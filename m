@@ -2,170 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1B86429A9
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3750C6429B1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiLENmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34992 "EHLO
+        id S230169AbiLENmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232143AbiLENlu (ORCPT
+        with ESMTP id S232055AbiLENmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:41:50 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E63A1CFF2;
-        Mon,  5 Dec 2022 05:41:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670247709; x=1701783709;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3GEBq+TnHHBMj8dKCAPrgcd5mxHNa6hFVgpFoTSTC/c=;
-  b=SpPVP0hdQppycTBJfqc525okQOHISoGrU10DQt4MPeGe/+zoIy96WjZe
-   xPWzywOdATF5flG4RQgso6tLMUNlfu82sr0fIm/lJCIVCgR0IEQ27hYNn
-   qLTsU/lzg2KK0KHd0eFHe1moYIAypi3CNFYJ930LsN73P5OU9MoY1ywSg
-   H1Ka1HeVNs1ExhFwrTd9aCa13WKW/nIQlMwnjFPY1vDiyP4p9DhrgMevW
-   2E5HplGa1ZTCDPfvi4t629DKNvDxiWZA9rxbl/pkfR5rwSTajfY9Vy/rn
-   m/L2CMNGaUm6Eo2lD9+QxbzE1Ic6kVgIf/p2Aa3qL1kpmSTwm/fCzT2tP
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="299776121"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="299776121"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 05:41:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="714401437"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="714401437"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.55.104])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 05:41:43 -0800
-Message-ID: <c200557f-c30a-62f9-287a-af804e818cf1@intel.com>
-Date:   Mon, 5 Dec 2022 15:41:39 +0200
+        Mon, 5 Dec 2022 08:42:31 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A53D2F2;
+        Mon,  5 Dec 2022 05:42:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=wV7UwztxOnwBjLx4UlGsMD6gs4ljlBwmQRIlqbtKjYc=; b=xK2390t2TA9x1AxvFAR+QX6cz6
+        HfVFNFtcUxYHfz1NNfwyDI4FZiGoL+gu8nx/QuZr3MXI+sMnY8c86crDAa6u4aGmPEuQWWsb78ScK
+        R6wWm4/3NkQpNprw0Awkpyize8fwiZvXwRcMWQpQgGU5CEtaAuYCgave33hmTYqmrkZ4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2Bjh-004POS-4P; Mon, 05 Dec 2022 14:42:21 +0100
+Date:   Mon, 5 Dec 2022 14:42:21 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Divya Koppera <Divya.Koppera@microchip.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        richardcochran@gmail.com, UNGLinuxDriver@microchip.com,
+        Madhuri.Sripada@microchip.com
+Subject: Re: [PATCH v4 net-next 2/2] net: phy: micrel: Fix warn: passing zero
+ to PTR_ERR
+Message-ID: <Y431PXknftwxwX3f@lunn.ch>
+References: <20221205103550.24944-1-Divya.Koppera@microchip.com>
+ <20221205103550.24944-3-Divya.Koppera@microchip.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tomer Maimon <tmaimon77@gmail.com>
-References: <20221205085351.27566-1-tmaimon77@gmail.com>
- <20221205085351.27566-3-tmaimon77@gmail.com>
- <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
- <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
- <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205103550.24944-3-Divya.Koppera@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/22 15:25, Andy Shevchenko wrote:
-> On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
->> On Mon, 5 Dec 2022 at 12:54, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
->>> On Mon, Dec 5, 2022 at 10:54 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+On Mon, Dec 05, 2022 at 04:05:50PM +0530, Divya Koppera wrote:
+> Handle the NULL pointer case
 > 
-> ...
+> Fixes New smatch warnings:
+> drivers/net/phy/micrel.c:2613 lan8814_ptp_probe_once() warn: passing zero to 'PTR_ERR'
 > 
->>>> +#include <linux/clk.h>
->>>> +#include <linux/err.h>
->>>> +#include <linux/io.h>
->>>> +#include <linux/mmc/host.h>
->>>> +#include <linux/mmc/mmc.h>
->>>> +#include <linux/module.h>
->>>
->>> I guess platform_device.h is missing here.
->> Build and work without platform_device.h, do I need it for module use?
+> vim +/PTR_ERR +2613 drivers/net/phy/micrel.c
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+> Fixes: ece19502834d ("net: phy: micrel: 1588 support for LAN8814 phy")
+> Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
+> ---
+> v3 -> v4:
+> - Split the patch for different warnings
+> - Renamed variable from shared_priv to shared.
 > 
-> The rule of thumb is to include headers we are the direct user of. I
-> believe you have a data type and API that are defined in that header.
+> v2 -> v3:
+> - Changed subject line from net to net-next
+> - Removed config check for ptp and clock configuration
+>   instead added null check for ptp_clock
+> - Fixed one more warning related to initialisaton.
 > 
-> ...
+> v1 -> v2:
+> - Handled NULL pointer case
+> - Changed subject line with net-next to net
+> ---
+>  drivers/net/phy/micrel.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
 > 
->>>> +static int npcm_sdhci_probe(struct platform_device *pdev)
->>>> +{
->>>> +       struct sdhci_pltfm_host *pltfm_host;
->>>> +       struct sdhci_host *host;
->>>> +       u32 caps;
->>>> +       int ret;
->>>> +
->>>> +       host = sdhci_pltfm_init(pdev, &npcm_sdhci_pdata, 0);
->>>> +       if (IS_ERR(host))
->>>> +               return PTR_ERR(host);
->>>> +
->>>> +       pltfm_host = sdhci_priv(host);
->>>
->>>> +       pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
->>>
->>> You can't mix devm with non-devm in this way.
->> Can you explain what you mean You can't mix devm with non-devm in this
->> way, where is the mix?
->> In version 1 used devm_clk_get, is it problematic?
-> 
-> devm_ is problematic in your case.
-> TL;DR: you need to use clk_get_optional() and clk_put().
+> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+> index 1bcdb828db56..0399f3830700 100644
+> --- a/drivers/net/phy/micrel.c
+> +++ b/drivers/net/phy/micrel.c
+> @@ -2971,12 +2971,13 @@ static int lan8814_config_intr(struct phy_device *phydev)
+>  
+>  static void lan8814_ptp_init(struct phy_device *phydev)
+>  {
+> +	struct lan8814_shared_priv *shared = phydev->shared->priv;
+>  	struct kszphy_priv *priv = phydev->priv;
+>  	struct kszphy_ptp_priv *ptp_priv = &priv->ptp_priv;
+>  	u32 temp;
+>  
+> -	if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
+> -	    !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
+> +	/* Check if PHC support is missing at the configuration level */
+> +	if (!shared->ptp_clock)
+>  		return;
 
-devm_ calls exactly those, so what is the issue?
+Can you somehow keep the IS_ENABLED() ? It gets evaluated at compile
+time. The optimizer can see the function will always return here, and
+all the code that follows is pointless, and so remove it. By turning
+this into a runtime test, you have made the image bigger.
 
-> 
-> Your ->remove() callback doesn't free resources in the reversed order
-> which may or, by luck, may not be the case of all possible crashes,
-> UAFs, races, etc during removal stage. All the same for error path in
-> ->probe().
-> 
->>>> +       if (IS_ERR(pltfm_host->clk))
->>>> +               return PTR_ERR(pltfm_host->clk);
->>>> +
->>>> +       ret = clk_prepare_enable(pltfm_host->clk);
->>>> +       if (ret)
->>>> +               return ret;
->>>> +
->>>> +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
->>>> +       if (caps & SDHCI_CAN_DO_8BIT)
->>>> +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
->>>> +
->>>> +       ret = mmc_of_parse(host->mmc);
->>>> +       if (ret)
->>>> +               goto err_sdhci_add;
->>>> +
->>>> +       ret = sdhci_add_host(host);
->>>> +       if (ret)
->>>> +               goto err_sdhci_add;
->>>
->>> Why can't you use sdhci_pltfm_register()?
->> two things are missing in sdhci_pltfm_register
->> 1. clock.
-> 
-> Taking into account the implementation of the corresponding
-> _unregister() I would add the clock handling to the _register() one.
-> Perhaps via a new member of the platform data that supplies the name
-> and index of the clock and hence all clk_get_optional() / clk_put will
-> be moved there.
-> 
->> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
-> 
-> All the same, why can't platform data be utilised for this?
-> 
->>>> +       return 0;
->>>> +
->>>> +err_sdhci_add:
->>>> +       clk_disable_unprepare(pltfm_host->clk);
->>>> +       sdhci_pltfm_free(pdev);
->>>> +       return ret;
->>>> +}
-> 
-
+     Andrew
