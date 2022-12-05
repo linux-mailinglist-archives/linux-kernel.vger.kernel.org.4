@@ -2,257 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8C986425AD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052B46425B2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbiLEJVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:21:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
+        id S230486AbiLEJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:22:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbiLEJVg (ORCPT
+        with ESMTP id S230508AbiLEJWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:21:36 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025F112A85
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:21:35 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso945930ilu.10
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:21:34 -0800 (PST)
+        Mon, 5 Dec 2022 04:22:04 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC78F1275C
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:22:02 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id x28so231384lfn.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:22:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a/hCkIS668u6PWnFlv85mQb/OtO7OLmAzj+V1xfIf9Q=;
+        b=L1MEGbS0EtSN16BOSO11ZsuQdudg+LMzkmre+65/5/3i6zjUeXJ6uGHFCJWlzwS9QI
+         e9OY1llnlDbkEf3PQ3C4FDSbMb50yTNVBuDfaiJsAEDce+k2iL6z6yVhNCrp8Oqd5w1L
+         8jICKDpabdW4zP5Z2MBy75AjgsRydoWxvWMnRMFe8jdjMP2CXPSudXRbilGQ7N/uDx5k
+         lOembDquEyOBFQPNvcHKbIjZlWpCea7rZw0yq/GHE07xuq92nQOKEqq53Dk+rcv1sRVY
+         sL/lQFUZZ8u6NACWxcjPDPaK2CPsF7Oup5wJnmzQfvL2KBuWefAh84EWSmuK3HtEdS8R
+         v9vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1P0HigEuEXIQLqnf79QffH2NpJGr9YIaQP4vDHpXay8=;
-        b=eCW7O23fKUEdYBuU49B5C+seYP61I6NOsZP9Fa3uM+4QwwdJN22nDHO9fzhRfUMWqe
-         v0xwzCrKUDttQ3MmEUIa3ys7dS7jjNl9r2bhR2Z8gwFmHVPyyYS69qWCSfOK1aj/wp62
-         OQSin451p7n6JiqdKSxFLoOrUreZS7RPq75NqTHKELwj1Z0KvqMV34X2qE/xvG7+kQWo
-         1NC1i99XoDZnqF+UUfp3xwoxTJgTXj8dnf7EFC4MiSZQ6jBeztX92zkTu4nbhvfJuAhy
-         dy86ZK2LEUdOX0g4pbGP+/KVE2d5vE7sz8CCmvOYbP6MNcspIULF40F24aoUECXNHugs
-         o/rQ==
-X-Gm-Message-State: ANoB5pm6616HoPnyrirEsUC+kMj/NDdE3Rs357Ui5gNdo9Z57SM0/pXQ
-        TbWfQ05HO2cc4qVChBChALvdOC2mDAcLr4BTzXHiuIaoECWF
-X-Google-Smtp-Source: AA0mqf5s1x3fjgq88gbM9SqGCQ7/p7AuEiG6P/bDt9CVhra3QpP3LkBPQU6PKRq+5v0LCnm3uXG2cbemDuTqtwPl6H/bVfNiyqAU
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a/hCkIS668u6PWnFlv85mQb/OtO7OLmAzj+V1xfIf9Q=;
+        b=clGGLey5zDKt1nemVkkLwFHFQmKqFP5SZ0UkmOudz6dsG+NtCL/Z7KC/wWeHflgtRf
+         hvK26yvOr4DmqMpEjj64ZNR2bgHwt6bMiOMLL0y3UaQsn9xYUshq5YpllCodacgzLaX5
+         rDmdyBQT1QbyaWyzUNcD1USFfwO25gmB3z1XQTuGhemeh4n6dwoCukyX1jUvMnhAJD+k
+         1tjSvKgyHeGMunocgtQ2kMq1bVyVr9Uql1b0kWC5TfmQKz21j1KfpgZnjBo6bRyP+96b
+         GG5E827FsQZ1XXoXjOyTF30bJXetaAesKaiSWhtR4k7RxtopFtWV/kxqLdsAWByHJkob
+         eekA==
+X-Gm-Message-State: ANoB5pk1GJr+JF6HdSZ9eHBILhrtN8cYt+g0Wk+LV71MlPzVu9iNRsJL
+        ScZOAbxjP9q6nT0dF6z9KELU+g==
+X-Google-Smtp-Source: AA0mqf4tfYxG7XmYk/2eQi+wnhLgLrpNUTLYv3yAtcllanEUC60fqFUsCPmYqPeEiefVbaGr6lKAvA==
+X-Received: by 2002:a05:6512:31d6:b0:4b4:f497:80e1 with SMTP id j22-20020a05651231d600b004b4f49780e1mr18672204lfe.119.1670232121091;
+        Mon, 05 Dec 2022 01:22:01 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f3-20020ac25083000000b0049c29389b98sm2051974lfm.151.2022.12.05.01.21.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 01:22:00 -0800 (PST)
+Message-ID: <3a9b5a27-e18f-226b-065b-f09c568b4d85@linaro.org>
+Date:   Mon, 5 Dec 2022 10:21:59 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a02:b00d:0:b0:38a:141d:6564 with SMTP id
- p13-20020a02b00d000000b0038a141d6564mr8120582jah.140.1670232094258; Mon, 05
- Dec 2022 01:21:34 -0800 (PST)
-Date:   Mon, 05 Dec 2022 01:21:34 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000abbde005ef113644@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
-From:   syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>
-To:     djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 8/9] dt-bindings: mtd: Split ECC engine with rawnand
+ controller
+Content-Language: en-US
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
+ <20221205065756.26875-9-xiangsheng.hou@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221205065756.26875-9-xiangsheng.hou@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 05/12/2022 07:57, Xiangsheng Hou wrote:
+> 1. Split MediaTek ECC engine with rawnand controller and convert to
+> YAML schema.
+> 2. Change the existing node name in order to match NAND controller DT
+> bindings.
 
-syzbot found the following issue on:
+One patch - one logical change. Not two. This applies to all your
+patches, so whenever you want to enumerate, please think twice.
 
-HEAD commit:    0ba09b173387 Revert "mm: align larger anonymous mappings o..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1736cf4b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-dashboard link: https://syzkaller.appspot.com/bug?extid=912776840162c13db1a3
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> ---
+>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 171 +++++++++++++++++
+>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
+>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+>  arch/arm/boot/dts/mt2701.dtsi                 |   2 +-
+>  arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   2 +-
+>  arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   2 +-
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Do not combine bindings and DTS.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9758ec2c06f4/disk-0ba09b17.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/06781dbfd581/vmlinux-0ba09b17.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3d44a22d15fa/bzImage-0ba09b17.xz
+>  6 files changed, 236 insertions(+), 179 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> new file mode 100644
+> index 000000000000..2b1c92edc9d0
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> @@ -0,0 +1,171 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
+> +
+> +maintainers:
+> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt2701-nfc
+> +      - mediatek,mt2712-nfc
+> +      - mediatek,mt7622-nfc
+> +
+> +  reg:
+> +    items:
+> +      - description: Base physical address and size of NFI.
+> +
+> +  interrupts:
+> +    items:
+> +      - description: NFI interrupt
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the controller
+> +      - description: clock used for the pad
+> +
+> +  clock-names:
+> +    items:
+> +      - const: nfi_clk
+> +      - const: pad_clk
+> +
+> +  ecc-engine: true
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+912776840162c13db1a3@syzkaller.appspotmail.com
+I don't think this could be anything. You need to describe it, so $ref
+and description.
 
-==================================================================
-BUG: KASAN: use-after-free in xfs_dquot_type fs/xfs/xfs_dquot.h:136 [inline]
-BUG: KASAN: use-after-free in xfs_qm_dqfree_one+0x12f/0x170 fs/xfs/xfs_qm.c:1604
-Read of size 1 at addr ffff88807ed63a98 by task syz-executor.2/22148
+> +
+> +  partitions:
+> +    $ref: mtd.yaml#
 
-CPU: 1 PID: 22148 Comm: syz-executor.2 Not tainted 6.1.0-rc7-syzkaller-00211-g0ba09b173387 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
- print_address_description+0x74/0x340 mm/kasan/report.c:284
- print_report+0x107/0x1f0 mm/kasan/report.c:395
- kasan_report+0xcd/0x100 mm/kasan/report.c:495
- xfs_dquot_type fs/xfs/xfs_dquot.h:136 [inline]
- xfs_qm_dqfree_one+0x12f/0x170 fs/xfs/xfs_qm.c:1604
- xfs_qm_shrink_scan+0x351/0x410 fs/xfs/xfs_qm.c:523
- do_shrink_slab+0x4e1/0xa00 mm/vmscan.c:842
- shrink_slab+0x1e6/0x340 mm/vmscan.c:1002
- drop_slab_node mm/vmscan.c:1037 [inline]
- drop_slab+0x185/0x2c0 mm/vmscan.c:1047
- drop_caches_sysctl_handler+0xb1/0x160 fs/drop_caches.c:66
- proc_sys_call_handler+0x576/0x890 fs/proc/proc_sysctl.c:604
- do_iter_write+0x6c2/0xc20 fs/read_write.c:861
- iter_file_splice_write+0x7fc/0xfc0 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0xe6/0x1c0 fs/splice.c:931
- splice_direct_to_actor+0x4e4/0xc00 fs/splice.c:886
- do_splice_direct+0x279/0x3d0 fs/splice.c:974
- do_sendfile+0x5fb/0xf80 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1317 [inline]
- __se_sys_sendfile64+0xd0/0x1b0 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7eff8be8c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007eff8cbb7168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007eff8bfabf80 RCX: 00007eff8be8c0d9
-RDX: 0000000020002080 RSI: 0000000000000004 RDI: 0000000000000006
-RBP: 00007eff8bee7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000870 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffd5ac99a0f R14: 00007eff8cbb7300 R15: 0000000000022000
- </TASK>
+How the partitions are MTD device? Open that file and see how it should
+be defined... Anyway mtd.yaml is part of nand-chip, not nand-controller.
 
-Allocated by task 22095:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- __kasan_slab_alloc+0x65/0x70 mm/kasan/common.c:325
- kasan_slab_alloc include/linux/kasan.h:201 [inline]
- slab_post_alloc_hook mm/slab.h:737 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- slab_alloc mm/slub.c:3406 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
- kmem_cache_alloc+0x1cc/0x300 mm/slub.c:3422
- kmem_cache_zalloc include/linux/slab.h:679 [inline]
- xfs_dquot_alloc+0x36/0x600 fs/xfs/xfs_dquot.c:475
- xfs_qm_dqread+0x8a/0x1d0 fs/xfs/xfs_dquot.c:659
- xfs_qm_dqget+0x27d/0x4f0 fs/xfs/xfs_dquot.c:870
- xfs_qm_vop_dqalloc+0x9bf/0xca0 fs/xfs/xfs_qm.c:1704
- xfs_setattr_nonsize+0x3c2/0xfd0 fs/xfs/xfs_iops.c:702
- xfs_vn_setattr+0x2f5/0x340 fs/xfs/xfs_iops.c:1022
- notify_change+0xe38/0x10f0 fs/attr.c:420
- chown_common+0x586/0x8f0 fs/open.c:736
- do_fchownat+0x165/0x240 fs/open.c:767
- __do_sys_lchown fs/open.c:792 [inline]
- __se_sys_lchown fs/open.c:790 [inline]
- __x64_sys_lchown+0x81/0x90 fs/open.c:790
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> +
+> +allOf:
+> +  - $ref: nand-controller.yaml#
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mediatek,mt2701-nfc
+> +    then:
+> +      patternProperties:
+> +        "^nand@[a-f0-9]$":
+> +          type: object
 
-Freed by task 3661:
- kasan_save_stack mm/kasan/common.c:45 [inline]
- kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
- kasan_save_free_info+0x27/0x40 mm/kasan/generic.c:511
- ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
- kasan_slab_free include/linux/kasan.h:177 [inline]
- slab_free_hook mm/slub.c:1724 [inline]
- slab_free_freelist_hook+0x12e/0x1a0 mm/slub.c:1750
- slab_free mm/slub.c:3661 [inline]
- kmem_cache_free+0x94/0x1d0 mm/slub.c:3683
- xfs_qm_dqpurge+0x4f7/0x660 fs/xfs/xfs_qm.c:177
- xfs_qm_dquot_walk+0x249/0x490 fs/xfs/xfs_qm.c:87
- xfs_qm_dqpurge_all fs/xfs/xfs_qm.c:193 [inline]
- xfs_qm_unmount+0x71/0x100 fs/xfs/xfs_qm.c:205
- xfs_unmountfs+0xc5/0x1e0 fs/xfs/xfs_mount.c:1059
- xfs_fs_put_super+0x6e/0x2d0 fs/xfs/xfs_super.c:1115
- generic_shutdown_super+0x130/0x310 fs/super.c:492
- kill_block_super+0x79/0xd0 fs/super.c:1428
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1186
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+No need for type, the definition is already there through
+nand-controller.yaml.
 
-The buggy address belongs to the object at ffff88807ed63a80
- which belongs to the cache xfs_dquot of size 704
-The buggy address is located 24 bytes inside of
- 704-byte region [ffff88807ed63a80, ffff88807ed63d40)
+> +          properties:
+> +            reg:
+> +              minimum: 0
+> +              maximum: 1
 
-The buggy address belongs to the physical page:
-page:ffffea0001fb5800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7ed60
-head:ffffea0001fb5800 order:2 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea0001a74500 dead000000000003 ffff88801c6f3a00
-raw: 0000000000000000 0000000080130013 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0x1d20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 18894, tgid 18893 (syz-executor.0), ts 751185457243, free_ts 748684720140
- prep_new_page mm/page_alloc.c:2539 [inline]
- get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
- __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
- alloc_slab_page+0xbd/0x190 mm/slub.c:1794
- allocate_slab+0x5e/0x4b0 mm/slub.c:1939
- new_slab mm/slub.c:1992 [inline]
- ___slab_alloc+0x782/0xe20 mm/slub.c:3180
- __slab_alloc mm/slub.c:3279 [inline]
- slab_alloc_node mm/slub.c:3364 [inline]
- slab_alloc mm/slub.c:3406 [inline]
- __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
- kmem_cache_alloc+0x24c/0x300 mm/slub.c:3422
- kmem_cache_zalloc include/linux/slab.h:679 [inline]
- xfs_dquot_alloc+0x36/0x600 fs/xfs/xfs_dquot.c:475
- xfs_qm_dqread+0x8a/0x1d0 fs/xfs/xfs_dquot.c:659
- xfs_qm_dqget_inode+0x430/0x960 fs/xfs/xfs_dquot.c:973
- xfs_qm_dqattach_one+0xe8/0x1c0 fs/xfs/xfs_qm.c:277
- xfs_qm_dqattach_locked+0x3ed/0x4a0 fs/xfs/xfs_qm.c:336
- xfs_qm_vop_dqalloc+0x3f2/0xca0 fs/xfs/xfs_qm.c:1659
- xfs_setattr_nonsize+0x3c2/0xfd0 fs/xfs/xfs_iops.c:702
- xfs_vn_setattr+0x2f5/0x340 fs/xfs/xfs_iops.c:1022
- notify_change+0xe38/0x10f0 fs/attr.c:420
- chown_common+0x586/0x8f0 fs/open.c:736
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1459 [inline]
- free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
- free_unref_page_prepare mm/page_alloc.c:3387 [inline]
- free_unref_page_list+0xb4/0x7b0 mm/page_alloc.c:3529
- release_pages+0x232a/0x25c0 mm/swap.c:1055
- __pagevec_release+0x7d/0xf0 mm/swap.c:1075
- pagevec_release include/linux/pagevec.h:71 [inline]
- folio_batch_release include/linux/pagevec.h:135 [inline]
- truncate_inode_pages_range+0x472/0x17f0 mm/truncate.c:373
- kill_bdev block/bdev.c:76 [inline]
- blkdev_flush_mapping+0x153/0x2c0 block/bdev.c:662
- blkdev_put_whole block/bdev.c:693 [inline]
- blkdev_put+0x4a5/0x730 block/bdev.c:953
- deactivate_locked_super+0xa7/0xf0 fs/super.c:332
- cleanup_mnt+0x494/0x520 fs/namespace.c:1186
- task_work_run+0x243/0x300 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop+0x124/0x150 kernel/entry/common.c:171
- exit_to_user_mode_prepare+0xb2/0x140 kernel/entry/common.c:203
- __syscall_exit_to_user_mode_work kernel/entry/common.c:285 [inline]
- syscall_exit_to_user_mode+0x26/0x60 kernel/entry/common.c:296
- do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+This is the same as other variant, so should be defined in top-level
+pattern properties.
 
-Memory state around the buggy address:
- ffff88807ed63980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807ed63a00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88807ed63a80: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                            ^
- ffff88807ed63b00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807ed63b80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+> +            nand-ecc-mode:
+> +              const: hw
+
+Ditto
+
+> +            nand-ecc-step-size:
+> +              enum: [ 512, 1024 ]> +            nand-ecc-strength:
+> +              enum: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36,
+> +                     40, 44, 48, 52, 56, 60]
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mediatek,mt2712-nfc
+> +    then:
+> +      patternProperties:
+> +        "^nand@[a-f0-9]$":
+> +          type: object
+> +          properties:
+> +            reg:
+> +              minimum: 0
+> +              maximum: 1
+> +            nand-ecc-mode:
+> +              const: hw
+> +            nand-ecc-step-size:
+> +              enum: [ 512, 1024 ]
+> +            nand-ecc-strength:
+> +              enum: [4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36,
+> +                     40, 44, 48, 52, 56, 60, 68, 72, 80]
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: mediatek,mt7622-nfc
+> +    then:
+> +      patternProperties:
+> +        "^nand@[a-f0-9]$":
+> +          type: object
+> +          properties:
+> +            reg:
+> +              minimum: 0
+> +              maximum: 1
+> +            nand-ecc-mode:
+> +              const: hw
+> +            nand-ecc-step-size:
+> +              const: 512
+> +            nand-ecc-strength:
+> +              enum: [4, 6, 8, 10, 12]
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - ecc-engine
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/mt2701-clk.h>
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +    soc {
+> +        #address-cells = <2>;
+> +        #size-cells = <2>;
+> +
+> +        nand-controller@1100d000 {
+> +            compatible = "mediatek,mt2701-nfc";
+> +            reg = <0 0x1100d000 0 0x1000>;
+> +            interrupts = <GIC_SPI 56 IRQ_TYPE_LEVEL_LOW>;
+> +            clocks = <&pericfg CLK_PERI_NFI>,
+> +                     <&pericfg CLK_PERI_NFI_PAD>;
+> +            clock-names = "nfi_clk", "pad_clk";
+> +            ecc-engine = <&bch>;
+> +            #address-cells = <1>;
+> +            #size-cells = <0>;
+> +
+> +            nand@0 {
+> +                reg = <0>;
+> +
+> +                nand-on-flash-bbt;
+> +                nand-ecc-mode = "hw";
+> +                nand-ecc-step-size = <1024>;
+> +                nand-ecc-strength = <24>;
+> +
+> +                partitions {
+> +                    compatible = "fixed-partitions";
+> +                    #address-cells = <1>;
+> +                    #size-cells = <1>;
+> +
+> +                    preloader@0 {
+> +                        label = "pl";
+> +                        read-only;
+> +                        reg = <0x0 0x400000>;
+> +                    };
+> +                    android@400000 {
+> +                        label = "android";
+> +                        reg = <0x400000 0x12c00000>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +
+> +        bch: ecc@1100e000 {
+> +            compatible = "mediatek,mt2701-ecc";
+> +            reg = <0 0x1100e000 0 0x1000>;
+> +            interrupts = <GIC_SPI 55 IRQ_TYPE_LEVEL_LOW>;
+> +            clocks = <&pericfg CLK_PERI_NFI_ECC>;
+> +            clock-names = "nfiecc_clk";
+
+You already have example of ecc in other binding, so drop from this one.
+
+> +        };
+> +    };
+> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml b/Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+> new file mode 100644
+> index 000000000000..b13d801eda76
+> --- /dev/null
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Best regards,
+Krzysztof
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
