@@ -2,104 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 071E6642F64
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993A0642F60
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiLERri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 12:47:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S231694AbiLERre (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 12:47:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232358AbiLERrI (ORCPT
+        with ESMTP id S232506AbiLERrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 12:47:08 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B94233AB;
-        Mon,  5 Dec 2022 09:45:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1330E61280;
-        Mon,  5 Dec 2022 17:45:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 972B2C43470;
-        Mon,  5 Dec 2022 17:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670262347;
-        bh=FmsPC9vkAuOSeyIidXhZGduvRa/XcRXnLCs2H58uKvc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CvoenScK84bXEcVw22KBdxXQ0dTV86dyI/T/dik2Uj0QKklr1vDO9BpdvI6AtqdF2
-         vzEB8kgauiVefFjhIUsA4+isEo6xVUHh5L0ilFJXOrzMDxSxBQqYXj9jznQnlKb+di
-         FuD0Fz8YK4GiLcCsAK4P4rBlb1whgliGRP0dLBLPeIIA4Jtk4QyYcIw+0wjyVdJEdh
-         oNhFSdIwLZbJI9XnjjvcVIBxZf625OlwJr26PHBO7i1sT3dqE21uPfJLlGE+GRwgn1
-         5GoWg1fabLz1FLSE3y9BbLq0eJpEdL8YLhejMymzSXCExMQxbRnkG/F6gNXWYL4nEy
-         shwi9zBkE1z1w==
-From:   Conor Dooley <conor@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Guo Ren <guoren@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v3 2/2] dt-bindings: riscv: fix single letter canonical order
-Date:   Mon,  5 Dec 2022 17:45:00 +0000
-Message-Id: <20221205174459.60195-3-conor@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221205174459.60195-1-conor@kernel.org>
-References: <20221205174459.60195-1-conor@kernel.org>
+        Mon, 5 Dec 2022 12:47:07 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2859123BD0;
+        Mon,  5 Dec 2022 09:45:47 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B5HGNIM015436;
+        Mon, 5 Dec 2022 17:45:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=BsIhV61f48a1exBvKZpEkb+RMgLqTQbvrtEGK9lnO6E=;
+ b=aL3LksvnbTplh4Ol1TIM/H6XvWi+tIVt0x6RnyAsJBhU5vtlKpHblD9MKSZed/pBp9p/
+ VfmZHTPQa+EGoB8A+6aG0jC377W4vK/3bxkMCOXDUXlCk0HfM4lGd9FuXyNb19Mmxam2
+ 2Ugu3kIuYliyoMGq2ZftNrqMrUXzbnDkBHMLwy4D8WAU4WXP9fUkpSZoDb4sCU5nn8/S
+ FNvwa2Ef/rUg4UmvbsosHknxAK45TQREMYx1Of1YH3810oXyO0sSgZMFCq6eJ9l8Wigr
+ VwC4EWYkhuKT2U8oOJ4EDx1vUMIG4WanZR8Vb4JHQUSbgCrtVoDkUUTUbfrZHpp73z2x ww== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7xudcc5u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 05 Dec 2022 17:45:38 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B5HjbZs002688
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 5 Dec 2022 17:45:37 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 5 Dec 2022 09:45:36 -0800
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>, <andersson@kernel.org>,
+        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
+        <airlied@gmail.com>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v7 0/5] Add data-lanes and link-frequencies to dp_out endpoint
+Date:   Mon, 5 Dec 2022 09:45:23 -0800
+Message-ID: <1670262328-26870-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 16KuvKfQ8wQxNhwmvCDdEJiF5xkf_FS9
+X-Proofpoint-ORIG-GUID: 16KuvKfQ8wQxNhwmvCDdEJiF5xkf_FS9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-05_01,2022-12-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 phishscore=0
+ suspectscore=0 spamscore=0 impostorscore=0 bulkscore=0 lowpriorityscore=0
+ mlxscore=0 mlxlogscore=861 adultscore=0 priorityscore=1501 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212050146
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+Add DP both data-lanes and link-frequencies property to dp_out endpoint and support
+functions to DP driver.
 
-I used the wikipedia table for ordering extensions when updating the
-pattern here in commit 299824e68bd0 ("dt-bindings: riscv: add new
-riscv,isa strings for emulators").
+Kuogee Hsieh (5):
+  arm64: dts: qcom: add data-lanes and link-freuencies into dp_out
+    endpoint
+  dt-bindings: msm/dp: add data-lanes and link-frequencies property
+  drm/msm/dp: parser data-lanes as property of dp_out endpoint
+  drm/msm/dp: parser link-frequencies as property of dp_out endpoint
+  drm/msm/dp: add support of max dp link rate
 
-Unfortunately that table did not match canonical order, as defined by
-the RISC-V ISA Manual, which defines extension ordering in (what is
-currently) Table 41, "Standard ISA extension names". Fix things up by
-re-sorting v (vector) and adding p (packed-simd) & j (dynamic
-languages). The e (reduced integer) and g (general) extensions are still
-intentionally left out.
+ .../bindings/display/msm/dp-controller.yaml        | 22 +++++++++----
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi       |  6 +++-
+ arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi     |  6 +++-
+ drivers/gpu/drm/msm/dp/dp_display.c                |  4 +++
+ drivers/gpu/drm/msm/dp/dp_panel.c                  |  7 ++--
+ drivers/gpu/drm/msm/dp/dp_panel.h                  |  1 +
+ drivers/gpu/drm/msm/dp/dp_parser.c                 | 38 ++++++++++++++++++----
+ drivers/gpu/drm/msm/dp/dp_parser.h                 |  2 ++
+ 8 files changed, 68 insertions(+), 18 deletions(-)
 
-Link: https://github.com/riscv/riscv-isa-manual/releases/tag/riscv-unpriv-pdf-from-asciidoc-15112022 # Chapter 29.5
-Fixes: 299824e68bd0 ("dt-bindings: riscv: add new riscv,isa strings for emulators")
-Acked-by: Guo Ren <guoren@kernel.org>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/riscv/cpus.yaml b/Documentation/devicetree/bindings/riscv/cpus.yaml
-index 97659bb71811..d4148418350c 100644
---- a/Documentation/devicetree/bindings/riscv/cpus.yaml
-+++ b/Documentation/devicetree/bindings/riscv/cpus.yaml
-@@ -80,7 +80,7 @@ properties:
-       insensitive, letters in the riscv,isa string must be all
-       lowercase to simplify parsing.
-     $ref: "/schemas/types.yaml#/definitions/string"
--    pattern: ^rv(?:64|32)imaf?d?q?c?b?v?k?h?(?:[hsxz](?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
-+    pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
- 
-   # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
-   timebase-frequency: false
 -- 
-2.38.1
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 
