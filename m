@@ -2,153 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43EA6435BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:34:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B94A6435DC
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:40:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiLEUet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:34:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S232809AbiLEUkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:40:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbiLEUer (ORCPT
+        with ESMTP id S230233AbiLEUkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:34:47 -0500
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0584714084;
-        Mon,  5 Dec 2022 12:34:46 -0800 (PST)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3b56782b3f6so130549427b3.13;
-        Mon, 05 Dec 2022 12:34:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GeLGTXERGukeSNOQDu2YmR7uT9/qpiRMDyykHkleQ2o=;
-        b=pV6KI/HZBQddAaryd4yKdtAZIjXHM+fQOQl8vls8oCF/Y0syljnC36hzxgQFzf3t1W
-         ZEfFPue68nbSQYyN45g3vyc1tKTsDhhDmdhY4NZzbyws1OLLs/EBYBCLeHMjUZ7AqQkG
-         bPHpYPqJ1AEZL4uauJNarKOb8Kjs0EiXHDayRbW+LvH0eVfIfd+Kt4GAhbisw/fJv8H5
-         ye4ctWjmmYNQlCsceyNtIQIp7VQQPqFfnpnwbiE6A67xPTrxsvIZPcz5N+C3swPGuMEV
-         zdL6BSwaRQTncT/q4vMGhtHQUJU0KVbms8kPcPSjUkErq0sjFtA3tGrr1dDn23Y/Q2aR
-         UEOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GeLGTXERGukeSNOQDu2YmR7uT9/qpiRMDyykHkleQ2o=;
-        b=7Xvmzz+819vhpwQqnUVItJFWwv95vzbsCNcb8bWbsISlJEMOFqTBBU8gHBlO8KfYld
-         QBfhl6l5ncv3fbdZXc2VSZHQ0fuqTplXQZ5bE4w0SPo74ga+23SGGbjBcolWdL6mTxrP
-         usqs+tsA/f9NjVwV3OBRlpQ5hhS0qQG9my2YY2lHLDMiT2zOx21LwVt47Fueq3qtTn6c
-         8e1BEbV6KaMa/CINCWNYqZtmZFybHztyM4uLfVtDoQYF4IBKHtRs9QNH8rpHOhftELML
-         KYt18bq30JA80z4EsQZhKsFySgTFSB5RIIOBJhhIxNbPtQZREoGr07hsqUSMri9Vk1WU
-         9hMg==
-X-Gm-Message-State: ANoB5pmvPbTPorojTAjsaDb7WA+CggN+6JXeBBDYx3MUgp2Zrk3AhP94
-        7BU4WWPaMGi7am0TdrrPSnfbsNP0a0qDYOYq7Yc=
-X-Google-Smtp-Source: AA0mqf6gVcUjGEuTNRozrYnWxY5uXjxRLCGPLpX8tEkUr/ot069nsH0uaNB29RtGgsmUEgc5iySKcYLMmK606QxvYxY=
-X-Received: by 2002:a81:4905:0:b0:3a8:fad9:13c0 with SMTP id
- w5-20020a814905000000b003a8fad913c0mr60110141ywa.23.1670272485151; Mon, 05
- Dec 2022 12:34:45 -0800 (PST)
+        Mon, 5 Dec 2022 15:40:11 -0500
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9362A731;
+        Mon,  5 Dec 2022 12:40:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=uKMIiWg7WMfEfBo1Es+0k/dOYC/WMrl1VUa9+5uwzE0=; b=WI+A2dg1zGr7mUREYNlOTu2i00
+        lW0PG15Nx+V8GnMUg+UzLSI3O8Z+/dx8iuBQF4oiXOjXIeU9847rns43rafqz8yKXjYpXtv1DFRbv
+        oxrjEcy4oDyuBoHcPLWeBHjpsmDuot3MmtSlnfzamAu7aEjlTO5FhNtSBX6biDA97hVsWCw0YQlS0
+        t+Lc0w0IyOgqca6U2jAzmsGek7Dfyq/ISG3CJmewit5FNK3lYv9BSf3qznDT4REcx5wWRb/p26SwA
+        jUN3T8VAu5bEzXTt1v1P/LMZu90LS3ANFwtqIIXizU4RdEzwUOZ/n8lZc9cy9wTJ7iQgbSKElVdvk
+        W9DN4MSGbS1PN+niE8l8XT3CXyAdymLpBTQVe/6fAFLMsOlWwmrb82WM/O7GhKQaMB/o+mGfndKqt
+        cV3Y4Px+DT+Q6IklzPNb70GjoGp7QL6KAMJl0PR/DxP0ndZ4V4Im3ZDJ8DYEJv24Q2yOMGyoBf+0L
+        bq5Qls2Ft5hKKMVKzrtVSQIIx1rANbt5JeqRODEs9aibM/wijqky3Tb2sebdvYQMMyrfDigC/Pmy3
+        bIXPHn08/RVU3Gl4I3s9uHgLR6MBCwMwUr9NAordhWLxYUDMbOdJ8XMDsqLPNYzmz+/d2uYIw6sp+
+        VwVLTCAcjvg6D31R6YXvb2V78t0J06ZEUz44R9TqY=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the v9fs tree
+Date:   Mon, 05 Dec 2022 21:40:06 +0100
+Message-ID: <3823616.UlgstfPZBx@silver>
+In-Reply-To: <46397336.ChKRcxMYMu@silver>
+References: <20221205150316.6fac25f2@canb.auug.org.au> <Y41vKkaH9tvRXCfv@codewreck.org>
+ <46397336.ChKRcxMYMu@silver>
 MIME-Version: 1.0
-References: <20221017202451.4951-1-vishal.moola@gmail.com> <20221017202451.4951-15-vishal.moola@gmail.com>
- <9c01bb74-97b3-d1c0-6a5f-dc8b11113e1a@kernel.org> <CAOzc2pweRFtsUj65=U-N-+ASf3cQybwMuABoVB+ciHzD1gKWhQ@mail.gmail.com>
- <CAOzc2pzoG1CN3Bpx5oe37GwRv71TpTQmFH6m58kTqOmeW7KLOw@mail.gmail.com>
-In-Reply-To: <CAOzc2pzoG1CN3Bpx5oe37GwRv71TpTQmFH6m58kTqOmeW7KLOw@mail.gmail.com>
-From:   Vishal Moola <vishal.moola@gmail.com>
-Date:   Mon, 5 Dec 2022 12:34:33 -0800
-Message-ID: <CAOzc2pzp0JEanJTgzSrRt3ziRCrR6rGCjpwJvAD8uCqsHqXnHg@mail.gmail.com>
-Subject: Re: [f2fs-dev] [PATCH v3 14/23] f2fs: Convert f2fs_write_cache_pages()
- to use filemap_get_folios_tag()
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, linux-mm@kvack.org,
-        fengnan chang <fengnanchang@gmail.com>,
-        linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 6:26 PM Vishal Moola <vishal.moola@gmail.com> wrote:
->
-> On Mon, Nov 14, 2022 at 1:38 PM Vishal Moola <vishal.moola@gmail.com> wrote:
-> >
-> > On Sun, Nov 13, 2022 at 11:02 PM Chao Yu <chao@kernel.org> wrote:
-> > >
-> > > On 2022/10/18 4:24, Vishal Moola (Oracle) wrote:
-> > > > Converted the function to use a folio_batch instead of pagevec. This is in
-> > > > preparation for the removal of find_get_pages_range_tag().
-> > > >
-> > > > Also modified f2fs_all_cluster_page_ready to take in a folio_batch instead
-> > > > of pagevec. This does NOT support large folios. The function currently
-> > >
-> > > Vishal,
-> > >
-> > > It looks this patch tries to revert Fengnan's change:
-> > >
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=01fc4b9a6ed8eacb64e5609bab7ac963e1c7e486
-> > >
-> > > How about doing some tests to evaluate its performance effect?
-> >
-> > Yeah I'll play around with it to see how much of a difference it makes.
->
-> I did some testing. Looks like reverting Fengnan's change allows for
-> occasional, but significant, spikes in write latency. I'll work on a variation
-> of the patch that maintains the use of F2FS_ONSTACK_PAGES and send
-> that in the next version of the patch series. Thanks for pointing that out!
+On Monday, December 5, 2022 3:31:57 PM CET Christian Schoenebeck wrote:
+> On Monday, December 5, 2022 5:10:18 AM CET Dominique Martinet wrote:
+> > Stephen Rothwell wrote on Mon, Dec 05, 2022 at 03:03:16PM +1100:
+> > > After merging the v9fs tree, today's linux-next build (i386 defconfig)
+> 
+> > > failed like this:
+> [...]
+> 
+> > > net/9p/client.c:523:17: note: in expansion of macro 'pr_err'
+> > > 
+> > >   523 |                 pr_err(
+> > >   
+> > >       |                 ^~~~~~
+> > > 
+> > > cc1: all warnings being treated as errors
+> > > 
+> > > Caused by commit
+> > > 
+> > >   36cd2f80abf8 ("net/9p: fix response size check in p9_check_errors()")
+> > > 
+> > > I have applied the following patch for today:
+> > Thank you!
+> > I guess I should start building one 32bit kernel somewhere...
+> :
+> :/ I'll setup a 32-bit build system as well, sorry!
 
-Following Matthew's comment, I'm thinking we should go with this patch
-as is. The numbers between both variations did not have substantial
-differences with regard to latency.
+Dominique, looking at your 9p queue, I just realized what happened here: I 
+posted a v2 of these two patches, which got lost for some reason:
 
-While the new variant would maintain the use of F2FS_ONSTACK_PAGES,
-the code becomes messier and would end up limiting the number of
-folios written back once large folio support is added. This means it would
-have to be converted down to this version later anyways.
+https://lore.kernel.org/all/cover.1669144861.git.linux_oss@crudebyte.com/
 
-Does leaving this patch as is sound good to you?
+The currently queued 1st patch is still v1 as well.
 
-For reference, here's what the version continuing to use a page
-array of size F2FS_ONSTACK_PAGES would change:
+Best regards,
+Christian Schoenebeck
 
-+               nr_pages = 0;
-+again:
-+               nr_folios = filemap_get_folios_tag(mapping, &index, end,
-+                               tag, &fbatch);
-+               if (nr_folios == 0) {
-+                       if (nr_pages)
-+                               goto write;
-+                               goto write;
-                        break;
-+               }
 
-+               for (i = 0; i < nr_folios; i++) {
-+                       struct folio* folio = fbatch.folios[i];
-+
-+                       idx = 0;
-+                       p = folio_nr_pages(folio);
-+add_more:
-+                       pages[nr_pages] = folio_page(folio,idx);
-+                       folio_ref_inc(folio);
-+                       if (++nr_pages == F2FS_ONSTACK_PAGES) {
-+                               index = folio->index + idx + 1;
-+                               folio_batch_release(&fbatch);
-+                               goto write;
-+                       }
-+                       if (++idx < p)
-+                               goto add_more;
-+               }
-+               folio_batch_release(&fbatch);
-+               goto again;
-+write:
 
-> How do the remaining f2fs patches in the series look to you?
-> Patch 16/23 f2fs_sync_meta_pages() in particular seems like it may
-> be prone to problems. If there are any changes that need to be made to
-> it I can include those in the next version as well.
-
-Thanks for reviewing the patches so far. I wanted to follow up on asking
-for review of the last couple of patches.
