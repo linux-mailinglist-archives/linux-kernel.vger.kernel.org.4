@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C7E643643
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB0CD643641
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 22:01:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233708AbiLEVAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 16:00:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S233567AbiLEVAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 16:00:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233254AbiLEVAY (ORCPT
+        with ESMTP id S231598AbiLEVAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 5 Dec 2022 16:00:24 -0500
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 918E525C5A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB16125E92;
         Mon,  5 Dec 2022 13:00:23 -0800 (PST)
 Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 2946F20B83CB;
+        by linux.microsoft.com (Postfix) with ESMTPSA id 7A19420B83DC;
         Mon,  5 Dec 2022 13:00:23 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 2946F20B83CB
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7A19420B83DC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
         s=default; t=1670274023;
-        bh=I4E3aVZX0lnhRkF9kXic/1+xlwkA1aElztKCxR5PD6s=;
+        bh=uParTVU9Z9xqfA98lJokNpjIwc9u+HZsqpYzGti/vmY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dXG9B1nkLoY2DlfEp+gZKSXyxLn3Y2DxCFurjycAWfMkbEIewW5ckwLoPpWFlSv8g
-         0gUjxcAJSWnQgBAeUJKUtXQ5v9L7W34WTu2zIC4S9xykYHxSGt1PuksucJ6SZqf8Uj
-         CaS/roRVyj1F6eJUNe8107F3r5E9pSCrsx1fZzSk=
+        b=iMJDXP8Q5fT1haWV3G14W4tzih6QY47J8fXaYMvfsLe18yT12SuxO2g94oNrgxAtn
+         hqffpLzkQRBKe42aBOgM9z30NjI+oaYluLrYRVj8ur/hM5vXRoKU5IamaDBRE4rAyx
+         4Pvdk5uOD0ombKPG6wnNcfyyiRCfj/zoP4sbcOJ0=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org,
         mathieu.desnoyers@efficios.com, dcook@linux.microsoft.com,
         alanau@linux.microsoft.com, brauner@kernel.org,
         akpm@linux-foundation.org
 Cc:     linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v5 01/11] tracing/user_events: Split header into uapi and kernel
-Date:   Mon,  5 Dec 2022 13:00:07 -0800
-Message-Id: <20221205210017.23440-2-beaub@linux.microsoft.com>
+Subject: [PATCH v5 02/11] tracing/user_events: Track fork/exec/exit for mm lifetime
+Date:   Mon,  5 Dec 2022 13:00:08 -0800
+Message-Id: <20221205210017.23440-3-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221205210017.23440-1-beaub@linux.microsoft.com>
 References: <20221205210017.23440-1-beaub@linux.microsoft.com>
@@ -50,156 +50,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The UAPI parts need to be split out from the kernel parts of user_events
-now that other parts of the kernel will reference it. Do so by moving
-the existing include/linux/user_events.h into
-include/uapi/linux/user_events.h.
+During tracefs discussions it was decided instead of requiring a mapping
+within a user-process to track the lifetime of memory descriptors we
+should hook the appropriate calls. Do this by adding the minimal stubs
+required for task fork, exec, and exit. Currently this is just a NOP.
+Future patches will implement these calls fully.
 
+Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- include/linux/user_events.h      | 52 +++++---------------------------
- include/uapi/linux/user_events.h | 48 +++++++++++++++++++++++++++++
- kernel/trace/trace_events_user.c |  5 ---
- 3 files changed, 56 insertions(+), 49 deletions(-)
- create mode 100644 include/uapi/linux/user_events.h
+ fs/exec.c                   |  2 ++
+ include/linux/sched.h       |  5 +++++
+ include/linux/user_events.h | 16 +++++++++++++++-
+ kernel/exit.c               |  2 ++
+ kernel/fork.c               |  2 ++
+ 5 files changed, 26 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/user_events.h b/include/linux/user_events.h
-index 592a3fbed98e..036b360f3d97 100644
---- a/include/linux/user_events.h
-+++ b/include/linux/user_events.h
-@@ -1,54 +1,18 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/* SPDX-License-Identifier: GPL-2.0-only */
+diff --git a/fs/exec.c b/fs/exec.c
+index a0b1f0337a62..75ca6fbd195c 100644
+--- a/fs/exec.c
++++ b/fs/exec.c
+@@ -64,6 +64,7 @@
+ #include <linux/io_uring.h>
+ #include <linux/syscall_user_dispatch.h>
+ #include <linux/coredump.h>
++#include <linux/user_events.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/mmu_context.h>
+@@ -1842,6 +1843,7 @@ static int bprm_execve(struct linux_binprm *bprm,
+ 	current->fs->in_exec = 0;
+ 	current->in_execve = 0;
+ 	rseq_execve(current);
++	user_events_execve(current);
+ 	acct_update_integrals(current);
+ 	task_numa_free(current, false);
+ 	return retval;
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index ffb6eb55cd13..61ed2f9deb26 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -69,6 +69,7 @@ struct sighand_struct;
+ struct signal_struct;
+ struct task_delay_info;
+ struct task_group;
++struct user_event_mm;
+ 
  /*
-- * Copyright (c) 2021, Microsoft Corporation.
-+ * Copyright (c) 2022, Microsoft Corporation.
-  *
-  * Authors:
-  *   Beau Belgrave <beaub@linux.microsoft.com>
-  */
--#ifndef _UAPI_LINUX_USER_EVENTS_H
--#define _UAPI_LINUX_USER_EVENTS_H
- 
--#include <linux/types.h>
--#include <linux/ioctl.h>
-+#ifndef _LINUX_USER_EVENTS_H
-+#define _LINUX_USER_EVENTS_H
- 
--#ifdef __KERNEL__
--#include <linux/uio.h>
-+#include <uapi/linux/user_events.h>
-+
-+#ifdef CONFIG_USER_EVENTS
- #else
--#include <sys/uio.h>
+  * Task state bitmask. NOTE! These bits are also
+@@ -1528,6 +1529,10 @@ struct task_struct {
+ 	union rv_task_monitor		rv[RV_PER_TASK_MONITORS];
  #endif
  
--#define USER_EVENTS_SYSTEM "user_events"
--#define USER_EVENTS_PREFIX "u:"
--
--/* Create dynamic location entry within a 32-bit value */
--#define DYN_LOC(offset, size) ((size) << 16 | (offset))
--
--/*
-- * Describes an event registration and stores the results of the registration.
-- * This structure is passed to the DIAG_IOCSREG ioctl, callers at a minimum
-- * must set the size and name_args before invocation.
-- */
--struct user_reg {
--
--	/* Input: Size of the user_reg structure being used */
--	__u32 size;
--
--	/* Input: Pointer to string with event name, description and flags */
--	__u64 name_args;
--
--	/* Output: Bitwise index of the event within the status page */
--	__u32 status_bit;
--
--	/* Output: Index of the event to use when writing data */
--	__u32 write_index;
--} __attribute__((__packed__));
--
--#define DIAG_IOC_MAGIC '*'
--
--/* Requests to register a user_event */
--#define DIAG_IOCSREG _IOWR(DIAG_IOC_MAGIC, 0, struct user_reg*)
--
--/* Requests to delete a user_event */
--#define DIAG_IOCSDEL _IOW(DIAG_IOC_MAGIC, 1, char*)
--
--#endif /* _UAPI_LINUX_USER_EVENTS_H */
-+#endif /* _LINUX_USER_EVENTS_H */
-diff --git a/include/uapi/linux/user_events.h b/include/uapi/linux/user_events.h
-new file mode 100644
-index 000000000000..7700759a7cd9
---- /dev/null
-+++ b/include/uapi/linux/user_events.h
-@@ -0,0 +1,48 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Copyright (c) 2021-2022, Microsoft Corporation.
-+ *
-+ * Authors:
-+ *   Beau Belgrave <beaub@linux.microsoft.com>
-+ */
-+#ifndef _UAPI_LINUX_USER_EVENTS_H
-+#define _UAPI_LINUX_USER_EVENTS_H
++#ifdef CONFIG_USER_EVENTS
++	struct user_event_mm		*user_event_mm;
++#endif
 +
-+#include <linux/types.h>
-+#include <linux/ioctl.h>
-+
-+#define USER_EVENTS_SYSTEM "user_events"
-+#define USER_EVENTS_PREFIX "u:"
-+
-+/* Create dynamic location entry within a 32-bit value */
-+#define DYN_LOC(offset, size) ((size) << 16 | (offset))
-+
-+/*
-+ * Describes an event registration and stores the results of the registration.
-+ * This structure is passed to the DIAG_IOCSREG ioctl, callers at a minimum
-+ * must set the size and name_args before invocation.
-+ */
-+struct user_reg {
-+
-+	/* Input: Size of the user_reg structure being used */
-+	__u32 size;
-+
-+	/* Input: Pointer to string with event name, description and flags */
-+	__u64 name_args;
-+
-+	/* Output: Bitwise index of the event within the status page */
-+	__u32 status_bit;
-+
-+	/* Output: Index of the event to use when writing data */
-+	__u32 write_index;
-+} __attribute__((__packed__));
-+
-+#define DIAG_IOC_MAGIC '*'
-+
-+/* Requests to register a user_event */
-+#define DIAG_IOCSREG _IOWR(DIAG_IOC_MAGIC, 0, struct user_reg*)
-+
-+/* Requests to delete a user_event */
-+#define DIAG_IOCSDEL _IOW(DIAG_IOC_MAGIC, 1, char*)
-+
-+#endif /* _UAPI_LINUX_USER_EVENTS_H */
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index ae78c2d53c8a..890357b48c37 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -19,12 +19,7 @@
- #include <linux/tracefs.h>
- #include <linux/types.h>
- #include <linux/uaccess.h>
--/* Reminder to move to uapi when everything works */
--#ifdef CONFIG_COMPILE_TEST
- #include <linux/user_events.h>
+ 	/*
+ 	 * New fields for task_struct should be added above here, so that
+ 	 * they are included in the randomized portion of task_struct.
+diff --git a/include/linux/user_events.h b/include/linux/user_events.h
+index 036b360f3d97..3d747c45d2fa 100644
+--- a/include/linux/user_events.h
++++ b/include/linux/user_events.h
+@@ -12,7 +12,21 @@
+ #include <uapi/linux/user_events.h>
+ 
+ #ifdef CONFIG_USER_EVENTS
 -#else
--#include <uapi/linux/user_events.h>
--#endif
- #include "trace.h"
- #include "trace_dynevent.h"
++struct user_event_mm {
++};
+ #endif
+ 
++static inline void user_events_fork(struct task_struct *t,
++				    unsigned long clone_flags)
++{
++}
++
++static inline void user_events_execve(struct task_struct *t)
++{
++}
++
++static inline void user_events_exit(struct task_struct *t)
++{
++}
++
+ #endif /* _LINUX_USER_EVENTS_H */
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 35e0a31a0315..0bfadc26d278 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -67,6 +67,7 @@
+ #include <linux/io_uring.h>
+ #include <linux/kprobes.h>
+ #include <linux/rethook.h>
++#include <linux/user_events.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -769,6 +770,7 @@ void __noreturn do_exit(long code)
+ 
+ 	coredump_task_exit(tsk);
+ 	ptrace_event(PTRACE_EVENT_EXIT, code);
++	user_events_exit(tsk);
+ 
+ 	validate_creds_for_do_exit(tsk);
+ 
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 08969f5aa38d..a4be76276ccb 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -97,6 +97,7 @@
+ #include <linux/scs.h>
+ #include <linux/io_uring.h>
+ #include <linux/bpf.h>
++#include <linux/user_events.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <linux/uaccess.h>
+@@ -2487,6 +2488,7 @@ static __latent_entropy struct task_struct *copy_process(
+ 
+ 	trace_task_newtask(p, clone_flags);
+ 	uprobe_copy_process(p, clone_flags);
++	user_events_fork(p, clone_flags);
+ 
+ 	copy_oom_score_adj(clone_flags, p);
  
 -- 
 2.25.1
