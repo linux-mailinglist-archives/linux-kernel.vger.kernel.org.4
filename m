@@ -2,150 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13F49642531
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:57:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E9E642534
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:58:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbiLEI5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:57:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
+        id S231639AbiLEI60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbiLEI47 (ORCPT
+        with ESMTP id S231745AbiLEI5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:56:59 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB27186D5
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:55:44 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id c1so17448559lfi.7
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:55:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xfg1yHqtX0q12ifIkBoCcowFenHMwDLU9Aqmhql/1bM=;
-        b=IDrbX64GmS8b+LNLFOReZkvoEfZxUM6UZGnodlCyKKbbV27VDRJiEeHTNgUg2Z0VcK
-         j9TLnGcx/5q9yxhHXf+Nn+6HTNQWQoeu1RmrYUW3KaeANTcXuyKNsli+Xhn9Uf/Lsm17
-         Dlk2g0N8T4EvD6KEsi0H/oblhJc6NYhjElPxtdbdPCWv50TvtbvJ7idC+KRsPQXvlkse
-         z4ExG+DpCnVwpH5T1dyDZ+JJn/4aZstmCCyn3Qz0N3sDivUlSC2HDuhP32RWUTAyahnj
-         qayfb9kVj87lc9nLr7OAcx2MbG3MlwhFI6cJie7Q25+VwdQXkTXCkEK95qgNZUkuWsDu
-         Zjtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xfg1yHqtX0q12ifIkBoCcowFenHMwDLU9Aqmhql/1bM=;
-        b=SUfrNfCTjY9zlT1DkqkwRM4JSHk2yE2264IJQH+2rwhd5uIiqKsDy4S0lT62Ks8I2u
-         VcumtFn8WYOGJWGnCLvopa6peLgOQ+JxmrD4037gK1fTaO8PBhUYwAUo2PjA7he6i2YL
-         UbwdJUsySb1pIXRGkB4x5PrA6CXFX4G7I0Mo+tygwDdJ5J+zSJW2ueP0V7miRqpEYvYV
-         FFsGQK7D47Hi+osNe8/2K8OzWymXhzZo5ASD2UgFGma3I13NjfxyJYkmT56+jImqeToI
-         UmMGUx4o5AawcrHzRmANxNxQMK+4lgmt7qQRP1o3Kh3ywrL6AhdSr6vzUYD3d0Kq2vLu
-         k6pA==
-X-Gm-Message-State: ANoB5pkF8isaujPgtkfnFibwLIEND3AJ3Tiutud6ApBfPbatzIDYKLEd
-        OT4rTXV+CEa5S3mS0BJacPh16qUwLv+W4JA463k=
-X-Google-Smtp-Source: AA0mqf51OQRphoCP+4uJweGZvapM+0agWx3FNr/wgHdYZQfwi37Ra6dU7e4LVM9n9/3PDpWxryXt2g==
-X-Received: by 2002:ac2:4c54:0:b0:4a2:7e2a:d2e1 with SMTP id o20-20020ac24c54000000b004a27e2ad2e1mr23313316lfk.641.1670230542363;
-        Mon, 05 Dec 2022 00:55:42 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id g1-20020a056512118100b004aab0ca795csm2066258lfr.211.2022.12.05.00.55.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:55:41 -0800 (PST)
-Message-ID: <3908e923-a063-0377-1854-ccbb3ecc704d@linaro.org>
-Date:   Mon, 5 Dec 2022 09:55:40 +0100
+        Mon, 5 Dec 2022 03:57:31 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1FDF6276;
+        Mon,  5 Dec 2022 00:56:11 -0800 (PST)
+Received: from loongson.cn (unknown [117.133.84.183])
+        by gateway (Coremail) with SMTP id _____8Dx++oqso1jRjwDAA--.7604S3;
+        Mon, 05 Dec 2022 16:56:10 +0800 (CST)
+Received: from [192.168.1.2] (unknown [117.133.84.183])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1cpso1j0tolAA--.9179S3;
+        Mon, 05 Dec 2022 16:56:09 +0800 (CST)
+Message-ID: <2a8fe97f-75c6-c481-1e37-1126ae1f97f6@loongson.cn>
+Date:   Mon, 5 Dec 2022 16:56:09 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
- glue driver
-To:     Chester Lin <clin@suse.com>
-Cc:     =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/2] i2c: loongson: add bus driver for the loongson i2c
+ controller
+To:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jan Petrous <jan.petrous@nxp.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Jose Abreu <joabreu@synopsys.com>, netdev@vger.kernel.org,
-        s32@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <mbrugger@suse.com>,
-        ghennadi.procopciuc@oss.nxp.com
-References: <20221128054920.2113-1-clin@suse.com>
- <20221128054920.2113-3-clin@suse.com>
- <4a7a9bf7-f831-e1c1-0a31-8afcf92ae84c@linaro.org>
- <560c38a5-318a-7a72-dc5f-8b79afb664ca@suse.de>
- <9778695f-f8a9-e361-e28f-f99525c96689@linaro.org>
- <Y42jqDiiq+rOurV+@linux-8mug>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y42jqDiiq+rOurV+@linux-8mug>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        William Zhang <william.zhang@broadcom.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Jan Dabros <jsd@semihalf.com>,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Sam Protsenko <semen.protsenko@linaro.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221128130025.23184-1-zhuyinbo@loongson.cn>
+ <Y42ubaVQclaTA7Eh@ninjato>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+In-Reply-To: <Y42ubaVQclaTA7Eh@ninjato>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxR1cpso1j0tolAA--.9179S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Xr1ftrW8GFy8Jry8XrWxXrb_yoWfCFbEkr
+        yYkFn7Cwn5Grs29348Kw1xuryag34Yqw4kGw1aqF1rZw1Fy398Xr4Dur97uw13ArZ7XFn5
+        Xan0qa48C348ujkaLaAFLSUrUUUUYb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUO
+        b7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM2
+        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r1q6r43M2AIxVAIcxkEcVAq
+        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
+        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Y
+        z7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxV
+        WUtVW8ZwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF
+        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIdWrDUUUU
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12/2022 08:54, Chester Lin wrote:
->>>>> +examples:
->>>>> +  - |
->>>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->>>>> +    #include <dt-bindings/interrupt-controller/irq.h>
->>>>> +
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_AXI
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_PCS
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RGMII
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_RMII
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TX_MII
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_PCS
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RGMII
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_RMII
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_RX_MII
->>>>> +    #define S32GEN1_SCMI_CLK_GMAC0_TS
->>>>
->>>> Why defines? Your clock controller is not ready? If so, just use raw
->>>> numbers.
->>>
->>> Please compare v1: There is no Linux-driven clock controller here but 
->>> rather a fluid SCMI firmware interface. Work towards getting clocks into 
->>> a kernel-hosted .dtsi was halted in favor of (downstream) TF-A, which 
->>> also explains the ugly examples here and for pinctrl.
+
+在 2022/12/5 16:40, Wolfram Sang 写道:
+> On Mon, Nov 28, 2022 at 09:00:24PM +0800, Yinbo Zhu wrote:
+>> This bus driver supports the Loongson i2c hardware controller in the
+>> Loongson platforms and supports to use DTS and ACPI framework to
+>> register i2c adapter device resources.
 >>
->> This does not explain to me why you added defines in the example. Are
->> you saying these can change any moment?
+>> The Loongson i2c controller supports operating frequencty is 50MHZ
+>> and supports the maximum transmission rate is 400kbps.
 >>
-> 
-> Actually these GMAC-related SCMI clock IDs changed once in NXP's downstream TF-A,
-> some redundant TS clock IDs were removed and the rest of clock IDs were all moved
-> forward. 
+>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> There are currently two people submitting a driver for this hardware.
+> This is the other driver:
+>
+> https://lore.kernel.org/all/f6cc2dbe5cd190031ab4f772d1cf250934288546.1669777792.git.zhoubinbin@loongson.cn/
+>
+> Can you guys please decide which one is "better" or combine the two to
+> make a better one?
+>
+> Thanks,
+>
+>     Wolfram
 
-This is not accepted. Your downstream TF-A cannot change bindings. As an
-upstream contributor you should push this back and definitely not try to
-upstream such approach.
+thanks your feedback,  please help review zhoubingbing's i2c patch.
 
-> Apart from GMAC-related IDs, some other clock IDs were also appended
-> in both base-clock IDs and platform-specific clock IDs [The first plat ID =
-> The last base ID + 1]. Due to the current design of the clk-scmi driver and the
-> SCMI clock protocol, IIUC, it's better to keep all clock IDs in sequence without
-> a blank in order to avoid query miss, which could affect the probe speed.
 
-You miss here broken ABI! Any change in IDs causes all DTBs to be
-broken. Downstream, upstream, other projects, everywhere.
+Thanks,
 
-Therefore thank you for clarifying that we need to be more careful about
-stuff coming from (or for) NXP. Here you need to drop all defines and
-all your patches must assume the ID is fixed. Once there, it's
-unchangeable without breaking the ABI.
+Yinbo.
 
-Best regards,
-Krzysztof
+>
 
