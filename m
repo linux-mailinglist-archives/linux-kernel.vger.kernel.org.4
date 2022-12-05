@@ -2,382 +2,361 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A619A6430F2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0E76430F5
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:01:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233389AbiLETAl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49776 "EHLO
+        id S233404AbiLETAn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 5 Dec 2022 14:00:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbiLETA1 (ORCPT
+        with ESMTP id S232179AbiLETAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:00:27 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9CD65AD;
-        Mon,  5 Dec 2022 11:00:21 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6EAEE188389E;
-        Mon,  5 Dec 2022 19:00:19 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 63F9825002E1;
-        Mon,  5 Dec 2022 19:00:19 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 590C091201E3; Mon,  5 Dec 2022 19:00:19 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-Received: from fujitsu.vestervang (2-104-116-184-cable.dk.customer.tdc.net [2.104.116.184])
-        by smtp.gigahost.dk (Postfix) with ESMTPSA id F349191201E4;
-        Mon,  5 Dec 2022 19:00:18 +0000 (UTC)
-From:   "Hans J. Schultz" <netdev@kapio-technology.com>
-To:     davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org,
-        "Hans J. Schultz" <netdev@kapio-technology.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB implementation
-Date:   Mon,  5 Dec 2022 19:59:08 +0100
-Message-Id: <20221205185908.217520-4-netdev@kapio-technology.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221205185908.217520-1-netdev@kapio-technology.com>
-References: <20221205185908.217520-1-netdev@kapio-technology.com>
+        Mon, 5 Dec 2022 14:00:31 -0500
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6455565AD;
+        Mon,  5 Dec 2022 11:00:30 -0800 (PST)
+Received: by mail-io1-f48.google.com with SMTP id n188so8184758iof.8;
+        Mon, 05 Dec 2022 11:00:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9Y0LkIG7CseqWaGcTYHgkEOPYPWFCe4s1CmA24MHEHU=;
+        b=hXJb7o1PcL3qZauq5KiDmgQ8ZnQhrsXjxjvKfmZu88Lbe1eTBrC85CbWDY529qbsX5
+         98LHobaj2FW5Ap94v2o0GqD2KzKLfY1nwhZgQzu1BBw04a0x9jtA5bF3ItCo6b72MhrK
+         QDij0p5zJ1KiT1gktM0xZb4bB/RGSqKyWpc1GvgR6jHYC6cRxChdxxruN8u1etIHQCvW
+         bhH24E9/9DcIBAdKNdb0twFVq09AsGtJCn5DGBPcpFOUKTBjMTor/ij8f450DgbbO6f1
+         zD1QHgm9XRZpz3xI1W6Tu96frTEjuhm+l2h1cf5U9Exaf75RyLB9ANa7N+LCxleiS+BX
+         OD3A==
+X-Gm-Message-State: ANoB5pmkYc8x+GtTkevP7ZHSOBei9IkfcXRDKxRfRA5kipEeNc32+s83
+        JCHyaXNrO/na0nK8Z0l6xtwYSiGO7MHJSFTjaPw=
+X-Google-Smtp-Source: AA0mqf7AS4Ulx1bvuJACj5AZwohAMg3Nxs7UCEUGxVUi2oo7FtwmiO0VPzMZeqMuhqXfixHcke3MNQgMmrPPguOWC8g=
+X-Received: by 2002:a05:6638:36f0:b0:38a:3978:f014 with SMTP id
+ t48-20020a05663836f000b0038a3978f014mr4116496jau.32.1670266828145; Mon, 05
+ Dec 2022 11:00:28 -0800 (PST)
 MIME-Version: 1.0
-Organization: Westermo Network Technologies AB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221018020227.85905-1-namhyung@kernel.org> <20221018020227.85905-19-namhyung@kernel.org>
+ <153310C5-413D-4079-9970-EDCEE2DF3340@linux.vnet.ibm.com>
+In-Reply-To: <153310C5-413D-4079-9970-EDCEE2DF3340@linux.vnet.ibm.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Mon, 5 Dec 2022 11:00:16 -0800
+Message-ID: <CAM9d7chxwxx+CuekO+6F8PcUveFTKhDL-aZdCfVwttfyyu-ecg@mail.gmail.com>
+Subject: Re: [PATCH 18/20] perf stat: Display event stats using aggr counts
+To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implementation for the Marvell mv88e6xxx chip series, is based on
-handling ATU miss violations occurring when packets ingress on a port
-that is locked with learning on. This will trigger a
-SWITCHDEV_FDB_ADD_TO_BRIDGE event, which will result in the bridge module
-adding a locked FDB entry. This bridge FDB entry will not age out as
-it has the extern_learn flag set.
+Hello,
 
-Userspace daemons can listen to these events and either accept or deny
-access for the host, by either replacing the locked FDB entry with a
-simple entry or leave the locked entry.
+On Mon, Dec 5, 2022 at 2:52 AM Athira Rajeev
+<atrajeev@linux.vnet.ibm.com> wrote:
+>
+>
+>
+> > On 18-Oct-2022, at 7:32 AM, Namhyung Kim <namhyung@kernel.org> wrote:
+> >
+> > Now aggr counts are ready for use.  Convert the display routines to use
+> > the aggr counts and update the shadow stat with them.  It doesn't need
+> > to aggregate counts or collect aliases anymore during the display.  Get
+> > rid of now unused struct perf_aggr_thread_value.
+> >
+> > Note that there's a difference in the display order among the aggr mode.
+> > For per-core/die/socket/node aggregation, it shows relevant events in
+> > the same unit together, whereas global/thread/no aggregation it shows
+> > the same events for different units together.  So it still uses separate
+> > codes to display them due to the ordering.
+> >
+> > One more thing to note is that it breaks per-core event display for now.
+> > The next patch will fix it to have identical output as of now.
+> >
+> > Acked-by: Ian Rogers <irogers@google.com>
+> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > ---
+> > tools/perf/util/stat-display.c | 421 ++++-----------------------------
+> > tools/perf/util/stat.c         |   5 -
+> > tools/perf/util/stat.h         |   9 -
+> > 3 files changed, 49 insertions(+), 386 deletions(-)
+> >
+> > diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+> > index 4113aa86772f..bfae2784609c 100644
+> > --- a/tools/perf/util/stat-display.c
+> > +++ b/tools/perf/util/stat-display.c
+> > @@ -442,31 +442,6 @@ static void print_metric_header(struct perf_stat_config *config,
+> >               fprintf(os->fh, "%*s ", config->metric_only_len, unit);
+> > }
+> >
+> > -static int first_shadow_map_idx(struct perf_stat_config *config,
+> > -                             struct evsel *evsel, const struct aggr_cpu_id *id)
+> > -{
+> > -     struct perf_cpu_map *cpus = evsel__cpus(evsel);
+> > -     struct perf_cpu cpu;
+> > -     int idx;
+> > -
+> > -     if (config->aggr_mode == AGGR_NONE)
+> > -             return perf_cpu_map__idx(cpus, id->cpu);
+> > -
+> > -     if (config->aggr_mode == AGGR_THREAD)
+> > -             return id->thread_idx;
+> > -
+> > -     if (!config->aggr_get_id)
+> > -             return 0;
+> > -
+> > -     perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
+> > -             struct aggr_cpu_id cpu_id = config->aggr_get_id(config, cpu);
+> > -
+> > -             if (aggr_cpu_id__equal(&cpu_id, id))
+> > -                     return idx;
+> > -     }
+> > -     return 0;
+> > -}
+> > -
+> > static void abs_printout(struct perf_stat_config *config,
+> >                        struct aggr_cpu_id id, int nr, struct evsel *evsel, double avg)
+> > {
+> > @@ -537,7 +512,7 @@ static bool is_mixed_hw_group(struct evsel *counter)
+> > static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int nr,
+> >                    struct evsel *counter, double uval,
+> >                    char *prefix, u64 run, u64 ena, double noise,
+> > -                  struct runtime_stat *st)
+> > +                  struct runtime_stat *st, int map_idx)
+> > {
+> >       struct perf_stat_output_ctx out;
+> >       struct outstate os = {
+> > @@ -648,8 +623,7 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+> >               print_running(config, run, ena);
+> >       }
+> >
+> > -     perf_stat__print_shadow_stats(config, counter, uval,
+> > -                             first_shadow_map_idx(config, counter, &id),
+> > +     perf_stat__print_shadow_stats(config, counter, uval, map_idx,
+> >                               &out, &config->metric_events, st);
+> >       if (!config->csv_output && !config->metric_only && !config->json_output) {
+> >               print_noise(config, counter, noise);
+> > @@ -657,34 +631,6 @@ static void printout(struct perf_stat_config *config, struct aggr_cpu_id id, int
+> >       }
+> > }
+> >
+> > -static void aggr_update_shadow(struct perf_stat_config *config,
+> > -                            struct evlist *evlist)
+> > -{
+> > -     int idx, s;
+> > -     struct perf_cpu cpu;
+> > -     struct aggr_cpu_id s2, id;
+> > -     u64 val;
+> > -     struct evsel *counter;
+> > -     struct perf_cpu_map *cpus;
+> > -
+> > -     for (s = 0; s < config->aggr_map->nr; s++) {
+> > -             id = config->aggr_map->map[s];
+> > -             evlist__for_each_entry(evlist, counter) {
+> > -                     cpus = evsel__cpus(counter);
+> > -                     val = 0;
+> > -                     perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
+> > -                             s2 = config->aggr_get_id(config, cpu);
+> > -                             if (!aggr_cpu_id__equal(&s2, &id))
+> > -                                     continue;
+> > -                             val += perf_counts(counter->counts, idx, 0)->val;
+> > -                     }
+> > -                     perf_stat__update_shadow_stats(counter, val,
+> > -                                     first_shadow_map_idx(config, counter, &id),
+> > -                                     &rt_stat);
+> > -             }
+> > -     }
+> > -}
+> > -
+> > static void uniquify_event_name(struct evsel *counter)
+> > {
+> >       char *new_name;
+> > @@ -721,137 +667,51 @@ static void uniquify_event_name(struct evsel *counter)
+> >       counter->uniquified_name = true;
+> > }
+> >
+> > -static void collect_all_aliases(struct perf_stat_config *config, struct evsel *counter,
+> > -                         void (*cb)(struct perf_stat_config *config, struct evsel *counter, void *data,
+> > -                                    bool first),
+> > -                         void *data)
+> > +static bool hybrid_uniquify(struct evsel *evsel, struct perf_stat_config *config)
+> > {
+> > -     struct evlist *evlist = counter->evlist;
+> > -     struct evsel *alias;
+> > -
+> > -     alias = list_prepare_entry(counter, &(evlist->core.entries), core.node);
+> > -     list_for_each_entry_continue (alias, &evlist->core.entries, core.node) {
+> > -             /* Merge events with the same name, etc. but on different PMUs. */
+> > -             if (!strcmp(evsel__name(alias), evsel__name(counter)) &&
+> > -                     alias->scale == counter->scale &&
+> > -                     alias->cgrp == counter->cgrp &&
+> > -                     !strcmp(alias->unit, counter->unit) &&
+> > -                     evsel__is_clock(alias) == evsel__is_clock(counter) &&
+> > -                     strcmp(alias->pmu_name, counter->pmu_name)) {
+> > -                     alias->merged_stat = true;
+> > -                     cb(config, alias, data, false);
+> > -             }
+> > -     }
+> > +     return evsel__is_hybrid(evsel) && !config->hybrid_merge;
+> > }
+> >
+> > -static bool hybrid_merge(struct evsel *counter, struct perf_stat_config *config,
+> > -                      bool check)
+> > +static void uniquify_counter(struct perf_stat_config *config, struct evsel *counter)
+> > {
+> > -     if (evsel__is_hybrid(counter)) {
+> > -             if (check)
+> > -                     return config->hybrid_merge;
+> > -             else
+> > -                     return !config->hybrid_merge;
+> > -     }
+> > -
+> > -     return false;
+> > -}
+> > -
+> > -static bool collect_data(struct perf_stat_config *config, struct evsel *counter,
+> > -                         void (*cb)(struct perf_stat_config *config, struct evsel *counter, void *data,
+> > -                                    bool first),
+> > -                         void *data)
+> > -{
+> > -     if (counter->merged_stat)
+> > -             return false;
+> > -     cb(config, counter, data, true);
+> > -     if (config->no_merge || hybrid_merge(counter, config, false))
+> > +     if (config->no_merge || hybrid_uniquify(counter, config))
+> >               uniquify_event_name(counter);
+> > -     else if (counter->auto_merge_stats || hybrid_merge(counter, config, true))
+> > -             collect_all_aliases(config, counter, cb, data);
+> > -     return true;
+> > -}
+> > -
+> > -struct aggr_data {
+> > -     u64 ena, run, val;
+> > -     struct aggr_cpu_id id;
+> > -     int nr;
+> > -     int cpu_map_idx;
+> > -};
+> > -
+> > -static void aggr_cb(struct perf_stat_config *config,
+> > -                 struct evsel *counter, void *data, bool first)
+> > -{
+> > -     struct aggr_data *ad = data;
+> > -     int idx;
+> > -     struct perf_cpu cpu;
+> > -     struct perf_cpu_map *cpus;
+> > -     struct aggr_cpu_id s2;
+> > -
+> > -     cpus = evsel__cpus(counter);
+> > -     perf_cpu_map__for_each_cpu(cpu, idx, cpus) {
+> > -             struct perf_counts_values *counts;
+> > -
+> > -             s2 = config->aggr_get_id(config, cpu);
+> > -             if (!aggr_cpu_id__equal(&s2, &ad->id))
+> > -                     continue;
+> > -             if (first)
+> > -                     ad->nr++;
+> > -             counts = perf_counts(counter->counts, idx, 0);
+> > -             /*
+> > -              * When any result is bad, make them all to give
+> > -              * consistent output in interval mode.
+> > -              */
+> > -             if (counts->ena == 0 || counts->run == 0 ||
+> > -                 counter->counts->scaled == -1) {
+> > -                     ad->ena = 0;
+> > -                     ad->run = 0;
+> > -                     break;
+> > -             }
+> > -             ad->val += counts->val;
+> > -             ad->ena += counts->ena;
+> > -             ad->run += counts->run;
+> > -     }
+> > }
+> >
+> > static void print_counter_aggrdata(struct perf_stat_config *config,
+> >                                  struct evsel *counter, int s,
+> >                                  char *prefix, bool metric_only,
+> > -                                bool *first, struct perf_cpu cpu)
+> > +                                bool *first)
+> > {
+> > -     struct aggr_data ad;
+> >       FILE *output = config->output;
+> >       u64 ena, run, val;
+> > -     int nr;
+> > -     struct aggr_cpu_id id;
+> >       double uval;
+> > +     struct perf_stat_evsel *ps = counter->stats;
+> > +     struct perf_stat_aggr *aggr = &ps->aggr[s];
+> > +     struct aggr_cpu_id id = config->aggr_map->map[s];
+> > +     double avg = aggr->counts.val;
+> >
+> > -     ad.id = id = config->aggr_map->map[s];
+> > -     ad.val = ad.ena = ad.run = 0;
+> > -     ad.nr = 0;
+> > -     if (!collect_data(config, counter, aggr_cb, &ad))
+> > +     if (counter->supported && aggr->nr == 0)
+> >               return;
+>
+> Hi Namhyung,
+>
+> Observed one issue with this change in tmp.perf/core branch of git://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git
+> Patch link: https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=tmp.perf/core&id=91f85f98da7ab8c32105f42dd03884c01ec4498f
+>
+> If we have multiple events in a group and if all events in that group can't go in at once, the group will fail to schedule.
+> The perf stat result used to have status of all events in group.
+>
+> Example result from powerpc:
+>         # perf stat -e '{r1001e,r401e0,r4c010}' <workload>
+>         Performance counter stats for 'workload’:
+>
+>              <not counted>      r1001e
+>              <not counted>      r401e0
+>            <not supported>      r4c010
+>
+> But after this change, it shows only the event which broke the constraint.
+>
+>         # ./perf stat -e '{r1001e,r401e0,r4c010}' <workload>
+>         Performance counter stats for 'workload’:
+>         <not supported>      r4c010
+>
+> The new condition added by the patch is:
+>
+>         if (counter->supported && aggr->nr == 0)
+>                         return;
+>
+>
+> The first two events r1001e and r401e0 are good to go in this group, hence
+> counter->supported  is true where as aggr->nr is zero since this group is
+> not scheduled. Since counter->supported is false for third event which
+> broke the group constraint, the condition won't return and hence only prints
+> this event in output.
+>
+> Namhyung, is there any scenario because of which this condition was added ?
+> If not I would go ahead and sent a fix patch to remove this check.
 
-If the host MAC address is already present on another port, a ATU
-member violation will occur, but to no real effect. Statistics on these
-violations can be shown with the command and example output of interest:
+I remember it's for AGGR_THREAD and merged (uncore) aliases and hybrid
+events.  In system-wide per-thread mode, many of them would get 0 results
+and we'd like to skip them.  And now I see that we have evsel->merged_stat
+check already.
 
-ethtool -S ethX
-NIC statistics:
-...
-     atu_member_violation: 5
-     atu_miss_violation: 23
-...
+Maybe we could just add the aggr_mode check there.
 
-Where ethX is the interface of the MAB enabled port.
-
-An anomaly has been observed, where the ATU op to read the FID reports
-FID=0 even though it is not a valid read. An -EINVAL error will be logged
-in this case. This was seen on a mv88e6097.
-
-Signed-off-by: Hans J. Schultz <netdev@kapio-technology.com>
----
- drivers/net/dsa/mv88e6xxx/Makefile      |  1 +
- drivers/net/dsa/mv88e6xxx/chip.c        | 18 ++++--
- drivers/net/dsa/mv88e6xxx/chip.h        | 15 +++++
- drivers/net/dsa/mv88e6xxx/global1_atu.c | 29 ++++++---
- drivers/net/dsa/mv88e6xxx/switchdev.c   | 83 +++++++++++++++++++++++++
- drivers/net/dsa/mv88e6xxx/switchdev.h   | 19 ++++++
- 6 files changed, 152 insertions(+), 13 deletions(-)
- create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.c
- create mode 100644 drivers/net/dsa/mv88e6xxx/switchdev.h
-
-diff --git a/drivers/net/dsa/mv88e6xxx/Makefile b/drivers/net/dsa/mv88e6xxx/Makefile
-index c8eca2b6f959..be903a983780 100644
---- a/drivers/net/dsa/mv88e6xxx/Makefile
-+++ b/drivers/net/dsa/mv88e6xxx/Makefile
-@@ -15,3 +15,4 @@ mv88e6xxx-objs += port_hidden.o
- mv88e6xxx-$(CONFIG_NET_DSA_MV88E6XXX_PTP) += ptp.o
- mv88e6xxx-objs += serdes.o
- mv88e6xxx-objs += smi.o
-+mv88e6xxx-objs += switchdev.o
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 66d7eae24ce0..732d7a2e2a07 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -1726,11 +1726,11 @@ static int mv88e6xxx_vtu_get(struct mv88e6xxx_chip *chip, u16 vid,
- 	return err;
- }
- 
--static int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
--			      int (*cb)(struct mv88e6xxx_chip *chip,
--					const struct mv88e6xxx_vtu_entry *entry,
--					void *priv),
--			      void *priv)
-+int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-+		       int (*cb)(struct mv88e6xxx_chip *chip,
-+				 const struct mv88e6xxx_vtu_entry *entry,
-+				 void *priv),
-+		       void *priv)
- {
- 	struct mv88e6xxx_vtu_entry entry = {
- 		.vid = mv88e6xxx_max_vid(chip),
-@@ -6524,7 +6524,7 @@ static int mv88e6xxx_port_pre_bridge_flags(struct dsa_switch *ds, int port,
- 	const struct mv88e6xxx_ops *ops;
- 
- 	if (flags.mask & ~(BR_LEARNING | BR_FLOOD | BR_MCAST_FLOOD |
--			   BR_BCAST_FLOOD | BR_PORT_LOCKED))
-+			   BR_BCAST_FLOOD | BR_PORT_LOCKED | BR_PORT_MAB))
- 		return -EINVAL;
- 
- 	ops = chip->info->ops;
-@@ -6582,6 +6582,12 @@ static int mv88e6xxx_port_bridge_flags(struct dsa_switch *ds, int port,
- 			goto out;
- 	}
- 
-+	if (flags.mask & BR_PORT_MAB) {
-+		bool mab = !!(flags.val & BR_PORT_MAB);
-+
-+		mv88e6xxx_port_set_mab(chip, port, mab);
-+	}
-+
- 	if (flags.mask & BR_PORT_LOCKED) {
- 		bool locked = !!(flags.val & BR_PORT_LOCKED);
- 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index e693154cf803..f635a5bb47ce 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -280,6 +280,9 @@ struct mv88e6xxx_port {
- 	unsigned int serdes_irq;
- 	char serdes_irq_name[64];
- 	struct devlink_region *region;
-+
-+	/* MacAuth Bypass control flag */
-+	bool mab;
- };
- 
- enum mv88e6xxx_region_id {
-@@ -784,6 +787,12 @@ static inline bool mv88e6xxx_is_invalid_port(struct mv88e6xxx_chip *chip, int po
- 	return (chip->info->invalid_port_mask & BIT(port)) != 0;
- }
- 
-+static inline void mv88e6xxx_port_set_mab(struct mv88e6xxx_chip *chip,
-+					  int port, bool mab)
-+{
-+	chip->ports[port].mab = mab;
-+}
-+
- int mv88e6xxx_read(struct mv88e6xxx_chip *chip, int addr, int reg, u16 *val);
- int mv88e6xxx_write(struct mv88e6xxx_chip *chip, int addr, int reg, u16 val);
- int mv88e6xxx_wait_mask(struct mv88e6xxx_chip *chip, int addr, int reg,
-@@ -802,6 +811,12 @@ static inline void mv88e6xxx_reg_unlock(struct mv88e6xxx_chip *chip)
- 	mutex_unlock(&chip->reg_lock);
- }
- 
-+int mv88e6xxx_vtu_walk(struct mv88e6xxx_chip *chip,
-+		       int (*cb)(struct mv88e6xxx_chip *chip,
-+				 const struct mv88e6xxx_vtu_entry *entry,
-+				 void *priv),
-+		       void *priv);
-+
- int mv88e6xxx_fid_map(struct mv88e6xxx_chip *chip, unsigned long *bitmap);
- 
- #endif /* _MV88E6XXX_CHIP_H */
-diff --git a/drivers/net/dsa/mv88e6xxx/global1_atu.c b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-index 8a874b6fc8e1..bb004df517b2 100644
---- a/drivers/net/dsa/mv88e6xxx/global1_atu.c
-+++ b/drivers/net/dsa/mv88e6xxx/global1_atu.c
-@@ -12,6 +12,7 @@
- 
- #include "chip.h"
- #include "global1.h"
-+#include "switchdev.h"
- 
- /* Offset 0x01: ATU FID Register */
- 
-@@ -408,23 +409,25 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 
- 	err = mv88e6xxx_g1_read_atu_violation(chip);
- 	if (err)
--		goto out;
-+		goto out_unlock;
- 
- 	err = mv88e6xxx_g1_read(chip, MV88E6XXX_G1_ATU_OP, &val);
- 	if (err)
--		goto out;
-+		goto out_unlock;
- 
- 	err = mv88e6xxx_g1_atu_fid_read(chip, &fid);
- 	if (err)
--		goto out;
-+		goto out_unlock;
- 
- 	err = mv88e6xxx_g1_atu_data_read(chip, &entry);
- 	if (err)
--		goto out;
-+		goto out_unlock;
- 
- 	err = mv88e6xxx_g1_atu_mac_read(chip, &entry);
- 	if (err)
--		goto out;
-+		goto out_unlock;
-+
-+	mv88e6xxx_reg_unlock(chip);
- 
- 	spid = entry.state;
- 
-@@ -446,6 +449,18 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 				    "ATU miss violation for %pM portvec %x spid %d\n",
- 				    entry.mac, entry.portvec, spid);
- 		chip->ports[spid].atu_miss_violation++;
-+
-+		if (!fid) {
-+			err = -EINVAL;
-+			goto out;
-+		}
-+
-+		if (chip->ports[spid].mab) {
-+			err = mv88e6xxx_handle_miss_violation(chip, spid,
-+							      &entry, fid);
-+			if (err)
-+				goto out;
-+		}
- 	}
- 
- 	if (val & MV88E6XXX_G1_ATU_OP_FULL_VIOLATION) {
-@@ -454,13 +469,13 @@ static irqreturn_t mv88e6xxx_g1_atu_prob_irq_thread_fn(int irq, void *dev_id)
- 				    entry.mac, entry.portvec, spid);
- 		chip->ports[spid].atu_full_violation++;
- 	}
--	mv88e6xxx_reg_unlock(chip);
- 
- 	return IRQ_HANDLED;
- 
--out:
-+out_unlock:
- 	mv88e6xxx_reg_unlock(chip);
- 
-+out:
- 	dev_err(chip->dev, "ATU problem: error %d while handling interrupt\n",
- 		err);
- 	return IRQ_HANDLED;
-diff --git a/drivers/net/dsa/mv88e6xxx/switchdev.c b/drivers/net/dsa/mv88e6xxx/switchdev.c
-new file mode 100644
-index 000000000000..4c346a884fb2
---- /dev/null
-+++ b/drivers/net/dsa/mv88e6xxx/switchdev.c
-@@ -0,0 +1,83 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * switchdev.c
-+ *
-+ *	Authors:
-+ *	Hans J. Schultz		<netdev@kapio-technology.com>
-+ *
-+ */
-+
-+#include <net/switchdev.h>
-+#include "chip.h"
-+#include "global1.h"
-+#include "switchdev.h"
-+
-+struct mv88e6xxx_fid_search_ctx {
-+	u16 fid_search;
-+	u16 vid_found;
-+};
-+
-+static int __mv88e6xxx_find_vid(struct mv88e6xxx_chip *chip,
-+				const struct mv88e6xxx_vtu_entry *entry,
-+				void *priv)
-+{
-+	struct mv88e6xxx_fid_search_ctx *ctx = priv;
-+
-+	if (ctx->fid_search == entry->fid) {
-+		ctx->vid_found = entry->vid;
-+		return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int mv88e6xxx_find_vid(struct mv88e6xxx_chip *chip, u16 fid, u16 *vid)
-+{
-+	struct mv88e6xxx_fid_search_ctx ctx;
-+	int err;
-+
-+	ctx.fid_search = fid;
-+	mv88e6xxx_reg_lock(chip);
-+	err = mv88e6xxx_vtu_walk(chip, __mv88e6xxx_find_vid, &ctx);
-+	mv88e6xxx_reg_unlock(chip);
-+	if (err < 0)
-+		return err;
-+	if (err == 1)
-+		*vid = ctx.vid_found;
-+	else
-+		return -ENOENT;
-+
-+	return 0;
-+}
-+
-+int mv88e6xxx_handle_miss_violation(struct mv88e6xxx_chip *chip, int port,
-+				    struct mv88e6xxx_atu_entry *entry, u16 fid)
-+{
-+	struct switchdev_notifier_fdb_info info = {
-+		.addr = entry->mac,
-+		.locked = true,
-+	};
-+	struct net_device *brport;
-+	struct dsa_port *dp;
-+	u16 vid;
-+	int err;
-+
-+	err = mv88e6xxx_find_vid(chip, fid, &vid);
-+	if (err)
-+		return err;
-+
-+	info.vid = vid;
-+	dp = dsa_to_port(chip->ds, port);
-+
-+	rtnl_lock();
-+	brport = dsa_port_to_bridge_port(dp);
-+	if (!brport) {
-+		rtnl_unlock();
-+		return -ENODEV;
-+	}
-+	err = call_switchdev_notifiers(SWITCHDEV_FDB_ADD_TO_BRIDGE,
-+				       brport, &info.info, NULL);
-+	rtnl_unlock();
-+
-+	return err;
-+}
-diff --git a/drivers/net/dsa/mv88e6xxx/switchdev.h b/drivers/net/dsa/mv88e6xxx/switchdev.h
-new file mode 100644
-index 000000000000..62214f9d62b0
---- /dev/null
-+++ b/drivers/net/dsa/mv88e6xxx/switchdev.h
-@@ -0,0 +1,19 @@
-+/* SPDX-License-Identifier: GPL-2.0-or-later
-+ *
-+ * switchdev.h
-+ *
-+ *	Authors:
-+ *	Hans J. Schultz		<netdev@kapio-technology.com>
-+ *
-+ */
-+
-+#ifndef _MV88E6XXX_SWITCHDEV_H_
-+#define _MV88E6XXX_SWITCHDEV_H_
-+
-+#include "chip.h"
-+
-+int mv88e6xxx_handle_miss_violation(struct mv88e6xxx_chip *chip, int port,
-+				    struct mv88e6xxx_atu_entry *entry,
-+				    u16 fid);
-+
-+#endif /* _MV88E6XXX_SWITCHDEV_H_ */
--- 
-2.34.1
-
+Thanks,
+Namhyung
