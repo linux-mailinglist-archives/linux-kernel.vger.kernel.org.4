@@ -2,76 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70FD642C4E
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:53:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 285CD642C55
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 16:57:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbiLEPxS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 10:53:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60414 "EHLO
+        id S232078AbiLEP45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 10:56:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiLEPxQ (ORCPT
+        with ESMTP id S231494AbiLEP4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 10:53:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC21213D75;
-        Mon,  5 Dec 2022 07:53:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 60438B8113A;
-        Mon,  5 Dec 2022 15:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 937AFC433D6;
-        Mon,  5 Dec 2022 15:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670255592;
-        bh=ljntIpg75HkHsR3cg+6kKx8b082KUIAgJDZVFMhFUB0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=drx3svl1jdFTbc90PJ6PmVJyOjnaEcHf39vmYKmDstPEf46EWXPPXE1lv/U7byVdW
-         ufC40X2PeTJVTT5VlcRmc70/2b4cb2aYP6Y72SPeKnDgTuPpvo7ydCfvW0mlwLKwjS
-         juDIqq6znFg/TJTpeGC8yMWXjr5Z4897AO3i18OU=
-Date:   Mon, 5 Dec 2022 16:53:10 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Allen Webb <allenwebb@google.com>
-Cc:     "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v6 5/5] drivers: Implement module modaliases for USB
-Message-ID: <Y44T5k7RFXafva6t@kroah.com>
-References: <20221202224540.1446952-1-allenwebb@google.com>
- <20221202224744.1447448-1-allenwebb@google.com>
- <20221202224744.1447448-5-allenwebb@google.com>
+        Mon, 5 Dec 2022 10:56:55 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596A71ADA9
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 07:56:54 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2Dpi-00011Z-NZ; Mon, 05 Dec 2022 16:56:42 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2Dpf-002VLp-O6; Mon, 05 Dec 2022 16:56:40 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2Dpf-002oje-K2; Mon, 05 Dec 2022 16:56:39 +0100
+Date:   Mon, 5 Dec 2022 16:56:39 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Wolfram Sang <wsa@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Peter Rosin <peda@axentia.se>, linux-i2c@vger.kernel.org,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 047/606] i2c: mux: pca9541: Convert to i2c's .probe_new()
+Message-ID: <20221205155639.4dgyoiafmmn5xehp@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-48-uwe@kleine-koenig.org>
+ <Y4296PEnzgtNyAo6@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ucoddo5mjexf4xpk"
 Content-Disposition: inline
-In-Reply-To: <20221202224744.1447448-5-allenwebb@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4296PEnzgtNyAo6@ninjato>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:47:44PM -0600, Allen Webb wrote:
-> Add the per-subsystem logic needed to print match-based modaliases to
-> the USB subsystem, so the modalias sysfs attribute for modules will
-> function for modules that register USB drivers.
-> 
-> Signed-off-by: Allen Webb <allenwebb@google.com>
-> ---
->  drivers/base/Makefile          |   2 +-
->  drivers/base/base.h            |   8 +
->  drivers/base/mod_devicetable.c | 257 +++++++++++++++++++++++++++++++++
->  drivers/usb/core/driver.c      |   2 +
 
-It feels like you have a lot of USB-specific stuff here in the driver
-core, and not enough in the usb core.  How is each different bus going
-to do this?  Add code to the driver core?  It should be able to not
-touch the driver core at all to add support for this for a new bus.
+--ucoddo5mjexf4xpk
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
+On Mon, Dec 05, 2022 at 10:46:16AM +0100, Wolfram Sang wrote:
+> On Fri, Nov 18, 2022 at 11:36:21PM +0100, Uwe Kleine-K=F6nig wrote:
+> > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > The probe function doesn't make use of the i2c_device_id * parameter so=
+ it
+> > can be trivially converted.
+> >=20
+> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> Found an older patch doing the same, but still thanks!
 
-greg k-h
+Yeah, sorry for the duplicates. I started on mainline instead of next +
+my patchstack when creating this series.
+
+Thanks for picking these up
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ucoddo5mjexf4xpk
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOOFLQACgkQwfwUeK3K
+7AnKKwf+LhM5BfMzD9oZF6YPSQv53xEbXW0QpUnyDugIGUxa4hRvNfqMXBHPWKGv
+sAjM215hlWhdC/d1tAmf1Pr/Xer3W6LWsGU+1hReP/xqetBV6tYVBLFrgCCJuvGf
+KapQZXY2l0RIDsEPdGdMdKUTXho5FOk6jQnSEUkXnbxtMnclOr2Gjgs8J/ocibK/
+IWHZAxNTw+rFp19hSv5+rm4jnu8MBc+7tdsXabrQ8ptbBxYsRUduaCRKQmVG0Cep
+6oSqpCUa+dITqJ+C4Uybq8hQHHtvBeelVZA9/J6v+knK7TW4jzSsAlV/b8F7BExF
+S7RBwelxYwrzg3/7KCgcsiIHVCCN3A==
+=Gy7X
+-----END PGP SIGNATURE-----
+
+--ucoddo5mjexf4xpk--
