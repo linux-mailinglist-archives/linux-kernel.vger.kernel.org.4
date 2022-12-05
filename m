@@ -2,109 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB126424E0
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F360B6424E7
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 09:43:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232155AbiLEIms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 03:42:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S232210AbiLEInr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 03:43:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiLEImp (ORCPT
+        with ESMTP id S232167AbiLEIng (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 03:42:45 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A2405FA9
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 00:42:43 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id h12so17404188wrv.10
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 00:42:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=If5qlixuUuCrpqJqTQzfWNyU5P9n2l4cyuUetIlMVDA=;
-        b=mvcWfHXUs+nS4mi6KaQhhybAcY63Fu3k9wkvPSzubDOVRxXnWdQnGlvmDA2gwoUaJM
-         PIYM0OVjn2K3cY4mxtML7Prk73+rLaCpRElmP7hINu8qUyIxSnlQKVSxmZZfM58duaM9
-         mIqjs1DfmePgdp+lDpG4lNCy7tZ3jKIbapWYdvMdCaQbJ6S2DMEm5fXivffQ13OBjURJ
-         MZnZ6kub4xIdQGo0Gskxgp/sgL79BOGNV8eX0sSx31wNuvY7z1aPkELiIT+mv+CKeXb1
-         Z7fu+RkUawlZ0iJ8kEP1PrURInk5r4DerdaWnElJwgRAksWUyUUnIG5bMtFjszjTR6p0
-         t2Jg==
+        Mon, 5 Dec 2022 03:43:36 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532CF6305;
+        Mon,  5 Dec 2022 00:43:35 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id r19so10927621qtx.6;
+        Mon, 05 Dec 2022 00:43:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=If5qlixuUuCrpqJqTQzfWNyU5P9n2l4cyuUetIlMVDA=;
-        b=sM9o0QvYOTkdSfLMe4OtXgjHcQG+DEg22RV6gi8ltvQNEe1rpj6fbf3S9zRmIB5Rxd
-         Vl9WJPVPq2OR1X4iBGimcFye5Ue6bm2Eej8bYlQF+nexVtsvBf0zJ82ew6g/NQHS9bsA
-         tspVyPi8iCjksdSIm8+mWGCqK+/EWjkSuQlj7Mo7OUnpZvb8qOXA2EkGUPf9hjQJPBIA
-         0k29glpnbteMG1THoTi0uScNY61a2nv74ffReebQWYBW76th6wg1j6jC+ctVWHMWvfti
-         GIG2PSGcdFce4XI7iDsHz/zuop5KE0mamnRH7XqAixGTRcisByibED86b+oVYpQotZ+q
-         yS/Q==
-X-Gm-Message-State: ANoB5plhGpYLK6dmUwoIrpPpQQytoQD5V6a8jt60n3UAT7O4O45XMMV2
-        //QfaqutJb/nXTUa9r0lYpPAzg==
-X-Google-Smtp-Source: AA0mqf7ftmwbCHcJjnnGuPWrlw7r3FnwQ27WNFbwK36TbXGmqA9uPXrcdiSRAypn+Q9Bh85Th5WD0w==
-X-Received: by 2002:adf:cf11:0:b0:242:4f41:2ef6 with SMTP id o17-20020adfcf11000000b002424f412ef6mr5486456wrj.56.1670229761713;
-        Mon, 05 Dec 2022 00:42:41 -0800 (PST)
-Received: from [192.168.7.93] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id fn9-20020a05600c688900b003cf75213bb9sm20089291wmb.8.2022.12.05.00.42.40
+        bh=TBMfq/T9pVt74NINWFPN13PsYwGHM/ql2acng2MzNpk=;
+        b=XLPwdPgWvFFoFQN+IzToIE+Rp+PBxH/j3QeCEWWNPdY1UmiHjMuAPOk1cCBIOUo/92
+         KEZ0nyYJijwYDRCkFphkit/6vh7Ed5uApsdp6x8XNq0TnJc8QH4JYiHoTQ5f4E68nso2
+         wurDT/2KgY0NhLOFCfN3una6P+FYxLUdxoPXGPXY1xFbfNiVMZHZ/4/5CdkyBCO/ouSo
+         dLvz9c7NIAIHCp577lDKyfrxYVGEY7WA5pP2UU38lLotA4m3ItbzIRh6e3w8VJgdWhJc
+         28n30M/sQlXTQDtyVm61pIsyiYlNwMdwlRZ1zx6IPxs3OTVyecHCo2nw38AH0VNiK59F
+         TInA==
+X-Gm-Message-State: ANoB5pn2tAvVakXuEDo+3ajWep8eO9HLlhUrofqCuGY6dIyZgrT05xZB
+        so3eEiYazjlfVekFTUs6nObcTCQXqYA0AA==
+X-Google-Smtp-Source: AA0mqf7LljSCKLMpTtLeL1eI9+y7kuEj12tHYQC/QBTSLfMrgoTGoYRyUB+qr1CPxH4lrMtXVsPKvA==
+X-Received: by 2002:ac8:1183:0:b0:3a5:8517:c3f3 with SMTP id d3-20020ac81183000000b003a58517c3f3mr74725249qtj.618.1670229813895;
+        Mon, 05 Dec 2022 00:43:33 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id bs17-20020a05620a471100b006bbc3724affsm12123722qkb.45.2022.12.05.00.43.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 00:42:41 -0800 (PST)
-Message-ID: <5f4579fc-36d4-608a-3ef3-8033faed6873@linaro.org>
-Date:   Mon, 5 Dec 2022 09:42:40 +0100
+        Mon, 05 Dec 2022 00:43:33 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-3b5d9050e48so110914357b3.2;
+        Mon, 05 Dec 2022 00:43:33 -0800 (PST)
+X-Received: by 2002:a81:148c:0:b0:3e5:f2ca:7be8 with SMTP id
+ 134-20020a81148c000000b003e5f2ca7be8mr7694852ywu.358.1670229812835; Mon, 05
+ Dec 2022 00:43:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v6 8/8] arm64: dts: Fix NPU power domain references in
- Amlogic G12-based SoCs
-Content-Language: en-US
-To:     Tomeu Vizoso <tomeu.vizoso@collabora.com>
-Cc:     italonicola@collabora.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/Amlogic Meson SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Amlogic Meson SoC support" 
-        <linux-amlogic@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221202115223.39051-1-tomeu.vizoso@collabora.com>
- <20221202115223.39051-9-tomeu.vizoso@collabora.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20221202115223.39051-9-tomeu.vizoso@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221203092941.10880-1-yuehaibing@huawei.com> <OS0PR01MB592214C639E060C5AD3A67BF86169@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+In-Reply-To: <OS0PR01MB592214C639E060C5AD3A67BF86169@OS0PR01MB5922.jpnprd01.prod.outlook.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 5 Dec 2022 09:43:20 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXs1jNgOD4u2ncW81rfxC7xb1+hc3N2VH_Gom8f9zB+vw@mail.gmail.com>
+Message-ID: <CAMuHMdXs1jNgOD4u2ncW81rfxC7xb1+hc3N2VH_Gom8f9zB+vw@mail.gmail.com>
+Subject: Re: [PATCH net] ravb: Fix potential use-after-free in ravb_rx_gbeth()
+To:     Biju Das <biju.das.jz@bp.renesas.com>
+Cc:     YueHaibing <yuehaibing@huawei.com>,
+        "s.shtylyov@omp.ru" <s.shtylyov@omp.ru>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/12/2022 12:52, Tomeu Vizoso wrote:
-> The power sequence is different between SoCs in that family, so get the
-> right bits for each one.
-> 
-> Signed-off-by: Tomeu Vizoso <tomeu.vizoso@collabora.com>
-> ---
->   arch/arm64/boot/dts/amlogic/meson-g12-common.dtsi | 2 --
->   arch/arm64/boot/dts/amlogic/meson-g12b.dtsi       | 4 ++++
->   arch/arm64/boot/dts/amlogic/meson-sm1.dtsi        | 4 ++++
->   3 files changed, 8 insertions(+), 2 deletions(-)
+Hi Biju,
 
+On Sat, Dec 3, 2022 at 11:29 AM Biju Das <biju.das.jz@bp.renesas.com> wrote:
+> > Subject: [PATCH net] ravb: Fix potential use-after-free in
+> > ravb_rx_gbeth()
+> >
+> > The skb is delivered to napi_gro_receive() which may free it, after
+> > calling this, dereferencing skb may trigger use-after-free.
+>
+> Can you please reconfirm the changes you have done is actually fixing any issue?
+> If yes, please provide the details.
+>
+> Current code,
+>
+> napi_gro_receive(&priv->napi[q], priv->rx_1st_skb);
 
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+IIUIC, after this, priv->rx_1st_skb may have been freed...
 
+>
+> - stats->rx_bytes += priv->rx_1st_skb->len;
 
-I'll probably squash it in patch 4.
+... so accessing priv->rx_1st_skb->len here may be a UAF.
 
-thanks,
-Neil
+> + stats->rx_bytes += pkt_len;
+
+So this change looks correct to me, as pkt_len was stored to
+priv->rx_1st_skb->len using skb_put() before.
+
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+>
+> Note: I haven't tested your patch yet to see it cause any regression.
+>
+> Cheers,
+> Biju
+>
+> >
+> > Fixes: 1c59eb678cbd ("ravb: Fillup ravb_rx_gbeth() stub")
+> > Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> > ---
+> >  drivers/net/ethernet/renesas/ravb_main.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/net/ethernet/renesas/ravb_main.c
+> > b/drivers/net/ethernet/renesas/ravb_main.c
+> > index 6bc923326268..33f723a9f471 100644
+> > --- a/drivers/net/ethernet/renesas/ravb_main.c
+> > +++ b/drivers/net/ethernet/renesas/ravb_main.c
+> > @@ -841,7 +841,7 @@ static bool ravb_rx_gbeth(struct net_device *ndev,
+> > int *quota, int q)
+> >                               napi_gro_receive(&priv->napi[q],
+> >                                                priv->rx_1st_skb);
+> >                               stats->rx_packets++;
+> > -                             stats->rx_bytes += priv->rx_1st_skb->len;
+> > +                             stats->rx_bytes += pkt_len;
+> >                               break;
+> >                       }
+> >               }
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
