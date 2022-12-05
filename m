@@ -2,182 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54F2643618
+	by mail.lfdr.de (Postfix) with ESMTP id 706CA643617
 	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 21:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232515AbiLEUwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 15:52:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53226 "EHLO
+        id S232755AbiLEUwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 15:52:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiLEUwS (ORCPT
+        with ESMTP id S232516AbiLEUwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 15:52:18 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6785629347
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 12:52:17 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id cf42so14727520lfb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 12:52:17 -0800 (PST)
+        Mon, 5 Dec 2022 15:52:22 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E67E2935D;
+        Mon,  5 Dec 2022 12:52:21 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id n20so1559070ejh.0;
+        Mon, 05 Dec 2022 12:52:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vqBCULZsH1OdaokS8FbAX84aFqUsQnlUhPdzG7kPjaQ=;
-        b=b/gNb7v5ouWnLQNd18FzsJWvshGa9Ys+2oX/N7t3fdcf1vjQCdxfiUeUCmeIDuivem
-         6/ZuvGLZ0qvVxZP+Bp5oF3lHYZMDdd8NNnknpdZihIkh0DD8UG8V2dab7l3jLgsTo1gU
-         PzJQ8VSveolTDGrG4qjNgmWVSttRsC0enQeB5csK3DdR4P5Wb4wXEEs3M9H3sb4IyD0D
-         WTLAO50LqaY35B+LbfB8B6MnzGY38XSrTveuYszpquFVlMOHyGdrdnpbiIVkfDx5D3ht
-         J1HuvuGPM8rSphvyFaW8D53TUbA9fcrugG4sR8K/eVcyKD6qBd9bEG0sOJXceoubw3Pe
-         F8OA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EUw6Hd+Tb+y6+h8IPlKOEXxbYBmUXjkCM3BqWwxBlG8=;
+        b=Tu0y2YsPn1xteSCPzD/5LdsrIuEIAlXs+99JqYe67QKzQW9c1ZbI6s6ujYamITNDtN
+         fNKvydO8AlCHSYhDHPCsITas0Rz0ZV6NDz3uFJW3jZgHzsm9vSzBwaE/7RWcRLaGmnSJ
+         YBwoHkRvfYRVdNYhwRYGPgAl28cYKv77KViE+Zi9YPB/L4PrEbHivc00W0RlXJPxPDN5
+         12/9Gxb77g23va8VGt+558SCRm5WjlOSlseXI7EV/e61rHArn9Ww6wDZxqbKHo1dKmCd
+         c0lSgQBBaK982lqTBd32DdwR62vZgMenBDxvWwtM2QfZK/1nJDIxOJhazKvWRJK72G3O
+         aopQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vqBCULZsH1OdaokS8FbAX84aFqUsQnlUhPdzG7kPjaQ=;
-        b=tJh6Rq2/1HF1ugpThB0kRYwWF/cczL4KZoUEcWurNSPs6yRidiJ6OlXYZEBxvmIDm6
-         tHMCq3e5xj+sZbn3B+G+o7I+dVtI9S9EURFs4+6WabyyJE7HfZzdrIYl1E1j1g9MmeUu
-         wYpnsxNmIl+FEiyYTkBhKW3/wKGZzJlW4mwpyz4RsJbrNGLlvfg+dmdoSVC91oon15Qk
-         zeY7RrsAG6Q+ah5qWZntSFWu006zt6PcIsMOxmCHB0VCDepmKouSJdnFOACGqSrHMvCK
-         WFhzL23IpmpsE46RSO2pWy1BAhPqtcQNQT4C16hTeoT1sEUP8bPAQuh9oOYds6IMwhJb
-         z/WA==
-X-Gm-Message-State: ANoB5pmTatcE6VJERekG2lgn8CDhbJQcWIncGphKMlBIcxsay0tA+1hp
-        r9cUDKy7etKuBb+2ZVn8N3yxTg==
-X-Google-Smtp-Source: AA0mqf6l1OJoaWZd7yCu3zcRqXMekbpIIUVEADTiLCwbsEbC8iDuyXbb1SYSGfvhvl5TTweL0EpH0g==
-X-Received: by 2002:a05:6512:b98:b0:4b5:5f2d:1458 with SMTP id b24-20020a0565120b9800b004b55f2d1458mr3408679lfv.253.1670273535824;
-        Mon, 05 Dec 2022 12:52:15 -0800 (PST)
-Received: from [127.0.0.1] ([94.25.229.129])
-        by smtp.gmail.com with ESMTPSA id g6-20020a0565123b8600b004b5812207dbsm153841lfv.201.2022.12.05.12.52.15
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Dec 2022 12:52:15 -0800 (PST)
-Date:   Mon, 05 Dec 2022 23:51:54 +0300
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        airlied@gmail.com
-CC:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v8_4/5=5D_drm/msm/dp=3A_parser_link?= =?US-ASCII?Q?-frequencies_as_property_of_dp=5Fout_endpoint?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1670267670-15832-5-git-send-email-quic_khsieh@quicinc.com>
-References: <1670267670-15832-1-git-send-email-quic_khsieh@quicinc.com> <1670267670-15832-5-git-send-email-quic_khsieh@quicinc.com>
-Message-ID: <E8BDDF33-972D-4CC2-9D22-DFE23A7C38E6@linaro.org>
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EUw6Hd+Tb+y6+h8IPlKOEXxbYBmUXjkCM3BqWwxBlG8=;
+        b=Rya5nML5L9nyUL045+b8ILk0Q3Dm0BBwjRTcN0FxfjLojR1GzLqJHMDmZC3FbdKo0T
+         tfUbiILWEYXXKLcQ/wVuqAt6tNqTdFv7e7XP2UqHHA2dTs7VMadVOX2gx7gjrkPbeMeJ
+         +m+j1n20AviOYjxhFzPhMlVBMBZB5eqxF5abGgc1AiGAx8N1v8TZJxVLBqhOQJacmIpC
+         STa0HI6BNvIPR1vaMCm/rsR1Innxc4Uf4HgnHIe5W27lto6cbh4HnwbU2C/8RMcia1d6
+         E5D+vyRGmqNwlrR/GznJcoAYDLxDa3dSMuLftVrbbI3B5KGJBCndnUdsVF2iPT+FsIwZ
+         iE/g==
+X-Gm-Message-State: ANoB5pl+k+D4gOPqTjYP6Z8T/FmoOdtIWXUheg6gONzQec6PNHHd71w7
+        QAEPQ1XZeHjUXOizJn0DbzQ=
+X-Google-Smtp-Source: AA0mqf5GnVmcrBfMG8tVYmiTkS2qjOw6eiBPylS67ujMkmT01we801GcaVxVM/HsmWm1ZFJQfC2r1g==
+X-Received: by 2002:a17:906:6dd7:b0:7a1:1c24:e564 with SMTP id j23-20020a1709066dd700b007a11c24e564mr58800700ejt.629.1670273539855;
+        Mon, 05 Dec 2022 12:52:19 -0800 (PST)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id s26-20020a170906285a00b007af0f0d2249sm6645367ejc.52.2022.12.05.12.52.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 12:52:19 -0800 (PST)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     paul.kocialkowski@bootlin.com, Yang Li <yang.lee@linux.alibaba.com>
+Cc:     mchehab@kernel.org, wens@csie.org, samuel@sholland.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] staging: media: Remove surplus dev_err() when using platform_get_irq()
+Date:   Mon, 05 Dec 2022 21:52:18 +0100
+Message-ID: <4229852.ejJDZkT8p0@kista>
+In-Reply-To: <20221129012923.111691-1-yang.lee@linux.alibaba.com>
+References: <20221129012923.111691-1-yang.lee@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dne torek, 29. november 2022 ob 02:29:23 CET je Yang Li napisal(a):
+> There is no need to call the dev_err() function directly to print a
+> custom message when handling an error from either the platform_get_irq()
+> or platform_get_irq_byname() functions as both are going to display an
+> appropriate error message in case of a failure.
+> 
+> ./drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c:390:2-9: line 390 is
+> redundant because platform_get_irq() already prints an error
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3274
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
 
 
-On 5 December 2022 22:14:29 GMT+03:00, Kuogee Hsieh <quic_khsieh@quicinc=
-=2Ecom> wrote:
->Add capability to parser and retrieve max DP link supported rate from
->link-frequencies property of dp_out endpoint=2E
->
->Changes in v6:
->-- second patch after split parser patch into two patches
->
->Changes in v7:
->-- without checking cnt against DP_MAX_NUM_DP_LANES to retrieve link rate
->
->Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc=2Ecom>
->---
-> drivers/gpu/drm/msm/dp/dp_parser=2Ec | 19 +++++++++++++++++--
-> drivers/gpu/drm/msm/dp/dp_parser=2Eh |  2 ++
-> 2 files changed, 19 insertions(+), 2 deletions(-)
->
->diff --git a/drivers/gpu/drm/msm/dp/dp_parser=2Ec b/drivers/gpu/drm/msm/d=
-p/dp_parser=2Ec
->index b5f7e70=2E=2E037dad8 100644
->--- a/drivers/gpu/drm/msm/dp/dp_parser=2Ec
->+++ b/drivers/gpu/drm/msm/dp/dp_parser=2Ec
->@@ -94,15 +94,28 @@ static int dp_parser_ctrl_res(struct dp_parser *parse=
-r)
-> static int dp_parser_misc(struct dp_parser *parser)
-> {
-> 	struct device_node *of_node =3D parser->pdev->dev=2Eof_node;
->+	struct device_node *endpoint;
->+	u64 frequency;
-> 	int cnt;
->=20
-> 	/*
-> 	 * data-lanes is the property of dp_out endpoint
-> 	 */
-> 	cnt =3D drm_of_get_data_lanes_count_ep(of_node, 1, 0, 1, DP_MAX_NUM_DP_=
-LANES);
->-	if (cnt > 0)
->+	if (cnt > 0) {
-> 		parser->max_dp_lanes =3D cnt;
->-	else {
->+
->+		endpoint =3D of_graph_get_endpoint_by_regs(of_node, 1, 0); /* port@1 *=
-/
->+		cnt =3D of_property_count_u64_elems(endpoint, "link-frequencies");
-
-Missing of_node_put()
-
->+		if (cnt > 0) {
->+			of_property_read_u64_index(endpoint, "link-frequencies",
->+							cnt - 1, &frequency);
->+			frequency /=3D 10;	/* from symbol rate to link rate */
->+			parser->max_dp_link_rate =3D (frequency / 1000); /* kbits */
->+		} else {
->+			parser->max_dp_link_rate =3D DP_LINK_RATE_HBR2; /* 540000 khz */
->+		}
->+	} else {
-> 		/*
-> 		 * legacy code, data-lanes is the property of mdss_dp node
-> 		 */
->@@ -111,6 +124,8 @@ static int dp_parser_misc(struct dp_parser *parser)
-> 			parser->max_dp_lanes =3D cnt;
-> 		else
-> 			parser->max_dp_lanes =3D DP_MAX_NUM_DP_LANES; /* 4 lanes */
->+
->+		parser->max_dp_link_rate =3D DP_LINK_RATE_HBR2; /* 540000 khz */
-
-Please, don't mix the dp lanes and dp link rate code=2E It would be much e=
-asier to read=2E And you can remove the duplicate assignment statements too=
-=2E
-
-> 	}
->=20
-> 	return 0;
->diff --git a/drivers/gpu/drm/msm/dp/dp_parser=2Eh b/drivers/gpu/drm/msm/d=
-p/dp_parser=2Eh
->index 866c1a8=2E=2E3ddf639 100644
->--- a/drivers/gpu/drm/msm/dp/dp_parser=2Eh
->+++ b/drivers/gpu/drm/msm/dp/dp_parser=2Eh
->@@ -15,6 +15,7 @@
-> #define DP_LABEL "MDSS DP DISPLAY"
-> #define DP_MAX_PIXEL_CLK_KHZ	675000
-> #define DP_MAX_NUM_DP_LANES	4
->+#define DP_LINK_RATE_HBR2       540000
->=20
-> enum dp_pm_type {
-> 	DP_CORE_PM,
->@@ -119,6 +120,7 @@ struct dp_parser {
-> 	struct dp_io io;
-> 	struct dp_display_data disp_data;
-> 	u32 max_dp_lanes;
->+	u32 max_dp_link_rate;
-> 	struct drm_bridge *next_bridge;
->=20
-> 	int (*parse)(struct dp_parser *parser);
-
---=20
-With best wishes
-Dmitry
