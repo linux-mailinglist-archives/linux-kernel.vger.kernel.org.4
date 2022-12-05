@@ -2,135 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A57C36429F6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BE8A6429FE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 15:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiLEN4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47740 "EHLO
+        id S230381AbiLEOAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 09:00:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbiLEN4a (ORCPT
+        with ESMTP id S229982AbiLEOAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:56:30 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A593B8
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:56:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=uZS2YlPKAGNQfivHgbSmAIM4sCwER+o4TAV8vJgXz8w=; b=HQzjLtssEbTdGTtTKrUBJwnOTz
-        MiF8nXG+Hezn7PDo6Ng86NCQen4xchs8gTaWqFbsDdFlu8PvGHvbdSgl0ol3PimDCDQ3Ocqyf1EIH
-        P9HoMg/vYHx3tJkDPD7iohCTszKcCixnTxgeqqa+Ere+AAKmfu6ym+82OZSMaBzQPn9m+olJywzkW
-        zzvIZtAmwo1KJSJF5fAmYb3KjKRNQ1miuEF0SivIYU4Q4XcLQx8lHQKJeHPWiA93c1A7xSaxy5qGG
-        9xuk+luZKmMQFkjRnFU2UlrJ2wdQK/ZbPwQJ4RlFbCJJIPmK8HZra7I/np8xCk3zbNNuZf9m+eKa+
-        biuln9zA==;
-Received: from [41.74.137.107] (helo=killbill.home)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1p2Bx9-00FUSn-Vl; Mon, 05 Dec 2022 14:56:16 +0100
-From:   Melissa Wen <mwen@igalia.com>
-To:     emma@anholt.net, mwen@igalia.com, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maira Canal <mcanal@igalia.com>, kernel-dev@igalia.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] drm/v3d: replace obj lookup steps with drm_gem_objects_lookup
-Date:   Mon,  5 Dec 2022 12:55:38 -0100
-Message-Id: <20221205135538.3545051-3-mwen@igalia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221205135538.3545051-1-mwen@igalia.com>
-References: <20221205135538.3545051-1-mwen@igalia.com>
+        Mon, 5 Dec 2022 09:00:06 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA318EE13
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 06:00:04 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id s10so3418964qkg.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 06:00:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mc+cLLtHJGOP66cgSux+fMADmZs9geR0ByZCxx6UhW8=;
+        b=dcA+CKALs3v3yWgLoLv6Im5Q0FCiGYalGkOrfujc38CCg1+dizT+6ag9Ldg5FOAHaV
+         rvOd7Z/0Pu5esu372X9Zs7Sldia20SoxnLsgGbIzUBvtwALVsas9IyLP9Y2qe1FIS1f/
+         Z0A9Cy3559ZsWiHJA89AYfX34xfSjwgN9Q9Y9zRlnPePNjJqNkBQ8+Gf9LuyivK9L5/8
+         FdWuMTLAeiBMsWpPvw21rUSNpgUWRt5EqU89N7wVhmZ6jZKSWmwNrk8YFLkthv0oufkS
+         z4SkNsI/dOhZ3ZqQvGlEI/tqka/ROZV+1dL3/CtdkMlrGDaFIM8+eP6Fw+Kj5Ev6Om3k
+         oAew==
+X-Gm-Message-State: ANoB5pnyzP2jBPoueTnU2ufLEyNHn4TklsomCeLv/RCeaunxGK4R10SL
+        6DJOpkeBg7SY/fT7NHANAsttR074Bc7pF5RaJsA=
+X-Google-Smtp-Source: AA0mqf5RVgc3Y77ZsHXC7qS4igV8TUMZxZEcLBgLFWNH4NPlW7DXBgp+uD1OuVuNYtiQQ7PZmqE0ks2d/u5SAPbd45k=
+X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
+ br17-20020a05620a461100b006faaf7e927cmr71735755qkb.443.1670248803895; Mon, 05
+ Dec 2022 06:00:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+In-Reply-To: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Dec 2022 14:59:49 +0100
+Message-ID: <CAJZ5v0gJuE0SOqErrZPSHKjgNuVqk0gtaQpPztGBqP1zqn9AEQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
+ preserves const-ness of the pointer
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As v3d_lookup_bos() performs the same steps as drm_gem_objects_lookup(),
-replace the explicit code in v3d to simply use the DRM function.
+On Mon, Dec 5, 2022 at 1:12 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> container_of does not preserve the const-ness of a pointer that is
+> passed into it, which can cause C code that passes in a const pointer to
+> get a pointer back that is not const and then scribble all over the data
+> in it.  To prevent this, container_of_const() will preserve the const
+> status of the pointer passed into it using the newly available _Generic()
+> method.
+>
+> Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
+> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Signed-off-by: Melissa Wen <mwen@igalia.com>
----
- drivers/gpu/drm/v3d/v3d_gem.c | 49 +++--------------------------------
- 1 file changed, 3 insertions(+), 46 deletions(-)
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
-index 31a37572c11d..6e152ef26358 100644
---- a/drivers/gpu/drm/v3d/v3d_gem.c
-+++ b/drivers/gpu/drm/v3d/v3d_gem.c
-@@ -299,10 +299,6 @@ v3d_lookup_bos(struct drm_device *dev,
- 	       u64 bo_handles,
- 	       u32 bo_count)
- {
--	u32 *handles;
--	int ret = 0;
--	int i;
--
- 	job->bo_count = bo_count;
- 
- 	if (!job->bo_count) {
-@@ -313,48 +309,9 @@ v3d_lookup_bos(struct drm_device *dev,
- 		return -EINVAL;
- 	}
- 
--	job->bo = kvmalloc_array(job->bo_count,
--				 sizeof(struct drm_gem_dma_object *),
--				 GFP_KERNEL | __GFP_ZERO);
--	if (!job->bo) {
--		DRM_DEBUG("Failed to allocate validated BO pointers\n");
--		return -ENOMEM;
--	}
--
--	handles = kvmalloc_array(job->bo_count, sizeof(u32), GFP_KERNEL);
--	if (!handles) {
--		ret = -ENOMEM;
--		DRM_DEBUG("Failed to allocate incoming GEM handles\n");
--		goto fail;
--	}
--
--	if (copy_from_user(handles,
--			   (void __user *)(uintptr_t)bo_handles,
--			   job->bo_count * sizeof(u32))) {
--		ret = -EFAULT;
--		DRM_DEBUG("Failed to copy in GEM handles\n");
--		goto fail;
--	}
--
--	spin_lock(&file_priv->table_lock);
--	for (i = 0; i < job->bo_count; i++) {
--		struct drm_gem_object *bo = idr_find(&file_priv->object_idr,
--						     handles[i]);
--		if (!bo) {
--			DRM_DEBUG("Failed to look up GEM BO %d: %d\n",
--				  i, handles[i]);
--			ret = -ENOENT;
--			spin_unlock(&file_priv->table_lock);
--			goto fail;
--		}
--		drm_gem_object_get(bo);
--		job->bo[i] = bo;
--	}
--	spin_unlock(&file_priv->table_lock);
--
--fail:
--	kvfree(handles);
--	return ret;
-+	return drm_gem_objects_lookup(file_priv,
-+				      (void __user *)(uintptr_t)bo_handles,
-+				      job->bo_count, &job->bo);
- }
- 
- static void
--- 
-2.35.1
-
+> ---
+> v2: - removed one parameter, now matches container_of(), thanks to
+>       suggestion from Sakari
+>     - changed Jason's tag to suggested-by and reviewed-by
+>     - added Andy's tag
+>
+>  include/linux/container_of.h | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+>
+> diff --git a/include/linux/container_of.h b/include/linux/container_of.h
+> index 2008e9f4058c..1d898f9158b4 100644
+> --- a/include/linux/container_of.h
+> +++ b/include/linux/container_of.h
+> @@ -22,4 +22,17 @@
+>                       "pointer type mismatch in container_of()");       \
+>         ((type *)(__mptr - offsetof(type, member))); })
+>
+> +/**
+> + * container_of_const - cast a member of a structure out to the containing
+> + *                     structure and preserve the const-ness of the pointer
+> + * @ptr:               the pointer to the member
+> + * @type:              the type of the container struct this is embedded in.
+> + * @member:            the name of the member within the struct.
+> + */
+> +#define container_of_const(ptr, type, member)                          \
+> +       _Generic(ptr,                                                   \
+> +               const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
+> +               default: ((type *)container_of(ptr, type, member))      \
+> +       )
+> +
+>  #endif /* _LINUX_CONTAINER_OF_H */
+> --
+> 2.38.1
+>
