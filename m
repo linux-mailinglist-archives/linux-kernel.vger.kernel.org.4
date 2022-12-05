@@ -2,341 +2,621 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BA1D642CED
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B838642CFD
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 17:36:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiLEQe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 11:34:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S231845AbiLEQgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 11:36:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbiLEQdn (ORCPT
+        with ESMTP id S232102AbiLEQft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 11:33:43 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB2D1DA50;
-        Mon,  5 Dec 2022 08:33:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670258007; x=1701794007;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=1oYt4Oz7HKA2eNOZ+EjSseoEZ6RDlVC/9hOYD/E8fhA=;
-  b=UcONeAgfwYpTrqicrJmk0FT73bnmsQ7vmg1Uo83jEvOxNXx2Hpv52cAr
-   Zl87OAKHGkRZqRtM+2SfSHKHwHjs8dwoOdoprCY85WFgrBrlkSvPglgcD
-   oAUrjAbtjkxfjoSzYodzSWgqbpj5Yppsp149FMK3+z01u0N7wcuRqJmGG
-   PQr9bvD0OkESH4EkRlMV9NCE8S3paTqm7o3Pkd+zB3wsFHhd1Id1C5XfE
-   LFtvlweWtCDQ50dcYAHGkZaOp4XPZTKM9mo+/3excq53fr0JbTEIWfqYm
-   QkEBUT+RMsOjJ5i0Bcwc/T3QA9ZooA6BQtxYAO2ks8K8/XUKd6D8KJu/V
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="296753203"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="296753203"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 08:33:09 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="623563378"
-X-IronPort-AV: E=Sophos;i="5.96,219,1665471600"; 
-   d="scan'208";a="623563378"
-Received: from almamunm-mobl.amr.corp.intel.com (HELO [10.209.53.139]) ([10.209.53.139])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 08:33:07 -0800
-Message-ID: <931e48dc399eddf8ad9f9dec8783f57df776daa9.camel@linux.intel.com>
-Subject: Re: [PATCH v2 07/18] x86/sgx: Use a list to track to-be-reclaimed
- pages during reclaim
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>, jarkko@kernel.org,
-        dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>
-Cc:     zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Date:   Mon, 05 Dec 2022 08:33:06 -0800
-In-Reply-To: <0646275c-0ab9-2fad-8db1-7098656d6e1d@intel.com>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
-         <20221202183655.3767674-8-kristen@linux.intel.com>
-         <0646275c-0ab9-2fad-8db1-7098656d6e1d@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Mon, 5 Dec 2022 11:35:49 -0500
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2055.outbound.protection.outlook.com [40.107.103.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3C7205FF;
+        Mon,  5 Dec 2022 08:34:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OXcSq+DemS/JSRm3wqfRE3pUWSEKM7TQPbqYQmFOtgTBl3cbEyvxFCMTlbJyv2ClKyJvCBGjrGKYhP1JKFU1jCnJ+oNMEMiXODev4aITC5J4pK0sRZtL5b04tKp4aSqjCI/Hnh4jojkxTIdrCDvEjsdPQ423QMT0ea4TYcDcjzfOYs+Ykse9qYWW0UC0AgBEsRRmwd0rUEFD9pSDAtMaClZoaSL1XPW86VfPxEGrLSjXtdjNvwJzHHL2u0NlmRu538lp5hBP3p4tB9doCFdVaM4gCZ1lRcw5xD1/CxehbVieO6oH/nsgJoAYYoB0VJwrGDSt6Sh6iMipb89DS6378Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5devBtc1GotYHvt8Ngla3VQMLDwC+i4WZC5rn1dBq38=;
+ b=ete9WQ+wXFCGyoToYxeuUzq4cfVtad0T6d4Z518+rHpTRZ3l4AKdCSE9Cs3o5o24X/5G2qPTYdDrH8G8Fc3ZNClLlbojx2hChQVkx0I4+20GxTL+GrvQ9F4CcDmeIvRE6yuX1FyRrFqbrI/avw/xAWLyGZAeg4BGDfTklM8/rPWyEhuDt/U/LKqn3rZlDYHiLJCeW4pdVWfVEJYnPOPr16wJAnzZz7TwtLajvzvubsErz/fKK/tGn9kLlMpQNsmSY11K76sFcqqw4HhqAIeVlANuLzImfvctosASdYLraq8EzlxrVuzgf4DGrI+UNj8KRWmWKe+sDfnVYHtP5VSDXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5devBtc1GotYHvt8Ngla3VQMLDwC+i4WZC5rn1dBq38=;
+ b=vL+UQFP7XtecByQdz10o6210Io/DeAw1hEK1xcCE3jXe+r4x3VeKa/jnoO4xvvzdZlGsV2XsoS6BdZO9kR0aVxilluTFbahAn55mMmL+IJshP+btCO8TdSYYjXzSBj+LG3DImUdUlAUj2Jr/E0AWu8IYF9xYasYbhe6jrPTrX0I=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from VI1PR08MB3919.eurprd08.prod.outlook.com (2603:10a6:803:c4::31)
+ by GVXPR08MB7846.eurprd08.prod.outlook.com (2603:10a6:150::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.11; Mon, 5 Dec 2022 16:34:35 +0000
+Received: from VI1PR08MB3919.eurprd08.prod.outlook.com
+ ([fe80::fe5c:b195:a2ad:b19c]) by VI1PR08MB3919.eurprd08.prod.outlook.com
+ ([fe80::fe5c:b195:a2ad:b19c%4]) with mapi id 15.20.5880.014; Mon, 5 Dec 2022
+ 16:34:35 +0000
+Message-ID: <51758d92-43e1-806d-3fbd-603be69b40e0@arm.com>
+Date:   Mon, 5 Dec 2022 16:34:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] [v2] ata: ahci: fix enum constants for gcc-13
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-ide@vger.kernel.org, stable@vger.kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+References: <20221203105425.180641-1-arnd@kernel.org>
+ <caa0e7a8-f222-b190-12a6-a36996affee2@opensource.wdc.com>
+From:   Luis Machado <luis.machado@arm.com>
+In-Reply-To: <caa0e7a8-f222-b190-12a6-a36996affee2@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: LO2P265CA0460.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:a2::16) To VI1PR08MB3919.eurprd08.prod.outlook.com
+ (2603:10a6:803:c4::31)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR08MB3919:EE_|GVXPR08MB7846:EE_
+X-MS-Office365-Filtering-Correlation-Id: cecef8a3-3c82-40cd-6e81-08dad6de9819
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WtuqGsmlfOObBUGgFqa1RuGCqhc+NIdXDDijZceeRRgXqnEqc/tVi70cAZY52G+2jCwWsARkHbnh/Lb87NZEDbgQAaQDOdp0c+kIH38f5xldPXgk92W8EbxClbBgPLUO+xxQYgI+TK47c+GS8dT9x4/I3/dTAWBpjAsPW/l61DNj+O4nbu1G9JvbXs/8NIMZPov4x6F4hd3T1AIFww5N42euW7hqMtaqgNuepn+WjISeDq0lVA4s6nfGuCxmAPQutxempu4cnR5rGEcIjCUhocAbh/nVEPYM/mr0SIHmmYQJdQwN7KRkd7VO/Ax2/ijjxunW7N6vPTqjdcidJwmbdtaZLeihhKSklSFqdayK+tCMO7vxbhFBni+JvmYZ9EBvUi7snNv5sNCX2Lk9llawXgHbYGGGRupbSmEc49ZV4hDXnXD+YNyS4uReNPzi/y5tyUTXqNPON6lx0tef7A3R0rlzd9pjsbdHCBNtHgAS25Eqip3L6IBCX699XYHr0USD1OTFoN7N3HYzcikx8lIEzpsY4LDOgSjwlMRCEOyujXmYnyaFuVJV7Z1uwAjt+2jAsqj/5D+vYTeuIrxQCB2k1nbmAGPWPz9IhkWCnZfJkyY+SipQ308HPYmB924B7CKNLhwG1rY/Tai+Y2kIrwZbS6UFRUL2T7YeAPmNLS5oTZqMvQ5gafxXfcVv2OGRFshu9U8IR4Xk6h0THOJ/ETkw3xwxQvl7wkqElhwV/r4l/4NXmFVAICfK6wjKnfOhVHIY/lrhHqz0Y5hCfhy8gT6HEQaK+s3tUEOXso/sEVwZferN1APUMdHQLCAhNIqKaAec
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR08MB3919.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(376002)(39860400002)(346002)(136003)(451199015)(38100700002)(66899015)(8676002)(4326008)(31686004)(478600001)(41300700001)(5660300002)(54906003)(83380400001)(86362001)(31696002)(53546011)(6506007)(6512007)(2906002)(26005)(6486002)(186003)(66476007)(66556008)(66946007)(966005)(8936002)(316002)(30864003)(110136005)(44832011)(2616005)(36756003)(21314003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFhSMmV5QmdkZHlReVB2dE52UlVxU0tlK1JFemx1VndraU85eEVPcHJVaTJQ?=
+ =?utf-8?B?VHluNEFyeXdoSnNEWVdkK2ptVWVLNXdUcllDYXRjRkxnZEJOeG9ZMDNhUVEz?=
+ =?utf-8?B?RDVoRFJkRmlFcnVMeTBJZ20vTnQwNE1OY3B4azR2ejJTa0FkTDZuRlB4ODdl?=
+ =?utf-8?B?Vm56REpxWVZjTHp1UHN2dklOdGdYaEl0M1lzSGgzTVA3emx1S3RaS0hyalF4?=
+ =?utf-8?B?MzkwaVdkUzhUdHlVaWVBODM4MWttMkdZUG5IOWs2UHJDNDJDWVBDUCtiY1lF?=
+ =?utf-8?B?OXlMTGwxeXFld3hFOFh2S3lnYklDMXZlZzN4QUt5MVJtVFRaL29ydHFWTjBV?=
+ =?utf-8?B?aTA3bVpydC9ObHNueTlxOTF2NDU1aWN4WHArZVBOK3NrVytBWGwzRjIvQWRT?=
+ =?utf-8?B?Z2JTUmpMNGxMdTI0TTVoN3Rqaks5UmNleERtazdYREhkcDg0b0RtYzJJV2da?=
+ =?utf-8?B?bHNRTFV4d1IxQlBJdTVxT1VtWi91RGE0WHBFU3lXRzA1bXhDdnltYWlXRG4x?=
+ =?utf-8?B?Z2NZUDlmQmNIcUtsN2dzdXJsY0R5R1ZsY01vOTlVWFJ1MXNLT083TURDR0pY?=
+ =?utf-8?B?U2h4eHdtem9MT09WeDFraDU0ZHBKRTcvNzhtTjdFSGFuR3pZNEFmaWxlekpU?=
+ =?utf-8?B?MTNaTWNkYjBzL0VkYVhKbWMxeGN1c3dUOXVJN1FRZTQrczRFTkxZaWpFNWl0?=
+ =?utf-8?B?MEtQVnBwVURjZnhmUTgveE9TVlliYzkxZWdELyt3RVdUV093UHEyaFBtVWtQ?=
+ =?utf-8?B?R3VjVjlydExOMXd1SXpueis4VzE3WHlnK1piTFdkdmw1R3lJc1YrYVBab2wv?=
+ =?utf-8?B?R3gxazc0dVNzOTg3ckllSkxjejhCVmNmeXlocHpjakNhWWFKUkRHR0pRTDk3?=
+ =?utf-8?B?Z0ZCS1dLeWVoOHVramxzUnR4cHNBZXpEd0gvWGExUm83b0l2Q0RVTHNnVnFY?=
+ =?utf-8?B?azMzellMT2NUanNjZ1NMWmdLVktPYTZvTjEraWZkQnhhU29sVzhDV1FrQU14?=
+ =?utf-8?B?M3p0V3hjdkEzMUR0aHhaeDRnN3I3VGtvYnhxcTJYMis2Z2tiVm5seEdBZFNW?=
+ =?utf-8?B?VzEzYnZHd0dzZzJ2UE44N0hUUi9qclVGVzBERnBVbU0zbDJGbk9TUkZ2N3My?=
+ =?utf-8?B?SUMramE0MkZmZVovVXR4d25uSSttVGhBTUdya2ZqOVZOczZVNS9VRzlZczBY?=
+ =?utf-8?B?b1NCMnVzRWU5L09wQ1QrNzFtcGlMS3d2VERGM2U5OEdteGdpU1ZCbnVoU2dV?=
+ =?utf-8?B?a0pJb1MwYXZUbmdJZjF1U0t3M2duWHNraUl5OEI0ZE5GdUMxVGhvUlRRU2pk?=
+ =?utf-8?B?SEkwSC8vRHc0SStSSHhrZy9jWlhOcnZvR0U3U1lPblJpVkFpa3JHOXFNd0hS?=
+ =?utf-8?B?R0d3TGdCYWJJK0sxNUNVZkE3bE42Z3VySWFROWM2aHpua3czMjRuQ3pYQlJV?=
+ =?utf-8?B?a2U0ZkgyQXlqQ0doN1ZqOTh4Ukt2SnE5ZGhVR0lEdjM0L1NwNXJPSlpBaXZE?=
+ =?utf-8?B?ZGlJci9ZYnlRdEtBcG5LVFpDZUNYdE8wclRqSFYwZHRpK01XNlYyMHg1MGJS?=
+ =?utf-8?B?eWhVOFZGZlRmZnhUcGVZRFNpaHB6SHFzVTlBbjlkSXlyUjIxclZtazltWE56?=
+ =?utf-8?B?UXBoLy8zQXlTOXQ0QWxKRDFjTTZiYXNOL3RFSUVFdGxEMTVaWG1IZDdnakVB?=
+ =?utf-8?B?cE04cU4xNnVxTlYwaVhqYnpKOS9KYmVncUJGYUY2eFViNTZDMTZ2ck5qNlpJ?=
+ =?utf-8?B?ZEZXMGd6L0IwRmNnanY3a2x2N3RqamJ2RG1EWXEyOWk3SkNzRWIwTjF0NkV4?=
+ =?utf-8?B?QlJYck82TG4xYUVzT0NTT08weElhTUNSODhYUWYwRnh6bStvYVY3d0U1RG13?=
+ =?utf-8?B?R2ZZOXQvZGN6Q2hXeHAwcWoya1FadHcvcTF0NVF6c2hIZ1NHRmM5U2t5RFJv?=
+ =?utf-8?B?NE1sSnMxVUl6NlFGeERlcm5oR3lsbUdGdDVwcTJxbUtiK0RyTDRkT0k3ak01?=
+ =?utf-8?B?V0hGNzNtWWRIcUhYUXUzZGVaNDk0dUNlVEdYdzRlbHdySU1MRTF1WEZaR1J2?=
+ =?utf-8?B?REZ5SE0wNm5XMUk4bUlJbUxYVXJqTkwxSWdSVnpFSnJZbFV5azVXamdjNWdE?=
+ =?utf-8?Q?6GkSBJSi1dGrQy/B31/HncD8F?=
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cecef8a3-3c82-40cd-6e81-08dad6de9819
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR08MB3919.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 16:34:35.0952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NqQBimv4WEooIRLg6JOrR5wRuSuz4tuB5ZtMt113ss8/WSO/YgI+J9qRt0u2JyLC6Frg/CEJda4RVAhkqCdd5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7846
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gRnJpLCAyMDIyLTEyLTAyIGF0IDE0OjMzIC0wODAwLCBEYXZlIEhhbnNlbiB3cm90ZToKPiBP
-biAxMi8yLzIyIDEwOjM2LCBLcmlzdGVuIENhcmxzb24gQWNjYXJkaSB3cm90ZToKPiA+IEZyb206
-IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW4uai5jaHJpc3RvcGhlcnNvbkBpbnRlbC5jb20+Cj4g
-PiAKPiA+IENoYW5nZSBzZ3hfcmVjbGFpbV9wYWdlcygpIHRvIHVzZSBhIGxpc3QgcmF0aGVyIHRo
-YW4gYW4gYXJyYXkgZm9yCj4gPiBzdG9yaW5nIHRoZSBlcGNfcGFnZXMgd2hpY2ggd2lsbCBiZSBy
-ZWNsYWltZWQuIFRoaXMgY2hhbmdlIGlzCj4gPiBuZWVkZWQKPiA+IHRvIHRyYW5zaXRpb24gdG8g
-dGhlIExSVSBpbXBsZW1lbnRhdGlvbiBmb3IgRVBDIGNncm91cCBzdXBwb3J0Lgo+ID4gCj4gPiBU
-aGlzIGNoYW5nZSByZXF1aXJlcyBrZWVwaW5nIHRyYWNrIG9mIHdoZXRoZXIgbmV3bHkgcmVjb3Jk
-ZWQKPiA+IEVQQyBwYWdlcyBhcmUgcGFnZXMgZm9yIFZBIEFycmF5cywgb3IgZm9yIEVuY2xhdmUg
-ZGF0YS4gSW4KPiA+IGFkZGl0aW9uLAo+ID4gaGVscGVyIGZ1bmN0aW9ucyBhcmUgYWRkZWQgdG8g
-bW92ZSBwYWdlcyBmcm9tIG9uZSBsaXN0IHRvIGFub3RoZXIKPiA+IGFuZAo+ID4gZW5mb3JjZSBh
-IGNvbnNpc3RlbnQgcXVldWUgbGlrZSBiZWhhdmlvciBmb3IgdGhlIExSVSBsaXN0cy4KPiAKPiBN
-b3JlIGNoYW5nZWxvZyBuaXQ6IFBsZWFzZSB1c2UgaW1wZXJhdGl2ZSB2b2ljZSwgbm90IHBhc3Np
-dmUgdm9pY2UuCj4gTW92ZSBmcm9tOgo+IAo+IMKgwqDCoMKgwqDCoMKgwqBJbiBhZGRpdGlvbiwg
-aGVscGVyIGZ1bmN0aW9ucyBhcmUgYWRkZWQKPiAKPiB0bzoKPiAKPiDCoMKgwqDCoMKgwqDCoMKg
-SW4gYWRkaXRpb24sIGFkZCBoZWxwZXIgZnVuY3Rpb25zCj4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJj
-aC94ODYva2VybmVsL2NwdS9zZ3gvZW5jbC5jCj4gPiBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4
-L2VuY2wuYwo+ID4gaW5kZXggNDY4M2RhOWVmNGYxLi45ZWUzMDZhYzJhOGUgMTAwNjQ0Cj4gPiAt
-LS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9lbmNsLmMKPiA+ICsrKyBiL2FyY2gveDg2L2tl
-cm5lbC9jcHUvc2d4L2VuY2wuYwo+ID4gQEAgLTI1Miw3ICsyNTIsNyBAQCBzdGF0aWMgc3RydWN0
-IHNneF9lbmNsX3BhZ2UKPiA+ICpfX3NneF9lbmNsX2xvYWRfcGFnZShzdHJ1Y3Qgc2d4X2VuY2wg
-KmVuY2wsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVwY19wYWdlID0gc2d4
-X2VuY2xfZWxkdSgmZW5jbC0+c2VjcywgTlVMTCk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGlmIChJU19FUlIoZXBjX3BhZ2UpKQo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9DQVNUKGVwY19wYWdlKTsKPiA+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdlKGVwY19w
-YWdlLCAwKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2Vw
-Y19wYWdlKGVwY19wYWdlLAo+ID4gU0dYX0VQQ19QQUdFX0VOQ0xBVkUpOwo+ID4gwqDCoMKgwqDC
-oMKgwqDCoH0KPiAKPiBUaGlzIGlzIG9uZSBvZiB0aG9zZSBwYXRjaGVzIHdoZXJlIHRoZSBmaXJz
-dCBodW5rIHNlZW1zIGxpa2UgaXQgaXMKPiBlbnRpcmVseSBkaXNjb25uZWN0ZWQgZnJvbSB3aGF0
-IHRoZSBjaGFuZ2Vsb2cgbWFkZSBtZSBleHBlY3QgSSB3b3VsZAo+IHNlZS4KPiAKPiBJIGRvbid0
-IHNlZSBzZ3hfcmVjbGFpbV9wYWdlcygpLCBvciBsaXN0cyBvciBhcnJheXMuCj4gCj4gSWYgeW91
-IG5lZWQgdG8gcGFzcyBhZGRpdGlvbmFsIGRhdGEgZG93biBpbnRvIGEgZnVuY3Rpb24sIHRoZW4g
-ZG8KPiAqdGhhdCoKPiBpbiBhIHNlcGFyYXRlIHBhdGNoLgo+IAo+IEknbSBnbGFkIGl0IGV2ZW50
-dWFsbHkgZ290IGZpeGVkIHVwLCBidXQgSSBkb24ndCByZWFsbHkgZXZlciBsaWtlIHRvCj4gc2Vl
-Cj4gYmFyZSBpbnRlZ2VycyB0aGF0IGRvbid0IGhhdmUgb2J2aW91cyBtZWFuaW5nOgo+IAo+IMKg
-wqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdlKGVwY19wYWdlLCAwKTsKPiAKPiBFdmVu
-IGlmIHlvdSBoYWQ6Cj4gCj4gI2RlZmluZSBTR1hfRVBDX1BBR0VfUkVDTEFJTUVSX1VOVFJBQ0tF
-RCAwCj4gCj4gwqDCoMKgwqDCoMKgwqDCoHNneF9yZWNvcmRfZXBjX3BhZ2UoZXBjX3BhZ2UsCj4g
-U0dYX0VQQ19QQUdFX1JFQ0xBSU1FUl9VTlRSQUNLRUQpOwo+IAo+IG1ha2VzIGEgKkxPVCogb2Yg
-c2Vuc2UgY29tcGFyZWQgdG8gb3RoZXIgY2FsbGVycyB0aGF0IGRvCj4gCj4gwqDCoMKgwqDCoMKg
-wqDCoHNneF9yZWNvcmRfZXBjX3BhZ2UoZXBjX3BhZ2UsCj4gU0dYX0VQQ19QQUdFX1JFQ0xBSU1F
-Ul9UUkFDS0VEKTsKPiAKPiA+IMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZSA9IHNneF9lbmNsX2Vs
-ZHUoZW50cnksIGVuY2wtPnNlY3MuZXBjX3BhZ2UpOwo+ID4gQEAgLTI2MCw3ICsyNjAsOCBAQCBz
-dGF0aWMgc3RydWN0IHNneF9lbmNsX3BhZ2UKPiA+ICpfX3NneF9lbmNsX2xvYWRfcGFnZShzdHJ1
-Y3Qgc2d4X2VuY2wgKmVuY2wsCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJl
-dHVybiBFUlJfQ0FTVChlcGNfcGFnZSk7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoGVuY2wt
-PnNlY3NfY2hpbGRfY250Kys7Cj4gPiAtwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdl
-KGVudHJ5LT5lcGNfcGFnZSwKPiA+IFNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRCk7Cj4g
-PiArwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19wYWdlKGVudHJ5LT5lcGNfcGFnZSwKPiA+
-ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIChT
-R1hfRVBDX1BBR0VfRU5DTEFWRSB8Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTUVSX1RSQUNLRUQp
-KTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGVudHJ5Owo+ID4gwqB9Cj4gPiBA
-QCAtMTIyMSw3ICsxMjIyLDcgQEAgc3RydWN0IHNneF9lcGNfcGFnZSAqc2d4X2FsbG9jX3ZhX3Bh
-Z2Uoc3RydWN0Cj4gPiBzZ3hfZW5jbCAqZW5jbCwgYm9vbCByZWNsYWltKQo+ID4gwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfZW5jbF9mcmVlX2VwY19wYWdlKGVwY19wYWdlKTsK
-PiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIEVSUl9QVFIoLUVGQVVM
-VCk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gLcKgwqDCoMKgwqDCoMKgc2d4X3JlY29yZF9l
-cGNfcGFnZShlcGNfcGFnZSwgMCk7Cj4gPiArwqDCoMKgwqDCoMKgwqBzZ3hfcmVjb3JkX2VwY19w
-YWdlKGVwY19wYWdlLCBTR1hfRVBDX1BBR0VfVkVSU0lPTl9BUlJBWSk7Cj4gPiDCoAo+ID4gwqDC
-oMKgwqDCoMKgwqDCoHJldHVybiBlcGNfcGFnZTsKPiA+IMKgfQo+ID4gZGlmZiAtLWdpdCBhL2Fy
-Y2gveDg2L2tlcm5lbC9jcHUvc2d4L2lvY3RsLmMKPiA+IGIvYXJjaC94ODYva2VybmVsL2NwdS9z
-Z3gvaW9jdGwuYwo+ID4gaW5kZXggYWNhODBhM2YzOGExLi5jM2E5YmZmYmMzN2UgMTAwNjQ0Cj4g
-PiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9pb2N0bC5jCj4gPiArKysgYi9hcmNoL3g4
-Ni9rZXJuZWwvY3B1L3NneC9pb2N0bC5jCj4gPiBAQCAtMTE0LDcgKzExNCw3IEBAIHN0YXRpYyBp
-bnQgc2d4X2VuY2xfY3JlYXRlKHN0cnVjdCBzZ3hfZW5jbAo+ID4gKmVuY2wsIHN0cnVjdCBzZ3hf
-c2VjcyAqc2VjcykKPiA+IMKgwqDCoMKgwqDCoMKgwqBlbmNsLT5hdHRyaWJ1dGVzID0gc2Vjcy0+
-YXR0cmlidXRlczsKPiA+IMKgwqDCoMKgwqDCoMKgwqBlbmNsLT5hdHRyaWJ1dGVzX21hc2sgPSBT
-R1hfQVRUUl9ERUJVRyB8IFNHWF9BVFRSX01PREU2NEJJVAo+ID4gfCBTR1hfQVRUUl9LU1M7Cj4g
-PiDCoAo+ID4gLcKgwqDCoMKgwqDCoMKgc2d4X3JlY29yZF9lcGNfcGFnZShlbmNsLT5zZWNzLmVw
-Y19wYWdlLCAwKTsKPiA+ICvCoMKgwqDCoMKgwqDCoHNneF9yZWNvcmRfZXBjX3BhZ2UoZW5jbC0+
-c2Vjcy5lcGNfcGFnZSwKPiA+IFNHWF9FUENfUEFHRV9FTkNMQVZFKTsKPiA+IMKgCj4gPiDCoMKg
-wqDCoMKgwqDCoMKgLyogU2V0IG9ubHkgYWZ0ZXIgY29tcGxldGlvbiwgYXMgZW5jbC0+bG9jayBo
-YXMgbm90IGJlZW4KPiA+IHRha2VuLiAqLwo+ID4gwqDCoMKgwqDCoMKgwqDCoHNldF9iaXQoU0dY
-X0VOQ0xfQ1JFQVRFRCwgJmVuY2wtPmZsYWdzKTsKPiA+IEBAIC0zMjUsNyArMzI1LDggQEAgc3Rh
-dGljIGludCBzZ3hfZW5jbF9hZGRfcGFnZShzdHJ1Y3Qgc2d4X2VuY2wKPiA+ICplbmNsLCB1bnNp
-Z25lZCBsb25nIHNyYywKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGdvdG8gZXJyX291dDsKPiA+IMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiDCoAo+ID4g
-LcKgwqDCoMKgwqDCoMKgc2d4X3JlY29yZF9lcGNfcGFnZShlbmNsX3BhZ2UtPmVwY19wYWdlLAo+
-ID4gU0dYX0VQQ19QQUdFX1JFQ0xBSU1FUl9UUkFDS0VEKTsKPiA+ICvCoMKgwqDCoMKgwqDCoHNn
-eF9yZWNvcmRfZXBjX3BhZ2UoZW5jbF9wYWdlLT5lcGNfcGFnZSwKPiA+ICvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIChTR1hfRVBDX1BBR0VfRU5D
-TEFWRSB8Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTUVSX1RSQUNLRUQpKTsKPiA+IMKgwqDCoMKg
-wqDCoMKgwqBtdXRleF91bmxvY2soJmVuY2wtPmxvY2spOwo+ID4gwqDCoMKgwqDCoMKgwqDCoG1t
-YXBfcmVhZF91bmxvY2soY3VycmVudC0+bW0pOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHJldHVybiBy
-ZXQ7Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvbWFpbi5jCj4gPiBi
-L2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21haW4uYwo+ID4gaW5kZXggYmFkNzI0OThiMGE3Li44
-M2FhZjVjZWE3YjkgMTAwNjQ0Cj4gPiAtLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9tYWlu
-LmMKPiA+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L21haW4uYwo+ID4gQEAgLTI4OCwz
-NyArMjg4LDQzIEBAIHN0YXRpYyB2b2lkIHNneF9yZWNsYWltZXJfd3JpdGUoc3RydWN0Cj4gPiBz
-Z3hfZXBjX3BhZ2UgKmVwY19wYWdlLAo+ID4gwqAgKi8KPiA+IMKgc3RhdGljIHZvaWQgX19zZ3hf
-cmVjbGFpbV9wYWdlcyh2b2lkKQo+ID4gwqB7Cj4gPiAtwqDCoMKgwqDCoMKgwqBzdHJ1Y3Qgc2d4
-X2VwY19wYWdlICpjaHVua1tTR1hfTlJfVE9fU0NBTl07Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3Ry
-dWN0IHNneF9iYWNraW5nIGJhY2tpbmdbU0dYX05SX1RPX1NDQU5dOwo+ID4gK8KgwqDCoMKgwqDC
-oMKgc3RydWN0IHNneF9lcGNfcGFnZSAqZXBjX3BhZ2UsICp0bXA7Cj4gPiDCoMKgwqDCoMKgwqDC
-oMKgc3RydWN0IHNneF9lbmNsX3BhZ2UgKmVuY2xfcGFnZTsKPiA+IC3CoMKgwqDCoMKgwqDCoHN0
-cnVjdCBzZ3hfZXBjX3BhZ2UgKmVwY19wYWdlOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHBnb2ZmX3Qg
-cGFnZV9pbmRleDsKPiA+IC3CoMKgwqDCoMKgwqDCoGludCBjbnQgPSAwOwo+ID4gK8KgwqDCoMKg
-wqDCoMKgTElTVF9IRUFEKGlzbyk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgaW50IHJldDsKPiA+IMKg
-wqDCoMKgwqDCoMKgwqBpbnQgaTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgc3Bpbl9sb2Nr
-KCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgwqDCoMKgwqDCoMKgwqBmb3IgKGkgPSAwOyBp
-IDwgU0dYX05SX1RPX1NDQU47IGkrKykgewo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoGVwY19wYWdlID0KPiA+IHNneF9lcGNfcG9wX3JlY2xhaW1hYmxlKCZzZ3hfZ2xvYmFsX2xy
-dSk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXBjX3BhZ2UgPQo+ID4gc2d4
-X2VwY19wZWVrX3JlY2xhaW1hYmxlKCZzZ3hfZ2xvYmFsX2xydSk7Cj4gPiDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoGlmICghZXBjX3BhZ2UpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBicmVhazsKPiA+IMKgCj4gPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVuY2xfcGFnZSA9IGVwY19wYWdlLT5lbmNsX293bmVyOwo+
-ID4gwqAKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoV0FSTl9PTl9PTkNF
-KCEoZXBjX3BhZ2UtPmZsYWdzICYKPiA+IFNHWF9FUENfUEFHRV9FTkNMQVZFKSkpCj4gPiArwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbnRpbnVlOwo+ID4g
-Kwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpZiAoa3JlZl9nZXRfdW5sZXNz
-X3plcm8oJmVuY2xfcGFnZS0+ZW5jbC0KPiA+ID5yZWZjb3VudCkgIT0gMCkgewo+ID4gwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgZXBjX3BhZ2UtPmZsYWdz
-IHw9Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUzsKPiA+IC3CoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2h1bmtbY250KytdID0gZXBjX3Bh
-Z2U7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGxp
-c3RfbW92ZV90YWlsKCZlcGNfcGFnZS0+bGlzdCwgJmlzbyk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoH0gZWxzZSB7Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoC8qIFRoZSBvd25lciBpcyBmcmVlaW5nIHRoZSBwYWdlLiBObyBu
-ZWVkCj4gPiB0byBhZGQgdGhlCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCAqIHBhZ2UgYmFjayB0byB0aGUgbGlzdCBvZiByZWNsYWltYWJsZQo+ID4g
-cGFnZXMuCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oC8qIFRoZSBvd25lciBpcyBmcmVlaW5nIHRoZSBwYWdlLCByZW1vdmUgaXQKPiA+IGZyb20gdGhl
-Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIExS
-VSBsaXN0Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgKi8KPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGVwY19wYWdlLT5mbGFncyAmPQo+ID4gflNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRDsK
-PiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgbGlzdF9k
-ZWxfaW5pdCgmZXBjX3BhZ2UtPmxpc3QpOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqB9Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gwqDCoMKgwqDCoMKgwqDCoHNwaW5fdW5s
-b2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3Ig
-KGkgPSAwOyBpIDwgY250OyBpKyspIHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBlcGNfcGFnZSA9IGNodW5rW2ldOwo+ID4gK8KgwqDCoMKgwqDCoMKgaWYgKGxpc3RfZW1wdHko
-JmlzbykpCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuOwo+ID4gKwo+
-ID4gK8KgwqDCoMKgwqDCoMKgaSA9IDA7Cj4gPiArwqDCoMKgwqDCoMKgwqBsaXN0X2Zvcl9lYWNo
-X2VudHJ5X3NhZmUoZXBjX3BhZ2UsIHRtcCwgJmlzbywgbGlzdCkgewo+ID4gwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBlbmNsX3BhZ2UgPSBlcGNfcGFnZS0+ZW5jbF9vd25lcjsKPiA+
-IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghc2d4X3JlY2xhaW1l
-cl9hZ2UoZXBjX3BhZ2UpKQo+ID4gQEAgLTMzMyw2ICszMzksNyBAQCBzdGF0aWMgdm9pZCBfX3Nn
-eF9yZWNsYWltX3BhZ2VzKHZvaWQpCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqBnb3RvIHNraXA7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoH0KPiA+IMKgCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaSsrOwo+
-ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlbmNsX3BhZ2UtPmRlc2MgfD0gU0dY
-X0VOQ0xfUEFHRV9CRUlOR19SRUNMQUlNRUQ7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoG11dGV4X3VubG9jaygmZW5jbF9wYWdlLT5lbmNsLT5sb2NrKTsKPiA+IMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY29udGludWU7Cj4gPiBAQCAtMzQwLDMxICszNDcsMjUg
-QEAgc3RhdGljIHZvaWQgX19zZ3hfcmVjbGFpbV9wYWdlcyh2b2lkKQo+ID4gwqBza2lwOgo+ID4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzcGluX2xvY2soJnNneF9nbG9iYWxfbHJ1
-LmxvY2spOwo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZS0+Zmxh
-Z3MgJj0KPiA+IH5TR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUzsKPiA+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfZXBjX3B1c2hfcmVjbGFpbWFibGUoJnNneF9nbG9i
-YWxfbHJ1LAo+ID4gZXBjX3BhZ2UpOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oHNneF9lcGNfbW92ZV9yZWNsYWltYWJsZSgmc2d4X2dsb2JhbF9scnUsCj4gPiBlcGNfcGFnZSk7
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNwaW5fdW5sb2NrKCZzZ3hfZ2xv
-YmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGtyZWZfcHV0KCZlbmNsX3BhZ2UtPmVuY2wtPnJlZmNvdW50LAo+ID4gc2d4X2VuY2xfcmVsZWFz
-ZSk7Cj4gPiAtCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgY2h1bmtbaV0gPSBO
-VUxMOwo+ID4gwqDCoMKgwqDCoMKgwqDCoH0KPiA+IMKgCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3Ig
-KGkgPSAwOyBpIDwgY250OyBpKyspIHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBlcGNfcGFnZSA9IGNodW5rW2ldOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oGlmIChlcGNfcGFnZSkKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgc2d4X3JlY2xhaW1lcl9ibG9jayhlcGNfcGFnZSk7Cj4gPiAtwqDCoMKgwqDCoMKg
-wqB9Cj4gPiAtCj4gPiAtwqDCoMKgwqDCoMKgwqBmb3IgKGkgPSAwOyBpIDwgY250OyBpKyspIHsK
-PiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZSA9IGNodW5rW2ldOwo+
-ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlmICghZXBjX3BhZ2UpCj4gPiAtwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGNvbnRpbnVlOwo+ID4g
-LQo+ID4gK8KgwqDCoMKgwqDCoMKgbGlzdF9mb3JfZWFjaF9lbnRyeShlcGNfcGFnZSwgJmlzbywg
-bGlzdCkKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjbGFpbWVyX2Js
-b2NrKGVwY19wYWdlKTsKPiA+ICsgCj4gPiArwqDCoMKgwqDCoMKgwqBpID0gMDsKPiA+ICvCoMKg
-wqDCoMKgwqDCoGxpc3RfZm9yX2VhY2hfZW50cnlfc2FmZShlcGNfcGFnZSwgdG1wLCAmaXNvLCBs
-aXN0KSB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVuY2xfcGFnZSA9IGVw
-Y19wYWdlLT5lbmNsX293bmVyOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNn
-eF9yZWNsYWltZXJfd3JpdGUoZXBjX3BhZ2UsICZiYWNraW5nW2ldKTsKPiA+ICvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqBzZ3hfcmVjbGFpbWVyX3dyaXRlKGVwY19wYWdlLCAmYmFja2lu
-Z1tpKytdKTsKPiA+IMKgCj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGtyZWZf
-cHV0KCZlbmNsX3BhZ2UtPmVuY2wtPnJlZmNvdW50LAo+ID4gc2d4X2VuY2xfcmVsZWFzZSk7Cj4g
-PiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVwY19wYWdlLT5mbGFncyAmPSB+KFNH
-WF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRAo+ID4gfAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+
-IFNHWF9FUENfUEFHRV9SRUNMQUlNX0lOX1BST0dSRVNTKTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4g
-PiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUyB8Cj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBT
-R1hfRVBDX1BBR0VfRU5DTEFWRSB8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBDX1BBR0VfVkVS
-U0lPTl9BUlJBWSk7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBz
-Z3hfZnJlZV9lcGNfcGFnZShlcGNfcGFnZSk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gQEAg
-LTUwNSw2ICs1MDYsNyBAQCBzdHJ1Y3Qgc2d4X2VwY19wYWdlICpfX3NneF9hbGxvY19lcGNfcGFn
-ZSh2b2lkKQo+ID4gwqAvKioKPiA+IMKgICogc2d4X3JlY29yZF9lcGNfcGFnZSgpIC0gQWRkIGEg
-cGFnZSB0byB0aGUgTFJVIHRyYWNraW5nCj4gPiDCoCAqIEBwYWdlOsKgwqDCoMKgwqDCoEVQQyBw
-YWdlCj4gPiArICogQGZsYWdzOsKgwqDCoMKgwqBSZWNsYWltIGZsYWdzIGZvciB0aGUgcGFnZS4K
-PiA+IMKgICoKPiA+IMKgICogTWFyayBhIHBhZ2Ugd2l0aCB0aGUgc3BlY2lmaWVkIGZsYWdzIGFu
-ZCBhZGQgaXQgdG8gdGhlCj4gPiBhcHByb3ByaWF0ZQo+ID4gwqAgKiAodW4pcmVjbGFpbWFibGUg
-bGlzdC4KPiA+IEBAIC01MzUsMTggKzUzNywxOSBAQCB2b2lkIHNneF9yZWNvcmRfZXBjX3BhZ2Uo
-c3RydWN0IHNneF9lcGNfcGFnZQo+ID4gKnBhZ2UsIHVuc2lnbmVkIGxvbmcgZmxhZ3MpCj4gPiDC
-oGludCBzZ3hfZHJvcF9lcGNfcGFnZShzdHJ1Y3Qgc2d4X2VwY19wYWdlICpwYWdlKQo+ID4gwqB7
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgc3Bpbl9sb2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+
-IC3CoMKgwqDCoMKgwqDCoGlmIChwYWdlLT5mbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlNRVJf
-VFJBQ0tFRCkgewo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoC8qIFRoZSBwYWdl
-IGlzIGJlaW5nIHJlY2xhaW1lZC4gKi8KPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqBpZiAocGFnZS0+ZmxhZ3MgJiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUykKPiA+
-IHsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc3Bp
-bl91bmxvY2soJnNneF9nbG9iYWxfbHJ1LmxvY2spOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVCVVNZOwo+ID4gLcKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoH0KPiA+IC0KPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBwYWdlLT5mbGFncyAmPSB+U0dYX0VQQ19QQUdFX1JFQ0xBSU1FUl9UUkFDS0VEOwo+ID4g
-K8KgwqDCoMKgwqDCoMKgaWYgKChwYWdlLT5mbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlNRVJf
-VFJBQ0tFRCkgJiYKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoCAocGFnZS0+ZmxhZ3MgJiBTR1hf
-RVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUykpIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqBzcGluX3VubG9jaygmc2d4X2dsb2JhbF9scnUubG9jayk7Cj4gPiArwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIC1FQlVTWTsKPiA+IMKgwqDCoMKgwqDCoMKg
-wqB9Cj4gPiDCoMKgwqDCoMKgwqDCoMKgbGlzdF9kZWwoJnBhZ2UtPmxpc3QpOwo+ID4gwqDCoMKg
-wqDCoMKgwqDCoHNwaW5fdW5sb2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiAr
-wqDCoMKgwqDCoMKgwqBwYWdlLT5mbGFncyAmPSB+KFNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJB
-Q0tFRCB8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBTR1hfRVBDX1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUyB8Cj4gPiArwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBDX1BBR0VfRU5DTEFWRSB8Cj4g
-PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBD
-X1BBR0VfVkVSU0lPTl9BUlJBWSk7Cj4gPiArCj4gPiDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIDA7
-Cj4gPiDCoH0KPiA+IMKgCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gv
-c2d4LmgKPiA+IGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvc2d4LmgKPiA+IGluZGV4IDM3ZDY2
-YmM2Y2EyNy4uZWM4ZDU2N2NkOTc1IDEwMDY0NAo+ID4gLS0tIGEvYXJjaC94ODYva2VybmVsL2Nw
-dS9zZ3gvc2d4LmgKPiA+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvc2d4L3NneC5oCj4gPiBA
-QCAtMzIsNiArMzIsOCBAQAo+ID4gwqAjZGVmaW5lIFNHWF9FUENfUEFHRV9LVk1fR1VFU1TCoMKg
-wqDCoMKgwqDCoMKgwqBCSVQoMikKPiA+IMKgLyogcGFnZSBmbGFnIHRvIGluZGljYXRlIHJlY2xh
-aW0gaXMgaW4gcHJvZ3Jlc3MgKi8KPiA+IMKgI2RlZmluZSBTR1hfRVBDX1BBR0VfUkVDTEFJTV9J
-Tl9QUk9HUkVTUyBCSVQoMykKPiA+ICsjZGVmaW5lIFNHWF9FUENfUEFHRV9FTkNMQVZFwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoEJJVCg0KQo+ID4gKyNkZWZpbmUgU0dYX0VQQ19QQUdFX1ZFUlNJT05f
-QVJSQVnCoMKgwqDCoMKgQklUKDUpCj4gCj4gQ291bGQgeW91IHBsZWFzZSBzcGVuZCBzb21lIHRp
-bWUgdG8gY2xlYXJseSBkb2N1bWVudCB3aGF0IGVhY2ggYml0Cj4gbWVhbnM/Cj4gCj4gPiArc3Rh
-dGljIGlubGluZSB2b2lkIF9fc2d4X2VwY19wYWdlX2xpc3RfbW92ZShzdHJ1Y3QgbGlzdF9oZWFk
-Cj4gPiAqbGlzdCwgc3RydWN0IHNneF9lcGNfcGFnZSAqcGFnZSkKPiA+ICt7Cj4gPiArwqDCoMKg
-wqDCoMKgwqBsaXN0X21vdmVfdGFpbCgmcGFnZS0+bGlzdCwgbGlzdCk7Cj4gPiArfQo+IAo+IEkn
-bSBub3Qgc3VyZSBJIGdldCB0aGUgcG9pbnQgb2YgYSBoZWxwZXIgbGlrZSB0aGlzLsKgIFdoeSBu
-b3QganVzdAo+IGhhdmUKPiB0aGUgY2FsbGVyIGNhbGwgbGlzdF9tb3ZlKCkgZGlyZWN0bHk/Cj4g
-Cj4gPiDCoC8qCj4gPiDCoCAqIE11c3QgYmUgY2FsbGVkIHdpdGggcXVldWUgbG9jayBhY3F1aXJl
-ZAo+ID4gwqAgKi8KPiA+IEBAIC0xNTcsNiArMTY3LDM4IEBAIHN0YXRpYyBpbmxpbmUgdm9pZAo+
-ID4gc2d4X2VwY19wdXNoX3VucmVjbGFpbWFibGUoc3RydWN0IHNneF9lcGNfbHJ1X2xpc3RzICps
-cnVzLAo+ID4gwqDCoMKgwqDCoMKgwqDCoF9fc2d4X2VwY19wYWdlX2xpc3RfcHVzaCgmKGxydXMp
-LT51bnJlY2xhaW1hYmxlLCBwYWdlKTsKPiA+IMKgfQo+ID4gwqAKPiA+ICsvKgo+ID4gKyAqIE11
-c3QgYmUgY2FsbGVkIHdpdGggcXVldWUgbG9jayBhY3F1aXJlZAo+ID4gKyAqLwo+ID4gK3N0YXRp
-YyBpbmxpbmUgc3RydWN0IHNneF9lcGNfcGFnZSAqCj4gPiBfX3NneF9lcGNfcGFnZV9saXN0X3Bl
-ZWsoc3RydWN0IGxpc3RfaGVhZCAqbGlzdCkKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBzdHJ1
-Y3Qgc2d4X2VwY19wYWdlICplcGNfcGFnZTsKPiA+ICsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChs
-aXN0X2VtcHR5KGxpc3QpKQo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHJldHVy
-biBOVUxMOwo+ID4gKwo+ID4gK8KgwqDCoMKgwqDCoMKgZXBjX3BhZ2UgPSBsaXN0X2ZpcnN0X2Vu
-dHJ5KGxpc3QsIHN0cnVjdCBzZ3hfZXBjX3BhZ2UsCj4gPiBsaXN0KTsKPiA+ICvCoMKgwqDCoMKg
-wqDCoHJldHVybiBlcGNfcGFnZTsKPiA+ICt9Cj4gCj4gbGlzdF9maXJzdF9lbnRyeV9vcl9udWxs
-KCkgcGVyaGFwcz8KPiAKPiA+ICtzdGF0aWMgaW5saW5lIHN0cnVjdCBzZ3hfZXBjX3BhZ2UgKgo+
-ID4gK3NneF9lcGNfcGVla19yZWNsYWltYWJsZShzdHJ1Y3Qgc2d4X2VwY19scnVfbGlzdHMgKmxy
-dXMpCj4gPiArewo+ID4gK8KgwqDCoMKgwqDCoMKgcmV0dXJuIF9fc2d4X2VwY19wYWdlX2xpc3Rf
-cGVlaygmKGxydXMpLT5yZWNsYWltYWJsZSk7Cj4gPiArfQo+ID4gKwo+ID4gK3N0YXRpYyBpbmxp
-bmUgdm9pZCBzZ3hfZXBjX21vdmVfcmVjbGFpbWFibGUoc3RydWN0Cj4gPiBzZ3hfZXBjX2xydV9s
-aXN0cyAqbHJ1LAo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3Qgc2d4X2Vw
-Y19wYWdlCj4gPiAqcGFnZSkKPiA+ICt7Cj4gPiArwqDCoMKgwqDCoMKgwqBfX3NneF9lcGNfcGFn
-ZV9saXN0X21vdmUoJihscnUpLT5yZWNsYWltYWJsZSwgcGFnZSk7Cj4gPiArfQo+ID4gKwo+ID4g
-K3N0YXRpYyBpbmxpbmUgc3RydWN0IHNneF9lcGNfcGFnZSAqCj4gPiArc2d4X2VwY19wZWVrX3Vu
-cmVjbGFpbWFibGUoc3RydWN0IHNneF9lcGNfbHJ1X2xpc3RzICpscnVzKQo+ID4gK3sKPiA+ICvC
-oMKgwqDCoMKgwqDCoHJldHVybiBfX3NneF9lcGNfcGFnZV9saXN0X3BlZWsoJihscnVzKS0+dW5y
-ZWNsYWltYWJsZSk7Cj4gPiArfQo+IAo+IEluIGdlbmVyYWwsIEknbSBub3QgYmVjb21pbmcgbW9y
-ZSBmb25kIG9mIHRoZXNlIGhlbHBlcnMgYXMgdGhlIHNlcmllcwo+IGdvZXMgYWxvbmcuwqAgTXkg
-d29ycnkgaXMgdGhhdCB0aGV5J3JlIGFuIGFic3RyYWN0aW9uIHdoZXJlIHdlIGRvbid0Cj4gKnJl
-YWxseSogbmVlZCBvbmUuwqAgSSBkb24ndCBzZWVtIHRoZW0gZ3Jvd2luZyBtdWNoIGZ1bmN0aW9u
-YWxpdHkgYXMKPiB0aGUKPiBzZXJpZXMgZ29lcyBhbG9uZy4KPiAKPiBJJ2xsIHJlc2VydmUganVk
-Z2VtZW50IHVudGlsIHRoZSBlbmQgdGhvdWdoLgo+IAoKClRoZSBoZWxwZXJzIHdlcmUgYWRkZWQg
-YmVjYXVzZSBKYXJya28gcmVxdWVzdGVkIGEgcXVldWUgYWJzdHJhY3Rpb24gZm9yCnRoZSBzZ3hf
-ZXBjX2xydV9saXN0cyBkYXRhIHN0cnVjdHVyZSBpbiB0aGUgZmlyc3Qgcm91bmQgb2YgcmV2aWV3
-cy4gdGhlCnNpbXBsZSBvbmUgbGluZSBpbmxpbmVzIGFyZSBlZmZlY3RpdmVseSBqdXN0IHJlbmFt
-aW5nIHRvIG1ha2UgdGhlIHF1ZXVlCmFic3RyYWN0aW9uIG1vcmUgb2J2aW91cyB0byB0aGUgcmVh
-ZGVyLgoK
+On 12/5/22 13:33, Damien Le Moal wrote:
+> On 12/3/22 19:54, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> gcc-13 slightly changes the type of constant expressions that are define=
+d
+>> in an enum, which triggers a compile time sanity check in libata:
+>>
+>> linux/drivers/ata/libahci.c: In function 'ahci_led_store':
+>> linux/include/linux/compiler_types.h:357:45: error: call to '__compileti=
+me_assert_302' declared with attribute error: BUILD_BUG_ON failed: sizeof(_=
+s) > sizeof(long)
+>> 357 | _compiletime_assert(condition, msg, __compiletime_assert_, __COUNT=
+ER__)
+>>
+>> The new behavior is that sizeof() returns the same value for the
+>> constant as it does for the enum type, which is generally more sensible
+>> and consistent.
+>>
+>> The problem in libata is that it contains a single enum definition for
+>> lots of unrelated constants, some of which are large positive (unsigned)
+>> integers like 0xffffffff, while others like (1<<31) are interpreted as
+>> negative integers, and this forces the enum type to become 64 bit wide
+>> even though most constants would still fit into a signed 32-bit 'int'.
+>>
+>> Fix this by changing the entire enum definition to use BIT(x) in place
+>> of (1<<x), which results in all values being seen as 'unsigned' and
+>> fitting into an unsigned 32-bit type.
+>>
+>> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D107917
+>> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D107405
+>> Reported-by: Luis Machado <luis.machado@arm.com>
+>> Cc: linux-ide@vger.kernel.org
+>> Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+>> Cc: stable@vger.kernel.org
+>> Cc: Randy Dunlap <rdunlap@infradead.org>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> Looks all good to me. One nit: for the PORT_CMD_ICC_XXX definitions, we
+> could use GENMASK() to be consistant with the use of BIT(), no ? Not a bi=
+g
+> deal though.
+>
+>> ---
+>> Luis, I don't have gcc-13 installed on the machine I used for
+>> creating this patch, can you give this a spin and see if it
+>> addresses the build failure?
+>
+> Luis, if you test/review, please send Tested-by/Reviewed-by tags !
+>
+>>
+>> v2 changes:
+>>   - fix typos in changelog
+>>   - change PORT_CMD_ICC_* constants as well
+>>   - include linux/bits.h
+>> ---
+>>   drivers/ata/ahci.h | 245 +++++++++++++++++++++++----------------------
+>>   1 file changed, 123 insertions(+), 122 deletions(-)
+>>
+>> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+>> index 7add8e79912b..ff8e6ae1c636 100644
+>> --- a/drivers/ata/ahci.h
+>> +++ b/drivers/ata/ahci.h
+>> @@ -24,6 +24,7 @@
+>>   #include <linux/libata.h>
+>>   #include <linux/phy/phy.h>
+>>   #include <linux/regulator/consumer.h>
+>> +#include <linux/bits.h>
+>>
+>>   /* Enclosure Management Control */
+>>   #define EM_CTRL_MSG_TYPE              0x000f0000
+>> @@ -53,12 +54,12 @@ enum {
+>>      AHCI_PORT_PRIV_FBS_DMA_SZ       =3D AHCI_CMD_SLOT_SZ +
+>>                                        AHCI_CMD_TBL_AR_SZ +
+>>                                        (AHCI_RX_FIS_SZ * 16),
+>> -    AHCI_IRQ_ON_SG          =3D (1 << 31),
+>> -    AHCI_CMD_ATAPI          =3D (1 << 5),
+>> -    AHCI_CMD_WRITE          =3D (1 << 6),
+>> -    AHCI_CMD_PREFETCH       =3D (1 << 7),
+>> -    AHCI_CMD_RESET          =3D (1 << 8),
+>> -    AHCI_CMD_CLR_BUSY       =3D (1 << 10),
+>> +    AHCI_IRQ_ON_SG          =3D BIT(31),
+>> +    AHCI_CMD_ATAPI          =3D BIT(5),
+>> +    AHCI_CMD_WRITE          =3D BIT(6),
+>> +    AHCI_CMD_PREFETCH       =3D BIT(7),
+>> +    AHCI_CMD_RESET          =3D BIT(8),
+>> +    AHCI_CMD_CLR_BUSY       =3D BIT(10),
+>>
+>>      RX_FIS_PIO_SETUP        =3D 0x20, /* offset of PIO Setup FIS data *=
+/
+>>      RX_FIS_D2H_REG          =3D 0x40, /* offset of D2H Register FIS dat=
+a */
+>> @@ -76,37 +77,37 @@ enum {
+>>      HOST_CAP2               =3D 0x24, /* host capabilities, extended */
+>>
+>>      /* HOST_CTL bits */
+>> -    HOST_RESET              =3D (1 << 0),  /* reset controller; self-cl=
+ear */
+>> -    HOST_IRQ_EN             =3D (1 << 1),  /* global IRQ enable */
+>> -    HOST_MRSM               =3D (1 << 2),  /* MSI Revert to Single Mess=
+age */
+>> -    HOST_AHCI_EN            =3D (1 << 31), /* AHCI enabled */
+>> +    HOST_RESET              =3D BIT(0),  /* reset controller; self-clea=
+r */
+>> +    HOST_IRQ_EN             =3D BIT(1),  /* global IRQ enable */
+>> +    HOST_MRSM               =3D BIT(2),  /* MSI Revert to Single Messag=
+e */
+>> +    HOST_AHCI_EN            =3D BIT(31), /* AHCI enabled */
+>>
+>>      /* HOST_CAP bits */
+>> -    HOST_CAP_SXS            =3D (1 << 5),  /* Supports External SATA */
+>> -    HOST_CAP_EMS            =3D (1 << 6),  /* Enclosure Management supp=
+ort */
+>> -    HOST_CAP_CCC            =3D (1 << 7),  /* Command Completion Coales=
+cing */
+>> -    HOST_CAP_PART           =3D (1 << 13), /* Partial state capable */
+>> -    HOST_CAP_SSC            =3D (1 << 14), /* Slumber state capable */
+>> -    HOST_CAP_PIO_MULTI      =3D (1 << 15), /* PIO multiple DRQ support =
+*/
+>> -    HOST_CAP_FBS            =3D (1 << 16), /* FIS-based switching suppo=
+rt */
+>> -    HOST_CAP_PMP            =3D (1 << 17), /* Port Multiplier support *=
+/
+>> -    HOST_CAP_ONLY           =3D (1 << 18), /* Supports AHCI mode only *=
+/
+>> -    HOST_CAP_CLO            =3D (1 << 24), /* Command List Override sup=
+port */
+>> -    HOST_CAP_LED            =3D (1 << 25), /* Supports activity LED */
+>> -    HOST_CAP_ALPM           =3D (1 << 26), /* Aggressive Link PM suppor=
+t */
+>> -    HOST_CAP_SSS            =3D (1 << 27), /* Staggered Spin-up */
+>> -    HOST_CAP_MPS            =3D (1 << 28), /* Mechanical presence switc=
+h */
+>> -    HOST_CAP_SNTF           =3D (1 << 29), /* SNotification register */
+>> -    HOST_CAP_NCQ            =3D (1 << 30), /* Native Command Queueing *=
+/
+>> -    HOST_CAP_64             =3D (1 << 31), /* PCI DAC (64-bit DMA) supp=
+ort */
+>> +    HOST_CAP_SXS            =3D BIT(5),  /* Supports External SATA */
+>> +    HOST_CAP_EMS            =3D BIT(6),  /* Enclosure Management suppor=
+t */
+>> +    HOST_CAP_CCC            =3D BIT(7),  /* Command Completion Coalesci=
+ng */
+>> +    HOST_CAP_PART           =3D BIT(13), /* Partial state capable */
+>> +    HOST_CAP_SSC            =3D BIT(14), /* Slumber state capable */
+>> +    HOST_CAP_PIO_MULTI      =3D BIT(15), /* PIO multiple DRQ support */
+>> +    HOST_CAP_FBS            =3D BIT(16), /* FIS-based switching support=
+ */
+>> +    HOST_CAP_PMP            =3D BIT(17), /* Port Multiplier support */
+>> +    HOST_CAP_ONLY           =3D BIT(18), /* Supports AHCI mode only */
+>> +    HOST_CAP_CLO            =3D BIT(24), /* Command List Override suppo=
+rt */
+>> +    HOST_CAP_LED            =3D BIT(25), /* Supports activity LED */
+>> +    HOST_CAP_ALPM           =3D BIT(26), /* Aggressive Link PM support =
+*/
+>> +    HOST_CAP_SSS            =3D BIT(27), /* Staggered Spin-up */
+>> +    HOST_CAP_MPS            =3D BIT(28), /* Mechanical presence switch =
+*/
+>> +    HOST_CAP_SNTF           =3D BIT(29), /* SNotification register */
+>> +    HOST_CAP_NCQ            =3D BIT(30), /* Native Command Queueing */
+>> +    HOST_CAP_64             =3D BIT(31), /* PCI DAC (64-bit DMA) suppor=
+t */
+>>
+>>      /* HOST_CAP2 bits */
+>> -    HOST_CAP2_BOH           =3D (1 << 0),  /* BIOS/OS handoff supported=
+ */
+>> -    HOST_CAP2_NVMHCI        =3D (1 << 1),  /* NVMHCI supported */
+>> -    HOST_CAP2_APST          =3D (1 << 2),  /* Automatic partial to slum=
+ber */
+>> -    HOST_CAP2_SDS           =3D (1 << 3),  /* Support device sleep */
+>> -    HOST_CAP2_SADM          =3D (1 << 4),  /* Support aggressive DevSlp=
+ */
+>> -    HOST_CAP2_DESO          =3D (1 << 5),  /* DevSlp from slumber only =
+*/
+>> +    HOST_CAP2_BOH           =3D BIT(0),  /* BIOS/OS handoff supported *=
+/
+>> +    HOST_CAP2_NVMHCI        =3D BIT(1),  /* NVMHCI supported */
+>> +    HOST_CAP2_APST          =3D BIT(2),  /* Automatic partial to slumbe=
+r */
+>> +    HOST_CAP2_SDS           =3D BIT(3),  /* Support device sleep */
+>> +    HOST_CAP2_SADM          =3D BIT(4),  /* Support aggressive DevSlp *=
+/
+>> +    HOST_CAP2_DESO          =3D BIT(5),  /* DevSlp from slumber only */
+>>
+>>      /* registers for each SATA port */
+>>      PORT_LST_ADDR           =3D 0x00, /* command list DMA addr */
+>> @@ -128,24 +129,24 @@ enum {
+>>      PORT_DEVSLP             =3D 0x44, /* device sleep */
+>>
+>>      /* PORT_IRQ_{STAT,MASK} bits */
+>> -    PORT_IRQ_COLD_PRES      =3D (1 << 31), /* cold presence detect */
+>> -    PORT_IRQ_TF_ERR         =3D (1 << 30), /* task file error */
+>> -    PORT_IRQ_HBUS_ERR       =3D (1 << 29), /* host bus fatal error */
+>> -    PORT_IRQ_HBUS_DATA_ERR  =3D (1 << 28), /* host bus data error */
+>> -    PORT_IRQ_IF_ERR         =3D (1 << 27), /* interface fatal error */
+>> -    PORT_IRQ_IF_NONFATAL    =3D (1 << 26), /* interface non-fatal error=
+ */
+>> -    PORT_IRQ_OVERFLOW       =3D (1 << 24), /* xfer exhausted available =
+S/G */
+>> -    PORT_IRQ_BAD_PMP        =3D (1 << 23), /* incorrect port multiplier=
+ */
+>> -
+>> -    PORT_IRQ_PHYRDY         =3D (1 << 22), /* PhyRdy changed */
+>> -    PORT_IRQ_DMPS           =3D (1 << 7), /* mechanical presence status=
+ */
+>> -    PORT_IRQ_CONNECT        =3D (1 << 6), /* port connect change status=
+ */
+>> -    PORT_IRQ_SG_DONE        =3D (1 << 5), /* descriptor processed */
+>> -    PORT_IRQ_UNK_FIS        =3D (1 << 4), /* unknown FIS rx'd */
+>> -    PORT_IRQ_SDB_FIS        =3D (1 << 3), /* Set Device Bits FIS rx'd *=
+/
+>> -    PORT_IRQ_DMAS_FIS       =3D (1 << 2), /* DMA Setup FIS rx'd */
+>> -    PORT_IRQ_PIOS_FIS       =3D (1 << 1), /* PIO Setup FIS rx'd */
+>> -    PORT_IRQ_D2H_REG_FIS    =3D (1 << 0), /* D2H Register FIS rx'd */
+>> +    PORT_IRQ_COLD_PRES      =3D BIT(31), /* cold presence detect */
+>> +    PORT_IRQ_TF_ERR         =3D BIT(30), /* task file error */
+>> +    PORT_IRQ_HBUS_ERR       =3D BIT(29), /* host bus fatal error */
+>> +    PORT_IRQ_HBUS_DATA_ERR  =3D BIT(28), /* host bus data error */
+>> +    PORT_IRQ_IF_ERR         =3D BIT(27), /* interface fatal error */
+>> +    PORT_IRQ_IF_NONFATAL    =3D BIT(26), /* interface non-fatal error *=
+/
+>> +    PORT_IRQ_OVERFLOW       =3D BIT(24), /* xfer exhausted available S/=
+G */
+>> +    PORT_IRQ_BAD_PMP        =3D BIT(23), /* incorrect port multiplier *=
+/
+>> +
+>> +    PORT_IRQ_PHYRDY         =3D BIT(22), /* PhyRdy changed */
+>> +    PORT_IRQ_DMPS           =3D BIT(7),  /* mechanical presence status =
+*/
+>> +    PORT_IRQ_CONNECT        =3D BIT(6),  /* port connect change status =
+*/
+>> +    PORT_IRQ_SG_DONE        =3D BIT(5),  /* descriptor processed */
+>> +    PORT_IRQ_UNK_FIS        =3D BIT(4),  /* unknown FIS rx'd */
+>> +    PORT_IRQ_SDB_FIS        =3D BIT(3),  /* Set Device Bits FIS rx'd */
+>> +    PORT_IRQ_DMAS_FIS       =3D BIT(2),  /* DMA Setup FIS rx'd */
+>> +    PORT_IRQ_PIOS_FIS       =3D BIT(1),  /* PIO Setup FIS rx'd */
+>> +    PORT_IRQ_D2H_REG_FIS    =3D BIT(0),  /* D2H Register FIS rx'd */
+>>
+>>      PORT_IRQ_FREEZE         =3D PORT_IRQ_HBUS_ERR |
+>>                                PORT_IRQ_IF_ERR |
+>> @@ -161,27 +162,27 @@ enum {
+>>                                PORT_IRQ_PIOS_FIS | PORT_IRQ_D2H_REG_FIS,
+>>
+>>      /* PORT_CMD bits */
+>> -    PORT_CMD_ASP            =3D (1 << 27), /* Aggressive Slumber/Partia=
+l */
+>> -    PORT_CMD_ALPE           =3D (1 << 26), /* Aggressive Link PM enable=
+ */
+>> -    PORT_CMD_ATAPI          =3D (1 << 24), /* Device is ATAPI */
+>> -    PORT_CMD_FBSCP          =3D (1 << 22), /* FBS Capable Port */
+>> -    PORT_CMD_ESP            =3D (1 << 21), /* External Sata Port */
+>> -    PORT_CMD_CPD            =3D (1 << 20), /* Cold Presence Detection *=
+/
+>> -    PORT_CMD_MPSP           =3D (1 << 19), /* Mechanical Presence Switc=
+h */
+>> -    PORT_CMD_HPCP           =3D (1 << 18), /* HotPlug Capable Port */
+>> -    PORT_CMD_PMP            =3D (1 << 17), /* PMP attached */
+>> -    PORT_CMD_LIST_ON        =3D (1 << 15), /* cmd list DMA engine runni=
+ng */
+>> -    PORT_CMD_FIS_ON         =3D (1 << 14), /* FIS DMA engine running */
+>> -    PORT_CMD_FIS_RX         =3D (1 << 4), /* Enable FIS receive DMA eng=
+ine */
+>> -    PORT_CMD_CLO            =3D (1 << 3), /* Command list override */
+>> -    PORT_CMD_POWER_ON       =3D (1 << 2), /* Power up device */
+>> -    PORT_CMD_SPIN_UP        =3D (1 << 1), /* Spin up device */
+>> -    PORT_CMD_START          =3D (1 << 0), /* Enable port DMA engine */
+>> -
+>> -    PORT_CMD_ICC_MASK       =3D (0xf << 28), /* i/f ICC state mask */
+>> -    PORT_CMD_ICC_ACTIVE     =3D (0x1 << 28), /* Put i/f in active state=
+ */
+>> -    PORT_CMD_ICC_PARTIAL    =3D (0x2 << 28), /* Put i/f in partial stat=
+e */
+>> -    PORT_CMD_ICC_SLUMBER    =3D (0x6 << 28), /* Put i/f in slumber stat=
+e */
+>> +    PORT_CMD_ASP            =3D BIT(27), /* Aggressive Slumber/Partial =
+*/
+>> +    PORT_CMD_ALPE           =3D BIT(26), /* Aggressive Link PM enable *=
+/
+>> +    PORT_CMD_ATAPI          =3D BIT(24), /* Device is ATAPI */
+>> +    PORT_CMD_FBSCP          =3D BIT(22), /* FBS Capable Port */
+>> +    PORT_CMD_ESP            =3D BIT(21), /* External Sata Port */
+>> +    PORT_CMD_CPD            =3D BIT(20), /* Cold Presence Detection */
+>> +    PORT_CMD_MPSP           =3D BIT(19), /* Mechanical Presence Switch =
+*/
+>> +    PORT_CMD_HPCP           =3D BIT(18), /* HotPlug Capable Port */
+>> +    PORT_CMD_PMP            =3D BIT(17), /* PMP attached */
+>> +    PORT_CMD_LIST_ON        =3D BIT(15), /* cmd list DMA engine running=
+ */
+>> +    PORT_CMD_FIS_ON         =3D BIT(14), /* FIS DMA engine running */
+>> +    PORT_CMD_FIS_RX         =3D BIT(4),  /* Enable FIS receive DMA engi=
+ne */
+>> +    PORT_CMD_CLO            =3D BIT(3),  /* Command list override */
+>> +    PORT_CMD_POWER_ON       =3D BIT(2),  /* Power up device */
+>> +    PORT_CMD_SPIN_UP        =3D BIT(1),  /* Spin up device */
+>> +    PORT_CMD_START          =3D BIT(0),  /* Enable port DMA engine */
+>> +
+>> +    PORT_CMD_ICC_MASK       =3D (0xfu << 28), /* i/f ICC state mask */
+>> +    PORT_CMD_ICC_ACTIVE     =3D (0x1u << 28), /* Put i/f in active stat=
+e */
+>> +    PORT_CMD_ICC_PARTIAL    =3D (0x2u << 28), /* Put i/f in partial sta=
+te */
+>> +    PORT_CMD_ICC_SLUMBER    =3D (0x6u << 28), /* Put i/f in slumber sta=
+te */
+>>
+>>      /* PORT_CMD capabilities mask */
+>>      PORT_CMD_CAP            =3D PORT_CMD_HPCP | PORT_CMD_MPSP |
+>> @@ -192,9 +193,9 @@ enum {
+>>      PORT_FBS_ADO_OFFSET     =3D 12, /* FBS active dev optimization offs=
+et */
+>>      PORT_FBS_DEV_OFFSET     =3D 8,  /* FBS device to issue offset */
+>>      PORT_FBS_DEV_MASK       =3D (0xf << PORT_FBS_DEV_OFFSET),  /* FBS.D=
+EV */
+>> -    PORT_FBS_SDE            =3D (1 << 2), /* FBS single device error */
+>> -    PORT_FBS_DEC            =3D (1 << 1), /* FBS device error clear */
+>> -    PORT_FBS_EN             =3D (1 << 0), /* Enable FBS */
+>> +    PORT_FBS_SDE            =3D BIT(2), /* FBS single device error */
+>> +    PORT_FBS_DEC            =3D BIT(1), /* FBS device error clear */
+>> +    PORT_FBS_EN             =3D BIT(0), /* Enable FBS */
+>>
+>>      /* PORT_DEVSLP bits */
+>>      PORT_DEVSLP_DM_OFFSET   =3D 25,             /* DITO multiplier offs=
+et */
+>> @@ -202,50 +203,50 @@ enum {
+>>      PORT_DEVSLP_DITO_OFFSET =3D 15,             /* DITO offset */
+>>      PORT_DEVSLP_MDAT_OFFSET =3D 10,             /* Minimum assertion ti=
+me */
+>>      PORT_DEVSLP_DETO_OFFSET =3D 2,              /* DevSlp exit timeout =
+*/
+>> -    PORT_DEVSLP_DSP         =3D (1 << 1),       /* DevSlp present */
+>> -    PORT_DEVSLP_ADSE        =3D (1 << 0),       /* Aggressive DevSlp en=
+able */
+>> +    PORT_DEVSLP_DSP         =3D BIT(1),         /* DevSlp present */
+>> +    PORT_DEVSLP_ADSE        =3D BIT(0),         /* Aggressive DevSlp en=
+able */
+>>
+>>      /* hpriv->flags bits */
+>>
+>>   #define AHCI_HFLAGS(flags)         .private_data   =3D (void *)(flags)
+>>
+>> -    AHCI_HFLAG_NO_NCQ               =3D (1 << 0),
+>> -    AHCI_HFLAG_IGN_IRQ_IF_ERR       =3D (1 << 1), /* ignore IRQ_IF_ERR =
+*/
+>> -    AHCI_HFLAG_IGN_SERR_INTERNAL    =3D (1 << 2), /* ignore SERR_INTERN=
+AL */
+>> -    AHCI_HFLAG_32BIT_ONLY           =3D (1 << 3), /* force 32bit */
+>> -    AHCI_HFLAG_MV_PATA              =3D (1 << 4), /* PATA port */
+>> -    AHCI_HFLAG_NO_MSI               =3D (1 << 5), /* no PCI MSI */
+>> -    AHCI_HFLAG_NO_PMP               =3D (1 << 6), /* no PMP */
+>> -    AHCI_HFLAG_SECT255              =3D (1 << 8), /* max 255 sectors */
+>> -    AHCI_HFLAG_YES_NCQ              =3D (1 << 9), /* force NCQ cap on *=
+/
+>> -    AHCI_HFLAG_NO_SUSPEND           =3D (1 << 10), /* don't suspend */
+>> -    AHCI_HFLAG_SRST_TOUT_IS_OFFLINE =3D (1 << 11), /* treat SRST timeou=
+t as
+>> -                                                    link offline */
+>> -    AHCI_HFLAG_NO_SNTF              =3D (1 << 12), /* no sntf */
+>> -    AHCI_HFLAG_NO_FPDMA_AA          =3D (1 << 13), /* no FPDMA AA */
+>> -    AHCI_HFLAG_YES_FBS              =3D (1 << 14), /* force FBS cap on =
+*/
+>> -    AHCI_HFLAG_DELAY_ENGINE         =3D (1 << 15), /* do not start engi=
+ne on
+>> -                                                    port start (wait un=
+til
+>> -                                                    error-handling stag=
+e) */
+>> -    AHCI_HFLAG_NO_DEVSLP            =3D (1 << 17), /* no device sleep *=
+/
+>> -    AHCI_HFLAG_NO_FBS               =3D (1 << 18), /* no FBS */
+>> +    AHCI_HFLAG_NO_NCQ               =3D BIT(0),
+>> +    AHCI_HFLAG_IGN_IRQ_IF_ERR       =3D BIT(1), /* ignore IRQ_IF_ERR */
+>> +    AHCI_HFLAG_IGN_SERR_INTERNAL    =3D BIT(2), /* ignore SERR_INTERNAL=
+ */
+>> +    AHCI_HFLAG_32BIT_ONLY           =3D BIT(3), /* force 32bit */
+>> +    AHCI_HFLAG_MV_PATA              =3D BIT(4), /* PATA port */
+>> +    AHCI_HFLAG_NO_MSI               =3D BIT(5), /* no PCI MSI */
+>> +    AHCI_HFLAG_NO_PMP               =3D BIT(6), /* no PMP */
+>> +    AHCI_HFLAG_SECT255              =3D BIT(8), /* max 255 sectors */
+>> +    AHCI_HFLAG_YES_NCQ              =3D BIT(9), /* force NCQ cap on */
+>> +    AHCI_HFLAG_NO_SUSPEND           =3D BIT(10), /* don't suspend */
+>> +    AHCI_HFLAG_SRST_TOUT_IS_OFFLINE =3D BIT(11), /* treat SRST timeout =
+as
+>> +                                                  link offline */
+>> +    AHCI_HFLAG_NO_SNTF              =3D BIT(12), /* no sntf */
+>> +    AHCI_HFLAG_NO_FPDMA_AA          =3D BIT(13), /* no FPDMA AA */
+>> +    AHCI_HFLAG_YES_FBS              =3D BIT(14), /* force FBS cap on */
+>> +    AHCI_HFLAG_DELAY_ENGINE         =3D BIT(15), /* do not start engine=
+ on
+>> +                                                  port start (wait unti=
+l
+>> +                                                  error-handling stage)=
+ */
+>> +    AHCI_HFLAG_NO_DEVSLP            =3D BIT(17), /* no device sleep */
+>> +    AHCI_HFLAG_NO_FBS               =3D BIT(18), /* no FBS */
+>>
+>>   #ifdef CONFIG_PCI_MSI
+>> -    AHCI_HFLAG_MULTI_MSI            =3D (1 << 20), /* per-port MSI(-X) =
+*/
+>> +    AHCI_HFLAG_MULTI_MSI            =3D BIT(20), /* per-port MSI(-X) */
+>>   #else
+>>      /* compile out MSI infrastructure */
+>>      AHCI_HFLAG_MULTI_MSI            =3D 0,
+>>   #endif
+>> -    AHCI_HFLAG_WAKE_BEFORE_STOP     =3D (1 << 22), /* wake before DMA s=
+top */
+>> -    AHCI_HFLAG_YES_ALPM             =3D (1 << 23), /* force ALPM cap on=
+ */
+>> -    AHCI_HFLAG_NO_WRITE_TO_RO       =3D (1 << 24), /* don't write to re=
+ad
+>> -                                                    only registers */
+>> -    AHCI_HFLAG_USE_LPM_POLICY       =3D (1 << 25), /* chipset that shou=
+ld use
+>> -                                                    SATA_MOBILE_LPM_POL=
+ICY
+>> -                                                    as default lpm_poli=
+cy */
+>> -    AHCI_HFLAG_SUSPEND_PHYS         =3D (1 << 26), /* handle PHYs durin=
+g
+>> -                                                    suspend/resume */
+>> -    AHCI_HFLAG_NO_SXS               =3D (1 << 28), /* SXS not supported=
+ */
+>> +    AHCI_HFLAG_WAKE_BEFORE_STOP     =3D BIT(22), /* wake before DMA sto=
+p */
+>> +    AHCI_HFLAG_YES_ALPM             =3D BIT(23), /* force ALPM cap on *=
+/
+>> +    AHCI_HFLAG_NO_WRITE_TO_RO       =3D BIT(24), /* don't write to read
+>> +                                                  only registers */
+>> +    AHCI_HFLAG_USE_LPM_POLICY       =3D BIT(25), /* chipset that should=
+ use
+>> +                                                  SATA_MOBILE_LPM_POLIC=
+Y
+>> +                                                  as default lpm_policy=
+ */
+>> +    AHCI_HFLAG_SUSPEND_PHYS         =3D BIT(26), /* handle PHYs during
+>> +                                                  suspend/resume */
+>> +    AHCI_HFLAG_NO_SXS               =3D BIT(28), /* SXS not supported *=
+/
+>>
+>>      /* ap->flags bits */
+>>
+>> @@ -261,22 +262,22 @@ enum {
+>>      EM_MAX_RETRY                    =3D 5,
+>>
+>>      /* em_ctl bits */
+>> -    EM_CTL_RST              =3D (1 << 9), /* Reset */
+>> -    EM_CTL_TM               =3D (1 << 8), /* Transmit Message */
+>> -    EM_CTL_MR               =3D (1 << 0), /* Message Received */
+>> -    EM_CTL_ALHD             =3D (1 << 26), /* Activity LED */
+>> -    EM_CTL_XMT              =3D (1 << 25), /* Transmit Only */
+>> -    EM_CTL_SMB              =3D (1 << 24), /* Single Message Buffer */
+>> -    EM_CTL_SGPIO            =3D (1 << 19), /* SGPIO messages supported =
+*/
+>> -    EM_CTL_SES              =3D (1 << 18), /* SES-2 messages supported =
+*/
+>> -    EM_CTL_SAFTE            =3D (1 << 17), /* SAF-TE messages supported=
+ */
+>> -    EM_CTL_LED              =3D (1 << 16), /* LED messages supported */
+>> +    EM_CTL_RST              =3D BIT(9), /* Reset */
+>> +    EM_CTL_TM               =3D BIT(8), /* Transmit Message */
+>> +    EM_CTL_MR               =3D BIT(0), /* Message Received */
+>> +    EM_CTL_ALHD             =3D BIT(26), /* Activity LED */
+>> +    EM_CTL_XMT              =3D BIT(25), /* Transmit Only */
+>> +    EM_CTL_SMB              =3D BIT(24), /* Single Message Buffer */
+>> +    EM_CTL_SGPIO            =3D BIT(19), /* SGPIO messages supported */
+>> +    EM_CTL_SES              =3D BIT(18), /* SES-2 messages supported */
+>> +    EM_CTL_SAFTE            =3D BIT(17), /* SAF-TE messages supported *=
+/
+>> +    EM_CTL_LED              =3D BIT(16), /* LED messages supported */
+>>
+>>      /* em message type */
+>> -    EM_MSG_TYPE_LED         =3D (1 << 0), /* LED */
+>> -    EM_MSG_TYPE_SAFTE       =3D (1 << 1), /* SAF-TE */
+>> -    EM_MSG_TYPE_SES2        =3D (1 << 2), /* SES-2 */
+>> -    EM_MSG_TYPE_SGPIO       =3D (1 << 3), /* SGPIO */
+>> +    EM_MSG_TYPE_LED         =3D BIT(0), /* LED */
+>> +    EM_MSG_TYPE_SAFTE       =3D BIT(1), /* SAF-TE */
+>> +    EM_MSG_TYPE_SES2        =3D BIT(2), /* SES-2 */
+>> +    EM_MSG_TYPE_SGPIO       =3D BIT(3), /* SGPIO */
+>>   };
+>>
+>>   struct ahci_cmd_hdr {
+>
 
+Sorry for the delay.
+
+Builds completed just fine.
+
+Tested-by: Luis Machado <luis.machado@arm.com>
+IMPORTANT NOTICE: The contents of this email and any attachments are confid=
+ential and may also be privileged. If you are not the intended recipient, p=
+lease notify the sender immediately and do not disclose the contents to any=
+ other person, use it for any purpose, or store or copy the information in =
+any medium. Thank you.
