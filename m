@@ -2,239 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A1A642715
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C407764270B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 12:00:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbiLELAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 06:00:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
+        id S229982AbiLELAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 06:00:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbiLELAB (ORCPT
+        with ESMTP id S231264AbiLEK7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 06:00:01 -0500
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2118.outbound.protection.outlook.com [40.107.241.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B255019292;
-        Mon,  5 Dec 2022 03:00:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ic9l6lw6d7AQwrJoo4eELrx6h6ZuqczNDl79CU0hG2LWjsTZANClr9Ttl3/95rvG3xL8/pqevATnKwP7sek9fJyNKHTdlhAleWhHwVqJpUPtDnjIUsF4fD4OhELFCXBSwp/dbvMuNygG6KPbsOHMMBZbcE2WuOhsSe5Ub+KPBhF3DcXmkAh8kdLWswfDRuwDgklkfj6GGkCCVdxtLFU5dvgmCrFqATVYoH5netYuSKmK2oju9etr+2lpZ4YqDnKYM/Oz9dIgPm1yRe5ClfyCsQSStyy2Umf//YuZE0kslhytEHsb3N31aUmXvKKZyExRjL9SZk9pawN+dpCx86rQZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FuldcKvKeWXVmKDJ7yaKSDt9K0l06pHPOxoH4W4h1gY=;
- b=bvhoc3qJiEMTGROY8JWZDMtLA6HoQhGSp5sS5y/N1sAb3K+zja3g2e5mqAlQLGztXRrTZqfUtZ39jUywP0TG7SkvuSpBkmOmefilIoTG+h1vnyDxogMrTto/283jzAD7bfFhuo8BkXT3lZg+Zi4DVoYC/Ymz+04zeUOa0n6icOC5hpHN57SjTycOU+spX0gXy/sCdAYrkyDUYxmbX1KdNHb2tGDTQo4zikcGMQJrkul3I9tKy7N/xsXO2NiAJGFlSyshqioUQKPROolS6o44vpoUCRZu/zBXuvtnfRjNbb5UfM6DR4Iz9d6oBYLdr+g6GyWRjgX6+OOwb9n7HoEUyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FuldcKvKeWXVmKDJ7yaKSDt9K0l06pHPOxoH4W4h1gY=;
- b=dK2HoMVgHF4TMoT+Ar6hoxmcRHCYM4KeregMPWw8BCszlw5zD34heAkXB6IscnZcJnx5QWi0iTEkJkxrKquTeJ8RzFPoZOv32Ohwv8pDG+0M2pi1r5cR/b1OczhqJLhqh9kVpXzEaqnAcMf+lL6zYRWTKjW8CYrH+YWoOpIT5dw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
- by AM8P190MB0980.EURP190.PROD.OUTLOOK.COM (2603:10a6:20b:1da::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Mon, 5 Dec
- 2022 10:59:51 +0000
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5912:e2b4:985e:265a]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5912:e2b4:985e:265a%3]) with mapi id 15.20.5880.013; Mon, 5 Dec 2022
- 10:59:51 +0000
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-To:     Hu Ziji <huziji@marvell.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
-Date:   Mon,  5 Dec 2022 12:59:30 +0200
-Message-Id: <20221205105931.410686-4-vadym.kochan@plvision.eu>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221205105931.410686-1-vadym.kochan@plvision.eu>
-References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FRYP281CA0018.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::28)
- To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
+        Mon, 5 Dec 2022 05:59:53 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F71D1A061
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:59:47 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so4893728ilt.9
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 02:59:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Q09y+0WVDGX3EBpuTWBRmc0Jup7UDTLHY2sj4+gc78=;
+        b=d5hmQK/zKt8u2rCJ2MgZH4TsFJgA9VpFfMD/MnushKLw44In4Bj8+yrmMw0LP8AQAS
+         kdgQbXPWb0d/JhmwYpAT5Q1oJ4IUjBVw8gzvD6ex/0Eu3cdjiKlR+JwOE07p9MgU4qWn
+         9pJVefLVYBanFPSHE8brqFTiLR6C2DBAZiCge8Qa4gF3ApseCtfHgFa9muXIq5oaKaZd
+         HmNoP6erotydbIvZzhRTO2pV7QXO8FsUldbEuaSSrgU8HdY/XOeL7ohbe6PKzC4ggBhF
+         AdBwQseCEwTId2V+0twNuaASomgOz0Fc4LOYc6nVzeHoxME7dneePI8BcUcecP6Ll/qj
+         h/oQ==
+X-Gm-Message-State: ANoB5pnxwG75TokdqXvPc4wxOHrKVCRT7Py5WzxoVOrBeDFQzfwe0EGP
+        U8RidarX021ucJtZeh3Exd/i9pdi4eN6FOiXCCVwFaOvG/VW
+X-Google-Smtp-Source: AA0mqf51eAsxUKc0FI3OkYWLu/krp5V35ijPsNojWum9HsEtozqxjO2eK/abruaXQKiKcAS2Ez0eTWfLXD9Mi28CP1/baNpX/jxA
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|AM8P190MB0980:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba06d64a-842c-4ae7-6165-08dad6afd538
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yP99TKulsQ/XPm1R3zFFu8E4YHKtOx36NsL11kHm8R0yAeRRgxsfBhzHcfVeWkABqUk+PaHfLDirm5M180KAQ5qd5w14SwW0g//5n2FMqSTuKtK9fifxuwE1u0lSC6wD0R/Ob2mPZB5grvqKhj4W/PjXo+NwzMvKRXYY3Rh3XRJs8G9Xr0Kgc2YXr5LFdaXRyPA4yeWtEWnwyh+ZygEED2VG2E0Hwa3MQ6/E+rHRtjva0JOY6ng+kKXbjuUR9GK/LE6o/Tb0D3eMs3hc92vMmSoRrkEg7aaqzSYfz5+SxtZK4u06BKs6swY1S46lTGDE8kuCNsu7+rWuwem/+pzMLXiy8GDAav5XWqXsVwOOElFBe3NQjJurnplo3FXWAWIanPztnjZ/eQdftpzmXS5zxLeATpftB7RJPpPS5Y21Z5R70253Nxn0IsIsA8Boi4weYJebAGn15p6OViMUKdMUDhdD/bDFDEYRs8antR8GAn8wA8TKLVt5DzKwXctLauU22K+P0EsmlfxVhVdJGjaCorn8UNsWqCeLrUs1itIPvOObDMKnC4PO3z89DL7ywT4preCiWP3P9k5n7xOOQqIS1j3z77YAeqHzoNJ1st5OsUig51BEcMyJzJxqaCHHR+UjYYeEm39vJ3IXTzXHxQwTgyGmKVc2iCYemI+LVaHWHRy4e28gEPvcThEeNy+qwHdF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(346002)(136003)(39830400003)(366004)(451199015)(36756003)(38100700002)(86362001)(38350700002)(2906002)(41300700001)(8936002)(4326008)(44832011)(5660300002)(7416002)(83380400001)(66946007)(478600001)(6486002)(66476007)(66556008)(316002)(54906003)(2616005)(110136005)(8676002)(107886003)(1076003)(6666004)(52116002)(6506007)(26005)(186003)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?88ZUkP+/xJBFJYOQ1P5vFxypZv4Et7fu4X/DoRzua41khsaUYTR29PvpGqUE?=
- =?us-ascii?Q?Ox3Tn4dK2erCjVSRizUx1LQR/LgXfBF2NgEI8b/PmG4SSW8KEPkllg7s9lIC?=
- =?us-ascii?Q?QSuqkJzdZ3UOD0yPZtw+Et3nI8nS/MyOZyOYuLBLbT8WXbYhhsiMYG+ZC58n?=
- =?us-ascii?Q?z151jaZDsKuMfezEhNuaTr85N6leNYApyKoe2V2UB6v5JfzkthxJXyphDMT0?=
- =?us-ascii?Q?3/40jjZNVHnfhpMi2i2Wbtk1XvQb4f287IML2TrNc5SX2lS7vmMl9O0Rioz7?=
- =?us-ascii?Q?8/oAS8+DmEJ1049qBlEM7I/d9suTEi+gCxtzR+M2hKyqyhTDPusVB3JKzf1Z?=
- =?us-ascii?Q?h2TA1RhNQEeUrnK/uzcXjBi4C6z7kmYWYBtLn8kwiibtNjGfZILYa74cNsSL?=
- =?us-ascii?Q?Tc2H+JtVHuBe6yZg5cVAHjfCBoHR7kcSjkrts7KySFUWzYmI0X3wZoUHbMOP?=
- =?us-ascii?Q?KJ9+kP49q14X47a0wOHEUPMrIdnsNA8eRTMP54gGh2YJPn8Nq7hTFWfZSw4d?=
- =?us-ascii?Q?US1SsGgXP8wsyhKtCrDTIePyqOc06n8hdtFie0+EgWKvxJN8kOZ76OjtS3l5?=
- =?us-ascii?Q?AvxFNIsHqKY7Nmvmv5CvgH/Gy6i9lpFXlU7eYh4u2ZEsoxFkFZtht1TxR7Lc?=
- =?us-ascii?Q?KiLTnfMmttIv1HAJXo66X7stRuE25prfeO09LsktbJFWZtWqrMiu5PljeuCZ?=
- =?us-ascii?Q?Gn+en3Uy293GZcUmJhhVUGk5yjfc+R43lURIGXPeioXCA5c+EHGcaHOgRAum?=
- =?us-ascii?Q?nh+746mFzvq71lPEA0aTgWVebiGXhHelIfhwMXMans8JZpXymrtGTDd8tGCH?=
- =?us-ascii?Q?0qSyJndcJdhB+IYD3JAzbzuBMLHkyc9KHuvTN1PNcDOF/Ae3vJrZ/7MFWXx2?=
- =?us-ascii?Q?OIIA/NzOgnqocLt5d7USHVkn/lXQatihGy4glZMdqKWcttyuPzz+cUEhal7n?=
- =?us-ascii?Q?khVszXPGkcu4TOLOdF3VOgzSp8xOuZZzq7TiCnJ++PGAhkb0C8S/VIp/aC0w?=
- =?us-ascii?Q?XOO4HOMyTiLggQmv0cOPOLp5vJ0Fa2IHaw3z8lf+CwWDwVjPe0kyw4dwko4B?=
- =?us-ascii?Q?vTulrpapf7DSLamRD5W6K6MsmwAg9tAU+48fY9BB8IGmETfAB+pkyHhJMJU1?=
- =?us-ascii?Q?Luwb4l2Fy/jp0TySXoH5P15NcQ4b70tcsDrLei/2NLo1+tzmnEZUxOw2mFaS?=
- =?us-ascii?Q?wbxNwEV1Z+WVPw6yEStcVd/mCTN17Y3MTfxejhp7vOtEZBt33LTVNaEmQj3x?=
- =?us-ascii?Q?EfGNOFPbN298rnyETamPmXkOzeRmZ+Rn7/eFX3STjTsWV25EgcpFlcN7PpWi?=
- =?us-ascii?Q?ImfJyxMIgK1u9pow5Ss1hoeK+98DrTYjuFm0owVukSDTDuAk7+d3JhW7umpF?=
- =?us-ascii?Q?bW3oN6H67l1fmOvQIh6YGBEK9ECmWWUzbO1A9NPzjQEuH9647zJmppp0MVIB?=
- =?us-ascii?Q?clO571oW0jqrLdev6gRs+zIKEDbrOq3FHHvVCNqjCw4XipP32JRu6orVi5l2?=
- =?us-ascii?Q?kbLE4lvUcFXe1HgRuDKvewEdi4scPhhW2zUrRjDNk6cpfN0uRhS1K7EMm72l?=
- =?us-ascii?Q?o8tP20HLR/MMBTtjSiFPY0pFtdMGlYCpAldCPKJNzstNl97Y9DIvK8wB2v0H?=
- =?us-ascii?Q?Zw=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba06d64a-842c-4ae7-6165-08dad6afd538
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 10:59:51.2771
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9HiSZn03lR21RbbMBAfCkeErssuLgYO2ZzrCjIqmZh/DbMf1reaHU9i9F1DFqECxtB4Vs+wTAJLerXX2Ufc7anSYmhN/SCP3TlVDh1IKM3M=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8P190MB0980
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:884e:0:b0:6df:5f05:40b6 with SMTP id
+ t14-20020a5d884e000000b006df5f0540b6mr19356583ios.74.1670237986714; Mon, 05
+ Dec 2022 02:59:46 -0800 (PST)
+Date:   Mon, 05 Dec 2022 02:59:46 -0800
+In-Reply-To: <00000000000031714f05ee5b2257@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e37a4005ef129563@google.com>
+Subject: Re: [syzbot] possible deadlock in hfsplus_file_truncate
+From:   syzbot <syzbot+6030b3b1b9bf70e538c4@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a limitation on AC5 SoC that mmc controller
-can't have DMA access over 2G memory, so use SDMA with
-a bounce buffer. Swiotlb can't help because on arm64 arch
-it reserves memblock's at the end of the memory.
+syzbot has found a reproducer for the following issue on:
 
-Additionally set mask to 34 bit since on AC5 SoC RAM starts
-at 0x2_00000000.
+HEAD commit:    0ba09b173387 Revert "mm: align larger anonymous mappings o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1517e983880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=6030b3b1b9bf70e538c4
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14b4d2cb880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d90fc3880000
 
-Co-developed-by: Elad Nachman <enachman@marvell.com>
-Signed-off-by: Elad Nachman <enachman@marvell.com>
-Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
----
- drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
- drivers/mmc/host/sdhci-xenon.h |  3 ++-
- 2 files changed, 40 insertions(+), 1 deletion(-)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9758ec2c06f4/disk-0ba09b17.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/06781dbfd581/vmlinux-0ba09b17.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3d44a22d15fa/bzImage-0ba09b17.xz
+mounted in repro #1: https://storage.googleapis.com/syzbot-assets/57266b2eb2c9/mount_0.gz
+mounted in repro #2: https://storage.googleapis.com/syzbot-assets/5f557bd13d34/mount_2.gz
 
-diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
-index 08e838400b52..5f3db0425674 100644
---- a/drivers/mmc/host/sdhci-xenon.c
-+++ b/drivers/mmc/host/sdhci-xenon.c
-@@ -13,7 +13,9 @@
- 
- #include <linux/acpi.h>
- #include <linux/delay.h>
-+#include <linux/dma-mapping.h>
- #include <linux/ktime.h>
-+#include <linux/mm.h>
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/pm.h>
-@@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
- 		return pltfm_host->clock;
- }
- 
-+static int xenon_set_dma_mask(struct sdhci_host *host)
-+{
-+	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-+	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
-+	struct mmc_host *mmc = host->mmc;
-+	struct device *dev = mmc_dev(mmc);
-+
-+	if (priv->hw_version == XENON_AC5) {
-+		host->flags &= ~SDHCI_USE_64_BIT_DMA;
-+
-+		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
-+	}
-+
-+	return sdhci_set_dma_mask(host);
-+}
-+
- static const struct sdhci_ops sdhci_xenon_ops = {
- 	.voltage_switch		= xenon_voltage_switch,
- 	.set_clock		= sdhci_set_clock,
-@@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
- 	.reset			= xenon_reset,
- 	.set_uhs_signaling	= xenon_set_uhs_signaling,
- 	.get_max_clock		= xenon_get_max_clock,
-+	.set_dma_mask		= xenon_set_dma_mask,
- };
- 
- static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
-@@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
- 	xenon_disable_sdhc(host, sdhc_id);
- }
- 
-+static int xenon_ac5_probe(struct sdhci_host *host)
-+{
-+	struct sysinfo si;
-+
-+	si_meminfo(&si);
-+
-+	if ((si.totalram * si.mem_unit) > SZ_2G)
-+		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
-+
-+	return 0;
-+}
-+
- static int xenon_probe(struct platform_device *pdev)
- {
- 	struct sdhci_pltfm_host *pltfm_host;
-@@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
- 		}
- 	}
- 
-+	if (priv->hw_version == XENON_AC5) {
-+		err = xenon_ac5_probe(host);
-+		if (err)
-+			goto err_clk_axi;
-+	}
-+
- 	err = mmc_of_parse(host->mmc);
- 	if (err)
- 		goto err_clk_axi;
-@@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
- 	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
- 	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
- 	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
-+	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
- 	{}
- };
- MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
-diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
-index 3e9c6c908a79..0460d97aad26 100644
---- a/drivers/mmc/host/sdhci-xenon.h
-+++ b/drivers/mmc/host/sdhci-xenon.h
-@@ -57,7 +57,8 @@ enum xenon_variant {
- 	XENON_A3700,
- 	XENON_AP806,
- 	XENON_AP807,
--	XENON_CP110
-+	XENON_CP110,
-+	XENON_AC5
- };
- 
- struct xenon_priv {
--- 
-2.25.1
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6030b3b1b9bf70e538c4@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 1024
+======================================================
+WARNING: possible circular locking dependency detected
+6.1.0-rc7-syzkaller-00211-g0ba09b173387 #0 Not tainted
+------------------------------------------------------
+syz-executor955/3635 is trying to acquire lock:
+ffff8880279780b0 (&tree->tree_lock){+.+.}-{3:3}, at: hfsplus_file_truncate+0x871/0xbb0 fs/hfsplus/extents.c:595
+
+but task is already holding lock:
+ffff8880189a3708 (&HFSPLUS_I(inode)->extents_lock){+.+.}-{3:3}, at: hfsplus_file_truncate+0x280/0xbb0 fs/hfsplus/extents.c:576
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&HFSPLUS_I(inode)->extents_lock){+.+.}-{3:3}:
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       hfsplus_get_block+0x3a3/0x1560 fs/hfsplus/extents.c:260
+       block_read_full_folio+0x3b3/0xfa0 fs/buffer.c:2271
+       filemap_read_folio+0x187/0x7d0 mm/filemap.c:2407
+       do_read_cache_folio+0x2d3/0x790 mm/filemap.c:3534
+       do_read_cache_page mm/filemap.c:3576 [inline]
+       read_cache_page+0x56/0x270 mm/filemap.c:3585
+       read_mapping_page include/linux/pagemap.h:756 [inline]
+       __hfs_bnode_create+0x4d5/0x7f0 fs/hfsplus/bnode.c:440
+       hfsplus_bnode_find+0x23d/0xd80 fs/hfsplus/bnode.c:486
+       hfsplus_brec_find+0x145/0x520 fs/hfsplus/bfind.c:183
+       hfsplus_brec_read+0x27/0x100 fs/hfsplus/bfind.c:222
+       hfsplus_find_cat+0x168/0x6d0 fs/hfsplus/catalog.c:202
+       hfsplus_iget+0x402/0x630 fs/hfsplus/super.c:82
+       hfsplus_fill_super+0xc6a/0x1b50 fs/hfsplus/super.c:503
+       mount_bdev+0x26c/0x3a0 fs/super.c:1401
+       legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+       vfs_get_tree+0x88/0x270 fs/super.c:1531
+       do_new_mount+0x289/0xad0 fs/namespace.c:3040
+       do_mount fs/namespace.c:3383 [inline]
+       __do_sys_mount fs/namespace.c:3591 [inline]
+       __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+-> #0 (&tree->tree_lock){+.+.}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3097 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+       validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+       __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+       lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+       __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+       hfsplus_file_truncate+0x871/0xbb0 fs/hfsplus/extents.c:595
+       hfsplus_delete_inode+0x16d/0x210
+       hfsplus_unlink+0x4e2/0x7d0 fs/hfsplus/dir.c:405
+       hfsplus_rename+0xc3/0x1b0 fs/hfsplus/dir.c:547
+       vfs_rename+0xd53/0x1130 fs/namei.c:4779
+       do_renameat2+0xb53/0x1370 fs/namei.c:4930
+       __do_sys_rename fs/namei.c:4976 [inline]
+       __se_sys_rename fs/namei.c:4974 [inline]
+       __x64_sys_rename+0x82/0x90 fs/namei.c:4974
+       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+       do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+       entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&HFSPLUS_I(inode)->extents_lock);
+                               lock(&tree->tree_lock);
+                               lock(&HFSPLUS_I(inode)->extents_lock);
+  lock(&tree->tree_lock);
+
+ *** DEADLOCK ***
+
+6 locks held by syz-executor955/3635:
+ #0: ffff888075a6c460 (sb_writers#9){.+.+}-{0:0}, at: mnt_want_write+0x3b/0x80 fs/namespace.c:393
+ #1: ffff8880189a2b80 (&type->i_mutex_dir_key#6/1){+.+.}-{3:3}, at: lock_rename+0x182/0x1a0
+ #2: ffff8880189a3240 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #2: ffff8880189a3240 (&sb->s_type->i_mutex_key#15){+.+.}-{3:3}, at: lock_two_nondirectories+0xdd/0x130 fs/inode.c:1121
+ #3: ffff8880189a3900 (&sb->s_type->i_mutex_key#15/4){+.+.}-{3:3}, at: vfs_rename+0x80a/0x1130 fs/namei.c:4749
+ #4: ffff888027abb198 (&sbi->vh_mutex){+.+.}-{3:3}, at: hfsplus_unlink+0x135/0x7d0 fs/hfsplus/dir.c:370
+ #5: ffff8880189a3708 (&HFSPLUS_I(inode)->extents_lock){+.+.}-{3:3}, at: hfsplus_file_truncate+0x280/0xbb0 fs/hfsplus/extents.c:576
+
+stack backtrace:
+CPU: 1 PID: 3635 Comm: syz-executor955 Not tainted 6.1.0-rc7-syzkaller-00211-g0ba09b173387 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ check_noncircular+0x2cc/0x390 kernel/locking/lockdep.c:2177
+ check_prev_add kernel/locking/lockdep.c:3097 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3216 [inline]
+ validate_chain+0x1898/0x6ae0 kernel/locking/lockdep.c:3831
+ __lock_acquire+0x1292/0x1f60 kernel/locking/lockdep.c:5055
+ lock_acquire+0x182/0x3c0 kernel/locking/lockdep.c:5668
+ __mutex_lock_common+0x1bd/0x26e0 kernel/locking/mutex.c:603
+ __mutex_lock kernel/locking/mutex.c:747 [inline]
+ mutex_lock_nested+0x17/0x20 kernel/locking/mutex.c:799
+ hfsplus_file_truncate+0x871/0xbb0 fs/hfsplus/extents.c:595
+ hfsplus_delete_inode+0x16d/0x210
+ hfsplus_unlink+0x4e2/0x7d0 fs/hfsplus/dir.c:405
+ hfsplus_rename+0xc3/0x1b0 fs/hfsplus/dir.c:547
+ vfs_rename+0xd53/0x1130 fs/namei.c:4779
+ do_renameat2+0xb53/0x1370 fs/namei.c:4930
+ __do_sys_rename fs/namei.c:4976 [inline]
+ __se_sys_rename fs/namei.c:4974 [inline]
+ __x64_sys_rename+0x82/0x90 fs/namei.c:4974
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f462a64f3f9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f462a5da2f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000052
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f462a64f3f9
+RDX: 0000000000000031 RSI: 00000000200001c0 RDI: 0000000020000180
+RBP: 00007f462a6d4798 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000000005fb R11: 0000000000000246 R12: 00007f462a6d4790
+R13: 736f706d6f636564 R14: 0030656c69662f2e R15: 0073756c70736668
+ </TASK>
 
