@@ -2,226 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883E5642FBF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD871642FC2
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiLESSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:18:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
+        id S231934AbiLESTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:19:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiLESSk (ORCPT
+        with ESMTP id S231454AbiLESTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:18:40 -0500
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D127F18374
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:18:38 -0800 (PST)
-Received: by mail-io1-xd31.google.com with SMTP id c7so8093823iof.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:18:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=1Kwjjsx+waj1NcHgZ8ne7/Y3ZoidRky6q1QRST3mznU=;
-        b=k/D6BRrAiEltqHGAx7SdxcEa8xxfmOjT2Q8OQrBn85TrObX/ggwOvTc/w630GDofxn
-         5mGGw13ytll+9uDYJfi1kQUcIVnouzkhyJJA9S43gB09mJGCNGxYdPUo6JeRjK0kNET4
-         Emjqo8yM/xdPN7/CtKRinsPeLRnn+bQekTW7w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Kwjjsx+waj1NcHgZ8ne7/Y3ZoidRky6q1QRST3mznU=;
-        b=gVd7esNDdPfETY3Lz+ejTwOqyZKG/9r6DZUsjb8bIf/Wu8qADGsQev6DzWtw0b9TKs
-         Bm3lEiCjRTNP0tlRS6/YXBEtARQpPRWY9XhtSv0n9634rrn/hAJr5koypEw6cXqV3Ii8
-         iWtIbnWNjIcKNnfQxOlVSxS6qPxx7fQvHIgXluyAua7lMwEFt3GWYrdGwicpd3NIRGfK
-         ukbeNSii0jy6J2s6v+/vT05L3NKFTVLf3uJu9JFhipVNjmSvTlBl6+ZCj9/HVal/Od+L
-         6Re72BKqGYHQMbVoqMG8zzsjIoG56sfY3/2Lr46VhWPqX+sUdJ5+ntnyZRoybTqdCdiE
-         D5tw==
-X-Gm-Message-State: ANoB5pkmZnAvJ+zaIO51w7N2fqxMDNzfvUHRkd0owdSCmOf7JGL2P4kU
-        6mt+evO7W/lkX3sz2csLBeeXYA==
-X-Google-Smtp-Source: AA0mqf7QEA1CNoWdkleXcJM+P4tT/Lz8FQq9eZlR+KvECnmuIAiYHcC6m9lD6rZLxGtle8E713gXjw==
-X-Received: by 2002:a05:6638:450a:b0:363:a91e:7ead with SMTP id bs10-20020a056638450a00b00363a91e7eadmr39895791jab.196.1670264317535;
-        Mon, 05 Dec 2022 10:18:37 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id u30-20020a02cbde000000b0038a55bcfb47sm440373jaq.58.2022.12.05.10.18.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 10:18:37 -0800 (PST)
-Date:   Mon, 5 Dec 2022 18:18:36 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        helgaas@kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, swboyd@chromium.org,
-        dmitry.baryshkov@linaro.org,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Saheed O. Bolarinwa" <refactormyself@gmail.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [PATCH v7] PCI/ASPM: Update LTR threshold based upon reported
- max latencies
-Message-ID: <Y441/Icd2wSgVnNU@google.com>
-References: <1663315719-21563-1-git-send-email-quic_krichai@quicinc.com>
- <20221205112500.GB4514@thinkpad>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Mon, 5 Dec 2022 13:19:18 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C847B1583D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:19:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670264356; x=1701800356;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=cD0czx1X6nfjsI1a02GNEMyD/vppgXk9mztvB1qz07I=;
+  b=ao7AGeddfylPh3ASmTZ0wd5TEQv1ToU5e5ftz3TgxMr0L4zmMz8We+uh
+   1sFiP31nf8f2PzifrzyWy1lun+MJXHdmSMjh6TWu5M2LHaiLtbHjlYZbo
+   z1E8SptnGpkfYbXSZH3Rp7cAkd7JopMcuqHJSbhJ7JHSFaImsdm50cC40
+   fjngAZcBV6RJWHqsQ/bykjzip6NQTsTxk0uxd7GHqTYSa3SIGNb0LNspD
+   myqKMM91n280U/W7eJ0SYyTvsAOExcy8KxsiJt2LI+yccAgHnGItbApvI
+   PZcFHz6Nd9nIJgAKf0IX6UTgfiL1uN6Y8pFt/GelDBZ3flH06twDJ3MY8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="343440289"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="343440289"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 10:19:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="623601474"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="623601474"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga006.jf.intel.com with ESMTP; 05 Dec 2022 10:19:15 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Mon, 5 Dec 2022 10:19:15 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Mon, 5 Dec 2022 10:19:15 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Mon, 5 Dec 2022 10:19:15 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EASKM+zaNXUoP/qRT4RBJS3ErgbrTv5yOHlJGir1MgZjo3d7Sm7xeBwPMCGbbun7gw5UMqdzXf9R05ltI9d6CaXE/qTeyGq5cHgP4GvTaD49ZbBaATWSkOs47wa76t2FDkmxL+7tr8Ry5yjG3QE0pZTffMHuMKSNBYO8qjC64VxVO/lBzBBSfTPPEbtWPfirxxKL9u41qsLVpFBsi41vHXFjqd2TifkvSZfyFtpV+sBgjRQr2AEEUnvEfgHhqWPmS8R8q7bJXQ9fpujK+a/YdvJbfDdVOguuKZK1PUdnpT6MhYxjEZxi51p6THm0QAqpfbf44WnC0puhS2S1mr+iKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dn1MU+ODRAUB8902KZvoRR9rhyH3ovve2bFuH1JJ/js=;
+ b=OJvK6R7JUk44aojMtdUQCD7vAcl5s4vDb3WEdLQx3wj9tFaF9xDMWqKtT4xdgegNNPfBx3FB6jsITkGThNC/YYLBJQIcGNg93NBsvnX6ib8h1YIAnb9IIXvna4enx9lfD3lUrKIA6WgGIrGFVbKjZfnOOlkzGGf1/vxsHb6YyxFJBj6fNG+mlDBS3HFjLpLP6K/8feAiVM7DaAfrDCg+HHbberSHyOdZd6SFXrWckNvanoKRN5AJO3JS965UImOb83IZZlt8YQD+kaxEBQ8HPDUe28SRDfMazUq6WeX7WiFEUa/y2cWUtNHa/gwSE9OnW8aiJfalCwjKtNzJ0X1ymg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+ by SA3PR11MB7464.namprd11.prod.outlook.com (2603:10b6:806:31b::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Mon, 5 Dec
+ 2022 18:19:13 +0000
+Received: from SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad]) by SJ1PR11MB6201.namprd11.prod.outlook.com
+ ([fe80::6dd2:a8a3:7f9:ad%3]) with mapi id 15.20.5880.013; Mon, 5 Dec 2022
+ 18:19:13 +0000
+Date:   Mon, 5 Dec 2022 10:19:07 -0800
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     Borislav Petkov <bp@alien8.de>, X86-kernel <x86@kernel.org>,
+        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Tony Luck <tony.luck@intel.com>, <alison.schofield@intel.com>,
+        <reinette.chatre@intel.com>, Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [Patch V1 7/7] x86/microcode/intel: Print when early microcode
+ loading fails
+Message-ID: <Y442GzMi1EE9SV5R@a4bf019067fa.jf.intel.com>
+References: <20221129210832.107850-1-ashok.raj@intel.com>
+ <20221129210832.107850-8-ashok.raj@intel.com>
+ <87v8mtob6b.ffs@tglx>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221205112500.GB4514@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87v8mtob6b.ffs@tglx>
+X-ClientProxiedBy: BYAPR01CA0065.prod.exchangelabs.com (2603:10b6:a03:94::42)
+ To SJ1PR11MB6201.namprd11.prod.outlook.com (2603:10b6:a03:45c::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PR11MB6201:EE_|SA3PR11MB7464:EE_
+X-MS-Office365-Filtering-Correlation-Id: ac460faa-f5d6-404b-97fc-08dad6ed3622
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Sz/P4YT83ATauUOA9PUhfQKJnVT+K/w/GoZdaMCpFAVzWYVydUdZY57bR3dZbzDjRIoyuDPzDcK3XpJkm/Dls/RcdYiHpUZt1JLukRj1H4BEV2X+wfkWkqHlnPVCB4ycafMd3irklJq72My5TTx9DG6zirn/mp+rgNe9RjDTvUOFlfTVptmFN+bAdFeCwfzi91UItiTPsOy6WBEj+22bMhQQNKaiWPWyaSWa0hng17v8Hn9QIeTdqkjfiT4Ht2B0xuT8oez93H2/UKOvQpZel87gduu99UDB2YMCNlG9igq33qeyYtACffq3sJAXz6IClcfmb19oYRLLtomwPXA1cQ/IWmJQH+x0Ocmm3z6TmiqglMLro983ZoFJDqf0FLKjiRj/d4+3H9GwzW5xwr7AZofXCU5MDsaJsdjHUchX/E5CB+WB0EjbY/2epru0cZ0wCYmwCmDdzO8SyVKMzJ/3gaVDXRqhJX7UHvNja/She0+g4m8i42kW3bMvDMchyhx9wULGIA5rqTaeQWrSA5pvQjbavO3HTYhUcJe0eNCwWZcFg6O1ob8PXYFdTeUYHndTp4tFl4ogMhlOjM2XSYugy+99dJQadovTsbWk38cPMI8tZHonEG5zDqIB5DIZmaiNQAblfk1vCWQd9fKAIBqlfu8FkdFxO0QvsdfqCTOIAcg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6201.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(396003)(346002)(39860400002)(366004)(451199015)(5660300002)(478600001)(6486002)(4326008)(8676002)(966005)(66946007)(41300700001)(66476007)(66556008)(6916009)(316002)(54906003)(82960400001)(38100700002)(6512007)(107886003)(6666004)(186003)(26005)(6506007)(86362001)(83380400001)(44832011)(2906002)(4744005)(8936002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7maRhAesVmAOzLZb2ee74GsEkoJN4KVVs6dnBv72deC0A8aj203BChvSK3gB?=
+ =?us-ascii?Q?WLk7KK4erXGzw7ziHvit1npOIHrl8cIjj3+O88X6pK6eLq/ccVh4ZtIZFtuS?=
+ =?us-ascii?Q?f8/7Ws/ROXg+hFQ7paWHYTKCjgV3hQN/18Pv0r9S1O/eob379BUNio/0GPHf?=
+ =?us-ascii?Q?WA5m9vAbzMG/Fqf3y6GWaHN3EhSsYak2sGIcY7SPlNnpISVWkmOX6WEMRaiD?=
+ =?us-ascii?Q?ZR3aM0RQIyBrbkl74G5VRo01k/AfN+KpYRfBSRXD4D9aGeLFERzNPBqmReFY?=
+ =?us-ascii?Q?vwapDUuYJ9qt1agmTSUnLViVp0aPSxrkm34H2LqvihOBI8kubOffAu1bg936?=
+ =?us-ascii?Q?07pOy2ys/I4VH6bngNQK7IOf3jav7oIvETF6EXSQNzD3Zq/rOkxOFhplSOko?=
+ =?us-ascii?Q?kp56gOt01R+e9mj4qioWXb9aK3XPsZL/cI5v4x6NDT+X7KxQqVfBERT9rho/?=
+ =?us-ascii?Q?4ZjysNKfVSlB9HbGBRUXYOEl4Ul9MSZ4ABOO+OgS4t1HCFXmdk3l6LQQYhjQ?=
+ =?us-ascii?Q?5ngDhIv9dsPRpLmRk5vcudDdgubG9B5npAuTMDVow+5iN0kXB5x3jva+M7Wf?=
+ =?us-ascii?Q?vKvM2eIedrstamAIjH2dRb9gl24Bh+8KJKYiWUk+oxhHFEVDL491bay8sLIX?=
+ =?us-ascii?Q?DY9DJFRqVp8pMpxBlz5C5gLqfwcRc3ALgg6eOm4xw/zkvk0N+h+pddsxx5Fx?=
+ =?us-ascii?Q?fsFl3Co4WwIltwySjeqVTtbf0sWDhDjmgS9Ph04JfPZzFLfHGO3evyLJAr1g?=
+ =?us-ascii?Q?F+gfPWoAaZs6pXRnz1xpAfLS52SK/m/837k++Z0t0iPgtbLEQR+KUpID7JfK?=
+ =?us-ascii?Q?TfGkY1aG3xnBMVJA/Skhl+7NJTwJ48B2yEPOUNEjqd6i8oVvrDD56aFJz+8z?=
+ =?us-ascii?Q?f9xXw0Ncl4ZgScXZ6Uj/tLCCW/V2YP9pA0cvWOgB8YOS0cpcgtzZffviqjKg?=
+ =?us-ascii?Q?XxOaIzvIqV92yePjmlKG1GedheAcbLMLkiE/jiAe2QIzb3x33z3ZaIZBQ5w8?=
+ =?us-ascii?Q?BqUaaZ7cw+AGr9LXTJQ+avDE1mFEEzU733UypwH10pNt51WOpkts5qfMByPK?=
+ =?us-ascii?Q?b4XBck6gVI2ZOUXtN0FaPpgQ5At/ZwJN6FAj6EhDK69YQT7gdQEl/EXdtN38?=
+ =?us-ascii?Q?d4+PXKuyZ8IFjJjTaUWbLkFnj+/9GfzettiDl3HSAbz01SzNXm205hpuja0E?=
+ =?us-ascii?Q?ghJawNFfUjXyzTAmpUPP2SsJYhWGoeOvo5mQB/6TZ26Y4qZ9kVfQ8cDCwzMC?=
+ =?us-ascii?Q?YnDbBdQffey38rNq9/nKNLPj1WF2AYne6sn5gY1PM9K9R+wE0fL6fg3+0n9C?=
+ =?us-ascii?Q?dk/zAMV0sykSW09BpVu5paknbalQCm7cjhCFCZJv6fvvYlH8HiGGMiGZBVZ0?=
+ =?us-ascii?Q?btp9l8E6rTzLnvY+3gBR0cm1/LsUk7oaItYfc/RdG81+mM2buvRRbbdAK8jY?=
+ =?us-ascii?Q?Iqgxi0+fn3ctA1644Ba8y319PQ9fBQV/qRVlAbfYMA6ofevrABe4CPXUaMKc?=
+ =?us-ascii?Q?Wcp2YUfgo3Fj1KxKn+Qc61ZyTx/EFNbXQzcAB21o033RHBMZbnxLBJJ8CdJ0?=
+ =?us-ascii?Q?xf8i+TTjYvQ4ZQRAmKO/rlShMGKxtuV+m2SD9lexcfJnu0MxUSMaie+4RBcd?=
+ =?us-ascii?Q?cQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac460faa-f5d6-404b-97fc-08dad6ed3622
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6201.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2022 18:19:13.1582
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jJiIXIRsYiJU0DsvajJLZSxf2B7D2yyiiIa3fiuI2bjAX5pMQhxUJl/h/8HlCKRdIULdpYDdv3A08xxnITEBGw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7464
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 04:55:00PM +0530, Manivannan Sadhasivam wrote:
-> On Fri, Sep 16, 2022 at 01:38:37PM +0530, Krishna chaitanya chundru wrote:
-> > In ASPM driver, LTR threshold scale and value are updated based on
-> > tcommon_mode and t_poweron values. In Kioxia NVMe L1.2 is failing due to
-> > LTR threshold scale and value are greater values than max snoop/non-snoop
-> > value.
-> > 
-> > Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when
-> > reported snoop/no-snoop values is greater than or equal to
-> > LTR_L1.2_THRESHOLD value.
-> > 
-> > Signed-off-by: Prasad Malisetty  <quic_pmaliset@quicinc.com>
-> > Signed-off-by: Krishna chaitanya chundru <quic_krichai@quicinc.com>
-> > Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On Fri, Dec 02, 2022 at 08:30:52PM +0100, Thomas Gleixner wrote:
+> On Tue, Nov 29 2022 at 13:08, Ashok Raj wrote:
 > 
-> I take my Ack back... Sorry that I did not look into this patch closer.
+> > Currently when early microcode loading fails there is no way for user to
 > 
-> > ---
-> > 
-> > I am taking this patch forward as prasad is no more working with our org.
-> > changes since v6:
-> > 	- Rebasing with pci/next.
-> > changes since v5:
-> > 	- no changes, just reposting as standalone patch instead of reply to
-> > 	  previous patch.
-> > Changes since v4:
-> > 	- Replaced conditional statements with min and max.
-> > changes since v3:
-> > 	- Changed the logic to include this condition "snoop/nosnoop
-> > 	  latencies are not equal to zero and lower than LTR_L1.2_THRESHOLD"
-> > Changes since v2:
-> > 	- Replaced LTRME logic with max snoop/no-snoop latencies check.
-> > Changes since v1:
-> > 	- Added missing variable declaration in v1 patch
-> > ---
-> >  drivers/pci/pcie/aspm.c | 30 ++++++++++++++++++++++++++++++
-> >  1 file changed, 30 insertions(+)
-> > 
-> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> > index 928bf64..2bb8470 100644
-> > --- a/drivers/pci/pcie/aspm.c
-> > +++ b/drivers/pci/pcie/aspm.c
-> > @@ -486,13 +486,35 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >  {
-> >  	struct pci_dev *child = link->downstream, *parent = link->pdev;
-> >  	u32 val1, val2, scale1, scale2;
-> > +	u32 max_val, max_scale, max_snp_scale, max_snp_val, max_nsnp_scale, max_nsnp_val;
-> >  	u32 t_common_mode, t_power_on, l1_2_threshold, scale, value;
-> >  	u32 ctl1 = 0, ctl2 = 0;
-> >  	u32 pctl1, pctl2, cctl1, cctl2;
-> > +	u16 ltr;
-> > +	u16 max_snoop_lat, max_nosnoop_lat;
-> >  
-> >  	if (!(link->aspm_support & ASPM_STATE_L1_2_MASK))
-> >  		return;
-> >  
-> > +	ltr = pci_find_ext_capability(child, PCI_EXT_CAP_ID_LTR);
-> > +	if (!ltr)
-> > +		return;
-> > +
-> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_SNOOP_LAT, &max_snoop_lat);
-> > +	pci_read_config_word(child, ltr + PCI_LTR_MAX_NOSNOOP_LAT, &max_nosnoop_lat);
-> > +
-> > +	max_snp_scale = (max_snoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > +	max_snp_val = max_snoop_lat & PCI_LTR_VALUE_MASK;
-> > +
-> > +	max_nsnp_scale = (max_nosnoop_lat & PCI_LTR_SCALE_MASK) >> PCI_LTR_SCALE_SHIFT;
-> > +	max_nsnp_val = max_nosnoop_lat & PCI_LTR_VALUE_MASK;
-> > +
-> > +	/* choose the greater max scale value between snoop and no snoop value*/
-> > +	max_scale = max(max_snp_scale, max_nsnp_scale);
-> > +
-> > +	/* choose the greater max value between snoop and no snoop scales */
-> > +	max_val = max(max_snp_val, max_nsnp_val);
-> > +
-> >  	/* Choose the greater of the two Port Common_Mode_Restore_Times */
-> >  	val1 = (parent_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> >  	val2 = (child_l1ss_cap & PCI_L1SS_CAP_CM_RESTORE_TIME) >> 8;
-> > @@ -525,6 +547,14 @@ static void aspm_calc_l1ss_info(struct pcie_link_state *link,
-> >  	 */
-> >  	l1_2_threshold = 2 + 4 + t_common_mode + t_power_on;
-> >  	encode_l12_threshold(l1_2_threshold, &scale, &value);
-> > +
-> > +	/*
-> > +	 * Based on PCIe r4.1, sec 5.5.1, L1.2 substate must be entered when reported
-> > +	 * snoop/no-snoop values are greater than or equal to LTR_L1.2_THRESHOLD value.
+> the user
 > 
-> Apart from the bug in calculating the LTR_Threshold as reported by Matthias
-> and Bjorn, I'm wondering if we are covering up for the device firmware issue.
-
-Yes, I think the patch is doing exactly that.
-
-> As per section 6.18, if the device reports snoop/no-snoop scale/value as 0, then
-> it implies that the device won't tolerate any additional delays from the host.
->
-> In that case, how can we allow the link to go into L1.2 since that would incur
-> high delay compared to L1.1?
-
-I had the same doubt, a value of 0 doesn't make sense, if it literally means
-'max delay of 0ns'. I did some debugging around this issue. One thing I found
-is that there are NVMe models that don't have issues with entering L1.2 with
-max (no-)snoop latencies of 0. From that I infer that a value of 0 does not
-literally mean a max delay of 0ns.
-
-The PCIe spec doesn't say specifically what a value of 0 in those registers
-means, but chapter "6.18 Latency Tolerance Reporting (LTR) Mechanism" of the
-PCIe 4.0 base spec says something about the latency requirements in LTR
-messages:
-
-  Setting the value and scale fields to all 0’s indicates that the device will
-  be impacted by any delay and that the best possible service is requested.
-
-With that and the fact that several NVMe's don't have issues with all 0 values
-I deduce that all 0's means 'best possible service' and not 'max latency of
-0ns'. It seems the Kioxia firmware has a bug which interprets all 0 values as
-a max latency of 0ns.
-
-Another finding is that the Kioxia NVMe can enter L1.2 if the max latencies
-are set to values >= the LTR threshold. Unfortunately that isn't a viable
-fix for existing devices in the field, devices under development could possibly
-adjust the latencies in the BIOS (coreboot code [1] suggests that this is done
-at least in some cases).
-
-m.
-
-[1] https://github.com/coreboot/coreboot/blob/master/src/device/pciexp_device.c#L313
-
-
-
-
-> > +	 */
-> > +	scale = min(scale, max_scale);
-> > +	value = min(value, max_val);
-> > +
-> >  	ctl1 |= t_common_mode << 8 | scale << 29 | value << 16;
-> >  
-> >  	/* Some broken devices only support dword access to L1 SS */
-> > -- 
-> > 2.7.4
-> > 
+> > know that the update failed.
+> >
+> > Store the failed status and pass it to print_ucode_info() to let early
+> > loading failures to captured in console log.
 > 
-> -- 
-> மணிவண்ணன் சதாசிவம்
+> so that early loading failures are captured in dmesg.
+> 
+> Hmm?
+
+Thanks for the review Thomas. 
+
+Boris, I have fixups to address all of Thomas's comments. Would you
+like me to repost a new series with those fixups?
+
+I'll drop patch1, since you have merged it in tip. You have a candidate for
+patch2 as well, maybe I can drop that as well.
+
+This patch has a type cast warning for 32bit compiles that I have fixed as
+well.
+
+I added a new patch to address Thomas's comment to print revs only when
+loading succeeds[1].
+
+Cheers,
+Ashok
+
+[1] https://lore.kernel.org/lkml/874judpqqd.ffs@tglx/
