@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA33964317A
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AD0E64316F
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 20:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiLETO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 14:14:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S232481AbiLETOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 14:14:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiLETOT (ORCPT
+        with ESMTP id S232801AbiLETOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 14:14:19 -0500
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A803A22521
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 11:14:13 -0800 (PST)
-Received: by mail-io1-xd2a.google.com with SMTP id 3so1959897iou.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 11:14:13 -0800 (PST)
+        Mon, 5 Dec 2022 14:14:41 -0500
+Received: from mail-oi1-x249.google.com (mail-oi1-x249.google.com [IPv6:2607:f8b0:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FB01F2FF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 11:14:40 -0800 (PST)
+Received: by mail-oi1-x249.google.com with SMTP id bh19-20020a056808181300b0035b6736ee50so5657335oib.22
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 11:14:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZFyCIXZXXj52B6+TRuXYxnhDZPZi9MBnfF7ElnTFN0o=;
-        b=KQGUU1Mz8tE4FwG55UuWK/DUEkyHdjC6KTQ4N+hj3x0ZlJuuTc/kGeD5/B6LgnUu/S
-         xvJeckIeV8aKAbciCxa3sgM6JZxhtmx9pd4+am3DyFTPmz04pnk1xB/g4kahK7DENpu+
-         rmKjl1FEIA/X1Ff3dM3ZgxaFCX3lKhsKjUlyxcBQqMl0OKlVgWU5h11YGOaWFIZsxRyt
-         XwqdPO2DUJ2AuRL6F7yTO8blbdlbbTuR9F5rQKRp0SUtegBSmO8uVO6Yi0gcps2NbhaW
-         zzS/ckngN3ZtcWj88HJFBh7DfGVIhhGFeAXbN7TEkpnK1GoeTaafGNV0gYvUCz0U7AM5
-         tvow==
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pcO8knyiGDbFIfMjbOgDj3hfHzch+YeaDL5Ano9tTdg=;
+        b=INmgLualos+oybZKFZwP2HhkuPQ1uOH4G3pvi+LqGBVBQ0ECqs/2znFA5G+49vdVZt
+         M3MgD4eE2R11m0AZ11wELWQ/wss3KXka1J2zfYzVg7WsiOjWG74u3JVnm+9lc0Gf17XW
+         2dxxoZ7jPNIEiZ5LBObcm7TT2mR5lZ9GEfWImBuJkIDCeU0xFENNgQ5p/hW7CeGXEmjQ
+         5leQnDtBiOMXG58CQwnynd7hqeC6Bf9Mv09MAYvgPSewiPU+ZB5ierKUyViU8qGOWkwj
+         CX8I1fz7l/0Cobjx40GL0vk77NSz8MQa+UNfqNp8UKW2/4nvaJoqJxUDhOIMH5xI8uAK
+         +fLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ZFyCIXZXXj52B6+TRuXYxnhDZPZi9MBnfF7ElnTFN0o=;
-        b=Hp026bRlm7ovKobxlMcMDHAxrlmPg+/0eN/MF8YqiaDgVH4295Qjuph65T3Ih+iJR0
-         mfxrpNHEzkoWd4sBe14wpbYC1MgBmgyQn8NKT0yVMCDoJuzhdgxsJR7aDCMG+qbGCTZJ
-         0W67VzzhnZKveXIV/uUnfg9D3jzRCyTt6qsDsUezEiWgfcIOdQ01n++SjtAUCpy8V0Ek
-         k6DLdNoxo5F8xezqMOaSXDsZOL9W5JlYqs6Yn1MsfPGOzmFtqXCavqT7CAmNmcJ4GDsw
-         1rX52BrH1o8A4c88uTGWLOCHEfaT1dK7xekSPlhZu+25inEo1qWP7ORxTfjx4JbVae91
-         hhmA==
-X-Gm-Message-State: ANoB5pmHwptpA9lQb0gxGzBYYXh4fAS+XYzb6Q6iFI8NaTUuLG1gswBO
-        XvlP2IU3ZBE0oQzeqzwe5Roh7XnjMls7pwJRmapzhg==
-X-Google-Smtp-Source: AA0mqf5z+bsAKNYfj1j6BbUt9D4MCk7ZIBrj8IAdK2ejaTvyL2OacLKX78s44UxNUH1xT8V7DYXP6zYQ+wAgnvyJhN4=
-X-Received: by 2002:a5d:97c9:0:b0:6a2:e3df:a40e with SMTP id
- k9-20020a5d97c9000000b006a2e3dfa40emr38722107ios.113.1670267652805; Mon, 05
- Dec 2022 11:14:12 -0800 (PST)
-MIME-Version: 1.0
-References: <20221205020046.1876356-1-Jason@zx2c4.com> <20221205020046.1876356-2-Jason@zx2c4.com>
-In-Reply-To: <20221205020046.1876356-2-Jason@zx2c4.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 5 Dec 2022 20:13:36 +0100
-Message-ID: <CAG48ez2R=Ov2Z9zn_W9+C3gHqOkPdQKAY=4SMWDUG=NfP=3eJw@mail.gmail.com>
-Subject: Re: [PATCH v11 1/4] random: add vgetrandom_alloc() syscall
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        tglx@linutronix.de, linux-crypto@vger.kernel.org,
-        linux-api@vger.kernel.org, x86@kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adhemerval Zanella Netto <adhemerval.zanella@linaro.org>,
-        "Carlos O'Donell" <carlos@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pcO8knyiGDbFIfMjbOgDj3hfHzch+YeaDL5Ano9tTdg=;
+        b=DCQ3umyFf6+2Bvcz53QFkLWqtnHyq23r66d4YJw/GLsuNMWCm2Mgx6l/rmsBzUfRQH
+         lv8lEKH0N2XTOg/taslwo8DWcdvoqJpQCN6s2ZD5L/fz/KGGWPDbZUkyhB+eBaeGEXel
+         yYeluPF74FluV50JCQlFd6JHhkZ0ik3ZIAVAxs13HymAWib/CvtDoxohiqbHSHgUFbfR
+         A+kk1QCqGDn5BXS6vfAN8owlAtsrqtyaY0+LGEqEAqXRPv+TA3uSHKQS5pQECtTI5cpg
+         d/jtxS5u7ucojxry3gINC3W9e2AgRKHTqCtA0rHgc8EFhRO1LSNoJeV4qI0gbmwDVV63
+         hA7w==
+X-Gm-Message-State: ANoB5pmd6b0vronfQEftjwaAujwpRqOgaYNPxA1v6WNroIJTt3e8XlmF
+        uwrKXyH49+moIhV8w1ZZ+nPKSe0tp2gL
+X-Google-Smtp-Source: AA0mqf5BzkRrJJpeplfASCRvD3cdZ6hCepT9ubKMW5wrpk+knufclse4p3hrETMeNf4B2X/EAJoEAjcW/Ar1
+X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
+ (user=vipinsh job=sendgmr) by 2002:a05:6870:aa88:b0:143:ca23:34a9 with SMTP
+ id gr8-20020a056870aa8800b00143ca2334a9mr20657540oab.235.1670267679700; Mon,
+ 05 Dec 2022 11:14:39 -0800 (PST)
+Date:   Mon,  5 Dec 2022 11:14:17 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221205191430.2455108-1-vipinsh@google.com>
+Subject: [Patch v3 00/13] Add Hyper-v extended hypercall support in KVM
+From:   Vipin Sharma <vipinsh@google.com>
+To:     seanjc@google.com, pbonzini@redhat.com, vkuznets@redhat.com,
+        dmatlack@google.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vipin Sharma <vipinsh@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,24 +67,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 3:01 AM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
-> +       mm->def_flags |=
-> +               /*
-> +                * Don't allow state to be written to swap, to preserve forward secrecy.
-> +                * This works in conjunction with MAP_LOCKED in do_mmap(), below, which
-> +                * actually does the locking (and associated permission check and accounting).
-> +                * Here, VM_LOCKONFAULT together with VM_NORESERVE simply make the mlocking
-> +                * happen the first time it's actually used, the same as when calling
-> +                * mlock2(MLOCK_ONFAULT) from userspace.
-> +                */
-> +               VM_LOCKONFAULT | VM_NORESERVE |
+Hi,
 
-Have you checked the interaction with this line in dup_mmap()?
-"tmp->vm_flags &= ~(VM_LOCKED | VM_LOCKONFAULT);"
+There are two patch series combined in this one because I have rebased
+my patch series (patches 8 to 13) on top of Vitaly's "Hyper-V invariant TSC control
+feature" (patches 1 to 7).
+https://lore.kernel.org/kvm/87o7szouyr.fsf@ovpn-194-185.brq.redhat.com/
 
-As the mlock.2 manpage says, "Memory locks are not inherited by a
-child created via fork(2)". I think the intention here is that the VMA
-should stay unswappable after fork(), right?
+Vitaly's series had some small merge conflicts on the KVM queue branch I
+have fixed them in this series, no code changes.
 
-Of course, trying to reserve more mlocked memory in fork() would also
-be problematic...
+My patches (8 to 13) add Hyper-V extended hypercall support and selftests.
+
+v3:
+- Rebased on top of Vitaly's "Hyper-V invariant TSC control feature"
+  series.
+- Removed enabling KVM_CAP_HYPERV_ENFORCE_CPUID in
+  hyperv_extended_hypercalls test.
+
+
+v2: https://lore.kernel.org/lkml/20221121234026.3037083-1-vipinsh@google.com/
+- Intorduced ASSERT_EXIT_REASON macro and replaced all occurences of
+  TEST_ASSERT for vcpu exit reason.
+- Skip hyperv_extended_hypercalls test if extended hypercalls are not
+  supported by the kernel.
+- Rebased with latest KVM queue.
+- Addressed all of the comments in patch 6 of v1.
+
+v1: https://lore.kernel.org/lkml/20221105045704.2315186-1-vipinsh@google.com/
+
+RFC: https://lore.kernel.org/lkml/20221021185916.1494314-1-vipinsh@google.com/
+
+Vipin Sharma (6):
+  KVM: x86: hyper-v: Use common code for hypercall userspace exit
+  KVM: x86: hyper-v: Add extended hypercall support in Hyper-v
+  KVM: selftests: Test Hyper-V extended hypercall enablement
+  KVM: selftests: Replace hardcoded Linux OS id with HYPERV_LINUX_OS_ID
+  KVM: selftests: Make vCPU exit reason test assertion common.
+  KVM: selftests: Test Hyper-V extended hypercall exit to userspace
+
+Vitaly Kuznetsov (7):
+  x86/hyperv: Add HV_EXPOSE_INVARIANT_TSC define
+  KVM: x86: Add a KVM-only leaf for CPUID_8000_0007_EDX
+  KVM: x86: Hyper-V invariant TSC control
+  KVM: selftests: Rename 'msr->available' to 'msr->fault_exepected' in
+    hyperv_features test
+  KVM: selftests: Convert hyperv_features test to using
+    KVM_X86_CPU_FEATURE()
+  KVM: selftests: Test that values written to Hyper-V MSRs are preserved
+  KVM: selftests: Test Hyper-V invariant TSC control
+
+ arch/x86/include/asm/hyperv-tlfs.h            |   3 +
+ arch/x86/include/asm/kvm_host.h               |   1 +
+ arch/x86/kernel/cpu/mshyperv.c                |   2 +-
+ arch/x86/kvm/cpuid.c                          |  11 +-
+ arch/x86/kvm/hyperv.c                         |  74 +++-
+ arch/x86/kvm/hyperv.h                         |  27 ++
+ arch/x86/kvm/reverse_cpuid.h                  |   7 +
+ arch/x86/kvm/x86.c                            |   4 +-
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../testing/selftests/kvm/aarch64/psci_test.c |   4 +-
+ .../testing/selftests/kvm/include/test_util.h |  10 +
+ .../selftests/kvm/include/x86_64/hyperv.h     | 149 +++++---
+ .../selftests/kvm/include/x86_64/processor.h  |   1 +
+ .../kvm/lib/s390x/diag318_test_handler.c      |   3 +-
+ .../selftests/kvm/s390x/sync_regs_test.c      |  15 +-
+ .../selftests/kvm/set_memory_region_test.c    |   6 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |   8 +-
+ .../kvm/x86_64/cr4_cpuid_sync_test.c          |   8 +-
+ .../testing/selftests/kvm/x86_64/debug_regs.c |   2 +-
+ .../selftests/kvm/x86_64/flds_emulation.h     |   5 +-
+ .../selftests/kvm/x86_64/hyperv_clock.c       |   9 +-
+ .../selftests/kvm/x86_64/hyperv_evmcs.c       |   8 +-
+ .../kvm/x86_64/hyperv_extended_hypercalls.c   |  93 +++++
+ .../selftests/kvm/x86_64/hyperv_features.c    | 353 +++++++++++-------
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c |   6 +-
+ .../selftests/kvm/x86_64/hyperv_svm_test.c    |   7 +-
+ .../selftests/kvm/x86_64/hyperv_tlb_flush.c   |  14 +-
+ .../selftests/kvm/x86_64/kvm_clock_test.c     |   5 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |   5 +-
+ .../selftests/kvm/x86_64/monitor_mwait_test.c |   9 +-
+ .../kvm/x86_64/nested_exceptions_test.c       |   5 +-
+ .../selftests/kvm/x86_64/platform_info_test.c |  14 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |   6 +-
+ tools/testing/selftests/kvm/x86_64/smm_test.c |   9 +-
+ .../testing/selftests/kvm/x86_64/state_test.c |   8 +-
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   8 +-
+ .../kvm/x86_64/svm_nested_shutdown_test.c     |   7 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  |   6 +-
+ .../selftests/kvm/x86_64/svm_vmcall_test.c    |   6 +-
+ .../selftests/kvm/x86_64/sync_regs_test.c     |  25 +-
+ .../kvm/x86_64/triple_fault_event_test.c      |   9 +-
+ .../selftests/kvm/x86_64/tsc_scaling_sync.c   |   6 +-
+ .../kvm/x86_64/ucna_injection_test.c          |  22 +-
+ .../selftests/kvm/x86_64/userspace_io_test.c  |   6 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      |  22 +-
+ .../kvm/x86_64/vmx_apic_access_test.c         |  11 +-
+ .../kvm/x86_64/vmx_close_while_nested_test.c  |   5 +-
+ .../selftests/kvm/x86_64/vmx_dirty_log_test.c |   7 +-
+ .../vmx_exception_with_invalid_guest_state.c  |   4 +-
+ .../x86_64/vmx_invalid_nested_guest_state.c   |   4 +-
+ .../kvm/x86_64/vmx_nested_tsc_scaling_test.c  |   6 +-
+ .../kvm/x86_64/vmx_preemption_timer_test.c    |   8 +-
+ .../kvm/x86_64/vmx_tsc_adjust_test.c          |   6 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |   6 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |   7 +-
+ .../selftests/kvm/x86_64/xen_vmcall_test.c    |   5 +-
+ 57 files changed, 586 insertions(+), 493 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/hyperv_extended_hypercalls.c
+
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
