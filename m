@@ -2,106 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD255642642
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2251D642645
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 11:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231540AbiLEKAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 05:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
+        id S231566AbiLEKB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 05:01:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbiLEKAM (ORCPT
+        with ESMTP id S230012AbiLEKBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 05:00:12 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065A7E0BA
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 02:00:11 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so55402pjr.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 02:00:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NQ6cAl+86TDUB9cUa1/EWsCMl2DdMF0dDV8o8yg5Vqo=;
-        b=Dbxfud1EIQCczeM8D9qo8COwwUq+htWEyYt1aSASCGolP60aSlSkGvfIRY3Rermc9u
-         X5GRzZ7JcDLi/ldCbMiflREi3JaZChi7ELkotb/7nyPofwcTUp4G6zeIoao9gbEhpr8q
-         8c+EUEW3AMqohdDWA3ZEJV+vyQzGcqjM7qQu4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NQ6cAl+86TDUB9cUa1/EWsCMl2DdMF0dDV8o8yg5Vqo=;
-        b=JfQpVqZlXr2Z9eQZjhAMNZzwpYtjU27XJzrJiL0aCBm6+r3p6+U578KK1y8IMJ6y+z
-         yUCulqC0Ul1ry3HhcKEwFpIyB2A4GsxuOuhtrQys8uvT/Tbgmtg0mHKwZlVqBuPUK12N
-         xziYmSSdB8WmujmtqaQusJQkiBYbnEI7VMpInFSSayFXm04yANX6W9cF276ZK+0OMSoJ
-         G1xnZ46zCSAF5DMl51vDuJHRznlxvHbL7UdDnW/sW24NqzbCryJM7qwy+trDMPzIked5
-         WvUK2NDKE5GKB5M0SQJFG1sZlotrgzK1XR+rZwOCHBTkhKh1WIRjpLUaihJX7jCgZ2Ym
-         793g==
-X-Gm-Message-State: ANoB5plVwpS68z9n32UoVWY9XIcbJ4HcZS1dDkfXjG/H85TulWJdIoBE
-        j4ob9FahfJBSNZ9xruP8/vNQe73J7Q6n/z0T
-X-Google-Smtp-Source: AA0mqf4QYZN99TQvaiqwaj4nboSHkfQYtYLllku2zIHP9FNU0z0yJP2t09klFeEMAEQU3Tew8Wz/hQ==
-X-Received: by 2002:a17:90b:3c4c:b0:218:a8a1:933a with SMTP id pm12-20020a17090b3c4c00b00218a8a1933amr73171225pjb.14.1670234410351;
-        Mon, 05 Dec 2022 02:00:10 -0800 (PST)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com. [209.85.214.171])
-        by smtp.gmail.com with ESMTPSA id n9-20020a170902e54900b001898ca438fcsm10220857plf.282.2022.12.05.02.00.08
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 02:00:09 -0800 (PST)
-Received: by mail-pl1-f171.google.com with SMTP id jn7so10296506plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 02:00:08 -0800 (PST)
-X-Received: by 2002:a17:90b:944:b0:219:33a1:d05f with SMTP id
- dw4-20020a17090b094400b0021933a1d05fmr40319988pjb.116.1670234407771; Mon, 05
- Dec 2022 02:00:07 -0800 (PST)
+        Mon, 5 Dec 2022 05:01:54 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBF2EEE04;
+        Mon,  5 Dec 2022 02:01:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82724B80D8A;
+        Mon,  5 Dec 2022 10:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEEE9C433D6;
+        Mon,  5 Dec 2022 10:01:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670234511;
+        bh=JzpFDEjrQFvjOi2I0p/4SK+qj9QDFZJNMZL7IvIyZ+k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s1XSEisnYeBkj9lpqoXuvM0I8fTReUG9gMb+HWuYURInEoJkg8hOj5jk1tmKw9j54
+         qfuliLepr4XO0kgXXrTPdbRAzHTCmUP0V47Fno2sX2ENbfBSOu/6keB6HSEiA3/CkY
+         VG0/kiX3MassJ3HUCn87NanxqCta1yFnd1va6QKBMYslDeupVnKbMq+iO0xk8eOOi9
+         bEy1kkEiKS+HsINl3fFMog90GN+ZTgWUrTATdB+wnKMnpcgdax8jZ+CZ0TXaEfrzLh
+         SQH74AGk1uErAwGTN98zLPlJ1Rxq+Cb3Ie71yvr4ZJvQHsxSggk1ryNZM7LIoxoVEA
+         DoWLs68vSeapg==
+Date:   Mon, 5 Dec 2022 11:01:48 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Hui Tang <tanghui20@huawei.com>
+Cc:     linux-i2c@vger.kernel.org, linux@roeck-us.net, bence98@sch.bme.hu,
+        linux-kernel@vger.kernel.org, weiyongjun1@huawei.com,
+        yusongping@huawei.com
+Subject: Re: [PATCH] i2c-pxa2xx: fix missing pci_disable_device() on error in
+ ce4100_i2c_probe
+Message-ID: <Y43BjGqsk+u/Nb+C@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Hui Tang <tanghui20@huawei.com>, linux-i2c@vger.kernel.org,
+        linux@roeck-us.net, bence98@sch.bme.hu,
+        linux-kernel@vger.kernel.org, weiyongjun1@huawei.com,
+        yusongping@huawei.com
+References: <20221114092540.247891-1-tanghui20@huawei.com>
 MIME-Version: 1.0
-References: <20220921-ad5820-v2-0-3e5cabb04786@chromium.org> <Y43A1WbaLSa042EJ@paasikivi.fi.intel.com>
-In-Reply-To: <Y43A1WbaLSa042EJ@paasikivi.fi.intel.com>
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 5 Dec 2022 10:59:56 +0100
-X-Gmail-Original-Message-ID: <CANiDSCtBk+HCzd6bc=WS8KQWjB8HrsoUBaS_CsJRDAdqp4z6Gg@mail.gmail.com>
-Message-ID: <CANiDSCtBk+HCzd6bc=WS8KQWjB8HrsoUBaS_CsJRDAdqp4z6Gg@mail.gmail.com>
-Subject: Re: [PATCH v2] media: i2c: ad5820: Fix error path
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Pali Rohar <pali@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nPhuWi1wxt0t7EzF"
+Content-Disposition: inline
+In-Reply-To: <20221114092540.247891-1-tanghui20@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 at 10:58, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
->
-> Hi Ricardo,
->
-> On Fri, Dec 02, 2022 at 05:35:59PM +0100, Ricardo Ribalda wrote:
-> > Error path seems to be swaped. Fix the order and provide some meaningful
-> > names.
-> >
-> > Fixes: bee3d5115611 ("[media] ad5820: Add driver for auto-focus coil")
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
->
-> I'm afraid v1 has already been merged. But I understand patch content
-> wasn't really different so that should be fine.
 
-Sorry I missed that :)
+--nPhuWi1wxt0t7EzF
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
+On Mon, Nov 14, 2022 at 05:25:40PM +0800, Hui Tang wrote:
+> Using pcim_enable_device() to avoid missing pci_disable_device().
+>=20
+> Fixes: 7e94dd154e934 ("i2c-pxa2xx: Add PCI support for PXA I2C controller=
+")
+> Signed-off-by: Hui Tang <tanghui20@huawei.com>
 
+Fixed the subject to "i2c: pxa-pci:" and fixed this checkpatch warning:
 
->
-> --
-> Kind regards,
->
-> Sakari Ailus
+WARNING: Please use correct Fixes: style 'Fixes: <12 chars of sha1> ("<titl=
+e line>")' - ie: 'Fixes: 7e94dd154e93 ("i2c-pxa2xx: Add PCI support for PXA=
+ I2C controller")'
+#3:=20
+Fixes: 7e94dd154e934 ("i2c-pxa2xx: Add PCI support for PXA I2C controller")
+
+Please do that in the future. After all that, applied to for-next, thanks!
 
 
+--nPhuWi1wxt0t7EzF
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Ricardo Ribalda
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmONwYgACgkQFA3kzBSg
+KbbnNw//czGgLmhbY/RlYuNU83wTfRkheJRUsZDI2tiahuzOe47VBAIo0mFmL1+j
+Jkd2UIWt6b0XIl5wSYXa+4oI4xO+7IQf3xtcC92P8EQP0/pqFIhekKwgZu57nqX3
+YSf/ECv1hj0YHlbUWoRMbsK3vx8F57sQ+RP1Q0GJK5LBul1jNlRZbxb+/7CMDClZ
+bCbT5YSIrd6izVLjgyEtDHnLKYVjIPMsx3MUQPbByeBS/4dzyOSWp19skH0Mppmj
+F9wwN4/EJ7TJ3ymqeSCVIETQh5O+BxYO6gz/ha/hl9nO8K/Xt3E2NysrUmxbaHy7
+zXMjGHXdFI5KB0p1+iU1dlglcbJ9aay2FOzldDnNFxuIJkX33EHzblql5MZWBaFK
+9Kc8PEhTVlndQtrjyqXxV797vlLerNxaubttMVZMhv+WOk5UpfMy/nXECUEgzGRz
+6JE1lQSRKSXnKE2Q8VNraeHlcnbQaKsuq5gx02QV9sf5sIpMyOioVXR0dmTJHPv4
+1w9IV6xC8Pi9bKe3l/NBhxwI4APF51y48+K62IzpoSbeEgAkPv6CH/fQ7IWbNGWV
+xO/oljClb1hkSTPFq4R2Mj1xyzSOsX5AuobihaXoxvybeZ8UPIl+dbyqTL6L9F1A
+S37wHTj7Rb0EceHDHB7FNLOlSISrDe35oGRNKX0t/E/ikjHxkj0=
+=sQB6
+-----END PGP SIGNATURE-----
+
+--nPhuWi1wxt0t7EzF--
