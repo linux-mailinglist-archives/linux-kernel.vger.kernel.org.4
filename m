@@ -2,79 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5546428F1
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 345C86428EF
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:07:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiLENHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:07:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S232047AbiLENHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:07:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiLENH1 (ORCPT
+        with ESMTP id S232080AbiLENG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:07:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BE01BEAC
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:06:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670245584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fysUMtd7nyS68Uh6akbyo7z/TqrJMUL08Oy/r5zD+R0=;
-        b=eXYRAYPcs+N0cnCothl45L4Mfw3hcz7czXPP1bAcyGCxuOzJoiPStjbDKB+pCSWGF+tVux
-        duillBH+kWy6CuU8tK0Ampc8dMi6BNCTbHUIvzbQrnzXnnkm+hMyD0T3FkentRBHOppYoM
-        ErW/CLgWxyujvg5J575eH/kzyziskX4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-340-8B24OzxzMTS-_CHzVW0nNg-1; Mon, 05 Dec 2022 08:06:23 -0500
-X-MC-Unique: 8B24OzxzMTS-_CHzVW0nNg-1
-Received: by mail-wr1-f69.google.com with SMTP id a7-20020adfbc47000000b002421f817287so2269575wrh.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:06:23 -0800 (PST)
+        Mon, 5 Dec 2022 08:06:58 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1041D1ADA7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:06:57 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id y135so9785314yby.12
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:06:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=d5fYKRyZintOwoAGXMb6vGdAfTkwnfN4FsoS+VpmLyU=;
+        b=BAdYHPPP5OlG6xmYe6hrYXJ5TJiLHef2nFE1sZvmtNSWq0ktjNzHwTjwBS99idioB6
+         9QIMJl/9n2ykISx3iZuIHapsxavHVSDHT8P9scTqlevnTMrnpn3+ShMmg4OJtoYUSTqb
+         Akd3L3YyjHzBUcE+zLOZsCTTtFffiNK5nIr0GbhXwyDRf/Jh/CaRkGOiydFl4W+vGf+m
+         80K45FQ5T5wmEy6xu3h/ahz4g6Hv0+2bh0qfzbWL5WKCXtn15YItvTo9qIEzwpeQlyhh
+         RL/Gio2mgeOs3F+LtLsBzB9iVK8foBdsktAW1c4ylQiib/DPerkdmU3z/0ZuGmZNCtUp
+         I1Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fysUMtd7nyS68Uh6akbyo7z/TqrJMUL08Oy/r5zD+R0=;
-        b=hCG73yFWzs1R9zUS3aOjpr+JPSUvctyQ1w+TP3sDioZ1jpN5/wp+SZ5clPTbfum+nG
-         2d4itiA690bh1yxt2ZX5gDXtzGKEq1jNn8ZChT+vbooywlxTm8w7h7gFtb3b/oavRu2y
-         WyHnvaPTYb9sKnX4og0uT4lKo/3Ic8mscTqEmN4DiF9S5yRgYxbSXmqz5pbr678mh2de
-         /wHiGjXn49qX9adNmYwhp51n6Dv43M3t8IPkrvwSl6vWm5tp0ietPfjDqrfX4+6iboVM
-         7H2Q2m+EtGSXaCjVtRnSCRfBwEeIX1bYkdhZJg6qa4OHae9KQwjJ4E4NDvYddhmV0MeQ
-         PeYQ==
-X-Gm-Message-State: ANoB5pndVcYqiMlTFAiW4rY5xBqtzfobafYBqq6Jetzr0vdqXQzpU+WT
-        Gty7DKBzT/nmySuytbOoO+FHmcQTA5XOKb86sGWLk7LybJxMmdn9R2f1ES1/mI/Llf777mZrQAA
-        IqctLMt1f76A0xKatxReLl6tl
-X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id m3-20020a7bcb83000000b003cf96da3846mr61506319wmi.10.1670245581737;
-        Mon, 05 Dec 2022 05:06:21 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7RZfPMSS4umpthjPuwuEfbtfp0zUdyrA+FWxPzPvb5YZzdZ87NyoR3TcEQ0+8D1lPGIcScpg==
-X-Received: by 2002:a7b:cb83:0:b0:3cf:96da:3846 with SMTP id m3-20020a7bcb83000000b003cf96da3846mr61506308wmi.10.1670245581511;
-        Mon, 05 Dec 2022 05:06:21 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id l22-20020a05600c4f1600b003cf54b77bfesm23862340wmq.28.2022.12.05.05.06.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 05:06:21 -0800 (PST)
-Date:   Mon, 5 Dec 2022 14:06:15 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Artem Chernyshev <artem.chernyshev@red-soft.ru>
-Cc:     Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v3] net: vmw_vsock: vmci: Check memcpy_from_msg()
-Message-ID: <20221205130615.jqnno74hnui6527c@sgarzare-redhat>
-References: <20221205094736.k3yuwk7emijpitvw@sgarzare-redhat>
- <20221205115200.2987942-1-artem.chernyshev@red-soft.ru>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d5fYKRyZintOwoAGXMb6vGdAfTkwnfN4FsoS+VpmLyU=;
+        b=RsAlKaI5i8p9YfLzVG0OS1TAYEfDpw1LUyDdDsYeNGys8i5zl79aM1vka6cWd70fnX
+         6EhTYjH7gQVX6n5vUl4sNoAAxf+EN0EDNRpweJTB17ufyTch1tjzoqqYj/xgobQajIa3
+         j4yZmGZg1Ko3jQG7zawF5pFyJ/pgh3CtoDnVrw2JJhs4Qx3AX7He7/dXsuVcFrz/J230
+         QMCb+FxwClmaQVX+pT3RcKkEqVWdQUkipCdzmsXkx07ls38Tkqjy0Ez2Znis2/1ZnDOJ
+         y1rLzwH57cSFY5YKQIq4gzDYivkgfrHa8YFUmb2kzhEWq1zJ2JTjnoSXqALTg5fMR+bO
+         GWDw==
+X-Gm-Message-State: ANoB5pkBa6BkHn6PepAHTeOWhwknMOqAKdrsSc1mJDEGerK/1nbvQWVx
+        w4rIP6L6NTn43xfLF/W4XrOJzFbxPNRRSFGLyrfEew==
+X-Google-Smtp-Source: AA0mqf7zu+Ix/fLrJS9443B/niuWcGFRgKoqLnW3h5dAxUc0KDmHjt0UE05e3vf46HWpBGzmwxNyXbr2+GeDuVzqeeg=
+X-Received: by 2002:a25:1e89:0:b0:6f6:b3d1:edcc with SMTP id
+ e131-20020a251e89000000b006f6b3d1edccmr34524757ybe.125.1670245616011; Mon, 05
+ Dec 2022 05:06:56 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221205115200.2987942-1-artem.chernyshev@red-soft.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20221205124756.426350-1-asmadeus@codewreck.org>
+In-Reply-To: <20221205124756.426350-1-asmadeus@codewreck.org>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 5 Dec 2022 14:06:18 +0100
+Message-ID: <CANpmjNNjSat=TkXUmv351yPGn=6SV27NaXe80dU69Ggy5SHxsg@mail.gmail.com>
+Subject: Re: [PATCH] 9p/client: fix data race on req->status
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Christian Schoenebeck <linux_oss@crudebyte.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,20 +69,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:52:00PM +0300, Artem Chernyshev wrote:
->vmci_transport_dgram_enqueue() does not check the return value
->of memcpy_from_msg(). Return with an error if the memcpy fails.
+On Mon, 5 Dec 2022 at 13:50, Dominique Martinet <asmadeus@codewreck.org> wrote:
 >
->Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> KCSAN reported a race between writing req->status in p9_client_cb and
+> accessing it in p9_client_rpc's wait_event.
 >
->Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
->Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
->---
->V1->V2 Fix memory leaking and updates for description
->V2->V3 Return the value of memcpy_from_msg()
+> Accesses to req itself is protected by the data barrier (writing req
+> fields, write barrier, writing status // reading status, read barrier,
+> reading other req fields), but status accesses themselves apparently
+> also must be annotated properly with WRITE_ONCE/READ_ONCE when we
+> access it without locks.
 >
-> net/vmw_vsock/vmci_transport.c | 6 +++++-
-> 1 file changed, 5 insertions(+), 1 deletion(-)
+> Follows:
+>  - error paths writing status in various threads all can notify
+> p9_client_rpc, so these all also need WRITE_ONCE
+>  - there's a similar read loop in trans_virtio for zc case that also
+> needs READ_ONCE
+>  - other reads in trans_fd should be protected by the trans_fd lock and
+> lists state machine, as corresponding writers all are within trans_fd
+> and should be under the same lock. If KCSAN complains on them we likely
+> will have something else to fix as well, so it's better to leave them
+> unmarked and look again if required.
+>
+> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Suggested-by: Marco Elver <elver@google.com>
+> Signed-off-by: Dominique Martinet <asmadeus@codewreck.org>
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Acked-by: Marco Elver <elver@google.com>
 
+In case you're interested, KCSAN has a strict mode that is more
+aggressive about which data races it reports (by default we're hiding
+several classes of data races). One such class is data races due to
+missing memory barriers, where e.g. an unmarked operation can be
+reordered in such a way (by compiler or CPU) that a concurrent racy
+access occurs. This mode can be enabled with CONFIG_KCSAN_STRICT=y.
+It's most effective with some good stress tests for the subsystem of
+interest. See https://docs.kernel.org/dev-tools/kcsan.html#modeling-weak-memory
+
+Thanks,
+-- Marco
