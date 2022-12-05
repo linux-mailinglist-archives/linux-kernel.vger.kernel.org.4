@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B40B642FAB
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 645AE642FB8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:17:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231841AbiLESP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60078 "EHLO
+        id S229954AbiLESRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:17:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiLESPu (ORCPT
+        with ESMTP id S230100AbiLESRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:15:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F312037D;
-        Mon,  5 Dec 2022 10:15:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3DFEBB80E6F;
-        Mon,  5 Dec 2022 18:15:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF15BC433C1;
-        Mon,  5 Dec 2022 18:15:45 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="LcEqgcPK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670264143;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=o5wurk9n+fhcKuPqAijagg/yKq0yv8nKTRp/gYVfZpE=;
-        b=LcEqgcPK1W7vppIkpae14KX5IfmybWNqDaUyvcKm6QKriYbpy0739/kPRoBnGNSpp8fQ/U
-        Hz/oilo0ZwAb/Ewhd1CUDoHmZHqIx3fNs3Cv3q1woQZrEe66pHJB8F3zVpuWlhFPc27XE2
-        WVHBM7SY9OgiIWDXQdweg/im7C+HyGg=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7d501ee1 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Mon, 5 Dec 2022 18:15:43 +0000 (UTC)
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Subject: [PATCH] bpf: call get_random_u32() for random integers
-Date:   Mon,  5 Dec 2022 19:15:34 +0100
-Message-Id: <20221205181534.612702-1-Jason@zx2c4.com>
+        Mon, 5 Dec 2022 13:17:22 -0500
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6332034E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:17:20 -0800 (PST)
+Received: by mail-qk1-x733.google.com with SMTP id x24so4989623qkf.5
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 10:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OJitEge6k1C0iVW4gatL8mOXDXQMwS9CGkbz56WU6+0=;
+        b=FgvEKthHQPUChaUlP88CXRY4aYDEqPiAyGg50ffbTrQGoCmUXRl4cIIs4RcGlR1WiF
+         SmueeYl9+PqCWjopBmHYNDgiWGFcugmZjRvKrL695tBcdvDe/b4nDOjCQIFthaEwojHa
+         V88Tf0N2liWcv+JGyE58ZTOs3kYvgVRwFp2tzIzANOohFbcrgbGiYxCuXbDrqmOWrDVc
+         kK/H6BB++pX5TGfKG2ZupUwiMpe9BDfqzroneonNl7IF0QGW4ixm6opJ1m8ThS5UUeZG
+         9i6Gmq006Wh16jlUqpY2zId3bCEBLVgD/oLWFl2ODhsIbORGbdwUh/ALnepahw6QLAgS
+         K6Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OJitEge6k1C0iVW4gatL8mOXDXQMwS9CGkbz56WU6+0=;
+        b=6XVc8Eg9U48G44r/LnL6Bde21ujohyMeM540kwGuApchQ1F7oIOUoIyak/DzLJ8tEQ
+         cjDYoWh71b35NPonr9BTf+z/nuxstOEoZuzHK58JJLKehtRaCSw/0m8KXJl7E9+Zi0Cn
+         qFSuFJV0L8EL0zdSyNlirCIEV0xvPwJZFKFtpILbOWSq7/2zkBkInRF/IRm+8rlS3ebn
+         rvv6hrrEok47yJXVs7DTLT5sLUxMhXKuslHhGuhQyrkCKenTTbMdJEv25XREHPui2BGs
+         PdtTAcihcXdpS6ySs+ERO5+hJojEq9wo9APtATaYU+uJEpc1TPK6/5LZVNefj33Ibl4n
+         ASGw==
+X-Gm-Message-State: ANoB5pkwIkeaY6fhn/96rxXngmo4Zzei2sexAA8lvsBzSLrfvrTP/+Xx
+        izqvUAq3nPPYcL3MaI7z7gPlcXyoV6hE3qbz5+h/mA==
+X-Google-Smtp-Source: AA0mqf55JqdXpQS6zQVkmNokw0SRrPtP+h0RULbijxHxItcJ8ecbt5d0TIDwu3JjdNERiYzQXtWpe8yKJ2DNlKS3mW0=
+X-Received: by 2002:a37:d246:0:b0:6f6:e7d1:4d1f with SMTP id
+ f67-20020a37d246000000b006f6e7d14d1fmr73244242qkj.477.1670264239304; Mon, 05
+ Dec 2022 10:17:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221201195718.1409782-1-vipinsh@google.com> <20221201195718.1409782-3-vipinsh@google.com>
+In-Reply-To: <20221201195718.1409782-3-vipinsh@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Mon, 5 Dec 2022 10:17:08 -0800
+Message-ID: <CANgfPd9Khg2tMAfpj18R39cqzerFE6pu+4YUSrYr3KD5FG9zRA@mail.gmail.com>
+Subject: Re: [Patch v2 2/2] KVM: x86/mmu: Allocate page table pages on NUMA
+ node of underlying pages
+To:     Vipin Sharma <vipinsh@google.com>
+Cc:     dmatlack@google.com, seanjc@google.com, pbonzini@redhat.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,99 +69,511 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since BPF's bpf_user_rnd_u32() was introduced, there have been three
-significant developments in the RNG: 1) get_random_u32() returns the
-same types of bytes as /dev/urandom, eliminating the distinction between
-"kernel random bytes" and "userspace random bytes", 2) get_random_u32()
-operates mostly locklessly over percpu state, 3) get_random_u32() has
-become quite fast.
+On Thu, Dec 1, 2022 at 11:57 AM Vipin Sharma <vipinsh@google.com> wrote:
+>
+> Page table pages of a VM are currently allocated based on the current
+> task's NUMA node or its mempolicy. This can cause suboptimal remote
+> accesses by the vCPU if it is accessing physical pages local to its NUMA
+> node but the page table pages mapping those physcal pages were created
+> by some other vCPU which was on different NUMA node or had different
+> policy.
+>
+> Allocate page table pages on the same NUMA node where underlying
+> physical page exists. Page table at level 5, 4, and 3 might not end up
+> on the same NUMA node as they can span multiple NUMA nodes.
+>
+> Signed-off-by: Vipin Sharma <vipinsh@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |   4 +-
+>  arch/x86/kvm/mmu.h              |   1 -
+>  arch/x86/kvm/mmu/mmu.c          | 109 ++++++++++++++++++++++----------
+>  arch/x86/kvm/mmu/paging_tmpl.h  |   4 +-
+>  arch/x86/kvm/mmu/tdp_mmu.c      |  16 +++--
+>  include/linux/kvm_host.h        |   2 +
+>  include/linux/kvm_types.h       |   2 +
+>  virt/kvm/kvm_main.c             |   7 +-
+>  8 files changed, 101 insertions(+), 44 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 283cbb83d6ae..8a0293326abc 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -782,7 +782,7 @@ struct kvm_vcpu_arch {
+>         struct kvm_mmu *walk_mmu;
+>
+>         struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
+> -       struct kvm_mmu_memory_cache mmu_shadow_page_cache;
+> +       struct kvm_mmu_memory_cache mmu_shadow_page_cache[MAX_NUMNODES];
+>         struct kvm_mmu_memory_cache mmu_shadowed_info_cache;
+>         struct kvm_mmu_memory_cache mmu_page_header_cache;
+>
+> @@ -1415,7 +1415,7 @@ struct kvm_arch {
+>          *
+>          * Protected by kvm->slots_lock.
+>          */
+> -       struct kvm_mmu_memory_cache split_shadow_page_cache;
+> +       struct kvm_mmu_memory_cache split_shadow_page_cache[MAX_NUMNODES];
+>         struct kvm_mmu_memory_cache split_page_header_cache;
+>
+>         /*
+> diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> index c960fb096e5c..6bdaacb6faa0 100644
+> --- a/arch/x86/kvm/mmu.h
+> +++ b/arch/x86/kvm/mmu.h
+> @@ -119,7 +119,6 @@ void kvm_mmu_unload(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_free_obsolete_roots(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_sync_roots(struct kvm_vcpu *vcpu);
+>  void kvm_mmu_sync_prev_roots(struct kvm_vcpu *vcpu);
+> -void *kvm_mmu_get_free_page(int nid, gfp_t gfp);
+>
+>  static inline int kvm_mmu_reload(struct kvm_vcpu *vcpu)
+>  {
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 0554dfc55553..ff7b17af8ab8 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -648,31 +648,43 @@ static void walk_shadow_page_lockless_end(struct kvm_vcpu *vcpu)
+>
+>  static int mmu_topup_memory_caches(struct kvm_vcpu *vcpu, bool maybe_indirect)
+>  {
+> -       int r;
+> +       int r, i;
 
-So rather than using the old clunky Tausworthe prandom code, just call
-get_random_u32(), which should fit BPF uses perfectly.
+Nit: nid or node or node_id would be more descriptive than just i.
 
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- include/linux/bpf.h   |  1 -
- kernel/bpf/core.c     | 17 +----------------
- kernel/bpf/verifier.c |  2 --
- net/core/filter.c     |  1 -
- 4 files changed, 1 insertion(+), 20 deletions(-)
+>
+>         /* 1 rmap, 1 parent PTE per level, and the prefetched rmaps. */
+>         r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache,
+>                                        1 + PT64_ROOT_MAX_LEVEL + PTE_PREFETCH_NUM);
+>         if (r)
+>                 return r;
+> -       r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache,
+> -                                      PT64_ROOT_MAX_LEVEL);
+> -       if (r)
+> -               return r;
+> +
+> +       for (i = 0; i < MAX_NUMNODES; i++) {
+> +               if (node_online(i)) {
+> +                       r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadow_page_cache[i],
+> +                                                      PT64_ROOT_MAX_LEVEL);
+> +                       if (r)
+> +                               return r;
+> +               }
+> +       }
+> +
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0566705c1d4e..aae89318789a 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2554,7 +2554,6 @@ const struct bpf_func_proto *tracing_prog_func_proto(
-   enum bpf_func_id func_id, const struct bpf_prog *prog);
- 
- /* Shared helpers among cBPF and eBPF. */
--void bpf_user_rnd_init_once(void);
- u64 bpf_user_rnd_u32(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- u64 bpf_get_raw_cpu_id(u64 r1, u64 r2, u64 r3, u64 r4, u64 r5);
- 
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 38159f39e2af..2cc28d63d761 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -2579,14 +2579,6 @@ void bpf_prog_free(struct bpf_prog *fp)
- }
- EXPORT_SYMBOL_GPL(bpf_prog_free);
- 
--/* RNG for unpriviledged user space with separated state from prandom_u32(). */
--static DEFINE_PER_CPU(struct rnd_state, bpf_user_rnd_state);
--
--void bpf_user_rnd_init_once(void)
--{
--	prandom_init_once(&bpf_user_rnd_state);
--}
--
- BPF_CALL_0(bpf_user_rnd_u32)
- {
- 	/* Should someone ever have the rather unwise idea to use some
-@@ -2595,14 +2587,7 @@ BPF_CALL_0(bpf_user_rnd_u32)
- 	 * transformations. Register assignments from both sides are
- 	 * different, f.e. classic always sets fn(ctx, A, X) here.
- 	 */
--	struct rnd_state *state;
--	u32 res;
--
--	state = &get_cpu_var(bpf_user_rnd_state);
--	res = prandom_u32_state(state);
--	put_cpu_var(bpf_user_rnd_state);
--
--	return res;
-+	return get_random_u32();
- }
- 
- BPF_CALL_0(bpf_get_raw_cpu_id)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 225666307bba..75a1a6526165 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14045,8 +14045,6 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
- 
- 		if (insn->imm == BPF_FUNC_get_route_realm)
- 			prog->dst_needed = 1;
--		if (insn->imm == BPF_FUNC_get_prandom_u32)
--			bpf_user_rnd_init_once();
- 		if (insn->imm == BPF_FUNC_override_return)
- 			prog->kprobe_override = 1;
- 		if (insn->imm == BPF_FUNC_tail_call) {
-diff --git a/net/core/filter.c b/net/core/filter.c
-index bb0136e7a8e4..7a595ac0028d 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -443,7 +443,6 @@ static bool convert_bpf_extensions(struct sock_filter *fp,
- 			break;
- 		case SKF_AD_OFF + SKF_AD_RANDOM:
- 			*insn = BPF_EMIT_CALL(bpf_user_rnd_u32);
--			bpf_user_rnd_init_once();
- 			break;
- 		}
- 		break;
--- 
-2.38.1
+Nice, I was worried about wasting cache memory we were never going to
+use, but this works great to at least ensure we're not allocating
+cached memory for nodes that don't exist.
 
+
+
+>         if (maybe_indirect) {
+>                 r = kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_shadowed_info_cache,
+>                                                PT64_ROOT_MAX_LEVEL);
+>                 if (r)
+>                         return r;
+>         }
+> +
+>         return kvm_mmu_topup_memory_cache(&vcpu->arch.mmu_page_header_cache,
+>                                           PT64_ROOT_MAX_LEVEL);
+>  }
+>
+>  static void mmu_free_memory_caches(struct kvm_vcpu *vcpu)
+>  {
+> +       int i;
+> +
+>         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_pte_list_desc_cache);
+> -       kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadow_page_cache);
+> +
+> +       for (i = 0; i < MAX_NUMNODES; i++)
+> +               kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadow_page_cache[i]);
+> +
+>         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_shadowed_info_cache);
+>         kvm_mmu_free_memory_cache(&vcpu->arch.mmu_page_header_cache);
+>  }
+> @@ -2203,13 +2215,17 @@ static struct kvm_mmu_page *__kvm_mmu_get_shadow_page(struct kvm *kvm,
+>
+>  static struct kvm_mmu_page *kvm_mmu_get_shadow_page(struct kvm_vcpu *vcpu,
+>                                                     gfn_t gfn,
+> -                                                   union kvm_mmu_page_role role)
+> +                                                   union kvm_mmu_page_role role,
+> +                                                   int nid)
+>  {
+> -       struct shadow_page_caches caches = {
+> -               .page_header_cache = &vcpu->arch.mmu_page_header_cache,
+> -               .shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache,
+> -               .shadowed_info_cache = &vcpu->arch.mmu_shadowed_info_cache,
+> -       };
+> +       struct shadow_page_caches caches;
+> +
+> +       if (nid == NUMA_NO_NODE)
+> +               nid = numa_mem_id();
+> +
+> +       caches.page_header_cache = &vcpu->arch.mmu_page_header_cache;
+> +       caches.shadow_page_cache = &vcpu->arch.mmu_shadow_page_cache[nid];
+> +       caches.shadowed_info_cache = &vcpu->arch.mmu_shadowed_info_cache;
+>
+>         return __kvm_mmu_get_shadow_page(vcpu->kvm, vcpu, &caches, gfn, role);
+>  }
+> @@ -2262,15 +2278,19 @@ static union kvm_mmu_page_role kvm_mmu_child_role(u64 *sptep, bool direct,
+>
+>  static struct kvm_mmu_page *kvm_mmu_get_child_sp(struct kvm_vcpu *vcpu,
+>                                                  u64 *sptep, gfn_t gfn,
+> -                                                bool direct, unsigned int access)
+> +                                                bool direct, unsigned int access,
+> +                                                kvm_pfn_t pfn)
+>  {
+>         union kvm_mmu_page_role role;
+> +       int nid;
+>
+>         if (is_shadow_present_pte(*sptep) && !is_large_pte(*sptep))
+>                 return ERR_PTR(-EEXIST);
+>
+>         role = kvm_mmu_child_role(sptep, direct, access);
+> -       return kvm_mmu_get_shadow_page(vcpu, gfn, role);
+> +       nid = kvm_pfn_to_refcounted_page_nid(pfn);
+> +
+> +       return kvm_mmu_get_shadow_page(vcpu, gfn, role, nid);
+>  }
+>
+>  static void shadow_walk_init_using_root(struct kvm_shadow_walk_iterator *iterator,
+> @@ -3153,7 +3173,8 @@ static int __direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>                 if (it.level == fault->goal_level)
+>                         break;
+>
+> -               sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn, true, ACC_ALL);
+> +               sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn, true,
+> +                                         ACC_ALL, fault->pfn);
+>                 if (sp == ERR_PTR(-EEXIST))
+>                         continue;
+>
+> @@ -3579,7 +3600,7 @@ static hpa_t mmu_alloc_root(struct kvm_vcpu *vcpu, gfn_t gfn, int quadrant,
+>         WARN_ON_ONCE(quadrant && !role.has_4_byte_gpte);
+>         WARN_ON_ONCE(role.direct && role.has_4_byte_gpte);
+>
+> -       sp = kvm_mmu_get_shadow_page(vcpu, gfn, role);
+> +       sp = kvm_mmu_get_shadow_page(vcpu, gfn, role, NUMA_NO_NODE);
+>         ++sp->root_count;
+>
+>         return __pa(sp->spt);
+> @@ -5853,15 +5874,20 @@ static int __kvm_mmu_create(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu)
+>
+>  int kvm_mmu_create(struct kvm_vcpu *vcpu)
+>  {
+> -       int ret;
+> +       int ret, i;
+>
+>         vcpu->arch.mmu_pte_list_desc_cache.kmem_cache = pte_list_desc_cache;
+>         vcpu->arch.mmu_pte_list_desc_cache.gfp_zero = __GFP_ZERO;
+> +       vcpu->arch.mmu_pte_list_desc_cache.node = NUMA_NO_NODE;
+>
+>         vcpu->arch.mmu_page_header_cache.kmem_cache = mmu_page_header_cache;
+>         vcpu->arch.mmu_page_header_cache.gfp_zero = __GFP_ZERO;
+> +       vcpu->arch.mmu_page_header_cache.node = NUMA_NO_NODE;
+>
+> -       vcpu->arch.mmu_shadow_page_cache.gfp_zero = __GFP_ZERO;
+> +       for (i = 0; i < MAX_NUMNODES; i++) {
+> +               vcpu->arch.mmu_shadow_page_cache[i].gfp_zero = __GFP_ZERO;
+> +               vcpu->arch.mmu_shadow_page_cache[i].node = i;
+> +       }
+>
+>         vcpu->arch.mmu = &vcpu->arch.root_mmu;
+>         vcpu->arch.walk_mmu = &vcpu->arch.root_mmu;
+> @@ -6012,7 +6038,7 @@ static void kvm_mmu_invalidate_zap_pages_in_memslot(struct kvm *kvm,
+>  int kvm_mmu_init_vm(struct kvm *kvm)
+>  {
+>         struct kvm_page_track_notifier_node *node = &kvm->arch.mmu_sp_tracker;
+> -       int r;
+> +       int r, i;
+>
+>         INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
+>         INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
+> @@ -6029,20 +6055,29 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+>
+>         kvm->arch.split_page_header_cache.kmem_cache = mmu_page_header_cache;
+>         kvm->arch.split_page_header_cache.gfp_zero = __GFP_ZERO;
+> +       kvm->arch.split_page_header_cache.node = NUMA_NO_NODE;
+> +
+> +       for (i = 0; i < MAX_NUMNODES; i++) {
+> +               kvm->arch.split_shadow_page_cache[i].gfp_zero = __GFP_ZERO;
+> +               kvm->arch.split_shadow_page_cache[i].node = i;
+> +       }
+>
+> -       kvm->arch.split_shadow_page_cache.gfp_zero = __GFP_ZERO;
+>
+>         kvm->arch.split_desc_cache.kmem_cache = pte_list_desc_cache;
+>         kvm->arch.split_desc_cache.gfp_zero = __GFP_ZERO;
+> +       kvm->arch.split_desc_cache.node = NUMA_NO_NODE;
+>
+>         return 0;
+>  }
+>
+>  static void mmu_free_vm_memory_caches(struct kvm *kvm)
+>  {
+> +       int i;
+> +
+>         kvm_mmu_free_memory_cache(&kvm->arch.split_desc_cache);
+>         kvm_mmu_free_memory_cache(&kvm->arch.split_page_header_cache);
+> -       kvm_mmu_free_memory_cache(&kvm->arch.split_shadow_page_cache);
+> +       for (i = 0; i < MAX_NUMNODES; i++)
+> +               kvm_mmu_free_memory_cache(&kvm->arch.split_shadow_page_cache[i]);
+>  }
+>
+>  void kvm_mmu_uninit_vm(struct kvm *kvm)
+> @@ -6150,7 +6185,7 @@ static inline bool need_topup(struct kvm_mmu_memory_cache *cache, int min)
+>         return kvm_mmu_memory_cache_nr_free_objects(cache) < min;
+>  }
+>
+> -static bool need_topup_split_caches_or_resched(struct kvm *kvm)
+> +static bool need_topup_split_caches_or_resched(struct kvm *kvm, int nid)
+>  {
+>         if (need_resched() || rwlock_needbreak(&kvm->mmu_lock))
+>                 return true;
+> @@ -6162,10 +6197,10 @@ static bool need_topup_split_caches_or_resched(struct kvm *kvm)
+>          */
+>         return need_topup(&kvm->arch.split_desc_cache, SPLIT_DESC_CACHE_MIN_NR_OBJECTS) ||
+>                need_topup(&kvm->arch.split_page_header_cache, 1) ||
+> -              need_topup(&kvm->arch.split_shadow_page_cache, 1);
+> +              need_topup(&kvm->arch.split_shadow_page_cache[nid], 1);
+>  }
+>
+> -static int topup_split_caches(struct kvm *kvm)
+> +static int topup_split_caches(struct kvm *kvm, int nid)
+>  {
+>         /*
+>          * Allocating rmap list entries when splitting huge pages for nested
+> @@ -6195,16 +6230,19 @@ static int topup_split_caches(struct kvm *kvm)
+>         if (r)
+>                 return r;
+>
+> -       return kvm_mmu_topup_memory_cache(&kvm->arch.split_shadow_page_cache, 1);
+> +       return kvm_mmu_topup_memory_cache(&kvm->arch.split_shadow_page_cache[nid], 1);
+>  }
+>
+> -static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *huge_sptep)
+> +static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm,
+> +                                                       u64 *huge_sptep,
+> +                                                       u64 huge_spte)
+>  {
+>         struct kvm_mmu_page *huge_sp = sptep_to_sp(huge_sptep);
+>         struct shadow_page_caches caches = {};
+>         union kvm_mmu_page_role role;
+>         unsigned int access;
+>         gfn_t gfn;
+> +       int nid;
+>
+>         gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
+>         access = kvm_mmu_page_get_access(huge_sp, spte_index(huge_sptep));
+> @@ -6217,9 +6255,13 @@ static struct kvm_mmu_page *shadow_mmu_get_sp_for_split(struct kvm *kvm, u64 *hu
+>          */
+>         role = kvm_mmu_child_role(huge_sptep, /*direct=*/true, access);
+>
+> +       nid = kvm_pfn_to_refcounted_page_nid(spte_to_pfn(huge_spte));
+> +       if (nid == NUMA_NO_NODE)
+> +               nid = numa_mem_id();
+> +
+>         /* Direct SPs do not require a shadowed_info_cache. */
+>         caches.page_header_cache = &kvm->arch.split_page_header_cache;
+> -       caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache;
+> +       caches.shadow_page_cache = &kvm->arch.split_shadow_page_cache[nid];
+>
+>         /* Safe to pass NULL for vCPU since requesting a direct SP. */
+>         return __kvm_mmu_get_shadow_page(kvm, NULL, &caches, gfn, role);
+> @@ -6238,7 +6280,7 @@ static void shadow_mmu_split_huge_page(struct kvm *kvm,
+>         gfn_t gfn;
+>         int index;
+>
+> -       sp = shadow_mmu_get_sp_for_split(kvm, huge_sptep);
+> +       sp = shadow_mmu_get_sp_for_split(kvm, huge_sptep, huge_spte);
+>
+>         for (index = 0; index < SPTE_ENT_PER_PAGE; index++) {
+>                 sptep = &sp->spt[index];
+> @@ -6276,7 +6318,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
+>                                           u64 *huge_sptep)
+>  {
+>         struct kvm_mmu_page *huge_sp = sptep_to_sp(huge_sptep);
+> -       int level, r = 0;
+> +       int level, r = 0, nid;
+>         gfn_t gfn;
+>         u64 spte;
+>
+> @@ -6284,13 +6326,16 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
+>         gfn = kvm_mmu_page_get_gfn(huge_sp, spte_index(huge_sptep));
+>         level = huge_sp->role.level;
+>         spte = *huge_sptep;
+> +       nid = kvm_pfn_to_refcounted_page_nid(spte_to_pfn(spte));
+> +       if (nid == NUMA_NO_NODE)
+> +               nid = numa_mem_id();
+>
+>         if (kvm_mmu_available_pages(kvm) <= KVM_MIN_FREE_MMU_PAGES) {
+>                 r = -ENOSPC;
+>                 goto out;
+>         }
+>
+> -       if (need_topup_split_caches_or_resched(kvm)) {
+> +       if (need_topup_split_caches_or_resched(kvm, nid)) {
+>                 write_unlock(&kvm->mmu_lock);
+>                 cond_resched();
+>                 /*
+> @@ -6298,7 +6343,7 @@ static int shadow_mmu_try_split_huge_page(struct kvm *kvm,
+>                  * rmap iterator should be restarted because the MMU lock was
+>                  * dropped.
+>                  */
+> -               r = topup_split_caches(kvm) ?: -EAGAIN;
+> +               r = topup_split_caches(kvm, nid) ?: -EAGAIN;
+>                 write_lock(&kvm->mmu_lock);
+>                 goto out;
+>         }
+> @@ -6988,7 +7033,7 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+>                 kthread_stop(kvm->arch.nx_huge_page_recovery_thread);
+>  }
+>
+> -void *kvm_mmu_get_free_page(int nid, gfp_t gfp)
+> +void *kvm_arch_mmu_get_free_page(int nid, gfp_t gfp)
+>  {
+>         struct page *spt_page;
+>         void *address = NULL;
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 0f6455072055..1b1039a1b178 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -652,7 +652,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>                 table_gfn = gw->table_gfn[it.level - 2];
+>                 access = gw->pt_access[it.level - 2];
+>                 sp = kvm_mmu_get_child_sp(vcpu, it.sptep, table_gfn,
+> -                                         false, access);
+> +                                         false, access, fault->pfn);
+>
+>                 if (sp != ERR_PTR(-EEXIST)) {
+>                         /*
+> @@ -708,7 +708,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>                 validate_direct_spte(vcpu, it.sptep, direct_access);
+>
+>                 sp = kvm_mmu_get_child_sp(vcpu, it.sptep, base_gfn,
+> -                                         true, direct_access);
+> +                                         true, direct_access, fault->pfn);
+>                 if (sp == ERR_PTR(-EEXIST))
+>                         continue;
+>
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 1607afbfcc0b..be0763e6b058 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -270,12 +270,15 @@ static struct kvm_mmu_page *tdp_mmu_next_root(struct kvm *kvm,
+>                     kvm_mmu_page_as_id(_root) != _as_id) {              \
+>                 } else
+>
+> -static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
+> +static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu, int nid)
+>  {
+>         struct kvm_mmu_page *sp;
+>
+> +       if (nid == NUMA_NO_NODE)
+> +               nid = numa_mem_id();
+> +
+>         sp = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_page_header_cache);
+> -       sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache);
+> +       sp->spt = kvm_mmu_memory_cache_alloc(&vcpu->arch.mmu_shadow_page_cache[nid]);
+>
+>         return sp;
+>  }
+> @@ -327,7 +330,7 @@ hpa_t kvm_tdp_mmu_get_vcpu_root_hpa(struct kvm_vcpu *vcpu)
+>                         goto out;
+>         }
+>
+> -       root = tdp_mmu_alloc_sp(vcpu);
+> +       root = tdp_mmu_alloc_sp(vcpu, NUMA_NO_NODE);
+>         tdp_mmu_init_sp(root, NULL, 0, role);
+>
+>         refcount_set(&root->tdp_mmu_root_count, 1);
+> @@ -1159,7 +1162,7 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>         struct kvm *kvm = vcpu->kvm;
+>         struct tdp_iter iter;
+>         struct kvm_mmu_page *sp;
+> -       int ret = RET_PF_RETRY;
+> +       int ret = RET_PF_RETRY, nid;
+>
+>         kvm_mmu_hugepage_adjust(vcpu, fault);
+>
+> @@ -1188,11 +1191,12 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>                     !is_large_pte(iter.old_spte))
+>                         continue;
+>
+> +               nid = kvm_pfn_to_refcounted_page_nid(fault->pfn);
+>                 /*
+>                  * The SPTE is either non-present or points to a huge page that
+>                  * needs to be split.
+>                  */
+> -               sp = tdp_mmu_alloc_sp(vcpu);
+> +               sp = tdp_mmu_alloc_sp(vcpu, nid);
+>                 tdp_mmu_init_child_sp(sp, &iter);
+>
+>                 sp->nx_huge_page_disallowed = fault->huge_page_disallowed;
+> @@ -1423,7 +1427,7 @@ static struct kvm_mmu_page *__tdp_mmu_alloc_sp_for_split(int nid, gfp_t gfp)
+>         if (!sp)
+>                 return NULL;
+>
+> -       sp->spt = kvm_mmu_get_free_page(nid, gfp);
+> +       sp->spt = kvm_arch_mmu_get_free_page(nid, gfp);
+>
+>         if (!sp->spt) {
+>                 kmem_cache_free(mmu_page_header_cache, sp);
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 558ded73f660..07674955460b 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -1374,6 +1374,8 @@ void kvm_vcpu_on_spin(struct kvm_vcpu *vcpu, bool usermode_vcpu_not_eligible);
+>
+>  void kvm_flush_remote_tlbs(struct kvm *kvm);
+>
+> +void *kvm_arch_mmu_get_free_page(int nid, gfp_t gfp);
+> +
+>  #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+>  int kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int min);
+>  int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min);
+> diff --git a/include/linux/kvm_types.h b/include/linux/kvm_types.h
+> index 3ca3db020e0e..cb627cf1b4e1 100644
+> --- a/include/linux/kvm_types.h
+> +++ b/include/linux/kvm_types.h
+> @@ -96,6 +96,8 @@ struct kvm_mmu_memory_cache {
+>         struct kmem_cache *kmem_cache;
+>         int capacity;
+>         void **objects;
+> +       /* Node on which memory should be allocated by default */
+> +       int node;
+>  };
+>  #endif
+>
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 1782c4555d94..4d59c9d48277 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -384,6 +384,11 @@ static void kvm_flush_shadow_all(struct kvm *kvm)
+>         kvm_arch_guest_memory_reclaimed(kvm);
+>  }
+>
+> +void * __weak kvm_arch_mmu_get_free_page(int nid, gfp_t gfp_flags)
+> +{
+> +               return (void *)__get_free_page(gfp_flags);
+> +}
+> +
+
+Rather than making this __weak, you could use #ifdef CONFIG_NUMA to
+just put all the code in the arch-neutral function.
+
+>  #ifdef KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE
+>  static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+>                                                gfp_t gfp_flags)
+> @@ -393,7 +398,7 @@ static inline void *mmu_memory_cache_alloc_obj(struct kvm_mmu_memory_cache *mc,
+>         if (mc->kmem_cache)
+>                 return kmem_cache_alloc(mc->kmem_cache, gfp_flags);
+>         else
+> -               return (void *)__get_free_page(gfp_flags);
+> +               return kvm_arch_mmu_get_free_page(mc->node, gfp_flags);
+>  }
+>
+>  int __kvm_mmu_topup_memory_cache(struct kvm_mmu_memory_cache *mc, int capacity, int min)
+> --
+> 2.39.0.rc0.267.gcb52ba06e7-goog
+>
