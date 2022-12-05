@@ -2,136 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6BD76420B2
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 01:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A610B6420BE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 01:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiLEAKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 4 Dec 2022 19:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42060 "EHLO
+        id S230465AbiLEA2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 4 Dec 2022 19:28:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiLEAKm (ORCPT
+        with ESMTP id S229479AbiLEA22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 4 Dec 2022 19:10:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71964EE07;
-        Sun,  4 Dec 2022 16:10:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26C01B807E5;
-        Mon,  5 Dec 2022 00:10:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D05C433D7;
-        Mon,  5 Dec 2022 00:10:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670199038;
-        bh=wHwBkSo7+9OsXeSnyzm3ampLGK0mAtM78dM7PJjSBzA=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=LYVLlfwQlNqL4IrP/fLTZ3aY/WveKlAsLqqhxuFI9pBkv+61ywlfdBNMfEMI9et2f
-         thECXDLwAUFxfeeVM8QUEWgp7TBGxEtSu5VlmPcK+J60pVhutgNhTlH7p8UBnE9jL0
-         8X/2rQRT2w9Zvb+FeyUc2vBdRx4qP182YKwbzfhWLUI37EPceVJP8CYXp5PSZ/S6Ot
-         ZrVHhapPO83mb1NbCEtQgjoKxhc3/EF4Xo1vmN6QZXLu+zdKgWFWxFMQw+DBlVk4Gc
-         FF/sP7sHmrgqSCOEICFxjr6Nkk+MmIRkCoVRyhcUR9/XALh3NdyB+FgAouCnRPCGH6
-         dF0ChJteyChfw==
-Date:   Mon, 05 Dec 2022 00:10:34 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Anup Patel <apatel@ventanamicro.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-CC:     Andrew Jones <ajones@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v5_1/3=5D_RISC-V=3A_time=3A_initialize?= =?US-ASCII?Q?_hrtimer_based_broadcast_clock_event_device?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221201123954.1111603-2-apatel@ventanamicro.com>
-References: <20221201123954.1111603-1-apatel@ventanamicro.com> <20221201123954.1111603-2-apatel@ventanamicro.com>
-Message-ID: <04CBEBD4-3EDC-4FA0-BB11-DDD6B710C60C@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        Sun, 4 Dec 2022 19:28:28 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4436911144;
+        Sun,  4 Dec 2022 16:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670200107; x=1701736107;
+  h=from:to:cc:subject:date:message-id;
+  bh=ZimJ2YT8aZQnfEYHIFHtH8PzMXMZ8Iim/gsgYv7dtTE=;
+  b=cAISHqtFY124yCpy7VvoCQfUV7oH0T64w4CRQ2HJoHyHM/Bb0j+x/wtV
+   T0XxXSBN5DogQGY83QzxNiLj1ouAGEYjpTP58Snt1mIw+hqvnYW9z67gi
+   nv7h6r8hI7oyd9T3N/4E4xYdxjwmjcZCh6njUfgZl0L3f0KHjxkTXSNI3
+   wiKHqQ5fxBre/HwUVp1HJ8F+iv0S9OS3AlpTKZbK33YUZjc293m3jY7Ny
+   KF6dKoylRNIIts/gdcKKOe6w6/N8ojEvCLcQwzaMmNS0TlnocrulwBlyj
+   2oM1fMm8wppiGCFKKQLTx/bl21qs2HjP+wI2KoEQWb1SZSAXSb2ntYeOV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="313880497"
+X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
+   d="scan'208";a="313880497"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2022 16:28:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="639304976"
+X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
+   d="scan'208";a="639304976"
+Received: from kartikka-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.241.109])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2022 16:28:25 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc:     rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] x86/hibernate: Use fixmap for saving unmapped pages
+Date:   Sun,  4 Dec 2022 16:28:04 -0800
+Message-Id: <20221205002804.21225-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hibernate uses the direct map to read memory it saves to disk. Since
+sometimes pages are not accessible on the direct map ("not present" on
+x86), it has special case logic to temporarily make a page present. On x86
+these direct map addresses can be mapped at various page sizes, but the
+logic works ok as long as the not present pages are always mapped as
+PAGE_SIZE such that they don't require a split to map the region as
+present. If the address was mapped not present by a larger page size, the
+split may fail and hibernate would then try to read an address mapped not
+present.
 
+Today on x86 there are no known cases of this (huge not present pages on
+the direct map), but it has come up from time to time when developing
+things that operate on the direct map. It blocked making
+VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+has been a complication for various direct map protection efforts.
 
-On 1 December 2022 12:39:52 GMT, Anup Patel <apatel@ventanamicro=2Ecom> wr=
-ote:
->From: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->
->Similarly to commit 022eb8ae8b5e ("ARM: 8938/1: kernel: initialize
->broadcast hrtimer based clock event device"), RISC-V needs to initiate
->hrtimer based broadcast clock event device before C3STOP can be used=2E
->Otherwise, the introduction of C3STOP for the RISC-V arch timer in
->commit 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped
->during CPU suspend") leaves us without any broadcast timer registered=2E
->This prevents the kernel from entering oneshot mode, which breaks timer
->behaviour, for example clock_nanosleep()=2E
->
->A test app that sleeps each cpu for 6, 5, 4, 3 ms respectively, HZ=3D250
->& C3STOP enabled, the sleep times are rounded up to the next jiffy:
->=3D=3D CPU: 1 =3D=3D      =3D=3D CPU: 2 =3D=3D      =3D=3D CPU: 3 =3D=3D =
-     =3D=3D CPU: 4 =3D=3D
->Mean: 7=2E974992    Mean: 7=2E976534    Mean: 7=2E962591    Mean: 3=2E952=
-179
->Std Dev: 0=2E154374 Std Dev: 0=2E156082 Std Dev: 0=2E171018 Std Dev: 0=2E=
-076193
->Hi: 9=2E472000      Hi: 10=2E495000     Hi: 8=2E864000      Hi: 4=2E73600=
-0
->Lo: 6=2E087000      Lo: 6=2E380000      Lo: 4=2E872000      Lo: 3=2E40300=
-0
->Samples: 521      Samples: 521      Samples: 521      Samples: 521
->
->Link: https://lore=2Ekernel=2Eorg/linux-riscv/YzYTNQRxLr7Q9JR0@spud/
->Fixes: 232ccac1bd9b ("clocksource/drivers/riscv: Events are stopped durin=
-g CPU suspend")
->Suggested-by: Samuel Holland <samuel@sholland=2Eorg>
->Signed-off-by: Conor Dooley <conor=2Edooley@microchip=2Ecom>
->Reviewed-by: Samuel Holland <samuel@sholland=2Eorg>
->Acked-by: Palmer Dabbelt <palmer@rivosinc=2Ecom>
+This dependency is also pretty hidden and easily missed by people poking at
+the direct map. For this reason, there are warnings in place to complain
+but not handle this scenario.
 
-Huh, thought I replied already but I just have forgotten to=2E=2E=2E
-Since you've added this patch to your series,  it needs your SoB appended=
-=2E
+One way to make this more robust would be to create some new CPA
+functionality that can know to map and reset the whole huge page in the
+case of trying to map a subpage. But for simplicity and smaller code, just
+make x86 hibernate have its own fixmap PTE that it can use to point
+to 4k pages when it encounters an unmapped direct map page.
+
+Move do_copy_page() to a header such that it can be used in an arch
+breakout. Rename it hib_copy_page() to be more hibernate specific since
+it could appear in other files.
+
+Use __weak for the arch breakout because there is not a suitable arch
+specific header to use the #define method.
+
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
+
+Hi,
+
+Since none of the module space allocation overhauls ever seem to go smoothly
+and it may be awhile before VM_FLUSH_RESET_PERMS in not needed, I thought I
+would try and fix up some of its deficiencies in the meantime. This is
+pre-work for that, but I thought it was useful enough on it's own.
+
+The testing was hacking up hibernate to load some data to a huge NP mapping
+and making sure the data was there when it came back.
 
 Thanks,
-Conor=2E
 
->---
-> arch/riscv/kernel/time=2Ec | 3 +++
-> 1 file changed, 3 insertions(+)
->
->diff --git a/arch/riscv/kernel/time=2Ec b/arch/riscv/kernel/time=2Ec
->index 8217b0f67c6c=2E=2E1cf21db4fcc7 100644
->--- a/arch/riscv/kernel/time=2Ec
->+++ b/arch/riscv/kernel/time=2Ec
->@@ -5,6 +5,7 @@
->  */
->=20
-> #include <linux/of_clk=2Eh>
->+#include <linux/clockchips=2Eh>
-> #include <linux/clocksource=2Eh>
-> #include <linux/delay=2Eh>
-> #include <asm/sbi=2Eh>
->@@ -29,6 +30,8 @@ void __init time_init(void)
->=20
-> 	of_clk_init(NULL);
-> 	timer_probe();
->+
->+	tick_setup_hrtimer_broadcast();
-> }
->=20
-> void clocksource_arch_init(struct clocksource *cs)
+Rick
+
+ arch/x86/include/asm/fixmap.h |  3 +++
+ arch/x86/power/hibernate.c    | 10 ++++++++++
+ include/linux/suspend.h       | 13 +++++++++++++
+ kernel/power/snapshot.c       | 21 +++++++--------------
+ 4 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59..0fceed9a4152 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -108,6 +108,9 @@ enum fixed_addresses {
+ #ifdef CONFIG_PARAVIRT_XXL
+ 	FIX_PARAVIRT_BOOTMAP,
+ #endif
++#ifdef CONFIG_HIBERNATION
++	FIX_HIBERNATE,
++#endif
+ 
+ #ifdef CONFIG_ACPI_APEI_GHES
+ 	/* Used for GHES mapping from assorted contexts */
+diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+index 6f955eb1e163..473b6b5f6b7e 100644
+--- a/arch/x86/power/hibernate.c
++++ b/arch/x86/power/hibernate.c
+@@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
+ 	return 0;
+ }
+ 
++void copy_unmapped_page(void *dst, struct page *page)
++{
++	WARN_ON(!preempt_count());
++
++	set_fixmap(FIX_HIBERNATE, page_to_phys(page));
++	__flush_tlb_all();
++	hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
++	clear_fixmap(FIX_HIBERNATE);
++}
++
+ int relocate_restore_code(void)
+ {
+ 	pgd_t *pgd;
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index cfe19a028918..0b19b910526e 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+ asmlinkage int swsusp_save(void);
+ extern struct pbe *restore_pblist;
+ int pfn_is_nosave(unsigned long pfn);
++void copy_unmapped_page(void *dst, struct page *page);
++
++/*
++ * This is needed, because copy_page and memcpy are not usable for copying
++ * task structs.
++ */
++static inline void hib_copy_page(long *dst, long *src)
++{
++	int n;
++
++	for (n = PAGE_SIZE / sizeof(long); n; n--)
++		*dst++ = *src++;
++}
+ 
+ int hibernate_quiet_exec(int (*func)(void *data), void *data);
+ #else /* CONFIG_HIBERNATION */
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2a406753af90..ccf123b5019c 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+ 	return n;
+ }
+ 
+-/*
+- * This is needed, because copy_page and memcpy are not usable for copying
+- * task structs.
+- */
+-static inline void do_copy_page(long *dst, long *src)
++void __weak copy_unmapped_page(void *dst, struct page *page)
+ {
+-	int n;
+-
+-	for (n = PAGE_SIZE / sizeof(long); n; n--)
+-		*dst++ = *src++;
++	hibernate_map_page(page);
++	hib_copy_page(dst, page_address(page));
++	hibernate_unmap_page(page);
+ }
+ 
+ /**
+@@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
+ static void safe_copy_page(void *dst, struct page *s_page)
+ {
+ 	if (kernel_page_present(s_page)) {
+-		do_copy_page(dst, page_address(s_page));
++		hib_copy_page(dst, page_address(s_page));
+ 	} else {
+-		hibernate_map_page(s_page);
+-		do_copy_page(dst, page_address(s_page));
+-		hibernate_unmap_page(s_page);
++		copy_unmapped_page(dst, s_page);
+ 	}
+ }
+ 
+@@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 	if (PageHighMem(s_page)) {
+ 		src = kmap_atomic(s_page);
+ 		dst = kmap_atomic(d_page);
+-		do_copy_page(dst, src);
++		hib_copy_page(dst, src);
+ 		kunmap_atomic(dst);
+ 		kunmap_atomic(src);
+ 	} else {
+-- 
+2.17.1
+
