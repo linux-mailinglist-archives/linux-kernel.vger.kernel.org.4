@@ -2,204 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B6536429CF
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5846429D1
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiLENpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
+        id S230187AbiLENq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:46:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbiLENpF (ORCPT
+        with ESMTP id S229949AbiLENqX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:45:05 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2AB1DA5C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:44:30 -0800 (PST)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NQlBN2C1hzFpdD;
-        Mon,  5 Dec 2022 21:43:40 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 5 Dec 2022 21:44:26 +0800
-Subject: Re: [PATCH v4 3/5] hisi_acc_vfio_pci: register debugfs for hisilicon
- migration driver
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     <alex.williamson@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <john.garry@huawei.com>,
-        <cohuck@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linuxarm@openeuler.org>
-References: <20221202092625.35075-1-liulongfang@huawei.com>
- <20221202092625.35075-4-liulongfang@huawei.com> <Y4oX4zC0eUbZsmMW@nvidia.com>
-From:   liulongfang <liulongfang@huawei.com>
-Message-ID: <6b3a0220-2a17-fabf-4aed-9ad91bf071f5@huawei.com>
-Date:   Mon, 5 Dec 2022 21:44:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 5 Dec 2022 08:46:23 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C23E27;
+        Mon,  5 Dec 2022 05:46:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=EX9VBUx0OohPDDPJ+qawLeUxqjcIhO+3jf4xmC07RkM=; b=NqFpUeG8QqMQZdn7FZykc0eiLg
+        dTlSFaITfBaD5O3dL+AHrc5gKussnJWTrt/eHdhq/xaofDZMD+P+3Qa9g38Jixvc0bHhgtSx3J3yD
+        BmfQItnN/7tyeai7ffbeB3DleewTg0uEsHU86y5nA2LgESMhsLlbTj5sJNF90FHW282Y=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2BnT-004PR3-8q; Mon, 05 Dec 2022 14:46:15 +0100
+Date:   Mon, 5 Dec 2022 14:46:15 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Lukas Wunner <lukas@wunner.de>,
+        Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH net-next v1 1/1] net: asix: add support for the Linux
+ Automation GmbH USB 10Base-T1L
+Message-ID: <Y432JzWOzV89I59J@lunn.ch>
+References: <20221205132102.2941732-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-In-Reply-To: <Y4oX4zC0eUbZsmMW@nvidia.com>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205132102.2941732-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/2 23:21, Jason Gunthorpe wrote:
-> On Fri, Dec 02, 2022 at 05:26:23PM +0800, Longfang Liu wrote:
->> On the debugfs framework of VFIO, register the debug function
->> for the live migration driver of the hisilicon accelerator device.
->>
->> On the basis of the original public debug function, a private debug
->> function is added, so that the single-step debugging function
->> during live migration can be realized.
->>
->> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->> ---
->>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 250 ++++++++++++++++++
->>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |   9 +
->>  drivers/vfio/pci/vfio_pci_debugfs.c           |  10 +-
->>  3 files changed, 268 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->> index eb18edffbd5f..0f35cde6e8ec 100644
->> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->> @@ -15,6 +15,7 @@
->>  #include <linux/anon_inodes.h>
->>  
->>  #include "hisi_acc_vfio_pci.h"
->> +#include "../vfio_pci_debugfs.h"
->>  
->>  /* Return 0 on VM acc device ready, -ETIMEDOUT hardware timeout */
->>  static int qm_wait_dev_not_ready(struct hisi_qm *qm)
->> @@ -609,6 +610,18 @@ hisi_acc_check_int_state(struct hisi_acc_vf_core_device *hisi_acc_vdev)
->>  	}
->>  }
->>  
->> +static void hisi_acc_vf_migf_save(struct hisi_acc_vf_migration_file *src_migf,
->> +	struct hisi_acc_vf_migration_file *dst_migf)
->> +{
->> +	if (!dst_migf)
->> +		return;
->> +
->> +	dst_migf->disabled = false;
->> +	dst_migf->total_length = src_migf->total_length;
->> +	memcpy(&dst_migf->vf_data, &src_migf->vf_data,
->> +		    sizeof(struct acc_vf_data));
->> +}
->> +
->>  static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
->>  {
->>  	mutex_lock(&migf->lock);
->> @@ -621,12 +634,16 @@ static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
->>  static void hisi_acc_vf_disable_fds(struct hisi_acc_vf_core_device *hisi_acc_vdev)
->>  {
->>  	if (hisi_acc_vdev->resuming_migf) {
->> +		hisi_acc_vf_migf_save(hisi_acc_vdev->resuming_migf,
->> +						hisi_acc_vdev->debug_migf);
->>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->resuming_migf);
->>  		fput(hisi_acc_vdev->resuming_migf->filp);
->>  		hisi_acc_vdev->resuming_migf = NULL;
->>  	}
->>  
->>  	if (hisi_acc_vdev->saving_migf) {
->> +		hisi_acc_vf_migf_save(hisi_acc_vdev->saving_migf,
->> +						hisi_acc_vdev->debug_migf);
->>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->saving_migf);
->>  		fput(hisi_acc_vdev->saving_migf->filp);
->>  		hisi_acc_vdev->saving_migf = NULL;
->> @@ -1188,6 +1205,231 @@ static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int
->>  	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
->>  }
->>  
->> +static int hisi_acc_vf_debug_io(struct vfio_device *vdev)
->> +{
->> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->> +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
->> +	struct device *dev = vdev->dev;
->> +	u64 data;
->> +	int ret;
->> +
->> +	data = readl(vf_qm->io_base + QM_MB_CMD_SEND_BASE);
->> +	dev_info(dev, "debug mailbox val: 0x%llx\n", data);
->> +
->> +	ret = qm_wait_dev_not_ready(vf_qm);
->> +	if (ret)
->> +		dev_err(dev, "VF device not ready!\n");
-> 
-> debugfs has helpers for this, you should use debugfs_print_regs32()
-> 
+On Mon, Dec 05, 2022 at 02:21:02PM +0100, Oleksij Rempel wrote:
+> Add ASIX based USB 10Base-T1L adapter support:
+> https://linux-automation.com/en/products/usb-t1l.html
 
-Yes, it is now possible to use this public interface in debugfs to
-implement this read register function.
+Interesting.
 
-Thanks,
-Longfang.
+I don't know the ASIX driver. Is Linux driving the PHY? So you get the
+correct link mode for a T1L PHY?
 
->> +static int hisi_acc_vf_debug_resume(struct vfio_device *vdev)
->> +{
->> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
->> +	struct device *dev = vdev->dev;
->> +	int ret;
->> +
->> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
->> +	if (ret) {
->> +		dev_err(dev, "failed to save device data!\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	ret = vf_qm_check_match(hisi_acc_vdev, migf);
->> +	if (ret) {
->> +		dev_err(dev, "failed to match the VF!\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	ret = vf_qm_load_data(hisi_acc_vdev, migf);
->> +	if (ret) {
->> +		dev_err(dev, "failed to recover the VF!\n");
->> +		return -EINVAL;
->> +	}
->> +
->> +	vf_qm_fun_reset(&hisi_acc_vdev->vf_qm);
->> +	dev_info(dev, "successful to resume device data!\n");
->> +
->> +	return 0;
->> +}
-> 
-> This doesn't seem like it belongs in debugfs at all, please just write
-> a test progam using normal vfio ioctls to do these steps and put in
-> the kernel selftests directory.
-> 
->> +static int hisi_acc_vf_debug_save(struct vfio_device *vdev)
->> +{
->> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
->> +	struct device *dev = vdev->dev;
->> +	int ret;
->> +
->> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
->> +	if (ret) {
->> +		dev_err(dev, "failed to save device data!\n");
->> +		return -EINVAL;
->> +	}
->> +	dev_info(dev, "successful to save device data!\n");
->> +
->> +	return 0;
->> +}
-> 
-> Ditto, I don't think debugfs should be accessing the device state
-> independently of the main FSM.
-> 
-> Jason
-> .
-> 
+	Andrew
