@@ -2,162 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6016428BA
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:47:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F386428B8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 13:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiLEMr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 07:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231928AbiLEMrU (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231140AbiLEMrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 5 Dec 2022 07:47:20 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D221B7A1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 04:47:19 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso11179584pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 04:47:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Skm+LNKckmc6G2Jr5AHkpfAt8qWeTvk3qZKc10iUg4o=;
-        b=u2x4sPJHmrr8rMTniOlRrg3awbIXBh5A/vu2BxcMk/66ujTOvEAUzX42SzH0/ZBDM5
-         vkyQf+vzFF5NegAhIJLWVu42vm1bb8mFxxu6sBK700JTfbHMhALKNZF/i1BX/TEdDuMQ
-         6CAnyUuKz6nG7aMMczjq1g4DvBSK38Wa0RHUCZsuK+iSfjITn/7AKoqbUJ5RkhNUHpXq
-         w5iyv2nkTHknaWsD4dqVWNoO+bYojMw80fKeJ3285ftkm4EN37V7XXuQbrX2c1KqXnf7
-         3Z7b/3UWNZU6GrXbypmd5DfjrJXyXaOrPkcslW5r7wWhyPwpcKpXw+MRncu0ktpjS+t6
-         aV0Q==
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231834AbiLEMrQ (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 5 Dec 2022 07:47:16 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011911B7A1;
+        Mon,  5 Dec 2022 04:47:14 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id x24so4140814qkf.5;
+        Mon, 05 Dec 2022 04:47:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Skm+LNKckmc6G2Jr5AHkpfAt8qWeTvk3qZKc10iUg4o=;
-        b=er7Ji/0FW2RBGsrobP0ISlCbKyxE2p3UlZFIqYeorKtP4w4vxuACylLSv5Vel8rTB/
-         4dIGnMc1dyhE9Lbj/27OogqKysM0DqdcuJT8E8OZnpNENLNKvRXLvxXQRFT82HJooTzH
-         6pcBt6Bk+XX9fAztCvA7jQwypP36JfbaiUTdSs8I0xF5bQL0ctPL4WNE8arnUWG+Kfss
-         vH4dt2sarXHVln2KYF//WWbZzBJwg+1nii9AM2lJAzr7UHYdFU2sEfjbroTZTta6aiZN
-         IRvaq4itgoMI4UjrsApWrZnp1zsZa24AGwjDNKD7H8yYLpflonn27/3fjjRNFZJAi5Oc
-         nL7g==
-X-Gm-Message-State: ANoB5pnh0v4Hnu4i8EePhODy5/nxLn6S1MTfZTve38jXfZ7DMC1RcKle
-        WKNZE1Vvs/tooJSvnDksIs72RyMa7BszRbYBd1RQ0g==
-X-Google-Smtp-Source: AA0mqf4qQzDBPIhJB3SRcS6Ku9gknQOQFsBHFqkD4If7DgzV4mevCrzkrb72BQQ/Pk0CGiDSBMJAs/dvybW9G+kz3Es=
-X-Received: by 2002:a17:90a:ae0f:b0:20d:b124:33b1 with SMTP id
- t15-20020a17090aae0f00b0020db12433b1mr87301189pjq.202.1670244438668; Mon, 05
- Dec 2022 04:47:18 -0800 (PST)
+        bh=baH+G8AY91mQWF55QesEv74bsBduWNCzRm1I0MqED+k=;
+        b=yjsyc6cPVIKVZ7z2zr5xbkm1BADyoI4t6J1xjRurjIR7OPfZV6sSNEFOi//p5QNV0J
+         Rh4t8Pbm6S9q9rFv6OPvBQ96BqVwjJHj6g7h2ODepSZquRXau8FvNS5P9YQkvsDEDtyV
+         0/l6iLhHx50dloSn0VypSvQpuCXtRiPoxXgWz55ZDGRt7cJ7nx8Qmj+0MV4oi9AwCySf
+         rSajeVcfzIn/DcWm3d431liyRIqpa2Hv70GfsoxO0rGnhQqVvhHvW0JoIxJhvMGt5nQW
+         vOHe8T9n//WkT8kCFmdfzE1kW3POVUjB5H61dfeII5+v1fIYWpCyhfVC34FSGWcZdTJN
+         X24A==
+X-Gm-Message-State: ANoB5pkA33amzQGeQE4u/4LsM7cQJS6ycEGlaZNG4ZQ7SLMnh+fOj95a
+        n8qsHfGkSD3sf6RGBVpD7HjD3vlj3HEOS0/XR8w=
+X-Google-Smtp-Source: AA0mqf4/Qp74wXJrO0hHpb3xbNPsUYLpg061BojP3GHIyXpK6vfWzLpLvAOX6fVsaeCf0foNoSKMIyI5xm0xtgoPlWw=
+X-Received: by 2002:a05:620a:22fa:b0:6fb:c38e:e5dd with SMTP id
+ p26-20020a05620a22fa00b006fbc38ee5ddmr72755175qki.23.1670244434016; Mon, 05
+ Dec 2022 04:47:14 -0800 (PST)
 MIME-Version: 1.0
-References: <5627469.DvuYhMxLoT@kreacher> <4789678.31r3eYUQgx@kreacher>
- <CAPDyKFqu9-=L9B-Vkzqom6akVpim0R2_DPj__3t3dp9Y_oUEEg@mail.gmail.com> <CAJZ5v0jWBREsP4UN98+d8f35zDNA3PwisAxZDq03mZ1JkAg1ww@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jWBREsP4UN98+d8f35zDNA3PwisAxZDq03mZ1JkAg1ww@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 5 Dec 2022 13:46:42 +0100
-Message-ID: <CAPDyKFp+5cXE8RLP=Q=i06uE1DyE0vzttFj46pQt_hTwmAm6_Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] PM: runtime: Do not call __rpm_callback() from rpm_idle()
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>
+References: <20221205002804.21225-1-rick.p.edgecombe@intel.com>
+In-Reply-To: <20221205002804.21225-1-rick.p.edgecombe@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Dec 2022 13:46:59 +0100
+Message-ID: <CAJZ5v0iZ8QdCMca1F+z2NJ8+a-jUkGMSNp2KRovCB-aMjHF7qg@mail.gmail.com>
+Subject: Re: [PATCH] x86/hibernate: Use fixmap for saving unmapped pages
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 at 13:13, Rafael J. Wysocki <rafael@kernel.org> wrote:
+On Mon, Dec 5, 2022 at 1:28 AM Rick Edgecombe
+<rick.p.edgecombe@intel.com> wrote:
 >
-> On Mon, Dec 5, 2022 at 1:08 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >
-> > On Fri, 2 Dec 2022 at 15:32, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > >
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Calling __rpm_callback() from rpm_idle() after adding device links
-> > > support to the former is a clear mistake.
-> > >
-> > > Not only it causes rpm_idle() to carry out unnecessary actions, but it
-> > > is also against the assumption regarding the stability of PM-runtime
-> > > status accross __rpm_callback() invocations, because rpm_suspend() and
-> > > rpm_resume() may run in parallel with __rpm_callback() when it is called
-> > > by rpm_idle() and the device's PM-runtime status can be updated by any
-> > > of them.
-> >
-> > Urgh, that's a nasty bug you are fixing here. Is there perhaps some
-> > links to some error reports that can make sense to include here?
+> Hibernate uses the direct map to read memory it saves to disk. Since
+> sometimes pages are not accessible on the direct map ("not present" on
+> x86), it has special case logic to temporarily make a page present. On x86
+> these direct map addresses can be mapped at various page sizes, but the
+> logic works ok as long as the not present pages are always mapped as
+> PAGE_SIZE such that they don't require a split to map the region as
+> present. If the address was mapped not present by a larger page size, the
+> split may fail and hibernate would then try to read an address mapped not
+> present.
 >
-> There is a bug report, but I have no confirmation that this fix is
-> sufficient to address it (even though I'm quite confident that it will
-> be).
+> Today on x86 there are no known cases of this (huge not present pages on
+> the direct map), but it has come up from time to time when developing
+> things that operate on the direct map. It blocked making
+> VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+> has been a complication for various direct map protection efforts.
 >
-> > >
-> > > Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/base/power/runtime.c |   12 +++++++++++-
-> > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > >
-> > > Index: linux-pm/drivers/base/power/runtime.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/base/power/runtime.c
-> > > +++ linux-pm/drivers/base/power/runtime.c
-> > > @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
-> > >
-> > >         dev->power.idle_notification = true;
-> > >
-> > > -       retval = __rpm_callback(callback, dev);
-> >
-> > Couldn't we just extend __rpm_callback() to take another in-parameter,
-> > rather than open-coding the below?
+> This dependency is also pretty hidden and easily missed by people poking at
+> the direct map. For this reason, there are warnings in place to complain
+> but not handle this scenario.
 >
-> I'd rather not do that.
+> One way to make this more robust would be to create some new CPA
+> functionality that can know to map and reset the whole huge page in the
+> case of trying to map a subpage. But for simplicity and smaller code, just
+> make x86 hibernate have its own fixmap PTE that it can use to point
+> to 4k pages when it encounters an unmapped direct map page.
 >
-> I'd prefer rpm_callback() to be used only in rpm_suspend() and
-> rpm_resume() where all of the assumptions hold and rpm_idle() really
-> is a special case.
+> Move do_copy_page() to a header such that it can be used in an arch
+> breakout. Rename it hib_copy_page() to be more hibernate specific since
+> it could appear in other files.
 >
-> And there is not much open-coding here, just the locking part.
+> Use __weak for the arch breakout because there is not a suitable arch
+> specific header to use the #define method.
+>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> ---
+>
+> Hi,
+>
+> Since none of the module space allocation overhauls ever seem to go smoothly
+> and it may be awhile before VM_FLUSH_RESET_PERMS in not needed, I thought I
+> would try and fix up some of its deficiencies in the meantime. This is
+> pre-work for that, but I thought it was useful enough on it's own.
+>
+> The testing was hacking up hibernate to load some data to a huge NP mapping
+> and making sure the data was there when it came back.
 
-That and the actual call to the callback. Not much, but still.
+OK, so I don't feel like it is 6.2 material at this point.
 
->
-> > Note that, __rpm_callback() already uses a "bool use_links" internal
-> > variable, that indicates whether the device links should be used or
-> > not.
->
-> Yes, it does, but why does that matter?
+Please resend it when 6.2-rc1 is out so it gets some more significant
+linux-next coverage before going into the mainline.
 
-It means that __rpm_callback() is already prepared to (almost) cover this case.
+Thanks!
 
 >
-> > > +       if (dev->power.irq_safe)
-> > > +               spin_unlock(&dev->power.lock);
-> > > +       else
-> > > +               spin_unlock_irq(&dev->power.lock);
-> > > +
-> > > +       retval = callback(dev);
-> > > +
-> > > +       if (dev->power.irq_safe)
-> > > +               spin_lock(&dev->power.lock);
-> > > +       else
-> > > +               spin_lock_irq(&dev->power.lock);
-> > >
-> > >         dev->power.idle_notification = false;
-> > >         wake_up_all(&dev->power.wait_queue);
-> > >
-> > >
-> > >
-
-Note, it's not a big deal to me, if you feel strongly that your
-current approach is better, I am fine with that too.
-
-Kind regards
-Uffe
+>  arch/x86/include/asm/fixmap.h |  3 +++
+>  arch/x86/power/hibernate.c    | 10 ++++++++++
+>  include/linux/suspend.h       | 13 +++++++++++++
+>  kernel/power/snapshot.c       | 21 +++++++--------------
+>  4 files changed, 33 insertions(+), 14 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+> index d0dcefb5cc59..0fceed9a4152 100644
+> --- a/arch/x86/include/asm/fixmap.h
+> +++ b/arch/x86/include/asm/fixmap.h
+> @@ -108,6 +108,9 @@ enum fixed_addresses {
+>  #ifdef CONFIG_PARAVIRT_XXL
+>         FIX_PARAVIRT_BOOTMAP,
+>  #endif
+> +#ifdef CONFIG_HIBERNATION
+> +       FIX_HIBERNATE,
+> +#endif
+>
+>  #ifdef CONFIG_ACPI_APEI_GHES
+>         /* Used for GHES mapping from assorted contexts */
+> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+> index 6f955eb1e163..473b6b5f6b7e 100644
+> --- a/arch/x86/power/hibernate.c
+> +++ b/arch/x86/power/hibernate.c
+> @@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
+>         return 0;
+>  }
+>
+> +void copy_unmapped_page(void *dst, struct page *page)
+> +{
+> +       WARN_ON(!preempt_count());
+> +
+> +       set_fixmap(FIX_HIBERNATE, page_to_phys(page));
+> +       __flush_tlb_all();
+> +       hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
+> +       clear_fixmap(FIX_HIBERNATE);
+> +}
+> +
+>  int relocate_restore_code(void)
+>  {
+>         pgd_t *pgd;
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index cfe19a028918..0b19b910526e 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+>  asmlinkage int swsusp_save(void);
+>  extern struct pbe *restore_pblist;
+>  int pfn_is_nosave(unsigned long pfn);
+> +void copy_unmapped_page(void *dst, struct page *page);
+> +
+> +/*
+> + * This is needed, because copy_page and memcpy are not usable for copying
+> + * task structs.
+> + */
+> +static inline void hib_copy_page(long *dst, long *src)
+> +{
+> +       int n;
+> +
+> +       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> +               *dst++ = *src++;
+> +}
+>
+>  int hibernate_quiet_exec(int (*func)(void *data), void *data);
+>  #else /* CONFIG_HIBERNATION */
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 2a406753af90..ccf123b5019c 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+>         return n;
+>  }
+>
+> -/*
+> - * This is needed, because copy_page and memcpy are not usable for copying
+> - * task structs.
+> - */
+> -static inline void do_copy_page(long *dst, long *src)
+> +void __weak copy_unmapped_page(void *dst, struct page *page)
+>  {
+> -       int n;
+> -
+> -       for (n = PAGE_SIZE / sizeof(long); n; n--)
+> -               *dst++ = *src++;
+> +       hibernate_map_page(page);
+> +       hib_copy_page(dst, page_address(page));
+> +       hibernate_unmap_page(page);
+>  }
+>
+>  /**
+> @@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
+>  static void safe_copy_page(void *dst, struct page *s_page)
+>  {
+>         if (kernel_page_present(s_page)) {
+> -               do_copy_page(dst, page_address(s_page));
+> +               hib_copy_page(dst, page_address(s_page));
+>         } else {
+> -               hibernate_map_page(s_page);
+> -               do_copy_page(dst, page_address(s_page));
+> -               hibernate_unmap_page(s_page);
+> +               copy_unmapped_page(dst, s_page);
+>         }
+>  }
+>
+> @@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+>         if (PageHighMem(s_page)) {
+>                 src = kmap_atomic(s_page);
+>                 dst = kmap_atomic(d_page);
+> -               do_copy_page(dst, src);
+> +               hib_copy_page(dst, src);
+>                 kunmap_atomic(dst);
+>                 kunmap_atomic(src);
+>         } else {
+> --
+> 2.17.1
+>
