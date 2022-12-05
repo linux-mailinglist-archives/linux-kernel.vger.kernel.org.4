@@ -2,103 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0443C642ED6
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D48642F02
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 18:42:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232261AbiLERc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 12:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56450 "EHLO
+        id S231573AbiLERmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 12:42:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiLERcV (ORCPT
+        with ESMTP id S230037AbiLERmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 12:32:21 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0E2218A3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 09:32:20 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 62so11068943pgb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 09:32:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wHyd9pKlC9WFHVrwobxVNYq4HVzMFaCc5ME41Vf/DS4=;
-        b=tXcuoR9V6zHapsF2k42um/JNMg5G/jsVRshX0CWC9OKMH0uUifRsHiZ+sKnK1ucz6w
-         DAr33L1RJNKC7+e0+y/DbbLxBAecH8KqhIcv5cUZQYBwSS+ccmEIQf4CuAa1kXy2DMw3
-         SGtsVwaJLyUqmpYhTVg7S8pNptpBQgXO0oYo7ewY847llU0O9xki8GgL+GJmrOJ9+qy3
-         Y67t3ex8vH4gDG+Oy4Jrwld+9WhaqXTPbka9JVSf9t3cA98+MEDa3rQZUrBeHq6C8nre
-         1V8Q2UZ7oS3aHfTjlFWNv3n4KMWIKpCO9X2SpCm/g780PnpERu52pGZA4g0nhuklu4ig
-         oRBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wHyd9pKlC9WFHVrwobxVNYq4HVzMFaCc5ME41Vf/DS4=;
-        b=iCnHFSTitXrOyjiDWl/sSjiH6s9n/DzjstwWeJ2tDehxkn+NWZmytk2oPV4iMKjuJa
-         mJTrIaJmytxYZR83Uhko+HiXLELINIaQ9TPRGrwKNzGdUEQTqho3Ku9ulmyhS8zid6Kw
-         SuoaP0Jcw2DzrV//5Ad1bxywmPgQSF0K6F7ZKRY+Iw+oki5Aii7TXHZYwUXghl4QzHW3
-         D2A/PmTXvF5qA7zLNF+TGklDlWDQlTI45oOGjqHV8VYcsQKvPkcpaCG+RDTZifoB77hN
-         cz6tyBDMAh48pPi258i+WtM/9X+C/Al+leRQLDnEw9KABqL5qYktlxt8SuulhWF73Wza
-         AiZw==
-X-Gm-Message-State: ANoB5pkEIeb01AyXdL/NS5TF4bom5y8XxqGxc8agARMYsVvpfXeSfwV3
-        NlDEwOg0CYRG/5RDbNJdcD2k4g==
-X-Google-Smtp-Source: AA0mqf5H6RmfXNSGuyQNg+3Xbnn5UEmDXz9z1UaDNDohTKkpmd3glPZwK/n7+3IkNQFbXk6SVJX+RQ==
-X-Received: by 2002:a63:1747:0:b0:478:1391:fd14 with SMTP id 7-20020a631747000000b004781391fd14mr35684881pgx.112.1670261539381;
-        Mon, 05 Dec 2022 09:32:19 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id s4-20020a17090a764400b0020087d7e778sm11218083pjl.37.2022.12.05.09.32.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 09:32:18 -0800 (PST)
-Date:   Mon, 5 Dec 2022 17:32:14 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Maxim Levitsky <mlevitsk@redhat.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Paolo Bonzini <pbonzini@redhat.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        xudong.hao@intel.com
-Subject: Re: [linus:master] [KVM]  92e7d5c83a:
- kernel-selftests.kvm.triple_fault_event_test.fail
-Message-ID: <Y44rHsJU9OdkxCHA@google.com>
-References: <202212032146.b0347c81-oliver.sang@intel.com>
+        Mon, 5 Dec 2022 12:42:31 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E937E1262B;
+        Mon,  5 Dec 2022 09:42:29 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1p2FTw-0000se-Sz; Mon, 05 Dec 2022 18:42:21 +0100
+Date:   Mon, 5 Dec 2022 17:42:12 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>
+Subject: Re: [PATCH v2 1/2] thermal: mediatek: add support for MT7986 and
+ MT7981
+Message-ID: <Y44tdASIQ2DpL9re@makrotopia.org>
+References: <Y4dYazyXF02eRGC5@makrotopia.org>
+ <0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202212032146.b0347c81-oliver.sang@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022, kernel test robot wrote:
-> 
-> Greeting,
-> 
-> FYI, we noticed kernel-selftests.kvm.triple_fault_event_test.fail due to commit (built with gcc-11):
-> 
-> commit: 92e7d5c83aff124f49082585e57939ed24b59c5c ("KVM: x86: allow L1 to not intercept triple fault")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+Hi Angelo,
 
-Should already be fixed.  Thanks!
+On Thu, Dec 01, 2022 at 02:24:17PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 30/11/22 14:19, Daniel Golle ha scritto:
+> > Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+> > Brings code to assign values from efuse as well as new function to
+> > convert raw temperature to millidegree celsius, as found in MediaTek's
+> > SDK sources (but cleaned up and de-duplicated)
+> > 
+> > [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> > Reviewed-by: Henry Yen <henry.yen@mediatek.com>
+> > ---
+> > Changes since v1: Drop use of adc_oe field in efuse, Henry Yen confirmed
+> > its use has been dropped intentionally in MTK SDK as well.
+> > 
+> >   drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
+> >   1 file changed, 119 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> > index 8440692e3890..6a69419f8960 100644
+> > --- a/drivers/thermal/mtk_thermal.c
+> > +++ b/drivers/thermal/mtk_thermal.c
+> > @@ -150,6 +150,21 @@
+> >   #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
+> >   #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
+> > +/*
+> > + * Layout of the fuses providing the calibration data
+> > + * These macros can be used for MT7981 and MT7986.
+> > + */
+> > +#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
+> > +#define CALIB_BUF0_ADC_OE_V3(x)		(((x) >> 10) & 0x3ff)
+> > +#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
+> > +#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
+> > +#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
+> > +#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
+> > +#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
+> > +#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
+> > +#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
+> > +#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
+> > +
+> >   enum {
+> >   	VTS1,
+> >   	VTS2,
+> > @@ -163,6 +178,7 @@ enum {
+> >   enum mtk_thermal_version {
+> >   	MTK_THERMAL_V1 = 1,
+> >   	MTK_THERMAL_V2,
+> > +	MTK_THERMAL_V3,
+> >   };
+> >   /* MT2701 thermal sensors */
+> > @@ -245,6 +261,27 @@ enum mtk_thermal_version {
+> >   /* The calibration coefficient of sensor  */
+> >   #define MT8183_CALIBRATION	153
+> > +/* AUXADC channel 11 is used for the temperature sensors */
+> > +#define MT7986_TEMP_AUXADC_CHANNEL	11
+> > +
+> > +/* The total number of temperature sensors in the MT7986 */
+> > +#define MT7986_NUM_SENSORS		1
+> > +
+> > +/* The number of banks in the MT7986 */
+> > +#define MT7986_NUM_ZONES		1
+> > +
+> > +/* The number of sensing points per bank */
+> > +#define MT7986_NUM_SENSORS_PER_ZONE	1
+> > +
+> > +/* MT7986 thermal sensors */
+> > +#define MT7986_TS1			0
+> > +
+> > +/* The number of controller in the MT7986 */
+> > +#define MT7986_NUM_CONTROLLER		1
+> > +
+> > +/* The calibration coefficient of sensor  */
+> > +#define MT7986_CALIBRATION		165
+> > +
+> >   struct mtk_thermal;
+> >   struct thermal_bank_cfg {
+> > @@ -386,6 +423,14 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
+> >   static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
+> >   static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
+> > +/* MT7986 thermal sensor data */
+> > +static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
+> > +static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
+> > +static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
+> > +static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
+> > +static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
+> > +static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
+> > +
+> >   /*
+> >    * The MT8173 thermal controller has four banks. Each bank can read up to
+> >    * four temperature sensors simultaneously. The MT8173 has a total of 5
+> > @@ -549,6 +594,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
+> >   	.version = MTK_THERMAL_V1,
+> >   };
+> > +/*
+> > + * MT7986 uses AUXADC Channel 11 for raw data access.
+> > + */
+> > +static const struct mtk_thermal_data mt7986_thermal_data = {
+> > +	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
+> > +	.num_banks = MT7986_NUM_ZONES,
+> > +	.num_sensors = MT7986_NUM_SENSORS,
+> > +	.vts_index = mt7986_vts_index,
+> > +	.cali_val = MT7986_CALIBRATION,
+> > +	.num_controller = MT7986_NUM_CONTROLLER,
+> > +	.controller_offset = mt7986_tc_offset,
+> > +	.need_switch_bank = true,
+> > +	.bank_data = {
+> > +		{
+> > +			.num_sensors = 1,
+> > +			.sensors = mt7986_bank_data,
+> > +		},
+> > +	},
+> > +	.msr = mt7986_msr,
+> > +	.adcpnp = mt7986_adcpnp,
+> > +	.sensor_mux_values = mt7986_mux_values,
+> > +	.version = MTK_THERMAL_V3,
+> > +};
+> > +
+> >   /**
+> >    * raw_to_mcelsius - convert a raw ADC value to mcelsius
+> >    * @mt:	The thermal controller
+> > @@ -603,6 +672,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
+> >   	return (format_2 - tmp) * 100;
+> >   }
+> > +static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
+> > +{
+> > +	s32 tmp;
+> > +
+> > +	if (raw == 0)
+> > +		return 0;
+> > +
+> > +	raw &= 0xfff;
+> > +	tmp = 100000 * 15 / 16 * 10000;
+> > +	tmp /= 4096 - 512 + mt->adc_ge;
+> > +	tmp /= 1490;
+> > +	tmp *= raw - mt->vts[sensno] - 2900;
+> > +
+> > +	return mt->degc_cali * 500 - tmp;
+> > +}
+> > +
+> >   /**
+> >    * mtk_thermal_get_bank - get bank
+> >    * @bank:	The bank
+> > @@ -659,9 +744,12 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+> >   		if (mt->conf->version == MTK_THERMAL_V1) {
+> >   			temp = raw_to_mcelsius_v1(
+> >   				mt, conf->bank_data[bank->id].sensors[i], raw);
+> > -		} else {
+> > +		} else if (mt->conf->version == MTK_THERMAL_V2) {
+> >   			temp = raw_to_mcelsius_v2(
+> >   				mt, conf->bank_data[bank->id].sensors[i], raw);
+> > +		} else {
+> > +			temp = raw_to_mcelsius_v3(
+> > +				mt, conf->bank_data[bank->id].sensors[i], raw);
+> >   		}
+> 
+> What about optimizing this with assigning a function pointer?
+> Like that, we wouldn't check any version in there... as in that case we'd
+> simply do something like
+> 
+> temp = conf->raw_to_mcelsius(mt, conf->bank...blahblah...);
+> 
+> ...and this would also mean that the snippet saying "the first read of a sensor
+> often contains very high bogus temperature value [...]" would get merged in the v2
+> of raw_to_mcelsius (as that function is used only in mtk_thermal_bank_temperature).
 
-commit df0bb47baa95aad133820b149851d5b94cbc6790
-Author: Paolo Bonzini <pbonzini@redhat.com>
-Date:   Wed Nov 30 11:14:35 2022 -0500
+I found that Amjad Ouled-Ameur is taking care of converting that series
+of if-else options into a function pointer allowing to easily call the
+right raw_to_mcelsius function.
 
-    KVM: x86: fix uninitialized variable use on KVM_REQ_TRIPLE_FAULT
-    
-    If a triple fault was fixed by kvm_x86_ops.nested_ops->triple_fault (by
-    turning it into a vmexit), there is no need to leave vcpu_enter_guest().
-    Any vcpu->requests will be caught later before the actual vmentry,
-    and in fact vcpu_enter_guest() was not initializing the "r" variable.
-    Depending on the compiler's whims, this could cause the
-    x86_64/triple_fault_event_test test to fail.
-    
-    Cc: Maxim Levitsky <mlevitsk@redhat.com>
-    Fixes: 92e7d5c83aff ("KVM: x86: allow L1 to not intercept triple fault")
-    Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+[PATCH v7 0/4] thermal: mediatek: Add support for MT8365 SoC
+https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
+
+Should I wait until this series is merged and then submit support
+for MT7986 thermal on top of that?
+
+
+> 
+> >   		/*
+> > @@ -887,6 +975,26 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
+> >   	return 0;
+> >   }
+> > +static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
+> > +{
+> > +	if (!CALIB_BUF1_VALID_V3(buf[1]))
+> > +		return -EINVAL;
+> > +
+> > +	mt->adc_oe = CALIB_BUF0_ADC_OE_V3(buf[0]);
+> > +	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
+> > +	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
+> > +	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
+> > +	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
+> > +	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
+> > +	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
+> > +	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
+> > +
+> > +	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
+> > +		mt->o_slope = 0;
+> > +
+> > +	return 0;
+> > +}
+> > +
+> >   static int mtk_thermal_get_calibration_data(struct device *dev,
+> >   					    struct mtk_thermal *mt)
+> >   {
+> > @@ -897,6 +1005,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
+> >   	/* Start with default values */
+> >   	mt->adc_ge = 512;
+> > +	mt->adc_oe = 512;
+> >   	for (i = 0; i < mt->conf->num_sensors; i++)
+> >   		mt->vts[i] = 260;
+> >   	mt->degc_cali = 40;
+> > @@ -924,8 +1033,10 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
+> >   	if (mt->conf->version == MTK_THERMAL_V1)
+> >   		ret = mtk_thermal_extract_efuse_v1(mt, buf);
+> > -	else
+> > +	else if (mt->conf->version == MTK_THERMAL_V2)
+> >   		ret = mtk_thermal_extract_efuse_v2(mt, buf);
+> > +	else
+> > +		ret = mtk_thermal_extract_efuse_v3(mt, buf);
+> 
+> I propose to use a switch here instead.
+> 
+> 	switch(mt->conf->version) {
+> 	case MTK_THERMAL_V1:
+> 		....
+> 	case MTK_THERMAL_V2:
+> 		....
+> 	case MTK_THERMAL_V3:
+> 		....
+> 	default:
+> 		ret = -EINVAL;
+> 		break;
+> 	};
+> 
+> This would also prevent a potential issue with getting an invalid calibration
+> due to us calling the wrong version of the get_calibration() function, in which
+> case, using the default calibration values would be at that point preferred.
+> 
+> Regards,
+> Angelo
+> 
+> 
+> 
