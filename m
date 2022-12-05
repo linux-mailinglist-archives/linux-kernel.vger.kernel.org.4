@@ -2,160 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1123C6429E8
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:52:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3726429EE
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 14:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiLENw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 08:52:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
+        id S231516AbiLENyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 08:54:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232474AbiLENwP (ORCPT
+        with ESMTP id S231205AbiLENyF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 08:52:15 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0131B13D04
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 05:52:13 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id w15so18669289wrl.9
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 05:52:12 -0800 (PST)
+        Mon, 5 Dec 2022 08:54:05 -0500
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36127257;
+        Mon,  5 Dec 2022 05:54:05 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-3cbdd6c00adso118244167b3.11;
+        Mon, 05 Dec 2022 05:54:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3uc9R8Uf/pCe2qvKF4aFF/8KuZBFNDVNUUa6PyIFKSQ=;
-        b=RkjkX1iZ5R0Yaqz0WAQr37pobuFT+aJMIBmxyWhCn6lx6BNIMq1ZuMmZIi5eq7x44P
-         fI58BD0j/5M2j/PhK/mv6zK5XSPQDLjr6cFSQp7/290ryoDIthzp7GH6pCqbcq33Czws
-         tu72Agr5scZe48h6R/exhLO7qC5J7LJHAdfIpgHSs/TOAB91haaBQlcCdornhma56CwQ
-         ycTatCKwkajBhUQxSrgwuayQvqRmJiKpekpHKYhpb1GxoDvybMyrHy6uIu+xb5lkoK2+
-         FovoXA66R3UESptREd5ICtcrnTOQjuIuFFfqsAAV8nHpPZfoa2l91ZG/fM1sUtWdxAEz
-         1lXg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bc4/MjN/YjTPQ9EZGEra+4fgjSY8zygUtk0AgsersU0=;
+        b=XuY48gARX1ENE547OqGANQPwOeRc2gRM3s9AirKaB5f7QPn2LgH6QY+/p5iN7FiaDR
+         3CGX4FGzaQtIrLyvdndr7xdF/D9mtI9guwQWgJ7AS9Z0fnEYwZi4oCG9mtxDGGH40+vT
+         R8ez7KsxFQtLHrKvTvhJZpskWdlNPMQFy0T5umLohosgOqmBqcHW7gkoRQBnv48EFiks
+         OjzPsJWCMH/PoOktEwc9W5U4Ez6iElLwZTDVmFv8FV7MwlnXHv+h/Dze/3utINPe4Hoo
+         6F7BeH/uSy/1K7myyxp7xfBcKLLyBOWpPBrMr7Gv3VgPkHR+Kg9eJImc6UHoB6fjru2U
+         xCLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3uc9R8Uf/pCe2qvKF4aFF/8KuZBFNDVNUUa6PyIFKSQ=;
-        b=wjzNzFd4GYoYEVMrUzaJXgzrERhqRXRqDsmdi9chWP2SLkvAa3kC4lRJdFG9ttox/a
-         6xE/IGG9RZeQrrKrApNP/sJNY1ixOOhQ0FJKrHO1iKjbVL6/aLJqQxtyd7V6eWax5AYI
-         1LPZeNu475SlVdQgglMQZyyM+OzmZZhietjWDVdnyjvg1+qGV+zeTfkoJltpDqj5L2yS
-         xrP1kQ9T5ROuWHvGS3iLXRb8HSlKwofDnEshoM9PyadcSMMoRD/fhWupXLfp3JzATwpK
-         xGG97adLop2pA0ganKUcSIs4RoC3PtMkhIOVkpPoQLrIFrxfv0jtVRwHSz2FQI6ke6O5
-         Sedg==
-X-Gm-Message-State: ANoB5pn92xBNSpc5L7l9dlHqjsiTPYlVmTzbERw/JKcRDcs+aztmKC0h
-        l1hhz5ajFSgXHiyLwyFJrGTy/w==
-X-Google-Smtp-Source: AA0mqf5FPRwt19PLh2T1fJ+ixYYqormZd+LI8rffdiI7G4LLSJQHjGxKOWRYJ5cKOJWEYhztpWv1xA==
-X-Received: by 2002:adf:fec6:0:b0:242:4697:d828 with SMTP id q6-20020adffec6000000b002424697d828mr8422358wrs.494.1670248331460;
-        Mon, 05 Dec 2022 05:52:11 -0800 (PST)
-Received: from predatorhelios.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id a3-20020adffac3000000b0024245e543absm9012700wrs.88.2022.12.05.05.52.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 05:52:11 -0800 (PST)
-From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
-To:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com,
-        krzysztof.kozlowski@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, khilman@baylibre.com,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH v4 3/3] ARM: dts: stm32: Remove the pins-are-numbered property
-Date:   Mon,  5 Dec 2022 14:51:58 +0100
-Message-Id: <20221205135158.1842465-4-bero@baylibre.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221205135158.1842465-1-bero@baylibre.com>
-References: <20221205135158.1842465-1-bero@baylibre.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bc4/MjN/YjTPQ9EZGEra+4fgjSY8zygUtk0AgsersU0=;
+        b=usuFAR3bafzc05B7OGEGFU/PNjWIyPfFBHO/y4/gvMPudJwBh0wsEobIMu7Es4uDOK
+         z7fLbxcj3z0hK8xbzTQFdpDjiOsvqGKgMwdS1GCEJZHmD0uEnHK0Q4mlDJuBqL7FHQE+
+         rg9oo4XvTbUW8PZcay3cvZhBo6sm2eTaRiM27CNNlQBzxQruVCUAvMGPRVDc0wWbcovJ
+         HRXD/79LtaHHslaEmWrKKYPnV2fFzf+vbPVJ/lA7lJULA97d9fl5IJlWVm3nJ0NBUzO7
+         LzUuFdtTbLNnvH7015qBr33WiDJ82fkVjKolEt5MpFe8QiOcVrKRrND2q4YyVWOldEoI
+         OSWw==
+X-Gm-Message-State: ANoB5pkBvX6yOkdWXFUHE3NVANUl3B0YG3VEeNXwI77cfyB9mJ6nXs6l
+        eQhB8mtfm1ueAhswJl4Na8h9op/HsfTHRg2cg2yTOOhnlqk=
+X-Google-Smtp-Source: AA0mqf57yGmLoBnvvhGrWpWKkOSHlBQkM4Cadv4sz/Tocdkosl6Gp2yYDACuYMlP/LhWj7GpigOHueOZififfQBdTYE=
+X-Received: by 2002:a05:690c:c9a:b0:3ed:90d2:2ab8 with SMTP id
+ cm26-20020a05690c0c9a00b003ed90d22ab8mr3864513ywb.67.1670248444418; Mon, 05
+ Dec 2022 05:54:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221202161502.385525-1-ojeda@kernel.org> <20221202161502.385525-28-ojeda@kernel.org>
+ <Y4qNR+Nn9utDftHq@localhost> <20221204103153.117675b1@GaryWorkstation> <CANeycqpNW0E5fQqD1Qzqr0p-3cgs5k5KgLusragaSWbrmcx2Nw@mail.gmail.com>
+In-Reply-To: <CANeycqpNW0E5fQqD1Qzqr0p-3cgs5k5KgLusragaSWbrmcx2Nw@mail.gmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Mon, 5 Dec 2022 14:53:53 +0100
+Message-ID: <CANiq72ns7U3mWxt=gZVPTHB49as5gaY7=kR5TmxGAoMQx3qgbA@mail.gmail.com>
+Subject: Re: [PATCH v2 27/28] rust: types: add `Either` type
+To:     Wedson Almeida Filho <wedsonaf@gmail.com>
+Cc:     Gary Guo <gary@garyguo.net>, Josh Triplett <josh@joshtriplett.org>,
+        ojeda@kernel.org, Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Wei Liu <wei.liu@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the pins-are-numbered property from STM32 DeviceTrees
+On Sun, Dec 4, 2022 at 6:36 PM Wedson Almeida Filho <wedsonaf@gmail.com> wrote:
+>
+> It's also implemented in `std`, which the kernel doesn't include.
+> (Which is actually good for us, since we can't really use it.)
 
-Signed-off-by: Bernhard Rosenkränzer <bero@baylibre.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
----
- arch/arm/boot/dts/stm32f4-pinctrl.dtsi | 1 -
- arch/arm/boot/dts/stm32f7-pinctrl.dtsi | 1 -
- arch/arm/boot/dts/stm32h743.dtsi       | 1 -
- arch/arm/boot/dts/stm32mp131.dtsi      | 1 -
- arch/arm/boot/dts/stm32mp151.dtsi      | 2 --
- 5 files changed, 6 deletions(-)
+We have it around in the kernel (the `std` one is a re-export), so one
+"could" replace the `Either` with `Cow` in the case of the commit
+message via ignoring the to-owned side of it (but I assume Josh didn't
+mean to suggest that).
 
-diff --git a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
-index 500bcc302d422..4523c63475e4c 100644
---- a/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32f4-pinctrl.dtsi
-@@ -51,7 +51,6 @@ pinctrl: pinctrl@40020000 {
- 			ranges = <0 0x40020000 0x3000>;
- 			interrupt-parent = <&exti>;
- 			st,syscfg = <&syscfg 0x8>;
--			pins-are-numbered;
- 
- 			gpioa: gpio@40020000 {
- 				gpio-controller;
-diff --git a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-index 8f37aefa73150..c8e6c52fb248e 100644
---- a/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-+++ b/arch/arm/boot/dts/stm32f7-pinctrl.dtsi
-@@ -15,7 +15,6 @@ pinctrl: pinctrl@40020000 {
- 			ranges = <0 0x40020000 0x3000>;
- 			interrupt-parent = <&exti>;
- 			st,syscfg = <&syscfg 0x8>;
--			pins-are-numbered;
- 
- 			gpioa: gpio@40020000 {
- 				gpio-controller;
-diff --git a/arch/arm/boot/dts/stm32h743.dtsi b/arch/arm/boot/dts/stm32h743.dtsi
-index 28e3deb20e1e1..f30796f7adf36 100644
---- a/arch/arm/boot/dts/stm32h743.dtsi
-+++ b/arch/arm/boot/dts/stm32h743.dtsi
-@@ -588,7 +588,6 @@ pinctrl: pinctrl@58020000 {
- 			ranges = <0 0x58020000 0x3000>;
- 			interrupt-parent = <&exti>;
- 			st,syscfg = <&syscfg 0x8>;
--			pins-are-numbered;
- 
- 			gpioa: gpio@58020000 {
- 				gpio-controller;
-diff --git a/arch/arm/boot/dts/stm32mp131.dtsi b/arch/arm/boot/dts/stm32mp131.dtsi
-index accc3824f7e98..6b86e031f60e6 100644
---- a/arch/arm/boot/dts/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/stm32mp131.dtsi
-@@ -547,7 +547,6 @@ pinctrl: pinctrl@50002000 {
- 			ranges = <0 0x50002000 0x8400>;
- 			interrupt-parent = <&exti>;
- 			st,syscfg = <&exti 0x60 0xff>;
--			pins-are-numbered;
- 
- 			gpioa: gpio@50002000 {
- 				gpio-controller;
-diff --git a/arch/arm/boot/dts/stm32mp151.dtsi b/arch/arm/boot/dts/stm32mp151.dtsi
-index 5491b6c4dec20..4e437d3f2ed66 100644
---- a/arch/arm/boot/dts/stm32mp151.dtsi
-+++ b/arch/arm/boot/dts/stm32mp151.dtsi
-@@ -1660,7 +1660,6 @@ pinctrl: pinctrl@50002000 {
- 			ranges = <0 0x50002000 0xa400>;
- 			interrupt-parent = <&exti>;
- 			st,syscfg = <&exti 0x60 0xff>;
--			pins-are-numbered;
- 
- 			gpioa: gpio@50002000 {
- 				gpio-controller;
-@@ -1789,7 +1788,6 @@ pinctrl_z: pinctrl@54004000 {
- 			#size-cells = <1>;
- 			compatible = "st,stm32mp157-z-pinctrl";
- 			ranges = <0 0x54004000 0x400>;
--			pins-are-numbered;
- 			interrupt-parent = <&exti>;
- 			st,syscfg = <&exti 0x60 0xff>;
- 
--- 
-2.38.1
+Anyway, it can be easily configured out from our `alloc`, so I will
+send the patch.
 
+Cheers,
+Miguel
