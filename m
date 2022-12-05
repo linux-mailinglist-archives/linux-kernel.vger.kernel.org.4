@@ -2,105 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68DF642F95
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:07:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDF06430E4
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 19:57:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231834AbiLESHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 13:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S232120AbiLES5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 13:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiLESHJ (ORCPT
+        with ESMTP id S232965AbiLES5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 13:07:09 -0500
-Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E8C201B3;
-        Mon,  5 Dec 2022 10:07:08 -0800 (PST)
-Received: by mail-ot1-x32e.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so2209804otp.9;
-        Mon, 05 Dec 2022 10:07:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mE+3XB5IEKDhRnqHM4DOUC+WCo7qc9F0k/SKBMW/+jk=;
-        b=bfaVpBpN9MBkcpIZFH/kxvgc4Wsqa95Lg9fp1NhpSJZC5HdBghVcNnL5V8/8dSZg35
-         j8racjBtzZj5IE1uba8EbLt77Z/auMgE7JSJNkBpS0aoQXrmuqAIhrByxuzk1pVYXCYT
-         Eb2tKBKg7qNXz8zU9+lmRHde4kLy4Ett9mu5y3E9fkSHjSUwF1soLNrpvORMdTYMTEwQ
-         iUAjz1aZw+Yq9BUJw/SBQk/dEzZZzAHm13cGlCqnyx5854b7uAGpZyPSAKgHfrOd8LF6
-         hihCwcGapX2yTCPzti8FSPneGRZoM0GjFBZepT2DobrDL2H2A03e9rfCtKqDH4oOI17y
-         CAqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mE+3XB5IEKDhRnqHM4DOUC+WCo7qc9F0k/SKBMW/+jk=;
-        b=KfEcWlhO/bekEPKx/uZCr2N+tCrxvBjkbSiP5yBkhXg/eYVCWOn0+6+9FFgSQryHIK
-         vCOd+UOQ+0mRydpG2y5hPTXfEBnDik89qCREaGWu4/q3siXJKhxr92PkeTAfCxXQSSrD
-         78NsApGzJVi8aeTmuvcUUhz8x0qGRdhT5+0Lb8X5X5W/iMOjQc02fFUjzyk1vPX3j/e8
-         iujwv4tG0KPRW9asFu9z8sbijxyJmk9ub+J+KM0UYFb/rBgRfhn/FFRSLgbYNMT56GYt
-         QuyfRU2yXAXDfv+r+ytsnqFHLpz4FeGbCwIt38mxkTpeNBbofebVpdsDTPPnWqAD8sUO
-         cooQ==
-X-Gm-Message-State: ANoB5pk/VgbbD4PqoIikTYXtVoaf9AXDaUjar/WMQcbvN8aXAwiEauNL
-        fdx2itzeQxd0QDOjrf2IhBoFYqpDECiLsg==
-X-Google-Smtp-Source: AA0mqf43Dp4ipEthqgd0Gqbcm+40iCwbaQOE1KdAvIWut8YsZz20Xj+X0027VGyqdLFqD2k8xgWLmg==
-X-Received: by 2002:a9d:6247:0:b0:66c:cfb8:a32e with SMTP id i7-20020a9d6247000000b0066ccfb8a32emr31409503otk.184.1670263627396;
-        Mon, 05 Dec 2022 10:07:07 -0800 (PST)
-Received: from ?IPV6:2603:8081:2802:9dfb:b9b:12f2:9a60:2073? (2603-8081-2802-9dfb-0b9b-12f2-9a60-2073.res6.spectrum.com. [2603:8081:2802:9dfb:b9b:12f2:9a60:2073])
-        by smtp.gmail.com with ESMTPSA id r41-20020a05687017a900b0014378df87cfsm9481866oae.33.2022.12.05.10.07.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 10:07:07 -0800 (PST)
-Message-ID: <e5e024a2-a530-9f4f-76f4-5f239b3608a3@gmail.com>
-Date:   Mon, 5 Dec 2022 12:07:05 -0600
+        Mon, 5 Dec 2022 13:57:43 -0500
+X-Greylist: delayed 3018 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 10:57:37 PST
+Received: from mail.cybernetics.com (mail.cybernetics.com [173.71.130.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280D4F62
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 10:57:35 -0800 (PST)
+X-ASG-Debug-ID: 1670263636-1cf43916c221f840001-xx1T2L
+Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id BowDeQFtfcmWyUgM; Mon, 05 Dec 2022 13:07:16 -0500 (EST)
+X-Barracuda-Envelope-From: tonyb@cybernetics.com
+X-ASG-Whitelist: Client
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
+        bh=RpLG6FuUPyOMHlETTijxTvENKLCXTVEl0Lq8W8zjYLQ=;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:
+        Content-Language:Subject:MIME-Version:Date:Message-ID; b=RKqDLauSxncfqo0oPaW8
+        hTFWjoaPEZSKJp25k2V2a5MkhjSuOv3zbSOGKYEI4P/ZIUCZuX3ba9F2u0aEVAcwqqWwvXAQjmqRq
+        Hw+ZN6ctq5ADesMMtzdj5uUrIZ6iuPl/5t62o89MDa8WW1OmFCFJTWMJw/7OjEdvev4hOHO8Dk=
+Received: from [10.157.2.224] (HELO [192.168.200.1])
+  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
+  with ESMTPS id 12356546; Mon, 05 Dec 2022 13:07:16 -0500
+Message-ID: <8fc56daf-7f8d-b62b-b6bf-4da4ca87ea20@cybernetics.com>
+Date:   Mon, 5 Dec 2022 13:07:15 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] cpufreq: acpi: Only set boost MSRs on supported CPUs
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Kyle Meyer <kyle.meyer@hpe.com>, Borislav Petkov <bp@alien8.de>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221205175744.9746-1-stuart.w.hayes@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 11/11] dmapool: link blocks across pages
 Content-Language: en-US
-From:   stuart hayes <stuart.w.hayes@gmail.com>
-In-Reply-To: <20221205175744.9746-1-stuart.w.hayes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-ASG-Orig-Subj: Re: [PATCH 11/11] dmapool: link blocks across pages
+To:     Keith Busch <kbusch@meta.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
+Cc:     Keith Busch <kbusch@kernel.org>
+References: <20221205145937.54367-1-kbusch@meta.com>
+ <20221205145937.54367-12-kbusch@meta.com>
+From:   Tony Battersby <tonyb@cybernetics.com>
+In-Reply-To: <20221205145937.54367-12-kbusch@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Barracuda-Connect: UNKNOWN[10.10.4.126]
+X-Barracuda-Start-Time: 1670263636
+X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
+X-Barracuda-BRTS-Status: 1
+X-Virus-Scanned: by bsmtpd at cybernetics.com
+X-Barracuda-Scan-Msg-Size: 2390
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/5/22 09:59, Keith Busch wrote:
+> From: Keith Busch <kbusch@kernel.org>
+>
+> The allocated dmapool pages are never freed for the lifetime of the
+> pool. There is no need for the two level list+stack lookup for finding a
+> free block since nothing is ever removed from the list. Just use a
+> simple stack, reducing time complexity to constant.
+>
+> The implementation inserts the stack linking elements and the dma handle
+> of the block within itself when freed. This means the smallest possible
+> dmapool block is increased to at most 16 bytes to accomodate these
+> fields, but there are no exisiting users requesting a dma pool smaller
+> than that anyway.
+
+Great work!
+
+I notice that the comment at the top of dmapool.c describes the old
+design ("Free blocks are tracked in an unsorted singly-linked
+list of free blocks within the page."), so you need to delete or update
+that part of the comment.
+
+>  struct dma_pool {		/* the pool */
+>  	struct list_head page_list;
+>  	spinlock_t lock;
+>  	struct device *dev;
+> +	struct dma_block *next_block;
+>  	unsigned int size;
+>  	unsigned int allocation;
+>  	unsigned int boundary;
+> +	unsigned int nr_blocks;
+> +	unsigned int nr_active;
+> +	unsigned int nr_pages;
+
+I think nr_blocks, nr_active, and nr_pages should be size_t rather than
+unsigned int since they count the number of objects in the entire pool,
+and it would be theoretically possible to allocate more than 2^32 objects.
 
 
-On 12/5/2022 11:57 AM, Stuart Hayes wrote:
-> Stop trying to set boost MSRs on CPUs that don't support boost.
-> 
-> This corrects a bug in the recent patch "Defer setting boost MSRs".
-> 
-> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
-> ---
->   drivers/cpufreq/acpi-cpufreq.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index bb58175a8d40..a7c5e312340e 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -888,7 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
->   	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
->   		pr_warn(FW_WARN "P-state 0 is not max freq\n");
->   
-> -	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
-> +	if (acpi_cpufreq_driver.set_boost)
-> +		set_boost(policy, acpi_cpufreq_driver.boost_enabled);
->   
->   	return result;
->   
+> @@ -199,22 +217,24 @@ EXPORT_SYMBOL(dma_pool_create);
+>  
+>  static void pool_initialise_page(struct dma_pool *pool, struct dma_page *page)
+>  {
+> -	unsigned int offset = 0;
+> -	unsigned int next_boundary = pool->boundary;
+> -
+> -	page->in_use = 0;
+> -	page->offset = 0;
+> -	do {
+> -		unsigned int next = offset + pool->size;
+> -		if (unlikely((next + pool->size) >= next_boundary)) {
+> -			next = next_boundary;
+> +	unsigned int next_boundary = pool->boundary, offset = 0;
+> +	struct dma_block *block;
+> +
+> +	while (offset < pool->allocation) {
+> +		if (offset > next_boundary) {
 
-My apologies--adding Boris, I forgot to put him on the "to" list.
+This is incorrect.  I believe the correct comparison should be:
+
++    while (offset + pool->size <= pool->allocation) {
++        if (offset + pool->size > next_boundary) {
+
+That should handle all the weird possible combinations of size,
+boundary, and allocation.
+
+Tony Battersby
+Cybernetics
+
