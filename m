@@ -2,325 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DB916425BD
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:24:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52B9A6425C8
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiLEJYm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:24:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
+        id S230479AbiLEJ3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230335AbiLEJYa (ORCPT
+        with ESMTP id S230006AbiLEJ3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:24:30 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D34D167E1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:24:28 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id 1so3946132lfz.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:24:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Owo0phbbJOrq6sWBiQ2bW5Gab2bMQcmAUmytHNbH9wo=;
-        b=CBfUM4ABoy4rHbnJbQWlgFZPr36WGkyWiutGX6w63I8DmF/IJiild6FcVSNN7OWJZ7
-         pXxUiVma9yq+PhDIrUun9M9Va0gKBpKxjzL4hSd+yyVkziX/hM+hdNnS2HrixHqWqr+w
-         9uPS+gbUSproyB0am3JO8sKBKWWHQ/lzz53ju3Q567AM4L0/1VsnFw7a7e+xLX5dqtAL
-         ltPfrvJFTtJCH5f/cWONsgU7aRsJDDYFPsxECnuUV1Upx768mYuIz8CszK1XiyhlQVRZ
-         mn1NjlqoOAVwrxhEaj2jBzLXfvyd3qLezPV3GfuypCofEI10LU/+uMeT5vEdTm2OxrYD
-         evrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Owo0phbbJOrq6sWBiQ2bW5Gab2bMQcmAUmytHNbH9wo=;
-        b=tPP3CRNUJ2585JZemrxXzQrSETaA1SDj0nmzrn2NsUjA7PXzBRK0K2Sjfdl1XEB7Hf
-         tPBj7BTGwygHLIXfZOyq4zKBHTw3ye7g1b9NnSQoP6cn2Dml3zoSfYqFk24LnqD8yE+7
-         MaphJY8xttCVk54QASCG+YNzzKHwYiAAdCsXmpQ0U8wHWvjrbaPmVcPJRyRNy8Xj/Lmc
-         OETyZrnMeEREKm1GrocAild/gogb//748H0V2opAFRhuxoyv0SbqHb9jvy1x/ClYFmA+
-         tgZcBUq2VQ5JogWRGWklzaQxpC4j7j0Jo53Lq+qnqmJRDJyDWSUr90QO8E8FnDmlOxA4
-         qfpg==
-X-Gm-Message-State: ANoB5pkEIGspOHMyVfbVbpVcdx53otGLb8Um2mBpdrvMoX/dYR+Aogzr
-        r77p2R9UOEhzLOtk2AKaXXv73DjusOMbOarUVSlBVw==
-X-Google-Smtp-Source: AA0mqf7hmc7cmV5dRxw88/fxJnTLIThfoQtt0oTYjymTMQQZpTJzvpZeXdF6ZMUHCf5Dbxm0DrPC0sEiLurEnocH1bU=
-X-Received: by 2002:a05:6512:104e:b0:4b5:604a:5b24 with SMTP id
- c14-20020a056512104e00b004b5604a5b24mr2898439lfb.550.1670232266434; Mon, 05
- Dec 2022 01:24:26 -0800 (PST)
+        Mon, 5 Dec 2022 04:29:07 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EB715738;
+        Mon,  5 Dec 2022 01:28:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=uYIGjJD2wgkVcMrKaqHksISnsayovI84ZVgDoXZJbZM=; b=XUShWzoGgZRjua1LdqRbH3lpeo
+        kJvToInvKRelfGJisTV+Sq0WROK9101f/+PnxcP65ttNQ2SA/0wbutD2NpMJow+Bf0mvUPDUPUiws
+        o6xvb/W69BxN8BbcsixypAUEiqwspCxAGju6J13Sshd8N7Q20NqVX9MpOfQgWaPWupaZ2p9qDljY9
+        y6BSAVLwQGSvwtMwPQatSyNIvshqHiASHjLER9dsY78MpzMFv50Nb0m6sxUS2byMZrCyfz58xOWKU
+        gOB2kJ9E23qab889cfBvyw02yB7CEZCGmuwm9WU7biH9H79ED7APpsNw0qLJDkH5rcOyuhkHkkGZk
+        Gdf8a3yA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35576)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p27mP-0006ZO-Qo; Mon, 05 Dec 2022 09:28:53 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p27mN-00078a-J7; Mon, 05 Dec 2022 09:28:51 +0000
+Date:   Mon, 5 Dec 2022 09:28:51 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v2 net-next 1/4] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y42509XkIN1S73Er@shell.armlinux.org.uk>
+References: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com> <20221202061347.1070246-6-chao.p.peng@linux.intel.com>
-In-Reply-To: <20221202061347.1070246-6-chao.p.peng@linux.intel.com>
-From:   Fuad Tabba <tabba@google.com>
-Date:   Mon, 5 Dec 2022 09:23:49 +0000
-Message-ID: <CA+EHjTy5+Ke_7Uh72p--H9kGcE-PK4EVmp7ym6Q1-PO28u6CCQ@mail.gmail.com>
-Subject: Re: [PATCH v10 5/9] KVM: Use gfn instead of hva for mmu_notifier_retry
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fc3ac4f2d0c28d9c24b909e97791d1f784502a4a.1670204277.git.piergiorgio.beruto@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Chao,
-
-On Fri, Dec 2, 2022 at 6:19 AM Chao Peng <chao.p.peng@linux.intel.com> wrote:
->
-> Currently in mmu_notifier invalidate path, hva range is recorded and
-> then checked against by mmu_notifier_retry_hva() in the page fault
-> handling path. However, for the to be introduced private memory, a page
-> fault may not have a hva associated, checking gfn(gpa) makes more sense.
->
-> For existing hva based shared memory, gfn is expected to also work. The
-> only downside is when aliasing multiple gfns to a single hva, the
-> current algorithm of checking multiple ranges could result in a much
-> larger range being rejected. Such aliasing should be uncommon, so the
-> impact is expected small.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c   |  8 +++++---
->  include/linux/kvm_host.h | 33 +++++++++++++++++++++------------
->  virt/kvm/kvm_main.c      | 32 +++++++++++++++++++++++---------
->  3 files changed, 49 insertions(+), 24 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 4736d7849c60..e2c70b5afa3e 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -4259,7 +4259,7 @@ static bool is_page_fault_stale(struct kvm_vcpu *vcpu,
->                 return true;
->
->         return fault->slot &&
-> -              mmu_invalidate_retry_hva(vcpu->kvm, mmu_seq, fault->hva);
-> +              mmu_invalidate_retry_gfn(vcpu->kvm, mmu_seq, fault->gfn);
->  }
->
->  static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
-> @@ -6098,7 +6098,9 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
->
->         write_lock(&kvm->mmu_lock);
->
-> -       kvm_mmu_invalidate_begin(kvm, gfn_start, gfn_end);
-> +       kvm_mmu_invalidate_begin(kvm);
-> +
-> +       kvm_mmu_invalidate_range_add(kvm, gfn_start, gfn_end);
->
->         flush = kvm_rmap_zap_gfn_range(kvm, gfn_start, gfn_end);
->
-> @@ -6112,7 +6114,7 @@ void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
->                 kvm_flush_remote_tlbs_with_address(kvm, gfn_start,
->                                                    gfn_end - gfn_start);
->
-> -       kvm_mmu_invalidate_end(kvm, gfn_start, gfn_end);
-> +       kvm_mmu_invalidate_end(kvm);
->
->         write_unlock(&kvm->mmu_lock);
->  }
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 02347e386ea2..3d69484d2704 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -787,8 +787,8 @@ struct kvm {
->         struct mmu_notifier mmu_notifier;
->         unsigned long mmu_invalidate_seq;
->         long mmu_invalidate_in_progress;
-> -       unsigned long mmu_invalidate_range_start;
-> -       unsigned long mmu_invalidate_range_end;
-> +       gfn_t mmu_invalidate_range_start;
-> +       gfn_t mmu_invalidate_range_end;
->  #endif
->         struct list_head devices;
->         u64 manual_dirty_log_protect;
-> @@ -1389,10 +1389,9 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
->  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
->  #endif
->
-> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
-> -                             unsigned long end);
-> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
-> -                           unsigned long end);
-> +void kvm_mmu_invalidate_begin(struct kvm *kvm);
-> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end);
-> +void kvm_mmu_invalidate_end(struct kvm *kvm);
->
->  long kvm_arch_dev_ioctl(struct file *filp,
->                         unsigned int ioctl, unsigned long arg);
-> @@ -1963,9 +1962,9 @@ static inline int mmu_invalidate_retry(struct kvm *kvm, unsigned long mmu_seq)
->         return 0;
->  }
->
-> -static inline int mmu_invalidate_retry_hva(struct kvm *kvm,
-> +static inline int mmu_invalidate_retry_gfn(struct kvm *kvm,
->                                            unsigned long mmu_seq,
-> -                                          unsigned long hva)
-> +                                          gfn_t gfn)
->  {
->         lockdep_assert_held(&kvm->mmu_lock);
->         /*
-> @@ -1974,10 +1973,20 @@ static inline int mmu_invalidate_retry_hva(struct kvm *kvm,
->          * that might be being invalidated. Note that it may include some false
-
-nit: "might be" (or) "is being"
-
->          * positives, due to shortcuts when handing concurrent invalidations.
-
-nit: handling
-
->          */
-> -       if (unlikely(kvm->mmu_invalidate_in_progress) &&
-> -           hva >= kvm->mmu_invalidate_range_start &&
-> -           hva < kvm->mmu_invalidate_range_end)
-> -               return 1;
-> +       if (unlikely(kvm->mmu_invalidate_in_progress)) {
-> +               /*
-> +                * Dropping mmu_lock after bumping mmu_invalidate_in_progress
-> +                * but before updating the range is a KVM bug.
-> +                */
-> +               if (WARN_ON_ONCE(kvm->mmu_invalidate_range_start == INVALID_GPA ||
-> +                                kvm->mmu_invalidate_range_end == INVALID_GPA))
-
-INVALID_GPA is an x86-specific define in
-arch/x86/include/asm/kvm_host.h, so this doesn't build on other
-architectures. The obvious fix is to move it to
-include/linux/kvm_host.h.
-
-Cheers,
-/fuad
-
-> +                       return 1;
-> +
-> +               if (gfn >= kvm->mmu_invalidate_range_start &&
-> +                   gfn < kvm->mmu_invalidate_range_end)
-> +                       return 1;
-> +       }
-> +
->         if (kvm->mmu_invalidate_seq != mmu_seq)
->                 return 1;
->         return 0;
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index b882eb2c76a2..ad55dfbc75d7 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -540,9 +540,7 @@ static void kvm_mmu_notifier_invalidate_range(struct mmu_notifier *mn,
->
->  typedef bool (*hva_handler_t)(struct kvm *kvm, struct kvm_gfn_range *range);
->
-> -typedef void (*on_lock_fn_t)(struct kvm *kvm, unsigned long start,
-> -                            unsigned long end);
-> -
-> +typedef void (*on_lock_fn_t)(struct kvm *kvm);
->  typedef void (*on_unlock_fn_t)(struct kvm *kvm);
->
->  struct kvm_hva_range {
-> @@ -628,7 +626,8 @@ static __always_inline int __kvm_handle_hva_range(struct kvm *kvm,
->                                 locked = true;
->                                 KVM_MMU_LOCK(kvm);
->                                 if (!IS_KVM_NULL_FN(range->on_lock))
-> -                                       range->on_lock(kvm, range->start, range->end);
-> +                                       range->on_lock(kvm);
-> +
->                                 if (IS_KVM_NULL_FN(range->handler))
->                                         break;
->                         }
-> @@ -715,8 +714,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
->         kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
->  }
->
-> -void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
-> -                             unsigned long end)
-> +void kvm_mmu_invalidate_begin(struct kvm *kvm)
->  {
->         /*
->          * The count increase must become visible at unlock time as no
-> @@ -724,6 +722,17 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
->          * count is also read inside the mmu_lock critical section.
->          */
->         kvm->mmu_invalidate_in_progress++;
-> +
-> +       if (likely(kvm->mmu_invalidate_in_progress == 1)) {
-> +               kvm->mmu_invalidate_range_start = INVALID_GPA;
-> +               kvm->mmu_invalidate_range_end = INVALID_GPA;
-> +       }
-> +}
-> +
-> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
+On Mon, Dec 05, 2022 at 02:41:35AM +0100, Piergiorgio Beruto wrote:
+> +int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
 > +{
-> +       WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
+> +	struct ethnl_req_info req_info = {};
+> +	struct nlattr **tb = info->attrs;
+> +	const struct ethtool_phy_ops *ops;
+> +	struct phy_plca_cfg plca_cfg;
+> +	struct net_device *dev;
 > +
->         if (likely(kvm->mmu_invalidate_in_progress == 1)) {
->                 kvm->mmu_invalidate_range_start = start;
->                 kvm->mmu_invalidate_range_end = end;
-> @@ -744,6 +753,12 @@ void kvm_mmu_invalidate_begin(struct kvm *kvm, unsigned long start,
->         }
->  }
->
-> +static bool kvm_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
-> +{
-> +       kvm_mmu_invalidate_range_add(kvm, range->start, range->end);
-> +       return kvm_unmap_gfn_range(kvm, range);
-> +}
+> +	bool mod = false;
+> +	int ret;
 > +
->  static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->                                         const struct mmu_notifier_range *range)
->  {
-> @@ -752,7 +767,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->                 .start          = range->start,
->                 .end            = range->end,
->                 .pte            = __pte(0),
-> -               .handler        = kvm_unmap_gfn_range,
-> +               .handler        = kvm_mmu_unmap_gfn_range,
->                 .on_lock        = kvm_mmu_invalidate_begin,
->                 .on_unlock      = kvm_arch_guest_memory_reclaimed,
->                 .flush_on_ret   = true,
-> @@ -791,8 +806,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->         return 0;
->  }
->
-> -void kvm_mmu_invalidate_end(struct kvm *kvm, unsigned long start,
-> -                           unsigned long end)
-> +void kvm_mmu_invalidate_end(struct kvm *kvm)
->  {
->         /*
->          * This sequence increase will notify the kvm page fault that
-> --
-> 2.25.1
->
+> +	ret = ethnl_parse_header_dev_get(&req_info,
+> +					 tb[ETHTOOL_A_PLCA_HEADER],
+> +					 genl_info_net(info), info->extack,
+> +					 true);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	dev = req_info.dev;
+> +
+> +	// check that the PHY device is available and connected
+> +	if (!dev->phydev) {
+> +		ret = -EOPNOTSUPP;
+> +		goto out;
+> +	}
+
+This check should really be done under the RTNL lock. phydevs can come
+and go with SFP cages.
+
+> +
+> +	rtnl_lock();
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
