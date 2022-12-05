@@ -2,122 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B424E642614
-	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C20864260B
+	for <lists+linux-kernel@lfdr.de>; Mon,  5 Dec 2022 10:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiLEJs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 04:48:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S231428AbiLEJrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 04:47:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiLEJsm (ORCPT
+        with ESMTP id S230519AbiLEJrs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 04:48:42 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9E110AE
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:47:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670233665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IcvnyLKDgnT5EwGdRxoCJ/l5uFVnluQmDLioHt8iGWE=;
-        b=M4MoF8Zih7RlM/aZzhWm4NqAFN+GciVNM44hmiVPBTKUXuN5yF91olQn4pGNzTRbS+OWpi
-        R8Gl4Kk+tgpUcQKUxHbnnA702JXGPvi6XGshvHXQ6XdcEVaKaMfsHkLOt3ZRL8fU3we+1L
-        +HBT6tkypR2Rx5cGRuK4Gcipf1nxAfE=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-59-2tqt99egNrWc-wvDdOQpZw-1; Mon, 05 Dec 2022 04:47:44 -0500
-X-MC-Unique: 2tqt99egNrWc-wvDdOQpZw-1
-Received: by mail-qv1-f71.google.com with SMTP id w1-20020a056214012100b004c6ecf32001so28743323qvs.8
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:47:44 -0800 (PST)
+        Mon, 5 Dec 2022 04:47:48 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C19765AB
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 01:47:47 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id e9-20020a056e020b2900b003036757d5caso978903ilu.10
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 01:47:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IcvnyLKDgnT5EwGdRxoCJ/l5uFVnluQmDLioHt8iGWE=;
-        b=S7yyDS9u9JTfkiMSCmHMnDhzdCR1sr9yLSAieltyCTxRXC7u+WP01hjAq051ruIXxC
-         N6hwennBDz9ceIqtW6nsxbBeymegHwS2dvWSuzxAuZNiCp9jNH1uUlsJiwygF3mr/bLH
-         o0i+lGX4E9g7bX/fawE+1YKmSpgJUJ8EwgR2p/AHGhVmodjSguvFIe6pQpjgA1QXkGdX
-         T2LKETTV3MaUeuyq+Scu/CQANwRnr0ocCV8AvO5nv4NGpgrx6aj3zlcc0XAo/s1uwFYp
-         EbFH0C4pb64uBm2LR/Q3hvjjqIUyksG48ysxShtaEJnwFMV4wGzwwBZcv0q7gVXZIVPF
-         ZKqQ==
-X-Gm-Message-State: ANoB5pl68u1HOHJoswE3sDoZuDYHswEB6/BqiCldMAr1UuWqWl3o3WfI
-        4uyEFftrDK8ifk1JO20KQF9YFngxuRVqnGzC5Uu4SlGcD8S/m/7ZP70PIftIwebulHXeaZ5SbKl
-        tyNZbymOaKvh4lH2Xmu3FwgNs
-X-Received: by 2002:a05:620a:13ab:b0:6fe:b81b:b34d with SMTP id m11-20020a05620a13ab00b006feb81bb34dmr3591726qki.670.1670233663913;
-        Mon, 05 Dec 2022 01:47:43 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf45OxZ8+RfdMfmhJecYJujPPz1Wg0eh2+1ixtUFNzLbxhTUqg3CfNjhGJz5ohM76/NfGk6Qbw==
-X-Received: by 2002:a05:620a:13ab:b0:6fe:b81b:b34d with SMTP id m11-20020a05620a13ab00b006feb81bb34dmr3591720qki.670.1670233663688;
-        Mon, 05 Dec 2022 01:47:43 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id ay40-20020a05622a22a800b003a57a317c17sm9285578qtb.74.2022.12.05.01.47.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 01:47:43 -0800 (PST)
-Date:   Mon, 5 Dec 2022 10:47:36 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Artem Chernyshev <artem.chernyshev@red-soft.ru>
-Cc:     Vishnu Dasa <vdasa@vmware.com>, Bryan Tan <bryantan@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Jakub Kicinski <kuba@kernel.org>, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] net: vmw_vsock: vmci: Check memcpy_from_msg()
-Message-ID: <20221205094736.k3yuwk7emijpitvw@sgarzare-redhat>
-References: <702BBCBE-6E80-4B12-A996-4A2CB7C66D70@vmware.com>
- <20221203083312.923029-1-artem.chernyshev@red-soft.ru>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TEKKEZGF+jgdIDc8NVBi3tp/tqdDla5lQNVIkx0HBX4=;
+        b=6diK0WgEA0K9mO8nx3ToFrNB62NA9SFWxK52zugZBDsAbuOmF3O80kfbloz0KGCrR9
+         Kb4TWTIVK4Z6/5pQdNr18tee/FMLisTFrsOhkr3KRbilSu6C9kihdyt4Uc9zEPFoHDmF
+         C+JJjm34WXS2Zn/TkZLhf2C7pWG2eP+71bO2qF3nQBFzMIAh7RA9enVVna9lOMqhRzF8
+         OWT8szrntjqCCOZkZm3YDbi8Y9rEux4HkXH3cq0sxvf+Yl/kvlF7AGzv70nLl7PBK0VV
+         OIMvBKx9Bap1wy5eKPfAtfONpd49nVM6ALlp53De/K6Nk7gV7Z8DgHlRwNc2l9hkVXjk
+         gSTQ==
+X-Gm-Message-State: ANoB5plyOb7NdSFC+UHceYBdHfobsl8CAV9LHyduAprhk1u6CXS7NoiN
+        6YXff1xQinuTKYofafgo9Xp5hwUr7dBBZcYJ11qzzsQIwk8U
+X-Google-Smtp-Source: AA0mqf7xNzka+tLGeTasGH5jvcELtTAyV3P0g8v3mT4BTvojg5BCpo89j/YKPphQeSfFLG++MPhgib2Mjf4rGYYTPWGuzfLjW31N
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221203083312.923029-1-artem.chernyshev@red-soft.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:cf21:0:b0:38a:2f59:53d7 with SMTP id
+ s1-20020a02cf21000000b0038a2f5953d7mr4288843jar.10.1670233666821; Mon, 05 Dec
+ 2022 01:47:46 -0800 (PST)
+Date:   Mon, 05 Dec 2022 01:47:46 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000067270b05ef119467@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in hfsplus_btree_open
+From:   syzbot <syzbot+8d39c1e195e443de0dfe@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, fmdefrancesco@gmail.com,
+        ira.weiny@intel.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, slava@dubeyko.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Dec 03, 2022 at 11:33:12AM +0300, Artem Chernyshev wrote:
->vmci_transport_dgram_enqueue() does not check the return value
->of memcpy_from_msg(). Return with an error if the memcpy fails.
->
->Found by Linux Verification Center (linuxtesting.org) with SVACE.
->
->Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
->Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
->---
->V1->V2 Fix memory leaking and updates for description
->
-> net/vmw_vsock/vmci_transport.c | 5 ++++-
-> 1 file changed, 4 insertions(+), 1 deletion(-)
->
->diff --git a/net/vmw_vsock/vmci_transport.c b/net/vmw_vsock/vmci_transport.c
->index 842c94286d31..c94c3deaa09d 100644
->--- a/net/vmw_vsock/vmci_transport.c
->+++ b/net/vmw_vsock/vmci_transport.c
->@@ -1711,7 +1711,10 @@ static int vmci_transport_dgram_enqueue(
-> 	if (!dg)
-> 		return -ENOMEM;
->
->-	memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len);
->+	if (memcpy_from_msg(VMCI_DG_PAYLOAD(dg), msg, len)) {
->+		kfree(dg);
->+		return -EFAULT;
+Hello,
 
-Since memcpy_from_msg() is a wrapper of copy_from_iter_full() that 
-simply returns -EFAULT in case of an error, perhaps it would be better 
-here to return the value of memcpy_from_msg() instead of wiring the 
-error.
+syzbot found the following issue on:
 
-However in the end the behavior is the same, so even if you don't want 
-to change it I'll leave my R-b:
+HEAD commit:    a4412fdd49dc error-injection: Add prompt for function erro..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=119c684d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
+dashboard link: https://syzkaller.appspot.com/bug?extid=8d39c1e195e443de0dfe
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Thanks,
-Stefano
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3bbe66b25958/disk-a4412fdd.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6851483ca667/vmlinux-a4412fdd.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2d5b23cb4616/bzImage-a4412fdd.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8d39c1e195e443de0dfe@syzkaller.appspotmail.com
+
+loop1: detected capacity change from 0 to 1024
+==================================================================
+BUG: KASAN: use-after-free in hfsplus_btree_open+0x918/0xd00 fs/hfsplus/btree.c:155
+Read of size 4 at addr ffff88804402bc74 by task syz-executor.1/6533
+
+CPU: 1 PID: 6533 Comm: syz-executor.1 Not tainted 6.1.0-rc7-syzkaller-00123-ga4412fdd49dc #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1b1/0x28e lib/dump_stack.c:106
+ print_address_description+0x74/0x340 mm/kasan/report.c:284
+ print_report+0x107/0x1f0 mm/kasan/report.c:395
+ kasan_report+0xcd/0x100 mm/kasan/report.c:495
+ hfsplus_btree_open+0x918/0xd00 fs/hfsplus/btree.c:155
+ hfsplus_fill_super+0xa7b/0x1b50 fs/hfsplus/super.c:473
+ mount_bdev+0x26c/0x3a0 fs/super.c:1401
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f974568d60a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f974632af88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00000000000005e7 RCX: 00007f974568d60a
+RDX: 0000000020000600 RSI: 0000000020000640 RDI: 00007f974632afe0
+RBP: 00007f974632b020 R08: 00007f974632b020 R09: 0000000000a00010
+R10: 0000000000a00010 R11: 0000000000000202 R12: 0000000020000600
+R13: 0000000020000640 R14: 00007f974632afe0 R15: 0000000020000140
+ </TASK>
+
+Allocated by task 4560:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x3d/0x60 mm/kasan/common.c:52
+ __kasan_slab_alloc+0x65/0x70 mm/kasan/common.c:325
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:737 [inline]
+ slab_alloc_node mm/slub.c:3398 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc_lru+0x180/0x2e0 mm/slub.c:3429
+ alloc_inode_sb include/linux/fs.h:3125 [inline]
+ f2fs_alloc_inode+0x14d/0x520 fs/f2fs/super.c:1366
+ alloc_inode fs/inode.c:259 [inline]
+ iget_locked+0x191/0x830 fs/inode.c:1286
+ f2fs_iget+0x51/0x4bb0 fs/f2fs/inode.c:505
+ f2fs_fill_super+0x52c4/0x6c40 fs/f2fs/super.c:4333
+ mount_bdev+0x26c/0x3a0 fs/super.c:1401
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Last potentially related work creation:
+ kasan_save_stack+0x2b/0x50 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:481
+ call_rcu+0x163/0x9c0 kernel/rcu/tree.c:2798
+ f2fs_fill_super+0x5669/0x6c40 fs/f2fs/super.c:4516
+ mount_bdev+0x26c/0x3a0 fs/super.c:1401
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff88804402b540
+ which belongs to the cache f2fs_inode_cache of size 2144
+The buggy address is located 1844 bytes inside of
+ 2144-byte region [ffff88804402b540, ffff88804402bda0)
+
+The buggy address belongs to the physical page:
+page:ffffea0001100a00 refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff88804402f360 pfn:0x44028
+head:ffffea0001100a00 order:3 compound_mapcount:0 compound_pincount:0
+memcg:ffff88801df0f201
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 0000000000000000 dead000000000001 ffff88801ccc23c0
+raw: ffff88804402f360 00000000800e0001 00000001ffffffff ffff88801df0f201
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Reclaimable, gfp_mask 0x1d2050(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL|__GFP_RECLAIMABLE), pid 4517, tgid 4516 (syz-executor.1), ts 148789358194, free_ts 135585079530
+ prep_new_page mm/page_alloc.c:2539 [inline]
+ get_page_from_freelist+0x742/0x7c0 mm/page_alloc.c:4291
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5558
+ alloc_slab_page+0x70/0xf0 mm/slub.c:1794
+ allocate_slab+0x5e/0x4b0 mm/slub.c:1939
+ new_slab mm/slub.c:1992 [inline]
+ ___slab_alloc+0x782/0xe20 mm/slub.c:3180
+ __slab_alloc mm/slub.c:3279 [inline]
+ slab_alloc_node mm/slub.c:3364 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc_lru+0x233/0x2e0 mm/slub.c:3429
+ alloc_inode_sb include/linux/fs.h:3125 [inline]
+ f2fs_alloc_inode+0x14d/0x520 fs/f2fs/super.c:1366
+ alloc_inode fs/inode.c:259 [inline]
+ iget_locked+0x191/0x830 fs/inode.c:1286
+ f2fs_iget+0x51/0x4bb0 fs/f2fs/inode.c:505
+ f2fs_fill_super+0x38b1/0x6c40 fs/f2fs/super.c:4222
+ mount_bdev+0x26c/0x3a0 fs/super.c:1401
+ legacy_get_tree+0xea/0x180 fs/fs_context.c:610
+ vfs_get_tree+0x88/0x270 fs/super.c:1531
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1459 [inline]
+ free_pcp_prepare+0x80c/0x8f0 mm/page_alloc.c:1509
+ free_unref_page_prepare mm/page_alloc.c:3387 [inline]
+ free_unref_page+0x7d/0x5f0 mm/page_alloc.c:3483
+ free_slab mm/slub.c:2031 [inline]
+ discard_slab mm/slub.c:2037 [inline]
+ __unfreeze_partials+0x1ab/0x200 mm/slub.c:2586
+ put_cpu_partial+0x106/0x170 mm/slub.c:2662
+ qlist_free_all+0x2b/0x70 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x169/0x180 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x1f/0x70 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:737 [inline]
+ slab_alloc_node mm/slub.c:3398 [inline]
+ slab_alloc mm/slub.c:3406 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3413 [inline]
+ kmem_cache_alloc_lru+0x180/0x2e0 mm/slub.c:3429
+ alloc_inode_sb include/linux/fs.h:3125 [inline]
+ sock_alloc_inode+0x21/0xc0 net/socket.c:304
+ alloc_inode fs/inode.c:259 [inline]
+ new_inode_pseudo+0x61/0x1d0 fs/inode.c:1018
+ sock_alloc net/socket.c:627 [inline]
+ __sock_create+0x12b/0x850 net/socket.c:1479
+ sock_create net/socket.c:1566 [inline]
+ __sys_socket_create net/socket.c:1603 [inline]
+ __sys_socket+0x119/0x360 net/socket.c:1636
+ __do_sys_socket net/socket.c:1649 [inline]
+ __se_sys_socket net/socket.c:1647 [inline]
+ __x64_sys_socket+0x76/0x80 net/socket.c:1647
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff88804402bb00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88804402bb80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff88804402bc00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                             ^
+ ffff88804402bc80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff88804402bd00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
