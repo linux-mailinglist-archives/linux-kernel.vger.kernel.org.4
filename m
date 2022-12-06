@@ -2,162 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF71864457A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48D2A6445EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:44:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234893AbiLFOU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 09:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S234663AbiLFOo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 09:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiLFOUs (ORCPT
+        with ESMTP id S233563AbiLFOoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 09:20:48 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7182DA93;
-        Tue,  6 Dec 2022 06:20:44 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NRMyX6KV9z4f3v58;
-        Tue,  6 Dec 2022 22:20:36 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgD37ay2T49jumSkBg--.19656S4;
-        Tue, 06 Dec 2022 22:20:39 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>,
-        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com,
-        Jun Nie <jun.nie@linaro.org>
-Subject: [PATCH v2] ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
-Date:   Tue,  6 Dec 2022 22:41:34 +0800
-Message-Id: <20221206144134.1919987-1-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 6 Dec 2022 09:44:23 -0500
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530FC23145
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:44:21 -0800 (PST)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-281-LsLMPZAZOU6vU66casKxsQ-1; Tue, 06 Dec 2022 14:44:18 +0000
+X-MC-Unique: LsLMPZAZOU6vU66casKxsQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 6 Dec
+ 2022 14:44:17 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.044; Tue, 6 Dec 2022 14:44:17 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Peter Lafreniere' <peter@n8pjl.ca>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+CC:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Thread-Topic: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Thread-Index: AQHZCXuUthnlIbrum024abYi187HBa5g7Jiw
+Date:   Tue, 6 Dec 2022 14:44:17 +0000
+Message-ID: <4f72e36f960347b29d1d6b3e59cdb8a2@AcuMS.aculab.com>
+References: <20221103042740.6556-1-elliott@hpe.com>
+ <20221116041342.3841-1-elliott@hpe.com>
+ <20221116041342.3841-11-elliott@hpe.com> <Y3TF7/+DejcnN0eV@zx2c4.com>
+ <Y4B/kjS0lgzdUJHG@gondor.apana.org.au>
+ <MW5PR84MB1842C2D1EA00D5EF65784E25AB179@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <Y4nEcV4w3eOEFYze@gondor.apana.org.au>
+ <MW5PR84MB184215302DC8E824812D6B13AB179@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <Y47El6TRitHm7Xz9@gondor.apana.org.au>
+ <5TnEjVPNm7Eyw-GH7C0LeJJvgRSpOLb2NUshnG407s3TGTXL1lq4RpsoAMTpVGKWk7tVxDI5f2G9aH6lDbATR6QqXXkE7q54o7TUzO91ibI=@n8pjl.ca>
+In-Reply-To: <5TnEjVPNm7Eyw-GH7C0LeJJvgRSpOLb2NUshnG407s3TGTXL1lq4RpsoAMTpVGKWk7tVxDI5f2G9aH6lDbATR6QqXXkE7q54o7TUzO91ibI=@n8pjl.ca>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgD37ay2T49jumSkBg--.19656S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF48ZF4xurWUWw48uF18AFb_yoWrtw1rpr
-        Z8Gr1UGr4Iva4DCFWkAF1UZr1Uuwn8CF47WryIgr4kXa43Cw1UKF1FgF18J3WjyrZ2vrWY
-        qF4DCry8Kw15G3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
-        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
-        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
-        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
-        CTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
-
-Syzbot report follow issue:
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inline.c:227!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3629 Comm: syz-executor212 Not tainted 6.1.0-rc5-syzkaller-00018-g59d0d52c30d4 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:ext4_write_inline_data+0x344/0x3e0 fs/ext4/inline.c:227
-RSP: 0018:ffffc90003b3f368 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff8880704e16c0 RCX: 0000000000000000
-RDX: ffff888021763a80 RSI: ffffffff821e31a4 RDI: 0000000000000006
-RBP: 000000000006818e R08: 0000000000000006 R09: 0000000000068199
-R10: 0000000000000079 R11: 0000000000000000 R12: 000000000000000b
-R13: 0000000000068199 R14: ffffc90003b3f408 R15: ffff8880704e1c82
-FS:  000055555723e3c0(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fffe8ac9080 CR3: 0000000079f81000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- ext4_write_inline_data_end+0x2a3/0x12f0 fs/ext4/inline.c:768
- ext4_write_end+0x242/0xdd0 fs/ext4/inode.c:1313
- ext4_da_write_end+0x3ed/0xa30 fs/ext4/inode.c:3063
- generic_perform_write+0x316/0x570 mm/filemap.c:3764
- ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:285
- ext4_file_write_iter+0x8bc/0x16e0 fs/ext4/file.c:700
- call_write_iter include/linux/fs.h:2191 [inline]
- do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
- do_iter_write+0x182/0x700 fs/read_write.c:861
- vfs_iter_write+0x74/0xa0 fs/read_write.c:902
- iter_file_splice_write+0x745/0xc90 fs/splice.c:686
- do_splice_from fs/splice.c:764 [inline]
- direct_splice_actor+0x114/0x180 fs/splice.c:931
- splice_direct_to_actor+0x335/0x8a0 fs/splice.c:886
- do_splice_direct+0x1ab/0x280 fs/splice.c:974
- do_sendfile+0xb19/0x1270 fs/read_write.c:1255
- __do_sys_sendfile64 fs/read_write.c:1323 [inline]
- __se_sys_sendfile64 fs/read_write.c:1309 [inline]
- __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
----[ end trace 0000000000000000 ]---
-
-Above issue may happens as follows:
-ext4_da_write_begin
-  ext4_da_write_inline_data_begin
-    ext4_da_convert_inline_data_to_extent
-      ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
-ext4_da_write_end
-
-ext4_run_li_request
-  ext4_mb_prefetch
-    ext4_read_block_bitmap_nowait
-      ext4_validate_block_bitmap
-        ext4_mark_group_bitmap_corrupted(sb, block_group, EXT4_GROUP_INFO_BBITMAP_CORRUPT)
-	 percpu_counter_sub(&sbi->s_freeclusters_counter,grp->bb_free);
-	  -> sbi->s_freeclusters_counter become zero
-ext4_da_write_begin
-  if (ext4_nonda_switch(inode->i_sb)) -> As freeclusters_counter is zero will return true
-    *fsdata = (void *)FALL_BACK_TO_NONDELALLOC;
-    ext4_write_begin
-ext4_da_write_end
-  if (write_mode == FALL_BACK_TO_NONDELALLOC)
-    ext4_write_end
-      if (inline_data)
-        ext4_write_inline_data_end
-	  ext4_write_inline_data
-	    BUG_ON(pos + len > EXT4_I(inode)->i_inline_size);
-           -> As inode is already convert to extent, so 'pos + len' > inline_size
-	   -> then trigger BUG.
-
-To solve above issue, there's need to judge inode if has EXT4_STATE_MAY_INLINE_DATA
-flag in 'ext4_write_end()'. 'ext4_has_inline_data()' flag only cleared after do
-write back, EXT4_STATE_MAY_INLINE_DATA flag indicate that inode has inline data,
-so add this flag check except 'ext4_has_inline_data()' flag in 'ext4_write_end()'.
-
-Fixes:f19d5870cbf7("ext4: add normal write support for inline data")
-Reported-by: syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com
-Reported-by: Jun Nie <jun.nie@linaro.org>
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/inode.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index f0079835b8a8..25841a878ce9 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1315,7 +1315,8 @@ static int ext4_write_end(struct file *file,
- 
- 	trace_ext4_write_end(inode, pos, len, copied);
- 
--	if (ext4_has_inline_data(inode))
-+	if (ext4_has_inline_data(inode) &&
-+	    ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
- 		return ext4_write_inline_data_end(inode, pos, len, copied, page);
- 
- 	copied = block_write_end(file, mapping, pos, len, copied, page, fsdata);
--- 
-2.31.1
+RnJvbTogUGV0ZXIgTGFmcmVuaWVyZQ0KPiBTZW50OiAwNiBEZWNlbWJlciAyMDIyIDE0OjA0DQo+
+DQo+ID4gPiA+IEJUVywganVzdCBhIG1pbm9yIG5pdCBidXQgeW91IGNhbiBkZWxldGUgdGhlIGNv
+bmRfcmVzY2hlZCgpIGNhbGwNCj4gPiA+ID4gYmVjYXVzZSBrZXJuZWxfZnB1X2VuZCgpL3ByZWVt
+cHRfZW5hYmxlKCkgd2lsbCBkbyBpdCBhbnl3YXkuDQo+ID4gPg0KPiA+ID4gVGhhdCBoYXBwZW5z
+IHVuZGVyDQo+ID4gPiBDT05GSUdfUFJFRU1QVElPTj15DQo+ID4gPiAoZnJvbSBpbmNsdWRlL0xp
+bnV4L3ByZWVtcHQuaCBhbmQgYXJjaC94ODYvaW5jbHVkZS9hc20vcHJlZW1wdC5oKQ0KPiA+ID4N
+Cj4gPiA+IElzIGNhbGxpbmcgY29uZF9yZXNjaGVkKCkgc3RpbGwgaGVscGZ1bCBpZiB0aGF0IGlz
+IG5vdCB0aGUgY29uZmlndXJhdGlvbj8NCj4gPg0KPiA+DQo+ID4gUGVyaGFwcywgYnV0IHRoZW4g
+YWdhaW4gcGVyaGFwcyBpZiBwcmVlbXB0aW9uIGlzIG9mZiwgbWF5YmUgd2UNCj4gPiBzaG91bGRu
+J3QgZXZlbiBib3RoZXIgd2l0aCB0aGUgNEsgc3BsaXQuIFdlcmUgdGhlIGluaXRpYWwNCj4gPiB3
+YXJuaW5ncyB3aXRoIG9yIHdpdGhvdXQgcHJlZW1wdGlvbj8NCj4gPg0KPiA+IFBlcnNvbmFsbHkg
+SSBkb24ndCByZWFsbHkgY2FyZSBzaW5jZSBJIGFsd2F5cyB1c2UgcHJlZW1wdGlvbi4NCj4gPg0K
+PiA+IFRoZSBQUkVFTVBUIEtjb25maWdzIGRvIHByb3ZpZGUgYSBiaXQgb2YgbnVhbmNlIHdpdGgg
+dGhlIHNwbGl0DQo+ID4gYmV0d2VlbiBQUkVFTVBUX05PTkUgdnMuIFBSRUVNUFRfVk9MVU5UQVJZ
+LiBCdXQgcGVyaGFwcyB0aGF0IGlzDQo+ID4ganVzdCBvdmVya2lsbCBmb3Igb3VyIHNpdHVhdGlv
+bi4NCj4gDQo+IEkgd2FzIHRoaW5raW5nIGFib3V0IHRoaXMgYSBmZXcgZGF5cyBhZ28sIGFuZCBt
+eSAywqIgaXMgdGhhdCBpdCdzDQo+IHByb2JhYmx5IGJlc3QgdG8gbm90IHByZWVtcHQgdGhlIGtl
+cm5lbCBpbiB0aGUgbWlkZGxlIG9mIGEgY3J5cHRvDQo+IG9wZXJhdGlvbiB1bmRlciBQUkVFTVBU
+X1ZPTFVOVEFSWS4gV2UncmUgYWxyZWFkeSBub3QgcHJlZW1wdGluZyBkdXJpbmcNCj4gdGhlc2Ug
+b3BlcmF0aW9ucywgYW5kIHRoZXJlIGhhdmVuJ3QgYmVlbiBjb21wbGFpbnRzIG9mIGV4Y2Vzc2l2
+ZSBsYXRlbmN5DQo+IGJlY2F1c2Ugb2YgdGhlc2UgY3J5cHRvIG9wZXJhdGlvbnMuDQouLi4NCg0K
+UHJvYmFibHkgYmVjYXVzZSB0aGUgcGVvcGxlIHdobyBoYXZlIGJlZW4gc3VmZmVyaW5nIGZyb20g
+KGFuZA0KbG9va2luZyBmb3IpIGxhdGVuY3kgaXNzdWVzIGFyZW4ndCBydW5uaW5nIGNyeXB0byB0
+ZXN0cy4NCg0KSSd2ZSBmb3VuZCBzb21lIHRlcnJpYmxlIHByZS1lbXB0aW9uIGxhdGVuY3kgaXNz
+dWVzIHRyeWluZw0KdG8gZ2V0IFJUIHByb2Nlc3NlcyBzY2hlZHVsZWQgaW4gYSBzZW5zaWJsZSB0
+aW1lZnJhbWUuDQpJIHdvdWxkbid0IHdvcnJ5IGFib3V0IDEwMHVzIC0gSSdtIGRvaW5nIGF1ZGlv
+IHByb2Nlc3NpbmcNCmV2ZXJ5IDEwbXMsIGJ1dCBhbnl0aGluZyBtdWNoIGxvbmdlciBjYXVzZXMg
+cHJvYmxlbXMgd2hlbg0KdHJ5aW5nIHRvIHVzZSA5MCslIG9mIHRoZSBjcHUgdGltZSBmb3IgbG90
+cyBvZiBhdWRpbyBjaGFubmVscy4NCg0KSSBkaWRuJ3QgdHJ5IGEgQ09ORklHX1JUIGtlcm5lbCwg
+dGhlIGFwcGxpY2F0aW9uIG5lZWRzIHRvIHJ1bg0Kb24gYSBzdGFuZGFyZCAnZGlzdHJvJyBrZXJu
+ZWwuIEluIGFueSBjYXNlIEkgc3VzcGVjdCBhbGwgdGhlDQpleHRyYSBwcm9jZXNzZXMgc3dpdGNo
+ZXMgKGV0YykgdGhlIFJUIGtlcm5lbCBhZGRzIHdpbGwgY29tcGxldGVseQ0Ka2lsbCBwZXJmb3Jt
+YW5jZS4NCg0KSSB3b25kZXIgaG93IG11Y2ggaXQgd291bGQgY29zdCB0byBtZWFzdXJlIHRoZSB0
+aW1lIHNwZW50IHdpdGgNCnByZS1lbXB0IGRpc2FibGVkIChhbmQgbm90IGNoZWNrZWQpIGFuZCB0
+byB0cmFjZSBsb25nIGludGVydmFscy4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVz
+cyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEg
+MVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
