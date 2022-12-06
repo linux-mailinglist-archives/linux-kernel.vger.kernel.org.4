@@ -2,73 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24FB1643A3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ED2F643A56
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbiLFAgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:36:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
+        id S233558AbiLFAhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233171AbiLFAgA (ORCPT
+        with ESMTP id S232604AbiLFAg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:36:00 -0500
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E93A1EC61
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:35:18 -0800 (PST)
-Received: by mail-io1-xd34.google.com with SMTP id d123so3305909iof.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:35:18 -0800 (PST)
+        Mon, 5 Dec 2022 19:36:59 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7AE22B3D
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:35:44 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id a27so12690741qtw.10
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:35:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6+UDrWNXMMGhk9HzOMZBwbh5zjmulDfm2DaVnY/OUhI=;
-        b=eLeE2dj14exQeQIr1ko9hCDJKvzZBxL31dknUIIIFaYlxA20UJuCHiOsbgVMQoo33m
-         2qhDf9Fm5NpvMorwLHW2iBCbaXEhs0Ck79a3jMQjJmVaDNi4k9/rhuIC3/1Gyvv0GbR+
-         yKtYcRWC+dnl+PUbTvH1i7/GSpRDrUAGqM4zlpfzTJeAvZ4iqQmZ+sVffIQCD0emjCs5
-         5jm7Evqqm3oba1alb0augbhYBWWBxnrTQhdwTAknsh9m5ifR2ccK3kKdNe2ZYDfzsEMf
-         OIoI0aUK+FFtI09eRSWSEtHRzDt3Cgyic2eQc+OWFGf93/+6XibjSm98FxmBkViMUuO4
-         H9AQ==
+        bh=ne2kQ17Z3A3jdHPo12NzWN07bL28Bd+Tg02BrzT7QcM=;
+        b=8B7MCsObOOvSR6mCIokEm9+fr1yaDvUvjD7xLGijdBTs3173zrpzOBCSMq7GbxNBOM
+         jlA32HML4qaWiA3bC6/MPSgXaUVCfDcNO6Eh0Y0wkVZv0g1YdCxC7+6gaO3SEVPZoGb5
+         HrrRV5vE7unUe9agoAJ8B1Pp8NbAhAYjBb9QhoDja4o0GsDM0tFW8pGusiEyqX4zxzkF
+         CljQBwGY9gpwXG1kIXBI+qeSYEVIsVEySuVkFdkM0H9hKa0A4GvD1jan7GRU9WkJps92
+         YP/pq8joOPnl2SuuUW4hLh9dHzTeG3C8HOQaTrrE/uf+/pB8p30p04rCt3j/O4H92pqq
+         BKMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6+UDrWNXMMGhk9HzOMZBwbh5zjmulDfm2DaVnY/OUhI=;
-        b=eG4T9hG6wQZLj1uev8B91btrhxj22tGirHYZGWarFIMY7/w/rDQ3bi4e48uZm5RMrC
-         YnvuLy9ypItPDZ4sPrSZI50RmzW8LZaTagSUdUYTTx6iEBZpXenbO3r7L16Hi1WkMskR
-         5mNjjyhNxkzqAMmSR6etQ44wW+c/2WzMkPuOyuHc7N/LR7XQvh8Dm6t6ITq35iNrVwZx
-         l2I93Gro/SQfT8RPQlv8U9OTO4UWMU8xXQJzLwbB2uHm7rRY60iGLiaD6CFgZJbdTx5G
-         2a5ACo3lLmUSv0jY9ytAQ8So87VT/03kt4rpzQanjLbBT/O5tvqIzLB/AD0Pbsv8RGDB
-         9Uyw==
-X-Gm-Message-State: ANoB5pmNPa83o2NiA6zHzzecGeD9MgOCMoC/4yctVnRxQEFsXsIa+j73
-        sGfKtKQq24LWokR1h3SqAw8cGtFWUy8GBQ==
-X-Google-Smtp-Source: AA0mqf7S5bHLlbhVAzPpHg9sCL9n3qLeloz+E671RFH4nKtb1ybTIO5QlE+Jm2CCx5RS1oF/exUDcw==
-X-Received: by 2002:a02:23ca:0:b0:372:59cb:f242 with SMTP id u193-20020a0223ca000000b0037259cbf242mr39977560jau.135.1670286917295;
-        Mon, 05 Dec 2022 16:35:17 -0800 (PST)
-Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id x3-20020a056602160300b006bba42f7822sm6408213iow.52.2022.12.05.16.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 16:35:16 -0800 (PST)
-From:   Jim Cromie <jim.cromie@gmail.com>
-To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org
-Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
-        daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
-        jbaron@akamai.com, gregkh@linuxfoundation.org,
-        Jim Cromie <jim.cromie@gmail.com>
-Subject: [RFC PATCH 17/17] dyndbg: miss-on HACK
-Date:   Mon,  5 Dec 2022 17:34:24 -0700
-Message-Id: <20221206003424.592078-18-jim.cromie@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221206003424.592078-1-jim.cromie@gmail.com>
-References: <20221206003424.592078-1-jim.cromie@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        bh=ne2kQ17Z3A3jdHPo12NzWN07bL28Bd+Tg02BrzT7QcM=;
+        b=yQObrtHsg1jmP/uL/XxMlPX4BdsM5qIZ5RRW1ntooNXWkh4LwGyc3GKEYmMPlR5COM
+         S1rN20r82BTqh1CulBa0yuWyGQ7DHxRfcySvpy1IpYd3WoXPdpU6HKCP5kCD7M2KVRMi
+         PMfvyGoyuF0LKRdIsqtF2Xdcq3ibwEOdZNfQwl+gsTc9SeoxSq1L4BACg8L7HNQy8orr
+         pfoZ1VTSbfsBcMdR+sfJkxcVNbcjQLdhiteU570Tjxslz06IthqCWcyIRcxwwdmLIH4U
+         Ut+IiYfUWqLXKoqn+aqe1wTsK44jqo/umX4JDW21IsvrB55NWDrL67OTCaC4AdBIwY9Q
+         hP3Q==
+X-Gm-Message-State: ANoB5plaUTtoYF9cYNz/AeskNyaxatLOhZkKzud9AaifsRKmbA5H7kWk
+        DmAhxds/CEGj0Avb3MVOGuw2hA==
+X-Google-Smtp-Source: AA0mqf6Oos0yfJkVZaqeYo7679Myu1FELMEk7IoUBQqnjFE3jKyqOBdEBqH00X3hxXMU9cg1xpS1Kw==
+X-Received: by 2002:ac8:4d4f:0:b0:3a6:1dea:8c1c with SMTP id x15-20020ac84d4f000000b003a61dea8c1cmr68663245qtv.157.1670286942302;
+        Mon, 05 Dec 2022 16:35:42 -0800 (PST)
+Received: from smtpclient.apple (172-125-78-211.lightspeed.sntcca.sbcglobal.net. [172.125.78.211])
+        by smtp.gmail.com with ESMTPSA id 134-20020a37088c000000b006ec771d8f89sm327312qki.112.2022.12.05.16.35.40
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 16:35:41 -0800 (PST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable
+ to be assigned with mount
+From:   Viacheslav Dubeyko <slava@dubeyko.com>
+In-Reply-To: <1D7AAEE4-9603-43A4-B89D-6F791EDCB929@live.com>
+Date:   Mon, 5 Dec 2022 16:35:36 -0800
+Cc:     "willy@infradead.org" <willy@infradead.org>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A2B962C1-AD33-413D-B64A-CD179AFBEA8D@dubeyko.com>
+References: <93F5197D-2B61-4129-B5D4-771934F70577@live.com>
+ <55A80630-60FB-44BE-9628-29104AB8A7D0@dubeyko.com>
+ <1D7AAEE4-9603-43A4-B89D-6F791EDCB929@live.com>
+To:     Aditya Garg <gargaditya08@live.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,35 +84,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dont break the loop, to see multiple clients.  the 3 client records
-are differently wrong.
----
- lib/dynamic_debug.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
-index 3ef1c0a1f0cd..a26eaa348731 100644
---- a/lib/dynamic_debug.c
-+++ b/lib/dynamic_debug.c
-@@ -629,6 +629,7 @@ static int ddebug_apply_class_bitmap(const struct ddebug_class_param *dcp,
- 		v2pr_info("bit_%d: %d matches on class: %s -> 0x%lx\n", bi,
- 			  ct, map->class_names[bi], *new_bits);
- 	}
-+	v2pr_info("applied bitmap: 0x%lx to: 0x%lx\n", *new_bits, *old_bits);
- 	return matches;
- }
- 
-@@ -1321,8 +1322,8 @@ static void ddebug_attach_client_module_classes(struct ddebug_table *dt, struct
- 			 */
- 			v2pr_info("break on %d/%d\n", i, di->num_class_refs);
- 			dt->num_class_refs = 1;
--			break;
--		}
-+		} else
-+			v2pr_info("miss on %d/%d\n", i, di->num_class_refs);
- 	}
- }
- 
--- 
-2.38.1
+
+> On Dec 2, 2022, at 11:56 PM, Aditya Garg <gargaditya08@live.com> =
+wrote:
+>=20
+>=20
+>> Also, what if we mounted
+>> file system without specifying the UID/GID, then what UID/GID will be =
+returned by
+>> your logic?
+>=20
+> So this case is if I run =E2=80=9Csudo mount /dev/sda1 /mnt=E2=80=9D
+>=20
+> Here the driver will not do any spoofing, and the real owners of the =
+files shall be displayed. Thus running =E2=80=9Cls -l=E2=80=9D on a =
+mounted partition without specifying UID/GID, files written by macOS =
+shall be shown as 99 as the owner, iPadOS as 501, and if any file was =
+written on Linux, the user who wrote it will be the owner.
+>=20
+> If the user/group of any file was changed using chown, then the new =
+user/group of the file will be displayed.
+
+My question is much more simple.
+
+diff --git a/fs/hfsplus/inode.c b/fs/hfsplus/inode.c
+index aeab83ed1..4d1077db8 100644
+--- a/fs/hfsplus/inode.c
++++ b/fs/hfsplus/inode.c
+@@ -192,11 +192,11 @@ static void hfsplus_get_perms(struct inode *inode,
+	mode =3D be16_to_cpu(perms->mode);
+
+	i_uid_write(inode, be32_to_cpu(perms->owner));
+-	if (!i_uid_read(inode) && !mode)
++	if (test_bit(HFSPLUS_SB_UID, &sbi->flags))
+		inode->i_uid =3D sbi->uid;
+
+	i_gid_write(inode, be32_to_cpu(perms->group));
+-	if (!i_gid_read(inode) && !mode)
++	if (test_bit(HFSPLUS_SB_GID, &sbi->flags))
+		inode->i_gid =3D sbi->gid;
+
+Before this change, logic called i_uid_read(inode) and checked mode.
+Now, we check only HFSPLUS_SB_UID/HFSPLUS_SB_GID flags.
+So, if we mount HFS+ volume by =E2=80=9Csudo mount /dev/sda1 /mnt=E2=80=9D=
+, then
+HFSPLUS_SB_UID and HFSPLUS_SB_GID flags will be unset.
+And current logic will do nothing. Is it correct logic? Maybe, we need
+to use sbi->uid/gid if flag(s)HFSPLUS_SB_UID/HFSPLUS_SB_GID are set.
+And if not, then to use old logic. Am I correct here? Or am I still =
+missing
+something here?
+
+Thanks,
+Slava.
+
 
