@@ -2,84 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73CF36442F8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:10:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FC6D6442FA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:11:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234260AbiLFMKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S234414AbiLFMK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:10:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233702AbiLFMKT (ORCPT
+        with ESMTP id S233702AbiLFMK4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:10:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C671328707;
-        Tue,  6 Dec 2022 04:10:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Dec 2022 07:10:56 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFA420BF3;
+        Tue,  6 Dec 2022 04:10:55 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 68353B819F3;
-        Tue,  6 Dec 2022 12:10:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 20B21C433B5;
-        Tue,  6 Dec 2022 12:10:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670328616;
-        bh=ETGnmd1O9+aniN78yXCjXGkWtlEBHjIXa79cICgB08A=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=vLHNcdfNG8ZOuzPxcx5cWd3vUXKVbSYtrwlsLOO+6lPuEgd3PEW9MUXyPoxV4Ngki
-         erBWErMKjJ8xW4cpRR9C3Ht/WrDF9/rhQf4QnIi8UmJnZ04v+Igx0r0nIuniX+EBhJ
-         rnvnB4FXBQWj3zPi8QX4/4ffzCukwaE3mFF+DyKDs+Fcktv9Vs7zCrswHv5UaQrqHo
-         j/ReDUaib3rwaL42rZ+RU31eI6TXoWKU2A7k3TghLienTWE0Ua4MvfO2Voq6Ck9ZAn
-         zD9r/tX1EbZ55NiZ4WCK1JUx7tS0gexad8KLs82ryZMwUkoh6hNnyXSPGxXxtYKiQp
-         9W590rm0RluiA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 029BDC395E5;
-        Tue,  6 Dec 2022 12:10:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1FB0A1FE51;
+        Tue,  6 Dec 2022 12:10:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670328654; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DXe2oCAGCB1QuKMT0B/IEQZzxBKGZgUxTzHZkMGRNaE=;
+        b=TAITO9YXL+oVhSg5pkLXsufsbCoEusfzsOwR6Zzq6I4E2AQH6HRBO+ity5hFWMnT2qOpmJ
+        93iUx+WTOxX/GFLm1Pdl6M/kJZPyWz2dVoX5lWxFjl0Y0/aaJLPOfoXfl9bVKLezi3fSMP
+        y96om/19+3j2LHWxoWXmwvakI8bBsr0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670328654;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DXe2oCAGCB1QuKMT0B/IEQZzxBKGZgUxTzHZkMGRNaE=;
+        b=BRwlAaQ6HnEnKgwHK6DWQoORB6GA7h4APCYCSaU5gR1Sqeug7J3UyCI3Hgksh2qTm79qMs
+        v3801FgH3uECW1BQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 12B65132F3;
+        Tue,  6 Dec 2022 12:10:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id doaFBE4xj2PjXQAAGKfGzw
+        (envelope-from <jack@suse.cz>); Tue, 06 Dec 2022 12:10:54 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 8B998A0725; Tue,  6 Dec 2022 13:10:53 +0100 (CET)
+Date:   Tue, 6 Dec 2022 13:10:53 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH -next 6/6] ext4: fix inode leak in
+ 'ext4_xattr_inode_create()'
+Message-ID: <20221206121053.ksylcq5ag6yn6yct@quack3>
+References: <20221206015806.3420321-1-yebin@huaweicloud.com>
+ <20221206015806.3420321-7-yebin@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] tipc: Fix potential OOB in tipc_link_proto_rcv()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167032861600.21886.17007946309136879304.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Dec 2022 12:10:16 +0000
-References: <20221203094635.29024-1-yuehaibing@huawei.com>
-In-Reply-To: <20221203094635.29024-1-yuehaibing@huawei.com>
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206015806.3420321-7-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sat, 3 Dec 2022 17:46:35 +0800 you wrote:
-> Fix the potential risk of OOB if skb_linearize() fails in
-> tipc_link_proto_rcv().
+On Tue 06-12-22 09:58:06, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
 > 
-> Fixes: 5cbb28a4bf65 ("tipc: linearize arriving NAME_DISTR and LINK_PROTO buffers")
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> There is issue as follows when do setxattr with inject fault:
+> [localhost]#fsck.ext4  -fn  /dev/sda
+> e2fsck 1.46.6-rc1 (12-Sep-2022)
+> Pass 1: Checking inodes, blocks, and sizes
+> Pass 2: Checking directory structure
+> Pass 3: Checking directory connectivity
+> Pass 4: Checking reference counts
+> Unattached zero-length inode 15.  Clear? no
+> 
+> Unattached inode 15
+> Connect to /lost+found? no
+> 
+> Pass 5: Checking group summary information
+> 
+> /dev/sda: ********** WARNING: Filesystem still has errors **********
+> 
+> /dev/sda: 15/655360 files (0.0% non-contiguous), 66755/2621440 blocks
+> 
+> Above issue occur in 'ext4_xattr_inode_create()', if 'ext4_mark_inode_dirty()'
+> failed need to drop inode's i_nlink. Or will lead to inode leak.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+
+The change looks good. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+I'm just slightly wondering if there is ever a situation when
+ext4_mark_inode_dirty() fails but the following cleanup would succeed...
+
+								Honza 
+
 > ---
->  net/tipc/link.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-
-Here is the summary with links:
-  - [net] tipc: Fix potential OOB in tipc_link_proto_rcv()
-    https://git.kernel.org/netdev/net/c/743117a997bb
-
-You are awesome, thank you!
+>  fs/ext4/xattr.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
+> index 003fe1f2d6a8..734f787ae7ed 100644
+> --- a/fs/ext4/xattr.c
+> +++ b/fs/ext4/xattr.c
+> @@ -1464,6 +1464,9 @@ static struct inode *ext4_xattr_inode_create(handle_t *handle,
+>  		if (!err)
+>  			err = ext4_inode_attach_jinode(ea_inode);
+>  		if (err) {
+> +			if (ext4_xattr_inode_dec_ref(handle, ea_inode))
+> +				ext4_warning_inode(ea_inode,
+> +					"cleanup dec ref error %d", err);
+>  			iput(ea_inode);
+>  			return ERR_PTR(err);
+>  		}
+> -- 
+> 2.31.1
+> 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
