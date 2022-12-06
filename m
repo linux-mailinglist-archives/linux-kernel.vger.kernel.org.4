@@ -2,95 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D7F643B68
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:42:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9480643B86
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233551AbiLFCmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 21:42:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S231715AbiLFCs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 21:48:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiLFCmR (ORCPT
+        with ESMTP id S234048AbiLFCsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:42:17 -0500
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866ABBF72;
-        Mon,  5 Dec 2022 18:42:16 -0800 (PST)
-Received: by mail-wr1-x431.google.com with SMTP id y16so21604007wrm.2;
-        Mon, 05 Dec 2022 18:42:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSoZALCCgZ9J9X4NU6zzWcqo3fV2QQvKn2ulvrjOZfQ=;
-        b=FOpGkLQHKdMr6M8r2mXJRnNpjY6arwsM/xuXB6d/oFzrZeiIN6nwdOXjjPkLT5idgn
-         ojTrLaWECpJLlju35z7/zPUmFeHPBSQZxuUzF5rWfMFD496NBgSo3D2tJY93/8fddVID
-         wWnniu0DQFML7Wu9LtuZ9kzzDk+Cga+GSrPaHd6DYv9SEJs7qf2h690UJbkVBTSg7+9I
-         83wYf50nI56m/+H5HPwwy7y9fPaHCrva956ec6Ax8eEQGFMuPF/HVJg+HeyJD+uEC+YN
-         ZbGIVZRBqZthzdXGpPzTCaIxWC3tCEqGIr+eIiG3iEcoSQsFNALrV6BmGy+fXMa6wJO7
-         OpOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cSoZALCCgZ9J9X4NU6zzWcqo3fV2QQvKn2ulvrjOZfQ=;
-        b=N91O4gWeuNL9RskBkigiP1w19tjVYUMsrNWmJVQIT5HnZjKAl463Eq5wV/J/RLbvUL
-         PTWfnvhH787qPJzzPIMyMlHQDIxy9uuRCZdYnCPgf7VluUyIicP9R/yHfixXYMMGiRRh
-         mi0LW+R5ku8G2DJ8YoHPvJRZ60XwMfHY2dpDXQ/PyPAL2shq21AOOGxP75e1YBoZYYvd
-         mv2JoSQYZ+N1Y+iLOezuAUuIT3xnvWhbZKZg1fNVFZw5pRo7/cpRxJ8W9bXyVSMDP4oZ
-         IBeJxQcQgQIwBi9SfS25S5EunIROzOOEXRWv3fYaxXpHr4tcXPfWTIvaTQXRXhTlg5KS
-         Fa2Q==
-X-Gm-Message-State: ANoB5pk7LIwXjMD7c1LTUFe5COQBeJTcfAaHXj86WC/2LxeH9ZCBGoar
-        nf2T0KPDlGE5aCrG9yzrO1lZO/TIxr4tJgKms2KKIch3sy8IsA==
-X-Google-Smtp-Source: AA0mqf5oi1d5gxjahQbv5PfOaEz398qzEI5UCtWJbX3f7A7o7SJ09hQIImwk8g7g8yKwTOe3YlCsg+zP1O6mVZA1aks=
-X-Received: by 2002:adf:d0c6:0:b0:242:1873:bb28 with SMTP id
- z6-20020adfd0c6000000b002421873bb28mr22462374wrh.485.1670294534643; Mon, 05
- Dec 2022 18:42:14 -0800 (PST)
+        Mon, 5 Dec 2022 21:48:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D147222530;
+        Mon,  5 Dec 2022 18:47:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F10DDB81609;
+        Tue,  6 Dec 2022 02:47:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09152C433D6;
+        Tue,  6 Dec 2022 02:47:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670294863;
+        bh=U3jMWo8UOIlXRtrpHAUyzh+FgiPs3PjKBCtkUu1R5B4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lmEyK/yLEa/mUttm4uKQUHisF8in+OHCKto8WjfW1KDBAoIoYNPiNhrfE1Eqrnqe2
+         2DZGKjbGK5UFrBU418bqlW9dtM8lDwHmgYFYI+E/KMW9iq7FyHIIRWEOPuCZxMjO3N
+         /Jq24dMTln+BwtgJ/LTramROt0i/64lAJRNlwL+tEPPVSFB76ZtdvDF18/zXnJJXlA
+         hHksAcNqQqM9O3nlGMy6loO7nrVxzSY2gl3iE9R6NuiJqbg70H4u/lP7Wt1UoJZ2vF
+         RSDwgq001wApQlG7QVQZ5Y809YzDFk5fi5fat79lfVx87yuOJTPmRI6Pf0g4V5lPng
+         fzJoGfxyp8laQ==
+Date:   Mon, 5 Dec 2022 18:47:42 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     <yang.yang29@zte.com.cn>
+Cc:     <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <bigeasy@linutronix.de>, <imagedong@tencent.com>,
+        <kuniyu@amazon.com>, <petrm@nvidia.com>, <liu3101@purdue.edu>,
+        <wujianguo@chinatelecom.cn>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <tedheadster@gmail.com>
+Subject: Re: [PATCH linux-next] net: record times of netdev_budget exhausted
+Message-ID: <20221205184742.0952fc75@kernel.org>
+In-Reply-To: <202212061035074041030@zte.com.cn>
+References: <20221205175314.0487527a@kernel.org>
+        <202212061035074041030@zte.com.cn>
 MIME-Version: 1.0
-References: <20221201160724.2593341-1-cccheng@synology.com> <CAL3q7H5oet2P9XijTtzPo3joZWdoa3OuD9L-wK9nTEFya2PY8w@mail.gmail.com>
-In-Reply-To: <CAL3q7H5oet2P9XijTtzPo3joZWdoa3OuD9L-wK9nTEFya2PY8w@mail.gmail.com>
-From:   Chung-Chiang Cheng <shepjeng@gmail.com>
-Date:   Tue, 6 Dec 2022 10:42:03 +0800
-Message-ID: <CAHuHWtnbVsS2pp5EySmZ_72fCrDqKJTAOkssa-D-X5wKoR9uWQ@mail.gmail.com>
-Subject: Re: [PATCH] btrfs: refuse to remount read-write with unsupported
- compat-ro features
-To:     Filipe Manana <fdmanana@kernel.org>
-Cc:     Chung-Chiang Cheng <cccheng@synology.com>, clm@fb.com,
-        josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@cccheng.net, Johnny Chang <johnnyc@synology.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 6:45 PM Filipe Manana <fdmanana@kernel.org> wrote:
->
-> Wasn't this already done by the following commit?
->
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d5d61454c365718655cfc87d8200c84e25d596
->
-> Thanks.
->
+On Tue, 6 Dec 2022 10:35:07 +0800 (CST) yang.yang29@zte.com.cn wrote:
+> The author of "Replace 2 jiffies with sysctl netdev_budget_usecs
+> to enable softirq tuning" is Matthew Whitehead, he said this in
+> git log: Constants used for tuning are generally a bad idea, especially
+> as hardware changes over time...For example, a very fast machine
+> might tune this to 1000 microseconds, while my regression testing
+> 486DX-25 needs it to be 4000 microseconds on a nearly idle network
+> to prevent time_squeeze from being incremented.
 
-Wow. I did not notice this commit doing the same job by Qu. But I have
-tested the latest linux-6.1 rc-7, and it's still able to mount a unsupported
-comat-ro btrfs as read-write via remount.
+Let's just ignore that on the basis that it mentions prehistoric HW ;)
 
-It's caused by the follow-up commit d7f67ac9a928 ("btrfs: relax
-block-group-tree feature dependency checks"). This commit checks read-
-only with the current superblock, which will always pass in the situation
-remounting from read-only to read-write. It seems `btrfs_check_features()`
-cannot cover this scenario.
+> And on my systems there are huge packets on the intranet, and we
+> came accross with lots of time_squeeze. The idea is that, netdev_budget*
+> are selections between throughput and real-time. If we care throughput
+> and not care real-time so much, we may want bigger netdev_budget*.
 
-        if (compat_ro_unsupp && !sb_rdonly(sb)) {
-                                ^^^^^^^^^^^^^^
+But are you seeing actual performance wins in terms of throughput 
+or latency? 
 
-Thanks,
-C.C.Cheng
+As I said time_squeeze is very noisy. In my experience it's very
+sensitive to issues with jiffies, like someone masking interrupts on
+the timekeeper CPU for a long time (which if you use cgroups happens
+_a lot_ :/).
+
+Have you tried threaded NAPI? (find files called 'threaded' in sysfs)
+It will let you do any such tuning much more flexibly.
+
+> In this scenario, we want to tune netdev_budget* and see their effect
+> separately.
+>
+> By the way, if netdev_budget* are useless, should they be deleted?
+
+Well, we can't be sure if there's really nobody that uses them :(
+It's very risky to remove stuff that's exposed to user space.
