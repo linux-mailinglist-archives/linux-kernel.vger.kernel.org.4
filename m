@@ -2,138 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C5F643DE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 975B6643DB9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiLFH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 02:56:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S230459AbiLFHkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 02:40:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231882AbiLFH4K (ORCPT
+        with ESMTP id S229724AbiLFHkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 02:56:10 -0500
-X-Greylist: delayed 603 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 23:56:06 PST
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C4D164BD;
-        Mon,  5 Dec 2022 23:56:05 -0800 (PST)
-Received: by codeconstruct.com.au (Postfix, from userid 10000)
-        id 44EC52024D; Tue,  6 Dec 2022 15:39:53 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codeconstruct.com.au; s=2022a; t=1670312393;
-        bh=lP2H0rsOAxY33TRBDl1BU0Pc1uc9tW/ct6bXhJl98YA=;
-        h=From:To:Subject:Date:In-Reply-To:References;
-        b=K6hrDV+xVhnjOZBiyvJ2zqEafHBgRPN/SET/47guQ2zGTVqOckq2wQ59RnRAFDhwe
-         5l07IPlnI0JvNjP8vOrr2LaaTlw8bocAXmi9G6WLy+9NASQwLAtFw7lw8DeOqeuDhm
-         oBEXDkK3pV8ZiRsTaATSUuSzvuUJttenoayK+AprI1MwfMMkhb+kYejCVKiKPDb+X/
-         H2YOMmkgyHDlm+FmhNbSaouS6eNgoKcOw3V73qNAoHKkW5OQQ2VcBI/cVYL8pLMmth
-         v8NGHrqwVK3JKuuPbqdgw583E2fY+iBNgm2gZUcXLveVXqIucIG0XIZF4/tYUM7j17
-         pMNCQNpzZSEGA==
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Subject: [RFC PATCH 2/2] mfd: syscon: allow reset control for syscon devices
-Date:   Tue,  6 Dec 2022 15:39:16 +0800
-Message-Id: <20221206073916.1606125-3-jk@codeconstruct.com.au>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221206073916.1606125-1-jk@codeconstruct.com.au>
-References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
+        Tue, 6 Dec 2022 02:40:00 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA3F193D3;
+        Mon,  5 Dec 2022 23:39:55 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 7515224E1D3;
+        Tue,  6 Dec 2022 15:39:47 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 6 Dec
+ 2022 15:39:47 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
+ (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 6 Dec
+ 2022 15:39:45 +0800
+Message-ID: <97418c57-ba31-aa16-ed8f-208dad4ac0d2@starfivetech.com>
+Date:   Tue, 6 Dec 2022 15:39:45 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 4/7] net: phy: motorcomm: Add YT8531 phy support
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-5-yanhong.wang@starfivetech.com>
+ <Y4jK5VBVuAnl55Xz@lunn.ch>
+Content-Language: en-US
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <Y4jK5VBVuAnl55Xz@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
+ (172.16.6.93)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simple syscon devices may require deassertion of a reset signal in order
-to access their register set. Rather than requiring a custom driver to
-implement this, we can use the generic "resets" specifiers to link a
-reset line to the syscon.
 
-This change adds an optional reset line to the syscon device
-description, and code to perform the deassertion/assertion on
-probe/remove.
 
-Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
----
- drivers/mfd/syscon.c | 23 +++++++++++++++++++++++
- 1 file changed, 23 insertions(+)
+On 2022/12/1 23:40, Andrew Lunn wrote:
+>> +static const struct ytphy_reg_field ytphy_rxtxd_grp[] = {
+>> +	{ "rx_delay_sel", GENMASK(13, 10), 0x0 },
+>> +	{ "tx_delay_sel_fe", GENMASK(7, 4), 0xf },
+>> +	{ "tx_delay_sel", GENMASK(3, 0), 0x1 }
+>> +};
+>> +
+>> +static const struct ytphy_reg_field ytphy_txinver_grp[] = {
+>> +	{ "tx_inverted_1000", BIT(14), 0x0 },
+>> +	{ "tx_inverted_100", BIT(14), 0x0 },
+>> +	{ "tx_inverted_10", BIT(14), 0x0 }
+>> +};
+>> +
+>> +static const struct ytphy_reg_field ytphy_rxden_grp[] = {
+>> +	{ "rxc_dly_en", BIT(8), 0x1 }
+>> +};
+>> +
+>> +static int ytphy_config_init(struct phy_device *phydev)
+>> +{
+>> +	struct device_node *of_node;
+>> +	u32 val;
+>> +	u32 mask;
+>> +	u32 cfg;
+>> +	int ret;
+>> +	int i = 0;
+>> +
+>> +	of_node = phydev->mdio.dev.of_node;
+>> +	if (of_node) {
+>> +		ret = of_property_read_u32(of_node, ytphy_rxden_grp[0].name, &cfg);
+> 
+> You need to document the device tree binding.
+> 
+> Frank Sae always gets the locking wrong in this driver. Have you
+> tested your patch with lockdep enabled?
+> 
 
-diff --git a/drivers/mfd/syscon.c b/drivers/mfd/syscon.c
-index bdb2ce7ff03b..a0483dbfe17a 100644
---- a/drivers/mfd/syscon.c
-+++ b/drivers/mfd/syscon.c
-@@ -20,6 +20,7 @@
- #include <linux/platform_data/syscon.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/reset.h>
- #include <linux/mfd/syscon.h>
- #include <linux/slab.h>
- 
-@@ -31,6 +32,7 @@ static LIST_HEAD(syscon_list);
- struct syscon {
- 	struct device_node *np;
- 	struct regmap *regmap;
-+	struct reset_control *reset;
- 	struct list_head list;
- };
- 
-@@ -280,6 +282,7 @@ static int syscon_probe(struct platform_device *pdev)
- 	struct regmap_config syscon_config = syscon_regmap_config;
- 	struct resource *res;
- 	void __iomem *base;
-+	int rc;
- 
- 	syscon = devm_kzalloc(dev, sizeof(*syscon), GFP_KERNEL);
- 	if (!syscon)
-@@ -302,13 +305,32 @@ static int syscon_probe(struct platform_device *pdev)
- 		return PTR_ERR(syscon->regmap);
- 	}
- 
-+	syscon->reset = devm_reset_control_get_optional_exclusive(&pdev->dev,
-+								  "reset");
-+	if (IS_ERR(syscon->reset))
-+		return PTR_ERR(syscon->reset);
-+
- 	platform_set_drvdata(pdev, syscon);
- 
-+	rc = reset_control_deassert(syscon->reset);
-+	if (rc) {
-+		dev_err(dev, "failed to deassert reset line! rc: %d\n", rc);
-+		return rc;
-+	}
-+
- 	dev_dbg(dev, "regmap %pR registered\n", res);
- 
- 	return 0;
- }
- 
-+static int syscon_remove(struct platform_device *pdev)
-+{
-+	struct syscon *syscon = platform_get_drvdata(pdev);
-+
-+	reset_control_assert(syscon->reset);
-+	return 0;
-+}
-+
- static const struct platform_device_id syscon_ids[] = {
- 	{ "syscon", },
- 	{ }
-@@ -319,6 +341,7 @@ static struct platform_driver syscon_driver = {
- 		.name = "syscon",
- 	},
- 	.probe		= syscon_probe,
-+	.remove		= syscon_remove,
- 	.id_table	= syscon_ids,
- };
- 
--- 
-2.35.1
+I will add document to describe details in the next version, such as "rx_delay_sel","tx_inverted_10" etc.
+
+>     Andrew
+
 
