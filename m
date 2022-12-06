@@ -2,98 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373B2644E79
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A9D644E7D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:20:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiLFWSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:18:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S229626AbiLFWUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiLFWSW (ORCPT
+        with ESMTP id S229452AbiLFWUe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:18:22 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B02326F3;
-        Tue,  6 Dec 2022 14:18:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670365101; x=1701901101;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/olmYmXC19tWhkfaoBMr6nH/+/kzO9cHDjZv6Ovsm9c=;
-  b=dy64yFpzJjAZCDhx8RRMNAV6v3ZdH3Lha2teAbsQzMqgwdc/qEI3XXF0
-   AVmPDGd41GWW8wnnHxrctXkUTYBkNoF+So+Z7VyNLz03ZAzxHfkkPJ28w
-   QUxhd3qQ+W1qQ641W3UrAenbjrc2O+2fHyj83ydn4FkwB7PzaMH5Cq6ay
-   7FFda9Jkd/3laE3k5z6BsCychPHucq7nV3d+xDPtbt6akblki/FanyvbJ
-   YjWt10qKS7/o7f1fvspRehHH835Y5VfT3TrK0trDUoIX/+wTJZsAHrig/
-   5wefsMWHUji8wUTF53zrnUbUyVH0umQCnX4xPbhWGGf/VtMMSiPSlNudD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="318600079"
-X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
-   d="scan'208";a="318600079"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 14:18:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="820738324"
-X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
-   d="scan'208";a="820738324"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 06 Dec 2022 14:18:15 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p2gGS-005UOe-1m;
-        Wed, 07 Dec 2022 00:18:12 +0200
-Date:   Wed, 7 Dec 2022 00:18:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Tharunkumar.Pasumarthi@microchip.com
-Cc:     ilpo.jarvinen@linux.intel.com, Kumaravel.Thiagarajan@microchip.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        macro@orcam.me.uk, jay.dolan@accesio.com, cang1@live.co.uk,
-        u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
-        phil.edworthy@renesas.com, lukas@wunner.de,
-        UNGLinuxDriver@microchip.com, colin.i.king@gmail.com
-Subject: Re: [PATCH v6 tty-next 1/4] serial: 8250_pci: Add
- serial8250_pci_setup_port definition in 8250_pcilib.c
-Message-ID: <Y4+/pBgrHmAdp4FV@smile.fi.intel.com>
-References: <20221201045146.1055913-1-kumaravel.thiagarajan@microchip.com>
- <20221201045146.1055913-2-kumaravel.thiagarajan@microchip.com>
- <1189f5af-aaac-f4c8-b928-cda183e7f90@linux.intel.com>
- <Y4iaC7rRkBhyOIsI@smile.fi.intel.com>
- <PH7PR11MB5958A77F93BB2ABE244123909B1B9@PH7PR11MB5958.namprd11.prod.outlook.com>
+        Tue, 6 Dec 2022 17:20:34 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2925632B95
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 14:20:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=rWZngcPAlXTsiQ+bv+9VkztCnXXPBTgUPIZ018Wiqcw=; b=VA19G7chEWZIoyWbloQ+9FwSP6
+        z8Z8gdlkz6nrj9IEk+o3YnrbSo/uuyep9Amip0UDxEPAy4K2QEP89rTO5AyNEmpKdCIlKKMKg5mlF
+        WcVnOM9elnXnnta8Xxu98Czl0rqC0KfgXML1lbbNcXtToR9jBgj9gwY10THS6FJsxru2R8BO3k5dY
+        nSS24IRBLojPjUnmKf6kPCEV5ymS3PxgfGg75S2KRKZxUESMsqhBE18GSH5/J/4ftmeJx25grl/2/
+        uvPKh4nbDMte1z43S6ljkLGCynTLzpj5yC/EXsMJrZduP/BhrapwHwyR5Ci1ZVcxz4sw6jqMMr7LQ
+        jnUME1uA==;
+Received: from c-67-160-137-253.hsd1.or.comcast.net ([67.160.137.253] helo=[10.0.0.152])
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p2gIg-003yiu-Kd; Tue, 06 Dec 2022 22:20:30 +0000
+Message-ID: <053d7bf2-9bf3-a71c-5713-7cce19413c37@infradead.org>
+Date:   Tue, 6 Dec 2022 14:20:29 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR11MB5958A77F93BB2ABE244123909B1B9@PH7PR11MB5958.namprd11.prod.outlook.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] mux: remove the Kconfig question for the subsystem
+Content-Language: en-US
+To:     Peter Rosin <peda@axentia.se>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CA+55aFyJkpSa6rwZ-5xTihfGiNC_T0oL6txrodYBEo2-0O=p7g@mail.gmail.com>
+ <1499156564-29458-1-git-send-email-peda@axentia.se>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <1499156564-29458-1-git-send-email-peda@axentia.se>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 07:09:29PM +0000, Tharunkumar.Pasumarthi@microchip.com wrote:
-> > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Sent: Thursday, December 1, 2022 5:42 PM
+Hi,
 
-> > > struct pci_dev;
-> > 
-> > + blank line
-> > 
-> > struct uart_8250_port;
+Sorry to drag up such an old thread, but: (please see below)
+
+
+On 7/4/17 01:22, Peter Rosin wrote:
+> The MULTIPLEXER question in the Kconfig might be confusing and is
+> of dubious value. Remove it. This makes consumers responsible for
+> selecting MULTIPLEXER, which they already do.
 > 
-> Is the blank line required here?
+> Signed-off-by: Peter Rosin <peda@axentia.se>
+> ---
+>  drivers/mux/Kconfig | 19 +++++--------------
+>  1 file changed, 5 insertions(+), 14 deletions(-)
+> 
+> On 2017-07-04 08:00, Linus Torvalds wrote:
+>> On Jul 3, 2017 22:53, "Peter Rosin" <peda@axentia.se <mailto:peda@axentia.se>> wrote:
+>>> But ok, is something like this what you wanted?
+>>
+>> I *think* this week just result in an empty menu if there are
+>> no drivers selecting it.
+>>
+>> Shouldn't the 'if' be outside the menu? But I didn't test
+>> anything, since I'm not in front of my computer any more..
+> 
+> Right, the previous patch also had the problem that it removed
+> the MULTIPLEXER option completely and was therefore total crap.
+> 
+> I have tested this patch more thoroughly and it should be a
+> definite improvement. Sorry for the noise...
+> 
+> Cheers,
+> peda
+> 
+> diff --git a/drivers/mux/Kconfig b/drivers/mux/Kconfig
+> index 7c754a0..19e4e90 100644
+> --- a/drivers/mux/Kconfig
+> +++ b/drivers/mux/Kconfig
+> @@ -2,20 +2,11 @@
+>  # Multiplexer devices
+>  #
+>  
+> -menuconfig MULTIPLEXER
+> -	tristate "Multiplexer subsystem"
+> -	help
+> -	  Multiplexer controller subsystem. Multiplexers are used in a
+> -	  variety of settings, and this subsystem abstracts their use
+> -	  so that the rest of the kernel sees a common interface. When
+> -	  multiple parallel multiplexers are controlled by one single
+> -	  multiplexer controller, this subsystem also coordinates the
+> -	  multiplexer accesses.
+> -
+> -	  To compile the subsystem as a module, choose M here: the module will
+> -	  be called mux-core.
+> +config MULTIPLEXER
+> +	tristate
+>  
+> -if MULTIPLEXER
+> +menu "Multiplexer drivers"
+> +	depends on MULTIPLEXER
+>  
+>  config MUX_ADG792A
+>  	tristate "Analog Devices ADG792A/ADG792G Multiplexers"
+> @@ -56,4 +47,4 @@ config MUX_MMIO
+>  	  To compile the driver as a module, choose M here: the module will
+>  	  be called mux-mmio.
+>  
+> -endif
+> +endmenu
 
-Strictly speaking no, it's not required. But it shows the group of generic
-forward declarations and specific to the topic (driver / subsystem).
+
+How does a user enable any of the 4 drivers in drivers/mux/Kconfig unless
+some other totally unrelated driver has just happened to select MULTIPLEXER
+so that the mux driver menu is visible to them?
+
+I was just about to send a patch (basically a revert but I didn't know it
+until I looked up the git blame history/hash for 4c19c0ec73241:
+  mux: remove the Kconfig question for the subsystem
+
+Thanks.
+
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+~Randy
