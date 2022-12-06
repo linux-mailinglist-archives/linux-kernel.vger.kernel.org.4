@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2B04644104
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:11:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5362644108
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:11:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbiLFKLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:11:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S234565AbiLFKLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:11:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234960AbiLFKKq (ORCPT
+        with ESMTP id S234594AbiLFKLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:10:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2232B180;
-        Tue,  6 Dec 2022 02:05:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F158C615DC;
-        Tue,  6 Dec 2022 10:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF534C43155;
-        Tue,  6 Dec 2022 10:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670321124;
-        bh=zAR2ZwReyK2Gtgq5zewd/xcIBPQR360V27DsMylLTWE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m0RFQtBQvOB7bHFIdbOupUQ1a0qAppDjTDha9Ss908R8wCUUHByP/xnxp4RpM9cIH
-         18fvsN2zQiZPDR2L0dZw5w46ulr2toDALvc74oZGZ1WaL2BBkxal7QCfFbKklZE3Iq
-         qJ/o86mS01d3gY5EYxy6HArht/7oAC+L7zIk2PoqOp97pDi0ROvzdQY2RI+BY9Bs5X
-         JT8uYNoEY3Ni96NTfVvI2CLiK+VWFOcwLJaYjhxTDBcomFiu96zlVjQoPq+wqlTHu6
-         D+hsEL/j5jN1clqeihoK7osAqqB05qZxu0s2BaXTkZ85atO3iR8FwOmH84JZ6G6DEP
-         Uy6XirS7d4/aw==
-Date:   Tue, 6 Dec 2022 12:05:20 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
-        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-        vigneshr@ti.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 0/6] net: ethernet: ti: am65-cpsw: Fix set
- channel operation
-Message-ID: <Y48T4OduISrVD4HR@unreal>
-References: <20221206094419.19478-1-rogerq@kernel.org>
+        Tue, 6 Dec 2022 05:11:25 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F55214099
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:06:56 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p2Uqk-0000ld-GE; Tue, 06 Dec 2022 11:06:54 +0100
+Message-ID: <8434c30b-52f5-2c23-cce4-8d66393f7635@leemhuis.info>
+Date:   Tue, 6 Dec 2022 11:06:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206094419.19478-1-rogerq@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US, de-DE
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>
+References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
+ <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
+ <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
+ <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
+ <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
+ <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
+ <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
+ <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
+ <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
+ about missing Link:
+In-Reply-To: <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1670321216;0f180956;
+X-HE-SMSGID: 1p2Uqk-0000ld-GE
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:44:13AM +0200, Roger Quadros wrote:
-> Hi,
+On 06.12.22 10:21, Joe Perches wrote:
+> On Tue, 2022-12-06 at 09:50 +0100, Thorsten Leemhuis wrote:
+>> On 06.12.22 08:44, Joe Perches wrote:
+>>> On Tue, 2022-12-06 at 08:17 +0100, Thorsten Leemhuis wrote:
+>>>> On 06.12.22 07:27, Thorsten Leemhuis wrote:
+>>>>> On 06.12.22 06:54, Joe Perches wrote:
+> [...]
+>> Ha, I considered doing something like that when I wrote my earlier mail,
+>> but was to lazy. :-D thx!
+>>
+>> Yeah, they are not that often, but I grew tired arguing about that,
+>> that's why I think checkpatch is the better place and in the better
+>> position to handle that.
 > 
-> This contains a critical bug fix for the recently merged suspend/resume
-> support [1] that broke set channel operation. (ethtool -L eth0 tx <n>)
-> 
-> As there were 2 dependent patches on top of the offending commit [1]
-> first revert them and then apply them back after the correct fix.
+> I'm not sure that "Patchwork:" is a reasonable prefix.
 
-Why did you chose revert and reapply almost same patch instead of simply
-fixing what is missing?
+/me neither
 
-Thanks
+> Is that documented anywhere?
 
+Couldn't find anything.
+
+>> Anyway, so how to move forward now? Do you insist on a allow list (IOW:
+>> a Link: or Patchwork: before every http...)? Or is a disallow list with
+>> the most common unwanted tags for links (that you thankfully compiled)
+>> fine for you as well?
 > 
-> [1] fd23df72f2be ("net: ethernet: ti: am65-cpsw: Add suspend/resume support")
+> Maybe
+> ---
+>  scripts/checkpatch.pl | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
-> cheers,
-> -roger
-> 
-> Changelog:
-> 
-> v5:
-> - Change reset failure error code from -EBUSY to -ETIMEDOUT
-> 
-> v4:
-> - move am65_cpsw_nuss_ndev_add_tx_napi() earlier to avoid declaration.
-> - print error and error out if soft RESET failed in
->   am65_cpsw_nuss_ndo_slave_open()
-> - move struct 'am65_cpsw_host *host' where 'common' is defined.
-> 
-> v3:
-> - revert offending commit before applying the updated patch.
-> - drop optimization patch to be sent separately.
-> 
-> v2:
-> - Fix build warning
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c:562:13: warning: variable 'tmo' set but not used [-Wunused-but-set-variable]
-> 
-> Roger Quadros (6):
->   Revert "net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
->     suspend/resume"
->   Revert "net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
->     suspend/resume"
->   Revert "net: ethernet: ti: am65-cpsw: Add suspend/resume support"
->   net: ethernet: ti: am65-cpsw: Add suspend/resume support
->   net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
->     suspend/resume
->   net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
->     suspend/resume
-> 
->  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 197 ++++++++++++-----------
->  1 file changed, 105 insertions(+), 92 deletions(-)
-> 
-> -- 
-> 2.17.1
-> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 1c3d13e65c2d0..a526a354cdfbc 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -3250,6 +3250,13 @@ sub process {
+>  			$commit_log_possible_stack_dump = 0;
+>  		}
+>  
+> +# Check for odd prefixes before a URI/URL
+> +		if ($in_commit_log &&
+> +		    $line =~ /^\s*(\w+):\s*http/ && $1 !~ /^(?:Link|Patchwork)/) {
+> +			WARN("PREFER_LINK",
+> +			     "Unusual link reference '$1:', prefer 'Link:'\n" . $herecurr);
+> +		}
+> +
+
+LGTM: I did some tests and it seem to do the right thing. Can we have
+your Signed-off-by: for that snippet?
+
+Ciao, Thorsten
