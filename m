@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E706A644A5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:36:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DEE8644A5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:36:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235427AbiLFRgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:36:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34920 "EHLO
+        id S235462AbiLFRgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:36:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235297AbiLFRgK (ORCPT
+        with ESMTP id S235360AbiLFRgM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:36:10 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA5C3AC15
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:36:09 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id x16-20020a63b210000000b0045f5c1e18d0so12539050pge.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:36:09 -0800 (PST)
+        Tue, 6 Dec 2022 12:36:12 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88638391D3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:36:11 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id o18-20020a17090aac1200b00219ca917708so6457717pjq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:36:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=akd5rMPTncKvwlPwwGjqiEGLXYk8H+l4pcsG5gvu2EQ=;
-        b=P3zoi6Oo6b7q+soGLki3tsCGlAU9dd9EOInpq1nWCzLQXQqk0hqowY4Hkq8RRNwYi6
-         O/UBNmRBhKw2A1BU/fGaVbprZcSxapecuRH8bj0X94WYxwiQFZ0e5TqdxvXyApmA6Nfz
-         t5JaVSrJVdjIYX+F6sAntOrzLzbsicP3kYMzZ6UugA24K+onBITM6wb3Db0Dtkp1heHx
-         /1bFv58lqLKo0R59joc5Q/rGf0bzp/hDa9eIH2sRAt1ATPZrn1sxXPFjwd1gzFhDLEW3
-         AWzzmxhdvQN+2ZBILDa3i/iPLkmZGA3zrWubVUq/F/L7sKGoicBwrrWfy5g3Lzl1Q63C
-         9QUA==
+        bh=rbUiksLk/ndFO2E6RSCpSBYGdIi7ojQOCeIOZeAA2ow=;
+        b=Ie/mmiJHQUpEyx6oKaIMTBhaNypqhp7wR5I9PgyeMslphAOxXP9Mt0H1vtwizsJhIe
+         KudAd2OjLuL/EPpuQX9326EMo5VoILq1g7QyBXb6UFkaTuiDxZclbwT36DYio2poZCsS
+         QnyUIh5aI4j5k7lLeu39t1k7Ll7Jcd5AbHaDNYnuGkYcn8utG14NtPeFRh8YUFbIi8cL
+         cJWfh4uSFvrE9hq19uADqys655XW12zElikxi/7jrj2UQ1uE/y7Rfbjh6LTg7OdPXF8N
+         4p3XD24i3opGf7A5gtoUq/j1EaErnZ4+1m3FR0zLUPit2WLjg1bVsAfAScnCsjsWWKKN
+         kj+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=akd5rMPTncKvwlPwwGjqiEGLXYk8H+l4pcsG5gvu2EQ=;
-        b=kvc3GT5Vhz6m4uFPLWLGdWPUcgZ40+ZU/yku+qq95h8684EcQk/SRvZdg7Dt2/9UMQ
-         83rXqb7IwvosWNsuJM+ZdDam6obwITIBEXWK3uModOIF8ThyvgV5+08mQPUqeSl6MsxD
-         w4yWxPbO5nk5S8EIjRS+pcf0NAKlbE9roE0bJVhYbYq3qvH3UwwMWXVnu5iPe3VbQrES
-         B2r/f1kwbeAClP2bzQku2beHo2LVHmNIU2KvUIlChDCSikqDn0zhwtd+VZchIIPcXmdb
-         Ju4UX9Mcfwg6UT6CQ3C2YTsFWYmLnsuyOg7L766gTu4tJGpWBCPWCzorOU3pSrl3ImyJ
-         1KFA==
-X-Gm-Message-State: ANoB5pnlKCYi6N3IxTi+MMEyn7JAfPOpLv8rEcF0lgeuhohn6naGSI7c
-        +5q6wNdOyf14n7aEHIv5Sz+q/rvdIK9TfhWpZ/ETKQ5pBXkfelS6fU482Bkork1w9jZ/1Jbcolf
-        +2zh3vTLg0ySq15GsHfe4Bp0gK8snQN0l/cfepgQhG3fgrVIW8wT4sGbFrdiQ4Pc/Ga0PWnEC
-X-Google-Smtp-Source: AA0mqf7m3FYBiYJRx6kc4LjbWv9jhqrSqbUCo0Kd5jklLnQdmTyeb6gzvI5DTS5hZQdVHl/r3uSYpdQ1+RCr
+        bh=rbUiksLk/ndFO2E6RSCpSBYGdIi7ojQOCeIOZeAA2ow=;
+        b=cfcRc6NKRIy/irFz7dfBGOqxNH2/AiWop3IbfBjDP1DYFGeuNudSTamhp/f31HtxBr
+         /ki/kBjYdVuLc0FDDOsBbq4Y4qYX7Ci1tZKXg2i3GImC3cn+pmO/6jdxm7rOtU5A+eI1
+         ysV60wKCz08r6Al4oIkGPQcW5XlzbWKxo50LvMFVrd3NxdcocRw0huAV2lplcSZFRdJL
+         1fiqVF4RM5wTM2JUq+sqRkMzLDIfuu7e5jTRQlHKFtNSpskj3qNnMKrEKOTGVX6yucHV
+         t+x4DjTutfBpUZYb53lH++ckiTP61zxrMGPVETuX8KzAGk0Vs1U+kVI2F1LQCWnJplWW
+         zOnA==
+X-Gm-Message-State: ANoB5pmWZ0jmWC9npwgIuVFKIf0srwQS13doD9EkA0TuY8nqxPUhD3V6
+        n3eLOVbq2Dd/rOtro+EMPj9QK7tFKLxMawxkGFYfVpAmdlvmmQ0NsBioK+GxIzw9HAhyUoWWYHF
+        GhpO8fgL3PwEOvfJiMdQ/q/BWEXuszAQc+GRJvBvRa/tCcImt1Sux6vPN2i8xVOA9QAJ/Ag+k
+X-Google-Smtp-Source: AA0mqf7CYvLk1N+e34pjvlhKeqbll+Of27+rNyiXwB2nQ8FwQUBi1/c58gdg0HYBifU3odb0bEYVaQvdni0M
 X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:a62:8683:0:b0:577:3624:2d49 with SMTP id
- x125-20020a628683000000b0057736242d49mr5185978pfd.64.1670348169136; Tue, 06
- Dec 2022 09:36:09 -0800 (PST)
-Date:   Tue,  6 Dec 2022 17:35:56 +0000
+ (user=bgardon job=sendgmr) by 2002:a17:902:b707:b0:189:5f3c:fb25 with SMTP id
+ d7-20020a170902b70700b001895f3cfb25mr60010769pls.123.1670348170913; Tue, 06
+ Dec 2022 09:36:10 -0800 (PST)
+Date:   Tue,  6 Dec 2022 17:35:57 +0000
 In-Reply-To: <20221206173601.549281-1-bgardon@google.com>
 Mime-Version: 1.0
 References: <20221206173601.549281-1-bgardon@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221206173601.549281-3-bgardon@google.com>
-Subject: [PATCH 2/7] KVM: x86/MMU: Move rmap_iterator to rmap.h
+Message-ID: <20221206173601.549281-4-bgardon@google.com>
+Subject: [PATCH 3/7] KVM: x86/MMU: Move gfn_to_rmap() to rmap.c
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -72,200 +72,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In continuing to factor the rmap out of mmu.c, move the rmap_iterator
-and associated functions and macros into rmap.(c|h).
+Move gfn_to_rmap() to rmap.c. While the function is not part of
+manipulating the rmap, it is the main way that the MMU gets pointers to
+the rmaps.
 
 No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c  | 76 -----------------------------------------
- arch/x86/kvm/mmu/rmap.c | 61 +++++++++++++++++++++++++++++++++
- arch/x86/kvm/mmu/rmap.h | 18 ++++++++++
- 3 files changed, 79 insertions(+), 76 deletions(-)
+ arch/x86/kvm/mmu/mmu.c  | 9 ---------
+ arch/x86/kvm/mmu/rmap.c | 8 ++++++++
+ arch/x86/kvm/mmu/rmap.h | 2 ++
+ 3 files changed, 10 insertions(+), 9 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 90b3735d6064..c3a7f443a213 100644
+index c3a7f443a213..f8d7201210c8 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -932,82 +932,6 @@ static void rmap_remove(struct kvm *kvm, u64 *spte)
- 	pte_list_remove(spte, rmap_head);
+@@ -891,15 +891,6 @@ static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
+ 	return true;
  }
  
--/*
-- * Used by the following functions to iterate through the sptes linked by a
-- * rmap.  All fields are private and not assumed to be used outside.
-- */
--struct rmap_iterator {
--	/* private fields */
--	struct pte_list_desc *desc;	/* holds the sptep if not NULL */
--	int pos;			/* index of the sptep */
--};
--
--/*
-- * Iteration must be started by this function.  This should also be used after
-- * removing/dropping sptes from the rmap link because in such cases the
-- * information in the iterator may not be valid.
-- *
-- * Returns sptep if found, NULL otherwise.
-- */
--static u64 *rmap_get_first(struct kvm_rmap_head *rmap_head,
--			   struct rmap_iterator *iter)
+-static struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
+-					 const struct kvm_memory_slot *slot)
 -{
--	u64 *sptep;
+-	unsigned long idx;
 -
--	if (!rmap_head->val)
--		return NULL;
--
--	if (!(rmap_head->val & 1)) {
--		iter->desc = NULL;
--		sptep = (u64 *)rmap_head->val;
--		goto out;
--	}
--
--	iter->desc = (struct pte_list_desc *)(rmap_head->val & ~1ul);
--	iter->pos = 0;
--	sptep = iter->desc->sptes[iter->pos];
--out:
--	BUG_ON(!is_shadow_present_pte(*sptep));
--	return sptep;
+-	idx = gfn_to_index(gfn, slot->base_gfn, level);
+-	return &slot->arch.rmap[level - PG_LEVEL_4K][idx];
 -}
 -
--/*
-- * Must be used with a valid iterator: e.g. after rmap_get_first().
-- *
-- * Returns sptep if found, NULL otherwise.
-- */
--static u64 *rmap_get_next(struct rmap_iterator *iter)
--{
--	u64 *sptep;
--
--	if (iter->desc) {
--		if (iter->pos < PTE_LIST_EXT - 1) {
--			++iter->pos;
--			sptep = iter->desc->sptes[iter->pos];
--			if (sptep)
--				goto out;
--		}
--
--		iter->desc = iter->desc->more;
--
--		if (iter->desc) {
--			iter->pos = 0;
--			/* desc->sptes[0] cannot be NULL */
--			sptep = iter->desc->sptes[iter->pos];
--			goto out;
--		}
--	}
--
--	return NULL;
--out:
--	BUG_ON(!is_shadow_present_pte(*sptep));
--	return sptep;
--}
--
--#define for_each_rmap_spte(_rmap_head_, _iter_, _spte_)			\
--	for (_spte_ = rmap_get_first(_rmap_head_, _iter_);		\
--	     _spte_; _spte_ = rmap_get_next(_iter_))
--
- static void drop_spte(struct kvm *kvm, u64 *sptep)
+ static bool rmap_can_add(struct kvm_vcpu *vcpu)
  {
- 	u64 old_spte = mmu_spte_clear_track_bits(kvm, sptep);
+ 	struct kvm_mmu_memory_cache *mc;
 diff --git a/arch/x86/kvm/mmu/rmap.c b/arch/x86/kvm/mmu/rmap.c
-index daa99dee0709..c3bad366b627 100644
+index c3bad366b627..272e89147d96 100644
 --- a/arch/x86/kvm/mmu/rmap.c
 +++ b/arch/x86/kvm/mmu/rmap.c
-@@ -139,3 +139,64 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head)
- 	return count;
+@@ -200,3 +200,11 @@ u64 *rmap_get_next(struct rmap_iterator *iter)
+ 	return sptep;
  }
  
-+/*
-+ * Iteration must be started by this function.  This should also be used after
-+ * removing/dropping sptes from the rmap link because in such cases the
-+ * information in the iterator may not be valid.
-+ *
-+ * Returns sptep if found, NULL otherwise.
-+ */
-+u64 *rmap_get_first(struct kvm_rmap_head *rmap_head, struct rmap_iterator *iter)
++struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
++				  const struct kvm_memory_slot *slot)
 +{
-+	u64 *sptep;
++	unsigned long idx;
 +
-+	if (!rmap_head->val)
-+		return NULL;
-+
-+	if (!(rmap_head->val & 1)) {
-+		iter->desc = NULL;
-+		sptep = (u64 *)rmap_head->val;
-+		goto out;
-+	}
-+
-+	iter->desc = (struct pte_list_desc *)(rmap_head->val & ~1ul);
-+	iter->pos = 0;
-+	sptep = iter->desc->sptes[iter->pos];
-+out:
-+	BUG_ON(!is_shadow_present_pte(*sptep));
-+	return sptep;
++	idx = gfn_to_index(gfn, slot->base_gfn, level);
++	return &slot->arch.rmap[level - PG_LEVEL_4K][idx];
 +}
-+
-+/*
-+ * Must be used with a valid iterator: e.g. after rmap_get_first().
-+ *
-+ * Returns sptep if found, NULL otherwise.
-+ */
-+u64 *rmap_get_next(struct rmap_iterator *iter)
-+{
-+	u64 *sptep;
-+
-+	if (iter->desc) {
-+		if (iter->pos < PTE_LIST_EXT - 1) {
-+			++iter->pos;
-+			sptep = iter->desc->sptes[iter->pos];
-+			if (sptep)
-+				goto out;
-+		}
-+
-+		iter->desc = iter->desc->more;
-+
-+		if (iter->desc) {
-+			iter->pos = 0;
-+			/* desc->sptes[0] cannot be NULL */
-+			sptep = iter->desc->sptes[iter->pos];
-+			goto out;
-+		}
-+	}
-+
-+	return NULL;
-+out:
-+	BUG_ON(!is_shadow_present_pte(*sptep));
-+	return sptep;
-+}
-+
 diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
-index 059765b6e066..13b265f3a95e 100644
+index 13b265f3a95e..45732eda57e5 100644
 --- a/arch/x86/kvm/mmu/rmap.h
 +++ b/arch/x86/kvm/mmu/rmap.h
-@@ -31,4 +31,22 @@ void free_pte_list_desc(struct pte_list_desc *pte_list_desc);
- void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head);
- unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
+@@ -49,4 +49,6 @@ u64 *rmap_get_next(struct rmap_iterator *iter);
+ 	for (_spte_ = rmap_get_first(_rmap_head_, _iter_);		\
+ 	     _spte_; _spte_ = rmap_get_next(_iter_))
  
-+/*
-+ * Used by the following functions to iterate through the sptes linked by a
-+ * rmap.  All fields are private and not assumed to be used outside.
-+ */
-+struct rmap_iterator {
-+	/* private fields */
-+	struct pte_list_desc *desc;	/* holds the sptep if not NULL */
-+	int pos;			/* index of the sptep */
-+};
-+
-+u64 *rmap_get_first(struct kvm_rmap_head *rmap_head,
-+		    struct rmap_iterator *iter);
-+u64 *rmap_get_next(struct rmap_iterator *iter);
-+
-+#define for_each_rmap_spte(_rmap_head_, _iter_, _spte_)			\
-+	for (_spte_ = rmap_get_first(_rmap_head_, _iter_);		\
-+	     _spte_; _spte_ = rmap_get_next(_iter_))
-+
++struct kvm_rmap_head *gfn_to_rmap(gfn_t gfn, int level,
++				  const struct kvm_memory_slot *slot);
  #endif /* __KVM_X86_MMU_RMAP_H */
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
