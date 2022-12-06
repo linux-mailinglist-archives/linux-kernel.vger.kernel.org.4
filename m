@@ -2,141 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64246644F66
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 00:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B2C644F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 00:17:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiLFXLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 18:11:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S229778AbiLFXR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 18:17:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiLFXL1 (ORCPT
+        with ESMTP id S229448AbiLFXRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 18:11:27 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B1D342992;
-        Tue,  6 Dec 2022 15:11:26 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 140so15948984pfz.6;
-        Tue, 06 Dec 2022 15:11:26 -0800 (PST)
+        Tue, 6 Dec 2022 18:17:23 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42742F41
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:17:22 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id a14so11920665pfa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 15:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AfTm30VB1mndYkvvbw2Oxak8CjnQYLln6zOZ6Likm1A=;
-        b=czes146P4fBUdjrU9CUKLgagdpW36UHAeBI4SRCOSd9HY37dFV+PwVIWuT9uEoPnxh
-         7O33CfJciPqdY4LPg1KziDDAbaGTfvECjI+RcNKZ4O1bKFdp2o7kh03/mewtw0HYX3OQ
-         9u9WYLRc7ivrm3gVe5pty6OuQQg8TZddEMmVQu9NakLz8DeYmg+pk199OV6lQaQ9x8wT
-         5UckprbweEaRXF1GbnPr8fbsBp2NDIVqpqSl3rec0pksEGcKks1+7c5ckfwbR6MHg7H+
-         CEJo913Jg28HDqX4k7/Tr69bZUEkzRNLphQfbRl8GFC3RXCFQESKFXrOLj7oKX685tzt
-         WVLA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3vbRaeuklEF43T7OpAaK1TLfMIWz7cNmPbZiH16DjEk=;
+        b=RcfNgmVFnKB8u4Z10nfAYSiF9cW9vtwIUqMKJZBCkVHsHejK4CNP4ry8bejkhPODLX
+         dztTcdBeS0CFH5anZgg6xaPMINIXLgJxeamBaKetRXAFZBdOghQurw29Afc71OBqIf9r
+         0o0nH0fPYw9RhNSRaTlDQFa+nnNyViS67CDWA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AfTm30VB1mndYkvvbw2Oxak8CjnQYLln6zOZ6Likm1A=;
-        b=wFwVg25nZfJi0Tz5BpC4A2k5PYoq0HF2zekIrFM/Dw/7LC5q6rQq6RxGnP9jc/b8NT
-         zFgWhpMN1fHIuFNxJwyNpYHgPUkssKnddJ7MLPP18rltUtBNo7M72uEBmFmYKqn+LODj
-         9sCfTEKLhYhEf5uwAz32eJxmUMZMjVG7DRELTWzVMQe/KT1HNbRqw1oKtS91WIIlcehC
-         JOuXBySWZKAWgrc/F3o3MoHpcB1mpbLZ87gNi+A1ACXOI9gs5vuiHlJjVsu82Vx+2qDA
-         NJd0o+egLb2JUDoXeHCu3mlHIODconvIxbRAyRYisWt6LsgFBmYJLm8S/6tU32LJ4A1S
-         Wx5A==
-X-Gm-Message-State: ANoB5pkH2u5xx7/kmy4Iyjg8OJcs8dweVi8k4iavLjGRV4kdXhj7qC+t
-        ceuRp0oRMbnztL/zPcZDxMI=
-X-Google-Smtp-Source: AA0mqf4UfUxYve2T+s32vQJd6OKR0C20+saAxeAtZ9WHcI2zn3cyNJwnDTTf5MuQYYH/dB446D4BxA==
-X-Received: by 2002:a62:be17:0:b0:56e:664f:a5f5 with SMTP id l23-20020a62be17000000b0056e664fa5f5mr464952pff.8.1670368285963;
-        Tue, 06 Dec 2022 15:11:25 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id x28-20020aa78f1c000000b0056c349f5c70sm12220709pfr.79.2022.12.06.15.11.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 15:11:25 -0800 (PST)
-Message-ID: <6079a282-c802-9836-1ae7-d67526a205c9@gmail.com>
-Date:   Wed, 7 Dec 2022 08:11:23 +0900
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3vbRaeuklEF43T7OpAaK1TLfMIWz7cNmPbZiH16DjEk=;
+        b=DF053l1dFKWqlq1uvd8Lzw6q4vEvfnt71hacD+MVhHcZc4pnxCI50W9jDsm7tpRnn3
+         M9exNArfc0UcieF6Lphj5ypxKKSR0c+jGdvB5j30anKvmHlP0fiX3ddiHHYmIIdg09+X
+         VDhVYnQxYXaK9MNi9BZUV9usECrjoPUYnAadIH6/Fb1a/f2ZThdSrTajIN6q5TeQdSgu
+         20/ETyJCGgZAHLMP7CZdihZxCFcpU9ZY4jkqvVmJjv/JXlufUu/tk54yC8j+QbkCNo4e
+         y4Y0Mp/9mZrULkb+P1BV9F/8kzbn8J9+9KR54Fg2RoTp2dS8NlCJf9UDF6SNJjZ3V8gI
+         JaSg==
+X-Gm-Message-State: ANoB5pm2VHAcq4WUD2UBRJ/5LeO8+p8Rx/pMKxksewJeyrZ4GyhXvwDV
+        CcW4ETuY2uDCQZx5rNEA0OByhA==
+X-Google-Smtp-Source: AA0mqf70yq/wiSE63G+S5dvMbxwJzEtdGs7svgHjnyKixD6By2l7CJqbb/S9LNtBgDlXwJlqIzbBTA==
+X-Received: by 2002:a63:d149:0:b0:478:dfd4:fc2b with SMTP id c9-20020a63d149000000b00478dfd4fc2bmr4745390pgj.234.1670368642119;
+        Tue, 06 Dec 2022 15:17:22 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0017f36638010sm13058718pla.276.2022.12.06.15.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 15:17:21 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     "David S. Miller" <davem@davemloft.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        pepsipu <soopthegoop@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] skbuff: Reallocate to ksize() in __build_skb_around()
+Date:   Tue,  6 Dec 2022 15:17:14 -0800
+Message-Id: <20221206231659.never.929-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/2] docs: Integrate rustdoc generation into htmldocs
-Content-Language: en-US
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net,
-        ojeda@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu, konstantin@linuxfoundation.org
-References: <20221201204814.2141401-1-carlos.bilbao@amd.com>
- <20221206153151.771038-1-carlos.bilbao@amd.com>
- <20221206153151.771038-3-carlos.bilbao@amd.com>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20221206153151.771038-3-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2831; h=from:subject:message-id; bh=SEGHsTZp5rUk6+r1FvL0rwY8bYvfT9UgLniC3mssO5w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjj81513DL6A5/30d+E/4ZlSiL3Nec8HQn2RQ2kFzs 0hZX4L+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4/NeQAKCRCJcvTf3G3AJgEWEA CP3WJylXFSIh5ufMvAJQvK79bcfGQEV+CDUcSNcXTWdDEohBbp8tEFod5Nfj2l3fynK91HxFZsxogF kEnuK8O/7SyKs7X8L7bGXpX9pXLRMweVYccLF5Nwxh4ERV1DNDsQmjZH1uDF7SNi9blnULpHvzg34i Byw6v5p0mynHLS3alptN8Pw1n6DTuP2wYEVV8vkB1gcqBOJ6MRbcCbnshUxezF2lTqORLUeVAKvn1S HhI3U5ydjsp6VsIcFmzIau3s9l5lF+z2D/Hrb28myH81E9/ec8nEljNqB5nwlZHAupJnwLxlBhukCC ILfKn0kAdEZLXwhYqmxctrFDB5aNYK+lcNtF2RKXnZsy0Tr3q7ubILFHbQLBSvEKQ8QfpAvwH4Gby9 BS+ELN1eAQ6WQqraXDr/ox/ZzfOPEk3IjsSY2jJ3UcGtqjz7rE7UXCEaAxTO+CmY+eGit7U/Y1HinQ JwhD/C4H1lNNPpJilKLWGmqOLnOYKkDKGfKWdTmSFJa3sxIlzWz5RlTPRoXPmMamZINipZHKl8BjU+ Ee0qzhGS5qQ8uuefIru++zAjBvy3ww83P/5IaKBqSma+SQkucNI4OEa4nqnSAZGLIwfYXc4sit2pHB WMtK/l1bgCdHLPDCL8cHfNH7f64jUTfmdEtV/urQ91TRLv497uFJ/hH07ZUg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022 09:31:51 -0600, Carlos Bilbao wrote:
-> Change target `make htmldocs` to combine RST Sphinx and the
-> generation of Rust documentation, when support is available.
-> 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
->  Documentation/Makefile | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/Makefile b/Documentation/Makefile
-> index 64d44c1ecad3..f537cf558af6 100644
-> --- a/Documentation/Makefile
-> +++ b/Documentation/Makefile
-> @@ -92,6 +92,10 @@ quiet_cmd_sphinx = SPHINX  $@ --> file://$(abspath $(BUILDDIR)/$3/$4)
->  	fi
->  
->  htmldocs:
-> +# If Rust support is available, add rustdoc generated contents
-> +ifdef CONFIG_RUST
-> +	$(Q)$(MAKE) rustdoc
-> +endif
->  	@$(srctree)/scripts/sphinx-pre-install --version-check
->  	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
->  
+When build_skb() is passed a frag_size of 0, it means the buffer came
+from kmalloc. In these cases, ksize() is used to find its actual size,
+but since the allocation may not have been made to that size, actually
+perform the krealloc() call so that all the associated buffer size
+checking will be correctly notified. For example, syzkaller reported:
 
-What about patch below on top of this?
-This way, it is possible to skip rustdoc generation by saying:
+  BUG: KASAN: slab-out-of-bounds in __build_skb_around+0x235/0x340 net/core/skbuff.c:294
+  Write of size 32 at addr ffff88802aa172c0 by task syz-executor413/5295
 
-    make CONFIG_RUST=n SPHINXDIRS=doc-guide htmldocs
+For bpf_prog_test_run_skb(), which uses a kmalloc()ed buffer passed to
+build_skb().
 
-The reordering is to complete Sphinx runs even if rustdoc generation
-ends up in error.
+Reported-by: syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com
+Link: https://groups.google.com/g/syzkaller-bugs/c/UnIKxTtU5-0/m/-wbXinkgAQAJ
+Fixes: 38931d8989b5 ("mm: Make ksize() a reporting-only function")
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: pepsipu <soopthegoop@gmail.com>
+Cc: syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: kasan-dev <kasan-dev@googlegroups.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: ast@kernel.org
+Cc: bpf <bpf@vger.kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: jolsa@kernel.org
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: martin.lau@linux.dev
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: song@kernel.org
+Cc: Yonghong Song <yhs@fb.com>
+Cc: netdev@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ net/core/skbuff.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-With this applied on top,
-
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-
-        Thanks, Akira
-
-------
-diff --git a/Documentation/Makefile b/Documentation/Makefile
-index 2cf3e0fd7839..4d334468aaaf 100644
---- a/Documentation/Makefile
-+++ b/Documentation/Makefile
-@@ -92,12 +92,12 @@ quiet_cmd_sphinx = SPHINX  $@ --> file://$(abspath $(BUILDDIR)/$3/$4)
- 	fi
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 1d9719e72f9d..b55d061ed8b4 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -274,7 +274,23 @@ static void __build_skb_around(struct sk_buff *skb, void *data,
+ 			       unsigned int frag_size)
+ {
+ 	struct skb_shared_info *shinfo;
+-	unsigned int size = frag_size ? : ksize(data);
++	unsigned int size = frag_size;
++
++	/* When frag_size == 0, the buffer came from kmalloc, so we
++	 * must find its true allocation size (and grow it to match).
++	 */
++	if (unlikely(size == 0)) {
++		void *resized;
++
++		size = ksize(data);
++		/* krealloc() will immediate return "data" when
++		 * "ksize(data)" is requested: it is the existing upper
++		 * bounds. As a result, GFP_ATOMIC will be ignored.
++		 */
++		resized = krealloc(data, size, GFP_ATOMIC);
++		if (WARN_ON(resized != data))
++			data = resized;
++	}
  
- htmldocs:
-+	@$(srctree)/scripts/sphinx-pre-install --version-check
-+	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
- # If Rust support is available, add rustdoc generated contents
--ifdef CONFIG_RUST
-+ifeq ($(CONFIG_RUST),y)
- 	$(Q)$(MAKE) rustdoc
- endif
--	@$(srctree)/scripts/sphinx-pre-install --version-check
--	@+$(foreach var,$(SPHINXDIRS),$(call loop_cmd,sphinx,html,$(var),,$(var)))
+ 	size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
  
- texinfodocs:
- 	@$(srctree)/scripts/sphinx-pre-install --version-check
 -- 
+2.34.1
 
