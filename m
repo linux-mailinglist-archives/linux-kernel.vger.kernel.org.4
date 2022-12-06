@@ -2,138 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B666450B0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E09C86451C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiLGBDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:03:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59354 "EHLO
+        id S229627AbiLGCIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 21:08:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiLGBDv (ORCPT
+        with ESMTP id S229486AbiLGCH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:03:51 -0500
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 360AFB78
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:03:50 -0800 (PST)
-X-UUID: 1d9768ea3ee7409fbadf070d522c1465-20221206
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
-X-Content-Feature: ica/max.line-size 108
-        audit/email.address 1
-        dict/adv 1
-        dict/notice 1
-        meta/cnt.alert 1
-X-CPASD-INFO: 39af155ca83541728b69beb22f595b1b@fImbhl5nY5ONWHWBg3SCbFiTZmmSkYK
-        BdKBVaWOSXYKVhH5xTV5nX1V9gnNXZF5dXFV3dnBQYmBhXVJ3i3-XblBgXoZgUZB3gnubhmFjZQ==
-X-CLOUD-ID: 39af155ca83541728b69beb22f595b1b
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:184.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:284.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:0,DUF:10036,ACD:163,DCD:163,SL:0,EISP:0,AG:0,CFC:0.383,CFSR:0.082,UAT:0
-        ,RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:
-        0,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 1d9768ea3ee7409fbadf070d522c1465-20221206
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 1d9768ea3ee7409fbadf070d522c1465-20221206
-X-User: xurui@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <xurui@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1051931821; Tue, 06 Dec 2022 15:31:35 +0800
-From:   xurui <xurui@kylinos.cn>
-To:     alexander.deucher@amd.com
-Cc:     christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, harry.wentland@amd.com,
-        ville.syrjala@linux.intel.com, tzimmermann@suse.de, cssk@net-c.es,
-        aurabindo.pillai@amd.com, guchun.chen@amd.com, sam@ravnborg.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, xurui <xurui@kylinos.cn>
-Subject: [PATCH] drm/amdgpu: Retry DDC probing on DVI on failure if we got an HPD interrupt
-Date:   Tue,  6 Dec 2022 15:31:56 +0800
-Message-Id: <20221206073156.43453-1-xurui@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Dec 2022 21:07:57 -0500
+X-Greylist: delayed 6648 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 18:07:53 PST
+Received: from mail.academia-cj.ro (mail.academia-cj.ro [188.213.48.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FA5FAD6;
+        Tue,  6 Dec 2022 18:07:53 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.academia-cj.ro (Postfix) with ESMTP id 5B8CE243699;
+        Wed,  7 Dec 2022 01:17:47 +0200 (EET)
+Received: from mail.academia-cj.ro ([127.0.0.1])
+        by localhost (mail.academia-cj.ro [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id x-18NXs7Gmvu; Wed,  7 Dec 2022 01:17:47 +0200 (EET)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.academia-cj.ro (Postfix) with ESMTP id 5ECB424369F;
+        Wed,  7 Dec 2022 01:17:46 +0200 (EET)
+X-Virus-Scanned: amavisd-new at mail.academia-cj.ro
+Received: from mail.academia-cj.ro ([127.0.0.1])
+        by localhost (mail.academia-cj.ro [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Nfnz43wjVtqz; Wed,  7 Dec 2022 01:17:46 +0200 (EET)
+Received: from mail.academia-cj.ro (mail.academia-cj.ro [188.213.48.91])
+        by mail.academia-cj.ro (Postfix) with ESMTP id B406B1263F6;
+        Wed,  7 Dec 2022 01:17:43 +0200 (EET)
+Date:   Wed, 7 Dec 2022 01:17:43 +0200 (EET)
+From:   Lucas <theodor.constantiniu@academia-cj.ro>
+Reply-To: Lucas <lukas@marineinzynieriagleam-jobs.com>
+Message-ID: <435242145.17666.1670368663691.JavaMail.zimbra@academia-cj.ro>
+Subject: Direct Interview.
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [188.213.48.91]
+X-Mailer: Zimbra 8.8.15_GA_4308 (zclient/8.8.15_GA_4308)
+Thread-Index: BO6Cw47mectqSRB8dhVsSCAi6bv50A==
+Thread-Topic: Direct Interview.
+X-Spam-Status: No, score=4.7 required=5.0 tests=ADVANCE_FEE_3_NEW_MONEY,
+        BAYES_50,LOTS_OF_MONEY,MISSING_HEADERS,NA_DOLLARS,RCVD_IN_MSPIKE_H2,
+        REPLYTO_WITHOUT_TO_CC,SPF_HELO_NONE,SPF_PASS,XFER_LOTSA_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HPD signals on DVI ports can be fired off before the pins required for
-DDC probing actually make contact, due to the pins for HPD making
-contact first. This results in a HPD signal being asserted but DDC
-probing failing, resulting in hotplugging occasionally failing.
+Hello,
 
-Rescheduling the hotplug work for a second when we run into an HPD
-signal with a failing DDC probe usually gives enough time for the rest
-of the connector's pins to make contact, and fixes this issue.
+I am writing to you on behalf of Mr. Yusuf Habib. My name is Lukas, I am an investment portfolio Manager at MetLife, and my client (Mr. Yusuf Habib) has a large sum of money he is looking for someone to help him manage the funds.The Saudi government filed charges against my-client Mr. Yusuf Habib with the aim of keeping him in prison indefinitely. A variety of local and foreign politicians, civil activists, and journalists consider the process leading to the imprisonment of Mr. Yusuf to be politically motivated. 
 
-Signed-off-by: xurui <xurui@kylinos.cn>
----
- .../gpu/drm/amd/amdgpu/amdgpu_connectors.c    | 22 ++++++++++++++++++-
- drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |  1 +
- 2 files changed, 22 insertions(+), 1 deletion(-)
+My client's involvement and financial support for Jamal Ahmad Khashoggi posed the most challenge ever to Mohammed bin Salman Al Saud who happens to be the current Crown Prince of Saudi Arabia the money is currently deposited in the name of an existing Investment entity.
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-index cfb262911bfc..dd8d414249a5 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
-@@ -997,13 +997,33 @@ amdgpu_connector_dvi_detect(struct drm_connector *connector, bool force)
- 		}
- 	}
- 
-+	if (amdgpu_connector->detected_hpd_without_ddc) {
-+		force = true;
-+		amdgpu_connector->detected_hpd_without_ddc = false;
-+	}
-+
- 	if (!force && amdgpu_connector_check_hpd_status_unchanged(connector)) {
- 		ret = connector->status;
- 		goto exit;
- 	}
- 
--	if (amdgpu_connector->ddc_bus)
-+	if (amdgpu_connector->ddc_bus) {
- 		dret = amdgpu_display_ddc_probe(amdgpu_connector, false);
-+
-+		/* Sometimes the pins required for the DDC probe on DVI
-+		 * connectors don't make contact at the same time that the ones
-+		 * for HPD do. If the DDC probe fails even though we had an HPD
-+		 * signal, try again later
-+		 */
-+		if (!dret && !force &&
-+		    amdgpu_display_hpd_sense(adev, amdgpu_connector->hpd.hpd)) {
-+			DRM_DEBUG_KMS("hpd detected without ddc, retrying in 1 second\n");
-+			amdgpu_connector->detected_hpd_without_ddc = true;
-+			schedule_delayed_work(&adev->hotplug_work,
-+					      msecs_to_jiffies(1000));
-+			goto exit;
-+		}
-+	}
- 	if (dret) {
- 		amdgpu_connector->detected_by_load = false;
- 		amdgpu_connector_free_edid(connector);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-index 37322550d750..bf009de59710 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
-@@ -535,6 +535,7 @@ struct amdgpu_connector {
- 	void *con_priv;
- 	bool dac_load_detect;
- 	bool detected_by_load; /* if the connection status was determined by load */
-+	bool detected_hpd_without_ddc; /* if an HPD signal was detected on DVI, but ddc probing failed */
- 	uint16_t connector_object_id;
- 	struct amdgpu_hpd hpd;
- 	struct amdgpu_router router;
--- 
-2.25.1
+My client Mr. Yusuf Habib has presented a subtle offer that will need the help of a partner like you to complete successfully. Mr. Yusuf Habib is in a difficult situation, and he must immediately relocate certain sums of money and this must be done in such a way that it must not be tied to Mr. Yusuf Habib. The money is currently deposited in the name of an existing Investment entity. Your role will be to:
+
+[1]. Act as the original beneficiary of the funds.
+[2]. Receive the funds into a business / private bank account.
+[3]. Invest / Manage the funds outside of Turkey
+[4]. Value of funds: 35 million US Dollars.
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+Everything will be done legally to ensure the rights to the funds are transferred to you. If you agree to partner with Mr. Yusuf Habib in this partnership business proposal, he will compensate you with 35% percent of the total sum. Terms will be discussed when you show interest and if you aren't interested and you know of someone looking for an investor, please give him / her my contact.
+
+Should you prefer I re-contact you with more express facts. Then make your interest known.
+
+Sincerely,
+Lukas.
