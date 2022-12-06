@@ -2,128 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAB11644BEC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62580644ACB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:06:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiLFSja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 13:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S229653AbiLFSF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 13:05:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLFSj2 (ORCPT
+        with ESMTP id S229646AbiLFSFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:39:28 -0500
-X-Greylist: delayed 1964 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 10:39:27 PST
-Received: from mail.edward-p.xyz (unknown [IPv6:2403:ac80:cc:7::13f:adc5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4627D30550
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 10:39:26 -0800 (PST)
-DKIM-Signature: a=rsa-sha256; bh=T+en6e3AXE3m/+a/1SsKJ6NeYBJ+M/f4BlVdIYx79zE=;
- c=relaxed/relaxed; d=edward-p.xyz;
- h=Subject:Subject:Sender:To:To:Cc:Cc:From:From:Date:Date:MIME-Version:MIME-Version:Content-Type:Content-Transfer-Encoding:Content-Transfer-Encoding:Reply-To:In-Reply-To:Message-Id:Message-Id:References:Autocrypt:Openpgp;
- i=@edward-p.xyz; s=default; t=1670349916; v=1; x=1670781916;
- b=ndbeQvwnsDAhdzCWhwNUER4mARyMBxiCwfnnRQprNcrBoyovwnQVkJnhne5rucfE7tUosjr/
- 7YWvjF0fBzxtlk3YK9+wNjb3SvjRjDk+7h+yc8VecceIWYT1JO9jLHOQFrgNulhyyrg6BGBCQbI
- T8dHv5S98lGnlAO0hhdkCaYjcjt8QPB9sNO9sbC7wXZCGp19AhGgFh+Ga8nThZhoiGnHz8ua7ne
- eACrA+Enst4+49GCRTaylQT5x31Zo/olmZVXgnEVEwRloenEVIFSHUnDFcVgRvC6rRLAAcgaQVb
- mhO/eeNidPSDXle1XfhzSlxB1FtP/lr+zVcQbHezK0zQA==
-Received: by mail.edward-p.xyz (envelope-sender <edward@edward-p.xyz>) with
- ESMTPS id 62a3ecde; Wed, 07 Dec 2022 02:05:16 +0800
-From:   edward-p <edward@edward-p.xyz>
-Cc:     edward-p <edward@edward-p.xyz>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>,
-        Tim Crawford <tcrawford@system76.com>,
-        Meng Tang <tangmeng@uniontech.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Philipp Jungkamp <p.jungkamp@gmx.net>,
-        Kailang Yang <kailang@realtek.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: hda/realtek: Add quirk for Lenovo TianYi510Pro-14IOB
-Date:   Wed,  7 Dec 2022 02:04:58 +0800
-Message-Id: <20221206180459.44260-1-edward@edward-p.xyz>
-X-Mailer: git-send-email 2.38.1
+        Tue, 6 Dec 2022 13:05:55 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E2A37207;
+        Tue,  6 Dec 2022 10:05:53 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id c66so15138535edf.5;
+        Tue, 06 Dec 2022 10:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sohc/zRaRTqav4RQHNdtoi5gvQOfb1wdHDNBf897pn8=;
+        b=FWPrMTJbrbqTVJbF7sMesUIossLBZlIIFHOkuIkQyTuJdSUSySW6JovFUXer9TFEDj
+         uyGDeZVp+tcSuOkaEjzqaNeWvQSBAw/ysrWVfgx53fYcJ0wW8j603job3g354QpwZQmk
+         3Q+I/NwzI5HDHVNrbGwbmXzmdCEAy72VwOKfBrWuZoQAxbpROMxk3LauZzk497DsoTR/
+         sspyBjpgAeFeryguTxJgPTh4+t1+cuh+WtBJleQNiG9bWKw8pIhih2uWIvVKJaxoK4vZ
+         CHUqrAOAgmjFFatwUomDx9YyRnLf65wnbdbQ0SSkqWCsDPqzlkTNYI59i5K5moKcRgG3
+         CF4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Sohc/zRaRTqav4RQHNdtoi5gvQOfb1wdHDNBf897pn8=;
+        b=7O9rgBX5JF1J3FwEEYAhGOZlPNovsLZeseVxSCujiXrBiheYlVTrIG6TRaVmP5KJiZ
+         TfkMPSGbErycUu9Bk34CBUJnMGXVFP4ooRuYrsEgXUL/iDEjULIbuHl7894C0Nh0SDeN
+         ywlzpIilaUO6bOZygICN5aWkZcybljnvGLQZcn9cISGidINGljOM5iRelDdL0iVaaVVh
+         BsHVlro2HiF4aTB/T30ymPSmR3XvJRGhJfT6/4TLtfINRIduNpvF2BjEciRhlW9h0Yik
+         iO1EmOk12+G3Tnitmqrn9eJsiUqSrSi6tF2JO8dzd+1av8Q+7Dvnm+/v9lfNisbc5CR4
+         /fgw==
+X-Gm-Message-State: ANoB5pl1EIngJBiqeMwOyJX1OmdHhOBRNPWgyToRtKaS7AGiq/gNKnd/
+        xNrBfI0wbEisfyNg9ZQZExo=
+X-Google-Smtp-Source: AA0mqf59PKndTCyH52fJ89lLaqCTgsUnjxUMmQX1tqSED0A3O1MyB32N8WKziur1XHq6+qQqTT3IHw==
+X-Received: by 2002:a05:6402:2912:b0:46a:c132:8a25 with SMTP id ee18-20020a056402291200b0046ac1328a25mr46431327edb.205.1670349952189;
+        Tue, 06 Dec 2022 10:05:52 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170906538200b0078d9cd0d2d6sm7789623ejo.11.2022.12.06.10.05.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 10:05:51 -0800 (PST)
+Date:   Tue, 6 Dec 2022 19:06:02 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v4 net-next 5/5] drivers/net/phy: add driver for the
+ onsemi NCN26000 10BASE-T1S PHY
+Message-ID: <Y4+Eigd6PZ3tgFzG@gvm01>
+References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
+ <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
+ <Y49IBR8ByMQH6oVt@lunn.ch>
+ <Y49THkXZdLBR6Mxv@gvm01>
+ <Y49YQOOhAslQQ9zt@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,RDNS_NONE,SPF_HELO_SOFTFAIL,SPF_SOFTFAIL,
-        T_PDS_OTHER_BAD_TLD autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y49YQOOhAslQQ9zt@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lenovo TianYi510Pro-14IOB (17aa:3742)
-require quirk for enabling headset-mic
+On Tue, Dec 06, 2022 at 02:57:04PM +0000, Russell King (Oracle) wrote:
+> On Tue, Dec 06, 2022 at 03:35:10PM +0100, Piergiorgio Beruto wrote:
+> > On Tue, Dec 06, 2022 at 02:47:49PM +0100, Andrew Lunn wrote:
+> > > > +static int ncn26000_read_status(struct phy_device *phydev)
+> > > > +{
+> > > > +	// The NCN26000 reports NCN26000_LINK_STATUS_BIT if the link status of
+> > > > +	// the PHY is up. It further reports the logical AND of the link status
+> > > > +	// and the PLCA status in the BMSR_LSTATUS bit. Thus, report the link
+> > > > +	// status by testing the appropriate BMSR bit according to the module's
+> > > > +	// parameter configuration.
+> > > > +	const int lstatus_flag = link_status_plca ?
+> > > > +		BMSR_LSTATUS : NCN26000_BMSR_LINK_STATUS_BIT;
+> > > > +
+> > > > +	int ret;
+> > > > +
+> > > > +	ret = phy_read(phydev, MII_BMSR);
+> > > > +	if (unlikely(ret < 0))
+> > > > +		return ret;
+> > > > +
+> > > > +	// update link status
+> > > > +	phydev->link = (ret & lstatus_flag) ? 1 : 0;
+> > > 
+> > > What about the latching behaviour of LSTATUS?
+> > See further down.
+> > 
+> > > 
+> > > https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L2289
+> > > 
+> > > > +
+> > > > +	// handle more IRQs here
+> > > 
+> > > You are not in an IRQ handler...
+> > Right, this is just a left-over when I moved the code from the ISR to
+> > this functions. Fixed.
+> > 
+> > > You should also be setting speed and duplex. I don't think they are
+> > > guaranteed to have any specific value if you don't set them.
+> > Ah, I got that before, but I removed it after comment from Russell
+> > asking me not to do this. Testing on my HW, this seems to work, although
+> > I'm not sure whether this is correct or it is working 'by chance' ?
+> 
+> I asked you to get rid of them in the config function, which was
+> setting them to "unknown" values. I thought I explained why it was
+> wrong to set them there - but again...
+> 
+> If you force the values in the config function, then when userspace
+> does a read-modify-write of the settings via ethtool, you will end
+> up wiping out the PHYs link settings, despite maybe nothing having
+> actually been changed. It is also incorrect to set them in the
+> config function, because those writes to those variables can race
+> with users reading them - the only place they should be set by a
+> PHY driver is in the .read_status method.
+Ok, I must have misunderstood what the problem was. This is clear to me
+now, I'm going to add this back in the read_status() method.
 
-Signed-off-by: edward-p <edward@edward-p.xyz>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216756
----
- sound/pci/hda/patch_realtek.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
-
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index e5c036385666..a2e1bdc06468 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -10960,6 +10960,17 @@ static void alc897_fixup_lenovo_headset_mic(struct hda_codec *codec,
- 	}
- }
- 
-+static void alc897_fixup_lenovo_headset_mode(struct hda_codec *codec,
-+				     const struct hda_fixup *fix, int action)
-+{
-+	struct alc_spec *spec = codec->spec;
-+
-+	if (action == HDA_FIXUP_ACT_PRE_PROBE) {
-+		spec->parse_flags |= HDA_PINCFG_HEADSET_MIC;
-+		spec->gen.hp_automute_hook = alc897_hp_automute_hook;
-+	}
-+}
-+
- static const struct coef_fw alc668_coefs[] = {
- 	WRITE_COEF(0x01, 0xbebe), WRITE_COEF(0x02, 0xaaaa), WRITE_COEF(0x03,    0x0),
- 	WRITE_COEF(0x04, 0x0180), WRITE_COEF(0x06,    0x0), WRITE_COEF(0x07, 0x0f80),
-@@ -11043,6 +11054,8 @@ enum {
- 	ALC897_FIXUP_LENOVO_HEADSET_MIC,
- 	ALC897_FIXUP_HEADSET_MIC_PIN,
- 	ALC897_FIXUP_HP_HSMIC_VERB,
-+	ALC897_FIXUP_LENOVO_HEADSET_MODE,
-+	ALC897_FIXUP_HEADSET_MIC_PIN2,
- };
- 
- static const struct hda_fixup alc662_fixups[] = {
-@@ -11469,6 +11482,19 @@ static const struct hda_fixup alc662_fixups[] = {
- 			{ }
- 		},
- 	},
-+	[ALC897_FIXUP_LENOVO_HEADSET_MODE] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = alc897_fixup_lenovo_headset_mode,
-+	},
-+	[ALC897_FIXUP_HEADSET_MIC_PIN2] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x1a, 0x01a11140 }, /* use as headset mic, without its own jack detect */
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC897_FIXUP_LENOVO_HEADSET_MODE
-+	},
- };
- 
- static const struct snd_pci_quirk alc662_fixup_tbl[] = {
-@@ -11521,6 +11547,7 @@ static const struct snd_pci_quirk alc662_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x17aa, 0x32cb, "Lenovo ThinkCentre M70", ALC897_FIXUP_HEADSET_MIC_PIN),
- 	SND_PCI_QUIRK(0x17aa, 0x32cf, "Lenovo ThinkCentre M950", ALC897_FIXUP_HEADSET_MIC_PIN),
- 	SND_PCI_QUIRK(0x17aa, 0x32f7, "Lenovo ThinkCentre M90", ALC897_FIXUP_HEADSET_MIC_PIN),
-+	SND_PCI_QUIRK(0x17aa, 0x3742, "Lenovo TianYi510Pro-14IOB", ALC897_FIXUP_HEADSET_MIC_PIN2),
- 	SND_PCI_QUIRK(0x17aa, 0x38af, "Lenovo Ideapad Y550P", ALC662_FIXUP_IDEAPAD),
- 	SND_PCI_QUIRK(0x17aa, 0x3a0d, "Lenovo Ideapad Y550", ALC662_FIXUP_IDEAPAD),
- 	SND_PCI_QUIRK(0x1849, 0x5892, "ASRock B150M", ALC892_FIXUP_ASROCK_MOBO),
--- 
-2.38.1
-
+Thanks,
+Piergiorgio
