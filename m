@@ -2,117 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DFA4643D32
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0FE7643D4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:52:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233961AbiLFGki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:40:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
+        id S233778AbiLFGwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233955AbiLFGkf (ORCPT
+        with ESMTP id S231694AbiLFGwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:40:35 -0500
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902DB1DDE1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:40:33 -0800 (PST)
-Received: by mail-ed1-f41.google.com with SMTP id d14so13976933edj.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 22:40:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e1mhWiQ+nK1TpnHegOmWn7jYPQfPzfQzNgARNwRVues=;
-        b=W92dgloFmw1rFPCdLv7LEvU5pz58jJZwkAlWQP74gD261Lx5T80h28sy1JqO7w/U0p
-         zw21m7xNvIcyFnehThv2nKnq8hzNCrwl8Lqo6ZAID3nMCpaUxaQ839vUQby4amby478j
-         qoJ+Sxm5w5D6gu81KaqZPYh9FAh1Eb+jPlMEC9yG7HowwgJ2VoaL3CIXXtG+o9hqD3QQ
-         1e03TqtqR5Dj4fmizHX+eUMmWb2GCpqmXF09P/xRQdpKuZ8/xelln8oCLY/tGxPkNPln
-         fU9G47SOgUBowuLsD1W2N284IQ4WL7AtkE1tbd9dSS2kOJjexlffzCwklgzqja7MoAzY
-         9jjg==
-X-Gm-Message-State: ANoB5pni5EI54jRpGtoInVyBicCAh5IGLrXYrPMp+odt/YboJOqUnrlu
-        topmAZt6kdnu4+0jLx2DOkALd9u1xL8=
-X-Google-Smtp-Source: AA0mqf7PIOY9sVwrkuF+HKiQVpAYCxXMjsNyDxp/2zaNSy/5ZlK/tcFjYPJMxwV37fhp/jBnseaaZw==
-X-Received: by 2002:aa7:daca:0:b0:46b:8078:2431 with SMTP id x10-20020aa7daca000000b0046b80782431mr27143396eds.408.1670308832172;
-        Mon, 05 Dec 2022 22:40:32 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b007c0bb571da5sm5257828ejb.41.2022.12.05.22.40.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 22:40:31 -0800 (PST)
-Message-ID: <27ade063-79df-dad9-0427-e16f1ddb43ef@kernel.org>
-Date:   Tue, 6 Dec 2022 07:40:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [patch 1/3] VT: Add height parameter to con_font_get/set consw
- operations
-Content-Language: en-US
-To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        kbd@lists.altlinux.org
-Cc:     linux-kernel@vger.kernel.org
-References: <20221205000739.583233140@ens-lyon.org>
- <20221205000807.751605665@ens-lyon.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221205000807.751605665@ens-lyon.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Tue, 6 Dec 2022 01:52:08 -0500
+Received: from mx417.baidu.com (mx411.baidu.com [124.64.200.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B20D163DE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:52:06 -0800 (PST)
+Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
+        by mx417.baidu.com (Postfix) with ESMTP id B68D219B80406;
+        Tue,  6 Dec 2022 14:43:18 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id B00A7D9932;
+        Tue,  6 Dec 2022 14:43:18 +0800 (CST)
+From:   lirongqing@baidu.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, peterz@infradead.org,
+        akpm@linux-foundation.org, tony.luck@intel.com,
+        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when mwait_idle is used
+Date:   Tue,  6 Dec 2022 14:43:18 +0800
+Message-Id: <1670308998-12313-1-git-send-email-lirongqing@baidu.com>
+X-Mailer: git-send-email 1.7.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05. 12. 22, 1:07, Samuel Thibault wrote:
-> The current con_font_get/set API currently hardcodes a 32-pixel-tall
-> limitation, which only dates from the old VGA hardware which could not
-> handle taller fonts than that.
-> 
-> This change just adds a vpitch parameter to release this
-> constraint. Drivers which do not support vpitch != 32 can just return
-> EINVAL when it is not 32, font loading tools will revert to trying 32
-> and succeed.
-> 
-> This change makes the fbcon driver consider vpitch appropriately, thus
-> making it able to load large fonts.
-> 
-> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
-> 
-...
-> --- linux-6.0.orig/drivers/usb/misc/sisusbvga/sisusb_con.c
-> +++ linux-6.0/drivers/usb/misc/sisusbvga/sisusb_con.c
-...
-> @@ -1243,13 +1244,15 @@ sisusbcon_font_set(struct vc_data *c, st
->   
->   /* Interface routine */
->   static int
-> -sisusbcon_font_get(struct vc_data *c, struct console_font *font)
-> +sisusbcon_font_get(struct vc_data *c, struct console_font *font, unsigned int vpitch)
->   {
->   	struct sisusb_usb_data *sisusb;
->   
->   	sisusb = sisusb_get_sisusb_lock_and_check(c->vc_num);
->   	if (!sisusb)
->   		return -ENODEV;
-> +	if (vpitch != 32)
-> +		return -EINVAL;
->   
->   	/* sisusb->lock is down */
->   
-> @@ -1268,7 +1271,7 @@ sisusbcon_font_get(struct vc_data *c, st
->   	}
->   
->   	/* Copy 256 chars only, like vgacon */
-> -	memcpy(font->data, sisusb->font_backup, 256 * 32);
-> +	memcpy(font->data, sisusb->font_backup, 256 * height);
+From: Li RongQing <lirongqing@baidu.com>
 
-Have you tested this? What does this 'height' refer to?
+when KVM guest has mwait and mwait_idle is used as default idle function,
+Loading cpuidle-haltpoll will make idle function back to default_idle which
+is using HLT, As the commit aebef63cf7ff ("x86: Remove vendor checks from
+prefer_mwait_c1_over_halt") explains that mwait is preferred
 
-thanks,
+so disable kvm guest polling in this conditions to improve performance,
+like sockperf localhost test shows that latency is reduced by about 20%
+
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+---
+ arch/x86/include/asm/processor.h   | 2 ++
+ arch/x86/kernel/process.c          | 6 ++++++
+ drivers/cpuidle/cpuidle-haltpoll.c | 4 ++++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 67c9d73..159ef33 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -862,4 +862,6 @@ bool arch_is_platform_page(u64 paddr);
+ #define arch_is_platform_page arch_is_platform_page
+ #endif
+ 
++bool is_mwait_idle(void);
++
+ #endif /* _ASM_X86_PROCESSOR_H */
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index c21b734..330972c 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -896,6 +896,12 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+ 		x86_idle = default_idle;
+ }
+ 
++bool is_mwait_idle(void)
++{
++	return x86_idle == mwait_idle;
++}
++EXPORT_SYMBOL_GPL(is_mwait_idle);
++
+ void amd_e400_c1e_apic_setup(void)
+ {
+ 	if (boot_cpu_has_bug(X86_BUG_AMD_APIC_C1E)) {
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index 3a39a7f..8cf1ddf 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -17,6 +17,7 @@
+ #include <linux/sched/idle.h>
+ #include <linux/kvm_para.h>
+ #include <linux/cpuidle_haltpoll.h>
++#include <linux/processor.h>
+ 
+ static bool force __read_mostly;
+ module_param(force, bool, 0444);
+@@ -111,6 +112,9 @@ static int __init haltpoll_init(void)
+ 	if (!kvm_para_available() || !haltpoll_want())
+ 		return -ENODEV;
+ 
++	if (is_mwait_idle())
++		return -ENODEV;
++
+ 	cpuidle_poll_state_init(drv);
+ 
+ 	ret = cpuidle_register_driver(drv);
 -- 
-js
-suse labs
+2.9.4
 
