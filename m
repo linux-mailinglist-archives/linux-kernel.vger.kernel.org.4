@@ -2,108 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14CF7644C2C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:05:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 168A8644C2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLFTFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:05:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S229668AbiLFTFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:05:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbiLFTF3 (ORCPT
+        with ESMTP id S229600AbiLFTFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:05:29 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A2682BB3B;
-        Tue,  6 Dec 2022 11:05:29 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id x28so13390935qtv.13;
-        Tue, 06 Dec 2022 11:05:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/TaSyIQyIVk1tPPl8SpOfU95ahTR/5mZip85LMpUqE0=;
-        b=aP4vpnBPWS5WVPgzBPPC+E/8DBpGiIxOr0kvPB20hzlFZ49MWOFQLgdRZoJCvVEz6F
-         WtbIsK6v2u0JAOZgRdq4hlGoX9kw0DNWP7EzB00bY8178oKP6i4bm/pTsuTaXTkNsGcT
-         36NFt5dVvUIeEpM73AEIQKGxYqqitAv3ShJD7nsxLxISl9a3nQN9JbIR1vaGRcjL/V5l
-         M+q+9UyGHo6fU/nvyHGfsgJHgCJ3tG+QcM9U/MohfK+7C/MtcQw3Y/If4nFyzCeit/Js
-         xJP9j2xwp5C8LK01tfEScKTz0wyRrotYTdsdUnJ2Htez0ieA5nCppSyMMosg4NW7gRKJ
-         ljIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/TaSyIQyIVk1tPPl8SpOfU95ahTR/5mZip85LMpUqE0=;
-        b=zt/Kqs5LaQBWkFSAFK57qWxT1eCFJgoSxfk3ame59O9IJx1EnztUDUJYqG2dzbniCt
-         ibxHVJcnfbXUgLUxH2xb4Ui8oFmyhVUtCtSD1DMFzTH+IqutX9+V1uuOb+OVlDXO17HT
-         2Le0EsdfJhxbB3Uq8fo5Piem5iHjAD96unh3acynD20idt1btwxYTDVI15VyZbbBNUEp
-         Hr6HS27Qy9tKYjohCYbFTvJfZoq7H6o9ppfEAuRMc1YL7gyNpaROkPa4bJlUhpdVGDxl
-         tbpfZkjQ33D/sxuGfFLxoPVR2zKTdDlG2kcqlLFw3Wf0EzZgJ02mi3atlvmLTYdaCg7m
-         nbEQ==
-X-Gm-Message-State: ANoB5pnVJykkhN1fNBuOtJykVrnNs90ZRn/E/RcxWKil/Dv6dvJIk1CI
-        uzc2opogIezrJKVbXqxvRGs=
-X-Google-Smtp-Source: AA0mqf6rJ021beKfANsDw1zAUU/n6XEvZd1HJ0S7TwgV3vdiH6r4GFMLDMurjIO9Jh+7EIYvZNjG5A==
-X-Received: by 2002:ac8:4541:0:b0:3a6:9904:d3ea with SMTP id z1-20020ac84541000000b003a69904d3eamr17886721qtn.597.1670353528117;
-        Tue, 06 Dec 2022 11:05:28 -0800 (PST)
-Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id s11-20020a05620a0bcb00b006fcab4da037sm12513107qki.39.2022.12.06.11.05.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 11:05:27 -0800 (PST)
-Message-ID: <6cc9c6e0-1107-e743-de98-6ea6b04bb131@gmail.com>
-Date:   Tue, 6 Dec 2022 11:05:24 -0800
+        Tue, 6 Dec 2022 14:05:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F8B2BB3B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:05:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDEFFB81A27
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 19:05:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 959E0C433C1;
+        Tue,  6 Dec 2022 19:05:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670353548;
+        bh=gGP0Q+JmPWb6jF5w/jRM2k/9YcKc+jgbamjaQNWI0GU=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=YGPQu0nNMxDoRYhk/Z8z8zYt+eqqiwaUqULP8l73HZm7l+P64aXrvKvsyAv9oVcZ6
+         bcoZZ0QZ9mOjaj3s1lWWgO0Ke849/HKEJYB/rj2jlN21oUto5+JyfMznlByQn8KcA1
+         5rq94q78pQALpG9zkQts2oURHnizSsSxr7hTS7VXPU8bAfAcC2i/U3ZmgrAuWJ4INo
+         wUdQMny++vRoM6mt8w6LUuA1q9SHYu0DA+ab1OAlyWp1dY317ZHF3l95Ztw3YDdF3a
+         xMxYVj0boB3WNrfYLQemATv0FUil3CNB4qLLu7ToYijmIuGYvmigxvkGUqnMw3kJUf
+         xOJLyDgo/Z/PQ==
+Date:   Tue, 6 Dec 2022 11:05:46 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [PATCH 4/6 v2] f2fs: refactor extent_cache to support for read
+ and more
+Message-ID: <Y4+SiufEJLNqrmSi@google.com>
+References: <20221205185433.3479699-1-jaegeuk@kernel.org>
+ <20221205185433.3479699-4-jaegeuk@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 5.4 000/157] 5.4.226-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221206124054.310184563@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20221206124054.310184563@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205185433.3479699-4-jaegeuk@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch prepares extent_cache to get more use-cases.
 
+Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+---
 
-On 12/6/2022 4:42 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.226 release.
-> There are 157 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.226-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+ Change log from v1:
+  - fix a bug
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+ fs/f2fs/data.c         | 14 +++----
+ fs/f2fs/debug.c        | 53 +++++++++++++++++---------
+ fs/f2fs/extent_cache.c | 85 +++++++++++++++++++++++++++---------------
+ 3 files changed, 97 insertions(+), 55 deletions(-)
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 35c19248b1e2..031fa27d194e 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -1195,7 +1195,7 @@ int f2fs_get_block(struct dnode_of_data *dn, pgoff_t index)
+ 	struct extent_info ei = {0, };
+ 	struct inode *inode = dn->inode;
+ 
+-	if (f2fs_lookup_extent_cache(inode, index, &ei)) {
++	if (f2fs_lookup_extent_cache(inode, index, &ei, EX_READ)) {
+ 		dn->data_blkaddr = ei.blk + index - ei.fofs;
+ 		return 0;
+ 	}
+@@ -1217,7 +1217,7 @@ struct page *f2fs_get_read_data_page(struct inode *inode, pgoff_t index,
+ 	if (!page)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	if (f2fs_lookup_extent_cache(inode, index, &ei)) {
++	if (f2fs_lookup_extent_cache(inode, index, &ei, EX_READ)) {
+ 		dn.data_blkaddr = ei.blk + index - ei.fofs;
+ 		if (!f2fs_is_valid_blkaddr(F2FS_I_SB(inode), dn.data_blkaddr,
+ 						DATA_GENERIC_ENHANCE_READ)) {
+@@ -1485,7 +1485,7 @@ int f2fs_map_blocks(struct inode *inode, struct f2fs_map_blocks *map,
+ 	pgofs =	(pgoff_t)map->m_lblk;
+ 	end = pgofs + maxblocks;
+ 
+-	if (!create && f2fs_lookup_extent_cache(inode, pgofs, &ei)) {
++	if (!create && f2fs_lookup_extent_cache(inode, pgofs, &ei, EX_READ)) {
+ 		if (f2fs_lfs_mode(sbi) && flag == F2FS_GET_BLOCK_DIO &&
+ 							map->m_may_create)
+ 			goto next_dnode;
+@@ -2201,7 +2201,7 @@ int f2fs_read_multi_pages(struct compress_ctx *cc, struct bio **bio_ret,
+ 	if (f2fs_cluster_is_empty(cc))
+ 		goto out;
+ 
+-	if (f2fs_lookup_extent_cache(inode, start_idx, &ei))
++	if (f2fs_lookup_extent_cache(inode, start_idx, &ei, EX_READ))
+ 		from_dnode = false;
+ 
+ 	if (!from_dnode)
+@@ -2635,7 +2635,7 @@ int f2fs_do_write_data_page(struct f2fs_io_info *fio)
+ 		set_new_dnode(&dn, inode, NULL, NULL, 0);
+ 
+ 	if (need_inplace_update(fio) &&
+-			f2fs_lookup_extent_cache(inode, page->index, &ei)) {
++	    f2fs_lookup_extent_cache(inode, page->index, &ei, EX_READ)) {
+ 		fio->old_blkaddr = ei.blk + page->index - ei.fofs;
+ 
+ 		if (!f2fs_is_valid_blkaddr(fio->sbi, fio->old_blkaddr,
+@@ -3359,7 +3359,7 @@ static int prepare_write_begin(struct f2fs_sb_info *sbi,
+ 	} else if (locked) {
+ 		err = f2fs_get_block(&dn, index);
+ 	} else {
+-		if (f2fs_lookup_extent_cache(inode, index, &ei)) {
++		if (f2fs_lookup_extent_cache(inode, index, &ei, EX_READ)) {
+ 			dn.data_blkaddr = ei.blk + index - ei.fofs;
+ 		} else {
+ 			/* hole case */
+@@ -3400,7 +3400,7 @@ static int __find_data_block(struct inode *inode, pgoff_t index,
+ 
+ 	set_new_dnode(&dn, inode, ipage, ipage, 0);
+ 
+-	if (f2fs_lookup_extent_cache(inode, index, &ei)) {
++	if (f2fs_lookup_extent_cache(inode, index, &ei, EX_READ)) {
+ 		dn.data_blkaddr = ei.blk + index - ei.fofs;
+ 	} else {
+ 		/* hole case */
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index a216dcdf6941..71eb4c50edf6 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -72,15 +72,23 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+ 	si->main_area_zones = si->main_area_sections /
+ 				le32_to_cpu(raw_super->secs_per_zone);
+ 
+-	/* validation check of the segment numbers */
++	/* general extent cache stats */
++	for (i = 0; i < NR_EXTENT_CACHES; i++) {
++		struct extent_tree_info *eti = &sbi->extent_tree[i];
++
++		si->hit_cached[i] = atomic64_read(&sbi->read_hit_cached[i]);
++		si->hit_rbtree[i] = atomic64_read(&sbi->read_hit_rbtree[i]);
++		si->total_ext[i] = atomic64_read(&sbi->total_hit_ext[i]);
++		si->hit_total[i] = si->hit_cached[i] + si->hit_rbtree[i];
++		si->ext_tree[i] = atomic_read(&eti->total_ext_tree);
++		si->zombie_tree[i] = atomic_read(&eti->total_zombie_tree);
++		si->ext_node[i] = atomic_read(&eti->total_ext_node);
++	}
++	/* read extent_cache only */
+ 	si->hit_largest = atomic64_read(&sbi->read_hit_largest);
+-	si->hit_cached = atomic64_read(&sbi->read_hit_cached);
+-	si->hit_rbtree = atomic64_read(&sbi->read_hit_rbtree);
+-	si->hit_total = si->hit_largest + si->hit_cached + si->hit_rbtree;
+-	si->total_ext = atomic64_read(&sbi->total_hit_ext);
+-	si->ext_tree = atomic_read(&sbi->total_ext_tree);
+-	si->zombie_tree = atomic_read(&sbi->total_zombie_tree);
+-	si->ext_node = atomic_read(&sbi->total_ext_node);
++	si->hit_total[EX_READ] += si->hit_largest;
++
++	/* validation check of the segment numbers */
+ 	si->ndirty_node = get_pages(sbi, F2FS_DIRTY_NODES);
+ 	si->ndirty_dent = get_pages(sbi, F2FS_DIRTY_DENTS);
+ 	si->ndirty_meta = get_pages(sbi, F2FS_DIRTY_META);
+@@ -294,10 +302,16 @@ static void update_mem_info(struct f2fs_sb_info *sbi)
+ 				sizeof(struct nat_entry_set);
+ 	for (i = 0; i < MAX_INO_ENTRY; i++)
+ 		si->cache_mem += sbi->im[i].ino_num * sizeof(struct ino_entry);
+-	si->cache_mem += atomic_read(&sbi->total_ext_tree) *
++
++	for (i = 0; i < NR_EXTENT_CACHES; i++) {
++		struct extent_tree_info *eti = &sbi->extent_tree[i];
++
++		si->ext_mem[i] += atomic_read(&eti->total_ext_tree) *
+ 						sizeof(struct extent_tree);
+-	si->cache_mem += atomic_read(&sbi->total_ext_node) *
++		si->ext_mem[i] += atomic_read(&eti->total_ext_node) *
+ 						sizeof(struct extent_node);
++		si->cache_mem += si->ext_mem[i];
++	}
+ 
+ 	si->page_mem = 0;
+ 	if (sbi->node_inode) {
+@@ -490,16 +504,19 @@ static int stat_show(struct seq_file *s, void *v)
+ 				si->bg_node_blks);
+ 		seq_printf(s, "BG skip : IO: %u, Other: %u\n",
+ 				si->io_skip_bggc, si->other_skip_bggc);
+-		seq_puts(s, "\nExtent Cache:\n");
++		seq_puts(s, "\nExtent Cache (Read):\n");
+ 		seq_printf(s, "  - Hit Count: L1-1:%llu L1-2:%llu L2:%llu\n",
+ 				si->hit_largest, si->hit_cached,
+-				si->hit_rbtree);
++				si->hit_largest, si->hit_cached[EX_READ],
++				si->hit_rbtree[EX_READ]);
+ 		seq_printf(s, "  - Hit Ratio: %llu%% (%llu / %llu)\n",
+-				!si->total_ext ? 0 :
+-				div64_u64(si->hit_total * 100, si->total_ext),
+-				si->hit_total, si->total_ext);
++				!si->total_ext[EX_READ] ? 0 :
++				div64_u64(si->hit_total[EX_READ] * 100,
++				si->total_ext[EX_READ]),
++				si->hit_total[EX_READ], si->total_ext[EX_READ]);
+ 		seq_printf(s, "  - Inner Struct Count: tree: %d(%d), node: %d\n",
+-				si->ext_tree, si->zombie_tree, si->ext_node);
++				si->ext_tree[EX_READ], si->zombie_tree[EX_READ],
++				si->ext_node[EX_READ]);
+ 		seq_puts(s, "\nBalancing F2FS Async:\n");
+ 		seq_printf(s, "  - DIO (R: %4d, W: %4d)\n",
+ 			   si->nr_dio_read, si->nr_dio_write);
+@@ -566,8 +583,10 @@ static int stat_show(struct seq_file *s, void *v)
+ 			(si->base_mem + si->cache_mem + si->page_mem) >> 10);
+ 		seq_printf(s, "  - static: %llu KB\n",
+ 				si->base_mem >> 10);
+-		seq_printf(s, "  - cached: %llu KB\n",
++		seq_printf(s, "  - cached all: %llu KB\n",
+ 				si->cache_mem >> 10);
++		seq_printf(s, "  - read extent cache: %llu KB\n",
++				si->ext_mem[EX_READ] >> 10);
+ 		seq_printf(s, "  - paged : %llu KB\n",
+ 				si->page_mem >> 10);
+ 	}
+diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+index 22a51934cd45..46dbe3629245 100644
+--- a/fs/f2fs/extent_cache.c
++++ b/fs/f2fs/extent_cache.c
+@@ -15,7 +15,21 @@
+ #include "node.h"
+ #include <trace/events/f2fs.h>
+ 
+-static bool f2fs_may_extent_tree(struct inode *inode)
++static bool f2fs_may_read_extent_tree(struct inode *inode)
++{
++	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++
++	if (!test_opt(sbi, READ_EXTENT_CACHE))
++		return false;
++	if (is_inode_flag_set(inode, FI_NO_EXTENT))
++		return false;
++	if (is_inode_flag_set(inode, FI_COMPRESSED_FILE) &&
++			 !f2fs_sb_has_readonly(sbi))
++		return false;
++	return S_ISREG(inode->i_mode);
++}
++
++static bool f2fs_may_extent_tree(struct inode *inode, enum extent_type type)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+ 
+@@ -26,18 +40,16 @@ static bool f2fs_may_extent_tree(struct inode *inode)
+ 	if (list_empty(&sbi->s_list))
+ 		return false;
+ 
+-	if (!test_opt(sbi, READ_EXTENT_CACHE) ||
+-			is_inode_flag_set(inode, FI_NO_EXTENT) ||
+-			(is_inode_flag_set(inode, FI_COMPRESSED_FILE) &&
+-			 !f2fs_sb_has_readonly(sbi)))
+-		return false;
+-
+-	return S_ISREG(inode->i_mode);
++	if (type == EX_READ)
++		return f2fs_may_read_extent_tree(inode);
++	return false;
+ }
+ 
+ static void __try_update_largest_extent(struct extent_tree *et,
+ 						struct extent_node *en)
+ {
++	if (et->type != EX_READ)
++		return;
+ 	if (en->ei.len <= et->largest.len)
+ 		return;
+ 
+@@ -46,28 +58,31 @@ static void __try_update_largest_extent(struct extent_tree *et,
+ }
+ 
+ static bool __is_extent_mergeable(struct extent_info *back,
+-				struct extent_info *front)
++		struct extent_info *front, enum extent_type type)
+ {
++	if (type == EX_READ) {
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+-	if (back->c_len && back->len != back->c_len)
+-		return false;
+-	if (front->c_len && front->len != front->c_len)
+-		return false;
++		if (back->c_len && back->len != back->c_len)
++			return false;
++		if (front->c_len && front->len != front->c_len)
++			return false;
+ #endif
+-	return (back->fofs + back->len == front->fofs &&
+-			back->blk + back->len == front->blk);
++		return (back->fofs + back->len == front->fofs &&
++				back->blk + back->len == front->blk);
++	}
++	return false;
+ }
+ 
+ static bool __is_back_mergeable(struct extent_info *cur,
+-				struct extent_info *back)
++		struct extent_info *back, enum extent_type type)
+ {
+-	return __is_extent_mergeable(back, cur);
++	return __is_extent_mergeable(back, cur, type);
+ }
+ 
+ static bool __is_front_mergeable(struct extent_info *cur,
+-				struct extent_info *front)
++		struct extent_info *front, enum extent_type type)
+ {
+-	return __is_extent_mergeable(cur, front);
++	return __is_extent_mergeable(cur, front, type);
+ }
+ 
+ static struct rb_entry *__lookup_rb_tree_fast(struct rb_entry *cached_re,
+@@ -292,6 +307,7 @@ static struct extent_node *__attach_extent_node(struct f2fs_sb_info *sbi,
+ 				struct rb_node *parent, struct rb_node **p,
+ 				bool leftmost)
+ {
++	struct extent_tree_info *eti = &sbi->extent_tree[et->type];
+ 	struct extent_node *en;
+ 
+ 	en = f2fs_kmem_cache_alloc(extent_node_slab, GFP_ATOMIC, false, sbi);
+@@ -305,16 +321,18 @@ static struct extent_node *__attach_extent_node(struct f2fs_sb_info *sbi,
+ 	rb_link_node(&en->rb_node, parent, p);
+ 	rb_insert_color_cached(&en->rb_node, &et->root, leftmost);
+ 	atomic_inc(&et->node_cnt);
+-	atomic_inc(&sbi->total_ext_node);
++	atomic_inc(&eti->total_ext_node);
+ 	return en;
+ }
+ 
+ static void __detach_extent_node(struct f2fs_sb_info *sbi,
+ 				struct extent_tree *et, struct extent_node *en)
+ {
++	struct extent_tree_info *eti = &sbi->extent_tree[et->type];
++
+ 	rb_erase_cached(&en->rb_node, &et->root);
+ 	atomic_dec(&et->node_cnt);
+-	atomic_dec(&sbi->total_ext_node);
++	atomic_dec(&eti->total_ext_node);
+ 
+ 	if (et->cached_en == en)
+ 		et->cached_en = NULL;
+@@ -330,42 +348,47 @@ static void __detach_extent_node(struct f2fs_sb_info *sbi,
+ static void __release_extent_node(struct f2fs_sb_info *sbi,
+ 			struct extent_tree *et, struct extent_node *en)
+ {
+-	spin_lock(&sbi->extent_lock);
++	struct extent_tree_info *eti = &sbi->extent_tree[et->type];
++
++	spin_lock(&eti->extent_lock);
+ 	f2fs_bug_on(sbi, list_empty(&en->list));
+ 	list_del_init(&en->list);
+-	spin_unlock(&sbi->extent_lock);
++	spin_unlock(&eti->extent_lock);
+ 
+ 	__detach_extent_node(sbi, et, en);
+ }
+ 
+-static struct extent_tree *__grab_extent_tree(struct inode *inode)
++static struct extent_tree *__grab_extent_tree(struct inode *inode,
++						enum extent_type type)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++	struct extent_tree_info *eti = &sbi->extent_tree[type];
+ 	struct extent_tree *et;
+ 	nid_t ino = inode->i_ino;
+ 
+-	mutex_lock(&sbi->extent_tree_lock);
+-	et = radix_tree_lookup(&sbi->extent_tree_root, ino);
++	mutex_lock(&eti->extent_tree_lock);
++	et = radix_tree_lookup(&eti->extent_tree_root, ino);
+ 	if (!et) {
+ 		et = f2fs_kmem_cache_alloc(extent_tree_slab,
+ 					GFP_NOFS, true, NULL);
+-		f2fs_radix_tree_insert(&sbi->extent_tree_root, ino, et);
++		f2fs_radix_tree_insert(&eti->extent_tree_root, ino, et);
+ 		memset(et, 0, sizeof(struct extent_tree));
+ 		et->ino = ino;
++		et->type = type;
+ 		et->root = RB_ROOT_CACHED;
+ 		et->cached_en = NULL;
+ 		rwlock_init(&et->lock);
+ 		INIT_LIST_HEAD(&et->list);
+ 		atomic_set(&et->node_cnt, 0);
+-		atomic_inc(&sbi->total_ext_tree);
++		atomic_inc(&eti->total_ext_tree);
+ 	} else {
+-		atomic_dec(&sbi->total_zombie_tree);
++		atomic_dec(&eti->total_zombie_tree);
+ 		list_del_init(&et->list);
+ 	}
+-	mutex_unlock(&sbi->extent_tree_lock);
++	mutex_unlock(&eti->extent_tree_lock);
+ 
+ 	/* never died until evict_inode */
+-	F2FS_I(inode)->extent_tree = et;
++	F2FS_I(inode)->extent_tree[type] = et;
+ 
+ 	return et;
+ }
 -- 
-Florian
+2.38.1.584.g0f3c55d4c2-goog
 
