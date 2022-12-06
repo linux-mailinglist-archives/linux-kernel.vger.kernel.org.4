@@ -2,140 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFC5643F82
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:13:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE67643F84
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233834AbiLFJN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:13:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S234403AbiLFJOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:14:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLFJNY (ORCPT
+        with ESMTP id S230036AbiLFJOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:13:24 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D708192AC;
-        Tue,  6 Dec 2022 01:13:23 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NRF7x2MV8z4f3pBn;
-        Tue,  6 Dec 2022 17:13:17 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.67.175.61])
-        by APP4 (Coremail) with SMTP id gCh0CgCXCNavB49jTw3_Bg--.27878S2;
-        Tue, 06 Dec 2022 17:13:20 +0800 (CST)
-From:   Pu Lehui <pulehui@huaweicloud.com>
-To:     bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>,
-        Pu Lehui <pulehui@huaweicloud.com>
-Subject: [PATCH bpf v3] riscv, bpf: Emit fixed-length instructions for BPF_PSEUDO_FUNC
-Date:   Tue,  6 Dec 2022 17:14:10 +0800
-Message-Id: <20221206091410.1584784-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Dec 2022 04:14:47 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B83C2DFB;
+        Tue,  6 Dec 2022 01:14:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670318087; x=1701854087;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41maBJWSA+KHxYSRffA4bRimbz6oUD4nzZp8MVlzs20=;
+  b=BdjGHrzaUWkHyQYOpe0M1/RUJt/PBcGagOR5gdUUvHJBXp8PPjKEatEN
+   0o5lOzXgsIvsLsLAbqnR2v/L1bnSgRReVBMGWyJyvtRVTdYJCvdSKTSRX
+   WnlJmcQCuZ2PiN5M5oZhwK3qpsM7BwoA13u2xYTvV2AjbeCIjH9Kism8B
+   HH8nL6u+xydwclNyjsKjnMCXv5v2FGl3P602jczlbW2HbcMy16uAVNl20
+   GdFhHsfiWGUueZEanpBOB8fsUQyVB7NjE48vQPP7LdZhqIvyl5vf3xuHZ
+   lchxOLGKp3sRrP+S7jb0R6Rdeb8DbOfSZP1zlqKoXe/ydcgqa5hT2DGb2
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="191874464"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Dec 2022 02:14:45 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 6 Dec 2022 02:14:43 -0700
+Received: from CHE-LT-I17769U.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Dec 2022 02:14:37 -0700
+From:   Arun Ramadoss <arun.ramadoss@microchip.com>
+To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
+CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
+        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
+        <richardcochran@gmail.com>, <ceggers@arri.de>
+Subject: [Patch net-next v2 00/13] net: dsa: microchip: add PTP support for KSZ9563/KSZ8563 and LAN937x
+Date:   Tue, 6 Dec 2022 14:44:15 +0530
+Message-ID: <20221206091428.28285-1-arun.ramadoss@microchip.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgCXCNavB49jTw3_Bg--.27878S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy5AFyxuryDur4UAryxZrb_yoW8uFW5pF
-        ZxGrn3CFWvqr1fGr13tF1jqr1SkF4vqFWfKry7G3y5J3ZIqwsF93Z8Gw4jyas8Zry8Gr15
-        JFWjkF98ua4Dta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
-        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
-        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-        fUOmhFUUUUU
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pu Lehui <pulehui@huawei.com>
+KSZ9563/KSZ8563 and  LAN937x switch are capable for supporting IEEE 1588 PTP
+protocol.  LAN937x has the same PTP register set similar to KSZ9563, hence the
+implementation has been made common for the KSZ switches.  KSZ9563 does not
+support two step timestamping but LAN937x supports both.  Tested the 1step &
+2step p2p timestamping in LAN937x and p2p1step timestamping in KSZ9563.
 
-For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
-correct addresses of bpf_calls and then run last pass of JIT.
-Since the emit_imm of RV64 is variable-length, which will emit
-appropriate length instructions accorroding to the imm, it may
-broke ctx->offset, and lead to unpredictable problem, such as
-inaccurate jump. So let's fix it with fixed-length instructions.
+This patch series is based on the Christian Eggers PTP support for KSZ9563.
+Applied the Christian patch and updated as per the latest refactoring of KSZ
+series code. The features added on top are PTP packet Interrupt
+implementation based on nested handler, LAN937x two step timestamping and
+programmable per_out pins.
 
-Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
-Suggested-by: Björn Töpel <bjorn@rivosinc.com>
----
- arch/riscv/net/bpf_jit_comp64.c | 29 ++++++++++++++++++++++++++++-
- 1 file changed, 28 insertions(+), 1 deletion(-)
+Link: https://www.spinics.net/lists/netdev/msg705531.html
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 89744dbd6d86..2f6207b72e12 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -139,6 +139,25 @@ static bool in_auipc_jalr_range(s64 val)
- 		val < ((1L << 31) - (1L << 11));
- }
- 
-+/* Emit fixed-length instructions for address */
-+static int emit_addr(u8 rd, u64 addr, bool extra_pass, struct rv_jit_context *ctx)
-+{
-+	u64 ip = (u64)(ctx->insns + ctx->ninsns);
-+	s64 off = addr - ip;
-+	s64 upper = (off + (1 << 11)) >> 12;
-+	s64 lower = off & 0xfff;
-+
-+	if (extra_pass && !in_auipc_jalr_range(off)) {
-+		pr_err("bpf-jit: target offset 0x%llx is out of range\n", off);
-+		return -ERANGE;
-+	}
-+
-+	emit(rv_auipc(rd, upper), ctx);
-+	emit(rv_addi(rd, rd, lower), ctx);
-+	return 0;
-+}
-+
-+/* Emit variable-length instructions for 32-bit and 64-bit imm */
- static void emit_imm(u8 rd, s64 val, struct rv_jit_context *ctx)
- {
- 	/* Note that the immediate from the add is sign-extended,
-@@ -1053,7 +1072,15 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 		u64 imm64;
- 
- 		imm64 = (u64)insn1.imm << 32 | (u32)imm;
--		emit_imm(rd, imm64, ctx);
-+		if (bpf_pseudo_func(insn)) {
-+			/* fixed-length insns for extra jit pass */
-+			ret = emit_addr(rd, imm64, extra_pass, ctx);
-+			if (ret)
-+				return ret;
-+		} else {
-+			emit_imm(rd, imm64, ctx);
-+		}
-+
- 		return 1;
- 	}
- 
+Patch v1 -> v2
+- GPIO perout enable bit is different for LAN937x and KSZ9x. Added new patch
+for configuring LAN937x programmable pins.
+- PTP enabled in hardware based on both tx and rx timestamping of all the user
+ports.
+- Replaced setting of 802.1AS bit with P2P bit in PTP_MSG_CONF1 register.
+
+RFC v2 -> Patch v1
+- Changed the patch author based on past patch submission
+- Changed the commit message prefix as net: dsa: microchip: ptp
+Individual patch changes are listed in correspondig commits.
+
+RFC v1 -> v2
+- Added the p2p1step timestamping and conditional execution of 2 step for
+  LAN937x only.
+- Added the periodic output support
+
+Arun Ramadoss (5):
+  net: dsa: microchip: ptp: add 4 bytes in tail tag when ptp enabled
+  net: dsa: microchip: ptp: enable interrupt for timestamping
+  net: dsa: microchip: ptp: add support for perout programmable pins
+  net: dsa: microchip: ptp: lan937x: add 2 step timestamping
+  net: dsa: microchip: ptp: lan937x: Enable periodic output in LED pins
+
+Christian Eggers (8):
+  net: dsa: microchip: ptp: add the posix clock support
+  net: dsa: microchip: ptp: Initial hardware time stamping support
+  net: dsa: microchip: ptp: manipulating absolute time using ptp hw
+    clock
+  net: ptp: add helper for one-step P2P clocks
+  net: dsa: microchip: ptp: add packet reception timestamping
+  net: dsa: microchip: ptp: add packet transmission timestamping
+  net: dsa: microchip: ptp: move pdelay_rsp correction field to tail tag
+  net: dsa: microchip: ptp: add periodic output signal
+
+ MAINTAINERS                             |    1 +
+ drivers/net/dsa/microchip/Kconfig       |   11 +
+ drivers/net/dsa/microchip/Makefile      |    5 +
+ drivers/net/dsa/microchip/ksz_common.c  |   45 +-
+ drivers/net/dsa/microchip/ksz_common.h  |   48 +
+ drivers/net/dsa/microchip/ksz_ptp.c     | 1157 +++++++++++++++++++++++
+ drivers/net/dsa/microchip/ksz_ptp.h     |   88 ++
+ drivers/net/dsa/microchip/ksz_ptp_reg.h |  142 +++
+ include/linux/dsa/ksz_common.h          |   54 ++
+ include/linux/ptp_classify.h            |   71 ++
+ net/dsa/tag_ksz.c                       |  271 +++++-
+ 11 files changed, 1875 insertions(+), 18 deletions(-)
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.c
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp.h
+ create mode 100644 drivers/net/dsa/microchip/ksz_ptp_reg.h
+ create mode 100644 include/linux/dsa/ksz_common.h
+
+
+base-commit: c9f8d73645b6f76c8d14f49bc860f7143d001cb7
 -- 
-2.25.1
+2.36.1
 
