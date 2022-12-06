@@ -2,306 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C31C643B48
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:22:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61125643B49
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:22:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiLFCWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 21:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S233760AbiLFCW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 21:22:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbiLFCV7 (ORCPT
+        with ESMTP id S231990AbiLFCWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:21:59 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518BF1EC61;
-        Mon,  5 Dec 2022 18:21:57 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR41G1Tn7z4wgr;
-        Tue,  6 Dec 2022 13:21:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670293314;
-        bh=RzaMekHioaqdhMxEdYs9QIQB0nGlUnzzHELxHKw9pIY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=W5lC6qb+osTjVhY+klVGxTUhB4u9Q2+3CGOrGnx7KXbg7H1riaEUrfSVOo3+RxnPz
-         RF6mzT+5UpSzX96I3ttHI1NYE0r0uNQl+I5xn4g5XPdvQujjXjb2mBWbhmnZlnlIpD
-         arjA85fkkYBKdoITeobUosOZaflNHr1ZTq4jJKPZ0EWsw9ab1wWSls8qnNvmAgKkQ2
-         oLpRiX8AdvTcLAYge9RN0fty+pgIfaK9S8/EG4+u79T6OhZC3tI+qtg8KQnKpSOD0O
-         QnlhUUjRs9aByM2mbiN5OkxuMb45ZaLOnr+vm1PlSVgLcE6LNuEegRVp1P8WPftETB
-         2D3jbcQR4LQ1w==
-Date:   Tue, 6 Dec 2022 13:21:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Greg KH <greg@kroah.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yi Liu <yi.l.liu@intel.com>
-Subject: linux-next: manual merge of the iommufd tree with the driver-core,
- vfio trees
-Message-ID: <20221206132153.074fff0c@canb.auug.org.au>
+        Mon, 5 Dec 2022 21:22:25 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AB6425295
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:22:24 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id d1so21514990wrs.12
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 18:22:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KeehAapm7ZXRZtRJIFZHdeIO9R9klFHDW166tK18b2A=;
+        b=dbIpZ/GO5LIsCEE5CILRjO56Zfii5s9R4pXrRGRZFoiV88SQ11KOM4GkYhLbWalPS7
+         48vGdxyoMLUbwQe58AvBpuV7U/cbYY8lNwJ6/Dntibzv24BBM/3TiC3sJwB1NRIwYr9I
+         kcE2x9Az35xvFv7zaXvA3z+E2W/FMiyOQ9t0C/a2BEEHgCBhc63hBlVfNct6gtx7aFaB
+         9WeN/4FKISvaZqrwB/4yKK7dKByBHPFf04oI9eFsuHeZ3PIIK5J3tI0sPUntFM7JnBKV
+         IoDmrN2CYsvxYS9ro/G1oqMAhAPbd/OE65WQNVWUT6li3GnL+wjmnQfwA+eT2O9inOZW
+         k/WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KeehAapm7ZXRZtRJIFZHdeIO9R9klFHDW166tK18b2A=;
+        b=srhL2ak16t095rab+yX8mBmf2IIYM/GSpSLmgAWXx1ie5bfjbdfB7X0wLtaulZEaQu
+         ikUsU2Inxk2pe7aMb7wz6ucxVLqnOqGRgsJBbWOeRDhtkz+O3IIVs73odSXGwPUl+x6F
+         amBHin7RaRg4YYU+nJZtq+FpfP85nZtJ3P6GaxT0gnDl8kLy2YqlRHUepgOSNlX4HLPz
+         O5sj/n5EwMmWa7qRQ4sDSPFCL7REbS6DuxKwVhXU+QN9xsJ7sdTXMMooiIrd9RW5tNDG
+         g4/raxd52mstVmDYQkmetGe/0Z1VY7Tn0z6reaRMkWLaWlrEnZ15n4oGOvVVsvKIcCew
+         cfaQ==
+X-Gm-Message-State: ANoB5pnm23dp652CpKaiMt75wHxdXsxAjpRA+ihlx45LJIY1wDborfA5
+        i3in167NsXgPE/8z/yeZ/MEycICMFxj9+1Ii7fU=
+X-Google-Smtp-Source: AA0mqf7vpcGqDj6nmQ8qCTCoSPvin2kOTea5QbVRb0OgJKW/g8n2r3V3e6cD2O5brfqrJFcvQilU23ygJBvMbnFET8E=
+X-Received: by 2002:a5d:4b45:0:b0:242:1ade:1145 with SMTP id
+ w5-20020a5d4b45000000b002421ade1145mr22524441wrs.483.1670293342943; Mon, 05
+ Dec 2022 18:22:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o9vwjh7lb8fvLELx83EBPU5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205175140.1543229-1-nphamcs@gmail.com> <20221205175140.1543229-3-nphamcs@gmail.com>
+ <CAOUHufZKTqoD2rFwrX9-eCknBmeWqP88rZ7X7A_5KHHbGBUP=A@mail.gmail.com>
+ <CAKEwX=N+mHBqey+E2d=4NpMrTTi8YYkVvJ-bEAnrG1Uqmjq_Yg@mail.gmail.com> <CAOUHufZZX9TyTbZCbmOt9FeyNYxoDwVPOkM0=t3Nyz2ZtP-s7A@mail.gmail.com>
+In-Reply-To: <CAOUHufZZX9TyTbZCbmOt9FeyNYxoDwVPOkM0=t3Nyz2ZtP-s7A@mail.gmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Mon, 5 Dec 2022 18:22:11 -0800
+Message-ID: <CAKEwX=P=ypLfqmJYKP1BWYzjpMUMWGg4v=DfjnO5hR_qhQUmUQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] workingset: refactor LRU refault to expose refault
+ recency check
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/o9vwjh7lb8fvLELx83EBPU5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Dec 5, 2022 at 5:29 PM Yu Zhao <yuzhao@google.com> wrote:
+>
+> On Mon, Dec 5, 2022 at 6:19 PM Nhat Pham <nphamcs@gmail.com> wrote:
+> >
+> > On Mon, Dec 5, 2022 at 3:49 PM Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > On Mon, Dec 5, 2022 at 10:51 AM Nhat Pham <nphamcs@gmail.com> wrote:
+> > > >
+> > > > In preparation for computing recently evicted pages in cachestat,
+> > > > refactor workingset_refault and lru_gen_refault to expose a helper
+> > > > function that would test if an evicted page is recently evicted.
+> > > >
+> > > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > > > ---
+> > > >  include/linux/swap.h |   1 +
+> > > >  mm/workingset.c      | 143 +++++++++++++++++++++++++++++--------------
+> > > >  2 files changed, 99 insertions(+), 45 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/swap.h b/include/linux/swap.h
+> > > > index a18cf4b7c724..dae6f6f955eb 100644
+> > > > --- a/include/linux/swap.h
+> > > > +++ b/include/linux/swap.h
+> > > > @@ -361,6 +361,7 @@ static inline void folio_set_swap_entry(struct folio *folio, swp_entry_t entry)
+> > > >  }
+> > > >
+> > > >  /* linux/mm/workingset.c */
+> > > > +bool workingset_test_recent(void *shadow, bool file, bool *workingset);
+> > > >  void workingset_age_nonresident(struct lruvec *lruvec, unsigned long nr_pages);
+> > > >  void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg);
+> > > >  void workingset_refault(struct folio *folio, void *shadow);
+> > > > diff --git a/mm/workingset.c b/mm/workingset.c
+> > > > index 79585d55c45d..44b331ce3040 100644
+> > > > --- a/mm/workingset.c
+> > > > +++ b/mm/workingset.c
+> > > > @@ -244,6 +244,30 @@ static void *lru_gen_eviction(struct folio *folio)
+> > > >         return pack_shadow(mem_cgroup_id(memcg), pgdat, token, refs);
+> > > >  }
+> > > >
+> > > > +/*
+> > > > + * Test if the folio is recently evicted.
+> > > > + *
+> > > > + * As a side effect, also populates the references with
+> > > > + * values unpacked from the shadow of the evicted folio.
+> > > > + */
+> > > > +static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> > > > +       struct pglist_data **pgdat, unsigned long *token, bool *workingset)
+> > > > +{
+> > > > +       struct mem_cgroup *eviction_memcg;
+> > > > +       struct lruvec *lruvec;
+> > > > +       struct lru_gen_struct *lrugen;
+> > > > +       unsigned long min_seq;
+> > > > +
+> > > > +       unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+> > > > +       eviction_memcg = mem_cgroup_from_id(*memcgid);
+> > > > +
+> > > > +       lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
+> > > > +       lrugen = &lruvec->lrugen;
+> > > > +
+> > > > +       min_seq = READ_ONCE(lrugen->min_seq[file]);
+> > > > +       return !((*token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)));
+> > > > +}
+> > >
+> > > Nit: not refactoring actually looks cleaner to me -- there are only a
+> > > few lines of duplicated code and you can get rid of 4 parameters
+> > > including the unused workingset in the next patch.
+> >
+> > (resending this because I forgot to forward to the rest of the
+> > group!)
+> >
+> > Thanks for the comment, Yu!
+> >
+> > Personally, I prefer refactoring this piece of logic - I do think that
+> > it is cleaner than copying the logic into the syscall implementation.
+>
+> Let me clarify.
+>
+> You can add
+>   lru_gen_test_recent(void *shadow, bool file)
+> without refactoring the existing
+>   lru_gen_refault().
+>
+> Set the boilerplate aside, you only repeat one line of code, which is
+> the last line in the new function.
+>
+> (The boilerplate code is repeated in many places, and that's why it's
+> called boilerplate.)
 
-Hi all,
-
-Today's linux-next merge of the iommufd tree got a conflict in:
-
-  drivers/vfio/vfio_main.c
-
-between commits:
-
-  ff62b8e6588f ("driver core: make struct class.devnode() take a const *")
-  e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
-
-from the driver-core, vfio trees and commits:
-
-  c2849d718d26 ("vfio: Move vfio group specific code into group.c")
-  f96dc03a8368 ("vfio: Wrap vfio group module init/clean code into helpers")
-
-from the iommufd tree.
-
-I fixed it up (I think - see below and I had to add the fix up patch as
-well) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 6 Dec 2022 13:17:41 +1100
-Subject: [PATCH] vfio: fix up for "driver core: make struct class.devnode()=
- take a const *"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/vfio/group.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/vfio/group.c b/drivers/vfio/group.c
-index c5d8bf10495e..bb24b2f0271e 100644
---- a/drivers/vfio/group.c
-+++ b/drivers/vfio/group.c
-@@ -827,7 +827,7 @@ bool vfio_file_has_dev(struct file *file, struct vfio_d=
-evice *device)
- }
- EXPORT_SYMBOL_GPL(vfio_file_has_dev);
-=20
--static char *vfio_devnode(struct device *dev, umode_t *mode)
-+static char *vfio_devnode(const struct device *dev, umode_t *mode)
- {
- 	return kasprintf(GFP_KERNEL, "vfio/%s", dev_name(dev));
- }
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/vfio/vfio_main.c
-index 718215b55038,e21ff965141e..000000000000
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@@ -433,95 -241,28 +239,16 @@@ out_uninit
-  	ida_free(&vfio.device_ida, device->index);
-  	return ret;
-  }
- -EXPORT_SYMBOL_GPL(vfio_init_device);
- -
- -/*
- - * The helper called by driver @release callback to free the device
- - * structure. Drivers which don't have private data to clean can
- - * simply use this helper as its @release.
- - */
- -void vfio_free_device(struct vfio_device *device)
- -{
- -	kvfree(device);
- -}
- -EXPORT_SYMBOL_GPL(vfio_free_device);
- =20
-- static struct vfio_group *vfio_noiommu_group_alloc(struct device *dev,
-- 		enum vfio_group_type type)
-- {
-- 	struct iommu_group *iommu_group;
-- 	struct vfio_group *group;
-- 	int ret;
--=20
-- 	iommu_group =3D iommu_group_alloc();
-- 	if (IS_ERR(iommu_group))
-- 		return ERR_CAST(iommu_group);
--=20
-- 	ret =3D iommu_group_set_name(iommu_group, "vfio-noiommu");
-- 	if (ret)
-- 		goto out_put_group;
-- 	ret =3D iommu_group_add_device(iommu_group, dev);
-- 	if (ret)
-- 		goto out_put_group;
--=20
-- 	group =3D vfio_create_group(iommu_group, type);
-- 	if (IS_ERR(group)) {
-- 		ret =3D PTR_ERR(group);
-- 		goto out_remove_device;
-- 	}
-- 	iommu_group_put(iommu_group);
-- 	return group;
--=20
-- out_remove_device:
-- 	iommu_group_remove_device(dev);
-- out_put_group:
-- 	iommu_group_put(iommu_group);
-- 	return ERR_PTR(ret);
-- }
--=20
-- static struct vfio_group *vfio_group_find_or_alloc(struct device *dev)
-- {
-- 	struct iommu_group *iommu_group;
-- 	struct vfio_group *group;
--=20
-- 	iommu_group =3D iommu_group_get(dev);
-- 	if (!iommu_group && vfio_noiommu) {
-- 		/*
-- 		 * With noiommu enabled, create an IOMMU group for devices that
-- 		 * don't already have one, implying no IOMMU hardware/driver
-- 		 * exists.  Taint the kernel because we're about to give a DMA
-- 		 * capable device to a user without IOMMU protection.
-- 		 */
-- 		group =3D vfio_noiommu_group_alloc(dev, VFIO_NO_IOMMU);
-- 		if (!IS_ERR(group)) {
-- 			add_taint(TAINT_USER, LOCKDEP_STILL_OK);
-- 			dev_warn(dev, "Adding kernel taint for vfio-noiommu group on device\n"=
-);
-- 		}
-- 		return group;
-- 	}
--=20
-- 	if (!iommu_group)
-- 		return ERR_PTR(-EINVAL);
--=20
-- 	/*
-- 	 * VFIO always sets IOMMU_CACHE because we offer no way for userspace to
-- 	 * restore cache coherency. It has to be checked here because it is only
-- 	 * valid for cases where we are using iommu groups.
-- 	 */
-- 	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY)) {
-- 		iommu_group_put(iommu_group);
-- 		return ERR_PTR(-EINVAL);
-- 	}
--=20
-- 	group =3D vfio_group_get_from_iommu(iommu_group);
-- 	if (!group)
-- 		group =3D vfio_create_group(iommu_group, VFIO_IOMMU);
--=20
-- 	/* The vfio_group holds a reference to the iommu_group */
-- 	iommu_group_put(iommu_group);
-- 	return group;
-- }
--=20
-  static int __vfio_register_dev(struct vfio_device *device,
-- 		struct vfio_group *group)
-+ 			       enum vfio_group_type type)
-  {
-- 	struct vfio_device *existing_device;
-  	int ret;
- =20
-- 	/*
-- 	 * In all cases group is the output of one of the group allocation
-- 	 * functions and we have group->drivers incremented for us.
-- 	 */
-- 	if (IS_ERR(group))
-- 		return PTR_ERR(group);
-+ 	if (WARN_ON(device->ops->bind_iommufd &&
-+ 		    (!device->ops->unbind_iommufd ||
-+ 		     !device->ops->attach_ioas)))
-+ 		return -EINVAL;
- =20
-  	/*
-  	 * If the driver doesn't specify a set then the device is added to a
-@@@ -1848,19 -1260,6 +1278,10 @@@ static int __init vfio_init(void
-  	if (ret)
-  		return ret;
- =20
- +	ret =3D vfio_virqfd_init();
- +	if (ret)
- +		goto err_virqfd;
- +
-- 	/* /dev/vfio/$GROUP */
-- 	vfio.class =3D class_create(THIS_MODULE, "vfio");
-- 	if (IS_ERR(vfio.class)) {
-- 		ret =3D PTR_ERR(vfio.class);
-- 		goto err_group_class;
-- 	}
--=20
-- 	vfio.class->devnode =3D vfio_devnode;
--=20
-  	/* /sys/class/vfio-dev/vfioX */
-  	vfio.device_class =3D class_create(THIS_MODULE, "vfio-dev");
-  	if (IS_ERR(vfio.device_class)) {
-@@@ -1871,36 -1270,17 +1292,20 @@@
-  	pr_info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
-  	return 0;
- =20
-- err_alloc_chrdev:
-- 	class_destroy(vfio.device_class);
-- 	vfio.device_class =3D NULL;
-  err_dev_class:
-- 	class_destroy(vfio.class);
-- 	vfio.class =3D NULL;
-- err_group_class:
- +	vfio_virqfd_exit();
- +err_virqfd:
-- 	vfio_container_cleanup();
-+ 	vfio_group_cleanup();
-  	return ret;
-  }
- =20
-  static void __exit vfio_cleanup(void)
-  {
-- 	WARN_ON(!list_empty(&vfio.group_list));
--=20
-  	ida_destroy(&vfio.device_ida);
-- 	ida_destroy(&vfio.group_ida);
-- 	unregister_chrdev_region(vfio.group_devt, MINORMASK + 1);
-  	class_destroy(vfio.device_class);
-  	vfio.device_class =3D NULL;
-- 	class_destroy(vfio.class);
- +	vfio_virqfd_exit();
-- 	vfio_container_cleanup();
-- 	vfio.class =3D NULL;
-+ 	vfio_group_cleanup();
-  	xa_destroy(&vfio_device_set_xa);
-  }
- =20
-
---Sig_/o9vwjh7lb8fvLELx83EBPU5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOp0EACgkQAVBC80lX
-0GwSqwf/VSL+BaMkAqlxfXyDeDtvFHssZVhKxEc0WT8IxWIgCRgPx2BdDXeyctPq
-7F0a0F7b0w/cUxohh810lsbhbqr5A7dyq01jZLYQAy+OK+tYjhYHkn7NYgL3t69G
-Lz5pF+pbufYY5wgWXxsfXhQsQBfroLf+vGPYY94yksrgqvYd4mor5p202PXZIbmm
-w30rEYiYPeFfBvhQGjU9dZLvK/KPzTatUlhG+U98sB577Vv8NOtpp3m+r7gNItN/
-4QJwGoRzsJCEkKjhe6JIq2witcnQkDCKdyxlRLDatM8HgpFQ86ri7kaNWu6gVppr
-DD1V63X2GAXzKtu2f/fakiHo+ZJYhA==
-=4xVG
------END PGP SIGNATURE-----
-
---Sig_/o9vwjh7lb8fvLELx83EBPU5--
+Oh maybe I've misunderstood your original comment. Your
+suggestion is to repeat the eviction recency check in workingset.c
+(i.e keep the *_gen_refault unchanged - just copy that logic to
+*_test_recent)?
