@@ -2,122 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E159064429B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:57:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9F364429E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbiLFL5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:57:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S234634AbiLFL5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235132AbiLFL4z (ORCPT
+        with ESMTP id S234110AbiLFL5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:56:55 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D521810546;
-        Tue,  6 Dec 2022 03:56:54 -0800 (PST)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NRJll4nJvzRpn5;
-        Tue,  6 Dec 2022 19:56:03 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Dec 2022 19:56:52 +0800
-Subject: Re: [PATCH 1/2] hwtracing: hisi_ptt: Only add the supported devices
- to the filters list
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Yicong Yang <yangyicong@huawei.com>,
-        <mathieu.poirier@linaro.org>
-CC:     <yangyicong@hisilicon.com>, <alexander.shishkin@linux.intel.com>,
-        <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
-        <prime.zeng@huawei.com>, <linux-kernel@vger.kernel.org>,
-        <jonathan.cameron@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221122120209.25682-1-yangyicong@huawei.com>
- <fb2441ce-fe4c-3733-5cd3-93a7d949d9f0@huawei.com>
- <47d600f0-e62e-e3b5-7fbe-68adce92af4f@arm.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <e82eed9c-164e-5454-299d-611882150cdb@huawei.com>
-Date:   Tue, 6 Dec 2022 19:56:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 6 Dec 2022 06:57:39 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74EB7E3D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:57:37 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id qk9so5617251ejc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:57:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jN+SaF+zuxoUU81Nw24j+GhxhXHvVPtH9udHI+xrnjQ=;
+        b=xTaTf2TBlJ0riAw3zVxcG64JhSxN9FcWFLIMmcX0wofkLtWC5FsleYIdwiEITwJ+Gv
+         5Gei4HbvI6mEjtas3s5gFhjtdqKbB1Tf5+ZGEYVZihdtxMtgiLvqJsc5ulBwo7bLbZLw
+         b2z+jFz/E+92taEGUrEehphYCmDlGCCmcMXmnQ5EST2xzIGI/VxEPqr2HqzNk6Ij2GP/
+         lJPM8fuD0Renq0iiUZGQkeAnJzA+zZRKSFZZibmnfJeQlObM+lnmUPuM8v7crfCV+lxy
+         pA00CBqGy759uIBV3CwywMBK3fZxakGrBpmilUsBbc7Tbh0f75UJOXxRK99JTrZ+/y20
+         Hxig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jN+SaF+zuxoUU81Nw24j+GhxhXHvVPtH9udHI+xrnjQ=;
+        b=2qXQsMIgONfAH15DKmfYkxlqsRz4wsZQbCW4OSngs9dhp8sHRkn4iRTRIA4BtBC8yw
+         pGrWQhyPTZ2EB11m4UU62tbnfyP4FtCedn1vlyenXxLvj8MVRSEq7SbKUmsspXMhCRO+
+         6Z7Q1QAS0aNYSAPC94RXMoX4ORvcHiXPah/BbJUWK7tWCpmHe/NZ8cgZerRN61T4AaWM
+         93UMxTB2vxooyA6WQ6cSyUGgpVEtr0sbZxXjXEq4hdVBIHcM48b63DQHlh/xeeRvHWDo
+         afJh1J5R7Smw4MYTWt6nwND/5wbYOaAufUx0mAqh3Qn7RlmCt7DJW82E5Rvww0YyOXKa
+         tfDA==
+X-Gm-Message-State: ANoB5pnHXRpChYyIYCTVP9S44gqNEBO9AU9LywfxpDSy2fQSl8WDcTl1
+        PXGsrSQbLg7W4Z8bMvca3Hos8A==
+X-Google-Smtp-Source: AA0mqf4c4rvYDO6ZyFGDQehYMtvpEw9FwaavKBWmmlL1SnkiTa/RhiNiU//LHE7chlPl7o1++LsYEg==
+X-Received: by 2002:a17:906:960f:b0:7c1:133a:37bd with SMTP id s15-20020a170906960f00b007c1133a37bdmr788393ejx.470.1670327855730;
+        Tue, 06 Dec 2022 03:57:35 -0800 (PST)
+Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
+        by smtp.gmail.com with ESMTPSA id ky20-20020a170907779400b007c0ac4e6b6esm6472076ejc.143.2022.12.06.03.57.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 03:57:35 -0800 (PST)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>
+Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v2 00/11] can: m_can: Optimizations for tcan and peripheral chips
+Date:   Tue,  6 Dec 2022 12:57:17 +0100
+Message-Id: <20221206115728.1056014-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-In-Reply-To: <47d600f0-e62e-e3b5-7fbe-68adce92af4f@arm.com>
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/6 19:46, Suzuki K Poulose wrote:
-> Hi Yicong Yang
-> 
-> On 06/12/2022 11:34, Yicong Yang wrote:
->> Hi Mathieu,
->>
->> Do we still have a chance to catch this cycle for these 2 patches?
-> 
-> Sorry, I have been handling the coresight tree this cycle (and will be
-> going forward). I have already sent the pull request to Greg. I am
-> afraid it is late for this cycle.
-> 
-> I can queue it for the next cycle.
-> 
+Hi Marc and everyone,
 
-Thanks for the information.
-It's ok, I'll resend in the next cycle.
+as requested I split the series into two parts. This is the first parts
+with simple improvements to reduce the number of SPI transfers. The
+second part will be the rest with coalescing support and more complex
+optimizations.
 
-Thanks,
-Yicong
+Changes in v2:
+- Fixed register ranges
+- Added fixes: tag for two patches
 
->>
->> Thanks!
->>
->> On 2022/11/22 20:02, Yicong Yang wrote:
->>> From: Yicong Yang <yangyicong@hisilicon.com>
->>>
->>> The PTT device can only support the devices on the same PCIe core,
->>> within BDF range [lower_bdf, upper_bdf]. It's not correct to assume
->>> the devices on the root bus are from the same PCIe core, there are
->>> cases that root ports from different PCIe core are sharing the same
->>> bus. So add the checking when initialize the filters list.
->>>
->>> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
->>> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
->>> ---
->>>   drivers/hwtracing/ptt/hisi_ptt.c | 10 ++++++++++
->>>   1 file changed, 10 insertions(+)
->>>
->>> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
->>> index 5d5526aa60c4..30f1525639b5 100644
->>> --- a/drivers/hwtracing/ptt/hisi_ptt.c
->>> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
->>> @@ -356,8 +356,18 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
->>>     static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
->>>   {
->>> +    struct pci_dev *root_port = pcie_find_root_port(pdev);
->>>       struct hisi_ptt_filter_desc *filter;
->>>       struct hisi_ptt *hisi_ptt = data;
->>> +    u32 port_devid;
->>> +
->>> +    if (!root_port)
->>> +        return 0;
->>> +
->>> +    port_devid = PCI_DEVID(root_port->bus->number, root_port->devfn);
->>> +    if (port_devid < hisi_ptt->lower_bdf ||
->>> +        port_devid > hisi_ptt->upper_bdf)
->>> +        return 0;
->>>         /*
->>>        * We won't fail the probe if filter allocation failed here. The filters
->>>
-> 
-> 
-> .
+Sorry that I am one day later than promised.
+
+Best,
+Markus
+
+Markus Schneider-Pargmann (11):
+  can: m_can: Eliminate double read of TXFQS in tx_handler
+  can: m_can: Avoid reading irqstatus twice
+  can: m_can: Read register PSR only on error
+  can: m_can: Count TXE FIFO getidx in the driver
+  can: m_can: Count read getindex in the driver
+  can: m_can: Batch acknowledge transmit events
+  can: m_can: Batch acknowledge rx fifo
+  can: tcan4x5x: Remove invalid write in clear_interrupts
+  can: tcan4x5x: Fix use of register error status mask
+  can: tcan4x5x: Fix register range of first two blocks
+  can: tcan4x5x: Specify separate read/write ranges
+
+ drivers/net/can/m_can/m_can.c           | 90 +++++++++++++++----------
+ drivers/net/can/m_can/tcan4x5x-core.c   | 19 ++----
+ drivers/net/can/m_can/tcan4x5x-regmap.c | 47 ++++++++++---
+ 3 files changed, 100 insertions(+), 56 deletions(-)
+
+
+base-commit: 76dcd734eca23168cb008912c0f69ff408905235
+-- 
+2.38.1
+
