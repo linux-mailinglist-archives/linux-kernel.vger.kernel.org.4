@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0224644E7F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:22:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFB3E644E81
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiLFWWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:22:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
+        id S229798AbiLFWWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLFWVx (ORCPT
+        with ESMTP id S229731AbiLFWWb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:21:53 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270A63721E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 14:21:53 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id ud5so9798173ejc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 14:21:53 -0800 (PST)
+        Tue, 6 Dec 2022 17:22:31 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C643F078
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 14:22:29 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id bs21so25570884wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 14:22:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TKkFwW/WJj63cceDkNUyxQnWr+gIBDmURWxHFL1Mn58=;
-        b=SpaZqwytEC8qi/eZ9PnrcubRrrYWmbAnqRPB3LAEWHxFEOLArv4hM1q0/XQSpcWW3W
-         wcfQxIdeqMmAGlxwlmok//NY9E+OwvS3BKl5awv/vAVUqP5jrIeLoNVkZ/4LZKDoDjtn
-         nukIse+HPBB26iYWSVuTSwnxV6ZdBX2yln66WwGz/Nh/diIdNOR16GdT2pCQ8Pi3+M7I
-         LrEIlB/ic75lBTiMOgZ39kBWRMA6dM36aBc4BqibWwTXTC6rzmUPkitF9HNZtf2qITxK
-         kc1U6JTpq8BkP3OSL0v5+Xo6eMoiRmm++Ch1E/5sYJ1J974fzrAAL48zlmvfk9n06wp1
-         VdmQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CMe+dVd5NCnca0fxq7BMWY37ENtlTcvSDlcvk7XOY2w=;
+        b=hGbu5/VGxRxg50qkMsOPo8bLyBgo+q91kTTCe8kaBvHJOxYbPX38GVcWeGoDGm/Ymq
+         NJA40cb1ccJ8HLNgZAJCmkHWVhPE+9Cfny6puzkdvBxPaqp6iV/Bz/YkzIFEfUwhMm06
+         Bqq6MSYtS7kUk7tDGPHtcSnRrRz/KPHnzlgGKLE+YntEA/S4Miw5YaiLe0I9f9wD34Fx
+         nSpHgT9O98JO7WwHlBhu5jb5jPdsV6kGWtpIhZ/7H1Q1+HvtbrPykwbfK6KDePI6GH6W
+         Uu2aRvejEnDDnr4N1c8ctTN4TgzHndhLy1owF7+qQxbKxjlcgrw2QEr75aFYZSASkU60
+         /2xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TKkFwW/WJj63cceDkNUyxQnWr+gIBDmURWxHFL1Mn58=;
-        b=W/10GraKreIaz+ZHc6TqbTpdKZ7NT9usytN/Uf+h/k8YqYv6cSxzgpr7fE3LnpCx3j
-         PLT0STjwoEHQNJhqWgLGhjrS2JxQLNv2yBR6iHDezDj0VGXUD+QyYdLcQtVyA4n4Gu3C
-         UeyTZeXC8bmj6H82r+NoPGOXIZ0uHd0hMyHokC2qhD80Qq1WJ33IH7g69sDKpF+nBT5G
-         c3VGy7OIPWT9kuG2qKdeYye48y5HBwEmHiprsaVdbECaC6Kx5dobzs8Zpmm04Wh9H3lc
-         wJaw7sOgBOyo5RkUwdPVmpFH/Jhs79/XgGqUgYyfqVpU+itZ7LAsbOr01DyLly7t0rzx
-         0KwA==
-X-Gm-Message-State: ANoB5pm5XcWLdW72Otnu3BHZ9o7/JjZ4sh3Zh4DS69KXuqD7HUvVTRu6
-        Rn4aFUsBdovPDYMRjOY6dwo=
-X-Google-Smtp-Source: AA0mqf7dXIFbhf3bJV1aWUaZvfOa6XL+fDFKStzwyKljz6sQnh/HA7KNNnTX+bYZI6xVs/7A9Vni8g==
-X-Received: by 2002:a17:906:e2d4:b0:7c1:532:f420 with SMTP id gr20-20020a170906e2d400b007c10532f420mr5694939ejb.679.1670365311249;
-        Tue, 06 Dec 2022 14:21:51 -0800 (PST)
-Received: from debian ([5.180.62.49])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0073dc5bb7c32sm7816807eja.64.2022.12.06.14.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 14:21:50 -0800 (PST)
-Date:   Tue, 6 Dec 2022 17:21:48 -0500
-From:   Petar Gligoric <petar.gligor@gmail.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Petar Gligoric <petar.gligoric@rohde-schwarz.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ian Rogers <irogers@google.com>
-Subject: Re: [PATCH v2 0/3] perf: introduce perf based task analyzer
-Message-ID: <Y4/AfA2OYtlTkKwo@debian>
-References: <20221206154406.41941-1-petar.gligor@gmail.com>
- <CAM9d7cizPC3p0-Z1oYsDPofwNfZHyKYiJR5JXEcS31Q=mgzcLg@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CMe+dVd5NCnca0fxq7BMWY37ENtlTcvSDlcvk7XOY2w=;
+        b=Ksoy7az921XvbU2E1jMym6nnxaqe/kGideyBfRpUcANgYW+r13p0KjZbvFR1yiBI7V
+         0T9WUlway9hCoDAUKgnlXqbUHtHFRWIwrZwokRyykmA4Ms1IiY98xwQY9u/ZIPlZdflZ
+         Eln4lzMUgIHdI/3ITny2G5U50NVz+ffKOKHTxbJpu4ZoOqRKMZ2zwRNGEp4ZTXQ0jLOC
+         9rYsKyZMSG9zDZtMuXohcxb6BnKaZn8Kqdyi/awscT0649ygr8v7UU6SU4m8P1wWmygv
+         sRVCR0De+bCx7wQLsjdq0FquUMMzbvnmMCFFcpqu1ViLzSaExgwLzvfXACiSAe9d4q2e
+         eD/g==
+X-Gm-Message-State: ANoB5pmrkBk5AhdR0YH4wynWRiz9K0sXqrrcikFdMev3cB2ox3CYcgKD
+        vwhPPeBMtjQZydtLhtMtnkJUmsH0+iSP/l4N3mYUag==
+X-Google-Smtp-Source: AA0mqf5zMrWwGRzkbmuSCyGMTaNHBr6zYZY0ywn56qEJKuvFEFo7BFbRLefMegvZ+n3RUbvGi8uMC4uKP0fOqFAbMP0=
+X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
+ d9-20020adfe2c9000000b00241db86176dmr43870568wrj.40.1670365347456; Tue, 06
+ Dec 2022 14:22:27 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM9d7cizPC3p0-Z1oYsDPofwNfZHyKYiJR5JXEcS31Q=mgzcLg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221205225940.3079667-3-irogers@google.com> <Y49qiCIiyaehEOaG@kernel.org>
+ <Y49rvLO2RnJBBNL/@kernel.org> <Y49skYa5VYPMU+RF@kernel.org>
+ <Y49uKfzfCoZ1ok62@kernel.org> <Y49vx0v6Z7EiR8jr@kernel.org>
+ <Y49wxSIK7dJ7iTDg@kernel.org> <Y491d1wEW4TfUi5f@kernel.org>
+ <Y4921D+36UGdhK92@kernel.org> <Y494TNa0ZyPH9YSD@kernel.org> <Y498YP2N3gvFSr/X@kernel.org>
+In-Reply-To: <Y498YP2N3gvFSr/X@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 6 Dec 2022 14:22:15 -0800
+Message-ID: <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,27 +79,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 10:32:35AM -0800, Namhyung Kim wrote:
-> Hello,
-> 
-> Have you looked at 'perf sched timehist' ?
-> I think it has the common functionality and can be easily extended if there's
-> missing one.
-> 
-> Thanks,
-> Namhyung
-> 
+On Tue, Dec 6, 2022 at 9:31 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+>
+> Em Tue, Dec 06, 2022 at 02:13:48PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Tue, Dec 06, 2022 at 02:07:32PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > Em Tue, Dec 06, 2022 at 02:01:43PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > Em Tue, Dec 06, 2022 at 01:41:41PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > > > >  Now to look at the BUILD_BPF_SKEL=1 kaboom:
+> > > > >
+> > > > >  [acme@quaco perf]$ alias m
+> > > > > alias m='rm -rf ~/libexec/perf-core/ ; make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 O=/tmp/build/perf -C tools/perf install-bin && perf test python'
+> > > > > [acme@quaco perf]$ m
+> > > > > make: Entering directory '/home/acme/git/perf/tools/perf'
+> > > > >   BUILD:   Doing 'make -j8' parallel build
+> > > > >   <SNIP>
+> > > > > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `add_work':
+> > > > > /home/acme/git/perf/tools/perf/util/bpf_kwork.c:285: undefined reference to `perf_kwork_add_work'
+> > > > > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `lock_contention_read':
+> > >
+> > > For that bpf_kwork.c see below. Now to see why the python binding is not
+> > > building, I guess is unrelated and you have some other outstanding
+> > > patch?
+> >
+> > Its related:
+> >
+> > [acme@quaco perf]$ perf test -v python
+> > Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
+> >  14: 'import perf' in python                                         :
+> > --- start ---
+> > test child forked, pid 1669872
+> > python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf/python'); import perf" | '/usr/bin/python3' "
+> > Traceback (most recent call last):
+> >   File "<stdin>", line 1, in <module>
+> > ImportError: /tmp/build/perf/python/perf.cpython-310-x86_64-linux-gnu.so: undefined symbol: tep_unload_plugins
+> > test child finished with -1
+> > ---- end ----
+> > 'import perf' in python: FAILED!
+> > [acme@quaco perf]$
+> >
+> > Now checking why NO_LIBTRACEEVENT=1 fails with this...
+> >
+> > [acme@quaco perf]$ find tools/perf/ -name "*.c" | xargs grep tep_unload_plugins
+> > tools/perf/util/trace-event.c:        tep_unload_plugins(t->plugin_list, t->pevent);
+> > [acme@quaco perf]$
+> >
+> > [acme@quaco perf]$ grep trace-event tools/perf/util/python-ext-sources
+> > util/trace-event.c
+> > [acme@quaco perf]$
+> >
+> > Trying to fix...
+>
+> I'm missing some detail, this isn't working, util/trace-event.c is still
+> being built and linked.
+>
+> The python binding should be usable without tracepoints, in fact its
+> first usage was just to have access to the perf metaevents, see
+> tools/perf/python/twatch.py.
 
-Thanks for the input! For this patchset we explicitly decided against
-extending "perf sched timehist" - after some pros and cons. Mainly we
-didn't want to break existing programs (which might parse the output of
-perf sched) and also the goal of the task-analyzer is a bit different.
-E.g what will follow as a follow-up patch, is to show IRQs visually
-pleasing intermixed with tasks to show potential sources of task
-latency. This will be offered as an option for the task-analyzer, but
-would be too much functionality for "perf sched timehist". This was the
-main reason why we decided against the extension.
+You're right. I'd assumed that if you were disabling libtraceevent
+then you'd also disable python. To fix the issue above you can do:
 
-Best Regards,
-Petar
+--- a/tools/perf/util/python-ext-sources
++++ b/tools/perf/util/python-ext-sources
+@@ -30,7 +30,6 @@ util/rblist.c
+util/counts.c
+util/print_binary.c
+util/strlist.c
+-util/trace-event.c
+../lib/rbtree.c
+util/string.c
+util/symbol_fprintf.c
 
+but this needs making conditional (possibly in setup.py) on whether
+libtraceevent is present or not.
+
+Thanks,
+Ian
+
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index f0e4daeef8120853..5bd67d54d036f281 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -348,6 +348,10 @@ export PYTHON_EXTBUILD_LIB PYTHON_EXTBUILD_TMP
+>  python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT)python/perf*.so
+>
+>  PYTHON_EXT_SRCS := $(shell grep -v ^\# util/python-ext-sources)
+> +ifneq ($(CONFIG_TRACEEVENT),y)
+> +  PYTHON_EXT_SRCS := $(call filter-out,$(PYTHON_EXT_SRCS),util/trace-event.c)
+> +endif
+> +
+>  PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBAPI)
+>
+>  SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
+> diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
+> index 728fe2f51759eb0d..72088aec2857b316 100644
+> --- a/tools/perf/util/python.c
+> +++ b/tools/perf/util/python.c
+> @@ -1330,6 +1330,9 @@ static struct {
+>  static PyObject *pyrf__tracepoint(struct pyrf_evsel *pevsel,
+>                                   PyObject *args, PyObject *kwargs)
+>  {
+> +#ifndef HAVE_LIBTRACEEVENT
+> +       return NULL;
+> +#else
+>         struct tep_event *tp_format;
+>         static char *kwlist[] = { "sys", "name", NULL };
+>         char *sys  = NULL;
+> @@ -1344,6 +1347,7 @@ static PyObject *pyrf__tracepoint(struct pyrf_evsel *pevsel,
+>                 return _PyLong_FromLong(-1);
+>
+>         return _PyLong_FromLong(tp_format->id);
+> +#endif // HAVE_LIBTRACEEVENT
+>  }
+>
+>  static PyMethodDef perf__methods[] = {
