@@ -2,140 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F315644071
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB6A644055
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:51:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235123AbiLFJwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:52:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S235341AbiLFJvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:51:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235324AbiLFJu4 (ORCPT
+        with ESMTP id S235121AbiLFJuF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:50:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10B4B11;
-        Tue,  6 Dec 2022 01:50:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DB35615FA;
-        Tue,  6 Dec 2022 09:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A05C433D7;
-        Tue,  6 Dec 2022 09:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670320215;
-        bh=MY+6h6alYIXrhQQ7+pDVOFz8txSmdRUSJmb23n3RKnM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mL9E6zOfUuvp0cA8HC4iqHArHQEaLKI/HCiMMmADKjIjTOqu0/nj4WXHSeB61DKQ6
-         MIFbT/hiiZi4MVaM74wfXTN9r8w37SLN5v78sD4aElJAl1+//2zlxk3A3PTazY8Mjj
-         ygSbS5XXuEZlh0B3wKLX4WB6w+l5IOx+B7NHyb94qc4HB76i/VhEmO+l+QLikcrBOj
-         lNX7+B6LYJgdkDUMn5uXMnK2FtMbt2sAHqFjRJK5tB50SbPmQdSPjfLMrt6riYbBRk
-         Dmd/GS+vBsr49mXRmxTng3z+szGSc+rBNJnzSvSIeTgtJ0DXGuYpsL1WCT2ynHDwxQ
-         ZL8qD/Y1kzfyg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Yasushi SHOJI <yasushi.shoji@gmail.com>,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Sasha Levin <sashal@kernel.org>, wg@grandegger.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
-        stefan.maetje@esd.eu, socketcan@hartkopp.net, hbh25y@gmail.com,
-        paskripkin@gmail.com, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 07/12] can: mcba_usb: Fix termination command argument
-Date:   Tue,  6 Dec 2022 04:49:49 -0500
-Message-Id: <20221206094955.987437-7-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221206094955.987437-1-sashal@kernel.org>
-References: <20221206094955.987437-1-sashal@kernel.org>
+        Tue, 6 Dec 2022 04:50:05 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33C7140AA;
+        Tue,  6 Dec 2022 01:49:54 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so14290989pjm.2;
+        Tue, 06 Dec 2022 01:49:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wE+Y9YKg27+j9ZwRsDEfAYfOT0+DAYDtUxA7ts0XIEs=;
+        b=NSM5ggndPkqRsN5xzlfgpI1pKlPrUXy790lqSyNuUHmifHQgB4fshEnNz1GCS5XTut
+         +/pgaHrZjVKmDIMxL0ndw2W4+Cg+gdvvFIRPIUKWSCfIN+UX0jrjh5Fj50g08DqnwplW
+         p01Q5UxwQjMJzs4TIVh1V/YY0r3bb5AyHc4qxZeMFMc7hnvEIHa4Go41LzG0/aAzWeaw
+         gfFxVzGRXOdrxgc8V4LKoeHjbppma+vzisbqDiD62/M5f+nf1OLBrMu5rkD92hBx2Wqd
+         gnIFwyLLzS2Kz8IXtvFhhFChsrzol8LVKh+5P0i/OD0u/VQEGZDb14SjvPSmBYyARQmO
+         B6Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wE+Y9YKg27+j9ZwRsDEfAYfOT0+DAYDtUxA7ts0XIEs=;
+        b=5gFpE+iwAEynqCm9ait+mD+AL4iqhMrMBsitANePyd0Rxho4eKXiFANM4DxoUBa9+7
+         v19yTdtrsdFF9A/DgR1chTqg3hEcd7BYe1uYWusAXzTv445/xvwko4Wv+M3mPH49pGLm
+         diVYaFUB6OK1wr0UB8DJQ5vZ48AIjZkPuS7B+JE1j+uiKl8QtBUtdgTXRhKL6wVjCOxb
+         1m4pkOkROE8mbYpg4QOclZDhiWQu7tgSFaLwSK98txyqSYWxxw0aU2oQeA7RtBVcQf0G
+         NzX5yiz8YVFWmm9yc4t7IrOzk6DaQ9Ghm9OoQPGuOmGFYUD1codPWU+zdVm0rEWO3QRn
+         hdlw==
+X-Gm-Message-State: ANoB5pkXoSfg26abqE/Fs9NApZ34LyiZ9905rmmmLgOWm0PXW5dTSyen
+        /UR1KDzKLdiGcaJM7gBp8bWszeqtO3o=
+X-Google-Smtp-Source: AA0mqf7lDjbMpwp0z7KNChyrxwV938s/rltfy4lwKcANWM7ZOzolJRFzjvteZvezkKIPKtoiJlSLHw==
+X-Received: by 2002:a17:902:e751:b0:189:80fe:b483 with SMTP id p17-20020a170902e75100b0018980feb483mr43641419plf.20.1670320194423;
+        Tue, 06 Dec 2022 01:49:54 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-69.three.co.id. [180.214.232.69])
+        by smtp.gmail.com with ESMTPSA id m1-20020a17090a5a4100b00219396d795esm10552409pji.15.2022.12.06.01.49.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 01:49:53 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 70D6E10437E; Tue,  6 Dec 2022 16:49:50 +0700 (WIB)
+Date:   Tue, 6 Dec 2022 16:49:50 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Robert Schlabbach <robert_s@gmx.net>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: Re: [PATCH -next] media: dvb/frontend.h: fix kernel-doc warnings
+Message-ID: <Y48QPphds7q6b5Sc@debian.me>
+References: <20221128054303.3124-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="NJPqvbdg7uJRbd2o"
+Content-Disposition: inline
+In-Reply-To: <20221128054303.3124-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yasushi SHOJI <yasushi.shoji@gmail.com>
 
-[ Upstream commit 1a8e3bd25f1e789c8154e11ea24dc3ec5a4c1da0 ]
+--NJPqvbdg7uJRbd2o
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Microchip USB Analyzer can activate the internal termination resistors
-by setting the "termination" option ON, or OFF to to deactivate them.
-As I've observed, both with my oscilloscope and captured USB packets
-below, you must send "0" to turn it ON, and "1" to turn it OFF.
+On Sun, Nov 27, 2022 at 09:43:03PM -0800, Randy Dunlap wrote:
+> scripts/kernel-doc spouts multiple warnings, so fix them:
+>=20
+> include/uapi/linux/dvb/frontend.h:399: warning: Enum value 'QAM_1024' not=
+ described in enum 'fe_modulation'
+> include/uapi/linux/dvb/frontend.h:399: warning: Enum value 'QAM_4096' not=
+ described in enum 'fe_modulation'
+> frontend.h:286: warning: contents before sections
+> frontend.h:780: warning: missing initial short description on line:
+>  * enum atscmh_rs_code_mode
+>=20
 
-From the schematics in the user's guide, I can confirm that you must
-drive the CAN_RES signal LOW "0" to activate the resistors.
+These warnings are gone, thanks!
 
-Reverse the argument value of usb_msg.termination to fix this.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-These are the two commands sequence, ON then OFF.
+--=20
+An old man doll... just what I always wanted! - Clara
 
-> No.     Time           Source                Destination           Protocol Length Info
->       1 0.000000       host                  1.3.1                 USB      46     URB_BULK out
->
-> Frame 1: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> USB URB
-> Leftover Capture Data: a80000000000000000000000000000000000a8
->
-> No.     Time           Source                Destination           Protocol Length Info
->       2 4.372547       host                  1.3.1                 USB      46     URB_BULK out
->
-> Frame 2: 46 bytes on wire (368 bits), 46 bytes captured (368 bits)
-> USB URB
-> Leftover Capture Data: a80100000000000000000000000000000000a9
+--NJPqvbdg7uJRbd2o
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Signed-off-by: Yasushi SHOJI <yashi@spacecubics.com>
-Link: https://lore.kernel.org/all/20221124152504.125994-1-yashi@spacecubics.com
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/can/usb/mcba_usb.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/can/usb/mcba_usb.c b/drivers/net/can/usb/mcba_usb.c
-index 023bd34d48e3..e9ccdcce01cc 100644
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -47,6 +47,10 @@
- #define MCBA_VER_REQ_USB 1
- #define MCBA_VER_REQ_CAN 2
- 
-+/* Drive the CAN_RES signal LOW "0" to activate R24 and R25 */
-+#define MCBA_VER_TERMINATION_ON 0
-+#define MCBA_VER_TERMINATION_OFF 1
-+
- #define MCBA_SIDL_EXID_MASK 0x8
- #define MCBA_DLC_MASK 0xf
- #define MCBA_DLC_RTR_MASK 0x40
-@@ -469,7 +473,7 @@ static void mcba_usb_process_ka_usb(struct mcba_priv *priv,
- 		priv->usb_ka_first_pass = false;
- 	}
- 
--	if (msg->termination_state)
-+	if (msg->termination_state == MCBA_VER_TERMINATION_ON)
- 		priv->can.termination = MCBA_TERMINATION_ENABLED;
- 	else
- 		priv->can.termination = MCBA_TERMINATION_DISABLED;
-@@ -789,9 +793,9 @@ static int mcba_set_termination(struct net_device *netdev, u16 term)
- 	};
- 
- 	if (term == MCBA_TERMINATION_ENABLED)
--		usb_msg.termination = 1;
-+		usb_msg.termination = MCBA_VER_TERMINATION_ON;
- 	else
--		usb_msg.termination = 0;
-+		usb_msg.termination = MCBA_VER_TERMINATION_OFF;
- 
- 	mcba_usb_xmit_cmd(priv, (struct mcba_usb_msg *)&usb_msg);
- 
--- 
-2.35.1
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY48QOQAKCRD2uYlJVVFO
+o8IZAQC9Jp/HlCxYD1QwMWlpveelUltR/7GZe2BLiaFKmStTVwD/TuS3/X8dML++
+InSz15yG8dOqofv7kqfA8EBT8i9PdAY=
+=ZLQJ
+-----END PGP SIGNATURE-----
 
+--NJPqvbdg7uJRbd2o--
