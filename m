@@ -2,128 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E5E643C3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 05:26:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F41F643C41
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 05:27:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiLFE0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 23:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S232317AbiLFE10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 23:27:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiLFE0f (ORCPT
+        with ESMTP id S229982AbiLFE1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 23:26:35 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59371A22E
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 20:26:34 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id q1so12314930pgl.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 20:26:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JFzSwj2UsOfE/ApheojhszW7qAncTn0zPiyeo2+89Kk=;
-        b=XICQdXQkpUQT1aoGftgoROTd8PONW3R4QpgVai+2MlM4c9XQJ/upAeyi5101p5dgdZ
-         S3jo1DDu2qVWJK2zglerOVEqdt5xkZqh8zWsXM9TTab2ohNMyXB1weI9UjRdQIMAWNyN
-         78ExsxMF4fro2PuD3o0168ZRjOzJDzhACZfkHvFB294AqYwliFtm9hxV/mrUQvTe6jlx
-         jjpabSy3+DBlklbPX7E/ODzego8ng7fpNA2BaOBPpPFotiQ31nDMVsTAvAp+fx2ZDnQJ
-         KPS4x3lCvjv2UbD2sG9fX7UqaZVff0ew5Zu+va0mNkGjccRoVtk/8Ilw1YZRdidnw2EV
-         /3YA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JFzSwj2UsOfE/ApheojhszW7qAncTn0zPiyeo2+89Kk=;
-        b=SVbWm4IYEDYnWgWvnJfIi1ecVFDBHNmVDsyOscsw2B32R1cZAdJ9DBsFh7HA6gBXuk
-         hnjdOF77pv60FSqBFZxmAS8Af9AjRhP3MN2QRHYoaPnpPliKrUjuIxHfVhgqT3i1uiX4
-         BHFfb4O6JELtvxSASYAjhOjnUe4VsbVX5LyKka4x+udIpxj55gCSpmE5Adwb5M0rx7B6
-         OF/iZhmhmv/4botW0PIvoWYzfzE6KhHlrD4La2hrPdfDVog1isLRcjGg1GL9bXkffl6y
-         7LK+Ay2S1SC/hxWPUMmfohEHAb79FvWohDfguLLG1KvLNL9/g32uBhi/OtaLwtIH4uFm
-         Rz9g==
-X-Gm-Message-State: ANoB5pm5j67pqj2a/5ovKU/FXT9K5Ss66mt7rn8mHUPZ7iOgqFSAxkBV
-        sqBzrG65yqdgfExfrYGOIF4=
-X-Google-Smtp-Source: AA0mqf7reR0SU5yUtiMz2X1QKMVhlZRiIcEgIP368SeRykiQ3SYIx0fzWgW/LhkTGahui+owekhlEA==
-X-Received: by 2002:a63:4910:0:b0:478:27a1:8602 with SMTP id w16-20020a634910000000b0047827a18602mr35307639pga.9.1670300794206;
-        Mon, 05 Dec 2022 20:26:34 -0800 (PST)
-Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
-        by smtp.gmail.com with ESMTPSA id q5-20020aa79825000000b0057458d1f939sm10626301pfl.152.2022.12.05.20.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 20:26:33 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 9D29A100AD9; Tue,  6 Dec 2022 11:26:30 +0700 (WIB)
-Date:   Tue, 6 Dec 2022 11:26:30 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     ye.xingchen@zte.com.cn, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@gmail.com, daniel@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/i915: use sysfs_emit() to instead of scnprintf()
-Message-ID: <Y47Edh3g+Ld9gFnt@debian.me>
-References: <202212011053265568903@zte.com.cn>
- <878rjm2kfm.fsf@intel.com>
+        Mon, 5 Dec 2022 23:27:22 -0500
+Received: from formenos.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897421A3B5;
+        Mon,  5 Dec 2022 20:27:19 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1p2PXr-004LJG-Ep; Tue, 06 Dec 2022 12:27:04 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 06 Dec 2022 12:27:03 +0800
+Date:   Tue, 6 Dec 2022 12:27:03 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        "ap420073@gmail.com" <ap420073@gmail.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "David.Laight@aculab.com" <David.Laight@aculab.com>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+Message-ID: <Y47El6TRitHm7Xz9@gondor.apana.org.au>
+References: <20221103042740.6556-1-elliott@hpe.com>
+ <20221116041342.3841-1-elliott@hpe.com>
+ <20221116041342.3841-11-elliott@hpe.com>
+ <Y3TF7/+DejcnN0eV@zx2c4.com>
+ <Y4B/kjS0lgzdUJHG@gondor.apana.org.au>
+ <MW5PR84MB1842C2D1EA00D5EF65784E25AB179@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+ <Y4nEcV4w3eOEFYze@gondor.apana.org.au>
+ <MW5PR84MB184215302DC8E824812D6B13AB179@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="GjOSs0npbigzXBmw"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <878rjm2kfm.fsf@intel.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <MW5PR84MB184215302DC8E824812D6B13AB179@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Dec 02, 2022 at 04:15:23PM +0000, Elliott, Robert (Servers) wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Herbert Xu <herbert@gondor.apana.org.au>
+> > Sent: Friday, December 2, 2022 3:25 AM
+> > To: Elliott, Robert (Servers) <elliott@hpe.com>
+> > Subject: Re: [PATCH v4 10/24] crypto: x86/poly - limit FPU preemption
+> > 
+> > On Fri, Dec 02, 2022 at 06:21:02AM +0000, Elliott, Robert (Servers) wrote:
+> ...
+> > BTW, just a minor nit but you can delete the cond_resched() call
+> > because kernel_fpu_end()/preempt_enable() will do it anyway.
+> 
+> That happens under
+> 	CONFIG_PREEMPTION=y
+> (from include/Linux/preempt.h and arch/x86/include/asm/preempt.h)
+> 
+> Is calling cond_resched() still helpful if that is not the configuration?
 
---GjOSs0npbigzXBmw
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Perhaps, but then again perhaps if preemption is off, maybe we
+shouldn't even bother with the 4K split.  Were the initial
+warnings with or without preemption?
 
-On Mon, Dec 05, 2022 at 12:50:53PM +0200, Jani Nikula wrote:
-> On Thu, 01 Dec 2022, <ye.xingchen@zte.com.cn> wrote:
-> > From: ye xingchen <ye.xingchen@zte.com.cn>
-> >
-> > Replace the open-code with sysfs_emit() to simplify the code.
->=20
-> I was going to push this, but noticed the function has a third
-> scnprintf(), and the last two play together with count. It would be
-> confusing to have a mix of sysfs_emit() and scnprintf(). The third one
-> can't be blindly converted to sysfs_emit() because it writes at an
-> offset not aligned by PAGE_SIZE.
->=20
-> So I'm not taking this.
->=20
+Personally I don't really care since I always use preemption.
 
-Hi Jani,
+The PREEMPT Kconfigs do provide a bit of nuance with the split
+between PREEMPT_NONE vs. PREEMPT_VOLUNTARY.  But perhaps that is
+just overkill for our situation.
 
-Fortunately you'd NAKed this patch from ZTE people, which are known for
-ignoring your (and others) patch review. Remember that they were used to
-send from cgel.zte gmail account [1], which after the address was banned
-=66rom LKML, they tried to send from their own corporate account but Greg
-suspected that emails sent from them are spoofed [2].
+I'll leave it to you to decide :)
 
-Thanks.
-
-[1]: https://lore.kernel.org/lkml/878rn1dd8l.fsf@intel.com/
-[2]: https://lore.kernel.org/lkml/Y3NqyDDGz%2FUKPgxM@kroah.com/
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---GjOSs0npbigzXBmw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY47EcQAKCRD2uYlJVVFO
-oxNvAQDaz4sHLhHTfDnNNN7CRci/KWUK4z2C2t7Vn5cKoqxhmgEA+C9pOLMOG6ta
-PuwUxC+yGaNiCvAepAumTZ4XSesIDw0=
-=i0Fp
------END PGP SIGNATURE-----
-
---GjOSs0npbigzXBmw--
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
