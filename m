@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434A86440DE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE926440E1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:58:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235685AbiLFJ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:56:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S235529AbiLFJ6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235492AbiLFJzZ (ORCPT
+        with ESMTP id S235877AbiLFJ5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:55:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488B72529B;
-        Tue,  6 Dec 2022 01:51:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Dec 2022 04:57:40 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5514729358
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:52:58 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8DDE615FD;
-        Tue,  6 Dec 2022 09:51:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9823DC433C1;
-        Tue,  6 Dec 2022 09:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670320311;
-        bh=S4+UT8GkuJ4PzXxSBbT8i+fIYskK9yjtDXGzJ/x9qJc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sYVq+hGBPIuvdc9RMu5t9ClnFWigH6vac4T2PdncbXbf3jsfMVnV5oHmOcAq6/O4p
-         qoXXVlJPy8/QxB+dNm3Tl/1OjLTyrde8WT6KfokLFPSswOTcuAe6cQ9zVkEFwO8aZX
-         9Cx2iqDYiAIkNznYxpDeBOYrWhrvU1tdp6x3U0jgbDUGTgpe7pn2ffzoFcRbOGlAqf
-         rLEValvy9QcuIjc30d23BDCw95wDhfpj5MSmHUYRpXhipaXbU3yN1uABGY43jv2Stb
-         LXOIrLf3QHOkHlbE3XiPPRvxEE5UkMcVMnmGvKKgAeuEJOxSb+3x0Ovqen4A+vXxW8
-         98qe3neNGt30A==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 3/3] net: loopback: use NET_NAME_PREDICTABLE for name_assign_type
-Date:   Tue,  6 Dec 2022 04:51:42 -0500
-Message-Id: <20221206095143.987934-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221206095143.987934-1-sashal@kernel.org>
-References: <20221206095143.987934-1-sashal@kernel.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9F22421C2C;
+        Tue,  6 Dec 2022 09:52:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1670320350; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7Dn6UT7jVflO53hPVdqEHAf+UEuhC24fEP0CYlmrBo=;
+        b=UGThJCHIvt4gmr7gOqfEI71Bj1wUwVEnY+6oVlf3FiMjJ195PviRYtiN0SM2UvLgCCs+4Z
+        nIzAscpCshUP45mUDi8fwWfyAFXt6sf9U1GeGFdTvw0mZZt2Jq1D/I1UpwVk7Pvd/FInz3
+        m1VoK2A8XWEd/lKR+94n2o7UQjqYWvc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1670320350;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m7Dn6UT7jVflO53hPVdqEHAf+UEuhC24fEP0CYlmrBo=;
+        b=GDyopmm9SUcw7fgf03rrKaB+UItKHchNIv0ZGR8tq6BfCRU1JRzzYPSArx9P7cEfLsW/LZ
+        1NzwKWADTEXs4GAQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 6061413326;
+        Tue,  6 Dec 2022 09:52:30 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id srOrFt4Qj2O0GgAAGKfGzw
+        (envelope-from <tzimmermann@suse.de>); Tue, 06 Dec 2022 09:52:30 +0000
+Message-ID: <c460bbda-6e9d-24e8-eb73-2e7207958deb@suse.de>
+Date:   Tue, 6 Dec 2022 10:52:29 +0100
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 3/3] drm/tiny: ili9486: remove conflicting framebuffers
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Carlo Caione <ccaione@baylibre.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221116-s905x_spi_ili9486-v3-0-59c6b58cbfe3@baylibre.com>
+ <20221116-s905x_spi_ili9486-v3-3-59c6b58cbfe3@baylibre.com>
+ <14e5c4e4-30dd-8efd-81e4-d680664ab04a@linaro.org>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <14e5c4e4-30dd-8efd-81e4-d680664ab04a@linaro.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------SEO4ZkEGGScUgy32BleGjVla"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,48 +81,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------SEO4ZkEGGScUgy32BleGjVla
+Content-Type: multipart/mixed; boundary="------------pCTPooQV0m10lXNIDNpaW0YE";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: neil.armstrong@linaro.org, Carlo Caione <ccaione@baylibre.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Jerome Brunet <jbrunet@baylibre.com>,
+ David Airlie <airlied@gmail.com>,
+ Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+ Mark Brown <broonie@kernel.org>,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Kevin Hilman <khilman@baylibre.com>
+Cc: linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Message-ID: <c460bbda-6e9d-24e8-eb73-2e7207958deb@suse.de>
+Subject: Re: [PATCH v3 3/3] drm/tiny: ili9486: remove conflicting framebuffers
+References: <20221116-s905x_spi_ili9486-v3-0-59c6b58cbfe3@baylibre.com>
+ <20221116-s905x_spi_ili9486-v3-3-59c6b58cbfe3@baylibre.com>
+ <14e5c4e4-30dd-8efd-81e4-d680664ab04a@linaro.org>
+In-Reply-To: <14e5c4e4-30dd-8efd-81e4-d680664ab04a@linaro.org>
 
-[ Upstream commit 31d929de5a112ee1b977a89c57de74710894bbbf ]
+--------------pCTPooQV0m10lXNIDNpaW0YE
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-When the name_assign_type attribute was introduced (commit
-685343fc3ba6, "net: add name_assign_type netdev attribute"), the
-loopback device was explicitly mentioned as one which would make use
-of NET_NAME_PREDICTABLE:
+SGkNCg0KQW0gMDYuMTIuMjIgdW0gMTA6NDEgc2NocmllYiBOZWlsIEFybXN0cm9uZzoNCj4g
+SGkgQ2FybG8sDQo+IA0KPiBPbiAwNi8xMi8yMDIyIDA5OjM0LCBDYXJsbyBDYWlvbmUgd3Jv
+dGU6DQo+PiBGb3IgcGxhdGZvcm1zIHVzaW5nIHNpbXBsZWZiIC8gZWZpZmIsIGNhbGwNCj4+
+IGRybV9hcGVydHVyZV9yZW1vdmVfZnJhbWVidWZmZXJzKCkgdG8gcmVtb3ZlIHRoZSBjb25m
+bGljdGluZw0KPj4gZnJhbWVidWZmZXIuDQo+IA0KPiBDb25mbGljdGluZyBmcmFtZWJ1ZmZl
+ciBvbiB0aGUgU1BJIGRpc3BsYXkgPyBIb3cgaXMgdGhhdCBwb3NzaWJsZSA/DQoNCkNhbGxp
+bmcgZHJtX2FwZXJ0dXJlX3JlbW92ZV9mcmFtZWJ1ZmZlcnMoKSBpcyBvbmx5IHJlcXVpcmVk
+IGlmIHRoZSANCmdyYXBoaWNzIGNhcmQgbWF5IGhhdmUgYmVlbiBwcmUtaW5pdGlhbGl6ZWQg
+YnkgdGhlIHN5c3RlbSwgc3VjaCBhcyBhIA0KVkdBLWNvbXBhdGlibGUgY2FyZCBvbiBhIFBD
+Lg0KDQpDb3VsZCB0aGUgU1BJIGRpc3BsYXkgaGF2ZSBiZWVuIGluaXRpYWxpemVkIGJ5IHRo
+ZSBmaXJtd2FyZT8gSWYgbm90LCB0aGUgDQpjYWxsIHNob3VsZCBiZSBsZWZ0IG91dC4NCg0K
+QmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gVGhlIG1lc29uX2RybSBzaG91bGQgYWxy
+ZWFkeSBkbyB0aGlzLCBubyA/DQo+IA0KPiBOZWlsDQo+IA0KPj4NCj4+IFNpZ25lZC1vZmYt
+Ynk6IENhcmxvIENhaW9uZSA8Y2NhaW9uZUBiYXlsaWJyZS5jb20+DQo+PiAtLS0NCj4+IMKg
+IGRyaXZlcnMvZ3B1L2RybS90aW55L2lsaTk0ODYuYyB8IDUgKysrKysNCj4+IMKgIDEgZmls
+ZSBjaGFuZ2VkLCA1IGluc2VydGlvbnMoKykNCj4+DQo+PiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9ncHUvZHJtL3RpbnkvaWxpOTQ4Ni5jIA0KPj4gYi9kcml2ZXJzL2dwdS9kcm0vdGlueS9p
+bGk5NDg2LmMNCj4+IGluZGV4IDE0YTllNmFkMmQxNS4uNmZkNGQ0MjQzN2ZkIDEwMDY0NA0K
+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3RpbnkvaWxpOTQ4Ni5jDQo+PiArKysgYi9kcml2
+ZXJzL2dwdS9kcm0vdGlueS9pbGk5NDg2LmMNCj4+IEBAIC0xNCw2ICsxNCw3IEBADQo+PiDC
+oCAjaW5jbHVkZSA8dmlkZW8vbWlwaV9kaXNwbGF5Lmg+DQo+PiArI2luY2x1ZGUgPGRybS9k
+cm1fYXBlcnR1cmUuaD4NCj4+IMKgICNpbmNsdWRlIDxkcm0vZHJtX2F0b21pY19oZWxwZXIu
+aD4NCj4+IMKgICNpbmNsdWRlIDxkcm0vZHJtX2Rydi5oPg0KPj4gwqAgI2luY2x1ZGUgPGRy
+bS9kcm1fZmJfaGVscGVyLmg+DQo+PiBAQCAtMjM4LDYgKzIzOSwxMCBAQCBzdGF0aWMgaW50
+IGlsaTk0ODZfcHJvYmUoc3RydWN0IHNwaV9kZXZpY2UgKnNwaSkNCj4+IMKgwqDCoMKgwqAg
+aWYgKHJldCkNCj4+IMKgwqDCoMKgwqDCoMKgwqDCoCByZXR1cm4gcmV0Ow0KPj4gK8KgwqDC
+oCByZXQgPSBkcm1fYXBlcnR1cmVfcmVtb3ZlX2ZyYW1lYnVmZmVycyhmYWxzZSwgJmlsaTk0
+ODZfZHJpdmVyKTsNCj4+ICvCoMKgwqAgaWYgKHJldCkNCj4+ICvCoMKgwqDCoMKgwqDCoCBy
+ZXR1cm4gcmV0Ow0KPj4gKw0KPj4gwqDCoMKgwqDCoCBkcm1fbW9kZV9jb25maWdfcmVzZXQo
+ZHJtKTsNCj4+IMKgwqDCoMKgwqAgcmV0ID0gZHJtX2Rldl9yZWdpc3Rlcihkcm0sIDApOw0K
+Pj4NCj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZl
+bG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KTWF4ZmVsZHN0
+ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2ODA5LCBBRyBOw7xybmJl
+cmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-    The name_assign_type attribute gives hints where the interface name of a
-    given net-device comes from. These values are currently defined:
-...
-      NET_NAME_PREDICTABLE:
-        The ifname has been assigned by the kernel in a predictable way
-        that is guaranteed to avoid reuse and always be the same for a
-        given device. Examples include statically created devices like
-        the loopback device [...]
+--------------pCTPooQV0m10lXNIDNpaW0YE--
 
-Switch to that so that reading /sys/class/net/lo/name_assign_type
-produces something sensible instead of returning -EINVAL.
+--------------SEO4ZkEGGScUgy32BleGjVla
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/loopback.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
 
-diff --git a/drivers/net/loopback.c b/drivers/net/loopback.c
-index 1b65f0f975cf..f04f9a87840e 100644
---- a/drivers/net/loopback.c
-+++ b/drivers/net/loopback.c
-@@ -194,7 +194,7 @@ static __net_init int loopback_net_init(struct net *net)
- 	int err;
- 
- 	err = -ENOMEM;
--	dev = alloc_netdev(0, "lo", NET_NAME_UNKNOWN, loopback_setup);
-+	dev = alloc_netdev(0, "lo", NET_NAME_PREDICTABLE, loopback_setup);
- 	if (!dev)
- 		goto out;
- 
--- 
-2.35.1
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmOPEN0FAwAAAAAACgkQlh/E3EQov+Ay
+DRAAqZNThRPO9KC+zdLqJvMZthooj1R1FF4CuBtG0gVkrjf5E80dRyNt+uaGBt9uXB7B0AekaQiz
+SO7VHZ6g3gz6hLbY8tgFZz0su0Xqke+T14bdQ0CjIPphmw1CD2sZK8lfkl5DwW05QdimehLOG5L9
+X/Fo3F64NGrVyY9iR6LmcdGX7G/ujueO5cciTeWvnvkLXq4xaH+UbSSg7dfQRm4PnN+tbfSIdg9u
+RZFNNjFLp1Tiunh6OlCzgBhdGELdHBPDtz/punSwr53XMsaufe5rTWvxs/336UXtSo7KmCPLvpob
+LlZaBV7ImE1cCKKAkGQw8lHICFv+vipqGdE57qh7OMmEchycOgqygKdkLySjSvCRYY7AfGDNqVK+
+N5UpxIfTuvY45/IcDGLeCXj5rBoNgxEFqbr7224XotWsEwiHoH8376pM1EPT4yZD9aqmzApIB68S
++AVNX8qwcBKasmPfi+cEjlw9R7nLey6EL0nWEjoMorCaIu9nIfFjdhXhyoklJAA/FQK6sp5Twe+8
++dbt/26dM+ZprMFaPCGrsmiBzglCvLeFMADASpcnqRbKpa3i6ZTFD+2gz/b2QOV1yoA8lXUw4Mfn
+XkE3h19o7WYq0ogSoy8l/EFkcZQlxtsGRHIgNcfWTySomdSb/pM1hbHEP1lLsk2AWamLu7iDJA5Q
+QWM=
+=sUgH
+-----END PGP SIGNATURE-----
 
+--------------SEO4ZkEGGScUgy32BleGjVla--
