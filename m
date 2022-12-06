@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30B9643CD1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:53:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FE6643CD3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiLFFxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 00:53:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S233317AbiLFFxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233443AbiLFFxa (ORCPT
+        with ESMTP id S233289AbiLFFxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:53:30 -0500
+        Tue, 6 Dec 2022 00:53:43 -0500
 Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7C626AD2;
-        Mon,  5 Dec 2022 21:53:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670305995; cv=none; 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDE92183D;
+        Mon,  5 Dec 2022 21:53:37 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670306004; cv=none; 
         d=zohomail.com; s=zohoarc; 
-        b=IXR+/KxxXp9HGmlxDhlYiIY7RdIlDRqki80PPtRNA2DhfRCHGHSOpPQBPlAslwJ6rtkZQuTuyk1Nd9nObvlAjmmddKzf84hJ7v9vztEYUG16oy4/fpPJvDZa1jOPZfPt3yokeIsbKEhuGnWoynpJIdocxsxRmr+VNq/mSxmmiho=
+        b=bOJVzM1mCf/q6YgpYL0S9bwVSnEDutixt55QYLDc6L9NJEOrs3ZdP9wCKQuVoqOiAMmcvnzrGsJk/eBRafvTG4F4KaOkeZ57hPuIepErLMOVE/qtyg0XKQutnsl7bJ7aQjjiC664H11T31SdcEE1N2gZd61NTTcy5Wo4lUMJIV4=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1670305995; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=BuIw4xDgq4VV/tg/CyfdQWLefl/clo1mTq+M3vk5PqY=; 
-        b=jyL6ZUdo3zlWA8k11LtSRvoH2AQK2y0eQtysyl4cFpnkR+zmuNx5TqFZ9sRZfEUO1+ZBeLrA0yp7sT0A6pKzHHh3ZC0ahkiC3TkRUCBbB7esP0+4vVRbDhr9PNrLrhepoWqjrtvfW1bPMGBuzo6bncVvRgP3Plu9fa7r3B4dDXc=
+        t=1670306004; h=Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=sHOF3TnzHZw0V45RTpvLywHN3uvsUJ95l1ZKet1nhw8=; 
+        b=bNlzX62+GtE6mglu/Lmzh16ZTker1h/w5KZ6rDh7OiVvqQHSXxAIXE0K5WfldqXb/5xj483woHL6gXwlUYXxEFEPXZrnJDUHmhrkG+YIcIrTxysUJ6vSFFDJcR6+joF9zoZFgTbZE5JeyTmqg9hsIXFvszjzpcRisIeUqI3DQ8A=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
         dkim=pass  header.i=icenowy.me;
         spf=pass  smtp.mailfrom=uwu@icenowy.me;
         dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670305995;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670306004;
         s=zmail; d=icenowy.me; i=uwu@icenowy.me;
         h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=BuIw4xDgq4VV/tg/CyfdQWLefl/clo1mTq+M3vk5PqY=;
-        b=LOWNcfXrbnfUjGAeWSk6wCdxWeK52iK5u2oc34nP+iNuhlBe3nZxoWT1oA6MRc0i
-        RXtMZ7rW0mTbqusodtyOZKu5ft9W8HNI/dnZrOZijVLTQHzXJyNApAnhz83LpVpqwqQ
-        rCuJI2dsuqNVbZId3GMqtTONAlFY+YciwdOy+GP8=
+        bh=sHOF3TnzHZw0V45RTpvLywHN3uvsUJ95l1ZKet1nhw8=;
+        b=fQqAhkGDjoV36ub2QrIa5MucBnNXYh2NrHnJaNGhf1zw/w34Ok5IyJsdo+jbTPvm
+        ruaGI/2teRuhix3vpc16qsfivBuYrTuwfjojRyJBr5Xac2OuClpMONmv8Pv7pTqUWHL
+        P0KLIi4tAlFa0dvxdA1HRmc/yz/Db8AlEDwiiGyY=
 Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
-        with SMTPS id 1670305993579283.89111808030043; Mon, 5 Dec 2022 21:53:13 -0800 (PST)
+        with SMTPS id 1670306003064295.21778497328853; Mon, 5 Dec 2022 21:53:23 -0800 (PST)
 From:   Icenowy Zheng <uwu@icenowy.me>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -47,9 +47,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
         linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
-Subject: [PATCH v3 2/6] dt-bindings: usb: Add binding for Genesys Logic GL850G hub controller
-Date:   Tue,  6 Dec 2022 13:52:24 +0800
-Message-Id: <20221206055228.306074-3-uwu@icenowy.me>
+Subject: [PATCH v3 3/6] usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+Date:   Tue,  6 Dec 2022 13:52:25 +0800
+Message-Id: <20221206055228.306074-4-uwu@icenowy.me>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221206055228.306074-1-uwu@icenowy.me>
 References: <20221206055228.306074-1-uwu@icenowy.me>
@@ -66,80 +66,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Genesys Logic GL850G is a USB 2.0 Single TT hub controller that
-features 4 downstream ports, an internal 5V-to-3.3V LDO regulator (can
-be bypassed) and an external reset pin.
+Genesys Logic GL850G is a 4-port USB 2.0 STT hub that has a reset pin to
+toggle and a 3.3V core supply exported (although an integrated LDO is
+available for powering it with 5V).
 
-Add a device tree binding for its USB protocol part. The internal LDO is
-not covered by this and can just be modelled as a fixed regulator.
+Add the support for this hub, for controlling the reset pin and the core
+power supply.
 
 Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+Acked-by: Matthias Kaehlcke <mka@chromium.org>
 ---
 Changes in v3:
-- Re-introduce GPIO flags.
+- Add Matthias's ACK.
 Changes in v2:
-- Misc fixes suggested by Krzysztof, including property descriptions,
-  single-item "items" and fixing the example's gpio property.
-- Fixed $id.
+- Sort things, by names or vendor IDs.
 
- .../bindings/usb/genesys,gl850g.yaml          | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+ drivers/usb/misc/onboard_usb_hub.c | 2 ++
+ drivers/usb/misc/onboard_usb_hub.h | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-new file mode 100644
-index 000000000000..a9f831448cca
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
-@@ -0,0 +1,48 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/genesys,gl850g.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index d63c63942af1..94e7966e199d 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -331,6 +331,7 @@ static struct platform_driver onboard_hub_driver = {
+ 
+ /************************** USB driver **************************/
+ 
++#define VENDOR_ID_GENESYS	0x05e3
+ #define VENDOR_ID_MICROCHIP	0x0424
+ #define VENDOR_ID_REALTEK	0x0bda
+ #define VENDOR_ID_TI		0x0451
+@@ -407,6 +408,7 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+ }
+ 
+ static const struct usb_device_id onboard_hub_id_table[] = {
++	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+index 34beab8bce3d..62129a6a1ba5 100644
+--- a/drivers/usb/misc/onboard_usb_hub.h
++++ b/drivers/usb/misc/onboard_usb_hub.h
+@@ -22,10 +22,15 @@ static const struct onboard_hub_pdata ti_tusb8041_data = {
+ 	.reset_us = 3000,
+ };
+ 
++static const struct onboard_hub_pdata genesys_gl850g_data = {
++	.reset_us = 3,
++};
 +
-+title: Genesys Logic GL850G USB 2.0 hub controller
-+
-+maintainers:
-+  - Icenowy Zheng <uwu@icenowy.me>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb5e3,608
-+
-+  reg: true
-+
-+  reset-gpios:
-+    description: GPIO controlling the RESET# pin.
-+
-+  vdd-supply:
-+    description:
-+      the regulator that provides 3.3V core power to the hub.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        hub: hub@1 {
-+            compatible = "usb5e3,608";
-+            reg = <1>;
-+            reset-gpios = <&pio 7 2 GPIO_ACTIVE_LOW>;
-+        };
-+    };
+ static const struct of_device_id onboard_hub_match[] = {
+ 	{ .compatible = "usb424,2514", .data = &microchip_usb424_data, },
+ 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+ 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
++	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
+ 	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
+ 	{ .compatible = "usbbda,5411", .data = &realtek_rts5411_data, },
+ 	{ .compatible = "usbbda,414", .data = &realtek_rts5411_data, },
 -- 
 2.38.1
 
