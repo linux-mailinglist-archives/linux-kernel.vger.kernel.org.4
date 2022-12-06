@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C877644611
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09FAA644624
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235073AbiLFOtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 09:49:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S235084AbiLFOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 09:49:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235028AbiLFOs6 (ORCPT
+        with ESMTP id S234364AbiLFOtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 09:48:58 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513791C905;
-        Tue,  6 Dec 2022 06:48:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670338083; x=1701874083;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KreZWgqbUXWkBrewyIR53/0zjeTOrsKtsjVNswAQ4+M=;
-  b=gewnhYgIjmkvaMQV/SOg+23XSDCu5yey/MzBSE73obvQcqdHjO9+aoRy
-   SKIQsFIiBEEalOEU47Vlx91n2GlqwIanwlFcyEF87JiNJQPNeW89BZvhG
-   qEwgdFGJSDjmoArwZc9x81jCf0qd5nSxxfsxjgQ0SiqXYFxm7Ugn4EgZD
-   7UxO2FzP2VZtb9Wirn7K4HMaAhDHWrETRek2ygENz+DZ+aC71vKAixXsv
-   CMt/HhO9OkMLtI04wib934uXKg+c61R9MPTpP7gwSnRJRgI23WlFBfqhL
-   Ib470PXDu3CQ286i1sLNeaczXVsRkV/W1bTFym7kIUkZDzfAxyAvadnUb
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="296329735"
-X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
-   d="scan'208";a="296329735"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 06:48:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="639897403"
-X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
-   d="scan'208";a="639897403"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2022 06:48:02 -0800
-Received: from [10.252.209.31] (kliang2-mobl1.ccr.corp.intel.com [10.252.209.31])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 8BF40580D54;
-        Tue,  6 Dec 2022 06:47:59 -0800 (PST)
-Message-ID: <529367b6-e96a-d030-b8a2-bb4ad3d37d90@linux.intel.com>
-Date:   Tue, 6 Dec 2022 09:47:57 -0500
+        Tue, 6 Dec 2022 09:49:45 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AD2AE39
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:48:24 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id g1so6681049pfk.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 06:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=E3b5bdWA85OzMOTjNeR+xYtDEAbTCZli0u3K40D9kx4=;
+        b=OFUOd4PNQR8bRxCK6qegIBSYa3MK8J/1a32WRukCTxAY5fTbE+omxk8YDjbYTugGMt
+         YeXjCnUiKvlBk7edXLLva1LG+EYEPJj21wfIj1MmX7CR4SOWyOYUEzYSPs05BYdfhIq5
+         z1IaXMgmuZsbEAXA7r01df8vhuih3NfsWItIHWKZi0n6rXD8IocqnRosa8UqEyN/8mVL
+         i6iXH2dMdNFy5yDeIFaIvU+1FfeV0PfX9RbViXvdq9awFDH4LYyYXr/zLukIzNQ2rY4g
+         WSup0IALJEblLWRnTR/3BL3KE6NdkyZhPvl0lshlmlVISJYUUF2mgQiKaTs/T2Pmpe+Y
+         t8FQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E3b5bdWA85OzMOTjNeR+xYtDEAbTCZli0u3K40D9kx4=;
+        b=froUQfs2iW1h4TNEk3ualfjd6KU2IIBJjWg7tQaNJ1/zVwc7ux2zBxOEaI0RAdeD8s
+         /UnoEbGNIK5ngSz2abe77bareiBTpBnlQEBPfn9iN5a7T4Rnl3niSDYcBnQ4DPiVLn/C
+         YDCziy24B2lU9ghTxq0e2KgGyVLXn36hMS7uYnv9G1XAvTJdf2R/eizoyef0wLrfk7cl
+         eYkeeT0qT20oJoCWbgkIBzvULMzLLmMNy881iPky2HR89Ty267nWRuZ0xy2Srn+3Kd/E
+         87T0gQxRSskIkv1v5P3OZZSYNKZewGhMYvvhCM8+7KCZhVcQVL7RyKS4TV/xf8T3honz
+         iHVQ==
+X-Gm-Message-State: ANoB5pkZjSVLO3Xgc7YaABDkGE/irnXXdulMWuLmF8iB5k1Cnf6+mmyg
+        RPICRkOYWsJ/rRKKGF5eH6g4JA==
+X-Google-Smtp-Source: AA0mqf6wZNYJR+nxEDntmIwoB1WTx5lMm+/0X87R2SrkgFXKtucbmHuGQYhQGln4hWgCmve4UUXs+g==
+X-Received: by 2002:a63:105c:0:b0:46f:f72c:cdae with SMTP id 28-20020a63105c000000b0046ff72ccdaemr62687659pgq.237.1670338104328;
+        Tue, 06 Dec 2022 06:48:24 -0800 (PST)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902e5c200b00186c5e8a8d7sm12785747plf.171.2022.12.06.06.48.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 06:48:23 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p2ZF8-004cPA-AK;
+        Tue, 06 Dec 2022 10:48:22 -0400
+Date:   Tue, 6 Dec 2022 10:48:22 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
+        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
+        cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
+Subject: Re: [RFC PATCH 5/5] nvme-vfio: Add a document for the NVMe device
+Message-ID: <Y49WNo7XWZ2aFfds@ziepe.ca>
+References: <20221206055816.292304-1-lei.rao@intel.com>
+ <20221206055816.292304-6-lei.rao@intel.com>
+ <20221206062604.GB6595@lst.de>
+ <Y48+AaG5rSCviIhl@ziepe.ca>
+ <20221206130901.GB24358@lst.de>
+ <Y49JNvdmRPNWw26q@ziepe.ca>
+ <20221206140002.GB27689@lst.de>
+ <Y49PqoAhZOeraLVa@ziepe.ca>
+ <20221206143126.GB30297@lst.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 0/2] perf test: Add event group test
-Content-Language: en-US
-To:     Ravi Bangoria <ravi.bangoria@amd.com>, acme@kernel.org
-Cc:     irogers@google.com, jolsa@redhat.com, namhyung@kernel.org,
-        peterz@infradead.org, mark.rutland@arm.com,
-        adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
-        carsten.haitzler@arm.com, leo.yan@linaro.org, maddy@linux.ibm.com,
-        kjain@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        tmricht@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
-References: <20221206043237.12159-1-ravi.bangoria@amd.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20221206043237.12159-1-ravi.bangoria@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206143126.GB30297@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022-12-05 11:32 p.m., Ravi Bangoria wrote:
-> Multiple events in a group can belong to one or more pmus, however
-> there are some limitations to it. One of the limitation is, perf
-> doesn't allow creating a group of events from different hw pmus.
-> Write a simple test to create various combinations of hw, sw and
-> uncore pmu events and verify group creation succeeds or fails as
-> expected.
+On Tue, Dec 06, 2022 at 03:31:26PM +0100, Christoph Hellwig wrote:
+> On Tue, Dec 06, 2022 at 10:20:26AM -0400, Jason Gunthorpe wrote:
+> > In the VFIO restore model there is no "live OS" on resume. The
+> > load/resume cycle is as destructive as reset to the vfio device.
 > 
-> v2: https://lore.kernel.org/r/20221129111946.409-1-ravi.bangoria@amd.com
-> v2->v3:
->  - Define a set of uncore pmus that supports more than 3 events. This
->    will prevent false negative results by not picking random uncore
->    pmu. Test will be skipped if no uncore pmu found.
-> 
-> Ravi Bangoria (2):
->   perf tool: Move pmus list variable to new a file
+> Of course there may be and OS.  As soon as the VF is live Linux
+> will by default bind to it.  And that's the big problem here,
+> the VF should not actually exist or at least not be usable when
+> such a restore happens - or to say it in NVMe terms, the Secondary
+> Controller better be in offline state when state is loaded into it.
 
-a new file
+Sadly in Linux we don't have a SRIOV VF lifecycle model that is any
+use.
 
-Other than the above typo, the patch series looks good to me.
+What we do have is a transfer of control from the normal OS driver (eg
+nvme) to the VFIO driver. Also, remember, that VFIO only does live
+migration between VFIO devices. We cannot use live migration and end
+up with a situation where the normal nvme driver is controlling the
+VF.
 
-Acked-by: Kan Liang <kan.liang@linux.intel.com>
+The VFIO load model is explicitly destructive. We replace the current
+VF with the loading VF. Both the VFIO variant driver and the VFIO
+userspace issuing the load have to be aware of this and understand
+that the whole device will change.
 
-Thanks,
-Kan
+From an implementation perspective, I would expect the nvme varient
+driver to either place the nvme device in the correct state during
+load, or refuse to execute load if it is in the wrong state.
 
->   perf test: Add event group test
-> 
->  tools/perf/tests/Build          |   1 +
->  tools/perf/tests/builtin-test.c |   1 +
->  tools/perf/tests/event_groups.c | 127 ++++++++++++++++++++++++++++++++
->  tools/perf/tests/tests.h        |   1 +
->  tools/perf/util/Build           |   1 +
->  tools/perf/util/pmu.c           |   2 +-
->  tools/perf/util/pmus.c          |   5 ++
->  tools/perf/util/pmus.h          |   9 +++
->  8 files changed, 146 insertions(+), 1 deletion(-)
->  create mode 100644 tools/perf/tests/event_groups.c
->  create mode 100644 tools/perf/util/pmus.c
->  create mode 100644 tools/perf/util/pmus.h
-> 
+To be compatible with what qemu is doing the "right state" should be
+entered by completing function level reset of the VF.
+
+The Linux/qemu parts are still being finalized, so if you see
+something that could be changed to better match nvme it would be a
+great time to understand that.
+
+Jason
