@@ -2,167 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA8B643BEF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FE70643BF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:46:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiLFDh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:37:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50074 "EHLO
+        id S232865AbiLFDqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:46:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLFDhz (ORCPT
+        with ESMTP id S230036AbiLFDqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:37:55 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E45D1CB1B;
-        Mon,  5 Dec 2022 19:37:53 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NR5hq3Tbxz4f3p0S;
-        Tue,  6 Dec 2022 11:37:47 +0800 (CST)
-Received: from [10.67.109.184] (unknown [10.67.109.184])
-        by APP4 (Coremail) with SMTP id gCh0CgDX+tcNuY5jyn7xBg--.3634S2;
-        Tue, 06 Dec 2022 11:37:50 +0800 (CST)
-Message-ID: <0ade59ea-6863-4d68-607c-22e4b9405a0d@huaweicloud.com>
-Date:   Tue, 6 Dec 2022 11:37:49 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [PATCH bpf v2] riscv, bpf: Emit fixed-length instructions for
- BPF_PSEUDO_FUNC
-Content-Language: en-US
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        Mon, 5 Dec 2022 22:46:37 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579011CB36;
+        Mon,  5 Dec 2022 19:46:36 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670298379; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=XC1UtjX2LLN1wAhTAqR5lvBlUxFgjtWEMAQyx2b9p6kSpOhiItVdMNXvHaEVpT0HOAAGCS5ZFsAYZi4nwXqy2HRnyWkd1fPL2cS4fjRMrpnICM6+X2KkLS/ksdpUJahre6Ie/NNZTx72s0SA0hoz3BjSWEBQSMqYxsgybbyB7yo=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670298379; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=oesidm6oUL1/85Jw3P7QodTJlckej5INKkfVuimasjg=; 
+        b=jihNKGTkRAVr9FFtiB6P2JEC2+wzh8uLH3HGnJ4a7mlpGpQCpg0d/Egp8N07huO3dmEYYIRkaWIN2kKmSn2IM+mF8T5GmsoOri2eMH7zbQyUULA89kEs1tMo6rrt0SZPRXCpggymKpocHu7f/xyNKT2cEwprrVBQuWr0e5dVrKU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670298379;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
+        bh=oesidm6oUL1/85Jw3P7QodTJlckej5INKkfVuimasjg=;
+        b=OXlSY7t2/CNoPLhrqQlD65eqb8fkTZE/AimZRkiRLKq9/0EPw2FKwzlLwvpz5c+9
+        TDMkqiazGAVaS2yt0znyMD2bpTOfwqs5FsO7mEn7482h+hitrGHDEqsbJU+d4Zo8xyR
+        Vr+aRXwFjAKmHya2tCfvS/U4YGImhAy0bJVmImVA=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
+        with SMTPS id 1670298376821248.54157344971338; Mon, 5 Dec 2022 19:46:16 -0800 (PST)
+Message-ID: <86d822f73f6e61c9f286e800db50e9959aef05a0.camel@icenowy.me>
+Subject: Re: [PATCH 2/3] dt-bindings: timer: sifive,clint: add compatible
+ for OpenC906
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>
-References: <20221202094837.3872444-1-pulehui@huaweicloud.com>
- <87y1rq848x.fsf@all.your.base.are.belong.to.us>
-From:   Pu Lehui <pulehui@huaweicloud.com>
-In-Reply-To: <87y1rq848x.fsf@all.your.base.are.belong.to.us>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgDX+tcNuY5jyn7xBg--.3634S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxWw15ZF4ftw15Zw17WrW3ZFb_yoW5WF48pr
-        W5KFy3CayvqrnrGF12yr4jvr1aqF4vqayxKr1UK34Yk3W2gF4IkF1DG390k3Z5ZFW8Gw13
-        JF4j9rsxCa4DZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
-        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
-        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
-        9x07UZ18PUUUUU=
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Date:   Tue, 06 Dec 2022 11:46:11 +0800
+In-Reply-To: <B1B2FC9D-D971-435B-A9FD-B092DE726367@kernel.org>
+References: <20221121041757.418645-3-uwu@icenowy.me>
+         <98005150-83a7-5439-0db1-d93d459c3809@linaro.org>
+         <b924d37d716fa8b1fd93102b1d51fac221f43d59.camel@icenowy.me>
+         <d0f3ce4f-5676-f5e1-f04f-dd069679b2d3@linaro.org>
+         <81C2234E-C92D-4F78-8295-7C6DD0A9BBC4@icenowy.me>
+         <20221130181330.GA2544489-robh@kernel.org> <Y4j+Gpptk3NAFBNV@spud>
+         <4ad56fa249a30167844abcedac53d198606511d8.camel@icenowy.me>
+         <Y43Jt3YOSbFyh954@wendy>
+         <75a3ef9a175b16c46b57b2829ecbe4f97737de8a.camel@icenowy.me>
+         <Y44IoC765yztZ6VF@wendy>
+         <879345cd8609cddccbf7bcf230923139af320b17.camel@icenowy.me>
+         <B1B2FC9D-D971-435B-A9FD-B092DE726367@kernel.org>
+Organization: Anthon Open-Source Community
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
+MIME-Version: 1.0
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+=E5=9C=A8 2022-12-05=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 16:54 +0000=EF=BC=
+=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
+>=20
+>=20
+> On 5 December 2022 15:59:44 GMT, Icenowy Zheng <uwu@icenowy.me>
+> wrote:
+> > =E5=9C=A8 2022-12-05=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 15:05 +0000=EF=
+=BC=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
+> > > On Mon, Dec 05, 2022 at 07:03:17PM +0800, Icenowy Zheng wrote:
+> > > > =E5=9C=A8 2022-12-05=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 10:36 +000=
+0=EF=BC=8CConor Dooley=E5=86=99=E9=81=93=EF=BC=9A
+> > >=20
+> > > > > You lot all know the situation here a lot more than I do...
+> > > > > I don't think "letting" people use the bare "thead,c900-foo"
+> > > > > makes
+> > > > > much
+> > > > > sense as it gives us no chance to deal with quirks down the
+> > > > > line.
+> > > >=20
+> > > > Well, after rechecking the manual, I found it possible to
+> > > > handle
+> > > > quirks
+> > > > -- T-Head has a custom "mcpuid" CSR (@ RISC-V CSR 0xFC0), which
+> > > > can
+> > > > be
+> > > > used to retrieve some identification info of the core,
+> > > > including
+> > > > its
+> > > > model ID, version, etc; and the T-Head PLIC/CLINT are part of
+> > > > their
+> > > > C906 SoC design that there's another "mapbaddr" CSR that could
+> > > > be
+> > > > used
+> > > > to retrieve the base address of them.
+> > > >=20
+> > > > So I think it okay to just use "thead,c900-clint" here, and
+> > > > when
+> > > > necessary, try to retrieve mcpuid for dealing with quirks.
+> > >=20
+> > > I'm not super sure I follow. What's the relevance of "mapbaddr"
+> > > here?
+> > > We've got a reg property, so I don't think we need "mapbaddr"?
+> >=20
+> > Yes, it's not relevant to us here, it's only to prove that
+> > PLIC/CLINT
+> > is part of C906 "Core Complex".
+> >=20
+> > >=20
+> > > For "mcpuid", can you be sure that implementers will not omit
+> > > setting
+> > > that value to something unique? I'd be happier if we were overly
+> > > clear
+> > > now rather than have some headaches later. Have I missed
+> > > something?
+> >=20
+> > These values are set by T-Head instead of individual SoC
+> > implementers
+> > as a CPU CSR, and it's not for uniqueness, but it's for
+> > identification
+> > of the CPU core revision (thus the PLIC/CLINT that come with it).
+>=20
+> I really am missing something here that must be obvious to you.
+> Let me try and explain where my gap in understanding is.
+> If someone takes the open cores & makes a minor tweak in the plic how
+> does knowing mcpuid help us identify that that plic is marginally
+> different?
 
+No, but my point is that in this situation we shouldn't use C900
+compatible at all because it's no longer the vanilla C900 cores.
 
-On 2022/12/2 18:54, Björn Töpel wrote:
-> Pu Lehui <pulehui@huaweicloud.com> writes:
-> 
->> From: Pu Lehui <pulehui@huawei.com>
->>
->> For BPF_PSEUDO_FUNC instruction, verifier will refill imm with
->> correct addresses of bpf_calls and then run last pass of JIT.
->> Since the emit_imm of RV64 is variable-length, which will emit
->> appropriate length instructions accorroding to the imm, it may
->> broke ctx->offset, and lead to unpredictable problem, such as
->> inaccurate jump. So let's fix it with fixed-length instructions.
->>
->> Fixes: 69c087ba6225 ("bpf: Add bpf_for_each_map_elem() helper")
->> Signed-off-by: Pu Lehui <pulehui@huawei.com>
->> Suggested-by: Björn Töpel <bjorn@rivosinc.com>
->> ---
->>   arch/riscv/net/bpf_jit_comp64.c | 20 +++++++++++++++++++-
->>   1 file changed, 19 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
->> index eb99df41fa33..9723f34f7a06 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -139,6 +139,19 @@ static bool in_auipc_jalr_range(s64 val)
->>   		val < ((1L << 31) - (1L << 11));
->>   }
->>   
->> +/* Emit fixed-length instructions for address */
->> +static void emit_addr(u8 rd, u64 addr, struct rv_jit_context *ctx)
->> +{
->> +	u64 ip = (u64)(ctx->insns + ctx->ninsns);
->> +	s64 off = addr - ip;
->> +	s64 upper = (off + (1 << 11)) >> 12;
->> +	s64 lower = ((off & 0xfff) << 52) >> 52;
->> +
->> +	emit(rv_auipc(rd, upper), ctx);
->> +	emit(rv_addi(rd, rd, lower), ctx);
->> +}
-> 
-> Nice! Two instructions are better than 6! :-)
-> 
-> One final thing. Please add a sanity check, that the range is correct,
-> e.g.:
-> 
->    if (!(addr && in_auipc_addi_range(off)))
->       return -1;
-> 
+My assumption is that the same IP cores are the same unless specially
+customized.
 
-Hi Björn,
-
-Sorry for replying so late. For BPF_PSEUDO_FUNC instruction, verifier 
-will set insn[0].imm and insn[1].imm to 1 that make addr to 0x100000001 
-before extra pass, and also ctx->insns is NULL in iteration stage, all 
-of these make off out of range of AUIPC-ADDI range, and return failed. 
-We could add some special handling at different stages, but that seems a 
-little weird. By the way, I do not really like emit_addr function with 
-return value.
-
-While a proper address is at least 2B alignment, and the valid address 
-is from 0xffffffff00000000 to 0xffffffffffffffff, we can make address 
-shifed 1 place to right, and addr >> 1 will always in the range of 
-AUIPC-ADDI range. We can get rid of the range detection. The 
-implementation is as follows:
-
-static void emit_addr(u8 rd, u64 addr, struct rv_jit_context *ctx)
-{
-          s64 imm = addr >> 1;
-          s64 upper = (imm + (1 << 11)) >> 12;
-          s64 lower = imm & 0xfff;
-
-          emit(rv_lui(rd, upper), ctx);
-          emit(rv_addi(rd, rd, lower), ctx);
-          emit(rv_slli(rd, rd, 1), ctx);
-}
-
-What do you think?
-
-Regards,
-Lehui
-
-> Have a look at emit_jump_and_link().
-> 
-> 
-> Thanks!
-> Björn
+>=20
+> I must have missed something that should be apparent and look like an
+> eejit right now!
+>=20
+> >=20
+> > >=20
+> > > > > I don't think that using "thead,openc906-clint", "thead,c900-
+> > > > > clint"
+> > > > > makes all that much sense either, in case someone does
+> > > > > something
+> > > > > wacky
+> > > > > with the open-source version of the core.
+> > > > >=20
+> > > > > That leaves us with either:
+> > > > > "vendor,soc-clint", "thead,openc906-clint", "thead,c900-
+> > > > > clint"
+> > > > > or:
+> > > > > "vendor,soc-clint", "thead,c900-clint"
+> > > > > right?
+> > > > >=20
+> > > > > The first one seems like possibly the better option as you'd
+> > > > > kinda
+> > > > > expect that, in a perfect word, all of the open-source IP
+> > > > > implementations would share quirks etc?
+> > >=20
+> >=20
 
