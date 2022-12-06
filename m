@@ -2,152 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49800644C68
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:21:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4A4644C70
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:22:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiLFTVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:21:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
+        id S229750AbiLFTWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:22:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229699AbiLFTVY (ORCPT
+        with ESMTP id S229737AbiLFTWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:21:24 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138F63FB9B;
-        Tue,  6 Dec 2022 11:21:23 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so4726572pjr.3;
-        Tue, 06 Dec 2022 11:21:23 -0800 (PST)
+        Tue, 6 Dec 2022 14:22:35 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4EC4219F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:22:31 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id bx10so25004900wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:22:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=kCOE6UB3AU4sZjM0eLrxIRHE8DSLTlCxmBapLp+bPNQ=;
-        b=oxisaQx/rtHyRTCMpb85wCfSx3JaiXt6gpFSAXSp4FBtH8KRxOuGMFodPB4T4nmghi
-         LcuqFFHpATlLWmrV7wfOj+JZrOaYqN7hKH40bPzvwfkj09li3lm2tueUfFt/orlTAFyT
-         tvxrbkSNTTXmQ/0GakqDsx0uzmMHOh07GiNu540gt6qTrdXvItuM50ztfPXxxZBhCkMQ
-         phB/7HgkIHCFtm2GWm9HjrDIrNaywELLXZVvacLeV4cp2oAz4NCBlxWaPI4ynblR3n2q
-         GsIfFyt8NS6Q7XBycZrQLky8jXgBpCr0adp6/sflDfVKMoDMgF30XtMMM6BRZIWBfDLA
-         hbmw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4Kc0DPAtZANtmBB4/APA8h9MGVc9hC5I6CM/Vzwl2xs=;
+        b=dK3PhiQhFUgbwn2UgOzR1EI3QDvs0M1JfayULjfIe+7Gf8mqT4rqpTFUcViscqXXYc
+         fk+YnJ8+ix4y2bSgF2Nj4w2yxrOJpZPpuueGinJoBw1FUUygisozIrjlLc4iZWE8tHs0
+         sTDciBFyePOOeh5LQ0tN18H+FubhMZLZ8bO1CJT2IYa+XVPLRxblsD4OksYEu75Y95cv
+         X9OEaXZTFjAx50izorCHGRCx0ILWhWJTzgpJ0AOGkORNtvWIVf5YQ0gd04Rf1V7QHAkW
+         G1YXZImgoffra/o0hA2LHZrEI14JZ5Ua2bXusXQFQw4qqcOcTeG5Az5txUe4FCUC7Xe7
+         Zshw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kCOE6UB3AU4sZjM0eLrxIRHE8DSLTlCxmBapLp+bPNQ=;
-        b=b2Jn8icqej4Hj2I2j5r1Zv6sDLjpk5ZFyAkAu1CKSarZV7crQKTow7L6qHkB/pxosg
-         Pzlf6dnNajyXGQofHW7oruq/qTf2LH5V65vw+wYB7SUuz4CMTQQ8S4AS2rVnIhmq0p40
-         47xv+iJLGbQvUMdchO3X5bTPcplvRa/yhkjw5IdDLzm7NMX/94nEe3E4tiMbJ9dTp97S
-         1XRApMkGxV5Z4BrFzASLXvfQ3yBwS4NG28aEm2WZ2PPgHWEBA6hp0wqp++vXZd1NMTX2
-         LXpM7NxigchFwNIQ3uxHd85GbVALKt9jqdSaZLS/Ss/MwOrkDuwTldBExU7tQWCsSWYl
-         3oxQ==
-X-Gm-Message-State: ANoB5plU2ZYzAAAVk8ln4uLnt+VFwTTLGmVzJ0jdbjIP8y/YQk7/vxX2
-        GeA5IgJgP1dneuXBp5HwxJg=
-X-Google-Smtp-Source: AA0mqf6exKLZJ3n5EhVh3nDm8ZR2z+CSHRWSi0xA8aPelGwpxWfZfGSsbERAoO8DlqExqBSnR0M+ig==
-X-Received: by 2002:a17:902:f7ca:b0:189:b203:9e2f with SMTP id h10-20020a170902f7ca00b00189b2039e2fmr382970plw.56.1670354482458;
-        Tue, 06 Dec 2022 11:21:22 -0800 (PST)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id v25-20020a634659000000b00473c36ea150sm5434632pgk.92.2022.12.06.11.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 11:21:21 -0800 (PST)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/msm: Add MSM_SUBMIT_BO_NO_IMPLICIT
-Date:   Tue,  6 Dec 2022 11:21:23 -0800
-Message-Id: <20221206192123.661448-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Kc0DPAtZANtmBB4/APA8h9MGVc9hC5I6CM/Vzwl2xs=;
+        b=TkqQ2o2SutAEIB1F27dVdq3z84o8HMShymu2GTlyieea52jieEqrIiMnAH8nIVHKRC
+         UD6t7o+2rM49I+3VBPz9MhBxrMBuoVEdBGi1pVM+YVCtJ8CLGoAjWJF4Q2Lj1wIe38x+
+         Ah2JIiRhr5ZRm25oc7Ey6NUT89JbyUrDvX1ubOt+RlNr5U1+RsrhqInKWPhg0O0S9Syc
+         i4xpjiBB0J1JbAcjjRFac69AbF1xTlshfkGxrdRIZArv7qgiKmQOCST8vdngnbuyw6No
+         1xdBACypK77rIRXMNwPjYLao7GI42SHZggQAcTiDpqUItYbMAaLCCfhsBxdIk5mKT+BA
+         dUZQ==
+X-Gm-Message-State: ANoB5pkRg7ZOD6Ho9qkPUb1YysNNCFSlK1bvCfE/HSnLOBTTXMEsfatw
+        i2P1w8UyB52h6NXKfPRrkUWPfw==
+X-Google-Smtp-Source: AA0mqf5rkOLSX/PBJ641Jpt5pcEBmiAtuAfQ5WZKW86lfETq6U0wWZJ5hpIkbTr4DDC8swW1DDtZVg==
+X-Received: by 2002:a5d:6a06:0:b0:242:140d:43d5 with SMTP id m6-20020a5d6a06000000b00242140d43d5mr27054697wru.53.1670354549595;
+        Tue, 06 Dec 2022 11:22:29 -0800 (PST)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id h16-20020a05600c2cb000b003c6bbe910fdsm32563712wmc.9.2022.12.06.11.22.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 11:22:29 -0800 (PST)
+Message-ID: <753775e9-33f6-031f-8da5-2f65894f44fe@baylibre.com>
+Date:   Tue, 6 Dec 2022 20:22:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 0/6] Add support for TI TPS65219 PMIC.
+Content-Language: en-US
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        nm@ti.com, kristo@kernel.org, dmitry.torokhov@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, catalin.marinas@arm.com,
+        will@kernel.org, lee@kernel.org, tony@atomide.com, vigneshr@ti.com,
+        shawnguo@kernel.org, geert+renesas@glider.be,
+        dmitry.baryshkov@linaro.org, marcel.ziswiler@toradex.com,
+        vkoul@kernel.org, biju.das.jz@bp.renesas.com, arnd@arndb.de,
+        jeff@labundy.com, afd@ti.com, khilman@baylibre.com,
+        narmstrong@baylibre.com, msp@baylibre.com, j-keerthy@ti.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        linux-omap@vger.kernel.org
+References: <20221104152311.1098603-1-jneanne@baylibre.com>
+ <Y44ztV+2j4krM8mp@francesco-nb.int.toradex.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <Y44ztV+2j4krM8mp@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
 
-In cases where implicit sync is used, it is still useful (for things
-like sub-allocation, etc) to allow userspace to opt-out of implicit
-sync on per-BO basis.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_drv.c        |  3 ++-
- drivers/gpu/drm/msm/msm_gem_submit.c | 11 +++++++++++
- include/uapi/drm/msm_drm.h           |  4 +++-
- 3 files changed, 16 insertions(+), 2 deletions(-)
+On 05/12/2022 19:08, Francesco Dolcini wrote:
+> On Fri, Nov 04, 2022 at 04:23:05PM +0100, Jerome Neanne wrote:
+>> Hi everyone,
+> Hello Jerome,
+> 
+> are you planning to have also gpio support added to the driver?
+> 
+> Francesco
+> 
+Hi Francesco,
 
-diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
-index 017a512982a2..e0e1199a822f 100644
---- a/drivers/gpu/drm/msm/msm_drv.c
-+++ b/drivers/gpu/drm/msm/msm_drv.c
-@@ -45,9 +45,10 @@
-  * - 1.7.0 - Add MSM_PARAM_SUSPENDS to access suspend count
-  * - 1.8.0 - Add MSM_BO_CACHED_COHERENT for supported GPUs (a6xx)
-  * - 1.9.0 - Add MSM_SUBMIT_FENCE_SN_IN
-+ * - 1.10.0 - Add MSM_SUBMIT_BO_NO_IMPLICIT
-  */
- #define MSM_VERSION_MAJOR	1
--#define MSM_VERSION_MINOR	9
-+#define MSM_VERSION_MINOR	10
- #define MSM_VERSION_PATCHLEVEL	0
- 
- static const struct drm_mode_config_funcs mode_config_funcs = {
-diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
-index eb3536e3d66a..8bad07a04f85 100644
---- a/drivers/gpu/drm/msm/msm_gem_submit.c
-+++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-@@ -334,9 +334,20 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
- 		if (ret)
- 			return ret;
- 
-+		/* If userspace has determined that explicit fencing is
-+		 * used, it can disable implicit sync on the entire
-+		 * submit:
-+		 */
- 		if (no_implicit)
- 			continue;
- 
-+		/* Otherwise userspace can ask for implicit sync to be
-+		 * disabled on specific buffers.  This is useful for internal
-+		 * usermode driver managed buffers, suballocation, etc.
-+		 */
-+		if (submit->bos[i].flags & MSM_SUBMIT_BO_NO_IMPLICIT)
-+			continue;
-+
- 		ret = drm_sched_job_add_implicit_dependencies(&submit->base,
- 							      obj,
- 							      write);
-diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
-index f54b48ef6a2d..329100016e7c 100644
---- a/include/uapi/drm/msm_drm.h
-+++ b/include/uapi/drm/msm_drm.h
-@@ -222,10 +222,12 @@ struct drm_msm_gem_submit_cmd {
- #define MSM_SUBMIT_BO_READ             0x0001
- #define MSM_SUBMIT_BO_WRITE            0x0002
- #define MSM_SUBMIT_BO_DUMP             0x0004
-+#define MSM_SUBMIT_BO_NO_IMPLICIT      0x0008
- 
- #define MSM_SUBMIT_BO_FLAGS            (MSM_SUBMIT_BO_READ | \
- 					MSM_SUBMIT_BO_WRITE | \
--					MSM_SUBMIT_BO_DUMP)
-+					MSM_SUBMIT_BO_DUMP | \
-+					MSM_SUBMIT_BO_NO_IMPLICIT)
- 
- struct drm_msm_gem_submit_bo {
- 	__u32 flags;          /* in, mask of MSM_SUBMIT_BO_x */
--- 
-2.38.1
+I don't have any requirement regarding GPIO on that PMIC. We've just 
+done this (GPIO driver) for another TI PMIC. Will see if this can be 
+reused later.
 
+Regards,
+Jerome
