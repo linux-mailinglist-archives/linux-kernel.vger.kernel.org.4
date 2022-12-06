@@ -2,47 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8AE3643CF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:04:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E24D643D07
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbiLFGEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:04:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
+        id S233241AbiLFGNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLFGEE (ORCPT
+        with ESMTP id S229867AbiLFGNM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:04:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9856F26563
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:04:03 -0800 (PST)
+        Tue, 6 Dec 2022 01:13:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D82CE2D;
+        Mon,  5 Dec 2022 22:13:10 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CD22B81600
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:04:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A2FC433C1;
-        Tue,  6 Dec 2022 06:03:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63701B81211;
+        Tue,  6 Dec 2022 06:13:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26887C43470;
+        Tue,  6 Dec 2022 06:13:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670306640;
-        bh=a2DXxzn2tCMHvMeAX4+C+K/btZTLZZOQGTh6c8Fnjn0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=uEVXx1qSx6SIB5uOnJZGJ71z0f97sOlkVleCJS5JphJVp6nSU77fnzTFVUGe8IYHn
-         7svbYWpi6P3MnX1Glr3LTC5+xhfr3S348ZcpCtlQPOU9YAn43Ygo64jB6whsfyyjni
-         H6/0Mf3b/A2UeOrDYhqyjAIlYaWh6y72Hs3z/fkDN33/6Ndrac3DT68MVSInHM19+M
-         wAFrE67i2S05y04kbqZxPURgbvPo+DjNAibW2ymkTyfnoE78m/QiMs0765nMDChEGq
-         aBW2jefgTZDVCeQYog/Ayx/nk9WAeuAsI1IFbmix68HGFwxtZPFmcwWFG4BIHj3Or7
-         P8px9rwoXv5nA==
-From:   Gao Xiang <xiang@kernel.org>
-To:     linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>,
-        Yue Hu <huyue2@coolpad.com>
-Subject: [PATCH v2] erofs: clean up cached I/O strategies
-Date:   Tue,  6 Dec 2022 14:03:52 +0800
-Message-Id: <20221206060352.152830-1-xiang@kernel.org>
-X-Mailer: git-send-email 2.30.2
+        s=k20201202; t=1670307188;
+        bh=th1V6+SkiuIfCPI17AmYfQBHSNCfb55wpqFcgPM9EAk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=NeV48oS7O6faZtRUsQrOrRKSVEssKcQHHkq6wEL3h8Bz95BsmenU2jbMig1oOGJEm
+         k4XYw+LaaEu6oO1qsV7j4IGq1hHg6PO5h5ovFAfzelcxwgasgKhYTJN0Uj5epulRd7
+         p+lY5+ZlJoo+LyRGchxuuotHduvoEk31ue6o/Ik8e0JqeBqWPSx2ESBzX8Y3spZ+AL
+         jio3gsth7v5sVEZn6b2xhwA02E43cqhdizeaGqDjOWMuSuUQZrAxX/6J0aUSCjskXS
+         cOLpjxgi1yO4Ft81G/uZBaGwcR8r3MLxsMGZjmC9qrbyJ5JLtB6H0cBBeo8hZnCG/6
+         23HluqiB7ewOw==
+Received: by mail-ed1-f48.google.com with SMTP id c66so12572324edf.5;
+        Mon, 05 Dec 2022 22:13:08 -0800 (PST)
+X-Gm-Message-State: ANoB5pmPYe1GMWhLmzQ4KaOMnTyU6HbfGtCDlhmIDZcNdtNxi8fkobUK
+        sjtwTW+fDC6GKMsKAgtxjlqzlfHTTwJl8A4iiP8=
+X-Google-Smtp-Source: AA0mqf4Sdb09rPxgcsGDOHwTXPlNPlrB8zHFwXBW2+mnGaoopW1W/6+v9PyzrnVbfHcutZsp1vv3yvEtJaXjGdiuoz8=
+X-Received: by 2002:a05:6402:22db:b0:46c:c16b:b4c4 with SMTP id
+ dm27-20020a05640222db00b0046cc16bb4c4mr6428173edb.419.1670307186319; Mon, 05
+ Dec 2022 22:13:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221103075047.1634923-1-guoren@kernel.org> <877cz69o8f.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <877cz69o8f.fsf@all.your.base.are.belong.to.us>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 6 Dec 2022 14:12:54 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSgvKV3Oh6t2dpbJGnt3cDZU14Qk_CxKPMXmEmgvMg8-Q@mail.gmail.com>
+Message-ID: <CAJF2gTSgvKV3Oh6t2dpbJGnt3cDZU14Qk_CxKPMXmEmgvMg8-Q@mail.gmail.com>
+Subject: Re: [PATCH -next V8 00/14] riscv: Add GENERIC_ENTRY support and
+ related features
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,159 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gao Xiang <hsiangkao@linux.alibaba.com>
+On Mon, Dec 5, 2022 at 5:46 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
+te:
+>
+> guoren@kernel.org writes:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The patches convert riscv to use the generic entry infrastructure from
+> > kernel/entry/*. Additionally, add independent irq stacks (IRQ_STACKS)
+> > for percpu to prevent kernel stack overflows. Add generic_entry based
+> > STACKLEAK support. Some optimization for entry.S with new .macro and
+> > merge ret_from_kernel_thread into ret_from_fork.
+> >
+> > We have tested it with rv64, rv32, rv64 + 32rootfs, all are passed.
+> >
+> > You can directly try it with:
+> > [1] https://github.com/guoren83/linux/tree/generic_entry_v8
+>
+> Guo, this is a really nice work, and I'm looking forward having generic
+> entry support for RV. However, there are many patches in this series
+> that really shouldn't be part of the series.
+>
+> Patch 2, 3, 4, and 10 should defintely be pulled out.
+Okay.
 
-After commit 4c7e42552b3a ("erofs: remove useless cache strategy of
-DELAYEDALLOC"), only one cached I/O allocation strategy is supported:
+>
+> I'm not sure 7, 8, and 9 belong to series, as it's really a separate
+> feature.
+The separate irq/softirq stack patches dpend on generic_entry tightly,
+so I recommand put them together.
 
-  When cached I/O is preferred, page allocation is applied without
-  direct reclaim.  If allocation fails, fall back to inplace I/O.
+>
+> Dito for patch 11, it just makes the series harder to review.
+The 11 is not so necessary as above, I would remove it from this
+series. And send it again after generic_entry merged.
 
-Let's get rid of z_erofs_cache_alloctype.  No logical changes.
+>
+> For GENERIC_ENTRY support only patch 1, 5, 6, 12, 13, and 14, really
+> required. The others are unrelated.
+Thx for the reminder; I will re-organize them.
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
----
-changes since v1:
- - fold in Yue Hu's fix:
-   https://lore.kernel.org/r/20221206053633.4251-1-zbestahu@gmail.com
+>
+>
+> Thanks,
+> Bj=C3=B6rn
 
- fs/erofs/zdata.c | 77 +++++++++++++++++++-----------------------------
- 1 file changed, 31 insertions(+), 46 deletions(-)
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index b792d424d774..b66c16473273 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -175,16 +175,6 @@ static void z_erofs_free_pcluster(struct z_erofs_pcluster *pcl)
- 	DBG_BUGON(1);
- }
- 
--/* how to allocate cached pages for a pcluster */
--enum z_erofs_cache_alloctype {
--	DONTALLOC,	/* don't allocate any cached pages */
--	/*
--	 * try to use cached I/O if page allocation succeeds or fallback
--	 * to in-place I/O instead to avoid any direct reclaim.
--	 */
--	TRYALLOC,
--};
--
- /*
-  * tagged pointer with 1-bit tag for all compressed pages
-  * tag 0 - the page is just found with an extra page reference
-@@ -292,12 +282,29 @@ struct z_erofs_decompress_frontend {
- 	.inode = __i, .owned_head = Z_EROFS_PCLUSTER_TAIL, \
- 	.mode = Z_EROFS_PCLUSTER_FOLLOWED, .backmost = true }
- 
-+static bool z_erofs_should_alloc_cache(struct z_erofs_decompress_frontend *fe)
-+{
-+	unsigned int cachestrategy = EROFS_I_SB(fe->inode)->opt.cache_strategy;
-+
-+	if (cachestrategy <= EROFS_ZIP_CACHE_DISABLED)
-+		return false;
-+
-+	if (fe->backmost)
-+		return true;
-+
-+	if (cachestrategy >= EROFS_ZIP_CACHE_READAROUND &&
-+	    fe->map.m_la < fe->headoffset)
-+		return true;
-+
-+	return false;
-+}
-+
- static void z_erofs_bind_cache(struct z_erofs_decompress_frontend *fe,
--			       enum z_erofs_cache_alloctype type,
- 			       struct page **pagepool)
- {
- 	struct address_space *mc = MNGD_MAPPING(EROFS_I_SB(fe->inode));
- 	struct z_erofs_pcluster *pcl = fe->pcl;
-+	bool shouldalloc = z_erofs_should_alloc_cache(fe);
- 	bool standalone = true;
- 	/*
- 	 * optimistic allocation without direct reclaim since inplace I/O
-@@ -326,18 +333,19 @@ static void z_erofs_bind_cache(struct z_erofs_decompress_frontend *fe,
- 		} else {
- 			/* I/O is needed, no possible to decompress directly */
- 			standalone = false;
--			switch (type) {
--			case TRYALLOC:
--				newpage = erofs_allocpage(pagepool, gfp);
--				if (!newpage)
--					continue;
--				set_page_private(newpage,
--						 Z_EROFS_PREALLOCATED_PAGE);
--				t = tag_compressed_page_justfound(newpage);
--				break;
--			default:        /* DONTALLOC */
-+			if (!shouldalloc)
- 				continue;
--			}
-+
-+			/*
-+			 * try to use cached I/O if page allocation
-+			 * succeeds or fallback to in-place I/O instead
-+			 * to avoid any direct reclaim.
-+			 */
-+			newpage = erofs_allocpage(pagepool, gfp);
-+			if (!newpage)
-+				continue;
-+			set_page_private(newpage, Z_EROFS_PREALLOCATED_PAGE);
-+			t = tag_compressed_page_justfound(newpage);
- 		}
- 
- 		if (!cmpxchg_relaxed(&pcl->compressed_bvecs[i].page, NULL,
-@@ -637,20 +645,6 @@ static bool z_erofs_collector_end(struct z_erofs_decompress_frontend *fe)
- 	return true;
- }
- 
--static bool should_alloc_managed_pages(struct z_erofs_decompress_frontend *fe,
--				       unsigned int cachestrategy,
--				       erofs_off_t la)
--{
--	if (cachestrategy <= EROFS_ZIP_CACHE_DISABLED)
--		return false;
--
--	if (fe->backmost)
--		return true;
--
--	return cachestrategy >= EROFS_ZIP_CACHE_READAROUND &&
--		la < fe->headoffset;
--}
--
- static int z_erofs_read_fragment(struct inode *inode, erofs_off_t pos,
- 				 struct page *page, unsigned int pageofs,
- 				 unsigned int len)
-@@ -687,12 +681,9 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 				struct page *page, struct page **pagepool)
- {
- 	struct inode *const inode = fe->inode;
--	struct erofs_sb_info *const sbi = EROFS_I_SB(inode);
- 	struct erofs_map_blocks *const map = &fe->map;
- 	const loff_t offset = page_offset(page);
- 	bool tight = true, exclusive;
--
--	enum z_erofs_cache_alloctype cache_strategy;
- 	unsigned int cur, end, spiltted;
- 	int err = 0;
- 
-@@ -746,13 +737,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 		fe->mode = Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE;
- 	} else {
- 		/* bind cache first when cached decompression is preferred */
--		if (should_alloc_managed_pages(fe, sbi->opt.cache_strategy,
--					       map->m_la))
--			cache_strategy = TRYALLOC;
--		else
--			cache_strategy = DONTALLOC;
--
--		z_erofs_bind_cache(fe, cache_strategy, pagepool);
-+		z_erofs_bind_cache(fe, pagepool);
- 	}
- hitted:
- 	/*
--- 
-2.30.2
 
+--=20
+Best Regards
+ Guo Ren
