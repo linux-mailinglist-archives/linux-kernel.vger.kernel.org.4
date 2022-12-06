@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB096445D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:38:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF71864457A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbiLFOiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 09:38:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41906 "EHLO
+        id S234893AbiLFOU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 09:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbiLFOh6 (ORCPT
+        with ESMTP id S234910AbiLFOUs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 09:37:58 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB82140F4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:37:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1670337473;
-        bh=Kd0jjz1CjqcV+7piYClIjIJneBLKFwnv523KTTiO8hc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ea1ZwCpSugdyNqlfCe26vLk7eouQGBO16z+sABZ+AEhPAoLqpWdhIDQeEtbGdLtH/
-         Jv0ExQFuElzvCxZDepj4uNvxW9Ax1PjfXxqRp0FrtpysjqGqGij5zJb2PSy8LGnvjY
-         K3hdxKdz9uuAiQ4hZA5eJnKOGTIl2mr/yvEUf43qdn0fsTuyKkapurJ7YEqABZS8zQ
-         tH/WHgQorXsQXgz/uU8wmLA6pfZSMSKcRKDFEwI4AhewU4F91iKppX9ZjUlIOSF8yh
-         7h6+nUfBIbbqWRkqBLb99QUKwzGZbzdwf5FMQoNcPy+3+ZswlGBngbsgC5T2ymC2zh
-         W3F9L1UL+utyQ==
-Received: from [172.16.0.118] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NRNLT2jlDzZx8;
-        Tue,  6 Dec 2022 09:37:53 -0500 (EST)
-Message-ID: <484763aa-e77b-b599-4786-ef4cdf16d7bd@efficios.com>
-Date:   Tue, 6 Dec 2022 09:38:11 -0500
+        Tue, 6 Dec 2022 09:20:48 -0500
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7182DA93;
+        Tue,  6 Dec 2022 06:20:44 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NRMyX6KV9z4f3v58;
+        Tue,  6 Dec 2022 22:20:36 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP1 (Coremail) with SMTP id cCh0CgD37ay2T49jumSkBg--.19656S4;
+        Tue, 06 Dec 2022 22:20:39 +0800 (CST)
+From:   Ye Bin <yebin@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
+        Ye Bin <yebin10@huawei.com>,
+        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com,
+        Jun Nie <jun.nie@linaro.org>
+Subject: [PATCH v2] ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
+Date:   Tue,  6 Dec 2022 22:41:34 +0800
+Message-Id: <20221206144134.1919987-1-yebin@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] powerpc/ftrace: fix syscall tracing on PPC64_ELF_ABI_V1
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Jeanson <mjeanson@efficios.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221201161442.2127231-1-mjeanson@efficios.com>
- <87pmcys9ae.fsf@mpe.ellerman.id.au>
- <d5dd1491-5d59-7987-9b5b-83f5fb1b29ee@efficios.com>
- <219580de-7473-f142-5ef2-1ed40e41d13d@csgroup.eu>
- <323f83c7-38fe-8a12-d77a-0a7249aad316@efficios.com>
- <dfe0b9ba-828d-e1a5-f9a3-416c6b5b1cf3@efficios.com>
- <87mt81sbxb.fsf@mpe.ellerman.id.au>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <87mt81sbxb.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgD37ay2T49jumSkBg--.19656S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF48ZF4xurWUWw48uF18AFb_yoWrtw1rpr
+        Z8Gr1UGr4Iva4DCFWkAF1UZr1Uuwn8CF47WryIgr4kXa43Cw1UKF1FgF18J3WjyrZ2vrWY
+        qF4DCry8Kw15G3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgEb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
+        c4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4
+        CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1x
+        MIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJV
+        Cq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxUrR6zUUUUU
+X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,66 +59,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-05 17:50, Michael Ellerman wrote:
-> Michael Jeanson <mjeanson@efficios.com> writes:
->> On 2022-12-05 15:11, Michael Jeanson wrote:
->>>>>> Michael Jeanson <mjeanson@efficios.com> writes:
->>>>>>> In v5.7 the powerpc syscall entry/exit logic was rewritten in C, on
->>>>>>> PPC64_ELF_ABI_V1 this resulted in the symbols in the syscall table
->>>>>>> changing from their dot prefixed variant to the non-prefixed ones.
->>>>>>>
->>>>>>> Since ftrace prefixes a dot to the syscall names when matching them to
->>>>>>> build its syscall event list, this resulted in no syscall events being
->>>>>>> available.
->>>>>>>
->>>>>>> Remove the PPC64_ELF_ABI_V1 specific version of
->>>>>>> arch_syscall_match_sym_name to have the same behavior across all powerpc
->>>>>>> variants.
->>>>>>
->>>>>> This doesn't seem to work for me.
->>>>>>
->>>>>> Event with it applied I still don't see anything in
->>>>>> /sys/kernel/debug/tracing/events/syscalls
->>>>>>
->>>>>> Did we break it in some other way recently?
->>>>>>
->>>>>> cheers
->>
->> I did some further testing, my config also enabled KALLSYMS_ALL, when I remove
->> it there is indeed no syscall events.
-> 
-> Aha, OK that explains it I guess.
-> 
-> I was using ppc64_guest_defconfig which has ABI_V1 and FTRACE_SYSCALLS,
-> but does not have KALLSYMS_ALL. So I guess there's some other bug
-> lurking in there.
+From: Ye Bin <yebin10@huawei.com>
 
-I don't have the setup handy to validate it, but I suspect it is caused 
-by the way scripts/kallsyms.c:symbol_valid() checks whether a symbol 
-entry needs to be integrated into the assembler output when 
---all-symbols is not specified. It only keeps symbols which addresses 
-are in the text range. On PPC64_ELF_ABI_V1, this means only the 
-dot-prefixed symbols will be kept (those point to the function begin), 
-leaving out the non-dot-prefixed symbols (those point to the function 
-descriptors).
+Syzbot report follow issue:
+------------[ cut here ]------------
+kernel BUG at fs/ext4/inline.c:227!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 3629 Comm: syz-executor212 Not tainted 6.1.0-rc5-syzkaller-00018-g59d0d52c30d4 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:ext4_write_inline_data+0x344/0x3e0 fs/ext4/inline.c:227
+RSP: 0018:ffffc90003b3f368 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff8880704e16c0 RCX: 0000000000000000
+RDX: ffff888021763a80 RSI: ffffffff821e31a4 RDI: 0000000000000006
+RBP: 000000000006818e R08: 0000000000000006 R09: 0000000000068199
+R10: 0000000000000079 R11: 0000000000000000 R12: 000000000000000b
+R13: 0000000000068199 R14: ffffc90003b3f408 R15: ffff8880704e1c82
+FS:  000055555723e3c0(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fffe8ac9080 CR3: 0000000079f81000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ ext4_write_inline_data_end+0x2a3/0x12f0 fs/ext4/inline.c:768
+ ext4_write_end+0x242/0xdd0 fs/ext4/inode.c:1313
+ ext4_da_write_end+0x3ed/0xa30 fs/ext4/inode.c:3063
+ generic_perform_write+0x316/0x570 mm/filemap.c:3764
+ ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:285
+ ext4_file_write_iter+0x8bc/0x16e0 fs/ext4/file.c:700
+ call_write_iter include/linux/fs.h:2191 [inline]
+ do_iter_readv_writev+0x20b/0x3b0 fs/read_write.c:735
+ do_iter_write+0x182/0x700 fs/read_write.c:861
+ vfs_iter_write+0x74/0xa0 fs/read_write.c:902
+ iter_file_splice_write+0x745/0xc90 fs/splice.c:686
+ do_splice_from fs/splice.c:764 [inline]
+ direct_splice_actor+0x114/0x180 fs/splice.c:931
+ splice_direct_to_actor+0x335/0x8a0 fs/splice.c:886
+ do_splice_direct+0x1ab/0x280 fs/splice.c:974
+ do_sendfile+0xb19/0x1270 fs/read_write.c:1255
+ __do_sys_sendfile64 fs/read_write.c:1323 [inline]
+ __se_sys_sendfile64 fs/read_write.c:1309 [inline]
+ __x64_sys_sendfile64+0x1d0/0x210 fs/read_write.c:1309
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+---[ end trace 0000000000000000 ]---
 
-So I see two possible solutions there: either we ensure that 
-FTRACE_SYSCALLS selects KALLSYMS_ALL on PPC64_ELF_ABI_V1, or we modify 
-scripts/kallsyms.c:symbol_valid() to also include function descriptor 
-symbols. This would mean accepting symbols pointing into the .opd ELF 
-section.
+Above issue may happens as follows:
+ext4_da_write_begin
+  ext4_da_write_inline_data_begin
+    ext4_da_convert_inline_data_to_extent
+      ext4_clear_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA);
+ext4_da_write_end
 
-IMHO the second option would be better because it does not increase the 
-kernel image size as much as KALLSYMS_ALL.
+ext4_run_li_request
+  ext4_mb_prefetch
+    ext4_read_block_bitmap_nowait
+      ext4_validate_block_bitmap
+        ext4_mark_group_bitmap_corrupted(sb, block_group, EXT4_GROUP_INFO_BBITMAP_CORRUPT)
+	 percpu_counter_sub(&sbi->s_freeclusters_counter,grp->bb_free);
+	  -> sbi->s_freeclusters_counter become zero
+ext4_da_write_begin
+  if (ext4_nonda_switch(inode->i_sb)) -> As freeclusters_counter is zero will return true
+    *fsdata = (void *)FALL_BACK_TO_NONDELALLOC;
+    ext4_write_begin
+ext4_da_write_end
+  if (write_mode == FALL_BACK_TO_NONDELALLOC)
+    ext4_write_end
+      if (inline_data)
+        ext4_write_inline_data_end
+	  ext4_write_inline_data
+	    BUG_ON(pos + len > EXT4_I(inode)->i_inline_size);
+           -> As inode is already convert to extent, so 'pos + len' > inline_size
+	   -> then trigger BUG.
 
-Thoughts ?
+To solve above issue, there's need to judge inode if has EXT4_STATE_MAY_INLINE_DATA
+flag in 'ext4_write_end()'. 'ext4_has_inline_data()' flag only cleared after do
+write back, EXT4_STATE_MAY_INLINE_DATA flag indicate that inode has inline data,
+so add this flag check except 'ext4_has_inline_data()' flag in 'ext4_write_end()'.
 
-Thanks,
+Fixes:f19d5870cbf7("ext4: add normal write support for inline data")
+Reported-by: syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com
+Reported-by: Jun Nie <jun.nie@linaro.org>
+Signed-off-by: Ye Bin <yebin10@huawei.com>
+---
+ fs/ext4/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Mathieu
-
+diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+index f0079835b8a8..25841a878ce9 100644
+--- a/fs/ext4/inode.c
++++ b/fs/ext4/inode.c
+@@ -1315,7 +1315,8 @@ static int ext4_write_end(struct file *file,
+ 
+ 	trace_ext4_write_end(inode, pos, len, copied);
+ 
+-	if (ext4_has_inline_data(inode))
++	if (ext4_has_inline_data(inode) &&
++	    ext4_test_inode_state(inode, EXT4_STATE_MAY_INLINE_DATA))
+ 		return ext4_write_inline_data_end(inode, pos, len, copied, page);
+ 
+ 	copied = block_write_end(file, mapping, pos, len, copied, page, fsdata);
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+2.31.1
 
