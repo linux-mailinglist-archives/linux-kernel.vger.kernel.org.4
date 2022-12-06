@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3814D644C45
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A721D644C47
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:12:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiLFTMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:12:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
+        id S229669AbiLFTMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:12:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiLFTMe (ORCPT
+        with ESMTP id S229616AbiLFTMj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:12:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AC2D1C3;
-        Tue,  6 Dec 2022 11:12:31 -0800 (PST)
+        Tue, 6 Dec 2022 14:12:39 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0C73B1F;
+        Tue,  6 Dec 2022 11:12:34 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58CEE616C6;
-        Tue,  6 Dec 2022 19:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF729C433D6;
-        Tue,  6 Dec 2022 19:12:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56EB9B81B2A;
+        Tue,  6 Dec 2022 19:12:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03B3FC433D6;
+        Tue,  6 Dec 2022 19:12:32 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1p2dMj-0004Qr-2Z;
+        id 1p2dMj-0004RL-33;
         Tue, 06 Dec 2022 14:12:29 -0500
-Message-ID: <20221206191229.656244029@goodmis.org>
+Message-ID: <20221206191229.813199661@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 06 Dec 2022 14:12:02 -0500
+Date:   Tue, 06 Dec 2022 14:12:03 -0500
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
@@ -40,8 +40,8 @@ Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org
-Subject: [PATCH 1/2] x86/mm/kmmio: Switch to arch_spin_lock()
+        x86@kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH 2/2] x86/mm/kmmio: Remove rcu_read_lock()
 References: <20221206191201.217838841@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -63,117 +63,51 @@ the driver was doing and then do the work on its behalf by single stepping
 through the process.
 
 But to achieve this ability, it must do some special things. One is it
-needs to grab a lock while in the breakpoint handler. This is considered
-an NMI state, and then lockdep warns that the lock is being held in both
-an NMI state (really a breakpoint handler) and also in normal context.
+take the rcu_read_lock() when the fault occurs, and then release it in the
+breakpoint that in the single stepping. This makes lockdep unhappy, as it
+changes the state of RCU from within an exception that is not contained in
+that exception, and we get a nasty splat from lockdep.
 
-As the breakpoint/NMI state only happens when the driver is accessing
-memory, there's no concern of a race condition against the setup and
-tear-down of mmiotracer.
+As it also disables preemption everywhere rcu_read_lock() is taken, and
+enables preemption everywhere rcu_read_unlock(), and does not enable
+preemption in between, it is the same as synchronize_rcu_sched(). But as
+the RCU sched variant has the same grace period as normal RCU, there's no
+reason to take the rcu_read_lock(). Simply remove it.
 
-To make lockdep and mmiotrace work together, convert the locks used in the
-breakpoint handler into arch_spin_lock().
-
-Link: https://lore.kernel.org/lkml/20221201213126.620b7dd3@gandalf.local.home/
-
-Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
 Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
 ---
- arch/x86/mm/kmmio.c | 31 ++++++++++++++++++++++---------
- 1 file changed, 22 insertions(+), 9 deletions(-)
+ arch/x86/mm/kmmio.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
 diff --git a/arch/x86/mm/kmmio.c b/arch/x86/mm/kmmio.c
-index d3efbc5b3449..edb486450158 100644
+index edb486450158..e15e3aaaf94c 100644
 --- a/arch/x86/mm/kmmio.c
 +++ b/arch/x86/mm/kmmio.c
-@@ -62,7 +62,13 @@ struct kmmio_context {
- 	int active;
- };
+@@ -254,7 +254,6 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
+ 	 * again.
+ 	 */
+ 	preempt_disable();
+-	rcu_read_lock();
  
--static DEFINE_SPINLOCK(kmmio_lock);
-+/*
-+ * The kmmio_lock is taken in int3 context, which is treated as NMI context.
-+ * This causes lockdep to complain about it bein in both NMI and normal
-+ * context. Hide it from lockdep, as it should not have any other locks
-+ * taken under it, and this is only enabled for debugging mmio anyway.
-+ */
-+static arch_spinlock_t kmmio_lock = __ARCH_SPIN_LOCK_UNLOCKED;
+ 	faultpage = get_kmmio_fault_page(page_base);
+ 	if (!faultpage) {
+@@ -323,7 +322,6 @@ int kmmio_handler(struct pt_regs *regs, unsigned long addr)
+ 	return 1; /* fault handled */
  
- /* Protected by kmmio_lock */
- unsigned int kmmio_count;
-@@ -346,10 +352,10 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
- 		ctx->probe->post_handler(ctx->probe, condition, regs);
+ no_kmmio:
+-	rcu_read_unlock();
+ 	preempt_enable_no_resched();
+ 	return ret;
+ }
+@@ -363,7 +361,6 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
+ 	/* These were acquired in kmmio_handler(). */
+ 	ctx->active--;
+ 	BUG_ON(ctx->active);
+-	rcu_read_unlock();
+ 	preempt_enable_no_resched();
  
- 	/* Prevent racing against release_kmmio_fault_page(). */
--	spin_lock(&kmmio_lock);
-+	arch_spin_lock(&kmmio_lock);
- 	if (ctx->fpage->count)
- 		arm_kmmio_fault_page(ctx->fpage);
--	spin_unlock(&kmmio_lock);
-+	arch_spin_unlock(&kmmio_lock);
- 
- 	regs->flags &= ~X86_EFLAGS_TF;
- 	regs->flags |= ctx->saved_flags;
-@@ -440,7 +446,8 @@ int register_kmmio_probe(struct kmmio_probe *p)
- 	unsigned int l;
- 	pte_t *pte;
- 
--	spin_lock_irqsave(&kmmio_lock, flags);
-+	local_irq_save(flags);
-+	arch_spin_lock(&kmmio_lock);
- 	if (get_kmmio_probe(addr)) {
- 		ret = -EEXIST;
- 		goto out;
-@@ -460,7 +467,9 @@ int register_kmmio_probe(struct kmmio_probe *p)
- 		size += page_level_size(l);
- 	}
- out:
--	spin_unlock_irqrestore(&kmmio_lock, flags);
-+	arch_spin_unlock(&kmmio_lock);
-+	local_irq_restore(flags);
-+
  	/*
- 	 * XXX: What should I do here?
- 	 * Here was a call to global_flush_tlb(), but it does not exist
-@@ -494,7 +503,8 @@ static void remove_kmmio_fault_pages(struct rcu_head *head)
- 	struct kmmio_fault_page **prevp = &dr->release_list;
- 	unsigned long flags;
- 
--	spin_lock_irqsave(&kmmio_lock, flags);
-+	local_irq_save(flags);
-+	arch_spin_lock(&kmmio_lock);
- 	while (f) {
- 		if (!f->count) {
- 			list_del_rcu(&f->list);
-@@ -506,7 +516,8 @@ static void remove_kmmio_fault_pages(struct rcu_head *head)
- 		}
- 		f = *prevp;
- 	}
--	spin_unlock_irqrestore(&kmmio_lock, flags);
-+	arch_spin_unlock(&kmmio_lock);
-+	local_irq_restore(flags);
- 
- 	/* This is the real RCU destroy call. */
- 	call_rcu(&dr->rcu, rcu_free_kmmio_fault_pages);
-@@ -540,14 +551,16 @@ void unregister_kmmio_probe(struct kmmio_probe *p)
- 	if (!pte)
- 		return;
- 
--	spin_lock_irqsave(&kmmio_lock, flags);
-+	local_irq_save(flags);
-+	arch_spin_lock(&kmmio_lock);
- 	while (size < size_lim) {
- 		release_kmmio_fault_page(addr + size, &release_list);
- 		size += page_level_size(l);
- 	}
- 	list_del_rcu(&p->list);
- 	kmmio_count--;
--	spin_unlock_irqrestore(&kmmio_lock, flags);
-+	arch_spin_unlock(&kmmio_lock);
-+	local_irq_restore(flags);
- 
- 	if (!release_list)
- 		return;
 -- 
 2.35.1
 
