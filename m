@@ -2,88 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4426F6449BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9705B6449BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235665AbiLFQuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:50:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S235498AbiLFQuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:50:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235462AbiLFQuf (ORCPT
+        with ESMTP id S235313AbiLFQud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:50:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 757342AEE
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:49:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670345382;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gQVj/FAk6QDQrcuyuYJJ6Wfs8dTdR09EgNSH0Y+Vk4w=;
-        b=VqT5osVMZ/68mkiOqej5k8zcxkb7J6JxdqemESPPeVjjAQ7hzaEO5KdNWzclCKDxT5tuiD
-        4G8JJ6N7OdtT37bK2k27RAsKRLQqy0wvPfwxDkASpNq1YkMiBGMop32YQY6CfvMVvkBFSX
-        dgiNguab1DKK8GbYnx5DYHZYtzetckY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-299-1XgyIYveNcqU1pRjiRWvUw-1; Tue, 06 Dec 2022 11:49:32 -0500
-X-MC-Unique: 1XgyIYveNcqU1pRjiRWvUw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B108E185A7A9;
-        Tue,  6 Dec 2022 16:49:31 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (ovpn-192-116.brq.redhat.com [10.40.192.116])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 84AC4FD48;
-        Tue,  6 Dec 2022 16:49:29 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue,  6 Dec 2022 17:49:31 +0100 (CET)
-Date:   Tue, 6 Dec 2022 17:49:28 +0100
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
-Subject: Re: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS
- zap_pid_ns_processes()
-Message-ID: <20221206164927.GD3866@redhat.com>
-References: <20221125135500.1653800-1-frederic@kernel.org>
- <20221125135500.1653800-4-frederic@kernel.org>
- <871qpkqof8.fsf@email.froward.int.ebiederm.org>
+        Tue, 6 Dec 2022 11:50:33 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC989E1D;
+        Tue,  6 Dec 2022 08:50:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=K4NFst+8FCbWyMDwZ12NPmOORMS7wdMV1QPTxYiev3A=; b=wMFsWTl2tH12g3UI1Upx/kqtLi
+        ACKfu5mG8D77DvtjjZMsl+tBwcg9mgpC7n2AjLPEEp+hp+d/ccjlOiUs5soxjtqO3BuFHpC7Scs51
+        8FKnGTh3FmoFbRhq9g6hm8wUxsddZalqgJG9kVHDnP5vQLG/bH4mI8mLH6j/s1TDwD5Q=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2b93-004YHj-Na; Tue, 06 Dec 2022 17:50:13 +0100
+Date:   Tue, 6 Dec 2022 17:50:13 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v4 net-next 5/5] drivers/net/phy: add driver for the
+ onsemi NCN26000 10BASE-T1S PHY
+Message-ID: <Y49yxcd6m7K3G3ZA@lunn.ch>
+References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
+ <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
+ <Y49IBR8ByMQH6oVt@lunn.ch>
+ <Y49THkXZdLBR6Mxv@gvm01>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <871qpkqof8.fsf@email.froward.int.ebiederm.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y49THkXZdLBR6Mxv@gvm01>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/30, Eric W. Biederman wrote:
->
-> 2) I keep thinking zap_pid_ns_processes() should be changed so that
->    after it sends SIGKILL to all of the relevant processes to not wait,
+> OK, as you see I'm a bit "outdated" :-)
+> What would be the alternative? There is a bunch of vendor-specific PHY
+> features that I would like to expose at some point (e.g. regulation of
+> TX voltage levels). Thanks!
 
-At least I think it should not wait for the tasks injected into this ns.
+TX voltages sound like they are board specific, so use DT properties.
 
-Because this looks like a kernel bug even if we forget about this deadlock.
+For runtime properties, look at phy tunables.
 
-Say we create a task P using clone(CLONE_NEWPID), then inject a task T into
-P's pid-namespace via setns/fork. This make the process P "unkillable", it
-will hang in zap_pid_ns_processes() "forever" until T->parent reaps a zombie
-task T killed by P.
-
-Oleg.
-
+    Andrew
