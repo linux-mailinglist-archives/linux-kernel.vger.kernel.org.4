@@ -2,116 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCAC1643EEA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:41:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA046643EEC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiLFIlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:41:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39240 "EHLO
+        id S234007AbiLFIlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:41:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbiLFIlg (ORCPT
+        with ESMTP id S231771AbiLFIlr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:41:36 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0628863A8;
-        Tue,  6 Dec 2022 00:41:34 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id CA2E95C00B2;
-        Tue,  6 Dec 2022 03:41:31 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 06 Dec 2022 03:41:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670316091; x=1670402491; bh=aJo3J1Ury8
-        ++OjEv6DzcQ9jc03bCyjWjmRPfTKm3uP0=; b=cIXLZfBwkLxJvUGYhKhDoQYgg3
-        oVLwPWXuDT/Op0sWB9H0oa1jbST02sOOmrlqXck1x3pmwWp+Ci0/5vQU983BWieK
-        LsHJ7gfJQHoUoj6JFIK57gq2hg1P894i+Tz3XNgDEXKbKufDqD8LruNMqM7DWLrP
-        R64gbjNNZdJhGes3sBaJK4ZWetNyjDK22OZvuogfPQtCtGXTAYAF6lWJ4YxEnSRg
-        zuAFrgCl+OOJ0n5F9e33XnkN6E9pJ4bYrx3MLzRalO7Gm9SvMKR8O1ZRB6BLVUSV
-        hheItXaZZZIMDNct6/9dt5W93TySzSvGjzX+V+MktfpF2h94tpKYSeKuhzlg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670316091; x=1670402491; bh=aJo3J1Ury8++OjEv6DzcQ9jc03bC
-        yjWjmRPfTKm3uP0=; b=VSRbJf5zDphz/MaojcgPtnB5M93ipX5duRgXyeju69hz
-        uwac1CtJ8HLaGSXgbetF/1gMnLFaY9yNzCTud2eU93HHc/Dh7hTmbvFrOvgGkgHw
-        XfdGs4PkyRJkoXjtw85F/iVLfgE5JnCE3F01UXkipLNC7ZQEqU2+cb7wzIg/k0kO
-        i4RSUdlDj0JK7b+a+Er+LebZ7NmkRoj/tmrt0ZQn1SrbWhSCyjaFqKlWFfG8+tQK
-        Ckg53CVInEO6/dU5NoenHuet0T9mP2EeOVoedKRS9FZBNOD7tl9NYAyNv+QyxqIh
-        +K8r+XcKhp+obbDKGqYeM7sw0k3MLJ44ANtrjNCMhA==
-X-ME-Sender: <xms:OwCPY3eLQy-IcoRbJAD_JOVDcCGRNHO3Sd89JuFFgtJfOqv2M6P8Vw>
-    <xme:OwCPY9Nnudqdi6_d2QGVlwGSag_Zeb4WKHnDo2j1pu2jPSUKBjeQ3u145VwpJZC2O
-    fpO05pS35huVIiP_AM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehgdduvdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffgeffuddtvdehffefleethfejjeegvdelffejieegueetledvtedtudelgfdu
-    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:OwCPYwgfHVwEAlvGexqKDEUUEwKpg-tLjX1fwreIpiPtS2xY2R1CWg>
-    <xmx:OwCPY4_SijKSlgmczYi3cJcUy6pfrjF57dht8NYc5huq58uu2xJteQ>
-    <xmx:OwCPYzvlX5h_xvCk7vf11qm2L01v7SpDpW4ZwNl4kJ9l1chMDxQpUg>
-    <xmx:OwCPY9Lfi6zLdiidBl7GMSvefovfMsTLTG5wQnNln-KKR1t44jIU3A>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 60E0AB60086; Tue,  6 Dec 2022 03:41:31 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <e46a680f-e891-489c-9747-98ae3df42ade@app.fastmail.com>
-In-Reply-To: <20221206073916.1606125-3-jk@codeconstruct.com.au>
-References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
- <20221206073916.1606125-3-jk@codeconstruct.com.au>
-Date:   Tue, 06 Dec 2022 09:41:10 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Jeremy Kerr" <jk@codeconstruct.com.au>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Lee Jones" <lee@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>
-Subject: Re: [RFC PATCH 2/2] mfd: syscon: allow reset control for syscon devices
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Dec 2022 03:41:47 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C71B1CD
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:41:45 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id x22so4394380ejs.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m/kMOksg7tU6lJPzMLBqUD/rOdX040X32EkXtoBAmQw=;
+        b=oqT91kX5Al5UDu7Kfc02o7LOuNU+8QsEQfRqp2HFO9Zt9aTutmLTM9520i+T4UcNCD
+         TnOmH6PRx+ndHf32A1uPC34cmmUlZPs/LBWtdS4jTzebfTeFlyxD/7EyXWUjx8bssJcS
+         mwgMM7xbZiZt03fd7HXx6LZ1JkgbeePJjSEdJswuA6HO/JZWUf+IMJJqDehpfRS63OHl
+         gay6qpbpzJ6QY9XbRWVspaPrpsKSmsXwnII47jAmtdMZ9RpJLMPPhKI+vlAKYCfgdk4P
+         Lp7RlhO6CRg7jrZyQznuOR+lNwB3Z1VPI7jbhbXTjh3k+gfsdu7dsREHkG0i2LI2EyVV
+         zLXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m/kMOksg7tU6lJPzMLBqUD/rOdX040X32EkXtoBAmQw=;
+        b=sq9GzorDZsBaVla5SOuCZgIp6HRpcx10Lx73D/DG66+aZTajXfT0BEDFAPctimnurU
+         dng2taMHdi3gWUFLlzy8nmYtxmN9icdwMNq+xXMImIgjtk5bhmN279t74AX/ZlYnkEpN
+         pJ8bPscp1RJyGfyqewRPmTFAEsP+hOqUdzy20k4oQHQEprFX4HeYyVSQBaAlPp/ZoCAy
+         rAamOEjdjyNn6iO+70YheFtGgOv9H9pKHJYyfAMz9kVtKKqgOy6Ha5bhvPXWW90bhH/T
+         ZdVJflGnksjZHJ1ABpO4zTGI5QhbACMWtnTrxafY+tHgxq58+iSHzejKo+OQm9Sm4T8X
+         z/9A==
+X-Gm-Message-State: ANoB5pk6d5wTqJjiwF2CuSA/fNm0Y7WE4hZp25pYhXAz6SByKCaBcgVU
+        odnw/qxfM6+zLs0fTDMOk+8SPQ==
+X-Google-Smtp-Source: AA0mqf7G1IP3b4y4pMVoGV/5wlyYiM3ZQx020JxViVj/6FtKjPStDlqezc3U/c27OV9qkYla7KAdRQ==
+X-Received: by 2002:a17:906:9709:b0:7c0:cb51:887c with SMTP id k9-20020a170906970900b007c0cb51887cmr14152179ejx.620.1670316104087;
+        Tue, 06 Dec 2022 00:41:44 -0800 (PST)
+Received: from mbp-di-paolo.station (net-2-35-55-161.cust.vodafonedsl.it. [2.35.55.161])
+        by smtp.gmail.com with ESMTPSA id e23-20020a1709062c1700b007305d408b3dsm7084588ejh.78.2022.12.06.00.41.43
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Dec 2022 00:41:43 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH V6 6/8] block, bfq: retrieve independent access ranges
+ from request queue
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <d27ca14b-e228-49b7-28a8-00ea67e8ea06@opensource.wdc.com>
+Date:   Tue, 6 Dec 2022 09:41:42 +0100
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
+        Rory Chen <rory.c.chen@seagate.com>,
+        Federico Gavioli <f.gavioli97@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <76ADE275-1862-44F7-B9C4-4A08179A72E3@linaro.org>
+References: <20221103162623.10286-1-paolo.valente@linaro.org>
+ <20221103162623.10286-7-paolo.valente@linaro.org>
+ <5d062001-2fff-35e5-d951-a61b510727d9@opensource.wdc.com>
+ <4C45BCC6-D9AB-4C70-92E2-1B54AB4A2090@linaro.org>
+ <d27ca14b-e228-49b7-28a8-00ea67e8ea06@opensource.wdc.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022, at 08:39, Jeremy Kerr wrote:
-> Simple syscon devices may require deassertion of a reset signal in order
-> to access their register set. Rather than requiring a custom driver to
-> implement this, we can use the generic "resets" specifiers to link a
-> reset line to the syscon.
->
-> This change adds an optional reset line to the syscon device
-> description, and code to perform the deassertion/assertion on
-> probe/remove.
->
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 
-I see that this will only work after the device has been registered,
-but not for early users of the syscon framework that bypass the
-device logic and just call device_node_to_regmap() or 
-syscon_regmap_lookup*() during early boot.
 
-It should be possible to solve this by adding the reset logic
-into the of_syscon_register() function and using the
-of_reset_control_get*() helpers instead of the devm_* ones,
-but I'm not sure if that causes other problems with probe
-order, or if that helps at all, if reset drivers already
-require the device subsystem to be running.
+> Il giorno 6 dic 2022, alle ore 09:29, Damien Le Moal =
+<damien.lemoal@opensource.wdc.com> ha scritto:
+>=20
+> On 12/6/22 17:06, Paolo Valente wrote:
+>>=20
+>>=20
+>>> Il giorno 21 nov 2022, alle ore 02:01, Damien Le Moal =
+<damien.lemoal@opensource.wdc.com> ha scritto:
+>>>=20
+>>=20
+>> ...
+>>=20
+>>>=20
+>>>> }
+>>>>=20
+>>>> static bool bfq_bio_merge(struct request_queue *q, struct bio *bio,
+>>>> @@ -7144,6 +7159,8 @@ static int bfq_init_queue(struct =
+request_queue *q, struct elevator_type *e)
+>>>> {
+>>>> 	struct bfq_data *bfqd;
+>>>> 	struct elevator_queue *eq;
+>>>> +	unsigned int i;
+>>>> +	struct blk_independent_access_ranges *ia_ranges =3D =
+q->disk->ia_ranges;
+>>>>=20
+>>>> 	eq =3D elevator_alloc(q, e);
+>>>> 	if (!eq)
+>>>> @@ -7187,10 +7204,31 @@ static int bfq_init_queue(struct =
+request_queue *q, struct elevator_type *e)
+>>>> 	bfqd->queue =3D q;
+>>>>=20
+>>>> 	/*
+>>>> -	 * Multi-actuator support not complete yet, default to single
+>>>> -	 * actuator for the moment.
+>>>> +	 * If the disk supports multiple actuators, we copy the =
+independent
+>>>> +	 * access ranges from the request queue structure.
+>>>> 	 */
+>>>> -	bfqd->num_actuators =3D 1;
+>>>> +	spin_lock_irq(&q->queue_lock);
+>>>> +	if (ia_ranges) {
+>>>> +		/*
+>>>> +		 * Check if the disk ia_ranges size exceeds the current =
+bfq
+>>>> +		 * actuator limit.
+>>>> +		 */
+>>>> +		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
+>>>> +			pr_crit("nr_ia_ranges higher than act limit: =
+iars=3D%d, max=3D%d.\n",
+>>>> +				ia_ranges->nr_ia_ranges, =
+BFQ_MAX_ACTUATORS);
+>>>> +			pr_crit("Falling back to single actuator =
+mode.\n");
+>>>> +			bfqd->num_actuators =3D 0;
+>>>> +		} else {
+>>>> +			bfqd->num_actuators =3D ia_ranges->nr_ia_ranges;
+>>>> +
+>>>> +			for (i =3D 0; i < bfqd->num_actuators; i++)
+>>>> +				bfqd->ia_ranges[i] =3D =
+ia_ranges->ia_range[i];
+>>>> +		}
+>>>> +	} else {
+>>>> +		bfqd->num_actuators =3D 0;
+>>>=20
+>>> That is very weird. The default should be 1 actuator.
+>>> ia_ranges->nr_ia_ranges is 0 when the disk does not provide any =
+range
+>>> information, meaning it is a regular disk with a single actuator.
+>>=20
+>> Actually, IIUC this assignment to 0 seems to be done exactly when you
+>> say that it should be done, i.e., when the disk does not provide any
+>> range information (ia_ranges is NULL). Am I missing something else?
+>=20
+> No ranges reported means no extra actuators, so a single actuator an
+> single LBA range for the entire device.
 
-Philipp, what is the earliest point at which
-reset_controller_register() can be called? Is that
-possible before postcore_initcall() or driver_register()?
+I'm still confused, sorry.  Where will I read sector ranges from, if
+no sector range information is available (ia_ranges is NULL)?
 
-     Arnd
+> In that case, bfq should process
+> all IOs using bfqd->ia_ranges[0]. The get range function will always
+> return that range. That makes the code clean and avoids different path =
+for
+> nr_ranges =3D=3D 1 and nr_ranges > 1. No ?
+
+Apart from the above point, for which maybe there is some other
+source of information for getting ranges, I see the following issue.
+
+What you propose is to save sector information and trigger the
+range-checking for loop also for the above single-actuator case.  Yet
+txecuting (one iteration of) that loop will will always result in
+getting a 0 as index.  So, what's the point is saving data and
+executing code on each IO, for getting a static result that we already
+know we will get?
+
+Thanks,
+Paolo
+
+>=20
+>>=20
+>> Once again, all other suggestions applied. I'm about to submit a V7.
+>>=20
+>> Thanks,
+>> Paolo
+>>=20
+>=20
+> --=20
+> Damien Le Moal
+> Western Digital Research
+
