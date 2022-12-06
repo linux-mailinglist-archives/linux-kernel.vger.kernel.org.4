@@ -2,49 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBBA644B50
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB37644B55
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiLFSVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 13:21:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33188 "EHLO
+        id S229921AbiLFSVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 13:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiLFST5 (ORCPT
+        with ESMTP id S229892AbiLFST5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Dec 2022 13:19:57 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F19209BB;
-        Tue,  6 Dec 2022 10:19:55 -0800 (PST)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E05E1F630;
+        Tue,  6 Dec 2022 10:19:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 46CBCCE198B;
-        Tue,  6 Dec 2022 18:19:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB58BC43143;
-        Tue,  6 Dec 2022 18:19:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01535B81B2E;
+        Tue,  6 Dec 2022 18:19:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9C6BC433C1;
+        Tue,  6 Dec 2022 18:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670350792;
-        bh=prU1Dmpeny5mMbqJi+O9MomcazycuOAmbeMY8t40dCc=;
+        s=k20201202; t=1670350793;
+        bh=JHubjQLH0ssWmLHugYbapmZtn6ZYmdiMM5ybOrx/NpU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pKgccnGrrxqyDE7GAmZqvQcSdJK0oIk4pRmWJPwxwoqVIZeEiolZXDR1yAMaoYAH5
-         L3uj5vZqlmgpwyCNFoii8tV+dZy/1OuqZhJZpBW2VEbMes3V8+pmtZb7e8C9jlYTYt
-         3BbrVfo+p7Yo7NsuGdFz1F715v0s0FH4MfQO0QxxGa6u1kD61Qx6duKgUfJ9yT8nHQ
-         mEkUbUyeU3XJpjoN2Rx6/fY1T7QEvSFcrltg5qa7MaZc+BcZEdboBVX854PdJh4CYH
-         M45nKwONksfZkEb5FQqCwX/Ga1z9pTLndU0GAYLs+/B7bwcJ5uALkmeyVJrF/hRBfA
-         FKiVabUUJroiQ==
+        b=YHOwUZjavmQYqTTJieMYijZYAfxoGLOvITPenjVjLZvoYUmX6mtKvLg3i0L1MjXpO
+         D8nZsWPsVRPluND9SwNV67bpqW2+4Bsn5Co3Py5IiaKv4RJVjxF1bYme4++xW3/GxJ
+         N09FZx8MOZ1jlLtlBN5tDSSqQAV1180O5RLvODgZ6G2xAnvX1vb6cDB9Nmhk2OLVsX
+         sgpo10FeOC6heiRBisknqmvvcXzod19cyraosDLsp5nvKHj3+kiQhsWnFjQ+6naOhF
+         g1CMOs/LJhg27uJ8R0B3QtPA6FUdtn+B8Amesn3fQ+wU46gzfpnn9k/4TuchACC3Al
+         Umn+W0fg7xHJw==
 From:   Bjorn Andersson <andersson@kernel.org>
-To:     johan+linaro@kernel.org
+To:     avri.altman@wdc.com, alim.akhtar@samsung.com,
+        johan+linaro@kernel.org
 Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, vkoul@kernel.org,
-        konrad.dybcio@linaro.org
-Subject: Re: [PATCH 0/2] arm64: dts: qcom: fix USB-DP PHY registers
-Date:   Tue,  6 Dec 2022 12:18:56 -0600
-Message-Id: <167035076327.3155086.12781605322798241404.b4-ty@kernel.org>
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-scsi@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, konrad.dybcio@linaro.org,
+        bvanassche@acm.org
+Subject: Re: (subset) [PATCH 0/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
+Date:   Tue,  6 Dec 2022 12:18:57 -0600
+Message-Id: <167035076357.3155086.13854105575228009158.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221111094729.11842-1-johan+linaro@kernel.org>
-References: <20221111094729.11842-1-johan+linaro@kernel.org>
+In-Reply-To: <20221205100837.29212-1-johan+linaro@kernel.org>
+References: <20221205100837.29212-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,25 +59,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 11 Nov 2022 10:47:27 +0100, Johan Hovold wrote:
-> This series fixes DisplayPort support on sm6350 and sm8250, which used
-> the wrong offset for the DP_PHY registers.
+On Mon, 5 Dec 2022 11:08:35 +0100, Johan Hovold wrote:
+> The SC8280XP UFS controllers are cache coherent and must be marked as
+> such in the devicetree to avoid potential data corruption.
 > 
 > Johan
 > 
 > 
 > Johan Hovold (2):
->   arm64: dts: qcom: sm6350: fix USB-DP PHY registers
->   arm64: dts: qcom: sm8250: fix USB-DP PHY registers
+>   dt-bindings: ufs: qcom: allow 'dma-coherent' property
+>   arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] arm64: dts: qcom: sm6350: fix USB-DP PHY registers
-      commit: 347b9491c595d5091bfabe65cad2fd6eee786153
-[2/2] arm64: dts: qcom: sm8250: fix USB-DP PHY registers
-      commit: f8d8840c72b3df61b5252052b79020dabec01ab5
+[2/2] arm64: dts: qcom: sc8280xp: fix UFS DMA coherency
+      commit: 0953777640354dc459a22369eea488603d225dd9
 
 Best regards,
 -- 
