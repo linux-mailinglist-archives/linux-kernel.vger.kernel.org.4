@@ -2,102 +2,424 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22951643D29
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526A5643D2A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:36:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233917AbiLFGfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:35:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60656 "EHLO
+        id S233927AbiLFGgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiLFGfN (ORCPT
+        with ESMTP id S230036AbiLFGge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:35:13 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2FC222BB;
-        Mon,  5 Dec 2022 22:35:07 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id vv4so3855864ejc.2;
-        Mon, 05 Dec 2022 22:35:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kpnQoUu9q4dFU9fd5dKoOeViJZYTdUELrMbvm+lIUes=;
-        b=PdeNrPpM/mc+Cn2I67Gjf1Wf/KOBET8M9rLbFYu4k015n4kFVbsPalmuzy63Mg9X34
-         mOVIxlsEJywstwTEeW6zYvycsf2NHaSJZ+i+ltWCECyE989UM4ZZ8fuJTN0xkJSsR7b5
-         yEfvMMBbf2krcxSZWauJFtmktBL5f37TzaecV6NzGFsGDoNC1rv1uMYHBo6/UvGqBnmg
-         tgdFJ3zl5fZL3qe5nApW7QQcOJr9Odmm109Ge+GQvqjPV/JB6NAV8ojjDM15FptrktUI
-         Yo7f7zOXPrrNN11rXdiSTqh8na+SsJNRNzkjAHKPDXJKb9IgcrDwUvJnIZuVIjkGu4+k
-         0iaA==
-X-Gm-Message-State: ANoB5pmoM63Q3jH2Y9azp4rzjujtoSrG9VMOlE+Nzw4SSCBdyxSV7Gk3
-        LKajedG+50+aHJmDsTsBCaQ=
-X-Google-Smtp-Source: AA0mqf7yArbjielBwMBLaQxWoE6QrvZhv1NGCA4k1c00+nH6n+Lo2x5YH+IBjHfZuQ9spSLA0SU+sA==
-X-Received: by 2002:a17:906:2b81:b0:7c0:f716:e395 with SMTP id m1-20020a1709062b8100b007c0f716e395mr5959496ejg.160.1670308505447;
-        Mon, 05 Dec 2022 22:35:05 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id a20-20020a17090680d400b007c081cf2d25sm6995881ejx.204.2022.12.05.22.35.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 22:35:05 -0800 (PST)
-Message-ID: <b3aff238-c473-e587-dd04-cc5ef4517722@kernel.org>
-Date:   Tue, 6 Dec 2022 07:35:03 +0100
+        Tue, 6 Dec 2022 01:36:34 -0500
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2135.outbound.protection.outlook.com [40.107.215.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8111895B1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:36:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mFFWiZzk/bZ9DY/zNLwZ+OjetJhljtjuyY4A4zIwMLMrpF1t9zNf0KyC1xnt8bI5+j0ouFuenqO3Pri7f043/izWHK1IKYWVTcJCt08r8FRXOMWPP58p9p865AaFbkrhCzPVMrKcSDcX5yBVJaP3zSxL0eSZ3H62ZOLVLvaG/EpsYk7O+kMRGLTp7TzbnLpgNT9+gksCnvUWSa/LL2acH69iHp9vz9wxkhUut8eKnJudytt59pypYACO+rHVmj+fvoAOaHDK74eBpGoieu/zd/tWfl+5NvNoUzhxICbuTbUfX+WM3SIOQ2exYFLs4zh1PM/7a+fEI3c/urHrXhvCKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YCO0C3ciguaCm5OANzldz3giTAeNlHiaCts2N+odNUA=;
+ b=OskVYYnPQS4vqrVUJM9HEk3Hl3SM55E+6YLyrGz1vDd2hOsidJm89wWWpiiOFbFgB52WFPGBwkLcxwjQC0kDhTO65ftUpmXfIMeQieHVNULgXTn5Rpmf8jb0dag7HV8Cj8flt99GAdCIQZvCxgYV5+KyA9fSqVaQQi+v/XH/IWarsb39OHtskGenMbZt3xhv20mg20xrK/g2M1v+zjKPU0G95c1l7+AMinAMvUuZA5gnjsm9K3bpjltxJgyQMSKKsOHK9QDzorNoB7yayqtmEpPQxqLjYkP1uKlgxfweyTi6lRbUFVhVl4EVdRK2HS+IHDboRqcOVQTq7uW7tNQbQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YCO0C3ciguaCm5OANzldz3giTAeNlHiaCts2N+odNUA=;
+ b=BMdbQ+nG13WHJtRpSSqvdgv0yvkc6PwqwYxS+eLAjagWou/wOA2OJg0At6IUsFG4QH57yBpwTTgtpGyd4aHMcg1IFQFrHhZzedot3Fa9orq1xpJ+b4aLZxoHOujwnIWJNpm2MazDwsAb88QAQ103XMvhqRM4hbnXnFcdxp9TG77cb0y37/YzapAEKYlbv+2qCczzhTXKjAUgQyK3ZWXabeb1e7+Di+ZLHRnsgAV3hc40pS2x+9NCQ18VwxfyCA9MQp54MThJ8j9I8QFpmo6grbbXvFeQU2fDSUHwcNuGoGEtiKemghRi94/UW9ElFyqmm5ky/vxP7jTv6RUTkY19qA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SEYPR06MB5087.apcprd06.prod.outlook.com (2603:1096:101:57::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
+ 2022 06:36:29 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::ef03:cbfb:f8ef:d88b%9]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
+ 06:36:29 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, qixiaoyu1@xiaomi.com,
+        xiongping1@xiaomi.com, Yangtao Li <frank.li@vivo.com>
+Subject: [PATCH] f2fs: introduce hot_data_age_threshold and warm_data_age_threshold mount opt
+Date:   Tue,  6 Dec 2022 14:36:16 +0800
+Message-Id: <20221206063616.68522-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0197.apcprd06.prod.outlook.com (2603:1096:4:1::29)
+ To SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] serial: Adapt Arm semihosting earlycon driver to
- RISC-V
-Content-Language: en-US
-To:     Bin Meng <bmeng@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org
-Cc:     Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-References: <20221205050038.195746-1-bmeng@tinylab.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221205050038.195746-1-bmeng@tinylab.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SEYPR06MB5087:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2143f4a1-10bf-4fe3-645d-08dad754349a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PuHELNvRG7Zq17R60QFWlpBcZaRvNdbm/ZKRzAp5BcXM4knmgLAjBzU6iKvEjy2e265QGWhXQZ3loLEaTanfAzQ60Ro6fXwCtwN+4Ik5hy/OgzocV3hIlv6lf6xiN7rMoe/XAC32bF56oqc8hZeUHkwBBXj89BKwvoFJe4M+7fZ39Dz225OKTgS9ABQu7+/EZAV+R8VNKvJpakS4YJtNjOa1uTnuksO5XK5KYPrDYHlf0sS74kTFhqNIusbnMuPz7JV5P9qO1r/LZHQ/5cZi8IXKCFNUlTgNQj9rw1Zoek/NSs98Q6PHX8duwUDXRQHAJDrHSst9lBliiA1rPwKPvQLGpYhcJFHvgGTQj+OhsRfkEd+LBpu39zziuxaqg3kGcDrMevmYBl6Act+F/ClNzzeu793ZEW7C7X9xcAcT+184elNKiUxtn/1X1+AeDUUcHSR0fp8WaaC78+FSnbCNfs5J51w4K8YQ+wuV7LBQH9DB4s7WWjvwmwBAQERD1SMM0WdaY10pOefRsgml/Dwf0kCC26m7suOGnt577uaFPT6TDo3Ysd70Opu7AVZZCDUvuvs0HrWceM1M/evX1yQvkDTKdGcMfOFjuleRf8P0JQEe3dO7o3V6pu2wSQCxKCZwxbrxX/kaAxzBPquN7GGYXLhtsihwNHtpNsz1R3c/PdhwtGCnGdbASE/we9IhgSZT
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(376002)(39860400002)(366004)(346002)(136003)(451199015)(478600001)(83380400001)(38100700002)(38350700002)(2616005)(1076003)(186003)(52116002)(107886003)(26005)(6666004)(6506007)(6512007)(41300700001)(66556008)(8936002)(2906002)(8676002)(66476007)(4326008)(30864003)(36756003)(6486002)(66946007)(5660300002)(86362001)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zTuR4ckL0L+JxFyZfBJ9YN1Sr19E4Pr1PRr9vOcrB5ey6lTC8W2dxFr1Tm7J?=
+ =?us-ascii?Q?ufyT5qFIfinNztgaPYnQu2+pQPWo3eEfTibSO7/NTfP7m408hSEL2OFTSrdz?=
+ =?us-ascii?Q?uBs3NehSAqu0xGEyWNp/vxDlyYY9rGWjxXTBuJU+ugExzYYPFCaOkVS8gp0O?=
+ =?us-ascii?Q?6Ga1gAHh5C+9qiNbeyggYGzZPAIIkPrL+Ol2UZJ4wAIxgl3QC4gj1yQ86YVy?=
+ =?us-ascii?Q?+DMbAlXjEUgspP4+Lc8ZJA7GVFk1Dl7O4Grh+IgelJBQYFTNWFXLGz8nWcUe?=
+ =?us-ascii?Q?gmtqPNYl2e/v4UJBjBZDjwXY0eQYPN4l3onq51E7mpb0/eP6L+73nM0/WUTN?=
+ =?us-ascii?Q?flxJvRbtGvZqQWMrnBhVSiLS/kiBbTEXAvtpIjsClQimJJibqQ0b4DeaBgMU?=
+ =?us-ascii?Q?8q9hssvn+t5GNcSr6Nq7VGFGo4+ne+QBs6qC3nrZrkmtOS6rrOektFjKCjO6?=
+ =?us-ascii?Q?NeHx3eV2luRAeepVL06J2rlrsxjpElerN2AiX3DIDDJbt9dEHWqp/skTwv5Q?=
+ =?us-ascii?Q?2tKdxxEnjeESWiYC5M0tJCYYCNki5TK7i94Rlz6XvOvH2vt5eMuORZLZ8vcM?=
+ =?us-ascii?Q?tghJfp7a8d5IAp2DOhRY4JIZPGz5XWRvV0Hzm7zLkqDyT66n195cv/q5wA7r?=
+ =?us-ascii?Q?cx+ztiqzenyorlfcLh+T/9sipU2e7e5zoSg8rCjuLh1YYtWOyt6R9oT+cYsb?=
+ =?us-ascii?Q?AoUV+rjc7IZP51g87ewsjOTCtmJaMQX2SvWdfwFhj4rdkysU3tUMoN1pCOxX?=
+ =?us-ascii?Q?APC7IErus87O/mY+akGc/ExhzSNnqYdxMG9BJlGv+1I/rZpgW7VpMK5eEwNs?=
+ =?us-ascii?Q?+LTZAbEG8H3apwdY+mpmIqIHI44FLRItW66XoojgpCpzZLWiHARP4BCKFRak?=
+ =?us-ascii?Q?BoM2AfCCxDrQ2+Hr5ZFkhIIgEyMXgL+Unu5xEtzNpofl1h58g79i89/dbVzY?=
+ =?us-ascii?Q?TydoPWeYVeIN2bNSRoMNAN6Hrkm1t+Wtt8NfHdSNXRgvv5ZSx+cykiISx51a?=
+ =?us-ascii?Q?JIMZGwzJR/6rXbBauFrxgTXRAxxq4USzDW/436Bz8j+wudMyyQogd8W9+hrk?=
+ =?us-ascii?Q?zaf2vFyYhpcU8uAJJVoz15Z5kIFsU+gFdZwos+VXwc2lak13eh+6KagYIGsA?=
+ =?us-ascii?Q?F3II0sMdibr+mrOuZcJyQFETLPJieA7L7nYpNZiJ9tfM4SJi7KFOygj+fx4C?=
+ =?us-ascii?Q?ms2j/YmxJ4eI/2F1Ep5hWuNgSWyaKRO8OVpfzBvQXiq0wCf0l3BR4V6XVWZO?=
+ =?us-ascii?Q?jc13mPZL71reirs3uH3Ec6Qo6iAJD0myTiXuj3dPFVg1dW1BQ29NTjhBHGcC?=
+ =?us-ascii?Q?rJxA/SAWlhK3x7zhu6zkocNrTjBgmVPiqFA9hUOGadw+Hf0hi8/vz4ycA2Lc?=
+ =?us-ascii?Q?CB+JbZidEck9HkyoP2fF9o6SyP7tLQ3OkF6mfywX3T5jGx8qA4OjhLeTFMVo?=
+ =?us-ascii?Q?T8oNLqsqkbyBw7Q1Yspv3lpVkGQ9gDbV9G67J9BLm9DW+pEAoyuWA72hTtiU?=
+ =?us-ascii?Q?BXZK2/Gl6MyNRGfPekOQpkI9vtqtXS8eo2odEBJdm40MoD0Z7IHp6YApyCSu?=
+ =?us-ascii?Q?YZslB1pDy2+8FZtLQNuGVULNE6UCcoFHb6urcjrZ?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2143f4a1-10bf-4fe3-645d-08dad754349a
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 06:36:28.9229
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OjuBVfGFm0fzoo5WZaATveAPpHt5iMAw+tQBxOQXyghhXV9RYfNCG38iRrvkZo6BzuE1+JwIaJFf1fr+hnH4tQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5087
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05. 12. 22, 6:00, Bin Meng wrote:
-...
-> --- a/drivers/tty/serial/earlycon-arm-semihost.c
-> +++ b/drivers/tty/serial/earlycon-arm-semihost.c
-...
-> @@ -23,7 +27,18 @@
->    */
->   static void smh_putc(struct uart_port *port, unsigned char c)
->   {
-> -#ifdef CONFIG_ARM64
-> +#if defined(CONFIG_RISCV)
-> +	asm volatile("addi    a1, %0, 0\n"
-> +		     "addi    a0, zero, 3\n"
-> +		     ".balign 16\n"
-> +		     ".option push\n"
-> +		     ".option norvc\n"
-> +		     "slli    zero, zero, 0x1f\n"
-> +		     "ebreak\n"
-> +		     "srai    zero, zero, 0x7\n"
-> +		     ".option pop\n"
-> +		     : : "r" (&c) : "a0", "a1", "memory");
-> +#elif defined(CONFIG_ARM64)
->   	asm volatile("mov  x1, %0\n"
->   		     "mov  x0, #3\n"
->   		     "hlt  0xf000\n"
+This patch supports parsing these two parameters from mount opt,
+so that we don't have to dynamically modify the parameters through
+the sysfs node after the system starts.
 
-Hmm, can we implement all those smh_putc() variants in respective 
-arch/*/include/semihost.h instead?
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ Documentation/filesystems/f2fs.rst |  6 +++++
+ fs/f2fs/debug.c                    |  3 ++-
+ fs/f2fs/extent_cache.c             | 14 +++++++----
+ fs/f2fs/f2fs.h                     | 14 +++++++----
+ fs/f2fs/segment.c                  |  8 ++++---
+ fs/f2fs/super.c                    | 38 +++++++++++++++++++++++++++++-
+ fs/f2fs/sysfs.c                    | 16 +++++++++----
+ 7 files changed, 81 insertions(+), 18 deletions(-)
 
-thanks,
+diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+index 220f3e0d3f55..12a04d7cd634 100644
+--- a/Documentation/filesystems/f2fs.rst
++++ b/Documentation/filesystems/f2fs.rst
+@@ -351,6 +351,12 @@ age_extent_cache	 Enable an age extent cache based on rb-tree. It records
+ 			 data block update frequency of the extent per inode, in
+ 			 order to provide better temperature hints for data block
+ 			 allocation.
++hot_data_age_threshold=%u	 When age_extent_cache is on, it controls the age
++			 threshold to indicate the data blocks as hot. By default it was
++			 initialized as 262144 blocks(equals to 1GB).
++warm_data_age_threshold=%u	 When age_extent_cache is on, it controls the age
++			 threshold to indicate the data blocks as warm. By default it was
++			 initialized as 2621440 blocks(equals to 10GB).
+ ======================== ============================================================
+ 
+ Debugfs Entries
+diff --git a/fs/f2fs/debug.c b/fs/f2fs/debug.c
+index 8f1ef742551f..5bf9c1ed7a2f 100644
+--- a/fs/f2fs/debug.c
++++ b/fs/f2fs/debug.c
+@@ -62,6 +62,7 @@ void f2fs_update_sit_info(struct f2fs_sb_info *sbi)
+ #ifdef CONFIG_DEBUG_FS
+ static void update_general_status(struct f2fs_sb_info *sbi)
+ {
++	struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
+ 	struct f2fs_stat_info *si = F2FS_STAT(sbi);
+ 	struct f2fs_super_block *raw_super = F2FS_RAW_SUPER(sbi);
+ 	int i;
+@@ -89,7 +90,7 @@ static void update_general_status(struct f2fs_sb_info *sbi)
+ 	si->hit_total[EX_READ] += si->hit_largest;
+ 
+ 	/* block age extent_cache only */
+-	si->allocated_data_blocks = atomic64_read(&sbi->allocated_data_blocks);
++	si->allocated_data_blocks = atomic64_read(&fai->allocated_data_blocks);
+ 
+ 	/* validation check of the segment numbers */
+ 	si->ndirty_node = get_pages(sbi, F2FS_DIRTY_NODES);
+diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+index 2fc675c45606..601659714aa9 100644
+--- a/fs/f2fs/extent_cache.c
++++ b/fs/f2fs/extent_cache.c
+@@ -883,9 +883,10 @@ static unsigned long long __calculate_block_age(unsigned long long new,
+ static int __get_new_block_age(struct inode *inode, struct extent_info *ei)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++	struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
+ 	loff_t f_size = i_size_read(inode);
+ 	unsigned long long cur_blocks =
+-				atomic64_read(&sbi->allocated_data_blocks);
++				atomic64_read(&fai->allocated_data_blocks);
+ 
+ 	/*
+ 	 * When I/O is not aligned to a PAGE_SIZE, update will happen to the last
+@@ -1216,13 +1217,18 @@ static void __init_extent_tree_info(struct extent_tree_info *eti)
+ 
+ void f2fs_init_extent_cache_info(struct f2fs_sb_info *sbi)
+ {
++	struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
++
+ 	__init_extent_tree_info(&sbi->extent_tree[EX_READ]);
+ 	__init_extent_tree_info(&sbi->extent_tree[EX_BLOCK_AGE]);
+ 
+ 	/* initialize for block age extents */
+-	atomic64_set(&sbi->allocated_data_blocks, 0);
+-	sbi->hot_data_age_threshold = DEF_HOT_DATA_AGE_THRESHOLD;
+-	sbi->warm_data_age_threshold = DEF_WARM_DATA_AGE_THRESHOLD;
++	atomic64_set(&fai->allocated_data_blocks, 0);
++
++	if (!fai->hot_data_age_threshold)
++		fai->hot_data_age_threshold = DEF_HOT_DATA_AGE_THRESHOLD;
++	if (!fai->warm_data_age_threshold)
++		fai->warm_data_age_threshold = DEF_WARM_DATA_AGE_THRESHOLD;
+ }
+ 
+ int __init f2fs_create_extent_cache(void)
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index eb71edcf70de..32a0bf2977bc 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -64,6 +64,12 @@ enum {
+ 	FAULT_MAX,
+ };
+ 
++struct f2fs_age_extent_info {
++	atomic64_t allocated_data_blocks;		/* for block age extent_cache */
++	unsigned int hot_data_age_threshold;	/* The threshold used for hot data seperation*/
++	unsigned int warm_data_age_threshold;	/* The threshold used for warm data seperation*/
++};
++
+ #ifdef CONFIG_F2FS_FAULT_INJECTION
+ #define F2FS_ALL_FAULT_TYPE		((1 << FAULT_MAX) - 1)
+ 
+@@ -148,6 +154,7 @@ struct f2fs_mount_info {
+ 	kgid_t s_resgid;		/* reserved blocks for gid */
+ 	int active_logs;		/* # of active logs */
+ 	int inline_xattr_size;		/* inline xattr size */
++	struct f2fs_age_extent_info age_info;	/* For block age extent */
+ #ifdef CONFIG_F2FS_FAULT_INJECTION
+ 	struct f2fs_fault_info fault_info;	/* For fault injection */
+ #endif
+@@ -173,6 +180,8 @@ struct f2fs_mount_info {
+ 					 * unusable when disabling checkpoint
+ 					 */
+ 
++	/* For block age extent_cache */
++
+ 	/* For compression */
+ 	unsigned char compress_algorithm;	/* algorithm type */
+ 	unsigned char compress_log_size;	/* cluster log size */
+@@ -1674,11 +1683,6 @@ struct f2fs_sb_info {
+ 
+ 	/* for extent tree cache */
+ 	struct extent_tree_info extent_tree[NR_EXTENT_CACHES];
+-	atomic64_t allocated_data_blocks;	/* for block age extent_cache */
+-
+-	/* The threshold used for hot and warm data seperation*/
+-	unsigned int hot_data_age_threshold;
+-	unsigned int warm_data_age_threshold;
+ 
+ 	/* basic filesystem units */
+ 	unsigned int log_sectors_per_block;	/* log2 sectors per block */
+diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+index dee712f7225f..c9b779fd7041 100644
+--- a/fs/f2fs/segment.c
++++ b/fs/f2fs/segment.c
+@@ -3159,14 +3159,15 @@ static int __get_segment_type_4(struct f2fs_io_info *fio)
+ static int __get_age_segment_type(struct inode *inode, pgoff_t pgofs)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
++	struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
+ 	struct extent_info ei;
+ 
+ 	if (f2fs_lookup_age_extent_cache(inode, pgofs, &ei)) {
+ 		if (!ei.age)
+ 			return NO_CHECK_TYPE;
+-		if (ei.age <= sbi->hot_data_age_threshold)
++		if (ei.age <= fai->hot_data_age_threshold)
+ 			return CURSEG_HOT_DATA;
+-		if (ei.age <= sbi->warm_data_age_threshold)
++		if (ei.age <= fai->warm_data_age_threshold)
+ 			return CURSEG_WARM_DATA;
+ 		return CURSEG_COLD_DATA;
+ 	}
+@@ -3242,6 +3243,7 @@ void f2fs_allocate_data_block(struct f2fs_sb_info *sbi, struct page *page,
+ 		struct f2fs_summary *sum, int type,
+ 		struct f2fs_io_info *fio)
+ {
++	struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
+ 	struct sit_info *sit_i = SIT_I(sbi);
+ 	struct curseg_info *curseg = CURSEG_I(sbi, type);
+ 	unsigned long long old_mtime;
+@@ -3316,7 +3318,7 @@ void f2fs_allocate_data_block(struct f2fs_sb_info *sbi, struct page *page,
+ 	locate_dirty_segment(sbi, GET_SEGNO(sbi, *new_blkaddr));
+ 
+ 	if (IS_DATASEG(type))
+-		atomic64_inc(&sbi->allocated_data_blocks);
++		atomic64_inc(&fai->allocated_data_blocks);
+ 
+ 	up_write(&sit_i->sentry_lock);
+ 
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 5bdab376b852..feea2006b070 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -164,6 +164,8 @@ enum {
+ 	Opt_discard_unit,
+ 	Opt_memory_mode,
+ 	Opt_age_extent_cache,
++	Opt_hot_data_age_threshold,
++	Opt_warm_data_age_threshold,
+ 	Opt_err,
+ };
+ 
+@@ -243,6 +245,8 @@ static match_table_t f2fs_tokens = {
+ 	{Opt_discard_unit, "discard_unit=%s"},
+ 	{Opt_memory_mode, "memory=%s"},
+ 	{Opt_age_extent_cache, "age_extent_cache"},
++	{Opt_hot_data_age_threshold, "hot_data_age_threshold=%u"},
++	{Opt_warm_data_age_threshold, "warm_data_age_threshold=%u"},
+ 	{Opt_err, NULL},
+ };
+ 
+@@ -658,6 +662,7 @@ static int f2fs_set_zstd_level(struct f2fs_sb_info *sbi, const char *str)
+ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+ {
+ 	struct f2fs_sb_info *sbi = F2FS_SB(sb);
++	struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
+ 	substring_t args[MAX_OPT_ARGS];
+ #ifdef CONFIG_F2FS_FS_COMPRESSION
+ 	unsigned char (*ext)[F2FS_EXTENSION_LEN];
+@@ -1262,6 +1267,32 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+ 		case Opt_age_extent_cache:
+ 			set_opt(sbi, AGE_EXTENT_CACHE);
+ 			break;
++		case Opt_hot_data_age_threshold:
++			if (!test_opt(sbi, AGE_EXTENT_CACHE)) {
++				f2fs_info(sbi, "age extent options not enabled");
++				break;
++			}
++			if (args->from && match_int(args, &arg))
++				return -EINVAL;
++			if (arg == 0 || arg > DEF_HOT_DATA_AGE_THRESHOLD) {
++				f2fs_err(sbi, "hot data age threshold is out of range");
++				return -EINVAL;
++			}
++			fai->hot_data_age_threshold = arg;
++			break;
++		case Opt_warm_data_age_threshold:
++			if (!test_opt(sbi, AGE_EXTENT_CACHE)) {
++				f2fs_info(sbi, "age extent options not enabled");
++				break;
++			}
++			if (args->from && match_int(args, &arg))
++				return -EINVAL;
++			if (arg == 0 || arg > DEF_WARM_DATA_AGE_THRESHOLD) {
++				f2fs_err(sbi, "warm data age threshold is out of range");
++				return -EINVAL;
++			}
++			fai->warm_data_age_threshold = arg;
++			break;
+ 		default:
+ 			f2fs_err(sbi, "Unrecognized mount option \"%s\" or missing value",
+ 				 p);
+@@ -1963,8 +1994,13 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+ 		seq_puts(seq, ",read_extent_cache");
+ 	else
+ 		seq_puts(seq, ",no_read_extent_cache");
+-	if (test_opt(sbi, AGE_EXTENT_CACHE))
++	if (test_opt(sbi, AGE_EXTENT_CACHE)) {
++		struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
++
+ 		seq_puts(seq, ",age_extent_cache");
++		seq_printf(seq, ",hot_data_age_threshold=%u", fai->hot_data_age_threshold);
++		seq_printf(seq, ",warm_data_age_threshold=%u", fai->warm_data_age_threshold);
++	}
+ 	if (test_opt(sbi, DATA_FLUSH))
+ 		seq_puts(seq, ",data_flush");
+ 
+diff --git a/fs/f2fs/sysfs.c b/fs/f2fs/sysfs.c
+index 2ab215110596..5b8e08aff0a6 100644
+--- a/fs/f2fs/sysfs.c
++++ b/fs/f2fs/sysfs.c
+@@ -36,6 +36,7 @@ enum {
+ 	FAULT_INFO_RATE,	/* struct f2fs_fault_info */
+ 	FAULT_INFO_TYPE,	/* struct f2fs_fault_info */
+ #endif
++	AGE_EXTENT_INFO,	/* struct f2fs_age_extent_info */
+ 	RESERVED_BLOCKS,	/* struct f2fs_sb_info */
+ 	CPRC_INFO,	/* struct ckpt_req_control */
+ 	ATGC_INFO,	/* struct atgc_management */
+@@ -81,6 +82,8 @@ static unsigned char *__struct_ptr(struct f2fs_sb_info *sbi, int struct_type)
+ 					struct_type == FAULT_INFO_TYPE)
+ 		return (unsigned char *)&F2FS_OPTION(sbi).fault_info;
+ #endif
++	else if (struct_type == AGE_EXTENT_INFO)
++		return (unsigned char *)&F2FS_OPTION(sbi).age_info;
+ #ifdef CONFIG_F2FS_STAT_FS
+ 	else if (struct_type == STAT_INFO)
+ 		return (unsigned char *)F2FS_STAT(sbi);
+@@ -669,7 +672,9 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 	}
+ 
+ 	if (!strcmp(a->attr.name, "hot_data_age_threshold")) {
+-		if (t == 0 || t >= sbi->warm_data_age_threshold)
++		struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
++
++		if (t == 0 || t >= fai->warm_data_age_threshold)
+ 			return -EINVAL;
+ 		if (t == *ui)
+ 			return count;
+@@ -678,7 +683,9 @@ static ssize_t __sbi_store(struct f2fs_attr *a,
+ 	}
+ 
+ 	if (!strcmp(a->attr.name, "warm_data_age_threshold")) {
+-		if (t == 0 || t <= sbi->hot_data_age_threshold)
++		struct f2fs_age_extent_info *fai = &F2FS_OPTION(sbi).age_info;
++
++		if (t == 0 || t <= fai->hot_data_age_threshold)
+ 			return -EINVAL;
+ 		if (t == *ui)
+ 			return count;
+@@ -942,8 +949,9 @@ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, committed_atomic_block, committed_atomic_bl
+ F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, revoked_atomic_block, revoked_atomic_block);
+ 
+ /* For block age extent cache */
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, hot_data_age_threshold, hot_data_age_threshold);
+-F2FS_RW_ATTR(F2FS_SBI, f2fs_sb_info, warm_data_age_threshold, warm_data_age_threshold);
++F2FS_RW_ATTR(AGE_EXTENT_INFO, f2fs_age_extent_info, hot_data_age_threshold, hot_data_age_threshold);
++F2FS_RW_ATTR(AGE_EXTENT_INFO, f2fs_age_extent_info, warm_data_age_threshold,
++							warm_data_age_threshold);
+ 
+ #define ATTR_LIST(name) (&f2fs_attr_##name.attr)
+ static struct attribute *f2fs_attrs[] = {
 -- 
-js
-suse labs
+2.25.1
 
