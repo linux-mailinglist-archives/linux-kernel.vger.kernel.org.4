@@ -2,218 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14389643CC6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 874B2643CCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiLFFuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 00:50:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S232604AbiLFFxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:53:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLFFuL (ORCPT
+        with ESMTP id S230289AbiLFFxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:50:11 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A3025C43
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:50:10 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id gh17so3625476ejb.6
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 21:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c6IAX5g6ledgAGKMBe/QiPZH1nxVzHQk9dCLqZzUwt0=;
-        b=PhSiFZVKOV80QGWnFhG4fhkEk4eKKXZ7LDW1qO7BVRMCpBAo3CUlllTeAr+MmTGicX
-         4HQjpCRJjRNTNL3aVGFIUjAY/PpSqxk/u4MJcEt/UM5eBjjVz1BBsDbAr2EMOpbkC/On
-         RczpIwbU6WsLJZFHDaiw7EpIfBhz/IPIry3hsVkdS5fi/TRjuf3Jsk6tBlG3phZ3540y
-         NZz2kIUBpk0VdPzoNyOnYb0GEfvBxktphGqEVpqXY2Glrfn6tuydvP6jF0BQba1LWmZu
-         RHiHrLMXk50dqwFEK4LQSr8bpd/2BcIblKvq2W6NpzvOVqQoiJPKz7HkrLUhMWoK7hpu
-         4eVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c6IAX5g6ledgAGKMBe/QiPZH1nxVzHQk9dCLqZzUwt0=;
-        b=4WfyIASqsOVKfCho3ChSmx/vX3CuvhlutxJRpXFJG/CiY1CBbt0HxUQld21rIvPfB7
-         jyrbcMg3Gr3bJZCFuMNaZSSRTsAD/U2MDRSqay7PUIaoZx+9wtdDMjp8/NO7rAFw4vTk
-         KNrGk7IG/KfCnzb5ZSXB1nuxqFOeTOTd2jQCUgVV472OwphS7e8GBoAQpgcQ8rV5k/3U
-         uNHm4owv5hU7ffRDC3bhT+6pae/OlmbvDv/U12mgaxhSbCUrzm9Tu0/BAs4KUOPMP0UE
-         ADl6vVJzW7PmPBHQjTu5SWRDWIsN4H8XFx5RzCyFUfuQPaJ4/MNLpUeGLp3/jRshLc6Z
-         M3nQ==
-X-Gm-Message-State: ANoB5plFiqXmLTjhtzAa4Zu/0pcAgDrcY1KPp8jrjzdbb1tYRLvsKEIJ
-        9l1G896rt0lLPqWGyBzhjWgbqw==
-X-Google-Smtp-Source: AA0mqf42zHplnnTX3EhWv3vS1EQcNMrEq3dkE0SS95uGttl1Xz5Njr7HJyTo75V4/pgIPyTnxhnnXg==
-X-Received: by 2002:a17:906:6bd4:b0:7c0:e23e:bbd6 with SMTP id t20-20020a1709066bd400b007c0e23ebbd6mr8906329ejs.551.1670305809017;
-        Mon, 05 Dec 2022 21:50:09 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id og40-20020a1709071de800b007c0d6b34d54sm3609973ejc.129.2022.12.05.21.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 21:50:08 -0800 (PST)
-Date:   Tue, 6 Dec 2022 06:50:07 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
-Message-ID: <20221206055007.cvc4zfworla3fwwr@kamzik>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-2-jszhang@kernel.org>
- <20221205145710.xzb4prrc44gv7mwm@kamzik>
- <Y44fY5tCC1hHDfcw@xhacker>
- <Y44hL3l8Uqg+JgWI@xhacker>
+        Tue, 6 Dec 2022 00:53:02 -0500
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD3C1C92A;
+        Mon,  5 Dec 2022 21:53:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670305961; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=eHUppgzpTBO7P6Lj0flr8iHol2Iqh9Me9093vkjxkY7bYpE4dYj6W2hhEh6Qs7Olr4LaPC4UpbhFzvoGmRpZSiAS7VbzXTE6Htd43EC/8DcE7A16aIwdd5d8DSkZ+gS724befRKx5giFe75il62MSksZeZNoQTgZR2viyNO3z8A=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1670305961; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=8OQhkFZBuQ+Ya1Ot1lELUxMRAjlXTh0qx4g/rKP2seQ=; 
+        b=jASkVWIbn4+tmFLqv1K6zWfEojjyZfEToxajyAyMXXN4d7rGLb/Dl5TuoyO+Fjhso/QNaDbHDr7TR6fX+FYMeHThWUHdSfSyClAdmdjlg9KdqqsVR1TFAQexIxZrriBNEBEinFjT1YARnW8kR7tSlR10JnNZZ5TXwBWvgoznynM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=icenowy.me;
+        spf=pass  smtp.mailfrom=uwu@icenowy.me;
+        dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670305961;
+        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+        bh=8OQhkFZBuQ+Ya1Ot1lELUxMRAjlXTh0qx4g/rKP2seQ=;
+        b=hNNjZcXFn4B4I5MWpTIt2KTE5gPT+OZWRvKLpeL812ku817GSwZoSdmEefZ8DGBH
+        JAQK1bC9D+dgQOR5Gcz5qcLWZgo2lesxeew/DL1Wu7JTwa9FqdNrdwYuP4yebqnzC/4
+        oJMj+UzakYc3vyGAeejAAkjX3iZ8TJA58TgnSZF4=
+Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
+        with SMTPS id 1670305959289556.1373358007419; Mon, 5 Dec 2022 21:52:39 -0800 (PST)
+From:   Icenowy Zheng <uwu@icenowy.me>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Andre Przywara <andre.przywara@arm.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH v3 0/6] Rongpin RP-H6B support (and support for GL850G)
+Date:   Tue,  6 Dec 2022 13:52:22 +0800
+Message-Id: <20221206055228.306074-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y44hL3l8Uqg+JgWI@xhacker>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 12:49:51AM +0800, Jisheng Zhang wrote:
-> On Tue, Dec 06, 2022 at 12:42:16AM +0800, Jisheng Zhang wrote:
-> > On Mon, Dec 05, 2022 at 03:57:10PM +0100, Andrew Jones wrote:
-> > > On Mon, Dec 05, 2022 at 01:46:20AM +0800, Jisheng Zhang wrote:
-> > > > Alternatives live in a different section, so offsets used by jal
-> > > > instruction will point to wrong locations after the patch got applied.
-> > > > 
-> > > > Similar to arm64, adjust the location to consider that offset.
-> > > > 
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > ---
-> > > >  arch/riscv/include/asm/alternative.h |  2 ++
-> > > >  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++++
-> > > >  arch/riscv/kernel/cpufeature.c       |  3 +++
-> > > >  3 files changed, 43 insertions(+)
-> > > > 
-> > > > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> > > > index c58ec3cc4bc3..33eae9541684 100644
-> > > > --- a/arch/riscv/include/asm/alternative.h
-> > > > +++ b/arch/riscv/include/asm/alternative.h
-> > > > @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t length);
-> > > >  
-> > > >  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
-> > > >  				      int patch_offset);
-> > > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> > > > +			       int patch_offset);
-> > > >  
-> > > >  struct alt_entry {
-> > > >  	void *old_ptr;		 /* address of original instruciton or data  */
-> > > > diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
-> > > > index 292cc42dc3be..9d88375624b5 100644
-> > > > --- a/arch/riscv/kernel/alternative.c
-> > > > +++ b/arch/riscv/kernel/alternative.c
-> > > > @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
-> > > >  	}
-> > > >  }
-> > > >  
-> > > > +#define to_jal_imm(value)						\
-> > > > +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_11_0_OPOFF) | \
-> > >                                                                  ^ RV_J_IMM_10_1_OPOFF
-> > > 
-> > > > +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OPOFF) | \
-> > > > +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IMM_19_12_OPOFF) | \
-> > > > +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
-> > 
-> > Hi all,
-> > 
-> > I believe there's bug in the to_jal_imm() macro implementation, the
-> > correct one should be like this:
-> > 
-> > #define to_jal_imm(value)                                               \
-> >         ((RV_X(value, RV_J_IMM_10_1_OFF, RV_J_IMM_10_1_MASK) << RV_J_IMM_10_1_OPOFF) | \
-> >         (RV_X(value, RV_J_IMM_11_OFF, RV_J_IMM_11_MASK) << RV_J_IMM_11_OPOFF) | \
-> >         (RV_X(value, RV_J_IMM_19_12_OFF, RV_J_IMM_19_12_MASK) << RV_J_IMM_19_12_OPOFF) | \
-> >         (RV_X(value, RV_J_IMM_SIGN_OFF, 1) << RV_J_IMM_SIGN_OPOFF))
-> 
-> And I just tested to_jal_imm() vs RV_EXTRACT_JTYPE_IMM(), they match perfectly.
-> E.g:
-> RV_EXTRACT_JTYPE_IMM(to_jal_imm(imm)) == imm is alway true when imm is a jal
-> valid offset.
+This patchset adds support for Rongpin RP-H6B, and as a dependency,
+power sequence support for its onboard USB hub, GL850G.
 
-I think we should define deposit() functions for each type, as well as the
-extract() functions, (and I'd prefer we use static inlines to macros to
-get some type checking). See [1] for my proposal.
+The first 3 patches are for GL850G, adding a binding for it and adding
+its support to onboard_usb_hub driver.
 
-[1] https://lore.kernel.org/all/20221205145323.l2dro6dt7muumqpn@kamzik/
+The last 3 patches are for RP-H6B, also 2 for adding a binding and 1 for
+the real DT.
 
-Thanks,
-drew
+Icenowy Zheng (6):
+  dt-bindings: vendor-prefixes: add Genesys Logic
+  dt-bindings: usb: Add binding for Genesys Logic GL850G hub controller
+  usb: misc: onboard_usb_hub: add Genesys Logic GL850G hub support
+  vendor-prefixes: Add Shenzhen Rongpin Electronics Co., Ltd
+  dt-bindings: arm: sunxi: add Rongpin RP-H6B board
+  arm64: dts: allwinner: h6: add Rongpin RP-H6C SoM and RP-H6B board
 
-> 
-> > 
-> > Will fix it in next version.
-> > 
-> > Thanks
-> > > 
-> > > Should put () around value
-> > > 
-> > > > +
-> > > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> > > > +			       int patch_offset)
-> > > > +{
-> > > > +	int num_instr = len / sizeof(u32);
-> > > > +	unsigned int call;
-> > > > +	int i;
-> > > > +	int imm;
-> > > > +
-> > > > +	for (i = 0; i < num_instr; i++) {
-> > > > +		u32 inst = riscv_instruction_at(alt_ptr, i);
-> > > > +
-> > > > +		if (!riscv_insn_is_jal(inst))
-> > > > +			continue;
-> > > > +
-> > > > +		/* get and adjust new target address */
-> > > > +		imm = RV_EXTRACT_JTYPE_IMM(inst);
-> > > > +		imm -= patch_offset;
-> > > > +
-> > > > +		/* pick the original jal */
-> > > > +		call = inst;
-> > > > +
-> > > > +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
-> > > > +		call &= ~GENMASK(31, 12);
-> > > 
-> > > It'd be nice if this had a define.
-> > > 
-> > > > +
-> > > > +		/* add the adapted IMMs */
-> > > > +		call |= to_jal_imm(imm);
-> > > > +
-> > > > +		/* patch the call place again */
-> > > > +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
-> > > > +	}
-> > > > +}
-> > > > +
-> > > >  /*
-> > > >   * This is called very early in the boot process (directly after we run
-> > > >   * a feature detect on the boot CPU). No need to worry about other CPUs
-> > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > > > index ba62a4ff5ccd..c743f0adc794 100644
-> > > > --- a/arch/riscv/kernel/cpufeature.c
-> > > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > > @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
-> > > >  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
-> > > >  							 alt->alt_len,
-> > > >  							 alt->old_ptr - alt->alt_ptr);
-> > > > +			riscv_alternative_fix_jal(alt->old_ptr,
-> > > > +						  alt->alt_len,
-> > > > +						  alt->old_ptr - alt->alt_ptr);
-> > > >  		}
-> > > >  	}
-> > > >  }
-> > > > -- 
-> > > > 2.37.2
-> > > >
-> > > 
-> > > Thanks,
-> > > drew
+ .../devicetree/bindings/arm/sunxi.yaml        |   6 +
+ .../bindings/usb/genesys,gl850g.yaml          |  48 ++++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
+ arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+ .../boot/dts/allwinner/sun50i-h6-rp-h6b.dts   | 241 ++++++++++++++++++
+ .../boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi  | 179 +++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c            |   2 +
+ drivers/usb/misc/onboard_usb_hub.h            |   5 +
+ 8 files changed, 486 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/usb/genesys,gl850g.yaml
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6b.dts
+ create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-h6-rp-h6c.dtsi
+
+-- 
+2.38.1
+
