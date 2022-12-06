@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A752F644B28
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:20:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF00D644B2E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:20:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiLFSUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 13:20:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
+        id S229972AbiLFSUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 13:20:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiLFSTn (ORCPT
+        with ESMTP id S229792AbiLFSTo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:19:43 -0500
+        Tue, 6 Dec 2022 13:19:44 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E167765FE;
-        Tue,  6 Dec 2022 10:19:42 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE94AE4D;
+        Tue,  6 Dec 2022 10:19:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EA19617F2;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A24C617F2;
+        Tue,  6 Dec 2022 18:19:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 272A5C43148;
         Tue,  6 Dec 2022 18:19:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B04AC43142;
-        Tue,  6 Dec 2022 18:19:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670350781;
-        bh=GSlbSx9ij8l7D2Mu0NuwCYXVSjHWaBII7J+uan0+6dU=;
+        s=k20201202; t=1670350782;
+        bh=HK4f3sTSRb+Qbyh2DgntGQfbwAWYOBh4uBn/smwxrps=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OtkVXguyXB7ryZoNDgPe0j9fCFkUjIm8emgC/6Hs2rBO4bGd+GC/y1pbgdJ8pROCo
-         Y5XNdICPPZKvIseuAb4r3ZCe0utC9qq7LSWfQYjR3SWmdMnqT6VKQJJl99r9QwYuGV
-         9q9xjxwjp4VqplI0u+JSOBuhcQFvVUYYChd66acEakx4SKzhqLNUB9DHFNn6WbgdyA
-         Yp0h17maP8m9QGglEyfsc4rIpbiXzzYsiVxnWojs4l2XWPFWsiW/sJLtKrOnARLuUi
-         qs5lKN0Bf4qwMrzFuTodkhktATQTKPm5Gl1Cwd4Zkg/I9GfPXpGHb9DpUccMpkC7pL
-         Ai3/qDLVHIqzg==
+        b=s5ahkbWSzZwLzbfdjcjBtmWv9WFcC7/1Amqa7eQjQ00qkpqQXwpK2BIQ9kE6Opebf
+         Hdz6Gbe4a0FSqwjrAR0yuBh7qOunYlNL6lcpHHi648oUAriXmktSD1ezUQyNv1ZTHr
+         5fR6wvnvyU3VLNaH1YMkRNiPXEWjJ/8P3ZwLoIa3n18drOaM3QGVJRf5XvqkCqPI+i
+         Ah0LZ8J7krFVJuQg5wHM7CQ9BS8DZJTivSaBZjSFo6DgHJMEsHIopUDfJp+4rjzmmD
+         2YbVIVUfGpOc7kXTpXPUOkeRr7ys40dtIQyLCkwq+lZG0IwrbXrjXdPzbzuJ1vvHqZ
+         oyN4BmuvWQnhw==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         bhupesh.sharma@linaro.org
 Cc:     robh+dt@kernel.org, konrad.dybcio@somainline.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        rnayak@codeaurora.org, bhupesh.linux@gmail.com, agross@kernel.org
-Subject: Re: [PATCH 0/2] Add SM4250 RPM power domain support
-Date:   Tue,  6 Dec 2022 12:18:47 -0600
-Message-Id: <167035076344.3155086.2883117402843264050.b4-ty@kernel.org>
+        krzysztof.kozlowski@linaro.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, agross@kernel.org, a39.skl@gmail.com
+Subject: Re: [PATCH 0/4] Add SoC ID support for a few more Qualcomm SoCs
+Date:   Tue,  6 Dec 2022 12:18:48 -0600
+Message-Id: <167035076353.3155086.7865345819947544762.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221127112204.1486337-1-bhupesh.sharma@linaro.org>
-References: <20221127112204.1486337-1-bhupesh.sharma@linaro.org>
+In-Reply-To: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
+References: <20221201141619.2462705-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -56,23 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 27 Nov 2022 16:52:02 +0530, Bhupesh Sharma wrote:
-> Add RPM power domain support for SM4250.
+On Thu, 1 Dec 2022 19:46:15 +0530, Bhupesh Sharma wrote:
+> This patchset adds SoC IDs for Qualcomm SM8150, SA8155,
+> SM6115 / SM4250 (and variants) SoCs to the socinfo driver and dt-bindings.
 > 
-> Cc: Bjorn Andersson <andersson@kernel.org>
-> Cc: Rajendra Nayak <rnayak@codeaurora.org>
-> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Cc: Rob Herring <robh+dt@kernel.org>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> Bhupesh Sharma (4):
+>   dt-bindings: arm: qcom,ids: Add SoC IDs for SM8150 and SA8155
+>   soc: qcom: socinfo: Add SM8150 and SA8155 SoC IDs to the soc_id table
+>   dt-bindings: arm: qcom,ids: Add SoC IDs for SM6115 / SM4250 and
+>     variants
+>   soc: qcom: socinfo: Add SM6115 / SM4250 SoC IDs to the soc_id table
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] dt-bindings: power: rpmpd: Add SM4250 support
-      commit: 45ac44ed10e58cf9b510e6552317ed7d2602346f
-[2/2] soc: qcom: rpmpd: Add SM4250 support
-      commit: 5b617b1b10c1c6a4365d8f956032e95c53b8e388
+[1/4] dt-bindings: arm: qcom,ids: Add SoC IDs for SM8150 and SA8155
+      commit: 87f67727e057bc54816097d3b8e38a4a0c58e0bb
+[2/4] soc: qcom: socinfo: Add SM8150 and SA8155 SoC IDs to the soc_id table
+      commit: 911eed825cd7573c8fa9fa3f348a5a657fa180a4
+[3/4] dt-bindings: arm: qcom,ids: Add SoC IDs for SM6115 / SM4250 and variants
+      commit: 67d1af1c50a4a0ae48f535126cdfca915ffed29b
+[4/4] soc: qcom: socinfo: Add SM6115 / SM4250 SoC IDs to the soc_id table
+      commit: f33ca7ec5e5e3a53d5636a4eab270bacac751f6e
 
 Best regards,
 -- 
