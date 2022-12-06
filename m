@@ -2,145 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9034F6449F4
+	by mail.lfdr.de (Postfix) with ESMTP id DBB726449F5
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbiLFRIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:08:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
+        id S235182AbiLFRIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:08:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbiLFRHn (ORCPT
+        with ESMTP id S234387AbiLFRIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:07:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6329F7D;
-        Tue,  6 Dec 2022 09:07:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B82AC617E6;
-        Tue,  6 Dec 2022 17:07:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA58BC433C1;
-        Tue,  6 Dec 2022 17:07:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670346457;
-        bh=lEuyI5w1R//aNy3kUfU54WqWhb7jdLiS6Jm+x6fdCpQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QAj3KbZ6M5+yZtlniUu5znjr/2J4BP5YT65Uxi+k2RssB1p89+y+Dmh2DxBfUoaNz
-         QxvTT7RUadm9mjDagmjK63hwSoIMUr7ljndtRkNZ/kLDJnQ6MI75Wu9DL0qblDdCop
-         8H4pXAVWYxsGWKfYamRHHakps7KamXBJJMstCd+jVK9nvHhz/TwcUsHBGEd67FvNFX
-         vodMCFJqDDRbwW4NdlCFqUkQUnNwDwdxLb/Eonivt0o1fLwi4MMBbly9UoD1MviAzW
-         bdNK2zibpcNDd9ehNfKrXLKw0zD3pDqy1S/Jl+/ALowz2V1rR4qZnI146znhTt4kHC
-         INAqv4BEqDB2w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id D684A40404; Tue,  6 Dec 2022 14:07:32 -0300 (-03)
-Date:   Tue, 6 Dec 2022 14:07:32 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Tue, 6 Dec 2022 12:08:04 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874B817E1E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:08:03 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso18657108pjt.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:08:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ov+WjnBNqjWs1af+hraj4YEzPtdcPglGlTeqAHbyJPo=;
+        b=FHOo4H2DwPVm0CqEEA/q06AKzsUcuFmns83OwxgFGIlQelD4uW5LjTsSKxm0wDywSo
+         CQLr7zoLiDaNDQqazIfwY0Y88qaUB3U9q+7hJQhgzGf+vTlbHUjOA53/5mmCLsvR5DFE
+         CCg6uJg8vLWc65bLwJCwfbpJsQAjqbA69DON+HB5v/hGkMTFeFr7P0SsN2T9NbD1rt3A
+         IQ12K15mbR5Ky+YEA4ynHwL/+b7LeHLPZR8rpGHMWFmABulKYekzfC8d1Yduo3GqmLHm
+         PfEMqWu43iwjJe0PDy2epKU1ZPFRX2nclunN0Ae8b9SuFP6XROxonn9ANoLhBSZMEy/B
+         wS7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ov+WjnBNqjWs1af+hraj4YEzPtdcPglGlTeqAHbyJPo=;
+        b=uYTlngEiZvhTnRfinSu+V7p/4IHfFNPjFLlpF88U3zqHKo4lTd0WHh+Ru/qqwEZjoL
+         cPmooLdA3Q327DJElq5L1Tu5JdG6ErN3h7DX4/df/wSQ/P5k+j+JhUa6MqhYclN3eDYy
+         OlQpu8+8HxdDJkuGx9t6FzHrGpFPLRY4YceUlAG8rFL7khoxHPkfSne+CC25zQGssK1E
+         6Cp6GSQxB/FypIx1SGf+S6L7BUXAtP+KmGjSgH13fR0cQskDoCMbWJM5foQd2OZeoMen
+         bciiRbuR+3Jqb0sIEr7LwoxnEmb9MnJzYUFqL7cDidmMMVAGiJ7AA7sPwUI+CEwYOopL
+         ZSXQ==
+X-Gm-Message-State: ANoB5pnL7zPA0n0YTYONNoIjd7XU2pNBbgTyfG+fKAUlP2Zt0sjkh8HP
+        NzamZt7o3L9YclG39ooxtEDNhQ==
+X-Google-Smtp-Source: AA0mqf7hA5/u0JLWZH7lY75a8vR5qIzNdl9UVLDNfusQbeAaUMqt7F4iCUyjLfDKe8ItbxVUl6QZuQ==
+X-Received: by 2002:a17:902:c1ca:b0:189:e149:a1b2 with SMTP id c10-20020a170902c1ca00b00189e149a1b2mr7524064plc.17.1670346482909;
+        Tue, 06 Dec 2022 09:08:02 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id p3-20020a1709026b8300b001898ee9f723sm12908572plk.2.2022.12.06.09.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 09:08:02 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:07:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michael Sterritt <sterritt@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
         Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y4921D+36UGdhK92@kernel.org>
-References: <20221205225940.3079667-1-irogers@google.com>
- <20221205225940.3079667-3-irogers@google.com>
- <Y49qiCIiyaehEOaG@kernel.org>
- <Y49rvLO2RnJBBNL/@kernel.org>
- <Y49skYa5VYPMU+RF@kernel.org>
- <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
+        Heiko Carstens <hca@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu
+ variables
+Message-ID: <Y4927u7hjK+REsNr@google.com>
+References: <20221201021948.9259-1-aik@amd.com>
+ <20221201021948.9259-2-aik@amd.com>
+ <Y4jdIl1elcnL8JUU@google.com>
+ <b28f0cb9-b321-cc55-db31-61296e1a494e@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y491d1wEW4TfUi5f@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b28f0cb9-b321-cc55-db31-61296e1a494e@amd.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 06, 2022 at 02:01:43PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Dec 06, 2022 at 01:41:41PM -0300, Arnaldo Carvalho de Melo escreveu:
-> >  Now to look at the BUILD_BPF_SKEL=1 kaboom:
+On Tue, Dec 06, 2022, Alexey Kardashevskiy wrote:
+> 
+> On 2/12/22 03:58, Sean Christopherson wrote:
+> > On Thu, Dec 01, 2022, Alexey Kardashevskiy wrote:
+> > > diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
+> > > index cfdf307ddc01..c4324d0205b5 100644
+> > > --- a/arch/x86/include/asm/debugreg.h
+> > > +++ b/arch/x86/include/asm/debugreg.h
+> > > @@ -127,6 +127,7 @@ static __always_inline void local_db_restore(unsigned long dr7)
+> > >   #ifdef CONFIG_CPU_SUP_AMD
+> > >   extern void set_dr_addr_mask(unsigned long mask, int dr);
+> > > +extern unsigned long get_dr_addr_mask(int dr);
+> > >   #else
+> > >   static inline void set_dr_addr_mask(unsigned long mask, int dr) { }
 > > 
-> >  [acme@quaco perf]$ alias m
-> > alias m='rm -rf ~/libexec/perf-core/ ; make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 O=/tmp/build/perf -C tools/perf install-bin && perf test python'
-> > [acme@quaco perf]$ m
-> > make: Entering directory '/home/acme/git/perf/tools/perf'
-> >   BUILD:   Doing 'make -j8' parallel build
-> >   <SNIP>
-> > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `add_work':
-> > /home/acme/git/perf/tools/perf/util/bpf_kwork.c:285: undefined reference to `perf_kwork_add_work'
-> > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `lock_contention_read':
+> > KVM_AMD doesn't depend on CPU_SUP_AMD, i.e. this needs a stub.  Or we need to add
+> > a dependency.
+> 
+> The new symbol is under CONFIG_CPU_SUP_AMD and so is its only user
+> arch/x86/kernel/cpu/amd.c:
+> 
+> arch/x86/kernel/cpu/Makefile:
+> obj-$(CONFIG_CPU_SUP_AMD)               += amd.o
+> 
+> 
+> Is this enough dependency or we need something else? (if enough, I'll put it
+> into the next commit log).
 
-For that bpf_kwork.c see below. Now to see why the python binding is not
-building, I guess is unrelated and you have some other outstanding
-patch?
+No, it's actually the opposite, the issue is precisely that the symbol is buried
+under CPU_SUP_AMD.  KVM_AMD doesn't currently depend on CPU_SUP_AMD, and so the
+usage in sev_es_prepare_switch_to_guest() fails to compile if CPU_SUP_AMD=n and
+KVM_AMD={Y,M}.
 
-[acme@quaco perf]$ git diff
-diff --git a/tools/perf/util/Build b/tools/perf/util/Build
-index 255bc751d19452f2..c97093f47c990b45 100644
---- a/tools/perf/util/Build
-+++ b/tools/perf/util/Build
-@@ -153,8 +153,12 @@ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
- perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
- perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
- perf-$(CONFIG_PERF_BPF_SKEL) += bpf_off_cpu.o
--perf-$(CONFIG_PERF_BPF_SKEL) += bpf_kwork.o
- perf-$(CONFIG_PERF_BPF_SKEL) += bpf_lock_contention.o
-+
-+ifeq ($(CONFIG_TRACEEVENT),y)
-+  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_kwork.o
-+endif
-+
- perf-$(CONFIG_BPF_PROLOGUE) += bpf-prologue.o
- perf-$(CONFIG_LIBELF) += symbol-elf.o
- perf-$(CONFIG_LIBELF) += probe-file.o
-[acme@quaco perf]$ m
-make: Entering directory '/home/acme/git/perf/tools/perf'
-  BUILD:   Doing 'make -j8' parallel build
-Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
-diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
-Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
-Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' differs from latest version at 'arch/arm64/include/asm/cputype.h'
-diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
-Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
-diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
-Makefile.config:1138: No openjdk development package found, please install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
+  config KVM_AMD
+	tristate "KVM for AMD processors support"
+	depends on KVM
 
-  INSTALL libsubcmd_headers
-  INSTALL libapi_headers
-  INSTALL libsymbol_headers
-  INSTALL libperf_headers
-  GEN     /tmp/build/perf/python/perf.so
-  INSTALL libbpf_headers
-  INSTALL binaries
-  INSTALL tests
-  INSTALL perf-read-vdso32
-  INSTALL libexec
-  INSTALL bpf-examples
-  INSTALL perf-archive
-  INSTALL perf-iostat
-  INSTALL strace/groups
-  INSTALL perl-scripts
-  INSTALL python-scripts
-  INSTALL dlfilters
-  INSTALL perf_completion-script
-  INSTALL perf-tip
-make: Leaving directory '/home/acme/git/perf/tools/perf'
- 14: 'import perf' in python                                         : FAILED!
-[acme@quaco perf]$
+I actually just submitted a patch[*] to "fix" that since KVM requires the CPU vendor
+to be AMD or Hygon at runtime.  Although that patch is buried in the middle of a
+large series, it doesn't have any dependencies.  So, if this series is routed through
+the KVM tree, it should be straightforward to just pull that patch into this series,
+and whichever series lands first gets the honor of applying that patch.
 
+If this series is routed through the tip tree, the best option may be to just add
+a stub to avoid potential conflicts, and then we can rip the stub out later.
+
+[*] https://lore.kernel.org/all/20221201232655.290720-12-seanjc@google.com
