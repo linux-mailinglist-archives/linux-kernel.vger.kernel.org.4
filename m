@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA3C264420B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7F764420E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234914AbiLFLYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S235010AbiLFLYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234438AbiLFLXl (ORCPT
+        with ESMTP id S234553AbiLFLXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:23:41 -0500
+        Tue, 6 Dec 2022 06:23:43 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0751FCD6;
-        Tue,  6 Dec 2022 03:23:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DD69205DA;
+        Tue,  6 Dec 2022 03:23:40 -0800 (PST)
 Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F18F36602B11;
-        Tue,  6 Dec 2022 11:23:37 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A29CC6602B45;
+        Tue,  6 Dec 2022 11:23:38 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670325818;
-        bh=rlTgEOFncee6fPGxGrdmPJK4iALNYJfpw5aOcS2FPzc=;
+        s=mail; t=1670325819;
+        bh=48tAHSkcotWDq/1mQynydodHHleYUjhYYLh9z9vaE/E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iI84tUNJ2OgxuFKyUIzMasbWPp2x5Gvjz71MPz5WLHgrr45NUIS3ZkaYJPU9r9nmn
-         tyvLjCHa52c0d8hIvlGd/aAyUeE7epONddmSG+W201MlMM9sJrlHIQ/4G+wWvBG+yc
-         Dhj+aYvpt1aRuXYXZrV1z+2FHquB2R7O7eDDO4xvtlH0EzvLKtT/0+ePpShU4MPNi6
-         1V+g68BhgCE7uGuG+ueWHd8B7hVHlE6wbaazQ3BoL5NMI+S9gB4x0XqjiyuhgmYjI6
-         TgcFVHcJL89VE2I7qWRPU0DXg/BTDRUHuPwiz9UhfYoiglXrmuZCwtUH942k9m+VUa
-         UoYC7CAvWdaFA==
+        b=VaH+ZWmLuTxCHfUaiGpfXsx9FVHf6bZKLYW4CxEs8l8GL8ZZcYJn/A3nHVgfdQ7Dh
+         vtjQWKDIdwcsVa+XnxXZcmaTRx6Y7YPcDPwBBP207xHNC+4ko0ZXClaHM+b9TbbF1+
+         K6FyIoLCGy/l1VZsL720JVFt3MWYuCV7oGdw+7+t/2bE6RRnJJ3L50QBuUV8ivMbhM
+         vHdrU3I3tIFU0oGXhftzsaIatOaURlEmPkSwwep+XZyO4yVl6cfbVzEfCU0urUSBiJ
+         CdgqhBkTTgBc1JTDs0k3QdjFfmVQF2x5V6BRCome2efPoeRKFh5reHEhYnhw2Yb28/
+         3wxepD4OolmEA==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     matthias.bgg@gmail.com
@@ -41,9 +41,9 @@ Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH 3/5] arm64: dts: mt8186: Add complete CPU caches information
-Date:   Tue,  6 Dec 2022 12:23:28 +0100
-Message-Id: <20221206112330.78431-4-angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 4/5] arm64: dts: mt8183: Add complete CPU caches information
+Date:   Tue,  6 Dec 2022 12:23:29 +0100
+Message-Id: <20221206112330.78431-5-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221206112330.78431-1-angelogioacchino.delregno@collabora.com>
 References: <20221206112330.78431-1-angelogioacchino.delregno@collabora.com>
@@ -59,12 +59,11 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This SoC features two clusters composed of:
- - 6x Cortex A55: 32KB I-cache and 32KB D-cache, 4-way set associative,
-                  per-cpu 128KB L2 cache, 4-way set associative;
- - 2x Cortex A76: 64KB I-cache and 64KB D-cache, 4-way set associative,
-                  per-cpu 256KB L2 cache, 8-way set associative;
-Moreover, the two clusters are sharing a DSU L3 cache with size 1MB,
-16-way set associative.
+ - 4x Cortex A53: 32KB I-cache, 2-way set associative,
+                  32KB D-cache, 4-way set associative,
+                  unified 1MB L2 cache, 16-way set associative;
+ - 4x Cortex A73: 64KB I-cache and 64KB D-cache, 4-way set associative,
+                  unified 1MB L2 cache, 16-way set associative;
 
 With that in mind, add the appropriate properties needed to specify the
 caches information for this SoC, which will now be correctly exported
@@ -72,146 +71,150 @@ to sysfs.
 
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8186.dtsi | 58 ++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi | 74 ++++++++++++++++++++++++
+ 1 file changed, 74 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-index 4a2f7ad3c6f0..c4a80ce3124c 100644
---- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -69,6 +69,12 @@ cpu0: cpu@0 {
- 			clock-frequency = <2000000000>;
- 			capacity-dmips-mhz = <382>;
- 			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
+diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+index a70b669c49ba..12f61cd20da5 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
+@@ -336,6 +336,13 @@ cpu0: cpu@0 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			dynamic-power-coefficient = <84>;
 +			i-cache-size = <32768>;
 +			i-cache-line-size = <64>;
-+			i-cache-sets = <128>;
++			i-cache-sets = <256>;
 +			d-cache-size = <32768>;
 +			d-cache-line-size = <64>;
 +			d-cache-sets = <128>;
- 			next-level-cache = <&l2_0>;
++			next-level-cache = <&l2_0>;
  			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
-@@ -81,6 +87,12 @@ cpu1: cpu@100 {
- 			clock-frequency = <2000000000>;
- 			capacity-dmips-mhz = <382>;
- 			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
+@@ -352,6 +359,13 @@ cpu1: cpu@1 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			dynamic-power-coefficient = <84>;
 +			i-cache-size = <32768>;
 +			i-cache-line-size = <64>;
-+			i-cache-sets = <128>;
++			i-cache-sets = <256>;
 +			d-cache-size = <32768>;
 +			d-cache-line-size = <64>;
 +			d-cache-sets = <128>;
- 			next-level-cache = <&l2_0>;
++			next-level-cache = <&l2_0>;
  			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
-@@ -93,6 +105,12 @@ cpu2: cpu@200 {
- 			clock-frequency = <2000000000>;
- 			capacity-dmips-mhz = <382>;
- 			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
+@@ -368,6 +382,13 @@ cpu2: cpu@2 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			dynamic-power-coefficient = <84>;
 +			i-cache-size = <32768>;
 +			i-cache-line-size = <64>;
-+			i-cache-sets = <128>;
++			i-cache-sets = <256>;
 +			d-cache-size = <32768>;
 +			d-cache-line-size = <64>;
 +			d-cache-sets = <128>;
- 			next-level-cache = <&l2_0>;
++			next-level-cache = <&l2_0>;
  			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
-@@ -105,6 +123,12 @@ cpu3: cpu@300 {
- 			clock-frequency = <2000000000>;
- 			capacity-dmips-mhz = <382>;
- 			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
+@@ -384,6 +405,13 @@ cpu3: cpu@3 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster0_opp>;
+ 			dynamic-power-coefficient = <84>;
 +			i-cache-size = <32768>;
 +			i-cache-line-size = <64>;
-+			i-cache-sets = <128>;
++			i-cache-sets = <256>;
 +			d-cache-size = <32768>;
 +			d-cache-line-size = <64>;
 +			d-cache-sets = <128>;
- 			next-level-cache = <&l2_0>;
++			next-level-cache = <&l2_0>;
  			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
-@@ -117,6 +141,12 @@ cpu4: cpu@400 {
- 			clock-frequency = <2000000000>;
- 			capacity-dmips-mhz = <382>;
- 			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			i-cache-size = <32768>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <128>;
-+			d-cache-size = <32768>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>;
- 			next-level-cache = <&l2_0>;
- 			#cooling-cells = <2>;
- 		};
-@@ -129,6 +159,12 @@ cpu5: cpu@500 {
- 			clock-frequency = <2000000000>;
- 			capacity-dmips-mhz = <382>;
- 			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			i-cache-size = <32768>;
-+			i-cache-line-size = <64>;
-+			i-cache-sets = <128>;
-+			d-cache-size = <32768>;
-+			d-cache-line-size = <64>;
-+			d-cache-sets = <128>;
- 			next-level-cache = <&l2_0>;
- 			#cooling-cells = <2>;
- 		};
-@@ -141,6 +177,12 @@ cpu6: cpu@600 {
- 			clock-frequency = <2050000000>;
- 			capacity-dmips-mhz = <1024>;
- 			cpu-idle-states = <&cpu_off_b &cluster_off_b>;
+@@ -400,6 +428,13 @@ cpu4: cpu@100 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster1_opp>;
+ 			dynamic-power-coefficient = <211>;
 +			i-cache-size = <65536>;
 +			i-cache-line-size = <64>;
 +			i-cache-sets = <256>;
 +			d-cache-size = <65536>;
 +			d-cache-line-size = <64>;
 +			d-cache-sets = <256>;
- 			next-level-cache = <&l2_1>;
++			next-level-cache = <&l2_1>;
  			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
-@@ -153,6 +195,12 @@ cpu7: cpu@700 {
- 			clock-frequency = <2050000000>;
- 			capacity-dmips-mhz = <1024>;
- 			cpu-idle-states = <&cpu_off_b &cluster_off_b>;
+@@ -416,6 +451,13 @@ cpu5: cpu@101 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster1_opp>;
+ 			dynamic-power-coefficient = <211>;
 +			i-cache-size = <65536>;
 +			i-cache-line-size = <64>;
 +			i-cache-sets = <256>;
 +			d-cache-size = <65536>;
 +			d-cache-line-size = <64>;
 +			d-cache-sets = <256>;
- 			next-level-cache = <&l2_1>;
++			next-level-cache = <&l2_1>;
  			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
-@@ -200,18 +248,28 @@ cluster_off_b: cluster-off-b {
- 		l2_0: l2-cache0 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-size = <131072>;
-+			cache-line-size = <64>;
-+			cache-sets = <512>;
- 			next-level-cache = <&l3_0>;
+@@ -432,6 +474,13 @@ cpu6: cpu@102 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster1_opp>;
+ 			dynamic-power-coefficient = <211>;
++			i-cache-size = <65536>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>;
++			d-cache-size = <65536>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <256>;
++			next-level-cache = <&l2_1>;
+ 			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
- 
- 		l2_1: l2-cache1 {
- 			compatible = "cache";
- 			cache-level = <2>;
-+			cache-size = <262144>;
-+			cache-line-size = <64>;
-+			cache-sets = <512>;
- 			next-level-cache = <&l3_0>;
+@@ -448,6 +497,13 @@ cpu7: cpu@103 {
+ 			clock-names = "cpu", "intermediate";
+ 			operating-points-v2 = <&cluster1_opp>;
+ 			dynamic-power-coefficient = <211>;
++			i-cache-size = <65536>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>;
++			d-cache-size = <65536>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <256>;
++			next-level-cache = <&l2_1>;
+ 			#cooling-cells = <2>;
+ 			mediatek,cci = <&cci>;
  		};
- 
- 		l3_0: l3-cache {
- 			compatible = "cache";
- 			cache-level = <3>;
+@@ -481,6 +537,24 @@ CLUSTER_SLEEP1: cluster-sleep-1 {
+ 				min-residency-us = <1300>;
+ 			};
+ 		};
++
++		l2_0: l2-cache0 {
++			compatible = "cache";
++			cache-level = <2>;
 +			cache-size = <1048576>;
 +			cache-line-size = <64>;
 +			cache-sets = <1024>;
 +			cache-unified;
- 		};
++		};
++
++		l2_1: l2-cache1 {
++			compatible = "cache";
++			cache-level = <2>;
++			cache-size = <1048576>;
++			cache-line-size = <64>;
++			cache-sets = <1024>;
++			cache-unified;
++		};
  	};
  
+ 	gpu_opp_table: opp-table-0 {
 -- 
 2.38.1
 
