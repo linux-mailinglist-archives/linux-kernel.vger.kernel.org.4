@@ -2,50 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6ED644E83
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F082D644E8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiLFWYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S229893AbiLFW2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiLFWYB (ORCPT
+        with ESMTP id S229514AbiLFW2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:24:01 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAC531F94;
-        Tue,  6 Dec 2022 14:23:59 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NRZhB3cb7z4xN4;
-        Wed,  7 Dec 2022 09:23:54 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670365436;
-        bh=lqNRfzgYaa3SPZu2eVsFmxAbCnMUF7h6TuLq00GT2eI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=A95lawMY9K4F8GNxvpovLh5r8yoqV9ki4zrLso/+SnDupp2ABlakDJqjJLOJW2RVp
-         GOIoiQ0prAUtJJZeoy/W0jglEmIMfv/ePjPjGx0TFbj0aPeXHA308Xb/nrbqAwY5+j
-         EL0EgrrAFPSza/eduwgXnV6x9vdW1PnvvjhtD+5xCyyV0AxfeWUlWSA6k7ZRFtDLbs
-         73KdWbU7lilFUStTA7SjXgzhMcH2NTLI1AHEMTVMVlk8G7gDvWdpsSprHX7Ynps26d
-         dOzpLQlvkOqBCrhONWAK+eaExnomn6ERyiFdEiybOtob0xQf+KD9LKvrWBY9181MKi
-         nQoOf+azYxOfg==
-Date:   Wed, 7 Dec 2022 09:23:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hirokazu Honda <hiroh@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the v4l-dvb-next tree with Linus' tree
-Message-ID: <20221207092353.0d1df5f8@canb.auug.org.au>
+        Tue, 6 Dec 2022 17:28:31 -0500
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A018047311;
+        Tue,  6 Dec 2022 14:28:30 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id k2so8730860qkk.7;
+        Tue, 06 Dec 2022 14:28:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nc/HddoCOojBCoQWm1ZfH4dnQ1g2zzDiDNX4pItMA7M=;
+        b=loP02QYRyaxjpU+3gPXXCePFeU5mlanOkmQkS84M81spAdi3gkyuj7yWbevTc59AAW
+         P4Y5F49ENGVzq0MVf7lHQfNw7YKaV8TOmKU74NUTczGRrUZmr0SgpgecNZg1J4DHfIAv
+         RnvNrxqlhCUO9TKY3281HguHqYqfTySeC2xHgUOolXpMeGddwW5auNaXwuP6gnRLS5A1
+         KIbzzB9PLR6ARAbRy4asR0jjh/zQaXHPtaefSlm/N7VxiPfi1EFW3KZgcGPXc8QOCY+t
+         76F1Rqx7tf/g63H8wyrYmozLW+3QBW37r4JU/p+WnomCkLOL0NdwnnNr2eNcUqeT469i
+         vMlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nc/HddoCOojBCoQWm1ZfH4dnQ1g2zzDiDNX4pItMA7M=;
+        b=t+Moa4Cs0NhfPqc1X9upmIxRY3Y+K75bIAZ8Z3OfCte/5SHaQvqAplPDVJBVHbzh+y
+         tQTo2c+F736jWgDAmwhYKD0kelcA6KSd4HfqD9Go4GADoNRcAf+x+zuOCXj1YY46XoRr
+         +G9tvRgKdX8mZ9eF4Fl3hXqjwnmv2TB5bb++ciseML8A1fSBnDXvnRWuPGUalBgMn2i6
+         zhfyFHIGIa0ITBsnLQ1Og0mI+5lJs8yXbohb/uLZT6SxH7iIO/gR4QTYWGrBCU9JY131
+         7EKTh/hoaYSB2SjVHsGHh90Gy/QTHSx7zjjWrOjcA7EgTK6Cn2XUZSYAOLkD71t8+8zP
+         JF5A==
+X-Gm-Message-State: ANoB5pmyOoxiV0rArjB3QKINdtZxFT023zoKh78wXEIo+xJw0x3+QME5
+        l9JKNdcZK9x0RJoiMO83bFQ=
+X-Google-Smtp-Source: AA0mqf5XaXwQlVWUY9uQYY0na59WH9xLANhllfnkOu2zUb1SYr00pbyIbOXfX67FVNKMpKFgHsYXHQ==
+X-Received: by 2002:ae9:d846:0:b0:6ec:5332:6ebd with SMTP id u67-20020ae9d846000000b006ec53326ebdmr79698102qkf.0.1670365709677;
+        Tue, 06 Dec 2022 14:28:29 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id g13-20020a05620a40cd00b006fc7c5d456asm12952654qko.136.2022.12.06.14.28.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 14:28:29 -0800 (PST)
+Message-ID: <535422d3-732c-868a-b74a-dc7d806a4dde@gmail.com>
+Date:   Tue, 6 Dec 2022 14:28:26 -0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ahfs.6cyzuPFBklWtgXRyxz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 6.0 000/125] 6.0.12-rc3 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221206163445.868107856@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20221206163445.868107856@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,151 +79,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ahfs.6cyzuPFBklWtgXRyxz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the v4l-dvb-next tree got a conflict in:
+On 12/6/2022 8:39 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.12 release.
+> There are 125 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 08 Dec 2022 16:34:27 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.12-rc3.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-  drivers/media/common/videobuf2/frame_vector.c
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-between commit:
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-  6647e76ab623 ("v4l2: don't fall back to follow_pfn() if pin_user_pages_fa=
-st() fails")
-
-from Linus' tree and commit:
-
-  e2fc6edd37ba ("media: videobuf2: revert "get_userptr: buffers are always =
-writable"")
-
-from the v4l-dvb-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/media/common/videobuf2/frame_vector.c
-index 144027035892,aad72640f055..000000000000
---- a/drivers/media/common/videobuf2/frame_vector.c
-+++ b/drivers/media/common/videobuf2/frame_vector.c
-@@@ -32,10 -33,15 +33,11 @@@
-   *
-   * This function takes care of grabbing mmap_lock as necessary.
-   */
-- int get_vaddr_frames(unsigned long start, unsigned int nr_frames,
-+ int get_vaddr_frames(unsigned long start, unsigned int nr_frames, bool wr=
-ite,
-  		     struct frame_vector *vec)
-  {
- -	struct mm_struct *mm =3D current->mm;
- -	struct vm_area_struct *vma;
- -	int ret_pin_user_pages_fast =3D 0;
- -	int ret =3D 0;
- -	int err;
- +	int ret;
-+ 	unsigned int gup_flags =3D FOLL_FORCE | FOLL_LONGTERM;
- =20
-  	if (nr_frames =3D=3D 0)
-  		return 0;
-@@@ -45,20 -51,62 +47,22 @@@
- =20
-  	start =3D untagged_addr(start);
- =20
-- 	ret =3D pin_user_pages_fast(start, nr_frames,
-- 				  FOLL_FORCE | FOLL_WRITE | FOLL_LONGTERM,
-+ 	if (write)
-+ 		gup_flags |=3D FOLL_WRITE;
-+=20
-+ 	ret =3D pin_user_pages_fast(start, nr_frames, gup_flags,
-  				  (struct page **)(vec->ptrs));
- -	if (ret > 0) {
- -		vec->got_ref =3D true;
- -		vec->is_pfns =3D false;
- -		goto out_unlocked;
- -	}
- -	ret_pin_user_pages_fast =3D ret;
- +	vec->got_ref =3D true;
- +	vec->is_pfns =3D false;
- +	vec->nr_frames =3D ret;
- =20
- -	mmap_read_lock(mm);
- -	vec->got_ref =3D false;
- -	vec->is_pfns =3D true;
- -	ret =3D 0;
- -	do {
- -		unsigned long *nums =3D frame_vector_pfns(vec);
- +	if (likely(ret > 0))
- +		return ret;
- =20
- -		vma =3D vma_lookup(mm, start);
- -		if (!vma)
- -			break;
- -
- -		while (ret < nr_frames && start + PAGE_SIZE <=3D vma->vm_end) {
- -			err =3D follow_pfn(vma, start, &nums[ret]);
- -			if (err) {
- -				if (ret)
- -					goto out;
- -				// If follow_pfn() returns -EINVAL, then this
- -				// is not an IO mapping or a raw PFN mapping.
- -				// In that case, return the original error from
- -				// pin_user_pages_fast(). Otherwise this
- -				// function would return -EINVAL when
- -				// pin_user_pages_fast() returned -ENOMEM,
- -				// which makes debugging hard.
- -				if (err =3D=3D -EINVAL && ret_pin_user_pages_fast)
- -					ret =3D ret_pin_user_pages_fast;
- -				else
- -					ret =3D err;
- -				goto out;
- -			}
- -			start +=3D PAGE_SIZE;
- -			ret++;
- -		}
- -		/* Bail out if VMA doesn't completely cover the tail page. */
- -		if (start < vma->vm_end)
- -			break;
- -	} while (ret < nr_frames);
- -out:
- -	mmap_read_unlock(mm);
- -out_unlocked:
- -	if (!ret)
- -		ret =3D -EFAULT;
- -	if (ret > 0)
- -		vec->nr_frames =3D ret;
- -	return ret;
- +	/* This used to (racily) return non-refcounted pfns. Let people know */
- +	WARN_ONCE(1, "get_vaddr_frames() cannot follow VM_IO mapping");
- +	vec->nr_frames =3D 0;
- +	return ret ? ret : -EFAULT;
-  }
-  EXPORT_SYMBOL(get_vaddr_frames);
- =20
-
---Sig_/ahfs.6cyzuPFBklWtgXRyxz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOPwPkACgkQAVBC80lX
-0GyXAwf8CrMVCEnXkKiFJxJyNfXDW6Jy8m+lmcc3fQMuZZbw+ME3PWN3ZPGLH6dA
-FAVdYq+Bhb9NSHoURHRizjCvTI/IMoZfsfVwziDWUuroAjvyUqdIAW8G1osnr/l/
-AY9Nj5T9eWvQDoXGn6c1/t9hQA4oNriEXQ+kTIorl20eoGZmhI9x0HadbTLBwVnY
-8iIXZ6zMbReP33MtVumyE/KxVZuYtWRaYBrNPXRGfCWtfsRp/ASblKGV2Z9sG49w
-cRh2SDXkGnKR7GC4/Fkh0/H3wBFsSv4LbX033CydEtCprurBw8y9nVlQP/MdQ04K
-GkWm0vUBQSpMtvvOvkk5ZOpizznaeg==
-=myTt
------END PGP SIGNATURE-----
-
---Sig_/ahfs.6cyzuPFBklWtgXRyxz--
