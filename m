@@ -2,168 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9CA7643A5F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:41:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1FE643A62
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:42:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233455AbiLFAll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:41:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S232584AbiLFAmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:42:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbiLFAl0 (ORCPT
+        with ESMTP id S233461AbiLFAlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:41:26 -0500
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFA31137
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:41:25 -0800 (PST)
-Received: by mail-pf1-x429.google.com with SMTP id x66so13068824pfx.3
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g1HJHevNxrj1Nq/NT7g6yR6y+nhBZjMl2neMxR4W590=;
-        b=m5t9TolEhunsnLAs8ghRCY5jduXJTUVrI828QMb9aaMDHIl9N52I0BcpPgXmJWJwHJ
-         8O/axD8BEanTUffxKBpeoT/71MR//Ncm3X2gdqz7aFSVJrBM1Wbfryc+Rv8pyLm6oklN
-         hdck+j11IhNQpknHmA6Td97jo/v98RGjlHlkI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g1HJHevNxrj1Nq/NT7g6yR6y+nhBZjMl2neMxR4W590=;
-        b=VsrXkXQbesFO69SBczsP3dJKOpm6euQXrbq+tN45z6xg2/lUnQLLKfdyeyGSVoEf4I
-         YD0oYVy9K2KYyeQIY22V7tdcXmWFWoB0mrHjEkerau+W+CMeZmM3qfgtX4pcBhmdT9KU
-         HZP6/cD9+TNhGyFfOoGgN5HsDs/u+41gvRERqNQO6yjxpExxwLwc720BNCGAE7KU23mm
-         Xk3raSnzhuL8Rlhvu067/BL7P9Qk5mRLlUeteKPdfgUuUah+RDSUaZ0IKpYFiyy+Jdpn
-         Mmi0NeSyXvqy+vAx3A1U5RhzZH+fswxz7qha/VmcKFzZjFLHX38lKttAoakRNYeZeuEn
-         m9+w==
-X-Gm-Message-State: ANoB5pmrK4nF5gmMrK2PsZXzSAAw4fYhEjXlF4yr7uVwV4EZM7Wn/7mV
-        YnKU9uZrGSf1LXE36/O5zHnhKA==
-X-Google-Smtp-Source: AA0mqf7bocP7PDul7rRtHY2oLz5aO8HTy1YdBhNhRPTn1YaCEYjEKUj/QL8QuzpT2xX9GPdxtsjU/w==
-X-Received: by 2002:a63:1824:0:b0:46e:baf4:ab7a with SMTP id y36-20020a631824000000b0046ebaf4ab7amr79923468pgl.37.1670287284417;
-        Mon, 05 Dec 2022 16:41:24 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b00186b549cdc2sm11187939plk.157.2022.12.05.16.41.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 16:41:24 -0800 (PST)
-Date:   Mon, 5 Dec 2022 16:41:23 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Alexey Izbyshev <izbyshev@ispras.ru>,
-        Andrei Vagin <avagin@gmail.com>,
-        Bernd Edlinger <bernd.edlinger@hotmail.de>,
-        Bo Liu <liubo03@inspur.com>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Liu Shixin <liushixin2@huawei.com>,
-        Li Zetao <lizetao1@huawei.com>, Rolf Eike Beer <eb@emlix.com>,
-        Wang Yufen <wangyufen@huawei.com>
-Subject: [GIT PULL] execve updates for v6.2-rc1
-Message-ID: <202212051637.93142F409@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 5 Dec 2022 19:41:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80886DFD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:41:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F0BED614F3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:41:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D46C433D7;
+        Tue,  6 Dec 2022 00:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670287300;
+        bh=PHYevn3Vh1bRzHgX8jaY2KGyymMFzZcEuYmLigdgpFY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HREFEuzQkgTBk6bZMKgFTiB8CEqWJP4JL8snfVoRvIFSkAZ+1NqBLredgeO8ut1cI
+         BOCHfhAqHxu+dA2bgYxP72JxkG+Gy/Sb6KaWcp3aGAOaIyiFMGTIitp2hUrt2OkapU
+         UjjZ/H0gJGeA1B5qfjLOwgoLEHrUJ9rGV8e4GsBICCkZLUqsLbhGscY9VEN+qfj3uR
+         jcOUGDFq3BRpWgEw3W6ccjdbsGFr9S8LQVsrLgFc0+etQ/hbpIelyT4Mf4ZxXMLSvC
+         M7DFFBwFk0gz9Zjfm9ZLS0b5J3tleD6OzTi2zgEMy56r7dlgWBo1NP5HB5ECKb3ABq
+         DYs50wj3+Gm9A==
+Date:   Tue, 6 Dec 2022 09:41:37 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sandeepa Prabhu <sandeepa.s.prabhu@gmail.com>
+Subject: Re: [PATCH v2 1/3] arm64: Prohibit instrumentation on
+ arch_stack_walk()
+Message-Id: <20221206094137.389e4c374f4be060af19f33a@kernel.org>
+In-Reply-To: <Y4n66ioPq0BZF4Pi@FVFF77S0Q05N>
+References: <166994750386.439920.1754385804350980158.stgit@devnote3>
+        <166994751368.439920.3236636557520824664.stgit@devnote3>
+        <Y4n66ioPq0BZF4Pi@FVFF77S0Q05N>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Fri, 2 Dec 2022 13:17:30 +0000
+Mark Rutland <mark.rutland@arm.com> wrote:
 
-Please pull these execve updates for v6.2-rc1. Most are small
-refactorings and bug fixes, but three things stand out: switching timens
-(which got reverted before) looks solid now, FOLL_FORCE has been removed
-(no failures seen yet across several weeks in -next), and some
-whitespace cleanups (which are long overdue). The latter does end up
-conflicting with changes from Al[1], but should be trivial to resolve.
+> On Fri, Dec 02, 2022 at 11:18:33AM +0900, Masami Hiramatsu (Google) wrote:
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Mark arch_stack_walk() as noinstr instead of notrace and inline functions
+> > called from arch_stack_walk() as __always_inline so that user does not
+> > put any instrumentations on it, because this function can be used from
+> > return_address() which is used by lockdep.
+> 
+> Hmmm... since arch_stack_walk is marked as notrace, that will be prohibited by
+> default unless the kernel was built with CONFIG_KPROBE_EVENTS_ON_NOTRACE=y,
+> and the commit message for that says:
+> 
+> │ This option disables such protection and allows you to put kprobe                                                                                                                                   │
+> │ events on ftrace functions for debugging ftrace by itself.                                                                                                                                          │
+> │ Note that this might let you shoot yourself in the foot.
+> 
+> ... and IIUC we generally don't expect people to set that, and that might be
+> worth calling out in the commit message.
+
+Yeah, but that is the feature for kprobe events, and not applied to
+the kprobes itself. Maybe I should use a test kprobe module to
+put a probe on it.
+
+> 
+> > Without this, if the kernel built with CONFIG_LOCKDEP=y, just probing
+> > arch_stack_walk() via <tracefs>/kprobe_events will crash the kernel on
+> > arm64.
+> > 
+> >  # echo p arch_stack_walk >> ${TRACEFS}/kprobe_events
+> >  # echo 1 > ${TRACEFS}/events/kprobes/enable
+> 
+> I had a go at testing this patch, and it fixes the crash with the reproducer
+> above, but there are plenty of other instances in stacktrace.c that lead to the
+> same sort of crash, e.g.
+> 
+> # echo p stackinfo_get_task >> ${TRACEFS}/kprobe_events
+> # echo 1 > ${TRACEFS}/events/kprobes/enable
+
+Oops, thanks for pointing! Hmm, I thought stackinfo_get_task() is an
+inlined function usually. Maybe we should make it nokprobe_inline.
+But this is just one case. I need to scan all symbols to trace...
+
+> 
+> ... so I think there's more that we need to do to fix this generally.
+> 
+> Note: I found interesting functions to try tracing by looking at the output of:
+> 
+>   aarch64-linux-objdump -t arch/arm64/kernel/stacktrace.o | grep -w '.text'
+> 
+> That all said, I think this patch is nice-to-have, and that we can address the
+> other cases as a follow-up, so for this patch as-is (with or without some
+> wording regarding CONFIG_KPROBE_EVENTS_ON_NOTRACE):
+> 
+> Acked-by: Mark Rutland <mark.rutland@arm.com>
 
 Thanks!
 
--Kees
+> 
+> Mark.
+> 
+> >   kprobes: Failed to recover from reentered kprobes.
+> >   kprobes: Dump kprobe:
+> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+> >   ------------[ cut here ]------------
+> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> >   kprobes: Failed to recover from reentered kprobes.
+> >   kprobes: Dump kprobe:
+> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+> >   ------------[ cut here ]------------
+> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> >   PREEMPT SMP
+> >   Modules linked in:
+> >   CPU: 0 PID: 17 Comm: migration/0 Tainted: G                 N 6.1.0-rc5+ #6
+> >   Hardware name: linux,dummy-virt (DT)
+> >   Stopper: 0x0 <- 0x0
+> >   pstate: 600003c5 (nZCv DAIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> >   pc : kprobe_breakpoint_handler+0x178/0x17c
+> >   lr : kprobe_breakpoint_handler+0x178/0x17c
+> >   sp : ffff8000080d3090
+> >   x29: ffff8000080d3090 x28: ffff0df5845798c0 x27: ffffc4f59057a774
+> >   x26: ffff0df5ffbba770 x25: ffff0df58f420f18 x24: ffff49006f641000
+> >   x23: ffffc4f590579768 x22: ffff0df58f420f18 x21: ffff8000080d31c0
+> >   x20: ffffc4f590579768 x19: ffffc4f590579770 x18: 0000000000000006
+> >   x17: 5f6b636174735f68 x16: 637261203d207264 x15: 64612e202c30203d
+> >   x14: 2074657366666f2e x13: 30633178302f3078 x12: 302b6b6c61775f6b
+> >   x11: 636174735f686372 x10: ffffc4f590dc5bd8 x9 : ffffc4f58eb31958
+> >   x8 : 00000000ffffefff x7 : ffffc4f590dc5bd8 x6 : 80000000fffff000
+> >   x5 : 000000000000bff4 x4 : 0000000000000000 x3 : 0000000000000000
+> >   x2 : 0000000000000000 x1 : ffff0df5845798c0 x0 : 0000000000000064
+> >   Call trace:
+> >   kprobes: Failed to recover from reentered kprobes.
+> >   kprobes: Dump kprobe:
+> >   .symbol_name = arch_stack_walk, .offset = 0, .addr = arch_stack_walk+0x0/0x1c0
+> >   ------------[ cut here ]------------
+> >   kernel BUG at arch/arm64/kernel/probes/kprobes.c:241!
+> > 
+> > Fixes: 39ef362d2d45 ("arm64: Make return_address() use arch_stack_walk()")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  Changes in v2:
+> >   - Use noinstr instead of NOKPROBE_SYMBOL()
+> >   - Use __always_inline because nokprobe_inline will be changed if
+> >     CONFIG_KPROBES=n.
+> >   - Fix indentation.
+> > ---
+> >  arch/arm64/kernel/stacktrace.c |   10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
+> > index 634279b3b03d..117e2c180f3c 100644
+> > --- a/arch/arm64/kernel/stacktrace.c
+> > +++ b/arch/arm64/kernel/stacktrace.c
+> > @@ -23,8 +23,8 @@
+> >   *
+> >   * The regs must be on a stack currently owned by the calling task.
+> >   */
+> > -static inline void unwind_init_from_regs(struct unwind_state *state,
+> > -					 struct pt_regs *regs)
+> > +static __always_inline void unwind_init_from_regs(struct unwind_state *state,
+> > +						  struct pt_regs *regs)
+> >  {
+> >  	unwind_init_common(state, current);
+> >  
+> > @@ -58,8 +58,8 @@ static __always_inline void unwind_init_from_caller(struct unwind_state *state)
+> >   * duration of the unwind, or the unwind will be bogus. It is never valid to
+> >   * call this for the current task.
+> >   */
+> > -static inline void unwind_init_from_task(struct unwind_state *state,
+> > -					 struct task_struct *task)
+> > +static __always_inline void unwind_init_from_task(struct unwind_state *state,
+> > +						  struct task_struct *task)
+> >  {
+> >  	unwind_init_common(state, task);
+> >  
+> > @@ -186,7 +186,7 @@ void show_stack(struct task_struct *tsk, unsigned long *sp, const char *loglvl)
+> >  			: stackinfo_get_unknown();		\
+> >  	})
+> >  
+> > -noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> > +noinline noinstr void arch_stack_walk(stack_trace_consume_fn consume_entry,
+> >  			      void *cookie, struct task_struct *task,
+> >  			      struct pt_regs *regs)
+> >  {
+> > 
 
-[1] https://lore.kernel.org/linux-next/20221128143704.3fe8f7b1@canb.auug.org.au/
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.2-rc1
-
-for you to fetch changes up to 6a46bf558803dd2b959ca7435a5c143efe837217:
-
-  binfmt_misc: fix shift-out-of-bounds in check_special_flags (2022-12-02 13:57:04 -0800)
-
-----------------------------------------------------------------
-execve updates for v6.2-rc1
-
-- Add timens support (when switching mm). This version has survived
-  in -next for the entire cycle (Andrei Vagin).
-
-- Various small bug fixes, refactoring, and readability improvements
-  (Bernd Edlinger, Rolf Eike Beer, Bo Liu, Li Zetao Liu Shixin).
-
-- Remove FOLL_FORCE for stack setup (Kees Cook).
-
-- Whilespace cleanups (Rolf Eike Beer, Kees Cook).
-
-----------------------------------------------------------------
-Andrei Vagin (2):
-      fs/exec: switch timens when a task gets a new mm
-      selftests/timens: add a test for vfork+exit
-
-Bernd Edlinger (1):
-      exec: Copy oldsighand->action under spin-lock
-
-Bo Liu (1):
-      binfmt_elf: replace IS_ERR() with IS_ERR_VALUE()
-
-Kees Cook (3):
-      exec: Add comments on check_unsafe_exec() fs counting
-      binfmt: Fix whitespace issues
-      exec: Remove FOLL_FORCE for stack setup
-
-Li Zetao (1):
-      fs/binfmt_elf: Fix memory leak in load_elf_binary()
-
-Liu Shixin (1):
-      binfmt_misc: fix shift-out-of-bounds in check_special_flags
-
-Rolf Eike Beer (4):
-      ELF uapi: add spaces before '{'
-      exec: simplify initial stack size expansion
-      binfmt_elf: fix documented return value for load_elf_phdrs()
-      binfmt_elf: simplify error handling in load_elf_phdrs()
-
-Wang Yufen (1):
-      binfmt: Fix error return code in load_elf_fdpic_binary()
-
- fs/binfmt_elf.c                             |  35 +++----
- fs/binfmt_elf_fdpic.c                       |   7 +-
- fs/binfmt_misc.c                            |   8 +-
- fs/exec.c                                   |  38 +++++---
- include/linux/nsproxy.h                     |   1 +
- include/uapi/linux/elf.h                    |  14 +--
- kernel/fork.c                               |   9 --
- kernel/nsproxy.c                            |  23 ++++-
- tools/testing/selftests/timens/.gitignore   |   1 +
- tools/testing/selftests/timens/Makefile     |   2 +-
- tools/testing/selftests/timens/vfork_exec.c | 139 ++++++++++++++++++++++++++++
- 11 files changed, 219 insertions(+), 58 deletions(-)
- create mode 100644 tools/testing/selftests/timens/vfork_exec.c
 
 -- 
-Kees Cook
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
