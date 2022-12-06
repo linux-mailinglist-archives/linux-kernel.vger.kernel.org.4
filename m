@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FB796442F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73CF36442F8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234462AbiLFMIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:08:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
+        id S234260AbiLFMKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235163AbiLFMIO (ORCPT
+        with ESMTP id S233702AbiLFMKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:08:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D21054C;
-        Tue,  6 Dec 2022 04:08:12 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670328490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOchanOPT3T0rVYg76BTFT5x8A0i2ssn7xjg7cU7rxM=;
-        b=hizXk9UtkbIMwyGTvGhaGw+ur1NmQ++i8IvREyxa01nMiTNKqM358HeqcM7nmCXf6tq+4m
-        kAdee5lyKv5lMtRirM/V7xV9PDW7Uh95PkX1J+1SVzo6tERYDcKpdQRAAstft5BgnNXFEK
-        VYb4i4tjZvME8ngrPbqI78sl5CPJmWMjyHA5ZwcWt94K9NH5RRxcdrTbyZTBBOCT31dXBs
-        5HDcMdjVzsr3r3ro2mjXSW3QtsPAJFxAfOJKYBxoe50vYTMqbBjoH6PMj/BpsmY2rCzixW
-        Eye+ZrrOhGZMMc99udiI4lpsUOIGOrNiUSCNZMYwjJbgJ6Rx0JLzgdY+at48NQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670328490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOchanOPT3T0rVYg76BTFT5x8A0i2ssn7xjg7cU7rxM=;
-        b=7JhFV7EGr8y99Ay5PQGR08/BewXnw4DPgoTHp1ZMKTVoUVueEyoQ13iXdHX47dbFMpr4yu
-        UlCOD/wM7BPC7FDA==
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, lirongqing@baidu.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        tony.luck@intel.com, jpoimboe@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when
- mwait_idle is used
-In-Reply-To: <CAJZ5v0gG93BXZWOcRVpng_EN-h4+sOyUqTc1XRt4xZkqMnaZZw@mail.gmail.com>
-References: <1670308998-12313-1-git-send-email-lirongqing@baidu.com>
- <CAJZ5v0gG93BXZWOcRVpng_EN-h4+sOyUqTc1XRt4xZkqMnaZZw@mail.gmail.com>
-Date:   Tue, 06 Dec 2022 13:08:10 +0100
-Message-ID: <87mt80g2fp.ffs@tglx>
+        Tue, 6 Dec 2022 07:10:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C671328707;
+        Tue,  6 Dec 2022 04:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 68353B819F3;
+        Tue,  6 Dec 2022 12:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 20B21C433B5;
+        Tue,  6 Dec 2022 12:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670328616;
+        bh=ETGnmd1O9+aniN78yXCjXGkWtlEBHjIXa79cICgB08A=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=vLHNcdfNG8ZOuzPxcx5cWd3vUXKVbSYtrwlsLOO+6lPuEgd3PEW9MUXyPoxV4Ngki
+         erBWErMKjJ8xW4cpRR9C3Ht/WrDF9/rhQf4QnIi8UmJnZ04v+Igx0r0nIuniX+EBhJ
+         rnvnB4FXBQWj3zPi8QX4/4ffzCukwaE3mFF+DyKDs+Fcktv9Vs7zCrswHv5UaQrqHo
+         j/ReDUaib3rwaL42rZ+RU31eI6TXoWKU2A7k3TghLienTWE0Ua4MvfO2Voq6Ck9ZAn
+         zD9r/tX1EbZ55NiZ4WCK1JUx7tS0gexad8KLs82ryZMwUkoh6hNnyXSPGxXxtYKiQp
+         9W590rm0RluiA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 029BDC395E5;
+        Tue,  6 Dec 2022 12:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] tipc: Fix potential OOB in tipc_link_proto_rcv()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167032861600.21886.17007946309136879304.git-patchwork-notify@kernel.org>
+Date:   Tue, 06 Dec 2022 12:10:16 +0000
+References: <20221203094635.29024-1-yuehaibing@huawei.com>
+In-Reply-To: <20221203094635.29024-1-yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     jmaloy@redhat.com, ying.xue@windriver.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, tipc-discussion@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06 2022 at 12:59, Rafael J. Wysocki wrote:
-> On Tue, Dec 6, 2022 at 7:43 AM <lirongqing@baidu.com> wrote:
->>
->> +bool is_mwait_idle(void)
->> +{
->> +       return x86_idle == mwait_idle;
->> +}
->> +EXPORT_SYMBOL_GPL(is_mwait_idle);
+Hello:
 
-No, this is just another adhoc check, which scratches ONE particular itch.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
->> @@ -111,6 +112,9 @@ static int __init haltpoll_init(void)
->>         if (!kvm_para_available() || !haltpoll_want())
->>                 return -ENODEV;
->>
->> +       if (is_mwait_idle())
->> +               return -ENODEV;
->> +
->
-> So perhaps you could make default_enter_idle() be a bit more careful
-> about what it calls as the "default idle" routine?
+On Sat, 3 Dec 2022 17:46:35 +0800 you wrote:
+> Fix the potential risk of OOB if skb_linearize() fails in
+> tipc_link_proto_rcv().
+> 
+> Fixes: 5cbb28a4bf65 ("tipc: linearize arriving NAME_DISTR and LINK_PROTO buffers")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  net/tipc/link.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 
-Correct. arch_cpu_idle() is the one which should be called.
+Here is the summary with links:
+  - [net] tipc: Fix potential OOB in tipc_link_proto_rcv()
+    https://git.kernel.org/netdev/net/c/743117a997bb
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-        tglx
+
