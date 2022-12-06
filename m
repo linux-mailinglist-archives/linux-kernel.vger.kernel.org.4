@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F1D644ED1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:54:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A24A644ED3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiLFWyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:54:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S229613AbiLFW4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLFWyg (ORCPT
+        with ESMTP id S229480AbiLFW4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:54:36 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2072.outbound.protection.outlook.com [40.107.20.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF784A06B;
-        Tue,  6 Dec 2022 14:54:35 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZsNJ2SwBYRHJ2TJgepKS1QbkiZSUNl8KF5uHg7DFARcKAtHlL8kyopuz+0UFR9PpRqtXrmeiPTdAkkPhNnYVeSX59Z6ErJFvD9u+cgBGnCYs7VmttGYar+OEquY4fVTpgJpmVcTEAYx+9DDBTStpjl+BuraubrKOfwVPw/47IbtujQqCBoLlOl7C6LfHVnIPj2M65k9uyr7O5fLSw5LJYUC9s9AicfeBM6lN//BP/C8L8ZRgHmgWLjlJTezZIMXVZu7UoZLUPb3JypXdO1x1iqf5QXdZS2J0vYdarjck9ex1bsXDsCtYOGFMSZtxNlE8jjZ6Ul7W6nsPbi24yGAG+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tUiagk4KV0+An7OkO3ak17Ov48u1WNwtjbdTnhxl0OA=;
- b=UvJjiafOk8C5CEC7YrfyQiep/DD3QaM9OoxOfGW08Wz2UvS0rziGIKFcp/0EtaEPHf5wxzVhxkXzSqZxDm7nTAmBsAsXryul8ZIs93xsV0GhLvNDItkyjY3FMw5saekFwKu292C/uE3so3KsGdOQE+8scHEBOxGV9kVZ2kx7V6st6487N2BvnjSp6XmesHwN0OBZiOSkSHqBG+ri8Moid5Qu/DNoh3EOw3ToseG/aKXaVecfSw8i1+fkqpeW8OIFW4Ct8BchfP80y7p/OONIShCUIi9eNVKJFmq2S+QX8PPqgdgVFLJg3yN05bNZ+OD2vWcXFrMVbmH9XC0YM+1b9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tUiagk4KV0+An7OkO3ak17Ov48u1WNwtjbdTnhxl0OA=;
- b=qy81XSWWGk7s649YSFUCr7oNy0VmbTowdVWU4eTAZi4VMik8bbqP6BV9/pmw6VhtXQIgvwPbDg1c/PRAavE5y/wSqji45HonXLEOVcDoT4yeM/u6UtnoGBxpTbcQg9bhE6+jNU3KkoxRChJikHLQa0DNyrBm9r+zWoZEwyVz0iY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com (2603:10a6:150:22::11)
- by PA4PR04MB9318.eurprd04.prod.outlook.com (2603:10a6:102:2a5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
- 2022 22:54:33 +0000
-Received: from GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::ef72:e2bf:2ff6:a953]) by GV1PR04MB9071.eurprd04.prod.outlook.com
- ([fe80::ef72:e2bf:2ff6:a953%6]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
- 22:54:33 +0000
-From:   Han Xu <han.xu@nxp.com>
-To:     broonie@kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     han.xu@nxp.com
-Subject: [PATCH 2/2] dt-bindings: spi: spi-fsl-lpspi: add num-cs for lpspi
-Date:   Tue,  6 Dec 2022 16:54:10 -0600
-Message-Id: <20221206225410.604482-2-han.xu@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221206225410.604482-1-han.xu@nxp.com>
-References: <20221206225410.604482-1-han.xu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY5PR13CA0001.namprd13.prod.outlook.com
- (2603:10b6:a03:180::14) To GV1PR04MB9071.eurprd04.prod.outlook.com
- (2603:10a6:150:22::11)
+        Tue, 6 Dec 2022 17:56:34 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D194A056;
+        Tue,  6 Dec 2022 14:56:33 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so19413301pje.5;
+        Tue, 06 Dec 2022 14:56:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aCtW+MA1B2sGv6cbDKFnxVnKAKT7UQXyOCBUBu2RYBQ=;
+        b=m+ogv/Qvnsr9dPyrYaqWb9CWuyH0R+XVDxQFi135JzdHs3k1U3H5kel3PcvqiQalDr
+         gxz7txQo94fNHfVP/NYV7cyfj0J/ENrfPArB/+SsTod8Ie3k1NZF0GsajssOtzaeSoAe
+         0adGYLiwK7UHoQYblzUd3OeDiHDm2yIOmOoQg8r4AuyiNaBpZIoGyvVVPi7AhzUGv0Jd
+         O8nJ0o+AOAo6gtOUGCe4ct6Tn2gQGIbNBv4Se/FL4NndhwcCZDIdpGri78BYFrGoAV5D
+         H3N73cLJnxqN6QwK5Em+/uHG1WsghkDQtFKiUyzSaOcJnL0GfQOiaNnjl9eyUxJy2LOu
+         3E8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aCtW+MA1B2sGv6cbDKFnxVnKAKT7UQXyOCBUBu2RYBQ=;
+        b=2ZZ3dU62DVDFlGXxWBd0/d0tZ2wSnJWtKoeFk+JPNh3UETwbIVPhtlNS0jUxJTkRhH
+         qtesf7WLvn25eUrFNBmGStWpiGzlojnizALk+ecX3f3vpqTOpwTlQ26WczOseYDb7yLg
+         PPPMihJ5zIaL8FSvUQTMpgpfLUwUKkzUMfWsZelXTvMZNl500RyaoVSk2oguQFNuFooc
+         QoN1r3UvycOpT8lV4UZ2sWwgO9rabvouscMxq+rQh76Q3siy8Al6TSUfVXUDBvSSH7lY
+         O/hvtRlomnP7phbOU4+z6IxjVC0cH6llXy9SotxxEK/VtSiA0jSK+DG3DCC8MeZw6Mev
+         wyAg==
+X-Gm-Message-State: ANoB5pnHjfVX/G8TK8EhgrUxVFcCLXiHx08fqkMZ23PEcncVYxaxBhIR
+        jVYvl5fwpmRf2E4hvYq/FNs9satwezg=
+X-Google-Smtp-Source: AA0mqf7+fxL1WGmNTHR1EPWdHlIa1qMLmpJjTGVsj11j8AMLbtFxDUVMUbm4DYiE0mlZumljT5KTRQ==
+X-Received: by 2002:a17:902:cccf:b0:187:2f28:bfd6 with SMTP id z15-20020a170902cccf00b001872f28bfd6mr602131ple.21.1670367392639;
+        Tue, 06 Dec 2022 14:56:32 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001872999f58esm13103290plk.189.2022.12.06.14.56.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 14:56:32 -0800 (PST)
+Message-ID: <f54802a3-cf2f-8746-2273-0ae462a7f4eb@gmail.com>
+Date:   Wed, 7 Dec 2022 07:56:27 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV1PR04MB9071:EE_|PA4PR04MB9318:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5eed93a3-a964-494f-8ac3-08dad7dcd74a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: orw352FdmjAAwZ7sWAQFwHhFZrTyF2pUpir92FPpPI/9PoPl0Y50G253OdD34DxlpD5A/7cDj07suw03Y9Q+Vz3+L8Her7YMwiozlhdXPLZPSMlucUiYdWHatcngAXIu29RwjsWRs8YVr2FBgaej4OU+vOLZPJiRo9tWYfL/kE8wBYNIek0CB9WMbLLkeD9acfVyxgtsk26ObWeOaYOYInmJkr4Dw9uRQ7eS5a5bOvhUECFkiPDu1sNWXD873C3QP3HFALnpzDtm1iufuuOIrkKHvwNyKL+At4hOfVZ4ljqg+ZDwCpTlIFd9GD0/i4i9oYB4JHE8gbA9YsH9kRRCMptXTyIW40hXj9UmO1gB21IJ8uv0c+ux/yxXGuy0uCSikcSQEtfbU78Cpj4ye9FCScNWn36yJq2/A6SAVYcrAq6N4TXBIAGO0BAXLsJWkO9B0jOzJ9q/fo5W6trJykwp0x2g9bO4xYUbfeSsGe3mmnrfFHGH66A1p94RAz/ft5gl4Hpl2jLLyIErfwETvKOu9cU0X3wDh06f0bZ4pJSlgoRX7ioa9hXGM4nEtMeOaaOax43X8BesHJhsELNVZ0XnrNqSIVTp51ks3Xw2bN21RAq9Ib6yFl3MtNE50Ciuqy/DZwHPhAnsqDDmBYvO4or4gPXsLlF7HTA1gAc4ZeTWc2GupAsdRrPVwnHxxcW1xRsY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9071.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(366004)(451199015)(83380400001)(38100700002)(38350700002)(86362001)(8936002)(44832011)(5660300002)(4744005)(4326008)(2906002)(41300700001)(478600001)(8676002)(26005)(6506007)(52116002)(1076003)(186003)(6512007)(6666004)(316002)(2616005)(66556008)(66476007)(6486002)(66946007)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WuRwE1NH9yOaEvoxjtooH+EuASFYArVuaTjMvlE0XkvLF87iEvVEJpyfuU/F?=
- =?us-ascii?Q?7cah0PXFmkedCb6d3t0hWLh+c4Yr3poQ6UXJuCXklS4f9bMAvsEYkc7jDATV?=
- =?us-ascii?Q?+/145L34NuzggG4Ihsj4fKk656FwbnveM3Sxu3XMHPuljT6Kk+CRymY5mvZl?=
- =?us-ascii?Q?n9G6CUTpaZwBGdyzTpppfNOL1JeJXSg8S3cVa58FenEdwMeHq1B6pfvSqcDZ?=
- =?us-ascii?Q?8aG2FBw9OCVuUtmebPNRtokcs2dhQvFFNglwk1lvsnCBTsGm1gt46iHgvN2z?=
- =?us-ascii?Q?TjN12RbqvfsryN025ECwyLV7gUNKUt4x4lIpa5Tp9ainxglbJELZgOsM/1XP?=
- =?us-ascii?Q?xnqOHqLgprWhQwEyoqWpPQM+Tsg/hgd+2PuQQCnA2j7jpqZNcEJSlzzljudb?=
- =?us-ascii?Q?BYfXSJaZXeO2ValLc4AYOd9t6i/aq8KYHnskl7rBPUZHko51JmKX1+pHexhf?=
- =?us-ascii?Q?1nqKCzUkZWAl0xrYPmDFJpWkGr8B4wHCZFR5XjLJ1IQHO/bs7WQnbQKIPmCN?=
- =?us-ascii?Q?HXgV1iTrwKFK5jv37j/Fzx/UozF8q6s4AHh8CgFGKE0GI4+lSS91qnCCSG8O?=
- =?us-ascii?Q?YcXzl7uvVKFN9zZEGYNO2pBi9EenT82WifIC4z6EKCgcFs431VTSIyy8QnU4?=
- =?us-ascii?Q?pInPwqolqENsoOALwPVWE17gOetia+K/8x7PbSi96sbJR5Alj4dzMiONaWNL?=
- =?us-ascii?Q?D2KAw4Pnoo/ujdOQkE+5y6EZ9QYuzJ2/SBr50p1S88Sr7X7p17zmhHASx9ZF?=
- =?us-ascii?Q?iUKS35PgR7UJnvi37j1IVuLh5UaS9lQnwUD0gSbFvYTd+xYp2Ox3KDqzIx3h?=
- =?us-ascii?Q?vwGNawbV3YNFqW8Xd0kqeeDnRbj0CxDLFxThvucDImwPMZfz4m6Hq5MMYihH?=
- =?us-ascii?Q?lcUHZnVZhfE/9+ylq1YlHSXHNfoWNfjnPMX4leVmBuQdUJ36nn7H0Kuytzc+?=
- =?us-ascii?Q?YeqB90w4topTICNs1j25RDrpAV1SZh9LgPsDMt7zLVYbu/8ABxsmWK4X1frr?=
- =?us-ascii?Q?uWgEO67EgQ5Zv/GoN+AcpHtR2eUGR2DPBfuSPLEcXZYjSO55Zq0VKGxH62Io?=
- =?us-ascii?Q?SOqivuXmf5X8fj5grnxBiNO4i2OVpdWbPEpijX+Xksq+c/8Zo7vYm6RkywzR?=
- =?us-ascii?Q?c7KmG6jkWTUjtOi61FGgnYP1TdOk2r6BGpOBvtXCl1YYc9KBcj+mUXjKoYey?=
- =?us-ascii?Q?Zhq6tkYSdY1CuRKCqR2xsdC7HDKV47T4Fu9i+1q3gKvbCTHiUtFEQ1xtYpKc?=
- =?us-ascii?Q?srq27La+Aox7DWIHuV1jt7ya2f2eG/HMnl3wKTtA5oGMixcZGU9ZB2HbFqGa?=
- =?us-ascii?Q?dwqNJOedaiElj0EYznxESgKzu+jwpqcscGoN/hslTi0PcegITu0Mbg/EprlS?=
- =?us-ascii?Q?GtxrJJeggP30PLMk9+Ap1LWecUlQfqKS38u0nRABgwwSKvneEP/degwU6dRC?=
- =?us-ascii?Q?x11IU2uC+fDOAuZqHFhB9o4QHyOJPQjgRtma0Kw2HfsDfu10Z4gHcjkBaF3N?=
- =?us-ascii?Q?B5yj103H24JPH3WKEq/vTJVXs+Rr0VF+gCm2Azgd98bvGOC2wpr8tjOBS0ne?=
- =?us-ascii?Q?h+oBmGe7y1o6ZzKGjh4=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5eed93a3-a964-494f-8ac3-08dad7dcd74a
-X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9071.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 22:54:33.6265
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EUejZxw1asc6mw7gLiZEhRhZz7jkX01NI/Eo5qCyzw6YK99LumZIklG0W8pwEEFa
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB9318
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 1/2] docs: Move rustdoc output, cross-reference it
+To:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net,
+        ojeda@kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu, konstantin@linuxfoundation.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20221201204814.2141401-1-carlos.bilbao@amd.com>
+ <20221206153151.771038-1-carlos.bilbao@amd.com>
+ <20221206153151.771038-2-carlos.bilbao@amd.com>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20221206153151.771038-2-carlos.bilbao@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,38 +79,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add num-cs property to support multiple cs for lpspi. This property is
-optional.
+On Tue, 6 Dec 2022 09:31:50 -0600, Carlos Bilbao wrote:
+> Generate rustdoc documentation with the rest of subsystem's documentation
+> in Documentation/output. Add a cross reference to the generated rustdoc in
+> Documentation/rust/index.rst.
+> 
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
 
-Signed-off-by: Han Xu <han.xu@nxp.com>
----
- Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
 
-diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-index 8b44284d30c6..94caa2b7e241 100644
---- a/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-fsl-lpspi.yaml
-@@ -56,6 +56,13 @@ properties:
-       this property to re-config the chipselect value in the LPSPI driver.
-     type: boolean
- 
-+  num-cs:
-+    description:
-+      number of chip selects.
-+    minimum: 1
-+    maximum: 2
-+    default: 1
-+
- required:
-   - compatible
-   - reg
-@@ -80,4 +87,5 @@ examples:
-         clock-names = "per", "ipg";
-         spi-slave;
-         fsl,spi-only-use-cs1-sel;
-+        num-cs = <2>;
-     };
--- 
-2.25.1
-
+> ---
+>  Documentation/rust/index.rst |  5 +++++
+>  rust/Makefile                | 15 +++++++++------
+>  2 files changed, 14 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
+> index 4ae8c66b94fa..416d6b3de1e4 100644
+> --- a/Documentation/rust/index.rst
+> +++ b/Documentation/rust/index.rst
+> @@ -6,6 +6,11 @@ Rust
+>  Documentation related to Rust within the kernel. To start using Rust
+>  in the kernel, please read the quick-start.rst guide.
+>  
+> +.. only:: html
+> +
+> +	If this documentation includes rustdoc-generated HTML, the entry
+> +	point can be found `here <rustdoc/kernel/index.html>`_.
+> +
+>  .. toctree::
+>      :maxdepth: 1
+>  
+> diff --git a/rust/Makefile b/rust/Makefile
+> index 7700d3853404..080c07048065 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -1,5 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +# Where to place rustdoc generated documentation
+> +RUSTDOC_OUTPUT = $(objtree)/Documentation/output/rust/rustdoc
+> +
+>  always-$(CONFIG_RUST) += target.json
+>  no-clean-files += target.json
+>  
+> @@ -58,7 +61,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+>  	OBJTREE=$(abspath $(objtree)) \
+>  	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
+>  		$(rustc_target_flags) -L$(objtree)/$(obj) \
+> -		--output $(objtree)/$(obj)/doc \
+> +		--output $(RUSTDOC_OUTPUT) \
+>  		--crate-name $(subst rustdoc-,,$@) \
+>  		@$(objtree)/include/generated/rustc_cfg $<
+>  
+> @@ -75,15 +78,15 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+>  # and then retouch the generated files.
+>  rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
+>      rustdoc-alloc rustdoc-kernel
+> -	$(Q)cp $(srctree)/Documentation/images/logo.svg $(objtree)/$(obj)/doc
+> -	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(objtree)/$(obj)/doc
+> -	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
+> +	$(Q)cp $(srctree)/Documentation/images/logo.svg $(RUSTDOC_OUTPUT)
+> +	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(RUSTDOC_OUTPUT)
+> +	$(Q)find $(RUSTDOC_OUTPUT) -name '*.html' -type f -print0 | xargs -0 sed -Ei \
+>  		-e 's:rust-logo\.svg:logo.svg:g' \
+>  		-e 's:rust-logo\.png:logo.svg:g' \
+>  		-e 's:favicon\.svg:logo.svg:g' \
+>  		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
+>  	$(Q)echo '.logo-container > img { object-fit: contain; }' \
+> -		>> $(objtree)/$(obj)/doc/rustdoc.css
+> +		>> $(RUSTDOC_OUTPUT)/rustdoc.css
+>  
+>  rustdoc-macros: private rustdoc_host = yes
+>  rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
+> @@ -141,7 +144,7 @@ quiet_cmd_rustdoc_test = RUSTDOC T $<
+>  		@$(objtree)/include/generated/rustc_cfg \
+>  		$(rustc_target_flags) $(rustdoc_test_target_flags) \
+>  		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
+> -		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
+> +		-L$(objtree)/$(obj)/test --output $(RUSTDOC_OUTPUT) \
+>  		--crate-name $(subst rusttest-,,$@) $<
+>  
+>  # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
