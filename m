@@ -2,147 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185166449A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9DF6449B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235544AbiLFQrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:47:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
+        id S235701AbiLFQs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:48:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235487AbiLFQq6 (ORCPT
+        with ESMTP id S235673AbiLFQsR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:46:58 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2078.outbound.protection.outlook.com [40.107.94.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2484DDB;
-        Tue,  6 Dec 2022 08:46:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xwr5X6rcfY2T8I3DsDSvgeCpTPxg2c8maeXjVSXKZZfaO2NzSfjwE5C0F/GmAwNv3+w38xTwOhWjaMICrR0PvxGMs9fzoCl7HA8lUCIYLKaWOV0xizLG6fMZA4ljn4WDV1SmQMXhHwXXzaP+WZJKL0+mEKvoz7N2Y9nr8S2h1HFpDX80MrG/AGCQEaX/3aahUDAFZQIoHaLS6qLpNDi0Ue1H8Gmz6U1x8wh3TgIEwbBrdpXthgWMwJBRBH50Ctnnk4zGB1Yh7VeND6F9Jol2OV5hdR7QDqIOR0FSQyvs9AU+tTXcgDE51zX/NvhJN3i4gRmK02U9oDdu4Y0vR06TCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WGPsuXe2gFZrxuX48BJa31YhhpbmMtg/f8EzWCKPWms=;
- b=fdw7gX70NHjre1+3AY5m1DuWRDUeE2Gq3/6Y1UrLnzuDdW6c0mgXfZ4+JaMspZI2pAqdyojRrUyok4qVsnXvbbQr/br14VZ2aHVATjGSId5SUw9gDsFGh88WGLRtN7IXsj3EeuNnwLCWBGhQm+Jq7CQm81O58KfaV+w8Y6i51YL1uKzicBVlM7yoPzaTY3VGanZaWYgrN2bVuTMobuI0Q8MQK7EznkfjkV0cLvPKPAg5NS/jDUW1dAZOgAL7vX4QdXz6/n3aogoIOsHPcfK7WlgOl9gebJSi6Z1D8N273vwbWnVgRpSMJhzwUqx2L5Nga9xlbq7H1Uqtl/t4GiI9EQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WGPsuXe2gFZrxuX48BJa31YhhpbmMtg/f8EzWCKPWms=;
- b=H6Olb+V5C1SoHM0z6sKgUkDz+PDkuZMd7hxnSydS4w1zlbEyIaBvHXa6ocLuzryyIcMdYbhYI61HKafk20S/blxThlyJHv9bloglTYZYCGCDhVesSOGOtueBwdKB+2fTOjrrMPNxVODncQZSz46O/yM0MCzQ+oaJEbhypDljsxPLxTHEAFweFFyD16H9CgDAVFHi+sH62iQQKxd9VhSy8iMZUQ6PIqxESOZdIeuR/fjSUwxn9XvFOjPeBYjOoccqMNpFjMfcCdC6c8noEowbANMpBvMQgJKtYp/554RLz6lTdmU5p2/IFOx8yMKfxhqzFNmjfiQ+KY48XPcOCF6ZPQ==
-Received: from DS7PR03CA0261.namprd03.prod.outlook.com (2603:10b6:5:3b3::26)
- by CH2PR12MB4037.namprd12.prod.outlook.com (2603:10b6:610:7a::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
- 2022 16:46:54 +0000
-Received: from DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b3:cafe::78) by DS7PR03CA0261.outlook.office365.com
- (2603:10b6:5:3b3::26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
- Transport; Tue, 6 Dec 2022 16:46:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT104.mail.protection.outlook.com (10.13.173.232) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5901.14 via Frontend Transport; Tue, 6 Dec 2022 16:46:54 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 6 Dec 2022
- 08:46:47 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 6 Dec 2022
- 08:46:47 -0800
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36 via Frontend
- Transport; Tue, 6 Dec 2022 08:46:47 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.15 000/123] 5.15.82-rc2 review
-In-Reply-To: <20221206124052.595650754@linuxfoundation.org>
-References: <20221206124052.595650754@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 6 Dec 2022 11:48:17 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B03F59B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:47:54 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id m18so6088248eji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 08:47:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2RtLWoKz9SFqCBGrlUyav70jinIYk98MmWcANd4GON4=;
+        b=hew5a7eQbeOEjPyiVTK5FfOsU4dJp/NQG+o092fHXOvHv+Q9iZ3lROpIBimZkkkG+y
+         yQ1M/CECHZrnZNoCrWv7WfZjcRFM4Z6/c/nPGkr7Z8fS2udU53zjzhU1Kn119BiRWPLI
+         ZjpJ/reAU5M4fZGB37oKrIlu6GAXzkoNqNskuG3Fa2yw7hkpl1zSVBtrl5vh6euZzqXt
+         /qqIawfOYcl0tG1rM4fsRcHnh4xOw/Z4//7Wrnd8DuTGDf2fNeXSPsI5r+moMPWN6vaG
+         P3DdypU/ykXrMbCN8GeyLnbvY4l25Y8GQJdokO4vi3f4NHt5M9M/vPnqVxP7LEviGNgK
+         3Slg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2RtLWoKz9SFqCBGrlUyav70jinIYk98MmWcANd4GON4=;
+        b=KPp1dRq6iGm9ct58TAmG+2ZQfRJyhsNtSzbOxKOcFRUOc9cbdsKHOgYunKJh4U+Q+3
+         f3ICta0q+DGOgq0+zYp3nbAjR1zty6Yu7y7//T8PkspZQG2oPWrz4G48mxu3eU1LPiKH
+         r4aBcX8SHJZYmtjW1bpOGYVtqn5yqGkkfiabMF6l1+9lFPki9x4VuFqJQN6KvaPZKs5S
+         V6V4x4WtGFyEBYf5ECN9I+QbICbCVZhM9mYI+wA9REfsE8WHVMGm3DHfcqxeL3td41Al
+         rOxYWn9+zZFh490RELWZEZ0TFzDW1Wz+JXlLHFXitw/SrhySaORGY3Qhm81peKze0kPp
+         Ambg==
+X-Gm-Message-State: ANoB5plptPJtTNxX6O7FzuqBjNGTC8IVYV2aqqGRjt+/jUNJ0ZSE+hx7
+        xd0wVuvi/0ecTBDxkCV0HmzgFA==
+X-Google-Smtp-Source: AA0mqf56sFW3JBmKhIfh1wwti1zbhdILBCyhwhoSUFW/kpmfXvnVKXku0Rb1FKNSCoQ1pPbtyBhjHw==
+X-Received: by 2002:a17:906:3413:b0:7c0:e6d7:92ad with SMTP id c19-20020a170906341300b007c0e6d792admr9683524ejb.419.1670345273242;
+        Tue, 06 Dec 2022 08:47:53 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id ga18-20020a170906b85200b00781be3e7badsm7540397ejb.53.2022.12.06.08.47.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 08:47:52 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:47:51 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     wangchuanlei <wangchuanlei@inspur.com>
+Cc:     echaudro@redhat.com, alexandr.lobakin@intel.com, pabeni@redhat.com,
+        pshelar@ovn.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, wangpeihui@inspur.com, netdev@vger.kernel.org,
+        dev@openvswitch.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [PATCH v8 net-next] net: openvswitch: Add support to
+ count upcall packets
+Message-ID: <Y49yN/lZTwn9+5Bd@nanopsycho>
+References: <20221206092905.4031985-1-wangchuanlei@inspur.com>
 MIME-Version: 1.0
-Message-ID: <139735d0-7d95-4a9b-8da4-933c7e86aea8@rnnvmail203.nvidia.com>
-Date:   Tue, 6 Dec 2022 08:46:47 -0800
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT104:EE_|CH2PR12MB4037:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f091663-6c88-4cf6-4ee3-08dad7a97b48
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V5iaWQw5oQJ8avcoLGpZlbayvHlfEucWjdKaDg4yAr6zeykSw9Gr0XWxufaBJUVvH0wR0PB49SKoAyNgsWMUAeVoRzPwpFLQ5cyqYghQJJfssMupxiHjZFDU1jCh0v9aR6ilANEora6TD5qacxyll69PRYJrhUbiYkM5Ep+JyIU6z+WWpcTbbisK6WgGqlIF4CPG0863V5WyBEkGKMzeOwCkytQuZiV52TgdxLTje9DUOQgpx6iNTL46izxKdFATXYcOnNeKAnMhz1mNfhEsNUTKaQb145nSYpHgzXnN5JRs8bXnM1iqEvoxZC43C150HuMknWo+6rbmwiPW6wEWLY2VAjKF8uEXX80SoOyRloB83AJUYIPJBLTYGUt79yqwbACXepDneheYh8ww3NQpHps4KtrZIraiX2tcfWy0xnY79lkeI4JxZLswQqX1fY3CQqUjzDQLzMwIxv19yt/UO5R4qmlHtn6uxFpLQEsZZJqNVYEqK1T9h5YJqX1RlQkqVgDWGf6XQttaxS51KGvEPr2KaO/tByZM3Ufd7kYd3M/JkQjeu9H1M6KDwV0sd5L4rWbC1YZDL8VMI+rHlyAuRMVJOVNtG+f6A69v/T1snDpP+ranOCpZa8Sz7ZkYz6uheSFSImo914v23vnR0H/zYro4I/Uki9BaT9jxE0CmyJHaWEH3MSWP3Mr+MuSayGBr9ir2lVPMZ6CoRTAOCEcTizAm3pi4G5foLik7MeebXgNDnBtRzI0Pfkp0i+A0+1omVsJcX9ThZpuu1jZ9cZSE86xs+HJYlJe+7JRLzNY9olU=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(136003)(376002)(451199015)(36840700001)(46966006)(40470700004)(8676002)(966005)(478600001)(36860700001)(26005)(82310400005)(2906002)(8936002)(70586007)(86362001)(41300700001)(40480700001)(31696002)(316002)(54906003)(40460700003)(7636003)(4326008)(70206006)(6916009)(7416002)(5660300002)(82740400003)(356005)(31686004)(47076005)(336012)(426003)(186003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 16:46:54.2565
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f091663-6c88-4cf6-4ee3-08dad7a97b48
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT104.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4037
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206092905.4031985-1-wangchuanlei@inspur.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Dec 2022 13:42:25 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.82 release.
-> There are 123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Tue, Dec 06, 2022 at 10:29:05AM CET, wangchuanlei@inspur.com wrote:
+>Add support to count upall packets, when kmod of openvswitch
+>upcall to userspace , here count the number of packets for
+
+s/userspace , here/userspace, here/
+
+>upcall succeed and failed, which is a better way to see how
+>many packets upcalled to userspace(ovs-vswitchd) on every
+>interfaces.
+>
+>Here modify format of code used by comments of v7.
+>
+>Changes since v4 - v7:
+>- optimize the function used by comments
+>
+>Changes since v3:
+>- use nested NLA_NESTED attribute in netlink message
+>
+>Changes since v2:
+>- add count of upcall failed packets
+>
+>Changes since v1:
+>- add count of upcall succeed packets
+>
+>Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
+>---
+> include/uapi/linux/openvswitch.h | 14 +++++++++
+> net/openvswitch/datapath.c       | 41 ++++++++++++++++++++++++++
+> net/openvswitch/vport.c          | 50 ++++++++++++++++++++++++++++++++
+> net/openvswitch/vport.h          | 16 ++++++++++
+> 4 files changed, 121 insertions(+)
+>
+>diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
+>index 94066f87e9ee..8422ebf6885b 100644
+>--- a/include/uapi/linux/openvswitch.h
+>+++ b/include/uapi/linux/openvswitch.h
+>@@ -277,11 +277,25 @@ enum ovs_vport_attr {
+> 	OVS_VPORT_ATTR_PAD,
+> 	OVS_VPORT_ATTR_IFINDEX,
+> 	OVS_VPORT_ATTR_NETNSID,
+>+	OVS_VPORT_ATTR_UPCALL_STATS,
+> 	__OVS_VPORT_ATTR_MAX
+> };
 > 
-> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
-> Anything received after that time might be too late.
+> #define OVS_VPORT_ATTR_MAX (__OVS_VPORT_ATTR_MAX - 1)
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.82-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
+>+/**
+>+ * enum ovs_vport_upcall_attr - attributes for %OVS_VPORT_UPCALL* commands
+>+ * @OVS_VPORT_UPCALL_SUCCESS: 64-bit upcall success packets.
+>+ * @OVS_VPORT_UPCALL_FAIL: 64-bit upcall fail packets.
+>+ */
+>+enum ovs_vport_upcall_attr {
+>+	OVS_VPORT_UPCALL_SUCCESS,
+>+	OVS_VPORT_UPCALL_FAIL,
+
+Should be OVS_VPORT_UPCALL_ATTR_*
+
+
+>+	__OVS_VPORT_UPCALL_MAX
+>+};
+>+
+>+#define OVS_VPORT_UPCALL_MAX (__OVS_VPORT_UPCALL_MAX - 1)
+>+
+> enum {
+> 	OVS_VXLAN_EXT_UNSPEC,
+> 	OVS_VXLAN_EXT_GBP,	/* Flag or __u32 */
+>diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
+>index c8a9075ddd0a..1d379d943e00 100644
+>--- a/net/openvswitch/datapath.c
+>+++ b/net/openvswitch/datapath.c
+>@@ -209,6 +209,26 @@ static struct vport *new_vport(const struct vport_parms *parms)
+> 	return vport;
+> }
 > 
-> thanks,
+>+static void ovs_vport_update_upcall_stats(struct sk_buff *skb,
+>+					  const struct dp_upcall_info *upcall_info,
+>+					  bool upcall_result)
+>+{
+>+	struct vport *p = OVS_CB(skb)->input_vport;
+>+	struct vport_upcall_stats_percpu *stats;
+>+
+>+	if (upcall_info->cmd != OVS_PACKET_CMD_MISS &&
+>+	    upcall_info->cmd != OVS_PACKET_CMD_ACTION)
+>+		return;
+>+
+>+	stats = this_cpu_ptr(p->upcall_stats);
+>+	u64_stats_update_begin(&stats->syncp);
+>+	if (upcall_result)
+>+		u64_stats_inc(&stats->n_success);
+>+	else
+>+		u64_stats_inc(&stats->n_fail);
+>+	u64_stats_update_end(&stats->syncp);
+>+}
+>+
+> void ovs_dp_detach_port(struct vport *p)
+> {
+> 	ASSERT_OVSL();
+>@@ -216,6 +236,9 @@ void ovs_dp_detach_port(struct vport *p)
+> 	/* First drop references to device. */
+> 	hlist_del_rcu(&p->dp_hash_node);
 > 
-> greg k-h
+>+	/* Free percpu memory */
+>+	free_percpu(p->upcall_stats);
+>+
+> 	/* Then destroy it. */
+> 	ovs_vport_del(p);
+> }
+>@@ -305,6 +328,8 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_buff *skb,
+> 		err = queue_userspace_packet(dp, skb, key, upcall_info, cutlen);
+> 	else
+> 		err = queue_gso_packets(dp, skb, key, upcall_info, cutlen);
+>+
+>+	ovs_vport_update_upcall_stats(skb, upcall_info, !err);
+> 	if (err)
+> 		goto err;
+> 
+>@@ -1825,6 +1850,12 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+> 		goto err_destroy_portids;
+> 	}
+> 
+>+	vport->upcall_stats = netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+>+	if (!vport->upcall_stats) {
+>+		err = -ENOMEM;
+>+		goto err_destroy_portids;
+>+	}
+>+
+> 	err = ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
+> 				   info->snd_seq, 0, OVS_DP_CMD_NEW);
+> 	BUG_ON(err < 0);
+>@@ -2097,6 +2128,9 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
+> 			  OVS_VPORT_ATTR_PAD))
+> 		goto nla_put_failure;
+> 
+>+	if (ovs_vport_get_upcall_stats(vport, skb))
+>+		goto nla_put_failure;
+>+
+> 	if (ovs_vport_get_upcall_portids(vport, skb))
+> 		goto nla_put_failure;
+> 
+>@@ -2278,6 +2312,12 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
+> 		goto exit_unlock_free;
+> 	}
+> 
+>+	vport->upcall_stats = netdev_alloc_pcpu_stats(struct vport_upcall_stats_percpu);
+>+	if (!vport->upcall_stats) {
+>+		err = -ENOMEM;
+>+		goto exit_unlock_free;
+>+	}
+>+
+> 	err = ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
+> 				      info->snd_portid, info->snd_seq, 0,
+> 				      OVS_VPORT_CMD_NEW, GFP_KERNEL);
+>@@ -2507,6 +2547,7 @@ static const struct nla_policy vport_policy[OVS_VPORT_ATTR_MAX + 1] = {
+> 	[OVS_VPORT_ATTR_OPTIONS] = { .type = NLA_NESTED },
+> 	[OVS_VPORT_ATTR_IFINDEX] = { .type = NLA_U32 },
+> 	[OVS_VPORT_ATTR_NETNSID] = { .type = NLA_S32 },
+>+	[OVS_VPORT_ATTR_UPCALL_STATS] = { .type = NLA_NESTED },
 
-All tests passing for Tegra ...
+Why do you need this?
 
-Test results for stable-v5.15:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    114 tests:	114 pass, 0 fail
 
-Linux version:	5.15.82-rc2-g9269e46bc838
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
+> };
+> 
+> static const struct genl_small_ops dp_vport_genl_ops[] = {
+>diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
+>index 82a74f998966..cdc649dae12c 100644
+>--- a/net/openvswitch/vport.c
+>+++ b/net/openvswitch/vport.c
+>@@ -284,6 +284,56 @@ void ovs_vport_get_stats(struct vport *vport, struct ovs_vport_stats *stats)
+> 	stats->tx_packets = dev_stats->tx_packets;
+> }
+> 
+>+/**
+>+ *	ovs_vport_get_upcall_stats - retrieve upcall stats
+>+ *
+>+ * @vport: vport from which to retrieve the stats.
+>+ * @skb: sk_buff where upcall stats should be appended.
+>+ *
+>+ * Retrieves upcall stats for the given device.
+>+ *
+>+ * Must be called with ovs_mutex or rcu_read_lock.
+>+ */
+>+int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb)
+>+{
+>+	struct nlattr *nla;
+>+	int i;
+>+
+>+	__u64 tx_success = 0;
+>+	__u64 tx_fail = 0;
+>+
+>+	for_each_possible_cpu(i) {
+>+		const struct vport_upcall_stats_percpu *stats;
+>+		unsigned int start;
+>+
+>+		stats = per_cpu_ptr(vport->upcall_stats, i);
+>+		do {
+>+			start = u64_stats_fetch_begin(&stats->syncp);
+>+			tx_success += u64_stats_read(&stats->n_success);
+>+			tx_fail += u64_stats_read(&stats->n_fail);
+>+		} while (u64_stats_fetch_retry(&stats->syncp, start));
+>+	}
+>+
+>+	nla = nla_nest_start_noflag(skb, OVS_VPORT_ATTR_UPCALL_STATS);
+>+	if (!nla)
+>+		return -EMSGSIZE;
+>+
+>+	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_SUCCESS, tx_success,
+>+			      OVS_VPORT_ATTR_PAD)) {
+>+		nla_nest_cancel(skb, nla);
+>+		return -EMSGSIZE;
+>+	}
+>+
+>+	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_FAIL, tx_fail,
+>+			      OVS_VPORT_ATTR_PAD)) {
+>+		nla_nest_cancel(skb, nla);
+>+		return -EMSGSIZE;
+>+	}
+>+	nla_nest_end(skb, nla);
+>+
+>+	return 0;
+>+}
+>+
+> /**
+>  *	ovs_vport_get_options - retrieve device options
+>  *
+>diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
+>index 7d276f60c000..3af18b5faa95 100644
+>--- a/net/openvswitch/vport.h
+>+++ b/net/openvswitch/vport.h
+>@@ -32,6 +32,8 @@ struct vport *ovs_vport_locate(const struct net *net, const char *name);
+> 
+> void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
+> 
+>+int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb);
+>+
+> int ovs_vport_set_options(struct vport *, struct nlattr *options);
+> int ovs_vport_get_options(const struct vport *, struct sk_buff *);
+> 
+>@@ -65,6 +67,7 @@ struct vport_portids {
+>  * @hash_node: Element in @dev_table hash table in vport.c.
+>  * @dp_hash_node: Element in @datapath->ports hash table in datapath.c.
+>  * @ops: Class structure.
+>+ * @upcall_stats: Upcall stats of every ports.
+>  * @detach_list: list used for detaching vport in net-exit call.
+>  * @rcu: RCU callback head for deferred destruction.
+>  */
+>@@ -78,6 +81,7 @@ struct vport {
+> 	struct hlist_node hash_node;
+> 	struct hlist_node dp_hash_node;
+> 	const struct vport_ops *ops;
+>+	struct vport_upcall_stats_percpu __percpu *upcall_stats;
+> 
+> 	struct list_head detach_list;
+> 	struct rcu_head rcu;
+>@@ -137,6 +141,18 @@ struct vport_ops {
+> 	struct list_head list;
+> };
+> 
+>+/**
+>+ * struct vport_upcall_stats_percpu - per-cpu packet upcall statistics for
+>+ * a given vport.
+>+ * @n_success: Number of packets that upcall to userspace succeed.
+>+ * @n_fail:    Number of packets that upcall to userspace failed.
+>+ */
+>+struct vport_upcall_stats_percpu {
+>+	struct u64_stats_sync syncp;
+>+	u64_stats_t n_success;
+>+	u64_stats_t n_fail;
+>+};
+>+
+> struct vport *ovs_vport_alloc(int priv_size, const struct vport_ops *,
+> 			      const struct vport_parms *);
+> void ovs_vport_free(struct vport *);
+>-- 
+>2.27.0
+>
