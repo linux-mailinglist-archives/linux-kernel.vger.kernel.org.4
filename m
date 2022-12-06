@@ -2,112 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8351643E89
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E8F643E8E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:28:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233319AbiLFI1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54116 "EHLO
+        id S233467AbiLFI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiLFI07 (ORCPT
+        with ESMTP id S230437AbiLFI2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:26:59 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4C9FAE5;
-        Tue,  6 Dec 2022 00:26:59 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so3110096pjr.3;
-        Tue, 06 Dec 2022 00:26:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xW0qv9B5+yGxi1H2usCQCP9mQhDaha3ttXysqpYFwiM=;
-        b=RWqjk/BXFmfFYxDsYol04Jmm0CeChfX2tO64fKfWjMuGG5AxcA9H8uf4Ksnf//U/qH
-         HckTmJT+rsecvvKOSoTVktuED/KpsSE0gr9OAHrVl3WcNNWOrkH9QXBdh4U52YI6X0X4
-         YgPMbCfCD0X5WDhBoA/XIsbUs/nyz9SIAx08tfv4gCc9p86CgJTN1toSswKThMRLwLyp
-         4/+r64DJgyQU5hknC7ty6rna8kIBffaz0xvYepM7cImKaUFPXpF2ws9Zih9fmTB1RhIP
-         GRrnt/L9GLLRQOygyCzplUN8Xq94QyBUYDvS0a/22OV5yxCh06qe8hByy+6RBVcfkBBW
-         41bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xW0qv9B5+yGxi1H2usCQCP9mQhDaha3ttXysqpYFwiM=;
-        b=hU3kpd5g12XpgV5qur8GqTSPkcQ3Be2/h5/D7Xa7l5xBpkpOuK0mZ/RZIvnv8OyYyT
-         Bu1sSzNmsDcbBO7ffIXR/hfPkTp8lA31ICIA7umRQ9pFgjuoOSu1IRT237Nucng48ZAv
-         r3Pq7XjFrrUgfmxNcSSYvijOMHRem7qH55cn68Ii5+OpLMzByBh7cYehI8FLKPF9iOZP
-         +eZj+RbqG5AbK3ln77bcgrzQIq3kWmsDpqBaxjeqeFM9QjY8bJTpDEDw5zJRPNeRniTy
-         DPCoc52IOh36UgqF9oMy1rZ6jJf7CkaO7ud3EKVdKeXYcH7UtKCOo2fKAC3KbNdJV6qM
-         FvDg==
-X-Gm-Message-State: ANoB5pm7CVdT4YpPYwr21LzHYB18/bLtEXq7Nz4+U5RU0E2TvAKKV2IR
-        TL2ubIdyNLl5s4MdYTq4NZU=
-X-Google-Smtp-Source: AA0mqf50xOkxd2Tqua6cu4Vr1W0k+sVXxQvVw2wZ2VyWld8NR8SBV/KcCxbR24+f0y2w8HOrWguVNQ==
-X-Received: by 2002:a17:903:2681:b0:189:7e2f:d66b with SMTP id jf1-20020a170903268100b001897e2fd66bmr46941097plb.110.1670315218711;
-        Tue, 06 Dec 2022 00:26:58 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-3.three.co.id. [180.214.233.3])
-        by smtp.gmail.com with ESMTPSA id jf1-20020a170903268100b00186b7443082sm11936428plb.195.2022.12.06.00.26.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 00:26:58 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 8DF511044D3; Tue,  6 Dec 2022 15:26:54 +0700 (WIB)
-Date:   Tue, 6 Dec 2022 15:26:54 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/124] 6.0.12-rc1 review
-Message-ID: <Y478znRWhzjlTdHN@debian.me>
-References: <20221205190808.422385173@linuxfoundation.org>
+        Tue, 6 Dec 2022 03:28:24 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9E026D5;
+        Tue,  6 Dec 2022 00:28:22 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id ABB606602A07;
+        Tue,  6 Dec 2022 08:28:19 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670315300;
+        bh=CJWvdWCG3UFO2zCYQg9f+JXTw5Zuom1JWkEBupeaBNg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=jW/2pSOn+W99aXXAsBjsNQg7P0eX9KfqAybhFWZAYfIRV8DJIR9qy+6+7wUhjsakD
+         gyq60uUYayeTcJCj+a10ztt2yMiHRehATYkW8ntYzYf8iHDal5HmDfBtxKI2nr1h8Z
+         Iu+8wUaaaR6/M61k2nNhio55fQmvFeGNW3AtQaCABnlCMOLXusuIyUzWC6cRlr3M2A
+         ESJ0fLMcCyqCkhaFGf/PvV2EuuoJ3pnNfNhiwTXFiGoMgcgO/U57Rt77oIEKpJPoUX
+         VhyZTmRmdfL6dUdDIK7FmZs1eqwOXojZQ4B0q1E77/jW/QZyLIrRq/wgQ7NrQ43x50
+         UTj6qENA3OQmA==
+Message-ID: <adc67800-beae-2f42-9cc7-5f041e390b61@collabora.com>
+Date:   Tue, 6 Dec 2022 09:28:16 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JCUFucPrhAkQEawz"
-Content-Disposition: inline
-In-Reply-To: <20221205190808.422385173@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/2] thermal: mediatek: add support for MT7986 and
+ MT7981
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>
+References: <Y4dYazyXF02eRGC5@makrotopia.org>
+ <0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com>
+ <Y44tdASIQ2DpL9re@makrotopia.org>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <Y44tdASIQ2DpL9re@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Il 05/12/22 18:42, Daniel Golle ha scritto:
+> Hi Angelo,
+> 
+> On Thu, Dec 01, 2022 at 02:24:17PM +0100, AngeloGioacchino Del Regno wrote:
+>> Il 30/11/22 14:19, Daniel Golle ha scritto:
+>>> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+>>> Brings code to assign values from efuse as well as new function to
+>>> convert raw temperature to millidegree celsius, as found in MediaTek's
+>>> SDK sources (but cleaned up and de-duplicated)
+>>>
+>>> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
+>>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+>>> Reviewed-by: Henry Yen <henry.yen@mediatek.com>
+>>> ---
+>>> Changes since v1: Drop use of adc_oe field in efuse, Henry Yen confirmed
+>>> its use has been dropped intentionally in MTK SDK as well.
+>>>
+>>>    drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
+>>>    1 file changed, 119 insertions(+), 3 deletions(-)
+>>>
 
---JCUFucPrhAkQEawz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Mon, Dec 05, 2022 at 08:08:26PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.12 release.
-> There are 124 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
+>>
+>> What about optimizing this with assigning a function pointer?
+>> Like that, we wouldn't check any version in there... as in that case we'd
+>> simply do something like
+>>
+>> temp = conf->raw_to_mcelsius(mt, conf->bank...blahblah...);
+>>
+>> ...and this would also mean that the snippet saying "the first read of a sensor
+>> often contains very high bogus temperature value [...]" would get merged in the v2
+>> of raw_to_mcelsius (as that function is used only in mtk_thermal_bank_temperature).
+> 
+> I found that Amjad Ouled-Ameur is taking care of converting that series
+> of if-else options into a function pointer allowing to easily call the
+> right raw_to_mcelsius function.
+> 
+> [PATCH v7 0/4] thermal: mediatek: Add support for MT8365 SoC
+> https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
+> 
+> Should I wait until this series is merged and then submit support
+> for MT7986 thermal on top of that?
+> 
 
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.2.0).
+Right - that may be sensible. Please coordinate with him, so that one of the two
+series actually depends on the other (and they don't conflict with each other).
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+I've added him to the loop.
 
---=20
-An old man doll... just what I always wanted! - Clara
+Regards,
+Angelo
 
---JCUFucPrhAkQEawz
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY478xwAKCRD2uYlJVVFO
-o4hNAP0a2W+sqrN0HF7z0dWZ4Fad9dSGfr3X+ISCc66H50xZiQEAg1sQzBXK7+yL
-6bgCKeWFAQrUeNzsjEZzY0NcDORFNgQ=
-=ILX0
------END PGP SIGNATURE-----
-
---JCUFucPrhAkQEawz--
