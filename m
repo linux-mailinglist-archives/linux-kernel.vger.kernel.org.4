@@ -2,110 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD5B644D4A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:30:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF29644D4D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:31:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLFUa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 15:30:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60288 "EHLO
+        id S229813AbiLFUb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 15:31:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiLFUax (ORCPT
+        with ESMTP id S229676AbiLFUbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 15:30:53 -0500
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7E240474;
-        Tue,  6 Dec 2022 12:30:27 -0800 (PST)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-12c8312131fso18879275fac.4;
-        Tue, 06 Dec 2022 12:30:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=70BHd3Bha/3SVQ9Fqr3IAXA2KJogPif1rbxfcGanlLI=;
-        b=l6qMrOMc1gVbYuhlAszHRHks1h0MPjaq7mTYN4fRdwTET6syx9uRLKz2nOhZth5ccC
-         179CPtZ+JPBMvoGJ5p/ir3tq6lLPajNnfuGK5nuv7ZoVzv+iZNgaXLhaYNwRWgWtI6CQ
-         Xb9QH9uVVLoznqXYEnZ4MkC5Wkx1B+D9+42TN1CPtlYKnooXzMig+smn9LZ7lMFP/kJO
-         Xi+OT4oMFALrp7UpAlxb1mBJ9JvcxwzNEHw/RZcHz49GF2dIClvRbSqLN+c5cvxXtxoE
-         oC/YA9UXvqmOwBQdQBrDoUw30C8HrvS+XHFF/QqfEWbE6WU+p7hve8ePHqb7jR3+jstr
-         AhEg==
-X-Gm-Message-State: ANoB5pnYXvPy3lQOawa2nmCiumfGJi2QdipMvzBzOy1jvwU8Vcis0tY3
-        9lkE2lAcrJUIcCsImRNVOg==
-X-Google-Smtp-Source: AA0mqf5/7tA6GtNa+ooZZfrQ3D2c18qvAkkUxKQVVV1LX5FQdtjOnvkYmlxagHeWWB71G/nuMbts8g==
-X-Received: by 2002:a05:6870:c0d1:b0:144:a87e:727d with SMTP id e17-20020a056870c0d100b00144a87e727dmr4999479oad.153.1670358626695;
-        Tue, 06 Dec 2022 12:30:26 -0800 (PST)
-Received: from robh_at_kernel.org ([4.31.143.193])
-        by smtp.gmail.com with ESMTPSA id u33-20020a05687100a100b0013ae39d0575sm11279086oaa.15.2022.12.06.12.30.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 12:30:26 -0800 (PST)
-Received: (nullmailer pid 8554 invoked by uid 1000);
-        Tue, 06 Dec 2022 20:30:25 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Tue, 6 Dec 2022 15:31:04 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAF445A1A;
+        Tue,  6 Dec 2022 12:30:48 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6EI9YP016264;
+        Tue, 6 Dec 2022 20:30:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=68KO9kvSay+/EojHDbG9DZmffwl2dEHYySOtUKGPazo=;
+ b=VF31BH0pCi/uRWBX7VoJkmIPWpYjWt7WeKhiWAxB1W39x/vb5mXtSq24hlWrmFuOrDTC
+ V66PGPxtjowLNkLvihTYy1FfIV3zWw5vsnRZujFp8ZZ/KWbaO72ECupN65wMTB4ygXgv
+ G2DJCxZfuApd7vlwu86mPowXzAzEBTuzSRhTBEAs29yWHeyM6bcoxgHrjNdqNgo+ll7Q
+ zVejy5BGYfpnlLFSgmn197dXuQYY45Ffz/xnZtde5i5ixjM/xQ07BIK+K3JQ4xzQZiyk
+ XV0woVjUfhR4125TaIKeyhwK5ELZB7h8DXhveWJSw/klP26llT9D5hTj2DFZZL7XwUJG vQ== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ma21usyc4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 06 Dec 2022 20:30:44 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B6KUgSF009504
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 6 Dec 2022 20:30:43 GMT
+Received: from [10.216.31.39] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 6 Dec 2022
+ 12:30:37 -0800
+Message-ID: <f99a8e9f-2c70-9e45-1ec4-23cc85047937@quicinc.com>
+Date:   Wed, 7 Dec 2022 02:00:34 +0530
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>
-In-Reply-To: <20221206124456.4159-1-edmund.berenson@emlix.com>
-References: <20221206124456.4159-1-edmund.berenson@emlix.com>
-Message-Id: <167035855162.6750.5481578237893135512.robh@kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: gpio: max7317: add gpio driver bindings
-Date:   Tue, 06 Dec 2022 14:30:25 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 1/4] drm/msm/adreno: Fix null ptr access in
+ adreno_gpu_cleanup()
+Content-Language: en-US
+To:     Dan Carpenter <error27@gmail.com>,
+        Jonathan Marek <jonathan@marek.ca>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David Airlie" <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Emma Anholt <emma@anholt.net>, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, <linux-kernel@vger.kernel.org>
+References: <20221204040946.1.Ib978de92c4bd000b515486aad72e96c2481f84d0@changeid>
+ <Y42ucX8GwYEFVUcr@kadam>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <Y42ucX8GwYEFVUcr@kadam>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: G6gDbpf1v9Y8sP8H74z2rHIxG3qi61nu
+X-Proofpoint-GUID: G6gDbpf1v9Y8sP8H74z2rHIxG3qi61nu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-06_11,2022-12-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 mlxlogscore=999 malwarescore=0 bulkscore=0
+ phishscore=0 spamscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212060171
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/5/2022 2:10 PM, Dan Carpenter wrote:
+> On Sun, Dec 04, 2022 at 04:11:41AM +0530, Akhil P Oommen wrote:
+>> Fix the below kernel panic due to null pointer access:
+>> [   18.504431] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000048
+>> [   18.513464] Mem abort info:
+>> [   18.516346]   ESR = 0x0000000096000005
+>> [   18.520204]   EC = 0x25: DABT (current EL), IL = 32 bits
+>> [   18.525706]   SET = 0, FnV = 0
+>> [   18.528878]   EA = 0, S1PTW = 0
+>> [   18.532117]   FSC = 0x05: level 1 translation fault
+>> [   18.537138] Data abort info:
+>> [   18.540110]   ISV = 0, ISS = 0x00000005
+>> [   18.544060]   CM = 0, WnR = 0
+>> [   18.547109] user pgtable: 4k pages, 39-bit VAs, pgdp=0000000112826000
+>> [   18.553738] [0000000000000048] pgd=0000000000000000, p4d=0000000000000000, pud=0000000000000000
+>> [   18.562690] Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+>> **Snip**
+>> [   18.696758] Call trace:
+>> [   18.699278]  adreno_gpu_cleanup+0x30/0x88
+>> [   18.703396]  a6xx_destroy+0xc0/0x130
+>> [   18.707066]  a6xx_gpu_init+0x308/0x424
+> Fixes: 17e822f7591f ("drm/msm: fix unbalanced pm_runtime_enable in adreno_gpu_{init, cleanup}")
+>
+> Let's add Jonathan to the CC list so he can Ack your patch.
+Thanks, will post a v2.
 
-On Tue, 06 Dec 2022 13:44:55 +0100, Edmund Berenson wrote:
-> Add driver bindings for the maxim max7317 spi
-> gpio expander.
-> 
-> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
-> ---
->  .../bindings/gpio/gpio-max7317.yaml           | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
-> 
+-Akhil.
+>
+> Although the real issue is that a6xx_gpu_init has bad error handling.
+>
+> The a6xx_destroy() function supposed to free *everything* so then the
+> question becomes how do we avoid freeing something which was not
+> allocated?  With normal kernel style we just free things one by one
+> in the reverse order from how they were allocated.  See my blog for more
+> details:
+> https://staticthinking.wordpress.com/2022/04/28/free-the-last-thing-style/
+Nice post. Thanks for sharing.
+>
+> However this code is written in One Function Frees Everything Style
+> which is difficult to review and prone to bugs.  The common mistakes are
+> the kind of NULL dereference that you've seen, double frees, and missing
+> frees.
+>
+> The only way to read this code is to open a new text editor window and
+> line up the allocations with the frees.
+>
+>   1725  static void a6xx_destroy(struct msm_gpu *gpu)
+>   1726  {
+>   1727          struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
+>   1728          struct a6xx_gpu *a6xx_gpu = to_a6xx_gpu(adreno_gpu);
+>   1729  
+>   1730          if (a6xx_gpu->sqe_bo) {
+>   1731                  msm_gem_unpin_iova(a6xx_gpu->sqe_bo, gpu->aspace);
+>   1732                  drm_gem_object_put(a6xx_gpu->sqe_bo);
+>
+> These unpin/put must be done together and should be in their own
+> function.  The ->sqe_bo pointer is allocated in a6xx_ucode_init().  It's
+> assigned to an error pointer, but then set to NULL on error or after a
+> free.  So this is okay.
+Agree. This warrants a helper function. I count 11 instances where it will be useful.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>
+>   1733          }
+>   1734  
+>   1735          if (a6xx_gpu->shadow_bo) {
+>
+> ->shadow_bo is allocated in hw_init().  Should there be a call to
+> msm_gem_put_vaddr(a6xx_gpu->shadow)?  It's unclear.  [QUESTION #1]
+Yes. This should be freed with msm_gem_kernel_put() which takes care of freeing vaddr.
+>
+>   1736                  msm_gem_unpin_iova(a6xx_gpu->shadow_bo, gpu->aspace);
+>   1737                  drm_gem_object_put(a6xx_gpu->shadow_bo);
+>   1738          }
+>   1739  
+>   1740          a6xx_llc_slices_destroy(a6xx_gpu);
+>
+> This has IS_ERR_OR_NULL() checks so it's okay.
+>
+>   1741  
+>   1742          a6xx_gmu_remove(a6xx_gpu);
+>
+> This uses a gmu->initialized flag which allows it to safely clean up
+> everything.  Fine.
+>
+>   1743  
+>   1744          adreno_gpu_cleanup(adreno_gpu);
+>
+> This function has the bug that you identified.  Let's dig into it.
+> (With normal kernel error handling you can read the error handling by
+> looking at the label name but with this style we need to jump around and
+> compare code from different files).
+>
+>   1745  
+>   1746          kfree(a6xx_gpu);
+>   1747  }
+>
+> drivers/gpu/drm/msm/adreno/adreno_gpu.c
+>   1079  void adreno_gpu_cleanup(struct adreno_gpu *adreno_gpu)
+>   1080  {
+>   1081          struct msm_gpu *gpu = &adreno_gpu->base;
+>   1082          struct msm_drm_private *priv = gpu->dev->dev_private;
+>   1083          unsigned int i;
+>   1084  
+>   1085          for (i = 0; i < ARRAY_SIZE(adreno_gpu->info->fw); i++)
+>   1086                  release_firmware(adreno_gpu->fw[i]);
+>
+> This is okay.  ->fw[i] is either valid or NULL and releasing a NULL is
+> fine.
+>
+>   1087  
+>   1088          if (pm_runtime_enabled(&priv->gpu_pdev->dev))
+>
+> This is the bug you found.
+>
+>   1089                  pm_runtime_disable(&priv->gpu_pdev->dev);
+>   1090  
+>   1091          msm_gpu_cleanup(&adreno_gpu->base);
+>
+> Let's dig into msm_gpu_cleanup().
+>
+>   1092  }
+>
+> drivers/gpu/drm/msm/msm_gpu.c
+>   1006  void msm_gpu_cleanup(struct msm_gpu *gpu)
+>   1007  {
+>   1008          int i;
+>   1009  
+>   1010          DBG("%s", gpu->name);
+>   1011  
+>   1012          for (i = 0; i < ARRAY_SIZE(gpu->rb); i++) {
+>   1013                  msm_ringbuffer_destroy(gpu->rb[i]);
+>
+> Destroying an error pointer is fine so this is okay.
+>
+>   1014                  gpu->rb[i] = NULL;
+>   1015          }
+>   1016  
+>   1017          msm_gem_kernel_put(gpu->memptrs_bo, gpu->aspace);
+>                                                     ^^^^^^^^^^^
+> [QUESTION #2] Passing an error pointer here will trigger a stack trace
+> so this is bug.  The drivers->aspace pointer is allocted in
+> msm_gpu_create_private_address_space()
+No. aspace is allocated using gpu->funcs->create_address_space() from msm_gpu_init(). If memptrs_bo is not NULL, then 'aspace' should be valid. So we don't have any issue here.
+>
+> drivers/gpu/drm/msm/msm_gpu.c
+>    824  struct msm_gem_address_space *
+>    825  msm_gpu_create_private_address_space(struct msm_gpu *gpu, struct task_struct *task)
+>    826  {
+>    827          struct msm_gem_address_space *aspace = NULL;
+>    828          if (!gpu)
+>    829                  return NULL;
+>    830  
+>    831          /*
+>    832           * If the target doesn't support private address spaces then return
+>    833           * the global one
+>    834           */
+>    835          if (gpu->funcs->create_private_address_space) {
+>    836                  aspace = gpu->funcs->create_private_address_space(gpu);
+>    837                  if (!IS_ERR(aspace))
+>    838                          aspace->pid = get_pid(task_pid(task));
+>    839          }
+>    840  
+>    841          if (IS_ERR_OR_NULL(aspace))
+>                     ^^^^^^^^^^^^^^^^^^^^^^
+> [QUESTION #3] This check seems reversed.  It should be if *NOT* is error
+> or null.
+You are confused about global aspace (which is attached to ttbr1 in gpu smmu) and private aspace (which is separate for each process and it is attached to ttbr0). Here the logic is that when private aspace creation fails, we fall back to global aspace. So this logic is correct.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml: 'maintainers' is a required property
-	hint: Metaschema for devicetree binding documentation
-	from schema $id: http://devicetree.org/meta-schemas/base.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/gpio-max7317.example.dtb: gpio5@0: 'spi-max-frequency' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221206124456.4159-1-edmund.berenson@emlix.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+-Akhil.
+>
+>    842                  aspace = msm_gem_address_space_get(gpu->aspace);
+>    843  
+>    844          return aspace;
+>    845  }
+>
+> regards,
+> dan carpenter
+>
+>
 
