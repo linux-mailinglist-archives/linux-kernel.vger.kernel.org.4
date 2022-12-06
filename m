@@ -2,260 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1873E643AB8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 02:26:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EBB4643ABD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 02:29:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230151AbiLFB0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 20:26:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43740 "EHLO
+        id S231599AbiLFB3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 20:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiLFB0c (ORCPT
+        with ESMTP id S231559AbiLFB3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 20:26:32 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139A91EC66
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 17:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670289991; x=1701825991;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=BFItqSQgBNwkiz5qIVf4U+3jo0eccZ9fEgmZMieuN6A=;
-  b=Ze/NqJ4V2kA5j0+OW7W8W0d3+E0W506xLXDe3vMxUgFqKPLWbkAx+ISn
-   6HvhWdjI32dJHdamktjD3S+/6OPyq+r0MbzU1z23ZSj8VcSrOLoMcmfay
-   tJCVHp4WrWp54fKdH8GVZWRFtvP9zAF+kbQbRBH3F800BWd4eWDltXbqO
-   bMoVMsGgMXLtRBnHd1bW9NZJpXI/D476+DuGUtIbLyhWWYy9/ZJZtnUEt
-   5jqONBT6UJfWxdwSIPBtVgyviUiuhrg6RKA1FpscinNX7P323gLaz6GkI
-   mwEEXLkBRrN6O8O8xsmbR3lhg8IRoR7MX/glEl77Ijl8lTbZtwayDgLuC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="318368782"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="318368782"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 17:26:30 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="639696317"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="639696317"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 17:26:26 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Mina Almasry <almasrymina@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] [mm-unstable] mm: Fix memcg reclaim on memory tiered
- systems
-References: <20221203011120.2361610-1-almasrymina@google.com>
-        <87lenm1soh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <CAHS8izMm4NDhwX-pqEu1RbKoUgi8jFJH5a9LTetdQpQPu6ZsGw@mail.gmail.com>
-Date:   Tue, 06 Dec 2022 09:25:36 +0800
-In-Reply-To: <CAHS8izMm4NDhwX-pqEu1RbKoUgi8jFJH5a9LTetdQpQPu6ZsGw@mail.gmail.com>
-        (Mina Almasry's message of "Mon, 5 Dec 2022 16:04:07 -0800")
-Message-ID: <87k035l3vz.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 5 Dec 2022 20:29:10 -0500
+Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769571EC6F
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 17:29:08 -0800 (PST)
+Received: by mail-ua1-x930.google.com with SMTP id v4so4510010ual.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 17:29:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pSDhDqOudVpfHmVoymf2tIcEElKGOfpGSM98qvPhOzI=;
+        b=TdeU6qpgv5peqyVsBJhLUvZJvLuXvVK/AE9Ue6gk8DvQWSafztvlow4ohux0JQWHOm
+         Dfjhq3nITLPlKvATxZbufa5m0JgRhj1w77D7ope4tYypzgJev4e6PiZbKeH2dKSJRPC1
+         Cxy71OyarL2lcpSkUjjvStploQC8AZZqpsMsYBZ+HxofhT5UDe7AcXif+JdX+aEn4I9Z
+         8fmr/uoSOWKAqILq2M2sYX8kSsz2pfMOPGueqxKopbl4cLqwlJ+whwxoTmBYBXySFzG5
+         vYdvy8EOGfYgRlskfcmqMNzL/SwYaqrBJkUjDc6fhdNEz3iyE710lpjNEG9G+9ppR34A
+         wUYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pSDhDqOudVpfHmVoymf2tIcEElKGOfpGSM98qvPhOzI=;
+        b=acWp5LvD33lf88pN4cmNGBJAHKQ8vIAeFy2rtMbXnznfbEnZrf9SG3Zw6xxyc+7yVu
+         LWT4kkNZS3sL5D86UveoDM+Lm6VlD1e99IVC0T/wQJ6EHG+YJNkI+AUGo0bO1EVIIZVO
+         kth7DIQAaeNAqvVvHWvr8QZUDTA8Ld9YdcRlI7Pxcohck27qSCDbtZGRIrwj21PWLjrq
+         JkoFewiMantPRq6oleIn0tu9gyS6DFOEjOsIfvMnFzPknzNJ7ht2Y5321eyRzQZsaF4j
+         GEC7vo8VHMfoPcqbESQeVCDD4bccCixR7zxtpQvTAGtu1tiewfGk7n/veKyplwZXjjGB
+         zsOg==
+X-Gm-Message-State: ANoB5pmvQ5TxEcVpiJv2K1S6tyf2UPaJdrty9t9xJyjYyd7wXJr1G0mj
+        OqZeMJDAzWRs7bFrBbfBbyFDGi0o1bbnYv1vzGZ/Dg==
+X-Google-Smtp-Source: AA0mqf6zhsb8ptPE9bRgCtcTDeQeR35GW+Hd02TEKsTRcWZ4+gCd8Srr097Kknn287pti4r/o9sNTOnzTe6BQAvDRuA=
+X-Received: by 2002:ab0:6f52:0:b0:419:1fa3:9618 with SMTP id
+ r18-20020ab06f52000000b004191fa39618mr23490504uat.11.1670290147298; Mon, 05
+ Dec 2022 17:29:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205175140.1543229-1-nphamcs@gmail.com> <20221205175140.1543229-3-nphamcs@gmail.com>
+ <CAOUHufZKTqoD2rFwrX9-eCknBmeWqP88rZ7X7A_5KHHbGBUP=A@mail.gmail.com> <CAKEwX=N+mHBqey+E2d=4NpMrTTi8YYkVvJ-bEAnrG1Uqmjq_Yg@mail.gmail.com>
+In-Reply-To: <CAKEwX=N+mHBqey+E2d=4NpMrTTi8YYkVvJ-bEAnrG1Uqmjq_Yg@mail.gmail.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 5 Dec 2022 18:28:31 -0700
+Message-ID: <CAOUHufZZX9TyTbZCbmOt9FeyNYxoDwVPOkM0=t3Nyz2ZtP-s7A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] workingset: refactor LRU refault to expose refault
+ recency check
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mina Almasry <almasrymina@google.com> writes:
+On Mon, Dec 5, 2022 at 6:19 PM Nhat Pham <nphamcs@gmail.com> wrote:
+>
+> On Mon, Dec 5, 2022 at 3:49 PM Yu Zhao <yuzhao@google.com> wrote:
+> >
+> > On Mon, Dec 5, 2022 at 10:51 AM Nhat Pham <nphamcs@gmail.com> wrote:
+> > >
+> > > In preparation for computing recently evicted pages in cachestat,
+> > > refactor workingset_refault and lru_gen_refault to expose a helper
+> > > function that would test if an evicted page is recently evicted.
+> > >
+> > > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > > ---
+> > >  include/linux/swap.h |   1 +
+> > >  mm/workingset.c      | 143 +++++++++++++++++++++++++++++--------------
+> > >  2 files changed, 99 insertions(+), 45 deletions(-)
+> > >
+> > > diff --git a/include/linux/swap.h b/include/linux/swap.h
+> > > index a18cf4b7c724..dae6f6f955eb 100644
+> > > --- a/include/linux/swap.h
+> > > +++ b/include/linux/swap.h
+> > > @@ -361,6 +361,7 @@ static inline void folio_set_swap_entry(struct folio *folio, swp_entry_t entry)
+> > >  }
+> > >
+> > >  /* linux/mm/workingset.c */
+> > > +bool workingset_test_recent(void *shadow, bool file, bool *workingset);
+> > >  void workingset_age_nonresident(struct lruvec *lruvec, unsigned long nr_pages);
+> > >  void *workingset_eviction(struct folio *folio, struct mem_cgroup *target_memcg);
+> > >  void workingset_refault(struct folio *folio, void *shadow);
+> > > diff --git a/mm/workingset.c b/mm/workingset.c
+> > > index 79585d55c45d..44b331ce3040 100644
+> > > --- a/mm/workingset.c
+> > > +++ b/mm/workingset.c
+> > > @@ -244,6 +244,30 @@ static void *lru_gen_eviction(struct folio *folio)
+> > >         return pack_shadow(mem_cgroup_id(memcg), pgdat, token, refs);
+> > >  }
+> > >
+> > > +/*
+> > > + * Test if the folio is recently evicted.
+> > > + *
+> > > + * As a side effect, also populates the references with
+> > > + * values unpacked from the shadow of the evicted folio.
+> > > + */
+> > > +static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+> > > +       struct pglist_data **pgdat, unsigned long *token, bool *workingset)
+> > > +{
+> > > +       struct mem_cgroup *eviction_memcg;
+> > > +       struct lruvec *lruvec;
+> > > +       struct lru_gen_struct *lrugen;
+> > > +       unsigned long min_seq;
+> > > +
+> > > +       unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+> > > +       eviction_memcg = mem_cgroup_from_id(*memcgid);
+> > > +
+> > > +       lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
+> > > +       lrugen = &lruvec->lrugen;
+> > > +
+> > > +       min_seq = READ_ONCE(lrugen->min_seq[file]);
+> > > +       return !((*token >> LRU_REFS_WIDTH) != (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH)));
+> > > +}
+> >
+> > Nit: not refactoring actually looks cleaner to me -- there are only a
+> > few lines of duplicated code and you can get rid of 4 parameters
+> > including the unused workingset in the next patch.
+>
+> (resending this because I forgot to forward to the rest of the
+> group!)
+>
+> Thanks for the comment, Yu!
+>
+> Personally, I prefer refactoring this piece of logic - I do think that
+> it is cleaner than copying the logic into the syscall implementation.
 
-> On Sun, Dec 4, 2022 at 6:39 PM Huang, Ying <ying.huang@intel.com> wrote:
->>
->> Mina Almasry <almasrymina@google.com> writes:
->>
->> > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
->> > reclaim"") enabled demotion in memcg reclaim, which is the right thing
->> > to do, however, I suspect it introduced a regression in the behavior of
->> > try_to_free_mem_cgroup_pages().
->> >
->> > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
->> > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
->> > of the cgroup should reduce by nr_pages. The callers expect
->> > try_to_free_mem_cgroup_pages() to also return the number of pages
->> > reclaimed, not demoted.
->> >
->> > However, what try_to_free_mem_cgroup_pages() actually does is it
->> > unconditionally counts demoted pages as reclaimed pages. So in practice
->> > when it is called it will often demote nr_pages and return the number of
->> > demoted pages to the caller. Demoted pages don't lower the memcg usage,
->> > and so I think try_to_free_mem_cgroup_pages() is not actually doing what
->> > the callers want it to do.
->> >
->> > I suspect various things work suboptimally on memory systems or don't
->> > work at all due to this:
->> >
->> > - memory.high enforcement likely doesn't work (it just demotes nr_pages
->> >   instead of lowering the memcg usage by nr_pages).
->> > - try_charge_memcg() will keep retrying the charge while
->> >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
->> >   making any room for the charge.
->> > - memory.reclaim has a wonky interface. It advertises to the user it
->> >   reclaims the provided amount but it will actually demote that amount.
->> >
->> > There may be more effects to this issue.
->> >
->> > To fix these issues I propose shrink_folio_list() to only count pages
->> > demoted from inside of sc->nodemask to outside of sc->nodemask as
->> > 'reclaimed'.
->> >
->> > For callers such as reclaim_high() or try_charge_memcg() that set
->> > sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
->> > actually reclaim nr_pages and return the number of pages reclaimed. No
->> > demoted pages would count towards the nr_pages requirement.
->> >
->> > For callers such as memory_reclaim() that set sc->nodemask,
->> > try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
->> > with either reclaim or demotion.
->>
->> Have you checked all callers?  For example, IIUC, in
->> reclaim_clean_pages_from_list(), although sc.nodemask == NULL, the
->> demoted pages should be counted as reclaimed.
->
-> I checked all call stacks leading to shrink_folio_list() now (at least
-> I hope). Here is what I think they do and how I propose to handle
-> them:
->
-> - reclaim_clean_pages_from_list() & __node_reclaim() & balance_pgdat()
-> These try to free memory from a specific node, and both demotion and
-> reclaim from that node should be counted. I propose these calls set
-> sc>nodemask = pgdat.node_id to signal to shrink_folio_list() that both
-> demotion and reclaim from this node should be counted.
->
-> - try_to_free_pages()
-> Tries to free pages from a specific nodemask. It sets sc->nodemask to
-> ac->nodemask. In this case pages demoted within the nodemask should
-> not count. Pages demoted outside of the nodemask should count, which
-> this patch already tries to do.
->
-> - mem_cgroup_shrink_node()
-> This is memcg soft limit reclaim. AFAIU only reclaim should be
-> counted. It already sets sc->nodemask=NULL to indicate that it
-> requires reclaim from all nodes and that only reclaimed memory should
-> be counted, which this patch already tries to do.
->
-> - try_to_free_mem_cgroup_pages()
-> This is covered in the commit message. Many callers set nodemask=NULL
-> indicating they want reclaim and demotion should not count.
-> memory.reclaim sets nodemask depending on the 'nodes=' arg and wants
-> demotion and reclaim from that nodemask.
->
-> - reclaim_folio_list()
-> Sets no_demotion = 1. No ambiguity here, only reclaims and counts
-> reclaimed pages.
->
-> If agreeable I can fix reclaim_clean_pages_from_list() &
-> __node_reclaim() & balance_pgdat() call sites in v3.
+Let me clarify.
 
-Looks good to me, Thanks!
+You can add
+  lru_gen_test_recent(void *shadow, bool file)
+without refactoring the existing
+  lru_gen_refault().
 
->> How about count both
->> "demoted" and "reclaimed" in struct scan_control, and let callers to
->> determine how to use the number?
->>
->
-> I don't think this is by itself enough. Pages demoted between 2 nodes
-> that are both in sc->nodemask should not count, I think. So 'demoted'
-> needs to be specifically pages demoted outside of the nodemask.
+Set the boilerplate aside, you only repeat one line of code, which is
+the last line in the new function.
 
-Yes.  Maybe we can do that when we need it.  I suggest to change the
-return value description in the comments of shrink_folio_list().
+(The boilerplate code is repeated in many places, and that's why it's
+called boilerplate.)
 
-> We can do 2 things:
+> I believe that if I don't do the refactoring, I'll have to repeat the
+> unused parameters in the syscall, and make unpack_shadow
+> a non-static function (along with all the locally defined macros like
+> WORKINGSET_SHIFT). I think it would get quite messy there too.
 >
-> 1. Only allow the kernel to demote outside the nodemask (which you
-> don't prefer).
-> 2. Allow the kernel to demote inside the nodemask but not count them.
+> But more importantly, I'm a bit concerned that the logic for
+> determining the recency of the eviction might change in the
+> future, which would break the cachestat syscall unknowingly...
 >
-> I will see if I can implement #2.
+> Let me know what you think about this, Yu!
 
-Thanks!
-
->> > Tested this change using memory.reclaim interface. With this change,
->> >
->> >       echo "1m" > memory.reclaim
->> >
->> > Will cause freeing of 1m of memory from the cgroup regardless of the
->> > demotions happening inside.
->> >
->> >       echo "1m nodes=0" > memory.reclaim
->>
->> Have you tested these tests in the original kernel?  If so, whether does
->> the issue you suspected above occurs during testing?
->>
->
-> Yes. I set up a test case where I allocate 500m in a cgroup, and then do:
->
->     echo "50m" > memory.reclaim
->
-> Without my fix, my kernel demotes 70mb and reclaims 4 mb.
->
-> With my v1 fix, my kernel demotes all memory possible and reclaims 60mb.
->
-> I will add this to the commit message in the next version.
-
-Good!  Thanks!
-
-Best Regards,
-Huang, Ying
-
->>
->> > Will cause freeing of 1m of node 0 by demotion if a demotion target is
->> > available, and by reclaim if no demotion target is available.
->> >
->> > Signed-off-by: Mina Almasry <almasrymina@google.com>
->> >
->> > ---
->> >
->> > This is developed on top of mm-unstable largely because I need the
->> > memory.reclaim nodes= arg to test it properly.
->> > ---
->> >  mm/vmscan.c | 13 ++++++++++++-
->> >  1 file changed, 12 insertions(+), 1 deletion(-)
->> >
->> > diff --git a/mm/vmscan.c b/mm/vmscan.c
->> > index 2b42ac9ad755..8f6e993b870d 100644
->> > --- a/mm/vmscan.c
->> > +++ b/mm/vmscan.c
->> > @@ -1653,6 +1653,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
->> >       LIST_HEAD(free_folios);
->> >       LIST_HEAD(demote_folios);
->> >       unsigned int nr_reclaimed = 0;
->> > +     unsigned int nr_demoted = 0;
->> >       unsigned int pgactivate = 0;
->> >       bool do_demote_pass;
->> >       struct swap_iocb *plug = NULL;
->> > @@ -2085,7 +2086,17 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
->> >       /* 'folio_list' is always empty here */
->> >
->> >       /* Migrate folios selected for demotion */
->> > -     nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
->> > +     nr_demoted = demote_folio_list(&demote_folios, pgdat);
->> > +
->> > +     /*
->> > +      * Only count demoted folios as reclaimed if we demoted them from
->> > +      * inside of the nodemask to outside of the nodemask, hence reclaiming
->> > +      * pages in the nodemask.
->> > +      */
->> > +     if (sc->nodemask && node_isset(pgdat->node_id, *sc->nodemask) &&
->> > +         !node_isset(next_demotion_node(pgdat->node_id), *sc->nodemask))
->> > +             nr_reclaimed += nr_demoted;
->> > +
->> >       /* Folios that could not be demoted are still in @demote_folios */
->> >       if (!list_empty(&demote_folios)) {
->> >               /* Folios which weren't demoted go back on @folio_list */
->> > --
->> > 2.39.0.rc0.267.gcb52ba06e7-goog
->>
+Your call :)
