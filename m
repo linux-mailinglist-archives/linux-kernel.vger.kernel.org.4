@@ -2,217 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C57644A39
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:21:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD856449E3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiLFRU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:20:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
+        id S235469AbiLFRCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:02:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235114AbiLFRUs (ORCPT
+        with ESMTP id S235204AbiLFRCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:20:48 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D3432B94
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:19:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670347190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=qI/FNfFK2hCaPQR7h5sQMFzBE9Rk/EKDVSD9F/Ae6dY=;
-        b=EGL1A5uqDIaW63bW6nmQn90vPcNRsOBLFL4vWuf1CAgXhLBt0H9RxvEsyT65sX96RHEooH
-        UwX/NecwQloNh46iwD3DNgMNhGTE1nZDYFpOh64CGOksiiK8zxgTqWaia3A2mp/05cdkGo
-        J/7IZGXssHbQIcoL6z0lURKVibMerWY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-524-7R3jg4Q4MDqJi9lPXjtZFA-1; Tue, 06 Dec 2022 12:19:45 -0500
-X-MC-Unique: 7R3jg4Q4MDqJi9lPXjtZFA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0F2BB3C0CD5A;
-        Tue,  6 Dec 2022 17:19:45 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9B4D3492B05;
-        Tue,  6 Dec 2022 17:19:44 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id D9F80409005E4; Tue,  6 Dec 2022 13:31:40 -0300 (-03)
-Message-ID: <20221206162416.545596407@redhat.com>
-User-Agent: quilt/0.66
-Date:   Tue, 06 Dec 2022 13:18:31 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     atomlin@redhat.com, frederic@kernel.org
-Cc:     cl@linux.com, tglx@linutronix.de, mingo@kernel.org,
-        peterz@infradead.org, pauld@redhat.com, neelx@redhat.com,
-        oleksandr@natalenko.name, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v9 5/5] tick/sched: Ensure quiet_vmstat() is called when the idle tick was stopped too
-References: <20221206161826.698593151@redhat.com>
+        Tue, 6 Dec 2022 12:02:31 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52212B27A
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:02:29 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id w15so24377871wrl.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:02:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6TfdMZJx6YwYGMzVOHSPGcZQcm/YvSKhyLP6Zb9LW3U=;
+        b=f8K+WmGUuSv8KswBqRGfezQk9LzOPL2MIF5hXavcrXyDmnppRVRbUmum7GmqK0ilHd
+         e7i/rRxDuNaug60YHu+zo1baN8lGd+/QKrT2dRibC6K7zbh/KdMAm3HwrnxQjC50YDKi
+         OsL4WLNJeo5ssdO0AsAeZiovFmmE1hI9YNlgEi/xwQ+Vh57UnCHDY9sKit0u6cMlebVH
+         DFNJt+KjeAeFoNFGqv+ooLw1JWXUCaDuj7xJLIw4Nx3kEPjVOpFG62qXyWAjX+2+wvnL
+         lnlor2txuaOFufx+UQkHYeBF9q2vguDA6pBj4/m3k0iC+nCdeT+MsrMJ3BeKOBVuVZfc
+         b24w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TfdMZJx6YwYGMzVOHSPGcZQcm/YvSKhyLP6Zb9LW3U=;
+        b=2HM6+1Kdpq8Ua25pj+xRkWuRl7Q07BHPbtz0c/x1qKXLXm+Mh8paK62BPTA7XUvWMF
+         zq/Qzmm8opTKdM9WLmC1otOVkj9dRTiYMWtJwPC6DUKOHEqK1f1W1qeBlOaOJjanrZ7J
+         eCfH7an///iNmgFKGwxE1N31y0OpAp+BjaGVXJ+milDLgJqaOy7H8BL+O6Z/TY0C84cm
+         GpiYlsd+Of1rqVkBqyeSnj9pgCO+1xiLycCu/c82zHZ8mOti+GJ2GV8fj+tf+9szRoAV
+         MeFe7NTcWFHL89hUVA+nnQKizMrWSuE8Ci3HIdUyhDKwryHD1D87KETFqBn4tHUd2CA4
+         WQ1w==
+X-Gm-Message-State: ANoB5pmL6gs9I4zhSXBYAc8C9Fmcnl7PxPkbrdh5ZFZ/zebo1ZhPAmow
+        /2gPUvt9Eh6VvmmfeBhggQUOuw==
+X-Google-Smtp-Source: AA0mqf42cYPf54pb3sxtziLBo7bdoS9uWV6Lhv4ERuK8x1zeExLMMZE086K/IaYZpTuoyHCqCnHi1w==
+X-Received: by 2002:a5d:4810:0:b0:242:4cf5:f391 with SMTP id l16-20020a5d4810000000b002424cf5f391mr9902226wrq.174.1670346148292;
+        Tue, 06 Dec 2022 09:02:28 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id w12-20020a05600c474c00b003b435c41103sm32934264wmo.0.2022.12.06.09.02.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 09:02:27 -0800 (PST)
+Message-ID: <617ffbbe-5043-d27f-6579-d5f5544f03d1@linaro.org>
+Date:   Tue, 6 Dec 2022 18:02:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 00/11] enable VTM node for all TI's K3 SoCs
+Content-Language: en-US
+To:     Bryan Brattlof <bb@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Cc:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
+        Device Trees <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LKML ARM <linux-arm-kernel@lists.infradead.org>
+References: <20221031232702.10339-1-bb@ti.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221031232702.10339-1-bb@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaron Tomlin <atomlin@redhat.com>
+On 01/11/2022 00:26, Bryan Brattlof wrote:
+> Hello again everyone!
+> 
+> This series enables the VTM nodes for all of Texas Instrument's K3 SoCs
+> 
+> Most of this series updates the k3_j72xx_bandgap driver to conditionally
+> map an eFuse region used by the j721e to work around an issue in its VTM
+> implementation and allows us to save the SPARE_FUSE region on other SoCs
+> 
+> We can then update the device tree bindings for the driver and finally
+> define the VTM nodes for each device
+> 
+> Thanks for reviewing again
+> ~Bryan
 
-In the context of the idle task and an adaptive-tick mode/or a nohz_full
-CPU, quiet_vmstat() can be called: before stopping the idle tick,
-entering an idle state and on exit. In particular, for the latter case,
-when the idle task is required to reschedule, the idle tick can remain
-stopped and the timer expiration time endless i.e., KTIME_MAX. Now,
-indeed before a nohz_full CPU enters an idle state, CPU-specific vmstat
-counters should be processed to ensure the respective values have been
-reset and folded into the zone specific 'vm_stat[]'. That being said, it
-can only occur when: the idle tick was previously stopped, and
-reprogramming of the timer is not required.
+patch 1-6 applied, thanks
 
-A customer provided some evidence which indicates that the idle tick was
-stopped; albeit, CPU-specific vmstat counters still remained populated.
-Thus one can only assume quiet_vmstat() was not invoked on return to the
-idle loop.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-If I understand correctly, I suspect this divergence might erroneously
-prevent a reclaim attempt by kswapd. If the number of zone specific free
-pages are below their per-cpu drift value then
-zone_page_state_snapshot() is used to compute a more accurate view of
-the aforementioned statistic.  Thus any task blocked on the NUMA node
-specific pfmemalloc_wait queue will be unable to make significant
-progress via direct reclaim unless it is killed after being woken up by
-kswapd (see throttle_direct_reclaim()).
-
-Consider the following theoretical scenario:
-
- - Note: CPU X is part of 'tick_nohz_full_mask'
-
-    1.      CPU Y migrated running task A to CPU X that
-	    was in an idle state i.e. waiting for an IRQ;
-	    marked the current task on CPU X to need/or
-	    require a reschedule i.e., set TIF_NEED_RESCHED
-	    and invoked a reschedule IPI to CPU X
-	    (see sched_move_task())
-
-    2.      CPU X acknowledged the reschedule IPI. Generic
-	    idle loop code noticed the TIF_NEED_RESCHED flag
-	    against the idle task and attempts to exit of the
-	    loop and calls the main scheduler function i.e.
-	    __schedule().
-
-	    Since the idle tick was previously stopped no
-	    scheduling-clock tick would occur.
-	    So, no deferred timers would be handled
-
-    3.      Post transition to kernel execution Task A
-	    running on CPU X, indirectly released a few pages
-	    (e.g. see __free_one_page()); CPU X's
-	    'vm_stat_diff[NR_FREE_PAGES]' was updated and zone
-	    specific 'vm_stat[]' update was deferred as per the
-	    CPU-specific stat threshold
-
-    4.      Task A does invoke exit(2) and the kernel does
-	    remove the task from the run-queue; the idle task
-	    was selected to execute next since there are no
-	    other runnable tasks assigned to the given CPU
-	    (see pick_next_task() and pick_next_task_idle())
-
-    5.      On return to the idle loop since the idle tick
-	    was already stopped and can remain so (see [1]
-	    below) e.g. no pending soft IRQs, no attempt is
-	    made to zero and fold CPU X's vmstat counters
-	    since reprogramming of the scheduling-clock tick
-	    is not required/or needed (see [2])
-
-		  ...
-		    do_idle
-		    {
-
-		      __current_set_polling()
-		      tick_nohz_idle_enter()
-
-		      while (!need_resched()) {
-
-			local_irq_disable()
-
-			...
-
-			/* No polling or broadcast event */
-			cpuidle_idle_call()
-			{
-
-			  if (cpuidle_not_available(drv, dev)) {
-			    tick_nohz_idle_stop_tick()
-			      __tick_nohz_idle_stop_tick(this_cpu_ptr(&tick_cpu_sched))
-			      {
-				int cpu = smp_processor_id()
-
-				if (ts->timer_expires_base)
-				  expires = ts->timer_expires
-				else if (can_stop_idle_tick(cpu, ts))
-	      (1) ------->        expires = tick_nohz_next_event(ts, cpu)
-				else
-				  return
-
-				ts->idle_calls++
-
-				if (expires > 0LL) {
-
-				  tick_nohz_stop_tick(ts, cpu)
-				  {
-
-				    if (ts->tick_stopped && (expires == ts->next_tick)) {
-	      (2) ------->            if (tick == KTIME_MAX || ts->next_tick ==
-					hrtimer_get_expires(&ts->sched_timer))
-					return
-				    }
-				    ...
-				  }
-
-So, the idea of this patch is to ensure refresh_cpu_vm_stats(false) is
-called, when it is appropriate, on return to the idle loop if the idle
-tick was previously stopped too.
-
-A trivial test program was used to determine the impact of the proposed
-changes and under vanilla. The nanosleep(2) system call was used several
-times to suspend execution for a period of time to approximately compute
-the number of CPU-cycles in the idle code path. The following is an average
-count of CPU-cycles:
-
-				  Vanilla                 Modified
-
-  Cycles per idle loop            151858                  153258  (+1.0%)
-
-Signed-off-by: Aaron Tomlin <atomlin@redhat.com>
----
- kernel/time/tick-sched.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-Index: linux-2.6/kernel/time/tick-sched.c
-===================================================================
---- linux-2.6.orig/kernel/time/tick-sched.c
-+++ linux-2.6/kernel/time/tick-sched.c
-@@ -926,13 +926,14 @@ static void tick_nohz_stop_tick(struct t
- 	 */
- 	if (!ts->tick_stopped) {
- 		calc_load_nohz_start();
--		quiet_vmstat(false);
- 
- 		ts->last_tick = hrtimer_get_expires(&ts->sched_timer);
- 		ts->tick_stopped = 1;
- 		trace_tick_stop(1, TICK_DEP_MASK_NONE);
- 	}
- 
-+	/* Attempt to fold when the idle tick is stopped or not */
-+	quiet_vmstat(false);
- 	ts->next_tick = tick;
- 
- 	/*
-
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
