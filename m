@@ -2,64 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A3AF644437
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:11:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B614A64443C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235193AbiLFNLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
+        id S232572AbiLFNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:12:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234492AbiLFNLN (ORCPT
+        with ESMTP id S235438AbiLFNMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:11:13 -0500
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940966243;
-        Tue,  6 Dec 2022 05:09:45 -0800 (PST)
-Received: by mail-oi1-f179.google.com with SMTP id r11so11115589oie.13;
-        Tue, 06 Dec 2022 05:09:45 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Twf2LUQQZEEsPFMs0YGDTeUVVUS9EWkbM3eJUG/VOf0=;
-        b=wb94GU1QlHOKSB3GEWBJaC+I2S/bP+Wlt5KY3Qq9/I+uWBhhG2IyM1sBF3DCSo9oot
-         ZhueNpYEKM+H3XjDT5/LNyzsgAvdULgRgf5x9xAgRyH3jyAGb1gFvRCmqyklj/uzS9ad
-         YRUrRJNKjeakHHtemU7JuzumrPQVX43s1hEpb48PgZHDOscnvVq5HeVH4PENA7YnwEbt
-         JUSx1GtJ69gQUo3CuWN97VCJMqPQNWtYnppPU5C+AcjK7gpXsPKOsdnmbXpAtHNrfueM
-         Q5Upu+6wy5YpPTy2lJhct9K600n4vWpOMbWB7JfwXGqIObWUr+VyvlKFJ/FiqSUn6HQH
-         ULyw==
-X-Gm-Message-State: ANoB5pk4MhQafVBg0bFnbvLkJxa4r/6b++GgrgRQtDXGZBxUukADzkjC
-        JWp3fYIUhuBy/GhKfYvQsCwSX1+J5Q==
-X-Google-Smtp-Source: AA0mqf7a4XewMy+qenYc/uQHEe7SRvtkFJ8yQxfPCpF8rThyNv20WBRTh4LVw3I3MiVY6s7uZD0XLA==
-X-Received: by 2002:a05:6808:22a4:b0:35a:388c:743d with SMTP id bo36-20020a05680822a400b0035a388c743dmr43974263oib.258.1670332184644;
-        Tue, 06 Dec 2022 05:09:44 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z20-20020a4a9c94000000b004a3527e8279sm1321513ooj.0.2022.12.06.05.09.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:09:44 -0800 (PST)
-Received: (nullmailer pid 236277 invoked by uid 1000);
-        Tue, 06 Dec 2022 13:09:43 -0000
-Date:   Tue, 6 Dec 2022 07:09:43 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Jeremy Kerr <jk@codeconstruct.com.au>
-Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [RFC PATCH 1/2] dt-bindings: mfd/syscon: Add resets property
-Message-ID: <167033218290.236219.3964235132732494862.robh@kernel.org>
-References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
- <20221206073916.1606125-2-jk@codeconstruct.com.au>
+        Tue, 6 Dec 2022 08:12:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6942C0;
+        Tue,  6 Dec 2022 05:11:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE348B81974;
+        Tue,  6 Dec 2022 13:11:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76B1C433C1;
+        Tue,  6 Dec 2022 13:11:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670332312;
+        bh=VVHMOEJUAAOA/RtsQv7QMpPJdj1/u6S3jZMKl5TJ8GI=;
+        h=Subject:From:To:Cc:Date:From;
+        b=F5UWSOaEDoHnHXcU43B6TM2774yeZtYXZDnrTEFERzcizLauw+q4z7w0sFjdCwgEM
+         huAj5OJJFPWgQSasfmi4uSSS0OEX+Y/vxsmi7RfTQRerMNS7IXQxgC9+IHe2N0OqIZ
+         bykRXwyVOVqRyoc2ZEZQLSZORUpf+x/W73Tp2mH5y4C+h+qTI4v1cI/UEl5NH7CyA3
+         KziTvZKgDn8+FDKW1SwLaWiaZj2iBzMLqBurHa2fwOVe++oPEQ7ja2MDh/VmYHn9OY
+         l/sKhKiPELag18Tz4hheNehfCMFkjfrdaMTT5UjiZ1sVXJx2riaWScvR+0WdK7fEH+
+         a3gv6qN6lIAkQ==
+Message-ID: <d3ba2c7f26958242c0a31b8f966e7c3d251a9e0f.camel@kernel.org>
+Subject: [GIT PULL] file locking changes for v6.2-rc1
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-cifs <linux-cifs@vger.kernel.org>,
+        ceph-devel <ceph-devel@vger.kernel.org>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>
+Date:   Tue, 06 Dec 2022 08:11:43 -0500
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-U/x8SEMmkxi22ZtjFzj9"
+User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206073916.1606125-2-jk@codeconstruct.com.au>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,19 +58,95 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Tue, 06 Dec 2022 15:39:15 +0800, Jeremy Kerr wrote:
-> Simple syscon devices may require deassertion of a reset signal in order
-> to access their register set. This change adds the `resets` property from
-> reset.yaml#/properties/resets (referenced through core.yaml), specifying
-> a maxItems of 1 for a single (optional) reset descriptor.
-> 
-> This will allow a future change to the syscon driver to implement reset
-> control.
-> 
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> ---
->  Documentation/devicetree/bindings/mfd/syscon.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
+--=-U/x8SEMmkxi22ZtjFzj9
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Rob Herring <robh@kernel.org>
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa=
+:
+
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/lock=
+s-v6.2
+
+for you to fetch changes up to f2f2494c8aa3cc317572c4674ef256005ebc092b:
+
+  Add process name and pid to locks warning (2022-11-30 05:08:10 -0500)
+
+----------------------------------------------------------------
+The main change here is to add the new locks_inode_context helper, and
+convert all of the places that dereference inode->i_flctx directly to
+use that instead.
+
+There a new helper to indicate whether any locks are held on an inode.
+This is mostly for Ceph but may be usable elsewhere too.
+
+Andi Kleen requested that we print the PID when the LOCK_MAND warning
+fires, to help track down applications trying to use it.
+
+Finally, we added some new warnings to some of the file locking
+functions that fire when the ->fl_file and filp arguments differ. This
+helped us find some long-standing bugs in lockd. Patches for those are
+in Chuck Lever's tree and should be in his v6.2 PR. After that patch,
+people using NFSv2/v3 locking may see some warnings fire until those go
+in.
+
+Happy Holidays!
+----------------------------------------------------------------
+Andi Kleen (1):
+      Add process name and pid to locks warning
+
+Jeff Layton (9):
+      filelock: WARN_ON_ONCE when ->fl_file and filp don't match
+      filelock: new helper: vfs_inode_has_locks
+      filelock: add a new locks_inode_context accessor function
+      ceph: use locks_inode_context helper
+      cifs: use locks_inode_context helper
+      ksmbd: use locks_inode_context helper
+      lockd: use locks_inode_context helper
+      nfs: use locks_inode_context helper
+      nfsd: use locks_inode_context helper
+
+ fs/ceph/locks.c     |  4 ++--
+ fs/cifs/file.c      |  2 +-
+ fs/ksmbd/vfs.c      |  2 +-
+ fs/lockd/svcsubs.c  |  4 ++--
+ fs/locks.c          | 50 ++++++++++++++++++++++++++++++++++++++-----------=
+-
+ fs/nfs/delegation.c |  2 +-
+ fs/nfs/nfs4state.c  |  2 +-
+ fs/nfs/pagelist.c   |  2 +-
+ fs/nfs/write.c      |  4 ++--
+ fs/nfsd/nfs4state.c |  6 +++---
+ include/linux/fs.h  | 20 ++++++++++++++++++++
+ 11 files changed, 72 insertions(+), 26 deletions(-)
+
+--=20
+Jeff Layton <jlayton@kernel.org>
+
+--=-U/x8SEMmkxi22ZtjFzj9
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iQJHBAABCAAxFiEES8DXskRxsqGE6vXTAA5oQRlWghUFAmOPP48THGpsYXl0b25A
+a2VybmVsLm9yZwAKCRAADmhBGVaCFfJND/4p6X6SWmAXSzBgZ7EOT/dnC66PllS1
+KO50o2DfeiIapxkvqzOo49YyGovbFMcdQqWNXcBJ3TdSZ2v18FRcrnp47UU/MnPU
+pz3bgdqDteDwsEEQPPSSpgFZr4CpokiwoFiHARKz0DdbJFRefN7CcL99whaNDioR
+VS6w0bysdNxesED9asHOl8MzzmKvbiOQV7/SHLOjIrxm+FwrSFkkC4ReO3UMZp72
+HxK80v4IF1Aarw2rd/+8jUsEiwWHRpWkYS1mxT6pIUqJrwFkBue6kkoUlmd5GaUl
+fqsQE8EQcuQHACHPd07MiH/VLgnNyOpY9KbHZoLf1JFDEWuXapVrIlg9iNuR/oT4
+wLJbC5U5HaOJlG5mcnOsg6KFc3+6Gf9BGuD8SPKhlGroHTPlb78+Xh8jPAdeOwn+
+nsEO9njtMdt7uR1AAJIyv8SvrC/ZuPc0kR3rQ3CVkG4yIBrnjsgul5MkBVjsImwF
+jYT7oQwDokTFGryROOt9nzW6O2bmcwin1NfUCA80iVaIm0JXW8IXii5/RT5vxmei
+4bNqNkQLrHU48OBtW3yz5YG/g9lZme71f+M8QUzRfSkGk1lTcDDMtjIZAK6OphpJ
+baITwvncNSkq7zmf03SpaN+l1GYK9A20BVdA1gu59qmanF/Fy532qbrotFEpLbJY
+yNqzj5LP4OrxJQ==
+=1wv0
+-----END PGP SIGNATURE-----
+
+--=-U/x8SEMmkxi22ZtjFzj9--
