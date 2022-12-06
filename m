@@ -2,161 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A24A644ED3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:56:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D58E644ED7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiLFW4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:56:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45360 "EHLO
+        id S229640AbiLFW6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLFW4e (ORCPT
+        with ESMTP id S229480AbiLFW6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:56:34 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D194A056;
-        Tue,  6 Dec 2022 14:56:33 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so19413301pje.5;
-        Tue, 06 Dec 2022 14:56:33 -0800 (PST)
+        Tue, 6 Dec 2022 17:58:39 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666273C6D7;
+        Tue,  6 Dec 2022 14:58:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670367518; x=1701903518;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=6ht/rZYuSS8f6RnDOvHrWqxob6Ym8r1N6Mor3H3UOvg=;
+  b=0dUnD66PvdcnGbPGa6w6855je+aIpJpKUFvI9hGyPQ3JE0eQGg8v4RtM
+   O4YQQiLMAS0lM3G5IYMpAFeNXauqluZubAASCaySeiJ/wRmoTMxQDtxlg
+   csG2yhSv7CPmifUaai1Fa8wp64YIKsi1id2i1LMLv4HHym38QCnekhBqZ
+   yxrj5mWfV6gWKJpo8q9H2oux5ym/J1rl5bMlYCLNHml4SJgpME0zaQLFn
+   njZG5XOfheKRu1XUJL8UGAkcVDEPr3eiDyv1GO2u9e4aO22iD6i0C2FVV
+   OzrEHOEemaxmJNA4zHrprwJ9BHGqnj2NBrL1glwFSmUcdfVwka4NG2PgM
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="190367408"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 06 Dec 2022 15:58:37 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Tue, 6 Dec 2022 15:58:26 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Tue, 6 Dec 2022 15:58:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FVfEeMKJ+LC6akmdBScF6uAc/jjAy3BTe3hnsZGuTsu3o910vWBOBjvmpHQimse/x7jvJsP+CssnACc9YJuo2Gf0Nw9L69cCsRNmNX65kHhdcRPbI7ef8/VMyfZl0n4NCJWOtHDDgWxYTto6V/0tpjYeV7G2T9+z8h5tJ8vFjCWcn72p1fqBZYLvaTrRAgzM8BCb80ORyPdrxVKo4wOjMgJFy3xVozxf6gw2JDUVg8Wm0kx4GMxqig47CG49EEEXHgKp9f74MqCvZH2wEISKJ653aNd61h67PX0rhYuKfg0bXi4mhmegqcrattH2OL3SaZz+kTMzdAYq5/qFYqXWMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wybtnkuk3thH8W53vatx6LGEPZlZfPsYffnLv0ScWwM=;
+ b=baE1zP61FEN9Y1ZwLcInNF6LGfma/ozv1TnJAtx+xtZeOgAR5grquWgubH0VtG1Qkkmi/ptQmm1u9c0alKes1YxYRqJPCZvuqG7JCLLc7gp/YthsbYBWmRNVFXErMA8Wb88xgnAWDnImeFEYGEsmnct2iKR2F1vG+nYo3zA0Z9NFRK9/En0NOhOuSVnW0sSTcQFrX6xDPkqwBBJdEPUcL9Hx6aQVDT+2n6tHb3rAOq4MAwlag2nLfkw6q6bKdTk1EXGQ48ftmEct4Iz19U1T0I/Uaezp35OCrc0zWsUhqDVxaCQaoXvpLqucIWb1P4eZ3RqJ6S17759TR2eLSI/ujA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aCtW+MA1B2sGv6cbDKFnxVnKAKT7UQXyOCBUBu2RYBQ=;
-        b=m+ogv/Qvnsr9dPyrYaqWb9CWuyH0R+XVDxQFi135JzdHs3k1U3H5kel3PcvqiQalDr
-         gxz7txQo94fNHfVP/NYV7cyfj0J/ENrfPArB/+SsTod8Ie3k1NZF0GsajssOtzaeSoAe
-         0adGYLiwK7UHoQYblzUd3OeDiHDm2yIOmOoQg8r4AuyiNaBpZIoGyvVVPi7AhzUGv0Jd
-         O8nJ0o+AOAo6gtOUGCe4ct6Tn2gQGIbNBv4Se/FL4NndhwcCZDIdpGri78BYFrGoAV5D
-         H3N73cLJnxqN6QwK5Em+/uHG1WsghkDQtFKiUyzSaOcJnL0GfQOiaNnjl9eyUxJy2LOu
-         3E8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aCtW+MA1B2sGv6cbDKFnxVnKAKT7UQXyOCBUBu2RYBQ=;
-        b=2ZZ3dU62DVDFlGXxWBd0/d0tZ2wSnJWtKoeFk+JPNh3UETwbIVPhtlNS0jUxJTkRhH
-         qtesf7WLvn25eUrFNBmGStWpiGzlojnizALk+ecX3f3vpqTOpwTlQ26WczOseYDb7yLg
-         PPPMihJ5zIaL8FSvUQTMpgpfLUwUKkzUMfWsZelXTvMZNl500RyaoVSk2oguQFNuFooc
-         QoN1r3UvycOpT8lV4UZ2sWwgO9rabvouscMxq+rQh76Q3siy8Al6TSUfVXUDBvSSH7lY
-         O/hvtRlomnP7phbOU4+z6IxjVC0cH6llXy9SotxxEK/VtSiA0jSK+DG3DCC8MeZw6Mev
-         wyAg==
-X-Gm-Message-State: ANoB5pnHjfVX/G8TK8EhgrUxVFcCLXiHx08fqkMZ23PEcncVYxaxBhIR
-        jVYvl5fwpmRf2E4hvYq/FNs9satwezg=
-X-Google-Smtp-Source: AA0mqf7+fxL1WGmNTHR1EPWdHlIa1qMLmpJjTGVsj11j8AMLbtFxDUVMUbm4DYiE0mlZumljT5KTRQ==
-X-Received: by 2002:a17:902:cccf:b0:187:2f28:bfd6 with SMTP id z15-20020a170902cccf00b001872f28bfd6mr602131ple.21.1670367392639;
-        Tue, 06 Dec 2022 14:56:32 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001872999f58esm13103290plk.189.2022.12.06.14.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 14:56:32 -0800 (PST)
-Message-ID: <f54802a3-cf2f-8746-2273-0ae462a7f4eb@gmail.com>
-Date:   Wed, 7 Dec 2022 07:56:27 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/2] docs: Move rustdoc output, cross-reference it
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net,
-        ojeda@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu, konstantin@linuxfoundation.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20221201204814.2141401-1-carlos.bilbao@amd.com>
- <20221206153151.771038-1-carlos.bilbao@amd.com>
- <20221206153151.771038-2-carlos.bilbao@amd.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wybtnkuk3thH8W53vatx6LGEPZlZfPsYffnLv0ScWwM=;
+ b=sn5CRNbq7q9eEzHpMD/59klqCacgSHLEa5WO8kfLh9qX7OsXH9IVkOMQ0hH67LUZ3ktwu6Zj8P4Vpw4vVzsp/D11fBwN+U5l6SAySMkaOKJVAnzD6ros9aX6ytiu/zygwfIxUAhdCy2JdY6DDU/JPgf36ANSHVciI6C1FZXZtnw=
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com (2603:10b6:300:2b::21)
+ by MW4PR11MB5800.namprd11.prod.outlook.com (2603:10b6:303:186::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Tue, 6 Dec
+ 2022 22:58:25 +0000
+Received: from MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::5928:21d9:268f:3481]) by MWHPR11MB1693.namprd11.prod.outlook.com
+ ([fe80::5928:21d9:268f:3481%11]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
+ 22:58:25 +0000
+From:   <Jerry.Ray@microchip.com>
+To:     <linux@armlinux.org.uk>, <olteanv@gmail.com>
+CC:     <andrew@lunn.ch>, <f.fainelli@gmail.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net-next v3 2/2] dsa: lan9303: Move to PHYLINK
+Thread-Topic: [PATCH net-next v3 2/2] dsa: lan9303: Move to PHYLINK
+Thread-Index: AQHZCaGINo+jcYxyBkCe7T6HFT6Y065hP+WKgAAadQCAAB4zwA==
+Date:   Tue, 6 Dec 2022 22:58:25 +0000
+Message-ID: <MWHPR11MB1693565E49EAB189C2084C58EF1B9@MWHPR11MB1693.namprd11.prod.outlook.com>
+References: <20221206183500.6898-1-jerry.ray@microchip.com>
+ <20221206183500.6898-1-jerry.ray@microchip.com>
+ <20221206183500.6898-3-jerry.ray@microchip.com>
+ <20221206183500.6898-3-jerry.ray@microchip.com>
+ <20221206193224.f3obnsjtphbxole4@skbuf>
+ <Y4+vKh8EfA9vtC2B@shell.armlinux.org.uk>
+In-Reply-To: <Y4+vKh8EfA9vtC2B@shell.armlinux.org.uk>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <20221206153151.771038-2-carlos.bilbao@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MWHPR11MB1693:EE_|MW4PR11MB5800:EE_
+x-ms-office365-filtering-correlation-id: 289ed66a-e3d1-4be4-7b43-08dad7dd61a4
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: XDkJTQxALQ2tUb7jvhPvFIa/tmQJjq7cArhyvkb3fv8TGrbnnW5Vz8IV2+OJII5fyrydzV+wxy2DGm4ELJBaYP9IDLG+LNX9R73aaZrij3YBi/wPQ76/I46AmD0T3JoLNO4+E2ro0DFcCPlp6uCJAaS6kbG5w9kz4pYtGQsVvDUqxpmp1AHovgiKec6aUS0HCOrd1zLGVeFnL9t5cZeetKG2va3F8qn69ccrDyRHQQjCoWvQq7Qjh+rR9zgGJsn8aa02bazNsrRuQlKVWENDjtmU6T85H/wwCDfaOVsFKqOgBtD/sPuXmExKPHdZK9f2JPP9T/evxnhQ6t8Gcp0eI3OkIBfRt/GVpLAcbxac9AUrAJzK7U14eMWBZlunP3wUK4Wa5ciZao2q+dM3/eDbjul131V4m8mkNiZbeQCtdIl8RsheL4Xvxcs1DdQbWRBDhZJCrq3UAnd30fgPoxpMUjAB1FxVFfYJ7Z8q1O5gQszRQPa06KLAsTXSlJhjHReQtyrMSFqzd22Jo6LuByuUpg2uqB0M4PfawVp8RkSilYqYqQ6KuDLK85vkAKEkJbt2OtMS5lM56t7M+y28VyzJQ1A4ulEzvppYo8Vq+hVPLBjbTpPpRE/3Rlz7PKl8b/z5XQtUF+yjfyvO907fnxKVgST7sWQwpC+Lsv7o6U9aotPaQLDof0qVB/y7IdSTHpIzlrgaI1mwEtZjPrl53HYepw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1693.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(366004)(396003)(346002)(136003)(376002)(451199015)(26005)(186003)(9686003)(7696005)(6506007)(478600001)(4326008)(316002)(38100700002)(76116006)(54906003)(41300700001)(110136005)(8936002)(71200400001)(8676002)(2906002)(66556008)(66446008)(66476007)(66946007)(64756008)(122000001)(7416002)(33656002)(38070700005)(5660300002)(86362001)(52536014)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/exvHGzSrxT1+ro9cN9CQ8WTSH9b7Ji13sdluWekRnAf7IUw+TWGri87okTu?=
+ =?us-ascii?Q?kxqqiyoCU6bCnuUbsKQ2UTYAfg4g6ibPT2bdJMosGSDH+eHY1+1Dc0BYhS76?=
+ =?us-ascii?Q?gzU2aHzd0fSGuuuNzutKFxGDGisAvvgO5015FF805ncZ0t55YEALO6H/qaOE?=
+ =?us-ascii?Q?JuQI/XYm2UNvO+8l8a/dDmZYaLTkOyL2Nbyl4yVLiMqj1yqv/QGUFTw1mT05?=
+ =?us-ascii?Q?2U9knck2zXQLItE1ju5e6a4YPqpRIU/8/UcbnLICVzMlNzv7rEWutJM6wwnf?=
+ =?us-ascii?Q?L2hR55Kwe+9QebqVCTUfKftbjzdJlEEIpFfmSny1tUraiC66Ex8/A/xN7XY1?=
+ =?us-ascii?Q?ClhlWlbm0cdMnB+bXpjGGsUcmTA+vlushWpAkOwPpz9tRQqHpqJAVzh8KOL/?=
+ =?us-ascii?Q?mbtlu0Jk76uinlA4PUIC9TP3srbTBr63qOJCH7eLSRbFbYv38INEKXLcEFQT?=
+ =?us-ascii?Q?okCUa5fR7OdWAvppA/1OUL+GyFyDtEWfIQZIX0qCtWctksuLPGQaZitRarLm?=
+ =?us-ascii?Q?h4Yd+z7vKFfxA2wFJ1pxko8gm/Coa4Xqa3KuKKxCi3uS2d3JdM0Zub+x7Q2X?=
+ =?us-ascii?Q?dYC9bJbFVZTeke8fKDZn9FNWgzKejkGWCPzZmzczJq9DZsVgQ7kJoRat64iO?=
+ =?us-ascii?Q?y8NoKnDxMGBNwCrlmMp4CFERKmRCdjbL6+D8qf+0e+gRZiQh+S2SwsN1Twxo?=
+ =?us-ascii?Q?IJoXQ2Z3A7ERMfCag4uqevVatZwSr4PH8nLAhS2FpCOnIaa324h5DwdUZvou?=
+ =?us-ascii?Q?5N5gWVV2PXx3bAXD1cKfOOl2GBd6anvZdDtE7vD+96q0wH9ymNM/lZnz91rv?=
+ =?us-ascii?Q?HpQeneeIdkLEqlJyvOAVx7Qs9iph+HQ2MHTrt2NJHNKG6Pxp2i5JDvNb6m9m?=
+ =?us-ascii?Q?e+q+Uh2+FxNmV6sVnnIRU/WUzsZ+B1K7ZrnRmd5veCzR0q41VqbPvmhAGU/e?=
+ =?us-ascii?Q?BS32zVl+ujhbXOV/bK0ZsinAX1nKM0R0ZMdXa2T0+rZ1s57aEbkhlYKhwelh?=
+ =?us-ascii?Q?vN74f05gRfZxHl05f2AFSCMazTcioN+uwpjimLnA+DnfLLm7t0p+I2lH8Emp?=
+ =?us-ascii?Q?/ObCQkgpg1ES6j9SGrhx2BYUPUtA8DM98tPltaO+1iPZqtJ1P7t+JY0aO1Bm?=
+ =?us-ascii?Q?dctWEv2hnond/XbXwle6qvpB6Pg3E2j0PRi8aG92XeI1oecqeWgwXwYqsLoU?=
+ =?us-ascii?Q?eB0cA+fvh3+OdtvP8UB/m7Tg8WmE7Wo+pYvSSiJgTpEBZqN6obFjqN1Ljrt+?=
+ =?us-ascii?Q?x9yuX8/NiNUpS2fI3N8XFCPpEhC4GSJhoPsJyAnEvEQ6V2gPH8WG9OEc9lrv?=
+ =?us-ascii?Q?TFHPUE6VjQ4c0SYSmQa8U5dGJiTlu+mBzaQsJYEvSK+e0ET5YGuUo6yrNykr?=
+ =?us-ascii?Q?DmramEyo/WuRfX87ErjY5Df4ZwICiFAg2Yka04uoFgcCuOcG65xFuhNzJ483?=
+ =?us-ascii?Q?y7m+ndkhMP/7OT5R/QV2a+fPkxzciog6sTxZdx+FoZ+dSDUk56xGlPsZqg9t?=
+ =?us-ascii?Q?nxw5lh3UCZzdrGQvrrcQnZHasRdNwIT4QVc+SNla53B9093JiJEF4xcxE1ko?=
+ =?us-ascii?Q?P3mPY4viU0JUSyNK6lWMpL+Uu3jShpCgIH/JL7Jc?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1693.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 289ed66a-e3d1-4be4-7b43-08dad7dd61a4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2022 22:58:25.2103
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qbTXixxsbA55i286LQsftBuobFdm5LUemSI9sAlQHP1GGFgT3yXOB5rLQnRjZob5Tx21UYh6h/F0eGAvklqCDQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB5800
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022 09:31:50 -0600, Carlos Bilbao wrote:
-> Generate rustdoc documentation with the rest of subsystem's documentation
-> in Documentation/output. Add a cross reference to the generated rustdoc in
-> Documentation/rust/index.rst.
-> 
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> > > This patch replaces the .adjust_link api with the .phylink_get_caps a=
+pi.
+> >
+> > Am I supposed to read this commit description and understand what the
+> > change does?
+> >
+> > You can't "replace" adjust_link with phylink_get_caps, since they don't
+> > do the same thing. The equivalent set of operations are roughly
+> > phylink_mac_config and phylink_mac_link_up, probably just the latter in
+> > your case.
+> >
+> > By deleting adjust_link and not replacing with any of the above, the
+> > change is telling me that nothing from adjust_link was needed?
+>=20
+> ...
+>=20
+> > > -static void lan9303_adjust_link(struct dsa_switch *ds, int port,
+> > > -                           struct phy_device *phydev)
+> > > -{
+> > > -   struct lan9303 *chip =3D ds->priv;
+> > > -   int ctl;
+> > > -
+> > > -   if (!phy_is_pseudo_fixed_link(phydev))
+> > > -           return;
+>=20
+> If this is a not a fixed link, adjust_link does nothing.
+>=20
+> > > -
+> > > -   ctl =3D lan9303_phy_read(ds, port, MII_BMCR);
+> > > -
+> > > -   ctl &=3D ~BMCR_ANENABLE;
+> > > -
+> > > -   if (phydev->speed =3D=3D SPEED_100)
+> > > -           ctl |=3D BMCR_SPEED100;
+> > > -   else if (phydev->speed =3D=3D SPEED_10)
+> > > -           ctl &=3D ~BMCR_SPEED100;
+> > > -   else
+> > > -           dev_err(ds->dev, "unsupported speed: %d\n", phydev->speed=
+);
+> > > -
+> > > -   if (phydev->duplex =3D=3D DUPLEX_FULL)
+> > > -           ctl |=3D BMCR_FULLDPLX;
+> > > -   else
+> > > -           ctl &=3D ~BMCR_FULLDPLX;
+> > > -
+> > > -   lan9303_phy_write(ds, port, MII_BMCR, ctl);
+> >
+> > Are you going to explain why modifying this register is no longer neede=
+d?
+>=20
+> ... otherwise it is a fixed link, so the PHY is configured for the fixed
+> link setting - which I think would end up writing to the an emulation of
+> the PHY, and would end up writing the same settings back to the PHY as
+> the PHY was already configured.
+>=20
+> So, I don't think adjust_link does anything useful, and I think this is
+> an entirely appropriate change.
+>=20
+>=20
 
-Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-
-> ---
->  Documentation/rust/index.rst |  5 +++++
->  rust/Makefile                | 15 +++++++++------
->  2 files changed, 14 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
-> index 4ae8c66b94fa..416d6b3de1e4 100644
-> --- a/Documentation/rust/index.rst
-> +++ b/Documentation/rust/index.rst
-> @@ -6,6 +6,11 @@ Rust
->  Documentation related to Rust within the kernel. To start using Rust
->  in the kernel, please read the quick-start.rst guide.
->  
-> +.. only:: html
-> +
-> +	If this documentation includes rustdoc-generated HTML, the entry
-> +	point can be found `here <rustdoc/kernel/index.html>`_.
-> +
->  .. toctree::
->      :maxdepth: 1
->  
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 7700d3853404..080c07048065 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -1,5 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> +# Where to place rustdoc generated documentation
-> +RUSTDOC_OUTPUT = $(objtree)/Documentation/output/rust/rustdoc
-> +
->  always-$(CONFIG_RUST) += target.json
->  no-clean-files += target.json
->  
-> @@ -58,7 +61,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
->  	OBJTREE=$(abspath $(objtree)) \
->  	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
->  		$(rustc_target_flags) -L$(objtree)/$(obj) \
-> -		--output $(objtree)/$(obj)/doc \
-> +		--output $(RUSTDOC_OUTPUT) \
->  		--crate-name $(subst rustdoc-,,$@) \
->  		@$(objtree)/include/generated/rustc_cfg $<
->  
-> @@ -75,15 +78,15 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
->  # and then retouch the generated files.
->  rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
->      rustdoc-alloc rustdoc-kernel
-> -	$(Q)cp $(srctree)/Documentation/images/logo.svg $(objtree)/$(obj)/doc
-> -	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(objtree)/$(obj)/doc
-> -	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
-> +	$(Q)cp $(srctree)/Documentation/images/logo.svg $(RUSTDOC_OUTPUT)
-> +	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(RUSTDOC_OUTPUT)
-> +	$(Q)find $(RUSTDOC_OUTPUT) -name '*.html' -type f -print0 | xargs -0 sed -Ei \
->  		-e 's:rust-logo\.svg:logo.svg:g' \
->  		-e 's:rust-logo\.png:logo.svg:g' \
->  		-e 's:favicon\.svg:logo.svg:g' \
->  		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
->  	$(Q)echo '.logo-container > img { object-fit: contain; }' \
-> -		>> $(objtree)/$(obj)/doc/rustdoc.css
-> +		>> $(RUSTDOC_OUTPUT)/rustdoc.css
->  
->  rustdoc-macros: private rustdoc_host = yes
->  rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
-> @@ -141,7 +144,7 @@ quiet_cmd_rustdoc_test = RUSTDOC T $<
->  		@$(objtree)/include/generated/rustc_cfg \
->  		$(rustc_target_flags) $(rustdoc_test_target_flags) \
->  		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
-> -		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
-> +		-L$(objtree)/$(obj)/test --output $(RUSTDOC_OUTPUT) \
->  		--crate-name $(subst rusttest-,,$@) $<
->  
->  # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
+I, too, thought I would need phylink_mac_config and phylink_mac_link_up to
+completely migrate away from PHYLIB to PHYLINK.  But it seems as though the
+phylink layer is now taking care of the speed / duplex / etc settings of th=
+e
+phy registers.  There is no DSA driver housecleaning needed at these other
+phylink_ api hook functions.  At least, that's my current level of
+understanding...
