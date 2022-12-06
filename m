@@ -2,108 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C581644DED
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA59C644DF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229555AbiLFV0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:26:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
+        id S229661AbiLFV2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:28:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLFV03 (ORCPT
+        with ESMTP id S229575AbiLFV2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:26:29 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFAA4841A
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:26:28 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE0841EC0523;
-        Tue,  6 Dec 2022 22:26:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670361987;
+        Tue, 6 Dec 2022 16:28:32 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CA637F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:27:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670362056;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=YVDn0S8JQnZN5dcrnKjo8zsfbWVS/GOKauD82aiLVQQ=;
-        b=k3p47DcFVuXJM8onhOBSue39zUDf2NtSZ560L/Q/UkcBnwDQn9r4LgyKfNSc04LKx6gCx1
-        MFY19yVzPP1FJBIamZWTWFxC+M6AzNa362IYaE6hcPq3XJ/xKyV8JgzriDHbJ91ExbsxWb
-        ubjtbDRqGbxoLWi5CBOb2DfMqqURapQ=
-Date:   Tue, 6 Dec 2022 22:26:22 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dionna Amalie Glaze <dionnaglaze@google.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
-        Andy Lutomirsky <luto@kernel.org>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v8 1/4] crypto: ccp - Name -1 return value as
- SEV_RET_NO_FW_CALL
-Message-ID: <Y4+zfgU639095B6K@zn.tnic>
-References: <20221104230040.2346862-1-dionnaglaze@google.com>
- <20221104230040.2346862-2-dionnaglaze@google.com>
- <Y4tAX580jEGHOU9d@zn.tnic>
- <CAAH4kHYz-46syE4wKPzo1N9P34wLHcs85obOCjqb6eQ=iv=n3w@mail.gmail.com>
- <Y4ulj38eMr1NiRdX@zn.tnic>
- <CAAH4kHbZM9YW0BvwxrQNFysHwB8JkPJzFRN9RdwhmixhbtsCyw@mail.gmail.com>
+         in-reply-to:in-reply-to:references:references;
+        bh=PRGbK9k8R9uzFMCG9ps6sFZXam1J9ub+EnEOXkruzkY=;
+        b=dBm4DUqcec8iQeDw8nOsoZnfinJnIXxbTLjszgSDPG82dRF+ZUgCs/OPKS0eUZ7dSKgySa
+        CpG2yUR8RMYI/yVIykcA1pEV68qKrxjd3FWmzufxnfXTe3QCyeerJCmH3aSquBtKo/0zsF
+        ruPzINCC1xphxzF9nuPdRBjuAbtmeTM=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-149-AtaVwDmXMm-fLdNHUuAJXg-1; Tue, 06 Dec 2022 16:27:34 -0500
+X-MC-Unique: AtaVwDmXMm-fLdNHUuAJXg-1
+Received: by mail-qt1-f197.google.com with SMTP id ff5-20020a05622a4d8500b003a526107477so35068249qtb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 13:27:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PRGbK9k8R9uzFMCG9ps6sFZXam1J9ub+EnEOXkruzkY=;
+        b=sV3QbJMgtW1LXy+jUvf5OwWx2UyQD/eGmHXfvkiuBLXElIVX45U4a3RWu3ipXrq+MP
+         CSt/xE/gB/WzslpHYEmilO8Ka/tIxwviSakl03wMhcdjZnxALFNEhMON+dgeSZFUhadB
+         Irsa97mlNMHwwzwR90ZDmi/8221tbwCs5dP7I/UvJDHyBxWaTv+M/In9k0McyBwTcUe4
+         3rCgJlCCZKhpq5Xc50gtxp6o4GS0sb3pJPEtwpeoiB3s2FXAyeDaQz2yMiXZs3Gorops
+         wv0uzk0KlGg+deSMhbzGwMaKMAvNganzePotwKDNYUfgxiCo69agsy7XXBfW4o2nZOz3
+         9yBw==
+X-Gm-Message-State: ANoB5plsTebadX65QqCgfitB6QzUxSlPY6h2xqStWVOnxjmhJpvIQ01s
+        W7r/EUiNhp2ptK9OTSroa8bSNx7wkPJbfoRKbifWpeD6/FQmH8rLs+mFw0Du9AhKu0Xrbc1ieGO
+        9uETo1yG8G3yGAS2gnohE2Sj/
+X-Received: by 2002:ac8:5508:0:b0:39c:da20:688 with SMTP id j8-20020ac85508000000b0039cda200688mr612911qtq.43.1670362054289;
+        Tue, 06 Dec 2022 13:27:34 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4kmVlOInGq/Pojb+UUeaVf8jYPRob7UOLmrRyKTTf+RHP6JcKzENk2Gdwl4icvTqnqDou07g==
+X-Received: by 2002:ac8:5508:0:b0:39c:da20:688 with SMTP id j8-20020ac85508000000b0039cda200688mr612909qtq.43.1670362054063;
+        Tue, 06 Dec 2022 13:27:34 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id k17-20020ac84791000000b003a50c9993e1sm12431610qtq.16.2022.12.06.13.27.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 13:27:33 -0800 (PST)
+Date:   Tue, 6 Dec 2022 16:27:31 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ives van Hoorne <ives@codesandbox.io>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hugh@veritas.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH RFC] mm/userfaultfd: enable writenotify while
+ userfaultfd-wp is enabled for a VMA
+Message-ID: <Y4+zw4JU7JMlDHbM@x1n>
+References: <20221202122748.113774-1-david@redhat.com>
+ <Y4oo6cN1a4Yz5prh@x1n>
+ <690afe0f-c9a0-9631-b365-d11d98fdf56f@redhat.com>
+ <19800718-9cb6-9355-da1c-c7961b01e922@redhat.com>
+ <Y45duzmGGUT0+u8t@x1n>
+ <92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAAH4kHbZM9YW0BvwxrQNFysHwB8JkPJzFRN9RdwhmixhbtsCyw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 09:05:19AM -0800, Dionna Amalie Glaze wrote:
-> Arguably it shouldn't ever get this value. We're just not very
-> selective when we copy back the kernel copy of the ioctl argument.
-> In all cases user space should treat the value as undefined, but still
-> we don't want to leak uninitialized kernel stack values.
+On Tue, Dec 06, 2022 at 05:28:07PM +0100, David Hildenbrand wrote:
+> > If no one is using mprotect() with uffd-wp like that, then the reproducer
+> > may not be valid - the reproducer is defining how it should work, but does
+> > that really stand?  That's why I said it's ambiguous, because the
+> > definition in this case is unclear.
+> 
+> There are interesting variations like:
+> 
+> mmap(PROT_READ, MAP_POPULATE|MAP_SHARED)
+> uffd_wp()
+> mprotect(PROT_READ|PROT_WRITE)
+> 
+> Where we start out with all-write permissions before we enable selective
+> write permissions.
 
-Absolutely.
+Could you elaborate what's the difference of above comparing to:
 
-> I've changed it to -1 to name the same kind of error across host and
-> guest: the communication with the PSP didn't complete successfully, so
-> the "error" value is not from the PSP.
-> This value can also get returned to user space during a -ENOTTY result.
-> We can call this NO_FW_CALL or UNDEFINED. I have no real preference.
+mmap(PROT_READ|PROT_WRITE, MAP_POPULATE|MAP_SHARED)
+uffd_wp()
 
-Me neither as long as this is written down and agreed upon as a possible
-value and not leaking kernel stack.
+?
 
-> Whatever value we set initially, the VMM can overwrite exitinfo2
-> during the ghcb_hv_call.
-> I'd rather that the "undefined" values were the same across both,
-> because the guest is merely receiving a value from the host's PSP
-> driver (or should be).
-> It keeps the enum for return values a bit tidier and not concerned
-> with whether the value is viewed from the host or guest.
+[...]
 
-Ack.
+> Yes, you are correct. I added that to the patch description:
+> 
+> "
+> Note that we don't optimize for the actual migration case:
+>     (1) When migration succeeds the new PTE will not be writable because
+>         the source PTE was not writable (protnone); in the future we
+>         might just optimize that case similarly by reusing
+>         can_change_pte_writable()/can_change_pmd_writable() when
+>         removing migration PTEs.
+>     (2) When migration fails, we'd have to recalculate the "writable"
+>         flag because we temporarily dropped the PT lock; for now keep it
+>         simple and set "writable=false".
+> "
+> 
+> Case (1) would, with your current patch, always lose the write bit during
+> migration, even if vma->vm_page_prot included it. We most might want to
+> optimize that in the future.
+> 
+> Case (2) is rather a corner case, and unless people complain about it being
+> a real performance issue, it felt cleaner (less code) to not optimize for
+> that now.
 
-...
+As I didn't have a closer look on the savedwrite removal patchset so I may
+not speak anything sensible here..  What I hope is that we don't lose write
+bits easily, after all we tried to even safe the dirty and young bits to
+avoid the machine cycles in the MMUs.
 
-> I hope the above discussion is clear that it's purely a defined
-> "undefined" because being pickier about what to copy_to_user during
-> exceptional circumstances in order to not overwrite the user's fw_err
-> value seems an unnecessary amount of code.
+> 
+> Again Peter, I am not against you, not at all. Sorry if I gave you the
+> impression. I highly appreciate your work and this discussion.
 
-Ok, I think we're on the same page. So pls document that NO_FW_CALL or
-so value and what it means and that thing should be taken care of.
+No worry on that part.  You're doing great in this email explaining things
+and write things up, especially I'm happy Hugh confirmed it so it's good to
+have those.  Let's start with something like this when you NAK something
+next time. :)
 
-Thx.
+Thanks,
 
 -- 
-Regards/Gruss,
-    Boris.
+Peter Xu
 
-https://people.kernel.org/tglx/notes-about-netiquette
