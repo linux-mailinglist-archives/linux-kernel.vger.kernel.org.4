@@ -2,99 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C287643A6D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB635643A75
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:51:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiLFAtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
+        id S233313AbiLFAvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:51:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiLFAtT (ORCPT
+        with ESMTP id S233171AbiLFAu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:49:19 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1171B7AD;
-        Mon,  5 Dec 2022 16:49:17 -0800 (PST)
-Received: (Authenticated sender: alex@alexyzhang.dev)
-        by mail.gandi.net (Postfix) with ESMTPSA id A77A0240003;
-        Tue,  6 Dec 2022 00:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alexyzhang.dev;
-        s=gm1; t=1670287755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A+PjSyDCFr/3XIz4V2NNmkUhvkPTvwX282wMPuLzm4c=;
-        b=BiGcc39XIdtvKnCQ/6EtcVS/7ZIkJ5gExJpoA3tKerelRAQIRZpNaj5rH9gnmpiqO+s/I1
-        HsP+0P40ua6+Tw8/8VStvpPczvol/NhkAyGuWHmjI+E8UQbyJ9MukNYQE7GDB9D3epYXU7
-        KF8DyO2U0Q/U21CfgTHRl/1YvdrKKUWGsHgtkfi4H9TgC+aV5qsUiVp2BtmWlQxwGt/viT
-        B1h40uhDxieOgwqInRs+pShLhG1LHgfdTNn7yn7KVaE0PU7SrmmEY9qRdIJMZnn6wey2gY
-        tovVyW78yNW0dEJ+BnNQ5vUU3niqL073VdMT0v4Fre9D8JXOm8TfFC6L4FJKZg==
-Message-ID: <1dc9d0ba-4836-dfc6-8bf2-322ce3b5c24d@alexyzhang.dev>
-Date:   Mon, 5 Dec 2022 16:49:10 -0800
+        Mon, 5 Dec 2022 19:50:59 -0500
+Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8A81B1CC
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:50:57 -0800 (PST)
+Received: by mail-il1-x12d.google.com with SMTP id z9so5875396ilu.10
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:50:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=t7EllS7EycwJQKQ7E4+tjHuL0D77O7aeDFmbgKj4v/I=;
+        b=EJHHbJiu3ulNrc8DJW8/qrbdCa4J7MJZMd/Wlf1oS4r/IF6DcNFguC+jw1hlPEuHSt
+         1fOLkP0UpyyFpW4Q9rsWCBOlASujjlxifFP4fjd0u2AmzLWhQNCpmJupByUKqb5zod0I
+         Qtbp43Ngn3R8VJj6ir32hJg1qc9AIYu/Xw60E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t7EllS7EycwJQKQ7E4+tjHuL0D77O7aeDFmbgKj4v/I=;
+        b=1Gbe02XkNaA0+Xyz8Ob29bvBDHHQz/pqemWsrJ67D//ONrWMAuGU55THAkpS+yXnzI
+         0vGEuZ3q+xTTlV82rvYIqVbz88CwKXpdGPrV/g7x13emWzkC+QjnmeWubMtU9R3j6EnH
+         9nYLpdlPc6lWuDJcwuOCegM3cMr0CJTrSaD3VjUqHgTszn3bdIW/mp+8iQDTCfYVCIzm
+         B59D//ofnV5QliyKwrk1xAxEyExrvmxO+NopRlFmfMnDDA5WhCwuAQ+QDoRUrPfCBXte
+         IR6I3vPKCD8+PqmJzYCD+7VahFloV5Qm11Qcdd8F91yy2P+QDESD5lMSE60/gZV8O46N
+         9Tpg==
+X-Gm-Message-State: ANoB5pnd0PuVBliZ5dTHTi3UeagIyPdoGdWGHpXyIgr2p/xAvgY+HbGS
+        RNFmXEg6kNzhOHrIKzvskUnYjNPfYjmvVCCmZEcj9ZEh5hmTTddqlrI=
+X-Google-Smtp-Source: AA0mqf6xcsiga75ZuTjF0H61IWsLJpXbIrrZk8NtyASGXEnkKaFjtvYsf+OGcArSzU5Rc/FkigeEW6O9vU8MXXcRfxg=
+X-Received: by 2002:a92:db42:0:b0:2fa:b6c0:80fd with SMTP id
+ w2-20020a92db42000000b002fab6c080fdmr14932425ilq.164.1670287857252; Mon, 05
+ Dec 2022 16:50:57 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 0/1] HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
-Content-Language: en-US
-From:   Alexander Zhang <alex@alexyzhang.dev>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        benjamin.tissoires@redhat.com, openglfreak@googlemail.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221110174056.393697-1-jose.exposito89@gmail.com>
- <e1daf0a9-b699-affd-0d14-e46981733096@alexyzhang.dev>
- <nycvar.YFH.7.76.2211141509340.6045@cbobk.fhfr.pm>
- <d08049f2-443b-f769-cfde-629cdfb96fc0@alexyzhang.dev>
-In-Reply-To: <d08049f2-443b-f769-cfde-629cdfb96fc0@alexyzhang.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
+ <Y30rdnZ+lrfOxjTB@cmpxchg.org> <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
+ <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com>
+ <Y4T43Tc54vlKjTN0@cmpxchg.org> <CABWYdi0z6-46PrNWumSXWki6Xf4G_EP1Nvc-2t00nEi0PiOU3Q@mail.gmail.com>
+In-Reply-To: <CABWYdi0z6-46PrNWumSXWki6Xf4G_EP1Nvc-2t00nEi0PiOU3Q@mail.gmail.com>
+From:   Ivan Babrou <ivan@cloudflare.com>
+Date:   Mon, 5 Dec 2022 16:50:46 -0800
+Message-ID: <CABWYdi25hricmGUqaK1K0EB-pAm04vGTg=eiqRF99RJ7hM7Gyg@mail.gmail.com>
+Subject: Re: Low TCP throughput due to vmpressure with swap enabled
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+ On Mon, Dec 5, 2022 at 3:57 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+>
+> On Mon, Nov 28, 2022 at 10:07 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> >
+> > On Tue, Nov 22, 2022 at 05:28:24PM -0800, Ivan Babrou wrote:
+> > > On Tue, Nov 22, 2022 at 2:11 PM Ivan Babrou <ivan@cloudflare.com> wrote:
+> > > >
+> > > > On Tue, Nov 22, 2022 at 12:05 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > > > >
+> > > > > On Mon, Nov 21, 2022 at 04:53:43PM -0800, Ivan Babrou wrote:
+> > > > > > Hello,
+> > > > > >
+> > > > > > We have observed a negative TCP throughput behavior from the following commit:
+> > > > > >
+> > > > > > * 8e8ae645249b mm: memcontrol: hook up vmpressure to socket pressure
+> > > > > >
+> > > > > > It landed back in 2016 in v4.5, so it's not exactly a new issue.
+> > > > > >
+> > > > > > The crux of the issue is that in some cases with swap present the
+> > > > > > workload can be unfairly throttled in terms of TCP throughput.
+> > > > >
+> > > > > Thanks for the detailed analysis, Ivan.
+> > > > >
+> > > > > Originally, we pushed back on sockets only when regular page reclaim
+> > > > > had completely failed and we were about to OOM. This patch was an
+> > > > > attempt to be smarter about it and equalize pressure more smoothly
+> > > > > between socket memory, file cache, anonymous pages.
+> > > > >
+> > > > > After a recent discussion with Shakeel, I'm no longer quite sure the
+> > > > > kernel is the right place to attempt this sort of balancing. It kind
+> > > > > of depends on the workload which type of memory is more imporant. And
+> > > > > your report shows that vmpressure is a flawed mechanism to implement
+> > > > > this, anyway.
+> > > > >
+> > > > > So I'm thinking we should delete the vmpressure thing, and go back to
+> > > > > socket throttling only if an OOM is imminent. This is in line with
+> > > > > what we do at the system level: sockets get throttled only after
+> > > > > reclaim fails and we hit hard limits. It's then up to the users and
+> > > > > sysadmin to allocate a reasonable amount of buffers given the overall
+> > > > > memory budget.
+> > > > >
+> > > > > Cgroup accounting, limiting and OOM enforcement is still there for the
+> > > > > socket buffers, so misbehaving groups will be contained either way.
+> > > > >
+> > > > > What do you think? Something like the below patch?
+> > > >
+> > > > The idea sounds very reasonable to me. I can't really speak for the
+> > > > patch contents with any sort of authority, but it looks ok to my
+> > > > non-expert eyes.
+> > > >
+> > > > There were some conflicts when cherry-picking this into v5.15. I think
+> > > > the only real one was for the "!sc->proactive" condition not being
+> > > > present there. For the rest I just accepted the incoming change.
+> > > >
+> > > > I'm going to be away from my work computer until December 5th, but
+> > > > I'll try to expedite my backported patch to a production machine today
+> > > > to confirm that it makes the difference. If I can get some approvals
+> > > > on my internal PRs, I should be able to provide the results by EOD
+> > > > tomorrow.
+> > >
+> > > I tried the patch and something isn't right here.
+> >
+> > Thanks for giving it a sping.
+> >
+> > > With the patch applied I'm capped at ~120MB/s, which is a symptom of a
+> > > clamped window.
+> > >
+> > > I can't find any sockets with memcg->socket_pressure = 1, but at the
+> > > same time I only see the following rcv_ssthresh assigned to sockets:
+> >
+> > Hm, I don't see how socket accounting would alter the network behavior
+> > other than through socket_pressure=1.
+> >
+> > How do you look for that flag? If you haven't yet done something
+> > comparable, can you try with tracing to rule out sampling errors?
+>
+> Apologies for a delayed reply, I took a week off away from computers.
+>
+> I looked with bpftrace (from my bash_history):
+>
+> $ sudo bpftrace -e 'kprobe:tcp_try_rmem_schedule { @sk[cpu] = arg0; }
+> kretprobe:tcp_try_rmem_schedule { $arg = @sk[cpu]; if ($arg) { $sk =
+> (struct sock *) $arg; $id = $sk->sk_memcg->css.cgroup->kn->id;
+> $socket_pressure = $sk->sk_memcg->socket_pressure; if ($id == 21379) {
+> printf("id = %d, socket_pressure = %d\n", $id, $socket_pressure); } }
+> }'
+>
+> I tried your patch on top of v6.1-rc8 (where it produced no conflicts)
+> in my vm and it still gave me low numbers and nothing in
+> /sys/kernel/debug/tracing/trace. To be extra sure, I changed it from
+> trace_printk to just printk and it still didn't show up in dmesg, even
+> with constant low throughput:
+>
+> ivan@vm:~$ curl -o /dev/null https://sim.cfperf.net/cached-assets/zero-5g.bin
+>   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+>                                  Dload  Upload   Total   Spent    Left  Speed
+>  14 4768M   14  685M    0     0  12.9M      0  0:06:08  0:00:52  0:05:16 13.0M
+>
+> I still saw clamped rcv_ssthresh:
+>
+> $ sudo ss -tinm dport 443
+> State                  Recv-Q                  Send-Q
+>                  Local Address:Port
+>   Peer Address:Port                  Process
+> ESTAB                  0                       0
+>                      10.2.0.15:35800
+> 162.159.136.82:443
+> skmem:(r0,rb2577228,t0,tb46080,f0,w0,o0,bl0,d0) cubic rto:201
+> rtt:0.42/0.09 ato:40 mss:1460 pmtu:1500 rcvmss:1440 advmss:1460
+> cwnd:10 bytes_sent:12948 bytes_acked:12949 bytes_received:2915062731
+> segs_out:506592 segs_in:2025111 data_segs_out:351 data_segs_in:2024911
+> send 278095238bps lastsnd:824 lastrcv:154 lastack:154 pacing_rate
+> 556190472bps delivery_rate 47868848bps delivered:352 app_limited
+> busy:147ms rcv_rtt:0.011 rcv_space:82199 rcv_ssthresh:5840
+> minrtt:0.059 snd_wnd:65535 tcp-ulp-tls rxconf: none txconf: none
+>
+> I also tried with my detection program for ebpf_exporter (fexit based version):
+>
+> * https://github.com/cloudflare/ebpf_exporter/pull/172/files
+>
+> Which also showed signs of a clamped window:
+>
+> # HELP ebpf_exporter_tcp_window_clamps_total Number of times that TCP
+> window was clamped to a low value
+> # TYPE ebpf_exporter_tcp_window_clamps_total counter
+> ebpf_exporter_tcp_window_clamps_total 53887
+>
+> In fact, I can replicate this with just curl to a public URL and fio running,
 
-On 11/19/22 11:01 PM, Alexander Zhang wrote:
-> On 11/14/22 6:10 AM, Jiri Kosina wrote:
->> On Thu, 10 Nov 2022, Alexander Zhang wrote:
->>
->>> Hi José,
->>>
->>> On 11/10/22 9:40 AM, José Expósito wrote:
->>>> Hi everyone,
->>>>
->>>> About 3 months ago, Torge Matthies sent a patch fixing an issue with
->>>> his XP-Pen Star G640 [1].
->>>>
->>>> His patch changes the IS_INPUT_APPLICATION() macro to accept
->>>> HID_DG_DIGITIZER. However, it looks like it is not being merged because
->>>> of the possible side effects that changing that macro could generate.
->>>>
->>>> This patch aims to fix the same issue but using a more conservative
->>>> approach hoping that the bug can be fixed.
->>>>
->>>> Torge, Alexander, could you test it and confirm that it fixes your
->>>> issues, please?
->>>
->>> I tested the patch on commit 4bbf3422df78 and it fixes the issue.
->>
->> I will add
->>
->>     Tested-by: Alexander Zhang <alex@alexyzhang.dev>
->>
->> to the commit; please speak up if you disagree.
-> 
-> I'm not sure if you're still waiting for a response from me but I'm fine 
-> with that.
+I sprinkled some more printk around to get to the bottom of this:
 
-Is there something preventing this patch from being merged? I'm not very 
-familiar with the kernel development process.
+static inline bool mem_cgroup_under_socket_pressure(struct mem_cgroup *memcg)
+{
+        if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) &&
+memcg->socket_pressure) {
+                printk("socket pressure[1]: %lu", memcg->socket_pressure);
+                return true;
+        }
+        do {
+                if (memcg->socket_pressure) {
+                        printk("socket pressure[2]: %lu",
+memcg->socket_pressure);
+                        return true;
+                }
+        } while ((memcg = parent_mem_cgroup(memcg)));
+        return false;
+}
 
-Best,
-Alexander Zhang
+And now I can see plenty of this:
+
+[  108.156707][ T5175] socket pressure[2]: 4294673429
+[  108.157050][ T5175] socket pressure[2]: 4294673429
+[  108.157301][ T5175] socket pressure[2]: 4294673429
+[  108.157581][ T5175] socket pressure[2]: 4294673429
+[  108.157874][ T5175] socket pressure[2]: 4294673429
+[  108.158254][ T5175] socket pressure[2]: 4294673429
+
+I think the first result below is to blame:
+
+$ rg '.->socket_pressure' mm
+mm/memcontrol.c
+5280: memcg->socket_pressure = jiffies;
+7198: memcg->socket_pressure = 0;
+7201: memcg->socket_pressure = 1;
+7211: memcg->socket_pressure = 0;
+7215: memcg->socket_pressure = 1;
+
+While we set socket_pressure to either zero or one in
+mem_cgroup_charge_skmem, it is still initialized to jiffies on memcg
+creation. Zero seems like a more appropriate starting point. With that
+change I see it working as expected with no TCP speed bumps. My
+ebpf_exporter program also looks happy and reports zero clamps in my
+brief testing.
+
+Since it's not "socket pressure[1]" in dmesg output, then it's
+probably one of the parent cgroups that is not getting charged for
+socket memory that is reporting memory pressure.
+
+I also think we should downgrade socket_pressure from "unsigned long"
+to "bool", as it only holds zero and one now.
