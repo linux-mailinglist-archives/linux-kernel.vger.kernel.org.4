@@ -2,51 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79FA6441D9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:08:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3546441E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbiLFLIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S234131AbiLFLKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiLFLI2 (ORCPT
+        with ESMTP id S232324AbiLFLKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:08:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3596B86D;
-        Tue,  6 Dec 2022 03:08:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 525D023A;
-        Tue,  6 Dec 2022 03:08:32 -0800 (PST)
-Received: from [10.57.7.134] (unknown [10.57.7.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 803593F73D;
-        Tue,  6 Dec 2022 03:08:22 -0800 (PST)
-Message-ID: <c2dc2ff0-b565-a2da-b3fa-2f50eb2b2e77@arm.com>
-Date:   Tue, 6 Dec 2022 11:08:20 +0000
+        Tue, 6 Dec 2022 06:10:19 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8833C24F12
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:09:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670324966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W6aKmUCMDnNQvag3kWpTzZtLHE4fcJsb6IlXQMzU/no=;
+        b=euagKWt6RD65OJ02X9ZFJ6CIF7+3btKGXQlLmU+nf+q2JvqKNIPXKRQM9yAFzkKzCKidFY
+        6Io+tRqHbzV7Gk4ZGLr+tgkFDwwpMG7ZUQ03ilxpI+NJ89caZZfgao7DzEk/lb8EZdqEe7
+        8xROINX/oxCz2nGYEQHgFFjHU/Ndpno=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-636-NhdAY6IMOsC8ILRnzkJeJQ-1; Tue, 06 Dec 2022 06:09:25 -0500
+X-MC-Unique: NhdAY6IMOsC8ILRnzkJeJQ-1
+Received: by mail-qt1-f199.google.com with SMTP id j26-20020ac84c9a000000b003a7e6d38e01so4474452qtv.14
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:09:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=W6aKmUCMDnNQvag3kWpTzZtLHE4fcJsb6IlXQMzU/no=;
+        b=2AISG6WZ5rf0cC4Rqj5S2v+0JLJZ4Q61MH1EYLL5iQ06ioWVKtYcT75RxMV+x5eV4a
+         m4phHYM7RjYoXDc2CDkueQy83Idl3h++PfaxY7ahuat8MhE4S/Zd4vi/PFYxtpupAQbz
+         6obmVMSKSYEx5Hn8mtxhmHKbqkeaOGu5i3dT4xfgrLwjWidPmH2pUpSf42zjNp6V6hWK
+         JRxUgFVTpBjQHPAkRsNTyi5tA+EufItRPYqAvHGZ5+PKBvw9DB1vZ7hZJSCfVFNRD83G
+         UFtZWT+FsZ+QhZw6rONcmes2U43M8YEoJIzt3dr7kbZ2Ok2pYmQLd3yfFBFpahdxHzBy
+         18lQ==
+X-Gm-Message-State: ANoB5pljvBpFu9Bk+WbjS2PM1GqsLAdO5Lw9J6L0ENl+eANW1JDtm6jC
+        Kr66qO2gKR4nDFmByAN5ccErqqvsp3tTnWpb6goKMaXrM4jFp0prIwQNYUN0La8d40DaYHem/li
+        UhyB8A10ehVJk/b6shxreqPmM
+X-Received: by 2002:a05:620a:a10:b0:6fa:27fa:6612 with SMTP id i16-20020a05620a0a1000b006fa27fa6612mr76798088qka.224.1670324965073;
+        Tue, 06 Dec 2022 03:09:25 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6utXWXbJYlK6nrHBiI15D+1PvtKl4efQcbfNet+Kqm5JquX15Pkc0wvPL2KiN6FyzXSEdWsw==
+X-Received: by 2002:a05:620a:a10:b0:6fa:27fa:6612 with SMTP id i16-20020a05620a0a1000b006fa27fa6612mr76798075qka.224.1670324964814;
+        Tue, 06 Dec 2022 03:09:24 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-106-100.dyn.eolo.it. [146.241.106.100])
+        by smtp.gmail.com with ESMTPSA id h4-20020a05620a284400b006cfc7f9eea0sm14547214qkp.122.2022.12.06.03.09.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 03:09:24 -0800 (PST)
+Message-ID: <fc76b5ffbcd1855cdfdb3ad8973ed313decb2868.camel@redhat.com>
+Subject: Re: [PATCH v2] nfc: llcp: Fix race in handling llcp_devices
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
+Cc:     liwei391@huawei.com, sameo@linux.intel.com, kuba@kernel.org,
+        davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Tue, 06 Dec 2022 12:09:21 +0100
+In-Reply-To: <20221203071218.3817593-1-bobo.shaobowang@huawei.com>
+References: <20221203071218.3817593-1-bobo.shaobowang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] cpufreq: schedutil: Optimize operations with single max
- CPU capacity
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        saravanak@google.com, wusamuel@google.com,
-        isaacmanjarres@google.com, kernel-team@android.com,
-        juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de
-References: <20221206101021.18113-1-lukasz.luba@arm.com>
- <20221206101629.dbcuv3zdso44w3cq@vireshk-i7>
- <2a97cf28-7e47-04c7-edcb-41adbd20ccd9@arm.com>
- <CAJZ5v0hRW2Px4LP9OCgFqyUQUiVr0xZL6dYPrWrmGerGqCq1PQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0hRW2Px4LP9OCgFqyUQUiVr0xZL6dYPrWrmGerGqCq1PQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,41 +80,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+On Sat, 2022-12-03 at 15:12 +0800, Wang ShaoBo wrote:
+> @@ -282,9 +285,13 @@ struct nfc_llcp_local *nfc_llcp_find_local(struct nfc_dev *dev)
+>  {
+>  	struct nfc_llcp_local *local;
+>  
+> +	spin_lock(&llcp_devices_list_lock);
+>  	list_for_each_entry(local, &llcp_devices, list)
+> -		if (local->dev == dev)
+> +		if (local->dev == dev) {
+> +			spin_unlock(&llcp_devices_list_lock);
 
-On 12/6/22 11:00, Rafael J. Wysocki wrote:
-> On Tue, Dec 6, 2022 at 11:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 12/6/22 10:16, Viresh Kumar wrote:
->>> On 06-12-22, 10:10, Lukasz Luba wrote:
->>>> The max CPU capacity is the same for all CPUs sharing frequency domain
->>>> and thus 'policy' object. There is a way to avoid heavy operations
->>>> in a loop for each CPU by leveraging this knowledge. Thus, simplify
->>>> the looping code in the sugov_next_freq_shared() and drop heavy
->>>> multiplications. Instead, use simple max() to get the highest utilization
->>>> from these CPUs. This is useful for platforms with many (4 or 6) little
->>>> CPUs.
->>>>
->>>> The max CPU capacity must be fetched every time we are called, due to
->>>> difficulties during the policy setup, where we are not able to get the
->>>> normalized CPU capacity at the right time.
->>>>
->>>> The stored value in sugov_policy::max is also than used in
->>>> sugov_iowait_apply() to calculate the right boost. Thus, that field is
->>>> useful to have in that sugov_policy struct.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>
->>> Can you please divide this into two patches, one for just moving max
->>> and one for looping optimization ? Else we may end up reverting
->>> everything once again.
->>>
->>
->> OK, I can do that. Thanks for having a look!
-> 
-> Also, please note that this material is unlikely to go into 6.2, so
-> I'd prefer going back to it after 6.2-rc1 is out.
+I'm sorry for not noticing the above earlier, but it looks like this is
+not enough. At this point local_release() may kick in and free 'local':
+the caller will experience UaF. 
 
-Yes, I understand. Thanks Rafael!
+You could acquire a reference here and let the caller release it.
+
+If the above race is not possible due to some other safeguards, it
+should at least be documented clearly here.
+
+Thanks,
+
+Paolo
+
