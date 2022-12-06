@@ -2,75 +2,408 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BF1D643C9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:22:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEECA643CA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbiLFFVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 00:21:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S231274AbiLFFXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:23:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiLFFVH (ORCPT
+        with ESMTP id S229591AbiLFFXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:21:07 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E764220CD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:21:06 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id n20so3647546ejh.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 21:21:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QB/Kh9ow3EUM5SHFp0aGSD+yTCIfG6WneTyXhljDwcU=;
-        b=cLb6Cd+FzxmMBo5l6sociKfYtZBGwkTeAZ1XrvpVf7CMlG3syQ0X5HAVGBpM/xW0HG
-         8JbUrfELxWbFR+Y7h/H54vmpQDTH3IkY9NYNtfOqmnlAZ3aqQNYPs+2LUvFfb30FUSxF
-         +6CvDfn1nhW7noPzavmuJOda0RUYnCpovwhf77GKWi0PTToy6wQMFY8v0ap5ZMrcaSbE
-         guG2bUZGW70sDtvW9wIi50u++lH3Nd+plbblxDGTpyyxjduDC7oufuu/edbAJa3/HlhU
-         bie3Bv/LDaMEZZiVsO7lLSkdTbvBy4d1S4Ny1MsyZEhuQ+gb3vxyokWba+BgFW+619Cn
-         HMXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QB/Kh9ow3EUM5SHFp0aGSD+yTCIfG6WneTyXhljDwcU=;
-        b=W6soCp1DEFAGNMq2DEBMV4br3CJq1Jata+RlI9ZnZ0HzTlkZ4f25QsF19jaXI9otRt
-         rsOvx9zFXfDYFvRmKncyuzwiDDTuuZUtYjEhR6vvQXBPUC3PAqVRdhGyl4dPWcb8Xdhm
-         SMVysdTzkkpMgGRc2Rzo5AXka22Ub0u2AKxqgf+lspTIX2yb6a5RUNqkbjYwtRhw+j2b
-         eWV57MA9LuMNuwxaWYzKqZBNHxgW3qv6QDbPvQytzd6S0e/g6657bI/CPqwyQew9WxnX
-         +Sseiqkww21swIzlS2uTmVhq9DNOZwmzea+wyGLu0KvIt5XEWSp6xteY5O4qUB2QOMG3
-         Y5CQ==
-X-Gm-Message-State: ANoB5pntcXUwc5/hBWGP20yDWG8ibprLvpvNJ9riWKi7UVhYahP9TFaD
-        G58K33nJOIuZlgBXuwOStEDNvaBEw63KMwRwXXpfI620PRA=
-X-Google-Smtp-Source: AA0mqf4TyFxEgOnjRjEYTXVnB10F/m6ypQcEjXlB4nOlh5ErlgqLlPdUUnEvoJSgnum/XZpK3qSEeoZEDfAGI7DubAw=
-X-Received: by 2002:a17:906:2594:b0:7c0:8d06:33f8 with SMTP id
- m20-20020a170906259400b007c08d0633f8mr25750948ejb.150.1670304064581; Mon, 05
- Dec 2022 21:21:04 -0800 (PST)
+        Tue, 6 Dec 2022 00:23:14 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1C495A4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:23:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670304193; x=1701840193;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=zSTVWtJ6FaGtwqMMWWIBrtnA7IZJUKkeBk1eG1Jw/c0=;
+  b=kuTm6EycbBN8D/mJaiH/yI9AkS0Ya0z3PbHJXw4HWuyl4EelUmWtKs0H
+   IAbiedgZX7mUj7BGFarGBCDJh8qgYqcR/7GDYFgbO7VRO4C7aQ0v7RfLQ
+   J5+xW2l2pyoHAR6M07EKQ89TSp1YnB5PpEMEEjeALjACkbQr2gbFfxZ1J
+   TbJpOigq1HPYbmsZWRQsCNZRM4zQr7NDOnyKr5wC00YKCJX3FVre+kFQk
+   osZ9tpinEUbgd/8FkycnvG8Os56K+5tB/OeT+IsMjcGbEzoh2NpRwypAj
+   pA6bb4RbzgQ+VvUOeiGhEVsjFBe3cUJRnl+OqRT3gZvnvOiMz18yf1eM8
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="296229123"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="296229123"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 21:23:12 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="623769909"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="623769909"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 21:23:08 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Rientjes <rientjes@google.com>
+Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered
+ systems
+References: <20221206023406.3182800-1-almasrymina@google.com>
+        <87wn75dy1q.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <CAHS8izMxoP9u3=Xa7D_GzNDSyLCuj-pSGbJdsp8E_D+pWBgjhA@mail.gmail.com>
+Date:   Tue, 06 Dec 2022 13:22:04 +0800
+In-Reply-To: <CAHS8izMxoP9u3=Xa7D_GzNDSyLCuj-pSGbJdsp8E_D+pWBgjhA@mail.gmail.com>
+        (Mina Almasry's message of "Mon, 5 Dec 2022 20:15:28 -0800")
+Message-ID: <87bkohds3n.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <CAEYL+X_X7OsP3BQ3poK4n+DWEOxAais6d9At9nz2TzLFV2HinA@mail.gmail.com>
- <1716b73b-77f4-da8e-801f-7521872697bb@infradead.org> <CAEYL+X8KAg58c32LXL8ksfxnDvPPLwJwBRxMFdu6wB7HU+kXBQ@mail.gmail.com>
- <5c01fe50-a975-f866-87d1-0343ad2ae520@infradead.org>
-In-Reply-To: <5c01fe50-a975-f866-87d1-0343ad2ae520@infradead.org>
-From:   Zopolis0 <creatorsmithmdt@gmail.com>
-Date:   Tue, 6 Dec 2022 16:20:55 +1100
-Message-ID: <CAEYL+X8SuUvaEG-ouGdCUBpe5DS0j0rPw7XedtcCocn1ZJFX2A@mail.gmail.com>
-Subject: Re: PATCH [1/2] gamecube/wii: graphic quantization registers driver (GQR)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Other (better) options are to use an email account/interface
-> that does not corrupt whitespace OR use 'git send-email' (which
-> does not require that you be using 'git').
+Mina Almasry <almasrymina@google.com> writes:
 
-Git send-email doesn't work with gmail anymore, and I've never had any
-whitespace troubles with gmail inline patches in the past.
+> On Mon, Dec 5, 2022 at 7:14 PM Huang, Ying <ying.huang@intel.com> wrote:
+>>
+>> Mina Almasry <almasrymina@google.com> writes:
+>>
+>> > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+>> > reclaim"") enabled demotion in memcg reclaim, which is the right thing
+>> > to do, however, it introduced a regression in the behavior of
+>> > try_to_free_mem_cgroup_pages().
+>> >
+>> > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
+>> > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
+>> > of the cgroup should reduce by nr_pages. The callers expect
+>> > try_to_free_mem_cgroup_pages() to also return the number of pages
+>> > reclaimed, not demoted.
+>> >
+>> > However, what try_to_free_mem_cgroup_pages() actually does is it
+>> > unconditionally counts demoted pages as reclaimed pages. So in practnice
+>> > when it is called it will often demote nr_pages and return the number of
+>> > demoted pages to the caller. Demoted pages don't lower the memcg usage,
+>> > and so try_to_free_mem_cgroup_pages() is not actually doing what the
+>> > callers want it to do.
+>> >
+>> > Various things work suboptimally on memory tiered systems or don't work
+>> > at all due to this:
+>> >
+>> > - memory.high enforcement likely doesn't work (it just demotes nr_pages
+>> >   instead of lowering the memcg usage by nr_pages).
+>> > - try_charge_memcg() will keep retrying the charge while
+>> >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
+>> >   making any room for the charge.
+>> > - memory.reclaim has a wonky interface. It advertises to the user it
+>> >   reclaims the provided amount but it will actually often demote that
+>> >   amount.
+>> >
+>> > There may be more effects to this issue.
+>> >
+>> > To fix these issues I propose shrink_folio_list() to only count pages
+>> > demoted from inside of sc->nodemask to outside of sc->nodemask as
+>> > 'reclaimed'.
+>> >
+>> > For callers such as reclaim_high() or try_charge_memcg() that set
+>> > sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
+>> > actually reclaim nr_pages and return the number of pages reclaimed. No
+>> > demoted pages would count towards the nr_pages requirement.
+>> >
+>> > For callers such as memory_reclaim() that set sc->nodemask,
+>> > try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
+>> > with either reclaim or demotion.
+>> >
+>> > Tested this change using memory.reclaim interface. I set up a test case where
+>> > I allocate 500m in a cgroup, and then do:
+>> >
+>> >     echo "50m" > memory.reclaim
+>> >
+>> > Without this fix, my kernel demotes 70mb and reclaims 4 mb
+>> > (memory.current is reduced by about 4mb).
+>> >
+>> > With this fix, my kernel demotes all memory possible and reclaims 60mb
+>> > (memory.current is reduced by about 60mb).
+>> >
+>> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+>> >
+>> > ---
+>> >
+>> > Changes in v3:
+>> > - Reverted back to v1 implementation: "try to demote but don't count
+>> >   demoted pages unless they are demoted to outside the nodemask" as Ying
+>> >   suggested.
+>> > - Made sure demotions that fall back to non next_demotion_target() are
+>> >   not counted as Wei suggested.
+>> > - Updated comment in shrink_folio_list() as Ying suggested.
+>> > - Added before/after for the test case in commit message since Ying
+>> >   asked.
+>> > - Fixed call sites that don't provide sc->nodemask but expect demotion
+>> >   from a specific node as Ying pointed out.
+>> >
+>> > Cc: weixugc@google.com
+>> > Cc: ying.huang@intel.com
+>> >
+>> > This is developed on top of mm-unstable largely because I want the
+>> > solution to be compatible with the recently added nodes= arg on
+>> > mm-unstable.
+>> > ---
+>> >  mm/vmscan.c | 91 +++++++++++++++++++++++++++++++++++++++++++++--------
+>> >  1 file changed, 78 insertions(+), 13 deletions(-)
+>> >
+>> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+>> > index 2b42ac9ad755..f324e80395c3 100644
+>> > --- a/mm/vmscan.c
+>> > +++ b/mm/vmscan.c
+>> > @@ -1555,13 +1555,18 @@ static void folio_check_dirty_writeback(struct folio *folio,
+>> >               mapping->a_ops->is_dirty_writeback(folio, dirty, writeback);
+>> >  }
+>> >
+>> > +struct demotion_control {
+>> > +     struct migration_target_control *mtc;
+>> > +     nodemask_t *demote_from_nodemask;
+>> > +     unsigned long nr_demoted_outside_nodemask;
+>> > +};
+>> > +
+>> >  static struct page *alloc_demote_page(struct page *page, unsigned long private)
+>> >  {
+>> >       struct page *target_page;
+>> >       nodemask_t *allowed_mask;
+>> > -     struct migration_target_control *mtc;
+>> > -
+>> > -     mtc = (struct migration_target_control *)private;
+>> > +     struct demotion_control *dc = (struct demotion_control *)private;
+>> > +     struct migration_target_control *mtc = dc->mtc;
+>> >
+>> >       allowed_mask = mtc->nmask;
+>> >       /*
+>> > @@ -1576,13 +1581,31 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
+>> >       mtc->nmask = NULL;
+>> >       mtc->gfp_mask |= __GFP_THISNODE;
+>> >       target_page = alloc_migration_target(page, (unsigned long)mtc);
+>> > -     if (target_page)
+>> > +     if (!target_page) {
+>> > +             mtc->gfp_mask &= ~__GFP_THISNODE;
+>> > +             mtc->nmask = allowed_mask;
+>> > +             target_page = alloc_migration_target(page, (unsigned long)mtc);
+>> > +     }
+>> > +
+>> > +     if (!target_page)
+>> >               return target_page;
+>> >
+>> > -     mtc->gfp_mask &= ~__GFP_THISNODE;
+>> > -     mtc->nmask = allowed_mask;
+>> > +     if (dc->demote_from_nodemask &&
+>> > +         !node_isset(page_to_nid(target_page), *dc->demote_from_nodemask))
+>>
+>> Use mtc->nid directly?
+>>
+>
+> mtc->nid is the next_demotion_node(). Wei's earlier comment is that
+> the page may be allocated anywhere on the get_allowed_targets(), not
+> necessarily the next_demotion_node(), so I don't think I can use
+> mtc->nid. I think I have to check on which node the page was allocated
+> as I'm doing here. Let me know if I missed something.
+
+Yes.  You are right.
+
+>> > +             dc->nr_demoted_outside_nodemask++;
+>> >
+>> > -     return alloc_migration_target(page, (unsigned long)mtc);
+>> > +     return target_page;
+>> > +}
+>> > +
+>> > +void free_demote_page(struct page *page, unsigned long private)
+>> > +{
+>> > +     struct demotion_control *dc = (struct demotion_control *)private;
+>> > +
+>> > +     if (dc->demote_from_nodemask &&
+>> > +         !node_isset(page_to_nid(page), *dc->demote_from_nodemask))
+>>
+>> ditto
+>>
+>> > +             dc->nr_demoted_outside_nodemask--;
+>> > +
+>> > +     folio_put(page_folio(page));
+>> >  }
+>> >
+>> >  /*
+>> > @@ -1590,7 +1613,8 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
+>> >   * Folios which are not demoted are left on @demote_folios.
+>> >   */
+>> >  static unsigned int demote_folio_list(struct list_head *demote_folios,
+>> > -                                  struct pglist_data *pgdat)
+>> > +                                   struct pglist_data *pgdat,
+>> > +                                   nodemask_t *nodemask)
+>> >  {
+>> >       int target_nid = next_demotion_node(pgdat->node_id);
+>> >       unsigned int nr_succeeded;
+>> > @@ -1608,6 +1632,12 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
+>> >               .nmask = &allowed_mask
+>> >       };
+>> >
+>> > +     struct demotion_control dc = {
+>> > +             .mtc = &mtc,
+>> > +             .demote_from_nodemask = nodemask,
+>> > +             .nr_demoted_outside_nodemask = 0,
+>> > +     };
+>> > +
+>> >       if (list_empty(demote_folios))
+>> >               return 0;
+>> >
+>> > @@ -1617,13 +1647,13 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
+>> >       node_get_allowed_targets(pgdat, &allowed_mask);
+>> >
+>> >       /* Demotion ignores all cpuset and mempolicy settings */
+>> > -     migrate_pages(demote_folios, alloc_demote_page, NULL,
+>> > -                   (unsigned long)&mtc, MIGRATE_ASYNC, MR_DEMOTION,
+>> > +     migrate_pages(demote_folios, alloc_demote_page, free_demote_page,
+>> > +                   (unsigned long)&dc, MIGRATE_ASYNC, MR_DEMOTION,
+>> >                     &nr_succeeded);
+>> >
+>> >       __count_vm_events(PGDEMOTE_KSWAPD + reclaimer_offset(), nr_succeeded);
+>> >
+>> > -     return nr_succeeded;
+>> > +     return dc.nr_demoted_outside_nodemask;
+>> >  }
+>> >
+>> >  static bool may_enter_fs(struct folio *folio, gfp_t gfp_mask)
+>> > @@ -1643,7 +1673,12 @@ static bool may_enter_fs(struct folio *folio, gfp_t gfp_mask)
+>> >  }
+>> >
+>> >  /*
+>> > - * shrink_folio_list() returns the number of reclaimed pages
+>> > + * shrink_folio_list() returns the number of reclaimed pages.
+>> > + *
+>> > + * Demoted pages are counted as reclaimed iff:
+>> > + *   (a) sc->nodemask arg is provided.
+>> > + *   (b) page has been demoted from a node inside sc->nodemask to a node
+>> > + *   outside sc->nodemask.
+>> >   */
+>> >  static unsigned int shrink_folio_list(struct list_head *folio_list,
+>> >               struct pglist_data *pgdat, struct scan_control *sc,
+>> > @@ -1653,6 +1688,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>> >       LIST_HEAD(free_folios);
+>> >       LIST_HEAD(demote_folios);
+>> >       unsigned int nr_reclaimed = 0;
+>> > +     unsigned int nr_demoted_outside_nodemask = 0;
+>> >       unsigned int pgactivate = 0;
+>> >       bool do_demote_pass;
+>> >       struct swap_iocb *plug = NULL;
+>> > @@ -2085,7 +2121,12 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>> >       /* 'folio_list' is always empty here */
+>> >
+>> >       /* Migrate folios selected for demotion */
+>> > -     nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
+>> > +     nr_demoted_outside_nodemask =
+>> > +             demote_folio_list(&demote_folios, pgdat, sc->nodemask);
+>> > +
+>> > +     if (sc->nodemask)
+>> > +             nr_reclaimed += nr_demoted_outside_nodemask;
+>> > +
+>> >       /* Folios that could not be demoted are still in @demote_folios */
+>> >       if (!list_empty(&demote_folios)) {
+>> >               /* Folios which weren't demoted go back on @folio_list */
+>> > @@ -2130,9 +2171,11 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>> >  unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>> >                                          struct list_head *folio_list)
+>> >  {
+>> > +     nodemask_t nodemask = NODE_MASK_NONE;
+>>
+>> Is it necessary for us to use NODEMASK_ALLOC/NODEMASK_FREE to save stack space?
+>>
+>
+> I can certainly use NODEMASK_ALLOC/NODEMASK_FREE if you'd like. I
+> think there are a few places that stack allocate nodemask_t already,
+> including one place I recently added in memory_reclaim(), so it
+> doesn't seem _necessary_ per say.
+>
+> If you're asking my opinion, AFAICT it's not an issue. I think you
+> need > 32 numa nodes before nodemask_t becomes an array of size 2
+> longs on a 32-bit machine, and even then I think it's not a huge deal.
+> Up to you; I have no issue with converting to
+> NODEMASK_ALLOC/NODEMASK_FREE in v4.
+
+Both are OK for me.  Want to know David Rientjes's idea here.
+
+Best Regards,
+Huang, Ying
+
+>>
+>> >       struct scan_control sc = {
+>> >               .gfp_mask = GFP_KERNEL,
+>> >               .may_unmap = 1,
+>> > +             .nodemask = &nodemask
+>> >       };
+>> >       struct reclaim_stat stat;
+>> >       unsigned int nr_reclaimed;
+>> > @@ -2140,6 +2183,12 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>> >       LIST_HEAD(clean_folios);
+>> >       unsigned int noreclaim_flag;
+>> >
+>> > +     /*
+>> > +      * Set the nodemask in sc to indicate to shrink_folio_list() that we're
+>> > +      * looking for reclaim from this node.
+>> > +      */
+>> > +     node_set(zone->zone_pgdat->node_id, nodemask);
+>> > +
+>> >       list_for_each_entry_safe(folio, next, folio_list, lru) {
+>> >               if (!folio_test_hugetlb(folio) && folio_is_file_lru(folio) &&
+>> >                   !folio_test_dirty(folio) && !__folio_test_movable(folio) &&
+>> > @@ -7031,12 +7080,20 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int highest_zoneidx)
+>> >       unsigned long zone_boosts[MAX_NR_ZONES] = { 0, };
+>> >       bool boosted;
+>> >       struct zone *zone;
+>> > +     nodemask_t nodemask = NODE_MASK_NONE;
+>> >       struct scan_control sc = {
+>> >               .gfp_mask = GFP_KERNEL,
+>> >               .order = order,
+>> >               .may_unmap = 1,
+>> > +             .nodemask = &nodemask,
+>> >       };
+>> >
+>> > +     /*
+>> > +      * Set the nodemask in sc to indicate to kswapd_shrink_node() that we're
+>> > +      * looking for reclaim from this node.
+>> > +      */
+>> > +     node_set(pgdat->node_id, nodemask);
+>> > +
+>> >       set_task_reclaim_state(current, &sc.reclaim_state);
+>> >       psi_memstall_enter(&pflags);
+>> >       __fs_reclaim_acquire(_THIS_IP_);
+>> > @@ -7642,6 +7699,7 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
+>> >       const unsigned long nr_pages = 1 << order;
+>> >       struct task_struct *p = current;
+>> >       unsigned int noreclaim_flag;
+>> > +     nodemask_t nodemask = NODE_MASK_NONE;
+>> >       struct scan_control sc = {
+>> >               .nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
+>> >               .gfp_mask = current_gfp_context(gfp_mask),
+>> > @@ -7651,9 +7709,16 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
+>> >               .may_unmap = !!(node_reclaim_mode & RECLAIM_UNMAP),
+>> >               .may_swap = 1,
+>> >               .reclaim_idx = gfp_zone(gfp_mask),
+>> > +             .nodemask = &nodemask,
+>> >       };
+>> >       unsigned long pflags;
+>> >
+>> > +     /*
+>> > +      * Set the nodemask in sc to indicate to shrink_node() that we're
+>> > +      * looking for reclaim from this node.
+>> > +      */
+>> > +     node_set(pgdat->node_id, nodemask);
+>> > +
+>> >       trace_mm_vmscan_node_reclaim_begin(pgdat->node_id, order,
+>> >                                          sc.gfp_mask);
+>> >
+>> > --
+>> > 2.39.0.rc0.267.gcb52ba06e7-goog
+>>
