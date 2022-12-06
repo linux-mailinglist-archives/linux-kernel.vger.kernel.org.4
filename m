@@ -2,187 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC1A6447F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:24:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E066447F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbiLFPYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S232604AbiLFP0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234255AbiLFPYK (ORCPT
+        with ESMTP id S231363AbiLFP0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:24:10 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B629FCA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:24:09 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so7162011pjj.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 07:24:09 -0800 (PST)
+        Tue, 6 Dec 2022 10:26:15 -0500
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4276DED;
+        Tue,  6 Dec 2022 07:26:14 -0800 (PST)
+Received: by mail-ed1-x531.google.com with SMTP id m19so20733043edj.8;
+        Tue, 06 Dec 2022 07:26:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RP30KXKl/PR6YPpKgU+DDNG5UwR2kZxBVDTlEl1cNxU=;
-        b=fmR1lznJtSVRR9L4Ia3CMGkwAZ2v4hkWoOPZm7PR1nH/3nuAorOgqKoWJuydk4wqi1
-         4Jv46XmZFzLlrkx7ctSkFgyRoHoerAtS2sX3lfOp8Jl6EZM58L/vapg/v4JYZQWR5omU
-         taxuDneZ5WG7Y4370lPtuckGfA3P8kfdDM44o=
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=+t4lRmvuP+usUZlk2JLcnWJTJvLfZrC6fX7qkvrWGoU=;
+        b=F/YOy35jsCGCf2cmwHOOtG0nXSfO4POa0zBTNmrTOOFOEUF7ZWGF8bqEI/wzjeeJpm
+         EAocKv7y7OfL8DQwXRdwYe3onUs4DrOvLDo06EZy6SqpD/t17OGyGmv91JzXqarSZrbn
+         hv6QjcBVtHHumIK67Ba8bx1CmcBxS0toLaIXUEZeOxM8WjvuZ5G5IO62LF6Y3EV3H+Uu
+         AVvAFISP8choFz6vflaKjrWhjNeyKydo1fWCLivsmZRHLZVYnJ/pZ4uELtAtkwc5zmh6
+         1Fb3DD7sRx1bYzkSplYVQX7T8XI1G4Vrq5T3XKVWXbyDKEa6KEZ497Hw38pmyJ4TTl4J
+         3iug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RP30KXKl/PR6YPpKgU+DDNG5UwR2kZxBVDTlEl1cNxU=;
-        b=o7SG7IB/HDkknFDCyaryWMxppykh6rZxDStH5qKAP72aosuz13ELey8xjjMDuaJR0I
-         gwW8PdRqEzf5bghBj+B7f8ZjrT9FnKHIlj+ANiLajAqCmP3ijVytvoKAQ5wFM37Lg210
-         3MGIgQfwURwzO9homtM/Rkq2/0t8MdMyFLwom+6q8uYlgGbdRkf7c6ChOSdlXXK2e1lo
-         3I5CUmzqyzmzZrRGL4rotH+s135DRpwr0UqwfCCCr7tyaKM2uriGvMiU/A/bUJK5nCm0
-         acsIMdkCzvKHrWgmAMlpHYXQVQ2oquFNwfNm4PiJ5Hkv9swpHBNcjgxXQCIsMe1lkElR
-         s9GA==
-X-Gm-Message-State: ANoB5pnjismBucuRVzP572oV+tNsXs6R6mlZBbBak8Lu58E7h5rhupPg
-        +C3ICojPmJJGhq3V2XHlC335Bg==
-X-Google-Smtp-Source: AA0mqf6EhFnYhQ5JfLUH2vxmtsq3k5PjP/AHU5doy5X0JZFulMFt5fVeH5kDyg6mfzg+AZ9j8VWMyw==
-X-Received: by 2002:a17:902:7898:b0:188:584d:b6d4 with SMTP id q24-20020a170902789800b00188584db6d4mr70697461pll.170.1670340248607;
-        Tue, 06 Dec 2022 07:24:08 -0800 (PST)
-Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id r25-20020a635d19000000b0046b1dabf9a8sm10004686pgb.70.2022.12.06.07.24.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 07:24:07 -0800 (PST)
-From:   jeffxu@chromium.org
-To:     skhan@linuxfoundation.org, keescook@chromium.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        Jeff Xu <jeffxu@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v5 6/6] mm/memfd: security hook for memfd_create
-Date:   Tue,  6 Dec 2022 15:23:58 +0000
-Message-Id: <20221206152358.1966099-7-jeffxu@google.com>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-In-Reply-To: <20221206152358.1966099-1-jeffxu@google.com>
-References: <20221206152358.1966099-1-jeffxu@google.com>
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+t4lRmvuP+usUZlk2JLcnWJTJvLfZrC6fX7qkvrWGoU=;
+        b=a734OCsAHLjZuAWv8Y+AnuD2OmgHMVVrsqJXKjPdBdfdghxA6xE/ddPJXtu9MTlVsD
+         RhkW0seKow3SHerg6pF+T7736o/4OvUUXq3w2k4sKmtAnmL5k0TfNO/fjEvbQw/gaPEg
+         +aotcAEKbONxH8R85NfWMLQGn3SFBVdLtjH8HeLbYdZg2JEXO4xMoqmcKSIG09h7bC/a
+         DT0oHjGzz2S+c9s5emEYmvlXEBS0Fk423yBB3AzIM03Loj9f89QuLo1pDqDHihvrz+nB
+         LKTou8cWPpXKxx7xhFgFVQYiKC/BhYDXu9vAdx9tAK6N4JqbCHKuS5a+0kh3X4yLIeeS
+         gBkw==
+X-Gm-Message-State: ANoB5plPbWhKqU7GQiiYcJ3nakMu89mhgUoBEVrzlGvVEphmelBjil9t
+        Oek6UQZlYVpP14zx+Huz4oTgw+CWlRiuuXei2JI=
+X-Google-Smtp-Source: AA0mqf6t/VFxHQkD8l5o8bjbVKaGw5qFlExaBszHIi21ZJRnCAhVqEgWwcpkZi/hBI8aCFaUZl+e8AyxyCzNXcPdRbI=
+X-Received: by 2002:a05:6402:528f:b0:461:9cbd:8fba with SMTP id
+ en15-20020a056402528f00b004619cbd8fbamr54978909edb.19.1670340372396; Tue, 06
+ Dec 2022 07:26:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Wei Chen <harperchen1110@gmail.com>
+Date:   Tue, 6 Dec 2022 23:25:36 +0800
+Message-ID: <CAO4mrfcV_07hbj8NUuZrA8FH-kaRsrFy-2metecpTuE5kKHn5w@mail.gmail.com>
+Subject: BUG: unable to handle kernel paging request in can_rcv_filter
+To:     socketcan@hartkopp.net, mkl@pengutronix.de,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        syzkaller-bugs@googlegroups.com,
+        syzbot <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Xu <jeffxu@chromium.org>
+Dear Linux Developers,
 
-The new security_memfd_create allows lsm to check flags of
-memfd_create.
+Recently, when using our tool to fuzz kernel, the following crash was triggered.
 
-The security by default system (such as chromeos) can use this
-to implement system wide lsm to allow only non-executable memfd
-being created.
+HEAD commit: 147307c69ba
+git tree: linux-next
+compiler: clang 12.0.0
+console output:
+https://drive.google.com/file/d/1_c7TZ6WzCT-VLBimUP3xnkMpJPhjOAPY/view?usp=share_link
+kernel config: https://drive.google.com/file/d/1NAf4S43d9VOKD52xbrqw-PUP1Mbj8z-S/view?usp=share_link
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-Reported-by: kernel test robot <lkp@intel.com>
----
- include/linux/lsm_hook_defs.h |  1 +
- include/linux/lsm_hooks.h     |  4 ++++
- include/linux/security.h      |  6 ++++++
- mm/memfd.c                    |  5 +++++
- security/security.c           | 13 +++++++++++++
- 5 files changed, 29 insertions(+)
+Unfortunately, I didn't have a reproducer for this crash.
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index ec119da1d89b..fd40840927c8 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
- LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
- LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
- 	 unsigned long arg)
-+LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
- LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
- LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
- 	 unsigned long prot, unsigned long flags)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 4ec80b96c22e..5a18a6552278 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -543,6 +543,10 @@
-  *	simple integer value.  When @arg represents a user space pointer, it
-  *	should never be used by the security module.
-  *	Return 0 if permission is granted.
-+ * @memfd_create:
-+ *	@name is the name of memfd file.
-+ *	@flags is the flags used in memfd_create.
-+ *	Return 0 if permission is granted.
-  * @mmap_addr :
-  *	Check permissions for a mmap operation at @addr.
-  *	@addr contains virtual address that will be used for the operation.
-diff --git a/include/linux/security.h b/include/linux/security.h
-index ca1b7109c0db..5b87a780822a 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
- int security_file_alloc(struct file *file);
- void security_file_free(struct file *file);
- int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-+int security_memfd_create(char *name, unsigned int flags);
- int security_mmap_file(struct file *file, unsigned long prot,
- 			unsigned long flags);
- int security_mmap_addr(unsigned long addr);
-@@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
- 	return 0;
- }
- 
-+static inline int security_memfd_create(char *name, unsigned int flags)
-+{
-+	return 0;
-+}
-+
- static inline int security_mmap_file(struct file *file, unsigned long prot,
- 				     unsigned long flags)
- {
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 92f0a5765f7c..f04ed5f0474f 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
- 		goto err_name;
- 	}
- 
-+	/* security hook for memfd_create */
-+	error = security_memfd_create(name, flags);
-+	if (error)
-+		return error;
-+
- 	if (flags & MFD_HUGETLB) {
- 		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
- 					HUGETLB_ANONHUGE_INODE,
-diff --git a/security/security.c b/security/security.c
-index 79d82cb6e469..5c018e080923 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1010,6 +1010,19 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
- }
- EXPORT_SYMBOL(security_sb_clone_mnt_opts);
- 
-+int security_add_mnt_opt(const char *option, const char *val, int len,
-+			 void **mnt_opts)
-+{
-+	return call_int_hook(sb_add_mnt_opt, -EINVAL,
-+					option, val, len, mnt_opts);
-+}
-+EXPORT_SYMBOL(security_add_mnt_opt);
-+
-+int security_memfd_create(char *name, unsigned int flags)
-+{
-+	return call_int_hook(memfd_create, 0, name, flags);
-+}
-+
- int security_move_mount(const struct path *from_path, const struct path *to_path)
- {
- 	return call_int_hook(move_mount, 0, from_path, to_path);
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+I'm wondering if there is a data race between can_receive and
+sock_close, which leads to the invalid null value of dev and
+dev_rcv_lists. I hope the following report is helpful.
 
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: Wei Chen <harperchen1110@gmail.com>
+
+BUG: unable to handle page fault for address: 0000000000006020
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 132110067 P4D 132110067 PUD 1320b6067 PMD 0
+Oops: 0000 [#1] PREEMPT SMP
+CPU: 0 PID: 13844 Comm: syz-executor.0 Not tainted 6.1.0-rc5-next-20221118 #2
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.13.0-48-gd9c812dda519-prebuilt.qemu.org 04/01/2014
+RIP: 0010:can_rcv_filter+0x44/0x4e0 net/can/af_can.c:584
+Code: 00 00 00 e8 3e 86 0f fd 49 8b 9e d8 00 00 00 48 89 df e8 af 81
+0f fd 44 8b 23 48 8d bd 20 60 00 00 e8 a0 81 0f fd 48 89 2c 24 <8b> 9d
+20 60 00 00 45 31 ed 31 ff 89 de e8 9a 1c fc fc 85 db 0f 84
+RSP: 0018:ffffc90000003d50 EFLAGS: 00010246
+RAX: ffff88813bc274d8 RBX: ffff8881310c5a10 RCX: ffffffff842b9940
+RDX: 0000000000000522 RSI: 0000000000000000 RDI: 0000000000006020
+RBP: 0000000000000000 R08: 0000000000006023 R09: 0000000000000000
+R10: 0001ffffffffffff R11: 00018881310c5a04 R12: 0000000000000000
+R13: ffff888106fb8880 R14: ffff8881308cba00 R15: 0000000000000000
+FS:  00007fc9368b0700(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000006020 CR3: 0000000132249000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000020000180 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+Call Trace:
+ <IRQ>
+ can_receive+0x182/0x1f0 net/can/af_can.c:664
+ canfd_rcv+0x9a/0x120 net/can/af_can.c:703
+ __netif_receive_skb_one_core net/core/dev.c:5482 [inline]
+ __netif_receive_skb+0x8b/0x1b0 net/core/dev.c:5596
+ process_backlog+0x23f/0x3b0 net/core/dev.c:5924
+ __napi_poll+0x65/0x420 net/core/dev.c:6485
+ napi_poll net/core/dev.c:6552 [inline]
+ net_rx_action+0x37e/0x730 net/core/dev.c:6663
+ __do_softirq+0xf2/0x2c9 kernel/softirq.c:571
+ do_softirq+0xb1/0xf0 kernel/softirq.c:472
+ </IRQ>
+ <TASK>
+ __local_bh_enable_ip+0x6f/0x80 kernel/softirq.c:396
+ local_bh_enable+0x1b/0x20 include/linux/bottom_half.h:33
+ netif_rx+0x63/0x1c0 net/core/dev.c:5003
+ can_send+0x521/0x5b0 net/can/af_can.c:286
+ bcm_can_tx+0x2f0/0x3f0 net/can/bcm.c:302
+ bcm_tx_setup net/can/bcm.c:1020 [inline]
+ bcm_sendmsg+0x1f78/0x2c50 net/can/bcm.c:1351
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg net/socket.c:734 [inline]
+ ____sys_sendmsg+0x38f/0x500 net/socket.c:2476
+ ___sys_sendmsg net/socket.c:2530 [inline]
+ __sys_sendmsg+0x197/0x230 net/socket.c:2559
+ __do_sys_sendmsg net/socket.c:2568 [inline]
+ __se_sys_sendmsg net/socket.c:2566 [inline]
+ __x64_sys_sendmsg+0x42/0x50 net/socket.c:2566
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x4697f9
+Code: f7 d8 64 89 02 b8 ff ff ff ff c3 66 0f 1f 44 00 00 48 89 f8 48
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d
+01 f0 ff ff 73 01 c3 48 c7 c1 bc ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc9368afc48 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 000000000077bf80 RCX: 00000000004697f9
+RDX: 0000000000000000 RSI: 0000000020000380 RDI: 0000000000000006
+RBP: 00000000004d29e9 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 000000000077bf80
+R13: 0000000000000000 R14: 000000000077bf80 R15: 00007ffe26483e60
+ </TASK>
+Modules linked in:
+CR2: 0000000000006020
+---[ end trace 0000000000000000 ]---
+RIP: 0010:can_rcv_filter+0x44/0x4e0 net/can/af_can.c:584
+Code: 00 00 00 e8 3e 86 0f fd 49 8b 9e d8 00 00 00 48 89 df e8 af 81
+0f fd 44 8b 23 48 8d bd 20 60 00 00 e8 a0 81 0f fd 48 89 2c 24 <8b> 9d
+20 60 00 00 45 31 ed 31 ff 89 de e8 9a 1c fc fc 85 db 0f 84
+RSP: 0018:ffffc90000003d50 EFLAGS: 00010246
+RAX: ffff88813bc274d8 RBX: ffff8881310c5a10 RCX: ffffffff842b9940
+RDX: 0000000000000522 RSI: 0000000000000000 RDI: 0000000000006020
+RBP: 0000000000000000 R08: 0000000000006023 R09: 0000000000000000
+R10: 0001ffffffffffff R11: 00018881310c5a04 R12: 0000000000000000
+R13: ffff888106fb8880 R14: ffff8881308cba00 R15: 0000000000000000
+FS:  00007fc9368b0700(0000) GS:ffff88813bc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000006020 CR3: 0000000132249000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000020000180 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+----------------
+Code disassembly (best guess):
+   0: 00 00                add    %al,(%rax)
+   2: 00 e8                add    %ch,%al
+   4: 3e 86 0f              xchg   %cl,%ds:(%rdi)
+   7: fd                    std
+   8: 49 8b 9e d8 00 00 00 mov    0xd8(%r14),%rbx
+   f: 48 89 df              mov    %rbx,%rdi
+  12: e8 af 81 0f fd        callq  0xfd0f81c6
+  17: 44 8b 23              mov    (%rbx),%r12d
+  1a: 48 8d bd 20 60 00 00 lea    0x6020(%rbp),%rdi
+  21: e8 a0 81 0f fd        callq  0xfd0f81c6
+  26: 48 89 2c 24          mov    %rbp,(%rsp)
+* 2a: 8b 9d 20 60 00 00    mov    0x6020(%rbp),%ebx <-- trapping instruction
+  30: 45 31 ed              xor    %r13d,%r13d
+  33: 31 ff                xor    %edi,%edi
+  35: 89 de                mov    %ebx,%esi
+  37: e8 9a 1c fc fc        callq  0xfcfc1cd6
+  3c: 85 db                test   %ebx,%ebx
+  3e: 0f                    .byte 0xf
+  3f: 84                    .byte 0x84
+
+Best,
+Wei
