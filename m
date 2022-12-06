@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D466B64411E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF140644122
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234202AbiLFKPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
+        id S231869AbiLFKQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234265AbiLFKPY (ORCPT
+        with ESMTP id S230151AbiLFKQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:15:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC694E20;
-        Tue,  6 Dec 2022 02:15:23 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 660CB615E7;
-        Tue,  6 Dec 2022 10:15:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB45C433B5;
-        Tue,  6 Dec 2022 10:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670321722;
-        bh=yO8H2wPz2yiz0jpwZL0JAyUSggS/ugiA1nSilGo2FLo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ottP8oFfj6PnIRGcrO0xqOlKqb/4MQuSUHuBzuMg6Rv2uLY/S6iIV9VQ+jFF3BHsQ
-         JVwyhMmkSdLJwhLSG4R8mxcpUFHFc2XhvfXU9kZZ5uHZZueg88GTdsEtNGLcINZ6Qh
-         OZ8oxIj6htW0onT76towkUj2K1n6F++qgAa2mvTFFwHv21HOW16jfsEmTC7vLAxlu8
-         y2ltdBEDd446gJrlpdqriv6AUs5QEmM8ippKLKVS5Ys0dVohDEYzsn1OLOA2XLa/k6
-         GFXd9kP8i2TCriNUTjA4MPXA8N16od3BCgo5u9wlIG2G84DH0KKO8eHyg/05iiEhGk
-         WJ6kpiVfIizyg==
-Message-ID: <fed09b42-7891-0a5e-3fd9-1ab65d090271@kernel.org>
-Date:   Tue, 6 Dec 2022 12:15:17 +0200
+        Tue, 6 Dec 2022 05:16:34 -0500
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539A21D3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:16:33 -0800 (PST)
+Received: by mail-pl1-x630.google.com with SMTP id y17so13472271plp.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 02:16:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=pN6IhImBKsrk1Eo5/1DUY+8IvLXyhacd5dYyhSLWzTg=;
+        b=RYURwSMjG4tW1hFv5iYwoRJPYf6chtrCwJGrnnJlENYL4n6j7sENkzTHvYuYZkw1Vn
+         Al+VicNVV3T0v43T+OWv3DHaAOm3mnZSEs+i8ql0GD4/O4GxtjzxTr1/2s/nMn8YiHJ7
+         wOX8tGuyaJjLdhtqc+nMXdz/9tTt4onGjEfQntZCEQhuFG2t9dJrmD8G4y1/mlhbJHSR
+         Rep6iaQ+UlPIDQ5V+fCGvcNKGUbVQwnYRMGDtyB2+kqjb7efnxmImHRAT/eQBzoBn7iZ
+         3GVLwqj8tAmvCxEu9f2hIX89IUZJZKcB4tJz5pw/CNrX3DIiEy2HCWx6d6yC220ECFO3
+         gQXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pN6IhImBKsrk1Eo5/1DUY+8IvLXyhacd5dYyhSLWzTg=;
+        b=3hfx9ZjQHhu6LDG1jSFE7g5632TlyWh+OI/l82J4T6/ordTCUr4NQGoTP8pAThCQNw
+         mc3eIWGsV1tary4CfRQXQEOFu7V83CWiH7mfSP/R3q1/2ToOWIlnAFE8+PsUEqi8tDO9
+         +kbv6C2Pe8g9zm8VWkngZg/bxxCccXvVaWPCe9xQqp+WY3ON3OxJ2znSmWAE+EENncbH
+         4fSE3kJWctnbspSbxOsZOuvq1LOckGUWBrF6UVfogGEHRJlfbsqmLDC7m5hV4rshxzd2
+         jnANforx9S9sOTxZZrPJIuIE7YuR5xz1THyQAeL8aaiLQC3qfo6zL7uw6afMiBpCJ6j3
+         Bevg==
+X-Gm-Message-State: ANoB5pkkiGflJOSWE4Bv1f1VDu7uM6FhMtOsnZYq7hUTAbrhn8zxw9hR
+        T5pIgbV6STDRoiAYPeLsicUvIg==
+X-Google-Smtp-Source: AA0mqf4xPPdhz+v13Xt4vQdKecxKyl1FxW3RsaYobQ3KErB/lCfR9LYIg67YcYoXYdc507XoUrzK5A==
+X-Received: by 2002:a17:902:bc84:b0:17f:700a:2cd3 with SMTP id bb4-20020a170902bc8400b0017f700a2cd3mr71763689plb.36.1670321792718;
+        Tue, 06 Dec 2022 02:16:32 -0800 (PST)
+Received: from localhost ([122.172.87.149])
+        by smtp.gmail.com with ESMTPSA id e18-20020a17090301d200b001782398648dsm6825490plh.8.2022.12.06.02.16.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 02:16:31 -0800 (PST)
+Date:   Tue, 6 Dec 2022 15:46:29 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com,
+        vincent.guittot@linaro.org, saravanak@google.com,
+        wusamuel@google.com, isaacmanjarres@google.com,
+        kernel-team@android.com, juri.lelli@redhat.com,
+        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de
+Subject: Re: [PATCH] cpufreq: schedutil: Optimize operations with single max
+ CPU capacity
+Message-ID: <20221206101629.dbcuv3zdso44w3cq@vireshk-i7>
+References: <20221206101021.18113-1-lukasz.luba@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 net-next 0/6] net: ethernet: ti: am65-cpsw: Fix set
- channel operation
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
-        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-        vigneshr@ti.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221206094419.19478-1-rogerq@kernel.org>
- <Y48T4OduISrVD4HR@unreal>
-Content-Language: en-US
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <Y48T4OduISrVD4HR@unreal>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206101021.18113-1-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2022 12:05, Leon Romanovsky wrote:
-> On Tue, Dec 06, 2022 at 11:44:13AM +0200, Roger Quadros wrote:
->> Hi,
->>
->> This contains a critical bug fix for the recently merged suspend/resume
->> support [1] that broke set channel operation. (ethtool -L eth0 tx <n>)
->>
->> As there were 2 dependent patches on top of the offending commit [1]
->> first revert them and then apply them back after the correct fix.
+On 06-12-22, 10:10, Lukasz Luba wrote:
+> The max CPU capacity is the same for all CPUs sharing frequency domain
+> and thus 'policy' object. There is a way to avoid heavy operations
+> in a loop for each CPU by leveraging this knowledge. Thus, simplify
+> the looping code in the sugov_next_freq_shared() and drop heavy
+> multiplications. Instead, use simple max() to get the highest utilization
+> from these CPUs. This is useful for platforms with many (4 or 6) little
+> CPUs.
 > 
-> Why did you chose revert and reapply almost same patch instead of simply
-> fixing what is missing?
-
-v1 & 2 of this series were doing that but it was difficult to review.
-This is because we are taking a different approach so we have to undo
-most of the things done earlier.
-
-It was suggested during review that reverting and fresh patch was better.
-
-cheers,
--roger
-
+> The max CPU capacity must be fetched every time we are called, due to
+> difficulties during the policy setup, where we are not able to get the
+> normalized CPU capacity at the right time.
 > 
-> Thanks
+> The stored value in sugov_policy::max is also than used in
+> sugov_iowait_apply() to calculate the right boost. Thus, that field is
+> useful to have in that sugov_policy struct.
 > 
->>
->> [1] fd23df72f2be ("net: ethernet: ti: am65-cpsw: Add suspend/resume support")
->>
->> cheers,
->> -roger
->>
->> Changelog:
->>
->> v5:
->> - Change reset failure error code from -EBUSY to -ETIMEDOUT
->>
->> v4:
->> - move am65_cpsw_nuss_ndev_add_tx_napi() earlier to avoid declaration.
->> - print error and error out if soft RESET failed in
->>   am65_cpsw_nuss_ndo_slave_open()
->> - move struct 'am65_cpsw_host *host' where 'common' is defined.
->>
->> v3:
->> - revert offending commit before applying the updated patch.
->> - drop optimization patch to be sent separately.
->>
->> v2:
->> - Fix build warning
->>  drivers/net/ethernet/ti/am65-cpsw-nuss.c:562:13: warning: variable 'tmo' set but not used [-Wunused-but-set-variable]
->>
->> Roger Quadros (6):
->>   Revert "net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
->>     suspend/resume"
->>   Revert "net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
->>     suspend/resume"
->>   Revert "net: ethernet: ti: am65-cpsw: Add suspend/resume support"
->>   net: ethernet: ti: am65-cpsw: Add suspend/resume support
->>   net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
->>     suspend/resume
->>   net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
->>     suspend/resume
->>
->>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 197 ++++++++++++-----------
->>  1 file changed, 105 insertions(+), 92 deletions(-)
->>
->> -- 
->> 2.17.1
->>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Can you please divide this into two patches, one for just moving max
+and one for looping optimization ? Else we may end up reverting
+everything once again.
+
+-- 
+viresh
