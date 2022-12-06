@@ -2,76 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB3E644E81
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:22:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD854644E84
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiLFWWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S229883AbiLFWYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiLFWWb (ORCPT
+        with ESMTP id S229731AbiLFWYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:22:31 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C643F078
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 14:22:29 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bs21so25570884wrb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 14:22:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CMe+dVd5NCnca0fxq7BMWY37ENtlTcvSDlcvk7XOY2w=;
-        b=hGbu5/VGxRxg50qkMsOPo8bLyBgo+q91kTTCe8kaBvHJOxYbPX38GVcWeGoDGm/Ymq
-         NJA40cb1ccJ8HLNgZAJCmkHWVhPE+9Cfny6puzkdvBxPaqp6iV/Bz/YkzIFEfUwhMm06
-         Bqq6MSYtS7kUk7tDGPHtcSnRrRz/KPHnzlgGKLE+YntEA/S4Miw5YaiLe0I9f9wD34Fx
-         nSpHgT9O98JO7WwHlBhu5jb5jPdsV6kGWtpIhZ/7H1Q1+HvtbrPykwbfK6KDePI6GH6W
-         Uu2aRvejEnDDnr4N1c8ctTN4TgzHndhLy1owF7+qQxbKxjlcgrw2QEr75aFYZSASkU60
-         /2xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CMe+dVd5NCnca0fxq7BMWY37ENtlTcvSDlcvk7XOY2w=;
-        b=Ksoy7az921XvbU2E1jMym6nnxaqe/kGideyBfRpUcANgYW+r13p0KjZbvFR1yiBI7V
-         0T9WUlway9hCoDAUKgnlXqbUHtHFRWIwrZwokRyykmA4Ms1IiY98xwQY9u/ZIPlZdflZ
-         Eln4lzMUgIHdI/3ITny2G5U50NVz+ffKOKHTxbJpu4ZoOqRKMZ2zwRNGEp4ZTXQ0jLOC
-         9rYsKyZMSG9zDZtMuXohcxb6BnKaZn8Kqdyi/awscT0649ygr8v7UU6SU4m8P1wWmygv
-         sRVCR0De+bCx7wQLsjdq0FquUMMzbvnmMCFFcpqu1ViLzSaExgwLzvfXACiSAe9d4q2e
-         eD/g==
-X-Gm-Message-State: ANoB5pmrkBk5AhdR0YH4wynWRiz9K0sXqrrcikFdMev3cB2ox3CYcgKD
-        vwhPPeBMtjQZydtLhtMtnkJUmsH0+iSP/l4N3mYUag==
-X-Google-Smtp-Source: AA0mqf5zMrWwGRzkbmuSCyGMTaNHBr6zYZY0ywn56qEJKuvFEFo7BFbRLefMegvZ+n3RUbvGi8uMC4uKP0fOqFAbMP0=
-X-Received: by 2002:adf:e2c9:0:b0:241:db86:176d with SMTP id
- d9-20020adfe2c9000000b00241db86176dmr43870568wrj.40.1670365347456; Tue, 06
- Dec 2022 14:22:27 -0800 (PST)
+        Tue, 6 Dec 2022 17:24:35 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99B230577
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 14:23:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670365414;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=KbcWN/Q2/pafQvgYCQFGwmhf/LUYY3gpOtuCCKoJbLI=;
+        b=NdDfPqh4EVTCN3l2AY8PgAyn61JceAbxbMuwoQqAvPA/aAsRskP78oR1aepzHCGsjwmiDk
+        blsLy/pOCxAHIxVUe2iXiuvOAL+qlQNzaPCKr1BWr2EjCRiLnWHAgJLdK4R2lm0sf41jDV
+        G7u7GDfMh+/4IeplTs69v0h3VIPw6fQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-317-r1vEH37-OeiFQN_UhFKpZg-1; Tue, 06 Dec 2022 17:23:30 -0500
+X-MC-Unique: r1vEH37-OeiFQN_UhFKpZg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8FDE3811E67;
+        Tue,  6 Dec 2022 22:23:29 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.22.11.131])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id DA56E2027061;
+        Tue,  6 Dec 2022 22:23:27 +0000 (UTC)
+From:   Nico Pache <npache@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     riel@surriel.com, mhocko@suse.com, shakeelb@google.com,
+        iamjoonsoo.kim@lge.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        akpm@linux-foundation.org, aquini@redhat.com, longman@redhat.com
+Subject: [RFC] vmscan: Scale file_is_tiny calculation based on priority
+Date:   Tue,  6 Dec 2022 15:23:15 -0700
+Message-Id: <20221206222315.37631-1-npache@redhat.com>
 MIME-Version: 1.0
-References: <20221205225940.3079667-3-irogers@google.com> <Y49qiCIiyaehEOaG@kernel.org>
- <Y49rvLO2RnJBBNL/@kernel.org> <Y49skYa5VYPMU+RF@kernel.org>
- <Y49uKfzfCoZ1ok62@kernel.org> <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org> <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org> <Y494TNa0ZyPH9YSD@kernel.org> <Y498YP2N3gvFSr/X@kernel.org>
-In-Reply-To: <Y498YP2N3gvFSr/X@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 6 Dec 2022 14:22:15 -0800
-Message-ID: <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,117 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 9:31 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
->
-> Em Tue, Dec 06, 2022 at 02:13:48PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Tue, Dec 06, 2022 at 02:07:32PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > Em Tue, Dec 06, 2022 at 02:01:43PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > Em Tue, Dec 06, 2022 at 01:41:41PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > > >  Now to look at the BUILD_BPF_SKEL=1 kaboom:
-> > > > >
-> > > > >  [acme@quaco perf]$ alias m
-> > > > > alias m='rm -rf ~/libexec/perf-core/ ; make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 O=/tmp/build/perf -C tools/perf install-bin && perf test python'
-> > > > > [acme@quaco perf]$ m
-> > > > > make: Entering directory '/home/acme/git/perf/tools/perf'
-> > > > >   BUILD:   Doing 'make -j8' parallel build
-> > > > >   <SNIP>
-> > > > > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `add_work':
-> > > > > /home/acme/git/perf/tools/perf/util/bpf_kwork.c:285: undefined reference to `perf_kwork_add_work'
-> > > > > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `lock_contention_read':
-> > >
-> > > For that bpf_kwork.c see below. Now to see why the python binding is not
-> > > building, I guess is unrelated and you have some other outstanding
-> > > patch?
-> >
-> > Its related:
-> >
-> > [acme@quaco perf]$ perf test -v python
-> > Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
-> >  14: 'import perf' in python                                         :
-> > --- start ---
-> > test child forked, pid 1669872
-> > python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf/python'); import perf" | '/usr/bin/python3' "
-> > Traceback (most recent call last):
-> >   File "<stdin>", line 1, in <module>
-> > ImportError: /tmp/build/perf/python/perf.cpython-310-x86_64-linux-gnu.so: undefined symbol: tep_unload_plugins
-> > test child finished with -1
-> > ---- end ----
-> > 'import perf' in python: FAILED!
-> > [acme@quaco perf]$
-> >
-> > Now checking why NO_LIBTRACEEVENT=1 fails with this...
-> >
-> > [acme@quaco perf]$ find tools/perf/ -name "*.c" | xargs grep tep_unload_plugins
-> > tools/perf/util/trace-event.c:        tep_unload_plugins(t->plugin_list, t->pevent);
-> > [acme@quaco perf]$
-> >
-> > [acme@quaco perf]$ grep trace-event tools/perf/util/python-ext-sources
-> > util/trace-event.c
-> > [acme@quaco perf]$
-> >
-> > Trying to fix...
->
-> I'm missing some detail, this isn't working, util/trace-event.c is still
-> being built and linked.
->
-> The python binding should be usable without tracepoints, in fact its
-> first usage was just to have access to the perf metaevents, see
-> tools/perf/python/twatch.py.
+Now that reclaiming anon memory is more prevelant (Johannes describes this
+well in commit f53af4285d77 ("mm: vmscan: fix extreme overreclaim and swap
+floods")), we've been seeing large bursts (sometimes in the order of
+multiple GiBs) of anon memory being reclaimed despite swappiness being
+very low (=1) and there being plenty of page cache remaining.
 
-You're right. I'd assumed that if you were disabling libtraceevent
-then you'd also disable python. To fix the issue above you can do:
+Johannes commit f53af4285d77 ("mm: vmscan: fix extreme overreclaim and
+swap floods"), helped reduce these swap storms; however, it did not fully
+curb this effect. Under further investigation I noticed these swap
+storms correspond to the activation of file_is_tiny.
 
---- a/tools/perf/util/python-ext-sources
-+++ b/tools/perf/util/python-ext-sources
-@@ -30,7 +30,6 @@ util/rblist.c
-util/counts.c
-util/print_binary.c
-util/strlist.c
--util/trace-event.c
-../lib/rbtree.c
-util/string.c
-util/symbol_fprintf.c
+file_is_tiny is being computed on a per-node basis, if reclaim
+drains the page cache on one node, and the scheduler is prefering
+new allocations on a separate node, file_is_tiny will remain elevated
+for a very long time, constantly draining anon from the node that is low
+on page cache.
 
-but this needs making conditional (possibly in setup.py) on whether
-libtraceevent is present or not.
+These burst of reclaim are also seen in the single node case, where once
+file_is_tiny=1, anon reclaim is too aggressive with a low swap value.
 
-Thanks,
-Ian
+Reduce these extreme bursts of anon reclaim by scaling the total_high_wmark
+down by the reclaim priority. This will activate file_is_tiny way less
+often, and for smaller bursts.
 
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index f0e4daeef8120853..5bd67d54d036f281 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -348,6 +348,10 @@ export PYTHON_EXTBUILD_LIB PYTHON_EXTBUILD_TMP
->  python-clean := $(call QUIET_CLEAN, python) $(RM) -r $(PYTHON_EXTBUILD) $(OUTPUT)python/perf*.so
->
->  PYTHON_EXT_SRCS := $(shell grep -v ^\# util/python-ext-sources)
-> +ifneq ($(CONFIG_TRACEEVENT),y)
-> +  PYTHON_EXT_SRCS := $(call filter-out,$(PYTHON_EXT_SRCS),util/trace-event.c)
-> +endif
-> +
->  PYTHON_EXT_DEPS := util/python-ext-sources util/setup.py $(LIBAPI)
->
->  SCRIPTS = $(patsubst %.sh,%,$(SCRIPT_SH))
-> diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-> index 728fe2f51759eb0d..72088aec2857b316 100644
-> --- a/tools/perf/util/python.c
-> +++ b/tools/perf/util/python.c
-> @@ -1330,6 +1330,9 @@ static struct {
->  static PyObject *pyrf__tracepoint(struct pyrf_evsel *pevsel,
->                                   PyObject *args, PyObject *kwargs)
->  {
-> +#ifndef HAVE_LIBTRACEEVENT
-> +       return NULL;
-> +#else
->         struct tep_event *tp_format;
->         static char *kwlist[] = { "sys", "name", NULL };
->         char *sys  = NULL;
-> @@ -1344,6 +1347,7 @@ static PyObject *pyrf__tracepoint(struct pyrf_evsel *pevsel,
->                 return _PyLong_FromLong(-1);
->
->         return _PyLong_FromLong(tp_format->id);
-> +#endif // HAVE_LIBTRACEEVENT
->  }
->
->  static PyMethodDef perf__methods[] = {
+Fixes: ccc5dc67340c ("mm/vmscan: make active/inactive ratio as 1:1 for anon lru")
+Fixes: 5df741963d52 ("mm: fix LRU balancing effect of new transparent huge pages")
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ mm/vmscan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 026199c047e0..0d288bb5354e 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2882,7 +2882,7 @@ static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc)
+ 		anon = node_page_state(pgdat, NR_INACTIVE_ANON);
+ 
+ 		sc->file_is_tiny =
+-			file + free <= total_high_wmark &&
++			file + free <= (total_high_wmark >> sc->priority) &&
+ 			!(sc->may_deactivate & DEACTIVATE_ANON) &&
+ 			anon >> sc->priority;
+ 	}
+-- 
+2.38.1
+
