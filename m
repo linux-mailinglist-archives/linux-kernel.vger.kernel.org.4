@@ -2,159 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00EB643FF3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF9F643FF5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235116AbiLFJib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:38:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S234435AbiLFJjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234609AbiLFJiZ (ORCPT
+        with ESMTP id S234156AbiLFJi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:38:25 -0500
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA98E1CFF9;
-        Tue,  6 Dec 2022 01:38:19 -0800 (PST)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NRFdR5tPZz6H7X0;
-        Tue,  6 Dec 2022 17:35:23 +0800 (CST)
-Received: from localhost (10.45.155.47) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 6 Dec
- 2022 09:38:16 +0000
-Date:   Tue, 6 Dec 2022 09:38:15 +0000
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-CC:     <ira.weiny@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Davidlohr Bueso" <dave@stgolabs.net>,
-        Dave Jiang <dave.jiang@intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
-Subject: Re: [PATCH V2 08/11] cxl/mem: Wire up event interrupts
-Message-ID: <20221206093815.00000156@Huawei.com>
-In-Reply-To: <638e1dd6aa7bb_25af829435@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-References: <20221201002719.2596558-1-ira.weiny@intel.com>
-        <20221201002719.2596558-9-ira.weiny@intel.com>
-        <6389ab5156083_c9572947c@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-        <20221202141901.00003016@Huawei.com>
-        <638a55611405d_3cbe02942c@dwillia2-xfh.jf.intel.com.notmuch>
-        <20221205130129.00000cc1@Huawei.com>
-        <638e1dd6aa7bb_25af829435@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Tue, 6 Dec 2022 04:38:59 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EAAC1AD99;
+        Tue,  6 Dec 2022 01:38:57 -0800 (PST)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B68NiHI017013;
+        Tue, 6 Dec 2022 09:38:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=corp-2022-7-12; bh=h+xqY3ap6uUHi01HvJo5PCdAUlQP/OuCOPGu3xuefWk=;
+ b=U6bRebwq0a09eqoYyMUBMzvDDuwlnT3h2M5neEXXJTjqnJUyjSZL82rFrVrIJGNRuFuw
+ mY51NhaY9FsGHfoY22j9HVv4THWFsxhfi4Bnd1jhww8Wx0ODlHbxJaHkNzyTxWUhTzZq
+ eza7QQfbD7WwT/nK3cfckhC5vH7baAwGYnZKmMiDFSbR3h6RvEUzFDRlQA7t1qpaHtTV
+ b57TX+gTY7VlaIDq9c0+McWcVhvm/FtkV/xauiQIG9zoaCVlx0PsUJVJxK0c70KERHFp
+ r20RA8VJ6vPT2zPCfHA336k4/37bA7JcksXw/pWU1Ex3OhqolgmqXGbs8L7dIFFVm/uV /g== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ybgpmat-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Dec 2022 09:38:55 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B67VZf2031092;
+        Tue, 6 Dec 2022 09:38:47 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3m8ua0ahce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 06 Dec 2022 09:38:47 +0000
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B69clcE006666;
+        Tue, 6 Dec 2022 09:38:47 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3m8ua0ahc9-1;
+        Tue, 06 Dec 2022 09:38:47 +0000
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@oracle.com, harshit.m.mogalapalli@gmail.com,
+        vegard.nossum@oracle.com, george.kennedy@oracle.com,
+        darren.kenny@oracle.com, syzkaller <syzkaller@googlegroups.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] io_uring: Fix a null-ptr-deref in io_tctx_exit_cb()
+Date:   Tue,  6 Dec 2022 01:38:32 -0800
+Message-Id: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.45.155.47]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-06_05,2022-12-05_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxlogscore=901 mlxscore=0
+ adultscore=0 phishscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2212060079
+X-Proofpoint-ORIG-GUID: pYNp8N-3mGfidp7miOcVNRWjSqIG7PZh
+X-Proofpoint-GUID: pYNp8N-3mGfidp7miOcVNRWjSqIG7PZh
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 08:35:34 -0800
-Dan Williams <dan.j.williams@intel.com> wrote:
+Syzkaller reports a NULL deref bug as follows:
 
-> Jonathan Cameron wrote:
-> > On Fri, 2 Dec 2022 11:43:29 -0800
-> > Dan Williams <dan.j.williams@intel.com> wrote:
-> >   
-> > > Jonathan Cameron wrote:  
-> > > >     
-> > > > > > +int cxl_event_config_msgnums(struct cxl_dev_state *cxlds,
-> > > > > > +			     struct cxl_event_interrupt_policy *policy)
-> > > > > > +{
-> > > > > > +	int rc;
-> > > > > > +
-> > > > > > +	policy->info_settings = CXL_INT_MSI_MSIX;
-> > > > > > +	policy->warn_settings = CXL_INT_MSI_MSIX;
-> > > > > > +	policy->failure_settings = CXL_INT_MSI_MSIX;
-> > > > > > +	policy->fatal_settings = CXL_INT_MSI_MSIX;      
-> > > > > 
-> > > > > I think this needs to be careful not to undo events that the BIOS
-> > > > > steered to itself in firmware-first mode, which raises another question,
-> > > > > does firmware-first mean more the OS needs to backoff on some event-log
-> > > > > handling as well?    
-> > > > 
-> > > > Hmm. Does the _OSC cover these.  There is one for Memory error reporting
-> > > > that I think covers it (refers to 12.2.3.2)
-> > > > 
-> > > > Note that should cover any means of obtaining these, not just interrupt
-> > > > driven - so including the initial record clear.
-> > > > 
-> > > > ..
-> > > >     
-> > > > > > +
-> > > > > > +static irqreturn_t cxl_event_failure_thread(int irq, void *id)
-> > > > > > +{
-> > > > > > +	struct cxl_dev_state *cxlds = id;
-> > > > > > +
-> > > > > > +	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
-> > > > > > +	return IRQ_HANDLED;
-> > > > > > +}      
-> > > > > 
-> > > > > So I think one of the nice side effects of moving log priorty handling
-> > > > > inside of cxl_mem_get_records_log() and looping through all log types in
-> > > > > priority order until all status is clear is that an INFO interrupt also
-> > > > > triggers a check of the FATAL status for free.
-> > > > >     
-> > > > 
-> > > > I go the opposite way on this in thinking that an interrupt should only
-> > > > ever be used to handle the things it was registered for - so we should
-> > > > not be clearing fatal records in the handler triggered for info events.    
-> > > 
-> > > I would agree with you if this was a fast path and if the hardware
-> > > mechanism did not involve shared status register that tells you
-> > > that both FATAL and INFO are pending retrieval through a mechanism.
-> > > Compare that to the separation between admin and IO queues in NVME.
-> > > 
-> > > If the handler is going to loop on the status register then it must be
-> > > careful not to starve out FATAL while processing INFO.
-> > >   
-> > > > Doing other actions like this relies on subtlies of the generic interrupt
-> > > > handling code which happens to force interrupt threads on a shared interrupt
-> > > > line to be serialized.  I'm not sure we are safe at all the interrupt
-> > > > isn't shared unless we put a lock around the whole thing (we have one
-> > > > because of the buffer mutex though).    
-> > > 
-> > > The interrupt is likely shared since there is no performance benefit to
-> > > entice hardware vendors spend transistor budget on more vector space for
-> > > events. The events architecture does not merit that spend.
-> > >   
-> > > > If going this way I think the lock needs a rename.
-> > > > It's not just protecting the buffer used, but also serialize multiple
-> > > > interrupt threads.    
-> > > 
-> > > I will let Ira decide if he wants to rename, but in my mind the shared
-> > > event buffer *is* the data being locked, the fact that multiple threads
-> > > might be contending for it is immaterial.  
-> > 
-> > It isn't he only thing being protected.  Access to the device is also
-> > being serialized including the data in it's registers.
-> > 
-> > If someone comes along later and decides to implement multiple buffers
-> > and there for gets rid of the lock. boom.  
-> 
-> That's what the mailbox mutex is protecting against. If there is an
-> aspect of the hardware state that is not protected by that then that's a
-> bug.
-> 
-Wrong level of locking. This is about a race on multiple commands
-1) Read data from interrupt thread 1.
-2) Read same data from interrupt thread 2.
-3) Clear data from interrupt thread 1.
-4) Clear data from interrupt thread 2. Boom (well minor error we
-probably eat but not good practice).
+ BUG: KASAN: null-ptr-deref in io_tctx_exit_cb+0x53/0xd3
+ Read of size 4 at addr 0000000000000138 by task file1/1955
 
+ CPU: 1 PID: 1955 Comm: file1 Not tainted 6.1.0-rc7-00103-gef4d3ea40565 #75
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+ Call Trace:
+  <TASK>
+  dump_stack_lvl+0xcd/0x134
+  ? io_tctx_exit_cb+0x53/0xd3
+  kasan_report+0xbb/0x1f0
+  ? io_tctx_exit_cb+0x53/0xd3
+  kasan_check_range+0x140/0x190
+  io_tctx_exit_cb+0x53/0xd3
+  task_work_run+0x164/0x250
+  ? task_work_cancel+0x30/0x30
+  get_signal+0x1c3/0x2440
+  ? lock_downgrade+0x6e0/0x6e0
+  ? lock_downgrade+0x6e0/0x6e0
+  ? exit_signals+0x8b0/0x8b0
+  ? do_raw_read_unlock+0x3b/0x70
+  ? do_raw_spin_unlock+0x50/0x230
+  arch_do_signal_or_restart+0x82/0x2470
+  ? kmem_cache_free+0x260/0x4b0
+  ? putname+0xfe/0x140
+  ? get_sigframe_size+0x10/0x10
+  ? do_execveat_common.isra.0+0x226/0x710
+  ? lockdep_hardirqs_on+0x79/0x100
+  ? putname+0xfe/0x140
+  ? do_execveat_common.isra.0+0x238/0x710
+  exit_to_user_mode_prepare+0x15f/0x250
+  syscall_exit_to_user_mode+0x19/0x50
+  do_syscall_64+0x42/0xb0
+  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ RIP: 0023:0x0
+ Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+ RSP: 002b:00000000fffb7790 EFLAGS: 00000200 ORIG_RAX: 000000000000000b
+ RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+ RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+ RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+ R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+ R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+  </TASK>
+ Kernel panic - not syncing: panic_on_warn set ...
 
+Add a NULL check on tctx to prevent this.
 
+Fixes: d56d938b4bef ("io_uring: do ctx initiated file note removal")
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+---
+Could not find the root cause of this.
+---
+ io_uring/io_uring.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 8840cf3e20f2..20f7d8655b50 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2708,7 +2708,7 @@ static __cold void io_tctx_exit_cb(struct callback_head *cb)
+ 	 * When @in_idle, we're in cancellation and it's racy to remove the
+ 	 * node. It'll be removed by the end of cancellation, just ignore it.
+ 	 */
+-	if (!atomic_read(&tctx->in_idle))
++	if (tctx && !atomic_read(&tctx->in_idle))
+ 		io_uring_del_tctx_node((unsigned long)work->ctx);
+ 	complete(&work->completion);
+ }
+-- 
+2.38.1
 
