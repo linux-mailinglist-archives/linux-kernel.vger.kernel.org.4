@@ -2,296 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 894D3643FAF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D299643FB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234730AbiLFJS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S229457AbiLFJTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:19:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234767AbiLFJQ2 (ORCPT
+        with ESMTP id S234855AbiLFJRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:16:28 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9382A21E29
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:16:08 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id l11so19409543edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=m9covplz1FXHTmQsH1JfjKP6msyoK/uzDf0KnqUp54Q=;
-        b=ZZ0V2CLofoZjipLPa+LqpIOUdNrZJcZ7OlOlHq+lMqAkHRVmUFOKGcbb7vc/Wzbp4s
-         FUtLEeFiR/KNhWwj/dygnuuHo5CC7atfJQMmQuilC2xAOO7MuzZ4wiN0s+cix/kmdBtK
-         Rxiba1HkVX0+BNVTkRa6AKDhbQ6ca6L2OcLGxMnBGApozFBUF1mWuYa00N+MxmEfGfrp
-         kC3LdjGfGYXcD6w3f2eJKseTqJb754O81tt9x6LmZF4+THbGMZIF9o8UqSugodLU3fCC
-         x6IWIZnyZR7L1gSG4yCbX+QP+IJdftJUABIuycuZllqkUWt314s7Vnnjd/as8l4+IkLu
-         xVnw==
+        Tue, 6 Dec 2022 04:17:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8323220F6F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:16:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670318172;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=lMRy72lNTyTvf37gL8dnH7NCNPDUhgTIYeO671gopCE=;
+        b=g2bX5Z86Q2StLxCSZegcanoooaT5KLQPTn5r/MGzwtL1QB9KZZFc8E1kidl5a15tDEPNY2
+        JBmsdVZaImwppiT8ERvhuP4nAZlbCvum3rgBfuUCva6jpWo64YnUsANhdj9/2dnBTchU+X
+        9ISU5S7vOuziqs54vrtDRIR5gXAwk4c=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-212-lBZWevLxMjKM7BNqBol_QA-1; Tue, 06 Dec 2022 04:16:11 -0500
+X-MC-Unique: lBZWevLxMjKM7BNqBol_QA-1
+Received: by mail-wr1-f69.google.com with SMTP id h15-20020adfa4cf000000b0024276cca31cso272781wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:16:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m9covplz1FXHTmQsH1JfjKP6msyoK/uzDf0KnqUp54Q=;
-        b=AWpoB+ew+QuqlecQ1qmpDKOH5Pr92WZ0wB6bbi+3UH9b3RygVPSR+PZlKG0LSycPSn
-         YQ77B6LsoTQYbuPnufDS/9tOI6amU80aF+iC5wTUu9Gg6iyCTw7/tpoLUylhT0Fhtc9S
-         8+P8T8dKvRT9Z2+AZF0xitj6P9j6Ti9qRYuJCIaaxPm+P8fcDniDPFVMhwaFt1GPk3Xq
-         u8UCwhSNA8ivMoFoXc0h0HsEuEEf+KwKnrXwHEXV/7NFqLucYl5nuqT7UoBaanD0tVJf
-         vHgKAHT+PJkOA5xJudxZypnPtaHqTfc/8PTfhc637bT80ic/apBwq9TDy5DLhMv+0KNg
-         Zatg==
-X-Gm-Message-State: ANoB5plw5CdmJvVFA1TSpEn7zIkccWWGAuRXlqu9oocmvpCO1tmnN6m9
-        8+nOCQEFL7+sE8YHXDHIVX5zfg==
-X-Google-Smtp-Source: AA0mqf7IPGmPB36CpbdNZRHBx9nue7y+ccfqXiDjjE4b3Ik+XteR0TQC2OsOOYqM37uiZ3yxt7fkmQ==
-X-Received: by 2002:a05:6402:64b:b0:46c:11ef:7b72 with SMTP id u11-20020a056402064b00b0046c11ef7b72mr16568581edx.235.1670318167113;
-        Tue, 06 Dec 2022 01:16:07 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id du1-20020a17090772c100b007c07909eb9asm7155608ejc.1.2022.12.06.01.16.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 01:16:06 -0800 (PST)
-Date:   Tue, 6 Dec 2022 10:16:05 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     ehakim@nvidia.com
-Cc:     linux-kernel@vger.kernel.org, raeds@nvidia.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, sd@queasysnail.net
-Subject: Re: [PATCH net-next v2] macsec: Add support for IFLA_MACSEC_OFFLOAD
- in the netlink layer
-Message-ID: <Y48IVReEUBmQza81@nanopsycho>
-References: <20221206085757.5816-1-ehakim@nvidia.com>
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lMRy72lNTyTvf37gL8dnH7NCNPDUhgTIYeO671gopCE=;
+        b=aT2Eo7ZSbdht/AjrdWylZ18xP9lKAIENKcIrpQinS+axH1ulXUxdeHLW5zOKRmF2/t
+         7rM5Mj4ijZN9Y5yECJl7JlPhar/Jf5l9YggLa3KyJN2igg2RTp1JO3Mjon+pLC+dUzPd
+         S3YcR0BBlrghoyFU6PPZdeGWx7Zmhgn+412V+KqW22xFDmkPzqEswuiPqGnsQy0r+wq4
+         HjpiMOlKWPb5innq4LDlRr/ZB9I25RpGeY5AI0V9eMtzG07otpxIUzhcj2mILkgyu3wP
+         aCq9cQI8leWbXgPgUwB7Su5RCaQH4t2c6PvCKuPlQ27wmB1MTKvcykInbVgzX475Pe/3
+         HZuQ==
+X-Gm-Message-State: ANoB5pnhK2uCZ9dehWUjfMl2fOj3bko65slZYGwSAs7SFvVB+s28IBGc
+        SR9gDYYiYwz4Pv1ctz95YXe6bF/HXTi1qO5AkNvx1Zlxfgr/TKNGLAVBZS05PSIccWLsdtPtEhq
+        Hcgc82QsNax4kEfRc6HYhzraf
+X-Received: by 2002:a05:6000:192:b0:242:4d66:d10 with SMTP id p18-20020a056000019200b002424d660d10mr7898447wrx.504.1670318170283;
+        Tue, 06 Dec 2022 01:16:10 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6lMBFp4LDO+TjiQzgMfKj1b8zuPe3WXQz7UTJO1PSntr02Vc7xM+ehsJ+ySDXUAffMfkhIbw==
+X-Received: by 2002:a05:6000:192:b0:242:4d66:d10 with SMTP id p18-20020a056000019200b002424d660d10mr7898430wrx.504.1670318169962;
+        Tue, 06 Dec 2022 01:16:09 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:4f00:41f1:185d:4f9f:d1c2? (p200300cbc7054f0041f1185d4f9fd1c2.dip0.t-ipconnect.de. [2003:cb:c705:4f00:41f1:185d:4f9f:d1c2])
+        by smtp.gmail.com with ESMTPSA id i12-20020adffc0c000000b00241d21d4652sm16031066wrr.21.2022.12.06.01.16.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 01:16:09 -0800 (PST)
+Message-ID: <0b122e73-22c3-e3a3-3aaf-d2b8361c196d@redhat.com>
+Date:   Tue, 6 Dec 2022 10:16:08 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206085757.5816-1-ehakim@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+References: <20221205150857.167583-1-david@redhat.com> <Y45u+0c4Hu2snEO2@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm/swap: fix SWP_PFN_BITS with
+ CONFIG_PHYS_ADDR_T_64BIT on 32bit
+In-Reply-To: <Y45u+0c4Hu2snEO2@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Dec 06, 2022 at 09:57:57AM CET, ehakim@nvidia.com wrote:
->From: Emeel Hakim <ehakim@nvidia.com>
->
->This adds support for configuring Macsec offload through the
+> 
+> Thanks for debugging this one.
 
-Tell the codebase what to do. Be imperative in your patch descriptions
-so it is clear what are the intensions of the patch.
+Sure!
+
+> 
+>> ---
+>>
+>> This makes my x86 PAE case work as expected again. Only cross compiled
+>> on other architectures.
+> 
+> IIUC it's not about PAE but !SPARSEMEM, as PAE actually has it defined when
+> with sparsemem:
+> 
+> #ifdef CONFIG_X86_32
+> # ifdef CONFIG_X86_PAE
+> #  define SECTION_SIZE_BITS	29
+> #  define MAX_PHYSMEM_BITS	36
+> # else
+> #  define SECTION_SIZE_BITS	26
+> #  define MAX_PHYSMEM_BITS	32
+> # endif
+> #else /* CONFIG_X86_32 */
+> # define SECTION_SIZE_BITS	27 /* matt - 128 is convenient right now */
+> # define MAX_PHYSMEM_BITS	(pgtable_l5_enabled() ? 52 : 46)
+> #endif
+
+Indeed, I'll extend the description accordingly.
+
+> 
+> One trivial comment below.
+> 
+>>
+>> ---
+>>   include/linux/swapops.h | 8 +++++---
+>>   1 file changed, 5 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+>> index 86b95ccb81bb..4bb7a20f3fa5 100644
+>> --- a/include/linux/swapops.h
+>> +++ b/include/linux/swapops.h
+>> @@ -32,11 +32,13 @@
+>>    * store PFN, we only need SWP_PFN_BITS bits.  Each of the pfn swap entries
+>>    * can use the extra bits to store other information besides PFN.
+>>    */
+>> -#ifdef MAX_PHYSMEM_BITS
+>> +#if defined(MAX_PHYSMEM_BITS)
+>>   #define SWP_PFN_BITS			(MAX_PHYSMEM_BITS - PAGE_SHIFT)
+>> -#else  /* MAX_PHYSMEM_BITS */
+>> +#elif !defined(CONFIG_64BIT) && defined(CONFIG_PHYS_ADDR_T_64BIT)
+>> +#define SWP_PFN_BITS			SWP_TYPE_SHIFT
+> 
+> Can we add a comment showing where SWP_TYPE_SHIFT comes from?  It should be
+> a min value comes from either the limitation of phys address width, or from
+> definition of swp_entry_t (which is unsigned long).
+> 
+> Or I'd rather make this then the code explains better on itself, and the
+> change should be smaller too:
+> 
+>   #ifdef MAX_PHYSMEM_BITS
+>   #define SWP_PFN_BITS                   (MAX_PHYSMEM_BITS - PAGE_SHIFT)
+>   #else  /* MAX_PHYSMEM_BITS */
+> -#define SWP_PFN_BITS                   (BITS_PER_LONG - PAGE_SHIFT)
+> +#define SWP_PFN_BITS                   MIN((sizeof(phys_addr_t) * 8) - \
+> +                                           PAGE_SHIFT, SWP_TYPE_SHIFT)
+>   #endif /* MAX_PHYSMEM_BITS */
+>   #define SWP_PFN_MASK                   (BIT(SWP_PFN_BITS) - 1)
+>                                   
+> What do you think?
+
+Sure, if we can make the compiler happy:
+
+./include/linux/swapops.h: In function 'swp_offset_pfn':
+./include/linux/swapops.h:38:41: error: implicit declaration of function 
+'MIN' [-Werror=implicit-function-declaration]
+    38 | #define SWP_PFN_BITS 
+MIN((sizeof(phys_addr_t) * 8) - \
+       |                                         ^~~
+./include/vdso/bits.h:7:44: note: in definition of macro 'BIT'
+     7 | #define BIT(nr)                 (UL(1) << (nr))
+       |                                            ^~
+./include/linux/swapops.h:41:46: note: in expansion of macro 'SWP_PFN_BITS'
+    41 | #define SWP_PFN_MASK                    (BIT(SWP_PFN_BITS) - 1)
+       |                                              ^~~~~~~~~~~~
+./include/linux/swapops.h:119:36: note: in expansion of macro 'SWP_PFN_MASK'
+   119 |         return swp_offset(entry) & SWP_PFN_MASK;
+       |                                    ^~~~~~~~~~~~
 
 
->netlink layer by:
->- Considering IFLA_MACSEC_OFFLOAD in macsec_fill_info.
->- Handling IFLA_MACSEC_OFFLOAD in macsec_changelink.
->- Adding IFLA_MACSEC_OFFLOAD to the netlink policy.
->- Adjusting macsec_get_size.
+using "min" instead gives plenty of warnings. min_t() seems to work:
 
-4 patches then?
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index 27ade4f22abb..088f25aa0e98 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -34,8 +34,10 @@
+   */
+  #ifdef MAX_PHYSMEM_BITS
+  #define SWP_PFN_BITS                   (MAX_PHYSMEM_BITS - PAGE_SHIFT)
+-#else  /* MAX_PHYSMEM_BITS */
+-#define SWP_PFN_BITS                   (BITS_PER_LONG - PAGE_SHIFT)
++#else /* MAX_PHYSMEM_BITS */
++#define SWP_PFN_BITS                   min_t(phys_addr_t, \
++                                             (sizeof(phys_addr_t) * 8) - \
++                                             PAGE_SHIFT, SWP_TYPE_SHIFT)
+  #endif /* MAX_PHYSMEM_BITS */
+  #define SWP_PFN_MASK                   (BIT(SWP_PFN_BITS) - 1)
 
-I mean really, not a macsec person, but I should be able to follow what
-are your intensions looking and description&code right away.
 
 
->
->The handling in macsec_changlink is similar to
+I'm currently cross-compiling that and will give it a churn.
 
-s/macsec_changlink/macsec_changelink/
+Thanks!
 
->macsec_upd_offload.
->Update macsec_upd_offload to use a common helper function
->to avoid duplication.
->
->Example for setting offload for a macsec device
->    ip link set macsec0 type macsec offload mac
->
->Reviewed-by: Raed Salem <raeds@nvidia.com>
->Signed-off-by: Emeel Hakim <ehakim@nvidia.com>
->---
->V1 -> V2: Add common helper to avoid duplicating code
-> drivers/net/macsec.c | 114 ++++++++++++++++++++++++++++---------------
-> 1 file changed, 74 insertions(+), 40 deletions(-)
->
->diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
->index d73b9d535b7a..afd6ff47ba56 100644
->--- a/drivers/net/macsec.c
->+++ b/drivers/net/macsec.c
->@@ -2583,16 +2583,45 @@ static bool macsec_is_configured(struct macsec_dev *macsec)
-> 	return false;
-> }
-> 
->+static int macsec_update_offload(struct macsec_dev *macsec, enum macsec_offload offload)
->+{
->+	enum macsec_offload prev_offload;
->+	const struct macsec_ops *ops;
->+	struct macsec_context ctx;
->+	int ret = 0;
->+
->+	prev_offload = macsec->offload;
->+
->+	/* Check if the device already has rules configured: we do not support
->+	 * rules migration.
->+	 */
->+	if (macsec_is_configured(macsec))
->+		return -EBUSY;
->+
->+	ops = __macsec_get_ops(offload == MACSEC_OFFLOAD_OFF ? prev_offload : offload,
->+			       macsec, &ctx);
->+	if (!ops)
->+		return -EOPNOTSUPP;
->+
->+	macsec->offload = offload;
->+
->+	ctx.secy = &macsec->secy;
->+	ret = (offload == MACSEC_OFFLOAD_OFF) ? macsec_offload(ops->mdo_del_secy, &ctx) :
->+		      macsec_offload(ops->mdo_add_secy, &ctx);
->+
->+	if (ret)
->+		macsec->offload = prev_offload;
->+
->+	return ret;
->+}
->+
-> static int macsec_upd_offload(struct sk_buff *skb, struct genl_info *info)
-> {
-> 	struct nlattr *tb_offload[MACSEC_OFFLOAD_ATTR_MAX + 1];
->-	enum macsec_offload offload, prev_offload;
->-	int (*func)(struct macsec_context *ctx);
-> 	struct nlattr **attrs = info->attrs;
->-	struct net_device *dev;
->-	const struct macsec_ops *ops;
->-	struct macsec_context ctx;
->+	enum macsec_offload offload;
-> 	struct macsec_dev *macsec;
->+	struct net_device *dev;
-> 	int ret;
-> 
-> 	if (!attrs[MACSEC_ATTR_IFINDEX])
->@@ -2629,39 +2658,7 @@ static int macsec_upd_offload(struct sk_buff *skb, struct genl_info *info)
-> 
-> 	rtnl_lock();
-> 
->-	prev_offload = macsec->offload;
->-	macsec->offload = offload;
->-
->-	/* Check if the device already has rules configured: we do not support
->-	 * rules migration.
->-	 */
->-	if (macsec_is_configured(macsec)) {
->-		ret = -EBUSY;
->-		goto rollback;
->-	}
->-
->-	ops = __macsec_get_ops(offload == MACSEC_OFFLOAD_OFF ? prev_offload : offload,
->-			       macsec, &ctx);
->-	if (!ops) {
->-		ret = -EOPNOTSUPP;
->-		goto rollback;
->-	}
->-
->-	if (prev_offload == MACSEC_OFFLOAD_OFF)
->-		func = ops->mdo_add_secy;
->-	else
->-		func = ops->mdo_del_secy;
->-
->-	ctx.secy = &macsec->secy;
->-	ret = macsec_offload(func, &ctx);
->-	if (ret)
->-		goto rollback;
->-
->-	rtnl_unlock();
->-	return 0;
->-
->-rollback:
->-	macsec->offload = prev_offload;
->+	ret = macsec_update_offload(macsec, offload);
-> 
-> 	rtnl_unlock();
-> 	return ret;
->@@ -3698,6 +3695,7 @@ static const struct nla_policy macsec_rtnl_policy[IFLA_MACSEC_MAX + 1] = {
-> 	[IFLA_MACSEC_SCB] = { .type = NLA_U8 },
-> 	[IFLA_MACSEC_REPLAY_PROTECT] = { .type = NLA_U8 },
-> 	[IFLA_MACSEC_VALIDATION] = { .type = NLA_U8 },
->+	[IFLA_MACSEC_OFFLOAD] = { .type = NLA_U8 },
-> };
-> 
-> static void macsec_free_netdev(struct net_device *dev)
->@@ -3803,6 +3801,29 @@ static int macsec_changelink_common(struct net_device *dev,
-> 	return 0;
-> }
-> 
->+static int macsec_changelink_upd_offload(struct net_device *dev, struct nlattr *data[])
->+{
->+	enum macsec_offload offload;
->+	struct macsec_dev *macsec;
->+
->+	macsec = macsec_priv(dev);
->+	offload = nla_get_u8(data[IFLA_MACSEC_OFFLOAD]);
->+
->+	if (macsec->offload == offload)
->+		return 0;
->+
->+	/* Check if the offloading mode is supported by the underlying layers */
->+	if (offload != MACSEC_OFFLOAD_OFF &&
->+	    !macsec_check_offload(offload, macsec))
->+		return -EOPNOTSUPP;
->+
->+	/* Check if the net device is busy. */
->+	if (netif_running(dev))
->+		return -EBUSY;
->+
->+	return macsec_update_offload(macsec, offload);
->+}
->+
-> static int macsec_changelink(struct net_device *dev, struct nlattr *tb[],
-> 			     struct nlattr *data[],
-> 			     struct netlink_ext_ack *extack)
->@@ -3831,6 +3852,12 @@ static int macsec_changelink(struct net_device *dev, struct nlattr *tb[],
-> 	if (ret)
-> 		goto cleanup;
-> 
->+	if (data[IFLA_MACSEC_OFFLOAD]) {
->+		ret = macsec_changelink_upd_offload(dev, data);
->+		if (ret)
->+			goto cleanup;
->+	}
->+
-> 	/* If h/w offloading is available, propagate to the device */
-> 	if (macsec_is_offloaded(macsec)) {
-> 		const struct macsec_ops *ops;
->@@ -4231,16 +4258,22 @@ static size_t macsec_get_size(const struct net_device *dev)
-> 		nla_total_size(1) + /* IFLA_MACSEC_SCB */
-> 		nla_total_size(1) + /* IFLA_MACSEC_REPLAY_PROTECT */
-> 		nla_total_size(1) + /* IFLA_MACSEC_VALIDATION */
->+		nla_total_size(1) + /* IFLA_MACSEC_OFFLOAD */
-> 		0;
-> }
-> 
-> static int macsec_fill_info(struct sk_buff *skb,
-> 			    const struct net_device *dev)
-> {
->-	struct macsec_secy *secy = &macsec_priv(dev)->secy;
->-	struct macsec_tx_sc *tx_sc = &secy->tx_sc;
->+	struct macsec_tx_sc *tx_sc;
->+	struct macsec_dev *macsec;
->+	struct macsec_secy *secy;
-> 	u64 csid;
-> 
->+	macsec = macsec_priv(dev);
->+	secy = &macsec->secy;
->+	tx_sc = &secy->tx_sc;
->+
-> 	switch (secy->key_len) {
-> 	case MACSEC_GCM_AES_128_SAK_LEN:
-> 		csid = secy->xpn ? MACSEC_CIPHER_ID_GCM_AES_XPN_128 : MACSEC_DEFAULT_CIPHER_ID;
->@@ -4265,6 +4298,7 @@ static int macsec_fill_info(struct sk_buff *skb,
-> 	    nla_put_u8(skb, IFLA_MACSEC_SCB, tx_sc->scb) ||
-> 	    nla_put_u8(skb, IFLA_MACSEC_REPLAY_PROTECT, secy->replay_protect) ||
-> 	    nla_put_u8(skb, IFLA_MACSEC_VALIDATION, secy->validate_frames) ||
->+	    nla_put_u8(skb, IFLA_MACSEC_OFFLOAD, macsec->offload) ||
-> 	    0)
-> 		goto nla_put_failure;
-> 
->-- 
->2.21.3
->
+-- 
+Thanks,
+
+David / dhildenb
+
