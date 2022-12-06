@@ -2,212 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55390643D7D
+	by mail.lfdr.de (Postfix) with ESMTP id 0956A643D7C
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:15:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233366AbiLFHOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 02:14:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49600 "EHLO
+        id S234067AbiLFHOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 02:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbiLFHOr (ORCPT
+        with ESMTP id S231530AbiLFHOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Dec 2022 02:14:47 -0500
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A823915702;
-        Mon,  5 Dec 2022 23:14:45 -0800 (PST)
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 2B67EEYZ012284;
-        Tue, 6 Dec 2022 16:14:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2B67EEYZ012284
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1670310855;
-        bh=U52gCh8Z/SoLdl6qC1zDSkx5TTz1rxCuOfh1pUNoh1I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=uir75WmhM61qWYaSAfEX4eh/3QvB6Hl5x7uUEt4t6txjzK9eHuMyEt2KoUvB8p0f/
-         3SeDf4vb5LglQhhBoQ92C1UJS4aFRwwL0K9tu8+AiCoZsONS7j+GOL4Lt7NXYFgKXP
-         8oMg887wTAjlSDOd4C69fumOvFX+a9B4/a+iql3BwwYveDlvm+MPBNdQRdDTWtcqEU
-         IMfiGGeGxfjjZ15/6zlwucOfsDnIS7BpbFua9Lm4+l9F9Ew1CjtGEVDxv3VkmG0LNn
-         4mOPQCK+zwbMgLeZa9pfWnpRYhwxDhaIim9guOQZ/WaR1BJ492RW8dn/dXHH9P4R5N
-         ThJSIhNuOSozw==
-X-Nifty-SrcIP: [209.85.208.172]
-Received: by mail-lj1-f172.google.com with SMTP id x11so16203289ljh.7;
-        Mon, 05 Dec 2022 23:14:14 -0800 (PST)
-X-Gm-Message-State: ANoB5pmy+Wp/qLrn1omvZdj3jklygDv87vd52EdheKJ/LnaQBw0DS5ao
-        DhmEmwuYvYmx+K6bQCgCqTR43fRIn88dfdZzHSQ=
-X-Google-Smtp-Source: AA0mqf5uw6qKYikZAQcH398Rzc4rNP9PNyOlQM5FtlXYbzO5X2thuJyKZ5sk3UnpRje0kRiU0nts8llwaN6AMm42LoU=
-X-Received: by 2002:a05:651c:10af:b0:277:3046:3d1c with SMTP id
- k15-20020a05651c10af00b0027730463d1cmr25407706ljn.422.1670310853192; Mon, 05
- Dec 2022 23:14:13 -0800 (PST)
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3451C14D04;
+        Mon,  5 Dec 2022 23:14:47 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id jn7so13080223plb.13;
+        Mon, 05 Dec 2022 23:14:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=AwV+aQezPrqmBi+1p608TRrRU2Dd7rb+QPCbuqXm00Y=;
+        b=Io1NM++sncn5eRES2/jZKZmNDFCuHxRqdNKbdkNpigNzh7SEoBIzImpXdIPsY+havC
+         CZJhgEnmVdHYPoLotanDGcdPmMeW1NA1r4YBo4d8juIQSW5H0iGPrHKFLYWa/L1c0Kkw
+         PmZvdPrdiTIhQogbicWB7Xr7P3iPZh3WJXQLwIEIz1DpERD8mbiTHFoAuMUZHVlj8y9Y
+         WURfOT55kx/+dqp+wwdGjyTZZjFQelCGkul6W7AG4mLzQnG64wJtO62f/7v+KWUuD+2c
+         xQWugvy/kzhVboqUEzoMRz/5Kc6FaXSp7J0EkteABUTP6CzWr3kyYC7Bee6IWugnH5/0
+         bhVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AwV+aQezPrqmBi+1p608TRrRU2Dd7rb+QPCbuqXm00Y=;
+        b=t7ep6CpNbv58f2UptR/3bHtPjYCuw10d0LneNRa4M+dWjqExHsVSoZT85AjuO0r+hb
+         u1eo2OvFQysbpP+1inXbbsO/9QkjaVNyVSZX/a1qm/7WzcSskec7MhNX3elBTEDW+lur
+         xjJnVRIovfX1o6n/BgY2DfOVWiOcwezbNO2oN8X0guGe6fok33Rx1vFDQudnvy+UE1IG
+         qLM6giDHUnElAHtvvFD+vK1uCFmfCnyXqN9ZOXwOLNcUB/T3CxTwdAk9EfN+DOUkh7Vd
+         e7Nv1hdjoPDn0ZZ7YKsIIUyV9gsApgQkgh1AQ84of/QPMy8NQQw6BSrvJPqA9bDp3lMU
+         DZjg==
+X-Gm-Message-State: ANoB5pktTyErNvDo3hYaKjXNrOIlPPHogJju6oLOSDyabKXoAje6OSuW
+        Mu+caOOWi58J1yO+nBlShjFIRyFYU8TBxQ==
+X-Google-Smtp-Source: AA0mqf5njaIFBPQ0FAuyk01o8a5QFgvF/4emMR4KG5ol+LRQkLvgFF0RC6vHDP2XDLJ9vRuYRSzhxQ==
+X-Received: by 2002:a17:902:d1d2:b0:189:d637:cc63 with SMTP id g18-20020a170902d1d200b00189d637cc63mr8638266plb.92.1670310886580;
+        Mon, 05 Dec 2022 23:14:46 -0800 (PST)
+Received: from [192.168.1.5] ([180.171.235.177])
+        by smtp.gmail.com with ESMTPSA id m13-20020a170902f64d00b001891ea4d133sm11753590plg.12.2022.12.05.23.14.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 23:14:45 -0800 (PST)
+Message-ID: <59dd6dba-cabf-bd80-dc1e-87da9cdd1671@gmail.com>
+Date:   Tue, 6 Dec 2022 15:14:38 +0800
 MIME-Version: 1.0
-References: <d6d5ce3169da8559cd20d20889849546cc69be50.1669042125.git.jtoppins@redhat.com>
- <88901065-469f-0988-f56b-c84d1fabbe8a@redhat.com> <f8c49457-7f7a-b8bf-b212-b607a1ecf346@infradead.org>
-In-Reply-To: <f8c49457-7f7a-b8bf-b212-b607a1ecf346@infradead.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 6 Dec 2022 16:13:34 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASyvQKkOmCfshfW7uuFtfSR7hSv7g4-_Vi1QoOL6VUFWw@mail.gmail.com>
-Message-ID: <CAK7LNASyvQKkOmCfshfW7uuFtfSR7hSv7g4-_Vi1QoOL6VUFWw@mail.gmail.com>
-Subject: Re: [PATCH next v2] kbuild: add ability to make source rpm buildable
- using koji
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jonathan Toppins <jtoppins@redhat.com>,
-        linux-kbuild@vger.kernel.org, dzickus@redhat.com,
-        ihuguet@redhat.com, ivecera@redhat.com, jtornosm@redhat.com,
-        kheib@redhat.com, linux-kernel@vger.kernel.org,
-        michal.lkml@markovi.net, ndesaulniers@google.com,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] bpftool: Fix memory leak in do_build_table_cb
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221205081300.561974-1-linmq006@gmail.com>
+ <8d7ac47d-5d76-eaf1-7c1e-a4418d80dac5@iogearbox.net>
+Content-Language: en-US
+From:   Miaoqian Lin <linmq006@gmail.com>
+In-Reply-To: <8d7ac47d-5d76-eaf1-7c1e-a4418d80dac5@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 2:44 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+Hi, Daniel
+
+On 2022/12/6 4:05, Daniel Borkmann wrote:
+> On 12/5/22 9:13 AM, Miaoqian Lin wrote:
+>> strdup() allocates memory for path. We need to release the memory in
+>> the following error paths. Add free() to avoid memory leak.
+>>
+>> Fixes: 8f184732b60b ("bpftool: Switch to libbpf's hashmap for pinned paths of BPF objects")
+>> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+>> ---
+>>   tools/bpf/bpftool/common.c | 4 +++-
+>>   1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+>> index 0cdb4f711510..8a820356525e 100644
+>> --- a/tools/bpf/bpftool/common.c
+>> +++ b/tools/bpf/bpftool/common.c
+>> @@ -499,9 +499,11 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
+>>       if (err) {
+>>           p_err("failed to append entry to hashmap for ID %u, path '%s': %s",
+>>                 pinned_info.id, path, strerror(errno));
+>> -        goto out_close;
+>> +        goto out_free;
+>>       }
+>>   +out_free:
+>> +    free(path);
 >
-> Hi,
+> It would be ok if you were to add the free(path) into the err condition, but here you
+> also cause the !err to be freed which would trigger as UAF. See the hashmap_insert()
+> where just set the pointer entry->value = <path>.. how was this tested before submission?
 >
-> On 12/5/22 21:37, Jonathan Toppins wrote:
-> > On 11/21/22 09:48, Jonathan Toppins wrote:
-> >> From: Ivan Vecera <ivecera@redhat.com>
-> >>
-> >> Changes:
-> >> - added new target 'srcrpm-pkg' to generate source rpm
-> >> - added required build tools to spec file
-> >> - removed locally compiled host tools to force their re-compile
-> >>
-> >> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> >> Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
-> >> Acked-by: =C3=8D=C3=B1igo Huguet <ihuguet@redhat.com>
-> >> Tested-by: Ivan Vecera <ivecera@redhat.com>
-> >> ---
-> >>
-> >> Notes:
-> >>      v2:
-> >>       * updated UTS_MACHINE to be $(UTS_MACHINE)-linux
-> >>         suggested by Masahiro Yamada
-> >
-> > Quick ping, wanted to make sure I didn't miss any requests. Looking at =
-patchwork there appear to be no replies to this version. Would it be reason=
-able to assume this version will be accepted and make it into the next kern=
-el?
+Thanks for your review. You're right. Sorry for the mistake, I meant to free it in the error path.
+
+I'll send v2 to fix this. I spotted it with static detection tool.
+
+>>   out_close:
+>>       close(fd);
+>>   out_ret:
+>>
 >
-> I have a request:
-> Tell us what "koji" is. I'm surprised that that word is not in the
-> patch description at all.
->
-> Thanks.
-
-
-
-
-I applied this patch, but somehow I replied to v1
-https://lore.kernel.org/linux-kbuild/CAK7LNATPZkMCabD5aGNamp-gH3aZvFPr2_Yq=
-=3DN=3DrM_ht2i3p6g@mail.gmail.com/
-
-
-
-I have never used it, but I guess koji is a build engine
-that generates binary packages from a source package.
-
-That's why they want to create only a source package.
-
-
-This patch is not related to koji
-(and I suggested them to drop it from the subject)
-
-I just tested it by using 'rpmbuild' on my local machine.
-
-
-
-
-
-
-
-
-
-
-
-
-> >>
-> >>   scripts/Makefile.package | 10 ++++++++++
-> >>   scripts/package/mkspec   |  7 +++++++
-> >>   2 files changed, 17 insertions(+)
-> >>
-> >> diff --git a/scripts/Makefile.package b/scripts/Makefile.package
-> >> index 8bbcced67c22..1290f1c631fb 100644
-> >> --- a/scripts/Makefile.package
-> >> +++ b/scripts/Makefile.package
-> >> @@ -62,6 +62,16 @@ rpm-pkg:
-> >>       +rpmbuild $(RPMOPTS) --target $(UTS_MACHINE)-linux -ta $(KERNELP=
-ATH).tar.gz \
-> >>       --define=3D'_smp_mflags %{nil}'
-> >>   +# srcrpm-pkg
-> >> +# -------------------------------------------------------------------=
---------
-> >> +PHONY +=3D srcrpm-pkg
-> >> +srcrpm-pkg:
-> >> +    $(MAKE) clean
-> >> +    $(CONFIG_SHELL) $(MKSPEC) >$(objtree)/kernel.spec
-> >> +    $(call cmd,src_tar,$(KERNELPATH),kernel.spec)
-> >> +    +rpmbuild $(RPMOPTS) --target $(UTS_MACHINE)-linux -ts $(KERNELPA=
-TH).tar.gz \
-> >> +    --define=3D'_smp_mflags %{nil}' --define=3D'_srcrpmdir $(srctree)=
-'
-> >> +
-> >>   # binrpm-pkg
-> >>   # ------------------------------------------------------------------=
----------
-> >>   PHONY +=3D binrpm-pkg
-> >> diff --git a/scripts/package/mkspec b/scripts/package/mkspec
-> >> index 70392fd2fd29..dda00a948a01 100755
-> >> --- a/scripts/package/mkspec
-> >> +++ b/scripts/package/mkspec
-> >> @@ -33,6 +33,8 @@ EXCLUDES=3D"$RCS_TAR_IGNORE --exclude=3D*vmlinux* --=
-exclude=3D*.mod \
-> >>   --exclude=3D*.o --exclude=3D*.ko --exclude=3D*.cmd --exclude=3DDocum=
-entation \
-> >>   --exclude=3D.config.old --exclude=3D.missing-syscalls.d --exclude=3D=
-*.s"
-> >>   +test -n "$LOCALVERSION" && MAKE=3D"$MAKE LOCALVERSION=3D$LOCALVERSI=
-ON"
-> >> +
-> >>   # We can label the here-doc lines for conditional output to the spec=
- file
-> >>   #
-> >>   # Labels:
-> >> @@ -49,6 +51,9 @@ sed -e '/^DEL/d' -e 's/^\t*//' <<EOF
-> >>       URL: https://www.kernel.org
-> >>   $S    Source: kernel-$__KERNELRELEASE.tar.gz
-> >>       Provides: $PROVIDES
-> >> +$S    BuildRequires: bc binutils bison dwarves elfutils-libelf-devel =
-flex
-> >> +$S    BuildRequires: gcc make openssl openssl-devel perl python3 rsyn=
-c
-> >> +
-> >>       # $UTS_MACHINE as a fallback of _arch in case
-> >>       # /usr/lib/rpm/platform/*/macros was not included.
-> >>       %define _arch %{?_arch:$UTS_MACHINE}
-> >> @@ -80,6 +85,8 @@ $S$M    against the $__KERNELRELEASE kernel package.
-> >>   $S$M
-> >>   $S    %prep
-> >>   $S    %setup -q
-> >> +$S    rm -f scripts/basic/fixdep scripts/kconfig/conf
-> >> +$S    rm -f tools/objtool/{fixdep,objtool}
-> >>   $S
-> >>   $S    %build
-> >>   $S    $MAKE %{?_smp_mflags} KBUILD_BUILD_VERSION=3D%{release}
-> >
->
-> --
-> ~Randy
-
-
-
---=20
-Best Regards
-Masahiro Yamada
