@@ -2,276 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D97B64476B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:06:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2D3964475E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233785AbiLFPGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:06:16 -0500
+        id S231869AbiLFPDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:03:33 -0500
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234556AbiLFPFt (ORCPT
+        with ESMTP id S234556AbiLFPDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:05:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FCF82AE8;
-        Tue,  6 Dec 2022 07:00:37 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35265B81A26;
-        Tue,  6 Dec 2022 15:00:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54919C433D6;
-        Tue,  6 Dec 2022 15:00:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670338834;
-        bh=3c6kibuQcbp7UNuOk1VcKWNfFbF3s27lK25A447UzA0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=py2GCys+Mcu9ZsFJkyBdhB1WOMuHh7A7c5fjZLcYjPhIr8/Xj4MT+hh1bYk0Tu2uy
-         NQ6vr2+qdQEZnVE8g2t1mpjtTXlsnAJ3a837AFInf5GXQVtLHROIz2cwSeitaA4IjW
-         FWEJltqCYqGEgL/+oKANoZKRSGRHRGeKvjek3StjY8UnI++1AsszgJomVzAMyMg39b
-         n0nB50HxU4WKpaUz79ZMA9rX7ky7SF08dVZhLEU0OQHHwJr/UtGvG/wSRfrVYNx4n7
-         uJkb4f61oWyoOUq274IJUGKYAul9ObboS1OqWqUIyBthcY7q4/v68ibdvr0CkO8NBV
-         7qflmREUz9rmA==
-Date:   Tue, 6 Dec 2022 22:50:37 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 09/13] riscv: switch to relative alternative entries
-Message-ID: <Y49WvYWIsFAIeabH@xhacker>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-10-jszhang@kernel.org>
- <CAJF2gTRxm7LJFtups5fexJ5ishm9_j3e+yzfKv3nTtQqUtXPtA@mail.gmail.com>
- <Y44LuRcQYPnVnFje@xhacker>
- <CAJF2gTQ98fyTNc6d3PJrkMjUjUstN8s1FcRNyZQCLiN5CV5NCw@mail.gmail.com>
+        Tue, 6 Dec 2022 10:03:07 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA402CDC9;
+        Tue,  6 Dec 2022 06:57:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=aOu3hcI2HuAA6JdI2YrAKpOHbakqeDHTAxD/ZZJJ0bc=; b=UNS+SWcy5CTU8YNCqy0hroPSbB
+        QWdBiYIYEOndB9iaeGHfIW5AQINGFgE03FIPcnZrWwCr444dIXeVCuYL3BpCYsGVjnd0vUIISqyDZ
+        nYPH8Qc0+qLWMjnidPclIIdtPHstye1LENG9PnAyrtcuDkd8f/Baklm28G5dXeMGmZmg0NRjeWTtw
+        PKf8Z9xYc2wfaIPlOdAGdspDi3PzPMnuHJdp5/2jJI7z4Qyvzv7x54xn6+KiBU2+k01pIKye7AHof
+        1VEOkr/L/DqLs3YzsRhdIa6MdzymTh7Tu4dECx6xQfXV1Dgb9LSXy0YSoz24KcrFo+a5Sa/eKwQjs
+        VVFsezXA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35602)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p2ZNa-00082b-Ah; Tue, 06 Dec 2022 14:57:06 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p2ZNY-0008Hm-9U; Tue, 06 Dec 2022 14:57:04 +0000
+Date:   Tue, 6 Dec 2022 14:57:04 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v4 net-next 5/5] drivers/net/phy: add driver for the
+ onsemi NCN26000 10BASE-T1S PHY
+Message-ID: <Y49YQOOhAslQQ9zt@shell.armlinux.org.uk>
+References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
+ <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
+ <Y49IBR8ByMQH6oVt@lunn.ch>
+ <Y49THkXZdLBR6Mxv@gvm01>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJF2gTQ98fyTNc6d3PJrkMjUjUstN8s1FcRNyZQCLiN5CV5NCw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y49THkXZdLBR6Mxv@gvm01>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 12:34:40PM +0800, Guo Ren wrote:
-> On Mon, Dec 5, 2022 at 11:28 PM Jisheng Zhang <jszhang@kernel.org> wrote:
-> >
-> > On Mon, Dec 05, 2022 at 08:51:41AM +0800, Guo Ren wrote:
-> > > On Mon, Dec 5, 2022 at 1:57 AM Jisheng Zhang <jszhang@kernel.org> wrote:
-> > > >
-> > > > Instead of using absolute addresses for both the old instrucions and
-> > > > the alternative instructions, use offsets relative to the alt_entry
-> > > > values. So we can not only cut the size of the alternative entry, but
-> > > > also meet the prerequisite for patching alternatives in the vDSO,
-> > > > since absolute alternative entries are subject to dynamic relocation,
-> > > > which is incompatible with the vDSO building.
-> > > >
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > ---
-> > > >  arch/riscv/errata/sifive/errata.c           |  4 +++-
-> > > >  arch/riscv/errata/thead/errata.c            | 11 ++++++++---
-> > > >  arch/riscv/include/asm/alternative-macros.h | 20 ++++++++++----------
-> > > >  arch/riscv/include/asm/alternative.h        | 12 ++++++------
-> > > >  arch/riscv/kernel/cpufeature.c              | 13 ++++++-------
-> > > >  5 files changed, 33 insertions(+), 27 deletions(-)
-> > > >
-> > > > diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errata/sifive/errata.c
-> > > > index 1031038423e7..0e537cdfd324 100644
-> > > > --- a/arch/riscv/errata/sifive/errata.c
-> > > > +++ b/arch/riscv/errata/sifive/errata.c
-> > > > @@ -107,7 +107,9 @@ void __init_or_module sifive_errata_patch_func(struct alt_entry *begin,
-> > > >
-> > > >                 tmp = (1U << alt->errata_id);
-> > > >                 if (cpu_req_errata & tmp) {
-> > > > -                       patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> > > > +                       patch_text_nosync((void *)&alt->old_offset + alt->old_offset,
-> > > > +                                         (void *)&alt->alt_offset + alt->alt_offset,
-> > >  (void *)&alt->alt_offset + alt->alt_offset. ??!!
-> >
-> > Hi Guo,
-> >
-> > what's the problem? I can't catch your meaning, could you please proide
-> > more details?
-> Can you explain why:
+On Tue, Dec 06, 2022 at 03:35:10PM +0100, Piergiorgio Beruto wrote:
+> On Tue, Dec 06, 2022 at 02:47:49PM +0100, Andrew Lunn wrote:
+> > > +static int ncn26000_read_status(struct phy_device *phydev)
+> > > +{
+> > > +	// The NCN26000 reports NCN26000_LINK_STATUS_BIT if the link status of
+> > > +	// the PHY is up. It further reports the logical AND of the link status
+> > > +	// and the PLCA status in the BMSR_LSTATUS bit. Thus, report the link
+> > > +	// status by testing the appropriate BMSR bit according to the module's
+> > > +	// parameter configuration.
+> > > +	const int lstatus_flag = link_status_plca ?
+> > > +		BMSR_LSTATUS : NCN26000_BMSR_LINK_STATUS_BIT;
+> > > +
+> > > +	int ret;
+> > > +
+> > > +	ret = phy_read(phydev, MII_BMSR);
+> > > +	if (unlikely(ret < 0))
+> > > +		return ret;
+> > > +
+> > > +	// update link status
+> > > +	phydev->link = (ret & lstatus_flag) ? 1 : 0;
+> > 
+> > What about the latching behaviour of LSTATUS?
+> See further down.
 > 
-> alt->old_ptr = (void *)&alt->old_offset + alt->old_offset
+> > 
+> > https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L2289
+> > 
+> > > +
+> > > +	// handle more IRQs here
+> > 
+> > You are not in an IRQ handler...
+> Right, this is just a left-over when I moved the code from the ISR to
+> this functions. Fixed.
+> 
+> > You should also be setting speed and duplex. I don't think they are
+> > guaranteed to have any specific value if you don't set them.
+> Ah, I got that before, but I removed it after comment from Russell
+> asking me not to do this. Testing on my HW, this seems to work, although
+> I'm not sure whether this is correct or it is working 'by chance' ?
 
-Hi,
+I asked you to get rid of them in the config function, which was
+setting them to "unknown" values. I thought I explained why it was
+wrong to set them there - but again...
 
-when constructing the alt entry, we save the offset in
-then entry as below:
+If you force the values in the config function, then when userspace
+does a read-modify-write of the settings via ethtool, you will end
+up wiping out the PHYs link settings, despite maybe nothing having
+actually been changed. It is also incorrect to set them in the
+config function, because those writes to those variables can race
+with users reading them - the only place they should be set by a
+PHY driver is in the .read_status method.
 
-.long \oldptr - .
-
-So we can restore the old_ptr by &alt->old_offset + alt->old_offset
-
-Thanks
-
-> 
-> | offset | <- &offset
-> | ...       |
-> | value | <- ptr = &offset + offset
-> 
-> I don't make sense of the above.
-> 
-> >
-> > Thanks
-> >
-> > >
-> > > > +                                         alt->alt_len);
-> > > >                         cpu_apply_errata |= tmp;
-> > > >                 }
-> > > >         }
-> > > > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> > > > index 21546937db39..2a6e335b5a32 100644
-> > > > --- a/arch/riscv/errata/thead/errata.c
-> > > > +++ b/arch/riscv/errata/thead/errata.c
-> > > > @@ -68,6 +68,7 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
-> > > >         struct alt_entry *alt;
-> > > >         u32 cpu_req_errata = thead_errata_probe(stage, archid, impid);
-> > > >         u32 tmp;
-> > > > +       void *oldptr, *updptr;
-> > > >
-> > > >         for (alt = begin; alt < end; alt++) {
-> > > >                 if (alt->vendor_id != THEAD_VENDOR_ID)
-> > > > @@ -77,12 +78,16 @@ void __init_or_module thead_errata_patch_func(struct alt_entry *begin, struct al
-> > > >
-> > > >                 tmp = (1U << alt->errata_id);
-> > > >                 if (cpu_req_errata & tmp) {
-> > > > +                       oldptr = (void *)&alt->old_offset + alt->old_offset;
-> > > > +                       updptr = (void *)&alt->alt_offset + alt->alt_offset;
-> > > > +
-> > > >                         /* On vm-alternatives, the mmu isn't running yet */
-> > > >                         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> > > > -                               memcpy((void *)__pa_symbol(alt->old_ptr),
-> > > > -                                      (void *)__pa_symbol(alt->alt_ptr), alt->alt_len);
-> > > > +                               memcpy((void *)__pa_symbol(oldptr),
-> > > > +                                      (void *)__pa_symbol(updptr),
-> > > > +                                      alt->alt_len);
-> > > >                         else
-> > > > -                               patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> > > > +                               patch_text_nosync(oldptr, updptr, alt->alt_len);
-> > > >                 }
-> > > >         }
-> > > >
-> > > > diff --git a/arch/riscv/include/asm/alternative-macros.h b/arch/riscv/include/asm/alternative-macros.h
-> > > > index ec2f3f1b836f..dd40727bc859 100644
-> > > > --- a/arch/riscv/include/asm/alternative-macros.h
-> > > > +++ b/arch/riscv/include/asm/alternative-macros.h
-> > > > @@ -7,11 +7,11 @@
-> > > >  #ifdef __ASSEMBLY__
-> > > >
-> > > >  .macro ALT_ENTRY oldptr newptr vendor_id errata_id new_len
-> > > > -       RISCV_PTR \oldptr
-> > > > -       RISCV_PTR \newptr
-> > > > -       REG_ASM \vendor_id
-> > > > -       REG_ASM \new_len
-> > > > -       .word   \errata_id
-> > > > +       .long \oldptr - .
-> > > > +       .long \newptr - .
-> > > > +       .short \vendor_id
-> > > > +       .short \new_len
-> > > > +       .long \errata_id
-> > > >  .endm
-> > > >
-> > > >  .macro ALT_NEW_CONTENT vendor_id, errata_id, enable = 1, new_c : vararg
-> > > > @@ -75,11 +75,11 @@
-> > > >  #include <linux/stringify.h>
-> > > >
-> > > >  #define ALT_ENTRY(oldptr, newptr, vendor_id, errata_id, newlen)                \
-> > > > -       RISCV_PTR " " oldptr "\n"                                       \
-> > > > -       RISCV_PTR " " newptr "\n"                                       \
-> > > > -       REG_ASM " " vendor_id "\n"                                      \
-> > > > -       REG_ASM " " newlen "\n"                                         \
-> > > > -       ".word " errata_id "\n"
-> > > > +       ".long  ((" oldptr ") - .) \n"                                  \
-> > > > +       ".long  ((" newptr ") - .) \n"                                  \
-> > > > +       ".short " vendor_id "\n"                                        \
-> > > > +       ".short " newlen "\n"                                           \
-> > > > +       ".long  " errata_id "\n"
-> > > >
-> > > >  #define ALT_NEW_CONTENT(vendor_id, errata_id, enable, new_c)           \
-> > > >         ".if " __stringify(enable) " == 1\n"                            \
-> > > > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
-> > > > index 33eae9541684..3baf32e05b46 100644
-> > > > --- a/arch/riscv/include/asm/alternative.h
-> > > > +++ b/arch/riscv/include/asm/alternative.h
-> > > > @@ -33,12 +33,12 @@ void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
-> > > >                                int patch_offset);
-> > > >
-> > > >  struct alt_entry {
-> > > > -       void *old_ptr;           /* address of original instruciton or data  */
-> > > > -       void *alt_ptr;           /* address of replacement instruction or data */
-> > > > -       unsigned long vendor_id; /* cpu vendor id */
-> > > > -       unsigned long alt_len;   /* The replacement size */
-> > > > -       unsigned int errata_id;  /* The errata id */
-> > > > -} __packed;
-> > > > +       s32 old_offset;         /* offset to original instruciton or data  */
-> > > > +       s32 alt_offset;         /* offset to replacement instruction or data */
-> > > > +       u16 vendor_id;          /* cpu vendor id */
-> > > > +       u16 alt_len;            /* The replacement size */
-> > > > +       u32 errata_id;          /* The errata id */
-> > > > +};
-> > > >
-> > > >  struct errata_checkfunc_id {
-> > > >         unsigned long vendor_id;
-> > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
-> > > > index 6244be5cd94a..adeac90b1d8e 100644
-> > > > --- a/arch/riscv/kernel/cpufeature.c
-> > > > +++ b/arch/riscv/kernel/cpufeature.c
-> > > > @@ -257,6 +257,7 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
-> > > >                                                   unsigned int stage)
-> > > >  {
-> > > >         struct alt_entry *alt;
-> > > > +       void *oldptr, *updptr;
-> > > >
-> > > >         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
-> > > >                 return;
-> > > > @@ -270,17 +271,15 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
-> > > >                         continue;
-> > > >                 }
-> > > >
-> > > > +               oldptr = (void *)&alt->old_offset + alt->old_offset;
-> > > > +               updptr = (void *)&alt->alt_offset + alt->alt_offset;
-> > > >                 if (!__riscv_isa_extension_available(NULL, alt->errata_id))
-> > > >                         continue;
-> > > >
-> > > >                 /* do the basic patching */
-> > > > -               patch_text_nosync(alt->old_ptr, alt->alt_ptr, alt->alt_len);
-> > > > -               riscv_alternative_fix_auipc_jalr(alt->old_ptr,
-> > > > -                                                alt->alt_len,
-> > > > -                                                alt->old_ptr - alt->alt_ptr);
-> > > > -               riscv_alternative_fix_jal(alt->old_ptr,
-> > > > -                                         alt->alt_len,
-> > > > -                                         alt->old_ptr - alt->alt_ptr);
-> > > > +               patch_text_nosync(oldptr, updptr, alt->alt_len);
-> > > > +               riscv_alternative_fix_auipc_jalr(oldptr, alt->alt_len, oldptr - updptr);
-> > > > +               riscv_alternative_fix_jal(oldptr, alt->alt_len, oldptr - updptr);
-> > > >         }
-> > > >  }
-> > > >  #endif
-> > > > --
-> > > > 2.37.2
-> > > >
-> > >
-> > >
-> > > --
-> > > Best Regards
-> > >  Guo Ren
-> 
-> 
-> 
-> -- 
-> Best Regards
->  Guo Ren
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
