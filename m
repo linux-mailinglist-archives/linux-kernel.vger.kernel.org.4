@@ -2,162 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B319D643D31
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:40:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFA4643D32
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:40:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233943AbiLFGkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
+        id S233961AbiLFGki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:40:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiLFGkQ (ORCPT
+        with ESMTP id S233955AbiLFGkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:40:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3403D1C130;
-        Mon,  5 Dec 2022 22:40:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4144B81696;
-        Tue,  6 Dec 2022 06:40:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AB47C4314C;
-        Tue,  6 Dec 2022 06:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670308812;
-        bh=2UPTSFMtC8PZoZckQhAgmrzqubqAbaCbl9+6gXlAzXo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lw6Q7X3ze/epTpgAu2+Q6mEV+2cdCKEpQQZcjS99AekVVMdKNg/D8y1heYss+wJMa
-         LeGNevDT/gNl18jeXnG4GuQwPfsVhsAdPcneM6cW2RYyFsLvRJornuoC76AImIJEg5
-         xqQB24g8EBf7grc9kC0N4k73tsaTJa6k5RT+abb6TKi6dLVQSNh99rnt4AEVbwP4jZ
-         PxUlb1W21GkXaz/oBdiTjnd+X+CdobWEPG40kiLxq+rUSUsRBwO1XrW2WS2y80Soqt
-         MDLRpOZx5L8yIfOZsZAk3e0WMqg36B9hQqurHkafyfJ3o/q5Xu9ILOPSM/cGYf5ga1
-         jNZ/OgSOmUAaQ==
-Received: by mail-ed1-f50.google.com with SMTP id d14so13976081edj.11;
-        Mon, 05 Dec 2022 22:40:12 -0800 (PST)
-X-Gm-Message-State: ANoB5pk3DYtzP35XVUGhhlps4f6k1TMCtuLXGi3VLXLAU5CTFMUKRzyg
-        54IyvxvP3UTp8Wmn094fTlTeXLrK93vgqplDS7A=
-X-Google-Smtp-Source: AA0mqf4UiAug0DZSHJ/dNaPXC7jnuJMoHAvmbB4knjFvReiDmDy5hZFcrNclRixVqByAdMOXJcNKQZ5COMaotDSXaTg=
-X-Received: by 2002:a05:6402:1117:b0:46b:6da7:e8a9 with SMTP id
- u23-20020a056402111700b0046b6da7e8a9mr28827003edv.401.1670308810687; Mon, 05
- Dec 2022 22:40:10 -0800 (PST)
+        Tue, 6 Dec 2022 01:40:35 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 902DB1DDE1
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:40:33 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id d14so13976933edj.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 22:40:33 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1mhWiQ+nK1TpnHegOmWn7jYPQfPzfQzNgARNwRVues=;
+        b=W92dgloFmw1rFPCdLv7LEvU5pz58jJZwkAlWQP74gD261Lx5T80h28sy1JqO7w/U0p
+         zw21m7xNvIcyFnehThv2nKnq8hzNCrwl8Lqo6ZAID3nMCpaUxaQ839vUQby4amby478j
+         qoJ+Sxm5w5D6gu81KaqZPYh9FAh1Eb+jPlMEC9yG7HowwgJ2VoaL3CIXXtG+o9hqD3QQ
+         1e03TqtqR5Dj4fmizHX+eUMmWb2GCpqmXF09P/xRQdpKuZ8/xelln8oCLY/tGxPkNPln
+         fU9G47SOgUBowuLsD1W2N284IQ4WL7AtkE1tbd9dSS2kOJjexlffzCwklgzqja7MoAzY
+         9jjg==
+X-Gm-Message-State: ANoB5pni5EI54jRpGtoInVyBicCAh5IGLrXYrPMp+odt/YboJOqUnrlu
+        topmAZt6kdnu4+0jLx2DOkALd9u1xL8=
+X-Google-Smtp-Source: AA0mqf7PIOY9sVwrkuF+HKiQVpAYCxXMjsNyDxp/2zaNSy/5ZlK/tcFjYPJMxwV37fhp/jBnseaaZw==
+X-Received: by 2002:aa7:daca:0:b0:46b:8078:2431 with SMTP id x10-20020aa7daca000000b0046b80782431mr27143396eds.408.1670308832172;
+        Mon, 05 Dec 2022 22:40:32 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id ha7-20020a170906a88700b007c0bb571da5sm5257828ejb.41.2022.12.05.22.40.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 22:40:31 -0800 (PST)
+Message-ID: <27ade063-79df-dad9-0427-e16f1ddb43ef@kernel.org>
+Date:   Tue, 6 Dec 2022 07:40:30 +0100
 MIME-Version: 1.0
-References: <20221103075047.1634923-1-guoren@kernel.org> <20221103075047.1634923-7-guoren@kernel.org>
- <874jua9lcp.fsf@all.your.base.are.belong.to.us>
-In-Reply-To: <874jua9lcp.fsf@all.your.base.are.belong.to.us>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 6 Dec 2022 14:39:58 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRsZMM9vPqRWEwzOOhW2czo8uOJEtTGjixJig1kdQP1hg@mail.gmail.com>
-Message-ID: <CAJF2gTRsZMM9vPqRWEwzOOhW2czo8uOJEtTGjixJig1kdQP1hg@mail.gmail.com>
-Subject: Re: [PATCH -next V8 06/14] riscv: convert to generic entry
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
-        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
-        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, mark.rutland@arm.com,
-        zouyipeng@huawei.com, bigeasy@linutronix.de,
-        David.Laight@aculab.com, chenzhongjin@huawei.com,
-        greentime.hu@sifive.com, andy.chiu@sifive.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [patch 1/3] VT: Add height parameter to con_font_get/set consw
+ operations
+Content-Language: en-US
+To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kbd@lists.altlinux.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221205000739.583233140@ens-lyon.org>
+ <20221205000807.751605665@ens-lyon.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221205000807.751605665@ens-lyon.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 6:49 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
-te:
->
-> guoren@kernel.org writes:
->
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > This patch converts riscv to use the generic entry infrastructure from
-> > kernel/entry/*. The generic entry makes maintainers' work easier and
-> > codes more elegant. Here are the changes than before:
-> >
-> >  - More clear entry.S with handle_exception and ret_from_exception
-> >  - Get rid of complex custom signal implementation
-> >  - More readable syscall procedure
-> >  - Little modification on ret_from_fork & ret_from_kernel_thread
-> >  - Wrap with irqentry_enter/exit and syscall_enter/exit_from_user_mode
-> >  - Use the standard preemption code instead of custom
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Suggested-by: Huacai Chen <chenhuacai@kernel.org>
-> > Tested-by: Yipeng Zou <zouyipeng@huawei.com>
-> > ---
->
-> [...]
->
-> > diff --git a/arch/riscv/kernel/sys_riscv.c b/arch/riscv/kernel/sys_risc=
-v.c
-> > index 5d3f2fbeb33c..c86d0eafdf6a 100644
-> > --- a/arch/riscv/kernel/sys_riscv.c
-> > +++ b/arch/riscv/kernel/sys_riscv.c
-> > @@ -5,8 +5,10 @@
-> >   * Copyright (C) 2017 SiFive
-> >   */
-> >
-> > +#include <linux/entry-common.h>
-> >  #include <linux/syscalls.h>
-> >  #include <asm/unistd.h>
-> > +#include <asm/syscall.h>
-> >  #include <asm/cacheflush.h>
-> >  #include <asm-generic/mman-common.h>
-> >
-> > @@ -69,3 +71,28 @@ SYSCALL_DEFINE3(riscv_flush_icache, uintptr_t, start=
-, uintptr_t, end,
-> >
-> >       return 0;
-> >  }
-> > +
-> > +typedef long (*syscall_t)(ulong, ulong, ulong, ulong, ulong, ulong, ul=
-ong);
-> > +
-> > +asmlinkage void do_sys_ecall_u(struct pt_regs *regs)
-> > +{
-> > +     syscall_t syscall;
-> > +     ulong nr =3D regs->a7;
-> > +
-> > +     regs->epc +=3D 4;
-> > +     regs->orig_a0 =3D regs->a0;
-> > +     regs->a0 =3D -ENOSYS;
-> > +
-> > +     nr =3D syscall_enter_from_user_mode(regs, nr);
-> > +#ifdef CONFIG_COMPAT
-> > +     if ((regs->status & SR_UXL) =3D=3D SR_UXL_32)
-> > +             syscall =3D compat_sys_call_table[nr];
-> > +     else
-> > +#endif
-> > +             syscall =3D sys_call_table[nr];
-> > +
-> > +     if (nr < NR_syscalls)
-> > +             regs->a0 =3D syscall(regs->orig_a0, regs->a1, regs->a2,
-> > +                                regs->a3, regs->a4, regs->a5,
-> >       regs->a6);
->
-> Now that we're doing the "pt_regs to call" dance, it would make sense to
-> introduce a syscall wrapper (like x86 and arm64) for riscv, so that we
-> don't need to unwrap all regs for all syscalls (See __MAP() in
-> include/linux/syscalls.h). That would be an optimization, so it could be
-> done as a follow-up, and not part of the series.
-Thx for the reminder; I will have a look at "pt_regs to call."
+On 05. 12. 22, 1:07, Samuel Thibault wrote:
+> The current con_font_get/set API currently hardcodes a 32-pixel-tall
+> limitation, which only dates from the old VGA hardware which could not
+> handle taller fonts than that.
+> 
+> This change just adds a vpitch parameter to release this
+> constraint. Drivers which do not support vpitch != 32 can just return
+> EINVAL when it is not 32, font loading tools will revert to trying 32
+> and succeed.
+> 
+> This change makes the fbcon driver consider vpitch appropriately, thus
+> making it able to load large fonts.
+> 
+> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> 
+...
+> --- linux-6.0.orig/drivers/usb/misc/sisusbvga/sisusb_con.c
+> +++ linux-6.0/drivers/usb/misc/sisusbvga/sisusb_con.c
+...
+> @@ -1243,13 +1244,15 @@ sisusbcon_font_set(struct vc_data *c, st
+>   
+>   /* Interface routine */
+>   static int
+> -sisusbcon_font_get(struct vc_data *c, struct console_font *font)
+> +sisusbcon_font_get(struct vc_data *c, struct console_font *font, unsigned int vpitch)
+>   {
+>   	struct sisusb_usb_data *sisusb;
+>   
+>   	sisusb = sisusb_get_sisusb_lock_and_check(c->vc_num);
+>   	if (!sisusb)
+>   		return -ENODEV;
+> +	if (vpitch != 32)
+> +		return -EINVAL;
+>   
+>   	/* sisusb->lock is down */
+>   
+> @@ -1268,7 +1271,7 @@ sisusbcon_font_get(struct vc_data *c, st
+>   	}
+>   
+>   	/* Copy 256 chars only, like vgacon */
+> -	memcpy(font->data, sisusb->font_backup, 256 * 32);
+> +	memcpy(font->data, sisusb->font_backup, 256 * height);
 
->
->
-> Bj=C3=B6rn
+Have you tested this? What does this 'height' refer to?
 
+thanks,
+-- 
+js
+suse labs
 
-
---=20
-Best Regards
- Guo Ren
