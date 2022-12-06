@@ -2,121 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECF3643FC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:23:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 407E8643FC4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:24:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235056AbiLFJXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:23:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
+        id S235106AbiLFJYO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Dec 2022 04:24:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234987AbiLFJWv (ORCPT
+        with ESMTP id S235035AbiLFJXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:22:51 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781DA220D3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:20:30 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id w15so22544178wrl.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:20:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jinBcPSkEbBkoDxJN/eRyhQV/jBZKLuC/Y4mXEJDUBw=;
-        b=dxWlUGmeupuPuJkU7adI5ygpuordIPTUDXDz2xfn0beqgCIkzmpPYT8uVff6LliFa9
-         rTphtRnpNutX79xC3H+iE8Z80DmQvF58B95YvBuNFIVOd9KBQXHmXUhAcKoJMNMZMUwJ
-         IDFRUQ2rVk7rKma1ZcbkPrJ8fbMQdDn4RCjkS7wgf3dqLglOUYVKm3o7O7NcthjB/BuU
-         8UZPVjD1Rz9HAQSiV8z8aG+IMOmtU7Qkom/5Ng+5RPyMxIp4RSnKnirtXDKWKY9WGulN
-         fIYHpA2HB6UDHnsROebpYGGfEobK27qQDZPDDNrhI4mRnPLDjsTKpxm3YHMq27n+1l2f
-         tShQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jinBcPSkEbBkoDxJN/eRyhQV/jBZKLuC/Y4mXEJDUBw=;
-        b=4pFQrTN26hRKrOLpklOEZpZAiYEssQoTCykuTTDPXTHipuRH8yVkCOIEDAVHFcjarG
-         eEGAcsP+g3cnaYgXWI7r+3BMRmNu6xGL2UEohw7rMOKOTyJSvkB5TnjJuLT1LfARZL8o
-         W/Yp4Nz3I1M+nBZ2eu7VkCt2tGTvdkJQPK0Vf/pxbnXtdvdckfO0HbH5ZvpCOaj65aBf
-         2m6eDOncoUxOxvHJ24QbCdOexptskBmqaMtIWoZNa3bDrZY9mVtubZILdvfK3xBOA78N
-         CIQFQ00zxVcnI1sm+nJnk8Lhhm9GzVLqVGNwtLFtBEKruAewJGRQxqoC7MP0ib308mpD
-         YjZw==
-X-Gm-Message-State: ANoB5pmUwk1pHnaay2Xiir2PlyodMFHqCIIobd6xokNRlTgTDb6wWWBI
-        F/2GqKhIhz4Ima3vtG6otBGf7tvcOQr9busydxd/uTUO90E=
-X-Google-Smtp-Source: AA0mqf6Z5dP+iQBbx1ft2L32IbIAwP11d9FkmHPe2lCw58ExxCHa5zIQPDifd8Z+f2JMFuWuQNGX0/uDUAG1HaEw77U=
-X-Received: by 2002:a5d:58e6:0:b0:242:5562:6d6 with SMTP id
- f6-20020a5d58e6000000b00242556206d6mr7111642wrd.541.1670318428890; Tue, 06
- Dec 2022 01:20:28 -0800 (PST)
+        Tue, 6 Dec 2022 04:23:50 -0500
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F49A26117
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:21:52 -0800 (PST)
+Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay05.hostedemail.com (Postfix) with ESMTP id 3E19E40CCA;
+        Tue,  6 Dec 2022 09:21:51 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 2E66332;
+        Tue,  6 Dec 2022 09:21:17 +0000 (UTC)
+Message-ID: <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
+Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
+ about missing Link:
+From:   Joe Perches <joe@perches.com>
+To:     Thorsten Leemhuis <linux@leemhuis.info>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>
+Date:   Tue, 06 Dec 2022 01:21:48 -0800
+In-Reply-To: <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
+References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
+         <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
+         <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
+         <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
+         <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
+         <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
+         <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
+         <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-References: <CAJNi4rOgYmmtOaXVqYB9sAxDmRhGhS_vVXmZbCbMjvFCQsdjCw@mail.gmail.com>
- <CAJhGHyD+oR8SeYeObJ2DSKfudqBtBOiL14jCsST3L5OG8WjT_g@mail.gmail.com>
- <CAJNi4rOs-=xx5qV-hQQYgSLQCz_q3JuFxJEd+wpPaao8Ej26yQ@mail.gmail.com> <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
-In-Reply-To: <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
-From:   richard clark <richard.xnu.clark@gmail.com>
-Date:   Tue, 6 Dec 2022 17:20:17 +0800
-Message-ID: <CAJNi4rNU0-GVnLMqdGFvHOsTb26eDEgjZJSE6Doo8QU6MYx+JQ@mail.gmail.com>
-Subject: Re: work item still be scheduled to execute after destroy_workqueue?
-To:     Lai Jiangshan <jiangshanlai@gmail.com>
-Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: 2E66332
+X-Stat-Signature: 5rowfeknxtaec4cidberrjpetkj7ohps
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+ZD1ZwsGQj1IIPGuQROrcwLwSYY7NdE9Q=
+X-HE-Tag: 1670318477-558674
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 2:23 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
->
-> On Tue, Dec 6, 2022 at 12:35 PM richard clark
-> <richard.xnu.clark@gmail.com> wrote:
->
-> > >
-> > A WARN is definitely reasonable and has its benefits. Can I try to
-> > submit the patch and you're nice to review as maintainer?
-> >
-> > Thanks,
-> > Richard
-> > >
->
-> Sure, go ahead.
->
-> What's in my mind is that the following code is wrapped in a new function:
->
->         mutex_lock(&wq->mutex);
->         if (!wq->nr_drainers++)
->                 wq->flags |= __WQ_DRAINING;
->         mutex_unlock(&wq->mutex);
->
->
-> and the new function replaces the open code drain_workqueue() and
-> is also called in destroy_workqueue() (before calling drain_workqueue()).
->
-Except that, do we need to defer the __WQ_DRAINING clean to the
-rcu_call, thus we still have a close-loop of the drainer's count, like
-this?
+On Tue, 2022-12-06 at 09:50 +0100, Thorsten Leemhuis wrote:
+> On 06.12.22 08:44, Joe Perches wrote:
+> > On Tue, 2022-12-06 at 08:17 +0100, Thorsten Leemhuis wrote:
+> > > On 06.12.22 07:27, Thorsten Leemhuis wrote:
+> > > > On 06.12.22 06:54, Joe Perches wrote:
+> > []
+> > > > > and perhaps a more
+> > > > > generic, "is the thing in front of a URI/URL" a known/supported entry,
+> > > > > instead of using an known invalid test would be a better mechanism.
+> > > > 
+> > > > Are you sure about that? It's not that I disagree completely, but it
+> > > > sounds overly restrictive to me and makes it harder for new tags to
+> > > > evolve in case we might want them.
+> > 
+> > It's easy to add newly supported values to a list.
+> > 
+> > > > And what tags would be on this allow-list? Anything else then "Link" and
+> > > > "Patchwork"? Those are the ones that looked common and valid to me when
+> > > > I ran
+> > > > 
+> > > > git log --grep='http' v4.0.. | grep http | grep -v '    Link: ' | less
+> > > > 
+> > > > and skimmed the output. Maybe "Datasheet" should be allowed, too -- not
+> > > > sure.
+> > []
+> > > > But I found a few others that likely should be on the disallow list:
+> > > > "Closes:", "Bug:", "Gitlab issue:", "References:", "Ref:", "Bugzilla:",
+> > > > "RHBZ:", and "link", as "Link" should be used instead in all of these
+> > > > cases afaics.
+> > 
+> > Do understand please that checkpatch will never be perfect.
+> > At best, it's just a guidance tool.
+> 
+> Of course -- and that's actually a reason why I prefer a disallow list
+> over an allow list, as that gives guidance in the way of "don't use this
+> tag, use Link instead" instead of enforcing "always use Link: when
+> linking somewhere" (now that I've written it like that it feels even
+> more odd, because it's obvious that it's a link, so why bother with a
+> tag; but whatever).
+> 
+> I also think the approach with a disallow list will not bother
+> developers much, while the other forces them a bit to much into a scheme.
+> 
+> > To me most of these are in the noise level, but perhaps all should just
+> > use Link:
+> > 
+> > $ git log -100000 --format=email -P --grep='^\w+:[ \t]*http' | \
+> >   grep -Poh '^\w+:[ \t]*http' | \
+> >   sort | uniq -c | sort -rn
+> >  103889 Link: http
+> >     415 BugLink: http
+> >     372 Patchwork: http
+> >     270 Closes: http
+> >     221 Bug: http
+> >     121 References: http
+> > [...]
+> 
+> Ha, I considered doing something like that when I wrote my earlier mail,
+> but was to lazy. :-D thx!
+> 
+> Yeah, they are not that often, but I grew tired arguing about that,
+> that's why I think checkpatch is the better place and in the better
+> position to handle that.
 
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
+I'm not sure that "Patchwork:" is a reasonable prefix.
+Is that documented anywhere?
 
-@@ -3528,6 +3526,9 @@ static void rcu_free_wq(struct rcu_head *rcu)
+> Anyway, so how to move forward now? Do you insist on a allow list (IOW:
+> a Link: or Patchwork: before every http...)? Or is a disallow list with
+> the most common unwanted tags for links (that you thankfully compiled)
+> fine for you as well?
 
-        else
-                free_workqueue_attrs(wq->unbound_attrs);
+Maybe
+---
+ scripts/checkpatch.pl | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-+       if (!--wq->nr_drainers)
-+               wq->flags &= ~__WQ_DRAINING;
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 1c3d13e65c2d0..a526a354cdfbc 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3250,6 +3250,13 @@ sub process {
+ 			$commit_log_possible_stack_dump = 0;
+ 		}
+ 
++# Check for odd prefixes before a URI/URL
++		if ($in_commit_log &&
++		    $line =~ /^\s*(\w+):\s*http/ && $1 !~ /^(?:Link|Patchwork)/) {
++			WARN("PREFER_LINK",
++			     "Unusual link reference '$1:', prefer 'Link:'\n" . $herecurr);
++		}
 +
-        kfree(wq);
+ # Check for lines starting with a #
+ 		if ($in_commit_log && $line =~ /^#/) {
+ 			if (WARN("COMMIT_COMMENT_SYMBOL",
 
->
-> __WQ_DRAINING will cause the needed WARN on illegally queuing items on
-> destroyed workqueue.
-
-I will re-test it if there are no concerns about the above fix...
-
->
-> Thanks
-> Lai
