@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF74A644230
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B032644237
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234835AbiLFLde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37142 "EHLO
+        id S234896AbiLFLed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:34:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbiLFLdb (ORCPT
+        with ESMTP id S229690AbiLFLeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:33:31 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD444262A;
-        Tue,  6 Dec 2022 03:33:30 -0800 (PST)
-Received: from [192.168.0.43] (cpc141996-chfd3-2-0-cust928.12-3.cable.virginm.net [86.13.91.161])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 52939480;
-        Tue,  6 Dec 2022 12:33:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670326408;
-        bh=OOw3jvyZAlreG+NVNZfb0NQYrAQH9l/8Rruf4vw/Kh8=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=sC35kEOwrDQPBQ9aTnDCBwFIS/7EinsgJ8CGQR9rwB0iTZerxMyf1R5YlXhYdeuHb
-         e+WvNz7ROw5v/KzHcNrzDNSgJAVw4AosVPKmha44B1qOasG7teuIwLnJTFt73cDAtr
-         0GZCzP12UEGuCptrZq62nZLCeq8PtZTG6XnOq/c0=
-Message-ID: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
-Date:   Tue, 6 Dec 2022 11:33:25 +0000
+        Tue, 6 Dec 2022 06:34:31 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB33664FB;
+        Tue,  6 Dec 2022 03:34:30 -0800 (PST)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRJFv3nNKzmWBc;
+        Tue,  6 Dec 2022 19:33:39 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Dec 2022 19:34:27 +0800
+CC:     <yangyicong@hisilicon.com>, <alexander.shishkin@linux.intel.com>,
+        <helgaas@kernel.org>, <linux-pci@vger.kernel.org>,
+        <prime.zeng@huawei.com>, <linuxarm@huawei.com>,
+        <suzuki.poulose@arm.com>, <linux-kernel@vger.kernel.org>,
+        <jonathan.cameron@huawei.com>
+Subject: Re: [PATCH 1/2] hwtracing: hisi_ptt: Only add the supported devices
+ to the filters list
+To:     <mathieu.poirier@linaro.org>
+References: <20221122120209.25682-1-yangyicong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <fb2441ce-fe4c-3733-5cd3-93a7d949d9f0@huawei.com>
+Date:   Tue, 6 Dec 2022 19:34:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>,
-        laurent.pinchart@ideasonboard.com
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <Y4jqVZfEj+/VdfnH@kroah.com>
- <20221201191134.12404-1-szymon.heidrich@gmail.com>
-From:   Dan Scally <dan.scally@ideasonboard.com>
-Subject: Re: [PATCH v2] usb: gadget: uvc: Prevent buffer overflow in setup
- handler
-In-Reply-To: <20221201191134.12404-1-szymon.heidrich@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <20221122120209.25682-1-yangyicong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Szymon
+Hi Mathieu,
 
-On 01/12/2022 19:11, Szymon Heidrich wrote:
-> Setup function uvc_function_setuppermits control transfer
-> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-> data stage handler for OUT transfer uses memcpy to copy req->actual
-> bytes to uvc_event->data.data array of size 60. This may result
-> in an overflow of 4 bytes.
->
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+Do we still have a chance to catch this cycle for these 2 patches?
 
+Thanks!
 
-Reviewed-by: Daniel Scally <dan.scally@ideasonboard.com>
-
-
-This probably needs to be tagged with:
-
-
-Fixes: cdda479f15cd ("USB gadget: video class function driver")
-
+On 2022/11/22 20:02, Yicong Yang wrote:
+> From: Yicong Yang <yangyicong@hisilicon.com>
+> 
+> The PTT device can only support the devices on the same PCIe core,
+> within BDF range [lower_bdf, upper_bdf]. It's not correct to assume
+> the devices on the root bus are from the same PCIe core, there are
+> cases that root ports from different PCIe core are sharing the same
+> bus. So add the checking when initialize the filters list.
+> 
+> Fixes: ff0de066b463 ("hwtracing: hisi_ptt: Add trace function support for HiSilicon PCIe Tune and Trace device")
+> Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
 > ---
-> V1 -> V2: Corrected commit message and changed ?: in favor of min_t
->
->   drivers/usb/gadget/function/f_uvc.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> index 6e196e061..4419b7972 100644
-> --- a/drivers/usb/gadget/function/f_uvc.c
-> +++ b/drivers/usb/gadget/function/f_uvc.c
-> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
->   
->   		memset(&v4l2_event, 0, sizeof(v4l2_event));
->   		v4l2_event.type = UVC_EVENT_DATA;
-> -		uvc_event->data.length = req->actual;
-> -		memcpy(&uvc_event->data.data, req->buf, req->actual);
-> +		uvc_event->data.length = min_t(unsigned int, req->actual,
-> +			sizeof(uvc_event->data.data));
-> +		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
->   		v4l2_event_queue(&uvc->vdev, &v4l2_event);
->   	}
->   }
+>  drivers/hwtracing/ptt/hisi_ptt.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/hwtracing/ptt/hisi_ptt.c b/drivers/hwtracing/ptt/hisi_ptt.c
+> index 5d5526aa60c4..30f1525639b5 100644
+> --- a/drivers/hwtracing/ptt/hisi_ptt.c
+> +++ b/drivers/hwtracing/ptt/hisi_ptt.c
+> @@ -356,8 +356,18 @@ static int hisi_ptt_register_irq(struct hisi_ptt *hisi_ptt)
+>  
+>  static int hisi_ptt_init_filters(struct pci_dev *pdev, void *data)
+>  {
+> +	struct pci_dev *root_port = pcie_find_root_port(pdev);
+>  	struct hisi_ptt_filter_desc *filter;
+>  	struct hisi_ptt *hisi_ptt = data;
+> +	u32 port_devid;
+> +
+> +	if (!root_port)
+> +		return 0;
+> +
+> +	port_devid = PCI_DEVID(root_port->bus->number, root_port->devfn);
+> +	if (port_devid < hisi_ptt->lower_bdf ||
+> +	    port_devid > hisi_ptt->upper_bdf)
+> +		return 0;
+>  
+>  	/*
+>  	 * We won't fail the probe if filter allocation failed here. The filters
+> 
