@@ -2,207 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589FA643D48
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B1E643D4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbiLFGrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S232543AbiLFGsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiLFGq5 (ORCPT
+        with ESMTP id S231694AbiLFGsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:46:57 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815E321E3E;
-        Mon,  5 Dec 2022 22:46:55 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 21so13686222pfw.4;
-        Mon, 05 Dec 2022 22:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Yc9LquVMnmUlyJv08o6ohM1bOO793lGhS39y0qki6yw=;
-        b=lv7u0qd99DE6beopwiYlll/RAGkiHjxwzOtQZSIaus87Wm3d7rS/yqz8IRzVkt6bCm
-         LCB1/TvDXGfhedb81TOQnSXSOkKl+1Dhe/xmDhk9sKQEDxFmbmoIabEG69UAk6KBJeTb
-         gmYI5qTIy2UPFrWhhnwt1xcmR3a/01941J4oLkrCXyt8z+lDo4dejBstY4TochV+NR4J
-         AhTz0+C8bXh2FfTvApBnBCYsTw8OfzFrU3RLfV+OE2iJSBNk93sFbObAyMYVoKFADnlA
-         cfw0W9kESwz4MyBwAX2pqvP1KSjiiOsdswo3NriJtAxnwGVc13Wd1tDHO7HnG2pbEhT5
-         sPbw==
+        Tue, 6 Dec 2022 01:48:41 -0500
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78C1F00A
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:48:40 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id a16so18924084edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 22:48:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Yc9LquVMnmUlyJv08o6ohM1bOO793lGhS39y0qki6yw=;
-        b=0GNmYsLuL9emUoH0B9EYcNmpK+REYjCO/W88QVv8LD5+nBKVtcoF2io1CJoANHDD7D
-         6KUX3J5mc++5O0C14xNtQ1cbn3wSfQn+FcMkwPFcxnbXHK4iOWUm460XZlpI370p+rQ9
-         i0oevcwBZ7XZuKFPM9+w93AxGji14/J7F/qdk7VI062dPeoY+GelgQQMBg+JxsJ+rMWk
-         9HnWw+cwgNCnpVmvq6DHkVg7OX4PtYfsYJONl3Yzn8b7QbmKSTSOh9pcCboHbxGrx3rH
-         8huU/Et/HA5ZWIfw/lM8E2fNyo5TzImocRMneAtj9Gwqcivc6e4Do5RUAD3CeQWS9v7L
-         THIQ==
-X-Gm-Message-State: ANoB5plK8+/znkyUf2oCO5PY/TMv9zwZb01frYO2BT0x9LvtRdth7saf
-        1TF4epQ36xkwap6zQQzDVMxJaTfeArHl9Ri7xCm7nrsMWg==
-X-Google-Smtp-Source: AA0mqf6ne6mMhw170Myl24RIUGU+Jd/FKILKJoX3W1kLw4cp5iD4p3awUf81rQc93rIErbAd6X2bRCBonFmqaaqNEaA=
-X-Received: by 2002:a63:6ce:0:b0:478:99ce:9f2b with SMTP id
- 197-20020a6306ce000000b0047899ce9f2bmr12826906pgg.203.1670309214566; Mon, 05
- Dec 2022 22:46:54 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JV4BRkcw7J2X95dDZsQQ3oLBuX11q5eUftbrluM0Dh0=;
+        b=UCYj+J6vNMejYyu5GL5Vwr1CItxelqAJ2FIVwxYukksMh/VFZh+1u3XZYE8CCvT3l/
+         wc9QjEpOksQnL7A5AkbTISOWo2buj52geY982eNonhLM32K+r6K81oNsCtPSDwSJPoL7
+         rCNcrSEWh/7M5ZtEVxWmteWjXUXypezhkmgNdviw5ScSCFiVfH207t/tSf7fDqfnwfJ8
+         Ftmd2o5sVtk5NlK/QV/7uaRzhJnLO0idzx3mTQkVodUcJvQMy2FgVh2OEJwTiIB5FGXW
+         024ESBIx/c8w+1+VE7O8DWJ+TuZ45OUp5F9+aLnQYPSPNPAPuKYarTg6r1IF3PFK/43f
+         x5RQ==
+X-Gm-Message-State: ANoB5pm/Ryqp4dlbHqwvrLZtdTdm0GiGdmIYpfWxOiSDGcrfd297vIXk
+        45jlTDjYf8QLkmkflQeD2y4=
+X-Google-Smtp-Source: AA0mqf4d4dBaMsLlYCr5A7hjQB4AHXV7Mgl/bM4ChBIFIJeXuKLvPppdkNZh7idDsmJVUnZmfUjHLg==
+X-Received: by 2002:a05:6402:2912:b0:46a:c132:8a25 with SMTP id ee18-20020a056402291200b0046ac1328a25mr44300824edb.205.1670309319238;
+        Mon, 05 Dec 2022 22:48:39 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id m12-20020a50cc0c000000b00461c6e8453dsm625806edi.23.2022.12.05.22.48.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 22:48:38 -0800 (PST)
+Message-ID: <45c09e48-9e69-2371-70d2-8a0b1e9f4899@kernel.org>
+Date:   Tue, 6 Dec 2022 07:48:37 +0100
 MIME-Version: 1.0
-References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
-In-Reply-To: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
-From:   Hao Sun <sunhao.th@gmail.com>
-Date:   Tue, 6 Dec 2022 14:46:43 +0800
-Message-ID: <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-To:     bpf <bpf@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [patch 3/3] VT: Bump font size limitation to 64x128 pixels
+Content-Language: en-US
+To:     Samuel Thibault <samuel.thibault@ens-lyon.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kbd@lists.altlinux.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20221205000739.583233140@ens-lyon.org>
+ <20221205000807.896278194@ens-lyon.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221205000807.896278194@ens-lyon.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hao Sun <sunhao.th@gmail.com> =E4=BA=8E2022=E5=B9=B412=E6=9C=886=E6=97=A5=
-=E5=91=A8=E4=BA=8C 11:28=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi,
->
-> The following crash can be triggered with the BPF prog provided.
-> It seems the verifier passed some invalid progs. I will try to simplify
-> the C reproducer, for now, the following can reproduce this:
->
-> HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-in
-> functions in bpf_iter_ksym
-> git tree: bpf-next
-> console log: https://pastebin.com/raw/87RCSnCs
-> kernel config: https://pastebin.com/raw/rZdWLcgK
-> Syz reproducer: https://pastebin.com/raw/4kbwhdEv
-> C reproducer: https://pastebin.com/raw/GFfDn2Gk
->
+On 05. 12. 22, 1:07, Samuel Thibault wrote:
+> This moves 32x32 font size limitation checking down to drivers, so that
+> fbcon can allow large fonts.
+> 
+> We still keep a limitation to 64x128 pixels so as to have a simple bounded
+> allocation for con_font_get and in the userland kbd tool. That glyph size
+> will however be enough to have 128x36 characters on a "16/9 8K display".
+> 
+> Signed-off-by: Samuel Thibault <samuel.thibault@ens-lyon.org>
+> 
+> Index: linux-6.0/drivers/tty/vt/vt.c
+> ===================================================================
+> --- linux-6.0.orig/drivers/tty/vt/vt.c
+> +++ linux-6.0/drivers/tty/vt/vt.c
+> @@ -4575,17 +4575,20 @@ void reset_palette(struct vc_data *vc)
+...
+> -#define max_font_size 65536
+> +#define max_font_width	64
+> +#define max_font_height	128
+> +#define max_font_glyphs	512
+> +#define max_font_size	(max_font_glyphs*max_font_width*max_font_height)
 
-Simplified C reproducer: https://pastebin.com/raw/aZgLcPvW
+So this is 64K -> 4M switch. We should likely convert to kvmalloc() too.
 
-Only two syscalls are required to reproduce this, seems it's an issue
-in XDP test run. Essentially, the reproducer just loads a very simple
-prog and tests run repeatedly and concurrently:
+regards,
+-- 
+js
+suse labs
 
-r0 =3D bpf$PROG_LOAD(0x5, &(0x7f0000000640)=3D@base=3D{0x6, 0xb,
-&(0x7f0000000500)}, 0x80)
-bpf$BPF_PROG_TEST_RUN(0xa, &(0x7f0000000140)=3D{r0, 0x0, 0x0, 0x0, 0x0,
-0x0, 0xffffffff, 0x0, 0x0, 0x0, 0x0, 0x0}, 0x48)
-
-Loaded prog:
-   0: (18) r0 =3D 0x0
-   2: (18) r6 =3D 0x0
-   4: (18) r7 =3D 0x0
-   6: (18) r8 =3D 0x0
-   8: (18) r9 =3D 0x0
-  10: (95) exit
-
-> wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
-> IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
-> wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
-> wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
-> IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
-> BUG: unable to handle page fault for address: 000000000fe0840f
-> #PF: supervisor write access in kernel mode
-> #PF: error_code(0x0002) - not-present page
-> PGD 2ebe3067 P4D 2ebe3067 PUD 1dd9b067 PMD 0
-> Oops: 0002 [#1] PREEMPT SMP KASAN
-> CPU: 0 PID: 7536 Comm: a.out Not tainted
-> 6.1.0-rc7-01489-gab0350c743d5-dirty #118
-> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux
-> 1.16.1-1-1 04/01/2014
-> RIP: 0010:bpf_dispatcher_xdp+0x24/0x1000
-> Code: cc cc cc cc cc cc 48 81 fa e8 55 00 a0 0f 8f 63 00 00 00 48 81
-> fa d8 54 00 a0 7f 2a 48 81 fa 4c 53 00 a0 7f 11 48 81 fa 4c 53 <00> a0
-> 0f 84 e0 0f 00 00 ff e2 66 90 48 81 fa d8 54 00 a0 0f 84 5b
-> RSP: 0018:ffffc900029df908 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffffc900028b9000 RCX: 0000000000000000
-> RDX: ffffffffa000534c RSI: ffffc900028b9048 RDI: ffffc900029dfb70
-> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
-> R13: 0000000000000001 R14: ffffc900028b9030 R15: ffffc900029dfb50
-> FS:  00007ff249efc700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000000fe0840f CR3: 000000002e0ba000 CR4: 0000000000750ef0
-> PKRU: 55555554
-> Call Trace:
->  <TASK>
->  ? __bpf_prog_run include/linux/filter.h:600 [inline]
->  ? bpf_prog_run_xdp include/linux/filter.h:775 [inline]
->  ? bpf_test_run+0x2ce/0x990 net/bpf/test_run.c:400
->  ? bpf_test_timer_continue+0x3d0/0x3d0 net/bpf/test_run.c:79
->  ? bpf_dispatcher_xdp+0x800/0x1000
->  ? bpf_dispatcher_xdp+0x800/0x1000
->  ? bpf_dispatcher_xdp+0x800/0x1000
->  ? _copy_from_user+0x5f/0x180 lib/usercopy.c:21
->  ? bpf_test_init.isra.0+0x111/0x150 net/bpf/test_run.c:772
->  ? bpf_prog_test_run_xdp+0xbde/0x1400 net/bpf/test_run.c:1389
->  ? bpf_prog_test_run_skb+0x1dd0/0x1dd0 include/linux/skbuff.h:2594
->  ? rcu_lock_release include/linux/rcupdate.h:321 [inline]
->  ? rcu_read_unlock include/linux/rcupdate.h:783 [inline]
->  ? __fget_files+0x283/0x3e0 fs/file.c:914
->  ? fput+0x30/0x1a0 fs/file_table.c:371
->  ? ____bpf_prog_get kernel/bpf/syscall.c:2206 [inline]
->  ? __bpf_prog_get+0x9a/0x2e0 kernel/bpf/syscall.c:2270
->  ? bpf_prog_test_run_skb+0x1dd0/0x1dd0 include/linux/skbuff.h:2594
->  ? bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
->  ? __sys_bpf+0x1293/0x5840 kernel/bpf/syscall.c:4997
->  ? futex_wait_setup+0x230/0x230 kernel/futex/waitwake.c:625
->  ? bpf_perf_link_attach+0x520/0x520 kernel/bpf/syscall.c:2720
->  ? instrument_atomic_read include/linux/instrumented.h:72 [inline]
->  ? atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
->  ? queued_spin_is_locked include/asm-generic/qspinlock.h:57 [inline]
->  ? debug_spin_unlock kernel/locking/spinlock_debug.c:100 [inline]
->  ? do_raw_spin_unlock+0x53/0x230 kernel/locking/spinlock_debug.c:140
->  ? futex_wake+0x15b/0x4a0 kernel/futex/waitwake.c:161
->  ? do_futex+0x130/0x350 kernel/futex/syscalls.c:122
->  ? __ia32_sys_get_robust_list+0x3b0/0x3b0 kernel/futex/syscalls.c:72
->  ? __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
->  ? __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
->  ? __x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5081
->  ? syscall_enter_from_user_mode+0x26/0xb0 kernel/entry/common.c:111
->  ? do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  ? do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
->  ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  </TASK>
-> Modules linked in:
-> Dumping ftrace buffer:
->    (ftrace buffer empty)
-> CR2: 000000000fe0840f
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:bpf_dispatcher_xdp+0x24/0x1000
-> Code: cc cc cc cc cc cc 48 81 fa e8 55 00 a0 0f 8f 63 00 00 00 48 81
-> fa d8 54 00 a0 7f 2a 48 81 fa 4c 53 00 a0 7f 11 48 81 fa 4c 53 <00> a0
-> 0f 84 e0 0f 00 00 ff e2 66 90 48 81 fa d8 54 00 a0 0f 84 5b
-> RSP: 0018:ffffc900029df908 EFLAGS: 00010246
-> RAX: 0000000000000000 RBX: ffffc900028b9000 RCX: 0000000000000000
-> RDX: ffffffffa000534c RSI: ffffc900028b9048 RDI: ffffc900029dfb70
-> RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
-> R13: 0000000000000001 R14: ffffc900028b9030 R15: ffffc900029dfb50
-> FS:  00007ff249efc700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000000000fe0840f CR3: 000000002e0ba000 CR4: 0000000000750ef0
-> PKRU: 55555554
