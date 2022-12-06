@@ -2,91 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD2C643BAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B066643BAE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232064AbiLFDKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:10:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
+        id S232584AbiLFDMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiLFDKT (ORCPT
+        with ESMTP id S232119AbiLFDMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:10:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1275A640C;
-        Mon,  5 Dec 2022 19:10:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91FD76151F;
-        Tue,  6 Dec 2022 03:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D5865C433C1;
-        Tue,  6 Dec 2022 03:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670296215;
-        bh=qeizWKrMRBlX8e3HYxm64lxGx4nQAx2XYIbFJQHbZaA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qZDrQUpROzJA2U8Ya8NfzQ9pZbxg7fdmfbfTDXTgpyWVw8iMGqgpymc2c0Pv3c2ei
-         2T4G4bzQfU9pZGVPmAiYEi9fxyEoYh0U17pdglXEHL0hab0Ohlh3sE2Tgbir12mzip
-         UC0kpa+AWAo/koHQP+jYM+lTNWM312+PtCyRZDG5sWusv5wTeikHwlVAO4xc4DZwuH
-         VHwU4Uj0sWQUcSm2DC4sZV1OxH9KqlIZLtAm0Ei95UVkBld29ZzqJc904ejWdVxuNy
-         RmMgiYyLMKnLHIhhD73qsTno0Kt4RvIA0UE+HkFVNLBILrqpfmRYuUVS5KAuFH29vG
-         qDDj4x2cU6V0Q==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B73BDE270C7;
-        Tue,  6 Dec 2022 03:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 5 Dec 2022 22:12:17 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3A625284
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:12:16 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id y5-20020a056602120500b006cf628c14ddso11010407iot.15
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 19:12:16 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UvD+MZjtUR1zcO4JD+kq1ILF5xn9xebsMtnvhQcAkAE=;
+        b=Ivubxhp8rhfUu56z9lFLcg1dEixpBA/plWP9arUmFEOhIV39ELGVbLc+mi6lcLSFPH
+         JZZMoC3xExsStBuaXnvwvgkuJ0+v2GZxhv2LJRM3A+QClq9ObINwmGoa0oRnh3aAHejY
+         jOQyBGDSIvG1aG3TQoqT2/Ia21EieIoPOPjVKXYboi3L4EmXW4hsvEeyEbkp32yk/G7J
+         bnYs8ehXbujJaYvZLPEYyVKZkOns8AxCv/IoalBN43VtMllGXu4BDGNQ4XOqOIggjQ50
+         g7Im/4RLb0LF4Bu+ETz8HF7+eafj+sn7JcaF4ZVqpyyeEw5vHvSAuTHff9QXPnZnBDeh
+         8dhg==
+X-Gm-Message-State: ANoB5pn5saFwA+fXbmskiQZxw6yEB0+/sXieS0x4OuzbNdID9RmrEDZl
+        FQzPA/HzowAdRvjJl+meR31Evnw77epuefHIQMrsM0AVWl0b
+X-Google-Smtp-Source: AA0mqf6A0GebHKYwEIp76zOIrRahHhD9zg1SBqJJFP7ufPb0tnRDBwWyKhcL9tmmAF8gUTA4P7QEV6FIh3yV6A26PFMBJA+62NY8
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 0/2] riscv: stacktrace: A fixup and an optimization
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <167029621574.4417.18172654401785175878.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Dec 2022 03:10:15 +0000
-References: <20221109064937.3643993-1-guoren@kernel.org>
-In-Reply-To: <20221109064937.3643993-1-guoren@kernel.org>
-To:     Guo Ren <guoren@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, anup@brainfault.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, heiko@sntech.de, peterz@infradead.org,
-        arnd@arndb.de, linux-arch@vger.kernel.org, keescook@chromium.org,
-        paulmck@kernel.org, frederic@kernel.org, nsaenzju@redhat.com,
-        changbin.du@intel.com, vincent.chen@sifive.com,
-        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:156c:b0:303:4885:a1fe with SMTP id
+ k12-20020a056e02156c00b003034885a1femr6044451ilu.261.1670296335371; Mon, 05
+ Dec 2022 19:12:15 -0800 (PST)
+Date:   Mon, 05 Dec 2022 19:12:15 -0800
+In-Reply-To: <20221205235827.GR3600936@dread.disaster.area>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bd587705ef202b08@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
+From:   syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>
+To:     david@fromorbit.com, djwong@kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hello,
 
-This series was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-On Wed,  9 Nov 2022 01:49:35 -0500 you wrote:
-> From: Guo Ren <guoren@linux.alibaba.com>
-> 
-> First is a fixup for the return address pointer. The second makes
-> walk_stackframe could cross the pt_regs frame.
-> 
-> Guo Ren (2):
->   riscv: stacktrace: Fixup ftrace_graph_ret_addr retp argument
->   riscv: stacktrace: Make walk_stackframe cross pt_regs frame
-> 
-> [...]
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-Here is the summary with links:
-  - [1/2] riscv: stacktrace: Fixup ftrace_graph_ret_addr retp argument
-    https://git.kernel.org/riscv/c/5c3022e4a616
-  - [2/2] riscv: stacktrace: Make walk_stackframe cross pt_regs frame
-    https://git.kernel.org/riscv/c/7ecdadf7f8c6
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Tested on:
 
+commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
+dashboard link: https://syzkaller.appspot.com/bug?extid=912776840162c13db1a3
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=164cad83880000
 
