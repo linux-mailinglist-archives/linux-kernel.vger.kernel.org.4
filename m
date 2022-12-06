@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94D756439FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:35:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1317E6439FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231888AbiLFAfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:35:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S229891AbiLFAfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:35:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiLFAe5 (ORCPT
+        with ESMTP id S230465AbiLFAe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:34:57 -0500
+        Mon, 5 Dec 2022 19:34:58 -0500
 Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FD41D67A
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB031E3D2
         for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:34:57 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id o189so3099624iof.0
+Received: by mail-io1-xd2c.google.com with SMTP id o189so3099650iof.0
         for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:34:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oll6l9lDa1YzuMAbRwQ0w/RLOsi7h8EqrYGzxo3MxIc=;
-        b=UD9DWHz/UiGFDtsU3HDSrNzMZNDuCpetOaCUNlHtv0S6U0MQYLIfcmL3jLYBuz0Q5h
-         eRd7MHClCouL9L03xTA089WBIsiCEySm2/x5gzjAtQS43+ojIgeKbrYxMsN0Clz3bkV6
-         yAnID7BIdH493G2rS4XD+Zk6RXZPjx6NrWwPiUpJ4acsMtlhyvGIunczW4FgCYDMpSDl
-         C0NT6MJ9m1EZ/RnxPEr+OKNFglmYnIurtVrPiQo7TkLtectGVdrqj6AofOOzo8UvBEEk
-         76Rxq1dUlmjcVHhag7ETkTymPiSovZYHAyIFRrc2u11HUvGMpUYAecdIuS3bvhPCFRUh
-         tGuQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YnDAYVoy4dFPmqfPd9DbquIT23rvABloUcd8Ca4aFl8=;
+        b=TQk6CUnqoOsZ+GSXEMerTI/bMoADInIl0tC3BAqQv0v8cpiAMfn/KneFyYmJQJsomd
+         FEJh13WFitq7Atd2g8EmkI0kwyuN0UL4EsuQUa5JjLrVvNtjx8fvQTWlpNhATsFBIKtq
+         O6VQ67aFSyRqwaqUorQwnRA9ZjVZpPOHPVbQsgmevwuOB+ROIbP0Cv1OuekMddawZwxh
+         RtMkMdg9NaezYUJ7l+sya5VwonL1BV/ExijyXbgMmtofqFfSFb0oa3mUDXJ2wurZQVkM
+         3doYLrTxOeFhiPLNiwcLy8kHHSV7Qfkwje6MEa58whtCJIA0lko2OauHuFFZfxRnwZp0
+         tDQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oll6l9lDa1YzuMAbRwQ0w/RLOsi7h8EqrYGzxo3MxIc=;
-        b=wWfmEqGgOwiGaETVayoHOfLF5xigRddp9wcnWh6d2PCTE7mN5dHKuLCbANJ5b90Vp6
-         sbSujzonU2rAu7mfx3VGOh2LIm5Yuh3uXKM9tC56/JqB6Hrvltv2HhAESjSEpDEiaLj7
-         R0JpMJjkh7NpDT+Xc9PBFiwfNjitcfKnK6IibmFRnXez5dS7zUHfY5lPGgaAQpnnZpcB
-         5fLxYOOm3fdXZa0KgwJzz4FPQLztNbcPPmpL97Rd7/DG9gXW7rENzEpVZLO8l/DkT9Cz
-         ZULhsxV4ezckEK/aJygIHgWK0NmKoZxxCmdwCSJe/WVjsVXGmd9EAXgl5Im10Qb9uzLR
-         9uaw==
-X-Gm-Message-State: ANoB5pkHexJwHnFe0GBVa0wYJX6z0If11DdagvFve/PQJVY7toY7u8Ad
-        td+8wZSSM9+VrrDf3qK3LMOSZxiQodg3Yg==
-X-Google-Smtp-Source: AA0mqf5PWVymzCnbWJXpMIHyTjb22OYxykYQ86bDxVxB4HjTi4ucYqEGKfdpkztJZ/eaV/plIOquCQ==
-X-Received: by 2002:a05:6638:3720:b0:38a:3771:cbff with SMTP id k32-20020a056638372000b0038a3771cbffmr4702557jav.223.1670286896073;
-        Mon, 05 Dec 2022 16:34:56 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YnDAYVoy4dFPmqfPd9DbquIT23rvABloUcd8Ca4aFl8=;
+        b=3/41We7wnka8DibbKYJy7ssDp+zmS3iUJ0n7Tkm5q6UnONvp9Z5mC8nEaKMwZxY6I7
+         +HBIiFKd3pE7Xgay63nB39spX2JWg+EY0UBrjdfjQ0xcACqhBvADT6k2rMM7QngOt+Wk
+         sSyxGrN0xNA75yRFtEwkEYPJfGJaeCrSB2Y9FHlf+YICMdEnImXEQuZ6i5n/SMY3UyyW
+         64KUmWUwNhy6sF1CFugOidIGc4pGkdQs/fMzJQJ1jtDUZ5yQ4GsYOS1KhvyyeOznhBej
+         qOj/5xEK0vkrJmygmJ7dXWKvIecqPL9KW8CLdBcK8LAu3QYEeif0ZlBA4dmg3YyCbUbs
+         aFNQ==
+X-Gm-Message-State: ANoB5pl+mLn5AXfUHrMNSLVfhaRUEJbeWVlW6MZAILpp1Nb2Dj2g0Hp5
+        KmcNojvhiz4EqRSz4z0qzPx1b2WdE6FbLA==
+X-Google-Smtp-Source: AA0mqf6Bm0S1ExgIZipFgzEZdlH4q3+aKyRo+Nm8PQcm/Cg2Eo2308mplHUGsDA9FiD4SWuE07cGRg==
+X-Received: by 2002:a05:6638:36e5:b0:38a:53d5:1488 with SMTP id t37-20020a05663836e500b0038a53d51488mr1859208jau.146.1670286897295;
+        Mon, 05 Dec 2022 16:34:57 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id x3-20020a056602160300b006bba42f7822sm6408213iow.52.2022.12.05.16.34.55
+        by smtp.googlemail.com with ESMTPSA id x3-20020a056602160300b006bba42f7822sm6408213iow.52.2022.12.05.16.34.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 16:34:55 -0800 (PST)
+        Mon, 05 Dec 2022 16:34:56 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
@@ -57,10 +58,12 @@ Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
         daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         jbaron@akamai.com, gregkh@linuxfoundation.org,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [RFC PATCH 00/17] DRM_USE_DYNAMIC_DEBUG regression
-Date:   Mon,  5 Dec 2022 17:34:07 -0700
-Message-Id: <20221206003424.592078-1-jim.cromie@gmail.com>
+Subject: [RFC PATCH 01/17] test-dyndbg: fixup CLASSMAP usage error
+Date:   Mon,  5 Dec 2022 17:34:08 -0700
+Message-Id: <20221206003424.592078-2-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221206003424.592078-1-jim.cromie@gmail.com>
+References: <20221206003424.592078-1-jim.cromie@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,100 +76,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi everyone,
+more careful reading of test output reveals:
 
-DRM_USE_DYNAMIC_DEBUG=y has a regression on rc-*
+lib/test_dynamic_debug.c:103 [test_dynamic_debug]do_cats =pmf "doing categories\n"
+lib/test_dynamic_debug.c:105 [test_dynamic_debug]do_cats =p "LOW msg\n" class:MID
+lib/test_dynamic_debug.c:106 [test_dynamic_debug]do_cats =p "MID msg\n" class:HI
+lib/test_dynamic_debug.c:107 [test_dynamic_debug]do_cats =_ "HI msg\n" class unknown, _id:13
 
-Regression is due to a chicken-egg problem loading modules; on
-`modprobe i915`, drm is loaded 1st, and drm.debug is set.  When
-drm_debug_enabled() tested __drm_debug at runtime, that just worked.
+That last line is wrong, the HI class is declared.
 
-But with DRM_USE_DYNAMIC_DEBUG=y, the runtime test is replaced with a
-post-load enablement of drm_dbg/dyndbg callsites (static-keys), via
-dyndbg's callback on __drm_debug.  Since all drm-drivers need drm.ko,
-it is loaded 1st, then drm.debug=X is applied, then drivers load, but
-too late for drm_dbgs to be enabled.
+But the enum's 1st val (explicitly initialized) was wrong; it must be
+_base, not _base+1 (a DECLARE_DYNDBG_CLASSMAP param).  So the last
+enumeration exceeded the range of mapped class-id's, which triggered
+the "class unknown" report.  Basically, I coded in an error, and
+forgot to verify it and remove it.
 
-STATUS
+RFC:
 
-For all-loadable drm,i915,amdgpu configs, it almost works, but
-propagating drm.debug to dependent modules doesnt actually apply,
-though the motions are there.  This is not the problem I want to chase
-here.
+This patch fixes a bad usage of DEFINE_DYNDBG_CLASSMAP(), showing that
+it is too error-prone.  As noted in test-dynamic-debug.c comments:
 
-The more basic trouble is:
+ * Using the CLASSMAP api:
+ * - classmaps must have corresponding enum
+ * - enum symbols must match/correlate with class-name strings in the map.
+ * - base must equal enum's 1st value
+ * - multiple maps must set their base to share the 0-62 class_id space !!
+ *   (build-bug-on tips welcome)
 
-For builtin drm + helpers, things are broken pretty early; at the
-beginning of dynamic_debug_init().  As the ddebug_sanity() commit-msg
-describes in some detail, the records added by _USE fail to reference
-the struct ddebug_class_map created and exported by _DEFINE, but get
-separate addresses to "other" data that segv's when used as the
-expected pointer. FWIW, the pointer val starts with "revi".
+Those shortcomings could largely be fixed with a __stringify_list
+(which doesn't exist) used in DEFINE_DYNAMIC_DEBUG_CLASSMAP(), on
+__VA_ARGS__ a 2nd time.  Then, DRM would pass DRM_UT_* ; all the
+categories, in order, and not their stringifications, which created
+all the usage complications above.
 
-OVERVIEW
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+ lib/test_dynamic_debug.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-DECLARE_DYNDBG_CLASSMAP is broken: it is one-size-fits-all-poorly.
-It muddles the distinction between a (single) definition, and multiple
-references.  Something exported should suffice.
-
-The core of this patchset splits it into:
-
-DYNDBG_CLASSMAP_DEFINE	used once per subsystem to define each classmap
-DYNDBG_CLASSMAP_USE	declare dependence on a DEFINEd classmap
-
-This makes the weird coordinated-changes-by-identical-classmaps
-"feature" unnecessary; the DEFINE can export the var, and USE refers
-to the exported var.
-
-So this patchset adds another section: __dyndbg_class_refs.
-
-It is like __dyndbg_classes; it is scanned under ddebug_add_module(),
-and attached to each module's ddebug_table.  Once attached, it can be
-used like classes to validate and apply class FOO >control queries.
-
-It also maps the class user -> definer explicitly, so that when the
-module is loaded, the section scan can find the kernel-param that is
-wired to dyndbg's kparam-callback, and apply its state-var, forex:
-__drm_debug to the just loaded helper/driver module.
-
-Theres plenty to address Im sure.
-
-Jim Cromie (17):
-  test-dyndbg: fixup CLASSMAP usage error
-  test-dyndbg: show that DEBUG enables prdbgs at compiletime
-  dyndbg: fix readback value on LEVEL_NAMES interfaces
-  dyndbg: replace classmap list with a vector
-  dyndbg: make ddebug_apply_class_bitmap more selective
-  dyndbg: dynamic_debug_init - use pointer inequality, not strcmp
-  dyndbg: drop NUM_TYPE_ARRAY
-  dyndbg: reduce verbose/debug clutter
-  dyndbg-API: replace DECLARE_DYNDBG_CLASSMAP with
-    DYNDBG_CLASSMAP(_DEFINE|_USE)
-  dyndbg-API: specialize DYNDBG_CLASSMAP_(DEFINE|USE)
-  dyndbg-API: DYNDBG_CLASSMAP_USE drop extra args
-  dyndbg-API: DYNDBG_CLASSMAP_DEFINE() improvements
-  drm_print: fix stale macro-name in comment
-  dyndbg: unwrap __ddebug_add_module inner function NOTYET
-  dyndbg: ddebug_sanity()
-  dyndbg: mess-w-dep-class
-  dyndbg: miss-on HACK
-
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  14 +-
- drivers/gpu/drm/display/drm_dp_helper.c |  14 +-
- drivers/gpu/drm/drm_crtc_helper.c       |  14 +-
- drivers/gpu/drm/drm_print.c             |  22 +--
- drivers/gpu/drm/i915/i915_params.c      |  14 +-
- drivers/gpu/drm/nouveau/nouveau_drm.c   |  14 +-
- include/asm-generic/vmlinux.lds.h       |   3 +
- include/drm/drm_print.h                 |   6 +-
- include/linux/dynamic_debug.h           |  57 ++++--
- include/linux/map.h                     |  54 ++++++
- kernel/module/main.c                    |   2 +
- lib/dynamic_debug.c                     | 240 +++++++++++++++++++-----
- lib/test_dynamic_debug.c                |  47 ++---
- 13 files changed, 344 insertions(+), 157 deletions(-)
- create mode 100644 include/linux/map.h
-
+diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
+index 8dd250ad022b..a01f0193a419 100644
+--- a/lib/test_dynamic_debug.c
++++ b/lib/test_dynamic_debug.c
+@@ -75,7 +75,7 @@ DD_SYS_WRAP(disjoint_bits, p);
+ DD_SYS_WRAP(disjoint_bits, T);
+ 
+ /* symbolic input, independent bits */
+-enum cat_disjoint_names { LOW = 11, MID, HI };
++enum cat_disjoint_names { LOW = 10, MID, HI };
+ DECLARE_DYNDBG_CLASSMAP(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES, 10,
+ 			"LOW", "MID", "HI");
+ DD_SYS_WRAP(disjoint_names, p);
 -- 
 2.38.1
 
