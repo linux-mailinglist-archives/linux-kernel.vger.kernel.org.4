@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56501643D13
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B2A643D1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbiLFGSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:18:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53118 "EHLO
+        id S233770AbiLFGXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233637AbiLFGSf (ORCPT
+        with ESMTP id S229936AbiLFGXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:18:35 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D832715C
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:18:34 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w15-20020a17090a380f00b0021873113cb4so13846165pjb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 22:18:34 -0800 (PST)
+        Tue, 6 Dec 2022 01:23:52 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CE6275D7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:23:52 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id a9so12996177pld.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 22:23:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y2DddouEQKfe5T1HPT/o0Lvg9osxHkFVaTa2j8bSG2k=;
-        b=C9WGBIcADVx5WxbQuiycCiuFkyWSPSIJiFzY157WCnH+dsSXS5Y///0Xd8j3BvHF6z
-         T4zcCEx+nLcHdxv8DH4oVu0NZlyNlGnSMbYj/IJccrz/lk/TiZUBVwoh3q+xllkaAlz6
-         2zfoKYdgoU7MITUXmSc4UC2F4DTwhuM6U7UOiIZREHtwlo9MF5NVgZ2tBoCIyhW6NAnv
-         L1NYGgleRCDUjVf1Up21uxmodRV5MkRkMtMX6JbuAVzhngTXk78mz2u1FmFYUXPnmRja
-         7F+uHdS3mL7Wa54KykG7QWCUddnkwoL1BMQx2ZjUlLX6J5hF9p9b0c/ZuxWlaMLQ7qXy
-         akvA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GleLPoHu7UPOxwuHN42Ezfxj9Y7BgZ7LiWPwDVkLnAQ=;
+        b=PYKPZBYgOZgiS9Y5pK+8SC/LMyQcEjdUbP7TGLkCQfa85csvX8kYwJpFomBXue3FjU
+         cHQJPqh+B6UXBJjrakzLgDBjYIdwgOx3ub9wRFOs0KxmR+2tt5nqmYfsMJn2buWmaX9s
+         PJLQQasyVhVdLvQ/5iUpJ5+ZEY4UdppBHI4vvGZJ1GqQMqeWm0OkqBf0tq6PclmC7+XF
+         e0wZ1zw3R1+TaNU/kEzr/IZaMeQgI6rPmfW7IFP1AplxR6kyIdTZVIEIM3xPsbqpeWgF
+         cYpZUIYcna++SC0/p4glWGB/2WIAKErvHFWQ5+lMeUJajoVQmYur/7VOafq4DVqjJgE+
+         z+2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=y2DddouEQKfe5T1HPT/o0Lvg9osxHkFVaTa2j8bSG2k=;
-        b=lAio2KPS6E9ETAo+n2IqdZ+MHpkbxJnpG2g8vp/PGA6lXdlLa1puZF6VCFN1JpgtK2
-         TlpD0T7LiW/ntRTaIxqz9xnjLhyx8g93p78zE2PJt4bBvYVoCqdWrU/zyu2CxaI03tAl
-         6VZhEHN4a8ew2XK/RwgKHJC18izXEvKZqoEsyY9USWY1r9PKJz9S7fNDgw3yWWwr6hM+
-         dKFhy8UX+gE2B9jWZC4Ip856eyy9OPMReGDy/hoyRGGB/7M6WFVvRrAjk32narr3FRaA
-         MwP986wHTxcPIM3y2P36xqH3gHbzcMvICCKRKp28XaHbn3uSngbgVKG9utVGjVN9Wt4b
-         FZPA==
-X-Gm-Message-State: ANoB5pkXArU23d4LXWkVABSYf2aPajncWdKQR4OYjypnKRKYkyarGO8D
-        CXyqJIwiVD5EhbPXdre7ets=
-X-Google-Smtp-Source: AA0mqf5wxtCVesu9mY9IFcfl8szGXpgSADbr5LDn5xdnCZXE2JllW6Hek5ZLQ6Xi5jvDGUgduV8lpg==
-X-Received: by 2002:a17:90a:9402:b0:219:6c4d:ba9d with SMTP id r2-20020a17090a940200b002196c4dba9dmr28116826pjo.175.1670307514015;
-        Mon, 05 Dec 2022 22:18:34 -0800 (PST)
-Received: from localhost ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id e13-20020a17090a280d00b00218a7808ec9sm3489737pjd.8.2022.12.05.22.18.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 05 Dec 2022 22:18:33 -0800 (PST)
-Date:   Tue, 6 Dec 2022 14:22:51 +0800
-From:   Yue Hu <zbestahu@gmail.com>
-To:     Gao Xiang <hsiangkao@linux.alibaba.com>
-Cc:     linux-erofs@lists.ozlabs.org, Chao Yu <chao@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, zhangwen@coolpad.com
-Subject: Re: [PATCH 1/2] erofs: fix missing unmap if
- z_erofs_get_extent_compressedlen() fails
-Message-ID: <20221206142251.00001fb4.zbestahu@gmail.com>
-In-Reply-To: <20221205150050.47784-1-hsiangkao@linux.alibaba.com>
-References: <20221205150050.47784-1-hsiangkao@linux.alibaba.com>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; i686-w64-mingw32)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GleLPoHu7UPOxwuHN42Ezfxj9Y7BgZ7LiWPwDVkLnAQ=;
+        b=J2hAo5i8/8DAU+GDeTVDzJiZ+G7+38H/jf/fOxQz3MPbKGHorMiN78Lq/ct0MR7P8K
+         5kR3e55bvZw4zg3yS7dkKEH+TsM1Nj2upD6GvfBB+e0N1xdhjuwVNGIYD2KQ5CytOvLo
+         UqEYzu20n9atkeXCL7nRVrgZl4c9m16fH9gfldQQaqL5sl1VCs/ljB+LwuhAz5KfWjF3
+         9ySFJW0QSjac99wX+22H019CA80nwSigGvMN4K5ShK18B8am7k+WlrvQTJ6b6FpdDJKC
+         sdqi7H2k9elxhZN3clCwLQQOoDO1dOKxFTSElqDp4urNC45EubpIRXgw+QcqOdWgp8N1
+         eKow==
+X-Gm-Message-State: ANoB5pnAKWxrS7g7MAyB1INc/v2hVPc6sGa5tuq6oSQSAXvqi09pTX3T
+        KQGsTyudfYcrT97TKLRaU9z01SxZmSm/79H8qrU=
+X-Google-Smtp-Source: AA0mqf7UHhYkTfGgAwF4U5uexpOzLAGNZlh3eS6HPyC2dXQDONOxwI8LAKvS65t+7yH0d9l+zgqSfDfHbjyIYz0IN1U=
+X-Received: by 2002:a17:903:3052:b0:189:651c:f023 with SMTP id
+ u18-20020a170903305200b00189651cf023mr53229711pla.78.1670307831551; Mon, 05
+ Dec 2022 22:23:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <CAJNi4rOgYmmtOaXVqYB9sAxDmRhGhS_vVXmZbCbMjvFCQsdjCw@mail.gmail.com>
+ <CAJhGHyD+oR8SeYeObJ2DSKfudqBtBOiL14jCsST3L5OG8WjT_g@mail.gmail.com> <CAJNi4rOs-=xx5qV-hQQYgSLQCz_q3JuFxJEd+wpPaao8Ej26yQ@mail.gmail.com>
+In-Reply-To: <CAJNi4rOs-=xx5qV-hQQYgSLQCz_q3JuFxJEd+wpPaao8Ej26yQ@mail.gmail.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Tue, 6 Dec 2022 14:23:39 +0800
+Message-ID: <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
+Subject: Re: work item still be scheduled to execute after destroy_workqueue?
+To:     richard clark <richard.xnu.clark@gmail.com>
+Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,47 +67,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  5 Dec 2022 23:00:49 +0800
-Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
+On Tue, Dec 6, 2022 at 12:35 PM richard clark
+<richard.xnu.clark@gmail.com> wrote:
 
-> Otherwise, meta buffers could be leaked.
-> 
-> Fixes: cec6e93beadf ("erofs: support parsing big pcluster compress indexes")
-> Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+> >
+> A WARN is definitely reasonable and has its benefits. Can I try to
+> submit the patch and you're nice to review as maintainer?
+>
+> Thanks,
+> Richard
+> >
 
-Reviewed-by: Yue Hu <huyue2@coolpad.com>
+Sure, go ahead.
 
-> ---
->  fs/erofs/zmap.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-> index 749a5ac943f4..98eff1259de4 100644
-> --- a/fs/erofs/zmap.c
-> +++ b/fs/erofs/zmap.c
-> @@ -694,7 +694,7 @@ static int z_erofs_do_map_blocks(struct inode *inode,
->  		map->m_pa = blknr_to_addr(m.pblk);
->  		err = z_erofs_get_extent_compressedlen(&m, initial_lcn);
->  		if (err)
-> -			goto out;
-> +			goto unmap_out;
->  	}
->  
->  	if (m.headtype == Z_EROFS_VLE_CLUSTER_TYPE_PLAIN) {
-> @@ -718,14 +718,12 @@ static int z_erofs_do_map_blocks(struct inode *inode,
->  		if (!err)
->  			map->m_flags |= EROFS_MAP_FULL_MAPPED;
->  	}
-> +
->  unmap_out:
->  	erofs_unmap_metabuf(&m.map->buf);
-> -
-> -out:
->  	erofs_dbg("%s, m_la %llu m_pa %llu m_llen %llu m_plen %llu m_flags 0%o",
->  		  __func__, map->m_la, map->m_pa,
->  		  map->m_llen, map->m_plen, map->m_flags);
-> -
->  	return err;
->  }
->  
+What's in my mind is that the following code is wrapped in a new function:
 
+        mutex_lock(&wq->mutex);
+        if (!wq->nr_drainers++)
+                wq->flags |= __WQ_DRAINING;
+        mutex_unlock(&wq->mutex);
+
+
+and the new function replaces the open code drain_workqueue() and
+is also called in destroy_workqueue() (before calling drain_workqueue()).
+
+
+__WQ_DRAINING will cause the needed WARN on illegally queuing items on
+destroyed workqueue.
+
+Thanks
+Lai
