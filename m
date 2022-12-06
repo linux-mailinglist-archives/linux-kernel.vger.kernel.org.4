@@ -2,119 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F78643D57
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71337643D58
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:53:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234090AbiLFGxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:53:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S234131AbiLFGxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:53:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiLFGxC (ORCPT
+        with ESMTP id S233701AbiLFGxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:53:02 -0500
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BB6C765
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 22:53:00 -0800 (PST)
-Received: by mail-yb1-xb31.google.com with SMTP id c140so17417052ybf.11
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 22:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/nf/VegHe9+DqsAeyPteKwkpo+sm1WkuqI0IKT/1miE=;
-        b=cYPDJXaDoeFowhUH4pRW6EN1R1ExMdSekmsCVfiJDlNC4/QXiNUQ9RYeysubclPBKu
-         uSHg0e2noHIScncTRwd81FjDH1Y95yeuZEiHmcXT07Snk3pqnWC7uaHVbLgcbEbZNs5e
-         SKOZixmdHzs2JvVmiqrl+lRCWQcm9XvQOvVTcfsRQOv9QCYRkr8rflXuhlB0OhdQXvUF
-         3o8Udjlmx68Kn01WEWO3sAfUMLVU0IJm+YBx/F5ygCr/xkdLtpCAedrVDfJ35rj6OZn/
-         LfDGjnMad/ni4Bb4m2WcguVHd3lYfdYjodrg8o4HwpFdEBhdOSviz5yshQPP9i7D5yd/
-         RIrQ==
+        Tue, 6 Dec 2022 01:53:04 -0500
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5019118E19;
+        Mon,  5 Dec 2022 22:53:03 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id c66so12667500edf.5;
+        Mon, 05 Dec 2022 22:53:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/nf/VegHe9+DqsAeyPteKwkpo+sm1WkuqI0IKT/1miE=;
-        b=k1Y4ryG6/WNwoiBpIbxf2oXpzTdoTpFxdblSG0dr9pA37BIWwYcEN9FzWcefnsQmyI
-         4vfz+pzSyrL1OqS844xl8h7vciPXNt0n7hArYh1B0vrPYaWKSCPQFfF2oXZo/d4XPZTF
-         vQcfy6/5mizbkX14aNect/l40cfoWb77mKTqnI6ywKHnhgUJj4mxBYafj0e1FzgkbKyA
-         7luWlR3IjzzVzYI9DgkEA3Cb6wkzePxDxZ/dbk9MSNNyzosrOTQfV99umb9Uere8cRim
-         78kPcTj5Rj54CVa/KG+m+h4O3JnF6ZuRAFEYCUvSj9yZdY5knBD36D0IlrqxZtcV2VrP
-         DvIA==
-X-Gm-Message-State: ANoB5pnRZugktwzsVF04eIil4t7Gs/X0TObYJl7MTzvGuNg5tMza0TnI
-        ybwLIqj+Pw0i0UHhzraoonyWWK8OuK0TTp5K83w=
-X-Google-Smtp-Source: AA0mqf6/NcEko6QjWT03tHSJ8MnBO2pFwcpGQpe+t5dgnqukYWx9FopEzIf67r5owPn8EjVKGLAm0H7eHm0TualXIx0=
-X-Received: by 2002:a25:c0d7:0:b0:6f4:fad9:731a with SMTP id
- c206-20020a25c0d7000000b006f4fad9731amr41616099ybf.400.1670309579517; Mon, 05
- Dec 2022 22:52:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UwtS9TDJJ7vIw83Se/GeNxatxjK+vLXoVYcIsIw2pCE=;
+        b=S0sXAj7SOfM530NxQrt47d/CKYamGpsJDFPxxZwEbdKFn/kki0aInccH8jjr4bNGxa
+         3VKUQ7HapM4RSp0Hm3QMh+uksmuCHuf8/Y8JrqRuob2t/F68btSFu8vFeisHG2c0OMWf
+         o/x7FBwTekwItB/odd3029wY55+iJK6LdW61UHl5WBeLfBU4qwlRvdZYLr7FjClLeJhP
+         wk3/JG0UZJE/FslfJp3tOTxnaDuO7Z3DLfOiD4PUQWGGq8xvJfw0QOIW8sxZGul81yAs
+         /Q4q6GKD2r2E+d4vcsJjFDoc3J/AZUCrp2NuS/KO6EZIlErYxu5P2/q29rHd4S7GQNv+
+         z9sw==
+X-Gm-Message-State: ANoB5pm20fyTP7OdCdbBjEZNcBhKbOip6KHjqUDaEcAgc4K9rpfDVr6p
+        RKhvS8mrSc44UOsr4Hj2mL3rWs29cHI=
+X-Google-Smtp-Source: AA0mqf6dqcBoKY2qtVoQUNjNIl+EnIHecxyGvQiux6H57y+P29ImNa3L1/hmxyYKqmAAjQ5kDxc40A==
+X-Received: by 2002:a05:6402:4289:b0:467:9864:9463 with SMTP id g9-20020a056402428900b0046798649463mr59324551edc.360.1670309581953;
+        Mon, 05 Dec 2022 22:53:01 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id lb26-20020a170907785a00b00781e7d364ebsm7099422ejc.144.2022.12.05.22.53.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 22:53:01 -0800 (PST)
+Message-ID: <df281b81-ba6c-4ca8-3da6-135d4ae09861@kernel.org>
+Date:   Tue, 6 Dec 2022 07:53:00 +0100
 MIME-Version: 1.0
-References: <20221111073154.784261-1-avagin@google.com> <202211181438.7D252CDC10@keescook>
- <CANaxB-zB_DuUrKuhDFAFVZVGphoVk=2PzF20-nJwJkx-xnbSfQ@mail.gmail.com>
-In-Reply-To: <CANaxB-zB_DuUrKuhDFAFVZVGphoVk=2PzF20-nJwJkx-xnbSfQ@mail.gmail.com>
-From:   Andrei Vagin <avagin@gmail.com>
-Date:   Mon, 5 Dec 2022 22:52:48 -0800
-Message-ID: <CANaxB-x=QMiTMf6-RCy1Vs8gyU=idqeK419y=BMpfeQ1oHL4XA@mail.gmail.com>
-Subject: Re: [PATCH 0/5 v3] seccomp: add the synchronous mode for seccomp_unotify
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Andrei Vagin <avagin@google.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Andy Lutomirski <luto@amacapital.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Peter Oskolkov <posk@google.com>,
-        Tycho Andersen <tycho@tycho.pizza>,
-        Will Drewry <wad@chromium.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Kees Cook <keescook@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 2/2] earlycon: Increase options size
+Content-Language: en-US
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+References: <20221123-serial-clk-v3-0-49c516980ae0@chromium.org>
+ <20221123-serial-clk-v3-2-49c516980ae0@chromium.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221123-serial-clk-v3-2-49c516980ae0@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 11:52 PM Andrei Vagin <avagin@gmail.com> wrote:
->
-> On Fri, Nov 18, 2022 at 2:38 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Thu, Nov 10, 2022 at 11:31:49PM -0800, Andrei Vagin wrote:
-> > > From: Andrei Vagin <avagin@gmail.com>
-> > >
-> > > seccomp_unotify allows more privileged processes do actions on behalf
-> > > of less privileged processes.
-> > >
-> > > In many cases, the workflow is fully synchronous. It means a target
-> > > process triggers a system call and passes controls to a supervisor
-> > > process that handles the system call and returns controls back to the
-> > > target process. In this context, "synchronous" means that only one
-> > > process is running and another one is waiting.
-> > >
-> > > The new WF_CURRENT_CPU flag advises the scheduler to move the wakee t=
-o
-> > > the current CPU. For such synchronous workflows, it makes context
-> > > switches a few times faster.
-> > >
-> > > Right now, each interaction takes 12=E7=9B=9C. With this patch, it ta=
-kes about
-> > > 3=E7=9B=9C.
-> > >
-> > > v2: clean up the first patch and add the test.
-> > > v3: update commit messages and a few fixes suggested by Kees Cook.
-> >
-> > Thanks for the update! If I can get Acks from the sched folks, I think
-> > this looks good to take.
->
-> Peter, Ingo, could you take a look at this series?
+On 24. 11. 22, 13:39, Ricardo Ribalda wrote:
+> Now that the clock frequency is also part of the options, 16 bytes is
+> too little.
+> 
+> Without this patch dmesg does not show the whole options, Eg:
+> 
+> earlycon: uart0 at MMIO32 0x00000000fedc9000 (options '115200n8,480000')
+> 
+> instead of: '115200n8,48000000'
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Friendly ping
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
->
-> Thanks,
-> Andrei
+> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+> index d657f2a42a7b..f555927195da 100644
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -701,7 +701,7 @@ static inline int uart_poll_timeout(struct uart_port *port)
+>   struct earlycon_device {
+>   	struct console *con;
+>   	struct uart_port port;
+> -	char options[16];		/* e.g., 115200n8 */
+> +	char options[32];		/* e.g., 115200n8 */
+>   	unsigned int baud;
+>   };
+>   
+> 
+
+-- 
+js
+suse labs
+
