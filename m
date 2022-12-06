@@ -2,75 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE318643D8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:19:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8308C643D92
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiLFHTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 02:19:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S233811AbiLFHT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 02:19:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiLFHTS (ORCPT
+        with ESMTP id S230280AbiLFHTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 02:19:18 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2244815717;
-        Mon,  5 Dec 2022 23:19:18 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id u5so4228190pjy.5;
-        Mon, 05 Dec 2022 23:19:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wC+jgDs02zc9bwLl6AMbyEX4xn+dp/+JRiH8UBwdO7c=;
-        b=X2b3y6qCh3VVvoH1Rd6ofeI0cnm6FpDnPv3sDWF5XU38qQbVCG34SRyT6/lKN5D23E
-         LME5u42zSTywwqK7SU7C+gQ0PpmqbA4XEpW8IZcZaXdhTPz9/56XYWi7T9foANSEGYJM
-         5XlAAHW7UaYV74O/b/WsWXwTiJzty68ZK05/KLfUG18uOh3Yc2ob83+zCgF8FpAGTIh7
-         kC6QR57QrPr9Zzni359A/oPv2iwtUpt38ldljADqfJdnqxIOpHqnChLl4XcXFCDzsyaE
-         /HaScXIeCuoRb2Q4bp+Ghu4n8yR34dpytC1cyFbwJCm6rDqd0KghI7hTxcHGgERW2XnQ
-         KLFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wC+jgDs02zc9bwLl6AMbyEX4xn+dp/+JRiH8UBwdO7c=;
-        b=6IzMnqWJ6jq8MM+uWlGapxIU/h50fb10MIBVA7G0jp46ZYuvDfhqIxEM6vng07i3A+
-         Fd7QOmA7j31kc0dhDIe8d2b8/CWpt5W0WeIJi4/M18WcszdP1ag1r2jnt4TIQOaC1Un6
-         Ipgc+7GhXjbUOE93YFLQOSpG0S+nsVDZnLBpYTftxuUlOL7ekJZ5Kq+ux5rKCU1muAa/
-         whbFE368qVeOa8ef9o5Y7OtNkh0E5iICji5qpmZ5nTSYN8as2t4DchkIC8nYgyerTFIp
-         7HzqQn/Vu/Sw6Tws0Djt8gZQ1SCZJ5qFImGp5d5/rdKcfII0dd7XEIAk1mRttlLZnPgw
-         OyCA==
-X-Gm-Message-State: ANoB5pmdtP92sgmPWSeKnLlxwXnn628UYVxibXJ25/wXmqzgb50vjk6o
-        Tou7iSWEVW4rJhhRebfLkwE=
-X-Google-Smtp-Source: AA0mqf5flU9WXavqZ3VBbP6o+q5cajYHdPdQCKCk9kv2oo7BLWv2uHzSgqs6G/7NXExaWsp1nHlQRQ==
-X-Received: by 2002:a17:902:f08d:b0:189:6b32:27dc with SMTP id p13-20020a170902f08d00b001896b3227dcmr52399133pla.29.1670311157567;
-        Mon, 05 Dec 2022 23:19:17 -0800 (PST)
-Received: from localhost.localdomain ([202.120.234.246])
-        by smtp.googlemail.com with ESMTPSA id pc16-20020a17090b3b9000b00212cf2fe8c3sm989912pjb.1.2022.12.05.23.19.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 23:19:16 -0800 (PST)
-From:   Miaoqian Lin <linmq006@gmail.com>
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     linmq006@gmail.com
-Subject: [PATCH v2] bpftool: Fix memory leak in do_build_table_cb
-Date:   Tue,  6 Dec 2022 11:19:06 +0400
-Message-Id: <20221206071906.806384-1-linmq006@gmail.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Tue, 6 Dec 2022 02:19:54 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6AB2FD3F;
+        Mon,  5 Dec 2022 23:19:52 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NRBd314QDz8RV7N;
+        Tue,  6 Dec 2022 15:19:51 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2B67JgBu008998;
+        Tue, 6 Dec 2022 15:19:42 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 6 Dec 2022 15:19:45 +0800 (CST)
+Date:   Tue, 6 Dec 2022 15:19:45 +0800 (CST)
+X-Zmail-TransId: 2af9638eed11ffffffff8d6e0d5a
+X-Mailer: Zmail v1.0
+Message-ID: <202212061519451024396@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <rafael@kernel.org>
+Cc:     <lenb@kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBBQ1BJOiBmYW46IENvbnZlcnQgdG8gdXNlIHN5c2ZzX2VtaXRfYXQoKSBBUEk=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B67JgBu008998
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 638EED17.000 by FangMail milter!
+X-FangMail-Envelope: 1670311191/4NRBd314QDz8RV7N/638EED17.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638EED17.000/4NRBd314QDz8RV7N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,30 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strdup() allocates memory for path. We need to release the memory in
-the following error path. Add free() to avoid memory leak.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Fixes: 8f184732b60b ("bpftool: Switch to libbpf's hashmap for pinned paths of BPF objects")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
----
-changes in v2:
-- move free(path); into error branch.
----
- tools/bpf/bpftool/common.c | 1 +
- 1 file changed, 1 insertion(+)
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 0cdb4f711510..e7a11cff7245 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -499,6 +499,7 @@ static int do_build_table_cb(const char *fpath, const struct stat *sb,
- 	if (err) {
- 		p_err("failed to append entry to hashmap for ID %u, path '%s': %s",
- 		      pinned_info.id, path, strerror(errno));
-+		free(path);
- 		goto out_close;
- 	}
- 
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/acpi/fan_attr.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/acpi/fan_attr.c b/drivers/acpi/fan_attr.c
+index f15157d40713..f4f6e2381f1d 100644
+--- a/drivers/acpi/fan_attr.c
++++ b/drivers/acpi/fan_attr.c
+@@ -27,24 +27,24 @@ static ssize_t show_state(struct device *dev, struct device_attribute *attr, cha
+ 		count = scnprintf(buf, PAGE_SIZE, "%lld:", fps->control);
+
+ 	if (fps->trip_point == 0xFFFFFFFF || fps->trip_point > 9)
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "not-defined:");
++		count += sysfs_emit_at(buf, count, "not-defined:");
+ 	else
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "%lld:", fps->trip_point);
++		count += sysfs_emit_at(buf, count, "%lld:", fps->trip_point);
+
+ 	if (fps->speed == 0xFFFFFFFF)
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "not-defined:");
++		count += sysfs_emit_at(buf, count, "not-defined:");
+ 	else
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "%lld:", fps->speed);
++		count += sysfs_emit_at(buf, count, "%lld:", fps->speed);
+
+ 	if (fps->noise_level == 0xFFFFFFFF)
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "not-defined:");
++		count += sysfs_emit_at(buf, count, "not-defined:");
+ 	else
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "%lld:", fps->noise_level * 100);
++		count += sysfs_emit_at(buf, count, "%lld:", fps->noise_level * 100);
+
+ 	if (fps->power == 0xFFFFFFFF)
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "not-defined\n");
++		count += sysfs_emit_at(buf, count, "not-defined\n");
+ 	else
+-		count += scnprintf(&buf[count], PAGE_SIZE - count, "%lld\n", fps->power);
++		count += sysfs_emit_at(buf, count, "%lld\n", fps->power);
+
+ 	return count;
+ }
 -- 
 2.25.1
-
