@@ -2,170 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB711644D6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:44:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44409644D71
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbiLFUod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 15:44:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
+        id S229595AbiLFUrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 15:47:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiLFUob (ORCPT
+        with ESMTP id S229652AbiLFUrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 15:44:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837F743852;
-        Tue,  6 Dec 2022 12:44:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46E03B815F6;
-        Tue,  6 Dec 2022 20:44:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D78DC433D6;
-        Tue,  6 Dec 2022 20:44:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670359468;
-        bh=VyFPKDskm09hB3DBPKUEg9fDFjmHc83whLCSf6+IOc8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IqE4P1ST/kOEAMpHGncY2mQC42fpXvtPwi7fEW4ygWIoFXRBQwuTgi+T4Oj1cPt5U
-         PcjNwTHqkBmsHx/9f43E+84ht/2lDZommmLHFk+mU3z1b9QLM7RJQOx6kV11zhvH3r
-         P5nikwVYyFulq41FCiW40m3CjFGxVG9GoTFMzcCPWle7Ea+HjyVFxQrp4HhjtxEwi/
-         +0uNRruA6Qk6w9CyFMhuXtIQyt0LHEe/dVvePp/0v4RJtT3kfWGs3eidwAFiA38Uv5
-         cG6SSrO4TkMC9CGupB9JjNKVwRsNOqoTu+l8T9neSqXAK5HoiDJgMvjSnEO23A++f9
-         txRPoFxC8sExw==
-Date:   Tue, 6 Dec 2022 20:44:23 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 08/13] riscv: module: move find_section to module.h
-Message-ID: <Y4+pp6XEu3GSWCiE@spud>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-9-jszhang@kernel.org>
+        Tue, 6 Dec 2022 15:47:07 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279D243852
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 12:47:06 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id c15so14736089qtw.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 12:47:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QqCq8TKN4kmB8YNzNOAmt9/ZhwoeUqepaj79gxCSZA0=;
+        b=gDLj+Mq4iIY3GH6MgEpu3S4ef4ao0I1kDVlTkZKBKIe9ibrHZMvhKPj4ZXrmRbCyhS
+         48qoMRuNKUGu4i9h3Z3JbdkI69xuRgiiYlxo2Xnsxhj8SEPfXsmEEOXujJ8oS9CAy207
+         +nhQvIkdNvncROQKuBA9BzNSCj/3v/WMzHHnFofZf8iiQR4CiaQ2dhxp2iGDRjPiigUF
+         WXW9VAOBILy7+6m7eCRcGIbvR+HOLjX3mBmdSNGAEhfjcmushTgiwy48FDTvtkUIAs/k
+         Q5ZMbIjAK57C7WNM7/P3WkZk2dIMzpcW3FxttPVJMui2YBAdxG43IAN4sH1103s2+gKp
+         lpQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QqCq8TKN4kmB8YNzNOAmt9/ZhwoeUqepaj79gxCSZA0=;
+        b=WW29roY/wnpQSK5XOLwZkXAJvp0UN1umG30jzouZ8B2HoPQcFeFnRV9bglN4JkHirG
+         TDKvSicVMGhCBiAgpMfjto+rB6OKQ9yXQZd7bb9S45HLdDhTqtTbiJpmbOGK5/gUNPBI
+         ILkBRg3mAWM9xPDBGHml6KDGpUr/zzsN/BIUYSsQxcOVsnMzbs6xBw/+LQcIfip+DkPw
+         7zg4xcqJpG636SQ/Y7bKAFpe2+JdR/W7ZTmsnHHx/xuj2HozFtFRm9LhceMjw2DK9jRb
+         +ltrvS0rlT6eiUIf1zktKfMWb5Vkc19RRWG1SPXEBjv2c/SgFvxGUqRdPdKY7o5hbKMm
+         Dr0g==
+X-Gm-Message-State: ANoB5pmDHdgko+CSyfflqVop8tJTxzKMmSCZgFk0W5kbHXNLgMx3qcO7
+        YNMzFFnyIT0Bgo2tkvhlDzA=
+X-Google-Smtp-Source: AA0mqf4JZD9i6JFqIv+J8ppJBVkOcZN1eiw37cWg8OzA4eiqgfs27oCoR+cV0VX060v00j9/ZPs56A==
+X-Received: by 2002:ac8:570a:0:b0:3a5:7c31:2e3e with SMTP id 10-20020ac8570a000000b003a57c312e3emr62922770qtw.111.1670359625248;
+        Tue, 06 Dec 2022 12:47:05 -0800 (PST)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id bk4-20020a05620a1a0400b006ee77f1ecc3sm15511089qkb.31.2022.12.06.12.47.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 12:47:04 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailauth.nyi.internal (Postfix) with ESMTP id F193527C005A;
+        Tue,  6 Dec 2022 15:47:03 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 06 Dec 2022 15:47:03 -0500
+X-ME-Sender: <xms:R6qPY9euBsNUXz90pvAiwbIAXUY4h3UoDADOjTo3jjb5R59YaM2O3A>
+    <xme:R6qPY7O3F_MJWo2LAXYt2sFoOJXq7_iTrIlGs0DhR79WN2W-etfeeBsRIZMRHq4e7
+    6Bx8kopTYpEQX-7WQ>
+X-ME-Received: <xmr:R6qPY2hhiFp7cBzioMJKj1NqEH5eIIxzkQr-NS4H1obCOHZkd4feQx_c6W8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeigddugeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeehudfgudffffetuedtvdehueevledvhfelleeivedtgeeuhfegueeviedu
+    ffeivdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:R6qPY29VWFRfyL1oJT6uQuVu5c44Cx5OsVSeM8BZVqmN_tguqb_IjA>
+    <xmx:R6qPY5ve9YbCeQBfIo8aNiFRLCIgSHfUExE4oKI35YVU-BKwyJPTag>
+    <xmx:R6qPY1GmeX45Oj132ZZehYsRMEJRUzYI7q5XwC0H4xtEfBx69fgpmQ>
+    <xmx:R6qPYy9s2feTD2jBYwCa1N1iJx0jJb79Xqvk72w8XMR3PMuduvoRWQ>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Dec 2022 15:47:02 -0500 (EST)
+Date:   Tue, 6 Dec 2022 12:46:58 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+Cc:     Jonas Oberhauser <jonas.oberhauser@huawei.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "urezki@gmail.com" <urezki@gmail.com>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
+ dependencies
+Message-ID: <Y4+qQrhxrcqOUolZ@boqun-archlinux>
+References: <4262e55407294a5989e766bc4dc48293@huawei.com>
+ <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
+ <20221203204405.GW4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4vAYzJTTQtNkXFh@rowland.harvard.edu>
+ <20221203231122.GZ4001@paulmck-ThinkPad-P17-Gen-1>
+ <43c7ea9ebdd14497b85633950b014240@huawei.com>
+ <Y4xbQmnDEbFTvgQ/@Boquns-Mac-mini.local>
+ <d86295788ad14a02874ab030ddb8a6f8@huawei.com>
+ <Y44ZxWYQkMN60a1E@rowland.harvard.edu>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Kfeymfl++SYTH9yC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221204174632.3677-9-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y44ZxWYQkMN60a1E@rowland.harvard.edu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 05, 2022 at 11:18:13AM -0500, stern@rowland.harvard.edu wrote:
+> On Mon, Dec 05, 2022 at 01:42:46PM +0000, Jonas Oberhauser wrote:
+> > > Besides, could you also explain a little bit why only "data;rfi" can be "carry-dep" but "ctrl;rfi" and "addr;rfi" cannot? I think it's because there are special cases when compilers can figure out a condition being true or an address being constant therefore break the dependency
+> > 
+> > Oh, good question. A bit hard for me to write down the answer clearly 
+> > (which some people will claim that I don't understand it well myself, 
+> > but I beg to differ :) :( :) ).
 
---Kfeymfl++SYTH9yC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Nah, I think your answer is clear to me ;-)
 
-On Mon, Dec 05, 2022 at 01:46:27AM +0800, Jisheng Zhang wrote:
-> Move it to the header so that the implementation can be shared
-> by the alternatives code.
+> > 
+> > In a nutshell, it's because x ->data [Plain] ->rfi y ->... z fulfils 
+> > the same role as storing something in a register and then using it in 
+> > a subsequent computation; x ->ctrl y ->... z (and ->addr) don't. So 
+> > it's not due to smart compilers, just the fact that the other two 
+> > cases seem unrelated to the problem being solved, and including them 
+> > might introduce some unsoundness (not that I have checked if they do).
 
-I'm not a super big fan of these perfunctory commit messages.
-Maybe I'm being a bit ornery, but a few words about why the alternatives
-could benefit from this would be nice. Also, s/it/find_section()/ please.
+So it's about whether a value can have a dataflow from x to y, right? In
+that case registers and memory cells should be treated the same by
+compilers, therefore we can extend the dependencies.
+> 
+> More can be said here.  Consider the following simple example:
+> 
+> 	void P0(int *x, int *y)
+> 	{
+> 		int r1, r2;
+> 		int a[10];
+> 
+> 		r1 = READ_ONCE(*x);
+> 		a[r1] = 1;
+> 		r2 = a[r1];
+> 		WRITE_ONCE(*y, r2);
+> 	}
+> 
+> There is an address dependency from the READ_ONCE to the plain store in 
+> a[r1].  Then there is an rfi and a data dependency to the WRITE_ONCE.
+> 
+> But in this example, the WRITE_ONCE is _not_ ordered after the 
+> READ_ONCE, even though they are linked by (addr ; rfi ; data).  The 
+> compiler knows that the value of r1 does not change between the two 
+> plain accesses, so it knows that it can optimize the code to be:
+> 
+> 	r1 = READ_ONCE(*x);
+> 	r2 = 1;
+> 	WRITE_ONCE(*y, r2);
+> 	a[r1] = r2;
+> 
+> And then the CPU can execute the WRITE_ONCE before the READ_ONCE.  This 
+> shows that (addr ; rfi) must not be included in the carry-deps relation.
+> 
+> You may be able to come up with a similar argument for (ctrl ; rfi), 
+> although it might not be quite as clear.
+> 
 
-How about:
-> Move find_section() to module.h so that the implementation can be shared
-> by the alternatives code. This will allow us to use alternatives in
-> the vdso.
+Thank you, Alan! One question though, can a "smart" compiler optimize
+out the case below, with the same logic?
 
+	void P0(int *x, int *y, int *a)
+	{
+		int r1, r2;
 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
->  arch/riscv/include/asm/module.h | 15 +++++++++++++++
->  arch/riscv/kernel/module.c      | 15 ---------------
+		r1 = READ_ONCE(*x); // A
 
-Silly question maybe, but is module.h the right place to put this?
-But I have nothing better to suggest, and I hate bikeshedding stuff when
-I have no suggestion to make.
+		*a = r1 & 0xffff; // B
 
-Rationale behind the movement seems grand to me though, so I suppose:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+		r2 = *a & 0xffff0000; // C
 
-Thanks,
-Conor.
+		WRITE_ONCE(*y, r2); // D
 
->  2 files changed, 15 insertions(+), 15 deletions(-)
->=20
-> diff --git a/arch/riscv/include/asm/module.h b/arch/riscv/include/asm/mod=
-ule.h
-> index 76aa96a9fc08..78722a79fc59 100644
-> --- a/arch/riscv/include/asm/module.h
-> +++ b/arch/riscv/include/asm/module.h
-> @@ -111,4 +111,19 @@ static inline struct plt_entry *get_plt_entry(unsign=
-ed long val,
-> =20
->  #endif /* CONFIG_MODULE_SECTIONS */
-> =20
-> +static inline const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
-> +					   const Elf_Shdr *sechdrs,
-> +					   const char *name)
-> +{
-> +	const Elf_Shdr *s, *se;
-> +	const char *secstrs =3D (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offse=
-t;
-> +
-> +	for (s =3D sechdrs, se =3D sechdrs + hdr->e_shnum; s < se; s++) {
-> +		if (strcmp(name, secstrs + s->sh_name) =3D=3D 0)
-> +			return s;
-> +	}
-> +
-> +	return NULL;
-> +}
-> +
->  #endif /* _ASM_RISCV_MODULE_H */
-> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-> index 91fe16bfaa07..76f4b9c2ec5b 100644
-> --- a/arch/riscv/kernel/module.c
-> +++ b/arch/riscv/kernel/module.c
-> @@ -429,21 +429,6 @@ void *module_alloc(unsigned long size)
->  }
->  #endif
-> =20
-> -static const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
-> -				    const Elf_Shdr *sechdrs,
-> -				    const char *name)
-> -{
-> -	const Elf_Shdr *s, *se;
-> -	const char *secstrs =3D (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offse=
-t;
-> -
-> -	for (s =3D sechdrs, se =3D sechdrs + hdr->e_shnum; s < se; s++) {
-> -		if (strcmp(name, secstrs + s->sh_name) =3D=3D 0)
-> -			return s;
-> -	}
-> -
-> -	return NULL;
-> -}
-> -
->  int module_finalize(const Elf_Ehdr *hdr,
->  		    const Elf_Shdr *sechdrs,
->  		    struct module *me)
-> --=20
-> 2.37.2
->=20
+	}
 
---Kfeymfl++SYTH9yC
-Content-Type: application/pgp-signature; name="signature.asc"
+I think we have A ->data B ->rfi C ->data D, however a "smart" compiler
+can figure out that r2 is actually zero, right? And the code get
+optimized to:
 
------BEGIN PGP SIGNATURE-----
+	r1 = READ_ONCE(*x);
+	r2 = 0;
+	WRITE_ONCE(*y, r2);
+	*a = r1 & 0xffff;
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY4+ppwAKCRB4tDGHoIJi
-0vdPAPwMCMePiLIxdM2S19748MS5S9G5teWeIfVGdq6nal4HMQD/a2JizR3i5tUB
-H5BxI52RGgMvF963Rr0R5Ftrp24+yQw=
-=/QTm
------END PGP SIGNATURE-----
+and break the dependency.
 
---Kfeymfl++SYTH9yC--
+I know that our memory model is actually unware of the differences of
+syntatics dependencies vs semantics syntatics, so one may argue that in
+the (data; rfi) example above the compiler optimization is outside the
+scope of LKMM, but won't the same reasoning apply to the (addr; rfi)
+example from you? The WRITE_ONCE() _syntatically_ depends on load of
+a[r1], therefore even a "smart" compiler can figure out the value, LKMM
+won't take that into consideration.
+
+Am I missing something subtle here?
+
+Regards,
+Boqun
+
+> Alan
