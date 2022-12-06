@@ -2,103 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AD946447FD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:26:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CE4644801
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbiLFP0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51824 "EHLO
+        id S234085AbiLFP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:28:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235053AbiLFP0k (ORCPT
+        with ESMTP id S231168AbiLFP2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:26:40 -0500
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7126B12636;
-        Tue,  6 Dec 2022 07:26:34 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id m19so20734465edj.8;
-        Tue, 06 Dec 2022 07:26:34 -0800 (PST)
+        Tue, 6 Dec 2022 10:28:16 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B43286F5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:28:15 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id x66so14843955pfx.3
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 07:28:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ziepe.ca; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tqp+rZqwBIbM0e7U8ET8WBjF4JT9ospITgGCw9GEAz4=;
-        b=DhRpIWOmwJWg06s5+Y55Z62Y4TC+KzQtgMC7iZGL1lQnmpSgKwBuElQuNrhdnWV894
-         e6w/mfu/JgsqlFoujbG/TIo89ZUToso4s2+pFaEWT6bfrtsPRm/psmCfdz5TIASFv5SC
-         AN/I8t0IqgHypQNs8rT/M1ZckvyvOdWGNnbB0gxQDG75C+itVBM8GdKJnCEeA1RuKRWq
-         LuNMkbX0pA44wOjKB7Gm5wsXsDRhaT3pw8S/ybNfz8nkznrszGyIfrC14JKpblBQdbVX
-         dFWA8Ozos/acesVXHKZIzACM59NiHfqf+P9PYhGlgn+eqvvRoqagLIvdYgWQsyviE60P
-         1qmw==
+        bh=UbvbC5wWAbTk1+A45QMi3yV7gKIuXUVlv7TRLX6QDzQ=;
+        b=o2pfBKad+xs/gHyi3mDpxXl3Ejx08rQwd7nDOZGu8tih+03yTLG9XNmst/u1NsCpd2
+         kyGJtZ5d7CWoKzweigchYufl1D8gierL43WqERJwGSSQeRHqmRZWusQ6eSD0wl6ytQAR
+         PFhlOF+Zravyw5C5LhmVc6V5UXDs6Ieixn7Z71yBPjdl7i+Rhqodee7VZzSZxM6gbJ+M
+         mUv+e7BMb1dEYVIavlac4VR+uJPX1dz2MgumEnsBWeA5UZ3V9ne5rWYEA66kFu8C1QG1
+         JYeIna0Nvi7bBdxHdo5P39G0mu/SsSFQ/pA0afbIWx+7D7CDy0/xKN1Q9huuXlirg552
+         jxng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Tqp+rZqwBIbM0e7U8ET8WBjF4JT9ospITgGCw9GEAz4=;
-        b=PgthjwOouMLQBhAi43eV0VV4rvjDdukIkkxc2ZS0bv/aN44jgqb1fqmSBcGUwqxBDD
-         /6qWbQJP3HkSLloifCZRFKwmOVrNLNI9Tsgjy9OvwA6e2Fn4m5bWFSxvWzSdBSdrNLdr
-         qqKeYXl5nXaH19achb+YWwU+YZMfuArgSqKIjkTsfT0K5hrPa4+w3LSDQzdNwYBZWOOP
-         SL4sB5pXpdMIrqRFmLQhyZfZxdbqyeHwNj+VSDCfFSRKK4i41TxHLcfncsAistSyRLjC
-         CAbumayU/UQnmAtur2QS5sL3tSDe7yS7t1K07T3q4i3DPRzga/j17aZsSv8UIQbp/JQQ
-         UZoQ==
-X-Gm-Message-State: ANoB5pkcqZp4RSi5cVujc2KXhjYOsK7L3RMfZdd008q84kQIIuKgHw4Y
-        QjoErgWHBmU6HtPyPaoYbAg=
-X-Google-Smtp-Source: AA0mqf6IOsm1x+d+9JHFsfaOJNldbNQ5atFYHIoPKswFVa87oK26VKKFmgvywUz4QtBoyjB+LtpwcQ==
-X-Received: by 2002:aa7:db13:0:b0:46b:aee1:3b46 with SMTP id t19-20020aa7db13000000b0046baee13b46mr4611443eds.44.1670340392963;
-        Tue, 06 Dec 2022 07:26:32 -0800 (PST)
-Received: from skbuf ([188.26.184.215])
-        by smtp.gmail.com with ESMTPSA id g25-20020a056402115900b0046cbcc86bdesm1111496edw.7.2022.12.06.07.26.31
+        bh=UbvbC5wWAbTk1+A45QMi3yV7gKIuXUVlv7TRLX6QDzQ=;
+        b=Cmkfj5FVcVjjxZaUYJetY1ndj2Yg5WMpMkzu1JVcIUOzp1G3zxUlc6M3HERyQ6ne5d
+         lZHkmxikmBRkv2AskSJ4vfiVl53jFiLlZVlPbE5+2h0L+phoKjyUeJo5Q+56fYOmNnxi
+         DghLCZmHqRMgcQ/B9BaAGEisdnx5IkplyAW7SUdzgcmt64QGmHp3Q1auyrqSrSN8j2gH
+         4lrpSrntfdzFZj1dahyTTDNYdkB+9smU5Y41xsHXfd+fkwZ+MJgUJQncu3PnXnvpA5Nr
+         vjFMNJVlvHxRqrG8xdbzCgzUp98nQSXsSJQMFRG7KuEoj4h4nISSLDmM17fSuhi29d7n
+         crmA==
+X-Gm-Message-State: ANoB5plr/kwgm0TlogX7FBIgdQLHZCiQAFPdnzWjyliI+ttF0UPMzCEy
+        hyoi9KXCJoE1+yGxE/vhqszrhQ==
+X-Google-Smtp-Source: AA0mqf55x7M4sv2x3tayft1I7V3sSjX0b6B+H4EoWIBSX/GlBW1IkeeiP/C1ZdGWLs42NtueKdU4uw==
+X-Received: by 2002:a63:1865:0:b0:478:b1f4:1661 with SMTP id 37-20020a631865000000b00478b1f41661mr10871408pgy.317.1670340495049;
+        Tue, 06 Dec 2022 07:28:15 -0800 (PST)
+Received: from ziepe.ca ([206.223.160.26])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170903230c00b0016c9e5f291bsm12848547plh.111.2022.12.06.07.28.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 07:26:32 -0800 (PST)
-Date:   Tue, 6 Dec 2022 17:26:30 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Radu Nicolae Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-Cc:     gregkh@linuxfoundation.org, netdev@vger.kernel.org,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net, f.fainelli@gmail.com,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>
-Subject: Re: [PATCH] net: dsa: sja1105: fix slab-out-of-bounds in
- sja1105_setup
-Message-ID: <20221206152630.lypso2kbh6gwwlse@skbuf>
-References: <20221206151136.802344-1-radu-nicolae.pirea@oss.nxp.com>
+        Tue, 06 Dec 2022 07:28:14 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p2Zrg-004crv-OQ;
+        Tue, 06 Dec 2022 11:28:12 -0400
+Date:   Tue, 6 Dec 2022 11:28:12 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
+        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
+        cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
+Subject: Re: [RFC PATCH 5/5] nvme-vfio: Add a document for the NVMe device
+Message-ID: <Y49fjFD6foGorhmp@ziepe.ca>
+References: <20221206055816.292304-6-lei.rao@intel.com>
+ <20221206062604.GB6595@lst.de>
+ <Y48+AaG5rSCviIhl@ziepe.ca>
+ <20221206130901.GB24358@lst.de>
+ <Y49JNvdmRPNWw26q@ziepe.ca>
+ <20221206140002.GB27689@lst.de>
+ <Y49PqoAhZOeraLVa@ziepe.ca>
+ <20221206143126.GB30297@lst.de>
+ <Y49WNo7XWZ2aFfds@ziepe.ca>
+ <20221206150131.GA32365@lst.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206151136.802344-1-radu-nicolae.pirea@oss.nxp.com>
+In-Reply-To: <20221206150131.GA32365@lst.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:11:36PM +0200, Radu Nicolae Pirea (OSS) wrote:
-> From: Radu Pirea <radu-nicolae.pirea@nxp.com>
-> 
-> Fix slab-out-of-bounds in sja1105_setup.
-> 
-> Signed-off-by: Radu Pirea <radu-nicolae.pirea@nxp.com>
-> ---
->  drivers/net/dsa/sja1105/sja1105_main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Can be applied on top of 5.15.81 stable branch.
+On Tue, Dec 06, 2022 at 04:01:31PM +0100, Christoph Hellwig wrote:
 
-Here the backporting process has to work differently.
+> So this isn't really about a VF live cycle, but how to manage life
+> migration, especially on the receive / restore side.  And restoring
+> the entire controller state is extremely invasive and can't be done
+> on a controller that is in any classic form live.  In fact a lot
+> of the state is subsystem-wide, so without some kind of virtualization
+> of the subsystem it is impossible to actually restore the state.
 
-Since the fixed code is also present in the master branch of the tree
-responsible with bug fixes for this code area
-(https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git), you
-have to base your patch on that tree, and send the patch to be applied
-by the netdev maintainers, not by stable directly. You do that by using
-git send-email --subject-prefix "PATCH v2 net". You also don't CC stable
-and Greg, just the networking people from ./scripts/get_maintainer.pl.
-After a while, the patch will land automatically in stable, through the
-"net" tree.
+I cannot speak to nvme, but for mlx5 the VF is laregly a contained
+unit so we just replace the whole thing.
 
-You must also add this above your Signed-off-by tag:
+From the PF there is some observability, eg the VF's MAC address is
+visible and a few other things. So the PF has to re-synchronize after
+the migration to get those things aligned.
 
-Fixes: 38fbe91f2287 ("net: dsa: sja1105: configure the multicast policers, if present")
+> To cycle back to the hardware that is posted here, I'm really confused
+> how it actually has any chance to work and no one has even tried
+> to explain how it is supposed to work.
+
+I'm interested as well, my mental model goes as far as mlx5 and
+hisillicon, so if nvme prevents the VFs from being contained units, it
+is a really big deviation from VFIO's migration design..
+
+Jason
