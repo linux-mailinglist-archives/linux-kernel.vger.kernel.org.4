@@ -2,82 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF68B643ED9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD742643EDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbiLFIiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
+        id S230363AbiLFIkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbiLFIhy (ORCPT
+        with ESMTP id S231133AbiLFIkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:37:54 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFC01CFF3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:37:17 -0800 (PST)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670315835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=rziPuY01KKfy8j2XSe8zzbR1uYlLxhOS82Ju9DQEie0=;
-        b=nryMVGmkL9uPJ4ZdK9rNDqaeTLYy6XSqxo0F+d8J7kJCWgeipUNGXsAeIrK6/AAzMZI/eC
-        PIezq6NB2SNo9csOCLKnw5Vo1klZDYo2pnceZPAIH3Pn8CveAR5enFGYhgFEKzc+U5aqJL
-        /7JGkyTJS8DWJm3ts4yWwbq6hs9/lTA=
-From:   Yajun Deng <yajun.deng@linux.dev>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>
-Subject: [PATCH] sched/rt: Add pid and comm when RT throttling activated
-Date:   Tue,  6 Dec 2022 16:36:41 +0800
-Message-Id: <20221206083641.103832-1-yajun.deng@linux.dev>
+        Tue, 6 Dec 2022 03:40:02 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAB4E78;
+        Tue,  6 Dec 2022 00:40:00 -0800 (PST)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NRDKT0SrszJp6D;
+        Tue,  6 Dec 2022 16:36:29 +0800 (CST)
+Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
+ (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 6 Dec
+ 2022 16:39:58 +0800
+From:   ruanjinjie <ruanjinjie@huawei.com>
+To:     <robh+dt@kernel.org>, <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH] of: overlay: fix null pointer dereferencing in find_dup_cset_node_entry() and find_dup_cset_prop()
+Date:   Tue, 6 Dec 2022 16:36:57 +0800
+Message-ID: <20221206083657.3202856-1-ruanjinjie@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.83]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is difficult to know which process consumes time when RT throttling
-activated.
+when kmalloc() fail to allocate memory in kasprintf(), fn_1 or fn_2 will
+be NULL, strcmp() will cause null pointer dereference.
 
-So add pid and comm for this case.
-
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+Fixes: 2fe0e8769df9 ("of: overlay: check prevents multiple fragments touching same property")
+Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
 ---
- kernel/sched/rt.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/of/overlay.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index ed2a47e4ddae..1f267ab1b59a 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -1012,6 +1012,7 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
+diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
+index bd8ff4df723d..49c066b51148 100644
+--- a/drivers/of/overlay.c
++++ b/drivers/of/overlay.c
+@@ -545,6 +545,11 @@ static int find_dup_cset_node_entry(struct overlay_changeset *ovcs,
  
- 	if (rt_rq->rt_time > runtime) {
- 		struct rt_bandwidth *rt_b = sched_rt_bandwidth(rt_rq);
-+		struct task_struct *curr = rq_of_rt_rq(rt_rq)->curr;
+ 		fn_1 = kasprintf(GFP_KERNEL, "%pOF", ce_1->np);
+ 		fn_2 = kasprintf(GFP_KERNEL, "%pOF", ce_2->np);
++		if (!fn_1 || !fn_2) {
++			kfree(fn_1);
++			kfree(fn_2);
++			return -ENOMEM;
++		}
+ 		node_path_match = !strcmp(fn_1, fn_2);
+ 		kfree(fn_1);
+ 		kfree(fn_2);
+@@ -580,6 +585,11 @@ static int find_dup_cset_prop(struct overlay_changeset *ovcs,
  
- 		/*
- 		 * Don't actually throttle groups that have no runtime assigned
-@@ -1019,7 +1020,8 @@ static int sched_rt_runtime_exceeded(struct rt_rq *rt_rq)
- 		 */
- 		if (likely(rt_b->rt_runtime)) {
- 			rt_rq->rt_throttled = 1;
--			printk_deferred_once("sched: RT throttling activated\n");
-+			printk_deferred_once("pid: %d, comm: %s, sched: RT throttling activated\n",
-+					     curr->pid, curr->comm);
- 		} else {
- 			/*
- 			 * In case we did anyway, make it go away,
+ 		fn_1 = kasprintf(GFP_KERNEL, "%pOF", ce_1->np);
+ 		fn_2 = kasprintf(GFP_KERNEL, "%pOF", ce_2->np);
++		if (!fn_1 || !fn_2) {
++			kfree(fn_1);
++			kfree(fn_2);
++			return -ENOMEM;
++		}
+ 		node_path_match = !strcmp(fn_1, fn_2);
+ 		kfree(fn_1);
+ 		kfree(fn_2);
 -- 
 2.25.1
 
