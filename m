@@ -2,80 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E17643ACD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 02:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178B1643ADF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 02:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbiLFBef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 20:34:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S233826AbiLFBim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 20:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiLFBeb (ORCPT
+        with ESMTP id S233678AbiLFBiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 20:34:31 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E151B791;
-        Mon,  5 Dec 2022 17:34:31 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id s30-20020a056830439e00b0067052c70922so1602341otv.11;
-        Mon, 05 Dec 2022 17:34:31 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FQJzjzczHukY5OAQJSMJmAiOo4gpV8IN7ET194V+qnQ=;
-        b=qTnr26XGtNqnsrgfsGjLBMqIIiklRLLkX04UV+ntWi9hrVgUc8Y7Wa3rpti99lWA7s
-         uC5eRqf6OaFAFfh3Lf8W5T5cqt9wjXkEMINlQnuR86Jp3BnMc6SZCq8pctGPyVQpxCns
-         aJPicmfSvUo/YgAs9W41nlQbzW5rLOSVVUx0fgkJTHROMniEnXrG80WeMWYsIfAOaZps
-         1GgUS1TqZ0ohQvmHHn7CvsUcFQh0BBt1ZlXDmru4N22KFpSM6A1defvoIX6ZuX/s+whq
-         Cx2Qy/RWAMtDnzJgbhtLMi+2hthkAiATRBN5gKDYnfYrGOa1SJ3Lk5UdZLjDudnbUBqq
-         VePQ==
-X-Gm-Message-State: ANoB5pnDH+KHPuL5kcAG3PuZ3SID0pF+QRoSVTNk40Auh8/U4PPGkL9R
-        QFU/jqYNPowwUwP11JNItA==
-X-Google-Smtp-Source: AA0mqf5DzZkVK2K4YFpkH/LzI3BUyeeHu5HQnlUzksKvWhTt/DprGhkm2DdoE4kzuhsh0ysvf3G/0w==
-X-Received: by 2002:a9d:5908:0:b0:66c:39ca:a7aa with SMTP id t8-20020a9d5908000000b0066c39caa7aamr42624026oth.24.1670290470268;
-        Mon, 05 Dec 2022 17:34:30 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x186-20020a4a41c3000000b00494ed04f500sm7333855ooa.27.2022.12.05.17.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 17:34:29 -0800 (PST)
-Received: (nullmailer pid 3096190 invoked by uid 1000);
-        Tue, 06 Dec 2022 01:34:29 -0000
-Date:   Mon, 5 Dec 2022 19:34:29 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>, devicetree@vger.kernel.org,
+        Mon, 5 Dec 2022 20:38:21 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A50E36245;
+        Mon,  5 Dec 2022 17:37:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16BE9614FB;
+        Tue,  6 Dec 2022 01:37:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C59C433C1;
+        Tue,  6 Dec 2022 01:37:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670290657;
+        bh=rz19PUH2Fl8oeU0CkmkBHGY6X9eg4p+1gMp4aSzTuN4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Sd6Ym3mpLMCXU73KLRNSYcMQwkNptFMtFy9WBf62Z0tQxYfnsdhqkLWLBl1nr7aTU
+         4qW+aVFSkc+ROd840dxdI+tfUhjIPQYiY/fmFe6TQToUY0fY4tmOvFKvZBGFG2Ma+r
+         iw/HaEg2Ir64rCnzKr7oLtye1A3ISapkg6AXNUAzMcgACUM6S42mxjy2nSx1/QoJAY
+         nxJhCYOK0jzij2L7Gxw49f5daFBlyNHwEQaL09dBnb1632s/KaTNDbqrf6v8VT3t20
+         hOyPYKbIKlR5QBc9U+U0z645ud6U5gW409V3CUVPeCwgwdg2/A3dIGSZumv66wHzBP
+         d1efGFj+q0Dtw==
+Date:   Mon, 5 Dec 2022 17:37:35 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: thermal: cooling-devices: Add missing cache
- related properties
-Message-ID: <167029046126.3095969.9611282339604758982.robh@kernel.org>
-References: <20221104162450.1982114-1-robh@kernel.org>
+Subject: Re: [PATCH v5] virtio/vsock: replace virtio_vsock_pkt with sk_buff
+Message-ID: <20221205173735.6123b941@kernel.org>
+In-Reply-To: <20221205122214.bky3oxipck4hsqqe@sgarzare-redhat>
+References: <20221202173520.10428-1-bobby.eshleman@bytedance.com>
+        <20221205122214.bky3oxipck4hsqqe@sgarzare-redhat>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221104162450.1982114-1-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 04 Nov 2022 11:24:50 -0500, Rob Herring wrote:
-> The examples' cache nodes are incomplete as 'cache-unified' and
-> 'cache-level' are required cache properties.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/thermal/thermal-cooling-devices.yaml  | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
+On Mon, 5 Dec 2022 13:22:14 +0100 Stefano Garzarella wrote:
+> As pointed out in v4, this is net-next material, so you should use the 
+> net-next tag and base the patch on the net-next tree:
+> https://www.kernel.org/doc/html/v6.0/process/maintainer-netdev.html#netdev-faq
 
-Applied, thanks!
+Thanks, yes, please try to do that, makes it much less likely that 
+the patch will be mishandled or lost.
+
+> I locally applied the patch on net-next and everything is fine, so maybe 
+> the maintainers can apply it, otherwise you should resend it with the 
+> right tag.
+
+FWIW looks like all the automated guessing kicked in correctly here,
+so no need to repost just for the subject tag (this time).
+
+> Ah, in that case I suggest you send it before the next merge window 
+> opens (I guess next week), because net-next closes and you'll have to 
+> wait for the next cycle.
+
++1, we'll try to take a closer look & apply tomorrow unless someone
+speaks up.
