@@ -2,105 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB585643B64
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC913643B66
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:42:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiLFCkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 21:40:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S231923AbiLFCl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 21:41:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLFCki (ORCPT
+        with ESMTP id S233551AbiLFCly (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:40:38 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C00B7DD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:40:36 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id q190so3800531iod.10
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 18:40:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C11bscbOmfUbhUvDY9IHufEbXEW6Jlvs+hg8vJ4XBWQ=;
-        b=f59DNAZDv+rfnYq/BEXcLH/B/MQhjC0omavNBDw+annfUJyQJAWvnSu3+WdD7NbAw8
-         tAfq8Fi8S/PUUaEfUc3hXJ20OkZcfFsGgKwNhqHDNrj9uDU8K/Qo6oPreqvdCrtJBy1h
-         9FFZfq9H2BaFX7onn5O1jYE8S6iLWzSjwHi+M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C11bscbOmfUbhUvDY9IHufEbXEW6Jlvs+hg8vJ4XBWQ=;
-        b=PoE/mD/2bWX0Siyff9ePfhqdNZPWUU6zY1az2RM4iH9o7ewjFzclDuwQ4ano718k98
-         /cN/T4FGQThHwlntVHWcF4Uz4qlIOAD4kaH7Aa9wSr4Cy0LGp/CRI74mZK8j2QpVv3lO
-         jvErAoItMGvTfBlvb/bnFH/dDyoxE0s3kSC+BVnpgvi1N9QdhSg33GRZU7wj4nijLCF2
-         E4EjaBGtQDm7P4/mFmF3I1dvYRyXDW1iDrpAbUpr12+8Bgjb1VMtSTtuGysdF9Kcgkuj
-         yrM49KVrgOxgMqBaDlA9HfKawhLkBHVz/GCa+iq67gc/AmEENErvB/92vwcJrO6TaJpL
-         ATgw==
-X-Gm-Message-State: ANoB5pktTSG5NFWPXiW1YJ9v7JTUCTwDHGmKUUIZStauizGuXSZuY4TE
-        iahcHIP29wmSa8WTbbSw7QxZGA==
-X-Google-Smtp-Source: AA0mqf4YJZkgLRAm/eqUjaca7IMExUKaYAKkSir++EWeQ1/+b3ePm4WZrqEU/RxxN00PMn6NhEQ+yA==
-X-Received: by 2002:a05:6638:440b:b0:374:fbbe:2da6 with SMTP id bp11-20020a056638440b00b00374fbbe2da6mr19160646jab.163.1670294436002;
-        Mon, 05 Dec 2022 18:40:36 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p18-20020a056638217200b00363da904602sm1549786jak.13.2022.12.05.18.40.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 18:40:35 -0800 (PST)
-Message-ID: <91eadab1-92bb-6361-7c43-193a8e348045@linuxfoundation.org>
-Date:   Mon, 5 Dec 2022 19:40:34 -0700
+        Mon, 5 Dec 2022 21:41:54 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F9FB7DD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:41:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670294513; x=1701830513;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=FZAHxGmeLgTvz+h4faOmVd/+icSg6LznsgsEN+s6FS8=;
+  b=WJW0gxQWUcDRerYlFGQyUBoYTt3l2tLIqogogbScLI4l4/8Vbd6xqJxn
+   ftzCTxJQk+m8/euyzcM0PDRkilg8FK8unIEs90ieKZIL8zZYOB5Mqj73j
+   khezfIWa9cGO9Pe/CwdbBFcGoXFHYK1MzgRgHg6nLaocAQJh00r34azTI
+   qvqPyKFU9C5KCqrTbEEtJqCp2/eIZpWeModDYGWgvGLi3fM7MpEO6lNov
+   QNYF9J4lxVy2e6dlFsNU8d2b505AGoFVQwihxVMojy9dXztV6bcNbICXM
+   tFSrXiIhoUm1MQYis2yMfmNEwpZGdHVp6eNwHfcIqgdMaQRMBr4bwKYJV
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="315226072"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="315226072"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 18:41:53 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="974910264"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="974910264"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 18:41:50 -0800
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     kernel test robot <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+Subject: Re: [linux-next:master] [mm] f1a7941243: unixbench.score -5.1%
+ regression
+References: <202212051324.182a6363-yujie.liu@intel.com>
+        <CALvZod4CD+O7-ynGAHU-6vxE6CbSmuQei1=SVJsx0zFfQdmV2g@mail.gmail.com>
+Date:   Tue, 06 Dec 2022 10:41:00 +0800
+In-Reply-To: <CALvZod4CD+O7-ynGAHU-6vxE6CbSmuQei1=SVJsx0zFfQdmV2g@mail.gmail.com>
+        (Shakeel Butt's message of "Mon, 5 Dec 2022 09:18:28 -0800")
+Message-ID: <875yepfe4j.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5.4 000/153] 5.4.226-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221205190808.733996403@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221205190808.733996403@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 12:08, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.226 release.
-> There are 153 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 07 Dec 2022 19:07:46 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.226-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Shakeel Butt <shakeelb@google.com> writes:
 
-Compiled and booted on my test system. No dmesg regressions.
+> On Sun, Dec 4, 2022 at 9:56 PM kernel test robot <yujie.liu@intel.com> wr=
+ote:
+>>
+>> Greeting,
+>>
+>> FYI, we noticed a -5.1% regression of unixbench.score due to commit:
+>>
+> [...]
+>> 9cd6ffa60256e931 f1a7941243c102a44e8847e3b94
+>> ---------------- ---------------------------
+>>          %stddev     %change         %stddev
+>>              \          |                \
+>>       7917            -5.1%       7509        unixbench.score
+>
+> What is unixbench.score?
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Should be benchmark throughput.
 
-thanks,
--- Shuah
+>>      10485           -12.1%       9216        unixbench.time.maximum_res=
+ident_set_size
+
+This should reflect accuracy change of per_cpu_counter.
+
+>>   37236706            -5.1%   35324104        unixbench.time.minor_page_=
+faults
+
+The reduction is same as benchmark score.  So I think this reflect the
+nature of time-bound testing (instead of workload-bound).
+
+> For above two, is negative change good or bad?
+>
+>>       0.98 =C4=85 20%      +0.7        1.64 =C4=85 38%  perf-profile.cal=
+ltrace.cycles-pp.link_path_walk.path_openat.do_filp_open.do_sys_openat2.__x=
+64_sys_openat
+>>       2.12 =C4=85 19%      +0.8        2.96 =C4=85 13%  perf-profile.cal=
+ltrace.cycles-pp.handle_mm_fault.do_user_addr_fault.exc_page_fault.asm_exc_=
+page_fault
+>>       2.35 =C4=85 13%      +0.9        3.28 =C4=85 13%  perf-profile.cal=
+ltrace.cycles-pp.__handle_mm_fault.handle_mm_fault.do_user_addr_fault.exc_p=
+age_fault.asm_exc_page_fault
+>>       0.14 =C4=85 74%      +0.4        0.55 =C4=85 32%  perf-profile.chi=
+ldren.cycles-pp.do_task_dead
+>>       0.04 =C4=85223%      +0.4        0.47 =C4=85 49%  perf-profile.chi=
+ldren.cycles-pp.__mmdrop
+>
+> Also how should I interpret the above perf-profiles?
+
+It appears that the changes of handle_mm_fault() and __mmdrop() are
+related to the code of the commit?  That is, for this specific workloads
+(not so unpractical), the operations become slower?
+
+Best Regards,
+Huang, Ying
