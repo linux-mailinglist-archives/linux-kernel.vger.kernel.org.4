@@ -2,129 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A46643BA2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FCE643BA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:08:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbiLFDFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:05:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S233778AbiLFDI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:08:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLFDFe (ORCPT
+        with ESMTP id S230293AbiLFDIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:05:34 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C211B7A7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:05:33 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id c7so8921246iof.13
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 19:05:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yQf4ZY8NnOfS/XZrZYFBrjz8jiMgg2iTJlvBgkUiKnI=;
-        b=B+LESh4NfFlaJrLJhK/+R7eY67yJrRUrFyBNEy7rQqgfKZgNOsllOH5A1HjUSu/ACQ
-         rsaWsGUGxWXYWSHjOt8TVfCBD2CotfmtlqbiiuUugWxre3rmsuJh4v2L1QJbmlDT3HAx
-         2HUMv63gCgipquCzvHgqPHRhfnuULE9027jRi2a7vwv6bdt9XL75QNqhDMvqbg1T0cLC
-         D45HYjkIFDn8/Y/VFSWKLiS5uBDcMx9uw6hW0qdzJEd+AAfln962A3xS9dEhEiQKEdQp
-         tS2SwV8gIDqXMiDu7AoyPPSZ/r61a0tn8I+wI4YWG9rW6wH5F0sZTOkXLAbpU0NR8Yao
-         PH1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yQf4ZY8NnOfS/XZrZYFBrjz8jiMgg2iTJlvBgkUiKnI=;
-        b=6Duq9Cs4a8V+jqxIqVKn2Hhj/remkRcawZmM7TkI7Y4fr0+TD5YbHDcFUAFub85y9s
-         R0QWrkM7YR1GS3r7mNlKjICyrdgrQ10llPdi2YWqcTz/ee6/0R+bGxa+LI3ZE891WTsO
-         NFB90imgtRUcDiWPOjHIn50L0iu1oBdHL98wpSDPRqqRX7pK69zlUsDUy56yMxcoopnF
-         +pjp560lSVcSvkGJi0g55J7urVxB2oEECmuBhjoRn0nzWFAFuqXUGtD0SUR4g6ezU94b
-         RZoOzt6icCpGj9U7xIJofGxZ0gy0XiOXe6jRkEYad72PbThfq85Pp/bqgzT8ffpjVKFn
-         1hJg==
-X-Gm-Message-State: ANoB5pn9I95khXBONkYHgPJ1P/2R2fr6og+UZRIKaw09buXPGLSA0ySa
-        CP5UZO6AD3ypZvLQIUH9AXFjBJaj4Me6KFDg
-X-Google-Smtp-Source: AA0mqf5RyDbcFgJcCuznHg/LSos18Hg/iENVPFz7iPLYoFND0sWm3/uY1TqH7HaYlk3NyHApBqPE0Q==
-X-Received: by 2002:a05:6638:37a5:b0:363:dd45:9df6 with SMTP id w37-20020a05663837a500b00363dd459df6mr40029387jal.274.1670295932596;
-        Mon, 05 Dec 2022 19:05:32 -0800 (PST)
-Received: from [10.211.55.3] ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id o62-20020a022241000000b00389d2ff28a5sm6410719jao.47.2022.12.05.19.05.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 19:05:32 -0800 (PST)
-Message-ID: <39903fb5-fd28-c159-b300-47d3ec4cd0fc@linaro.org>
-Date:   Mon, 5 Dec 2022 21:05:30 -0600
+        Mon, 5 Dec 2022 22:08:25 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D8BD640C;
+        Mon,  5 Dec 2022 19:08:21 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowABXX5cWso5jFUbkBA--.26373S2;
+        Tue, 06 Dec 2022 11:08:06 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH net] ice: Add check for kzalloc
+Date:   Tue,  6 Dec 2022 11:08:05 +0800
+Message-Id: <20221206030805.15934-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Alex Elder <elder@linaro.org>
-Cc:     sboyd@kernel.org, mturquette@baylibre.com,
-        konrad.dybcio@linaro.org, agross@kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221202221240.225720-1-elder@linaro.org>
- <20221205225646.gtwhakd4lxh6vlfc@builder.lan>
-From:   Alex Elder <alex.elder@linaro.org>
-In-Reply-To: <20221205225646.gtwhakd4lxh6vlfc@builder.lan>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowABXX5cWso5jFUbkBA--.26373S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWrur4rKw1fKF4DGw4fuFg_yoW8Xr4rpa
+        n8JFyjvrW8Jr4UWr9xXF4qyFZ8Wa4xJ34Sga9rX398ZF1Dtr15t3WDKryYyr1rGrW3ZFsI
+        yF45AF13uF92vw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUjQBMtUUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 4:56 PM, Bjorn Andersson wrote:
-> On Fri, Dec 02, 2022 at 04:12:40PM -0600, Alex Elder wrote:
->> From: Luca Weiss <luca.weiss@fairphone.com>
->>
->> The IPA core clock is required for SM6350.  Define it.
->>
->> [elder@linaro.org: rebased with Dmitry's changes]
->> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+As kzalloc may fail and return NULL pointer,
+it should be better to check the return value
+in order to avoid the NULL pointer dereference.
 
-Sorry about that, I knew I was supposed to sign
-off and thought I had.
+Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/net/ethernet/intel/ice/ice_gnss.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-You told me separately that this was sufficient:
-
-Signed-off-by: Alex Elder <elder@linaro.org>
-
-If you want me to send a new version with the
-signoff just let me know.  Thanks.
-
-					-Alex
-> 
-> Thanks for rebasing this Alex. But as you're handling the patch you need
-> to add your S-o-b; which will make sure your [] makes sense as well.
-> 
-> Regards,
-> Bjorn
-> 
->> ---
->> v2: This is now based on qualcomm/for-next.
->>
->>   drivers/clk/qcom/clk-rpmh.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
->> index 2c2ef4b6d130e..586a810c682ca 100644
->> --- a/drivers/clk/qcom/clk-rpmh.c
->> +++ b/drivers/clk/qcom/clk-rpmh.c
->> @@ -606,6 +606,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
->>   	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_ln_bb_clk3_g4_ao.hw,
->>   	[RPMH_QLINK_CLK]	= &clk_rpmh_qlink_div4.hw,
->>   	[RPMH_QLINK_CLK_A]	= &clk_rpmh_qlink_div4_ao.hw,
->> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
->>   };
->>   
->>   static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
->> -- 
->> 2.34.1
->>
+diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
+index b5a7f246d230..6d3d5e75726b 100644
+--- a/drivers/net/ethernet/intel/ice/ice_gnss.c
++++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
+@@ -421,7 +421,7 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+ 	const int ICE_TTYDRV_NAME_MAX = 14;
+ 	struct tty_driver *tty_driver;
+ 	char *ttydrv_name;
+-	unsigned int i;
++	unsigned int i, j;
+ 	int err;
+ 
+ 	tty_driver = tty_alloc_driver(ICE_GNSS_TTY_MINOR_DEVICES,
+@@ -462,6 +462,17 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+ 					       GFP_KERNEL);
+ 		pf->gnss_serial[i] = NULL;
+ 
++		if (!pf->gnss_tty_port[i]) {
++			for (j = 0; j < i; j++) {
++				tty_port_destroy(pf->gnss_tty_port[j]);
++				kfree(pf->gnss_tty_port[j]);
++			}
++			kfree(ttydrv_name);
++			tty_driver_kref_put(pf->ice_gnss_tty_driver);
++
++			return NULL;
++		}
++
+ 		tty_port_init(pf->gnss_tty_port[i]);
+ 		tty_port_link_device(pf->gnss_tty_port[i], tty_driver, i);
+ 	}
+-- 
+2.25.1
 
