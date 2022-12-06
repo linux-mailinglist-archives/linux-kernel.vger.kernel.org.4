@@ -2,192 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B02643BE6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4599F643BEB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233532AbiLFDbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:31:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
+        id S232548AbiLFDe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:34:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiLFDbM (ORCPT
+        with ESMTP id S230036AbiLFDey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:31:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB03E2529D;
-        Mon,  5 Dec 2022 19:31:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66E0161544;
-        Tue,  6 Dec 2022 03:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA1EC4314C;
-        Tue,  6 Dec 2022 03:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670297470;
-        bh=WTSRU6KLdB/pQeJp68FTfceCK6cjixmp3Lyduir0Gs4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vLH2LVEkHwJsBPC1GJMcIr41vD1EW94svc9hSWdIdm1ftg7csd8xM57DLRGB0lZNh
-         BVNYRTeDp8xBod7ZnBTDHfMU6oZN22cABGRjp7sbYFX5NAqRPileMx3tJY+3+ghror
-         NYng5uDND0otXNHw6hQ6ifHJFBdlPbkhb3cekluzKy5VyXB8lxcyVb+DtcKC5ZOfx5
-         TBc7e+8BmE3YdcEIxNuhUiCjndrg8MoC3tNj973km5xC6TfzyHLQpYjt12rc4wRbpN
-         KOCiC9CSsNCyy2+jc7fMy6ngpb22AY0hoHtcsB4lDl32O4SzC+ta9nW2LAum0cmQst
-         Lz3B4qSAt95tQ==
-Received: by mail-ej1-f52.google.com with SMTP id x22so3070033ejs.11;
-        Mon, 05 Dec 2022 19:31:10 -0800 (PST)
-X-Gm-Message-State: ANoB5pk9hVHgjyiwq+DExM7yFX+e03F9SJDCMwCEpeh9JgPIwRwkvpr3
-        TPjiy1R0nFR/fyLxOYiyY1O+JWEnfDUHpf+UAKE=
-X-Google-Smtp-Source: AA0mqf44re6Z38rA7EyJ0JPXaL1H4hkISmoWkhymcUfiUEQwHIJ7eHGkrkUCB8jo2EqvVlNyrHh5arNq1dTjGhg2PVQ=
-X-Received: by 2002:a17:906:1e4a:b0:78d:3505:6f3e with SMTP id
- i10-20020a1709061e4a00b0078d35056f3emr69420048ejj.611.1670297468584; Mon, 05
- Dec 2022 19:31:08 -0800 (PST)
+        Mon, 5 Dec 2022 22:34:54 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13D817AA5
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:34:53 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id a9so12710778pld.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 19:34:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PHYJa3J3t18km/Z2gjWUFE8PEpWCpwo/WtNH2bdNblg=;
+        b=g5AGkeK8aEcms//ZBvjF0SoZMgsokz8SkcXL3u4h2va7941ALx6Gv9sCD6rySUhC9w
+         EaYjJLsy62c5nbf9Et6aotaahkeO91Njqn9nAQCuou7On7iZ8fjDpSZ9nAc3zp7v7n7y
+         XIf5B8M1QlnQn1Jj8VpwpMu8ZxU6oCSAOCoB59COU2KDXwUTE27K0Zq74hOS83Pqel33
+         hb99S7wtBLtGDQdtcaBHJcmCsWCZmS5BDqI4fH60FiwmR5qAIn4kIYwSowH3z/yYqHok
+         eEsUYTG6RB+pb70aIyCRxJ9sQlu3nIGErYPVzkZxOAsgTNmfVOHW1H8W0TmSvrgexPNx
+         cySg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PHYJa3J3t18km/Z2gjWUFE8PEpWCpwo/WtNH2bdNblg=;
+        b=zeOYSoebr0mNP4XYVChKw5Xy2zWnsfp3pfWE3D/YhyNzZzUDHpAdfBT54nKVodz7bs
+         wtEVh8E3kluJbcke9cSyGPDt3gQkxM6fMUZ6zm94id0wo3i5yydXJf3ipRxgGLTMJmhm
+         YabPY3Mxi7f/LaUbiZQwIuC7JK3StfJQs6ATH9W6PLXi+2Ew81PLjA02gxlqQx5T1wSn
+         lKYZyG6HKKTLSr9FIV74w7cWRgiWAka5tfuLV9LTX/0tOix9dRd/z8cWUDIM1mg9WwH1
+         DRhKI5qW50qyE37iNVvmbegYPR5G3lkkjm+F7PaYD3HWDgSANSHXaBcAreptq06XeXFX
+         +Gyg==
+X-Gm-Message-State: ANoB5pkztbWgyVHwj2PajWabmZdHgOw5FFo7FrIzuWMwUEstmIh+4AKg
+        /FPYKwThQ2gggZz5tYEzoHdotg==
+X-Google-Smtp-Source: AA0mqf6KDYdtsr9TKVQrgpUHo/vuLpTuRfrjeB9qfVGWssoqjFUriHxIUq14JbVAxVq7WZFeBDI2wA==
+X-Received: by 2002:a17:90b:793:b0:218:9c4f:e97 with SMTP id l19-20020a17090b079300b002189c4f0e97mr83419380pjz.2.1670297693353;
+        Mon, 05 Dec 2022 19:34:53 -0800 (PST)
+Received: from dread.disaster.area (pa49-181-54-199.pa.nsw.optusnet.com.au. [49.181.54.199])
+        by smtp.gmail.com with ESMTPSA id a14-20020a170902ecce00b00186b1bfbe79sm11372053plh.66.2022.12.05.19.34.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 19:34:52 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1p2OjK-0052kM-6w; Tue, 06 Dec 2022 14:34:50 +1100
+Date:   Tue, 6 Dec 2022 14:34:50 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>
+Cc:     djwong@kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
+Message-ID: <20221206033450.GS3600936@dread.disaster.area>
+References: <000000000000bd587705ef202b08@google.com>
 MIME-Version: 1.0
-References: <20221109064937.3643993-3-guoren@kernel.org> <mhng-c6cdc161-cab9-4d2d-acaa-ed81f87c14f3@palmer-ri-x1c9a>
-In-Reply-To: <mhng-c6cdc161-cab9-4d2d-acaa-ed81f87c14f3@palmer-ri-x1c9a>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 6 Dec 2022 11:30:56 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQkSZun6r8DEcJtahLCq5Oq2hQ3sgDyc1WRCfgGc5wjLg@mail.gmail.com>
-Message-ID: <CAJF2gTQkSZun6r8DEcJtahLCq5Oq2hQ3sgDyc1WRCfgGc5wjLg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] riscv: stacktrace: Make walk_stackframe cross pt_regs frame
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     anup@brainfault.org, Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
-        peterz@infradead.org, Arnd Bergmann <arnd@arndb.de>,
-        linux-arch@vger.kernel.org, keescook@chromium.org,
-        paulmck@kernel.org, frederic@kernel.org, nsaenzju@redhat.com,
-        changbin.du@intel.com, vincent.chen@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        guoren@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000bd587705ef202b08@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 10:59 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->
-> On Tue, 08 Nov 2022 22:49:37 PST (-0800), guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > The current walk_stackframe with FRAME_POINTER would stop unwinding at
-> > ret_from_exception:
-> >   BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
-> >   in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
-> >   CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
-> >   Call Trace:
-> >   [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
-> >   [<ffffffe000aecf48>] show_stack+0x32/0x4a
-> >   [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
-> >   [<ffffffe000af1648>] dump_stack+0x14/0x1c
-> >   [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
-> >   [<ffffffe000239aec>] __might_sleep+0x10/0x18
-> >   [<ffffffe000afe3fe>] down_read+0x22/0xa4
-> >   [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
-> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-> >
-> > The optimization would help walk_stackframe cross the pt_regs frame and
-> > get more backtrace of debug info:
-> >   BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
-> >   in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
-> >   CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
-> >   Call Trace:
-> >   [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
-> >   [<ffffffe000aecf48>] show_stack+0x32/0x4a
-> >   [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
-> >   [<ffffffe000af1648>] dump_stack+0x14/0x1c
-> >   [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
-> >   [<ffffffe000239aec>] __might_sleep+0x10/0x18
-> >   [<ffffffe000afe3fe>] down_read+0x22/0xa4
-> >   [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
-> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-> >   [<ffffffe000613c06>] riscv_intc_irq+0x1a/0x72
-> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-> >   [<ffffffe00033f44a>] vma_link+0x54/0x160
-> >   [<ffffffe000341d7a>] mmap_region+0x2cc/0x4d0
-> >   [<ffffffe000342256>] do_mmap+0x2d8/0x3ac
-> >   [<ffffffe000326318>] vm_mmap_pgoff+0x70/0xb8
-> >   [<ffffffe00032638a>] vm_mmap+0x2a/0x36
-> >   [<ffffffe0003cfdde>] elf_map+0x72/0x84
-> >   [<ffffffe0003d05f8>] load_elf_binary+0x69a/0xec8
-> >   [<ffffffe000376240>] bprm_execve+0x246/0x53a
-> >   [<ffffffe00037786c>] kernel_execve+0xe8/0x124
-> >   [<ffffffe000aecdf2>] run_init_process+0xfa/0x10c
-> >   [<ffffffe000aece16>] try_to_run_init_process+0x12/0x3c
-> >   [<ffffffe000afa920>] kernel_init+0xb4/0xf8
-> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
-> >
-> > Here is the error injection test code for the above output:
-> >  drivers/irqchip/irq-riscv-intc.c:
-> >  static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
-> >  {
-> >         unsigned long cause = regs->cause & ~CAUSE_IRQ_FLAG;
-> > +       u32 tmp; __get_user(tmp, (u32 *)0);
-> >
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
-> > Cc: Changbin Du <changbin.du@intel.com>
-> > ---
-> >  arch/riscv/kernel/entry.S      | 2 +-
-> >  arch/riscv/kernel/stacktrace.c | 9 +++++++++
-> >  2 files changed, 10 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
-> > index b9eda3fcbd6d..329cf51fcd4d 100644
-> > --- a/arch/riscv/kernel/entry.S
-> > +++ b/arch/riscv/kernel/entry.S
-> > @@ -248,7 +248,7 @@ ret_from_syscall_rejected:
-> >       andi t0, t0, _TIF_SYSCALL_WORK
-> >       bnez t0, handle_syscall_trace_exit
-> >
-> > -ret_from_exception:
-> > +ENTRY(ret_from_exception)
->
-> This at least needs an END(), but it should also be converted over to
-Yes, I missed END() here.
+On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
+> Hello,
+> 
+> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> INFO: rcu detected stall in corrupted
+> 
+> rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
+> rcu: blocking rcu_node structures (internal RCU debug):
 
-> some non-function entry flavor.  I converted it over to
-> SYM_CODE_START_NOALIGN(), with the cooresponding SYM_CODE_END(), and put
-> it on for-next.
-Is that also for ret_from_fork & __switch_to?
+I'm pretty sure this has nothing to do with the reproducer - the
+console log here:
 
->
-> >       REG_L s0, PT_STATUS(sp)
-> >       csrc CSR_STATUS, SR_IE
-> >  #ifdef CONFIG_TRACE_IRQFLAGS
-> > diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
-> > index bcfe9eb55f80..75c8dd64fc48 100644
-> > --- a/arch/riscv/kernel/stacktrace.c
-> > +++ b/arch/riscv/kernel/stacktrace.c
-> > @@ -16,6 +16,8 @@
-> >
-> >  #ifdef CONFIG_FRAME_POINTER
-> >
-> > +extern asmlinkage void ret_from_exception(void);
-> > +
-> >  void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
-> >                            bool (*fn)(void *, unsigned long), void *arg)
-> >  {
-> > @@ -59,6 +61,13 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
-> >                       fp = frame->fp;
-> >                       pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
-> >                                                  &frame->ra);
-> > +                     if (pc == (unsigned long)ret_from_exception) {
-> > +                             if (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
-> > +                                     break;
-> > +
-> > +                             pc = ((struct pt_regs *)sp)->epc;
-> > +                             fp = ((struct pt_regs *)sp)->s0;
-> > +                     }
-> >               }
-> >
-> >       }
+> Tested on:
+> 
+> commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
 
+indicates that syzbot is screwing around with bluetooth, HCI,
+netdevsim, bridging, bonding, etc.
 
+There's no evidence that it actually ran the reproducer for the bug
+reported in this thread - there's no record of a single XFS
+filesystem being mounted in the log....
+
+It look slike someone else also tried a private patch to fix this
+problem (which was obviously broken) and it failed with exactly the
+same RCU warnings. That was run from the same commit id as the
+original reproducer, so this looks like either syzbot is broken or
+there's some other completely unrelated problem that syzbot is
+tripping over here.
+
+Over to the syzbot people to debug the syzbot failure....
+
+-Dave.
 
 -- 
-Best Regards
- Guo Ren
+Dave Chinner
+david@fromorbit.com
