@@ -2,75 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE025644C93
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:35:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3FC644C9B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiLFTfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:35:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S229802AbiLFThs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:37:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLFTfv (ORCPT
+        with ESMTP id S229779AbiLFThq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:35:51 -0500
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D624387D
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:35:50 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id l11so21861543edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:35:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WponI/OPvT2mcKk8dSrH3qaEn42D5K3v3G8XrPmRpsk=;
-        b=OdxbijA70i9J53/AspRFrAMIP/Z5xK9PGlFLF0FzSq3QZT9PV2KYfAE930hMWeIZRE
-         QzDCA7oDOSltTWxshuGDkFcazRCrz2KreOhBWPPtj0PUgqp2IqKs6jZjKyeO1Mu3I9Er
-         0cFpOoIiiywnNgfvTRRHnHgCpnA3/U2W8Jl6ST+EENwQa1uXxNvyKcGgvatjCK+cPzIc
-         FKOP2AstKicp8cKUq1/ZK1AC1B0/WpvQ1Gj0jj9CC3xmARgUD44Vvr+iQVVrUCa6XVeD
-         A3tzoR+3Ns2F3JuBlhgAzFdpV1jy6b1DtvknWoz2k6InjjOIgFu7ExGlFuGvBZVev3OS
-         Mi3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=WponI/OPvT2mcKk8dSrH3qaEn42D5K3v3G8XrPmRpsk=;
-        b=1C9tcZticI3b8zoByYngSY0l8TAE65lf5fpX4VGhpB4/zDuS8x3FIg1AfsdKjB4xvj
-         uQrCQT/lozB0j383BKasT0SRDAVdglDxjTCjnmYP/UFNoezn3/j4oY0xNZDqQOzsVyC9
-         0gr+k5nyzERewpx4CjTAI1pGNyIJP7WWqlQU0CDEKZVGxHbmzFtL8J7eqOQP8Jabnupy
-         rTMekOlTUTSYhd99Ap2uYj+ETRedhLRkxe0LbsuvYLLVCtKK/dPzAZFcMdlijVQsE//H
-         69xJd/AEfczKSKTDlCWlF+QKBJhY1ElwcPXjBEqKCQ0yR1hv90jaLweKTmO+SjZ/QFY0
-         R8Uw==
-X-Gm-Message-State: ANoB5pljkiI23sz3pfnuEbgfwrMXopf5JXWj0l1H/20W7ZF5F7n2nzJo
-        0LdrjiGUzLRyi6Eue94UKtTTeA==
-X-Google-Smtp-Source: AA0mqf5WbHP6QRYexxGulOL+ronjmWrCEU5oYEOi/Z9KlvjMcSc8JQ4FERp6VhWuHCGGbcTT1fL4wQ==
-X-Received: by 2002:a05:6402:248e:b0:461:e2ab:912d with SMTP id q14-20020a056402248e00b00461e2ab912dmr63906605eda.93.1670355348784;
-        Tue, 06 Dec 2022 11:35:48 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id dn18-20020a05640222f200b00463b9d47e1fsm1326366edb.71.2022.12.06.11.35.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 11:35:47 -0800 (PST)
-Message-ID: <c338d813-dbcd-776b-3c46-d3779bfea522@linaro.org>
-Date:   Tue, 6 Dec 2022 20:35:40 +0100
+        Tue, 6 Dec 2022 14:37:46 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A96091B1C6;
+        Tue,  6 Dec 2022 11:37:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670355464; x=1701891464;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=vN4lwqnsGyDLulqDpchOlpMKkxyM2VICPVBXfraX+Uk=;
+  b=JD+DLY4Y0mVx3afohGeWqirW8SmYFReP1HkXsK6XxDt6593rAN9M7EgN
+   zjgyiALKve9RA/RDjvQFXu1Z/kuUrbwtjoPLRAfFlE6wyLvoVjG85AHpA
+   UYHDxsjkimIthQCg7slPBO4eKiVKuDAENaXo8Fc35cpk5SZ354PiqoXh4
+   P/MNxguLT+ooavuF5roEKSRTNtDmt6rIngs0IJE51Pii7NjVtpVsUwQgP
+   BVnbvCSWwZYF3jb4wu0LWD70zPTE/Oap8LkKUCzVvTMVF9g+uv3ifqQOE
+   O6gOen7MiuOUiuF2TCq1UVXmwom827APHi5uRNOeF8rV3du3btQCBoEbT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="317853305"
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="317853305"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 11:37:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="639989304"
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="639989304"
+Received: from smaslov-mobl3.amr.corp.intel.com (HELO [10.251.23.186]) ([10.251.23.186])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 11:37:43 -0800
+Message-ID: <51fb66d6-f2e0-f11c-68a3-525723d56dd4@linux.intel.com>
+Date:   Tue, 6 Dec 2022 11:37:42 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH 0/2] Add SM4250 RPM power domain support
-To:     Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, bhupesh.sharma@linaro.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, rnayak@codeaurora.org,
-        bhupesh.linux@gmail.com, agross@kernel.org
-References: <20221127112204.1486337-1-bhupesh.sharma@linaro.org>
- <167035076344.3155086.2883117402843264050.b4-ty@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <167035076344.3155086.2883117402843264050.b4-ty@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.2
+Subject: Re: [Patch v4 05/13] init: Call mem_encrypt_init() after Hyper-V
+ hypercall init is done
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, luto@kernel.org, peterz@infradead.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, isaku.yamahata@intel.com,
+        dan.j.williams@intel.com, jane.chu@oracle.com, seanjc@google.com,
+        tony.luck@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
+ <1669951831-4180-6-git-send-email-mikelley@microsoft.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <1669951831-4180-6-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,27 +81,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 06/12/2022 19:18, Bjorn Andersson wrote:
-> On Sun, 27 Nov 2022 16:52:02 +0530, Bhupesh Sharma wrote:
->> Add RPM power domain support for SM4250.
->>
->> Cc: Bjorn Andersson <andersson@kernel.org>
->> Cc: Rajendra Nayak <rnayak@codeaurora.org>
->> Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->>
->> [...]
-> 
-> Applied, thanks!
-> 
-> [1/2] dt-bindings: power: rpmpd: Add SM4250 support
->        commit: 45ac44ed10e58cf9b510e6552317ed7d2602346f
-> [2/2] soc: qcom: rpmpd: Add SM4250 support
->        commit: 5b617b1b10c1c6a4365d8f956032e95c53b8e388
-> 
-> Best regards,
-This may deserve a revert.. it's a 1:1 copy of 6115, which, well..
-is the same SoC, lower binned. And they share a common dts.
+On 12/1/22 7:30 PM, Michael Kelley wrote:
+> Full Hyper-V initialization, including support for hypercalls, is done
+> as an apic_post_init callback via late_time_init().  mem_encrypt_init()
+> needs to make hypercalls when it marks swiotlb memory as decrypted.
+> But mem_encrypt_init() is currently called a few lines before
+> late_time_init(), so the hypercalls don't work.
 
-Konrad
+Did you consider moving hyper-v hypercall initialization before
+ mem_encrypt_init(). Is there any dependency issue?
+
+> 
+> Fix this by moving mem_encrypt_init() after late_time_init() and
+> related clock initializations. The intervening initializations don't
+> do any I/O that requires the swiotlb, so moving mem_encrypt_init()
+> slightly later has no impact.
+> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+> ---
+>  init/main.c | 19 +++++++++++--------
+>  1 file changed, 11 insertions(+), 8 deletions(-)
+> 
+> diff --git a/init/main.c b/init/main.c
+> index e1c3911..5a7c466 100644
+> --- a/init/main.c
+> +++ b/init/main.c
+> @@ -1088,14 +1088,6 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>  	 */
+>  	locking_selftest();
+>  
+> -	/*
+> -	 * This needs to be called before any devices perform DMA
+> -	 * operations that might use the SWIOTLB bounce buffers. It will
+> -	 * mark the bounce buffers as decrypted so that their usage will
+> -	 * not cause "plain-text" data to be decrypted when accessed.
+> -	 */
+> -	mem_encrypt_init();
+> -
+>  #ifdef CONFIG_BLK_DEV_INITRD
+>  	if (initrd_start && !initrd_below_start_ok &&
+>  	    page_to_pfn(virt_to_page((void *)initrd_start)) < min_low_pfn) {
+> @@ -1112,6 +1104,17 @@ asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
+>  		late_time_init();
+>  	sched_clock_init();
+>  	calibrate_delay();
+> +
+> +	/*
+> +	 * This needs to be called before any devices perform DMA
+> +	 * operations that might use the SWIOTLB bounce buffers. It will
+> +	 * mark the bounce buffers as decrypted so that their usage will
+> +	 * not cause "plain-text" data to be decrypted when accessed. It
+> +	 * must be called after late_time_init() so that Hyper-V x86/x64
+> +	 * hypercalls work when the SWIOTLB bounce buffers are decrypted.
+> +	 */
+> +	mem_encrypt_init();
+> +
+>  	pid_idr_init();
+>  	anon_vma_init();
+>  #ifdef CONFIG_X86
+
+-- 
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
