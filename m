@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CBE96447C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:16:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F766447CC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:17:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235375AbiLFPQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:16:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
+        id S234523AbiLFPRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:17:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235314AbiLFPPp (ORCPT
+        with ESMTP id S234839AbiLFPQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:15:45 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A4C2EF00;
-        Tue,  6 Dec 2022 07:11:51 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-14449b7814bso12793522fac.3;
-        Tue, 06 Dec 2022 07:11:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U2aqfWiC18IWaJPfen75guUebWdcC57mYfUOjSginJ8=;
-        b=X7P/ipumWPrS53pnFJPhLt9S4ZXC7xstFKw+LYRBYGoL8V0635Ef1gkYhcHKzrb5f+
-         MnlhsS3zuxOw6FgQJzYWNFVPlP72Fxi3cjXv0Mn02oa0Kpc0I7OoLMMnHcbfzjJjWoBD
-         FCxxZhOh322UZ9AEOQpL5Bj3+/3JUvzcZ9/g/bM9Azk0VvxCsY3epXqZT6C9GI1dg2jh
-         B+4hTmqjjLQkq4dd/+Bycm6d0CWrvTterUKqz1nvNKCBibmHtLrpHgNQHwpFts0k1/EO
-         1ZdnlgJs/mT8Id2NlA0DXnbbio5r/chWWGhX3/lmUpe2WPR2x/nkGEQQbXnqLEStA55o
-         MH8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U2aqfWiC18IWaJPfen75guUebWdcC57mYfUOjSginJ8=;
-        b=eo716D619xsd8JSLvR1ODpBlFV6Un2iM0c4jRqKXjCNfrYL6lO/uzLhvTOqhxwnHA7
-         +aLhLyOBZmQJF06WmcHEQLiGT/ifkZlov8rEAhhtpTONfuKmB1tGpbTRoaiCv6zH9wH3
-         LIkGAJ5w4Y2Rf9G4R/3ccNr+ZlkIullfYFHko+1OQ0zrUJ6xTtuqNT5cvvdaCrXLsIPS
-         zNcOCgHWpRBP/UzaFY7/tyDhRWkdFJ5xc114TEUaoF8I10L9PxLxsNIJhLa4JvPD9m3a
-         OkoIbU6sh8/Xmi+IvFbWXkuGvSTbB8/CIT/LNspmlpprD/tLdzc3oqv+dBa8swpfiWAi
-         eriQ==
-X-Gm-Message-State: ANoB5pl8atDYpCDttJfez94JwhrY3QDlFxcyXK+jE1VKDfea4B3405f4
-        uBgJyg5Ss6b8uY7fVqteuJg=
-X-Google-Smtp-Source: AA0mqf5k6TyODTmFnas1gSjxxVcp5bgqj2cC6uaE41NtITw/OPvmc0Mnf/joQBZzQK8uqXxfMoApAg==
-X-Received: by 2002:a05:6870:9d95:b0:13b:a163:ca6 with SMTP id pv21-20020a0568709d9500b0013ba1630ca6mr53683510oab.125.1670339501593;
-        Tue, 06 Dec 2022 07:11:41 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id ce11-20020a056830628b00b00670461b8be4sm2200619otb.33.2022.12.06.07.11.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 07:11:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <792a6fba-aa15-2e2a-7527-99ab1116a01d@roeck-us.net>
-Date:   Tue, 6 Dec 2022 07:11:39 -0800
+        Tue, 6 Dec 2022 10:16:49 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5BAE59;
+        Tue,  6 Dec 2022 07:12:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670339556; x=1701875556;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UQPpoMYHgojZ0s9I/vYi4H/g6UU0D10ansdSCf8jK0c=;
+  b=ijN4fQwf305Hp7GZB8DInTtwuofxS3O635wJ86UrZ6X36WoPvuXP0lwr
+   B7xE2OdFwYoi3ByN4Wq98ekykg3IiO0wVQjReMFHQb1NjpuFJle7szdQ6
+   ezZJMZU00ti5Cvvp9TALL7W7+IrQbUBZMGT/zPxl7toGKhSPkfWAnZHmk
+   mnAYizn98lODQ5hl/WX2jZ9zZC341lIK6Goz52xyQuIIKV/Fv7EiMxsBA
+   W3TPit80AJH6NXf19SWRi3uzmN+2hmkZSxj9Sl3m1lYbndSndGxrkUBDm
+   Yx9x3mwgbVC9KjV0RQYgUxeKG4+XlVQQgcMeouKloRRO3LprcHThVE4ri
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="378807875"
+X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
+   d="scan'208";a="378807875"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 07:12:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="639904605"
+X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
+   d="scan'208";a="639904605"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2022 07:12:13 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p2ZcB-005MBU-0N;
+        Tue, 06 Dec 2022 17:12:11 +0200
+Date:   Tue, 6 Dec 2022 17:12:10 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     ye.xingchen@zte.com.cn
+Cc:     jic23@kernel.org, michael.hennerich@analog.com, lars@metafoo.de,
+        u.kleine-koenig@pengutronix.de, jk@codeconstruct.com.au,
+        wsa@kernel.org, ddrokosov@sberdevices.ru, hdegoede@redhat.com,
+        haibo.chen@nxp.com, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: accel: Convert to use sysfs_emit_at() API
+Message-ID: <Y49byhJ/Yn5/I28d@smile.fi.intel.com>
+References: <202212061953201070549@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221206124052.595650754@linuxfoundation.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.15 000/123] 5.15.82-rc2 review
-In-Reply-To: <20221206124052.595650754@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212061953201070549@zte.com.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/22 04:42, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.82 release.
-> There are 123 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Tue, Dec 06, 2022 at 07:53:20PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
-> Anything received after that time might be too late.
-> 
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 
-arch/riscv/kernel/smp.c: In function 'handle_IPI':
-arch/riscv/kernel/smp.c:195:44: error: 'cpu' undeclared (first use in this function)
-   195 |                         ipi_cpu_crash_stop(cpu, get_irq_regs());
-       |                                            ^~~
-arch/riscv/kernel/smp.c:195:44: note: each undeclared identifier is reported only once for each function it appears in
-arch/riscv/kernel/smp.c:217:22: error: 'old_regs' undeclared (first use in this function)
-   217 |         set_irq_regs(old_regs);
-       |                      ^~~~~~~~
+Please split on per device driver basis (3 patches here).
 
-This is with v5.15.81-124-g9269e46bc838.
+The code looks fine to me, thanks.
 
-The backport of commit 9b932aadfc47d seems wrong. The original version introduces
-the cpu variable in handle_IPI(). The backport doesn't, and removes old_regs
-instead.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Backport:
-
-  void handle_IPI(struct pt_regs *regs)
-  {
--       struct pt_regs *old_regs = set_irq_regs(regs);
-         unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
-         unsigned long *stats = ipi_data[smp_processor_id()].stats;
-
-Original:
-
-void handle_IPI(struct pt_regs *regs)
-  {
--       unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
--       unsigned long *stats = ipi_data[smp_processor_id()].stats;
-+       unsigned int cpu = smp_processor_id();
-+       unsigned long *pending_ipis = &ipi_data[cpu].bits;
-+       unsigned long *stats = ipi_data[cpu].stats;
-
-Upstream includes commit 7ecbc648102f which removes the old_regs variable.
-That doesn't mean it can be removed in the backport.
-
-Guenter
 
