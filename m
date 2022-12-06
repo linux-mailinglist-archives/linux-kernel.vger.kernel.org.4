@@ -2,84 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CCE64414E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6381644159
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbiLFKb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:31:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
+        id S234270AbiLFKh7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234216AbiLFKbr (ORCPT
+        with ESMTP id S230450AbiLFKhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:31:47 -0500
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1058F1BEBC;
-        Tue,  6 Dec 2022 02:31:43 -0800 (PST)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 8ADF61C0A0E; Tue,  6 Dec 2022 11:31:42 +0100 (CET)
-Date:   Tue, 6 Dec 2022 11:31:42 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.9 00/62] 4.9.335-rc1 review
-Message-ID: <Y48aDpD1rW8xaA7H@duo.ucw.cz>
-References: <20221205190758.073114639@linuxfoundation.org>
+        Tue, 6 Dec 2022 05:37:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F5BDFF4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:36:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670323018;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=D9WTzI07B2T90FQ6MBF1oIvNELJRpqkR308N9NI9I8E=;
+        b=SB99WnPf9f6kGafyfbOktewcGCfDrvcu1b3i+msWfAh+WL2/ZLbSJftHUFpPXrwWlvWiHD
+        VQalX8SMAnKeBXwj2I4WB1uDi0i5qjXclc60Vne+orHeg7cGwVbrexfyAdgV/BsFE7EDTP
+        WCqgqL0YpDw22/YC62jYIB/P6Hzd8/0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-180-P_H1gjzhMMykIKA-7PCZCQ-1; Tue, 06 Dec 2022 05:36:57 -0500
+X-MC-Unique: P_H1gjzhMMykIKA-7PCZCQ-1
+Received: by mail-wr1-f71.google.com with SMTP id h10-20020adfaa8a000000b0024208cf285eso3119035wrc.22
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 02:36:56 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D9WTzI07B2T90FQ6MBF1oIvNELJRpqkR308N9NI9I8E=;
+        b=O7ss7/0+fLGoRVoGYtVJbBxze2QMkRwe7vhKhAIWmeFUyPVbWxkrXh5vBUNpm/2t1E
+         K5ICXFGJ7gQPRsVQWLBV3T0dA95FTKvQ4X5EnpwT/RSjuHbkyFgV+tnq61zdhwEkERLr
+         Lgu9kyxhDnWe91cSUYt2RP4MuAs9ECHllTEd0gAQzBU1UR9FKH+xwIS+6eoTq+mwUVAA
+         QTgj6UktTtZ+23BSRLhzZef9UPZH1xD1WoFyJcf92AgdXhZCj1ETOXDHgybDsZEMCUbE
+         dpxBTTP6d9H9fRObzuLOtOl97jP4VMypUynWeezM3aBLzXlOA/D5yF0C9x4xRBj/2Z0N
+         jAhw==
+X-Gm-Message-State: ANoB5pk591BpxacF77bKTtZGa+uv0boNn8sDoUbf3t8D7E3S6ngBs4Or
+        necKED1T1AFSYy+LPDXjl2Su0D9PYsQP4vUAEh3iViQOBGJIevXgBypfjusL2L0ScHUSQdV04ts
+        EKTArlwknUDR3t6TCmIdewg+t
+X-Received: by 2002:a5d:6101:0:b0:242:46d0:3ee1 with SMTP id v1-20020a5d6101000000b0024246d03ee1mr10075199wrt.315.1670323015969;
+        Tue, 06 Dec 2022 02:36:55 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4hdCTFiVaTLif2boeNw/kxGbQScPuaS1un/J2RGjn40Favi8QTQ0cVDhBrer5EXpUMnibKEw==
+X-Received: by 2002:a5d:6101:0:b0:242:46d0:3ee1 with SMTP id v1-20020a5d6101000000b0024246d03ee1mr10075190wrt.315.1670323015747;
+        Tue, 06 Dec 2022 02:36:55 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-106-100.dyn.eolo.it. [146.241.106.100])
+        by smtp.gmail.com with ESMTPSA id v128-20020a1cac86000000b003cfa80443a0sm20734164wme.35.2022.12.06.02.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 02:36:55 -0800 (PST)
+Message-ID: <abd1a8e98d8b6d19520ae41d164ee905a40b3c42.camel@redhat.com>
+Subject: Re: [PATCH] net/ncsi: Silence runtime memcpy() false positive
+ warning
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Kees Cook <keescook@chromium.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>
+Cc:     Joel Stanley <joel@jms.id.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date:   Tue, 06 Dec 2022 11:36:54 +0100
+In-Reply-To: <20221202212418.never.837-kees@kernel.org>
+References: <20221202212418.never.837-kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="7uwovfPFJibtsLIv"
-Content-Disposition: inline
-In-Reply-To: <20221205190758.073114639@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
---7uwovfPFJibtsLIv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 2022-12-02 at 13:24 -0800, Kees Cook wrote:
+> The memcpy() in ncsi_cmd_handler_oem deserializes nca->data into a
+> flexible array structure that overlapping with non-flex-array members
+> (mfr_id) intentionally. Since the mem_to_flex() API is not finished,
+> temporarily silence this warning, since it is a false positive, using
+> unsafe_memcpy().
+> 
+> Reported-by: Joel Stanley <joel@jms.id.au>
+> Link: https://lore.kernel.org/netdev/CACPK8Xdfi=OJKP0x0D1w87fQeFZ4A2DP2qzGCRcuVbpU-9=4sQ@mail.gmail.com/
+> Cc: Samuel Mendoza-Jonas <sam@mendozajonas.com>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-Hi!
+Is this for the -net or the -net-next tree? It applies to both...
 
-> This is the start of the stable review cycle for the 4.9.335 release.
-> There are 62 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+It you are targetting the -net tree, I think it would be nicer adding a
+suitable Fixes tag.
 
-CIP testing did not find any problems here:
+Thanks!
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.9.y
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-4.19.y
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
+Paolo
 
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---7uwovfPFJibtsLIv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY48aDgAKCRAw5/Bqldv6
-8tCDAJ445sAHxuYyA4yF3QxuNv+gliKuQACePoJT8b0rmV8dMfUaUFLXMgDzQdY=
-=R3MZ
------END PGP SIGNATURE-----
-
---7uwovfPFJibtsLIv--
