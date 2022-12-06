@@ -2,106 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAD9644A3F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:23:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F35BF644A3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:22:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiLFRXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57210 "EHLO
+        id S234721AbiLFRWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:22:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234965AbiLFRXD (ORCPT
+        with ESMTP id S234194AbiLFRWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:23:03 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 673C3391E8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:23:01 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DA3CB23A;
-        Tue,  6 Dec 2022 09:23:07 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E20953F73B;
-        Tue,  6 Dec 2022 09:22:57 -0800 (PST)
-Message-ID: <76e23104-a8c0-a5fc-b8c6-27de79df2372@arm.com>
-Date:   Tue, 6 Dec 2022 18:22:41 +0100
+        Tue, 6 Dec 2022 12:22:51 -0500
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48507303F5;
+        Tue,  6 Dec 2022 09:22:50 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id u12so23523565wrr.11;
+        Tue, 06 Dec 2022 09:22:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h458RF1zVZ1EV5DsW5Ozll8gVo7xVTHiPN8UW60GA68=;
+        b=MAdwXevRAeZXm9ebxFKC37IdNfLB8qCjRWWBrM8437ruIZ5E7cRHqxnnWwNUKLKS/A
+         ZV1JwKU7L2n1LIN9PDqIdnd2hb0fm32HJeadSu13D/nXBkYPFU9j8j95fe6e7bOgLeyv
+         gBo6MF2OouZon21KzCukqIHCSz2+P0ewnj0Zyt5dMqjWf2XhfXORaKFz5DV4nyAaXCFc
+         WKpSMHgNwImlsv/6Buk9EguUXxjkC89xTmc41GG5c5yQG2IXw3BtwNRtDE5wvskIzYMf
+         LYHeskFTK23tvoT1TOxMw4fWFC9txj6FcAt0WeYc1g9jtFa/cK6zm7M8KK/L1fryGOAd
+         RiNA==
+X-Gm-Message-State: ANoB5pkkInLqtKF/L+jiAZXL2K0FBI0o6qBTF0y4tMAB36TgzyqxfDe4
+        fwPF4fVRx+J3G/XeupmA4EQIQiP32sk=
+X-Google-Smtp-Source: AA0mqf69t2edOthKa9N0tlXb6In5lgsG6vbYRgykNTLjMAQGRTNDzlhy0o7aKePbqfG0Z7vVISKD6Q==
+X-Received: by 2002:adf:f94f:0:b0:241:f467:f885 with SMTP id q15-20020adff94f000000b00241f467f885mr37985303wrr.482.1670347368751;
+        Tue, 06 Dec 2022 09:22:48 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id e14-20020adff34e000000b0024228b0b932sm21286544wrp.27.2022.12.06.09.22.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 09:22:48 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:22:46 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     ojeda@kernel.org
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Josh Triplett <josh@joshtriplett.org>,
+        Wei Liu <wei.liu@kernel.org>
+Subject: Re: [PATCH v1] rust: alloc: remove the `borrow` module (`ToOwned`,
+ `Cow`)
+Message-ID: <Y496ZhJF2ND+ND3L@liuwe-devbox-debian-v2>
+References: <20221206010519.39075-1-ojeda@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/7] sched/fair: Generalize asym_packing logic for SMT
- local sched group
-Content-Language: en-US
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
-References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
- <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20221122203532.15013-2-ricardo.neri-calderon@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206010519.39075-1-ojeda@kernel.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/11/2022 21:35, Ricardo Neri wrote:
-> When balancing load between two physical cores, an idle destination CPU can
-> help another core only if all of its SMT siblings are also idle. Otherwise,
-> there is not increase in throughput. It does not matter whether the other
-> core is composed of SMT siblings.
+On Tue, Dec 06, 2022 at 02:05:19AM +0100, ojeda@kernel.org wrote:
+> From: Miguel Ojeda <ojeda@kernel.org>
 > 
-> Simply check if there are any tasks running on the local group and the
-> other core has exactly one busy CPU before proceeding. Let
-> find_busiest_group() handle the case of more than one busy CPU. This is
-> true for SMT2, SMT4, SMT8, etc.
-
-[...]
-
-> Changes since v1:
->  * Reworded commit message and inline comments for clarity.
->  * Stated that this changeset does not impact STM4 or SMT8.
-> ---
->  kernel/sched/fair.c | 29 +++++++++--------------------
->  1 file changed, 9 insertions(+), 20 deletions(-)
+> The `Cow` type [1] requires that its generic parameter type implements
+> the `ToOwned` trait [2], which provides a method to create owned data
+> from borrowed data, usually by cloning.
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index e4a0b8bd941c..18c672ff39ef 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -8900,12 +8900,10 @@ static bool asym_smt_can_pull_tasks(int dst_cpu, struct sd_lb_stats *sds,
->  				    struct sched_group *sg)
+> However, it is infallible, and thus in most cases it is not useful for
+> the kernel. [3]
+> 
+> Therefore, introduce `cfg(no_borrow)` to remove the `borrow` module
+> (which contains `ToOwned` and `Cow`) from `alloc`.
+> 
+> Link: https://doc.rust-lang.org/alloc/borrow/enum.Cow.html [1]
+> Link: https://doc.rust-lang.org/alloc/borrow/trait.ToOwned.html [2]
+> Link: https://lore.kernel.org/rust-for-linux/20221204103153.117675b1@GaryWorkstation/ [3]
+> Cc: Gary Guo <gary@garyguo.net>
+> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
 
-I'm not sure why you change asym_smt_can_pull_tasks() together with
-removing SD_ASYM_PACKING from SMT level (patch 5/7)?
-
-update_sg_lb_stats()
-
-  ... && env->sd->flags & SD_ASYM_PACKING && .. && sched_asym()
-                                                   ^^^^^^^^^^^^
-    sched_asym()
-
-      if ((sds->local->flags & SD_SHARE_CPUCAPACITY) ||
-          (group->flags & SD_SHARE_CPUCAPACITY))
-        return asym_smt_can_pull_tasks()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^
-
-So x86 won't have a sched domain with SD_SHARE_CPUCAPACITY and
-SD_ASYM_PACKING anymore. So sched_asym() would call sched_asym_prefer()
-directly on MC. What do I miss here?
-
-[...]
+Reviewed-by: Wei Liu <wei.liu@kernel.org>
