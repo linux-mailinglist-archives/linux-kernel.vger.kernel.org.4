@@ -2,110 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18C564486E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:54:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0D164487B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiLFPyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:54:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S234322AbiLFP7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:59:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiLFPyu (ORCPT
+        with ESMTP id S231363AbiLFP7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:54:50 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9912E28E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:54:49 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Dec 2022 10:59:42 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2300240B3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:58:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670342323;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7g0LnaCVVBFg5bjNm736bQE91ZcWL1iYF9XTOaq+3F8=;
+        b=b2FF5Hs8kfA6UcS7AgiFSGjMY3443F6+dTp05uQb+A/fQ+JJQOL8PXli6ikPirDsT+yzSh
+        jpHBxewG05GgRxaVn0pXRY6T616fpX0mgzc71DqM5N+5t0lm1yA9vgaYSFkav4ct1k9dzH
+        I1dVZuZj9B8m3PdUM403qVBSAMtXscs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-304-M1Cqj47eO-S-9_xOtweZqQ-1; Tue, 06 Dec 2022 10:58:40 -0500
+X-MC-Unique: M1Cqj47eO-S-9_xOtweZqQ-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 24AED617BC
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:54:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28839C433C1;
-        Tue,  6 Dec 2022 15:54:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670342088;
-        bh=QUAz2+vZ/4CFvdyhgvZ2R2gjyA3bbWFrLGeGScV3rgA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MT5aAAuoQpj401dpL9XAqx5U7QM19z4fJcJI661uyzwJfU/fJhiIDopfTFojVY7Cn
-         CfXenlPqcVdsEADaoIXsg1H8G/fC8qqf4ZCMGMDhp6gRaOxK3CNU0B7+5dQGipaStE
-         6e9dNB50K5L9aIeoP5zAcHjureFjXtXtI5ImgodQ=
-Date:   Tue, 6 Dec 2022 16:54:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
- preserves const-ness of the pointer
-Message-ID: <Y49lxZMsKrXRciIg@kroah.com>
-References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
- <Y49cGRDBVP3bHJuT@casper.infradead.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96EAA101A54E;
+        Tue,  6 Dec 2022 15:58:39 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CC96F1759E;
+        Tue,  6 Dec 2022 15:58:38 +0000 (UTC)
+Subject: [PATCH net-next 00/32] rxrpc: Increasing SACK size and moving away
+ from softirq, part 4
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org, dhowells@redhat.com,
+        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 06 Dec 2022 15:58:36 +0000
+Message-ID: <167034231605.1105287.1693064952174322878.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y49cGRDBVP3bHJuT@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 03:13:29PM +0000, Matthew Wilcox wrote:
-> On Mon, Dec 05, 2022 at 01:12:03PM +0100, Greg Kroah-Hartman wrote:
-> > +/**
-> > + * container_of_const - cast a member of a structure out to the containing
-> > + *			structure and preserve the const-ness of the pointer
-> > + * @ptr:		the pointer to the member
-> > + * @type:		the type of the container struct this is embedded in.
-> > + * @member:		the name of the member within the struct.
-> > + */
-> > +#define container_of_const(ptr, type, member)				\
-> > +	_Generic(ptr,							\
-> > +		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
-> > +		default: ((type *)container_of(ptr, type, member))	\
-> > +	)
-> > +
-> 
-> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> 
-> I tried doing this:
-> 
-> +++ b/include/linux/container_of.h
-> @@ -15,11 +15,17 @@
->   *
->   * WARNING: any const qualifier of @ptr is lost.
->   */
-> -#define container_of(ptr, type, member) ({                             \
-> +#define _c_of(ptr, type, member) ({                                    \
->         void *__mptr = (void *)(ptr);                                   \
->         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
->                       __same_type(*(ptr), void),                        \
->                       "pointer type mismatch in container_of()");       \
->         ((type *)(__mptr - offsetof(type, member))); })
-> 
-> +#define container_of(ptr, type, m)                                     \
-> +       _Generic(ptr,                                                   \
-> +               const typeof(*(ptr)) *: (const type *)_c_of(ptr, type, m),\
-> +               default: ((type *)_c_of(ptr, type, m))                  \
-> +       )
-> +
->  #endif /* _LINUX_CONTAINER_OF_H */
-> 
-> (whitespace damaged, yes the kernel-doc is now in the wrong place, etc)
-> 
-> It found a few problems; just building the mlx5 driver (I happened to be
-> doing some work on it in that tree).  We're definitely not ready to do
-> that yet, but I'll send a few patches to prepare for it.
 
-Yeah, that's a good long-term goal to have here.  Once everything is
-moved over, switching all container_of_const() to just container_of()
-should be simple.
+Here's the fourth part of patches in the process of moving rxrpc from doing
+a lot of its stuff in softirq context to doing it in an I/O thread in
+process context and thereby making it easier to support a larger SACK
+table.
 
-thanks,
+The full description is in the description for the first part[1] which is
+already in net-next.  The second and third parts have also been pulled[2].
 
-greg k-h
+The fourth part includes some more moving of stuff to the I/O thread:
+
+ (1) Changing the state of a call.  This gets the last bits of changing
+     call state out of sendmsg() and recvmsg() so that all call state
+     transitions happen in the call event handler in the I/O thread.
+
+ (2) Aborting of calls.  sendmsg() and recvmsg() are no longer allowed to
+     shift a call's state and send an ABORT packet; rather they stash the
+     details in the rxrpc_call struct and send an event and the state
+     change and transmission happen in the I/O thread.
+
+ (3) Connection of client calls.  The app thread allocates a call and then
+     asks the I/O thread to connect it, waiting until the resources are
+     attached to it.  Responsibility for setting up the crypto for the
+     connection is then delegated to the app thread.
+
+ (4) Disconnection of calls.  Calls are now disconnected by their event
+     handers in the I/O thread when they reach the completed state.
+
+ (5) Management of client connections.  The tree containing the client
+     connection IDs is moved to the local endpoint and put under the
+     management of the I/O thread.
+
+ (6) Completion of service connection security.  When a RESPONSE packet has
+     been successfully verified in the conn's service thread, the packet is
+     marked specially and passed back to the I/O thread so that relevant
+     calls can be woken up.
+
+With the above, a call's lifetime is almost entirely managed by the I/O
+thread and this allows a lot of locking to be removed as the singular I/O
+thread itself provides the necessary exclusion:
+
+ (6) Remove the call->state_lock and wrap the call state transition
+     handling into helper functions to insert the appropriate barriers.
+     The barriers allow the abort state to be read locklessly after the
+     completion state is set.
+
+ (7) Don't use call->tx_lock to access ->tx_buffer as that is only accessed
+     inside the I/O thread.  sendmsg() loads onto ->tx_sendmsg and the I/O
+     thread decants from that to the buffer.
+
+ (8) Convert ->recvmsg_lock to a spinlock as it's only ever locked
+     exclusively.
+
+ (9) Make ->ackr_window and ->ackr_nr_unacked non-atomic as they're only
+     used in the I/O thread.
+
+(10) Remove local->defrag_sem as DATA packets are transmitted serially by
+     the I/O thread.
+
+Some other bits are done also:
+
+(11) Fix a missing unlock in rxrpc_do_sendmsg().
+
+(12) Fix propagation of the security settings on new calls.
+
+(13) Simplify the SACK table maintenance and ACK generation.  Now that both
+     parts are done in the same thread, there's no possibility of a race
+     and no need to try and be cunning to avoid taking a BH spinlock whilst
+     copying the SACK table (which in the future will be up to 2K) and no
+     need to rotate the copy to fit the ACK packet table.
+
+(14) Use SKB_CONSUMED when freeing received DATA packets (stop dropwatch
+     complaining).
+
+(15) Tidy up the abort generation, in particular to have one tracepoint and
+     a big enum of trace reasons rather than copying in a string.  If the
+     input functions want to return an abort, they just tag the received
+     skbuff and return false; rxrpc_io_thread() will reject the packet on
+     their behalf.
+
+(16) Add a debugging option to allow a delay to be injected into packet
+     reception to help investigate the behaviour over longer links than
+     just a few cm.
+
+Tested-by: Marc Dionne <marc.dionne@auristor.com>
+Tested-by: kafs-testing+fedora36_64checkkafs-build-153@auristor.com
+Link: https://lore.kernel.org/r/166794587113.2389296.16484814996876530222.stgit@warthog.procyon.org.uk/ [1]
+Link: https://lore.kernel.org/r/166994010342.1732290.13771061038178613124.stgit@warthog.procyon.org.uk/ [2]
+
+---
+The patches are tagged here:
+
+	git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git tags/rxrpc-next-20221206
+
+And can be found on this branch:
+
+	http://git.kernel.org/cgit/linux/kernel/git/dhowells/linux-fs.git/log/?h=rxrpc-next
+
+David
+---
+David Howells (32):
+      rxrpc: Fix missing unlock in rxrpc_do_sendmsg()
+      rxrpc: Fix security setting propagation
+      rxrpc: Simplify rxrpc_implicit_end_call()
+      rxrpc: Separate call retransmission from other conn events
+      rxrpc: Convert call->recvmsg_lock to a spinlock
+      rxrpc: Convert call->state_lock to a spinlock
+      rxrpc: Only set/transmit aborts in the I/O thread
+      rxrpc: Only disconnect calls in the I/O thread
+      rxrpc: Allow a delay to be injected into packet reception
+      rxrpc: Generate extra pings for RTT during heavy-receive call
+      rxrpc: De-atomic call->ackr_window and call->ackr_nr_unacked
+      rxrpc: Simplify ACK handling
+      rxrpc: Don't lock call->tx_lock to access call->tx_buffer
+      rxrpc: Remove local->defrag_sem
+      rxrpc: Implement a mechanism to send an event notification to a connection
+      rxrpc: Clean up connection abort
+      rxrpc: Tidy up abort generation infrastructure
+      rxrpc: Stash the network namespace pointer in rxrpc_local
+      rxrpc: Make the set of connection IDs per local endpoint
+      rxrpc: Offload the completion of service conn security to the I/O thread
+      rxrpc: Set up a connection bundle from a call, not rxrpc_conn_parameters
+      rxrpc: Split out the call state changing functions into their own file
+      rxrpc: Wrap accesses to get call state to put the barrier in one place
+      rxrpc: Move call state changes from sendmsg to I/O thread
+      rxrpc: Move call state changes from recvmsg to I/O thread
+      rxrpc: Remove call->state_lock
+      rxrpc: Make the local endpoint hold a ref on a connected call
+      rxrpc: Move the client conn cache management to the I/O thread
+      rxrpc: Show consumed and freed packets as non-dropped in dropwatch
+      rxrpc: Change rx_packet tracepoint to display securityIndex not type twice
+      rxrpc: Move client call connection to the I/O thread
+      rxrpc: Kill service bundle
+
+
+ Documentation/networking/rxrpc.rst |   4 +-
+ fs/afs/cmservice.c                 |   6 +-
+ fs/afs/rxrpc.c                     |  24 +-
+ include/net/af_rxrpc.h             |   3 +-
+ include/trace/events/rxrpc.h       | 213 +++++++--
+ net/rxrpc/Kconfig                  |   9 +
+ net/rxrpc/Makefile                 |   1 +
+ net/rxrpc/af_rxrpc.c               |  21 +-
+ net/rxrpc/ar-internal.h            | 203 ++++++---
+ net/rxrpc/call_accept.c            |  31 +-
+ net/rxrpc/call_event.c             |  99 +++-
+ net/rxrpc/call_object.c            | 121 +++--
+ net/rxrpc/call_state.c             |  69 +++
+ net/rxrpc/conn_client.c            | 701 ++++++++---------------------
+ net/rxrpc/conn_event.c             | 381 ++++++----------
+ net/rxrpc/conn_object.c            |  46 +-
+ net/rxrpc/conn_service.c           |   8 -
+ net/rxrpc/input.c                  | 233 +++++-----
+ net/rxrpc/insecure.c               |  20 +-
+ net/rxrpc/io_thread.c              | 249 ++++++----
+ net/rxrpc/local_object.c           |  42 +-
+ net/rxrpc/misc.c                   |   7 +
+ net/rxrpc/net_ns.c                 |  17 -
+ net/rxrpc/output.c                 | 129 ++++--
+ net/rxrpc/peer_object.c            |  23 +-
+ net/rxrpc/proc.c                   |  21 +-
+ net/rxrpc/recvmsg.c                | 272 ++++-------
+ net/rxrpc/rxkad.c                  | 356 ++++++---------
+ net/rxrpc/rxperf.c                 |  17 +-
+ net/rxrpc/security.c               |  54 +--
+ net/rxrpc/sendmsg.c                | 196 ++++----
+ net/rxrpc/skbuff.c                 |   4 +-
+ net/rxrpc/sysctl.c                 |  17 +-
+ net/rxrpc/txbuf.c                  |  12 +-
+ 34 files changed, 1755 insertions(+), 1854 deletions(-)
+ create mode 100644 net/rxrpc/call_state.c
+
+
