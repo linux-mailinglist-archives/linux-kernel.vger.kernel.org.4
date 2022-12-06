@@ -2,90 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E759643F2F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:59:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A552D643F35
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234387AbiLFI66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50378 "EHLO
+        id S234452AbiLFI7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:59:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234428AbiLFI64 (ORCPT
+        with ESMTP id S234450AbiLFI7r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:58:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64131C436;
-        Tue,  6 Dec 2022 00:58:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CDB0B818CB;
-        Tue,  6 Dec 2022 08:58:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66E59C433D6;
-        Tue,  6 Dec 2022 08:58:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670317132;
-        bh=6hC6q62YWRveam3AL7WSGJpsWyeG22u37HMG9JMaXxI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JxAx8/GRcTVX4o2aj8TMqSfS3DniSNQTXtVyyWTHnu04UZrE8lIRIkEs2zgajhb+Y
-         /d1npkJhZpmQGMB8fzBR2pfIfmr2BRqIOc5wEFItejAUjdzxQEl8M4IE6jA+jWn6fF
-         6NjOZ50sauClyO96Npps56VDmWqJ1BjEpu1W0nMoPmjXxPvQSyTNqbyr0YUDeszwK1
-         csYOB3+dcqukLq67Tq2clIN2l+ji2Xy0FqjpOJBJhvsbUhv48B1klyrJZqSHjKeFO6
-         gBo7ztvCebJZrlewCuMtZ8H3PBpc13UpKAro9bg4Hl1SFT5HnaE/CjPVkx4P+CSxPC
-         3NoK9YbbNf7SA==
-Date:   Tue, 6 Dec 2022 10:58:47 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Veerasenareddy Burru <vburru@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Liron Himi <lironh@marvell.com>,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        Sathesh B Edara <sedara@marvell.com>,
-        Satananda Burla <sburla@marvell.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH net-next v2 2/9] octeon_ep: poll for control
- messages
-Message-ID: <Y48ERxYICkG9lQc1@unreal>
-References: <20221129130933.25231-1-vburru@marvell.com>
- <20221129130933.25231-3-vburru@marvell.com>
- <Y4cirWdJipOxmNaT@unreal>
- <BYAPR18MB242397C352B0086140106A46CC159@BYAPR18MB2423.namprd18.prod.outlook.com>
- <Y4hhpFVsENaM45Ho@unreal>
- <BYAPR18MB2423229A66D1C98C6C744EE1CC189@BYAPR18MB2423.namprd18.prod.outlook.com>
- <Y42nerLmNeAIn5w9@unreal>
- <20221205161626.088e383f@kernel.org>
+        Tue, 6 Dec 2022 03:59:47 -0500
+Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE5A1B1C3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:59:45 -0800 (PST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:947e:1fc0:ebbb:447b])
+        by baptiste.telenet-ops.be with bizsmtp
+        id swzj2800A4BwbnS01wzjWS; Tue, 06 Dec 2022 09:59:43 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1p2Tnj-002ibG-8h; Tue, 06 Dec 2022 09:59:43 +0100
+Date:   Tue, 6 Dec 2022 09:59:43 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     linux-kernel@vger.kernel.org
+cc:     linux-wireless@vger.kernel.org
+Subject: Re: Build regressions/improvements in v6.1-rc8
+In-Reply-To: <20221206085158.349363-1-geert@linux-m68k.org>
+Message-ID: <alpine.DEB.2.22.394.2212060957480.648028@ramsan.of.borg>
+References: <CAHk-=wgyXu4D44b8wQU9dpTYUft6WhZ0wr3nV1fziy6k0GwCCw@mail.gmail.com> <20221206085158.349363-1-geert@linux-m68k.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205161626.088e383f@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 04:16:26PM -0800, Jakub Kicinski wrote:
-> On Mon, 5 Dec 2022 10:10:34 +0200 Leon Romanovsky wrote:
-> > > These messages include periodic keep alive (heartbeat) messages
-> > > from FW and control messages from VFs. Every PF will be listening
-> > > for its own control messages.  
-> > 
-> > @netdev, as I said, I don't know if it is valid behaviour in netdev.
-> > Can you please comment?
-> 
-> Polling for control messages every 100ms?  Sure.
-> 
-> You say "valid in netdev" so perhaps you can educate us where/why it
-> would not be?
+On Tue, 6 Dec 2022, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.1-rc8[1] to v6.1-rc7[3], the summaries are:
+>  - build errors: +1/-3
 
-It doesn't seem right to me that idle device burns CPU cycles, while it
-supports interrupts. If it needs "listen to FW", it will be much nicer to
-install interrupts immediately and don't wait for netdev.
+   + /kisskb/src/drivers/net/wireless/cisco/airo.c: error: 'status_rid.currentXmitRate' is used uninitialized [-Werror=uninitialized]:  => 6152:45
 
-Thanks
+sh4-gcc11/sh-allmodconfig
+
+Looks like a real issue, albeit not new (but never seen before?).
+
+> [1] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/76dcd734eca23168cb008912c0f69ff408905235/ (all 152 configs)
+> [3] http://kisskb.ellerman.id.au/kisskb/branch/linus/head/b7b275e60bcd5f89771e865a8239325f86d9927d/ (all 152 configs)
+
+Gr{oetje,eeting}s,
+
+ 						Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							    -- Linus Torvalds
