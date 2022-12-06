@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3331B6449F6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7394F6449F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:09:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235335AbiLFRIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:08:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
+        id S234971AbiLFRJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:09:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235449AbiLFRIG (ORCPT
+        with ESMTP id S235490AbiLFRJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:08:06 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ABEDF77;
-        Tue,  6 Dec 2022 09:08:05 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id m18so6229908eji.5;
-        Tue, 06 Dec 2022 09:08:05 -0800 (PST)
+        Tue, 6 Dec 2022 12:09:27 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512AD2DAB4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:09:26 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id ay40so4955002wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:09:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nQy1QBUpeuNTaLoaBP6NQNUp97yCKwC841vY4JbVEXo=;
-        b=HnsnVe7w9HTT6ViTvbLtHAAdgPPKrdbPTAt5BDC0X0GJab0VhwQkwxEG4+QOwlyV55
-         hEds2StZunG6a3uGms2WiK0UHrlEC/a4Us/f3QLF0292PqgHBP9rzLhISJrNGnqBLI2f
-         6EjdZfE+BwI+e9kETZ5Ju7k6zxnrgeK87gkW9sz+hcz1PW9JxCUdoPIYX9w4r/dGMOV8
-         VuBDVNV3dej5OUq3gzPULxTrpCiHpjN/QKhn4/WQbLO/C5kC3Ex2lgXyxAs+cRQm090k
-         POF/bU9lFHNLqc8R90QTqliGeNT0wPfzz80jEKrJWvohJKMkh4eKnoFx0V1BoRNkBayR
-         vbcg==
+        d=amarulasolutions.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxiX4xJAqzGvUOJG6dGIAYeA5k9jqvSgVNBvDNesWok=;
+        b=FiKrRdnnu/Odmt1R/n1t39q5QwfZ5qIN6HA/spKh8UBYUbEp5m/PwauwlbcWDq1/fg
+         f0iPgJiKeXpm+mpqMGW/CqBsUUeReZBncLjcD0EmMFPEcW0rRDCRI9Tz1gFi6IDwC1Ad
+         L0Is4iHJySgrY9kwT1voN3pvDjihcKoCcYJdg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nQy1QBUpeuNTaLoaBP6NQNUp97yCKwC841vY4JbVEXo=;
-        b=gXcfTZWPEM+LsHw6GSI3b2pEhPDFYALXPBgGlihNA7CEJ+dbU/0HAlPZ3lWdvZmEPF
-         eBlMV0PBYXhxHaQS9t/ahG12iu7UxjzJwHgaaMMyeMMx5K37RCFeqkVKoKY7f8U0PQoV
-         6kT/Wlxh+OFcQsM/nNNeGCXL6LhWMFH41TMsI5UHEAhTUcbfCCltEcqVTeilpB0UpTbv
-         rDfikYnG5jZGI/ysO/vy/t371BRmST2VkCzyZHfNwzi7Cjo0Eqt+TZ2JRXie9npwr0Wx
-         I+Iz0XNgTJUtvijBIZ96PVZDKNXwZ3gNGLT/5Vx2jXwweNJIoo0v3cIHoDHcN631t4Mr
-         wbJA==
-X-Gm-Message-State: ANoB5pkj+MVg3cbGGMsZKkPiIrrP52hsdo1NRclvkHQAysDy02gHMEJ1
-        lhYWrhyl6I1ndFW7oJMgamL2HZpK2j/irg==
-X-Google-Smtp-Source: AA0mqf5akfdAaaDyOIT8vkmO83FPxEvQkhKHvl/QSwuMbZSYFwgEZmjn4jZj2Bc3DwmIYpUDBMeZEw==
-X-Received: by 2002:a17:907:d40e:b0:7bb:f10c:9282 with SMTP id vi14-20020a170907d40e00b007bbf10c9282mr13017454ejc.325.1670346483982;
-        Tue, 06 Dec 2022 09:08:03 -0800 (PST)
-Received: from skbuf ([188.26.184.215])
-        by smtp.gmail.com with ESMTPSA id gi20-20020a1709070c9400b0077d6f628e14sm7619800ejc.83.2022.12.06.09.08.02
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MxiX4xJAqzGvUOJG6dGIAYeA5k9jqvSgVNBvDNesWok=;
+        b=FLgGOOCzZxNMzZJ0PUeaI4OIGMoHw443YeSKZcn6j580IQKIjMUSz8lSKURTDKrEOj
+         SgMl9+Zj+H+TfAUlXWtx0PkEh2VZcCjoZ0WuRArCEobTYeDwIqR/hW8XnlJoRvzgbUml
+         /mOICwCVqZppNDNUUXSQzZMpyyWKsbt9POJ0Fh6tQpbQwPMxz6D5BuDyL5R5zX/VbO1R
+         KJLGffAEIqJfYr268uBjOHY2dqVraBG2qH6uq1rXqkMmwQsavNpMWzwbLi+4pIBMC0+H
+         CYFr5KIa4NAZ/fWWY9RuiftwD8ranypzWmhUeu6DkBXxTW1xZh181maAResn0zkXooav
+         c7gw==
+X-Gm-Message-State: ANoB5pkZOCXkywGS0R/8TgVkt6jVwGaswN41ksJOLSCWuxBy53IuRAO7
+        SCDdVN2PQML74iM85G+bEqh9cEw/SIx6ok+a
+X-Google-Smtp-Source: AA0mqf4DltLaz1pwxrItnzlotskGlZXAARr9Z1Mh1JJ47kLxeld0dwEQidVU2Rzg4oOrUFw3e6jHSQ==
+X-Received: by 2002:a1c:7715:0:b0:3cf:d18d:3bfe with SMTP id t21-20020a1c7715000000b003cfd18d3bfemr66187328wmi.203.1670346564509;
+        Tue, 06 Dec 2022 09:09:24 -0800 (PST)
+Received: from dario-ThinkPad-T14s-Gen-2i.pdxnet.pdxeng.ch (host-82-54-95-136.retail.telecomitalia.it. [82.54.95.136])
+        by smtp.gmail.com with ESMTPSA id e4-20020adff344000000b00236488f62d6sm17655402wrp.79.2022.12.06.09.09.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 09:08:03 -0800 (PST)
-Date:   Tue, 6 Dec 2022 19:08:01 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
+        Tue, 06 Dec 2022 09:09:24 -0800 (PST)
+From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64 support
- for ksz8 series of switches
-Message-ID: <20221206170801.othuifyrm3qrz7ub@skbuf>
-References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
- <20221205052904.2834962-1-o.rempel@pengutronix.de>
+        Ray Jui <rjui@broadcom.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Scott Branden <sbranden@broadcom.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] ARM: BCM63xx: remove useless goto statement
+Date:   Tue,  6 Dec 2022 18:09:13 +0100
+Message-Id: <20221206170913.3316205-1-dario.binacchi@amarulasolutions.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205052904.2834962-1-o.rempel@pengutronix.de>
- <20221205052904.2834962-1-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 06:29:04AM +0100, Oleksij Rempel wrote:
-> +void ksz88xx_r_mib_stats64(struct ksz_device *dev, int port)
-> +{
-> +	struct ethtool_pause_stats *pstats;
-> +	struct rtnl_link_stats64 *stats;
-> +	struct ksz88xx_stats_raw *raw;
-> +	struct ksz_port_mib *mib;
-> +
-> +	mib = &dev->ports[port].mib;
-> +	stats = &mib->stats64;
-> +	pstats = &mib->pause_stats;
-> +	raw = (struct ksz88xx_stats_raw *)mib->counters;
-> +
-> +	spin_lock(&mib->stats64_lock);
-> +
-> +	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast +
-> +		raw->rx_pause;
-> +	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast +
-> +		raw->tx_pause;
-> +
-> +	/* HW counters are counting bytes + FCS which is not acceptable
-> +	 * for rtnl_link_stats64 interface
-> +	 */
-> +	stats->rx_bytes = raw->rx + raw->rx_hi - stats->rx_packets * ETH_FCS_LEN;
-> +	stats->tx_bytes = raw->tx + raw->tx_hi - stats->tx_packets * ETH_FCS_LEN;
+Between the 'goto out' statement and the 'out' label there are no other
+statements, so it is useless to check the return value of the
+bcm63xx_pmb_power_on_cpu() function. Then, let's remove the statements
+that are unnecessarily executed.
 
-What are rx_hi, tx_hi compared to rx, tx?
+Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
 
-> +
-> +	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
-> +		raw->rx_oversize;
-> +
-> +	stats->rx_crc_errors = raw->rx_crc_err;
-> +	stats->rx_frame_errors = raw->rx_align_err;
-> +	stats->rx_dropped = raw->rx_discards;
-> +	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
-> +		stats->rx_frame_errors  + stats->rx_dropped;
-> +
-> +	stats->tx_window_errors = raw->tx_late_col;
-> +	stats->tx_fifo_errors = raw->tx_discards;
-> +	stats->tx_aborted_errors = raw->tx_exc_col;
-> +	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
-> +		stats->tx_aborted_errors;
-> +
-> +	stats->multicast = raw->rx_mcast;
-> +	stats->collisions = raw->tx_total_col;
-> +
-> +	pstats->tx_pause_frames = raw->tx_pause;
-> +	pstats->rx_pause_frames = raw->rx_pause;
+---
 
-FWIW, ksz_get_pause_stats() can sleep, just ksz_get_stats64() can't. So
-the pause stats don't need to be periodically read (unless you want to
-do that to prevent 32-bit overflows).
+ arch/arm/mach-bcm/bcm63xx_smp.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> +
-> +	spin_unlock(&mib->stats64_lock);
-> +}
+diff --git a/arch/arm/mach-bcm/bcm63xx_smp.c b/arch/arm/mach-bcm/bcm63xx_smp.c
+index 641e1f8fcf5e..18d0ffc621aa 100644
+--- a/arch/arm/mach-bcm/bcm63xx_smp.c
++++ b/arch/arm/mach-bcm/bcm63xx_smp.c
+@@ -142,8 +142,7 @@ static int bcm63138_smp_boot_secondary(unsigned int cpu,
+ 	 */
+ 	ret = bcm63xx_pmb_power_on_cpu(dn);
+ 	of_node_put(dn);
+-	if (ret)
+-		goto out;
++
+ out:
+ 	iounmap(bootlut_base);
+ 
+-- 
+2.32.0
+
