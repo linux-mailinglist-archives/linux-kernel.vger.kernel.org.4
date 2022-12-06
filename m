@@ -2,60 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E42F643F16
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34081643F1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:53:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234267AbiLFIxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:53:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S233724AbiLFIxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:53:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234232AbiLFIxB (ORCPT
+        with ESMTP id S234375AbiLFIxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:53:01 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 943D1FCFB;
-        Tue,  6 Dec 2022 00:52:59 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 3EBCF68B05; Tue,  6 Dec 2022 09:52:55 +0100 (CET)
-Date:   Tue, 6 Dec 2022 09:52:54 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "ira.weiny@intel.com" <ira.weiny@intel.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
-        "slava@dubeyko.com" <slava@dubeyko.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] hfsplus: Add module parameter to enable force writes
-Message-ID: <20221206085254.GA9597@lst.de>
-References: <53821C76-DAFE-4505-9EC8-BE4ACBEA9DD9@live.com> <20221202125344.4254ab20d2fe0a8e784b33e8@linux-foundation.org> <20221204080752.GA26794@lst.de> <A35CC249-5F77-4B1A-B68F-8E07A38AB73B@live.com>
+        Tue, 6 Dec 2022 03:53:34 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC811D65F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:53:15 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id c1so22590139lfi.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xaaugcKD2DWO+dKMtwtCSR92f960siJ7Bi9i7riVt0o=;
+        b=lfaejrrgm3ovECiXFErsEgWM3FnLktoMohIcaghDk9k4yTtCq05wiRFeYI4PtBeOWa
+         S3/CCBPSKsQpp766jttP73I/NSK+bKw10woE5M9+blvSyltDVUHbD34TQ0hS3/iNJgBF
+         zN9iT0CwUJx6EADjwwXSMQhYSC3D0gvPuPqKUCCiIYydqx9vSIlGTf7dgql6c0B7W5jL
+         pnPGs8KpKJj6k2o6DRgRvf229vMnWrKVdHWu29fqi3aDvlzgmrERibWH67jnhmRDwEXo
+         UQp1ToWn0YsQN678rv4eeNwbx9KiZTIX25uXMWOvZF8DSycuZBoCZyaY3J2wNrDgIt5J
+         SQIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xaaugcKD2DWO+dKMtwtCSR92f960siJ7Bi9i7riVt0o=;
+        b=sFcY4w3ksQAACFFADGaLTlc0nrfcATyAOGcoOSiFDeEeWTTdqdOsRqR09EuSJGQq0x
+         nxB2ySsqLHkrEVQhO2LW+0Ubx4Uyt6c4/MkT1b61yIAn1yXVKB9Rv8uPJemAg2pezpe7
+         OaRaaqnPmKVqAhDLO1qyiO8m7TVN4WCCwVFxqLVeU1ypxZYbltCqlGJ8z0r7rFT3Sxdy
+         jqnDsSRFg4RHfS9okuGX7A51YmZ3XKiRuxUcUOi2y5r6nBQGUGzodRonEkSe4KXxdMe1
+         kJDA3vBrbrj62NL3RV3LenaSq2G5BmpmrocKFym9pIox4jk86YSr8EwGVC66L7Ed1MWi
+         B61Q==
+X-Gm-Message-State: ANoB5pmzCRdVr4Whsz6bhIpq6w5LfPt2t61tYiJq1+3HQM6tsSKW3OYf
+        e7r1kqG7n6Zx6HS+9tiDZFyFMQ==
+X-Google-Smtp-Source: AA0mqf5ChLoNGLdLOgDBauHU8k10w8GSMe8kuGmBVkkbQHaFfPKJbRwcfuSe1uAJY9+80U2eX20s2g==
+X-Received: by 2002:a05:6512:40e:b0:4b5:850a:34b6 with SMTP id u14-20020a056512040e00b004b5850a34b6mr691777lfk.668.1670316793581;
+        Tue, 06 Dec 2022 00:53:13 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u1-20020ac248a1000000b004a05767bc07sm2419944lfg.28.2022.12.06.00.53.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 00:53:13 -0800 (PST)
+Message-ID: <cb1ccf2e-71a8-a1d3-138c-8696338ea3d2@linaro.org>
+Date:   Tue, 6 Dec 2022 09:53:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <A35CC249-5F77-4B1A-B68F-8E07A38AB73B@live.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH net 2/2] dt-bindings: FEC/i.MX DWMAC and INTMUX maintainer
+Content-Language: en-US
+To:     Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221205212340.1073283-1-f.fainelli@gmail.com>
+ <20221205212340.1073283-3-f.fainelli@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221205212340.1073283-3-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 11:01:49AM +0000, Aditya Garg wrote:
-> Although, if you think its worth it, the following improvements can be made :-
+On 05/12/2022 22:23, Florian Fainelli wrote:
+> Emails to Joakim Zhang bounce, add Shawn Guo (i.MX architecture
+> maintainer) and the NXP Linux Team exploder email.
 > 
-> 1. There is no logging showing that writes have been force enabled. We could add that.
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-I think this would be very useful.
 
-> 2. We could have separate mount options for journaled and locked volumes (although I dunno in what case we get locked volumes).
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-We can't really retire the existing option, but if for your use case
-you'd prefer to only allow one of them and want to not write to the
-other case feel free to submit a patch to add that option.
+Best regards,
+Krzysztof
+
