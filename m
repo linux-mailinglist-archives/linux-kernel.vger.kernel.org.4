@@ -2,79 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 280F3644AB1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E70DB644AB2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLFR53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S229593AbiLFR6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLFR51 (ORCPT
+        with ESMTP id S229480AbiLFR6K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:57:27 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D970209BB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:57:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E589C61821
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:57:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20CB7C433C1;
-        Tue,  6 Dec 2022 17:57:23 +0000 (UTC)
-Date:   Tue, 6 Dec 2022 17:57:21 +0000
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Will Deacon <will@kernel.org>, regressions@leemhuis.info,
-        manivannan.sadhasivam@linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] arm64 fix/revert for 6.1
-Message-ID: <Y4+CgaxbC0BVlE6h@arm.com>
+        Tue, 6 Dec 2022 12:58:10 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8266D2ED51;
+        Tue,  6 Dec 2022 09:58:09 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id c7so11847053pfc.12;
+        Tue, 06 Dec 2022 09:58:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BdUvwqC29XOrztFHqs4wKWQVR7XBu2du92zx1lFNE64=;
+        b=PSe4+mYXzHhEgVlaq0aOgQBDwpCWFjR+24lSiDv96NMafzHjaZwhYoxLoSUvGVHlX+
+         VpANMjL5sk0bWwZ35I8Ut2DVhHHy/GeuwmRSV6wr+ZLH5tWN0dJZNtnRpN3chryyQCOL
+         G101IC2eqPz4/9gaD4jUOVh+vLjMb+HvOJmM9RkZ8tb6mTiSpBXOZcAC7nNAlgXB3w80
+         RpQVmBlCTrg1QoO/dXZoZ9r0y9OPRn4sSFXM7M0U0Mj4mnh/LiJVMmLrC5XoP03xvTO9
+         2dfomQ1R5u5q5j3eLupbe+U3JCPyNSbO03asgW5kLThd/mKx25sZ0Vv8It9bGXPw1qfJ
+         SNEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BdUvwqC29XOrztFHqs4wKWQVR7XBu2du92zx1lFNE64=;
+        b=5JxWE2u59kWakPYJWd3F5QTSyKBAtp9+BntcNYwWQpxYVweBsnVeI13HopnetVNoYe
+         KEtEujpb7b2Ul5lAGVUlSxie+/w8K9iZiFexA8XKV3Kp+4nS0lTNawrzicFqbcIH/v1B
+         dRDI2SgxKl+4YdS25j1oZ8f9mQ0uNbfvHuG1yVEg7m/ZhnwsnyjkZQew2k1ca3Ds1KbN
+         cHY90os/txkAsC0ISwXgNmgnwuGJdKSX7s7plqw99bEcAQFSnfeVyQqDzd2sIQXI+CFA
+         AzVfIC9FC2NCnZOjpLNaPGYbsu1FFKdwUZ489aw/aqVS/EP4jtvBz8jg7dt9SkFBFl2S
+         4hqA==
+X-Gm-Message-State: ANoB5pmIoHNpPXAV4zncJFvQtAHyLSWmokeW1nFUvJlydB6QTOcpSxdV
+        kqE8Dh9PE2P26Kd6ij/RtO4=
+X-Google-Smtp-Source: AA0mqf5920htsApHboXlf6EKdP55hmYLFoMzX6lqrYKAVep4HU9fKaApcshTLc056BVJW6DuPK62kQ==
+X-Received: by 2002:a63:5611:0:b0:478:c151:cd85 with SMTP id k17-20020a635611000000b00478c151cd85mr8617847pgb.49.1670349489025;
+        Tue, 06 Dec 2022 09:58:09 -0800 (PST)
+Received: from balhae.corp.google.com ([2620:15c:2c1:200:8948:2f20:37fb:a548])
+        by smtp.gmail.com with ESMTPSA id p7-20020a170902780700b001899007a721sm12836894pll.193.2022.12.06.09.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 09:58:08 -0800 (PST)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>, Andi Kleen <ak@linux.intel.com>,
+        James Clark <james.clark@arm.com>,
+        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
+        Michael Petlan <mpetlan@redhat.com>
+Subject: [PATCH v2] perf stat: Update event skip condition
+Date:   Tue,  6 Dec 2022 09:58:04 -0800
+Message-Id: <20221206175804.391387-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+In print_counter_aggrdata(), it skips some events that has no aggregate
+count.  It's actually for system-wide per-thread mode and merged uncore
+and hybrid events.
 
-Please pull the revert below. The qcom driver fix is being worked on but
-not in time for 6.1, so revert the arm64 change that highlighted the
-issue.
+Let's update the condition to check them explicitly.
 
-Thanks.
+Fixes: 91f85f98da7a ("Display event stats using aggr counts")
+Reported-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Acked-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/util/stat-display.c | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-The following changes since commit 5b47348fc0b18a78c96f8474cc90b7525ad1bbfe:
-
-  arm64/mm: fix incorrect file_map_count for non-leaf pmd/pud (2022-11-18 19:31:54 +0000)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux tags/arm64-fixes
-
-for you to fetch changes up to b7d9aae404841d9999b7476170867ae441e948d2:
-
-  Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()" (2022-12-06 17:30:39 +0000)
-
-----------------------------------------------------------------
-Revert the dropping of the cache invalidation from the arm64
-arch_dma_prep_coherent() as it caused a regression in the qcom_q6v5_mss
-remoteproc driver. The driver is already buggy but the original arm64
-change made the problem obvious. The change will be re-introduced once
-the driver is fixed.
-
-----------------------------------------------------------------
-Will Deacon (1):
-      Revert "arm64: dma: Drop cache invalidation from arch_dma_prep_coherent()"
-
- arch/arm64/mm/dma-mapping.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
+diff --git a/tools/perf/util/stat-display.c b/tools/perf/util/stat-display.c
+index 847acdb5dc40..a45aacc9df64 100644
+--- a/tools/perf/util/stat-display.c
++++ b/tools/perf/util/stat-display.c
+@@ -814,7 +814,8 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 	os->nr = aggr->nr;
+ 	os->evsel = counter;
+ 
+-	if (counter->supported && aggr->nr == 0)
++	/* Skip already merged uncore/hybrid events */
++	if (counter->merged_stat)
+ 		return;
+ 
+ 	uniquify_counter(config, counter);
+@@ -823,6 +824,13 @@ static void print_counter_aggrdata(struct perf_stat_config *config,
+ 	ena = aggr->counts.ena;
+ 	run = aggr->counts.run;
+ 
++	/*
++	 * Skip value 0 when enabling --per-thread globally, otherwise it will
++	 * have too many 0 output.
++	 */
++	if (val == 0 && config->aggr_mode == AGGR_THREAD && config->system_wide)
++		return;
++
+ 	if (!metric_only) {
+ 		if (config->json_output)
+ 			fputc('{', output);
+@@ -899,9 +907,6 @@ static void print_aggr(struct perf_stat_config *config,
+ 		print_metric_begin(config, evlist, os, s);
+ 
+ 		evlist__for_each_entry(evlist, counter) {
+-			if (counter->merged_stat)
+-				continue;
+-
+ 			print_counter_aggrdata(config, counter, s, os);
+ 		}
+ 		print_metric_end(config, os);
+@@ -928,9 +933,6 @@ static void print_aggr_cgroup(struct perf_stat_config *config,
+ 			print_metric_begin(config, evlist, os, s);
+ 
+ 			evlist__for_each_entry(evlist, counter) {
+-				if (counter->merged_stat)
+-					continue;
+-
+ 				if (counter->cgrp != os->cgrp)
+ 					continue;
+ 
+@@ -950,9 +952,6 @@ static void print_counter(struct perf_stat_config *config,
+ 	if (!config->aggr_map)
+ 		return;
+ 
+-	if (counter->merged_stat)
+-		return;
+-
+ 	for (s = 0; s < config->aggr_map->nr; s++) {
+ 		print_counter_aggrdata(config, counter, s, os);
+ 	}
 -- 
-Catalin
+2.39.0.rc0.267.gcb52ba06e7-goog
+
