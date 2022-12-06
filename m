@@ -2,55 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E73644276
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:50:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF551644282
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235049AbiLFLuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
+        id S235101AbiLFLvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:51:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235066AbiLFLuR (ORCPT
+        with ESMTP id S235082AbiLFLvn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:50:17 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2329727FC2;
-        Tue,  6 Dec 2022 03:50:17 -0800 (PST)
+        Tue, 6 Dec 2022 06:51:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E0827DED;
+        Tue,  6 Dec 2022 03:51:42 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6818616D4;
-        Tue,  6 Dec 2022 11:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 20E7AC433C1;
-        Tue,  6 Dec 2022 11:50:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A836B819BB;
+        Tue,  6 Dec 2022 11:51:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C8D6C433D6;
+        Tue,  6 Dec 2022 11:51:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670327416;
-        bh=b07s2sNE6hg0YiuREv3r9mgcBnusf2Rlu8O2Wh+ZSOk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=A85yE0hndxxffjFwdIoPb3x4K35j4YkAaNI0ZwnKAqU/ZmyeflS5zx2PrNnRpV4Ly
-         ZQ29BHBOU/+/4KNWIyXUJZKxpiedJNTvjXZdnv+iqWK7G5VHEj4AAjnLqArEEoB2yb
-         xPHtgz/g/xd4Rm57JKEamGomS1qTkh0zepPV0TBsQMt2WJXc/pXeIrHIP7iyZQKISD
-         HPjbccjYmhkiv/zZlLIYZpaVj/706Zykuv388/7ToS83tJaPBRyAqqH/QgUaxMrSMH
-         a1K7jShKlSHkc3pQ85i1offErU5BB+lfvmB4wTxQ7FqAtTj3Nlw6iUC6NNelOp9iqW
-         MZiHKjLyDYhIQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0421AE56AA0;
-        Tue,  6 Dec 2022 11:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1670327500;
+        bh=s4K6bUN232iqgGLvJebgGUOXpM0Nekv+4mjWez6DWJ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XiES+w/sgACehabQ6uDUpA2H2rgqaWd2j8ft6FggvWDX77Skw6L7pY7Z+A7LqWQUO
+         dSKU50T7pQCD+ueZThDG0C3Xmdp6qggNQGgKEgu+u0GlFBeJ1gG52mklvgTC+fn/Db
+         X3wbHEvReFDEc1gctm7Wq5A3oKuJLodsoMvhgArGsKIS+gCF5qlPKLT9Y7Ju1zF0f8
+         HoKdasAplW9SjPPt1jgPd/kGvxPPWKeEKjpPktupwDv5VRZqRZGez5h0JbZEMTlYgp
+         zyR36nP8kZ5qj+R7etGVXufEpWtx1EIBM6tjzmyJsE6QImfdASM9kodNcpkywY7gDM
+         C5NwERGeObbcw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p2WUF-0000Vi-IY; Tue, 06 Dec 2022 12:51:47 +0100
+Date:   Tue, 6 Dec 2022 12:51:47 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: PCI: qcom: Allow 'dma-coherent' property
+Message-ID: <Y48s09HMMkb34kRn@hovoldconsulting.com>
+References: <20221205094530.12883-1-johan+linaro@kernel.org>
+ <Y48f4ktAwsPBW60y@lpieralisi>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: thunderx: Fix missing destroy_workqueue of
- nicvf_rx_mode_wq
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167032741601.10641.4366220220611889414.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Dec 2022 11:50:16 +0000
-References: <20221203094125.602812-1-liuyongqiang13@huawei.com>
-In-Reply-To: <20221203094125.602812-1-liuyongqiang13@huawei.com>
-To:     Yongqiang Liu <liuyongqiang13@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        vlomovtsev@marvell.com, zhangxiaoxu5@huawei.com,
-        weiyongjun1@huawei.com, sgoutham@marvell.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y48f4ktAwsPBW60y@lpieralisi>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -60,28 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Sat, 3 Dec 2022 09:41:25 +0000 you wrote:
-> The nicvf_probe() won't destroy workqueue when register_netdev()
-> failed. Add destroy_workqueue err handle case to fix this issue.
+On Tue, Dec 06, 2022 at 11:56:34AM +0100, Lorenzo Pieralisi wrote:
+> On Mon, Dec 05, 2022 at 10:45:30AM +0100, Johan Hovold wrote:
+> > Devices on some PCIe buses may be cache coherent and must be marked as
+> > such in the devicetree to avoid data corruption.
+> > 
+> > This is specifically needed on recent Qualcomm platforms like SC8280XP.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > ---
+> > 
+> > Lorenzo, the corresponding SC8280XP DT fix is heading for 6.2 so it
+> > would be nice if this one could be merged for 6.2-rc1 (or -rc2) as well
+> > to avoid the corresponding DT validation warnings.
 > 
-> Fixes: 2ecbe4f4a027 ("net: thunderx: replace global nicvf_rx_mode_wq work queue for all VFs to private for each of them.")
-> Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
-> ---
->  drivers/net/ethernet/cavium/thunder/nicvf_main.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> What's the commit base for this patch ? I tried applying to my pci/dt
+> branch to no avail, please let me know and I will merge it.
 
-Here is the summary with links:
-  - net: thunderx: Fix missing destroy_workqueue of nicvf_rx_mode_wq
-    https://git.kernel.org/netdev/net/c/42330a32933f
+That should be pci/qcom which has 3a936b2a5a58 ("dt-bindings: PCI: qcom:
+Add SC8280XP/SA8540P interconnects").
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Johan
