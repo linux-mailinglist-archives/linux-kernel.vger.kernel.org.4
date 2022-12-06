@@ -2,161 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0776644DCE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:15:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4C0644DD7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiLFVPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:15:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
+        id S229663AbiLFVSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLFVPF (ORCPT
+        with ESMTP id S229507AbiLFVSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:15:05 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E3B3F074
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:15:04 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id n63so6152080iod.7
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 13:15:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P+zJzPA5j2fSPXiFPqe/ELh6l+2nGcRmsM+yat0BzBM=;
-        b=Mhti21mTcFzhALFJjLSv3wMyhlM/mH3Qnsg+VRrSiOk9Y82RvCyzDCsYlQotRmIgKD
-         Ddgt6J13ic33BCajPYxyU6Q+cwlIS4qUt9JdVGCzJ0a6Rtf0UyTItqFTnlcqMTo975Zf
-         2CnGgEH350HiI17LNlzh5hkbcNfp0MHaxjVYKGOUaGuyUTTbFHFberFKA/m6WkLlvyBY
-         tgG0EcWXa9inIegrQA8W+ERiJYqacqO/ieNrvUSvdRcg23glZlNT1QUVEvimxABbs/Fk
-         x+K0GkitEsvntV44HuyAlJCysV8GZrvmCVp/Tff8HgvMwM3U4EVH3jU/SEF0/jaqhHlt
-         znPw==
+        Tue, 6 Dec 2022 16:18:10 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1C31135;
+        Tue,  6 Dec 2022 13:18:09 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id s186so18304602oia.5;
+        Tue, 06 Dec 2022 13:18:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+zJzPA5j2fSPXiFPqe/ELh6l+2nGcRmsM+yat0BzBM=;
-        b=RjAaOiAtvImJBTqXfa+GPQUcYXr3zLyGzxvSTRgGgEoR8opu0jiRiSJIq7Aw9/TjrH
-         HWIsUBVfnhxJ2Zap8riYUmHpGCMwx5FnAx+JWaRC/+kBGzw+EIMiTO/YpDqS9G6Zidjr
-         y0VuQNBbK23m31rXmMPaJxn+1JKwXLjqVzfbYw/uq+JWiMUSiu63RwQ/HtHve7Y9Gw/P
-         9ixA9WlwqIJ+SPh2WTV/Y+QiFHs2tZSM9BSeXV49FOEHHVziWLWoOOoeKKpf64TbW3qj
-         lLQItjBAKXfBtbCtkrJ+ZVOI2dT3hEOFiifrU8wl4F6LvrPwkZZwjSuyAj2n8CxL+zVp
-         POfQ==
-X-Gm-Message-State: ANoB5pluC1NvnFQQekAV+KnmsYzVyVBKKBuG73iVQe1rdnpIVN39yw/I
-        hxpnEYLPuIeuSzR0iXZrr/kTrQ==
-X-Google-Smtp-Source: AA0mqf5DaswT/ZwWOpfxsGHbnMU0DuoB4lCMRBnfFlXmMS1yLONJdW/lsJwS6zoGOrO/5OOy9ki42A==
-X-Received: by 2002:a05:6602:2143:b0:6bc:6352:9853 with SMTP id y3-20020a056602214300b006bc63529853mr38986910ioy.65.1670361302143;
-        Tue, 06 Dec 2022 13:15:02 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id z17-20020a056602081100b006ddd15ca0absm2604999iow.25.2022.12.06.13.15.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 13:15:01 -0800 (PST)
-Message-ID: <5a643da7-1c28-b680-391e-ea8392210327@kernel.dk>
-Date:   Tue, 6 Dec 2022 14:15:00 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1fZ+Nm1ZVezN1RXPdT9/whBqlUpozCto6FF44KKkJ4U=;
+        b=XGr4AAKGDu+pobKG13kXoAbaAv9gbSBSGt9JhjeN28CTb/BWWqQU/QTlGGOcRG0lGo
+         wQACxjvFvNfA+M/GsusZMl7zVOeCz+2qWaLNgznhloLkT12QvzTq9SNTpNyqrHycKGj6
+         NrXzb7w9HpmWfRCm4Kycrjb1UaBBAfx0/xc8qkz2kNiatLjQivvxxKJxUg9Rww/p7ay8
+         bZ4yNUn+OEO+ONsE9k/9ZFIMNhJOLncph5S//DlGTphGn7GQrwIguMkZK8AUQ6Hkq1kc
+         nYLp0wG/4h6LHWDzPaQv3qOcl2/2xOhQw8mxAQfYMTlaCkC5TBYOdD8OJftcwaO0OAu+
+         f6Mw==
+X-Gm-Message-State: ANoB5pmyxUAZUgQwwHYvtPjZf9egItUU21ybUVgS2O7iRZS/H9Kd3R1Z
+        xIWqYxm0ox2WOl0Jvx27SKT3qpHZyw==
+X-Google-Smtp-Source: AA0mqf7atIqgmcAEyNTqMz4+XRNR7PAGa4eH0oaBHkRZ2wsg8a4J/Infh7O0CnVxXkpR9sAsST1BwA==
+X-Received: by 2002:a05:6808:655:b0:35a:2e4b:4c44 with SMTP id z21-20020a056808065500b0035a2e4b4c44mr36172114oih.263.1670361488907;
+        Tue, 06 Dec 2022 13:18:08 -0800 (PST)
+Received: from robh_at_kernel.org ([4.31.143.193])
+        by smtp.gmail.com with ESMTPSA id ay19-20020a056808301300b00354b0850fb6sm8874803oib.33.2022.12.06.13.18.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 13:18:08 -0800 (PST)
+Received: (nullmailer pid 94882 invoked by uid 1000);
+        Tue, 06 Dec 2022 21:18:07 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Gene Chen <gene_chen@richtek.com>,
+        Daniel Mack <zonque@gmail.com>
+Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: [PATCH] dt-bindings: Add missing 'unevaluatedProperties' to regulator nodes
+Date:   Tue,  6 Dec 2022 15:15:55 -0600
+Message-Id: <20221206211554.92005-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] io_uring: Fix a null-ptr-deref in io_tctx_exit_cb()
-Content-Language: en-US
-To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Cc:     harshit.m.mogalapalli@gmail.com, vegard.nossum@oracle.com,
-        george.kennedy@oracle.com, darren.kenny@oracle.com,
-        syzkaller <syzkaller@googlegroups.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/22 2:38?AM, Harshit Mogalapalli wrote:
-> Syzkaller reports a NULL deref bug as follows:
-> 
->  BUG: KASAN: null-ptr-deref in io_tctx_exit_cb+0x53/0xd3
->  Read of size 4 at addr 0000000000000138 by task file1/1955
-> 
->  CPU: 1 PID: 1955 Comm: file1 Not tainted 6.1.0-rc7-00103-gef4d3ea40565 #75
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
->  Call Trace:
->   <TASK>
->   dump_stack_lvl+0xcd/0x134
->   ? io_tctx_exit_cb+0x53/0xd3
->   kasan_report+0xbb/0x1f0
->   ? io_tctx_exit_cb+0x53/0xd3
->   kasan_check_range+0x140/0x190
->   io_tctx_exit_cb+0x53/0xd3
->   task_work_run+0x164/0x250
->   ? task_work_cancel+0x30/0x30
->   get_signal+0x1c3/0x2440
->   ? lock_downgrade+0x6e0/0x6e0
->   ? lock_downgrade+0x6e0/0x6e0
->   ? exit_signals+0x8b0/0x8b0
->   ? do_raw_read_unlock+0x3b/0x70
->   ? do_raw_spin_unlock+0x50/0x230
->   arch_do_signal_or_restart+0x82/0x2470
->   ? kmem_cache_free+0x260/0x4b0
->   ? putname+0xfe/0x140
->   ? get_sigframe_size+0x10/0x10
->   ? do_execveat_common.isra.0+0x226/0x710
->   ? lockdep_hardirqs_on+0x79/0x100
->   ? putname+0xfe/0x140
->   ? do_execveat_common.isra.0+0x238/0x710
->   exit_to_user_mode_prepare+0x15f/0x250
->   syscall_exit_to_user_mode+0x19/0x50
->   do_syscall_64+0x42/0xb0
->   entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  RIP: 0023:0x0
->  Code: Unable to access opcode bytes at 0xffffffffffffffd6.
->  RSP: 002b:00000000fffb7790 EFLAGS: 00000200 ORIG_RAX: 000000000000000b
->  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
->  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
->  RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
->  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
->  R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->   </TASK>
->  Kernel panic - not syncing: panic_on_warn set ...
-> 
-> Add a NULL check on tctx to prevent this.
+Several regulator schemas are missing 'unevaluatedProperties' constraint
+which means any extra properties are allowed. Upon adding the
+constraint, there's numerous warnings from using the deprecated
+'regulator-compatible' property. Remove the usage as examples shouldn't
+be using long since deprecated properties.
 
-I agree with Vegard that I don't think this is fixing the core of
-the issue. I think what is happening here is that we don't run the
-task_work in io_uring_cancel_generic() unconditionally, if we don't
-need to in the loop above. But we do need to ensure we run it before
-we clear current->io_uring.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+I'd suggest that Mark take this if that's okay with Lee. Or I can take 
+it.
 
-Do you have a reproducer? If so, can you try the below? I _think_
-this is all we need. We can't be hitting the delayed fput path as
-the task isn't exiting, and we're dealing with current here.
+ Documentation/devicetree/bindings/mfd/max77650.yaml  |  2 --
+ .../devicetree/bindings/mfd/mediatek,mt6360.yaml     |  9 ---------
+ .../bindings/power/supply/mt6360_charger.yaml        |  2 +-
+ .../bindings/regulator/max77650-regulator.yaml       |  1 +
+ .../devicetree/bindings/regulator/max8660.yaml       |  6 +-----
+ .../bindings/regulator/mt6360-regulator.yaml         | 12 +++---------
+ 6 files changed, 6 insertions(+), 26 deletions(-)
 
-
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index 36cb63e4174f..4791d94c88f5 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3125,6 +3125,15 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
+diff --git a/Documentation/devicetree/bindings/mfd/max77650.yaml b/Documentation/devicetree/bindings/mfd/max77650.yaml
+index b0a0f0d3d9d4..4181174fcf58 100644
+--- a/Documentation/devicetree/bindings/mfd/max77650.yaml
++++ b/Documentation/devicetree/bindings/mfd/max77650.yaml
+@@ -100,14 +100,12 @@ examples:
+                 compatible = "maxim,max77650-regulator";
  
- 	io_uring_clean_tctx(tctx);
- 	if (cancel_all) {
-+		/*
-+		 * If we didn't run task_work in the loop above, ensure we
-+		 * do so here. If an fput() queued up exit task_work for the
-+		 * ring descriptor before we started the exec that led to this
-+		 * cancelation, then we need to have that run before we proceed
-+		 * with tearing down current->io_uring.
-+		 */
-+		io_run_task_work();
-+
- 		/*
- 		 * We shouldn't run task_works after cancel, so just leave
- 		 * ->in_idle set for normal exit.
-
+                 max77650_ldo: regulator-ldo {
+-                    regulator-compatible = "ldo";
+                     regulator-name = "max77650-ldo";
+                     regulator-min-microvolt = <1350000>;
+                     regulator-max-microvolt = <2937500>;
+                 };
+ 
+                 max77650_sbb0: regulator-sbb0 {
+-                    regulator-compatible = "sbb0";
+                     regulator-name = "max77650-sbb0";
+                     regulator-min-microvolt = <800000>;
+                     regulator-max-microvolt = <1587500>;
+diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
+index 28eee02441ee..fb65abf30d57 100644
+--- a/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
++++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6360.yaml
+@@ -83,7 +83,6 @@ examples:
+                 richtek,vinovp-microvolt = <14500000>;
+ 
+                 otg_vbus_regulator: usb-otg-vbus-regulator {
+-                    regulator-compatible = "usb-otg-vbus";
+                     regulator-name = "usb-otg-vbus";
+                     regulator-min-microvolt = <4425000>;
+                     regulator-max-microvolt = <5825000>;
+@@ -145,7 +144,6 @@ examples:
+                 compatible = "mediatek,mt6360-regulator";
+                 LDO_VIN3-supply = <&BUCK2>;
+                 buck1 {
+-                    regulator-compatible = "BUCK1";
+                     regulator-name = "mt6360,buck1";
+                     regulator-min-microvolt = <300000>;
+                     regulator-max-microvolt = <1300000>;
+@@ -154,7 +152,6 @@ examples:
+                          MT6360_OPMODE_ULP>;
+                 };
+                 BUCK2: buck2 {
+-                    regulator-compatible = "BUCK2";
+                     regulator-name = "mt6360,buck2";
+                     regulator-min-microvolt = <300000>;
+                     regulator-max-microvolt = <1300000>;
+@@ -163,7 +160,6 @@ examples:
+                          MT6360_OPMODE_ULP>;
+                 };
+                 ldo6 {
+-                    regulator-compatible = "LDO6";
+                     regulator-name = "mt6360,ldo6";
+                     regulator-min-microvolt = <500000>;
+                     regulator-max-microvolt = <2100000>;
+@@ -171,7 +167,6 @@ examples:
+                          MT6360_OPMODE_LP>;
+                 };
+                 ldo7 {
+-                    regulator-compatible = "LDO7";
+                     regulator-name = "mt6360,ldo7";
+                     regulator-min-microvolt = <500000>;
+                     regulator-max-microvolt = <2100000>;
+@@ -179,7 +174,6 @@ examples:
+                          MT6360_OPMODE_LP>;
+                 };
+                 ldo1 {
+-                    regulator-compatible = "LDO1";
+                     regulator-name = "mt6360,ldo1";
+                     regulator-min-microvolt = <1200000>;
+                     regulator-max-microvolt = <3600000>;
+@@ -187,7 +181,6 @@ examples:
+                          MT6360_OPMODE_LP>;
+                 };
+                 ldo2 {
+-                    regulator-compatible = "LDO2";
+                     regulator-name = "mt6360,ldo2";
+                     regulator-min-microvolt = <1200000>;
+                     regulator-max-microvolt = <3600000>;
+@@ -195,7 +188,6 @@ examples:
+                          MT6360_OPMODE_LP>;
+                 };
+                 ldo3 {
+-                    regulator-compatible = "LDO3";
+                     regulator-name = "mt6360,ldo3";
+                     regulator-min-microvolt = <1200000>;
+                     regulator-max-microvolt = <3600000>;
+@@ -203,7 +195,6 @@ examples:
+                          MT6360_OPMODE_LP>;
+                 };
+                 ldo5 {
+-                    regulator-compatible = "LDO5";
+                     regulator-name = "mt6360,ldo5";
+                     regulator-min-microvolt = <2700000>;
+                     regulator-max-microvolt = <3600000>;
+diff --git a/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
+index b89b15a5bfa4..4c74cc78729e 100644
+--- a/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
++++ b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
+@@ -26,6 +26,7 @@ properties:
+     type: object
+     description: OTG boost regulator.
+     $ref: /schemas/regulator/regulator.yaml#
++    unevaluatedProperties: false
+ 
+ required:
+   - compatible
+@@ -39,7 +40,6 @@ examples:
+       richtek,vinovp-microvolt = <14500000>;
+ 
+       otg_vbus_regulator: usb-otg-vbus-regulator {
+-        regulator-compatible = "usb-otg-vbus";
+         regulator-name = "usb-otg-vbus";
+         regulator-min-microvolt = <4425000>;
+         regulator-max-microvolt = <5825000>;
+diff --git a/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+index ce0a4021ae7f..01b9775a92d1 100644
+--- a/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/max77650-regulator.yaml
+@@ -26,6 +26,7 @@ properties:
+ patternProperties:
+   "^regulator-(ldo|sbb[0-2])$":
+     $ref: "regulator.yaml#"
++    unevaluatedProperties: false
+ 
+ required:
+   - compatible
+diff --git a/Documentation/devicetree/bindings/regulator/max8660.yaml b/Documentation/devicetree/bindings/regulator/max8660.yaml
+index 4d550ca396eb..35792a927b03 100644
+--- a/Documentation/devicetree/bindings/regulator/max8660.yaml
++++ b/Documentation/devicetree/bindings/regulator/max8660.yaml
+@@ -26,6 +26,7 @@ properties:
+     patternProperties:
+       "^regulator-.+$":
+         $ref: "regulator.yaml#"
++        unevaluatedProperties: false
+ 
+     additionalProperties: false
+ 
+@@ -43,31 +44,26 @@ examples:
+ 
+         regulators {
+           regulator-V3 {
+-            regulator-compatible= "V3(DCDC)";
+             regulator-min-microvolt = <725000>;
+             regulator-max-microvolt = <1800000>;
+           };
+ 
+           regulator-V4 {
+-            regulator-compatible= "V4(DCDC)";
+             regulator-min-microvolt = <725000>;
+             regulator-max-microvolt = <1800000>;
+           };
+ 
+           regulator-V5 {
+-            regulator-compatible= "V5(LDO)";
+             regulator-min-microvolt = <1700000>;
+             regulator-max-microvolt = <2000000>;
+           };
+ 
+           regulator-V6 {
+-            regulator-compatible= "V6(LDO)";
+             regulator-min-microvolt = <1800000>;
+             regulator-max-microvolt = <3300000>;
+           };
+ 
+           regulator-V7 {
+-            regulator-compatible= "V7(LDO)";
+             regulator-min-microvolt = <1800000>;
+             regulator-max-microvolt = <3300000>;
+           };
+diff --git a/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml b/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml
+index a462d99a25cc..8a0931dc2f30 100644
+--- a/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/mt6360-regulator.yaml
+@@ -27,9 +27,11 @@ properties:
+ patternProperties:
+   "^buck[12]$":
+     $ref: "regulator.yaml#"
++    unevaluatedProperties: false
+ 
+   "^ldo[123567]$":
+     $ref: "regulator.yaml#"
++    unevaluatedProperties: false
+ 
+ required:
+   - compatible
+@@ -44,7 +46,6 @@ examples:
+       compatible = "mediatek,mt6360-regulator";
+       LDO_VIN3-supply = <&BUCK2>;
+       buck1 {
+-        regulator-compatible = "BUCK1";
+         regulator-name = "mt6360,buck1";
+         regulator-min-microvolt = <300000>;
+         regulator-max-microvolt = <1300000>;
+@@ -53,7 +54,6 @@ examples:
+              MT6360_OPMODE_ULP>;
+       };
+       BUCK2: buck2 {
+-        regulator-compatible = "BUCK2";
+         regulator-name = "mt6360,buck2";
+         regulator-min-microvolt = <300000>;
+         regulator-max-microvolt = <1300000>;
+@@ -62,7 +62,6 @@ examples:
+              MT6360_OPMODE_ULP>;
+       };
+       ldo6 {
+-        regulator-compatible = "LDO6";
+         regulator-name = "mt6360,ldo6";
+         regulator-min-microvolt = <500000>;
+         regulator-max-microvolt = <2100000>;
+@@ -70,7 +69,6 @@ examples:
+              MT6360_OPMODE_LP>;
+       };
+       ldo7 {
+-        regulator-compatible = "LDO7";
+         regulator-name = "mt6360,ldo7";
+         regulator-min-microvolt = <500000>;
+         regulator-max-microvolt = <2100000>;
+@@ -78,15 +76,13 @@ examples:
+              MT6360_OPMODE_LP>;
+       };
+       ldo1 {
+-        regulator-compatible = "LDO1";
+         regulator-name = "mt6360,ldo1";
+         regulator-min-microvolt = <1200000>;
+         regulator-max-microvolt = <3600000>;
+         regulator-allowed-modes = <MT6360_OPMODE_NORMAL
+              MT6360_OPMODE_LP>;
+       };
+-        ldo2 {
+-        regulator-compatible = "LDO2";
++      ldo2 {
+         regulator-name = "mt6360,ldo2";
+         regulator-min-microvolt = <1200000>;
+         regulator-max-microvolt = <3600000>;
+@@ -94,7 +90,6 @@ examples:
+              MT6360_OPMODE_LP>;
+       };
+       ldo3 {
+-        regulator-compatible = "LDO3";
+         regulator-name = "mt6360,ldo3";
+         regulator-min-microvolt = <1200000>;
+         regulator-max-microvolt = <3600000>;
+@@ -102,7 +97,6 @@ examples:
+              MT6360_OPMODE_LP>;
+       };
+       ldo5 {
+-        regulator-compatible = "LDO5";
+         regulator-name = "mt6360,ldo5";
+         regulator-min-microvolt = <2700000>;
+         regulator-max-microvolt = <3600000>;
 -- 
-Jens Axboe
+2.35.1
+
