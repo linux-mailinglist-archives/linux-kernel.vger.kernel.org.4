@@ -2,96 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B54D64410B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDC064410D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:12:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbiLFKLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S233467AbiLFKMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:12:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234322AbiLFKL3 (ORCPT
+        with ESMTP id S233776AbiLFKLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:11:29 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0D323BDF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:07:21 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id b9so16645457ljr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 02:07:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NMekL2LEk3JOOHB+JWji+lnO2nhMD5gf3MzPJiCM1Gg=;
-        b=zUSRpnmTc/RFKY0PPPOizXNQWMOmVuMoluFjVWCiV+y0JRoq9PKRKsnPLuWkRfegVy
-         lvfZ9F21HyLiXCuIwExrwL8Z5jwN1Dxx6yqN62A5l9sxY851fdyR0uTwUk+aZMr00KNE
-         ihmWwGw6PhJVPHsDTKorJinY9wBcTOvku5MmtsXEVIIunRv7pgDWnNZGdNdQENhYaVEj
-         nzFhav+U4nd+ot6HgsbLRfOE0P6Lv4rwKdC20iKoRYXHE2RIoB+bRQsSHAXCUicFTJO0
-         fR3jtohuRIdMNBSLfJsOzxCe2JOVL4ED/rtPpZfW1+VJEfaQxw4Niv4bP2x/I7KNzAKP
-         D0VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NMekL2LEk3JOOHB+JWji+lnO2nhMD5gf3MzPJiCM1Gg=;
-        b=1OwAMka7trh3Uk7q1p8ye7SaWmJZgifHSVHu00ZCdIxwLPksC/qoqkhzyKbuwjZ5CW
-         KiOIGnXC+9/aF6WFfbOPQyxwCoEgmJriCiAGCi9l4qS32ImgiKvH6He7eAoLZgdU71al
-         tq5anwwAmEOzKNgcNtCUAKpIcWzU1ug2qx5Y6sPR6+A0Gp2Achyk8n5dD5VyYjCxa303
-         wZ/0cfNxiExwzCKcT+AMQ0e2dlok4+sx4YmLV7+GALswGy8gKxdW9g/AkrCunGIMY1AA
-         6aELw5D357sjFliOpb+FhiJeSPJuOZHxXo1AgueRylAt3UnLiYwsuoqpmYu7ag75aaRx
-         xwfQ==
-X-Gm-Message-State: ANoB5plU7fEvp5hS0JY6LGH9HEoV9MMu0ZLlbqVSbDQSSN0+L1wMNir/
-        OGWYZq8qID//IVA8FNsBNgNN/A==
-X-Google-Smtp-Source: AA0mqf6ypVuG5zWj9XR/Lb4mql4LSQssNDupVw8L/tQ9hJunntmG6nm4nXjDV75baL3SH/xhfVddEA==
-X-Received: by 2002:a2e:b0ca:0:b0:279:c096:2e8a with SMTP id g10-20020a2eb0ca000000b00279c0962e8amr9625320ljl.433.1670321239588;
-        Tue, 06 Dec 2022 02:07:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05651206d200b00498f23c249dsm2414432lff.74.2022.12.06.02.07.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 02:07:19 -0800 (PST)
-Message-ID: <853c1bff-f657-8696-e927-5b5278593234@linaro.org>
-Date:   Tue, 6 Dec 2022 11:07:17 +0100
+        Tue, 6 Dec 2022 05:11:43 -0500
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056B6FE9;
+        Tue,  6 Dec 2022 02:07:41 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id EB13C3F12A;
+        Tue,  6 Dec 2022 10:07:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1670321257;
+        bh=nplTo9ZKBIapoAm8/cSHXWQq2fSo+p21HcrD9WDHSSI=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=ewCF4cARfYQx42U+vjs8pcyJ5ceRclU0esL78RuH/6PPwmYrIYvzlODDV1AZTz4XZ
+         WD9GvlE/h92slGtznwwNsMgshqU4NinourDR2pAzdHud5VydNbQ+Ahli02vko0ov3h
+         cruLsaTIDORASyxxWmUldtq/9kN5IrgeutO5AIO0yZ08Mhvf22TxmJr9b61HLd4AhM
+         T4wUYEV+E04U/IAMucOP2gVBfhVtaRKP1Gc3ixncNsmPjEdlsQSmP9Z+BE6gr9/MOi
+         x1IL6cPUuhvcazAF7cdno2GKnkN3EesMGtwmDaTUgf3A8OJiGki2FogFyV/ywUaR7C
+         StNl1GMHofb8w==
+Message-ID: <45a7a499-bf80-7cdf-6db8-4792f8bfb7a0@canonical.com>
+Date:   Tue, 6 Dec 2022 02:07:33 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v4 0/2] arm64: dts: Add SYSREG nodes for FSD SoC
-To:     Sriranjani P <sriranjani.p@samsung.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        alim.akhtar@samsung.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, sathya@samsung.com
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org
-References: <CGME20221129115540epcas5p370eb47c404a8d2c08ab4f264ae983481@epcas5p3.samsung.com>
- <20221129115531.102932-1-sriranjani.p@samsung.com>
- <01ff01d90950$c7768fd0$5663af70$@samsung.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/2] kunit: add macro to allow conditionally exposing
+ static symbols to tests
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <01ff01d90950$c7768fd0$5663af70$@samsung.com>
-Content-Type: text/plain; charset=UTF-8
+To:     David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc:     brendanhiggins@google.com, dlatypov@google.com,
+        skhan@linuxfoundation.org, tales.aparecida@gmail.com,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, apparmor@lists.ubuntu.com
+References: <20221205215058.143688-1-rmoar@google.com>
+ <20221205215058.143688-2-rmoar@google.com>
+ <CABVgOSkRkN9OGHKcAuG98vV2SeFoSJ6yOUGNoaJ2=8ZFyYBwUA@mail.gmail.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <CABVgOSkRkN9OGHKcAuG98vV2SeFoSJ6yOUGNoaJ2=8ZFyYBwUA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2022 09:57, Sriranjani P wrote:
-> Hi all,
+On 12/6/22 01:40, David Gow wrote:
+> On Tue, Dec 6, 2022 at 5:51 AM Rae Moar <rmoar@google.com> wrote:
+>>
+>> Create two macros:
+>>
+>> VISIBLE_IF_KUNIT - A macro that sets symbols to be static if CONFIG_KUNIT
+>> is not enabled. Otherwise if CONFIG_KUNIT is enabled there is no change to
+>> the symbol definition.
+>>
+>> EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
+>> EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is enabled. Must
+>> use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING) in test file in order to
+>> use symbols.
+>>
+>> Signed-off-by: Rae Moar <rmoar@google.com>
+>> Reviewed-by: John Johansen <john.johansen@canonical.com>
+>> Reviewed-by: David Gow <davidgow@google.com>
+>> ---
+>>
+>> Changes since v1:
+>>   - Separated the documentation comments for macros.
+>>   - Changed copyright date and author for new header file.
+>>
 > 
-> Gentle Reminder to review this patch series.
+> This still looks good to me, thanks!
 > 
+> Reviewed-by: David Gow <davidgow@google.com>
 
-If you ping me, then:
-1. Pinging after a week is a bit too fast. Standard is 2 weeks.
-2. It is too late in the cycle for me to pick it up. I will take it
-after the merge window. Anything sent after rc5 usually misses upcoming
-merge window.
+yep, and you already have my Reviewed-by for this one
 
-Best regards,
-Krzysztof
+> 
+> Cheers,
+> -- David
+> 
+> 
+>>   include/kunit/visibility.h | 33 +++++++++++++++++++++++++++++++++
+>>   1 file changed, 33 insertions(+)
+>>   create mode 100644 include/kunit/visibility.h
+>>
+>> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+>> new file mode 100644
+>> index 000000000000..0dfe35feeec6
+>> --- /dev/null
+>> +++ b/include/kunit/visibility.h
+>> @@ -0,0 +1,33 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * KUnit API to allow symbols to be conditionally visible during KUnit
+>> + * testing
+>> + *
+>> + * Copyright (C) 2022, Google LLC.
+>> + * Author: Rae Moar <rmoar@google.com>
+>> + */
+>> +
+>> +#ifndef _KUNIT_VISIBILITY_H
+>> +#define _KUNIT_VISIBILITY_H
+>> +
+>> +#if IS_ENABLED(CONFIG_KUNIT)
+>> +    /**
+>> +     * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if
+>> +     * CONFIG_KUNIT is not enabled. Otherwise if CONFIG_KUNIT is enabled
+>> +     * there is no change to the symbol definition.
+>> +     */
+>> +    #define VISIBLE_IF_KUNIT
+>> +    /**
+>> +     * EXPORT_SYMBOL_IF_KUNIT(symbol) - Exports symbol into
+>> +     * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
+>> +     * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
+>> +     * in test file in order to use symbols.
+>> +     */
+>> +    #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
+>> +           EXPORTED_FOR_KUNIT_TESTING)
+>> +#else
+>> +    #define VISIBLE_IF_KUNIT static
+>> +    #define EXPORT_SYMBOL_IF_KUNIT(symbol)
+>> +#endif
+>> +
+>> +#endif /* _KUNIT_VISIBILITY_H */
+>> --
+>> 2.39.0.rc0.267.gcb52ba06e7-goog
+>>
 
