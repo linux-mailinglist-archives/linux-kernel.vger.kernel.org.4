@@ -2,208 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC248644119
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:15:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D466B64411E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:15:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233879AbiLFKPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:15:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54748 "EHLO
+        id S234202AbiLFKPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231869AbiLFKOx (ORCPT
+        with ESMTP id S234265AbiLFKPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:14:53 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2A1327;
-        Tue,  6 Dec 2022 02:14:52 -0800 (PST)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B681iNn011870;
-        Tue, 6 Dec 2022 10:14:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : message-id : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=xP+fE3zfeq7Cma8fKqUf/J6GY4b4v0vDQ9LWsl5xUaE=;
- b=CxCV2iAwdqdN9mf9vgFsB05jtM1ewnD7HjVYa5NrZSCY02d8w/paB+ehcpKx21z4oFQE
- WEBPO9BT0fxbd86ps7hzSw/TD8pDLKbTK7NKXuGKd5uMhrpy56EZ9U5KhsFDK47SWerB
- FlVZsbVGgLBm2wfv0lL0DkxVZcXkbzIlrC1exr595Zpx7w+0NGJ8IxHuqsTjv7MvRILX
- ZMZoEZ2VGQJfljhGh2d04VmXxvgut52TOBPpfFSQ6RSXRLxGFHCCxBVtTUEhYoI22LGv
- 8HNrlS3L6B4FF8cvMJ18jr2fIJ9WEYnvwQoD9rQ7SwPJLmB5z5u48GZ0LQSoGfywgtpI 0g== 
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3m8gm46xvm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Dec 2022 10:14:28 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2B696TPX008300;
-        Tue, 6 Dec 2022 10:14:26 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3m9m5y1602-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Dec 2022 10:14:26 +0000
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com ([9.149.105.160])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B6AEOgf43843942
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Dec 2022 10:14:24 GMT
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 18ADFA4067;
-        Tue,  6 Dec 2022 10:14:24 +0000 (GMT)
-Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A948A4062;
-        Tue,  6 Dec 2022 10:14:23 +0000 (GMT)
-Received: from localhost (unknown [9.124.31.136])
-        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  6 Dec 2022 10:14:23 +0000 (GMT)
-Date:   Tue, 06 Dec 2022 15:44:22 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: linux-next: build warnings after merge of the powerpc-objtool
- tree
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20221125143012.6426c2b9@canb.auug.org.au>
-        <6cdad32e-782d-5bb5-f7e9-a44fb0b6444d@linux.ibm.com>
-        <c0ed0d60-6014-4c5f-e610-b4d3bd9e9e33@csgroup.eu>
-        <74552090-c654-5356-773d-47ead2d63ab2@linux.ibm.com>
-In-Reply-To: <74552090-c654-5356-773d-47ead2d63ab2@linux.ibm.com>
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1670317359.hj45ajyl9d.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: olsnCQvttZOY4sF1sHKJ-y4bBqYE_GNk
-X-Proofpoint-GUID: olsnCQvttZOY4sF1sHKJ-y4bBqYE_GNk
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 6 Dec 2022 05:15:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC694E20;
+        Tue,  6 Dec 2022 02:15:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 660CB615E7;
+        Tue,  6 Dec 2022 10:15:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FB45C433B5;
+        Tue,  6 Dec 2022 10:15:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670321722;
+        bh=yO8H2wPz2yiz0jpwZL0JAyUSggS/ugiA1nSilGo2FLo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ottP8oFfj6PnIRGcrO0xqOlKqb/4MQuSUHuBzuMg6Rv2uLY/S6iIV9VQ+jFF3BHsQ
+         JVwyhMmkSdLJwhLSG4R8mxcpUFHFc2XhvfXU9kZZ5uHZZueg88GTdsEtNGLcINZ6Qh
+         OZ8oxIj6htW0onT76towkUj2K1n6F++qgAa2mvTFFwHv21HOW16jfsEmTC7vLAxlu8
+         y2ltdBEDd446gJrlpdqriv6AUs5QEmM8ippKLKVS5Ys0dVohDEYzsn1OLOA2XLa/k6
+         GFXd9kP8i2TCriNUTjA4MPXA8N16od3BCgo5u9wlIG2G84DH0KKO8eHyg/05iiEhGk
+         WJ6kpiVfIizyg==
+Message-ID: <fed09b42-7891-0a5e-3fd9-1ab65d090271@kernel.org>
+Date:   Tue, 6 Dec 2022 12:15:17 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-06_05,2022-12-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 spamscore=0 clxscore=1011 mlxscore=0 suspectscore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 mlxlogscore=999
- adultscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2212060078
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 net-next 0/6] net: ethernet: ti: am65-cpsw: Fix set
+ channel operation
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
+        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+        vigneshr@ti.com, linux-omap@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221206094419.19478-1-rogerq@kernel.org>
+ <Y48T4OduISrVD4HR@unreal>
+Content-Language: en-US
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <Y48T4OduISrVD4HR@unreal>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sathvika Vasireddy wrote:
->=20
-> On 29/11/22 20:58, Christophe Leroy wrote:
+On 06/12/2022 12:05, Leon Romanovsky wrote:
+> On Tue, Dec 06, 2022 at 11:44:13AM +0200, Roger Quadros wrote:
+>> Hi,
 >>
->> Le 29/11/2022 =C3=A0 16:13, Sathvika Vasireddy a =C3=A9crit=C2=A0:
->>> Hi all,
->>>
->>> On 25/11/22 09:00, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> After merging the powerpc-objtool tree, today's linux-next build (powe=
-rpc
->>>> pseries_le_defconfig) produced these warnings:
->>>>
->>>> arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B():
->>>> can't find starting instruction
->>>> arch/powerpc/kernel/optprobes_head.o: warning: objtool:
->>>> optprobe_template_end(): can't find starting instruction
->>>>
->>>> I have no idea what started this (they may have been there yesterday).
->>> I was able to recreate the above mentioned warnings with
->>> pseries_le_defconfig and powernv_defconfig. The regression report also
->>> mentions a warning
->>> (https://lore.kernel.org/oe-kbuild-all/202211282102.QUr7HHrW-lkp@intel.=
-com/) seen with arch/powerpc/kernel/kvm_emul.S assembly file.
->>>
->>>   =C2=A0[1] arch/powerpc/kernel/optprobes_head.o: warning: objtool:
->>> optprobe_template_end(): can't find starting instruction
->>>   =C2=A0[2] arch/powerpc/kernel/kvm_emul.o: warning: objtool:
->>> kvm_template_end(): can't find starting instruction
->>>   =C2=A0[3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_=
-256B():
->>> can't find starting instruction
->>>
->>> The warnings [1] and [2] go away after adding 'nop' instruction. Below
->>> diff fixes it for me:
->> You have to add NOPs just because those labels are at the end of the
->> files. That's a bit odd.
->> I think either we are missing some kind of flagging for the symbols, or
->> objtool has a bug. In both cases, I'm not sure adding an artificial
->> 'nop' is the solution. At least there should be a big hammer warning
->> explaining why.
+>> This contains a critical bug fix for the recently merged suspend/resume
+>> support [1] that broke set channel operation. (ethtool -L eth0 tx <n>)
+>>
+>> As there were 2 dependent patches on top of the offending commit [1]
+>> first revert them and then apply them back after the correct fix.
+> 
+> Why did you chose revert and reapply almost same patch instead of simply
+> fixing what is missing?
 
-The problem looks to be that commit dbcdbdfdf137b4 ("objtool: Rework=20
-instruction -> symbol mapping"), which was referenced by Sathvika below,=20
-changes how STT_NOTYPE symbols are handled. In the files throwing that=20
-warning, there are labels either at the very end of the file, or at the=20
-end of a section with no subsequent instruction. Before that commit, we=20
-didn't used to expect an instruction for STT_NOTYPE symbols.
+v1 & 2 of this series were doing that but it was difficult to review.
+This is because we are taking a different approach so we have to undo
+most of the things done earlier.
 
->=20
-> I don't see these warnings with powerpc/topic/objtool branch. However,=20
-> they are seen with linux-next master branch.
-> Commit dbcdbdfdf137b49144204571f1a5e5dc01b8aaad objtool: Rework=20
-> instruction -> symbol mapping in linux-next is resulting in objtool=20
-> can't find starting instruction warnings on powerpc.
->=20
-> Reverting this particular hunk (pasted below), resolves it and we don't=20
-> see the problem anymore.
->=20
-> @@ -427,7 +427,10 @@ static int decode_instructions(struct objtool_file=20
-> *file)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 }
->=20
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 list_for_each_entry(func, &sec->symbol_list, list) {
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (func->type=
- !=3D STT_FUNC || func->alias !=3D func)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (func->type=
- !=3D STT_NOTYPE && func->type !=3D=20
-> STT_FUNC)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 continue;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (func->retu=
-rn_thunk || func->alias !=3D func)
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 continue;
->=20
->  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!fin=
-d_insn(file, sec, func->offset)) {
+It was suggested during review that reverting and fresh patch was better.
 
-We are currently bailing out if find_insn() there fails. Should we=20
-instead just continue by not setting insn->sym?
+cheers,
+-roger
 
-@@ -430,11 +430,8 @@ static int decode_instructions(struct objtool_file *fi=
-le)
-                        if (func->return_thunk || func->alias !=3D func)
-                                continue;
-=20
--                       if (!find_insn(file, sec, func->offset)) {
--                               WARN("%s(): can't find starting instruction=
-",
--                                    func->name);
--                               return -1;
--                       }
-+                       if (!find_insn(file, sec, func->offset))
-+                               continue;
-=20
-                        sym_for_each_insn(file, func, insn) {
-                                insn->sym =3D func;
-
-
-
-- Naveen
-
+> 
+> Thanks
+> 
+>>
+>> [1] fd23df72f2be ("net: ethernet: ti: am65-cpsw: Add suspend/resume support")
+>>
+>> cheers,
+>> -roger
+>>
+>> Changelog:
+>>
+>> v5:
+>> - Change reset failure error code from -EBUSY to -ETIMEDOUT
+>>
+>> v4:
+>> - move am65_cpsw_nuss_ndev_add_tx_napi() earlier to avoid declaration.
+>> - print error and error out if soft RESET failed in
+>>   am65_cpsw_nuss_ndo_slave_open()
+>> - move struct 'am65_cpsw_host *host' where 'common' is defined.
+>>
+>> v3:
+>> - revert offending commit before applying the updated patch.
+>> - drop optimization patch to be sent separately.
+>>
+>> v2:
+>> - Fix build warning
+>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c:562:13: warning: variable 'tmo' set but not used [-Wunused-but-set-variable]
+>>
+>> Roger Quadros (6):
+>>   Revert "net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
+>>     suspend/resume"
+>>   Revert "net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
+>>     suspend/resume"
+>>   Revert "net: ethernet: ti: am65-cpsw: Add suspend/resume support"
+>>   net: ethernet: ti: am65-cpsw: Add suspend/resume support
+>>   net: ethernet: ti: am65-cpsw: retain PORT_VLAN_REG after
+>>     suspend/resume
+>>   net: ethernet: ti: am65-cpsw: Fix hardware switch mode on
+>>     suspend/resume
+>>
+>>  drivers/net/ethernet/ti/am65-cpsw-nuss.c | 197 ++++++++++++-----------
+>>  1 file changed, 105 insertions(+), 92 deletions(-)
+>>
+>> -- 
+>> 2.17.1
+>>
