@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD9D644C49
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3814D644C45
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:12:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiLFTNW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:13:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50386 "EHLO
+        id S229632AbiLFTMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiLFTNG (ORCPT
+        with ESMTP id S229595AbiLFTMe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:13:06 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E4F6350;
-        Tue,  6 Dec 2022 11:13:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=LsBZCFjtzud19tztl2DwToZmHr4mF8Y2lOaokxUC5tw=; b=MAAF7/7KCdnQ9IkD3XvjGJf2jj
-        IgEYtCgx8WihiCqbXLqjXVeTLnP603T9iRZnJWKOc4Ulf8pTbvqBCNjdTtjU0zKk8tl1HJrFteT+N
-        ItoFINLe0nJ9NwBx4Bszk4wyMn/EsSLMqwvB2T/WkXKGlc6tulWNm7aeFuCXOccUiCvY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p2dMI-004Yup-HZ; Tue, 06 Dec 2022 20:12:02 +0100
-Date:   Tue, 6 Dec 2022 20:12:02 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v4 net-next 5/5] drivers/net/phy: add driver for the
- onsemi NCN26000 10BASE-T1S PHY
-Message-ID: <Y4+UAmyS5hJ0+c66@lunn.ch>
-References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
- <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
- <Y49IBR8ByMQH6oVt@lunn.ch>
- <Y49THkXZdLBR6Mxv@gvm01>
- <Y49yxcd6m7K3G3ZA@lunn.ch>
- <Y4+FqsZLBzDzadcC@gvm01>
+        Tue, 6 Dec 2022 14:12:34 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43AC2D1C3;
+        Tue,  6 Dec 2022 11:12:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 58CEE616C6;
+        Tue,  6 Dec 2022 19:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF729C433D6;
+        Tue,  6 Dec 2022 19:12:30 +0000 (UTC)
+Received: from rostedt by gandalf.local.home with local (Exim 4.96)
+        (envelope-from <rostedt@goodmis.org>)
+        id 1p2dMj-0004Qr-2Z;
+        Tue, 06 Dec 2022 14:12:29 -0500
+Message-ID: <20221206191229.656244029@goodmis.org>
+User-Agent: quilt/0.66
+Date:   Tue, 06 Dec 2022 14:12:02 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Karol Herbst <karolherbst@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org
+Subject: [PATCH 1/2] x86/mm/kmmio: Switch to arch_spin_lock()
+References: <20221206191201.217838841@goodmis.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4+FqsZLBzDzadcC@gvm01>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,13 +54,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> I was wondering if there is some interface (sysfs / proc / other) to set
-> parameters which are very specific to a PHY implementation?
+From: Steven Rostedt <rostedt@goodmis.org>
 
-Please describe what they are, and in what context you need them. Then
-we can decide on the correct API.
+The mmiotrace tracer is "special". The purpose is to help reverse engineer
+binary drivers by removing the memory allocated by the driver and when the
+driver goes to access it, a fault occurs, the mmiotracer will record what
+the driver was doing and then do the work on its behalf by single stepping
+through the process.
 
-In general, the OS is there to abstract over the hardware so they all
-look the same. We don't want anything specific to the PHY.
+But to achieve this ability, it must do some special things. One is it
+needs to grab a lock while in the breakpoint handler. This is considered
+an NMI state, and then lockdep warns that the lock is being held in both
+an NMI state (really a breakpoint handler) and also in normal context.
 
-     Andrew
+As the breakpoint/NMI state only happens when the driver is accessing
+memory, there's no concern of a race condition against the setup and
+tear-down of mmiotracer.
+
+To make lockdep and mmiotrace work together, convert the locks used in the
+breakpoint handler into arch_spin_lock().
+
+Link: https://lore.kernel.org/lkml/20221201213126.620b7dd3@gandalf.local.home/
+
+Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
+---
+ arch/x86/mm/kmmio.c | 31 ++++++++++++++++++++++---------
+ 1 file changed, 22 insertions(+), 9 deletions(-)
+
+diff --git a/arch/x86/mm/kmmio.c b/arch/x86/mm/kmmio.c
+index d3efbc5b3449..edb486450158 100644
+--- a/arch/x86/mm/kmmio.c
++++ b/arch/x86/mm/kmmio.c
+@@ -62,7 +62,13 @@ struct kmmio_context {
+ 	int active;
+ };
+ 
+-static DEFINE_SPINLOCK(kmmio_lock);
++/*
++ * The kmmio_lock is taken in int3 context, which is treated as NMI context.
++ * This causes lockdep to complain about it bein in both NMI and normal
++ * context. Hide it from lockdep, as it should not have any other locks
++ * taken under it, and this is only enabled for debugging mmio anyway.
++ */
++static arch_spinlock_t kmmio_lock = __ARCH_SPIN_LOCK_UNLOCKED;
+ 
+ /* Protected by kmmio_lock */
+ unsigned int kmmio_count;
+@@ -346,10 +352,10 @@ static int post_kmmio_handler(unsigned long condition, struct pt_regs *regs)
+ 		ctx->probe->post_handler(ctx->probe, condition, regs);
+ 
+ 	/* Prevent racing against release_kmmio_fault_page(). */
+-	spin_lock(&kmmio_lock);
++	arch_spin_lock(&kmmio_lock);
+ 	if (ctx->fpage->count)
+ 		arm_kmmio_fault_page(ctx->fpage);
+-	spin_unlock(&kmmio_lock);
++	arch_spin_unlock(&kmmio_lock);
+ 
+ 	regs->flags &= ~X86_EFLAGS_TF;
+ 	regs->flags |= ctx->saved_flags;
+@@ -440,7 +446,8 @@ int register_kmmio_probe(struct kmmio_probe *p)
+ 	unsigned int l;
+ 	pte_t *pte;
+ 
+-	spin_lock_irqsave(&kmmio_lock, flags);
++	local_irq_save(flags);
++	arch_spin_lock(&kmmio_lock);
+ 	if (get_kmmio_probe(addr)) {
+ 		ret = -EEXIST;
+ 		goto out;
+@@ -460,7 +467,9 @@ int register_kmmio_probe(struct kmmio_probe *p)
+ 		size += page_level_size(l);
+ 	}
+ out:
+-	spin_unlock_irqrestore(&kmmio_lock, flags);
++	arch_spin_unlock(&kmmio_lock);
++	local_irq_restore(flags);
++
+ 	/*
+ 	 * XXX: What should I do here?
+ 	 * Here was a call to global_flush_tlb(), but it does not exist
+@@ -494,7 +503,8 @@ static void remove_kmmio_fault_pages(struct rcu_head *head)
+ 	struct kmmio_fault_page **prevp = &dr->release_list;
+ 	unsigned long flags;
+ 
+-	spin_lock_irqsave(&kmmio_lock, flags);
++	local_irq_save(flags);
++	arch_spin_lock(&kmmio_lock);
+ 	while (f) {
+ 		if (!f->count) {
+ 			list_del_rcu(&f->list);
+@@ -506,7 +516,8 @@ static void remove_kmmio_fault_pages(struct rcu_head *head)
+ 		}
+ 		f = *prevp;
+ 	}
+-	spin_unlock_irqrestore(&kmmio_lock, flags);
++	arch_spin_unlock(&kmmio_lock);
++	local_irq_restore(flags);
+ 
+ 	/* This is the real RCU destroy call. */
+ 	call_rcu(&dr->rcu, rcu_free_kmmio_fault_pages);
+@@ -540,14 +551,16 @@ void unregister_kmmio_probe(struct kmmio_probe *p)
+ 	if (!pte)
+ 		return;
+ 
+-	spin_lock_irqsave(&kmmio_lock, flags);
++	local_irq_save(flags);
++	arch_spin_lock(&kmmio_lock);
+ 	while (size < size_lim) {
+ 		release_kmmio_fault_page(addr + size, &release_list);
+ 		size += page_level_size(l);
+ 	}
+ 	list_del_rcu(&p->list);
+ 	kmmio_count--;
+-	spin_unlock_irqrestore(&kmmio_lock, flags);
++	arch_spin_unlock(&kmmio_lock);
++	local_irq_restore(flags);
+ 
+ 	if (!release_list)
+ 		return;
+-- 
+2.35.1
+
+
