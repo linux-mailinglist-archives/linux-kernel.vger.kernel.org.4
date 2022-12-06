@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEFA644271
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:50:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FBF644279
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234978AbiLFLuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:50:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
+        id S235073AbiLFLu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:50:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234857AbiLFLt5 (ORCPT
+        with ESMTP id S234986AbiLFLuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:49:57 -0500
+        Tue, 6 Dec 2022 06:50:18 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB5C1CFFE;
-        Tue,  6 Dec 2022 03:49:56 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EF027DE9;
+        Tue,  6 Dec 2022 03:50:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC22D616D4;
-        Tue,  6 Dec 2022 11:49:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F47C433C1;
-        Tue,  6 Dec 2022 11:49:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CE8C0616D0;
+        Tue,  6 Dec 2022 11:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 37155C433D7;
+        Tue,  6 Dec 2022 11:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670327395;
-        bh=Mwq5NuUta+wRMLWCv1J/+EfioKOtv+vyJzohqHnIx/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iaQE+6AEDlB+uXpLw/GQu62g48FT/7nlHQ+9v8EwFMYhGKEoK5xw+ROVYN41XspLY
-         2FVUzSPuNaxt1vN3rghloroJCGx5ImeopcQbXdc63ILKYJFTNta2IsQ+IHN9XQEvhX
-         spIAeEpTsjZ8gbSIKwoWEawQ3u6zefLpeYZ6+xpZN701120ChN/tYkvu/Oq2BQGFtw
-         eF+32F3cmZNzU4mOhVQEigHyWx3XE4wWJ3Ufr7C63RGp6OwVzKmSOf8Q5gymsYgLEd
-         1SgMzE4IXTKQ+Fc/8ehDBL68//F5dxxvlYUuZovAchMr5qiDhVYduVc2jKMWafNQfq
-         n8HZ9xaFgIsCw==
-Date:   Tue, 6 Dec 2022 13:49:50 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
-        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-        vigneshr@ti.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 net-next 0/6] net: ethernet: ti: am65-cpsw: Fix set
- channel operation
-Message-ID: <Y48sXm0B67u/hSQI@unreal>
-References: <20221206094419.19478-1-rogerq@kernel.org>
- <Y48T4OduISrVD4HR@unreal>
- <fed09b42-7891-0a5e-3fd9-1ab65d090271@kernel.org>
+        s=k20201202; t=1670327416;
+        bh=g0iiRpDFeldqd0FblsKlLaBWUTPZG9jnZwlisgPQLhw=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pvdNd2p2lMwZu+0DnVJS0u2fBcdzBySwlDnhp6IMDjKu8HQHRA0+301aST2hR2i6A
+         R5tPsvxXtICQwU5k0UmSbKKbuL79gkNlzOskR6RNoDhDvawISjf/sxU4YnugK8+Dhy
+         W7L/dhPha7bKJ8xp3g7QqNCDMpCS5U9y2ldMDvtxiDDqOnmfio5Aj4QRyM5wgp8wOW
+         nrLwFpfVrS/loDbMYog98+qUYr9d962GqU9Y5LhGA8c/gKPSRh+UKQXlyLt7GudZEc
+         5AP8YBELzjl4SMfcGAoct76WMe31abv5KdR3Hy0J9wPyXhdxWj9CU1hzVMJZ0IUL4D
+         uEMg3RJ6MyBug==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 14C24E56AA2;
+        Tue,  6 Dec 2022 11:50:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fed09b42-7891-0a5e-3fd9-1ab65d090271@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] ravb: Fix potential use-after-free in ravb_rx_gbeth()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167032741607.10641.2043445047483476004.git-patchwork-notify@kernel.org>
+Date:   Tue, 06 Dec 2022 11:50:16 +0000
+References: <20221203092941.10880-1-yuehaibing@huawei.com>
+In-Reply-To: <20221203092941.10880-1-yuehaibing@huawei.com>
+To:     YueHaibing <yuehaibing@huawei.com>
+Cc:     s.shtylyov@omp.ru, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, phil.edworthy@renesas.com,
+        biju.das.jz@bp.renesas.com,
+        prabhakar.mahadev-lad.rj@bp.renesas.com, netdev@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -58,24 +59,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 12:15:17PM +0200, Roger Quadros wrote:
-> On 06/12/2022 12:05, Leon Romanovsky wrote:
-> > On Tue, Dec 06, 2022 at 11:44:13AM +0200, Roger Quadros wrote:
-> >> Hi,
-> >>
-> >> This contains a critical bug fix for the recently merged suspend/resume
-> >> support [1] that broke set channel operation. (ethtool -L eth0 tx <n>)
-> >>
-> >> As there were 2 dependent patches on top of the offending commit [1]
-> >> first revert them and then apply them back after the correct fix.
-> > 
-> > Why did you chose revert and reapply almost same patch instead of simply
-> > fixing what is missing?
-> 
-> v1 & 2 of this series were doing that but it was difficult to review.
-> This is because we are taking a different approach so we have to undo
-> most of the things done earlier.
-> 
-> It was suggested during review that reverting and fresh patch was better.
+Hello:
 
-Thanks.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sat, 3 Dec 2022 17:29:41 +0800 you wrote:
+> The skb is delivered to napi_gro_receive() which may free it, after calling this,
+> dereferencing skb may trigger use-after-free.
+> 
+> Fixes: 1c59eb678cbd ("ravb: Fillup ravb_rx_gbeth() stub")
+> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+> ---
+>  drivers/net/ethernet/renesas/ravb_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+Here is the summary with links:
+  - [net] ravb: Fix potential use-after-free in ravb_rx_gbeth()
+    https://git.kernel.org/netdev/net/c/5a5a3e564de6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
