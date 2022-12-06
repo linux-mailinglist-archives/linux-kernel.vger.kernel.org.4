@@ -2,92 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A430644BF4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2D5644BF6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiLFSky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 13:40:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60208 "EHLO
+        id S229739AbiLFSl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 13:41:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbiLFSks (ORCPT
+        with ESMTP id S229850AbiLFSlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:40:48 -0500
-Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C022303C2;
-        Tue,  6 Dec 2022 10:40:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
-        MIME-Version:Date:Message-ID:content-disposition;
-        bh=ZiiH7sPM36eESYgVd0MVQCEMcrxi9jMZwAnjeL8qWtI=; b=fxa8RuuDWwVd5gWqReAJK6uA7h
-        Nny/0gZQC9I+tr59D1gA2hOqNspedLXG9FyqFlyZQR7+257futnwHXjXoQPmoPr/W+jZic5cVzPHR
-        0xnD5YskPYAPxIjxKVejQ+Isixsl6K7NuwfPkpbxDLoWhH+1L0Q0+VYyZNdfl+s+5BYEsyHurI8Dk
-        g4EAXFBbgAqTKkk2YkJT7c5jOklOoFSL65+EFFhHQW4dHvpEr+/mg/CslZWjcE7h8qPntCQ8tLgtk
-        lsHRjnQJckZ4g1qkZM7hhxIMXOH4cdXuuXZ8s0sOVLmx3zEQwrhxCsk3+RI/HrZsY+kLwGu1F+INb
-        kSrHsTFA==;
-Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
-        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <logang@deltatee.com>)
-        id 1p2crp-001syz-HJ; Tue, 06 Dec 2022 11:40:34 -0700
-Message-ID: <8420a781-6ac2-e976-cc43-a04d59d2d043@deltatee.com>
-Date:   Tue, 6 Dec 2022 11:40:32 -0700
+        Tue, 6 Dec 2022 13:41:14 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03F553F06F;
+        Tue,  6 Dec 2022 10:41:03 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so18843484pjs.4;
+        Tue, 06 Dec 2022 10:41:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5gSr4H7WrM5p30udt7aFBkhEJpe85dvdV3IE4tFnVRo=;
+        b=TGQT0+CX1iAFQkGnVQomi2v8D9g1ksynUotNR29hyIGO3kPFxOwpRrLIYnS9IuaWQP
+         R/lQ60Ap2c9LcdxYX0GG7xVxS6FAnWBgG84pj9kavgjFdK14xF30kOzZjAY9ua1zySz+
+         RnljnEKRisAfcjsyoyyo7jvGNVLpbN1W65dAuatU1Yc3uVrTRpwW3e9C97yzZwttlAd3
+         4rAcFp6o1C6L2q1jyN1r1Es+Z4c745e4CXbD5nrQfRBqr++X+Z4X7T2tLQ4ueEwoGWhm
+         WkHOrL2WtWPC1rSv+slE56VSB7Dt2sYG15dy4JUY7XcAk6sVcgVAVhR68JeNZxetpOeX
+         JBgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5gSr4H7WrM5p30udt7aFBkhEJpe85dvdV3IE4tFnVRo=;
+        b=79EKO0D8qC0HXZ591VxJZxLJs6yef6Caay/efBbqxD9/NcRZ9lpc/xJWK5xL/5PeUD
+         0NJumwO6STY7hc2oD/j38GCZ1NRLi3R80FOyUaZDbxTVk9bvVMDtbh9bj036a1aYtji+
+         PsgovkHeSmUh5XoPiaxUFKpRRKO5qce6sapArEYUmDwaXIBNiB+VZBmPR97nYyCSpFKM
+         CqkPphlE5ia8nUa/bDhP8ysjZENkp1pxnnNn4AS564OtUwsJBzbYBWAxtWwjxzUj+OFH
+         pMICyAV1dnrqCwPOpeckMvxTZMnymzVGZlU92CNa0k3mBgO5rKapu28ylsTpicMsYIVw
+         cFNw==
+X-Gm-Message-State: ANoB5pkElLYjCVqEWHwaDH2UzYIWjao5+zIiifVfPZTtWPFkcK4NpdIu
+        2fw5hsJv0U3BGQDbkePjKwg=
+X-Google-Smtp-Source: AA0mqf4aQXK2YFP9zN8AYyVVp8yy6XB26E6pP22ecJQ2jAGlbETA14oO58LUU1q4zivayR7lvz497w==
+X-Received: by 2002:a17:902:7c06:b0:189:b0a3:cf50 with SMTP id x6-20020a1709027c0600b00189b0a3cf50mr27149772pll.39.1670352062320;
+        Tue, 06 Dec 2022 10:41:02 -0800 (PST)
+Received: from [192.168.1.102] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id ju10-20020a170903428a00b001782a6fbcacsm12937521plb.101.2022.12.06.10.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 10:41:01 -0800 (PST)
+Message-ID: <31fae915-3803-49e2-cded-0ab77ffcb611@gmail.com>
+Date:   Tue, 6 Dec 2022 10:40:59 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: en-CA
-To:     David Howells <dhowells@redhat.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-References: <0d62615c-57d1-922b-5ebc-32faabf33327@deltatee.com>
- <166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk>
- <166997421646.9475.14837976344157464997.stgit@warthog.procyon.org.uk>
- <1251303.1670351737@warthog.procyon.org.uk>
-From:   Logan Gunthorpe <logang@deltatee.com>
-In-Reply-To: <1251303.1670351737@warthog.procyon.org.uk>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+From:   Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH 4.9 00/63] 4.9.335-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20221206124043.386388226@linuxfoundation.org>
+Content-Language: en-US
+In-Reply-To: <20221206124043.386388226@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 24.64.144.200
-X-SA-Exim-Rcpt-To: dhowells@redhat.com, viro@zeniv.linux.org.uk, hch@lst.de, jhubbard@nvidia.com, willy@infradead.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, hch@infradead.org, jlayton@kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: logang@deltatee.com
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 2/4] iov_iter: Add a function to extract a page list
- from an iterator
-X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
-X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 2022-12-06 11:35, David Howells wrote:
-> Logan Gunthorpe <logang@deltatee.com> wrote:
+On 12/6/2022 4:41 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.335 release.
+> There are 63 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
->> If this is going to be a general replacement for iov_iter_get_pages()
->> it's going to need to pass through gup_flags. My recent patchset added
->> versions with these and I think it should be in during the next merge
->> cycle. [1]
+> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
+> Anything received after that time might be too late.
 > 
-> Cool.  Note that the current iov_iter_get_pages2() is broken, which is why Al
-> wanted a replacement.  It should not be taking a ref on the pages in an
-> XARRAY, BVEC or PIPE - and it should be pinning rather than getting a ref on
-> pages in IOVEC or UBUF if the buffer is being read into.  I'm guessing that
-> your changes move the latter decision to the caller?
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.335-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-My changes maintained the status quo in terms of brokenness. They simply
-added the gup_flags so I could pass a P2PDMA flag in a couple specific
-cases. I have no objections to the other changes and vaguely look ok to
-me, but having not seen patches to convert the users I care about, I
-thought I'd point out that the P2PDMA use case will need to be supported
-somehow.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-Logan
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
