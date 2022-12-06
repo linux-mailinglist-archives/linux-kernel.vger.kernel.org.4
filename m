@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B31643BC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1418A643BD9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:21:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233710AbiLFDSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:18:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42776 "EHLO
+        id S233904AbiLFDVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:21:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiLFDSV (ORCPT
+        with ESMTP id S233884AbiLFDVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:18:21 -0500
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1B825C52
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:18:19 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3bfd998fa53so138874247b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 19:18:19 -0800 (PST)
+        Mon, 5 Dec 2022 22:21:44 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6F222B4
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:21:43 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id v206so17016101ybv.7
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 19:21:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YqqT24Nqraytn2LOsrycTIcntZ7F2ktH5EjwHmBvNlU=;
-        b=f+X2wMIVqjOCM2pvzHPFEQnlrwDChpuK1e//9A/nqpwNm4/ibClEfmz0chRI3MEAr/
-         puudyO91CXQY+k4AvVN/n5/WdqlX6H+rNcoWrSs62NW1+xg3YsEeR4Mos+uymbw8B6FO
-         TLkghVyoa+KIy2t93LqnYzz3Jiqj6bb7OC5rt9A0oeAjIUTEcqTIvzlHq/qpxh0j7YG+
-         cHTc3auKyTWvO4HJJ3lqBxC7r89KueGKzQ0wlWtS9KF+FKGHqKzlbWJpkwXNO8biG3N5
-         F1x0wrPQcw1ls7R5Wlf4b8rAMnOa120IurcFpsi5VJg/ze2jSrRnlUathgqAzCszHAGQ
-         4rGg==
+        bh=L0rThEAGpgTOyn17zGhI/zm1G/vnQGsdtcnyo/9H9BA=;
+        b=nNZc+wIjDrFq8+W5tMuzccBqAOZsun3xycLU00kiE/tUDoF6VUGJhkvDZRi4FgaNO4
+         EbnvDBzUBRmL6SEnejnlh89ho4B6nr9Vj3z1fbgAq9Lz6Y2OE8gwyRHD/RJBSO3/C8GE
+         Aawh77F5YTX/M2BWfLyZ/kKDVrwx1G8tqWSORrWpj/nT6rMStGG4pNoG2w2GtpYy9v2y
+         YG2x4djqMD+6so3fckQIjLBLPpjFatwpp4cV73l2sjF0JERBpRBL7LzMTIYgQBY4GWgJ
+         +u8HsPIt0f0chuvxry5bc1JVQGDopoAtjHEp6H09etyXgf/ptETXXO8ZK2xMTiSVyvZ+
+         JwXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YqqT24Nqraytn2LOsrycTIcntZ7F2ktH5EjwHmBvNlU=;
-        b=JSANmhLKHLtwns9WFfvbhqtALVh3d2kwVCanNgsp/O5EbC5zee0b1YOWydf+2tfn28
-         el7BKAFfuBt18dNgdFt/6WVW9Gn2H0mU0o/472re0OpAh3Ldtl66EUMaWkHcgWYqJQYA
-         ztnSjUlW89RPhO3HNY95LD4hQZAENkgcg8QUxgpvhjJfSZszSfS/DpHXRMvXS+o7WvjI
-         MfRQTpx8IPHQ+5rPvNub05zX8W+xuVVpRAqiT0kJIOAJ4xkwXcOBa3o8dwzs2KaETINg
-         bkUQYd7n0kHBbucUYx+CC34TWKbA2WS7UHmINpMKIyMIEe4XtK47OS8DwGd8mBcjM7bY
-         g/tw==
-X-Gm-Message-State: ANoB5pl9RXyP/Q8+kMBj051fSc3LrNHOpkfH+gCrQpHRvcGk/btFiDx/
-        WcDMkWZk+Kua07tacKOJ5btUsYkzEYdd1We/cUQxYw==
-X-Google-Smtp-Source: AA0mqf74j0N0U2MSZf44kh+gBRqfj83d8aCzfMMwco3VZErVzavml/PjpFSrMePpXJeHhEpszNYW8BOGLiIEybl2dJ8=
-X-Received: by 2002:a81:d87:0:b0:393:ab0b:5a31 with SMTP id
- 129-20020a810d87000000b00393ab0b5a31mr13277936ywn.55.1670296698705; Mon, 05
- Dec 2022 19:18:18 -0800 (PST)
+        bh=L0rThEAGpgTOyn17zGhI/zm1G/vnQGsdtcnyo/9H9BA=;
+        b=LMR+GkUCx10/6IVG97exjUQN5axgWEnfJgoDoMISeN2h+PjxGqoit+LGf//InqMuu5
+         Rg+wHWQzQFERc8TZBAVuR2uMm/X/Op8KmyQXjJonSG8l23E2S3Zxw3qfzliSwkj2xW8E
+         zBmS9D/EUuuMeuAc7RU9sZjicrJrZgpQYmIpfeE80cnqmpDgLy6d0ZsxrOqfI9P6XOgf
+         l1fD517cA6ApkvgqDFne2HIb1yL5YMTvH4j5nGgzDBiHY8SH8FNQ/Ty1O4fZmES+2NWD
+         IVaxfIa7ckAFSzjz8+G2wabbhNIRInmBlvXrXxHIvQmvMcroQPWhL4/tkkZyR6k64fIE
+         uO5g==
+X-Gm-Message-State: ANoB5pni+xKP31Ajrxve72UN2icU+dHGJ58ITZ2bGen56hCpxOezIaDM
+        6mH993C5s8JyHyQI8wBI3KZSc2dlUiab5eAMJNv2tQ==
+X-Google-Smtp-Source: AA0mqf62+7uNMlNgurIXTWE7Zz21Vi6swSdHe74CT0hwHyy/bY8WqsERd6t7hN//zfEZvRKcaqI33O+x5RXPdyKk12I=
+X-Received: by 2002:a25:d197:0:b0:703:4bfd:3986 with SMTP id
+ i145-20020a25d197000000b007034bfd3986mr1052241ybg.407.1670296902643; Mon, 05
+ Dec 2022 19:21:42 -0800 (PST)
 MIME-Version: 1.0
-References: <202212050936120314474@zte.com.cn> <20221205175354.3949c6bb@kernel.org>
-In-Reply-To: <20221205175354.3949c6bb@kernel.org>
+References: <1669817512-4560-1-git-send-email-george.kennedy@oracle.com>
+ <CALs4sv2ZfT1SAYY0oOYhrBBCjsG_th5g=QtSsbKJnPbW8faQ+w@mail.gmail.com>
+ <CANn89iL9obgd==tdp9DgdxXk78UvzF6D4J1OeihB1kx9_U4oZw@mail.gmail.com>
+ <99adf483-ae89-8010-4689-fd50a77ff023@oracle.com> <CANn89iL18gPus7YWMMX_UFg9PSxAv0SkWTjLYCPhncOCEKrWuQ@mail.gmail.com>
+ <ae736328-56de-7985-8a9a-0279a123544f@oracle.com>
+In-Reply-To: <ae736328-56de-7985-8a9a-0279a123544f@oracle.com>
 From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 6 Dec 2022 04:18:07 +0100
-Message-ID: <CANn89iK4Cn-+BgJEuGSWF=PTfDPWuCy8ci75664+98ajt_+3Xw@mail.gmail.com>
-Subject: Re: [PATCH linux-next v2] net: record times of netdev_budget exhausted
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     yang.yang29@zte.com.cn, davem@davemloft.net, pabeni@redhat.com,
-        bigeasy@linutronix.de, imagedong@tencent.com, kuniyu@amazon.com,
-        petrm@nvidia.com, liu3101@purdue.edu, wujianguo@chinatelecom.cn,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 6 Dec 2022 04:21:31 +0100
+Message-ID: <CANn89iKsGrTw31_yQ8DqdFeDYG0OABUKuWd5i9t+HbwAS7ZbsQ@mail.gmail.com>
+Subject: Re: [PATCH] net: check for dev pointer being NULL in
+ dev_hard_header() to avoid GPF
+To:     George Kennedy <george.kennedy@oracle.com>
+Cc:     Pavan Chebbi <pavan.chebbi@broadcom.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        harshit.m.mogalapalli@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -70,24 +75,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 2:53 AM Jakub Kicinski <kuba@kernel.org> wrote:
+On Tue, Dec 6, 2022 at 2:11 AM George Kennedy <george.kennedy@oracle.com> wrote:
 >
-> On Mon, 5 Dec 2022 09:36:12 +0800 (CST) yang.yang29@zte.com.cn wrote:
-> > A long time ago time_squeeze was used to only record netdev_budget
-> > exhausted[1]. Then we added netdev_budget_usecs to enable softirq
-> > tuning[2]. And when polling elapsed netdev_budget_usecs, it's also
-> > record by time_squeeze.
-> > For tuning netdev_budget and netdev_budget_usecs respectively, we'd
-> > better distinguish from netdev_budget exhausted and netdev_budget_usecs
-> > elapsed, so add budget_exhaust to record netdev_budget exhausted.
-> >
-> > [1] commit 1da177e4c3f4("Linux-2.6.12-rc2")
-> > [2] commit 7acf8a1e8a28("Replace 2 jiffies with sysctl netdev_budget_usecs to enable softirq tuning")
+> Hi Eric,
 >
-> Same comments as on v1.
+> More info...
+>
+> On 12/1/2022 11:11 PM, Eric Dumazet wrote:
+> > On Thu, Dec 1, 2022 at 9:44 PM George Kennedy <george.kennedy@oracle.com> wrote:
+> >>
+> >>
+> >> On 12/1/2022 2:25 PM, Eric Dumazet wrote:
+> >>> On Thu, Dec 1, 2022 at 2:16 PM Pavan Chebbi <pavan.chebbi@broadcom.com> wrote:
+> >>>> On Wed, Nov 30, 2022 at 7:43 PM George Kennedy
+> >>>> <george.kennedy@oracle.com> wrote:
+> >>>>> The dev pointer can be NULL in dev_hard_header(). Add check for dev being
+> >>>>> NULL in dev_hard_header() to avoid GPF.
+> >>>>>
+> >>>>> general protection fault, probably for non-canonical address
+> >>>>>       0xdffffc0000000046: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> >>>>> KASAN: null-ptr-deref in range [0x0000000000000230-0x0000000000000237]
+> >>>>> CPU: 1 PID: 45 Comm: kworker/1:1 Not tainted 6.1.0-rc7+ #2
+> >>>>> Hardware name: Red Hat KVM, BIOS 1.15.0-2.module+el8.6.0+20659+3dcf7c70
+> >>>>> Workqueue: mld mld_ifc_work
+> >>>>> RIP: 0010:macvlan_hard_header (./include/linux/netdevice.h:3057
+> >>>>>       (discriminator 4) drivers/net/macvlan.c:594 (discriminator 4))
+> >>>>> RSP: 0018:ffff888103d377d0 EFLAGS: 00010212
+> >>>>> RAX: dffffc0000000000 RBX: ffff88801cf1a000 RCX: 0000000000000000
+> >>>>> RDX: 0000000000000046 RSI: 0000000000000000 RDI: 0000000000000230
+> >>>>> RBP: ffff88801e8ef328 R08: 0000000000000000 R09: 0000000000000060
+> >>>>> R10: 0000000000000000 R11: 0000000000000000 R12: ffff88801f0497c0
+> >>>>> R13: 0000000000000000 R14: ffff888045187c98 R15: 0000000000000060
+> >>>>> FS:  0000000000000000(0000) GS:ffff888106c80000(0000)
+> >>>>>       knlGS:0000000000000000
+> >>>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>>>> CR2: 00007fbf3f1c1840 CR3: 0000000014e36000 CR4: 00000000000006e0
+> >>>>> Call Trace:
+> >>>>>    <TASK>
+> >>>>> neigh_connected_output (./include/linux/netdevice.h:3060
+> >>>>>       net/core/neighbour.c:1595)
+> >>>>> ip6_finish_output2 (./include/net/neighbour.h:546
+> >>>>>       net/ipv6/ip6_output.c:134)
+> >>>>> ip6_finish_output (net/ipv6/ip6_output.c:195 net/ipv6/ip6_output.c:206)
+> >>>>> ip6_output (./include/linux/netfilter.h:291 net/ipv6/ip6_output.c:227)
+> >>>>> NF_HOOK.constprop.0 (./include/net/dst.h:445
+> >>>>>       ./include/linux/netfilter.h:302)
+> >>>>> mld_sendpack (net/ipv6/mcast.c:1824)
+> >>>>> mld_send_cr (net/ipv6/mcast.c:2122)
+> >>>>> mld_ifc_work (net/ipv6/mcast.c:2655)
+> >>>>> process_one_work (kernel/workqueue.c:2294)
+> >>>>> worker_thread (./include/linux/list.h:292 kernel/workqueue.c:2437)
+> >>>>> kthread (kernel/kthread.c:376)
+> >>>>> ret_from_fork (arch/x86/entry/entry_64.S:312)
+> >>>>>    </TASK>
+> >>>>> Modules linked in:
+> >>>>> Dumping ftrace buffer:
+> >>>>>      (ftrace buffer empty)
+> >>>>> ---[ end trace 0000000000000000 ]---
+> >>>>>
+> >>>>> Fixes: 0c4e85813d0a ("[NET]: Wrap netdevice hardware header creation.")
+> >>>>> Reported-by: syzkaller <syzkaller@googlegroups.com>
+> >>>>> Signed-off-by: George Kennedy <george.kennedy@oracle.com>
+> >>>>> ---
+> >>>>>    include/linux/netdevice.h | 2 +-
+> >>>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+> >>>>>
+> >>>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> >>>>> index eddf8ee270e7..9b25a6301fa5 100644
+> >>>>> --- a/include/linux/netdevice.h
+> >>>>> +++ b/include/linux/netdevice.h
+> >>>>> @@ -3054,7 +3054,7 @@ static inline int dev_hard_header(struct sk_buff *skb, struct net_device *dev,
+> >>>>>                                     const void *daddr, const void *saddr,
+> >>>>>                                     unsigned int len)
+> >>>>>    {
+> >>>>> -       if (!dev->header_ops || !dev->header_ops->create)
+> >>>>> +       if (!dev || !dev->header_ops || !dev->header_ops->create)
+> >>> Do  you have a repro ?
+> >> See syzkaller repros attached.
+> >>
+> >>> This patch will not prevent a crash later I think.
+> >> The repro ran overnight without failure with the patch applied.
+> > Yes, but the patch is hiding a potential bug that might show up with
+> > other 'repros'
+> The repro fails when these devices are configured (seem like small mtu):
+>
+> 20: vxcan0@vxcan1: <NOARP,UP,LOWER_UP> mtu 72 qdisc noqueue state UP group default qlen 1000
+>      link/can
+>      inet 172.20.20.38/24 scope global vxcan0
+>         valid_lft forever preferred_lft forever
+> 21: vxcan1@vxcan0: <NOARP,UP,LOWER_UP> mtu 72 qdisc noqueue state UP group default qlen 1000
+>      link/can
+>      inet 172.20.20.39/24 scope global vxcan1
+>         valid_lft forever preferred_lft forever
+>
+>
+> # diff ../config.fail .config
+> 3325c3325
+> < CONFIG_CAN_VXCAN=y
+> ---
+> > # CONFIG_CAN_VXCAN is not set
+>
+> Thanks,
+> George
 
-Yes, and if we really want to track all these kinds of events the
-break caused by need_resched() in do_softirq would
-also need some monitoring.
+Small MTU has caused numerous issues in the past.
 
-I feel that more granular tracing (did I say tracepoints) would be more useful.
+I am pretty sure we miss some READ_ONCE(dev->mtu) and other safety checks.
