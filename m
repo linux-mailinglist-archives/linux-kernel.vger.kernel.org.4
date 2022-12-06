@@ -2,84 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4378464486A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18C564486E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:54:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232865AbiLFPvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:51:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
+        id S232458AbiLFPyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:54:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234506AbiLFPv1 (ORCPT
+        with ESMTP id S229780AbiLFPyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:51:27 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A65C286F3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:51:26 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id r18so13704366pgr.12
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 07:51:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gqqL0wzb/cn536XtYZtFOaEpIM6uV5P9yYi1coZmPF0=;
-        b=jp4VKKZJHmW9e+5o/XYsQYVzCWhlkU6zVHLYGWRQ6mL5NGoTJWhwjrvshgFBiI+mEZ
-         hVt7JXaTWLM2BeUl+D0v+YiBr92Tfo/1eDlAmvK8unPQIMLXxTdQcEXHU7VcsOz6MymE
-         gRhL84a73vXFw9Kzv8cmUMxo2gVtuR+sr+dL3bKLc50/L/IVfG4X81uc8EdEf2f935mh
-         X1AffDI3sVE53IzMXO9e1awFVOLUYoOQV6+I5I7KcekR8ALznMH6UQKfKYU/rqJOs/vw
-         kQif/TsZvMyXAftVb/QSfMwuKlHFJRLJHZZsLXPhluYpkqoOQjdNvnxlRGSCe921fY1g
-         uZPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gqqL0wzb/cn536XtYZtFOaEpIM6uV5P9yYi1coZmPF0=;
-        b=RRfOOwOhKUOlAE/6EEUvKUcIE/eVHhx33XrlWWvY25UxGz4MeGQ2MyPub6vp7xslRn
-         Es1SJnjQOvGFJQo1q8gS5vmEzAHTkoZa3z3Od/LqiyZ5tYeVPLwUTcSqZ9ZQVtPsswFA
-         nRkg3lGQLChCJMSZMOISZqj0w9hxoGDw1lqelo90vQ23lIv7Na3kmIeHq+U+tiPpIosm
-         oiSjvD/nyuTB7OehFkkAZ6bWLzQUIqmyQl/0p1ZS8voaQP7KkNoqhNiUHugx166wABtZ
-         It8OsUqHQWrG+610zTXVJxpOJ/OMWeKyrXz9j+IXoUmG/gu2Pwtja31c2jOIRfolEaH1
-         qlbw==
-X-Gm-Message-State: ANoB5plAvNfUzGIbpOKa0DqYXub2UfSloxZwbhM/51V5bA7/sNDTx7Pl
-        mU26aMtabKA+TU0uflU8KyTNwQ==
-X-Google-Smtp-Source: AA0mqf5jC2zZ88Ayk24fAnxs48LFANriRWQeqtUtGoqg2h+a9ISznENi3o6AcV6fLePCR9fGgUE6Fg==
-X-Received: by 2002:aa7:8207:0:b0:576:7440:2478 with SMTP id k7-20020aa78207000000b0057674402478mr19328949pfi.51.1670341886129;
-        Tue, 06 Dec 2022 07:51:26 -0800 (PST)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id a4-20020a17090a480400b001fe39bda429sm10974521pjh.38.2022.12.06.07.51.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 07:51:25 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p2aE7-004dDy-Um;
-        Tue, 06 Dec 2022 11:51:23 -0400
-Date:   Tue, 6 Dec 2022 11:51:23 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <Y49k++D3i8DfLOLL@ziepe.ca>
-References: <20221206055816.292304-1-lei.rao@intel.com>
- <20221206055816.292304-2-lei.rao@intel.com>
- <20221206061940.GA6595@lst.de>
- <Y49HKHP9NrId39iH@ziepe.ca>
- <20221206135810.GA27689@lst.de>
- <Y49eObpI7QoSnugu@ziepe.ca>
- <20221206153811.GB2266@lst.de>
+        Tue, 6 Dec 2022 10:54:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9912E28E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:54:49 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 24AED617BC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:54:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28839C433C1;
+        Tue,  6 Dec 2022 15:54:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670342088;
+        bh=QUAz2+vZ/4CFvdyhgvZ2R2gjyA3bbWFrLGeGScV3rgA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MT5aAAuoQpj401dpL9XAqx5U7QM19z4fJcJI661uyzwJfU/fJhiIDopfTFojVY7Cn
+         CfXenlPqcVdsEADaoIXsg1H8G/fC8qqf4ZCMGMDhp6gRaOxK3CNU0B7+5dQGipaStE
+         6e9dNB50K5L9aIeoP5zAcHjureFjXtXtI5ImgodQ=
+Date:   Tue, 6 Dec 2022 16:54:45 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
+ preserves const-ness of the pointer
+Message-ID: <Y49lxZMsKrXRciIg@kroah.com>
+References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+ <Y49cGRDBVP3bHJuT@casper.infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206153811.GB2266@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <Y49cGRDBVP3bHJuT@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,35 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 04:38:11PM +0100, Christoph Hellwig wrote:
-
-> > We have locking issues in Linux SW connecting different SW drivers for
-> > things that are not a PF/VF relationship, but perhaps that can be
-> > solved.
+On Tue, Dec 06, 2022 at 03:13:29PM +0000, Matthew Wilcox wrote:
+> On Mon, Dec 05, 2022 at 01:12:03PM +0100, Greg Kroah-Hartman wrote:
+> > +/**
+> > + * container_of_const - cast a member of a structure out to the containing
+> > + *			structure and preserve the const-ness of the pointer
+> > + * @ptr:		the pointer to the member
+> > + * @type:		the type of the container struct this is embedded in.
+> > + * @member:		the name of the member within the struct.
+> > + */
+> > +#define container_of_const(ptr, type, member)				\
+> > +	_Generic(ptr,							\
+> > +		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
+> > +		default: ((type *)container_of(ptr, type, member))	\
+> > +	)
+> > +
 > 
-> And I think the only reasonable answer is that the entire workflow
-> must be 100% managed from the controlling function, and the controlled
-> function is just around for a ride, with the controlling function
-> enabling/disabling it as needed without ever interacting with software
-> that directly deals with the controlled function.
+> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> 
+> I tried doing this:
+> 
+> +++ b/include/linux/container_of.h
+> @@ -15,11 +15,17 @@
+>   *
+>   * WARNING: any const qualifier of @ptr is lost.
+>   */
+> -#define container_of(ptr, type, member) ({                             \
+> +#define _c_of(ptr, type, member) ({                                    \
+>         void *__mptr = (void *)(ptr);                                   \
+>         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+>                       __same_type(*(ptr), void),                        \
+>                       "pointer type mismatch in container_of()");       \
+>         ((type *)(__mptr - offsetof(type, member))); })
+> 
+> +#define container_of(ptr, type, m)                                     \
+> +       _Generic(ptr,                                                   \
+> +               const typeof(*(ptr)) *: (const type *)_c_of(ptr, type, m),\
+> +               default: ((type *)_c_of(ptr, type, m))                  \
+> +       )
+> +
+>  #endif /* _LINUX_CONTAINER_OF_H */
+> 
+> (whitespace damaged, yes the kernel-doc is now in the wrong place, etc)
+> 
+> It found a few problems; just building the mlx5 driver (I happened to be
+> doing some work on it in that tree).  We're definitely not ready to do
+> that yet, but I'll send a few patches to prepare for it.
 
-That is a big deviation from where VFIO is right now, the controlled
-function is the one with the VFIO driver, it should be the one that
-drives the migration uAPI components.
+Yeah, that's a good long-term goal to have here.  Once everything is
+moved over, switching all container_of_const() to just container_of()
+should be simple.
 
-Adding another uAPI that can manipulate the same VFIO device from some
-unrelated chardev feels wrong.
+thanks,
 
-There are certain things that need to be co-ordinated for eveything to
-work. Like you can't suspend the VFIO device unless you promise to
-also stop MMIO operations. Stuff like FLR interfers with the migration
-operation and has to be co-ordinated. Some migration operation
-failures, like load failure, have to be healed through FLR.
-
-It really does not want to be two different uAPIs even if that is
-convenient for the kernel.
-
-I'd much rather try to fix the problems PASID brings that try to make
-this work :\
-
-Jason
+greg k-h
