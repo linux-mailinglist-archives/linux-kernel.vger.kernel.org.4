@@ -2,119 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7092F64458B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:23:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E91C464458E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232321AbiLFOXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 09:23:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
+        id S234997AbiLFOX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 09:23:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiLFOXU (ORCPT
+        with ESMTP id S234932AbiLFOXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 09:23:20 -0500
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526C92196;
-        Tue,  6 Dec 2022 06:23:20 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id BECC95C0124;
-        Tue,  6 Dec 2022 09:23:19 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 06 Dec 2022 09:23:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1670336599; x=
-        1670422999; bh=1i9KAnaualAN3RJiLZ4IkdDGmbffUXeErCmYosOp25c=; b=s
-        FxqxZVccTvrAXSJixF7mmB3bOZevz2gn7d7/ecmiVOiUj4PZApFqKuz07m5BNO1i
-        Dd5Ei4Wkofmh2veGKJ28UtevrrNaU24BL62h722Nur4mVuJsut28ik9HN+QNZkjx
-        0p5u6Qo+TioisMJ5wSZYeKsiaF8qUvqcZKu527LUuIyrcmGj5HDnlXNPYm1tU4Rl
-        U6JNn8C6ojR3YXa6p1cAUWM1rHjx617nihG/pefdZx/mSrP6qWtlJESR6W1X0T97
-        3ZeW9hZFRGOUePrjdn2wxtEQDD33hDivqaOIb9lcBiMQaARVwTo6jpMLBgGtUZtV
-        l2cr4iK/DCg47BFWwjlcw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670336599; x=
-        1670422999; bh=1i9KAnaualAN3RJiLZ4IkdDGmbffUXeErCmYosOp25c=; b=s
-        OcEyCaMR7pMIDNeW/OfFpIFAHOryMp/U1ACR1PAvrcAIeiofmNK0THWI0dF8hYzq
-        JRD/QwC8uF64Y3XRhGY5i3sS6rwPJ9/BJg8XfjEw2j5KPf/9Mi5WuQ7lG8aYoFMK
-        Zij6PBJBo6o/sJ895NMdWZhMvJQreND80fk4b+2eprgJvkNAo9qOkMGoLCgD2RfB
-        GQ7EZxvYkDUS7bc8gleWz3xCdIek120pFyWL8PtB51hPQm2r2KviW3AW1SH3MQOQ
-        dJiHDLCNKk84FzfZ4OMSj0ZJuztJwkBZuRYiOpaqDJnCQ21GyCxH/kKdkCFvTQ19
-        /cfP9TfN+rCo+xVuC/rxA==
-X-ME-Sender: <xms:V1CPY_v67UVpdFYyqaoX45LVPwOvO2sCO6YLAEwAAuqdOGZMEh-Lsw>
-    <xme:V1CPYwd7K-ed--dV1upm4MXkG3N5D6FAq6FhMUZZwlut9bdaStVdHgxOfCusrmuoL
-    Z6-EVYMQi12Cipwij8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudeigdeifecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgeefjeehvdelvdffieejieejiedvvdfhleeivdelveehjeelteegudektdfg
-    jeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:V1CPYywE4PFZf7AKSy4CU27sjoyxJ147xXmp6o7U_aHIlEnrZxC7eg>
-    <xmx:V1CPY-O6lIV-T5zQzXQGSV_Vem1I0q0Z8-ahB100ypDRaBTJomvPxA>
-    <xmx:V1CPY_9Iw9_DAUtuRjcHYbD34NiCdD6r8ZRQzWj2zl_t0YKMWPQCYg>
-    <xmx:V1CPY7b75rBLN83RJeL2KIHZGBK0tlvQcrdqbl1cvg8YSXi4iWl5Gg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 37ED9B60086; Tue,  6 Dec 2022 09:23:19 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <43fda82a-f3df-42c8-9eb2-23cf2dce8628@app.fastmail.com>
-In-Reply-To: <0903321f-e0cf-fd7b-bbdd-fc4fdc0f05a0@189.cn>
-References: <1670229006-4063-1-git-send-email-chensong_2000@189.cn>
- <2a3d3359-a5fd-453b-81f1-35c7a35fc12d@app.fastmail.com>
- <0903321f-e0cf-fd7b-bbdd-fc4fdc0f05a0@189.cn>
-Date:   Tue, 06 Dec 2022 15:22:58 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Song Chen" <chensong_2000@189.cn>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH v3 3/4] include/asm-generic/io.h: remove performing pointer
- arithmetic on a null pointer
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 6 Dec 2022 09:23:21 -0500
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B1438B8;
+        Tue,  6 Dec 2022 06:23:18 -0800 (PST)
+Received: by mail-lj1-x22b.google.com with SMTP id a7so17341631ljq.12;
+        Tue, 06 Dec 2022 06:23:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sT1QGkgmhBkSpHiyhRuKPI4cqNjm9QnBwa8ft8tm2b4=;
+        b=l+v/q+gX2uTMHA9ZkYaAEAOtqVZdgJNwEosrM3dkEf7jw4tHyTliypQOHtJCtyU/H9
+         W7Rb7+6szCYzuywkLj8Zzm8bXfov7G34xh+DWePoSoe3mUbB9RTRgb4Eoe8P5za4HhYo
+         dqM6Rl8x97B2IcqV6Bbti5ExuCNlqSZ8XCLIBcuNfbACL6rR0FzgrSP3QuLtkaV1X83p
+         WDR8LXEIKzHxXYaMLxwysL+5yuFzANOq60Tmx256kIMgIGLGL+c3zdZhTjoEc6bXyMzb
+         mTf2P51kB/RnI5TnC6bBnUbYBNumrfqdbQAc+5FEo9sqIrbg9zjykdwwm5+wVohhP2yH
+         79Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sT1QGkgmhBkSpHiyhRuKPI4cqNjm9QnBwa8ft8tm2b4=;
+        b=A5IexOMxQnEjjrD2SOPKM7O5gWs8dGbKRGjquroWM/VLDY3YEl99XIsnSIvLPH6krs
+         uWyhMSPqocrnCrb816oyMBcrSWmqAsdoLS9SI7+SZq8rz9mpYOl0EOrLfWXNNTYoLsjk
+         uCnlgLfKP6I5/W/d6gvDx5XoaqDZIJ3lXiiJVH4bzytDF3Vs5PecpfWXdqXZlChzHhKK
+         sx5ti9MJ/UNuUosD8s21NWjIhjX7cC0k7VsuZ7ZEafTCZ1cvu0OUJXTi5WNWwx36YGy0
+         veeYTOru9oEbuMKaAPbax9RQGGxH1WbX2xorH1uzDLi6lt35TcA4qR7gxPRFx4nI/IRG
+         SYGA==
+X-Gm-Message-State: ANoB5plJLyVLshTEfwhpoYUT3RcskW6TkPPbjo6IC8TSGBporqFX36hS
+        mt50nl/h4efXWmbVAN7BFG1fAfUCmDSclqly0SzuOPk8
+X-Google-Smtp-Source: AA0mqf48L7a4pxzGkZLU939Pac44paZk+6TCPskq0MapimEioj6zash50V+a81kf7aJotA75z78shCuZOCge67gFClo=
+X-Received: by 2002:a2e:a22f:0:b0:27a:d4:f94f with SMTP id i15-20020a2ea22f000000b0027a00d4f94fmr2544512ljm.499.1670336596229;
+ Tue, 06 Dec 2022 06:23:16 -0800 (PST)
+MIME-Version: 1.0
+References: <20221205050038.195746-1-bmeng@tinylab.org> <b3aff238-c473-e587-dd04-cc5ef4517722@kernel.org>
+In-Reply-To: <b3aff238-c473-e587-dd04-cc5ef4517722@kernel.org>
+From:   Bin Meng <bmeng.cn@gmail.com>
+Date:   Tue, 6 Dec 2022 22:23:04 +0800
+Message-ID: <CAEUhbmVBLLppJdnw5CUiD+Vpj1jaGQ7FTZGVr4xT0_LaA7qSjQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] serial: Adapt Arm semihosting earlycon driver to RISC-V
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Bin Meng <bmeng@tinylab.org>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022, at 07:01, Song Chen wrote:
-> =E5=9C=A8 2022/12/5 18:04, Arnd Bergmann =E5=86=99=E9=81=93:
->> On Mon, Dec 5, 2022, at 09:30, Song Chen wrote:
->>=20
->> We have discussed this bit multiple times, and Niklas Schnelle
->> last posted his series to fix this as an RFC in [1].
->>=20
+On Tue, Dec 6, 2022 at 2:47 PM Jiri Slaby <jirislaby@kernel.org> wrote:
 >
-> Trace triggers the warning accidentally by including io.h indirectly=20
-> because of the absence of PCI_IOBASE in hexagon. So what trace can do =
-in=20
-> this case is either to suppress warning or just ignore it, the warning=20
-> will go away as long as hexagon has put PCI_IOBASE in place or=20
-> implemented its own inb() etc, i think they will do it sooner or later.
+> On 05. 12. 22, 6:00, Bin Meng wrote:
+> ...
+> > --- a/drivers/tty/serial/earlycon-arm-semihost.c
+> > +++ b/drivers/tty/serial/earlycon-arm-semihost.c
+> ...
+> > @@ -23,7 +27,18 @@
+> >    */
+> >   static void smh_putc(struct uart_port *port, unsigned char c)
+> >   {
+> > -#ifdef CONFIG_ARM64
+> > +#if defined(CONFIG_RISCV)
+> > +     asm volatile("addi    a1, %0, 0\n"
+> > +                  "addi    a0, zero, 3\n"
+> > +                  ".balign 16\n"
+> > +                  ".option push\n"
+> > +                  ".option norvc\n"
+> > +                  "slli    zero, zero, 0x1f\n"
+> > +                  "ebreak\n"
+> > +                  "srai    zero, zero, 0x7\n"
+> > +                  ".option pop\n"
+> > +                  : : "r" (&c) : "a0", "a1", "memory");
+> > +#elif defined(CONFIG_ARM64)
+> >       asm volatile("mov  x1, %0\n"
+> >                    "mov  x0, #3\n"
+> >                    "hlt  0xf000\n"
+>
+> Hmm, can we implement all those smh_putc() variants in respective
+> arch/*/include/semihost.h instead?
+>
 
-hexagon/riscv/s390 should not implement inb(), there is no reason
-for that because no hardware uses it. Half of the other architectures
-that currently implement inb() should not do so either.
+I think so. Will do in v2.
 
-> Introducing HAS_IOPORT to trace seems no necessary and too much impact.
-
-I don't think that trace has anything to do with it, the asm-generic
-header should just not provde the inb() interface on architectures
-that don't use it.
-
-    Arnd
+Regards,
+Bin
