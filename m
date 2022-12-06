@@ -2,69 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18363644A67
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:37:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5D7644A6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:37:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiLFRgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:36:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S234957AbiLFRhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:37:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235503AbiLFRg2 (ORCPT
+        with ESMTP id S235428AbiLFRgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:36:28 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B594F3B9EA
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:36:18 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id pa16-20020a17090b265000b0020a71040b4cso11997198pjb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGVIdVHmu98j0ATMgshfuLelOvL1LTZm9iF00wr+z1c=;
-        b=the3UR5nZvASMSHWZbLNk/phN3QpGy2ZKbi9DHYfcXEQ159p8R/Z/7Kn8+DTeMoLVC
-         pHaMaXdy8nBuAF7ZQ2GCqrLjaiaRR0ok0NVp/8M1NybmC1AX9iALlFOCP1J9eBukP62K
-         TexEBs1IBdXfB8yWGuUpm4cBsb0DlWf6ECzEhJKJpgiNZHKgKJslJ4+mK+GkHrO3BR6n
-         whrLxfo9JKB/TzV1zU5UtNlT+X/J7I2EibnOxAYrtaKAZ5MlhSUTaNP44stCu67XoUmc
-         VA412z6d51UVGfKCbdx1Ny80uArOlblTwP+eCoH6u+49GoAX1nxW82zITs2cd+GzLIVD
-         agtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGVIdVHmu98j0ATMgshfuLelOvL1LTZm9iF00wr+z1c=;
-        b=rOAz96E7NWoWxGCvre4KAXvBCrXVgk6efGLHVxSR268d2024BrVEdv15idbVQemw9E
-         bJDXJBKZhHv75MJy5p95PfVkpNz9nYB1+ZnEUn8ZL+l3wmS5GBr6eN+mEkcPhCbHB5hx
-         xhz9L2lvAiOxPdjzzc6ZIqnTiCQcnzuA8Ts2qjdvKw91+ouTlEpLVBSG/Z5nZtsOd5aD
-         /dK1tTSVUkazVP6Y+QOEQgyvQahDBzvT6xVrv/lRILSjYPcLYJ7t6NPpchleKNivPpyV
-         8aPBzhIyxXGCluAmgxvAoOKdu+fGEGGcoWQBwuyQZdUAvolC2ZPIrBDYVuhcaV+iKqZV
-         nh5Q==
-X-Gm-Message-State: ANoB5pl/CZUUIgYoIKBxTk/CcTqMqp02gLZNtoDmW0CuJtJu9d+GTntg
-        VJNHwseE+bI4b8DYEO7a8io5vVUF0MDMQjvCeo2gzzSbqE9Lz2s0AUrnvDSzuU2uPAWKqhUDp7/
-        51xor/MYBnkWY07xtlm9/U9WiNvoHTnu3uiiB7SvF/iVkKsEJWj6BYxJwDrRpPD3CJQ5ABqcr
-X-Google-Smtp-Source: AA0mqf68Pz8Y3Hu8v2Z/yj/mfJs/DBPFKf1uym2qY0m7kl49GEfjQ/w0L7uOl9vvRQZvkaj86jRMQk2/UOwu
-X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:a17:90a:d086:b0:219:227d:d91f with SMTP id
- k6-20020a17090ad08600b00219227dd91fmr4993281pju.0.1670348177805; Tue, 06 Dec
- 2022 09:36:17 -0800 (PST)
-Date:   Tue,  6 Dec 2022 17:36:01 +0000
-In-Reply-To: <20221206173601.549281-1-bgardon@google.com>
-Mime-Version: 1.0
-References: <20221206173601.549281-1-bgardon@google.com>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221206173601.549281-8-bgardon@google.com>
-Subject: [PATCH 7/7] KVM: x86/MMU: Move rmap_add() to rmap.c
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        Tue, 6 Dec 2022 12:36:36 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2087.outbound.protection.outlook.com [40.107.96.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74813C6C3;
+        Tue,  6 Dec 2022 09:36:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JeCGNetm6vBNoaMU12V+vN3f/qhfwtvwW/pFnxiRrnlAL8Ld0NdIhqiyE8oSbSh17waugMckR+vJEDiglHi+oDr2Mce2wFzmmBWfz3XG+LvHFw5UXFJzX/Ho/4yMCeJR05rDRabapTPpu1cUjSaleqDBtF2OX2QS1TZULzPq+YFNd7Ngnn+vh2WjqSYHojIAdGMZBCgy82h2YfCfd9s1DrkJ7MNifF7XvXvvsEbYH2X5/Kn4GxWVOf2yCegrJEo0X2bZepegt9NTkn7B17X1L5lBK0MerszvTheG5xRzTGD5twMB2W+VWd8dF3u1FxScYktwLj7o/icPAfoxoj7O7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n2uhbHwX6osfXodb/30pTu0JPDjxF3b0MqtpuTEwQzU=;
+ b=aBhilThseuvcUW6/97umjzJOSQpeG9REfn14F+pjoYQA+DgI851gQbeAPlD4lX/PLtFaYXN7gMK+k1F3LPQyQJHUfr8S0A+RiHUvizOmayPP/AnvsrkucBUq01RZXJ3OW4nYzC93R7JPqC8ont8IusmljF013jV/PfLz5+cmDh9eJL/bP/J0OVCJULSFbEiy40iW9ahBBLTyluMRcDZEkS4jv87NeXw2MKkldce/hzvU5a2q0Zf8C6/zqnyJBpQJ/IkqYe4AdpywyRSC8WdSNW/rU5++EQneNfbSW11N3bXxtqE6S+GOjoBr88mvlJ1KjbqHAjsgSCeOoN78f+OnKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n2uhbHwX6osfXodb/30pTu0JPDjxF3b0MqtpuTEwQzU=;
+ b=zlXue9MedjX9l+9c0cbwmrKmt7uxJ2oG5ctK/2GUDPC4jWM8S0y4IS34WYMEHiav/PnypnctLPwL3TB5JnmP/Ac6SutXxtE3+ORN4YGkxFUtcp5lWJdWfVXxjC+0Mg/LQ2HU7EfRg7bI16XY0pAxt1EpsDmG60QUE2XQbHgNdGs=
+Received: from MW4PR04CA0219.namprd04.prod.outlook.com (2603:10b6:303:87::14)
+ by LV2PR12MB5797.namprd12.prod.outlook.com (2603:10b6:408:17b::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Tue, 6 Dec
+ 2022 17:36:20 +0000
+Received: from CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:87:cafe::e5) by MW4PR04CA0219.outlook.office365.com
+ (2603:10b6:303:87::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
+ Transport; Tue, 6 Dec 2022 17:36:20 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT032.mail.protection.outlook.com (10.13.174.218) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5880.14 via Frontend Transport; Tue, 6 Dec 2022 17:36:19 +0000
+Received: from titanite-35bahost.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Tue, 6 Dec 2022 11:36:17 -0600
+From:   Yazen Ghannam <yazen.ghannam@amd.com>
+To:     <linux-edac@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <tony.luck@intel.com>,
+        <x86@kernel.org>, <Smita.KoralahalliChannabasappa@amd.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>
+Subject: [PATCH v6 0/4] x86/mce: Support extended MCA_ADDR address on SMCA systems
+Date:   Tue, 6 Dec 2022 11:36:03 -0600
+Message-ID: <20221206173607.1185907-1-yazen.ghannam@amd.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT032:EE_|LV2PR12MB5797:EE_
+X-MS-Office365-Filtering-Correlation-Id: f1b87cc3-43cb-4224-37ca-08dad7b062c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sRP91mPlCjPRk4VdcXTSUGyfJd5reB5ihAE/QgiDpeGhVhkVnYltn+ndSyKSV7ATTzQdgICCgw64CmRHKTqA58SEmJbKx5moiukLjScdgNNMG4fipNftl/ygnhJ+0lXmipVvXUkSVCL/eZJSOokQapI/MGgn6S9WJ4jmwCND+9tGoN+aoFmybpW1zLNYtFn39pGNc2f3eAHKqv7zgE4gbkazYaus+Hu9ly/r0gs79DYY8+E5yUaibGvyI3cMm6SDrwBirphhrPesxjwJeDB5PEG53XEECR1mhZ0ZwFSwoGY/Au42hVzaHfeAF4FoQ6eDiFVhyX+KWvVdmUEbIo2aBfPhnYVZBQA70UIZ4JUSA6yOWZELCiO1FdgaxMubXAbsYXe1gDTYoUFmj811P1gBMTSCPBLyWWwioKKtObdO0pcbCOef0fImqToPFP2oTi/fVlYQ4Mlq6FuGkTjvZwdecvx9t7uomIeqlz7Ex7VwDIZ4zLVRy8dfZQjJh5bXsl6jiU7RoWeTzHMbHtiavwSdUfc9EAZDajvFIrK9Ma12pMzmxoFxKpJBZ+gaT2XBjGxXhpIcTh9WFoUJuIxlQWZbfQ4R0ksZKHvlXhdgMQ7h8qVWp1wp4o9FaSmnWd6c7cXQBcEAI8qSllj3ryqdix5ujUu+iF5+8XuPz25HW2U9nsr2F44F97sIxVJ2QV9IN+GyjwfmDou+RJ0k3y2jqdIEqkGm1/jGiYNXs471bme+i2bs+CvX55+RN3tEzrM8AmT/Fun5gwANsiCpHewJdDnqCg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(46966006)(36840700001)(40470700004)(36860700001)(86362001)(41300700001)(82310400005)(44832011)(83380400001)(2906002)(5660300002)(8936002)(47076005)(8676002)(70206006)(70586007)(81166007)(356005)(316002)(6916009)(54906003)(426003)(336012)(40480700001)(16526019)(4326008)(2616005)(1076003)(26005)(966005)(40460700003)(82740400003)(36756003)(478600001)(6666004)(7696005)(186003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 17:36:19.5961
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1b87cc3-43cb-4224-37ca-08dad7b062c3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5797
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,182 +98,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move rmap_add() to rmap.c to complete the migration of the various rmap
-operations out of mmu.c.
+Hi all,
 
-No functional change intended.
+This series of patches adds support for extended physical address on newer
+AMD CPUs.
 
-Signed-off-by: Ben Gardon <bgardon@google.com>
----
- arch/x86/kvm/mmu/mmu.c          | 45 ++++-----------------------------
- arch/x86/kvm/mmu/mmu_internal.h |  6 +++++
- arch/x86/kvm/mmu/rmap.c         | 37 ++++++++++++++++++++++++++-
- arch/x86/kvm/mmu/rmap.h         |  8 +++++-
- 4 files changed, 54 insertions(+), 42 deletions(-)
+Patch 1 simplifies part of the MCA init path by reordering and combining
+some helper functions. This was shared by Boris during the discussion of v5
+of this set.
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 12082314d82d..b122c90a3e5f 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -215,13 +215,13 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
- 	return regs;
- }
- 
--static inline bool kvm_available_flush_tlb_with_range(void)
-+inline bool kvm_available_flush_tlb_with_range(void)
- {
- 	return kvm_x86_ops.tlb_remote_flush_with_range;
- }
- 
--static void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
--		struct kvm_tlb_range *range)
-+void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
-+				      struct kvm_tlb_range *range)
- {
- 	int ret = -ENOTSUPP;
- 
-@@ -695,8 +695,8 @@ static u32 kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
- 	return sp->role.access;
- }
- 
--static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
--					 gfn_t gfn, unsigned int access)
-+void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
-+				  gfn_t gfn, unsigned int access)
- {
- 	if (sp_has_gptes(sp)) {
- 		sp->shadowed_translation[index] = (gfn << PAGE_SHIFT) | access;
-@@ -1217,41 +1217,6 @@ static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 	return false;
- }
- 
--#define RMAP_RECYCLE_THRESHOLD 1000
--
--static void __rmap_add(struct kvm *kvm,
--		       struct kvm_mmu_memory_cache *cache,
--		       const struct kvm_memory_slot *slot,
--		       u64 *spte, gfn_t gfn, unsigned int access)
--{
--	struct kvm_mmu_page *sp;
--	struct kvm_rmap_head *rmap_head;
--	int rmap_count;
--
--	sp = sptep_to_sp(spte);
--	kvm_mmu_page_set_translation(sp, spte_index(spte), gfn, access);
--	kvm_update_page_stats(kvm, sp->role.level, 1);
--
--	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
--	rmap_count = pte_list_add(cache, spte, rmap_head);
--
--	if (rmap_count > kvm->stat.max_mmu_rmap_size)
--		kvm->stat.max_mmu_rmap_size = rmap_count;
--	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
--		kvm_zap_all_rmap_sptes(kvm, rmap_head);
--		kvm_flush_remote_tlbs_with_address(
--				kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
--	}
--}
--
--static void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
--		     u64 *spte, gfn_t gfn, unsigned int access)
--{
--	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_pte_list_desc_cache;
--
--	__rmap_add(vcpu->kvm, cache, slot, spte, gfn, access);
--}
--
- bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
- {
- 	bool young = false;
-diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index a219c8e556e9..03da1f8b066e 100644
---- a/arch/x86/kvm/mmu/mmu_internal.h
-+++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -320,4 +320,10 @@ void untrack_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
- 
- gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index);
- u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep);
-+void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
-+				  gfn_t gfn, unsigned int access);
-+
-+inline bool kvm_available_flush_tlb_with_range(void);
-+void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
-+				      struct kvm_tlb_range *range);
- #endif /* __KVM_X86_MMU_INTERNAL_H */
-diff --git a/arch/x86/kvm/mmu/rmap.c b/arch/x86/kvm/mmu/rmap.c
-index 9cc4252aaabb..136c5f4f867b 100644
---- a/arch/x86/kvm/mmu/rmap.c
-+++ b/arch/x86/kvm/mmu/rmap.c
-@@ -292,7 +292,8 @@ void kvm_zap_one_rmap_spte(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- }
- 
- /* Return true if at least one SPTE was zapped, false otherwise */
--bool kvm_zap_all_rmap_sptes(struct kvm *kvm, struct kvm_rmap_head *rmap_head)
-+static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
-+				   struct kvm_rmap_head *rmap_head)
- {
- 	struct pte_list_desc *desc, *next;
- 	int i;
-@@ -331,3 +332,37 @@ bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- {
- 	return __kvm_zap_rmap(kvm, rmap_head, slot);
- }
-+
-+#define RMAP_RECYCLE_THRESHOLD 1000
-+
-+void __rmap_add(struct kvm *kvm, struct kvm_mmu_memory_cache *cache,
-+		const struct kvm_memory_slot *slot, u64 *spte, gfn_t gfn,
-+		unsigned int access)
-+{
-+	struct kvm_mmu_page *sp;
-+	struct kvm_rmap_head *rmap_head;
-+	int rmap_count;
-+
-+	sp = sptep_to_sp(spte);
-+	kvm_mmu_page_set_translation(sp, spte_index(spte), gfn, access);
-+	kvm_update_page_stats(kvm, sp->role.level, 1);
-+
-+	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
-+	rmap_count = pte_list_add(cache, spte, rmap_head);
-+
-+	if (rmap_count > kvm->stat.max_mmu_rmap_size)
-+		kvm->stat.max_mmu_rmap_size = rmap_count;
-+	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
-+		kvm_zap_all_rmap_sptes(kvm, rmap_head);
-+		kvm_flush_remote_tlbs_with_address(
-+				kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
-+	}
-+}
-+
-+void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
-+	      u64 *spte, gfn_t gfn, unsigned int access)
-+{
-+	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_pte_list_desc_cache;
-+
-+	__rmap_add(vcpu->kvm, cache, slot, spte, gfn, access);
-+}
-diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
-index a9bf48494e1a..b06897dad76a 100644
---- a/arch/x86/kvm/mmu/rmap.h
-+++ b/arch/x86/kvm/mmu/rmap.h
-@@ -91,10 +91,16 @@ typedef bool (*rmap_handler_t)(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 
- void kvm_zap_one_rmap_spte(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 			   u64 *sptep);
--bool kvm_zap_all_rmap_sptes(struct kvm *kvm, struct kvm_rmap_head *rmap_head);
- bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 		    const struct kvm_memory_slot *slot);
- bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
- 		  pte_t unused);
-+
-+void __rmap_add(struct kvm *kvm, struct kvm_mmu_memory_cache *cache,
-+		const struct kvm_memory_slot *slot, u64 *spte, gfn_t gfn,
-+		unsigned int access);
-+void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
-+	      u64 *spte, gfn_t gfn, unsigned int access);
-+
- #endif /* __KVM_X86_MMU_RMAP_H */
+Patch 2 removes another MCA init helper function and merges it with the AMD
+MCA init code. Also, some other MCA init functions are reordered so that
+MCA is enabled after vendor init. This was shared by myself during the
+discussion of v5 of this set.
+
+Patch 3 moves the SMCA-specific parsing of the MCA_ADDR register into a
+separate helper function. This was originally submitted by Smita and
+reworked by Boris. The current version is unmodified from her v5
+submission.
+
+Patch 4 adds support for the new location of the "LSB" field used when
+parsing MCA_ADDR. This was originally submitted by Smita, and I've rebased
+it on the first three patches.
+
+Thanks,
+Yazen 
+
+Link:
+https://lore.kernel.org/r/20220412154038.261750-1-Smita.KoralahalliChannabasappa@amd.com
+
+Borislav Petkov (1):
+  x86/mce: Cleanup bank processing on init
+
+Smita Koralahalli (2):
+  x86/mce: Define function to extract ErrorAddr from MCA_ADDR
+  x86/mce: Add support for Extended Physical Address MCA changes
+
+Yazen Ghannam (1):
+  x86/mce: Remove __mcheck_cpu_init_early()
+
+ arch/x86/include/asm/mce.h         |   3 +-
+ arch/x86/kernel/cpu/mce/amd.c      |  16 ++---
+ arch/x86/kernel/cpu/mce/core.c     | 100 +++++++----------------------
+ arch/x86/kernel/cpu/mce/internal.h |  44 +++++++++++++
+ 4 files changed, 74 insertions(+), 89 deletions(-)
+
 -- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+2.34.1
 
