@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84347643DE1
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:56:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED53F643DDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 08:55:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiLFHz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 02:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35504 "EHLO
+        id S231434AbiLFHzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 02:55:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231756AbiLFHzt (ORCPT
+        with ESMTP id S231425AbiLFHzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 02:55:49 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA0215835;
-        Mon,  5 Dec 2022 23:55:48 -0800 (PST)
+        Tue, 6 Dec 2022 02:55:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8325915736;
+        Mon,  5 Dec 2022 23:55:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BCE50B80DF3;
-        Tue,  6 Dec 2022 07:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0D69C433C1;
-        Tue,  6 Dec 2022 07:55:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 23AEC6159B;
+        Tue,  6 Dec 2022 07:55:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8259DC433C1;
+        Tue,  6 Dec 2022 07:55:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670313345;
-        bh=Ws+/WeLvxVRVftbMkKZ45KNmqftKhEp+4sJrpNSl7W8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Akt6EXK463zbJVk8vj7pqEFLR0sdb/4Yob2ZKUli/56Vf/35f9UzxgX2xjFgkpDZX
-         KNSo4q9Ngdo3c4XuIU9VXbXERskeiNCubROjs2lmFvd6+qu0oY75x3gni7p+dGu+mW
-         J/WiEknNLgmLlmUFLIWy7MqhjimYk0Qeahju301o0jy1+BJ+aBjQN7/F+TfVB2vCOH
-         cCPw/3+/1K64HF3622QTf6ZOd2pndNYBBQmSoUuS9QSHDMKbNc2x+Pxx4vnb+IfcHL
-         quPT49Mx1L/W8GXWfpkEge3Ng9ROmFZinxeLlCLdcQkBRy+mlqHv+F4WKFA19t+qzL
-         wmG4Hn25bz1ww==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     Pu Lehui <pulehui@huaweicloud.com>, bpf@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Pu Lehui <pulehui@huawei.com>
-Subject: Re: [PATCH bpf v2] riscv, bpf: Emit fixed-length instructions for
- BPF_PSEUDO_FUNC
-In-Reply-To: <0ade59ea-6863-4d68-607c-22e4b9405a0d@huaweicloud.com>
-References: <20221202094837.3872444-1-pulehui@huaweicloud.com>
- <87y1rq848x.fsf@all.your.base.are.belong.to.us>
- <0ade59ea-6863-4d68-607c-22e4b9405a0d@huaweicloud.com>
-Date:   Tue, 06 Dec 2022 08:55:42 +0100
-Message-ID: <87359t3r0h.fsf@all.your.base.are.belong.to.us>
+        s=k20201202; t=1670313342;
+        bh=0I6MjdoaniHTQdE6M92nGwwRUX9bmzCkmed1VgLdy4w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=txiWcekEX32RvDDR+LQeWWDeHl2tI47yoHl1qbioOR3ZDWiKmVoXZlxJ2NZvokrMg
+         bNXp1RJjdvLpDKM+3jd75HYocWUahyCe/+2v2BBwXb3DdzYBKpyc9x/Zj6yRyv4MdE
+         F01XBMeevjCet3D0JPktyJY9R01lMtMbadIpWmozbR1a8XElH1/KRXOZwQfPVG5/Pq
+         m3lPCpACLkQxiEWlv14/zdG4YJ/L8PcyORMK3KM9G88mll8pkLPDIBuKEuJ9ClikMD
+         i8yXzTUk/C8cR2FwNl5adu0KzM+3NQvPR0IWqQtBOC9tIYZS58TiBhCsCWe6JatY1/
+         cb7u9vY3Xgkyg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1p2Snt-000745-9v; Tue, 06 Dec 2022 08:55:50 +0100
+Date:   Tue, 6 Dec 2022 08:55:49 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: ufs: qcom: allow 'dma-coherent' property
+Message-ID: <Y471hQ2Si5IFq6Xg@hovoldconsulting.com>
+References: <20221205100837.29212-1-johan+linaro@kernel.org>
+ <20221205100837.29212-2-johan+linaro@kernel.org>
+ <20221205230751.ismiwodjhsyxp5uv@builder.lan>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205230751.ismiwodjhsyxp5uv@builder.lan>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -68,101 +69,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pu Lehui <pulehui@huaweicloud.com> writes:
+On Mon, Dec 05, 2022 at 05:07:51PM -0600, Bjorn Andersson wrote:
+> On Mon, Dec 05, 2022 at 11:08:36AM +0100, Johan Hovold wrote:
+> > UFS controllers may be cache coherent and must be marked as such in the
+> > devicetree to avoid data corruption.
+> > 
+> > This is specifically needed on recent Qualcomm platforms like SC8280XP.
+> > 
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> 
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> 
+> But I think this should be picked up by James or Martin. Added them as
+> explicit recipients, but perhaps they would like you to resubmit this?
 
-> Sorry for replying so late. For BPF_PSEUDO_FUNC instruction, verifier=20
-> will set insn[0].imm and insn[1].imm to 1 that make addr to 0x100000001=20
-> before extra pass, and also ctx->insns is NULL in iteration stage, all=20
-> of these make off out of range of AUIPC-ADDI range, and return failed.=20
-> We could add some special handling at different stages, but that seems a=
-=20
-> little weird. By the way, I do not really like emit_addr function with=20
-> return value.
+They were not included in the get_maintainer.pl output so I'm guessing
+they prefer to pick UFS binding patches from the scsi list.
 
-My rational is that *if* for some reason the jit is passed an address
-that auipc/addi can't represent, we'd like to catch that and not emit
-broken code.
+> I'm picking the dts change for now.
 
-> While a proper address is at least 2B alignment, and the valid address=20
-> is from 0xffffffff00000000 to 0xffffffffffffffff, we can make address=20
-> shifed 1 place to right, and addr >> 1 will always in the range of=20
-> AUIPC-ADDI range. We can get rid of the range detection. The=20
-> implementation is as follows:
->
-> static void emit_addr(u8 rd, u64 addr, struct rv_jit_context *ctx)
-> {
->           s64 imm =3D addr >> 1;
->           s64 upper =3D (imm + (1 << 11)) >> 12;
->           s64 lower =3D imm & 0xfff;
->
->           emit(rv_lui(rd, upper), ctx);
->           emit(rv_addi(rd, rd, lower), ctx);
->           emit(rv_slli(rd, rd, 1), ctx);
-> }
->
-> What do you think?
+Thanks.
 
-That's a code generation penalty, instead of catching it at code
-gen. Don't like! :-) I much prefer the auipc/addi version.
-
-What do you think about the diff (on-top of your work) below?
-
---8<--
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp6=
-4.c
-index aa9410eef77c..7acaf28cb3be 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -137,15 +137,21 @@ static bool in_auipc_jalr_range(s64 val)
- }
-=20
- /* Emit fixed-length instructions for address */
--static void emit_addr(u8 rd, u64 addr, struct rv_jit_context *ctx)
-+static int emit_addr(u8 rd, u64 addr, bool extra_pass, struct rv_jit_conte=
-xt *ctx)
- {
- 	u64 ip =3D (u64)(ctx->insns + ctx->ninsns);
- 	s64 off =3D addr - ip;
- 	s64 upper =3D (off + (1 << 11)) >> 12;
- 	s64 lower =3D ((off & 0xfff) << 52) >> 52;
-=20
-+	if (extra_pass && !in_auipc_jalr_range(off)) {
-+		pr_err("bpf-jit: target offset 0x%llx is out of range\n", off);
-+		return -ERANGE;
-+	}
-+
- 	emit(rv_auipc(rd, upper), ctx);
- 	emit(rv_addi(rd, rd, lower), ctx);
-+	return 0;
- }
-=20
- /* Emit variable-length instructions for 32-bit and 64-bit imm */
-@@ -1061,13 +1067,17 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, =
-struct rv_jit_context *ctx,
- 	{
- 		struct bpf_insn insn1 =3D insn[1];
- 		u64 imm64;
-+		int ret;
-=20
- 		imm64 =3D (u64)insn1.imm << 32 | (u32)imm;
--		if (bpf_pseudo_func(insn))
-+		if (bpf_pseudo_func(insn)) {
- 			/* fixed-length insns for extra jit pass */
--			emit_addr(rd, imm64, ctx);
--		else
-+			ret =3D emit_addr(rd, imm64, extra_pass, ctx);
-+			if (ret)
-+				return ret;
-+		} else {
- 			emit_imm(rd, imm64, ctx);
-+		}
-=20
- 		return 1;
- 	}
-
---8<--
-
-Wouldn't that work?
-
-
-Bj=C3=B6rn
+Johan
