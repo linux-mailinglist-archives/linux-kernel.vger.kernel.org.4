@@ -2,102 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AEF6443D6
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5AD56443EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:03:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234896AbiLFNCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S235298AbiLFNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:03:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235279AbiLFNB5 (ORCPT
+        with ESMTP id S234716AbiLFNCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:01:57 -0500
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80650D2E3;
-        Tue,  6 Dec 2022 05:01:40 -0800 (PST)
-Received: by mail-ot1-f43.google.com with SMTP id a7-20020a056830008700b0066c82848060so9199336oto.4;
-        Tue, 06 Dec 2022 05:01:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=u7Hbffxdj76xYFdF4l0QY3Nbhb00ty2h6F92vl5ePeM=;
-        b=6kAyYs1M2ThjzIkzDnoEyHEa38QderaRNDg/PbER3jZ9GFwE9+4drloPukSGJgX0sN
-         +WjfTsm42efZ2Ar5eJnjuDj5dNz8nPadSMDqI/M8vd5fK6QQFUA5RqSlaUfZ++e7Qm2w
-         JJ4KmKnrCHwdVD0WL8TgfD1+PtYOJn0yv9mdg6ImUrGohwGn7+Rr+mbMpfw7jFz8zrFg
-         afscIx/iDljDbJdQKIfE3bWOfE6kWYcNJqsm4gh3PeFx2vBtOVn+9wXqemUejp+bZMH/
-         ZxOiXJKUJ+SN2FTzYLVpNxkvzehgWjevbrDF8yCd6+BuC77s2HKarEKakyeZ5HZeMWH/
-         IBJQ==
-X-Gm-Message-State: ANoB5pnxSqk7QbHDymHL5MWhwJRCS+b9GI7Zk46Mofo4HsSOkBAljhTh
-        mlj5Yf4UwoHHyY3xO5iPEL3gdOss6w==
-X-Google-Smtp-Source: AA0mqf4k5ByXOavEm8wTJJndBCnqCb7kXMspArChR3P/1CC6EiJONndeKfl7Me39LQ6wRjgZBQUqlg==
-X-Received: by 2002:a05:6830:110e:b0:661:c5ac:7324 with SMTP id w14-20020a056830110e00b00661c5ac7324mr44543682otq.179.1670331699671;
-        Tue, 06 Dec 2022 05:01:39 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g33-20020a9d2da4000000b00661af2f9a1asm9201988otb.49.2022.12.06.05.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:01:38 -0800 (PST)
-Received: (nullmailer pid 224048 invoked by uid 1000);
-        Tue, 06 Dec 2022 13:01:37 -0000
-Date:   Tue, 6 Dec 2022 07:01:37 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joe Tessler <jrt@google.com>, linux-media@vger.kernel.org,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        linux-amlogic@lists.infradead.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jeff Chase <jnchase@google.com>, linux-tegra@vger.kernel.org,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        devicetree@vger.kernel.org,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Subject: Re: [PATCH v2 1/9] media: dt-bindings: amlogic,meson-gx-ao-cec: move
- to cec subfolder
-Message-ID: <167033169684.223985.8563268980146610337.robh@kernel.org>
-References: <20221205151845.21618-1-krzysztof.kozlowski@linaro.org>
- <20221205151845.21618-2-krzysztof.kozlowski@linaro.org>
+        Tue, 6 Dec 2022 08:02:19 -0500
+Received: from esa11.hc1455-7.c3s2.iphmx.com (esa11.hc1455-7.c3s2.iphmx.com [207.54.90.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFA7BCE;
+        Tue,  6 Dec 2022 05:02:16 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="78294247"
+X-IronPort-AV: E=Sophos;i="5.96,222,1665414000"; 
+   d="scan'208";a="78294247"
+Received: from unknown (HELO oym-r2.gw.nic.fujitsu.com) ([210.162.30.90])
+  by esa11.hc1455-7.c3s2.iphmx.com with ESMTP; 06 Dec 2022 22:02:13 +0900
+Received: from oym-m3.gw.nic.fujitsu.com (oym-nat-oym-m3.gw.nic.fujitsu.com [192.168.87.60])
+        by oym-r2.gw.nic.fujitsu.com (Postfix) with ESMTP id D0912D4330;
+        Tue,  6 Dec 2022 22:02:12 +0900 (JST)
+Received: from kws-ab2.gw.nic.fujitsu.com (kws-ab2.gw.nic.fujitsu.com [192.51.206.12])
+        by oym-m3.gw.nic.fujitsu.com (Postfix) with ESMTP id F2FD6D9488;
+        Tue,  6 Dec 2022 22:02:11 +0900 (JST)
+Received: from FNSTPC.g08.fujitsu.local (unknown [10.167.226.45])
+        by kws-ab2.gw.nic.fujitsu.com (Postfix) with ESMTP id AE092234090F;
+        Tue,  6 Dec 2022 22:02:10 +0900 (JST)
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     Bob Pearson <rpearsonhpe@gmail.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-rdma@vger.kernel.org
+Cc:     Zhu Yanjun <zyjzyj2000@gmail.com>, yangx.jy@fujitsu.com,
+        y-goto@fujitsu.com, mbloch@nvidia.com, tom@talpey.com,
+        tomasz.gromadzki@intel.com, dan.j.williams@intel.com,
+        linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>,
+        Wenpeng Liang <liangwenpeng@huawei.com>
+Subject: [for-next PATCH 00/10] RDMA/rxe: Add RDMA FLUSH operation
+Date:   Tue,  6 Dec 2022 21:01:51 +0800
+Message-Id: <20221206130201.30986-1-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205151845.21618-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-TM-AS-Product-Ver: IMSS-9.1.0.1408-9.0.0.1002-27306.007
+X-TM-AS-User-Approved-Sender: Yes
+X-TMASE-Version: IMSS-9.1.0.1408-9.0.1002-27306.007
+X-TMASE-Result: 10--18.880700-10.000000
+X-TMASE-MatchedRID: iooG+Wyw6IM8HZsl9oOV8Do39wOA02LhZLeVqspIPkdk55TPiguhpQl+
+        HyAcPie7eYUpRWZq07pynoTP8fAVKoCoSWHZmQrDCtzGvPCy/m6u2GmdldmiUBPiIPO2d8g5bNN
+        GUMZTc/NrrJtu7aXv0XdNoXv6UJm+5L19EARK0Hu+yqBsn+iUg/3/XRTBCRDstkHYqyu7kCPhq7
+        9AxpFYjOdo//33TCNrsUZQrAsB6FRKQhXDXm7aNnnlGDzIJIlryiKgKtIyB4pffSkyb6LPSIVD0
+        TJVgsKEbyJyCxc6wOabZUf6o9ihJeC1b7ItfNpSLG6gc1cSnZyhHrZE2+S86xEwRXB+SwEtSikP
+        5EIJEGTE7gW9Nmz5nELIYTs8DylFcAD14WP1J9ieAiCmPx4NwJuJ+Pb8n/VxvCaAzkS8BHs4BrA
+        Twm8horxAi7jPoeEQftwZ3X11IV0=
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in V7:
+- rebase to jgg-for-next(Atomic Write applied)
+- patch-09: enable FLUSH QP attribute for supported device only, and remove RVB # Jason
+- patch-04: pr_debug -> rxe_dbg_mr # Jason
 
-On Mon, 05 Dec 2022 16:18:37 +0100, Krzysztof Kozlowski wrote:
-> Move amlogic,meson-gx-ao-cec.yaml bindings to cec subfolder and drop
-> unneeded quotes.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml     | 4 ++--
->  MAINTAINERS                                                   | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
->  rename Documentation/devicetree/bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml (93%)
-> 
+Changes in V6:
+- rebase to v6.1-rc1
+- add Yanjun's reviewed-by expect "Allow registering persistent flag for pmem MR only"
+- minimize pmem checking side effect # Jason
+- return EOPNOSUPP if HCA doesn't support flush operation
 
-Acked-by: Rob Herring <robh@kernel.org>
+These patches are going to implement a *NEW* RDMA opcode "RDMA FLUSH".
+In IB SPEC 1.5[1], 2 new opcodes, ATOMIC WRITE and RDMA FLUSH were
+added in the MEMORY PLACEMENT EXTENSIONS section.
+
+This patchset makes SoftRoCE support new RDMA FLUSH on RC service.
+
+pyverbs tests and blktests(nvme over RDMA and srp) are tested.
+
+You can verify the patchset by building and running the rdma_flush example[2].
+server:
+$ ./rdma_flush_server -s [server_address] -p [port_number]
+client:
+$ ./rdma_flush_client -s [server_address] -p [port_number]
+
+Corresponding pyverbs and tests(tests.test_qpex.QpExTestCase.test_qp_ex_rc_rdma_flush)
+are also added to rdma-core
+
+[1]: https://www.infinibandta.org/wp-content/uploads/2021/08/IBTA-Overview-of-IBTA-Volume-1-Release-1.5-and-MPE-2021-08-17-Secure.pptx
+[2]: https://github.com/zhijianli88/rdma-core/tree/rdma-flush-v5
+
+CC: Xiao Yang <yangx.jy@fujitsu.com>
+CC: "Gotou, Yasunori" <y-goto@fujitsu.com>
+CC: Jason Gunthorpe <jgg@ziepe.ca>
+CC: Zhu Yanjun <zyjzyj2000@gmail.com>
+CC: Leon Romanovsky <leon@kernel.org>
+CC: Bob Pearson <rpearsonhpe@gmail.com>
+CC: Mark Bloch <mbloch@nvidia.com>
+CC: Wenpeng Liang <liangwenpeng@huawei.com>
+CC: Tom Talpey <tom@talpey.com>
+CC: "Gromadzki, Tomasz" <tomasz.gromadzki@intel.com>
+CC: Dan Williams <dan.j.williams@intel.com>
+CC: linux-rdma@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+
+Can also access the kernel source in:
+https://github.com/zhijianli88/linux/tree/rdma-flush-v7
+Changes log
+V6: https://lore.kernel.org/lkml/20221116081951.32750-10-lizhijian@fujitsu.com/T/
+V5: https://lore.kernel.org/lkml/20220927055337.22630-12-lizhijian@fujitsu.com/t/
+V4:
+- rework responder process
+- rebase to v5.19+
+- remove [7/7]: RDMA/rxe: Add RD FLUSH service support since RD is not really supported
+
+V3:
+- Just rebase and commit log and comment updates
+- delete patch-1: "RDMA: mr: Introduce is_pmem", which will be combined into "Allow registering persistent flag for pmem MR only"
+- delete patch-7
+
+V2:
+RDMA: mr: Introduce is_pmem
+   check 1st byte to avoid crossing page boundary
+   new scheme to check is_pmem # Dan
+
+RDMA: Allow registering MR with flush access flags
+   combine with [03/10] RDMA/rxe: Allow registering FLUSH flags for supported device only to this patch # Jason
+   split RDMA_FLUSH to 2 capabilities
+
+RDMA/rxe: Allow registering persistent flag for pmem MR only
+   update commit message, get rid of confusing ib_check_flush_access_flags() # Tom
+
+RDMA/rxe: Implement RC RDMA FLUSH service in requester side
+   extend flush to include length field. # Tom and Tomasz
+
+RDMA/rxe: Implement flush execution in responder side
+   adjust start for WHOLE MR level # Tom
+   don't support DMA mr for flush # Tom
+   check flush return value
+
+RDMA/rxe: Enable RDMA FLUSH capability for rxe device
+   adjust patch's order. move it here from [04/10]
+
+Li Zhijian (10):
+  RDMA: Extend RDMA user ABI to support flush
+  RDMA: Extend RDMA kernel verbs ABI to support flush
+  RDMA/rxe: Extend rxe user ABI to support flush
+  RDMA/rxe: Allow registering persistent flag for pmem MR only
+  RDMA/rxe: Extend rxe packet format to support flush
+  RDMA/rxe: Implement RC RDMA FLUSH service in requester side
+  RDMA/rxe: Implement flush execution in responder side
+  RDMA/rxe: Implement flush completion
+  RDMA/cm: Make QP FLUSHABLE for supported device
+  RDMA/rxe: Enable RDMA FLUSH capability for rxe device
+
+ drivers/infiniband/core/cm.c            |  13 +-
+ drivers/infiniband/sw/rxe/rxe_comp.c    |   4 +-
+ drivers/infiniband/sw/rxe/rxe_hdr.h     |  47 +++++++
+ drivers/infiniband/sw/rxe/rxe_loc.h     |   1 +
+ drivers/infiniband/sw/rxe/rxe_mr.c      |  58 ++++++++-
+ drivers/infiniband/sw/rxe/rxe_opcode.c  |  17 +++
+ drivers/infiniband/sw/rxe/rxe_opcode.h  |  14 ++-
+ drivers/infiniband/sw/rxe/rxe_param.h   |   2 +
+ drivers/infiniband/sw/rxe/rxe_req.c     |  15 ++-
+ drivers/infiniband/sw/rxe/rxe_resp.c    | 160 +++++++++++++++++++++---
+ drivers/infiniband/sw/rxe/rxe_verbs.h   |   6 +
+ include/rdma/ib_pack.h                  |   3 +
+ include/rdma/ib_verbs.h                 |  18 ++-
+ include/uapi/rdma/ib_user_ioctl_verbs.h |   2 +
+ include/uapi/rdma/ib_user_verbs.h       |  17 +++
+ include/uapi/rdma/rdma_user_rxe.h       |   7 ++
+ 16 files changed, 352 insertions(+), 32 deletions(-)
+
+-- 
+2.31.1
+
