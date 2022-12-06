@@ -2,134 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9125C64492F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:27:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E33644933
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:29:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235071AbiLFQ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:27:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43062 "EHLO
+        id S235073AbiLFQ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:29:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235053AbiLFQ1f (ORCPT
+        with ESMTP id S232324AbiLFQ3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:27:35 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37DBDF3;
-        Tue,  6 Dec 2022 08:27:34 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6FJENR028294;
-        Tue, 6 Dec 2022 16:27:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7c9rUUN7a3dR7QSdFDzCgZSOVng77nFk6H1OiFv6SGM=;
- b=MCipxe8THHv/9DW5+rX4GrGGfKh0E6vw0zH7Qfan69fsdVAxhKiAMEjFNHnd3aIT8x3X
- /+pAOIKD8TPItzmGUa2iiDvEfwyeCl3wnumhxceBMy8EGE0xpIWcHtq2xqyVCxe7TxrK
- IV2ZFUCmwd2lGNMq9SLCFFcTm2vu2NKw6SSd3Gtb40tNZvIgZEcg1Z6vmaK4rNzS6j4U
- 3cgEYFb0NfZYn+iuWpoTbZs9PJVRMlPhsKTD6HK+IsxMtoUwj6R+/6yb9ZUcx1btPyY8
- 8NeIiN7CuNSgzPpa+eaq02vyL76LiGsTdKu63NRZezbz3+URyCa/eajdEDep2UgiCVmN QA== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3ma1661e4y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Dec 2022 16:27:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B6GRP8A022789
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 6 Dec 2022 16:27:25 GMT
-Received: from [10.50.39.136] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 6 Dec 2022
- 08:27:21 -0800
-Message-ID: <03048338-449d-6d4b-dfa9-d4eccba5cabb@quicinc.com>
-Date:   Tue, 6 Dec 2022 21:57:17 +0530
+        Tue, 6 Dec 2022 11:29:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5396BC99
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:28:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670344092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ftN5vrqIh393VC3x0YgzupFdfd4d2nuxsXC4NEbHZHY=;
+        b=gOwrLy/FTvUaCP/rIXbAiT27i+a6Qs+osGed97tL+agrpuNQJOztdw6JxxWyz3LqbVJcmw
+        zYi1FzFz0tIDPc78Obuamr/zuzfr8JZUm61J/89ULJb7qheh5t+qLdnFUnX55EPkqgMPEb
+        v/Hgdx055PFt6t0DQcYj1DooKSyKOpg=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-654-DyxuGLBBN6yGALfYU6C4ug-1; Tue, 06 Dec 2022 11:28:10 -0500
+X-MC-Unique: DyxuGLBBN6yGALfYU6C4ug-1
+Received: by mail-wr1-f69.google.com with SMTP id h15-20020adfa4cf000000b0024276cca31cso637188wrb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 08:28:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ftN5vrqIh393VC3x0YgzupFdfd4d2nuxsXC4NEbHZHY=;
+        b=NNCa/bDRzzbt7675gQqVJrh9Tbp2HNXU+sED/FrRQdxYDsm/xzdZLOlR32DOCATY4l
+         BF/199BoW7qXJvwH9YLF7G0uFEy6JyEhKF/raUDALT4NgAontBbGhMj63WEEYQEJ5NYu
+         Kab0G8oxBy0oaq6pfApCLYEnjvVE+DTKlS8M0sgkflnjxALrGduKRuV9rEaDvWHWHu2A
+         l+Izb2j08Ki8HlKy5Cw0tR6n2pIN471X286ZvxZ3ybxpq2RT7SqbiteY6ceGHWwrtyPh
+         sIVks+7gmhULBrPPYSJYCgCQaisvkfSa10Jrnoi17BdfZIy42snCQ5OpNn5HL8HKBcYq
+         z/GQ==
+X-Gm-Message-State: ANoB5pnWs356GJ67Uc/nPZ1VEcXtjldHRa1M51SaoBGAEsJXquEa6O5I
+        lk37QYtit2kTSHzVAMblOcYHnM/Mkz+H1zD6kKSugh0dviSTMUt+r7h1W2MtK/Mlp3uJYqI4OyP
+        C3mDXjDNModksq5Nb2cIIScn5
+X-Received: by 2002:a5d:4985:0:b0:242:4c61:271f with SMTP id r5-20020a5d4985000000b002424c61271fmr9501082wrq.236.1670344089232;
+        Tue, 06 Dec 2022 08:28:09 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6mAynUXcJWsU/JNusmmJwUTrMSf2IyMZvYSKNpAtRwo369qelwFXVeHHxbMyWQON65Dpyqdw==
+X-Received: by 2002:a5d:4985:0:b0:242:4c61:271f with SMTP id r5-20020a5d4985000000b002424c61271fmr9501065wrq.236.1670344088866;
+        Tue, 06 Dec 2022 08:28:08 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:4f00:41f1:185d:4f9f:d1c2? (p200300cbc7054f0041f1185d4f9fd1c2.dip0.t-ipconnect.de. [2003:cb:c705:4f00:41f1:185d:4f9f:d1c2])
+        by smtp.gmail.com with ESMTPSA id i21-20020a1c5415000000b003d1f2c3e571sm125988wmb.33.2022.12.06.08.28.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 08:28:08 -0800 (PST)
+Message-ID: <92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com>
+Date:   Tue, 6 Dec 2022 17:28:07 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v6 02/10] arm64: dts: qcom: Add base SM8550 dtsi
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-References: <20221206131252.977369-1-abel.vesa@linaro.org>
- <20221206131252.977369-3-abel.vesa@linaro.org>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <20221206131252.977369-3-abel.vesa@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ives van Hoorne <ives@codesandbox.io>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hugh@veritas.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+References: <20221202122748.113774-1-david@redhat.com> <Y4oo6cN1a4Yz5prh@x1n>
+ <690afe0f-c9a0-9631-b365-d11d98fdf56f@redhat.com>
+ <19800718-9cb6-9355-da1c-c7961b01e922@redhat.com> <Y45duzmGGUT0+u8t@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RFC] mm/userfaultfd: enable writenotify while
+ userfaultfd-wp is enabled for a VMA
+In-Reply-To: <Y45duzmGGUT0+u8t@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 4qtcHSvXVKEvRAKcAP_RZOnVilkFH2mM
-X-Proofpoint-GUID: 4qtcHSvXVKEvRAKcAP_RZOnVilkFH2mM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-06_10,2022-12-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 bulkscore=0 phishscore=0 clxscore=1015 mlxscore=0
- suspectscore=0 priorityscore=1501 adultscore=0 spamscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212060137
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Abel,
-
-On 12/6/2022 6:42 PM, Abel Vesa wrote:
-> Add base dtsi for SM8550 SoC and includes base description of
-> CPUs, GCC, RPMHCC, UART, interrupt controller, TLMM, reserved
-> memory, RPMh PD, TCSRCC, ITS, IPCC, AOSS QMP, LLCC, cpufreq,
-> interconnect, thermal sensor, cpu cooling maps and SMMU nodes
-> which helps boot to shell with console on boards with this SoC.
+>>>> I think fundamentally the core is uffd-wp is pte-based, so the information
+>>>> resides in pte not vma.  I'm not strongly objecting this patch, especially
+>>>> you mentioned auto-numa so I need to have a closer look later there.
+>>>> However I do think uffd-wp is slightly special because we always need to
+>>>> consider pte information anyway, so a per-vma information doesn't hugely
+>>>> help, IMHO.
+>>>
+>>> That's the same as softdirty tracking, IMHO.
 > 
-> Co-developed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
+> Soft-dirty doesn't have a bit in the pte showing whether the page is
+> protected.
+
+If the page is already softdirty (PTE bit), we don't need write faults 
+and consequently can map the page writable. If the page is not 
+softdirty, we need !write as default. But let's talk in detail about 
+vma->vm_page_prot and interaction with other wrprotect features below.
+
 > 
-> Changes since v5:
->   * changed the include of qcom,sm8550-tcsrcc.h to qcom,sm8550-tcsr.h
->
+> One wr-protects in soft-dirty with either ALL or NONE.  That's per-vma.
+> 
+> One wr-protects in uffd-wp by wr-protect specific page or range of pages.
+> That's per-page.
+> 
 
-<snip>...
+Let me try to explain clearer what the issue with uffd-wp on shmem is 
+right now and how to proceed from here. maybe that makes it clearer what 
+the vma->vm_page_prot semantics are.
 
+vma->vm_page_prot defines the default PTE/PMD/... protection. This 
+protection is always *safe*, meaning, if you blindly use that protection 
+when (re)mapping a page, there won't be correctness issues. No need to 
+manually wrprotect afterwards.
 
-> +	pmu {
-> +		compatible = "arm,armv8-pmuv3";
-> +		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH>;
-
-This should be IRQ_TYPE_LEVEL_LOW
-
-
-> +
-> +		intc: interrupt-controller@17100000 {
-> +			compatible = "arm,gic-v3";
-> +			reg = <0 0x17100000 0 0x10000>,	/* GICD */
-> +			      <0 0x17180000 0 0x200000>;	/* GICR * 8 */
-> +			ranges;
-> +			#interrupt-cells = <3>;
-> +			interrupt-controller;
-> +			#redistributor-regions = <1>;
-> +			redistributor-stride = <0 0x40000>;
-> +			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
-
-And here as well, IRQ_TYPE_LEVEL_LOW
-
-With these 2 corrections,
-
-Reviewed-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
+That's why migration, mprotect(), NUMA faults that all rely on 
+vma->vm_page_prot work as expected for now.
 
 
+When calculating vma->vm_page_prot, we considers three things:
+
+(1) VMA protection. For example, no VM_WRITE? then it won't include
+     write permissions.
+(2) Private vs. shared: If the mapping is private, we will never have
+     write permissions in vma->vm_page_prot, because we might have to
+     COW individual PTEs. We really want write faults as default.
+(3) Write-notify: Some mechanism (softdirty tracking, file system, uffd-
+     wp) *might* require default write-protection, such that we always
+     properly trigger a write fault instead where we can handle these.
+     This only applies to shared mappings, because private mappings
+     always default to !write (2).
+
+As vma->vm_page_prot is safe, it is always valid to apply them when 
+mapping a PTE/PMD/ ... *in addition* we can use other information, to 
+detect if we still can map the PTE writable (if they were removed due to 
+(2) or (3)).
+
+In migration code, we use the migration type (writable migration 
+entries). In NUMA-hinting code we used the stored savedwrite value. 
+Absence of these bits does not imply that we have to map the page 
+wrprotected.
+
+
+We never had to remove write permissions so far from the 
+vma->vm_page_prot default. We always only added permissions.
+
+
+Now, uffd-wp on shmem as of now violates these semantics. 
+vma->vm_page_prot cannot always be used as a safe default, because we 
+might have to wrprotect individual PTEs. Note that for uffd-wp on 
+anonymous memory this was not an issue, because we default to !write in 
+vma->vm_page_prot.
+
+
+The two possible ways to approach this for uffd-wp on shmem are:
+
+(1) Obey existing vma->vm_page_prot semantics. Default to !write and
+     optimize the relevant cases to *add* the write bit. This is
+     essentially what this patch does, minus
+     can_change_pte_writable() optimizations on relevant code paths where
+     we'd want to maintain the write bit. For example, when removing
+     uffd-wp protection we might want to restore the write bit directly.
+
+(2) Default to write permissions and check each and every code location
+     where we remap for uffd-wp ptes, to manuall wrprotect -- *remove*
+     the write bit. Alternatively, as you said, always wrprotect when
+     setting the PTE bit, which might work as well.
+
+
+My claim is that (1) is less error prone, because in the worst case we 
+forget to optimize one code location -- instead to resulting in a BUG if 
+we forget to wrprotect (what we have now). But I am not going to fight 
+for it, because I can see that (2) can be made to work as well, as you 
+outline in your patch.
+
+You seem to have decided on (2). Fair enough, you know uffd-wp best. We 
+just have to fix it properly and make the logic consistent whenever we 
+remap a page.
+
+
+Is anything I said fundamentally wrong?
+
+>>>
+>>> [...]
+>>>
+>>>>> Running the mprotect() reproducer [1] without this commit:
+>>>>>      $ ./uffd-wp-mprotect
+>>>>>      FAIL: uffd-wp did not fire
+>>>>> Running the mprotect() reproducer with this commit:
+>>>>>      $ ./uffd-wp-mprotect
+>>>>>      PASS: uffd-wp fired
+>>>>>
+>>>>> [1] https://lore.kernel.org/all/222fc0b2-6ec0-98e7-833f-ea868b248446@redhat.com/T/#u
+>>>>
+>>>> I still hope for a formal patch (non-rfc) we can have a reproducer outside
+>>>> mprotect().  IMHO mprotect() is really ambiguously here being used with
+>>>> uffd-wp, so not a good example IMO as I explained in the other thread [1].
+>>>
+>>> I took the low hanging fruit to showcase that this is a more generic problem.
+>>> The reproducer is IMHO nice because it's simple and race-free.
+> 
+> If no one is using mprotect() with uffd-wp like that, then the reproducer
+> may not be valid - the reproducer is defining how it should work, but does
+> that really stand?  That's why I said it's ambiguous, because the
+> definition in this case is unclear.
+
+There are interesting variations like:
+
+mmap(PROT_READ, MAP_POPULATE|MAP_SHARED)
+uffd_wp()
+mprotect(PROT_READ|PROT_WRITE)
+
+Where we start out with all-write permissions before we enable selective 
+write permissions.
+
+But I'm not going to argue about whats valid and whats not as long as 
+it's documented ;). I primarily wanted to showcase that the same logic 
+based on vma->vm_page_prot is used elsewhere, and that migration PTE 
+restoration is not particularly special.
+
+> 
+> I think numa has the problem too which I agree with you.  If you attach a
+> numa reproducer it'll be nicer.  But again I'm not convinced uffd-wp is a
+> per-vma thing, which seems to be what this patch is based upon.
+
+I might be able to give NUMA hinting a shot later this week, but I have 
+other stuff to focus on.
+
+> 
+> Now I really wonder whether I should just simply wr-protect pte for
+> pte_mkuffd_wp() always, attached.  I didn't do that from the start because
+> I wanted to keep the helpers operate on one bit only.  But I found that
+> it's actually common technique to use in pgtable arch code, and it really
+> doesn't make sense to not wr-protect a pte if uffd-wp is set on a present
+> entry.  It's much safer.
+
+Indeed, that would be much safer.
+
+> 
+>>>
+>>>>
+>>>> I'll need to off-work most of the rest of today, but maybe I can also have
+>>>> a look in the weekend or Monday more on the numa paths.  Before that, can
+>>>> we first reach a consensus that we have the mm/migrate patch there to be
+>>>> merged first?  These are two issues, IMHO.
+>>>>
+>>>> I know you're against me for some reason, but until now I sincerely don't
+>>>> know why.  That patch sololy recovers write bit status (by removing it for
+>>>> read-only) for a migration entry and that definitely makes sense to me.  As
+>>>> I also mentioned in the old version of that thread, we can rework migration
+>>>> entries and merge READ|WRITE entries into a GENERIC entry one day if you
+>>>> think proper, but that's for later.
+>>>
+>>> I'm not against you. I'm against changing well-working, common code
+>>> when it doesn't make any sense to me to change it.
+> 
+> This goes back to the original question of whether we should remove the
+> write bit for read migration entry.  Well, let's just focus on others;
+> we're all tired of this one.
+
+I hope my lengthy explanation above was helpful and correct.
+
+> 
+>>> And now we have proof that
+>>> mprotect() just behaves exactly the same way, using the basic rules of vma->vm_page_prot.
+>>>
+>>> Yes, there is broken sparc64 (below), but that shouldn't dictate our implementation.
+> 
+> I doubt whether sparc64 is broken if it has been like that anyway, because
+> I know little on sparc64 so I guess I'd not speak on that.
+> 
+
+I'd wish some of the sparc64 maintainers would speak up finally. Anyhow, 
+most probably I'll write a reproducer for some broken case and send it 
+to the sparc64 list. Yeah, I need to get Linux for sparc64 running 
+inside a VM ... :/
+
+[...]
+
+> 
+> Yes, but now I'm prone to the patch I attached which should just cover all
+> pte_mkuffd_wp().
+
+We should probably do the same for the pmd variants, and clean up the 
+existing wrprotect like:
+	pmde = pmd_wrprotect(pmd_mkuffd_wp(pmde));
+
+But that's of course, not a fix.
+
+
+> 
+> Side note: since looking at the numa code, I found that after the recent
+> rework of removing savedwrite for numa, cdb205f9e220 ("mm/autonuma: use
+> can_change_(pte|pmd)_writable() to replace savedwrite"), I think it can
+> happen that after numa balancing one pte under uffd-wp vma (but not
+> wr-protected) can have its write bit lost if the migration failed during
+> recovering, because vma_wants_manual_pte_write_upgrade() will return false
+> for such case.  Is it true?
+
+Yes, you are correct. I added that to the patch description:
+
+"
+Note that we don't optimize for the actual migration case:
+     (1) When migration succeeds the new PTE will not be writable because
+         the source PTE was not writable (protnone); in the future we
+         might just optimize that case similarly by reusing
+         can_change_pte_writable()/can_change_pmd_writable() when
+         removing migration PTEs.
+     (2) When migration fails, we'd have to recalculate the "writable"
+         flag because we temporarily dropped the PT lock; for now keep it
+         simple and set "writable=false".
+"
+
+Case (1) would, with your current patch, always lose the write bit 
+during migration, even if vma->vm_page_prot included it. We most might 
+want to optimize that in the future.
+
+Case (2) is rather a corner case, and unless people complain about it 
+being a real performance issue, it felt cleaner (less code) to not 
+optimize for that now.
+
+
+
+Again Peter, I am not against you, not at all. Sorry if I gave you the 
+impression. I highly appreciate your work and this discussion.
+
+-- 
 Thanks,
-Sai
+
+David / dhildenb
+
