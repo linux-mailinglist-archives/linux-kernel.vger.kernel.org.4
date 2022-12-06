@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BB1644ADA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B91644AE1
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 19:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLFSJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 13:09:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55410 "EHLO
+        id S229708AbiLFSKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 13:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbiLFSJY (ORCPT
+        with ESMTP id S229709AbiLFSKA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 13:09:24 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BAAA3AC16;
-        Tue,  6 Dec 2022 10:09:23 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1447c7aa004so10235318fac.11;
-        Tue, 06 Dec 2022 10:09:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CWev+jDg0dJZ3iRe8fmDv7sVMbP2pNiYIK+0iXz8Ozw=;
-        b=gGQ4+B1AD0prkHHQTMEZSg0B+Po3EeECzMeGxLiglZQCMnadIghRxwxHWlMxquyKfM
-         lZYGC0USPIpX+prT+vtaowDIjN0L6IDesiXaKcbI0I8Tf/Z5LyT4gabJEv7w2YrxbBxc
-         nJedvuGElXiXAtWQ49k9akfBY7U9WtFgCQBOsm9B/E0SzOXZcYBq6tVQYi5feQ5RS90Y
-         1W2VHnpMB1vz/6R4PSPHvA596hjbHdO/46l/DkU8+E0w9rIvWwzQ/U77GhiuIEEoy1iz
-         d0xHLBpDdDsSdRW7StAyzBge8nQ6rho0G8KlYlfjVf2WzxzHKCi0pwRxnXGf7nOZRWlW
-         2SNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CWev+jDg0dJZ3iRe8fmDv7sVMbP2pNiYIK+0iXz8Ozw=;
-        b=nad3VrToehX+U3e0+A2x3TACDLFEdXV8+fKVubxnoQNNGqhVUVgkoYMzWvjsyL/mSr
-         AoJYu6eSJq7Gm1W7yYpjb4XGtbX3mpLzze7UlGR/NVHgvBCrop19L6NNRTF1gERkV0bV
-         pQvH22al+ZX5fQGQvVSyZwcAbMxRp9pTy/ERb81N4tssgSpd8zvMu97lIIeWryOlVxTm
-         nEY55X/r/596qERE5f9aSv1ZElB/1zCCC789Fe1epsLHnsaveDYHn3X/ssIFNSIWSTKb
-         qPCCt5g1ygK2zz6exwpjluXHuZIosV+ep9FkR185Ta7l5dPnZBAr9jC7ZGY5rNI50IC1
-         NIdA==
-X-Gm-Message-State: ANoB5pmjEKNZxZuN/M/yDAMFIACpvANKhmQ4+H3X9OjQYInEgJyOeAoA
-        PMaTD24spsdUEtKgDh4dVrTGvrDteoWspP06UhA=
-X-Google-Smtp-Source: AA0mqf6iKPcyytwwVsEHd6kTCR7WtQHQnDpEAdLZZGz40NnxjMAO+4rIEjR8fUj3WHshRxS+nwOfEgXqCvw1ZdDfDiY=
-X-Received: by 2002:a05:6870:e749:b0:144:5f0d:9fcb with SMTP id
- t9-20020a056870e74900b001445f0d9fcbmr8272974oak.38.1670350162551; Tue, 06 Dec
- 2022 10:09:22 -0800 (PST)
+        Tue, 6 Dec 2022 13:10:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010C23B9EB;
+        Tue,  6 Dec 2022 10:09:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CCF161831;
+        Tue,  6 Dec 2022 18:09:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A501CC433C1;
+        Tue,  6 Dec 2022 18:09:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670350197;
+        bh=opSBu2zzyIqLHG9zK6v0tzpsie4Ks4lyGVD5qH9u17M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=qJhJSixfltLB0oBCKJDghRSl7IVmh4HXcgQJGmWhGODjMUHawruvRWPCXBKtm6naZ
+         qC27p50XL4bkKUNiQIZOrmqqer/5Vt3PQhp7ehZfa7F2VeS4N2ululacIJ2tESCLI0
+         15O4ML+g6PGJPTAwfh4Zx3i3CxvaZyMYGFX0R2jlgEYVFAZqiCl2ZxIZyRvyQeXbD5
+         vk85Hpg/5UWJWSHvBZWOOjx6kPQqH9uXTwvpWRTShbrdsHjDiuGIZ7n/5n4QeXCkyZ
+         wz8z7KBqwQQdO/9ykDIXoKg5EYW2o5t3N6UDIoPuuJtT4XPMoegYkA/WNEwg2Tpr3e
+         Ju5MTnrhk3BIQ==
+Date:   Tue, 6 Dec 2022 12:09:56 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Zhuo Chen <chenzhuo.1@bytedance.com>,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, jdmason@kudzu.us,
+        dave.jiang@intel.com, allenbh@gmail.com, james.smart@broadcom.com,
+        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linuxppc-dev@lists.ozlabs.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v3 3/9] NTB: Remove pci_aer_clear_nonfatal_status() call
+Message-ID: <20221206180956.GA1361309@bhelgaas>
 MIME-Version: 1.0
-References: <20221130185748.357410-1-robdclark@gmail.com> <20221130185748.357410-2-robdclark@gmail.com>
- <3e9e157d-e740-ee5b-b8d3-07822b2c9a9b@collabora.com>
-In-Reply-To: <3e9e157d-e740-ee5b-b8d3-07822b2c9a9b@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 6 Dec 2022 10:09:16 -0800
-Message-ID: <CAF6AEGud11KEJvBY9J_TPahFOvo=C0VhG0An7nfNbsHXKbKC2w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] drm/shmem-helper: Remove errant put in error path
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        open list <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, Eric Anholt <eric@anholt.net>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220928110355.emf2nucmdmpb3vbu@mobilestation>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 4, 2022 at 12:45 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
->
-> On 11/30/22 21:57, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > drm_gem_shmem_mmap() doesn't own this reference, resulting in the GEM
-> > object getting prematurely freed leading to a later use-after-free.
-> >
-> > Link: https://syzkaller.appspot.com/bug?extid=c8ae65286134dd1b800d
-> > Reported-by: syzbot+c8ae65286134dd1b800d@syzkaller.appspotmail.com
-> > Fixes: 2194a63a818d ("drm: Add library for shmem backed GEM objects")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+On Wed, Sep 28, 2022 at 02:03:55PM +0300, Serge Semin wrote:
+> On Wed, Sep 28, 2022 at 06:59:40PM +0800, Zhuo Chen wrote:
+> > There is no need to clear error status during init code, so remove it.
+> 
+> Why do you think there isn't? Justify in more details.
+
+Thanks for taking a look, Sergey!  I agree we should leave it or add
+the rationale here.
+
+> > Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
 > > ---
-> >  drivers/gpu/drm/drm_gem_shmem_helper.c | 4 +---
-> >  1 file changed, 1 insertion(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > index 35138f8a375c..3b7b71391a4c 100644
-> > --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
-> > @@ -622,10 +622,8 @@ int drm_gem_shmem_mmap(struct drm_gem_shmem_object *shmem, struct vm_area_struct
-> >       }
-> >
-> >       ret = drm_gem_shmem_get_pages(shmem);
-> > -     if (ret) {
-> > -             drm_gem_vm_close(vma);
-> > +     if (ret)
-> >               return ret;
-> > -     }
-> >
-> >       vma->vm_flags |= VM_PFNMAP | VM_DONTEXPAND | VM_DONTDUMP;
-> >       vma->vm_page_prot = vm_get_page_prot(vma->vm_flags);
->
-> AFAICS, the dmabuf mmaping code path needs a similar fix, isn't it?
->
-> -               /* Drop the reference drm_gem_mmap_obj() acquired.*/
-> -               drm_gem_object_put(obj);
->                 vma->vm_private_data = NULL;
->
-> -               return dma_buf_mmap(obj->dma_buf, vma, 0);
-> +               ret = dma_buf_mmap(obj->dma_buf, vma, 0);
-> +
-> +               /* Drop the reference drm_gem_mmap_obj() acquired.*/
-> +               if (!ret)
-> +                       drm_gem_object_put(obj);
-> +
-> +               return ret;
->
+> >  drivers/ntb/hw/idt/ntb_hw_idt.c | 2 --
+> >  1 file changed, 2 deletions(-)
+> > 
+> > diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
+> > index 0ed6f809ff2e..fed03217289d 100644
+> > --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
+> > +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
+> > @@ -2657,8 +2657,6 @@ static int idt_init_pci(struct idt_ntb_dev *ndev)
+> >  	ret = pci_enable_pcie_error_reporting(pdev);
+> >  	if (ret != 0)
+> >  		dev_warn(&pdev->dev, "PCIe AER capability disabled\n");
+> > -	else /* Cleanup nonfatal error status before getting to init */
+> > -		pci_aer_clear_nonfatal_status(pdev);
 
-Yes, it seems that way.. I wish the shmem helpers worked in a less
-"special" way with regards to refcnting :-(
+I do think drivers should not need to clear errors; I think the PCI
+core should be responsible for that.
 
-BR,
--R
+And I think the core *does* do that in this path:
+
+  pci_init_capabilities
+    pci_aer_init
+      pci_aer_clear_status
+        pci_aer_raw_clear_status
+          pci_write_config_dword(pdev, aer + PCI_ERR_COR_STATUS)
+          pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS)
+
+pci_aer_clear_nonfatal_status() clears only non-fatal uncorrectable
+errors, while pci_aer_init() clears all correctable and all
+uncorrectable errors, so the PCI core is already doing more than
+idt_init_pci() does.
+
+So I think this change is good because it removes some work from the
+driver, but let me know if you think otherwise.
+
+> >  
+> >  	/* First enable the PCI device */
+> >  	ret = pcim_enable_device(pdev);
+> > -- 
+> > 2.30.1 (Apple Git-130)
+> > 
