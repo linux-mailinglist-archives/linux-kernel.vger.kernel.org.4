@@ -2,172 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912D8644499
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE61C6444AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:34:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234139AbiLFNcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:32:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35410 "EHLO
+        id S234375AbiLFNep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbiLFNcs (ORCPT
+        with ESMTP id S232676AbiLFNek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:32:48 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD31638B;
-        Tue,  6 Dec 2022 05:32:47 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so14769375pjd.5;
-        Tue, 06 Dec 2022 05:32:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JdbNe9RNVtu6aOv2KKD8EJeEYMqx5NsqVe6zMYOrKR8=;
-        b=GLQL78XTCT1xN9guX8HTNyf5f188IwhmtpvGu53pkYpm1YRYbW5gA7OIb4tq4SaCS6
-         xBNCJHrnQqr0K2mQ7JQn7/IUMy6/ktZU25o/plNFbPqaixUzAdXnDM7Qavkwk3wrugBE
-         xbr/0jVjDcCCo+QoVZs83nsfVqPfcLlSGVb8LEq5evJjzHLxh24GAq5+6SQCuZIapYqE
-         0/DnbC5zyebhFYJs0itKucWQnB/B/4ltztRSB5SHuJ5sfXzLmcUzjxgLfCG449aBNy3O
-         Lpm/1NCLTW/N2EBX+vu14rxukFSbv0M+lzb8ELNdTH6CluKKlHPx+3NtX7xtDBNV+Fjg
-         Bcjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JdbNe9RNVtu6aOv2KKD8EJeEYMqx5NsqVe6zMYOrKR8=;
-        b=mKb/Hi9qpIsDRVrBqAnFlkardBIxhQt1LUoJvuWEEzfnxJa3rclztm4fxL67e3EUbl
-         z4RgDZRb7Kb+7YtyjJMXYUBqQRY+VwjLea0Ez9mLVIcXfCp5Ny7AQ9oB37gi23s7R5Dp
-         5ihOslhoUhlQMkriGWJhjvs2XGq1O/53LJ8BCxvU09vWLS42QK6dIlZd1XjdlsRYzPKl
-         xn57BmSPk4maRfskDPqewWvmAwYGJZfmN88MNQVQuEeWu0THP/5rQEuB+BCWRyC/QwaX
-         w8QWBJgSVOf9ZGDozZvymxS3BIRR10oVdVthW4dF/3RXTM9/PCkmcGvOqwDQnzxGfLmQ
-         3RJw==
-X-Gm-Message-State: ANoB5pn027zveDyaoYNuihTuSAJmZwW1VxeQTHr7PsdCgOAJLsFLYssr
-        ZEC5CkoO/CONuBJyDiE2Isw=
-X-Google-Smtp-Source: AA0mqf4v+SI7WHfM9rGAhbUGCXuA/96aLyWVFbGEbuPO55mW1jbORcw2URka3CBYnFjO81RYXVD1fQ==
-X-Received: by 2002:a05:6a21:8cc7:b0:a2:c45f:f0fc with SMTP id ta7-20020a056a218cc700b000a2c45ff0fcmr402022pzb.27.1670333566701;
-        Tue, 06 Dec 2022 05:32:46 -0800 (PST)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id y7-20020aa78f27000000b0057462848b94sm11710065pfr.184.2022.12.06.05.32.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 05:32:45 -0800 (PST)
-Message-ID: <e3523f33-847b-81da-7b20-83ee54597d9f@gmail.com>
-Date:   Tue, 6 Dec 2022 22:32:42 +0900
+        Tue, 6 Dec 2022 08:34:40 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60EEBC36;
+        Tue,  6 Dec 2022 05:34:36 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 79BDE1FE58;
+        Tue,  6 Dec 2022 13:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1670333675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dRjMqe9XUfWybRrbUF7GOm/XPQRxXJ5e2gntwceUOoI=;
+        b=rMUnPAsfEpWIJsbRvlnc4Kq8LUTLvMgy4L7RRJsI38/Pmp/I/IQPIER3EVlgM35dwn6gLF
+        9ZOffk1YPWciOp0dX967xPXIahIWRQ/5YzUUD9f2frz4WDMV5fLhJNjg4n1USKz1p0k6RD
+        nGflIZSZE9DevBpSu3wVbSjTUepE5JY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1670333675;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dRjMqe9XUfWybRrbUF7GOm/XPQRxXJ5e2gntwceUOoI=;
+        b=bYBAhVZ4hM49gizquEVGwEMgfkUk376WJJmV6+Gbni2jnjdakO1jwryltaQqbVYP29g2vR
+        iDS88CFVOgK4GaAA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 82E5D13326;
+        Tue,  6 Dec 2022 13:34:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id /kz2H+pEj2MYBwAAGKfGzw
+        (envelope-from <farosas@suse.de>); Tue, 06 Dec 2022 13:34:34 +0000
+From:   Fabiano Rosas <farosas@suse.de>
+To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+Date:   Tue, 06 Dec 2022 10:34:32 -0300
+Message-ID: <877cz4ac5z.fsf@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v2] docs: Integrate rustdoc into Rust documentation
-To:     Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        bilbao@vt.edu, corbet@lwn.net, konstantin@linuxfoundation.org,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <20221130220825.1545758-1-carlos.bilbao@amd.com>
- <20221201204814.2141401-1-carlos.bilbao@amd.com>
- <a019a3f1-7ff1-15b2-d930-e1d722847e0c@gmail.com>
- <CANiq72=ud1EB+jcKE=iudFSgKNcqd=8Xe-M0YgxikmUuQ+TjGA@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CANiq72=ud1EB+jcKE=iudFSgKNcqd=8Xe-M0YgxikmUuQ+TjGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 17:08:53 +0100, Miguel Ojeda wrote:
-> On Mon, Dec 5, 2022 at 2:06 AM Akira Yokosawa <akiyks@gmail.com> wrote:
->>
->> So, this means "make htmldocs" will require kernel .config if CONFIG_RUST=y.
->> I'm not sure this new requirement is acceptable for kernel documentation
->> testers who just want to build kernel documentation.
-> 
-> If the worry is that "full tree testers" (or CIs in general) cannot
-> fully test the docs anymore without a config, that is definitely a
-> change, and one of the reasons why I initially didn't add it to
-> `htmldocs`.
+Chao Peng <chao.p.peng@linux.intel.com> writes:
 
-Well, I'm actually worrying about additional TAT when I want to test
-a particular change in a .rst file and test-build under the relevant
-subdirectory using a command, e.g., "make SPHINXDIRS=doc-guide htmldocs".
+> In confidential computing usages, whether a page is private or shared is
+> necessary information for KVM to perform operations like page fault
+> handling, page zapping etc. There are other potential use cases for
+> per-page memory attributes, e.g. to make memory read-only (or no-exec,
+> or exec-only, etc.) without having to modify memslots.
+>
+> Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
+> userspace to operate on the per-page memory attributes.
+>   - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
+>     a guest memory range.
+>   - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
+>     memory attributes.
+>
+> KVM internally uses xarray to store the per-page memory attributes.
+>
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
+> ---
+>  Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
+>  arch/x86/kvm/Kconfig           |  1 +
+>  include/linux/kvm_host.h       |  3 ++
+>  include/uapi/linux/kvm.h       | 17 ++++++++
+>  virt/kvm/Kconfig               |  3 ++
+>  virt/kvm/kvm_main.c            | 76 ++++++++++++++++++++++++++++++++++
+>  6 files changed, 163 insertions(+)
+>
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index 5617bc4f899f..bb2f709c0900 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -5952,6 +5952,59 @@ delivery must be provided via the "reg_aen" struct.
+>  The "pad" and "reserved" fields may be used for future extensions and should be
+>  set to 0s by userspace.
+>  
+> +4.138 KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES
+> +-----------------------------------------
+> +
+> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> +:Architectures: x86
+> +:Type: vm ioctl
+> +:Parameters: u64 memory attributes bitmask(out)
+> +:Returns: 0 on success, <0 on error
+> +
+> +Returns supported memory attributes bitmask. Supported memory attributes will
+> +have the corresponding bits set in u64 memory attributes bitmask.
+> +
+> +The following memory attributes are defined::
+> +
+> +  #define KVM_MEMORY_ATTRIBUTE_READ              (1ULL << 0)
+> +  #define KVM_MEMORY_ATTRIBUTE_WRITE             (1ULL << 1)
+> +  #define KVM_MEMORY_ATTRIBUTE_EXECUTE           (1ULL << 2)
+> +  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+> +
+> +4.139 KVM_SET_MEMORY_ATTRIBUTES
+> +-----------------------------------------
+> +
+> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> +:Architectures: x86
+> +:Type: vm ioctl
+> +:Parameters: struct kvm_memory_attributes(in/out)
+> +:Returns: 0 on success, <0 on error
+> +
+> +Sets memory attributes for pages in a guest memory range. Parameters are
+> +specified via the following structure::
+> +
+> +  struct kvm_memory_attributes {
+> +	__u64 address;
+> +	__u64 size;
+> +	__u64 attributes;
+> +	__u64 flags;
+> +  };
+> +
+> +The user sets the per-page memory attributes to a guest memory range indicated
+> +by address/size, and in return KVM adjusts address and size to reflect the
+> +actual pages of the memory range have been successfully set to the attributes.
 
-This completes almost instantly when CONFIG_RUST is not set.
+This wording could cause some confusion, what about a simpler:
 
-With CONFIG_RUST=y, in my test, it runs RUSTDOC even when rustdoc is
-already generated once, as shown below:
+"reflect the range of pages that had its attributes successfully set"
 
-------
-  CALL    scripts/checksyscalls.sh
-  DESCEND objtool
-  RUSTDOC   /home/foo/.rustup/toolchains/1.62.0-x86_64-unknown-linux-gnu/lib/rustlib/src/rust/library/core/src/lib.rs
-  RUSTDOC H rust/macros/lib.rs
-  RUSTDOC   rust/compiler_builtins.rs
-  RUSTDOC   rust/alloc/lib.rs
-  RUSTDOC   rust/kernel/lib.rs
-  SPHINX  htmldocs --> file:///linux/Documentation/output/doc-guide
-make[2]: Nothing to be done for 'html'.
-Using classic theme
-source directory: doc-guide
-------
+> +If the call returns 0, "address" is updated to the last successful address + 1
+> +and "size" is updated to the remaining address size that has not been set
+> +successfully.
 
-It takes 10 seconds or so (under a not-fast PC), 97% or more of which
-is wasted for redundant RUSTDOC runs.
+"address + 1 page" or "subsequent page" perhaps.
 
-Why is RUSTDOC invoked when there is no change in rustdoc?
+In fact, wouldn't this all become simpler if size were number of pages instead?
 
-If those redundant runs can be resolved, I might change my mind and ack
-the integration of generating rustdoc and htmldocs.
+> The user should check the return value as well as the size to
+> +decide if the operation succeeded for the whole range or not. The user may want
+> +to retry the operation with the returned address/size if the previous range was
+> +partially successful.
+> +
+> +Both address and size should be page aligned and the supported attributes can be
+> +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
+> +
+> +The "flags" field may be used for future extensions and should be set to 0s.
+> +
 
-> 
-> However, full tree testers will need other changes anyway (at least
-> installing the Rust toolchain), even if there was no need for a
-> config. So it may be not too bad, and putting it in `htmldocs` means
-> not having to call another target in the CIs; and for humans, less
-> chance of forgetting etc.
+...
 
-Full tree testers wouldn't mind the redundant runs of RUSTDOC.
+> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> +					   struct kvm_memory_attributes *attrs)
+> +{
+> +	gfn_t start, end;
+> +	unsigned long i;
+> +	void *entry;
+> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> +
+> +	/* flags is currently not used. */
+> +	if (attrs->flags)
+> +		return -EINVAL;
+> +	if (attrs->attributes & ~supported_attrs)
+> +		return -EINVAL;
+> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> +		return -EINVAL;
+> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> +		return -EINVAL;
+> +
+> +	start = attrs->address >> PAGE_SHIFT;
+> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
 
-I think you can add a new target in the top-devel Makefile which
-runs both rustdoc and htmldocs for CIs. Something like 'htmldocsboth'
-or 'htmldocsall'???
+Here PAGE_SIZE and -1 cancel out.
 
-htmldocs and other *docs targets are the most primitive ones for
-running Sphinx, so my gut feeling tells me _not_ to contaminate
-htmldocs with rustdoc or vice versa.
+Consider using gpa_to_gfn as well.
 
-> 
-> (It is also why I wondered above about
-> `CONFIG_WARN_MISSING_DOCUMENTS`: if `Documentation/` intended to
-> require a config as a whole, then it would be fine. I assume that is
-> not the case, though, but not doing the sync is nevertheless a bit
-> confusing)
-
-I have no idea. (Note: I was not around when the kernel documentation
-transitioned to Sphinx.)
-
-> 
->> By the way, is rustdoc's requirement of .config only for CONFIG_RUST?
->> In other words, are contents of rustdoc affected by other config settings?
->>
->> If not, I think rustdoc can be generated regardless of config settings as
->> far as necessary tools (rustc, bindgen, etc.) are available.
-> 
-> Yeah, at the moment the config affects what gets generated. However,
-> that may change in the future: there has been some movement around the
-> Rust features needed for this recently, so I want to try that approach
-> again (it would require some other changes, though).
-
-Interesting.
-So rustdoc needs .config. I'm convinced.
-
-        Thanks, Akira
-
-> 
-> Cheers,
-> Miguel
-
+> +
+> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> +
+> +	mutex_lock(&kvm->lock);
+> +	for (i = start; i < end; i++)
+> +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> +				    GFP_KERNEL_ACCOUNT)))
+> +			break;
+> +	mutex_unlock(&kvm->lock);
+> +
+> +	attrs->address = i << PAGE_SHIFT;
+> +	attrs->size = (end - i) << PAGE_SHIFT;
+> +
+> +	return 0;
+> +}
+> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> +
+>  struct kvm_memory_slot *gfn_to_memslot(struct kvm *kvm, gfn_t gfn)
+>  {
+>  	return __gfn_to_memslot(kvm_memslots(kvm), gfn);
+> @@ -4459,6 +4508,9 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+>  #ifdef CONFIG_HAVE_KVM_MSI
+>  	case KVM_CAP_SIGNAL_MSI:
+>  #endif
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	case KVM_CAP_MEMORY_ATTRIBUTES:
+> +#endif
+>  #ifdef CONFIG_HAVE_KVM_IRQFD
+>  	case KVM_CAP_IRQFD:
+>  	case KVM_CAP_IRQFD_RESAMPLE:
+> @@ -4804,6 +4856,30 @@ static long kvm_vm_ioctl(struct file *filp,
+>  		break;
+>  	}
+>  #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
+> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> +	case KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES: {
+> +		u64 attrs = kvm_supported_mem_attributes(kvm);
+> +
+> +		r = -EFAULT;
+> +		if (copy_to_user(argp, &attrs, sizeof(attrs)))
+> +			goto out;
+> +		r = 0;
+> +		break;
+> +	}
+> +	case KVM_SET_MEMORY_ATTRIBUTES: {
+> +		struct kvm_memory_attributes attrs;
+> +
+> +		r = -EFAULT;
+> +		if (copy_from_user(&attrs, argp, sizeof(attrs)))
+> +			goto out;
+> +
+> +		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
+> +
+> +		if (!r && copy_to_user(argp, &attrs, sizeof(attrs)))
+> +			r = -EFAULT;
+> +		break;
+> +	}
+> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+>  	case KVM_CREATE_DEVICE: {
+>  		struct kvm_create_device cd;
