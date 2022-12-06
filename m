@@ -2,153 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FD76442C0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B82E6442C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:59:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiLFL6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:58:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51038 "EHLO
+        id S235324AbiLFL7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:59:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235226AbiLFL54 (ORCPT
+        with ESMTP id S234960AbiLFL6a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:57:56 -0500
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054B9B1F2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:57:45 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id m18so4048691eji.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:57:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ETAV5GbK15ksIb7Y/2hAQrE1+2csG56eJ5O31jfiSm0=;
-        b=DsfemFw96NwbJCFj2aFQGgrtCd2kXAYLnSqdxWwK+f1C3ozv2O2qwOA162mGChL6hn
-         6I8b6+MpLsRWGQ819BWKWHuvh1pk4JJwfFFq5sZbdmqFSxYOgMaXX7rKn93GpyuDU2UM
-         h5KKd8pg+2P+K+zmKtJ/mqUMtoyDqHdgVCEk+rCn/GRBXHyMCW+INlcHnX5ff/IH/dhh
-         ngzvdJTJTYXIr/Rkgt7Z2UtfSw73i5H6jbxRqHzhD+lA6Z+QcIb+UbW7AP4SfJ2zc+dz
-         R5gcQq8CvqHxKE6Ju1pQQRc2JNIv/7wcy8FwdrRHsATiQb5fx6TjiACsYI+HbPtLeLG5
-         6s6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ETAV5GbK15ksIb7Y/2hAQrE1+2csG56eJ5O31jfiSm0=;
-        b=gYBUauZ18yKHhyM3a9si8dnBaAyJBTmOE9GZfJCR8GWetoJ5vIs7PW+oczI5+ak8mQ
-         DtqkQ98Z32K59xMYCS/yYi5MeiYBEEPyjLL20spn8zmU2iKJM4WxY5m5UQ4mhl3W2ZWA
-         IhSRfTPW+sUPjG6mSM1jzm7+H/T2hf6CSF9iQLhhShlouAUW7GQi5XbN4cD/+nvMRhfk
-         O0/iQZb+bWgENxbq58rFuyVEim7QWqrCaRsVItGC7xKgm1o2WAfonbE6IzD4tBYhuVgP
-         PujB637Yu6rt8oDNh4PB6QOqzOG05FUbaAPSMjfzm9DfvN2oMJDoGQRu4I1W4f7J5jN1
-         w04A==
-X-Gm-Message-State: ANoB5pnIVzlRhFFjxEbVuETM3pW1PI3q7KWO1zsSrpZ8Zm33PTP2/0+O
-        XOCjT38SWReXJ4ucvU8+KvJa6g==
-X-Google-Smtp-Source: AA0mqf7GzGmbIAawAMwe6NRH9KO4raa68YejfLxvVTFxOOTu1R7RNxVCX6OXkVFF6vVz1mIthTIjtQ==
-X-Received: by 2002:a17:906:2552:b0:7ad:917b:61ec with SMTP id j18-20020a170906255200b007ad917b61ecmr59356203ejb.513.1670327865402;
-        Tue, 06 Dec 2022 03:57:45 -0800 (PST)
-Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id ky20-20020a170907779400b007c0ac4e6b6esm6472076ejc.143.2022.12.06.03.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 03:57:45 -0800 (PST)
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>
-Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v2 11/11] can: tcan4x5x: Specify separate read/write ranges
-Date:   Tue,  6 Dec 2022 12:57:28 +0100
-Message-Id: <20221206115728.1056014-12-msp@baylibre.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221206115728.1056014-1-msp@baylibre.com>
-References: <20221206115728.1056014-1-msp@baylibre.com>
+        Tue, 6 Dec 2022 06:58:30 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801EF286F9;
+        Tue,  6 Dec 2022 03:57:58 -0800 (PST)
+Date:   Tue, 06 Dec 2022 11:57:55 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670327876;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHGQJTwsNN6HaBNZBNClbbvaQLAwkpG5ENTqPqpgULE=;
+        b=DHRVX/SUYV9Y/dC5uIO/CBIgs5X9NVPCJcdOa5yj7dfc8kJjhMykcHPp18V5lNI4ZaruDH
+        tr1q5zZ3QzAIKS1fLeXVPigLkVhmJJ04P9e0ASp3p6T+AfferICWvs1mHaTsW54oi2SoyY
+        9GUuzO2KzbqTTtrHHhyGzvnjelMGt+lXWJSMMYBwTVK5pyzeB81jOGTZkqD9eEXQCX28S4
+        f/4R5EXUbPsjeOPlgWPuU7qjZnurWJfBquzscZm+tK59c1Tckg8gupgATIN3dCirZn+XIu
+        /W4PCIwAQ0tEYvw4+6UhTsospx6b5DzYSds//DcbarQ9feK1KLp11Ya4PdR0rg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670327876;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHGQJTwsNN6HaBNZBNClbbvaQLAwkpG5ENTqPqpgULE=;
+        b=b3qlPPzeWbGPj9qWjbFxTrHnljcoP4SMhL2EqCgsmU2CPd+ccj4oOl7KpBPpGlZBBB+wD9
+        Jly6VxEILmQU6jCg==
+From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: irq/core] irqchip/ti-sci-inta: Fix kernel doc
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221121140048.596303869@linutronix.de>
+References: <20221121140048.596303869@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <167032787599.4906.15535679126278048472.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Specify exactly which registers are read/writeable in the chip. This
-is supposed to help detect any violations in the future.
+The following commit has been merged into the irq/core branch of tip:
 
-Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Commit-ID:     e6d22108621c837f81d041ec5d61b08d17b151df
+Gitweb:        https://git.kernel.org/tip/e6d22108621c837f81d041ec5d61b08d17b151df
+Author:        Thomas Gleixner <tglx@linutronix.de>
+AuthorDate:    Mon, 21 Nov 2022 15:39:34 +01:00
+Committer:     Thomas Gleixner <tglx@linutronix.de>
+CommitterDate: Tue, 06 Dec 2022 12:50:18 +01:00
+
+irqchip/ti-sci-inta: Fix kernel doc
+
+W=1 build complains:
+
+drivers/irqchip/irq-ti-sci-inta.c:177: warning: Function parameter or member 'vint_id' not described in 'ti_sci_inta_xlate_irq'
+drivers/irqchip/irq-ti-sci-inta.c:177: warning: Excess function parameter 'irq' description in 'ti_sci_inta_xlate_irq'
+
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20221121140048.596303869@linutronix.de
+
 ---
- drivers/net/can/m_can/tcan4x5x-regmap.c | 43 +++++++++++++++++++++----
- 1 file changed, 37 insertions(+), 6 deletions(-)
+ drivers/irqchip/irq-ti-sci-inta.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/can/m_can/tcan4x5x-regmap.c b/drivers/net/can/m_can/tcan4x5x-regmap.c
-index 33aed989e42a..2b218ce04e9f 100644
---- a/drivers/net/can/m_can/tcan4x5x-regmap.c
-+++ b/drivers/net/can/m_can/tcan4x5x-regmap.c
-@@ -90,16 +90,47 @@ static int tcan4x5x_regmap_read(void *context,
- 	return 0;
- }
- 
--static const struct regmap_range tcan4x5x_reg_table_yes_range[] = {
-+static const struct regmap_range tcan4x5x_reg_table_wr_range[] = {
-+	/* Device ID and SPI Registers */
-+	regmap_reg_range(0x000c, 0x0010),
-+	/* Device configuration registers and Interrupt Flags*/
-+	regmap_reg_range(0x0800, 0x080c),
-+	regmap_reg_range(0x0814, 0x0814),
-+	regmap_reg_range(0x0820, 0x0820),
-+	regmap_reg_range(0x0830, 0x0830),
-+	/* M_CAN */
-+	regmap_reg_range(0x100c, 0x102c),
-+	regmap_reg_range(0x1048, 0x1048),
-+	regmap_reg_range(0x1050, 0x105c),
-+	regmap_reg_range(0x1080, 0x1088),
-+	regmap_reg_range(0x1090, 0x1090),
-+	regmap_reg_range(0x1098, 0x10a0),
-+	regmap_reg_range(0x10a8, 0x10b0),
-+	regmap_reg_range(0x10b8, 0x10c0),
-+	regmap_reg_range(0x10c8, 0x10c8),
-+	regmap_reg_range(0x10d0, 0x10d4),
-+	regmap_reg_range(0x10e0, 0x10e4),
-+	regmap_reg_range(0x10f0, 0x10f0),
-+	regmap_reg_range(0x10f8, 0x10f8),
-+	/* MRAM */
-+	regmap_reg_range(0x8000, 0x87fc),
-+};
-+
-+static const struct regmap_range tcan4x5x_reg_table_rd_range[] = {
- 	regmap_reg_range(0x0000, 0x0010),	/* Device ID and SPI Registers */
- 	regmap_reg_range(0x0800, 0x0830),	/* Device configuration registers and Interrupt Flags*/
- 	regmap_reg_range(0x1000, 0x10fc),	/* M_CAN */
- 	regmap_reg_range(0x8000, 0x87fc),	/* MRAM */
- };
- 
--static const struct regmap_access_table tcan4x5x_reg_table = {
--	.yes_ranges = tcan4x5x_reg_table_yes_range,
--	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_yes_range),
-+static const struct regmap_access_table tcan4x5x_reg_table_wr = {
-+	.yes_ranges = tcan4x5x_reg_table_wr_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_wr_range),
-+};
-+
-+static const struct regmap_access_table tcan4x5x_reg_table_rd = {
-+	.yes_ranges = tcan4x5x_reg_table_rd_range,
-+	.n_yes_ranges = ARRAY_SIZE(tcan4x5x_reg_table_rd_range),
- };
- 
- static const struct regmap_config tcan4x5x_regmap = {
-@@ -107,8 +138,8 @@ static const struct regmap_config tcan4x5x_regmap = {
- 	.reg_stride = 4,
- 	.pad_bits = 8,
- 	.val_bits = 32,
--	.wr_table = &tcan4x5x_reg_table,
--	.rd_table = &tcan4x5x_reg_table,
-+	.wr_table = &tcan4x5x_reg_table_wr,
-+	.rd_table = &tcan4x5x_reg_table_rd,
- 	.max_register = TCAN4X5X_MAX_REGISTER,
- 	.cache_type = REGCACHE_NONE,
- 	.read_flag_mask = (__force unsigned long)
--- 
-2.38.1
-
+diff --git a/drivers/irqchip/irq-ti-sci-inta.c b/drivers/irqchip/irq-ti-sci-inta.c
+index 5fdbb43..a6ecc53 100644
+--- a/drivers/irqchip/irq-ti-sci-inta.c
++++ b/drivers/irqchip/irq-ti-sci-inta.c
+@@ -168,7 +168,7 @@ static void ti_sci_inta_irq_handler(struct irq_desc *desc)
+ /**
+  * ti_sci_inta_xlate_irq() - Translate hwirq to parent's hwirq.
+  * @inta:	IRQ domain corresponding to Interrupt Aggregator
+- * @irq:	Hardware irq corresponding to the above irq domain
++ * @vint_id:	Hardware irq corresponding to the above irq domain
+  *
+  * Return parent irq number if translation is available else -ENOENT.
+  */
