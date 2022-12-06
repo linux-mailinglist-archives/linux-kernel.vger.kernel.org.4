@@ -2,142 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104BE643A61
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9CA7643A5F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:41:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiLFAmO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:42:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S233455AbiLFAll (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:41:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233354AbiLFAle (ORCPT
+        with ESMTP id S233056AbiLFAl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:41:34 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D32E2D
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:41:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ATfntEczgiDIz1NDR8g2Hsjkm0/EyiJMOTZLTQtWJWg=; b=snYz7qIe6fDQfVdAt/V32OhLKp
-        9iYax2sUhBchWYv8rmbPO/zIM+fKSCYkut7xVShWYvuG4x1+yMJm9jkngjm1V/E+GLs3U0lvHkDCQ
-        NxA4tN07eCTd0QCdZNtljFyurPfL+FndvCAufaYgbyUqldYilV+e15bVIdLijamOPQor/CIegVyEG
-        z4bdTFO13L2ZLGtpsEV3LHKhnLp0ZH91XI6XJqMYThPg+esxm285GNaJR/si96r9ACHzDd0n6AMJn
-        wa4HjYe+QL2M5/fChv+bRGCDO0kx6YVHldWHfy+mnuD/mJFdzax3nas8lKng12k01W7ALYS9eLuqA
-        UcnTNMAg==;
-Received: from [177.34.169.227] (helo=[192.168.0.8])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1p2M1W-00FpWu-3X; Tue, 06 Dec 2022 01:41:26 +0100
-Message-ID: <66a7178e-5af2-2aab-dc3f-3c1a4ef991dd@igalia.com>
-Date:   Mon, 5 Dec 2022 21:41:21 -0300
+        Mon, 5 Dec 2022 19:41:26 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFA31137
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:41:25 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id x66so13068824pfx.3
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:41:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g1HJHevNxrj1Nq/NT7g6yR6y+nhBZjMl2neMxR4W590=;
+        b=m5t9TolEhunsnLAs8ghRCY5jduXJTUVrI828QMb9aaMDHIl9N52I0BcpPgXmJWJwHJ
+         8O/axD8BEanTUffxKBpeoT/71MR//Ncm3X2gdqz7aFSVJrBM1Wbfryc+Rv8pyLm6oklN
+         hdck+j11IhNQpknHmA6Td97jo/v98RGjlHlkI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g1HJHevNxrj1Nq/NT7g6yR6y+nhBZjMl2neMxR4W590=;
+        b=VsrXkXQbesFO69SBczsP3dJKOpm6euQXrbq+tN45z6xg2/lUnQLLKfdyeyGSVoEf4I
+         YD0oYVy9K2KYyeQIY22V7tdcXmWFWoB0mrHjEkerau+W+CMeZmM3qfgtX4pcBhmdT9KU
+         HZP6/cD9+TNhGyFfOoGgN5HsDs/u+41gvRERqNQO6yjxpExxwLwc720BNCGAE7KU23mm
+         Xk3raSnzhuL8Rlhvu067/BL7P9Qk5mRLlUeteKPdfgUuUah+RDSUaZ0IKpYFiyy+Jdpn
+         Mmi0NeSyXvqy+vAx3A1U5RhzZH+fswxz7qha/VmcKFzZjFLHX38lKttAoakRNYeZeuEn
+         m9+w==
+X-Gm-Message-State: ANoB5pmrK4nF5gmMrK2PsZXzSAAw4fYhEjXlF4yr7uVwV4EZM7Wn/7mV
+        YnKU9uZrGSf1LXE36/O5zHnhKA==
+X-Google-Smtp-Source: AA0mqf7bocP7PDul7rRtHY2oLz5aO8HTy1YdBhNhRPTn1YaCEYjEKUj/QL8QuzpT2xX9GPdxtsjU/w==
+X-Received: by 2002:a63:1824:0:b0:46e:baf4:ab7a with SMTP id y36-20020a631824000000b0046ebaf4ab7amr79923468pgl.37.1670287284417;
+        Mon, 05 Dec 2022 16:41:24 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902650700b00186b549cdc2sm11187939plk.157.2022.12.05.16.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 16:41:24 -0800 (PST)
+Date:   Mon, 5 Dec 2022 16:41:23 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Alexey Izbyshev <izbyshev@ispras.ru>,
+        Andrei Vagin <avagin@gmail.com>,
+        Bernd Edlinger <bernd.edlinger@hotmail.de>,
+        Bo Liu <liubo03@inspur.com>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        Liu Shixin <liushixin2@huawei.com>,
+        Li Zetao <lizetao1@huawei.com>, Rolf Eike Beer <eb@emlix.com>,
+        Wang Yufen <wangyufen@huawei.com>
+Subject: [GIT PULL] execve updates for v6.2-rc1
+Message-ID: <202212051637.93142F409@keescook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/2] drm/v3d: replace obj lookup steps with
- drm_gem_objects_lookup
-Content-Language: en-US
-To:     Melissa Wen <mwen@igalia.com>, emma@anholt.net, airlied@gmail.com,
-        daniel@ffwll.ch
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kernel-dev@igalia.com
-References: <20221205135538.3545051-1-mwen@igalia.com>
- <20221205135538.3545051-3-mwen@igalia.com>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <20221205135538.3545051-3-mwen@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/5/22 10:55, Melissa Wen wrote:
-> As v3d_lookup_bos() performs the same steps as drm_gem_objects_lookup(),
-> replace the explicit code in v3d to simply use the DRM function.
-> 
-> Signed-off-by: Melissa Wen <mwen@igalia.com>
+Hi Linus,
 
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
+Please pull these execve updates for v6.2-rc1. Most are small
+refactorings and bug fixes, but three things stand out: switching timens
+(which got reverted before) looks solid now, FOLL_FORCE has been removed
+(no failures seen yet across several weeks in -next), and some
+whitespace cleanups (which are long overdue). The latter does end up
+conflicting with changes from Al[1], but should be trivial to resolve.
 
-Best Regards,
-- Maíra Canal
+Thanks!
 
-> ---
->  drivers/gpu/drm/v3d/v3d_gem.c | 49 +++--------------------------------
->  1 file changed, 3 insertions(+), 46 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/v3d/v3d_gem.c b/drivers/gpu/drm/v3d/v3d_gem.c
-> index 31a37572c11d..6e152ef26358 100644
-> --- a/drivers/gpu/drm/v3d/v3d_gem.c
-> +++ b/drivers/gpu/drm/v3d/v3d_gem.c
-> @@ -299,10 +299,6 @@ v3d_lookup_bos(struct drm_device *dev,
->  	       u64 bo_handles,
->  	       u32 bo_count)
->  {
-> -	u32 *handles;
-> -	int ret = 0;
-> -	int i;
-> -
->  	job->bo_count = bo_count;
->  
->  	if (!job->bo_count) {
-> @@ -313,48 +309,9 @@ v3d_lookup_bos(struct drm_device *dev,
->  		return -EINVAL;
->  	}
->  
-> -	job->bo = kvmalloc_array(job->bo_count,
-> -				 sizeof(struct drm_gem_dma_object *),
-> -				 GFP_KERNEL | __GFP_ZERO);
-> -	if (!job->bo) {
-> -		DRM_DEBUG("Failed to allocate validated BO pointers\n");
-> -		return -ENOMEM;
-> -	}
-> -
-> -	handles = kvmalloc_array(job->bo_count, sizeof(u32), GFP_KERNEL);
-> -	if (!handles) {
-> -		ret = -ENOMEM;
-> -		DRM_DEBUG("Failed to allocate incoming GEM handles\n");
-> -		goto fail;
-> -	}
-> -
-> -	if (copy_from_user(handles,
-> -			   (void __user *)(uintptr_t)bo_handles,
-> -			   job->bo_count * sizeof(u32))) {
-> -		ret = -EFAULT;
-> -		DRM_DEBUG("Failed to copy in GEM handles\n");
-> -		goto fail;
-> -	}
-> -
-> -	spin_lock(&file_priv->table_lock);
-> -	for (i = 0; i < job->bo_count; i++) {
-> -		struct drm_gem_object *bo = idr_find(&file_priv->object_idr,
-> -						     handles[i]);
-> -		if (!bo) {
-> -			DRM_DEBUG("Failed to look up GEM BO %d: %d\n",
-> -				  i, handles[i]);
-> -			ret = -ENOENT;
-> -			spin_unlock(&file_priv->table_lock);
-> -			goto fail;
-> -		}
-> -		drm_gem_object_get(bo);
-> -		job->bo[i] = bo;
-> -	}
-> -	spin_unlock(&file_priv->table_lock);
-> -
-> -fail:
-> -	kvfree(handles);
-> -	return ret;
-> +	return drm_gem_objects_lookup(file_priv,
-> +				      (void __user *)(uintptr_t)bo_handles,
-> +				      job->bo_count, &job->bo);
->  }
->  
->  static void
+-Kees
+
+[1] https://lore.kernel.org/linux-next/20221128143704.3fe8f7b1@canb.auug.org.au/
+
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.2-rc1
+
+for you to fetch changes up to 6a46bf558803dd2b959ca7435a5c143efe837217:
+
+  binfmt_misc: fix shift-out-of-bounds in check_special_flags (2022-12-02 13:57:04 -0800)
+
+----------------------------------------------------------------
+execve updates for v6.2-rc1
+
+- Add timens support (when switching mm). This version has survived
+  in -next for the entire cycle (Andrei Vagin).
+
+- Various small bug fixes, refactoring, and readability improvements
+  (Bernd Edlinger, Rolf Eike Beer, Bo Liu, Li Zetao Liu Shixin).
+
+- Remove FOLL_FORCE for stack setup (Kees Cook).
+
+- Whilespace cleanups (Rolf Eike Beer, Kees Cook).
+
+----------------------------------------------------------------
+Andrei Vagin (2):
+      fs/exec: switch timens when a task gets a new mm
+      selftests/timens: add a test for vfork+exit
+
+Bernd Edlinger (1):
+      exec: Copy oldsighand->action under spin-lock
+
+Bo Liu (1):
+      binfmt_elf: replace IS_ERR() with IS_ERR_VALUE()
+
+Kees Cook (3):
+      exec: Add comments on check_unsafe_exec() fs counting
+      binfmt: Fix whitespace issues
+      exec: Remove FOLL_FORCE for stack setup
+
+Li Zetao (1):
+      fs/binfmt_elf: Fix memory leak in load_elf_binary()
+
+Liu Shixin (1):
+      binfmt_misc: fix shift-out-of-bounds in check_special_flags
+
+Rolf Eike Beer (4):
+      ELF uapi: add spaces before '{'
+      exec: simplify initial stack size expansion
+      binfmt_elf: fix documented return value for load_elf_phdrs()
+      binfmt_elf: simplify error handling in load_elf_phdrs()
+
+Wang Yufen (1):
+      binfmt: Fix error return code in load_elf_fdpic_binary()
+
+ fs/binfmt_elf.c                             |  35 +++----
+ fs/binfmt_elf_fdpic.c                       |   7 +-
+ fs/binfmt_misc.c                            |   8 +-
+ fs/exec.c                                   |  38 +++++---
+ include/linux/nsproxy.h                     |   1 +
+ include/uapi/linux/elf.h                    |  14 +--
+ kernel/fork.c                               |   9 --
+ kernel/nsproxy.c                            |  23 ++++-
+ tools/testing/selftests/timens/.gitignore   |   1 +
+ tools/testing/selftests/timens/Makefile     |   2 +-
+ tools/testing/selftests/timens/vfork_exec.c | 139 ++++++++++++++++++++++++++++
+ 11 files changed, 219 insertions(+), 58 deletions(-)
+ create mode 100644 tools/testing/selftests/timens/vfork_exec.c
+
+-- 
+Kees Cook
