@@ -2,177 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC98F643BE3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:28:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B02643BE6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbiLFD2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:28:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46714 "EHLO
+        id S233532AbiLFDbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:31:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233904AbiLFD2Q (ORCPT
+        with ESMTP id S231756AbiLFDbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:28:16 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F5A24F36;
-        Mon,  5 Dec 2022 19:28:15 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so16809564pjp.1;
-        Mon, 05 Dec 2022 19:28:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tSFBXsQz5kt69BB2/66rOZd+Kc+U9V6VbB9yZ0q0uPw=;
-        b=fHhdCfxAz89x6uZ9ORXRFD5LBzYQKNiWpIGLL4/A1a1ClBbLGs/q0kSlbhpziQl82N
-         gCSvKtIrBxqt6VrYbW6PpBahkUehWugn1qpNIczVgCcQK4soCPiCwPKey280gZEm1Uad
-         iknAC5TAVJZlQyhaCpU3Z1NBJ6dGGMTpHgIbCnkQqDr28XOjfiJLkzvU1xE2zh2MadPD
-         1qdM83CedGsvd6iidYsCnxtomQVVInYD5nb3XIuu+CIBmwOpxs0GJdFatK9009d//Thd
-         VDak0DGsMmXYwD2agD5Y1ixtQvvAWbF4KJgPp3E0HkLJ6ExYxmaco2pQ/GvO4ZPI/3mQ
-         Ha9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tSFBXsQz5kt69BB2/66rOZd+Kc+U9V6VbB9yZ0q0uPw=;
-        b=T2JPwPOJ6GaIw0yv2fCtAQceKsani019E8q4fmrg+rHh+72D/q9xuu1U3ndylyfS2z
-         +cUO6Ar0qgw3bFxhaIdcSF28oezD/lW36Kd7YQw5SJwPsb/ioNLyC2f9segb3DXud7xk
-         1ro6L+zF+htgg24ryZW5n4aHmo3v3t6RlsUsUcbvZN2gMGezBOjxhDTeYrQQftpsAz0x
-         eTDiXF0FtkIilpbhDydrA/W9BVdyfeBZh2jYiJjBz16ujKofW5YIa2AjXmb6Ch5mCAAn
-         ZZHF02v0Q2E5i+T9edwGP5EnutPHFzjHVOm+1/9QEHRyel/pkRavmJZkaLhK6GbbMppk
-         d0tA==
-X-Gm-Message-State: ANoB5pkKFu2WG48GUUY+7dKL7jCeO8jBGg7/qHfqMry3rT2LDbvpO9If
-        P4D2ylnYJk/tCz52ol/CVg97wwdxl49hsDqfGNHq6m/IRA==
-X-Google-Smtp-Source: AA0mqf5wt9lTBk/Odwy+o9i6yDxX4NyK7Vx8uFEOvTbZ3nAnIK0tz2YBJ3NkjWe/QE3peABZdMdeZTuE46395iAqVYc=
-X-Received: by 2002:a17:902:bb10:b0:189:6292:827e with SMTP id
- im16-20020a170902bb1000b001896292827emr55812042plb.97.1670297294708; Mon, 05
- Dec 2022 19:28:14 -0800 (PST)
+        Mon, 5 Dec 2022 22:31:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB03E2529D;
+        Mon,  5 Dec 2022 19:31:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66E0161544;
+        Tue,  6 Dec 2022 03:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEA1EC4314C;
+        Tue,  6 Dec 2022 03:31:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670297470;
+        bh=WTSRU6KLdB/pQeJp68FTfceCK6cjixmp3Lyduir0Gs4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vLH2LVEkHwJsBPC1GJMcIr41vD1EW94svc9hSWdIdm1ftg7csd8xM57DLRGB0lZNh
+         BVNYRTeDp8xBod7ZnBTDHfMU6oZN22cABGRjp7sbYFX5NAqRPileMx3tJY+3+ghror
+         NYng5uDND0otXNHw6hQ6ifHJFBdlPbkhb3cekluzKy5VyXB8lxcyVb+DtcKC5ZOfx5
+         TBc7e+8BmE3YdcEIxNuhUiCjndrg8MoC3tNj973km5xC6TfzyHLQpYjt12rc4wRbpN
+         KOCiC9CSsNCyy2+jc7fMy6ngpb22AY0hoHtcsB4lDl32O4SzC+ta9nW2LAum0cmQst
+         Lz3B4qSAt95tQ==
+Received: by mail-ej1-f52.google.com with SMTP id x22so3070033ejs.11;
+        Mon, 05 Dec 2022 19:31:10 -0800 (PST)
+X-Gm-Message-State: ANoB5pk9hVHgjyiwq+DExM7yFX+e03F9SJDCMwCEpeh9JgPIwRwkvpr3
+        TPjiy1R0nFR/fyLxOYiyY1O+JWEnfDUHpf+UAKE=
+X-Google-Smtp-Source: AA0mqf44re6Z38rA7EyJ0JPXaL1H4hkISmoWkhymcUfiUEQwHIJ7eHGkrkUCB8jo2EqvVlNyrHh5arNq1dTjGhg2PVQ=
+X-Received: by 2002:a17:906:1e4a:b0:78d:3505:6f3e with SMTP id
+ i10-20020a1709061e4a00b0078d35056f3emr69420048ejj.611.1670297468584; Mon, 05
+ Dec 2022 19:31:08 -0800 (PST)
 MIME-Version: 1.0
-From:   Hao Sun <sunhao.th@gmail.com>
-Date:   Tue, 6 Dec 2022 11:28:03 +0800
-Message-ID: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
-Subject: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-To:     bpf <bpf@vger.kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, hawk@kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
+References: <20221109064937.3643993-3-guoren@kernel.org> <mhng-c6cdc161-cab9-4d2d-acaa-ed81f87c14f3@palmer-ri-x1c9a>
+In-Reply-To: <mhng-c6cdc161-cab9-4d2d-acaa-ed81f87c14f3@palmer-ri-x1c9a>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Tue, 6 Dec 2022 11:30:56 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQkSZun6r8DEcJtahLCq5Oq2hQ3sgDyc1WRCfgGc5wjLg@mail.gmail.com>
+Message-ID: <CAJF2gTQkSZun6r8DEcJtahLCq5Oq2hQ3sgDyc1WRCfgGc5wjLg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] riscv: stacktrace: Make walk_stackframe cross pt_regs frame
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     anup@brainfault.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
+        peterz@infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        linux-arch@vger.kernel.org, keescook@chromium.org,
+        paulmck@kernel.org, frederic@kernel.org, nsaenzju@redhat.com,
+        changbin.du@intel.com, vincent.chen@sifive.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        guoren@linux.alibaba.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Dec 6, 2022 at 10:59 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>
+> On Tue, 08 Nov 2022 22:49:37 PST (-0800), guoren@kernel.org wrote:
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > The current walk_stackframe with FRAME_POINTER would stop unwinding at
+> > ret_from_exception:
+> >   BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
+> >   in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
+> >   CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
+> >   Call Trace:
+> >   [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
+> >   [<ffffffe000aecf48>] show_stack+0x32/0x4a
+> >   [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
+> >   [<ffffffe000af1648>] dump_stack+0x14/0x1c
+> >   [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
+> >   [<ffffffe000239aec>] __might_sleep+0x10/0x18
+> >   [<ffffffe000afe3fe>] down_read+0x22/0xa4
+> >   [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
+> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+> >
+> > The optimization would help walk_stackframe cross the pt_regs frame and
+> > get more backtrace of debug info:
+> >   BUG: sleeping function called from invalid context at kernel/locking/rwsem.c:1518
+> >   in_atomic(): 0, irqs_disabled(): 1, non_block: 0, pid: 1, name: init
+> >   CPU: 0 PID: 1 Comm: init Not tainted 5.10.113-00021-g15c15974895c-dirty #192
+> >   Call Trace:
+> >   [<ffffffe0002038c8>] walk_stackframe+0x0/0xee
+> >   [<ffffffe000aecf48>] show_stack+0x32/0x4a
+> >   [<ffffffe000af1618>] dump_stack_lvl+0x72/0x8e
+> >   [<ffffffe000af1648>] dump_stack+0x14/0x1c
+> >   [<ffffffe000239ad2>] ___might_sleep+0x12e/0x138
+> >   [<ffffffe000239aec>] __might_sleep+0x10/0x18
+> >   [<ffffffe000afe3fe>] down_read+0x22/0xa4
+> >   [<ffffffe000207588>] do_page_fault+0xb0/0x2fe
+> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+> >   [<ffffffe000613c06>] riscv_intc_irq+0x1a/0x72
+> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+> >   [<ffffffe00033f44a>] vma_link+0x54/0x160
+> >   [<ffffffe000341d7a>] mmap_region+0x2cc/0x4d0
+> >   [<ffffffe000342256>] do_mmap+0x2d8/0x3ac
+> >   [<ffffffe000326318>] vm_mmap_pgoff+0x70/0xb8
+> >   [<ffffffe00032638a>] vm_mmap+0x2a/0x36
+> >   [<ffffffe0003cfdde>] elf_map+0x72/0x84
+> >   [<ffffffe0003d05f8>] load_elf_binary+0x69a/0xec8
+> >   [<ffffffe000376240>] bprm_execve+0x246/0x53a
+> >   [<ffffffe00037786c>] kernel_execve+0xe8/0x124
+> >   [<ffffffe000aecdf2>] run_init_process+0xfa/0x10c
+> >   [<ffffffe000aece16>] try_to_run_init_process+0x12/0x3c
+> >   [<ffffffe000afa920>] kernel_init+0xb4/0xf8
+> >   [<ffffffe000201b80>] ret_from_exception+0x0/0xc
+> >
+> > Here is the error injection test code for the above output:
+> >  drivers/irqchip/irq-riscv-intc.c:
+> >  static asmlinkage void riscv_intc_irq(struct pt_regs *regs)
+> >  {
+> >         unsigned long cause = regs->cause & ~CAUSE_IRQ_FLAG;
+> > +       u32 tmp; __get_user(tmp, (u32 *)0);
+> >
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > Cc: Changbin Du <changbin.du@intel.com>
+> > ---
+> >  arch/riscv/kernel/entry.S      | 2 +-
+> >  arch/riscv/kernel/stacktrace.c | 9 +++++++++
+> >  2 files changed, 10 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/riscv/kernel/entry.S b/arch/riscv/kernel/entry.S
+> > index b9eda3fcbd6d..329cf51fcd4d 100644
+> > --- a/arch/riscv/kernel/entry.S
+> > +++ b/arch/riscv/kernel/entry.S
+> > @@ -248,7 +248,7 @@ ret_from_syscall_rejected:
+> >       andi t0, t0, _TIF_SYSCALL_WORK
+> >       bnez t0, handle_syscall_trace_exit
+> >
+> > -ret_from_exception:
+> > +ENTRY(ret_from_exception)
+>
+> This at least needs an END(), but it should also be converted over to
+Yes, I missed END() here.
 
-The following crash can be triggered with the BPF prog provided.
-It seems the verifier passed some invalid progs. I will try to simplify
-the C reproducer, for now, the following can reproduce this:
+> some non-function entry flavor.  I converted it over to
+> SYM_CODE_START_NOALIGN(), with the cooresponding SYM_CODE_END(), and put
+> it on for-next.
+Is that also for ret_from_fork & __switch_to?
 
-HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-in
-functions in bpf_iter_ksym
-git tree: bpf-next
-console log: https://pastebin.com/raw/87RCSnCs
-kernel config: https://pastebin.com/raw/rZdWLcgK
-Syz reproducer: https://pastebin.com/raw/4kbwhdEv
-C reproducer: https://pastebin.com/raw/GFfDn2Gk
+>
+> >       REG_L s0, PT_STATUS(sp)
+> >       csrc CSR_STATUS, SR_IE
+> >  #ifdef CONFIG_TRACE_IRQFLAGS
+> > diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrace.c
+> > index bcfe9eb55f80..75c8dd64fc48 100644
+> > --- a/arch/riscv/kernel/stacktrace.c
+> > +++ b/arch/riscv/kernel/stacktrace.c
+> > @@ -16,6 +16,8 @@
+> >
+> >  #ifdef CONFIG_FRAME_POINTER
+> >
+> > +extern asmlinkage void ret_from_exception(void);
+> > +
+> >  void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+> >                            bool (*fn)(void *, unsigned long), void *arg)
+> >  {
+> > @@ -59,6 +61,13 @@ void notrace walk_stackframe(struct task_struct *task, struct pt_regs *regs,
+> >                       fp = frame->fp;
+> >                       pc = ftrace_graph_ret_addr(current, NULL, frame->ra,
+> >                                                  &frame->ra);
+> > +                     if (pc == (unsigned long)ret_from_exception) {
+> > +                             if (unlikely(!__kernel_text_address(pc) || !fn(arg, pc)))
+> > +                                     break;
+> > +
+> > +                             pc = ((struct pt_regs *)sp)->epc;
+> > +                             fp = ((struct pt_regs *)sp)->s0;
+> > +                     }
+> >               }
+> >
+> >       }
 
-wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
-IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
-wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
-wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
-IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
-BUG: unable to handle page fault for address: 000000000fe0840f
-#PF: supervisor write access in kernel mode
-#PF: error_code(0x0002) - not-present page
-PGD 2ebe3067 P4D 2ebe3067 PUD 1dd9b067 PMD 0
-Oops: 0002 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 7536 Comm: a.out Not tainted
-6.1.0-rc7-01489-gab0350c743d5-dirty #118
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Linux
-1.16.1-1-1 04/01/2014
-RIP: 0010:bpf_dispatcher_xdp+0x24/0x1000
-Code: cc cc cc cc cc cc 48 81 fa e8 55 00 a0 0f 8f 63 00 00 00 48 81
-fa d8 54 00 a0 7f 2a 48 81 fa 4c 53 00 a0 7f 11 48 81 fa 4c 53 <00> a0
-0f 84 e0 0f 00 00 ff e2 66 90 48 81 fa d8 54 00 a0 0f 84 5b
-RSP: 0018:ffffc900029df908 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffffc900028b9000 RCX: 0000000000000000
-RDX: ffffffffa000534c RSI: ffffc900028b9048 RDI: ffffc900029dfb70
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
-R13: 0000000000000001 R14: ffffc900028b9030 R15: ffffc900029dfb50
-FS:  00007ff249efc700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000fe0840f CR3: 000000002e0ba000 CR4: 0000000000750ef0
-PKRU: 55555554
-Call Trace:
- <TASK>
- ? __bpf_prog_run include/linux/filter.h:600 [inline]
- ? bpf_prog_run_xdp include/linux/filter.h:775 [inline]
- ? bpf_test_run+0x2ce/0x990 net/bpf/test_run.c:400
- ? bpf_test_timer_continue+0x3d0/0x3d0 net/bpf/test_run.c:79
- ? bpf_dispatcher_xdp+0x800/0x1000
- ? bpf_dispatcher_xdp+0x800/0x1000
- ? bpf_dispatcher_xdp+0x800/0x1000
- ? _copy_from_user+0x5f/0x180 lib/usercopy.c:21
- ? bpf_test_init.isra.0+0x111/0x150 net/bpf/test_run.c:772
- ? bpf_prog_test_run_xdp+0xbde/0x1400 net/bpf/test_run.c:1389
- ? bpf_prog_test_run_skb+0x1dd0/0x1dd0 include/linux/skbuff.h:2594
- ? rcu_lock_release include/linux/rcupdate.h:321 [inline]
- ? rcu_read_unlock include/linux/rcupdate.h:783 [inline]
- ? __fget_files+0x283/0x3e0 fs/file.c:914
- ? fput+0x30/0x1a0 fs/file_table.c:371
- ? ____bpf_prog_get kernel/bpf/syscall.c:2206 [inline]
- ? __bpf_prog_get+0x9a/0x2e0 kernel/bpf/syscall.c:2270
- ? bpf_prog_test_run_skb+0x1dd0/0x1dd0 include/linux/skbuff.h:2594
- ? bpf_prog_test_run kernel/bpf/syscall.c:3644 [inline]
- ? __sys_bpf+0x1293/0x5840 kernel/bpf/syscall.c:4997
- ? futex_wait_setup+0x230/0x230 kernel/futex/waitwake.c:625
- ? bpf_perf_link_attach+0x520/0x520 kernel/bpf/syscall.c:2720
- ? instrument_atomic_read include/linux/instrumented.h:72 [inline]
- ? atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
- ? queued_spin_is_locked include/asm-generic/qspinlock.h:57 [inline]
- ? debug_spin_unlock kernel/locking/spinlock_debug.c:100 [inline]
- ? do_raw_spin_unlock+0x53/0x230 kernel/locking/spinlock_debug.c:140
- ? futex_wake+0x15b/0x4a0 kernel/futex/waitwake.c:161
- ? do_futex+0x130/0x350 kernel/futex/syscalls.c:122
- ? __ia32_sys_get_robust_list+0x3b0/0x3b0 kernel/futex/syscalls.c:72
- ? __do_sys_bpf kernel/bpf/syscall.c:5083 [inline]
- ? __se_sys_bpf kernel/bpf/syscall.c:5081 [inline]
- ? __x64_sys_bpf+0x78/0xc0 kernel/bpf/syscall.c:5081
- ? syscall_enter_from_user_mode+0x26/0xb0 kernel/entry/common.c:111
- ? do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- ? do_syscall_64+0x38/0xb0 arch/x86/entry/common.c:80
- ? entry_SYSCALL_64_after_hwframe+0x63/0xcd
- </TASK>
-Modules linked in:
-Dumping ftrace buffer:
-   (ftrace buffer empty)
-CR2: 000000000fe0840f
----[ end trace 0000000000000000 ]---
-RIP: 0010:bpf_dispatcher_xdp+0x24/0x1000
-Code: cc cc cc cc cc cc 48 81 fa e8 55 00 a0 0f 8f 63 00 00 00 48 81
-fa d8 54 00 a0 7f 2a 48 81 fa 4c 53 00 a0 7f 11 48 81 fa 4c 53 <00> a0
-0f 84 e0 0f 00 00 ff e2 66 90 48 81 fa d8 54 00 a0 0f 84 5b
-RSP: 0018:ffffc900029df908 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffffc900028b9000 RCX: 0000000000000000
-RDX: ffffffffa000534c RSI: ffffc900028b9048 RDI: ffffc900029dfb70
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
-R13: 0000000000000001 R14: ffffc900028b9030 R15: ffffc900029dfb50
-FS:  00007ff249efc700(0000) GS:ffff888063a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000000fe0840f CR3: 000000002e0ba000 CR4: 0000000000750ef0
-PKRU: 55555554
+
+
+-- 
+Best Regards
+ Guo Ren
