@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E06C643A11
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E25A643A1E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233149AbiLFAfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:35:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
+        id S233311AbiLFAgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:36:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232616AbiLFAff (ORCPT
+        with ESMTP id S232798AbiLFAfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:35:35 -0500
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA3020BF7
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:35:10 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id x13so5865684ilp.8
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:35:10 -0800 (PST)
+        Mon, 5 Dec 2022 19:35:36 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA5AB20BFE
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:35:11 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id i83so2365977ioa.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:35:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2OlqAVdvyqqiVyTjTWaSqPn3OANos9Aj5vBF/fh+B7U=;
-        b=YFOK2V9wjKW/Oo1x+9HuOkLN+9AquBXUA70mCXvorqcl2nCNRYyIFlkDWpd51ROAN4
-         dBpoef7KmUKfYar+JO82ufcsoBTfNNl9tIeA591VPmk0RUidt8wB2ayruNhgyc8q7g8s
-         jUtHAFU5h5SNknHzIv9/cPIG1Rsu03PvbuiZE6z8IywK4kPSk5MTeAI0fXZY2TuRqvnA
-         K5l80SihOx25ryFXbxfch9dTNCrOr5p3kAd/m07bluRMM0nDFySvv4KNGPY0oiSFXPMu
-         cJ3IUBG0hE06AAarAnLcrPgIyhHW8SmtqqjWkOOLAg9FEQ8wOu5STEHvFo3p92UDkP78
-         uLJg==
+        bh=Dhgn9wX8VnoKy4gzdEAPvv/+WdYNfhhNGem4xWUo+54=;
+        b=cFjT5uBYIfbwjn+ZYskaH0i9/7ogEYuVuZP+PF9wO1tDwTZn2NY6q3tcELecZeDsOZ
+         VhfUVTL1zEHCFF34UEGr17MYKK/GCq3rjL8KrLVSpUuORuCV2lxsdXUJICDQu9Odwq4u
+         x8lhsRupAN+pUzghCYZtaekjHz15L1SFI4VKPoZ2TXiSJQdXojgaOpY8rPlafl9obLgQ
+         zUUidFrJdbJR6Hwt8NYCRizAFopS3vBpAex2augWlW9eu3efXR9QtnJGD1+FSbTYsvw3
+         f3coPez/qgNUkvfvISWWzsnxOj08VAx0m0sdpXQgIbo3eQ2yw3L8iUzUqodpM3IBPSCa
+         PABQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2OlqAVdvyqqiVyTjTWaSqPn3OANos9Aj5vBF/fh+B7U=;
-        b=fsHVJlaKu7SV1kPvyktVN++lvcu1N7t0eWbn0PedGFSZcoI4SMUbNBqgtwmrVAoZYU
-         nR7FQQaV84XEWU+nDSthmM/YVgmJHjS+3dwWmM1K5qmSfkh9IjUoPXqyq+QWWIsk+N6s
-         as5B5UR+xmdnXCA7o5tm8Zl6NFp7lmOBOd/5vzkCieisDOJBLnlDoHf/1R8WvpMmwIe5
-         TCPWZt7btSzy2NOzvDmCvo8zZplojMmmeIhLvbV0XhdVqIKkqvDzGrgzxX99U62uL51l
-         0jeAJBznZXvvH1LF6QyIZiWCpX1MppH0WYJpfwl8jzpFc49Tx7Snw93ZxDeGfxAH3Pmt
-         xoAw==
-X-Gm-Message-State: ANoB5plVCGtzbPEdVSFUOYUCb3OUG9PM405k00tKYCeKqYdv9Wy3DSre
-        ON4WgwnJMMbZ++buDMcvuQDTbjqfPBPXgw==
-X-Google-Smtp-Source: AA0mqf6VrCePpRaMYDydeXhqjekmzGAwcuJFdpoJ9FGZdi9FOYU7uzNez0MgcFyy/8mbZPp+YUI47Q==
-X-Received: by 2002:a92:c8c9:0:b0:2ff:e4b1:5436 with SMTP id c9-20020a92c8c9000000b002ffe4b15436mr37065011ilq.305.1670286909058;
-        Mon, 05 Dec 2022 16:35:09 -0800 (PST)
+        bh=Dhgn9wX8VnoKy4gzdEAPvv/+WdYNfhhNGem4xWUo+54=;
+        b=2jtwpmDHMa4NywnIpsqnXgWk3qWai98x+3UB9z4UXX/HnAyxOKPqb1phsso0WZtcLg
+         BQn9S3c45SABxfQGwyL0ea1j2sVJt8I772/grht8Rtm9Y0FajTKELAiJIDcujJC9Z4Cr
+         fxJGOn/cJfMBuklKPy8F/7iOuLcZTGUcG7IA1N6flsKJnua5UjfJr94d2ydOLBmL7sk8
+         t+XPwYx+wockPu3/CVw0rsfnbx+rQoYMxqvEMJwGQhr2lp9w0ydMaXy1e15DtMcY4qqw
+         dhuRlr2Bv6I7qK19nQaKOerY+tSstYB3NONndcRJBGnzCXu+1idIv9M69zAD/aIgiXQf
+         yl3w==
+X-Gm-Message-State: ANoB5pmLNxnwapZDtdKiGNqjzHqUrPq2GkGaS4yuDyl0uHg8bXFx9EBZ
+        V1M0QsKcDV+yMgC8Dsj8KzwxPsoUbhd8tw==
+X-Google-Smtp-Source: AA0mqf4UrGwrWW8ayZpYFUogOfCrj+KdhRKQlLYKVBdzN70o9Io7J3UShL/h1FTcWu9T3atRD0XnnA==
+X-Received: by 2002:a6b:fd17:0:b0:6df:eed3:42c3 with SMTP id c23-20020a6bfd17000000b006dfeed342c3mr6238175ioi.63.1670286910901;
+        Mon, 05 Dec 2022 16:35:10 -0800 (PST)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id x3-20020a056602160300b006bba42f7822sm6408213iow.52.2022.12.05.16.35.07
+        by smtp.googlemail.com with ESMTPSA id x3-20020a056602160300b006bba42f7822sm6408213iow.52.2022.12.05.16.35.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 16:35:08 -0800 (PST)
+        Mon, 05 Dec 2022 16:35:10 -0800 (PST)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         amd-gfx@lists.freedesktop.org, intel-gvt-dev@lists.freedesktop.org,
@@ -58,9 +58,9 @@ Cc:     jani.nikula@intel.com, ville.syrjala@linux.intel.com,
         daniel.vetter@ffwll.ch, seanpaul@chromium.org, robdclark@gmail.com,
         jbaron@akamai.com, gregkh@linuxfoundation.org,
         Jim Cromie <jim.cromie@gmail.com>
-Subject: [RFC PATCH 11/17] dyndbg-API: DYNDBG_CLASSMAP_USE drop extra args
-Date:   Mon,  5 Dec 2022 17:34:18 -0700
-Message-Id: <20221206003424.592078-12-jim.cromie@gmail.com>
+Subject: [RFC PATCH 12/17] dyndbg-API: DYNDBG_CLASSMAP_DEFINE() improvements
+Date:   Mon,  5 Dec 2022 17:34:19 -0700
+Message-Id: <20221206003424.592078-13-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221206003424.592078-1-jim.cromie@gmail.com>
 References: <20221206003424.592078-1-jim.cromie@gmail.com>
@@ -76,30 +76,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop macro args after _var.  Since DYNDBG_CLASSMAP_USE no longer
-forwards to DYNDBG_CLASSMAP_DEFINE, it doesn't need those args to
-forward.  Keep only the _var arg, which is the extern'd struct
-classmap with all the class info.
+patch 1 in this series fixed a CLASSMAP usage error, this improves the
+api so that misuse is less likely.
+
+changes here:
+
+0- Add William Swanson's public domain map macro:
+   https://github.com/swansontec/map-macro/blob/master/map.h
+   this makes 1 possible.
+
+1- classnames were formerly specified as strings: "DRM_UT_CORE"
+   now they are the actual enum const symbols:     DRM_UT_CORE
+   direct use of symbols is tighter, more comprehensible by tools, grep
+
+2- drop _base arg.
+   _base was the value of the 1st classname
+   that is now available due to 1, no need to require it 2x
+
+So take _base out of the API/kdoc.  Note that the macro impl keeps the
+_base arg so that it can be used to set classmap.base, but reuses it
+in the MAP-stringify _base, __VA_ARGS__ expression.
+
+Also cleanup the API usage comment in test_dynamic_debug.c, and since
+comments in test-code might not be noticed, restate that here.
+
+Using the CLASSMAP api:
+
+  - class-specifications are enum consts/symbols,
+    like DRM_UT_CORE, DRM_UT_KMS, etc.
+    their values define bit positions to drm.debug (as before)
+
+  - they are stringified and accepted at >control
+    echo class DRM_UT_CORE +p >control
+
+  - multiple class-maps must share the per-module: 0-62 class_id space
+    (by setting initial enum values to non-overlapping subranges)
+
+todo: fixup the 'i' prefix, a quick/dirty avoidance of MAP.
+
+NOTE: test_dynamic_debug.c also has this helper macro to wire a
+classmap to a drm.debug style parameter; its easier to just use it as
+a model/template as needed, rather than try to make it general enough
+to be an official API helper.
+
+ define DD_SYS_WRAP(_model, _flags)					\
+	static unsigned long bits_##_model;				\
+	static struct ddebug_class_param _flags##_model = {		\
+		.bits = &bits_##_model,					\
+		.flags = #_flags,					\
+		.map = &map_##_model,					\
+	};								\
+	module_param_cb(_flags##_##_model, &param_ops_dyndbg_classes, &_flags##_model, 0600)
 
 Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c | 12 +---------
- drivers/gpu/drm/display/drm_dp_helper.c | 12 +---------
- drivers/gpu/drm/drm_crtc_helper.c       | 12 +---------
- drivers/gpu/drm/i915/i915_params.c      | 12 +---------
- drivers/gpu/drm/nouveau/nouveau_drm.c   | 12 +---------
- include/linux/dynamic_debug.h           | 30 ++++++++++++++-----------
- 6 files changed, 22 insertions(+), 68 deletions(-)
+ drivers/gpu/drm/drm_print.c   | 22 +++++++-------
+ include/drm/drm_print.h       |  1 +
+ include/linux/dynamic_debug.h | 17 ++++++-----
+ include/linux/map.h           | 54 +++++++++++++++++++++++++++++++++++
+ lib/test_dynamic_debug.c      | 43 ++++++++++++++--------------
+ 5 files changed, 95 insertions(+), 42 deletions(-)
+ create mode 100644 include/linux/map.h
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 0075184b5d93..7bcc22ef5d49 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -189,17 +189,7 @@ int amdgpu_vcnfw_log;
- static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
- 
- #if defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--DYNDBG_CLASSMAP_USE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+diff --git a/drivers/gpu/drm/drm_print.c b/drivers/gpu/drm/drm_print.c
+index 4b697e18238d..07c25241e8cc 100644
+--- a/drivers/gpu/drm/drm_print.c
++++ b/drivers/gpu/drm/drm_print.c
+@@ -56,17 +56,17 @@ MODULE_PARM_DESC(debug, "Enable debug output, where each bit enables a debug cat
+ module_param_named(debug, __drm_debug, ulong, 0600);
+ #else
+ /* classnames must match vals of enum drm_debug_category */
+-DYNDBG_CLASSMAP_DEFINE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
 -			"DRM_UT_CORE",
 -			"DRM_UT_DRIVER",
 -			"DRM_UT_KMS",
@@ -110,154 +157,206 @@ index 0075184b5d93..7bcc22ef5d49 100644
 -			"DRM_UT_LEASE",
 -			"DRM_UT_DP",
 -			"DRM_UT_DRMRES");
-+DYNDBG_CLASSMAP_USE(drm_debug_classes);
- #endif
++DYNDBG_CLASSMAP_DEFINE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS,
++		       DRM_UT_CORE,
++		       DRM_UT_DRIVER,
++		       DRM_UT_KMS,
++		       DRM_UT_PRIME,
++		       DRM_UT_ATOMIC,
++		       DRM_UT_VBL,
++		       DRM_UT_STATE,
++		       DRM_UT_LEASE,
++		       DRM_UT_DP,
++		       DRM_UT_DRMRES);
  
- struct amdgpu_mgpu_info mgpu_info = {
-diff --git a/drivers/gpu/drm/display/drm_dp_helper.c b/drivers/gpu/drm/display/drm_dp_helper.c
-index 8fa7a88299e7..3bc188cb1116 100644
---- a/drivers/gpu/drm/display/drm_dp_helper.c
-+++ b/drivers/gpu/drm/display/drm_dp_helper.c
-@@ -42,17 +42,7 @@
- #include "drm_dp_helper_internal.h"
- 
- #if defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--DYNDBG_CLASSMAP_USE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
--			"DRM_UT_CORE",
--			"DRM_UT_DRIVER",
--			"DRM_UT_KMS",
--			"DRM_UT_PRIME",
--			"DRM_UT_ATOMIC",
--			"DRM_UT_VBL",
--			"DRM_UT_STATE",
--			"DRM_UT_LEASE",
--			"DRM_UT_DP",
--			"DRM_UT_DRMRES");
-+DYNDBG_CLASSMAP_USE(drm_debug_classes);
- #endif
- 
- struct dp_aux_backlight {
-diff --git a/drivers/gpu/drm/drm_crtc_helper.c b/drivers/gpu/drm/drm_crtc_helper.c
-index 2f747c9c8f60..5fb83336b015 100644
---- a/drivers/gpu/drm/drm_crtc_helper.c
-+++ b/drivers/gpu/drm/drm_crtc_helper.c
-@@ -52,17 +52,7 @@
- #include "drm_crtc_helper_internal.h"
+ static struct ddebug_class_param drm_debug_bitmap = {
+ 	.bits = &__drm_debug,
+diff --git a/include/drm/drm_print.h b/include/drm/drm_print.h
+index a44fb7ef257f..6a27e8f26770 100644
+--- a/include/drm/drm_print.h
++++ b/include/drm/drm_print.h
+@@ -333,6 +333,7 @@ static inline bool drm_debug_enabled_raw(enum drm_debug_category category)
+ 	})
  
  #if defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--DYNDBG_CLASSMAP_USE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
--			"DRM_UT_CORE",
--			"DRM_UT_DRIVER",
--			"DRM_UT_KMS",
--			"DRM_UT_PRIME",
--			"DRM_UT_ATOMIC",
--			"DRM_UT_VBL",
--			"DRM_UT_STATE",
--			"DRM_UT_LEASE",
--			"DRM_UT_DP",
--			"DRM_UT_DRMRES");
-+DYNDBG_CLASSMAP_USE(drm_debug_classes);
- #endif
- 
- /**
-diff --git a/drivers/gpu/drm/i915/i915_params.c b/drivers/gpu/drm/i915/i915_params.c
-index b5b2542ae364..e959d0384ead 100644
---- a/drivers/gpu/drm/i915/i915_params.c
-+++ b/drivers/gpu/drm/i915/i915_params.c
-@@ -30,17 +30,7 @@
- #include "i915_drv.h"
- 
- #if defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--DYNDBG_CLASSMAP_USE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
--			"DRM_UT_CORE",
--			"DRM_UT_DRIVER",
--			"DRM_UT_KMS",
--			"DRM_UT_PRIME",
--			"DRM_UT_ATOMIC",
--			"DRM_UT_VBL",
--			"DRM_UT_STATE",
--			"DRM_UT_LEASE",
--			"DRM_UT_DP",
--			"DRM_UT_DRMRES");
-+DYNDBG_CLASSMAP_USE(drm_debug_classes);
- #endif
- 
- #define i915_param_named(name, T, perm, desc) \
-diff --git a/drivers/gpu/drm/nouveau/nouveau_drm.c b/drivers/gpu/drm/nouveau/nouveau_drm.c
-index 2963cf5b0807..609edeb2a117 100644
---- a/drivers/gpu/drm/nouveau/nouveau_drm.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_drm.c
-@@ -72,17 +72,7 @@
- #include "nouveau_dmem.h"
- 
- #if defined(CONFIG_DRM_USE_DYNAMIC_DEBUG)
--DYNDBG_CLASSMAP_USE(drm_debug_classes, DD_CLASS_TYPE_DISJOINT_BITS, 0,
--			"DRM_UT_CORE",
--			"DRM_UT_DRIVER",
--			"DRM_UT_KMS",
--			"DRM_UT_PRIME",
--			"DRM_UT_ATOMIC",
--			"DRM_UT_VBL",
--			"DRM_UT_STATE",
--			"DRM_UT_LEASE",
--			"DRM_UT_DP",
--			"DRM_UT_DRMRES");
-+DYNDBG_CLASSMAP_USE(drm_debug_classes);
- #endif
- 
- MODULE_PARM_DESC(config, "option string to pass to driver core");
++//extern struct ddebug_class_map drm_debug_classes[];
+ /*
+  * the drm.debug API uses dyndbg, so each drm_*dbg macro/callsite gets
+  * a descriptor, and only enabled callsites are reachable.  They use
 diff --git a/include/linux/dynamic_debug.h b/include/linux/dynamic_debug.h
-index dabbe1a9180c..0088fc354c98 100644
+index 0088fc354c98..6f53a687cb32 100644
 --- a/include/linux/dynamic_debug.h
 +++ b/include/linux/dynamic_debug.h
-@@ -92,13 +92,15 @@ struct ddebug_class_map {
+@@ -7,6 +7,7 @@
+ #endif
+ 
+ #include <linux/build_bug.h>
++#include <linux/map.h>
+ 
+ /*
+  * An instance of this structure is created in a special
+@@ -92,18 +93,16 @@ struct ddebug_class_map {
  };
  
  /**
-- * DYNDBG_CLASSMAP_DEFINE - define the class_map that names the
-- * debug classes used in this module.  This tells dyndbg the authorized
-- * classnames it should manipulate.
-- * @_var:   a struct ddebug_class_map, passed to module_param_cb
-+ * DYNDBG_CLASSMAP_DEFINE - define debug-classes used by a module.
-+ * @_var:   name of the classmap, exported for other modules coordinated use.
-  * @_type:  enum class_map_type, chooses bits/verbose, numeric/symbolic
-  * @_base:  offset of 1st class-name. splits .class_id space
-- * @classes: class-names used to control class'd prdbgs
-+ * @classes: enum-map - symbol names are "classnames", vals are .class_ids
-+ *
-+ * @classes vals are _ddebug.class_ids used in the module, the symbol
-+ * names are stringified; they authorize "class FOO" to >control.
-+ * Connection to a kernel-param is done separately.
+- * DYNDBG_CLASSMAP_DEFINE - define debug-classes used by a module.
+- * @_var:   name of the classmap, exported for other modules coordinated use.
+- * @_type:  enum class_map_type, chooses bits/verbose, numeric/symbolic
+- * @_base:  offset of 1st class-name. splits .class_id space
+- * @classes: enum-map - symbol names are "classnames", vals are .class_ids
++ * DYNDBG_CLASSMAP_DEFINE - define the debug classes used in this module.
++ * This tells dyndbg what debug classes it should control for the client.
+  *
+- * @classes vals are _ddebug.class_ids used in the module, the symbol
+- * names are stringified; they authorize "class FOO" to >control.
+- * Connection to a kernel-param is done separately.
++ * @_var:    struct ddebug_class_map, as passed to module_param_cb
++ * @_type:   enum ddebug_class_map_type, chooses bits/verbose, numeric/symbolic
++ * @classes: enum class values used in module, such as: DRM_UT_*
   */
  #define DYNDBG_CLASSMAP_DEFINE(_var, _maptype, _base, ...)		\
- 	const char *_var##_classnames[] = { __VA_ARGS__ };		\
-@@ -118,16 +120,18 @@ struct ddebug_class_user {
- 	struct ddebug_class_map *map;
- };
- /**
-- * DYNDBG_CLASSMAP_USE - Use a classmap DEFINEd in another module.
-- * This lets dyndbg initialize the dependent module's prdbgs from the
-- * other module's controlling sysfs node.
-+ * DYNDBG_CLASSMAP_USE - refer to a classmap, DEFINEd elsewhere.
-+ * @_var: name of the exported classmap
+-	const char *_var##_classnames[] = { __VA_ARGS__ };		\
++	const char *_var##_classnames[] = {				\
++		iMAP_LIST(__stringify, _base, __VA_ARGS__) };		\
+ 	struct ddebug_class_map __aligned(8) __used			\
+ 		__section("__dyndbg_classes") _var = {			\
+ 		.mod = THIS_MODULE,					\
+diff --git a/include/linux/map.h b/include/linux/map.h
+new file mode 100644
+index 000000000000..4348313a596f
+--- /dev/null
++++ b/include/linux/map.h
+@@ -0,0 +1,54 @@
++/*
++ * Created by William Swanson in 2012.
 + *
-+ * This registers the module's use of another module's classmap defn,
-+ * allowing dyndbg to find the controlling kparam, and propagate its
-+ * settings to the dependent module being loaded.
++ * I, William Swanson, dedicate this work to the public domain.
++ * I waive all rights to the work worldwide under copyright law,
++ * including all related and neighboring rights,
++ * to the extent allowed by law.
++ *
++ * You can copy, modify, distribute and perform the work,
++ * even for commercial purposes, all without asking permission.
++ */
++
++#ifndef MAP_H_INCLUDED
++#define MAP_H_INCLUDED
++
++#define iEVAL0(...) __VA_ARGS__
++#define iEVAL1(...) iEVAL0(iEVAL0(iEVAL0(__VA_ARGS__)))
++#define iEVAL2(...) iEVAL1(iEVAL1(iEVAL1(__VA_ARGS__)))
++#define iEVAL3(...) iEVAL2(iEVAL2(iEVAL2(__VA_ARGS__)))
++#define iEVAL4(...) iEVAL3(iEVAL3(iEVAL3(__VA_ARGS__)))
++#define iEVAL(...)  iEVAL4(iEVAL4(iEVAL4(__VA_ARGS__)))
++
++#define iMAP_END(...)
++#define iMAP_OUT
++#define iMAP_COMMA ,
++
++#define iMAP_GET_END2() 0, iMAP_END
++#define iMAP_GET_END1(...) iMAP_GET_END2
++#define iMAP_GET_END(...) iMAP_GET_END1
++#define iMAP_NEXT0(test, next, ...) next iMAP_OUT
++#define iMAP_NEXT1(test, next) iMAP_NEXT0(test, next, 0)
++#define iMAP_NEXT(test, next)  iMAP_NEXT1(iMAP_GET_END test, next)
++
++#define iMAP0(f, x, peek, ...) f(x) iMAP_NEXT(peek, iMAP1)(f, peek, __VA_ARGS__)
++#define iMAP1(f, x, peek, ...) f(x) iMAP_NEXT(peek, iMAP0)(f, peek, __VA_ARGS__)
++
++#define iMAP_LIST_NEXT1(test, next) iMAP_NEXT0(test, iMAP_COMMA next, 0)
++#define iMAP_LIST_NEXT(test, next)  iMAP_LIST_NEXT1(iMAP_GET_END test, next)
++
++#define iMAP_LIST0(f, x, peek, ...) f(x) iMAP_LIST_NEXT(peek, iMAP_LIST1)(f, peek, __VA_ARGS__)
++#define iMAP_LIST1(f, x, peek, ...) f(x) iMAP_LIST_NEXT(peek, iMAP_LIST0)(f, peek, __VA_ARGS__)
++
++/**
++ * Applies the function macro `f` to each of the remaining parameters.
++ */
++#define iMAP(f, ...) iEVAL(iMAP1(f, __VA_ARGS__, ()()(), ()()(), ()()(), 0))
++
++/**
++ * Applies the function macro `f` to each of the remaining parameters and
++ * inserts commas between the results.
++ */
++#define iMAP_LIST(f, ...) iEVAL(iMAP_LIST1(f, __VA_ARGS__, ()()(), ()()(), ()()(), 0))
++
++#endif
+diff --git a/lib/test_dynamic_debug.c b/lib/test_dynamic_debug.c
+index 4ae01f7fa920..f471737fdfc3 100644
+--- a/lib/test_dynamic_debug.c
++++ b/lib/test_dynamic_debug.c
+@@ -33,11 +33,10 @@ module_param_cb(do_prints, &param_ops_do_prints, NULL, 0600);
+ 
+ /*
+  * Using the CLASSMAP api:
+- * - classmaps must have corresponding enum
+- * - enum symbols must match/correlate with class-name strings in the map.
+- * - base must equal enum's 1st value
+- * - multiple maps must set their base to share the 0-30 class_id space !!
+- *   (build-bug-on tips welcome)
++ * - class-names are enum consts/symbols, like DRM_UT_CORE, DRM_UT_KMS, etc
++ * - those names are accepted at >control interface
++ * - multiple class-maps must share the per-module: 0-62 class_id space
++ *   (by setting initial enum values to non-overlapping subranges)
+  * Additionally, here:
+  * - tie together sysname, mapname, bitsname, flagsname
   */
--#define DYNDBG_CLASSMAP_USE(_var, ...)					\
--	DYNDBG_CLASSMAP_USE_(_var, __UNIQUE_ID(ddebug_class_user),	\
--			     __VA_ARGS__)
--#define DYNDBG_CLASSMAP_USE_(_var, _uname, ...)				\
-+#define DYNDBG_CLASSMAP_USE(_var)					\
-+	DYNDBG_CLASSMAP_USE_(_var, __UNIQUE_ID(ddebug_class_user))
-+#define DYNDBG_CLASSMAP_USE_(_var, _uname)				\
- 	extern struct ddebug_class_map _var[];				\
--	static struct ddebug_class_user __used				\
-+	struct ddebug_class_user __used					\
- 	__section("__dyndbg_class_refs") _uname = {			\
- 		.user_mod_name = KBUILD_MODNAME,			\
- 		.map = _var,						\
+@@ -62,38 +61,38 @@ enum cat_disjoint_bits {
+ 	D2_LEASE,
+ 	D2_DP,
+ 	D2_DRMRES };
+-DYNDBG_CLASSMAP_DEFINE(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS, 0,
+-		       "D2_CORE",
+-		       "D2_DRIVER",
+-		       "D2_KMS",
+-		       "D2_PRIME",
+-		       "D2_ATOMIC",
+-		       "D2_VBL",
+-		       "D2_STATE",
+-		       "D2_LEASE",
+-		       "D2_DP",
+-		       "D2_DRMRES");
++DYNDBG_CLASSMAP_DEFINE(map_disjoint_bits, DD_CLASS_TYPE_DISJOINT_BITS,
++		       D2_CORE,
++		       D2_DRIVER,
++		       D2_KMS,
++		       D2_PRIME,
++		       D2_ATOMIC,
++		       D2_VBL,
++		       D2_STATE,
++		       D2_LEASE,
++		       D2_DP,
++		       D2_DRMRES);
+ DD_SYS_WRAP(disjoint_bits, p);
+ DD_SYS_WRAP(disjoint_bits, T);
+ 
+ /* symbolic input, independent bits */
+ enum cat_disjoint_names { LOW = 10, MID, HI };
+-DYNDBG_CLASSMAP_DEFINE(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES, 10,
+-		       "LOW", "MID", "HI");
++DYNDBG_CLASSMAP_DEFINE(map_disjoint_names, DD_CLASS_TYPE_DISJOINT_NAMES,
++		       LOW, MID, HI);
+ DD_SYS_WRAP(disjoint_names, p);
+ DD_SYS_WRAP(disjoint_names, T);
+ 
+ /* numeric verbosity, V2 > V1 related */
+ enum cat_level_num { V0 = 14, V1, V2, V3, V4, V5, V6, V7 };
+-DYNDBG_CLASSMAP_DEFINE(map_level_num, DD_CLASS_TYPE_LEVEL_NUM, 14,
+-		       "V0", "V1", "V2", "V3", "V4", "V5", "V6", "V7");
++DYNDBG_CLASSMAP_DEFINE(map_level_num, DD_CLASS_TYPE_LEVEL_NUM,
++		       V0, V1, V2, V3, V4, V5, V6, V7);
+ DD_SYS_WRAP(level_num, p);
+ DD_SYS_WRAP(level_num, T);
+ 
+ /* symbolic verbosity */
+ enum cat_level_names { L0 = 22, L1, L2, L3, L4, L5, L6, L7 };
+-DYNDBG_CLASSMAP_DEFINE(map_level_names, DD_CLASS_TYPE_LEVEL_NAMES, 22,
+-		       "L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7");
++DYNDBG_CLASSMAP_DEFINE(map_level_names, DD_CLASS_TYPE_LEVEL_NAMES,
++		       L0, L1, L2, L3, L4, L5, L6, L7);
+ DD_SYS_WRAP(level_names, p);
+ DD_SYS_WRAP(level_names, T);
+ 
 -- 
 2.38.1
 
