@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C45644433
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:11:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3AF644437
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:11:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiLFNLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47226 "EHLO
+        id S235193AbiLFNLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235008AbiLFNKr (ORCPT
+        with ESMTP id S234492AbiLFNLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:10:47 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5ED2DABB;
-        Tue,  6 Dec 2022 05:09:11 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id B000068B05; Tue,  6 Dec 2022 14:09:01 +0100 (CET)
-Date:   Tue, 6 Dec 2022 14:09:01 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@lst.de>, Lei Rao <lei.rao@intel.com>,
-        kbusch@kernel.org, axboe@fb.com, kch@nvidia.com, sagi@grimberg.me,
-        alex.williamson@redhat.com, cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 5/5] nvme-vfio: Add a document for the NVMe device
-Message-ID: <20221206130901.GB24358@lst.de>
-References: <20221206055816.292304-1-lei.rao@intel.com> <20221206055816.292304-6-lei.rao@intel.com> <20221206062604.GB6595@lst.de> <Y48+AaG5rSCviIhl@ziepe.ca>
+        Tue, 6 Dec 2022 08:11:13 -0500
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940966243;
+        Tue,  6 Dec 2022 05:09:45 -0800 (PST)
+Received: by mail-oi1-f179.google.com with SMTP id r11so11115589oie.13;
+        Tue, 06 Dec 2022 05:09:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Twf2LUQQZEEsPFMs0YGDTeUVVUS9EWkbM3eJUG/VOf0=;
+        b=wb94GU1QlHOKSB3GEWBJaC+I2S/bP+Wlt5KY3Qq9/I+uWBhhG2IyM1sBF3DCSo9oot
+         ZhueNpYEKM+H3XjDT5/LNyzsgAvdULgRgf5x9xAgRyH3jyAGb1gFvRCmqyklj/uzS9ad
+         YRUrRJNKjeakHHtemU7JuzumrPQVX43s1hEpb48PgZHDOscnvVq5HeVH4PENA7YnwEbt
+         JUSx1GtJ69gQUo3CuWN97VCJMqPQNWtYnppPU5C+AcjK7gpXsPKOsdnmbXpAtHNrfueM
+         Q5Upu+6wy5YpPTy2lJhct9K600n4vWpOMbWB7JfwXGqIObWUr+VyvlKFJ/FiqSUn6HQH
+         ULyw==
+X-Gm-Message-State: ANoB5pk4MhQafVBg0bFnbvLkJxa4r/6b++GgrgRQtDXGZBxUukADzkjC
+        JWp3fYIUhuBy/GhKfYvQsCwSX1+J5Q==
+X-Google-Smtp-Source: AA0mqf7a4XewMy+qenYc/uQHEe7SRvtkFJ8yQxfPCpF8rThyNv20WBRTh4LVw3I3MiVY6s7uZD0XLA==
+X-Received: by 2002:a05:6808:22a4:b0:35a:388c:743d with SMTP id bo36-20020a05680822a400b0035a388c743dmr43974263oib.258.1670332184644;
+        Tue, 06 Dec 2022 05:09:44 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z20-20020a4a9c94000000b004a3527e8279sm1321513ooj.0.2022.12.06.05.09.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 05:09:44 -0800 (PST)
+Received: (nullmailer pid 236277 invoked by uid 1000);
+        Tue, 06 Dec 2022 13:09:43 -0000
+Date:   Tue, 6 Dec 2022 07:09:43 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Jeremy Kerr <jk@codeconstruct.com.au>
+Cc:     Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Lee Jones <lee@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [RFC PATCH 1/2] dt-bindings: mfd/syscon: Add resets property
+Message-ID: <167033218290.236219.3964235132732494862.robh@kernel.org>
+References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
+ <20221206073916.1606125-2-jk@codeconstruct.com.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y48+AaG5rSCviIhl@ziepe.ca>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221206073916.1606125-2-jk@codeconstruct.com.au>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 09:05:05AM -0400, Jason Gunthorpe wrote:
-> In this case Intel has a real PCI SRIOV VF to expose to the guest,
-> with a full VF RID.
 
-RID?
+On Tue, 06 Dec 2022 15:39:15 +0800, Jeremy Kerr wrote:
+> Simple syscon devices may require deassertion of a reset signal in order
+> to access their register set. This change adds the `resets` property from
+> reset.yaml#/properties/resets (referenced through core.yaml), specifying
+> a maxItems of 1 for a single (optional) reset descriptor.
+> 
+> This will allow a future change to the syscon driver to implement reset
+> control.
+> 
+> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
 
-> The proper VFIO abstraction is the variant PCI
-> driver as this series does. We want to use the variant PCI drivers
-> because they properly encapsulate all the PCI behaviors (MSI, config
-> space, regions, reset, etc) without requiring re-implementation of this
-> in mdev drivers.
-
-I don't think the code in this series has any chance of actually
-working.  There is a lot of state associated with a NVMe subsystem,
-controller and namespace, such as the serial number, subsystem NQN,
-namespace uniqueue identifiers, Get/Set features state, pending AENs,
-log page content.  Just migrating from one device to another without
-capturing all this has no chance of actually working.
-
-> I don't think we know enough about this space at the moment to fix a
-> specification to one path or the other, so I hope the TPAR will settle
-> on something that can support both models in SW and people can try
-> things out.
-
-I've not seen anyone from Intel actually contributing to the live
-migration TPAR, which is almost two month old by now.
+Acked-by: Rob Herring <robh@kernel.org>
