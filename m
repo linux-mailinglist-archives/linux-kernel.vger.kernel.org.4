@@ -2,106 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CF86448D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF0CE6448D7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:10:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235379AbiLFQJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:09:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
+        id S235462AbiLFQKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:10:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235502AbiLFQJc (ORCPT
+        with ESMTP id S235271AbiLFQJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:09:32 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49229391FB;
-        Tue,  6 Dec 2022 08:04:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9560FB81AA7;
-        Tue,  6 Dec 2022 16:04:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263CDC433C1;
-        Tue,  6 Dec 2022 16:04:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670342665;
-        bh=Szlr9bhRSHRa3/F8OFwm0BojO1dnfBM+g8JhZoyroVQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=EuHdyOO7jfOqgp/M50bX1Vr0lYkcoMJ0gPiTJr33pdky/0JRMb+5J+sZBvWEU0ENI
-         s264f0V25aj0eqe7VkWzwOS6m7wqx02l7A1MI+USSIqWtVOgFPwF6S1k1JLPWRgOaz
-         L5PSESakgZf5/kmeSOY6ZM+JSIYiTYhs8zi2krXQwXnlJz+/bGfWEhUTgTWuQBY8rX
-         8f2EZtwSdGdJS5ZOizfU6w4fUGlunL/X8/vd+vbPVB+5qMpfhszUeemCdaXdaxCTuP
-         pw0EnSbeFcNeFDfRtEiY4QJo3HIAvrOjJlka1Sy6vacGHi3kbxiQySBwsVkhC9+KES
-         PRzMbhZbDP2PA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tue, 6 Dec 2022 11:09:41 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9663AC2F;
+        Tue,  6 Dec 2022 08:04:35 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id s5so20867409edc.12;
+        Tue, 06 Dec 2022 08:04:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t8cA4ACelgyjXGYdUQh+jD+jJuegWDTJ6AcOocRBXlg=;
+        b=UDbZ7YkU9hRMLDz1egSCEnbQlgdWZjEVy636iYNE+34e/fSxF62gaDd6CTMdppFtCK
+         gg/tmHGxjv6MmTRtOIK6cx2Jjb3mrtGU3frQXEfew2/+LTUEgbnyISdsKs3uGml2JOtZ
+         JvYal2m3xNBsJGKirr1ul8T5Nqd523nKJZ5j/6tsiWtmmwa5Lq9hS9GDQVfeeHi8DuNO
+         9AH2mDVYfYFz3XMKsNqvPsJgk2ntQaoPQjCS/0XXQ47EzhHk/ZzAcZeGVyZBpXi0/BKY
+         ja42TGmlgxjL8R53NfB3B/0xZOOKq7jWt3JyWFWCklmO4Nc0rmdZcq3WlTtSguff+bFS
+         +xvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t8cA4ACelgyjXGYdUQh+jD+jJuegWDTJ6AcOocRBXlg=;
+        b=olay62LRaSe+dfFDCKnIqP9H0/J1TI00PjCUeh1sNY33HWirTT8uF8bilNfoJB6Kyf
+         91Z6DtEM5ykYFgCIRLWlUMPpx9WqsUfLkP2rFmva2yXh6oVH6+O8tOLCruPVyRV8CguT
+         HfikQ4Eb50GssVAztN7UFqC3H2iDyRHGlBGLUrtQcrW2TXB3Q1PZwDQWlz83LCeV15Wt
+         YZXzoIEuigsjF4nnagax/gr90Qup2Al0YlFLZh4DZ4sJeJlIhCC5JM0LQGK2wjhmYJab
+         WU0GJTtdQQzWThheH1gIkjREueXY5HRQ60Omy6gmd5cOcXuCOPwDsgzKBVTwAmVbzfz1
+         tdcA==
+X-Gm-Message-State: ANoB5pkht0eqnziw4oiM6deE8BgS4crbpgClWy/Tp45Q+uyxPhx6QTeY
+        NU9jbCphdqVxIxbGOenbkSc=
+X-Google-Smtp-Source: AA0mqf6eCz9WrlnsQ6nH/cJ10vu3pmDPK2/Tun57q7E62E++v7Ogms9pw0K/xifG+5+Clvkvi4W2KQ==
+X-Received: by 2002:aa7:d1c5:0:b0:46b:a536:e8d0 with SMTP id g5-20020aa7d1c5000000b0046ba536e8d0mr26487265edp.261.1670342673471;
+        Tue, 06 Dec 2022 08:04:33 -0800 (PST)
+Received: from skbuf ([188.26.184.215])
+        by smtp.gmail.com with ESMTPSA id gi20-20020a1709070c9400b0077d6f628e14sm7565992ejc.83.2022.12.06.08.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 08:04:33 -0800 (PST)
+Date:   Tue, 6 Dec 2022 18:04:30 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
         Matthias Brugger <matthias.bgg@gmail.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-In-Reply-To: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
-Subject: Re: (subset) [PATCH v2 0/9] Add MediaTek MT7986 SPI NAND and ECC support
-Message-Id: <167034266187.169562.7872281598428362203.b4-ty@kernel.org>
-Date:   Tue, 06 Dec 2022 16:04:21 +0000
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>
+Subject: Re: [PATCH v4 net-next 0/9] dt-binding preparation for ocelot
+ switches
+Message-ID: <20221206160430.4kiyrzrumcc6dp2g@skbuf>
+References: <20221202204559.162619-1-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-da105
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202204559.162619-1-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 5 Dec 2022 14:57:47 +0800, Xiangsheng Hou wrote:
-> This patch series add MediaTek MT7986 SPI NAND and ECC controller
-> support, split ECC engine with rawnand controller in bindings and
-> hange to YAML schema.
+Hi Colin,
+
+On Fri, Dec 02, 2022 at 12:45:50PM -0800, Colin Foster wrote:
+> Ocelot switches have the abilitiy to be used internally via
+> memory-mapped IO or externally via SPI or PCIe. This brings up issues
+> for documentation, where the same chip might be accessed internally in a
+> switchdev manner, or externally in a DSA configuration. This patch set
+> is perparation to bring DSA functionality to the VSC7512, utilizing as
+> much as possible with an almost identical VSC7514 chip.
 > 
-> Changes since V1:
->  - Use existing sample delay property.
->  - Add restricting for optional nfi_hclk.
->  - Improve and perfect dt-bindings documentation.
->  - Change existing node name to match NAND controller DT bingings.
->  - Fix issues reported by dt_binding_check.
->  - Fix issues reported by dtbs_check.
+> This patch set changed quite a bit from v2, so I'll omit the background
+> of how those sets came to be. Rob offered a lot of very useful guidance.
+> My thanks.
 > 
-> [...]
+> At the end of the day, with this patch set, there should be a framework
+> to document Ocelot switches (and any switch) in scenarios where they can
+> be controlled internally (ethernet-switch) or externally (dsa-switch).
+> 
+> ---
 
-Applied to
+This looks like a very clean implementation of what I had in mind
+(better than I could have done it). Sorry for not being able to help
+with the json-schema bits and thanks to Rob for doing so.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Would you mind adding one more patch at the beginning of the series
+which syncs the maintainers from the DSA (and now also ethernet-switch)
+dt-bindings with the MAINTAINERS file? That would mean removing Vivien
+(see commit 6ce3df596be2 ("MAINTAINERS: Move Vivien to CREDITS")) and
+adding myself. This is in principle such that you don't carry around a
+not-up-to-date list of maintainers when adding new schemas.
 
-Thanks!
-
-[1/9] spi: mtk-snfi: Add snfi support for MT7986 IC
-      commit: 7073888c86601389e17f3ee8ab15ab7aef148839
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+I don't know if we could do something about maintainer entries in
+schemas not becoming out of date w.r.t. the MAINTAINERS file.
