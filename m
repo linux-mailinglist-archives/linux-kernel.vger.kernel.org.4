@@ -2,249 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95061644C4D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA6E644C51
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLFTOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:14:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S229660AbiLFTPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLFTOc (ORCPT
+        with ESMTP id S229602AbiLFTPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:14:32 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EF041992
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:14:31 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id y4so14896367plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:14:31 -0800 (PST)
+        Tue, 6 Dec 2022 14:15:11 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E724047C;
+        Tue,  6 Dec 2022 11:15:10 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id p8so25189073lfu.11;
+        Tue, 06 Dec 2022 11:15:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google;
-        h=mime-version:subject:user-agent:references:in-reply-to:message-id
-         :date:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NZxLg3m86MTq+yfV3vdZKqLT3HooQ0ooUL0PoMuVy+I=;
-        b=PFnEtm+H2fuOm4MTyIMmi2I3NZEUMxowRHMmiuCG24sISpJL+QjMPZGA4DyewRvZAL
-         sKEgkPv5DRfUlEJ9Q/XYa5PyLjDYWvWLHDJNcveoQGv3NfJ31iIvQEkvpEH30Zlpj7TO
-         qEysqzcPAJZFCzB9MJ1wHvF6UupNXH/G6+d0w=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IfFKOBr66s1CwYSG2TTOFX37oTDo5VCSWbNTI8/Kwv4=;
+        b=FbR73fIsdMR2GPrgHhHD+UTq9hQpNRGnvsBYxAjUFp6pfvgZr0f3krQfwdG05HyEy1
+         GrqzuNBjEozr5uCrq355J5hfAROhjBeuriFoK7Wx/8Y+5uepSm64UppuyPyZyBXJu7sb
+         t6hTT7Q7l6Yc3Vsc/E0zrw8cEhE1vTktFBImAKIE213k6f94zcrTVKWhHa3F6N2u+JYs
+         YXCI/iRDp+4YGirsctZXJg5BTeMwuqg8KGgarVtxG2GiWC/WVUXJvhMIOaR5YNxPHSiS
+         U1SMKtmtkVQdQSiGjdGkp6vMI05YWsRoFBqIh9b+qKNbsMfSXUli4dHVKTvkNWaIWHYj
+         PQoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:subject:user-agent:references:in-reply-to:message-id
-         :date:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NZxLg3m86MTq+yfV3vdZKqLT3HooQ0ooUL0PoMuVy+I=;
-        b=n0ZiMwJX5JMSUMmBvWsl7wOMZHNc8eq4DeyoYUPaK66jwTXFNzk4jFA3V89IWYtJzx
-         OouPKzacSufg7Q9EG0htWlrEnKo9jVt9vfrgUa+DpuoDx9H7bwqyv397kQ2E5u+hoSsx
-         XqXDgk9rpDhEvZZCf20I8HnL2KpnbWFiUy26rR9xd1SzISlIrujJ0Y0JN9UldtNPzQEP
-         FyMAP9E9E2UZLZ+/w+rQzeD/4xivh2xqgoRIxX+9T91CJ7Lp7WMk672c50s3fnvh48WK
-         1VERxR2ZleRx5sEiC6TQd357H4lUXZ7BVHfefs6n772nSgwbVGzVUqhNthDeEINT/l0K
-         z0Tw==
-X-Gm-Message-State: ANoB5pnWKgZSGe/4i+HvE1UCbAC87wkraGIgVDeU8j4BITaGxB2tfKRI
-        dISsHQwB57SU+uvrnoKIUt913w==
-X-Google-Smtp-Source: AA0mqf7bgWpPAOVGs4gF/kyKjyaQdsVlShe04v2G0duq8dHKKVIi+vDJ2V/S5t9k43FqHX2KRPHOrw==
-X-Received: by 2002:a17:90b:4f85:b0:216:92a9:fd60 with SMTP id qe5-20020a17090b4f8500b0021692a9fd60mr99626838pjb.24.1670354071186;
-        Tue, 06 Dec 2022 11:14:31 -0800 (PST)
-Received: from [10.230.43.52] ([192.19.152.250])
-        by smtp.gmail.com with ESMTPSA id m8-20020a170902db0800b001895f7c8a71sm13067970plx.97.2022.12.06.11.14.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Dec 2022 11:14:30 -0800 (PST)
-From:   Arend Van Spriel <arend.vanspriel@broadcom.com>
-To:     Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-        JunASAKA <JunASAKA@zzy040330.moe>, <Jes.Sorensen@gmail.com>
-CC:     <kvalo@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Date:   Tue, 06 Dec 2022 20:14:25 +0100
-Message-ID: <184e8dc5668.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
-In-Reply-To: <312341d3-67b5-3de7-e4a7-ee94191c15b0@gmail.com>
-References: <20221129043442.14717-1-JunASAKA@zzy040330.moe>
- <9dc328a1-1d76-6b8b-041e-d20479f4ff56@gmail.com>
- <184e897cf70.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
- <184e8aa3278.279b.9b12b7fc0a3841636cfb5e919b41b954@broadcom.com>
- <312341d3-67b5-3de7-e4a7-ee94191c15b0@gmail.com>
-User-Agent: AquaMail/1.40.1 (build: 104001224)
-Subject: Re: [PATCH] drivers: rewrite and remove a superfluous parameter.
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IfFKOBr66s1CwYSG2TTOFX37oTDo5VCSWbNTI8/Kwv4=;
+        b=Bq+fjXkV9XCW52L0vzfKYvXgTw2AmDobiKRcI9TbvZ3OCUNop4knXEfa2yzpRo2f00
+         aV6eqyj1SYDN4Ow3/I7kOV1ha9XI+0jpz2nZe/1crr6QtOZFVcLe1JLyvVVI5B6G20pt
+         srbnA8eHVIlCV51P6TQl0/JG3ZsQ/4tIwDWhCdKck0sqayPIwstuUkpNXWuXgSUX5rDa
+         K77zWWKYBxZjpDoZbwbc4T3Z72tz0NeFNksGsz1WGqGCyu//5TMVOF/HOFzsEiPxHWX4
+         1uQFCGh4lVm2MekKy/K7T7sdD7+AfnO1HN1LogXT5zlgM53ICh0LYnSYbHPRQxpFhyfL
+         zlzA==
+X-Gm-Message-State: ANoB5pkokmyqVR7IATEvQoXD9OjJk9dXH1EJVJrLtKVHURSgaaoAUvfc
+        SPmOpezqF8XtdFHR9XgABHHJV1ZfmKXdmWgwVtQ=
+X-Google-Smtp-Source: AA0mqf6ETBMrhmv2FnJL6/8iC29PFIRvFowg7iEsc9rHdp3yWtBwlqKEvdeK6CW7hUEfF3YvW0no1zsbDZQmKY5m740=
+X-Received: by 2002:a19:760b:0:b0:4b5:67d8:e3c2 with SMTP id
+ c11-20020a19760b000000b004b567d8e3c2mr4872095lff.166.1670354108416; Tue, 06
+ Dec 2022 11:15:08 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001444a405ef2d9d2b"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206070029.7342-1-fmdefrancesco@gmail.com> <Y472ipY908pHip+B@linutronix.de>
+In-Reply-To: <Y472ipY908pHip+B@linutronix.de>
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Date:   Tue, 6 Dec 2022 20:14:52 +0100
+Message-ID: <CAPj211tzOzk7JBmCOaNUekx4APv+khnKk0pxLqOJppUAp0A+8A@mail.gmail.com>
+Subject: Re: [PATCH] mm/highmem: Add notes about conversions from kmap{,_atomic}()
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Thomas Gleixner <tglx@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000001444a405ef2d9d2b
-Content-Type: text/plain; format=flowed; charset="us-ascii"
-Content-Transfer-Encoding: 8bit
+On marted=C3=AC 6 dicembre 2022 09:00:10 CET Sebastian Andrzej Siewior wrot=
+e:
+> On 2022-12-06 08:00:29 [+0100], Fabio M. De Francesco wrote:
+> > diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rs=
+t
+> > index 0f731d9196b0..9523e92299f6 100644
+> > --- a/Documentation/mm/highmem.rst
+> > +++ b/Documentation/mm/highmem.rst
+> > @@ -100,10 +101,21 @@ list shows them in order of preference of use.
+> >
+> >    (included in the "Functions" section) for details on how to manage
+nested
+> >    mappings.
+> >
+> > -* kmap_atomic().  This permits a very short duration mapping of a sing=
+le
+> > -  page.  Since the mapping is restricted to the CPU that issued it, it
+> > -  performs well, but the issuing task is therefore required to stay on
+that
+> > -  CPU until it has finished, lest some other task displace its mapping=
+s.
+> > +* kmap_atomic(). This function has been deprecated; use
+kmap_local_page().
+> > +
+> > +  NOTE: Conversions to kmap_local_page() must take care to follow the
+> > mapping +  restrictions imposed on kmap_local_page(). Furthermore, code
+> > between the +  map/unmap operations may implicitly depended on the side
+> > effects of +  kmap_atomic(), such as disabling pagefaults, migration,
+> > and/or preemption. +  Such conversions should be changed to make explic=
+it
+> > calls for those +  requirements.
 
-On December 6, 2022 7:40:43 PM Bitterblue Smith <rtl8821cerfe2@gmail.com> 
-wrote:
+Sebastian, thanks for taking a look at my patch and replying.
 
-> On 06/12/2022 20:19, Arend Van Spriel wrote:
->> On December 6, 2022 6:59:36 PM Arend Van Spriel 
->> <arend.vanspriel@broadcom.com> wrote:
->>
->>> On November 29, 2022 3:06:37 PM Bitterblue Smith <rtl8821cerfe2@gmail.com>
->>> wrote:
->>>
->>>> On 29/11/2022 06:34, JunASAKA wrote:
->>>>> I noticed there is a superfluous "*hdr" parameter in rtl8xxxu module
->>>>> when I am trying to fix some bugs for the rtl8192eu wifi dongle. This
->>>>> parameter can be removed and then gained from the skb object to make the
->>>>> function more beautiful.
->>>>>
->>>>> Signed-off-by: JunASAKA <JunASAKA@zzy040330.moe>
->>>>> ---
->>>>> drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c | 5 +++--
->>>>> 1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
->>>>> b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
->>>>> index ac641a56efb0..4c3d97e8e51f 100644
->>>>> --- a/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
->>>>> +++ b/drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu_core.c
->>>>> @@ -4767,9 +4767,10 @@ static u32 rtl8xxxu_80211_to_rtl_queue(u32 queue)
->>>>> return rtlqueue;
->>>>> }
->>>>>
->>>>> -static u32 rtl8xxxu_queue_select(struct ieee80211_hdr *hdr, struct sk_buff
->>>>> *skb)
->>>>> +static u32 rtl8xxxu_queue_select(struct sk_buff *skb)
->>>>> {
->>>>> u32 queue;
->>>>> + struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)skb->data;
->>>>>
->>>>> if (ieee80211_is_mgmt(hdr->frame_control))
->>>>> queue = TXDESC_QUEUE_MGNT;
->>>>> @@ -5118,7 +5119,7 @@ static void rtl8xxxu_tx(struct ieee80211_hw *hw,
->>>>> if (control && control->sta)
->>>>> sta = control->sta;
->>>>>
->>>>> - queue = rtl8xxxu_queue_select(hdr, skb);
->>>>> + queue = rtl8xxxu_queue_select(skb);
->>>>>
->>>>> tx_desc = skb_push(skb, tx_desc_size);
->>>>
->>>> See the recent discussion about this here:
->>>> https://lore.kernel.org/linux-wireless/acd30174-4541-7343-e49a-badd199f4151@gmail.com/
->>>> https://lore.kernel.org/linux-wireless/2af44c28-1c12-46b9-85b9-011560bf7f7e@gmail.com/
->>>
->>> Not sure why I looked but I did. You may want to look at rtl8xxxu_tx()
->>> which is the .tx callback that mac80211 uses and the first statement in
->>> there is also assuming skb->data points to the 802.11 header.
->>
->> Here the documentation of the .tx callback:
->>
->> @tx: Handler that 802.11 module calls for each transmitted frame.
->> * skb contains the buffer *starting from the IEEE 802.11 header*.
->> * The low-level driver should send the frame out based on
->> * configuration in the TX control data. This handler should,
->> * preferably, never fail and stop queues appropriately.
->> * Must be atomic.
->>
->> I don't see any pushes or pulls before the queue select so that would mean 
->> mac80211 is not complying to the described behavior.
->>
->> Regards,
->> Arend
->>
->>>
->>> Regards,
->>> Arend
->>>>
-> mac80211 is behaving as described in the documentation, as far as I know.
-> Technically, rtl8xxxu_queue_select's hdr parameter is not needed.
+>   Furthermore, code between the kmap_atomic() and kunmap_atomic()
+>   functions may implicitly depended
 
-Okay. Then I probably misunderstood the gist of the discussion you referred 
-to. Now I see the issue got fixed by your patch (1st URL). So sorry for the 
-noise.
+I suppose it should be "depend"? Shouldn't it?
 
-Regards,
-Arend
+>   on the side effects of kmap_atomic()
+>   namely disabling pagefaults or preemption or both.
+
+I agree with you for rephrasing, mainly because it is
+written in poor English.
+
+However, I still have doubts about why you deleted "migration".
+AFAIK, __kmap_local_pfn_prot() always takes care of disabling migration for
+HIGHMEM enabled kernels.
+
+How about !HIGHMEM, where kmap_local_page() is an indirect call to
+page_address()? Did you mean that, if the code between kmap_atomic() and
+kunmap_atomic() depended on migrate_disable() (in PREEMPT_RT) we should alw=
+ays
+just stay safe and call preempt_disable() together with conversion to
+kmap_local_page()?
+
+If so, I understand and I again agree with you. If not, I'm missing somethi=
+ng;
+so please let me understand properly.
+
+Aside from the above, I'm not sure whether you deleted the last phrase befo=
+re
+your suggestion. What about making it to become "For the above-mentioned
+cases, conversions should also explicitly disable page-faults and/or
+preemption"?
+
+Thanks again for noticing my mistakes.
 
 
+Fabio
 
---0000000000001444a405ef2d9d2b
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-2Gzj3QNJRLsZu1TLyOyBBIr/BE7UiY3RabgRzknBGAPmzhS+fmyM8OtM5BYBsFBrSUFtZZO2p/tf
-Nbc24J2zf2peoZ8MK+7WQqummYlOnz+FyDkA9EybeNMcS5C+xi/PAgMBAAGjggHdMIIB2TAOBgNV
-HQ8BAf8EBAMCBaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYI
-KwYBBQUHMAGGNWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24y
-Y2EyMDIwME0GA1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3
-dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqG
-OGh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3Js
-MCcGA1UdEQQgMB6BHGFyZW5kLnZhbnNwcmllbEBicm9hZGNvbS5jb20wEwYDVR0lBAwwCgYIKwYB
-BQUHAwQwHwYDVR0jBBgwFoAUljPR5lgXWzR1ioFWZNW+SN6hj88wHQYDVR0OBBYEFIikAXd8CEtv
-ZbDflDRnf3tuStPuMA0GCSqGSIb3DQEBCwUAA4IBAQCdS5XCYx6k2GGZui9DlFsFm75khkqAU7rT
-zBX04sJU1+B1wtgmWTVIzW7ugdtDZ4gzaV0S9xRhpDErjJaltxPbCylb1DEsLj+AIvBR34caW6ZG
-sQk444t0HPb29HnWYj+OllIGMbdJWr0/P95ZrKk2bP24ub3ZP/8SyzrohfIba9WZKMq6g2nTLZE3
-BtkeSGJx/8dy0h8YmRn+adOrxKXHxhSL8BNn8wsmIZyYWe6fRcBtO3Ks2DOLyHCdkoFlN8x9VUQF
-N2ulEgqCbRKkx+qNirW86eF138lr1gRxzclu/38ko//MmkAYR/+hP3WnBll7zbpIt0jc9wyFkSqH
-p8a1MYICbTCCAmkCAQEwazBbMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1z
-YTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMgUGVyc29uYWxTaWduIDIgQ0EgMjAyMAIMTv1t
-bpIzNUky46LXMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAIGsCzgMz7DffGLPcQ
-YFyhBiv0OmC0X+GjDCiuHSinzDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJ
-BTEPFw0yMjEyMDYxOTE0MzFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUDBAEqMAsGCWCGSAFl
-AwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsGCSqGSIb3DQEBBzAL
-BglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAfUI+uU4Qyb7HvG4rD8/ERXQ/l64gHqCl9YOr
-xFpiD2x0x1pRIthVGTJqe+UcZCv4xzWz+/abQHrTk7KNIwSujU5T7SikWcKp5JGXBiUZ/Fg/+57U
-80vlRoJgJlRo/Ppkv4GjyBCzN4/FKZdg7/f0/aiGRkVQu7WP6WKhvTsgDEKeUCUWmpLc+OVHP6kn
-TaPTu8fbokr16dEzFfsI21KB5bgO7jFo5z65WaeEzRszo5ZdzfK9JXP+5hgKxx5g2siGh/RbTMUO
-MxB6qt/cJCiMFmYZ2PdV4EBNZj2AIfOAH/QWswGXUYZ3AjJ/lXN8nVDk7u0Tuhvi2hmbbt9u+duj
-Dw==
---0000000000001444a405ef2d9d2b--
+>
+> > +  [Legacy documentation]
+> > +
+> > +  This permits a very short duration mapping of a single page.  Since =
+the
+> > +  mapping is restricted to the CPU that issued it, it performs well, b=
+ut
+> > +  the issuing task is therefore required to stay on that CPU until it =
+has
+> > +  finished, lest some other task displace its mappings.
+> >
+> >    kmap_atomic() may also be used by interrupt contexts, since it does =
+not
+> >    sleep and the callers too may not sleep until after kunmap_atomic() =
+is
+>
+> Sebastian
