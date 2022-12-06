@@ -2,115 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC08E644767
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B559644775
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:06:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbiLFPEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:04:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
+        id S232198AbiLFPGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:06:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiLFPE2 (ORCPT
+        with ESMTP id S234167AbiLFPGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:04:28 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7932FC1B;
-        Tue,  6 Dec 2022 06:58:16 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id d31926fc1cae3eed; Tue, 6 Dec 2022 15:58:12 +0100
-Received: from kreacher.localnet (unknown [213.134.163.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 6 Dec 2022 10:06:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F82232BB7
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:59:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670338786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=cc4Vy7WMYhGoahXShwfLWL6RdpHCDWpUvTljVdwasiw=;
+        b=OTL6VUHeieeyEZ45+Kp/e1qORtl1V8P80P8nnQK0XpaMgcFdfGN1d6r8S4ndhwUcgBOuHT
+        oE/mNMYEsx/Jg1PoZQTni9bt6k5mwmKxtdMskkgCJIZuTAHwObNucbZTzk73/bcjJHGXLh
+        iHQfgCzTPu/tGZUbDD121Y8Jmytsrrs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-S2Syx4JLPVm-UdqJSo8ciQ-1; Tue, 06 Dec 2022 09:59:43 -0500
+X-MC-Unique: S2Syx4JLPVm-UdqJSo8ciQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id D5840940A67;
-        Tue,  6 Dec 2022 15:58:11 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Jiri Kosina <jikos@kernel.org>, Bastien Nocera <hadess@hadess.net>
-Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [Regression] Logitech BT mouse unusable after commit 532223c8ac57 (still in 6.1-rc8)
-Date:   Tue, 06 Dec 2022 15:58:11 +0100
-Message-ID: <2262737.ElGaqSPkdT@kreacher>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AD3A2833B13;
+        Tue,  6 Dec 2022 14:59:42 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.193.117])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9C5684A9254;
+        Tue,  6 Dec 2022 14:59:40 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Florent Revest <revest@chromium.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH HID for-next v3 0/5] HID: bpf: remove the need for ALLOW_ERROR_INJECTION and Kconfig fixes
+Date:   Tue,  6 Dec 2022 15:59:31 +0100
+Message-Id: <20221206145936.922196-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.187
-X-CLIENT-HOSTNAME: 213.134.163.187
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudeigdejtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudeifedrudekjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrddukeejpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtohepjhhikhhosheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgruggvshhssehhrgguvghsshdrnhgvthdprhgtphhtthhopehlrghinhhssehrihhsvghuphdrnhgvthdprhgtphhtthhopegsvghnjhgrmhhinhdrthhishhsohhirhgvshesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqihhnphhuthesvhhgvghrrdhkvghr
- nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgvghhrvghsshhiohhnsheslhgvvghmhhhuihhsrdhinhhfoh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bastien, Jiri,
+Hi,
 
-Commit 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the Logitech
-Bluetooth devices") caused my Logitech Bluetooth mouse to become unusable.
+This is a new version of the ALLOW_ERROR_INJECTION hack removal.
 
-Appended is the change I need to make it work again (note that adding the
-device ID to unhandled_hidpp_devices[] doesn't help, so there must be some
-significant enough difference in how the two cases are handled in the stack).
+Compared to v2, I followed the review from Alexei which cleaned up the
+code a little bit.
 
-Here's what I get in the log without the patch below:
+I also got a kbuild test bot complaining[3] so add a fix for that too.
 
-[   36.710574] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-[   36.710592] Bluetooth: HIDP socket layer initialized
-[   36.724644] hid-generic 0005:046D:B016.0001: unknown main item tag 0x0
-[   36.725860] input: Bluetooth Mouse M336/M337/M535 Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
-[   36.728036] input: Bluetooth Mouse M336/M337/M535 Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
-[   36.728823] input: Bluetooth Mouse M336/M337/M535 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
-[   36.731550] hid-generic 0005:046D:B016.0001: input,hidraw0: BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on 9c:b6:d0:96:8e:c8
-[   36.833039] logitech-hidpp-device 0005:046D:B016.0001: unknown main item tag 0x0
-[   36.999064] logitech-hidpp-device 0005:046D:B016.0001: Device not connected
+For reference, here is the previous cover letter:
 
-and here's what I get with it:
+So this patch series aims at solving both [0] and [1].
 
-[   43.642546] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-[   43.642559] Bluetooth: HIDP socket layer initialized
-[   43.652898] hid-generic 0005:046D:B016.0001: unknown main item tag 0x0
-[   43.653833] input: Bluetooth Mouse M336/M337/M535 Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
-[   43.655025] input: Bluetooth Mouse M336/M337/M535 Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
-[   43.655400] input: Bluetooth Mouse M336/M337/M535 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
-[   43.657521] hid-generic 0005:046D:B016.0001: input,hidraw0: BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on 9c:b6:d0:96:8e:c8
+The first one is bpf related and concerns the ALLOW_ERROR_INJECTION API.
+It is considered as a hack to begin with, so introduce a proper kernel
+API to declare when a BPF hook can have its return value changed.
 
-The only difference seems to be that in the former case the logitech-hidpp
-driver tries to bind to the device, but I guess that is expected.  However,
-when the device ID is added to unhandled_hidpp_devices[], the messages look
-exactly like in the "good" case, but the mouse still doesn't work.
+The second one is related to the fact that
+DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently not enabled on arm64, and
+that means that the current HID-BPF implementation doesn't work there
+for now.
 
-Thanks,
-Rafael
+The first patch actually touches the bpf core code, but it would be
+easier if we could merge it through the hid tree in the for-6.2/hid-bpf
+branch once we get the proper acks.
 
+Cheers,
+Benjamin
 
----
- drivers/hid/hid-logitech-hidpp.c |    3 ---
- 1 file changed, 3 deletions(-)
+[0] https://lore.kernel.org/all/20221121104403.1545f9b5@gandalf.local.home/
+[1] https://lore.kernel.org/r/CABRcYmKyRchQhabi1Vd9RcMQFCcb=EtWyEbFDFRTc-L-U8WhgA@mail.gmail.com
+[3] https://lore.kernel.org/all/202212060216.a6X8Py5H-lkp@intel.com/
 
-Index: linux-pm/drivers/hid/hid-logitech-hidpp.c
-===================================================================
---- linux-pm.orig/drivers/hid/hid-logitech-hidpp.c
-+++ linux-pm/drivers/hid/hid-logitech-hidpp.c
-@@ -4367,9 +4367,6 @@ static const struct hid_device_id hidpp_
- 	{ /* MX5500 keyboard over Bluetooth */
- 	  HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb30b),
- 	  .driver_data = HIDPP_QUIRK_HIDPP_CONSUMER_VENDOR_KEYS },
--
--	{ /* And try to enable HID++ for all the Logitech Bluetooth devices */
--	  HID_DEVICE(BUS_BLUETOOTH, HID_GROUP_ANY, USB_VENDOR_ID_LOGITECH, HID_ANY_ID) },
- 	{}
- };
- 
+Benjamin Tissoires (5):
+  bpf: do not rely on ALLOW_ERROR_INJECTION for fmod_ret
+  HID: bpf: do not rely on ALLOW_ERROR_INJECTION
+  HID: bpf: enforce HID_BPF dependencies
+  selftests: hid: ensures we have the proper requirements in config
+  kselftests: hid: fix missing headers_install step
 
+ drivers/hid/bpf/Kconfig              |  3 ++-
+ drivers/hid/bpf/hid_bpf_dispatch.c   | 20 +++++++++++++++++--
+ drivers/hid/bpf/hid_bpf_jmp_table.c  |  1 -
+ include/linux/btf.h                  |  2 ++
+ kernel/bpf/btf.c                     | 30 +++++++++++++++++++++++-----
+ kernel/bpf/verifier.c                | 17 ++++++++++++++--
+ net/bpf/test_run.c                   | 14 ++++++++++---
+ tools/testing/selftests/hid/Makefile | 26 +++++++++++-------------
+ tools/testing/selftests/hid/config   |  1 +
+ 9 files changed, 86 insertions(+), 28 deletions(-)
 
+-- 
+2.38.1
 
