@@ -2,155 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84189644960
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10155644965
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235575AbiLFQfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:35:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
+        id S235514AbiLFQgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:36:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbiLFQfX (ORCPT
+        with ESMTP id S235195AbiLFQfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:35:23 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DE66168
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:34:36 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id s1-20020a056e021a0100b003026adad6a9so14899779ild.18
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 08:34:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=otfmXiKq+WJz+dQQ9OybBgLY5KvpZDxz8oPgOmP5vXQ=;
-        b=UuNHuUxlIlraO0PPOfyScvpnS20GiH6cpsEU7XY/aqj6whj61OEFbH1tyxWEJHZvgY
-         fOrQkTn4GgYkcah0kvRSYlizdTkzSXwO3d8sH+9sKNZ0bpn2aswblV49/WDMX3NmOBIS
-         PfKlMpubson/Kvi7rEeGEcTiETRaTjRwkNoab5bEnK1ZL86IWt4iPivShiMkmm/Nht1i
-         fyED4FEX+ICKESvvWE13bFUuLX4UOWtxcOmZ6iPhJbqO8NnReX2qAMwLreN5iCTo/7OF
-         OBm/HFSMymrWrEdtuteisKO7NGp8oYqNyc15fXd4D2mECpOQ4k48n0Gh4b091xAvNuRc
-         sj2A==
-X-Gm-Message-State: ANoB5pnXQYPxwme2M8jv0bNeSh9x6MNsUc2+GqoQjozHmz0M3RnkJC+s
-        uLKVlKHBOJPa8S5jP5z7sx6+G74paNkpg4bSlyVlqL9FIiRe
-X-Google-Smtp-Source: AA0mqf4THhEJ9Z8aIvmyPCJLCSgn390v+YXHZFh5pDGGY6vRFfXxKnRJNobSM3dWobpWVWOBRtYrEbDp5bJCTp+Wg9DSYR+lH/As
+        Tue, 6 Dec 2022 11:35:39 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF1FB106
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:35:25 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2auc-0004XL-Gn; Tue, 06 Dec 2022 17:35:18 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2aua-002jqL-PL; Tue, 06 Dec 2022 17:35:17 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2aua-0034l9-Mn; Tue, 06 Dec 2022 17:35:16 +0100
+Date:   Tue, 6 Dec 2022 17:35:16 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-amlogic@lists.infradead.org, Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 431/606] mfd: khadas-mcu: Convert to i2c's .probe_new()
+Message-ID: <20221206163516.i6rzewxts7do75y5@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-432-uwe@kleine-koenig.org>
+ <Y3tvypIDVdCYxAVB@google.com>
+ <20221121150854.3mwczqtbusawho4m@pengutronix.de>
+ <Y3usiUm1K+5xCWhY@google.com>
+ <20221206105908.jzcdnast3yw22eel@pengutronix.de>
+ <Y49pi54DKsvLOzvb@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:db11:0:b0:303:1648:f2b9 with SMTP id
- b17-20020a92db11000000b003031648f2b9mr18505072iln.56.1670344476142; Tue, 06
- Dec 2022 08:34:36 -0800 (PST)
-Date:   Tue, 06 Dec 2022 08:34:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000002733a805ef2b6133@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in can_rcv_filter
-From:   syzbot <syzbot+2d7f58292cb5b29eb5ad@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-can@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        socketcan@hartkopp.net, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dy4m535lwp7336za"
+Content-Disposition: inline
+In-Reply-To: <Y49pi54DKsvLOzvb@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--dy4m535lwp7336za
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    e3cb714fb489 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e55ae3880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec7118319bfb771e
-dashboard link: https://syzkaller.appspot.com/bug?extid=2d7f58292cb5b29eb5ad
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1164b38d880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11f61223880000
+On Tue, Dec 06, 2022 at 04:10:51PM +0000, Lee Jones wrote:
+> On Tue, 06 Dec 2022, Uwe Kleine-K=F6nig wrote:
+>=20
+> > Hey Lee,
+> >=20
+> > On Mon, Nov 21, 2022 at 04:51:21PM +0000, Lee Jones wrote:
+> > > On Mon, 21 Nov 2022, Uwe Kleine-K=F6nig wrote:
+> > >=20
+> > > > Hello Lee,
+> > > >=20
+> > > > On Mon, Nov 21, 2022 at 12:32:10PM +0000, Lee Jones wrote:
+> > > > > On Fri, 18 Nov 2022, Uwe Kleine-K=F6nig wrote:
+> > > > >=20
+> > > > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > > >=20
+> > > > > > The probe function doesn't make use of the i2c_device_id * para=
+meter so it
+> > > > > > can be trivially converted.
+> > > > > >=20
+> > > > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.=
+de>
+> > > > > > ---
+> > > > > >  drivers/mfd/khadas-mcu.c | 5 ++---
+> > > > > >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > > > >=20
+> > > > > After a week or so, please collect-up all the tags you have recei=
+ved
+> > > > > and submit a per-subsystem set for me to hoover up, thanks.
+> > > >=20
+> > > > For mfd I'd do:
+> > > >=20
+> > > > 	git checkout mfd/for-next
+> > > > 	b4 am -P 413-481 20221118224540.619276-1-uwe@kleine-koenig.org
+> > > > 	git am ./20221118_uwe_i2c_complete_conversion_to_i2c_probe_new.mbx
+> > > > 	git send-email --to .... --cc .... mfd/for-next
+> > >=20
+> > > That's just crazy enough to work.
+> > >=20
+> > > Thanks for the tip.
+> >=20
+> > On irc you said you'd care for application of these patches ("I plan to
+> > attempt the b4 solution"), they didn't land in next yet. Do you need a
+> > reminder? Something else?
+>=20
+> I applied them, but they fail to build and I haven't had time to
+> investigate.  I guess they depend on some patches that have been
+> accepted into another (input?) and are now in -next.  Any idea if they
+> are available on some immutable branch that I can pull from?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/832eb1866f2c/disk-e3cb714f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5fd572b7d96d/vmlinux-e3cb714f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/34c82908beda/Image-e3cb714f.gz.xz
+If in your tree i2c_client_get_device_id() is missing, you want to pull
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2d7f58292cb5b29eb5ad@syzkaller.appspotmail.com
+	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client_d=
+evice_id_helper-immutable
 
-syz-executor414 uses obsolete (PF_INET,SOCK_PACKET)
-Unable to handle kernel paging request at virtual address 0000000000006020
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109d9e000
-[0000000000006020] pgd=080000010bb80003, p4d=080000010bb80003, pud=080000010ba1f003, pmd=0000000000000000
-Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 3072 Comm: syz-executor414 Not tainted 6.1.0-rc7-syzkaller-33097-ge3cb714fb489 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : can_rcv_filter+0x30/0x30c net/can/af_can.c:584
-lr : can_rcv_filter+0x28/0x30c net/can/af_can.c:578
-sp : ffff80000f77b970
-x29: ffff80000f77b970 x28: ffff0000c9f2cc80 x27: ffff80000f77bcd0
-x26: 0000000000000000 x25: ffff0000c9585300 x24: 0000000000000001
-x23: ffff0000c7be3680 x22: 0000000000000000 x21: 0000000000000000
-x20: ffff0000c9f2c000 x19: ffff0000c9585300 x18: 0000000000000000
-x17: 0000000000000000 x16: ffff80000dbe6158 x15: ffff0000c7c98000
-x14: 0000000000000000 x13: 00000000ffffffff x12: ffff0000c7c98000
-x11: ff8080000b96c6ac x10: 0000000000000000 x9 : 0000000000006020
-x8 : ffff0000c7ab2240 x7 : ffff80000b96c9a0 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000002
-x2 : 0000000000000008 x1 : ffff0000c9585300 x0 : 0000000000000000
-Call trace:
- can_rcv_filter+0x30/0x30c
- can_receive+0x194/0x26c net/can/af_can.c:664
- canfd_rcv+0x7c/0xf8 net/can/af_can.c:703
- __netif_receive_skb_one_core net/core/dev.c:5489 [inline]
- __netif_receive_skb+0x70/0x14c net/core/dev.c:5603
- netif_receive_skb_internal+0xb4/0x258 net/core/dev.c:5689
- netif_receive_skb+0x28/0x44 net/core/dev.c:5748
- tun_rx_batched+0x1e0/0x220
- tun_get_user+0xf94/0x1148 drivers/net/tun.c:2004
- tun_chr_write_iter+0xa4/0x144 drivers/net/tun.c:2034
- call_write_iter include/linux/fs.h:2199 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x2dc/0x46c fs/read_write.c:584
- ksys_write+0xb4/0x160 fs/read_write.c:637
- __do_sys_write fs/read_write.c:649 [inline]
- __se_sys_write fs/read_write.c:646 [inline]
- __arm64_sys_write+0x24/0x34 fs/read_write.c:646
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x140 arch/arm64/kernel/syscall.c:197
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-Code: aa0003f6 9724e4b5 f9406e68 528c0409 (b8696ad4) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	aa0003f6 	mov	x22, x0
-   4:	9724e4b5 	bl	0xfffffffffc9392d8
-   8:	f9406e68 	ldr	x8, [x19, #216]
-   c:	528c0409 	mov	w9, #0x6020                	// #24608
-* 10:	b8696ad4 	ldr	w20, [x22, x9] <-- trapping instruction
+Best regards
+Uwe
 
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--dy4m535lwp7336za
+Content-Type: application/pgp-signature; name="signature.asc"
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOPb0EACgkQwfwUeK3K
+7AnRqAf+LxdBinNoKRDwKyG1d4vGoUEdNxDR448xVYkZ81KrXKW9ulHcHNNcx/7U
+b7qyJvNhTfA//k7WoWrFOVfEXpZp7yKSriTTETQbWYV986JbtmaU6OzEIzgKAyPi
+ZRSw7tPJMSrBQZa59yywjqAVL1pIbUuXkmaU8FSnPjYjkiULkb9xplydn7VPAHDY
+GFK0EJAVM95cVSsuBaYV3T6dXNyKoYgKU1dVQUUlDKU/f7pxy4umQnABy5tFV61r
+HLfivemcoBKWLdygJ4B79JhVMN6JPzn8ltOqq3+xDoznG8qNYUkhHGwC2IunUzTy
+HDkvn8uUEqSwBqCTsJ3x3qreawsrWA==
+=tLOm
+-----END PGP SIGNATURE-----
+
+--dy4m535lwp7336za--
