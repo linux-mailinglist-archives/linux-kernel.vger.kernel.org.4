@@ -2,226 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76E18643BA3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:05:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A46643BA2
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:05:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233947AbiLFDFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:05:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
+        id S232119AbiLFDFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:05:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233924AbiLFDFv (ORCPT
+        with ESMTP id S230035AbiLFDFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:05:51 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654D62253F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:05:48 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NR4tW1WtNzqSsN;
-        Tue,  6 Dec 2022 11:01:07 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Dec 2022 11:05:14 +0800
-Subject: Re: [PATCH v4 12/17] mm: remember exclusively mapped anonymous pages
- with PG_anon_exclusive
-To:     David Hildenbrand <david@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, <linux-mm@kvack.org>
-References: <20220428083441.37290-1-david@redhat.com>
- <20220428083441.37290-13-david@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <90dd6a93-4500-e0de-2bf0-bf522c311b0c@huawei.com>
-Date:   Tue, 6 Dec 2022 11:05:14 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 5 Dec 2022 22:05:34 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C211B7A7
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 19:05:33 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id c7so8921246iof.13
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 19:05:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yQf4ZY8NnOfS/XZrZYFBrjz8jiMgg2iTJlvBgkUiKnI=;
+        b=B+LESh4NfFlaJrLJhK/+R7eY67yJrRUrFyBNEy7rQqgfKZgNOsllOH5A1HjUSu/ACQ
+         rsaWsGUGxWXYWSHjOt8TVfCBD2CotfmtlqbiiuUugWxre3rmsuJh4v2L1QJbmlDT3HAx
+         2HUMv63gCgipquCzvHgqPHRhfnuULE9027jRi2a7vwv6bdt9XL75QNqhDMvqbg1T0cLC
+         D45HYjkIFDn8/Y/VFSWKLiS5uBDcMx9uw6hW0qdzJEd+AAfln962A3xS9dEhEiQKEdQp
+         tS2SwV8gIDqXMiDu7AoyPPSZ/r61a0tn8I+wI4YWG9rW6wH5F0sZTOkXLAbpU0NR8Yao
+         PH1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQf4ZY8NnOfS/XZrZYFBrjz8jiMgg2iTJlvBgkUiKnI=;
+        b=6Duq9Cs4a8V+jqxIqVKn2Hhj/remkRcawZmM7TkI7Y4fr0+TD5YbHDcFUAFub85y9s
+         R0QWrkM7YR1GS3r7mNlKjICyrdgrQ10llPdi2YWqcTz/ee6/0R+bGxa+LI3ZE891WTsO
+         NFB90imgtRUcDiWPOjHIn50L0iu1oBdHL98wpSDPRqqRX7pK69zlUsDUy56yMxcoopnF
+         +pjp560lSVcSvkGJi0g55J7urVxB2oEECmuBhjoRn0nzWFAFuqXUGtD0SUR4g6ezU94b
+         RZoOzt6icCpGj9U7xIJofGxZ0gy0XiOXe6jRkEYad72PbThfq85Pp/bqgzT8ffpjVKFn
+         1hJg==
+X-Gm-Message-State: ANoB5pn9I95khXBONkYHgPJ1P/2R2fr6og+UZRIKaw09buXPGLSA0ySa
+        CP5UZO6AD3ypZvLQIUH9AXFjBJaj4Me6KFDg
+X-Google-Smtp-Source: AA0mqf5RyDbcFgJcCuznHg/LSos18Hg/iENVPFz7iPLYoFND0sWm3/uY1TqH7HaYlk3NyHApBqPE0Q==
+X-Received: by 2002:a05:6638:37a5:b0:363:dd45:9df6 with SMTP id w37-20020a05663837a500b00363dd459df6mr40029387jal.274.1670295932596;
+        Mon, 05 Dec 2022 19:05:32 -0800 (PST)
+Received: from [10.211.55.3] ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id o62-20020a022241000000b00389d2ff28a5sm6410719jao.47.2022.12.05.19.05.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 19:05:32 -0800 (PST)
+Message-ID: <39903fb5-fd28-c159-b300-47d3ec4cd0fc@linaro.org>
+Date:   Mon, 5 Dec 2022 21:05:30 -0600
 MIME-Version: 1.0
-In-Reply-To: <20220428083441.37290-13-david@redhat.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2] clk: qcom: rpmh: add support for SM6350 rpmh IPA clock
 Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Alex Elder <elder@linaro.org>
+Cc:     sboyd@kernel.org, mturquette@baylibre.com,
+        konrad.dybcio@linaro.org, agross@kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        dmitry.baryshkov@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221202221240.225720-1-elder@linaro.org>
+ <20221205225646.gtwhakd4lxh6vlfc@builder.lan>
+From:   Alex Elder <alex.elder@linaro.org>
+In-Reply-To: <20221205225646.gtwhakd4lxh6vlfc@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/28 16:34, David Hildenbrand wrote:
-> Let's mark exclusively mapped anonymous pages with PG_anon_exclusive as
-> exclusive, and use that information to make GUP pins reliable and stay
-> consistent with the page mapped into the page table even if the
-> page table entry gets write-protected.
+On 12/5/22 4:56 PM, Bjorn Andersson wrote:
+> On Fri, Dec 02, 2022 at 04:12:40PM -0600, Alex Elder wrote:
+>> From: Luca Weiss <luca.weiss@fairphone.com>
+>>
+>> The IPA core clock is required for SM6350.  Define it.
+>>
+>> [elder@linaro.org: rebased with Dmitry's changes]
+>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+
+Sorry about that, I knew I was supposed to sign
+off and thought I had.
+
+You told me separately that this was sufficient:
+
+Signed-off-by: Alex Elder <elder@linaro.org>
+
+If you want me to send a new version with the
+signoff just let me know.  Thanks.
+
+					-Alex
 > 
-> With that information at hand, we can extend our COW logic to always
-> reuse anonymous pages that are exclusive. For anonymous pages that
-> might be shared, the existing logic applies.
+> Thanks for rebasing this Alex. But as you're handling the patch you need
+> to add your S-o-b; which will make sure your [] makes sense as well.
 > 
-> As already documented, PG_anon_exclusive is usually only expressive in
-> combination with a page table entry. Especially PTE vs. PMD-mapped
-> anonymous pages require more thought, some examples: due to mremap() we
-> can easily have a single compound page PTE-mapped into multiple page tables
-> exclusively in a single process -- multiple page table locks apply.
-> Further, due to MADV_WIPEONFORK we might not necessarily write-protect
-> all PTEs, and only some subpages might be pinned. Long story short: once
-> PTE-mapped, we have to track information about exclusivity per sub-page,
-> but until then, we can just track it for the compound page in the head
-> page and not having to update a whole bunch of subpages all of the time
-> for a simple PMD mapping of a THP.
+> Regards,
+> Bjorn
 > 
-> For simplicity, this commit mostly talks about "anonymous pages", while
-> it's for THP actually "the part of an anonymous folio referenced via
-> a page table entry".
-> 
-> To not spill PG_anon_exclusive code all over the mm code-base, we let
-> the anon rmap code to handle all PG_anon_exclusive logic it can easily
-> handle.
-> 
-> If a writable, present page table entry points at an anonymous (sub)page,
-> that (sub)page must be PG_anon_exclusive. If GUP wants to take a reliably
-> pin (FOLL_PIN) on an anonymous page references via a present
-> page table entry, it must only pin if PG_anon_exclusive is set for the
-> mapped (sub)page.
-> 
-> This commit doesn't adjust GUP, so this is only implicitly handled for
-> FOLL_WRITE, follow-up commits will teach GUP to also respect it for
-> FOLL_PIN without FOLL_WRITE, to make all GUP pins of anonymous pages
-> fully reliable.
-> 
-> Whenever an anonymous page is to be shared (fork(), KSM), or when
-> temporarily unmapping an anonymous page (swap, migration), the relevant
-> PG_anon_exclusive bit has to be cleared to mark the anonymous page
-> possibly shared. Clearing will fail if there are GUP pins on the page:
-> * For fork(), this means having to copy the page and not being able to
->   share it. fork() protects against concurrent GUP using the PT lock and
->   the src_mm->write_protect_seq.
-> * For KSM, this means sharing will fail. For swap this means, unmapping
->   will fail, For migration this means, migration will fail early. All
->   three cases protect against concurrent GUP using the PT lock and a
->   proper clear/invalidate+flush of the relevant page table entry.
-> 
-> This fixes memory corruptions reported for FOLL_PIN | FOLL_WRITE, when a
-> pinned page gets mapped R/O and the successive write fault ends up
-> replacing the page instead of reusing it. It improves the situation for
-> O_DIRECT/vmsplice/... that still use FOLL_GET instead of FOLL_PIN,
-> if fork() is *not* involved, however swapout and fork() are still
-> problematic. Properly using FOLL_PIN instead of FOLL_GET for these
-> GUP users will fix the issue for them.
-> 
+>> ---
+>> v2: This is now based on qualcomm/for-next.
+>>
+>>   drivers/clk/qcom/clk-rpmh.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+>> index 2c2ef4b6d130e..586a810c682ca 100644
+>> --- a/drivers/clk/qcom/clk-rpmh.c
+>> +++ b/drivers/clk/qcom/clk-rpmh.c
+>> @@ -606,6 +606,7 @@ static struct clk_hw *sm6350_rpmh_clocks[] = {
+>>   	[RPMH_LN_BB_CLK3_A]	= &clk_rpmh_ln_bb_clk3_g4_ao.hw,
+>>   	[RPMH_QLINK_CLK]	= &clk_rpmh_qlink_div4.hw,
+>>   	[RPMH_QLINK_CLK_A]	= &clk_rpmh_qlink_div4_ao.hw,
+>> +	[RPMH_IPA_CLK]		= &clk_rpmh_ipa.hw,
+>>   };
+>>   
+>>   static const struct clk_rpmh_desc clk_rpmh_sm6350 = {
+>> -- 
+>> 2.34.1
+>>
 
-Hi David, sorry for the late respond and a possible inconsequential question. :)
-
-<snip>
-
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 7a71ed679853..5add8bbd47cd 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -4772,7 +4772,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->  				    is_hugetlb_entry_hwpoisoned(entry))) {
->  			swp_entry_t swp_entry = pte_to_swp_entry(entry);
->  
-> -			if (is_writable_migration_entry(swp_entry) && cow) {
-> +			if (!is_readable_migration_entry(swp_entry) && cow) {
->  				/*
->  				 * COW mappings require pages in both
->  				 * parent and child to be set to read.
-> @@ -5172,6 +5172,8 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
->  		set_huge_ptep_writable(vma, haddr, ptep);
->  		return 0;
->  	}
-> +	VM_BUG_ON_PAGE(PageAnon(old_page) && PageAnonExclusive(old_page),
-> +		       old_page);
->  
->  	/*
->  	 * If the process that created a MAP_PRIVATE mapping is about to
-> @@ -6169,12 +6171,17 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
->  		}
->  		if (unlikely(is_hugetlb_entry_migration(pte))) {
->  			swp_entry_t entry = pte_to_swp_entry(pte);
-> +			struct page *page = pfn_swap_entry_to_page(entry);
->  
-> -			if (is_writable_migration_entry(entry)) {
-> +			if (!is_readable_migration_entry(entry)) {
-
-In hugetlb_change_protection(), is_writable_migration_entry() is changed to !is_readable_migration_entry(),
-but
-
->  				pte_t newpte;
->  
-> -				entry = make_readable_migration_entry(
-> -							swp_offset(entry));
-> +				if (PageAnon(page))
-> +					entry = make_readable_exclusive_migration_entry(
-> +								swp_offset(entry));
-> +				else
-> +					entry = make_readable_migration_entry(
-> +								swp_offset(entry));
->  				newpte = swp_entry_to_pte(entry);
->  				set_huge_swap_pte_at(mm, address, ptep,
->  						     newpte, huge_page_size(h));
-
-<snip>
-
-> diff --git a/mm/mprotect.c b/mm/mprotect.c
-> index b69ce7a7b2b7..56060acdabd3 100644
-> --- a/mm/mprotect.c
-> +++ b/mm/mprotect.c
-> @@ -152,6 +152,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  			pages++;
->  		} else if (is_swap_pte(oldpte)) {
->  			swp_entry_t entry = pte_to_swp_entry(oldpte);
-> +			struct page *page = pfn_swap_entry_to_page(entry);
->  			pte_t newpte;
->  
->  			if (is_writable_migration_entry(entry)) {
-
-In change_pte_range(), is_writable_migration_entry() is not changed to !is_readable_migration_entry().
-Is this done intentionally? Could you tell me why there's such a difference? I'm confused. It's very
-kind of you if you can answer my puzzle.
-
-Thanks!
-Miaohe Lin
-
-> @@ -159,8 +160,11 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->  				 * A protection check is difficult so
->  				 * just be safe and disable write
->  				 */
-> -				entry = make_readable_migration_entry(
-> -							swp_offset(entry));
-> +				if (PageAnon(page))
-> +					entry = make_readable_exclusive_migration_entry(
-> +							     swp_offset(entry));
-> +				else
-> +					entry = make_readable_migration_entry(swp_offset(entry));
->  				newpte = swp_entry_to_pte(entry);
->  				if (pte_swp_soft_dirty(oldpte))
->  					newpte = pte_swp_mksoft_dirty(newpte);
