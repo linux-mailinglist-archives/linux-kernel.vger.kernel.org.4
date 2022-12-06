@@ -2,148 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CF5643CDD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D86A0643CDF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:55:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233854AbiLFFyi convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Dec 2022 00:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39654 "EHLO
+        id S233558AbiLFFzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:55:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiLFFyU (ORCPT
+        with ESMTP id S233927AbiLFFyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:54:20 -0500
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B653275C1
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:54:16 -0800 (PST)
-Received: from omf12.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay10.hostedemail.com (Postfix) with ESMTP id DCDACC09FE;
-        Tue,  6 Dec 2022 05:54:15 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf12.hostedemail.com (Postfix) with ESMTPA id DEEBF18;
-        Tue,  6 Dec 2022 05:54:13 +0000 (UTC)
-Message-ID: <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
-Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
- about missing Link:
-From:   Joe Perches <joe@perches.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>
-Date:   Mon, 05 Dec 2022 21:54:13 -0800
-In-Reply-To: <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
-References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
-         <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
-         <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 6 Dec 2022 00:54:47 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB54275E2;
+        Mon,  5 Dec 2022 21:54:45 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p2Qud-0007tz-Vq; Tue, 06 Dec 2022 06:54:40 +0100
+Message-ID: <6fd52cbe-4cb0-d7a2-9f55-1e56c07843fe@leemhuis.info>
+Date:   Tue, 6 Dec 2022 06:54:39 +0100
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: DEEBF18
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Robin Murphy <robin.murphy@arm.com>,
+        janusz.krzysztofik@linux.intel.com
+Cc:     fenghua.yu@intel.com, jdelvare@suse.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, lucas.demarchi@intel.com,
+        Guenter Roeck <linux@roeck-us.net>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
+ <20221111213753.GA1059841@roeck-us.net>
+ <ac2e553f-fa8b-8b08-aba9-e04529adad34@leemhuis.info>
+Content-Language: en-US, de-DE
+In-Reply-To: <ac2e553f-fa8b-8b08-aba9-e04529adad34@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670306085;2939937a;
+X-HE-SMSGID: 1p2Qud-0007tz-Vq
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout01
-X-Stat-Signature: mjsx31x6rtq6pujqnyhaqkf4yee5oiag
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX19rKO3gGkxEMRatNNSkA9mA1lYurhuvi8g=
-X-HE-Tag: 1670306053-807855
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-06 at 05:55 +0100, Thorsten Leemhuis wrote:
-> Hi Joe! Many thx for looking into this.
-> 
-> On 06.12.22 02:02, Joe Perches wrote:
-> > On Mon, 2022-12-05 at 13:14 -0800, Andrew Morton wrote:
-> > > Begin forwarded message:
-> > > 
-> > > Date: Sun,  4 Dec 2022 12:33:37 +0100
-> > > From: Kai Wasserbäch <kai@dev.carbon-project.org>
-> > > To: linux-kernel@vger.kernel.org
-> > > Cc: Andrew Morton <akpm@linux-foundation.org>, Thorsten Leemhuis <linux@leemhuis.info>
-> > > Subject: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn about missing Link:
-> > > 
-> > > Thorsten Leemhuis suggested the following two changes to checkpatch, which
-> > > I hereby humbly submit for review. Please let me know if any changes
-> > > would be required for acceptance.
-> > [...]
-> > > Suggested-by: Thorsten Leemhuis <linux@leemhuis.info>
-> > > Signed-off-by: Kai Wasserbäch <kai@dev.carbon-project.org>
-> > > 
-> > > Kai Wasserbäch (2):
-> > >   feat: checkpatch: error on usage of a Buglink tag in the commit log
-> > 
-> > Why, what's wrong with a buglink reference?
-> 
-> Long story short: Linus doesn't like it:
-> 
-> ```
-> > > BugLink: https://lore.kernel.org/r/20220610205038.GA3050413@paulmck-ThinkPad-P17-Gen-1
-> > > BugLink: https://lore.kernel.org/r/CAMdYzYpF4FNTBPZsEFeWRuEwSies36QM_As8osPWZSr2q-viEA@mail.gmail.com
-> > [...]
-> > please stop making up random tags that make no sense.
-> > 
-> > Just use "Link:"
-> > [...]
-> > 
-> > It's extra context to the commit, in case somebody wants to know the
-> > history. The "bug" part is (and always should be) already explained in
-> > the commit message, there's absolutely no point in adding soem extra
-> > noise to the "Link:" tag.>
-> ```
-> That's a quote from
-> https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
-> 
-> In that message he also links to another mail from him, where he wrote:
-> ```
-> > I think "BugLink:" is silly, because that's just a regular link.
-> > What's the upside of saying "Bug" in there? If you're fixing a bug,
-> > and are linking to reports and discussions by people, what does that
-> > "bug" buy you apart from another ugly CamelCase thing?
-> > 
-> > In other words, in "BugLink:", neither "Bug" nor "Link" is actually meaningful.
-> > 
-> > The current "Link:" tag exists AS A GENERIC WAY TO SAY "look, here's
-> > more information". That's the point. The word "Link" has no other
-> > meaning, and trying to then combine it with other things is worthless.
-> ```
-> https://lore.kernel.org/all/CAHk-=wgzRUT1fBpuz3xcN+YdsX0SxqOzHWRtj0ReHpUBb5TKbA@mail.gmail.com/
-> 
-> Our docs say to use Link in this case, too; see
-> Documentation/process/submitting-patches.rst
-> (http://docs.kernel.org/process/submitting-patches.html) and
-> Documentation/process/5.Posting.rst
-> (https://docs.kernel.org/process/5.Posting.html)
-> 
-> And using various tags for the same thing makes it also harder for
-> external scripts that look at commits to take further action -- like the
-> regression tracking bot I write and use for my work.
-> 
-> All of that obviously should have been in patch description. Let me
-> resubmit that patch with all of that in there, or are you dead against
-> this idea now?
+On 01.12.22 16:02, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker. I wondered what
+> happened to this regression fix, as things looks stalled from here --
+> but maybe I'm missing something.
 
-No, better commit description would be useful and perhaps a more
-generic, "is the thing in front of a URI/URL" a known/supported entry,
-instead of using an known invalid test would be a better mechanism.
+This still looks stalled; hope someone will tell me if I missed any
+progress.
 
-> > >   feat: checkpatch: Warn about Reported-by: not being followed by a
-> > >     Link:
-> > 
-> > I think this is unnecessary.
+> On 11.11.22 22:37, Guenter Roeck wrote:
+>> On Thu, Nov 10, 2022 at 04:20:25PM +0000, Robin Murphy wrote:
+>>> Coretemp's vestigial platform driver is odd. All the real work is done
+>>> globally by the initcall and CPU hotplug notifiers, while the "driver"
+>>> effectively just wraps an allocation and the registration of the hwmon
+>>> interface in a long-winded round-trip through the driver core. The whole
+>>> logic of dynamically creating and destroying platform devices to bring
+>>> the interfaces up and down is fatally flawed right away, since it
+>>> notifier from a platform bus notifier.
+>> [...]
+>>> I haven't been able to fully test hotplug since I only have a
+>>> single-socket Intel system to hand.
+>> Someone with access to hardware will have to validate this.
+> That afaics has happened.
 > 
-> I expect this to cause more discussion, which is why this should be in a
-> separate submission. But in the end the reasons are similar as above:
-> (1) Linus really want to see those links to make things easier for
-> future code archeologists. (2) My regression tracking efforts heavily
-> rely on those Links, as they allow to automatically connect reports with
-> patches and commits to fix the reported regression; without those the
-> tracking is a PITA and doesn't scale.
-> 
-> Together that IMHO is strong enough reason to warn in this case.
+>> For both subject and description, please avoid terms like "antics",
+>> "odd", or "questionable". Please describe the problem in neutral terms.
+> Robin, did you take care of that?
 
-Maybe, I think there might be some value in not intermixing signature
-tags and other tags though.
+Robin, are you busy, or is there some other reason why this regression
+fix afaics isn't making any progress?
 
+Janusz Krzysztofik, as you seemed to care: if you have a minute and
+Robin doesn't show up within a day or wo, could you maybe improve
+subject and description to make Guenter happy?
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+#regzbot poke
