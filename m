@@ -2,156 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B4F644DB7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:04:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC52B644DBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:05:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiLFVEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:04:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51166 "EHLO
+        id S229689AbiLFVFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:05:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229827AbiLFVEj (ORCPT
+        with ESMTP id S229479AbiLFVFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:04:39 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB7A30577;
-        Tue,  6 Dec 2022 13:04:38 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id y25so3416759lfa.9;
-        Tue, 06 Dec 2022 13:04:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bGfC41RTI6jgj8ywYESKxaRQC3IxCMppOBqs9HFb7hI=;
-        b=bNQEtaR1NsMh9mBbNKD/Y01RTcj/56safmMbTV/XW62mfIJ4Q2KApj/steVorzOSvc
-         ld9uCsyPAxJYAPy79UOF9M3rXiJQjqcLyWxuefpT7WA6VMckwzOhQnmPEhsgRjmzOxnc
-         Iyw8R76JCvgW+E23NufgvCV4kagx6FLlbbdh6AnXqHigklPlbkuj50CzZhDJrkWGKFc5
-         d4XrH3K95NJs5ju+3Neok+onvTqB2Qo9384vttmTufY3TTwvUQtr5gCzclfArNjX71QM
-         r5EtdiKwXIS544o6qQWwwSKL/NX13b5zssd1zLHSuEO5eDBpSIix9DJhZd4B7T3yzZ//
-         G7bQ==
+        Tue, 6 Dec 2022 16:05:48 -0500
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3EEEA7;
+        Tue,  6 Dec 2022 13:05:46 -0800 (PST)
+Received: by mail-qt1-f170.google.com with SMTP id jr1so14779997qtb.7;
+        Tue, 06 Dec 2022 13:05:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bGfC41RTI6jgj8ywYESKxaRQC3IxCMppOBqs9HFb7hI=;
-        b=AD3Ac7qgHSl7YJb7g8bgYRl5nRX5fUWECUlipt+XJcPi3IKSN73xI/2UbOGGFrKy2d
-         3ZqX3hFdb4bcLxmDOh5QrQtwg03ke2XW/VM7VtelW8sQPgn8HNFZqaBN3w4QoDrqt7hU
-         sJqlnV1/qpk21fqN85CpUC7OE2Fc2p+QfX3YCVMRDCor2B01yH8lMMmg/XCOF8QRBann
-         tl4y07QtLwjPd4BWlzXah0QfJWJh+PynRtVzMVqXsXKbPVRLla7MgNZrHp1ADWrxDiwP
-         C8g8DeM8j7esnSAVLv+lSqYqLDBkfIir7fys9IS6VUINSXvvIelKxG0NjXxbcYwDnHLw
-         DkaA==
-X-Gm-Message-State: ANoB5pmYJGhtTTyMdSBD7tOGmLf1vcNxucB5yFlu8QjYb58alt/lWInE
-        exNcBxIXSe5bOcgrkvoghqs=
-X-Google-Smtp-Source: AA0mqf6lk8n1mSovdZxsNEks0iX3SYkOI7bB3GP+FfVi9H/dJoGvipfviaVx3C8lx6rPgOyVK/Nh3Q==
-X-Received: by 2002:a05:6512:104e:b0:4b5:604a:5b24 with SMTP id c14-20020a056512104e00b004b5604a5b24mr5337245lfb.550.1670360676996;
-        Tue, 06 Dec 2022 13:04:36 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id p1-20020ac24ec1000000b004991437990esm2618593lfr.11.2022.12.06.13.04.35
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AWT2GZF2oePCDXbUr1HIe1iJVZEEvLGC46quUCIfd88=;
+        b=4faggOzmnyr9Xuny7guMoZUnd64jLSdaxGl+hlXMSrzdI8lqahSVNcRkXBT1nteQ0c
+         7e7x6LlDx7E4U4D+7yiGvQhOedr4PcHigkgEx2LmcHuOTWn/2WDQGAT+NT4WLNbRQ0th
+         Z0LOMMnV2eO3bGIJsQ/DMU/0hRzjN6fs3QaEUu7aUbbmerQRN0JZ2dB+fD9CviX3VGce
+         zQjJUPqi7lXCJntBFJ5Lfiet/Ly0hE+EnMCNkmmcLste1vVPM+QGKUN9XjSvCFOM7aHR
+         zllaQfzFpcc8de1k6dasQyOpBYVqqTUnkyzeTewwpCXUCiuOwdv+rm4N9hNY+PzS1CBy
+         txAg==
+X-Gm-Message-State: ANoB5pmdlb32BvTbXour7DR2IAVESIOSmx9Bx/Nuh/5OTFQMWAYWeWAN
+        aYVD4WE405GNHqULskwjx73sqGr95pHZbM87
+X-Google-Smtp-Source: AA0mqf7vMC+fDPLtIrFtxDcsLvZOo4r00+TQO2SqirFFMaTLgjNKIXXtaqbs8nnFWGS/xVfbBoUkQQ==
+X-Received: by 2002:a05:622a:5c1b:b0:3a6:930b:b3b5 with SMTP id gd27-20020a05622a5c1b00b003a6930bb3b5mr22103167qtb.613.1670360745508;
+        Tue, 06 Dec 2022 13:05:45 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:ed4c])
+        by smtp.gmail.com with ESMTPSA id r12-20020a05620a298c00b006e16dcf99c8sm15870995qkp.71.2022.12.06.13.05.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 13:04:36 -0800 (PST)
-Date:   Wed, 7 Dec 2022 00:04:34 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Niklas Cassel <Niklas.Cassel@wdc.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Praneeth Bajjuri <praneeth@ti.com>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "open list:LIBATA SUBSYSTEM (Serial and Parallel ATA drivers)" 
-        <linux-ide@vger.kernel.org>,
-        "lkft-triage@lists.linaro.org" <lkft-triage@lists.linaro.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Carlos Hernandez <ceh@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Subject: Re: TI: X15 the connected SSD is not detected on Linux next 20221006
- tag
-Message-ID: <20221206210434.wdttz5aj7ipzsvcy@mobilestation>
-References: <CADYN=9LrKHRNMON3GA4piDvWeSWTASQ1u2=D30rXFdvo1L18bg@mail.gmail.com>
- <20221017155246.zxal2cfehjgaajcu@mobilestation>
- <CA+G9fYtYetV5sZVD14WkZxCE_tgTC4VVKm8BcBw5_NwXD6U=Sw@mail.gmail.com>
- <Y4cqcTRcni5H7UAU@x1-carbon>
- <CADYN=9KKGBXn-YkiiFxsUzsanTALbDV1c+tB0oUQPouE1idnuQ@mail.gmail.com>
- <20221205011105.4do4trbytq4bfw5b@mobilestation>
- <98670e23-6553-4788-8662-9403c480af82@app.fastmail.com>
- <f440a8ff-7657-c1be-e733-4ad69b6b7b0b@opensource.wdc.com>
- <20221206084637.olaflvqmxwoo467a@mobilestation>
- <fa2bc2b9-d74a-51a3-cb5f-80d04e145b27@opensource.wdc.com>
+        Tue, 06 Dec 2022 13:05:44 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Matus Jokay <matus.jokay@stuba.sk>
+Subject: [PATCH bpf-next] bpf: Don't use rcu_users to refcount in task kfuncs
+Date:   Tue,  6 Dec 2022 15:05:38 -0600
+Message-Id: <20221206210538.597606-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fa2bc2b9-d74a-51a3-cb5f-80d04e145b27@opensource.wdc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 06:12:48PM +0900, Damien Le Moal wrote:
-> On 12/6/22 17:46, Serge Semin wrote:
-> > On Mon, Dec 05, 2022 at 10:24:22PM +0900, Damien Le Moal wrote:
-> >> On 12/5/22 19:08, Arnd Bergmann wrote:
-> >>> On Mon, Dec 5, 2022, at 02:11, Serge Semin wrote:
-> >>>> On Thu, Dec 01, 2022 at 12:48:32PM +0100, Anders Roxell wrote:
-> >>>
-> >>>>>
-> >>>>>   for (i = 0; i < hpriv->n_clks; i++) {
-> >>>>> - if (!strcmp(hpriv->clks[i].id, con_id))
-> >>>>> + if (hpriv->clks && hpriv->clks[i].id &&
-> >>>>> +    !strcmp(hpriv->clks[i].id, con_id))
-> >>>>>   return hpriv->clks[i].clk;
-> >>>>>   }
-> >>>>
-> >>>> Indeed I should have taken into account that devm_clk_bulk_get_all()
-> >>>> can get unnamed clocks too. But checking the hpriv->clks pointer for
-> >>>> being not null is redundant, since the ahci_platform_get_resources()
-> >>>> procedure makes sure that the array is always allocated. At the very
-> >>>> least you shouldn't check the pointer in the loop, but can make sure
-> >>>> that the clks array is available before it.
-> >>>
-> > 
-> >>> Do you think this is otherwise the correct fix then? Any chance we
-> >>> can still get a version of it into 6.1?
-> > 
-> > I'll think of a better solution. But at this stage it seems like the
-> > best choice seeing the bindings permit having unnamed clocks
-> > specified.
-> > 
-> >>
-> >> If someone sends me a proper patch to apply, I can send a last PR for 6.1
-> >> to Linus before week end.
-> > 
-> > I'll submit the patch today. Thanks.
-> 
+A series of prior patches added some kfuncs that allow struct
+task_struct * objects to be used as kptrs. These kfuncs leveraged the
+'refcount_t rcu_users' field of the task for performing refcounting.
+This field was used instead of 'refcount_t usage', as we wanted to
+leverage the safety provided by RCU for ensuring a task's lifetime.
 
-> Anders just posted one. Can you review it please ?
+A struct task_struct is refcounted by two different refcount_t fields:
 
-Done. Thanks.
+1. p->usage:     The "true" refcount field which task lifetime. The
+		 task is freed as soon as this refcount drops to 0.
 
--Serge(y)
+2. p->rcu_users: An "RCU users" refcount field which is statically
+		 initialized to 2, and is co-located in a union with
+		 a struct rcu_head field (p->rcu). p->rcu_users
+		 essentially encapsulates a single p->usage
+		 refcount, and when p->rcu_users goes to 0, an RCU
+		 callback is scheduled on the struct rcu_head which
+		 decrements the p->usage refcount.
 
-> 
-> > 
-> > -Serge(y)
-> > 
-> >>
-> >>
-> >>>
-> >>>      Arnd
-> >>
-> >> -- 
-> >> Damien Le Moal
-> >> Western Digital Research
-> >>
-> 
-> -- 
-> Damien Le Moal
-> Western Digital Research
-> 
+Our logic was that by using p->rcu_users, we would be able to use RCU to
+safely issue refcount_inc_not_zero() a task's rcu_users field to
+determine if a task could still be acquired, or was exiting.
+Unfortunately, this does not work due to p->rcu_users and p->rcu sharing
+a union. When p->rcu_users goes to 0, an RCU callback is scheduled to
+drop a single p->usage refcount, and because the fields share a union,
+the refcount immediately becomes nonzero again after the callback is
+scheduled.
+
+If we were to split the fields out of the union, this wouldn't be a
+problem. Doing so should also be rather non-controversial, as there are
+a number of places in struct task_struct that have padding which we
+could use to avoid growing the structure by splitting up the fields.
+
+For now, so as to fix the kfuncs to be correct, this patch instead
+updates bpf_task_acquire() and bpf_task_release() to use the p->usage
+field for refcounting via the get_task_struct() and put_task_struct()
+functions. Because we can no longer rely on RCU, the change also guts
+the bpf_task_acquire_not_zero() and bpf_task_kptr_get() functions
+pending a resolution on the above problem.
+
+In addition, the task fixes the kfunc and rcu_read_lock selftests to
+expect this new behavior.
+
+Fixes: 90660309b0c7 ("bpf: Add kfuncs for storing struct task_struct * as a kptr")
+Fixes: fca1aa75518c ("bpf: Handle MEM_RCU type properly")
+Reported-by: Matus Jokay <matus.jokay@stuba.sk>
+Signed-off-by: David Vernet <void@manifault.com>
+---
+ kernel/bpf/helpers.c                          | 76 ++++++++++++-------
+ .../selftests/bpf/progs/rcu_read_lock.c       |  5 ++
+ .../selftests/bpf/progs/task_kfunc_success.c  |  9 ++-
+ 3 files changed, 60 insertions(+), 30 deletions(-)
+
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index cca642358e80..284b3ffdbe48 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -1833,8 +1833,7 @@ struct bpf_list_node *bpf_list_pop_back(struct bpf_list_head *head)
+  */
+ struct task_struct *bpf_task_acquire(struct task_struct *p)
+ {
+-	refcount_inc(&p->rcu_users);
+-	return p;
++	return get_task_struct(p);
+ }
+ 
+ /**
+@@ -1845,9 +1844,48 @@ struct task_struct *bpf_task_acquire(struct task_struct *p)
+  */
+ struct task_struct *bpf_task_acquire_not_zero(struct task_struct *p)
+ {
+-	if (!refcount_inc_not_zero(&p->rcu_users))
+-		return NULL;
+-	return p;
++	/* For the time being this function returns NULL, as it's not currently
++	 * possible to safely acquire a reference to a task with RCU protection
++	 * using get_task_struct() and put_task_struct(). This is due to the
++	 * slightly odd mechanics of p->rcu_users, and how task RCU protection
++	 * works.
++	 *
++	 * A struct task_struct is refcounted by two different refcount_t
++	 * fields:
++	 *
++	 * 1. p->usage:     The "true" refcount field which tracks a task's
++	 *		    lifetime. The task is freed as soon as this
++	 *		    refcount drops to 0.
++	 *
++	 * 2. p->rcu_users: An "RCU users" refcount field which is statically
++	 *		    initialized to 2, and is co-located in a union with
++	 *		    a struct rcu_head field (p->rcu). p->rcu_users
++	 *		    essentially encapsulates a single p->usage
++	 *		    refcount, and when p->rcu_users goes to 0, an RCU
++	 *		    callback is scheduled on the struct rcu_head which
++	 *		    decrements the p->usage refcount.
++	 *
++	 * There are two important implications to this task refcounting logic
++	 * described above. The first is that
++	 * refcount_inc_not_zero(&p->rcu_users) cannot be used anywhere, as
++	 * after the refcount goes to 0, the RCU callback being scheduled will
++	 * cause the memory backing the refcount to again be nonzero due to the
++	 * fields sharing a union. The other is that we can't rely on RCU to
++	 * guarantee that a task is valid in a BPF program. This is because a
++	 * task could have already transitioned to being in the TASK_DEAD
++	 * state, had its rcu_users refcount go to 0, and its rcu callback
++	 * invoked in which it drops its single p->usage reference. At this
++	 * point the task will be freed as soon as the last p->usage reference
++	 * goes to 0, without waiting for another RCU gp to elapse. The only
++	 * way that a BPF program can guarantee that a task is valid is in this
++	 * scenario is to hold a p->usage refcount itself.
++	 *
++	 * Until we're able to resolve this issue, either by pulling
++	 * p->rcu_users and p->rcu out of the union, or by getting rid of
++	 * p->usage and just using p->rcu_users for refcounting, we'll just
++	 * return NULL here.
++	 */
++	return NULL;
+ }
+ 
+ /**
+@@ -1858,33 +1896,15 @@ struct task_struct *bpf_task_acquire_not_zero(struct task_struct *p)
+  */
+ struct task_struct *bpf_task_kptr_get(struct task_struct **pp)
+ {
+-	struct task_struct *p;
+-
+-	rcu_read_lock();
+-	p = READ_ONCE(*pp);
+-
+-	/* Another context could remove the task from the map and release it at
+-	 * any time, including after we've done the lookup above. This is safe
+-	 * because we're in an RCU read region, so the task is guaranteed to
+-	 * remain valid until at least the rcu_read_unlock() below.
++	/* We must return NULL here until we have clarity on how to properly
++	 * leverage RCU for ensuring a task's lifetime. See the comment above
++	 * in bpf_task_acquire_not_zero() for more details.
+ 	 */
+-	if (p && !refcount_inc_not_zero(&p->rcu_users))
+-		/* If the task had been removed from the map and freed as
+-		 * described above, refcount_inc_not_zero() will return false.
+-		 * The task will be freed at some point after the current RCU
+-		 * gp has ended, so just return NULL to the user.
+-		 */
+-		p = NULL;
+-	rcu_read_unlock();
+-
+-	return p;
++	return NULL;
+ }
+ 
+ /**
+  * bpf_task_release - Release the reference acquired on a struct task_struct *.
+- * If this kfunc is invoked in an RCU read region, the task_struct is
+- * guaranteed to not be freed until the current grace period has ended, even if
+- * its refcount drops to 0.
+  * @p: The task on which a reference is being released.
+  */
+ void bpf_task_release(struct task_struct *p)
+@@ -1892,7 +1912,7 @@ void bpf_task_release(struct task_struct *p)
+ 	if (!p)
+ 		return;
+ 
+-	put_task_struct_rcu_user(p);
++	put_task_struct(p);
+ }
+ 
+ #ifdef CONFIG_CGROUPS
+diff --git a/tools/testing/selftests/bpf/progs/rcu_read_lock.c b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+index cf06a34fcb02..125f908024d3 100644
+--- a/tools/testing/selftests/bpf/progs/rcu_read_lock.c
++++ b/tools/testing/selftests/bpf/progs/rcu_read_lock.c
+@@ -161,6 +161,11 @@ int task_acquire(void *ctx)
+ 	/* acquire a reference which can be used outside rcu read lock region */
+ 	gparent = bpf_task_acquire_not_zero(gparent);
+ 	if (!gparent)
++		/* Until we resolve the issues with using task->rcu_users, we
++		 * expect bpf_task_acquire_not_zero() to return a NULL task.
++		 * See the comment at the definition of
++		 * bpf_task_acquire_not_zero() for more details.
++		 */
+ 		goto out;
+ 
+ 	(void)bpf_task_storage_get(&map_a, gparent, 0, 0);
+diff --git a/tools/testing/selftests/bpf/progs/task_kfunc_success.c b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+index 60c7ead41cfc..9f359cfd29e7 100644
+--- a/tools/testing/selftests/bpf/progs/task_kfunc_success.c
++++ b/tools/testing/selftests/bpf/progs/task_kfunc_success.c
+@@ -123,12 +123,17 @@ int BPF_PROG(test_task_get_release, struct task_struct *task, u64 clone_flags)
+ 	}
+ 
+ 	kptr = bpf_task_kptr_get(&v->task);
+-	if (!kptr) {
++	if (kptr) {
++		/* Until we resolve the issues with using task->rcu_users, we
++		 * expect bpf_task_kptr_get() to return a NULL task. See the
++		 * comment at the definition of bpf_task_acquire_not_zero() for
++		 * more details.
++		 */
++		bpf_task_release(kptr);
+ 		err = 3;
+ 		return 0;
+ 	}
+ 
+-	bpf_task_release(kptr);
+ 
+ 	return 0;
+ }
+-- 
+2.38.1
+
