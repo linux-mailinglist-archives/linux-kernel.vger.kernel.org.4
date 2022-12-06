@@ -2,261 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38A7644A8B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDD3644A91
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229520AbiLFRoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42460 "EHLO
+        id S229445AbiLFRpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:45:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbiLFRoJ (ORCPT
+        with ESMTP id S229477AbiLFRph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:44:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486DE615B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:43:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670348596;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oayfLbg+4e6JFyZkj40MnFWp6cxM7nCSzst762sbKxw=;
-        b=TLCBU8j9pRFzEg7u0slyFKDTC/UYarruIe4jvlamr/rLuud/H/nQNVSiCrmw+sDbO2vH0c
-        tGFmC4Zlo6AuPVvkTHS9wH1d8fQIoTaT7U0HtNikill6esdZefQOOqkYnbZyOU0n6CMRRz
-        7ZU6q6atJSRi38gyemfYUjH/VPOFSqw=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-94-rK3UMTefPe2ju6JBMnptrQ-1; Tue, 06 Dec 2022 12:43:15 -0500
-X-MC-Unique: rK3UMTefPe2ju6JBMnptrQ-1
-Received: by mail-qt1-f200.google.com with SMTP id fw8-20020a05622a4a8800b003a64f82fe73so35657512qtb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:43:15 -0800 (PST)
+        Tue, 6 Dec 2022 12:45:37 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E165237208
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:45:36 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so18698439pjs.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:45:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QnXuCMBJLGvaQ8GD/oAIn2hbJLbNYlY5oG7JUQ6WrZs=;
+        b=Car3FCxir2IE4cCpDcdBvjDJODCtqU/FMnhPBQ2ZChw6LybsvXbSbeYIgCEpqS8zBk
+         O/bxcfu3V4iJBezsRvo6tIt26lzNsUEkzolUMvX8tnvcPUJZpNENQ3KuIYGEltvAbESe
+         kGByCtOcbf6ztbG7j7qI6gqmxiGXN2o8iBeVpgxkU/yXsZgsWcESWVqEhLhg0gCMgVFo
+         GpMQ9XoKlYkEhnvfY6KNa+LUfgqA1AyKMhMA7rnAObIHx2v/TzBYVoj3TobWg81LDXTs
+         epubBmQA9sYHkjid0ofIfDBnrGw4+sDXl/t30F4bxM97+yppivRJV0AgegKWVHoEKA1X
+         X+nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oayfLbg+4e6JFyZkj40MnFWp6cxM7nCSzst762sbKxw=;
-        b=Jkem0Opa+cOlw6a3nwgbhfsltRE/9u6VaJRi21MN+7twb2ziaggzN1mMDBPr4oR+40
-         QDCbYYlLkezkoobP7ZNu4bOanUgQTrqOjt7q3kH5nVpSPExK5x3g2o/yUMkbgbHQ11RO
-         WuJreANDciiCGbZT0C4PzkBSEFwqZH8w99Up9ftRH/ndqyiyv70JGf1Z2SrrHHX9iFfz
-         SzZxpr69sleiM4a1f/cqOTpCMJCXJlDRT82QdFMT4WjZUw3OSjFTu5K4dede181qswGm
-         Ao4+c9igB6gvbOtLbLiP7o+QBAZK1Jxq8nYJEa9ot+FTmPFEWvsh3fGYu+0xEw2yE8/J
-         F8tQ==
-X-Gm-Message-State: ANoB5plXW8NaHL8JKiWdviB8SMhHGxHJ0qlYwxLISBHGo9A64Jn5FnPm
-        0JlLlDDNT8tlA8BunsBKLcbtiKOnwehp3UkbQTaPpmc/rqBzG7Zq5oPjv4Wz2qTfDo94QXalqdb
-        5bOFs/2rwVb50GpqLSC0BGEh9
-X-Received: by 2002:a05:6214:1023:b0:4c6:a1fd:9b25 with SMTP id k3-20020a056214102300b004c6a1fd9b25mr66139229qvr.128.1670348594645;
-        Tue, 06 Dec 2022 09:43:14 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Jw0TTfKXJr084q00xTnBdn0ksQGqBzCGmdwbnxy3yvDHP1mZgwQiGiUC9lRigFIMZkPeyQg==
-X-Received: by 2002:a05:6214:1023:b0:4c6:a1fd:9b25 with SMTP id k3-20020a056214102300b004c6a1fd9b25mr66139211qvr.128.1670348594361;
-        Tue, 06 Dec 2022 09:43:14 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id x16-20020ac87a90000000b003a5fb681ae7sm11878656qtr.3.2022.12.06.09.43.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 09:43:13 -0800 (PST)
-Date:   Tue, 6 Dec 2022 12:43:12 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 09/10] mm/hugetlb: Make page_vma_mapped_walk() safe to
- pmd unshare
-Message-ID: <Y49/MPNKib6eDfqk@x1n>
-References: <20221129193526.3588187-1-peterx@redhat.com>
- <20221129193526.3588187-10-peterx@redhat.com>
- <Y46EMlDLCThbrl+E@monkey>
- <Y493aNfcK7n7s1B1@monkey>
- <Y49+aYHTy/UwV7JQ@x1n>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QnXuCMBJLGvaQ8GD/oAIn2hbJLbNYlY5oG7JUQ6WrZs=;
+        b=Ytz8LS98QnPSzaSh28unUf5YgzNSzaduAk3Ei/WxsX4gENNJbVhmqLvgqF3M/vuhCI
+         EsSl48g4kyBFfSHRSbug7/MZsiUwtFoog1TAcJNH2BwErhy6bGq73MZX9nloaQP6Vmks
+         7do6/cSPdwFCraVzzUKzN09ta8ph52ASqgCFAT1oeuGnaNUkqSTIIjoVQIr37msnFnOv
+         8i/KOngOUC6D1oygdKIaCaLwOw4sQXEm4mcsQ26+PDZFGoYKCusleYH4SW7jcCIHMwms
+         acHrR1PZpbxmv9mftGE1Qk8yJauWLntKRwTfxPCNgC+hjK3QLNZRabwCeLZQ5kjvY0ON
+         hjhA==
+X-Gm-Message-State: ANoB5pn+c2vvi5zj6qWhEMEFLH5F3jklyHryOBkAZyprMXsL2+WmLMd8
+        vZyc8JA/Gpr7KDqlv+3UKZoRsA==
+X-Google-Smtp-Source: AA0mqf63M5QudRaFUyWkka3wLk0yj7w6tH3rMCRjclZAEfsaj6iitdAM4YgOb8a9ZCk928yrZDL1Ig==
+X-Received: by 2002:a05:6a20:441e:b0:ac:16ae:1082 with SMTP id ce30-20020a056a20441e00b000ac16ae1082mr795935pzb.32.1670348736388;
+        Tue, 06 Dec 2022 09:45:36 -0800 (PST)
+Received: from ?IPV6:2405:201:d02f:d899:2028:7962:400:43b6? ([2405:201:d02f:d899:2028:7962:400:43b6])
+        by smtp.gmail.com with ESMTPSA id s1-20020a635241000000b0046ff3634a78sm10143474pgl.71.2022.12.06.09.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 09:45:35 -0800 (PST)
+Message-ID: <77c5a9e2-ce25-df19-1eba-ba4808bbeb9d@9elements.com>
+Date:   Tue, 6 Dec 2022 23:15:31 +0530
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="e5yzZCdrBMEPRle2"
-Content-Disposition: inline
-In-Reply-To: <Y49+aYHTy/UwV7JQ@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v8 4/4] hwmon: (max6639) Add pwm support
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        linux-pwm@vger.kernel.org, kernel@pengutronix.de
+References: <20221129161134.2672474-1-Naresh.Solanki@9elements.com>
+ <20221129161134.2672474-5-Naresh.Solanki@9elements.com>
+ <20221129163427.dxnqfay6ur6mvivu@pengutronix.de>
+ <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
+Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <d2d54a34-56dc-df83-5fde-ad0a9a73a9e0@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Guenter, Rob
 
---e5yzZCdrBMEPRle2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-
-On Tue, Dec 06, 2022 at 12:39:53PM -0500, Peter Xu wrote:
-> On Tue, Dec 06, 2022 at 09:10:00AM -0800, Mike Kravetz wrote:
-> > On 12/05/22 15:52, Mike Kravetz wrote:
-> > > On 11/29/22 14:35, Peter Xu wrote:
-> > > > Since page_vma_mapped_walk() walks the pgtable, it needs the vma lock
-> > > > to make sure the pgtable page will not be freed concurrently.
-> > > > 
-> > > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > > ---
-> > > >  include/linux/rmap.h | 4 ++++
-> > > >  mm/page_vma_mapped.c | 5 ++++-
-> > > >  2 files changed, 8 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/include/linux/rmap.h b/include/linux/rmap.h
-> > > > index bd3504d11b15..a50d18bb86aa 100644
-> > > > --- a/include/linux/rmap.h
-> > > > +++ b/include/linux/rmap.h
-> > > > @@ -13,6 +13,7 @@
-> > > >  #include <linux/highmem.h>
-> > > >  #include <linux/pagemap.h>
-> > > >  #include <linux/memremap.h>
-> > > > +#include <linux/hugetlb.h>
-> > > >  
-> > > >  /*
-> > > >   * The anon_vma heads a list of private "related" vmas, to scan if
-> > > > @@ -408,6 +409,9 @@ static inline void page_vma_mapped_walk_done(struct page_vma_mapped_walk *pvmw)
-> > > >  		pte_unmap(pvmw->pte);
-> > > >  	if (pvmw->ptl)
-> > > >  		spin_unlock(pvmw->ptl);
-> > > > +	/* This needs to be after unlock of the spinlock */
-> > > > +	if (is_vm_hugetlb_page(pvmw->vma))
-> > > > +		hugetlb_vma_unlock_read(pvmw->vma);
-> > > >  }
-> > > >  
-> > > >  bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw);
-> > > > diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-> > > > index 93e13fc17d3c..f94ec78b54ff 100644
-> > > > --- a/mm/page_vma_mapped.c
-> > > > +++ b/mm/page_vma_mapped.c
-> > > > @@ -169,10 +169,13 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
-> > > >  		if (pvmw->pte)
-> > > >  			return not_found(pvmw);
-> > > >  
-> > > > +		hugetlb_vma_lock_read(vma);
-> > > >  		/* when pud is not present, pte will be NULL */
-> > > >  		pvmw->pte = huge_pte_offset(mm, pvmw->address, size);
-> > > > -		if (!pvmw->pte)
-> > > > +		if (!pvmw->pte) {
-> > > > +			hugetlb_vma_unlock_read(vma);
-> > > >  			return false;
-> > > > +		}
-> > > >  
-> > > >  		pvmw->ptl = huge_pte_lock(hstate, mm, pvmw->pte);
-> > > >  		if (!check_pte(pvmw))
-> > > 
-> > > I think this is going to cause try_to_unmap() to always fail for hugetlb
-> > > shared pages.  See try_to_unmap_one:
-> > > 
-> > > 	while (page_vma_mapped_walk(&pvmw)) {
-> > > 		...
-> > > 		if (folio_test_hugetlb(folio)) {
-> > > 			...
-> > > 			/*
-> > >                          * To call huge_pmd_unshare, i_mmap_rwsem must be
-> > >                          * held in write mode.  Caller needs to explicitly
-> > >                          * do this outside rmap routines.
-> > >                          *
-> > >                          * We also must hold hugetlb vma_lock in write mode.
-> > >                          * Lock order dictates acquiring vma_lock BEFORE
-> > >                          * i_mmap_rwsem.  We can only try lock here and fail
-> > >                          * if unsuccessful.
-> > >                          */
-> > >                         if (!anon) {
-> > >                                 VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
-> > >                                 if (!hugetlb_vma_trylock_write(vma)) {
-> > >                                         page_vma_mapped_walk_done(&pvmw);
-> > >                                         ret = false;
-> > > 				}
-> > > 
-> > > 
-> > > Can not think of a great solution right now.
-> > 
-> > Thought of this last night ...
-> > 
-> > Perhaps we do not need vma_lock in this code path (not sure about all
-> > page_vma_mapped_walk calls).  Why?  We already hold i_mmap_rwsem.
+On 29-11-2022 10:11 pm, Guenter Roeck wrote:
+> On 11/29/22 08:34, Uwe Kleine-König wrote:
+>> On Tue, Nov 29, 2022 at 05:11:34PM +0100, Naresh Solanki wrote:
+>>> Add pwm support for max6639. Also configure pwm fan speed based on pwm
+>>> provided in DT.
+>>
+>> Did you do anything to resolve the questions I had in reply to v5? If
+>> yes, I must have missed it.
+>>
 > 
-> Exactly.  The only concern is when it's not in a rmap.
+> I don't see a response to my concerns either, especially regarding fan mode
+> (dc vs. pwm) in the bindings. For that reason, I won't even look at the 
+> series.
+Best I can think of regulator with voltage control. Because as per my 
+understanding, DC control fan essentially control DC voltage on negative 
+pin of fan.
+
+
+Regards,
+Naresh
 > 
-> I'm actually preparing something that adds a new flag to PVMW, like:
+> Guenter
 > 
-> #define PVMW_HUGETLB_NEEDS_LOCK	(1 << 2)
+>> Note that maintainer time is scarce and with sending new versions of a
+>> patch with no sign that you improved in the aspects that were critized
+>> before, you're burning that scarce time and loosing the good will of the
+>> responsible maintainers.
+>>
+>> Best regards
+>> Uwe
+>>
 > 
-> But maybe we don't need that at all, since I had a closer look the only
-> outliers of not using a rmap is:
-> 
-> __replace_page
-> write_protect_page
-> 
-> I'm pretty sure ksm doesn't have hugetlb involved, then the other one is
-> uprobe (uprobe_write_opcode).  I think it's the same.  If it's true, we can
-> simply drop this patch.  Then we also have hugetlb_walk and the lock checks
-> there guarantee that we're safe anyways.
-> 
-> Potentially we can document this fact, which I also attached a comment
-> patch just for it to be appended to the end of the patchset.
-> 
-> Mike, let me know what do you think.
-> 
-> Andrew, if this patch to be dropped then the last patch may not cleanly
-> apply.  Let me know if you want a full repost of the things.
-
-The document patch that can be appended to the end of this series attached.
-I referenced hugetlb_walk() so it needs to be the last patch.
-
--- 
-Peter Xu
-
---e5yzZCdrBMEPRle2
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-mm-hugetlb-Document-why-page_vma_mapped_walk-is-safe.patch"
-
-From 754c2180804e9e86accf131573cbd956b8c62829 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Tue, 6 Dec 2022 12:36:04 -0500
-Subject: [PATCH] mm/hugetlb: Document why page_vma_mapped_walk() is safe to
- walk
-Content-type: text/plain
-
-Taking vma lock here is not needed for now because all potential hugetlb
-walkers here should have i_mmap_rwsem held.  Document the fact.
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- mm/page_vma_mapped.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index e97b2e23bd28..2e59a0419d22 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -168,8 +168,14 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 		/* The only possible mapping was handled on last iteration */
- 		if (pvmw->pte)
- 			return not_found(pvmw);
--
--		/* when pud is not present, pte will be NULL */
-+		/*
-+		 * NOTE: we don't need explicit lock here to walk the
-+		 * hugetlb pgtable because either (1) potential callers of
-+		 * hugetlb pvmw currently holds i_mmap_rwsem, or (2) the
-+		 * caller will not walk a hugetlb vma (e.g. ksm or uprobe).
-+		 * When one day this rule breaks, one will get a warning
-+		 * in hugetlb_walk(), and then we'll figure out what to do.
-+		 */
- 		pvmw->pte = hugetlb_walk(vma, pvmw->address, size);
- 		if (!pvmw->pte)
- 			return false;
--- 
-2.37.3
-
-
---e5yzZCdrBMEPRle2--
-
