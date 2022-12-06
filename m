@@ -2,132 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B18D644E1C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAC4644E1F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLFVmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37994 "EHLO
+        id S229728AbiLFVme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLFVmM (ORCPT
+        with ESMTP id S229692AbiLFVmb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:42:12 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B374874A;
-        Tue,  6 Dec 2022 13:42:11 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3ADB7B81B8A;
-        Tue,  6 Dec 2022 21:42:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC973C433D7;
-        Tue,  6 Dec 2022 21:42:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670362928;
-        bh=wxhUycLDzdhggpxStShb2U5NNeKt45tBmidI7CWLoqU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=iKbYxVGuNZ9Q8dCml8SpnNaWJnOFPHb4fBigyPNA1v+AL5jOfscJx8pwHUh2TivJZ
-         AULQl7iQrHAcrZNUAsXXd2Wgg63QenYakcefYiePya7MeuuhvvVnwVHwKu7WN+imM1
-         q5ykM/H6r0z6jN7a5DDfpJ2Ku29V+nYB59wAOekwvo5j5G0yzLZNYH9EvjzcrnoYT3
-         jSkJyPOaeb2ABu/V+CWlE3hBrh8pb8yyaqUo1UZiNuQgOcpVyje2Lfj7A27V+PZrCG
-         XOlXzUpQOEcaX21lCFMUemTMrWUQD0SRkhyy9RGwNUf5v/cZ3/MN/bVinjDfFVfo5r
-         2vHT7nQCB1Kcg==
-Date:   Tue, 6 Dec 2022 15:42:07 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Zhuo Chen <chenzhuo.1@bytedance.com>
-Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
-        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
-        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
-        james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, martin.petersen@oracle.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH v3 8/9] PCI/ERR: Clear fatal error status when
- pci_channel_io_frozen
-Message-ID: <20221206214207.GA1368357@bhelgaas>
+        Tue, 6 Dec 2022 16:42:31 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6333E48761;
+        Tue,  6 Dec 2022 13:42:30 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id w23so15223774ply.12;
+        Tue, 06 Dec 2022 13:42:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CjJnMDyt/NNp+Ep12ubSTLl5hV1ShtEgJ1DJNEKSYuI=;
+        b=RMNnhQfUcUNpgEo82iPLWj7vrC0aDD0MjKOfj9jlvUlGQUaaOAZ6xXcyJ3Kv50bFJm
+         YSknEoJh7BNPJ5ti/NGZDQa+2HqwE1QPw68hCMaIIL2WG37/mDgj+Ezv9vBnjyob4HhX
+         t/5xVnoYmlAMNGc6qXAyBQZA8hCpxrBGhIaYxjWpj2IGRpPsNNq/7/wV+ymZQEQgQ7LS
+         sRGc6CLzPTK9rK+8hsicPVolWrpUdQnA07lDdS9B9Kr7aH/rLloZf4SM2cCPO1E46tq/
+         /bKzbLmd+Hwy6qbohxBIbvzbAQEEhaUcQkQMxwDcwUh14SNwjLQFJQ0s/JutIi2SCff8
+         u2Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CjJnMDyt/NNp+Ep12ubSTLl5hV1ShtEgJ1DJNEKSYuI=;
+        b=iwYvLvRIkWAandsGExtaN2mTUKsOwjgiX/hQtyE4Q5v1/F44QlQZ1csNLGhq5T2hK6
+         vtc1dIQlqFpdV2/wNeUwSrIZXH4ZSQYDc5faXENr31IDcuZzvaGsy/ppsv+XsxxqtSg7
+         rApxrMQ5oAGDJtFkFOnivUuVuiZmidwOiUAR98nDH2Vh6mqOiyoMirti7YSk4tzWF7GL
+         iAbpaEHJuz+YWbEgOed+ghohwmmGYcFSChYTnLL1shNC5tpLKvyXwEwqy0QAen3JCYe4
+         zDCNo8R3m+I3CbJHncy7JXOdeaAUrhYbjDUhqvmOz0WD0tx+LhN674SAeFQkhPuqEQgt
+         8p7g==
+X-Gm-Message-State: ANoB5pngv8sC257au8CLSECL4kvsKQIR0gd3M6r3J+sfQEzWBWM2qG2U
+        7QUAF2HSQ5uD1AXc5avDIA8=
+X-Google-Smtp-Source: AA0mqf6YblcoDIEHEcWbGxV56wWXrOBhqjA+DBm4Qygg6pgXR/A8xoeDoVq2ot7AE0t3YnGAePbxag==
+X-Received: by 2002:a17:90b:35cb:b0:213:22d:b2e2 with SMTP id nb11-20020a17090b35cb00b00213022db2e2mr40628251pjb.148.1670362949601;
+        Tue, 06 Dec 2022 13:42:29 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:841a])
+        by smtp.gmail.com with ESMTPSA id s24-20020a17090ad49800b00210125b789dsm11272853pju.54.2022.12.06.13.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 13:42:29 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Dec 2022 11:42:27 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Barret Rhoden <brho@google.com>
+Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, pjt@google.com, derkling@google.com,
+        haoluo@google.com, dvernet@meta.com, dschatzberg@meta.com,
+        dskarlat@cs.cmu.edu, riel@surriel.com,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y4+3Q2FnG1bsGH55@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
+ <8d146099-a12a-c5a1-4829-dec95497fdca@google.com>
+ <Y4o9gV2v8eyI1arK@slm.duckdns.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220928105946.12469-9-chenzhuo.1@bytedance.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y4o9gV2v8eyI1arK@slm.duckdns.org>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhuo,
+Hello, Barret.
 
-On Wed, Sep 28, 2022 at 06:59:45PM +0800, Zhuo Chen wrote:
-> When state is pci_channel_io_frozen in pcie_do_recovery(), the
-> severity is fatal and fatal error status should be cleared.
-> So add pci_aer_clear_fatal_status().
+On Fri, Dec 02, 2022 at 08:01:37AM -1000, Tejun Heo wrote:
+> > you still end up grabbing both locks, but just not at the same time.
 > 
-> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
-> ---
->  drivers/pci/pcie/err.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> Yeah, this probably would look better than the current double lock dancing,
+> especially in the finish_dispatch() path.
+>
+> > plus, task_rq_lock() takes the guesswork out of whether you're getting p's
+> > rq lock or not.  it looks like you're using the holding_cpu to handle the
+> > race where p moves cpus after you read task_rq(p) but before you lock that
+> > task_rq.  maybe you can drop the whole concept of the holding_cpu?
 > 
-> diff --git a/drivers/pci/pcie/err.c b/drivers/pci/pcie/err.c
-> index f80b21244ef1..b46f1d36c090 100644
-> --- a/drivers/pci/pcie/err.c
-> +++ b/drivers/pci/pcie/err.c
-> @@ -241,7 +241,10 @@ pci_ers_result_t pcie_do_recovery(struct pci_dev *dev,
->  	pci_walk_bridge(bridge, report_resume, &status);
->  
->  	pcie_clear_device_status(dev);
-> -	pci_aer_clear_nonfatal_status(dev);
-> +	if (state == pci_channel_io_frozen)
-> +		pci_aer_clear_fatal_status(dev);
-> +	else
-> +		pci_aer_clear_nonfatal_status(dev);
+> ->holding_cpu is there to basically detect intervening dequeues, so if we
+> lock them out with TASK_ON_RQ_MIGRATING, we might be able to drop it. I need
+> to look into it more tho. Things get pretty subtle around there, so I could
+> easily be missing something. I'll try this and let you know how it goes.
 
-I'm confused.  It seems like we certainly need to clear fatal errors
-after they occur *somewhere*, and if we don't, surely this would be a
-very obvious issue.  But you didn't mention this being a bug fix, so I
-assume it's more of a cleanup.
+I tried both and I'm pretty ambivalent. The problem is that the
+finish_dispatch() path can't use TASK_ON_RQ_MIGRATING the way the consume
+path does because the dispatch path isn't starting with the task locked. The
+only claim it has to the task is through p->scx.ops_state.
 
-If it *is* a bug fix, please say that and give a hint about what the
-bug looks like, e.g., what sort of messages a user might see.
+It can be argued that getting rid of double locking is still nice but given
+that holding_cpu is needed anyway and can play the same role, I'm not sure
+how attractive it is. I suppose we can go either way.
 
-If it's not a bug fix, I don't understand how AER fatal errors get
-cleared today.  The PCI_ERR_UNCOR_STATUS bits are sticky, so they're
-not cleared by a reset.  In the current tree, these are the only
-places I see that clear AER fatal errors:
+Thanks.
 
-  pci_init_capabilities
-    pci_aer_init         # once at device enumeration
-      pci_aer_clear_status
-        pci_aer_raw_clear_status
-          pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status)
-
-  aer_probe
-    aer_enable_rootport  # once at Root Port enumeration
-      pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32)
-
-  dpc_process_error      # after DPC triggered
-    pci_aer_clear_fatal_status
-      pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status)
-
-  edr_handle_event       # after EDR event
-    pci_aer_raw_clear_status
-      pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status)
-
-  pci_restore_state      # after reset or PM sleep/resume
-    pci_aer_clear_status
-      pci_aer_raw_clear_status
-        pci_write_config_dword(dev, aer + PCI_ERR_UNCOR_STATUS, status)
-
-The only one that could clear errors after an AER error (not DPC or
-EDR), would be the pci_restore_state() in the reset path.  If the
-current code relies on that, I'd say that's a pretty non-obvious
-dependency.
-
->  	pci_info(bridge, "device recovery successful\n");
->  	return status;
-> -- 
-> 2.30.1 (Apple Git-130)
-> 
+-- 
+tejun
