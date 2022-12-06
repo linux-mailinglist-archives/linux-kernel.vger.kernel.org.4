@@ -2,124 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36E8F643E8E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:28:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1100643E93
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:29:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233467AbiLFI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:28:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S233619AbiLFI3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:29:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbiLFI2Y (ORCPT
+        with ESMTP id S233178AbiLFI3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:28:24 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9E026D5;
-        Tue,  6 Dec 2022 00:28:22 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 6 Dec 2022 03:29:18 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6426315;
+        Tue,  6 Dec 2022 00:29:17 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id ABB606602A07;
-        Tue,  6 Dec 2022 08:28:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670315300;
-        bh=CJWvdWCG3UFO2zCYQg9f+JXTw5Zuom1JWkEBupeaBNg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jW/2pSOn+W99aXXAsBjsNQg7P0eX9KfqAybhFWZAYfIRV8DJIR9qy+6+7wUhjsakD
-         gyq60uUYayeTcJCj+a10ztt2yMiHRehATYkW8ntYzYf8iHDal5HmDfBtxKI2nr1h8Z
-         Iu+8wUaaaR6/M61k2nNhio55fQmvFeGNW3AtQaCABnlCMOLXusuIyUzWC6cRlr3M2A
-         ESJ0fLMcCyqCkhaFGf/PvV2EuuoJ3pnNfNhiwTXFiGoMgcgO/U57Rt77oIEKpJPoUX
-         VhyZTmRmdfL6dUdDIK7FmZs1eqwOXojZQ4B0q1E77/jW/QZyLIrRq/wgQ7NrQ43x50
-         UTj6qENA3OQmA==
-Message-ID: <adc67800-beae-2f42-9cc7-5f041e390b61@collabora.com>
-Date:   Tue, 6 Dec 2022 09:28:16 +0100
+        by mail.3ffe.de (Postfix) with ESMTPSA id 54BAB125C;
+        Tue,  6 Dec 2022 09:29:15 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1670315355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6x7SqeU7DjKi4snpIda9gKwYIWf96Kgh9HxDpXGjY7s=;
+        b=IF4UQKpEORyOoN+79mglJzGWZAK8gvJOd1Np/Ao/oIgdB0VPjWuwumcaI7MBzAOMQ8udYU
+        1AuyCoAIBg84DTLguD7+59ZR2MONJ/HxDtPifciKYixccbeoctBB7Q3QUVv945WGErVU7T
+        EbK+hGg5Dfh1WyljNINJ47R1bfeJZcpIwg3DPi1wu7x+dTr2p+IN5Se2S/xI0y5P/LbVj8
+        SvdPrsgsB4mSHURR0M2hyWGNPDPMyPT3MntgVHEb17XU+B0u+XXMh4z7jRZUG+cqmmtY9c
+        AQjixZ1+ns7sG/OJ5DrwfOZPQmhph7r+7EfstzRwMW0XpatmQ2QKUusVKr8tuA==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/2] thermal: mediatek: add support for MT7986 and
- MT7981
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Steven Liu <steven.liu@mediatek.com>,
-        Henry Yen <Henry.Yen@mediatek.com>,
-        Amjad Ouled-Ameur <aouledameur@baylibre.com>
-References: <Y4dYazyXF02eRGC5@makrotopia.org>
- <0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com>
- <Y44tdASIQ2DpL9re@makrotopia.org>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <Y44tdASIQ2DpL9re@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Tue, 06 Dec 2022 09:29:15 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
+ GPY2xx bindings
+In-Reply-To: <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-4-michael@walle.cc>
+ <20221205212924.GA2638223-robh@kernel.org>
+ <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 05/12/22 18:42, Daniel Golle ha scritto:
-> Hi Angelo,
-> 
-> On Thu, Dec 01, 2022 at 02:24:17PM +0100, AngeloGioacchino Del Regno wrote:
->> Il 30/11/22 14:19, Daniel Golle ha scritto:
->>> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
->>> Brings code to assign values from efuse as well as new function to
->>> convert raw temperature to millidegree celsius, as found in MediaTek's
->>> SDK sources (but cleaned up and de-duplicated)
->>>
->>> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
->>> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
->>> Reviewed-by: Henry Yen <henry.yen@mediatek.com>
+Am 2022-12-05 22:53, schrieb Michael Walle:
+> Am 2022-12-05 22:29, schrieb Rob Herring:
+>> On Fri, Dec 02, 2022 at 04:12:03PM +0100, Michael Walle wrote:
+>>> Add the device tree bindings for the MaxLinear GPY2xx PHYs.
+>>> 
+>>> Signed-off-by: Michael Walle <michael@walle.cc>
 >>> ---
->>> Changes since v1: Drop use of adc_oe field in efuse, Henry Yen confirmed
->>> its use has been dropped intentionally in MTK SDK as well.
->>>
->>>    drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
->>>    1 file changed, 119 insertions(+), 3 deletions(-)
->>>
-
-...
-
->>
->> What about optimizing this with assigning a function pointer?
->> Like that, we wouldn't check any version in there... as in that case we'd
->> simply do something like
->>
->> temp = conf->raw_to_mcelsius(mt, conf->bank...blahblah...);
->>
->> ...and this would also mean that the snippet saying "the first read of a sensor
->> often contains very high bogus temperature value [...]" would get merged in the v2
->> of raw_to_mcelsius (as that function is used only in mtk_thermal_bank_temperature).
+>>> 
+>>> Is the filename ok? I was unsure because that flag is only for the 
+>>> GPY215
+>>> for now. But it might also apply to others. Also there is no 
+>>> compatible
+>>> string, so..
+>>> 
+>>>  .../bindings/net/maxlinear,gpy2xx.yaml        | 47 
+>>> +++++++++++++++++++
+>>>  1 file changed, 47 insertions(+)
+>>>  create mode 100644 
+>>> Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>>> 
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml 
+>>> b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>>> new file mode 100644
+>>> index 000000000000..d71fa9de2b64
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>>> @@ -0,0 +1,47 @@
+>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/net/maxlinear,gpy2xx.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: MaxLinear GPY2xx PHY
+>>> +
+>>> +maintainers:
+>>> +  - Andrew Lunn <andrew@lunn.ch>
+>>> +  - Michael Walle <michael@walle.cc>
+>>> +
+>>> +allOf:
+>>> +  - $ref: ethernet-phy.yaml#
+>>> +
+>>> +properties:
+>>> +  maxlinear,use-broken-interrupts:
+>>> +    description: |
+>>> +      Interrupts are broken on some GPY2xx PHYs in that they keep 
+>>> the
+>>> +      interrupt line asserted even after the interrupt status 
+>>> register is
+>>> +      cleared. Thus it is blocking the interrupt line which is 
+>>> usually bad
+>>> +      for shared lines. By default interrupts are disabled for this 
+>>> PHY and
+>>> +      polling mode is used. If one can live with the consequences, 
+>>> this
+>>> +      property can be used to enable interrupt handling.
+>> 
+>> Just omit the interrupt property if you don't want interrupts and add 
+>> it
+>> if you do.
 > 
-> I found that Amjad Ouled-Ameur is taking care of converting that series
-> of if-else options into a function pointer allowing to easily call the
-> right raw_to_mcelsius function.
-> 
-> [PATCH v7 0/4] thermal: mediatek: Add support for MT8365 SoC
-> https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
-> 
-> Should I wait until this series is merged and then submit support
-> for MT7986 thermal on top of that?
-> 
+> How does that work together with "the device tree describes
+> the hardware and not the configuration". The interrupt line
+> is there, its just broken sometimes and thus it's disabled
+> by default for these PHY revisions/firmwares. With this
+> flag the user can say, "hey on this hardware it is not
+> relevant because we don't have shared interrupts or because
+> I know what I'm doing".
 
-Right - that may be sensible. Please coordinate with him, so that one of the two
-series actually depends on the other (and they don't conflict with each other).
+Specifically you can't do the following: Have the same device
+tree and still being able to use it with a future PHY firmware
+update/revision. Because according to your suggestion, this
+won't have the interrupt property set. With this flag you can
+have the following cases:
+  (1) the interrupt information is there and can be used in the
+      future by non-broken PHY revisions,
+  (2) broken PHYs will ignore the interrupt line
+  (3) except the system designer opts-in with this flag (because
+      maybe this is the only PHY on the interrupt line etc).
 
-I've added him to the loop.
-
-Regards,
-Angelo
-
-
+-michael
