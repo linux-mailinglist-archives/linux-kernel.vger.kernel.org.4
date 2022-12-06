@@ -2,63 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E49643D0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A7C643D0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:16:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbiLFGQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:16:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51524 "EHLO
+        id S233619AbiLFGQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:16:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiLFGP5 (ORCPT
+        with ESMTP id S233537AbiLFGQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:15:57 -0500
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C900327169;
-        Mon,  5 Dec 2022 22:15:56 -0800 (PST)
-Received: by mail-pg1-x532.google.com with SMTP id v3so12519278pgh.4;
-        Mon, 05 Dec 2022 22:15:56 -0800 (PST)
+        Tue, 6 Dec 2022 01:16:18 -0500
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F61A275D4;
+        Mon,  5 Dec 2022 22:16:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cao+GfaGrq2ECO1hr0MTI44zHM0MFwGfvfdh/iV+l9o=;
-        b=ANIjq6WCcDktRPe1ueay3wixt+JhU/DP767DDqVBVffq1j1J01LAu8298A1+Kc84X6
-         IWiMQiYbzpg1y2rlsYmUXyUaqtIlkhUKRB9mAfjZuzwBEjJxLyvQahoErlTOG5o2ee98
-         o0pa7npb3BbvNcYzOrN20P45Bw29uSOO1SVw3YPjz0Tmntd5h3xlFvyFIDx/4fxsME6E
-         Vi2Hhku8FkpJGdqzLV6pP2ddZiwHaI4zqdQTnCwVHuvhZ4IHu9xA5xtFx/m3YBevFzEK
-         bwUZYPulvssSh+9RLgEB6BFJBCsNOneXmaDRMrCwX7w6wa3IbDYpDcd4H/3hNGa2Qd7g
-         yHVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cao+GfaGrq2ECO1hr0MTI44zHM0MFwGfvfdh/iV+l9o=;
-        b=tQwZc3LV6Y3I9Y0WzApLfA4s5aZokRrX2h6zU9ed4WSF9VtRKH7E+ODD2fs38aVsS/
-         EDkUP+sW+Ky2cH6sjks8ioXpxZfuB9/iRdjxQim1ToCWedK+ytrz6ZPcLjX3qyvU2nI1
-         Y7guKdNHyDY/CQMep6BuH8OnrD4OLo3m2D3gZK06e0mbdAPv5Oq1yY3dJjOa0UQyLZYu
-         6uI8ZL6VyCCI88BKzoCpr0m6DTziwBnq3WCua0AJAtuY5xU9AReXixVK8Q0IZx+5R0fr
-         BEPWWt0Ri3eTNlGR1lEmSHYQSXjzq6j2wgRw/DmNwohLKLIiqeJ9ZTX9HzAe3aSR3x5V
-         TS4g==
-X-Gm-Message-State: ANoB5pmq0+W5Y+tsVBUirShg7YLqXfGJtz4bXfCoMzwifEMU9HWyL1Ol
-        B25lH1el5o+oprOZLe4SxZw=
-X-Google-Smtp-Source: AA0mqf51fDDfA8tYm68EG4YmthSBGmIpHHULymVB6KvmwTqLu5LaTA/sjuYrnkEPYohep97WifxOtg==
-X-Received: by 2002:a63:495e:0:b0:43c:a5cb:5d1b with SMTP id y30-20020a63495e000000b0043ca5cb5d1bmr60848658pgk.134.1670307356320;
-        Mon, 05 Dec 2022 22:15:56 -0800 (PST)
-Received: from PS-CAN-014uA51.localdomain ([58.63.247.51])
-        by smtp.googlemail.com with ESMTPSA id r13-20020aa7962d000000b00576d4d69909sm3720153pfg.8.2022.12.05.22.15.54
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Dec 2022 22:15:55 -0800 (PST)
-From:   Chen Xiao <abigwc@gmail.com>
-To:     viro@zeniv.linux.org.uk
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Chen Xiao <abigwc@gmail.com>
-Subject: [PATCH] fs: use helper function file_inode() to get inode
-Date:   Tue,  6 Dec 2022 14:15:34 +0800
-Message-Id: <1670307334-3638-1-git-send-email-abigwc@gmail.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1670307377; x=1701843377;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=F3iVR1JKaoTgXLtkX2Mixb3MKbMl1CXpDuFVhXJAPHg=;
+  b=EdLCW/dRnstNbISJBX3qFUZ2PGpTYvItciqIOP1bZve8QRRSRu38qeQg
+   URtHZM9/SYQjTeHXdQVUmRa1lTujr+jJK6z3zhCmXPLJHLCO/AKgl6k5o
+   ahhXZA8FS5sDgg18qODenhhDJRWcXKz62hgwatXVpi8DFAtxRkrrd2KTE
+   ch36F+eqamjhXNMLEOQQ711PeAmDpRlrWgH0tYJapdWyC1Px/HnYh050Z
+   jKk4mOysZe/11UbwgSB96SgoWDrbSZa6Pk+t2W0yOfHOdnP+YEUQ9yzbm
+   s0RptB/5Ln3bYTmhI75iGkDYP16uO6iMyWsQWDQ3lrJp+h6Jt1WUkYyT9
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,220,1665439200"; 
+   d="scan'208";a="27769770"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 06 Dec 2022 07:16:15 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 06 Dec 2022 07:16:15 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 06 Dec 2022 07:16:15 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1670307375; x=1701843375;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=F3iVR1JKaoTgXLtkX2Mixb3MKbMl1CXpDuFVhXJAPHg=;
+  b=oeBCqYsFYDBRLBEqFAyc2zDdFlKZYJuLGKBcFB6vWi5CyQg1f2b7AvZ+
+   8bCPx3MlSToDpbQSFNWyVs+fYRnNtdJuJ8R5UFD2NuO31PCyrGyFWooeF
+   w9TvSA+U5Er90WcRaaG9kEspJxfMFpmUw5FY7cLkVwDLdOy3+QOb70cxS
+   u7fXbN8JAzFrSryW5jQiMGsbewOrQj+APoG1GCpZZPeDKtBs62bOeVxqP
+   qENT1msGHc3kqt0ejNYIwPU6WRkbLWl411DH6yprz7KoP8+4NRHBUc/MP
+   HFCO82Eo9VHa60WalLKpCqmZYLFvdBIM5daNxAAv5eNcU5zcCbbS1C5nh
+   g==;
+X-IronPort-AV: E=Sophos;i="5.96,220,1665439200"; 
+   d="scan'208";a="27769769"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 06 Dec 2022 07:16:15 +0100
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 41117280071;
+        Tue,  6 Dec 2022 07:16:15 +0100 (CET)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Joakim Zhang <qiangqing.zhang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Greg Ungerer <gregungerer@westnet.com.au>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: fec: properly guard irq coalesce setup
+Date:   Tue, 06 Dec 2022 07:16:10 +0100
+Message-ID: <2661485.mvXUDI8C0e@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20221205204604.869853-1-linux@rasmusvillemoes.dk>
+References: <20221205204604.869853-1-linux@rasmusvillemoes.dk>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,27 +87,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 496ad9aa8ef44 ("new helper: file_inode(file)") introduced
-the helper file_inode(file) but dir_emit_dot forgot to use it.
+Am Montag, 5. Dezember 2022, 21:46:04 CET schrieb Rasmus Villemoes:
+> Prior to the Fixes: commit, the initialization code went through the
+> same fec_enet_set_coalesce() function as used by ethtool, and that
+> function correctly checks whether the current variant has support for
+> irq coalescing.
+> 
+> Now that the initialization code instead calls fec_enet_itr_coal_set()
+> directly, that call needs to be guarded by a check for the
+> FEC_QUIRK_HAS_COALESCE bit.
+> 
+> Fixes: df727d4547de (net: fec: don't reset irq coalesce settings to defaults
+> on "ip link up") Reported-by: Greg Ungerer <gregungerer@westnet.com.au>
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+>  drivers/net/ethernet/freescale/fec_main.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c
+> b/drivers/net/ethernet/freescale/fec_main.c index
+> 2ca2b61b451f..23e1a94b9ce4 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -1220,7 +1220,8 @@ fec_restart(struct net_device *ndev)
+>  		writel(0, fep->hwp + FEC_IMASK);
+> 
+>  	/* Init the interrupt coalescing */
+> -	fec_enet_itr_coal_set(ndev);
+> +	if (fep->quirks & FEC_QUIRK_HAS_COALESCE)
+> +		fec_enet_itr_coal_set(ndev);
+>  }
+> 
+>  static int fec_enet_ipc_handle_init(struct fec_enet_private *fep)
 
-Signed-off-by: Chen Xiao <abigwc@gmail.com>
----
- include/linux/fs.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm wondering if this check should be added to fec_enet_itr_coal_set() 
+instead. Right now any additional caller has to do it's own check for 
+FEC_QUIRK_HAS_COALESCE, so why not do check in fec_enet_itr_coal_set?
+But I'm okay with this change as well.
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 59ae95d..014aef9 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -3567,7 +3567,7 @@ static inline bool dir_emit(struct dir_context *ctx,
- static inline bool dir_emit_dot(struct file *file, struct dir_context *ctx)
- {
- 	return ctx->actor(ctx, ".", 1, ctx->pos,
--			  file->f_path.dentry->d_inode->i_ino, DT_DIR);
-+			  file_inode(file)->i_ino, DT_DIR);
- }
- static inline bool dir_emit_dotdot(struct file *file, struct dir_context *ctx)
- {
--- 
-1.8.3.1
+Best regards,
+Alexander
+
 
