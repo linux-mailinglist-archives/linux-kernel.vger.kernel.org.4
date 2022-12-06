@@ -2,124 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9414644240
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE9E644241
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:37:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbiLFLhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:37:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
+        id S231183AbiLFLhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235059AbiLFLhh (ORCPT
+        with ESMTP id S235045AbiLFLhc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:37:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 858A5C9;
-        Tue,  6 Dec 2022 03:37:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 173EB61684;
-        Tue,  6 Dec 2022 11:37:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF436C433B5;
-        Tue,  6 Dec 2022 11:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670326651;
-        bh=4GLFz/egUMuzv4JiXJTbKWzf5OjW9OOGiDGRCOpKNSE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=u2MC6C5N/1A+icu8L/D8T1bQAzoLVA6oq75jdTEVz8plA5I6YC0BblB4xmIKbq9Ej
-         wqdd+cvmygMcFfbmqOYhtZlUZDg/hduacQCHOXs3r94dPLvfRGN5x7X+4wtzX5pKXl
-         AC/+h7iuNWcVXSqdTVWebYo8V/rMmg68tzRDKkSs=
-Date:   Tue, 6 Dec 2022 12:37:16 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>, stable@vger.kernel.org,
-        Kamal Dasu <kdasu.kdev@gmail.com>, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 4.9 00/62] 4.9.335-rc1 review
-Message-ID: <Y48pbLT3dmA1iQPu@kroah.com>
-References: <20221205190758.073114639@linuxfoundation.org>
- <80305ea1-4d52-b1d3-e078-3c1084d96cc7@nvidia.com>
- <2bb37989-7c22-ae06-6568-8419ce57e44b@gmail.com>
- <e00f6e66-fd51-5b55-6cd1-ec9abe038022@gmail.com>
- <77fff5aa-ddd2-6bc7-f0b4-46b93e87338b@intel.com>
+        Tue, 6 Dec 2022 06:37:32 -0500
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522F3BF73;
+        Tue,  6 Dec 2022 03:37:30 -0800 (PST)
+Received: by mail-wr1-f49.google.com with SMTP id bs21so23059203wrb.4;
+        Tue, 06 Dec 2022 03:37:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2dEEPgYHWLWGN87zsbE4biUqCxTkyL0Hp4s+LmxL1OA=;
+        b=BX7ppSth1PbgamtzbcN0AJc3/Ug4pt3Jfdn6v+/AzPJi05fItfOGDcKO8MlStm73A4
+         dHfjwu39fJM2rLI2x2iADEVz4ACrnoX9Ms9420we9MIcuqFQ+sgK0ETW0ngJ9DvGiUwr
+         KKGuh0POI+u8n+iSlZHkB4tLIvr+c3uckYRHG+wA3buHKdM2dj8H5ZN/iqLRsZE268jg
+         /zZZiOgEI/xhtmZfSXd40FZlouhXbek+u55DRIdq3E+aJ0DC4JLESLAqPuNmkUyHiI6v
+         kZoR2fBsrhA//h9738zsw6XEIfcvR9OngY2N+wnbNo89buAoaw54Bnz3kM+6y+yQhiOA
+         Wxhg==
+X-Gm-Message-State: ANoB5pl5JSXlMXuuclHSwg7295J72FEPJxQPZxpF15C4F30o9cZ3CEV8
+        5biF6XcAXmnirHfz6j24NB8=
+X-Google-Smtp-Source: AA0mqf5IQao7pI3S55ozIZ3UILwG0zwLXEWSh3JhE8Rsg0wuM8pdCGyXY1E8JKqEYaIaMJ9EdjlENQ==
+X-Received: by 2002:a5d:5385:0:b0:242:f8d:fcee with SMTP id d5-20020a5d5385000000b002420f8dfceemr27418643wrv.86.1670326648777;
+        Tue, 06 Dec 2022 03:37:28 -0800 (PST)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05600000d100b0024207ed4ce0sm16635553wrx.58.2022.12.06.03.37.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 03:37:27 -0800 (PST)
+Date:   Tue, 6 Dec 2022 11:37:26 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     gregkh@linuxfoundation.org, johannes@sipsolutions.net,
+        robert.jarzmik@free.fr, jgross@suse.com, sstabellini@kernel.org,
+        oleksandr_tyshchenko@epam.com, roger.pau@citrix.com,
+        srinivas.kandagatla@linaro.org, bgoswami@quicinc.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, alsa-devel@alsa-project.org,
+        linuxppc-dev@lists.ozlabs.org, xen-devel@lists.xenproject.org,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] hyperv: Make remove callback of hyperv driver void
+ returned
+Message-ID: <Y48pdr9DEmXShhFR@liuwe-devbox-debian-v2>
+References: <20221205153644.60909-1-set_pte_at@outlook.com>
+ <TYCP286MB232373567792ED1AC5E0849FCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <77fff5aa-ddd2-6bc7-f0b4-46b93e87338b@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <TYCP286MB232373567792ED1AC5E0849FCA189@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:23:15AM +0200, Adrian Hunter wrote:
-> On 6/12/22 02:11, Florian Fainelli wrote:
-> > On 12/5/22 14:48, Florian Fainelli wrote:
-> >> On 12/5/22 14:28, Jon Hunter wrote:
-> >>> Hi Greg,
-> >>>
-> >>> On 05/12/2022 19:08, Greg Kroah-Hartman wrote:
-> >>>> This is the start of the stable review cycle for the 4.9.335 release.
-> >>>> There are 62 patches in this series, all will be posted as a response
-> >>>> to this one.  If anyone has any issues with these being applied, please
-> >>>> let me know.
-> >>>>
-> >>>> Responses should be made by Wed, 07 Dec 2022 19:07:46 +0000.
-> >>>> Anything received after that time might be too late.
-> >>>>
-> >>>> The whole patch series can be found in one patch at:
-> >>>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.335-rc1.gz
-> >>>> or in the git tree and branch at:
-> >>>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-> >>>> and the diffstat can be found below.
-> >>>>
-> >>>> thanks,
-> >>>>
-> >>>> greg k-h
-> >>>>
-> >>>> -------------
-> >>>> Pseudo-Shortlog of commits:
-> >>>>
-> >>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >>>>      Linux 4.9.335-rc1
-> >>>>
-> >>>> Adrian Hunter <adrian.hunter@intel.com>
-> >>>>      mmc: sdhci: Fix voltage switch delay
-> >>>
-> >>>
-> >>> I am seeing a boot regression on a couple boards and bisect is pointing to the above commit.
-> >>
-> >> Same thing here, getting a hard lock for our devices with the SDHCI controller enabled, sometimes we are lucky to see the following:
-> >>
-> >> [    4.790367] mmc0: SDHCI controller on 84b0000.sdhci [84b0000.sdhci] using ADMA 64-bit
-> >> [   25.802351] INFO: rcu_sched detected stalls on CPUs/tasks:
-> >> [   25.807871]  1-...: (1 GPs behind) idle=561/140000000000000/0 softirq=728/728 fqs=5252
-> >> [   25.815892]  (detected by 0, t=21017 jiffies, g=61, c=60, q=55)
-> >> [   25.821834] Task dump for CPU 1:
-> >> [   25.825069] kworker/1:1     R  running task        0   509      2 0x00000002
-> >> [   25.832164] Workqueue: events_freezable mmc_rescan
-> >> [   25.836974] Backtrace:
-> >> [   25.839440] [<ce32fea4>] (0xce32fea4) from [<ce32fed4>] (0xce32fed4)
-> >> [   25.845803] Backtrace aborted due to bad frame pointer <cd2f0a54>
-> >>
-> >> Also confirmed that reverting that change ("mmc: sdhci: Fix voltage switch delay") allows devices to boot properly.
-> >>
-> >> Had not a chance to test the change when submitted for mainline despite being copied, sorry about that.
-> >>
-> >> Since that specific commit is also included in the other stable trees (5.4, 5.10, 5.15 and 6.0) I will let you know whether the same issue is present in those trees shortly thereafter.
-> > 
-> > This only appears to impact 4.9, Adrian is there a missing functional dependency for "mmc: sdhci: Fix voltage switch delay" to work correctly on the 4.9 kernel?
+On Mon, Dec 05, 2022 at 11:36:39PM +0800, Dawei Li wrote:
+> Since commit fc7a6209d571 ("bus: Make remove callback return
+> void") forces bus_type::remove be void-returned, it doesn't
+> make much sense for any bus based driver implementing remove
+> callbalk to return non-void to its caller.
 > 
-> The thing that leaps to mind is that "mmc: sdhci: Fix voltage switch delay" returns out of sdhci_set_ios() without releasing the spinlock which was removed in later kernels.  I expect below would help, but a revert might allow a more considered response - it is a holiday here today.
+> This change is for hyperv bus based drivers.
+> 
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+[...]
+> -static int netvsc_remove(struct hv_device *dev)
+> +static void netvsc_remove(struct hv_device *dev)
+>  {
+>  	struct net_device_context *ndev_ctx;
+>  	struct net_device *vf_netdev, *net;
+> @@ -2603,7 +2603,6 @@ static int netvsc_remove(struct hv_device *dev)
+>  	net = hv_get_drvdata(dev);
+>  	if (net == NULL) {
+>  		dev_err(&dev->device, "No net device to remove\n");
+> -		return 0;
 
-I'll just drop them for now from 4.9, thanks!
+This is wrong. You are introducing a NULL pointer dereference.
 
-greg k-h
+>  	}
+>  
+>  	ndev_ctx = netdev_priv(net);
+> @@ -2637,7 +2636,6 @@ static int netvsc_remove(struct hv_device *dev)
+>  
+>  	free_percpu(ndev_ctx->vf_stats);
+>  	free_netdev(net);
+> -	return 0;
+>  }
+>  
+>  static int netvsc_suspend(struct hv_device *dev)
+> diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
+> index ba64284eaf9f..3a09de70d6ea 100644
+> --- a/drivers/pci/controller/pci-hyperv.c
+> +++ b/drivers/pci/controller/pci-hyperv.c
+> @@ -3756,7 +3756,7 @@ static int hv_pci_bus_exit(struct hv_device *hdev, bool keep_devs)
+>   *
+>   * Return: 0 on success, -errno on failure
+>   */
+
+This comment is no longer needed in the new world.
+
+But, are you sure you're modifying the correct piece of code?
+
+hv_pci_remove is not a hook in the base bus type. It is used in struct
+hv_driver.
+
+The same comment applies to all other modifications.
+
+Thanks,
+Wei.
