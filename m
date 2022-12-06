@@ -2,162 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8330644FAA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 00:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB828644FAE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 00:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiLFXeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 18:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40202 "EHLO
+        id S229661AbiLFXfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 18:35:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLFXeS (ORCPT
+        with ESMTP id S229523AbiLFXfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 18:34:18 -0500
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BBC132070
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:34:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670369658; x=1701905658;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vxeY8mVIA7CHkny4Zx5b+MvreBwEym4XdXljNgjVfXE=;
-  b=MqmLG0Yd0dYcDQTJt08PUc0EX/OT8LgbOw/ZYg3ng9wzMb896A3mxcp0
-   zUhoPF0L/V8YNajfaxOJK4kpOthcWW4P+lcJQOfsjCnOapH6nAMRviz0A
-   bGs4zjEKTYpef21Ljll3H2borGkcB8hF9E8uvEy0cjpX+XvrrXPZ+cyRh
-   Yc+dY3x/LPLXgRu4r4vaf8gYlM13omElbMqTWHsqdlNPBPd83e+J91+ua
-   cGbnCfj5Dd+qdQ7ZFrhBsMS1Na4MErB1p4ylMM/hUMN5VEl++Z51owbeb
-   eTIgPiiPCbNoeKEn34MHDr916wNPvnJdFKWhEJlyM3nuJ7jBLeTNh/I6k
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,223,1665417600"; 
-   d="scan'208";a="218314231"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Dec 2022 07:34:13 +0800
-IronPort-SDR: Cs1qfrvX85TWqENPzVy32BvJsL8wIukVxxMagcY4yHeRGDjjjMf9/clgC4dPiddqbh2vdKGG0U
- gmUU+8M85WRotL13DpbuAni48XqxY4ajmJCGwN42j+8xhRkEttvNcQHDwrdbrommkvE8a14sbf
- SaT2djxtw4pw7aNv/8+UBZt/b4++/sw67xvQNPMRWwCT6F+RM5A7e5A8VE4+cfbnKmXmPBKOeX
- 3w5qx1mE4eKXeGEuxeeNKcD78WIBOIUXUrRx1ZyQiwNu8Ur5eztLBU7qUpWHTC2qzccufgcrwV
- rac=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2022 14:46:59 -0800
-IronPort-SDR: OWwyqE2wO0MiaMtSxAoLEe1lsv05ICyZVbkLnEMZkVB0a4betR2eC1tZ9ZddMTOnQL6bnV2Kte
- Wyf2b7IiGzPSoviqPUlhLLKHSdgllD3i3r9CJbIKr+2lJIOXD1EDsOHW3YVzxjFhqu8qnv2yp0
- owxUnho2hTXppjV0fjiRmLfOMV8azGV80tqAX2fzPEiwWaYwLA6ZCXEWI0ctug7M9kxou24MBz
- SmabLJ+tpNY++PQKdmeRy1OSG2j8RLgF9TyEzjHCG8sf4jnVwniC1+7zPawdwV359ZtstAtJO6
- zq8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2022 15:34:13 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NRcFK14dfz1Rwt8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:34:13 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1670369652; x=1672961653; bh=vxeY8mVIA7CHkny4Zx5b+MvreBwEym4XdXl
-        jNgjVfXE=; b=FZOhb9vAnwhL2D+zw1g+CqDzz/DngDTfZnyI0PyGuti2mbdaUO5
-        1JEXCm/0VuplTOLTWgLbcC82yUL7iy7nRQOWMXEYi0BVIJGiKmynZ+Co+iTJ08zA
-        gg3S73FqFv6UH+JU5CzTjaFpr33U87+x/U0OaCXu/AiiI89dRs6hC/Jk4JNnf9gv
-        kg1LgB/wkK3GzpXD0W0xJ2QeidEC//Fw5YBAiuatJHhgvfOAXxAmkoVf4ccCsG2R
-        2Q0Nek9WCSa82wbH75Dmhly4MQBIDB6d21aMBoRUIZLmANeZ7ZF5MBDljds/e9Za
-        gcuGn0kwH/Qn8EdFnncpyA7+yaq5mCDUn9Q==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id jRymy70OxJne for <linux-kernel@vger.kernel.org>;
-        Tue,  6 Dec 2022 15:34:12 -0800 (PST)
-Received: from [10.225.163.74] (unknown [10.225.163.74])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NRcFH0B86z1RvLy;
-        Tue,  6 Dec 2022 15:34:10 -0800 (PST)
-Message-ID: <9eba7529-8879-fbba-4e17-f174ef401513@opensource.wdc.com>
-Date:   Wed, 7 Dec 2022 08:34:09 +0900
+        Tue, 6 Dec 2022 18:35:10 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2055.outbound.protection.outlook.com [40.107.94.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76DC303E9;
+        Tue,  6 Dec 2022 15:35:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SADianSLhIIKGQgAq8tsxg4ejnag5gzUqC258vZu1PL0TLtAK0u64BFY+lgWQfc0DJ2kAVaCVtdmSS+zsZn48SBYGNwduiFIurW1TTO1bogbA+NnHfdzFIp4MSGuvzEZ7cv1ggAr7Tgj0WAlgYYrfeeMuSm0MWIrAuInkHB4V3j/umeLdGhpKeHeZVTSIduU5JJW+V+ikdLSswsieil70Jdqe2K4ZTQjhYWSyw5tlAI11geFEJy2D/sQ5hzc7tXEpTNmhD/SK6bVFEy+iVAbEMs/8l98kqxcrcOzQgMduky8rRqsGbTSCWmdY9XOZcG4SV6ME7ViBuJCUWpynptsfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=H8sF4vNR1/8jXwLgiiTkk4f9I67zBDx/m9hvLVTW3wQ=;
+ b=UN027uPVRhc1uiKLcAX8Utl6bJybuaLKk1kEvQUd/9GqWcLFS9eoSSWaH/PYvXPbSFLcxyfQyGUNf3ifUfHxxBMdE2bUQtEztW11aiGwDmSVLWprvlNddmXpMDcT92TznQAZF4h2QWruXpnzGIvlKie3zzzjw9JAes0F2Btavk+zMmirPu0f5B6zVQIyzHPWb8qU+7sVhUxuoUchpRekAYRK+LphdVtkCAgaBqLKpO67lqAeDkuVn1AVs1j5yzkEuiajP64OwCORr1xBO7DfqeZ4+LRYKJxbFUiafh+f24Hprky/PA8YMHEIypANf44dIgH4TPfWo3nk9ntstkxWng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=H8sF4vNR1/8jXwLgiiTkk4f9I67zBDx/m9hvLVTW3wQ=;
+ b=JPhC7rDewWo4jRoiaEdmQM++ey1g9yOcXMFLNzXWEcnSuRx72Bz1lJb3oD/SKn+lKbv4egXn5xAeDwFET+sNDHkdJIx2BHGfXgPt47Extfdlw9vR1r8jpvt7mmzWzjbtNEGTfYMxbeEFwn8NUJ4d2aY63mifH4o0EeWvUtHuF9PFd62bUFJAj9G6U7b5Qx6vF0jORfeRehaUQGrbNtfm3ubeo27OUzc+4ncvZ6fZXX29QBDI0u6k+0ny+xfU/UyI7KC7ezQ4TsUgHFYEb9h+PkOcslYPR2GInaWwQriIM5FVVNh6tQ0VjZuU0ROSw7S+akiEQ02nihSjEWND4zMIxw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.14; Tue, 6 Dec 2022 23:35:08 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
+ 23:35:08 +0000
+Date:   Tue, 6 Dec 2022 19:35:06 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Yi Liu <yi.l.liu@intel.com>
+Subject: Re: linux-next: manual merge of the iommufd tree with the vfio tree
+Message-ID: <Y4/RqtFMCobuOL8J@nvidia.com>
+References: <20221206125542.52ea97a7@canb.auug.org.au>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206125542.52ea97a7@canb.auug.org.au>
+X-ClientProxiedBy: BL0PR02CA0117.namprd02.prod.outlook.com
+ (2603:10b6:208:35::22) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH V6 6/8] block, bfq: retrieve independent access ranges
- from request queue
-Content-Language: en-US
-To:     Paolo Valente <paolo.valente@linaro.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        linux-block <linux-block@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
-        Rory Chen <rory.c.chen@seagate.com>,
-        Federico Gavioli <f.gavioli97@gmail.com>
-References: <20221103162623.10286-1-paolo.valente@linaro.org>
- <20221103162623.10286-7-paolo.valente@linaro.org>
- <5d062001-2fff-35e5-d951-a61b510727d9@opensource.wdc.com>
- <4C45BCC6-D9AB-4C70-92E2-1B54AB4A2090@linaro.org>
- <d27ca14b-e228-49b7-28a8-00ea67e8ea06@opensource.wdc.com>
- <76ADE275-1862-44F7-B9C4-4A08179A72E3@linaro.org>
- <6983f8b3-a320-ce32-ef0d-273d11dd8648@opensource.wdc.com>
- <518C279B-8896-470A-9D8C-974F3BB886DB@linaro.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <518C279B-8896-470A-9D8C-974F3BB886DB@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB6390:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2417816a-1dba-453f-f0fa-08dad7e28282
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Sh5wKCaMH1rta8vpT5z/uKOw0KJbfPFjsef5bJY7yAlvoSbOMksAv5EARAbcUAksl+l9uWkQq7m1yZFJrOUyQiG0yjRNr9KFr+FQdAfkev5GDBwPLRoFyNDM1cnacZCBHpMDp+EpEr7q7R7+Bx4kRSPiuJiz7ifuVusVxpomxBFuawhRgxzYzVyqHw49pH5ID60cfbFqIxXzJa8EmUCpkEo6v49wKtB7pvjWCRmIxMrMIXB/YupDZjC/jsqbbn39iUIXWz4Dr/AKIBvPVNR1jOdCAFGA9mbTwWOO2tJkcAgD/oK/Gl/erKo/clpzVzuY8zt/nR5HzgAIfwxvASHKiQkQcactZ9Lkixpf2IwzV+hiInnYwuFGovgsSEo4lW0f9nPg6kHhERCAaITqSno86zqnaVT4YPtmVfZ3cForXueafjquj3x3DCb1wHf76RmaunWxXZCGYRS6nK1c8vdCJEuAT5zZTATXy2ovBfxb7wW0WOLIWuDR5mIJh0p6V8XFgcqV71eUbfw7Hd69jHGhBXpAD/gwWnEZgAgdAyXdh28ilA00qBpB1kAngmc0loEs57PInR8XV95Ylp/HVFWqQQynVokqJfZeqG8oqD3rWexRlmau4tocYWZ9HDQVWi8kv+/JLvtLCtCUCm3N44ZFXQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(136003)(376002)(451199015)(2906002)(66946007)(83380400001)(8936002)(8676002)(4326008)(36756003)(66556008)(5660300002)(66476007)(316002)(54906003)(41300700001)(86362001)(6916009)(6486002)(478600001)(6506007)(26005)(6512007)(186003)(2616005)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?UL/uuArNvccwZUpe2/ZLkyz36Z+gvB9hPfp9Zh9mvspUZDvmwsrcNithq8Pr?=
+ =?us-ascii?Q?P3JiiglA4cEIuD1xxqc3+2sZSgjiIQ2CrkMaH2vq+3PinNzbKRpys93JTLi5?=
+ =?us-ascii?Q?POSKgWD/hGlbjdDgW+auRX6QOIAhDbrsI9BIVctqW7kI5dbFeVpa4aP0dXYz?=
+ =?us-ascii?Q?GE5uljjUbcz7NA8fozqKsvCEwLNSGtN4i0tm7b23sssCOxlvuVG3ZjnxeFs5?=
+ =?us-ascii?Q?wmpodipIePEM6Dhu8XPQlEWXMwbnDYteTCeowzt1uXXB7q1HQpZhVn0OCHUQ?=
+ =?us-ascii?Q?J3AX/ne4eYBMxHZwFqrAQUfZsD9+qvtQNY2ywTI3wb9hLlgbuUJOxDDXyPmV?=
+ =?us-ascii?Q?0h5vIxFVX9VhJLXQlT4JtLPVhgWzX5xPzMAHzJu5YHX2wM9eLS7a2Wz2eGvP?=
+ =?us-ascii?Q?WvdQEIyeoYTb7XIsiC22naXjJrUUS626FvVystKVji7/U+UVDjRB8B3H6qIi?=
+ =?us-ascii?Q?z0YTplh/mvrPME3GfV7zC0zQG2y8pJX70nESTbr96WEmV1uA5E0LRe3vmD1S?=
+ =?us-ascii?Q?xNn8hKCe9n+HFITMr8kHH7eQXt9F5zrKrSG0Z3kcoRZOZ9Avn10nbMnCeRGE?=
+ =?us-ascii?Q?ebPn3y6mLaieZM30yKLIRVDfk8hZ6AKeDjSwSXor+abpionJ8arWJBKiqs5W?=
+ =?us-ascii?Q?s7zp4b+WlE1XNOHUw9boVVjuF00d/Sz6hhpp+Y7kWCJO6avUMqKei0LtgIN8?=
+ =?us-ascii?Q?+4HeBR6IDNaENtiMpqeWoOZhflldkieQWEOBIaQYyrGvnbdetZznAYRapdsW?=
+ =?us-ascii?Q?7qLT+zmgj4OefL3J4DAkYhKz46lXdwStvk/jx5luaZj5j5dOzjDNu7SI2Kcy?=
+ =?us-ascii?Q?Ts4K6Pg9Ojb+k0ueLtC+o7Ka16keWcR4v0eInzR9K2APaw8q0uXlmIXujLpG?=
+ =?us-ascii?Q?c674Yn9SE1uh8qnMS2rWS76krVJORpTvo/EePMtAvRuqxhzziqNxUKxEvRzQ?=
+ =?us-ascii?Q?wFFEU/ZJm8nnGP9SjhuPDjAt1/HA0Z3EVK5E9w2YEzQVDtkn2zqkR1R9l+JN?=
+ =?us-ascii?Q?4Opxo3hD5sHyl2YymnXTDFpVxD/sY70lExC8IwN7WP8YrVI7z6p8GSi497Jl?=
+ =?us-ascii?Q?m2c1y32Bg7AOW5VaoIuBLgSffZWSh8CN4qm0NE2Zp60yp7dlxw/OJ2iYZZjk?=
+ =?us-ascii?Q?Lp4JPW7g38mibX3zHUFco6+PaPvCi0HKSNgj6PCXCV1FPH9pJlccvirv28bs?=
+ =?us-ascii?Q?cxE7p3DhBszwSXo0HSe1mFeYucIQJ6mdNIGIrCB5p+pRLrugqNaP52cyvOIk?=
+ =?us-ascii?Q?nLp9CezJyV1T9UX8Kd3QBaM/PdwcOfFQECRJva4tpnvJgc5WuXuW+536iCoO?=
+ =?us-ascii?Q?hLApaM4GywHXYZtRAx9xcMhpIvDxf6NStUB8JikrfIAard/BZU3xKvaZKgMr?=
+ =?us-ascii?Q?8ub4rQjt6F53XyInNZiPoxeLkoFVyjBaMe0cOLSN+f1WQ7rRa96+mZHDTKN1?=
+ =?us-ascii?Q?u7FYdsh70VKgj7v6AYt8LIgksdjJf2gzw60B6mdylxpSQobwOpI3l7PObBRK?=
+ =?us-ascii?Q?eeOD9O3DcPys50klG8hp6kX3CGKmHuzn/iJXJdHxdTbxuKtgQUAOCODn2eP6?=
+ =?us-ascii?Q?/ASlxUwSu8RntUzkopk=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2417816a-1dba-453f-f0fa-08dad7e28282
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 23:35:07.9952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5eSDicNTD1zfhdlfp//4h22E+RjX7OeiJ2dlS24ZJH8A3ZdCVbtvVbr0vjjl6KSx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6390
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 00:43, Paolo Valente wrote:
->>>> In that case, bfq should process
->>>> all IOs using bfqd->ia_ranges[0]. The get range function will always
->>>> return that range. That makes the code clean and avoids different path for
->>>> nr_ranges == 1 and nr_ranges > 1. No ?
->>>
->>> Apart from the above point, for which maybe there is some other
->>> source of information for getting ranges, I see the following issue.
->>>
->>> What you propose is to save sector information and trigger the
->>> range-checking for loop also for the above single-actuator case.  Yet
->>> txecuting (one iteration of) that loop will will always result in
->>> getting a 0 as index.  So, what's the point is saving data and
->>> executing code on each IO, for getting a static result that we already
->>> know we will get?
->>
->> Surely, you can add an "if (bfqd->num_actuators ==1)" optimization in
->> strategic places to optimize for regular devices with a single actuator,
->> which bfqd->num_actuators == 1 *exactly* describes. Having
->> "bfqd->num_actuators = 0" makes no sense to me.
->>
+On Tue, Dec 06, 2022 at 12:55:42PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Ok, I see your point at last, sorry.  I'll check the code, but I think
-> that there is no problem in moving from 0 to 1 actuators for the case
-> ia_ranges == NULL.  I meant to separate the case "single actuator with
-> ia_ranges available" (num_actuators = 1), from the case "no ia_ranges
-> available" (num_actuators = 0).  But evidently things don't work as I
-> thought, and using the same value (1) is ok.
+> Today's linux-next merge of the iommufd tree got conflicts in:
+> 
+>   drivers/vfio/Kconfig
+>   drivers/vfio/Makefile
+> 
+> between commits:
+> 
+>   20601c45a0fa ("vfio: Remove CONFIG_VFIO_SPAPR_EEH")
+>   e2d55709398e ("vfio: Fold vfio_virqfd.ko into vfio.ko")
+> 
+> from the vfio tree and commits:
+> 
+>   a4d1f91db502 ("vfio-iommufd: Support iommufd for physical VFIO devices")
+>   e5a9ec7e096a ("vfio: Make vfio_container optionally compiled")
+>   c2849d718d26 ("vfio: Move vfio group specific code into group.c")
+> 
+> from the iommufd tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Any HDD always has at least 1 actuator. Per SCSI & ATA specs, ia_range
-will be present only and only if the device has *more than one actuator*.
-So the case "no ia_ranges available" means "num_actuator = 1" and the
-implied access range is the entire device capacity.
+I got the same as you for what you showed, but I also got a hunk in
+vfio_main.c as well? It looks close to your next-20221206 tag, but I
+renamed 'err_virqfd' to 'err_group' and 'err_dev_class' to
+'err_virqfd' for consistency with the rest of the file.
 
-> Just, let me avoid setting the fields bfqd->sector and
-> bfqd->nr_sectors for a case where we don't use them.
+Thanks,
+Jason
 
-Sure. But if you do not use them thanks to "if (num_actuators == 1)"
-optimizations, it would still not hurt to set these fields. That actually
-could be helpful for debugging.
+@@@ -1260,27 -1902,59 +1348,34 @@@ static int __init vfio_init(void
+        if (ret)
+                return ret;
+  
++       ret = vfio_virqfd_init();
++       if (ret)
+ -              goto err_virqfd;
+ -
+ -      /* /dev/vfio/$GROUP */
+ -      vfio.class = class_create(THIS_MODULE, "vfio");
+ -      if (IS_ERR(vfio.class)) {
+ -              ret = PTR_ERR(vfio.class);
+ -              goto err_group_class;
+ -      }
+ -
+ -      vfio.class->devnode = vfio_devnode;
+++              goto err_group;
++ 
+        /* /sys/class/vfio-dev/vfioX */
+        vfio.device_class = class_create(THIS_MODULE, "vfio-dev");
+        if (IS_ERR(vfio.device_class)) {
+                ret = PTR_ERR(vfio.device_class);
+--              goto err_dev_class;
+++              goto err_virqfd;
+        }
+  
+ -      ret = alloc_chrdev_region(&vfio.group_devt, 0, MINORMASK + 1, "vfio");
+ -      if (ret)
+ -              goto err_alloc_chrdev;
+ -
+        pr_info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
+        return 0;
+  
+ -err_alloc_chrdev:
+ -      class_destroy(vfio.device_class);
+ -      vfio.device_class = NULL;
+--err_dev_class:
+ -      class_destroy(vfio.class);
+ -      vfio.class = NULL;
+ -err_group_class:
+ -      vfio_virqfd_exit();
++ err_virqfd:
+ -      vfio_container_cleanup();
+++      vfio_virqfd_exit();
+++err_group:
+ +      vfio_group_cleanup();
+        return ret;
+  }
+  
+  static void __exit vfio_cleanup(void)
+  {
+ -      WARN_ON(!list_empty(&vfio.group_list));
+ -
+        ida_destroy(&vfio.device_ida);
+ -      ida_destroy(&vfio.group_ida);
+ -      unregister_chrdev_region(vfio.group_devt, MINORMASK + 1);
+        class_destroy(vfio.device_class);
+        vfio.device_class = NULL;
+ -      class_destroy(vfio.class);
++       vfio_virqfd_exit();
+ -      vfio_container_cleanup();
+ -      vfio.class = NULL;
+ +      vfio_group_cleanup();
+        xa_destroy(&vfio_device_set_xa);
+  }
+  
+ 
 
-Overall, I think that the code should not differ much for the
-num_actuators == 1 case. Any actuator search loop would simply hit the
-first and only entry on the first iteration, so should not add any nasty
-overhead. Such single code path would likely greatly simplify the code.
-
-
--- 
-Damien Le Moal
-Western Digital Research
 
