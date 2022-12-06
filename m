@@ -2,71 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C46D643C8F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:03:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BF1D643C9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:22:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbiLFFDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 00:03:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52442 "EHLO
+        id S232825AbiLFFVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:21:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiLFFC6 (ORCPT
+        with ESMTP id S231694AbiLFFVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:02:58 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4E4FC74F
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:02:57 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id 125-20020a1c0283000000b003d076ee89d6so10803307wmc.0
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 21:02:57 -0800 (PST)
+        Tue, 6 Dec 2022 00:21:07 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E764220CD
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:21:06 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id n20so3647546ejh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 21:21:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IsrGD/2+yn6YnOXfEO+xg404RVi2s4a4zlidgWfmgVk=;
-        b=UiZHzgZXSObfsSVre4wJAPxgA5vSbx5ZmCST8nXSr9pmIvr51K8JFqrKXJOo6qLoZg
-         gDY1xqAIa1KF5nLPH4it+F70g36bmSoHcEk+xtZmnwJpdlHp4nE9mjFDLf5CTRJoAQdF
-         Gna0Pp6EH9D0m4Tahg93LOiTy2rgXAXhfz/5hZ3ZA29YbLulXVFguZYJY2OSDHy2y1XI
-         CJuT8i9RTfDIzSdgoXO0G5YUtpBe51K9Kh0g1DSOKJP16ZtW1C3Ng/Hvgx+pJGhxbuqp
-         82GIR1p6v2lOUnfxNbnnuvcx45LkgIgSuQFDHMeSPu0DXnGm/7xt057CQw4G58mI5rFZ
-         /4HA==
+        bh=QB/Kh9ow3EUM5SHFp0aGSD+yTCIfG6WneTyXhljDwcU=;
+        b=cLb6Cd+FzxmMBo5l6sociKfYtZBGwkTeAZ1XrvpVf7CMlG3syQ0X5HAVGBpM/xW0HG
+         8JbUrfELxWbFR+Y7h/H54vmpQDTH3IkY9NYNtfOqmnlAZ3aqQNYPs+2LUvFfb30FUSxF
+         +6CvDfn1nhW7noPzavmuJOda0RUYnCpovwhf77GKWi0PTToy6wQMFY8v0ap5ZMrcaSbE
+         guG2bUZGW70sDtvW9wIi50u++lH3Nd+plbblxDGTpyyxjduDC7oufuu/edbAJa3/HlhU
+         bie3Bv/LDaMEZZiVsO7lLSkdTbvBy4d1S4Ny1MsyZEhuQ+gb3vxyokWba+BgFW+619Cn
+         HMXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IsrGD/2+yn6YnOXfEO+xg404RVi2s4a4zlidgWfmgVk=;
-        b=wu5/1hBxs8PvEOBHxmLy86cL82ucOGhYTbCi54j6j7qktlXOjm+EksZlKPnSwgdI2g
-         C4AVAI5/bQidChq1i4DCF/Zcij7NJnC7pb6SmTPEzW7X4tjEMgBVqxuNPGOMtAtqh2cW
-         STlrt21MUzyTwQHx6W1wNDeKuO9oXx3yk66YOLZaPig1k1kCA4BKKtoXibzGdJLg761n
-         CE2qM4vyDFcNygn24KwPyzOSDq8ZkN0YWdW5BugLyBfGaRiaeZEZBtIWOlVF3vFqwP0H
-         ALC3TsvWwoH7WU6T6eznbTQww42rDrh9xj3pjVQf0hDJYQblVmPpmFtf//JA4fdG5db/
-         n0yg==
-X-Gm-Message-State: ANoB5pn+G3OPNHhr7M7zJRL7e2zUQeIED4TX5uBhgK6ygLcYwE3pXN3E
-        VziQyvt1xb1TFx6lFK68rVJwfN6U4S/qFY73DcMgPA==
-X-Google-Smtp-Source: AA0mqf7utYozEKl0LYpUjOycw2vxoqkx+1UE8c8193GTqSi0P8ofsHRJcD31Vzb+xkbU07d0uajCZDc8MLjCUBS5/Tg=
-X-Received: by 2002:a1c:7318:0:b0:3cf:cb16:f24a with SMTP id
- d24-20020a1c7318000000b003cfcb16f24amr64550760wmb.182.1670302976080; Mon, 05
- Dec 2022 21:02:56 -0800 (PST)
+        bh=QB/Kh9ow3EUM5SHFp0aGSD+yTCIfG6WneTyXhljDwcU=;
+        b=W6soCp1DEFAGNMq2DEBMV4br3CJq1Jata+RlI9ZnZ0HzTlkZ4f25QsF19jaXI9otRt
+         rsOvx9zFXfDYFvRmKncyuzwiDDTuuZUtYjEhR6vvQXBPUC3PAqVRdhGyl4dPWcb8Xdhm
+         SMVysdTzkkpMgGRc2Rzo5AXka22Ub0u2AKxqgf+lspTIX2yb6a5RUNqkbjYwtRhw+j2b
+         eWV57MA9LuMNuwxaWYzKqZBNHxgW3qv6QDbPvQytzd6S0e/g6657bI/CPqwyQew9WxnX
+         +Sseiqkww21swIzlS2uTmVhq9DNOZwmzea+wyGLu0KvIt5XEWSp6xteY5O4qUB2QOMG3
+         Y5CQ==
+X-Gm-Message-State: ANoB5pntcXUwc5/hBWGP20yDWG8ibprLvpvNJ9riWKi7UVhYahP9TFaD
+        G58K33nJOIuZlgBXuwOStEDNvaBEw63KMwRwXXpfI620PRA=
+X-Google-Smtp-Source: AA0mqf4TyFxEgOnjRjEYTXVnB10F/m6ypQcEjXlB4nOlh5ErlgqLlPdUUnEvoJSgnum/XZpK3qSEeoZEDfAGI7DubAw=
+X-Received: by 2002:a17:906:2594:b0:7c0:8d06:33f8 with SMTP id
+ m20-20020a170906259400b007c08d0633f8mr25750948ejb.150.1670304064581; Mon, 05
+ Dec 2022 21:21:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20221206043237.12159-1-ravi.bangoria@amd.com>
-In-Reply-To: <20221206043237.12159-1-ravi.bangoria@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 5 Dec 2022 21:02:43 -0800
-Message-ID: <CAP-5=fXdx8aKyyw8wGA-xpOTqRFakaWYyGES3nq12of-xgM=AA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] perf test: Add event group test
-To:     Ravi Bangoria <ravi.bangoria@amd.com>
-Cc:     acme@kernel.org, kan.liang@linux.intel.com, jolsa@redhat.com,
-        namhyung@kernel.org, peterz@infradead.org, mark.rutland@arm.com,
-        adrian.hunter@intel.com, alexander.shishkin@linux.intel.com,
-        carsten.haitzler@arm.com, leo.yan@linaro.org, maddy@linux.ibm.com,
-        kjain@linux.ibm.com, atrajeev@linux.vnet.ibm.com,
-        tmricht@linux.ibm.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
+References: <CAEYL+X_X7OsP3BQ3poK4n+DWEOxAais6d9At9nz2TzLFV2HinA@mail.gmail.com>
+ <1716b73b-77f4-da8e-801f-7521872697bb@infradead.org> <CAEYL+X8KAg58c32LXL8ksfxnDvPPLwJwBRxMFdu6wB7HU+kXBQ@mail.gmail.com>
+ <5c01fe50-a975-f866-87d1-0343ad2ae520@infradead.org>
+In-Reply-To: <5c01fe50-a975-f866-87d1-0343ad2ae520@infradead.org>
+From:   Zopolis0 <creatorsmithmdt@gmail.com>
+Date:   Tue, 6 Dec 2022 16:20:55 +1100
+Message-ID: <CAEYL+X8SuUvaEG-ouGdCUBpe5DS0j0rPw7XedtcCocn1ZJFX2A@mail.gmail.com>
+Subject: Re: PATCH [1/2] gamecube/wii: graphic quantization registers driver (GQR)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,43 +68,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 8:33 PM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
->
-> Multiple events in a group can belong to one or more pmus, however
-> there are some limitations to it. One of the limitation is, perf
-> doesn't allow creating a group of events from different hw pmus.
-> Write a simple test to create various combinations of hw, sw and
-> uncore pmu events and verify group creation succeeds or fails as
-> expected.
->
-> v2: https://lore.kernel.org/r/20221129111946.409-1-ravi.bangoria@amd.com
-> v2->v3:
->  - Define a set of uncore pmus that supports more than 3 events. This
->    will prevent false negative results by not picking random uncore
->    pmu. Test will be skipped if no uncore pmu found.
+> Other (better) options are to use an email account/interface
+> that does not corrupt whitespace OR use 'git send-email' (which
+> does not require that you be using 'git').
 
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks!
-Ian
-
-> Ravi Bangoria (2):
->   perf tool: Move pmus list variable to new a file
->   perf test: Add event group test
->
->  tools/perf/tests/Build          |   1 +
->  tools/perf/tests/builtin-test.c |   1 +
->  tools/perf/tests/event_groups.c | 127 ++++++++++++++++++++++++++++++++
->  tools/perf/tests/tests.h        |   1 +
->  tools/perf/util/Build           |   1 +
->  tools/perf/util/pmu.c           |   2 +-
->  tools/perf/util/pmus.c          |   5 ++
->  tools/perf/util/pmus.h          |   9 +++
->  8 files changed, 146 insertions(+), 1 deletion(-)
->  create mode 100644 tools/perf/tests/event_groups.c
->  create mode 100644 tools/perf/util/pmus.c
->  create mode 100644 tools/perf/util/pmus.h
->
-> --
-> 2.38.1
->
+Git send-email doesn't work with gmail anymore, and I've never had any
+whitespace troubles with gmail inline patches in the past.
