@@ -2,134 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4666444E2
+	by mail.lfdr.de (Postfix) with ESMTP id 55E166444E3
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234619AbiLFNsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42504 "EHLO
+        id S234673AbiLFNsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:48:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234522AbiLFNsG (ORCPT
+        with ESMTP id S234494AbiLFNsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:48:06 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B3B2B246;
-        Tue,  6 Dec 2022 05:48:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=INa+kDPeRtDGTKkXfOH4U8T/bFqxRT7X+F58KC5R7Zo=; b=6RaELbF/PVhJaQy+0ascCjBHbQ
-        bREm0vLFZkn/Afl1cdEMUGrDM24BaidGn85e6IXijKnnpLqGN5SqJocD7c/gEviEZ3ApU55zFPefi
-        U+0bkZPPWuE2YUEd83bD/DyO4NCq42ln45Va7q+vVdeW8iA8WSS9yzFR6XNKx5zH/XH4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1p2YIX-004X38-Cn; Tue, 06 Dec 2022 14:47:49 +0100
-Date:   Tue, 6 Dec 2022 14:47:49 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v4 net-next 5/5] drivers/net/phy: add driver for the
- onsemi NCN26000 10BASE-T1S PHY
-Message-ID: <Y49IBR8ByMQH6oVt@lunn.ch>
-References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
- <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
+        Tue, 6 Dec 2022 08:48:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56393A1B7;
+        Tue,  6 Dec 2022 05:48:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 698F161769;
+        Tue,  6 Dec 2022 13:48:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A421C433D6;
+        Tue,  6 Dec 2022 13:47:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670334481;
+        bh=2JYS2naf9E4zAIWrMEAyI5LO342tnYyw1XzP6ZaY6B0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=g2omVqENBHzAwHg4smn2aRF4jnFXHRhuOxYLek0wV9y2ANZ2ICNy6r0t127kPwEV0
+         UjavF360bI6edL/lh71+UcGZNDZ/DytjcFKG9VK9c51vticZtLv0+Hk0SlyHnsxjao
+         lJXBTxkbA5Ll6lfiID3UUbbAzDvJggsJNUB9i+WfoPG0Dg3JfigCMu1JryIv9eRIWQ
+         wZ1zQD0qSyPTbdJDBmg6qZYEyP+W8BvvuZoTlKbDN8tIsboJw0yLX2xkMyNqvfi2cr
+         9lrQf4LBdD3F7C6G+EzJUFqSlBTT12XpLHzpAboz93x+CLRpIQ6JDbuLhSsF2bOuzf
+         ef8Wbrq3e/8/A==
+Date:   Tue, 6 Dec 2022 13:47:55 +0000
+From:   Keith Busch <kbusch@kernel.org>
+To:     Lei Rao <lei.rao@intel.com>
+Cc:     axboe@fb.com, kch@nvidia.com, hch@lst.de, sagi@grimberg.me,
+        alex.williamson@redhat.com, cohuck@redhat.com, jgg@ziepe.ca,
+        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com,
+        kevin.tian@intel.com, mjrosato@linux.ibm.com,
+        linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        kvm@vger.kernel.org, eddie.dong@intel.com, yadong.li@intel.com,
+        yi.l.liu@intel.com, Konrad.wilk@oracle.com, stephen@eideticom.com,
+        hang.yuan@intel.com
+Subject: Re: [RFC PATCH 4/5] nvme-vfio: check if the hardware supports live
+ migration
+Message-ID: <Y49ICyTJ/WExT+wN@kbusch-mbp>
+References: <20221206055816.292304-1-lei.rao@intel.com>
+ <20221206055816.292304-5-lei.rao@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221206055816.292304-5-lei.rao@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +// module parameter: if set, the link status is derived from the PLCA status
-> +// default: false
-> +static bool link_status_plca;
-> +module_param(link_status_plca, bool, 0644);
-
-No module parameters, they are considered a bad user interface.
-
-> +static int ncn26000_get_features(struct phy_device *phydev)
+On Tue, Dec 06, 2022 at 01:58:15PM +0800, Lei Rao wrote:
+> +static bool nvmevf_check_migration(struct pci_dev *pdev)
 > +{
-> +	linkmode_zero(phydev->supported);
-> +	linkmode_set_bit(ETHTOOL_LINK_MODE_MII_BIT, phydev->supported);
-> +
-> +	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
-> +			 phydev->supported);
-> +
-> +	linkmode_copy(phydev->advertising, phydev->supported);
-
-That should not be needed.
-
-Also, look at PHY_BASIC_T1_FEATURES, and how it is used in
-microchip_t1.c.
-
-> +static int ncn26000_read_status(struct phy_device *phydev)
-> +{
-> +	// The NCN26000 reports NCN26000_LINK_STATUS_BIT if the link status of
-> +	// the PHY is up. It further reports the logical AND of the link status
-> +	// and the PLCA status in the BMSR_LSTATUS bit. Thus, report the link
-> +	// status by testing the appropriate BMSR bit according to the module's
-> +	// parameter configuration.
-> +	const int lstatus_flag = link_status_plca ?
-> +		BMSR_LSTATUS : NCN26000_BMSR_LINK_STATUS_BIT;
-> +
+> +	struct nvme_command c = { };
+> +	struct nvme_id_ctrl *id;
+> +	u8 live_mig_support;
 > +	int ret;
 > +
-> +	ret = phy_read(phydev, MII_BMSR);
-> +	if (unlikely(ret < 0))
-> +		return ret;
+> +	c.identify.opcode = nvme_admin_identify;
+> +	c.identify.cns = NVME_ID_CNS_CTRL;
 > +
-> +	// update link status
-> +	phydev->link = (ret & lstatus_flag) ? 1 : 0;
-
-What about the latching behaviour of LSTATUS?
-
-https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L2289
-
+> +	id = kmalloc(sizeof(struct nvme_id_ctrl), GFP_KERNEL);
+> +	if (!id)
+> +		return false;
 > +
-> +	// handle more IRQs here
-
-You are not in an IRQ handler...
-
-You should also be setting speed and duplex. I don't think they are
-guaranteed to have any specific value if you don't set them.
-
+> +	ret = nvme_submit_vf_cmd(pdev, &c, NULL, id, sizeof(struct nvme_id_ctrl));
+> +	if (ret) {
+> +		dev_warn(&pdev->dev, "Get identify ctrl failed (ret=0x%x)\n", ret);
+> +		goto out;
+> +	}
 > +
-> +	return 0;
-> +}
-> +
-> +static irqreturn_t ncn26000_handle_interrupt(struct phy_device *phydev)
-> +{
-> +	const struct ncn26000_priv *const priv = phydev->priv;
-> +	int ret;
-> +
-> +	// clear the latched bits in MII_BMSR
-> +	phy_read(phydev, MII_BMSR);
+> +	live_mig_support = id->vs[0];
 
-Why?
-
-> +
-> +	// read and aknowledge the IRQ status register
-> +	ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
-> +
-> +	if (unlikely(ret < 0) || (ret & priv->enabled_irqs) == 0)
-
-How does NCN26000_REG_IRQ_STATUS work? Can it have bits set which are
-not in NCN26000_REG_IRQ_CTL ? That does happen sometimes, but is
-pretty unusual. If not, you don't need to track priv->enabled_irqs,
-just ensure ret is not 0.
-
-     Andrew
+Considering this is a vendor specific region, it seems rather presumptuous to
+assume this byte means "live migration supported".
