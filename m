@@ -2,52 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C37643E10
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04377643E13
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiLFIFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:05:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41456 "EHLO
+        id S232324AbiLFIGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:06:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbiLFIF0 (ORCPT
+        with ESMTP id S230402AbiLFIGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:05:26 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777711A07B;
-        Tue,  6 Dec 2022 00:05:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F1D10615A5;
-        Tue,  6 Dec 2022 08:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801B2C433C1;
-        Tue,  6 Dec 2022 08:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670313924;
-        bh=iU1nTlIIFsG8ZExX8X4Ya6XC5By7z1nDy14hkZt+HlQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FOkFwdZ9ZIcz3j3JA396Ocj7KcLySwy0uvUe0vny0Pbrw2dintYZnayHReK1EhVQi
-         Pa8y7fcxDDBECOkCEY3j8aoNT7/YQ8K2nsdKCzMCYiJo0I9rBrTPLr7Pbzh7fQGkNm
-         JxzWLkT/jo1gRaGKdZco+3/Ik4bou2vxG6PlfhjQwx9jOGjIB/qBIH31US0kZBpu02
-         NRccyX7ouPX3bCi18DxAG5Gt3MiQBRHKIsIXzGwtvFr0iinYX5Vu7RSlICr9NI4Wjr
-         hNfR2L5oVFmbd2ymCn799tjukAvqYSY5KYl/pRpYPrvtHX0itxybvgIpwvhaWw6Zwb
-         a09pbej5VmOpA==
-Date:   Tue, 6 Dec 2022 10:05:19 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, richardbgobert@gmail.com, iwienand@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net: ethernet: use sysfs_emit() to instead of
- scnprintf()
-Message-ID: <Y473v/0z/YlTRzoT@unreal>
-References: <202212051918564721658@zte.com.cn>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212051918564721658@zte.com.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Tue, 6 Dec 2022 03:06:21 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D478E1A239
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:06:19 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id x22so4200371ejs.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:06:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WREkliTy5mKN95PO7CCRKu7uAiwzQByQOjsmLLqGSUk=;
+        b=FcYIfA4oDY0Xrp9+BVodN0TnxnoeZNMiucN64P+B71Dwa+8z7/KdULapBL8xlVEyJj
+         FVyAI6QqTsCQN5+kU/HcQGVfiS2i0y68CGlWYvlj+dixJBFnPwTB9tivISc9FhgYrAU3
+         cra9hdDGN/7Mm+6BfUWpBGBzFsg6tTXtymbiCuuXLwPcuNoPir0zMf6VppjEZdYqkPAV
+         1f+qwT26AM81FdxrPBsiAuqRm5YsOTQf4+Z//A+hBLjZWkHwh6R8gQc6L5T4nZN63Brg
+         2Gsjn6iulp5XblFZ/rEsOy/YhDHicfpVYrsgGDZ7kRKFFd/jE5D8TPAHLjb/eRhjIkXj
+         eXuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WREkliTy5mKN95PO7CCRKu7uAiwzQByQOjsmLLqGSUk=;
+        b=B1E+uRP3m0RaLIELKxDFbRdZvnuhCQYLrzTzwqZYRGBBw/p70n7j+nEes4zbkCKWXW
+         QJgOUq6w/ljgmK5atkFuHhXdxOoHkkAzqSqtOPjNhHaTSokL+2QwBy3WVtNR1UFKWDaa
+         KXL08cPFtM+KQ3oNAxm++Mg5jEQJf3vy/u/843G12oaAM0HnaVEjwoJtBLifUb9KJ0Uy
+         KNxpAFkgKs1WNDhs1EAcjwlRlmlaqvGDBMaXnv/6PCad+Cd0dtJ+GjNsb7CBWA8lEwvL
+         +lQbIiVdAJcu2wgvMjrQBZK2XN2lNRynkU4baOboftymKIDDPUtq6mg9Ggjc3DWsGYYz
+         FRgg==
+X-Gm-Message-State: ANoB5pnOzJ1rPBgvatAZFZ8ZFg3j5gaV43wZPY8HEVGnSHUF5o4IgJ2/
+        638PbnqF4sS+2mP6+TqGQ5CfCQ==
+X-Google-Smtp-Source: AA0mqf73JHOqGpDUGg53WdcvLu5gaWuskxVybe/qoyzm5gAWoEgUzmCFA+XztP0plDSe8ha2gmOHiw==
+X-Received: by 2002:a17:906:7b96:b0:7c1:bb5:f29c with SMTP id s22-20020a1709067b9600b007c10bb5f29cmr1221263ejo.58.1670313978383;
+        Tue, 06 Dec 2022 00:06:18 -0800 (PST)
+Received: from mbp-di-paolo.station (net-2-35-55-161.cust.vodafonedsl.it. [2.35.55.161])
+        by smtp.gmail.com with ESMTPSA id vs19-20020a170907139300b007bee745759bsm7084366ejb.20.2022.12.06.00.06.17
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Dec 2022 00:06:18 -0800 (PST)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH V6 6/8] block, bfq: retrieve independent access ranges
+ from request queue
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <5d062001-2fff-35e5-d951-a61b510727d9@opensource.wdc.com>
+Date:   Tue, 6 Dec 2022 09:06:17 +0100
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, arie.vanderhoeven@seagate.com,
+        rory.c.chen@seagate.com, Federico Gavioli <f.gavioli97@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4C45BCC6-D9AB-4C70-92E2-1B54AB4A2090@linaro.org>
+References: <20221103162623.10286-1-paolo.valente@linaro.org>
+ <20221103162623.10286-7-paolo.valente@linaro.org>
+ <5d062001-2fff-35e5-d951-a61b510727d9@opensource.wdc.com>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,18 +78,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 07:18:56PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  net/ethernet/eth.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+
+
+> Il giorno 21 nov 2022, alle ore 02:01, Damien Le Moal =
+<damien.lemoal@opensource.wdc.com> ha scritto:
+>=20
+
+...
+
+>=20
+>> }
+>>=20
+>> static bool bfq_bio_merge(struct request_queue *q, struct bio *bio,
+>> @@ -7144,6 +7159,8 @@ static int bfq_init_queue(struct request_queue =
+*q, struct elevator_type *e)
+>> {
+>> 	struct bfq_data *bfqd;
+>> 	struct elevator_queue *eq;
+>> +	unsigned int i;
+>> +	struct blk_independent_access_ranges *ia_ranges =3D =
+q->disk->ia_ranges;
+>>=20
+>> 	eq =3D elevator_alloc(q, e);
+>> 	if (!eq)
+>> @@ -7187,10 +7204,31 @@ static int bfq_init_queue(struct =
+request_queue *q, struct elevator_type *e)
+>> 	bfqd->queue =3D q;
+>>=20
+>> 	/*
+>> -	 * Multi-actuator support not complete yet, default to single
+>> -	 * actuator for the moment.
+>> +	 * If the disk supports multiple actuators, we copy the =
+independent
+>> +	 * access ranges from the request queue structure.
+>> 	 */
+>> -	bfqd->num_actuators =3D 1;
+>> +	spin_lock_irq(&q->queue_lock);
+>> +	if (ia_ranges) {
+>> +		/*
+>> +		 * Check if the disk ia_ranges size exceeds the current =
+bfq
+>> +		 * actuator limit.
+>> +		 */
+>> +		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
+>> +			pr_crit("nr_ia_ranges higher than act limit: =
+iars=3D%d, max=3D%d.\n",
+>> +				ia_ranges->nr_ia_ranges, =
+BFQ_MAX_ACTUATORS);
+>> +			pr_crit("Falling back to single actuator =
+mode.\n");
+>> +			bfqd->num_actuators =3D 0;
+>> +		} else {
+>> +			bfqd->num_actuators =3D ia_ranges->nr_ia_ranges;
+>> +
+>> +			for (i =3D 0; i < bfqd->num_actuators; i++)
+>> +				bfqd->ia_ranges[i] =3D =
+ia_ranges->ia_range[i];
+>> +		}
+>> +	} else {
+>> +		bfqd->num_actuators =3D 0;
+>=20
+> That is very weird. The default should be 1 actuator.
+> ia_ranges->nr_ia_ranges is 0 when the disk does not provide any range
+> information, meaning it is a regular disk with a single actuator.
+
+Actually, IIUC this assignment to 0 seems to be done exactly when you
+say that it should be done, i.e., when the disk does not provide any
+range information (ia_ranges is NULL). Am I missing something else?
+
+Once again, all other suggestions applied. I'm about to submit a V7.
 
 Thanks,
-Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
+Paolo
+
