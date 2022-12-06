@@ -2,82 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A32644184
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEFC644186
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:48:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234171AbiLFKsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:48:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42348 "EHLO
+        id S232184AbiLFKsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:48:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233785AbiLFKsC (ORCPT
+        with ESMTP id S230437AbiLFKsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:48:02 -0500
-Received: from mx.swemel.ru (mx.swemel.ru [95.143.211.150])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A11225
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:48:00 -0800 (PST)
-From:   Denis Arefev <arefev@swemel.ru>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=swemel.ru; s=mail;
-        t=1670323677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dyDdQ0ouK6C8bS9bKimyo6WyQoc/XZnFKa1MkRVBOUU=;
-        b=eUZgBGctez7/faDwGHUnXo0cKQutXkFVBBoyVX6M9Qvwybd7AhC7TAbCcDg+bdqNrSYtVs
-        6Ca9APE+/edoMT9CpKngwaL8dd6GjVYFKBuy35NnW30qm/U1zrLoFJH7KURuQ8xidTAmeE
-        UKmkFX0dnTNI9TPEUU/JCFrrlOgqNhA=
-To:     Harry Wentland <harry.wentland@amd.com>
-Cc:     Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Aurabindo Pillai <aurabindo.pillai@amd.com>,
-        Roman Li <roman.li@amd.com>,
-        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
-Subject: [PATCH] drm/amd/display: Added pointer check
-Date:   Tue,  6 Dec 2022 13:47:57 +0300
-Message-Id: <20221206104757.31512-1-arefev@swemel.ru>
+        Tue, 6 Dec 2022 05:48:32 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAB3225;
+        Tue,  6 Dec 2022 02:48:31 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id d14so14736185edj.11;
+        Tue, 06 Dec 2022 02:48:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4SaDoYpKy8Pz2qitUMQLvwrZeZcLwL+BKMR9jLZDlo0=;
+        b=aH1DdEhqSjTxFKkR5p4zfb7+pyTWa0UMQ3qeWnmhVYS9Sun9eI7yxGNxRwg4HLocdQ
+         79yW7eaEA6X+IxPLbqOvJYpltwZIpTXznWkU5i58Crgq5D1eovHbc60MNyCL0glfFBA6
+         q/3JMv8ZGaJAqqBe4Su5sN2b37sdphSCLlgJDzT65JVVRjFibwXCRgz4CZtlibp/x27W
+         orYcgMZ0lguiPAPfk3YZnTp6AMPkIlBGQyZCRNBEqqF5tzPmO2aRKfXGeVWHXK8g+DmP
+         MyGuzxwFpfyjfrmSmcSrMSElBOZ5M/CVA2N9Cme/YI3XBbsk5/jFQs5E/r889KZxlm1H
+         OdkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4SaDoYpKy8Pz2qitUMQLvwrZeZcLwL+BKMR9jLZDlo0=;
+        b=UHk6L+wcPRc3m85Z4DnVCJ47GhDXbQlUchYgg5HY2/RwoW+n7kTl6oZmOOlfUIthnG
+         gqF3diepAeS5leO+aQzt255CNJZM/ellITkErrxqdfgiLp0oQiKTGQgHt2yepHglkuCU
+         4IDT+DdHnUuoD/UEWVEjMES4BsWLJd2gy2moyOrA8nLj0x5lWQcWzN46abB530xaiovN
+         nZ5DruvUjsWunm/b6ymi+H/kkdjq6wZodgIrk8CU6F+oMnGTuMUagefi+JqD+luPpoxz
+         sPQeG9SkZoxevFyR7lPzYZVEphh81SnfHXp4Vh07TKfTBywAS7rJixi1jtqPelLGKvzm
+         iBFg==
+X-Gm-Message-State: ANoB5pnfMtA1vk6OOqNyIM7A/GdPWdhWVSahawHGowGWxo1v47tUMiat
+        V4Mb6O42DuKtQJjQe6yAbzp9F6fgC+o0NQ==
+X-Google-Smtp-Source: AA0mqf5QpqtVzqcm5qwpNii1uiuSPOCxFEfHLFQf8AsZhcmqhbT37+fc7Ze7o9yhBwRiiDG9sHZcjQ==
+X-Received: by 2002:aa7:db18:0:b0:46c:304d:843f with SMTP id t24-20020aa7db18000000b0046c304d843fmr15338214eds.231.1670323709986;
+        Tue, 06 Dec 2022 02:48:29 -0800 (PST)
+Received: from skbuf ([188.26.184.215])
+        by smtp.gmail.com with ESMTPSA id va11-20020a17090711cb00b007c0f45ad6bcsm2300366ejb.109.2022.12.06.02.48.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 02:48:29 -0800 (PST)
+Date:   Tue, 6 Dec 2022 12:48:27 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Eggers <ceggers@arri.de>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux@armlinux.org.uk,
+        Tristram.Ha@microchip.com, richardcochran@gmail.com
+Subject: Re: [Patch net-next v2 01/13] net: dsa: microchip: ptp: add the
+ posix clock support
+Message-ID: <20221206104827.corkkthxmypegja7@skbuf>
+References: <20221206091428.28285-1-arun.ramadoss@microchip.com>
+ <20221206091428.28285-2-arun.ramadoss@microchip.com>
+ <5892889.lOV4Wx5bFT@n95hx1g2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5892889.lOV4Wx5bFT@n95hx1g2>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Return value of a function 'dc_create_state' is
-dereferenced at amdgpu_dm.c:2027 without checking for null
+On Tue, Dec 06, 2022 at 11:37:26AM +0100, Christian Eggers wrote:
+> > v1 -> v2
+> > - Deleted setting 8021_1as bit and added P2P bit in ksz_ptp_clock_register()
+> 
+> did I miss the discussion about this change? I thought that the first goal is
+> to use KSZ switches as a boundary clock which implies using the 802.1AS feature.
+> 
+> Using the KSZ in P2P transparent clock mode IMHO requires writing the peer delays
+> into switch registers (which needs to be implemented in a companion 
+> application/script for ptp4p).
+> 
+> As far as I remember, there is also no support using ptp4l with 1-step transparent
+> clock switches.
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Signed-off-by: Denis Arefev <arefev@swemel.ru>
----
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 0f7749e9424d..529483997154 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -1960,7 +1960,9 @@ static int dm_resume(void *handle)
- 	dc_release_state(dm_state->context);
- 	dm_state->context = dc_create_state(dm->dc);
- 	/* TODO: Remove dc_state->dccg, use dc->dccg directly. */
--	dc_resource_state_construct(dm->dc, dm_state->context);
-+	if (dm_state->context) {
-+		dc_resource_state_construct(dm->dc, dm_state->context);
-+	}
- 
- 	/* Before powering on DC we need to re-initialize DMUB. */
- 	r = dm_dmub_hw_init(adev);
--- 
-2.25.1
-
+If it was in response to something I said, I just asked to add a comment
+as to what the 802.1AS bit does, not to delete it...
