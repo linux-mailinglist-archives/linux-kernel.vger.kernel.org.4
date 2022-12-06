@@ -2,121 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C9D6445BD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6B06445C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:35:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234823AbiLFOeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 09:34:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
+        id S234835AbiLFOfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 09:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiLFOeQ (ORCPT
+        with ESMTP id S231363AbiLFOfF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 09:34:16 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2117.outbound.protection.outlook.com [40.107.8.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B392655D;
-        Tue,  6 Dec 2022 06:34:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JYGJwSynSvC7x8qTVKPQUcTXzwy1RmqAJIN/RGPSa7IXySc2nXBGYPbwBzK7BhHljNMpzO2r/+KNoiIzeBNCt4QNwQXm8JNrXSFzKE/01pg76bToF73ATn0LtsLCt4o0cysBIbPwcawGg75XuQnJuXXsRBLRVJVXf+uxUc6swvbkajawklQqoi/u2JEEN4KDYYquHs3hB4Q8h7RubqPMRoDWFY8AcCsR7rPxc1LJlWSKRh6Iz5n9VyZW9FgEbbFlyS8J/MPMBNk7vFJCYkTXtx3xrUE9s76leFSWQ6Pf3kgS8C/Xf1Tod5hQP+YSAiOQW96DXVCajEq3IP6JUHlbhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jpIIfeJO50/HzMBMMQhVEcfT1mGxMVCUMzwLmGTOt0M=;
- b=gjgVnqP1QIG/5g5ayrC819v8zMrv+QD22NcqlL0Kca7/0cYgNNLg9b8ZpdeSodgD7M/Xqui/5WTQ0N/iRLkELYEB9C6WpBwBsIgwTsmUwY0QIrfaHTvakw424FFXMUt71XUSVzHGTirkkCB41tx1/SWLW9NmeMX9a87CAA3Dwn7Ee4b+911q6H1C/e2i9kQTKLALtcdgWb84b1e2N87nznufozMExwOBYo8zqh9OTMXrx1gCQFSN+mEE9FnZ4CrwzPSC1OKYJvPNPSo1r6n6qJz2KI16o8VMqPWihjLgo8tQPZHGrORp1lUumYA4iLBC5ep2RWFL1R2KpkYnOuUQ7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=axentia.se; dmarc=pass action=none header.from=axentia.se;
- dkim=pass header.d=axentia.se; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=axentia.se;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jpIIfeJO50/HzMBMMQhVEcfT1mGxMVCUMzwLmGTOt0M=;
- b=LWxrsMfjlAJPb43OoAJZpWCvBXeYBEobmJqD6GXQ2ckHZlQLKzsbaB0OCZmF01/2cMdVfsv7PIAMcDwKKBpDzxhacMXSN9syNgMbLnjuKC6d4Du26H7O4MfznLuxGjsul3lDtDBFvsm7fCBGRw6kd3Nurv4MSjEYKHGsJf57S28=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=axentia.se;
-Received: from VI1PR02MB4445.eurprd02.prod.outlook.com (2603:10a6:803:ab::28)
- by AM0PR02MB5891.eurprd02.prod.outlook.com (2603:10a6:208:183::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.8; Tue, 6 Dec
- 2022 14:34:11 +0000
-Received: from VI1PR02MB4445.eurprd02.prod.outlook.com
- ([fe80::622:521d:7f53:7c4f]) by VI1PR02MB4445.eurprd02.prod.outlook.com
- ([fe80::622:521d:7f53:7c4f%6]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
- 14:34:11 +0000
-Message-ID: <029fd171-18c6-7588-453b-ed8c4f12ab38@axentia.se>
-Date:   Tue, 6 Dec 2022 15:34:10 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] i2c: mux: Convert to use sysfs_emit_at() API
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, wsa+renesas@sang-engineering.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <202212061936401320262@zte.com.cn>
-From:   Peter Rosin <peda@axentia.se>
-In-Reply-To: <202212061936401320262@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MM0P280CA0001.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:190:a::10) To VI1PR02MB4445.eurprd02.prod.outlook.com
- (2603:10a6:803:ab::28)
+        Tue, 6 Dec 2022 09:35:05 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AD821813;
+        Tue,  6 Dec 2022 06:35:03 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id kw15so3215924ejc.10;
+        Tue, 06 Dec 2022 06:35:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EzchpwuEta8aWE4H77gSMJ23xGLi6cuMRh/hqr7Hhzg=;
+        b=PJlYuQu7DT20Nqtsx+U+ypBjUKndXcSYcotmtLnM2rbpcnQF3hOCRETPKWv44aDNsO
+         I34EdmBmvfCyNtp8f5Raec1qfcw/80sQWgGiSnDFlpKmkiMtI4IT97vesVZxY0Zl/cp1
+         JVuL4avU19GpqIVNJcn66YRPI/P4iwiWv33h7JtQNwS1gj0vJFUgOsWeKYk6iAI70bzb
+         +DRU813exk/yoLvqLBd81Z5VGHPIoW7TjnIZFRuEiI6ZwftM/144e7/E4UmfL2qBANHS
+         XqQhJaNkvQK/dLTKfCXuGvLqDhw7mlFYNpMlO3D7VH18KejQA+t+X9HiOFQBRLEPROMs
+         YQKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EzchpwuEta8aWE4H77gSMJ23xGLi6cuMRh/hqr7Hhzg=;
+        b=nwK64y6wLlpsecLeh6vv7Kkr4Qd9AcENIEFoTF1xJqOhWyMJCZGHji9GPRBg8f5FaT
+         q1ojc5+U6j6wNZPWWQhUit6ppFyWb/xird7mefKQlABaTpoMUhUIXN/sozQOXLYqN7Yv
+         Z1FJw0FwzhO+BnH+/M21TGBC6wPcoz1lV5n4l2PbmbmMTkM9VeKG79NP1aaJZvijAFrx
+         cZG6RHf/+lAsdHSP2U6UWjxenvkUGUxfWinnH+7DWu5HJ3DvDQZTVWj/hz/OJtqCEh01
+         ejELf56PT0KGnEUq4tN9ltsbPVFvsYtN+DccDQ/EkuqVdPa8dW6bT+GnGx+n7LYIVLI3
+         6BlA==
+X-Gm-Message-State: ANoB5pn7OT+duH3eJJr6VwJBSMl4K5T/W1AgmkZl/60AG1UWrwKuBLHc
+        5p4zk9rssRuyUJVAnxhqTInVioeUtnQN/41Q
+X-Google-Smtp-Source: AA0mqf50vMd570dJRGajJ64lc4+GMS6qx3XGi9I9gbuBt1onOlLBoT30hOjQY87JLWf86OA8Q+XN0g==
+X-Received: by 2002:a17:906:99d3:b0:78d:c7fd:f755 with SMTP id s19-20020a17090699d300b0078dc7fdf755mr10882905ejn.702.1670337301415;
+        Tue, 06 Dec 2022 06:35:01 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id g26-20020a056402181a00b004618a89d273sm1059447edy.36.2022.12.06.06.34.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 06:34:59 -0800 (PST)
+Date:   Tue, 6 Dec 2022 15:35:10 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v4 net-next 5/5] drivers/net/phy: add driver for the
+ onsemi NCN26000 10BASE-T1S PHY
+Message-ID: <Y49THkXZdLBR6Mxv@gvm01>
+References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
+ <1816cb14213fc2050b1a7e97a68be7186340d994.1670329232.git.piergiorgio.beruto@gmail.com>
+ <Y49IBR8ByMQH6oVt@lunn.ch>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR02MB4445:EE_|AM0PR02MB5891:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5a82a285-d9ab-4a17-1014-08dad796f0fc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XC7YlIgtuTwHBBUNAn9tMtUOdqNkbTmmTAwGZllRX1ztB0Iwg920zH2zmVNSfW+cyUN+eea2nmilZksHbchwU1A7//nb/tETRxyEs68JfoW4rXGPt7Njtdl55+T8QQpOwOP9iUs+y5xlF1opd9sSbbIwbVkUgJKm2hVPX/M9CykPWbQHaUFksCebSc61/jIb9epnztCPaZWimBB4QRr4oTiDrrXmQlcDpc057z+6lJKwv8p5fEKHDDb72aaWG1WWTIDvCXQLung9T5B6Z6bFswU82dusVBW7LxIwdbYdIFVKK9qsk0FkCTE1TMITa5oGs09DOeuZYsRmRs7rbdHwPEDk74um6oxnOTVXMb4suUcLpr3hxjPIXTJDlyBP7h9fkHTpK2FSurLH4EDYYQNN+LRRKqWG5i8QbgRStmkixhe6PjASjcX4tOuzmzpErx22zPX00WjD+2TWgOAjMcrQxDZMThDS5Yg1izEaASPMxgh+Uu92mlB/TRhLc9jrSlR1Wka1Iy75oikYdV6i6FD6/O+sUi0w2cuM2hwglufClVeD9ym6LkZdwNzYANQyZ6DkU4ajMbsEu46lIiZObpd4EsW9way6D6kLKFWhLNsX4/aaw2VqwapFamF7y+zgyihlf81m4XEY+HjCMJCnzvsUY80CwN57Bu4FeUQ4k+c5xu7/aRMs46LPKx0SttY1PbnFNF7oZNbhO0agzYIF9TrW3pbEx6w6vWdFC6goSC83flk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR02MB4445.eurprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39840400004)(346002)(366004)(376002)(396003)(136003)(451199015)(316002)(2616005)(6512007)(186003)(26005)(31686004)(83380400001)(478600001)(41300700001)(6506007)(8676002)(36756003)(4326008)(66556008)(66476007)(66946007)(2906002)(38100700002)(6486002)(8936002)(5660300002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cW5OQUx2dTJoU0NwR0ZBNlE5Qks4TzZqcmRjUDZVYzlCbHJUZXR1SWlTaTR4?=
- =?utf-8?B?RWticnhsYTdnN3c4NE0vaWpia2hrbTRaVTN1MnJ4dVAvMVNvaVdvR3hQa2ZR?=
- =?utf-8?B?VTV2aUtkeTlUdUhaVnBiYzRKYVdSdUh1b3R6amcya2JmN0t5NXdmdFcwTi9s?=
- =?utf-8?B?dUJ2L1BaQjRzYk9mS2FheXpscWV5cHc1b1h5Zi9NWkZuUU5pbGhvQmVYc0Vi?=
- =?utf-8?B?VFNjZHI5UzY2YUxtUTZJSE52WkdQK0p6NS96aVlDY3QrL3BOaE1iSm5Zb2Q4?=
- =?utf-8?B?SXR5am01c0I1RXpjeSsvU2N5Q3RFdVo4YTEzVHRPOGNnZW5wZGkzMXJLaWdz?=
- =?utf-8?B?SWNocHJ3OFFkenoyT1A1WlJLRW5yQ3l6VFhxdTZLbi9WZ2VtN2ozNmE4UHZY?=
- =?utf-8?B?ZjVuM2F6ZkRFRGFuRlg0TFNlUjcyaG4rSTd1OG9FWFZicXM5UDZwL0NWa3RD?=
- =?utf-8?B?Q0F3bWRLb29lNTQwVXBwMG02K3hCaXBFckhteWRQbzZWZGttdHBXOHlZd2F6?=
- =?utf-8?B?MlNScFV6N2NtdEVad1FpN2tQTEtOZ3VtYUFYTklhUXJLUUlodWJHVkJwUVdC?=
- =?utf-8?B?NE9ocFF3U21EMk9tS2I1Vy83OWEvMDFrZno1ZXFzdUdQNTcxWWx2TkZSZGxu?=
- =?utf-8?B?Zkk4VVA1NWt6QVp1bERSbjlmYlEwWUl4SnR1N1J1d2lkaE1JTjdENjMzOE5F?=
- =?utf-8?B?OFJ3L1FiUnE0YzQxV3A2NjRGWVdUUUxBRStCcmszeHgxSVpPbUsvcVBJYmZk?=
- =?utf-8?B?QUdRdG11WDJCVkxySTZaUXdkRk1wZkhHQmIxOG45a2dMbDNmTjlzaloxTzdu?=
- =?utf-8?B?eURvdHN4ajJwU290d01DVjN6TURpYWN1VVMxZkFFYVJCeFZQeVh0WGdzdjFW?=
- =?utf-8?B?Qkl4YzdzaE02WEgrWkRKRUgyc2xBTGNDY2EvY28vYm8rSWNnNW1oWDVJMFpi?=
- =?utf-8?B?OW85SjZ3ckMzMEFjWUtKZmZFaUswWVd1SUYvYXlFR2N6MG9LQVN2Um5qZlVj?=
- =?utf-8?B?UTRzdElNZndpTmdyVldJMENwR3BDODUySXRCSDMveXp0NUtpM2d4V0dMaytr?=
- =?utf-8?B?Skh1MExFWUZHNVJjWXV5VnRHdUxHTW80am1mVVVLY1hpTlJTcG5meEFnejdk?=
- =?utf-8?B?QVRpOHhZcmQzVjk1WmZBbXRwc1dxSy9mTEJicnIzUjdTaWFnNFkrT1hXWThB?=
- =?utf-8?B?WlJlQzlZOXNad1dkbWJ3bUd1eWpxa2tqMEZwenlwR2tBakNvdGF2bWpvZ1hD?=
- =?utf-8?B?UTh4ZXllSm1zM2daNXFWQzRHVXVpQUxhWGlRM0VlcnlkdzA2TnUza2d2MjlQ?=
- =?utf-8?B?WlVqTVdHMDQyd1RRZFUydFF5WGl0eWh1VnJIS3ZwN0xKY2l2UnJFeW95bjJ2?=
- =?utf-8?B?cXFVNWJYMjZlN05Jd2xKS3hGbmliZnV1cXFUQ09kSVlpcVNSSE52eDRkYVpt?=
- =?utf-8?B?VXJFQ0hNWGMwRTcvTHFQVE5saE5ZT0xWanRnMm4zRG5qaWkwbVRyNVJ1Skht?=
- =?utf-8?B?M2Q0dk9xY2tCeFZWKzIySWxOcElhZmtDUFVxTTcreU1pM2RXOHo1cG5kdng5?=
- =?utf-8?B?bklBYTN0YmI3VG4vTFNJZ3lIR1VKcWJFQ2wrSkF6YUloaHdSUy9SUjRBcFBJ?=
- =?utf-8?B?OW1ZaWRyek5JZlliUmo5amIyTDNnSHVhaWhwU0xxRnVpTEExK2RKanFzZy96?=
- =?utf-8?B?Ni9UR3M2dVg1VW00VDBQREowRHoxRjhmcDJieWpRdVRYSFpBU0JSM3cwMmE5?=
- =?utf-8?B?ZXdwK3l4QmRCdHFiNjFMNS8wbW5uYjVsWWNIUHkxUTB5TVBnQXhKZU5ZQ1pS?=
- =?utf-8?B?V2hneEh6d1pTMWpZRlpIeGhiT0gwTWt2VWNqVndlRVUzM2xBYTR6a3dpOHI1?=
- =?utf-8?B?bWpKZ2RnSVZvSUhPT1pHOWd3RVNBZEdsajNqODZjc2RXZXcrNlI4V0llY0Jz?=
- =?utf-8?B?UTNTbXd6LzUyL2luUWZ2K3kyMEF4ckN5d2ljMTl2cEFURmlMYXVGWUJ5M1hp?=
- =?utf-8?B?WGdpL1F2ZkJGSnVScFNKbmdHbWZyUzBXbjh2WTRYR1VQUE41L2FlNGZGUE8w?=
- =?utf-8?B?UStIQk96UmNMRm1xQ1hyQ2c0NEUxQXpnSnpBRWZmdjIxaXZYK05QL1Q1U1Fq?=
- =?utf-8?Q?0EVv6DYuqujAbz8p80ZODIddF?=
-X-OriginatorOrg: axentia.se
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5a82a285-d9ab-4a17-1014-08dad796f0fc
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR02MB4445.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 14:34:11.6807
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4ee68585-03e1-4785-942a-df9c1871a234
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gMQfxkQObX9FneGqsnCWP4Vj7fzVADjhZxykWiWn1fKfHtaeTt2AwWye31YCjg3r
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR02MB5891
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y49IBR8ByMQH6oVt@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,35 +79,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Hi Andrew,
+thank you for your review. Please, see my answers below.
 
-2022-12-06 at 12:36, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/i2c/muxes/i2c-demux-pinctrl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
-> index f7a7405d4350..6dc23aedcaed 100644
-> --- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
-> +++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
-> @@ -167,7 +167,7 @@ static ssize_t available_masters_show(struct device *dev,
->  	int count = 0, i;
-> 
->  	for (i = 0; i < priv->num_chan && count < PAGE_SIZE; i++)
-> -		count += scnprintf(buf + count, PAGE_SIZE - count, "%d:%pOF%c",
-> +		count += sysfs_emit_at(buf, count, "%d:%pOF%c",
->  				   i, priv->chan[i].parent_np,
->  				   i == priv->num_chan - 1 ? '\n' : ' ');
-> 
+Thanks,
+Piergiorgio
 
-You need to adjust the indentation of the two follow-up lines.
+On Tue, Dec 06, 2022 at 02:47:49PM +0100, Andrew Lunn wrote:
+> > +// module parameter: if set, the link status is derived from the PLCA status
+> > +// default: false
+> > +static bool link_status_plca;
+> > +module_param(link_status_plca, bool, 0644);
+> 
+> No module parameters, they are considered a bad user interface.
+OK, as you see I'm a bit "outdated" :-)
+What would be the alternative? There is a bunch of vendor-specific PHY
+features that I would like to expose at some point (e.g. regulation of
+TX voltage levels). Thanks!
+ 
+> > +static int ncn26000_get_features(struct phy_device *phydev)
+> > +{
+> > +	linkmode_zero(phydev->supported);
+> > +	linkmode_set_bit(ETHTOOL_LINK_MODE_MII_BIT, phydev->supported);
+> > +
+> > +	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
+> > +			 phydev->supported);
+> > +
+> > +	linkmode_copy(phydev->advertising, phydev->supported);
+> 
+> That should not be needed.
+> 
+> Also, look at PHY_BASIC_T1_FEATURES, and how it is used in
+> microchip_t1.c.
+In principle, I agree. But I have a problem with this specific chip, two
+actually...
 
-Cheers,
-Peter
+1. The chip does -not- set the MDIO_PMA_EXTABLE while it should. This
+has been fixed in new versions of the chip, but for now, the bit is 0
+so genphy_c45_baset1_able() reports 'false'.
+
+2. This PHY is one of the PHYs that emulates AN (we discussed about this
+earlier), but it does not actually implement it.
+
+Therefore, I thought to just force the capabilities. In the future, I
+could read the chip ID/version and make a decision based on that (force
+or use the standard c45 functions).
+
+Doe it make sense to you?
+
+> > +static int ncn26000_read_status(struct phy_device *phydev)
+> > +{
+> > +	// The NCN26000 reports NCN26000_LINK_STATUS_BIT if the link status of
+> > +	// the PHY is up. It further reports the logical AND of the link status
+> > +	// and the PLCA status in the BMSR_LSTATUS bit. Thus, report the link
+> > +	// status by testing the appropriate BMSR bit according to the module's
+> > +	// parameter configuration.
+> > +	const int lstatus_flag = link_status_plca ?
+> > +		BMSR_LSTATUS : NCN26000_BMSR_LINK_STATUS_BIT;
+> > +
+> > +	int ret;
+> > +
+> > +	ret = phy_read(phydev, MII_BMSR);
+> > +	if (unlikely(ret < 0))
+> > +		return ret;
+> > +
+> > +	// update link status
+> > +	phydev->link = (ret & lstatus_flag) ? 1 : 0;
+> 
+> What about the latching behaviour of LSTATUS?
+See further down.
+
+> 
+> https://elixir.bootlin.com/linux/latest/source/drivers/net/phy/phy_device.c#L2289
+> 
+> > +
+> > +	// handle more IRQs here
+> 
+> You are not in an IRQ handler...
+Right, this is just a left-over when I moved the code from the ISR to
+this functions. Fixed.
+
+> You should also be setting speed and duplex. I don't think they are
+> guaranteed to have any specific value if you don't set them.
+Ah, I got that before, but I removed it after comment from Russell
+asking me not to do this. Testing on my HW, this seems to work, although
+I'm not sure whether this is correct or it is working 'by chance' ?
+
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static irqreturn_t ncn26000_handle_interrupt(struct phy_device *phydev)
+> > +{
+> > +	const struct ncn26000_priv *const priv = phydev->priv;
+> > +	int ret;
+> > +
+> > +	// clear the latched bits in MII_BMSR
+> > +	phy_read(phydev, MII_BMSR);
+> 
+> Why?
+That was my ugly handling of the status double-read...
+See the pacth below! I copied part of the code you suggested.
+
+> 
+> > +
+> > +	// read and aknowledge the IRQ status register
+> > +	ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
+> > +
+> > +	if (unlikely(ret < 0) || (ret & priv->enabled_irqs) == 0)
+> 
+> How does NCN26000_REG_IRQ_STATUS work? Can it have bits set which are
+> not in NCN26000_REG_IRQ_CTL ? That does happen sometimes, but is
+> pretty unusual. If not, you don't need to track priv->enabled_irqs,
+> just ensure ret is not 0.
+It has a single bit that is not maskable. That would be the reset event
+bit, which is triggered if the chip goes through a spurious reset. Since
+I did not want to handle this in this first version of the driver, I
+just masked it this way.
+Thoughts?
+
+
+diff --git a/drivers/net/phy/ncn26000.c b/drivers/net/phy/ncn26000.c
+index 9e02c5c55244..198539b7ee66 100644
+--- a/drivers/net/phy/ncn26000.c
++++ b/drivers/net/phy/ncn26000.c
+@@ -92,15 +92,27 @@ static int ncn26000_read_status(struct phy_device *phydev)
+
+        int ret;
+
++       /* The link state is latched low so that momentary link
++        * drops can be detected. Do not double-read the status
++        * in polling mode to detect such short link drops except
++        * the link was already down.
++        */
++       if (!phy_polling_mode(phydev) || !phydev->link) {
++               ret = phy_read(phydev, MII_BMSR);
++               if (ret < 0)
++                       return ret;
++               else if (ret & lstatus_flag)
++                       goto upd_link;
++       }
++
+        ret = phy_read(phydev, MII_BMSR);
+        if (unlikely(ret < 0))
+                return ret;
+
++upd_link:
+        // update link status
+        phydev->link = (ret & lstatus_flag) ? 1 : 0;
+
+-       // handle more IRQs here
+-
+        return 0;
+ }
+
+@@ -109,9 +121,6 @@ static irqreturn_t ncn26000_handle_interrupt(struct phy_device *phydev)
+        const struct ncn26000_priv *const priv = phydev->priv;
+        int ret;
+
+-       // clear the latched bits in MII_BMSR
+-       phy_read(phydev, MII_BMSR);
+-
+        // read and aknowledge the IRQ status register
+        ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
