@@ -2,169 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B2C644F74
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 00:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 271A5644F85
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 00:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbiLFXR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 18:17:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59458 "EHLO
+        id S229705AbiLFXXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 18:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLFXRX (ORCPT
+        with ESMTP id S229515AbiLFXXB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 18:17:23 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA42742F41
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:17:22 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id a14so11920665pfa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 15:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3vbRaeuklEF43T7OpAaK1TLfMIWz7cNmPbZiH16DjEk=;
-        b=RcfNgmVFnKB8u4Z10nfAYSiF9cW9vtwIUqMKJZBCkVHsHejK4CNP4ry8bejkhPODLX
-         dztTcdBeS0CFH5anZgg6xaPMINIXLgJxeamBaKetRXAFZBdOghQurw29Afc71OBqIf9r
-         0o0nH0fPYw9RhNSRaTlDQFa+nnNyViS67CDWA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3vbRaeuklEF43T7OpAaK1TLfMIWz7cNmPbZiH16DjEk=;
-        b=DF053l1dFKWqlq1uvd8Lzw6q4vEvfnt71hacD+MVhHcZc4pnxCI50W9jDsm7tpRnn3
-         M9exNArfc0UcieF6Lphj5ypxKKSR0c+jGdvB5j30anKvmHlP0fiX3ddiHHYmIIdg09+X
-         VDhVYnQxYXaK9MNi9BZUV9usECrjoPUYnAadIH6/Fb1a/f2ZThdSrTajIN6q5TeQdSgu
-         20/ETyJCGgZAHLMP7CZdihZxCFcpU9ZY4jkqvVmJjv/JXlufUu/tk54yC8j+QbkCNo4e
-         y4Y0Mp/9mZrULkb+P1BV9F/8kzbn8J9+9KR54Fg2RoTp2dS8NlCJf9UDF6SNJjZ3V8gI
-         JaSg==
-X-Gm-Message-State: ANoB5pm2VHAcq4WUD2UBRJ/5LeO8+p8Rx/pMKxksewJeyrZ4GyhXvwDV
-        CcW4ETuY2uDCQZx5rNEA0OByhA==
-X-Google-Smtp-Source: AA0mqf70yq/wiSE63G+S5dvMbxwJzEtdGs7svgHjnyKixD6By2l7CJqbb/S9LNtBgDlXwJlqIzbBTA==
-X-Received: by 2002:a63:d149:0:b0:478:dfd4:fc2b with SMTP id c9-20020a63d149000000b00478dfd4fc2bmr4745390pgj.234.1670368642119;
-        Tue, 06 Dec 2022 15:17:22 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170902a38e00b0017f36638010sm13058718pla.276.2022.12.06.15.17.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 15:17:21 -0800 (PST)
-From:   Kees Cook <keescook@chromium.org>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     Kees Cook <keescook@chromium.org>,
-        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        pepsipu <soopthegoop@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
-        bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
-        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
-        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
-        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        David Ahern <dsahern@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Richard Gobert <richardbgobert@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] skbuff: Reallocate to ksize() in __build_skb_around()
-Date:   Tue,  6 Dec 2022 15:17:14 -0800
-Message-Id: <20221206231659.never.929-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Tue, 6 Dec 2022 18:23:01 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E673B1CB08
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1670368974; x=1701904974;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7dTgJZvXn/0rjzJG4KrL4TNwGEAxt2FG5yydkETyABg=;
+  b=Cl31QvEMt+8BaMkeam9CfZDNidlBSMuR6XMHS7bXjdQ4VCdSbF3d8V6Q
+   IdNyT4WyKV2CcHrC4jhs3hDYqoXmAGEYLY78SyiH7pVIXY7rZKqO2Z+ez
+   VY/2aP2q1Nd9khRbghGROzukuwTxHwpcH6w9HQettJpnFNqZgOBxCVobU
+   E5YSqXgOXLdYkbopMPKWzDOXvSn9bX9+fJg/WcI9vqhnx+X1jdGkXXdRK
+   vFL69Pk50sr86e/pa/eMPgIsPMu7atd9h6dBhtQuMQDeRINeGWehUIiHU
+   YOFpyMbAv11W6nV6WGqk0RYpXEUMUYm10qxoeSsEjmNq3mMWchJsvGyiC
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,223,1665417600"; 
+   d="scan'208";a="330140992"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Dec 2022 07:22:54 +0800
+IronPort-SDR: omZ/UmOZTl3hSty0MVKUpTl/r4oklm4XJxtOKIPbMRlERnvGvY8GOrEU5kTiXTce2XpGMABwN7
+ PBPNunq/6SDKlTKsoruL1r9+4VdjfLvqNl6+tomjNMWDwyVUOE0scHYUCy9K/nd2IJ5UkhifjN
+ +hty6a2XvJsl78c1NN4Ng9OyUi6oq+jBKf+dwApRoRyMjpkCNghX/InbDLdUJgmam1e3R3LUKf
+ OTkPNLbOEAFxsNdJ4+Yo8Hg/j5fwh4KRczYAh/F9JFtkZDuitQ0NuWd/lSnGdlHFJ0WfBqnZtS
+ zQE=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2022 14:41:25 -0800
+IronPort-SDR: 5i1eHQs6v7nk2roFC2xyaKQSbbGviZbiWAkfbXB7/T33zspsRG7ekI8sMmhVq8zcx+IISLpuXq
+ XrkLX3eNMh1kQRG4fstWFyu9mbTO7aaEV5DNDev+4y4W0nQYOBxnzLemeYLPNcX5Io7fB4ZXVi
+ wxP+SmNt/3YK9zIhXO/hRubo6p7Ts4g4Ta5A+RKKQyFL8M/F73a3UXuNSwu5ImnJFqmJPXgpnZ
+ HRuYsa5gKjkcWMhHmmAs61eJGJG01xB1su9GBtLDlRm1tXXTqklv6+8FFfLi0dOc/893cWfJL7
+ vI0=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2022 15:22:55 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NRc0F6zX5z1RwqL
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 15:22:53 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1670368973; x=1672960974; bh=7dTgJZvXn/0rjzJG4KrL4TNwGEAxt2FG5yy
+        dkETyABg=; b=X1aW3GN1utk0UgPHuHVZA2oTdTMeXctOUd+rsdoX8RAorOW2zdu
+        afiI0sEz8xelO16qCfd05xOj/naPGG9KLUZFZZUsBV2ACtoCNtTNLZ+U2gA2rucx
+        NZq77IpJaxnPhBzbvDlsx7V+7DThQJ4058ldWNt8C1IajrKEN7cAcsC/73fXPXJm
+        7BtbId2rGWTt20WsBg2p9qFp1XASo7eGAz897IaXqXhJYvEcd0bRN30rH14gEuJM
+        6e7wVfvze8dvTy4/M1nbyBf+HgsnetFvCrvDv0zg3JOgTiiV8YHfJ0iq0J3oCuYQ
+        BcUQwoGVNxwJ1kSv/ZyBgkVW2BZzrgcqO/w==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id j3BqsLkjju8U for <linux-kernel@vger.kernel.org>;
+        Tue,  6 Dec 2022 15:22:53 -0800 (PST)
+Received: from [10.225.163.74] (unknown [10.225.163.74])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NRc0C5NZhz1RvLy;
+        Tue,  6 Dec 2022 15:22:51 -0800 (PST)
+Message-ID: <52576133-b94e-e667-8410-33e44f3f37f1@opensource.wdc.com>
+Date:   Wed, 7 Dec 2022 08:22:50 +0900
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2831; h=from:subject:message-id; bh=SEGHsTZp5rUk6+r1FvL0rwY8bYvfT9UgLniC3mssO5w=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjj81513DL6A5/30d+E/4ZlSiL3Nec8HQn2RQ2kFzs 0hZX4L+JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY4/NeQAKCRCJcvTf3G3AJgEWEA CP3WJylXFSIh5ufMvAJQvK79bcfGQEV+CDUcSNcXTWdDEohBbp8tEFod5Nfj2l3fynK91HxFZsxogF kEnuK8O/7SyKs7X8L7bGXpX9pXLRMweVYccLF5Nwxh4ERV1DNDsQmjZH1uDF7SNi9blnULpHvzg34i Byw6v5p0mynHLS3alptN8Pw1n6DTuP2wYEVV8vkB1gcqBOJ6MRbcCbnshUxezF2lTqORLUeVAKvn1S HhI3U5ydjsp6VsIcFmzIau3s9l5lF+z2D/Hrb28myH81E9/ec8nEljNqB5nwlZHAupJnwLxlBhukCC ILfKn0kAdEZLXwhYqmxctrFDB5aNYK+lcNtF2RKXnZsy0Tr3q7ubILFHbQLBSvEKQ8QfpAvwH4Gby9 BS+ELN1eAQ6WQqraXDr/ox/ZzfOPEk3IjsSY2jJ3UcGtqjz7rE7UXCEaAxTO+CmY+eGit7U/Y1HinQ JwhD/C4H1lNNPpJilKLWGmqOLnOYKkDKGfKWdTmSFJa3sxIlzWz5RlTPRoXPmMamZINipZHKl8BjU+ Ee0qzhGS5qQ8uuefIru++zAjBvy3ww83P/5IaKBqSma+SQkucNI4OEa4nqnSAZGLIwfYXc4sit2pHB WMtK/l1bgCdHLPDCL8cHfNH7f64jUTfmdEtV/urQ91TRLv497uFJ/hH07ZUg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH V8 3/8] block, bfq: move io_cq-persistent bfqq data into a
+ dedicated struct
+Content-Language: en-US
+To:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
+        glen.valante@linaro.org, Gianmarco Lusvardi <glusvardi@posteo.net>,
+        Giulio Barabino <giuliobarabino99@gmail.com>,
+        Emiliano Maccaferri <inbox@emilianomaccaferri.com>
+References: <20221206163203.30071-1-paolo.valente@linaro.org>
+ <20221206163203.30071-4-paolo.valente@linaro.org>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20221206163203.30071-4-paolo.valente@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When build_skb() is passed a frag_size of 0, it means the buffer came
-from kmalloc. In these cases, ksize() is used to find its actual size,
-but since the allocation may not have been made to that size, actually
-perform the krealloc() call so that all the associated buffer size
-checking will be correctly notified. For example, syzkaller reported:
+On 12/7/22 01:31, Paolo Valente wrote:
+> With a multi-actuator drive, a process may get associated with multiple
+> bfq_queues: one queue for each of the N actuators. So, the bfq_io_cq
+> data structure must be able to accommodate its per-queue persistent
+> information for N queues. Currently it stores this information for
+> just one queue, in several scalar fields.
+> 
+> This is a preparatory commit for moving to accommodating persistent
+> information for N queues. In particular, this commit packs all the
+> above scalar fields into a single data structure. Then there is now
+> only one field, in bfq_io_cq, that stores all the above information. This
+> scalar field will then be turned into an array by a following commit.
+> 
+> Suggested-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+> Signed-off-by: Gianmarco Lusvardi <glusvardi@posteo.net>
+> Signed-off-by: Giulio Barabino <giuliobarabino99@gmail.com>
+> Signed-off-by: Emiliano Maccaferri <inbox@emilianomaccaferri.com>
+> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
 
-  BUG: KASAN: slab-out-of-bounds in __build_skb_around+0x235/0x340 net/core/skbuff.c:294
-  Write of size 32 at addr ffff88802aa172c0 by task syz-executor413/5295
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-For bpf_prog_test_run_skb(), which uses a kmalloc()ed buffer passed to
-build_skb().
-
-Reported-by: syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com
-Link: https://groups.google.com/g/syzkaller-bugs/c/UnIKxTtU5-0/m/-wbXinkgAQAJ
-Fixes: 38931d8989b5 ("mm: Make ksize() a reporting-only function")
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Pavel Begunkov <asml.silence@gmail.com>
-Cc: pepsipu <soopthegoop@gmail.com>
-Cc: syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: kasan-dev <kasan-dev@googlegroups.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: ast@kernel.org
-Cc: bpf <bpf@vger.kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Hao Luo <haoluo@google.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>
-Cc: jolsa@kernel.org
-Cc: KP Singh <kpsingh@kernel.org>
-Cc: martin.lau@linux.dev
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: song@kernel.org
-Cc: Yonghong Song <yhs@fb.com>
-Cc: netdev@vger.kernel.org
-Cc: LKML <linux-kernel@vger.kernel.org>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- net/core/skbuff.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 1d9719e72f9d..b55d061ed8b4 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -274,7 +274,23 @@ static void __build_skb_around(struct sk_buff *skb, void *data,
- 			       unsigned int frag_size)
- {
- 	struct skb_shared_info *shinfo;
--	unsigned int size = frag_size ? : ksize(data);
-+	unsigned int size = frag_size;
-+
-+	/* When frag_size == 0, the buffer came from kmalloc, so we
-+	 * must find its true allocation size (and grow it to match).
-+	 */
-+	if (unlikely(size == 0)) {
-+		void *resized;
-+
-+		size = ksize(data);
-+		/* krealloc() will immediate return "data" when
-+		 * "ksize(data)" is requested: it is the existing upper
-+		 * bounds. As a result, GFP_ATOMIC will be ignored.
-+		 */
-+		resized = krealloc(data, size, GFP_ATOMIC);
-+		if (WARN_ON(resized != data))
-+			data = resized;
-+	}
- 
- 	size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
- 
 -- 
-2.34.1
+Damien Le Moal
+Western Digital Research
 
