@@ -2,316 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04158644379
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C014644369
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234186AbiLFMwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:52:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S231641AbiLFMrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbiLFMw1 (ORCPT
+        with ESMTP id S230327AbiLFMrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:52:27 -0500
-Received: from mx1.emlix.com (mx1.emlix.com [136.243.223.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FCC215A29;
-        Tue,  6 Dec 2022 04:52:21 -0800 (PST)
-Received: from mailer.emlix.com (p5098be52.dip0.t-ipconnect.de [80.152.190.82])
-        (using TLSv1.2 with cipher ADH-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mx1.emlix.com (Postfix) with ESMTPS id 78B0A60730;
-        Tue,  6 Dec 2022 13:45:37 +0100 (CET)
-From:   Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Edmund Berenson <edmund.berenson@emlix.com>,
-        Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: [PATCH 2/2] gpio: max7317: Add gpio expander driver
-Date:   Tue,  6 Dec 2022 13:45:28 +0100
-Message-Id: <20221206124530.5431-1-edmund.berenson@emlix.com>
-X-Mailer: git-send-email 2.37.4
+        Tue, 6 Dec 2022 07:47:31 -0500
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75E424F;
+        Tue,  6 Dec 2022 04:47:28 -0800 (PST)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1445ca00781so10659624fac.1;
+        Tue, 06 Dec 2022 04:47:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jRbJnoAPdyVeKSpAdDaecdS/ZR6oAJxEcKGzEYJMYw0=;
+        b=eeHNYvEqru0tU9fsBL1/bkm91uWkm/y0V+oysIoo2Vk/HRtadL0J8x7Ca0VbvMieUq
+         PIf8vzrpoHWDg7bXsG4kItHvtls3JKl/4nX0/aHK+sF1yQKVO64H9DFepaya4AF2qr6u
+         Bzp7gOSx6pnfbsODe0GM763SxIWktkahQXr2gASibA6xaw6ulrvsKIMXbgoDubvAaGUp
+         a0rd++TjUNFn4B82T37qJzRTaFQL6wbNhVEXbPDQwn5KjpGbHTb4Xpzu/udLqKBRV1v/
+         M+Xi5eS+J/EPmXI1en1/TkZKfdEaPYNTaa8/aWqPy1cJGaA8DQNGU2Ql6zv8TRIMBerR
+         gtGw==
+X-Gm-Message-State: ANoB5plRHmNIZx+NMlYumtDwC34R5hC4mzHIyib8PhwBHzODONBSJXeT
+        Os2UX4x9Jzov9CiYdkmAlw==
+X-Google-Smtp-Source: AA0mqf5Rm0o3BU5PrNXKP/4vKT9EPUdrmyLN5uG/7ZjQ/O4xf0ra3tTsNcE89VV/V15aEllCorbAZw==
+X-Received: by 2002:a05:6870:5781:b0:13b:c610:e30b with SMTP id i1-20020a056870578100b0013bc610e30bmr39970200oap.134.1670330848000;
+        Tue, 06 Dec 2022 04:47:28 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r16-20020a4a3710000000b004a0b424f99dsm3656548oor.43.2022.12.06.04.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 04:47:27 -0800 (PST)
+Received: (nullmailer pid 176446 invoked by uid 1000);
+        Tue, 06 Dec 2022 12:47:26 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dmitry.baryshkov@linaro.org, daniel@ffwll.ch,
+        linux-kernel@vger.kernel.org, freedreno@lists.freedesktop.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        airlied@linux.ie, quic_sbillaka@quicinc.com, andersson@kernel.org,
+        agross@kernel.org, sean@poorly.run, robh+dt@kernel.org,
+        vkoul@kernel.org, konrad.dybcio@somainline.org, airlied@gmail.com,
+        quic_abhinavk@quicinc.com, dri-devel@lists.freedesktop.org,
+        swboyd@chromium.org, devicetree@vger.kernel.org,
+        dianders@chromium.org, linux-arm-msm@vger.kernel.org
+In-Reply-To: <1670281694-13281-3-git-send-email-quic_khsieh@quicinc.com>
+References: <1670281694-13281-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670281694-13281-3-git-send-email-quic_khsieh@quicinc.com>
+Message-Id: <167033052405.165993.699264089064134340.robh@kernel.org>
+Subject: Re: [PATCH v9 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+Date:   Tue, 06 Dec 2022 06:47:26 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add driver for maxim MAX7317 SPI-Interfaced 10 Port
-GPIO Expander.
 
-Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
----
- drivers/gpio/Kconfig        |   8 ++
- drivers/gpio/Makefile       |   1 +
- drivers/gpio/gpio-max7317.c | 221 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 230 insertions(+)
- create mode 100644 drivers/gpio/gpio-max7317.c
+On Mon, 05 Dec 2022 15:08:11 -0800, Kuogee Hsieh wrote:
+> Add both data-lanes and link-frequencies property into endpoint
+> 
+> Changes in v7:
+> -- split yaml out of dtsi patch
+> -- link-frequencies from link rate to symbol rate
+> -- deprecation of old data-lanes property
+> 
+> Changes in v8:
+> -- correct Bjorn mail address to kernel.org
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+> ---
+>  Documentation/devicetree/bindings/display/msm/dp-controller.yaml | 9 +++++++++
+>  1 file changed, 9 insertions(+)
+> 
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index a01af1180616..24ed968a2b7f 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1622,6 +1622,14 @@ config GPIO_MAX7301
- 	help
- 	  GPIO driver for Maxim MAX7301 SPI-based GPIO expander.
- 
-+config GPIO_MAX7317
-+	tristate "Maxim MAX7317 GPIO expander"
-+	depends on SPI
-+	help
-+	  GPIO driver for Maxim MAX7317 SPI-based GPIO expander.
-+	  The MAX7317 is a serial-interfaced gpio extender, with
-+	  10 ports.
-+
- config GPIO_MC33880
- 	tristate "Freescale MC33880 high-side/low-side switch"
- 	help
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 29e3beb6548c..edbfb3d918ce 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -89,6 +89,7 @@ obj-$(CONFIG_GPIO_MAX7300)		+= gpio-max7300.o
- obj-$(CONFIG_GPIO_MAX7301)		+= gpio-max7301.o
- obj-$(CONFIG_GPIO_MAX730X)		+= gpio-max730x.o
- obj-$(CONFIG_GPIO_MAX732X)		+= gpio-max732x.o
-+obj-$(CONFIG_GPIO_MAX7317)		+= gpio-max7317.o
- obj-$(CONFIG_GPIO_MAX77620)		+= gpio-max77620.o
- obj-$(CONFIG_GPIO_MAX77650)		+= gpio-max77650.o
- obj-$(CONFIG_GPIO_MB86S7X)		+= gpio-mb86s7x.o
-diff --git a/drivers/gpio/gpio-max7317.c b/drivers/gpio/gpio-max7317.c
-new file mode 100644
-index 000000000000..58b66f763beb
---- /dev/null
-+++ b/drivers/gpio/gpio-max7317.c
-@@ -0,0 +1,221 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2021, Lukasz Zemla, Woodward Inc.
-+ *
-+ */
-+
-+#include <linux/gpio.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/slab.h>
-+#include <linux/spi/spi.h>
-+#include <linux/platform_data/max7317.h>
-+
-+/* MAX7317 has 10 pins, controlled by 10 internal registers,
-+ * addressed as 0x00 - 0x09.
-+ */
-+#define PIN_NUMBER 10
-+
-+/* Register code to read inputs from 7 to 0 */
-+#define REG_CODE_READ_PORTS_7_TO_0	((u8)0x0E)
-+/* Register code to read inputs from 9 to 8 */
-+#define REG_CODE_READ_PORTS_9_TO_8	((u8)0x0F)
-+
-+struct max7317 {
-+	struct mutex		lock;
-+	struct gpio_chip	chip;
-+	struct device		*dev;
-+};
-+
-+struct max7317_platform_data {
-+	/* number assigned to the first GPIO */
-+	unsigned int	gpio_base;
-+};
-+
-+/* A write to the MAX7317 means one message with one transfer */
-+static int max7317_spi_write(struct device *dev, unsigned int reg,
-+				unsigned int val)
-+{
-+	struct spi_device *spi = to_spi_device(dev);
-+	u16 word = ((reg & 0x7F) << 8) | (val & 0xFF);
-+
-+	return spi_write_then_read(spi, &word, sizeof(word), NULL, 0);
-+}
-+
-+/* A read from the MAX7317 means two transfers, with chip select going high between them. */
-+static int max7317_spi_read(struct device *dev, unsigned int reg)
-+{
-+	int ret;
-+	u16 word;
-+	struct spi_device *spi = to_spi_device(dev);
-+
-+	word = 0x8000 | (reg << 8);
-+
-+	/* First transfer: ask to read register */
-+	ret = spi_write(spi, &word, sizeof(word));
-+	if (ret)
-+		return ret;
-+
-+	/* Second transfer: read register value */
-+	ret = spi_read(spi, &word, sizeof(word));
-+	if (ret)
-+		return ret;
-+
-+	return word & 0xff;
-+}
-+
-+static void max7317_set(struct gpio_chip *chip, unsigned int offset, int value)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+
-+	mutex_lock(&ts->lock);
-+	max7317_spi_write(ts->dev, offset, value);
-+	mutex_unlock(&ts->lock);
-+}
-+
-+static int max7317_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct max7317 *ts = gpiochip_get_data(chip);
-+	unsigned int reg, val, mask, shift;
-+	int inputs;
-+
-+	if (offset < 8) {
-+		reg = REG_CODE_READ_PORTS_7_TO_0;
-+		mask = 1u << offset;
-+		shift = offset;
-+	} else {
-+		reg = REG_CODE_READ_PORTS_9_TO_8;
-+		mask = 1u << (offset - 8);
-+		shift = offset - 8;
-+	}
-+
-+	mutex_lock(&ts->lock);
-+	inputs = max7317_spi_read(ts->dev, reg);
-+	mutex_unlock(&ts->lock);
-+
-+	val = ((unsigned int)inputs & mask) >> shift;
-+
-+	return (int)val;
-+}
-+
-+static int max7317_direction_input(struct gpio_chip *chip, unsigned int offset)
-+{
-+	/* Per documentation:
-+	 * 'Configure a port as an input by setting its output register to 0x01,
-+	 * which sets the port output high impedance (Table 4).
-+	 */
-+	max7317_set(chip, offset, 1);
-+	return 0;
-+}
-+
-+static int max7301_direction_output(struct gpio_chip *chip, unsigned int offset,
-+				    int value)
-+{
-+	max7317_set(chip, offset, value);
-+	return 0;
-+}
-+
-+static int max7317_probe(struct spi_device *spi)
-+{
-+	struct max7317 *ts;
-+	struct device *dev;
-+	struct max7317_platform_data *pdata;
-+	int ret;
-+
-+	/* bits_per_word cannot be configured in platform data */
-+	spi->bits_per_word = 16;
-+	ret = spi_setup(spi);
-+	if (ret < 0)
-+		return ret;
-+
-+	ts = devm_kzalloc(&spi->dev, sizeof(struct max7317), GFP_KERNEL);
-+	if (!ts)
-+		return -ENOMEM;
-+
-+	ts->dev = &spi->dev;
-+
-+	dev = ts->dev;
-+
-+	pdata = dev_get_platdata(dev);
-+
-+	mutex_init(&ts->lock);
-+	dev_set_drvdata(dev, ts);
-+
-+	if (pdata)
-+		ts->chip.base = pdata->gpio_base;
-+	else
-+		ts->chip.base = -1;
-+
-+	ts->chip.label = dev->driver->name;
-+
-+	ts->chip.direction_input = max7317_direction_input;
-+	ts->chip.get = max7317_get;
-+	ts->chip.direction_output = max7301_direction_output;
-+	ts->chip.set = max7317_set;
-+
-+	ts->chip.ngpio = PIN_NUMBER;
-+	ts->chip.can_sleep = true;
-+	ts->chip.parent = dev;
-+	ts->chip.owner = THIS_MODULE;
-+
-+	ret = gpiochip_add_data(&ts->chip, ts);
-+	if (!ret)
-+		return ret;
-+
-+	mutex_destroy(&ts->lock);
-+	return ret;
-+}
-+
-+static void max7317_remove(struct spi_device *spi)
-+{
-+	struct max7317 *ts = dev_get_drvdata(&spi->dev);
-+
-+	if (!ts)
-+		return;
-+
-+	gpiochip_remove(&ts->chip);
-+	mutex_destroy(&ts->lock);
-+}
-+
-+static const struct spi_device_id max7317_id[] = {
-+	{ "max7317", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(spi, max7317_id);
-+
-+static const struct of_device_id max7317_of_table[] = {
-+	{ .compatible = "maxim,max7317" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max7317_of_table);
-+
-+static struct spi_driver max7317_driver = {
-+	.driver = {
-+		.name = "max7317",
-+		.of_match_table	= of_match_ptr(max7317_of_table),
-+	},
-+	.probe = max7317_probe,
-+	.remove = max7317_remove,
-+	.id_table = max7317_id,
-+};
-+
-+static int __init max7317_init(void)
-+{
-+	return spi_register_driver(&max7317_driver);
-+}
-+/* register after spi postcore initcall and before
-+ * subsys initcalls that may rely on these GPIOs
-+ */
-+subsys_initcall(max7317_init);
-+
-+static void __exit max7317_exit(void)
-+{
-+	spi_unregister_driver(&max7317_driver);
-+}
-+module_exit(max7317_exit);
-+
-+MODULE_AUTHOR("Lukasz Zemla");
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("MAX7317 GPIO-Expander");
--- 
-2.37.4
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/msm/dp-controller.yaml:108:21: [error] syntax error: mapping values are not allowed here (syntax)
+
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/display/msm/dp-controller.example.dts'
+Documentation/devicetree/bindings/display/msm/dp-controller.yaml:108:21: mapping values are not allowed here
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/display/msm/dp-controller.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/display/msm/dp-controller.yaml:108:21: mapping values are not allowed here
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: ignoring, error parsing file
+make: *** [Makefile:1492: dt_binding_check] Error 2
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1670281694-13281-3-git-send-email-quic_khsieh@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
