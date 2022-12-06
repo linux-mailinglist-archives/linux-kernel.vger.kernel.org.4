@@ -2,104 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 748EE644979
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DB4644977
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234768AbiLFQiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:38:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
+        id S235619AbiLFQiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbiLFQhw (ORCPT
+        with ESMTP id S235582AbiLFQhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:37:52 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BB6DDD;
-        Tue,  6 Dec 2022 08:36:58 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 7E78F18839C4;
-        Tue,  6 Dec 2022 16:36:47 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 6616525002E1;
-        Tue,  6 Dec 2022 16:36:42 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 4EBC691201E4; Tue,  6 Dec 2022 16:36:42 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Tue, 6 Dec 2022 11:37:33 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFAC1CE8;
+        Tue,  6 Dec 2022 08:36:47 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id z92so21127146ede.1;
+        Tue, 06 Dec 2022 08:36:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cu4l7c7T/KB912u2Bgs9LaIHGYUGD4KvKD2RT7SocLI=;
+        b=PMIsbCZcJUnwlcb85e4se4Lhmnkg5/p3CZ/cDZsAukZ3f3i3tmY4g5sANJgykCYirK
+         mlvGaIPbXgCyzpAmH06sYNk8vCmaADFoE6zZqQHb8hGg4x0/WHv6Z8hYJ0LBIWS+LTtc
+         u+Elv8Ugh2Cba3MU9nJxstXdxBM91J+/NK6gRkjIOK3iiQ+uH5og/9UApeMWkOKnd9cj
+         1HfW0ZgVT20uEcispZUyLDadLhenYxpl6mq5JxMXKgftr+gVs0wv+tsc+y54FBjZx7F/
+         u//HOUZNxymJ9GIObTMD8FDbnCFX9F/nCVNnq/jzUgW6MoBC+f52FSuv+e3PAFbJwBdU
+         tGnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Cu4l7c7T/KB912u2Bgs9LaIHGYUGD4KvKD2RT7SocLI=;
+        b=QqgvWJFuBx4Dlbq3c2K4BFr3EmtAo1gXs7Sd9pixTs2mMVmgJm5rpnyKyOuk0VBvhx
+         v35X45QzmJLTsm0tTIJ6vLUPqkhCRoPQmPETpEzIwCzHW3vh11ExPn9wJvDbhJ9TazUl
+         6jD/L14lToXbia9j4D0IlzI69fJpDBqjz/izRfhtPed2g2Zn0qpUhA2kDS28X8CXArqW
+         XgivAtJTMLQs4ByUQ5PSubW39xwPDmwq4WpmBw6+UP8hRlgs653/LQq1IKsBjXpXx+s4
+         TTRRWFltKV8RtmMICfxgcGPBB5NMqnSTkgXtzV+58CqJKJN6cSxv9cP6ax1ZM6GI4M6g
+         KTXA==
+X-Gm-Message-State: ANoB5pntnd1xbY5FVipUuD9fid1wW1UiXIMmnOThvcw8AGmdAM44wGBs
+        QzY2jSR9CrnpEqENlvtSdK0=
+X-Google-Smtp-Source: AA0mqf73SzGZEjm/ohEPWqbfiYGIO3rXn2gObtryTw0s7vUBeNfZ9CzBOpFc3oS8A3V5nkWXr1+saw==
+X-Received: by 2002:aa7:d1c5:0:b0:46b:a536:e8d0 with SMTP id g5-20020aa7d1c5000000b0046ba536e8d0mr26626675edp.261.1670344606270;
+        Tue, 06 Dec 2022 08:36:46 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id y20-20020a50eb94000000b004589da5e5cesm1168852edr.41.2022.12.06.08.36.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 08:36:45 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:36:43 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Joe Tessler <jrt@google.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2 8/9] media: dt-bindings: nvidia,tegra-cec: convert to
+ DT schema
+Message-ID: <Y49vm34cwgilAA33@orome>
+References: <20221205151845.21618-1-krzysztof.kozlowski@linaro.org>
+ <20221205151845.21618-9-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Date:   Tue, 06 Dec 2022 17:36:42 +0100
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     davem@davemloft.net, kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <Y487T+pUl7QFeL60@shredder>
-References: <20221205185908.217520-1-netdev@kapio-technology.com>
- <20221205185908.217520-4-netdev@kapio-technology.com>
- <Y487T+pUl7QFeL60@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <580f6bd5ee7df0c8f0c7623a5b213d8f@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Go2Ynh+Vu1nkhJ/W"
+Content-Disposition: inline
+In-Reply-To: <20221205151845.21618-9-krzysztof.kozlowski@linaro.org>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-06 13:53, Ido Schimmel wrote:
-> On Mon, Dec 05, 2022 at 07:59:08PM +0100, Hans J. Schultz wrote:
->> This implementation for the Marvell mv88e6xxx chip series, is based on
->> handling ATU miss violations occurring when packets ingress on a port
->> that is locked with learning on. This will trigger a
->> SWITCHDEV_FDB_ADD_TO_BRIDGE event, which will result in the bridge 
->> module
->> adding a locked FDB entry. This bridge FDB entry will not age out as
->> it has the extern_learn flag set.
->> 
->> Userspace daemons can listen to these events and either accept or deny
->> access for the host, by either replacing the locked FDB entry with a
->> simple entry or leave the locked entry.
->> 
->> If the host MAC address is already present on another port, a ATU
->> member violation will occur, but to no real effect.
-> 
-> And the packet will be dropped in hardware, right?
 
-Every packet that enters a locked port and does not have a matching ATU 
-entry on the port will be dropped (in HW) afaik.
+--Go2Ynh+Vu1nkhJ/W
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> ---
-> 
-> The changelog from previous versions is missing.
-> 
+On Mon, Dec 05, 2022 at 04:18:44PM +0100, Krzysztof Kozlowski wrote:
+> Convert Nvidia Tegra HDMI CEC bindings to DT schema.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+> ---
+>  .../bindings/media/cec/nvidia,tegra-cec.yaml  | 58 +++++++++++++++++++
+>  .../devicetree/bindings/media/tegra-cec.txt   | 27 ---------
+>  MAINTAINERS                                   |  2 +-
+>  3 files changed, 59 insertions(+), 28 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/media/cec/nvidia,te=
+gra-cec.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/media/tegra-cec.txt
+>=20
+> diff --git a/Documentation/devicetree/bindings/media/cec/nvidia,tegra-cec=
+=2Eyaml b/Documentation/devicetree/bindings/media/cec/nvidia,tegra-cec.yaml
+> new file mode 100644
+> index 000000000000..9a4025ff7fad
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/cec/nvidia,tegra-cec.yaml
 
-I am afraid because I made a mistake with the version string last, this 
-should be regarded as a first. Therefore no changelog.
+For consistency with other DT bindings on Tegra, it'd be good to name
+this nvidia,tegra114-cec.yaml since that's the first generation where
+this IP was added. Not a big deal, though.
 
->>  	err = mv88e6xxx_g1_atu_mac_read(chip, &entry);
->>  	if (err)
->> -		goto out;
->> +		goto out_unlock;
->> +
->> +	mv88e6xxx_reg_unlock(chip);
-> 
-> I was under the impression that we agreed that the locking change will
-> be split to a separate patch.
-> 
+> @@ -0,0 +1,58 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/cec/nvidia,tegra-cec.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Nvidia Tegra HDMI CEC
 
-Sorry, I guess that because of the quite long time that has passed as I 
-needed to get this FID=0 issue sorted out, and had many other different 
-changes to attend, I forgot. I see an updated version is needed anyhow, 
-so I will do it there.
+Again, for consistency with other bindings, NVIDIA is the preferred
+spelling. It's not a big deal and could be fixed up in a subsequent
+patch, there are a few other cases where the alternative spelling has
+been used.
 
->> 
->>  	spid = entry.state;
+The rest looks okay, so either way:
+
+Acked-by: Thierry Reding <treding@nvidia.com>
+
+--Go2Ynh+Vu1nkhJ/W
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmOPb5sACgkQ3SOs138+
+s6GLkQ/+JBbjUjYZFvRHaZqueKhqQcvpNxzAo/fyN5BnZRl/Dr6r9OkfSNoSVuEm
+io5uqdiYDfXXvkApiv7BbHeNaXH8BX0PxRZ9J+hsE41zpGVHRHE+dmRlcE+rhY54
+/TpkHx0VCMROkD6C1KQShCE4n9CQGRixLL2sHdhIWxmkaC2fLR609+duNNQ4t8Up
+ASXC4hJuo1TaO31lGydUoB6S7SeU+iSO71B68Pc0HZ2cFib1ZnsdLPgK1gMJyO9q
+ooyvj+IZsPX+YMfId0bMq9owxQRdqZhxSx58LOELQPR/5Ac8Cyfll70L9eZ9uw/8
+5PKT6Eb5ilJnjfCDzF/ef8BGMBL1Ko5qoZBAdqE2Pgk01joFuRIclgZBHcujEaMl
+ymMSnEla9I8thLrJ+8grukft6H6FcuKDnqsn4jhCoIm8b7tID+jyKCbmaBxb0AmC
+VBn13BuYlSv6czihQawg9cfUyjnam/f6t/KksETr1Ne6HzC0qN7ZrxXNjcqFVB48
+mrmKcUbT1adE4eq5czWTEExxckY91LIGSBxZVO6JFRp+13qv4HUV6ZfC8bHM+0x+
+g8WACmp+9HsfNHLR53X2ASF7UIzPicMXNMw2SHK2Zx8y2/WF1MdWRkYIj9NpfkhD
+eIbGX2q9nIG7nsmqzH66uQO59Wqdv40FseT6dQM5KPpNNz9Z8eI=
+=2Wsf
+-----END PGP SIGNATURE-----
+
+--Go2Ynh+Vu1nkhJ/W--
