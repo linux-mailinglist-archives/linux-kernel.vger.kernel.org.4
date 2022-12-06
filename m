@@ -2,73 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54779643B38
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:13:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44EC0643B39
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:13:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232930AbiLFCNH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 21:13:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S233084AbiLFCNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 21:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232849AbiLFCMx (ORCPT
+        with ESMTP id S233799AbiLFCN3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:12:53 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3952417AA3
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:12:52 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 21so13222971pfw.4
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 18:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c14cpbENCYZNKC7u3nvm/pV+pN6D09fmQR9Vg77kP7E=;
-        b=Puf5KmAloTMG82ul7mVb3DjfNsyo5ylLf2c86JaNIj0DRSwnbqyT5dFPV5PV62+JZv
-         bWODrmKHzlDHCPGWqUP5k+aupZxoY6qnjBb/JMpfwTeSmalwdqJjDqS6pGSwICU2I0PE
-         IvvvpZHbv68ZWDXW/N+OQrvHMtrHx98Ghjdz4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c14cpbENCYZNKC7u3nvm/pV+pN6D09fmQR9Vg77kP7E=;
-        b=T6W+T1yEiWeSf1Zt8D6MDE3axfaq7crlnY4GaCue5ZlVDp2Kq/qqUQDqUUTNocXuI8
-         t6+Z0nWO7I/TWmED+iR/fS7oXlm8xgCQqprq94AgNGXKTzXdhYYgLYJadXuLHzJQCy/j
-         No/rR58NGFvFwabmmXDQqsV+/kOHIZ8fHyHHzPSRz3ssYSurKecZW5HLg2RF2MZKlorB
-         00N4+4607a88lOyqb6SKwJJiwzg3+at0JUGvOhEze4sSgYAa9Rsq2jRmBuIXJixllnV+
-         Ed5e+0py0D2CtJIt8UtCQSQiFo6+V7KGR7c78T0jU/dNdED6kk+KcveNCY/PIJjqLvqQ
-         UqHQ==
-X-Gm-Message-State: ANoB5pkep060sAQBG6Syb0amzpRy9uz7D4BfhTdC9YjSgTZNx+r92+vt
-        gfN+dNE8zibFDRp7Pszkvf+a3oUSOEHppzUh
-X-Google-Smtp-Source: AA0mqf6aQacPSyfFiQzOm8CXVaSz1VIVy23ZQ5+/FZE57I15VEUSYLEjwQxOATQTdC4VkXC8I9/f5Q==
-X-Received: by 2002:a63:c46:0:b0:476:ed2a:6228 with SMTP id 6-20020a630c46000000b00476ed2a6228mr60063696pgm.137.1670292771791;
-        Mon, 05 Dec 2022 18:12:51 -0800 (PST)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id u6-20020a170902e80600b0017849a2b56asm11337097plg.46.2022.12.05.18.12.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 18:12:51 -0800 (PST)
-Date:   Tue, 6 Dec 2022 11:12:46 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Ricardo Ribalda <ribalda@chromium.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, Yunke Cao <yunkec@chromium.org>,
-        Max Staudt <mstaudt@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] media: uvcvideo: Refactor streamon/streamoff
-Message-ID: <Y46lHvHCFHH8J/ao@google.com>
-References: <20220920-resend-powersave-v4-0-47484ae40761@chromium.org>
- <20220920-resend-powersave-v4-1-47484ae40761@chromium.org>
+        Mon, 5 Dec 2022 21:13:29 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C87F1D0DA
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:13:28 -0800 (PST)
+Received: from kwepemi100025.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NR3pb1MqSz15N4y;
+        Tue,  6 Dec 2022 10:12:39 +0800 (CST)
+Received: from DESKTOP-27KDQMV.china.huawei.com (10.174.148.223) by
+ kwepemi100025.china.huawei.com (7.221.188.158) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Dec 2022 10:13:25 +0800
+From:   "Longpeng(Mike)" <longpeng2@huawei.com>
+To:     <stefanha@redhat.com>, <mst@redhat.com>, <jasowang@redhat.com>,
+        <sgarzare@redhat.com>, <eperezma@redhat.com>
+CC:     <cohuck@redhat.com>, <arei.gonglei@huawei.com>,
+        <yechuan@huawei.com>, <huangzhichao@huawei.com>,
+        <virtualization@lists.linux-foundation.org>,
+        <linux-kernel@vger.kernel.org>, Longpeng <longpeng2@huawei.com>
+Subject: [PATCH v2] vp_vdpa: harden the logic of set status
+Date:   Tue, 6 Dec 2022 10:13:21 +0800
+Message-ID: <20221206021321.2400-1-longpeng2@huawei.com>
+X-Mailer: git-send-email 2.25.0.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220920-resend-powersave-v4-1-47484ae40761@chromium.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.148.223]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi100025.china.huawei.com (7.221.188.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,37 +48,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/12/02 18:19), Ricardo Ribalda wrote:
-> @@ -840,13 +840,19 @@ static int uvc_ioctl_streamon(struct file *file, void *fh,
-[..]
-> +	handle->is_streaming = !ret;
+From: Longpeng <longpeng2@huawei.com>
 
+1. We should not set status to 0 when invoking vp_vdpa_set_status(),
+   trigger a warning in that case.
 
-> @@ -857,15 +863,22 @@ static int uvc_ioctl_streamoff(struct file *file, void *fh,
-[..]
-> +	handle->is_streaming = !!ret;
+2. The driver MUST wait for a read of device_status to return 0 before
+   reinitializing the device. But we also don't want to keep us in an
+   infinite loop forever, so wait for 5s if we try to reset the device.
 
-Had uvc_ioctl_streamABC() be 3 functions we would have seen
+Signed-off-by: Longpeng <longpeng2@huawei.com>
+---
+Changes v1->v2:
+  - use WARN_ON instead of BUG_ON. [Stefano]
+  - use "warning + failed" instead of "infinite loop". [Jason, Stefano]
+  - use usleep_range instead of msleep (checkpatch). [Longpeng]
 
-	handle->is_streaming = !!!ret;
+---
+ drivers/vdpa/virtio_pci/vp_vdpa.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-:)
+diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
+index 13701c2a1963..a2d3b13ac646 100644
+--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
++++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
+@@ -214,6 +214,9 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
+ 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	u8 s = vp_vdpa_get_status(vdpa);
+ 
++	/* We should never be setting status to 0. */
++	WARN_ON(status == 0);
++
+ 	if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
+ 	    !(s & VIRTIO_CONFIG_S_DRIVER_OK)) {
+ 		vp_vdpa_request_irq(vp_vdpa);
+@@ -222,14 +225,33 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
+ 	vp_modern_set_status(mdev, status);
+ }
+ 
++#define VP_VDPA_RESET_TMOUT_MS 5000 /* 5s */
++
+ static int vp_vdpa_reset(struct vdpa_device *vdpa, bool clear)
+ {
+ 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
+ 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
+ 	u8 s = vp_vdpa_get_status(vdpa);
++	unsigned long timeout;
+ 
+ 	vp_modern_set_status(mdev, 0);
+ 
++	/*
++	 * As the virtio v1.1 spec (4.1.4.3.2) says: After writing 0 to
++	 * device_status, the driver MUST wait for a read of device_status
++	 * to return 0 before reinitializing the device.
++	 * To avoid keep us here forever, we only wait for 5 seconds.
++	 */
++	timeout = jiffies + msecs_to_jiffies(VP_VDPA_RESET_TMOUT_MS);
++	while (vp_modern_get_status(mdev)) {
++		usleep_range(1000, 1500);
++		if (time_after(jiffies, timeout)) {
++			dev_err(&mdev->pci_dev->dev,
++				"vp_vdpa: fail to reset device\n");
++			return -ETIMEDOUT;
++		}
++	}
++
+ 	if (s & VIRTIO_CONFIG_S_DRIVER_OK)
+ 		vp_vdpa_free_irq(vp_vdpa);
+ 
+-- 
+2.23.0
 
-
-[..]
-
-A nit:
-
->  struct uvc_fh {
->  	struct v4l2_fh vfh;
-> +	bool is_streaming;
-
-That's a lot of padding.
-
->  	struct uvc_video_chain *chain;
->  	struct uvc_streaming *stream;
->  	enum uvc_handle_state state;
-
-I guess is_streaming better be next to enum uvc_handle_state, in which
-case is_streaming should not change sizeof(uvc_fh) (at least so on
-64-bit).
