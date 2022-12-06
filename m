@@ -2,123 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE533644E62
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BD27644E68
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:13:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbiLFWMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:12:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53652 "EHLO
+        id S229753AbiLFWNn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:13:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiLFWMp (ORCPT
+        with ESMTP id S229496AbiLFWNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:12:45 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C521717043;
-        Tue,  6 Dec 2022 14:12:42 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id d14so17446485edj.11;
-        Tue, 06 Dec 2022 14:12:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iYXLmwmRWqCyzAqnG3aNR/0AAohD2KWeWKOH7EUJLow=;
-        b=PBhzGIZ+ATOupWPKL5grDJCU68MrkeDJpiKg0onlWWcqUyo1Mv2L+ykCaleiVc6vBO
-         S+2Wu/oqBIqTGID6spdgTgGQn/1IOgqILcfzdQmiL8dZU0ZsrEtI7U8mh3I1czV59kFD
-         E/A0kji4qFDVudma8gMbdf/O0+DQrHwYFyfypBnG8S0OJqurIcx5Rh+X9yRCRmVmp+xe
-         q916Yru6yAvStgs01hw/2EVwYgHZugkfCQL3M1Cat+KDlE81qy+W4V37LS+FYfgUlQ1A
-         N2ixhucuYHEYG5qKSmbN9dQwMAHrettbepTX3JWEzvBo1VLEUaxbxYs3MYJSBTD7z1OY
-         TsfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iYXLmwmRWqCyzAqnG3aNR/0AAohD2KWeWKOH7EUJLow=;
-        b=3n9jLaNxkNJmEKq2NKpzgUM3nm6GuNiBLUruZNLI663uWj3cFOL7Jv3yfmHWotTbfc
-         V3LqXk/F5LbRAyrxhLeMd42r0bC4DS/aegDRINjC7VWXKk6R3iWlpkGBrwsOzUgYUIUc
-         WdjwA+8niA7hvravzZuiWEgSKkIMoJjNhqjYaw9RDFm1peb8kEne4m+sa+WNyj3uvqVG
-         RYAxR5UnLT5sR5ftxVByUjITmtlUZ9iXw4lUPG75MGxSFWGOkMs/TlIZEWkNO2ZVZWmA
-         4qbHrR6lmiyYjdC++HmDI0uYC9XRu6AYTY62Pf5kAzWcCqcQuN7gEj/8MMvivrHOHUSM
-         hL4w==
-X-Gm-Message-State: ANoB5pmKqWMO7QwuqZwwm92J05fNMkUl6G9OcPQTQCk9ChXdkGBKC5q9
-        fIiU/02HLYYk8VBFlzixkSc=
-X-Google-Smtp-Source: AA0mqf5mkqk5k/z5QmE6FQqCbFxEGSqZxp3bArtHGiABx2k5B/hMwQgmCDCIwBHreNIf13tELMH63g==
-X-Received: by 2002:a05:6402:1013:b0:463:f3a:32ce with SMTP id c19-20020a056402101300b004630f3a32cemr63753523edu.366.1670364761155;
-        Tue, 06 Dec 2022 14:12:41 -0800 (PST)
-Received: from skbuf ([188.26.184.215])
-        by smtp.gmail.com with ESMTPSA id 10-20020a170906200a00b007ae243c3f05sm7664381ejo.189.2022.12.06.14.12.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 14:12:40 -0800 (PST)
-Date:   Wed, 7 Dec 2022 00:12:38 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Jerry Ray <jerry.ray@microchip.com>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v3 2/2] dsa: lan9303: Move to PHYLINK
-Message-ID: <20221206221238.5p4wv472wwcjowy5@skbuf>
-References: <20221206183500.6898-1-jerry.ray@microchip.com>
- <20221206183500.6898-1-jerry.ray@microchip.com>
- <20221206183500.6898-3-jerry.ray@microchip.com>
- <20221206183500.6898-3-jerry.ray@microchip.com>
- <20221206193224.f3obnsjtphbxole4@skbuf>
- <Y4+vKh8EfA9vtC2B@shell.armlinux.org.uk>
+        Tue, 6 Dec 2022 17:13:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E946C2C124;
+        Tue,  6 Dec 2022 14:13:39 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A950B81B3B;
+        Tue,  6 Dec 2022 22:13:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AB50C433D7;
+        Tue,  6 Dec 2022 22:13:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670364817;
+        bh=aaEuMflWG3h9lGdqzzs38XODN98pr4Rxd/gte/nw7TI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Cyf1Huo8bUIvhPTTxdlAnMIoObwq8hm8lFH2xRlU+32//CwMWZoj0N+zd5sa6NwDv
+         3Wq3H0x6TCtNEnXCJONRinvp16pjnlgj6qc1/B0rT9b73MwJwl97YbZgIq359Wl72V
+         XlQH/pu7lDqBjUfTDqHlKDTond8AQy82ghJG5MdF8FLlN9C7x6w98HZGg1oWGgjzS6
+         H2zt7DhAjGDWqAI/vckpY4bDJlfGqQGWhaVCZ7FKsLsEFgQKVOb5tyKa8jxgYaJCiB
+         QH5JUi6AJF6o7qoZ39xzM4QeSa9mKLpufnMdk1KrSZqUajZB2x0AnxT3CuAUy6LlKL
+         dUlHI/RmVZCjg==
+Date:   Tue, 6 Dec 2022 16:13:35 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Cc:     sathyanarayanan.kuppuswamy@linux.intel.com, bhelgaas@google.com,
+        ruscur@russell.cc, oohall@gmail.com, fancer.lancer@gmail.com,
+        jdmason@kudzu.us, dave.jiang@intel.com, allenbh@gmail.com,
+        jejb@linux.ibm.com, martin.petersen@oracle.com,
+        linux-scsi@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ntb@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v3 4/9] scsi: lpfc: Change to use
+ pci_aer_clear_uncorrect_error_status()
+Message-ID: <20221206221335.GA1363005@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y4+vKh8EfA9vtC2B@shell.armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220928105946.12469-5-chenzhuo.1@bytedance.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 09:07:54PM +0000, Russell King (Oracle) wrote:
-> > Are you going to explain why modifying this register is no longer needed?
+[moved James, Dick, LPFC supporters to "to"]
+
+On Wed, Sep 28, 2022 at 06:59:41PM +0800, Zhuo Chen wrote:
+> lpfc_aer_cleanup_state() requires clearing both fatal and non-fatal
+> uncorrectable error status.
+
+I don't know what the point of lpfc_aer_cleanup_state() is.  AER
+errors should be handled and cleared by the PCI core, not by
+individual drivers.  Only lpfc, liquidio, and sky2 touch
+PCI_ERR_UNCOR_STATUS.
+
+But lpfc_aer_cleanup_state() is visible in the
+"lpfc_aer_state_cleanup" sysfs file, so removing it would break any
+userspace that uses it.
+
+If we can rely on the PCI core to clean up AER errors itself
+(admittedly, that might be a big "if"), maybe lpfc_aer_cleanup_state()
+could just become a no-op?
+
+Any comment from the LPFC folks?
+
+Ideally, I would rather not export pci_aer_clear_nonfatal_status() or
+pci_aer_clear_uncorrect_error_status() outside the PCI core at all.
+
+> But using pci_aer_clear_nonfatal_status()
+> will only clear non-fatal error status. To clear both fatal and
+> non-fatal error status, use pci_aer_clear_uncorrect_error_status().
 > 
-> ... otherwise it is a fixed link, so the PHY is configured for the fixed
-> link setting - which I think would end up writing to the an emulation of
-> the PHY, and would end up writing the same settings back to the PHY as
-> the PHY was already configured.
-
-To be clear, when you say "an emulation of the PHY", are you talking
-about the swphy behind the fixed-link, or about the LAN9303_VIRT_PHY_BASE
-registers, which correspond to the RevMII Virtual PHY of the switch CPU port?
-
-As far as I can understand the Microchip LAN9303 documentation, the DSA
-master can have a phy-handle to the switch node (which
-devicetree/bindings/net/dsa/lan9303.txt seems to confirm), and the
-switch can pretend it's a PHY when accessed by a switch-unaware
-(Generic) PHY driver at the usual PHY MDIO registers. Through the
-Virtual PHY feature and registers, it can also pretend it's the "other"
-PHY, and this MII_BMCR register of the Virtual PHY can ultimately
-autoneg with "itself" and control what the DSA master sees in terms of
-reported speed, duplex, and AN complete.
-
-Prior to this change, the driver, when given a DT blob with a fixed-link
-on the switch CPU port, would disable BMCR_ANENABLE in the Virtual PHY.
-After the change, it would leave things as they are (which is not
-necessarily the way things are out of reset). Which way is better?
-Does it matter? Is it a stupid question? No clue.
-
-> So, I don't think adjust_link does anything useful, and I think this is
-> an entirely appropriate change.
-
-That it may well be, but its presentation is entirely inappropriate.
-Andrew has told Jerry before that it's important to split, describe and
-justify his changes accordingly, so it's not like the things I'm
-complaining about are news to him. Things would go a lot smoother if
-Jerry explained his patches better.
-
-Reviewing patches which do stuff that isn't explained in the commit
-message reminds me of Forrest Gump. Life is like a box of chocolates,
-you never know what you're going to get. That's not how it's supposed to
-work, a box of chocolates should contain chocolates, at least here.
+> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> ---
+>  drivers/scsi/lpfc/lpfc_attr.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/scsi/lpfc/lpfc_attr.c b/drivers/scsi/lpfc/lpfc_attr.c
+> index 09cf2cd0ae60..d835cc0ba153 100644
+> --- a/drivers/scsi/lpfc/lpfc_attr.c
+> +++ b/drivers/scsi/lpfc/lpfc_attr.c
+> @@ -4689,7 +4689,7 @@ static DEVICE_ATTR_RW(lpfc_aer_support);
+>   * Description:
+>   * If the @buf contains 1 and the device currently has the AER support
+>   * enabled, then invokes the kernel AER helper routine
+> - * pci_aer_clear_nonfatal_status() to clean up the uncorrectable
+> + * pci_aer_clear_uncorrect_error_status() to clean up the uncorrectable
+>   * error status register.
+>   *
+>   * Notes:
+> @@ -4715,7 +4715,7 @@ lpfc_aer_cleanup_state(struct device *dev, struct device_attribute *attr,
+>  		return -EINVAL;
+>  
+>  	if (phba->hba_flag & HBA_AER_ENABLED)
+> -		rc = pci_aer_clear_nonfatal_status(phba->pcidev);
+> +		rc = pci_aer_clear_uncorrect_error_status(phba->pcidev);
+>  
+>  	if (rc == 0)
+>  		return strlen(buf);
+> -- 
+> 2.30.1 (Apple Git-130)
+> 
