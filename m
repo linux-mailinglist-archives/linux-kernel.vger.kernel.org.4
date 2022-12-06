@@ -2,398 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78619643E26
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98188643E25
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:12:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232492AbiLFING (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:13:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
+        id S232417AbiLFIM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:12:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiLFIND (ORCPT
+        with ESMTP id S230036AbiLFIMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:13:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485C1F3C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:12:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670314327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GmpmjSbKHMulBvxZcweP4/nkndyxT09kD0wag8DfLnY=;
-        b=FImgcqV3GZRPRQR5aBS6+L/3rle8NLIdJqwHnq9IPTajgbIGIyeAIdz+tx6Veas/e71ANb
-        jL/6OqLF8rpoIXURqcXBtKXvwBY0PC4MfNvvcQBHApTUhwfhDpQpYRnw4WWkPXsz+VSZrm
-        o7+BOB8XlNh5xjYI8z1YWFBEHRY/LPQ=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-370-VCbn2Sf9P7e1vYiCGwEgFQ-1; Tue, 06 Dec 2022 03:12:05 -0500
-X-MC-Unique: VCbn2Sf9P7e1vYiCGwEgFQ-1
-Received: by mail-ed1-f71.google.com with SMTP id h9-20020a05640250c900b00461d8ee12e2so7534270edb.23
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:12:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GmpmjSbKHMulBvxZcweP4/nkndyxT09kD0wag8DfLnY=;
-        b=WT+aHpCmRcic2WtwOfdRS8RxDTCQbaGE0eFNCMhJ/ViMadGDl74doZQ/KgCEt9Fub/
-         0vdtF0HzMZRN/0Ru5gKFQj4SXU7M8mGIvaR5ypsUc3YgUWW3CYv/Nu5X4VfeFV6fcCxV
-         5TN1j3Nf+YKJ5iC0bjCtDuWaPDoI8EGO2XV/5Gtg+3YBSOGqrdQyCl2ZyMVP2vE6tQUw
-         Aqd0yMnWgxJJZ+9YqbjS0lgA2AX5bvi6iEquux8sJRrMfrXGWqVajtiJUKrK96gtfpsD
-         aT588mHfu493rBZheEYGuXTfgkCwhPCRrMXzXOPuEOD936mMMB6DGkdhws0fE3LW8QBM
-         DKqA==
-X-Gm-Message-State: ANoB5pndPJ3OX8H9kfoRyrxDQCUBH/ub9dunjMwkC6XdLw8Rsl2hkqsR
-        zXal4CZhV/hb3so2Znc1ghbomXwhfbZh9JFpEmgrFoXEbgomT0mN0SMGoy9Irl+YV/pwIo9Oly/
-        9Km56OZxPgGEtLlKpX7TiKUBv
-X-Received: by 2002:a17:906:1914:b0:7c0:f213:f2ca with SMTP id a20-20020a170906191400b007c0f213f2camr7447389eje.21.1670314324683;
-        Tue, 06 Dec 2022 00:12:04 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7RvWO/eVBwuF6KitHgx9D3Doy82/2BTXkQSwZfRvB8Suhd5n6JuuNEITYOzu9xPmeNN2AO6Q==
-X-Received: by 2002:a17:906:1914:b0:7c0:f213:f2ca with SMTP id a20-20020a170906191400b007c0f213f2camr7447364eje.21.1670314324334;
-        Tue, 06 Dec 2022 00:12:04 -0800 (PST)
-Received: from [10.39.192.70] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id n14-20020aa7db4e000000b0046ae912ff36sm678855edt.84.2022.12.06.00.12.03
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Dec 2022 00:12:03 -0800 (PST)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     wangchuanlei <wangchuanlei@inspur.com>
-Cc:     alexandr.lobakin@intel.com, pabeni@redhat.com, pshelar@ovn.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        wangpeihui@inspur.com, netdev@vger.kernel.org, dev@openvswitch.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [PATCH v7 net-next] net: openvswitch: Add support to
- count upcall packets
-Date:   Tue, 06 Dec 2022 09:12:01 +0100
-X-Mailer: MailMate (1.14r5929)
-Message-ID: <E969E975-1D24-48F1-949E-3D5EE27AFA02@redhat.com>
-In-Reply-To: <20221205030024.3990061-1-wangchuanlei@inspur.com>
-References: <20221205030024.3990061-1-wangchuanlei@inspur.com>
+        Tue, 6 Dec 2022 03:12:24 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2106.outbound.protection.outlook.com [40.92.103.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C8110B5B;
+        Tue,  6 Dec 2022 00:12:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=A9HiJ6s4DdXqvOaeszZZeqTARNQMMYL50cw2zxnVe+zPIegpE0XHGNEhu4UT6nvZyD1kOrqP5inrHi5Z9M12um2NPOcY1t8Oo8YYvDrpeYhrdrOgU26jk2ySsJQQGj5D2dOcQgYMmhhPDoZad2JGGxvVGJpqzoOZKQOGhIor6WlrpW6fmg1qyXBaCgjA/IbHzHoI2WPORB8HmvTAbZ1Hu67RyF5v0hl+tz7nzE+Kc4TiZIWKbbLkiwVmE2673pzVK6kbIM5qyCbP1JMjBoTM1W0vqe6dzpVtUUMfXfdWLSy90M4NjPl8DcXKp3vXLC3XWiLxSMxNCShwgSsXicyp7A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E/qnc7mOWFU9Dw5pi9AdXRp12EjNpV4jVWLm4iEUyM8=;
+ b=YhN3hbvGBAaNxAD2QB0nA+4VBXWCjNgfSPaX3ZKDVhfzGSB6FUVF82i8gusiseJdr6Q2R2LUO5UuIengDtmg6yQNClKHQ/JmhSuc3SYcLsY+YbIhO9ja2kAVdKAKRezH67Y4Qh68h7cfptNxtpet73NUujfgGQ7mowEJu4VOcxo74j4wvqtffbp9gbq21Wa70ZysYgq/yOLgwXIPVv9Y1hlZGvwhXXaaXNijqkXv8SsiSSjpQuh8gx7Mo3QCaven4eQM27yyHTI8OCeTuVJIthLaKvJcnrNSCs4rjziKYD31u//EBskddci+3D6bn20toAwQv33Ks2VlMwKc/ueWpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E/qnc7mOWFU9Dw5pi9AdXRp12EjNpV4jVWLm4iEUyM8=;
+ b=CLwgSs7PlreZamIzZu+tfmXuAOcbwNFAM4/yhha9zWMiHGDdTe8werkRqMAIUjkt3mmR51uJH5wmE8xejlmBs3PmgHSHIse4+kNewfp2n4wGOeSJPvEXc8aMsFRr9Y33df71nqiuLEmqBQGE18Xzwxa8SM/uurwQA7wEn9JYizmPEbpmrVcCMrP+CufflUxTYjTmsl12HEQeKXG44T8R8Dj5I89ZuuknrVmucP94i0VNRyA5VvCXGhlQnas8tfCoV2BP1hVIA0xbaQYLMV8DVRYmBLoCUp8X4z/4+uFWeJ400ayxUu6CBaqlq20DQ6H2lPgWNFBzCW4n+3cu1YTtWQ==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ PN3PR01MB7254.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:92::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.14; Tue, 6 Dec 2022 08:12:16 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1%4]) with mapi id 15.20.5880.014; Tue, 6 Dec 2022
+ 08:12:16 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Viacheslav Dubeyko <slava@dubeyko.com>
+CC:     "willy@infradead.org" <willy@infradead.org>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable
+ to be assigned with mount
+Thread-Topic: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable
+ to be assigned with mount
+Thread-Index: AQHZBmRIqZUco1oHfUewwcIrvr9k1a5bExaAgAC5qICABDvJAIAAf4aA
+Date:   Tue, 6 Dec 2022 08:12:16 +0000
+Message-ID: <FBF299DB-E235-4BD3-82BD-5A54EE9E26DA@live.com>
+References: <93F5197D-2B61-4129-B5D4-771934F70577@live.com>
+ <55A80630-60FB-44BE-9628-29104AB8A7D0@dubeyko.com>
+ <1D7AAEE4-9603-43A4-B89D-6F791EDCB929@live.com>
+ <A2B962C1-AD33-413D-B64A-CD179AFBEA8D@dubeyko.com>
+In-Reply-To: <A2B962C1-AD33-413D-B64A-CD179AFBEA8D@dubeyko.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [/bym8/SiL0w1QRN7feEX8ZB2/qwkDCFz]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN3PR01MB7254:EE_
+x-ms-office365-filtering-correlation-id: b85ce3b0-8977-4aa9-275b-08dad76196be
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nRPLTNhQCTAkzSP4CSoJiZ16oHAwgfNnYNv3HY2VwmrBVeYrozbFkrq9IldYDNhs6VXYtnHaLal30FCb6FvZi3AG+GUyruqKyQnRMZ8qli/6uyh+c3o4+t41IQiKjz/Jod8Ecj1gfkyXBzp8e7EJzZF9JamJO85w3g1r/nGH219/5qoIY+lCGExbA5R8K71F343NlcFUDYEt0LodZ04j/IJi27Z2T7GLyWTWqsHzYmmKYdl8lrld57QdwpWtBgbMiqLvmlP851xcFWPtgYsDDgRB5uwSyZt3XgBmRMqMFN+IjujC96XuMhcjkuBHo5wixAMGGygU1HOGY5S60VAlYquU/1up3Ui6dqs0ux7L+rs+mx0kkwyXOFMYJtsr9QwP2dzKu9kPNg9+SMzvo2JD/CATxVoegj/raI23uiov+EgPKpCsk1a2HkOYbh6Fe0Kh57w3xcHljFCVVVtz7IGbWpxaxlkL/HhMd8vzpPzFTfJ/UAhr9/okQwm7SwGvXYgNQpeu9sxf7EloCo85pSMeIH8WRcV7J89zIn2VO66rYJYUfnAHue1TCaZkzfEdptFpntLrM76siadtyIeCp2HStJKxvmkbD9mrJkrIu1zmcAzz57RySa66eSGsGA+4KX7bqLRz+m2yN/mE//blsUDzWQ==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NGtOQUk2a1FsM3FLNjBlTlVHSWZvZGhoSVI3b3NET0QyZU80cU5qQVVrOXpx?=
+ =?utf-8?B?OS95ckM4cFUveTRsdnBXcTNabFhHcmkxMjhyYWg2RjM1Y0t3NW1QSjUzY2tD?=
+ =?utf-8?B?cVByS0NubEtKWnBHNHhyQnJEM1N0SkNERFpTRU14amhCa2JkUE1jRzlnSzZ6?=
+ =?utf-8?B?NTFyWFRjSHFQL2hqZ3VhTS9yZzlPNEJqbERIdEF2VmhFWFY0eEtRc0lNMm8w?=
+ =?utf-8?B?U1M1UW1PeXNLQkdyZzNpbjBlNkxCbHVTc1NZZU9sK1Y4MmZHZE1ZdmdGd21l?=
+ =?utf-8?B?MzZMRjFDSmZSWGI1Vk5FTjZHMUVaV21Rc1F3KzNpbm9XMEQ5NXdveWhBQUZz?=
+ =?utf-8?B?REhYdkpEeS9SemVoOFFKTE5FenU0TmxVek5ERE9VVVVHbW1oK0Ivdi9ORnY2?=
+ =?utf-8?B?MUxKT014VzZ2aEVhQXF6VXBmZUpiUFJ6Vk14MlZLUTdWOW1sVmpuRzdlZk9h?=
+ =?utf-8?B?ZFF1NFA5TTJRNk5UZi9OdHA1TXJMWEpJSWZzK2dRS1FHTVo3S0hEaUtWSEJB?=
+ =?utf-8?B?QzAxMWQrdEQxQlljclduRGg5WTZabVY1WGE1akg5VFhOTXI2TlBFSFBhSHJ1?=
+ =?utf-8?B?bVdydFBUSmFQVG5kS3JEMS9vYXVyZktTSGhWRjNwSSt6eWMzUk1IM2FtZm9R?=
+ =?utf-8?B?NHpSZnpIL0FwUGNpTWhZaHlFUjZyWm9WTGdaRUpjMmt3SkhtaHlzY0FIaEVz?=
+ =?utf-8?B?WTBLVmljazVvdExuT3NmQ1pWSFV4V2pjWXNJUWVFbDhEVnBkRDBZZEVZYlZO?=
+ =?utf-8?B?bTZGcStMejBWQ005V0h3aFlKYm5oVXVSQXoxdkoydnA1M3U0VlNoQnoxbEZD?=
+ =?utf-8?B?M3l4MUlkK3hRQ00yWEI5NDJQS1NwbWNhODFnYlpvNzA2dUlvaTI3VzB0VGNm?=
+ =?utf-8?B?RHQzaXZZd3lxbzZPV1poVE1obnhmQzhIakM5QzZsL2QzL2hGVytrN2ExWXVX?=
+ =?utf-8?B?aU90c2JRVzlSMS95SklxVklsK1NsZ1FlalRoQ2xKT0xhMllaRmFseEh2RFd4?=
+ =?utf-8?B?bllaL1I4OUJob0hKWXlkME5EenM4ako4VkE2Q0o3K1UxZWhPTE0zT1Z6MzVI?=
+ =?utf-8?B?UnhDMW5LS2luWmxOSlh5b1pYemhZWTA5OFRHNDR5NERpZXVTYi9zWjBURUgz?=
+ =?utf-8?B?c3NIUkZlMTRhSEVUSGFySFZxNzBTSUVPRDRhZ0R6c2VUVHM5ZDB3QS9Yc0x5?=
+ =?utf-8?B?QWoyak52NnV4QlkzU0tJQU5OT0Jvb1BJMUtKZGQrR0dRTm9YR1dyYk9GY2tV?=
+ =?utf-8?B?bFR1Y2lvY0Fqb3BsbGp1R3VLVmFDSlU2WVVzNFF6RkJINGNQWGtHUDNNdHY0?=
+ =?utf-8?B?N3FEUU1valdPY1ZRR0hhQ0QwVjRlNlhRMWdwbktzd3JXOHZPd1M1NlY3bEhN?=
+ =?utf-8?B?Q01yaC96L3E5M2gweGpmTnZ5WlJKalYwWE93Tmd5b3lTS0Z2TTdLdXZ0enBP?=
+ =?utf-8?B?Ynd2NFBRMVJJY2IzV2k4R0VSczUyVmU3MEs0Mlg2UFBZZGtoY3BUak1DalRn?=
+ =?utf-8?B?VXBpbVlZbjhYTG9mVnd6MTVjdEt4NEpRNUpQNFMzVWJoZ3h1ZFBxZjZIcCs1?=
+ =?utf-8?B?ZzE3ZmRrZUJRQ1JjL2FHQjd0WFBwdC9aWnRkUURxeTRHWGpMUG1SbSt5Y3VO?=
+ =?utf-8?B?d2pNeEZEcWNyZnBpSm9NUWtqNGtHQkUzU3U5SlliUzUzdGs2dFhrZ0JteHVZ?=
+ =?utf-8?B?QmlJTUpsT2tmY05HNjEvNFhQV2xwRC9SY1JROEJRbktIMjJSbTUvbkF3PT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1FDCCC99CBF32847AF4A5E7C38F6B819@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: b85ce3b0-8977-4aa9-275b-08dad76196be
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2022 08:12:16.6877
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN3PR01MB7254
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5 Dec 2022, at 4:00, wangchuanlei wrote:
-
-> Add support to count upall packets, when kmod of openvswitch
-> upcall to userspace , here count the number of packets for
-> upcall succeed and failed, which is a better way to see how
-> many packets upcalled to userspace(ovs-vswitchd) on every
-> interfaces.
-
-Thanks for including my suggestions, one more comment below.
-
-> Here modify format of code used by comments of v6.
->
-> Changes since v4 & v5 & v6:
-> - optimize the function used by comments
->
-> Changes since v3:
-> - use nested NLA_NESTED attribute in netlink message
->
-> Changes since v2:
-> - add count of upcall failed packets
->
-> Changes since v1:
-> - add count of upcall succeed packets
->
-> Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
-> ---
->  include/uapi/linux/openvswitch.h | 14 ++++++++++
->  net/openvswitch/datapath.c       | 47 ++++++++++++++++++++++++++++++++=
-
->  net/openvswitch/vport.c          | 40 +++++++++++++++++++++++++++
->  net/openvswitch/vport.h          | 16 +++++++++++
->  4 files changed, 117 insertions(+)
->
-> diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/open=
-vswitch.h
-> index 94066f87e9ee..8422ebf6885b 100644
-> --- a/include/uapi/linux/openvswitch.h
-> +++ b/include/uapi/linux/openvswitch.h
-> @@ -277,11 +277,25 @@ enum ovs_vport_attr {
->  	OVS_VPORT_ATTR_PAD,
->  	OVS_VPORT_ATTR_IFINDEX,
->  	OVS_VPORT_ATTR_NETNSID,
-> +	OVS_VPORT_ATTR_UPCALL_STATS,
->  	__OVS_VPORT_ATTR_MAX
->  };
->
->  #define OVS_VPORT_ATTR_MAX (__OVS_VPORT_ATTR_MAX - 1)
->
-> +/**
-> + * enum ovs_vport_upcall_attr - attributes for %OVS_VPORT_UPCALL* comm=
-ands
-> + * @OVS_VPORT_UPCALL_SUCCESS: 64-bit upcall success packets.
-> + * @OVS_VPORT_UPCALL_FAIL: 64-bit upcall fail packets.
-> + */
-> +enum ovs_vport_upcall_attr {
-> +	OVS_VPORT_UPCALL_SUCCESS,
-> +	OVS_VPORT_UPCALL_FAIL,
-> +	__OVS_VPORT_UPCALL_MAX
-> +};
-> +
-> +#define OVS_VPORT_UPCALL_MAX (__OVS_VPORT_UPCALL_MAX - 1)
-> +
->  enum {
->  	OVS_VXLAN_EXT_UNSPEC,
->  	OVS_VXLAN_EXT_GBP,	/* Flag or __u32 */
-> diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-> index c8a9075ddd0a..d8ca73dac3b0 100644
-> --- a/net/openvswitch/datapath.c
-> +++ b/net/openvswitch/datapath.c
-> @@ -209,6 +209,26 @@ static struct vport *new_vport(const struct vport_=
-parms *parms)
->  	return vport;
->  }
->
-> +static void ovs_vport_update_upcall_stats(struct sk_buff *skb,
-> +					  const struct dp_upcall_info *upcall_info,
-> +					  bool upcall_result)
-> +{
-> +	struct vport *p =3D OVS_CB(skb)->input_vport;
-> +	struct vport_upcall_stats_percpu *stats;
-> +
-> +	if (upcall_info->cmd !=3D OVS_PACKET_CMD_MISS &&
-> +	    upcall_info->cmd !=3D OVS_PACKET_CMD_ACTION)
-> +		return;
-> +
-> +	stats =3D this_cpu_ptr(p->upcall_stats);
-> +	u64_stats_update_begin(&stats->syncp);
-> +	if (upcall_result)
-> +		u64_stats_inc(&stats->n_success);
-> +	else
-> +		u64_stats_inc(&stats->n_fail);
-> +	u64_stats_update_end(&stats->syncp);
-> +}
-> +
->  void ovs_dp_detach_port(struct vport *p)
->  {
->  	ASSERT_OVSL();
-> @@ -216,6 +236,9 @@ void ovs_dp_detach_port(struct vport *p)
->  	/* First drop references to device. */
->  	hlist_del_rcu(&p->dp_hash_node);
->
-> +	/* Free percpu memory */
-> +	free_percpu(p->upcall_stats);
-> +
->  	/* Then destroy it. */
->  	ovs_vport_del(p);
->  }
-> @@ -305,6 +328,8 @@ int ovs_dp_upcall(struct datapath *dp, struct sk_bu=
-ff *skb,
->  		err =3D queue_userspace_packet(dp, skb, key, upcall_info, cutlen);
->  	else
->  		err =3D queue_gso_packets(dp, skb, key, upcall_info, cutlen);
-> +
-> +	ovs_vport_update_upcall_stats(skb, upcall_info, !err);
->  	if (err)
->  		goto err;
->
-> @@ -1825,6 +1850,12 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, s=
-truct genl_info *info)
->  		goto err_destroy_portids;
->  	}
->
-> +	vport->upcall_stats =3D netdev_alloc_pcpu_stats(struct vport_upcall_s=
-tats_percpu);
-> +	if (!vport->upcall_stats) {
-> +		err =3D -ENOMEM;
-> +		goto err_destroy_portids;
-> +	}
-> +
->  	err =3D ovs_dp_cmd_fill_info(dp, reply, info->snd_portid,
->  				   info->snd_seq, 0, OVS_DP_CMD_NEW);
->  	BUG_ON(err < 0);
-> @@ -2068,6 +2099,7 @@ static int ovs_vport_cmd_fill_info(struct vport *=
-vport, struct sk_buff *skb,
->  {
->  	struct ovs_header *ovs_header;
->  	struct ovs_vport_stats vport_stats;
-> +	struct nlattr *nla;
->  	int err;
->
->  	ovs_header =3D genlmsg_put(skb, portid, seq, &dp_vport_genl_family,
-> @@ -2097,6 +2129,14 @@ static int ovs_vport_cmd_fill_info(struct vport =
-*vport, struct sk_buff *skb,
->  			  OVS_VPORT_ATTR_PAD))
->  		goto nla_put_failure;
->
-> +	nla =3D nla_nest_start_noflag(skb, OVS_VPORT_ATTR_UPCALL_STATS);
-> +	if (!nla)
-> +		goto nla_put_failure;
-> +
-> +	if (ovs_vport_get_upcall_stats(vport, skb))
-> +		goto nla_put_failure;
-> +	nla_nest_end(skb, nla);
-> +
-
-The whole nesting part should also be handled in the ovs_vport_get_upcall=
-_stats() code.
-So here all there should be is:
-
-+	if (ovs_vport_get_upcall_stats(vport, skb))
-+		goto nla_put_failure;
-
->  	if (ovs_vport_get_upcall_portids(vport, skb))
->  		goto nla_put_failure;
->
-> @@ -2278,6 +2318,12 @@ static int ovs_vport_cmd_new(struct sk_buff *skb=
-, struct genl_info *info)
->  		goto exit_unlock_free;
->  	}
->
-> +	vport->upcall_stats =3D netdev_alloc_pcpu_stats(struct vport_upcall_s=
-tats_percpu);
-> +	if (!vport->upcall_stats) {
-> +		err =3D -ENOMEM;
-> +		goto exit_unlock_free;
-> +	}
-> +
->  	err =3D ovs_vport_cmd_fill_info(vport, reply, genl_info_net(info),
->  				      info->snd_portid, info->snd_seq, 0,
->  				      OVS_VPORT_CMD_NEW, GFP_KERNEL);
-> @@ -2507,6 +2553,7 @@ static const struct nla_policy vport_policy[OVS_V=
-PORT_ATTR_MAX + 1] =3D {
->  	[OVS_VPORT_ATTR_OPTIONS] =3D { .type =3D NLA_NESTED },
->  	[OVS_VPORT_ATTR_IFINDEX] =3D { .type =3D NLA_U32 },
->  	[OVS_VPORT_ATTR_NETNSID] =3D { .type =3D NLA_S32 },
-> +	[OVS_VPORT_ATTR_UPCALL_STATS] =3D { .type =3D NLA_NESTED },
->  };
->
->  static const struct genl_small_ops dp_vport_genl_ops[] =3D {
-> diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
-> index 82a74f998966..832109e3217e 100644
-> --- a/net/openvswitch/vport.c
-> +++ b/net/openvswitch/vport.c
-> @@ -284,6 +284,46 @@ void ovs_vport_get_stats(struct vport *vport, stru=
-ct ovs_vport_stats *stats)
->  	stats->tx_packets =3D dev_stats->tx_packets;
->  }
->
-> +/**
-> + *	ovs_vport_get_upcall_stats - retrieve upcall stats
-> + *
-> + * @vport: vport from which to retrieve the stats.
-> + * @skb: sk_buff where upcall stats should be appended.
-> + *
-> + * Retrieves upcall stats for the given device.
-> + *
-> + * Must be called with ovs_mutex or rcu_read_lock.
-> + */
-> +int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *sk=
-b)
-> +{
-- > +	int i;
-- > +
-> +	__u64 tx_success =3D 0;
-> +	__u64 tx_fail =3D 0;
-  + int i;
-> +
-> +	for_each_possible_cpu(i) {
-> +		const struct vport_upcall_stats_percpu *upcall_stats;
-> +		unsigned int start;
-> +
-> +		upcall_stats =3D per_cpu_ptr(vport->upcall_stats, i);
-> +		do {
-> +			start =3D u64_stats_fetch_begin(&upcall_stats->syncp);
-> +			tx_success +=3D u64_stats_read(&upcall_stats->n_success);
-> +			tx_fail +=3D u64_stats_read(&upcall_stats->n_fail);
-> +		} while (u64_stats_fetch_retry(&upcall_stats->syncp, start));
-> +	}
-> +
-
-See above, I guess something like this (not tested):
-
-+	nla =3D nla_nest_start_noflag(skb, OVS_VPORT_ATTR_UPCALL_STATS);
-+	if (!nla)
-+		return -EMSGSIZE;
-+
-
-> +	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_SUCCESS, tx_success,
-> +			      OVS_VPORT_ATTR_PAD)) {
-  +     nla_nest_cancel(skb, nla);
-> + 	return -EMSGSIZE;
-  + }
-> +
-> +	if (nla_put_u64_64bit(skb, OVS_VPORT_UPCALL_FAIL, tx_fail,
-> +			      OVS_VPORT_ATTR_PAD)) {
-  +     nla_nest_cancel(skb, nla);
-> +		return -EMSGSIZE;
-  + }
-> +
-+   nla_nest_end(skb, nla);
-> +	return 0;
-> +}
-> +
->  /**
->   *	ovs_vport_get_options - retrieve device options
->   *
-> diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
-> index 7d276f60c000..3af18b5faa95 100644
-> --- a/net/openvswitch/vport.h
-> +++ b/net/openvswitch/vport.h
-> @@ -32,6 +32,8 @@ struct vport *ovs_vport_locate(const struct net *net,=
- const char *name);
->
->  void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
->
-> +int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *sk=
-b);
-> +
->  int ovs_vport_set_options(struct vport *, struct nlattr *options);
->  int ovs_vport_get_options(const struct vport *, struct sk_buff *);
->
-> @@ -65,6 +67,7 @@ struct vport_portids {
->   * @hash_node: Element in @dev_table hash table in vport.c.
->   * @dp_hash_node: Element in @datapath->ports hash table in datapath.c=
-=2E
->   * @ops: Class structure.
-> + * @upcall_stats: Upcall stats of every ports.
->   * @detach_list: list used for detaching vport in net-exit call.
->   * @rcu: RCU callback head for deferred destruction.
->   */
-> @@ -78,6 +81,7 @@ struct vport {
->  	struct hlist_node hash_node;
->  	struct hlist_node dp_hash_node;
->  	const struct vport_ops *ops;
-> +	struct vport_upcall_stats_percpu __percpu *upcall_stats;
->
->  	struct list_head detach_list;
->  	struct rcu_head rcu;
-> @@ -137,6 +141,18 @@ struct vport_ops {
->  	struct list_head list;
->  };
->
-> +/**
-> + * struct vport_upcall_stats_percpu - per-cpu packet upcall statistics=
- for
-> + * a given vport.
-> + * @n_success: Number of packets that upcall to userspace succeed.
-> + * @n_fail:    Number of packets that upcall to userspace failed.
-> + */
-> +struct vport_upcall_stats_percpu {
-> +	struct u64_stats_sync syncp;
-> +	u64_stats_t n_success;
-> +	u64_stats_t n_fail;
-> +};
-> +
->  struct vport *ovs_vport_alloc(int priv_size, const struct vport_ops *,=
-
->  			      const struct vport_parms *);
->  void ovs_vport_free(struct vport *);
-> -- =
-
-> 2.27.0
-
+DQo+IEJlZm9yZSB0aGlzIGNoYW5nZSwgbG9naWMgY2FsbGVkIGlfdWlkX3JlYWQoaW5vZGUpIGFu
+ZCBjaGVja2VkIG1vZGUuDQo+IE5vdywgd2UgY2hlY2sgb25seSBIRlNQTFVTX1NCX1VJRC9IRlNQ
+TFVTX1NCX0dJRCBmbGFncy4NCj4gU28sIGlmIHdlIG1vdW50IEhGUysgdm9sdW1lIGJ5IOKAnHN1
+ZG8gbW91bnQgL2Rldi9zZGExIC9tbnTigJ0sIHRoZW4NCj4gSEZTUExVU19TQl9VSUQgYW5kIEhG
+U1BMVVNfU0JfR0lEIGZsYWdzIHdpbGwgYmUgdW5zZXQuDQo+IEFuZCBjdXJyZW50IGxvZ2ljIHdp
+bGwgZG8gbm90aGluZy4gSXMgaXQgY29ycmVjdCBsb2dpYz8gTWF5YmUsIHdlIG5lZWQNCj4gdG8g
+dXNlIHNiaS0+dWlkL2dpZCBpZiBmbGFnKHMpSEZTUExVU19TQl9VSUQvSEZTUExVU19TQl9HSUQg
+YXJlIHNldC4NCj4gQW5kIGlmIG5vdCwgdGhlbiB0byB1c2Ugb2xkIGxvZ2ljLiBBbSBJIGNvcnJl
+Y3QgaGVyZT8gT3IgYW0gSSBzdGlsbCBtaXNzaW5nDQo+IHNvbWV0aGluZyBoZXJlPw0KDQpXZWxs
+IGluaXRpYWxseSBJIHdoZW4gSSB0cmllZCB0byBpbnZlc3RpZ2F0ZSB3aGF04oCZcyB3cm9uZywg
+YW5kIGZvdW5kIHRoYXQgdGhlIG9sZCBsb2dpYyB3YXMgdGhlIGN1bHByaXQsIEkgZGlkIHNvbWUg
+bG9nZ2luZyB0byBzZWUgd2hhdCBleGFjdGx5IHdhcyB3cm9uZy4gVGhlIGxvZyBwYXRjaCBpcyBo
+ZXJlIGJ0dyA6LSBodHRwczovL2dpdGh1Yi5jb20vQWRpdHlhR2FyZzgvbGludXgvY29tbWl0L2Y2
+NjhmYjAxMmY1OTVkODMwNTMwMjBiODhiOTQzOWMyOTViNGRjMjENCg0KU28gSSBzYXcgdGhhdCB0
+aGUgb2xkIGxvZ2ljIHdhcyBhbHdheXMgZmFsc2UsIG5vIG1hdHRlciB3aGV0aGVyIEkgbW91bnRl
+ZCB3aXRoIHVpZCBvciBub3QuDQoNCkkgdHJpZWQgdG8gc2VlIHdoYXQgbWFrZXMgdGhpcyB0cnVl
+LCBidXQgY291bGRuJ3Qgc3VjY2VlZC4gU28sIEkgdGhvdWdodCBvZiBhIHNpbXBsZXIgYXBwcm9h
+Y2ggYW5kIGNoYW5nZWQgdGhlIGxvZ2ljIGl0c2VsZi4NCg0KVG8gYmUgaG9uZXN0LCBJIGR1bm5v
+IHdoYXQgaXMgdGhlIG9sZCBsb2dpYyBmb3IuIE1heWJlIGluc3RlYWQgb2YgY29tcGxldGVseSBy
+ZW1vdmluZyB0aGUgb2xkIGxvZ2ljLCBJIGNvdWxkIHVzZSBhbiBPUj8NCg0KSWYgeW91IHRoaW5r
+IGl0cyBtb3JlIGxvZ2ljYWwsIEkgY2FuIG1ha2UgdGhpcyBjaGFuZ2UgOi0NCg0KLQlpZiAoIWlf
+Z2lkX3JlYWQoaW5vZGUpICYmICFtb2RlKQ0KKwlpZiAoKHRlc3RfYml0KEhGU1BMVVNfU0JfVUlE
+LCAmc2JpLT5mbGFncykpIHx8ICghaV91aWRfcmVhZChpbm9kZSkgJiYgIW1vZGUpKQ0KDQpUaGFu
+a3MNCkFkaXR5YQ0KDQoNCg==
