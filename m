@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86131644A65
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:36:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18363644A67
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:37:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235429AbiLFRgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:36:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S230480AbiLFRgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:36:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235447AbiLFRgW (ORCPT
+        with ESMTP id S235503AbiLFRg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:36:22 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD10A3B9D5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:36:16 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id l10-20020a170902f68a00b00189d1728848so6739896plg.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:36:16 -0800 (PST)
+        Tue, 6 Dec 2022 12:36:28 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B594F3B9EA
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:36:18 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id pa16-20020a17090b265000b0020a71040b4cso11997198pjb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:36:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jOLoTsUdfTgKzlK6Hy0CC7NNiyXgF9iSm7cJp2Q7w9I=;
-        b=EGiIlaHT8ks2bvi5YXJjx9YD9KUtl5Bv7ychIQYtNPVEquCrgQSKDZ3acg5PgVPIVe
-         pA28XThubo+ao/p3YKAxinQQWFyIQQSFkmKsnVY8WZCzhxljx0GJPSk1N3aJKeKOnyzO
-         y3L6C6OLq9XYYqt7xwnr4+YTvztFafCbhJZxAymemVVXLgFhs4mJlMvh9daCOWTjifxU
-         tHgiZumwPGXMLfuo+hZRZ6k7aZq4LV1VJveUo3alSBxbMD7MvMmBtQTJ66hHFiQOaMJ4
-         UB2QL9SzWEUQbGKo7llrKdknPgVwZyt1vBwC1vd6/WMmb9z36w4uwQ5uWqH0Hqjl2gat
-         pqig==
+        bh=zGVIdVHmu98j0ATMgshfuLelOvL1LTZm9iF00wr+z1c=;
+        b=the3UR5nZvASMSHWZbLNk/phN3QpGy2ZKbi9DHYfcXEQ159p8R/Z/7Kn8+DTeMoLVC
+         pHaMaXdy8nBuAF7ZQ2GCqrLjaiaRR0ok0NVp/8M1NybmC1AX9iALlFOCP1J9eBukP62K
+         TexEBs1IBdXfB8yWGuUpm4cBsb0DlWf6ECzEhJKJpgiNZHKgKJslJ4+mK+GkHrO3BR6n
+         whrLxfo9JKB/TzV1zU5UtNlT+X/J7I2EibnOxAYrtaKAZ5MlhSUTaNP44stCu67XoUmc
+         VA412z6d51UVGfKCbdx1Ny80uArOlblTwP+eCoH6u+49GoAX1nxW82zITs2cd+GzLIVD
+         agtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jOLoTsUdfTgKzlK6Hy0CC7NNiyXgF9iSm7cJp2Q7w9I=;
-        b=2/g0/L3zGYbmqIA2lZDyBOFL134CXGNEAwnSAexTCQHKjpAfQ0ayWyHNQ8BSGTT5yu
-         yRDHvSuag/9idyvK/onG/FNv0iAPL+ZbETwrIp7Hg6uzE2Bh7uCz0l1dcv1K7F/L1Y+5
-         XILZ05QXyUy0jVSKKYCCKOGrUjQgoxJ1M3TqxEPUn39qhhZsYeAqGsHOMzEzi+rASnP6
-         xZ3u1bKaUfKjsgqHcKShkdNiOH0VKpEPUbKQ7jKfhDsXYQEiRokHTKP5eSTuiCub4CaR
-         l6+EnSW9B6kgjFx1RX7e6DRFwIeqCxz+Tiwrmxj/zZu1diZxudSTEHZljAgqZ5ISRaJ5
-         3U3w==
-X-Gm-Message-State: ANoB5pl8ioQPUAvofX0xpdjKegfzxfo2i79GhC/j+ZwlN/rqLqZKSmXm
-        BR0K5miOZrlyKoDU5bTa2A0kSrVIYBXofm7EIhvIiOSYHonOiTpSG0xl04pyOkGx+L8/DabHbXy
-        Lokyn6sU/C/4+ARTu+J9mpmHrQ2SclPCX6wxSAeQjTlqwHHoo6nEWNqZnFl6UzSwTiDWU6m2W
-X-Google-Smtp-Source: AA0mqf6SMlVyiA0N9Q0gw7pZUuNmuzbXTUgkBqIAbP6ewRDGoB4dQ9xMEoHDig2j00UC567TTm2tAOf3qMjb
+        bh=zGVIdVHmu98j0ATMgshfuLelOvL1LTZm9iF00wr+z1c=;
+        b=rOAz96E7NWoWxGCvre4KAXvBCrXVgk6efGLHVxSR268d2024BrVEdv15idbVQemw9E
+         bJDXJBKZhHv75MJy5p95PfVkpNz9nYB1+ZnEUn8ZL+l3wmS5GBr6eN+mEkcPhCbHB5hx
+         xhz9L2lvAiOxPdjzzc6ZIqnTiCQcnzuA8Ts2qjdvKw91+ouTlEpLVBSG/Z5nZtsOd5aD
+         /dK1tTSVUkazVP6Y+QOEQgyvQahDBzvT6xVrv/lRILSjYPcLYJ7t6NPpchleKNivPpyV
+         8aPBzhIyxXGCluAmgxvAoOKdu+fGEGGcoWQBwuyQZdUAvolC2ZPIrBDYVuhcaV+iKqZV
+         nh5Q==
+X-Gm-Message-State: ANoB5pl/CZUUIgYoIKBxTk/CcTqMqp02gLZNtoDmW0CuJtJu9d+GTntg
+        VJNHwseE+bI4b8DYEO7a8io5vVUF0MDMQjvCeo2gzzSbqE9Lz2s0AUrnvDSzuU2uPAWKqhUDp7/
+        51xor/MYBnkWY07xtlm9/U9WiNvoHTnu3uiiB7SvF/iVkKsEJWj6BYxJwDrRpPD3CJQ5ABqcr
+X-Google-Smtp-Source: AA0mqf68Pz8Y3Hu8v2Z/yj/mfJs/DBPFKf1uym2qY0m7kl49GEfjQ/w0L7uOl9vvRQZvkaj86jRMQk2/UOwu
 X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:a17:90a:43a4:b0:219:1d0a:34a6 with SMTP id
- r33-20020a17090a43a400b002191d0a34a6mr5141962pjg.1.1670348175816; Tue, 06 Dec
- 2022 09:36:15 -0800 (PST)
-Date:   Tue,  6 Dec 2022 17:36:00 +0000
+ (user=bgardon job=sendgmr) by 2002:a17:90a:d086:b0:219:227d:d91f with SMTP id
+ k6-20020a17090ad08600b00219227dd91fmr4993281pju.0.1670348177805; Tue, 06 Dec
+ 2022 09:36:17 -0800 (PST)
+Date:   Tue,  6 Dec 2022 17:36:01 +0000
 In-Reply-To: <20221206173601.549281-1-bgardon@google.com>
 Mime-Version: 1.0
 References: <20221206173601.549281-1-bgardon@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221206173601.549281-7-bgardon@google.com>
-Subject: [PATCH 6/7] KVM: x86/MMU: Move rmap zap operations to rmap.c
+Message-ID: <20221206173601.549281-8-bgardon@google.com>
+Subject: [PATCH 7/7] KVM: x86/MMU: Move rmap_add() to rmap.c
 From:   Ben Gardon <bgardon@google.com>
 To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Peter Xu <peterx@redhat.com>,
@@ -72,195 +72,181 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the various rmap zap functions to rmap.c. These functions are less
-"pure" rmap operations in that they also contain some SPTE manipulation,
-however they're mostly about rmap / pte list manipulation.
+Move rmap_add() to rmap.c to complete the migration of the various rmap
+operations out of mmu.c.
 
 No functional change intended.
 
 Signed-off-by: Ben Gardon <bgardon@google.com>
 ---
- arch/x86/kvm/mmu/mmu.c          | 51 +--------------------------------
- arch/x86/kvm/mmu/mmu_internal.h |  1 +
- arch/x86/kvm/mmu/rmap.c         | 50 +++++++++++++++++++++++++++++++-
- arch/x86/kvm/mmu/rmap.h         |  9 +++++-
- 4 files changed, 59 insertions(+), 52 deletions(-)
+ arch/x86/kvm/mmu/mmu.c          | 45 ++++-----------------------------
+ arch/x86/kvm/mmu/mmu_internal.h |  6 +++++
+ arch/x86/kvm/mmu/rmap.c         | 37 ++++++++++++++++++++++++++-
+ arch/x86/kvm/mmu/rmap.h         |  8 +++++-
+ 4 files changed, 54 insertions(+), 42 deletions(-)
 
 diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 88da2abc2375..12082314d82d 100644
+index 12082314d82d..b122c90a3e5f 100644
 --- a/arch/x86/kvm/mmu/mmu.c
 +++ b/arch/x86/kvm/mmu/mmu.c
-@@ -512,7 +512,7 @@ static bool mmu_spte_update(u64 *sptep, u64 new_spte)
-  * state bits, it is used to clear the last level sptep.
-  * Returns the old PTE.
-  */
--static u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
-+u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep)
- {
- 	kvm_pfn_t pfn;
- 	u64 old_spte = *sptep;
-@@ -855,42 +855,6 @@ gfn_to_memslot_dirty_bitmap(struct kvm_vcpu *vcpu, gfn_t gfn,
- 	return slot;
+@@ -215,13 +215,13 @@ static struct kvm_mmu_role_regs vcpu_to_role_regs(struct kvm_vcpu *vcpu)
+ 	return regs;
  }
  
--static void kvm_zap_one_rmap_spte(struct kvm *kvm,
--				  struct kvm_rmap_head *rmap_head, u64 *sptep)
--{
--	mmu_spte_clear_track_bits(kvm, sptep);
--	pte_list_remove(sptep, rmap_head);
--}
--
--/* Return true if at least one SPTE was zapped, false otherwise */
--static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
--				   struct kvm_rmap_head *rmap_head)
--{
--	struct pte_list_desc *desc, *next;
--	int i;
--
--	if (!rmap_head->val)
--		return false;
--
--	if (!(rmap_head->val & 1)) {
--		mmu_spte_clear_track_bits(kvm, (u64 *)rmap_head->val);
--		goto out;
--	}
--
--	desc = (struct pte_list_desc *)(rmap_head->val & ~1ul);
--
--	for (; desc; desc = next) {
--		for (i = 0; i < desc->spte_count; i++)
--			mmu_spte_clear_track_bits(kvm, desc->sptes[i]);
--		next = desc->more;
--		free_pte_list_desc(desc);
--	}
--out:
--	/* rmap_head is meaningless now, remember to reset it */
--	rmap_head->val = 0;
--	return true;
--}
--
- static void drop_spte(struct kvm *kvm, u64 *sptep)
+-static inline bool kvm_available_flush_tlb_with_range(void)
++inline bool kvm_available_flush_tlb_with_range(void)
  {
- 	u64 old_spte = mmu_spte_clear_track_bits(kvm, sptep);
-@@ -1145,19 +1109,6 @@ static bool kvm_vcpu_write_protect_gfn(struct kvm_vcpu *vcpu, u64 gfn)
- 	return kvm_mmu_slot_gfn_write_protect(vcpu->kvm, slot, gfn, PG_LEVEL_4K);
+ 	return kvm_x86_ops.tlb_remote_flush_with_range;
  }
  
--static bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			   const struct kvm_memory_slot *slot)
+-static void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
+-		struct kvm_tlb_range *range)
++void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
++				      struct kvm_tlb_range *range)
+ {
+ 	int ret = -ENOTSUPP;
+ 
+@@ -695,8 +695,8 @@ static u32 kvm_mmu_page_get_access(struct kvm_mmu_page *sp, int index)
+ 	return sp->role.access;
+ }
+ 
+-static void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
+-					 gfn_t gfn, unsigned int access)
++void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
++				  gfn_t gfn, unsigned int access)
+ {
+ 	if (sp_has_gptes(sp)) {
+ 		sp->shadowed_translation[index] = (gfn << PAGE_SHIFT) | access;
+@@ -1217,41 +1217,6 @@ static bool kvm_test_age_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ 	return false;
+ }
+ 
+-#define RMAP_RECYCLE_THRESHOLD 1000
+-
+-static void __rmap_add(struct kvm *kvm,
+-		       struct kvm_mmu_memory_cache *cache,
+-		       const struct kvm_memory_slot *slot,
+-		       u64 *spte, gfn_t gfn, unsigned int access)
 -{
--	return kvm_zap_all_rmap_sptes(kvm, rmap_head);
+-	struct kvm_mmu_page *sp;
+-	struct kvm_rmap_head *rmap_head;
+-	int rmap_count;
+-
+-	sp = sptep_to_sp(spte);
+-	kvm_mmu_page_set_translation(sp, spte_index(spte), gfn, access);
+-	kvm_update_page_stats(kvm, sp->role.level, 1);
+-
+-	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
+-	rmap_count = pte_list_add(cache, spte, rmap_head);
+-
+-	if (rmap_count > kvm->stat.max_mmu_rmap_size)
+-		kvm->stat.max_mmu_rmap_size = rmap_count;
+-	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
+-		kvm_zap_all_rmap_sptes(kvm, rmap_head);
+-		kvm_flush_remote_tlbs_with_address(
+-				kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
+-	}
 -}
 -
--static bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
--			 struct kvm_memory_slot *slot, gfn_t gfn, int level,
--			 pte_t unused)
+-static void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
+-		     u64 *spte, gfn_t gfn, unsigned int access)
 -{
--	return __kvm_zap_rmap(kvm, rmap_head, slot);
+-	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_pte_list_desc_cache;
+-
+-	__rmap_add(vcpu->kvm, cache, slot, spte, gfn, access);
 -}
 -
- static bool kvm_set_pte_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 			     struct kvm_memory_slot *slot, gfn_t gfn, int level,
- 			     pte_t pte)
+ bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+ {
+ 	bool young = false;
 diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-index 3de703c2a5d4..a219c8e556e9 100644
+index a219c8e556e9..03da1f8b066e 100644
 --- a/arch/x86/kvm/mmu/mmu_internal.h
 +++ b/arch/x86/kvm/mmu/mmu_internal.h
-@@ -319,4 +319,5 @@ void track_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
- void untrack_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+@@ -320,4 +320,10 @@ void untrack_possible_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
  
  gfn_t kvm_mmu_page_get_gfn(struct kvm_mmu_page *sp, int index);
-+u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep);
+ u64 mmu_spte_clear_track_bits(struct kvm *kvm, u64 *sptep);
++void kvm_mmu_page_set_translation(struct kvm_mmu_page *sp, int index,
++				  gfn_t gfn, unsigned int access);
++
++inline bool kvm_available_flush_tlb_with_range(void);
++void kvm_flush_remote_tlbs_with_range(struct kvm *kvm,
++				      struct kvm_tlb_range *range);
  #endif /* __KVM_X86_MMU_INTERNAL_H */
 diff --git a/arch/x86/kvm/mmu/rmap.c b/arch/x86/kvm/mmu/rmap.c
-index 91af5b32cffb..9cc4252aaabb 100644
+index 9cc4252aaabb..136c5f4f867b 100644
 --- a/arch/x86/kvm/mmu/rmap.c
 +++ b/arch/x86/kvm/mmu/rmap.c
-@@ -56,7 +56,7 @@ int pte_list_add(struct kvm_mmu_memory_cache *cache, u64 *spte,
- 	return count;
+@@ -292,7 +292,8 @@ void kvm_zap_one_rmap_spte(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
  }
  
--void free_pte_list_desc(struct pte_list_desc *pte_list_desc)
-+static void free_pte_list_desc(struct pte_list_desc *pte_list_desc)
+ /* Return true if at least one SPTE was zapped, false otherwise */
+-bool kvm_zap_all_rmap_sptes(struct kvm *kvm, struct kvm_rmap_head *rmap_head)
++static bool kvm_zap_all_rmap_sptes(struct kvm *kvm,
++				   struct kvm_rmap_head *rmap_head)
  {
- 	kmem_cache_free(pte_list_desc_cache, pte_list_desc);
+ 	struct pte_list_desc *desc, *next;
+ 	int i;
+@@ -331,3 +332,37 @@ bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ {
+ 	return __kvm_zap_rmap(kvm, rmap_head, slot);
  }
-@@ -283,3 +283,51 @@ void slot_rmap_walk_next(struct slot_rmap_walk_iterator *iterator)
- 
- 	rmap_walk_init_level(iterator, iterator->level);
- }
 +
-+void kvm_zap_one_rmap_spte(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			   u64 *sptep)
++#define RMAP_RECYCLE_THRESHOLD 1000
++
++void __rmap_add(struct kvm *kvm, struct kvm_mmu_memory_cache *cache,
++		const struct kvm_memory_slot *slot, u64 *spte, gfn_t gfn,
++		unsigned int access)
 +{
-+	mmu_spte_clear_track_bits(kvm, sptep);
-+	pte_list_remove(sptep, rmap_head);
-+}
++	struct kvm_mmu_page *sp;
++	struct kvm_rmap_head *rmap_head;
++	int rmap_count;
 +
-+/* Return true if at least one SPTE was zapped, false otherwise */
-+bool kvm_zap_all_rmap_sptes(struct kvm *kvm, struct kvm_rmap_head *rmap_head)
-+{
-+	struct pte_list_desc *desc, *next;
-+	int i;
++	sp = sptep_to_sp(spte);
++	kvm_mmu_page_set_translation(sp, spte_index(spte), gfn, access);
++	kvm_update_page_stats(kvm, sp->role.level, 1);
 +
-+	if (!rmap_head->val)
-+		return false;
++	rmap_head = gfn_to_rmap(gfn, sp->role.level, slot);
++	rmap_count = pte_list_add(cache, spte, rmap_head);
 +
-+	if (!(rmap_head->val & 1)) {
-+		mmu_spte_clear_track_bits(kvm, (u64 *)rmap_head->val);
-+		goto out;
++	if (rmap_count > kvm->stat.max_mmu_rmap_size)
++		kvm->stat.max_mmu_rmap_size = rmap_count;
++	if (rmap_count > RMAP_RECYCLE_THRESHOLD) {
++		kvm_zap_all_rmap_sptes(kvm, rmap_head);
++		kvm_flush_remote_tlbs_with_address(
++				kvm, sp->gfn, KVM_PAGES_PER_HPAGE(sp->role.level));
 +	}
-+
-+	desc = (struct pte_list_desc *)(rmap_head->val & ~1ul);
-+
-+	for (; desc; desc = next) {
-+		for (i = 0; i < desc->spte_count; i++)
-+			mmu_spte_clear_track_bits(kvm, desc->sptes[i]);
-+		next = desc->more;
-+		free_pte_list_desc(desc);
-+	}
-+out:
-+	/* rmap_head is meaningless now, remember to reset it */
-+	rmap_head->val = 0;
-+	return true;
 +}
 +
-+bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+		    const struct kvm_memory_slot *slot)
++void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
++	      u64 *spte, gfn_t gfn, unsigned int access)
 +{
-+	return kvm_zap_all_rmap_sptes(kvm, rmap_head);
-+}
++	struct kvm_mmu_memory_cache *cache = &vcpu->arch.mmu_pte_list_desc_cache;
 +
-+bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+		  pte_t unused)
-+{
-+	return __kvm_zap_rmap(kvm, rmap_head, slot);
++	__rmap_add(vcpu->kvm, cache, slot, spte, gfn, access);
 +}
 diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
-index dc4bf7e609ec..a9bf48494e1a 100644
+index a9bf48494e1a..b06897dad76a 100644
 --- a/arch/x86/kvm/mmu/rmap.h
 +++ b/arch/x86/kvm/mmu/rmap.h
-@@ -27,7 +27,6 @@ static struct kmem_cache *pte_list_desc_cache;
+@@ -91,10 +91,16 @@ typedef bool (*rmap_handler_t)(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
  
- int pte_list_add(struct kvm_mmu_memory_cache *cache, u64 *spte,
- 		 struct kvm_rmap_head *rmap_head);
--void free_pte_list_desc(struct pte_list_desc *pte_list_desc);
- void pte_list_remove(u64 *spte, struct kvm_rmap_head *rmap_head);
- unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
- 
-@@ -90,4 +89,12 @@ typedef bool (*rmap_handler_t)(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
- 			       struct kvm_memory_slot *slot, gfn_t gfn,
- 			       int level, pte_t pte);
- 
-+void kvm_zap_one_rmap_spte(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+			   u64 *sptep);
-+bool kvm_zap_all_rmap_sptes(struct kvm *kvm, struct kvm_rmap_head *rmap_head);
-+bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+		    const struct kvm_memory_slot *slot);
-+bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
-+		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
-+		  pte_t unused);
+ void kvm_zap_one_rmap_spte(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ 			   u64 *sptep);
+-bool kvm_zap_all_rmap_sptes(struct kvm *kvm, struct kvm_rmap_head *rmap_head);
+ bool __kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ 		    const struct kvm_memory_slot *slot);
+ bool kvm_zap_rmap(struct kvm *kvm, struct kvm_rmap_head *rmap_head,
+ 		  struct kvm_memory_slot *slot, gfn_t gfn, int level,
+ 		  pte_t unused);
++
++void __rmap_add(struct kvm *kvm, struct kvm_mmu_memory_cache *cache,
++		const struct kvm_memory_slot *slot, u64 *spte, gfn_t gfn,
++		unsigned int access);
++void rmap_add(struct kvm_vcpu *vcpu, const struct kvm_memory_slot *slot,
++	      u64 *spte, gfn_t gfn, unsigned int access);
++
  #endif /* __KVM_X86_MMU_RMAP_H */
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
