@@ -2,191 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09539643EDC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:39:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CBFC4643EE7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232604AbiLFIjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:39:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
+        id S232444AbiLFIkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:40:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234122AbiLFIiq (ORCPT
+        with ESMTP id S232321AbiLFIkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:38:46 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C172655
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:38:44 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id x28so5212763lfn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:38:44 -0800 (PST)
+        Tue, 6 Dec 2022 03:40:51 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18AFFE87
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:40:50 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id l11so19296837edb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:40:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ANyVsngf65a+eFmtwb0iMJHr0EeOJEcLYKSjm4qNpxI=;
-        b=NJMk55P+sC/tqvVTE5YgKq8nQusWlrdEnAyJYx0CsOvhX9rLKLkm4pnwSIvQk6SAZm
-         ONCSQRQ1JXQIeAKiPGbM848T1ZIW2d7l+/tP6GaB06wKMQ1zq7TJupMR4/QJbvZ5AYzA
-         KApImDchL4woQ6iEfLs7s0HrjmzKegSkNkD2M+/HxZDyfrsw9Jx1zbwGJH/Kk9Uly+lq
-         zNtBHZXfMM1sNaFXNCHVqjnEJoph6+nUF/9/bZ9T+GjzR2z+j2IPdhMflij5zxKIwQwL
-         FHdA+RgpZ0/9YNbYpGoZ2PzHSdM6qC735HYmAsZ2Ow4Ex7LA2iZ7foVSmULQ6AB52RdM
-         W3Tg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wb4e4KLqX/W0EQ+pghx+Rj8+iOq0razwJhvVhFNSz+E=;
+        b=ZqY6wWHvq0n02BHxpXLvp1TMRphD5VQQX7jlb3yrYeZEmfvbJCxjIn3Vfk0p4FL43K
+         gNB8RN0wcVQXkhTekCC3hLu3mBvDavTNfgOOHjmJ+wqhJaV+gH8puR4mAg22WV+/m8Jk
+         qhvfeU32KV9yUccCBt6pHIWW19QrKKhfSTtdaOgeGseeL9ie+PEpbeWtPYNGCaEE2TdQ
+         V4hfO1OS95VpkNODFaLhNwWYv8pUBnBnjzO3pBc11je3VrlU908/HQYPqpYvEjCVcZ/0
+         FsWOOb4mEa4KNN/YkvJ6wyinkxmiV6rM4laDfdutgeytwhu3CsMqcMYWEXriJiXstGH2
+         z4hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANyVsngf65a+eFmtwb0iMJHr0EeOJEcLYKSjm4qNpxI=;
-        b=QVs/HvF6g2o+3dW6GOg0pOPSnOf0k92499UL0C/XPibaS5t05CFisZyA9/X2KbL9fe
-         /0IvjQDql3hxNP2nBhHO4yOXom4Y/AtmxRpiTRq6QwfRq0GYQzoltruW6filesDvY2Wy
-         z4RTg77M7slQnhPnyTL8ECZ++qqxeA8ySo7FHKkY0UddrmpHuu3bLwUMDi+WzHkW7sP1
-         xqerKcVH7J5lfcJzuucon/rXuezxB9BRvvemf4Tbr7rygoqEurf2uAz1Fx/lVVorEtsR
-         +pD8iKh12SeGb8sq5DrWZGg8FgvuJ+RQyU9qiyHpKXTKWIfFrRpCgO1xKRhPe96HvvWS
-         rWfA==
-X-Gm-Message-State: ANoB5pn2jbQ5Dc9aGUgjf4JG9PKy0F3reisUibnKIffOa6n+9nQfbsEx
-        f48/1A+OL1zXMrh24snz7t/lvg==
-X-Google-Smtp-Source: AA0mqf64avDHaRy5jJ5LqrBrk9vceu4eOGM5kyWEz2n90p+ntO8hFrEe7y5FzENUFnVh7tv2lJ+tuA==
-X-Received: by 2002:a05:6512:445:b0:4b5:8d2c:fc36 with SMTP id y5-20020a056512044500b004b58d2cfc36mr31490lfk.505.1670315922955;
-        Tue, 06 Dec 2022 00:38:42 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bi20-20020a05651c231400b002773ac59697sm1599383ljb.0.2022.12.06.00.38.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 00:38:42 -0800 (PST)
-Message-ID: <2597b9e5-7c61-e91c-741c-3fe18247e27c@linaro.org>
-Date:   Tue, 6 Dec 2022 09:38:41 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Wb4e4KLqX/W0EQ+pghx+Rj8+iOq0razwJhvVhFNSz+E=;
+        b=CeMSyCpGFcxzULL16+aduK/hIFp96MomWxpMosfaKPYBpgvKzXGX/oML02rPYIa5VC
+         uyU7ZaKORPpFBk07mB4bGaC+UWMnOyJrl4W5wHh9DyFssD8rBCKwk9dIXG5/mKP/WT4L
+         qFJLuRtGMiXZOTVzDeUj6qjvkPbHI5jmxSwAoSCdPyUa9vZ5njU1ZFiYsVG+ki/rmRjx
+         ytPiwt9nx07P1NAFhxTxqlSjEyP2rSeWeOwJwPn4VNu1f4lyVzS3gKMFhqNHEvf4btB0
+         xbpjWvbG+3uBlH1RjbCkmeMJTHNJlaaImGRpy05oVNoC1EkIQR10VnK/KsiwQLQ4gYC/
+         BGvA==
+X-Gm-Message-State: ANoB5pm0KJpvxO4qeubbuahQ9kIXKgJkAo6+aNN3RXS8W30kx5JKylXE
+        HsVjEYCA1joaRnA8IaaOypV0SQ0NfX03uvtK9Q4T
+X-Google-Smtp-Source: AA0mqf5Nb0jkYRIRIckdLjV5rgneBA+/lxQi57WmseMEMqgl2PnOsz1TUSekNIpFuM8m8I5SiDsNV40CqkCmq1BNvN4=
+X-Received: by 2002:aa7:c98e:0:b0:46c:2cf2:e89f with SMTP id
+ c14-20020aa7c98e000000b0046c2cf2e89fmr15699323edt.267.1670316048670; Tue, 06
+ Dec 2022 00:40:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
- GPY2xx bindings
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>, Rob Herring <robh@kernel.org>
-Cc:     Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221202151204.3318592-1-michael@walle.cc>
- <20221202151204.3318592-4-michael@walle.cc>
- <20221205212924.GA2638223-robh@kernel.org>
- <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
- <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221205084127.535-1-xieyongji@bytedance.com> <20221205084127.535-2-xieyongji@bytedance.com>
+ <20221206081847.GA8771@lst.de>
+In-Reply-To: <20221206081847.GA8771@lst.de>
+From:   Yongji Xie <xieyongji@bytedance.com>
+Date:   Tue, 6 Dec 2022 16:40:37 +0800
+Message-ID: <CACycT3sXHGQt_V=rgwvEv4v8+oUaAOu1T=tWrKePdybMHagzng@mail.gmail.com>
+Subject: Re: [PATCH v2 01/11] genirq/affinity:: Export irq_create_affinity_masks()
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/12/2022 09:29, Michael Walle wrote:
-> Am 2022-12-05 22:53, schrieb Michael Walle:
->> Am 2022-12-05 22:29, schrieb Rob Herring:
->>> On Fri, Dec 02, 2022 at 04:12:03PM +0100, Michael Walle wrote:
->>>> Add the device tree bindings for the MaxLinear GPY2xx PHYs.
->>>>
->>>> Signed-off-by: Michael Walle <michael@walle.cc>
->>>> ---
->>>>
->>>> Is the filename ok? I was unsure because that flag is only for the 
->>>> GPY215
->>>> for now. But it might also apply to others. Also there is no 
->>>> compatible
->>>> string, so..
->>>>
->>>>  .../bindings/net/maxlinear,gpy2xx.yaml        | 47 
->>>> +++++++++++++++++++
->>>>  1 file changed, 47 insertions(+)
->>>>  create mode 100644 
->>>> Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
->>>>
->>>> diff --git 
->>>> a/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml 
->>>> b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
->>>> new file mode 100644
->>>> index 000000000000..d71fa9de2b64
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
->>>> @@ -0,0 +1,47 @@
->>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/net/maxlinear,gpy2xx.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: MaxLinear GPY2xx PHY
->>>> +
->>>> +maintainers:
->>>> +  - Andrew Lunn <andrew@lunn.ch>
->>>> +  - Michael Walle <michael@walle.cc>
->>>> +
->>>> +allOf:
->>>> +  - $ref: ethernet-phy.yaml#
->>>> +
->>>> +properties:
->>>> +  maxlinear,use-broken-interrupts:
->>>> +    description: |
->>>> +      Interrupts are broken on some GPY2xx PHYs in that they keep 
->>>> the
->>>> +      interrupt line asserted even after the interrupt status 
->>>> register is
->>>> +      cleared. Thus it is blocking the interrupt line which is 
->>>> usually bad
->>>> +      for shared lines. By default interrupts are disabled for this 
->>>> PHY and
->>>> +      polling mode is used. If one can live with the consequences, 
->>>> this
->>>> +      property can be used to enable interrupt handling.
->>>
->>> Just omit the interrupt property if you don't want interrupts and add 
->>> it
->>> if you do.
->>
->> How does that work together with "the device tree describes
->> the hardware and not the configuration". The interrupt line
->> is there, its just broken sometimes and thus it's disabled
->> by default for these PHY revisions/firmwares. With this
->> flag the user can say, "hey on this hardware it is not
->> relevant because we don't have shared interrupts or because
->> I know what I'm doing".
+On Tue, Dec 6, 2022 at 4:18 PM Christoph Hellwig <hch@lst.de> wrote:
+>
+> On Mon, Dec 05, 2022 at 04:41:17PM +0800, Xie Yongji wrote:
+> > Export irq_create_affinity_masks() so that some modules
+> > can make use of it to implement interrupt affinity
+> > spreading mechanism.
+>
+> I don't think driver should be building low-level affinity masks.
 
-Yeah, that's a good question. In your case broken interrupts could be
-understood the same as "not connected", so property not present. When
-things are broken, you do not describe them fully in DTS for the
-completeness of hardware description, right?
+With the vDPA framework, some drivers (vduse, vdpa-sim) can create
+software-defined virtio devices and attach them to the virtio bus.
+This kind of virtio device is not a pci device or a platform device.
+So it would be needed to export this function if we want to implement
+the automatic affinity management for the virtio device driver which
+is binded to this device.
 
-> 
-> Specifically you can't do the following: Have the same device
-> tree and still being able to use it with a future PHY firmware
-> update/revision. Because according to your suggestion, this
-> won't have the interrupt property set. With this flag you can
-> have the following cases:
->   (1) the interrupt information is there and can be used in the
->       future by non-broken PHY revisions,
->   (2) broken PHYs will ignore the interrupt line
->   (3) except the system designer opts-in with this flag (because
->       maybe this is the only PHY on the interrupt line etc).
-
-I am not sure if I understand the case. You want to have a DTS with
-interrupts and "maxlinear,use-broken-interrupts", where the latter will
-be ignored by some future firmware? Isn't then the property not really
-correct? Broken for one firmware on the same device, working for other
-firmware on the same device?
-
-I would assume that in such cases you (or bootloader or overlay) should
-patch the DTS...
-
-
-
-Best regards,
-Krzysztof
-
+Thanks,
+Yongji
