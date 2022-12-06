@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACEB6441C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:02:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D216441C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbiLFLBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:01:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S234506AbiLFLBk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234569AbiLFLAz (ORCPT
+        with ESMTP id S234542AbiLFLAr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:00:55 -0500
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F8F24973;
-        Tue,  6 Dec 2022 03:00:20 -0800 (PST)
-Received: by mail-qk1-f177.google.com with SMTP id g10so7143962qkl.6;
-        Tue, 06 Dec 2022 03:00:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lBhPqYc/JMCTFIEagYJZEgzKwzycXm8LzBcb9Js+yF4=;
-        b=CviNX96YSi8l5ieJGDHjXHpGFKVnm9BlKWsqpB7LDaCKucvDe6DFvpeWt5B8RYSE07
-         eyRyUx94DmjmtR0hz9+/V3Z6GXRVVAPDWgiPIHmzUXHphHOFzUyVJ+hNysy7FK2WGGyE
-         Y15EHlwBuB9DxQi2zXj4t/PZl9EQwYGTgJAtpVn2ASzAA4agVXngVGhkisYqVWeEBCc1
-         6ACjBF3iGy3FD4KCyuOhqp2Ej/PyrM9mBbv7dIPlqOJLgiXJ9ki4kOoeqR+bMQaboWHy
-         0LUMiJjhruSuFG3LafMHTCSJ8jjrzbt/+Xo1BEPVw3j618DMDz7hpgbFsRiJEOOCqFhJ
-         Ec+Q==
-X-Gm-Message-State: ANoB5pnZgAhhrUgeG1HyWWhktnJSdsVpw/UGOlA7JIrsnG/KjezKG1Pj
-        UBldA2XTmPm5zuL32t2wCesWD9IPyUCF3DKM4OU=
-X-Google-Smtp-Source: AA0mqf5b/hp4GlGZmjpSekpW0gRmUaFcJ+nSiIYlCHbKwn0nXou+S9nnSSJq2OUAjqmI568w8vqneQ0QDd8n2GYee3s=
-X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
- br17-20020a05620a461100b006faaf7e927cmr74758208qkb.443.1670324419800; Tue, 06
- Dec 2022 03:00:19 -0800 (PST)
+        Tue, 6 Dec 2022 06:00:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D3823158;
+        Tue,  6 Dec 2022 03:00:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFB66B81901;
+        Tue,  6 Dec 2022 11:00:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 51013C433B5;
+        Tue,  6 Dec 2022 11:00:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670324415;
+        bh=U/0VRHgrSM8Y5IYzd71Kgi5ZjK26Pe6Xi2PyRPfYrQg=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=am4/9U0zvVzyxAAInh8alvrsL3uewSBCE8AcQhoGwqYTowbwW9yND/qcDF0Dkfe9H
+         leSs+ZRh/xHn4RDFJScbIuuWMBCBkKudpi2wLui2y961gklERM1qm/F6H8paXRbKJl
+         6T5cpslbOWxe4rG2bmt3C5JgdLH5PRbbXHbB7yYmIjr2dajCUBM4+IBAqRQGmVPyzE
+         Jx5giLmOpAzvlObobedwr3ldIv9Pc8YeX51DXOEoxDscF6QfAPUhmRvcYnbUzQhCex
+         Zqms7T50IUC6Mmxi2xTzERhwxZGYdyKXigXIv+uohFcSPRjHuSALH8296ibVnKGPKv
+         6D56q2fbqLyVA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 385FDC395E5;
+        Tue,  6 Dec 2022 11:00:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221206101021.18113-1-lukasz.luba@arm.com> <20221206101629.dbcuv3zdso44w3cq@vireshk-i7>
- <2a97cf28-7e47-04c7-edcb-41adbd20ccd9@arm.com>
-In-Reply-To: <2a97cf28-7e47-04c7-edcb-41adbd20ccd9@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 6 Dec 2022 12:00:07 +0100
-Message-ID: <CAJZ5v0hRW2Px4LP9OCgFqyUQUiVr0xZL6dYPrWrmGerGqCq1PQ@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: schedutil: Optimize operations with single max
- CPU capacity
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, saravanak@google.com,
-        wusamuel@google.com, isaacmanjarres@google.com,
-        kernel-team@android.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] net: microchip: sparx5: Fix missing destroy_workqueue of
+ mact_queue
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167032441522.13103.458741845784845586.git-patchwork-notify@kernel.org>
+Date:   Tue, 06 Dec 2022 11:00:15 +0000
+References: <20221203070259.19560-1-linqiheng@huawei.com>
+In-Reply-To: <20221203070259.19560-1-linqiheng@huawei.com>
+To:     Qiheng Lin <linqiheng@huawei.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lars.povlsen@microchip.com,
+        Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
+        UNGLinuxDriver@microchip.com, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 11:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 12/6/22 10:16, Viresh Kumar wrote:
-> > On 06-12-22, 10:10, Lukasz Luba wrote:
-> >> The max CPU capacity is the same for all CPUs sharing frequency domain
-> >> and thus 'policy' object. There is a way to avoid heavy operations
-> >> in a loop for each CPU by leveraging this knowledge. Thus, simplify
-> >> the looping code in the sugov_next_freq_shared() and drop heavy
-> >> multiplications. Instead, use simple max() to get the highest utilization
-> >> from these CPUs. This is useful for platforms with many (4 or 6) little
-> >> CPUs.
-> >>
-> >> The max CPU capacity must be fetched every time we are called, due to
-> >> difficulties during the policy setup, where we are not able to get the
-> >> normalized CPU capacity at the right time.
-> >>
-> >> The stored value in sugov_policy::max is also than used in
-> >> sugov_iowait_apply() to calculate the right boost. Thus, that field is
-> >> useful to have in that sugov_policy struct.
-> >>
-> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >
-> > Can you please divide this into two patches, one for just moving max
-> > and one for looping optimization ? Else we may end up reverting
-> > everything once again.
-> >
->
-> OK, I can do that. Thanks for having a look!
+Hello:
 
-Also, please note that this material is unlikely to go into 6.2, so
-I'd prefer going back to it after 6.2-rc1 is out.
+This patch was applied to netdev/net.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Sat, 3 Dec 2022 15:02:59 +0800 you wrote:
+> The mchp_sparx5_probe() won't destroy workqueue created by
+> create_singlethread_workqueue() in sparx5_start() when later
+> inits failed. Add destroy_workqueue in the cleanup_ports case,
+> also add it in mchp_sparx5_remove()
+> 
+> Fixes: b37a1bae742f ("net: sparx5: add mactable support")
+> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] net: microchip: sparx5: Fix missing destroy_workqueue of mact_queue
+    https://git.kernel.org/netdev/net/c/7b8232bdb178
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
