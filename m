@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEDF36448BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CF86448D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:09:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235237AbiLFQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:07:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S235379AbiLFQJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:09:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235546AbiLFQHP (ORCPT
+        with ESMTP id S235502AbiLFQJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:07:15 -0500
+        Tue, 6 Dec 2022 11:09:32 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E0F32B98;
-        Tue,  6 Dec 2022 08:03:26 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49229391FB;
+        Tue,  6 Dec 2022 08:04:27 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7572B81AA1;
-        Tue,  6 Dec 2022 16:03:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F16C433D6;
-        Tue,  6 Dec 2022 16:03:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9560FB81AA7;
+        Tue,  6 Dec 2022 16:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 263CDC433C1;
+        Tue,  6 Dec 2022 16:04:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670342603;
-        bh=TqJFgSnbNlhbjhiuX1arn47XcYRFf/kK7R85AOUhw6w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MpbKpY/4NOt6CZJA27rHP/XauBm8GjJFBjXjFbrxFYlCtR2UObW8fGZXzgnL0GLKX
-         HpH9B8529EVizc8sdYoy+5w9IhIOsOMkCNoxhMY/tlKP5a20L+K+wG89EAvVtHmlrx
-         2/1KbHQ8r7O+OLf2xKkJ4YnYN+KP7FnRg7NNE2x/HW6A1TENys3b7V7ahhIx3vzISA
-         b50IBst8dERdCBlryFxZpzU1w84aKltmNo9+BfIimwsTF2OkKr6ybLbY03U+WOcv7W
-         +MtBmUMXPRskumA6wCRMRcU1BzEnkX1cljG0zCqgmLQlYsGlK0kuXLvBEzlVoo5FV4
-         ICZd19A/g/y0Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4DB1540404; Tue,  6 Dec 2022 13:03:18 -0300 (-03)
-Date:   Tue, 6 Dec 2022 13:03:18 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Ravi Bangoria <ravi.bangoria@amd.com>, irogers@google.com,
-        jolsa@redhat.com, namhyung@kernel.org, peterz@infradead.org,
-        mark.rutland@arm.com, adrian.hunter@intel.com,
-        alexander.shishkin@linux.intel.com, carsten.haitzler@arm.com,
-        leo.yan@linaro.org, maddy@linux.ibm.com, kjain@linux.ibm.com,
-        atrajeev@linux.vnet.ibm.com, tmricht@linux.ibm.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com,
-        santosh.shukla@amd.com
-Subject: Re: [PATCH v3 0/2] perf test: Add event group test
-Message-ID: <Y49nxv41VMtqUSNk@kernel.org>
-References: <20221206043237.12159-1-ravi.bangoria@amd.com>
- <529367b6-e96a-d030-b8a2-bb4ad3d37d90@linux.intel.com>
+        s=k20201202; t=1670342665;
+        bh=Szlr9bhRSHRa3/F8OFwm0BojO1dnfBM+g8JhZoyroVQ=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=EuHdyOO7jfOqgp/M50bX1Vr0lYkcoMJ0gPiTJr33pdky/0JRMb+5J+sZBvWEU0ENI
+         s264f0V25aj0eqe7VkWzwOS6m7wqx02l7A1MI+USSIqWtVOgFPwF6S1k1JLPWRgOaz
+         L5PSESakgZf5/kmeSOY6ZM+JSIYiTYhs8zi2krXQwXnlJz+/bGfWEhUTgTWuQBY8rX
+         8f2EZtwSdGdJS5ZOizfU6w4fUGlunL/X8/vd+vbPVB+5qMpfhszUeemCdaXdaxCTuP
+         pw0EnSbeFcNeFDfRtEiY4QJo3HIAvrOjJlka1Sy6vacGHi3kbxiQySBwsVkhC9+KES
+         PRzMbhZbDP2PA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com, linux-mediatek@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+In-Reply-To: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
+References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
+Subject: Re: (subset) [PATCH v2 0/9] Add MediaTek MT7986 SPI NAND and ECC support
+Message-Id: <167034266187.169562.7872281598428362203.b4-ty@kernel.org>
+Date:   Tue, 06 Dec 2022 16:04:21 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <529367b6-e96a-d030-b8a2-bb4ad3d37d90@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-da105
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,30 +63,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 06, 2022 at 09:47:57AM -0500, Liang, Kan escreveu:
-> On 2022-12-05 11:32 p.m., Ravi Bangoria wrote:
-> > Multiple events in a group can belong to one or more pmus, however
-> > there are some limitations to it. One of the limitation is, perf
-> > doesn't allow creating a group of events from different hw pmus.
-> > Write a simple test to create various combinations of hw, sw and
-> > uncore pmu events and verify group creation succeeds or fails as
-> > expected.
-> > 
-> > v2: https://lore.kernel.org/r/20221129111946.409-1-ravi.bangoria@amd.com
-> > v2->v3:
-> >  - Define a set of uncore pmus that supports more than 3 events. This
-> >    will prevent false negative results by not picking random uncore
-> >    pmu. Test will be skipped if no uncore pmu found.
-> > 
-> > Ravi Bangoria (2):
-> >   perf tool: Move pmus list variable to new a file
+On Mon, 5 Dec 2022 14:57:47 +0800, Xiangsheng Hou wrote:
+> This patch series add MediaTek MT7986 SPI NAND and ECC controller
+> support, split ECC engine with rawnand controller in bindings and
+> hange to YAML schema.
 > 
-> a new file
+> Changes since V1:
+>  - Use existing sample delay property.
+>  - Add restricting for optional nfi_hclk.
+>  - Improve and perfect dt-bindings documentation.
+>  - Change existing node name to match NAND controller DT bingings.
+>  - Fix issues reported by dt_binding_check.
+>  - Fix issues reported by dtbs_check.
 > 
-> Other than the above typo, the patch series looks good to me.
-> 
-> Acked-by: Kan Liang <kan.liang@linux.intel.com>
+> [...]
 
-Fixed that up, added your Acked-by, thanks.
+Applied to
 
-- Arnaldo
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[1/9] spi: mtk-snfi: Add snfi support for MT7986 IC
+      commit: 7073888c86601389e17f3ee8ab15ab7aef148839
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
