@@ -2,182 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B28C3644224
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:29:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F4964422D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:32:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234776AbiLFL3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:29:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S234788AbiLFLco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:32:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234563AbiLFL2v (ORCPT
+        with ESMTP id S229690AbiLFLck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:28:51 -0500
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C89E48
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:28:48 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NRJ7M2YcTz15Mxx;
-        Tue,  6 Dec 2022 19:27:59 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Dec 2022 19:28:45 +0800
-Subject: Re: [PATCH v4 12/17] mm: remember exclusively mapped anonymous pages
- with PG_anon_exclusive
-To:     David Hildenbrand <david@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, <linux-mm@kvack.org>
-References: <20220428083441.37290-1-david@redhat.com>
- <20220428083441.37290-13-david@redhat.com>
- <90dd6a93-4500-e0de-2bf0-bf522c311b0c@huawei.com>
- <3c7fd5da-b3f8-5562-45a9-f83d7dbcdd7d@redhat.com>
- <d51a7163-b082-d43a-1d0d-13ebf8cb538d@huawei.com>
- <e679e859-8c08-36e6-24c4-6fea50fe485b@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <954b0bd3-bf7d-5c4b-5d76-8ac13b5ee8ac@huawei.com>
-Date:   Tue, 6 Dec 2022 19:28:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 6 Dec 2022 06:32:40 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D99C4C;
+        Tue,  6 Dec 2022 03:32:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4487E61698;
+        Tue,  6 Dec 2022 11:32:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8C0C433D7;
+        Tue,  6 Dec 2022 11:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670326356;
+        bh=hdx5lL3XQncm1TjSRW1x2q5YNuSGyRAzdS5G1zXDWa0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MlCsv/t8V2vpnGrUHCIF/11Qv8bxig4oDGbEjHnsMH+44I0TtBb7GXRE91SfRA5a3
+         ou7qtIgP/6raAElyZw4FT5VG76+5E3yqvLTxbuhRTEGytjD9J8EFOBCsGPe3c05lQ3
+         jS9wbc69MK1Ac9b2MjuPwbiERseowl5KynRV2kQW2wEzzXRyztK3+dRD2nJtMLZYBr
+         005k27K09Tep8oPe2QP5kXlIOa46LvK7OMvxXiPw1vLVAyg0AhEXNtmFVRLDtABJtj
+         eFiZQ+DEWnlWHwVXrA5q4EpRPWxGDNK3vetzu5XWoFS6ivnWl/Uyo++KBlHWmko5E0
+         KNrpV6X3WTMuA==
+Date:   Tue, 6 Dec 2022 12:32:27 +0100
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>
+Cc:     linux-mediatek@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [next v7 0/8] Add BananaPi R3
+Message-ID: <Y48oS3+vR4Pv6izh@lpieralisi>
+References: <20221127114142.156573-1-linux@fw-web.de>
 MIME-Version: 1.0
-In-Reply-To: <e679e859-8c08-36e6-24c4-6fea50fe485b@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221127114142.156573-1-linux@fw-web.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/6 17:40, David Hildenbrand wrote:
-> On 06.12.22 10:37, Miaohe Lin wrote:
->> On 2022/12/6 16:43, David Hildenbrand wrote:
->>>>>
->>>>
->>>> Hi David, sorry for the late respond and a possible inconsequential question. :)
->>>
->>> Better late than never! Thanks for the review, independently at which time it happens :)
->>>
->>>>
->>>> <snip>
->>>>
->>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>>>> index 7a71ed679853..5add8bbd47cd 100644
->>>>> --- a/mm/hugetlb.c
->>>>> +++ b/mm/hugetlb.c
->>>>> @@ -4772,7 +4772,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->>>>>                        is_hugetlb_entry_hwpoisoned(entry))) {
->>>>>                swp_entry_t swp_entry = pte_to_swp_entry(entry);
->>>>>    -            if (is_writable_migration_entry(swp_entry) && cow) {
->>>>> +            if (!is_readable_migration_entry(swp_entry) && cow) {
->>>>>                    /*
->>>>>                     * COW mappings require pages in both
->>>>>                     * parent and child to be set to read.
->>>>> @@ -5172,6 +5172,8 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
->>>>>            set_huge_ptep_writable(vma, haddr, ptep);
->>>>>            return 0;
->>>>>        }
->>>>> +    VM_BUG_ON_PAGE(PageAnon(old_page) && PageAnonExclusive(old_page),
->>>>> +               old_page);
->>>>>          /*
->>>>>         * If the process that created a MAP_PRIVATE mapping is about to
->>>>> @@ -6169,12 +6171,17 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
->>>>>            }
->>>>>            if (unlikely(is_hugetlb_entry_migration(pte))) {
->>>>>                swp_entry_t entry = pte_to_swp_entry(pte);
->>>>> +            struct page *page = pfn_swap_entry_to_page(entry);
->>>>>    -            if (is_writable_migration_entry(entry)) {
->>>>> +            if (!is_readable_migration_entry(entry)) {
->>>>
->>>> In hugetlb_change_protection(), is_writable_migration_entry() is changed to !is_readable_migration_entry(),
->>>> but
->>>>
->>>>>                    pte_t newpte;
->>>>>    -                entry = make_readable_migration_entry(
->>>>> -                            swp_offset(entry));
->>>>> +                if (PageAnon(page))
->>>>> +                    entry = make_readable_exclusive_migration_entry(
->>>>> +                                swp_offset(entry));
->>>>> +                else
->>>>> +                    entry = make_readable_migration_entry(
->>>>> +                                swp_offset(entry));
->>>>>                    newpte = swp_entry_to_pte(entry);
->>>>>                    set_huge_swap_pte_at(mm, address, ptep,
->>>>>                                 newpte, huge_page_size(h));
->>>>
->>>> <snip>
->>>>
->>>>> diff --git a/mm/mprotect.c b/mm/mprotect.c
->>>>> index b69ce7a7b2b7..56060acdabd3 100644
->>>>> --- a/mm/mprotect.c
->>>>> +++ b/mm/mprotect.c
->>>>> @@ -152,6 +152,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->>>>>                pages++;
->>>>>            } else if (is_swap_pte(oldpte)) {
->>>>>                swp_entry_t entry = pte_to_swp_entry(oldpte);
->>>>> +            struct page *page = pfn_swap_entry_to_page(entry);
->>>>>                pte_t newpte;
->>>>>                  if (is_writable_migration_entry(entry)) {
->>>>
->>>> In change_pte_range(), is_writable_migration_entry() is not changed to !is_readable_migration_entry().
->>>
->>> Yes, and also in change_huge_pmd(), is_writable_migration_entry() stays unchanged.
->>>
->>>> Is this done intentionally? Could you tell me why there's such a difference? I'm confused. It's very
->>>> kind of you if you can answer my puzzle.
->>>
->>> For change protection, the only relevant part is to convert writable -> readable or writable -> readable_exclusive.
->>>
->>> If an entry is already readable or readable_exclusive, there is nothing to do. The only issues would be when turning a readable one into a readable_exclusive one or a readable_exclusive one into a readable one.
->>>
->>>
->>> In hugetlb_change_protection(), the "!is_readable_migration_entry" could in fact be turned into a "is_writable_migration_entry()". Right now, it would convert writable -> readable or writable -> readable_exclusive AND readable -> readable AND readable_exclusive -> readable_exclusive, which isn't necessary but also shouldn't hurt either.
->>
->> Many thanks for your explanation. It's really helpful. :)
->>
->>>
->>>
->>> So yeah, it's not consistent but shouldn't be problematic. Do you see an issue with that?
->>
->> No, I don't see any issue with that. I just wonder whether we can change "!is_readable_migration_entry" to "is_writable_migration_entry()" to make code
->> more consistent and avoid possible future puzzle. Also we can further remove this harmless unnecessary migration entry conversion. But this should
->> be a separate cleanup patch anyway.
+On Sun, Nov 27, 2022 at 12:41:34PM +0100, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Want to send a patch? :)
+> This Series adds some Nodes to mt7986 devicetree and the BananaPi R3
+> 
+> This version is rebased on linux next from 2022/11/27.
+> 
+> i included sams series for mt7986 DTS with small changes
+> https://patchwork.kernel.org/project/linux-mediatek/cover/20220427124741.18245->
+> 
+> i had run full dtbs-check but i end up with some strange warnings in
+> ethernet-node that should not come up as phy-handle and sfp/managed
+> properties are already defined. These errors also came up for mt7986a-rfb.
+> 
+> phy-handle made optional
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/mediatek,net.yaml#n265
+> 
+> property sfp/managed (which is included for mac subnode in yaml above):
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/net/ethernet-controller.yaml#n137
+> 
+> changes:
+> v7:
+> - rebase on next so dropped already applied patches
+> - squashed overlay-patch into the bpi-r3 base support
+> - moved regulators from mmc-dts to common dtsi
+> - changed dtsi to dts (as board base dtb) and mmc-dts to overlays
+> - renamed overlays to dtso
+> - removed angelos RB because of changes in bpi-r3 patch
+> 
+> v6:
+> - dropped regulators from usb-patch as suggested by chunfeng yun
+> - moved 3v3 regulator to mmc-patch as it is needed for emmc to work
+>   rfbs were tested by sam shih, r3 by me
+> - dropped RB from AngeloGioacchino from mmc-patch due to this change
+> - fixed links in coverletter which were broken in v5
+> - i hope this series is sent without errors now (my mailprovider limited
+>   mails last 2 times while sending part 10)
+> 
+> v5:
+> - changed usb ranges/reg/unit-adress
+> - added reviewd-by's except usb-part due to changes
+> 
+> v4:
+> - dropped RFC prefix
+> - rebase on matthias' mtk dts-next (for 6.2) branch
+> - added author information to overlays
+> - fixed sfp binding error
+> - added fix for moving wed_pcie node
+> - readded missing compatible patches
+> 
+> v3:
+> - changed mmc pull-ups
+> - added patch for board binding (sent separately before)
+> - added pcie node in mt7986 (not yet again in r3)
+> - added dt overlays
+> 
+> Frank Wunderlich (5):
+>   dt-bindings: phy: mediatek,tphy: add support for mt7986
+>   dt-bindings: usb: mtk-xhci: add support for mt7986
+>   dt-bindings: PCI: mediatek-gen3: add SoC based clock config
+>   dt-bindings: PCI: mediatek-gen3: add support for mt7986
+>   arm64: dts: mt7986: add Bananapi R3
+> 
+> Sam Shih (3):
+>   arm64: dts: mt7986: add usb related device nodes
+>   arm64: dts: mt7986: add mmc related device nodes
+>   arm64: dts: mt7986: add pcie related device nodes
+> 
+>  .../bindings/pci/mediatek-pcie-gen3.yaml      |  64 ++-
+>  .../bindings/phy/mediatek,tphy.yaml           |   1 +
+>  .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+>  arch/arm64/boot/dts/mediatek/Makefile         |   5 +
+>  .../mt7986a-bananapi-bpi-r3-emmc.dtso         |  30 ++
+>  .../mt7986a-bananapi-bpi-r3-nand.dtso         |  55 +++
+>  .../mediatek/mt7986a-bananapi-bpi-r3-nor.dtso |  68 +++
+>  .../mediatek/mt7986a-bananapi-bpi-r3-sd.dtso  |  24 +
+>  .../dts/mediatek/mt7986a-bananapi-bpi-r3.dts  | 448 ++++++++++++++++++
+>  arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts  | 120 +++++
+>  arch/arm64/boot/dts/mediatek/mt7986a.dtsi     | 122 +++++
+>  arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts  |   8 +
+>  12 files changed, 934 insertions(+), 12 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-emmc.dtso
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nand.dtso
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-nor.dtso
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3-sd.dtso
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3.dts
 
-Queued in my todo list. ;)
+Should I pick up patches [3,4] into the PCI tree ?
 
-Thanks!
-Miaohe Lin
-
-
+Thanks,
+Lorenzo
