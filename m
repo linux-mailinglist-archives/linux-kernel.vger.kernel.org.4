@@ -2,103 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C13643ACA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 02:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9DA643B9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbiLFBeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 20:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S233898AbiLFDEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:04:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiLFBd5 (ORCPT
+        with ESMTP id S230035AbiLFDEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 20:33:57 -0500
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 408FC1EC75;
-        Mon,  5 Dec 2022 17:33:56 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4NR2xp523Cz4f3mSs;
-        Tue,  6 Dec 2022 09:33:50 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.124.27])
-        by APP1 (Coremail) with SMTP id cCh0CgCHMK8AnI5j21eHBg--.5641S2;
-        Tue, 06 Dec 2022 09:33:53 +0800 (CST)
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-To:     tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linfeilong@huawei.com,
-        liuzhiqiang26@huawei.com
-Subject: [PATCH v3] blk-cgroup: Fix typo in comment
-Date:   Tue,  6 Dec 2022 17:33:07 +0800
-Message-Id: <20221206093307.378249-1-shikemeng@huaweicloud.com>
-X-Mailer: git-send-email 2.30.0
+        Mon, 5 Dec 2022 22:04:44 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92288B486;
+        Mon,  5 Dec 2022 19:04:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=knlKMQxu2kigd4KXDxW0Ewl4mzT6NSR6mAtv/z2qQcw=; b=r1DQ7eAPTdvXGxIH2eFI+ItaLM
+        NWx9JL+5znG2RQGIkm5g/TY1ivfSzB5HjwvkBa5bFJlfqZsez/ARFtXRyqjyH7wd1qQEKrQB9krcc
+        Yx+y84XcercxCnzaHwWewc4lAcsmYpEHkl6Gv0NXeZJcmphmTc9l0qFaQpP2Zt/aZA8s=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2OF3-004TRN-Ji; Tue, 06 Dec 2022 04:03:33 +0100
+Date:   Tue, 6 Dec 2022 04:03:33 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v3 net-next 1/4] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y46xBVuv9iaUdNLs@lunn.ch>
+References: <d53ffecdde8d3950a24155228a3439f2c9b10b9b.1670259123.git.piergiorgio.beruto@gmail.com>
+ <Y44y05M+6NGod+4x@shell.armlinux.org.uk>
+ <Y4455r631my4LNIU@gvm01>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgCHMK8AnI5j21eHBg--.5641S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Jw4kJry8JFWUtw18Xw45trb_yoW8JrWkpr
-        ZIkF4qkry29F9rCa1Yg3WY9FWSga1kGa43J393Zw1Ykr13try8Ca4Yyr48tr1FqFs7AF4D
-        X34S9rW0kw1UCrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkYb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M280x2IEY4vEnII2IxkI6r1a6r45M2
-        8lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E
-        3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r
-        xl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv
-        0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z2
-        80aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28I
-        cxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42
-        IY6xAIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU01mh7UUUUU==
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y4455r631my4LNIU@gvm01>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kemeng Shi <shikemeng@huawei.com>
+> > Also, why do they need to be exported to modules? From what I can see,
+> > the only user of these functions is phy_device.c, which is part of
+> > the same module as phy.c where the functions live, meaning that they
+> > don't need to be exported.
+> I did this because similar functions in the same file are all exported
+> to modules (e.g. phy_config_aneg, phy_speed_down, phy_start_cable_test).
+> Therefore, I assumed the intention was to let modules (maybe out-of-tree
+> modules?) make use of these functions. If you think we should not do
+> this, would kindly explain why for example the phy_start_cable_test is
+> exported?
 
-Replace assocating with associating.
-Replace intiailized with initialized.
+phy_start_cable_test probably should not be exported. I probably got
+this wrong. At one point, it might of been called directly from
+net/ethtool/cabletest.c, but not any more. It is now accessed via
+phy_ethtool_phy_ops.
 
-Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
-Acked-by: Tejun Heo <tj@kernel.org>
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Each kernel module is its own name space. You can only reference
+something within a kernel module if it is exported. So you will find
+all the helper functions in phy_device.c which are used by PHY drivers
+are exported, for example.
 
----
-v3:
- -add reviewed-by
-v2:
- -based on current mainline code
- -add acked-by
----
- block/blk-cgroup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+You need to watch out for circular dependencies between modules, since
+they are loaded sequentially. PHYs are generally leaves, they depend
+on phylib and nothing else, so that is simple. The phylib module is
+loaded first, and then the PHY drivers.
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index ed761c62ad0a..8197246ba8c6 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -577,7 +577,7 @@ EXPORT_SYMBOL_GPL(blkcg_print_blkgs);
-  * @pd: policy private data of interest
-  * @v: value to print
-  *
-- * Print @v to @sf for the device assocaited with @pd.
-+ * Print @v to @sf for the device associated with @pd.
-  */
- u64 __blkg_prfill_u64(struct seq_file *sf, struct blkg_policy_data *pd, u64 v)
- {
-@@ -765,7 +765,7 @@ EXPORT_SYMBOL_GPL(blkg_conf_prep);
- 
- /**
-  * blkg_conf_finish - finish up per-blkg config update
-- * @ctx: blkg_conf_ctx intiailized by blkg_conf_prep()
-+ * @ctx: blkg_conf_ctx initialized by blkg_conf_prep()
-  *
-  * Finish up after per-blkg config update.  This function must be paired
-  * with blkg_conf_prep().
--- 
-2.30.0
+But there are more complex scenarios. A built in driver cannot
+reference a module, that would result in undefined symbols. That is
+probably what i got wrong with cable tests. I did all my testing with
+it built in. But phylib can be built as a module. But that then
+implies the core ethtool code cannot be built in, otherwise you get
+undefined reference. So it was reworked to reference phylib via
+phy_ethtool_phy_ops.
 
+So as Russell says, if a function is only referenced within a module,
+there is no need to export it, so keeping the kernel namespace clean.
+
+      Andrew
