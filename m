@@ -2,121 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198CE6439E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:25:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6A36439ED
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiLFAZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:25:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S231434AbiLFA0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:26:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiLFAY7 (ORCPT
+        with ESMTP id S229456AbiLFA0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:24:59 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A841F2FC;
-        Mon,  5 Dec 2022 16:24:57 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NR1QC49S2z4x1T;
-        Tue,  6 Dec 2022 11:24:51 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670286292;
-        bh=4bttU9xuSbnp1T/tbvdcKwjQVJPJdcK+Mjvu8iHG65o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=rNKRPhcOthMt4WBi5977e+QUpARdC45GYHHoAbw5XAbvWnMgyh0+4y7BXnxfkyc8t
-         ZTlJbeq/RP4jghqnJ/lskvfTcUE6+I6rmzvVZcJ45wQ5b7BV1zTF13XFmoF1OTvLF0
-         Jlwlfef1wpWMdI7Hdi66Y/ZsXhKp0ZHlulBn7NElToFHKx5XVDlm4c44VZG/SEllb0
-         PcSc6dnirNh/4hSCPNAjfxhX6IZ7l1hcE+CPD+bltsy8/uUvcXtTLmT656lVIwcCH3
-         9g0T7XUfYwSmQ5Meb2bGDto8IB7wVjBnJE7ajFvWSVAvfGcshsuOVoSHq6DkSkDhIQ
-         AxgpjFsmSNI1Q==
-Date:   Tue, 6 Dec 2022 11:24:47 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Armin Wolf <W_Armin@gmx.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: linux-next: manual merge of the drivers-x86 tree with the pm tree
-Message-ID: <20221206112447.429f7ab7@canb.auug.org.au>
+        Mon, 5 Dec 2022 19:26:15 -0500
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DC4C1EAFD;
+        Mon,  5 Dec 2022 16:26:14 -0800 (PST)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 164663200949;
+        Mon,  5 Dec 2022 19:26:08 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 05 Dec 2022 19:26:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1670286367; x=
+        1670372767; bh=3CGH9HhcetAdOgZSRwrfM5MD0lJuEd9B/GIe9kj/hzo=; b=n
+        697w9xePqnt2Zr3AVOYOpv1h7X1AQmkS04kXCqeNZHLbJXdt9PnmsJPqluA6y6ie
+        DXdn9kuXkvIyy1DTDYK1+bG6fUqVs/Lr9bb4KkFlliQiBOOZmfoSC9Z5nVO6dJPR
+        vUs+s2ilSQr++aq6Ke+AgwmTaXhj3EkmoPG+6SFh0QqB2CeV/zlJBq/FAlyapcqx
+        5wxc4b8fF4NSiWqehCSuFGdN/h6eNKqwc50j4EsfKRhapoAPZMCq3kinMNW+E9Fj
+        MMiJFCGzGJnCgQskmbFvaEQfvWK55jC5hKIwwPz+UwO6oLb8UZ8eU/HmKZJKwgpH
+        D0bK4WEnxrHtYYqsvOfDg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670286367; x=
+        1670372767; bh=3CGH9HhcetAdOgZSRwrfM5MD0lJuEd9B/GIe9kj/hzo=; b=O
+        em+0VDYY/AXEgAj7nY65hj0uJYXOL785k8+91di15IoD1U2+jVdHzau7G1xGoi8z
+        qBqFfxFereUCg0wfonbB/+SIgz4+cl3qvCK3y7H6mYS5R/Weki1S8XtxhvPwceYl
+        ZPNL11seHwZpKVxqu+gRCw1Sf04CaYx0yYwpxelk6PtUZm3QJsMTE8Hrhr0fVZsN
+        IWcVomtJ1qhhUYjor787JHQQHOTdmsvSyTuZQqDTI8oQ+Enzyjt83PAXBDOWy8iv
+        BwWXnxc7ewwgVi3oJKrR8Rm0fwCdvo3dUKmE8s/BGPxCjzdzMFAPb1yh01lrL1Uy
+        X49CGSCATWlSeIbVtaNEw==
+X-ME-Sender: <xms:HYyOYwsO7GWFkR7v6vKER5mxp7Ziy4rt6W0xVjT7AoQUCSPzJOVsqQ>
+    <xme:HYyOY9f4OT4eUTy3q3uz3x0Lw8ZLWJH86oiBAsHVefsGSGkaUavM9Gh0MY9Y8Vx2Z
+    iznm9OZXVmwzlUuvw>
+X-ME-Received: <xmr:HYyOY7x11GOALng9029pCIVpTVajcn-IK5ua9-TXXHnZ45Cr7f_jYtIwCF_kmTaUah6dbW1iZcI3sY1bGM1joYBLTtVc7ZWeGCgiQBm6_wCQ5viH_5XFIa1X5w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudehgddvvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
+    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:HYyOYzN1cDkTRtlUiCITJiIuL6oNrli1quZxUCK-r53n-GMpSr2I1g>
+    <xmx:HYyOYw99df9U5mgzoIWdzSMyiUloHMH1unQh-DoY_7VhDA_2r6-zTA>
+    <xmx:HYyOY7VVHCBDiKt_1-5_42hClQ65j-GuZJ4azHghgi525HtyZBgqjw>
+    <xmx:H4yOYyye-CmZk9os8yvj-jdcmxMzJKm3FZwbx5VaSf-i7gUK0IXNrg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 5 Dec 2022 19:26:03 -0500 (EST)
+Message-ID: <a0c767d5-eb55-3479-c4bc-1029809027f5@sholland.org>
+Date:   Mon, 5 Dec 2022 18:26:02 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jlzzsRQhMGIBha=E=89gQu0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v3 6/9] arm64: dts: allwinner: fix touchscreen reset GPIO
+ polarity
+Content-Language: en-US
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Bastien Nocera <hadess@hadess.net>,
+        =?UTF-8?Q?Guido_G=c3=bcnther?= <agx@sigxcpu.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Angus Ainslie <angus@akkea.ca>,
+        Ondrej Jirman <megous@megous.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Andy Gross <agross@kernel.org>,
+        Aleksei Mamlin <mamlinav@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        David Jander <david@protonic.nl>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Lukasz Majewski <lukma@denx.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20221103-upstream-goodix-reset-v3-0-0975809eb183@theobroma-systems.com>
+ <20221103-upstream-goodix-reset-v3-6-0975809eb183@theobroma-systems.com>
+From:   Samuel Holland <samuel@sholland.org>
+In-Reply-To: <20221103-upstream-goodix-reset-v3-6-0975809eb183@theobroma-systems.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/jlzzsRQhMGIBha=E=89gQu0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Quentin,
 
-Hi all,
+On 12/5/22 07:40, Quentin Schulz wrote:
+> From: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> 
+> The reset line is active low for the Goodix touchscreen controller so
+> let's fix the polarity in the Device Tree node.
+> 
+> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
+> ---
+>  arch/arm64/boot/dts/allwinner/sun50i-a64-amarula-relic.dts       | 2 +-
+>  arch/arm64/boot/dts/allwinner/sun50i-a64-oceanic-5205-5inmfd.dts | 2 +-
+>  arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi          | 2 +-
+>  arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts             | 2 +-
+>  4 files changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-amarula-relic.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-amarula-relic.dts
+> index 8233582f62881..5fd581037d987 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64-amarula-relic.dts
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-amarula-relic.dts
+> @@ -122,7 +122,7 @@ touchscreen@5d {
+>  		interrupt-parent = <&pio>;
+>  		interrupts = <7 4 IRQ_TYPE_EDGE_FALLING>;
+>  		irq-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>;	/* CTP-INT: PH4 */
+> -		reset-gpios = <&pio 7 8 GPIO_ACTIVE_HIGH>;	/* CTP-RST: PH8 */
+> +		reset-gpios = <&pio 7 8 GPIO_ACTIVE_LOW>;	/* CTP-RST: PH8 */
 
-Today's linux-next merge of the drivers-x86 tree got a conflict in:
+You are changing the DT binding here, in a way that breaks backward
+compatibility with existing devicetrees. NACK.
 
-  drivers/acpi/battery.c
+Regards,
+Samuel
 
-between commit:
+>  		touchscreen-inverted-x;
+>  		touchscreen-inverted-y;
+>  	};
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-oceanic-5205-5inmfd.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-oceanic-5205-5inmfd.dts
+> index 577f9e1d08a14..990f042f5a5b1 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64-oceanic-5205-5inmfd.dts
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-oceanic-5205-5inmfd.dts
+> @@ -45,7 +45,7 @@ touchscreen@5d {
+>  		interrupt-parent = <&pio>;
+>  		interrupts = <7 4 IRQ_TYPE_EDGE_FALLING>;
+>  		irq-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>;	/* CTP-INT: PH4 */
+> -		reset-gpios = <&pio 7 11 GPIO_ACTIVE_HIGH>;	/* CTP-RST: PH11 */
+> +		reset-gpios = <&pio 7 11 GPIO_ACTIVE_LOW>;	/* CTP-RST: PH11 */
+>  		touchscreen-inverted-x;
+>  		touchscreen-inverted-y;
+>  	};
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
+> index 87847116ab6d9..97359cc7f13e2 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
+> @@ -167,7 +167,7 @@ touchscreen@5d {
+>  		interrupt-parent = <&pio>;
+>  		interrupts = <7 4 IRQ_TYPE_LEVEL_HIGH>; /* PH4 */
+>  		irq-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
+> -		reset-gpios = <&pio 7 11 GPIO_ACTIVE_HIGH>; /* PH11 */
+> +		reset-gpios = <&pio 7 11 GPIO_ACTIVE_LOW>; /* PH11 */
+>  		AVDD28-supply = <&reg_ldo_io0>;
+>  		VDDIO-supply = <&reg_ldo_io0>;
+>  		touchscreen-size-x = <720>;
+> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts
+> index 0a5607f73049e..c0eccc753e3f5 100644
+> --- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts
+> +++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinetab.dts
+> @@ -189,7 +189,7 @@ touchscreen@5d {
+>  		interrupt-parent = <&pio>;
+>  		interrupts = <7 4 IRQ_TYPE_LEVEL_HIGH>; /* PH4 */
+>  		irq-gpios = <&pio 7 4 GPIO_ACTIVE_HIGH>; /* PH4 */
+> -		reset-gpios = <&pio 7 8 GPIO_ACTIVE_HIGH>; /* PH8 */
+> +		reset-gpios = <&pio 7 8 GPIO_ACTIVE_LOW>; /* PH8 */
+>  		AVDD28-supply = <&reg_ldo_io1>;
+>  	};
+>  };
+> 
 
-  98b0cf207b61 ("ACPI: battery: Call power_supply_changed() when adding hoo=
-ks")
-
-from the pm tree and commit:
-
-  878a82c23469 ("ACPI: battery: Pass battery hook pointer to hook callbacks=
-")
-
-from the drivers-x86 tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/acpi/battery.c
-index 883c75757400,9482b0b6eadc..000000000000
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@@ -696,8 -696,7 +696,8 @@@ static void __battery_hook_unregister(s
-  	if (lock)
-  		mutex_lock(&hook_mutex);
-  	list_for_each_entry(battery, &acpi_battery_list, list) {
-- 		if (!hook->remove_battery(battery->bat))
- -		hook->remove_battery(battery->bat, hook);
-++		if (!hook->remove_battery(battery->bat, hook))
- +			power_supply_changed(battery->bat);
-  	}
-  	list_del(&hook->list);
-  	if (lock)
-
---Sig_/jlzzsRQhMGIBha=E=89gQu0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOOi88ACgkQAVBC80lX
-0GwoCgf9FpJ2FlQZ1thukSsoGfixDIwCo5jlkrLNZ9PpGS/90WkafVyBzQ7jebJu
-fT8OOrY6cP7LB2RbXVnUoWeuOB1084UsGdR68mr0FHAsa/cEqJfSEhilwQ0Pq6li
-2znB6llfqUpgHLL1QdWvJ6X5S8wzJEVE4z14JEw1FDcYd6hYE+bnQwnivfjVHnmP
-ME9MgLuWXe1UgG7KuvGUlb1slMBQWLXHj17+s8sikEAMyCO90L8+cTRkfidnb+qw
-6ZC5s7w/Hs7wNBj6CZQ/vhDnsTUqR7GAMlGgQNFaOIf/gYDhKtYYXQHO4OdBICcC
-r5Fg2sqEZ0SyCGBE3XXUJSILeZhhOA==
-=XMJ7
------END PGP SIGNATURE-----
-
---Sig_/jlzzsRQhMGIBha=E=89gQu0--
