@@ -2,75 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC60644C44
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 456FB644C4C
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:14:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiLFTMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:12:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
+        id S229681AbiLFTOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:14:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLFTMT (ORCPT
+        with ESMTP id S229660AbiLFTOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:12:19 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7A21A202;
-        Tue,  6 Dec 2022 11:12:17 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id r65-20020a1c4444000000b003d1e906ca23so1035275wma.3;
-        Tue, 06 Dec 2022 11:12:17 -0800 (PST)
+        Tue, 6 Dec 2022 14:14:04 -0500
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEB3AE6E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:14:03 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 189so19833669ybe.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:14:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=923JxRimLSxvO+7wwtbUsSa/9xr0Tkhke8ZWL9gS4y0=;
-        b=qkmf7XcS+lo2DHkVGfkMsAoqlWRXmhRAFrPaVNfmHgrWIBF91HeI/yTV6jmCFiWgI9
-         V71wUFeZ8swmKSQVkwHLjkKxxLw3uqHm67uNc+S2mUJX3Q0c8ZytrkLwOELIaykdxU/P
-         wvl+QDsoTy3PBdpW3Qx0oRBYNTjdITtW2diD7ul3JjtEHsjF7kwHGXIetxpVehTx6u54
-         p2DSNq90fFbkdQ7qReFxk/64bA/XXEulPK0AtfgHhqBIIjh/ABmLB3iFj9UbGKQZ4Qd7
-         /c5Bxt3ae54UusVC8h9bQOoZgQct2swQrkzwuhJHNuQi+FM8TL9DTfXsraCWMwa9/0Sx
-         foAA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsGstoMegH9NCBA+9S++kT1eq+4LgLp/g5jcJesallk=;
+        b=XYKeMYNurkuR6sR3Bimkf7Sn8dHGUPB/zyUAi5+51h+e/3eKyuQGNJmkMVJA2I8mIO
+         CRj1XB6I+6aa93zGfB/XreNSlmTLe7W5eHZVi/gq5zyZ7EEkjk4q49HSkidWnAE7J2UZ
+         yhegxEOwEF91TJJvN5JjZ1tgaxWE7Z0j3VlZWiVxWL3QhIxeqHNLGUahLLYMgnMWo6m7
+         LWQBrrP98g3lSPdohibAd0RZqtMzH2ASNda0/fz+SLByFsys48P+q9qh3dZu1Okmq1jf
+         RtZC+vv238QR0AXfwTzcUPRCnYQP38SscsXB3ILVgMfK8CzeVP8pxS7S6iPEzQGHWcIP
+         fdBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=923JxRimLSxvO+7wwtbUsSa/9xr0Tkhke8ZWL9gS4y0=;
-        b=LrUd01siCOl5s33C7pP9Wrn6w+8X61vuRqTMl/iNw7OSFGGD9dNCg6P34eleL6C+bo
-         2lK7WYTrEcJ0s4Maghz+/k4uS6Lep9Jv6xM+aOw2yE8pWcF1Gr0L7NHTcFxhUHkI46nE
-         fPM96TpOnvNR5bdpUz5EpPoo9BeW/gYysJGcFRmdQiZ4qtpMaNrsoLzzEbw2fXhSPcaW
-         PBzmgy0Wz0Lhnac8jKxrdEXofVZy5H2WLftnNN38R5iRv/6chzYzw9vcKaUw/JWeLgbH
-         9m41w+hUq/e57eO3UYIOWSZ1CFJkhwVwrcSgad376KekVdA8Ztx5HKlNRCL7fn1Oe7Ym
-         MaUw==
-X-Gm-Message-State: ANoB5pkX0h0luLG1GH4BM8WlwGwVZQRk3QMeTj/Xenz8WoHzHwbfBF7s
-        7rlK0MnVP4iEZ2R5pHrNedXDuc3OWEk=
-X-Google-Smtp-Source: AA0mqf5fWLlUpKtSyOQMHbSYFOFS7l2vnj7lsBXeHzKbKVvrd6Vkj4cwjW4Jzs+KUzY5WYcAYO3ymg==
-X-Received: by 2002:a05:600c:4e14:b0:3d0:7477:bc89 with SMTP id b20-20020a05600c4e1400b003d07477bc89mr395032wmq.22.1670353936143;
-        Tue, 06 Dec 2022 11:12:16 -0800 (PST)
-Received: from suse.localnet (host-79-26-108-238.retail.telecomitalia.it. [79.26.108.238])
-        by smtp.gmail.com with ESMTPSA id n29-20020a05600c3b9d00b003c21ba7d7d6sm25725783wms.44.2022.12.06.11.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 11:12:15 -0800 (PST)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Peter Zijlstra <a.p.zijlstra@chello.nl>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH] mm/highmem: Add notes about conversions from kmap{,_atomic}()
-Date:   Tue, 06 Dec 2022 20:12:13 +0100
-Message-ID: <2093077.OBFZWjSADL@suse>
-In-Reply-To: <Y472ipY908pHip+B@linutronix.de>
-References: <20221206070029.7342-1-fmdefrancesco@gmail.com> <Y472ipY908pHip+B@linutronix.de>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nsGstoMegH9NCBA+9S++kT1eq+4LgLp/g5jcJesallk=;
+        b=g3l6QehuUOIpqHHhdocF2RQkb4tq2a3r2p+OLLMNuYBdIFDpOyhHWUECDviYsVTf+c
+         FgDxBRxuWLllXk6d+TvFoAamvZJrX8olCls3kqkxZ/2ZFPDl1PcaLQ5WffuWX30cf04L
+         LmEZD5uF182yOy0INQ5r7KVb3Iwg/v1W0WUW4yz+reMnuJkOl9NyAOpBFEJHHcfQ3P2d
+         bnfHU9gMsQ3ul1W1EIyBdrjOWGcU6HkcaDvLvloAN9rWGcJbeYJ2UCdA8rL28TQcw1jo
+         ZbQGdO++xsqRZyvoLCRrGFf/nPJEEw3A0DH0uRCTwOqGRNsTEGPOvAvtWSV5FkW9mhiC
+         Yydg==
+X-Gm-Message-State: ANoB5pnj9gmtaUWCcvJkEJN02Mb6d8Gcc34yH0L/D7qa++PVnya51kFZ
+        P2AblxtP8ypbvnAoEhH3xWXtsn7VHqrTGbS/2hufBWh6hfEp6Bnd
+X-Google-Smtp-Source: AA0mqf7m6QMPk8QvSd5EosLtYWGKojHXXveXDH0jx2Rge6XwaoiwkjiHmCyuNB2B6z2oCDVoagQzgUk1NRNWwoi5oyU=
+X-Received: by 2002:a25:24d:0:b0:6fd:2917:cf60 with SMTP id
+ 74-20020a25024d000000b006fd2917cf60mr18389766ybc.427.1670354042180; Tue, 06
+ Dec 2022 11:14:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CABWYdi0G7cyNFbndM-ELTDAR3x4Ngm0AehEp5aP0tfNkXUE+Uw@mail.gmail.com>
+ <Y30rdnZ+lrfOxjTB@cmpxchg.org> <CABWYdi3PqipLxnqeepXeZ471pfeBg06-PV0Uw04fU-LHnx_A4g@mail.gmail.com>
+ <CABWYdi0qhWs56WK=k+KoQBAMh+Tb6Rr0nY4kJN+E5YqfGhKTmQ@mail.gmail.com>
+ <Y4T43Tc54vlKjTN0@cmpxchg.org> <CABWYdi0z6-46PrNWumSXWki6Xf4G_EP1Nvc-2t00nEi0PiOU3Q@mail.gmail.com>
+ <CABWYdi25hricmGUqaK1K0EB-pAm04vGTg=eiqRF99RJ7hM7Gyg@mail.gmail.com> <Y4+RPry2tfbWFdSA@cmpxchg.org>
+In-Reply-To: <Y4+RPry2tfbWFdSA@cmpxchg.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 6 Dec 2022 20:13:50 +0100
+Message-ID: <CANn89iJfx4QdVBqJ23oFJoz5DJKou=ZwVBNNXFNDJRNAqNvzwQ@mail.gmail.com>
+Subject: Re: Low TCP throughput due to vmpressure with swap enabled
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Ivan Babrou <ivan@cloudflare.com>, Linux MM <linux-mm@kvack.org>,
+        Linux Kernel Network Developers <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, cgroups@vger.kernel.org,
+        kernel-team <kernel-team@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,94 +84,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=EC 6 dicembre 2022 09:00:10 CET Sebastian Andrzej Siewior wrote:
-> On 2022-12-06 08:00:29 [+0100], Fabio M. De Francesco wrote:
-> > diff --git a/Documentation/mm/highmem.rst b/Documentation/mm/highmem.rst
-> > index 0f731d9196b0..9523e92299f6 100644
-> > --- a/Documentation/mm/highmem.rst
-> > +++ b/Documentation/mm/highmem.rst
-> > @@ -100,10 +101,21 @@ list shows them in order of preference of use.
-> >=20
-> >    (included in the "Functions" section) for details on how to manage=20
-nested
-> >    mappings.
-> >=20
-> > -* kmap_atomic().  This permits a very short duration mapping of a sing=
-le
-> > -  page.  Since the mapping is restricted to the CPU that issued it, it
-> > -  performs well, but the issuing task is therefore required to stay on=
-=20
-that
-> > -  CPU until it has finished, lest some other task displace its mapping=
-s.
-> > +* kmap_atomic(). This function has been deprecated; use=20
-kmap_local_page().
-> > +
-> > +  NOTE: Conversions to kmap_local_page() must take care to follow the
-> > mapping +  restrictions imposed on kmap_local_page(). Furthermore, code
-> > between the +  map/unmap operations may implicitly depended on the side
-> > effects of +  kmap_atomic(), such as disabling pagefaults, migration,
-> > and/or preemption. +  Such conversions should be changed to make explic=
-it
-> > calls for those +  requirements.
+On Tue, Dec 6, 2022 at 8:00 PM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Mon, Dec 05, 2022 at 04:50:46PM -0800, Ivan Babrou wrote:
+> > And now I can see plenty of this:
+> >
+> > [  108.156707][ T5175] socket pressure[2]: 4294673429
+> > [  108.157050][ T5175] socket pressure[2]: 4294673429
+> > [  108.157301][ T5175] socket pressure[2]: 4294673429
+> > [  108.157581][ T5175] socket pressure[2]: 4294673429
+> > [  108.157874][ T5175] socket pressure[2]: 4294673429
+> > [  108.158254][ T5175] socket pressure[2]: 4294673429
+> >
+> > I think the first result below is to blame:
+> >
+> > $ rg '.->socket_pressure' mm
+> > mm/memcontrol.c
+> > 5280: memcg->socket_pressure = jiffies;
+> > 7198: memcg->socket_pressure = 0;
+> > 7201: memcg->socket_pressure = 1;
+> > 7211: memcg->socket_pressure = 0;
+> > 7215: memcg->socket_pressure = 1;
+>
+> Hoo boy, that's a silly mistake indeed. Thanks for tracking it down.
+>
+> > While we set socket_pressure to either zero or one in
+> > mem_cgroup_charge_skmem, it is still initialized to jiffies on memcg
+> > creation. Zero seems like a more appropriate starting point. With that
+> > change I see it working as expected with no TCP speed bumps. My
+> > ebpf_exporter program also looks happy and reports zero clamps in my
+> > brief testing.
+>
+> Excellent, now this behavior makes sense.
+>
+> > I also think we should downgrade socket_pressure from "unsigned long"
+> > to "bool", as it only holds zero and one now.
+>
+> Sounds good to me!
+>
+> Attaching the updated patch below. If nobody has any objections, I'll
+> add a proper changelog, reported-bys, sign-off etc and send it out.
+>
+> ---
+>  include/linux/memcontrol.h |  8 +++---
+>  include/linux/vmpressure.h |  7 ++---
+>  mm/memcontrol.c            | 20 +++++++++----
+>  mm/vmpressure.c            | 58 ++++++--------------------------------
+>  mm/vmscan.c                | 15 +---------
+>  5 files changed, 30 insertions(+), 78 deletions(-)
+>
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index e1644a24009c..ef1c388be5b3 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -283,11 +283,11 @@ struct mem_cgroup {
+>         atomic_long_t           memory_events[MEMCG_NR_MEMORY_EVENTS];
+>         atomic_long_t           memory_events_local[MEMCG_NR_MEMORY_EVENTS];
+>
+> -       unsigned long           socket_pressure;
+> +       /* Socket memory allocations have failed */
+> +       bool                    socket_pressure;
+>
+>         /* Legacy tcp memory accounting */
+>         bool                    tcpmem_active;
+> -       int                     tcpmem_pressure;
+>
+>  #ifdef CONFIG_MEMCG_KMEM
+>         int kmemcg_id;
+> @@ -1701,10 +1701,10 @@ void mem_cgroup_sk_alloc(struct sock *sk);
+>  void mem_cgroup_sk_free(struct sock *sk);
+>  static inline bool mem_cgroup_under_socket_pressure(struct mem_cgroup *memcg)
+>  {
+> -       if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && memcg->tcpmem_pressure)
+> +       if (!cgroup_subsys_on_dfl(memory_cgrp_subsys) && memcg->socket_pressure)
 
-Sebastian, thanks for taking a look at my patch and replying.
+&& READ_ONCE(memcg->socket_pressure))
 
->   Furthermore, code between the kmap_atomic() and kunmap_atomic()
->   functions may implicitly depended=20
+>                 return true;
+>         do {
+> -               if (time_before(jiffies, READ_ONCE(memcg->socket_pressure)))
+> +               if (memcg->socket_pressure)
 
-I suppose it should be "depend"? Shouldn't it?
+if (READ_ONCE(...))
 
->   on the side effects of kmap_atomic()
->   namely disabling pagefaults or preemption or both.
+>                         return true;
+>         } while ((memcg = parent_mem_cgroup(memcg)));
+>         return false;
+> diff --git a/include/linux/vmpressure.h b/include/linux/vmpressure.h
+> index 6a2f51ebbfd3..20d93de37a17 100644
+> --- a/include/linux/vmpressure.h
+> +++ b/include/linux/vmpressure.h
+> @@ -11,9 +11,6 @@
+>  #include <linux/eventfd.h>
+>
+>  struct vmpressure {
+> -       unsigned long scanned;
+> -       unsigned long reclaimed;
+> -
+>         unsigned long tree_scanned;
+>         unsigned long tree_reclaimed;
+>         /* The lock is used to keep the scanned/reclaimed above in sync. */
+> @@ -30,7 +27,7 @@ struct vmpressure {
+>  struct mem_cgroup;
+>
+>  #ifdef CONFIG_MEMCG
+> -extern void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
+> +extern void vmpressure(gfp_t gfp, struct mem_cgroup *memcg,
+>                        unsigned long scanned, unsigned long reclaimed);
+>  extern void vmpressure_prio(gfp_t gfp, struct mem_cgroup *memcg, int prio);
+>
+> @@ -44,7 +41,7 @@ extern int vmpressure_register_event(struct mem_cgroup *memcg,
+>  extern void vmpressure_unregister_event(struct mem_cgroup *memcg,
+>                                         struct eventfd_ctx *eventfd);
+>  #else
+> -static inline void vmpressure(gfp_t gfp, struct mem_cgroup *memcg, bool tree,
+> +static inline void vmpressure(gfp_t gfp, struct mem_cgroup *memcg,
+>                               unsigned long scanned, unsigned long reclaimed) {}
+>  static inline void vmpressure_prio(gfp_t gfp, struct mem_cgroup *memcg,
+>                                    int prio) {}
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 2d8549ae1b30..0d4b9dbe775a 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -5277,7 +5277,6 @@ static struct mem_cgroup *mem_cgroup_alloc(void)
+>         vmpressure_init(&memcg->vmpressure);
+>         INIT_LIST_HEAD(&memcg->event_list);
+>         spin_lock_init(&memcg->event_list_lock);
+> -       memcg->socket_pressure = jiffies;
+>  #ifdef CONFIG_MEMCG_KMEM
+>         memcg->kmemcg_id = -1;
+>         INIT_LIST_HEAD(&memcg->objcg_list);
+> @@ -7195,10 +7194,10 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
+>                 struct page_counter *fail;
+>
+>                 if (page_counter_try_charge(&memcg->tcpmem, nr_pages, &fail)) {
+> -                       memcg->tcpmem_pressure = 0;
 
-I agree with you for rephrasing, mainly because it is=20
-written in poor English.
+Orthogonal to your patch, but:
 
-However, I still have doubts about why you deleted "migration".=20
-AFAIK, __kmap_local_pfn_prot() always takes care of disabling migration for=
-=20
-HIGHMEM enabled kernels.=20
+Maybe avoid touching this cache line too often and use READ/WRITE_ONCE() ?
 
-How about !HIGHMEM, where kmap_local_page() is an indirect call to=20
-page_address()? Did you mean that, if the code between kmap_atomic() and=20
-kunmap_atomic() depended on migrate_disable() (in PREEMPT_RT) we should alw=
-ays=20
-just stay safe and call preempt_disable() together with conversion to=20
-kmap_local_page()?
-
-If so, I understand and I again agree with you. If not, I'm missing somethi=
-ng;=20
-so please let me understand properly.
-
-Aside from the above, I'm not sure whether you deleted the last phrase befo=
-re=20
-your suggestion. What about making it to become "For the above-mentioned=20
-cases, conversions should also explicitly disable page-faults and/or=20
-preemption"?=20
-
-Thanks again for noticing my mistakes.
-
-=46abio
-
->=20
-> > +  [Legacy documentation]
-> > +
-> > +  This permits a very short duration mapping of a single page.  Since =
-the
-> > +  mapping is restricted to the CPU that issued it, it performs well, b=
-ut
-> > +  the issuing task is therefore required to stay on that CPU until it =
-has
-> > +  finished, lest some other task displace its mappings.
-> >=20
-> >    kmap_atomic() may also be used by interrupt contexts, since it does =
-not
-> >    sleep and the callers too may not sleep until after kunmap_atomic() =
-is
->=20
-> Sebastian
+    if (READ_ONCE(memcg->socket_pressure))
+      WRITE_ONCE(memcg->socket_pressure, false);
 
 
+> +                       memcg->socket_pressure = false;
+>                         return true;
+>                 }
+> -               memcg->tcpmem_pressure = 1;
+> +               memcg->socket_pressure = true;
 
+Same remark.
 
+>                 if (gfp_mask & __GFP_NOFAIL) {
+>                         page_counter_charge(&memcg->tcpmem, nr_pages);
+>                         return true;
+> @@ -7206,12 +7205,21 @@ bool mem_cgroup_charge_skmem(struct mem_cgroup *memcg, unsigned int nr_pages,
+>                 return false;
+>         }
+>
+> -       if (try_charge(memcg, gfp_mask, nr_pages) == 0) {
+> -               mod_memcg_state(memcg, MEMCG_SOCK, nr_pages);
+> -               return true;
+> +       if (try_charge(memcg, gfp_mask & ~__GFP_NOFAIL, nr_pages) == 0) {
+> +               memcg->socket_pressure = false;
+
+same remark.
+
+> +               goto success;
+> +       }
+> +       memcg->socket_pressure = true;
+
+same remark.
+
+> +       if (gfp_mask & __GFP_NOFAIL) {
+> +               try_charge(memcg, gfp_mask, nr_pages);
+> +               goto success;
+>         }
+>
+>         return false;
+> +
+> +success:
+> +       mod_memcg_state(memcg, MEMCG_SOCK, nr_pages);
+> +       return true;
+>  }
+>
+>  /**
