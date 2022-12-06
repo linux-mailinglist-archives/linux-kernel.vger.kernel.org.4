@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60457644772
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:06:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F98644783
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:07:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233495AbiLFPGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:06:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60700 "EHLO
+        id S234901AbiLFPHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiLFPGR (ORCPT
+        with ESMTP id S234448AbiLFPG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:06:17 -0500
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9108D2F009;
-        Tue,  6 Dec 2022 07:02:10 -0800 (PST)
-Received: from localhost (mdns.lwn.net [45.79.72.68])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 55166385;
-        Tue,  6 Dec 2022 15:02:08 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 55166385
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1670338930; bh=0G2uh/bRc5rHaqR4/6WR1JTpOD3SXdpBKV+MrTwefuU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=d57n5x7czbaabIrvEpZHlETZfQDi7yH2Hy/iO8mPrZQwEBnFqE3berASi9sdkq02Z
-         9gSifhWNMPEQlcq9RA4j6IBUtG+9Pa4jh5GXxYu0kpdFXSXmtFpUUlvQWF8X7XZUjm
-         +uCYBPlrg3uFPapg9+zeB5rI6hEbmDzeRjjt9AS7qK5+UNL5StGSbBe951s6+r2uFh
-         hdajF7nuGVI/2W+y0uY5QCyS3tr3ZKperADz9N21J0GS+0NpIcBS6Glyvk0eoRfK+a
-         Jr/ohI65v+3A8muPojih4g2Cga3+PpRFDvAuCtJB/WFMmG3J3ItHU0GJOHdEVbmy6U
-         uAOXAxF7Wk33g==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Akira Yokosawa <akiyks@gmail.com>,
-        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        bilbao@vt.edu, konstantin@linuxfoundation.org,
-        Akira Yokosawa <akiyks@gmail.com>
-Subject: Re: [PATCH v2] docs: Integrate rustdoc into Rust documentation
-In-Reply-To: <e3523f33-847b-81da-7b20-83ee54597d9f@gmail.com>
-References: <20221130220825.1545758-1-carlos.bilbao@amd.com>
- <20221201204814.2141401-1-carlos.bilbao@amd.com>
- <a019a3f1-7ff1-15b2-d930-e1d722847e0c@gmail.com>
- <CANiq72=ud1EB+jcKE=iudFSgKNcqd=8Xe-M0YgxikmUuQ+TjGA@mail.gmail.com>
- <e3523f33-847b-81da-7b20-83ee54597d9f@gmail.com>
-Date:   Tue, 06 Dec 2022 08:02:04 -0700
-Message-ID: <87pmcwlgnn.fsf@meer.lwn.net>
+        Tue, 6 Dec 2022 10:06:29 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1165324F20
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:02:44 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id k7so14166095pll.6
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 07:02:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BhBDV/Z8hnxkq5EH3sr+xFSqw/SOYTGLnS4fXDD4TjQ=;
+        b=af1IJpmx8DAIf0dBdHOanjwfNi1rtPFXiQV+4VzEitDppNrmdXLLzybn9DMpm1DlNR
+         XIYgg4i/Ylczd0HdCoBUhDS1irOESyxtl3+5jjEj2qqldkYqHNg+rLoXUFXvTVqHgL9X
+         H4jkOAzi6UgxIKJV10ouMPtsvGdIPsgaatcRo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BhBDV/Z8hnxkq5EH3sr+xFSqw/SOYTGLnS4fXDD4TjQ=;
+        b=YidO41EmeXCq586IjKkKX6YoaBmhnai202UfLUJxP5JOQSqIRBHrDjS67/fhznmF/N
+         HXYwdnI7n1/VmA7UrxRwJ8IXZGGzkFy8Nmy8Kqqvi/YV9SV13MDoz/8qNeY5ZX9YVgFR
+         nFDmjBuIlGmrulbobjzB7HehEuzeK8XA1dew5uJHyGERTrQLtZyPRlGZ6lrepXUNTFCB
+         /YN2hjXqYvDrNSj/wMv2mejFHLNqieYeHgPKUIF6ESAFkf/fmL4HB17tToiGzt29dtS4
+         bOF1+F9x1lZndVK4PXl10g/IMZ3xNNO0aA4Qa++QveqnE6U3Yu/QCtrUSaE9ZahyiTat
+         OYeA==
+X-Gm-Message-State: ANoB5pnhDtnP7wF+f7X5mjfFs71yljik/mAAwuXBI+87+CLGFESHU2bF
+        NBYOg3Cxg836bwgswfT9lRvozA==
+X-Google-Smtp-Source: AA0mqf6qblx42JoKDSjnTf+U7lxx39QANcvHeJCpg3SWy8a16hQUUXTjzHDB199NarPxRc9E1/2YfQ==
+X-Received: by 2002:a17:90a:d3d5:b0:218:845f:36a1 with SMTP id d21-20020a17090ad3d500b00218845f36a1mr89183328pjw.117.1670338963543;
+        Tue, 06 Dec 2022 07:02:43 -0800 (PST)
+Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
+        by smtp.gmail.com with ESMTPSA id 62-20020a621441000000b00575bab45644sm3343019pfu.61.2022.12.06.07.02.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 07:02:43 -0800 (PST)
+From:   jeffxu@chromium.org
+To:     skhan@linuxfoundation.org, keescook@chromium.org
+Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v4 0/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+Date:   Tue,  6 Dec 2022 15:02:27 +0000
+Message-Id: <20221206150233.1963717-1-jeffxu@google.com>
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Akira Yokosawa <akiyks@gmail.com> writes:
+From: Jeff Xu <jeffxu@chromium.org>
 
-> Well, I'm actually worrying about additional TAT when I want to test
-> a particular change in a .rst file and test-build under the relevant
-> subdirectory using a command, e.g., "make SPHINXDIRS=doc-guide htmldocs".
->
-> This completes almost instantly when CONFIG_RUST is not set.
->
-> With CONFIG_RUST=y, in my test, it runs RUSTDOC even when rustdoc is
-> already generated once, as shown below:
+Since Linux introduced the memfd feature, memfd have always had their execute bit set, and the memfd_create() syscall doesn't allow setting it differently.
 
-This is something that would be nice to avoid if we can; narrowing
-things with SPHINXDIRS should avoid building anything that the user
-isn't asking for.  I'm not sure how much makefile pain would be required
-to make that happen...Documentation/Makefile is not the easiest place to
-make changes, alas.
+However, in a secure by default system, such as ChromeOS, (where all executables should come from the rootfs, which is protected by Verified boot), this executable nature of memfd opens a door for NoExec bypass and enables “confused deputy attack”.  E.g, in VRP bug [1]: cros_vm process created a memfd to share the content with an external process, however the memfd is overwritten and used for executing arbitrary code and root escalation. [2] lists more VRP in this kind.
 
-> I think you can add a new target in the top-devel Makefile which
-> runs both rustdoc and htmldocs for CIs. Something like 'htmldocsboth'
-> or 'htmldocsall'???
->
-> htmldocs and other *docs targets are the most primitive ones for
-> running Sphinx, so my gut feeling tells me _not_ to contaminate
-> htmldocs with rustdoc or vice versa.
+On the other hand, executable memfd has its legit use, runc uses memfd’s seal and executable feature to copy the contents of the binary then execute them, for such system, we need a solution to differentiate runc's use of  executable memfds and an attacker's [3].
 
-Well, I *would* like for a bare "make htmldocs" to make *all* of the
-docs; I don't think Rust should be special in that regard.
+To address those above, this set of patches add following:
+1> Let memfd_create() set X bit at creation time.
+2> Let memfd to be sealed for modifying X bit.
+3> A new pid namespace sysctl: vm.memfd_noexec to control behavior of X bit.  For example, if a container has vm.memfd_noexec=2, then memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+4> A new security hook in memfd_create(). This make it possible to a new LSM, which rejects or allows executable memfd based on its security policy.
 
->> (It is also why I wondered above about
->> `CONFIG_WARN_MISSING_DOCUMENTS`: if `Documentation/` intended to
->> require a config as a whole, then it would be fine. I assume that is
->> not the case, though, but not doing the sync is nevertheless a bit
->> confusing)
->
-> I have no idea. (Note: I was not around when the kernel documentation
-> transitioned to Sphinx.)
+This is V4 version of patch: see [4] [5] [6] for previous versions.
 
-I think we're just seeing the implementation as was rammed in by
-somebody in a hurry; I don't doubt it could be improved.
+[1] https://crbug.com/1305411
+[2] https://bugs.chromium.org/p/chromium/issues/list?q=type%3Dbug-security%20memfd%20escalation&can=1
+[3] https://lwn.net/Articles/781013/
+[4] https://lwn.net/Articles/890096/
+[5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@chromium.org/
+[6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@chromium.org/
 
-Thanks,
+Daniel Verkamp (2):
+  mm/memfd: add F_SEAL_EXEC
+  selftests/memfd: add tests for F_SEAL_EXEC
 
-jon  (currently traveling and scrambling to get ready for the merge window)
+Jeff Xu (4):
+  mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+  mm/memfd: Add write seals when apply SEAL_EXEC to executable memfd
+  selftests/memfd: add tests for MFD_NOEXEC_SEAL MFD_EXEC
+  mm/memfd: security hook for memfd_create
+
+ include/linux/lsm_hook_defs.h              |   1 +
+ include/linux/lsm_hooks.h                  |   4 +
+ include/linux/pid_namespace.h              |  19 ++
+ include/linux/security.h                   |   6 +
+ include/uapi/linux/fcntl.h                 |   1 +
+ include/uapi/linux/memfd.h                 |   4 +
+ kernel/pid_namespace.c                     |  48 ++++
+ mm/memfd.c                                 |  61 ++++-
+ mm/shmem.c                                 |   6 +
+ security/security.c                        |  13 +
+ tools/testing/selftests/memfd/fuse_test.c  |   1 +
+ tools/testing/selftests/memfd/memfd_test.c | 304 ++++++++++++++++++++-
+ 12 files changed, 465 insertions(+), 3 deletions(-)
+
+
+base-commit: eb7081409f94a9a8608593d0fb63a1aa3d6f95d8
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
