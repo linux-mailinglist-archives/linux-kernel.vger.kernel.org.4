@@ -2,134 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 278436443C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CED644374
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:52:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235008AbiLFNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:00:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S233933AbiLFMwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:52:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234848AbiLFM7x (ORCPT
+        with ESMTP id S230327AbiLFMwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:59:53 -0500
-Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org [IPv6:2001:67c:2050:102:465::110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B585FCF4;
-        Tue,  6 Dec 2022 04:59:15 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4NRL0Z5J26z9tBp;
-        Tue,  6 Dec 2022 13:52:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyantec.com; s=default;
-        t=1670331134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IRHVWafY0jHFpHspwEKtI6JUKd/uH2AFkVef11b8k6E=;
-        b=N1xBqdYrP8dXmghzKaLbcLdLpkNG0cHbYgPfiCrvtwz9ibdMcruKlyZtBPyty5mVKHwcqy
-        pfJsynIP4ubyQGY4nqSPTJkyzhkAhscw1SRYmyIdc7oRGIk5fjr44FjSrWCgY1dgYHb1xH
-        gcumJmjWkTPCn46i3XoJNrELOf+f/152w49VMwTXUfHL/ZJXB3F1mQFCOHeTze87OOXo/v
-        QwEPSGjXzPKSIeV/sN1Dx++F2UTspoUue1RM278N7FKKDjqEkg/INJhewJ0XQI96v93o9Q
-        j7wuTFiOP7ESEf2xjBhgJxuCrqJJKh7Gh4jxiTyORgH/M+D0MV4pBnoCEvQ0ug==
-From:   Finn Behrens <fin@nyantec.com>
-To:     ojeda@kernel.org
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Viktor Garske <viktor@v-gar.de>
-Subject: Re: [PATCH v2 09/28] rust: error: add codes from `errno-base.h`
-Date:   Tue, 06 Dec 2022 13:52:07 +0100
-Message-ID: <8D86E171-0030-4A3F-BE87-9B9FB9E79213@nyantec.com>
-In-Reply-To: <20221202161502.385525-10-ojeda@kernel.org>
-References: <20221202161502.385525-1-ojeda@kernel.org>
- <20221202161502.385525-10-ojeda@kernel.org>
+        Tue, 6 Dec 2022 07:52:07 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2C812AD8;
+        Tue,  6 Dec 2022 04:52:05 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id m18so4381074eji.5;
+        Tue, 06 Dec 2022 04:52:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=51QssTzfadvu9MbJIavM+zYO5rlyPy5FsJ0qUzBEE+4=;
+        b=FMinxXABhkCBk/+6+8lBxAEZskm4Tjpm7cGQMzN4II6hrwCXo2YGphcUbW41gbTlqM
+         v+hmI55npuoRclSLEbmyteS0VFOQyaKKkkw3DpS6MOsa3MJ+9pmZxp3FHuS3gwPeP7eG
+         9D0pVJMOeSKXd6f72M4LjZcs4iy3kY26oJG+pzmr+Mob1Y8tLAUpkhBT88rzOBdGIoxR
+         e1hWV49L/VTVDogmQcJEJ9ajVzscfF9aiBlKCZ90nDPp6ApwEW5sCFwD7VnjVkBdGNi7
+         fXrPxXwOYBPfDa4NpUBgt4q56bqt35dASb4vpf3Gl0S2+M/7ITket7q7iY2/j48a6oP4
+         Vnzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=51QssTzfadvu9MbJIavM+zYO5rlyPy5FsJ0qUzBEE+4=;
+        b=cBrIRXnzSlNGyExjhRb+pr+wLzW98eeranKvM594hY2AaKQ7t7FdKcKhEtzEqVhjA1
+         WlHv618HatvzH/5DyAd0KDIqzqbQ5/8D4n63j/KbVob8YCK/9Mr+n+C97WZLxaHtPSmW
+         meLCRQD1351zjfzDDeCJbyZL7NLcDZLtWpjgse+YrTvZJf2xtpt8enc87gfYDazA8A7l
+         px9oalbek3lKA73Z8xY72BqnjfZsGnvxRdijcpw01xeMKs/PPBPTmkdGkbIolBTXGoSo
+         PRr95/nwEh9UEL/wVKmyVedqLJPmaxFXyBYPBcHIMNk+fBY9pvJ/jom2mgBstzBVEb4O
+         lphw==
+X-Gm-Message-State: ANoB5pn8plk8iJRu4TTVuZcz5Cz3pe/mZTZKF8LIHqG11T7McS3QJMqb
+        0eNyVmfYb6PHwYzFRYMu7Tw=
+X-Google-Smtp-Source: AA0mqf7v809hh8emV7VAW7lcHVQgxNKRWs+9aq9wdve4yIPv0rU73ShiMR6tafNpQXoExB8FykWlnw==
+X-Received: by 2002:a17:906:6d8a:b0:7ad:69eb:923b with SMTP id h10-20020a1709066d8a00b007ad69eb923bmr10925466ejt.19.1670331123718;
+        Tue, 06 Dec 2022 04:52:03 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id f8-20020a056402150800b0046146c730easm928170edw.75.2022.12.06.04.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 04:52:03 -0800 (PST)
+Date:   Tue, 6 Dec 2022 13:52:13 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v4 net-next 0/5] add PLCA RS support and onsemi NCN26000
+Message-ID: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 4NRL0Z5J26z9tBp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patchset adds support for getting/setting the Physical Layer 
+Collision Avoidace (PLCA) Reconciliation Sublayer (RS) configuration and
+status on Ethernet PHYs that supports it.
 
+PLCA is a feature that provides improved media-access performance in terms
+of throughput, latency and fairness for multi-drop (P2MP) half-duplex PHYs.
+PLCA is defined in Clause 148 of the IEEE802.3 specifications as amended
+by 802.3cg-2019. Currently, PLCA is supported by the 10BASE-T1S single-pair
+Ethernet PHY defined in the same standard and related amendments. The OPEN
+Alliance SIG TC14 defines additional specifications for the 10BASE-T1S PHY,
+including a standard register map for PHYs that embeds the PLCA RS (see
+PLCA management registers at https://www.opensig.org/about/specifications/).
 
-On 2 Dec 2022, at 17:14, ojeda@kernel.org wrote:
+The changes proposed herein add the appropriate ethtool netlink interface
+for configuring the PLCA RS on PHYs that supports it. A separate patchset
+further modifies the ethtool userspace program to show and modify the
+configuration/status of the PLCA RS.
 
-> From: Viktor Garske <viktor@v-gar.de>
->
-> Only a few codes were added so far. With the `declare_err!`
-> macro in place, add the remaining ones (which is most of them)
-> from `include/uapi/asm-generic/errno-base.h`.
->
-> Co-developed-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Signed-off-by: Viktor Garske <viktor@v-gar.de>
-> Reviewed-by: Gary Guo <gary@garyguo.net>
-> [Reworded, adapted for upstream and applied latest changes]
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-Reviewed-by: Finn Behrens <fin@nyantec.com>
+Additionally, this patchset adds support for the onsemi NCN26000
+Industrial Ethernet 10BASE-T1S PHY that uses the newly added PLCA
+infrastructure.
 
-Regards,
-Finn
+Piergiorgio Beruto (5):
+  net/ethtool: add netlink interface for the PLCA RS
+  drivers/net/phy: add the link modes for the 10BASE-T1S Ethernet PHY
+  drivers/net/phy: add connection between ethtool and phylib for PLCA
+  drivers/net/phy: add helpers to get/set PLCA configuration
+  drivers/net/phy: add driver for the onsemi NCN26000 10BASE-T1S PHY
 
-> ---
->  rust/kernel/error.rs | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
-> index b843f3445483..861746f2422d 100644
-> --- a/rust/kernel/error.rs
-> +++ b/rust/kernel/error.rs
-> @@ -17,7 +17,40 @@ pub mod code {
->          };
->      }
->
-> +    declare_err!(EPERM, "Operation not permitted.");
-> +    declare_err!(ENOENT, "No such file or directory.");
-> +    declare_err!(ESRCH, "No such process.");
-> +    declare_err!(EINTR, "Interrupted system call.");
-> +    declare_err!(EIO, "I/O error.");
-> +    declare_err!(ENXIO, "No such device or address.");
-> +    declare_err!(E2BIG, "Argument list too long.");
-> +    declare_err!(ENOEXEC, "Exec format error.");
-> +    declare_err!(EBADF, "Bad file number.");
-> +    declare_err!(ECHILD, "Exec format error.");
-> +    declare_err!(EAGAIN, "Try again.");
->      declare_err!(ENOMEM, "Out of memory.");
-> +    declare_err!(EACCES, "Permission denied.");
-> +    declare_err!(EFAULT, "Bad address.");
-> +    declare_err!(ENOTBLK, "Block device required.");
-> +    declare_err!(EBUSY, "Device or resource busy.");
-> +    declare_err!(EEXIST, "File exists.");
-> +    declare_err!(EXDEV, "Cross-device link.");
-> +    declare_err!(ENODEV, "No such device.");
-> +    declare_err!(ENOTDIR, "Not a directory.");
-> +    declare_err!(EISDIR, "Is a directory.");
-> +    declare_err!(EINVAL, "Invalid argument.");
-> +    declare_err!(ENFILE, "File table overflow.");
-> +    declare_err!(EMFILE, "Too many open files.");
-> +    declare_err!(ENOTTY, "Not a typewriter.");
-> +    declare_err!(ETXTBSY, "Text file busy.");
-> +    declare_err!(EFBIG, "File too large.");
-> +    declare_err!(ENOSPC, "No space left on device.");
-> +    declare_err!(ESPIPE, "Illegal seek.");
-> +    declare_err!(EROFS, "Read-only file system.");
-> +    declare_err!(EMLINK, "Too many links.");
-> +    declare_err!(EPIPE, "Broken pipe.");
-> +    declare_err!(EDOM, "Math argument out of domain of func.");
-> +    declare_err!(ERANGE, "Math result not representable.");
->  }
->
->  /// Generic integer kernel error.
-> -- =
+ Documentation/networking/ethtool-netlink.rst | 133 +++++++++
+ MAINTAINERS                                  |  14 +
+ drivers/net/phy/Kconfig                      |   7 +
+ drivers/net/phy/Makefile                     |   1 +
+ drivers/net/phy/mdio-open-alliance.h         |  44 +++
+ drivers/net/phy/ncn26000.c                   | 193 ++++++++++++
+ drivers/net/phy/phy-c45.c                    | 180 ++++++++++++
+ drivers/net/phy/phy-core.c                   |   5 +-
+ drivers/net/phy/phy.c                        | 175 +++++++++++
+ drivers/net/phy/phy_device.c                 |   3 +
+ drivers/net/phy/phylink.c                    |   6 +-
+ include/linux/ethtool.h                      |  11 +
+ include/linux/phy.h                          |  81 ++++++
+ include/uapi/linux/ethtool.h                 |   3 +
+ include/uapi/linux/ethtool_netlink.h         |  25 ++
+ net/ethtool/Makefile                         |   2 +-
+ net/ethtool/common.c                         |   8 +
+ net/ethtool/netlink.c                        |  30 ++
+ net/ethtool/netlink.h                        |   6 +
+ net/ethtool/plca.c                           | 290 +++++++++++++++++++
+ 20 files changed, 1214 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/net/phy/mdio-open-alliance.h
+ create mode 100644 drivers/net/phy/ncn26000.c
+ create mode 100644 net/ethtool/plca.c
 
-> 2.38.1
+-- 
+2.35.1
+
