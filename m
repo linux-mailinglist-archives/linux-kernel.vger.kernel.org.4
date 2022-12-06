@@ -2,206 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0BF644D18
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EE0644D22
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:14:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLFUN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 15:13:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47298 "EHLO
+        id S229984AbiLFUOV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 15:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiLFUNk (ORCPT
+        with ESMTP id S229896AbiLFUNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 15:13:40 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12BF3D923
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 12:11:35 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id p24so15045888plw.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 12:11:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rcUapuzIOLv1ChbTqErlZGz/ooTgkpZ+vmGq4+9eme0=;
-        b=HS3nS3aG+T2LVV6nMWKra4RzUehyW4WbMsaEmuND/g1nKLScX0WYzpj/oOTCrA/Omv
-         6LnaZ5B91HU+EXupBNvMD9jQKzcQA+Myerhx5M9gaJdTbK4w1GxjcL+3NLr1o9OR28rg
-         5HIqoUyXJ1rS3fjcBK1mre3zmqdynG9egGzr8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rcUapuzIOLv1ChbTqErlZGz/ooTgkpZ+vmGq4+9eme0=;
-        b=LHNSehG2NGsQGxvh6fgXCiI7pKQArxMQ+emenR8N+0dlguw6PW7i+o33whA6qo6eIh
-         zxoHAA1WNcxZL0On6cUaXGR7edxw2X1BsfNVg2++MqKdAzXYsq9X/JBtVmzTcHiTpD7O
-         DFl5MCWzy8t+kBt5s0urSq1PwSsCN4ZHSKGC5ahQAKkPkSTUxKqMH99qr7optPhobslU
-         oPSsOXRXgHPVj30eJDpeA4AdvlTmkndTpCbsmzB8BkgEB6DkXFdprOEProjCgvvNoTZe
-         zm4d5UZ8VLqR++ZK/47+fvMoAcbkR+kEyPKYJYlhzY49w9shtAFKL2GzDknt9TcsvMsd
-         oGDQ==
-X-Gm-Message-State: ANoB5pncanGezW8YrhwPkN8EaxkEpi8QQRZA0EkUxAEStg+sfPi5Cnsk
-        JGFmDmWXIdD1rC1hCRg6ovHO6yyL/XfDuyy2
-X-Google-Smtp-Source: AA0mqf7B86YTM83iDnKi1WDihlp1QUCaJlGqInZKq8oskfeTvAtbecepL3AFKjbcZ9SuoCJ8UOig7Q==
-X-Received: by 2002:a17:902:f792:b0:186:b32c:4cdc with SMTP id q18-20020a170902f79200b00186b32c4cdcmr71850387pln.166.1670357494929;
-        Tue, 06 Dec 2022 12:11:34 -0800 (PST)
-Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com. [209.85.215.181])
-        by smtp.gmail.com with ESMTPSA id f17-20020a170902f39100b00178b9c997e5sm12991775ple.138.2022.12.06.12.11.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 12:11:34 -0800 (PST)
-Received: by mail-pg1-f181.google.com with SMTP id 6so14354805pgm.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 12:11:33 -0800 (PST)
-X-Received: by 2002:a63:1607:0:b0:457:a1d3:48c3 with SMTP id
- w7-20020a631607000000b00457a1d348c3mr60775778pgl.465.1670357493343; Tue, 06
- Dec 2022 12:11:33 -0800 (PST)
+        Tue, 6 Dec 2022 15:13:54 -0500
+Received: from CY4PR02CU007-vft-obe.outbound.protection.outlook.com (mail-westcentralusazon11021025.outbound.protection.outlook.com [40.93.199.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55978442C8;
+        Tue,  6 Dec 2022 12:13:13 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HAEhwAwS9nBLeI8anb15dAsmHEw+o899ADg6SUB1MBN2gOerfyl1tjXVVMapv/BCk7B8CMTOkwX7TxyxHRb0r8WlMB7tCRNXqRocRwjx9TlN/jpftzSTTCREZMb4O92MH9HOxE2WQbaMaoj2Z6VctstyBokgQcao1b64tkVOPQDM+xdaeTSkvVynrTjjy4mf17mSpE/vszabNaGIM2kVIxXbemNbQx+TRkrdbaNQMjLEVhpbBSGLsCqtLcK7Slo2ex4S6emiYqTEUQ/z0uYRNRWSptK7JkvesUvntMxjLArmFGf7qvQaRZUPfxTWA/CCH7hrz2MJJtLzYyH668VQxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tFrFgAc28fUlIP4u/CxBV8TLKHWgFO4un7YC4GCn0cA=;
+ b=FIRm63ArqC9dnQ2lTj1R1+rrQ0XMGS+IEkEbrIlfJJJwu9dHExZlF6IZ8FJnsFHuWo1jBgpe5VnTfMHouEkyCIdoGaSrQWKmIS8WGnzKx2hmMZYovldzRvdHOp/zkcGPQPOIjCWt0DybcshXfS8yWyhv2S5Cv4wzIqGVU/VhqNED1AvbpXuxJLBsODdoqbp7AYGRVfw9773KdQXbejHjsbQ4i/pqcI/hfwQlSo1dDtWXY6FcUnzTa+ih8pOakf//memwTVP2deIA5AbTzgdAIXP9rb/MSRBY8UsuIlOI0jpv/m/L4dDcR3/ljFAqdLvMa9x1BSyxkfeUtqruVV4v+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tFrFgAc28fUlIP4u/CxBV8TLKHWgFO4un7YC4GCn0cA=;
+ b=SP67krvmHz/lhLh8fjmebshvnkQnyES5uaa/xWUjdzm4Pm20G4/h1CAYYWVOewNjjBoIR52tZCYMqI/XOEkg4HNuuVf8AnOxSL9oXBB4EmgU0MiVqpH3zvKLT1L2t+SKxi3WTY+B5o7/013q5+hKConJxDHErv89A5t02ZTVNc0=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by IA1PR21MB3400.namprd21.prod.outlook.com (2603:10b6:208:3e3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.4; Tue, 6 Dec
+ 2022 20:13:10 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::1e50:78ec:6954:d6dd%5]) with mapi id 15.20.5924.004; Tue, 6 Dec 2022
+ 20:13:09 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>, KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
+Subject: RE: [Patch v4 05/13] init: Call mem_encrypt_init() after Hyper-V
+ hypercall init is done
+Thread-Topic: [Patch v4 05/13] init: Call mem_encrypt_init() after Hyper-V
+ hypercall init is done
+Thread-Index: AQHZBf6sn+ZXM6Ly40q2Zb/xUXDSYq5hSGwAgAAEzKA=
+Date:   Tue, 6 Dec 2022 20:13:08 +0000
+Message-ID: <BYAPR21MB1688BD8EF5F5E7B572846116D71B9@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1669951831-4180-1-git-send-email-mikelley@microsoft.com>
+ <1669951831-4180-6-git-send-email-mikelley@microsoft.com>
+ <51fb66d6-f2e0-f11c-68a3-525723d56dd4@linux.intel.com>
+In-Reply-To: <51fb66d6-f2e0-f11c-68a3-525723d56dd4@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=f609deda-5f74-40f3-b17a-941f892976c9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-12-06T19:54:51Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|IA1PR21MB3400:EE_
+x-ms-office365-filtering-correlation-id: 932aec9b-4915-4484-cbf3-08dad7c64b23
+x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DBvwILjSp/IljFzBXkeLLX66COryhZ37DrLprEXNkRkdVO3ut3RtSVv1vIkQGN8roEJAa5Fzl/CUVUS2UEnOXmUm4h0cYeCb10Bg+UNkwac5calxwKHoS4zBRaZbLhnRC+hUSag8gyG1p9czPuhOaZjS7qQ8OqSE9JhEU8qnkEnsm3rNvVptp1QZwTiVT9TNGgEKxpTDyx5bG8K7KshZb+2twysLOeGEtGKpsflhyW5X32v4Z+XZlD/4PE9SYfceWBl1j5jlYGI18AI0WsjyWjdRvCjCAmm/1rOdN5d0U96aarLki++ZbVHVvWBzkNwlG6oDB9JCU6OUf0PHnC/8/KlPhj5MPf1P/9IZ0LCarR21mmtSjUKWmu3SCOl/TeWMbHa4Cv/Khyb3qF8p+dL0Qs8HUQ/DRhEsZ2dNJDYBoFmtpFIeCd4BEqt8zWJ25H7ww0wCc05pk1gz+6vszsEoS+1jJLPdQuqiH4u2ziKsjQJeORz9znpxssz8SiIC6RmOOoO+Ll8ouPJijyzDJCyMVMC2Us9e+qAwCjqa1/GETTQIhAi+P5fOna4mEEJeQ8h5fyYG/C2yK0YkJ1LDIJmBqL2or1cxbgc107vNH2ISjysVPbynju8432MtUIVegSlAkK+YMzvxJONEu67s/tO4DauLb3w3PgtZx10qjhl2fHst9ZvCtuOOaHzq3oZScDFGjpKtdUk8f47FwbhM4npxMvFZaOYyUFbeOzB+qdu4vVp0ii9CDWSA3t1LaTfHl9m1w9nHUqpwGpV0nQli3CGOMg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(366004)(396003)(136003)(376002)(346002)(451199015)(122000001)(83380400001)(33656002)(8676002)(82950400001)(921005)(82960400001)(7406005)(7416002)(41300700001)(5660300002)(2906002)(8936002)(38070700005)(52536014)(76116006)(8990500004)(6506007)(186003)(7696005)(64756008)(53546011)(26005)(9686003)(478600001)(110136005)(316002)(66556008)(66446008)(10290500003)(55016003)(71200400001)(86362001)(66946007)(66476007)(38100700002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Z25GZnEvZVpSS1NHV0FqZkliV3FVbDRoL1JjZ05kS040SFQrdlZYZDJBcUZC?=
+ =?utf-8?B?azFGYy9FSGo0d0NEVVJ1RENKeDkrWnpnaVVYd05hdkYxbXlnTC9heEp6Zys0?=
+ =?utf-8?B?dUVaM3FmcS90NWJyUDZKaFp5a2RrRmxRUGtqV2ZGSXFzdm9YNHFyYkZ3bzYw?=
+ =?utf-8?B?Q3VlWjJmc1lmcGZiWU1jQmxwNUZMamsvQ1dpbnJJeTBzdWk2b0pYOGlJVzhN?=
+ =?utf-8?B?OG9nQnZDc0JybzVsUHpydFRDeWJkLzUvUXJMS01HcDZuVlpGYU5qSTJSK3dP?=
+ =?utf-8?B?UE53dnRJN0VQL1d1dDUyVkN5K2o3R1dWYW9JeE0rcGJkU0E1dUJxQ0V3dks2?=
+ =?utf-8?B?OW5nWVU1ZVpWQ1ZPU1hOQjVqQkkwYVRFajRTSldiTmZWeitrUmNHcDF6MjhX?=
+ =?utf-8?B?V2VVZERWYTVJaVZKZ2VEcU5zR3pMUU8wMlltSHRGZitnSGMvQXl2Z2JOOHVL?=
+ =?utf-8?B?cVA3MHRHNXRkb1RoV3dPSHNSSVNrSXdaOHRnZmhIRytaaTBkVnBud05rdW1F?=
+ =?utf-8?B?V3pDODVuWC81VVZmY3FoMTFUKzhGRzZQNlBLNkhOTlU0SEdZSWJvZGtTdkps?=
+ =?utf-8?B?ZTRHczdTQ2ROUEJXeTZNQkxQT1IwV29VK3BnN2ZWYWh3R29yT01oNWJJMFhS?=
+ =?utf-8?B?dUFnazFzU1NOUUJreXRNRjRCWmw0V0wrOUVqdmsvMjF2VGJSbU01Q2FYeCtm?=
+ =?utf-8?B?NndaR0duN2l6eG1NaTJweWF4MUc5VDJiaTExaDJRYm4wSGZDWlJKWHdlMzNE?=
+ =?utf-8?B?Nm5aejNTMU5ra3hTdUVDYWp0VS9OOWFPYzVibFR3N0tnZE8rM3NxbzluRDhl?=
+ =?utf-8?B?UzBFV2c4YXk2M3FsMTBvMW0rbzR4dlc0Y0srTUV5cDk3eFBPclhHSjJpUk00?=
+ =?utf-8?B?cFMxdWZnS2h1NWRGeXp6akpkaGNwTjZjUEc0bnFqR09EcWtoQXk2ZG9uK3Bo?=
+ =?utf-8?B?QWFYU1U0OURsVHROaVZLWTVObFpYMFhIMG5KaC92UG93YXNWeWl2dmh3K2I0?=
+ =?utf-8?B?dHEwV3JNZTJyMDdqcFlpUHpkZHVlclZOa0pLWXpQblBkcEdsSlQxeDNrelFq?=
+ =?utf-8?B?ajk2QXJNaFpSL042RGUyMVo5aFdDa1NleUhodWV2MmtxLytiQllqL0xUbkJp?=
+ =?utf-8?B?R002MTBlTGpFMmx2Vnc3WXROMU1uSjM1QnpORjNSaW5mM3JSb2U0NXRFZ0x4?=
+ =?utf-8?B?N3lZVCtIeHlYZVVRNmlTajhtbjZlZWptVHpOV3J1UXBhblJpVVhxL2d1MVlB?=
+ =?utf-8?B?REh0R3VYTS9XMXAxd2duYmx2U281ZFFudVdsRk9wbHZLV1haNkw2dmh6MzQv?=
+ =?utf-8?B?eVRJQmt2UmVHQ2Y4aEtCQVVvWHA4Q24zcG41T21rYUs0UUI0N3JKUzlWWTdo?=
+ =?utf-8?B?RWQ0czRsZ2hhQjA3bUJxZDJlcXFaVGZaU3E4aHd4bzJtdzdtcTI2MTQwL1JY?=
+ =?utf-8?B?V3I5UGgxRXNaK0lpYU5ZMzNHOVE1UDRtd3Y5elBmK0Vnb3JvY1ZDQTdQdHRa?=
+ =?utf-8?B?cTQ4cWVtR1BxMzN3ZlNaUWsyY2dwZUdna0NHbktLN3RmUHlsREdBU2lMN3M5?=
+ =?utf-8?B?Z3g2K2VUdTcvVTVuc3NiNldyT2MwNjM4VEFnSVJiaU9uYWVGYTNMZ0RzU3I2?=
+ =?utf-8?B?ckVCNGpNdzNGRzVJTnV2ckhQL3gxblFmcVFLcmRVL1ovQ3lnczU3Z0Y5ZTNH?=
+ =?utf-8?B?QndiZkoxamdOdlRwQmNQMDZzNThnK0ZLQnVKMEpSRFhHaWxUTll1czA4WmxR?=
+ =?utf-8?B?YnBhaUQ3SVZtVXZOaG9xNGJlQy9FZVFXMFRwMHVkRzB5TjU0NS90UWdtd2pO?=
+ =?utf-8?B?bENmSnM5KzJsTFFWRllTWEhKTEpUOUxnTm5JdzFuaVN5dWYybHJVbmpmY1NS?=
+ =?utf-8?B?bzdra0RlcVNhZVhQVWtZbm5UbUx4VU9sSHo5cHA3NWZVa0o3K3M0QUlpc2gy?=
+ =?utf-8?B?dkpwZ3cwbUhHb29zaUN5L0ZvZnlIMXNENk9NNGlubERTNnZCaWkyMTQvMFkr?=
+ =?utf-8?B?R1htcjd0aHZEZFc3anNPQkFoY1g2cUZEeUVsdUVONTNVa1NLYmhRbGEwZjlp?=
+ =?utf-8?B?NDlqZWhzUkhHelhUUjJzSGNPR05RQXlSSXVLNlhMVGFvaDlFOWUzSXZ0bzBl?=
+ =?utf-8?B?MDdnS2VpTHNaYmhYYWdNeUpHTVBvalFncEVSSng0bjMraktyb2kwR0RHQWtI?=
+ =?utf-8?B?Mmc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221206173819.1.I69657e84c0606b2e5ccfa9fedbf42b7676a1e129@changeid>
-In-Reply-To: <20221206173819.1.I69657e84c0606b2e5ccfa9fedbf42b7676a1e129@changeid>
-From:   Dmitry Torokhov <dtor@chromium.org>
-Date:   Tue, 6 Dec 2022 12:11:17 -0800
-X-Gmail-Original-Message-ID: <CAE_wzQ-WrjOgSADCn4v80ESwicOFif_Trn3Wrq=5toy2+y+q=g@mail.gmail.com>
-Message-ID: <CAE_wzQ-WrjOgSADCn4v80ESwicOFif_Trn3Wrq=5toy2+y+q=g@mail.gmail.com>
-Subject: Re: [PATCH] HID: multitouch: Add quirks for flipped axes
-To:     Allen Ballway <ballway@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, Henrik Rydberg <rydberg@bitmath.org>,
-        linux-input@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 932aec9b-4915-4484-cbf3-08dad7c64b23
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Dec 2022 20:13:08.9855
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1zU5LaQzAbEdIEFHNuhaqmYasxEA2aeaU/DlAINp6NUhAV0jydPUPSSFIUcoDHNbCSwlppT/NBd7Svt34phQMqIrmWzPtg3EBUlkBPPhgBE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR21MB3400
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Allen,
-
-On Tue, Dec 6, 2022 at 9:39 AM Allen Ballway <ballway@chromium.org> wrote:
->
-> Certain touchscreen devices, such as the ELAN9034, are oriented
-> incorrectly and report touches on opposite points on the X and Y axes.
-> For example, a 100x200 screen touched at (10,20) would report (90, 180)
-> and vice versa.
->
-> This is fixed by adding device quirks to transform the touch points
-> into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
->
-> Signed-off-by: Allen Ballway <ballway@chromium.org>
-> ---
->
->  drivers/hid/hid-multitouch.c | 46 ++++++++++++++++++++++++++++++++----
->  1 file changed, 42 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
-> index 91a4d3fc30e08..5e14cc4b00f53 100644
-> --- a/drivers/hid/hid-multitouch.c
-> +++ b/drivers/hid/hid-multitouch.c
-> @@ -71,6 +71,8 @@ MODULE_LICENSE("GPL");
->  #define MT_QUIRK_SEPARATE_APP_REPORT   BIT(19)
->  #define MT_QUIRK_FORCE_MULTI_INPUT     BIT(20)
->  #define MT_QUIRK_DISABLE_WAKEUP                BIT(21)
-> +#define MT_QUIRK_FLIP_X                        BIT(22)
-> +#define MT_QUIRK_FLIP_Y                        BIT(23)
->
->  #define MT_INPUTMODE_TOUCHSCREEN       0x02
->  #define MT_INPUTMODE_TOUCHPAD          0x03
-> @@ -212,6 +214,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
->  #define MT_CLS_GOOGLE                          0x0111
->  #define MT_CLS_RAZER_BLADE_STEALTH             0x0112
->  #define MT_CLS_SMART_TECH                      0x0113
-> +#define MT_CLS_ELAN_FLIPPED                    0x0114
->
->  #define MT_DEFAULT_MAXCONTACT  10
->  #define MT_MAX_MAXCONTACT      250
-> @@ -396,6 +399,17 @@ static const struct mt_class mt_classes[] = {
->                         MT_QUIRK_CONTACT_CNT_ACCURATE |
->                         MT_QUIRK_SEPARATE_APP_REPORT,
->         },input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->x
-> +       { .name = MT_CLS_ELAN_FLIPPED,
-> +               .quirks = MT_QUIRK_ALWAYS_VALID |
-> +                       MT_QUIRK_IGNORE_DUPLICATES |
-> +                       MT_QUIRK_HOVERING |
-> +                       MT_QUIRK_CONTACT_CNT_ACCURATE |
-> +                       MT_QUIRK_STICKY_FINGERS |
-> +                       MT_QUIRK_WIN8_PTP_BUTTONS |
-> +                       MT_QUIRK_FLIP_X |
-> +                       MT_QUIRK_FLIP_Y,
-> +               .export_all_inputs = true },
-> +
->         { }
->  };
->
-> @@ -1115,10 +1129,30 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
->                         minor = minor >> 1;
->                 }
->
-> -               input_event(input, EV_ABS, ABS_MT_POSITION_X, *slot->x);
-> -               input_event(input, EV_ABS, ABS_MT_POSITION_Y, *slot->y);
-> -               input_event(input, EV_ABS, ABS_MT_TOOL_X, *slot->cx);
-> -               input_event(input, EV_ABS, ABS_MT_TOOL_Y, *slot->cy);
-> +               if (quirks & MT_QUIRK_FLIP_X) {
-> +                       /* Inputs with a flipped X axis need to report MAX - X */
-> +                       int x = input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->x;
-
-Maybe
-
-x = quirks & MT_QUIRK_FLIP_X ?
-        input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->x :
-        *slot->x;
-
-and then report it all together?
-
-> +                       int cx = input_abs_get_max(input, ABS_MT_TOOL_X) - *slot->cx;
-
-Would like to double-check that this conversion is actually needed.
-
-> +
-> +                       input_event(input, EV_ABS, ABS_MT_POSITION_X, x);
-> +                       input_event(input, EV_ABS, ABS_MT_TOOL_X, cx);
-> +               } else {
-> +                       input_event(input, EV_ABS, ABS_MT_POSITION_X, *slot->x);
-> +                       input_event(input, EV_ABS, ABS_MT_TOOL_X, *slot->cx);
-> +               }
-> +
-> +               if (quirks & MT_QUIRK_FLIP_Y) {
-> +                       /* Inputs with a flipped Y axis need to report MAX - Y */
-> +                       int y = input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->y;
-> +                       int cy = input_abs_get_max(input, ABS_MT_TOOL_Y) - *slot->cy;
-> +
-> +                       input_event(input, EV_ABS, ABS_MT_POSITION_Y, y);
-> +                       input_event(input, EV_ABS, ABS_MT_TOOL_Y, cy);
-> +               } else {
-> +                       input_event(input, EV_ABS, ABS_MT_POSITION_Y, *slot->y);
-> +                       input_event(input, EV_ABS, ABS_MT_TOOL_Y, *slot->cy);
-> +               }
-> +
->                 input_event(input, EV_ABS, ABS_MT_DISTANCE, !*slot->tip_state);
->                 input_event(input, EV_ABS, ABS_MT_ORIENTATION, orientation);
-
-I think we might need to do something about this too as orientation will change.
-
->                 input_event(input, EV_ABS, ABS_MT_PRESSURE, *slot->p);
-> @@ -1963,6 +1997,10 @@ static const struct hid_device_id mt_devices[] = {
->                         USB_DEVICE_ID_DWAV_EGALAX_MULTITOUCH_C002) },
->
->         /* Elan devices */
-> +       { .driver_data = MT_CLS_ELAN_FLIPPED,
-> +               HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
-> +                       USB_VENDOR_ID_ELAN, 0x2dcd) },
-> +
-
-I believe this needs to be plumbed through i2c-hid and involve DMI check as I am
-concerned that product 0x2dcd might have been used in other devices where it was
-mounted in a different way.
-
->         { .driver_data = MT_CLS_WIN_8_FORCE_MULTI_INPUT,
->                 HID_DEVICE(BUS_I2C, HID_GROUP_MULTITOUCH_WIN_8,
->                         USB_VENDOR_ID_ELAN, 0x313a) },
-> --
-> 2.39.0.rc0.267.gcb52ba06e7-goog
->
-
-Thanks,
-Dmitry
+RnJvbTogU2F0aHlhbmFyYXlhbmFuIEt1cHB1c3dhbXkgPHNhdGh5YW5hcmF5YW5hbi5rdXBwdXN3
+YW15QGxpbnV4LmludGVsLmNvbT4NCj4gDQo+IA0KPiANCj4gT24gMTIvMS8yMiA3OjMwIFBNLCBN
+aWNoYWVsIEtlbGxleSB3cm90ZToNCj4gPiBGdWxsIEh5cGVyLVYgaW5pdGlhbGl6YXRpb24sIGlu
+Y2x1ZGluZyBzdXBwb3J0IGZvciBoeXBlcmNhbGxzLCBpcyBkb25lDQo+ID4gYXMgYW4gYXBpY19w
+b3N0X2luaXQgY2FsbGJhY2sgdmlhIGxhdGVfdGltZV9pbml0KCkuICBtZW1fZW5jcnlwdF9pbml0
+KCkNCj4gPiBuZWVkcyB0byBtYWtlIGh5cGVyY2FsbHMgd2hlbiBpdCBtYXJrcyBzd2lvdGxiIG1l
+bW9yeSBhcyBkZWNyeXB0ZWQuDQo+ID4gQnV0IG1lbV9lbmNyeXB0X2luaXQoKSBpcyBjdXJyZW50
+bHkgY2FsbGVkIGEgZmV3IGxpbmVzIGJlZm9yZQ0KPiA+IGxhdGVfdGltZV9pbml0KCksIHNvIHRo
+ZSBoeXBlcmNhbGxzIGRvbid0IHdvcmsuDQo+IA0KPiBEaWQgeW91IGNvbnNpZGVyIG1vdmluZyBo
+eXBlci12IGh5cGVyY2FsbCBpbml0aWFsaXphdGlvbiBiZWZvcmUNCj4gIG1lbV9lbmNyeXB0X2lu
+aXQoKS4gSXMgdGhlcmUgYW55IGRlcGVuZGVuY3kgaXNzdWU/DQoNCkh5cGVyLVYgaW5pdGlhbGl6
+YXRpb24gaGFzIGhpc3RvcmljYWxseSBiZWVuIGRvbmUgdXNpbmcgdGhlIGNhbGxiYWNrcw0KdGhh
+dCBleGlzdCBpbiB0aGUgeDg2IGluaXRpYWxpemF0aW9uIHBhdGhzLCByYXRoZXIgdGhhbiBhZGRp
+bmcgZXhwbGljaXQNCkh5cGVyLVYgaW5pdCBjYWxscy4gIEFzIG5vdGVkIGFib3ZlLCB0aGUgZnVs
+bCBIeXBlci1WIGluaXQgaXMgZG9uZSBvbg0KdGhlIGFwaWNfcG9zdF9pbml0IGNhbGxiYWNrIHZp
+YSBsYXRlX3RpbWVfaW5pdCgpLiAgQ29uY2VpdmFibHkgd2UgY291bGQNCmFkZCBhbiBleHBsaWNp
+dCBjYWxsIHRvIGRvIHRoZSBIeXBlci1WIGluaXQsIGJ1dCBJIHRoaW5rIHRoZXJlJ3Mgc3RpbGwg
+YQ0KcHJvYmxlbSBpbiBwdXR0aW5nIHRoYXQgSHlwZXItViBpbml0IHByaW9yIHRvIHRoZSBjdXJy
+ZW50IGxvY2F0aW9uIG9mDQptZW1fZW5jcnlwdF9pbml0KCkuICBJJ2QgaGF2ZSB0byBnbyBjaGVj
+ayB0aGUgaGlzdG9yeSwgYnV0IEkgdGhpbmsgdGhlDQpIeXBlci1WIGluaXQgbmVlZHMgdG8gaGFw
+cGVuIGFmdGVyIHRoZSBBUElDIGlzIGluaXRpYWxpemVkLg0KDQpJdCBzZWVtcyBsaWtlIG1vdmlu
+ZyBtZW1fZW5jcnlwdF9pbml0KCkgc2xpZ2h0bHkgbGF0ZXIgaXMgdGhlIGNsZWFuZXINCmxvbmct
+dGVybSBzb2x1dGlvbi4gIEFyZSB5b3UgYXdhcmUgb2YgYSBsaWtlbHkgcHJvYmxlbSBhcmlzaW5n
+IGluIHRoZQ0KZnV0dXJlIHdpdGggbW92aW5nIG1lbV9lbmNyeXB0X2luaXQoKT8NCg0KTWljaGFl
+bA0KDQo+IA0KPiA+DQo+ID4gRml4IHRoaXMgYnkgbW92aW5nIG1lbV9lbmNyeXB0X2luaXQoKSBh
+ZnRlciBsYXRlX3RpbWVfaW5pdCgpIGFuZA0KPiA+IHJlbGF0ZWQgY2xvY2sgaW5pdGlhbGl6YXRp
+b25zLiBUaGUgaW50ZXJ2ZW5pbmcgaW5pdGlhbGl6YXRpb25zIGRvbid0DQo+ID4gZG8gYW55IEkv
+TyB0aGF0IHJlcXVpcmVzIHRoZSBzd2lvdGxiLCBzbyBtb3ZpbmcgbWVtX2VuY3J5cHRfaW5pdCgp
+DQo+ID4gc2xpZ2h0bHkgbGF0ZXIgaGFzIG5vIGltcGFjdC4NCj4gPg0K
