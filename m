@@ -2,137 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDEB644157
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AD38644167
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiLFKhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:37:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S231653AbiLFKms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:42:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230450AbiLFKhf (ORCPT
+        with ESMTP id S233613AbiLFKmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:37:35 -0500
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2107.outbound.protection.outlook.com [40.107.104.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BBCDFF5;
-        Tue,  6 Dec 2022 02:37:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hmvy2MbPypklUx+zYZH6oQZxEptrmjKpQiIXz/bKWUdNLdO2+Bp0S00V9CqpEJi9GlhxenSVUTAPUABPksZxXOecnuax9Aysu58qaz1YsHz1zARmWjESzfl1QLL72/rKLHFBtN6onT2ajQM6q85JlgEqEC3CnnnLsNBdbHld6d5xaoMt63MJbFwePUv2dcqdjIu5Kaw9+bmDIKMuPNUC/H3jBgoGW4dunhsx8/mpr2O5nTBJHeaAb2iv1UGR25c0Gac5CnnNIkPStqUCyeRjZij5lkKfPr1nnFLMu/E1vbR4xYcRoXBqgD/j6M6usj3l9a/EqIGQ8aPcBIbR1hJxpQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qvpybjwYHuTgSRIoUgF0dbWFoIys3U1QXeH49adwjMA=;
- b=JTI6h4q2l11hT6gDcTmH0dyEoR3N1UP+4Q18CP2t5VQEBvBjL74ctoGPpXAjmPSE0wTyYWEChutq2dlV/HYqd21VseksqMaa+Z2oIaDEwuk0Swy7zVat8w4hNDzhK/3p/W5H1EJTPqY42ycTLsPGAVLD/+aR08qbpRPav3piT1JWbmT6Ql9IMvjuWU8/Hxf8Wxoc+EPqdZLMLjmD4FxpgDqhkk30i4OLT6ptXoi35jYrwWRwXL9y9yYWqeiG1PUSwHSAX1+y0QD57cJ8zl5GvBNC0uyU9IqQjH/0W93w7qKIoXsMluvO2A/JH2/jn85I88iIXuyvOv8EHzTm1ipKMg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arri.de;
- dmarc=none action=none header.from=arri.de; dkim=none (message not signed);
- arc=none
+        Tue, 6 Dec 2022 05:42:22 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413351E3D4
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:42:18 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id m18so3606289eji.5
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 02:42:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qvpybjwYHuTgSRIoUgF0dbWFoIys3U1QXeH49adwjMA=;
- b=Qpj3Bq7udoVxW+GTNdvlOrCvNQCKwGxJZn6IQwRpAFzKQGjqzHrvm8kXhALsMchCAPS+x4yTmlbBRJJKedpRbTcvWtnnrADnXxgr10XF8zwS/zZqUDCeoZEmPiXhhNP6t5xGBPSrb0uUV1LDHKK0M6yTZZy5DHg0GHA+ZZL4QO0=
-Received: from AM6P195CA0015.EURP195.PROD.OUTLOOK.COM (2603:10a6:209:81::28)
- by PAXPR07MB8470.eurprd07.prod.outlook.com (2603:10a6:102:2b8::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.11; Tue, 6 Dec
- 2022 10:37:29 +0000
-Received: from AM0EUR02FT031.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:209:81:cafe::37) by AM6P195CA0015.outlook.office365.com
- (2603:10a6:209:81::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
- Transport; Tue, 6 Dec 2022 10:37:29 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- AM0EUR02FT031.mail.protection.outlook.com (10.13.54.151) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5880.14 via Frontend Transport; Tue, 6 Dec 2022 10:37:27 +0000
-Received: from n95hx1g2.localnet (10.30.4.179) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 6 Dec
- 2022 11:37:27 +0100
-From:   Christian Eggers <ceggers@arri.de>
-To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <richardcochran@gmail.com>
-Subject: Re: [Patch net-next v2 01/13] net: dsa: microchip: ptp: add the posix clock support
-Date:   Tue, 6 Dec 2022 11:37:26 +0100
-Message-ID: <5892889.lOV4Wx5bFT@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <20221206091428.28285-2-arun.ramadoss@microchip.com>
-References: <20221206091428.28285-1-arun.ramadoss@microchip.com> <20221206091428.28285-2-arun.ramadoss@microchip.com>
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yGNvqrTOHM4qesBe13tVQjrIrlY8iFdqHUQbZxIpkZk=;
+        b=jB3w0VKwREQFT5JmxRYC9UjWz94Zr+KlgF9v+euYtADpH9XU2OncUs0V//axQEjRpr
+         MCVdkx8uci67ns3Qm1jIzlQf83eVrv2yXbUwtJn5VK6R7mGDu92k96IVsmr255vSi+Wd
+         rjP3qjkg0t4qZv0KNVRs0vngD5+BaFg/kUbEERQ+ZREgWHUspoiK20OI1Y4PQ31ZWqQu
+         AnvYvUmIbG+oOS+DUIWSvHInehpR4qeMVQkGWMUNQa7/2oBCCUXyhBVuP05bO0Nug3qM
+         TXdQ5RGVRDwt7zwruEyFyBVtquAWcjn0NPZCF313HEdO9l3j4vc9JWURSEiCUMrylJJ3
+         Aktw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yGNvqrTOHM4qesBe13tVQjrIrlY8iFdqHUQbZxIpkZk=;
+        b=J1LV56lYbWfPFoAY9CxDEtdf1pu2Yin+2PPzz7rAAId2vk8fZze+YbdJ9gMQBVGfx5
+         JPPgVrKCYjd+M1FXr8OmqzR2gwoiSoM0jZex6rwU7b+YJSamGR6HO+YpBm9AxccmM1+s
+         tu2o7eRy4lbBY/fCW/egpIl1NC6jo8e1PcYZhadS1azmfIegb8T51cSRmSy4IGMWpp9H
+         5OcbwqDSQ5h4bqtzKHQf88fxYV4iKZofAVTpKEpDD9oZssFTe8CKLrtdtmoZ7MHzqsEO
+         zufZ435Txjced+RK0+S30cSZzNHYSsR+dVSam+4da2egiHEqWcx2RVvgRl+p16JvGYXn
+         Iw4w==
+X-Gm-Message-State: ANoB5pkmbDt0tpJ3FPBTZjwUdoGVwkwrqiFgdB4iiJpDRIkS02H4N/sF
+        JDJKVxcvPNjvXB7idFH3eyyKLw==
+X-Google-Smtp-Source: AA0mqf7A2JhngUU7ORMyFzBp08AP5pHsL0/7QbUxQnvw6mlRdqxFpD3+iVLJBHhf3k4EJbVwpJc9hA==
+X-Received: by 2002:a17:907:2127:b0:7c0:ee16:3c5a with SMTP id qo7-20020a170907212700b007c0ee163c5amr8003658ejb.298.1670323336627;
+        Tue, 06 Dec 2022 02:42:16 -0800 (PST)
+Received: from linaro.org ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id q18-20020a17090676d200b007c0e23b5615sm3240138ejn.34.2022.12.06.02.42.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 02:42:16 -0800 (PST)
+Date:   Tue, 6 Dec 2022 12:42:14 +0200
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+Subject: Re: [PATCH v4 8/9] clk: qcom: rpmh: Add support for SM8550 rpmh
+ clocks
+Message-ID: <Y48chhGMMRFv/6DS@linaro.org>
+References: <20221130112852.2977816-1-abel.vesa@linaro.org>
+ <20221130112852.2977816-9-abel.vesa@linaro.org>
+ <CAA8EJppgpe_LK=2=qncHB_fpDz4AmUBzcRQ=8_kb0YrLCQNweg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [10.30.4.179]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0EUR02FT031:EE_|PAXPR07MB8470:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f7ab710-c081-4c99-c847-08dad775dec5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kHSIlmcsYiTrJB8sv4yHaPYsoRl/lDrQ1xi1cTg6MoI3nwVhdBfpCJUpxGqKplgMM1lY5zrCZYNjmf1+KZSfhLnMXTUiIkOOsG5Pt01ZkwvKuqEGjjWdt3L/ZwiTPTKqOHMr6idwxHFZk4auuIdINN2bzdmVszE4TxtQPsVNJKr1J++gJnMFWP/fzo2lh6U5d2nycEnR489XEFwGxINYUrAGoxPlxf4eiNxKfaLF3O6CCuBCJto6GsYeTb1XZ8R3cjhkREOgEraY6XuaHxBhJnBpizPKKriRxrB0ppCf1++1alDQeI/Dgd5AFq1J0l84msoUc1lpm6CKSNeM/aF8XXlISaFRs8zhLsZpgDiEeq8xEjnkjykVfLrHrHSqXATgQS6UJdmoU2MyrNGaHK5q6DGHlWf9J4XA0E/4IFha5iI1v14tvJbSrdZqY1JkHm68AbfWVqxVri54jtEVQBq3Rl2Ons20NQGERTmwRTXy4t+kI35Zz7w6+12Nad6H3j0Vf1lVxdWO/lU+QDhufSEKc+Pdv+h+ohchx1csIpQY61S2EowU/mOIRjzVfGQtv6RkMIVBF5SGOBiaGsWSqZ7ZsrXaKZ9jvm1/sJ6gjnAVC2WtQTqIBwpsaSEqXGvnY8RRfv52+euFIHQ1C7deh/USh7/GtKRe6Y1FYZTaW6l1yLsLdQDMqoGhP3hATndZEwc0S5yWKvIVHkGYW37Uq93vGcsJy5g4RxrAwnjbyr8xwQIW8eTSWFlu8vptiRoOLDiyPkd0rOPSZ0wZsiRVt3HP4w==
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(136003)(396003)(451199015)(36840700001)(46966006)(316002)(36916002)(186003)(2906002)(5660300002)(47076005)(426003)(86362001)(336012)(8936002)(54906003)(7416002)(26005)(110136005)(9576002)(41300700001)(83380400001)(33716001)(16526019)(9686003)(82310400005)(70586007)(70206006)(40480700001)(36860700001)(478600001)(4326008)(8676002)(82740400003)(81166007)(356005)(39026012)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2022 10:37:27.4527
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f7ab710-c081-4c99-c847-08dad775dec5
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: AM0EUR02FT031.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR07MB8470
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAA8EJppgpe_LK=2=qncHB_fpDz4AmUBzcRQ=8_kb0YrLCQNweg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
-
-On Tuesday, 6 December 2022, 10:14:16 CET, Arun Ramadoss wrote:
-> From: Christian Eggers <ceggers@arri.de>
+On 22-11-30 13:45:19, Dmitry Baryshkov wrote:
+> On Wed, 30 Nov 2022 at 13:30, Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > Adds the RPMH clocks present in SM8550 SoC.
+> >
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > ---
+> >  drivers/clk/qcom/clk-rpmh.c | 110 +++++++++++++++++++++++++++++-------
+> >  1 file changed, 90 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+> > index 0471bab82464..3204df3fda86 100644
+> > --- a/drivers/clk/qcom/clk-rpmh.c
+> > +++ b/drivers/clk/qcom/clk-rpmh.c
+> > @@ -132,6 +132,36 @@ static DEFINE_MUTEX(rpmh_clk_lock);
+> >                 },                                                      \
+> >         }
+> >
+> > +#define DEFINE_CLK_RPMH_FIXED(_platform, _name, _name_active,  \
+> > +                                 _parent_name, _name_active_parent,    \
+> > +                                 _div)                                 \
+> > +       static struct clk_fixed_factor _platform##_##_name = {          \
+> > +               .mult = 1,                                              \
+> > +               .div = _div,                                            \
+> > +               .hw.init = &(struct clk_init_data){                     \
+> > +                       .ops = &clk_fixed_factor_ops,                   \
+> > +                       .name = #_name,                                 \
+> > +                       .parent_data =  &(const struct clk_parent_data){ \
+> > +                                       .fw_name = #_parent_name,       \
+> > +                                       .name = #_parent_name,          \
+> > +                       },                                              \
+> > +                       .num_parents = 1,                               \
+> > +               },                                                      \
+> > +       };                                                              \
+> > +       static struct clk_fixed_factor _platform##_##_name_active = {   \
+> > +               .mult = 1,                                              \
+> > +               .div = _div,                                            \
+> > +               .hw.init = &(struct clk_init_data){                     \
+> > +                       .ops = &clk_fixed_factor_ops,                   \
+> > +                       .name = #_name_active,                          \
+> > +                       .parent_data =  &(const struct clk_parent_data){ \
+> > +                                       .fw_name = #_name_active_parent,\
+> > +                                       .name = #_name_active_parent,   \
+> > +                       },                                              \
+> > +                       .num_parents = 1,                               \
+> > +               },                                                      \
+> > +       }
+> > +
 > 
-> This patch implement routines (adjfine, adjtime, gettime and settime)
-> for manipulating the chip's PTP clock. It registers the ptp caps
-> to posix clock register.
+> Please use CLK_FIXED_FACTOR_FW_NAME() instead.
 > 
-> Signed-off-by: Christian Eggers <ceggers@arri.de>
-> Co-developed-by: Arun Ramadoss <arun.ramadoss@microchip.com>
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+> >  static inline struct clk_rpmh *to_clk_rpmh(struct clk_hw *_hw)
+> >  {
+> >         return container_of(_hw, struct clk_rpmh, hw);
+> > @@ -579,6 +609,43 @@ static const struct clk_rpmh_desc clk_rpmh_sm8450 = {
+> >         .num_clks = ARRAY_SIZE(sm8450_rpmh_clocks),
+> >  };
+> >
+> > +DEFINE_CLK_RPMH_ARC(sm8550, xo_pad, xo_pad_ao, "xo.lvl", 0x03, 2);
+> > +DEFINE_CLK_RPMH_FIXED(sm8550, bi_tcxo, bi_tcxo_ao, xo_pad, xo_pad_ao, 2);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk1, rf_clk1_ao, "clka1", 1);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk2, rf_clk2_ao, "clka2", 1);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk3, rf_clk3_ao, "clka3", 1);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, rf_clk4, rf_clk4_ao, "clka4", 1);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk1, ln_bb_clk1_ao, "clka6", 2);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk2, ln_bb_clk2_ao, "clka7", 2);
+> > +DEFINE_CLK_RPMH_VRM(sm8550, ln_bb_clk3, ln_bb_clk3_ao, "clka8", 2);
+> > +
+> > +static struct clk_hw *sm8550_rpmh_clocks[] = {
+> > +       [RPMH_CXO_PAD_CLK]      = &sm8550_xo_pad.hw,
+> > +       [RPMH_CXO_PAD_CLK_A]    = &sm8550_xo_pad_ao.hw,
+> > +       [RPMH_CXO_CLK]          = &sm8550_bi_tcxo.hw,
+> > +       [RPMH_CXO_CLK_A]        = &sm8550_bi_tcxo_ao.hw,
+> > +       [RPMH_LN_BB_CLK1]       = &sm8550_ln_bb_clk1.hw,
+> > +       [RPMH_LN_BB_CLK1_A]     = &sm8550_ln_bb_clk1_ao.hw,
+> > +       [RPMH_LN_BB_CLK2]       = &sm8550_ln_bb_clk2.hw,
+> > +       [RPMH_LN_BB_CLK2_A]     = &sm8550_ln_bb_clk2_ao.hw,
+> > +       [RPMH_LN_BB_CLK3]       = &sm8550_ln_bb_clk3.hw,
+> > +       [RPMH_LN_BB_CLK3_A]     = &sm8550_ln_bb_clk3_ao.hw,
+> > +       [RPMH_RF_CLK1]          = &sm8550_rf_clk1.hw,
+> > +       [RPMH_RF_CLK1_A]        = &sm8550_rf_clk1_ao.hw,
+> > +       [RPMH_RF_CLK2]          = &sm8550_rf_clk2.hw,
+> > +       [RPMH_RF_CLK2_A]        = &sm8550_rf_clk2_ao.hw,
+> > +       [RPMH_RF_CLK3]          = &sm8550_rf_clk3.hw,
+> > +       [RPMH_RF_CLK3_A]        = &sm8550_rf_clk3_ao.hw,
+> > +       [RPMH_RF_CLK4]          = &sm8550_rf_clk4.hw,
+> > +       [RPMH_RF_CLK4_A]        = &sm8550_rf_clk4_ao.hw,
+> > +       [RPMH_IPA_CLK]          = &sdm845_ipa.hw,
+> > +};
+> > +
+> > +static const struct clk_rpmh_desc clk_rpmh_sm8550 = {
+> > +       .clks = sm8550_rpmh_clocks,
+> > +       .num_clks = ARRAY_SIZE(sm8550_rpmh_clocks),
+> > +};
+> > +
+> >  static struct clk_hw *sc7280_rpmh_clocks[] = {
+> >         [RPMH_CXO_CLK]      = &sc7280_bi_tcxo.hw,
+> >         [RPMH_CXO_CLK_A]    = &sc7280_bi_tcxo_ao.hw,
+> > @@ -682,29 +749,31 @@ static int clk_rpmh_probe(struct platform_device *pdev)
+> >
+> >                 name = hw_clks[i]->init->name;
+> >
+> > -               rpmh_clk = to_clk_rpmh(hw_clks[i]);
+> > -               res_addr = cmd_db_read_addr(rpmh_clk->res_name);
+> > -               if (!res_addr) {
+> > -                       dev_err(&pdev->dev, "missing RPMh resource address for %s\n",
+> > -                               rpmh_clk->res_name);
+> > -                       return -ENODEV;
+> > -               }
+> > +               if (hw_clks[i]->init->ops != &clk_fixed_factor_ops) {
 > 
-> ---
-> v1 -> v2
-> - added arri in copyright message
-> - Deleted setting 8021_1as bit and added P2P bit in ksz_ptp_clock_register()
+> This looks ugly a bit. I'd rather add something like non_cmd_clks to
 
-did I miss the discussion about this change? I thought that the first goal is
-to use KSZ switches as a boundary clock which implies using the 802.1AS feature.
+Right, but this complicates the xlate function without a really good
+reason. Assuming you meant multiple (different) arrays for cmd
+based and for non-cmd based (in this case fixed factor only), this would
+force the of_clk_rpmh_hw_get to look into different arrays, but then we
+only have one set of IDs. Wouldn't that make it even uglier? At least,
+right now we are being consistent after probe.
 
-Using the KSZ in P2P transparent clock mode IMHO requires writing the peer delays
-into switch registers (which needs to be implemented in a companion 
-application/script for ptp4p).
-
-As far as I remember, there is also no support using ptp4l with 1-step transparent
-clock switches.
-
-regards
-Christian
-
-
-
-
+> the clk_rpmh_desc data and register them separately. Or even worse,
+> you can keep the rpmh as is, with only cmd-db based clocks and add a
+> fixed factor clock to the sm8550 dtsi directly. I have a slight
+> preference for the former method, but the latter would also work.
+> 
+> > +                       rpmh_clk = to_clk_rpmh(hw_clks[i]);
+> > +                       res_addr = cmd_db_read_addr(rpmh_clk->res_name);
+> > +                       if (!res_addr) {
+> > +                               dev_err(&pdev->dev, "missing RPMh resource address for %s\n",
+> > +                                       rpmh_clk->res_name);
+> > +                               return -ENODEV;
+> > +                       }
+> >
+> > -               data = cmd_db_read_aux_data(rpmh_clk->res_name, &aux_data_len);
+> > -               if (IS_ERR(data)) {
+> > -                       ret = PTR_ERR(data);
+> > -                       dev_err(&pdev->dev,
+> > -                               "error reading RPMh aux data for %s (%d)\n",
+> > -                               rpmh_clk->res_name, ret);
+> > -                       return ret;
+> > -               }
+> > +                       data = cmd_db_read_aux_data(rpmh_clk->res_name, &aux_data_len);
+> > +                       if (IS_ERR(data)) {
+> > +                               ret = PTR_ERR(data);
+> > +                               dev_err(&pdev->dev,
+> > +                                       "error reading RPMh aux data for %s (%d)\n",
+> > +                                       rpmh_clk->res_name, ret);
+> > +                               return ret;
+> > +                       }
+> >
+> > -               /* Convert unit from Khz to Hz */
+> > -               if (aux_data_len == sizeof(*data))
+> > -                       rpmh_clk->unit = le32_to_cpu(data->unit) * 1000ULL;
+> > +                       /* Convert unit from Khz to Hz */
+> > +                       if (aux_data_len == sizeof(*data))
+> > +                               rpmh_clk->unit = le32_to_cpu(data->unit) * 1000ULL;
+> >
+> > -               rpmh_clk->res_addr += res_addr;
+> > -               rpmh_clk->dev = &pdev->dev;
+> > +                       rpmh_clk->res_addr += res_addr;
+> > +                       rpmh_clk->dev = &pdev->dev;
+> > +               }
+> >
+> >                 ret = devm_clk_hw_register(&pdev->dev, hw_clks[i]);
+> >                 if (ret) {
+> > @@ -739,6 +808,7 @@ static const struct of_device_id clk_rpmh_match_table[] = {
+> >         { .compatible = "qcom,sm8250-rpmh-clk", .data = &clk_rpmh_sm8250},
+> >         { .compatible = "qcom,sm8350-rpmh-clk", .data = &clk_rpmh_sm8350},
+> >         { .compatible = "qcom,sm8450-rpmh-clk", .data = &clk_rpmh_sm8450},
+> > +       { .compatible = "qcom,sm8550-rpmh-clk", .data = &clk_rpmh_sm8550},
+> >         { .compatible = "qcom,sc7280-rpmh-clk", .data = &clk_rpmh_sc7280},
+> >         { }
+> >  };
+> > --
+> > 2.34.1
+> >
+> 
+> 
+> -- 
+> With best wishes
+> Dmitry
