@@ -2,434 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5B7643B3A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:15:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B524643B3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233313AbiLFCPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 21:15:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S232883AbiLFCRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 21:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiLFCPQ (ORCPT
+        with ESMTP id S233791AbiLFCRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:15:16 -0500
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2311D0FD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:15:12 -0800 (PST)
-Date:   Mon, 5 Dec 2022 18:15:04 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670292910;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3g+90RvlwUB9ZlXAss9NsspXI02DqqGD0/yx03JWUmE=;
-        b=PAxFhp8rf/GPlK9H28H7nejs1R7o5VHMTtVp3+7gAP4CvZlM6zGhGkY3v7eJdywvoqPi4P
-        fhsrnbPBiYizeXRuI7irNmXlDRLuZ8OOj8KG6Mq2z88gClKMbxPMR4Lk4dEIOQFrL3p7EW
-        kFv2HhiRbu47Z/1GEbxJMst7VJ1nriA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     "Luther, Sven" <Sven.Luther@windriver.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Roman Gushchin <guro@fb.com>,
+        Mon, 5 Dec 2022 21:17:05 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD4A1D0FD;
+        Mon,  5 Dec 2022 18:17:05 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id x66so13238988pfx.3;
+        Mon, 05 Dec 2022 18:17:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LcP8NKIZlYUePwBhMMJRQewkzTKwifvCi6pycP1f6GM=;
+        b=M4ZhPc6YO6HttK4ywN3HPaaww0bQbW6IqEAKMTrjp/IMfsfO8+xnm2+YJop6UyTrEK
+         7VVccYUVV506+O298iOMvIR930wlw/moGT8lQVHtwmLaUJROtCslAwhPkofA99kTq2m4
+         3megxLBRZGC8slz4vdO/Ka4wgaIgD5DLiKQpFvd9ORxhsd/AXaSYJolf6lrLQg4D1Nmh
+         Tx6vmvvFQh2Q43WyaXTabKB0HMCxp5GNmnVcX5M0wDlegxWpB/3IWSKTMv+2xtlTaSLz
+         QbWszRnOyJC4lju4I/te/UBIIXfsbDqIpJgzUE01sX1HrlO3OKAslvxpKiOR2+DgOzy6
+         eHGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LcP8NKIZlYUePwBhMMJRQewkzTKwifvCi6pycP1f6GM=;
+        b=mk1Lrvuk6tx4+hp4PosMhOqQ/ar/pBJaMGarLsUWa6brSzn9l0BTSQi7XXj1AAmrtg
+         sJvifAmeWGJGSMXqDJ+ImLJb1/v70A8EGTtANYR1fqqJ/Jot2k18NVGAMI8XFHFjy0sk
+         xL2c5UOpD/Vmfn83WIKLflcJFEE5EHprlNpZwiA1+HNHf5BcKJAqhmIfVxGi8sNsHPX6
+         lr1I643/ZtxNxnCntnkfAuBh+pwgdte64fNlJHd4MsV6GyPSP7mxrW+Yu+9QGUcZ4zpi
+         zqgTx9whQqW1ZutbTJbrapTTfcEasgyX2EpGoABS+pveWmFlw2iUvoV21WMj9Rlem7KS
+         OMfA==
+X-Gm-Message-State: ANoB5pnIQabuFw1sRX7oF/V1HVSeP9trjRkceNohTzCiy6vYe72hS4XK
+        yO+Y4OyypdsmHbz+XPQXB64=
+X-Google-Smtp-Source: AA0mqf4CQ3OBT41PKIEho/5N2NtvXuHvpJK+I3Pn6WJT0jq2MJyqN50dy29mBI8Gr+upaZ1fQvXD5g==
+X-Received: by 2002:a05:6a00:21c8:b0:562:e0fb:3c79 with SMTP id t8-20020a056a0021c800b00562e0fb3c79mr67299904pfj.39.1670293024432;
+        Mon, 05 Dec 2022 18:17:04 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:11da])
+        by smtp.gmail.com with ESMTPSA id v129-20020a622f87000000b005761c4754e7sm8901215pfv.144.2022.12.05.18.17.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 18:17:03 -0800 (PST)
+Date:   Mon, 5 Dec 2022 18:17:00 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "kernel-team@fb.com" <kernel-team@fb.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        Alexey Gladkov <legion@kernel.org>,
-        "Bonn, Jonas" <Jonas.Bonn@windriver.com>
-Subject: Re: [Regression] mqueue performance degradation after "The new
- cgroup slab memory controller" patchset.
-Message-ID: <Y46lqCToUa/Bgt/c@P9FQF9L96D>
-References: <PH0PR11MB562641BC03630B4B7A227FD7E9189@PH0PR11MB5626.namprd11.prod.outlook.com>
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-ID: <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+ <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+ <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR11MB562641BC03630B4B7A227FD7E9189@PH0PR11MB5626.namprd11.prod.outlook.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:55:48PM +0000, Luther, Sven wrote:
-> #regzbot ^introduced 10befea91b61c4e2c2d1df06a2e978d182fcf792
+On Mon, Dec 05, 2022 at 07:59:21AM +0900, Masami Hiramatsu wrote:
+> On Sun, 4 Dec 2022 14:30:01 -0800
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 > 
-> We are making heavy use of mqueues, and noticed a degradation of performance between 4.18 & 5.10 linux kernels.
+> > On Mon, Dec 05, 2022 at 07:22:44AM +0900, Masami Hiramatsu (Google) wrote:
+> > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > 
+> > > Since the function error injection framework in the fault injection
+> > > subsystem can change the function code flow forcibly, it may cause
+> > > unexpected behavior (and that is the purpose of this feature) even
+> > > if it is applied to the ALLOW_ERROR_INJECTION functions.
+> > > So this feature must be used only for debugging or testing purpose.
+> > 
+> > The whole idea of tainting for kernel debugging is questionable.
+> > There are many other *inject* kconfigs and other debug flags
+> > for link lists, RCU, sleeping, etc.
+> > None of them taint the kernel.
+> > 
+> > > To identify this in the kernel oops message, add a new taint flag
+> > 
+> > Have you ever seen a single oops message because of this particular
+> > error injection?
 > 
-> After a gross per-version tracing, we did kernel bisection between 5.8 and 5.9
-> and traced the issue to a 10 patches (of which 9 where skipped as they didn't boot) between:
-> 
-> 
-> commit 10befea91b61c4e2c2d1df06a2e978d182fcf792 (HEAD, refs/bisect/bad)
-> Author: Roman Gushchin <guro@fb.com>
-> Date:   Thu Aug 6 23:21:27 2020 -0700
-> 
->     mm: memcg/slab: use a single set of kmem_caches for all allocations
-> 
-> and:
-> 
-> commit 286e04b8ed7a04279ae277f0f024430246ea5eec (refs/bisect/good-286e04b8ed7a04279ae277f0f024430246ea5eec)
-> Author: Roman Gushchin <guro@fb.com>
-> Date:   Thu Aug 6 23:20:52 2020 -0700
-> 
->     mm: memcg/slab: allocate obj_cgroups for non-root slab pages
-> 
-> All of them are part of the "The new cgroup slab memory controller" patchset:
-> 
->   https://lore.kernel.org/all/20200623174037.3951353-18-guro@fb.com/T/
-> 
-> from Roman Gushchin, which moves the accounting for page level to the object level.
-> 
-> Measurements where done using the a test programmtest, which measures mix/average/max time mqueue_send/mqueue_rcv,
-> and average for getppid, both measured over 100 000 runs. Results are shown in the following table
-> 
-> +----------+--------------------------+-------------------------+----------------+
-> | kernel   |    mqueue_rcv (ns)       | mqueue_send (ns)        |    getppid     |
-> | version  | min avg  max   variation | min avg max   variation | (ns) variation |
-> +----------+--------------------------+-------------------------+----------------+
-> | 4.18.45  | 351 382 17533     base   | 383 410 13178     base  | 149      base  |
-> | 5.8-good | 380 392  7156   -2,55%   | 376 384  6225    6,77%  | 169   -11,83%  |
-> | 5.8-bad  | 524 530  5310  -27,92%   | 512 519  8775  -21,00%  | 169   -11,83%  |
-> | 5.10     | 520 533  4078  -28,33%   | 518 534  8108  -23,22%  | 167   -10,78%  |
-> | 5.15     | 431 444  8440  -13,96%   | 425 437  6170   -6,18%  | 171   -12,87%  |
-> | 6.03     | 474 614  3881  -37,79%   | 482 693   931  -40,84%  | 171   -12,87%  |
-> +----------+--------------------------+-------------------------+-----------------
->
+> No, but there is no guarantee that the FEI doesn't cause any issue
+> in the future too. If it happens, we need to know the precise
+> information about what FEI/bpf does.
+> FEI is a kind of temporal Livepatch for testing. If Livepatch taints
+> the kernel, why doesn't the FEI taint it too?
 
-Hi Sven!
+Live patching can replace an arbitrary function and the kernel has
+no visibility into what KLP module is doing.
+While 'bpf error injection' is predictable.
+The functions marked with [BPF_]ALLOW_ERROR_INJECTION can return errors
+in the normal execution. So the callers of these functions have to deal with errors.
 
-To prove a concept of local msg caching, I'm mastered a patch (attached below).
-In my test setup it seems to resolve most of the regression. Would you mind to
-give it a try? (It's only tested on my local vm, don't treat it as a production
-code). If it will fix the regression, I can invest more time into it and post
-it in an umpstreamble form.
+If kernel panics on such injected error it potentially would have paniced
+on it anyway. At this point crash dump might be necessary to debug.
+Whether oops happened because of bpf, kprobe or normal execution
+doesn't matter much. The bug is in the caller that wasn't prepared
+to deal with that error.
 
-Here are my results (5 runs each):
+One can still walk all bpf progs from crash dump with tool "drgn"
+(it has nice scripts to examine the dumps) or "crash" or other tools.
 
-Original (current mm tree, 6.1+):
-RX: 1122/1202/114001 1197/1267/26517 1109/1173/29613 1091/1165/54434 1091/1160/26302
-TX: 1176/1255/38168  1252/1360/27683 1165/1226/41454 1145/1222/90040 1146/1214/26595
+> > 
+> > > for the fault injection. This taint flag will be set by either
+> > > function error injection is used or the BPF use the kprobe_override
+> > > on error injectable functions (identified by ALLOW_ERROR_INJECTION).
+> > 
+> > ...
+> > 
+> > >  	/* set the new array to event->tp_event and set event->prog */
+> > > +	if (prog->kprobe_override)
+> > > +		add_taint(TAINT_FAULT_INJECTED, LOCKDEP_NOW_UNRELIABLE);
+> > 
+> > Nack for bpf bits.
+> 
+> I think this is needed especially for bpf bits. If we see this flag,
+> we can ask reporters to share the bpf programs which they used.
 
-No accounting:
-RX: 984/1053/31268    1024/1091/39105 1018/1077/61515  999/1065/30423  1008/1060/115284
-TX: 1020/1097/137690  1065/1143/31448 1055/1130/133278 1032/1106/52372 1043/1099/25705
-
-Patched:
-RX: 1033/1165/38579 1030/1108/43703 1022/1114/25653 1008/1110/38462 1089/1136/29120
-TX: 1047/1184/25373 1048/1116/25425 1034/1122/61275 1022/1121/24636 1105/1155/46600
-
-Thanks!
-
---
-
-From 7742e074c25eb51d8e606585f0f8b06228d907f5 Mon Sep 17 00:00:00 2001
-From: Roman Gushchin <roman.gushchin@linux.dev>
-Date: Mon, 5 Dec 2022 18:13:15 -0800
-Subject: [PATCH] ipc/mqueue: introduce msg cache
-
-Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
----
- ipc/mqueue.c  | 20 ++++++++++---
- ipc/msg.c     | 12 ++++----
- ipc/msgutil.c | 79 +++++++++++++++++++++++++++++++++++++++++++++++----
- ipc/util.h    |  8 ++++--
- 4 files changed, 101 insertions(+), 18 deletions(-)
-
-diff --git a/ipc/mqueue.c b/ipc/mqueue.c
-index 467a194b8a2e..5c6fec8e9701 100644
---- a/ipc/mqueue.c
-+++ b/ipc/mqueue.c
-@@ -131,6 +131,11 @@ struct ext_wait_queue {		/* queue of sleeping tasks */
- 	int state;		/* one of STATE_* values */
- };
- 
-+struct pcpu_msg_cache;
-+struct msg_cache {
-+	struct pcpu_msg_cache __percpu *pcpu_cache;
-+};
-+
- struct mqueue_inode_info {
- 	spinlock_t lock;
- 	struct inode vfs_inode;
-@@ -152,6 +157,8 @@ struct mqueue_inode_info {
- 	/* for tasks waiting for free space and messages, respectively */
- 	struct ext_wait_queue e_wait_q[2];
- 
-+	struct msg_cache msg_cache;
-+
- 	unsigned long qsize; /* size of queue in memory (sum of all msgs) */
- };
- 
-@@ -368,6 +375,9 @@ static struct inode *mqueue_get_inode(struct super_block *sb,
- 		mq_bytes = info->attr.mq_maxmsg * info->attr.mq_msgsize;
- 		if (mq_bytes + mq_treesize < mq_bytes)
- 			goto out_inode;
-+		ret = init_msg_cache(&info->msg_cache);
-+		if (ret)
-+			goto out_inode;
- 		mq_bytes += mq_treesize;
- 		info->ucounts = get_ucounts(current_ucounts());
- 		if (info->ucounts) {
-@@ -531,9 +541,11 @@ static void mqueue_evict_inode(struct inode *inode)
- 
- 	list_for_each_entry_safe(msg, nmsg, &tmp_msg, m_list) {
- 		list_del(&msg->m_list);
--		free_msg(msg);
-+		free_msg(msg, &info->msg_cache);
- 	}
- 
-+	free_msg_cache(&info->msg_cache);
-+
- 	if (info->ucounts) {
- 		unsigned long mq_bytes, mq_treesize;
- 
-@@ -1108,7 +1120,7 @@ static int do_mq_timedsend(mqd_t mqdes, const char __user *u_msg_ptr,
- 
- 	/* First try to allocate memory, before doing anything with
- 	 * existing queues. */
--	msg_ptr = load_msg(u_msg_ptr, msg_len);
-+	msg_ptr = load_msg(u_msg_ptr, msg_len, &info->msg_cache);
- 	if (IS_ERR(msg_ptr)) {
- 		ret = PTR_ERR(msg_ptr);
- 		goto out_fput;
-@@ -1170,7 +1182,7 @@ static int do_mq_timedsend(mqd_t mqdes, const char __user *u_msg_ptr,
- 	wake_up_q(&wake_q);
- out_free:
- 	if (ret)
--		free_msg(msg_ptr);
-+		free_msg(msg_ptr, &info->msg_cache);
- out_fput:
- 	fdput(f);
- out:
-@@ -1273,7 +1285,7 @@ static int do_mq_timedreceive(mqd_t mqdes, char __user *u_msg_ptr,
- 			store_msg(u_msg_ptr, msg_ptr, msg_ptr->m_ts)) {
- 			ret = -EFAULT;
- 		}
--		free_msg(msg_ptr);
-+		free_msg(msg_ptr, &info->msg_cache);
- 	}
- out_fput:
- 	fdput(f);
-diff --git a/ipc/msg.c b/ipc/msg.c
-index fd08b3cb36d7..fcc09f848490 100644
---- a/ipc/msg.c
-+++ b/ipc/msg.c
-@@ -287,7 +287,7 @@ static void freeque(struct ipc_namespace *ns, struct kern_ipc_perm *ipcp)
- 
- 	list_for_each_entry_safe(msg, t, &msq->q_messages, m_list) {
- 		percpu_counter_sub_local(&ns->percpu_msg_hdrs, 1);
--		free_msg(msg);
-+		free_msg(msg, NULL);
- 	}
- 	percpu_counter_sub_local(&ns->percpu_msg_bytes, msq->q_cbytes);
- 	ipc_update_pid(&msq->q_lspid, NULL);
-@@ -861,7 +861,7 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
- 	if (mtype < 1)
- 		return -EINVAL;
- 
--	msg = load_msg(mtext, msgsz);
-+	msg = load_msg(mtext, msgsz, NULL);
- 	if (IS_ERR(msg))
- 		return PTR_ERR(msg);
- 
-@@ -954,7 +954,7 @@ static long do_msgsnd(int msqid, long mtype, void __user *mtext,
- out_unlock1:
- 	rcu_read_unlock();
- 	if (msg != NULL)
--		free_msg(msg);
-+		free_msg(msg, NULL);
- 	return err;
- }
- 
-@@ -1049,7 +1049,7 @@ static inline struct msg_msg *prepare_copy(void __user *buf, size_t bufsz)
- 	/*
- 	 * Create dummy message to copy real message to.
- 	 */
--	copy = load_msg(buf, bufsz);
-+	copy = load_msg(buf, bufsz, NULL);
- 	if (!IS_ERR(copy))
- 		copy->m_ts = bufsz;
- 	return copy;
-@@ -1058,7 +1058,7 @@ static inline struct msg_msg *prepare_copy(void __user *buf, size_t bufsz)
- static inline void free_copy(struct msg_msg *copy)
- {
- 	if (copy)
--		free_msg(copy);
-+		free_msg(copy, NULL);
- }
- #else
- static inline struct msg_msg *prepare_copy(void __user *buf, size_t bufsz)
-@@ -1256,7 +1256,7 @@ static long do_msgrcv(int msqid, void __user *buf, size_t bufsz, long msgtyp, in
- 	}
- 
- 	bufsz = msg_handler(buf, msg, bufsz);
--	free_msg(msg);
-+	free_msg(msg, NULL);
- 
- 	return bufsz;
- }
-diff --git a/ipc/msgutil.c b/ipc/msgutil.c
-index d0a0e877cadd..8fe64bb3f48d 100644
---- a/ipc/msgutil.c
-+++ b/ipc/msgutil.c
-@@ -39,16 +39,65 @@ struct msg_msgseg {
- 	/* the next part of the message follows immediately */
- };
- 
-+struct pcpu_msg_cache {
-+	struct msg_msg *msg;
-+	struct task_struct *curr;
-+	size_t len;
-+};
-+
-+struct msg_cache {
-+	struct pcpu_msg_cache __percpu *pcpu_cache;
-+};
-+
- #define DATALEN_MSG	((size_t)PAGE_SIZE-sizeof(struct msg_msg))
- #define DATALEN_SEG	((size_t)PAGE_SIZE-sizeof(struct msg_msgseg))
- 
-+int init_msg_cache(struct msg_cache *cache)
-+{
-+	cache->pcpu_cache = alloc_percpu(struct pcpu_msg_cache);
-+	if (!cache->pcpu_cache)
-+		return -ENOMEM;
- 
--static struct msg_msg *alloc_msg(size_t len)
-+	return 0;
-+}
-+
-+void free_msg_cache(struct msg_cache *cache)
-+{
-+	int cpu;
-+
-+	if (!cache->pcpu_cache)
-+		return;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct pcpu_msg_cache *pc = per_cpu_ptr(cache->pcpu_cache, cpu);
-+
-+		if (pc->msg)
-+			free_msg(pc->msg, NULL);
-+	}
-+
-+	free_percpu(cache->pcpu_cache);
-+}
-+
-+static struct msg_msg *alloc_msg(size_t len, struct msg_cache *cache)
- {
- 	struct msg_msg *msg;
- 	struct msg_msgseg **pseg;
- 	size_t alen;
- 
-+	if (cache) {
-+		struct pcpu_msg_cache *pc;
-+
-+		msg = NULL;
-+		pc = get_cpu_ptr(cache->pcpu_cache);
-+		if (pc->msg && pc->curr == get_current() && pc->len == len) {
-+			msg = pc->msg;
-+			pc->msg = NULL;
-+		}
-+		put_cpu_ptr(cache->pcpu_cache);
-+		if (msg)
-+			return msg;
-+	}
-+
- 	alen = min(len, DATALEN_MSG);
- 	msg = kmalloc(sizeof(*msg) + alen, GFP_KERNEL_ACCOUNT);
- 	if (msg == NULL)
-@@ -77,18 +126,19 @@ static struct msg_msg *alloc_msg(size_t len)
- 	return msg;
- 
- out_err:
--	free_msg(msg);
-+	free_msg(msg, cache);
- 	return NULL;
- }
- 
--struct msg_msg *load_msg(const void __user *src, size_t len)
-+struct msg_msg *load_msg(const void __user *src, size_t len,
-+			 struct msg_cache *cache)
- {
- 	struct msg_msg *msg;
- 	struct msg_msgseg *seg;
- 	int err = -EFAULT;
- 	size_t alen;
- 
--	msg = alloc_msg(len);
-+	msg = alloc_msg(len, cache);
- 	if (msg == NULL)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -111,7 +161,7 @@ struct msg_msg *load_msg(const void __user *src, size_t len)
- 	return msg;
- 
- out_err:
--	free_msg(msg);
-+	free_msg(msg, cache);
- 	return ERR_PTR(err);
- }
- #ifdef CONFIG_CHECKPOINT_RESTORE
-@@ -166,10 +216,27 @@ int store_msg(void __user *dest, struct msg_msg *msg, size_t len)
- 	return 0;
- }
- 
--void free_msg(struct msg_msg *msg)
-+void free_msg(struct msg_msg *msg, struct msg_cache *cache)
- {
- 	struct msg_msgseg *seg;
- 
-+	if (cache) {
-+		struct pcpu_msg_cache *pc;
-+		bool cached = false;
-+
-+		pc = get_cpu_ptr(cache->pcpu_cache);
-+		if (!pc->msg) {
-+			pc->curr = get_current();
-+			pc->len = msg->m_ts;
-+			pc->msg = msg;
-+			cached = true;
-+		}
-+		put_cpu_ptr(cache->pcpu_cache);
-+
-+		if (cached)
-+			return;
-+	}
-+
- 	security_msg_msg_free(msg);
- 
- 	seg = msg->next;
-diff --git a/ipc/util.h b/ipc/util.h
-index b2906e366539..a2da266386aa 100644
---- a/ipc/util.h
-+++ b/ipc/util.h
-@@ -196,8 +196,12 @@ static inline void ipc_update_pid(struct pid **pos, struct pid *pid)
- int ipc_parse_version(int *cmd);
- #endif
- 
--extern void free_msg(struct msg_msg *msg);
--extern struct msg_msg *load_msg(const void __user *src, size_t len);
-+struct msg_cache;
-+extern int init_msg_cache(struct msg_cache *cache);
-+extern void free_msg_cache(struct msg_cache *cache);
-+extern void free_msg(struct msg_msg *msg, struct msg_cache *cache);
-+extern struct msg_msg *load_msg(const void __user *src, size_t len,
-+				struct msg_cache *cache);
- extern struct msg_msg *copy_msg(struct msg_msg *src, struct msg_msg *dst);
- extern int store_msg(void __user *dest, struct msg_msg *msg, size_t len);
- 
--- 
-2.38.1
-
+You can ask reporters to share bpf progs, but you can repro
+the oops just as well without bpf. It's not bpf to blame, but the
+bug in the caller that you should worry about.
