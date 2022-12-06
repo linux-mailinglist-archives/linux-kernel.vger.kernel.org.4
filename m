@@ -2,86 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0428F644AA0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:50:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE4E644AA7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiLFRuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45556 "EHLO
+        id S229573AbiLFRyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:54:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLFRuU (ORCPT
+        with ESMTP id S229562AbiLFRyq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:50:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BFC2228D;
-        Tue,  6 Dec 2022 09:50:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AA715B81B00;
-        Tue,  6 Dec 2022 17:50:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 56067C433B5;
-        Tue,  6 Dec 2022 17:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670349017;
-        bh=vnrsEcjZq5+7qt/t33vzTsH4giZIyJwRDMHO+qQlWgI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=nL/uGD9fqjH7/Lu+/zTKv5k9RoepNYWFXbT84eke+koxQADZz/6lS2eic7fUDSZJL
-         sjtvqsNT/PEduUvdZYdhpsXuTw+G57B/Pb7FttXhv+h8yXcb2J5TaFkkgp0eVk9Vqj
-         I9+bjrTzxXo/Vljxz3Qz744pv+zqtB+WFExX3RQwANRh/0vPOUoKvyZdeyizMToc7E
-         5eztA9eNbu5e6tzfTNFiVwPcqwUEJ2DXmg/gMZsqLQTsUhFaSbY/7mkbBvjbkiQdcS
-         Y0lIf7M07uVf4kWAt4BTaX5vYpFYej62PgZJijsu1Bgrqcuqvzp14oEjp8qEbnwbjQ
-         UlQfevhmW7SHA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3CCC0E56AA2;
-        Tue,  6 Dec 2022 17:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 6 Dec 2022 12:54:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDE812BB11
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:54:45 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2969423A;
+        Tue,  6 Dec 2022 09:54:52 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 78C8F3F73B;
+        Tue,  6 Dec 2022 09:54:41 -0800 (PST)
+Message-ID: <e7d6c19b-593d-acfd-35af-73b1840be276@arm.com>
+Date:   Tue, 6 Dec 2022 18:54:39 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluetooth: btintel: Fix missing free skb in
- btintel_setup_combined()
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <167034901724.25798.17751229965672179058.git-patchwork-notify@kernel.org>
-Date:   Tue, 06 Dec 2022 17:50:17 +0000
-References: <20221205135357.3961836-1-bobo.shaobowang@huawei.com>
-In-Reply-To: <20221205135357.3961836-1-bobo.shaobowang@huawei.com>
-To:     Wang ShaoBo <bobo.shaobowang@huawei.com>
-Cc:     liwei391@huawei.com, marcel@holtmann.org, luiz.dentz@gmail.com,
-        johan.hedberg@gmail.com, linux-bluetooth@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 3/7] sched: Teach arch_asym_cpu_priority() the idle
+ state of SMT siblings
+Content-Language: en-US
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+References: <20221122203532.15013-1-ricardo.neri-calderon@linux.intel.com>
+ <20221122203532.15013-4-ricardo.neri-calderon@linux.intel.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20221122203532.15013-4-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Mon, 5 Dec 2022 21:53:57 +0800 you wrote:
-> skb allocated by __hci_cmd_sync would not be used whether in checking
-> for supported iBT hardware variants or after, we should free it in all
-> error branches, this patch makes the case read version failed or default
-> error case free skb before return.
+On 22/11/2022 21:35, Ricardo Neri wrote:
+> Some processors (e.g., Intel processors with ITMT) use asym_packing to
+> balance load between physical cores with SMT. In such case, a core with all
+> its SMT siblings idle is more desirable than another with one or more busy
+> siblings.
 > 
-> Fixes: c86c7285bb08 ("Bluetooth: btintel: Fix the legacy bootloader returns tlv based version")
-> Fixes: 019a1caa7fd2 ("Bluetooth: btintel: Refactoring setup routine for bootloader devices")
-> Signed-off-by: Wang ShaoBo <bobo.shaobowang@huawei.com>
+> Other processors (e.g, Power7 with SMT8) use asym_packing to balance load
+> among SMT siblings of different priority, regardless of their idle state.
 > 
-> [...]
+> Add a new parameter, check_smt, that architectures can use as needed.
 
-Here is the summary with links:
-  - Bluetooth: btintel: Fix missing free skb in btintel_setup_combined()
-    https://git.kernel.org/bluetooth/bluetooth-next/c/6ae5399836fa
+[...]
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Changes since v1:
+>  * Introduced this patch.
 
+[...]
+
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index d18947a9c03e..0e4251f83807 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -142,8 +142,11 @@ __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
+>  #ifdef CONFIG_SMP
+>  /*
+>   * For asym packing, by default the lower numbered CPU has higher priority.
+> + *
+> + * When doing ASYM_PACKING at the "MC" or higher domains, architectures may
+
+There is this new CLUSTER level between SMT and MC.
+
+> + * want to check the idle state of the SMT siblngs of @cpu.
+
+s/siblngs/siblings
+
+The scheduler calls sched_asym_prefer(..., true) from
+find_busiest_queue(), asym_active_balance() and nohz_balancer_kick()
+even from SMT layer on !x86. So I guess a `bool check_smt` wouldn't be
+sufficient to distinguish whether sched_smt_siblings_idle() should be
+called or not. To me this comment is a little bit misleading. Not an
+issue currently since there is only the x86 overwrite right now.
+
+>   */
+> -int __weak arch_asym_cpu_priority(int cpu)
+> +int __weak arch_asym_cpu_priority(int cpu, bool check_smt)
+>  {
+>  	return -cpu;
+>  }
+
+[...]
 
