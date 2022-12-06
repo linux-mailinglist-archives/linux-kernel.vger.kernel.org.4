@@ -2,65 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F766447CC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:17:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5E26447CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234523AbiLFPRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:17:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
+        id S235426AbiLFPSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:18:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234839AbiLFPQt (ORCPT
+        with ESMTP id S232046AbiLFPRQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:16:49 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5BAE59;
-        Tue,  6 Dec 2022 07:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670339556; x=1701875556;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UQPpoMYHgojZ0s9I/vYi4H/g6UU0D10ansdSCf8jK0c=;
-  b=ijN4fQwf305Hp7GZB8DInTtwuofxS3O635wJ86UrZ6X36WoPvuXP0lwr
-   B7xE2OdFwYoi3ByN4Wq98ekykg3IiO0wVQjReMFHQb1NjpuFJle7szdQ6
-   ezZJMZU00ti5Cvvp9TALL7W7+IrQbUBZMGT/zPxl7toGKhSPkfWAnZHmk
-   mnAYizn98lODQ5hl/WX2jZ9zZC341lIK6Goz52xyQuIIKV/Fv7EiMxsBA
-   W3TPit80AJH6NXf19SWRi3uzmN+2hmkZSxj9Sl3m1lYbndSndGxrkUBDm
-   Yx9x3mwgbVC9KjV0RQYgUxeKG4+XlVQQgcMeouKloRRO3LprcHThVE4ri
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="378807875"
-X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
-   d="scan'208";a="378807875"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 07:12:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="639904605"
-X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
-   d="scan'208";a="639904605"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga007.jf.intel.com with ESMTP; 06 Dec 2022 07:12:13 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p2ZcB-005MBU-0N;
-        Tue, 06 Dec 2022 17:12:11 +0200
-Date:   Tue, 6 Dec 2022 17:12:10 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     ye.xingchen@zte.com.cn
-Cc:     jic23@kernel.org, michael.hennerich@analog.com, lars@metafoo.de,
-        u.kleine-koenig@pengutronix.de, jk@codeconstruct.com.au,
-        wsa@kernel.org, ddrokosov@sberdevices.ru, hdegoede@redhat.com,
-        haibo.chen@nxp.com, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iio: accel: Convert to use sysfs_emit_at() API
-Message-ID: <Y49byhJ/Yn5/I28d@smile.fi.intel.com>
-References: <202212061953201070549@zte.com.cn>
+        Tue, 6 Dec 2022 10:17:16 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CC11115
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:13:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=H1//nXXWnd3IvEA/8K9+DU2/XNjGt8vXcnTNixiMSsA=; b=cTQGLedKj7KCb3zTVHCalu8qZp
+        3pdAoq0g9kalvf44twAyr6WMgZ99d5YsjkHW2dF9UNnt0UvrsbXJFhFykQ1If42VLyRr1GUlUyTqv
+        9NuKpaLbz6YDVWRCM0GkNhXqSado52ubd0wJfdKVnkwrYzjkSfFDvpYVbvkN8V7TgSV2I0w5+Cmx+
+        ClWLFvitbUXHvJX+7ncycj/ltmtEprQq/AzET/JbCYip8qJYAIpAmZnn3+hHZ/MQBEHnS5gwLaIq9
+        QulTv7fD0/Fd/p0SzZ/5RrOcU/6ygwh3/W9W6995NopZwLlP7qKm7YOCQcvLw4GxTuz6x99rJDmN5
+        ASbCMWHA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p2ZdR-004XiZ-JO; Tue, 06 Dec 2022 15:13:29 +0000
+Date:   Tue, 6 Dec 2022 15:13:29 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
+ preserves const-ness of the pointer
+Message-ID: <Y49cGRDBVP3bHJuT@casper.infradead.org>
+References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202212061953201070549@zte.com.cn>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,19 +52,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 07:53:20PM +0800, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
+On Mon, Dec 05, 2022 at 01:12:03PM +0100, Greg Kroah-Hartman wrote:
+> +/**
+> + * container_of_const - cast a member of a structure out to the containing
+> + *			structure and preserve the const-ness of the pointer
+> + * @ptr:		the pointer to the member
+> + * @type:		the type of the container struct this is embedded in.
+> + * @member:		the name of the member within the struct.
+> + */
+> +#define container_of_const(ptr, type, member)				\
+> +	_Generic(ptr,							\
+> +		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
+> +		default: ((type *)container_of(ptr, type, member))	\
+> +	)
+> +
 
-Please split on per device driver basis (3 patches here).
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-The code looks fine to me, thanks.
+I tried doing this:
 
--- 
-With Best Regards,
-Andy Shevchenko
++++ b/include/linux/container_of.h
+@@ -15,11 +15,17 @@
+  *
+  * WARNING: any const qualifier of @ptr is lost.
+  */
+-#define container_of(ptr, type, member) ({                             \
++#define _c_of(ptr, type, member) ({                                    \
+        void *__mptr = (void *)(ptr);                                   \
+        static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+                      __same_type(*(ptr), void),                        \
+                      "pointer type mismatch in container_of()");       \
+        ((type *)(__mptr - offsetof(type, member))); })
 
++#define container_of(ptr, type, m)                                     \
++       _Generic(ptr,                                                   \
++               const typeof(*(ptr)) *: (const type *)_c_of(ptr, type, m),\
++               default: ((type *)_c_of(ptr, type, m))                  \
++       )
++
+ #endif /* _LINUX_CONTAINER_OF_H */
 
+(whitespace damaged, yes the kernel-doc is now in the wrong place, etc)
+
+It found a few problems; just building the mlx5 driver (I happened to be
+doing some work on it in that tree).  We're definitely not ready to do
+that yet, but I'll send a few patches to prepare for it.
