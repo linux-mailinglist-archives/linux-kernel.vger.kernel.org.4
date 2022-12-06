@@ -2,90 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AB7E64452B
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:59:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D03164452F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:59:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231530AbiLFN7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S234557AbiLFN7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:59:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiLFN7a (ORCPT
+        with ESMTP id S231255AbiLFN7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:59:30 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A7C6143
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:59:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F2E16176E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:59:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7C03C433D6;
-        Tue,  6 Dec 2022 13:59:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670335166;
-        bh=pBfGabi2/wXkebpJ8J8lEIDp/m5U4OB2XlYBddIlHL0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gI7qwPfNa2KUJdwrwtrf5oWP+Bj3XZl+P8eOymxLFNAEqmZ4JWbcNlpB1UThMI+kn
-         K1Z6yp89E9HiVS8QRJWQ0+eug/BAz1jUvdFz+LsGnXM5Y823XkieUXVZSpKEBo7Y5T
-         D7RoiJNlcsjf37m8fKk4yNt8TqG9DztJnpEUu31HJ9PyCRTpEmgx0em3Ui4E7IuzgH
-         wyMyPhGw0LWziyAM/7iAYFOIi9rrpvswCK/9RcK4lz30iD13n+IOPPPZSWRPIUtHf1
-         fPX2sM/4WJAsZ/ggrIVUdrKuRdgkQn2zMirw0dYH7EfuwEO6c37mREsbQ4MK+hTgRI
-         tm3RhExuYo0cg==
-Date:   Tue, 6 Dec 2022 22:59:23 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] trace: Fix some checker warnings
-Message-Id: <20221206225923.342044429adb3aafe67400a7@kernel.org>
-In-Reply-To: <382777.1670236186@warthog.procyon.org.uk>
-References: <20221205180617.9b9d3971cbe06ee536603523@kernel.org>
-        <20221205123200.51539846cb9dd9dc158cc871@kernel.org>
-        <166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk>
-        <276025.1670228915@warthog.procyon.org.uk>
-        <382777.1670236186@warthog.procyon.org.uk>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Dec 2022 08:59:50 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289816163;
+        Tue,  6 Dec 2022 05:59:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=XzTi/+CPlea6BjgH4HGU1K3zrFmzxH8ADOjRkaoqvyA=; b=uiQoxcvtSwPnG69c5tBO8nP9vu
+        MHeKXPRZyfstw3pLHawm908KSlhUCLPMKSGiHBiyNppN7tSNI4GYnOcTH/a/WwN7PrnSJXDCvQ/jY
+        EUf5fvaJHUBsELZccHfH/xhtcwrr28LbZTV/31LXxkh8Q3ySpIF/UD9LulMcFE2QuILs=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2YTz-004X8E-4t; Tue, 06 Dec 2022 14:59:39 +0100
+Date:   Tue, 6 Dec 2022 14:59:39 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v4 net-next 4/5] drivers/net/phy: add helpers to get/set
+ PLCA configuration
+Message-ID: <Y49Ky7aCUZxE5Fwg@lunn.ch>
+References: <cover.1670329232.git.piergiorgio.beruto@gmail.com>
+ <4c6bb420c2169edb31abd5c4d5fe04090ed329e4.1670329232.git.piergiorgio.beruto@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4c6bb420c2169edb31abd5c4d5fe04090ed329e4.1670329232.git.piergiorgio.beruto@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Dec 2022 10:29:46 +0000
-David Howells <dhowells@redhat.com> wrote:
+> +/* MDIO Manageable Devices (MMDs). */
+> +#define MDIO_MMD_OATC14		MDIO_MMD_VEND2
 
-> Btw, do you know how to deal with:
-> 
-> 	add_ftrace_export(struct trace_export **list, struct trace_export *export)
-> 
-> being called by:
-> 
-> 	add_ftrace_export(&ftrace_exports_list, export);
-> 
-> but ftrace_exports_list has an __rcu annotation, so the list argument in the
-> former should have an __rcu annotation in it somewhere too.
+As i said in a comment somewhere, i would prefer you use
+MDIO_MMD_VEND2, not MDIO_MMD_OATC14. We want the gentle reminder that
+these registers can contain anything the vendor wants, including, but
+not limited to, PLCA.
 
-Can't you just add __rcu to the 'list' argument?
+> +/* Open Alliance TC14 PLCA CTRL0 register */
+> +#define MDIO_OATC14_PLCA_EN	0x8000  /* PLCA enable */
+> +#define MDIO_OATC14_PLCA_RST	0x4000  /* PLCA reset */
 
-> 
-> OTOH - there's only one user of add_trace_export() and add_ftrace_export(), so
-> can they be collapsed into register_ftrace_export()?
+These are bits, so use the BIT macro. When this was part of mii.h,
+that file used this hex format so it made sense to follow that
+format. Now you are in a few file, you should use the macro.
 
-Steve, do you have any idea?
+> +/* Open Alliance TC14 PLCA CTRL1 register */
+> +#define MDIO_OATC14_PLCA_NCNT	0xff00	/* PLCA node count */
+> +#define MDIO_OATC14_PLCA_ID	0x00ff	/* PLCA local node ID */
+> +
+> +/* Open Alliance TC14 PLCA STATUS register */
+> +#define MDIO_OATC14_PLCA_PST	0x8000	/* PLCA status indication */
+> +
+> +/* Open Alliance TC14 PLCA TOTMR register */
+> +#define MDIO_OATC14_PLCA_TOT	0x00ff
+> +
+> +/* Open Alliance TC14 PLCA BURST register */
+> +#define MDIO_OATC14_PLCA_MAXBC	0xff00
+> +#define MDIO_OATC14_PLCA_BTMR	0x00ff
+> +
+> +#endif /* __MDIO_OPEN_ALLIANCE__ */
+> diff --git a/drivers/net/phy/phy-c45.c b/drivers/net/phy/phy-c45.c
+> index a87a4b3ffce4..dace5d3b29ad 100644
+> --- a/drivers/net/phy/phy-c45.c
+> +++ b/drivers/net/phy/phy-c45.c
+> @@ -8,6 +8,8 @@
+>  #include <linux/mii.h>
+>  #include <linux/phy.h>
+>  
+> +#include "mdio-open-alliance.h"
+> +
+>  /**
+>   * genphy_c45_baset1_able - checks if the PMA has BASE-T1 extended abilities
+>   * @phydev: target phy_device struct
+> @@ -931,6 +933,184 @@ int genphy_c45_fast_retrain(struct phy_device *phydev, bool enable)
+>  }
+>  EXPORT_SYMBOL_GPL(genphy_c45_fast_retrain);
+>  
+> +/**
+> + * genphy_c45_plca_get_cfg - get PLCA configuration from standard registers
+> + * @phydev: target phy_device struct
+> + * @plca_cfg: output structure to store the PLCA configuration
+> + *
+> + * Description: if the PHY complies to the Open Alliance TC14 10BASE-T1S PLCA
+> + *   Management Registers specifications, this function can be used to retrieve
+> + *   the current PLCA configuration from the standard registers in MMD 31.
+> + */
+> +int genphy_c45_plca_get_cfg(struct phy_device *phydev,
+> +			    struct phy_plca_cfg *plca_cfg)
+> +{
+> +	int ret;
+> +
+> +	ret = phy_read_mmd(phydev, MDIO_MMD_OATC14, MDIO_OATC14_PLCA_IDVER);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	plca_cfg->version = ret;
 
-Thanks,
+It would be good to verify this value, and return -ENODEV if it is not
+valid.
 
-> 
-> David
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+	Andrew
