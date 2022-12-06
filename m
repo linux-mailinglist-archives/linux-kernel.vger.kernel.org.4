@@ -2,128 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9F0644A94
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:47:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE64644A96
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:47:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbiLFRrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:47:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
+        id S229543AbiLFRrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLFRrA (ORCPT
+        with ESMTP id S229500AbiLFRrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:47:00 -0500
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2947036C7C
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:47:00 -0800 (PST)
-Received: by mail-qk1-x72d.google.com with SMTP id m5so6528651qkg.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:47:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qz9eWRKuOMkZyY7yCLP4bfB61B8iFWuAmg5J5O6xxbc=;
-        b=CX81Miey0t51ao24TZ2oOyZuH0V16FdY5dDo88+POfGyM2FUYIa38h4SZ87A0oq/mb
-         ahHAJTbeomoIOgfljUzZM9vdalqOoeQFtbDFEqi+3ziLqqgbk8fnrvy7Hxv3H4/b6Mjg
-         vq9Vge90X+ZXPr9RFnAxglnCja4Ydm3Z2UtAG2QJskra1CBNO5nX8Tm+zfU1jvg2JGv3
-         Vgv5hFA0lyHLshRwiF1Crbl6oh5oQ8eBrp5wVlGy9NZkVwtnvvujufvXuUgfLmhHNm7X
-         QQU8YPudhpMIKMbwQ2SwCBpugZyuGwiMJ0YXxgS8olZ3aWrN2xNgZThWC2Si0yKEu423
-         PBsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qz9eWRKuOMkZyY7yCLP4bfB61B8iFWuAmg5J5O6xxbc=;
-        b=IYCkREGT+aSwYK6WvGPQejLRNX2zuVaOoVwI0FUfDzQx7j+FOwuyv6N6m6b26fYoYf
-         57pXqkl6vqGZ7vIBwnHTjJMdy8jmkDLXpCBTXBwvkrGlQqeLPBPQzDrR8qSJm3CfbxvW
-         mgKRAzAHAzNzrCP89HKA6Ngv47/ONEbDobXoE1l69sVQG8FUCQN/SVpWUAxTA1//NCjW
-         7HxVzoV37QSXmsRwrP3LIzO2E3BLJLI/sH9aKKfhk3YAcsGccD/y0sBxe8pc7qqIQvBN
-         2+3m5MN0c4BtQB+KMT6u359hhd8X4vZK7rjClm7v7C/JFwKQy5Sc/J9Ybv8gj0oL1R+A
-         rtOg==
-X-Gm-Message-State: ANoB5pm8AbgXQ5DhrUMaDKRWVan8lgVy+Lyw5fkQEPQTQSClTDuR1xhO
-        jeCQsa65Gw6Qr10oTpbeGMHFNw==
-X-Google-Smtp-Source: AA0mqf7Msy5LM0t0T4y/zIJ7du4drst1jlBhVBLU7EVYPos606MNc5wjXVQHWrhFLoSgMsVtwkw5PQ==
-X-Received: by 2002:a05:620a:ed2:b0:6fb:c26:608c with SMTP id x18-20020a05620a0ed200b006fb0c26608cmr78390519qkm.307.1670348819315;
-        Tue, 06 Dec 2022 09:46:59 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05620a405500b006f8665f483fsm15939628qko.85.2022.12.06.09.46.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 09:46:58 -0800 (PST)
-Message-ID: <3c3a7b0c053c5366be4ad0c4a9a3bd205aaea731.camel@ndufresne.ca>
-Subject: Re: [PATCH] media: videobuf2: add V4L2_BUF_FLAG_HEADERS_ONLY flag
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org
-Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Tomasz Figa <tfiga@chromium.org>
-Date:   Tue, 06 Dec 2022 12:46:57 -0500
-In-Reply-To: <34d5c5d7-cedd-a12c-557b-33274f62cf70@xs4all.nl>
-References: <20220712093754.23370-1-ming.qian@nxp.com>
-         <15ba9b9e-f3f6-7f30-c200-d7c9593a4735@xs4all.nl>
-         <35256805b1ce0b2b7533f53f658c799a37255469.camel@ndufresne.ca>
-         <34d5c5d7-cedd-a12c-557b-33274f62cf70@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 6 Dec 2022 12:47:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D01536C7B;
+        Tue,  6 Dec 2022 09:47:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D5970B81AF7;
+        Tue,  6 Dec 2022 17:47:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F988C433C1;
+        Tue,  6 Dec 2022 17:47:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670348849;
+        bh=kpThiEp3UAhW6pzLUVd7+M75zxZbydrFxRCxs6or0pE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dLGwzyu6XmzXG/L7DgvYNGWvQ9CokgYuQ3e5dBAMRWxe613GDVfj+rDE5SGfYm1R/
+         nKrJvuleNLFbCmMF++/f7pPQ+pxAZJxxC/4xK4fWmxN0PAj6GMwxWUtbso3V0Rj04i
+         AJ7pU9+Gdq8Bvsn4G2ftpVQZs9PoSoDXW5gKdVKpVHNfkY4vratV2NcktXcmn3zl6N
+         I0KzBVamo3uo0TxBnJ30iJea5++v8gNwkTIyZDKVQJUa6WnF81ykjlGxHimNvc0QoU
+         AA6CpGPHcDrDiod2YFpGRvS6WAWgUuV5RCJHem3z5PSFLn0+aAIzUznBSZ+KFNRPiM
+         Zxv/88KAO8S8A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2D3EA5C0952; Tue,  6 Dec 2022 09:47:29 -0800 (PST)
+Date:   Tue, 6 Dec 2022 09:47:29 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Dave Chinner <david@fromorbit.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
+        RCU <rcu@vger.kernel.org>,
+        syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>,
+        djwong@kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
+Message-ID: <20221206174729.GQ4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <000000000000bd587705ef202b08@google.com>
+ <20221206033450.GS3600936@dread.disaster.area>
+ <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com>
+ <20221206153211.GN4001@paulmck-ThinkPad-P17-Gen-1>
+ <CACT4Y+ZbmxyKJXM2zrJR6gNGSUS8j2_-Nu2dpC6gBEjcE3ercw@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZbmxyKJXM2zrJR6gNGSUS8j2_-Nu2dpC6gBEjcE3ercw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 06 d=C3=A9cembre 2022 =C3=A0 10:05 +0100, Hans Verkuil a =C3=A9cri=
-t=C2=A0:
-> > For decoders, if a a decoder is in "separate mode", it seems that sendi=
-ng
-> > headers must happen this way. If this uses a separate path internally, =
-the
-> > kernel needs also to be aware which buffers are what (and we don't pars=
-e in
-> > the
-> > kernel). In very basic case, the driver assume that the first buffer af=
-ter
-> > streamon is a header, but that prevents resolution changes without a
-> > drain+flush, which android and chromeos folks seems to use. (I always d=
-rain
-> > and
-> > flush for what I'm doing).
->=20
-> OK, thank you for the explanation.
->=20
-> So if this is going to be added, then existing drivers that use
-> V4L2_MPEG_VIDEO_HEADER_MODE_SEPARATE have to be adapted to use the new fl=
-ag
-> as well.
->=20
-> From what I can tell those are the mediatek vcodec, venus and s5p-mfc
-> encoders.
-> I suspect/hope that it won't be too difficult to add this new flag there.
+On Tue, Dec 06, 2022 at 05:19:10PM +0100, Dmitry Vyukov wrote:
+> On Tue, 6 Dec 2022 at 16:32, Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Tue, Dec 06, 2022 at 12:06:10PM +0100, Dmitry Vyukov wrote:
+> > > On Tue, 6 Dec 2022 at 04:34, Dave Chinner <david@fromorbit.com> wrote:
+> > > >
+> > > > On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
+> > > > > Hello,
+> > > > >
+> > > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> > > > > INFO: rcu detected stall in corrupted
+> > > > >
+> > > > > rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
+> > > > > rcu: blocking rcu_node structures (internal RCU debug):
+> > > >
+> > > > I'm pretty sure this has nothing to do with the reproducer - the
+> > > > console log here:
+> > > >
+> > > > > Tested on:
+> > > > >
+> > > > > commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
+> > > > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
+> > > >
+> > > > indicates that syzbot is screwing around with bluetooth, HCI,
+> > > > netdevsim, bridging, bonding, etc.
+> > > >
+> > > > There's no evidence that it actually ran the reproducer for the bug
+> > > > reported in this thread - there's no record of a single XFS
+> > > > filesystem being mounted in the log....
+> > > >
+> > > > It look slike someone else also tried a private patch to fix this
+> > > > problem (which was obviously broken) and it failed with exactly the
+> > > > same RCU warnings. That was run from the same commit id as the
+> > > > original reproducer, so this looks like either syzbot is broken or
+> > > > there's some other completely unrelated problem that syzbot is
+> > > > tripping over here.
+> > > >
+> > > > Over to the syzbot people to debug the syzbot failure....
+> > >
+> > > Hi Dave,
+> > >
+> > > It's not uncommon for a single program to trigger multiple bugs.
+> > > That's what happens here. The rcu stall issue is reproducible with
+> > > this test program.
+> > > In such cases you can either submit more test requests, or test manually.
+> > >
+> > > I think there is an RCU expedited stall detection.
+> > > For some reason CONFIG_RCU_EXP_CPU_STALL_TIMEOUT is limited to 21
+> > > seconds, and that's not enough for reliable flake-free stress testing.
+> > > We bump other timeouts to 100+ seconds.
+> > > +RCU maintainers, do you mind removing the overly restrictive limit on
+> > > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT?
+> > > Or you think there is something to fix in the kernel to not stall? I
+> > > see the test writes to
+> > > /proc/sys/vm/drop_caches, maybe there is some issue in that code.
+> >
+> > Like this?
+> >
+> > If so, I don't see why not.  And in that case, may I please have
+> > your Tested-by or similar?
+> 
+> I've tried with this patch and RCU_EXP_CPU_STALL_TIMEOUT=80000.
+> Running the test program I got some kernel BUG in XFS and no RCU
+> errors/warnings.
+> 
+> Tested-by: Dmitry Vyukov <dvyukov@google.com>
 
-The exercise will also be very informative for the reviewers, so yes, I wou=
-ld
-ask Ming to update all the drivers, though its fine to only compile test th=
-is=20
-and leave it to the maintainers to verify (at least that's my opinion). I d=
-on't
-see this change as a break, as any existing userspace will just ignore this=
-, and
-maybe managed to support it by deep parsing (which will keep working).
-Otherwise, existing userspace using this mode have been broken for
-renegotiation, and that change will not deteriorate (nor improve) the end
-result.
+Applied, thank you both!
 
-Nicolas
+I expect to push this into the v6.3 merge window, that is, not the
+one coming up real soon now, but the one after that.
 
->=20
-> Regards,
->=20
-> 	Hans
+							Thanx, Paul
 
+> Thanks
+> 
+> > At the same time, I am sure that there are things in the kernel that
+> > should be adjusted to avoid stalls, but I recognize that different
+> > developers in different situations will have different issues that they
+> > choose to focus on.  ;-)
+> >
+> >                                                         Thanx, Paul
+> >
+> > ------------------------------------------------------------------------
+> >
+> > diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
+> > index 49da904df6aa6..2984de629f749 100644
+> > --- a/kernel/rcu/Kconfig.debug
+> > +++ b/kernel/rcu/Kconfig.debug
+> > @@ -82,7 +82,7 @@ config RCU_CPU_STALL_TIMEOUT
+> >  config RCU_EXP_CPU_STALL_TIMEOUT
+> >         int "Expedited RCU CPU stall timeout in milliseconds"
+> >         depends on RCU_STALL_COMMON
+> > -       range 0 21000
+> > +       range 0 300000
+> >         default 0
+> >         help
+> >           If a given expedited RCU grace period extends more than the
