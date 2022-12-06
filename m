@@ -2,205 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0648643FE7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39C95643F79
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:11:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235161AbiLFJba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S234622AbiLFJK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:10:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235120AbiLFJbR (ORCPT
+        with ESMTP id S234619AbiLFJKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:31:17 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7CF1F9D5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:31:09 -0800 (PST)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20221206093108epoutp02dd0e9065906540295103bdfd1b6fc671~uKlfK3XHh3219632196epoutp02j
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:31:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20221206093108epoutp02dd0e9065906540295103bdfd1b6fc671~uKlfK3XHh3219632196epoutp02j
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1670319068;
-        bh=JZXQx+IsTmTwNlYjn0Q0pBoHGpl7jVav9aBC81tQrFY=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=Z3pHOBtt8KtYTOuMJbCdy/SI5DmSBxm42uV4XGee5ypNRP69C/OjPzd3apptx3jHe
-         PXZYYqdWxFJS9+0C/GTYDrXvwA+14tr0KLmQLf9YpDRe0SEAsesbRoP9vSIy3GADKI
-         joymrqDQxRJj/llwM8GDxVFzLzpx+ObhrKx4u4QQ=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20221206093107epcas5p21abeaf6ad2ab5b6476a2a9486ecc1e48~uKlekFpi40348903489epcas5p2n;
-        Tue,  6 Dec 2022 09:31:07 +0000 (GMT)
-Received: from epsmges5p3new.samsung.com (unknown [182.195.38.176]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4NRFXV0T8vz4x9Q3; Tue,  6 Dec
-        2022 09:31:06 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-        epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        70.74.56352.8DB0F836; Tue,  6 Dec 2022 18:31:04 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-        epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-        20221206090723epcas5p447daee3deb05ef72fac0befc9cc80aeb~uKQv8C7fy0247502475epcas5p4C;
-        Tue,  6 Dec 2022 09:07:23 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20221206090723epsmtrp1a97cc362b01d889309f0d65882dd8f5b~uKQv7SJiZ1765517655epsmtrp1D;
-        Tue,  6 Dec 2022 09:07:23 +0000 (GMT)
-X-AuditID: b6c32a4b-5f7fe7000001dc20-57-638f0bd85b31
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        91.C0.18644.B460F836; Tue,  6 Dec 2022 18:07:23 +0900 (KST)
-Received: from FDSFTE411 (unknown [107.122.81.184]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20221206090721epsmtip16743d02d357e15dbfa820c65d0a3954a~uKQue64Se0566105661epsmtip1V;
-        Tue,  6 Dec 2022 09:07:21 +0000 (GMT)
-From:   "Ravi Patel" <ravi.patel@samsung.com>
-To:     "'Sriranjani P'" <sriranjani.p@samsung.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <alim.akhtar@samsung.com>, <pankaj.dubey@samsung.com>,
-        <sathya@samsung.com>
-Cc:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-samsung-soc@vger.kernel.org>
-In-Reply-To: <20221129115531.102932-3-sriranjani.p@samsung.com>
-Subject: RE: [PATCH v4 2/2] arm64: dts: fsd: add sysreg device node
-Date:   Tue, 6 Dec 2022 14:37:20 +0530
-Message-ID: <001001d90952$26faa8f0$74effad0$@samsung.com>
+        Tue, 6 Dec 2022 04:10:34 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C261E3F2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:10:07 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id a19so16544403ljk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:10:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a8/S6ykdg/g49/FLME8o1MfbsUhOagdLOH5bnruHpgc=;
+        b=tVOT/KX5QXizryslSdAePiV+U23GGylwtj7MDpkRxFUOUoMhhe1p3yLmektj+AscQ2
+         plN8nnb4Ym6VVSr6WxMHAoLi2RaU8EGLQEjm2u5zDVrj6T77eC6cXLpKquV8Vr3lCDgc
+         1JGwzmHC/rCgv1xMhbqQXawa+66F3y72uXPM02vPxqGqT9yXADXZUGQOmo8MJ97zY4Gs
+         9fiAxVMubMdmmrXQrWBUKHvLz3sY0Bo33nq3eIWY8qYOD9929BjoKFRMuRNCOrluApiZ
+         fgcJSFMYfGXnmaK+Wq9kcLipzTOCxrP10zVzqXcPjMVLJJLCzGTGM8R9O6nUNn29AQ8y
+         dJcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a8/S6ykdg/g49/FLME8o1MfbsUhOagdLOH5bnruHpgc=;
+        b=AXUpS295MQv0PBCeQQ3pPMMP7oARX1qXWldzEkyeDssC6AiQMDeNrfnjZfMt/sEh+D
+         FE67LxzRDxXLkX6iRGiJP5b66kY3/aDWjraDWuSB6ZyopsT9/8HDdjswtmhxNA4m/QKm
+         yxXJk/w5OQ2PguWd2iq+4Ng+fjPz+8IRlT29z0Y9hCTpI9CntQajCfmFoLv9sNhrfbWT
+         cdqmAne55j5/FjSp2fR0UjyHn9+k2ugi/2ZRHjIuKKbb02koMgy+UttKVOEKWFcs5y5m
+         Y7+WX+oRXALKEGR0ic99dDYL+ndWz+ugLHt9GrObpP7BTu3gZmZ/EehtXogSgtNkltAL
+         tBKg==
+X-Gm-Message-State: ANoB5pka7X0dSs40fnZmgLEqa6O8Y0UERxNTKIkYZb3oKm2ARyA372Ac
+        17/qdqtlcjXnidn9BVotBVlZeBuwZyU0mbtHWik8XQ==
+X-Google-Smtp-Source: AA0mqf6D1FFx/swbUQRcuEkx7dLWfLvxXSQHuO+R/SXjyGe6LsEjbp8hORG9ZzHThisS+7u4R16tTw==
+X-Received: by 2002:a17:907:8b06:b0:7c0:8e3a:9a54 with SMTP id sz6-20020a1709078b0600b007c08e3a9a54mr25454851ejc.619.1670317794846;
+        Tue, 06 Dec 2022 01:09:54 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id v6-20020a170906180600b007c0c679ca2fsm4744150eje.26.2022.12.06.01.09.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 01:09:54 -0800 (PST)
+Date:   Tue, 6 Dec 2022 10:09:53 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Divya Koppera <Divya.Koppera@microchip.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, richardcochran@gmail.com,
+        UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v5 net-next 1/2] net: phy: micrel: Fixed error related to
+ uninitialized symbol ret
+Message-ID: <Y48G4etaxXnmJJLF@nanopsycho>
+References: <20221206073511.4772-1-Divya.Koppera@microchip.com>
+ <20221206073511.4772-2-Divya.Koppera@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQLJnMxoNyT45a9R9PTdsX6iVXIE+wFDZibaATEvXGSsa8XgAA==
-Content-Language: en-in
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBJsWRmVeSWpSXmKPExsWy7bCmpu4N7v5kgw8f5S0ezNvGZjH/yDlW
-        i74XD5ktNj2+xmpxedccNosZ5/cxWSza+oXdonXvEXaLL0deM1rcfrOO1YHLY9OqTjaPO9f2
-        sHlsXlLv0bdlFaPH501yAaxR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5
-        ibmptkouPgG6bpk5QEcpKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OL
-        S/PS9fJSS6wMDQyMTIEKE7Izpl1cyFKwQKzi8Z+vbA2ML4W6GDk5JARMJE58+cDUxcjFISSw
-        m1Hi7ITnbCAJIYFPjBL7DoZCJD4zSsz/sJsZpmPj1E/sEIldjBKPbuxmhHBeMEr83rOUpYuR
-        g4NNQFviyhpDkLiIwE1Gid4zV8HGMgsUShw7s5EdxOYUsJc4s/gpE4gtLOAs8WDXMkYQm0VA
-        RWL7+Q1gNq+ApcT25kssELagxMmZT1gg5mhLLFv4GuoiBYmfT5exgtgiAk4Sl57fZYaoEZc4
-        +rOHGeQICYGVHBIdS+4xQjS4SDxbeB7KFpZ4dXwLO4QtJfGyvw3Kzpe4OKeNCcLOkOg4dRmq
-        3l7iwJU5YE8yC2hKrN+lDxGWlZh6ah0TxF4+id7fT6BaeSV2zAOxOYBsFYkZD0thNh0684lx
-        AqPSLCSfzULy2SwkH8xCWLaAkWUVo2RqQXFuemqxaYFxXmo5PL6T83M3MYKTrJb3DsZHDz7o
-        HWJk4mA8xCjBwawkwvtiY2+yEG9KYmVValF+fFFpTmrxIUZTYHBPZJYSTc4Hpvm8knhDE0sD
-        EzMzMxNLYzNDJXHepVM6koUE0hNLUrNTUwtSi2D6mDg4pRqYREPCxd43svQqqu54Ws7N9nJF
-        LYfiCrHrQtUrHx8qUnfbZi9bLRIw8V+Qw6zqrrx1q6KULNztnhkW7eo5+ff7FLVv6549yT/D
-        tym87VfVVFNrv8WbXa6pbonN0+b+0Td7arnmtB3THCfkCEYLv3csnvtjcq3yCh65E41VbVaX
-        TW1r8lddbvt9xH5Bgf/VBZpsOSXfb2ReT14der56fwx77tytTz0C9ZZPvmt+4Kr0n03XzF8E
-        7c+0Uz998udmLumdbovjU0zvK9ueutv7J9SkvqEieOtzjef3DK7umnGRQ/X8QufDHKfY5t9O
-        3anouWlPyd8PW+1mrWtb0Zu1x8009OjETUonduq/nrpk9Zs6XyWW4oxEQy3mouJEAOncGlY7
-        BAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSnK43W3+ywZJdXBYP5m1js5h/5Byr
-        Rd+Lh8wWmx5fY7W4vGsOm8WM8/uYLBZt/cJu0br3CLvFlyOvGS1uv1nH6sDlsWlVJ5vHnWt7
-        2Dw2L6n36NuyitHj8ya5ANYoLpuU1JzMstQifbsEroxDt7azFjwSqfh6Zh5jA+NqwS5GTg4J
-        AROJjVM/sXcxcnEICexglFg8dzEzREJK4s+WxywQtrDEyn/PoYqeMUpc3fAIqIiDg01AW+LK
-        GkOQuIjAQ0aJD9cXsYM0MAsUS+zbcpsZouEwo8S5rrlMIAlOAXuJM4ufgtnCAs4SD3YtYwSx
-        WQRUJLaf3wBm8wpYSmxvvsQCYQtKnJz5hAViqLbE05tP4exlC19DXaog8fPpMlYQW0TASeLS
-        87vMEDXiEkd/9jBPYBSehWTULCSjZiEZNQtJywJGllWMkqkFxbnpucWGBUZ5qeV6xYm5xaV5
-        6XrJ+bmbGMHRpqW1g3HPqg96hxiZOBgPMUpwMCuJ8L7Y2JssxJuSWFmVWpQfX1Sak1p8iFGa
-        g0VJnPdC18l4IYH0xJLU7NTUgtQimCwTB6dUA9Nsh/UtV2KD2PYHSRlHfdbytpSoKr2TkD/v
-        56Hztgu8RBgym+I3WTibbM1ax1gxQ/tN65SA8wvZrhhf57hkdGv96lV2s/PDrz/WC2+tZDWI
-        qeZa/fLkMc8H4lXx6XprlTQKpmeELd1068UnQaNt/Iuu6eY+bWi1c6/ouye6+MoB1g/V//Lt
-        vlTFfJFJuWG3Tf2U1NrlfVy/X3RZ6XHevH/5agGrzfXNDXwTqw8YZb4VerD5Vw/XBt2Nj5Z5
-        974M49ew2NZxO/aVa8Lf6rDHG5+3HLm8fP09zzcHpm169WSe5PWXBivLiznWOIqvjKqyyT+n
-        4fDcZ13Qse6a80rGh7K4nBmqMj5P3yb/fdJx77tKLMUZiYZazEXFiQAs/bOCJQMAAA==
-X-CMS-MailID: 20221206090723epcas5p447daee3deb05ef72fac0befc9cc80aeb
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: REQ_APPROVE
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20221129115546epcas5p3d5ef247af122c4041f50337ed2ec148c
-References: <20221129115531.102932-1-sriranjani.p@samsung.com>
-        <CGME20221129115546epcas5p3d5ef247af122c4041f50337ed2ec148c@epcas5p3.samsung.com>
-        <20221129115531.102932-3-sriranjani.p@samsung.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206073511.4772-2-Divya.Koppera@microchip.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Tue, Dec 06, 2022 at 08:35:10AM CET, Divya.Koppera@microchip.com wrote:
+>Initialized return variable
+
+Not only here, but in the patch/patchset subject, you should be
+imperative to the codebase and tell it what to do.
 
 
->-----Original Message-----
->From: Sriranjani P =5Bmailto:sriranjani.p=40samsung.com=5D
->Sent: 29 November 2022 17:26
->To: robh+dt=40kernel.org; krzysztof.kozlowski+dt=40linaro.org;
->devicetree=40vger.kernel.org; alim.akhtar=40samsung.com;
->pankaj.dubey=40samsung.com; ravi.patel=40samsung.com;
->sathya=40samsung.com
->Cc: linux-arm-kernel=40lists.infradead.org; linux-kernel=40vger.kernel.org=
-; linux-
->samsung-soc=40vger.kernel.org; Sriranjani P <sriranjani.p=40samsung.com>
->Subject: =5BPATCH v4 2/2=5D arm64: dts: fsd: add sysreg device node
 >
->Add SYSREG controller device node, which is available in PERIC, FSYS0,
->FSYS1 and CAM block of FSD SoC.
+>Fixes Old smatch warnings:
+>drivers/net/phy/micrel.c:1750 ksz886x_cable_test_get_status() error:
+>uninitialized symbol 'ret'.
 >
->Signed-off-by: Alim Akhtar <alim.akhtar=40samsung.com>
->Signed-off-by: Pankaj Dubey <pankaj.dubey=40samsung.com>
->Signed-off-by: Sriranjani P <sriranjani.p=40samsung.com>
+>Reported-by: kernel test robot <lkp@intel.com>
+>Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+>Fixes: 21b688dabecb ("net: phy: micrel: Cable Diag feature for lan8814 phy")
+>Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+>Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
 >---
-> arch/arm64/boot/dts/tesla/fsd.dtsi =7C 20 ++++++++++++++++++++
-> 1 file changed, 20 insertions(+)
+>v4 -> v5:
+>- No changes, added reviewed by tag.
 >
->diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi
->b/arch/arm64/boot/dts/tesla/fsd.dtsi
->index f35bc5a288c2..ff625fb71fbe 100644
->--- a/arch/arm64/boot/dts/tesla/fsd.dtsi
->+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
->=40=40 -466,6 +466,11 =40=40
-> 			clock-names =3D =22fin_pll=22;
-> 		=7D;
+>v3 -> v4:
+>- Split the patch for different warnings.
 >
->+		sysreg_cam: system-controller=4012630000 =7B
->+			compatible =3D =22tesla,fsd-cam-sysreg=22, =22syscon=22;
->+			reg =3D <0x0 0x12630000 0x0 0x500>;
->+		=7D;
->+
-> 		clock_mfc: clock-controller=4012810000 =7B
-> 			compatible =3D =22tesla,fsd-clock-mfc=22;
-> 			reg =3D <0x0 0x12810000 0x0 0x3000>;
->=40=40 -492,6 +497,11 =40=40
-> 				=22dout_cmu_peric_shared1div4_dmaclk=22;
-> 		=7D;
+>v1 -> v3:
+>- No changes
+>---
+> drivers/net/phy/micrel.c | 3 ++-
+> 1 file changed, 2 insertions(+), 1 deletion(-)
 >
->+		sysreg_peric: system-controller=4014030000 =7B
->+			compatible =3D =22tesla,fsd-peric-sysreg=22, =22syscon=22;
->+			reg =3D <0x0 0x14030000 0x0 0x1000>;
->+		=7D;
->+
-> 		clock_fsys0: clock-controller=4015010000 =7B
-> 			compatible =3D =22tesla,fsd-clock-fsys0=22;
-> 			reg =3D <0x0 0x15010000 0x0 0x3000>;
->=40=40 -506,6 +516,11 =40=40
-> 				=22dout_cmu_fsys0_shared0div4=22;
-> 		=7D;
->
->+		sysreg_fsys0: system-controller=4015030000 =7B
->+			compatible =3D =22tesla,fsd-fsys0-sysreg=22, =22syscon=22;
->+			reg =3D <0x0 0x15030000 0x0 0x1000>;
->+		=7D;
->+
-> 		clock_fsys1: clock-controller=4016810000 =7B
-> 			compatible =3D =22tesla,fsd-clock-fsys1=22;
-> 			reg =3D <0x0 0x16810000 0x0 0x3000>;
->=40=40 -518,6 +533,11 =40=40
-> 				=22dout_cmu_fsys1_shared0div4=22;
-> 		=7D;
->
->+		sysreg_fsys1: system-controller=4016830000 =7B
->+			compatible =3D =22tesla,fsd-fsys1-sysreg=22, =22syscon=22;
->+			reg =3D <0x0 0x16830000 0x0 0x1000>;
->+		=7D;
->+
-> 		mdma0: dma-controller=4010100000 =7B
-> 			compatible =3D =22arm,pl330=22, =22arm,primecell=22;
-> 			reg =3D <0x0 0x10100000 0x0 0x1000>;
->--
+>diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+>index 26ce0c5defcd..1bcdb828db56 100644
+>--- a/drivers/net/phy/micrel.c
+>+++ b/drivers/net/phy/micrel.c
+>@@ -2088,7 +2088,8 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
+> 	const struct kszphy_type *type = phydev->drv->driver_data;
+> 	unsigned long pair_mask = type->pair_mask;
+> 	int retries = 20;
+>-	int pair, ret;
+>+	int ret = 0;
+>+	int pair;
+> 
+> 	*finished = false;
+> 
+>-- 
 >2.17.1
-
-Reviewed-by: Ravi Patel <ravi.patel=40samsung.com>
-
-
+>
