@@ -2,50 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F556440B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:53:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EC56440BA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:53:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235579AbiLFJxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:53:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57972 "EHLO
+        id S235588AbiLFJxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235418AbiLFJvz (ORCPT
+        with ESMTP id S235440AbiLFJv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:51:55 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C36E23BC5;
-        Tue,  6 Dec 2022 01:51:09 -0800 (PST)
+        Tue, 6 Dec 2022 04:51:58 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B68324080;
+        Tue,  6 Dec 2022 01:51:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E359CB818E3;
-        Tue,  6 Dec 2022 09:51:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F37C433C1;
-        Tue,  6 Dec 2022 09:51:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 706DA6160B;
+        Tue,  6 Dec 2022 09:51:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 613E2C433C1;
+        Tue,  6 Dec 2022 09:51:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670320266;
-        bh=OqXrkel/gqs5cVlkVunVtxkFHQXH2a23IGjNXD5nSpI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T5ZMe/9QlZREU2UsUVObCC+9cMPh7m08dwqr+1zNIaV6sDQk1hx3E92N/9nMDhFNu
-         KDYxsor+tV0TRZrRf0zH+wDiLdkKfj5VVM7ZKm+rjrfnHN7u7ULZAsHbCGKEeWRG2W
-         BEJy71fgXwcSW1cTVa13KKD0Rx+uigtvFCQBx1VU+nXLfMijyQCXtVzD7XgyLQJkzK
-         iTQCRn/zQrjCWmYrKMHU1iY67jRYUwAvfB24iS6bd8/DcJvmi7NCkGhQdOtXFFZegI
-         /3AjwjnVIbkdrsWvLL8TX0bGLNn6A4/UjC40xdksSdwlxEWzg5I1i25ytbIOI01fNL
-         A+/hzHR5FdROw==
-Date:   Tue, 6 Dec 2022 11:51:02 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] ice: Add check for kzalloc
-Message-ID: <Y48QhnqUEfNEcC8u@unreal>
-References: <20221206030805.15934-1-jiasheng@iscas.ac.cn>
+        s=k20201202; t=1670320275;
+        bh=7hHdQtpeJgUhhlVrjaF3QqUWI/qXbxg2b5hWeRvhBPo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VEj0dAFcq4EbNd/9ZH2NN4K3RG6X0C+QAkEBjxu/g2c4M5hE9Ks+/jToLIH7o9P5H
+         dtUM1wE+iA/NaOVooB8RohVVKChf+18eLwsulZpfqrIdZInaOurjAQE5kkKWDeF2o7
+         WzFTGDxWeXsUvLwm7JCj4cBBbZ/tWXk4xm3WLu9cqMyhjQOPE6i6BI7wUF1AJgMexQ
+         +oWWPY4cnrZ+3T/UB9thaQIOJQvF2opc3hO53CWRuBS4/BmgFNTinYfkNIrwB7sqs0
+         jY2qZ9EfN4l46SA7JAmLj9xx69cEqw4QOGfepxC5vMY/eNI0ZDxwrW0WLG7DG/lSLT
+         JBsKFXShzCzNQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 4.19 1/5] ASoC: ops: Check bounds for second channel in snd_soc_put_volsw_sx()
+Date:   Tue,  6 Dec 2022 04:51:07 -0500
+Message-Id: <20221206095112.987799-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206030805.15934-1-jiasheng@iscas.ac.cn>
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,55 +54,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:08:05AM +0800, Jiasheng Jiang wrote:
-> As kzalloc may fail and return NULL pointer,
-> it should be better to check the return value
-> in order to avoid the NULL pointer dereference.
-> 
-> Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/net/ethernet/intel/ice/ice_gnss.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+From: Mark Brown <broonie@kernel.org>
 
-The idea is correct, but please change an implementation to use goto
-and proper unwind for whole function. It will remove duplication in the
-code which handles tty_port destroys.
+[ Upstream commit 97eea946b93961fffd29448dcda7398d0d51c4b2 ]
 
-Thanks
+The bounds checks in snd_soc_put_volsw_sx() are only being applied to the
+first channel, meaning it is possible to write out of bounds values to the
+second channel in stereo controls. Add appropriate checks.
 
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
-> index b5a7f246d230..6d3d5e75726b 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
-> @@ -421,7 +421,7 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
->  	const int ICE_TTYDRV_NAME_MAX = 14;
->  	struct tty_driver *tty_driver;
->  	char *ttydrv_name;
-> -	unsigned int i;
-> +	unsigned int i, j;
->  	int err;
->  
->  	tty_driver = tty_alloc_driver(ICE_GNSS_TTY_MINOR_DEVICES,
-> @@ -462,6 +462,17 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
->  					       GFP_KERNEL);
->  		pf->gnss_serial[i] = NULL;
->  
-> +		if (!pf->gnss_tty_port[i]) {
-> +			for (j = 0; j < i; j++) {
-> +				tty_port_destroy(pf->gnss_tty_port[j]);
-> +				kfree(pf->gnss_tty_port[j]);
-> +			}
-> +			kfree(ttydrv_name);
-> +			tty_driver_kref_put(pf->ice_gnss_tty_driver);
-> +
-> +			return NULL;
-> +		}
-> +
->  		tty_port_init(pf->gnss_tty_port[i]);
->  		tty_port_link_device(pf->gnss_tty_port[i], tty_driver, i);
->  	}
-> -- 
-> 2.25.1
-> 
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Link: https://lore.kernel.org/r/20220511134137.169575-2-broonie@kernel.org
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ sound/soc/soc-ops.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/sound/soc/soc-ops.c b/sound/soc/soc-ops.c
+index 453b61b42dd9..00e6a6e46fe5 100644
+--- a/sound/soc/soc-ops.c
++++ b/sound/soc/soc-ops.c
+@@ -460,6 +460,12 @@ int snd_soc_put_volsw_sx(struct snd_kcontrol *kcontrol,
+ 	if (snd_soc_volsw_is_stereo(mc)) {
+ 		val_mask = mask << rshift;
+ 		val2 = (ucontrol->value.integer.value[1] + min) & mask;
++
++		if (mc->platform_max && val2 > mc->platform_max)
++			return -EINVAL;
++		if (val2 > max)
++			return -EINVAL;
++
+ 		val2 = val2 << rshift;
+ 
+ 		err = snd_soc_component_update_bits(component, reg2, val_mask,
+-- 
+2.35.1
+
