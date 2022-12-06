@@ -2,103 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF140644122
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3169644128
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231869AbiLFKQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:16:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58214 "EHLO
+        id S231190AbiLFKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:20:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiLFKQe (ORCPT
+        with ESMTP id S229867AbiLFKUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:16:34 -0500
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539A21D3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:16:33 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id y17so13472271plp.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 02:16:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pN6IhImBKsrk1Eo5/1DUY+8IvLXyhacd5dYyhSLWzTg=;
-        b=RYURwSMjG4tW1hFv5iYwoRJPYf6chtrCwJGrnnJlENYL4n6j7sENkzTHvYuYZkw1Vn
-         Al+VicNVV3T0v43T+OWv3DHaAOm3mnZSEs+i8ql0GD4/O4GxtjzxTr1/2s/nMn8YiHJ7
-         wOX8tGuyaJjLdhtqc+nMXdz/9tTt4onGjEfQntZCEQhuFG2t9dJrmD8G4y1/mlhbJHSR
-         Rep6iaQ+UlPIDQ5V+fCGvcNKGUbVQwnYRMGDtyB2+kqjb7efnxmImHRAT/eQBzoBn7iZ
-         3GVLwqj8tAmvCxEu9f2hIX89IUZJZKcB4tJz5pw/CNrX3DIiEy2HCWx6d6yC220ECFO3
-         gQXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pN6IhImBKsrk1Eo5/1DUY+8IvLXyhacd5dYyhSLWzTg=;
-        b=3hfx9ZjQHhu6LDG1jSFE7g5632TlyWh+OI/l82J4T6/ordTCUr4NQGoTP8pAThCQNw
-         mc3eIWGsV1tary4CfRQXQEOFu7V83CWiH7mfSP/R3q1/2ToOWIlnAFE8+PsUEqi8tDO9
-         +kbv6C2Pe8g9zm8VWkngZg/bxxCccXvVaWPCe9xQqp+WY3ON3OxJ2znSmWAE+EENncbH
-         4fSE3kJWctnbspSbxOsZOuvq1LOckGUWBrF6UVfogGEHRJlfbsqmLDC7m5hV4rshxzd2
-         jnANforx9S9sOTxZZrPJIuIE7YuR5xz1THyQAeL8aaiLQC3qfo6zL7uw6afMiBpCJ6j3
-         Bevg==
-X-Gm-Message-State: ANoB5pkkiGflJOSWE4Bv1f1VDu7uM6FhMtOsnZYq7hUTAbrhn8zxw9hR
-        T5pIgbV6STDRoiAYPeLsicUvIg==
-X-Google-Smtp-Source: AA0mqf4xPPdhz+v13Xt4vQdKecxKyl1FxW3RsaYobQ3KErB/lCfR9LYIg67YcYoXYdc507XoUrzK5A==
-X-Received: by 2002:a17:902:bc84:b0:17f:700a:2cd3 with SMTP id bb4-20020a170902bc8400b0017f700a2cd3mr71763689plb.36.1670321792718;
-        Tue, 06 Dec 2022 02:16:32 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id e18-20020a17090301d200b001782398648dsm6825490plh.8.2022.12.06.02.16.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 02:16:31 -0800 (PST)
-Date:   Tue, 6 Dec 2022 15:46:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, saravanak@google.com,
-        wusamuel@google.com, isaacmanjarres@google.com,
-        kernel-team@android.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de
-Subject: Re: [PATCH] cpufreq: schedutil: Optimize operations with single max
- CPU capacity
-Message-ID: <20221206101629.dbcuv3zdso44w3cq@vireshk-i7>
-References: <20221206101021.18113-1-lukasz.luba@arm.com>
+        Tue, 6 Dec 2022 05:20:09 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2312B658A;
+        Tue,  6 Dec 2022 02:20:08 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7ff329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ff:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B64801EC064F;
+        Tue,  6 Dec 2022 11:20:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670322006;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=sl4e+RriZSOsyS4K085UmZxwSNVZxIS3S1lRJkgBgQI=;
+        b=pRzA9pRiF2c0RJHu4ytcZU/OtYCGeVKjbSufHl9zu/Lg71N/HsKRNiuffGaoMtBDDvkU9u
+        YbafEcQpF4Bf7Py9x2Zf9Gd+zb51B/OEz+Y4VZu0NBC/dexDiNV2n2bL/n+tsJm7ejqw07
+        mSxtk4lJXpoLJFMrWc1iPcG24Y1TPYs=
+Date:   Tue, 6 Dec 2022 11:20:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     stuart hayes <stuart.w.hayes@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: acpi: Only set boost MSRs on supported CPUs
+Message-ID: <Y48XUjSMWVvohIy3@zn.tnic>
+References: <20221205175744.9746-1-stuart.w.hayes@gmail.com>
+ <e5e024a2-a530-9f4f-76f4-5f239b3608a3@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221206101021.18113-1-lukasz.luba@arm.com>
+In-Reply-To: <e5e024a2-a530-9f4f-76f4-5f239b3608a3@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06-12-22, 10:10, Lukasz Luba wrote:
-> The max CPU capacity is the same for all CPUs sharing frequency domain
-> and thus 'policy' object. There is a way to avoid heavy operations
-> in a loop for each CPU by leveraging this knowledge. Thus, simplify
-> the looping code in the sugov_next_freq_shared() and drop heavy
-> multiplications. Instead, use simple max() to get the highest utilization
-> from these CPUs. This is useful for platforms with many (4 or 6) little
-> CPUs.
+On Mon, Dec 05, 2022 at 12:07:05PM -0600, stuart hayes wrote:
 > 
-> The max CPU capacity must be fetched every time we are called, due to
-> difficulties during the policy setup, where we are not able to get the
-> normalized CPU capacity at the right time.
 > 
-> The stored value in sugov_policy::max is also than used in
-> sugov_iowait_apply() to calculate the right boost. Thus, that field is
-> useful to have in that sugov_policy struct.
+> On 12/5/2022 11:57 AM, Stuart Hayes wrote:
+> > Stop trying to set boost MSRs on CPUs that don't support boost.
+> > 
+> > This corrects a bug in the recent patch "Defer setting boost MSRs".
+> > 
+> > Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> > ---
+> >   drivers/cpufreq/acpi-cpufreq.c | 3 ++-
+> >   1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> > index bb58175a8d40..a7c5e312340e 100644
+> > --- a/drivers/cpufreq/acpi-cpufreq.c
+> > +++ b/drivers/cpufreq/acpi-cpufreq.c
+> > @@ -888,7 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> >   	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
+> >   		pr_warn(FW_WARN "P-state 0 is not max freq\n");
+> > -	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
+> > +	if (acpi_cpufreq_driver.set_boost)
+> > +		set_boost(policy, acpi_cpufreq_driver.boost_enabled);
+> >   	return result;
 > 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> My apologies--adding Boris, I forgot to put him on the "to" list.
 
-Can you please divide this into two patches, one for just moving max
-and one for looping optimization ? Else we may end up reverting
-everything once again.
+Yap, that does it.
+
+Reported-by: Borislav Petkov (AMD) <bp@alien8.de>
+Tested-by: Borislav Petkov (AMD) <bp@alien8.de>
+
+Thx.
 
 -- 
-viresh
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
