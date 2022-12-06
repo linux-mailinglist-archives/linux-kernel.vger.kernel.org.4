@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B29C643F0A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02269643F08
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:50:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234250AbiLFIun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
+        id S234232AbiLFIub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:50:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234272AbiLFIud (ORCPT
+        with ESMTP id S230480AbiLFIu1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:50:33 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753E218E2E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:50:31 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id cf42so16814973lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:50:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EbhyIR5iqOHGIwbpWPeuDBH9qoKo5A/INqe+aQ5y4vo=;
-        b=5NGK/yeiJ0K6G5YOutDLflZmhU/ZvdLbI7KsGD9KQwuSRwHBlgc+hcoXLdfLslQKlk
-         XZB92ji5j+hXYfzjV6yveuKkMB4XAjNHN2RMBYfwWabNR+hF/m7AMrrmEl1o2rye5BjM
-         Lo3NU8DaFvgzgdxqZv9grCTWun77NuIXzQEfUf0QXBxhKVmPKb2n9IXqMYvT1lYmamN+
-         agy9TU4oHjQO7asyx0Mup87TOAPgVMK6BoNEUngrcaHmQTCv4j0k6uQXDGqF86D9kKh7
-         Hp31MKtOLgf1Vsu/cCJgfZ8oA3C2t8BjMaLTfo5X1Sw4JdqR6o1Oyz7jwpeVO0wciaum
-         hBgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EbhyIR5iqOHGIwbpWPeuDBH9qoKo5A/INqe+aQ5y4vo=;
-        b=jgFyU26bO98FdAUr4X5BwWXm6h67t7xsyO55qLpc7IOzlaG+De5FtDp7KLhAmaKQVM
-         DxY119pFpW15p7VyrCxEbpxgPtjA1C4YwXpQY/ZNcgRGG1O0uaoBf6CMJaJJKdmaW2XK
-         0TpPaBaAv0r1pDaClA+wqEv87f4mzupr+uVrl1FjdCWEEcaxoMK23UWejKkI2n9wAWzH
-         37bds84z1Rg6V/LBrZM8V012KBZvo/kUG08uUJf/dkBO6ashtWUXTzt3DVWuqbuXivfx
-         oalhz3pqIWNi8fM2ZH9nG0uN1AYwqzvChMUOXrvRQ6h5XGpEXRNm7AA3aRdtHoNuis3O
-         0UpA==
-X-Gm-Message-State: ANoB5plCAiUoqQGhL4qGN3beCjUXmwQaMbOkV4SoSSXBereYCScD9Amf
-        qMhHXIhWIk8jH8+iSvd9bNQbeg==
-X-Google-Smtp-Source: AA0mqf4wpY92b8b9H+cbs8Ud1iTWWobIal0QmagWuTV4S8YirCzVn85vCbJNiW4nOtDloiErrWqmzA==
-X-Received: by 2002:a05:6512:10c3:b0:4b5:853b:73d with SMTP id k3-20020a05651210c300b004b5853b073dmr628184lfg.672.1670316629673;
-        Tue, 06 Dec 2022 00:50:29 -0800 (PST)
-Received: from localhost.localdomain ([91.216.213.152])
-        by smtp.gmail.com with ESMTPSA id f28-20020a05651c03dc00b0027730261350sm1578489ljp.131.2022.12.06.00.50.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 00:50:29 -0800 (PST)
-From:   Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rpmsg: char: Use preallocated SKBs.
-Date:   Tue,  6 Dec 2022 09:50:07 +0100
-Message-Id: <20221206085008.25388-1-piotr.wojtaszczyk@timesys.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 6 Dec 2022 03:50:27 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A866441
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:50:26 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p2Tei-0008PG-Gw; Tue, 06 Dec 2022 09:50:24 +0100
+Message-ID: <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
+Date:   Tue, 6 Dec 2022 09:50:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US, de-DE
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>
+References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
+ <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
+ <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
+ <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
+ <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
+ <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
+ <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
+ about missing Link:
+In-Reply-To: <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1670316626;59e58b62;
+X-HE-SMSGID: 1p2Tei-0008PG-Gw
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,195 +52,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On a message reception copy the message to a SKB taken from preallocated
-pool instead of allocating a new SKB each time.
-During high rpmsg traffic this reduces consumed CPU time noticeably.
+On 06.12.22 08:44, Joe Perches wrote:
+> On Tue, 2022-12-06 at 08:17 +0100, Thorsten Leemhuis wrote:
+>> On 06.12.22 07:27, Thorsten Leemhuis wrote:
+>>> On 06.12.22 06:54, Joe Perches wrote:
+> []
+>>>> and perhaps a more
+>>>> generic, "is the thing in front of a URI/URL" a known/supported entry,
+>>>> instead of using an known invalid test would be a better mechanism.
+>>>
+>>> Are you sure about that? It's not that I disagree completely, but it
+>>> sounds overly restrictive to me and makes it harder for new tags to
+>>> evolve in case we might want them.
+> 
+> It's easy to add newly supported values to a list.
+> 
+>>> And what tags would be on this allow-list? Anything else then "Link" and
+>>> "Patchwork"? Those are the ones that looked common and valid to me when
+>>> I ran
+>>>
+>>> git log --grep='http' v4.0.. | grep http | grep -v '    Link: ' | less
+>>>
+>>> and skimmed the output. Maybe "Datasheet" should be allowed, too -- not
+>>> sure.
+> []
+>>> But I found a few others that likely should be on the disallow list:
+>>> "Closes:", "Bug:", "Gitlab issue:", "References:", "Ref:", "Bugzilla:",
+>>> "RHBZ:", and "link", as "Link" should be used instead in all of these
+>>> cases afaics.
+> 
+> Do understand please that checkpatch will never be perfect.
+> At best, it's just a guidance tool.
 
-Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
----
- drivers/rpmsg/rpmsg_char.c       | 58 ++++++++++++++++++++++++++++----
- drivers/rpmsg/rpmsg_internal.h   | 21 ++++++++++++
- drivers/rpmsg/virtio_rpmsg_bus.c | 21 ------------
- 3 files changed, 72 insertions(+), 28 deletions(-)
+Of course -- and that's actually a reason why I prefer a disallow list
+over an allow list, as that gives guidance in the way of "don't use this
+tag, use Link instead" instead of enforcing "always use Link: when
+linking somewhere" (now that I've written it like that it feels even
+more odd, because it's obvious that it's a link, so why bother with a
+tag; but whatever).
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index ac50ed757765..76546ba72cdc 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -75,9 +75,44 @@ struct rpmsg_eptdev {
- 
- 	spinlock_t queue_lock;
- 	struct sk_buff_head queue;
-+	struct sk_buff_head skb_pool;
- 	wait_queue_head_t readq;
- };
- 
-+static inline
-+struct sk_buff *rpmsg_eptdev_get_skb(struct rpmsg_eptdev *eptdev)
-+{
-+	struct sk_buff *skb;
-+
-+	skb = skb_dequeue(&eptdev->skb_pool);
-+	if (!skb)
-+		skb = alloc_skb(MAX_RPMSG_BUF_SIZE, GFP_ATOMIC);
-+	return skb;
-+}
-+
-+static inline
-+void rpmsg_eptdev_put_skb(struct rpmsg_eptdev *eptdev, struct sk_buff *skb)
-+{
-+	/* Recycle the skb */
-+	skb->tail = 0;
-+	skb->len = 0;
-+	skb_queue_head(&eptdev->skb_pool, skb);
-+}
-+
-+static void rpmsg_eptdev_free_all_skb(struct rpmsg_eptdev *eptdev)
-+{
-+	struct sk_buff *skb;
-+
-+	while (!skb_queue_empty(&eptdev->queue)) {
-+		skb = skb_dequeue(&eptdev->queue);
-+		kfree_skb(skb);
-+	}
-+	while (!skb_queue_empty(&eptdev->skb_pool)) {
-+		skb = skb_dequeue(&eptdev->skb_pool);
-+		kfree_skb(skb);
-+	}
-+}
-+
- static int rpmsg_eptdev_destroy(struct device *dev, void *data)
- {
- 	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
-@@ -104,7 +139,7 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	struct rpmsg_eptdev *eptdev = priv;
- 	struct sk_buff *skb;
- 
--	skb = alloc_skb(len, GFP_ATOMIC);
-+	skb = rpmsg_eptdev_get_skb(eptdev);
- 	if (!skb)
- 		return -ENOMEM;
- 
-@@ -126,6 +161,18 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- 	struct rpmsg_endpoint *ept;
- 	struct rpmsg_device *rpdev = eptdev->rpdev;
- 	struct device *dev = &eptdev->dev;
-+	struct sk_buff *skb;
-+	int i;
-+
-+	/* Preallocate 8 SKBs */
-+	for (i = 0; i < 8; i++) {
-+		skb = rpmsg_eptdev_get_skb(eptdev);
-+		if (!skb) {
-+			rpmsg_eptdev_free_all_skb(eptdev);
-+			return -ENOMEM;
-+		}
-+		rpmsg_eptdev_put_skb(eptdev, skb);
-+	}
- 
- 	get_device(dev);
- 
-@@ -146,7 +193,6 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- {
- 	struct rpmsg_eptdev *eptdev = cdev_to_eptdev(inode->i_cdev);
- 	struct device *dev = &eptdev->dev;
--	struct sk_buff *skb;
- 
- 	/* Close the endpoint, if it's not already destroyed by the parent */
- 	mutex_lock(&eptdev->ept_lock);
-@@ -157,10 +203,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- 	mutex_unlock(&eptdev->ept_lock);
- 
- 	/* Discard all SKBs */
--	while (!skb_queue_empty(&eptdev->queue)) {
--		skb = skb_dequeue(&eptdev->queue);
--		kfree_skb(skb);
--	}
-+	rpmsg_eptdev_free_all_skb(eptdev);
- 
- 	put_device(dev);
- 
-@@ -209,7 +252,7 @@ static ssize_t rpmsg_eptdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 	if (copy_to_iter(skb->data, use, to) != use)
- 		use = -EFAULT;
- 
--	kfree_skb(skb);
-+	rpmsg_eptdev_put_skb(eptdev, skb);
- 
- 	return use;
- }
-@@ -358,6 +401,7 @@ static int rpmsg_eptdev_create(struct rpmsg_ctrldev *ctrldev,
- 	mutex_init(&eptdev->ept_lock);
- 	spin_lock_init(&eptdev->queue_lock);
- 	skb_queue_head_init(&eptdev->queue);
-+	skb_queue_head_init(&eptdev->skb_pool);
- 	init_waitqueue_head(&eptdev->readq);
- 
- 	device_initialize(dev);
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index 3fc83cd50e98..5acaa54a277a 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -15,6 +15,27 @@
- #include <linux/rpmsg.h>
- #include <linux/poll.h>
- 
-+/*
-+ * We're allocating buffers of 512 bytes each for communications. The
-+ * number of buffers will be computed from the number of buffers supported
-+ * by the vring, upto a maximum of 512 buffers (256 in each direction).
-+ *
-+ * Each buffer will have 16 bytes for the msg header and 496 bytes for
-+ * the payload.
-+ *
-+ * This will utilize a maximum total space of 256KB for the buffers.
-+ *
-+ * We might also want to add support for user-provided buffers in time.
-+ * This will allow bigger buffer size flexibility, and can also be used
-+ * to achieve zero-copy messaging.
-+ *
-+ * Note that these numbers are purely a decision of this driver - we
-+ * can change this without changing anything in the firmware of the remote
-+ * processor.
-+ */
-+#define MAX_RPMSG_NUM_BUFS	(512)
-+#define MAX_RPMSG_BUF_SIZE	(512)
-+
- #define to_rpmsg_device(d) container_of(d, struct rpmsg_device, dev)
- #define to_rpmsg_driver(d) container_of(d, struct rpmsg_driver, drv)
- 
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 3d9e442883e1..6552928a440d 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -133,27 +133,6 @@ struct virtio_rpmsg_channel {
- #define to_virtio_rpmsg_channel(_rpdev) \
- 	container_of(_rpdev, struct virtio_rpmsg_channel, rpdev)
- 
--/*
-- * We're allocating buffers of 512 bytes each for communications. The
-- * number of buffers will be computed from the number of buffers supported
-- * by the vring, upto a maximum of 512 buffers (256 in each direction).
-- *
-- * Each buffer will have 16 bytes for the msg header and 496 bytes for
-- * the payload.
-- *
-- * This will utilize a maximum total space of 256KB for the buffers.
-- *
-- * We might also want to add support for user-provided buffers in time.
-- * This will allow bigger buffer size flexibility, and can also be used
-- * to achieve zero-copy messaging.
-- *
-- * Note that these numbers are purely a decision of this driver - we
-- * can change this without changing anything in the firmware of the remote
-- * processor.
-- */
--#define MAX_RPMSG_NUM_BUFS	(512)
--#define MAX_RPMSG_BUF_SIZE	(512)
--
- /*
-  * Local addresses are dynamically allocated on-demand.
-  * We do not dynamically assign addresses from the low 1024 range,
--- 
-2.38.1
+I also think the approach with a disallow list will not bother
+developers much, while the other forces them a bit to much into a scheme.
 
+> To me most of these are in the noise level, but perhaps all should just
+> use Link:
+> 
+> $ git log -100000 --format=email -P --grep='^\w+:[ \t]*http' | \
+>   grep -Poh '^\w+:[ \t]*http' | \
+>   sort | uniq -c | sort -rn
+>  103889 Link: http
+>     415 BugLink: http
+>     372 Patchwork: http
+>     270 Closes: http
+>     221 Bug: http
+>     121 References: http
+> [...]
+
+Ha, I considered doing something like that when I wrote my earlier mail,
+but was to lazy. :-D thx!
+
+Yeah, they are not that often, but I grew tired arguing about that,
+that's why I think checkpatch is the better place and in the better
+position to handle that.
+
+Anyway, so how to move forward now? Do you insist on a allow list (IOW:
+a Link: or Patchwork: before every http...)? Or is a disallow list with
+the most common unwanted tags for links (that you thankfully compiled)
+fine for you as well?
+
+Ciao, Thorsten
