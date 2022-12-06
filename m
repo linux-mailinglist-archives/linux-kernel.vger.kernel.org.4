@@ -2,123 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39C95643F79
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:11:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DF7643F7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiLFJK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:10:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56218 "EHLO
+        id S232143AbiLFJLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:11:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234619AbiLFJKe (ORCPT
+        with ESMTP id S233865AbiLFJLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:10:34 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C261E3F2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:10:07 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id a19so16544403ljk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:10:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=a8/S6ykdg/g49/FLME8o1MfbsUhOagdLOH5bnruHpgc=;
-        b=tVOT/KX5QXizryslSdAePiV+U23GGylwtj7MDpkRxFUOUoMhhe1p3yLmektj+AscQ2
-         plN8nnb4Ym6VVSr6WxMHAoLi2RaU8EGLQEjm2u5zDVrj6T77eC6cXLpKquV8Vr3lCDgc
-         1JGwzmHC/rCgv1xMhbqQXawa+66F3y72uXPM02vPxqGqT9yXADXZUGQOmo8MJ97zY4Gs
-         9fiAxVMubMdmmrXQrWBUKHvLz3sY0Bo33nq3eIWY8qYOD9929BjoKFRMuRNCOrluApiZ
-         fgcJSFMYfGXnmaK+Wq9kcLipzTOCxrP10zVzqXcPjMVLJJLCzGTGM8R9O6nUNn29AQ8y
-         dJcg==
+        Tue, 6 Dec 2022 04:11:23 -0500
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7031EEF8;
+        Tue,  6 Dec 2022 01:11:22 -0800 (PST)
+Received: by mail-qk1-f172.google.com with SMTP id m5so5458164qkg.0;
+        Tue, 06 Dec 2022 01:11:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a8/S6ykdg/g49/FLME8o1MfbsUhOagdLOH5bnruHpgc=;
-        b=AXUpS295MQv0PBCeQQ3pPMMP7oARX1qXWldzEkyeDssC6AiQMDeNrfnjZfMt/sEh+D
-         FE67LxzRDxXLkX6iRGiJP5b66kY3/aDWjraDWuSB6ZyopsT9/8HDdjswtmhxNA4m/QKm
-         yxXJk/w5OQ2PguWd2iq+4Ng+fjPz+8IRlT29z0Y9hCTpI9CntQajCfmFoLv9sNhrfbWT
-         cdqmAne55j5/FjSp2fR0UjyHn9+k2ugi/2ZRHjIuKKbb02koMgy+UttKVOEKWFcs5y5m
-         Y7+WX+oRXALKEGR0ic99dDYL+ndWz+ugLHt9GrObpP7BTu3gZmZ/EehtXogSgtNkltAL
-         tBKg==
-X-Gm-Message-State: ANoB5pka7X0dSs40fnZmgLEqa6O8Y0UERxNTKIkYZb3oKm2ARyA372Ac
-        17/qdqtlcjXnidn9BVotBVlZeBuwZyU0mbtHWik8XQ==
-X-Google-Smtp-Source: AA0mqf6D1FFx/swbUQRcuEkx7dLWfLvxXSQHuO+R/SXjyGe6LsEjbp8hORG9ZzHThisS+7u4R16tTw==
-X-Received: by 2002:a17:907:8b06:b0:7c0:8e3a:9a54 with SMTP id sz6-20020a1709078b0600b007c08e3a9a54mr25454851ejc.619.1670317794846;
-        Tue, 06 Dec 2022 01:09:54 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id v6-20020a170906180600b007c0c679ca2fsm4744150eje.26.2022.12.06.01.09.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 01:09:54 -0800 (PST)
-Date:   Tue, 6 Dec 2022 10:09:53 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Divya Koppera <Divya.Koppera@microchip.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, richardcochran@gmail.com,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v5 net-next 1/2] net: phy: micrel: Fixed error related to
- uninitialized symbol ret
-Message-ID: <Y48G4etaxXnmJJLF@nanopsycho>
-References: <20221206073511.4772-1-Divya.Koppera@microchip.com>
- <20221206073511.4772-2-Divya.Koppera@microchip.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xecAIxqgdkhlDnskCgGkdXEsAstHBuFzAgEKe0CMxQ0=;
+        b=KfytAYO9F49g5s9lztaqU/5+UzgojlMqCadE0j1zY2ueTk6LROKwr5e33ADEK4LLk1
+         0UJPo6tv4wt996NNvu4vvqbeIIQwOnsaj3WOjxY4bqL82SbHCHI16oGbfCrgTcf8tu4o
+         0GoHJucXkWyDrsB7OpRZrf/yK4M080sQSuypDRy8cNkvbYg/bTLYCc5u7Te0ciA+TeV2
+         q3872gY3q65/BFJUPqV5/p62sGm9HHFLhr3SfnxMvmRhG2IEFa2ebXaD3jFzZmUUoTz8
+         zPdjixlvlJSreK6ZgRLXfWgrXz1KpEMZddeP5OIqZ0u1L79FPPq65qnT5GZldNvYtTow
+         BcWA==
+X-Gm-Message-State: ANoB5pnZWKs1UoL/d+jHzPrRTQ4AxqblNmU0fX0SKenPNw/Vvqm3lTOO
+        RsKAoFp1pawCvpcmwntuC9+VrRtgi3+Osw==
+X-Google-Smtp-Source: AA0mqf7F/AAPhAhlvFo0AEEAXp2XGpuf5b+N+NcFZN/nHPHXqTC4IxZHT3gT5UyEcc/XDQAExGWKwg==
+X-Received: by 2002:a05:620a:1398:b0:6fa:1d51:74a1 with SMTP id k24-20020a05620a139800b006fa1d5174a1mr59677651qki.688.1670317881311;
+        Tue, 06 Dec 2022 01:11:21 -0800 (PST)
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
+        by smtp.gmail.com with ESMTPSA id o13-20020ac85a4d000000b003a68fe872a5sm2305892qta.96.2022.12.06.01.11.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 01:11:20 -0800 (PST)
+Received: by mail-yb1-f172.google.com with SMTP id s11so3280889ybe.2;
+        Tue, 06 Dec 2022 01:11:20 -0800 (PST)
+X-Received: by 2002:a25:9:0:b0:6f9:29ef:a5ee with SMTP id 9-20020a250009000000b006f929efa5eemr28698201yba.380.1670317880298;
+ Tue, 06 Dec 2022 01:11:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206073511.4772-2-Divya.Koppera@microchip.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221205163157.269335-1-nick.alcock@oracle.com> <20221205163157.269335-6-nick.alcock@oracle.com>
+In-Reply-To: <20221205163157.269335-6-nick.alcock@oracle.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 6 Dec 2022 10:11:08 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+Message-ID: <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+Subject: Re: [PATCH v10 05/13] kbuild: remove MODULE_LICENSE/AUTHOR/DESCRIPTION
+ in non-modules
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, masahiroy@kernel.org,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        akpm@linux-foundation.org, eugene.loh@oracle.com,
+        kris.van.hees@oracle.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tue, Dec 06, 2022 at 08:35:10AM CET, Divya.Koppera@microchip.com wrote:
->Initialized return variable
+Hi Nick,
 
-Not only here, but in the patch/patchset subject, you should be
-imperative to the codebase and tell it what to do.
+Thanks for your patch!
 
+On Mon, Dec 5, 2022 at 5:34 PM Nick Alcock <nick.alcock@oracle.com> wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations in
+> non-modules will cause modprobe to misidentify their containing object
+> file as a module when it is not, which might cause it to spuriously fail
+> when trying to load something that is built in to the kernel.  They
+> also cause misconstruction of modules.builtin.objs, leading to incorrect
+> output in kallmodsyms (notating things as being in modules when they
+> actually cannot be built as a module at all).
+>
+> Automatically identified with the new tristate checker, and purged with
+> sed and a subsequent make allmodconfig to double-check.
+>
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
 
->
->Fixes Old smatch warnings:
->drivers/net/phy/micrel.c:1750 ksz886x_cable_test_get_status() error:
->uninitialized symbol 'ret'.
->
->Reported-by: kernel test robot <lkp@intel.com>
->Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->Fixes: 21b688dabecb ("net: phy: micrel: Cable Diag feature for lan8814 phy")
->Reviewed-by: Andrew Lunn <andrew@lunn.ch>
->Signed-off-by: Divya Koppera <Divya.Koppera@microchip.com>
->---
->v4 -> v5:
->- No changes, added reviewed by tag.
->
->v3 -> v4:
->- Split the patch for different warnings.
->
->v1 -> v3:
->- No changes
->---
-> drivers/net/phy/micrel.c | 3 ++-
-> 1 file changed, 2 insertions(+), 1 deletion(-)
->
->diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
->index 26ce0c5defcd..1bcdb828db56 100644
->--- a/drivers/net/phy/micrel.c
->+++ b/drivers/net/phy/micrel.c
->@@ -2088,7 +2088,8 @@ static int ksz886x_cable_test_get_status(struct phy_device *phydev,
-> 	const struct kszphy_type *type = phydev->drv->driver_data;
-> 	unsigned long pair_mask = type->pair_mask;
-> 	int retries = 20;
->-	int pair, ret;
->+	int ret = 0;
->+	int pair;
-> 
-> 	*finished = false;
-> 
->-- 
->2.17.1
->
+I can (sort of) agree with the MODULE_LICENSE(), as it duplicates the
+SPDX-License-Identifier at the top.
+However, you don't explain why it is a good thing to remove the
+MODULE_{AUTHOR,DESCRIPTION}, too.  This is useful information, in an
+easy-to-parse format.
+
+Moreover, many of the affected drivers might be converted into modules
+in the near or far future.
+
+If the presence of these causes issues for the tooling, perhaps the
+tooling can be fixed instead?
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
