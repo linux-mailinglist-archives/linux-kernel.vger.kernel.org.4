@@ -2,133 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0CE6448D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CE86448DB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:10:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235462AbiLFQKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:10:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S235439AbiLFQK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:10:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235271AbiLFQJl (ORCPT
+        with ESMTP id S235422AbiLFQKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:09:41 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9663AC2F;
-        Tue,  6 Dec 2022 08:04:35 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id s5so20867409edc.12;
-        Tue, 06 Dec 2022 08:04:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t8cA4ACelgyjXGYdUQh+jD+jJuegWDTJ6AcOocRBXlg=;
-        b=UDbZ7YkU9hRMLDz1egSCEnbQlgdWZjEVy636iYNE+34e/fSxF62gaDd6CTMdppFtCK
-         gg/tmHGxjv6MmTRtOIK6cx2Jjb3mrtGU3frQXEfew2/+LTUEgbnyISdsKs3uGml2JOtZ
-         JvYal2m3xNBsJGKirr1ul8T5Nqd523nKJZ5j/6tsiWtmmwa5Lq9hS9GDQVfeeHi8DuNO
-         9AH2mDVYfYFz3XMKsNqvPsJgk2ntQaoPQjCS/0XXQ47EzhHk/ZzAcZeGVyZBpXi0/BKY
-         ja42TGmlgxjL8R53NfB3B/0xZOOKq7jWt3JyWFWCklmO4Nc0rmdZcq3WlTtSguff+bFS
-         +xvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t8cA4ACelgyjXGYdUQh+jD+jJuegWDTJ6AcOocRBXlg=;
-        b=olay62LRaSe+dfFDCKnIqP9H0/J1TI00PjCUeh1sNY33HWirTT8uF8bilNfoJB6Kyf
-         91Z6DtEM5ykYFgCIRLWlUMPpx9WqsUfLkP2rFmva2yXh6oVH6+O8tOLCruPVyRV8CguT
-         HfikQ4Eb50GssVAztN7UFqC3H2iDyRHGlBGLUrtQcrW2TXB3Q1PZwDQWlz83LCeV15Wt
-         YZXzoIEuigsjF4nnagax/gr90Qup2Al0YlFLZh4DZ4sJeJlIhCC5JM0LQGK2wjhmYJab
-         WU0GJTtdQQzWThheH1gIkjREueXY5HRQ60Omy6gmd5cOcXuCOPwDsgzKBVTwAmVbzfz1
-         tdcA==
-X-Gm-Message-State: ANoB5pkht0eqnziw4oiM6deE8BgS4crbpgClWy/Tp45Q+uyxPhx6QTeY
-        NU9jbCphdqVxIxbGOenbkSc=
-X-Google-Smtp-Source: AA0mqf6eCz9WrlnsQ6nH/cJ10vu3pmDPK2/Tun57q7E62E++v7Ogms9pw0K/xifG+5+Clvkvi4W2KQ==
-X-Received: by 2002:aa7:d1c5:0:b0:46b:a536:e8d0 with SMTP id g5-20020aa7d1c5000000b0046ba536e8d0mr26487265edp.261.1670342673471;
-        Tue, 06 Dec 2022 08:04:33 -0800 (PST)
-Received: from skbuf ([188.26.184.215])
-        by smtp.gmail.com with ESMTPSA id gi20-20020a1709070c9400b0077d6f628e14sm7565992ejc.83.2022.12.06.08.04.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 08:04:33 -0800 (PST)
-Date:   Tue, 6 Dec 2022 18:04:30 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        John Crispin <john@phrozen.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Marek Vasut <marex@denx.de>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        UNGLinuxDriver@microchip.com,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Kurt Kanzenbach <kurt@linutronix.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        George McCollister <george.mccollister@gmail.com>
-Subject: Re: [PATCH v4 net-next 0/9] dt-binding preparation for ocelot
- switches
-Message-ID: <20221206160430.4kiyrzrumcc6dp2g@skbuf>
-References: <20221202204559.162619-1-colin.foster@in-advantage.com>
+        Tue, 6 Dec 2022 11:10:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C7F3AC33;
+        Tue,  6 Dec 2022 08:04:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DDDD617A0;
+        Tue,  6 Dec 2022 16:04:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BE8C433C1;
+        Tue,  6 Dec 2022 16:04:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670342691;
+        bh=gLpDTa+rhIH8NgaAcvNWyhQOtMSJQxHMPFZgL9hpIWI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UF60dVUP/aF9XqgJKVxVlccO8WHFfVB+F8TBKwO1Ir+7+A95I+cWjyQ/89GNogrrJ
+         VjewJijvOODIWPYGIFOs0lvI2Xjz9XWsL/cq/ERPHHWGhU2LzvwfIVFdbj69IdQTl4
+         Fwr55ea12m70z4dZfL7YmtW0+dTRXkv3sN2AlY4A=
+Date:   Tue, 6 Dec 2022 17:04:49 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     jeffxu@chromium.org
+Cc:     skhan@linuxfoundation.org, keescook@chromium.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH v5 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+Message-ID: <Y49oIR6/ULTqlcwL@kroah.com>
+References: <20221206152358.1966099-1-jeffxu@google.com>
+ <20221206152358.1966099-4-jeffxu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221202204559.162619-1-colin.foster@in-advantage.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221206152358.1966099-4-jeffxu@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
+On Tue, Dec 06, 2022 at 03:23:55PM +0000, jeffxu@chromium.org wrote:
+> --- a/kernel/pid_namespace.c
+> +++ b/kernel/pid_namespace.c
+> @@ -110,6 +110,11 @@ static struct pid_namespace *create_pid_namespace(struct user_namespace *user_ns
+>  	ns->ucounts = ucounts;
+>  	ns->pid_allocated = PIDNS_ADDING;
+>  
+> +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> +	ns->memfd_noexec_scope =
+> +		task_active_pid_ns(current)->memfd_noexec_scope;
+> +#endif
 
-On Fri, Dec 02, 2022 at 12:45:50PM -0800, Colin Foster wrote:
-> Ocelot switches have the abilitiy to be used internally via
-> memory-mapped IO or externally via SPI or PCIe. This brings up issues
-> for documentation, where the same chip might be accessed internally in a
-> switchdev manner, or externally in a DSA configuration. This patch set
-> is perparation to bring DSA functionality to the VSC7512, utilizing as
-> much as possible with an almost identical VSC7514 chip.
-> 
-> This patch set changed quite a bit from v2, so I'll omit the background
-> of how those sets came to be. Rob offered a lot of very useful guidance.
-> My thanks.
-> 
-> At the end of the day, with this patch set, there should be a framework
-> to document Ocelot switches (and any switch) in scenarios where they can
-> be controlled internally (ethernet-switch) or externally (dsa-switch).
-> 
-> ---
+.c files should never have #if in them.  Can't you put this in a .h file
+properly so that this does not get really messy over time?
 
-This looks like a very clean implementation of what I had in mind
-(better than I could have done it). Sorry for not being able to help
-with the json-schema bits and thanks to Rob for doing so.
 
-Would you mind adding one more patch at the beginning of the series
-which syncs the maintainers from the DSA (and now also ethernet-switch)
-dt-bindings with the MAINTAINERS file? That would mean removing Vivien
-(see commit 6ce3df596be2 ("MAINTAINERS: Move Vivien to CREDITS")) and
-adding myself. This is in principle such that you don't carry around a
-not-up-to-date list of maintainers when adding new schemas.
 
-I don't know if we could do something about maintainer entries in
-schemas not becoming out of date w.r.t. the MAINTAINERS file.
+> +
+>  	return ns;
+>  
+>  out_free_idr:
+> @@ -255,6 +260,45 @@ void zap_pid_ns_processes(struct pid_namespace *pid_ns)
+>  	return;
+>  }
+>  
+> +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+
+Same here.
+
+thanks,
+
+greg k-h
