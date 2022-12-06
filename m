@@ -2,73 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5134643C1E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 05:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028E2643C3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 05:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbiLFEPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 23:15:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34646 "EHLO
+        id S232054AbiLFEZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 23:25:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLFEPm (ORCPT
+        with ESMTP id S229982AbiLFEZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 23:15:42 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1F7BC2B
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 20:15:40 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id i2so13107001vsc.1
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 20:15:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dj7bj7s2N2DRMLBZoVp/5SSfoND0SEldqQgP3dtmfSE=;
-        b=sR8ZOppEdKACGQKI+m/lf7k9pj0JDJ5U6b0HzZtXcWTUtz+utBxWsZW7ughNXBAK53
-         6Dj2mHadB6Rec+oC41SDOh2PZYoHx4DnEaLJS+jmnC7emU4ekwtwzTCjj57lqykOAF9Z
-         vnPY8L9CuXaEjJ5XxIENtbYZxJlaboot0nwm/f1cMmAT6tFPOwWvEe0I6gZIgpBaGNPn
-         qoX5OXJEif1fPuGZipFPksYuXC/AjqoVJJPnXT2RoL+B7QUdi5qZvNlCCF4WNZYCu77A
-         XJZWd8yDJSCea12tTfwX4/v9O4Ud6jeEfv8X05dJQyTlcEUoN+7mtG6r3+OhvqHP+QDf
-         AH9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dj7bj7s2N2DRMLBZoVp/5SSfoND0SEldqQgP3dtmfSE=;
-        b=zMhwUGMMXe51w+ULmFH9jwh/82HnpSBPm0ZKCv77Hy/qTld4zXdITMgwA37vaXtBee
-         xRMP+BwNnOWuynlFTICUb3zXVjO/uqd4nUm1aqV2mjA8/mRPLWghZ7YK6ODecw0W/UrZ
-         6Ixe9B+oV5mr2GkG6NH0OL9hL7N3uUMz57LB01iLaAYQ2EwFKL4tfq7w5TvG5V+3PCLd
-         z9vd6mXr3+llN8yMNlLiFDD6RPuzN9HQmCKU1yHCKc/RSUkedxCmiON9JhIJOBGqSe+E
-         MIaLMVyUlI337dTheO/bRSmv1cYe87xVORLr02liy3mUwUrwUrIxFAAAUlth+XVKTkpL
-         68DQ==
-X-Gm-Message-State: ANoB5pkWiJJdz4lFxbYgJ1B5BiOzll2BoYJT/tDwWlpnephM1Fb1H1B1
-        S0lued+F9rXqsArCCsQXZoy8TuoA+BL+uvIQs6Ridw==
-X-Google-Smtp-Source: AA0mqf497FUV/AaphX+85vZn+n5d1egSs4oaVbE5DJnYld3jxopQO0ccCy+n4mg5b7aqpMUj/7Jb0ilIZ7xjCXmm1cQ=
-X-Received: by 2002:a67:ea04:0:b0:3a7:d7bc:c2e9 with SMTP id
- g4-20020a67ea04000000b003a7d7bcc2e9mr38009687vso.61.1670300139777; Mon, 05
- Dec 2022 20:15:39 -0800 (PST)
+        Mon, 5 Dec 2022 23:25:33 -0500
+Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2E81A22E;
+        Mon,  5 Dec 2022 20:25:32 -0800 (PST)
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182]) (authenticated)
+        by conssluserg-05.nifty.com with ESMTP id 2B64PIig018332;
+        Tue, 6 Dec 2022 13:25:18 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2B64PIig018332
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1670300719;
+        bh=lRhwG5d1oTcfBZkynjSenWdo4di6NnnnWPwMnzU2Xzw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XY6WTM2Cf5i8tFHGXSM2VOoF6nngwWkXMnUiUJ0+SS/iOFb/GVjHRprI+0hK4XjOJ
+         mfiqYb8q5GHvKtaRaPaVW/9LS3HVcehR2hbqLHZjp9JkXpDSs9A7jfSw4c+jy/+zgD
+         EFJ3wwMfNWNLWmkFofTfRgTMNCUps19mRjEGHURg0b1bItMT1bIkBMLsz1mzU+RKp4
+         sQF3ZTnhWxKF56K+c5dDw9XO2SxKR1KGZjlVI8k1skOV2846YS8jDRmGxLKs0W3PDj
+         QqDTsUUTXWW9/AQjPy0UX7BEfm1ifLdG9MWSqIjQ4AkRoH8hTuljQxMM7Xh3M9y6Kf
+         1y/pn/BhybFGw==
+X-Nifty-SrcIP: [209.85.167.182]
+Received: by mail-oi1-f182.google.com with SMTP id v70so7226371oie.3;
+        Mon, 05 Dec 2022 20:25:18 -0800 (PST)
+X-Gm-Message-State: ANoB5pkxBl7R/CtjyAlBqjk40tZGAHjz7wimoPKKG78US/rRKYSKchwG
+        uWc7GFQQ8YsQHcsrkThyRg8QhEx2v+ziYW1eg90=
+X-Google-Smtp-Source: AA0mqf7R6bvx9C8DxH0OpzLBptbqxc8k8+7Z54KBrm/jOWiB+tWfc38sQV54qx9STVLGuBPN1Luxp84N+6JOWgAIOIQ=
+X-Received: by 2002:aca:1c06:0:b0:354:28ae:23b3 with SMTP id
+ c6-20020aca1c06000000b0035428ae23b3mr32579050oic.287.1670300717668; Mon, 05
+ Dec 2022 20:25:17 -0800 (PST)
 MIME-Version: 1.0
-References: <20221206023406.3182800-1-almasrymina@google.com> <87wn75dy1q.fsf@yhuang6-desk2.ccr.corp.intel.com>
-In-Reply-To: <87wn75dy1q.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Mon, 5 Dec 2022 20:15:28 -0800
-Message-ID: <CAHS8izMxoP9u3=Xa7D_GzNDSyLCuj-pSGbJdsp8E_D+pWBgjhA@mail.gmail.com>
-Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Rientjes <rientjes@google.com>
+References: <20221027162839.410720-1-masahiroy@kernel.org> <202211161056.1B9611A@keescook>
+ <CAK7LNATWbvpovH8qsGMX-5-31QiQ6pjKNnm+YEDEqr4io1hrSw@mail.gmail.com> <202211161406.EF075E28E9@keescook>
+In-Reply-To: <202211161406.EF075E28E9@keescook>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 6 Dec 2022 13:24:41 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASBwfyt_2dbT1-MEcGwF8hQogJgjYnEE-e-twtL1WNYhg@mail.gmail.com>
+Message-ID: <CAK7LNASBwfyt_2dbT1-MEcGwF8hQogJgjYnEE-e-twtL1WNYhg@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and AR=llvm-ar
+To:     Kees Cook <keescook@chromium.org>
+Cc:     linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,332 +64,137 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 7:14 PM Huang, Ying <ying.huang@intel.com> wrote:
+On Thu, Nov 17, 2022 at 7:07 AM Kees Cook <keescook@chromium.org> wrote:
 >
-> Mina Almasry <almasrymina@google.com> writes:
+> On Thu, Nov 17, 2022 at 05:37:31AM +0900, Masahiro Yamada wrote:
+> > On Thu, Nov 17, 2022 at 4:01 AM Kees Cook <keescook@chromium.org> wrote:
+> > >
+> > > On Fri, Oct 28, 2022 at 01:28:39AM +0900, Masahiro Yamada wrote:
+> > > > Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
+> > > >   /usr/bin/ar terminated with signal 13 [Broken pipe]
+> > > >
+> > > > Nathan Chancellor reported the latest AR=llvm-ar shows
+> > > >   error: write on a pipe with no reader
+> > > >
+> > > > The latter occurs since LLVM commit 51b557adc131 ("Add an error message
+> > > > to the default SIGPIPE handler").
+> > > >
+> > > > The resulting vmlinux is correct, but it is better to silence it.
+> > > >
+> > > > 'head -n1' exits after reading the first line, so the pipe is closed.
+> > > >
+> > > > Use 'sed -n 1p' to eat the stream till the end.
+> > >
+> > > I think this is wrong because it needlessly consumes CPU time. SIGPIPE
+> > > is _needed_ to stop a process after we found what we needed, but it's up
+> > > to the caller (the shell here) to determine what to do about it.
+> > >
+> > > Similarly, that LLVM commit is wrong -- tools should _not_ catch their
+> > > own SIGPIPEs. They should be caught by their callers.
+> > >
+> > > For example, see:
+> > >
+> > > $ seq 10000 | head -n1
+> > > 1
+> > >
+> > > ^^^ no warnings from the shell (caller of "seq")
+> > > And you can see it _is_ being killed by SIGPIPE:
+> > >
+> > > $ strace seq 1000 | head -n1
+> > > ...
+> > > write(1, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14"..., 8192) = 8192
+> > > 1
+> > > write(1, "\n1861\n1862\n1863\n1864\n1865\n1866\n1"..., 4096) = -1 EPIPE (Broken pipe)
+> > > --- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=3503448, si_uid=1000} ---
+> > > +++ killed by SIGPIPE +++
+> > >
+> > > If we use "sed -n 1p" seq will continue to run, consuming needless time
+> > > and CPU resources.
+> > >
+> > > So, I strongly think this is the wrong solution. SIGPIPE should be
+> > > ignored for ar, and LLVM should _not_ catch its own SIGPIPE.
+> > >
+> > > -Kees
+> >
+> >
+> > I thought of this - it is just wasting CPU time,
+> > but I did not come up with a better idea on the kbuild side.
+> >
+> > I do not want to use 2>/dev/null because it may hide
+> > non-SIGPIPE (i.e. real) errors.
 >
-> > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> > reclaim"") enabled demotion in memcg reclaim, which is the right thing
-> > to do, however, it introduced a regression in the behavior of
-> > try_to_free_mem_cgroup_pages().
-> >
-> > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
-> > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
-> > of the cgroup should reduce by nr_pages. The callers expect
-> > try_to_free_mem_cgroup_pages() to also return the number of pages
-> > reclaimed, not demoted.
-> >
-> > However, what try_to_free_mem_cgroup_pages() actually does is it
-> > unconditionally counts demoted pages as reclaimed pages. So in practnice
-> > when it is called it will often demote nr_pages and return the number of
-> > demoted pages to the caller. Demoted pages don't lower the memcg usage,
-> > and so try_to_free_mem_cgroup_pages() is not actually doing what the
-> > callers want it to do.
-> >
-> > Various things work suboptimally on memory tiered systems or don't work
-> > at all due to this:
-> >
-> > - memory.high enforcement likely doesn't work (it just demotes nr_pages
-> >   instead of lowering the memcg usage by nr_pages).
-> > - try_charge_memcg() will keep retrying the charge while
-> >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
-> >   making any room for the charge.
-> > - memory.reclaim has a wonky interface. It advertises to the user it
-> >   reclaims the provided amount but it will actually often demote that
-> >   amount.
-> >
-> > There may be more effects to this issue.
-> >
-> > To fix these issues I propose shrink_folio_list() to only count pages
-> > demoted from inside of sc->nodemask to outside of sc->nodemask as
-> > 'reclaimed'.
-> >
-> > For callers such as reclaim_high() or try_charge_memcg() that set
-> > sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
-> > actually reclaim nr_pages and return the number of pages reclaimed. No
-> > demoted pages would count towards the nr_pages requirement.
-> >
-> > For callers such as memory_reclaim() that set sc->nodemask,
-> > try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
-> > with either reclaim or demotion.
-> >
-> > Tested this change using memory.reclaim interface. I set up a test case where
-> > I allocate 500m in a cgroup, and then do:
-> >
-> >     echo "50m" > memory.reclaim
-> >
-> > Without this fix, my kernel demotes 70mb and reclaims 4 mb
-> > (memory.current is reduced by about 4mb).
-> >
-> > With this fix, my kernel demotes all memory possible and reclaims 60mb
-> > (memory.current is reduced by about 60mb).
-> >
-> > Signed-off-by: Mina Almasry <almasrymina@google.com>
-> >
-> > ---
-> >
-> > Changes in v3:
-> > - Reverted back to v1 implementation: "try to demote but don't count
-> >   demoted pages unless they are demoted to outside the nodemask" as Ying
-> >   suggested.
-> > - Made sure demotions that fall back to non next_demotion_target() are
-> >   not counted as Wei suggested.
-> > - Updated comment in shrink_folio_list() as Ying suggested.
-> > - Added before/after for the test case in commit message since Ying
-> >   asked.
-> > - Fixed call sites that don't provide sc->nodemask but expect demotion
-> >   from a specific node as Ying pointed out.
-> >
-> > Cc: weixugc@google.com
-> > Cc: ying.huang@intel.com
-> >
-> > This is developed on top of mm-unstable largely because I want the
-> > solution to be compatible with the recently added nodes= arg on
-> > mm-unstable.
-> > ---
-> >  mm/vmscan.c | 91 +++++++++++++++++++++++++++++++++++++++++++++--------
-> >  1 file changed, 78 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > index 2b42ac9ad755..f324e80395c3 100644
-> > --- a/mm/vmscan.c
-> > +++ b/mm/vmscan.c
-> > @@ -1555,13 +1555,18 @@ static void folio_check_dirty_writeback(struct folio *folio,
-> >               mapping->a_ops->is_dirty_writeback(folio, dirty, writeback);
-> >  }
-> >
-> > +struct demotion_control {
-> > +     struct migration_target_control *mtc;
-> > +     nodemask_t *demote_from_nodemask;
-> > +     unsigned long nr_demoted_outside_nodemask;
-> > +};
-> > +
-> >  static struct page *alloc_demote_page(struct page *page, unsigned long private)
-> >  {
-> >       struct page *target_page;
-> >       nodemask_t *allowed_mask;
-> > -     struct migration_target_control *mtc;
-> > -
-> > -     mtc = (struct migration_target_control *)private;
-> > +     struct demotion_control *dc = (struct demotion_control *)private;
-> > +     struct migration_target_control *mtc = dc->mtc;
-> >
-> >       allowed_mask = mtc->nmask;
-> >       /*
-> > @@ -1576,13 +1581,31 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
-> >       mtc->nmask = NULL;
-> >       mtc->gfp_mask |= __GFP_THISNODE;
-> >       target_page = alloc_migration_target(page, (unsigned long)mtc);
-> > -     if (target_page)
-> > +     if (!target_page) {
-> > +             mtc->gfp_mask &= ~__GFP_THISNODE;
-> > +             mtc->nmask = allowed_mask;
-> > +             target_page = alloc_migration_target(page, (unsigned long)mtc);
-> > +     }
-> > +
-> > +     if (!target_page)
-> >               return target_page;
-> >
-> > -     mtc->gfp_mask &= ~__GFP_THISNODE;
-> > -     mtc->nmask = allowed_mask;
-> > +     if (dc->demote_from_nodemask &&
-> > +         !node_isset(page_to_nid(target_page), *dc->demote_from_nodemask))
+> Yes, I've opened an upstream LLVM bug for this:
+> https://github.com/llvm/llvm-project/issues/59037
 >
-> Use mtc->nid directly?
->
+> --
+> Kees Cook
 
-mtc->nid is the next_demotion_node(). Wei's earlier comment is that
-the page may be allocated anywhere on the get_allowed_targets(), not
-necessarily the next_demotion_node(), so I don't think I can use
-mtc->nid. I think I have to check on which node the page was allocated
-as I'm doing here. Let me know if I missed something.
 
-> > +             dc->nr_demoted_outside_nodemask++;
-> >
-> > -     return alloc_migration_target(page, (unsigned long)mtc);
-> > +     return target_page;
-> > +}
-> > +
-> > +void free_demote_page(struct page *page, unsigned long private)
-> > +{
-> > +     struct demotion_control *dc = (struct demotion_control *)private;
-> > +
-> > +     if (dc->demote_from_nodemask &&
-> > +         !node_isset(page_to_nid(page), *dc->demote_from_nodemask))
->
-> ditto
->
-> > +             dc->nr_demoted_outside_nodemask--;
-> > +
-> > +     folio_put(page_folio(page));
-> >  }
-> >
-> >  /*
-> > @@ -1590,7 +1613,8 @@ static struct page *alloc_demote_page(struct page *page, unsigned long private)
-> >   * Folios which are not demoted are left on @demote_folios.
-> >   */
-> >  static unsigned int demote_folio_list(struct list_head *demote_folios,
-> > -                                  struct pglist_data *pgdat)
-> > +                                   struct pglist_data *pgdat,
-> > +                                   nodemask_t *nodemask)
-> >  {
-> >       int target_nid = next_demotion_node(pgdat->node_id);
-> >       unsigned int nr_succeeded;
-> > @@ -1608,6 +1632,12 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
-> >               .nmask = &allowed_mask
-> >       };
-> >
-> > +     struct demotion_control dc = {
-> > +             .mtc = &mtc,
-> > +             .demote_from_nodemask = nodemask,
-> > +             .nr_demoted_outside_nodemask = 0,
-> > +     };
-> > +
-> >       if (list_empty(demote_folios))
-> >               return 0;
-> >
-> > @@ -1617,13 +1647,13 @@ static unsigned int demote_folio_list(struct list_head *demote_folios,
-> >       node_get_allowed_targets(pgdat, &allowed_mask);
-> >
-> >       /* Demotion ignores all cpuset and mempolicy settings */
-> > -     migrate_pages(demote_folios, alloc_demote_page, NULL,
-> > -                   (unsigned long)&mtc, MIGRATE_ASYNC, MR_DEMOTION,
-> > +     migrate_pages(demote_folios, alloc_demote_page, free_demote_page,
-> > +                   (unsigned long)&dc, MIGRATE_ASYNC, MR_DEMOTION,
-> >                     &nr_succeeded);
-> >
-> >       __count_vm_events(PGDEMOTE_KSWAPD + reclaimer_offset(), nr_succeeded);
-> >
-> > -     return nr_succeeded;
-> > +     return dc.nr_demoted_outside_nodemask;
-> >  }
-> >
-> >  static bool may_enter_fs(struct folio *folio, gfp_t gfp_mask)
-> > @@ -1643,7 +1673,12 @@ static bool may_enter_fs(struct folio *folio, gfp_t gfp_mask)
-> >  }
-> >
-> >  /*
-> > - * shrink_folio_list() returns the number of reclaimed pages
-> > + * shrink_folio_list() returns the number of reclaimed pages.
-> > + *
-> > + * Demoted pages are counted as reclaimed iff:
-> > + *   (a) sc->nodemask arg is provided.
-> > + *   (b) page has been demoted from a node inside sc->nodemask to a node
-> > + *   outside sc->nodemask.
-> >   */
-> >  static unsigned int shrink_folio_list(struct list_head *folio_list,
-> >               struct pglist_data *pgdat, struct scan_control *sc,
-> > @@ -1653,6 +1688,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> >       LIST_HEAD(free_folios);
-> >       LIST_HEAD(demote_folios);
-> >       unsigned int nr_reclaimed = 0;
-> > +     unsigned int nr_demoted_outside_nodemask = 0;
-> >       unsigned int pgactivate = 0;
-> >       bool do_demote_pass;
-> >       struct swap_iocb *plug = NULL;
-> > @@ -2085,7 +2121,12 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> >       /* 'folio_list' is always empty here */
-> >
-> >       /* Migrate folios selected for demotion */
-> > -     nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
-> > +     nr_demoted_outside_nodemask =
-> > +             demote_folio_list(&demote_folios, pgdat, sc->nodemask);
-> > +
-> > +     if (sc->nodemask)
-> > +             nr_reclaimed += nr_demoted_outside_nodemask;
-> > +
-> >       /* Folios that could not be demoted are still in @demote_folios */
-> >       if (!list_empty(&demote_folios)) {
-> >               /* Folios which weren't demoted go back on @folio_list */
-> > @@ -2130,9 +2171,11 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> >  unsigned int reclaim_clean_pages_from_list(struct zone *zone,
-> >                                          struct list_head *folio_list)
-> >  {
-> > +     nodemask_t nodemask = NODE_MASK_NONE;
->
-> Is it necessary for us to use NODEMASK_ALLOC/NODEMASK_FREE to save stack space?
->
 
-I can certainly use NODEMASK_ALLOC/NODEMASK_FREE if you'd like. I
-think there are a few places that stack allocate nodemask_t already,
-including one place I recently added in memory_reclaim(), so it
-doesn't seem _necessary_ per say.
+BTW, Python does something similar by default.
+(noisy back-trace for SIGPIPE)
 
-If you're asking my opinion, AFAICT it's not an issue. I think you
-need > 32 numa nodes before nodemask_t becomes an array of size 2
-longs on a 32-bit machine, and even then I think it's not a huge deal.
-Up to you; I have no issue with converting to
-NODEMASK_ALLOC/NODEMASK_FREE in v4.
 
-> Best Regards,
-> Huang, Ying
->
-> >       struct scan_control sc = {
-> >               .gfp_mask = GFP_KERNEL,
-> >               .may_unmap = 1,
-> > +             .nodemask = &nodemask
-> >       };
-> >       struct reclaim_stat stat;
-> >       unsigned int nr_reclaimed;
-> > @@ -2140,6 +2183,12 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
-> >       LIST_HEAD(clean_folios);
-> >       unsigned int noreclaim_flag;
-> >
-> > +     /*
-> > +      * Set the nodemask in sc to indicate to shrink_folio_list() that we're
-> > +      * looking for reclaim from this node.
-> > +      */
-> > +     node_set(zone->zone_pgdat->node_id, nodemask);
-> > +
-> >       list_for_each_entry_safe(folio, next, folio_list, lru) {
-> >               if (!folio_test_hugetlb(folio) && folio_is_file_lru(folio) &&
-> >                   !folio_test_dirty(folio) && !__folio_test_movable(folio) &&
-> > @@ -7031,12 +7080,20 @@ static int balance_pgdat(pg_data_t *pgdat, int order, int highest_zoneidx)
-> >       unsigned long zone_boosts[MAX_NR_ZONES] = { 0, };
-> >       bool boosted;
-> >       struct zone *zone;
-> > +     nodemask_t nodemask = NODE_MASK_NONE;
-> >       struct scan_control sc = {
-> >               .gfp_mask = GFP_KERNEL,
-> >               .order = order,
-> >               .may_unmap = 1,
-> > +             .nodemask = &nodemask,
-> >       };
-> >
-> > +     /*
-> > +      * Set the nodemask in sc to indicate to kswapd_shrink_node() that we're
-> > +      * looking for reclaim from this node.
-> > +      */
-> > +     node_set(pgdat->node_id, nodemask);
-> > +
-> >       set_task_reclaim_state(current, &sc.reclaim_state);
-> >       psi_memstall_enter(&pflags);
-> >       __fs_reclaim_acquire(_THIS_IP_);
-> > @@ -7642,6 +7699,7 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
-> >       const unsigned long nr_pages = 1 << order;
-> >       struct task_struct *p = current;
-> >       unsigned int noreclaim_flag;
-> > +     nodemask_t nodemask = NODE_MASK_NONE;
-> >       struct scan_control sc = {
-> >               .nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
-> >               .gfp_mask = current_gfp_context(gfp_mask),
-> > @@ -7651,9 +7709,16 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
-> >               .may_unmap = !!(node_reclaim_mode & RECLAIM_UNMAP),
-> >               .may_swap = 1,
-> >               .reclaim_idx = gfp_zone(gfp_mask),
-> > +             .nodemask = &nodemask,
-> >       };
-> >       unsigned long pflags;
-> >
-> > +     /*
-> > +      * Set the nodemask in sc to indicate to shrink_node() that we're
-> > +      * looking for reclaim from this node.
-> > +      */
-> > +     node_set(pgdat->node_id, nodemask);
-> > +
-> >       trace_mm_vmscan_node_reclaim_begin(pgdat->node_id, order,
-> >                                          sc.gfp_mask);
-> >
-> > --
-> > 2.39.0.rc0.267.gcb52ba06e7-goog
->
+
+
+
+masahiro@zoe:/tmp$ cat test.py
+#!/usr/bin/python3
+for i in range(4000):
+    print(i)
+
+masahiro@zoe:/tmp$ ./test.py  |  head -n1
+0
+Traceback (most recent call last):
+  File "/tmp/./test.py", line 3, in <module>
+    print(i)
+BrokenPipeError: [Errno 32] Broken pipe
+
+
+
+
+
+
+This page
+https://www.geeksforgeeks.org/broken-pipe-error-in-python/
+
+suggests some workarounds.
+
+
+
+
+
+Python scripts potentially have this issue.
+
+
+
+
+
+
+$ ./scripts/diffconfig  .config.old  .config  | head -n1
+-104_QUAD_8 m
+Traceback (most recent call last):
+  File "/home/masahiro/ref/linux/./scripts/diffconfig", line 132, in <module>
+    main()
+  File "/home/masahiro/ref/linux/./scripts/diffconfig", line 111, in main
+    print_config("-", config, a[config], None)
+  File "/home/masahiro/ref/linux/./scripts/diffconfig", line 62, in print_config
+    print("-%s %s" % (config, value))
+BrokenPipeError: [Errno 32] Broken pipe
+
+
+
+
+
+
+
+What would you suggest for python scripts?
+
+
+
+
+
+
+-- 
+Best Regards
+Masahiro Yamada
