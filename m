@@ -2,187 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F93064479A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07C1D6447C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:17:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbiLFPIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:08:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S233778AbiLFPRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:17:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235323AbiLFPG7 (ORCPT
+        with ESMTP id S234965AbiLFPQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:06:59 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0972E9C5
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:03:19 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id o12so14676449pjo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 07:03:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RP30KXKl/PR6YPpKgU+DDNG5UwR2kZxBVDTlEl1cNxU=;
-        b=HPjs8mheLAahBm8OUAn4PnD0Mw9299JNdm/Ya3WP81eG9XgGqqNUb1NxHROe4uAzpa
-         pxH4GbCDjdsUHJZFXJDWpAGkq0hfWPstAQ4vbO8Nd7CmrtGPKaiK0LCfcK9X8GCoRloL
-         pYH55QtHDsWGwxU98YexyagX1ikk0x6JAHEyM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RP30KXKl/PR6YPpKgU+DDNG5UwR2kZxBVDTlEl1cNxU=;
-        b=ZPhiAce1AizwA3V2BdjJGENXOaHmfEwE4HW3rn2T0djJb0QEprM/GHlWQNyUeWhsm6
-         L0ADaJwo1IQcc7xzLMFm6YsKUURmeouFeBtEk+HYs/HLI1M1MvJVZUHJK4SXCO/fMSqd
-         /3+zOA63X69Vtd2UWvtLxn7z6uV0E1F/+rrtSZDIfa/feNFH3WO47mrYzuODjMwS9rZE
-         aJPjzGOnIXgHHH0LKl8plXKK78nPZYBiD+snYsiQm1L0Zqzp2+N3+ChZpIOXa+N96ELk
-         +/oEiXbTcmdeNsJ3VxX8+EtfMQA25HiUbVu8Uwk1Te4mw1IdWswzPKdAl2rCGOtvR5bx
-         DPmw==
-X-Gm-Message-State: ANoB5pmrjsGx+swgPrcYOsyIIIKIOfOXUyGytAqBdAc5A0DiuuMpscbA
-        Qe0LF2uXM/LxDlHAf6yGy5qiRw==
-X-Google-Smtp-Source: AA0mqf6IKN3LZHIUjL7BHnLwCPmED6KHQZ9tjiZ4ffklorTZcvYizCxxLPNGz7/31lHRh1As5QqOWA==
-X-Received: by 2002:a17:90a:13c4:b0:219:e3de:53e3 with SMTP id s4-20020a17090a13c400b00219e3de53e3mr7665466pjf.87.1670338978111;
-        Tue, 06 Dec 2022 07:02:58 -0800 (PST)
-Received: from jeffxud.c.googlers.com.com (30.202.168.34.bc.googleusercontent.com. [34.168.202.30])
-        by smtp.gmail.com with ESMTPSA id 62-20020a621441000000b00575bab45644sm3343019pfu.61.2022.12.06.07.02.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 07:02:57 -0800 (PST)
-From:   jeffxu@chromium.org
-To:     skhan@linuxfoundation.org, keescook@chromium.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        Jeff Xu <jeffxu@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v4 6/6] mm/memfd: security hook for memfd_create
-Date:   Tue,  6 Dec 2022 15:02:33 +0000
-Message-Id: <20221206150233.1963717-7-jeffxu@google.com>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-In-Reply-To: <20221206150233.1963717-1-jeffxu@google.com>
-References: <20221206150233.1963717-1-jeffxu@google.com>
+        Tue, 6 Dec 2022 10:16:50 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D0CC3891;
+        Tue,  6 Dec 2022 07:12:37 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 30206CE19DD;
+        Tue,  6 Dec 2022 15:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBBDC433D6;
+        Tue,  6 Dec 2022 15:12:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670339554;
+        bh=mGtG2UCNLb8zhz3Q6ArNChI7VGb5eTZ5ueFrfVstXD0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bo5y7lUSDSXWfZgfW+OZ4O8LIx502DSwi4Fm4epiyqnYf9KRbYyK7MM8P9H999BGY
+         6z46l9lxs+KnGbQSjen7JDqvNl4fDQfmIis5sRcSBT2AqRFjWYuGpZ3hSRBwVvmhCG
+         VyOsx743ycHsVK/LN54RaXYDyQo98XtoaWghHq8xYcZjS8pXmcGd0g3kJuwu1u/oxw
+         cJ7sIn8Xo3AsyiurYG6ZVzMgTNkj3Kw8zRGb6NOAzkwjPKrAIZt4WG/yCZ2DAhnjGy
+         FsZ7OMDupxLncDYgSkpRgoBaZOOLI0SD8Z+FQGrIh2FR4tt07STmbuRqCURjK4K53d
+         pAlD9Ibdsvxlw==
+Date:   Tue, 6 Dec 2022 23:02:35 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Heiko =?utf-8?Q?St=C3=BCbner?= <heiko@sntech.de>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <Y49Zi2CNv8pZSAe5@xhacker>
+References: <20221204174632.3677-1-jszhang@kernel.org>
+ <10190559.nUPlyArG6x@diego>
+ <Y45LRu0Gvrurm5Rh@spud>
+ <12207576.O9o76ZdvQC@diego>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <12207576.O9o76ZdvQC@diego>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeff Xu <jeffxu@chromium.org>
+On Tue, Dec 06, 2022 at 01:39:50AM +0100, Heiko Stübner wrote:
+> Am Montag, 5. Dezember 2022, 20:49:26 CET schrieb Conor Dooley:
+> > On Mon, Dec 05, 2022 at 07:49:01PM +0100, Heiko Stübner wrote:
+> > > Am Montag, 5. Dezember 2022, 19:36:45 CET schrieb Conor Dooley:
+> > > > Heiko, Jisheng,
+> > > > On Mon, Dec 05, 2022 at 11:40:44PM +0800, Jisheng Zhang wrote:
+> > > > > Yesterday, I also wanted to unify the two instruction fix into
+> > > > > one. But that would need to roll back the
+> > > > > riscv_alternative_fix_auipc_jalr() to your v1 version. And IMHO,
+> > > > > it's better if you can split the Zbb string optimizations series
+> > > > > into two: one for alternative improvements, another for Zbb. Then
+> > > > > we may get the alternative improvements and this inst extension
+> > > > > series merged in v6.2-rc1.
+> > > > 
+> > > > Heiko, perhaps you can correct me here:
+> > > > 
+> > > > Last Wednesday you & Palmer agreed that it was too late in the cycle to
+> > > > apply any of the stuff touching alternatives?
+> > > > If I do recall correctly, gives plenty of time to sort out any
+> > > > interdependent changes here.
+> > > > 
+> > > > Could easily be misremembering, wouldn't be the first time!
+> > > 
+> > > You slightly misremembered, but are still correct with the above ;-) .
+> > > 
+> > > I.e. what we talked about was stuff for fixes for 6.1-rc, were Palmers
+> > > wisely wanted to limit additions to really easy fixes for the remaining
+> > > last rc, to not upset any existing boards.
+> > 
+> > Ahh right. I was 50-50 on whether something like that was said so at
+> > least I am not going crazy.
+> > 
+> > > But you are still correct that we also shouldn't target the 6.2 merge window
+> > > anymore :-) .
+> > > 
+> > > We're after -rc8 now (which is in itself uncommon) and in his -rc7
+> > > announcement [0], Linus stated
+> > > 
+> > > "[...] the usual rule is that things that I get sent for the
+> > > merge window should have been all ready _before_ the merge window
+> > > opened. But with the merge window happening largely during the holiday
+> > > season, I'll just be enforcing that pretty strictly."
+> > 
+> > Yah, of all the windows to land patchsets that are being re-spun a few
+> > days before it opens this probably isn't the best one to pick!
+> > 
+> > > That means new stuff should be reviewed and in linux-next _way before_ the
+> > > merge window opens next weekend. Taking into account that people need
+> > > to review stuff (and maybe the series needing another round), I really don't
+> > > see this happening this week and everything else will get us shouted at
+> > > from atop a christmas tree ;-) .
+> > > 
+> > > That's the reason most maintainer-trees stop accepting stuff after -rc7
 
-The new security_memfd_create allows lsm to check flags of
-memfd_create.
+Thanks for the information, then we have more time to test and review
+this series.
 
-The security by default system (such as chromeos) can use this
-to implement system wide lsm to allow only non-executable memfd
-being created.
+> > 
+> > Aye, in RISC-V land maybe we will get there one day :)
+> > 
+> > For the original question though, breaking them up into 3 or 4 smaller
+> > bits that could get applied on their own is probably a good idea?
+> > 
+> > Between yourselves, Drew and Prabhakar there's a couple series touching
+> > the same bits. Certainly don't want to seem like I am speaking for the
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-Reported-by: kernel test robot <lkp@intel.com>
----
- include/linux/lsm_hook_defs.h |  1 +
- include/linux/lsm_hooks.h     |  4 ++++
- include/linux/security.h      |  6 ++++++
- mm/memfd.c                    |  5 +++++
- security/security.c           | 13 +++++++++++++
- 5 files changed, 29 insertions(+)
+Because alternative is the best solution to riscv extensions while still
+keep one unified kernel Image ;)
 
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index ec119da1d89b..fd40840927c8 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
- LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
- LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
- 	 unsigned long arg)
-+LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
- LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
- LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
- 	 unsigned long prot, unsigned long flags)
-diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-index 4ec80b96c22e..5a18a6552278 100644
---- a/include/linux/lsm_hooks.h
-+++ b/include/linux/lsm_hooks.h
-@@ -543,6 +543,10 @@
-  *	simple integer value.  When @arg represents a user space pointer, it
-  *	should never be used by the security module.
-  *	Return 0 if permission is granted.
-+ * @memfd_create:
-+ *	@name is the name of memfd file.
-+ *	@flags is the flags used in memfd_create.
-+ *	Return 0 if permission is granted.
-  * @mmap_addr :
-  *	Check permissions for a mmap operation at @addr.
-  *	@addr contains virtual address that will be used for the operation.
-diff --git a/include/linux/security.h b/include/linux/security.h
-index ca1b7109c0db..5b87a780822a 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
- int security_file_alloc(struct file *file);
- void security_file_free(struct file *file);
- int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-+int security_memfd_create(char *name, unsigned int flags);
- int security_mmap_file(struct file *file, unsigned long prot,
- 			unsigned long flags);
- int security_mmap_addr(unsigned long addr);
-@@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
- 	return 0;
- }
- 
-+static inline int security_memfd_create(char *name, unsigned int flags)
-+{
-+	return 0;
-+}
-+
- static inline int security_mmap_file(struct file *file, unsigned long prot,
- 				     unsigned long flags)
- {
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 92f0a5765f7c..f04ed5f0474f 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
- 		goto err_name;
- 	}
- 
-+	/* security hook for memfd_create */
-+	error = security_memfd_create(name, flags);
-+	if (error)
-+		return error;
-+
- 	if (flags & MFD_HUGETLB) {
- 		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
- 					HUGETLB_ANONHUGE_INODE,
-diff --git a/security/security.c b/security/security.c
-index 79d82cb6e469..5c018e080923 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -1010,6 +1010,19 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
- }
- EXPORT_SYMBOL(security_sb_clone_mnt_opts);
- 
-+int security_add_mnt_opt(const char *option, const char *val, int len,
-+			 void **mnt_opts)
-+{
-+	return call_int_hook(sb_add_mnt_opt, -EINVAL,
-+					option, val, len, mnt_opts);
-+}
-+EXPORT_SYMBOL(security_add_mnt_opt);
-+
-+int security_memfd_create(char *name, unsigned int flags)
-+{
-+	return call_int_hook(memfd_create, 0, name, flags);
-+}
-+
- int security_move_mount(const struct path *from_path, const struct path *to_path)
- {
- 	return call_int_hook(move_mount, 0, from_path, to_path);
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+> > Higher Powers here, but some sort of logical ordering would probably be
+> > a good idea so as not to hold each other up?
+> > The non-string bit of your series has been fairly well reviewed & would,
+> > in theory, be mergeable once the tree re-opens? Timing aside, Jisheng's
+> > idea seems like a good one, no?
 
+IMHO, it will be better if Palmer can merge Heiko's alternative improvements
+into riscv-next once well reviewed and the window is reopen. Then Drew,
+Prabhakar and I can rebase on that tree.
+
+> 
+> yeah, I had that same thought over the weekend - with the generic
+> part being pretty good in the review and only the string part needing
+> more work and thus ideally splitting the series [0] .
+> 
+> Jisheng's series just made that even more important to do :-)
+> 
+> 
+> Heiko
+> 
+> 
