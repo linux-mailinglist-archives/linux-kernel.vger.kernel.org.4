@@ -2,177 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2F4644313
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2303644314
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:24:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232037AbiLFMXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:23:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S234232AbiLFMYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:24:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiLFMXi (ORCPT
+        with ESMTP id S229449AbiLFMYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:23:38 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3FD2613B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 04:23:33 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id 125so13963895vsi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 04:23:33 -0800 (PST)
+        Tue, 6 Dec 2022 07:24:06 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC5C28E27;
+        Tue,  6 Dec 2022 04:24:02 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id vv4so5801123ejc.2;
+        Tue, 06 Dec 2022 04:24:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FS41pdVPPftlkxjfAeNNX5m/JobiqQJnQqPs/qKrQKU=;
-        b=j70OfvcxJivYV3jV9dIlvoC9BNn2MYMRSVLucnWH895vZoCq980rebl6a9/UqWIBdM
-         3P0EvrkWWODPFvC78By6kuYcw+EMeJnHxb1NP5nq1lXfbLX+8mE2VTXby5bCBclYSdHO
-         iEBZSqPMhcinbId1+ejPOAfhXxXBBEPP4zhL4=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OzQf6O96kQU/9b9Rxkvx78FK/If7e44i6Ub9+L4DsqA=;
+        b=o7v93TF1sVonrEY7ulPfEf8o94p95sAJIVR6eq03qcEidh/Ysbh+du4MLAQa43Gx1H
+         vVfNybv3GvG2C1mLya3T1JzIPLVPP6Ea7rtx1hJKyvzRivXNShVyTwjpmrLgir7GBv6K
+         tPo6ixyK8PGA6OJbxPslhm0GgB5HyiPSXYG6AvUzIbBpP1ZGtB1weJxkElGoq4EmbkCb
+         ETVFbW4pJnFtbpUxwtpG2iG/7JVv/+oOHvSm4oPljt0dUz/xIT2Gz0VS7zawGcyDLfoX
+         ipQB23vWXyZ3uzLjHrw9Yfrl6flLF4VVj7M7fco/5TajYr5/GOUpExuGJ/6aiTfsDU3j
+         sMcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FS41pdVPPftlkxjfAeNNX5m/JobiqQJnQqPs/qKrQKU=;
-        b=tQzv0Gzd8hIw9apxvmXY+PPsWQSlykTUtquRE4+d8iqMrOb5Vb2V7lrBNTUvXnR8RC
-         8gL/eHM7tuiSK3UkDDeOhV5kZAmIrnF81qf2jSQs1Sb8a1O0cVaJVEwyeknY2EyQ9BuX
-         CFsqRKqx1nfjkpFrzA6eMSL5LphRZKvIaG7heegEqU63u1ANS/8/1cXGn5FhIYZsYEL5
-         L/uezgFR9o23pWayHjyovM49KOrnmAq3YfmvASd7CxZUe098j2RuWndSKzftG5h1meFs
-         JP7Dzs56zUZ94j9Z8RnIrPes/uXGm2+yI0+et7sC3fKOt9R7W9vAzpZzBg6taCqsVibE
-         s+Lg==
-X-Gm-Message-State: ANoB5pmh3IIl24lkx6t3cCD8Q4KCmvQMvGwqIlzouKSdLbv8wdrA11Ry
-        tj3tLEpS6odc/7C6E5h6PNHWNErXTw0fEDgRZ3fzOg==
-X-Google-Smtp-Source: AA0mqf5jTjF11GvxCW7tLTboZIRLdroQaxX3DPq9TVWWQgiUfLFKRlMYFfIyx2FQJo5yv2rOIFkfQv1vYohWq1/7PT8=
-X-Received: by 2002:a05:6102:e0c:b0:3b0:6da7:39ba with SMTP id
- o12-20020a0561020e0c00b003b06da739bamr35260338vst.26.1670329412933; Tue, 06
- Dec 2022 04:23:32 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OzQf6O96kQU/9b9Rxkvx78FK/If7e44i6Ub9+L4DsqA=;
+        b=jJXvrHr1p/dGGhXuqSib8EfZ6jyH1sI0xgm9ciUkoVOxffzz6VuVRMSPEJOQpBb2t7
+         R5Z78DhHTEKOSGJO3FDhLyOohEyq3nvz5bJBzznmKUvT4+TUpqIxrv/mRM6arnZPqt3/
+         8P0BvPVDMB7SLSc4I3tNRBssCH+9QbdLkz7188F26yx2rBCTGdLjVQLtytrgVm7IjVRg
+         nZ9VCW+gP+uExca5A76IZ7c6LCqcKc3pwKBSw5FPQ0IB9hOOXYjhiffyC61HBGZb+82m
+         3l9hUTveDo4pOO2t4uyjpoSQ4QC+NPGgDIECZcF6Yy1KxcjoMUd+LRAZWhbFNZzYjvX8
+         7Epw==
+X-Gm-Message-State: ANoB5pl3Yy1+ydLErNGWxn+/JAT0ZZiUUuJsUM1s/4304n2/EtYwrlDC
+        r9Ip0c1cjt9u8PEAjuBG2dRI9H7bA6Sv9g==
+X-Google-Smtp-Source: AA0mqf4Fj8flcXvcahLIBRyzVHaT/Lk2p8V4XzlXZ+yb867KGf8678OhofDidLo+QYXnX7JuO+Q6QA==
+X-Received: by 2002:a17:906:258d:b0:7c0:aea3:a9a8 with SMTP id m13-20020a170906258d00b007c0aea3a9a8mr19412181ejb.718.1670329440532;
+        Tue, 06 Dec 2022 04:24:00 -0800 (PST)
+Received: from pc638.lan ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id dy25-20020a05640231f900b004643f1524f3sm920681edb.44.2022.12.06.04.23.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 04:24:00 -0800 (PST)
+From:   "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+To:     LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
+Subject: [PATCH 1/1] rcu/kvfree: Add runtime sleep check for single argument
+Date:   Tue,  6 Dec 2022 13:23:57 +0100
+Message-Id: <20221206122357.309982-1-urezki@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221129074530.640251-1-wenst@chromium.org> <45143854.fMDQidcC6G@kista>
- <5d79ed06-15c0-3564-97b6-5fd4433acabf@xs4all.nl>
-In-Reply-To: <5d79ed06-15c0-3564-97b6-5fd4433acabf@xs4all.nl>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Tue, 6 Dec 2022 20:23:21 +0800
-Message-ID: <CAGXv+5GH==gm533P_sNiFTyaFwQXp-QLXRLWyABdsn+0p_83UQ@mail.gmail.com>
-Subject: Re: [PATCH] media: cedrus: Convert to MPLANE uAPI
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     =?UTF-8?Q?Jernej_=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 4:35 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wrot=
-e:
->
-> On 05/12/2022 22:01, Jernej =C5=A0krabec wrote:
-> > Hi Chen-Yu!
-> >
-> > Dne torek, 29. november 2022 ob 08:45:30 CET je Chen-Yu Tsai napisal(a)=
-:
-> >> The majority of the V4L2 stateless video decoder drivers use the MPLAN=
-E
-> >> interface.
-> >>
-> >> On the userspace side, Gstreamer supports non-MPLANE and MPLANE
-> >> interfaces. Chromium only supports the MPLANE interface, and is not ye=
-t
-> >> usable with standard desktop Linux. FFmpeg support for either has not
-> >> landed.
-> >
-> > I don't like fixing userspace issues in kernel, if kernel side works fi=
-ne.
-> > Implementing missing non-MPLANE support in Chromium will also allow it =
-to work
-> > with older kernels.
-> >
-> > Hans, what's linux-media politics about such changes?
->
-> Not keen on this. Does the cedrus HW even have support for multiple plane=
-s?
-> I suspect not, in which case the driver shouldn't suggest that it can do =
-that.
->
-> Now, if the hardware *can* support this, then there is an argument to be =
-made
-> for the cedrus driver to move to the multiplanar API before moving it out
-> of staging to allow such future enhancements.
+A single argument can be invoked only from a sleepable
+context. There is already a might_sleep() check to mitigate
+such cases. The problem is that it requires a kernel to
+be built with a CONFIG_DEBUG_ATOMIC_SLEEP option.
 
-AFAIK it can, but has some limitations on how far apart the buffers for
-the separate planes can be. Nicolas mentioned that I could support the
-multiplanar API, but only allow the contiguous single planar formats,
-so NV12 instead of NV12M.
+In order to improve an extra runtime_assert_can_sleep()
+function is introduced by this patch. It is a run-time
+checking. Please note it only covers PREEMPT kernels.
 
-And I suspect that reference frames have to be contiguous as well.
-So I guess the overall answer is that it can't. But the same goes for
-Hantro or rkvdec, which both use the multiplanar API.
+Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+---
+ kernel/rcu/tree.c | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-This conversion was done so that I could use Cedrus as a testbed for
-developing new codec support, as I already own an H6 device. Added
-bonus is trying to get V4L2 decoder support to work for desktop Linux,
-without the libraries that ChromeOS ships.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index d155f2594317..bb798f07e768 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3232,6 +3232,19 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
+ 	return true;
+ }
+ 
++static void
++runtime_assert_can_sleep(void)
++{
++	if (!IS_ENABLED(CONFIG_PREEMPT_COUNT))
++		return;
++
++	if (preemptible())
++		return;
++
++	WARN_ONCE(1, "in_atomic(): %d, irqs_disabled(): %d, pid: %d, name: %s\n",
++		in_atomic(), irqs_disabled(), current->pid, current->comm);
++}
++
+ /*
+  * Queue a request for lazy invocation of the appropriate free routine
+  * after a grace period.  Please note that three paths are maintained,
+@@ -3257,8 +3270,10 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+ 	 * only. For other places please embed an rcu_head to
+ 	 * your data.
+ 	 */
+-	if (!head)
++	if (!head) {
++		runtime_assert_can_sleep();
+ 		might_sleep();
++	}
+ 
+ 	// Queue the object but don't yet schedule the batch.
+ 	if (debug_rcu_head_queue(ptr)) {
+-- 
+2.30.2
 
-> Note that you have to choose whether to support single or multiplanar, yo=
-u
-> can't support both at the same time.
->
-> So the decision to move to multiplanar should be led by the HW capabiliti=
-es.
->
-> And Chromium really needs to support non-multiplanar formats as well. I'm
-> really surprised to hear that it doesn't, to be honest.
-
-Chromium does support non-multiplanar formats, such as NV12. In fact
-this is the preferred format, unless it's on MediaTek, in which it
-switches to MM21 as the capture format, and does untiling in software.
-This support for formats is separate from using the multiplanar API.
-
-Support for video decoders is mostly driven by ChromeOS. Currently all the
-hardware ChromeOS supports, be it stateful or stateless, use the multiplana=
-r
-API, so there hasn't been a real need to support it yet.
-
-
-Regards
-ChenYu
-
-> Regards,
->
->         Hans
->
-> >
-> > Best regards,
-> > Jernej
-> >
-> >>
-> >> A fallback route using libv4l is also available. The library translate=
-s
-> >> MPLANE interface ioctl calls to non-MPLANE ones, provided that the pix=
-el
-> >> format used is single plane.
-> >>
-> >> Convert the Cedrus driver to the MPLANE interface, while keeping the
-> >> supported formats single plane. Besides backward compatibility through
-> >> the plugin, the hardware requires that different planes not be located
-> >> too far apart in memory. Keeping the single plane pixel format makes
-> >> this easy to enforce.
-> >>
-> >> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> >> ---
-> >>
-> >> This has been tested with Fluster. The score remained the same with or
-> >> without the patch. This also helps with getting VP8 decoding working
-> >> with Chromium's in-tree test program "video_decode_accelerator_tests",
-> >> though Chromium requires other changes regarding buffer allocation and
-> >> management.
-> >
-> >
->
