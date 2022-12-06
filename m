@@ -2,46 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59534644DE2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:21:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C581644DED
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiLFVVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S229555AbiLFV0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiLFVVx (ORCPT
+        with ESMTP id S229452AbiLFV03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:21:53 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BAB47325;
-        Tue,  6 Dec 2022 13:21:52 -0800 (PST)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3E1933D7;
-        Tue,  6 Dec 2022 22:21:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670361711;
-        bh=OrJsCJNo27Qlp3rbIbQPFuVvMQMYEBOzgkHtwGy1OdQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FwiImNRf7ALJLdu5YaC8qgkXWb8AnAiJDZIVuV9VEhI6Odi/lmjE10LQ8JHi3ru+V
-         4M5VR3lKZO+3vXLGdDoP6c4Hbr/GiVqDzZvox4qcbnQld9WxuvZy85p2mS1s8LfhYR
-         x2qMpgVuMRxMzjpCvdkCd8mwF4Y4Bqn4EW5LLHTA=
-Date:   Tue, 6 Dec 2022 23:21:48 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Szymon Heidrich <szymon.heidrich@gmail.com>
-Cc:     dan.scally@ideasonboard.com, Felipe Balbi <balbi@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] usb: gadget: uvc: Prevent buffer overflow in setup
- handler
-Message-ID: <Y4+ybPL2uUO4SCJJ@pendragon.ideasonboard.com>
-References: <9ffc4812-ab45-d7f9-7d93-fcacf629a754@ideasonboard.com>
- <20221206141301.51305-1-szymon.heidrich@gmail.com>
+        Tue, 6 Dec 2022 16:26:29 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFAA4841A
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:26:28 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DE0841EC0523;
+        Tue,  6 Dec 2022 22:26:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670361987;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=YVDn0S8JQnZN5dcrnKjo8zsfbWVS/GOKauD82aiLVQQ=;
+        b=k3p47DcFVuXJM8onhOBSue39zUDf2NtSZ560L/Q/UkcBnwDQn9r4LgyKfNSc04LKx6gCx1
+        MFY19yVzPP1FJBIamZWTWFxC+M6AzNa362IYaE6hcPq3XJ/xKyV8JgzriDHbJ91ExbsxWb
+        ubjtbDRqGbxoLWi5CBOb2DfMqqURapQ=
+Date:   Tue, 6 Dec 2022 22:26:22 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dionna Amalie Glaze <dionnaglaze@google.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Lendacky <Thomas.Lendacky@amd.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Joerg Roedel <jroedel@suse.de>, Ingo Molnar <mingo@redhat.com>,
+        Andy Lutomirsky <luto@kernel.org>,
+        John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v8 1/4] crypto: ccp - Name -1 return value as
+ SEV_RET_NO_FW_CALL
+Message-ID: <Y4+zfgU639095B6K@zn.tnic>
+References: <20221104230040.2346862-1-dionnaglaze@google.com>
+ <20221104230040.2346862-2-dionnaglaze@google.com>
+ <Y4tAX580jEGHOU9d@zn.tnic>
+ <CAAH4kHYz-46syE4wKPzo1N9P34wLHcs85obOCjqb6eQ=iv=n3w@mail.gmail.com>
+ <Y4ulj38eMr1NiRdX@zn.tnic>
+ <CAAH4kHbZM9YW0BvwxrQNFysHwB8JkPJzFRN9RdwhmixhbtsCyw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221206141301.51305-1-szymon.heidrich@gmail.com>
+In-Reply-To: <CAAH4kHbZM9YW0BvwxrQNFysHwB8JkPJzFRN9RdwhmixhbtsCyw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,49 +63,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Szymon,
+On Mon, Dec 05, 2022 at 09:05:19AM -0800, Dionna Amalie Glaze wrote:
+> Arguably it shouldn't ever get this value. We're just not very
+> selective when we copy back the kernel copy of the ioctl argument.
+> In all cases user space should treat the value as undefined, but still
+> we don't want to leak uninitialized kernel stack values.
 
-Thank you for the patch.
+Absolutely.
 
-On Tue, Dec 06, 2022 at 03:13:01PM +0100, Szymon Heidrich wrote:
-> Setup function uvc_function_setup permits control transfer
-> requests with up to 64 bytes of payload (UVC_MAX_REQUEST_SIZE),
-> data stage handler for OUT transfer uses memcpy to copy req->actual
-> bytes to uvc_event->data.data array of size 60. This may result
-> in an overflow of 4 bytes.
-> 
-> Fixes: cdda479f15cd ("USB gadget: video class function driver")
-> Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
+> I've changed it to -1 to name the same kind of error across host and
+> guest: the communication with the PSP didn't complete successfully, so
+> the "error" value is not from the PSP.
+> This value can also get returned to user space during a -ENOTTY result.
+> We can call this NO_FW_CALL or UNDEFINED. I have no real preference.
 
-Good catch.
+Me neither as long as this is written down and agreed upon as a possible
+value and not leaking kernel stack.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+> Whatever value we set initially, the VMM can overwrite exitinfo2
+> during the ghcb_hv_call.
+> I'd rather that the "undefined" values were the same across both,
+> because the guest is merely receiving a value from the host's PSP
+> driver (or should be).
+> It keeps the enum for return values a bit tidier and not concerned
+> with whether the value is viewed from the host or guest.
 
-> ---
-> V1 -> V2: Corrected commit message and changed ?: in favor of min_t
-> V2 -> V3: Added fixes tag
-> 
->  drivers/usb/gadget/function/f_uvc.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_uvc.c b/drivers/usb/gadget/function/f_uvc.c
-> index 6e196e061..4419b7972 100644
-> --- a/drivers/usb/gadget/function/f_uvc.c
-> +++ b/drivers/usb/gadget/function/f_uvc.c
-> @@ -216,8 +216,9 @@ uvc_function_ep0_complete(struct usb_ep *ep, struct usb_request *req)
->  
->  		memset(&v4l2_event, 0, sizeof(v4l2_event));
->  		v4l2_event.type = UVC_EVENT_DATA;
-> -		uvc_event->data.length = req->actual;
-> -		memcpy(&uvc_event->data.data, req->buf, req->actual);
-> +		uvc_event->data.length = min_t(unsigned int, req->actual,
-> +			sizeof(uvc_event->data.data));
-> +		memcpy(&uvc_event->data.data, req->buf, uvc_event->data.length);
->  		v4l2_event_queue(&uvc->vdev, &v4l2_event);
->  	}
->  }
+Ack.
+
+...
+
+> I hope the above discussion is clear that it's purely a defined
+> "undefined" because being pickier about what to copy_to_user during
+> exceptional circumstances in order to not overwrite the user's fw_err
+> value seems an unnecessary amount of code.
+
+Ok, I think we're on the same page. So pls document that NO_FW_CALL or
+so value and what it means and that thing should be taken care of.
+
+Thx.
 
 -- 
-Regards,
+Regards/Gruss,
+    Boris.
 
-Laurent Pinchart
+https://people.kernel.org/tglx/notes-about-netiquette
