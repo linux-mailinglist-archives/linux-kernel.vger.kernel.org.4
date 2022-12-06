@@ -2,127 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FAA644624
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 15:49:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7269564474F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:00:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235084AbiLFOtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 09:49:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S234097AbiLFO76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 09:59:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiLFOtp (ORCPT
+        with ESMTP id S234826AbiLFO6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 09:49:45 -0500
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8AD2AE39
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:48:24 -0800 (PST)
-Received: by mail-pf1-x434.google.com with SMTP id g1so6681049pfk.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 06:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=E3b5bdWA85OzMOTjNeR+xYtDEAbTCZli0u3K40D9kx4=;
-        b=OFUOd4PNQR8bRxCK6qegIBSYa3MK8J/1a32WRukCTxAY5fTbE+omxk8YDjbYTugGMt
-         YeXjCnUiKvlBk7edXLLva1LG+EYEPJj21wfIj1MmX7CR4SOWyOYUEzYSPs05BYdfhIq5
-         z1IaXMgmuZsbEAXA7r01df8vhuih3NfsWItIHWKZi0n6rXD8IocqnRosa8UqEyN/8mVL
-         i6iXH2dMdNFy5yDeIFaIvU+1FfeV0PfX9RbViXvdq9awFDH4LYyYXr/zLukIzNQ2rY4g
-         WSup0IALJEblLWRnTR/3BL3KE6NdkyZhPvl0lshlmlVISJYUUF2mgQiKaTs/T2Pmpe+Y
-         t8FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E3b5bdWA85OzMOTjNeR+xYtDEAbTCZli0u3K40D9kx4=;
-        b=froUQfs2iW1h4TNEk3ualfjd6KU2IIBJjWg7tQaNJ1/zVwc7ux2zBxOEaI0RAdeD8s
-         /UnoEbGNIK5ngSz2abe77bareiBTpBnlQEBPfn9iN5a7T4Rnl3niSDYcBnQ4DPiVLn/C
-         YDCziy24B2lU9ghTxq0e2KgGyVLXn36hMS7uYnv9G1XAvTJdf2R/eizoyef0wLrfk7cl
-         eYkeeT0qT20oJoCWbgkIBzvULMzLLmMNy881iPky2HR89Ty267nWRuZ0xy2Srn+3Kd/E
-         87T0gQxRSskIkv1v5P3OZZSYNKZewGhMYvvhCM8+7KCZhVcQVL7RyKS4TV/xf8T3honz
-         iHVQ==
-X-Gm-Message-State: ANoB5pkZjSVLO3Xgc7YaABDkGE/irnXXdulMWuLmF8iB5k1Cnf6+mmyg
-        RPICRkOYWsJ/rRKKGF5eH6g4JA==
-X-Google-Smtp-Source: AA0mqf6wZNYJR+nxEDntmIwoB1WTx5lMm+/0X87R2SrkgFXKtucbmHuGQYhQGln4hWgCmve4UUXs+g==
-X-Received: by 2002:a63:105c:0:b0:46f:f72c:cdae with SMTP id 28-20020a63105c000000b0046ff72ccdaemr62687659pgq.237.1670338104328;
-        Tue, 06 Dec 2022 06:48:24 -0800 (PST)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id u2-20020a170902e5c200b00186c5e8a8d7sm12785747plf.171.2022.12.06.06.48.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 06:48:23 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p2ZF8-004cPA-AK;
-        Tue, 06 Dec 2022 10:48:22 -0400
-Date:   Tue, 6 Dec 2022 10:48:22 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 5/5] nvme-vfio: Add a document for the NVMe device
-Message-ID: <Y49WNo7XWZ2aFfds@ziepe.ca>
-References: <20221206055816.292304-1-lei.rao@intel.com>
- <20221206055816.292304-6-lei.rao@intel.com>
- <20221206062604.GB6595@lst.de>
- <Y48+AaG5rSCviIhl@ziepe.ca>
- <20221206130901.GB24358@lst.de>
- <Y49JNvdmRPNWw26q@ziepe.ca>
- <20221206140002.GB27689@lst.de>
- <Y49PqoAhZOeraLVa@ziepe.ca>
- <20221206143126.GB30297@lst.de>
+        Tue, 6 Dec 2022 09:58:51 -0500
+Received: from smtp-out-03.comm2000.it (smtp-out-03.comm2000.it [212.97.32.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35352E695
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 06:52:03 -0800 (PST)
+Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: francesco@dolcini.it)
+        by smtp-out-03.comm2000.it (Postfix) with ESMTPSA id 88521B43547;
+        Tue,  6 Dec 2022 15:52:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
+        s=mailsrv; t=1670338322;
+        bh=AH0lJQg4LZFijVvXwpG3wKnwdJDssHQBputnWnmGOqc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=SnF/eRgWSZYZjwwv5dPDLyC03bYXf+Y/uBVUgjVb6eGjSU2Z4doe73h488olnQt/R
+         89M4+8vo0qYkiWkVlsgJRucC51ZVb7kX5W/UgYCXaQzBR2FiIdOa0HVDQa/CqLx99L
+         kh5jVy1BegNdl/BcbIWdrEQzxL4/54VU/wnIKmlHjI0L0Xr8kqOnFbK0hVT0IVmDF1
+         s/oWJ4HTw0TvsoYpOU2b1j3lUWMQaP8xKF6Hm87d7zbX3pLhNK/UMDzVOia99ooNTw
+         I3ZXoV8+4qPf02cwZK3HWdw9X75W86gClvnXXqIngnXySXb5vNyGlGU+DiNc8WLTkR
+         zg2wciUTFv/Lw==
+Date:   Tue, 6 Dec 2022 15:51:16 +0100
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Sherry Sun <sherry.sun@nxp.com>, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     lukas@wunner.de, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Fabio Estevam <festevam@gmail.com>,
+        max.krummenacher@toradex.com
+Subject: Re: [PATCH] Revert "serial: fsl_lpuart: Reset prior to registration"
+Message-ID: <Y49W5DuvGcqh0PFw@francesco-nb.int.toradex.com>
+References: <20220929085318.5268-1-sherry.sun@nxp.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206143126.GB30297@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220929085318.5268-1-sherry.sun@nxp.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 03:31:26PM +0100, Christoph Hellwig wrote:
-> On Tue, Dec 06, 2022 at 10:20:26AM -0400, Jason Gunthorpe wrote:
-> > In the VFIO restore model there is no "live OS" on resume. The
-> > load/resume cycle is as destructive as reset to the vfio device.
+Hello all,
+
+On Thu, Sep 29, 2022 at 04:53:18PM +0800, Sherry Sun wrote:
+> This reverts commit 60f361722ad2ae5ee667d0b0545d40c42f754daf.
 > 
-> Of course there may be and OS.  As soon as the VF is live Linux
-> will by default bind to it.  And that's the big problem here,
-> the VF should not actually exist or at least not be usable when
-> such a restore happens - or to say it in NVMe terms, the Secondary
-> Controller better be in offline state when state is loaded into it.
+> commit 60f361722ad2 ("serial: fsl_lpuart: Reset prior to registration")
+> causes the lpuart console cannot work any more. Since the console is
+> registered in the uart_add_one_port(), the driver cannot identify the
+> console port before call uart_add_one_port(), which causes all the uart
+> ports including the console port will be global reset.
+> So need to revert this patch to avoid breaking the lpuart console.
+> 
+> Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
 
-Sadly in Linux we don't have a SRIOV VF lifecycle model that is any
-use.
+What's the status/plan on this?
 
-What we do have is a transfer of control from the normal OS driver (eg
-nvme) to the VFIO driver. Also, remember, that VFIO only does live
-migration between VFIO devices. We cannot use live migration and end
-up with a situation where the normal nvme driver is controlling the
-VF.
+From what I can tell the commit this patch is reverting introduced a
+regression (that was backported to stable kernel), it should have a
+Fixes tag and probably a cc:stable.
 
-The VFIO load model is explicitly destructive. We replace the current
-VF with the loading VF. Both the VFIO variant driver and the VFIO
-userspace issuing the load have to be aware of this and understand
-that the whole device will change.
+See also https://github.com/Freescale/linux-fslc/commit/a682d463667a418d3f7277dbbe06cd6347e76761
 
-From an implementation perspective, I would expect the nvme varient
-driver to either place the nvme device in the correct state during
-load, or refuse to execute load if it is in the wrong state.
+Francesco
 
-To be compatible with what qemu is doing the "right state" should be
-entered by completing function level reset of the VF.
-
-The Linux/qemu parts are still being finalized, so if you see
-something that could be changed to better match nvme it would be a
-great time to understand that.
-
-Jason
