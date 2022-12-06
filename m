@@ -2,138 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4E55644818
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F1264481B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235125AbiLFPec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:34:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56700 "EHLO
+        id S234702AbiLFPf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:35:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234771AbiLFPeM (ORCPT
+        with ESMTP id S232458AbiLFPfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:34:12 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483EF2CE15
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:34:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670340852; x=1701876852;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QCUoX14tfclkO5GylbtI8GdrNBAy8EpB3v8UADUVB/8=;
-  b=IJt1arGqmUl+WDQzTSE6YggTXeZ/KYCANfwQvlUs+cCLKQXy0sesazyd
-   TRiBCF4JY3NXiYycEL+tO1vVSdIACqStRMsm+8CKOLzWkX3c6ZqerHPtE
-   zmWc/DKua9pLRE5gweaYFePF0Vv6P3I4kEP1bRgj8J/JHtHt1jAmdGZ63
-   87jzx77C5oLkUUdBzXNuL50p2addZrDFiXmZsWwtjuarvwi/JG4c5m9t0
-   HZIxvVYgJYrL876h4Jyq7bdYF2D0pPerQp3+DmTZ2Rw9rDw0cnUi13FjU
-   VB9Ui5oUkT18WqgFKhvOcDfgammsem5AIIIQCiXtIAgxBhbdp54J1iFIq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="315362203"
-X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
-   d="scan'208";a="315362203"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 07:34:11 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="770760262"
-X-IronPort-AV: E=Sophos;i="5.96,222,1665471600"; 
-   d="scan'208";a="770760262"
-Received: from cjian12x-mobl.amr.corp.intel.com (HELO [10.212.125.207]) ([10.212.125.207])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 07:34:10 -0800
-Message-ID: <186a5111-617d-c8f0-ba7e-1f39663c65dd@linux.intel.com>
-Date:   Tue, 6 Dec 2022 09:34:09 -0600
+        Tue, 6 Dec 2022 10:35:24 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4079D2B26B
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 07:35:20 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id b3so24253993lfv.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 07:35:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F1KPdrNmIxp/vLqj14ywZDhQ1hvfTFyJrb/kxKX7fV4=;
+        b=lBCtYGkPkNXHFvTdm1DCtq7RzVuMzyyDGMYRTAYKnx7r0KkE9pqSJz9RwHkzTfaU/n
+         Y2s0W3b3Q9TKaSwHDG7nJrJBgDXS29ms9JSVA6+83rmsyNbMj9gxkBEL4ROyA8dDIWgn
+         xeLk8Iz1ZE4YJq4mSOP5Y1T7SQF2wEOwVI4An16JY+NKeermak7fmVqhRRn3cR3IeDDT
+         4YLXzF+Nw9bqXE8wRODMU/hNtpRgocb3NiOSIkZFYg6ysR7D0WcoodHt0kyfP4bWmV/j
+         M8Xrq0rhd36WoZDwDiJfaM46jbBmR4eURWj2CP+hZOjq+RHyamsoarrT42EEGoD33+Er
+         ItHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F1KPdrNmIxp/vLqj14ywZDhQ1hvfTFyJrb/kxKX7fV4=;
+        b=2q2wE/0cmLX4rxxGOBsjpE5CxExgWmZxy0/x28ZFeC8dEuk+0SqKwp7OnD6A2ZyQWd
+         ZbHzU7bDAndqL6SPkYVYV3UVOD2A+IarIAHr8WOLFfacVxxFgtANdUsGHp9nMcruEXY2
+         J+Ogm25UPgl1avoK3vTMxHU+qXfd1E1VGGp6q2X1dqlF0KfWq1KnCVVPkai0yx6GXZ2T
+         0GxyQEs137ZKOtQJBm1GUluy/Mxme6cCULYY+YHy+Z5eTL/MOT4AGHZMZruN2ydSJroP
+         9oWBspLoQhhnYAwG89Q5aN6xkm1P83TaGBbKVzJPvk4wLFOt1SFUtgs6P3dEvdPaSRcz
+         aveg==
+X-Gm-Message-State: ANoB5pkN9An4RbClQLy0t1NtS60no4DGomuTrnjnlraxqghV39Q1xdE4
+        6KSavV00ET8DbFPM1yd6Lcz3TQ==
+X-Google-Smtp-Source: AA0mqf5Egysi9Meisg5THM/DUVSiqhI4AENo68/EpnGy0c4t/MajZcQiQC8PBhxf+3S0Ahjn4MVrWw==
+X-Received: by 2002:a05:6512:3413:b0:4aa:b3d1:9c83 with SMTP id i19-20020a056512341300b004aab3d19c83mr22037421lfr.260.1670340918475;
+        Tue, 06 Dec 2022 07:35:18 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id g4-20020a2ea4a4000000b00279d73cdf83sm1417014ljm.128.2022.12.06.07.35.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 07:35:18 -0800 (PST)
+Message-ID: <33d261f6-ab3d-7470-8e3d-6943c3fa9297@linaro.org>
+Date:   Tue, 6 Dec 2022 16:35:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH] ALSA: compress: Add AC3, EAC3, TrueHD, DTS, MPEG-H 3D
- Audio Stream (MHAS)
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v5 1/5] dt-bindings: clock: Add SM8550 TCSR CC clocks
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org
+References: <20221206125635.952114-1-abel.vesa@linaro.org>
+ <20221206125635.952114-2-abel.vesa@linaro.org>
 Content-Language: en-US
-To:     Carlos Rafael Giani <crg7475@mailbox.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-References: <20221206145317.99934-1-crg7475@mailbox.org>
- <d6da4f2f-d6d8-bab6-66f0-a4b2486d1922@linux.intel.com>
- <cdee3f7d-3f98-02dc-9fc6-18ffc489c6f8@mailbox.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <cdee3f7d-3f98-02dc-9fc6-18ffc489c6f8@mailbox.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221206125635.952114-2-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 06/12/2022 13:56, Abel Vesa wrote:
+> Add bindings documentation for clock TCSR driver on SM8550.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/clock/qcom,sm8550-tcsr.yaml      | 53 +++++++++++++++++++
+>  include/dt-bindings/clock/qcom,sm8550-tcsr.h  | 18 +++++++
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
+>  create mode 100644 include/dt-bindings/clock/qcom,sm8550-tcsr.h
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
+> new file mode 100644
+> index 000000000000..15176b0457d1
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-tcsr.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/qcom,sm8550-tcsr.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm TCSR Clock Controller on SM8550
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +description: |
+> +  Qualcomm TCSR clock control module provides the clocks, resets and
+> +  power domains on SM8550
+> +
+> +  See also:: include/dt-bindings/clock/qcom,sm8550-tcsr.h
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,sm8550-tcsr
 
+This still misses syscon. Did you send it before we talk on IRC?
 
-On 12/6/22 09:16, Carlos Rafael Giani wrote:
-> IEC61937 is quite commonly used, yes. However, I have been working with
-> a commercial system that is getting support for these formats
-> implemented via compress-offload. Since these formats aren't exactly
-> uncommon, I figured that adding these could be useful, especially since
-> only the #defines need to be added, nothing else.
+Best regards,
+Krzysztof
 
-please don't top-post on mailing lists.
-
-Nothing else? That sounds to good to be true. Specifically for
-spatialization, there's got to be some sort of interface to control
-where the objects are located, either in reference to the listener
-position or the listening room setup.
-
-The compressed API was developed back in the early 2010s for elementary
-streams, it's not been extended since and IMHO it's far too limited to
-support Atmos and newer systems optimally.
-
-> On 06.12.22 16:07, Pierre-Louis Bossart wrote:
->>
->> On 12/6/22 08:53, Carlos Rafael Giani wrote:
->>> These audio codecs are used in sound bars and digital TVs, and benefit
->>> from off-loading to a DSP. In particular, Dolby Atmos and MPEG-H 3D
->>> audio
->>> spatialization is done in dedicated DSPs. Thus, adding these codecs  to
->>> the Compress-Offload API makes sense.
->> The question is "how is the stream transported". In most implementations
->> for these formats, the DSP is on the receiver side and the transport
->> happens with an IEC61937 format - which does not require the use of the
->> compressed API.
->>
->>> Signed-off-by: Carlos Rafael Giani <crg7475@mailbox.org>
->>> ---
->>>   include/uapi/sound/compress_params.h | 8 +++++++-
->>>   1 file changed, 7 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/include/uapi/sound/compress_params.h
->>> b/include/uapi/sound/compress_params.h
->>> index ddc77322d571..7a58e2026be3 100644
->>> --- a/include/uapi/sound/compress_params.h
->>> +++ b/include/uapi/sound/compress_params.h
->>> @@ -43,7 +43,13 @@
->>>   #define SND_AUDIOCODEC_BESPOKE               ((__u32) 0x0000000E)
->>>   #define SND_AUDIOCODEC_ALAC                  ((__u32) 0x0000000F)
->>>   #define SND_AUDIOCODEC_APE                   ((__u32) 0x00000010)
->>> -#define SND_AUDIOCODEC_MAX                   SND_AUDIOCODEC_APE
->>> +#define SND_AUDIOCODEC_AC3                   ((__u32) 0x00000011)
->>> +#define SND_AUDIOCODEC_EAC3                  ((__u32) 0x00000012)
->>> +#define SND_AUDIOCODEC_TRUEHD                ((__u32) 0x00000013)
->>> +#define SND_AUDIOCODEC_DTS                   ((__u32) 0x00000014)
->> IIRC there are multiple flavors of DTS, off the top of my head DTS-ES,
->> 96, HD, Master Audio. "DTS" only doesn't even begin to describe the
->> possible variants.
-
-And IIRC2 there is some level of backwards compatibility between
-flavors, but the decoder may or may not be able to generate the number
-of channels and formats supported in the initial stream. That's a
-problem if you need to configure audio codecs or interfaces and the DSP
-doesn't tell you what it decoded or upmixed.
-
->>> +/* MPEG-H 3D Audio Stream (MHAS) as defined in ISO/IEC 23008-3 */
->>> +#define SND_AUDIOCODEC_MHAS                  ((__u32) 0x00000015)
->> Doesn't this need the definition of profiles and various types of
->> formats - classic problem with designed-by-committee MPEG codecs.
->>
->>> +#define SND_AUDIOCODEC_MAX                   SND_AUDIOCODEC_MHAS
->>
->>>   /*
->>>    * Profile and modes are listed with bit masks. This allows for a
