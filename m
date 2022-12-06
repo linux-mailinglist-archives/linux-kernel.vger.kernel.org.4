@@ -2,247 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EBA644E2A
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:44:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96193644E2D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiLFVoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:44:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
+        id S229753AbiLFVob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLFVoE (ORCPT
+        with ESMTP id S229771AbiLFVoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:44:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A828BE7;
-        Tue,  6 Dec 2022 13:44:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 795F0618C9;
-        Tue,  6 Dec 2022 21:44:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 351CAC433D7;
-        Tue,  6 Dec 2022 21:43:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670363041;
-        bh=hQJFrOi/riwxs9Q5lMZF7yhYqPIY/L8Z7et7euLwRMQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rFsRHJE2QieSENTNShtA8xr+u59axvZ7NnOk3RY9yQMOayaWZpptr3WVelO2Y461h
-         pc3BfKUDEHWU9kuF7HPNVFFkmcuY3VBPSDjcsyMdP9xmuNGbKLIHPV7p/3BhVAh2dW
-         4HziDxZX9PpijvGBhNIT39jawplVO7Y/esJFsQHizCyh7WnEKrvy5yfF0WIkmu06k9
-         QME+hd2y+t+7qth9IHTavEQK4FbUqOwNpxW0XRq3yauS9TBwrWE7FaFnjx7wgZUh7D
-         /5vk3EsOim7p2+ElkYXIP2UIJ1BEyNQlqd9T4Jd5WCCAUA6MluB6eOob81VceB8Duh
-         nt0b0UCdE8m1w==
-Date:   Tue, 6 Dec 2022 21:43:56 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Guo Ren <guoren@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 09/13] riscv: switch to relative alternative entries
-Message-ID: <Y4+3nJ53nvmmc8+z@spud>
-References: <20221204174632.3677-1-jszhang@kernel.org>
- <20221204174632.3677-10-jszhang@kernel.org>
- <CAJF2gTRxm7LJFtups5fexJ5ishm9_j3e+yzfKv3nTtQqUtXPtA@mail.gmail.com>
- <Y44LuRcQYPnVnFje@xhacker>
- <CAJF2gTQ98fyTNc6d3PJrkMjUjUstN8s1FcRNyZQCLiN5CV5NCw@mail.gmail.com>
- <Y49WvYWIsFAIeabH@xhacker>
+        Tue, 6 Dec 2022 16:44:24 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AA72E9DB;
+        Tue,  6 Dec 2022 13:44:22 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so19271481pje.5;
+        Tue, 06 Dec 2022 13:44:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aVHwH0VKlT9ImQq/qr6fMoMnZ6eF5jNSaI5hlJKoSSo=;
+        b=OwJexiggMym4osrXLBMkrG6EExJXHvJ1fijFdCIdC5V3ivr9AAbWGOYWvXzKJyhEfZ
+         uJrHNVi8pZKMdDY2jI0YbD8HDRrFteuub5lMHF+iLFTt+PvOH5k6v4MZ9U8cn1oVXr7g
+         M0fBBdiAI4HdI8+ZPVhu2t6xZKrYSnkaAwMPICJfLusWi9FmbWkjrmemelxZx0D3fpW/
+         ePKS0hygKFWbnMMvGnBo4pQQ8NyySETotE1+HJkB+oWDXSgnuoUaqtmc0yQRpxLT3VNd
+         vgTGg+dr7M96Y/ZkMsJ0AowtbLnqNuFvPFj2RcohOhGxDrx9C86+jrJmqICfIi1+GOYH
+         8pTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aVHwH0VKlT9ImQq/qr6fMoMnZ6eF5jNSaI5hlJKoSSo=;
+        b=B3P4fQQOz5uV9ScWoPKG4sySDLbGLGgias9jC79Qawe0B3eOxnmGcOOX1VzRqz2Rns
+         ZOAAXHGsvQ8RgUZbw1Ji51fWgKOuXmccZgGZZfPpGtcTU4UsIU9/JT+mjuXeqH0cXC4h
+         FGfLL7J3Vq3mT5fD4d1YcKYo2jCHld0MlA52JyGAZCZQEvVGE6lx4yoXoUq8/vE3Pov2
+         BwR3xtlP1VjSK46JDTP2qO/YiSvWCrFFdZ1e84DWcfUK4oOTcc4hCiBo/gM0cra+iaJX
+         apSIeIHsifSAPUP3sCKWdK+zEDINkJM3O6em5reISVlj5ow5YQepT+shS3Caa9JumNzX
+         ObXQ==
+X-Gm-Message-State: ANoB5pmO3Kk1tmUlTueBUDVZ/+c4ABUszMkSBjOjD5iSgj4N7rioElmU
+        AOZ7FhTcHCWQRtyE+29NCs8=
+X-Google-Smtp-Source: AA0mqf4TKhnS7faYeNbd5hQ7hKecwEzkkQsTsDwcJE7Kg84few/gNg8jE3MyWv545wHBJKxbar5ISg==
+X-Received: by 2002:a17:902:a718:b0:189:7722:99d7 with SMTP id w24-20020a170902a71800b00189772299d7mr51224854plq.96.1670363061785;
+        Tue, 06 Dec 2022 13:44:21 -0800 (PST)
+Received: from localhost ([2620:10d:c090:400::5:841a])
+        by smtp.gmail.com with ESMTPSA id j7-20020a170902da8700b0018980f14ecfsm13212827plx.115.2022.12.06.13.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 13:44:21 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 6 Dec 2022 11:44:19 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     torvalds@linux-foundation.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        joshdon@google.com, brho@google.com, pjt@google.com,
+        derkling@google.com, haoluo@google.com, dvernet@meta.com,
+        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        kernel-team@meta.com
+Subject: Re: [PATCH 14/31] sched_ext: Implement BPF extensible scheduler class
+Message-ID: <Y4+3sw9wEUKJ0zh4@slm.duckdns.org>
+References: <20221130082313.3241517-1-tj@kernel.org>
+ <20221130082313.3241517-15-tj@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="uWz0dNot0HPNalAT"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y49WvYWIsFAIeabH@xhacker>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221130082313.3241517-15-tj@kernel.org>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 29, 2022 at 10:22:56PM -1000, Tejun Heo wrote:
+> +	/**
+> +	 * dispatch - Dispatch tasks from the BPF scheduler into dsq's
+> +	 * @cpu: CPU to dispatch tasks for
+> +	 * @prev: previous task being switched out
+> +	 *
+> +	 * Called when a CPU can't find a task to execute after ops.consume().
+> +	 * The operation should dispatch one or more tasks from the BPF
+> +	 * scheduler to the dsq's using scx_bpf_dispatch(). The maximum number
+> +	 * of tasks which can be dispatched in a single call is specified by the
+> +	 * @dispatch_max_batch field of this struct.
+> +	 */
+> +	void (*dispatch)(s32 cpu, struct task_struct *prev);
+> +
+> +	/**
+> +	 * consume - Consume tasks from the dsq's to the local dsq for execution
+> +	 * @cpu: CPU to consume tasks for
+> +	 *
+> +	 * Called when a CPU's local dsq is empty. The operation should transfer
+> +	 * one or more tasks from the dsq's to the CPU's local dsq using
+> +	 * scx_bpf_consume(). If this function fails to fill the local dsq,
+> +	 * ops.dispatch() will be called.
+> +	 *
+> +	 * This operation is unnecessary if the BPF scheduler always dispatches
+> +	 * either to one of the local dsq's or the global dsq. If implemented,
+> +	 * this operation is also responsible for consuming the global_dsq.
+> +	 */
+> +	void (*consume)(s32 cpu);
+> +
+> +	/**
+> +	 * consume_final - Final consume call before going idle
+> +	 * @cpu: CPU to consume tasks for
+> +	 *
+> +	 * After ops.consume() and .dispatch(), @cpu still doesn't have a task
+> +	 * to execute and is about to go idle. This operation can be used to
+> +	 * implement more aggressive consumption strategies. Otherwise
+> +	 * equivalent to ops.consume().
+> +	 */
+> +	void (*consume_final)(s32 cpu);
 
---uWz0dNot0HPNalAT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Doesn't really change the big picture but I ended up merging
+ops.consume[_final]() into ops.dispatch() which should make the dispatch
+path both simpler and more flexible.
 
-Hey Jisheng, Guo Ren,
+Thanks.
 
-On Tue, Dec 06, 2022 at 10:50:37PM +0800, Jisheng Zhang wrote:
-> On Tue, Dec 06, 2022 at 12:34:40PM +0800, Guo Ren wrote:
-> > On Mon, Dec 5, 2022 at 11:28 PM Jisheng Zhang <jszhang@kernel.org> wrot=
-e:
-> > > On Mon, Dec 05, 2022 at 08:51:41AM +0800, Guo Ren wrote:
-> > > > On Mon, Dec 5, 2022 at 1:57 AM Jisheng Zhang <jszhang@kernel.org> w=
-rote:
-> > > > >
-> > > > > Instead of using absolute addresses for both the old instrucions =
-and
-> > > > > the alternative instructions, use offsets relative to the alt_ent=
-ry
-> > > > > values. So we can not only cut the size of the alternative entry,=
- but
-
-"This not only cuts"
-
-> > > > > also meet the prerequisite for patching alternatives in the vDSO,
-> > > > > since absolute alternative entries are subject to dynamic relocat=
-ion,
-> > > > > which is incompatible with the vDSO building.
-
-I do this this is in the wrong order though, saving on size is
-secondary to enabling their use in the vdso?
-
-> > > > >
-> > > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > > ---
-> > > > >  arch/riscv/errata/sifive/errata.c           |  4 +++-
-> > > > >  arch/riscv/errata/thead/errata.c            | 11 ++++++++---
-> > > > >  arch/riscv/include/asm/alternative-macros.h | 20 ++++++++++-----=
------
-> > > > >  arch/riscv/include/asm/alternative.h        | 12 ++++++------
-> > > > >  arch/riscv/kernel/cpufeature.c              | 13 ++++++-------
-> > > > >  5 files changed, 33 insertions(+), 27 deletions(-)
-> > > > >
-> > > > > diff --git a/arch/riscv/errata/sifive/errata.c b/arch/riscv/errat=
-a/sifive/errata.c
-> > > > > index 1031038423e7..0e537cdfd324 100644
-> > > > > --- a/arch/riscv/errata/sifive/errata.c
-> > > > > +++ b/arch/riscv/errata/sifive/errata.c
-> > > > > @@ -107,7 +107,9 @@ void __init_or_module sifive_errata_patch_fun=
-c(struct alt_entry *begin,
-> > > > >
-> > > > >                 tmp =3D (1U << alt->errata_id);
-> > > > >                 if (cpu_req_errata & tmp) {
-> > > > > -                       patch_text_nosync(alt->old_ptr, alt->alt_=
-ptr, alt->alt_len);
-> > > > > +                       patch_text_nosync((void *)&alt->old_offse=
-t + alt->old_offset,
-> > > > > +                                         (void *)&alt->alt_offse=
-t + alt->alt_offset,
-> > > >  (void *)&alt->alt_offset + alt->alt_offset. ??!!
-> > >
-> > > Hi Guo,
-> > >
-> > > what's the problem? I can't catch your meaning, could you please proi=
-de
-> > > more details?
-> > Can you explain why:
-> >=20
-> > alt->old_ptr =3D (void *)&alt->old_offset + alt->old_offset
->=20
-> Hi,
->=20
-> when constructing the alt entry, we save the offset in
-> then entry as below:
->=20
-> .long \oldptr - .
->=20
-> So we can restore the old_ptr by &alt->old_offset + alt->old_offset
-
-Please correct me if I have misunderstood, but for stuff like this I
-find it useful to kinda summarise a bit and figure out for myself what
-is going on..
-
-As things stand, we have absolute "locations" for the alternative and
-"old" instructions/data/functions. Your commit is converting us over to
-use offsets. The code that patches in the alternatives needs to have
-absolute addresses though, so you need to be able to, effectively,
-reverse engineer those from the offset.
-You do this by taking the address of the offset & adding the offset to
-the address before casting to (void *). This works, because the offset
-is the offset from the alt_entry data structure to the alternative?
-
-I hope I am in the right ballpark there haha, but I do think that this
-really needs a comment explaining what it is doing. Maybe extract that
-operation into some sort of macro in alternatives.h so the operation is
-done in a central location & you can leave the comment there?
-
-That'd make it at least more manageable for us mere mortals who can just
-do something like
-patch_text_nosync(ALT_OFFSET_ADDRESS(alt->old_offset),
-		  ALT_OFFSET_ADDRESS(alt->alt_offset),
-		  alt->alt_len);
-
-when we have to go an add some alternatives..
-
-> >=20
-> > | offset | <- &offset
-> > | ...       |
-> > | value | <- ptr =3D &offset + offset
-> >=20
-> > I don't make sense of the above.
-> >=20
-> > >
-> > > Thanks
-> > >
-> > > >
-> > > > > +                                         alt->alt_len);
-> > > > >                         cpu_apply_errata |=3D tmp;
-> > > > >                 }
-> > > > >         }
-> > > > > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata=
-/thead/errata.c
-> > > > > index 21546937db39..2a6e335b5a32 100644
-> > > > > --- a/arch/riscv/errata/thead/errata.c
-> > > > > +++ b/arch/riscv/errata/thead/errata.c
-> > > > > @@ -68,6 +68,7 @@ void __init_or_module thead_errata_patch_func(s=
-truct alt_entry *begin, struct al
-> > > > >         struct alt_entry *alt;
-> > > > >         u32 cpu_req_errata =3D thead_errata_probe(stage, archid, =
-impid);
-> > > > >         u32 tmp;
-> > > > > +       void *oldptr, *updptr;
-
-Why mix the terminology with "upd" instead of "alt"?
-
-> > > > >
-> > > > >         for (alt =3D begin; alt < end; alt++) {
-> > > > >                 if (alt->vendor_id !=3D THEAD_VENDOR_ID)
-
-> > > > >  struct alt_entry {
-> > > > > -       void *old_ptr;           /* address of original instrucit=
-on or data  */
-> > > > > -       void *alt_ptr;           /* address of replacement instru=
-ction or data */
-> > > > > -       unsigned long vendor_id; /* cpu vendor id */
-> > > > > -       unsigned long alt_len;   /* The replacement size */
-> > > > > -       unsigned int errata_id;  /* The errata id */
-> > > > > -} __packed;
-> > > > > +       s32 old_offset;         /* offset to original instruciton=
- or data */
-> > > > > +       s32 alt_offset;         /* offset to replacement instruct=
-ion or data */
-
-Perhaps also this comment could be expanded on to specify what it is an
-offset *from* as well as to?
-
-> > > > > +       u16 vendor_id;          /* cpu vendor id */
-> > > > > +       u16 alt_len;            /* The replacement size */
-> > > > > +       u32 errata_id;          /* The errata id */
-> > > > > +};
-
-I hope I didn't make a hames of trying to understand what you were
-doing, but please let me know what I have undoubtedly got mixed up on!
-Thanks,
-Conor.
-
-
---uWz0dNot0HPNalAT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY4+3nAAKCRB4tDGHoIJi
-0o4UAQDdFtrFC6LSB2je2GwWfqj+2QnzRowVGKALV/wZtobyOQEA0iR9BN1OvLLD
-yFafJBWPiUaXNg2nrA+uOw37n1XCUwc=
-=Q0N3
------END PGP SIGNATURE-----
-
---uWz0dNot0HPNalAT--
+-- 
+tejun
