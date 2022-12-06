@@ -2,89 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35BF644A3E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A307C644A42
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234721AbiLFRWy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:22:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
+        id S234510AbiLFRX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:23:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234194AbiLFRWv (ORCPT
+        with ESMTP id S230450AbiLFRXz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:22:51 -0500
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48507303F5;
-        Tue,  6 Dec 2022 09:22:50 -0800 (PST)
-Received: by mail-wr1-f49.google.com with SMTP id u12so23523565wrr.11;
-        Tue, 06 Dec 2022 09:22:50 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h458RF1zVZ1EV5DsW5Ozll8gVo7xVTHiPN8UW60GA68=;
-        b=MAdwXevRAeZXm9ebxFKC37IdNfLB8qCjRWWBrM8437ruIZ5E7cRHqxnnWwNUKLKS/A
-         ZV1JwKU7L2n1LIN9PDqIdnd2hb0fm32HJeadSu13D/nXBkYPFU9j8j95fe6e7bOgLeyv
-         gBo6MF2OouZon21KzCukqIHCSz2+P0ewnj0Zyt5dMqjWf2XhfXORaKFz5DV4nyAaXCFc
-         WKpSMHgNwImlsv/6Buk9EguUXxjkC89xTmc41GG5c5yQG2IXw3BtwNRtDE5wvskIzYMf
-         LYHeskFTK23tvoT1TOxMw4fWFC9txj6FcAt0WeYc1g9jtFa/cK6zm7M8KK/L1fryGOAd
-         RiNA==
-X-Gm-Message-State: ANoB5pkkInLqtKF/L+jiAZXL2K0FBI0o6qBTF0y4tMAB36TgzyqxfDe4
-        fwPF4fVRx+J3G/XeupmA4EQIQiP32sk=
-X-Google-Smtp-Source: AA0mqf69t2edOthKa9N0tlXb6In5lgsG6vbYRgykNTLjMAQGRTNDzlhy0o7aKePbqfG0Z7vVISKD6Q==
-X-Received: by 2002:adf:f94f:0:b0:241:f467:f885 with SMTP id q15-20020adff94f000000b00241f467f885mr37985303wrr.482.1670347368751;
-        Tue, 06 Dec 2022 09:22:48 -0800 (PST)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id e14-20020adff34e000000b0024228b0b932sm21286544wrp.27.2022.12.06.09.22.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 09:22:48 -0800 (PST)
-Date:   Tue, 6 Dec 2022 17:22:46 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     ojeda@kernel.org
-Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Josh Triplett <josh@joshtriplett.org>,
-        Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v1] rust: alloc: remove the `borrow` module (`ToOwned`,
- `Cow`)
-Message-ID: <Y496ZhJF2ND+ND3L@liuwe-devbox-debian-v2>
-References: <20221206010519.39075-1-ojeda@kernel.org>
+        Tue, 6 Dec 2022 12:23:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC44611815;
+        Tue,  6 Dec 2022 09:23:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46308617EE;
+        Tue,  6 Dec 2022 17:23:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE62C433D6;
+        Tue,  6 Dec 2022 17:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670347433;
+        bh=vgsf/phjQqqxA2RXgd59v2QIQaSndvp5aqVRHaKGzH0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k/VuipSm0Q/fHh/G09DN+GXdetyGbjLuSKqLWxsfcuCxqeIiftAoOqCE3H3jkSqTg
+         K4O0coC3QoqwBsX8Q3gYRBExaOnIRORzzES7WkV/AxNIc9ZFmNVbf2ozcHnSzedmBZ
+         J2Fx6MbQcYPkjuF1aWQrrZk9zEFw0ualkNx4EEeK38sqQQuCCbBsKN4QoW26xJnHpM
+         lPijvEmkB5TIBELnOyIpykYCzrFR/v3ngwUcq4t0y9rwUaMId/86XhjnUh6wXEE+8N
+         AujAtdGTVY661w30gyNBihpQuUU5YgWYome/Kva1z1EWvHp0onJFPmT6z84ucmwyEU
+         BQgZ4BUrdn9cg==
+Date:   Tue, 6 Dec 2022 09:23:52 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Veerasenareddy Burru <vburru@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Liron Himi <lironh@marvell.com>,
+        Abhijit Ayarekar <aayarekar@marvell.com>,
+        Sathesh B Edara <sedara@marvell.com>,
+        Satananda Burla <sburla@marvell.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH net-next v2 2/9] octeon_ep: poll for control
+ messages
+Message-ID: <20221206092352.7a86a744@kernel.org>
+In-Reply-To: <Y48ERxYICkG9lQc1@unreal>
+References: <20221129130933.25231-1-vburru@marvell.com>
+        <20221129130933.25231-3-vburru@marvell.com>
+        <Y4cirWdJipOxmNaT@unreal>
+        <BYAPR18MB242397C352B0086140106A46CC159@BYAPR18MB2423.namprd18.prod.outlook.com>
+        <Y4hhpFVsENaM45Ho@unreal>
+        <BYAPR18MB2423229A66D1C98C6C744EE1CC189@BYAPR18MB2423.namprd18.prod.outlook.com>
+        <Y42nerLmNeAIn5w9@unreal>
+        <20221205161626.088e383f@kernel.org>
+        <Y48ERxYICkG9lQc1@unreal>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206010519.39075-1-ojeda@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 02:05:19AM +0100, ojeda@kernel.org wrote:
-> From: Miguel Ojeda <ojeda@kernel.org>
+On Tue, 6 Dec 2022 10:58:47 +0200 Leon Romanovsky wrote:
+> > Polling for control messages every 100ms?  Sure.
+> > 
+> > You say "valid in netdev" so perhaps you can educate us where/why it
+> > would not be?  
 > 
-> The `Cow` type [1] requires that its generic parameter type implements
-> the `ToOwned` trait [2], which provides a method to create owned data
-> from borrowed data, usually by cloning.
-> 
-> However, it is infallible, and thus in most cases it is not useful for
-> the kernel. [3]
-> 
-> Therefore, introduce `cfg(no_borrow)` to remove the `borrow` module
-> (which contains `ToOwned` and `Cow`) from `alloc`.
-> 
-> Link: https://doc.rust-lang.org/alloc/borrow/enum.Cow.html [1]
-> Link: https://doc.rust-lang.org/alloc/borrow/trait.ToOwned.html [2]
-> Link: https://lore.kernel.org/rust-for-linux/20221204103153.117675b1@GaryWorkstation/ [3]
-> Cc: Gary Guo <gary@garyguo.net>
-> Cc: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> It doesn't seem right to me that idle device burns CPU cycles, while it
+> supports interrupts. If it needs "listen to FW", it will be much nicer to
+> install interrupts immediately and don't wait for netdev.
 
-Reviewed-by: Wei Liu <wei.liu@kernel.org>
+No doubt, if there is an alternative we can push for it to be
+implemented. I guess this being yet another "IPU" there could
+be possible workarounds in FW? As always with IPUs - hard to tell :/
+
+If there is no alternative - it is what it is. 
+It's up to customers to buy good HW.
+
+That said, looking at what this set does - how are the VFs configured?
+That's the showstopper for the series in my mind.
