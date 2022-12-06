@@ -2,380 +2,373 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67392644A4C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCFC644A4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiLFR2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:28:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60494 "EHLO
+        id S235073AbiLFRbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:31:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233661AbiLFR2f (ORCPT
+        with ESMTP id S234261AbiLFRbH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:28:35 -0500
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260862FFE8;
-        Tue,  6 Dec 2022 09:28:34 -0800 (PST)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6Fp4oY018757;
-        Tue, 6 Dec 2022 17:28:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=content-type :
- mime-version : subject : from : in-reply-to : date : cc :
- content-transfer-encoding : message-id : references : to; s=pp1;
- bh=6KyngVsGeTHndunyIhehZIijEgaC7Yd64qTrUX2gGmw=;
- b=OH0OwJQJCQe1DdvFIJZV7GBd8NZvRLLHIkZelZA6+5IbPrNPkZJSXNmLWzO7NN2Z+a75
- XXTsuyOdvHy9JKt/upQCmHy4T/oNU2+tHkh5xb+Jgp1mkvzknFYOx4Z1gOvJpxXo848e
- LhOvDw4hywTzccCBYEAcIxF39g36te//t7QoRN1iZD0WQYZkK9WNdZrj6zGRFMYTWTgo
- FifB1gD7A6RvcyRMO9NldnYkGs6BJ//1fNAiG/DAQLdBz2R838Lz1nWFFJu7Crv/IeYu
- k+v41KQzNifIvU7CBwk10FW+gnJHXibwYeKVljcOFCfxCxBrm/uh6kd4Lsq7GQEfGLF4 Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ma40sjw14-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Dec 2022 17:28:14 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B6HFPR3031595;
-        Tue, 6 Dec 2022 17:28:14 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ma40sjw03-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Dec 2022 17:28:13 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.17.1.19/8.16.1.2) with ESMTP id 2B6DZAoD016464;
-        Tue, 6 Dec 2022 17:28:11 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3m9m6y1a9m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 06 Dec 2022 17:28:11 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B6HS8OV21168840
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 6 Dec 2022 17:28:08 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 001C32004B;
-        Tue,  6 Dec 2022 17:28:07 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4BD2E20043;
-        Tue,  6 Dec 2022 17:28:04 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.43.49.182])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue,  6 Dec 2022 17:28:04 +0000 (GMT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v3 2/2] perf test: Add event group test
-From:   Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-In-Reply-To: <20221206043237.12159-3-ravi.bangoria@amd.com>
-Date:   Tue, 6 Dec 2022 22:57:44 +0530
-Cc:     Kan Liang <kan.liang@linux.intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@redhat.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        carsten.haitzler@arm.com, Leo Yan <leo.yan@linaro.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, sandipan.das@amd.com,
-        ananth.narayan@amd.com, santosh.shukla@amd.com
+        Tue, 6 Dec 2022 12:31:07 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFE6326CE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:31:04 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id e13so21267757edj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n+3e6H+rNc43BYKP5QkPBUPguk9yv8mtPl4Zi9TTV2M=;
+        b=RHo82ZeUKPpZm++b23/Vi01vKGRZbpzPstVySQnDsmBFjqptsTHMkdlt5NDuUcCjLJ
+         D+dQDJA16twpkFpjMRPfNUcCVLS7OBRiBBJ7UrlQ4Byu/mINP+boanGRQuqFFMr8IT7k
+         yjQhN5ZGdSzRfLgxMiHNCrsRlRuGLg5GMlcE1fOC0aUQiTpGoVSqLl6eI/2HzUjcs4yr
+         mTq9hJ+LvS2JPtHslPhw56nbUEklefcTDStYfKjvQdNdFw+lJ8i9PhjiPkyd9JCCeYM/
+         VkCa1mTs10BWvMrFl/koSxmJQitrGybtGFVQPX+mf8AZ+mqS2zqgZAT3HxUdux+yQk01
+         oW6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n+3e6H+rNc43BYKP5QkPBUPguk9yv8mtPl4Zi9TTV2M=;
+        b=RKAyCLpqNQzsOcwyXwBvetlxdoNoWk4irk7J86uaeVngZEyH/dOptUwoSuPg6XQ9nD
+         +pOG8kT1J7T1x5V8efn5VXo2kKGZARKy1owBJ6lDEJE4v4dHyRIvjMRP47gF4l4TH2VX
+         LwXmdmONLWiHNmHXa0fKvlQzlXMJIcXPDK7M7wGrL4eQ9OXUrsM+TrrKM1tXYa0ZssQ+
+         JxXAI9u6VLdlgT203mzMmeMFOfVtH0PX18iVNE2p5ERO7vAoUVcWdTcY/W4/TQwtGsSL
+         7mHliiunlkTElIn01tuid9oSd2q89sibRvgztn6JYWof62bfEWJVlQ6ZHBHaEzcqRgva
+         oKeQ==
+X-Gm-Message-State: ANoB5pnzC2blpa4840S1OovbvxmMWmqw6JcsHdo9HlgUHjtKWfT1Hyan
+        OuJ45C6NQV5axUuZhZDknoR0PVAj9mny7XXX8WA6C7i5CLCdWS5r
+X-Google-Smtp-Source: AA0mqf5z3H2sENvjKeFsCcR7szkuQlYRa/2GaINCxycrZ2LS0FpYc8bKkNTO7AkvuYIqloOUkv/rK/xOygercDPdtGM=
+X-Received: by 2002:a05:6402:538e:b0:468:ea55:ab40 with SMTP id
+ ew14-20020a056402538e00b00468ea55ab40mr1832454edb.323.1670347862529; Tue, 06
+ Dec 2022 09:31:02 -0800 (PST)
+MIME-Version: 1.0
+References: <20221124110210.3905092-1-Naresh.Solanki@9elements.com> <20221124110210.3905092-3-Naresh.Solanki@9elements.com>
+In-Reply-To: <20221124110210.3905092-3-Naresh.Solanki@9elements.com>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+Date:   Tue, 6 Dec 2022 23:00:52 +0530
+Message-ID: <CABqG17hCoY86w3usA6RNLQbGjHo_JRFioznuvdCZLo4_KNaMWg@mail.gmail.com>
+Subject: Re: [RESEND PATCH v11 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <C7F7A9B0-421E-40AB-987C-6D250B9633D3@linux.vnet.ibm.com>
-References: <20221206043237.12159-1-ravi.bangoria@amd.com>
- <20221206043237.12159-3-ravi.bangoria@amd.com>
-To:     Ravi Bangoria <ravi.bangoria@amd.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t95Z8NEYB8_1tby92AOoVLST3I708UMK
-X-Proofpoint-GUID: 598D7D-lvS7wc0_XS9rwwC68nrkL7Kst
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-06_11,2022-12-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 mlxscore=0 malwarescore=0 phishscore=0 spamscore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1011 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2212060142
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ping
+
+Regards,
+Naresh Solanki
 
 
-> On 06-Dec-2022, at 10:02 AM, Ravi Bangoria <ravi.bangoria@amd.com> =
-wrote:
->=20
-> Multiple events in a group can belong to one or more pmus, however
-> there are some limitations to it. One of the limitation is, perf
-> doesn't allow creating a group of events from different hw pmus.
-> Write a simple test to create various combinations of hw, sw and
-> uncore pmu events and verify group creation succeeds or fails as
-> expected.
->=20
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+
+9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+Email:  naresh.solanki@9elements.com
+Mobile:  +91 9538631477
+
+Sitz der Gesellschaft: Bochum
+Handelsregister: Amtsgericht Bochum, HRB 17519
+Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
+
+Datenschutzhinweise nach Art. 13 DSGVO
+
+
+On Thu, 24 Nov 2022 at 16:32, Naresh Solanki
+<naresh.solanki@9elements.com> wrote:
+>
+> From: Patrick Rudolph <patrick.rudolph@9elements.com>
+>
+> Implement a regulator driver with IRQ support for fault management.
+> Written against documentation [1] and [2] and tested on real hardware.
+>
+> Every channel has its own regulator supplies nammed 'vss1-supply' and
+> 'vss2-supply'. The regulator supply is used to determine the output
+> voltage, as the smart switch provides no output regulation.
+> The driver requires the 'shunt-resistor-micro-ohms' property to be
+> present in Device Tree to properly calculate current related
+> values.
+>
+> Datasheet links:
+> 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
+> 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
+>
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Co-developed-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
 > ---
-> tools/perf/tests/Build          |   1 +
-> tools/perf/tests/builtin-test.c |   1 +
-> tools/perf/tests/event_groups.c | 127 ++++++++++++++++++++++++++++++++
-> tools/perf/tests/tests.h        |   1 +
-> 4 files changed, 130 insertions(+)
-> create mode 100644 tools/perf/tests/event_groups.c
->=20
-> diff --git a/tools/perf/tests/Build b/tools/perf/tests/Build
-> index 11b69023011b..658b5052c24d 100644
-> --- a/tools/perf/tests/Build
-> +++ b/tools/perf/tests/Build
-> @@ -67,6 +67,7 @@ perf-y +=3D expand-cgroup.o
-> perf-y +=3D perf-time-to-tsc.o
-> perf-y +=3D dlfilter-test.o
-> perf-y +=3D sigtrap.o
-> +perf-y +=3D event_groups.o
->=20
-> $(OUTPUT)tests/llvm-src-base.c: tests/bpf-script-example.c tests/Build
-> 	$(call rule_mkdir)
-> diff --git a/tools/perf/tests/builtin-test.c =
-b/tools/perf/tests/builtin-test.c
-> index 4c6ae59a4dfd..ddd8262bfa26 100644
-> --- a/tools/perf/tests/builtin-test.c
-> +++ b/tools/perf/tests/builtin-test.c
-> @@ -110,6 +110,7 @@ static struct test_suite *generic_tests[] =3D {
-> 	&suite__perf_time_to_tsc,
-> 	&suite__dlfilter,
-> 	&suite__sigtrap,
-> +	&suite__event_groups,
-> 	NULL,
-> };
->=20
-> diff --git a/tools/perf/tests/event_groups.c =
-b/tools/perf/tests/event_groups.c
+>  drivers/mfd/Kconfig         |  12 +++++
+>  drivers/mfd/Makefile        |   1 +
+>  drivers/mfd/max597x.c       |  93 +++++++++++++++++++++++++++++++++
+>  include/linux/mfd/max597x.h | 101 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 207 insertions(+)
+>  create mode 100644 drivers/mfd/max597x.c
+>  create mode 100644 include/linux/mfd/max597x.h
+>
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index 8b93856de432..416fe7986b7b 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -253,6 +253,18 @@ config MFD_MADERA_SPI
+>           Support for the Cirrus Logic Madera platform audio SoC
+>           core functionality controlled via SPI.
+>
+> +config MFD_MAX597X
+> +       tristate "Maxim 597x Power Switch and Monitor"
+> +       depends on I2C
+> +       depends on OF
+> +       select MFD_CORE
+> +       select REGMAP_I2C
+> +       help
+> +         This driver controls a Maxim 5970/5978 switch via I2C bus.
+> +         The MAX5970/5978 is a smart switch with no output regulation, b=
+ut
+> +         fault protection and voltage and current monitoring capabilitie=
+s.
+> +         Also it supports upto 4 indication LEDs.
+> +
+>  config MFD_CS47L15
+>         bool "Cirrus Logic CS47L15"
+>         select PINCTRL_CS47L15
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 7ed3ef4a698c..819d711fa748 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)    +=3D da9063.o
+>  obj-$(CONFIG_MFD_DA9150)       +=3D da9150-core.o
+>
+>  obj-$(CONFIG_MFD_MAX14577)     +=3D max14577.o
+> +obj-$(CONFIG_MFD_MAX597X)      +=3D max597x.o
+>  obj-$(CONFIG_MFD_MAX77620)     +=3D max77620.o
+>  obj-$(CONFIG_MFD_MAX77650)     +=3D max77650.o
+>  obj-$(CONFIG_MFD_MAX77686)     +=3D max77686.o
+> diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
 > new file mode 100644
-> index 000000000000..612c0444aaa8
+> index 000000000000..45838413f24a
 > --- /dev/null
-> +++ b/tools/perf/tests/event_groups.c
-> @@ -0,0 +1,127 @@
+> +++ b/drivers/mfd/max597x.c
+> @@ -0,0 +1,93 @@
 > +// SPDX-License-Identifier: GPL-2.0
-> +#include <string.h>
-> +#include <unistd.h>
-> +#include <stdio.h>
-> +#include "linux/perf_event.h"
-> +#include "tests.h"
-> +#include "debug.h"
-> +#include "pmu.h"
-> +#include "pmus.h"
-> +#include "header.h"
-> +#include "../perf-sys.h"
+> +/*
+> + * Maxim MAX5970/MAX5978 Power Switch & Monitor
+> + *
+> + * Copyright (c) 2022 9elements GmbH
+> + *
+> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+> + */
 > +
-> +/* hw: cycles, sw: context-switch, uncore: [arch dependent] */
-> +static int types[] =3D {0, 1, -1};
-> +static unsigned long configs[] =3D {0, 3, 0};
+> +#include <linux/i2c.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/max597x.h>
+> +#include <linux/regmap.h>
 > +
-> +#define NR_UNCORE_PMUS 5
-> +
-> +/* Uncore pmus that support more than 3 counters */
-> +static struct uncore_pmus {
-> +	const char *name;
-> +	__u64 config;
-> +} uncore_pmus[NR_UNCORE_PMUS] =3D {
-> +	{ "amd_l3", 0x0 },
-> +	{ "amd_df", 0x0 },
-> +	{ "uncore_imc_0", 0x1 },         /* Intel */
-> +	{ "core_imc", 0x318 },           /* PowerPC: =
-core_imc/CPM_STCX_FIN/ */
-> +	{ "hv_24x7", 0x22000000003 },    /* PowerPC: =
-hv_24x7/CPM_STCX_FIN/ */
+> +static const struct regmap_config max597x_regmap_config =3D {
+> +       .reg_bits =3D 8,
+> +       .val_bits =3D 8,
+> +       .max_register =3D MAX_REGISTERS,
 > +};
 > +
-> +static int event_open(int type, unsigned long config, int group_fd)
+> +static const struct mfd_cell max597x_cells[] =3D {
+> +       { .name =3D "max597x-regulator", },
+> +       { .name =3D "max597x-iio", },
+> +       { .name =3D "max597x-led", },
+> +};
+> +
+> +static int max597x_probe(struct i2c_client *i2c, const struct i2c_device=
+_id *id)
 > +{
-> +	struct perf_event_attr attr;
+> +       struct max597x_data *ddata;
+> +       enum max597x_chip_type chip =3D id->driver_data;
 > +
-> +	memset(&attr, 0, sizeof(struct perf_event_attr));
-> +	attr.type =3D type;
-> +	attr.size =3D sizeof(struct perf_event_attr);
-> +	attr.config =3D config;
-> +	/*
-> +	 * When creating an event group, typically the group leader is
-> +	 * initialized with disabled set to 1 and any child events are
-> +	 * initialized with disabled set to 0. Despite disabled being 0,
-> +	 * the child events will not start until the group leader is
-> +	 * enabled.
-> +	 */
-> +	attr.disabled =3D group_fd =3D=3D -1 ? 1 : 0;
+> +       ddata =3D devm_kzalloc(&i2c->dev, sizeof(*ddata), GFP_KERNEL);
+> +       if (!ddata)
+> +               return -ENOMEM;
 > +
-> +	return sys_perf_event_open(&attr, -1, 0, group_fd, 0);
+> +       /*
+> +        * Based on chip type, Initialize the number of switch. This is n=
+eeded by
+> +        * regulator & iio cells.
+> +        */
+> +       switch (chip) {
+> +       case MAX597x_TYPE_MAX5970:
+> +               ddata->num_switches =3D MAX5970_NUM_SWITCHES;
+> +               break;
+> +       case MAX597x_TYPE_MAX5978:
+> +               ddata->num_switches =3D MAX5978_NUM_SWITCHES;
+> +               break;
+> +       }
+> +
+> +       ddata->regmap =3D devm_regmap_init_i2c(i2c, &max597x_regmap_confi=
+g);
+> +       if (IS_ERR(ddata->regmap)) {
+> +               dev_err(&i2c->dev, "Failed to initialize regmap");
+> +               return PTR_ERR(ddata->regmap);
+> +       }
+> +
+> +       /* IRQ used by regulator cell */
+> +       ddata->irq =3D i2c->irq;
+> +       ddata->dev =3D &i2c->dev;
+> +       i2c_set_clientdata(i2c, ddata);
+> +
+> +       return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
+> +                                   max597x_cells, ARRAY_SIZE(max597x_cel=
+ls),
+> +                                   NULL, 0, NULL);
 > +}
 > +
-> +static int setup_uncore_event(void)
-> +{
-> +	struct perf_pmu *pmu;
-> +	int i;
+> +static const struct i2c_device_id max597x_table[] =3D {
+> +       { .name =3D "max5970", MAX597x_TYPE_MAX5970 },
+> +       { .name =3D "max5978", MAX597x_TYPE_MAX5978 },
+> +       {}
+> +};
 > +
-> +	if (list_empty(&pmus))
-> +		perf_pmu__scan(NULL);
+> +MODULE_DEVICE_TABLE(i2c, max597x_table);
 > +
-> +	perf_pmus__for_each_pmu(pmu) {
-> +		for (i =3D 0; i < NR_UNCORE_PMUS; i++) {
-> +			if (!strcmp(uncore_pmus[i].name, pmu->name)) {
-> +				pr_debug("Using %s for uncore pmu =
-event\n", pmu->name);
-> +				types[2] =3D pmu->type;
-> +				configs[2] =3D uncore_pmus[i].config;
-
-Hi Ravi,
-
-Observed failure while running the test on powerpc. It is because the =
-uncore PMU ie hv_24x7 needs
-performance monitoring to be enabled in powerpc. So to handle such =
-cases, can we add an =E2=80=9Cevent_open" check before
-proceeding with the test. Below is the change on top of =
-=E2=80=9Ctmp.perf/core=E2=80=9D .
-
-
-=46rom 8b33fb900c26beafc28f75b6f64631f8fdd045c2 Mon Sep 17 00:00:00 2001
-From: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Date: Tue, 6 Dec 2022 20:17:25 +0530
-Subject: [PATCH] perf test: Update event group check for support of =
-uncore
- event
-
-Event group test checks group creation for combinations of
-hw, sw and uncore PMU events. Some of the uncore pmu event
-requires performance enablement explicitly. Example, hv_24x7
-event in powerpc. Hence add a check to see if event_open
-succeeds before proceeding.
-
-Fixes: 5c88101b797d ("perf test: Add event group test for events in =
-multiple PMUs")
-Signed-off-by: Athira Rajeev <atrajeev@linux.vnet.ibm.com>
----
- tools/perf/tests/event_groups.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/tests/event_groups.c =
-b/tools/perf/tests/event_groups.c
-index 612c0444aaa8..ad52e1da259a 100644
---- a/tools/perf/tests/event_groups.c
-+++ b/tools/perf/tests/event_groups.c
-@@ -51,7 +51,7 @@ static int event_open(int type, unsigned long config, =
-int group_fd)
- static int setup_uncore_event(void)
- {
- 	struct perf_pmu *pmu;
--	int i;
-+	int i, fd;
-=20
- 	if (list_empty(&pmus))
- 		perf_pmu__scan(NULL);
-@@ -62,6 +62,10 @@ static int setup_uncore_event(void)
- 				pr_debug("Using %s for uncore pmu =
-event\n", pmu->name);
- 				types[2] =3D pmu->type;
- 				configs[2] =3D uncore_pmus[i].config;
-+				fd =3D event_open(types[2], configs[2], =
--1);
-+				if (fd < 0)
-+					return -1;
-+				close(fd);
- 				return 0;
- 			}
- 		}
---=20
-2.31.1
-
-
-Ravi, Please share your comments on this. If this looks fine, I can post =
-this as separate fix patch.
-
-Thanks
-Athira
-> +				return 0;
-> +			}
-> +		}
-> +	}
-> +	return -1;
-> +}
+> +static const struct of_device_id max597x_of_match[] =3D {
+> +       { .compatible =3D "maxim,max5970" },
+> +       { .compatible =3D "maxim,max5978" },
+> +       {}
+> +};
 > +
-> +static int run_test(int i, int j, int k)
-> +{
-> +	int erroneous =3D ((((1 << i) | (1 << j) | (1 << k)) & 5) =3D=3D =
-5);
-> +	int group_fd, sibling_fd1, sibling_fd2;
+> +MODULE_DEVICE_TABLE(of, max597x_of_match);
 > +
-> +	group_fd =3D event_open(types[i], configs[i], -1);
-> +	if (group_fd =3D=3D -1)
-> +		return -1;
+> +static struct i2c_driver max597x_driver =3D {
+> +       .id_table =3D max597x_table,
+> +       .driver =3D {
+> +                 .name =3D "max597x",
+> +                 .of_match_table =3D of_match_ptr(max597x_of_match),
+> +                 },
+> +       .probe =3D max597x_probe,
+> +};
+> +module_i2c_driver(max597x_driver);
 > +
-> +	sibling_fd1 =3D event_open(types[j], configs[j], group_fd);
-> +	if (sibling_fd1 =3D=3D -1) {
-> +		close(group_fd);
-> +		return erroneous ? 0 : -1;
-> +	}
+> +MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
+> +MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
+> new file mode 100644
+> index 000000000000..706eff9c50a4
+> --- /dev/null
+> +++ b/include/linux/mfd/max597x.h
+> @@ -0,0 +1,101 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Maxim MAX5970/MAX5978 Power Switch & Monitor
+> + *
+> + * Copyright (c) 2022 9elements GmbH
+> + *
+> + * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
+> + */
 > +
-> +	sibling_fd2 =3D event_open(types[k], configs[k], group_fd);
-> +	if (sibling_fd2 =3D=3D -1) {
-> +		close(sibling_fd1);
-> +		close(group_fd);
-> +		return erroneous ? 0 : -1;
-> +	}
+> +#ifndef MFD_MAX597X_H
+> +#define MFD_MAX597X_H
 > +
-> +	close(sibling_fd2);
-> +	close(sibling_fd1);
-> +	close(group_fd);
-> +	return erroneous ? -1 : 0;
-> +}
+> +#include <linux/device.h>
+> +#include <linux/regmap.h>
 > +
-> +static int test__event_groups(struct test_suite *text __maybe_unused, =
-int subtest __maybe_unused)
-> +{
-> +	int i, j, k;
-> +	int ret;
-> +	int r;
+> +#define MAX5970_NUM_SWITCHES 2
+> +#define MAX5978_NUM_SWITCHES 1
+> +#define MAX597X_NUM_LEDS     4
 > +
-> +	ret =3D setup_uncore_event();
-> +	if (ret || types[2] =3D=3D -1)
-> +		return TEST_SKIP;
+> +enum max597x_chip_type {
+> +       MAX597x_TYPE_MAX5978 =3D 1,
+> +       MAX597x_TYPE_MAX5970,
+> +};
 > +
-> +	ret =3D TEST_OK;
-> +	for (i =3D 0; i < 3; i++) {
-> +		for (j =3D 0; j < 3; j++) {
-> +			for (k =3D 0; k < 3; k++) {
-> +				r =3D run_test(i, j, k);
-> +				if (r)
-> +					ret =3D TEST_FAIL;
+> +#define MAX5970_REG_CURRENT_L(ch)              (0x01 + (ch) * 4)
+> +#define MAX5970_REG_CURRENT_H(ch)              (0x00 + (ch) * 4)
+> +#define MAX5970_REG_VOLTAGE_L(ch)              (0x03 + (ch) * 4)
+> +#define MAX5970_REG_VOLTAGE_H(ch)              (0x02 + (ch) * 4)
+> +#define MAX5970_REG_MON_RANGE                  0x18
+> +#define  MAX5970_MON_MASK                              0x3
+> +#define  MAX5970_MON(reg, ch)          (((reg) >> ((ch) * 2)) & MAX5970_=
+MON_MASK)
+> +#define  MAX5970_MON_MAX_RANGE_UV              16000000
 > +
-> +				pr_debug("0x%x 0x%lx, 0x%x 0x%lx, 0x%x =
-0x%lx: %s\n",
-> +					 types[i], configs[i], types[j], =
-configs[j],
-> +					 types[k], configs[k], r ? =
-"Fail" : "Pass");
-> +			}
-> +		}
-> +	}
-> +	return ret;
-> +}
+> +#define MAX5970_REG_CH_UV_WARN_H(ch)   (0x1A + (ch) * 10)
+> +#define MAX5970_REG_CH_UV_WARN_L(ch)   (0x1B + (ch) * 10)
+> +#define MAX5970_REG_CH_UV_CRIT_H(ch)   (0x1C + (ch) * 10)
+> +#define MAX5970_REG_CH_UV_CRIT_L(ch)   (0x1D + (ch) * 10)
+> +#define MAX5970_REG_CH_OV_WARN_H(ch)   (0x1E + (ch) * 10)
+> +#define MAX5970_REG_CH_OV_WARN_L(ch)   (0x1F + (ch) * 10)
+> +#define MAX5970_REG_CH_OV_CRIT_H(ch)   (0x20 + (ch) * 10)
+> +#define MAX5970_REG_CH_OV_CRIT_L(ch)   (0x21 + (ch) * 10)
 > +
-> +DEFINE_SUITE("Event groups", event_groups);
-> diff --git a/tools/perf/tests/tests.h b/tools/perf/tests/tests.h
-> index e15f24cfc909..fb4b5ad4dd0f 100644
-> --- a/tools/perf/tests/tests.h
-> +++ b/tools/perf/tests/tests.h
-> @@ -147,6 +147,7 @@ DECLARE_SUITE(expand_cgroup_events);
-> DECLARE_SUITE(perf_time_to_tsc);
-> DECLARE_SUITE(dlfilter);
-> DECLARE_SUITE(sigtrap);
-> +DECLARE_SUITE(event_groups);
->=20
-> /*
->  * PowerPC and S390 do not support creation of instruction breakpoints =
-using the
-> --=20
-> 2.38.1
->=20
-
+> +#define  MAX5970_VAL2REG_H(x)                  (((x) >> 2) & 0xFF)
+> +#define  MAX5970_VAL2REG_L(x)                  ((x) & 0x3)
+> +
+> +#define MAX5970_REG_DAC_FAST(ch)               (0x2E + (ch))
+> +
+> +#define MAX5970_FAST2SLOW_RATIO                        200
+> +
+> +#define MAX5970_REG_STATUS0                            0x31
+> +#define  MAX5970_CB_IFAULTF(ch)                        (1 << (ch))
+> +#define  MAX5970_CB_IFAULTS(ch)                        (1 << ((ch) + 4))
+> +
+> +#define MAX5970_REG_STATUS1                            0x32
+> +#define  STATUS1_PROT_MASK                             0x3
+> +#define  STATUS1_PROT(reg) \
+> +       (((reg) >> 6) & STATUS1_PROT_MASK)
+> +#define  STATUS1_PROT_SHUTDOWN                 0
+> +#define  STATUS1_PROT_CLEAR_PG                 1
+> +#define  STATUS1_PROT_ALERT_ONLY               2
+> +
+> +#define MAX5970_REG_STATUS2                            0x33
+> +#define  MAX5970_IRNG_MASK                             0x3
+> +#define  MAX5970_IRNG(reg, ch) \
+> +                                               (((reg) >> ((ch) * 2)) & =
+MAX5970_IRNG_MASK)
+> +
+> +#define MAX5970_REG_STATUS3                            0x34
+> +#define  MAX5970_STATUS3_ALERT                 BIT(4)
+> +#define  MAX5970_STATUS3_PG(ch)                        BIT(ch)
+> +
+> +#define MAX5970_REG_FAULT0                             0x35
+> +#define  UV_STATUS_WARN(ch)                            BIT(ch)
+> +#define  UV_STATUS_CRIT(ch)                            BIT(ch + 4)
+> +
+> +#define MAX5970_REG_FAULT1                             0x36
+> +#define  OV_STATUS_WARN(ch)                            BIT(ch)
+> +#define  OV_STATUS_CRIT(ch)                            BIT(ch + 4)
+> +
+> +#define MAX5970_REG_FAULT2                             0x37
+> +#define  OC_STATUS_WARN(ch)                            BIT(ch)
+> +
+> +#define MAX5970_REG_CHXEN                              0x3b
+> +#define  CHXEN(ch)                                             (3 << (ch=
+ * 2))
+> +
+> +#define MAX5970_REG_LED_FLASH                  0x43
+> +
+> +#define MAX_REGISTERS                                  0x49
+> +#define ADC_MASK                                               0x3FF
+> +
+> +struct max597x_data {
+> +       struct device *dev;
+> +       int irq;
+> +       int num_switches;
+> +       struct regmap *regmap;
+> +       /* Chip specific parameters needed by regulator & iio cells */
+> +       u32 irng[MAX5970_NUM_SWITCHES];
+> +       u32 mon_rng[MAX5970_NUM_SWITCHES];
+> +       u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
+> +};
+> +
+> +#endif
+> --
+> 2.37.3
+>
