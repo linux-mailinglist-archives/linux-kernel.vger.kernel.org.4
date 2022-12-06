@@ -2,89 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB726449F5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:08:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3331B6449F6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:08:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbiLFRIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43656 "EHLO
+        id S235335AbiLFRIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:08:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234387AbiLFRIE (ORCPT
+        with ESMTP id S235449AbiLFRIG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:08:04 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874B817E1E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:08:03 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso18657108pjt.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:08:03 -0800 (PST)
+        Tue, 6 Dec 2022 12:08:06 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73ABEDF77;
+        Tue,  6 Dec 2022 09:08:05 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id m18so6229908eji.5;
+        Tue, 06 Dec 2022 09:08:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ov+WjnBNqjWs1af+hraj4YEzPtdcPglGlTeqAHbyJPo=;
-        b=FHOo4H2DwPVm0CqEEA/q06AKzsUcuFmns83OwxgFGIlQelD4uW5LjTsSKxm0wDywSo
-         CQLr7zoLiDaNDQqazIfwY0Y88qaUB3U9q+7hJQhgzGf+vTlbHUjOA53/5mmCLsvR5DFE
-         CCg6uJg8vLWc65bLwJCwfbpJsQAjqbA69DON+HB5v/hGkMTFeFr7P0SsN2T9NbD1rt3A
-         IQ12K15mbR5Ky+YEA4ynHwL/+b7LeHLPZR8rpGHMWFmABulKYekzfC8d1Yduo3GqmLHm
-         PfEMqWu43iwjJe0PDy2epKU1ZPFRX2nclunN0Ae8b9SuFP6XROxonn9ANoLhBSZMEy/B
-         wS7Q==
+        bh=nQy1QBUpeuNTaLoaBP6NQNUp97yCKwC841vY4JbVEXo=;
+        b=HnsnVe7w9HTT6ViTvbLtHAAdgPPKrdbPTAt5BDC0X0GJab0VhwQkwxEG4+QOwlyV55
+         hEds2StZunG6a3uGms2WiK0UHrlEC/a4Us/f3QLF0292PqgHBP9rzLhISJrNGnqBLI2f
+         6EjdZfE+BwI+e9kETZ5Ju7k6zxnrgeK87gkW9sz+hcz1PW9JxCUdoPIYX9w4r/dGMOV8
+         VuBDVNV3dej5OUq3gzPULxTrpCiHpjN/QKhn4/WQbLO/C5kC3Ex2lgXyxAs+cRQm090k
+         POF/bU9lFHNLqc8R90QTqliGeNT0wPfzz80jEKrJWvohJKMkh4eKnoFx0V1BoRNkBayR
+         vbcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ov+WjnBNqjWs1af+hraj4YEzPtdcPglGlTeqAHbyJPo=;
-        b=uYTlngEiZvhTnRfinSu+V7p/4IHfFNPjFLlpF88U3zqHKo4lTd0WHh+Ru/qqwEZjoL
-         cPmooLdA3Q327DJElq5L1Tu5JdG6ErN3h7DX4/df/wSQ/P5k+j+JhUa6MqhYclN3eDYy
-         OlQpu8+8HxdDJkuGx9t6FzHrGpFPLRY4YceUlAG8rFL7khoxHPkfSne+CC25zQGssK1E
-         6Cp6GSQxB/FypIx1SGf+S6L7BUXAtP+KmGjSgH13fR0cQskDoCMbWJM5foQd2OZeoMen
-         bciiRbuR+3Jqb0sIEr7LwoxnEmb9MnJzYUFqL7cDidmMMVAGiJ7AA7sPwUI+CEwYOopL
-         ZSXQ==
-X-Gm-Message-State: ANoB5pnL7zPA0n0YTYONNoIjd7XU2pNBbgTyfG+fKAUlP2Zt0sjkh8HP
-        NzamZt7o3L9YclG39ooxtEDNhQ==
-X-Google-Smtp-Source: AA0mqf7hA5/u0JLWZH7lY75a8vR5qIzNdl9UVLDNfusQbeAaUMqt7F4iCUyjLfDKe8ItbxVUl6QZuQ==
-X-Received: by 2002:a17:902:c1ca:b0:189:e149:a1b2 with SMTP id c10-20020a170902c1ca00b00189e149a1b2mr7524064plc.17.1670346482909;
-        Tue, 06 Dec 2022 09:08:02 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id p3-20020a1709026b8300b001898ee9f723sm12908572plk.2.2022.12.06.09.08.02
+        bh=nQy1QBUpeuNTaLoaBP6NQNUp97yCKwC841vY4JbVEXo=;
+        b=gXcfTZWPEM+LsHw6GSI3b2pEhPDFYALXPBgGlihNA7CEJ+dbU/0HAlPZ3lWdvZmEPF
+         eBlMV0PBYXhxHaQS9t/ahG12iu7UxjzJwHgaaMMyeMMx5K37RCFeqkVKoKY7f8U0PQoV
+         6kT/Wlxh+OFcQsM/nNNeGCXL6LhWMFH41TMsI5UHEAhTUcbfCCltEcqVTeilpB0UpTbv
+         rDfikYnG5jZGI/ysO/vy/t371BRmST2VkCzyZHfNwzi7Cjo0Eqt+TZ2JRXie9npwr0Wx
+         I+Iz0XNgTJUtvijBIZ96PVZDKNXwZ3gNGLT/5Vx2jXwweNJIoo0v3cIHoDHcN631t4Mr
+         wbJA==
+X-Gm-Message-State: ANoB5pkj+MVg3cbGGMsZKkPiIrrP52hsdo1NRclvkHQAysDy02gHMEJ1
+        lhYWrhyl6I1ndFW7oJMgamL2HZpK2j/irg==
+X-Google-Smtp-Source: AA0mqf5akfdAaaDyOIT8vkmO83FPxEvQkhKHvl/QSwuMbZSYFwgEZmjn4jZj2Bc3DwmIYpUDBMeZEw==
+X-Received: by 2002:a17:907:d40e:b0:7bb:f10c:9282 with SMTP id vi14-20020a170907d40e00b007bbf10c9282mr13017454ejc.325.1670346483982;
+        Tue, 06 Dec 2022 09:08:03 -0800 (PST)
+Received: from skbuf ([188.26.184.215])
+        by smtp.gmail.com with ESMTPSA id gi20-20020a1709070c9400b0077d6f628e14sm7619800ejc.83.2022.12.06.09.08.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 09:08:02 -0800 (PST)
-Date:   Tue, 6 Dec 2022 17:07:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Sterritt <sterritt@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu
- variables
-Message-ID: <Y4927u7hjK+REsNr@google.com>
-References: <20221201021948.9259-1-aik@amd.com>
- <20221201021948.9259-2-aik@amd.com>
- <Y4jdIl1elcnL8JUU@google.com>
- <b28f0cb9-b321-cc55-db31-61296e1a494e@amd.com>
+        Tue, 06 Dec 2022 09:08:03 -0800 (PST)
+Date:   Tue, 6 Dec 2022 19:08:01 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64 support
+ for ksz8 series of switches
+Message-ID: <20221206170801.othuifyrm3qrz7ub@skbuf>
+References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
+ <20221205052904.2834962-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b28f0cb9-b321-cc55-db31-61296e1a494e@amd.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20221205052904.2834962-1-o.rempel@pengutronix.de>
+ <20221205052904.2834962-1-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,50 +82,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022, Alexey Kardashevskiy wrote:
-> 
-> On 2/12/22 03:58, Sean Christopherson wrote:
-> > On Thu, Dec 01, 2022, Alexey Kardashevskiy wrote:
-> > > diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
-> > > index cfdf307ddc01..c4324d0205b5 100644
-> > > --- a/arch/x86/include/asm/debugreg.h
-> > > +++ b/arch/x86/include/asm/debugreg.h
-> > > @@ -127,6 +127,7 @@ static __always_inline void local_db_restore(unsigned long dr7)
-> > >   #ifdef CONFIG_CPU_SUP_AMD
-> > >   extern void set_dr_addr_mask(unsigned long mask, int dr);
-> > > +extern unsigned long get_dr_addr_mask(int dr);
-> > >   #else
-> > >   static inline void set_dr_addr_mask(unsigned long mask, int dr) { }
-> > 
-> > KVM_AMD doesn't depend on CPU_SUP_AMD, i.e. this needs a stub.  Or we need to add
-> > a dependency.
-> 
-> The new symbol is under CONFIG_CPU_SUP_AMD and so is its only user
-> arch/x86/kernel/cpu/amd.c:
-> 
-> arch/x86/kernel/cpu/Makefile:
-> obj-$(CONFIG_CPU_SUP_AMD)               += amd.o
-> 
-> 
-> Is this enough dependency or we need something else? (if enough, I'll put it
-> into the next commit log).
+On Mon, Dec 05, 2022 at 06:29:04AM +0100, Oleksij Rempel wrote:
+> +void ksz88xx_r_mib_stats64(struct ksz_device *dev, int port)
+> +{
+> +	struct ethtool_pause_stats *pstats;
+> +	struct rtnl_link_stats64 *stats;
+> +	struct ksz88xx_stats_raw *raw;
+> +	struct ksz_port_mib *mib;
+> +
+> +	mib = &dev->ports[port].mib;
+> +	stats = &mib->stats64;
+> +	pstats = &mib->pause_stats;
+> +	raw = (struct ksz88xx_stats_raw *)mib->counters;
+> +
+> +	spin_lock(&mib->stats64_lock);
+> +
+> +	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast +
+> +		raw->rx_pause;
+> +	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast +
+> +		raw->tx_pause;
+> +
+> +	/* HW counters are counting bytes + FCS which is not acceptable
+> +	 * for rtnl_link_stats64 interface
+> +	 */
+> +	stats->rx_bytes = raw->rx + raw->rx_hi - stats->rx_packets * ETH_FCS_LEN;
+> +	stats->tx_bytes = raw->tx + raw->tx_hi - stats->tx_packets * ETH_FCS_LEN;
 
-No, it's actually the opposite, the issue is precisely that the symbol is buried
-under CPU_SUP_AMD.  KVM_AMD doesn't currently depend on CPU_SUP_AMD, and so the
-usage in sev_es_prepare_switch_to_guest() fails to compile if CPU_SUP_AMD=n and
-KVM_AMD={Y,M}.
+What are rx_hi, tx_hi compared to rx, tx?
 
-  config KVM_AMD
-	tristate "KVM for AMD processors support"
-	depends on KVM
+> +
+> +	stats->rx_length_errors = raw->rx_undersize + raw->rx_fragments +
+> +		raw->rx_oversize;
+> +
+> +	stats->rx_crc_errors = raw->rx_crc_err;
+> +	stats->rx_frame_errors = raw->rx_align_err;
+> +	stats->rx_dropped = raw->rx_discards;
+> +	stats->rx_errors = stats->rx_length_errors + stats->rx_crc_errors +
+> +		stats->rx_frame_errors  + stats->rx_dropped;
+> +
+> +	stats->tx_window_errors = raw->tx_late_col;
+> +	stats->tx_fifo_errors = raw->tx_discards;
+> +	stats->tx_aborted_errors = raw->tx_exc_col;
+> +	stats->tx_errors = stats->tx_window_errors + stats->tx_fifo_errors +
+> +		stats->tx_aborted_errors;
+> +
+> +	stats->multicast = raw->rx_mcast;
+> +	stats->collisions = raw->tx_total_col;
+> +
+> +	pstats->tx_pause_frames = raw->tx_pause;
+> +	pstats->rx_pause_frames = raw->rx_pause;
 
-I actually just submitted a patch[*] to "fix" that since KVM requires the CPU vendor
-to be AMD or Hygon at runtime.  Although that patch is buried in the middle of a
-large series, it doesn't have any dependencies.  So, if this series is routed through
-the KVM tree, it should be straightforward to just pull that patch into this series,
-and whichever series lands first gets the honor of applying that patch.
+FWIW, ksz_get_pause_stats() can sleep, just ksz_get_stats64() can't. So
+the pause stats don't need to be periodically read (unless you want to
+do that to prevent 32-bit overflows).
 
-If this series is routed through the tip tree, the best option may be to just add
-a stub to avoid potential conflicts, and then we can rip the stub out later.
-
-[*] https://lore.kernel.org/all/20221201232655.290720-12-seanjc@google.com
+> +
+> +	spin_unlock(&mib->stats64_lock);
+> +}
