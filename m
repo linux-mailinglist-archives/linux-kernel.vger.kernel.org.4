@@ -2,46 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7373B644E58
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:07:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFDE644E5B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:08:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLFWHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51640 "EHLO
+        id S229848AbiLFWIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:08:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiLFWHw (ORCPT
+        with ESMTP id S229744AbiLFWIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:07:52 -0500
+        Tue, 6 Dec 2022 17:08:48 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76CF1262B;
-        Tue,  6 Dec 2022 14:07:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8FF2A413;
+        Tue,  6 Dec 2022 14:08:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
         MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ghNzYmLGX+1I8uXA3rrjX5OsOiaSJqPCR/IWY1J+MJA=; b=OSBNmZ3SuxJ2jiz8l0Z76oktDH
-        3vBMBZJDzvYF7SurRNCkTKEn8LuX2IGNUlXQY+vOjbvaBWoKN2uEJEENTu3AX2z4ocjT2kepNTD1f
-        8knZt42XWwyfzfO1SHsHSViKi8KHTx7PiqEOONjTCuKs/avLtLj0QGao15dYd5O73/i/R7LxinLUG
-        fajiCNIK9ufHUNT/Zvw1UmY80/q1sMXJeuiNrmA998GpOFjjzAnyadt7jcffxwUHWF+90xs1cMOxp
-        zcDLI32rgSeK0FduWKo0QyDzK4FEC/MChLCsUwyPXj6LLADxwR8yVMuDaYm85t9ZXQTxBoomLX7BE
-        qqCtktHg==;
+        bh=jCjmi8ZneEdnXgTJchxomiX/fTGkLt0Zee4oZ7yofqE=; b=D6ukBDyoYS06QTWDRrLaRTlRqT
+        XdyToTFp8sItMu/pVXTTic93dBiXRKgDdmlT2+n7j/mwN0GWyKQeekRJnVJaMdZpjUe3PxCpa3avg
+        G7seZFcop1r7JsvlwskUzFd5QjfaG3btqgjefLUy13xDlfurEBI4fEqoNyP8QVpa281Iee94S/BE1
+        6k7YP/18f/R6dtP42KBkJ4D/L+3XhET+LN6e2arR2JKmvKVFOjcjy7cQlbCODaC+DxW1YqT/TPpS/
+        KVEwCyGZUxIDcZem0+OIsoGfsQMDlrJSYCo45Wi1k2zACntrrUzM0UalW9JY8LtT0fGH9YB1lhlu5
+        7RRVk8Vw==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p2g6O-003lyu-2G; Tue, 06 Dec 2022 22:07:48 +0000
-Date:   Tue, 6 Dec 2022 14:07:48 -0800
+        id 1p2g7D-003muu-0P; Tue, 06 Dec 2022 22:08:39 +0000
+Date:   Tue, 6 Dec 2022 14:08:38 -0800
 From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         linux-modules@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Nick Terrell <terrelln@fb.com>, Takashi Iwai <tiwai@suse.de>
-Subject: Re: [PATCH] module/decompress: Support zstd in-kernel decompression
-Message-ID: <Y4+9NJStMzI+9/nO@bombadil.infradead.org>
-References: <20221206215318.3955400-1-swboyd@chromium.org>
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v8 6/9] livepatch: Use kallsyms_on_each_match_symbol() to
+ improve performance
+Message-ID: <Y4+9Zr1BBqsYRxqT@bombadil.infradead.org>
+References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+ <20221102084921.1615-7-thunder.leizhen@huawei.com>
+ <Y34f+IqqSGbtC82V@alley>
+ <45a28bcf-c6e1-8d39-613a-d30bd7b685f0@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206215318.3955400-1-swboyd@chromium.org>
+In-Reply-To: <45a28bcf-c6e1-8d39-613a-d30bd7b685f0@huawei.com>
 Sender: Luis Chamberlain <mcgrof@infradead.org>
 X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -53,18 +67,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 01:53:18PM -0800, Stephen Boyd wrote:
-> Add support for zstd compressed modules to the in-kernel decompression
-> code. This allows zstd compressed modules to be decompressed by the
-> kernel, similar to the existing support for gzip and xz compressed
-> modules.
+On Thu, Nov 24, 2022 at 10:36:23AM +0800, Leizhen (ThunderTown) wrote:
 > 
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Piotr Gorski <lucjan.lucjanov@gmail.com>
-> Cc: Nick Terrell <terrelln@fb.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> 
+> On 2022/11/23 21:28, Petr Mladek wrote:
+> > Hi,
+> > 
+> > I am sorry for the late review. I have been snowed under another
+> > tasks.
+> > 
+> > On Wed 2022-11-02 16:49:18, Zhen Lei wrote:
+> >> Based on the test results of kallsyms_on_each_match_symbol() and
+> >> kallsyms_on_each_symbol(), the average performance can be improved by
+> >> more than 1500 times.
+> > 
+> > Sounds great.
+> > 
+> >> --- a/kernel/livepatch/core.c
+> >> +++ b/kernel/livepatch/core.c
+> >> @@ -153,6 +153,24 @@ static int klp_find_callback(void *data, const char *name,
+> >>  	return 0;
+> >>  }
+> >>  
+> >> +static int klp_match_callback(void *data, unsigned long addr)
+> >> +{
+> >> +	struct klp_find_arg *args = data;
+> >> +
+> >> +	args->addr = addr;
+> >> +	args->count++;
+> >> +
+> >> +	/*
+> >> +	 * Finish the search when the symbol is found for the desired position
+> >> +	 * or the position is not defined for a non-unique symbol.
+> >> +	 */
+> >> +	if ((args->pos && (args->count == args->pos)) ||
+> >> +	    (!args->pos && (args->count > 1)))
+> >> +		return 1;
+> >> +
+> >> +	return 0;
+> > 
+> > This duplicates most of the klp_find_callback(). Please, call this
+> > new function in klp_find_callback() instead of the duplicated code.
+> > I mean to do:
+> > 
+> > static int klp_find_callback(void *data, const char *name, unsigned long addr)
+> > {
+> > 	struct klp_find_arg *args = data;
+> > 
+> > 	if (strcmp(args->name, name))
+> > 		return 0;
+> > 
+> > 	return klp_match_callback(data, addr);
+> > }
+> 
+> Good idea. But these patches have been merged into linux-next, how about I post
+> a new cleanup patch after v6.2-rc1?
 
-Thanks, might as well get the bots to start testing this, so queued up for
-modules-next.
+You can send the cleanup now. The code doesn't change drastically, just
+base it on modules-next.
 
   Luis
