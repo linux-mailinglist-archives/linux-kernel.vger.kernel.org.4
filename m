@@ -2,107 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28CFC6439C3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:04:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A2846439C0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 01:04:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbiLFAEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 19:04:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37266 "EHLO
+        id S231756AbiLFAEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 19:04:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232006AbiLFAEf (ORCPT
+        with ESMTP id S229471AbiLFAEV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 19:04:35 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AED441CB24
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:04:32 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id r18so11880890pgr.12
-        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:04:32 -0800 (PST)
+        Mon, 5 Dec 2022 19:04:21 -0500
+Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0D941B9DF
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 16:04:19 -0800 (PST)
+Received: by mail-ua1-x933.google.com with SMTP id n21so2267651uaj.8
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 16:04:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Du9fC8uNx8ue3fvIkuE2kVsiCyslxGafpD/Atw5Se3c=;
-        b=dVrWEz+M2VbizK97uaojc0bn58XNs+jECIOm4Dk4fuhywQcVIsQVd6m7RXVPtwsL8m
-         ga6n0cdybF4Sh/FS6pqSX36CNLgxugRZ74aKcrmpBhw/lymbZwnHdW5+zTwgAZhesOFX
-         P77S7byXu92e/BpKcIVT+gkAcCOPiTUr9HXqE=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CN9j3kYVvyZ5N6wvjIbsfvlwhZyZism7lUmKxfBm3qo=;
+        b=oGxMdcr+0mbzD6dGaWRq//H9fg0RRqPLZS5um42zp6vqIB3VgaYSzsPlmIZ0z83+Fv
+         O0goqZ/n6Ydm454x0iQFUjqVCxeoFtpDVFTBE9du6vbdkt9YG3ZYp92U/vktU881pzhA
+         TdULRQ7aMupkPxWWZEdtAR6mtIm7nO7d+DpeE0VozhOJiaCMYZFnrHBjhAFZA2TddYd3
+         4FNrEcJY9Zj1oXHpEMc/hpy1qAKRPd1BiJeMK+pmKSdo/Nvp3UsdQ3+DGAVLPrzsBoxm
+         cMgfGpOQPSAK42PLPdHgQKnp9QJdnTE8tw8qQMd9MDguSBcsVsV5mTkWMbj06/QHcEZP
+         LxTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Du9fC8uNx8ue3fvIkuE2kVsiCyslxGafpD/Atw5Se3c=;
-        b=bnX89aIpmB3gEu1RuLt+Bqw+ChlrYL3ptb/VVP3/EIExpQE7R55eNA4nb/4cI9MgTx
-         0xWsyNLqpIuzMIn/WPeid1rwbL7iBJhcpOa/w7wKK2An5YIePHOIPKuA05yxxkuVjolk
-         5JZUZw2OSk27r0vMjVGjlteLe4Nc9aDjD1SF6qdjutc+ct7eJQ5B/d2pv54fX6anH6xt
-         ndWByutSzM9GOOjuLrOhby38hT+2AvX/OsSAqZtZ2zdPyEpipgW6jEzqU6cCV3IvTH3D
-         OJ6baqeKqXTAbXfUAF1Niq9ehTmn5ojv35e1ZjrX/2zHKuch0DJ7DNrB9mUmx55G4UON
-         KwXQ==
-X-Gm-Message-State: ANoB5pkWkThvwMDIXtBlzvWykIjrlOUhobYClj7GDagPicW+lTNWB+Rq
-        2cWZAYSnpqbpDqTafIiv4Yd0lQ==
-X-Google-Smtp-Source: AA0mqf6cuyzm+Fr2zJihuS/WC3/UZVnopQl0riVV+wrA94t5wzAD8Eq3DBs/aDN9xSvKEHFXMqaDCg==
-X-Received: by 2002:a63:de4a:0:b0:429:983d:22f8 with SMTP id y10-20020a63de4a000000b00429983d22f8mr56608777pgi.165.1670285072207;
-        Mon, 05 Dec 2022 16:04:32 -0800 (PST)
-Received: from localhost ([2620:15c:9d:2:9b83:ae6f:f47b:bb4d])
-        by smtp.gmail.com with UTF8SMTPSA id z27-20020aa79e5b000000b00576f9773c81sm2382267pfq.211.2022.12.05.16.04.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 16:04:31 -0800 (PST)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     linux-mmc@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Al Cooper <alcooperx@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Brian Norris <briannorris@chromium.org>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] mmc: sdhci-brcmstb: Resolve "unused" warnings with CONFIG_OF=n
-Date:   Mon,  5 Dec 2022 16:04:06 -0800
-Message-Id: <20221205160353.1.I5fa28f1045f17fb9285d507accf139f8b2a8f4b5@changeid>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+        bh=CN9j3kYVvyZ5N6wvjIbsfvlwhZyZism7lUmKxfBm3qo=;
+        b=kQchZ/5AukXccLN+1t0t6cjOm4RMEIMp5vO3LgRLU6xCEt4nJog0+4eXlLic2Zzgr5
+         zajt/U6WKsH1ew+9crAKkJNTBonEd9ap7z6OZfEg0hqKHiN2w7ef2pNaXUrttsaaVaC+
+         QcUsmMAF6AAtEvIOSeR/Vi5PxV9Yj7Nyw/MZZ/4ck/7T8I5V4vT/jaI3N+w88rpNS1QL
+         X4uO6Sm2J+Z/Z+Iu5lcF7TdkMnJ45rDv9QvWNLlFrgjD4JfxhLRj3Fm40bvOcQJfaqog
+         CWX0yQCumykluQzQRQ4Koe3r5FoMoYoEpMKo27CgIVNJYWYM/bcq0VXcVAWEoK7w7Mys
+         nbNg==
+X-Gm-Message-State: ANoB5pnZAvDO+R6LclQ0jxurqJghPv1ITnA1O3ykhET0d4PpGzclCs9w
+        slnfvGeYWUoBq8l1bZdG2bVYDczvaIg+1GcMP4KGZA==
+X-Google-Smtp-Source: AA0mqf5I66pb9lA/8S5u9JMg2ndRhX5KB3kou7fRIId3RudNxizUHF7KzNRn+9h6uS0rWUC7fY5J9LY1KNoDMQUYwbw=
+X-Received: by 2002:ab0:5517:0:b0:409:5403:c18 with SMTP id
+ t23-20020ab05517000000b0040954030c18mr38785220uaa.51.1670285058552; Mon, 05
+ Dec 2022 16:04:18 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221203011120.2361610-1-almasrymina@google.com> <87lenm1soh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87lenm1soh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Mon, 5 Dec 2022 16:04:07 -0800
+Message-ID: <CAHS8izMm4NDhwX-pqEu1RbKoUgi8jFJH5a9LTetdQpQPu6ZsGw@mail.gmail.com>
+Subject: Re: [PATCH v1] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With W=1, we can see this gcc warning:
+On Sun, Dec 4, 2022 at 6:39 PM Huang, Ying <ying.huang@intel.com> wrote:
+>
+> Mina Almasry <almasrymina@google.com> writes:
+>
+> > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> > reclaim"") enabled demotion in memcg reclaim, which is the right thing
+> > to do, however, I suspect it introduced a regression in the behavior of
+> > try_to_free_mem_cgroup_pages().
+> >
+> > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
+> > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
+> > of the cgroup should reduce by nr_pages. The callers expect
+> > try_to_free_mem_cgroup_pages() to also return the number of pages
+> > reclaimed, not demoted.
+> >
+> > However, what try_to_free_mem_cgroup_pages() actually does is it
+> > unconditionally counts demoted pages as reclaimed pages. So in practice
+> > when it is called it will often demote nr_pages and return the number of
+> > demoted pages to the caller. Demoted pages don't lower the memcg usage,
+> > and so I think try_to_free_mem_cgroup_pages() is not actually doing what
+> > the callers want it to do.
+> >
+> > I suspect various things work suboptimally on memory systems or don't
+> > work at all due to this:
+> >
+> > - memory.high enforcement likely doesn't work (it just demotes nr_pages
+> >   instead of lowering the memcg usage by nr_pages).
+> > - try_charge_memcg() will keep retrying the charge while
+> >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
+> >   making any room for the charge.
+> > - memory.reclaim has a wonky interface. It advertises to the user it
+> >   reclaims the provided amount but it will actually demote that amount.
+> >
+> > There may be more effects to this issue.
+> >
+> > To fix these issues I propose shrink_folio_list() to only count pages
+> > demoted from inside of sc->nodemask to outside of sc->nodemask as
+> > 'reclaimed'.
+> >
+> > For callers such as reclaim_high() or try_charge_memcg() that set
+> > sc->nodemask to NULL, try_to_free_mem_cgroup_pages() will try to
+> > actually reclaim nr_pages and return the number of pages reclaimed. No
+> > demoted pages would count towards the nr_pages requirement.
+> >
+> > For callers such as memory_reclaim() that set sc->nodemask,
+> > try_to_free_mem_cgroup_pages() will free nr_pages from that nodemask
+> > with either reclaim or demotion.
+>
+> Have you checked all callers?  For example, IIUC, in
+> reclaim_clean_pages_from_list(), although sc.nodemask == NULL, the
+> demoted pages should be counted as reclaimed.
 
-drivers/mmc/host/sdhci-brcmstb.c:182:34: warning: ‘sdhci_brcm_of_match’ defined but not used [-Wunused-const-variable=]
-  182 | static const struct of_device_id sdhci_brcm_of_match[] = {
-      |                                  ^~~~~~~~~~~~~~~~~~~
+I checked all call stacks leading to shrink_folio_list() now (at least
+I hope). Here is what I think they do and how I propose to handle
+them:
 
-Rather than play around more with #ifdef's, the simplest solution is to
-just mark this __maybe_unused.
+- reclaim_clean_pages_from_list() & __node_reclaim() & balance_pgdat()
+These try to free memory from a specific node, and both demotion and
+reclaim from that node should be counted. I propose these calls set
+sc>nodemask = pgdat.node_id to signal to shrink_folio_list() that both
+demotion and reclaim from this node should be counted.
 
-Fixes: 1fad8422c989 ("mmc: sdhci-brcmstb: Allow building with COMPILE_TEST")
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/all/202212060700.NjMecjxS-lkp@intel.com/
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+- try_to_free_pages()
+Tries to free pages from a specific nodemask. It sets sc->nodemask to
+ac->nodemask. In this case pages demoted within the nodemask should
+not count. Pages demoted outside of the nodemask should count, which
+this patch already tries to do.
 
- drivers/mmc/host/sdhci-brcmstb.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+- mem_cgroup_shrink_node()
+This is memcg soft limit reclaim. AFAIU only reclaim should be
+counted. It already sets sc->nodemask=NULL to indicate that it
+requires reclaim from all nodes and that only reclaimed memory should
+be counted, which this patch already tries to do.
 
-diff --git a/drivers/mmc/host/sdhci-brcmstb.c b/drivers/mmc/host/sdhci-brcmstb.c
-index 55d8bd232695..f2cf3d70db79 100644
---- a/drivers/mmc/host/sdhci-brcmstb.c
-+++ b/drivers/mmc/host/sdhci-brcmstb.c
-@@ -179,7 +179,7 @@ static const struct brcmstb_match_priv match_priv_7216 = {
- 	.ops = &sdhci_brcmstb_ops_7216,
- };
- 
--static const struct of_device_id sdhci_brcm_of_match[] = {
-+static const struct of_device_id __maybe_unused sdhci_brcm_of_match[] = {
- 	{ .compatible = "brcm,bcm7425-sdhci", .data = &match_priv_7425 },
- 	{ .compatible = "brcm,bcm7445-sdhci", .data = &match_priv_7445 },
- 	{ .compatible = "brcm,bcm7216-sdhci", .data = &match_priv_7216 },
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog
+- try_to_free_mem_cgroup_pages()
+This is covered in the commit message. Many callers set nodemask=NULL
+indicating they want reclaim and demotion should not count.
+memory.reclaim sets nodemask depending on the 'nodes=' arg and wants
+demotion and reclaim from that nodemask.
 
+- reclaim_folio_list()
+Sets no_demotion = 1. No ambiguity here, only reclaims and counts
+reclaimed pages.
+
+If agreeable I can fix reclaim_clean_pages_from_list() &
+__node_reclaim() & balance_pgdat() call sites in v3.
+
+> How about count both
+> "demoted" and "reclaimed" in struct scan_control, and let callers to
+> determine how to use the number?
+>
+
+I don't think this is by itself enough. Pages demoted between 2 nodes
+that are both in sc->nodemask should not count, I think. So 'demoted'
+needs to be specifically pages demoted outside of the nodemask. We can
+do 2 things:
+
+1. Only allow the kernel to demote outside the nodemask (which you
+don't prefer).
+2. Allow the kernel to demote inside the nodemask but not count them.
+
+I will see if I can implement #2.
+
+> > Tested this change using memory.reclaim interface. With this change,
+> >
+> >       echo "1m" > memory.reclaim
+> >
+> > Will cause freeing of 1m of memory from the cgroup regardless of the
+> > demotions happening inside.
+> >
+> >       echo "1m nodes=0" > memory.reclaim
+>
+> Have you tested these tests in the original kernel?  If so, whether does
+> the issue you suspected above occurs during testing?
+>
+
+Yes. I set up a test case where I allocate 500m in a cgroup, and then do:
+
+    echo "50m" > memory.reclaim
+
+Without my fix, my kernel demotes 70mb and reclaims 4 mb.
+
+With my v1 fix, my kernel demotes all memory possible and reclaims 60mb.
+
+I will add this to the commit message in the next version.
+
+
+> Best Regards,
+> Huang, Ying
+>
+> > Will cause freeing of 1m of node 0 by demotion if a demotion target is
+> > available, and by reclaim if no demotion target is available.
+> >
+> > Signed-off-by: Mina Almasry <almasrymina@google.com>
+> >
+> > ---
+> >
+> > This is developed on top of mm-unstable largely because I need the
+> > memory.reclaim nodes= arg to test it properly.
+> > ---
+> >  mm/vmscan.c | 13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/mm/vmscan.c b/mm/vmscan.c
+> > index 2b42ac9ad755..8f6e993b870d 100644
+> > --- a/mm/vmscan.c
+> > +++ b/mm/vmscan.c
+> > @@ -1653,6 +1653,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+> >       LIST_HEAD(free_folios);
+> >       LIST_HEAD(demote_folios);
+> >       unsigned int nr_reclaimed = 0;
+> > +     unsigned int nr_demoted = 0;
+> >       unsigned int pgactivate = 0;
+> >       bool do_demote_pass;
+> >       struct swap_iocb *plug = NULL;
+> > @@ -2085,7 +2086,17 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+> >       /* 'folio_list' is always empty here */
+> >
+> >       /* Migrate folios selected for demotion */
+> > -     nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
+> > +     nr_demoted = demote_folio_list(&demote_folios, pgdat);
+> > +
+> > +     /*
+> > +      * Only count demoted folios as reclaimed if we demoted them from
+> > +      * inside of the nodemask to outside of the nodemask, hence reclaiming
+> > +      * pages in the nodemask.
+> > +      */
+> > +     if (sc->nodemask && node_isset(pgdat->node_id, *sc->nodemask) &&
+> > +         !node_isset(next_demotion_node(pgdat->node_id), *sc->nodemask))
+> > +             nr_reclaimed += nr_demoted;
+> > +
+> >       /* Folios that could not be demoted are still in @demote_folios */
+> >       if (!list_empty(&demote_folios)) {
+> >               /* Folios which weren't demoted go back on @folio_list */
+> > --
+> > 2.39.0.rc0.267.gcb52ba06e7-goog
+>
