@@ -2,160 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8915864490C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60C1644911
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234754AbiLFQS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:18:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35704 "EHLO
+        id S234194AbiLFQUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:20:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235237AbiLFQSI (ORCPT
+        with ESMTP id S235175AbiLFQUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:18:08 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019E72E6AB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:16:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ADE94B81A10
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 16:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5658C433C1;
-        Tue,  6 Dec 2022 16:15:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670343360;
-        bh=Ke9Es9vSZpyqQkkD0xDtUqrPPPHQ+QXHuO92AWRtX1o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CUXtY072QKTqR8dVGI+9RxyL8a/07FbLRZKpQFkI2akpBJwWtmuuHo/zeS78ST/Qf
-         wP2/KK2eINwmdiPfNITsaR9WfOhcSYz6y5s2nm4bmhqoBREpfZbf1B9hxAPsj47EjF
-         ZJUBaQdtleCUphhzQsxxXtoWNCJ1pu/pLZ/g5he8AgCtJ+TzSqoKVjhuHFSYhiN9oA
-         tZqWfbaK/RrAATh9ob6ayzFEHtCOCvp5TOAS+gijQdU6SKKmQIJc+0kvbBhRw1eQ6g
-         zFFOcpW5WnJtDw8agTkOQgjbJhfIrC+hGE1UdG7xj9WalzmiA6wS3uu0itEMVJlJAi
-         3lR8mjTR8oeIA==
-Date:   Tue, 6 Dec 2022 16:15:56 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Changbin Du <changbin.du@intel.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] riscv: stacktrace: Fix missing the first frame
-Message-ID: <Y49qvHb3LVas1cvO@spud>
-References: <20221205132936.493245-1-liushixin2@huawei.com>
+        Tue, 6 Dec 2022 11:20:35 -0500
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E890F2E9EC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:19:22 -0800 (PST)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-14455716674so11833462fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 08:19:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=32ACU6T/lTFb6vWGcYTKLeiJKe3uAE6xkvBDuOzVgNk=;
+        b=LbL32xRyru5kJ7wApUQbhbqQCKZYP/g/3Ns7yxI04gGsqm0cvSCS3t91kfyLioc0i/
+         ZwfjQTLBO7U4z+YJN7UpT9MYByVdO7inBNnvTj9vuFz+Lt/UNwY4mEgQh0AmA+S2ERJL
+         OM5DOx1b+8ucHxUma4pD1LLNDMGMid8+kwMtKHP0jqSA23bJAo1ov3rs9NCUVjT8YPk5
+         UHzeYnOfrSvhRNGdDjWOZaGR0dK7wUibuQZvRh0wXGAn3Dnx3N2+CF2yUDC3P4YNQ+P5
+         q+IUVDVRqL4d+1x30qM0edzO8SHMSImcw9G1pDxowYByS544VTl9Mn2jtpuVT/M2XCzb
+         MVLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=32ACU6T/lTFb6vWGcYTKLeiJKe3uAE6xkvBDuOzVgNk=;
+        b=MpNI4X1luACThcxFmEoZKhjPkQrgYuOOKI5wpNH82ZOUDSfQrt791xsTQuaUQV9Wp5
+         0l9uqY3WtcmNZDduhqAl2nHvYYmJlruuxUzLYsqnCDU93GfcF5A2c/F6pZQ8JMnrWA6w
+         YAoHOdrtqxrOwBMWW0ZaxJibdWP/FInC6vvot34ZvCX/FP2PFvwMxJZHhhfvjJRRnrUo
+         5tLom4UeDG9A9kYzGLqk2VTmU2wQ2/iK8iaOzbztMaDUr/QYolvxQjRp2loI8ePIQFr/
+         VKRNQ+ikHkWlRbAaUG3Ywot8wsiw4tWy+QMtBu1Jw2FC4vu0aQZeexKKEnYbIwigjt4N
+         ssIQ==
+X-Gm-Message-State: ANoB5pkaqGWg/zpBClPh04qoGWyH7J9Bd7oBTIleQxrAHVa6r14ViIlq
+        QVLE7WQ124oMtJCZGYGdC9LwmAkAojBLjwenvclDtA==
+X-Google-Smtp-Source: AA0mqf4SnW30QjXP3g6g3gwsvvzjnHccMhyPlYsKb9oa8G48oeoL94t7Lvl3VpY2ZNYxx/nf5gHDOFzTtOY9OrqsAt0=
+X-Received: by 2002:a05:6871:404e:b0:144:4546:61e7 with SMTP id
+ ky14-20020a056871404e00b00144454661e7mr10041556oab.282.1670343562003; Tue, 06
+ Dec 2022 08:19:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/esEgmKIgx6lEmfS"
-Content-Disposition: inline
-In-Reply-To: <20221205132936.493245-1-liushixin2@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000bd587705ef202b08@google.com> <20221206033450.GS3600936@dread.disaster.area>
+ <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com> <20221206153211.GN4001@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20221206153211.GN4001@paulmck-ThinkPad-P17-Gen-1>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 6 Dec 2022 17:19:10 +0100
+Message-ID: <CACT4Y+ZbmxyKJXM2zrJR6gNGSUS8j2_-Nu2dpC6gBEjcE3ercw@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
+To:     paulmck@kernel.org
+Cc:     Dave Chinner <david@fromorbit.com>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
+        RCU <rcu@vger.kernel.org>,
+        syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>,
+        djwong@kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 6 Dec 2022 at 16:32, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Tue, Dec 06, 2022 at 12:06:10PM +0100, Dmitry Vyukov wrote:
+> > On Tue, 6 Dec 2022 at 04:34, Dave Chinner <david@fromorbit.com> wrote:
+> > >
+> > > On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
+> > > > Hello,
+> > > >
+> > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> > > > INFO: rcu detected stall in corrupted
+> > > >
+> > > > rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
+> > > > rcu: blocking rcu_node structures (internal RCU debug):
+> > >
+> > > I'm pretty sure this has nothing to do with the reproducer - the
+> > > console log here:
+> > >
+> > > > Tested on:
+> > > >
+> > > > commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
+> > > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
+> > >
+> > > indicates that syzbot is screwing around with bluetooth, HCI,
+> > > netdevsim, bridging, bonding, etc.
+> > >
+> > > There's no evidence that it actually ran the reproducer for the bug
+> > > reported in this thread - there's no record of a single XFS
+> > > filesystem being mounted in the log....
+> > >
+> > > It look slike someone else also tried a private patch to fix this
+> > > problem (which was obviously broken) and it failed with exactly the
+> > > same RCU warnings. That was run from the same commit id as the
+> > > original reproducer, so this looks like either syzbot is broken or
+> > > there's some other completely unrelated problem that syzbot is
+> > > tripping over here.
+> > >
+> > > Over to the syzbot people to debug the syzbot failure....
+> >
+> > Hi Dave,
+> >
+> > It's not uncommon for a single program to trigger multiple bugs.
+> > That's what happens here. The rcu stall issue is reproducible with
+> > this test program.
+> > In such cases you can either submit more test requests, or test manually.
+> >
+> > I think there is an RCU expedited stall detection.
+> > For some reason CONFIG_RCU_EXP_CPU_STALL_TIMEOUT is limited to 21
+> > seconds, and that's not enough for reliable flake-free stress testing.
+> > We bump other timeouts to 100+ seconds.
+> > +RCU maintainers, do you mind removing the overly restrictive limit on
+> > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT?
+> > Or you think there is something to fix in the kernel to not stall? I
+> > see the test writes to
+> > /proc/sys/vm/drop_caches, maybe there is some issue in that code.
+>
+> Like this?
+>
+> If so, I don't see why not.  And in that case, may I please have
+> your Tested-by or similar?
 
---/esEgmKIgx6lEmfS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I've tried with this patch and RCU_EXP_CPU_STALL_TIMEOUT=80000.
+Running the test program I got some kernel BUG in XFS and no RCU
+errors/warnings.
 
-On Mon, Dec 05, 2022 at 09:29:36PM +0800, Liu Shixin wrote:
-> When running kfence_test, I found some testcases failed like this:
->=20
->  # test_out_of_bounds_read: EXPECTATION FAILED at mm/kfence/kfence_test.c=
-:346
->  Expected report_matches(&expect) to be true, but is false
->  not ok 1 - test_out_of_bounds_read
->=20
-> The corresponding call-trace is:
->=20
->  BUG: KFENCE: out-of-bounds read in kunit_try_run_case+0x38/0x84
->=20
->  Out-of-bounds read at 0x(____ptrval____) (32B right of kfence-#10):
->   kunit_try_run_case+0x38/0x84
->   kunit_generic_run_threadfn_adapter+0x12/0x1e
->   kthread+0xc8/0xde
->   ret_from_exception+0x0/0xc
->=20
-> The kfence_test using the first frame of call trace to check whether the
-> testcase is succeed or not. Patch a7c5c7e8ff78 skip first frame for all
-> case, which results the kfence_test failed. Indeed, we only need to skip
-> the first frame for case (task=3D=3DNULL || task=3D=3Dcurrent).
->=20
-> With this patch, the call-trace will be:
->=20
->  BUG: KFENCE: out-of-bounds read in test_out_of_bounds_read+0x88/0x19e
->=20
->  Out-of-bounds read at 0x(____ptrval____) (1B left of kfence-#7):
->   test_out_of_bounds_read+0x88/0x19e
->   kunit_try_run_case+0x38/0x84
->   kunit_generic_run_threadfn_adapter+0x12/0x1e
->   kthread+0xc8/0xde
->   ret_from_exception+0x0/0xc
->=20
-> Fixes: a7c5c7e8ff78 ("riscv: eliminate unreliable __builtin_frame_address=
-(1)")
+Tested-by: Dmitry Vyukov <dvyukov@google.com>
 
-This fixes tag is not right, did checkpatch not warn about it?
+Thanks
 
-The correct fixes tag would be:
-Fixes: 6a00ef449370 ("riscv: eliminate unreliable __builtin_frame_address(1=
-)")
-
-Maybe consider automating the creation of fixes tags, like so:
-git log -1 --format=3D'Fixes: %h (\"%s\")'
-
-Thanks,
-Conor.
-
-> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
-> ---
->  arch/riscv/kernel/stacktrace.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/arch/riscv/kernel/stacktrace.c b/arch/riscv/kernel/stacktrac=
-e.c
-> index 08d11a53f39e..5fe2ae4cf135 100644
-> --- a/arch/riscv/kernel/stacktrace.c
-> +++ b/arch/riscv/kernel/stacktrace.c
-> @@ -30,6 +30,7 @@ void notrace walk_stackframe(struct task_struct *task, =
-struct pt_regs *regs,
->  		fp =3D (unsigned long)__builtin_frame_address(0);
->  		sp =3D current_stack_pointer;
->  		pc =3D (unsigned long)walk_stackframe;
-> +		level =3D -1;
->  	} else {
->  		/* task blocked in __switch_to */
->  		fp =3D task->thread.s[0];
-> @@ -41,7 +42,7 @@ void notrace walk_stackframe(struct task_struct *task, =
-struct pt_regs *regs,
->  		unsigned long low, high;
->  		struct stackframe *frame;
-> =20
-> -		if (unlikely(!__kernel_text_address(pc) || (level++ >=3D 1 && !fn(arg,=
- pc))))
-> +		if (unlikely(!__kernel_text_address(pc) || (level++ >=3D 0 && !fn(arg,=
- pc))))
->  			break;
-> =20
->  		/* Validate frame pointer */
-> --=20
-> 2.25.1
->=20
-
---/esEgmKIgx6lEmfS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY49qvAAKCRB4tDGHoIJi
-0kI7AP9Wd277d8/BzwLH9y34IUIT/97w2cZ2oh4ldowck5Y9bQD+I+ltzljWIlqI
-5d5NHjHdSGLSMbBS/qCnorTUjpi+tgE=
-=l4hT
------END PGP SIGNATURE-----
-
---/esEgmKIgx6lEmfS--
+> At the same time, I am sure that there are things in the kernel that
+> should be adjusted to avoid stalls, but I recognize that different
+> developers in different situations will have different issues that they
+> choose to focus on.  ;-)
+>
+>                                                         Thanx, Paul
+>
+> ------------------------------------------------------------------------
+>
+> diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
+> index 49da904df6aa6..2984de629f749 100644
+> --- a/kernel/rcu/Kconfig.debug
+> +++ b/kernel/rcu/Kconfig.debug
+> @@ -82,7 +82,7 @@ config RCU_CPU_STALL_TIMEOUT
+>  config RCU_EXP_CPU_STALL_TIMEOUT
+>         int "Expedited RCU CPU stall timeout in milliseconds"
+>         depends on RCU_STALL_COMMON
+> -       range 0 21000
+> +       range 0 300000
+>         default 0
+>         help
+>           If a given expedited RCU grace period extends more than the
