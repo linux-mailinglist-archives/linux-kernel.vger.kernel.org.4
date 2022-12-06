@@ -2,64 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 132AB64446F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 338D0644471
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231781AbiLFNRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:17:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55822 "EHLO
+        id S232572AbiLFNSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:18:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234494AbiLFNQy (ORCPT
+        with ESMTP id S231272AbiLFNSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:16:54 -0500
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19812A43B;
-        Tue,  6 Dec 2022 05:16:52 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-143ffc8c2b2so17367073fac.2;
-        Tue, 06 Dec 2022 05:16:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EaYmjVMKi6m6Kxmr7DWey6okwhtAEvgqHUnlmil0PeU=;
-        b=aJAuWUgKlxtZQpr7ZNqmiiJ3iNH1o31YQLXVlgWO4G2JsmUYINi3XLWW9gq6h4tDPo
-         5qm/f7VMdBWn5KnURhleVXcFscYqgbu4Kw32um5yXIXbm02wAmEOsrxHxlQTFtkIOSZU
-         OF3hpbt69gT5/qCHRqTlxZLitawSJYaP5JdncBWvtt/Cmv7Vo2eduunIR/Rz6qLu5Oo/
-         BtLg9rCrZ9dKDlxdPGGgnmSVggOzfWKPRs64oZwxZTfGaDzAtELBFkpjwI3KG8ERPC9q
-         comPxapnGMIWHSQn2tTbj++nkpxJYlhAv1QqJSvfj9hlxoT1vUSHy2pLVVr5YZfHan+o
-         jizg==
-X-Gm-Message-State: ANoB5pnpg57Rw0R4CYHwXYVPbcp73RnX7A8TjNY4FeWHmLC/HDOzmH3e
-        GtTYkItWy/hRTzxWPuj8aA==
-X-Google-Smtp-Source: AA0mqf7IjwvpdWWrq9Hova2cn9yHixUjZuP8++9Q5X5xu+i8XU+97zxxo9X2IRe6Ssx/TejfniT10A==
-X-Received: by 2002:a05:6870:d1cd:b0:143:75da:a5b with SMTP id b13-20020a056870d1cd00b0014375da0a5bmr29655766oac.74.1670332611950;
-        Tue, 06 Dec 2022 05:16:51 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o5-20020acabe05000000b0035173c2fddasm8236054oif.51.2022.12.06.05.16.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:16:51 -0800 (PST)
-Received: (nullmailer pid 245750 invoked by uid 1000);
-        Tue, 06 Dec 2022 13:16:50 -0000
-Date:   Tue, 6 Dec 2022 07:16:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Edmund Berenson <edmund.berenson@emlix.com>
-Cc:     Lukasz Zemla <Lukasz.Zemla@woodward.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: gpio: max7317: add gpio driver bindings
-Message-ID: <20221206131650.GA236912-robh@kernel.org>
-References: <20221206124456.4159-1-edmund.berenson@emlix.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206124456.4159-1-edmund.berenson@emlix.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Tue, 6 Dec 2022 08:18:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC649D6F;
+        Tue,  6 Dec 2022 05:18:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 234E36174A;
+        Tue,  6 Dec 2022 13:18:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92DE9C433C1;
+        Tue,  6 Dec 2022 13:18:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670332696;
+        bh=yWnHX7kQZN3gZ80y4mJxNlC5EcUmNw+ipJWVjMmo7Oc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S+rTSqM3V6kujMp9fWQUrJBGViad5OIG53s08rYSOh/Nozo/q+0cXlAAYMtNMlnOs
+         o5JhxfzlHnFbW2UUroCJ5Yjo4UdNO8afIBOQvdTsqhuyRr+vRl6s0Z409wKnPsGEoK
+         inwjUKp+MMR0D9Tm/BPtiN7RqCIfzy5U0X61qOe+LGaLlpd2AG97p74p1nTVHEEhEB
+         EV0B2/VvwzuKczykBD1AbAe86tcL1KROo74nvAzRl2NEDLgwujill6DUc4ql5cefsM
+         AqvTH8RGNaLyBqoFZPeKjby4sAsGLW031rqBlEWhHRAYlRuCPp94SxI70/S/ZuI7nZ
+         gb1M6+CJCSb6Q==
+Date:   Tue, 6 Dec 2022 22:18:13 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] trace: Fix some checker warnings
+Message-Id: <20221206221813.3c7cfa0c6e51b551869912b3@kernel.org>
+In-Reply-To: <167023571258.382307.15314866482834835192.stgit@warthog.procyon.org.uk>
+References: <167023571258.382307.15314866482834835192.stgit@warthog.procyon.org.uk>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,98 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 01:44:55PM +0100, Edmund Berenson wrote:
-> Add driver bindings for the maxim max7317 spi
-> gpio expander.
+On Mon, 05 Dec 2022 10:21:52 +0000
+David Howells <dhowells@redhat.com> wrote:
 
-Bindings are for h/w, not drivers.
-
-s/maxim/Maxim/
-s/spi/SPI/
-
-For the subject, no need to say 'bindings' twice:
-
-dt-bindings: gpio: Add Maxim max7317 GPIO expander 
-
+> Fix some checker warnings in the trace code by adding __printf attributes
+> to a number of trace functions and their declarations.
 > 
-> Co-developed-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Lukasz Zemla <Lukasz.Zemla@woodward.com>
-> Signed-off-by: Edmund Berenson <edmund.berenson@emlix.com>
+> Changes:
+> ========
+> ver #2)
+>  - Dropped the fix for the unconditional tracing_max_lat_fops decl[1].
+> 
+
+Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thank you!
+
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steven Rostedt <rostedt@goodmis.org>
+> cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Link: https://lore.kernel.org/r/20221205180617.9b9d3971cbe06ee536603523@kernel.org/ [1]
+> Link: https://lore.kernel.org/r/166992525941.1716618.13740663757583361463.stgit@warthog.procyon.org.uk/ # v1
 > ---
->  .../bindings/gpio/gpio-max7317.yaml           | 52 +++++++++++++++++++
->  1 file changed, 52 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml b/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
-> new file mode 100644
-> index 000000000000..88f1fe02a627
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/gpio/gpio-max7317.yaml
-> @@ -0,0 +1,52 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/gpio/gpio-max7317.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX7317 SPI-Interfaced I/O Expander
-> +
-> +description: |
-
-Don't need '|'
-
-> +  Bindings for 10-Port Maxim MAX7317 SPI GPIO expanders.
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max7317
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    const: 2
-> +
-> +  gpio-line-names:
-> +    minItems: 1
-> +    maxItems: 10
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - gpio-controller
-> +  - "#gpio-cells"
-> +
-> +additionalProperties: false
-
-unevaluatedProperties: false
-
-Or the $ref below doesn't work.
-
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +examples:
-> +  - |
-> +    spi {
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            gpio5: gpio5@0 {
-
-gpio@0 {
-
-> +                    compatible = "maxim,max7317";
-> +                    reg = <0>;
-> +                    gpio-controller;
-> +                    #gpio-cells = <2>;
-> +                    spi-max-frequency = <100000>;
-> +            };
-> +    };
-> -- 
-> 2.37.4
+>  include/linux/trace_events.h |    3 ++-
+>  include/linux/trace_seq.h    |    3 ++-
+>  kernel/trace/trace.h         |    2 +-
+>  kernel/trace/trace_output.c  |    5 +++--
+>  4 files changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
+> index 20749bd9db71..112b08ca2c5c 100644
+> --- a/include/linux/trace_events.h
+> +++ b/include/linux/trace_events.h
+> @@ -235,7 +235,8 @@ void tracing_record_taskinfo_sched_switch(struct task_struct *prev,
+>  void tracing_record_cmdline(struct task_struct *task);
+>  void tracing_record_tgid(struct task_struct *task);
+>  
+> -int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...);
+> +int trace_output_call(struct trace_iterator *iter, char *name, char *fmt, ...)
+> +	 __printf(3, 4);
+>  
+>  struct event_filter;
+>  
+> diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
+> index 5a2c650d9e1c..0c4c7587d6c3 100644
+> --- a/include/linux/trace_seq.h
+> +++ b/include/linux/trace_seq.h
+> @@ -97,7 +97,8 @@ extern int trace_seq_hex_dump(struct trace_seq *s, const char *prefix_str,
+>  			      const void *buf, size_t len, bool ascii);
+>  
+>  #else /* CONFIG_TRACING */
+> -static inline void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
+> +static inline __printf(2, 3)
+> +void trace_seq_printf(struct trace_seq *s, const char *fmt, ...)
+>  {
+>  }
+>  static inline void
+> diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+> index d42e24507152..ecc6120116da 100644
+> --- a/kernel/trace/trace.h
+> +++ b/kernel/trace/trace.h
+> @@ -615,7 +615,7 @@ void trace_buffer_unlock_commit_nostack(struct trace_buffer *buffer,
+>  bool trace_is_tracepoint_string(const char *str);
+>  const char *trace_event_format(struct trace_iterator *iter, const char *fmt);
+>  void trace_check_vprintf(struct trace_iterator *iter, const char *fmt,
+> -			 va_list ap);
+> +			 va_list ap) __printf(2, 0);
+>  
+>  int trace_empty(struct trace_iterator *iter);
+>  
+> diff --git a/kernel/trace/trace_output.c b/kernel/trace/trace_output.c
+> index 67f47ea27921..7039cd883c8b 100644
+> --- a/kernel/trace/trace_output.c
+> +++ b/kernel/trace/trace_output.c
+> @@ -323,8 +323,9 @@ void trace_event_printf(struct trace_iterator *iter, const char *fmt, ...)
+>  }
+>  EXPORT_SYMBOL(trace_event_printf);
+>  
+> -static int trace_output_raw(struct trace_iterator *iter, char *name,
+> -			    char *fmt, va_list ap)
+> +static __printf(3, 0)
+> +int trace_output_raw(struct trace_iterator *iter, char *name,
+> +		     char *fmt, va_list ap)
+>  {
+>  	struct trace_seq *s = &iter->seq;
+>  
 > 
 > 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
