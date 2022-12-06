@@ -2,102 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FCE643BA8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD2C643BAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 04:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbiLFDI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 22:08:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
+        id S232064AbiLFDKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 22:10:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiLFDIZ (ORCPT
+        with ESMTP id S230293AbiLFDKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 22:08:25 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D8BD640C;
-        Mon,  5 Dec 2022 19:08:21 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowABXX5cWso5jFUbkBA--.26373S2;
-        Tue, 06 Dec 2022 11:08:06 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH net] ice: Add check for kzalloc
-Date:   Tue,  6 Dec 2022 11:08:05 +0800
-Message-Id: <20221206030805.15934-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 5 Dec 2022 22:10:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1275A640C;
+        Mon,  5 Dec 2022 19:10:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 91FD76151F;
+        Tue,  6 Dec 2022 03:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D5865C433C1;
+        Tue,  6 Dec 2022 03:10:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670296215;
+        bh=qeizWKrMRBlX8e3HYxm64lxGx4nQAx2XYIbFJQHbZaA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qZDrQUpROzJA2U8Ya8NfzQ9pZbxg7fdmfbfTDXTgpyWVw8iMGqgpymc2c0Pv3c2ei
+         2T4G4bzQfU9pZGVPmAiYEi9fxyEoYh0U17pdglXEHL0hab0Ohlh3sE2Tgbir12mzip
+         UC0kpa+AWAo/koHQP+jYM+lTNWM312+PtCyRZDG5sWusv5wTeikHwlVAO4xc4DZwuH
+         VHwU4Uj0sWQUcSm2DC4sZV1OxH9KqlIZLtAm0Ei95UVkBld29ZzqJc904ejWdVxuNy
+         RmMgiYyLMKnLHIhhD73qsTno0Kt4RvIA0UE+HkFVNLBILrqpfmRYuUVS5KAuFH29vG
+         qDDj4x2cU6V0Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B73BDE270C7;
+        Tue,  6 Dec 2022 03:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowABXX5cWso5jFUbkBA--.26373S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFWrur4rKw1fKF4DGw4fuFg_yoW8Xr4rpa
-        n8JFyjvrW8Jr4UWr9xXF4qyFZ8Wa4xJ34Sga9rX398ZF1Dtr15t3WDKryYyr1rGrW3ZFsI
-        yF45AF13uF92vw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvm14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-        n2IY04v7MxkIecxEwVAFwVW8GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
-        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
-        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
-        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
-        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnU
-        UI43ZEXa7VUjQBMtUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 0/2] riscv: stacktrace: A fixup and an optimization
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <167029621574.4417.18172654401785175878.git-patchwork-notify@kernel.org>
+Date:   Tue, 06 Dec 2022 03:10:15 +0000
+References: <20221109064937.3643993-1-guoren@kernel.org>
+In-Reply-To: <20221109064937.3643993-1-guoren@kernel.org>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     linux-riscv@lists.infradead.org, anup@brainfault.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, heiko@sntech.de, peterz@infradead.org,
+        arnd@arndb.de, linux-arch@vger.kernel.org, keescook@chromium.org,
+        paulmck@kernel.org, frederic@kernel.org, nsaenzju@redhat.com,
+        changbin.du@intel.com, vincent.chen@sifive.com,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As kzalloc may fail and return NULL pointer,
-it should be better to check the return value
-in order to avoid the NULL pointer dereference.
+Hello:
 
-Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/net/ethernet/intel/ice/ice_gnss.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+This series was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
-index b5a7f246d230..6d3d5e75726b 100644
---- a/drivers/net/ethernet/intel/ice/ice_gnss.c
-+++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
-@@ -421,7 +421,7 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
- 	const int ICE_TTYDRV_NAME_MAX = 14;
- 	struct tty_driver *tty_driver;
- 	char *ttydrv_name;
--	unsigned int i;
-+	unsigned int i, j;
- 	int err;
- 
- 	tty_driver = tty_alloc_driver(ICE_GNSS_TTY_MINOR_DEVICES,
-@@ -462,6 +462,17 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
- 					       GFP_KERNEL);
- 		pf->gnss_serial[i] = NULL;
- 
-+		if (!pf->gnss_tty_port[i]) {
-+			for (j = 0; j < i; j++) {
-+				tty_port_destroy(pf->gnss_tty_port[j]);
-+				kfree(pf->gnss_tty_port[j]);
-+			}
-+			kfree(ttydrv_name);
-+			tty_driver_kref_put(pf->ice_gnss_tty_driver);
-+
-+			return NULL;
-+		}
-+
- 		tty_port_init(pf->gnss_tty_port[i]);
- 		tty_port_link_device(pf->gnss_tty_port[i], tty_driver, i);
- 	}
+On Wed,  9 Nov 2022 01:49:35 -0500 you wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> 
+> First is a fixup for the return address pointer. The second makes
+> walk_stackframe could cross the pt_regs frame.
+> 
+> Guo Ren (2):
+>   riscv: stacktrace: Fixup ftrace_graph_ret_addr retp argument
+>   riscv: stacktrace: Make walk_stackframe cross pt_regs frame
+> 
+> [...]
+
+Here is the summary with links:
+  - [1/2] riscv: stacktrace: Fixup ftrace_graph_ret_addr retp argument
+    https://git.kernel.org/riscv/c/5c3022e4a616
+  - [2/2] riscv: stacktrace: Make walk_stackframe cross pt_regs frame
+    https://git.kernel.org/riscv/c/7ecdadf7f8c6
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
