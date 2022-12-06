@@ -2,135 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE3EA6444CD
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EE46444D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232511AbiLFNoQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:44:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40062 "EHLO
+        id S233466AbiLFNo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:44:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLFNoP (ORCPT
+        with ESMTP id S229471AbiLFNoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:44:15 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E6829824
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:44:11 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id 82so13437251pgc.0
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 05:44:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4qbkKWhWPanWRYEN6xzgaOcSVOJAns1k+cY++VtfwfI=;
-        b=pMTEtuDRlb/LRGsjD9um2ZuhbgiEurbfTulD3JNY4dinWi9LzpixZtViJOlgsP5ukD
-         QwZ7ovixznLKNSzMQRS6Vub7GRjRPRign7Qtc3IJa2NYlkptLhko0T28GgSzBD484JJ6
-         CRx7ys70PFEALQUZ2MS6I1Nw8MHu0CbeBXoztNU2LHuQnIqLXSWFhzxlxONjWbSjnwwK
-         lKAb8L5p2SIHMrFMgBoa2S5bQxyaLRF8qoN7JmSX5Ngnqh5hK9zyDwecixglL3xTef3r
-         ZbDAGhH9tnvfkEswYSHUZl5s9FMTFx/elBmvPvSU1zmIDxOgKLXdJO+28vile3hAAG1Q
-         oAIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4qbkKWhWPanWRYEN6xzgaOcSVOJAns1k+cY++VtfwfI=;
-        b=Lo6WjdjrA95yI4OpFFb4lnZ0+JHmo8i95gfyniL2kha+qzYGJrgnfpugDjrPVlkiZa
-         zizVH2wzBeIa8bDd+Du7TwjHx23zNRx3CTaaIYH5Y28rt1vP7DLATBa+l/WXTHv1lg+M
-         uAz8QK3m8EqY26Kh0TAeyMfZxmsgUhXMRq6+3I8izl9mWM7qBY8APxImypcfB7cZZt4Y
-         4y2gCywT4JvlszJfJhLzbUM8wLJ0iSPsmozpKtrTEdg0zOANGdshlVtCDiGxkSCWZBF+
-         oCwpS7SvURPFtWCFMmePefYqwsTbaV72Hn2Y2O3T3gsnK4sLsuXLonz4oAHpxuNxXS4w
-         BtAQ==
-X-Gm-Message-State: ANoB5pkMqs3Qb9AKG7sihjExx6K8h+xoF+v/9Yd3iyY6t2ivpqncNG2h
-        Q7eoyxbXaCMC8VR34UyipQOkzw==
-X-Google-Smtp-Source: AA0mqf7qnh+I/sFr2gLN57AjRk8weKbLt5zxdv5BY0erfYcMVzmg1gMkminrCllLyLKwgqjK2bBlGA==
-X-Received: by 2002:a63:dd16:0:b0:476:d2d9:5151 with SMTP id t22-20020a63dd16000000b00476d2d95151mr58290007pgg.487.1670334250591;
-        Tue, 06 Dec 2022 05:44:10 -0800 (PST)
-Received: from ziepe.ca ([206.223.160.26])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902e74a00b00186acb14c4asm12688493plf.67.2022.12.06.05.44.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:44:10 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p2YEy-004bTc-NA;
-        Tue, 06 Dec 2022 09:44:08 -0400
-Date:   Tue, 6 Dec 2022 09:44:08 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <Y49HKHP9NrId39iH@ziepe.ca>
-References: <20221206055816.292304-1-lei.rao@intel.com>
- <20221206055816.292304-2-lei.rao@intel.com>
- <20221206061940.GA6595@lst.de>
+        Tue, 6 Dec 2022 08:44:54 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77BC2981E;
+        Tue,  6 Dec 2022 05:44:51 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRM8G6pkgzmWLK;
+        Tue,  6 Dec 2022 21:43:58 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 6 Dec 2022 21:44:47 +0800
+Subject: Re: [PATCH -next 1/6] ext4: fix WARNING in ext4_expand_extra_isize_ea
+To:     Jan Kara <jack@suse.cz>, Ye Bin <yebin@huaweicloud.com>
+References: <20221206015806.3420321-1-yebin@huaweicloud.com>
+ <20221206015806.3420321-2-yebin@huaweicloud.com>
+ <20221206120417.225uxtlg255bzph4@quack3>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <638F474E.9070901@huawei.com>
+Date:   Tue, 6 Dec 2022 21:44:46 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206061940.GA6595@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221206120417.225uxtlg255bzph4@quack3>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 07:19:40AM +0100, Christoph Hellwig wrote:
-> On Tue, Dec 06, 2022 at 01:58:12PM +0800, Lei Rao wrote:
-> > The new function nvme_submit_vf_cmd() helps the host VF driver to issue
-> > VF admin commands. It's helpful in some cases that the host NVMe driver
-> > does not control VF's admin queue. For example, in the virtualization
-> > device pass-through case, the VF controller's admin queue is governed
-> > by the Guest NVMe driver. Host VF driver relies on PF device's admin
-> > queue to control VF devices like vendor-specific live migration commands.
-> 
-> WTF are you even smoking when you think this would be acceptable?
 
-Not speaking to NVMe - but this driver is clearly copying mlx5's live
-migration driver, almost completely - including this basic function.
 
-So, to explain why mlx5 works this way..
+On 2022/12/6 20:04, Jan Kara wrote:
+> On Tue 06-12-22 09:58:01, Ye Bin wrote:
+>> From: Ye Bin <yebin10@huawei.com>
+>>
+>> Syzbot found the following issue:
+>> ------------[ cut here ]------------
+>> WARNING: CPU: 1 PID: 3631 at mm/page_alloc.c:5534 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+>> Modules linked in:
+>> CPU: 1 PID: 3631 Comm: syz-executor261 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>> RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+>> RSP: 0018:ffffc90003ccf080 EFLAGS: 00010246
+>> RAX: ffffc90003ccf0e0 RBX: 000000000000000c RCX: 0000000000000000
+>> RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003ccf108
+>> RBP: ffffc90003ccf198 R08: dffffc0000000000 R09: ffffc90003ccf0e0
+>> R10: fffff52000799e21 R11: 1ffff92000799e1c R12: 0000000000040c40
+>> R13: 1ffff92000799e18 R14: dffffc0000000000 R15: 1ffff92000799e14
+>> FS:  0000555555c10300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007ffc36f70000 CR3: 00000000744ad000 CR4: 00000000003506e0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   __alloc_pages_node include/linux/gfp.h:223 [inline]
+>>   alloc_pages_node include/linux/gfp.h:246 [inline]
+>>   __kmalloc_large_node+0x8a/0x1a0 mm/slab_common.c:1096
+>>   __do_kmalloc_node mm/slab_common.c:943 [inline]
+>>   __kmalloc+0xfe/0x1a0 mm/slab_common.c:968
+>>   kmalloc include/linux/slab.h:558 [inline]
+>>   ext4_xattr_move_to_block fs/ext4/xattr.c:2558 [inline]
+>>   ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
+>>   ext4_expand_extra_isize_ea+0xe3f/0x1cd0 fs/ext4/xattr.c:2765
+>>   __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
+>>   ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
+>>   __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
+>>   ext4_inline_data_truncate+0x548/0xd00 fs/ext4/inline.c:2021
+>>   ext4_truncate+0x341/0xeb0 fs/ext4/inode.c:4221
+>>   ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
+>>   ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+>>   __ext4_fill_super fs/ext4/super.c:5515 [inline]
+>>   ext4_fill_super+0x80ed/0x8610 fs/ext4/super.c:5643
+>>   get_tree_bdev+0x400/0x620 fs/super.c:1324
+>>   vfs_get_tree+0x88/0x270 fs/super.c:1531
+>>   do_new_mount+0x289/0xad0 fs/namespace.c:3040
+>>   do_mount fs/namespace.c:3383 [inline]
+>>   __do_sys_mount fs/namespace.c:3591 [inline]
+>>   __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>   </TASK>
+>>
+>> Reason is allocate 16M memory by kmalloc, but MAX_ORDER is 11, kmalloc
+>> can allocate maxium size memory is 4M.
+>> XATTR_SIZE_MAX is currently 64k, but EXT4_XATTR_SIZE_MAX is '(1 << 24)',
+>> so 'ext4_xattr_check_entries()' regards this length as legal. Then trigger
+>> warning in 'ext4_xattr_move_to_block()'.
+>> To solve above issue, according to Jan Kara's suggestion use kvmalloc()
+>> to allocate memory in ext4_xattr_move_to_block().
+>>
+>> Reported-by: syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+>> Fixes: 54dd0e0a1b25 ("ext4: add extra checks to ext4_xattr_block_get()")
+>> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> The changelog speak about kvmalloc() while your patch changes
+> EXT4_XATTR_SIZE_MAX. This needs to be fixed. If Ted is find with this
+> change, I have no problem with it either but I remember there were some
+> discussions about what EXT4_XATTR_SIZE_MAX should be when ea_inode feature
+> has been developed. Ted might remember.
 
-The VFIO approach is to fully assign an entire VF to the guest OS. The
-entire VF assignment means every MMIO register *and all the DMA* of
-the VF is owned by the guest operating system.
+I'm sorry I forgot to modify the commit message, I will modify the 
+changelog again.
 
-mlx5 needs to transfer hundreds of megabytes to gigabytes of in-device
-state to perform a migration.
+> Also the change from kmalloc() to kvmalloc() is a desirable one anyway. It
+> is not always easy to find physically contiguous 64k of memory so
+> kvmalloc() makes the allocation much more likely to succeed.
+>
+> 								Honza
 
-So, we must be able to use DMA to transfer the data. However, the VM
-exclusively controls the DMA of the VF. The iommu_domain of the VF
-belongs to the guest VM through VFIO, and we simply cannot mutate
-it. Not only should not, but physically can not, ie when IOMMU nested
-translation is in use and the IO page tables are in guest VM memory.
+A later patch use kvmalloc to allocate  extended attribute value memory.
 
-So the VF cannot be used to control the migration, or transfer the
-migration data. This leaves only the PF.
 
-Thus, mxl5 has the same sort of design where the VF VFIO driver
-reaches into the PF kernel driver and asks the PF driver to perform
-some commands targeting the PF's own VFs. The DMA is then done using
-the RID of the PF, and reaches the kernel owned iommu_domain of the
-PF. This way the entire operation is secure aginst meddling by the
-guest.
-
-We can contrast this with the hisilicon live migration driver that
-does not use the PF for control. Instead it has a very small state
-that the migration driver simply reads out of registers. The VF has a
-page of registers that control pause/go of the queues and the VFIO
-varient driver denies access to this page from the guest VM so that
-the kernel VFIO driver has reliable control over the VF.
-
-Without involving PASID this is broadly the only two choices for doing
-SRIOV live migration, AFAIK.
-
-Jason
