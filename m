@@ -2,93 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86A0643CDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3711F643CE3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:58:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233558AbiLFFzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 00:55:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        id S233313AbiLFF6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:58:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233927AbiLFFyr (ORCPT
+        with ESMTP id S231213AbiLFF63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:54:47 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB54275E2;
-        Mon,  5 Dec 2022 21:54:45 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p2Qud-0007tz-Vq; Tue, 06 Dec 2022 06:54:40 +0100
-Message-ID: <6fd52cbe-4cb0-d7a2-9f55-1e56c07843fe@leemhuis.info>
-Date:   Tue, 6 Dec 2022 06:54:39 +0100
+        Tue, 6 Dec 2022 00:58:29 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075D21ADB1;
+        Mon,  5 Dec 2022 21:58:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670306309; x=1701842309;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nLZI0skm1dszqhAO48j8Bg824jpCNH+WDBB/e0YlLoE=;
+  b=IZfljVk5hN8iFC6U5IN3LxsFbyAuRLb+WJ1Lmp84jeBRKHKQAHC6VN5J
+   3EhaRRx4n4GWDRHAlee5WD1+N9OslBD+WN7ysrG9l+yrfWwol++Gfw0Oz
+   hDeo19hLZhBLkQCCVAmN/KvKRccPBQm2m1/HgwscxDx2mmMleneSndLsn
+   LLKuYldDMHWJirAY10jyJlm6YI2qSlc6f6vX6MKgKQc8M9Y07v/d4EGdJ
+   IcTL8MrrpLoBpoHrK+Yto82UuRw5vsZXyfRQnyJx0YyHqsezmOc3qulL8
+   bpbdYGNTHX2sLYQ8+iYjkMNPtwrGj1UmcXQ4KmdneN6ssX28pLPCAIOu7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="378706577"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="378706577"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 21:58:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="648211171"
+X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
+   d="scan'208";a="648211171"
+Received: from leirao-pc.bj.intel.com ([10.238.156.101])
+  by fmsmga007.fm.intel.com with ESMTP; 05 Dec 2022 21:58:23 -0800
+From:   Lei Rao <lei.rao@intel.com>
+To:     kbusch@kernel.org, axboe@fb.com, kch@nvidia.com, hch@lst.de,
+        sagi@grimberg.me, alex.williamson@redhat.com, cohuck@redhat.com,
+        jgg@ziepe.ca, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org
+Cc:     eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com,
+        Lei Rao <lei.rao@intel.com>
+Subject: [RFC PATCH 0/5] Add new VFIO PCI driver for NVMe devices
+Date:   Tue,  6 Dec 2022 13:58:11 +0800
+Message-Id: <20221206055816.292304-1-lei.rao@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] hwmon/coretemp: Simplify platform device antics
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Robin Murphy <robin.murphy@arm.com>,
-        janusz.krzysztofik@linux.intel.com
-Cc:     fenghua.yu@intel.com, jdelvare@suse.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, lucas.demarchi@intel.com,
-        Guenter Roeck <linux@roeck-us.net>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <898dbb76a54aae6ca58ceefcab9ab18beeee2fff.1668096928.git.robin.murphy@arm.com>
- <20221111213753.GA1059841@roeck-us.net>
- <ac2e553f-fa8b-8b08-aba9-e04529adad34@leemhuis.info>
-Content-Language: en-US, de-DE
-In-Reply-To: <ac2e553f-fa8b-8b08-aba9-e04529adad34@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670306085;2939937a;
-X-HE-SMSGID: 1p2Qud-0007tz-Vq
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.12.22 16:02, Thorsten Leemhuis wrote:
-> Hi, this is your Linux kernel regression tracker. I wondered what
-> happened to this regression fix, as things looks stalled from here --
-> but maybe I'm missing something.
+Some devices, such as Infrastructure Processing Units (IPUs) and Data
+Processing Units (DPUs), expose SR-IOV capable NVMe devices to the host.
+Its VF devices support live migration via specific NVMe commands issued
+through the PF's device's admin queue.
 
-This still looks stalled; hope someone will tell me if I missed any
-progress.
+One of the problems is there are no standardized NVMe live migration
+commands to make our patches spec compliant, which prevents us from
+creating a spec-compliant implementation. So we've created a reference
+implantation based on the Vendor-specific command fields of the protocol.
+We want these commands to be standardized so that the implementation will
+be spec compliant in future versions and use this RFC as a basis for the
+same.
 
-> On 11.11.22 22:37, Guenter Roeck wrote:
->> On Thu, Nov 10, 2022 at 04:20:25PM +0000, Robin Murphy wrote:
->>> Coretemp's vestigial platform driver is odd. All the real work is done
->>> globally by the initcall and CPU hotplug notifiers, while the "driver"
->>> effectively just wraps an allocation and the registration of the hwmon
->>> interface in a long-winded round-trip through the driver core. The whole
->>> logic of dynamically creating and destroying platform devices to bring
->>> the interfaces up and down is fatally flawed right away, since it
->>> notifier from a platform bus notifier.
->> [...]
->>> I haven't been able to fully test hotplug since I only have a
->>> single-socket Intel system to hand.
->> Someone with access to hardware will have to validate this.
-> That afaics has happened.
-> 
->> For both subject and description, please avoid terms like "antics",
->> "odd", or "questionable". Please describe the problem in neutral terms.
-> Robin, did you take care of that?
+More importantly, we provide our work to help the community and start the
+discussion, so everyone can participate and benefit from our work in
+NVMe Live Migration implementation and help drive on standardization
+efforts.
 
-Robin, are you busy, or is there some other reason why this regression
-fix afaics isn't making any progress?
+This series implements the specific vfio-pci driver to support live
+migration of NVMe devices. Adds a new interface in the general
+NVMe driver to receive the VF device's commands submission to the PF
+device's admin queue. And also documents the details of NVMe device
+live migration commands.
 
-Janusz Krzysztofik, as you seemed to care: if you have a minute and
-Robin doesn't show up within a day or wo, could you maybe improve
-subject and description to make Guenter happy?
+Any feedback and comments are greatly appreciated.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+Lei Rao (5):
+  nvme-pci: add function nvme_submit_vf_cmd to issue admin commands for
+    VF driver.
+  nvme-vfio: add new vfio-pci driver for NVMe device
+  nvme-vfio: enable the function of VFIO live migration.
+  nvme-vfio: check if the hardware supports live migration
+  nvme-vfio: Add a document for the NVMe device
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+ drivers/nvme/host/pci.c        |  18 +
+ drivers/vfio/pci/Kconfig       |   2 +
+ drivers/vfio/pci/Makefile      |   2 +
+ drivers/vfio/pci/nvme/Kconfig  |  10 +
+ drivers/vfio/pci/nvme/Makefile |   3 +
+ drivers/vfio/pci/nvme/nvme.c   | 636 +++++++++++++++++++++++++++++++++
+ drivers/vfio/pci/nvme/nvme.h   | 111 ++++++
+ drivers/vfio/pci/nvme/nvme.txt | 278 ++++++++++++++
+ 8 files changed, 1060 insertions(+)
+ create mode 100644 drivers/vfio/pci/nvme/Kconfig
+ create mode 100644 drivers/vfio/pci/nvme/Makefile
+ create mode 100644 drivers/vfio/pci/nvme/nvme.c
+ create mode 100644 drivers/vfio/pci/nvme/nvme.h
+ create mode 100644 drivers/vfio/pci/nvme/nvme.txt
 
-#regzbot poke
+-- 
+2.34.1
+
