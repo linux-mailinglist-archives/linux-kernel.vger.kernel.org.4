@@ -2,104 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC8764442D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:09:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90C1644431
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbiLFNJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:09:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47012 "EHLO
+        id S231409AbiLFNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234032AbiLFNI7 (ORCPT
+        with ESMTP id S234790AbiLFNKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:08:59 -0500
-Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A7A2CDDD;
-        Tue,  6 Dec 2022 05:07:12 -0800 (PST)
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-1447c7aa004so9173927fac.11;
-        Tue, 06 Dec 2022 05:07:11 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=imUdSZL1p1VPSoRbaTGeAWYoJrWVTzc2KiZUbiVlSk0=;
-        b=Q+onvu7um3cXTpZ3a0pgluNaZZAFK8Bw0KIIYPemlpvMj8N8rEQflunZuVAcOL6KSu
-         rflnDDUuFZlRL4LW7jnTkmlDV146E+5LdjZ9k1Vglz3YJ1tfixbjxnbiyPQSDlUqGLv1
-         iXlFqHxDNFT5MsVj0h2U9r2ZhLZK5PgC46L266jmJd6WZNnMvnPTzw12uOUyubR1wVWu
-         4b5X2//zT8MqcuTj6hIREcmw7vXzsRIr6Ht/rH51eehxucF99hUajeAchE4nQ6kQSNc5
-         YX8NlTd9CLjyMWTzjkRRNJf2HalDOPKwtnw1Q/yEBI2OgdpJ/BBFWzPnP2axU4i7shUK
-         1NPg==
-X-Gm-Message-State: ANoB5pkNV+1gqyXIn0RfNjDdV6Xbd2Vd/QgRLOJ7FPifestzuUSvA0uG
-        STs/bUoShkAlzy8ONeEEYQ==
-X-Google-Smtp-Source: AA0mqf5z9DjerkdA2yTFa+vGGSfpZNB+NnpP2vdElYLYU29uLcQ9+ZkV9VlhJCcZpEAQoIs77c/cIA==
-X-Received: by 2002:a05:6870:828e:b0:144:9477:9f56 with SMTP id q14-20020a056870828e00b0014494779f56mr5147179oae.226.1670332031196;
-        Tue, 06 Dec 2022 05:07:11 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s5-20020a05683004c500b0066d2fc495a4sm9098255otd.48.2022.12.06.05.07.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:07:10 -0800 (PST)
-Received: (nullmailer pid 232720 invoked by uid 1000);
-        Tue, 06 Dec 2022 13:07:10 -0000
-Date:   Tue, 6 Dec 2022 07:07:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] dt-bindings: riscv: fix single letter canonical
- order
-Message-ID: <167033202949.232654.4467238719152703044.robh@kernel.org>
-References: <20221205174459.60195-1-conor@kernel.org>
- <20221205174459.60195-3-conor@kernel.org>
+        Tue, 6 Dec 2022 08:10:31 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5981A380;
+        Tue,  6 Dec 2022 05:09:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=VnpjLHo/sa2cz01oNYrd1ELG111YGtUPPSMPURQFhK4=; b=eJZ9nei4Og3IjrlvXXmkRS9MZX
+        eB7DRiCw+bbdcFxcZTrsYXsx9JcqYAnCONBCNZzxnPbz9Ril2/aguLqXLIIun0K5tu7uTLLqFJH/q
+        EkXw+y1GiVrjDoNmOys9cTFWvuQot3pteBfQmYxGzXWSKXgGsSH4KraKYK2zFxmOw/a8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2Xfw-004Wo4-3K; Tue, 06 Dec 2022 14:07:56 +0100
+Date:   Tue, 6 Dec 2022 14:07:56 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Divya Koppera <Divya.Koppera@microchip.com>
+Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        richardcochran@gmail.com, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v5 net-next 2/2] net: phy: micrel: Fix warn: passing zero
+ to PTR_ERR
+Message-ID: <Y48+rLpF7Gre/s1P@lunn.ch>
+References: <20221206073511.4772-1-Divya.Koppera@microchip.com>
+ <20221206073511.4772-3-Divya.Koppera@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205174459.60195-3-conor@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221206073511.4772-3-Divya.Koppera@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> diff --git a/drivers/net/phy/micrel.c b/drivers/net/phy/micrel.c
+> index 1bcdb828db56..650ef53fcf20 100644
+> --- a/drivers/net/phy/micrel.c
+> +++ b/drivers/net/phy/micrel.c
+> @@ -3017,10 +3017,6 @@ static int lan8814_ptp_probe_once(struct phy_device *phydev)
+>  {
+>  	struct lan8814_shared_priv *shared = phydev->shared->priv;
+>  
+> -	if (!IS_ENABLED(CONFIG_PTP_1588_CLOCK) ||
+> -	    !IS_ENABLED(CONFIG_NETWORK_PHY_TIMESTAMPING))
+> -		return 0;
+> -
 
-On Mon, 05 Dec 2022 17:45:00 +0000, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> I used the wikipedia table for ordering extensions when updating the
-> pattern here in commit 299824e68bd0 ("dt-bindings: riscv: add new
-> riscv,isa strings for emulators").
-> 
-> Unfortunately that table did not match canonical order, as defined by
-> the RISC-V ISA Manual, which defines extension ordering in (what is
-> currently) Table 41, "Standard ISA extension names". Fix things up by
-> re-sorting v (vector) and adding p (packed-simd) & j (dynamic
-> languages). The e (reduced integer) and g (general) extensions are still
-> intentionally left out.
-> 
-> Link: https://github.com/riscv/riscv-isa-manual/releases/tag/riscv-unpriv-pdf-from-asciidoc-15112022 # Chapter 29.5
-> Fixes: 299824e68bd0 ("dt-bindings: riscv: add new riscv,isa strings for emulators")
-> Acked-by: Guo Ren <guoren@kernel.org>
-> Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+Why are you removing this ?
 
-Acked-by: Rob Herring <robh@kernel.org>
+    Andrew
