@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60196441CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452586441D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:06:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232046AbiLFLDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S232198AbiLFLGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:06:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232543AbiLFLCY (ORCPT
+        with ESMTP id S230036AbiLFLGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:02:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2360D24BD4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:00:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670324455;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=nnhqMeUW5gkAJH3i2M2e0zkZdF9yQL6BjlLwXPeq/ho=;
-        b=OuN0bGKRm/+ut9t5sF7TS1aN7ZZRkWWzV35MtWnZgDHT3ZjeCf/85u8P79nlJH12OEuakE
-        1la6Nz/8gs6T92XCgKdRNeJQ+0I1tcX+81QTCieuDzbckvqBrKj50J6GrBc1RXX4W++sYy
-        nMdT1b7dx7s7Jw8idNkbGqUI6a+58wQ=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-195-p3LsUzXXNTGNnfBKPinOTg-1; Tue, 06 Dec 2022 06:00:54 -0500
-X-MC-Unique: p3LsUzXXNTGNnfBKPinOTg-1
-Received: by mail-qv1-f71.google.com with SMTP id nh17-20020a056214391100b004bb6c16bd4dso33213265qvb.17
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:00:53 -0800 (PST)
+        Tue, 6 Dec 2022 06:06:23 -0500
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BFE2C3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:06:22 -0800 (PST)
+Received: by mail-ot1-x335.google.com with SMTP id l8-20020a056830054800b006705fd35eceso48274otb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:06:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6J5/cA2heNXWUf0rHF45pgIEEYc2mRi3nWq/9vPqQM=;
+        b=MuusQTa/qnNbDkJ/sjQ7f/u6J0NdkURpovK6EqeCU0Ck0WQA2QUp5cSCNrPXmTGNJK
+         q5yimJwPYB7qbUVcC8L/sXz0qrInRz6Uecy+IqJgAuTkafpN+TMCo7gJsXZW9nk66s0f
+         gFDwG+rgY/TQljRgOirRpj3zALG5Ut45hKwhFxApgu0EAnBz2oVkiNb+1TruraBAmgMD
+         z3CrLDCpC1rPKDRnp2LLOyfLaD1ErxPYPlsskXbjGlWR+PykkIfJeY4MU4VdsUFXiLKD
+         Ea/fhLtJyR3jaDX5Spqmto9lVs8qvS6OZWCSUvK/f0hhsA5pk3qeO8Lk7Z0ka9vb0Cgh
+         kgXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nnhqMeUW5gkAJH3i2M2e0zkZdF9yQL6BjlLwXPeq/ho=;
-        b=IddmH0ytiyq+dRjJCi24qL1wmKoRIcOfBhau5Qze+MOUjwhOgt/FkBEeZ1cBsygigO
-         QW2jBB2A7K6hLHL23+9YGEMXzot+LXJAcMS0L6wXHwcM6cHWM24V/uyGkXpqzAjxa6eB
-         gs2rJvy6XpkmYx0lu2wahN9NUPq+cDCgutIVGiwTb/OtybmuZEGS4D8QMXywIRlgvveG
-         pbnoZKvQ3wo0txZn7U9R7ceMnjIoIY2Bpyu0czx6ol8iiV1eJvoWrGXceq59N8zhDB/N
-         UL5L3ZZIKcDgw7TGs89NiaX8hDrBlmfhZXq3stf4EtX7CFubc6DIYRPyCWWmeZ4qkEG/
-         Nxew==
-X-Gm-Message-State: ANoB5pnQ/k8ns6YmaG1UctZf4OrO8B2xlHN4HMMpAVS+AVUO3nmXwHYP
-        UE/hUw8J6TkjALjnfqV7OlDZe0/wBrhYWtBb36nkayX/jW+u/GYxwyAzxidXSJswNZfG6MU0zi+
-        YyU26kACIFPy4suoQ/xmmhUrC
-X-Received: by 2002:a05:6214:170d:b0:4c7:4add:6123 with SMTP id db13-20020a056214170d00b004c74add6123mr14971769qvb.100.1670324453406;
-        Tue, 06 Dec 2022 03:00:53 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6O4cvnwiNG/1UoAXIkBQIklV5lMHMzKytVq4RHoVXR9XHDwZ6NxwUPqwnijsvhRUZGuVdF0g==
-X-Received: by 2002:a05:6214:170d:b0:4c7:4add:6123 with SMTP id db13-20020a056214170d00b004c74add6123mr14971755qvb.100.1670324453175;
-        Tue, 06 Dec 2022 03:00:53 -0800 (PST)
-Received: from sgarzare-redhat (host-87-11-6-51.retail.telecomitalia.it. [87.11.6.51])
-        by smtp.gmail.com with ESMTPSA id dm12-20020a05620a1d4c00b006fb11eee465sm14082021qkb.64.2022.12.06.03.00.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 03:00:52 -0800 (PST)
-Date:   Tue, 6 Dec 2022 12:00:40 +0100
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     "Longpeng(Mike)" <longpeng2@huawei.com>
-Cc:     stefanha@redhat.com, mst@redhat.com, jasowang@redhat.com,
-        eperezma@redhat.com, cohuck@redhat.com, arei.gonglei@huawei.com,
-        yechuan@huawei.com, huangzhichao@huawei.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] vp_vdpa: harden the logic of set status
-Message-ID: <20221206110040.q5i2k7ypojuira2e@sgarzare-redhat>
-References: <20221206021321.2400-1-longpeng2@huawei.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P6J5/cA2heNXWUf0rHF45pgIEEYc2mRi3nWq/9vPqQM=;
+        b=D6Jt3QpHDRTYy6+arK2IqNyPwdz1Q8G3ProjjND5MDYhqgFZ6dV9hGwzbbsKzP77+d
+         OWX3hZPQiLu9BXxOSWtDNFn0eVbh5PmnW7MWaHjpUGg/WpPlCeC6i5lgNvNv28Wd/oQv
+         xnJmtmb2oiY0+ecjedr1uZXGDXQK31ZJu26Ql86dgi6Wad/PnmiZmYk8UsfBUJL1D12m
+         vY5fSvslgH9iBgwVd6aOHl+vNvaubksdqVyTTe6+/d33t3LkdHfVV7KxwSPxulxI9YrQ
+         qGX3K3vYB5ZFJjCsgmJCLwCGIAZC9TtHgZTn8gvE8h5kWEbGdWxDvlK3k3bUsN0/x8EI
+         2JVA==
+X-Gm-Message-State: ANoB5pn1nFefMZrw9+0SXzfo+j3KeMwH3ysEq9x0kgxq+yyPn/+SEL/S
+        GEisDxwSUANmRiilKhTJUeyb4uvaGlUUwICNrooySA==
+X-Google-Smtp-Source: AA0mqf7F266rR1tTxm4R7434AaCrtd594zQmgO0fP+AzuOZHTD8XQLKdBwxpKHtD6aDv2UG/CANbX1nnEjA0t16Atzk=
+X-Received: by 2002:a9d:351:0:b0:66e:6cf5:770a with SMTP id
+ 75-20020a9d0351000000b0066e6cf5770amr12829902otv.269.1670324781674; Tue, 06
+ Dec 2022 03:06:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221206021321.2400-1-longpeng2@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <000000000000bd587705ef202b08@google.com> <20221206033450.GS3600936@dread.disaster.area>
+In-Reply-To: <20221206033450.GS3600936@dread.disaster.area>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 6 Dec 2022 12:06:10 +0100
+Message-ID: <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
+To:     Dave Chinner <david@fromorbit.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
+        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
+        RCU <rcu@vger.kernel.org>
+Cc:     syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>,
+        djwong@kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,90 +73,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 10:13:21AM +0800, Longpeng(Mike) wrote:
->From: Longpeng <longpeng2@huawei.com>
+On Tue, 6 Dec 2022 at 04:34, Dave Chinner <david@fromorbit.com> wrote:
 >
->1. We should not set status to 0 when invoking vp_vdpa_set_status(),
->   trigger a warning in that case.
+> On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
+> > Hello,
+> >
+> > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+> > INFO: rcu detected stall in corrupted
+> >
+> > rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
+> > rcu: blocking rcu_node structures (internal RCU debug):
 >
->2. The driver MUST wait for a read of device_status to return 0 before
->   reinitializing the device. But we also don't want to keep us in an
->   infinite loop forever, so wait for 5s if we try to reset the device.
+> I'm pretty sure this has nothing to do with the reproducer - the
+> console log here:
 >
->Signed-off-by: Longpeng <longpeng2@huawei.com>
->---
->Changes v1->v2:
->  - use WARN_ON instead of BUG_ON. [Stefano]
->  - use "warning + failed" instead of "infinite loop". [Jason, Stefano]
->  - use usleep_range instead of msleep (checkpatch). [Longpeng]
+> > Tested on:
+> >
+> > commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
+> > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
 >
->---
-> drivers/vdpa/virtio_pci/vp_vdpa.c | 22 ++++++++++++++++++++++
-> 1 file changed, 22 insertions(+)
+> indicates that syzbot is screwing around with bluetooth, HCI,
+> netdevsim, bridging, bonding, etc.
 >
->diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
->index 13701c2a1963..a2d3b13ac646 100644
->--- a/drivers/vdpa/virtio_pci/vp_vdpa.c
->+++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
->@@ -214,6 +214,9 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
-> 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
-> 	u8 s = vp_vdpa_get_status(vdpa);
+> There's no evidence that it actually ran the reproducer for the bug
+> reported in this thread - there's no record of a single XFS
+> filesystem being mounted in the log....
 >
->+	/* We should never be setting status to 0. */
->+	WARN_ON(status == 0);
->+
-> 	if (status & VIRTIO_CONFIG_S_DRIVER_OK &&
-> 	    !(s & VIRTIO_CONFIG_S_DRIVER_OK)) {
-> 		vp_vdpa_request_irq(vp_vdpa);
->@@ -222,14 +225,33 @@ static void vp_vdpa_set_status(struct vdpa_device *vdpa, u8 status)
-> 	vp_modern_set_status(mdev, status);
-> }
+> It look slike someone else also tried a private patch to fix this
+> problem (which was obviously broken) and it failed with exactly the
+> same RCU warnings. That was run from the same commit id as the
+> original reproducer, so this looks like either syzbot is broken or
+> there's some other completely unrelated problem that syzbot is
+> tripping over here.
 >
->+#define VP_VDPA_RESET_TMOUT_MS 5000 /* 5s */
+> Over to the syzbot people to debug the syzbot failure....
 
-What about moving this define on top of this file?
-Near the other macro.
+Hi Dave,
 
-And I would use TIMEOUT entirely.
+It's not uncommon for a single program to trigger multiple bugs.
+That's what happens here. The rcu stall issue is reproducible with
+this test program.
+In such cases you can either submit more test requests, or test manually.
 
->+
-> static int vp_vdpa_reset(struct vdpa_device *vdpa, bool clear)
-> {
-> 	struct vp_vdpa *vp_vdpa = vdpa_to_vp(vdpa);
-> 	struct virtio_pci_modern_device *mdev = vp_vdpa_to_mdev(vp_vdpa);
-> 	u8 s = vp_vdpa_get_status(vdpa);
->+	unsigned long timeout;
->
-> 	vp_modern_set_status(mdev, 0);
->
->+	/*
->+	 * As the virtio v1.1 spec (4.1.4.3.2) says: After writing 0 to
-
-I think we can refer to the lates v1.2 (the section should be the same).
-
->+	 * device_status, the driver MUST wait for a read of device_status
->+	 * to return 0 before reinitializing the device.
->+	 * To avoid keep us here forever, we only wait for 5 seconds.
->+	 */
->+	timeout = jiffies + msecs_to_jiffies(VP_VDPA_RESET_TMOUT_MS);
->+	while (vp_modern_get_status(mdev)) {
->+		usleep_range(1000, 1500);
->+		if (time_after(jiffies, timeout)) {
->+			dev_err(&mdev->pci_dev->dev,
->+				"vp_vdpa: fail to reset device\n");
->+			return -ETIMEDOUT;
->+		}
->+	}
->+
-> 	if (s & VIRTIO_CONFIG_S_DRIVER_OK)
-> 		vp_vdpa_free_irq(vp_vdpa);
->
->-- 
->2.23.0
->
-
-The rest LGTM!
-
-Thanks,
-Stefano
-
+I think there is an RCU expedited stall detection.
+For some reason CONFIG_RCU_EXP_CPU_STALL_TIMEOUT is limited to 21
+seconds, and that's not enough for reliable flake-free stress testing.
+We bump other timeouts to 100+ seconds.
++RCU maintainers, do you mind removing the overly restrictive limit on
+CONFIG_RCU_EXP_CPU_STALL_TIMEOUT?
+Or you think there is something to fix in the kernel to not stall? I
+see the test writes to
+/proc/sys/vm/drop_caches, maybe there is some issue in that code.
