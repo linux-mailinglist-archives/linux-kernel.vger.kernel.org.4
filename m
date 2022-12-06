@@ -2,99 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413156442E4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C7656442E7
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:06:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235403AbiLFMFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:05:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58874 "EHLO
+        id S235406AbiLFMGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:06:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235256AbiLFMFa (ORCPT
+        with ESMTP id S234982AbiLFMFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:05:30 -0500
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84DAB7CB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 04:03:49 -0800 (PST)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
+        Tue, 6 Dec 2022 07:05:34 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC762934C;
+        Tue,  6 Dec 2022 04:04:20 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 57C2B44232
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 12:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1670328228;
-        bh=brtPlso4v+WsnAGgbWLqD0qaP/DWC2mCOIzkN3hJ/jA=;
-        h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-         Content-Type:MIME-Version;
-        b=gfZi6hA7kxEOKRuBEQgII6fQOfkxNKe+KGk7A9zvTR9SFcwzLOf0czIZ5C4LF5JFS
-         tFzz2BSBSy96sQIuQewedKUQtLkBnE90zdUwOAESXU+sMycbjp1IAKzUPWT4yOe4tg
-         plZu9TjmQ1d5BBZoglnSM9nwwgVs6fwwFz67QpTUjeDuuUvSr2G2e3bxA7i8QSmxHQ
-         KTXeYU1LESxMeVqw+RmkUIOK9wz2fgdzxSfvrv5yeEiEM4epGJc3c9IgvLVLwXO9MX
-         kJJHc/YOOBGlyBBMggvi6zpgiclwZQ1tAhgD1CpdPDnHx3T03d2KmY3jar48NKAs5A
-         gSVb3gWsUeHNA==
-Received: by mail-ed1-f70.google.com with SMTP id w22-20020a056402269600b0046b00a9ee5fso7704604edd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 04:03:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=brtPlso4v+WsnAGgbWLqD0qaP/DWC2mCOIzkN3hJ/jA=;
-        b=x0mSXnbuTjOPkyhMtcp7tyVgdsu7jPcfYdnZ55qVuczaFJE9mlXSEO3jrAOwWe2sO9
-         i5Oa5wxokyLMeOWWCj5y+OgztVFQMVz5k/YFCfdNcVAexkwlW8Z8Rk0rLHCXZBoHTJBU
-         dB96714IjU9VKXf5XdJIQ0mF3yY9WkJsTOn/kKAadM5fUiGpVkbjvx4FEUKkQf2/c19O
-         wXGWNwo0pnl0I/FEBaw+MDQjB5MWLBLHF2BtqE5LydDYA7h0KNSfYGihSdMAsXpatLob
-         uU6fFt+fZg4+8DbbrcqIkxXUGxlthTQa8tU6Rq9ns5LIBQELfx5SNjpP5Ao5xCoAJvk5
-         pc7Q==
-X-Gm-Message-State: ANoB5pmdqWyI5waveWofTVRV2SnRSY/2CvbG/RP6YCrZzcVuhGhPmeon
-        ZJ4ByvqGJp6CxQo+VvgNcmU1eQucuiWE5bNpvT+A203fftIVlgs2JnPhIaW4Sf8lTK1m50Tpep1
-        AHesCfUNEG3J2ZP/YVjrnPrPlln+aOHGT0RGP5TIhLw==
-X-Received: by 2002:a17:906:1310:b0:7c0:c5e9:634d with SMTP id w16-20020a170906131000b007c0c5e9634dmr15321585ejb.220.1670328227917;
-        Tue, 06 Dec 2022 04:03:47 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf53XzYQZ9m1URY2w6jlEHp7rS5tCFGriu9rXA6LSOHfWrCMGtPfHrgs+qnXI07YhR2WvnFdNg==
-X-Received: by 2002:a17:906:1310:b0:7c0:c5e9:634d with SMTP id w16-20020a170906131000b007c0c5e9634dmr15321567ejb.220.1670328227650;
-        Tue, 06 Dec 2022 04:03:47 -0800 (PST)
-Received: from [192.168.1.27] ([92.44.145.54])
-        by smtp.gmail.com with ESMTPSA id gg9-20020a170906e28900b007c0d41736c0sm4138501ejb.39.2022.12.06.04.03.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 04:03:47 -0800 (PST)
-Message-ID: <a22e2c8de905d7f9d3cf3525269487a6b5da4bf5.camel@canonical.com>
-Subject: Re: Regarding 711f8c3fb3db "Bluetooth: L2CAP: Fix accepting
- connection request for invalid SPSM"
-From:   Cengiz Can <cengiz.can@canonical.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Tue, 06 Dec 2022 15:03:34 +0300
-In-Reply-To: <Y48sR0xv0yuH8GDd@kroah.com>
-References: <f0b260c1-a7c4-9e0e-5b29-a3c8a7570df1@canonical.com>
-         <Y48sR0xv0yuH8GDd@kroah.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1-0ubuntu1 
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C07BF1FE3E;
+        Tue,  6 Dec 2022 12:04:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670328258; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8q6ZPg/tqFRuvaWD1LpVpkaIE6BD7BT1f0oDRYe1ZbI=;
+        b=umPJYJtv9Mo8wdyWE643zdsspQ8aZGh0KrsM3nLBwy3lqHAj1IAg7w4pSV9w5JNnMns9Vr
+        JrR6Amw62P8aHLNWQ/LKbUvBQJhen1xugoWKGBjO+PWfY3ZmyNoKQ2puv5cvfwP71yzNV/
+        hmZH3Rj+6GlU6q5nV/Z01kTyo5KFuYc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670328258;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8q6ZPg/tqFRuvaWD1LpVpkaIE6BD7BT1f0oDRYe1ZbI=;
+        b=8MP3y+KPOw3Xtedhk68KkSyF8iEtA/6ppFOk9eIn9YysTOiGjKBwLku8WD1RGwDpNY4ZYH
+        7BW7rI1i9cveFaDA==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id AF901132F3;
+        Tue,  6 Dec 2022 12:04:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id rMLKKsIvj2PgWgAAGKfGzw
+        (envelope-from <jack@suse.cz>); Tue, 06 Dec 2022 12:04:18 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 07A92A0725; Tue,  6 Dec 2022 13:04:17 +0100 (CET)
+Date:   Tue, 6 Dec 2022 13:04:17 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
+        syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+Subject: Re: [PATCH -next 1/6] ext4: fix WARNING in ext4_expand_extra_isize_ea
+Message-ID: <20221206120417.225uxtlg255bzph4@quack3>
+References: <20221206015806.3420321-1-yebin@huaweicloud.com>
+ <20221206015806.3420321-2-yebin@huaweicloud.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206015806.3420321-2-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-06 at 12:49 +0100, Greg KH wrote:
->=20
-> I've already done this backport and it is in the latest -rc1 stable
-> kernel releases.  Is it not working for you there?  Why do it again?
+On Tue 06-12-22 09:58:01, Ye Bin wrote:
+> From: Ye Bin <yebin10@huawei.com>
+> 
+> Syzbot found the following issue:
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 3631 at mm/page_alloc.c:5534 __alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+> Modules linked in:
+> CPU: 1 PID: 3631 Comm: syz-executor261 Not tainted 6.1.0-rc6-syzkaller-00308-g644e9524388a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> RIP: 0010:__alloc_pages+0x30a/0x560 mm/page_alloc.c:5534
+> RSP: 0018:ffffc90003ccf080 EFLAGS: 00010246
+> RAX: ffffc90003ccf0e0 RBX: 000000000000000c RCX: 0000000000000000
+> RDX: 0000000000000028 RSI: 0000000000000000 RDI: ffffc90003ccf108
+> RBP: ffffc90003ccf198 R08: dffffc0000000000 R09: ffffc90003ccf0e0
+> R10: fffff52000799e21 R11: 1ffff92000799e1c R12: 0000000000040c40
+> R13: 1ffff92000799e18 R14: dffffc0000000000 R15: 1ffff92000799e14
+> FS:  0000555555c10300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007ffc36f70000 CR3: 00000000744ad000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __alloc_pages_node include/linux/gfp.h:223 [inline]
+>  alloc_pages_node include/linux/gfp.h:246 [inline]
+>  __kmalloc_large_node+0x8a/0x1a0 mm/slab_common.c:1096
+>  __do_kmalloc_node mm/slab_common.c:943 [inline]
+>  __kmalloc+0xfe/0x1a0 mm/slab_common.c:968
+>  kmalloc include/linux/slab.h:558 [inline]
+>  ext4_xattr_move_to_block fs/ext4/xattr.c:2558 [inline]
+>  ext4_xattr_make_inode_space fs/ext4/xattr.c:2673 [inline]
+>  ext4_expand_extra_isize_ea+0xe3f/0x1cd0 fs/ext4/xattr.c:2765
+>  __ext4_expand_extra_isize+0x2b8/0x3f0 fs/ext4/inode.c:5857
+>  ext4_try_to_expand_extra_isize fs/ext4/inode.c:5900 [inline]
+>  __ext4_mark_inode_dirty+0x51a/0x670 fs/ext4/inode.c:5978
+>  ext4_inline_data_truncate+0x548/0xd00 fs/ext4/inline.c:2021
+>  ext4_truncate+0x341/0xeb0 fs/ext4/inode.c:4221
+>  ext4_process_orphan+0x1aa/0x2d0 fs/ext4/orphan.c:339
+>  ext4_orphan_cleanup+0xb60/0x1340 fs/ext4/orphan.c:474
+>  __ext4_fill_super fs/ext4/super.c:5515 [inline]
+>  ext4_fill_super+0x80ed/0x8610 fs/ext4/super.c:5643
+>  get_tree_bdev+0x400/0x620 fs/super.c:1324
+>  vfs_get_tree+0x88/0x270 fs/super.c:1531
+>  do_new_mount+0x289/0xad0 fs/namespace.c:3040
+>  do_mount fs/namespace.c:3383 [inline]
+>  __do_sys_mount fs/namespace.c:3591 [inline]
+>  __se_sys_mount+0x2d3/0x3c0 fs/namespace.c:3568
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  </TASK>
+> 
+> Reason is allocate 16M memory by kmalloc, but MAX_ORDER is 11, kmalloc
+> can allocate maxium size memory is 4M.
+> XATTR_SIZE_MAX is currently 64k, but EXT4_XATTR_SIZE_MAX is '(1 << 24)',
+> so 'ext4_xattr_check_entries()' regards this length as legal. Then trigger
+> warning in 'ext4_xattr_move_to_block()'.
+> To solve above issue, according to Jan Kara's suggestion use kvmalloc()
+> to allocate memory in ext4_xattr_move_to_block().
+> 
+> Reported-by: syzbot+4d99a966fd74bdeeec36@syzkaller.appspotmail.com
+> Fixes: 54dd0e0a1b25 ("ext4: add extra checks to ext4_xattr_block_get()")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-Sorry for the noise. I was just trying to make sure that I'm following
-the right path.
+The changelog speak about kvmalloc() while your patch changes
+EXT4_XATTR_SIZE_MAX. This needs to be fixed. If Ted is find with this
+change, I have no problem with it either but I remember there were some
+discussions about what EXT4_XATTR_SIZE_MAX should be when ea_inode feature
+has been developed. Ted might remember.
 
-I know that 4.4.y is no longer actively maintained but I was trying to
-backport it to there as well.
+Also the change from kmalloc() to kvmalloc() is a desirable one anyway. It
+is not always easy to find physically contiguous 64k of memory so
+kvmalloc() makes the allocation much more likely to succeed.
 
-Sorry for the noise again.
+								Honza
 
-Cengiz Can
-
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
