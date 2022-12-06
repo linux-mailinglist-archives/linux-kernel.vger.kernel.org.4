@@ -2,154 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 407E8643FC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:24:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91649643FC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:24:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbiLFJYO convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Dec 2022 04:24:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39622 "EHLO
+        id S235028AbiLFJYR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:24:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235035AbiLFJXu (ORCPT
+        with ESMTP id S235055AbiLFJXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 6 Dec 2022 04:23:50 -0500
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F49A26117
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:21:52 -0800 (PST)
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay05.hostedemail.com (Postfix) with ESMTP id 3E19E40CCA;
-        Tue,  6 Dec 2022 09:21:51 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf14.hostedemail.com (Postfix) with ESMTPA id 2E66332;
-        Tue,  6 Dec 2022 09:21:17 +0000 (UTC)
-Message-ID: <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
-Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
- about missing Link:
-From:   Joe Perches <joe@perches.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>
-Date:   Tue, 06 Dec 2022 01:21:48 -0800
-In-Reply-To: <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
-References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
-         <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
-         <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
-         <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
-         <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
-         <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
-         <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
-         <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D36E20F41
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:21:59 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id b11so13860543pjp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:21:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=37i4PLhbvOixYkzJrk3nfK3Vs02mt4pjFCyGYhE/6yw=;
+        b=bd2kgLbTRBfKMhrHPs+EtDK3iSVQ7Hb/AsOw0eqpX1g6kfVd33s1+fpQx4UJ/GC0VT
+         nHsQEPkielwsNM2G9ZWPwYoXqOkZD+E9lrXmZcZ/rLVPO6ksAV9k5nQ3jaLUbx6fzI0T
+         PLmRlDChnPWj0wkjBVGYiFKYevIpoflU2f2k3CphvcQS0e1HyxPI4MLoBcYAGf5N4ait
+         4fQyfD7mj4DREW20VMbftjq+/Ab2uXyYtoI084nuzdLQTkMgtFE9AtFxmumazHTWr0Bi
+         AtBuU+/n8TnQvQgVI4RRk2y4h0GPKzmaOw/D7VuHFd3nBPuemFI0TEOU+7Fr6F4TaiLj
+         qVYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=37i4PLhbvOixYkzJrk3nfK3Vs02mt4pjFCyGYhE/6yw=;
+        b=NgfrXUp8lTYkC6VTKBUhzT7oRjv8HQL86aW5XrhwZQJO9AmTgKLkLSh5a5VXeDXiQH
+         ZLEmZ8NXpifN8v2KJzIqTdeMWnZB2I/fOPS1pX/9Jo6T6pOaxTlUUihpF24Eaj+acvks
+         l/vRWpZu4LtPnBZ6mOSxDTP8lKAdSk7Ld6eiSdsbpgmVHxoHbdHIX7IyKJqLthBDshws
+         7+aPMHEkMhFNQ4Wg2mWrvZ5gMtaQw6qFzjEilhklRJUCCrqiBVxwRiAsaqEBW+A/3PvZ
+         CvI5MVb9+2IXbf9gH/gTaqK6usHlT6MMefHpTsrWYTbJHQGntFNVaRokvdIXakVYMgls
+         Jclw==
+X-Gm-Message-State: ANoB5pmu9tOV0110z3UpsC09Wl+sVNs9eFY6VWS6jn7zu1h93RhJmjpU
+        qTxuboA+Ix5DRwvisDqBw4D/
+X-Google-Smtp-Source: AA0mqf450XD3p4pvvnhWO0oR2aiyvMsnhY2p+vYqQxKwKPZhZQ+tB+itI0bN2tbzOP7VC0mY1kON9w==
+X-Received: by 2002:a17:90b:3011:b0:219:5f5a:7192 with SMTP id hg17-20020a17090b301100b002195f5a7192mr33374737pjb.144.1670318518914;
+        Tue, 06 Dec 2022 01:21:58 -0800 (PST)
+Received: from thinkpad ([59.92.103.18])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c10c00b001869f2120a4sm12053483pli.94.2022.12.06.01.21.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 01:21:57 -0800 (PST)
+Date:   Tue, 6 Dec 2022 14:51:52 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Will Deacon <will@kernel.org>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Amit Pundir <amit.pundir@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Robin Murphy <robin.murphy@arm.com>, andersson@kernel.org,
+        sumit.semwal@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, hch@lst.de
+Subject: Re: [PATCH] Revert "arm64: dma: Drop cache invalidation from
+ arch_dma_prep_coherent()"
+Message-ID: <20221206092152.GD15486@thinkpad>
+References: <Y4joR2sQMMjIt+yE@arm.com>
+ <CAMi1Hd2wM5MLsjkx0HAWKkswzTDACb0C4tsPymNrRa0ariWsww@mail.gmail.com>
+ <f98d163b-3410-9cf7-7d98-0f7640f4aa1f@leemhuis.info>
+ <20221202100357.GB29396@willie-the-truck>
+ <92a148a3-a8ac-4065-123c-99b72ac3ebeb@leemhuis.info>
+ <Y4ojXyXMX2p+RVBR@kroah.com>
+ <395ad6ef-eb54-ec7e-e131-714f23c84d7a@leemhuis.info>
+ <Y4oos/xXL+tLT7E7@kroah.com>
+ <20221202171437.GH5356@thinkpad>
+ <20221205142402.GA31783@willie-the-truck>
 MIME-Version: 1.0
-X-Rspamd-Server: rspamout08
-X-Rspamd-Queue-Id: 2E66332
-X-Stat-Signature: 5rowfeknxtaec4cidberrjpetkj7ohps
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1+ZD1ZwsGQj1IIPGuQROrcwLwSYY7NdE9Q=
-X-HE-Tag: 1670318477-558674
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221205142402.GA31783@willie-the-truck>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-06 at 09:50 +0100, Thorsten Leemhuis wrote:
-> On 06.12.22 08:44, Joe Perches wrote:
-> > On Tue, 2022-12-06 at 08:17 +0100, Thorsten Leemhuis wrote:
-> > > On 06.12.22 07:27, Thorsten Leemhuis wrote:
-> > > > On 06.12.22 06:54, Joe Perches wrote:
-> > []
-> > > > > and perhaps a more
-> > > > > generic, "is the thing in front of a URI/URL" a known/supported entry,
-> > > > > instead of using an known invalid test would be a better mechanism.
+On Mon, Dec 05, 2022 at 02:24:03PM +0000, Will Deacon wrote:
+> On Fri, Dec 02, 2022 at 10:44:37PM +0530, Manivannan Sadhasivam wrote:
+> > On Fri, Dec 02, 2022 at 05:32:51PM +0100, Greg KH wrote:
+> > > On Fri, Dec 02, 2022 at 05:27:24PM +0100, Thorsten Leemhuis wrote:
+> > > > On 02.12.22 17:10, Greg KH wrote:
+> > > > > On Fri, Dec 02, 2022 at 11:34:30AM +0100, Thorsten Leemhuis wrote:
+> > > > >> On 02.12.22 11:03, Will Deacon wrote:
+> > > > >>> On Fri, Dec 02, 2022 at 09:54:05AM +0100, Thorsten Leemhuis wrote:
+> > > > >>>> On 02.12.22 09:26, Amit Pundir wrote:
+> > > > >>>>> On Thu, 1 Dec 2022 at 23:15, Catalin Marinas <catalin.marinas@arm.com> wrote:
+> > > > >>>>>>
+> > > > >>>>>> On Thu, Dec 01, 2022 at 10:29:39AM +0100, Thorsten Leemhuis wrote:
+> > > > >>>>>>> Has any progress been made to fix this regression? It afaics is not a
+> > > > >>>>>>> release critical issue, but well, it still would be nice to get this
+> > > > >>>>>>> fixed before 6.1 is released.
+> > > > >>>>>>
+> > > > >>>>>> The only (nearly) risk-free "fix" for 6.1 would be to revert the commit
+> > > > >>>>>> that exposed the driver bug. It doesn't fix the actual bug, it only
+> > > > >>>>>> makes it less likely to happen.
+> > > > >>>>>>
+> > > > >>>>>> I like the original commit removing the cache invalidation as it shows
+> > > > >>>>>> drivers not behaving properly
+> > > > >>>>
+> > > > >>>> Yeah, I understand that, but I guess it's my job to ask at this point:
+> > > > >>>> "is continuing to live with the old behavior for one or two more cycles"
+> > > > >>>> that much of a problem"?
+> > > > >>>
+> > > > >>> That wouldn't be a problem. The problem is that I haven't see any efforts
+> > > > >>> from the Qualcomm side to actually fix the drivers [...]
+> > > > >>
+> > > > >> Thx for sharing the details. I can fully understand your pain. But well,
+> > > > >> in the end it looks to me like this commit it intentionally breaking
+> > > > >> something that used to work -- which to my understanding of the "no
+> > > > >> regression rule" is not okay, even if things only worked by chance and
+> > > > >> not flawless.
+> > > > > 
+> > > > > "no regressions" for userspace code, this is broken, out-of-tree driver
+> > > > > code, right?
 > > > > 
-> > > > Are you sure about that? It's not that I disagree completely, but it
-> > > > sounds overly restrictive to me and makes it harder for new tags to
-> > > > evolve in case we might want them.
+> > > > If so: apologies. But that's not the impression I got, as Amit wrote "I
+> > > > can reproduce this crash on vanilla v6.1-rc1 as well with no out-of-tree
+> > > > drivers." here:
+> > > > https://lore.kernel.org/linux-arm-kernel/CAMi1Hd3H2k1J8hJ6e-Miy5+nVDNzv6qQ3nN-9929B0GbHJkXEg@mail.gmail.com/
+> > > 
+> > > Ah, I missed that.
+> > > 
+> > > Ok, what in-tree drivers are having problems being buggy?  I can't seem
+> > > to figure that out from that report at all.  Does anyone know?
+> > > 
 > > 
-> > It's easy to add newly supported values to a list.
+> > It is the Qualcomm Q6V5_MSS remoteproc driver:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/remoteproc/qcom_q6v5_mss.c
 > > 
-> > > > And what tags would be on this allow-list? Anything else then "Link" and
-> > > > "Patchwork"? Those are the ones that looked common and valid to me when
-> > > > I ran
-> > > > 
-> > > > git log --grep='http' v4.0.. | grep http | grep -v '    Link: ' | less
-> > > > 
-> > > > and skimmed the output. Maybe "Datasheet" should be allowed, too -- not
-> > > > sure.
-> > []
-> > > > But I found a few others that likely should be on the disallow list:
-> > > > "Closes:", "Bug:", "Gitlab issue:", "References:", "Ref:", "Bugzilla:",
-> > > > "RHBZ:", and "link", as "Link" should be used instead in all of these
-> > > > cases afaics.
-> > 
-> > Do understand please that checkpatch will never be perfect.
-> > At best, it's just a guidance tool.
+> > Qualcomm is working on the fix but the patches are not ready yet. So if we can
+> > get this patch reverted in the meantime, that would be helpful.
 > 
-> Of course -- and that's actually a reason why I prefer a disallow list
-> over an allow list, as that gives guidance in the way of "don't use this
-> tag, use Link instead" instead of enforcing "always use Link: when
-> linking somewhere" (now that I've written it like that it feels even
-> more odd, because it's obvious that it's a link, so why bother with a
-> tag; but whatever).
+> It's good to hear that you're working to fix this, even if it's happening
+> behind closed doors. Do you have a rough idea how soon you'll be able to
+> post the remoteproc driver fixes? That would help us to figure out when
+> to bring back the change if we were to revert it.
 > 
-> I also think the approach with a disallow list will not bother
-> developers much, while the other forces them a bit to much into a scheme.
+
+Sibi is the one working on the fix. I believe he should be able to post the
+patches within this week.
+
+Thanks,
+Mani
+
+> Cheers,
 > 
-> > To me most of these are in the noise level, but perhaps all should just
-> > use Link:
-> > 
-> > $ git log -100000 --format=email -P --grep='^\w+:[ \t]*http' | \
-> >   grep -Poh '^\w+:[ \t]*http' | \
-> >   sort | uniq -c | sort -rn
-> >  103889 Link: http
-> >     415 BugLink: http
-> >     372 Patchwork: http
-> >     270 Closes: http
-> >     221 Bug: http
-> >     121 References: http
-> > [...]
-> 
-> Ha, I considered doing something like that when I wrote my earlier mail,
-> but was to lazy. :-D thx!
-> 
-> Yeah, they are not that often, but I grew tired arguing about that,
-> that's why I think checkpatch is the better place and in the better
-> position to handle that.
+> Will
 
-I'm not sure that "Patchwork:" is a reasonable prefix.
-Is that documented anywhere?
-
-> Anyway, so how to move forward now? Do you insist on a allow list (IOW:
-> a Link: or Patchwork: before every http...)? Or is a disallow list with
-> the most common unwanted tags for links (that you thankfully compiled)
-> fine for you as well?
-
-Maybe
----
- scripts/checkpatch.pl | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index 1c3d13e65c2d0..a526a354cdfbc 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -3250,6 +3250,13 @@ sub process {
- 			$commit_log_possible_stack_dump = 0;
- 		}
- 
-+# Check for odd prefixes before a URI/URL
-+		if ($in_commit_log &&
-+		    $line =~ /^\s*(\w+):\s*http/ && $1 !~ /^(?:Link|Patchwork)/) {
-+			WARN("PREFER_LINK",
-+			     "Unusual link reference '$1:', prefer 'Link:'\n" . $herecurr);
-+		}
-+
- # Check for lines starting with a #
- 		if ($in_commit_log && $line =~ /^#/) {
- 			if (WARN("COMMIT_COMMENT_SYMBOL",
-
+-- 
+மணிவண்ணன் சதாசிவம்
