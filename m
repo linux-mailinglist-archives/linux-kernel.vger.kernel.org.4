@@ -2,90 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44563644EBA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D031644EB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 23:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiLFWtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 17:49:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41460 "EHLO
+        id S229544AbiLFWt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 17:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLFWte (ORCPT
+        with ESMTP id S229479AbiLFWt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 17:49:34 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03B94A079
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 14:49:32 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id 140so15906300pfz.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 14:49:32 -0800 (PST)
+        Tue, 6 Dec 2022 17:49:26 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34239101F;
+        Tue,  6 Dec 2022 14:49:25 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id s196so14698285pgs.3;
+        Tue, 06 Dec 2022 14:49:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YOk7QmVLaqd3ISsObkMka5HE5a1QK0ooo8SO4HwCcs=;
-        b=hmGCxzHgrW03n/c2L9WWEk6cmVA7AwYgzgKY1qtyGPxK84x1OFe5CMJOYLyldaGICR
-         zWTyumSntW3IyYVU9cpRQw+VoqWbTHxCH++oXcKd2dnGBY/v3Vjm1vGqZkGhskFrTM3L
-         k1O/yqcnPGOuT5ht7YWWNcAgi9iyRTlnZrHUcQjDdnrrTWXDWClGO0lBpy9SGMxN80Us
-         zyruGxog8NFWvD7WBfgKfkPxEr4NZduX6kGm3cd9vbmBLeNNal8ifB34XsY6mk3j6C2R
-         0nN3nRrhjFClruMDh1I1ko+OPd0pckr6sOGX27db4fp6CFryA2650C7x0mlmzNCHi2ng
-         V1BA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Pe1eOciIXEJ+05IC+V1OUGdVr7z9y/treN6lOvW2ZCI=;
+        b=OwEJvuf/JOQglAYaq6BU9UsJlJfr3meImRdp9x/CoksF2U5mAD159MFnPwbeqjeEyM
+         RUAWcqPcQouMLqLpvL8rUCF9UN8j5uRADokKyNqIb77Bh3Oul5F1PZYTAPfeRWa4GdPH
+         AESGxMxcBXfCyoq7g0SUQKyGoowDNuOlxrbR+KN/jqYv659XYwG5BM5FgpGQ9pSnObxO
+         TQlWW4ztqJCtCh835Sjyjf+VyXAznrR5stb9yMgbn8eNkJgYkLKwaqRqyWUrzTq9jCaP
+         z1WCbE8AlOCQoYFguhtlF8B/guKFl3p7wDPWwOlSrjKYJkVeht93X1D34qj0j+5VlVY0
+         rizQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3YOk7QmVLaqd3ISsObkMka5HE5a1QK0ooo8SO4HwCcs=;
-        b=4ohPpK1K28YBoW3c5rrZg4m9GXPow/jMrgk0uLl1J0URSwshMbIljgHJeLMEdDQu2a
-         Qky77HpKzBj37pGz6/Wfsk/01SAElp7+aKvOEpVIX3TcEXLUHoyhaqu3nFJG1kQzLBz/
-         KdusDU5HlZEWAGJhquldbGn2j2L5Pv27YNSXIM63mG/st7O0L5YX+oQCcNVOcACjaCIC
-         6ZxHqugd9Byb95F/Zl4rXdfjtme3ucYL/msqxXh4NF8g/tiuEc0Qws0AIpaSVZTtf22e
-         qD9U4i5x1L1LHV0OLKb65c6Ya3BLrQnNHV/gQ5yaoroU+e3/1PqEAqbRwgNTgM54QpYs
-         51Ig==
-X-Gm-Message-State: ANoB5pnIbZBKknLqtlLC55zwtZriSDZ2A8Ej+BKlQefC5AJ2Kvu9Mv7Z
-        oQUoqi2P8pvjHBnonaBAKcxMzioTMw3SpvkPRrO+
-X-Google-Smtp-Source: AA0mqf6E1vaC0sUCBbynMxKLx1rni5YiJ4sneJVG4eqYFn3gMyHoV3U9fo0V84xJJNqhTXzHbU50Hwnar/9szIDP41s=
-X-Received: by 2002:a05:6a00:440b:b0:56b:b53f:e887 with SMTP id
- br11-20020a056a00440b00b0056bb53fe887mr71632209pfb.3.1670366972083; Tue, 06
- Dec 2022 14:49:32 -0800 (PST)
-MIME-Version: 1.0
-References: <202212051932088061889@zte.com.cn> <CAHC9VhQnfMkrRNmEe0FtcFis3pkPp7Xd8dUbE3cT+cSni-9qxA@mail.gmail.com>
-In-Reply-To: <CAHC9VhQnfMkrRNmEe0FtcFis3pkPp7Xd8dUbE3cT+cSni-9qxA@mail.gmail.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 6 Dec 2022 17:49:21 -0500
-Message-ID: <CAHC9VhTq7s4Le59LS_Ygwju_AHUiDsL-B_mAaT1Ftaj_gB=MnQ@mail.gmail.com>
-Subject: Re: [PATCH security-next] selinux: use sysfs_emit() to instead of scnprintf()
-To:     ye.xingchen@zte.com.cn
-Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Pe1eOciIXEJ+05IC+V1OUGdVr7z9y/treN6lOvW2ZCI=;
+        b=VmM0CvLqRraJoHuHqJPJ9d0wd8REI3UeQXMS9oM1m6zRnDrtRUV/U8BA3IrqwssJBC
+         VNugjnMq9iJUpZQYFOFid+zxbiQiao7WmOsF88AsOAh+dKe2pEaRrrTI/vqPdO2wEsDX
+         Cl1/hwNZ5evDG13I379JlsPL3O+5xA/wOYlei2pqdJjidZHHlpwQ6m1yriuWR1UPUU/1
+         A3svOJ72SDwM7SZKGO5zr7+Rst8nvCpM9R0N0uS8AyltG+yN2k/ANI6KVjP3dye9p/uY
+         aVHRHFHzIIQ42halYGgk6K43b759hQYGHDLkkIupLsa5zCEu6X06UuKt1fJ7WsY7FfkB
+         P00A==
+X-Gm-Message-State: ANoB5plfQP/2gOLRkgJtFSBdCpbo3icwlXIvHju99iSNF9cJ7nl3OCkn
+        xb0EcD8dHVoU9/eLI/W46YYc0iDaCpE=
+X-Google-Smtp-Source: AA0mqf7IfCRwxmsc0rRgNngVMIeMwL16nWO5Ls60aK7lhp8auFmnlXqSTynUfJkX/RzkZ7LXcvkU+g==
+X-Received: by 2002:a05:6a00:2396:b0:56c:318a:f808 with SMTP id f22-20020a056a00239600b0056c318af808mr73933355pfc.11.1670366964596;
+        Tue, 06 Dec 2022 14:49:24 -0800 (PST)
+Received: from localhost ([129.95.247.247])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b00189b910c6ccsm5587954plg.125.2022.12.06.14.49.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 14:49:24 -0800 (PST)
+Date:   Tue, 06 Dec 2022 14:49:23 -0800
+From:   John Fastabend <john.fastabend@gmail.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        netdev@vger.kernel.org, bpf@vger.kernel.org
+Message-ID: <638fc6f33c755_b05f2082c@john.notmuch>
+In-Reply-To: <88d6a1d88764cca328610854f890a9ca1f4b029e.1670086246.git.christophe.jaillet@wanadoo.fr>
+References: <88d6a1d88764cca328610854f890a9ca1f4b029e.1670086246.git.christophe.jaillet@wanadoo.fr>
+Subject: RE: [PATCH] net: xsk: Don't include <linux/rculist.h>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 3:26 PM Paul Moore <paul@paul-moore.com> wrote:
->
-> On Mon, Dec 5, 2022 at 6:32 AM <ye.xingchen@zte.com.cn> wrote:
-> > From: ye xingchen <ye.xingchen@zte.com.cn>
-> >
-> > Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> > should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> > value to be returned to user space.
-> >
-> > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> > ---
-> >  security/selinux/avc.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> SELinux uses securityfs, not sysfs, for entries under /sys/fs/selinux.
+Christophe JAILLET wrote:
+> There is no need to include <linux/rculist.h> here.
+> 
+> Prefer the less invasive <linux/types.h> which is needed for 'hlist_head'.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Let see if build-bots agree with me!
+> 
+> Just declaring 'struct mutex' and 'struct hlist_head' would also be an
+> option.
+> It would remove the need of any include, but is more likely to break
+> something.
+> ---
+>  include/net/netns/xdp.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/net/netns/xdp.h b/include/net/netns/xdp.h
+> index e5734261ba0a..21a4f25a187a 100644
+> --- a/include/net/netns/xdp.h
+> +++ b/include/net/netns/xdp.h
+> @@ -2,8 +2,8 @@
+>  #ifndef __NETNS_XDP_H__
+>  #define __NETNS_XDP_H__
+>  
+> -#include <linux/rculist.h>
+>  #include <linux/mutex.h>
+> +#include <linux/types.h>
+>  
+>  struct netns_xdp {
+>  	struct mutex		lock;
+> -- 
+> 2.34.1
+> 
 
-Sorry, a little mental mistake in the above, SELinux uses *selinuxfs*
-and not sysfs.
-
-Thanks to the little birdie that pointed this out :)
-
--- 
-paul-moore.com
+Acked-by: John Fastabend <john.fastabend@gmail.com>
