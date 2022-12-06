@@ -2,79 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DAA644411
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F711644418
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234728AbiLFNGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:06:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S230233AbiLFNHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:07:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiLFNG2 (ORCPT
+        with ESMTP id S235155AbiLFNHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:06:28 -0500
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F17A2CE30;
-        Tue,  6 Dec 2022 05:05:00 -0800 (PST)
-Received: by mail-ot1-f45.google.com with SMTP id m7-20020a9d6447000000b0066da0504b5eso9174958otl.13;
-        Tue, 06 Dec 2022 05:05:00 -0800 (PST)
+        Tue, 6 Dec 2022 08:07:02 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A112B608;
+        Tue,  6 Dec 2022 05:05:31 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1445ca00781so10710509fac.1;
+        Tue, 06 Dec 2022 05:05:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MXIFyP+UTIEk0Yojx26A5iXgnHl9m8JY0GBl53V7tbQ=;
-        b=DAyDgnWlOWLkq29DoSnPG8nifNlGFwi5wPs9uCyv5P9HF2S9EBZJ9T9NHZi3UyO/VZ
-         TypTA7wNcRt8gZb+MLq6VFIiq6zLRqDDDkzSCD6ZqiWZwQW+om6kE4Vk5W3C2KNaVn7d
-         VvPF38RU0XrOa4QgHJL/4mpxxdbBLfy9wm6FPGDgWE5hN2/eimNfMR9b5YWuyCs9Pskj
-         CXjRkgo8LKYhHIcogKDY8O2IngQX6q8xCUol/5uHVfszkLtloozKFfVVj83gBeCY8y9k
-         pNBTCnjbjjsZvC8T5QpQVwyVWojw6hyVHVCsuMjB+U5wEtcNGZdqMO2UHXmYbj4DI2II
-         dHnQ==
-X-Gm-Message-State: ANoB5pmdnxUSh3gC9XekFer3bpyirjuqAKUW+x5Jn93dQj8UdZu87hln
-        3IDyBNV760glEpynzPRI6A==
-X-Google-Smtp-Source: AA0mqf7Q/7VtDzt3A993Wg1brZgvtLz+mD83kkYPL9YunOoWHl5PrH+2cBdscmR+RDa3oJj02LwLrA==
-X-Received: by 2002:a9d:578c:0:b0:66e:66c7:9f71 with SMTP id q12-20020a9d578c000000b0066e66c79f71mr15134597oth.333.1670331834777;
-        Tue, 06 Dec 2022 05:03:54 -0800 (PST)
+        bh=7PA9L06FReN9gMJW1BhOEhzIMLjiatd9la6VdvyM95E=;
+        b=YCES/+6xXRyWPBK2V5B/SESK10ZFPZhEAhtBl5e+xoB4XO0dWZBMddzB4fex8SIebh
+         jiV0OqCUzttTBjqSqRJhXfRacQbDy0AGP2aRQGojNlLNyFg1G0xRk0aGanOrOqt4loso
+         nBZwtCMkc+FP1J7wc7RRbtHWkhNgz1KHZeZkIcI2k/KSAuDwNNdVpSu8tQy+rKGHGGtl
+         hMyos6dfNiap4mAY5I6m04YGNOMv47aU1m5XIcb9kw3HVOw4Gxoipty58YuBg4UZt8y9
+         gtMyJgmFsTFu/ijSvNge0QJn16EHVGmi9bckB9yg814urBijNCgouuaK9gXqGl/PpRdD
+         sOaA==
+X-Gm-Message-State: ANoB5plVV58dUQ/lOa+o1L2P73q8pOV2t7xP5EHqjvtc5f0/D0SochlZ
+        LYqdsCojl3JGgaqfsr5plw==
+X-Google-Smtp-Source: AA0mqf4OD6Dy3yFsVoldxMcqJvPGCgCh+F/7YTzrJMkOhg4PXj2JwTNX9wO+2Gqu7sAuwvEhtKG/Hw==
+X-Received: by 2002:a05:6871:410d:b0:144:4557:320a with SMTP id la13-20020a056871410d00b001444557320amr9285238oab.112.1670331896981;
+        Tue, 06 Dec 2022 05:04:56 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h3-20020a9d6403000000b0066de9dc966fsm8861582otl.65.2022.12.06.05.03.50
+        by smtp.gmail.com with ESMTPSA id j20-20020a056830271400b0066e80774203sm6638956otu.43.2022.12.06.05.04.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:03:51 -0800 (PST)
-Received: (nullmailer pid 227640 invoked by uid 1000);
-        Tue, 06 Dec 2022 13:03:50 -0000
-Date:   Tue, 6 Dec 2022 07:03:50 -0600
+        Tue, 06 Dec 2022 05:04:56 -0800 (PST)
+Received: (nullmailer pid 229159 invoked by uid 1000);
+        Tue, 06 Dec 2022 13:04:55 -0000
+Date:   Tue, 6 Dec 2022 07:04:55 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-amlogic@lists.infradead.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         linux-samsung-soc@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        devicetree@vger.kernel.org,
-        Alain Volmat <alain.volmat@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
         Yannick Fertre <yannick.fertre@foss.st.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Joe Tessler <jrt@google.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Joe Tessler <jrt@google.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
         linux-tegra@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        Jonathan Hunter <jonathanh@nvidia.com>,
         Rob Herring <robh+dt@kernel.org>,
         Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Jeff Chase <jnchase@google.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH v2 6/9] media: dt-bindings: samsung,s5p-cec: convert to
- DT schema
-Message-ID: <167033182977.227580.3241593783297091470.robh@kernel.org>
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jeff Chase <jnchase@google.com>
+Subject: Re: [PATCH v2 7/9] media: dt-bindings: cec-gpio: convert to DT schema
+Message-ID: <167033189469.229101.10106957833693362255.robh@kernel.org>
 References: <20221205151845.21618-1-krzysztof.kozlowski@linaro.org>
- <20221205151845.21618-7-krzysztof.kozlowski@linaro.org>
+ <20221205151845.21618-8-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221205151845.21618-7-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221205151845.21618-8-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
@@ -87,17 +86,18 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 05 Dec 2022 16:18:42 +0100, Krzysztof Kozlowski wrote:
-> Convert Samsung S5P HDMI CEC adapter bindings to DT schema.
+On Mon, 05 Dec 2022 16:18:43 +0100, Krzysztof Kozlowski wrote:
+> Convert HDMI CEC GPIO bindings to DT schema.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 > ---
->  .../bindings/media/cec/samsung,s5p-cec.yaml   | 66 +++++++++++++++++++
->  .../devicetree/bindings/media/s5p-cec.txt     | 36 ----------
+>  .../devicetree/bindings/media/cec-gpio.txt    | 42 -----------
+>  .../bindings/media/cec/cec-gpio.yaml          | 73 +++++++++++++++++++
 >  MAINTAINERS                                   |  2 +-
->  3 files changed, 67 insertions(+), 37 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/media/cec/samsung,s5p-cec.yaml
->  delete mode 100644 Documentation/devicetree/bindings/media/s5p-cec.txt
+>  3 files changed, 74 insertions(+), 43 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/cec-gpio.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/cec/cec-gpio.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>
