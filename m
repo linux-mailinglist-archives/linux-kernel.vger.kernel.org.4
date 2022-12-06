@@ -2,86 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD742643EDF
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09539643EDC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:39:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiLFIkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:40:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S232604AbiLFIjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:39:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbiLFIkC (ORCPT
+        with ESMTP id S234122AbiLFIiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:40:02 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAB4E78;
-        Tue,  6 Dec 2022 00:40:00 -0800 (PST)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NRDKT0SrszJp6D;
-        Tue,  6 Dec 2022 16:36:29 +0800 (CST)
-Received: from huawei.com (10.67.175.83) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 6 Dec
- 2022 16:39:58 +0800
-From:   ruanjinjie <ruanjinjie@huawei.com>
-To:     <robh+dt@kernel.org>, <frowand.list@gmail.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH] of: overlay: fix null pointer dereferencing in find_dup_cset_node_entry() and find_dup_cset_prop()
-Date:   Tue, 6 Dec 2022 16:36:57 +0800
-Message-ID: <20221206083657.3202856-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 6 Dec 2022 03:38:46 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C172655
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:38:44 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id x28so5212763lfn.6
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:38:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ANyVsngf65a+eFmtwb0iMJHr0EeOJEcLYKSjm4qNpxI=;
+        b=NJMk55P+sC/tqvVTE5YgKq8nQusWlrdEnAyJYx0CsOvhX9rLKLkm4pnwSIvQk6SAZm
+         ONCSQRQ1JXQIeAKiPGbM848T1ZIW2d7l+/tP6GaB06wKMQ1zq7TJupMR4/QJbvZ5AYzA
+         KApImDchL4woQ6iEfLs7s0HrjmzKegSkNkD2M+/HxZDyfrsw9Jx1zbwGJH/Kk9Uly+lq
+         zNtBHZXfMM1sNaFXNCHVqjnEJoph6+nUF/9/bZ9T+GjzR2z+j2IPdhMflij5zxKIwQwL
+         FHdA+RgpZ0/9YNbYpGoZ2PzHSdM6qC735HYmAsZ2Ow4Ex7LA2iZ7foVSmULQ6AB52RdM
+         W3Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANyVsngf65a+eFmtwb0iMJHr0EeOJEcLYKSjm4qNpxI=;
+        b=QVs/HvF6g2o+3dW6GOg0pOPSnOf0k92499UL0C/XPibaS5t05CFisZyA9/X2KbL9fe
+         /0IvjQDql3hxNP2nBhHO4yOXom4Y/AtmxRpiTRq6QwfRq0GYQzoltruW6filesDvY2Wy
+         z4RTg77M7slQnhPnyTL8ECZ++qqxeA8ySo7FHKkY0UddrmpHuu3bLwUMDi+WzHkW7sP1
+         xqerKcVH7J5lfcJzuucon/rXuezxB9BRvvemf4Tbr7rygoqEurf2uAz1Fx/lVVorEtsR
+         +pD8iKh12SeGb8sq5DrWZGg8FgvuJ+RQyU9qiyHpKXTKWIfFrRpCgO1xKRhPe96HvvWS
+         rWfA==
+X-Gm-Message-State: ANoB5pn2jbQ5Dc9aGUgjf4JG9PKy0F3reisUibnKIffOa6n+9nQfbsEx
+        f48/1A+OL1zXMrh24snz7t/lvg==
+X-Google-Smtp-Source: AA0mqf64avDHaRy5jJ5LqrBrk9vceu4eOGM5kyWEz2n90p+ntO8hFrEe7y5FzENUFnVh7tv2lJ+tuA==
+X-Received: by 2002:a05:6512:445:b0:4b5:8d2c:fc36 with SMTP id y5-20020a056512044500b004b58d2cfc36mr31490lfk.505.1670315922955;
+        Tue, 06 Dec 2022 00:38:42 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id bi20-20020a05651c231400b002773ac59697sm1599383ljb.0.2022.12.06.00.38.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 00:38:42 -0800 (PST)
+Message-ID: <2597b9e5-7c61-e91c-741c-3fe18247e27c@linaro.org>
+Date:   Tue, 6 Dec 2022 09:38:41 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.83]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH net-next v1 3/4] dt-bindings: net: phy: add MaxLinear
+ GPY2xx bindings
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>, Rob Herring <robh@kernel.org>
+Cc:     Xu Liang <lxu@maxlinear.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221202151204.3318592-1-michael@walle.cc>
+ <20221202151204.3318592-4-michael@walle.cc>
+ <20221205212924.GA2638223-robh@kernel.org>
+ <99d4f476d4e0ce5945fa7e1823d9824a@walle.cc>
+ <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <9c0506a6f654f72ea62fed864c1b2a26@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-when kmalloc() fail to allocate memory in kasprintf(), fn_1 or fn_2 will
-be NULL, strcmp() will cause null pointer dereference.
+On 06/12/2022 09:29, Michael Walle wrote:
+> Am 2022-12-05 22:53, schrieb Michael Walle:
+>> Am 2022-12-05 22:29, schrieb Rob Herring:
+>>> On Fri, Dec 02, 2022 at 04:12:03PM +0100, Michael Walle wrote:
+>>>> Add the device tree bindings for the MaxLinear GPY2xx PHYs.
+>>>>
+>>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>>> ---
+>>>>
+>>>> Is the filename ok? I was unsure because that flag is only for the 
+>>>> GPY215
+>>>> for now. But it might also apply to others. Also there is no 
+>>>> compatible
+>>>> string, so..
+>>>>
+>>>>  .../bindings/net/maxlinear,gpy2xx.yaml        | 47 
+>>>> +++++++++++++++++++
+>>>>  1 file changed, 47 insertions(+)
+>>>>  create mode 100644 
+>>>> Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>>>>
+>>>> diff --git 
+>>>> a/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml 
+>>>> b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..d71fa9de2b64
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/net/maxlinear,gpy2xx.yaml
+>>>> @@ -0,0 +1,47 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/net/maxlinear,gpy2xx.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: MaxLinear GPY2xx PHY
+>>>> +
+>>>> +maintainers:
+>>>> +  - Andrew Lunn <andrew@lunn.ch>
+>>>> +  - Michael Walle <michael@walle.cc>
+>>>> +
+>>>> +allOf:
+>>>> +  - $ref: ethernet-phy.yaml#
+>>>> +
+>>>> +properties:
+>>>> +  maxlinear,use-broken-interrupts:
+>>>> +    description: |
+>>>> +      Interrupts are broken on some GPY2xx PHYs in that they keep 
+>>>> the
+>>>> +      interrupt line asserted even after the interrupt status 
+>>>> register is
+>>>> +      cleared. Thus it is blocking the interrupt line which is 
+>>>> usually bad
+>>>> +      for shared lines. By default interrupts are disabled for this 
+>>>> PHY and
+>>>> +      polling mode is used. If one can live with the consequences, 
+>>>> this
+>>>> +      property can be used to enable interrupt handling.
+>>>
+>>> Just omit the interrupt property if you don't want interrupts and add 
+>>> it
+>>> if you do.
+>>
+>> How does that work together with "the device tree describes
+>> the hardware and not the configuration". The interrupt line
+>> is there, its just broken sometimes and thus it's disabled
+>> by default for these PHY revisions/firmwares. With this
+>> flag the user can say, "hey on this hardware it is not
+>> relevant because we don't have shared interrupts or because
+>> I know what I'm doing".
 
-Fixes: 2fe0e8769df9 ("of: overlay: check prevents multiple fragments touching same property")
-Signed-off-by: ruanjinjie <ruanjinjie@huawei.com>
----
- drivers/of/overlay.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Yeah, that's a good question. In your case broken interrupts could be
+understood the same as "not connected", so property not present. When
+things are broken, you do not describe them fully in DTS for the
+completeness of hardware description, right?
 
-diff --git a/drivers/of/overlay.c b/drivers/of/overlay.c
-index bd8ff4df723d..49c066b51148 100644
---- a/drivers/of/overlay.c
-+++ b/drivers/of/overlay.c
-@@ -545,6 +545,11 @@ static int find_dup_cset_node_entry(struct overlay_changeset *ovcs,
- 
- 		fn_1 = kasprintf(GFP_KERNEL, "%pOF", ce_1->np);
- 		fn_2 = kasprintf(GFP_KERNEL, "%pOF", ce_2->np);
-+		if (!fn_1 || !fn_2) {
-+			kfree(fn_1);
-+			kfree(fn_2);
-+			return -ENOMEM;
-+		}
- 		node_path_match = !strcmp(fn_1, fn_2);
- 		kfree(fn_1);
- 		kfree(fn_2);
-@@ -580,6 +585,11 @@ static int find_dup_cset_prop(struct overlay_changeset *ovcs,
- 
- 		fn_1 = kasprintf(GFP_KERNEL, "%pOF", ce_1->np);
- 		fn_2 = kasprintf(GFP_KERNEL, "%pOF", ce_2->np);
-+		if (!fn_1 || !fn_2) {
-+			kfree(fn_1);
-+			kfree(fn_2);
-+			return -ENOMEM;
-+		}
- 		node_path_match = !strcmp(fn_1, fn_2);
- 		kfree(fn_1);
- 		kfree(fn_2);
--- 
-2.25.1
+> 
+> Specifically you can't do the following: Have the same device
+> tree and still being able to use it with a future PHY firmware
+> update/revision. Because according to your suggestion, this
+> won't have the interrupt property set. With this flag you can
+> have the following cases:
+>   (1) the interrupt information is there and can be used in the
+>       future by non-broken PHY revisions,
+>   (2) broken PHYs will ignore the interrupt line
+>   (3) except the system designer opts-in with this flag (because
+>       maybe this is the only PHY on the interrupt line etc).
+
+I am not sure if I understand the case. You want to have a DTS with
+interrupts and "maxlinear,use-broken-interrupts", where the latter will
+be ignored by some future firmware? Isn't then the property not really
+correct? Broken for one firmware on the same device, working for other
+firmware on the same device?
+
+I would assume that in such cases you (or bootloader or overlay) should
+patch the DTS...
+
+
+
+Best regards,
+Krzysztof
 
