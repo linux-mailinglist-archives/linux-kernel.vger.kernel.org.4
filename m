@@ -2,97 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A88B643DF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:01:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88515643DFB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiLFIBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:01:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38752 "EHLO
+        id S232406AbiLFICa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:02:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiLFIBB (ORCPT
+        with ESMTP id S232324AbiLFIC2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:01:01 -0500
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76441178A2;
-        Tue,  6 Dec 2022 00:01:00 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id v8so6891538qkg.12;
-        Tue, 06 Dec 2022 00:01:00 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NwtnhNDE77wY8xo2aeVHI67JHPZRh1RTuiZ2DWCBbZc=;
-        b=Ae/vfjtMldeQ/+G4WeRVUY0visx3TnckD1iWkyBuu/YsnWtOXv8hhOJRowajiVJ6Ln
-         YOBpprutHVSRN016g43bSfv6Usicv/FzWtTWRqn8QhsoLHj2II9Q+2IY7BmVS0sMjbDZ
-         LCT6Au3/sCJqe/5t+B4Rp45h8/XSy/4fpUsRyW4J0Se09bZyws9yrMUCB5XvZ9D9WJJG
-         hXiPwBS081WqK0nlbLXzgsbi6Hh2qMv0ajHLPuaKkVXzEZa9TgszIike5pmE/RzylOu7
-         WRJ9dVJPAyUFwxgBbIl7+zMIfrlg2YdMB2ADMmggCYh6LWz9UQ7oXNkRgNStkhcTDpjT
-         z/mQ==
-X-Gm-Message-State: ANoB5pkPmEWH0Nqq94cln71M0H7J0H12XkYT89nyMcaE/4GkyKX9tXyv
-        itu5NfBiPI/dPr+afqzeclQuo7kwKKSNUw==
-X-Google-Smtp-Source: AA0mqf7JcNGGKOmHaJ/73QQdP3YXe4/dTLFF0/RKcy442c/IzQICTUPSoFfbCMh37gecUjWhZGVdqg==
-X-Received: by 2002:a05:620a:12bc:b0:6fc:add2:58e4 with SMTP id x28-20020a05620a12bc00b006fcadd258e4mr16033683qki.681.1670313659392;
-        Tue, 06 Dec 2022 00:00:59 -0800 (PST)
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com. [209.85.219.172])
-        by smtp.gmail.com with ESMTPSA id u3-20020a05622a17c300b003a6947863e1sm9153801qtk.11.2022.12.06.00.00.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 00:00:59 -0800 (PST)
-Received: by mail-yb1-f172.google.com with SMTP id 7so17594133ybp.13;
-        Tue, 06 Dec 2022 00:00:58 -0800 (PST)
-X-Received: by 2002:a25:7a02:0:b0:6f7:952d:b145 with SMTP id
- v2-20020a257a02000000b006f7952db145mr33481513ybc.604.1670313657864; Tue, 06
- Dec 2022 00:00:57 -0800 (PST)
+        Tue, 6 Dec 2022 03:02:28 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4F535593;
+        Tue,  6 Dec 2022 00:02:26 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowABXXfEL945jZ605BQ--.54722S2;
+        Tue, 06 Dec 2022 16:02:19 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     robdclark@gmail.com, quic_abhinavk@quicinc.com,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, airlied@gmail.com,
+        daniel@ffwll.ch, quic_jesszhan@quicinc.com,
+        ville.syrjala@linux.intel.com, yang.lee@linux.alibaba.com
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm/msm/dpu: Add check for cstate
+Date:   Tue,  6 Dec 2022 16:02:18 +0800
+Message-Id: <20221206080218.43635-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <a989b3b798ecaf3b45f35160e30e605636d66a77.1669044086.git.geert+renesas@glider.be>
- <CACRpkdZPhKT=wjToSiY+iyXk2_WdBZ1hEvmNvQQLJPZGN==-xQ@mail.gmail.com>
-In-Reply-To: <CACRpkdZPhKT=wjToSiY+iyXk2_WdBZ1hEvmNvQQLJPZGN==-xQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 6 Dec 2022 09:00:46 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVDYsCPko9NJfa+JLk_MRFAR1dgSF3GahtTeABysDFyBA@mail.gmail.com>
-Message-ID: <CAMuHMdVDYsCPko9NJfa+JLk_MRFAR1dgSF3GahtTeABysDFyBA@mail.gmail.com>
-Subject: Re: [PATCH] usb: USB_FOTG210 should depend on ARCH_GEMINI
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Fabian Vogt <fabian@ritter-vogt.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowABXXfEL945jZ605BQ--.54722S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4ktw45GF1rZF48JF1rtFb_yoWDWrg_G3
+        W5Arn8Xr47CrWqg3W8Aw1fury0y3s09F1kXas3ta4avFZFvr9rZ3y2v3yrJr1fuFWUtFnr
+        Aa1xta4rArsxGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+        1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+        cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+        ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc2xSY4AK67AK6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbqQ6JUUUUU==
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+As kzalloc may fail and return NULL pointer,
+it should be better to check pstates
+in order to avoid the NULL pointer dereference
+later.
 
-On Mon, Dec 5, 2022 at 11:24 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Mon, Nov 21, 2022 at 4:22 PM Geert Uytterhoeven
-> <geert+renesas@glider.be> wrote:
-> > The Faraday Technology FOTG210 USB2 Dual Role Controller is only present
-> > on Cortina Systems Gemini SoCs.
->
-> As it turns out, this is not true. The TI nSpire uses this too, I should have
-> noted since the nSpire maintainer was patching the driver...
-> https://lore.kernel.org/linux-usb/20210324141115.9384-1-fabian@ritter-vogt.de/
->
-> Shall we revert it or just add another clause for the nSpire?
+Fixes: 25fdd5933e4c ("drm/msm: Add SDM845 DPU support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Oh, but the integration is not (yet) upstream, as I didn't find any
-"faraday,fotg210" outside gemini.dtsi.
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+index 13ce321283ff..f51cb46ecfd6 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+@@ -1150,6 +1150,8 @@ static int dpu_crtc_atomic_check(struct drm_crtc *crtc,
+ 	bool needs_dirtyfb = dpu_crtc_needs_dirtyfb(crtc_state);
+ 
+ 	pstates = kzalloc(sizeof(*pstates) * DPU_STAGE_MAX * 4, GFP_KERNEL);
++	if (!pstates)
++		return -ENOMEM;
+ 
+ 	if (!crtc_state->enable || !crtc_state->active) {
+ 		DRM_DEBUG_ATOMIC("crtc%d -> enable %d, active %d, skip atomic_check\n",
+-- 
+2.25.1
 
-I guess another clause would be the most-userfriendly solution.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
