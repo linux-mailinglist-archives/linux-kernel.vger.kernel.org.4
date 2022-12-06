@@ -2,219 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E58B644C54
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9360A644C56
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:15:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiLFTPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:15:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S229649AbiLFTPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:15:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiLFTPe (ORCPT
+        with ESMTP id S229718AbiLFTPq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:15:34 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A867040920;
-        Tue,  6 Dec 2022 11:15:32 -0800 (PST)
-Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net [192.222.136.102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA1326602B2C;
-        Tue,  6 Dec 2022 19:15:29 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670354130;
-        bh=CbpetSjHvQviX156mgDvQrxS6ZNVFJ4ayCXN+Hd15qE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=iDe6TZ4x00XduKQhsVWMhOUhifd4fAGQA9W2enB/w5rC3edcQ/UI+OZavlqkN5oVp
-         F+lzQXnH3pwvD7jdJDEJblO+lcAe4GVxCmE2yrCGBZpxKCIOgjpPAawBjwZLfM9Uv0
-         Lwt7F0G7xJ41Enn33lr7MsOvKPJBgDPEQ1rfzvK4+HzJqQkDo+76V1NAyp2FEWfg95
-         AzxfbUBPShVt/5xm31KHmE1oH95UngzsQmuDXSSIM5INSl/BPdKHwlU2tkPE08W0AM
-         J5/WbklRLVxYqwT3boakWqqAVs9tJP/+v0CqNUEKoC0szKgc9p3l2rmbmXKjYT44S1
-         mmW7MXw4jfWHw==
-Message-ID: <6c75bbbf497f9baa5d99f642bd466751e2b0d460.camel@collabora.com>
-Subject: Re: [PATCH] media: cedrus: Convert to MPLANE uAPI
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Chen-Yu Tsai <wenst@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Jernej =?UTF-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-media@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 06 Dec 2022 14:15:19 -0500
-In-Reply-To: <CAGXv+5GH==gm533P_sNiFTyaFwQXp-QLXRLWyABdsn+0p_83UQ@mail.gmail.com>
-References: <20221129074530.640251-1-wenst@chromium.org>
-         <45143854.fMDQidcC6G@kista>
-         <5d79ed06-15c0-3564-97b6-5fd4433acabf@xs4all.nl>
-         <CAGXv+5GH==gm533P_sNiFTyaFwQXp-QLXRLWyABdsn+0p_83UQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Tue, 6 Dec 2022 14:15:46 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6695740934
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:15:44 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id ay32so6455066qtb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:15:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GG73iLTCO/uw4M1Ylg2jcMVxqfgJjKpsiaTSmU2EXGA=;
+        b=JIXO4eFgOaT8ujjjyeXvuO8qQ+yypxhZOimo6XQPj9ykjHnpz42lA0hxwRS2CqALlP
+         InZ5KniMwf4gL2CkysIfWTSK/zRhcKpgYW1h7jk80RV72fs+TIGlADEs1qMbux4LzQXs
+         kgFo0jiGF80V8ESdg6/Y8ivo2WWI0dTsZ+SjdqyptOk2b/5s3bOyMy2Cjfh133fw5t7P
+         inVYux5ZW6ridMLq77+CizaOGY5xhsgGqo/Q+axhpiXkSy3h5saQm0aOlMTavw/1Z53L
+         RwcTU+ikujUo3UDBcOg37Tvhuh6FiRok4lYQDG1ACo4Agcpan+pZrTeBeKsNDB9ShmHe
+         G8Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GG73iLTCO/uw4M1Ylg2jcMVxqfgJjKpsiaTSmU2EXGA=;
+        b=mynzEuoUIg+MPs0o3YpXy4yBxgr9Z8ilr4MQqxooMAf8ez8tP53RhxqTDx/zkUsO+M
+         XMJouyqL1ySPsDlk5d2kDBrjbuZ+yai31vi66oEbGoHBz08859EsD88SPjV3watTBVZK
+         TTlOUDqb15FHV1y/VJfIszEQgVN3rNJWRTb/bekYcOJVxsO7iOi93gu3GD09NhMxPnge
+         DLEq5zOEL+bTiirTVR+obyEGL/AhR7qaRN0nvDtE6UJ9vVnKezgQ2LEfjXWI3Y5PuPZf
+         hsDIqQnffjgh1Ssr3pnv48NmRvZ1vE6OrYsOTmrw2mrWL2GEoS6saf1Q62kArN+IazVP
+         8OcQ==
+X-Gm-Message-State: ANoB5pntp/iuElo5SDWKwHmhdg6hhVLRoEEjIJsZtNjFwWxNzgFewOSQ
+        uQajp9maHgrG5uOGSUVg8lCgiw==
+X-Google-Smtp-Source: AA0mqf6eCv+InVfKA4sHLrootqXhgKbPCqZwr/BHpgt/6iwDstlRrCS04XbrZWyIdohBA+R6Gq2t/Q==
+X-Received: by 2002:ac8:5892:0:b0:3a5:3d08:9fdd with SMTP id t18-20020ac85892000000b003a53d089fddmr82236079qta.684.1670354143281;
+        Tue, 06 Dec 2022 11:15:43 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id y14-20020a37f60e000000b006fbaf9c1b70sm14752500qkj.133.2022.12.06.11.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 11:15:42 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p2dPp-004gjs-T7;
+        Tue, 06 Dec 2022 15:15:41 -0400
+Date:   Tue, 6 Dec 2022 15:15:41 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
+        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
+        cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
+Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
+ issue admin commands for VF driver.
+Message-ID: <Y4+U3VR2LeEh2S7B@ziepe.ca>
+References: <20221206055816.292304-1-lei.rao@intel.com>
+ <20221206055816.292304-2-lei.rao@intel.com>
+ <20221206061940.GA6595@lst.de>
+ <Y49HKHP9NrId39iH@ziepe.ca>
+ <20221206135810.GA27689@lst.de>
+ <Y49eObpI7QoSnugu@ziepe.ca>
+ <20221206153811.GB2266@lst.de>
+ <Y49k++D3i8DfLOLL@ziepe.ca>
+ <20221206165503.GA8677@lst.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206165503.GA8677@lst.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 06 d=C3=A9cembre 2022 =C3=A0 20:23 +0800, Chen-Yu Tsai a =C3=A9cri=
-t=C2=A0:
-> On Tue, Dec 6, 2022 at 4:35 PM Hans Verkuil <hverkuil-cisco@xs4all.nl> wr=
-ote:
-> >=20
-> > On 05/12/2022 22:01, Jernej =C5=A0krabec wrote:
-> > > Hi Chen-Yu!
-> > >=20
-> > > Dne torek, 29. november 2022 ob 08:45:30 CET je Chen-Yu Tsai napisal(=
-a):
-> > > > The majority of the V4L2 stateless video decoder drivers use the MP=
-LANE
-> > > > interface.
-> > > >=20
-> > > > On the userspace side, Gstreamer supports non-MPLANE and MPLANE
-> > > > interfaces. Chromium only supports the MPLANE interface, and is not=
- yet
-> > > > usable with standard desktop Linux. FFmpeg support for either has n=
-ot
-> > > > landed.
-> > >=20
-> > > I don't like fixing userspace issues in kernel, if kernel side works =
-fine.
-> > > Implementing missing non-MPLANE support in Chromium will also allow i=
-t to work
-> > > with older kernels.
-> > >=20
-> > > Hans, what's linux-media politics about such changes?
-> >=20
-> > Not keen on this. Does the cedrus HW even have support for multiple pla=
-nes?
-> > I suspect not, in which case the driver shouldn't suggest that it can d=
-o that.
+On Tue, Dec 06, 2022 at 05:55:03PM +0100, Christoph Hellwig wrote:
+> On Tue, Dec 06, 2022 at 11:51:23AM -0400, Jason Gunthorpe wrote:
+> > That is a big deviation from where VFIO is right now, the controlled
+> > function is the one with the VFIO driver, it should be the one that
+> > drives the migration uAPI components.
+> 
+> Well, that is one way to see it, but I think the more natural
+> way to deal with it is to drive everyting from the controlling
+> function, because that is by definition much more in control.
 
-Hi Hans,
+Sure, the controlling function should (and does in mlx5) drive
+everything here.
 
-> >=20
-> > Now, if the hardware *can* support this, then there is an argument to b=
-e made
-> > for the cedrus driver to move to the multiplanar API before moving it o=
-ut
-> > of staging to allow such future enhancements.
->=20
-> AFAIK it can, but has some limitations on how far apart the buffers for
-> the separate planes can be. Nicolas mentioned that I could support the
-> multiplanar API, but only allow the contiguous single planar formats,
-> so NV12 instead of NV12M.
+What the kernel is doing is providing the abstraction to link the
+controlling function to the VFIO device in a general way.
 
-indeed, MPLANE buffer API is not an advertisement for MPLANE support. The p=
-ixel
-formats exposed through ENUM_FMT are the only possible advertisement, and o=
-nly
-single allocation format (NV12) remains exposed.
+We don't want to just punt this problem to user space and say 'good
+luck finding the right cdev for migration control'. If the kernel
+struggles to link them then userspace will not fare better on its own.
 
-Putting my userspace hat on, I see see an effort by the author of MPLANE AP=
-I to
-make it so it would completely replaced the older API. The effort have imho=
- very
-bad consequences (duplication of pixel formats), but if we also don't enfor=
-ce
-porting existing drivers to the new API, we add yet another consequence, bu=
-t
-this time on userspace, which must handle both C structures to actually wor=
-k
-generically. I totally understand that from driver maintainer point of view=
-,
-this change have absolutely no value, but we force userspace complexity sim=
-ply
-because we leave it to driver author to pick older or newer (totally equiva=
-lent)
-APIs. To me, the problem is that V4L2 API maintainers didn't adopt the new =
-API
-despite merging it. The adoption should have deprecated usage of the old AP=
-I, at
-least in new drivers (since 2011). This should also have been an unstaging
-requirement.
+Especially, we do not want every VFIO device to have its own crazy way
+for userspace to link the controlling/controlled functions
+together. This is something the kernel has to abstract away.
 
-regards,
-Nicolas
+So, IMHO, we must assume the kernel is aware of the relationship,
+whatever algorithm it uses to become aware.
 
->=20
-> And I suspect that reference frames have to be contiguous as well.
-> So I guess the overall answer is that it can't. But the same goes for
-> Hantro or rkvdec, which both use the multiplanar API.
->=20
-> This conversion was done so that I could use Cedrus as a testbed for
-> developing new codec support, as I already own an H6 device. Added
-> bonus is trying to get V4L2 decoder support to work for desktop Linux,
-> without the libraries that ChromeOS ships.
->=20
-> > Note that you have to choose whether to support single or multiplanar, =
-you
-> > can't support both at the same time.
-> >=20
-> > So the decision to move to multiplanar should be led by the HW capabili=
-ties.
-> >=20
-> > And Chromium really needs to support non-multiplanar formats as well. I=
-'m
-> > really surprised to hear that it doesn't, to be honest.
->=20
-> Chromium does support non-multiplanar formats, such as NV12. In fact
-> this is the preferred format, unless it's on MediaTek, in which it
-> switches to MM21 as the capture format, and does untiling in software.
-> This support for formats is separate from using the multiplanar API.
->=20
-> Support for video decoders is mostly driven by ChromeOS. Currently all th=
-e
-> hardware ChromeOS supports, be it stateful or stateless, use the multipla=
-nar
-> API, so there hasn't been a real need to support it yet.
->=20
->=20
-> Regards
-> ChenYu
->=20
-> > Regards,
-> >=20
-> >         Hans
-> >=20
-> > >=20
-> > > Best regards,
-> > > Jernej
-> > >=20
-> > > >=20
-> > > > A fallback route using libv4l is also available. The library transl=
-ates
-> > > > MPLANE interface ioctl calls to non-MPLANE ones, provided that the =
-pixel
-> > > > format used is single plane.
-> > > >=20
-> > > > Convert the Cedrus driver to the MPLANE interface, while keeping th=
-e
-> > > > supported formats single plane. Besides backward compatibility thro=
-ugh
-> > > > the plugin, the hardware requires that different planes not be loca=
-ted
-> > > > too far apart in memory. Keeping the single plane pixel format make=
-s
-> > > > this easy to enforce.
-> > > >=20
-> > > > Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-> > > > ---
-> > > >=20
-> > > > This has been tested with Fluster. The score remained the same with=
- or
-> > > > without the patch. This also helps with getting VP8 decoding workin=
-g
-> > > > with Chromium's in-tree test program "video_decode_accelerator_test=
-s",
-> > > > though Chromium requires other changes regarding buffer allocation =
-and
-> > > > management.
-> > >=20
-> > >=20
-> >=20
+It just means the issue is doing the necessary cross-subsystem
+locking.
 
+That combined with the fact they really are two halfs of the same
+thing - operations on the controlling function have to be sequenced
+with operations on the VFIO device - makes me prefer the single uAPI.
+
+> More importantly any sane design will have easy ways to list and
+> manipulate all the controlled functions from the controlling
+> functions, while getting from the controlled function to the
+> controlling one is extremely awkward, as anything that can be
+> used for that is by definition and information leak.  
+
+We have spend some time looking at this for mlx5. It is a hard
+problem. The VFIO driver cannot operate the device, eg it cannot do
+MMIO and things, so it is limited to items in the PCI config space to
+figure out the device identity.
+
+> It seems mlx5 just gets away with that by saying controlled
+> functions are always VFs, and the controlling function is a PF, but
+> that will break down very easily, 
+
+Yes, that is part of the current mlx5 model. It is not inherent to the
+device design, but the problems with arbitary nesting were hard enough
+they were not tackled at this point.
+
+Jason
