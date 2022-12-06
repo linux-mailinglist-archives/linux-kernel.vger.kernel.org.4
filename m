@@ -2,74 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB01A643FF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C00EB643FF3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiLFJiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:38:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48662 "EHLO
+        id S235116AbiLFJib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:38:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbiLFJiI (ORCPT
+        with ESMTP id S234609AbiLFJiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:38:08 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87DBB7E2
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:38:06 -0800 (PST)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRFgc2bW4zmWPR;
-        Tue,  6 Dec 2022 17:37:16 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 6 Dec 2022 17:37:31 +0800
-Subject: Re: [PATCH v4 12/17] mm: remember exclusively mapped anonymous pages
- with PG_anon_exclusive
-To:     David Hildenbrand <david@redhat.com>,
-        <linux-kernel@vger.kernel.org>
-CC:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        David Rientjes <rientjes@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
-        Roman Gushchin <guro@fb.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Donald Dutile <ddutile@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
-        Liang Zhang <zhangliang5@huawei.com>,
-        Pedro Gomes <pedrodemargomes@gmail.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>, <linux-mm@kvack.org>
-References: <20220428083441.37290-1-david@redhat.com>
- <20220428083441.37290-13-david@redhat.com>
- <90dd6a93-4500-e0de-2bf0-bf522c311b0c@huawei.com>
- <3c7fd5da-b3f8-5562-45a9-f83d7dbcdd7d@redhat.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <d51a7163-b082-d43a-1d0d-13ebf8cb538d@huawei.com>
-Date:   Tue, 6 Dec 2022 17:37:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Tue, 6 Dec 2022 04:38:25 -0500
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA98E1CFF9;
+        Tue,  6 Dec 2022 01:38:19 -0800 (PST)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4NRFdR5tPZz6H7X0;
+        Tue,  6 Dec 2022 17:35:23 +0800 (CST)
+Received: from localhost (10.45.155.47) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 6 Dec
+ 2022 09:38:16 +0000
+Date:   Tue, 6 Dec 2022 09:38:15 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+CC:     <ira.weiny@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Davidlohr Bueso" <dave@stgolabs.net>,
+        Dave Jiang <dave.jiang@intel.com>,
+        <linux-kernel@vger.kernel.org>, <linux-cxl@vger.kernel.org>
+Subject: Re: [PATCH V2 08/11] cxl/mem: Wire up event interrupts
+Message-ID: <20221206093815.00000156@Huawei.com>
+In-Reply-To: <638e1dd6aa7bb_25af829435@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+References: <20221201002719.2596558-1-ira.weiny@intel.com>
+        <20221201002719.2596558-9-ira.weiny@intel.com>
+        <6389ab5156083_c9572947c@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+        <20221202141901.00003016@Huawei.com>
+        <638a55611405d_3cbe02942c@dwillia2-xfh.jf.intel.com.notmuch>
+        <20221205130129.00000cc1@Huawei.com>
+        <638e1dd6aa7bb_25af829435@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-In-Reply-To: <3c7fd5da-b3f8-5562-45a9-f83d7dbcdd7d@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.45.155.47]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,106 +61,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/6 16:43, David Hildenbrand wrote:
->>>
->>
->> Hi David, sorry for the late respond and a possible inconsequential question. :)
-> 
-> Better late than never! Thanks for the review, independently at which time it happens :)
-> 
->>
->> <snip>
->>
->>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>> index 7a71ed679853..5add8bbd47cd 100644
->>> --- a/mm/hugetlb.c
->>> +++ b/mm/hugetlb.c
->>> @@ -4772,7 +4772,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
->>>                       is_hugetlb_entry_hwpoisoned(entry))) {
->>>               swp_entry_t swp_entry = pte_to_swp_entry(entry);
->>>   -            if (is_writable_migration_entry(swp_entry) && cow) {
->>> +            if (!is_readable_migration_entry(swp_entry) && cow) {
->>>                   /*
->>>                    * COW mappings require pages in both
->>>                    * parent and child to be set to read.
->>> @@ -5172,6 +5172,8 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
->>>           set_huge_ptep_writable(vma, haddr, ptep);
->>>           return 0;
->>>       }
->>> +    VM_BUG_ON_PAGE(PageAnon(old_page) && PageAnonExclusive(old_page),
->>> +               old_page);
->>>         /*
->>>        * If the process that created a MAP_PRIVATE mapping is about to
->>> @@ -6169,12 +6171,17 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
->>>           }
->>>           if (unlikely(is_hugetlb_entry_migration(pte))) {
->>>               swp_entry_t entry = pte_to_swp_entry(pte);
->>> +            struct page *page = pfn_swap_entry_to_page(entry);
->>>   -            if (is_writable_migration_entry(entry)) {
->>> +            if (!is_readable_migration_entry(entry)) {
->>
->> In hugetlb_change_protection(), is_writable_migration_entry() is changed to !is_readable_migration_entry(),
->> but
->>
->>>                   pte_t newpte;
->>>   -                entry = make_readable_migration_entry(
->>> -                            swp_offset(entry));
->>> +                if (PageAnon(page))
->>> +                    entry = make_readable_exclusive_migration_entry(
->>> +                                swp_offset(entry));
->>> +                else
->>> +                    entry = make_readable_migration_entry(
->>> +                                swp_offset(entry));
->>>                   newpte = swp_entry_to_pte(entry);
->>>                   set_huge_swap_pte_at(mm, address, ptep,
->>>                                newpte, huge_page_size(h));
->>
->> <snip>
->>
->>> diff --git a/mm/mprotect.c b/mm/mprotect.c
->>> index b69ce7a7b2b7..56060acdabd3 100644
->>> --- a/mm/mprotect.c
->>> +++ b/mm/mprotect.c
->>> @@ -152,6 +152,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
->>>               pages++;
->>>           } else if (is_swap_pte(oldpte)) {
->>>               swp_entry_t entry = pte_to_swp_entry(oldpte);
->>> +            struct page *page = pfn_swap_entry_to_page(entry);
->>>               pte_t newpte;
->>>                 if (is_writable_migration_entry(entry)) {
->>
->> In change_pte_range(), is_writable_migration_entry() is not changed to !is_readable_migration_entry().
-> 
-> Yes, and also in change_huge_pmd(), is_writable_migration_entry() stays unchanged.
-> 
->> Is this done intentionally? Could you tell me why there's such a difference? I'm confused. It's very
->> kind of you if you can answer my puzzle.
-> 
-> For change protection, the only relevant part is to convert writable -> readable or writable -> readable_exclusive.
-> 
-> If an entry is already readable or readable_exclusive, there is nothing to do. The only issues would be when turning a readable one into a readable_exclusive one or a readable_exclusive one into a readable one.
-> 
-> 
-> In hugetlb_change_protection(), the "!is_readable_migration_entry" could in fact be turned into a "is_writable_migration_entry()". Right now, it would convert writable -> readable or writable -> readable_exclusive AND readable -> readable AND readable_exclusive -> readable_exclusive, which isn't necessary but also shouldn't hurt either.
+On Mon, 5 Dec 2022 08:35:34 -0800
+Dan Williams <dan.j.williams@intel.com> wrote:
 
-Many thanks for your explanation. It's really helpful. :)
-
+> Jonathan Cameron wrote:
+> > On Fri, 2 Dec 2022 11:43:29 -0800
+> > Dan Williams <dan.j.williams@intel.com> wrote:
+> >   
+> > > Jonathan Cameron wrote:  
+> > > >     
+> > > > > > +int cxl_event_config_msgnums(struct cxl_dev_state *cxlds,
+> > > > > > +			     struct cxl_event_interrupt_policy *policy)
+> > > > > > +{
+> > > > > > +	int rc;
+> > > > > > +
+> > > > > > +	policy->info_settings = CXL_INT_MSI_MSIX;
+> > > > > > +	policy->warn_settings = CXL_INT_MSI_MSIX;
+> > > > > > +	policy->failure_settings = CXL_INT_MSI_MSIX;
+> > > > > > +	policy->fatal_settings = CXL_INT_MSI_MSIX;      
+> > > > > 
+> > > > > I think this needs to be careful not to undo events that the BIOS
+> > > > > steered to itself in firmware-first mode, which raises another question,
+> > > > > does firmware-first mean more the OS needs to backoff on some event-log
+> > > > > handling as well?    
+> > > > 
+> > > > Hmm. Does the _OSC cover these.  There is one for Memory error reporting
+> > > > that I think covers it (refers to 12.2.3.2)
+> > > > 
+> > > > Note that should cover any means of obtaining these, not just interrupt
+> > > > driven - so including the initial record clear.
+> > > > 
+> > > > ..
+> > > >     
+> > > > > > +
+> > > > > > +static irqreturn_t cxl_event_failure_thread(int irq, void *id)
+> > > > > > +{
+> > > > > > +	struct cxl_dev_state *cxlds = id;
+> > > > > > +
+> > > > > > +	cxl_mem_get_records_log(cxlds, CXL_EVENT_TYPE_FAIL);
+> > > > > > +	return IRQ_HANDLED;
+> > > > > > +}      
+> > > > > 
+> > > > > So I think one of the nice side effects of moving log priorty handling
+> > > > > inside of cxl_mem_get_records_log() and looping through all log types in
+> > > > > priority order until all status is clear is that an INFO interrupt also
+> > > > > triggers a check of the FATAL status for free.
+> > > > >     
+> > > > 
+> > > > I go the opposite way on this in thinking that an interrupt should only
+> > > > ever be used to handle the things it was registered for - so we should
+> > > > not be clearing fatal records in the handler triggered for info events.    
+> > > 
+> > > I would agree with you if this was a fast path and if the hardware
+> > > mechanism did not involve shared status register that tells you
+> > > that both FATAL and INFO are pending retrieval through a mechanism.
+> > > Compare that to the separation between admin and IO queues in NVME.
+> > > 
+> > > If the handler is going to loop on the status register then it must be
+> > > careful not to starve out FATAL while processing INFO.
+> > >   
+> > > > Doing other actions like this relies on subtlies of the generic interrupt
+> > > > handling code which happens to force interrupt threads on a shared interrupt
+> > > > line to be serialized.  I'm not sure we are safe at all the interrupt
+> > > > isn't shared unless we put a lock around the whole thing (we have one
+> > > > because of the buffer mutex though).    
+> > > 
+> > > The interrupt is likely shared since there is no performance benefit to
+> > > entice hardware vendors spend transistor budget on more vector space for
+> > > events. The events architecture does not merit that spend.
+> > >   
+> > > > If going this way I think the lock needs a rename.
+> > > > It's not just protecting the buffer used, but also serialize multiple
+> > > > interrupt threads.    
+> > > 
+> > > I will let Ira decide if he wants to rename, but in my mind the shared
+> > > event buffer *is* the data being locked, the fact that multiple threads
+> > > might be contending for it is immaterial.  
+> > 
+> > It isn't he only thing being protected.  Access to the device is also
+> > being serialized including the data in it's registers.
+> > 
+> > If someone comes along later and decides to implement multiple buffers
+> > and there for gets rid of the lock. boom.  
 > 
+> That's what the mailbox mutex is protecting against. If there is an
+> aspect of the hardware state that is not protected by that then that's a
+> bug.
 > 
-> So yeah, it's not consistent but shouldn't be problematic. Do you see an issue with that?
+Wrong level of locking. This is about a race on multiple commands
+1) Read data from interrupt thread 1.
+2) Read same data from interrupt thread 2.
+3) Clear data from interrupt thread 1.
+4) Clear data from interrupt thread 2. Boom (well minor error we
+probably eat but not good practice).
 
-No, I don't see any issue with that. I just wonder whether we can change "!is_readable_migration_entry" to "is_writable_migration_entry()" to make code
-more consistent and avoid possible future puzzle. Also we can further remove this harmless unnecessary migration entry conversion. But this should
-be a separate cleanup patch anyway.
 
-> 
-> It would be great to extend the "selftest/vm cow" test to also cover migration entries, however, that requires slightly more work and "luck" to fork() while migration is happening.
-> 
-> Thanks!
 
-Many thanks for your work!
 
-Thanks,
-Miaohe Lin
-
-> 
