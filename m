@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1686448FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB84644903
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:17:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbiLFQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
+        id S234609AbiLFQRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:17:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232198AbiLFQPu (ORCPT
+        with ESMTP id S235531AbiLFQQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:15:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84C133B9E8;
-        Tue,  6 Dec 2022 08:10:59 -0800 (PST)
+        Tue, 6 Dec 2022 11:16:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F42AE44;
+        Tue,  6 Dec 2022 08:12:41 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2E492B81A96;
-        Tue,  6 Dec 2022 16:10:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AF46C433C1;
-        Tue,  6 Dec 2022 16:10:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01DF9617AC;
+        Tue,  6 Dec 2022 16:12:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA2D0C433C1;
+        Tue,  6 Dec 2022 16:12:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670343056;
-        bh=F6DcxtiqCeG4B6wmN9I+pwVih4zHP19OF/1oftcy+cM=;
+        s=k20201202; t=1670343160;
+        bh=HgFTfC9zyZQkoZmePhkz0MAY8w2m/nlUZpikKauzyNI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tK7IUkXUxWrHWCQOObPIW+bVrPjFl8vpJ3Zhe5rh4Nh8hqPo0VHuyHpMGVdXRQ7Wv
-         E+OdNwSvW0sNShK1BLGCd2/9gd72c4JUyoGQEBAJQYDcVY0BFcmYnIVpfHUL/GdCIi
-         wxw4NnkziVMmdl9WOD8Nvfdq6E+Weabtmlc9d6plnsAhGjIeyr5LgxCkKgQDo4t0RV
-         h90lBD5Ghn1C1QXRyoK5G4ZmU6zUk0AlzNiXZzi/89bVE8hDWV5JU84ybVcyQYsgw3
-         PjTPVf7ZyrifZtgOZZLigTL7ulhd8IMg7gzgDxwT7rMmFbuu1pCcRUDJVCGVHyE9xC
-         F2Qye+z+lAXaw==
-Date:   Tue, 6 Dec 2022 16:10:51 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <uwe@kleine-koenig.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-amlogic@lists.infradead.org, Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 431/606] mfd: khadas-mcu: Convert to i2c's .probe_new()
-Message-ID: <Y49pi54DKsvLOzvb@google.com>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-432-uwe@kleine-koenig.org>
- <Y3tvypIDVdCYxAVB@google.com>
- <20221121150854.3mwczqtbusawho4m@pengutronix.de>
- <Y3usiUm1K+5xCWhY@google.com>
- <20221206105908.jzcdnast3yw22eel@pengutronix.de>
+        b=EQOA1wFB7IjdbpNtB0kXUsH1jicB3zphJhix3CVdp7LRImEsvXizZS1+It1XCfvu0
+         lzYC0HGDJUy1Rb2tVGlMB2dxjzI6bNi+p1+UMps0Za75Ua/rrbeVOnP4zBzZuqg3Ik
+         oxl8BGNdB5yXmN6vl62fB4iKA7FITecNLHthCrt6eAb0NEgJ7swPvt5tUdqYgtN2OO
+         E6UToeESPi6hVkSDfw0Jcp0FTiBVgSPEW8jWVNw4pqUzoVgAFUtBwLP6rf10cOIL9M
+         4XaVIX3Jf8qCdwjqs9ctO1rEo0k3evwFI+FIZAjcyueXUE57OBzDe8MfBwtWKAa+kp
+         zhs7703F9YS1A==
+Date:   Tue, 6 Dec 2022 16:12:35 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <Y49p82Iac/+iYQ+1@spud>
+References: <20221204174632.3677-1-jszhang@kernel.org>
+ <10190559.nUPlyArG6x@diego>
+ <Y45LRu0Gvrurm5Rh@spud>
+ <12207576.O9o76ZdvQC@diego>
+ <Y49Zi2CNv8pZSAe5@xhacker>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="0yfmBJphl5BauK+i"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221206105908.jzcdnast3yw22eel@pengutronix.de>
+In-Reply-To: <Y49Zi2CNv8pZSAe5@xhacker>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,50 +65,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 06 Dec 2022, Uwe Kleine-König wrote:
 
-> Hey Lee,
-> 
-> On Mon, Nov 21, 2022 at 04:51:21PM +0000, Lee Jones wrote:
-> > On Mon, 21 Nov 2022, Uwe Kleine-König wrote:
-> > 
-> > > Hello Lee,
-> > > 
-> > > On Mon, Nov 21, 2022 at 12:32:10PM +0000, Lee Jones wrote:
-> > > > On Fri, 18 Nov 2022, Uwe Kleine-König wrote:
-> > > > 
-> > > > > From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > > > 
-> > > > > The probe function doesn't make use of the i2c_device_id * parameter so it
-> > > > > can be trivially converted.
-> > > > > 
-> > > > > Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> > > > > ---
-> > > > >  drivers/mfd/khadas-mcu.c | 5 ++---
-> > > > >  1 file changed, 2 insertions(+), 3 deletions(-)
-> > > > 
-> > > > After a week or so, please collect-up all the tags you have received
-> > > > and submit a per-subsystem set for me to hoover up, thanks.
-> > > 
-> > > For mfd I'd do:
-> > > 
-> > > 	git checkout mfd/for-next
-> > > 	b4 am -P 413-481 20221118224540.619276-1-uwe@kleine-koenig.org
-> > > 	git am ./20221118_uwe_i2c_complete_conversion_to_i2c_probe_new.mbx
-> > > 	git send-email --to .... --cc .... mfd/for-next
-> > 
-> > That's just crazy enough to work.
-> > 
-> > Thanks for the tip.
-> 
-> On irc you said you'd care for application of these patches ("I plan to
-> attempt the b4 solution"), they didn't land in next yet. Do you need a
-> reminder? Something else?
+--0yfmBJphl5BauK+i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I applied them, but they fail to build and I haven't had time to
-investigate.  I guess they depend on some patches that have been
-accepted into another (input?) and are now in -next.  Any idea if they
-are available on some immutable branch that I can pull from?
+On Tue, Dec 06, 2022 at 11:02:35PM +0800, Jisheng Zhang wrote:
 
--- 
-Lee Jones [李琼斯]
+> > > Higher Powers here, but some sort of logical ordering would probably =
+be
+> > > a good idea so as not to hold each other up?
+> > > The non-string bit of your series has been fairly well reviewed & wou=
+ld,
+> > > in theory, be mergeable once the tree re-opens? Timing aside, Jisheng=
+'s
+> > > idea seems like a good one, no?
+>=20
+> IMHO, it will be better if Palmer can merge Heiko's alternative improveme=
+nts
+> into riscv-next once well reviewed and the window is reopen. Then Drew,
+> Prabhakar and I can rebase on that tree.
+
+Unless I missed something, we're saying the same thing in different ways
+:)
+
+
+--0yfmBJphl5BauK+i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY49p1QAKCRB4tDGHoIJi
+0h75AQCs7HqktVAyyk++q+81eShEP/hyMgLVqh7NhSCXaYUMIQEA8Fq3lpbnzAbi
+JQrKm36mZz/R5qyDiB9pd5bml2HvoQA=
+=xqAW
+-----END PGP SIGNATURE-----
+
+--0yfmBJphl5BauK+i--
