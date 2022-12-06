@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C7E2644370
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 278436443C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233419AbiLFMuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55108 "EHLO
+        id S235008AbiLFNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiLFMuS (ORCPT
+        with ESMTP id S234848AbiLFM7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:50:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B969DFA8;
-        Tue,  6 Dec 2022 04:50:16 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 6 Dec 2022 07:59:53 -0500
+Received: from mout-b-110.mailbox.org (mout-b-110.mailbox.org [IPv6:2001:67c:2050:102:465::110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B585FCF4;
+        Tue,  6 Dec 2022 04:59:15 -0800 (PST)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 261B1B815A6;
-        Tue,  6 Dec 2022 12:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 966D2C433C1;
-        Tue,  6 Dec 2022 12:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670331013;
-        bh=5fkVXllCSjBZuVo8Uv46ZK/hvRL1/H1PEhU3z7MLu9U=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Pl0mLg6/LiKcbhhSy0QHR1e32ydRmRC+61dwkYzb/s06blHeIrSqAXDAOUctG6l6C
-         0Z5tCluonCZ66PUPkB3+flY/v5c7MLvc4CQ3JR45gOtJdw5g8PGq3lQMqY7acWIcFt
-         wRrkj0B/xseEs/Y5odZNwPgYoFP7D0li3cLTAy1DbRzNnQVOzCHZBOXJY6OCok8GBf
-         HO51IJjrXBsZtjXmzw1O/u5j+iEwVXknWuJWqRCD0JoaRvlYOHAmvljkDgSlXCwt+4
-         bZ0VQ68sTh91wcjEYe9MZ9mcajrf55N8sUL4OtWWOd1QM74NANjuiU1nJ8jnj780wg
-         xkjBZkpxi9Nlg==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 7A6E982E386; Tue,  6 Dec 2022 13:50:10 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Daniel Borkmann <daniel@iogearbox.net>
-Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH] bpf: call get_random_u32() for random integers
-In-Reply-To: <Y451ENAK7BQQDJc/@zx2c4.com>
-References: <20221205181534.612702-1-Jason@zx2c4.com>
- <730fd355-ad86-a8fa-6583-df23d39e0c23@iogearbox.net>
- <Y451ENAK7BQQDJc/@zx2c4.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 06 Dec 2022 13:50:10 +0100
-Message-ID: <87lenku265.fsf@toke.dk>
+        by mout-b-110.mailbox.org (Postfix) with ESMTPS id 4NRL0Z5J26z9tBp;
+        Tue,  6 Dec 2022 13:52:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nyantec.com; s=default;
+        t=1670331134;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IRHVWafY0jHFpHspwEKtI6JUKd/uH2AFkVef11b8k6E=;
+        b=N1xBqdYrP8dXmghzKaLbcLdLpkNG0cHbYgPfiCrvtwz9ibdMcruKlyZtBPyty5mVKHwcqy
+        pfJsynIP4ubyQGY4nqSPTJkyzhkAhscw1SRYmyIdc7oRGIk5fjr44FjSrWCgY1dgYHb1xH
+        gcumJmjWkTPCn46i3XoJNrELOf+f/152w49VMwTXUfHL/ZJXB3F1mQFCOHeTze87OOXo/v
+        QwEPSGjXzPKSIeV/sN1Dx++F2UTspoUue1RM278N7FKKDjqEkg/INJhewJ0XQI96v93o9Q
+        j7wuTFiOP7ESEf2xjBhgJxuCrqJJKh7Gh4jxiTyORgH/M+D0MV4pBnoCEvQ0ug==
+From:   Finn Behrens <fin@nyantec.com>
+To:     ojeda@kernel.org
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Viktor Garske <viktor@v-gar.de>
+Subject: Re: [PATCH v2 09/28] rust: error: add codes from `errno-base.h`
+Date:   Tue, 06 Dec 2022 13:52:07 +0100
+Message-ID: <8D86E171-0030-4A3F-BE87-9B9FB9E79213@nyantec.com>
+In-Reply-To: <20221202161502.385525-10-ojeda@kernel.org>
+References: <20221202161502.385525-1-ojeda@kernel.org>
+ <20221202161502.385525-10-ojeda@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 4NRL0Z5J26z9tBp
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,33 +60,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 
-> On Mon, Dec 05, 2022 at 11:21:51PM +0100, Daniel Borkmann wrote:
->> On 12/5/22 7:15 PM, Jason A. Donenfeld wrote:
->> > Since BPF's bpf_user_rnd_u32() was introduced, there have been three
->> > significant developments in the RNG: 1) get_random_u32() returns the
->> > same types of bytes as /dev/urandom, eliminating the distinction between
->> > "kernel random bytes" and "userspace random bytes", 2) get_random_u32()
->> > operates mostly locklessly over percpu state, 3) get_random_u32() has
->> > become quite fast.
->> 
->> Wrt "quite fast", do you have a comparison between the two? Asking as its
->> often used in networking worst case on per packet basis (e.g. via XDP), would
->> be useful to state concrete numbers for the two on a given machine.
+
+On 2 Dec 2022, at 17:14, ojeda@kernel.org wrote:
+
+> From: Viktor Garske <viktor@v-gar.de>
 >
-> Median of 25 cycles vs median of 38, on my Tiger Lake machine. So a
-> little slower, but too small of a difference to matter.
+> Only a few codes were added so far. With the `declare_err!`
+> macro in place, add the remaining ones (which is most of them)
+> from `include/uapi/asm-generic/errno-base.h`.
+>
+> Co-developed-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
+> Signed-off-by: Viktor Garske <viktor@v-gar.de>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> [Reworded, adapted for upstream and applied latest changes]
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+Reviewed-by: Finn Behrens <fin@nyantec.com>
 
-Assuming a 3Ghz CPU clock (so 3 cycles per nanosecond), that's an
-additional overhead of ~4.3 ns. When processing 10 Gbps at line rate
-with small packets, the per-packet processing budget is 67.2 ns, so
-those extra 4.3 ns will eat up ~6.4% of the budget.
+Regards,
+Finn
 
-So in other words, "too small a difference to matter" is definitely not
-true in general. It really depends on the use case; if someone is using
-this to, say, draw per-packet random numbers to compute a drop frequency
-on ingress, that extra processing time will most likely result in a
-quite measurable drop in performance.
+> ---
+>  rust/kernel/error.rs | 33 +++++++++++++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+>
+> diff --git a/rust/kernel/error.rs b/rust/kernel/error.rs
+> index b843f3445483..861746f2422d 100644
+> --- a/rust/kernel/error.rs
+> +++ b/rust/kernel/error.rs
+> @@ -17,7 +17,40 @@ pub mod code {
+>          };
+>      }
+>
+> +    declare_err!(EPERM, "Operation not permitted.");
+> +    declare_err!(ENOENT, "No such file or directory.");
+> +    declare_err!(ESRCH, "No such process.");
+> +    declare_err!(EINTR, "Interrupted system call.");
+> +    declare_err!(EIO, "I/O error.");
+> +    declare_err!(ENXIO, "No such device or address.");
+> +    declare_err!(E2BIG, "Argument list too long.");
+> +    declare_err!(ENOEXEC, "Exec format error.");
+> +    declare_err!(EBADF, "Bad file number.");
+> +    declare_err!(ECHILD, "Exec format error.");
+> +    declare_err!(EAGAIN, "Try again.");
+>      declare_err!(ENOMEM, "Out of memory.");
+> +    declare_err!(EACCES, "Permission denied.");
+> +    declare_err!(EFAULT, "Bad address.");
+> +    declare_err!(ENOTBLK, "Block device required.");
+> +    declare_err!(EBUSY, "Device or resource busy.");
+> +    declare_err!(EEXIST, "File exists.");
+> +    declare_err!(EXDEV, "Cross-device link.");
+> +    declare_err!(ENODEV, "No such device.");
+> +    declare_err!(ENOTDIR, "Not a directory.");
+> +    declare_err!(EISDIR, "Is a directory.");
+> +    declare_err!(EINVAL, "Invalid argument.");
+> +    declare_err!(ENFILE, "File table overflow.");
+> +    declare_err!(EMFILE, "Too many open files.");
+> +    declare_err!(ENOTTY, "Not a typewriter.");
+> +    declare_err!(ETXTBSY, "Text file busy.");
+> +    declare_err!(EFBIG, "File too large.");
+> +    declare_err!(ENOSPC, "No space left on device.");
+> +    declare_err!(ESPIPE, "Illegal seek.");
+> +    declare_err!(EROFS, "Read-only file system.");
+> +    declare_err!(EMLINK, "Too many links.");
+> +    declare_err!(EPIPE, "Broken pipe.");
+> +    declare_err!(EDOM, "Math argument out of domain of func.");
+> +    declare_err!(ERANGE, "Math result not representable.");
+>  }
+>
+>  /// Generic integer kernel error.
+> -- =
 
--Toke
+> 2.38.1
