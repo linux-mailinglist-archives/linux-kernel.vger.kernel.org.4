@@ -2,157 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA80643FCB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:25:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CF2643FCF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiLFJZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:25:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40872 "EHLO
+        id S233863AbiLFJ0C convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Dec 2022 04:26:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235037AbiLFJYM (ORCPT
+        with ESMTP id S234997AbiLFJZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:24:12 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6011FFB9;
-        Tue,  6 Dec 2022 01:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670318609; x=1701854609;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oPcLXIVOc+GFeFSkqSIyhWQJfGtxDDGC65jp3SUfUnA=;
-  b=UeTBsujFM2gUc2fa8xAvJEKZFBLXsArOFWi7X89x8gQSGBWFpsL79KEA
-   DzDZNIULkwnxSB2K4FNReRqbP9fyEJ8HpjBH12OBtzSoxMQVyYaLZSSY0
-   dfjIa1w1/vshE+G80mj+806swe1WcTskqPn+sDYRgYPBtU9hNimZA8VkU
-   Ibvizso3V/JUb9K6ualMV/THKaUZqPuIjF5sOyW6rnMJpHlwqXBF7U+dK
-   SBgnw4V75rdKdAqWOPm2pANjsr+1zDAHH9EQayKJn/0fDx93Kh4ImjJuK
-   /5sFbwcq3wzefdCcf9fJNzbXE3wh1kwgVpRdqozjENSXUX5CO97BxooXG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="300001067"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="300001067"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 01:23:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="714733236"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="714733236"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.38.78])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 01:23:19 -0800
-Message-ID: <77fff5aa-ddd2-6bc7-f0b4-46b93e87338b@intel.com>
-Date:   Tue, 6 Dec 2022 11:23:15 +0200
+        Tue, 6 Dec 2022 04:25:40 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBB1DF77
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:25:36 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1p2UCh-000107-DT; Tue, 06 Dec 2022 10:25:31 +0100
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1p2UCe-002fDd-8C; Tue, 06 Dec 2022 10:25:29 +0100
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1p2UCe-0002Fh-EA; Tue, 06 Dec 2022 10:25:28 +0100
+Message-ID: <a83f62d604e70a8e58309dc7a5e2e3515227e1c4.camel@pengutronix.de>
+Subject: Re: [RFC PATCH 2/2] mfd: syscon: allow reset control for syscon
+ devices
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Jeremy Kerr <jk@codeconstruct.com.au>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Date:   Tue, 06 Dec 2022 10:25:28 +0100
+In-Reply-To: <e46a680f-e891-489c-9747-98ae3df42ade@app.fastmail.com>
+References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
+         <20221206073916.1606125-3-jk@codeconstruct.com.au>
+         <e46a680f-e891-489c-9747-98ae3df42ade@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH 4.9 00/62] 4.9.335-rc1 review
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kamal Dasu <kdasu.kdev@gmail.com>
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20221205190758.073114639@linuxfoundation.org>
- <80305ea1-4d52-b1d3-e078-3c1084d96cc7@nvidia.com>
- <2bb37989-7c22-ae06-6568-8419ce57e44b@gmail.com>
- <e00f6e66-fd51-5b55-6cd1-ec9abe038022@gmail.com>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <e00f6e66-fd51-5b55-6cd1-ec9abe038022@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/22 02:11, Florian Fainelli wrote:
-> On 12/5/22 14:48, Florian Fainelli wrote:
->> On 12/5/22 14:28, Jon Hunter wrote:
->>> Hi Greg,
->>>
->>> On 05/12/2022 19:08, Greg Kroah-Hartman wrote:
->>>> This is the start of the stable review cycle for the 4.9.335 release.
->>>> There are 62 patches in this series, all will be posted as a response
->>>> to this one.  If anyone has any issues with these being applied, please
->>>> let me know.
->>>>
->>>> Responses should be made by Wed, 07 Dec 2022 19:07:46 +0000.
->>>> Anything received after that time might be too late.
->>>>
->>>> The whole patch series can be found in one patch at:
->>>>     https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.335-rc1.gz
->>>> or in the git tree and branch at:
->>>>     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
->>>> and the diffstat can be found below.
->>>>
->>>> thanks,
->>>>
->>>> greg k-h
->>>>
->>>> -------------
->>>> Pseudo-Shortlog of commits:
->>>>
->>>> Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>>      Linux 4.9.335-rc1
->>>>
->>>> Adrian Hunter <adrian.hunter@intel.com>
->>>>      mmc: sdhci: Fix voltage switch delay
->>>
->>>
->>> I am seeing a boot regression on a couple boards and bisect is pointing to the above commit.
->>
->> Same thing here, getting a hard lock for our devices with the SDHCI controller enabled, sometimes we are lucky to see the following:
->>
->> [    4.790367] mmc0: SDHCI controller on 84b0000.sdhci [84b0000.sdhci] using ADMA 64-bit
->> [   25.802351] INFO: rcu_sched detected stalls on CPUs/tasks:
->> [   25.807871]  1-...: (1 GPs behind) idle=561/140000000000000/0 softirq=728/728 fqs=5252
->> [   25.815892]  (detected by 0, t=21017 jiffies, g=61, c=60, q=55)
->> [   25.821834] Task dump for CPU 1:
->> [   25.825069] kworker/1:1     R  running task        0   509      2 0x00000002
->> [   25.832164] Workqueue: events_freezable mmc_rescan
->> [   25.836974] Backtrace:
->> [   25.839440] [<ce32fea4>] (0xce32fea4) from [<ce32fed4>] (0xce32fed4)
->> [   25.845803] Backtrace aborted due to bad frame pointer <cd2f0a54>
->>
->> Also confirmed that reverting that change ("mmc: sdhci: Fix voltage switch delay") allows devices to boot properly.
->>
->> Had not a chance to test the change when submitted for mainline despite being copied, sorry about that.
->>
->> Since that specific commit is also included in the other stable trees (5.4, 5.10, 5.15 and 6.0) I will let you know whether the same issue is present in those trees shortly thereafter.
+On Di, 2022-12-06 at 09:41 +0100, Arnd Bergmann wrote:
+> On Tue, Dec 6, 2022, at 08:39, Jeremy Kerr wrote:
+> > Simple syscon devices may require deassertion of a reset signal in order
+> > to access their register set. Rather than requiring a custom driver to
+> > implement this, we can use the generic "resets" specifiers to link a
+> > reset line to the syscon.
+> > 
+> > This change adds an optional reset line to the syscon device
+> > description, and code to perform the deassertion/assertion on
+> > probe/remove.
+> > 
+> > Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
 > 
-> This only appears to impact 4.9, Adrian is there a missing functional dependency for "mmc: sdhci: Fix voltage switch delay" to work correctly on the 4.9 kernel?
+> I see that this will only work after the device has been registered,
+> but not for early users of the syscon framework that bypass the
+> device logic and just call device_node_to_regmap() or 
+> syscon_regmap_lookup*() during early boot.
+> 
+> It should be possible to solve this by adding the reset logic
+> into the of_syscon_register() function and using the
+> of_reset_control_get*() helpers instead of the devm_* ones,
+> but I'm not sure if that causes other problems with probe
+> order, or if that helps at all, if reset drivers already
+> require the device subsystem to be running.
+> 
+> Philipp, what is the earliest point at which
+> reset_controller_register() can be called? Is that
+> possible before postcore_initcall() or driver_register()?
 
-The thing that leaps to mind is that "mmc: sdhci: Fix voltage switch delay" returns out of sdhci_set_ios() without releasing the spinlock which was removed in later kernels.  I expect below would help, but a revert might allow a more considered response - it is a holiday here today.
+reset_controller_register() only initializes a few fields in the passed
+rcdev structure and adds it to a static list under a static mutex, so
+there's not much of a limit.
 
+However, reset controllers that choose to register early without
+creating a platform device may run into issues with devlink inhibiting
+reset consumers' probe [1].
 
-diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-index cfd665f0d6db..f3e2aba53ffa 100644
---- a/drivers/mmc/host/sdhci.c
-+++ b/drivers/mmc/host/sdhci.c
-@@ -1684,7 +1684,7 @@ static void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
- 	    host->timing == ios->timing &&
- 	    host->version >= SDHCI_SPEC_300 &&
- 	    !sdhci_presetable_values_change(host, ios))
--		return;
-+		goto out;
- 
- 	ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
- 
-@@ -1773,7 +1773,7 @@ static void sdhci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
- 		host->ops->set_clock(host, host->clock);
- 	} else
- 		sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
--
-+out:
- 	/*
- 	 * Some (ENE) controllers go apeshit on some ios operation,
- 	 * signalling timeout and CRC errors even on CMD0. Resetting
+[1] a1467faa1041 ("ARM: imx: register reset controller from a platform driver")
+    https://lore.kernel.org/linux-arm-kernel/20211005100618.730907-1-p.zabel@pengutronix.de/
 
+regards
+Philipp
