@@ -2,93 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3169644128
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:20:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2467864412B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 11:21:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiLFKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 05:20:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S229867AbiLFKVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 05:21:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiLFKUJ (ORCPT
+        with ESMTP id S230036AbiLFKVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 05:20:09 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2312B658A;
-        Tue,  6 Dec 2022 02:20:08 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e7ff329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7ff:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B64801EC064F;
-        Tue,  6 Dec 2022 11:20:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670322006;
+        Tue, 6 Dec 2022 05:21:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3733BBE05
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 02:20:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670322029;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=sl4e+RriZSOsyS4K085UmZxwSNVZxIS3S1lRJkgBgQI=;
-        b=pRzA9pRiF2c0RJHu4ytcZU/OtYCGeVKjbSufHl9zu/Lg71N/HsKRNiuffGaoMtBDDvkU9u
-        YbafEcQpF4Bf7Py9x2Zf9Gd+zb51B/OEz+Y4VZu0NBC/dexDiNV2n2bL/n+tsJm7ejqw07
-        mSxtk4lJXpoLJFMrWc1iPcG24Y1TPYs=
-Date:   Tue, 6 Dec 2022 11:20:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     stuart hayes <stuart.w.hayes@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jHrzc7nXr4YvCNaFmiJ1lG1BHgrUaPmAIMwaF5/OBO4=;
+        b=WSb9TPf/XHVYiQ9DqQPamakc2PzVPqdFx1QSBqVQzpvjMM5WbMuQOgrGKt4F07NQjmwvEg
+        lLQ7woBJ+RivoI6jCluwcrxQhzVvgdXhGbmXPHfKMBMz5Eb4sux+VB3rLly0qRcLVMhAhI
+        v0BOBq6J8r60YPXFzveHvRVR2SazhBY=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-471-0Ti9sYP5PvqLG0s3KGUIZA-1; Tue, 06 Dec 2022 05:20:27 -0500
+X-MC-Unique: 0Ti9sYP5PvqLG0s3KGUIZA-1
+Received: by mail-qk1-f200.google.com with SMTP id s7-20020a05620a0bc700b006fcb1a3bb9dso12950852qki.15
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 02:20:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jHrzc7nXr4YvCNaFmiJ1lG1BHgrUaPmAIMwaF5/OBO4=;
+        b=ZHmdjJNhrdTtzvuBsMMsNP/BJ95ljw67RzwS8KhGL5uZyJXpo8Z6Wn7TTVl4nKKjN5
+         t4gNuDBKfMoKzBgbqp3vssLue97Cn3svEEjHJt/+IUJ9tXl/C3xVDGlihdPd55KK4UtP
+         wy82nrPhqDPAmUKnQnuGvUXZwzCrYosclGbKOq8BNPEgHfqweTa+0D+qrbjLwBo2GX8H
+         EuxwLgsDlKlLR95ccxByQeLXbqFQQ8yb/AR8/Q732jL3Ko9y7KGadjcfGupkvqZycZtJ
+         xIFcVbJrDYo3AmpxmOmcGzBXVuVvKIhphmaViFgzvgMGehKDeQlzGJHofL03Y8ZY/EfW
+         sCTg==
+X-Gm-Message-State: ANoB5plk0UAmpV3v55+mJDZSqE70OyX2L3KvuWtbzQWtBWCtrmRAWeZ5
+        8waaR+BGFFwtYO209p2z5Qlb3nnWb78jY5Qo++iL0hyPjU50IvEZDjZxswvIlQDjg4+F15iGyI1
+        0SZaib/bfOnwyLgl9AqWZvSIM
+X-Received: by 2002:a05:622a:4017:b0:3a5:4f7e:bab2 with SMTP id cf23-20020a05622a401700b003a54f7ebab2mr64363603qtb.527.1670322026696;
+        Tue, 06 Dec 2022 02:20:26 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5qvnmSSJhD7XhInjAoVoAZX/6OMJ6iTD3rm9lH6Om7UxRSOVZ1bSbEKEISqvQ5FcAl/6HHWQ==
+X-Received: by 2002:a05:622a:4017:b0:3a5:4f7e:bab2 with SMTP id cf23-20020a05622a401700b003a54f7ebab2mr64363575qtb.527.1670322026401;
+        Tue, 06 Dec 2022 02:20:26 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-106-100.dyn.eolo.it. [146.241.106.100])
+        by smtp.gmail.com with ESMTPSA id bi6-20020a05620a318600b006fa16fe93bbsm14341627qkb.15.2022.12.06.02.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 02:20:26 -0800 (PST)
+Message-ID: <863a58452b4a4c0d63a41b0f78b59d32919067fa.camel@redhat.com>
+Subject: Re: [PATCH v5] virtio/vsock: replace virtio_vsock_pkt with sk_buff
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
+Cc:     Bobby Eshleman <bobbyeshleman@gmail.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Jiang Wang <jiang.wang@bytedance.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: acpi: Only set boost MSRs on supported CPUs
-Message-ID: <Y48XUjSMWVvohIy3@zn.tnic>
-References: <20221205175744.9746-1-stuart.w.hayes@gmail.com>
- <e5e024a2-a530-9f4f-76f4-5f239b3608a3@gmail.com>
+Date:   Tue, 06 Dec 2022 11:20:21 +0100
+In-Reply-To: <20221202173520.10428-1-bobby.eshleman@bytedance.com>
+References: <20221202173520.10428-1-bobby.eshleman@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <e5e024a2-a530-9f4f-76f4-5f239b3608a3@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 12:07:05PM -0600, stuart hayes wrote:
-> 
-> 
-> On 12/5/2022 11:57 AM, Stuart Hayes wrote:
-> > Stop trying to set boost MSRs on CPUs that don't support boost.
-> > 
-> > This corrects a bug in the recent patch "Defer setting boost MSRs".
-> > 
-> > Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
-> > ---
-> >   drivers/cpufreq/acpi-cpufreq.c | 3 ++-
-> >   1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> > index bb58175a8d40..a7c5e312340e 100644
-> > --- a/drivers/cpufreq/acpi-cpufreq.c
-> > +++ b/drivers/cpufreq/acpi-cpufreq.c
-> > @@ -888,7 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> >   	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
-> >   		pr_warn(FW_WARN "P-state 0 is not max freq\n");
-> > -	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
-> > +	if (acpi_cpufreq_driver.set_boost)
-> > +		set_boost(policy, acpi_cpufreq_driver.boost_enabled);
-> >   	return result;
-> 
-> My apologies--adding Boris, I forgot to put him on the "to" list.
+Hello,
 
-Yap, that does it.
+On Fri, 2022-12-02 at 09:35 -0800, Bobby Eshleman wrote:
+[...]
+> diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
+> index 35d7eedb5e8e..6c0b2d4da3fe 100644
+> --- a/include/linux/virtio_vsock.h
+> +++ b/include/linux/virtio_vsock.h
+> @@ -3,10 +3,129 @@
+>  #define _LINUX_VIRTIO_VSOCK_H
+>  
+>  #include <uapi/linux/virtio_vsock.h>
+> +#include <linux/bits.h>
+>  #include <linux/socket.h>
+>  #include <net/sock.h>
+>  #include <net/af_vsock.h>
+>  
+> +#define VIRTIO_VSOCK_SKB_HEADROOM (sizeof(struct virtio_vsock_hdr))
+> +
+> +enum virtio_vsock_skb_flags {
+> +	VIRTIO_VSOCK_SKB_FLAGS_REPLY		= BIT(0),
+> +	VIRTIO_VSOCK_SKB_FLAGS_TAP_DELIVERED	= BIT(1),
+> +};
+> +
+> +static inline struct virtio_vsock_hdr *virtio_vsock_hdr(struct sk_buff *skb)
+> +{
+> +	return (struct virtio_vsock_hdr *)skb->head;
+> +}
+> +
+> +static inline bool virtio_vsock_skb_reply(struct sk_buff *skb)
+> +{
+> +	return skb->_skb_refdst & VIRTIO_VSOCK_SKB_FLAGS_REPLY;
+> +}
 
-Reported-by: Borislav Petkov (AMD) <bp@alien8.de>
-Tested-by: Borislav Petkov (AMD) <bp@alien8.de>
+I'm sorry for the late feedback. The above is extremelly risky: if the
+skb will land later into the networking stack, we could experience the
+most difficult to track bugs.
 
-Thx.
+You should use the skb control buffer instead (skb->cb), with the
+additional benefit you could use e.g. bool - the compiler could emit
+better code to manipulate such fields - and you will not need to clear
+the field before release nor enqueue.
 
--- 
-Regards/Gruss,
-    Boris.
+[...]
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> @@ -352,37 +360,38 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
+>  				   size_t len)
+>  {
+>  	struct virtio_vsock_sock *vvs = vsk->trans;
+> -	struct virtio_vsock_pkt *pkt;
+>  	size_t bytes, total = 0;
+> -	u32 free_space;
+> +	struct sk_buff *skb;
+>  	int err = -EFAULT;
+> +	u32 free_space;
+>  
+>  	spin_lock_bh(&vvs->rx_lock);
+> -	while (total < len && !list_empty(&vvs->rx_queue)) {
+> -		pkt = list_first_entry(&vvs->rx_queue,
+> -				       struct virtio_vsock_pkt, list);
+> +	while (total < len && !skb_queue_empty_lockless(&vvs->rx_queue)) {
+> +		skb = __skb_dequeue(&vvs->rx_queue);
+
+Here the locking schema is confusing. It looks like vvs->rx_queue is
+under vvs->rx_lock protection, so the above should be skb_queue_empty()
+instead of the lockless variant.
+
+[...]
+
+> @@ -858,16 +873,11 @@ static int virtio_transport_reset_no_sock(const struct virtio_transport *t,
+>  static void virtio_transport_remove_sock(struct vsock_sock *vsk)
+>  {
+>  	struct virtio_vsock_sock *vvs = vsk->trans;
+> -	struct virtio_vsock_pkt *pkt, *tmp;
+>  
+>  	/* We don't need to take rx_lock, as the socket is closing and we are
+>  	 * removing it.
+>  	 */
+> -	list_for_each_entry_safe(pkt, tmp, &vvs->rx_queue, list) {
+> -		list_del(&pkt->list);
+> -		virtio_transport_free_pkt(pkt);
+> -	}
+> -
+> +	virtio_vsock_skb_queue_purge(&vvs->rx_queue);
+
+Still assuming rx_queue is under the rx_lock, given you don't need the
+locking here as per the above comment, you should use the lockless
+purge variant.
+
+Thanks!
+
+Paolo
+
