@@ -2,199 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028E2643C3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 05:25:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E5E643C3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 05:26:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232054AbiLFEZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 23:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37394 "EHLO
+        id S232399AbiLFE0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 23:26:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiLFEZd (ORCPT
+        with ESMTP id S229982AbiLFE0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 23:25:33 -0500
-Received: from conssluserg-05.nifty.com (conssluserg-05.nifty.com [210.131.2.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2E81A22E;
-        Mon,  5 Dec 2022 20:25:32 -0800 (PST)
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 2B64PIig018332;
-        Tue, 6 Dec 2022 13:25:18 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 2B64PIig018332
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1670300719;
-        bh=lRhwG5d1oTcfBZkynjSenWdo4di6NnnnWPwMnzU2Xzw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XY6WTM2Cf5i8tFHGXSM2VOoF6nngwWkXMnUiUJ0+SS/iOFb/GVjHRprI+0hK4XjOJ
-         mfiqYb8q5GHvKtaRaPaVW/9LS3HVcehR2hbqLHZjp9JkXpDSs9A7jfSw4c+jy/+zgD
-         EFJ3wwMfNWNLWmkFofTfRgTMNCUps19mRjEGHURg0b1bItMT1bIkBMLsz1mzU+RKp4
-         sQF3ZTnhWxKF56K+c5dDw9XO2SxKR1KGZjlVI8k1skOV2846YS8jDRmGxLKs0W3PDj
-         QqDTsUUTXWW9/AQjPy0UX7BEfm1ifLdG9MWSqIjQ4AkRoH8hTuljQxMM7Xh3M9y6Kf
-         1y/pn/BhybFGw==
-X-Nifty-SrcIP: [209.85.167.182]
-Received: by mail-oi1-f182.google.com with SMTP id v70so7226371oie.3;
-        Mon, 05 Dec 2022 20:25:18 -0800 (PST)
-X-Gm-Message-State: ANoB5pkxBl7R/CtjyAlBqjk40tZGAHjz7wimoPKKG78US/rRKYSKchwG
-        uWc7GFQQ8YsQHcsrkThyRg8QhEx2v+ziYW1eg90=
-X-Google-Smtp-Source: AA0mqf7R6bvx9C8DxH0OpzLBptbqxc8k8+7Z54KBrm/jOWiB+tWfc38sQV54qx9STVLGuBPN1Luxp84N+6JOWgAIOIQ=
-X-Received: by 2002:aca:1c06:0:b0:354:28ae:23b3 with SMTP id
- c6-20020aca1c06000000b0035428ae23b3mr32579050oic.287.1670300717668; Mon, 05
- Dec 2022 20:25:17 -0800 (PST)
+        Mon, 5 Dec 2022 23:26:35 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A59371A22E
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 20:26:34 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id q1so12314930pgl.11
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 20:26:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JFzSwj2UsOfE/ApheojhszW7qAncTn0zPiyeo2+89Kk=;
+        b=XICQdXQkpUQT1aoGftgoROTd8PONW3R4QpgVai+2MlM4c9XQJ/upAeyi5101p5dgdZ
+         S3jo1DDu2qVWJK2zglerOVEqdt5xkZqh8zWsXM9TTab2ohNMyXB1weI9UjRdQIMAWNyN
+         78ExsxMF4fro2PuD3o0168ZRjOzJDzhACZfkHvFB294AqYwliFtm9hxV/mrUQvTe6jlx
+         jjpabSy3+DBlklbPX7E/ODzego8ng7fpNA2BaOBPpPFotiQ31nDMVsTAvAp+fx2ZDnQJ
+         KPS4x3lCvjv2UbD2sG9fX7UqaZVff0ew5Zu+va0mNkGjccRoVtk/8Ilw1YZRdidnw2EV
+         /3YA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JFzSwj2UsOfE/ApheojhszW7qAncTn0zPiyeo2+89Kk=;
+        b=SVbWm4IYEDYnWgWvnJfIi1ecVFDBHNmVDsyOscsw2B32R1cZAdJ9DBsFh7HA6gBXuk
+         hnjdOF77pv60FSqBFZxmAS8Af9AjRhP3MN2QRHYoaPnpPliKrUjuIxHfVhgqT3i1uiX4
+         BHFfb4O6JELtvxSASYAjhOjnUe4VsbVX5LyKka4x+udIpxj55gCSpmE5Adwb5M0rx7B6
+         OF/iZhmhmv/4botW0PIvoWYzfzE6KhHlrD4La2hrPdfDVog1isLRcjGg1GL9bXkffl6y
+         7LK+Ay2S1SC/hxWPUMmfohEHAb79FvWohDfguLLG1KvLNL9/g32uBhi/OtaLwtIH4uFm
+         Rz9g==
+X-Gm-Message-State: ANoB5pm5j67pqj2a/5ovKU/FXT9K5Ss66mt7rn8mHUPZ7iOgqFSAxkBV
+        sqBzrG65yqdgfExfrYGOIF4=
+X-Google-Smtp-Source: AA0mqf7reR0SU5yUtiMz2X1QKMVhlZRiIcEgIP368SeRykiQ3SYIx0fzWgW/LhkTGahui+owekhlEA==
+X-Received: by 2002:a63:4910:0:b0:478:27a1:8602 with SMTP id w16-20020a634910000000b0047827a18602mr35307639pga.9.1670300794206;
+        Mon, 05 Dec 2022 20:26:34 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-2.three.co.id. [180.214.232.2])
+        by smtp.gmail.com with ESMTPSA id q5-20020aa79825000000b0057458d1f939sm10626301pfl.152.2022.12.05.20.26.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 20:26:33 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 9D29A100AD9; Tue,  6 Dec 2022 11:26:30 +0700 (WIB)
+Date:   Tue, 6 Dec 2022 11:26:30 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     ye.xingchen@zte.com.cn, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@gmail.com, daniel@ffwll.ch,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/i915: use sysfs_emit() to instead of scnprintf()
+Message-ID: <Y47Edh3g+Ld9gFnt@debian.me>
+References: <202212011053265568903@zte.com.cn>
+ <878rjm2kfm.fsf@intel.com>
 MIME-Version: 1.0
-References: <20221027162839.410720-1-masahiroy@kernel.org> <202211161056.1B9611A@keescook>
- <CAK7LNATWbvpovH8qsGMX-5-31QiQ6pjKNnm+YEDEqr4io1hrSw@mail.gmail.com> <202211161406.EF075E28E9@keescook>
-In-Reply-To: <202211161406.EF075E28E9@keescook>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 6 Dec 2022 13:24:41 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASBwfyt_2dbT1-MEcGwF8hQogJgjYnEE-e-twtL1WNYhg@mail.gmail.com>
-Message-ID: <CAK7LNASBwfyt_2dbT1-MEcGwF8hQogJgjYnEE-e-twtL1WNYhg@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: fix SIGPIPE error message for AR=gcc-ar and AR=llvm-ar
-To:     Kees Cook <keescook@chromium.org>
-Cc:     linux-kbuild@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="GjOSs0npbigzXBmw"
+Content-Disposition: inline
+In-Reply-To: <878rjm2kfm.fsf@intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 7:07 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Thu, Nov 17, 2022 at 05:37:31AM +0900, Masahiro Yamada wrote:
-> > On Thu, Nov 17, 2022 at 4:01 AM Kees Cook <keescook@chromium.org> wrote:
-> > >
-> > > On Fri, Oct 28, 2022 at 01:28:39AM +0900, Masahiro Yamada wrote:
-> > > > Jiri Slaby reported that building the kernel with AR=gcc-ar shows:
-> > > >   /usr/bin/ar terminated with signal 13 [Broken pipe]
-> > > >
-> > > > Nathan Chancellor reported the latest AR=llvm-ar shows
-> > > >   error: write on a pipe with no reader
-> > > >
-> > > > The latter occurs since LLVM commit 51b557adc131 ("Add an error message
-> > > > to the default SIGPIPE handler").
-> > > >
-> > > > The resulting vmlinux is correct, but it is better to silence it.
-> > > >
-> > > > 'head -n1' exits after reading the first line, so the pipe is closed.
-> > > >
-> > > > Use 'sed -n 1p' to eat the stream till the end.
-> > >
-> > > I think this is wrong because it needlessly consumes CPU time. SIGPIPE
-> > > is _needed_ to stop a process after we found what we needed, but it's up
-> > > to the caller (the shell here) to determine what to do about it.
-> > >
-> > > Similarly, that LLVM commit is wrong -- tools should _not_ catch their
-> > > own SIGPIPEs. They should be caught by their callers.
-> > >
-> > > For example, see:
-> > >
-> > > $ seq 10000 | head -n1
-> > > 1
-> > >
-> > > ^^^ no warnings from the shell (caller of "seq")
-> > > And you can see it _is_ being killed by SIGPIPE:
-> > >
-> > > $ strace seq 1000 | head -n1
-> > > ...
-> > > write(1, "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14"..., 8192) = 8192
-> > > 1
-> > > write(1, "\n1861\n1862\n1863\n1864\n1865\n1866\n1"..., 4096) = -1 EPIPE (Broken pipe)
-> > > --- SIGPIPE {si_signo=SIGPIPE, si_code=SI_USER, si_pid=3503448, si_uid=1000} ---
-> > > +++ killed by SIGPIPE +++
-> > >
-> > > If we use "sed -n 1p" seq will continue to run, consuming needless time
-> > > and CPU resources.
-> > >
-> > > So, I strongly think this is the wrong solution. SIGPIPE should be
-> > > ignored for ar, and LLVM should _not_ catch its own SIGPIPE.
-> > >
-> > > -Kees
+
+--GjOSs0npbigzXBmw
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Dec 05, 2022 at 12:50:53PM +0200, Jani Nikula wrote:
+> On Thu, 01 Dec 2022, <ye.xingchen@zte.com.cn> wrote:
+> > From: ye xingchen <ye.xingchen@zte.com.cn>
 > >
-> >
-> > I thought of this - it is just wasting CPU time,
-> > but I did not come up with a better idea on the kbuild side.
-> >
-> > I do not want to use 2>/dev/null because it may hide
-> > non-SIGPIPE (i.e. real) errors.
->
-> Yes, I've opened an upstream LLVM bug for this:
-> https://github.com/llvm/llvm-project/issues/59037
->
-> --
-> Kees Cook
+> > Replace the open-code with sysfs_emit() to simplify the code.
+>=20
+> I was going to push this, but noticed the function has a third
+> scnprintf(), and the last two play together with count. It would be
+> confusing to have a mix of sysfs_emit() and scnprintf(). The third one
+> can't be blindly converted to sysfs_emit() because it writes at an
+> offset not aligned by PAGE_SIZE.
+>=20
+> So I'm not taking this.
+>=20
 
+Hi Jani,
 
+Fortunately you'd NAKed this patch from ZTE people, which are known for
+ignoring your (and others) patch review. Remember that they were used to
+send from cgel.zte gmail account [1], which after the address was banned
+=66rom LKML, they tried to send from their own corporate account but Greg
+suspected that emails sent from them are spoofed [2].
 
-BTW, Python does something similar by default.
-(noisy back-trace for SIGPIPE)
+Thanks.
 
+[1]: https://lore.kernel.org/lkml/878rn1dd8l.fsf@intel.com/
+[2]: https://lore.kernel.org/lkml/Y3NqyDDGz%2FUKPgxM@kroah.com/
 
+--=20
+An old man doll... just what I always wanted! - Clara
 
+--GjOSs0npbigzXBmw
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-masahiro@zoe:/tmp$ cat test.py
-#!/usr/bin/python3
-for i in range(4000):
-    print(i)
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY47EcQAKCRD2uYlJVVFO
+oxNvAQDaz4sHLhHTfDnNNN7CRci/KWUK4z2C2t7Vn5cKoqxhmgEA+C9pOLMOG6ta
+PuwUxC+yGaNiCvAepAumTZ4XSesIDw0=
+=i0Fp
+-----END PGP SIGNATURE-----
 
-masahiro@zoe:/tmp$ ./test.py  |  head -n1
-0
-Traceback (most recent call last):
-  File "/tmp/./test.py", line 3, in <module>
-    print(i)
-BrokenPipeError: [Errno 32] Broken pipe
-
-
-
-
-
-
-This page
-https://www.geeksforgeeks.org/broken-pipe-error-in-python/
-
-suggests some workarounds.
-
-
-
-
-
-Python scripts potentially have this issue.
-
-
-
-
-
-
-$ ./scripts/diffconfig  .config.old  .config  | head -n1
--104_QUAD_8 m
-Traceback (most recent call last):
-  File "/home/masahiro/ref/linux/./scripts/diffconfig", line 132, in <module>
-    main()
-  File "/home/masahiro/ref/linux/./scripts/diffconfig", line 111, in main
-    print_config("-", config, a[config], None)
-  File "/home/masahiro/ref/linux/./scripts/diffconfig", line 62, in print_config
-    print("-%s %s" % (config, value))
-BrokenPipeError: [Errno 32] Broken pipe
-
-
-
-
-
-
-
-What would you suggest for python scripts?
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+--GjOSs0npbigzXBmw--
