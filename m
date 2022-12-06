@@ -2,72 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1879643CC3
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14389643CC6
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 06:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232135AbiLFFs0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 00:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36294 "EHLO
+        id S232604AbiLFFuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 00:50:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLFFsY (ORCPT
+        with ESMTP id S229471AbiLFFuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 00:48:24 -0500
-Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C12A13F64;
-        Mon,  5 Dec 2022 21:48:22 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NR8bR6Djjz4y3ZX;
-        Tue,  6 Dec 2022 13:48:19 +0800 (CST)
-Received: from szxlzmapp03.zte.com.cn ([10.5.231.207])
-        by mse-fl1.zte.com.cn with SMTP id 2B65mAjr099460;
-        Tue, 6 Dec 2022 13:48:10 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp02[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Tue, 6 Dec 2022 13:48:12 +0800 (CST)
-Date:   Tue, 6 Dec 2022 13:48:12 +0800 (CST)
-X-Zmail-TransId: 2b04638ed79c441a7331
-X-Mailer: Zmail v1.0
-Message-ID: <202212061348121276979@zte.com.cn>
-In-Reply-To: <CANn89iK4Cn-+BgJEuGSWF=PTfDPWuCy8ci75664+98ajt_+3Xw@mail.gmail.com>
-References: 202212050936120314474@zte.com.cn,20221205175354.3949c6bb@kernel.org,CANn89iK4Cn-+BgJEuGSWF=PTfDPWuCy8ci75664+98ajt_+3Xw@mail.gmail.com
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <edumazet@google.com>
-Cc:     <kuba@kernel.org>, <davem@davemloft.net>, <pabeni@redhat.com>,
-        <bigeasy@linutronix.de>, <imagedong@tencent.com>,
-        <kuniyu@amazon.com>, <petrm@nvidia.com>, <liu3101@purdue.edu>,
-        <wujianguo@chinatelecom.cn>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?UmU6IFtQQVRDSCBsaW51eC1uZXh0IHYyXSBuZXQ6IHJlY29yZCB0aW1lcyBvZiBuZXRkZXZfYnVkZ2V0IGV4aGF1c3RlZA==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B65mAjr099460
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638ED7A3.000 by FangMail milter!
-X-FangMail-Envelope: 1670305699/4NR8bR6Djjz4y3ZX/638ED7A3.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638ED7A3.000/4NR8bR6Djjz4y3ZX
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 6 Dec 2022 00:50:11 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A3025C43
+        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 21:50:10 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id gh17so3625476ejb.6
+        for <linux-kernel@vger.kernel.org>; Mon, 05 Dec 2022 21:50:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c6IAX5g6ledgAGKMBe/QiPZH1nxVzHQk9dCLqZzUwt0=;
+        b=PhSiFZVKOV80QGWnFhG4fhkEk4eKKXZ7LDW1qO7BVRMCpBAo3CUlllTeAr+MmTGicX
+         4HQjpCRJjRNTNL3aVGFIUjAY/PpSqxk/u4MJcEt/UM5eBjjVz1BBsDbAr2EMOpbkC/On
+         RczpIwbU6WsLJZFHDaiw7EpIfBhz/IPIry3hsVkdS5fi/TRjuf3Jsk6tBlG3phZ3540y
+         NZz2kIUBpk0VdPzoNyOnYb0GEfvBxktphGqEVpqXY2Glrfn6tuydvP6jF0BQba1LWmZu
+         RHiHrLMXk50dqwFEK4LQSr8bpd/2BcIblKvq2W6NpzvOVqQoiJPKz7HkrLUhMWoK7hpu
+         4eVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c6IAX5g6ledgAGKMBe/QiPZH1nxVzHQk9dCLqZzUwt0=;
+        b=4WfyIASqsOVKfCho3ChSmx/vX3CuvhlutxJRpXFJG/CiY1CBbt0HxUQld21rIvPfB7
+         jyrbcMg3Gr3bJZCFuMNaZSSRTsAD/U2MDRSqay7PUIaoZx+9wtdDMjp8/NO7rAFw4vTk
+         KNrGk7IG/KfCnzb5ZSXB1nuxqFOeTOTd2jQCUgVV472OwphS7e8GBoAQpgcQ8rV5k/3U
+         uNHm4owv5hU7ffRDC3bhT+6pae/OlmbvDv/U12mgaxhSbCUrzm9Tu0/BAs4KUOPMP0UE
+         ADl6vVJzW7PmPBHQjTu5SWRDWIsN4H8XFx5RzCyFUfuQPaJ4/MNLpUeGLp3/jRshLc6Z
+         M3nQ==
+X-Gm-Message-State: ANoB5plFiqXmLTjhtzAa4Zu/0pcAgDrcY1KPp8jrjzdbb1tYRLvsKEIJ
+        9l1G896rt0lLPqWGyBzhjWgbqw==
+X-Google-Smtp-Source: AA0mqf42zHplnnTX3EhWv3vS1EQcNMrEq3dkE0SS95uGttl1Xz5Njr7HJyTo75V4/pgIPyTnxhnnXg==
+X-Received: by 2002:a17:906:6bd4:b0:7c0:e23e:bbd6 with SMTP id t20-20020a1709066bd400b007c0e23ebbd6mr8906329ejs.551.1670305809017;
+        Mon, 05 Dec 2022 21:50:09 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id og40-20020a1709071de800b007c0d6b34d54sm3609973ejc.129.2022.12.05.21.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 21:50:08 -0800 (PST)
+Date:   Tue, 6 Dec 2022 06:50:07 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 01/13] riscv: fix jal offsets in patched alternatives
+Message-ID: <20221206055007.cvc4zfworla3fwwr@kamzik>
+References: <20221204174632.3677-1-jszhang@kernel.org>
+ <20221204174632.3677-2-jszhang@kernel.org>
+ <20221205145710.xzb4prrc44gv7mwm@kamzik>
+ <Y44fY5tCC1hHDfcw@xhacker>
+ <Y44hL3l8Uqg+JgWI@xhacker>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y44hL3l8Uqg+JgWI@xhacker>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 11:18 AM Eric Dumazet <edumazet@google.com,> wrote:
-> Yes, and if we really want to track all these kinds of events the
-> break caused by need_resched() in do_softirq would
-> also need some monitoring.
+On Tue, Dec 06, 2022 at 12:49:51AM +0800, Jisheng Zhang wrote:
+> On Tue, Dec 06, 2022 at 12:42:16AM +0800, Jisheng Zhang wrote:
+> > On Mon, Dec 05, 2022 at 03:57:10PM +0100, Andrew Jones wrote:
+> > > On Mon, Dec 05, 2022 at 01:46:20AM +0800, Jisheng Zhang wrote:
+> > > > Alternatives live in a different section, so offsets used by jal
+> > > > instruction will point to wrong locations after the patch got applied.
+> > > > 
+> > > > Similar to arm64, adjust the location to consider that offset.
+> > > > 
+> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > > ---
+> > > >  arch/riscv/include/asm/alternative.h |  2 ++
+> > > >  arch/riscv/kernel/alternative.c      | 38 ++++++++++++++++++++++++++++
+> > > >  arch/riscv/kernel/cpufeature.c       |  3 +++
+> > > >  3 files changed, 43 insertions(+)
+> > > > 
+> > > > diff --git a/arch/riscv/include/asm/alternative.h b/arch/riscv/include/asm/alternative.h
+> > > > index c58ec3cc4bc3..33eae9541684 100644
+> > > > --- a/arch/riscv/include/asm/alternative.h
+> > > > +++ b/arch/riscv/include/asm/alternative.h
+> > > > @@ -29,6 +29,8 @@ void apply_module_alternatives(void *start, size_t length);
+> > > >  
+> > > >  void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
+> > > >  				      int patch_offset);
+> > > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
+> > > > +			       int patch_offset);
+> > > >  
+> > > >  struct alt_entry {
+> > > >  	void *old_ptr;		 /* address of original instruciton or data  */
+> > > > diff --git a/arch/riscv/kernel/alternative.c b/arch/riscv/kernel/alternative.c
+> > > > index 292cc42dc3be..9d88375624b5 100644
+> > > > --- a/arch/riscv/kernel/alternative.c
+> > > > +++ b/arch/riscv/kernel/alternative.c
+> > > > @@ -125,6 +125,44 @@ void riscv_alternative_fix_auipc_jalr(void *alt_ptr, unsigned int len,
+> > > >  	}
+> > > >  }
+> > > >  
+> > > > +#define to_jal_imm(value)						\
+> > > > +	(((value & (RV_J_IMM_10_1_MASK << RV_J_IMM_10_1_OFF)) << RV_I_IMM_11_0_OPOFF) | \
+> > >                                                                  ^ RV_J_IMM_10_1_OPOFF
+> > > 
+> > > > +	 ((value & (RV_J_IMM_11_MASK << RV_J_IMM_11_OFF)) << RV_J_IMM_11_OPOFF) | \
+> > > > +	 ((value & (RV_J_IMM_19_12_OPOFF << RV_J_IMM_19_12_OFF)) << RV_J_IMM_19_12_OPOFF) | \
+> > > > +	 ((value & (1 << RV_J_IMM_SIGN_OFF)) << RV_J_IMM_SIGN_OPOFF))
+> > 
+> > Hi all,
+> > 
+> > I believe there's bug in the to_jal_imm() macro implementation, the
+> > correct one should be like this:
+> > 
+> > #define to_jal_imm(value)                                               \
+> >         ((RV_X(value, RV_J_IMM_10_1_OFF, RV_J_IMM_10_1_MASK) << RV_J_IMM_10_1_OPOFF) | \
+> >         (RV_X(value, RV_J_IMM_11_OFF, RV_J_IMM_11_MASK) << RV_J_IMM_11_OPOFF) | \
+> >         (RV_X(value, RV_J_IMM_19_12_OFF, RV_J_IMM_19_12_MASK) << RV_J_IMM_19_12_OPOFF) | \
+> >         (RV_X(value, RV_J_IMM_SIGN_OFF, 1) << RV_J_IMM_SIGN_OPOFF))
+> 
+> And I just tested to_jal_imm() vs RV_EXTRACT_JTYPE_IMM(), they match perfectly.
+> E.g:
+> RV_EXTRACT_JTYPE_IMM(to_jal_imm(imm)) == imm is alway true when imm is a jal
+> valid offset.
 
-I think this situation is a bit different. The break caused by
-need_resched() in __do_softirq() is some kind of internal
-events, kernel hacker may track it by something like tracepoint.
+I think we should define deposit() functions for each type, as well as the
+extract() functions, (and I'd prefer we use static inlines to macros to
+get some type checking). See [1] for my proposal.
 
-But netdev_budget* are sysctl for administrator, when
-administrator adjust them, they may want to see the
-effect in a direct or easy way.
+[1] https://lore.kernel.org/all/20221205145323.l2dro6dt7muumqpn@kamzik/
+
+Thanks,
+drew
+
+> 
+> > 
+> > Will fix it in next version.
+> > 
+> > Thanks
+> > > 
+> > > Should put () around value
+> > > 
+> > > > +
+> > > > +void riscv_alternative_fix_jal(void *alt_ptr, unsigned int len,
+> > > > +			       int patch_offset)
+> > > > +{
+> > > > +	int num_instr = len / sizeof(u32);
+> > > > +	unsigned int call;
+> > > > +	int i;
+> > > > +	int imm;
+> > > > +
+> > > > +	for (i = 0; i < num_instr; i++) {
+> > > > +		u32 inst = riscv_instruction_at(alt_ptr, i);
+> > > > +
+> > > > +		if (!riscv_insn_is_jal(inst))
+> > > > +			continue;
+> > > > +
+> > > > +		/* get and adjust new target address */
+> > > > +		imm = RV_EXTRACT_JTYPE_IMM(inst);
+> > > > +		imm -= patch_offset;
+> > > > +
+> > > > +		/* pick the original jal */
+> > > > +		call = inst;
+> > > > +
+> > > > +		/* drop the old IMMs, all jal imm bits sit at 31:12 */
+> > > > +		call &= ~GENMASK(31, 12);
+> > > 
+> > > It'd be nice if this had a define.
+> > > 
+> > > > +
+> > > > +		/* add the adapted IMMs */
+> > > > +		call |= to_jal_imm(imm);
+> > > > +
+> > > > +		/* patch the call place again */
+> > > > +		patch_text_nosync(alt_ptr + i * sizeof(u32), &call, 4);
+> > > > +	}
+> > > > +}
+> > > > +
+> > > >  /*
+> > > >   * This is called very early in the boot process (directly after we run
+> > > >   * a feature detect on the boot CPU). No need to worry about other CPUs
+> > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > > > index ba62a4ff5ccd..c743f0adc794 100644
+> > > > --- a/arch/riscv/kernel/cpufeature.c
+> > > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > > @@ -324,6 +324,9 @@ void __init_or_module riscv_cpufeature_patch_func(struct alt_entry *begin,
+> > > >  			riscv_alternative_fix_auipc_jalr(alt->old_ptr,
+> > > >  							 alt->alt_len,
+> > > >  							 alt->old_ptr - alt->alt_ptr);
+> > > > +			riscv_alternative_fix_jal(alt->old_ptr,
+> > > > +						  alt->alt_len,
+> > > > +						  alt->old_ptr - alt->alt_ptr);
+> > > >  		}
+> > > >  	}
+> > > >  }
+> > > > -- 
+> > > > 2.37.2
+> > > >
+> > > 
+> > > Thanks,
+> > > drew
