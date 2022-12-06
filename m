@@ -2,51 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2981E644316
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A746164431E
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbiLFMZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:25:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S231888AbiLFM2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:28:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiLFMZS (ORCPT
+        with ESMTP id S229457AbiLFM2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:25:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EEE813F64;
-        Tue,  6 Dec 2022 04:25:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11575B819EB;
-        Tue,  6 Dec 2022 12:25:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76BE0C433D6;
-        Tue,  6 Dec 2022 12:25:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670329511;
-        bh=Zhel367AShSXh2mO9nrfDUKNLZGOArG9Z2AeqVaLZnk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IcPpQFSRjbwvEp6A+iUmGWPoV1QzMAAlZRyW0S3H2tawPpVrXOkFV3rfuPXNMPn8E
-         Y14ZtHUn6mi+aAFqsBiJVZucTODmieiacAwty0OrEPOobJzxvUF2KdrxSqHMDiJi/r
-         TFqkQWPf0lyh5hA5GpnVKrY52hvRQae4D4rm/wqI=
-Date:   Tue, 6 Dec 2022 13:25:09 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Dicheng Wang <wangdicheng123@hotmail.com>
-Cc:     perex@perex.cz, tiwai@suse.com, sdoregor@sdore.me,
-        connerknoxpublic@gmail.com, wangdicheng@kylinos.cn,
-        hahnjo@hahnjo.de, john-linux@pelago.org.uk,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2 -next] ALSA:usb-audio:Add the information of KT0206
- device driven by USB audio
-Message-ID: <Y480pd/XynYddrHk@kroah.com>
-References: <SG2PR02MB58780ED138433086A3213AE98A1B9@SG2PR02MB5878.apcprd02.prod.outlook.com>
+        Tue, 6 Dec 2022 07:28:01 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE0EBCAF
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 04:27:59 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id b21so13745858plc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 04:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aF6V0yGGidp6q8ssR7JdUYdu4/B6DpE3k0WEFhRk5Vw=;
+        b=Vs3pZqSm4aeuLOv+nInbIXkj1GeMqkF4ZHr9AiANTVbsxKxMzxZGnUfqrsYdykK1IK
+         h+5iVIl0pMZWjhSUNlzeVoyuw2rWQlmmOpxNdCjjMWR1KOk1ehxWZIgaJcLjBpzJ6nn7
+         B/IZCyPLy0aGLQcbbQy02mFs/br5HnztUM3og=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aF6V0yGGidp6q8ssR7JdUYdu4/B6DpE3k0WEFhRk5Vw=;
+        b=i7D4FJjSgXMgkn3Vpwzuf+6eNzTyV2jNx2tBA2xOPbnOKzlPhheRcg7fNVu0qw2dkJ
+         uEz7k7yrZB22Tsj7LhDHSuQuShFB8pJTIRPigr9pyuaw2gyikZoYMXobntDJ3GVtPZ4H
+         /KGZqtAYr4YiJ2jYSlGPGRBPYdngKe0Qz9XjA9fFyadjGy40nLg5s/jKsKf7vg7JuofB
+         sAU82hFjkaFMGG35or0952NUGX+ajfho81zrWAPwwqzXyp7wnBgoKYpSl2be8WzfXyKg
+         cZdL9HYnRHvlAGJ6pKPUpYso9JNjLdx4R5l94V9o0jtR8NMMugmUHRaD0Ksngym6xq16
+         dkSA==
+X-Gm-Message-State: ANoB5pm4l0YZ6dxiQE7RvNJwDZCqi/jNd6KIpspTNOE5h+/39RZIdK4Y
+        V2a4oyU+2TPZQkInXIiSKBz9Lw==
+X-Google-Smtp-Source: AA0mqf6v6kGYQYhfDmUwl0mIDXxX6gmJ28YDaQVO56HSzFqym6MimztwgkhnqbioxoTBmYZcrmy2/A==
+X-Received: by 2002:a17:90a:9c18:b0:212:fa9a:12df with SMTP id h24-20020a17090a9c1800b00212fa9a12dfmr100930150pjp.231.1670329679069;
+        Tue, 06 Dec 2022 04:27:59 -0800 (PST)
+Received: from 1ea210ad73b0 ([220.253.112.46])
+        by smtp.gmail.com with ESMTPSA id cp12-20020a170902e78c00b0017854cee6ebsm3202220plb.72.2022.12.06.04.27.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 04:27:58 -0800 (PST)
+Date:   Tue, 6 Dec 2022 12:27:50 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 00/92] 5.10.158-rc1 review
+Message-ID: <20221206122750.GA932196@1ea210ad73b0>
+References: <20221205190803.464934752@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <SG2PR02MB58780ED138433086A3213AE98A1B9@SG2PR02MB5878.apcprd02.prod.outlook.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221205190803.464934752@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,76 +71,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:36:37PM +0800, Dicheng Wang wrote:
-> From: wangdicheng <wangdicheng@kylinos.cn>
+On Mon, Dec 05, 2022 at 08:09:13PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.158 release.
+> There are 92 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: wangdicheng <wangdicheng@kylinos.cn>
-> ---
-> v2:use USB_DEVICE_VENDOR_SPEC() suggested by Takashi Iwai
-> 
->  sound/usb/quirks-table.h | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/sound/usb/quirks-table.h b/sound/usb/quirks-table.h
-> index 874fcf245747..271884e35003 100644
-> --- a/sound/usb/quirks-table.h
-> +++ b/sound/usb/quirks-table.h
-> @@ -76,6 +76,8 @@
->  { USB_DEVICE_VENDOR_SPEC(0x041e, 0x3f0a) },
->  /* E-Mu 0204 USB */
->  { USB_DEVICE_VENDOR_SPEC(0x041e, 0x3f19) },
-> +/* Ktmicro Usb_audio device */
-> +{ USB_DEVICE_VENDOR_SPEC(0x31b2, 0x0011) },
->  
->  /*
->   * Creative Technology, Ltd Live! Cam Sync HD [VF0770]
-> -- 
-> 2.25.1
-> 
+> Responses should be made by Wed, 07 Dec 2022 19:07:46 +0000.
+> Anything received after that time might be too late.
 
-Hi,
+Hi Greg,
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+5.10.158-rc1 tested.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+Run tested on:
+- Intel Skylake x86_64 (nuc6 i5-6260U)
 
-- Your patch contains warnings and/or errors noticed by the
-  scripts/checkpatch.pl tool.
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
 
-- Your patch is malformed (tabs converted to spaces, linewrapped, etc.)
-  and can not be applied.  Please read the file,
-  Documentation/email-clients.txt in order to fix this.
-
-- You did not specify a description of why the patch is needed, or
-  possibly, any description at all, in the email body.  Please read the
-  section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what is needed in order to
-  properly describe the change.
-
-- You did not write a descriptive Subject: for the patch, allowing Greg,
-  and everyone else, to know what this patch is all about.  Please read
-  the section entitled "The canonical patch format" in the kernel file,
-  Documentation/SubmittingPatches for what a proper Subject: line should
-  look like.
-
-- It looks like you did not use your "real" name for the patch on either
-  the Signed-off-by: line, or the From: line (both of which have to
-  match).  Please read the kernel file, Documentation/SubmittingPatches
-  for how to do this correctly.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi
