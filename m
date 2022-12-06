@@ -2,54 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B614A64443C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51CDB644443
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232572AbiLFNMm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:12:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S231409AbiLFNNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:13:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbiLFNMU (ORCPT
+        with ESMTP id S229867AbiLFNNU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:12:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6942C0;
-        Tue,  6 Dec 2022 05:11:55 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EE348B81974;
-        Tue,  6 Dec 2022 13:11:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76B1C433C1;
-        Tue,  6 Dec 2022 13:11:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670332312;
-        bh=VVHMOEJUAAOA/RtsQv7QMpPJdj1/u6S3jZMKl5TJ8GI=;
-        h=Subject:From:To:Cc:Date:From;
-        b=F5UWSOaEDoHnHXcU43B6TM2774yeZtYXZDnrTEFERzcizLauw+q4z7w0sFjdCwgEM
-         huAj5OJJFPWgQSasfmi4uSSS0OEX+Y/vxsmi7RfTQRerMNS7IXQxgC9+IHe2N0OqIZ
-         bykRXwyVOVqRyoc2ZEZQLSZORUpf+x/W73Tp2mH5y4C+h+qTI4v1cI/UEl5NH7CyA3
-         KziTvZKgDn8+FDKW1SwLaWiaZj2iBzMLqBurHa2fwOVe++oPEQ7ja2MDh/VmYHn9OY
-         l/sKhKiPELag18Tz4hheNehfCMFkjfrdaMTT5UjiZ1sVXJx2riaWScvR+0WdK7fEH+
-         a3gv6qN6lIAkQ==
-Message-ID: <d3ba2c7f26958242c0a31b8f966e7c3d251a9e0f.camel@kernel.org>
-Subject: [GIT PULL] file locking changes for v6.2-rc1
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-cifs <linux-cifs@vger.kernel.org>,
-        ceph-devel <ceph-devel@vger.kernel.org>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>
-Date:   Tue, 06 Dec 2022 08:11:43 -0500
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-U/x8SEMmkxi22ZtjFzj9"
-User-Agent: Evolution 3.46.1 (3.46.1-1.fc37) 
+        Tue, 6 Dec 2022 08:13:20 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0858CD120
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:13:18 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id x22so6021525ejs.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 05:13:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X49GRzjJhXbqmB1hs+2urUm1MVIZuKqOwRmIImQS47k=;
+        b=Sk/EAHvgaPaKPaq3f6GgtvesKQKbknHQ3rMC7kNAwoEjUwh9ltn4YgQoNdIcImudfv
+         7KZviIrWk1cMvdgoFQd27ULKwdIz/qjN1kxelQau+3w5UhD15z+GRnlp4DN6de/otAVy
+         72kwMYIoz44WAvGtMKps6RPjAXj4aO0M1SIeDJo5WzzbS2cZjF+kor1bJKNVY3OswxPK
+         Lp3PVQD7L3vuSr1T7jHvGVpgyn9kRBF+r6zT/SWIQ89i3NgrIWAeZIvutfRtPOepumh4
+         aLgt1pvoByLcrR+Dx29wq4iGEcL3ezfnZ81mq3apF/glTquaPidz/p/iLz9b3GBDzL3I
+         83dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X49GRzjJhXbqmB1hs+2urUm1MVIZuKqOwRmIImQS47k=;
+        b=kb2ZX56cMRpHofJRJ1aYjVYJ5mcd9G7xlM+8Rgva8GrslM10AMfwypYWrHozptWKYI
+         s/KIflB840f7bDhEWhj+mCNFdvqLCqSdb/hH2ZsbxDXp3+kCuZ9CywKvmCiuu+HtAdOJ
+         2KBSCY5sLUqxthXi5uq05gsEKTQA6Bj0owHFqh1k0tPz0F9e1pvb/xlFGRQe5Onkch+D
+         eMdcyCHyPMrfe9e+BEVvmIFp8BIhhRSr7Ul0qh/X3VyMdIodCLy4F8c4NWmUFgsH2RTk
+         jKvYjijjXwpy7U5JYuzdgfX3CIiTWBeipabjYPNGuzCCU90zXIM9P/ZNJ+00LvvD+vKL
+         N88Q==
+X-Gm-Message-State: ANoB5pks7Yg5LPAH60eNhSPcw9Zk+lt0Gl2Ct+08PzUhCV4hrabC2iUh
+        2UBAHu/sXEAX2z+YM4xEJo9asw==
+X-Google-Smtp-Source: AA0mqf5QQNbBlCkDVK/0B0Qx1XoVgtbccZYuRljgxZ7gAilOWo539hXArD5fRqnt8aEsVk2V3q6fOw==
+X-Received: by 2002:a17:906:4a0c:b0:7c0:e306:fe72 with SMTP id w12-20020a1709064a0c00b007c0e306fe72mr9877028eju.243.1670332396533;
+        Tue, 06 Dec 2022 05:13:16 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u2-20020a1709061da200b007b8a8fc6674sm7345775ejh.12.2022.12.06.05.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 05:13:15 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v6 00/10] arm64: dts: Add base device tree files for SM8550
+Date:   Tue,  6 Dec 2022 15:12:42 +0200
+Message-Id: <20221206131252.977369-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,96 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series adds the base device tree files and MTP board support
+for the Qualcomm SM8550 SoC, including the clock, pinctrl, smmu,
+regulators, interconnect, cpufreq, and qup nodes.
 
---=-U/x8SEMmkxi22ZtjFzj9
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
+The SM8550 is the latest Qualcomm Mobile Platform.
+See more at:
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/Snapdragon-8-Gen-2-Product-Brief.pdf
 
-The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa=
-:
+The v5 of this patchset is here:
+https://lore.kernel.org/all/20221205230342.494923-1-abel.vesa@linaro.org/
 
-  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
+Here is a branch where the entire support has been merged:
+https://git.codelinaro.org/linaro/qcomlt/linux/-/commits/topic/sm8550/next
 
-are available in the Git repository at:
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git tags/lock=
-s-v6.2
+Abel Vesa (3):
+  dt-bindings: arm: qcom: Document SM8550 SoC and boards
+  arm64: dts: qcom: Add base SM8550 dtsi
+  arm64: dts: qcom: Add base SM8550 MTP dts
 
-for you to fetch changes up to f2f2494c8aa3cc317572c4674ef256005ebc092b:
+Neil Armstrong (7):
+  arm64: dts: qcom: Add pm8010 pmic dtsi
+  arm64: dts: qcom: Add PM8550 pmic dtsi
+  arm64: dts: qcom: Add PM8550b pmic dtsi
+  arm64: dts: qcom: Add PM8550ve pmic dtsi
+  arm64: dts: qcom: Add PM8550vs pmic dtsi
+  arm64: dts: qcom: Add PMK8550 pmic dtsi
+  arm64: dts: qcom: Add PMR735d pmic dtsi
 
-  Add process name and pid to locks warning (2022-11-30 05:08:10 -0500)
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ arch/arm64/boot/dts/qcom/pm8010.dtsi          |   84 +
+ arch/arm64/boot/dts/qcom/pm8550.dtsi          |   59 +
+ arch/arm64/boot/dts/qcom/pm8550b.dtsi         |   59 +
+ arch/arm64/boot/dts/qcom/pm8550ve.dtsi        |   59 +
+ arch/arm64/boot/dts/qcom/pm8550vs.dtsi        |  194 +
+ arch/arm64/boot/dts/qcom/pmk8550.dtsi         |   55 +
+ arch/arm64/boot/dts/qcom/pmr735d.dtsi         |  104 +
+ arch/arm64/boot/dts/qcom/sm8550-mtp.dts       |  404 ++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          | 3534 +++++++++++++++++
+ 11 files changed, 4559 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8010.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8550.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8550b.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8550ve.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pm8550vs.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmk8550.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/pmr735d.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sm8550.dtsi
 
-----------------------------------------------------------------
-The main change here is to add the new locks_inode_context helper, and
-convert all of the places that dereference inode->i_flctx directly to
-use that instead.
+-- 
+2.34.1
 
-There a new helper to indicate whether any locks are held on an inode.
-This is mostly for Ceph but may be usable elsewhere too.
-
-Andi Kleen requested that we print the PID when the LOCK_MAND warning
-fires, to help track down applications trying to use it.
-
-Finally, we added some new warnings to some of the file locking
-functions that fire when the ->fl_file and filp arguments differ. This
-helped us find some long-standing bugs in lockd. Patches for those are
-in Chuck Lever's tree and should be in his v6.2 PR. After that patch,
-people using NFSv2/v3 locking may see some warnings fire until those go
-in.
-
-Happy Holidays!
-----------------------------------------------------------------
-Andi Kleen (1):
-      Add process name and pid to locks warning
-
-Jeff Layton (9):
-      filelock: WARN_ON_ONCE when ->fl_file and filp don't match
-      filelock: new helper: vfs_inode_has_locks
-      filelock: add a new locks_inode_context accessor function
-      ceph: use locks_inode_context helper
-      cifs: use locks_inode_context helper
-      ksmbd: use locks_inode_context helper
-      lockd: use locks_inode_context helper
-      nfs: use locks_inode_context helper
-      nfsd: use locks_inode_context helper
-
- fs/ceph/locks.c     |  4 ++--
- fs/cifs/file.c      |  2 +-
- fs/ksmbd/vfs.c      |  2 +-
- fs/lockd/svcsubs.c  |  4 ++--
- fs/locks.c          | 50 ++++++++++++++++++++++++++++++++++++++-----------=
--
- fs/nfs/delegation.c |  2 +-
- fs/nfs/nfs4state.c  |  2 +-
- fs/nfs/pagelist.c   |  2 +-
- fs/nfs/write.c      |  4 ++--
- fs/nfsd/nfs4state.c |  6 +++---
- include/linux/fs.h  | 20 ++++++++++++++++++++
- 11 files changed, 72 insertions(+), 26 deletions(-)
-
---=20
-Jeff Layton <jlayton@kernel.org>
-
---=-U/x8SEMmkxi22ZtjFzj9
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQJHBAABCAAxFiEES8DXskRxsqGE6vXTAA5oQRlWghUFAmOPP48THGpsYXl0b25A
-a2VybmVsLm9yZwAKCRAADmhBGVaCFfJND/4p6X6SWmAXSzBgZ7EOT/dnC66PllS1
-KO50o2DfeiIapxkvqzOo49YyGovbFMcdQqWNXcBJ3TdSZ2v18FRcrnp47UU/MnPU
-pz3bgdqDteDwsEEQPPSSpgFZr4CpokiwoFiHARKz0DdbJFRefN7CcL99whaNDioR
-VS6w0bysdNxesED9asHOl8MzzmKvbiOQV7/SHLOjIrxm+FwrSFkkC4ReO3UMZp72
-HxK80v4IF1Aarw2rd/+8jUsEiwWHRpWkYS1mxT6pIUqJrwFkBue6kkoUlmd5GaUl
-fqsQE8EQcuQHACHPd07MiH/VLgnNyOpY9KbHZoLf1JFDEWuXapVrIlg9iNuR/oT4
-wLJbC5U5HaOJlG5mcnOsg6KFc3+6Gf9BGuD8SPKhlGroHTPlb78+Xh8jPAdeOwn+
-nsEO9njtMdt7uR1AAJIyv8SvrC/ZuPc0kR3rQ3CVkG4yIBrnjsgul5MkBVjsImwF
-jYT7oQwDokTFGryROOt9nzW6O2bmcwin1NfUCA80iVaIm0JXW8IXii5/RT5vxmei
-4bNqNkQLrHU48OBtW3yz5YG/g9lZme71f+M8QUzRfSkGk1lTcDDMtjIZAK6OphpJ
-baITwvncNSkq7zmf03SpaN+l1GYK9A20BVdA1gu59qmanF/Fy532qbrotFEpLbJY
-yNqzj5LP4OrxJQ==
-=1wv0
------END PGP SIGNATURE-----
-
---=-U/x8SEMmkxi22ZtjFzj9--
