@@ -2,119 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58422644A0E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:14:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80C20644A18
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:15:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235702AbiLFROH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:14:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S235761AbiLFRPT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:15:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235706AbiLFRN6 (ORCPT
+        with ESMTP id S235718AbiLFRPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:13:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7847E326E6;
-        Tue,  6 Dec 2022 09:13:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2F317B81A2B;
-        Tue,  6 Dec 2022 17:13:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B123AC433D6;
-        Tue,  6 Dec 2022 17:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670346832;
-        bh=KsB0Ju8MsizvtzHecpR38rDWHUZH8j/0c7qfrFnwZVc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tOxKn2AwWxZIph/bjCBs7X3ZlXrqgMsdcfKnxqLvyHNUfpDP4ziGSd02CQpVrZmPU
-         8mkEdJARpnjwVBevk+c2enHwx3varcA/Dk02E7jVT2XE9yITrZHOJgqB0jBfw/Xczq
-         /8KmxieJf8itNPbgZFrmzvKTRz9OYiJK1NaeVASxQJtSHsWra4jxRbIh+8xBYWDGBQ
-         VDqZtsURlkT5WfTCcW8LWxAUOWEWSGFOLS/d7vHrBSXKw0KP9jI2Mritb3Pm7frzw+
-         k2CThCFE3Q4wfrlIs91in1h9jx4/U6bKa5IJFxy5/l861sAl1VJVwjXdANcKv54QRo
-         jsSujauE7I46Q==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7553A40404; Tue,  6 Dec 2022 14:13:48 -0300 (-03)
-Date:   Tue, 6 Dec 2022 14:13:48 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y494TNa0ZyPH9YSD@kernel.org>
-References: <20221205225940.3079667-1-irogers@google.com>
- <20221205225940.3079667-3-irogers@google.com>
- <Y49qiCIiyaehEOaG@kernel.org>
- <Y49rvLO2RnJBBNL/@kernel.org>
- <Y49skYa5VYPMU+RF@kernel.org>
- <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
+        Tue, 6 Dec 2022 12:15:03 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100D8326D5
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:15:02 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id bs21so24456480wrb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:15:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+s5rfVzoW3yLox4r2DEYN4/4gPffJ7R6undERdlOa7I=;
+        b=tXvl2rihDv/nI8066aMrNTEOGsB2L/nq22jKVqZs02WR3VxbFCh4tXsBIq/Xw1EXef
+         6enl0Azbx31SU5rhM5uivq8lw1Ye73A8nrVSdTKvPqCq3wBcYAs5xhRD8bhD7ai0PSJ/
+         WQq48VfWN/KyRDmql1axQ2jQJudHKwvdMGznx1vSH3UJ9DpxXpg0Qj8oYiKW11td3eWm
+         QCcG4jBcDvVabCY6718psd/imjAo5YKtKMZQfeJk+6ls47l2Y8sjtzosSrOvCny4OkBT
+         cxDWxNlxyniNxyQ8AQlteY2+goniDIbhb5S4429d/Z7ue5lpJk8Z0LRh26+X7dtM14tK
+         z0Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+s5rfVzoW3yLox4r2DEYN4/4gPffJ7R6undERdlOa7I=;
+        b=3gKpc3A0iujDU0jMjJn5XWSJWVRhlh31VKMVIa20iOexh6rT1xVKL6+oZEjHWgauYc
+         IjdQQcb9dJ+K3hxZYjUFbp6uxVD0UqrsorE3G2aSY5BhQ6Md4xq1adsWwNBJ6bf3Z6ZG
+         ZVVNt+qjzJ+DhrMjw20DYfWdhGow9zL4qKY/AJNNMR3q++We5usA4oZJZj7A+bIXyug7
+         W559BZ7IS4xD227SX7evWNTeptA7Ov1LESIgkfMstDzeoKfblldSQW1rIsq4bA5AX2Uw
+         CR0+ywdHDSuZELq5LRYTx2BrMSOKvY/sEso7nFm82gux2GFJlURS8xd9D2lLcecV1fqS
+         OsMg==
+X-Gm-Message-State: ANoB5pnL7Nip+PMbVd0X18RHk5bEfB2uIs6S93EHN8tpWYsSZnERvPD8
+        oKlIETrYNwvhVN3wtG9/0PihHA==
+X-Google-Smtp-Source: AA0mqf5hQpXGaAgJ7nbFJ+jMeijdZS2MNJwgkTHTlnmXa2OnFJssM3CjbFkoRS/WWZoK6Ina6QmVcw==
+X-Received: by 2002:adf:dbcd:0:b0:242:1294:5174 with SMTP id e13-20020adfdbcd000000b0024212945174mr26798428wrj.249.1670346900469;
+        Tue, 06 Dec 2022 09:15:00 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id r20-20020a05600c35d400b003c6d21a19a0sm14936614wmq.29.2022.12.06.09.14.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 09:15:00 -0800 (PST)
+Message-ID: <52d2e0c2-a04a-1ae8-cab5-b89a79150fe6@linaro.org>
+Date:   Tue, 6 Dec 2022 18:14:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4921D+36UGdhK92@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] dt-bindings: thermal: thermal-idle: Fix example paths
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221111162729.3381835-1-robh@kernel.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221111162729.3381835-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Dec 06, 2022 at 02:07:32PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Dec 06, 2022 at 02:01:43PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Tue, Dec 06, 2022 at 01:41:41PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > >  Now to look at the BUILD_BPF_SKEL=1 kaboom:
-> > > 
-> > >  [acme@quaco perf]$ alias m
-> > > alias m='rm -rf ~/libexec/perf-core/ ; make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 O=/tmp/build/perf -C tools/perf install-bin && perf test python'
-> > > [acme@quaco perf]$ m
-> > > make: Entering directory '/home/acme/git/perf/tools/perf'
-> > >   BUILD:   Doing 'make -j8' parallel build
-> > >   <SNIP>
-> > > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `add_work':
-> > > /home/acme/git/perf/tools/perf/util/bpf_kwork.c:285: undefined reference to `perf_kwork_add_work'
-> > > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `lock_contention_read':
+On 11/11/2022 17:27, Rob Herring wrote:
+> The reference by path (&{/cpus/cpu@101/thermal-idle}) in the example causes
+> an error with new version of dtc:
 > 
-> For that bpf_kwork.c see below. Now to see why the python binding is not
-> building, I guess is unrelated and you have some other outstanding
-> patch?
+> FATAL ERROR: Can't generate fixup for reference to path &{/cpus/cpu@100/thermal-idle}
+> 
+> This is because the examples are built as an overlay and absolute paths
+> are not valid as references must be by label. The path was also not
+> resolvable because, by default, examples are placed under 'example-N'
+> nodes.
+> 
+> As the example contains top-level nodes, the root node must be explicit for
+> the example to be extracted as-is. This changes the indentation for the
+> whole example, but the existing indentation is a mess of of random amounts.
+> Clean this up to be 4 spaces everywhere.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> The dtc update is in my tree, so I'd prefer to take this via the DT
+> tree.
+> 
+>   .../bindings/thermal/thermal-idle.yaml        | 154 +++++++++---------
+>   1 file changed, 80 insertions(+), 74 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/thermal-idle.yaml b/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+> index cc938d7ad1f3..72d85eb64247 100644
+> --- a/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+> @@ -48,99 +48,105 @@ additionalProperties: false
+>   
+>   examples:
+>     - |
+> -    #include <dt-bindings/thermal/thermal.h>
+> +    /{
+> +        #include <dt-bindings/thermal/thermal.h>
+>   
+> -    // Example: Combining idle cooling device on big CPUs with cpufreq cooling device
+> -    cpus {
+> +        compatible = "foo";
+> +        model = "foo";
+> +        #address-cells = <1>;
+> +        #size-cells = <1>;
+> +
+> +        // Example: Combining idle cooling device on big CPUs with cpufreq cooling device
+> +        cpus {
+>               #address-cells = <2>;
+>               #size-cells = <0>;
+>   
+>               /* ... */
+>   
+> -                 cpu_b0: cpu@100 {
+> -                         device_type = "cpu";
+> -                         compatible = "arm,cortex-a72";
+> -                         reg = <0x0 0x100>;
+> -                         enable-method = "psci";
+> -                         capacity-dmips-mhz = <1024>;
+> -                         dynamic-power-coefficient = <436>;
+> -                         #cooling-cells = <2>; /* min followed by max */
+> -                         cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> -                         thermal-idle {
+> -                                 #cooling-cells = <2>;
+> -                                 duration-us = <10000>;
+> -                                 exit-latency-us = <500>;
+> -                         };
+> +            cpu_b0: cpu@100 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a72";
+> +                reg = <0x0 0x100>;
+> +                enable-method = "psci";
+> +                capacity-dmips-mhz = <1024>;
+> +                dynamic-power-coefficient = <436>;
+> +                #cooling-cells = <2>; /* min followed by max */
+> +                cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> +                thermal-idle {
+> +                    #cooling-cells = <2>;
+> +                    duration-us = <10000>;
+> +                    exit-latency-us = <500>;
+> +                };
+> +            };
+> +
+> +            cpu_b1: cpu@101 {
+> +                device_type = "cpu";
+> +                compatible = "arm,cortex-a72";
+> +                reg = <0x0 0x101>;
+> +                enable-method = "psci";
+> +                capacity-dmips-mhz = <1024>;
+> +                dynamic-power-coefficient = <436>;
+> +                #cooling-cells = <2>; /* min followed by max */
+> +                cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> +                thermal-idle {
+> +                    #cooling-cells = <2>;
+> +                    duration-us = <10000>;
+> +                    exit-latency-us = <500>;
+>                   };
+> +            };
+>   
+> -                cpu_b1: cpu@101 {
+> -                        device_type = "cpu";
+> -                        compatible = "arm,cortex-a72";
+> -                        reg = <0x0 0x101>;
+> -                        enable-method = "psci";
+> -                        capacity-dmips-mhz = <1024>;
+> -                        dynamic-power-coefficient = <436>;
+> -                        #cooling-cells = <2>; /* min followed by max */
+> -                        cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> -                        thermal-idle {
+> -                                #cooling-cells = <2>;
+> -                                duration-us = <10000>;
+> -                                exit-latency-us = <500>;
+> -                        };
+> -                 };
+> -
+> -          /* ... */
+> +            /* ... */
+>   
+> -    };
+> +        };
+>   
+> -    /* ... */
+> +        /* ... */
+>   
+> -    thermal_zones {
+> -         cpu_thermal: cpu {
+> +        thermal_zones {
+> +            cpu_thermal: cpu {
+>                   polling-delay-passive = <100>;
+>                   polling-delay = <1000>;
+>   
+>                   /* ... */
+>   
+>                   trips {
+> -                        cpu_alert0: cpu_alert0 {
+> -                                    temperature = <65000>;
+> -                                    hysteresis = <2000>;
+> -                                    type = "passive";
+> -                        };
+> -
+> -                        cpu_alert1: cpu_alert1 {
+> -                                    temperature = <70000>;
+> -                                    hysteresis = <2000>;
+> -                                    type = "passive";
+> -                        };
+> -
+> -                        cpu_alert2: cpu_alert2 {
+> -                                    temperature = <75000>;
+> -                                    hysteresis = <2000>;
+> -                                    type = "passive";
+> -                        };
+> -
+> -                        cpu_crit: cpu_crit {
+> -                                    temperature = <95000>;
+> -                                    hysteresis = <2000>;
+> -                                    type = "critical";
+> -                        };
+> +                    cpu_alert0: cpu_alert0 {
+> +                        temperature = <65000>;
+> +                        hysteresis = <2000>;
+> +                        type = "passive";
+> +                    };
+> +
+> +                    cpu_alert1: cpu_alert1 {
+> +                        temperature = <70000>;
+> +                        hysteresis = <2000>;
+> +                        type = "passive";
+> +                    };
+> +
+> +                    cpu_alert2: cpu_alert2 {
+> +                        temperature = <75000>;
+> +                        hysteresis = <2000>;
+> +                        type = "passive";
+> +                    };
+> +
+> +                    cpu_crit: cpu_crit {
+> +                        temperature = <95000>;
+> +                        hysteresis = <2000>;
+> +                        type = "critical";
+> +                    };
+>                   };
+>   
+>                   cooling-maps {
+> -                        map0 {
+> -                             trip = <&cpu_alert1>;
+> -                             cooling-device = <&{/cpus/cpu@100/thermal-idle} 0 15 >,
+> -                                              <&{/cpus/cpu@101/thermal-idle} 0 15>;
+> -                        };
+> -
+> -                        map1 {
+> -                             trip = <&cpu_alert2>;
+> -                             cooling-device =
+> -                                        <&cpu_b0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> -                                        <&cpu_b1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> -                       };
+> +                    map0 {
+> +                        trip = <&cpu_alert1>;
+> +                        cooling-device = <&cpu_b0 0 15 >,
+> +                                         <&cpu_b1 0 15>;
 
-Its related:
+This is pointing to the DVFS cooling device, not the idle cooling 
+device. Should it be <&cpu_b0_idle 0 15> and that label defined in 
+thermal_idle ?
 
-[acme@quaco perf]$ perf test -v python
-Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
- 14: 'import perf' in python                                         :
---- start ---
-test child forked, pid 1669872
-python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf/python'); import perf" | '/usr/bin/python3' "
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-ImportError: /tmp/build/perf/python/perf.cpython-310-x86_64-linux-gnu.so: undefined symbol: tep_unload_plugins
-test child finished with -1
----- end ----
-'import perf' in python: FAILED!
-[acme@quaco perf]$
+> +                    };
+> +
+> +                    map1 {
+> +                        trip = <&cpu_alert2>;
+> +                        cooling-device = <&cpu_b0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> +                                         <&cpu_b1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> +                    };
+>                   };
+> -          };
+> +            };
+> +        };
+>       };
 
-Now checking why NO_LIBTRACEEVENT=1 fails with this...
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-[acme@quaco perf]$ find tools/perf/ -name "*.c" | xargs grep tep_unload_plugins
-tools/perf/util/trace-event.c:	tep_unload_plugins(t->plugin_list, t->pevent);
-[acme@quaco perf]$
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
-[acme@quaco perf]$ grep trace-event tools/perf/util/python-ext-sources
-util/trace-event.c
-[acme@quaco perf]$
-
-Trying to fix...
