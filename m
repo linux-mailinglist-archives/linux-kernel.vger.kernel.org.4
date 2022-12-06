@@ -2,103 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2DDC64491C
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC0364491F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233927AbiLFQW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:22:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
+        id S233864AbiLFQXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiLFQWz (ORCPT
+        with ESMTP id S229780AbiLFQXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:22:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477EC2ED
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670343717;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sCUP81xXIy/70El6lCPLbAYE27sraoFkLSJy6O9sUWw=;
-        b=Qo//7Xwb1DTVE8DU8wSygrxu8g7bpbrM8kYE5wdRx2hKNQP6u9sInR4t7Y8SZCKCkZuDJk
-        O+uj26RSDpfEQTKvu2xSFiwSnzTTVJ16ysA7L3q4pMdd6+1pe53CcAD8dIWn1K37u5TqkH
-        xaeQ6K12AUp6uGibS8/9hIoJBYkeD8U=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-400-X4F6QNrcOaynmCuw-bBhRQ-1; Tue, 06 Dec 2022 11:21:56 -0500
-X-MC-Unique: X4F6QNrcOaynmCuw-bBhRQ-1
-Received: by mail-qt1-f200.google.com with SMTP id fg11-20020a05622a580b00b003a7eaa5cb47so2970696qtb.15
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 08:21:56 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sCUP81xXIy/70El6lCPLbAYE27sraoFkLSJy6O9sUWw=;
-        b=B0tlYi3qw+ofrcdhcnJ0noXGTXpT4fuPxsCXiEjsnRejQ8knUqR4JUfG+mKgUKjJvf
-         xv6fvcq6QHQj7C5RH14h4U4Br7rV85yrORR2dJ/hVqKyyx7ATHfbyq2IQpPRBEQ1xJxb
-         xG9j563tjiSDs0F+9bgFELfz/Ct70jPnyFUs2EaBev3w0dVogmoLoYwAoal2TrSVneVH
-         NO9Cy0c6inqCJdsZL4ndSoHujnntMEd7MPk2IuBV5EqHl7uAFeq1kwg/4MFeNp8FwUDj
-         uaDVWQj4J0VYprIoDKUFmyHmHjxz+Ef4Lw5Yt7CUSRJT5ZSXCjCeJW6Hq/RdezHyDvl0
-         zcAg==
-X-Gm-Message-State: ANoB5pnKT+QbIS7mJCyrYvvZlqPJJTJlX9slOpMBE87MWaU/9nTtQcAr
-        F781YHB7k55+j0nz9UoEc7iEfFnQvEpO/Pg7MH+CxXW8TyYZGwiz//9k4uWR2qHO+EvU5Xi0TWJ
-        5Yx0VdvKiCQEep0SMK6IIm1Md
-X-Received: by 2002:a05:620a:b9a:b0:6fa:432f:298a with SMTP id k26-20020a05620a0b9a00b006fa432f298amr63417875qkh.159.1670343715700;
-        Tue, 06 Dec 2022 08:21:55 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4EsM3BohWqkEZPkf2Bazdn88pyZKyN2ExwE9KgYwrNWoq74e43cW2/M3n+Ei57iDV3EOHs+Q==
-X-Received: by 2002:a05:620a:b9a:b0:6fa:432f:298a with SMTP id k26-20020a05620a0b9a00b006fa432f298amr63417854qkh.159.1670343715469;
-        Tue, 06 Dec 2022 08:21:55 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bj9-20020a05620a190900b006b95b0a714esm14931361qkb.17.2022.12.06.08.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 08:21:55 -0800 (PST)
-Date:   Tue, 6 Dec 2022 11:21:53 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH] mm/uffd: Always wr-protect pte in pte_mkuffd_wp()
-Message-ID: <Y49sIRZ1y6wq884J@x1n>
-References: <Y45duzmGGUT0+u8t@x1n>
- <202212060801.yenOQCHL-lkp@intel.com>
+        Tue, 6 Dec 2022 11:23:50 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265AECE22;
+        Tue,  6 Dec 2022 08:23:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B5BCE617D4;
+        Tue,  6 Dec 2022 16:23:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C72F2C433D6;
+        Tue,  6 Dec 2022 16:23:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670343829;
+        bh=ad2lDY343TkFcWm5TqcqRjN3pJz83g/1a8BC4bGnAAg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xp8z5kv0ju5bSohNsyOhDhwmxRGwI82eDsPE2xrTJSB7nziBMdGe3aT3Mu1uAFbEZ
+         ZyBeZNfB5IbtsRK2YMgxmJLg9p44Y23TPp9cFkGgX1CtGXBf9VmoJZsp/uknivFtFV
+         u/eeE5bjGXSNUtzp0RvyCZbudYVtAl6j0i4rv2oeEYGKOxA4EvDadZhvVvi4CEyH88
+         LD3w0dv2FCwtNaPZzG+UiDFqQw7UETEv87W+Rdj7k/6ECNs0/RJqJhlVL3CXhTY/Ig
+         h+I9l+Xh9xRvBJV3VgCayC+1GyglQSm/1AdGjvEX76uMHq2heXdLMXXvPMZivCIwa+
+         +OZlP3Sru+tiQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 2F4F240404; Tue,  6 Dec 2022 13:23:45 -0300 (-03)
+Date:   Tue, 6 Dec 2022 13:23:45 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
+Message-ID: <Y49skYa5VYPMU+RF@kernel.org>
+References: <20221205225940.3079667-1-irogers@google.com>
+ <20221205225940.3079667-3-irogers@google.com>
+ <Y49qiCIiyaehEOaG@kernel.org>
+ <Y49rvLO2RnJBBNL/@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <202212060801.yenOQCHL-lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y49rvLO2RnJBBNL/@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 08:46:17AM +0800, kernel test robot wrote:
-> vim +316 arch/x86/include/asm/pgtable.h
+Em Tue, Dec 06, 2022 at 01:20:12PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Dec 06, 2022 at 01:15:04PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Dec 05, 2022 at 02:59:39PM -0800, Ian Rogers escreveu:
+> > > Remove the LIBTRACEEVENT_DYNAMIC and LIBTRACEFS_DYNAMIC. If
+> > > libtraceevent isn't installed or NO_LIBTRACEEVENT=1 is passed to the
+> > > build, don't compile in libtraceevent and libtracefs support. This
+> > > also disables CONFIG_TRACE that controls "perf
+> > > trace". CONFIG_TRACEEVENT is used to control enablement in
+> > > Build/Makefiles, HAVE_LIBTRACEEVENT is used in C code. Without
+> > > HAVE_LIBTRACEEVENT tracepoints are disabled and as such the commands
+> > > kmem, kwork, lock, sched and timechart are removed. The majority of
+> > > commands continue to work including "perf test".
+> > 
+> > Had just this .rej and I fixed it up manually, testing now:
 > 
->    313	
->    314	static inline pte_t pte_mkuffd_wp(pte_t pte)
->    315	{
->  > 316		return pte_wrprotect(pte_set_flags(pte, _PAGE_UFFD_WP));
->    317	}
+> Investigating:
+> 
+> [acme@quaco perf]$ rpm -q libtraceevent-devel
+> libtraceevent-devel-1.5.3-2.fc36.x86_64
+> [acme@quaco perf]$
+> [acme@quaco perf]$ grep -i traceevent /tmp/build/perf/FEATURE-DUMP
+> feature-libtraceevent=1
+> [acme@quaco perf]$
+> 
+> [acme@quaco perf]$ alias m
+> alias m='rm -rf ~/libexec/perf-core/ ; perf stat -e cycles:u,instructions:u make -k BUILD_BPF_SKEL=1 O=/tmp/build/perf -C tools/perf install-bin && perf test python'
+> [acme@quaco perf]$
+> 
+> [acme@quaco perf]$ rpm -ql libtraceevent-devel | grep \.h$ | xargs grep tep_print_flag_sym
+> /usr/include/traceevent/event-parse.h:struct tep_print_flag_sym {
+> /usr/include/traceevent/event-parse.h:	struct tep_print_flag_sym	*next;
+> /usr/include/traceevent/event-parse.h:	struct tep_print_flag_sym	*flags;
+> /usr/include/traceevent/event-parse.h:	struct tep_print_flag_sym	*symbols;
+> [acme@quaco perf]$
+> 
+> util/scripting-engines/trace-event-perl.c:104:43: error: ‘struct tep_print_flag_sym’ declared inside parameter list will not be visible outside of this definition or declaration [-Werror]
+>   104 | static void define_symbolic_values(struct tep_print_flag_sym *field,
+>       |                                           ^~~~~~~~~~~~~~~~~~
+> util/scripting-engines/trace-event-perl.c: In function ‘define_symbolic_values’:
 
-It's interesting to know the bot will test any patch I attach in an mail
-reply, which is very nice...
+This cured it, folding into your patch:
 
-I'll send a formal patch for this one soon.
-
--- 
-Peter Xu
-
+diff --git a/tools/perf/util/scripting-engines/trace-event-perl.c b/tools/perf/util/scripting-engines/trace-event-perl.c
+index 5b602b6d46854133..0bacb49408f84adf 100644
+--- a/tools/perf/util/scripting-engines/trace-event-perl.c
++++ b/tools/perf/util/scripting-engines/trace-event-perl.c
+@@ -27,6 +27,7 @@
+ #include <errno.h>
+ #include <linux/bitmap.h>
+ #include <linux/time64.h>
++#include <traceevent/event-parse.h>
+ 
+ #include <stdbool.h>
+ /* perl needs the following define, right after including stdbool.h */
