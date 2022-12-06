@@ -2,165 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE64644A96
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:47:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A419644A9A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:49:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLFRrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:47:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44024 "EHLO
+        id S229521AbiLFRtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:49:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLFRrf (ORCPT
+        with ESMTP id S229475AbiLFRte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:47:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D01536C7B;
-        Tue,  6 Dec 2022 09:47:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D5970B81AF7;
-        Tue,  6 Dec 2022 17:47:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F988C433C1;
-        Tue,  6 Dec 2022 17:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670348849;
-        bh=kpThiEp3UAhW6pzLUVd7+M75zxZbydrFxRCxs6or0pE=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=dLGwzyu6XmzXG/L7DgvYNGWvQ9CokgYuQ3e5dBAMRWxe613GDVfj+rDE5SGfYm1R/
-         nKrJvuleNLFbCmMF++/f7pPQ+pxAZJxxC/4xK4fWmxN0PAj6GMwxWUtbso3V0Rj04i
-         AJ7pU9+Gdq8Bvsn4G2ftpVQZs9PoSoDXW5gKdVKpVHNfkY4vratV2NcktXcmn3zl6N
-         I0KzBVamo3uo0TxBnJ30iJea5++v8gNwkTIyZDKVQJUa6WnF81ykjlGxHimNvc0QoU
-         AA6CpGPHcDrDiod2YFpGRvS6WAWgUuV5RCJHem3z5PSFLn0+aAIzUznBSZ+KFNRPiM
-         Zxv/88KAO8S8A==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2D3EA5C0952; Tue,  6 Dec 2022 09:47:29 -0800 (PST)
-Date:   Tue, 6 Dec 2022 09:47:29 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Dave Chinner <david@fromorbit.com>, frederic@kernel.org,
-        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
-        RCU <rcu@vger.kernel.org>,
-        syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>,
-        djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
-Message-ID: <20221206174729.GQ4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <000000000000bd587705ef202b08@google.com>
- <20221206033450.GS3600936@dread.disaster.area>
- <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com>
- <20221206153211.GN4001@paulmck-ThinkPad-P17-Gen-1>
- <CACT4Y+ZbmxyKJXM2zrJR6gNGSUS8j2_-Nu2dpC6gBEjcE3ercw@mail.gmail.com>
+        Tue, 6 Dec 2022 12:49:34 -0500
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D89209BB
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:49:33 -0800 (PST)
+Received: by mail-pg1-x52f.google.com with SMTP id q1so14012572pgl.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:49:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ICtZNQQIECcoUV2T8DPLv/5CjLxlJxo5ELk63KJMTWM=;
+        b=D4UWvQHkPpgWRIW2yCKzG63FY3IVtUaX+fckriYTJL9at6/DIqcow4qEB3G+XDMzA9
+         15EMESvE9DUNnWk3bNgQBDV4fp5ii+A6nV+tVNtmFLFJd9AY7Tppx8po2Icy0sMmBHdO
+         BzLf6DUFG5CELzKIYP90gz+QdqwyjKpWZWXpBvGqT1AXk+res7180LhmgdJ6o99cdHAE
+         9HVJL0Yxb4kkVnjrzcQuQBDKIyu1yn8sCMP/xb1V6VaGb9onh9PDG0dPDj9AcqS9E8Ee
+         E6UzfsUrtwoSANqGJOTYJJeX8GHGrdTnhPR7wtn98ekltN3Zxk7DHgMqqgG3O89sGICo
+         54tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ICtZNQQIECcoUV2T8DPLv/5CjLxlJxo5ELk63KJMTWM=;
+        b=ARrWy+KiMinVszSqTKH7sTBYeY6WayTXMvHoQGCaOGWbCnLYOeVUN1Ecue/khscV81
+         B4Nz+TuDJXe4R8Zl9s7FLTTogHhPWJVy/Hg/++QWfM6dyPd/JAtv2p5KF4NT0lj6e/5+
+         Vq9OD6Fccv28du8onfrImfy5CE4C62EwM8sj3X8Ja2DoyHYNFmdDh/EGekHsw1lqzebp
+         GLpSUhh2h8Kmfm4/Tu+7Ioy9QWWqa9uOHrQMxFX9ZMMlGXm0wYfVXobnjzMiZQwunGmi
+         63Ah+svx0YCadxzJFNntCWTUP7m7vEhTCBWLPRBXbCLorzByGwauNl+SmX76T6QnLOEC
+         8qUg==
+X-Gm-Message-State: ANoB5pm9IWbKWQ1XR+HvYi8i8XMLEVDtXHJHiy+Eu6sHRA7AmNdNTXbr
+        4gGkKFTEwWocoQIn3BHWdxDdB2dCZcdqR4nZu9sV1Q==
+X-Google-Smtp-Source: AA0mqf4YG6k4mPXavaI5dFKuiml0xnQbph3dfLNPO/Rr9ysj57G6xzz8+ebmMh09c5Ax9kXsfN/Dd3G5HqA9lDkmRUM=
+X-Received: by 2002:a63:f04d:0:b0:470:5d17:a62e with SMTP id
+ s13-20020a63f04d000000b004705d17a62emr61433446pgj.620.1670348972272; Tue, 06
+ Dec 2022 09:49:32 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+ZbmxyKJXM2zrJR6gNGSUS8j2_-Nu2dpC6gBEjcE3ercw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206152358.1966099-1-jeffxu@google.com> <20221206152358.1966099-4-jeffxu@google.com>
+ <Y49oIR6/ULTqlcwL@kroah.com> <CALmYWFvaEg84DYtjQtoQqsvaboX7mRS5dOqz8OJ0EYJTOCp4kg@mail.gmail.com>
+ <Y49vUQKRVyquazJ2@kroah.com>
+In-Reply-To: <Y49vUQKRVyquazJ2@kroah.com>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Tue, 6 Dec 2022 09:48:55 -0800
+Message-ID: <CALmYWFvO8kKGusv8_Jwevw5pS4LwbF9G12=RthWZeHYE++ZO3Q@mail.gmail.com>
+Subject: Re: [PATCH v5 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        keescook@chromium.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, linux-hardening@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:19:10PM +0100, Dmitry Vyukov wrote:
-> On Tue, 6 Dec 2022 at 16:32, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Tue, Dec 06, 2022 at 12:06:10PM +0100, Dmitry Vyukov wrote:
-> > > On Tue, 6 Dec 2022 at 04:34, Dave Chinner <david@fromorbit.com> wrote:
-> > > >
-> > > > On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
-> > > > > Hello,
-> > > > >
-> > > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > > > INFO: rcu detected stall in corrupted
-> > > > >
-> > > > > rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
-> > > > > rcu: blocking rcu_node structures (internal RCU debug):
-> > > >
-> > > > I'm pretty sure this has nothing to do with the reproducer - the
-> > > > console log here:
-> > > >
-> > > > > Tested on:
-> > > > >
-> > > > > commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
-> > > > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
-> > > >
-> > > > indicates that syzbot is screwing around with bluetooth, HCI,
-> > > > netdevsim, bridging, bonding, etc.
-> > > >
-> > > > There's no evidence that it actually ran the reproducer for the bug
-> > > > reported in this thread - there's no record of a single XFS
-> > > > filesystem being mounted in the log....
-> > > >
-> > > > It look slike someone else also tried a private patch to fix this
-> > > > problem (which was obviously broken) and it failed with exactly the
-> > > > same RCU warnings. That was run from the same commit id as the
-> > > > original reproducer, so this looks like either syzbot is broken or
-> > > > there's some other completely unrelated problem that syzbot is
-> > > > tripping over here.
-> > > >
-> > > > Over to the syzbot people to debug the syzbot failure....
+On Tue, Dec 6, 2022 at 8:35 AM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Tue, Dec 06, 2022 at 08:26:30AM -0800, Jeff Xu wrote:
+> > On Tue, Dec 6, 2022 at 8:04 AM Greg KH <gregkh@linuxfoundation.org> wrote:
 > > >
-> > > Hi Dave,
+> > > On Tue, Dec 06, 2022 at 03:23:55PM +0000, jeffxu@chromium.org wrote:
+> > > > --- a/kernel/pid_namespace.c
+> > > > +++ b/kernel/pid_namespace.c
+> > > > @@ -110,6 +110,11 @@ static struct pid_namespace *create_pid_namespace(struct user_namespace *user_ns
+> > > >       ns->ucounts = ucounts;
+> > > >       ns->pid_allocated = PIDNS_ADDING;
+> > > >
+> > > > +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> > > > +     ns->memfd_noexec_scope =
+> > > > +             task_active_pid_ns(current)->memfd_noexec_scope;
+> > > > +#endif
 > > >
-> > > It's not uncommon for a single program to trigger multiple bugs.
-> > > That's what happens here. The rcu stall issue is reproducible with
-> > > this test program.
-> > > In such cases you can either submit more test requests, or test manually.
+> > > .c files should never have #if in them.  Can't you put this in a .h file
+> > > properly so that this does not get really messy over time?
 > > >
-> > > I think there is an RCU expedited stall detection.
-> > > For some reason CONFIG_RCU_EXP_CPU_STALL_TIMEOUT is limited to 21
-> > > seconds, and that's not enough for reliable flake-free stress testing.
-> > > We bump other timeouts to 100+ seconds.
-> > > +RCU maintainers, do you mind removing the overly restrictive limit on
-> > > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT?
-> > > Or you think there is something to fix in the kernel to not stall? I
-> > > see the test writes to
-> > > /proc/sys/vm/drop_caches, maybe there is some issue in that code.
-> >
-> > Like this?
-> >
-> > If so, I don't see why not.  And in that case, may I please have
-> > your Tested-by or similar?
-> 
-> I've tried with this patch and RCU_EXP_CPU_STALL_TIMEOUT=80000.
-> Running the test program I got some kernel BUG in XFS and no RCU
-> errors/warnings.
-> 
-> Tested-by: Dmitry Vyukov <dvyukov@google.com>
+> > >
+> > Thanks for reviewing.
+> > It seems to me that checking for CONFIG_XXX is  common in c code in
+> > kernel/ path.
+>
+> Maybe, but please don't make it any worse if at all possible.  It's
+> tough to maintain code like that.
+>
+> > Do you have a sample code pattern (link/function) that I can follow?
+>
+> Any of the zillions of #if statements in .h files :)
+>
+Thanks.
+I will take the approach of having real/stub implementation in the h
+file, and the c file  using it without a compile flag.
+Please kindly let me know if this is not right.
 
-Applied, thank you both!
+Thanks
+Jeff
 
-I expect to push this into the v6.3 merge window, that is, not the
-one coming up real soon now, but the one after that.
-
-							Thanx, Paul
-
-> Thanks
-> 
-> > At the same time, I am sure that there are things in the kernel that
-> > should be adjusted to avoid stalls, but I recognize that different
-> > developers in different situations will have different issues that they
-> > choose to focus on.  ;-)
-> >
-> >                                                         Thanx, Paul
-> >
-> > ------------------------------------------------------------------------
-> >
-> > diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-> > index 49da904df6aa6..2984de629f749 100644
-> > --- a/kernel/rcu/Kconfig.debug
-> > +++ b/kernel/rcu/Kconfig.debug
-> > @@ -82,7 +82,7 @@ config RCU_CPU_STALL_TIMEOUT
-> >  config RCU_EXP_CPU_STALL_TIMEOUT
-> >         int "Expedited RCU CPU stall timeout in milliseconds"
-> >         depends on RCU_STALL_COMMON
-> > -       range 0 21000
-> > +       range 0 300000
-> >         default 0
-> >         help
-> >           If a given expedited RCU grace period extends more than the
+> thanks,
+>
+> greg k-h
