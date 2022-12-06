@@ -2,123 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC913643B66
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4D7F643B68
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 03:42:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiLFCl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 5 Dec 2022 21:41:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
+        id S233551AbiLFCmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 5 Dec 2022 21:42:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiLFCly (ORCPT
+        with ESMTP id S232825AbiLFCmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 5 Dec 2022 21:41:54 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88F9FB7DD
-        for <linux-kernel@vger.kernel.org>; Mon,  5 Dec 2022 18:41:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670294513; x=1701830513;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version:content-transfer-encoding;
-  bh=FZAHxGmeLgTvz+h4faOmVd/+icSg6LznsgsEN+s6FS8=;
-  b=WJW0gxQWUcDRerYlFGQyUBoYTt3l2tLIqogogbScLI4l4/8Vbd6xqJxn
-   ftzCTxJQk+m8/euyzcM0PDRkilg8FK8unIEs90ieKZIL8zZYOB5Mqj73j
-   khezfIWa9cGO9Pe/CwdbBFcGoXFHYK1MzgRgHg6nLaocAQJh00r34azTI
-   qvqPyKFU9C5KCqrTbEEtJqCp2/eIZpWeModDYGWgvGLi3fM7MpEO6lNov
-   QNYF9J4lxVy2e6dlFsNU8d2b505AGoFVQwihxVMojy9dXztV6bcNbICXM
-   tFSrXiIhoUm1MQYis2yMfmNEwpZGdHVp6eNwHfcIqgdMaQRMBr4bwKYJV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="315226072"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="315226072"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 18:41:53 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="974910264"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="974910264"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 18:41:50 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Shakeel Butt <shakeelb@google.com>
-Cc:     kernel test robot <yujie.liu@intel.com>, oe-lkp@lists.linux.dev,
-        lkp@intel.com, Andrew Morton <akpm@linux-foundation.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-kernel@vger.kernel.org, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-Subject: Re: [linux-next:master] [mm] f1a7941243: unixbench.score -5.1%
- regression
-References: <202212051324.182a6363-yujie.liu@intel.com>
-        <CALvZod4CD+O7-ynGAHU-6vxE6CbSmuQei1=SVJsx0zFfQdmV2g@mail.gmail.com>
-Date:   Tue, 06 Dec 2022 10:41:00 +0800
-In-Reply-To: <CALvZod4CD+O7-ynGAHU-6vxE6CbSmuQei1=SVJsx0zFfQdmV2g@mail.gmail.com>
-        (Shakeel Butt's message of "Mon, 5 Dec 2022 09:18:28 -0800")
-Message-ID: <875yepfe4j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 5 Dec 2022 21:42:17 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866ABBF72;
+        Mon,  5 Dec 2022 18:42:16 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id y16so21604007wrm.2;
+        Mon, 05 Dec 2022 18:42:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=cSoZALCCgZ9J9X4NU6zzWcqo3fV2QQvKn2ulvrjOZfQ=;
+        b=FOpGkLQHKdMr6M8r2mXJRnNpjY6arwsM/xuXB6d/oFzrZeiIN6nwdOXjjPkLT5idgn
+         ojTrLaWECpJLlju35z7/zPUmFeHPBSQZxuUzF5rWfMFD496NBgSo3D2tJY93/8fddVID
+         wWnniu0DQFML7Wu9LtuZ9kzzDk+Cga+GSrPaHd6DYv9SEJs7qf2h690UJbkVBTSg7+9I
+         83wYf50nI56m/+H5HPwwy7y9fPaHCrva956ec6Ax8eEQGFMuPF/HVJg+HeyJD+uEC+YN
+         ZbGIVZRBqZthzdXGpPzTCaIxWC3tCEqGIr+eIiG3iEcoSQsFNALrV6BmGy+fXMa6wJO7
+         OpOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cSoZALCCgZ9J9X4NU6zzWcqo3fV2QQvKn2ulvrjOZfQ=;
+        b=N91O4gWeuNL9RskBkigiP1w19tjVYUMsrNWmJVQIT5HnZjKAl463Eq5wV/J/RLbvUL
+         PTWfnvhH787qPJzzPIMyMlHQDIxy9uuRCZdYnCPgf7VluUyIicP9R/yHfixXYMMGiRRh
+         mi0LW+R5ku8G2DJ8YoHPvJRZ60XwMfHY2dpDXQ/PyPAL2shq21AOOGxP75e1YBoZYYvd
+         mv2JoSQYZ+N1Y+iLOezuAUuIT3xnvWhbZKZg1fNVFZw5pRo7/cpRxJ8W9bXyVSMDP4oZ
+         IBeJxQcQgQIwBi9SfS25S5EunIROzOOEXRWv3fYaxXpHr4tcXPfWTIvaTQXRXhTlg5KS
+         Fa2Q==
+X-Gm-Message-State: ANoB5pk7LIwXjMD7c1LTUFe5COQBeJTcfAaHXj86WC/2LxeH9ZCBGoar
+        nf2T0KPDlGE5aCrG9yzrO1lZO/TIxr4tJgKms2KKIch3sy8IsA==
+X-Google-Smtp-Source: AA0mqf5oi1d5gxjahQbv5PfOaEz398qzEI5UCtWJbX3f7A7o7SJ09hQIImwk8g7g8yKwTOe3YlCsg+zP1O6mVZA1aks=
+X-Received: by 2002:adf:d0c6:0:b0:242:1873:bb28 with SMTP id
+ z6-20020adfd0c6000000b002421873bb28mr22462374wrh.485.1670294534643; Mon, 05
+ Dec 2022 18:42:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221201160724.2593341-1-cccheng@synology.com> <CAL3q7H5oet2P9XijTtzPo3joZWdoa3OuD9L-wK9nTEFya2PY8w@mail.gmail.com>
+In-Reply-To: <CAL3q7H5oet2P9XijTtzPo3joZWdoa3OuD9L-wK9nTEFya2PY8w@mail.gmail.com>
+From:   Chung-Chiang Cheng <shepjeng@gmail.com>
+Date:   Tue, 6 Dec 2022 10:42:03 +0800
+Message-ID: <CAHuHWtnbVsS2pp5EySmZ_72fCrDqKJTAOkssa-D-X5wKoR9uWQ@mail.gmail.com>
+Subject: Re: [PATCH] btrfs: refuse to remount read-write with unsupported
+ compat-ro features
+To:     Filipe Manana <fdmanana@kernel.org>
+Cc:     Chung-Chiang Cheng <cccheng@synology.com>, clm@fb.com,
+        josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@cccheng.net, Johnny Chang <johnnyc@synology.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shakeel Butt <shakeelb@google.com> writes:
-
-> On Sun, Dec 4, 2022 at 9:56 PM kernel test robot <yujie.liu@intel.com> wr=
-ote:
->>
->> Greeting,
->>
->> FYI, we noticed a -5.1% regression of unixbench.score due to commit:
->>
-> [...]
->> 9cd6ffa60256e931 f1a7941243c102a44e8847e3b94
->> ---------------- ---------------------------
->>          %stddev     %change         %stddev
->>              \          |                \
->>       7917            -5.1%       7509        unixbench.score
+On Mon, Dec 5, 2022 at 6:45 PM Filipe Manana <fdmanana@kernel.org> wrote:
 >
-> What is unixbench.score?
-
-Should be benchmark throughput.
-
->>      10485           -12.1%       9216        unixbench.time.maximum_res=
-ident_set_size
-
-This should reflect accuracy change of per_cpu_counter.
-
->>   37236706            -5.1%   35324104        unixbench.time.minor_page_=
-faults
-
-The reduction is same as benchmark score.  So I think this reflect the
-nature of time-bound testing (instead of workload-bound).
-
-> For above two, is negative change good or bad?
+> Wasn't this already done by the following commit?
 >
->>       0.98 =C4=85 20%      +0.7        1.64 =C4=85 38%  perf-profile.cal=
-ltrace.cycles-pp.link_path_walk.path_openat.do_filp_open.do_sys_openat2.__x=
-64_sys_openat
->>       2.12 =C4=85 19%      +0.8        2.96 =C4=85 13%  perf-profile.cal=
-ltrace.cycles-pp.handle_mm_fault.do_user_addr_fault.exc_page_fault.asm_exc_=
-page_fault
->>       2.35 =C4=85 13%      +0.9        3.28 =C4=85 13%  perf-profile.cal=
-ltrace.cycles-pp.__handle_mm_fault.handle_mm_fault.do_user_addr_fault.exc_p=
-age_fault.asm_exc_page_fault
->>       0.14 =C4=85 74%      +0.4        0.55 =C4=85 32%  perf-profile.chi=
-ldren.cycles-pp.do_task_dead
->>       0.04 =C4=85223%      +0.4        0.47 =C4=85 49%  perf-profile.chi=
-ldren.cycles-pp.__mmdrop
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d5d61454c365718655cfc87d8200c84e25d596
 >
-> Also how should I interpret the above perf-profiles?
+> Thanks.
+>
 
-It appears that the changes of handle_mm_fault() and __mmdrop() are
-related to the code of the commit?  That is, for this specific workloads
-(not so unpractical), the operations become slower?
+Wow. I did not notice this commit doing the same job by Qu. But I have
+tested the latest linux-6.1 rc-7, and it's still able to mount a unsupported
+comat-ro btrfs as read-write via remount.
 
-Best Regards,
-Huang, Ying
+It's caused by the follow-up commit d7f67ac9a928 ("btrfs: relax
+block-group-tree feature dependency checks"). This commit checks read-
+only with the current superblock, which will always pass in the situation
+remounting from read-only to read-write. It seems `btrfs_check_features()`
+cannot cover this scenario.
+
+        if (compat_ro_unsupp && !sb_rdonly(sb)) {
+                                ^^^^^^^^^^^^^^
+
+Thanks,
+C.C.Cheng
