@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6743F643E46
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:16:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CF6643E48
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 09:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbiLFIQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 03:16:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S231964AbiLFIQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 03:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232778AbiLFIQG (ORCPT
+        with ESMTP id S232825AbiLFIQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 03:16:06 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2CC18B3F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:16:04 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id s5so19131965edc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:16:04 -0800 (PST)
+        Tue, 6 Dec 2022 03:16:07 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51D8118E0D
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 00:16:05 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id m19so19161528edj.8
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 00:16:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EvbZSEnSEzLdu7kZISISG4TIgUpixjenItLENz+8BsE=;
-        b=PVgbkqownST6/r10EIuSEAdT/wjZjhnykquUPS+xrzqoZRgWOZJ/b2so/ZeGldvSJP
-         8nAzoAPeh1J7+B8x83x2f31CJv8D3xqJrucZGstQLbAMCoC/9a3NX98k5taIKZfYcbMj
-         xKxzpoNQ0O6txtlxmWTiwdJ0WqJEP81bWAlcfRhOkOZL3/VJ/Pj4wS/oryBKFgoBZjBU
-         R97dmBWH4oSnqeBB1+EO5DQ0BsRjrVtTTsTZRQv7DZ8nGlArlrkfFVRG5dCrmSM5x9Q0
-         1A01MJsO9DDUBpfmLHixM9vLTJRbtFiDbayxLZ72Q0CW59VPbdjdqP9cJdYA1zKtn5G3
-         9dKA==
+        bh=7BpKU2NYbTziJwWq6AjACejxgrhoAentIWtSJgkaJ4g=;
+        b=yK7/MZoaRbZtgYXmF3MAZ+t8TxI0i+WFdOdvu8VLqq45rSubMmRh9JnjbAipy5b1mK
+         xr8U8y7xEn7TiOv61nOBWtXAzfUFjRVwKSyjeiMbpUj5MwCtz4IsQLgU1uxiNCY4i5PT
+         us6imHP7UkljpG4V5X5WVm+2bN9NyqTgcGI4GfhOjeND6DS9Vz13OUw5glG46yAhlaPt
+         QaSY2Nazv0K1rJj2UOc0GkA7wUV7aDrfJYmxUENzZBB2keFOu150JGZLIBzu15DCwacS
+         ETe1JiNKHvmacxeHj2brWDIms2hk/NprMtNKMPxcP4om2RNWOl7w42SuPZ6x06Cammjh
+         DB0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EvbZSEnSEzLdu7kZISISG4TIgUpixjenItLENz+8BsE=;
-        b=zBafkE1M7T7/+hg3fdAo/CBxEFEod1/fhZRhkXs6ZNyEyLgxBXzWZWpe/pbXmg8t7z
-         huQid1ek5PYufWdbBWYcq7SS9WLIxR1LqSKy81c91WueZNbIaqgdsH4bXGS0+6Rq1DPb
-         yAH+HSM6ShhqAPIkcxO11YtDw/7eb9Mtc9kB50R68JMjGU4tFMakM2oq1CpFi1dSyBln
-         hlKg2Qo3ludwNe4KUr6+dAnt6b2EbuVxhtXhB2KfPLExS8GAradselGqcNYK0KovLFME
-         OuJiHTURknoJXORtkuNDO/H2aMTH23Sdow6DA0502jlP3v9Dtct3f2F3J5fjwFgDkYbt
-         W9Dg==
-X-Gm-Message-State: ANoB5pmGYyp51Q/JKMsL66KA1PSr5cfGDZPVV7Mj1Es21wcUw63N3W+L
-        a602TY+h8V+GX8hSPl4M9LiVSw==
-X-Google-Smtp-Source: AA0mqf4Db5CvDp4j0j9msdYeia7RPZtmZzMbZ2z9Q0F9T8+Synjl4lsttVryR1nBG3A5A09qHfvA5Q==
-X-Received: by 2002:a05:6402:5003:b0:462:a25f:f0f2 with SMTP id p3-20020a056402500300b00462a25ff0f2mr24239475eda.156.1670314562684;
-        Tue, 06 Dec 2022 00:16:02 -0800 (PST)
+        bh=7BpKU2NYbTziJwWq6AjACejxgrhoAentIWtSJgkaJ4g=;
+        b=iLPKNqRnwL515HpZyzfrv6Z7GM9LY1DOwQ79YgjO5FwWYtQu85avWZZpwc8nAkfBdM
+         aSIwr4O8vi5OQogHvTfCmgK5zyV5uZdBntzTMqU41PhIgbgVS0W15DpNtxDq9NF7LFMR
+         ONcPbEt9NOK3QG6Ix7mhyzPrpfw9629g0u+QuuLqp7mE1WsUBiawHZ43Szq6NVEJl8yQ
+         paRMQrWHMNIdz8MyK2D81gB9fuNV2sWM9k/NRqlo7/cn9/OtfN9We16b6Fu7O7zxjeWe
+         VU8oU9l6VM1jp9hObvD1bKI8x0T+I2FL7VqGOtWLskR045soxFvZSkFMnm7ISOzNendM
+         kbog==
+X-Gm-Message-State: ANoB5pke812cN0bwK+E1r6HDmEvIhY51bDNMEAxL6nfLRuHiQMAqg7W/
+        B/xrZ2j8lDFdXY3mxk+uMh0kfA==
+X-Google-Smtp-Source: AA0mqf59IAODO9bKfkWzNiG9vFLbwCbvCtC8LtCopTIlBYCJaSxGXXQvl1TPULIVhdf/IwlQl3OASA==
+X-Received: by 2002:aa7:d1c3:0:b0:46c:edb5:afea with SMTP id g3-20020aa7d1c3000000b0046cedb5afeamr4095540edp.315.1670314563597;
+        Tue, 06 Dec 2022 00:16:03 -0800 (PST)
 Received: from MBP-di-Paolo.station (net-2-35-55-161.cust.vodafonedsl.it. [2.35.55.161])
-        by smtp.gmail.com with ESMTPSA id 24-20020a170906329800b007b29d292852sm7161944ejw.148.2022.12.06.00.16.01
+        by smtp.gmail.com with ESMTPSA id 24-20020a170906329800b007b29d292852sm7161944ejw.148.2022.12.06.00.16.02
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 06 Dec 2022 00:16:02 -0800 (PST)
+        Tue, 06 Dec 2022 00:16:03 -0800 (PST)
 From:   Paolo Valente <paolo.valente@linaro.org>
 To:     Jens Axboe <axboe@kernel.dk>
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        glen.valante@linaro.org, Davide Zini <davidezini2@gmail.com>,
+        glen.valante@linaro.org, Federico Gavioli <f.gavioli97@gmail.com>,
         Paolo Valente <paolo.valente@linaro.org>
-Subject: [PATCH V7 5/8] block, bfq: split also async bfq_queues on a per-actuator basis
-Date:   Tue,  6 Dec 2022 09:15:48 +0100
-Message-Id: <20221206081551.28257-6-paolo.valente@linaro.org>
+Subject: [PATCH V7 6/8] block, bfq: retrieve independent access ranges from request queue
+Date:   Tue,  6 Dec 2022 09:15:49 +0100
+Message-Id: <20221206081551.28257-7-paolo.valente@linaro.org>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20221206081551.28257-1-paolo.valente@linaro.org>
 References: <20221206081551.28257-1-paolo.valente@linaro.org>
@@ -66,135 +66,137 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Davide Zini <davidezini2@gmail.com>
+From: Federico Gavioli <f.gavioli97@gmail.com>
 
-Similarly to sync bfq_queues, also async bfq_queues need to be split
-on a per-actuator basis.
+This patch implements the code to gather the content of the
+independent_access_ranges structure from the request_queue and copy
+it into the queue's bfq_data. This copy is done at queue initialization.
 
+We copy the access ranges into the bfq_data to avoid taking the queue
+lock each time we access the ranges.
+
+This implementation, however, puts a limit to the maximum independent
+ranges supported by the scheduler. Such a limit is equal to the constant
+BFQ_MAX_ACTUATORS. This limit was placed to avoid the allocation of
+dynamic memory.
+
+Co-developed-by: Rory Chen <rory.c.chen@seagate.com>
+Signed-off-by: Rory Chen <rory.c.chen@seagate.com>
+Signed-off-by: Federico Gavioli <f.gavioli97@gmail.com>
 Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-Signed-off-by: Davide Zini <davidezini2@gmail.com>
 ---
- block/bfq-iosched.c | 41 +++++++++++++++++++++++------------------
- block/bfq-iosched.h |  8 ++++----
- 2 files changed, 27 insertions(+), 22 deletions(-)
+ block/bfq-iosched.c | 56 ++++++++++++++++++++++++++++++++++++++-------
+ block/bfq-iosched.h |  8 ++++++-
+ 2 files changed, 55 insertions(+), 9 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index c5caeefba156..6b1376ab8980 100644
+index 6b1376ab8980..665e78035666 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -2680,14 +2680,16 @@ static void bfq_bfqq_end_wr(struct bfq_queue *bfqq)
- void bfq_end_wr_async_queues(struct bfq_data *bfqd,
- 			     struct bfq_group *bfqg)
- {
--	int i, j;
--
--	for (i = 0; i < 2; i++)
--		for (j = 0; j < IOPRIO_NR_LEVELS; j++)
--			if (bfqg->async_bfqq[i][j])
--				bfq_bfqq_end_wr(bfqg->async_bfqq[i][j]);
--	if (bfqg->async_idle_bfqq)
--		bfq_bfqq_end_wr(bfqg->async_idle_bfqq);
-+	int i, j, k;
-+
-+	for (k = 0; k < bfqd->num_actuators; k++) {
-+		for (i = 0; i < 2; i++)
-+			for (j = 0; j < IOPRIO_NR_LEVELS; j++)
-+				if (bfqg->async_bfqq[i][j][k])
-+					bfq_bfqq_end_wr(bfqg->async_bfqq[i][j][k]);
-+		if (bfqg->async_idle_bfqq[k])
-+			bfq_bfqq_end_wr(bfqg->async_idle_bfqq[k]);
-+	}
- }
- 
- static void bfq_end_wr(struct bfq_data *bfqd)
-@@ -5636,18 +5638,18 @@ static void bfq_init_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
- 
- static struct bfq_queue **bfq_async_queue_prio(struct bfq_data *bfqd,
- 					       struct bfq_group *bfqg,
--					       int ioprio_class, int ioprio)
-+					       int ioprio_class, int ioprio, int act_idx)
- {
- 	switch (ioprio_class) {
- 	case IOPRIO_CLASS_RT:
--		return &bfqg->async_bfqq[0][ioprio];
-+		return &bfqg->async_bfqq[0][ioprio][act_idx];
- 	case IOPRIO_CLASS_NONE:
- 		ioprio = IOPRIO_BE_NORM;
- 		fallthrough;
- 	case IOPRIO_CLASS_BE:
--		return &bfqg->async_bfqq[1][ioprio];
-+		return &bfqg->async_bfqq[1][ioprio][act_idx];
- 	case IOPRIO_CLASS_IDLE:
--		return &bfqg->async_idle_bfqq;
-+		return &bfqg->async_idle_bfqq[act_idx];
- 	default:
- 		return NULL;
- 	}
-@@ -5820,7 +5822,8 @@ static struct bfq_queue *bfq_get_queue(struct bfq_data *bfqd,
- 	bfqg = bfq_bio_bfqg(bfqd, bio);
- 	if (!is_sync) {
- 		async_bfqq = bfq_async_queue_prio(bfqd, bfqg, ioprio_class,
--						  ioprio);
-+						  ioprio,
-+						  bfq_actuator_index(bfqd, bio));
- 		bfqq = *async_bfqq;
- 		if (bfqq)
- 			goto out;
-@@ -7037,13 +7040,15 @@ static void __bfq_put_async_bfqq(struct bfq_data *bfqd,
+@@ -1838,10 +1838,25 @@ static bool bfq_bfqq_higher_class_or_weight(struct bfq_queue *bfqq,
   */
- void bfq_put_async_queues(struct bfq_data *bfqd, struct bfq_group *bfqg)
+ static unsigned int bfq_actuator_index(struct bfq_data *bfqd, struct bio *bio)
  {
--	int i, j;
-+	int i, j, k;
- 
--	for (i = 0; i < 2; i++)
--		for (j = 0; j < IOPRIO_NR_LEVELS; j++)
--			__bfq_put_async_bfqq(bfqd, &bfqg->async_bfqq[i][j]);
-+	for (k = 0; k < bfqd->num_actuators; k++) {
-+		for (i = 0; i < 2; i++)
-+			for (j = 0; j < IOPRIO_NR_LEVELS; j++)
-+				__bfq_put_async_bfqq(bfqd, &bfqg->async_bfqq[i][j][k]);
- 
--	__bfq_put_async_bfqq(bfqd, &bfqg->async_idle_bfqq);
-+		__bfq_put_async_bfqq(bfqd, &bfqg->async_idle_bfqq[k]);
+-	/*
+-	 * Multi-actuator support not complete yet, so always return 0
+-	 * for the moment (to keep incomplete mechanisms off).
+-	 */
++	unsigned int i;
++	sector_t end;
++
++	/* no search needed if one or zero ranges present */
++	if (bfqd->num_actuators < 2)
++		return 0;
++
++	/* bio_end_sector(bio) gives the sector after the last one */
++	end = bio_end_sector(bio) - 1;
++
++	for (i = 0; i < bfqd->num_actuators; i++) {
++		if (end >= bfqd->sector[i] &&
++		    end < bfqd->sector[i] + bfqd->nr_sectors[i])
++			return i;
 +	}
++
++	WARN_ONCE(true,
++		  "bfq_actuator_index: bio sector out of ranges: end=%llu\n",
++		  end);
+ 	return 0;
  }
  
- /*
+@@ -7159,6 +7174,8 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+ {
+ 	struct bfq_data *bfqd;
+ 	struct elevator_queue *eq;
++	unsigned int i;
++	struct blk_independent_access_ranges *ia_ranges = q->disk->ia_ranges;
+ 
+ 	eq = elevator_alloc(q, e);
+ 	if (!eq)
+@@ -7202,11 +7219,34 @@ static int bfq_init_queue(struct request_queue *q, struct elevator_type *e)
+ 	bfqd->queue = q;
+ 
+ 	/*
+-	 * Multi-actuator support not complete yet, unconditionally
+-	 * set to only one actuator for the moment (to keep incomplete
+-	 * mechanisms off).
++	 * If the disk supports multiple actuators, copy independent
++	 * access ranges from the request queue structure.
+ 	 */
+-	bfqd->num_actuators = 1;
++	spin_lock_irq(&q->queue_lock);
++	if (ia_ranges) {
++		/*
++		 * Check if the disk ia_ranges size exceeds the current bfq
++		 * actuator limit.
++		 */
++		if (ia_ranges->nr_ia_ranges > BFQ_MAX_ACTUATORS) {
++			pr_crit("nr_ia_ranges higher than act limit: iars=%d, max=%d.\n",
++				ia_ranges->nr_ia_ranges, BFQ_MAX_ACTUATORS);
++			pr_crit("Falling back to single actuator mode.\n");
++			bfqd->num_actuators = 0;
++		} else {
++			bfqd->num_actuators = ia_ranges->nr_ia_ranges;
++
++			for (i = 0; i < bfqd->num_actuators; i++) {
++				bfqd->sector[i] = ia_ranges->ia_range[i].sector;
++				bfqd->nr_sectors[i] =
++					ia_ranges->ia_range[i].nr_sectors;
++			}
++		}
++	} else {
++		bfqd->num_actuators = 0;
++	}
++
++	spin_unlock_irq(&q->queue_lock);
+ 
+ 	INIT_LIST_HEAD(&bfqd->dispatch);
+ 
 diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index a685aa32b037..1450990dba32 100644
+index 1450990dba32..953980de6b4b 100644
 --- a/block/bfq-iosched.h
 +++ b/block/bfq-iosched.h
-@@ -976,8 +976,8 @@ struct bfq_group {
- 
- 	void *bfqd;
- 
--	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS];
--	struct bfq_queue *async_idle_bfqq;
-+	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS][BFQ_MAX_ACTUATORS];
-+	struct bfq_queue *async_idle_bfqq[BFQ_MAX_ACTUATORS];
- 
- 	struct bfq_entity *my_entity;
- 
-@@ -993,8 +993,8 @@ struct bfq_group {
- 	struct bfq_entity entity;
- 	struct bfq_sched_data sched_data;
- 
--	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS];
--	struct bfq_queue *async_idle_bfqq;
-+	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS][BFQ_MAX_ACTUATORS];
-+	struct bfq_queue *async_idle_bfqq[BFQ_MAX_ACTUATORS];
- 
- 	struct rb_root rq_pos_tree;
+@@ -810,7 +810,13 @@ struct bfq_data {
+ 	 * case of single-actuator drives.
+ 	 */
+ 	unsigned int num_actuators;
+-
++	/*
++	 * Disk independent access ranges for each actuator
++	 * in this device.
++	 */
++	sector_t sector[BFQ_MAX_ACTUATORS];
++	sector_t nr_sectors[BFQ_MAX_ACTUATORS];
++	struct blk_independent_access_range ia_ranges[BFQ_MAX_ACTUATORS];
  };
+ 
+ enum bfqq_state_flags {
 -- 
 2.20.1
 
