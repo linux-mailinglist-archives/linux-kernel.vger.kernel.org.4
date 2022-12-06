@@ -2,290 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE61C6444AA
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:34:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCD16444AE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234375AbiLFNep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36370 "EHLO
+        id S232511AbiLFNfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:35:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232676AbiLFNek (ORCPT
+        with ESMTP id S230313AbiLFNfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:34:40 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60EEBC36;
-        Tue,  6 Dec 2022 05:34:36 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 79BDE1FE58;
-        Tue,  6 Dec 2022 13:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1670333675; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dRjMqe9XUfWybRrbUF7GOm/XPQRxXJ5e2gntwceUOoI=;
-        b=rMUnPAsfEpWIJsbRvlnc4Kq8LUTLvMgy4L7RRJsI38/Pmp/I/IQPIER3EVlgM35dwn6gLF
-        9ZOffk1YPWciOp0dX967xPXIahIWRQ/5YzUUD9f2frz4WDMV5fLhJNjg4n1USKz1p0k6RD
-        nGflIZSZE9DevBpSu3wVbSjTUepE5JY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1670333675;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dRjMqe9XUfWybRrbUF7GOm/XPQRxXJ5e2gntwceUOoI=;
-        b=bYBAhVZ4hM49gizquEVGwEMgfkUk376WJJmV6+Gbni2jnjdakO1jwryltaQqbVYP29g2vR
-        iDS88CFVOgK4GaAA==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 82E5D13326;
-        Tue,  6 Dec 2022 13:34:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id /kz2H+pEj2MYBwAAGKfGzw
-        (envelope-from <farosas@suse.de>); Tue, 06 Dec 2022 13:34:34 +0000
-From:   Fabiano Rosas <farosas@suse.de>
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-In-Reply-To: <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
-Date:   Tue, 06 Dec 2022 10:34:32 -0300
-Message-ID: <877cz4ac5z.fsf@suse.de>
+        Tue, 6 Dec 2022 08:35:30 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA8625EB6
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:35:26 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id m14so23466672wrh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 05:35:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p9xwVOTAYpGb0BgYtRUwe5NfJ2iUdS8LM9rIfOZm+pk=;
+        b=LTfmUOoXz31VqYHf1vqOug6OF5ojsYHK8Qj0G0E4jV7muimMdKSjk4odCvGzacYUSo
+         bR+0JTH8/4SV/p0hRkcR+PgDd64tDycnvStl1C5ruKOtfsm1SPrPHtl7oDcyGcxMEatV
+         RDiSa6mUCRzuqkF1NqqKgSUk4UWz70ktip22SSfdcazhM1hRfvso5GNNXpLDvWYABSRa
+         oKoYn+g3E2rOctJ2TVK5JfVEtFIeespVWkKWgAJLXYuOJ4/wwFBtyzphUzDIXy6klX1O
+         lJrpOnmqOyLJnlClChslM5If120Q9ky07q8HYLL+YKN/JCwPdGc3mr1yzbKpPSBwK8Yz
+         dtAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p9xwVOTAYpGb0BgYtRUwe5NfJ2iUdS8LM9rIfOZm+pk=;
+        b=NvztjqNiL8/7B16m4AIwjK/WeyOcDO42NI2xt0HRXXUFW2K3t6m5MWqJxeONSsWSlB
+         EltsbxAT1DsTWYRoAwrt7Ec7ZIp5wIBpl4PdXichwn9/3tq2Nwq1jTTXjGz7CjkMBQaN
+         evTDLIMzO5VIfvuPni47mfI51HZpC+WZZ+o8gDWmZfKscDDKUa0fOKOA9gFbYvEHVAAV
+         jE10essmRg963c14TcNKxS5nE1zEnPf1T7uMLDqAqB/UlnEeT2dXz5yxoKE7RMOrLCF/
+         SQVpmNoKOzD2LxU+EIOpLlKnmyhQa0+V92XW/np1Ql+AmaSJQDowARu4xQmrg7hvcZAV
+         Yr9Q==
+X-Gm-Message-State: ANoB5pk7Xhz1i17OkWzNGa661ciMeJQbAOqKE3Y01VxPnyUxlb0T9gnn
+        3hi/0olYRsHG6sE4MXkIVYHiBY0hmJP1sRaKLhLYUg==
+X-Google-Smtp-Source: AA0mqf7oca2bYxnqcQHEBTMsP6PiDTE558RTGrdoaRf2atejx4TyBT6FwDCSRYsiqKINcCdioOJPXg==
+X-Received: by 2002:a5d:4344:0:b0:22e:3430:475d with SMTP id u4-20020a5d4344000000b0022e3430475dmr53828566wrr.65.1670333725389;
+        Tue, 06 Dec 2022 05:35:25 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id g13-20020a5d554d000000b002365cd93d05sm16781071wrw.102.2022.12.06.05.35.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 05:35:24 -0800 (PST)
+Date:   Tue, 6 Dec 2022 14:35:23 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Emeel Hakim <ehakim@nvidia.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Raed Salem <raeds@nvidia.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "sd@queasysnail.net" <sd@queasysnail.net>
+Subject: Re: [PATCH net-next v2] macsec: Add support for IFLA_MACSEC_OFFLOAD
+ in the netlink layer
+Message-ID: <Y49FGzwBdyC/xHxH@nanopsycho>
+References: <20221206085757.5816-1-ehakim@nvidia.com>
+ <Y48IVReEUBmQza81@nanopsycho>
+ <IA1PR12MB6353D358E112EE09C4DD770CAB1B9@IA1PR12MB6353.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA1PR12MB6353D358E112EE09C4DD770CAB1B9@IA1PR12MB6353.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chao Peng <chao.p.peng@linux.intel.com> writes:
-
-> In confidential computing usages, whether a page is private or shared is
-> necessary information for KVM to perform operations like page fault
-> handling, page zapping etc. There are other potential use cases for
-> per-page memory attributes, e.g. to make memory read-only (or no-exec,
-> or exec-only, etc.) without having to modify memslots.
+Tue, Dec 06, 2022 at 01:31:54PM CET, ehakim@nvidia.com wrote:
 >
-> Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
-> userspace to operate on the per-page memory attributes.
->   - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
->     a guest memory range.
->   - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
->     memory attributes.
 >
-> KVM internally uses xarray to store the per-page memory attributes.
+>> -----Original Message-----
+>> From: Jiri Pirko <jiri@resnulli.us>
+>> Sent: Tuesday, 6 December 2022 11:16
+>> To: Emeel Hakim <ehakim@nvidia.com>
+>> Cc: linux-kernel@vger.kernel.org; Raed Salem <raeds@nvidia.com>;
+>> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+>> pabeni@redhat.com; netdev@vger.kernel.org; sd@queasysnail.net
+>> Subject: Re: [PATCH net-next v2] macsec: Add support for IFLA_MACSEC_OFFLOAD
+>> in the netlink layer
+>> 
+>> External email: Use caution opening links or attachments
+>> 
+>> 
+>> Tue, Dec 06, 2022 at 09:57:57AM CET, ehakim@nvidia.com wrote:
+>> >From: Emeel Hakim <ehakim@nvidia.com>
+>> >
+>> >This adds support for configuring Macsec offload through the
+>> 
+>> Tell the codebase what to do. Be imperative in your patch descriptions so it is clear
+>> what are the intensions of the patch.
 >
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
-> Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
-> ---
->  Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
->  arch/x86/kvm/Kconfig           |  1 +
->  include/linux/kvm_host.h       |  3 ++
->  include/uapi/linux/kvm.h       | 17 ++++++++
->  virt/kvm/Kconfig               |  3 ++
->  virt/kvm/kvm_main.c            | 76 ++++++++++++++++++++++++++++++++++
->  6 files changed, 163 insertions(+)
+>Ack
 >
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 5617bc4f899f..bb2f709c0900 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -5952,6 +5952,59 @@ delivery must be provided via the "reg_aen" struct.
->  The "pad" and "reserved" fields may be used for future extensions and should be
->  set to 0s by userspace.
->  
-> +4.138 KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES
-> +-----------------------------------------
-> +
-> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
-> +:Architectures: x86
-> +:Type: vm ioctl
-> +:Parameters: u64 memory attributes bitmask(out)
-> +:Returns: 0 on success, <0 on error
-> +
-> +Returns supported memory attributes bitmask. Supported memory attributes will
-> +have the corresponding bits set in u64 memory attributes bitmask.
-> +
-> +The following memory attributes are defined::
-> +
-> +  #define KVM_MEMORY_ATTRIBUTE_READ              (1ULL << 0)
-> +  #define KVM_MEMORY_ATTRIBUTE_WRITE             (1ULL << 1)
-> +  #define KVM_MEMORY_ATTRIBUTE_EXECUTE           (1ULL << 2)
-> +  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> +
-> +4.139 KVM_SET_MEMORY_ATTRIBUTES
-> +-----------------------------------------
-> +
-> +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
-> +:Architectures: x86
-> +:Type: vm ioctl
-> +:Parameters: struct kvm_memory_attributes(in/out)
-> +:Returns: 0 on success, <0 on error
-> +
-> +Sets memory attributes for pages in a guest memory range. Parameters are
-> +specified via the following structure::
-> +
-> +  struct kvm_memory_attributes {
-> +	__u64 address;
-> +	__u64 size;
-> +	__u64 attributes;
-> +	__u64 flags;
-> +  };
-> +
-> +The user sets the per-page memory attributes to a guest memory range indicated
-> +by address/size, and in return KVM adjusts address and size to reflect the
-> +actual pages of the memory range have been successfully set to the attributes.
+>> 
+>> 
+>> >netlink layer by:
+>> >- Considering IFLA_MACSEC_OFFLOAD in macsec_fill_info.
+>> >- Handling IFLA_MACSEC_OFFLOAD in macsec_changelink.
+>> >- Adding IFLA_MACSEC_OFFLOAD to the netlink policy.
+>> >- Adjusting macsec_get_size.
+>> 
+>> 4 patches then?
+>
+>Ack, I will change the commit message to be imperative and will replace the list with a good description.
+>I still believe it should be a one patch since splitting this could break a bisect process.
 
-This wording could cause some confusion, what about a simpler:
+Well, when you split, you have to make sure you don't break bisection,
+always. Please try to figure that out.
 
-"reflect the range of pages that had its attributes successfully set"
 
-> +If the call returns 0, "address" is updated to the last successful address + 1
-> +and "size" is updated to the remaining address size that has not been set
-> +successfully.
-
-"address + 1 page" or "subsequent page" perhaps.
-
-In fact, wouldn't this all become simpler if size were number of pages instead?
-
-> The user should check the return value as well as the size to
-> +decide if the operation succeeded for the whole range or not. The user may want
-> +to retry the operation with the returned address/size if the previous range was
-> +partially successful.
-> +
-> +Both address and size should be page aligned and the supported attributes can be
-> +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
-> +
-> +The "flags" field may be used for future extensions and should be set to 0s.
-> +
-
-...
-
-> +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
-> +					   struct kvm_memory_attributes *attrs)
-> +{
-> +	gfn_t start, end;
-> +	unsigned long i;
-> +	void *entry;
-> +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
-> +
-> +	/* flags is currently not used. */
-> +	if (attrs->flags)
-> +		return -EINVAL;
-> +	if (attrs->attributes & ~supported_attrs)
-> +		return -EINVAL;
-> +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
-> +		return -EINVAL;
-> +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
-> +		return -EINVAL;
-> +
-> +	start = attrs->address >> PAGE_SHIFT;
-> +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
-
-Here PAGE_SIZE and -1 cancel out.
-
-Consider using gpa_to_gfn as well.
-
-> +
-> +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
-> +
-> +	mutex_lock(&kvm->lock);
-> +	for (i = start; i < end; i++)
-> +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
-> +				    GFP_KERNEL_ACCOUNT)))
-> +			break;
-> +	mutex_unlock(&kvm->lock);
-> +
-> +	attrs->address = i << PAGE_SHIFT;
-> +	attrs->size = (end - i) << PAGE_SHIFT;
-> +
-> +	return 0;
-> +}
-> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
-> +
->  struct kvm_memory_slot *gfn_to_memslot(struct kvm *kvm, gfn_t gfn)
->  {
->  	return __gfn_to_memslot(kvm_memslots(kvm), gfn);
-> @@ -4459,6 +4508,9 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
->  #ifdef CONFIG_HAVE_KVM_MSI
->  	case KVM_CAP_SIGNAL_MSI:
->  #endif
-> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
-> +	case KVM_CAP_MEMORY_ATTRIBUTES:
-> +#endif
->  #ifdef CONFIG_HAVE_KVM_IRQFD
->  	case KVM_CAP_IRQFD:
->  	case KVM_CAP_IRQFD_RESAMPLE:
-> @@ -4804,6 +4856,30 @@ static long kvm_vm_ioctl(struct file *filp,
->  		break;
->  	}
->  #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
-> +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
-> +	case KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES: {
-> +		u64 attrs = kvm_supported_mem_attributes(kvm);
-> +
-> +		r = -EFAULT;
-> +		if (copy_to_user(argp, &attrs, sizeof(attrs)))
-> +			goto out;
-> +		r = 0;
-> +		break;
-> +	}
-> +	case KVM_SET_MEMORY_ATTRIBUTES: {
-> +		struct kvm_memory_attributes attrs;
-> +
-> +		r = -EFAULT;
-> +		if (copy_from_user(&attrs, argp, sizeof(attrs)))
-> +			goto out;
-> +
-> +		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
-> +
-> +		if (!r && copy_to_user(argp, &attrs, sizeof(attrs)))
-> +			r = -EFAULT;
-> +		break;
-> +	}
-> +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
->  	case KVM_CREATE_DEVICE: {
->  		struct kvm_create_device cd;
+>
+>> I mean really, not a macsec person, but I should be able to follow what are your
+>> intensions looking and description&code right away.
+>> 
+>> >
+>> >The handling in macsec_changlink is similar to
+>> 
+>> s/macsec_changlink/macsec_changelink/
+>
+>Ack
+>
+>> >macsec_upd_offload.
+>> >Update macsec_upd_offload to use a common helper function to avoid
+>> >duplication.
+>> >
+>> >Example for setting offload for a macsec device
+>> >    ip link set macsec0 type macsec offload mac
+>> >
+>> >Reviewed-by: Raed Salem <raeds@nvidia.com>
+>> >Signed-off-by: Emeel Hakim <ehakim@nvidia.com>
+>> >---
+>> >V1 -> V2: Add common helper to avoid duplicating code
+>> >drivers/net/macsec.c | 114 ++++++++++++++++++++++++++++---------------
+>> > 1 file changed, 74 insertions(+), 40 deletions(-)
+>> >
+>> >diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c index
+>> >d73b9d535b7a..afd6ff47ba56 100644
+>> >--- a/drivers/net/macsec.c
+>> >+++ b/drivers/net/macsec.c
+>> >@@ -2583,16 +2583,45 @@ static bool macsec_is_configured(struct macsec_dev
+>> *macsec)
+>> >       return false;
+>> > }
+>> >
+>> >+static int macsec_update_offload(struct macsec_dev *macsec, enum
+>> >+macsec_offload offload) {
+>> >+      enum macsec_offload prev_offload;
+>> >+      const struct macsec_ops *ops;
+>> >+      struct macsec_context ctx;
+>> >+      int ret = 0;
+>> >+
+>> >+      prev_offload = macsec->offload;
+>> >+
+>> >+      /* Check if the device already has rules configured: we do not support
+>> >+       * rules migration.
+>> >+       */
+>> >+      if (macsec_is_configured(macsec))
+>> >+              return -EBUSY;
+>> >+
+>> >+      ops = __macsec_get_ops(offload == MACSEC_OFFLOAD_OFF ? prev_offload :
+>> offload,
+>> >+                             macsec, &ctx);
+>> >+      if (!ops)
+>> >+              return -EOPNOTSUPP;
+>> >+
+>> >+      macsec->offload = offload;
+>> >+
+>> >+      ctx.secy = &macsec->secy;
+>> >+      ret = (offload == MACSEC_OFFLOAD_OFF) ? macsec_offload(ops-
+>> >mdo_del_secy, &ctx) :
+>> >+                    macsec_offload(ops->mdo_add_secy, &ctx);
+>> >+
+>> >+      if (ret)
+>> >+              macsec->offload = prev_offload;
+>> >+
+>> >+      return ret;
+>> >+}
+>> >+
+>> > static int macsec_upd_offload(struct sk_buff *skb, struct genl_info
+>> >*info)  {
+>> >       struct nlattr *tb_offload[MACSEC_OFFLOAD_ATTR_MAX + 1];
+>> >-      enum macsec_offload offload, prev_offload;
+>> >-      int (*func)(struct macsec_context *ctx);
+>> >       struct nlattr **attrs = info->attrs;
+>> >-      struct net_device *dev;
+>> >-      const struct macsec_ops *ops;
+>> >-      struct macsec_context ctx;
+>> >+      enum macsec_offload offload;
+>> >       struct macsec_dev *macsec;
+>> >+      struct net_device *dev;
+>> >       int ret;
+>> >
+>> >       if (!attrs[MACSEC_ATTR_IFINDEX]) @@ -2629,39 +2658,7 @@ static
+>> >int macsec_upd_offload(struct sk_buff *skb, struct genl_info *info)
+>> >
+>> >       rtnl_lock();
+>> >
+>> >-      prev_offload = macsec->offload;
+>> >-      macsec->offload = offload;
+>> >-
+>> >-      /* Check if the device already has rules configured: we do not support
+>> >-       * rules migration.
+>> >-       */
+>> >-      if (macsec_is_configured(macsec)) {
+>> >-              ret = -EBUSY;
+>> >-              goto rollback;
+>> >-      }
+>> >-
+>> >-      ops = __macsec_get_ops(offload == MACSEC_OFFLOAD_OFF ? prev_offload :
+>> offload,
+>> >-                             macsec, &ctx);
+>> >-      if (!ops) {
+>> >-              ret = -EOPNOTSUPP;
+>> >-              goto rollback;
+>> >-      }
+>> >-
+>> >-      if (prev_offload == MACSEC_OFFLOAD_OFF)
+>> >-              func = ops->mdo_add_secy;
+>> >-      else
+>> >-              func = ops->mdo_del_secy;
+>> >-
+>> >-      ctx.secy = &macsec->secy;
+>> >-      ret = macsec_offload(func, &ctx);
+>> >-      if (ret)
+>> >-              goto rollback;
+>> >-
+>> >-      rtnl_unlock();
+>> >-      return 0;
+>> >-
+>> >-rollback:
+>> >-      macsec->offload = prev_offload;
+>> >+      ret = macsec_update_offload(macsec, offload);
+>> >
+>> >       rtnl_unlock();
+>> >       return ret;
+>> >@@ -3698,6 +3695,7 @@ static const struct nla_policy
+>> macsec_rtnl_policy[IFLA_MACSEC_MAX + 1] = {
+>> >       [IFLA_MACSEC_SCB] = { .type = NLA_U8 },
+>> >       [IFLA_MACSEC_REPLAY_PROTECT] = { .type = NLA_U8 },
+>> >       [IFLA_MACSEC_VALIDATION] = { .type = NLA_U8 },
+>> >+      [IFLA_MACSEC_OFFLOAD] = { .type = NLA_U8 },
+>> > };
+>> >
+>> > static void macsec_free_netdev(struct net_device *dev) @@ -3803,6
+>> >+3801,29 @@ static int macsec_changelink_common(struct net_device *dev,
+>> >       return 0;
+>> > }
+>> >
+>> >+static int macsec_changelink_upd_offload(struct net_device *dev,
+>> >+struct nlattr *data[]) {
+>> >+      enum macsec_offload offload;
+>> >+      struct macsec_dev *macsec;
+>> >+
+>> >+      macsec = macsec_priv(dev);
+>> >+      offload = nla_get_u8(data[IFLA_MACSEC_OFFLOAD]);
+>> >+
+>> >+      if (macsec->offload == offload)
+>> >+              return 0;
+>> >+
+>> >+      /* Check if the offloading mode is supported by the underlying layers */
+>> >+      if (offload != MACSEC_OFFLOAD_OFF &&
+>> >+          !macsec_check_offload(offload, macsec))
+>> >+              return -EOPNOTSUPP;
+>> >+
+>> >+      /* Check if the net device is busy. */
+>> >+      if (netif_running(dev))
+>> >+              return -EBUSY;
+>> >+
+>> >+      return macsec_update_offload(macsec, offload); }
+>> >+
+>> > static int macsec_changelink(struct net_device *dev, struct nlattr *tb[],
+>> >                            struct nlattr *data[],
+>> >                            struct netlink_ext_ack *extack) @@ -3831,6
+>> >+3852,12 @@ static int macsec_changelink(struct net_device *dev, struct nlattr
+>> *tb[],
+>> >       if (ret)
+>> >               goto cleanup;
+>> >
+>> >+      if (data[IFLA_MACSEC_OFFLOAD]) {
+>> >+              ret = macsec_changelink_upd_offload(dev, data);
+>> >+              if (ret)
+>> >+                      goto cleanup;
+>> >+      }
+>> >+
+>> >       /* If h/w offloading is available, propagate to the device */
+>> >       if (macsec_is_offloaded(macsec)) {
+>> >               const struct macsec_ops *ops; @@ -4231,16 +4258,22 @@
+>> >static size_t macsec_get_size(const struct net_device *dev)
+>> >               nla_total_size(1) + /* IFLA_MACSEC_SCB */
+>> >               nla_total_size(1) + /* IFLA_MACSEC_REPLAY_PROTECT */
+>> >               nla_total_size(1) + /* IFLA_MACSEC_VALIDATION */
+>> >+              nla_total_size(1) + /* IFLA_MACSEC_OFFLOAD */
+>> >               0;
+>> > }
+>> >
+>> > static int macsec_fill_info(struct sk_buff *skb,
+>> >                           const struct net_device *dev)  {
+>> >-      struct macsec_secy *secy = &macsec_priv(dev)->secy;
+>> >-      struct macsec_tx_sc *tx_sc = &secy->tx_sc;
+>> >+      struct macsec_tx_sc *tx_sc;
+>> >+      struct macsec_dev *macsec;
+>> >+      struct macsec_secy *secy;
+>> >       u64 csid;
+>> >
+>> >+      macsec = macsec_priv(dev);
+>> >+      secy = &macsec->secy;
+>> >+      tx_sc = &secy->tx_sc;
+>> >+
+>> >       switch (secy->key_len) {
+>> >       case MACSEC_GCM_AES_128_SAK_LEN:
+>> >               csid = secy->xpn ? MACSEC_CIPHER_ID_GCM_AES_XPN_128 :
+>> >MACSEC_DEFAULT_CIPHER_ID; @@ -4265,6 +4298,7 @@ static int
+>> macsec_fill_info(struct sk_buff *skb,
+>> >           nla_put_u8(skb, IFLA_MACSEC_SCB, tx_sc->scb) ||
+>> >           nla_put_u8(skb, IFLA_MACSEC_REPLAY_PROTECT, secy->replay_protect) ||
+>> >           nla_put_u8(skb, IFLA_MACSEC_VALIDATION,
+>> >secy->validate_frames) ||
+>> >+          nla_put_u8(skb, IFLA_MACSEC_OFFLOAD, macsec->offload) ||
+>> >           0)
+>> >               goto nla_put_failure;
+>> >
+>> >--
+>> >2.21.3
+>> >
