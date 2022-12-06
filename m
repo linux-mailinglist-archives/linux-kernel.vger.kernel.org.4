@@ -2,169 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D972C644A2E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E015A644A34
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233864AbiLFRSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:18:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
+        id S231530AbiLFRTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:19:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbiLFRSV (ORCPT
+        with ESMTP id S234621AbiLFRTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:18:21 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892122EF1B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:18:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=bUv6yKvkWdBvEKj5O2gPYdJyOl5l6ZqaOflgR7jq+kQ=; b=s1S9oIxz5+IdM0OXAOflwivX8M
-        6Tb/plslR9CpibsN8++684b+kmaXKMl4gUbpkaBeYWAjFuJyWRjIIuoY/omZjSDy9/1hrvdCXcBO4
-        JHEuH05xRebGJrO1MqvTrLS8pxN86eILh2V0Ig757U7fmHC7buPueg2ipwWTFsH7VL0rLP1X77anb
-        /C1o91YmwV0A1CdrM1yBdIvZ/FBjPbZFMKx3QcKUQTg2E6bW7KSD4mJXIV0fr69c6a0bnZ2ojRsaB
-        Eg8XJ5z30rkysmfRf1JX7vXKJTzaInDS6ENzeMZyYOIgyiE0HfXexbIhCkLitcxunPCzPzcqpVO2p
-        LN/C2yyg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p2baI-004dnD-KH; Tue, 06 Dec 2022 17:18:22 +0000
-Date:   Tue, 6 Dec 2022 17:18:22 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
- preserves const-ness of the pointer
-Message-ID: <Y495XgCv+dhGA2Tg@casper.infradead.org>
-References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
- <Y49cGRDBVP3bHJuT@casper.infradead.org>
- <Y49lxZMsKrXRciIg@kroah.com>
+        Tue, 6 Dec 2022 12:19:49 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC6632B9E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:19:49 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id p24so14597692plw.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 09:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nufx4zcAF2Hy92hdZ4SQGgGJQhbCVmBKUwfpAVYuWVU=;
+        b=Obn4AceK6JO1PPNkUXCyxakNTEOq4vY6WYVQLNpctP9OccD3HniookrXLoUobLFi58
+         g4OP1m+jq9wTSxYIXXemVbnmEZVHPR4h0M9IStEHhBlVhRqJ1V3iz5Jm4X+ZIFGQMgav
+         q60b2tS4LyqYTF4BahjOYBq5aQ2io2Puub3yiSTk/Mc9YFCzQPYLC8nLU/WvhEaqdtBr
+         4tv4pWh+Owmc5zKz/+2yT/H+Sp/gfXWqFPf8yAwdJ4pB44xBWX8VUDq7tF6tHxHcKo6s
+         jJG7bR1H2Hdr1QYvZHmUZkmRpa4q28Be6oBZlCRwWROdG7WxCnxEHw3dRLt2QuJuvmzA
+         qQSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nufx4zcAF2Hy92hdZ4SQGgGJQhbCVmBKUwfpAVYuWVU=;
+        b=rHIVJxEKoHB2iE+bXJU3xiYafk5k76edBSQs+lndMwnA6wa1trBVPheRoSGjzW/iYw
+         UDc4PivJDCQVjykt6rrCyECcEFhggN8I+hQ74SJIAnw/tNwvosHBS1o/NdGB78Lw57aB
+         Wzo+ccuchBaBfK5pppMRwIKwwRxQBXzWNZZxJXl+qI+534XHOYV1tpGQqkTIVWkrTF41
+         jaYRSbsGGZD3mT1X1BxeHwkxmEbJM+UwhxcSoqmktnE5m0/reJVcf0yJyJBoEqhP8oj6
+         9jBLeBNoFqZtCDX1ijiN2Ek0j1kiW89ft3VdWxNdgZawKACFrjYnh3Jhy18VDJay8WXi
+         PPGw==
+X-Gm-Message-State: ANoB5pnbYQoXFlcxZv6PHfT6MbP+KgH0yn4saOl/aHMxKS2z11RIBZtl
+        2qeAqdnOthSd5N4gJ1pe17bAGw==
+X-Google-Smtp-Source: AA0mqf5cWW2MfuAinYnKIj4/TFXmrCH6S81CbrXwLs/uGbsz9tE0u3kFGxBncDG7FF690NMfx9Vviw==
+X-Received: by 2002:a17:902:7686:b0:177:faf5:58c5 with SMTP id m6-20020a170902768600b00177faf558c5mr73905859pll.166.1670347188486;
+        Tue, 06 Dec 2022 09:19:48 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c9-20020a63ef49000000b0046feca0883fsm9918488pgk.64.2022.12.06.09.19.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 09:19:48 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:19:44 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86/pmu: Avoid ternary operator by directly
+ referring to counters->type
+Message-ID: <Y495sF0rDGrrfstD@google.com>
+References: <20221205113718.1487-1-likexu@tencent.com>
+ <Y44gbvm5Zb7a1Sbj@google.com>
+ <38b2a836-f9a4-23e4-107b-61efc74638a4@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y49lxZMsKrXRciIg@kroah.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_FILL_THIS_FORM_SHORT autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <38b2a836-f9a4-23e4-107b-61efc74638a4@gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 04:54:45PM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Dec 06, 2022 at 03:13:29PM +0000, Matthew Wilcox wrote:
-> > On Mon, Dec 05, 2022 at 01:12:03PM +0100, Greg Kroah-Hartman wrote:
-> > > +/**
-> > > + * container_of_const - cast a member of a structure out to the containing
-> > > + *			structure and preserve the const-ness of the pointer
-> > > + * @ptr:		the pointer to the member
-> > > + * @type:		the type of the container struct this is embedded in.
-> > > + * @member:		the name of the member within the struct.
-> > > + */
-> > > +#define container_of_const(ptr, type, member)				\
-> > > +	_Generic(ptr,							\
-> > > +		const typeof(*(ptr)) *: ((const type *)container_of(ptr, type, member)),\
-> > > +		default: ((type *)container_of(ptr, type, member))	\
-> > > +	)
-> > > +
+On Tue, Dec 06, 2022, Like Xu wrote:
+> > > diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+> > > index e5cec07ca8d9..28b0a784f6e9 100644
+> > > --- a/arch/x86/kvm/vmx/pmu_intel.c
+> > > +++ b/arch/x86/kvm/vmx/pmu_intel.c
+> > > @@ -142,7 +142,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+> > >   	}
+> > >   	if (idx >= num_counters)
+> > >   		return NULL;
+> > > -	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
+> > > +	*mask &= pmu->counter_bitmask[counters->type];
 > > 
-> > Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > 
-> > I tried doing this:
-> > 
-> > +++ b/include/linux/container_of.h
-> > @@ -15,11 +15,17 @@
-> >   *
-> >   * WARNING: any const qualifier of @ptr is lost.
-> >   */
-> > -#define container_of(ptr, type, member) ({                             \
-> > +#define _c_of(ptr, type, member) ({                                    \
-> >         void *__mptr = (void *)(ptr);                                   \
-> >         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
-> >                       __same_type(*(ptr), void),                        \
-> >                       "pointer type mismatch in container_of()");       \
-> >         ((type *)(__mptr - offsetof(type, member))); })
-> > 
-> > +#define container_of(ptr, type, m)                                     \
-> > +       _Generic(ptr,                                                   \
-> > +               const typeof(*(ptr)) *: (const type *)_c_of(ptr, type, m),\
-> > +               default: ((type *)_c_of(ptr, type, m))                  \
-> > +       )
-> > +
-> >  #endif /* _LINUX_CONTAINER_OF_H */
-> > 
-> > (whitespace damaged, yes the kernel-doc is now in the wrong place, etc)
-> > 
-> > It found a few problems; just building the mlx5 driver (I happened to be
-> > doing some work on it in that tree).  We're definitely not ready to do
-> > that yet, but I'll send a few patches to prepare for it.
-> 
-> Yeah, that's a good long-term goal to have here.  Once everything is
-> moved over, switching all container_of_const() to just container_of()
-> should be simple.
+> > In terms of readability, I have a slight preference for the current code as I
+> > don't have to look at counters->type to understand its possible values.
+> When someone tries to add a new type of pmc type, the code bugs up.
 
-I found a problem in fs/dcache.c:
+Are there new types coming along?  If so, I definitely would not object to refactoring
+this code in the context of a series that adds a new type(s).  But "fixing" this one
+case is not sufficient to support a new type, e.g. intel_is_valid_rdpmc_ecx() also
+needs to be updated.  Actually, even this function would need additional updates
+to perform a similar sanity check.
 
-struct qstr {
-        union {
-                struct {
-                        HASH_LEN_DECLARE;
-                };
-                u64 hash_len;
-        };
-        const unsigned char *name;
-};
+	if (fixed) {
+		counters = pmu->fixed_counters;
+		num_counters = pmu->nr_arch_fixed_counters;
+	} else {
+		counters = pmu->gp_counters;
+		num_counters = pmu->nr_arch_gp_counters;
+	}
+	if (idx >= num_counters)
+		return NULL;
 
-(note the const on "name")
+> And, this one will make all usage of pmu->counter_bitmask[] more consistent.
 
-static inline struct external_name *external_name(struct dentry *dentry)
-{
-        return container_of(dentry->d_name.name, struct external_name, name[0]);
-}
+How's that?  There's literally one instance of using ->type
 
-dentry isn't const, but dentry->d_name.name is, so we match the const
-case and the compiler emits a warning.  I don't think there's a way to
-key off the constness of dentry instead of dentry->d_name.name, so
-I've gone with the following for now.  Anybody prefer a different
-approach?
+  static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
+  {
+	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
 
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 52e6d5fdab6b..b51a86f3cec6 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -288,7 +288,8 @@ struct external_name {
- 
- static inline struct external_name *external_name(struct dentry *dentry)
- {
--	return container_of(dentry->d_name.name, struct external_name, name[0]);
-+	return container_of_not_const(dentry->d_name.name,
-+				      struct external_name, name[0]);
- }
- 
- static void __d_free(struct rcu_head *head)
-@@ -329,7 +330,8 @@ void release_dentry_name_snapshot(struct name_snapshot *name)
- {
- 	if (unlikely(name->name.name != name->inline_name)) {
- 		struct external_name *p;
--		p = container_of(name->name.name, struct external_name, name[0]);
-+		p = container_of_not_const(name->name.name,
-+					   struct external_name, name[0]);
- 		if (unlikely(atomic_dec_and_test(&p->u.count)))
- 			kfree_rcu(p, u.head);
- 	}
-diff --git a/include/linux/container_of.h b/include/linux/container_of.h
-index 23389af3af94..bf609a072754 100644
---- a/include/linux/container_of.h
-+++ b/include/linux/container_of.h
-@@ -25,4 +25,7 @@
- 		const typeof(*(ptr)) *: (const type *)__mptr,		\
- 		default: ((type *)__mptr)); })
- 
-+#define container_of_not_const(ptr, type, member) 			\
-+	(type *)container_of(ptr, type, member)
-+
- #endif	/* _LINUX_CONTAINER_OF_H */
+	return pmu->counter_bitmask[pmc->type];
+  }
+
+everything else is hardcoded.  And using pmc->type there make perfect sense in
+that case.  But in intel_rdpmc_ecx_to_pmc(), there is already usage of "fixed",
+so IMO switching to ->type makes that function somewhat inconsistent with itself.
