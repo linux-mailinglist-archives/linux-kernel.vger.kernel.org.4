@@ -2,107 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCA646448CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDF36448BF
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbiLFQJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:09:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54582 "EHLO
+        id S235237AbiLFQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:07:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbiLFQI0 (ORCPT
+        with ESMTP id S235546AbiLFQHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:08:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338E336C4B
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 08:03:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670342592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=if43UGApWWJdqTN/53+zoOb2JfWQ93VyHHfMWcbQemE=;
-        b=TK7ibaACa2bpQnMYgkHthWRhHjRQ4ozzksMh1u+vlwoouxSZ/T8UFik4oMpaQmbNrCKfER
-        PWteLDyiVRLBJpJ5au2SzdQq4hqdsfaWhzSWgu0K+hfY15yz89rVRv2t1E83ZVUHM6XwPo
-        Ua3USm0l5nYvPXFRzY2gVhV/mrAGiMI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-307-DRMKhfe8PJ2MOlVLvAu9cQ-1; Tue, 06 Dec 2022 11:03:08 -0500
-X-MC-Unique: DRMKhfe8PJ2MOlVLvAu9cQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 6 Dec 2022 11:07:15 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71E0F32B98;
+        Tue,  6 Dec 2022 08:03:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42205857FAC;
-        Tue,  6 Dec 2022 16:03:08 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9BE651410DD9;
-        Tue,  6 Dec 2022 16:03:07 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH net-next 32/32] rxrpc: Kill service bundle
-From:   David Howells <dhowells@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, dhowells@redhat.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org
-Date:   Tue, 06 Dec 2022 16:03:05 +0000
-Message-ID: <167034258505.1105287.5403397572562689183.stgit@warthog.procyon.org.uk>
-In-Reply-To: <167034231605.1105287.1693064952174322878.stgit@warthog.procyon.org.uk>
-References: <167034231605.1105287.1693064952174322878.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        by ams.source.kernel.org (Postfix) with ESMTPS id C7572B81AA1;
+        Tue,  6 Dec 2022 16:03:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F16C433D6;
+        Tue,  6 Dec 2022 16:03:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670342603;
+        bh=TqJFgSnbNlhbjhiuX1arn47XcYRFf/kK7R85AOUhw6w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MpbKpY/4NOt6CZJA27rHP/XauBm8GjJFBjXjFbrxFYlCtR2UObW8fGZXzgnL0GLKX
+         HpH9B8529EVizc8sdYoy+5w9IhIOsOMkCNoxhMY/tlKP5a20L+K+wG89EAvVtHmlrx
+         2/1KbHQ8r7O+OLf2xKkJ4YnYN+KP7FnRg7NNE2x/HW6A1TENys3b7V7ahhIx3vzISA
+         b50IBst8dERdCBlryFxZpzU1w84aKltmNo9+BfIimwsTF2OkKr6ybLbY03U+WOcv7W
+         +MtBmUMXPRskumA6wCRMRcU1BzEnkX1cljG0zCqgmLQlYsGlK0kuXLvBEzlVoo5FV4
+         ICZd19A/g/y0Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4DB1540404; Tue,  6 Dec 2022 13:03:18 -0300 (-03)
+Date:   Tue, 6 Dec 2022 13:03:18 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Ravi Bangoria <ravi.bangoria@amd.com>, irogers@google.com,
+        jolsa@redhat.com, namhyung@kernel.org, peterz@infradead.org,
+        mark.rutland@arm.com, adrian.hunter@intel.com,
+        alexander.shishkin@linux.intel.com, carsten.haitzler@arm.com,
+        leo.yan@linaro.org, maddy@linux.ibm.com, kjain@linux.ibm.com,
+        atrajeev@linux.vnet.ibm.com, tmricht@linux.ibm.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v3 0/2] perf test: Add event group test
+Message-ID: <Y49nxv41VMtqUSNk@kernel.org>
+References: <20221206043237.12159-1-ravi.bangoria@amd.com>
+ <529367b6-e96a-d030-b8a2-bb4ad3d37d90@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <529367b6-e96a-d030-b8a2-bb4ad3d37d90@linux.intel.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the bundle->channel_lock has been eliminated, we don't need the
-dummy service bundle anymore.  It's purpose was purely to provide the
-channel_lock for service connections.
+Em Tue, Dec 06, 2022 at 09:47:57AM -0500, Liang, Kan escreveu:
+> On 2022-12-05 11:32 p.m., Ravi Bangoria wrote:
+> > Multiple events in a group can belong to one or more pmus, however
+> > there are some limitations to it. One of the limitation is, perf
+> > doesn't allow creating a group of events from different hw pmus.
+> > Write a simple test to create various combinations of hw, sw and
+> > uncore pmu events and verify group creation succeeds or fails as
+> > expected.
+> > 
+> > v2: https://lore.kernel.org/r/20221129111946.409-1-ravi.bangoria@amd.com
+> > v2->v3:
+> >  - Define a set of uncore pmus that supports more than 3 events. This
+> >    will prevent false negative results by not picking random uncore
+> >    pmu. Test will be skipped if no uncore pmu found.
+> > 
+> > Ravi Bangoria (2):
+> >   perf tool: Move pmus list variable to new a file
+> 
+> a new file
+> 
+> Other than the above typo, the patch series looks good to me.
+> 
+> Acked-by: Kan Liang <kan.liang@linux.intel.com>
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
+Fixed that up, added your Acked-by, thanks.
 
- net/rxrpc/conn_service.c |    7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/net/rxrpc/conn_service.c b/net/rxrpc/conn_service.c
-index f30323de82bd..89ac05a711a4 100644
---- a/net/rxrpc/conn_service.c
-+++ b/net/rxrpc/conn_service.c
-@@ -8,11 +8,6 @@
- #include <linux/slab.h>
- #include "ar-internal.h"
- 
--static struct rxrpc_bundle rxrpc_service_dummy_bundle = {
--	.ref		= REFCOUNT_INIT(1),
--	.debug_id	= UINT_MAX,
--};
--
- /*
-  * Find a service connection under RCU conditions.
-  *
-@@ -132,8 +127,6 @@ struct rxrpc_connection *rxrpc_prealloc_service_connection(struct rxrpc_net *rxn
- 		 */
- 		conn->state = RXRPC_CONN_SERVICE_PREALLOC;
- 		refcount_set(&conn->ref, 2);
--		conn->bundle = rxrpc_get_bundle(&rxrpc_service_dummy_bundle,
--						rxrpc_bundle_get_service_conn);
- 
- 		atomic_inc(&rxnet->nr_conns);
- 		write_lock(&rxnet->conn_lock);
-
-
+- Arnaldo
