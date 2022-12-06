@@ -2,111 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28A33644500
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA2E06444FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233178AbiLFNyM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:54:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
+        id S234448AbiLFNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:53:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiLFNyJ (ORCPT
+        with ESMTP id S233495AbiLFNx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:54:09 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2F7D2B608
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:53:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670334789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ECE0g7YbfMnTJuWIRmn1xP32SqigQ6zugR1ek2C/cw=;
-        b=c89Gb1+CI+5sMv+0HGEy8NJDxQwbNdtxWcgzmEHedSECkW61wy1Ap28PyhuD3rck6eLPTZ
-        XMZCFbdlljs9LLCecXD6pPHxh9mDhIZBgdjh+aLIwmxbfR/TdfTtwfmUzSNoRTwd341EQr
-        qFMA1tJ5eLqx8c0oU7ZtpFeXbXE9aWk=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-542-7IVfiazxODSYWQeI1UbTCQ-1; Tue, 06 Dec 2022 08:53:07 -0500
-X-MC-Unique: 7IVfiazxODSYWQeI1UbTCQ-1
-Received: by mail-wm1-f70.google.com with SMTP id i203-20020a1c3bd4000000b003d0f49bc21bso4397404wma.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 05:53:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ECE0g7YbfMnTJuWIRmn1xP32SqigQ6zugR1ek2C/cw=;
-        b=2+GwuXCo/Xq1fLqhMSXfhWv6UZork1yyBS4AureXC7sP1TzGerSQTRG2yNUFpRkb1c
-         rowsf0vTGxI0T3OApatnwZVaxi0swIvOhaQpbaDtpWoW1GscAjYxV7UP+zc+h25Byxy0
-         /TeGc81kdZcBiR9lkAusYHAh+nL1SN57riwLnZjkWoWqsEZBRbyVEcqJPdoyghKp3bXD
-         sFQxb9UEpYxJYRg3JQmOklxuTtudR9lJTgmpwyKsURarPeK7lwDK+T/XRaitHyTHjyOR
-         My14phhiXQ31LzZxfJCIfosCRUKkGxPSfYBk/lsPrl6cuBI1rR9uGB/Fg3V0bYFbHF6a
-         uLVA==
-X-Gm-Message-State: ANoB5pkEAoassQLsX5lJHU+cmgF4lKDyXvVIMZKhoPpeMnSOx9hnnNFc
-        uBS+3qvjZU8rIVFmlVMDzel0M0RtEWLEA26mVWnD3F813PGDoySrzR4qPtri9ZC19aVc28lGMmG
-        Xc+RvMYm/Z5ZUI3J4rnYUMqMgBaGI8pX3fEmsX0Z7h9vhRLMZkQa9OntsBMfnUg+P574NBZdxSf
-        c3
-X-Received: by 2002:a7b:c315:0:b0:3cf:ca62:7ab with SMTP id k21-20020a7bc315000000b003cfca6207abmr334264wmj.23.1670334786666;
-        Tue, 06 Dec 2022 05:53:06 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4Arxt6oofscVN8skgdjZ/sDcuxwWiozQstiNdWtSwlkiStCmejQeNBgbSlwRCno3PPgyy0+A==
-X-Received: by 2002:a7b:c315:0:b0:3cf:ca62:7ab with SMTP id k21-20020a7bc315000000b003cfca6207abmr334256wmj.23.1670334786383;
-        Tue, 06 Dec 2022 05:53:06 -0800 (PST)
-Received: from ovpn-194-152.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id j4-20020a05600c410400b003cfbbd54178sm2937311wmi.2.2022.12.06.05.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:53:05 -0800 (PST)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        coverity-bot <keescook@chromium.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86: hyper-v: Fix 'using uninitialized value'
- Coverity warning
-In-Reply-To: <Y4odRLlFRj17tUNE@google.com>
-References: <20221202105856.434886-1-vkuznets@redhat.com>
- <Y4odRLlFRj17tUNE@google.com>
-Date:   Tue, 06 Dec 2022 14:53:04 +0100
-Message-ID: <87pmcwd4fz.fsf@ovpn-194-152.brq.redhat.com>
+        Tue, 6 Dec 2022 08:53:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F62B19D;
+        Tue,  6 Dec 2022 05:53:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B122B80DF3;
+        Tue,  6 Dec 2022 13:53:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BDDC433C1;
+        Tue,  6 Dec 2022 13:53:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670334805;
+        bh=pLK21N5d/EKb/syw7sI9+Uws4wdPPOjQjHEhyt51XUU=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=nO+bo8un+V+ofnRZf16zv9tcWuY2QT1r4KaWAHFjvB4zhdNlHOs0P7x48LTLInYdo
+         ZJPXalJcwpWZvZkF/+tET+dbFBmLEGZI1i9qflg73cO2OL3VVqJP8DszO/zo2nnkUe
+         fZZmojkVMq5EtU6tqsezgJH3MJ4bS0FLY1e76kUofcj+x0xnCBCPAdRuv47ITB4ISX
+         a7UlNZIy/04HGnwExrFBORnxC9BPSoFUZnl9m35meQWaNisFSWjlmjMohi2He+l6Su
+         L4KqmG7N3mdvvuBrbzEPXcD1G+HTS5cMKWoCJ+S4UprT/lj4cU4znD3x/kH7ORFBv4
+         u2zRcq0kvCA5A==
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+        id 1C00582E399; Tue,  6 Dec 2022 14:53:22 +0100 (CET)
+From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Subject: Re: [PATCH] bpf: call get_random_u32() for random integers
+In-Reply-To: <CAHmME9pQoHBLob306ta4jswr5HnPX73Uq0GDK8bZBtYOLHVwbQ@mail.gmail.com>
+References: <20221205181534.612702-1-Jason@zx2c4.com>
+ <730fd355-ad86-a8fa-6583-df23d39e0c23@iogearbox.net>
+ <Y451ENAK7BQQDJc/@zx2c4.com> <87lenku265.fsf@toke.dk>
+ <CAHmME9poicgpHhXJ1ieWbDTFBu=ApSFaQKShhHezDmA0A5ajKQ@mail.gmail.com>
+ <87iliou0hd.fsf@toke.dk>
+ <CAHmME9pQoHBLob306ta4jswr5HnPX73Uq0GDK8bZBtYOLHVwbQ@mail.gmail.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date:   Tue, 06 Dec 2022 14:53:22 +0100
+Message-ID: <87edtctz8t.fsf@toke.dk>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
 
-> On Fri, Dec 02, 2022, Vitaly Kuznetsov wrote:
->> In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
->> are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
->> halves' and increase 'data_offset' otherwise. Coverity discovered, that in
->> one case both variables are incremented unconditionally. This doesn't seem
->> to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
->> data is kvm_hv_get_tlb_flush_entries() ->  kvm_hv_get_hc_data() which also
->> takes into account 'hc->fast' but is still worth fixing.
+> Hi Toke,
 >
-> If those calls aren't inlined, then 32-bit Hyper-V will be "consuming" uninitialized
-> data when pushing parameters onto the stack.  It won't cause real problems, but
-> checkers might complain.
+> On Tue, Dec 6, 2022 at 2:26 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@ker=
+nel.org> wrote:
+>> So for instance, if there's a large fixed component of the overhead of
+>> get_random_u32(), we could have bpf_user_rnd_u32() populate a larger
+>> per-CPU buffer and then just emit u32 chunks of that as long as we're
+>> still in the same NAPI loop as the first call. Or something to that
+>> effect. Not sure if this makes sense for this use case, but figured I'd
+>> throw the idea out there :)
 >
-> What about shoving this metadata into "struct kvm_hv_hcall" as a union?  That'd
-> help convey that the two are mutually exclusive, would provide a place to document
-> said exclusion, and would yield a nice cleanup too by eliminating multiple params
-> from various functions.
+> Actually, this already is how get_random_u32() works! It buffers a
+> bunch of u32s in percpu batches, and doles them out as requested.
 
-"struct kvm_hv_hcall" used to hold raw data from the guest and
-'consumed_xmm_halves'/ 'data_offset' are rather our implementation
-details, how we consume these data. I don't see why we can't re-purpose
-it a little bit to hold both, let me try that in v2.
+Ah, right. Not terribly surprised you already did this!
 
--- 
-Vitaly
+> However, this API currently works in all contexts, including in
+> interrupts. So each call results in disabling irqs and reenabling
+> them. If I bifurcated batches into irq batches and non-irq batches, so
+> that we only needed to disable preemption for the non-irq batches,
+> that'd probably improve things quite a bit, since then the overhead
+> really would reduce to just a memcpy for the majority of calls. But I
+> don't know if adding that duplication of all code paths is really
+> worth the huge hassle.
 
+Right, makes sense; happy to leave that decision entirely up to you :)
+
+-Toke
