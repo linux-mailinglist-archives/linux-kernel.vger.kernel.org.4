@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E736443CB
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCEF86443D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:01:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbiLFNAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S234942AbiLFNBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:01:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235099AbiLFNAL (ORCPT
+        with ESMTP id S235035AbiLFNBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:00:11 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333582B62C;
-        Tue,  6 Dec 2022 04:59:47 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C392B616F9;
-        Tue,  6 Dec 2022 12:59:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF22C433C1;
-        Tue,  6 Dec 2022 12:59:45 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WzIqeR0x"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1670331584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZNUzYjUW6V3f6PQmilZnZflLBsJyR+1UzQ8srN624zM=;
-        b=WzIqeR0x3SP/rDucMSwPkfclZ+IrtFSGEkcT7IYMUQLS/dJnTsPjU9cSqXp4SdHjy5+vZe
-        PJm3aZGqMl1btR//EPVqf972fnDpKyJOzEntU8Cg+sHrNHUeYzTJwoygLJW+iS8zzf/yAq
-        MxKEEv9+aNgGU0mB2/Z87gKmO72+QmI=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 948cecd0 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 6 Dec 2022 12:59:43 +0000 (UTC)
-Received: by mail-yb1-f178.google.com with SMTP id 189so18439769ybe.8;
-        Tue, 06 Dec 2022 04:59:43 -0800 (PST)
-X-Gm-Message-State: ANoB5pnAzmcEJdODEEfYf2+Ud8Krrm2GQB98ClEN9wrslKR4ApFbGvTm
-        MyoZZcPsDQqV8Wsib97BtfU+S19NxcuBgcVelbw=
-X-Google-Smtp-Source: AA0mqf5PgdyHvYKtmLmiy3GxoC+5azt9FTkeTfLeiK3M263s02W0opjgv+CiZzTuRFuYZS931Vca8NSiF6HxoBwggVs=
-X-Received: by 2002:a25:d4f:0:b0:703:8a9c:fd with SMTP id 76-20020a250d4f000000b007038a9c00fdmr1846744ybn.231.1670331582891;
- Tue, 06 Dec 2022 04:59:42 -0800 (PST)
+        Tue, 6 Dec 2022 08:01:17 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0AFD130
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:00:54 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id x22so5932856ejs.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 05:00:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wPt4+hNHEAygAYm/iIi7WWfY6gI8L5cWMRSUMDDponY=;
+        b=bQCKAqQfljf1U+dmf1KTvgvajxOVvy8g4xkI4rqmjigYqgb9X1FMbQ8tIMdrKaz3P6
+         rctDhvLQTL+2Q4qbe1stTd1+SPdOxXAgcDeFRdvGHLkC4LInwOCbzeVlXod0yH3gpiAr
+         vrxak2zCWhjeVMx+yMy6Vdn5liiPfn/oxVrUaD/UkMpxYVrD+P6N7Bmf4smucUSd/rNo
+         2Xehk9hDqq8zPpddbXzqRxYnWw1k/32h5/s3p9KEseBLmRGtDxdiNdZEEVps0v+qdwl4
+         2j+wS2CBuRpXP4IWlQlBxw8lvGERcYYR6izUxZUShkdjLvgzgqcywwDgvqBhKLq7F29H
+         Holg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPt4+hNHEAygAYm/iIi7WWfY6gI8L5cWMRSUMDDponY=;
+        b=jFPaJySlamsEy9JT4K/6tcoaS+3IyK73n/GKx2P+/AbJUBCL9oo2E0i3Z4bbuasIdE
+         tcsX9pdpKb6YAYWqcSu+yE9OjWnAyfmzty4afls/okf5VwoEYYlPQ/6Ad2nQp2S1rbol
+         1jxatIZ8wa2I5Pe2DsUl6w5m1IckzCCsgaFEZVerUNQilRVf9P5JAh890QCelY1tmIDK
+         /uOSVVJbXQrzGm0Nzz8GRSQprNH+qsoUZFuSL8fU1s14USLwfyJKbsnimIQv2IiunVSL
+         Xn1VN9Qm58V+Qh3vVMXEeo7h0SSY/lY4Uyqxa3xzSVx8Iw+GTHx4+x7+PK4FfhpXJcKy
+         96Dw==
+X-Gm-Message-State: ANoB5pn9MCzldIdjS2m7PLt1F9ee7CftuLXza4YOGikY7468350CZ1uw
+        24X3pmJX74Kjjf7tnvdKZ/o/PQ==
+X-Google-Smtp-Source: AA0mqf4ZqirxuOZeT0doTihcv0ObkbVOPHk5CHTRLxdM1jLRtMbB2+TyECyb6JOuMmm8aMSm/aDMXQ==
+X-Received: by 2002:a17:906:1585:b0:7ad:84c7:502d with SMTP id k5-20020a170906158500b007ad84c7502dmr58639319ejd.177.1670331652808;
+        Tue, 06 Dec 2022 05:00:52 -0800 (PST)
+Received: from ?IPV6:2a0e:41a:894f:0:5e13:2125:2912:2c56? ([2a0e:41a:894f:0:5e13:2125:2912:2c56])
+        by smtp.gmail.com with ESMTPSA id fe17-20020a1709072a5100b0077a8fa8ba55sm7325471ejc.210.2022.12.06.05.00.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 05:00:52 -0800 (PST)
+Message-ID: <9ec0204d-ca4c-afd9-33d6-1ebaaaf6b144@baylibre.com>
+Date:   Tue, 6 Dec 2022 14:00:51 +0100
 MIME-Version: 1.0
-References: <20221205181534.612702-1-Jason@zx2c4.com> <730fd355-ad86-a8fa-6583-df23d39e0c23@iogearbox.net>
- <Y451ENAK7BQQDJc/@zx2c4.com> <87lenku265.fsf@toke.dk>
-In-Reply-To: <87lenku265.fsf@toke.dk>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 6 Dec 2022 13:59:31 +0100
-X-Gmail-Original-Message-ID: <CAHmME9poicgpHhXJ1ieWbDTFBu=ApSFaQKShhHezDmA0A5ajKQ@mail.gmail.com>
-Message-ID: <CAHmME9poicgpHhXJ1ieWbDTFBu=ApSFaQKShhHezDmA0A5ajKQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: call get_random_u32() for random integers
-To:     =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@kernel.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 3/3] drm/tiny: ili9486: remove conflicting framebuffers
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>, neil.armstrong@linaro.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        David Airlie <airlied@gmail.com>,
+        Kamlesh Gurudasani <kamlesh.gurudasani@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221116-s905x_spi_ili9486-v3-0-59c6b58cbfe3@baylibre.com>
+ <20221116-s905x_spi_ili9486-v3-3-59c6b58cbfe3@baylibre.com>
+ <14e5c4e4-30dd-8efd-81e4-d680664ab04a@linaro.org>
+ <c460bbda-6e9d-24e8-eb73-2e7207958deb@suse.de>
+From:   Carlo Caione <ccaione@baylibre.com>
+In-Reply-To: <c460bbda-6e9d-24e8-eb73-2e7207958deb@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Toke,
+On 06/12/2022 10:52, Thomas Zimmermann wrote:
 
-On Tue, Dec 6, 2022 at 1:50 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@kerne=
-l.org> wrote:
->
-> "Jason A. Donenfeld" <Jason@zx2c4.com> writes:
->
-> > On Mon, Dec 05, 2022 at 11:21:51PM +0100, Daniel Borkmann wrote:
-> >> On 12/5/22 7:15 PM, Jason A. Donenfeld wrote:
-> >> > Since BPF's bpf_user_rnd_u32() was introduced, there have been three
-> >> > significant developments in the RNG: 1) get_random_u32() returns the
-> >> > same types of bytes as /dev/urandom, eliminating the distinction bet=
-ween
-> >> > "kernel random bytes" and "userspace random bytes", 2) get_random_u3=
-2()
-> >> > operates mostly locklessly over percpu state, 3) get_random_u32() ha=
-s
-> >> > become quite fast.
-> >>
-> >> Wrt "quite fast", do you have a comparison between the two? Asking as =
-its
-> >> often used in networking worst case on per packet basis (e.g. via XDP)=
-, would
-> >> be useful to state concrete numbers for the two on a given machine.
-> >
-> > Median of 25 cycles vs median of 38, on my Tiger Lake machine. So a
-> > little slower, but too small of a difference to matter.
->
-> Assuming a 3Ghz CPU clock (so 3 cycles per nanosecond), that's an
-> additional overhead of ~4.3 ns. When processing 10 Gbps at line rate
-> with small packets, the per-packet processing budget is 67.2 ns, so
-> those extra 4.3 ns will eat up ~6.4% of the budget.
->
-> So in other words, "too small a difference to matter" is definitely not
-> true in general. It really depends on the use case; if someone is using
-> this to, say, draw per-packet random numbers to compute a drop frequency
-> on ingress, that extra processing time will most likely result in a
-> quite measurable drop in performance.
+>> Conflicting framebuffer on the SPI display ? How is that possible ?
+> 
+> Calling drm_aperture_remove_framebuffers() is only required if the 
+> graphics card may have been pre-initialized by the system, such as a 
+> VGA-compatible card on a PC.
+> 
+> Could the SPI display have been initialized by the firmware? If not, the 
+> call should be left out.
 
-Huh, neat calculation, I'll keep that method in mind.
+What's happening on this board is that the builtin simpledrm driver is 
+creating fb0 backed by the framebuffer prepared by u-boot / grub, and 
+this the framebuffer being used by fbcon at early boot.
 
-Alright, sorry for the noise here. I'll check back in if I ever manage
-to eliminate that performance gap.
+When the ILI9486 DRM driver is probed later during boot a second 
+framebuffer is created (fb1) and when fb0 is destroyed, fbcon still 
+remains attached to a non-existent framebuffer, so the user is left in 
+the dark.
 
-Jason
+What this patch is doing is that when the ILI driver is probed, fb0 is 
+destroyed and a new DRM-backed fb0 is created by the ILI DRM driver that 
+can be used by fbcon, so the user can correctly see the console on the 
+SPI display.
+
+Cheers,
+
+-- 
+Carlo Caione
+
