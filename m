@@ -2,244 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CC4643FF7
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:39:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9767644001
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbiLFJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:39:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S234007AbiLFJlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:41:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234957AbiLFJjZ (ORCPT
+        with ESMTP id S235162AbiLFJlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:39:25 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634B81D0CB
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:39:23 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id y25so550314lfa.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:39:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=timesys-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yFc2eJVqHcILb5tFkpDwv7IVs2FB1/IIl0iM/zEMppo=;
-        b=pU4OP9p9F+OHG7qupD3P8uyksEhCnxPlXzc2xK1doegNJ/HRKlLlnQz6iIXjYKT0dW
-         /7EX+tBt5pmh0aLUN/sLscnaWI4BQiiXQe7C/2OYJvHo7PctX3NwA8qCyr6zGgZSpw3/
-         08LgNHUYNf1Rw8FWSyLMxhE1DyuFeSa/qGkdo12eNy14sWI8L6ioBmkd3GDYXG7Gp00o
-         6uaFWBH3A2O5i2bToT8JYL4Psexk0zxJEy9LVXQkTOgG+al8y5lG36DEvpaHvYQNt62t
-         pL+K4fJTsDnxZLqgB6PAadHkTyLUmRswaTofJ7fGfJQMuv8+RhG6uNoDw0BxVzpS3UBd
-         eqGg==
+        Tue, 6 Dec 2022 04:41:18 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC2D1CFD9
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:40:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670319617;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TW5dHJarb7+FFAmmzS1Os44E3J0QfUoAGmh4ld8vUpU=;
+        b=i9yCub0lViqnj8ukHX4Pg2LxR6MRoSywYM0iUv7RQN75PauKntyVzPM8RTApDBumfrMJCf
+        gCvun/IPlXL0Isg1xsLp7I2gI/NpqeP+Nbyl25gtGUi8UbmTWPT/Omo1mm6djq3CxVKbkE
+        OZlzsxftW8uaJD6o1T1DWSXb9NxBZL0=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-259-e_P1z54oMQG1SfHbb2G6Kw-1; Tue, 06 Dec 2022 04:40:14 -0500
+X-MC-Unique: e_P1z54oMQG1SfHbb2G6Kw-1
+Received: by mail-wm1-f70.google.com with SMTP id 9-20020a1c0209000000b003d1c0a147f6so3570036wmc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:40:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yFc2eJVqHcILb5tFkpDwv7IVs2FB1/IIl0iM/zEMppo=;
-        b=lZRpIxYKrfPf/EL18MakoLoEgI4LsDGnBJolZ6M2qmnl8QbuqpDgpMXHY0XexSn5xU
-         2FCAHEpjUPP3U6OAKKLQ/RQ2KF2RL1q2UgoqJpTiglvkjGE/V4Z23fNUdueSNJzUpVb6
-         P2AJJ4FKW/BcSog7S5e6r+nK9Ty17CEVpRKzDBZIwYZbT+UQQYOpwQzBKPGEeXmy+ee2
-         SSpyEqT42lrE2gMiyRN8CrI1beL4ij7RjNYCXRVklwwX8VYzjmo6hgrHdlQ8x7TAvMql
-         KCt4xilj1sdA6uG2jm99GKbbbN4MpcClAIGPXpsOOyEdwsokUGwwj2HmvIJc1btZfyY0
-         472A==
-X-Gm-Message-State: ANoB5pnSqr4lRQ5QwW/u4n6qOGgKRmfCfeZvYk20yHr8L0RXAdwWcK5x
-        OpjFFo1gld3t/+itHQpnFs5hmQ==
-X-Google-Smtp-Source: AA0mqf4F1Jkzi6oqTTO2ABvBXReofhL02v26NcvCZ7zcYjeujELxBTeV3pbRcgbj/6z09CIpfYanDA==
-X-Received: by 2002:ac2:545b:0:b0:4af:ad16:8a08 with SMTP id d27-20020ac2545b000000b004afad168a08mr24831100lfn.664.1670319561529;
-        Tue, 06 Dec 2022 01:39:21 -0800 (PST)
-Received: from localhost.localdomain ([91.216.213.152])
-        by smtp.gmail.com with ESMTPSA id k26-20020ac2457a000000b0049462af8614sm2415833lfm.145.2022.12.06.01.39.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 01:39:21 -0800 (PST)
-From:   Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>
-Cc:     Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] rpmsg: char: Use preallocated SKBs.
-Date:   Tue,  6 Dec 2022 10:38:41 +0100
-Message-Id: <20221206093840.32181-1-piotr.wojtaszczyk@timesys.com>
-X-Mailer: git-send-email 2.38.1
+        bh=TW5dHJarb7+FFAmmzS1Os44E3J0QfUoAGmh4ld8vUpU=;
+        b=w6bNZCXvv/TRHKBU1oP2bOiXQ1XVhe/KuL+Rppk+jSAigG7XANBBNT/zfl6+Mg5PVU
+         qsGNiV6kwfw5H7v/nRiimkXqdAKXgO+FEf1jYKMpxYOiPyI1sM/SKlpkbKVPD0Yjv1Wu
+         Kyfukd8Vn47tiNH26SmlonlgVieRdAKsqG7f2nhAJD08EJSJd/mqCNLiGxtWYAjJYi8g
+         JzUGwTYjTIPGDxEl9m5CF41eZE5oEPMQuft9UFqHNcUoAyZpkNZRJ2RizRzaJXY0wMFH
+         EGDu9geCkaRwzUkWZk6W8zG0uq/3Wa0w3QzDjvTWac1JQlyo4B5UY4xsPO8ru0SPkixT
+         3WLg==
+X-Gm-Message-State: ANoB5pkvzQA6uGDjIz8XALSHje+xrbGuRKlVrp7XHDtvfCmZFoiflFij
+        zDX9KPb/vbw1EE7Z0mMonYG7lcQZIPpQA7gHVWSsYxkPh0Iayf6J9T/q7YD7aajaaElWFw5NFJq
+        s9oOFeiS+YvGtVcuUm9QMkQmA
+X-Received: by 2002:a05:600c:3d98:b0:3cf:e9a4:325f with SMTP id bi24-20020a05600c3d9800b003cfe9a4325fmr61640502wmb.98.1670319613324;
+        Tue, 06 Dec 2022 01:40:13 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7MtVVtl9RFgBHMNRf56gOZudqLVuxoYvL6ZChVKkkD30HPJrmCQbk5WjN+rcIYKSw8XOV2sA==
+X-Received: by 2002:a05:600c:3d98:b0:3cf:e9a4:325f with SMTP id bi24-20020a05600c3d9800b003cfe9a4325fmr61640458wmb.98.1670319612945;
+        Tue, 06 Dec 2022 01:40:12 -0800 (PST)
+Received: from ?IPV6:2003:cb:c705:4f00:41f1:185d:4f9f:d1c2? (p200300cbc7054f0041f1185d4f9fd1c2.dip0.t-ipconnect.de. [2003:cb:c705:4f00:41f1:185d:4f9f:d1c2])
+        by smtp.gmail.com with ESMTPSA id z8-20020adfdf88000000b002258235bda3sm16231837wrl.61.2022.12.06.01.40.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 01:40:12 -0800 (PST)
+Message-ID: <e679e859-8c08-36e6-24c4-6fea50fe485b@redhat.com>
+Date:   Tue, 6 Dec 2022 10:40:10 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 12/17] mm: remember exclusively mapped anonymous pages
+ with PG_anon_exclusive
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220428083441.37290-1-david@redhat.com>
+ <20220428083441.37290-13-david@redhat.com>
+ <90dd6a93-4500-e0de-2bf0-bf522c311b0c@huawei.com>
+ <3c7fd5da-b3f8-5562-45a9-f83d7dbcdd7d@redhat.com>
+ <d51a7163-b082-d43a-1d0d-13ebf8cb538d@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <d51a7163-b082-d43a-1d0d-13ebf8cb538d@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On a message reception copy the message to a SKB taken from preallocated
-pool instead of allocating a new SKB each time.
-During high rpmsg traffic this reduces consumed CPU time noticeably.
+On 06.12.22 10:37, Miaohe Lin wrote:
+> On 2022/12/6 16:43, David Hildenbrand wrote:
+>>>>
+>>>
+>>> Hi David, sorry for the late respond and a possible inconsequential question. :)
+>>
+>> Better late than never! Thanks for the review, independently at which time it happens :)
+>>
+>>>
+>>> <snip>
+>>>
+>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>> index 7a71ed679853..5add8bbd47cd 100644
+>>>> --- a/mm/hugetlb.c
+>>>> +++ b/mm/hugetlb.c
+>>>> @@ -4772,7 +4772,7 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+>>>>                        is_hugetlb_entry_hwpoisoned(entry))) {
+>>>>                swp_entry_t swp_entry = pte_to_swp_entry(entry);
+>>>>    -            if (is_writable_migration_entry(swp_entry) && cow) {
+>>>> +            if (!is_readable_migration_entry(swp_entry) && cow) {
+>>>>                    /*
+>>>>                     * COW mappings require pages in both
+>>>>                     * parent and child to be set to read.
+>>>> @@ -5172,6 +5172,8 @@ static vm_fault_t hugetlb_cow(struct mm_struct *mm, struct vm_area_struct *vma,
+>>>>            set_huge_ptep_writable(vma, haddr, ptep);
+>>>>            return 0;
+>>>>        }
+>>>> +    VM_BUG_ON_PAGE(PageAnon(old_page) && PageAnonExclusive(old_page),
+>>>> +               old_page);
+>>>>          /*
+>>>>         * If the process that created a MAP_PRIVATE mapping is about to
+>>>> @@ -6169,12 +6171,17 @@ unsigned long hugetlb_change_protection(struct vm_area_struct *vma,
+>>>>            }
+>>>>            if (unlikely(is_hugetlb_entry_migration(pte))) {
+>>>>                swp_entry_t entry = pte_to_swp_entry(pte);
+>>>> +            struct page *page = pfn_swap_entry_to_page(entry);
+>>>>    -            if (is_writable_migration_entry(entry)) {
+>>>> +            if (!is_readable_migration_entry(entry)) {
+>>>
+>>> In hugetlb_change_protection(), is_writable_migration_entry() is changed to !is_readable_migration_entry(),
+>>> but
+>>>
+>>>>                    pte_t newpte;
+>>>>    -                entry = make_readable_migration_entry(
+>>>> -                            swp_offset(entry));
+>>>> +                if (PageAnon(page))
+>>>> +                    entry = make_readable_exclusive_migration_entry(
+>>>> +                                swp_offset(entry));
+>>>> +                else
+>>>> +                    entry = make_readable_migration_entry(
+>>>> +                                swp_offset(entry));
+>>>>                    newpte = swp_entry_to_pte(entry);
+>>>>                    set_huge_swap_pte_at(mm, address, ptep,
+>>>>                                 newpte, huge_page_size(h));
+>>>
+>>> <snip>
+>>>
+>>>> diff --git a/mm/mprotect.c b/mm/mprotect.c
+>>>> index b69ce7a7b2b7..56060acdabd3 100644
+>>>> --- a/mm/mprotect.c
+>>>> +++ b/mm/mprotect.c
+>>>> @@ -152,6 +152,7 @@ static unsigned long change_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+>>>>                pages++;
+>>>>            } else if (is_swap_pte(oldpte)) {
+>>>>                swp_entry_t entry = pte_to_swp_entry(oldpte);
+>>>> +            struct page *page = pfn_swap_entry_to_page(entry);
+>>>>                pte_t newpte;
+>>>>                  if (is_writable_migration_entry(entry)) {
+>>>
+>>> In change_pte_range(), is_writable_migration_entry() is not changed to !is_readable_migration_entry().
+>>
+>> Yes, and also in change_huge_pmd(), is_writable_migration_entry() stays unchanged.
+>>
+>>> Is this done intentionally? Could you tell me why there's such a difference? I'm confused. It's very
+>>> kind of you if you can answer my puzzle.
+>>
+>> For change protection, the only relevant part is to convert writable -> readable or writable -> readable_exclusive.
+>>
+>> If an entry is already readable or readable_exclusive, there is nothing to do. The only issues would be when turning a readable one into a readable_exclusive one or a readable_exclusive one into a readable one.
+>>
+>>
+>> In hugetlb_change_protection(), the "!is_readable_migration_entry" could in fact be turned into a "is_writable_migration_entry()". Right now, it would convert writable -> readable or writable -> readable_exclusive AND readable -> readable AND readable_exclusive -> readable_exclusive, which isn't necessary but also shouldn't hurt either.
+> 
+> Many thanks for your explanation. It's really helpful. :)
+> 
+>>
+>>
+>> So yeah, it's not consistent but shouldn't be problematic. Do you see an issue with that?
+> 
+> No, I don't see any issue with that. I just wonder whether we can change "!is_readable_migration_entry" to "is_writable_migration_entry()" to make code
+> more consistent and avoid possible future puzzle. Also we can further remove this harmless unnecessary migration entry conversion. But this should
+> be a separate cleanup patch anyway.
 
-Signed-off-by: Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
----
- drivers/rpmsg/rpmsg_char.c       | 46 +++++++++++++++++++++++++++++---
- drivers/rpmsg/rpmsg_internal.h   | 21 +++++++++++++++
- drivers/rpmsg/virtio_rpmsg_bus.c | 21 ---------------
- 3 files changed, 64 insertions(+), 24 deletions(-)
+Want to send a patch? :)
 
-diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
-index 3e0b8f3496ed..51b1b077687e 100644
---- a/drivers/rpmsg/rpmsg_char.c
-+++ b/drivers/rpmsg/rpmsg_char.c
-@@ -66,10 +66,37 @@ struct rpmsg_eptdev {
- 
- 	spinlock_t queue_lock;
- 	struct sk_buff_head queue;
-+	struct sk_buff_head skb_pool;
- 	wait_queue_head_t readq;
- 
- };
- 
-+static inline
-+struct sk_buff *rpmsg_eptdev_get_skb(struct rpmsg_eptdev *eptdev)
-+{
-+	struct sk_buff *skb;
-+
-+	skb = skb_dequeue(&eptdev->skb_pool);
-+	if (!skb)
-+		skb = alloc_skb(MAX_RPMSG_BUF_SIZE, GFP_ATOMIC);
-+	return skb;
-+}
-+
-+static inline
-+void rpmsg_eptdev_put_skb(struct rpmsg_eptdev *eptdev, struct sk_buff *skb)
-+{
-+	/* Recycle the skb */
-+	skb->tail = 0;
-+	skb->len = 0;
-+	skb_queue_head(&eptdev->skb_pool, skb);
-+}
-+
-+static void rpmsg_eptdev_free_all_skb(struct rpmsg_eptdev *eptdev)
-+{
-+	skb_queue_purge(&eptdev->queue);
-+	skb_queue_purge(&eptdev->skb_pool);
-+}
-+
- int rpmsg_chrdev_eptdev_destroy(struct device *dev, void *data)
- {
- 	struct rpmsg_eptdev *eptdev = dev_to_eptdev(dev);
-@@ -99,7 +126,7 @@ static int rpmsg_ept_cb(struct rpmsg_device *rpdev, void *buf, int len,
- 	struct rpmsg_eptdev *eptdev = priv;
- 	struct sk_buff *skb;
- 
--	skb = alloc_skb(len, GFP_ATOMIC);
-+	skb = rpmsg_eptdev_get_skb(eptdev);
- 	if (!skb)
- 		return -ENOMEM;
- 
-@@ -121,6 +148,18 @@ static int rpmsg_eptdev_open(struct inode *inode, struct file *filp)
- 	struct rpmsg_endpoint *ept;
- 	struct rpmsg_device *rpdev = eptdev->rpdev;
- 	struct device *dev = &eptdev->dev;
-+	struct sk_buff *skb;
-+	int i;
-+
-+	/* Preallocate 8 SKBs */
-+	for (i = 0; i < 8; i++) {
-+		skb = rpmsg_eptdev_get_skb(eptdev);
-+		if (!skb) {
-+			rpmsg_eptdev_free_all_skb(eptdev);
-+			return -ENOMEM;
-+		}
-+		rpmsg_eptdev_put_skb(eptdev, skb);
-+	}
- 
- 	mutex_lock(&eptdev->ept_lock);
- 	if (eptdev->ept) {
-@@ -168,7 +207,7 @@ static int rpmsg_eptdev_release(struct inode *inode, struct file *filp)
- 	mutex_unlock(&eptdev->ept_lock);
- 
- 	/* Discard all SKBs */
--	skb_queue_purge(&eptdev->queue);
-+	rpmsg_eptdev_free_all_skb(eptdev);
- 
- 	put_device(dev);
- 
-@@ -217,7 +256,7 @@ static ssize_t rpmsg_eptdev_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 	if (copy_to_iter(skb->data, use, to) != use)
- 		use = -EFAULT;
- 
--	kfree_skb(skb);
-+	rpmsg_eptdev_put_skb(eptdev, skb);
- 
- 	return use;
- }
-@@ -370,6 +409,7 @@ static struct rpmsg_eptdev *rpmsg_chrdev_eptdev_alloc(struct rpmsg_device *rpdev
- 	mutex_init(&eptdev->ept_lock);
- 	spin_lock_init(&eptdev->queue_lock);
- 	skb_queue_head_init(&eptdev->queue);
-+	skb_queue_head_init(&eptdev->skb_pool);
- 	init_waitqueue_head(&eptdev->readq);
- 
- 	device_initialize(dev);
-diff --git a/drivers/rpmsg/rpmsg_internal.h b/drivers/rpmsg/rpmsg_internal.h
-index 39b646d0d40d..b30bfe01db69 100644
---- a/drivers/rpmsg/rpmsg_internal.h
-+++ b/drivers/rpmsg/rpmsg_internal.h
-@@ -15,6 +15,27 @@
- #include <linux/rpmsg.h>
- #include <linux/poll.h>
- 
-+/*
-+ * We're allocating buffers of 512 bytes each for communications. The
-+ * number of buffers will be computed from the number of buffers supported
-+ * by the vring, upto a maximum of 512 buffers (256 in each direction).
-+ *
-+ * Each buffer will have 16 bytes for the msg header and 496 bytes for
-+ * the payload.
-+ *
-+ * This will utilize a maximum total space of 256KB for the buffers.
-+ *
-+ * We might also want to add support for user-provided buffers in time.
-+ * This will allow bigger buffer size flexibility, and can also be used
-+ * to achieve zero-copy messaging.
-+ *
-+ * Note that these numbers are purely a decision of this driver - we
-+ * can change this without changing anything in the firmware of the remote
-+ * processor.
-+ */
-+#define MAX_RPMSG_NUM_BUFS	(512)
-+#define MAX_RPMSG_BUF_SIZE	(512)
-+
- #define to_rpmsg_device(d) container_of(d, struct rpmsg_device, dev)
- #define to_rpmsg_driver(d) container_of(d, struct rpmsg_driver, drv)
- 
-diff --git a/drivers/rpmsg/virtio_rpmsg_bus.c b/drivers/rpmsg/virtio_rpmsg_bus.c
-index 905ac7910c98..5369669d3327 100644
---- a/drivers/rpmsg/virtio_rpmsg_bus.c
-+++ b/drivers/rpmsg/virtio_rpmsg_bus.c
-@@ -109,27 +109,6 @@ struct virtio_rpmsg_channel {
- #define to_virtio_rpmsg_channel(_rpdev) \
- 	container_of(_rpdev, struct virtio_rpmsg_channel, rpdev)
- 
--/*
-- * We're allocating buffers of 512 bytes each for communications. The
-- * number of buffers will be computed from the number of buffers supported
-- * by the vring, upto a maximum of 512 buffers (256 in each direction).
-- *
-- * Each buffer will have 16 bytes for the msg header and 496 bytes for
-- * the payload.
-- *
-- * This will utilize a maximum total space of 256KB for the buffers.
-- *
-- * We might also want to add support for user-provided buffers in time.
-- * This will allow bigger buffer size flexibility, and can also be used
-- * to achieve zero-copy messaging.
-- *
-- * Note that these numbers are purely a decision of this driver - we
-- * can change this without changing anything in the firmware of the remote
-- * processor.
-- */
--#define MAX_RPMSG_NUM_BUFS	(512)
--#define MAX_RPMSG_BUF_SIZE	(512)
--
- /*
-  * Local addresses are dynamically allocated on-demand.
-  * We do not dynamically assign addresses from the low 1024 range,
+Thanks!
+
 -- 
-2.38.1
+Thanks,
+
+David / dhildenb
 
