@@ -2,145 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CE064480F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 434E8644813
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 16:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbiLFPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 10:32:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55050 "EHLO
+        id S234448AbiLFPeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 10:34:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234514AbiLFPcT (ORCPT
+        with ESMTP id S232458AbiLFPeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 10:32:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B59C2D1D3;
-        Tue,  6 Dec 2022 07:32:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A910F6179C;
-        Tue,  6 Dec 2022 15:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B2D3C433D6;
-        Tue,  6 Dec 2022 15:32:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670340732;
-        bh=bxaBWlzTdTizNBOxwax1l/q9lZvg1ZCSRn7FfrlozmA=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kOqtGP7kXhe3CTB68EmQrWimhPRdSp9osGwDNP4FhGLK5MuHs99rpj5Bat0WWX3TF
-         vZxp2mNEPfvxffFhMG4C08PT+zswj0v96WPq/R85pK99FGm7PLlZepY7SoPUoZws+O
-         5a+wn4rmp4rDmOMtH40GHwH9dL4UnhZW005P9WK6KnaSr38cN8f/o8r8L3yKDoa9wm
-         j0nEuG6eUJRhk0ZVTyVxaqQI/OVQr6dBRC9+jLGPewsVQhfhcpsxg3x1N1jqDDJfdQ
-         V7WQ9jXr7pEKsUAzO/3vGLSLNzIgOE0pHHX7pOkTsor35wBRIFZmv7GC8HTQKau78x
-         rye6e3cw6/VzA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AC1BE5C008B; Tue,  6 Dec 2022 07:32:11 -0800 (PST)
-Date:   Tue, 6 Dec 2022 07:32:11 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Dave Chinner <david@fromorbit.com>, frederic@kernel.org,
-        quic_neeraju@quicinc.com, Josh Triplett <josh@joshtriplett.org>,
-        RCU <rcu@vger.kernel.org>,
-        syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>,
-        djwong@kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzkaller <syzkaller@googlegroups.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
-Message-ID: <20221206153211.GN4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <000000000000bd587705ef202b08@google.com>
- <20221206033450.GS3600936@dread.disaster.area>
- <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com>
+        Tue, 6 Dec 2022 10:34:04 -0500
+Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0822B26B;
+        Tue,  6 Dec 2022 07:34:02 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=xueshuai@linux.alibaba.com;NM=0;PH=DS;RN=16;SR=0;TI=SMTPD_---0VWhZXz6_1670340837;
+Received: from localhost.localdomain(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VWhZXz6_1670340837)
+          by smtp.aliyun-inc.com;
+          Tue, 06 Dec 2022 23:33:59 +0800
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     rafael@kernel.org, lenb@kernel.org, james.morse@arm.com,
+        tony.luck@intel.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        jarkko@kernel.org, naoya.horiguchi@nec.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cuibixuan@linux.alibaba.com, baolin.wang@linux.alibaba.com,
+        zhuo.song@linux.alibaba.com, xueshuai@linux.alibaba.com
+Subject: [RFC PATCH 0/2] ACPI: APEI: handle synchronous exceptions in task work
+Date:   Tue,  6 Dec 2022 23:33:52 +0800
+Message-Id: <20221206153354.92394-1-xueshuai@linux.alibaba.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
+References: <20221027042445.60108-1-xueshuai@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 12:06:10PM +0100, Dmitry Vyukov wrote:
-> On Tue, 6 Dec 2022 at 04:34, Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
-> > > Hello,
-> > >
-> > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > INFO: rcu detected stall in corrupted
-> > >
-> > > rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
-> > > rcu: blocking rcu_node structures (internal RCU debug):
-> >
-> > I'm pretty sure this has nothing to do with the reproducer - the
-> > console log here:
-> >
-> > > Tested on:
-> > >
-> > > commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
-> > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
-> >
-> > indicates that syzbot is screwing around with bluetooth, HCI,
-> > netdevsim, bridging, bonding, etc.
-> >
-> > There's no evidence that it actually ran the reproducer for the bug
-> > reported in this thread - there's no record of a single XFS
-> > filesystem being mounted in the log....
-> >
-> > It look slike someone else also tried a private patch to fix this
-> > problem (which was obviously broken) and it failed with exactly the
-> > same RCU warnings. That was run from the same commit id as the
-> > original reproducer, so this looks like either syzbot is broken or
-> > there's some other completely unrelated problem that syzbot is
-> > tripping over here.
-> >
-> > Over to the syzbot people to debug the syzbot failure....
+Currently, both synchronous and asynchronous error are queued and handled by a
+dedicated kthread in workqueue. Memory failure for synchronous error is
+synced by a trick.
+
+Although the task could be killed by page fault, the memory failure is handled
+in a kthread context so that the hwpoison-aware mechanisms, e.g. PF_MCE_EARLY,
+early kill, does not work as expected.
+
+To this end, separate synchronous and asynchronous error handling into
+different paths like X86 does:
+
+- task work for synchronous error.
+- and workqueue for asynchronous error.
+
+This patch set is based on a new UEFI proposal submitted by our colleague Yingwen.[1]
+
+> Background:
 > 
-> Hi Dave,
+> In ARM world, two type events (Sync/Async) from hardware IP need OS/VMM take different actions. 
+> Current CPER memory error record is not able to distinguish sync/async type event right now. 
+> Current OS/VMM need to take extra actions beyond CPER which is heavy burden to identify the 
+> two type events
+>  
+> Sync event (e.g. CPU consume poisoned data) --> Firmware  -> CPER error log  --> OS/VMM take recovery action.
+> Async event (e.g. Memory controller detect UE event)  --> Firmware  --> CPER error log  --> OS take page action. 
 > 
-> It's not uncommon for a single program to trigger multiple bugs.
-> That's what happens here. The rcu stall issue is reproducible with
-> this test program.
-> In such cases you can either submit more test requests, or test manually.
 > 
-> I think there is an RCU expedited stall detection.
-> For some reason CONFIG_RCU_EXP_CPU_STALL_TIMEOUT is limited to 21
-> seconds, and that's not enough for reliable flake-free stress testing.
-> We bump other timeouts to 100+ seconds.
-> +RCU maintainers, do you mind removing the overly restrictive limit on
-> CONFIG_RCU_EXP_CPU_STALL_TIMEOUT?
-> Or you think there is something to fix in the kernel to not stall? I
-> see the test writes to
-> /proc/sys/vm/drop_caches, maybe there is some issue in that code.
+> Proposal: 
+>
+> - In section description Flags field(UEFI spec section N.2, add sync flag as below. OS/VMM 
+>  could depend on this flag to distinguish sync/async events.
+> - Bit8 – sync flag; if set this flag indicates that this event record is synchronous(e.g. 
+>  cpu core consumes poison data, then cause instruction/data abort); if not set, this event record is asynchronous.
+> 
+> Best regards,
+> Yingwen Chen
+> 
+> [ Shuai Xue: The thread is only opened to the member of UEFI Workgroup.
+>   Paste here for discussion.]
 
-Like this?
+[1] https://members.uefi.org/wg/uswg/mail/thread/9453
 
-If so, I don't see why not.  And in that case, may I please have
-your Tested-by or similar?
+Shuai Xue (2):
+  ACPI: APEI: set memory failure flags as MF_ACTION_REQUIRED on
+    synchronous events
+  ACPI: APEI: separate synchronous error handling into task work
 
-At the same time, I am sure that there are things in the kernel that
-should be adjusted to avoid stalls, but I recognize that different
-developers in different situations will have different issues that they
-choose to focus on.  ;-)
+ drivers/acpi/apei/ghes.c | 120 ++++++++++++++++++++++-----------------
+ include/linux/cper.h     |  22 +++++++
+ 2 files changed, 89 insertions(+), 53 deletions(-)
 
-							Thanx, Paul
+-- 
+2.20.1.12.g72788fdb
 
-------------------------------------------------------------------------
-
-diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-index 49da904df6aa6..2984de629f749 100644
---- a/kernel/rcu/Kconfig.debug
-+++ b/kernel/rcu/Kconfig.debug
-@@ -82,7 +82,7 @@ config RCU_CPU_STALL_TIMEOUT
- config RCU_EXP_CPU_STALL_TIMEOUT
- 	int "Expedited RCU CPU stall timeout in milliseconds"
- 	depends on RCU_STALL_COMMON
--	range 0 21000
-+	range 0 300000
- 	default 0
- 	help
- 	  If a given expedited RCU grace period extends more than the
