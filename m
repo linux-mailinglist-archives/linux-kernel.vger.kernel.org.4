@@ -2,155 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA59C644DF5
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:28:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B43B644DFB
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:30:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLFV2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
+        id S229679AbiLFVa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:30:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiLFV2c (ORCPT
+        with ESMTP id S229575AbiLFVa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:28:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801CA637F
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:27:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670362056;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PRGbK9k8R9uzFMCG9ps6sFZXam1J9ub+EnEOXkruzkY=;
-        b=dBm4DUqcec8iQeDw8nOsoZnfinJnIXxbTLjszgSDPG82dRF+ZUgCs/OPKS0eUZ7dSKgySa
-        CpG2yUR8RMYI/yVIykcA1pEV68qKrxjd3FWmzufxnfXTe3QCyeerJCmH3aSquBtKo/0zsF
-        ruPzINCC1xphxzF9nuPdRBjuAbtmeTM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-149-AtaVwDmXMm-fLdNHUuAJXg-1; Tue, 06 Dec 2022 16:27:34 -0500
-X-MC-Unique: AtaVwDmXMm-fLdNHUuAJXg-1
-Received: by mail-qt1-f197.google.com with SMTP id ff5-20020a05622a4d8500b003a526107477so35068249qtb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 13:27:34 -0800 (PST)
+        Tue, 6 Dec 2022 16:30:27 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222032FA44
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:30:26 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id e189so10643073iof.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 13:30:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NY1lbrce4WrYO2aGvYwSUN0oSq8qgVYLOPerQDuEDVk=;
+        b=bHMIAOHrUWpdrpvyijfOwx3gWz/Ffg++OvunmI2aHY7REE7YLEK7tU4FESMztgW8lS
+         TnuYk+jDef9cJYX5nEG8BGlK+nTo6CxfeiMlLyqIKzK1vflYp2VqP2ilc0vnDso5me5V
+         0B0qJIgsWAeyj9QoX0/7OKkwTObtkiKBAFwNIeidlTekVTMcksmGhoI7ZS7nSvbb9Ita
+         p/NZC7UMTDd62lUf0qcp3Jwf6SkpIFeY9m9BH/YsCHSTzDT7BaYKbQPjmtro6UnEaAf6
+         YS5f/ntAbsNr9GXVe8AgDKUmPgokXecQj+h1yl+QuNU5CaUwK3e5ZIFKB2qatpX98cGK
+         itIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PRGbK9k8R9uzFMCG9ps6sFZXam1J9ub+EnEOXkruzkY=;
-        b=sV3QbJMgtW1LXy+jUvf5OwWx2UyQD/eGmHXfvkiuBLXElIVX45U4a3RWu3ipXrq+MP
-         CSt/xE/gB/WzslpHYEmilO8Ka/tIxwviSakl03wMhcdjZnxALFNEhMON+dgeSZFUhadB
-         Irsa97mlNMHwwzwR90ZDmi/8221tbwCs5dP7I/UvJDHyBxWaTv+M/In9k0McyBwTcUe4
-         3rCgJlCCZKhpq5Xc50gtxp6o4GS0sb3pJPEtwpeoiB3s2FXAyeDaQz2yMiXZs3Gorops
-         wv0uzk0KlGg+deSMhbzGwMaKMAvNganzePotwKDNYUfgxiCo69agsy7XXBfW4o2nZOz3
-         9yBw==
-X-Gm-Message-State: ANoB5plsTebadX65QqCgfitB6QzUxSlPY6h2xqStWVOnxjmhJpvIQ01s
-        W7r/EUiNhp2ptK9OTSroa8bSNx7wkPJbfoRKbifWpeD6/FQmH8rLs+mFw0Du9AhKu0Xrbc1ieGO
-        9uETo1yG8G3yGAS2gnohE2Sj/
-X-Received: by 2002:ac8:5508:0:b0:39c:da20:688 with SMTP id j8-20020ac85508000000b0039cda200688mr612911qtq.43.1670362054289;
-        Tue, 06 Dec 2022 13:27:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4kmVlOInGq/Pojb+UUeaVf8jYPRob7UOLmrRyKTTf+RHP6JcKzENk2Gdwl4icvTqnqDou07g==
-X-Received: by 2002:ac8:5508:0:b0:39c:da20:688 with SMTP id j8-20020ac85508000000b0039cda200688mr612909qtq.43.1670362054063;
-        Tue, 06 Dec 2022 13:27:34 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id k17-20020ac84791000000b003a50c9993e1sm12431610qtq.16.2022.12.06.13.27.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 13:27:33 -0800 (PST)
-Date:   Tue, 6 Dec 2022 16:27:31 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH RFC] mm/userfaultfd: enable writenotify while
- userfaultfd-wp is enabled for a VMA
-Message-ID: <Y4+zw4JU7JMlDHbM@x1n>
-References: <20221202122748.113774-1-david@redhat.com>
- <Y4oo6cN1a4Yz5prh@x1n>
- <690afe0f-c9a0-9631-b365-d11d98fdf56f@redhat.com>
- <19800718-9cb6-9355-da1c-c7961b01e922@redhat.com>
- <Y45duzmGGUT0+u8t@x1n>
- <92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NY1lbrce4WrYO2aGvYwSUN0oSq8qgVYLOPerQDuEDVk=;
+        b=QGUfke8p3Yq237iXg7v4/xBFojjbqz4gr7b/m6VH4RO8y0TR1/D5imqnp4OnDsTCtg
+         hbWIOdxFYjf5lRiiHRQy5YtsU5niU1cbybQCwQOIZWhZR9BaVnmS134yLEGsHVAGO9YS
+         4KKYht7qAKoAiuUT++ja1V9qog24qZuzNpMPe4DmOaLm8ESpUFBubLA0pNuYgoY2Yid4
+         eSne+X+W5PlX0fUJ5doLxKBttXfDEwSu2EEL08XUy8/Bv9M4KgTXVafYyP3sVH2rn81I
+         +pegoHUcXrVEkR7jNZGHvbz+htx2WE7fNOBloc0b7KF/e6xU8qHLNzTVcC/ocM/eTMSf
+         0axQ==
+X-Gm-Message-State: ANoB5plvO2Ua/lHrl60/WcfvNMVWyl0rvSvD/DZRUE7ddLW1cbmyoSBp
+        IOdwSbIYO0Bg5p86pWJzxqK7HQ==
+X-Google-Smtp-Source: AA0mqf57vl31W9FKVe0odlyoCoqs8C7Sc/CSA1W0SnzD/5qSF1ecgzvPZFuqxdH0dVgv36mG6R7Bnw==
+X-Received: by 2002:a02:914b:0:b0:363:b3c4:5c47 with SMTP id b11-20020a02914b000000b00363b3c45c47mr33685993jag.237.1670362225336;
+        Tue, 06 Dec 2022 13:30:25 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id b7-20020a029587000000b00370decbbff3sm7176072jai.148.2022.12.06.13.30.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 13:30:23 -0800 (PST)
+Message-ID: <0c692b20-8aab-7f3d-d30c-4732064a7d13@kernel.dk>
+Date:   Tue, 6 Dec 2022 14:30:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] io_uring: Fix a null-ptr-deref in io_tctx_exit_cb()
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@gmail.com, vegard.nossum@oracle.com,
+        george.kennedy@oracle.com, darren.kenny@oracle.com,
+        syzkaller <syzkaller@googlegroups.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
+ <5a643da7-1c28-b680-391e-ea8392210327@kernel.dk>
+In-Reply-To: <5a643da7-1c28-b680-391e-ea8392210327@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:28:07PM +0100, David Hildenbrand wrote:
-> > If no one is using mprotect() with uffd-wp like that, then the reproducer
-> > may not be valid - the reproducer is defining how it should work, but does
-> > that really stand?  That's why I said it's ambiguous, because the
-> > definition in this case is unclear.
+On 12/6/22 2:15?PM, Jens Axboe wrote:
+> On 12/6/22 2:38?AM, Harshit Mogalapalli wrote:
+>> Syzkaller reports a NULL deref bug as follows:
+>>
+>>  BUG: KASAN: null-ptr-deref in io_tctx_exit_cb+0x53/0xd3
+>>  Read of size 4 at addr 0000000000000138 by task file1/1955
+>>
+>>  CPU: 1 PID: 1955 Comm: file1 Not tainted 6.1.0-rc7-00103-gef4d3ea40565 #75
+>>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+>>  Call Trace:
+>>   <TASK>
+>>   dump_stack_lvl+0xcd/0x134
+>>   ? io_tctx_exit_cb+0x53/0xd3
+>>   kasan_report+0xbb/0x1f0
+>>   ? io_tctx_exit_cb+0x53/0xd3
+>>   kasan_check_range+0x140/0x190
+>>   io_tctx_exit_cb+0x53/0xd3
+>>   task_work_run+0x164/0x250
+>>   ? task_work_cancel+0x30/0x30
+>>   get_signal+0x1c3/0x2440
+>>   ? lock_downgrade+0x6e0/0x6e0
+>>   ? lock_downgrade+0x6e0/0x6e0
+>>   ? exit_signals+0x8b0/0x8b0
+>>   ? do_raw_read_unlock+0x3b/0x70
+>>   ? do_raw_spin_unlock+0x50/0x230
+>>   arch_do_signal_or_restart+0x82/0x2470
+>>   ? kmem_cache_free+0x260/0x4b0
+>>   ? putname+0xfe/0x140
+>>   ? get_sigframe_size+0x10/0x10
+>>   ? do_execveat_common.isra.0+0x226/0x710
+>>   ? lockdep_hardirqs_on+0x79/0x100
+>>   ? putname+0xfe/0x140
+>>   ? do_execveat_common.isra.0+0x238/0x710
+>>   exit_to_user_mode_prepare+0x15f/0x250
+>>   syscall_exit_to_user_mode+0x19/0x50
+>>   do_syscall_64+0x42/0xb0
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>  RIP: 0023:0x0
+>>  Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+>>  RSP: 002b:00000000fffb7790 EFLAGS: 00000200 ORIG_RAX: 000000000000000b
+>>  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>>  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>>  RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+>>  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+>>  R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>>   </TASK>
+>>  Kernel panic - not syncing: panic_on_warn set ...
+>>
+>> Add a NULL check on tctx to prevent this.
 > 
-> There are interesting variations like:
+> I agree with Vegard that I don't think this is fixing the core of
+> the issue. I think what is happening here is that we don't run the
+> task_work in io_uring_cancel_generic() unconditionally, if we don't
+> need to in the loop above. But we do need to ensure we run it before
+> we clear current->io_uring.
 > 
-> mmap(PROT_READ, MAP_POPULATE|MAP_SHARED)
-> uffd_wp()
-> mprotect(PROT_READ|PROT_WRITE)
-> 
-> Where we start out with all-write permissions before we enable selective
-> write permissions.
+> Do you have a reproducer? If so, can you try the below? I _think_
+> this is all we need. We can't be hitting the delayed fput path as
+> the task isn't exiting, and we're dealing with current here.
 
-Could you elaborate what's the difference of above comparing to:
+While I think the above is the right description of what happens, I
+think there's still a race with the proposed solution. If the task_work
+gets added right after the newly inserted io_run_task_work(), then we'll
+still crash when the targeted task exits to userspace and runs the
+task_work.
 
-mmap(PROT_READ|PROT_WRITE, MAP_POPULATE|MAP_SHARED)
-uffd_wp()
-
-?
-
-[...]
-
-> Yes, you are correct. I added that to the patch description:
-> 
-> "
-> Note that we don't optimize for the actual migration case:
->     (1) When migration succeeds the new PTE will not be writable because
->         the source PTE was not writable (protnone); in the future we
->         might just optimize that case similarly by reusing
->         can_change_pte_writable()/can_change_pmd_writable() when
->         removing migration PTEs.
->     (2) When migration fails, we'd have to recalculate the "writable"
->         flag because we temporarily dropped the PT lock; for now keep it
->         simple and set "writable=false".
-> "
-> 
-> Case (1) would, with your current patch, always lose the write bit during
-> migration, even if vma->vm_page_prot included it. We most might want to
-> optimize that in the future.
-> 
-> Case (2) is rather a corner case, and unless people complain about it being
-> a real performance issue, it felt cleaner (less code) to not optimize for
-> that now.
-
-As I didn't have a closer look on the savedwrite removal patchset so I may
-not speak anything sensible here..  What I hope is that we don't lose write
-bits easily, after all we tried to even safe the dirty and young bits to
-avoid the machine cycles in the MMUs.
-
-> 
-> Again Peter, I am not against you, not at all. Sorry if I gave you the
-> impression. I highly appreciate your work and this discussion.
-
-No worry on that part.  You're doing great in this email explaining things
-and write things up, especially I'm happy Hugh confirmed it so it's good to
-have those.  Let's start with something like this when you NAK something
-next time. :)
-
-Thanks,
+It should actually be fine to add that NULL check in io_tctx_exit_cb. We
+can't be racing here, as both the clear and io_tctx_exit_cb() are run by
+current itself. It's really just an ordering issue.
 
 -- 
-Peter Xu
-
+Jens Axboe
