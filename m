@@ -2,94 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA2E06444FC
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F603644521
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:58:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbiLFNxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
+        id S233987AbiLFN6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:58:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiLFNx2 (ORCPT
+        with ESMTP id S230093AbiLFN6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:53:28 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE6F62B19D;
-        Tue,  6 Dec 2022 05:53:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B122B80DF3;
-        Tue,  6 Dec 2022 13:53:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BDDC433C1;
-        Tue,  6 Dec 2022 13:53:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670334805;
-        bh=pLK21N5d/EKb/syw7sI9+Uws4wdPPOjQjHEhyt51XUU=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=nO+bo8un+V+ofnRZf16zv9tcWuY2QT1r4KaWAHFjvB4zhdNlHOs0P7x48LTLInYdo
-         ZJPXalJcwpWZvZkF/+tET+dbFBmLEGZI1i9qflg73cO2OL3VVqJP8DszO/zo2nnkUe
-         fZZmojkVMq5EtU6tqsezgJH3MJ4bS0FLY1e76kUofcj+x0xnCBCPAdRuv47ITB4ISX
-         a7UlNZIy/04HGnwExrFBORnxC9BPSoFUZnl9m35meQWaNisFSWjlmjMohi2He+l6Su
-         L4KqmG7N3mdvvuBrbzEPXcD1G+HTS5cMKWoCJ+S4UprT/lj4cU4znD3x/kH7ORFBv4
-         u2zRcq0kvCA5A==
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-        id 1C00582E399; Tue,  6 Dec 2022 14:53:22 +0100 (CET)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>
-Subject: Re: [PATCH] bpf: call get_random_u32() for random integers
-In-Reply-To: <CAHmME9pQoHBLob306ta4jswr5HnPX73Uq0GDK8bZBtYOLHVwbQ@mail.gmail.com>
-References: <20221205181534.612702-1-Jason@zx2c4.com>
- <730fd355-ad86-a8fa-6583-df23d39e0c23@iogearbox.net>
- <Y451ENAK7BQQDJc/@zx2c4.com> <87lenku265.fsf@toke.dk>
- <CAHmME9poicgpHhXJ1ieWbDTFBu=ApSFaQKShhHezDmA0A5ajKQ@mail.gmail.com>
- <87iliou0hd.fsf@toke.dk>
- <CAHmME9pQoHBLob306ta4jswr5HnPX73Uq0GDK8bZBtYOLHVwbQ@mail.gmail.com>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date:   Tue, 06 Dec 2022 14:53:22 +0100
-Message-ID: <87edtctz8t.fsf@toke.dk>
+        Tue, 6 Dec 2022 08:58:21 -0500
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0881E203;
+        Tue,  6 Dec 2022 05:58:19 -0800 (PST)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id DF0C268B05; Tue,  6 Dec 2022 14:58:10 +0100 (CET)
+Date:   Tue, 6 Dec 2022 14:58:10 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Christoph Hellwig <hch@lst.de>, Lei Rao <lei.rao@intel.com>,
+        kbusch@kernel.org, axboe@fb.com, kch@nvidia.com, sagi@grimberg.me,
+        alex.williamson@redhat.com, cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
+Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
+ issue admin commands for VF driver.
+Message-ID: <20221206135810.GA27689@lst.de>
+References: <20221206055816.292304-1-lei.rao@intel.com> <20221206055816.292304-2-lei.rao@intel.com> <20221206061940.GA6595@lst.de> <Y49HKHP9NrId39iH@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y49HKHP9NrId39iH@ziepe.ca>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+On Tue, Dec 06, 2022 at 09:44:08AM -0400, Jason Gunthorpe wrote:
+> Not speaking to NVMe - but this driver is clearly copying mlx5's live
+> migration driver, almost completely - including this basic function.
 
-> Hi Toke,
->
-> On Tue, Dec 6, 2022 at 2:26 PM Toke H=C3=B8iland-J=C3=B8rgensen <toke@ker=
-nel.org> wrote:
->> So for instance, if there's a large fixed component of the overhead of
->> get_random_u32(), we could have bpf_user_rnd_u32() populate a larger
->> per-CPU buffer and then just emit u32 chunks of that as long as we're
->> still in the same NAPI loop as the first call. Or something to that
->> effect. Not sure if this makes sense for this use case, but figured I'd
->> throw the idea out there :)
->
-> Actually, this already is how get_random_u32() works! It buffers a
-> bunch of u32s in percpu batches, and doles them out as requested.
+Maybe that's not a good idea in an NVMe environment, and maybe that
+should have talked to the standards committee before spending their
+time on cargo cult engineering.
 
-Ah, right. Not terribly surprised you already did this!
+Most importantly NVMe is very quiet on the relationship between
+VFs and PFs, and there is no way to guarantee that a PF is, at the
+NVMe level, much in control of a VF at all.  In other words this
+concept really badly breaks NVMe abstractions.
 
-> However, this API currently works in all contexts, including in
-> interrupts. So each call results in disabling irqs and reenabling
-> them. If I bifurcated batches into irq batches and non-irq batches, so
-> that we only needed to disable preemption for the non-irq batches,
-> that'd probably improve things quite a bit, since then the overhead
-> really would reduce to just a memcpy for the majority of calls. But I
-> don't know if adding that duplication of all code paths is really
-> worth the huge hassle.
+> Thus, mxl5 has the same sort of design where the VF VFIO driver
+> reaches into the PF kernel driver and asks the PF driver to perform
+> some commands targeting the PF's own VFs. The DMA is then done using
+> the RID of the PF, and reaches the kernel owned iommu_domain of the
+> PF. This way the entire operation is secure aginst meddling by the
+> guest.
 
-Right, makes sense; happy to leave that decision entirely up to you :)
-
--Toke
+And the works for you because you have a clearly defined relationship.
+In NVMe we do not have this.  We'd either need to define a way
+to query that relationship or find another way to deal with the
+problem.  But in doubt the best design would be to drive VF
+live migration entirely from the PF, turn the lookup from controlled
+function to controlling function upside down, that is a list of
+controlled functions (which could very well be, and in some designs
+are, additional PFs and not VFs) by controlling function.  In fact
+NVMe already has that list in it's architecture with the
+"Secondary Controller List".
