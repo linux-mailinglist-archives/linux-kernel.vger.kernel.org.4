@@ -2,57 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A77643FC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ECF3643FC3
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 10:23:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235005AbiLFJXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 04:23:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39728 "EHLO
+        id S235056AbiLFJXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 04:23:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234973AbiLFJWu (ORCPT
+        with ESMTP id S234987AbiLFJWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 04:22:50 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4C022B2E;
-        Tue,  6 Dec 2022 01:20:28 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id f18so22549561wrj.5;
-        Tue, 06 Dec 2022 01:20:27 -0800 (PST)
+        Tue, 6 Dec 2022 04:22:51 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781DA220D3
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 01:20:30 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id w15so22544178wrl.9
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 01:20:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vPKqXWw7xsVHLyBN+EDFkZ4J8uiiHRqUm/YEFJcGYLU=;
-        b=j/S97HK7WE0fQCAFzc+ivVICdJxs+QEfktSh/NcVfZne5yHKLlkG98Z/Fq21EMorUg
-         aEHmAjijyugb9nmoW65LE1q1OhezYiI3/Kv/eEHAwgOtfVhdANEQT7HzH70awa61h8JH
-         XZJHefgcM7w20qDJGSbgS3hfCEP0o7Se8nI+tx7t7FTyj4qIWff/H1r5VPl2fhuONq05
-         +U4nr05Kzb9fgaZLH3HHbzXdWxxkxFyV71D0LztT3SBTjXkQQ2dugXlPUS1uhaYSdU/L
-         AoX2dA5Bu0GVGLVhiYpTWzWQXlxvACj88INjZNKEMdymf/OuxZjNuNQUozlBGXKVRZbI
-         j8Rg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jinBcPSkEbBkoDxJN/eRyhQV/jBZKLuC/Y4mXEJDUBw=;
+        b=dxWlUGmeupuPuJkU7adI5ygpuordIPTUDXDz2xfn0beqgCIkzmpPYT8uVff6LliFa9
+         rTphtRnpNutX79xC3H+iE8Z80DmQvF58B95YvBuNFIVOd9KBQXHmXUhAcKoJMNMZMUwJ
+         IDFRUQ2rVk7rKma1ZcbkPrJ8fbMQdDn4RCjkS7wgf3dqLglOUYVKm3o7O7NcthjB/BuU
+         8UZPVjD1Rz9HAQSiV8z8aG+IMOmtU7Qkom/5Ng+5RPyMxIp4RSnKnirtXDKWKY9WGulN
+         fIYHpA2HB6UDHnsROebpYGGfEobK27qQDZPDDNrhI4mRnPLDjsTKpxm3YHMq27n+1l2f
+         tShQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vPKqXWw7xsVHLyBN+EDFkZ4J8uiiHRqUm/YEFJcGYLU=;
-        b=uTb5THpmYuEGXgW/LR8LG0GGeiNNHFSNzh7uQJS4hAcFX8gDCDva/dKgJSNbZyA+ud
-         HoNwOz+EFlApwMw2HYarSOmWULk3Y4OKci9w2c47Z+CfE8AWUPxevrFopsqmePZJ2g+s
-         F/4QL0uh97Rjy5tjHq47l4hmuRii94JsW7FdWlkXNz9xcomXlpqq0iFhv/mOKd+4ptO1
-         RbyPNXw75o6pd6itCmh4km/O77HfFU0OM9cI8zPNiTIawx+qcCVDRzoY/bmM+6UHRLYB
-         XmSTS718kmdYV0N/GdEEXwNouGpJh7pN7PbWaBUY77Pujs5fJXOGi0IsKwmhxjYY5Xw6
-         R9cQ==
-X-Gm-Message-State: ANoB5pkvigWza3dxSf6TaxRQQqQgPbg5e7d4eUb46pwzp3H8BdOAss9H
-        bbDMMnDpHjmPEjuammnpdP9nnLrR8qSnJCVrM8NnvmkgEqM=
-X-Google-Smtp-Source: AA0mqf4OGm51HT1f2vYNDcuC9b/Q0EBFF0gHPQWoe/I9nnBEXla1eFjv6qPUChwffz/gSpQwzC0vysILgpt7DQ/P3y4=
-X-Received: by 2002:adf:e28b:0:b0:241:c2c3:26c8 with SMTP id
- v11-20020adfe28b000000b00241c2c326c8mr48984132wri.278.1670318426619; Tue, 06
- Dec 2022 01:20:26 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jinBcPSkEbBkoDxJN/eRyhQV/jBZKLuC/Y4mXEJDUBw=;
+        b=4pFQrTN26hRKrOLpklOEZpZAiYEssQoTCykuTTDPXTHipuRH8yVkCOIEDAVHFcjarG
+         eEGAcsP+g3cnaYgXWI7r+3BMRmNu6xGL2UEohw7rMOKOTyJSvkB5TnjJuLT1LfARZL8o
+         W/Yp4Nz3I1M+nBZ2eu7VkCt2tGTvdkJQPK0Vf/pxbnXtdvdckfO0HbH5ZvpCOaj65aBf
+         2m6eDOncoUxOxvHJ24QbCdOexptskBmqaMtIWoZNa3bDrZY9mVtubZILdvfK3xBOA78N
+         CIQFQ00zxVcnI1sm+nJnk8Lhhm9GzVLqVGNwtLFtBEKruAewJGRQxqoC7MP0ib308mpD
+         YjZw==
+X-Gm-Message-State: ANoB5pmUwk1pHnaay2Xiir2PlyodMFHqCIIobd6xokNRlTgTDb6wWWBI
+        F/2GqKhIhz4Ima3vtG6otBGf7tvcOQr9busydxd/uTUO90E=
+X-Google-Smtp-Source: AA0mqf6Z5dP+iQBbx1ft2L32IbIAwP11d9FkmHPe2lCw58ExxCHa5zIQPDifd8Z+f2JMFuWuQNGX0/uDUAG1HaEw77U=
+X-Received: by 2002:a5d:58e6:0:b0:242:5562:6d6 with SMTP id
+ f6-20020a5d58e6000000b00242556206d6mr7111642wrd.541.1670318428890; Tue, 06
+ Dec 2022 01:20:28 -0800 (PST)
 MIME-Version: 1.0
-From:   Hao Peng <flyingpenghao@gmail.com>
-Date:   Tue, 6 Dec 2022 17:20:15 +0800
-Message-ID: <CAPm50aJ=BLXNWT11+j36Dd6d7nz2JmOBk4u7o_NPQ0N61ODu1g@mail.gmail.com>
-Subject: [PATCH] KVM: x86: Simplify kvm_apic_hw_enabled
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
+References: <CAJNi4rOgYmmtOaXVqYB9sAxDmRhGhS_vVXmZbCbMjvFCQsdjCw@mail.gmail.com>
+ <CAJhGHyD+oR8SeYeObJ2DSKfudqBtBOiL14jCsST3L5OG8WjT_g@mail.gmail.com>
+ <CAJNi4rOs-=xx5qV-hQQYgSLQCz_q3JuFxJEd+wpPaao8Ej26yQ@mail.gmail.com> <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
+In-Reply-To: <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
+From:   richard clark <richard.xnu.clark@gmail.com>
+Date:   Tue, 6 Dec 2022 17:20:17 +0800
+Message-ID: <CAJNi4rNU0-GVnLMqdGFvHOsTb26eDEgjZJSE6Doo8QU6MYx+JQ@mail.gmail.com>
+Subject: Re: work item still be scheduled to execute after destroy_workqueue?
+To:     Lai Jiangshan <jiangshanlai@gmail.com>
+Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -64,33 +68,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Hao <flyingpeng@tencent.com>
+On Tue, Dec 6, 2022 at 2:23 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
+>
+> On Tue, Dec 6, 2022 at 12:35 PM richard clark
+> <richard.xnu.clark@gmail.com> wrote:
+>
+> > >
+> > A WARN is definitely reasonable and has its benefits. Can I try to
+> > submit the patch and you're nice to review as maintainer?
+> >
+> > Thanks,
+> > Richard
+> > >
+>
+> Sure, go ahead.
+>
+> What's in my mind is that the following code is wrapped in a new function:
+>
+>         mutex_lock(&wq->mutex);
+>         if (!wq->nr_drainers++)
+>                 wq->flags |= __WQ_DRAINING;
+>         mutex_unlock(&wq->mutex);
+>
+>
+> and the new function replaces the open code drain_workqueue() and
+> is also called in destroy_workqueue() (before calling drain_workqueue()).
+>
+Except that, do we need to defer the __WQ_DRAINING clean to the
+rcu_call, thus we still have a close-loop of the drainer's count, like
+this?
 
-kvm_apic_hw_enabled() only needs to return bool, there is no place
-to use the return value of MSR_IA32_APICBASE_ENABLE.
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
 
-Signed-off-by: Peng Hao <flyingpeng@tencent.com>
----
- arch/x86/kvm/lapic.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+@@ -3528,6 +3526,9 @@ static void rcu_free_wq(struct rcu_head *rcu)
 
-diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-index 28e3769066e2..58c3242fcc7a 100644
---- a/arch/x86/kvm/lapic.h
-+++ b/arch/x86/kvm/lapic.h
-@@ -188,11 +188,11 @@ static inline bool lapic_in_kernel(struct kvm_vcpu *vcpu)
+        else
+                free_workqueue_attrs(wq->unbound_attrs);
 
- extern struct static_key_false_deferred apic_hw_disabled;
++       if (!--wq->nr_drainers)
++               wq->flags &= ~__WQ_DRAINING;
++
+        kfree(wq);
 
--static inline int kvm_apic_hw_enabled(struct kvm_lapic *apic)
-+static inline bool kvm_apic_hw_enabled(struct kvm_lapic *apic)
- {
-        if (static_branch_unlikely(&apic_hw_disabled.key))
-                return apic->vcpu->arch.apic_base & MSR_IA32_APICBASE_ENABLE;
--       return MSR_IA32_APICBASE_ENABLE;
-+       return true;
- }
+>
+> __WQ_DRAINING will cause the needed WARN on illegally queuing items on
+> destroyed workqueue.
 
- extern struct static_key_false_deferred apic_sw_disabled;
---
-2.27.0
+I will re-test it if there are no concerns about the above fix...
+
+>
+> Thanks
+> Lai
