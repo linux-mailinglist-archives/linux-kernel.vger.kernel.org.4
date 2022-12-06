@@ -2,83 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF399644477
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A013F64447D
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 14:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233690AbiLFNVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 08:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58232 "EHLO
+        id S231220AbiLFNZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 08:25:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231168AbiLFNV3 (ORCPT
+        with ESMTP id S230230AbiLFNZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 08:21:29 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAFAD120
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:21:26 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id m18so4577462eji.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 05:21:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4A1/sDedsEMhpagiaSYGQZ4/VZF9EUw1mfdyYLwspKc=;
-        b=tMrnWhIwGP2Gl0gqajcIBQAKu/fg+d/y+m834Den0uq6uTqk882e3GGanbCPQz9l53
-         Wggili/p7rOQ1tdOE/ypHaUqzeJtfY5OT1/PjU5AP5cmIXD1/DF5vTQ6J08NqhdQcI8E
-         /434huhN80gdnAoCbFzDp7Vy3YUJ76rnZue5bIeuOAk2ckE7hxqraYVeGep93lAKDHUA
-         0AjfJvFc8PhO0EJwqR4FN1/UW/xDyYVm60JulEag5a+3rB7LrX4+am7V4Rb43wSqR8Hm
-         avLlOMLpNMJ679jODgRoB3yjQjBo4gZjmNQvuSaPVmHiKFDcAEA2ROg6PA/c3ZCmmA4k
-         i8ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4A1/sDedsEMhpagiaSYGQZ4/VZF9EUw1mfdyYLwspKc=;
-        b=ujGgY/iO0B6O/CCddERdWBrbmN13rnG7CKm44+VociwFZGEMXsEJjKUUKYw5so0XNj
-         HIWLTpRy+cMM7OhO7mcWm6VdPTq/cPFbwUuuInnielCnv6cxgOYhAaTkk5hdWRTIJYi/
-         nMAM+K3SrUnMLDpCIcvsi6i8t7XCjMucve1VrJ/phAz9b43SISYluXwZ+vnQQwHGsHPz
-         fOO0tm0uvk7nZ78CplJLCW1LcUYihrImeJC/1M/SKYod1cH7iZPgDbZWH0YIreTKusVl
-         //wn29eZsAJj3Nd+9b5e5FWncasOM2nLnTdVGW7KZfQotDavqV7xSciqACjLGf0hdnbr
-         iJDA==
-X-Gm-Message-State: ANoB5pnez1XLCMxfiVGdksVuxfBUVbmFo+gdnB2giw8owFATl2UZhB75
-        WsYuJ1FdkuhOJX/TQSSVG1Y9pA==
-X-Google-Smtp-Source: AA0mqf6NthG9z1ImHJdswLixYqxWNP9T87diFnLhKiaSRGZswGtMAb061dUvXpe8zghf6GqecOlNww==
-X-Received: by 2002:a17:906:ee2:b0:78d:3f96:b7aa with SMTP id x2-20020a1709060ee200b0078d3f96b7aamr58012848eji.74.1670332885277;
-        Tue, 06 Dec 2022 05:21:25 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id y20-20020a50eb94000000b004589da5e5cesm973328edr.41.2022.12.06.05.21.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 05:21:24 -0800 (PST)
-Date:   Tue, 6 Dec 2022 14:21:23 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     zhang.songyi@zte.com.cn
-Cc:     leon@kernel.org, saeedm@nvidia.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        kliteyn@nvidia.com, shunh@nvidia.com, rongweil@nvidia.com,
-        valex@nvidia.com, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] net/mlx5: remove redundant ret variable
-Message-ID: <Y49B08qoVY5WT0s3@nanopsycho>
-References: <202212051424013653827@zte.com.cn>
+        Tue, 6 Dec 2022 08:25:40 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCFBA218AE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 05:24:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670333088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j/qcQ529qZKxUBY9ovkeJuGmrZWbcp54vb/CqVODfHM=;
+        b=RPrdooBTaGoj2bouzshuZ9grXEe1vgz/gFCOhpIgmJnAiPDWirMWRAovGtLX33tpwkcAJB
+        QXwWhoJcGSyqFI73iPzHVf05a5eC0hsw+GweqevqRcPn2eY/LZzkbPFUVOf3o7EjDem0lU
+        NtpEwOeY5v6Y0SkR7NP7Wt6HdTW95xo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-131-Y0tJPtboMJqxLGC6FkN7zg-1; Tue, 06 Dec 2022 08:24:37 -0500
+X-MC-Unique: Y0tJPtboMJqxLGC6FkN7zg-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82F681C09B73;
+        Tue,  6 Dec 2022 13:24:35 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BF9DE40C6EC3;
+        Tue,  6 Dec 2022 13:24:33 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20221206221813.3c7cfa0c6e51b551869912b3@kernel.org>
+References: <20221206221813.3c7cfa0c6e51b551869912b3@kernel.org> <167023571258.382307.15314866482834835192.stgit@warthog.procyon.org.uk>
+To:     Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Cc:     dhowells@redhat.com, rostedt@goodmis.org,
+        linux-kernel@vger.kernel.org,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] trace: Fix some checker warnings
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202212051424013653827@zte.com.cn>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <998782.1670333070.1@warthog.procyon.org.uk>
+Date:   Tue, 06 Dec 2022 13:24:30 +0000
+Message-ID: <998783.1670333070@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Dec 05, 2022 at 07:24:01AM CET, zhang.songyi@zte.com.cn wrote:
->From: zhang songyi <zhang.songyi@zte.com.cn>
->
->Return value from mlx5dr_send_postsend_action() directly instead of taking
->this in another redundant variable.
->
->Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+Is there a tracing tree this can go through?
 
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+David
+
