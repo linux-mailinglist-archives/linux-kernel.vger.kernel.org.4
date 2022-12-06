@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D426442B9
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:58:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E52E56442AD
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:58:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235166AbiLFL6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:58:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50964 "EHLO
+        id S235259AbiLFL55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:57:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235139AbiLFL5n (ORCPT
+        with ESMTP id S229780AbiLFL5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:57:43 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC36C9580
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:57:39 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id d14so14974062edj.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:57:39 -0800 (PST)
+        Tue, 6 Dec 2022 06:57:44 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD18F958C
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 03:57:40 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ud5so5617872ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 03:57:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6/SM3kRtE0QNFZxUupuZ+9fh0CsrCFYSaqu7nZYqZws=;
-        b=0+4ZNoct0t37OCBI0Y3zYjJ0HnauWB5gfqosr2YiHb/KDkgUB0W0OrWp6Td60o/qh2
-         mj23yCSgRd5vUr7yuTKBqXK1rKj0Dhlne1ZTLoggSHVQcVUnynig5NLWmEpmVyZtjCR9
-         irNVKd5e/1zjgrEagyZdtsouWAoDH1YU6TEqfWDYe8sKqoV5xy6a8vH3wt1gX/C2iF05
-         D9RYNZvOzX9Iu3F07nBTc6L5AZpNP9kV7QGs67cWBAQAzMJTfsXEK36ablfRhBOVi8rt
-         LtImRuyGjgccVT2bgzzGb5sl8iVYYFbWE+C+3BKu1JbqA6qOh3YMau4R9iC5+p7Ap9Uw
-         8DQA==
+        bh=Jg8CR20tG79djQpdFo8U0Y6E9PQi/JvNHqoQZx2uO1Q=;
+        b=zELG2lnh50u90Jp2YLLVqH4yZCkDv7zMa535EWcQPw1JEmENJog2b3Vqaw170TwLzo
+         Mz0Z8SmeWTO+dx1Wuqlpp0fYpWLBXeqtfqlcCQZ70JmisGnxHt9gDi7T3KbSDRq/ytP9
+         hOJ1oP74mxN+w1SRByUuzSSnFrUwbbjXn5/yUDUm5d+yU+2mw2E8sTLFVTMtLfuaVQCE
+         w9JaR1YlrXSrq2LmYnEkm41ANlQdDqwshQbgkP3nVdbMCwXWNo8ur1m++gxNIw1Je89n
+         Fj1r+UbVNA+7252hQFEO7reV7YGsMfRiDo7pj5nAZKquSRfB/BQZxVhRqEzcqJfFlJaT
+         GPzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6/SM3kRtE0QNFZxUupuZ+9fh0CsrCFYSaqu7nZYqZws=;
-        b=cFANtEZa8BexaNFGU1HZSgTozY4yzv1xdULfKRtNHuvcgY8U58A1TXfIkJe1DYb1qF
-         w88j9JicDQca8evNUa9N8jMbNYrmBzc1gK8LdX56M0ILgu+fI/8LkzTDfas+0O2Zo+cW
-         G0suxEwElBuDgguSwzrl4am4f+5aHz4w72ZvPoCP6HtNQBgIO4LhpoG7KXtvxZdHpJU5
-         04dljMdWaW3KFu5goAa40XVtk4UVNS+QnsP/c8gECACzeleEwYMgwQAV8fQTblQkNhBy
-         80alzuzTTHrooUM4T4aDCyFXdzD69GkEkjXhutd5iaCFcx9Be8WgF83yFkkKocR7cB86
-         46dg==
-X-Gm-Message-State: ANoB5plZjcKEwUMDVBgS6AKErwyznOkRvn3tPmGJaReXdHOqS08+L5+M
-        elc4S+GuUOcNgvV9XTkA6czBeQ==
-X-Google-Smtp-Source: AA0mqf7dfp5M+1XwnbbDWRD6RfH8MEGTMzGyhpgQVfsezjb8oi7qrVaCy9qNcQuAtPlBn6W5MrBokw==
-X-Received: by 2002:a05:6402:2b91:b0:457:23cb:20ab with SMTP id fj17-20020a0564022b9100b0045723cb20abmr12075583edb.254.1670327858359;
-        Tue, 06 Dec 2022 03:57:38 -0800 (PST)
+        bh=Jg8CR20tG79djQpdFo8U0Y6E9PQi/JvNHqoQZx2uO1Q=;
+        b=CpLzQxnBsTxOF1C/PdEaF0s6E/A7V9dLBtnt9A2ESBekq5Kcd5DE7Cgq9+TqeXAx89
+         BmHuAcwPE8a0aLN4szybsIBsjiHQ1kUGDrf0kRwHARt6kE5sMqn6KMmrW8IqicSprJGu
+         vJQsGVsxcobI31JGlmoaxLLlNyuwe7tvAyusdm8ZJ/r2W/COKU/j7wXa4PC4ghS+LNCp
+         LpPb/e73dhM33sEnGPocFq1ub951kIk04YzL+bygP/z6H09RK22pRcAxYTYr+OEQeLbg
+         RjAwmb7ztdYMuj1GqNdB1BQ78jPHhWsWDE+yMmRx3mcxQWbZXwHZoBAnj8HRvewSy/ir
+         I8CA==
+X-Gm-Message-State: ANoB5pnys4pGYCa/+MhE0l77bTMlHVW06hJECGNWwKnoqSJ5Yuzex1OU
+        bvzdZbYm8dVVs2YnF/EOQ99zPA==
+X-Google-Smtp-Source: AA0mqf6XeLvgIxwGH4a6RLaphDtEo1NWHsQelYYFWjvNWuKUdCDgRQQAeNLelwlOJQCFkYYAsDhtig==
+X-Received: by 2002:a17:906:444b:b0:7ad:dd43:5d53 with SMTP id i11-20020a170906444b00b007addd435d53mr54435818ejp.376.1670327859238;
+        Tue, 06 Dec 2022 03:57:39 -0800 (PST)
 Received: from blmsp.fritz.box ([2001:4091:a245:805c:8713:84e4:2a9e:cbe8])
-        by smtp.gmail.com with ESMTPSA id ky20-20020a170907779400b007c0ac4e6b6esm6472076ejc.143.2022.12.06.03.57.37
+        by smtp.gmail.com with ESMTPSA id ky20-20020a170907779400b007c0ac4e6b6esm6472076ejc.143.2022.12.06.03.57.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 06 Dec 2022 03:57:38 -0800 (PST)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
@@ -57,60 +57,61 @@ To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
 Cc:     linux-can@vger.kernel.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v2 03/11] can: m_can: Read register PSR only on error
-Date:   Tue,  6 Dec 2022 12:57:20 +0100
-Message-Id: <20221206115728.1056014-4-msp@baylibre.com>
+Subject: [PATCH v2 04/11] can: m_can: Count TXE FIFO getidx in the driver
+Date:   Tue,  6 Dec 2022 12:57:21 +0100
+Message-Id: <20221206115728.1056014-5-msp@baylibre.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221206115728.1056014-1-msp@baylibre.com>
 References: <20221206115728.1056014-1-msp@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Only read register PSR if there is an error indicated in irqstatus.
+The getindex simply increases by one for every iteration. There is no
+need to get the current getidx every time from a register. Instead we
+can just count and wrap if necessary.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 ---
- drivers/net/can/m_can/m_can.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+ drivers/net/can/m_can/m_can.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index d30afbb3503b..45c718413abf 100644
+index 45c718413abf..a133f15fb90a 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -900,7 +900,6 @@ static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	int rx_work_or_err;
- 	int work_done = 0;
--	u32 psr;
+@@ -1020,15 +1020,13 @@ static int m_can_echo_tx_event(struct net_device *dev)
  
- 	if (!irqstatus)
- 		goto end;
-@@ -926,13 +925,13 @@ static int m_can_rx_handler(struct net_device *dev, int quota, u32 irqstatus)
- 		}
- 	}
+ 	/* Get Tx Event fifo element count */
+ 	txe_count = FIELD_GET(TXEFS_EFFL_MASK, m_can_txefs);
++	fgi = FIELD_GET(TXEFS_EFGI_MASK, m_can_txefs);
  
--	psr = m_can_read(cdev, M_CAN_PSR);
+ 	/* Get and process all sent elements */
+ 	for (i = 0; i < txe_count; i++) {
+ 		u32 txe, timestamp = 0;
+ 		int err;
+ 
+-		/* retrieve get index */
+-		fgi = FIELD_GET(TXEFS_EFGI_MASK, m_can_read(cdev, M_CAN_TXEFS));
 -
- 	if (irqstatus & IR_ERR_STATE)
--		work_done += m_can_handle_state_errors(dev, psr);
-+		work_done += m_can_handle_state_errors(dev,
-+						       m_can_read(cdev, M_CAN_PSR));
+ 		/* get message marker, timestamp */
+ 		err = m_can_txe_fifo_read(cdev, fgi, 4, &txe);
+ 		if (err) {
+@@ -1042,6 +1040,7 @@ static int m_can_echo_tx_event(struct net_device *dev)
+ 		/* ack txe element */
+ 		m_can_write(cdev, M_CAN_TXEFA, FIELD_PREP(TXEFA_EFAI_MASK,
+ 							  fgi));
++		fgi = (++fgi >= cdev->mcfg[MRAM_TXE].num ? 0 : fgi);
  
- 	if (irqstatus & IR_ERR_BUS_30X)
--		work_done += m_can_handle_bus_errors(dev, irqstatus, psr);
-+		work_done += m_can_handle_bus_errors(dev, irqstatus,
-+						     m_can_read(cdev, M_CAN_PSR));
- 
- 	if (irqstatus & IR_RF0N) {
- 		rx_work_or_err = m_can_do_rx_poll(dev, (quota - work_done));
+ 		/* update stats */
+ 		m_can_tx_update_stats(cdev, msg_mark, timestamp);
 -- 
 2.38.1
 
