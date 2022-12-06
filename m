@@ -2,47 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6177B64426E
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEFA644271
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 12:50:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbiLFLtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 06:49:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S234978AbiLFLuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 06:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234407AbiLFLtd (ORCPT
+        with ESMTP id S234857AbiLFLt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 06:49:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB53E17416;
-        Tue,  6 Dec 2022 03:49:32 -0800 (PST)
+        Tue, 6 Dec 2022 06:49:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB5C1CFFE;
+        Tue,  6 Dec 2022 03:49:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 699FCB819AE;
-        Tue,  6 Dec 2022 11:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE8C4C433D6;
-        Tue,  6 Dec 2022 11:49:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670327370;
-        bh=jpNRSCrAwScrzo73RHAzCPD2+2OMYIYifGr0nc1dD2s=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC22D616D4;
+        Tue,  6 Dec 2022 11:49:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9F47C433C1;
+        Tue,  6 Dec 2022 11:49:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670327395;
+        bh=Mwq5NuUta+wRMLWCv1J/+EfioKOtv+vyJzohqHnIx/Q=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=zRq5mG4R2BQSp3uA10kQ8Tdt24sbMMLIo2JCqM15zQ/xqAPqoJCrwvkkCr85xbknK
-         oZIV0jJIUIPBR74tqcoTADheFOFYoyZ71L8nw9mNJBcrxoQPHqqSPtaY0cHuR1OP1o
-         D6xrEO6DG8LI2tsebL7KXjXeei11gSmHMYMR6eFo=
-Date:   Tue, 6 Dec 2022 12:49:27 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Cengiz Can <cengiz.can@canonical.com>
-Cc:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Regarding 711f8c3fb3db "Bluetooth: L2CAP: Fix accepting
- connection request for invalid SPSM"
-Message-ID: <Y48sR0xv0yuH8GDd@kroah.com>
-References: <f0b260c1-a7c4-9e0e-5b29-a3c8a7570df1@canonical.com>
+        b=iaQE+6AEDlB+uXpLw/GQu62g48FT/7nlHQ+9v8EwFMYhGKEoK5xw+ROVYN41XspLY
+         2FVUzSPuNaxt1vN3rghloroJCGx5ImeopcQbXdc63ILKYJFTNta2IsQ+IHN9XQEvhX
+         spIAeEpTsjZ8gbSIKwoWEawQ3u6zefLpeYZ6+xpZN701120ChN/tYkvu/Oq2BQGFtw
+         eF+32F3cmZNzU4mOhVQEigHyWx3XE4wWJ3Ufr7C63RGp6OwVzKmSOf8Q5gymsYgLEd
+         1SgMzE4IXTKQ+Fc/8ehDBL68//F5dxxvlYUuZovAchMr5qiDhVYduVc2jKMWafNQfq
+         n8HZ9xaFgIsCw==
+Date:   Tue, 6 Dec 2022 13:49:50 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Roger Quadros <rogerq@kernel.org>
+Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, kuba@kernel.org,
+        andrew@lunn.ch, edumazet@google.com, pabeni@redhat.com,
+        vigneshr@ti.com, linux-omap@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 net-next 0/6] net: ethernet: ti: am65-cpsw: Fix set
+ channel operation
+Message-ID: <Y48sXm0B67u/hSQI@unreal>
+References: <20221206094419.19478-1-rogerq@kernel.org>
+ <Y48T4OduISrVD4HR@unreal>
+ <fed09b42-7891-0a5e-3fd9-1ab65d090271@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f0b260c1-a7c4-9e0e-5b29-a3c8a7570df1@canonical.com>
+In-Reply-To: <fed09b42-7891-0a5e-3fd9-1ab65d090271@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,54 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 02:27:27PM +0300, Cengiz Can wrote:
-> Hello Luiz Augusto,
+On Tue, Dec 06, 2022 at 12:15:17PM +0200, Roger Quadros wrote:
+> On 06/12/2022 12:05, Leon Romanovsky wrote:
+> > On Tue, Dec 06, 2022 at 11:44:13AM +0200, Roger Quadros wrote:
+> >> Hi,
+> >>
+> >> This contains a critical bug fix for the recently merged suspend/resume
+> >> support [1] that broke set channel operation. (ethtool -L eth0 tx <n>)
+> >>
+> >> As there were 2 dependent patches on top of the offending commit [1]
+> >> first revert them and then apply them back after the correct fix.
+> > 
+> > Why did you chose revert and reapply almost same patch instead of simply
+> > fixing what is missing?
 > 
+> v1 & 2 of this series were doing that but it was difficult to review.
+> This is because we are taking a different approach so we have to undo
+> most of the things done earlier.
 > 
-> I'm by no means a bluetooth expert so please bear with me if my
-> questions sound dumb or pointless.
-> 
-> 
-> I'm trying to backport commit 711f8c3fb3db ("Bluetooth: L2CAP: Fix
-> accepting connection request for invalid SPSM") to v4.15.y and older
-> stable kernels. (CVE-2022-42896)
-> 
-> 
-> According to the changes to `net/bluetooth/l2cap_core.c` there are two
-> functions that need patching:
-> 
-> 
-> * l2cap_le_connect_req
-> * l2cap_ecred_conn_req
-> 
-> 
-> 
-> Only the former exists in kernels <= v4.15.y. So I decided to skip
-> 
-> l2cap_ecred_conn_req for older kernels.
-> 
-> 
-> Do you think this would be enough to mitigate the issue?
-> 
-> 
-> 
-> If so, older kernels also lack definitions of L2CAP_CR_LE_BAD_PSM and
-> 
-> L2CAP_PSM_LE_DYN_END.
-> 
-> 
-> I see that L2CAP_CR_LE_BAD_PSM is basically the same as
-> L2CAP_CR_BAD_PSM so I used it to signify an error.
-> 
-> 
-> I think it should be enough for the sake of a backport.
-> 
-> 
-> What do you think?
+> It was suggested during review that reverting and fresh patch was better.
 
-I've already done this backport and it is in the latest -rc1 stable
-kernel releases.  Is it not working for you there?  Why do it again?
-
-thanks,
-
-greg k-h
+Thanks.
