@@ -2,290 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEFE6449F3
+	by mail.lfdr.de (Postfix) with ESMTP id 9034F6449F4
 	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 18:08:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232897AbiLFRIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 12:08:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43230 "EHLO
+        id S235049AbiLFRIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 12:08:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiLFRHh (ORCPT
+        with ESMTP id S234957AbiLFRHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 12:07:37 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8285BB8
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 09:07:34 -0800 (PST)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NRRf74NYDzFpYS;
-        Wed,  7 Dec 2022 01:06:39 +0800 (CST)
-Received: from [10.174.179.79] (10.174.179.79) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Dec 2022 01:07:26 +0800
-Subject: Re: [RFC PATCH] arm64: mm: Add invalidate back in
- arch_sync_dma_for_device when FROM_DEVICE
-To:     Robin Murphy <robin.murphy@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>, <will@kernel.org>
-CC:     <catalin.marinas@arm.com>, <sstabellini@kernel.org>,
-        <jgross@suse.com>, <oleksandr_tyshchenko@epam.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <wangkefeng.wang@huawei.com>,
-        <linux@armlinux.org.uk>
-References: <20221117072100.2720512-1-sunnanyong@huawei.com>
- <CAMj1kXENCa5TK9EnRa9Mtn+xGLrnV_X0sAkTC64GVOShDsTK1Q@mail.gmail.com>
- <2787aa42-5ba5-be84-3adc-3b24e6477439@huawei.com>
- <93ad9b12-b5e7-de6c-af99-0f4c532dbb60@arm.com>
-From:   Nanyong Sun <sunnanyong@huawei.com>
-Message-ID: <ea0a2454-3dc1-e128-fc18-d36a905ed6ad@huawei.com>
-Date:   Wed, 7 Dec 2022 01:07:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        Tue, 6 Dec 2022 12:07:43 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6329F7D;
+        Tue,  6 Dec 2022 09:07:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B82AC617E6;
+        Tue,  6 Dec 2022 17:07:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA58BC433C1;
+        Tue,  6 Dec 2022 17:07:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670346457;
+        bh=lEuyI5w1R//aNy3kUfU54WqWhb7jdLiS6Jm+x6fdCpQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QAj3KbZ6M5+yZtlniUu5znjr/2J4BP5YT65Uxi+k2RssB1p89+y+Dmh2DxBfUoaNz
+         QxvTT7RUadm9mjDagmjK63hwSoIMUr7ljndtRkNZ/kLDJnQ6MI75Wu9DL0qblDdCop
+         8H4pXAVWYxsGWKfYamRHHakps7KamXBJJMstCd+jVK9nvHhz/TwcUsHBGEd67FvNFX
+         vodMCFJqDDRbwW4NdlCFqUkQUnNwDwdxLb/Eonivt0o1fLwi4MMBbly9UoD1MviAzW
+         bdNK2zibpcNDd9ehNfKrXLKw0zD3pDqy1S/Jl+/ALowz2V1rR4qZnI146znhTt4kHC
+         INAqv4BEqDB2w==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id D684A40404; Tue,  6 Dec 2022 14:07:32 -0300 (-03)
+Date:   Tue, 6 Dec 2022 14:07:32 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
+Message-ID: <Y4921D+36UGdhK92@kernel.org>
+References: <20221205225940.3079667-1-irogers@google.com>
+ <20221205225940.3079667-3-irogers@google.com>
+ <Y49qiCIiyaehEOaG@kernel.org>
+ <Y49rvLO2RnJBBNL/@kernel.org>
+ <Y49skYa5VYPMU+RF@kernel.org>
+ <Y49uKfzfCoZ1ok62@kernel.org>
+ <Y49vx0v6Z7EiR8jr@kernel.org>
+ <Y49wxSIK7dJ7iTDg@kernel.org>
+ <Y491d1wEW4TfUi5f@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <93ad9b12-b5e7-de6c-af99-0f4c532dbb60@arm.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.79]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y491d1wEW4TfUi5f@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+Em Tue, Dec 06, 2022 at 02:01:43PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Tue, Dec 06, 2022 at 01:41:41PM -0300, Arnaldo Carvalho de Melo escreveu:
+> >  Now to look at the BUILD_BPF_SKEL=1 kaboom:
+> > 
+> >  [acme@quaco perf]$ alias m
+> > alias m='rm -rf ~/libexec/perf-core/ ; make -k NO_LIBTRACEEVENT=1 BUILD_BPF_SKEL=1 O=/tmp/build/perf -C tools/perf install-bin && perf test python'
+> > [acme@quaco perf]$ m
+> > make: Entering directory '/home/acme/git/perf/tools/perf'
+> >   BUILD:   Doing 'make -j8' parallel build
+> >   <SNIP>
+> > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `add_work':
+> > /home/acme/git/perf/tools/perf/util/bpf_kwork.c:285: undefined reference to `perf_kwork_add_work'
+> > /usr/bin/ld: /tmp/build/perf/perf-in.o: in function `lock_contention_read':
 
-     What do you think about this?
+For that bpf_kwork.c see below. Now to see why the python binding is not
+building, I guess is unrelated and you have some other outstanding
+patch?
 
-     I have another question: are there actual programs or scenarios  
-which can utilize the 2 problems fixed by the
+[acme@quaco perf]$ git diff
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 255bc751d19452f2..c97093f47c990b45 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -153,8 +153,12 @@ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_counter_cgroup.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_ftrace.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_off_cpu.o
+-perf-$(CONFIG_PERF_BPF_SKEL) += bpf_kwork.o
+ perf-$(CONFIG_PERF_BPF_SKEL) += bpf_lock_contention.o
++
++ifeq ($(CONFIG_TRACEEVENT),y)
++  perf-$(CONFIG_PERF_BPF_SKEL) += bpf_kwork.o
++endif
++
+ perf-$(CONFIG_BPF_PROLOGUE) += bpf-prologue.o
+ perf-$(CONFIG_LIBELF) += symbol-elf.o
+ perf-$(CONFIG_LIBELF) += probe-file.o
+[acme@quaco perf]$ m
+make: Entering directory '/home/acme/git/perf/tools/perf'
+  BUILD:   Doing 'make -j8' parallel build
+Warning: Kernel ABI header at 'tools/arch/x86/include/asm/msr-index.h' differs from latest version at 'arch/x86/include/asm/msr-index.h'
+diff -u tools/arch/x86/include/asm/msr-index.h arch/x86/include/asm/msr-index.h
+Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
+diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
+Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h' differs from latest version at 'arch/arm64/include/asm/cputype.h'
+diff -u tools/arch/arm64/include/asm/cputype.h arch/arm64/include/asm/cputype.h
+Warning: Kernel ABI header at 'tools/perf/arch/powerpc/entry/syscalls/syscall.tbl' differs from latest version at 'arch/powerpc/kernel/syscalls/syscall.tbl'
+diff -u tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/syscalls/syscall.tbl
+Makefile.config:1138: No openjdk development package found, please install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
 
-commit c50f11c6196f ("arm64: mm: Don't invalidate FROM_DEVICE buffers at 
-start of DMA transfer")?
+  INSTALL libsubcmd_headers
+  INSTALL libapi_headers
+  INSTALL libsymbol_headers
+  INSTALL libperf_headers
+  GEN     /tmp/build/perf/python/perf.so
+  INSTALL libbpf_headers
+  INSTALL binaries
+  INSTALL tests
+  INSTALL perf-read-vdso32
+  INSTALL libexec
+  INSTALL bpf-examples
+  INSTALL perf-archive
+  INSTALL perf-iostat
+  INSTALL strace/groups
+  INSTALL perl-scripts
+  INSTALL python-scripts
+  INSTALL dlfilters
+  INSTALL perf_completion-script
+  INSTALL perf-tip
+make: Leaving directory '/home/acme/git/perf/tools/perf'
+ 14: 'import perf' in python                                         : FAILED!
+[acme@quaco perf]$
 
-We want to evaluate the actual impact of this pach.
-
-On 2022/11/25 4:04, Robin Murphy wrote:
-> On 2022-11-20 02:59, Nanyong Sun wrote:
->> On 2022/11/17 16:24, Ard Biesheuvel wrote:
->>
->>> On Thu, 17 Nov 2022 at 07:33, Nanyong Sun <sunnanyong@huawei.com> 
->>> wrote:
->>>> The commit c50f11c6196f ("arm64: mm: Don't invalidate FROM_DEVICE
->>>> buffers at start of DMA transfer") replaces invalidate with clean
->>>> when DMA_FROM_DEVICE, this changes the behavior of functions like
->>>> dma_map_single() and dma_sync_single_for_device(*, *, *, 
->>>> DMA_FROM_DEVICE),
->>>> then it may make some drivers works unwell because the implementation
->>>> of these DMA APIs lose the original cache invalidation.
->>>>
->>>> Situation 1:
->>> ...
->>>> Situation 2:
->>>> After backporting the above commit, we find a network card driver go
->>>> wrong with cache inconsistency when doing DMA transfer: CPU got the
->>>> stale data in cache when reading DMA data received from device.
->>> I suppose this means those drivers may lack dma_sync_single_for_cpu()
->>> calls after the inbound transfers complete, and are instead relying on
->>> the cache invalidation performed before the transfer to make the DMA'd
->>> data visible to the CPU.
->>>
->>> This is buggy and fragile, and should be fixed in any case. There is
->>> no guarantee that the CPU will not preload parts of the buffer into
->>> the cache while DMA is in progress, so the invalidation must occur
->>> strictly after the device has finished transferring the data.
->>>
->>>> A similar phenomenon happens on sata disk drivers, it involves
->>>> mainline modules like libata, scsi, ahci etc, and is hard to find
->>>> out which line of code results in the error.
->>>>
->>> Could you identify the actual hardware and drivers that you are
->>> observing the issue on? Claiming that everything is broken is not very
->>> helpful in narrowing it down (although I am not saying you are wrong
->>> :-))
->> The hardware combination is ARM64 with SATA disk，but not every 
->> product of
->> this combination has the DMA problem, and the related drivers seems 
->> right,
->> so I am currently checking whether the DT or ACPI indicate device's 
->> coherent attribute uncorrectly.
->> (The scenario that Robin proposed in another email:
->> ===============================================================
->> It also commonly goes wrong the other way round when the drivers are 
->> correct but DT/ACPI failed to indicate a coherent device as such.
->> If writes from the device actually snoop, they hit the still-present 
->> cache line, which then gets invalidated by unmap/sync_for_cpu and the 
->> new data is lost.
->> Robin.
->> ===============================================================
->> )
->>>> It seems that some dirvers may go wrong and have to match the
->>>> implementation changes of the DMA APIs, and it would be confused
->>>> because the behavior of these DMA APIs on arm64 are different
->>>> from other archs.
->>>>
->>>> Add invalidate back in arch_sync_dma_for_device() to keep drivers
->>>> compatible by replace dcache_clean_poc with dcache_clean_inval_poc
->>>> when DMA_FROM_DEVICE.
->>>>
->>> So notably, the patch in question removes cache invalidation *without*
->>> clean, and what you are adding here is clean+invalidate. (Invalidation
->>> without clean may undo the effect of, e.g., the memzero() of a secret
->>> in memory, and so it is important that we don't add that back if we
->>> can avoid it)
->>>
->>> Since we won't lose the benefits of that change, incorporating
->>> invalidation at this point should be fine: clean+invalidate shouldn't
->>> be more expensive than clean, and [correctly written] drivers will
->>> invalidate those lines anyway, as the data has to come from DRAM in
->>> any case.
->>>
->>> So unless fixing the drivers in question is feasible, this change
->>> seems reasonable to me.
->> Agree with you and I have some questions:
->> 1. I am not very clear that how to fix the drivers? Before the patch 
->> in question, the behaviors of DMA APIs are like this:
->>
->>                       map        for_cpu         for_device unmap
->> TO_DEV    writeback    none             writeback       none
->> TO_CPU    invalidate    invalidate*    invalidate invalidate*
->> BIDIR        writeback    invalidate      writeback invalidate
->>
->> (Reference from: 
->> https://lore.kernel.org/lkml/20180518175004.GF17671@n2100.armlinux.org.uk/)
->>
->> and now the behaviors on arm64 become this:
->>
->>                       map              for_cpu for_device            
->> unmap
->> TO_DEV    writeback          none writeback             none
->> TO_CPU   -> [writeback]    invalidate* ->[writeback] invalidate*
->> BIDIR        writeback          invalidate writeback invalidate
->>
->> Can we confirm that these changes are acceptable on the ARM64?
->>
->> I counted the drivers on the Linux mainline and there are at least 
->> 123 places of code have called
->> dma_sync_single_for_device(*, *, *, DMA_FROM_DEVICE), one of them 
->> like this:
->> drivers/net/ethernet/sun/cassini.c:
->>      cas_rx_process_pkt():
->> dma_sync_single_for_cpu(&cp->pdev->dev, page->dma_addr + off,
->>                                          i, DMA_FROM_DEVICE);
->>                  addr = cas_page_map(page->buffer);
->>                  memcpy(p, addr + off, i);
->> dma_sync_single_for_device(&cp->pdev->dev,
->>                                             page->dma_addr + off, i,
->>                                             DMA_FROM_DEVICE);
->>
->> Are they correct?
->
-> Yes.
->
-> In the non-coherent scenario here, dma_sync_single_for_cpu() 
-> invalidates any previously-fetched cachelines to ensure that the 
-> latest data written to DRAM by the device is visible to the CPU. There 
-> is no writeback because those cachelines can only be clean, not dirty 
-> - the device is non-coherent, so is not updating the cache, and the 
-> contract of the DMA API says that nothing else may write to the same 
-> address at the same time. The subsequent dma_sync_single_for_device() 
-> doesn't actually need to do anything, because the whole transfer is 
-> DMA_FROM_DEVICE - even though the buffer was almost certainly fetched 
-> into some level of cache by the memcpy() reading from it, that's fine. 
-> The device will write the next packet to DRAM, and those (clean) 
-> cachelines will be invalidated by dma_sync_single_for_cpu() when we 
-> start the whole cycle again.
-So all of the dma_sync_single_for_device(*, *, *, DMA_FROM_DEVICE) are 
-unnecessary?
->
->> - If they are, they may be affected by the implementation change, 
->> then how to fix them?
->> - Or these codes are needless on arm64 so they won't be affected?
->>
->> 2. Finding the drivers which do not strictly follow the DMA API rule 
->> is expensive, they used to run with no problem
->> because they called the DMA APIs that will do the same invalidate 
->> thing like dma_sync_single_for_cpu(), but now they have risks,
->> so every DMA users should check the drivers, including in tree, 
->> out-of-tree and binary-only drivers.
->> We also need to check the DTS and ACPI to prevent the case that Robin 
->> mentioned.
->> And are there any other scenarios we haven't thought of that need to 
->> be checked?
->>
->> That will be a huge and difficult workload for DMA users, and based 
->> on they know the influence of that patch.
->>
->> So, adding invalidate back in arch_sync_dma_for_device() seems more 
->> friendly, cheap and harmless,  the behaviors on arm64 will be this:
->>
->>                       map              for_cpu for_device            
->> unmap
->> TO_DEV    writeback          none writeback             none
->> TO_CPU    wback+inv        invalidate*        wback+inv invalidate*
->> BIDIR        writeback          invalidate writeback invalidate
->
-> But then DMA_BIDIRECTIONAL is still wrong, and even if you bodge the 
-> syncs even further to make that appear to work on an 
-> incorrectly-configured system, dma_alloc_coherent() will still be at 
-> risk of losing coherency in ways that cannot be 
-
-But only DMA_FROM_DEVICE is affected, if something wrong with 
-DMA_BIDIRECTIONAL, it would appear early before.
-
-Why dma_alloc_coherent() will be at risk of losing coherency?
-
-> fixed at all, except by fixing the firmware to remove the source of 
-> the problem.
->
-> In practice, driver bugs tend to be fairly easy to weed out with 
-> options like CONFIG_DMA_API_DEBUG and "swiotlb=force", and given that 
-> we can't reliably or completely work around broken firmware, I'd argue 
-> that it's better *not* to try to hide these issues, to increase the 
-> likelihood that they'll be noticed by developers earlier. As happened 
-> again today, in fact:
->
-I am afraid that it is not so easy in practice, at least we have to try 
-every dma-related hardware component of every product, and check the 
-drivers, DTS/ACPI.
-
-> https://lore.kernel.org/linux-arm-kernel/20221124142501.29314-1-johan+linaro@kernel.org/ 
->
->
-> Thanks,
-> Robin.
->
->>>> Fixes: c50f11c6196f ("arm64: mm: Don't invalidate FROM_DEVICE 
->>>> buffers at start of DMA transfer")
->>>> Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
->>>> ---
->>>>   arch/arm64/mm/dma-mapping.c | 5 ++++-
->>>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/arch/arm64/mm/dma-mapping.c b/arch/arm64/mm/dma-mapping.c
->>>> index 3cb101e8cb29..07f6a3089c64 100644
->>>> --- a/arch/arm64/mm/dma-mapping.c
->>>> +++ b/arch/arm64/mm/dma-mapping.c
->>>> @@ -18,7 +18,10 @@ void arch_sync_dma_for_device(phys_addr_t paddr, 
->>>> size_t size,
->>>>   {
->>>>          unsigned long start = (unsigned long)phys_to_virt(paddr);
->>>>
->>>> -       dcache_clean_poc(start, start + size);
->>>> +       if (dir == DMA_FROM_DEVICE)
->>>> +               dcache_clean_inval_poc(start, start + size);
->>>> +       else
->>>> +               dcache_clean_poc(start, start + size);
->>>>   }
->>>>
->>>>   void arch_sync_dma_for_cpu(phys_addr_t paddr, size_t size,
->>>> -- 
->>>> 2.25.1
->>>>
->>> .
->
-> .
