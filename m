@@ -2,187 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABBD644D63
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:41:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB711644D6F
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 21:44:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiLFUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 15:41:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S229652AbiLFUod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 15:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiLFUlY (ORCPT
+        with ESMTP id S229506AbiLFUob (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 15:41:24 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF7C140CE;
-        Tue,  6 Dec 2022 12:41:24 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id 6so14419972pgm.6;
-        Tue, 06 Dec 2022 12:41:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eqWyNBxC7NJydI2Uy3WCSu1/x0WVl3HUjLnH2tKSHz0=;
-        b=WhvZ48cWD9H2UdGKE8MTubyz082b8vFSiHI4fwwvNgXWTH0/Yhz/GJSekQ5KZ6ULlP
-         qoEciX4aSmGMxRoRQTuoluXKlSzaO0fgZK8Umc7JVibYozGKBmJe2w3yoyopt+q6XADD
-         1buET3PVsu8NEgKnY77RQw72M1hxzNos1UTrgoYYKYeTzYBPw7qqruUv2C2/KyU7Mg7/
-         CgtV8jxlo8cEMTq3RqEnjkLltIabVYQ7bzJmqSJNlIjrD8bZrNquop+HVYxIMuKIGOLU
-         v2hrgFp6sSGJXYvqo251qfOXkG4p0UcPmQF0c67kWiRYTP6YvcdLl+l/2KSiWmS8Fq5h
-         GJXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eqWyNBxC7NJydI2Uy3WCSu1/x0WVl3HUjLnH2tKSHz0=;
-        b=NbuNrB9MyGoT/7B5iaa0f8/b21lzxUyZ+3JG3mO4o88Dt+OPM15Nb46WYCA096sdDg
-         ByHvNUaNIikp3pNq1ysQ80LxoBjcnjdxlQ6hdqJqkwMcK6kpaW3XRgnqySC7fVN/4olA
-         vEhiAhOk+t8UTivc70BDv6/YAkE/CQnwgmlPSFWRrO39lWFjWCa6w0R2C5pZ6r7/t/Gb
-         XDbdKo5InvJMgVqPSoiJZmLhLfUy30j27RylqkMld8Dxuin7KgMm+YpzoFFeGUtyuMzr
-         FZk/3OV3ypzUUUZSJw6IxewR1fB9qMOlzEwBDRIehAWh46iOvam6momgW0FwpOrcV8IN
-         f3Uw==
-X-Gm-Message-State: ANoB5pn/3ib0uN5ISoCer6cq6NgVIjtz/CvQzP0dK6MIPnprh1zBvDn5
-        EeUydd+LtOigbzBlsYTtMcs=
-X-Google-Smtp-Source: AA0mqf56Zz5d5PLS0OHSiNp/sFuA+5x82yz9SW00LlPfe7Jo3yPXXLB0jApKcQmEVksgRJ2TiKy2nQ==
-X-Received: by 2002:aa7:982b:0:b0:577:391e:16ac with SMTP id q11-20020aa7982b000000b00577391e16acmr5304762pfl.38.1670359283372;
-        Tue, 06 Dec 2022 12:41:23 -0800 (PST)
-Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::2c6b])
-        by smtp.googlemail.com with ESMTPSA id o25-20020aa79799000000b005769b244c2fsm6599295pfp.40.2022.12.06.12.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 12:41:22 -0800 (PST)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     tytso@mit.edu, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH mm-unstable] ext4: Convert mext_page_double_lock() to mext_folio_double_lock()
-Date:   Tue,  6 Dec 2022 12:41:15 -0800
-Message-Id: <20221206204115.35258-1-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 6 Dec 2022 15:44:31 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837F743852;
+        Tue,  6 Dec 2022 12:44:30 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 46E03B815F6;
+        Tue,  6 Dec 2022 20:44:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D78DC433D6;
+        Tue,  6 Dec 2022 20:44:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670359468;
+        bh=VyFPKDskm09hB3DBPKUEg9fDFjmHc83whLCSf6+IOc8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IqE4P1ST/kOEAMpHGncY2mQC42fpXvtPwi7fEW4ygWIoFXRBQwuTgi+T4Oj1cPt5U
+         PcjNwTHqkBmsHx/9f43E+84ht/2lDZommmLHFk+mU3z1b9QLM7RJQOx6kV11zhvH3r
+         P5nikwVYyFulq41FCiW40m3CjFGxVG9GoTFMzcCPWle7Ea+HjyVFxQrp4HhjtxEwi/
+         +0uNRruA6Qk6w9CyFMhuXtIQyt0LHEe/dVvePp/0v4RJtT3kfWGs3eidwAFiA38Uv5
+         cG6SSrO4TkMC9CGupB9JjNKVwRsNOqoTu+l8T9neSqXAK5HoiDJgMvjSnEO23A++f9
+         txRPoFxC8sExw==
+Date:   Tue, 6 Dec 2022 20:44:23 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 08/13] riscv: module: move find_section to module.h
+Message-ID: <Y4+pp6XEu3GSWCiE@spud>
+References: <20221204174632.3677-1-jszhang@kernel.org>
+ <20221204174632.3677-9-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Kfeymfl++SYTH9yC"
+Content-Disposition: inline
+In-Reply-To: <20221204174632.3677-9-jszhang@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Converts mext_page_double_lock() to use folios. This change saves
-146 bytes of kernel text and removes 3 calls to compound_head().
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- fs/ext4/move_extent.c | 46 +++++++++++++++++++++----------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+--Kfeymfl++SYTH9yC
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/fs/ext4/move_extent.c b/fs/ext4/move_extent.c
-index 8dbb87edf24c..2de9829aed63 100644
---- a/fs/ext4/move_extent.c
-+++ b/fs/ext4/move_extent.c
-@@ -110,22 +110,23 @@ mext_check_coverage(struct inode *inode, ext4_lblk_t from, ext4_lblk_t count,
- }
- 
- /**
-- * mext_page_double_lock - Grab and lock pages on both @inode1 and @inode2
-+ * mext_folio_double_lock - Grab and lock folio on both @inode1 and @inode2
-  *
-  * @inode1:	the inode structure
-  * @inode2:	the inode structure
-- * @index1:	page index
-- * @index2:	page index
-- * @page:	result page vector
-+ * @index1:	folio index
-+ * @index2:	folio index
-+ * @folio:	result folio vector
-  *
-- * Grab two locked pages for inode's by inode order
-+ * Grab two locked folio for inode's by inode order
-  */
- static int
--mext_page_double_lock(struct inode *inode1, struct inode *inode2,
--		      pgoff_t index1, pgoff_t index2, struct page *page[2])
-+mext_folio_double_lock(struct inode *inode1, struct inode *inode2,
-+		      pgoff_t index1, pgoff_t index2, struct folio *folio[2])
- {
- 	struct address_space *mapping[2];
- 	unsigned int flags;
-+	unsigned fgp_flags = FGP_LOCK | FGP_WRITE | FGP_CREAT | FGP_STABLE;
- 
- 	BUG_ON(!inode1 || !inode2);
- 	if (inode1 < inode2) {
-@@ -138,28 +139,30 @@ mext_page_double_lock(struct inode *inode1, struct inode *inode2,
- 	}
- 
- 	flags = memalloc_nofs_save();
--	page[0] = grab_cache_page_write_begin(mapping[0], index1);
--	if (!page[0]) {
-+	folio[0] = __filemap_get_folio(mapping[0], index1, fgp_flags,
-+			mapping_gfp_mask(mapping[0]));
-+	if (!folio[0]) {
- 		memalloc_nofs_restore(flags);
- 		return -ENOMEM;
- 	}
- 
--	page[1] = grab_cache_page_write_begin(mapping[1], index2);
-+	folio[1] = __filemap_get_folio(mapping[1], index2, fgp_flags,
-+			mapping_gfp_mask(mapping[1]));
- 	memalloc_nofs_restore(flags);
--	if (!page[1]) {
--		unlock_page(page[0]);
--		put_page(page[0]);
-+	if (!folio[1]) {
-+		folio_unlock(folio[0]);
-+		folio_put(folio[0]);
- 		return -ENOMEM;
- 	}
- 	/*
--	 * grab_cache_page_write_begin() may not wait on page's writeback if
-+	 * __filemap_get_folio() may not wait on folio's writeback if
- 	 * BDI not demand that. But it is reasonable to be very conservative
--	 * here and explicitly wait on page's writeback
-+	 * here and explicitly wait on folio's writeback
- 	 */
--	wait_on_page_writeback(page[0]);
--	wait_on_page_writeback(page[1]);
-+	folio_wait_writeback(folio[0]);
-+	folio_wait_writeback(folio[1]);
- 	if (inode1 > inode2)
--		swap(page[0], page[1]);
-+		swap(folio[0], folio[1]);
- 
- 	return 0;
- }
-@@ -252,7 +255,6 @@ move_extent_per_page(struct file *o_filp, struct inode *donor_inode,
- 		     int block_len_in_page, int unwritten, int *err)
- {
- 	struct inode *orig_inode = file_inode(o_filp);
--	struct page *pagep[2] = {NULL, NULL};
- 	struct folio *folio[2] = {NULL, NULL};
- 	handle_t *handle;
- 	ext4_lblk_t orig_blk_offset, donor_blk_offset;
-@@ -303,8 +305,8 @@ move_extent_per_page(struct file *o_filp, struct inode *donor_inode,
- 
- 	replaced_size = data_size;
- 
--	*err = mext_page_double_lock(orig_inode, donor_inode, orig_page_offset,
--				     donor_page_offset, pagep);
-+	*err = mext_folio_double_lock(orig_inode, donor_inode, orig_page_offset,
-+				     donor_page_offset, folio);
- 	if (unlikely(*err < 0))
- 		goto stop_journal;
- 	/*
-@@ -314,8 +316,6 @@ move_extent_per_page(struct file *o_filp, struct inode *donor_inode,
- 	 * hold page's lock, if it is still the case data copy is not
- 	 * necessary, just swap data blocks between orig and donor.
- 	 */
--	folio[0] = page_folio(pagep[0]);
--	folio[1] = page_folio(pagep[1]);
- 
- 	VM_BUG_ON_FOLIO(folio_test_large(folio[0]), folio[0]);
- 	VM_BUG_ON_FOLIO(folio_test_large(folio[1]), folio[1]);
--- 
-2.38.1
+On Mon, Dec 05, 2022 at 01:46:27AM +0800, Jisheng Zhang wrote:
+> Move it to the header so that the implementation can be shared
+> by the alternatives code.
 
+I'm not a super big fan of these perfunctory commit messages.
+Maybe I'm being a bit ornery, but a few words about why the alternatives
+could benefit from this would be nice. Also, s/it/find_section()/ please.
+
+How about:
+> Move find_section() to module.h so that the implementation can be shared
+> by the alternatives code. This will allow us to use alternatives in
+> the vdso.
+
+
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  arch/riscv/include/asm/module.h | 15 +++++++++++++++
+>  arch/riscv/kernel/module.c      | 15 ---------------
+
+Silly question maybe, but is module.h the right place to put this?
+But I have nothing better to suggest, and I hate bikeshedding stuff when
+I have no suggestion to make.
+
+Rationale behind the movement seems grand to me though, so I suppose:
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+>  2 files changed, 15 insertions(+), 15 deletions(-)
+>=20
+> diff --git a/arch/riscv/include/asm/module.h b/arch/riscv/include/asm/mod=
+ule.h
+> index 76aa96a9fc08..78722a79fc59 100644
+> --- a/arch/riscv/include/asm/module.h
+> +++ b/arch/riscv/include/asm/module.h
+> @@ -111,4 +111,19 @@ static inline struct plt_entry *get_plt_entry(unsign=
+ed long val,
+> =20
+>  #endif /* CONFIG_MODULE_SECTIONS */
+> =20
+> +static inline const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
+> +					   const Elf_Shdr *sechdrs,
+> +					   const char *name)
+> +{
+> +	const Elf_Shdr *s, *se;
+> +	const char *secstrs =3D (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offse=
+t;
+> +
+> +	for (s =3D sechdrs, se =3D sechdrs + hdr->e_shnum; s < se; s++) {
+> +		if (strcmp(name, secstrs + s->sh_name) =3D=3D 0)
+> +			return s;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+>  #endif /* _ASM_RISCV_MODULE_H */
+> diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> index 91fe16bfaa07..76f4b9c2ec5b 100644
+> --- a/arch/riscv/kernel/module.c
+> +++ b/arch/riscv/kernel/module.c
+> @@ -429,21 +429,6 @@ void *module_alloc(unsigned long size)
+>  }
+>  #endif
+> =20
+> -static const Elf_Shdr *find_section(const Elf_Ehdr *hdr,
+> -				    const Elf_Shdr *sechdrs,
+> -				    const char *name)
+> -{
+> -	const Elf_Shdr *s, *se;
+> -	const char *secstrs =3D (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offse=
+t;
+> -
+> -	for (s =3D sechdrs, se =3D sechdrs + hdr->e_shnum; s < se; s++) {
+> -		if (strcmp(name, secstrs + s->sh_name) =3D=3D 0)
+> -			return s;
+> -	}
+> -
+> -	return NULL;
+> -}
+> -
+>  int module_finalize(const Elf_Ehdr *hdr,
+>  		    const Elf_Shdr *sechdrs,
+>  		    struct module *me)
+> --=20
+> 2.37.2
+>=20
+
+--Kfeymfl++SYTH9yC
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY4+ppwAKCRB4tDGHoIJi
+0vdPAPwMCMePiLIxdM2S19748MS5S9G5teWeIfVGdq6nal4HMQD/a2JizR3i5tUB
+H5BxI52RGgMvF963Rr0R5Ftrp24+yQw=
+=/QTm
+-----END PGP SIGNATURE-----
+
+--Kfeymfl++SYTH9yC--
