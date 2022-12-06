@@ -2,155 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B649464494F
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:34:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE87644957
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 17:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234085AbiLFQeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 11:34:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46060 "EHLO
+        id S231168AbiLFQfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 11:35:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235371AbiLFQdu (ORCPT
+        with ESMTP id S235549AbiLFQem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 11:33:50 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80662E094;
-        Tue,  6 Dec 2022 08:32:49 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 1so10917932lfz.4;
-        Tue, 06 Dec 2022 08:32:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=cnF2YDPnsO+8EZX0+nPu76+779ed9TlbeHRhkPJbO2o=;
-        b=pdU6W4aXYpxvGUZkWU6qLnKV+TwYBGb6p3G208PLOfANNZqGmDLktrsdm7NHm2V75E
-         W5vJpQnauH3QuXfpFv5QS+i81u3NPVJc2KYgiOYVUXIeBnKDi9V02KtN0RFICg2eMYlW
-         1FJKtww7CTXLWpMt6+9LA//Bc1bqRZkaZ707F3y/nzCdCOV3BAF1S4cHL0AdvdVck9qw
-         1nWF2oA1TCeCT4NmB4C7clJ8mXwiM//r35N+X51F2f4xhw2L+Mj854zgSG9XuIaGTNpS
-         2z/cb7N6Zf6Tu0feDtbjY1dlXONYODLR6eXq+jnh3XctcIiobF+ZRD8x1I/4zYBa9JpA
-         a2Ag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cnF2YDPnsO+8EZX0+nPu76+779ed9TlbeHRhkPJbO2o=;
-        b=jCR0v219rIYSGv5E/ZMLd9gjEcaS/vkQSSB5WX7mIULUUBFuiOoxCu33xmD1nqM9w9
-         ZKrX7ZRzv0MRBfO6jfztpVhTrBST6ZRPvg+8AxTvmflvY8BgZ9Lvm2+io3juMn7lfjJj
-         3oYDmZ7+gzgdk+4WP0zfWEpBg3S/gm8Wvvpf3thR0RGhGQKi8CdTNTq9as0frYXXm4mL
-         H8FAYJA1ZK+LrxOnfljQ9VCGtEIJ5bUkwnsSKtmo8bpupc9hg0BogakUv1x5aj1sVMey
-         ZLYqv1Oo/BqhGuxmpHF0RwyxGZ3PoR8ecv13UZa9Z4MLiuPC0DMOuHZ1P/z5i4JBmTJb
-         GE/w==
-X-Gm-Message-State: ANoB5pkyrBolkflNPp5Zg5yVVilBdtNIoQTG8p66hMkSJcd3lLq5dmIR
-        LNLBGQJvVHdyyygRXwiUIAT7y6vojIY=
-X-Google-Smtp-Source: AA0mqf5M23SBj2lOhcKXLXnzqzbPAHhbdAKXpyvxdNHnmoUZzfCNNglgX2RpvsKF22izQm7p7pUQCw==
-X-Received: by 2002:a05:6512:22cf:b0:499:fa38:3da4 with SMTP id g15-20020a05651222cf00b00499fa383da4mr28079119lfu.12.1670344365707;
-        Tue, 06 Dec 2022 08:32:45 -0800 (PST)
-Received: from pc636 (host-90-235-25-230.mobileonline.telia.com. [90.235.25.230])
-        by smtp.gmail.com with ESMTPSA id s14-20020a056512314e00b004b584204b85sm369294lfi.161.2022.12.06.08.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 08:32:45 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 6 Dec 2022 17:32:43 +0100
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>, RCU <rcu@vger.kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.iitr10@gmail.com>,
-        Oleksiy Avramchenko <oleksiy.avramchenko@sony.com>
-Subject: Re: [PATCH 1/1] rcu/kvfree: Add runtime sleep check for single
- argument
-Message-ID: <Y49uq+nGCTaM0O8N@pc636>
-References: <20221206122357.309982-1-urezki@gmail.com>
- <E8261077-6AFB-4FA6-AEAB-3BEFF5ABEC23@joelfernandes.org>
+        Tue, 6 Dec 2022 11:34:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E4632FC1A;
+        Tue,  6 Dec 2022 08:33:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66B8A617D6;
+        Tue,  6 Dec 2022 16:33:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10406C433C1;
+        Tue,  6 Dec 2022 16:33:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670344403;
+        bh=tjj3qZj9Emwq0jAd3d/L+wLhfBYyuz9FzS2LZYYSAzs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KNMwZcbyxa1tQJlT6gvYV8TsHwya8sfNbv3+H/bU3G1w92zBhc8lPFh/nuFOMcKor
+         pqTeLHfqSgBaDwE3Hsb2ubexhDK/GUJaCXWaRy1rmgx4a/qmUcMBY65/vY/w7FrpIy
+         uPSl7iPi9XqFZLU1Sj95nn+pmuhlbQ68esLtGKdg=
+Date:   Tue, 6 Dec 2022 17:33:20 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.15 000/123] 5.15.82-rc2 review
+Message-ID: <Y49u0LhWMDJxc90l@kroah.com>
+References: <20221206124052.595650754@linuxfoundation.org>
+ <792a6fba-aa15-2e2a-7527-99ab1116a01d@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <E8261077-6AFB-4FA6-AEAB-3BEFF5ABEC23@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <792a6fba-aa15-2e2a-7527-99ab1116a01d@roeck-us.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 09:45:11AM -0500, Joel Fernandes wrote:
-> Hello Vlad,
-> 
-> > On Dec 6, 2022, at 7:24 AM, Uladzislau Rezki (Sony) <urezki@gmail.com> wrote:
+On Tue, Dec 06, 2022 at 07:11:39AM -0800, Guenter Roeck wrote:
+> On 12/6/22 04:42, Greg Kroah-Hartman wrote:
+> > This is the start of the stable review cycle for the 5.15.82 release.
+> > There are 123 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > > 
-> > ﻿A single argument can be invoked only from a sleepable
-> > context. There is already a might_sleep() check to mitigate
-> > such cases.
-> > The problem is that it requires a kernel to
-> > be built with a CONFIG_DEBUG_ATOMIC_SLEEP option.
+> > Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
+> > Anything received after that time might be too late.
 > > 
-> > In order to improve an extra runtime_assert_can_sleep()
-> > function is introduced by this patch. It is a run-time
-> > checking. Please note it only covers PREEMPT
 > 
-> I would call it preemptible kernels.
+> arch/riscv/kernel/smp.c: In function 'handle_IPI':
+> arch/riscv/kernel/smp.c:195:44: error: 'cpu' undeclared (first use in this function)
+>   195 |                         ipi_cpu_crash_stop(cpu, get_irq_regs());
+>       |                                            ^~~
+> arch/riscv/kernel/smp.c:195:44: note: each undeclared identifier is reported only once for each function it appears in
+> arch/riscv/kernel/smp.c:217:22: error: 'old_regs' undeclared (first use in this function)
+>   217 |         set_irq_regs(old_regs);
+>       |                      ^~~~~~~~
 > 
-> > kernels.
+> This is with v5.15.81-124-g9269e46bc838.
 > 
-> Also, It is not clear at all from the commit message about what we are checking and why. Neither is it clear why the might_sleep() is insufficient.
+> The backport of commit 9b932aadfc47d seems wrong. The original version introduces
+> the cpu variable in handle_IPI(). The backport doesn't, and removes old_regs
+> instead.
 > 
-> The whole point of doing this is, the purpose of might_sleep() is to check whether we are blocking in an atomic context. That will not help Eric issue which is totally different - we would like to know if we are using an API where we can block instead of an API where we do not need to, by providing additional rcu_head space.
+> Backport:
 > 
-> > Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > ---
-> > kernel/rcu/tree.c | 17 ++++++++++++++++-
-> > 1 file changed, 16 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > index d155f2594317..bb798f07e768 100644
-> > --- a/kernel/rcu/tree.c
-> > +++ b/kernel/rcu/tree.c
-> > @@ -3232,6 +3232,19 @@ add_ptr_to_bulk_krc_lock(struct kfree_rcu_cpu **krcp,
-> >    return true;
-> > }
-> > 
-> > +static void
-> > +runtime_assert_can_sleep(void)
-> > +{
-> > +    if (!IS_ENABLED(CONFIG_PREEMPT_COUNT))
-> > +        return;
-> > +
-> > +    if (preemptible())
-> > +        return;
+>  void handle_IPI(struct pt_regs *regs)
+>  {
+> -       struct pt_regs *old_regs = set_irq_regs(regs);
+>         unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
+>         unsigned long *stats = ipi_data[smp_processor_id()].stats;
 > 
-> These 2 iffs can be combined into 2-3 lines in this function. No need to add more LOC than needed.
+> Original:
 > 
-It can be.
+> void handle_IPI(struct pt_regs *regs)
+>  {
+> -       unsigned long *pending_ipis = &ipi_data[smp_processor_id()].bits;
+> -       unsigned long *stats = ipi_data[smp_processor_id()].stats;
+> +       unsigned int cpu = smp_processor_id();
+> +       unsigned long *pending_ipis = &ipi_data[cpu].bits;
+> +       unsigned long *stats = ipi_data[cpu].stats;
+> 
+> Upstream includes commit 7ecbc648102f which removes the old_regs variable.
+> That doesn't mean it can be removed in the backport.
 
-> > +
-> > +    WARN_ONCE(1, "in_atomic(): %d, irqs_disabled(): %d, pid: %d, name: %s\n",
-> > +        in_atomic(), irqs_disabled(), current->pid, current->comm);
-> > +}
-> > +
-> > /*
-> >  * Queue a request for lazy invocation of the appropriate free routine
-> >  * after a grace period.  Please note that three paths are maintained,
-> > @@ -3257,8 +3270,10 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
-> >     * only. For other places please embed an rcu_head to
-> >     * your data.
-> >     */
-> > -    if (!head)
-> > +    if (!head) {
-> > +        runtime_assert_can_sleep();
-> >        might_sleep();
-> 
-> runtime_assert_preemptible() is a better name with a comment about big comment on top of the new function about false negatives for non-preemptible kernels. Can sleep sounds like might sleep which just adds confusion and does not help code readers.
-> 
-> Also Paul raised a point about using 1-arg API in some sleepable contexts where the caller does not want to introduce new space for the head. Have we confirmed there are not any? If there are, the warning will fire for those, as false-positives.
-> 
-single argument is only for sleepable contexts. This is a rule.
+Yeah, that looks odd.  I've dropped it from both 5.15 and 6.0 now and
+will push out a new -rc with that removed.
 
---
-Uladzislau Rezki
+thanks for testing!
+
+greg k-h
