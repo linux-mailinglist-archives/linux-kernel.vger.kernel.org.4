@@ -2,144 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9360A644C56
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B54644C5A
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 20:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiLFTPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 14:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52418 "EHLO
+        id S229699AbiLFTSZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 14:18:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiLFTPq (ORCPT
+        with ESMTP id S229559AbiLFTSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 14:15:46 -0500
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6695740934
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:15:44 -0800 (PST)
-Received: by mail-qt1-x82d.google.com with SMTP id ay32so6455066qtb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:15:44 -0800 (PST)
+        Tue, 6 Dec 2022 14:18:22 -0500
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AD937226
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 11:18:20 -0800 (PST)
+Received: by mail-qk1-x732.google.com with SMTP id m5so6767830qkg.0
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 11:18:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GG73iLTCO/uw4M1Ylg2jcMVxqfgJjKpsiaTSmU2EXGA=;
-        b=JIXO4eFgOaT8ujjjyeXvuO8qQ+yypxhZOimo6XQPj9ykjHnpz42lA0hxwRS2CqALlP
-         InZ5KniMwf4gL2CkysIfWTSK/zRhcKpgYW1h7jk80RV72fs+TIGlADEs1qMbux4LzQXs
-         kgFo0jiGF80V8ESdg6/Y8ivo2WWI0dTsZ+SjdqyptOk2b/5s3bOyMy2Cjfh133fw5t7P
-         inVYux5ZW6ridMLq77+CizaOGY5xhsgGqo/Q+axhpiXkSy3h5saQm0aOlMTavw/1Z53L
-         RwcTU+ikujUo3UDBcOg37Tvhuh6FiRok4lYQDG1ACo4Agcpan+pZrTeBeKsNDB9ShmHe
-         G8Ew==
+        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=p7OTI92HE3dIRLmGiEP5wVF6IPA48SqfwAtDwY11Wgk=;
+        b=ShYERSnGwqK/Ft5xBnts+NxM0hnI/UYKhnm1TsT6tgsvvs1JWBrUE69yslSEEP/wlj
+         if7n7kzrI24GO2j0pOF9tWDJywf0xhOl3T8oqle4CiaBfyhxtT5sSe+wpS3dFHyA3i62
+         pwOhNilc/hRnQmm442EuYRjELxdfH/d7M6ws/mEYpP79O5V/K6T0MDJ2dvAwU+sfh924
+         gHCxy0kInWY8xCTomvd8ATSKnZisqX8z5WCFLdS7+tuVaMtxg6euV4bEXitRdKZ1DRAW
+         cAjLC7h+B5pG2IGWY3zr3lvLE6wnfbXVR7Q4YR8sk2iOfRnHQS1GCNkO9AXlxyXigiRJ
+         uCjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GG73iLTCO/uw4M1Ylg2jcMVxqfgJjKpsiaTSmU2EXGA=;
-        b=mynzEuoUIg+MPs0o3YpXy4yBxgr9Z8ilr4MQqxooMAf8ez8tP53RhxqTDx/zkUsO+M
-         XMJouyqL1ySPsDlk5d2kDBrjbuZ+yai31vi66oEbGoHBz08859EsD88SPjV3watTBVZK
-         TTlOUDqb15FHV1y/VJfIszEQgVN3rNJWRTb/bekYcOJVxsO7iOi93gu3GD09NhMxPnge
-         DLEq5zOEL+bTiirTVR+obyEGL/AhR7qaRN0nvDtE6UJ9vVnKezgQ2LEfjXWI3Y5PuPZf
-         hsDIqQnffjgh1Ssr3pnv48NmRvZ1vE6OrYsOTmrw2mrWL2GEoS6saf1Q62kArN+IazVP
-         8OcQ==
-X-Gm-Message-State: ANoB5pntp/iuElo5SDWKwHmhdg6hhVLRoEEjIJsZtNjFwWxNzgFewOSQ
-        uQajp9maHgrG5uOGSUVg8lCgiw==
-X-Google-Smtp-Source: AA0mqf6eCv+InVfKA4sHLrootqXhgKbPCqZwr/BHpgt/6iwDstlRrCS04XbrZWyIdohBA+R6Gq2t/Q==
-X-Received: by 2002:ac8:5892:0:b0:3a5:3d08:9fdd with SMTP id t18-20020ac85892000000b003a53d089fddmr82236079qta.684.1670354143281;
-        Tue, 06 Dec 2022 11:15:43 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id y14-20020a37f60e000000b006fbaf9c1b70sm14752500qkj.133.2022.12.06.11.15.42
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p7OTI92HE3dIRLmGiEP5wVF6IPA48SqfwAtDwY11Wgk=;
+        b=ZpSjigUpHcPbqYjeKLtpd8JS5LD4750WA49ragCCpjsPx3zApprHRjABtOHjXkPQt7
+         +KRDE/5xzbe3+LBRrpxLC7kOXFZVYGaD5wkCR7g0l+pqD/euvuLfUJfqibDv2sxDXPbl
+         8ch+QTc/sUY7O/6H1iRuJk38aHxjRc5U4k2sRAOgqsme//RLCvigsns960qfyo2TwY3l
+         6D6PTMIe/4TqnfEX/0EwMDRiKi7AXgiW92d6qyy2IHtfLrl18BiVzoVNm2i+AtfITyZP
+         dhWVFj6H6z0a0Swd+RCtC0HdsrkQ2z5JKEF7d4Mz5a+2OumGX5MHD4Kcqc6/56zwxQJQ
+         dIjw==
+X-Gm-Message-State: ANoB5pngaZQNOmf0QzCoD727ROA6QL9SVW+Z7cHwq6glbhrOE/DJ5iTE
+        mu46hVAp2h1XkQGxKUt2t2PcYw==
+X-Google-Smtp-Source: AA0mqf6b2bZ2lHgpIImzI3iDccC1JIlx3UQnq6m0rnLsKiZ6UK/8fUEzhWjXnS3xTat+egxGYNcg4g==
+X-Received: by 2002:a37:5885:0:b0:6fa:1ef8:49dc with SMTP id m127-20020a375885000000b006fa1ef849dcmr77214507qkb.314.1670354299931;
+        Tue, 06 Dec 2022 11:18:19 -0800 (PST)
+Received: from nicolas-tpx395.localdomain (192-222-136-102.qc.cable.ebox.net. [192.222.136.102])
+        by smtp.gmail.com with ESMTPSA id bp32-20020a05620a45a000b006fa2cc1b0fbsm15417234qkb.11.2022.12.06.11.18.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 11:15:42 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p2dPp-004gjs-T7;
-        Tue, 06 Dec 2022 15:15:41 -0400
-Date:   Tue, 6 Dec 2022 15:15:41 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <Y4+U3VR2LeEh2S7B@ziepe.ca>
-References: <20221206055816.292304-1-lei.rao@intel.com>
- <20221206055816.292304-2-lei.rao@intel.com>
- <20221206061940.GA6595@lst.de>
- <Y49HKHP9NrId39iH@ziepe.ca>
- <20221206135810.GA27689@lst.de>
- <Y49eObpI7QoSnugu@ziepe.ca>
- <20221206153811.GB2266@lst.de>
- <Y49k++D3i8DfLOLL@ziepe.ca>
- <20221206165503.GA8677@lst.de>
+        Tue, 06 Dec 2022 11:18:15 -0800 (PST)
+Message-ID: <d8cdc4c62f83161ee3239b92495fd9623fddfff1.camel@ndufresne.ca>
+Subject: Re: [PATCH] media: amphion: remove redundant check of colorspace in
+ venc_s_fmt
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Ming Qian <ming.qian@nxp.com>, mchehab@kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     shawnguo@kernel.org, robh+dt@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        xiahong.bao@nxp.com, ming.zhou@nxp.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Date:   Tue, 06 Dec 2022 14:18:13 -0500
+In-Reply-To: <20221129102217.30710-1-ming.qian@nxp.com>
+References: <20221129102217.30710-1-ming.qian@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206165503.GA8677@lst.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:55:03PM +0100, Christoph Hellwig wrote:
-> On Tue, Dec 06, 2022 at 11:51:23AM -0400, Jason Gunthorpe wrote:
-> > That is a big deviation from where VFIO is right now, the controlled
-> > function is the one with the VFIO driver, it should be the one that
-> > drives the migration uAPI components.
-> 
-> Well, that is one way to see it, but I think the more natural
-> way to deal with it is to drive everyting from the controlling
-> function, because that is by definition much more in control.
+Le mardi 29 novembre 2022 =C3=A0 18:22 +0800, Ming Qian a =C3=A9crit=C2=A0:
+> record the colorspace set by user.
+> if it's not supported by h264 vui, then zero will be written to vui,
+> but don't modify the user setting.
+>=20
+> Fixes: 0401e659c1f9 ("media: amphion: add v4l2 m2m vpu encoder stateful d=
+river")
+> Signed-off-by: Ming Qian <ming.qian@nxp.com>
 
-Sure, the controlling function should (and does in mlx5) drive
-everything here.
+This seems like the right approach to me. The only down side, is that users=
+pace
+will not be aware that the encoder could not store the colorimetry into the
+bitstream. What I totally agree, is that this should not prevent encoding t=
+he
+stream, but the stream should also not lie about it (which this change fixe=
+s).
 
-What the kernel is doing is providing the abstraction to link the
-controlling function to the VFIO device in a general way.
+Acked-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-We don't want to just punt this problem to user space and say 'good
-luck finding the right cdev for migration control'. If the kernel
-struggles to link them then userspace will not fare better on its own.
+> ---
+>  drivers/media/platform/amphion/venc.c | 18 ++++--------------
+>  1 file changed, 4 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/amphion/venc.c b/drivers/media/platfo=
+rm/amphion/venc.c
+> index 3cbe8ce637e5..e6e8fe45fc7c 100644
+> --- a/drivers/media/platform/amphion/venc.c
+> +++ b/drivers/media/platform/amphion/venc.c
+> @@ -250,19 +250,10 @@ static int venc_s_fmt(struct file *file, void *fh, =
+struct v4l2_format *f)
+>  	}
+> =20
+>  	if (V4L2_TYPE_IS_OUTPUT(f->type)) {
+> -		if (!vpu_color_check_primaries(pix_mp->colorspace)) {
+> -			venc->params.color.primaries =3D pix_mp->colorspace;
+> -			vpu_color_get_default(venc->params.color.primaries,
+> -					      &venc->params.color.transfer,
+> -					      &venc->params.color.matrix,
+> -					      &venc->params.color.full_range);
+> -		}
+> -		if (!vpu_color_check_transfers(pix_mp->xfer_func))
+> -			venc->params.color.transfer =3D pix_mp->xfer_func;
+> -		if (!vpu_color_check_matrix(pix_mp->ycbcr_enc))
+> -			venc->params.color.matrix =3D pix_mp->ycbcr_enc;
+> -		if (!vpu_color_check_full_range(pix_mp->quantization))
+> -			venc->params.color.full_range =3D pix_mp->quantization;
+> +		venc->params.color.primaries =3D pix_mp->colorspace;
+> +		venc->params.color.transfer =3D pix_mp->xfer_func;
+> +		venc->params.color.matrix =3D pix_mp->ycbcr_enc;
+> +		venc->params.color.full_range =3D pix_mp->quantization;
+>  	}
+> =20
+>  	pix_mp->colorspace =3D venc->params.color.primaries;
+> @@ -1281,7 +1272,6 @@ static void venc_init(struct file *file)
+>  	f.fmt.pix_mp.width =3D 1280;
+>  	f.fmt.pix_mp.height =3D 720;
+>  	f.fmt.pix_mp.field =3D V4L2_FIELD_NONE;
+> -	f.fmt.pix_mp.colorspace =3D V4L2_COLORSPACE_REC709;
+>  	venc_s_fmt(file, &inst->fh, &f);
+> =20
+>  	memset(&f, 0, sizeof(f));
 
-Especially, we do not want every VFIO device to have its own crazy way
-for userspace to link the controlling/controlled functions
-together. This is something the kernel has to abstract away.
-
-So, IMHO, we must assume the kernel is aware of the relationship,
-whatever algorithm it uses to become aware.
-
-It just means the issue is doing the necessary cross-subsystem
-locking.
-
-That combined with the fact they really are two halfs of the same
-thing - operations on the controlling function have to be sequenced
-with operations on the VFIO device - makes me prefer the single uAPI.
-
-> More importantly any sane design will have easy ways to list and
-> manipulate all the controlled functions from the controlling
-> functions, while getting from the controlled function to the
-> controlling one is extremely awkward, as anything that can be
-> used for that is by definition and information leak.  
-
-We have spend some time looking at this for mlx5. It is a hard
-problem. The VFIO driver cannot operate the device, eg it cannot do
-MMIO and things, so it is limited to items in the PCI config space to
-figure out the device identity.
-
-> It seems mlx5 just gets away with that by saying controlled
-> functions are always VFs, and the controlling function is a PF, but
-> that will break down very easily, 
-
-Yes, that is part of the current mlx5 model. It is not inherent to the
-device design, but the problems with arbitary nesting were hard enough
-they were not tackled at this point.
-
-Jason
