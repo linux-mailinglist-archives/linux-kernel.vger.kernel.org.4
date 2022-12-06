@@ -2,141 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37902643D52
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:52:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41AA1643D54
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 07:52:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbiLFGwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 01:52:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40568 "EHLO
+        id S234087AbiLFGwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 01:52:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiLFGwR (ORCPT
+        with ESMTP id S234002AbiLFGwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 01:52:17 -0500
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5637A1A83A;
-        Mon,  5 Dec 2022 22:52:16 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id c17so10410106edj.13;
-        Mon, 05 Dec 2022 22:52:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SMTUgjfzyyWTmD7y/UtJYvOT87qBLK9RluPkgoZ6OBU=;
-        b=obB2Hb+oCi8AEy40JSR49oI6EgmQJ4plwPPZI1RdnuY3ps80qyjsQRNQtoIy6qsE0V
-         haO6AOaFCHWxBQd2bjCcsmU6SF2Gu0bFwxkgmAJ0vEt/X1l1m7ZcypYUmVq+52P5y52t
-         KmhgGzrKbP6s8pAEIwUZoUy785RgnIGKAkOfOK7g/lCmmNi1Dx/YJYbedVgZExZrJRFs
-         J7lqn2sGRgYg6OVXlO6bXDUZcfmhIkfrEmfCwT363dcPWxikEY35D6xjoaFdCQQS0RKg
-         j8F+ksbAEJFX07lALWoYTHsZtxERD9fAqIIXO9Qn6hO3y9zZ5QeLo3NtyZaTNYnbE+SK
-         vyyg==
-X-Gm-Message-State: ANoB5plvzfn7aPbWZizcjH5p0fTMMMxZdRgYFPvGXc4aO7cHvwr9kg59
-        UK1ZcNwbLpMxgbVRiVdU14+U5OL6hAo=
-X-Google-Smtp-Source: AA0mqf580R470q9lP4FNtIa85kztRpzJgRpl2SFp7WJ4mom5ZtAz2Sy+gJFG7CT9EUHXdT4LsDo80A==
-X-Received: by 2002:a05:6402:3807:b0:45c:a651:87f1 with SMTP id es7-20020a056402380700b0045ca65187f1mr60139045edb.359.1670309534847;
-        Mon, 05 Dec 2022 22:52:14 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id v6-20020a170906180600b007c0c679ca2fsm4628858eje.26.2022.12.05.22.52.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 22:52:14 -0800 (PST)
-Message-ID: <7117060e-9081-2bb2-823b-a1a311c8cb72@kernel.org>
-Date:   Tue, 6 Dec 2022 07:52:13 +0100
+        Tue, 6 Dec 2022 01:52:42 -0500
+Received: from gw.red-soft.ru (red-soft.ru [188.246.186.2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 329ACDE9;
+        Mon,  5 Dec 2022 22:52:36 -0800 (PST)
+Received: from localhost.localdomain (unknown [10.81.81.211])
+        (using TLSv1.2 with cipher AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by gw.red-soft.ru (Postfix) with ESMTPSA id 234473E1A0C;
+        Tue,  6 Dec 2022 09:52:34 +0300 (MSK)
+Date:   Tue, 6 Dec 2022 09:52:33 +0300
+From:   Artem Chernyshev <artem.chernyshev@red-soft.ru>
+To:     Vishnu Dasa <vdasa@vmware.com>
+Cc:     Stefano Garzarella <sgarzare@redhat.com>,
+        Pv-drivers <Pv-drivers@vmware.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux Virtualization <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "lvc-project@linuxtesting.org" <lvc-project@linuxtesting.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3] net: vmw_vsock: vmci: Check memcpy_from_msg()
+Message-ID: <Y47msXHvtKVlzDu2@localhost.localdomain>
+References: <20221205115200.2987942-1-artem.chernyshev@red-soft.ru>
+ <C39CC4BC-E87C-4C6D-ADC9-A33E7696BD20@vmware.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/2] earlycon: Let users set the clock frequency
-Content-Language: en-US
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-References: <20221123-serial-clk-v3-0-49c516980ae0@chromium.org>
- <20221123-serial-clk-v3-1-49c516980ae0@chromium.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221123-serial-clk-v3-1-49c516980ae0@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <C39CC4BC-E87C-4C6D-ADC9-A33E7696BD20@vmware.com>
+X-KLMS-Rule-ID: 1
+X-KLMS-Message-Action: clean
+X-KLMS-AntiSpam-Lua-Profiles: 173957 [Dec 06 2022]
+X-KLMS-AntiSpam-Version: 5.9.59.0
+X-KLMS-AntiSpam-Envelope-From: artem.chernyshev@red-soft.ru
+X-KLMS-AntiSpam-Rate: 0
+X-KLMS-AntiSpam-Status: not_detected
+X-KLMS-AntiSpam-Method: none
+X-KLMS-AntiSpam-Auth: dkim=none
+X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;red-soft.ru:7.1.1;127.0.0.199:7.1.2
+X-MS-Exchange-Organization-SCL: -1
+X-KLMS-AntiSpam-Interceptor-Info: scan successful
+X-KLMS-AntiPhishing: Clean, bases: 2022/12/06 06:02:00
+X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/12/05 16:38:00 #20652685
+X-KLMS-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24. 11. 22, 13:39, Ricardo Ribalda wrote:
-> Some platforms, namely AMD Picasso, use non standard uart clocks (48M),
-> witch makes it impossible to use with earlycon.
+Hi,
+On Mon, Dec 05, 2022 at 11:03:47PM +0000, Vishnu Dasa wrote:
 > 
-> Let the user select its own frequency.
+> > On Dec 5, 2022, at 3:52 AM, Artem Chernyshev <artem.chernyshev@red-soft.ru> wrote:
+> > 
+> > vmci_transport_dgram_enqueue() does not check the return value
+> > of memcpy_from_msg(). Return with an error if the memcpy fails.
 > 
-> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index a465d5242774..9efb6c3b0486 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -1182,10 +1182,10 @@
->   			specified, the serial port must already be setup and
->   			configured.
->   
-> -		uart[8250],io,<addr>[,options]
-> -		uart[8250],mmio,<addr>[,options]
-> -		uart[8250],mmio32,<addr>[,options]
-> -		uart[8250],mmio32be,<addr>[,options]
-> +		uart[8250],io,<addr>[,options[,uartclk]]
-> +		uart[8250],mmio,<addr>[,options[,uartclk]]
-> +		uart[8250],mmio32,<addr>[,options[,uartclk]]
-> +		uart[8250],mmio32be,<addr>[,options[,uartclk]]
->   		uart[8250],0x<addr>[,options]
->   			Start an early, polled-mode console on the 8250/16550
->   			UART at the specified I/O port or MMIO address.
-> @@ -1194,7 +1194,9 @@
->   			If none of [io|mmio|mmio32|mmio32be], <addr> is assumed
->   			to be equivalent to 'mmio'. 'options' are specified
->   			in the same format described for "console=ttyS<n>"; if
-> -			unspecified, the h/w is not initialized.
-> +			unspecified, the h/w is not initialized. 'uartclk' is
-> +			the uart clock frequency; if unspecified, it is set
-> +			to 'BASE_BAUD' * 16.
->   
->   		pl011,<addr>
->   		pl011,mmio32,<addr>
-> diff --git a/drivers/tty/serial/earlycon.c b/drivers/tty/serial/earlycon.c
-> index a5f380584cda..3a0c88419b6c 100644
-> --- a/drivers/tty/serial/earlycon.c
-> +++ b/drivers/tty/serial/earlycon.c
-> @@ -120,7 +120,13 @@ static int __init parse_options(struct earlycon_device *device, char *options)
->   	}
->   
->   	if (options) {
-> +		char *uartclk;
-> +
->   		device->baud = simple_strtoul(options, NULL, 0);
-> +		uartclk = strchr(options, ',');
-> +		if (uartclk && kstrtouint(uartclk + 1, 0, &port->uartclk) < 0)
-> +			pr_warn("[%s] unsupported earlycon uart clkrate option\n",
-> +				options);
->   		length = min(strcspn(options, " ") + 1,
->   			     (size_t)(sizeof(device->options)));
->   		strscpy(device->options, options, length);
-> @@ -139,7 +145,8 @@ static int __init register_earlycon(char *buf, const struct earlycon_id *match)
->   		buf = NULL;
->   
->   	spin_lock_init(&port->lock);
-> -	port->uartclk = BASE_BAUD * 16;
-> +	if (!port->uartclk)
-> +		port->uartclk = BASE_BAUD * 16;
->   	if (port->mapbase)
->   		port->membase = earlycon_map(port->mapbase, 64);
->   
+> I think we can add some more information in the description.  Sorry, I
+> should've said this earlier.
 > 
+> vmci_transport_dgram_enqueue() does not check the return value
+> of memcpy_from_msg().  If memcpy_from_msg() fails, it is possible that
+> uninitialized memory contents are sent unintentionally instead of user's
+> message in the datagram to the destination.  Return with an error if
+> memcpy_from_msg() fails.
+> 
+> > 
+> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> > 
+> > Fixes: 0f7db23a07af ("vmci_transport: switch ->enqeue_dgram, ->enqueue_stream and ->dequeue_stream to msghdr")
+> > Signed-off-by: Artem Chernyshev <artem.chernyshev@red-soft.ru>
+> 
+> Thanks, Artem!  This version looks good to me modulo my suggestion
+> about the description above.
+> 
+> Reviewed-by: Vishnu Dasa <vdasa@vmware.com>
+> 
+> Regards,
+> Vishnu
+> 
+No problem, I'll change description in v4
 
--- 
-js
-suse labs
-
+Thanks,
+Artem
