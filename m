@@ -2,77 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52E4644308
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:20:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99CD964430B
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 13:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233451AbiLFMUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 07:20:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S234218AbiLFMUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 07:20:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiLFMT6 (ORCPT
+        with ESMTP id S234085AbiLFMUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 07:19:58 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458E728E27;
-        Tue,  6 Dec 2022 04:19:56 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 6 Dec 2022 07:20:43 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD0728E3E
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 04:20:39 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 91C4A660035D;
-        Tue,  6 Dec 2022 12:19:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670329194;
-        bh=l310F9lHcGhGvP4PuGtAy05tWbjB4PQoJ3xaWw36ABM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gttCpPDYm0hfTw/9o5b8PCwS0lR+0JzCaoDBMHOUWsCpuY1DQIz6ReUTPcpHKJnCk
-         Etv1bSL67CKIoWAbqV8tdl520zDnCNEHZ5MfLI7LPHa2T0TQaVYH3Il3UmKg6PU1Yt
-         +SZh2bw1HX+hvWvGjZ8zK6yi1EdGtpYBQI7WTZKzIzh1Q7TrvtZhxBwEFGZbijunJW
-         JEfWxF7VXO1BOocXgHM8IjdVpHOdlfy0VdG6s4JcvVwDHs8AmCL2RENS3siV937e8f
-         I8xkIxGm/+gcRYMox0bVcOz0FFD02COEr2s6tjgk9HidF8K2iH31MbnisDs5eLVohj
-         Mc97lj4nNI3UA==
-Message-ID: <9992c9a5-059a-9396-32ce-7ed63cd12a96@collabora.com>
-Date:   Tue, 6 Dec 2022 13:19:51 +0100
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E54991FE5A;
+        Tue,  6 Dec 2022 12:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670329237; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ubehKMI13V7IpoDkqhnY7iW2vBl9bHhW3ygShDxfjZU=;
+        b=fNE0Kyi7oZSf7QU7bvg5Wd3bjmzSRo7dddFUZS7bf0M6Pvep5NmvE3cSuVk3ExVU9S8I1Z
+        9ysK78QuxkBeZ/tLa0co0Pxx+pWZutVmBiIxnIT5lM3MdNOa8pxSuKIqesIqj3aVwwShyV
+        GGBwaXaACl3mgtb62ecUSiRl/sREQf0=
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id C3EDC132F3;
+        Tue,  6 Dec 2022 12:20:37 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id 0dqjLZUzj2N6YgAAGKfGzw
+        (envelope-from <mhocko@suse.com>); Tue, 06 Dec 2022 12:20:37 +0000
+Date:   Tue, 6 Dec 2022 13:20:37 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Mina Almasry <almasrymina@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered
+ systems
+Message-ID: <Y48zlaimOb/wr8qd@dhcp22.suse.cz>
+References: <20221206023406.3182800-1-almasrymina@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 7/9] dt-bindings: spi: mtk-snfi: Add read latch latency
- property
-Content-Language: en-US
-To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
-        <Xiangsheng.Hou@mediatek.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "gch981213@gmail.com" <gch981213@gmail.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "richard@nod.at" <richard@nod.at>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?QmVubGlhbmcgWmhhbyAo6LW15pys5LquKQ==?= 
-        <Benliang.Zhao@mediatek.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
- <ce449a0c-efcc-0ac1-fb8e-c2b4148a5bc1@collabora.com>
- <a8f706b37f5decf91bfa9a9ac8cf04be4346dd85.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <a8f706b37f5decf91bfa9a9ac8cf04be4346dd85.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206023406.3182800-1-almasrymina@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,56 +68,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 06/12/22 10:04, Xiangsheng Hou (侯祥胜) ha scritto:
-> Hi Angelo,
+On Mon 05-12-22 18:34:05, Mina Almasry wrote:
+> commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> reclaim"") enabled demotion in memcg reclaim, which is the right thing
+> to do, however, it introduced a regression in the behavior of
+> try_to_free_mem_cgroup_pages().
 > 
-> On Mon, 2022-12-05 at 15:21 +0100, AngeloGioacchino Del Regno wrote:
->> Il 05/12/22 07:57, Xiangsheng Hou ha scritto:
->>> Add mediatek,rx-latch-latency property which adjust read delay in
->>> the
->>> unit of clock cycle.
->>>
->>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>    .../devicetree/bindings/spi/mediatek,spi-mtk-snfi.yaml     | 7
->>> +++++++
->>>    1 file changed, 7 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/spi/mediatek,spi-
->>> mtk-snfi.yaml b/Documentation/devicetree/bindings/spi/mediatek,spi-
->>> mtk-snfi.yaml
->>> index bab23f1b11fd..6e6ff8d73fcd 100644
->>> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>> snfi.yaml
->>> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>> snfi.yaml
->>> @@ -45,6 +45,13 @@ properties:
->>>        description: device-tree node of the accompanying ECC engine.
->>>        $ref: /schemas/types.yaml#/definitions/phandle
->>>    
->>> +  mediatek,rx-latch-latency:
->>> +    description: Rx delay to sample data with this value, the
->>> value
->>> +                 unit is clock cycle.
->>
->> Can't we use nanoseconds or microseconds as a unit here, instead of
->> clock cycles?
+> The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
+> reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
+> of the cgroup should reduce by nr_pages. The callers expect
+> try_to_free_mem_cgroup_pages() to also return the number of pages
+> reclaimed, not demoted.
 > 
-> The clock cycle will be various with MediaTek SPI NAND controller which
-> clock frequency can support 26/52/68/81/104MHz...
-> It`s may be easy to configure and understand with clock cycle in unit.
+> However, what try_to_free_mem_cgroup_pages() actually does is it
+> unconditionally counts demoted pages as reclaimed pages. So in practice
+> when it is called it will often demote nr_pages and return the number of
+> demoted pages to the caller. Demoted pages don't lower the memcg usage,
+> and so try_to_free_mem_cgroup_pages() is not actually doing what the
+> callers want it to do.
 > 
+> Various things work suboptimally on memory tiered systems or don't work
+> at all due to this:
+> 
+> - memory.high enforcement likely doesn't work (it just demotes nr_pages
+>   instead of lowering the memcg usage by nr_pages).
+> - try_charge_memcg() will keep retrying the charge while
+>   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
+>   making any room for the charge.
 
-Yes, but whatever clock frequency we use, the target is to always wait for
-X nanoseconds, right?
+This has been brought up during the review https://lore.kernel.org/all/YoYTEDD+c4GT0xYY@dhcp22.suse.cz/
 
-Waiting for 5 clock cycles at 104MHz is obviously not the same as waiting
-for the same 5 clock cycles at 26MHz: in that case, expressing the value
-in nanoseconds or microseconds would make that independent from the
-controller's clock frequency as the calculation from `time` to `cycles`
-would be performed inside of the driver.
+> - memory.reclaim has a wonky interface. It advertises to the user it
+>   reclaims the provided amount but it will actually often demote that
+>   amount.
+> 
+> There may be more effects to this issue.
+> 
+> To fix these issues I propose shrink_folio_list() to only count pages
+> demoted from inside of sc->nodemask to outside of sc->nodemask as
+> 'reclaimed'.
 
-Regards,
-Angelo
+Could you expand on why the node mask matters? From the charge point of
+view it should be completely uninteresting as the charge remains.
 
+I suspect we really need to change to reclaim metrics for memcg reclaim.
+In the memory balancing reclaim we can indeed consider demotions as a
+reclaim because the memory is freed in the end but for the memcg reclaim
+we really should be counting discharges instead. No demotion/migration will
+free up charges.
+-- 
+Michal Hocko
+SUSE Labs
