@@ -2,110 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C675B644DC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:10:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0776644DCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  6 Dec 2022 22:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiLFVKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 16:10:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54428 "EHLO
+        id S229616AbiLFVPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 16:15:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiLFVKc (ORCPT
+        with ESMTP id S229507AbiLFVPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 16:10:32 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37AC42190
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:09:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670360978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Mg/aljGGcMt80PkX9YRGQwr9D0oTsL3rosvPBvPONg=;
-        b=Lfi6s0aPXnHYGNnoJts5eh6qn49vEVB8oxwxHEAmrc+KjscFU1yYQqhIkSDZ6xbF3JhEyI
-        8pPFP361Vh/tkXQ1mqwmXxtmGwBNFsA63NJ05U5OazB42hOn+6vcfmulW97kcNuVmfO+/i
-        w/3/eNWpwmIVqnv5fwglRifTetDZh0s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-333-g9MP2WCfPemP_Y7cm7HAgA-1; Tue, 06 Dec 2022 16:09:35 -0500
-X-MC-Unique: g9MP2WCfPemP_Y7cm7HAgA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 74B76185A794;
-        Tue,  6 Dec 2022 21:09:34 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 15DF42166B26;
-        Tue,  6 Dec 2022 21:09:32 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000229f1505ef2b6159@google.com>
-References: <000000000000229f1505ef2b6159@google.com>
-To:     syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
+        Tue, 6 Dec 2022 16:15:05 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E3B3F074
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 13:15:04 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id n63so6152080iod.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 13:15:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P+zJzPA5j2fSPXiFPqe/ELh6l+2nGcRmsM+yat0BzBM=;
+        b=Mhti21mTcFzhALFJjLSv3wMyhlM/mH3Qnsg+VRrSiOk9Y82RvCyzDCsYlQotRmIgKD
+         Ddgt6J13ic33BCajPYxyU6Q+cwlIS4qUt9JdVGCzJ0a6Rtf0UyTItqFTnlcqMTo975Zf
+         2CnGgEH350HiI17LNlzh5hkbcNfp0MHaxjVYKGOUaGuyUTTbFHFberFKA/m6WkLlvyBY
+         tgG0EcWXa9inIegrQA8W+ERiJYqacqO/ieNrvUSvdRcg23glZlNT1QUVEvimxABbs/Fk
+         x+K0GkitEsvntV44HuyAlJCysV8GZrvmCVp/Tff8HgvMwM3U4EVH3jU/SEF0/jaqhHlt
+         znPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+zJzPA5j2fSPXiFPqe/ELh6l+2nGcRmsM+yat0BzBM=;
+        b=RjAaOiAtvImJBTqXfa+GPQUcYXr3zLyGzxvSTRgGgEoR8opu0jiRiSJIq7Aw9/TjrH
+         HWIsUBVfnhxJ2Zap8riYUmHpGCMwx5FnAx+JWaRC/+kBGzw+EIMiTO/YpDqS9G6Zidjr
+         y0VuQNBbK23m31rXmMPaJxn+1JKwXLjqVzfbYw/uq+JWiMUSiu63RwQ/HtHve7Y9Gw/P
+         9ixA9WlwqIJ+SPh2WTV/Y+QiFHs2tZSM9BSeXV49FOEHHVziWLWoOOoeKKpf64TbW3qj
+         lLQItjBAKXfBtbCtkrJ+ZVOI2dT3hEOFiifrU8wl4F6LvrPwkZZwjSuyAj2n8CxL+zVp
+         POfQ==
+X-Gm-Message-State: ANoB5pluC1NvnFQQekAV+KnmsYzVyVBKKBuG73iVQe1rdnpIVN39yw/I
+        hxpnEYLPuIeuSzR0iXZrr/kTrQ==
+X-Google-Smtp-Source: AA0mqf5DaswT/ZwWOpfxsGHbnMU0DuoB4lCMRBnfFlXmMS1yLONJdW/lsJwS6zoGOrO/5OOy9ki42A==
+X-Received: by 2002:a05:6602:2143:b0:6bc:6352:9853 with SMTP id y3-20020a056602214300b006bc63529853mr38986910ioy.65.1670361302143;
+        Tue, 06 Dec 2022 13:15:02 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id z17-20020a056602081100b006ddd15ca0absm2604999iow.25.2022.12.06.13.15.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 13:15:01 -0800 (PST)
+Message-ID: <5a643da7-1c28-b680-391e-ea8392210327@kernel.dk>
+Date:   Tue, 6 Dec 2022 14:15:00 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1265525.1670360970.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 06 Dec 2022 21:09:30 +0000
-Message-ID: <1265526.1670360970@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] io_uring: Fix a null-ptr-deref in io_tctx_exit_cb()
+Content-Language: en-US
+To:     Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     harshit.m.mogalapalli@gmail.com, vegard.nossum@oracle.com,
+        george.kennedy@oracle.com, darren.kenny@oracle.com,
+        syzkaller <syzkaller@googlegroups.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next=
-.git master
+On 12/6/22 2:38?AM, Harshit Mogalapalli wrote:
+> Syzkaller reports a NULL deref bug as follows:
+> 
+>  BUG: KASAN: null-ptr-deref in io_tctx_exit_cb+0x53/0xd3
+>  Read of size 4 at addr 0000000000000138 by task file1/1955
+> 
+>  CPU: 1 PID: 1955 Comm: file1 Not tainted 6.1.0-rc7-00103-gef4d3ea40565 #75
+>  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+>  Call Trace:
+>   <TASK>
+>   dump_stack_lvl+0xcd/0x134
+>   ? io_tctx_exit_cb+0x53/0xd3
+>   kasan_report+0xbb/0x1f0
+>   ? io_tctx_exit_cb+0x53/0xd3
+>   kasan_check_range+0x140/0x190
+>   io_tctx_exit_cb+0x53/0xd3
+>   task_work_run+0x164/0x250
+>   ? task_work_cancel+0x30/0x30
+>   get_signal+0x1c3/0x2440
+>   ? lock_downgrade+0x6e0/0x6e0
+>   ? lock_downgrade+0x6e0/0x6e0
+>   ? exit_signals+0x8b0/0x8b0
+>   ? do_raw_read_unlock+0x3b/0x70
+>   ? do_raw_spin_unlock+0x50/0x230
+>   arch_do_signal_or_restart+0x82/0x2470
+>   ? kmem_cache_free+0x260/0x4b0
+>   ? putname+0xfe/0x140
+>   ? get_sigframe_size+0x10/0x10
+>   ? do_execveat_common.isra.0+0x226/0x710
+>   ? lockdep_hardirqs_on+0x79/0x100
+>   ? putname+0xfe/0x140
+>   ? do_execveat_common.isra.0+0x238/0x710
+>   exit_to_user_mode_prepare+0x15f/0x250
+>   syscall_exit_to_user_mode+0x19/0x50
+>   do_syscall_64+0x42/0xb0
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>  RIP: 0023:0x0
+>  Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+>  RSP: 002b:00000000fffb7790 EFLAGS: 00000200 ORIG_RAX: 000000000000000b
+>  RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>  RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>  RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+>  R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+>  R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>   </TASK>
+>  Kernel panic - not syncing: panic_on_warn set ...
+> 
+> Add a NULL check on tctx to prevent this.
 
-rxrpc: Fix NULL deref in rxrpc_unuse_local()
+I agree with Vegard that I don't think this is fixing the core of
+the issue. I think what is happening here is that we don't run the
+task_work in io_uring_cancel_generic() unconditionally, if we don't
+need to in the loop above. But we do need to ensure we run it before
+we clear current->io_uring.
 
-Fix rxrpc_unuse_local() to get the debug_id *after* checking to see if
-local is NULL.
-
-Fixes: a2cf3264f331 ("rxrpc: Fold __rxrpc_unuse_local() into rxrpc_unuse_l=
-ocal()")
-Reported-by: syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Marc Dionne <marc.dionne@auristor.com>
-cc: linux-afs@lists.infradead.org
----
- net/rxrpc/local_object.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Do you have a reproducer? If so, can you try the below? I _think_
+this is all we need. We can't be hitting the delayed fput path as
+the task isn't exiting, and we're dealing with current here.
 
 
-diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-index 44222923c0d1..24ee585d9aaf 100644
---- a/net/rxrpc/local_object.c
-+++ b/net/rxrpc/local_object.c
-@@ -357,10 +357,11 @@ struct rxrpc_local *rxrpc_use_local(struct rxrpc_loc=
-al *local,
-  */
- void rxrpc_unuse_local(struct rxrpc_local *local, enum rxrpc_local_trace =
-why)
- {
--	unsigned int debug_id =3D local->debug_id;
-+	unsigned int debug_id;
- 	int r, u;
- =
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 36cb63e4174f..4791d94c88f5 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -3125,6 +3125,15 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
+ 
+ 	io_uring_clean_tctx(tctx);
+ 	if (cancel_all) {
++		/*
++		 * If we didn't run task_work in the loop above, ensure we
++		 * do so here. If an fput() queued up exit task_work for the
++		 * ring descriptor before we started the exec that led to this
++		 * cancelation, then we need to have that run before we proceed
++		 * with tearing down current->io_uring.
++		 */
++		io_run_task_work();
++
+ 		/*
+ 		 * We shouldn't run task_works after cancel, so just leave
+ 		 * ->in_idle set for normal exit.
 
- 	if (local) {
-+		debug_id =3D local->debug_id;
- 		r =3D refcount_read(&local->ref);
- 		u =3D atomic_dec_return(&local->active_users);
- 		trace_rxrpc_local(debug_id, why, r, u);
-
+-- 
+Jens Axboe
