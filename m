@@ -2,362 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2498F645850
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18334645854
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiLGK5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:57:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46100 "EHLO
+        id S229705AbiLGK6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:58:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLGK5l (ORCPT
+        with ESMTP id S229497AbiLGK6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:57:41 -0500
-Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0888D2DE7;
-        Wed,  7 Dec 2022 02:57:38 -0800 (PST)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R991e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=xueshuai@linux.alibaba.com;NM=0;PH=DS;RN=20;SR=0;TI=SMTPD_---0VWlm3cl_1670410653;
-Received: from 30.221.145.221(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VWlm3cl_1670410653)
-          by smtp.aliyun-inc.com;
-          Wed, 07 Dec 2022 18:57:35 +0800
-Message-ID: <c779d666-4937-e2dc-2d52-da0e49d5d1ac@linux.alibaba.com>
-Date:   Wed, 7 Dec 2022 18:57:32 +0800
+        Wed, 7 Dec 2022 05:58:19 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2098.outbound.protection.outlook.com [40.107.94.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8774063C8;
+        Wed,  7 Dec 2022 02:58:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TNh0VYriwx7RYj/PZfXuBut/U+koEp4xio+XIWFhchC32N25wWfu4a5sAxFNMDsBArfvcdDtRukB8cyfwRp0ma3Pu1UgTCYiQvC4JQOzR6zgYL1vk+/wQJpTw8qrWf+uoXB4tSEG5hww4TZN5JUuHXRu4GYPtDw00WrbV1bLCaLKT64hokQr4nXFCcyComwKGoLNoU5uATKxoaaahl15dB7aARgWBODgA7act7XEli2EGXgDskEJZLV510jb/kDxR4fPJ0XJWMtHl/O8IggZ7CZdcntNmJ6XNaSEwM7FDrHBLwJg0INKuWEs7tGDIl0MdczpMNnM5GKSwlpBaytbjg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4Aampry3pGa9rTqn6qMTVIc66Gro31d+eGqt/6LkbsI=;
+ b=Qfd4yi7Ib/Z9SEmLLvyZY3mwiNjX2fCx/BS+B1ZFgTSRcbbqmkYjtDl0dbMbza8Sl79eWB+b7z82UcswBLjcgE7OgNpbpD7tJK0JYjH4qVuTHcUYux5/cIBgpv+xkcAKu7dg8mDUTjK5kNdXKNbD6nX25Ri1CvAHCPdYWRxJmAUg7SINBv1En6rB6aSaUSUrq8HSUD+lQuUe5G3rzcVSapjCtw7DYUYku+lv7AQcEZcEL0mkeUxBeZD7cy4CrWLo7gi702VeTUs7pdwiCcSesPvStQMznMFv/bccm9YZisSRj6qDwtrlFHf3+SdLr7n0AsnAwWwiPQfZnnFwhl//mA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4Aampry3pGa9rTqn6qMTVIc66Gro31d+eGqt/6LkbsI=;
+ b=aoQyqVkR4vupeo3HUAfJRcodNyOtXnEDlzRMTqPOi4wVW+kLZXQP8jDNAOrZgT9umOiv5LGlO3tDmJW1gDSfpGyr7Emp4b+4XnXwSz+18rrvwF8bZqUaXoutb/J9IUjyhgxRzYYZi7w8T3KaCAvIQrCbNw9cuboZDY/0I/DaA9A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5710.namprd13.prod.outlook.com (2603:10b6:806:1ee::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 10:58:15 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::483b:9e84:fadc:da30]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::483b:9e84:fadc:da30%9]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 10:58:15 +0000
+Date:   Wed, 7 Dec 2022 11:58:10 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, oss-drivers@corigine.com,
+        netdev@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] nfp: Fix spelling mistake "tha" -> "the"
+Message-ID: <Y5BxwtW1hC78/VC8@corigine.com>
+References: <20221207094312.2281493-1-colin.i.king@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207094312.2281493-1-colin.i.king@gmail.com>
+X-ClientProxiedBy: AS4P195CA0005.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e2::14) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-From:   Shuai Xue <xueshuai@linux.alibaba.com>
-Subject: Re: [RFC 1/2] ACPI: APEI: Make memory_failure() triggered by
- synchronization errors execute in the current context
-To:     Lv Ying <lvying6@huawei.com>, rafael@kernel.org, lenb@kernel.org,
-        james.morse@arm.com, tony.luck@intel.com, bp@alien8.de,
-        naoya.horiguchi@nec.com, linmiaohe@huawei.com,
-        akpm@linux-foundation.org, ashish.kalra@amd.com
-Cc:     xiezhipeng1@huawei.com, wangkefeng.wang@huawei.com,
-        xiexiuqi@huawei.com, tanxiaofei@huawei.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Bixuan Cui <cuibixuan@linux.alibaba.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        yingwen.cyw@alibaba-inc.com
-References: <20221205115111.131568-1-lvying6@huawei.com>
- <20221205115111.131568-2-lvying6@huawei.com>
-Content-Language: en-US
-In-Reply-To: <20221205115111.131568-2-lvying6@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5710:EE_
+X-MS-Office365-Filtering-Correlation-Id: b10a6a34-32ee-4504-4d75-08dad841f10f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: KCRV6pw9pGCSVxZntlZnRLem3SrT36sBUXHb5PPY5lfVYwCvkLq9T1C5CmQ/pUuQT4HZpCYlqJTUL3Ri4pyR0j4yaWEmmItgUpPR82ZQfkD0Z55H1IRSfuvPx3GRq8oACUa8lkwr4sBDEJVB7QAN/3UBl/N3CUh2Avuz83rCLPJHHuYfQe5/2vkEnO3kzrZvliGoRMUvrRzBXx4P9nzx2BS7ITUaY3b4vaK9E9ryaSH7sekotkioNdSZA/WbYrMRfHTNiRJP/WGzoli34dOQe4H3EnYr0+UGkE9MRbXfJgLwFaLonP+sSXoablPdWkIed/r/hBMANDBBOoiPOvVUYo2qk2naGHPRiGjT6ORTQV5Jpm+tw27HyYBgG1nY8neWSxW7zBcLvAgkuLglkH5OSZSVcW/aim9+NVlSnWqixLzThnF0T8GPBlOmKzYCxHkI4trh7zBdL1wQ7FRaPwEu5cSRJUbzTfD5viv650mb6fR+KcluiBd8yX1xBTVoHZuPcndqz3aZ8E+Y9oIhQbkLAsuZRbUWe7za9uQ2kN+z6VwUzRYFAhfoH4/Pp/EufQFRnflSfpE8qy+IXziiZSldn+XtfKLwE2aYtpQIafwnAOoNzVUcEFcD/JmtxZvdOUDNCvjTmOwZDQvHscuMbL39gJgp8AUfVS7zaJk49pf7KfpCcCTP4fXMXywWVica8K47
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39840400004)(346002)(396003)(136003)(376002)(366004)(451199015)(558084003)(36756003)(38100700002)(2906002)(5660300002)(44832011)(8936002)(186003)(2616005)(86362001)(83380400001)(54906003)(6916009)(316002)(478600001)(66476007)(66556008)(66946007)(41300700001)(4326008)(6486002)(8676002)(6512007)(6666004)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?P43HvwUn/9FbpcWfvNnJKwK8h2Sv1oyais7YpMcXeGsUNakd0y+rJNzbq4qP?=
+ =?us-ascii?Q?3XANbjNhYxw2s4mKowTIj22ylUguah9RFIK/34weS33L1Y/PEykCHpUNL7qy?=
+ =?us-ascii?Q?EsI1cTqXFegYvLvtNTrMs7UIjahyMRSzHcz+tlQzWPOW+BOZio1dEfqRXpRG?=
+ =?us-ascii?Q?UkQGzTawVT+ubSX/SGhAi/vXzdNnB3bP/4T0WdsqHhFI6tMZJNEEI+OMEJqA?=
+ =?us-ascii?Q?meqSdXlhT4nxUlL4dqyM/1wRdIE3IDmhlT73g6JlLZRfIS43kChveipglJtz?=
+ =?us-ascii?Q?miJ6tmSoUgu5GLajBoqOEvo0cVWXy1PWQWA1UF9zGjMqABxqusf0nyOm2vg4?=
+ =?us-ascii?Q?vv27pPt2xe07PxYFsfO643D/Zg43wKIciBX649G3Dd+keIe4BoAdz0jvwula?=
+ =?us-ascii?Q?nxugn7VSc0Bd16Hkg3ALLXj47BW/Jz9PM6XwTx0A7RALveKkZ8ypT0ec1lno?=
+ =?us-ascii?Q?iaMM7wcKHIBftbtjPflmfRSpSPlFfvAZuLxVQCrEjkQm5jOtuk7i60OkH1UE?=
+ =?us-ascii?Q?L0/rWCRlxD82RI/bD01Zhj/mhuH+kvAaogjO3itmdaT8vZSkJNZ9kYgWhohS?=
+ =?us-ascii?Q?hW2h15e03TLlVbMF48OgvlR/h8BJ3sFB+GoU14OBhwGwRPzGpNRVWPT+gz5r?=
+ =?us-ascii?Q?OstSlS37+X6xtpdci3Ut9BHh6qhRwgnVGNhQeMYaPXa8d+9phgbyySCxqJBG?=
+ =?us-ascii?Q?BESufeV+kgFlU4AHYPKQJnT5IgBAGeDjOxS6q5gzs1nWUtHB+cOEw8Q7Xdin?=
+ =?us-ascii?Q?f9cJspS94jrf6vY6muGIjAXhyGrbtsV/KsnADiI9nvvXN6Qh1LdTUW94EhCw?=
+ =?us-ascii?Q?6c7GzG9H7Qxc7WR5n6TkXdev2FAl75lGraR0KK94q3bOv/uP8TvwMprP35cN?=
+ =?us-ascii?Q?NZoJ6qCuQk58+Xm/E1rvSyMf8UUyF566k3MPK8TGED1TRqzmv22hiPfWq68d?=
+ =?us-ascii?Q?tgrW9Ruv2DVKTbslM70Pk/Zt36t92awv3IFEnPwHpJQB50MlUxmB69RfNPqZ?=
+ =?us-ascii?Q?2DoDBScJme8SY+OQfB44EZqnO4xYv+Qk9XjP8m70J2p9SJ9OwxSgaXCPyPtl?=
+ =?us-ascii?Q?kqCTDlQm+cnrA7G38lajc1SksIiLkJ0cdCzU02ycvicHcVz3dC95+FXkRmS2?=
+ =?us-ascii?Q?c5UEK1ccGu1IazkJOqgahV4eBeoprQWC1p04lM5ywGyq0ie0wO3yCQ2NvwwR?=
+ =?us-ascii?Q?Ko3gfmoP8rbdUjfje98myw/9Xd2jTB8UD6B0fBSxbWWRMtT3ANLyf4nKOnFE?=
+ =?us-ascii?Q?+nv4DWQ8DWykHbF5HlB7n7KXCp5lC9Li1uUahFAu9JguXj399kDKWgjf1KBs?=
+ =?us-ascii?Q?ti57hv6edYfEOcqAxG1FKoeoa1nEi+OofRmYiZKzr9uTjWZw+i7+DZ5AYzY7?=
+ =?us-ascii?Q?cop4RXu8uDXjZWEPQZ+ovKo00HP0yzTgBY6VdakYI0UVAQpFjgfUmJCjHoJ0?=
+ =?us-ascii?Q?JzdgDxpygyIoxSeZU8cBvaHmnsUGa4R1kVNYEgUudCNfU+jIuO+6cgLlvf+h?=
+ =?us-ascii?Q?vAJdAPVPA1zbsXOwXoH+/cpx5+3qyZvH8W6VHnW5/WztBmDKXFeknxecbT46?=
+ =?us-ascii?Q?AHr/ywZsu106VALLnkLmPoullf+KV1xgWXieIy073Bz1KJAl3SR3fTfNR4OF?=
+ =?us-ascii?Q?Rei2k3MSPYY2sljNCWvTHgu6iGzIOOTerpobk58PKVR4igqWVfpy0lhsiZed?=
+ =?us-ascii?Q?AD4J7Q=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b10a6a34-32ee-4504-4d75-08dad841f10f
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 10:58:15.6694
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 7jxCh3dZz4Jzmqn+kegvUZHKRIJp7DZ4lmbs0Otu8W6ULpm8CnjUXdu6+jblwXP1KUUEoqefdaqn2ufwiHRHSnr5T+cAs/Aa5uaBZvugx+w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5710
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/12/5 PM7:51, Lv Ying 写道:
-> The memory uncorrected error which is detected by an external component and
-> notified via an IRQ, can be called asynchronization error. If an error is
-> detected as a result of user-space process accessing a corrupt memory
-> location, the CPU may take an abort. On arm64 this is a
-> 'synchronous external abort', and on a firmware first system it is notified
-> via NOTIFY_SEA, this can be called synchronization error.
+On Wed, Dec 07, 2022 at 09:43:12AM +0000, Colin Ian King wrote:
+> There is a spelling mistake in a nn_dp_warn message. Fix it.
 > 
-> Currently, synchronization error and asynchronization error both use
-> memory_failure_queue to schedule memory_failure() exectute in kworker
-> context. Commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue
-> for synchronous errors") make task_work pending to flush out the queue,
-> cancel_work_sync() in memory_failure_queue_kick() will make
-> memory_failure() exectute in kworker context first which will get
-> synchronization error info from kfifo, so task_work later will get nothing
-> from kfifo which doesn't work as expected. Even worse, synchronization
-> error notification has NMI like properties, (it can interrupt IRQ-masked
-> code), task_work may get wrong kfifo entry from interrupted
-> asynchronization error which is notified by IRQ.
-> 
-> Since the memory_failure() triggered by a synchronous exception is
-> executed in the kworker context, the early_kill mode of memory_failure()
-> will send wrong si_code by SIGBUS signal: current process is kworker
-> thread, the actual user-space process accessing the corrupt memory location
-> will be collected by find_early_kill_thread(), and then send SIGBUS with
-> BUS_MCEERR_AO si_code to the actual user-space process instead of
-> BUS_MCEERR_AR. The machine-manager(kvm) use the si_code: BUS_MCEERR_AO for
-> 'action optional' early notifications, and BUS_MCEERR_AR for
-> 'action required' synchronous/late notifications.
-> 
-> Make memory_failure() triggered by synchronization errors execute in the
-> current context, we do not need workqueue for synchronization error
-> anymore, use task_work handle synchronization errors directly. Since,
-> synchronization errors and asynchronization errors share the same kfifo,
-> use MF_ACTION_REQUIRED flag to distinguish them. And the asynchronization
-> error keeps the same as before.
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
+Hi Colin,
 
-Hi, Lv Ying,
+thanks for fixing this.
 
-Thank you for your great work.
-
-We also encountered this problem in production environment, and tried to
-solve it by dividing synchronous and asynchronous error handling into different
-paths: task work for synchronous error and workqueue for asynchronous error.
-
-The main challenge is how to distinguish synchronous errors in kernel first
-mode through APEI, a related discussion is here.[1]
-
-> @@ -978,14 +979,14 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->  		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->  		len = cper_estatus_len(estatus);
->  		node_len = GHES_ESTATUS_NODE_LEN(len);
-> -		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
-> +		corruption_page_pending = ghes_do_proc(estatus_node->ghes, estatus, true);
->  		if (!ghes_estatus_cached(estatus)) {
->  			generic = estatus_node->generic;
->  			if (ghes_print_estatus(NULL, generic, estatus))
->  				ghes_estatus_cache_add(generic, estatus);
->  		}
-
-In the case of your patch, it is inappropriate to assume that ghes_proc_in_irq() is only
-called to handle synchronous error. Firmware could notify all synchronous and asynchronous
-error signals to kernel through NMI notification, e.g. SDEI. In this case, asynchronous
-error will be treated as synchronous error.
-
-Our colleague Yingwen has submitted a proposal to extend acpi_hest_generic_data::flag (bit 8)
-to indicate that the error is a synchronous[2]. Personally speaking, it is a more general
-solution and completely solves the problem.
-
-
-> Background:
->
-> In ARM world, two type events (Sync/Async) from hardware IP need OS/VMM take different actions.
-> Current CPER memory error record is not able to distinguish sync/async type event right now.
-> Current OS/VMM need to take extra actions beyond CPER which is heavy burden to identify the
-> two type events
->
-> Sync event (e.g. CPU consume poisoned data) --> Firmware  -> CPER error log  --> OS/VMM take recovery action.
-> Async event (e.g. Memory controller detect UE event)  --> Firmware  --> CPER error log  --> OS take page action.
->
->
-> Proposal:
->
-> - In section description Flags field(UEFI spec section N.2, add sync flag as below. OS/VMM
->  could depend on this flag to distinguish sync/async events.
-> - Bit8 – sync flag; if set this flag indicates that this event record is synchronous(e.g.
->  cpu core consumes poison data, then cause instruction/data abort); if not set, this event record is asynchronous.
->
-> Best regards,
-> Yingwen Chen
-
-A RFC patch set based on above proposal is here[3].
-
-Thank you.
-
-Best Regards,
-Shuai
-
-
-[1] https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/T/
-[2] https://members.uefi.org/wg/uswg/mail/thread/9453
-[3] https://lore.kernel.org/lkml/20221206153354.92394-2-xueshuai@linux.alibaba.com/
-
-
-> 
-> Signed-off-by: Lv Ying <lvying6@huawei.com>
-> ---
->  drivers/acpi/apei/ghes.c | 27 ++++++++++++++-------------
->  mm/memory-failure.c      | 34 ++++++++++++++++++++++------------
->  2 files changed, 36 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
-> index 9952f3a792ba..2ec71fc8a8dd 100644
-> --- a/drivers/acpi/apei/ghes.c
-> +++ b/drivers/acpi/apei/ghes.c
-> @@ -423,8 +423,8 @@ static void ghes_clear_estatus(struct ghes *ghes,
->  
->  /*
->   * Called as task_work before returning to user-space.
-> - * Ensure any queued work has been done before we return to the context that
-> - * triggered the notification.
-> + * Ensure any queued corrupt page in synchronous errors has been handled before
-> + * we return to the user context that triggered the notification.
->   */
->  static void ghes_kick_task_work(struct callback_head *head)
->  {
-> @@ -461,7 +461,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->  }
->  
->  static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
-> -				       int sev)
-> +				       int sev, bool sync)
->  {
->  	int flags = -1;
->  	int sec_sev = ghes_severity(gdata->error_severity);
-> @@ -475,7 +475,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->  	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
->  		flags = MF_SOFT_OFFLINE;
->  	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
-> -		flags = 0;
-> +		flags = sync ? MF_ACTION_REQUIRED : 0;
->  
->  	if (flags != -1)
->  		return ghes_do_memory_failure(mem_err->physical_addr, flags);
-> @@ -483,7 +483,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->  	return false;
->  }
->  
-> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
-> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev, bool sync)
->  {
->  	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
->  	bool queued = false;
-> @@ -510,7 +510,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->  		 * and don't filter out 'corrected' error here.
->  		 */
->  		if (is_cache && has_pa) {
-> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
-> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr,
-> +					sync ? MF_ACTION_REQUIRED : 0);
->  			p += err_info->length;
->  			continue;
->  		}
-> @@ -623,7 +624,7 @@ static void ghes_defer_non_standard_event(struct acpi_hest_generic_data *gdata,
->  }
->  
->  static bool ghes_do_proc(struct ghes *ghes,
-> -			 const struct acpi_hest_generic_status *estatus)
-> +			 const struct acpi_hest_generic_status *estatus, bool sync)
->  {
->  	int sev, sec_sev;
->  	struct acpi_hest_generic_data *gdata;
-> @@ -648,13 +649,13 @@ static bool ghes_do_proc(struct ghes *ghes,
->  			ghes_edac_report_mem_error(sev, mem_err);
->  
->  			arch_apei_report_mem_error(sev, mem_err);
-> -			queued = ghes_handle_memory_failure(gdata, sev);
-> +			queued = ghes_handle_memory_failure(gdata, sev, sync);
->  		}
->  		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
->  			ghes_handle_aer(gdata);
->  		}
->  		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
-> -			queued = ghes_handle_arm_hw_error(gdata, sev);
-> +			queued = ghes_handle_arm_hw_error(gdata, sev, sync);
->  		} else {
->  			void *err = acpi_hest_get_payload(gdata);
->  
-> @@ -868,7 +869,7 @@ static int ghes_proc(struct ghes *ghes)
->  		if (ghes_print_estatus(NULL, ghes->generic, estatus))
->  			ghes_estatus_cache_add(ghes->generic, estatus);
->  	}
-> -	ghes_do_proc(ghes, estatus);
-> +	ghes_do_proc(ghes, estatus, false);
->  
->  out:
->  	ghes_clear_estatus(ghes, estatus, buf_paddr, FIX_APEI_GHES_IRQ);
-> @@ -961,7 +962,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->  	struct ghes_estatus_node *estatus_node;
->  	struct acpi_hest_generic *generic;
->  	struct acpi_hest_generic_status *estatus;
-> -	bool task_work_pending;
-> +	bool corruption_page_pending;
->  	u32 len, node_len;
->  	int ret;
->  
-> @@ -978,14 +979,14 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->  		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->  		len = cper_estatus_len(estatus);
->  		node_len = GHES_ESTATUS_NODE_LEN(len);
-> -		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
-> +		corruption_page_pending = ghes_do_proc(estatus_node->ghes, estatus, true);
->  		if (!ghes_estatus_cached(estatus)) {
->  			generic = estatus_node->generic;
->  			if (ghes_print_estatus(NULL, generic, estatus))
->  				ghes_estatus_cache_add(generic, estatus);
->  		}
->  
-> -		if (task_work_pending && current->mm) {
-> +		if (corruption_page_pending && current->mm) {
->  			estatus_node->task_work.func = ghes_kick_task_work;
->  			estatus_node->task_work_cpu = smp_processor_id();
->  			ret = task_work_add(current, &estatus_node->task_work,
-> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> index bead6bccc7f2..3b6ac3694b8d 100644
-> --- a/mm/memory-failure.c
-> +++ b/mm/memory-failure.c
-> @@ -2204,7 +2204,11 @@ struct memory_failure_cpu {
->  static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
->  
->  /**
-> - * memory_failure_queue - Schedule handling memory failure of a page.
-> + * memory_failure_queue
-> + * - Schedule handling memory failure of a page for asynchronous error, memory
-> + *   failure page will be executed in kworker thread
-> + * - put corrupt memory info into kfifo for synchronous error, task_work will
-> + *   handle them before returning to the user
->   * @pfn: Page Number of the corrupted page
->   * @flags: Flags for memory failure handling
->   *
-> @@ -2217,6 +2221,11 @@ static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
->   * happen outside the current execution context (e.g. when
->   * detected by a background scrubber)
->   *
-> + * This function can also be used in synchronous errors which was detected as a
-> + * result of user-space accessing a corrupt memory location, just put memory
-> + * error info into kfifo, and then, task_work get and handle it in current
-> + * execution context instead of scheduling kworker to handle it
-> + *
->   * Can run in IRQ context.
->   */
->  void memory_failure_queue(unsigned long pfn, int flags)
-> @@ -2230,9 +2239,10 @@ void memory_failure_queue(unsigned long pfn, int flags)
->  
->  	mf_cpu = &get_cpu_var(memory_failure_cpu);
->  	spin_lock_irqsave(&mf_cpu->lock, proc_flags);
-> -	if (kfifo_put(&mf_cpu->fifo, entry))
-> -		schedule_work_on(smp_processor_id(), &mf_cpu->work);
-> -	else
-> +	if (kfifo_put(&mf_cpu->fifo, entry)) {
-> +		if (!(entry.flags & MF_ACTION_REQUIRED))
-> +			schedule_work_on(smp_processor_id(), &mf_cpu->work);
-> +	} else
->  		pr_err("buffer overflow when queuing memory failure at %#lx\n",
->  		       pfn);
->  	spin_unlock_irqrestore(&mf_cpu->lock, proc_flags);
-> @@ -2240,7 +2250,7 @@ void memory_failure_queue(unsigned long pfn, int flags)
->  }
->  EXPORT_SYMBOL_GPL(memory_failure_queue);
->  
-> -static void memory_failure_work_func(struct work_struct *work)
-> +static void __memory_failure_work_func(struct work_struct *work, bool sync)
->  {
->  	struct memory_failure_cpu *mf_cpu;
->  	struct memory_failure_entry entry = { 0, };
-> @@ -2256,22 +2266,22 @@ static void memory_failure_work_func(struct work_struct *work)
->  			break;
->  		if (entry.flags & MF_SOFT_OFFLINE)
->  			soft_offline_page(entry.pfn, entry.flags);
-> -		else
-> +		else if (!sync || (entry.flags & MF_ACTION_REQUIRED))
->  			memory_failure(entry.pfn, entry.flags);
->  	}
->  }
->  
-> -/*
-> - * Process memory_failure work queued on the specified CPU.
-> - * Used to avoid return-to-userspace racing with the memory_failure workqueue.
-> - */
-> +static void memory_failure_work_func(struct work_struct *work)
-> +{
-> +	__memory_failure_work_func(work, false);
-> +}
-> +
->  void memory_failure_queue_kick(int cpu)
->  {
->  	struct memory_failure_cpu *mf_cpu;
->  
->  	mf_cpu = &per_cpu(memory_failure_cpu, cpu);
-> -	cancel_work_sync(&mf_cpu->work);
-> -	memory_failure_work_func(&mf_cpu->work);
-> +	__memory_failure_work_func(&mf_cpu->work, true);
->  }
->  
->  static int __init memory_failure_init(void)
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
