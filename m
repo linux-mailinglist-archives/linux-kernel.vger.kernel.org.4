@@ -2,133 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C910646155
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB0F6646158
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiLGS6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S229717AbiLGS66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:58:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiLGS57 (ORCPT
+        with ESMTP id S229486AbiLGS6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:57:59 -0500
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BA71A839
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 10:57:57 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 6840E32006F2;
-        Wed,  7 Dec 2022 13:57:53 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 07 Dec 2022 13:57:54 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1670439472; x=1670525872; bh=IYyFVXq4uP
-        LEhfNx5cFnxsu3093usNvyCS91OgsAon4=; b=SMIN2njeTfwiE019ekb1g6bijV
-        NKHv0vYTHXtMT+UINLaSRtX1NpXVxCIDBRcnMDpbRrbF8A46/sxNlk1nX7wVZR0W
-        BHYJZf8dO/czk+33+Zjmn5IPtmqT2VhUFWLtFd0a52CXZqHz3w6C8kvHrHLFVKUi
-        MAwWNNzoIe049XNoDE4HPMlfu0UAblDb+N2krIotQQpGWCuZG1wRwtYZYNrMOqTx
-        WETqRdVZ2o49/wPGdDkBg/1h+pPGVBCuz/ATjDB98H+HxB1EJvrZUZMBJ5fK1zZB
-        js2iQyL839A2tE7ExtJyv37uOSTB1DIO8T2isSL5o6sHbk9wd4LlKLzBSriQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670439472; x=1670525872; bh=IYyFVXq4uPLEhfNx5cFnxsu3093u
-        sNvyCS91OgsAon4=; b=DBSZj6QcexkjNBaxNJTyJo3URZLeUZT5VkAy78Vn/oCZ
-        Sqo1TTvs9gTDN2lK+xZalLMzu9bZrZw+/sDCxBfHUKD5OTJEe8u/yv6ieWntDSIT
-        m7TMEfg3SrokXNCVuoE+40+0oOYxjTbJISEpO3EO2hBYdzi9F0+OJ48TNQnGgCSV
-        CczUKFxwW7aAZyBrTFxYFyEsnvm1EYHEBb+z+s9Z7NaRWj5igfgHnFlWVLGN7R1Y
-        p1sxVYCr+Kuaq2rX8b8mFm5Dcsv6o6JmzMC1hpYVVnD+N0h/k5Qm0kqRICT9qs/N
-        4g1e+QdSDZ+B0rHduklu4CY7+51tihP8/BnY/y65jQ==
-X-ME-Sender: <xms:MOKQY595cdVAeyRxDx7a39Qsj4hW3bNov3SN_BdPsWFLWYN9CrLQFA>
-    <xme:MOKQY9u-Hx2D387zPssewjvndRGX4jxEO9wQTjTANkvyCIBe8WQK1H2Xk0mbfq9P_
-    eothuQRcl64AH5drgo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdduudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:MOKQY3BdQb_tvKSlP52pmMGrnJeYKbmJz9Sv8W0fnuJJYbC9DfaVgQ>
-    <xmx:MOKQY9fU6rDQrBqjE1aaIJgqstlUUpnoLLnxDeX5B94Kz4RJJXQA_Q>
-    <xmx:MOKQY-ONrTN3eLSbvqMBidOX272KLRX0IbvbMG29v1CoEj2u2ZG02Q>
-    <xmx:MOKQY7oDcvzpd7B0sitpjJXj3JXVmH9t0RbFktG7LOCc5Fwzse8z8Q>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7394AB60086; Wed,  7 Dec 2022 13:57:52 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <efaf326b-3cd9-40a4-8424-b5f60270beae@app.fastmail.com>
-In-Reply-To: <41a5931e-3543-6a3d-ca85-2dd8ad581f2e@infradead.org>
-References: <CA+55aFyJkpSa6rwZ-5xTihfGiNC_T0oL6txrodYBEo2-0O=p7g@mail.gmail.com>
- <1499156564-29458-1-git-send-email-peda@axentia.se>
- <053d7bf2-9bf3-a71c-5713-7cce19413c37@infradead.org>
- <a546f2db-371e-4d2f-a0ee-c71fcae8c548@app.fastmail.com>
- <41a5931e-3543-6a3d-ca85-2dd8ad581f2e@infradead.org>
-Date:   Wed, 07 Dec 2022 19:57:31 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Randy Dunlap" <rdunlap@infradead.org>,
-        "Peter Rosin" <peda@axentia.se>,
-        "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] mux: remove the Kconfig question for the subsystem
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 13:58:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEA93AC0B;
+        Wed,  7 Dec 2022 10:58:52 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 606B061BC2;
+        Wed,  7 Dec 2022 18:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01996C433D6;
+        Wed,  7 Dec 2022 18:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670439531;
+        bh=tileNfIVVSzSkC6hGTUe9h984/Ujy2+taCQu+sbD3EM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZTOQvX+ZEFGW9ZgdU02BHVvgAgQ5IXPrg8Ro2U9dF/A7aynlgp91rKsVEfkZJCa3p
+         WsK/udxDrqaHgQ0KH18sjNrXrT5pv5oMCGdcEtsHSXfOR11RzbA8NyWcDTcWF48I7x
+         Dm6W5Kh/B6XSaJa/w7qjPYBTL8fPhfQdETdR/xNL/4ItIl2jfjk6r0WlxJU4xNJNil
+         bUu6fNdZFVF9sv7z8zImG4Pm8IlpCixieuJm1DxwmBoQFAwdWmm6tuSnG0nPaJz01f
+         rXy2cQ0Uw4ocHw7vZLmWikzqfeRjsAMk2efTWAubfz/oFNfCLBYf8sr/KZIwaQAc20
+         /7YJqlEQJ5E1w==
+Date:   Wed, 7 Dec 2022 11:58:49 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Daniel Jordan <daniel.m.jordan@oracle.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        linux-crypto@vger.kernel.org
+Subject: Re: [PATCH 1/2] padata: Do not mark padata_mt_helper() as __init
+Message-ID: <Y5DiaT8+eQDLfJcW@dev-arch.thelio-3990X>
+References: <20221129190123.872394-1-nathan@kernel.org>
+ <20221129190123.872394-2-nathan@kernel.org>
+ <CAK7LNASdOhcTqbnRibPumMH1o+78dxBjLuzLK+JS+AiHyTiY6A@mail.gmail.com>
+ <20221206201526.al3tpbdvd244cvl5@parnassus.localdomain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206201526.al3tpbdvd244cvl5@parnassus.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022, at 18:19, Randy Dunlap wrote:
-> On 12/7/22 00:41, Arnd Bergmann wrote:
->> For the other subsystems I mentioned, there are occasionally 
->> problems with missing 'select' that tend to be a pain to find,
->> compared to subsystems consistently using 'depends on', which
->> show up as link failures in randconfig builds.
->
-> I find that various drivers mixing the use of "select" and
-> "depends on" is problematic.
+On Tue, Dec 06, 2022 at 03:15:26PM -0500, Daniel Jordan wrote:
+> On Thu, Dec 01, 2022 at 07:35:59AM +0900, Masahiro Yamada wrote:
+> > On Wed, Nov 30, 2022 at 4:02 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > When building arm64 allmodconfig + ThinLTO with clang and a proposed
+> > > modpost update to account for -ffuncton-sections, the following warning
+> > > appears:
+> > >
+> > >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
+> > >   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
+> > >
+> > > In both cases, an __init function calls padata_work_init(), which is not
+> > > marked __init, with padata_mt_helper(), another __init function, as a
+> > > work function argument.
+> > >
+> > > padata_work_init() is called from non-init paths, otherwise it could be
+> > > marked __init to resolve the warning. Instead, remove __init from
+> > > padata_mt_helper() to resolve the warning.
+> > >
+> > > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > > ---
+> > > Cc: Steffen Klassert <steffen.klassert@secunet.com>
+> > > Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
+> > > Cc: linux-crypto@vger.kernel.org
+> > > ---
+> > >  kernel/padata.c | 4 ++--
+> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/kernel/padata.c b/kernel/padata.c
+> > > index e5819bb8bd1d..c2271d7e446d 100644
+> > > --- a/kernel/padata.c
+> > > +++ b/kernel/padata.c
+> > > @@ -45,7 +45,7 @@ struct padata_mt_job_state {
+> > >  };
+> > >
+> > >  static void padata_free_pd(struct parallel_data *pd);
+> > > -static void __init padata_mt_helper(struct work_struct *work);
+> > > +static void padata_mt_helper(struct work_struct *work);
+> > >
+> > >  static int padata_index_to_cpu(struct parallel_data *pd, int cpu_index)
+> > >  {
+> > > @@ -425,7 +425,7 @@ static int padata_setup_cpumasks(struct padata_instance *pinst)
+> > >         return err;
+> > >  }
+> > >
+> > > -static void __init padata_mt_helper(struct work_struct *w)
+> > > +static void padata_mt_helper(struct work_struct *w)
+> > >  {
+> > >         struct padata_work *pw = container_of(w, struct padata_work, pw_work);
+> > >         struct padata_mt_job_state *ps = pw->pw_data;
+> > > --
+> > > 2.38.1
+> > >
+> > 
+> > This patch seems wrong.
+> > 
+> > padata_work_init() does not reference to padata_mt_helper()
+> > 
+> > 
+> > padata_work_alloc_mt() and padata_do_multithreaded() do.
+> 
+> I see LLVM optimizing padata_work_init by embedding padata_mt_helper's
+> address in its text, which runs afoul of modpost.
+> 
+> I agree with Masahiro, the warning is a false positive since only __init
+> functions ever cause the embedded address to be used.
+> 
+> We have __ref for situations like this.  That way, padata_mt_helper can
+> stay properly __init.
 
-Agreed. Even just mixing 'select' with user-visible symbols
-is very confusing. The two sensible ways are either using
-user-visible options with 'depends on' or hidden options with
-'select'.
+Ah, thank you for pointing out __ref, that seems to be exactly what we
+want here. I will send a v2 marking padata_work_init() as __ref shortly.
 
-> However, there was no answer for the original question:
-> How does a user enable the 4 Kconfig symbols in drivers/mux/Kconfig
-> if some other random driver has not selected MULTIPLEXER?
-
-There is no need to enable any of them in this case, because
-the mux drivers are not usable by themselves.
-
-> I.e.:
->
-> config MUX_ADG792A
-> 	tristate "Analog Devices ADG792A/ADG792G Multiplexers"
->
-> config MUX_ADGS1408
-> 	tristate "Analog Devices ADGS1408/ADGS1409 Multiplexers"
->
-> config MUX_GPIO
-> 	tristate "GPIO-controlled Multiplexer"
->
-> config MUX_MMIO
-> 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
->
-> OK, MUX_MMIO is selected from some other drivers, but if that is not done,
-> how can the first 3 be enabled by a user?
-
-They cannot, that is the entire point of hiding the subsystem
-when it is not used.
-
-      Arnd
+Cheers,
+Nathan
