@@ -2,113 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42754645D35
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:03:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 852A7645D2F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230083AbiLGPDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50152 "EHLO
+        id S229978AbiLGPDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbiLGPDR (ORCPT
+        with ESMTP id S229941AbiLGPCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:03:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CF662E99
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:02:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670425319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yAFoepezIvCP3uAHr/BFfLPVvO1u5OHDj5w9FAPQ8+I=;
-        b=fhnxpz3LdGeGiKVlROS+LnrqCB3iUqJfBN+WBDafA+aFZY9/tDBpTCLSyMHZP5/RwZzw7n
-        K0ZgQxriQALAvU5V915f3F6n3KOi5UXN21saV7soMxm7I3X7bXF56dFDMuPh3IIn1vihr8
-        m9k9vv95MGu0cnhwIi1EnOPnOOS0hoE=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-602-PQt_aICSPkKPjkrL9LdRvg-1; Wed, 07 Dec 2022 10:01:58 -0500
-X-MC-Unique: PQt_aICSPkKPjkrL9LdRvg-1
-Received: by mail-wm1-f70.google.com with SMTP id c126-20020a1c3584000000b003cfffcf7c1aso927418wma.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:01:58 -0800 (PST)
+        Wed, 7 Dec 2022 10:02:42 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07D4326F9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:02:16 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id qk9so14670031ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=rkW+R4a4Tse6+MACAktrvnQJHvMvBdaXyWKhbIEKa4Y=;
+        b=fkHTwS2xda8lXWPwC/vh6Sh3dsVuHW6pI5EwaLzpeW2PTehU5ETuWBv7ToCAGRlohi
+         8PA0gxeF/NHGRup1QG2jbLwskMNCfUY7Y/w2tc3n2CcTY0CgV6VOsnSRlehtDRv0l4ho
+         6OmIIbqIKTUeZu0L5HPuVvlFENu1fsb4bC/UA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yAFoepezIvCP3uAHr/BFfLPVvO1u5OHDj5w9FAPQ8+I=;
-        b=WriZ+9smmJF7OxWejzqi8inYAyIxRfokOgOgBdGy3TKu2G22MKr1vtWWJXellueP1G
-         cBH1VbAnFK5r8Qe986BUFebWZzrqkrtithFf93lrp0DhGiHvW7Rygl0f+V5jyhcMDnG1
-         Xz1ROl0V/gsoavRdHBLeymO2ROyABC04+j9YXxNL/PYe7A9tpDNB2JoURdGbbVvJptfe
-         1sI0dHOoPZsD1L8Z1Iu6UexpbP27Qhx3j0pArQz8r34OT6nQSIN9jVDs3Od6TF8mtnUG
-         mJ2YCznB8FkNwU7sndcX0nbtEQxrOW1ADqR0m2p1ktAiorB4c37iOLIr7mHcLrJNWZqi
-         8wqA==
-X-Gm-Message-State: ANoB5pmRqXTRArfDvXlfWR3Nm/KPFXWSjEZy/qFNnz8UPAXUFdj/tSmk
-        nY06RnNZPYp+X9gSEY5Goi325WPScuFhZmO2w6hqG5Xzs1V5KvzlqfpGqOQXqyYpVV5usuVJOKa
-        4bBfM750rgPjkzhTmWfAN/bQY
-X-Received: by 2002:a05:6000:137a:b0:242:5b1f:3dd0 with SMTP id q26-20020a056000137a00b002425b1f3dd0mr10163870wrz.633.1670425317214;
-        Wed, 07 Dec 2022 07:01:57 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7WjIG9s5h6WW8iRE/Pz9BUs/TQH8zSEuM+9DqTqN/19T1vpGwnC7f+e6cMwuAEoG4IwzH/4A==
-X-Received: by 2002:a05:6000:137a:b0:242:5b1f:3dd0 with SMTP id q26-20020a056000137a00b002425b1f3dd0mr10163852wrz.633.1670425316889;
-        Wed, 07 Dec 2022 07:01:56 -0800 (PST)
-Received: from redhat.com ([2.52.154.114])
-        by smtp.gmail.com with ESMTPSA id e4-20020adff344000000b00236488f62d6sm20203849wrp.79.2022.12.07.07.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 07:01:56 -0800 (PST)
-Date:   Wed, 7 Dec 2022 10:01:53 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Daniil Tatianin <d-tatianin@yandex-team.ru>
-Cc:     Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] drivers/vhost/vhost: fix overflow checks in
- vhost_overflow
-Message-ID: <20221207100028-mutt-send-email-mst@kernel.org>
-References: <20221207134631.907221-1-d-tatianin@yandex-team.ru>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rkW+R4a4Tse6+MACAktrvnQJHvMvBdaXyWKhbIEKa4Y=;
+        b=lEyWEfg/XfVrWSUwgEDiFMUZ8D3th8BD6wnFDY8elRQ8LzPNQijbt2j2h8quBgEfII
+         /tMjat+Xrgr2NBkcTDJk72Gaf0eIoD0urJS2T6pqFgSjp7bFufNkIiie5JPlqUDoAIM2
+         tPai79//FfBbLsPV2wTdLM6fxGtpDPXfnJaEAyyQsQ1nHOK2K2+2e9FIse1NEyoWt1Qt
+         sfLcvIGKjR3O4I/bJkcUDrgTMvd80mStJhqwpkNFQY+TQFfivK1zFpXxQhvB9XdXae82
+         CyGfK0VGDAxk4NEuCIcAkssjMo0HBsty1JqNrIcTbkkQX5jJpQQyTvBR/QYQy16ysbqH
+         0xoA==
+X-Gm-Message-State: ANoB5pmShVZZwTOxyTIZrHK+zA9UcJ/krLOw4cQRsQnwEqeIHFVaaanl
+        pKjTShrDwDMcdJYUMmaf3NGL/ZFBHg4YMascQLs=
+X-Google-Smtp-Source: AA0mqf4C1f026UiIRWPFzH9bGMsJgL5rwZ6szZqBwPW27rLxa9ImplNBTSOiwt0ZUueVjD3SnpNtUw==
+X-Received: by 2002:a17:906:138d:b0:7c0:faff:ab43 with SMTP id f13-20020a170906138d00b007c0faffab43mr342574ejc.26.1670425334999;
+        Wed, 07 Dec 2022 07:02:14 -0800 (PST)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id fe17-20020a1709072a5100b0077a8fa8ba55sm8600530ejc.210.2022.12.07.07.02.12
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 07:02:13 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so1267791wms.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:02:12 -0800 (PST)
+X-Received: by 2002:a05:600c:1e12:b0:3cf:9ad3:a20e with SMTP id
+ ay18-20020a05600c1e1200b003cf9ad3a20emr57361645wmb.151.1670425332189; Wed, 07
+ Dec 2022 07:02:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207134631.907221-1-d-tatianin@yandex-team.ru>
+References: <20221207065922.2086368-1-linmq006@gmail.com>
+In-Reply-To: <20221207065922.2086368-1-linmq006@gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 7 Dec 2022 07:01:59 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VDQZu_-kDOQVLoz1SNPda_78aQ+NMa163mXDmnmXrRSg@mail.gmail.com>
+Message-ID: <CAD=FV=VDQZu_-kDOQVLoz1SNPda_78aQ+NMa163mXDmnmXrRSg@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/msm/dpu: Fix memory leak in msm_mdss_parse_data_bus_icc_path
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Stephen Boyd <swboyd@chromium.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:46:31PM +0300, Daniil Tatianin wrote:
-> The if statement would erroneously check for > ULONG_MAX, which could
-> never evaluate to true. Check for equality instead.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with the SVACE
-> static analysis tool.
-> 
-> Signed-off-by: Daniil Tatianin <d-tatianin@yandex-team.ru>
+Hi,
 
-It can trigger on a 32 bit system. I'd also expect more analysis
-of the code flow than "this can not trigger switch to a condition
-that can" to accompany a patch.
-
+On Tue, Dec 6, 2022 at 10:59 PM Miaoqian Lin <linmq006@gmail.com> wrote:
+>
+> of_icc_get() alloc resources for path1, we should release it when not
+> need anymore. Early return when IS_ERR_OR_NULL(path0) may leak path1.
+> Defer getting path1 to fix this.
+>
+> Fixes: b9364eed9232 ("drm/msm/dpu: Move min BW request and full BW disable back to mdss")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
->  drivers/vhost/vhost.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 40097826cff0..8df706e7bc6c 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -730,7 +730,7 @@ static bool log_access_ok(void __user *log_base, u64 addr, unsigned long sz)
->  /* Make sure 64 bit math will not overflow. */
->  static bool vhost_overflow(u64 uaddr, u64 size)
->  {
-> -	if (uaddr > ULONG_MAX || size > ULONG_MAX)
-> +	if (uaddr == ULONG_MAX || size == ULONG_MAX)
->  		return true;
->  
->  	if (!size)
-> -- 
-> 2.25.1
+> changes in v2:
+> - move getting path1 after error check for path0.
+> ---
+>  drivers/gpu/drm/msm/msm_mdss.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
