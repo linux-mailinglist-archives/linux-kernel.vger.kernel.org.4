@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD56164589D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:10:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F3E64589F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:11:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230044AbiLGLKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:10:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S230072AbiLGLL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiLGLKE (ORCPT
+        with ESMTP id S229978AbiLGLKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:10:04 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393B122BC0;
-        Wed,  7 Dec 2022 03:09:59 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id m14so27560571wrh.7;
-        Wed, 07 Dec 2022 03:09:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ICFciUzqeiA5TCqnWMy+yTZQrd2p8LuMqKRatp5gkOM=;
-        b=q6xZGM8wdEgdRT+AAi2IGnwmA/DLvQBFChaF3gfYESHoY5CTsovDMps1EQ09MJzzUI
-         RzcKqAI5MPmrANbwiAARTOIppoWsTwg/Wltf23xvsBfnoXi2UlAjj4/EkSKUceM045Dg
-         gFBQ3K8Z1/EqONclWrihhQO/CeaLa7M+bz4V0K6Wf4y1Y/Z7Eb1kGTBPwtyuN2ClQ2Hh
-         aKNfdfR+ZnFGUY28WpKMUI7b2gnnhEI70h/IERmyuYMCxMepiBkaccGE+J1NdVZ0m/s/
-         eespEJwYpCgKWnbfRcgxwVJNF0b3hRqZnnb5Af+WZbdsMcARNnAojVGJXBfWQFFAjmvj
-         nCfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ICFciUzqeiA5TCqnWMy+yTZQrd2p8LuMqKRatp5gkOM=;
-        b=lCYzuJDrkvER+5EPy6J9rGZ2aIOr7Qo0kC84g0CQiUZDUrjvAFhoi0a7BUZlm2pCMy
-         vyUb6LPktn+/6rMkLScR+/SIU/gg6lD9DzNaQLTiga7AJpC+zRFiTuyn92Y0xK+5k1+e
-         ZyVe0ZXOdl1d9IpRN+wqE5NC+p37fpNJN04lnXScKIMx3R3NV+ZtBAVFXI5vO6SZ5bcl
-         P7YvXJ+O3YvIpDszy1VRi1sXJ4zaFD4mghL8rcPzJNVpZK7PHiXJTuc+JguhwPh/c97j
-         A2R7vTGusIkoXodokjjlhcsX36AJguDqDUXTp1mCzp0yzPvAbWmjWVQvjncr98mLA2PS
-         HX6A==
-X-Gm-Message-State: ANoB5pkMiDcnSgMdSjS+vBgBj1gVpVttHmcHvuYIQZ9BJzLiM9LjWJFW
-        hrZj0FeC2pHcOEJVxgJgwdM=
-X-Google-Smtp-Source: AA0mqf7iWewb8CjBGIvYjTdV48Sin4KSCqRo5q788eaoVU/JLiAQSeAGP1fRLC/4BocEFsM0E+82jw==
-X-Received: by 2002:a5d:49c5:0:b0:242:2fe2:ffa1 with SMTP id t5-20020a5d49c5000000b002422fe2ffa1mr18548975wrs.96.1670411397546;
-        Wed, 07 Dec 2022 03:09:57 -0800 (PST)
-Received: from fedora ([94.73.32.229])
-        by smtp.gmail.com with ESMTPSA id o15-20020a05600c4fcf00b003cf483ee8e0sm1548479wmq.24.2022.12.07.03.09.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 03:09:57 -0800 (PST)
-Date:   Wed, 7 Dec 2022 12:09:55 +0100
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     Alexander Zhang <alex@alexyzhang.dev>
-Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        openglfreak@googlemail.com, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/1] HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
-Message-ID: <Y5B0gwGZJ/PQyV4+@fedora>
-References: <20221110174056.393697-1-jose.exposito89@gmail.com>
- <e1daf0a9-b699-affd-0d14-e46981733096@alexyzhang.dev>
- <nycvar.YFH.7.76.2211141509340.6045@cbobk.fhfr.pm>
- <d08049f2-443b-f769-cfde-629cdfb96fc0@alexyzhang.dev>
- <1dc9d0ba-4836-dfc6-8bf2-322ce3b5c24d@alexyzhang.dev>
+        Wed, 7 Dec 2022 06:10:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B092B24E;
+        Wed,  7 Dec 2022 03:10:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 529A0614C9;
+        Wed,  7 Dec 2022 11:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA884C433D7;
+        Wed,  7 Dec 2022 11:10:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670411416;
+        bh=0jJul38H7b6a7pV+bfmeR+4Ek1fomNZg73Xrsb1RXkA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=pJ6XI7BMgdLF7pbXMNKMeE+3OyMfv0EYiGj7jtqHx9+sgD6d0NndLbanc/FC/GcyV
+         igII75xYk3rMZXMUU0aZHBZqFq1r8spBs/XJpbbaXMiW7TCJM84f3fdqi1Ml+pMScM
+         hB3Hf7yw3xaeUEeJ5+D996SJbog/eR+kyT8FHl8WKSRrbxLicZuqMwcwsAnORhlJlp
+         vK2o8yjkWZfBeoNRdr2VOmZr1nKcwu4eq6SmbnmZxtH7Tl5fEidvOPwDj3Z6yF954s
+         /iRUX0jxR2EiDIlMUI0TcxYKDPvOA4pCKOzeg3IODrZ2H8vFTtLO/U/voG5QUPOlTi
+         gbCwkKjeYiGbA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8C286E270CF;
+        Wed,  7 Dec 2022 11:10:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1dc9d0ba-4836-dfc6-8bf2-322ce3b5c24d@alexyzhang.dev>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH net-next v7 0/6] net: dsa: microchip: add MTU support for KSZ8
+ series
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167041141656.12492.16254467680010942896.git-patchwork-notify@kernel.org>
+Date:   Wed, 07 Dec 2022 11:10:16 +0000
+References: <20221205052232.2834166-1-o.rempel@pengutronix.de>
+In-Reply-To: <20221205052232.2834166-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alexander,
+Hello:
 
-On Mon, Dec 05, 2022 at 04:49:10PM -0800, Alexander Zhang wrote:
-> Hello,
+This series was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
+
+On Mon,  5 Dec 2022 06:22:26 +0100 you wrote:
+> changes v7:
+> - add Acked-bys and Reviewed-bys
 > 
-> On 11/19/22 11:01 PM, Alexander Zhang wrote:
-> > On 11/14/22 6:10 AM, Jiri Kosina wrote:
-> > > On Thu, 10 Nov 2022, Alexander Zhang wrote:
-> > > 
-> > > > Hi José,
-> > > > 
-> > > > On 11/10/22 9:40 AM, José Expósito wrote:
-> > > > > Hi everyone,
-> > > > > 
-> > > > > About 3 months ago, Torge Matthies sent a patch fixing an issue with
-> > > > > his XP-Pen Star G640 [1].
-> > > > > 
-> > > > > His patch changes the IS_INPUT_APPLICATION() macro to accept
-> > > > > HID_DG_DIGITIZER. However, it looks like it is not being merged because
-> > > > > of the possible side effects that changing that macro could generate.
-> > > > > 
-> > > > > This patch aims to fix the same issue but using a more conservative
-> > > > > approach hoping that the bug can be fixed.
-> > > > > 
-> > > > > Torge, Alexander, could you test it and confirm that it fixes your
-> > > > > issues, please?
-> > > > 
-> > > > I tested the patch on commit 4bbf3422df78 and it fixes the issue.
-> > > 
-> > > I will add
-> > > 
-> > >     Tested-by: Alexander Zhang <alex@alexyzhang.dev>
-> > > 
-> > > to the commit; please speak up if you disagree.
-> > 
-> > I'm not sure if you're still waiting for a response from me but I'm fine
-> > with that.
+> changes v6:
+> - move dsa configuration to ksz8_setup
 > 
-> Is there something preventing this patch from being merged? I'm not very
-> familiar with the kernel development process.
+> changes v5:
+> - add mtu normalization patch
+> 
+> [...]
 
-The patch is already applied in the for-next branch, you can find it here:
-https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?h=for-next&id=3405a4beaaa8
+Here is the summary with links:
+  - [net-next,v7,1/6] net: dsa: microchip: move max mtu to one location
+    https://git.kernel.org/netdev/net-next/c/838c19f89454
+  - [net-next,v7,2/6] net: dsa: microchip: do not store max MTU for all ports
+    https://git.kernel.org/netdev/net-next/c/1d0a1a6d0d63
+  - [net-next,v7,3/6] net: dsa: microchip: add ksz_rmw8() function
+    https://git.kernel.org/netdev/net-next/c/6f1b986a43ce
+  - [net-next,v7,4/6] net: dsa: microchip: ksz8: add MTU configuration support
+    https://git.kernel.org/netdev/net-next/c/29d1e85f45e0
+  - [net-next,v7,5/6] net: dsa: microchip: enable MTU normalization for KSZ8795 and KSZ9477 compatible switches
+    https://git.kernel.org/netdev/net-next/c/6b30cfa86ee7
+  - [net-next,v7,6/6] net: dsa: microchip: ksz8: move all DSA configurations to one location
+    https://git.kernel.org/netdev/net-next/c/55a952eef70a
 
-Jose
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> Best,
-> Alexander Zhang
+
