@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF5EE645F2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE2C645F2F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiLGQoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:44:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S230042AbiLGQoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:44:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiLGQn5 (ORCPT
+        with ESMTP id S230025AbiLGQoC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:43:57 -0500
-Received: from mail-lf1-x149.google.com (mail-lf1-x149.google.com [IPv6:2a00:1450:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4183D5E9CB
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:43:56 -0800 (PST)
-Received: by mail-lf1-x149.google.com with SMTP id q25-20020ac25a19000000b004b59452a20aso790597lfn.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:43:55 -0800 (PST)
+        Wed, 7 Dec 2022 11:44:02 -0500
+Received: from mail-lj1-x24a.google.com (mail-lj1-x24a.google.com [IPv6:2a00:1450:4864:20::24a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E03B5E3C2
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:44:00 -0800 (PST)
+Received: by mail-lj1-x24a.google.com with SMTP id k8-20020a05651c10a800b00279ff1459b6so3287558ljn.19
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:44:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3UNgITk2mCHM+aO+s0l1dU1wLZipt6ouG5VCup5ogI=;
-        b=Jz0dxAj0ez7bZFI3NVyATAAqCsijUj/bzAPgNXTFygZTZgQ7y23Uu5QmZcfivd00bR
-         FmMEyREyeUPS7o3HvpZZNDrw54Yx1zKt/muSqK8Sr9e8cZTsd7f6bZQfVAaC02fU0qiA
-         0qw7J4effoSo8816N1fDYWHLcMSFieumfGy3ZND2thOacnib8n+YHGL1sjtx6EpfGfEr
-         QTcIeXFfHOcBZHwtWestLk7LrC1y/fORCxalyHJDqBzrldLw6w/iMyiFCikm4kqhtT9I
-         rOWvSSGCgPzneb18q9SmmAWALdrGRojrscCR+hddi8noVtF232wCoXfsvNc3KvOrCHDd
-         b6og==
+        bh=FMcxzvpQ79NigTE1Z+XywTBOeZAVWjGPGIVGHcTu/LY=;
+        b=hB/sk0afJO4g4k73aTVkKJ1vNRhCYGcH2LDEGEF6h0UVflD/+52ZaUq0TwvY/20lIB
+         V6Pm/Q6cInPd1VngVfp45sQ9arCcu3CBHL+Nj7lxzVXdU10/6FVwzJnRWROgriBMD3d9
+         mvk0pi1qcBr9D7CcHlDHb6JyipEL5TwzF0CballDjeL88MIUVyHqnidLAgBo4va/GztN
+         nmYu4nOMyRkrKQ596r/kTMY4z+snc/GTMkVNoUGS87kPV74Rgk3J7cMYgnuoTPgE0Jpe
+         F37SUXjpOiiNvsfzW98G05VwdoRbpcXUMtC9BgJmGOxtqOHTNSr6wgahra+KRwFnkTF1
+         3pxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=R3UNgITk2mCHM+aO+s0l1dU1wLZipt6ouG5VCup5ogI=;
-        b=m2AXej8Dwf27LuWsXwt7pfNyiWWpKP/K3VXnh7AZixerP5yXCgd4Q+Bh7MNIGW0uzp
-         xO+TdUe3YIPzrsMSs2vMrbvllqXNHf+QWfBCYPwyuSrveW5rDEyhgHdTQklov0Oc1T8M
-         7xQMzI8edBw8k+BN54AV+eYqhcQic81BoIyRZ0SuO/oLnHeOLHfD6ntD9UECLNz3j1Gc
-         0cnHOse6sfRBsaQ54eIzQ/yQ6fEhT/sIMByKfsnYF9a3iBHS4qHtNjStelRBa2QHhtMJ
-         lMPePZWoSOoscnpMm/JL47vRCfoofM751aqIzuQeYSVyVWzX7W80J/D2XPF29+F98zi0
-         6+2Q==
-X-Gm-Message-State: ANoB5pniY33BkuQmnfRc8tjDz4f9nFlXpMrqkBCjk9PNdIQn0O/8J+Yh
-        ne4HOCXDI7HI527ZdeU1KgzwR9b+SXrF/sxf
-X-Google-Smtp-Source: AA0mqf6hwzNXlz8mWqisoOstIk8lU431OMAtI0FDtAlpn3oNcMNpSObbMyM4FovQgMHkq/Xk99Z3UP2pVjMWxsbu
+        bh=FMcxzvpQ79NigTE1Z+XywTBOeZAVWjGPGIVGHcTu/LY=;
+        b=avnPG/3g46UWlVmSbHtS2RaOCbCrQWQbrWre5Cj06j7dQU0M1XZ9EePO+Tmha6mQar
+         +R2D3xS1Nro2WG0LFbkwWayAnOqxa8iks0Zdk4STB2CeRETSmlUDhVpKjiv7rgZ6u6iX
+         tWvDcHCVu8OYDN4xqDVzxZ/duelOzs2PevAz7yNghJE76qhNGk6rQ819Oh3oL97bHeqw
+         VmC1t5hGXI51/GQ6k3PQqKW6iqGJk19ghVIdLua1mtC3N+86jMMzkSFEPCoxy+hIF2O1
+         NpqU049dK5ewFwknP1Q5137jU+e70dwlACiu0x6CG1hhK/+Ww+RLNHjpJ2KoPtLmEUio
+         jbZg==
+X-Gm-Message-State: ANoB5pl7CMCqjiSmTekIkNbFPP9PzQaCOs3JW8taL7T7jnGiHJfq6DJz
+        bvBKNXumV0bCqYajAgCMxH8qix0OWXo+Lc2Q
+X-Google-Smtp-Source: AA0mqf4xrI8w0q5oOG5W2+kw/G/DXZljwzYZt9o7MMuLcR38iNbo42aEEbZZw85XqQVA++M5vTtKinrJ/TIke8AN
 X-Received: from mclapinski.waw.corp.google.com ([2a00:79e0:9b:0:3d6d:f78e:bc73:df])
- (user=mclapinski job=sendgmr) by 2002:a05:651c:12ca:b0:277:a9d:9355 with SMTP
- id 10-20020a05651c12ca00b002770a9d9355mr21109826lje.102.1670431434519; Wed,
- 07 Dec 2022 08:43:54 -0800 (PST)
-Date:   Wed,  7 Dec 2022 17:43:37 +0100
+ (user=mclapinski job=sendgmr) by 2002:a05:651c:1586:b0:277:38f:ffad with SMTP
+ id h6-20020a05651c158600b00277038fffadmr21919328ljq.439.1670431438583; Wed,
+ 07 Dec 2022 08:43:58 -0800 (PST)
+Date:   Wed,  7 Dec 2022 17:43:38 +0100
 In-Reply-To: <20221207164338.1535591-1-mclapinski@google.com>
 Mime-Version: 1.0
 References: <20221207164338.1535591-1-mclapinski@google.com>
 X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221207164338.1535591-2-mclapinski@google.com>
-Subject: [PATCH 1/2] sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+Message-ID: <20221207164338.1535591-3-mclapinski@google.com>
+Subject: [PATCH 2/2] selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
 From:   Michal Clapinski <mclapinski@google.com>
 To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
         "Paul E. McKenney" <paulmck@kernel.org>
@@ -72,100 +72,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Provide a method to query previously issued registrations.
+Keep track of previously issued registrations and compare the result
+with MEMBARRIER_CMD_GET_REGISTRATIONS return value.
 
 Signed-off-by: Michal Clapinski <mclapinski@google.com>
 ---
- include/uapi/linux/membarrier.h |  4 ++++
- kernel/sched/membarrier.c       | 39 ++++++++++++++++++++++++++++++++-
- 2 files changed, 42 insertions(+), 1 deletion(-)
+ .../membarrier/membarrier_test_impl.h         | 33 +++++++++++++++++++
+ .../membarrier/membarrier_test_multi_thread.c |  2 +-
+ .../membarrier_test_single_thread.c           |  6 +++-
+ 3 files changed, 39 insertions(+), 2 deletions(-)
 
-diff --git a/include/uapi/linux/membarrier.h b/include/uapi/linux/membarrier.h
-index 737605897f36..5f3ad6d5be6f 100644
---- a/include/uapi/linux/membarrier.h
-+++ b/include/uapi/linux/membarrier.h
-@@ -137,6 +137,9 @@
-  * @MEMBARRIER_CMD_SHARED:
-  *                          Alias to MEMBARRIER_CMD_GLOBAL. Provided for
-  *                          header backward compatibility.
-+ * @MEMBARRIER_CMD_GET_REGISTRATIONS:
-+ *                          Returns a bitmask of previously issued
-+ *                          registration commands.
-  *
-  * Command to be passed to the membarrier system call. The commands need to
-  * be a single bit each, except for MEMBARRIER_CMD_QUERY which is assigned to
-@@ -153,6 +156,7 @@ enum membarrier_cmd {
- 	MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE	= (1 << 6),
- 	MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ			= (1 << 7),
- 	MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ		= (1 << 8),
-+	MEMBARRIER_CMD_GET_REGISTRATIONS			= (1 << 9),
+diff --git a/tools/testing/selftests/membarrier/membarrier_test_impl.h b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+index 186be69f0a59..af89855adb7b 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test_impl.h
++++ b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+@@ -9,11 +9,38 @@
  
- 	/* Alias for header backward compatibility. */
- 	MEMBARRIER_CMD_SHARED			= MEMBARRIER_CMD_GLOBAL,
-diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-index 0c5be7ebb1dc..2ad881d07752 100644
---- a/kernel/sched/membarrier.c
-+++ b/kernel/sched/membarrier.c
-@@ -159,7 +159,8 @@
- 	| MEMBARRIER_CMD_PRIVATE_EXPEDITED				\
- 	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED			\
- 	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK		\
--	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
-+	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK			\
-+	| MEMBARRIER_CMD_GET_REGISTRATIONS)
+ #include "../kselftest.h"
  
- static void ipi_mb(void *info)
++static int registrations;
++
+ static int sys_membarrier(int cmd, int flags)
  {
-@@ -540,6 +541,40 @@ static int membarrier_register_private_expedited(int flags)
+ 	return syscall(__NR_membarrier, cmd, flags);
+ }
+ 
++static int test_membarrier_get_registrations(int cmd)
++{
++	int ret, flags = 0;
++	const char *test_name =
++		"sys membarrier MEMBARRIER_CMD_GET_REGISTRATIONS";
++
++	registrations |= cmd;
++
++	ret = sys_membarrier(MEMBARRIER_CMD_GET_REGISTRATIONS, 0);
++	if (ret < 0) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, errno = %d\n",
++			test_name, flags, errno);
++	} else if (ret != registrations) {
++		ksft_exit_fail_msg(
++			"%s test: flags = %d, ret = %d, registrations = %d\n",
++			test_name, flags, ret, registrations);
++	}
++	ksft_test_result_pass(
++		"%s test: flags = %d, ret = %d, registrations = %d\n",
++		test_name, flags, ret, registrations);
++
++	return 0;
++}
++
+ static int test_membarrier_cmd_fail(void)
+ {
+ 	int cmd = -1, flags = 0;
+@@ -113,6 +140,8 @@ static int test_membarrier_register_private_expedited_success(void)
+ 	ksft_test_result_pass(
+ 		"%s test: flags = %d\n",
+ 		test_name, flags);
++
++	test_membarrier_get_registrations(cmd);
  	return 0;
  }
  
-+static int membarrier_get_registrations(void)
-+{
-+	struct task_struct *p = current;
-+	struct mm_struct *mm = p->mm;
-+	int registrations_mask = 0, membarrier_state, i;
-+	static const int states[] = {
-+		MEMBARRIER_STATE_GLOBAL_EXPEDITED |
-+			MEMBARRIER_STATE_GLOBAL_EXPEDITED_READY,
-+		MEMBARRIER_STATE_PRIVATE_EXPEDITED |
-+			MEMBARRIER_STATE_PRIVATE_EXPEDITED_READY,
-+		MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE |
-+			MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE_READY,
-+		MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ |
-+			MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY
-+	};
-+	static const int registration_cmds[] = {
-+		MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED,
-+		MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-+		MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
-+		MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ
-+	};
-+	BUILD_BUG_ON(ARRAY_SIZE(states) != ARRAY_SIZE(registration_cmds));
+@@ -170,6 +199,8 @@ static int test_membarrier_register_private_expedited_sync_core_success(void)
+ 	ksft_test_result_pass(
+ 		"%s test: flags = %d\n",
+ 		test_name, flags);
 +
-+	membarrier_state = atomic_read(&mm->membarrier_state);
-+	for (i = 0; i < ARRAY_SIZE(states); ++i) {
-+		if (membarrier_state & states[i]) {
-+			registrations_mask |= registration_cmds[i];
-+			membarrier_state &= ~states[i];
-+		}
-+	}
-+	WARN_ON_ONCE(membarrier_state != 0);
-+	return registrations_mask;
-+}
++	test_membarrier_get_registrations(cmd);
+ 	return 0;
+ }
+ 
+@@ -204,6 +235,8 @@ static int test_membarrier_register_global_expedited_success(void)
+ 	ksft_test_result_pass(
+ 		"%s test: flags = %d\n",
+ 		test_name, flags);
 +
- /**
-  * sys_membarrier - issue memory barriers on a set of threads
-  * @cmd:    Takes command values defined in enum membarrier_cmd.
-@@ -623,6 +658,8 @@ SYSCALL_DEFINE3(membarrier, int, cmd, unsigned int, flags, int, cpu_id)
- 		return membarrier_private_expedited(MEMBARRIER_FLAG_RSEQ, cpu_id);
- 	case MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ:
- 		return membarrier_register_private_expedited(MEMBARRIER_FLAG_RSEQ);
-+	case MEMBARRIER_CMD_GET_REGISTRATIONS:
-+		return membarrier_get_registrations();
- 	default:
- 		return -EINVAL;
- 	}
++	test_membarrier_get_registrations(cmd);
+ 	return 0;
+ }
+ 
+diff --git a/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c b/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
+index ac5613e5b0eb..a9cc17facfb3 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
++++ b/tools/testing/selftests/membarrier/membarrier_test_multi_thread.c
+@@ -62,7 +62,7 @@ static int test_mt_membarrier(void)
+ int main(int argc, char **argv)
+ {
+ 	ksft_print_header();
+-	ksft_set_plan(13);
++	ksft_set_plan(16);
+ 
+ 	test_membarrier_query();
+ 
+diff --git a/tools/testing/selftests/membarrier/membarrier_test_single_thread.c b/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
+index c1c963902854..4cdc8b1d124c 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
++++ b/tools/testing/selftests/membarrier/membarrier_test_single_thread.c
+@@ -12,7 +12,9 @@
+ int main(int argc, char **argv)
+ {
+ 	ksft_print_header();
+-	ksft_set_plan(13);
++	ksft_set_plan(18);
++
++	test_membarrier_get_registrations(/*cmd=*/0);
+ 
+ 	test_membarrier_query();
+ 
+@@ -20,5 +22,7 @@ int main(int argc, char **argv)
+ 
+ 	test_membarrier_success();
+ 
++	test_membarrier_get_registrations(/*cmd=*/0);
++
+ 	return ksft_exit_pass();
+ }
 -- 
 2.39.0.rc0.267.gcb52ba06e7-goog
 
