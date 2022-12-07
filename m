@@ -2,148 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17450645F1B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:40:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCB1645F2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:43:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiLGQkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:40:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S229951AbiLGQnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:43:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLGQkn (ORCPT
+        with ESMTP id S229868AbiLGQnv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:40:43 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B69765C8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:40:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=/Sd4SxWaT71FmvSDVWiBw7YRjZK3pQuzvjU74TL/s14=; b=VWSg17yuc7hkOPqXOFOwpCrx33
-        bmEbRS5WWK0+aaIzJVptDdkazFLWObtjIR9JteCnNlGvzV7++KW1RJ4nSRSYmls1r+J5NnGe94IqC
-        Ys8ojAGOAShvughEGIOtogTXi9d9smWsIOgTXA2D5WJji2xtulT6Hu2oENi3M7W5dEqBuQjJkJTP4
-        AGk9+E2UYUj5ZzjpWYqgkoNG8+9Gy384fTT143Vh63rLVjVQfaiZLn3O0F3AQuSw0IMcjJl6Fth7j
-        wlvtYwFNQXCJiZfBf5Jo1K2fNTaJ+GOBug9OSt507xTN9/hr5j2CQcesX65T1dqplcHJY1Zo0VAcy
-        r771A/qg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p2xTQ-00609X-5E; Wed, 07 Dec 2022 16:40:44 +0000
-Date:   Wed, 7 Dec 2022 16:40:44 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
- preserves const-ness of the pointer
-Message-ID: <Y5DCDI69xFI+Y2gT@casper.infradead.org>
-References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
- <Y49cGRDBVP3bHJuT@casper.infradead.org>
- <Y49lxZMsKrXRciIg@kroah.com>
- <Y495XgCv+dhGA2Tg@casper.infradead.org>
- <Y4+OFzfAh7XqOoWv@kroah.com>
- <Y4+jrBBRQ6XfNMfY@casper.infradead.org>
- <41c6f1b8-5c09-d7d4-14b7-214a9f844156@rasmusvillemoes.dk>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <41c6f1b8-5c09-d7d4-14b7-214a9f844156@rasmusvillemoes.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 11:43:51 -0500
+Received: from mail-lj1-x249.google.com (mail-lj1-x249.google.com [IPv6:2a00:1450:4864:20::249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A30CA5CD12
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:43:50 -0800 (PST)
+Received: by mail-lj1-x249.google.com with SMTP id c1-20020a2e9d81000000b00279805978a3so5315805ljj.14
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:43:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=r5PgP+WJc71MoSmOYpj5ZrReovCQD8z66dlPR1F1GrM=;
+        b=h9q0oCHCkezL9bDcUnUZehUq9NrDktR3pPdxA0ghKptzKRHhcO2Mv6ffgYXhhMeTDw
+         3FlcN+joto2hVxpALrei69fw2jCyeGk5p7m5lmzIDnjhePyRGuuBtmYNubWlxdMVK49Y
+         IVV5EE3mzt94gpt82itT0ZFT8QItcd08SK86g0AGo6ngMZwCoKR6cdvgfvos3oRPHPxm
+         tF6/LRGg+seULJgO40IOq/plN5pjqSzzUO34tFei2DWC3m+kZsKDqiSCp8eZagMMhxgj
+         +ItjPwSETCeT6fe4tmoRZbgdO5ItNgQhm7kWj+A0E/xc4YFlX43nKiMBX+Bho0D+5gMP
+         8A/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r5PgP+WJc71MoSmOYpj5ZrReovCQD8z66dlPR1F1GrM=;
+        b=O8hJjhNX9sHkJDLCCvHZ55FpLLOAWORH60gbZrwu0WbFRjSk82Tpymp84lBlFRiYZM
+         4/LtVyhwb5t3bFpGNlatJoWCjW90RWUun5ACMGu2/4CTgb1X+nQNRctDccYM6No3E4Ew
+         yO/jfpChuJxqJSSDiApUGuzB5KESfUKucq3Ir5ysBInA+Ivq950XqQjF2WNvdBXGyg9b
+         TRcAzmPle22YHX+sO2pK2aMKiJDhuHaCeoJiRacGSFy80mFUWipbZ+F9lfoOaBVSfDTM
+         RKP7pN/DXEjCITRL1ieKtsbxSyURZZp8O6gYoQN1dKzu10x2UnGvOVlgDfD9jrqRJQH2
+         kzxQ==
+X-Gm-Message-State: ANoB5pm4F4zAgujx5ZPPKS67GGsUzPhWqN8tdfH1huoB2owf1/0c5G8u
+        iPc008Dxpxt1a4rOHxBUxz5YbrcdinwBLk5z
+X-Google-Smtp-Source: AA0mqf5YcwjHlHtRqgfuPiOeL0r+c+V4UkIP7YmZTgX6L+0JEuChdLtOGmf84VQTuN/80Q8EuPv3BvX29fAGZV0Z
+X-Received: from mclapinski.waw.corp.google.com ([2a00:79e0:9b:0:3d6d:f78e:bc73:df])
+ (user=mclapinski job=sendgmr) by 2002:ac2:518f:0:b0:4b4:9227:3565 with SMTP
+ id u15-20020ac2518f000000b004b492273565mr34808968lfi.290.1670431429015; Wed,
+ 07 Dec 2022 08:43:49 -0800 (PST)
+Date:   Wed,  7 Dec 2022 17:43:36 +0100
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221207164338.1535591-1-mclapinski@google.com>
+Subject: [PATCH 0/2] sched/membarrier, selftests: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+From:   Michal Clapinski <mclapinski@google.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Michal Clapinski <mclapinski@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 10:26:54AM +0100, Rasmus Villemoes wrote:
-> On 06/12/2022 21.18, Matthew Wilcox wrote:
-> > On Tue, Dec 06, 2022 at 07:46:47PM +0100, Greg Kroah-Hartman wrote:
-> >> On Tue, Dec 06, 2022 at 05:18:22PM +0000, Matthew Wilcox wrote:
-> >>>  static inline struct external_name *external_name(struct dentry *dentry)
-> >>>  {
-> >>> -	return container_of(dentry->d_name.name, struct external_name, name[0]);
-> >>> +	return container_of_not_const(dentry->d_name.name,
-> >>> +				      struct external_name, name[0]);
-> >>>  }
-> >>
-> >> Will just:
-> >> 	return container_of((unsigned char *)dentry->d_name.name, struct external_name, name[0]);
-> >> work by casting away the "const" of the name?
-> >>
-> >> Yeah it's ugly, I never considered the address of a const char * being
-> >> used as a base to cast back from.  The vfs is fun :)
-> > 
-> > Yes, that also works.  This isn't particularly common in the VFS, it's
-> > just the dcache.  And I understand why it's done like this; you don't
-> > want rando filesystems modifying dentry names without also updating
-> > the hash.
-> > 
-> > I feel like all the options here are kind of ugly.  Seeing casts in
-> > the arguments to container_of should be a red flag!
-> > 
-> > Here's a bit of a weird option ...
-> > 
-> > +#define container_of_2(ptr, p_m, type, member)                         \
-> > +       _Generic(ptr,                                                   \
-> > +               const typeof(*(ptr)) *: (const type *)container_of(ptr->p_m, type, member), \
-> > +               default: ((type *)container_of(ptr->p_m, type, member)))
-> > +
-> > 
-> >  static inline struct external_name *external_name(struct dentry *dentry)
-> >  {
-> > -       return container_of(dentry->d_name.name, struct external_name, name[0]);
-> > +       return container_of_2(dentry, d_name.name, struct external_name,
-> > +                               name[0]);
-> >  }
-> > 
-> > so we actually split the first argument into two -- the pointer which
-> > isn't const, then the pointer member which might be const, but we don't
-> > use it for the return result of container_of_2.
-> 
-> Wait, what? The const-ness or not of dentry is completely irrelevant,
-> we're not doing any pointer arithmetic on that to obtain some other
-> pointer that morally should have the same const-ness. We're
-> dereferencing dentry to get a pointer value, and _that_ pointer value is
-> then subject to the pointer arithmetic.
+This change provides a method to query previously issued registrations.
+It's needed for CRIU (checkpoint/restore in userspace). Before this
+change we had to issue private membarrier commands during checkpoint -
+if they succeeded, they must have been registered. Unfortunately global
+membarrier succeeds even on unregistered processes, so there was no way to
+tell if MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED had been issued or not.
 
-... and this runs up against the fundamental duality of "what does const
-mean".  If you declare a region of memory as const, it is read only.
-But a pointer to const memory simply means "you may not alter it".
-It does not mean "this is read only".  But the compiler doesn't know
-that, so of course it warns that you're casting away constness.
+CRIU is run after the process has been frozen with ptrace, so we don't
+have to worry too much about the result of running this command in parallel
+with registration commands.
 
-> Note that external_name might as well have had the prototype
-> 
-> static inline struct external_name *external_name(const struct dentry
-> *dentry)
-> 
-> and then your container_of_2 would break.
+Michal Clapinski (2):
+  sched/membarrier: Introduce MEMBARRIER_CMD_GET_REGISTRATIONS
+  selftests/membarrier: Test MEMBARRIER_CMD_GET_REGISTRATIONS
 
-Fair point.  Actually, it probably should have that prototype since
-it doesn't modify dentry.
+ include/uapi/linux/membarrier.h               |  4 ++
+ kernel/sched/membarrier.c                     | 39 ++++++++++++++++++-
+ .../membarrier/membarrier_test_impl.h         | 33 ++++++++++++++++
+ .../membarrier/membarrier_test_multi_thread.c |  2 +-
+ .../membarrier_test_single_thread.c           |  6 ++-
+ 5 files changed, 81 insertions(+), 3 deletions(-)
 
-> I think that if we want to move towards container_of preserving the
-> constness of the member pointer, the right fix here is indeed a cast,
-> but not inside container_of, but rather to cast away the const afterwards:
-> 
->   return (struct external_name *)container_of(dentry->d_name.name,
-> struct external_name, name[0]);
-> 
-> knowing that yes, the dentry only keeps a const pointer to the name[]
-> member for good reasons, but the callers very much do need to modify the
-> rest of the struct.
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
 
-I dislike repeating the name of the struct twice.  More than I dislike
-container_of_not_const() which gets to reuse the type name.
-
-We could also do ...
-
-	return NOT_CONST(container_of(dentry->d_name.name,
-					struct external_name, name[0]);
-
-and have NOT_CONST be the warning sign that we're doing something
-unusual.
