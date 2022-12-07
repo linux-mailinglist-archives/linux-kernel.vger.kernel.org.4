@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AAF5645542
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39255645544
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:13:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLGINC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:13:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S229732AbiLGINR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:13:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLGIM7 (ORCPT
+        with ESMTP id S229722AbiLGINP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:12:59 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8D9B85
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:12:58 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id f16so8348772ljc.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:12:58 -0800 (PST)
+        Wed, 7 Dec 2022 03:13:15 -0500
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EDE31FB9
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:13:12 -0800 (PST)
+Received: by mail-yb1-xb2f.google.com with SMTP id c140so21693236ybf.11
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:13:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m+kjYDptxUK/6lTIYvf1c81EedOZ9qW05fricFulF/s=;
-        b=E+Idr6D8UHCLzDMlof82wLQ953lks4pkn/ITiOLjg5EZ5GexMPBGhRyhZ47WjQBA5x
-         ZtTgp/uA7mD1SKC0qk623g9FPnNWypXTviAAbU5l3pEfxPmDG/1VYSTTOhtIg/6jfajW
-         zrVRznyX8RLlWHPs8g8ldRGAAsbVi1RUEVxMSVWVVvl21z91bamPXZ1j1An/HTzDCVnN
-         5Z01lDM1eiwfrSeydBjDoS9F3SM2YHUEc+91G6J9klWpmZPwxEx8ZuwA3Tb/VopOvPEM
-         +BO74orO6Y27+gPuYCLB+/l1gtqg3ofRuBZy9k2qh2yT+hHXig4/E0XyBdRmJbSVIWni
-         SP1w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9PwBs2OW6KV67ZD6N5qY5Z5ZOtyNNcvY0UpEdencGE=;
+        b=YvoabhEN5LkAlnAsj7FwPTX3hCLmWY46IgIkXkXbBLJzjwSepXsWfZFLj6pY8g6C63
+         PQsgbo5hbcEG9ffKMMMalFfu70ZsB+x3oAZA1HYrQtSmB/1T6mydnloFZfQvknM99heQ
+         tT2z487cne4nZ5KkxSWi11IWyeJBWFUCF5ZZd3utLKyBMYmhDAn41LLBY8+zWOJh/PL2
+         U0MODsrglmbnb6z1EILfAjO7urtuBzcmupKyIDCHUtph2j3Vv/5/lpAscyf6uXEy8VeJ
+         vQUhXYaOEqg3qnkjnHOzg491BRk9NY92NIzAlfUfeU/Dt5CHUK9iMKiJYhwg/3ubln0c
+         0gSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m+kjYDptxUK/6lTIYvf1c81EedOZ9qW05fricFulF/s=;
-        b=CqGd9XsL4ObEboRi2PAly2wFVm0jsT3Rmr8UMBNYYQC5+uQ/GukCQiDrZRoSWnyUVp
-         CQmUdA4GD+L1mCCYCCWbQS2tnEwkJXAFQ7ntT9GfGUe3veUi0rB/YLPO8vWy7uFgmoin
-         QPhQ0bOy3IfZTixB35DziXNWSvsn2lcxItANBjDFByt//zTfjWz2v56fZis23nOnk7sF
-         qUEjb4qimETcVVjNRNqVYObfwwYMuBLGmID5wF/LSHb6Z04oXdR1JBhPS5hfQIAE4IO9
-         qYMNQKTGTZ7Ky8G9YvU9XoGs0NxAXm1c28w11yCMC3ItvQq4jQ57A4jEH6vdaJnoHjXR
-         UHDg==
-X-Gm-Message-State: ANoB5pliWBHTdUim1IywXgkLt39eOt+75v1SZNFU+KbuGBlXcWoMsTZ/
-        VXYVaVggnT0v/GFPK2PzIwq2Y7jk9/9FFp7sXFJo4w==
-X-Google-Smtp-Source: AA0mqf5iOn+a4tqY2SYsU+Hmzcta+/lPEAREqnH/tSE6nHz37FLIaYyTLATUxyA+pzwqdKe5qV58PXUueOsqZhvjKiY=
-X-Received: by 2002:a2e:b0ef:0:b0:279:be29:cb69 with SMTP id
- h15-20020a2eb0ef000000b00279be29cb69mr11441271ljl.482.1670400776921; Wed, 07
- Dec 2022 00:12:56 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q9PwBs2OW6KV67ZD6N5qY5Z5ZOtyNNcvY0UpEdencGE=;
+        b=d38PRTXXCY0W0wnD1sqASJQZcb9nMgXcNWmSyah/F/GgHLGvMjNbkLk+h+9XLNiEKS
+         JWYktxBnRKilsKrD0vwDU7MinFvTUvKDLRXv2s4NU4I9iJBw/kPX4VkrE0CQKe2b7Zpi
+         RGXumNUKPBGFk92ohIEer7J67bc962HGNsJsKwfu918QiZMe2tzqlcocTkZc18q87awK
+         u9VHVOmfgGLfV11tA9GWpM+HOFjBHFS4+fH0FxcTwUZkcR4CclR/ALfCaxW6L215lWd6
+         UxvbyWUq98J1BdIWctnq5lDbuHg+rXl2sK+LuRXhuWxVa1f0bg9Gdxw405hNuShsNowI
+         HbBg==
+X-Gm-Message-State: ANoB5pm/WVnY4SlmFZQCT82vTB0irhCND+cgLu0ZAnXiLousW4wFYKaP
+        +rheNp8f8bZaOb/oU8RVN6Wk/maUxWiw9FqQ6OZ3qg==
+X-Google-Smtp-Source: AA0mqf60uLxT8YTLpBIXQE3IHpdSFumG4AgCRXD/7v6KrWZDTPRMYpjKDtwszvVrwSJB+SiUy1iAwHu+5U4PJc9XZqM=
+X-Received: by 2002:a25:24d:0:b0:6fd:2917:cf60 with SMTP id
+ 74-20020a25024d000000b006fd2917cf60mr20430226ybc.427.1670400791161; Wed, 07
+ Dec 2022 00:13:11 -0800 (PST)
 MIME-Version: 1.0
-References: <20221206144134.1919987-1-yebin@huaweicloud.com>
- <CABymUCN-WC5aCpVestRFpXVgZobxs48crUDX2419yvXxLgyjRQ@mail.gmail.com> <63904686.3010903@huawei.com>
-In-Reply-To: <63904686.3010903@huawei.com>
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Wed, 7 Dec 2022 16:11:01 +0800
-Message-ID: <CABymUCMC=8PwrqetiOBVK98iwKrycAf_eYZdfqVOPya6jZTPvQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
-To:     "yebin (H)" <yebin10@huawei.com>
-Cc:     Ye Bin <yebin@huaweicloud.com>, tytso@mit.edu,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jack@suse.cz,
-        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com
+References: <00000000000073b14905ef2e7401@google.com> <639034dda7f92_bb36208f5@john.notmuch>
+In-Reply-To: <639034dda7f92_bb36208f5@john.notmuch>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Dec 2022 09:12:59 +0100
+Message-ID: <CANn89iK2UN1FmdUcH12fv_xiZkv2G+Nskvmq7fG6aA_6VKRf6g@mail.gmail.com>
+Subject: Re: [syzbot] BUG: stack guard page was hit in inet6_release
+To:     John Fastabend <john.fastabend@gmail.com>
+Cc:     syzbot <syzbot+04c21ed96d861dccc5cd@syzkaller.appspotmail.com>,
+        bpf@vger.kernel.org, davem@davemloft.net, jakub@cloudflare.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-yebin (H) <yebin10@huawei.com> =E4=BA=8E2022=E5=B9=B412=E6=9C=887=E6=97=A5=
-=E5=91=A8=E4=B8=89 15:54=E5=86=99=E9=81=93=EF=BC=9A
+On Wed, Dec 7, 2022 at 7:38 AM John Fastabend <john.fastabend@gmail.com> wrote:
 >
->
->
-> On 2022/12/7 14:44, Jun Nie wrote:
-> > Hi Bin,
+> syzbot wrote:
+> > Hello,
 > >
-> > Thanks for the patch! The bug is reproduced with this patch. I can
-> > help trigger another
-> > test when you have new patch.
-> > https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D16760797880000
->
-> The cause of this issue is different from that of the previous issue.
-> I analyze that the issue
-> "https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D16760797880000 "
-> is caused by the concurrency of  inline data conversion and buffer
-> write. To be honest, I haven't
-> thought of any good solution.
->
-Thanks for explanation. So the patch to fix the previous bug is still
-in upstream plan, right?
+> > syzbot found the following issue on:
 > >
-> > Regards,
-> > Jun
-> > .
+> > HEAD commit:    6a30d3e3491d selftests: net: Use "grep -E" instead of "egr..
+> > git tree:       net
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1576b11d880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cc4b2e0a8e8a8366
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=04c21ed96d861dccc5cd
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e1656b880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1077da23880000
+> >
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/bbee3d5fc908/disk-6a30d3e3.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/bf9e258de70e/vmlinux-6a30d3e3.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/afaa6696b9e0/bzImage-6a30d3e3.xz
+> >
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+04c21ed96d861dccc5cd@syzkaller.appspotmail.com
+> >
+> > BUG: TASK stack guard page was hit at ffffc90003cd7fa8 (stack is ffffc90003cd8000..ffffc90003ce0000)
+> > stack guard page: 0000 [#1] PREEMPT SMP KASAN
+> > CPU: 0 PID: 3636 Comm: syz-executor238 Not tainted 6.1.0-rc7-syzkaller-00135-g6a30d3e3491d #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+> > RIP: 0010:mark_lock.part.0+0x26/0x1910 kernel/locking/lockdep.c:4593
+> > Code: 00 00 00 00 41 57 41 56 41 55 41 89 d5 48 ba 00 00 00 00 00 fc ff df 41 54 49 89 f4 55 53 48 81 ec 38 01 00 00 48 8d 5c 24 38 <48> 89 3c 24 48 c7 44 24 38 b3 8a b5 41 48 c1 eb 03 48 c7 44 24 40
+> > RSP: 0018:ffffc90003cd7fb8 EFLAGS: 00010096
+> > RAX: 0000000000000004 RBX: ffffc90003cd7ff0 RCX: ffffffff8162a7bf
+> > RDX: dffffc0000000000 RSI: ffff88801f65e238 RDI: ffff88801f65d7c0
+> > RBP: ffff88801f65e25a R08: 0000000000000000 R09: ffffffff910f4aff
+> > R10: fffffbfff221e95f R11: 0000000000000000 R12: ffff88801f65e238
+> > R13: 0000000000000002 R14: 0000000000000000 R15: 0000000000040000
+> > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: ffffc90003cd7fa8 CR3: 000000000c28e000 CR4: 00000000003506f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  mark_lock kernel/locking/lockdep.c:4598 [inline]
+> >  mark_usage kernel/locking/lockdep.c:4543 [inline]
+> >  __lock_acquire+0x847/0x56d0 kernel/locking/lockdep.c:5009
+> >  lock_acquire kernel/locking/lockdep.c:5668 [inline]
+> >  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+> >  lock_sock_nested+0x3a/0xf0 net/core/sock.c:3447
+> >  lock_sock include/net/sock.h:1721 [inline]
+> >  sock_map_close+0x75/0x7b0 net/core/sock_map.c:1610
 >
+> I'll take a look likely something recent.
+
+Fact that sock_map_close  can call itself seems risky.
+We might issue a one time warning and keep the host alive.
+
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index 81beb16ab1ebfcb166f51f89a029fe1c28a629a4..a79771a6627b9b2f38ae6ce153ceff9e8c0be8d4
+100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -1612,17 +1612,25 @@ void sock_map_close(struct sock *sk, long timeout)
+        psock = sk_psock_get(sk);
+        if (unlikely(!psock)) {
+                rcu_read_unlock();
++               saved_close = sk->sk_prot->close;
+                release_sock(sk);
+-               return sk->sk_prot->close(sk, timeout);
++       } else {
++               saved_close = psock->saved_close;
++               sock_map_remove_links(sk, psock);
++               rcu_read_unlock();
++               sk_psock_stop(psock);
++               release_sock(sk);
++               cancel_work_sync(&psock->work);
++               sk_psock_put(sk, psock);
++       }
++       /* Make sure we do not recurse to us.
++        * This is a bug, we can leak the socket instead
++        * of crashing on a stack overflow.
++        */
++       if (saved_close == sock_map_close) {
++               WARN_ON_ONCE(1);
++               return;
+        }
+-
+-       saved_close = psock->saved_close;
+-       sock_map_remove_links(sk, psock);
+-       rcu_read_unlock();
+-       sk_psock_stop(psock);
+-       release_sock(sk);
+-       cancel_work_sync(&psock->work);
+-       sk_psock_put(sk, psock);
+        saved_close(sk, timeout);
+ }
+ EXPORT_SYMBOL_GPL(sock_map_close);
