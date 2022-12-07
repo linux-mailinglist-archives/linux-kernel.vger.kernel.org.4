@@ -2,114 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F816462DC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E1E6462A1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:46:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiLGUvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
+        id S229606AbiLGUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiLGUvF (ORCPT
+        with ESMTP id S229470AbiLGUqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:51:05 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A19883E90;
-        Wed,  7 Dec 2022 12:49:51 -0800 (PST)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7KnbEs031095;
-        Wed, 7 Dec 2022 20:49:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=8SFDvbzQ1dlolm07vRWQ6nGPb415dRbXSJxfEmPGi4I=;
- b=pJ/a57BZCdU68XY9sSHFeZc49JnxtxJ9drOI27FiwBaIkJ+BQSaUs0Nx1deCbixWzZm7
- 0aH1n+4TFIF1m+kP422bjzx7PO+2PQhqadRMBzoKJq79tpvgFoBaDJocJbSY6Ws3+Ioo
- hzv4r37pmk96ZxY7HwHCYhxwcqtTgXsykzCkZVIsP4B77tyF/+GfZJNzncNBBBSapd7L
- qhstLkQOTZPb2ss4ZujzgQVLCzxkoQrXFA+VBh+CQHeYNntARgTQSbNvzhfR1Becef9i
- l4oltmFXfhv1hOPB7VM+QKUVBTpHU1y+qM2xebLg4u4VmTBIFzepTvA/x64sb/891V5w KQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3man0ka09f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Dec 2022 20:49:37 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B7Knatq014967
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Dec 2022 20:49:36 GMT
-Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 7 Dec 2022 12:49:36 -0800
-From:   Asutosh Das <quic_asutoshd@quicinc.com>
-To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
-        <linux-scsi@vger.kernel.org>
-CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
-        <stanley.chu@mediatek.com>, <eddie.huang@mediatek.com>,
-        <daejun7.park@samsung.com>, <bvanassche@acm.org>,
-        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>,
-        Asutosh Das <quic_asutoshd@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Jinyoung Choi <j-young.choi@samsung.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v10 16/16] ufs: core: mcq: Enable Multi Circular Queue
-Date:   Wed, 7 Dec 2022 12:46:27 -0800
-Message-ID: <70f8760735786ff9397c5e38144c72aa5482de7f.1670445699.git.quic_asutoshd@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1670445698.git.quic_asutoshd@quicinc.com>
-References: <cover.1670445698.git.quic_asutoshd@quicinc.com>
+        Wed, 7 Dec 2022 15:46:45 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE2258BF4;
+        Wed,  7 Dec 2022 12:46:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670446004; x=1701982004;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=eTDbxYWR4ZutHid/GJ7kKhEcbnpjoulOObTQVkZ7K50=;
+  b=LyD3XsVRBaVBqRqnRlRBhDPg16G3t1089KIPF3faMTwO7VuiJG8QmDBm
+   L6ovRkdGFeLNGOm/A315pJAYVff+26IzH1upPF8AwPsXQzju3Op9IO6WX
+   kbGETnzJgmf1uPXQQTod2UeQ+aNGKuoff2eHpBbyDTt34KA+QUELg8od3
+   KQaAdfwHLAR5X8nkK17plqChQtVZTTAQLvRcURy/qqvSK8/UBcAj4MZYh
+   AcORv72qzTFgTWvgviKukr9XKHZi2s+xe2QwjGT+yD32JUU7hzXKSP3fj
+   /AQI1IkmkF/p30b4W+TxwRWh3KUHOGdn56AE/sLykbrXBGSoBBpv2g5qr
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="297355962"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="297355962"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 12:46:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="975597739"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="975597739"
+Received: from fbackhou-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.192])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 12:46:40 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
+        corbet@lwn.net, akiyks@gmail.com, rdunlap@infradead.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konstantin@linuxfoundation.org,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH v4 1/2] docs: Move rustdoc output, cross-reference it
+In-Reply-To: <20221207173053.1463800-2-carlos.bilbao@amd.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
+ <20221207173053.1463800-2-carlos.bilbao@amd.com>
+Date:   Wed, 07 Dec 2022 22:46:37 +0200
+Message-ID: <87cz8v0wnm.fsf@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: JA_cyClS-aZsCHyKr9bta4npkswA0E5S
-X-Proofpoint-ORIG-GUID: JA_cyClS-aZsCHyKr9bta4npkswA0E5S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_09,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 impostorscore=0 adultscore=0 mlxlogscore=999
- clxscore=1015 priorityscore=1501 suspectscore=0 malwarescore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212070174
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable MCQ in the Host Controller.
+On Wed, 07 Dec 2022, Carlos Bilbao <carlos.bilbao@amd.com> wrote:
+> Generate rustdoc documentation with the rest of subsystem's documentation
+> in Documentation/output. Add a cross reference to the generated rustdoc in
+> Documentation/rust/index.rst if Sphinx target rustdoc is set.
+>
+> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+>  Documentation/rust/index.rst |  8 ++++++++
+>  rust/Makefile                | 15 +++++++++------
+>  2 files changed, 17 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
+> index 4ae8c66b94fa..4fc97c1eb1d1 100644
+> --- a/Documentation/rust/index.rst
+> +++ b/Documentation/rust/index.rst
+> @@ -6,6 +6,14 @@ Rust
+>  Documentation related to Rust within the kernel. To start using Rust
+>  in the kernel, please read the quick-start.rst guide.
+>  
+> +.. only:: rustdoc
+> +
+> +	You can also browse `rustdoc documentation <rustdoc/kernel/index.html>`_.
+> +
+> +.. only:: not rustdoc
+> +
+> +	This documentation does not include rustdoc generated information.
+> +
 
-Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
----
- drivers/ufs/core/ufshcd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+FWIW, this and the -t rustdoc part in patch 2/2 look good to me.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index e42d642..7f0bc10 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -8381,6 +8381,12 @@ static void ufshcd_config_mcq(struct ufs_hba *hba)
- 
- 	hba->host->can_queue = hba->nutrs - UFSHCD_NUM_RESERVED;
- 	hba->reserved_slot = hba->nutrs - UFSHCD_NUM_RESERVED;
-+
-+	/* Select MCQ mode */
-+	ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x1,
-+		      REG_UFS_MEM_CFG);
-+	hba->mcq_enabled = true;
-+
- 	dev_info(hba->dev, "MCQ configured, nr_queues=%d, io_queues=%d, read_queue=%d, poll_queues=%d, queue_depth=%d\n",
- 		 hba->nr_hw_queues, hba->nr_queues[HCTX_TYPE_DEFAULT],
- 		 hba->nr_queues[HCTX_TYPE_READ], hba->nr_queues[HCTX_TYPE_POLL],
+BR,
+Jani.
+
+
+>  .. toctree::
+>      :maxdepth: 1
+>  
+> diff --git a/rust/Makefile b/rust/Makefile
+> index 7700d3853404..080c07048065 100644
+> --- a/rust/Makefile
+> +++ b/rust/Makefile
+> @@ -1,5 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+> +# Where to place rustdoc generated documentation
+> +RUSTDOC_OUTPUT = $(objtree)/Documentation/output/rust/rustdoc
+> +
+>  always-$(CONFIG_RUST) += target.json
+>  no-clean-files += target.json
+>  
+> @@ -58,7 +61,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+>  	OBJTREE=$(abspath $(objtree)) \
+>  	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
+>  		$(rustc_target_flags) -L$(objtree)/$(obj) \
+> -		--output $(objtree)/$(obj)/doc \
+> +		--output $(RUSTDOC_OUTPUT) \
+>  		--crate-name $(subst rustdoc-,,$@) \
+>  		@$(objtree)/include/generated/rustc_cfg $<
+>  
+> @@ -75,15 +78,15 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
+>  # and then retouch the generated files.
+>  rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
+>      rustdoc-alloc rustdoc-kernel
+> -	$(Q)cp $(srctree)/Documentation/images/logo.svg $(objtree)/$(obj)/doc
+> -	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(objtree)/$(obj)/doc
+> -	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
+> +	$(Q)cp $(srctree)/Documentation/images/logo.svg $(RUSTDOC_OUTPUT)
+> +	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(RUSTDOC_OUTPUT)
+> +	$(Q)find $(RUSTDOC_OUTPUT) -name '*.html' -type f -print0 | xargs -0 sed -Ei \
+>  		-e 's:rust-logo\.svg:logo.svg:g' \
+>  		-e 's:rust-logo\.png:logo.svg:g' \
+>  		-e 's:favicon\.svg:logo.svg:g' \
+>  		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
+>  	$(Q)echo '.logo-container > img { object-fit: contain; }' \
+> -		>> $(objtree)/$(obj)/doc/rustdoc.css
+> +		>> $(RUSTDOC_OUTPUT)/rustdoc.css
+>  
+>  rustdoc-macros: private rustdoc_host = yes
+>  rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
+> @@ -141,7 +144,7 @@ quiet_cmd_rustdoc_test = RUSTDOC T $<
+>  		@$(objtree)/include/generated/rustc_cfg \
+>  		$(rustc_target_flags) $(rustdoc_test_target_flags) \
+>  		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
+> -		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
+> +		-L$(objtree)/$(obj)/test --output $(RUSTDOC_OUTPUT) \
+>  		--crate-name $(subst rusttest-,,$@) $<
+>  
+>  # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
+
 -- 
-2.7.4
-
+Jani Nikula, Intel Open Source Graphics Center
