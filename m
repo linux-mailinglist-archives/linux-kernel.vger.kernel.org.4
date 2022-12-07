@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13166646434
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:42:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 035F0646436
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:44:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiLGWmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:42:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
+        id S229593AbiLGWoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:44:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGWmO (ORCPT
+        with ESMTP id S229437AbiLGWoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:42:14 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494158566A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:42:13 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id q1so17650514pgl.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:42:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uaKfifrJZK97daCe72D9/Gb5Lld6G4q6AB5r5eFaeng=;
-        b=dn8hBayyXUsKjEVEx5dDu08340dzvh7FkXff2++s3jpKZMNNstIRA9DM1fRczHAEOk
-         CZIUbvCf3i2emcPyRLTFr/PQux85J9c4guugGSnQEXZFo1i68RVRGl9Zin3WpcXgQCwH
-         NgOKeJKfYOBvTp8MZUHSXVUJSMePZvsbr7miOQx1wD1p75MZx71vO1/FZrE9g6NSiGA5
-         veV9HrQrtU8tWnv9Ele5g4Ct4E0Ig1ggdlwQPcYycsm+W5DmikR4DqrXuUcTplq3TF6M
-         +8LsTsVKAiPFBrgZ4l2eK7TvgXxAgtvz7sOQXWSJPurPQ3et2tM8NGEv3HjuJ/TcihPq
-         K29A==
+        Wed, 7 Dec 2022 17:44:11 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA1A83273
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:43:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670452989;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CWjwloNvUEkkIL4IH5jVpeAOiD4Eko/MVERp2bOyZdg=;
+        b=VU9nXVshkihD69icg6t4I579efh3XhiMmCs5E0rWnicRDGWrFYCBKya4bvaDpDvdI3rq9D
+        QMVDlRfRNhPrcNzqBlYiHq+xgAoZQW+LdGPW564pj8/2f2XuMcWedwH7IJlCd3zdVLvSON
+        It49mLuJlJW2JyHq2o/5gD9AzNtdFuY=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-411-o0BlPDJsOI-jwkL_O6vGpQ-1; Wed, 07 Dec 2022 17:43:08 -0500
+X-MC-Unique: o0BlPDJsOI-jwkL_O6vGpQ-1
+Received: by mail-qk1-f199.google.com with SMTP id bi42-20020a05620a31aa00b006faaa1664b9so25975630qkb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:43:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uaKfifrJZK97daCe72D9/Gb5Lld6G4q6AB5r5eFaeng=;
-        b=0Kn2RVSkregqDxeg+5pCmLL1EI6BLtWo18Dsf1uTLGDovqg5rXHxIavze22qhcekF4
-         oRdsHV5T+4iDQLyWFlXFDIKFZwl5TXjdrCAG2LG4eYaXL/24Ds6E3R6MbY63DN/2hLip
-         ujXrVLfD4ePImBv2iLDgI7ra2Q/v148l8kggSyQVIDTtu6xv6B3XY6oTu65nL1qWnJbM
-         XpIJHMrap8QVwbMByDu55TuL2P2faKM2LiHRiV71ZQKBFSZXQTrBUurUHy1qc8Whu8vV
-         0LN6/XOvtoG+Z6ZUqdsLKfBrrJVXmzObLV0BiYQg385kyY20cJcgEOirVNufuU+8chIv
-         CFPg==
-X-Gm-Message-State: ANoB5pnjLWE1CeF1lzfYhi9snNf8iJzRn5bu2UoLffEcwi5Fqcyed1Ho
-        /LB6LXedvEk6/gAOFilVJjQb++ozNe3yC90uWfdtrg==
-X-Google-Smtp-Source: AA0mqf6dvrG55NohnKYLjhsioiiUtIObh6VFX65KBGhcOhsxPu2KKsydYRNLcO2j00NQid2OWiRtLZLjB60G0oS7PqM=
-X-Received: by 2002:a63:c143:0:b0:45b:f8be:7400 with SMTP id
- p3-20020a63c143000000b0045bf8be7400mr68182432pgi.30.1670452932521; Wed, 07
- Dec 2022 14:42:12 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CWjwloNvUEkkIL4IH5jVpeAOiD4Eko/MVERp2bOyZdg=;
+        b=pj9XBmos382v0sJ/UTkOVVO5l54av+1+eK0iB3cmLUJzBJPcD/Td4ClMFAnPvcXr6X
+         O15Y8u3XF05yOQMfU8fSCO3jfuchGLEmkzW9IJ0VpxAeUJ+viS82989qR3qHEUvsoYv0
+         HkVTeN5I6XY+u8tGtVvKxQ7jK+e7EMS1CBODTB5IiIwg07ycTLVKk2Noyc699qoMdpgd
+         9LuhzApuLHbN3LyGYxAOiksdgrSxfcWwOSdVixoH6CyNR9CbnsHR9Sr+wqquKv8BcueA
+         4Q5M+b7G7V0AKdUmf+y4Br5P56SDeME/DKhA37t4fVmJjDcH90ednhHmDKG2/bGdkUe5
+         BdVQ==
+X-Gm-Message-State: ANoB5plXRL4WPZBMd7ZbVrY0Z1Mi6x6Xpp5QLc5QmS4g2I98msqmBlKt
+        rsjFagbcKmGDDCAz5IueDyNe9KC50CqJXBUMzLqeofi2zndTAt4nyyI/hfAM0CwfigwHgeFU4/y
+        FaMk/52LFFttdGeUjsRvdbGk1
+X-Received: by 2002:ac8:6b16:0:b0:3a5:c7d9:15f9 with SMTP id w22-20020ac86b16000000b003a5c7d915f9mr1480100qts.49.1670452987686;
+        Wed, 07 Dec 2022 14:43:07 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5+IvWHCzpkzEmIQzaT31AjgoZDyI4bcsd2RFr41CcZw0um/Oq2E2tah8eU0le0YiwGZcXHbg==
+X-Received: by 2002:ac8:6b16:0:b0:3a5:c7d9:15f9 with SMTP id w22-20020ac86b16000000b003a5c7d915f9mr1480084qts.49.1670452987444;
+        Wed, 07 Dec 2022 14:43:07 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id l27-20020ac84cdb000000b00399fe4aac3esm13722291qtv.50.2022.12.07.14.43.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 14:43:06 -0800 (PST)
+Date:   Wed, 7 Dec 2022 17:43:05 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH v2 04/10] mm/hugetlb: Move swap entry handling into vma
+ lock when faulted
+Message-ID: <Y5EW+RTuGuGhfdNk@x1n>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203034.650899-5-peterx@redhat.com>
+ <326789a5-85ba-f13c-389e-fd21d673e3ae@nvidia.com>
 MIME-Version: 1.0
-References: <20221123012104.3317665-1-joel@joelfernandes.org>
- <20221123012104.3317665-3-joel@joelfernandes.org> <20221207221423.GH4001@paulmck-ThinkPad-P17-Gen-1>
- <CAEXW_YQrdBsC0xKNSu-Y9wN5W4YOrQEHrKVCfxEJRtJVArk6vA@mail.gmail.com>
-In-Reply-To: <CAEXW_YQrdBsC0xKNSu-Y9wN5W4YOrQEHrKVCfxEJRtJVArk6vA@mail.gmail.com>
-From:   Joel Fernandes <joelaf@google.com>
-Date:   Wed, 7 Dec 2022 22:42:01 +0000
-Message-ID: <CAJWu+opNvnOW=Gda6LiujPDX4yjYO0UJx9win24D7QvnVqNzNQ@mail.gmail.com>
-Subject: Re: [PATCH RFC 2/3] locktorture: Allow non-rtmutex lock types to be boosted
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Connor O'Brien" <connoro@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <326789a5-85ba-f13c-389e-fd21d673e3ae@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,111 +88,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 10:23 PM Joel Fernandes <joel@joelfernandes.org> wrote:
->
-> Hi Paul,
->
-> On Wed, Dec 7, 2022 at 10:14 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Wed, Nov 23, 2022 at 01:21:03AM +0000, Joel Fernandes (Google) wrote:
-> > > Currently RT boosting is only done for rtmutex_lock, however with proxy
-> > > execution, we also have the mutex_lock participating in priorities. To
-> > > exercise the testing better, add RT boosting to other lock testing types
-> > > as well, using a new knob (rt_boost).
-> > >
-> > > Tested with boot parameters:
-> > > locktorture.torture_type=mutex_lock
-> > > locktorture.onoff_interval=1
-> > > locktorture.nwriters_stress=8
-> > > locktorture.stutter=0
-> > > locktorture.rt_boost=1
-> > > locktorture.rt_boost_factor=1
-> > > locktorture.nlocks=3
-> > >
-> > > For the rtmutex test, rt_boost is always enabled even if disabling is
-> > > requested.
-> > >
-> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > > ---
-> > >  kernel/locking/locktorture.c | 91 +++++++++++++++++++-----------------
-> > >  1 file changed, 48 insertions(+), 43 deletions(-)
-> > >
-> > > diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-> > > index bc3557677eed..5a388ac96a9b 100644
-> > > --- a/kernel/locking/locktorture.c
-> > > +++ b/kernel/locking/locktorture.c
-> > > @@ -46,6 +46,7 @@ torture_param(int, shutdown_secs, 0, "Shutdown time (j), <= zero to disable.");
-> > >  torture_param(int, stat_interval, 60,
-> > >            "Number of seconds between stats printk()s");
-> > >  torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
-> > > +torture_param(int, rt_boost, 0, "Perform an rt-boost from the writer, always 1 for rtmutex_lock");
-> > >  torture_param(int, verbose, 1,
-> > >            "Enable verbose debugging printk()s");
-> > >  torture_param(int, nlocks, 1,
-> > > @@ -129,15 +130,44 @@ static void torture_lock_busted_write_unlock(int tid __maybe_unused)
-> > >         /* BUGGY, do not use in real life!!! */
-> > >  }
-> > >
-> > > -static void torture_boost_dummy(struct torture_random_state *trsp)
-> >
-> > We no longer have torture_boot_dummy().  Is the point that the
-> > "spinlocks" to priority boosting in PREEMPT_RT kernels?  If so,
-> > would it make sense to do something like this for spinlock?
-> >
-> >         .task_boost     = IS_ENABLED(CONFIG_PREEMPT_RT) ? torture_rt_boost : torture_boost_dummy,
-> >
-> > Or maybe using a similar approach for the default value of the rt_boost
-> > module parameter?
-> >
-> > Or is there some benefit of priority boosting for spinlocks even in
-> > non-PREEMPT_RT kernels that I am missing?
->
-> There are 2 advantages as far as I can see:
->
-> 1. The shuffle thread which ends up in setscheduler exercises the same
-> path as the rt mutex boost, so that would test races with that and the
-> boost path.
+Hi, John,
 
-I was too hasty in my reply, I meant here the thread's "RT boost"
-racing with other paths such as migration / schedule() / other
-setscheduler() paths.
+Firstly, thanks for taking a look at the whole set.
 
-Obviously rtmutex boost does not happen when there is no rtmutex to begin with.
+On Wed, Dec 07, 2022 at 02:36:21PM -0800, John Hubbard wrote:
+> > @@ -5886,8 +5866,22 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
+> >   	 * fault, and is_hugetlb_entry_(migration|hwpoisoned) check will
+> >   	 * properly handle it.
+> >   	 */
+> > -	if (!pte_present(entry))
+> > +	if (!pte_present(entry)) {
+> > +		if (unlikely(is_hugetlb_entry_migration(entry))) {
+> > +			/*
+> > +			 * Release fault lock first because the vma lock is
+> > +			 * needed to guard the huge_pte_lockptr() later in
+> > +			 * migration_entry_wait_huge().  The vma lock will
+> > +			 * be released there.
+> > +			 */
+> > +			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+> > +			migration_entry_wait_huge(vma, ptep);
+> > +			return 0;
+> 
+> Oh, but now (and also one other, pre-existing case, above)
+> hugetlb_fault() is returning with the vma lock held.
 
-Thanks,
+Note that here migration_entry_wait_huge() will release it.
 
-  - Joel
+Sorry it's definitely not as straightforward, but this is also something I
+didn't come up with a better solution, because we need the vma lock to
+protect the spinlock, which is used in deep code path of the migration
+code.
 
+That's also why I added a rich comment above, and there's "The vma lock
+will be released there" which is just for that.
 
->
-> >
-> >                                                         Thanx, Paul
-> >
-> > >       .writelock      = torture_rtmutex_lock,
-> > >       .write_delay    = torture_rtmutex_delay,
-> > > -     .task_boost     = torture_rtmutex_boost,
-> > > +     .task_boost     = torture_rt_boost,
-> > >       .writeunlock    = torture_rtmutex_unlock,
-> > >       .readlock       = NULL,
-> > >       .read_delay     = NULL,
-> > > @@ -604,7 +609,7 @@ __releases(torture_rwsem)
-> > >  static struct lock_torture_ops rwsem_lock_ops = {
-> > >       .writelock      = torture_rwsem_down_write,
-> > >       .write_delay    = torture_rwsem_write_delay,
-> > > -     .task_boost     = torture_boost_dummy,
-> > > +     .task_boost     = torture_rt_boost,
-> > >       .writeunlock    = torture_rwsem_up_write,
-> > >       .readlock       = torture_rwsem_down_read,
-> > >       .read_delay     = torture_rwsem_read_delay,
-> > > @@ -656,7 +661,7 @@ static struct lock_torture_ops percpu_rwsem_lock_ops = {
-> > >       .exit           = torture_percpu_rwsem_exit,
-> > >       .writelock      = torture_percpu_rwsem_down_write,
-> > >       .write_delay    = torture_rwsem_write_delay,
-> > > -     .task_boost     = torture_boost_dummy,
-> > > +     .task_boost     = torture_rt_boost,
-> > >       .writeunlock    = torture_percpu_rwsem_up_write,
-> > >       .readlock       = torture_percpu_rwsem_down_read,
-> > >       .read_delay     = torture_rwsem_read_delay,
-> > > --
-> > > 2.38.1.584.g0f3c55d4c2-goog
-> > >
+> This is in contrast
+> with most of the rest of the function, which takes great care to release
+> locks before returning.
+> 
+> Which makes this new case really quite irregular and makes the overall
+> locking harder to follow. It would be ideal to avoid doing this! But at
+> the very least, there should be a little note above hugetlb_fault(),
+> explaining this deviation and how it fits in with the locking rules.
+> 
+> Do we really have to structure it this way, though?
+
+-- 
+Peter Xu
+
