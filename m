@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382F0646048
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC27E64604B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:32:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiLGRbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:31:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
+        id S230006AbiLGRcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:32:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiLGRbk (ORCPT
+        with ESMTP id S229888AbiLGRbr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:31:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4ACF58C;
-        Wed,  7 Dec 2022 09:31:38 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 678F961B7D;
-        Wed,  7 Dec 2022 17:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 983C7C433C1;
-        Wed,  7 Dec 2022 17:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670434297;
-        bh=Z3f9pgi5krrUdxiim8b1Ifbjs27OR0IsaivttKNGsGk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=beuOdUTFfVYMixU2vCatb6QuAzCt7xLhIQS4Pa9+A33apabaymX54yAhnq28JX4SS
-         hHkmLN1mHKj0cCmtF8+Xi4JCBCvchGyCe+i4mSu4DIz/2nGJMFLmeSYCLjM9qmcCyd
-         7jfweqr5UuIbBEiUdRIBWR21NH+yLeSLXn4oFG/XBI5XFHHfMZl1K5KaG1Zh9dLSaT
-         Yr888Xk8sT1cxVnAzvuT9If+ZoNbM0RArXm1qDumBvHSxlNOX9I0j7HTfZcBp2vUrl
-         mKh7MJRzs6ukfi6qsc+Wg/8aQI7pexwcbo4NGTsyS5O9wgOT3LO72Z4LXHK7u50H7f
-         522VU84tuwPog==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 7AAE040404; Wed,  7 Dec 2022 14:31:35 -0300 (-03)
-Date:   Wed, 7 Dec 2022 14:31:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y5DN90m5D0HVOPK8@kernel.org>
-References: <Y49skYa5VYPMU+RF@kernel.org>
- <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
- <Y5DNBZNC5rBBqlJW@kernel.org>
+        Wed, 7 Dec 2022 12:31:47 -0500
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D201FE082
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:31:46 -0800 (PST)
+Received: by mail-qt1-x82e.google.com with SMTP id x28so15615078qtv.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:31:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GGYm/U8zQZjJljcYBsuBB43oBO+UowQVbQ4PB8XzHy4=;
+        b=JVYHn2Uq7dr+ybmwbABL740dori9GKB6509NnTrMEa0HWmWilQWCIsVF0ukAsjG0NJ
+         QB//ZxGk2bJyMjHgSdkpktwlHmE19dA8spOKyggVH/cdq3YhnCzM1OQu10Am4JJ/l6b9
+         2nSL+gRXQWCEy3K+o7LxOw8fQnrdBysQlRwgT7fXE1KZKfzPNG6gD8G5T0vGKFy/spxj
+         FSD0L66l01my1N0CgZoGKZTtdXiH42Kst31L7UDnWFgCpMa2vTSyYkSWzRCMEwZlVv6M
+         KWPgTxnjaLbHpwVKG8Sc8MS+9eVKpTy4TSwNughyBUWBb5GB6feee5Zf7HbiedQI/CPq
+         GFyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GGYm/U8zQZjJljcYBsuBB43oBO+UowQVbQ4PB8XzHy4=;
+        b=HN3delsdsx3r02qcnJiNzzJpuvRjMeYHGlD3Ogac7d2EaOxB2OHwwu3dS2RY43b1nk
+         FKKpWk7rEPNc1I1VpfZXrdSTICX811529lxeyoW8jaO5U4YFTmyguVduHfXh7I+Q55wR
+         HHOow+jpkvE4IbMEhipnIRFGlOQnGGycrB1ttfQ7ngHwwe0zRkrDFqHEQF1J++OTWHKI
+         n0c0mPlOStbpiWbU3GU/yMkpll6PCVrv8yXU5ffgquylb7ANOnVDCHg5pp0RYFh5n+u0
+         vjHDIbTTLKTqRCR8Md774USyr6e43WWPwxlVXHzweI7qQ+XVQH2/IUgesytf8FfSqWJh
+         nbaQ==
+X-Gm-Message-State: ANoB5pnrtTMWjLA/lM+dkuZYTYlmdij9bcmCAFsCJPi0LOZdCu4sh8pz
+        pHDDB+dmmarvsjf0jgGi1IM0kw==
+X-Google-Smtp-Source: AA0mqf42zyYSULlUE4U8ptwueXX6sRZDqQITBgKVrqFCvFRJD27eq+kQvOKvmlFR+vkVg2fYBCK3PA==
+X-Received: by 2002:a05:622a:17cb:b0:3a6:21fd:6c9a with SMTP id u11-20020a05622a17cb00b003a621fd6c9amr71657357qtk.545.1670434305934;
+        Wed, 07 Dec 2022 09:31:45 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id t3-20020a05620a450300b006eea4b5abcesm18442401qkp.89.2022.12.07.09.31.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 09:31:45 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p2yGm-005IGO-HV;
+        Wed, 07 Dec 2022 13:31:44 -0400
+Date:   Wed, 7 Dec 2022 13:31:44 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
+        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
+        cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
+Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
+ issue admin commands for VF driver.
+Message-ID: <Y5DOAKArjyfb6Mcz@ziepe.ca>
+References: <Y49eObpI7QoSnugu@ziepe.ca>
+ <20221206153811.GB2266@lst.de>
+ <Y49k++D3i8DfLOLL@ziepe.ca>
+ <20221206165503.GA8677@lst.de>
+ <Y4+U3VR2LeEh2S7B@ziepe.ca>
+ <20221207075415.GB2283@lst.de>
+ <Y5CWVu08abcOuEQH@ziepe.ca>
+ <20221207135203.GA22803@lst.de>
+ <Y5CsH5PqMYAWYatw@ziepe.ca>
+ <20221207163857.GB2010@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5DNBZNC5rBBqlJW@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20221207163857.GB2010@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,38 +90,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Dec 07, 2022 at 02:27:33PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Dec 07, 2022 at 07:08:28PM +0530, Athira Rajeev escreveu:
-> > > On 06-Dec-2022, at 11:01 PM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> Can you try again? tmp.perf/core? That "tmp." part means its a force
-> pushed branch, so I just force pushed with some arch specific fixes, now
-> I'm down to (removing the successful builds and unrelated failures, now
-> related to libbpf's F_DUPFD_CLOEXEC kaboom):
+On Wed, Dec 07, 2022 at 05:38:57PM +0100, Christoph Hellwig wrote:
+> On Wed, Dec 07, 2022 at 11:07:11AM -0400, Jason Gunthorpe wrote:
+> > > And while that is a fine concept per see, the current incarnation of
+> > > that is fundamentally broken is it centered around the controlled
+> > > VM.  Which really can't work.
+> > 
+> > I don't see why you keep saying this. It is centered around the struct
+> > vfio_device object in the kernel, which is definately NOT the VM.
 > 
->   14     8.49 ubuntu:18.04-x-s390           : FAIL gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)
->     tests/parse-events.c:1893:12: error: 'test__checkevent_tracepoint' undeclared here (not in a function); did you mean 'test__checkevent_breakpoint'?
->        .check = test__checkevent_tracepoint,
->                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->                 test__checkevent_breakpoint
->     /git/perf-6.1.0-rc6/tools/build/Makefile.build:139: recipe for target 'tests' failed
->     make[3]: *** [tests] Error 2
+> Sorry, I meant VF.  Your continued using of SR-IOV teminology now keeps
+> confusing my mind so much that I start mistyping things.
 
-This should fix the above:
+Well, what words do you want to use?
 
+Regardless of VF/VM, it doesn't matter - my point is that the
+vfio_device is the hypervisor control for *whatever* is under the
+vfio_device and it is not desirable to break it up along arbitrary HW
+boundaries.
 
-⬢[acme@toolbox perf]$ vim tools/perf/tests/parse-events.c
-⬢[acme@toolbox perf]$ git diff
-diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-index dcbfb93287e80e78..bebb677682deff98 100644
---- a/tools/perf/tests/parse-events.c
-+++ b/tools/perf/tests/parse-events.c
-@@ -1887,7 +1887,7 @@ static const struct evlist_test test__events[] = {
-                .check = test__checkevent_breakpoint_len_rw_modifier,
-                /* 4 */
-        },
--#if defined(__s390x__)
-+#if defined(__s390x__) and defined(HAVE_LIBTRACEEVENT)
-        {
-                .name  = "kvm-s390:kvm_s390_create_vm",
-                .check = test__checkevent_tracepoint,
-⬢[acme@toolbox perf]$
+I've given lots of reasons why not to do this now.
+
+I strongly suspect it can work technically - as ugly as it is Pensando
+shows an approach.
+
+So I don't think I've learned anything more about your objection.
+
+"fundamentally broken" doesn't help
+
+It is a major point, because if we are going to have to rip apart all
+the uAPI we built here and are completing the qemu work for, we need
+to come to an understanding very soon.
+
+And given how difficult it has been to get to this point, I want a
+*really* good reason why we have to start again, and rewrite all the
+drivers that exist and are coming.
+
+Jason
