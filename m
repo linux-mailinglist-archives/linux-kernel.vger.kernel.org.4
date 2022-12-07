@@ -2,190 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B7B645723
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:07:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E76B7645725
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:08:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiLGKHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:07:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
+        id S230223AbiLGKIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229848AbiLGKHo (ORCPT
+        with ESMTP id S230064AbiLGKH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:07:44 -0500
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA3B2A8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:07:42 -0800 (PST)
-Received: by mail-lj1-x236.google.com with SMTP id l8so20283614ljh.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:07:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2lgyDc2BPaf6a7xLJztu7FglI3cnhZOU9b/y2TvNFgc=;
-        b=vRsLv/GaSy9EPmAQq+63dZ6M4t6p4/CzDF2JAjaJSIcxWJOx9uVeZqJVNVq3dmnpPb
-         lBbab6edWfxx7MxVCDMbL855Z5mWItwy5YdIfEfZyiS/JHuT2O+8bt92/90S+I4d4l8V
-         iFrpKD1UpAiPDqcnWIxRmPay3c38uIZ7FH1b8s6ecILw68jJqX4NunJSc1velN82iOav
-         NUhsUSK7gdRRkiBhDUH99oazExjAQxTUARi1CHM2K0dmmwiheHUfoas2SOLG3QpcGJTO
-         QqFBw3rMuSN7y7RbUu8bMOcFQHvG/oSb+scJ7gW2JFLzjvH+VqXs+Kj8KfPIvB7wpqr+
-         Fkkw==
+        Wed, 7 Dec 2022 05:07:58 -0500
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD90FD32;
+        Wed,  7 Dec 2022 02:07:57 -0800 (PST)
+Received: by mail-qt1-f182.google.com with SMTP id y15so15778354qtv.5;
+        Wed, 07 Dec 2022 02:07:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2lgyDc2BPaf6a7xLJztu7FglI3cnhZOU9b/y2TvNFgc=;
-        b=H4jxQ0OHYeRPfqc+OKelp3skK08rknX6ROyYQSzVb0UXiO2q25dkmRWPUZgfajF93Y
-         okhHD9zcHMoVrClGW06HXSlKyAInAGOQ+VmziycOGDkdWg1+0UD6Nk+DCw5Avx5lNhom
-         TaRgOVdZaXMIWrKbeCElsDG5+Qz8UxUUdsw9gtF2XphJ4vPKCwdaW6GmFc/YyXvWWB1f
-         Y1U6iVF5uSwgjSqy8Vnk8DW6hYU8jv3jDVAtfmD2ADDJSHWCP6WhlRlZcbnII6+11r4q
-         orr7jv+/ogkpMy2ez1O2AWju6DDySj4xcGrr1lpMTV1p1d2E2H3MDTYwCPJZ0ClvOdTH
-         VaAA==
-X-Gm-Message-State: ANoB5plrbphTsEb9qeqJJMXMRTqAsSKYEskFk8H2InadkLqV/ZNeT62h
-        Mg2mMFEyyZnj0F4W65R+RRcshQ==
-X-Google-Smtp-Source: AA0mqf7rtzVO4OcdPniGSM3lTHYW3jU+eQ+5NKwi22IsC1vflmvtS1Aibm/8Ce1hrOnOkE5hsrF3pw==
-X-Received: by 2002:a2e:9e11:0:b0:26e:3292:12ad with SMTP id e17-20020a2e9e11000000b0026e329212admr24627754ljk.271.1670407660835;
-        Wed, 07 Dec 2022 02:07:40 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v7-20020ac25927000000b004ab4ebb5d92sm2807906lfi.5.2022.12.07.02.07.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 02:07:40 -0800 (PST)
-Message-ID: <7deb14ee-aae1-b521-c75e-6e33cd052c44@linaro.org>
-Date:   Wed, 7 Dec 2022 11:07:39 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TEMqtnr8yIPKdQ8rnHIb74MSIknwWc2/8CuDmZ72dmM=;
+        b=aAcPmxMoQbhWlPK6YHDroP5G9mFDXisLTzNAJdKUCvCSKZuu6L6R8KewW3jQa61KqL
+         oTaJEv67hQFnHObSpmB+qktU5eSPq03Pb6Q0pveg9Eq5j1qfFITB46bQ62GT42IxfmHG
+         C6sP6GsBzNaExfjIIT/zhJIJiJCr/yjrOCsRLzmcEtLM3Hp2w36rqdgkwfH+mUEwhnas
+         3umLvu3X8rf35P/XUeDt4SP1outF/8Hb0BHrOxvNyIQI/5Xyi5/36TuWhgTNpOKRzcH3
+         1C+xisyFZHOvlcA0c+9pkRWtuHTWJR5+idQ+jwG+lq54gTnsa4nVEnHOZZzyHz+JDYqd
+         uKog==
+X-Gm-Message-State: ANoB5pkTjQjNYOxuCvk165ZFri6nCJhBaCyhDccuelShIOlh/ajA+ig2
+        z4hhoj0KgpxlkQgu9KtYvB7AxFgU4sJMxoZjQ50=
+X-Google-Smtp-Source: AA0mqf6v3AK3qCOxYiQzm1YdzeqTMIebZHJAquSyG7WYAzzXQvegAx3VWMfOUHNf4RwGINEHSvA8EaUHiz/pe0gFq1Y=
+X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
+ c11-20020ac87dcb000000b003a68dd04712mr27484817qte.411.1670407676616; Wed, 07
+ Dec 2022 02:07:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 4/5] staging: dt-bindings: regulator: adi,max77541.yaml
- Add MAX77541 Regulator bindings
-Content-Language: en-US
-To:     Okan Sahin <okan.sahin@analog.com>, outreachy@lists.linux.dev
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org
-References: <20221207090906.5896-1-okan.sahin@analog.com>
- <20221207090906.5896-5-okan.sahin@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207090906.5896-5-okan.sahin@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <2262737.ElGaqSPkdT@kreacher> <1df12728a2e788788fd387588bac62023e123d16.camel@hadess.net>
+ <2145955.irdbgypaU6@kreacher> <CAJZ5v0ic+pm+NWD8g4O2MwQEvi+xuB-W9Wpd6c1RhprhoxuK1g@mail.gmail.com>
+ <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
+In-Reply-To: <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 7 Dec 2022 11:07:44 +0100
+Message-ID: <CAJZ5v0gjAGZFS6ap+NAbsi96hq7y9MRGE0h_A-n6xfB1CMs=2g@mail.gmail.com>
+Subject: Re: [Regression] Logitech BT mouse unusable after commit 532223c8ac57
+ (still in 6.1-rc8)
+To:     Bastien Nocera <hadess@hadess.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 10:08, Okan Sahin wrote:
-> This patch adds document the bindings for MAX77541 and MAX77540
-> regulator drivers.
+On Wed, Dec 7, 2022 at 10:59 AM Bastien Nocera <hadess@hadess.net> wrote:
+>
+> On Wed, 2022-12-07 at 10:36 +0100, Rafael J. Wysocki wrote:
+> > On Wed, Dec 7, 2022 at 10:16 AM Rafael J. Wysocki <rjw@rjwysocki.net>
+> > wrote:
+> > >
+> > > On Wednesday, December 7, 2022 10:04:43 AM CET Bastien Nocera
+> > > wrote:
+> > > > On Tue, 2022-12-06 at 15:58 +0100, Rafael J. Wysocki wrote:
+> > > > > Bastien, Jiri,
+> > > > >
+> > > > > Commit 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all
+> > > > > the
+> > > > > Logitech
+> > > > > Bluetooth devices") caused my Logitech Bluetooth mouse to
+> > > > > become
+> > > > > unusable.
+> > > > >
+> > > > > Appended is the change I need to make it work again (note that
+> > > > > adding
+> > > > > the
+> > > > > device ID to unhandled_hidpp_devices[] doesn't help, so there
+> > > > > must be
+> > > > > some
+> > > > > significant enough difference in how the two cases are handled
+> > > > > in the
+> > > > > stack).
+> > > > >
+> > > > > Here's what I get in the log without the patch below:
+> > > > >
+> > > > > [   36.710574] Bluetooth: HIDP (Human Interface Emulation) ver
+> > > > > 1.2
+> > > > > [   36.710592] Bluetooth: HIDP socket layer initialized
+> > > > > [   36.724644] hid-generic 0005:046D:B016.0001: unknown main
+> > > > > item tag
+> > > > > 0x0
+> > > > > [   36.725860] input: Bluetooth Mouse M336/M337/M535 Mouse as
+> > > > > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
+> > > > > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
+> > > > > [   36.728036] input: Bluetooth Mouse M336/M337/M535 Consumer
+> > > > > Control
+> > > > > as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
+> > > > > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
+> > > > > [   36.728823] input: Bluetooth Mouse M336/M337/M535 Keyboard
+> > > > > as
+> > > > > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
+> > > > > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
+> > > > > [   36.731550] hid-generic 0005:046D:B016.0001: input,hidraw0:
+> > > > > BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on
+> > > > > 9c:b6:d0:96:8e:c8
+> > > > > [   36.833039] logitech-hidpp-device 0005:046D:B016.0001:
+> > > > > unknown
+> > > > > main item tag 0x0
+> > > > > [   36.999064] logitech-hidpp-device 0005:046D:B016.0001:
+> > > > > Device not
+> > > > > connected
+> > > > >
+> > > > > and here's what I get with it:
+> > > > >
+> > > > > [   43.642546] Bluetooth: HIDP (Human Interface Emulation) ver
+> > > > > 1.2
+> > > > > [   43.642559] Bluetooth: HIDP socket layer initialized
+> > > > > [   43.652898] hid-generic 0005:046D:B016.0001: unknown main
+> > > > > item tag
+> > > > > 0x0
+> > > > > [   43.653833] input: Bluetooth Mouse M336/M337/M535 Mouse as
+> > > > > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
+> > > > > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
+> > > > > [   43.655025] input: Bluetooth Mouse M336/M337/M535 Consumer
+> > > > > Control
+> > > > > as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
+> > > > > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
+> > > > > [   43.655400] input: Bluetooth Mouse M336/M337/M535 Keyboard
+> > > > > as
+> > > > > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
+> > > > > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
+> > > > > [   43.657521] hid-generic 0005:046D:B016.0001: input,hidraw0:
+> > > > > BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on
+> > > > > 9c:b6:d0:96:8e:c8
+> > > > >
+> > > > > The only difference seems to be that in the former case the
+> > > > > logitech-
+> > > > > hidpp
+> > > > > driver tries to bind to the device, but I guess that is
+> > > > > expected.
+> > > >
+> > > > There really shouldn't be that much difference between the 2
+> > > > paths,
+> > > > except that hid-logitech-hidpp.c will check that the device
+> > > > supports
+> > > > HID++ in its report descriptors, and then start talking to it to
+> > > > check
+> > > > whether it's connected.
+> > > >
+> > > > Maybe the device doesn't support HID++?
+> > >
+> > > Quite possibly.
+> > >
+> > > > Can you try running src/tools/hidpp-list-features from
+> > > > https://github.com/cvuchener/hidpp on the hidraw device for the
+> > > > mouse?
+> > >
+> > > OK, I'll do that.
+> >
+> > Well, I would if I had a binary.
+> >
+> > Otherwise, I have cmake 3.17 which apparently is too old, sorry.
+>
+> Revert 308f240585380dd0af4d9f5bbec5eb01e103deca and it will just
+> require 3.12.
 
-Do not use "This commit/patch".
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+OK
 
-> 
-> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
-> ---
->  .../bindings/regulator/adi,max77541.yaml      | 44 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 45 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77541.yaml b/Documentation/devicetree/bindings/regulator/adi,max77541.yaml
-> new file mode 100644
-> index 000000000000..1f828895ab3a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/adi,max77541.yaml
-> @@ -0,0 +1,44 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/adi,max77541.yaml#
+It says:
 
-Filename matching compatible, so adi,max77541-regulator.yaml
+/dev/hidraw0 (device 0): Bluetooth Mouse M336/M337/M535 (046d:b016) HID++ 4.5
 
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Buck Converter driver for MAX77540/MAX77541
-
-Drop "driver" and any other references to Linux drivers.
-
-> +
-> +maintainers:
-> +  - Okan Sahin <okan.sahin@analog.com>
-> +
-> +description: |
-> +  This is a part of device tree bindings for ADI MAX77540/MAX77541
-> +
-> +  The buck convertere is represented as a sub-node of the PMIC node on the device tree.
-
-Typo, converter
-
-> +
-> +  The device has two buck regulators.
-> +  See also Documentation/devicetree/bindings/mfd/adi,max77541.yaml for
-> +  additional information and example.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - adi,max77540-regulator
-> +      - adi,max77541-regulator
-> +
-> +patternProperties:
-> +  "^BUCK[12]$":
-
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
-
-> +    type: object
-> +    $ref: regulator.yaml#
-> +    additionalProperties: false
-> +    description: |
-> +      Buck regulator.
-> +
-> +    properties:
-> +      regulator-name: true
-> +      regulator-always-on: true
-> +      regulator-boot-on: true
-> +      regulator-min-microvolt:
-> +        minimum: 300000
-> +      regulator-max-microvolt:
-> +        maximum: 5200000
-> +
-> +additionalProperties: false
-> \ No newline at end of file
-
-Check your patches before sending...
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 5704ed5afce3..8e5572b28a8c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12502,6 +12502,7 @@ M:	Okan Sahin <okan.sahin@analog.com>
->  L:	linux-kernel@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/devicetree/bindings/mfd/adi,max77541.yaml
-> +F:	Documentation/devicetree/bindings/regulator/adi,max77541.yaml
->  F:	drivers/mfd/max77541.c
->  F:	drivers/regulator/max77541-regulator.c
->  F:	include/linux/mfd/max77541.h
-
-Best regards,
-Krzysztof
-
+> Or use Solaar from your distribution or one of the prebuilt packages
+> (https://github.com/pwr-Solaar/Solaar/#prebuilt-packages):
+> solaar -D /dev/hidrawX show
