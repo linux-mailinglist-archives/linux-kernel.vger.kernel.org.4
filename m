@@ -2,62 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74F5A645419
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:39:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E54A64541B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:39:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiLGGjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 01:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60882 "EHLO
+        id S229853AbiLGGjh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 01:39:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229834AbiLGGi7 (ORCPT
+        with ESMTP id S229763AbiLGGje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 01:38:59 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217C52B245;
-        Tue,  6 Dec 2022 22:38:59 -0800 (PST)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2B76ckkG071199;
-        Wed, 7 Dec 2022 00:38:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1670395126;
-        bh=/V+T88l8oC9cpiyVXjUF8saOMdaTLVrK6AsbdMLgbko=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=y74KxFnKI+/Z1gmb660fiMOYyZH3VqsnjPuvTTctyrdKVj3fafdMDFPraLe3NDRtC
-         cEfjvYSzv0scEQ6MQCB47tR9dEWC9d1QppLJclWHXpCMdStLYW3UrKYu6bwzoh9+A5
-         5gJLcHlXagZ9wUutqN8Q3DZYM3PXHGcNloYPI0IA=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2B76ckZl009827
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 7 Dec 2022 00:38:46 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 7
- Dec 2022 00:38:45 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Wed, 7 Dec 2022 00:38:45 -0600
-Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2B76chuv115915;
-        Wed, 7 Dec 2022 00:38:44 -0600
-Message-ID: <4ed39c8f-3736-30d6-8d8c-92a4882b72e7@ti.com>
-Date:   Wed, 7 Dec 2022 12:08:43 +0530
+        Wed, 7 Dec 2022 01:39:34 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC8CE7F;
+        Tue,  6 Dec 2022 22:39:32 -0800 (PST)
+Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NRnc01m43zJp3K;
+        Wed,  7 Dec 2022 14:36:00 +0800 (CST)
+Received: from [10.174.178.185] (10.174.178.185) by
+ canpemm500010.china.huawei.com (7.192.105.118) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 7 Dec 2022 14:39:30 +0800
+Subject: Re: [BUG REPORT] kernel BUG in ext4_write_inline_data_end or
+ ext4_writepages
+To:     Jun Nie <jun.nie@linaro.org>, <harshadshirwadkar@gmail.com>,
+        <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
+        <linux-ext4@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ye Bin <yebin@huaweicloud.com>
+References: <CABymUCOsVcpaS+uXqzB7-hm0FZwm2ZXD8J=6m0NKAh8WyrTiwA@mail.gmail.com>
+ <CABymUCP32_95eTeEbfWCPEUBCj4XBMU5=2-hRBLw9SoTFt_6XQ@mail.gmail.com>
+CC:     Lee Jones <joneslee@google.com>
+From:   "yebin (H)" <yebin10@huawei.com>
+Message-ID: <63903521.5040307@huawei.com>
+Date:   Wed, 7 Dec 2022 14:39:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:38.0) Gecko/20100101
+ Thunderbird/38.1.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/2] spi: spi-fsl-lpspi: support multiple cs for lpspi
-Content-Language: en-US
-To:     Han Xu <han.xu@nxp.com>, <broonie@kernel.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-References: <20221206225410.604482-1-han.xu@nxp.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20221206225410.604482-1-han.xu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+In-Reply-To: <CABymUCP32_95eTeEbfWCPEUBCj4XBMU5=2-hRBLw9SoTFt_6XQ@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Originating-IP: [10.174.178.185]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500010.china.huawei.com (7.192.105.118)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,73 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 07/12/22 04:24, Han Xu wrote:
-> support to get chip select number from DT file.
 
-In my humble opinion, a  more elaborate commit message would help.
-You can add perhaps which DT node is to be set, like you might want
-to say,
+On 2022/12/5 16:54, Jun Nie wrote:
+> Hi,
+> syzbot find a new bug[1] in ext4 that's similar with bug[0], that
+> leads to reboot.
+> While the bug[0] can be fixed with patch[2] from Bin. This new bug is still
+> triggered with the patch[2], and log[3] is collected. Both log[1] and
+> log[3] are
+> collected when testing bug[4] on the mainline.
+>
+> [0] https://syzkaller.appspot.com/bug?id=5bafe4554067100b70f58a81268aa06ea3f9c345
+> [1] https://syzkaller.appspot.com/text?tag=CrashLog&x=16325fc3880000
+> [2] https://lore.kernel.org/lkml/CABymUCN+NSzkunRqFs8LgqjT6vXz-gyyZYn0hQWf8V9kmcO0Hw@mail.gmail.com/T/
+> [3] https://syzkaller.appspot.com/text?tag=CrashLog&x=155abe7b880000
+> [4] https://syzkaller.appspot.com/bug?id=899b37f20ce4072bcdfecfe1647b39602e956e36
+>
+>
+> [   38.932317][  T494] Call Trace:
+> [   38.935437][  T494]  <TASK>
+> [   38.938393][  T494]  ext4_write_inline_data_end+0xa39/0xdf0
+> [   38.943946][  T494]  ? put_page+0xa0/0xa0
+> [   38.947936][  T494]  ? ext4_da_write_begin+0x6f0/0x8d0
+> [   38.953055][  T494]  ? pipe_zero+0x240/0x240
+> [   38.957308][  T494]  ext4_da_write_end+0x1e2/0x950
+> [   38.962082][  T494]  ? ext4_da_write_begin+0x8d0/0x8d0
+> [   38.967204][  T494]  generic_perform_write+0x401/0x5f0
+> [   38.972326][  T494]  ? generic_file_direct_write+0x6c0/0x6c0
+> [   38.977994][  T494]  ? generic_write_checks_count+0x4b0/0x4b0
+> [   38.983694][  T494]  ext4_buffered_write_iter+0x35f/0x640
+> [   38.989074][  T494]  ext4_file_write_iter+0x198/0x1cd0
+> [   38.994194][  T494]  ? futex_unqueue+0x156/0x180
+> [   38.998795][  T494]  ? futex_wait+0x4c5/0x5c0
+> [   39.003307][  T494]  ? futex_wait_setup+0x320/0x320
+> [   39.008168][  T494]  ? avc_policy_seqno+0x1b/0x70
+> [   39.012862][  T494]  ? ext4_file_read_iter+0x470/0x470
+> [   39.017976][  T494]  vfs_write+0x8b5/0xef0
+> [   39.022056][  T494]  ? file_end_write+0x1b0/0x1b0
+> [   39.026739][  T494]  ? mutex_lock+0xb6/0x130
+> [   39.030994][  T494]  ? bit_wait_io_timeout+0x110/0x110
+> [   39.036117][  T494]  ? __fget_files+0x2d9/0x330
+> [   39.040630][  T494]  ? __fdget_pos+0x268/0x300
+> [   39.045054][  T494]  ? ksys_write+0x77/0x2c0
+> [   39.049307][  T494]  ksys_write+0x198/0x2c0
+> [   39.053472][  T494]  ? save_fpregs_to_fpstate+0x210/0x210
+> [   39.058855][  T494]  ? __ia32_sys_read+0x90/0x90
+> [   39.063465][  T494]  ? __kasan_check_write+0x14/0x20
+> [   39.068403][  T494]  ? switch_fpu_return+0x129/0x270
+> [   39.073348][  T494]  __x64_sys_write+0x7b/0x90
+> [   39.077783][  T494]  do_syscall_64+0x2f/0x50
+> [   39.082030][  T494]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>
+> Regards,
+> Jun
+> .
 
-support to get chip select number by Setting the value of num-cs in DT
+I analyze that the above issue should be caused by the concurrency
+of inline data conversion and buffer write.
+At present, I haven't thought of any good solution.
 
-or something on those lines.
-> 
-> Signed-off-by: Han Xu <han.xu@nxp.com>
-> ---
->   drivers/spi/spi-fsl-lpspi.c | 5 +++++
->   1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-fsl-lpspi.c b/drivers/spi/spi-fsl-lpspi.c
-> index 6454b88c31fe..7f0562ed4d09 100644
-> --- a/drivers/spi/spi-fsl-lpspi.c
-> +++ b/drivers/spi/spi-fsl-lpspi.c
-> @@ -98,6 +98,7 @@ struct fsl_lpspi_data {
->   	struct clk *clk_ipg;
->   	struct clk *clk_per;
->   	bool is_slave;
-> +	u32 num_cs;
->   	bool is_only_cs1;
->   	bool is_first_byte;
->   
-> @@ -850,6 +851,9 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
->   	fsl_lpspi->is_slave = is_slave;
->   	fsl_lpspi->is_only_cs1 = of_property_read_bool((&pdev->dev)->of_node,
->   						"fsl,spi-only-use-cs1-sel");
-> +	if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
-Running a checkpatch on this patch gave me the following,
 
-CHECK: Unnecessary parentheses around '&pdev->dev'
-#36: FILE: drivers/spi/spi-fsl-lpspi.c:854:
-+       if (of_property_read_u32((&pdev->dev)->of_node, "num-cs",
-+                                &fsl_lpspi->num_cs))
-
-You might want to just do &pdev->dev->of_node instead
-
-> +				 &fsl_lpspi->num_cs))
-> +		fsl_lpspi->num_cs = 1;
-I am not sure I understand why you are setting this to 1 here?
-I am assuming it is because you want num_cs to default to 1 if
-it is not specified in DT.
-
-Please can you also add a dev_err and be sure to warn about this?
-
-Also adding a comment or even a message inside dev err that you are
-setting this to 1 if it fails to get from DT would be helpful.
-
->   
->   	controller->bits_per_word_mask = SPI_BPW_RANGE_MASK(8, 32);
->   	controller->transfer_one = fsl_lpspi_transfer_one;
-> @@ -859,6 +863,7 @@ static int fsl_lpspi_probe(struct platform_device *pdev)
->   	controller->flags = SPI_MASTER_MUST_RX | SPI_MASTER_MUST_TX;
->   	controller->dev.of_node = pdev->dev.of_node;
->   	controller->bus_num = pdev->id;
-> +	controller->num_chipselect = fsl_lpspi->num_cs;
->   	controller->slave_abort = fsl_lpspi_slave_abort;
->   	if (!fsl_lpspi->is_slave)
->   		controller->use_gpio_descriptors = true;
-
--- 
-Thanks and Regards,
-Dhruva Gole
