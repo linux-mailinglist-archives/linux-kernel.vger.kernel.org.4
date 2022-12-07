@@ -2,131 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 829DE645870
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D30645873
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:01:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiLGLAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:00:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
+        id S229715AbiLGLBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:01:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiLGLA0 (ORCPT
+        with ESMTP id S229982AbiLGLAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:00:26 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286D24E681;
-        Wed,  7 Dec 2022 03:00:09 -0800 (PST)
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 53C6D1F37E;
-        Wed,  7 Dec 2022 11:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1670410807; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BXRoWMTGPoTeL3TcVSpv7TQfkq1KRaiCSR39v7nfVY4=;
-        b=KjQso7GGpZn8QDZNEBRXMoKYDgXDoaag5NEelvcyc2wmxGGW+lVp6l+Rc+nHs+lxgUetL7
-        m/UCeNdgKNMSW3fTG5FFlAFHv6A8XAd5JeU5cdrcfFo5bS7nVTPg0GXBs6k+fJvwIrv2nf
-        J4fyR0Iaf0gnAlQeqb052EHCQ9qhGY4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1670410807;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BXRoWMTGPoTeL3TcVSpv7TQfkq1KRaiCSR39v7nfVY4=;
-        b=pRTbilr3My9LGiJy2A0S2qAycdi5tV3mLYnHny5++rH99nkMJweUyTtKS5GGJwb/moENBN
-        XH0fLmCMPTpAfuAg==
-Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 4678F134CD;
-        Wed,  7 Dec 2022 11:00:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap1.suse-dmz.suse.de with ESMTPSA
-        id p442ETdykGMdHgAAGKfGzw
-        (envelope-from <jack@suse.cz>); Wed, 07 Dec 2022 11:00:07 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E4D2DA0725; Wed,  7 Dec 2022 12:00:06 +0100 (CET)
-Date:   Wed, 7 Dec 2022 12:00:06 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>
-Subject: Re: [PATCH v2 6/6] ext4: fix inode leak in
- 'ext4_xattr_inode_create()'
-Message-ID: <20221207110006.xuod3seh7zwipsih@quack3>
-References: <20221207074043.1286731-1-yebin@huaweicloud.com>
- <20221207074043.1286731-7-yebin@huaweicloud.com>
+        Wed, 7 Dec 2022 06:00:42 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F11DF06
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:00:20 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2s9u-0008Pa-3n; Wed, 07 Dec 2022 12:00:14 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2s9r-002tug-O9; Wed, 07 Dec 2022 12:00:12 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2s9o-003GNG-TY; Wed, 07 Dec 2022 12:00:09 +0100
+Date:   Wed, 7 Dec 2022 12:00:07 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-amlogic@lists.infradead.org, Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 431/606] mfd: khadas-mcu: Convert to i2c's .probe_new()
+Message-ID: <20221207110007.yfjfiakmh4ma3sfo@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-432-uwe@kleine-koenig.org>
+ <Y3tvypIDVdCYxAVB@google.com>
+ <20221121150854.3mwczqtbusawho4m@pengutronix.de>
+ <Y3usiUm1K+5xCWhY@google.com>
+ <20221206105908.jzcdnast3yw22eel@pengutronix.de>
+ <Y49pi54DKsvLOzvb@google.com>
+ <20221206163516.i6rzewxts7do75y5@pengutronix.de>
+ <Y490W6k4N8iBxLHf@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hofgvycto33rels6"
 Content-Disposition: inline
-In-Reply-To: <20221207074043.1286731-7-yebin@huaweicloud.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y490W6k4N8iBxLHf@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 07-12-22 15:40:43, Ye Bin wrote:
-> From: Ye Bin <yebin10@huawei.com>
-> 
-> There is issue as follows when do setxattr with inject fault:
-> [localhost]#fsck.ext4  -fn  /dev/sda
-> e2fsck 1.46.6-rc1 (12-Sep-2022)
-> Pass 1: Checking inodes, blocks, and sizes
-> Pass 2: Checking directory structure
-> Pass 3: Checking directory connectivity
-> Pass 4: Checking reference counts
-> Unattached zero-length inode 15.  Clear? no
-> 
-> Unattached inode 15
-> Connect to /lost+found? no
-> 
-> Pass 5: Checking group summary information
-> 
-> /dev/sda: ********** WARNING: Filesystem still has errors **********
-> 
-> /dev/sda: 15/655360 files (0.0% non-contiguous), 66755/2621440 blocks
-> 
-> Above issue occur in 'ext4_xattr_inode_create()', if 'ext4_mark_inode_dirty()'
-> failed need to drop inode's i_nlink. Or will lead to inode leak.
-> 
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
 
-I think I've already given my Reviewed-by on this :). Anyway, the patch
-looks good. Feel free to add:
+--hofgvycto33rels6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Hello Lee,
 
-								Honza
+On Tue, Dec 06, 2022 at 04:56:59PM +0000, Lee Jones wrote:
+> > On Tue, Dec 06, 2022 at 04:10:51PM +0000, Lee Jones wrote:
+> > > On Tue, 06 Dec 2022, Uwe Kleine-K=F6nig wrote:
+> > >=20
+> > > > Hey Lee,
+> > > >=20
+> > > > On Mon, Nov 21, 2022 at 04:51:21PM +0000, Lee Jones wrote:
+> > > > > On Mon, 21 Nov 2022, Uwe Kleine-K=F6nig wrote:
+> > > > >=20
+> > > > > > Hello Lee,
+> > > > > >=20
+> > > > > > On Mon, Nov 21, 2022 at 12:32:10PM +0000, Lee Jones wrote:
+> > > > > > > On Fri, 18 Nov 2022, Uwe Kleine-K=F6nig wrote:
+> > > > > > >=20
+> > > > > > > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > > > > > > >=20
+> > > > > > > > The probe function doesn't make use of the i2c_device_id * =
+parameter so it
+> > > > > > > > can be trivially converted.
+> > > > > > > >=20
+> > > > > > > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutro=
+nix.de>
+> > > > > > > > ---
+> > > > > > > >  drivers/mfd/khadas-mcu.c | 5 ++---
+> > > > > > > >  1 file changed, 2 insertions(+), 3 deletions(-)
+> > > > > > >=20
+> > > > > > > After a week or so, please collect-up all the tags you have r=
+eceived
+> > > > > > > and submit a per-subsystem set for me to hoover up, thanks.
+> > > > > >=20
+> > > > > > For mfd I'd do:
+> > > > > >=20
+> > > > > > 	git checkout mfd/for-next
+> > > > > > 	b4 am -P 413-481 20221118224540.619276-1-uwe@kleine-koenig.org
+> > > > > > 	git am ./20221118_uwe_i2c_complete_conversion_to_i2c_probe_new=
+=2Embx
+> > > > > > 	git send-email --to .... --cc .... mfd/for-next
+> > > > >=20
+> > > > > That's just crazy enough to work.
+> > > > >=20
+> > > > > Thanks for the tip.
+> > > >=20
+> > > > On irc you said you'd care for application of these patches ("I pla=
+n to
+> > > > attempt the b4 solution"), they didn't land in next yet. Do you nee=
+d a
+> > > > reminder? Something else?
+> > >=20
+> > > I applied them, but they fail to build and I haven't had time to
+> > > investigate.  I guess they depend on some patches that have been
+> > > accepted into another (input?) and are now in -next.  Any idea if they
+> > > are available on some immutable branch that I can pull from?
+> >=20
+> > If in your tree i2c_client_get_device_id() is missing, you want to pull
+> >=20
+> > 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/clie=
+nt_device_id_helper-immutable
+>=20
+> Ideal, thanks.
 
-> ---
->  fs/ext4/xattr.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/fs/ext4/xattr.c b/fs/ext4/xattr.c
-> index 5c0476ff62c8..6c19d01ba261 100644
-> --- a/fs/ext4/xattr.c
-> +++ b/fs/ext4/xattr.c
-> @@ -1465,6 +1465,9 @@ static struct inode *ext4_xattr_inode_create(handle_t *handle,
->  		if (!err)
->  			err = ext4_inode_attach_jinode(ea_inode);
->  		if (err) {
-> +			if (ext4_xattr_inode_dec_ref(handle, ea_inode))
-> +				ext4_warning_inode(ea_inode,
-> +					"cleanup dec ref error %d", err);
->  			iput(ea_inode);
->  			return ERR_PTR(err);
->  		}
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+I see you added my commits to your tree now, however there is a problem:
+
+  $ git log --oneline --graph --boundary linus/master..FETCH_HEAD
+  ...
+  *   7281458f4396 Merge branches 'ib-i2c-mfd-client_dev_id_helper-6.2' and=
+ 'ib-mfd-uwes-i2c-probe_new-6.2' into ibs-for-mfd-merged
+  |\ =20
+  | * c066a1632bc3 mfd: wm8994-core: Convert to i2c's .probe_new()
+  | * 0f22cf00762d mfd: wm8400-core: Convert to i2c's .probe_new()
+  | * 090f49b250ee mfd: wm8350-i2c: Convert to i2c's .probe_new()
+  | * 7174af1be41d mfd: wm831x-i2c: Convert to i2c's .probe_new()
+  | ...
+  | * 63909fec136e mfd: adp5520: Convert to i2c's .probe_new()
+  | * 549d4f3207f8 mfd: act8945a: Convert to i2c's .probe_new()
+  | * 623f79babaf1 mfd: aat2870-core: Convert to i2c's .probe_new()
+  | * ce41e4ae7cac mfd: 88pm805: Convert to i2c's .probe_new()
+  | * 02aa483f1f98 mfd: 88pm800: Convert to i2c's .probe_new()
+  * | 662233731d66 i2c: core: Introduce i2c_client_get_device_id helper fun=
+ction
+  |/
+  o 9abf2313adc1 (tag: v6.1-rc1) Linux 6.1-rc1
+
+That means that the commit introducing i2c_client_get_device_id() isn't
+an ancestor of the commits that make use of the new function. So
+63909fec136e (which is the first commit making use of the new function)
+likely won't compile:
+
+	$ git grep i2c_client_get_device_id 63909fec136e
+	63909fec136e:drivers/mfd/adp5520.c:     const struct i2c_device_id *id =3D=
+ i2c_client_get_device_id(client);
+
+Starting with 7281458f4396 everything is fine again, but still this
+hurts a bisection.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--hofgvycto33rels6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOQcjQACgkQwfwUeK3K
+7AmnXQf+JBTwXlgudhX4rD9hpZef8Y+s9wI4l1NLyop37v2yPigu+AkHwxhMfsvy
+N7SGBQpXPMkg0FQywv8X81E8b4RrkotvSb2TUg4r1FwUM7XRs/lQeHqf03knyLjC
+W63dQsLq98w6wurqNl64JrKsi2dYQOZHg4wEkwBV/ZDUA5C0ybLS8JEr0L9HpbC5
+dZ9s0y/GhqO7YERH0P/ldTWNT5J2+eLdUKraL23O4jNFZi2HX6eLNJIoozZsADSB
+C+fXjval/tCqNUKSP0tGsvKCVbYkZrQoM9uuaF/5V6dWBDoIzEHaM7oJuE9V1LAX
+39MwM/ogCq1L1RHs85PtuRVPwZpG+A==
+=IN5C
+-----END PGP SIGNATURE-----
+
+--hofgvycto33rels6--
