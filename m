@@ -2,152 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EE46457A6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9209C6457D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:28:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiLGKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:23:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S229872AbiLGK2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:28:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbiLGKXH (ORCPT
+        with ESMTP id S229759AbiLGK12 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:23:07 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA7A15FF6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:23:06 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id c1so27957785lfi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:23:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d5ptnyM8tU9KK9vuHrqJhLp9kBHzmtP8NOjNL98W6O0=;
-        b=kwnECpHYYs2dljETpxBP82ebzWcB8+wP08KcpTW0mTbgigX6RffI70K/KhpLO/YDC2
-         6DwfcxArNz6QB+WP8rHiDiRyFxCJlWR4KIL0b5P82ylwXg++5M3rZhjXdHiiXenylfhh
-         WHGDlw16wENi7DG/Sin7l0bUZZT73PHBprW595DmdPO4nQRLmk9Hzom9bLKpofnmbhu1
-         7eeohVs98jGdxiVle7XGMFdI+y4jxV+npBwZjmRSfJFJNx67uycw7h98J5ThbGjBDaJg
-         KFTspp95uosj6pXTZxb2sC4/FEUjUWOCO/8FUs5ZSXmYLlNvJY4ndBIiWMWqIYdxGArH
-         cL5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d5ptnyM8tU9KK9vuHrqJhLp9kBHzmtP8NOjNL98W6O0=;
-        b=n06OUT7ww0TGu8PdGUf7+/ko9oLh1pwM64L+ZsV3v9/ZEvU1D8WqZyN7eSAl9LT8cN
-         HVo9ahcdZKIZKzXE44odcAxFZc29M6xfNhCRUd5S55mEpDsm5Y1cM4AfleTbsQDgbwd8
-         Ejr/WJlnbZgNiDnDMhEAdh/nPL5NXFmztluSnhzpWICilKi4HLpeLWKy8wCvQ0sOdJ9h
-         X6kMSHxeG+D/GZC0OBXGODsksRDH0vzIOycfN1we1XWJp2J4pok1I0DM+jziSPTWLSSF
-         NJRayIXYlq+UO+DIxCtZNfkYLWtxTrcOiwcHZ1rJZ5/kwTWb5wbW1lgmpLQVkqW4MNgH
-         YkrA==
-X-Gm-Message-State: ANoB5pkjTTwezuuuKDlRmrfmFwFeo9uqM23AjhlNCREt6qBTtGKAgdKp
-        6HOzEsWoZDj8c+xTLqJBrCtGCA==
-X-Google-Smtp-Source: AA0mqf4r7f2xeXn7yaYoPkPuO7SMWpWfTPrwG1RH+SDYe9rX4EhYS8TzE8+PgGnMNg3pkiB3apXW2A==
-X-Received: by 2002:ac2:5e8e:0:b0:4b5:9370:d084 with SMTP id b14-20020ac25e8e000000b004b59370d084mr573180lfq.527.1670408584717;
-        Wed, 07 Dec 2022 02:23:04 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bu31-20020a056512169f00b00499b27a329esm1953183lfb.300.2022.12.07.02.23.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:23:04 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Joe Tessler <jrt@google.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 5/9] media: dt-bindings: chrontel,ch7322: reference common CEC properties
-Date:   Wed,  7 Dec 2022 11:22:49 +0100
-Message-Id: <20221207102253.26663-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
-References: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
+        Wed, 7 Dec 2022 05:27:28 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80861C435
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:27:26 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 20A395C01D5;
+        Wed,  7 Dec 2022 05:27:26 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 07 Dec 2022 05:27:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1670408846; x=
+        1670495246; bh=h5h97StYzAEu+yy4ghlHT2x7MeSqftaELyUUevoLQM0=; b=D
+        73OOanYGO2UWsfZrhE9zGdhqwFvGx4FmLgwO/J77HyamhCE+Gs80PkL2hiRjGDrK
+        /mE8qPVF/PELLh0PjbiZ310kQi+MGOUz07iJbQ1DtybENJhYUnoBewNIJ5n3W097
+        cmd6fz9BFsDHbpIZHUj46AFc8K4ia4WG1PKnUsylK/aUx2MkURyzpufy/ms2qhSr
+        cON6ZFr274Xp/ONPQv/OMXJT1F7KHMj0xivqM1Kj0oOxiOlqrRaxjEEpzqHToWSl
+        CWuk0xeHLn+N2a1eOQP6i/b6sbo/30b8IQxiOwpMJzLGHZi4JT5pIqdQaONwG3zn
+        g0ffE5z1IdkuiJ9eUmRXg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670408846; x=
+        1670495246; bh=h5h97StYzAEu+yy4ghlHT2x7MeSqftaELyUUevoLQM0=; b=I
+        Jns9dICqpr3zOv31VUmjTqzDQxbqqlac2wTRVoEL4yJg8xOrB7hL9J36NjBx6c7r
+        dwqudNa+ENc1h5gmmigvBcgiu4MMGu3kazia9IBTAzX3MWxnn/DjSCV65BSi7c7U
+        E9hHAE7wzxIWl4CXXIrtM20faW6pDYYvlR6/PmFVlv0/fikXVb2Yt6jvMAcB26ru
+        4XCFbhjVJRvhhPI4RrHLmHh8rFdITNiq+9ZJ9f+aKwMqsKFpcpZ+NG9bUAgUZpgy
+        nLBQHOwemRwqsc0xgy+Qe+N2D2mcu3Opnyua1FacRepO99NbZdjIeogNMIHmK5Ld
+        +oteCm9v8Z5PKCADuzqjw==
+X-ME-Sender: <xms:jmqQY8o3bGXZlhxyG4LVFNWoLX8QlBgII2EdPv6X9-KmgXecn8aYAw>
+    <xme:jmqQYypZYUsZmlviWvYR11yFaFDyscFnPeAI4Sj9mFurKTQUCoaZh1mB2Dk6lWDRX
+    eFiD3VkaKK0pDckxb0>
+X-ME-Received: <xmr:jmqQYxMLpyRDng0eC8MCy7ek2gDxgVQE2ajmYBU0XfdG4PkEFZxXN1Mh2JVX9-_nkEdKPfezwiBU63q6R674fYJtkSk7VnJvx_L0nyunzT8lAg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdduhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeevvdelieejgedvkeffheekheeilefhgefgffehteekueelvddtueffheet
+    ledtffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:jmqQYz41eqMZECp7Icb08Vw000_yhFgmhLwiE2mKVtg_W7Le23UViA>
+    <xmx:jmqQY74jSnwjJrO-UUbOfFvoEX25oGixAJ0QCPz6OnDE_gJiUdbI6A>
+    <xmx:jmqQYziIvL_c3-rfywfjWXuZH0yjS1jT8Jqpwn71objlQvMIXiFavg>
+    <xmx:jmqQY6TR4AS4hh3lLWtps0WUF9vRH_wlSgWKGa1fw3aTaR6wimD8Aw>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Dec 2022 05:27:25 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Wed, 07 Dec 2022 11:22:49 +0100
+Subject: [PATCH 6/6] drm/vc4: dsi: Remove entry to ULPS from vc4_dsi post_disable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221207-rpi-dsi-bridge-v1-6-8f68ee0b0adb@cerno.tech>
+References: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
+In-Reply-To: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
+To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Maxime Ripard <maxime@cerno.tech>
+X-Mailer: b4 0.11.0-dev-8c583
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1249; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=cJvbEvZA5k2IhWWlGKDtOHgsecBa2Doxm4Mts5DYRUc=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkTMkvvMpjYH9y0vulQ/kYji2NzPKdOYs+brJxR8Saxeu+L
+ qGrHjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAExk51+G/07nIrUtPrr6T1LgfWzldC
+ HwUtxWqUuf3zk4mGvsO787YjfDP33DE+5dT3tO1uQF5gXrZ0tYlnkevjLN8Sv/Re2b855YMAMA
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference common HDMI CEC adapter properties to simplify the binding and
-have only one place of definition for common properties.  The common CEC
-binding expects also node name to be 'cec'.
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
+Post_disable was sending the D-PHY sequence to put any device
+into ULPS suspend mode, and then cutting power to the DSI block.
+The power-on reset state of the DSI block is for DSI to be in
+an operational state, not ULPS, so it then never sent the sequence
+for exiting ULPS. Any attached device that didn't have an external
+reset therefore remained in ULPS / standby, and didn't function.
 
+Use of ULPS isn't well specified in DRM, therefore remove entering
+it to avoid the above situation.
+
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 ---
+ drivers/gpu/drm/vc4/vc4_dsi.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Changes since v1:
-1. Fix node name to cec.
----
- .../bindings/media/i2c/chrontel,ch7322.yaml           | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-index 63e5b89d2e0b..af8ada55b3f2 100644
---- a/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-+++ b/Documentation/devicetree/bindings/media/i2c/chrontel,ch7322.yaml
-@@ -13,6 +13,9 @@ description:
-   The Chrontel CH7322 is a discrete HDMI-CEC controller. It is
-   programmable through I2C and drives a single CEC line.
+diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
+index a7b8ffd995b0..4f3805528aa1 100644
+--- a/drivers/gpu/drm/vc4/vc4_dsi.c
++++ b/drivers/gpu/drm/vc4/vc4_dsi.c
+@@ -813,8 +813,6 @@ static void vc4_dsi_bridge_post_disable(struct drm_bridge *bridge,
+ 	struct vc4_dsi *dsi = bridge_to_vc4_dsi(bridge);
+ 	struct device *dev = &dsi->pdev->dev;
  
-+allOf:
-+  - $ref: /schemas/media/cec/cec-common.yaml#
-+
- properties:
-   compatible:
-     const: chrontel,ch7322
-@@ -40,16 +43,12 @@ properties:
-       if in auto mode.
-     maxItems: 1
- 
--  # see ../cec.txt
--  hdmi-phandle:
--    description: phandle to the HDMI controller
+-	vc4_dsi_ulps(dsi, true);
 -
- required:
-   - compatible
-   - reg
-   - interrupts
- 
--additionalProperties: false
-+unevaluatedProperties: false
- 
- examples:
-   - |
-@@ -58,7 +57,7 @@ examples:
-     i2c {
-       #address-cells = <1>;
-       #size-cells = <0>;
--      ch7322@75 {
-+      cec@75 {
-         compatible = "chrontel,ch7322";
-         reg = <0x75>;
-         interrupts = <47 IRQ_TYPE_EDGE_RISING>;
--- 
-2.34.1
+ 	clk_disable_unprepare(dsi->pll_phy_clock);
+ 	clk_disable_unprepare(dsi->escape_clock);
+ 	clk_disable_unprepare(dsi->pixel_clock);
 
+-- 
+2.38.1
