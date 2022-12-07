@@ -2,102 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02566459BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBF36459C1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiLGMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 07:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S229732AbiLGMWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 07:22:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiLGMVr (ORCPT
+        with ESMTP id S229772AbiLGMWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 07:21:47 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640D4391E9;
-        Wed,  7 Dec 2022 04:21:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670415706; x=1701951706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0kGd/OiPW1PJ4cPEb4PPblp3AImCctx/hnYQmTGU6Mc=;
-  b=i8RyJaEwN4iHglzkfINp+KsNjzXgDW+kwVgWL5Hm2cVthgOivoV9eSDh
-   K0nSmo9WW80Q7vCKbYcSKIS/Y0MvuZSl1i3M7tTRYkOAVcaWxNhqwHf0J
-   duaepWr8r0qTFy4qpoBZNV1NuZ1ZhpVXlhdHTcN4NJBTKI6eLFcYrk1vS
-   dD59j4OAovHkWhaVb3+c66f5aVsOvMylwxsv2XDybGncNtaZQKo7Sgu36
-   3JJ4rBhgnHJAOM4aYwXtiSZXyDZl2nIm5RSvoRKuuVrZjTJYfMSk4fwj4
-   +MCrpMpEzB6DRO3xsaWtvhMTenwX6GeiksxasazBTgbqufw4vPkgqCHr/
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="403148135"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="403148135"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 04:21:44 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="891782203"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="891782203"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 04:21:42 -0800
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id 6AE092033F;
-        Wed,  7 Dec 2022 14:21:40 +0200 (EET)
-Date:   Wed, 7 Dec 2022 12:21:40 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] device property: Fix documentation for
- fwnode_get_next_parent()
-Message-ID: <Y5CFVHL0xTeWbKfU@paasikivi.fi.intel.com>
-References: <20221207112219.2652411-1-linmq006@gmail.com>
+        Wed, 7 Dec 2022 07:22:02 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 720BC4C246;
+        Wed,  7 Dec 2022 04:22:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97D0D23A;
+        Wed,  7 Dec 2022 04:22:07 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 561E03F73D;
+        Wed,  7 Dec 2022 04:21:57 -0800 (PST)
+Message-ID: <40ff1e4c-b128-c0d0-a024-e454e843ee46@arm.com>
+Date:   Wed, 7 Dec 2022 13:21:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207112219.2652411-1-linmq006@gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 04/22] sched/core: Add user_tick as argument to
+ scheduler_tick()
+Content-Language: en-US
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-5-ricardo.neri-calderon@linux.intel.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20221128132100.30253-5-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:22:18PM +0400, Miaoqian Lin wrote:
-> Use fwnode_handle_put() on the node pointer to release the refcount.
-> Change fwnode_handle_node() to fwnode_handle_put().
-> 
-> Fixes: 233872585de1 ("device property: Add fwnode_get_next_parent()")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+On 28/11/2022 14:20, Ricardo Neri wrote:
+> Differentiate between user and kernel ticks so that the scheduler updates
+> the IPC class of the current task during the latter.
 
-Thanks!
+Just to make sure ,,, 05/22 introduces `rq->curr` IPCC update during
+user_tick, i.e. the former?
 
-Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-> ---
->  drivers/base/property.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index 2a5a37fcd998..daa1e379762b 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -601,7 +601,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_parent);
->   * node's parents.
->   *
->   * Returns a node pointer with refcount incremented, use
-> - * fwnode_handle_node() on it when done.
-> + * fwnode_handle_put() on it when done.
->   */
->  struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
->  {
-
--- 
-Kind regards,
-
-Sakari Ailus
+[...]
