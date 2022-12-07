@@ -2,79 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F5C6452E5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9333B6452E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiLGEJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 23:09:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S229788AbiLGEKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 23:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiLGEJf (ORCPT
+        with ESMTP id S229640AbiLGEKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 23:09:35 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5574A55C8D;
-        Tue,  6 Dec 2022 20:09:33 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so337452pjm.2;
-        Tue, 06 Dec 2022 20:09:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GcPuIm82ikXU/VF2RTYxRO5UsZrVYF3tiHPBHWAjN2s=;
-        b=Jt1Pt+8N3m7gI/0BL6PcmIxJr5KKLHWO792Wq2JdKI6rUSlClOf9nsnWJ3WtHFHrRU
-         x0+zH37AJBLhX3QDWlupyCYTlHFYgqm/YEq8FO8SklrjjicgOU+tZTnm/Vb+dPeWMg7M
-         qCbd1R3yFj3qbxQ9fyVKVP7mQZkjUDCxySe/UV7fBre7nA5mrliQJJhBf0u5T5GY9g35
-         MsBjLqdc8lXfIOBUlqw0Xb3ycMYGL+fDMOunUEEH4VW8/3IFiA0jdhFtEyb8X3NKlNe7
-         2QVL0yFjyr6ISzxzET1LIcPsI38P4j5ecba6Kj2tURIdqwKK8vl5ENRkEvJAou/wZ6lH
-         tjoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GcPuIm82ikXU/VF2RTYxRO5UsZrVYF3tiHPBHWAjN2s=;
-        b=FHMQGprO3C9I5y7Q/K05kV9CGWMJUu7ldyOvATpM5+ojZjQOQo5u3iCVOlcMXwqYx+
-         7ZYv13cBMsEC66j+ZFTTTIIldtyDIVgaP8XAnbVEVL5hGrHnEvOJ8fZ/YrUDCkSbAK/Z
-         GH1j5jD/A4kAULG7FFaJPF5+8LUpMEoMH8tVMzKPsAGomnbnPhgHGOoEyX90oLd4RInf
-         7n9Gv3XDpVrXmxW3ljuuJLdlHfpa1majjq5aZ0Z8UetCfsXI4ozux8NwKOxuSXvCjssm
-         IaKpvfr4KRrQU7gQ6jDZ45PQk6zNJ7Jn9Cirzq5/0DytipozKWQKdiGPdeRBNDZR9sCh
-         F0jQ==
-X-Gm-Message-State: ANoB5pnDA0tAdj6Y3Z/CpioBIBwl+B/iJx7A2J79ivJaecZlHHLpWEdS
-        V1HsSORAeD+gny+JyGKOQu8SIT0Lcn4=
-X-Google-Smtp-Source: AA0mqf5PYyNSRTZWSF4qhgpXGHZxCikztuQGUmUOx6bObckd7dOdoPySEe9lQeJr2gYdVItXJzGrWA==
-X-Received: by 2002:a17:902:a618:b0:189:72c2:67fe with SMTP id u24-20020a170902a61800b0018972c267femr53967501plq.135.1670386172512;
-        Tue, 06 Dec 2022 20:09:32 -0800 (PST)
-Received: from guoguo-omen.lan ([2401:c080:1400:4da2:5400:3ff:feb4:7578])
-        by smtp.gmail.com with ESMTPSA id i15-20020a63130f000000b00478eb777d18sm587822pgl.72.2022.12.06.20.09.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 20:09:32 -0800 (PST)
-From:   Chuanhong Guo <gch981213@gmail.com>
-To:     linux-leds@vger.kernel.org
-Cc:     Chuanhong Guo <gch981213@gmail.com>, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 3/3] leds: add driver for SPI driven WorldSemi WS2812B RGB LEDs
-Date:   Wed,  7 Dec 2022 12:09:04 +0800
-Message-Id: <20221207040904.582585-4-gch981213@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221207040904.582585-1-gch981213@gmail.com>
-References: <20221207040904.582585-1-gch981213@gmail.com>
+        Tue, 6 Dec 2022 23:10:24 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940AC56D5F
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 20:10:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oKLvtRvVb1DnQJYMqyVz6uVEmQU2Nkz8nASbZT5lVxhRGipGSaTtiDz06pZoqOAATZNXLUhGAPk52MQ3wT8pG4jxKWx6l4sVWT7yXMZUkM47DVoBa6eoOuUFl/Palg/xJc/CbJ0+2GW3E7Nu/8OWSpK+MPNx0Gr4KIiqvmUF2VOjt51i3/etE/kPfQCvWOeHIVamI4CArTKPFyM6i85pzd0ijzuQYLyJvJDB4pBGA2/DBEQN3f8FHnIUxHkz9WyRDMTvACY+TPIAzD3702Cojj5kC4cre1yVWvgRkitViU+eNxs6hKLnokt3rxTVuL0a4qL3ZcN5ep/778Yj/FdcKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bPGp2T0g6a2jpubK6gLHNKj+BhDCDtxsf3p61ILXqJU=;
+ b=aHW2mqGQ2w0yukPOicuuXBdgXVkhv8kODQAdDopcqtTHOKRfdhi3k6DB+o4d9Eo1vEMPX/zpF6QuFelM+77VZccLyGbAhnx+A0+RuSDgFRTvgBGd0gMEvYzDNoQXngUU2WnU/jcPkrrCrcsJayRHmVzgZxq4peY5xQDAb1nsK+12HgK7M3PlJEmNzdavtZtiD6+yzFChZlC3Kg7H6YvCF6n053MUJCNwUaM0FywICwlMOSImW4kkl3/GG3nV7+uOoUAGovxN6ucb3Trywjdoc+2DathIEJSPgxvTMAA0t7ONFcFgkHeGolx7m1YfNeNSHh+GmsUg2Fqp96TIcltsSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bPGp2T0g6a2jpubK6gLHNKj+BhDCDtxsf3p61ILXqJU=;
+ b=s+Dg7M/LFCnUYfC6UuOCybzu23jU0ypLWWrQT9CW6uRb1sbU0V02X+uRrS2EwmD5YLQbdcRDieIHHIYl9SUBAu0XCp3E6GXkfk/VuMeMNFxBfXZq6OUcbWqNYTcJwo8EHlz5TO7gLEzxbaE9SoMg0TyWzO+GvFNmIOKNhuJN2UQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com (2603:10b6:5:41::21) by
+ SA1PR12MB7295.namprd12.prod.outlook.com (2603:10b6:806:2b6::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 04:09:58 +0000
+Received: from DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::8f76:f869:2e1f:331e]) by DM6PR12MB2810.namprd12.prod.outlook.com
+ ([fe80::8f76:f869:2e1f:331e%6]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 04:09:58 +0000
+Message-ID: <3f7821a0-7139-7a97-ab24-dfca02811fc0@amd.com>
+Date:   Wed, 7 Dec 2022 05:09:42 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] virtio_pmem: populate numa information
+Content-Language: en-US
+To:     Michael Sammler <sammler@google.com>,
+        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mina Almasry <almasrymina@google.com>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Sammler <mich.sammler@gmail.com>,
+        virtualization@lists.linux-foundation.org
+References: <20221115214036.1571015-1-sammler@google.com>
+ <CAFPP518x6cg97tK_Gm-qqj9htoydsBtYm5jbG_KivK5rfLcHtA@mail.gmail.com>
+Cc:     "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+From:   "Gupta, Pankaj" <pankaj.gupta@amd.com>
+In-Reply-To: <CAFPP518x6cg97tK_Gm-qqj9htoydsBtYm5jbG_KivK5rfLcHtA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0120.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::35) To DM6PR12MB2810.namprd12.prod.outlook.com
+ (2603:10b6:5:41::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB2810:EE_|SA1PR12MB7295:EE_
+X-MS-Office365-Filtering-Correlation-Id: 22f2a312-83a8-43e2-ee22-08dad808e751
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HpGJHtRdGaY5KySmWFmDllC0uvFAcUtcdQ4d33ycSOSug9FwA+79dyUo/OmvFGR6v850J+2rl7NG5octHFy7RDOkVZ3gJENnbnX1+Xy7BXakZalF2PyxhDir0QYxtRIItINAn4nX89LRhzHesaTmPvbs/yjas+46+AWdjWzk3obmB9/0/igLhjDjsjPgVCaQ+WyCBO6Kb/0nbRjZmDALAiRDkcWZRk1H9CIMURISnrHutWEIl2LLZoqg/KHqhBUAq17ehhzd5tyV53hhWnbEf96vTbAYhTfZtN7h2xIuWbIw4+DAJd/zu/F6pwPdIgrL4jrkQEfhfx1IMpfm1EaA6xIPog34epBg2Jz+Vs8BcGkW40+AoyqP6ObfkoihJhu5EEhCTWE7CqJajhaLqYrydTXrEUEHLtXju7BcWSvXajxQBQHm2fL2EWCRwjAdKGWbDRSb/cb1lJK5ybtISHU34TGBap1Rt9BDvHguim8WpbFirJSAyLx6DQhuNfRT3Y+SkoS1CE7KBB8mgDbMY4Z1JcMGta8/d7u5eIE4WJeJP5k8omJ8FMZ0HShLcyFn6nI2qIrUeTdNMN8Ok1BinsV+RUWlqCM4arj3Afy6y0BjUbU2Q3ojRo1+b+j5Yf5rGP5Kp61dHgRASHBndWavA8JSgYGHSE5XL2BOBj6VtuR8V8PUIOBrdjGnWs65H/fxHcZ7o8ASskDYYZ6+5GlY4xar0umE62HCHLpELBCC2vV/InULmI3MUXHrdbN0fWCUdT50KdcWsAVOpRA96awkGiIxhw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB2810.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(366004)(136003)(39860400002)(451199015)(83380400001)(7416002)(921005)(38100700002)(86362001)(31696002)(4744005)(2906002)(5660300002)(8936002)(4326008)(41300700001)(8676002)(6666004)(26005)(6512007)(6506007)(186003)(316002)(2616005)(110136005)(54906003)(6486002)(66476007)(66556008)(66946007)(478600001)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RGNsSWZudGdteUp5anV4d29WUjFGTFpWeUN6bmZVbTVWaXNxUXBFVXZRT0gr?=
+ =?utf-8?B?bG9XN3NxaUozUWk4RGZHOURxN2oxZVk2SVZEcUtHL01XNXBhYkVWc3ZUTFl6?=
+ =?utf-8?B?ZENJaStSNzRUeWFhaVhzKy9jZm0zQThWQTB0YXo5OVp3RVZZQlcxRWplb0tR?=
+ =?utf-8?B?THhaRERObjRnOVNCRzZUNnFPYWdyS0daOWJPdVJwSy9McGJyT3ZjaHdGcU1y?=
+ =?utf-8?B?VTk4NSs2cFpJOXE3a0o3bUFLRktYR0MvdDRES3BQeGJtaHZUcUNScFBmSzg5?=
+ =?utf-8?B?aWZzcjRjTjJyeEF6WTBXMlcreTdpUk1jN0lwREg0a25May9OSUVwVUpGangz?=
+ =?utf-8?B?eE4wZk1oS3BYMEVkaXEvNWliTkZLREtZSlY2Y3h4UVhSdFU1OWRnREo1NWFU?=
+ =?utf-8?B?VmtDMDNGRjVqVGlib1lJV1lta3pibHVnZFN6aXoyUG1EZXhicUpYOXR3MUh4?=
+ =?utf-8?B?eG1YMW8zZGZxWjI1NXJsREJrbENXV2dUSmloN2VvcVNacjhoZlVYM3N3T05R?=
+ =?utf-8?B?Y1JVRTVTSmh4UWtCM2tSVkNxR3RTek91RnVlL3RJQytERFIrMmloSk9rZkly?=
+ =?utf-8?B?b2wzbUVGU09zVlAraElNdXhwcmVJWExFL0RkTUlqK2tQNEJURFhEenl3cStZ?=
+ =?utf-8?B?NlBiK2t4ZEtLemJvYkFtajZNSEc4a2w5K25BK0pJakpsMTB0Nkxoc0tBYkds?=
+ =?utf-8?B?dkoyNTg0YjRYRzhxdVMxNjczTHp5ckFCWkYxbDBrdUorRlgxdFF5SFFDWm55?=
+ =?utf-8?B?VVZjTkhxQXgrVDA2RlhGZ20rUGk2RVhqQ0MybEFFQWx2cGozQ0VHSHBFK04y?=
+ =?utf-8?B?TGNaVVgxVUZTejQ2TWJ5alBobFdjcFlPU2ZSaTdRaFRvS0NONUlNc3lVbklL?=
+ =?utf-8?B?cXlYOGIwMHFMRVVBNW9iSFUzRElHc2VwTFN0QUovZHRXQXV1eUJDMG0xN0pi?=
+ =?utf-8?B?aTRrV3FoczRtbFFxd3lqeWhoazdHTjdGNDRmRmNOWjNqWlpIMTBYdUdleDZk?=
+ =?utf-8?B?VW9oL1Jmei9IQldXckxFSmErZXFheU9ReHYyM1E4NDA3QjVTam93QkFSQTh6?=
+ =?utf-8?B?STlLajZyaGpNQlBSOWw3NlZkaDkzSDI5d093bzRqbzh2ZjBwZnZGZHJaeFMy?=
+ =?utf-8?B?bnVoUCtmZ2p5QnN2dkkvQ1ZNS3FNVDZpYTM5N1JQZStQTXdpeitxbndZakhw?=
+ =?utf-8?B?RnVKTm1pSmlHcHp2eC8ycEhYalVleUo4VkQxMDZmV1lFczEvNVdOdGpORUQy?=
+ =?utf-8?B?aU5QRE1FUDhiWmZUY3dDaG1MZFhkQ2t4eVV3UXQweWhvNTIzb2VLSFlzYVZD?=
+ =?utf-8?B?MHBJUnB1Vk95VmpKclZaeXcyeitlTTZSVG9zeDFQQnN2ZnNlQlk0blQrSWc2?=
+ =?utf-8?B?Vkt0ckVQVWh4eGRuWWpyYUlUc2RXMXI0enpVdlJpblRGTVJ5ZHJDYWVKMlpt?=
+ =?utf-8?B?YjQvSUlQLy85U0pXOHQ0T3QrVTRRTHp4UENIL2Ywb3ZkUUZQckx5ZHpGTzk2?=
+ =?utf-8?B?TXJUTDZNN1Y3a0ZYbXhoR1dZZG5MQUhndG5TUU9XKzg5S2haNHBGYkNML2hZ?=
+ =?utf-8?B?M2ptNUM5bHI2a3RsdGtNZHNEQ1ZTc2VZUkMranB2bVVOTlJCZ1ZVd2EvUFBB?=
+ =?utf-8?B?YlgwMmhVNERSTmUwd2tZUXovVmJ0UXo0R3dJVGg3YXUwVk02VSt1dkU3ZWRi?=
+ =?utf-8?B?OG5SNkFkdm1wUy9yT0dTMWdiRU1IM3loSFFWU1pjWE9vVGdNMVhQdUJ0OFQw?=
+ =?utf-8?B?Z3lXRHNhYW5HZ0VHdXd2UzJrbURrY3ZKK1g5SlJjdzJwbWVEZlRwcUUvdmhX?=
+ =?utf-8?B?YUY2TFRJMGVYRXRQTDZ4TVJEblYzSWxyYU5vQk1MZDZqaUlOb1FhbFVjb2ly?=
+ =?utf-8?B?b0p6aWpQeGtDaHBHa3hmZEVVNC9OeFlpQ1BJS3JZWXVNblp2VURrUEpROHJY?=
+ =?utf-8?B?SkFxQzVweXRHcHVQZmxVZVVrSlh6YTZIZFB6dndmWEJCTmlOWFN3UDVIMzc3?=
+ =?utf-8?B?Mm1xMDZZRXlJbmd3SC90NENnL3U5UTJ5bDl2cFBVV1dzbCtPWE9lWFJZYWpG?=
+ =?utf-8?B?T0NCbkJXQ2FHeE02eGs3SlM3eHZ1SHdtb243YndTcVdNc1N3ajdGUTkvRHRi?=
+ =?utf-8?Q?JdwKHwA85EDWaokh93ElSmcev?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22f2a312-83a8-43e2-ee22-08dad808e751
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB2810.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 04:09:58.1559
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vVxZRZobqny1qz2GAziXqn6IcjIHjJkAX7eiqArvEGXqjshjwOC5hh+xqNt7stNjbAmeeerkRCyF+1Fvwb/g+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7295
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,293 +135,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for driving a chain of WS2812B LED chips
-using SPI bus.
++Cc [MST, virtualization-list]
 
-WorldSemi WS2812B is a individually addressable LED chip that
-can be chained together and controlled individually using a
-single wire. The chip recognize a long pulse as a bit of 1 and
-a short pulse as a bit of 0. Host sends a continuous stream
-of 24-bits color values, each LED chip takes the first 3 byte
-it receives as its color value and passes the leftover bytes to
-the next LED on the chain.
+Hi Dan, MST,
 
-This driver simulates this protocol using SPI bus by sending
-a long pulse as 3'b110 and a short pulse as 3'b100. The SPI
-frequency needs to be 2.105MHz~2.85MHz for the timing to be
-correct and the controller needs to transfer all the bytes
-continuously.
+> This patch is reviewed and tested. Is there anything that needs to be
+> done from my side (e.g. sync with mainline)?
 
-Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
----
-Changes since v1:
-rename the driver to drop -spi suffix
-add support for default-brightness
-use fwnode apis for properties
+If there are no further comments, Can we please merge this patch?
 
-Changes since v2:
-drop default-brightness and default-intensity
+Thank You,
+Pankaj
 
- drivers/leds/rgb/Kconfig        |  11 ++
- drivers/leds/rgb/Makefile       |   1 +
- drivers/leds/rgb/leds-ws2812b.c | 219 ++++++++++++++++++++++++++++++++
- 3 files changed, 231 insertions(+)
- create mode 100644 drivers/leds/rgb/leds-ws2812b.c
-
-diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-index 204cf470beae..5c2081852f01 100644
---- a/drivers/leds/rgb/Kconfig
-+++ b/drivers/leds/rgb/Kconfig
-@@ -26,4 +26,15 @@ config LEDS_QCOM_LPG
- 
- 	  If compiled as a module, the module will be named leds-qcom-lpg.
- 
-+config LEDS_WS2812B
-+	tristate "SPI driven WS2812B RGB LED support"
-+	depends on OF
-+	depends on SPI
-+	help
-+	  This option enables support for driving daisy-chained WS2812B RGB
-+	  LED chips using SPI bus. This driver simulates the single-wire
-+	  protocol by sending bits over the SPI MOSI pin. For this to work,
-+	  the SPI frequency should be 2.105MHz~2.85MHz and the controller
-+	  needs to transfer all the bytes continuously.
-+
- endif # LEDS_CLASS_MULTICOLOR
-diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
-index 0675bc0f6e18..a6f855eaeb14 100644
---- a/drivers/leds/rgb/Makefile
-+++ b/drivers/leds/rgb/Makefile
-@@ -2,3 +2,4 @@
- 
- obj-$(CONFIG_LEDS_PWM_MULTICOLOR)	+= leds-pwm-multicolor.o
- obj-$(CONFIG_LEDS_QCOM_LPG)		+= leds-qcom-lpg.o
-+obj-$(CONFIG_LEDS_WS2812B)		+= leds-ws2812b.o
-diff --git a/drivers/leds/rgb/leds-ws2812b.c b/drivers/leds/rgb/leds-ws2812b.c
-new file mode 100644
-index 000000000000..68c80beb304c
---- /dev/null
-+++ b/drivers/leds/rgb/leds-ws2812b.c
-@@ -0,0 +1,219 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * WorldSemi WS2812B individually-addressable LED driver using SPI
-+ *
-+ * Copyright 2022 Chuanhong Guo <gch981213@gmail.com>
-+ *
-+ * This driver simulates WS2812B protocol using SPI MOSI pin. A one pulse
-+ * is transferred as 3'b110 and a zero pulse is 3'b100. For this driver to
-+ * work properly, the SPI frequency should be 2.105MHz~2.85MHz and it needs
-+ * to transfer all the bytes continuously.
-+ */
-+
-+#include <linux/led-class-multicolor.h>
-+#include <linux/leds.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/property.h>
-+#include <linux/spi/spi.h>
-+#include <linux/mutex.h>
-+
-+#define WS2812B_BYTES_PER_COLOR 3
-+#define WS2812B_NUM_COLORS 3
-+#define WS2812B_RESET_LEN 18
-+
-+struct ws2812b_led {
-+	struct led_classdev_mc mc_cdev;
-+	struct mc_subled subled[WS2812B_NUM_COLORS];
-+	struct ws2812b_priv *priv;
-+	int reg;
-+};
-+
-+struct ws2812b_priv {
-+	struct led_classdev ldev;
-+	struct spi_device *spi;
-+	struct mutex mutex;
-+	int num_leds;
-+	size_t data_len;
-+	u8 *data_buf;
-+	struct ws2812b_led leds[];
-+};
-+
-+static void ws2812b_set_byte(u8 *p, u8 val)
-+{
-+	/*
-+	 * Every bit of data is represented using 3 bits: 3'b100 for
-+	 * 0 and 3'b110 for 1.
-+	 * 1 byte of data takes up 3 bytes in a SPI transfer. The higher
-+	 * 3 bits, middle 2 bits and lower 3 bits are represented
-+	 * with the 1st, 2nd and 3rd byte in the SPI transfer.
-+	 * Here's the lookup table for them.
-+	 */
-+	const u8 h3b[] = { 0x92, 0x93, 0x9a, 0x9b, 0xd2, 0xd3, 0xda, 0xdb };
-+	const u8 m2b[] = { 0x49, 0x4d, 0x69, 0x6d };
-+	const u8 l3b[] = { 0x24, 0x26, 0x34, 0x36, 0xa4, 0xa6, 0xb4, 0xb6 };
-+
-+	p[0] = h3b[val >> 5];
-+	p[1] = m2b[(val >> 3) & 0x3];
-+	p[2] = l3b[val & 0x7];
-+}
-+
-+static int ws2812b_set(struct led_classdev *cdev,
-+		       enum led_brightness brightness)
-+{
-+	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-+	struct ws2812b_led *led =
-+		container_of(mc_cdev, struct ws2812b_led, mc_cdev);
-+	struct ws2812b_priv *priv = led->priv;
-+	u8 *buf = priv->data_buf + WS2812B_RESET_LEN +
-+		  led->reg * WS2812B_NUM_COLORS * WS2812B_BYTES_PER_COLOR;
-+	int ret = 0;
-+	int i;
-+
-+	led_mc_calc_color_components(mc_cdev, brightness);
-+
-+	mutex_lock(&priv->mutex);
-+	for (i = 0; i < WS2812B_NUM_COLORS; i++)
-+		ws2812b_set_byte(buf + i * WS2812B_BYTES_PER_COLOR,
-+				 led->subled[i].brightness);
-+	ret = spi_write(priv->spi, priv->data_buf, priv->data_len);
-+	mutex_unlock(&priv->mutex);
-+
-+	return ret;
-+}
-+
-+static int ws2812b_probe(struct spi_device *spi)
-+{
-+	struct device *dev = &spi->dev;
-+	int ret = 0, cur_led = 0;
-+	struct ws2812b_priv *priv;
-+	struct fwnode_handle *led_node;
-+	int num_leds, i, cnt;
-+
-+	num_leds = device_get_child_node_count(dev);
-+
-+	priv = devm_kzalloc(dev, struct_size(priv, leds, num_leds), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+	priv->data_len =
-+		num_leds * WS2812B_BYTES_PER_COLOR * WS2812B_NUM_COLORS +
-+		WS2812B_RESET_LEN;
-+	priv->data_buf = kzalloc(priv->data_len, GFP_KERNEL);
-+	if (!priv->data_buf)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_leds * WS2812B_NUM_COLORS; i++)
-+		ws2812b_set_byte(priv->data_buf + WS2812B_RESET_LEN +
-+					 i * WS2812B_BYTES_PER_COLOR,
-+				 0);
-+
-+	mutex_init(&priv->mutex);
-+	priv->num_leds = num_leds;
-+	priv->spi = spi;
-+
-+	device_for_each_child_node(dev, led_node) {
-+		u32 reg = -1;
-+		struct led_init_data init_data = {
-+			.fwnode = led_node,
-+		};
-+		/* WS2812B LEDs usually come with GRB color */
-+		u32 color_idx[WS2812B_NUM_COLORS] = {
-+			LED_COLOR_ID_GREEN,
-+			LED_COLOR_ID_RED,
-+			LED_COLOR_ID_BLUE,
-+		};
-+
-+		ret = fwnode_property_read_u32(led_node, "reg", &reg);
-+		if (ret) {
-+			dev_err(dev, "failed to get reg of the %dth led.",
-+				cur_led);
-+			goto ERR_UNREG_LEDS;
-+		}
-+		if (reg >= num_leds) {
-+			dev_err(dev, "reg of the %dth led is too big.",
-+				cur_led);
-+			ret = -EINVAL;
-+			goto ERR_UNREG_LEDS;
-+		}
-+
-+		cnt = fwnode_property_count_u32(led_node, "color-index");
-+		if (cnt > 0 && cnt <= WS2812B_NUM_COLORS)
-+			fwnode_property_read_u32_array(led_node, "color-index",
-+						       color_idx, (size_t)cnt);
-+
-+		priv->leds[cur_led].mc_cdev.subled_info =
-+			priv->leds[cur_led].subled;
-+		priv->leds[cur_led].mc_cdev.num_colors = WS2812B_NUM_COLORS;
-+		priv->leds[cur_led].mc_cdev.led_cdev.max_brightness = 255;
-+		priv->leds[cur_led].mc_cdev.led_cdev.brightness_set_blocking =
-+			ws2812b_set;
-+
-+		for (i = 0; i < WS2812B_NUM_COLORS; i++) {
-+			priv->leds[cur_led].subled[i].color_index =
-+				color_idx[i];
-+			priv->leds[cur_led].subled[i].intensity = 255;
-+		}
-+
-+		priv->leds[cur_led].priv = priv;
-+		priv->leds[cur_led].reg = reg;
-+
-+		ret = led_classdev_multicolor_register_ext(
-+			dev, &priv->leds[cur_led].mc_cdev, &init_data);
-+		if (ret) {
-+			dev_err(dev, "registration of led@%d failed.", reg);
-+			goto ERR_UNREG_LEDS;
-+		}
-+		cur_led++;
-+	}
-+
-+	spi_set_drvdata(spi, priv);
-+
-+	return 0;
-+ERR_UNREG_LEDS:
-+	for (; cur_led >= 0; cur_led--)
-+		led_classdev_multicolor_unregister(
-+			&priv->leds[cur_led].mc_cdev);
-+	mutex_destroy(&priv->mutex);
-+	kfree(priv->data_buf);
-+	return ret;
-+}
-+
-+static void ws2812b_remove(struct spi_device *spi)
-+{
-+	struct ws2812b_priv *priv = spi_get_drvdata(spi);
-+	int cur_led;
-+
-+	for (cur_led = priv->num_leds - 1; cur_led >= 0; cur_led--)
-+		led_classdev_multicolor_unregister(
-+			&priv->leds[cur_led].mc_cdev);
-+	kfree(priv->data_buf);
-+	mutex_destroy(&priv->mutex);
-+}
-+
-+static const struct spi_device_id ws2812b_spi_ids[] = {
-+	{ "ws2812b" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(spi, ws2812b_spi_ids);
-+
-+static const struct of_device_id ws2812b_dt_ids[] = {
-+	{ .compatible = "worldsemi,ws2812b" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, ws2812b_dt_ids);
-+
-+static struct spi_driver ws2812b_driver = {
-+	.probe		= ws2812b_probe,
-+	.remove		= ws2812b_remove,
-+	.id_table	= ws2812b_spi_ids,
-+	.driver = {
-+		.name		= KBUILD_MODNAME,
-+		.of_match_table	= ws2812b_dt_ids,
-+	},
-+};
-+
-+module_spi_driver(ws2812b_driver);
-+
-+MODULE_AUTHOR("Chuanhong Guo <gch981213@gmail.com>");
-+MODULE_DESCRIPTION("WS2812B LED driver using SPI");
-+MODULE_LICENSE("GPL");
--- 
-2.38.1
+> 
+> (Adding my alternative email address to this thread as I will soon
+> lose access to the address I am sending this email from.)
 
