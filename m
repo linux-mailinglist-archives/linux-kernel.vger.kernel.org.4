@@ -2,93 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52776454BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 440DE6454BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiLGHkU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 02:40:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35206 "EHLO
+        id S229780AbiLGHko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 02:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLGHkS (ORCPT
+        with ESMTP id S229820AbiLGHke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 02:40:18 -0500
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BC9338
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 23:40:17 -0800 (PST)
-Received: by mail-pg1-x52a.google.com with SMTP id w37so15547575pga.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 23:40:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dC4TMwQXle2CEuFAKSViCaKm4V2S4kBREOfxx+v90hQ=;
-        b=JLZSrHm7cSdoOaZ6GlESOfZDxTaEa++sKJcTtmT0lKqgVVhXCB225oOwm2a4u/L5r7
-         6//xjS+hxn91j4BMwxCG26Vvve0qqtVMU1Ra2nv/p+1yFowXTc5Ad4WAYBbl5XQuzEcQ
-         ANf0NBxgSqFnPLw0i8MigD5QDbf0HfwOy7ztUcb+KprWP6Oy7DCx2LIKEgUmL70TL5Fj
-         rr0Xi0nsUwnjihUIKooo9IwimcxY6paJD90sPqq8blCifpoeI5hn1ETu0JMPSJASRoyn
-         OCLStPQW3hjDhV+OfGzFD3jz2m9Y0bDqN8BY4cm1fuSsCzwAqKT4pfnSjP/tSI89H+DQ
-         7MHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dC4TMwQXle2CEuFAKSViCaKm4V2S4kBREOfxx+v90hQ=;
-        b=2i3bzyejV5F5WQ+NmCpsBMtetJ48+ZTrKGHnjnPw8Kdhv3NuPhqUs4GYTa0iOxaBM6
-         W25M8iwl4DblgunbuRUxmO8bCA2Ufy1BSVMvtb5T5juZasqaqMdLinubzkAOoV2+t57w
-         pNr8JgKVIKNWwkww9Jvh4MaFnrCrhOgEVBVtAZln+vR2CnM5b/2wrcHQelwV9+SxZ/ZE
-         tImThju1be8ZDIvOXsADULCdqPZw1h7zDN4hPlBT7MRntN0dzTXW8rYt0nHWr8K1JUE1
-         SkpMyckEIEwy3T6BglRIGjwYnx3zrqMgwNdkbXhuGVYL724jh0RwbKLfnZoFVXB2x/VI
-         1SxQ==
-X-Gm-Message-State: ANoB5pnt9M/7ba9wd7oMsVzUtkDUm+gjjNvqdUhFOU8wbcJKK1W/ZNs1
-        aCJLit+SIi1wE0m4qAisn4U=
-X-Google-Smtp-Source: AA0mqf7qcVeLATWy21idezbozBqYcnn4qlbqDeTQX+XJeK4Cfsu8ABNaGuG+pBX78UPky/vtZ6qSwQ==
-X-Received: by 2002:a63:ff0e:0:b0:434:aa69:bba2 with SMTP id k14-20020a63ff0e000000b00434aa69bba2mr79320896pgi.567.1670398817084;
-        Tue, 06 Dec 2022 23:40:17 -0800 (PST)
-Received: from cloud ([185.216.119.110])
-        by smtp.gmail.com with ESMTPSA id t12-20020a170902e84c00b001867fdec154sm13930840plg.224.2022.12.06.23.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 23:40:16 -0800 (PST)
-Date:   Wed, 7 Dec 2022 07:40:11 +0000
-From:   Wang Yong <yongw.kernel@gmail.com>
-To:     akpm@linux-foundation.org, ying.huang@intel.com,
-        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: fix typo in struct pglist_data code comment
-Message-ID: <20221207074011.GA151242@cloud>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 02:40:34 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AF22CE30;
+        Tue,  6 Dec 2022 23:40:30 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NRq2P2pGpz5BNS0;
+        Wed,  7 Dec 2022 15:40:29 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.40.52])
+        by mse-fl1.zte.com.cn with SMTP id 2B77eMlL057810;
+        Wed, 7 Dec 2022 15:40:22 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 7 Dec 2022 15:40:24 +0800 (CST)
+Date:   Wed, 7 Dec 2022 15:40:24 +0800 (CST)
+X-Zmail-TransId: 2af963904368ffffffffffb81ce6
+X-Mailer: Zmail v1.0
+Message-ID: <202212071540249842544@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <jic23@kernel.org>
+Cc:     <lorenzo@kernel.org>, <andriy.shevchenko@linux.intel.com>,
+        <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBpaW86IGltdTogc3RfbHNtNmRzeDogQ29udmVydCB0byB1c2Ugc3lzZnNfZW1pdF9hdCgpIEFQSQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B77eMlL057810
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 6390436D.000 by FangMail milter!
+X-FangMail-Envelope: 1670398829/4NRq2P2pGpz5BNS0/6390436D.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6390436D.000/4NRq2P2pGpz5BNS0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-change "stat" to "start".
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Fixes: c959924b0dc5 ("memory tiering: adjust hot threshold automatically")
-Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- include/linux/mmzone.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c | 9 ++++-----
+ drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_shub.c | 6 ++----
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 5f74891556f3..128f3cde800c 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1200,7 +1200,7 @@ typedef struct pglist_data {
- 	/* start time in ms of current promote threshold adjustment period */
- 	unsigned int nbp_th_start;
- 	/*
--	 * number of promote candidate pages at stat time of current promote
-+	 * number of promote candidate pages at start time of current promote
- 	 * threshold adjustment period
- 	 */
- 	unsigned long nbp_th_nr_cand;
+diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
+index 3f6060c64f32..ac89978a6da1 100644
+--- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
++++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
+@@ -1993,9 +1993,9 @@ st_lsm6dsx_sysfs_sampling_frequency_avail(struct device *dev,
+
+ 	odr_table = &sensor->hw->settings->odr_table[sensor->id];
+ 	for (i = 0; i < odr_table->odr_len; i++)
+-		len += scnprintf(buf + len, PAGE_SIZE - len, "%d.%03d ",
+-				 odr_table->odr_avl[i].milli_hz / 1000,
+-				 odr_table->odr_avl[i].milli_hz % 1000);
++		len += sysfs_emit_at(buf, len, "%d.%03d ",
++				     odr_table->odr_avl[i].milli_hz / 1000,
++				     odr_table->odr_avl[i].milli_hz % 1000);
+ 	buf[len - 1] = '\n';
+
+ 	return len;
+@@ -2012,8 +2012,7 @@ static ssize_t st_lsm6dsx_sysfs_scale_avail(struct device *dev,
+
+ 	fs_table = &hw->settings->fs_table[sensor->id];
+ 	for (i = 0; i < fs_table->fs_len; i++)
+-		len += scnprintf(buf + len, PAGE_SIZE - len, "0.%09u ",
+-				 fs_table->fs_avl[i].gain);
++		len += sysfs_emit_at(buf, len, "0.%09u ", fs_table->fs_avl[i].gain);
+ 	buf[len - 1] = '\n';
+
+ 	return len;
+diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_shub.c b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_shub.c
+index f2b64b4956a3..554b235f75a0 100644
+--- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_shub.c
++++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_shub.c
+@@ -676,8 +676,7 @@ st_lsm6dsx_shub_sampling_freq_avail(struct device *dev,
+ 	for (i = 0; i < settings->odr_table.odr_len; i++) {
+ 		u32 val = settings->odr_table.odr_avl[i].milli_hz;
+
+-		len += scnprintf(buf + len, PAGE_SIZE - len, "%d.%03d ",
+-				 val / 1000, val % 1000);
++		len += sysfs_emit_at(buf, len, "%d.%03d ", val / 1000, val % 1000);
+ 	}
+ 	buf[len - 1] = '\n';
+
+@@ -694,8 +693,7 @@ static ssize_t st_lsm6dsx_shub_scale_avail(struct device *dev,
+
+ 	settings = sensor->ext_info.settings;
+ 	for (i = 0; i < settings->fs_table.fs_len; i++)
+-		len += scnprintf(buf + len, PAGE_SIZE - len, "0.%06u ",
+-				 settings->fs_table.fs_avl[i].gain);
++		len += sysfs_emit_at(buf, len, "0.%06u ", settings->fs_table.fs_avl[i].gain);
+ 	buf[len - 1] = '\n';
+
+ 	return len;
 -- 
 2.25.1
-
