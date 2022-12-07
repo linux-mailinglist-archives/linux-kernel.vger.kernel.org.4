@@ -2,86 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7D896453DB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24C26453F4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLGGQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 01:16:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51984 "EHLO
+        id S229530AbiLGGX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 01:23:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiLGGQh (ORCPT
+        with ESMTP id S229437AbiLGGX4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 01:16:37 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFE758BC6
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 22:16:37 -0800 (PST)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p2njK-0003p7-Oa; Wed, 07 Dec 2022 07:16:30 +0100
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1p2njK-0007Y7-G9; Wed, 07 Dec 2022 07:16:30 +0100
-Date:   Wed, 7 Dec 2022 07:16:30 +0100
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64 support
- for ksz8 series of switches
-Message-ID: <20221207061630.GC19179@pengutronix.de>
-References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
- <20221206114133.291881a4@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221206114133.291881a4@kernel.org>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 7 Dec 2022 01:23:56 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F325984D;
+        Tue,  6 Dec 2022 22:23:53 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NRnKz2vdkz8R040;
+        Wed,  7 Dec 2022 14:23:51 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 2B76NlVm041235;
+        Wed, 7 Dec 2022 14:23:47 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp02[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Wed, 7 Dec 2022 14:23:49 +0800 (CST)
+Date:   Wed, 7 Dec 2022 14:23:49 +0800 (CST)
+X-Zmail-TransId: 2b04639031752c0b96a8
+X-Mailer: Zmail v1.0
+Message-ID: <202212071423496852423@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <corbet@lwn.net>, <kuba@kernel.org>
+Cc:     <davem@davemloft.net>, <hannes@cmpxchg.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdwqBkb2NzOiBwcm9jLnJzdDogYWRkwqBzb2Z0bmV0X3N0YXQ=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B76NlVm041235
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63903177.000 by FangMail milter!
+X-FangMail-Envelope: 1670394231/4NRnKz2vdkz8R040/63903177.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63903177.000/4NRnKz2vdkz8R040
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:41:33AM -0800, Jakub Kicinski wrote:
-> On Mon,  5 Dec 2022 06:29:04 +0100 Oleksij Rempel wrote:
-> > +	stats->rx_packets = raw->rx_bcast + raw->rx_mcast + raw->rx_ucast +
-> > +		raw->rx_pause;
-> > +	stats->tx_packets = raw->tx_bcast + raw->tx_mcast + raw->tx_ucast +
-> > +		raw->tx_pause;
-> 
-> FWIW for normal netdevs / NICs the rtnl_link_stat pkts do not include
-> pause frames, normally. Otherwise one can't maintain those stats in SW
-> (and per-ring stats, if any, don't add up to the full link stats).
-> But if you have a good reason to do this - I won't nack..
+From: Yang Yang <yang.yang29@zte.com.cn>
 
-Pause frames are accounted by rx/tx_bytes by HW. Since pause frames may
-have different size, it is not possible to correct byte counters, so I
-need to add them to the packet counters.
+Softnet_stat shows statistics of struct softnet_data of online CPUs.
+Struct softnet_data manages incoming and output packets on
+per-CPU queues. Notice that fastroute and cpu_collision in
+softnet_stat are obsoleted, their value is always 0.
 
-Regards,
-Oleksij
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Reviewed-by: xu xin <xu.xin16@zte.com.cn>
+Reviewed-by: Zhang Yunkai <zhang.yunkai@zte.com.cn>
+---
+ Documentation/filesystems/proc.rst | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index e224b6d5b642..9d5fd9424e8b 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -1284,6 +1284,7 @@ support this. Table 1-9 lists the files and their meaning.
+  rt_cache      Routing cache
+  snmp          SNMP data
+  sockstat      Socket statistics
++ softnet_stat  Per-CPU incoming packets queues statistics of online CPUs
+  tcp           TCP  sockets
+  udp           UDP sockets
+  unix          UNIX domain sockets
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+2.15.2
