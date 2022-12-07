@@ -2,172 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E14666455D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD886455E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLGI50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:57:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S229783AbiLGI6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:58:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLGI5W (ORCPT
+        with ESMTP id S229749AbiLGI6f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:57:22 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696EBDC7
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:57:19 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id l11so23969528edb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:57:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aFUuCOOiYpWargj2Hxx4wMeTG9+2i0xp4Xulr1tAh5I=;
-        b=w+PrcUPZV5sQabnMiIjAHQDYVNHUfAPdie62LtsU7xJVmWCqBHqmOGKPerEgg+vvNz
-         mLFwsVRbBZ5gwsYkcq2TYQU7k2mNOdwJ9DkxT1Cs3DSlF4s9xTENQ9r4S5qFlPHChMjZ
-         0WIHZpgVFkK16I1RvSRdIbPYeef37f6IoXnvz20e8wYuojNZBXNApPZMHf0Ap912GY4L
-         0umkAAwOSC9Pr3VEBXC4COkjJNDxSYs9qtWbKFuPdf48Ow52XVLbdD+o++GqUz0DZRMv
-         xTH24BUAzw7D7biqvLbG7ffVAN5QCKfYrtFaDWY52vPor4OVlbud/TgfSOgRAqaY1S4x
-         TiwA==
+        Wed, 7 Dec 2022 03:58:35 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A583AC40;
+        Wed,  7 Dec 2022 00:58:34 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id z17so9511086qki.11;
+        Wed, 07 Dec 2022 00:58:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aFUuCOOiYpWargj2Hxx4wMeTG9+2i0xp4Xulr1tAh5I=;
-        b=V5p4XNlL7SRQCjCpKi1UC4n+ubPq6cxZGYM9l9rze4VIzU7qv9z3pruU3CdkLkQcvo
-         XXlW8098ZuGt+VasQEwVrMmM6r9HQbUPIkn7xaL8nVbGo4/t57qeKa9kWmxP+I7cCRMq
-         N/gY4xyQxEHRWt/lZi1gaF2U71c5r/lqfMEmtUZCzdH6NjxjA3nXZqBdRb8I/hvjC0fs
-         gR8Gv3yQxRiCvvKXKuFPAS0WfUAOPpUN288mGTGGoAcR3TpwLISfJUmWT7H/Vviy49Yt
-         Ibsc3ksqZOmIx+02GCg8t5EIASYDy8XsTyC0XC4Popm5pGgstmnccteItxA8dUB5/2CS
-         uGXQ==
-X-Gm-Message-State: ANoB5pnPTHY/03n+IX8nvEmx/eEOq9kcVfVHg9bXaWMGFvVL1+884Vvm
-        xgDZwfX2tqxJ94g6OCSXF4/sjw==
-X-Google-Smtp-Source: AA0mqf5WMrbilNVw4TizQyBbN02+ie9mlbjBtzYdH/RCctyU33On5vtBjilGIpk2xE+JkGW6CsVFqA==
-X-Received: by 2002:a05:6402:e9c:b0:458:d064:a8c2 with SMTP id h28-20020a0564020e9c00b00458d064a8c2mr8428952eda.346.1670403437959;
-        Wed, 07 Dec 2022 00:57:17 -0800 (PST)
-Received: from [192.168.31.208] ([194.29.137.22])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170906218200b007be886f0db5sm8175707eju.209.2022.12.07.00.57.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 00:57:17 -0800 (PST)
-Message-ID: <0a340c21-7794-dd50-0e5c-90abb37423f2@linaro.org>
-Date:   Wed, 7 Dec 2022 09:57:12 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pleAcNei+fQZB0zmkXiJ8AfFaLRxspIhoeV2rVgFZ7Q=;
+        b=2ZY+nh8rz+FGSRpOpKz4viVzf86dGn3b8nZyVbZnbaENew6q8g1hiEIt6XE9idYnAm
+         K7LpqiA2j3qH2ktTi3jtNgAZ2QMfX0ZnZqrvKrHnsLHj+kEZsx3DOwuaDaD7WmLXN8DK
+         l8ehwMabssOguzfloEiD8SyhLsA4AN2M4Oii0+szQ3cYygDg+0G5W9mL37shF/SIOO4E
+         hQI3BE6Xc63xXffV/AY2CFwZW5HYDixAr2Jt/R5YF0pfq5326G1bZiUSfc5iwLhvqPuN
+         33uWK2LK2iCHv0gOpgUSLUs14Jy70LPJ0mxzzCC6iTDKMi+jlC62LUw9Po2O3KADgx5U
+         9qyg==
+X-Gm-Message-State: ANoB5pla/vZt6loh5xbQCIbrxQsvAcpdRYXlfBoeO3KsQgHlFEOil/LV
+        AB+V+E/zD2+dlWT0wjh492uZsf6WHj12l6FRm4Q=
+X-Google-Smtp-Source: AA0mqf53TKybKEpgvhuuUjEXyzo+u+xXdLtr+p5Gh4slnCI9X2C7Vxuk86LOAwCI6Q1qtMmobnFGdYT+IGX/3wg/2jQ=
+X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
+ cx10-20020a05620a51ca00b006ecfa04d97cmr61679069qkb.764.1670403513756; Wed, 07
+ Dec 2022 00:58:33 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.0
-Subject: Re: [PATCH v2] brcmfmac: Add support for BCM43596 PCIe Wi-Fi
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Arend Van Spriel <aspriel@gmail.com>
-Cc:     Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?Q?Alvin_=c5=a0ipraga?= <ALSI@bang-olufsen.dk>,
-        Hector Martin <marcan@marcan.st>,
-        "martin.botka@somainline.org" <martin.botka@somainline.org>,
-        "angelogioacchino.delregno@somainline.org" 
-        <angelogioacchino.delregno@somainline.org>,
-        "marijn.suijten@somainline.org" <marijn.suijten@somainline.org>,
-        "jamipkettunen@somainline.org" <jamipkettunen@somainline.org>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Marek Vasut <marex@denx.de>,
-        "Zhao, Jiaqing" <jiaqing.zhao@intel.com>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "SHA-cyfmac-dev-list@infineon.com" <SHA-cyfmac-dev-list@infineon.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, phone-devel@vger.kernel.org
-References: <20220921001630.56765-1-konrad.dybcio@somainline.org>
- <7fd077c5-83f8-02e2-03c1-900a47f05dc1@somainline.org>
- <CACRpkda3uryD6TOEaTi3pPX5No40LBWoyHR4VcEuKw4iYT0dqA@mail.gmail.com>
- <20220922133056.eo26da4npkg6bpf2@bang-olufsen.dk> <87sfke32pc.fsf@kernel.org>
- <4592f87a-bb61-1c28-13f0-d041a6e7d3bf@linaro.org>
- <CACRpkdax-3VVDd29iH51mfumakqM7jyEc8Pbb=AQwAgp2WsqFQ@mail.gmail.com>
- <d03bd4d4-e4ef-681b-b4a5-02822e1eee75@linaro.org> <87fse76yig.fsf@kernel.org>
- <fc2812b1-db96-caa6-2ecb-c5bb2c33246a@linaro.org> <87bkov6x1q.fsf@kernel.org>
- <CACRpkdbpJ8fw0UsuHXGX43JRyPy6j8P41_5gesXOmitHvyoRwQ@mail.gmail.com>
- <28991d2d-d917-af47-4f5f-4e8183569bb1@linaro.org>
- <c83d7496-7547-2ab4-571a-60e16aa2aa3d@broadcom.com>
- <6e4f1795-08b5-7644-d1fa-102d6d6b47fb@linaro.org>
- <af489711-6849-6f87-8ea3-6c8216f0007b@broadcom.com>
- <62566987-6bd2-eed3-7c2f-ec13c5d34d1b@gmail.com>
- <21fc5c0e-f880-7a14-7007-2d28d5e66c7d@linaro.org>
- <CACRpkdbNssF5c7oJnm-EbjAJnD25kv2V7wp+TCKQZnVHJsni-g@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CACRpkdbNssF5c7oJnm-EbjAJnD25kv2V7wp+TCKQZnVHJsni-g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <2262737.ElGaqSPkdT@kreacher>
+In-Reply-To: <2262737.ElGaqSPkdT@kreacher>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 7 Dec 2022 09:58:22 +0100
+Message-ID: <CAJZ5v0jBo-_XnN2m0jeVdeTi7kjr6C3OSzc1NEJgav0srD0JGQ@mail.gmail.com>
+Subject: Re: [Regression] Logitech BT mouse unusable after commit 532223c8ac57
+ (still in 6.1-rc8)
+To:     Bastien Nocera <hadess@hadess.net>, Jiri Kosina <jikos@kernel.org>
+Cc:     =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 6, 2022 at 3:58 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> Bastien, Jiri,
+>
+> Commit 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the Logitech
+> Bluetooth devices") caused my Logitech Bluetooth mouse to become unusable.
+>
+> Appended is the change I need to make it work again (note that adding the
+> device ID to unhandled_hidpp_devices[] doesn't help, so there must be some
+> significant enough difference in how the two cases are handled in the stack).
+>
+> Here's what I get in the log without the patch below:
+>
+> [   36.710574] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+> [   36.710592] Bluetooth: HIDP socket layer initialized
+> [   36.724644] hid-generic 0005:046D:B016.0001: unknown main item tag 0x0
+> [   36.725860] input: Bluetooth Mouse M336/M337/M535 Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
+> [   36.728036] input: Bluetooth Mouse M336/M337/M535 Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
+> [   36.728823] input: Bluetooth Mouse M336/M337/M535 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
+> [   36.731550] hid-generic 0005:046D:B016.0001: input,hidraw0: BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on 9c:b6:d0:96:8e:c8
+> [   36.833039] logitech-hidpp-device 0005:046D:B016.0001: unknown main item tag 0x0
+> [   36.999064] logitech-hidpp-device 0005:046D:B016.0001: Device not connected
+>
+> and here's what I get with it:
+>
+> [   43.642546] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+> [   43.642559] Bluetooth: HIDP socket layer initialized
+> [   43.652898] hid-generic 0005:046D:B016.0001: unknown main item tag 0x0
+> [   43.653833] input: Bluetooth Mouse M336/M337/M535 Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
+> [   43.655025] input: Bluetooth Mouse M336/M337/M535 Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
+> [   43.655400] input: Bluetooth Mouse M336/M337/M535 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
+> [   43.657521] hid-generic 0005:046D:B016.0001: input,hidraw0: BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on 9c:b6:d0:96:8e:c8
+>
+> The only difference seems to be that in the former case the logitech-hidpp
+> driver tries to bind to the device, but I guess that is expected.  However,
+> when the device ID is added to unhandled_hidpp_devices[], the messages look
+> exactly like in the "good" case, but the mouse still doesn't work.
 
+Here's what happens.
 
-On 07/12/2022 00:37, Linus Walleij wrote:
-> On Tue, Dec 6, 2022 at 10:59 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
-> 
->> Yes, it does seem to work just fine! The kernel now looks for
->> brcm/brcmfmac4359c-pcie.sony,kagura-row.bin as we would expect.
-> 
-> So the Sony kagura needs a special brcmfmac firmware like so many
-> other mobile phones. There are a few Samsungs with custom firmware
-> as well.
-FWIW, Sony did a great job and agreed to license calibration files under 
-CC0-1.0 [1] and the firmwares itself [2] have a Broadcom license 
-attached to it.
+- The logitech-hidpp driver is modular and is not present initially,
+so hid-generic probes first (successfully).
 
-Konrad
+- logitech-hidpp is loaded which causes the device to be reporobed due
+to __hid_bus_driver_added().
 
-[1] 
-https://github.com/sonyxperiadev/device-sony-kagura/commit/1f633325a3890864503b5e19f581d1b6a538996c
-[2] 
-https://github.com/sonyxperiadev/vendor-broadcom-wlan/tree/master/bcmdhd/firmware
-> 
-> Arend: what is the legal situation with these custom firmwares?
-> 
-> I was under the impression that Broadcom actually made these,
-> so they could in theory be given permission for redistribution in
-> linux-firmware?
-> 
-> Some that I have are newer versions than what is in Linux-firmware,
-> e.g this from linux-firmware:
-> 
-> brcm/brcmfmac4330-sdio.bin
-> 4330b2-roml/sdio-ag-pool-ccx-btamp-p2p-idsup-idauth-proptxstatus-pno-aoe-toe-pktfilter-keepalive
-> Version: 5.90.125.104 CRC: 2570e6a3 Date: Tue 2011-10-25 19:34:26 PDT
-> 
-> There is this found in Samsung Codina GT-I8160:
-> 4330b2-roml/sdio-g-p2p-aoe-pktfilter-keepalive-pno-ccx-wepso Version:
-> 5.99.10.0 CRC: 4f7fccf Date: Wed 2012-12-05 01:02:50 PST FWID
-> 01-52653ba9
-> 
-> Or:
-> brcmfmac4334-sdio.bin
-> 4334b1min-roml/sdio-ag-pno-p2p-ccx-extsup-proptxstatus-dmatxrc-rxov-pktfilter-keepalive-aoe-vsdb-wapi-wl11d
-> Version: 6.10.0.0 CRC: 31410dd4 Date: Tue 2012-06-26 11:33:07 PDT FWID
-> 01-8ee3be86
-> 
-> There is this found in Samsung Golden GT-I8190N:
-> 4334b1-roml/sdio-ag-p2p-extsup-aoe-pktfilter-keepalive-pno-dmatxrc-rxov-proptxstatus-vsdb-mchan-okc-rcc-fmc-wepso-txpwr-autoabn-sr
-> Version: 6.10.58.99 CRC: 828f9174 Date: Mon 2013-08-26 02:13:44 PDT
-> FWID 01-e39d4d77
-> 
-> So in some cases more than a year newer firmware versions
-> compared to linux-firmware, I guess also customized for the
-> phones, but I can't really tell because we don't have anything
-> of similar date in linux-firmware.
-> 
-> Yours,
-> Linus Walleij
+- Because the ->match() callback in hid-generic returns 0 for the
+device now, it is unbound from the device.
+
+- The probing of logitech-hidpp fails (due to an error in ->probe()).
+
+- The probing of hid-generic fails due to the failing ->match().
+
+So in order for unhandled_hidpp_devices[] in logitech-hidpp to work
+with hid-generic, __check_hid_generic() needs to be amended with a
+change to run the ->match() callback of the "specific" driver being
+tried.
+
+I have a working patch for this that will be sent shortly.
+
+Thanks!
