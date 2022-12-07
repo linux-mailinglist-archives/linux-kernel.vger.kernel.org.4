@@ -2,107 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A9E645196
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD42564519B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiLGBzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:55:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
+        id S229902AbiLGB4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbiLGBzH (ORCPT
+        with ESMTP id S229836AbiLGB4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:55:07 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A86DAC
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:55:05 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id cf42so20701778lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9gPf1c0smtvvJKefQzCjT4En/iaFZ6itMFzysD6Z4OM=;
-        b=F5XdJ8P+8uBnBb+dUBfic7nm5SikL1KNbn7ae+J0KeUhJ7YubLk0eOko+SSKw4JMIL
-         RMowVv0fhZjZxvuuC5XCrjHqcsOTFUOkFuxnVS4R0yoybdhUosKxPSJWgXlG8BRCR4Bl
-         qByb0+sg9hXnmrQuwKfm+1pfSWG6rpvT2eFiE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9gPf1c0smtvvJKefQzCjT4En/iaFZ6itMFzysD6Z4OM=;
-        b=yjggHGDWW7/FFoOWSUx1m9oeQAwb3uJhjUD0NZFzENmTW3DCPgZSXB5DLbLqxxQF5i
-         YJS0Iovorijfbf6QgJuchkLOSkyHeaQgdxxuKpa+zjtACOLnXu9FX3PDMAZJzT/DGHGn
-         w6NCBxAO/I2jB7MstkltdsWDrP1oCXJ5V7rI4vXOGK8wRXDkwrImvbgG4sucpvLGrEFK
-         vB0PdPM97D5S5Ly02Z22r2yIM0ssIdM+mFAfYcTo3QR9NLAqHodQI3AnuKc5Aj8UoLlS
-         5KKcJuOBM6jy15Vs9VwfPASF/T03HlB41Y8CsaOJKJFT6SuxsWAaLg7r03sk2M8j/z5B
-         Ak+A==
-X-Gm-Message-State: ANoB5plhgdnx3zgpEYnlKR8uIAyrxDNQ+4/C9aMcML20sL2WHV+FQu8o
-        fdE11Cu7fcMdQ75eKt+eZhl9pCETzSKmbmNJd97ZfQ==
-X-Google-Smtp-Source: AA0mqf7wtJbEWs3XklSLGf4TQG/d7BmGx6U75OCnWt3zypvQNfxMpgMOwZeyvletG+StOnG/ChUnbuE8/zaGl5Fx4vs=
-X-Received: by 2002:a05:6512:33d1:b0:4b5:1c86:9267 with SMTP id
- d17-20020a05651233d100b004b51c869267mr15140973lfg.297.1670378104033; Tue, 06
- Dec 2022 17:55:04 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 7 Dec 2022 01:55:03 +0000
+        Tue, 6 Dec 2022 20:56:02 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EB32ED;
+        Tue,  6 Dec 2022 17:56:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7B376068E;
+        Wed,  7 Dec 2022 01:55:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57939C433D6;
+        Wed,  7 Dec 2022 01:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670378159;
+        bh=/z+Iu62uP4cJGR3CTHqreL6Uha56POJb1QIiPp7cJ9Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=skStzngAaBq+LugCgiSvQgoYE632Mrtu89piWFC/pKdrCtyWcYSLK+DssC6Ko9Vtk
+         gLSo2Wj9mFS2oM+ZDthoSb7N30k++/sPaHRKPjKdLExCKhwtqoKvG9zKj2YGY37Xyc
+         I3NLSeRxE7aFN76JPSYbEPZV/uYWaXzR8BD9IMw0PNJHY0eId2tZghTVVW70ILExbm
+         GScSP9XWnvVWEba8O8BSCvGbj48Zxlla8xG+f4pv4qWxaVm4VlmF8nUfBSZ/V1VZ6D
+         XavSa2AbgFLJJkU3p6Rx58oEt4EAFRoHn8RoEjad9maFsQh8L4KLstesRo7s8fwDuq
+         ZIO1u6rFDTZTQ==
+Date:   Tue, 6 Dec 2022 17:55:57 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        pepsipu <soopthegoop@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] skbuff: Reallocate to ksize() in __build_skb_around()
+Message-ID: <20221206175557.1cbd3baa@kernel.org>
+In-Reply-To: <20221206231659.never.929-kees@kernel.org>
+References: <20221206231659.never.929-kees@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
-References: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 7 Dec 2022 01:55:03 +0000
-Message-ID: <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com>
-Subject: Re: [PATCH] remoteproc: elf_loader: Update resource table name check
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, bgoswami@quicinc.com,
-        broonie@kernel.org, devicetree@vger.kernel.org,
-        judyhsiao@chromium.org, krzysztof.kozlowski@linaro.org,
-        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        mathieu.poirier@linaro.org, perex@perex.cz, quic_plai@quicinc.com,
-        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
-        srinivas.kandagatla@linaro.org, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-12-01 04:20:48)
-> Update resource table name check with sub string search instead of
-> complete string search.
-> In general Qualcomm binary contains, section header name
-> (e.g. .resource_table), amended with extra string to differentiate
-> with other sections.
-> So far Android adsp binaries are being authenticated using TZ,
-> hence this mismatch hasn't created any problem.
-> In recent developments, ADSP binary is being used in Chrome based
-> platforms, which doesn't have TZ path, hence resource table is
-> required for memory sandboxing.
->
+On Tue,  6 Dec 2022 15:17:14 -0800 Kees Cook wrote:
+> -	unsigned int size = frag_size ? : ksize(data);
+> +	unsigned int size = frag_size;
+> +
+> +	/* When frag_size == 0, the buffer came from kmalloc, so we
+> +	 * must find its true allocation size (and grow it to match).
+> +	 */
+> +	if (unlikely(size == 0)) {
+> +		void *resized;
+> +
+> +		size = ksize(data);
+> +		/* krealloc() will immediate return "data" when
+> +		 * "ksize(data)" is requested: it is the existing upper
+> +		 * bounds. As a result, GFP_ATOMIC will be ignored.
+> +		 */
+> +		resized = krealloc(data, size, GFP_ATOMIC);
+> +		if (WARN_ON(resized != data))
+> +			data = resized;
+> +	}
+>  
 
-Does this need a Fixes tag?
+Aammgh. build_skb(0) is plain silly, AFAIK. The performance hit of
+using kmalloc()'ed heads is large because GRO can't free the metadata.
+So we end up carrying per-MTU skbs across to the application and then
+freeing them one by one. With pages we just aggregate up to 64k of data
+in a single skb.
 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
->  drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
-> index 5a412d7..0feb120 100644
-> --- a/drivers/remoteproc/remoteproc_elf_loader.c
-> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
-> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
->                 u64 offset = elf_shdr_get_sh_offset(class, shdr);
->                 u32 name = elf_shdr_get_sh_name(class, shdr);
->
-> -               if (strcmp(name_table + name, ".resource_table"))
-> +               if (!strstr(name_table + name, ".resource_table"))
+I can only grep out 3 cases of build_skb(.. 0), could we instead
+convert them into a new build_skb_slab(), and handle all the silliness
+in such a new helper? That'd be a win both for the memory safety and one
+fewer branch for the fast path.
 
-Was the strcmp not working before because the 'name_table' has something
-else in it? It really looks like your elf file is malformed.
+I think it's worth doing, so LMK if you're okay to do this extra work,
+otherwise I can help (unless e.g. Eric tells me I'm wrong..).
