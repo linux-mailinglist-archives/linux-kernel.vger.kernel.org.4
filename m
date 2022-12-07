@@ -2,163 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F1D26457CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EF5E645797
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiLGK1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:27:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S230438AbiLGKXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:23:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLGK1U (ORCPT
+        with ESMTP id S230375AbiLGKXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:27:20 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7315E0F4
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:27:19 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1B31D5C01C6;
-        Wed,  7 Dec 2022 05:27:19 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 07 Dec 2022 05:27:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1670408839; x=
-        1670495239; bh=Zn5jcj0nU0NQg/fB7GJUuCXybzPA29EmtUUxU6l8Xro=; b=E
-        wuHCkoD5BEswQC9qUuPfaaqVKsMliy8vHaeLW61fXj/q8yKZCL5IvVJpI4alxzdV
-        3gvWCzgR59199Zb9qSHkvTWzEYsinVkjSGrrpK3B66WKkgFDYGPJYehdcoU0HoVt
-        uQZIb/1hdRf7wMSQnKEHzI6kYh+8lumue2V36gAP6DLZoEhWBMLlXeV/Tx1O3JOo
-        G3+FeGOXbvJHIrmGU1KK8tsMenMODr9mCuZxviw9L1tE/+wTeRkl74XCJtXAMHvw
-        nyznme2vhKyAc4J2RrUdFMDouDfffxusMkU4iG3UYCjrsUiNSOf8+zF+gZ2SOJ+Q
-        IAT6ANuaUvC/P2gNZ+SOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670408839; x=
-        1670495239; bh=Zn5jcj0nU0NQg/fB7GJUuCXybzPA29EmtUUxU6l8Xro=; b=O
-        Em7LebaaCIxXob7HuXAjoWNVUY9POi5Tpz7ddMXAxbL2X9EXwy56scD6DRJgeK/1
-        ktJrzah4EKNRzd15gaCm6EtLAAKcK29psDPEXACESTZqRDAa66fmLmzsiE0Mew5w
-        nWbRnECnSov4WgHpZ6r5xG934CNfFsMLwF6CDV+oNfBlHG7SgWH0nmrjvIU61l3O
-        ZDIUhJmKFenPO9vhcz78QFu99FWe2XDf0f1bSivJwHOpr7fzaotHXSKOybLoZQ3u
-        eI5Pt/bXDoNKWvhc4V8RX6fRHVlSR3LKLtCEPS22UFvvXBhfyKkQq2wXIVeqpgu5
-        Up6ikjU3AFwbj1cLzKssg==
-X-ME-Sender: <xms:hmqQY_nWgLKjeGi8t1b1ovx4PtIKpXQ4wnVg6uI2uZEjHkVBgjy-Ow>
-    <xme:hmqQYy1agSVrWhhkKFU0g44QFr26R2fbz77DFafQ3qIMVsAdE8_spTEdqwxIz9siV
-    8-uIfp6zwZAbO-lLnU>
-X-ME-Received: <xmr:hmqQY1or9E1G1hBiqxV8YqQia-dCgohoDqyCEXK09D3uHLhPRcMnOmgEn8ZhiTlJwbHHIZZpO28E3bJDjsUvjct62mcXMJRgU8tIfuekNOC6Uw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgddugecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevvdelieejgedvkeffheekheeilefhgefgffehteekueelvddtueffheet
-    ledtffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:hmqQY3m9xNetr0JhaD4XnblOqrpUAX8BDHL8_cZMLn2M8foyVan5ew>
-    <xmx:hmqQY90mz3YiOcEsEx_-Z_WFJWdYuDlUr2FfjwJEyV7O06n-APDZLA>
-    <xmx:hmqQY2u2wK2BJALPeqYq0PIy5fS_ous5mgwuBvMiei5q_ZrWgPVG7w>
-    <xmx:h2qQY3Mp2AwbpxThg4M4scdRoeF4EL0z_Rzp5QfvdxptTfnrEO-mCA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Dec 2022 05:27:18 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Wed, 07 Dec 2022 11:22:45 +0100
-Subject: [PATCH 2/6] drm/vc4: dsi: Move initialisation to encoder_mode_set
+        Wed, 7 Dec 2022 05:23:02 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA78165BC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:23:00 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id a19so20414436ljk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:22:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/AxgtdSHYHP1YbbzJqlPfT18aEYuRk09InbeSd0JHNg=;
+        b=tOruhaPzNOR3bQD/ouWBj+2tp/tUN/H/5pGNgjSe2ABiV3vA61PRSLsVlqeAvI3Oro
+         vHe3xvQC6FSO988F88LJTaSEr7beyBCC0Xr5mjSQNDZchgwGX/zzIK/HzVUFQm9VSFme
+         1SwIrYDkMGRN9sZr262zvK3Rqvw0K0UZRe3qgHO2FEKAoLEeQbmgdeRgDgkeB2V1Z9KU
+         ymxi4wc9pFKvlNmuXwlViGvq4nf0puoGFSzB+NSl2FGkbWnZ1skK7Dng2cwxys79bQBL
+         B2o3FQDAN5bNXMdZu277dHREbYgTFCPcottzQGS2KMyJNymjfRP+abAi8h8GpG1+lETO
+         jymg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/AxgtdSHYHP1YbbzJqlPfT18aEYuRk09InbeSd0JHNg=;
+        b=BJ+BkgyUjJUmK1IvkEzwTK9niMFTB/G5nS1zxNPZqvI0T3gQXjkxSp+35OrlsIbuRL
+         BWtus66Bim8XcxbNa8MD2L1zXlNYu4Pl+03As/2ITDPGmWWdDSd6JpWUVctuwTX9nTsV
+         rT3oXmlUWJoYI3BQ89orEP15QRn14fICmY8suKwNxCwOYB90n6gsCkhpkbg1hjQmoe5h
+         OE242p1plAc0537994srumVzSrWliKBU5duHoW4gt93ICKaavU3J25Koe2N8sRgsm9GG
+         eqzE3yHpEPH+yQXcQ+mgQXzSUl+8X+q/XS3z5Ix/HSzB7zjzHnxXvDdBV0UJlo/xEfxu
+         it0Q==
+X-Gm-Message-State: ANoB5pmA73uTiaApXFMzW2uTKeslSpoNf22RkseHOS8G9spCgAsKvgsB
+        oZcDLdmm457V8O5vM9S4VaCRlA==
+X-Google-Smtp-Source: AA0mqf77/+pUWb1Bn4v6zLGZhuX5q4wF2Fzv0XKIu9nI2Iw4J7TFxfO02J2gesAVCe0NSJikkfILHA==
+X-Received: by 2002:a2e:87d5:0:b0:27a:1ce7:bbcb with SMTP id v21-20020a2e87d5000000b0027a1ce7bbcbmr369003ljj.420.1670408578398;
+        Wed, 07 Dec 2022 02:22:58 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id bu31-20020a056512169f00b00499b27a329esm1953183lfb.300.2022.12.07.02.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 02:22:58 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Joe Tessler <jrt@google.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/9] media: dt-bindings: amlogic,meson-gx-ao-cec: move to cec subfolder
+Date:   Wed,  7 Dec 2022 11:22:45 +0100
+Message-Id: <20221207102253.26663-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
+References: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221207-rpi-dsi-bridge-v1-2-8f68ee0b0adb@cerno.tech>
-References: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
-In-Reply-To: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.11.0-dev-8c583
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2358; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=3tiWtws48aAKGnXcNHWpHDYHrtyX9rE7+J92kYYHF9A=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkTMkslXzLeKGBUO2H0unniv7QQ8z7lXy/O3b53qfvphBWp
- r8/xdZSyMIhxMciKKbLECJsviTs163UnG988mDmsTCBDGLg4BWAieiWMDN8+yBe1KEZtrjT42aOgsv
- fWNJs1WapSE1mNlALXfuQ+Is/IsOGY+TXVhZbcwVp3zpck1erx8t+JLt+6hS3kyIRDyz+8YwEA
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Move amlogic,meson-gx-ao-cec.yaml bindings to cec subfolder and drop
+unneeded quotes.
 
-Breaking the bridge chain does not work for atomic bridges/panels
-and generally causes issues.
-We need to initialise the DSI host before the bridge pre_enables
-are called, so move that to encoder_mode_set in the same way that
-dw-mipi-dsi does.
-
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_dsi.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+ .../bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml     | 4 ++--
+ MAINTAINERS                                                   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+ rename Documentation/devicetree/bindings/media/{ => cec}/amlogic,meson-gx-ao-cec.yaml (93%)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
-index d9d951e9ab7c..607ebe368409 100644
---- a/drivers/gpu/drm/vc4/vc4_dsi.c
-+++ b/drivers/gpu/drm/vc4/vc4_dsi.c
-@@ -867,18 +867,18 @@ static bool vc4_dsi_encoder_mode_fixup(struct drm_encoder *encoder,
- 	return true;
- }
+diff --git a/Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml b/Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
+similarity index 93%
+rename from Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
+rename to Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
+index 8d844f4312d1..f65c9681a9f7 100644
+--- a/Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
++++ b/Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
+@@ -2,8 +2,8 @@
+ # Copyright 2019 BayLibre, SAS
+ %YAML 1.2
+ ---
+-$id: "http://devicetree.org/schemas/media/amlogic,meson-gx-ao-cec.yaml#"
+-$schema: "http://devicetree.org/meta-schemas/core.yaml#"
++$id: http://devicetree.org/schemas/media/cec/amlogic,meson-gx-ao-cec.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
  
--static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
-+static void vc4_dsi_encoder_mode_set(struct drm_encoder *encoder,
-+				     struct drm_display_mode *mode,
-+				     struct drm_display_mode *adjusted_mode)
- {
--	struct drm_display_mode *mode = &encoder->crtc->state->adjusted_mode;
- 	struct vc4_dsi *dsi = to_vc4_dsi(encoder);
- 	struct device *dev = &dsi->pdev->dev;
- 	bool debug_dump_regs = false;
--	struct drm_bridge *iter;
- 	unsigned long hs_clock;
- 	u32 ui_ns;
- 	/* Minimum LP state duration in escape clock cycles. */
- 	u32 lpx = dsi_esc_timing(60);
--	unsigned long pixel_clock_hz = mode->clock * 1000;
-+	unsigned long pixel_clock_hz = adjusted_mode->clock * 1000;
- 	unsigned long dsip_clock;
- 	unsigned long phy_clock;
- 	int ret;
-@@ -1105,6 +1105,13 @@ static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
- 		       ~DSI_PORT_BIT(PHY_AFEC0_RESET));
+ title: Amlogic Meson AO-CEC Controller
  
- 	vc4_dsi_ulps(dsi, false);
-+}
-+
-+static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
-+{
-+	struct vc4_dsi *dsi = to_vc4_dsi(encoder);
-+	bool debug_dump_regs = false;
-+	struct drm_bridge *iter;
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e3f3c3e53f77..07cb85cac4c3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13553,7 +13553,7 @@ L:	linux-amlogic@lists.infradead.org
+ S:	Supported
+ W:	http://linux-meson.com/
+ T:	git git://linuxtv.org/media_tree.git
+-F:	Documentation/devicetree/bindings/media/amlogic,meson-gx-ao-cec.yaml
++F:	Documentation/devicetree/bindings/media/cec/amlogic,meson-gx-ao-cec.yaml
+ F:	drivers/media/cec/platform/meson/ao-cec-g12a.c
+ F:	drivers/media/cec/platform/meson/ao-cec.c
  
- 	list_for_each_entry_reverse(iter, &dsi->bridge_chain, chain_node) {
- 		if (iter->funcs->pre_enable)
-@@ -1370,6 +1377,7 @@ static const struct drm_encoder_helper_funcs vc4_dsi_encoder_helper_funcs = {
- 	.disable = vc4_dsi_encoder_disable,
- 	.enable = vc4_dsi_encoder_enable,
- 	.mode_fixup = vc4_dsi_encoder_mode_fixup,
-+	.mode_set = vc4_dsi_encoder_mode_set,
- };
- 
- static int vc4_dsi_late_register(struct drm_encoder *encoder)
-
 -- 
-2.38.1
+2.34.1
+
