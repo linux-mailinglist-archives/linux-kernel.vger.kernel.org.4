@@ -2,108 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097A264614E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A985646152
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiLGSzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S229734AbiLGS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:56:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLGSzL (ORCPT
+        with ESMTP id S229529AbiLGS4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:55:11 -0500
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19E152896;
-        Wed,  7 Dec 2022 10:55:10 -0800 (PST)
-Received: by mail-pg1-x531.google.com with SMTP id 142so1750256pga.1;
-        Wed, 07 Dec 2022 10:55:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZcyW1gd3zg4fd9wHjyZaKoHe7UQlx2iwBj5+r5lwtoU=;
-        b=QUYI+oBTvrXmif/gn+JK3lOrFCtECQCbbzhdV5P9nIiQrTffTetrNFxzscEawuo32S
-         +FbyYmsgy5evvxBDw/NyInajDVWFJwDBLdQZRrqqgntVJvS744l8Xmc64R2Vn/fWYMml
-         mrnEbpGDv4sCQ/r9EwB+uUhe8y4zd6RZsfuaRmEf3ZC6mlNqlh6dgZANRfzsncYi+/35
-         c6UF7Ofz/TOc7Aw+L/sp5h+6cvs7CikSn8k+gLuhLT12yFWlNRQbifkpwxzFh+Jq15KE
-         CIfz5ZWM27H+q6dRMK+ST982qSh0MB6pWdBZF6SmuEmC/gS6IzKRwigG5jz0DEODxT+z
-         ZY8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcyW1gd3zg4fd9wHjyZaKoHe7UQlx2iwBj5+r5lwtoU=;
-        b=Q1vwQ8NS0fgZmsOegF10N/Rkmlp1Uw64OaIegiPddHK42QipeTieAMDWq4uaBJn7h2
-         p9PnLWtChotxkV5HQCT3Uj8Rk22hCig1M30xzFa+HIVR5hXHIkMWRfSRLOi9GP/A4tCY
-         uTF9xYG9NNN93JfWKlMrylYXIA5MuC4R9eoPiSq0jOf11DFbPCNAcGzbt/qlw4IqtBYs
-         vtKFUyVv3XxTdkk3H0nBl/kJgiSswaLwEJpsITlC8DDTKKvWaswggBm0G4ZeYFqI+ywB
-         HNqDyHL9FhBcDLDMrnuLlCY1uRjPpyhvHmPVbk/3nmqxXl3xlM9zn0WW85L1FLaF2YDV
-         vzJg==
-X-Gm-Message-State: ANoB5pkzUTKkP0bQZpDMJ08iIil6HWNH9/RH11PSNzU7VxQ1C6AdPjU7
-        EXzvUxsOljz1ArUFneY9Y04=
-X-Google-Smtp-Source: AA0mqf6ZDvsKc2bPJvQKql7dHejEDkB0r2kwSBRHdYITJRC3S9CSGASRGhU+id+dPBTkKXHi4G0rUA==
-X-Received: by 2002:a05:6a00:1696:b0:537:b0c3:691 with SMTP id k22-20020a056a00169600b00537b0c30691mr75112012pfc.59.1670439310252;
-        Wed, 07 Dec 2022 10:55:10 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:7a61:38c7:d37a:7f43])
-        by smtp.gmail.com with ESMTPSA id g23-20020aa796b7000000b00575d1ba0ecfsm5634837pfk.133.2022.12.07.10.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 10:55:09 -0800 (PST)
-Date:   Wed, 7 Dec 2022 10:55:06 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
- devm_gpiod_get_optional()
-Message-ID: <Y5DhigXLHMZPhI/E@google.com>
-References: <Y3KMEZFv6dpxA+Gv@google.com>
- <20221207143351.GA1439513@bhelgaas>
+        Wed, 7 Dec 2022 13:56:05 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7017532FE;
+        Wed,  7 Dec 2022 10:56:03 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 54ADC1EC0426;
+        Wed,  7 Dec 2022 19:56:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670439362;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=w/3sUk/0rfDRuqVgEsIw3ITuf0RQoY4ZUXxH88HqJ9A=;
+        b=FRcXo6P1WXcDtzyF+tdgCucKnoo5G7CTBSrh1jzak3+i6ipLz7ffxEIkZwkEnfelNrqP2R
+        054sS/PfrLqdrjogmm+N5+bc6rgxmeLUiWEkB2CuygYNLaRavmTBw6FXltMoPFxwXhkNXi
+        Q+CsZIgDK/J76gYZweohlXECXomsKJE=
+Date:   Wed, 7 Dec 2022 19:55:57 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Venu Busireddy <venu.busireddy@oracle.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sean Christopherson <seanjc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Michael Sterritt <sterritt@google.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu
+ variables
+Message-ID: <Y5DhvRZX0Aizu1ya@zn.tnic>
+References: <20221201021948.9259-1-aik@amd.com>
+ <20221201021948.9259-2-aik@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221207143351.GA1439513@bhelgaas>
+In-Reply-To: <20221201021948.9259-2-aik@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 08:33:51AM -0600, Bjorn Helgaas wrote:
-> On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
-> > Switch the driver to the generic version of gpiod API (and away from
-> > OF-specific variant), so that we can stop exporting
-> > devm_gpiod_get_from_of_node().
-> > 
-> > Acked-by: Pali Rohár <pali@kernel.org>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+On Thu, Dec 01, 2022 at 01:19:46PM +1100, Alexey Kardashevskiy wrote:
+> Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu variables
+
+"x86/amd: " is perfectly fine as a prefix.
+
+> Reading DR[0-3]_ADDR_MASK MSRs takes about 250 cycles which is going to
+> be noticeable when the AMD KVM SEV-ES's DebugSwap feature is enabled and
+
+which does what? I.e., a sort of lazy DR regs swapping...
+
+> KVM needs to store these before switching to a guest; the DebugSwitch
+> hardware support restores them as type B swap.
+
+I know this is all clear to you but you should explain what type B
+register swap is.
+
+> This stores MSR values from set_dr_addr_mask() in percpu values and
+
+s/This stores/Store/
+
+From Documentation/process/submitting-patches.rst:
+
+ "Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+  instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+  to do frotz", as if you are giving orders to the codebase to change
+  its behaviour."
+
+Also, do not talk about what your patch does - that should hopefully be
+visible in the diff itself. Rather, talk about *why* you're doing what
+you're doing.
+
+> returns them via new get_dr_addr_mask(). The gain here is about 10x.
 > 
-> This is unrelated to other pending aardvark changes and will help
-> unblock the API removal, so I applied this to pci/ctrl/aardvark for
-> v6.2, thanks!
+> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
+> ---
+>  arch/x86/include/asm/debugreg.h |  1 +
+>  arch/x86/kernel/cpu/amd.c       | 32 ++++++++++++++++++++
+>  2 files changed, 33 insertions(+)
+> 
+> diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
+> index cfdf307ddc01..c4324d0205b5 100644
+> --- a/arch/x86/include/asm/debugreg.h
+> +++ b/arch/x86/include/asm/debugreg.h
+> @@ -127,6 +127,7 @@ static __always_inline void local_db_restore(unsigned long dr7)
+>  
+>  #ifdef CONFIG_CPU_SUP_AMD
+>  extern void set_dr_addr_mask(unsigned long mask, int dr);
+> +extern unsigned long get_dr_addr_mask(int dr);
+>  #else
+>  static inline void set_dr_addr_mask(unsigned long mask, int dr) { }
+>  #endif
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index c75d75b9f11a..ec7efcef4e14 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -1158,6 +1158,11 @@ static bool cpu_has_amd_erratum(struct cpuinfo_x86 *cpu, const int *erratum)
+>  	return false;
+>  }
+>  
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr0_addr_mask);
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr1_addr_mask);
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr2_addr_mask);
+> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr3_addr_mask);
 
-Thank you Bjorn!
+This BPEXT thing is AMD-only, right?
 
-I wonder if you could also consider picking up the mvebu patch:
+I guess those should be called amd_drX_addr_mask where X in [0-3].
 
-	https://lore.kernel.org/all/Y3KbhIi4ZsSO7+Cl@google.com/
+Yeah yeah, they are used in AMD-only code - svm* - but still.
 
-pci-mvebu.c is the very last user of of_get_named_gpio_flags() in the
-next tree, which we also want to stop exporting.
+>  void set_dr_addr_mask(unsigned long mask, int dr)
+>  {
+>  	if (!boot_cpu_has(X86_FEATURE_BPEXT))
+> @@ -1166,17 +1171,44 @@ void set_dr_addr_mask(unsigned long mask, int dr)
+>  	switch (dr) {
+>  	case 0:
+>  		wrmsr(MSR_F16H_DR0_ADDR_MASK, mask, 0);
+> +		per_cpu(dr0_addr_mask, smp_processor_id()) = mask;
+>  		break;
+>  	case 1:
+> +		wrmsr(MSR_F16H_DR1_ADDR_MASK - 1 + dr, mask, 0);
+> +		per_cpu(dr1_addr_mask, smp_processor_id()) = mask;
+> +		break;
+>  	case 2:
+> +		wrmsr(MSR_F16H_DR1_ADDR_MASK - 1 + dr, mask, 0);
+> +		per_cpu(dr2_addr_mask, smp_processor_id()) = mask;
+> +		break;
+>  	case 3:
+>  		wrmsr(MSR_F16H_DR1_ADDR_MASK - 1 + dr, mask, 0);
+> +		per_cpu(dr3_addr_mask, smp_processor_id()) = mask;
+>  		break;
+>  	default:
+>  		break;
+>  	}
+>  }
+>  
+> +unsigned long get_dr_addr_mask(int dr)
 
-Thanks.
+This function name is too generic for an exported function.
+
+amd_get_dr_addr_mask() I'd say.
+
+> +	if (!boot_cpu_has(X86_FEATURE_BPEXT))
+
+check_for_deprecated_apis: WARNING: arch/x86/kernel/cpu/amd.c:1195: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
+
+You could fix the above one too, while at it.
+
+> +		return 0;
+> +
+> +	switch (dr) {
+> +	case 0:
+> +		return per_cpu(dr0_addr_mask, smp_processor_id());
+> +	case 1:
+> +		return per_cpu(dr1_addr_mask, smp_processor_id());
+> +	case 2:
+> +		return per_cpu(dr2_addr_mask, smp_processor_id());
+> +	case 3:
+> +		return per_cpu(dr3_addr_mask, smp_processor_id());
+
+	default:	
+		WARN_ON_ONCE(1);
+		break;
+
+Just in case.
+
+And as a matter of fact, make that short and succinct:
+
+        switch (dr) {
+        case 0: return per_cpu(dr0_addr_mask, smp_processor_id());
+        case 1: return per_cpu(dr1_addr_mask, smp_processor_id());
+        case 2: return per_cpu(dr2_addr_mask, smp_processor_id());
+        case 3: return per_cpu(dr3_addr_mask, smp_processor_id());
+        default: WARN_ON_ONCE(1); break;
+        }
+
+Thx.
 
 -- 
-Dmitry
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
