@@ -2,184 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B4B645E42
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF68645E40
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:00:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiLGQAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229917AbiLGQAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:00:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiLGQAf (ORCPT
+        with ESMTP id S229632AbiLGQAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:00:35 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4DD3D913
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670428778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3ds86l2H1ZNflWHy4/S2aLn7l+F5D9ot2q/ERt4zH3Q=;
-        b=JEch1RRBNO0MdgE3G6aWp9YkG9SmLeZjc7dDKcjN9Kz3kCzPALAbz1seYx/5HqEtsfiUG1
-        uyZFl1rT3hBTw1ysUrD93V/O+lM2d3o7fEks02Loa5du8jTz60tzHEn8gr6G2kVNoDimOm
-        4USBtNd3ye9UItro4IptAX4NRXBr8uM=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-515-_zLY8_C2NAKxvZkofUuyPA-1; Wed, 07 Dec 2022 10:59:36 -0500
-X-MC-Unique: _zLY8_C2NAKxvZkofUuyPA-1
-Received: by mail-qv1-f69.google.com with SMTP id o13-20020a056214108d00b004c6fb4f16dcso35757311qvr.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:59:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ds86l2H1ZNflWHy4/S2aLn7l+F5D9ot2q/ERt4zH3Q=;
-        b=2xVVFcLdb/guVl/cfXHSFbDXxj5JdivYSja/PAHrESBICm6m/M05Bk4IYjS4cudH+6
-         SqdPtOS22LCEbZsMSvHTK02j2D0NII1mXf1awYRRsGPQ4ADhvlpVsuFcfotnFCmuW6m0
-         NRLYMB8CK4CJ5/NRCJQLrl//CqtYsC0q0v8zhbxZQQvLFijXoFymlX7rXzuKJYteEThC
-         JP5F69qf74rxXer1Lg9uQiA0yCEakcT15zw2jlFDhXtszhrUaU2JZ6On2an/JlI202Yi
-         MlAA5l6rixFWWQoWPRdqDsKHE7PQefOAJlpg47yNb3EN9hPfzUd0wH4OLBz/qirXVrGS
-         LC3w==
-X-Gm-Message-State: ANoB5pntgNB58Z9LEWpoVC+PakwD0BYkk+XtM4/Q0iFp4uXaVySyZqEV
-        7pkMUB5CLbSpPBwWH7hE5gzO84IEWpIhyVGIakzsWxKkV1O5jYnnFyPIt/2aZSATJPWzJDjRyim
-        dEYxmMEjDf3lbZz4H/qNY5XXz
-X-Received: by 2002:a05:6214:2b97:b0:4c7:734a:9047 with SMTP id kr23-20020a0562142b9700b004c7734a9047mr1202638qvb.50.1670428776079;
-        Wed, 07 Dec 2022 07:59:36 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf56ieISDBHezYDAzZ+VpWdZ5V6o2u1bx+Hff3p4ac7yFjt3BUL6MXewhOVSKr+NI9MhWdKWhA==
-X-Received: by 2002:a05:6214:2b97:b0:4c7:734a:9047 with SMTP id kr23-20020a0562142b9700b004c7734a9047mr1202631qvb.50.1670428775800;
-        Wed, 07 Dec 2022 07:59:35 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id bj7-20020a05620a190700b006cfc1d827cbsm17170597qkb.9.2022.12.07.07.59.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 07:59:35 -0800 (PST)
-Date:   Wed, 7 Dec 2022 10:59:34 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH RFC] mm/userfaultfd: enable writenotify while
- userfaultfd-wp is enabled for a VMA
-Message-ID: <Y5C4Zu9sDvZ7KiCk@x1n>
-References: <20221202122748.113774-1-david@redhat.com>
- <Y4oo6cN1a4Yz5prh@x1n>
- <690afe0f-c9a0-9631-b365-d11d98fdf56f@redhat.com>
- <19800718-9cb6-9355-da1c-c7961b01e922@redhat.com>
- <Y45duzmGGUT0+u8t@x1n>
- <92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com>
- <Y4+zw4JU7JMlDHbM@x1n>
- <5a626d30-ccc9-6be3-29f7-78f83afbe5c4@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Wed, 7 Dec 2022 11:00:31 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213B33E090
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:00:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670428830; x=1701964830;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=kG2tIKYtKyNAMfsYWgka4tNLRHyDk9aMd4jLOYTz1vQ=;
+  b=k/m0KX64kGw8YanOljjtyw0kbfdWuPE+TVnUBlsdoZg/BWFMYVSxW0iZ
+   hZ870+XGICkfM2qOgOaF/T+58iFNzTlaCon9MRlpiYy/q05ex7Gfah7R3
+   eE3IUVtcR5o2b0WnY+jJXh19glkNvFWwS/DYjobLYem1GOf/T9wxh6GCs
+   VoNQWAzd+W7QA/s8d22o/8hiEoKaCAXGzHTv9/u5NXbYD1neijOl/4j/j
+   Bjgrs0tllls7hTMLduJHWfyBYdsvTTXLk3JBirTirLh8bLpqvAmRlYa0y
+   OF6nDlk8VtiFeOSeFYsv9c5iFv9G62nIjup6QkpJ6ADJcrueR1/GdYGSj
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="315637476"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="315637476"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 08:00:28 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="753151709"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="753151709"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga002.fm.intel.com with ESMTP; 07 Dec 2022 08:00:28 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 7 Dec 2022 08:00:27 -0800
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Wed, 7 Dec 2022 08:00:27 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Wed, 7 Dec 2022 08:00:27 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Wed, 7 Dec 2022 08:00:27 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LxXx9zaouG4aINcA8Rj/zupFevAZER8IGO/wWXrvr8yJFyGqc20bNRY1p78oHfMfJ2RLKbkCkxkV1NPIOKJOW+s0TQjRi3Cq/xLH4oUlO+1gFMoTfH7h9e/lsHqPelaPwoFDJvCcaappfk+J1WS3iimKDHck7TKkomUpuuXjibs6N1bkn6UI3lQreyBg3llon9BzPLI2JelCNbU6XjReE8hIfcsi3u7QJU+M77VEe86UovUUc62gqC3Iq1pa1X5CemwZkNZUlQYpJcc2aYJ7RvJcBGamUJpnfTseUevUpRi16H4VSbXk9I9/WTPih8AoRN1sgpDlPVmkGhJ4EXG8ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Dtx2oyMlgCMRYTmLyy8jSagZqs9PBCOL3HXseECbIg4=;
+ b=UWP+z1y9pqNFc7IyGni95j8BLvhnqSqg+inw8LMe6gQzP9UaVLZim5K0vKJOYNrNt1GNOXlS8Qni045AF3U3+waSGXwP9xEzW/LI5tisJBFvJWWZ3LFiEwFOVSSfuI5L6T/DsOtWFam2mx2xxI6po5f4LIDWb7ypRPPlvcUn8gCZnonSD0NF0aTv0gGSGMIRKUfs+eimDqrgEL3GzvrH+JBlo8sEt1ESKU6VFY+tt7ZC0tZazMpX89mcvEypm03RINu0IIz+m1hYVs3oAbTX2Irk36klLPz2AM2U4uuCzqKowN/3XKc7z33Nc+HMurhmIXC0y2Zc3aUJFKIfP3rDjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by PH8PR11MB6878.namprd11.prod.outlook.com (2603:10b6:510:22a::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 16:00:25 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::499c:efe3:4397:808]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::499c:efe3:4397:808%9]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 16:00:25 +0000
+Date:   Wed, 7 Dec 2022 11:00:20 -0500
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+CC:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drm/i915: Fix documentation for
+ intel_uncore_forcewake_put__locked
+Message-ID: <Y5C4lKIuMhBorik0@intel.com>
+References: <20221207112909.2655251-1-linmq006@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <5a626d30-ccc9-6be3-29f7-78f83afbe5c4@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221207112909.2655251-1-linmq006@gmail.com>
+X-ClientProxiedBy: SJ0PR05CA0126.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::11) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6059:EE_|PH8PR11MB6878:EE_
+X-MS-Office365-Filtering-Correlation-Id: 00c93654-b041-4f8e-6dae-08dad86c26e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ad5sPsR7BaWJ72Qjnci/hije8NMpF0cBhRJTKzC2Z6rYQdPXIof/jhlmgfhmz9P4W4l5KKrt8yHNHWqf3FNjT3rI+yHnqrxnrIv30EtzxXS5jloxPAz/7uKltCfrMuroaeACG6HsI4fuGOyhHVfcg8OcqDFlUi1eyjpyxUZqd8yIYyLeFSLXgd0Xz67CJSIC9vYq+ZQGxWs71hSdHICqdRn/Dr7ahQ1WSY3zVEbpE11FJfJRenZMlcKAh8kKWsVvBVUlyA7fft+ZUXu3rY4Emc1bv0dtCEveAsOYJ/BYl0K7vFZCXTetfDuJGG1BV2SKr8wtuylvhR9mx7bW97B5mSro4hAD/MLxA0FaWHSvKm9tZEUXQA0DqbIaVzJdjaO1j6+U7kKn7v5xrVIK07gN4awukbJrEVgjpFVc4B2fo4a1KdWIfpTQnnguYSARxqNzaov6XgD8FJfVUbPngkjhK/DiKHzKXzjxflk4aokVHVk4295w41bL3LMHaI1KT8ztQOxY8xs/Qp11dqAqnb4wkPec3+qoZs7vq2kgisiwuvNOnAXgxAbEUB/gYlblCg2GOZtp2fPVy/yMgtmoxVvICOsS3wSbatgH3xiYHaJpuvaHKy05qI/3u6x6b/jCt9t1Jw8C0OUrSoje8l3MheCOclJw91egPsLI+gRrGdZuGkS5GajmJAEX6/ZaLriIPnwgyUJ1JD4GTn3ZVjXYTt2+Bw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(39860400002)(366004)(376002)(396003)(346002)(451199015)(2616005)(38100700002)(6916009)(54906003)(316002)(478600001)(86362001)(6486002)(36756003)(83380400001)(82960400001)(186003)(6506007)(26005)(6512007)(6666004)(2906002)(44832011)(7416002)(5660300002)(41300700001)(8676002)(66556008)(66946007)(8936002)(66476007)(4326008)(101420200003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zBt9V3wV6E8WkGIZMDtXnLA2DIKFghkRECfnm/KPXXrDhTTrnSON9sdORjBR?=
+ =?us-ascii?Q?ESwJr5jeL8uP025v2MdAD865uzzEwLgqkq9MrPb6iQicReMJ/PYLbk/jh72q?=
+ =?us-ascii?Q?CJRg+GzeisLTWXq6zBKRc1ghJJ1EhQfxT/ZWeeJm6Pc6jghB7P45DWzDP4nL?=
+ =?us-ascii?Q?PVGMBfPG464y3LZSDRPhlM3dp7USn9kRDvEimhXv53CY6+QiOP61ZAw6qSuG?=
+ =?us-ascii?Q?NQcFv2qRddE0XV6ifU5BjT8KTWFrFdsknfg9h0nxtlGVY1VrB/NiFvcJoNSV?=
+ =?us-ascii?Q?gvVVNEps/Unua2FkRLpDEIP6WDFQ3pxQ+kIsYtUUUFx+pSyI7h9lO1Ax8wfO?=
+ =?us-ascii?Q?ol96RR2viI5jSfkJIvw8JV10uGNKL4AtwKgipGlnkesG3QgakVf1XKi4ye3i?=
+ =?us-ascii?Q?luRDRhbsg78Yf/GlsQCI1L8UjOBpO0VSTokOu0Nn/xFFsnOZ7/s6P4pqWSS0?=
+ =?us-ascii?Q?bYMWJylEZQysY580s2XGB86b9eFamwpMM3QPLXOC3RcHI9Im2t4s0+5yyXK4?=
+ =?us-ascii?Q?snHj95xIMUaqNCAUFfpsTIowE///qOcBtMSXzqpV2QGWqqwFgpdh8rK2Rw9b?=
+ =?us-ascii?Q?Tebjec8C3Fta3Xt62YGxZT8ETDgGLWhBfROeVQXUC686vW0hu+/0V0zXUFNO?=
+ =?us-ascii?Q?FpCCSJRNxfASS3Vqv7dZkdq9pykTCMZTCDHg00B29gyzNmjeZtB4oHvsR/I+?=
+ =?us-ascii?Q?VyqDNAozxPTXWmA3V6bkEyGnTLhujlQlWXI9EmCbD9eoII5oj9+A9+cccL2n?=
+ =?us-ascii?Q?P4qteDfYmf6STSwVh5FzlQkRInFTIIGceROeU4T/csdXRNPnOS5xWx2k9F+A?=
+ =?us-ascii?Q?ofSA+r5v7FtoVihAcZXyeG6usR0vyYtUSqOi1cf2Pf6NxVqyexsZYcZYD/yj?=
+ =?us-ascii?Q?Gzj5POHhTw8Ze8XyMjW2hP//e0rZcW2nzGu3jK1IP/0OK8Ear9r49duBmoo5?=
+ =?us-ascii?Q?/QCc5tCUkvajwTxzDgVvlq8S0Kt8CiT3CsD93LqdIPHdiklDHPTwXpde035T?=
+ =?us-ascii?Q?Vs1PAi6O32IkGvhMb8GOl0HD2fpZvqAkPFLT+P3B59stfuuAuyBqWilisNEe?=
+ =?us-ascii?Q?70HcHnZeYMIqknHLXBJ6ggqoTDBr/nnTv42wS9/jhXU50VusVAuMq6p8ylh9?=
+ =?us-ascii?Q?MRijacYJdrpiaYgcvpJqv4V98e/k4XHH7St1fJXoBAAg4qdTd+AcvWqliLmS?=
+ =?us-ascii?Q?iWKttjJgJn1mSD1/sK5bILxwUimHrS+SZGn95PZlfZzAXkKvjfc/wXTEWQoM?=
+ =?us-ascii?Q?GWdc5hJd7c2Moa0mIkS7hh0uG3aYQ482AGQCZ37rYe0aS/8DyCnP+RjrJMkg?=
+ =?us-ascii?Q?a/+kzk0pZqBvPAjjRWBcqb/DDkNGIoLp/726RDYYTSDDwAACHwe6vw/H2kdC?=
+ =?us-ascii?Q?bz29pv0GyOldnr3y6Z2FrOw6O77jLmiro2oFFRv4wyjlgw6ygKFjStjOtmEu?=
+ =?us-ascii?Q?4YLO94WqAcxNjWUdg57B4I0KFg34irqWt5JsCKtgs8a79krW0ePoTeSYxMWs?=
+ =?us-ascii?Q?A5I/doGUPtMzOPw7dkkQFQnF3gIeYZIpMzSnllVN/nvoR/sIj6dQMcxDXmYN?=
+ =?us-ascii?Q?yIeUkfxYK5hCiYxXzMEhsgy2Fgoy56SdoNOo5LhDVSeSiLenR29us5b/M/hS?=
+ =?us-ascii?Q?RQ=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 00c93654-b041-4f8e-6dae-08dad86c26e7
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 16:00:24.9614
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HXQwiDtgytZ1u9+bf/2T5kRAhlY0U7QFieAJkjCYLzXrH6Pk3cyItxdAjsHzujqNaszUdipW8xhXEIkb+r7EzQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6878
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 02:33:58PM +0100, David Hildenbrand wrote:
-> On 06.12.22 22:27, Peter Xu wrote:
-> > On Tue, Dec 06, 2022 at 05:28:07PM +0100, David Hildenbrand wrote:
-> > > > If no one is using mprotect() with uffd-wp like that, then the reproducer
-> > > > may not be valid - the reproducer is defining how it should work, but does
-> > > > that really stand?  That's why I said it's ambiguous, because the
-> > > > definition in this case is unclear.
-> > > 
-> > > There are interesting variations like:
-> > > 
-> > > mmap(PROT_READ, MAP_POPULATE|MAP_SHARED)
-> > > uffd_wp()
-> > > mprotect(PROT_READ|PROT_WRITE)
-> > > 
-> > > Where we start out with all-write permissions before we enable selective
-> > > write permissions.
-> > 
-> > Could you elaborate what's the difference of above comparing to:
-> > 
-> > mmap(PROT_READ|PROT_WRITE, MAP_POPULATE|MAP_SHARED)
-> > uffd_wp()
-> > 
-> > ?
+On Wed, Dec 07, 2022 at 03:29:09PM +0400, Miaoqian Lin wrote:
+> intel_uncore_forcewake_put__locked() is used to release a reference.
 > 
-> That mapping would temporarily allow write access. I'd imagine that
-> something like that might be useful when atomically replacing an existing
-> mapping (MAP_FIXED), and the VMA might already be in use by other threads.
-> or when you really want to catch any possible write access.
+> Fixes: a6111f7b6604 ("drm/i915: Reduce locking in execlist command submission")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+
+and will push this right now...
+
+> ---
+>  drivers/gpu/drm/i915/intel_uncore.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> For example, libvhost-user.c in QEMU uses for ordinary postcopy:
+> diff --git a/drivers/gpu/drm/i915/intel_uncore.c b/drivers/gpu/drm/i915/intel_uncore.c
+> index 5cd423c7b646..acb40543eb32 100644
+> --- a/drivers/gpu/drm/i915/intel_uncore.c
+> +++ b/drivers/gpu/drm/i915/intel_uncore.c
+> @@ -819,9 +819,9 @@ void intel_uncore_forcewake_flush(struct intel_uncore *uncore,
+>  }
+>  
+>  /**
+> - * intel_uncore_forcewake_put__locked - grab forcewake domain references
+> + * intel_uncore_forcewake_put__locked - release forcewake domain references
+>   * @uncore: the intel_uncore structure
+> - * @fw_domains: forcewake domains to get reference on
+> + * @fw_domains: forcewake domains to put references
+>   *
+>   * See intel_uncore_forcewake_put(). This variant places the onus
+>   * on the caller to explicitly handle the dev_priv->uncore.lock spinlock.
+> -- 
+> 2.25.1
 > 
->         /*
->          * In postcopy we're using PROT_NONE here to catch anyone
->          * accessing it before we userfault.
->          */
->         mmap_addr = mmap(0, dev_region->size + dev_region->mmap_offset,
->                          PROT_NONE, MAP_SHARED | MAP_NORESERVE,
->                          vmsg->fds[0], 0);
-
-I assume this is for missing mode only.  More on wr-protect mode below.
-
-Personally I don't see immediately on whether this is needed.  If the
-process itself is trusted then it should be under control of anyone who
-will be accessing the pages..  If the other threads are not trusted, then
-there's no way to stop anyone from mprotect(RW) after mprotect(NONE)
-anyway..
-
-So I may not really get the gut of it.
-
-Another way to make sure no one access it is right after receiving the
-memory range from QEMU (VhostUserMemoryRegion), if VuDev.postcopy_listening
-is set, then we register the range with UFFD missing immediately.  After
-all if postcopy_listening is set it means we passed the advise phase
-already (VHOST_USER_POSTCOPY_ADVISE). Any potential access will be blocked
-until QEMU starts to read on that uffd.
-
-> 
-> I'd imagine, when using uffd-wp (VM snapshotting with shmem?) one might use
-> PROT_READ instead before the write-protection is properly set. Because read
-> access would be fine in the meantime.
-
-It'll be different for wr-protect IIUC, because unlike missing protections,
-we don't worry about writes happening before UFFDIO_WRITEPROTECT.
-
-IMHO the solo thing the vhost-user proc needs to do is one
-UFFDIO_WRITEPROTECT for each of the range when QEMU tells it to, then it'll
-be fine.  Pre-writes are fine.
-
-Sorry I probably went a bit off-topic.  I just want to make sure I don't
-miss any real use case of having mprotect being useful for uffd-wp being
-there, because that used to be a grey area for me.
-
-> 
-> But I'm just pulling use cases out of my magic hat ;) Nothing stops user
-> space from doing things that are not clearly forbidden (well, even then
-> users might complain, but that's a different story).
-
-Yes, I think those are always fine but the user just cannot assume it'll
-work as they assumed how it will work.
-
-If "doing things that are not clearly forbidden" triggers a host warning or
-crash that's a bug, OTOH if the outcome is limited to the process itself
-then from kernel pov I think we're good.  I used to even thought about
-forbid mprotect() on uffd-wp but I'm not sure whether it's good idea either.
-
-Let's see whether I missed something above, if so I'll rethink.
-
-Thanks,
-
--- 
-Peter Xu
-
