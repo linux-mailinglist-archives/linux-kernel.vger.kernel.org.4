@@ -2,401 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137C96455AF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFC336455A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:45:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiLGIpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S229893AbiLGIp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:45:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiLGIor (ORCPT
+        with ESMTP id S229964AbiLGIoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:44:47 -0500
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCD92CDE7;
-        Wed,  7 Dec 2022 00:44:21 -0800 (PST)
-X-UUID: f0d089fe87ae4b649ea45bca376c9087-20221207
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=SdYdFei+WyIpEfyzWShuQCmdVJ6JKao/HyTPYm+DK/I=;
-        b=u3Jb5i7XDTQfzStd+KaT+dsvK7dd8HmntOSCI4/uhRUV/06AakIOGZmFgzvQw13F1uHkyzSX5QNPsn8oMekcWOzkZPpMZbRQkQ2GUqMr+y9fzu5Mbxl/fmIfD7fAn43b+gxYiwGi2MmCOQP+CYfUcUeDLX2ebzBB2N9F4d/3vkU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:e704f391-5367-418b-a960-94c637e4aa14,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:95
-X-CID-INFO: VERSION:1.1.14,REQID:e704f391-5367-418b-a960-94c637e4aa14,IP:0,URL
-        :0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTION
-        :quarantine,TS:95
-X-CID-META: VersionHash:dcaaed0,CLOUDID:45facb16-b863-49f8-8228-cbdfeedd1fa4,B
-        ulkID:221207164417I061RKD7,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f0d089fe87ae4b649ea45bca376c9087-20221207
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1391539808; Wed, 07 Dec 2022 16:44:15 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Wed, 7 Dec 2022 16:44:14 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 7 Dec 2022 16:44:14 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v2 11/12] media: platform: mtk-mdp3: add 8195 shared memory configurations
+        Wed, 7 Dec 2022 03:44:46 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065AE2FFE0;
+        Wed,  7 Dec 2022 00:44:22 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id 124so16980046pfy.0;
+        Wed, 07 Dec 2022 00:44:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Aq3HGZp76kd1IhxcBQ0sV7wyhIxHXLUJxX9uaW3maVM=;
+        b=i0hKOZw04aUYKyoYSWFGPQP2C62KidWwhG+DlldCs2fqXoMGucwSSVg1rMHisM4bNx
+         5dQlofsLZL+VNDyAPGwOlW4Wnlkw63FXjddLvCe5DraA57IjyUH0adheqyYpUc9a8/0X
+         MYjboA1P6bhAfRv1jKNnCFP4Xx3TKl4N448lVbPesmFsMf+7SH7RtIVgXrHfehp7BFqT
+         nmMKcoHIxzxTGx6T9hmleoPe3VTGW51GJZpC3mbX+KFQZcVnG/2txt6p+1YvPoE7LKPF
+         dLEVArdKvT3jMTjsD5XryzQ04Oz46OYPtBTZudBK8QJmf+NLn+iI0Z5cX1/zZT7ss2Wb
+         qcOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aq3HGZp76kd1IhxcBQ0sV7wyhIxHXLUJxX9uaW3maVM=;
+        b=iZd8ElBhkBVNfS0FdInm1Hb2oWlkQQZ+EgETZZDUcM5ZAFQJu3nGoFj2VHnKMYkePm
+         5gL+x0JVqfxEDcGjc2yJbslH+rM0fBuPcPVayEKnep4GxO53UWL9WU+oJciX+ieovRw0
+         uQ5lQk+Gt1SQsZmQmbmjUpAJ0O9A8vt1zsKdRkqUL53HMUm5SXZk4U9hdh358D3U3twd
+         c1r2VPByUZquku3cJWisF5BGxIZ4e5rmijQ36BMtCDwV4SB6+lTovuWj1MaelK4df8Cv
+         RbyT0/u78GP2fC9+xXyPgwkORJRqaRZsnV1exEbxz+TkmZlofG8WDUDB886M/VsPJ2xG
+         uiFg==
+X-Gm-Message-State: ANoB5pkF2gg3XUcQPTAZKrK4gPgubVaMaQAYrKjNcFS/Rhxq+3U2ueWg
+        MLd78TcmGxBvfMYan5NNkBM=
+X-Google-Smtp-Source: AA0mqf57MSjH+nG9lMX/ezXPrV6wwfC2E5m98eO2WdJBYYYTk/S/NCJQtHOlxzCj8gIXh5fjvuIqQA==
+X-Received: by 2002:a05:6a00:1711:b0:576:c2f0:d6a1 with SMTP id h17-20020a056a00171100b00576c2f0d6a1mr510404pfc.8.1670402661511;
+        Wed, 07 Dec 2022 00:44:21 -0800 (PST)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id g81-20020a625254000000b00561d79f1064sm13003043pfb.57.2022.12.07.00.44.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 00:44:19 -0800 (PST)
+Message-ID: <7db2bc22-99b8-96f3-66f3-d1695e2e82c1@gmail.com>
 Date:   Wed, 7 Dec 2022 16:44:11 +0800
-Message-ID: <20221207084412.14075-12-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221207084412.14075-1-moudy.ho@mediatek.com>
-References: <20221207084412.14075-1-moudy.ho@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH] KVM: x86/pmu: Avoid ternary operator by directly
+ referring to counters->type
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221205113718.1487-1-likexu@tencent.com>
+ <Y44gbvm5Zb7a1Sbj@google.com>
+ <38b2a836-f9a4-23e4-107b-61efc74638a4@gmail.com>
+ <Y495sF0rDGrrfstD@google.com>
+Content-Language: en-US
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Y495sF0rDGrrfstD@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The configuration of the MT8195 components in the shared memory
-is defined in the header file "mdp3-comp-mt8195.h".
+On 7/12/2022 1:19 am, Sean Christopherson wrote:
+> On Tue, Dec 06, 2022, Like Xu wrote:
+>>>> diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
+>>>> index e5cec07ca8d9..28b0a784f6e9 100644
+>>>> --- a/arch/x86/kvm/vmx/pmu_intel.c
+>>>> +++ b/arch/x86/kvm/vmx/pmu_intel.c
+>>>> @@ -142,7 +142,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+>>>>    	}
+>>>>    	if (idx >= num_counters)
+>>>>    		return NULL;
+>>>> -	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
+>>>> +	*mask &= pmu->counter_bitmask[counters->type];
+>>>
+>>> In terms of readability, I have a slight preference for the current code as I
 
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
----
- .../mediatek/mdp3/mt8195/mdp3-comp-mt8195.h   | 283 ++++++++++++++++++
- .../platform/mediatek/mdp3/mtk-img-ipi.h      |   3 +
- 2 files changed, 286 insertions(+)
- create mode 100644 drivers/media/platform/mediatek/mdp3/mt8195/mdp3-comp-mt8195.h
+IMO, using counters->type directly just like pmc_bitmask() will add more readability
+and opportunistically helps some stale compilers behave better.
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-comp-mt8195.h b/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-comp-mt8195.h
-new file mode 100644
-index 000000000000..2f791597bd7b
---- /dev/null
-+++ b/drivers/media/platform/mediatek/mdp3/mt8195/mdp3-comp-mt8195.h
-@@ -0,0 +1,283 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
-+ */
-+
-+#ifndef __MDP3_COMP_MT8195_H__
-+#define __MDP3_COMP_MT8195_H__
-+
-+#include "mtk-mdp3-type.h"
-+
-+/*
-+ * ISP-MDP generic output information
-+ * MD5 of the target SCP blob:
-+ *     6da52bdcf4bf76a0983b313e1d4745d6
-+ */
-+
-+#define IMG_MAX_SUBFRAMES_8195      14
-+
-+struct img_comp_frame_8195 {
-+	u32 output_disable;
-+	u32 bypass;
-+	u32 in_width;
-+	u32 in_height;
-+	u32 out_width;
-+	u32 out_height;
-+	struct img_crop crop;
-+	u32 in_total_width;
-+	u32 out_total_width;
-+} __packed;
-+
-+struct img_comp_subfrm_8195 {
-+	u32 tile_disable;
-+	struct img_region in;
-+	struct img_region out;
-+	struct img_offset luma;
-+	struct img_offset chroma;
-+	s32 out_vertical; /* Output vertical index */
-+	s32 out_horizontal; /* Output horizontal index */
-+} __packed;
-+
-+struct mdp_rdma_subfrm_8195 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 offset_0_p;
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 in_tile_xleft;
-+	u32 in_tile_ytop;
-+} __packed;
-+
-+struct mdp_rdma_data_8195 {
-+	u32 src_ctrl;
-+	u32 comp_ctrl;
-+	u32 control;
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 iova_end[IMG_MAX_PLANES];
-+	u32 mf_bkgd;
-+	u32 mf_bkgd_in_pxl;
-+	u32 sf_bkgd;
-+	u32 ufo_dec_y;
-+	u32 ufo_dec_c;
-+	u32 transform;
-+	u32 dmabuf_con0;
-+	u32 ultra_th_high_con0;
-+	u32 ultra_th_low_con0;
-+	u32 dmabuf_con1;
-+	u32 ultra_th_high_con1;
-+	u32 ultra_th_low_con1;
-+	u32 dmabuf_con2;
-+	u32 ultra_th_high_con2;
-+	u32 ultra_th_low_con2;
-+	u32 dmabuf_con3;
-+	struct mdp_rdma_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_fg_subfrm_8195 {
-+	u32 info_0;
-+	u32 info_1;
-+} __packed;
-+
-+struct mdp_fg_data_8195 {
-+	u32 ctrl_0;
-+	u32 ck_en;
-+	struct mdp_fg_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_hdr_subfrm_8195 {
-+	u32 win_size;
-+	u32 src;
-+	u32 clip_ofst0;
-+	u32 clip_ofst1;
-+	u32 hist_ctrl_0;
-+	u32 hist_ctrl_1;
-+	u32 hdr_top;
-+	u32 hist_addr;
-+} __packed;
-+
-+struct mdp_hdr_data_8195 {
-+	u32 top;
-+	u32 relay;
-+	struct mdp_hdr_subfrm_8195   subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_aal_subfrm_8195 {
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+} __packed;
-+
-+struct mdp_aal_data_8195 {
-+	u32 cfg_main;
-+	u32 cfg;
-+	struct mdp_aal_subfrm_8195   subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_rsz_subfrm_8195 {
-+	u32 control2;
-+	u32 src;
-+	u32 clip;
-+	u32 hdmirx_en;
-+	u32 luma_h_int_ofst;
-+	u32 luma_h_sub_ofst;
-+	u32 luma_v_int_ofst;
-+	u32 luma_v_sub_ofst;
-+	u32 chroma_h_int_ofst;
-+	u32 chroma_h_sub_ofst;
-+	u32 rsz_switch;
-+	u32 merge_cfg;
-+} __packed;
-+
-+struct mdp_rsz_data_8195 {
-+	u32 coeff_step_x;
-+	u32 coeff_step_y;
-+	u32 control1;
-+	u32 control2;
-+	u32 etc_control;
-+	u32 prz_enable;
-+	u32 ibse_softclip;
-+	u32 tap_adapt;
-+	u32 ibse_gaincontrol1;
-+	u32 ibse_gaincontrol2;
-+	u32 ibse_ylevel_1;
-+	u32 ibse_ylevel_2;
-+	u32 ibse_ylevel_3;
-+	u32 ibse_ylevel_4;
-+	u32 ibse_ylevel_5;
-+	struct mdp_rsz_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_tdshp_subfrm_8195 {
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 hist_cfg_0;
-+	u32 hist_cfg_1;
-+} __packed;
-+
-+struct mdp_tdshp_data_8195 {
-+	u32 cfg;
-+	struct mdp_tdshp_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_color_subfrm_8195 {
-+	u32 in_hsize;
-+	u32 in_vsize;
-+} __packed;
-+
-+struct mdp_color_data_8195 {
-+	u32 start;
-+	struct mdp_color_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_ovl_subfrm_8195 {
-+	u32 L0_src_size;
-+	u32 roi_size;
-+} __packed;
-+
-+struct mdp_ovl_data_8195 {
-+	u32 L0_con;
-+	u32 src_con;
-+	struct mdp_ovl_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_pad_subfrm_8195 {
-+	u32 pic_size;
-+} __packed;
-+
-+struct mdp_pad_data_8195 {
-+	struct mdp_pad_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_tcc_subfrm_8195 {
-+	u32 pic_size;
-+} __packed;
-+
-+struct mdp_tcc_data_8195 {
-+	struct mdp_tcc_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_wrot_subfrm_8195 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 main_buf;
-+} __packed;
-+
-+struct mdp_wrot_data_8195 {
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 control;
-+	u32 stride[IMG_MAX_PLANES];
-+	u32 mat_ctrl;
-+	u32 fifo_test;
-+	u32 filter;
-+	u32 pre_ultra;
-+	u32 framesize;
-+	u32 afbc_yuvtrans;
-+	u32 scan_10bit;
-+	u32 pending_zero;
-+	u32 bit_number;
-+	u32 pvric;
-+	u32 vpp02vpp1;
-+	struct mdp_wrot_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct mdp_wdma_subfrm_8195 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+} __packed;
-+
-+struct mdp_wdma_data_8195 {
-+	u32 wdma_cfg;
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 w_in_byte;
-+	u32 uv_stride;
-+	struct mdp_wdma_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct isp_data_8195 {
-+	u64 dl_flags; /* 1 << (enum mdp_comp_type) */
-+	u32 smxi_iova[4];
-+	u32 cq_idx;
-+	u32 cq_iova;
-+	u32 tpipe_iova[IMG_MAX_SUBFRAMES_8195];
-+} __packed;
-+
-+struct img_compparam_8195 {
-+	u32 type; /* enum mdp_comp_id */
-+	u32 id; /* engine alias_id */
-+	u32 input;
-+	u32 outputs[IMG_MAX_HW_OUTPUTS];
-+	u32 num_outputs;
-+	struct img_comp_frame_8195 frame;
-+	struct img_comp_subfrm_8195 subfrms[IMG_MAX_SUBFRAMES_8195];
-+	u32 num_subfrms;
-+	union {
-+		struct mdp_rdma_data_8195 rdma;
-+		struct mdp_fg_data_8195 fg;
-+		struct mdp_hdr_data_8195 hdr;
-+		struct mdp_aal_data_8195 aal;
-+		struct mdp_rsz_data_8195 rsz;
-+		struct mdp_tdshp_data_8195 tdshp;
-+		struct mdp_color_data_8195 color;
-+		struct mdp_ovl_data_8195 ovl;
-+		struct mdp_pad_data_8195 pad;
-+		struct mdp_tcc_data_8195 tcc;
-+		struct mdp_wrot_data_8195 wrot;
-+		struct mdp_wdma_data_8195 wdma;
-+		struct isp_data_8195 isp;
-+	};
-+} __packed;
-+
-+struct img_config_8195 {
-+	struct img_compparam_8195 components[IMG_MAX_COMPONENTS];
-+	u32 num_components;
-+	struct img_mmsys_ctrl ctrls[IMG_MAX_SUBFRAMES_8195];
-+	u32 num_subfrms;
-+} __packed;
-+
-+#endif  /* __MDP3_COMP_MT8195_H__ */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-index 412b6ab06a82..5dc97894c435 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-@@ -12,6 +12,7 @@
- #include <linux/err.h>
- #include "mtk-mdp3-type.h"
- #include "mt8183/mdp3-comp-mt8183.h"
-+#include "mt8195/mdp3-comp-mt8195.h"
- 
- /* ISP-MDP generic input information */
- 
-@@ -135,12 +136,14 @@ struct img_frameparam {
- struct img_config {
- 	union {
- 		struct img_config_8183 config_8183;
-+		struct img_config_8195 config_8195;
- 	};
- } __packed;
- 
- struct img_compparam {
- 	union {
- 		struct img_compparam_8183 comp_8183;
-+		struct img_compparam_8195 comp_8195;
- 	};
- } __packed;
- 
--- 
-2.18.0
+>>> don't have to look at counters->type to understand its possible values.
+>> When someone tries to add a new type of pmc type, the code bugs up.
+> 
+> Are there new types coming along?  If so, I definitely would not object to refactoring
+> this code in the context of a series that adds a new type(s).  But "fixing" this one
+> case is not sufficient to support a new type, e.g. intel_is_valid_rdpmc_ecx() also
+> needs to be updated.  Actually, even this function would need additional updates
+> to perform a similar sanity check.
 
+True but this part of the change is semantically relevant, which should not
+be present in a harmless generic optimization like this one. Right ?
+
+> 
+> 	if (fixed) {
+> 		counters = pmu->fixed_counters;
+> 		num_counters = pmu->nr_arch_fixed_counters;
+> 	} else {
+> 		counters = pmu->gp_counters;
+> 		num_counters = pmu->nr_arch_gp_counters;
+> 	}
+> 	if (idx >= num_counters)
+> 		return NULL;
+> 
+>> And, this one will make all usage of pmu->counter_bitmask[] more consistent.
+> 
+> How's that?  There's literally one instance of using ->type
+> 
+>    static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
+>    {
+> 	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+> 
+> 	return pmu->counter_bitmask[pmc->type];
+>    }
+> 
+> everything else is hardcoded.  And using pmc->type there make perfect sense in
+> that case.  But in intel_rdpmc_ecx_to_pmc(), there is already usage of "fixed",
+> so IMO switching to ->type makes that function somewhat inconsistent with itself.
+
+More, it's rare to see code like " [ a ? b : c] " in the world of both KVM and x86.
+Good practice (branchless) should be scattered everywhere and not the other way 
+around.
+
+I have absolutely no objection to your "slight preference". Thanks for your time 
+in reviewing this.
