@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5740C6462E0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE34A6462E2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230156AbiLGUxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:53:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S229972AbiLGUxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiLGUww (ORCPT
+        with ESMTP id S230144AbiLGUxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:52:52 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D478139F;
-        Wed,  7 Dec 2022 12:51:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UORhhcQqOaIvpRwHi0DMFterbhwvG2EXcBZ82YBwQMU=; b=HB0cbntyJzwuDFdxDCnp+Vlwhk
-        tSONA7EaFAT9b+ZkRhi8SCpbuaWYeyV5dX92dXFFQy0XLTwjZ8b+qZwY47nxK7r2JS3AhDY/Y2q18
-        YQWeVOWuZLc56HAj71ksdMyTmxK6OQToCGUwu1P6WxiBWym+wp+/POSm1HgoJ8F5etqzNTjvaY9bB
-        oumvoTFfM93KB+IZtwPw2qExrWTiQawM9qjY/9m+jEcmlrXCaa4To5UgSUoi6LVA0YsHiwMLJcwMm
-        Txs6DUb29cPIuy/ivStLtb5yUJUpwXE8cCLBgzfJaZSs2U6XAo+6S6gBoGM5zgOeszjBtmgcza8E+
-        ms0w9KNw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p31Np-00CLcf-VD; Wed, 07 Dec 2022 20:51:14 +0000
-Date:   Wed, 7 Dec 2022 12:51:13 -0800
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>,
-        Pankaj Raghav <p.raghav@samsung.com>,
-        Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Yangtao Li <frank.li@vivo.com>, chao@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, fengnanchang@gmail.com,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        vishal.moola@gmail.com,
-        Javier =?iso-8859-1?Q?Gonz=E1lez?= <javier.gonz@samsung.com>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Subject: Re: [PATCH] f2fs: Support enhanced hot/cold data separation for f2fs
-Message-ID: <Y5D8wYGpp/95ShTV@bombadil.infradead.org>
-References: <Y4ZaBd1r45waieQs@casper.infradead.org>
- <20221130124804.79845-1-frank.li@vivo.com>
- <Y4d0UReDb+EmUJOz@casper.infradead.org>
+        Wed, 7 Dec 2022 15:53:32 -0500
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA8181D8E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 12:51:40 -0800 (PST)
+Received: by mail-io1-f72.google.com with SMTP id f23-20020a5d8157000000b006dfb209094fso14402623ioo.18
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 12:51:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HyvDeG6Y2UoKzWcZcDaELbnX5GhOusiE9HkxBScn33c=;
+        b=QD075S1j+MUOGzAfTAAdN33Pmyo9PzfImI4ToKNaITtDLbFkKtj1BKIRGC+7ddyItg
+         rkkyCbFzzuvj68m5+yT/PqKXk57ebMvLCwuJJ6okYMHjUR21ZoAVInCjBbHJIVX1+8fl
+         u2GJrBDPe9JcmXiG5xEIunF2gxo/n6fK1AqOG9zpDSwapG5b9odypP8MdjTTtR7KLXpW
+         f7zZ3lLnuLK/ZM5v3Igw/TLoDGzTivSFWz6oKMCykqwTUT10SoNoJH4CiwQhWr2OaChx
+         4nNaqMrc2fTkOqD+Y0A8L7ft5fSnC9azOxjL9weLFBWSrwNa0U9GcCbGq+FQPNBAhJyh
+         +kzw==
+X-Gm-Message-State: ANoB5pk8GBIJz0C36J1nl/7OHRw4B2Cs/wQwlOHeAnq9oRLQZm1fL5Mu
+        9WMP4RsHzQZlWFO6WkJN3OnlAzp7VOVF5pXEuzIa5q92vngP
+X-Google-Smtp-Source: AA0mqf7bOULAPk0zMt+Rt++BFFDspzE/DiYVBxLj04TBMNQWKAPcbig10p2+brjyCAjC0Db04TB11X+osWwOKr+Dh1OKS8TN18MG
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4d0UReDb+EmUJOz@casper.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:97c9:0:b0:6a2:e3df:a40e with SMTP id
+ k9-20020a5d97c9000000b006a2e3dfa40emr42762720ios.113.1670446299732; Wed, 07
+ Dec 2022 12:51:39 -0800 (PST)
+Date:   Wed, 07 Dec 2022 12:51:39 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004fe6c005ef43161d@google.com>
+Subject: [syzbot] WARNING: refcount bug in nldev_newlink
+From:   syzbot <syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com>
+To:     jgg@ziepe.ca, leon@kernel.org, linux-kernel@vger.kernel.org,
+        linux-rdma@vger.kernel.org, markzhang@nvidia.com,
+        ohartoov@nvidia.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 03:18:41PM +0000, Matthew Wilcox wrote:
-> On Wed, Nov 30, 2022 at 08:48:04PM +0800, Yangtao Li wrote:
-> > Hi,
-> > 
-> > > Thanks for reviewing this.  I think the real solution to this is
-> > > that f2fs should be using large folios.  That way, the page cache
-> > > will keep track of dirtiness on a per-folio basis, and if your folios
-> > > are at least as large as your cluster size, you won't need to do the
-> > > f2fs_prepare_compress_overwrite() dance.  And you'll get at least fifteen
-> > > dirty folios per call instead of fifteen dirty pages, so your costs will
-> > > be much lower.
-> > >
-> > > Is anyone interested in doing the work to convert f2fs to support
-> > > large folios?  I can help, or you can look at the work done for XFS,
-> > > AFS and a few other filesystems.
-> > 
-> > Seems like an interesting job. Not sure if I can be of any help.
-> > What needs to be done currently to support large folio?
-> > 
-> > Are there any roadmaps and reference documents.
-> 
-> >From a filesystem point of view, you need to ensure that you handle folios
-> larger than PAGE_SIZE correctly.  The easiest way is to spread the use
-> of folios throughout the filesystem.  For example, today the first thing
-> we do in f2fs_read_data_folio() is convert the folio back into a page.
-> That works because f2fs hasn't told the kernel that it supports large
-> folios, so the VFS won't create large folios for it.
-> 
-> It's a lot of subtle things.  Here's an obvious one:
->                         zero_user_segment(page, 0, PAGE_SIZE);
-> There's a folio equivalent that will zero an entire folio.
-> 
-> But then there is code which assumes the number of blocks per page (maybe
-> not in f2fs?) and so on.  Every filesystem will have its own challenges.
-> 
-> One way to approach this is to just enable large folios (see commit
-> 6795801366da or 8549a26308f9) and see what breaks when you run xfstests
-> over it.  Probably quite a lot!
+Hello,
 
-Me and Pankaj are very interested in helping on this front. And so we'll
-start to organize and talk every week about this to see what is missing.
-First order of business however will be testing so we'll have to
-establish a public baseline to ensure we don't regress. For this we intend
-on using kdevops so that'll be done first.
+syzbot found the following issue on:
 
-If folks have patches they want to test in consideration for folio /
-iomap enhancements feel free to Cc us :)
+HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11aeafad880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=3fd8326d9a0812d19218
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112536fb880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16aa2e6d880000
 
-After we establish a baseline we can move forward with taking on tasks
-which will help with this conversion.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
 
-[0] https://github.com/linux-kdevops/kdevops
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com
 
-  Luis
+WARNING: CPU: 0 PID: 5156 at lib/refcount.c:31 refcount_warn_saturate+0x1d7/0x1f0 lib/refcount.c:31
+Modules linked in:
+CPU: 0 PID: 5156 Comm: syz-executor773 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:refcount_warn_saturate+0x1d7/0x1f0 lib/refcount.c:31
+Code: 05 5a 60 51 0a 01 e8 35 0a b5 05 0f 0b e9 d3 fe ff ff e8 6c 9b 75 fd 48 c7 c7 c0 6d a6 8a c6 05 37 60 51 0a 01 e8 16 0a b5 05 <0f> 0b e9 b4 fe ff ff 48 89 ef e8 5a b5 c3 fd e9 5c fe ff ff 0f 1f
+RSP: 0018:ffffc90003ebf0d8 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88802bfcba80 RSI: ffffffff8166b1dc RDI: fffff520007d7e0d
+RBP: ffff888070296600 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 1ffff920007d7e20
+R13: 0000000000000000 R14: ffff888070296600 R15: ffffc90003ebf608
+FS:  000055555600f300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffed185b004 CR3: 00000000265db000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __refcount_dec include/linux/refcount.h:344 [inline]
+ refcount_dec include/linux/refcount.h:359 [inline]
+ ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
+ netdev_tracker_free include/linux/netdevice.h:4039 [inline]
+ netdev_put include/linux/netdevice.h:4056 [inline]
+ dev_put include/linux/netdevice.h:4082 [inline]
+ nldev_newlink+0x360/0x5d0 drivers/infiniband/core/nldev.c:1733
+ rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
+ rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
+ netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
+ netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xd3/0x120 net/socket.c:734
+ ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
+ ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
+ __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd5bc473699
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffed185aff8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fd5bc473699
+RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
+R10: 00007ffed185aa70 R11: 0000000000000246 R12: 00007ffed185b010
+R13: 00000000000f4240 R14: 0000000000011fc1 R15: 00007ffed185b004
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
