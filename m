@@ -2,81 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6930364511E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:27:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3241A64513B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:29:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiLGB07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:26:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46182 "EHLO
+        id S229750AbiLGB3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:29:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiLGB05 (ORCPT
+        with ESMTP id S229511AbiLGB3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:26:57 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A77151C27;
-        Tue,  6 Dec 2022 17:26:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 6 Dec 2022 20:29:39 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852D351C27;
+        Tue,  6 Dec 2022 17:29:38 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 30CADB81B91;
-        Wed,  7 Dec 2022 01:26:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77237C433D6;
-        Wed,  7 Dec 2022 01:26:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670376413;
-        bh=uAhPANtQG8vNwsDMnta3XtQvv7+ogOxGq/VNCkqvbnQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qO6IuAsDB5W4SkID05tr1ksBMwt2O+HHvk6UVnfPs8yyYHGQu5iHwwx0E2d4YDrRX
-         FzTi5ZxefSZJxeOeYR/VWwBzNY9SpbUNSaTTQsQehKam374EKBUpaRvJw/tRMCe9vI
-         p4Q8lg+j7D/5ZhmJSwZgUGEuoE3+X/E51XECrijSGJ34O3VYnUkn9IOoBQ1WRDs/jd
-         D/3Jn+aKWhxW6HRvFn9ZJkkXYdN/NZtu9+WLeA7PpAtnsJuP0Q/XTKhjWVemabyeN6
-         ftYXFXjOODufORJC/iEcxRXjH62M3iGbkW5+CpRd1NSo4A0ckGfTIiKVYRxfTR06Tn
-         liYIjYbnFm8Qw==
-Date:   Tue, 6 Dec 2022 17:26:52 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Veerasenareddy Burru <vburru@marvell.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Liron Himi <lironh@marvell.com>,
-        Abhijit Ayarekar <aayarekar@marvell.com>,
-        Sathesh B Edara <sedara@marvell.com>,
-        Satananda Burla <sburla@marvell.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH net-next v2 2/9] octeon_ep: poll for control
- messages
-Message-ID: <20221206172652.34ed158a@kernel.org>
-In-Reply-To: <BYAPR18MB24234E1E6566B47FCA609BF8CC1B9@BYAPR18MB2423.namprd18.prod.outlook.com>
-References: <20221129130933.25231-1-vburru@marvell.com>
-        <20221129130933.25231-3-vburru@marvell.com>
-        <Y4cirWdJipOxmNaT@unreal>
-        <BYAPR18MB242397C352B0086140106A46CC159@BYAPR18MB2423.namprd18.prod.outlook.com>
-        <Y4hhpFVsENaM45Ho@unreal>
-        <BYAPR18MB2423229A66D1C98C6C744EE1CC189@BYAPR18MB2423.namprd18.prod.outlook.com>
-        <Y42nerLmNeAIn5w9@unreal>
-        <20221205161626.088e383f@kernel.org>
-        <Y48ERxYICkG9lQc1@unreal>
-        <20221206092352.7a86a744@kernel.org>
-        <BYAPR18MB24234E1E6566B47FCA609BF8CC1B9@BYAPR18MB2423.namprd18.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NRfpT0kVzz4y0tv;
+        Wed,  7 Dec 2022 09:29:37 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.40.52])
+        by mse-fl2.zte.com.cn with SMTP id 2B71TQFJ098106;
+        Wed, 7 Dec 2022 09:29:27 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 7 Dec 2022 09:29:27 +0800 (CST)
+Date:   Wed, 7 Dec 2022 09:29:27 +0800 (CST)
+X-Zmail-TransId: 2af9638fec77427b43dc
+X-Mailer: Zmail v1.0
+Message-ID: <202212070929276734686@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <linkinjeon@kernel.org>
+Cc:     <sfrench@samba.org>, <senozhatsky@chromium.org>, <tom@talpey.com>,
+        <linux-cifs@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBrc21iZDogQ29udmVydCB0byB1c2Ugc3lzZnNfZW1pdCgpL3N5c2ZzX2VtaXRfYXQoKSBBUElz?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B71TQFJ098106
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 638FEC81.000 by FangMail milter!
+X-FangMail-Envelope: 1670376577/4NRfpT0kVzz4y0tv/638FEC81.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638FEC81.000/4NRfpT0kVzz4y0tv
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022 21:19:26 +0000 Veerasenareddy Burru wrote:
-> > That said, looking at what this set does - how are the VFs configured?
-> > That's the showstopper for the series in my mind.  
-> 
-> VFs are created by writing to sriov_numvfs.
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Configured, not enabled.
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
+
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ fs/ksmbd/server.c | 20 ++++++--------------
+ 1 file changed, 6 insertions(+), 14 deletions(-)
+
+diff --git a/fs/ksmbd/server.c b/fs/ksmbd/server.c
+index a0d635304754..394b6ceac431 100644
+--- a/fs/ksmbd/server.c
++++ b/fs/ksmbd/server.c
+@@ -432,11 +432,9 @@ static ssize_t stats_show(struct class *class, struct class_attribute *attr,
+ 		"reset",
+ 		"shutdown"
+ 	};
+-
+-	ssize_t sz = scnprintf(buf, PAGE_SIZE, "%d %s %d %lu\n", stats_version,
+-			       state[server_conf.state], server_conf.tcp_port,
+-			       server_conf.ipc_last_active / HZ);
+-	return sz;
++	return sysfs_emit(buf, "%d %s %d %lu\n", stats_version,
++			  state[server_conf.state], server_conf.tcp_port,
++			  server_conf.ipc_last_active / HZ);
+ }
+
+ static ssize_t kill_server_store(struct class *class,
+@@ -468,19 +466,13 @@ static ssize_t debug_show(struct class *class, struct class_attribute *attr,
+
+ 	for (i = 0; i < ARRAY_SIZE(debug_type_strings); i++) {
+ 		if ((ksmbd_debug_types >> i) & 1) {
+-			pos = scnprintf(buf + sz,
+-					PAGE_SIZE - sz,
+-					"[%s] ",
+-					debug_type_strings[i]);
++			pos = sysfs_emit_at(buf, sz, "[%s] ", debug_type_strings[i]);
+ 		} else {
+-			pos = scnprintf(buf + sz,
+-					PAGE_SIZE - sz,
+-					"%s ",
+-					debug_type_strings[i]);
++			pos = sysfs_emit_at(buf, sz, "%s ", debug_type_strings[i]);
+ 		}
+ 		sz += pos;
+ 	}
+-	sz += scnprintf(buf + sz, PAGE_SIZE - sz, "\n");
++	sz += sysfs_emit_at(buf, sz, "\n");
+ 	return sz;
+ }
+
+-- 
+2.25.1
