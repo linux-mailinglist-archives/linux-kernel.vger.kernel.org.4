@@ -2,216 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EACA645A49
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4662C645A4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:02:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiLGNAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
+        id S229811AbiLGNB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:01:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLGNAo (ORCPT
+        with ESMTP id S229603AbiLGNBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:00:44 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EA05133D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:00:43 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id co23so526840wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:00:43 -0800 (PST)
+        Wed, 7 Dec 2022 08:01:52 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFD35133D;
+        Wed,  7 Dec 2022 05:01:51 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id bn5so20840171ljb.2;
+        Wed, 07 Dec 2022 05:01:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xR1noXbyPM5kt/sYfkF4dJpSqyLI733A+gni4V3Hl+g=;
-        b=yeFZCjZBCI9Jl2kn0mMwm5h3PCNQV0qMVvCmJLEPczp/jvmDAWIfUZZZbfXW/EXohY
-         p2XOzLBhN+FZBTdxRVYo44n24EZiyP96Jx5kd/7p3Hc+l8wdcRpierf6Dp49w8DJUQDy
-         rlBFc+EHmIFOsMjJqc5U/27MwGIGi1dyA0aOpjKrEGMwSdLG15MR/hFUANlgdcLoVSMy
-         tGxtn8JsPnRt/XqqdlJcxbVGkDLHo+cYI60OVm5g44w4aaSGFBdCTWJ5kcy1eAG75Mkg
-         tJLpMweFuT/1HwNNf/oHnBgCm87mrMqKt+FPX76ImHI3UkxCCwnkVWry+O/oi/fCry9i
-         XXNw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=58n9OnzkX+f+tALJ3x9hXjitd2F/uK0zQDu7nLFK8BM=;
+        b=Wb7aJUSwSAqnww08AQep8NInEPaa3G9cUjc8sQqZCF2rSZLiFiCkbPvi90Q2W/JB50
+         AkZ0elNUWOZAg6iyS7IFebYNSJCSfUVNBIpyGC09Wu/HfrXcsqaxszfmVUhIfIbdz+tG
+         G+oCaum5ZcLDLT9G7P/Z0Agwbw7BLr4LKCvjVbpsts29SYIH+YuFthAG5XZtiKOgPS/P
+         ZthMdAxkIZxycgbGnmvGTYQR3cEhqarrfoenHuJepkHLokhiBap+28SWnHwc7p6Shlxp
+         nwxvkfNOpUxUFzKkXI8arTvSilK593jhVasK23lsIaSSOhsg/gGZL6ZmBnWC095w8U3Y
+         noGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xR1noXbyPM5kt/sYfkF4dJpSqyLI733A+gni4V3Hl+g=;
-        b=iBgOJLX4fkrEZTHO7LzuPDTBMIcszbKOievVZU8U03HmNR+OXriDI9U5TFfHTyezUZ
-         iQVCZQqCmNZXXIZT0ExB/kA8ZmBU25wfgN8cXNGljGGhTPml2k0nQ095rpZkoxRk8g9W
-         7LhkjaSEDgekNUlNre5Viaic9KhuoEsn1HjNYCKF5tWiuGBjGg62/m+SMh0Cbfu7miBq
-         JJALwh1XsFK9hfp+udmJIXjRro4f/Mtm+/wK2kOUHpUfqfjjAWBBVWnUjpbK0idApZji
-         pUlw/8rrshpUFrfgHpfHKKnLb7LViiC4N80u6hZGZS3NbSKfvReL7d5PHWi273Y7dgQ9
-         aFGw==
-X-Gm-Message-State: ANoB5pn2eWkBGqvF67lIBgRenHYd84RQv8dBqPhN/Ue5ePKnzraCqg5Z
-        o0Znvl4BXDv4hTs+jozv+5+6tg==
-X-Google-Smtp-Source: AA0mqf5ZqtIW3Nlw0Hn0bcSCxhPju08BUFN33Uu0nIt2jrv6oohoW/Xp5yzOalr4pHN+P7tCxG+4GA==
-X-Received: by 2002:a05:6000:1d92:b0:241:6e0a:bfe6 with SMTP id bk18-20020a0560001d9200b002416e0abfe6mr47301524wrb.34.1670418041694;
-        Wed, 07 Dec 2022 05:00:41 -0800 (PST)
-Received: from localhost (ip-046-005-139-011.um12.pools.vodafone-ip.de. [46.5.139.11])
-        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003cfd4a50d5asm1645753wmq.34.2022.12.07.05.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 05:00:41 -0800 (PST)
-Date:   Wed, 7 Dec 2022 14:00:39 +0100
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] mm: memcontrol: deprecate charge moving
-Message-ID: <Y5COd+qXwk/S+n8N@cmpxchg.org>
-References: <20221206171340.139790-1-hannes@cmpxchg.org>
- <20221206171340.139790-4-hannes@cmpxchg.org>
- <02b9663-4377-bd67-8da2-aad72240da@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=58n9OnzkX+f+tALJ3x9hXjitd2F/uK0zQDu7nLFK8BM=;
+        b=AIX2JyowqM1l8YEOax8X0uC/g/lloZEwk9L64AJfFeqmBWI2a411Oy7hNxEah0EHdS
+         fnLMQrTvwoYn+xpHq1s3G/A1AdUgL9SQSdrCEo/72U5Dl/AOpMDqdJQfcC4KKHmnjPhp
+         4cMBErd58yiyOYoesBvgRH3z63a7pD6twt2TNlA3ha67UGvsDb+jl0PM8GGAo1QI5FBr
+         fPYWICOj8gyC/P9aZaQSaZyQkrQ29tf33cWtcqYBKRnjlZKDDJH2b9CGwbyjBGWc5SeT
+         LCUO2hDYcpxl9vgZ+p06pgNgsVZkTOrQ9pRBVf6saC9jx9jqVAzZUZSMwWWyEhgK4bOe
+         UPgQ==
+X-Gm-Message-State: ANoB5pnnbVTeLLODKxw78frcFvk/DokvFeBFXeDn45zbW0mrhqRt9Rw5
+        V+XwIUNiuNxKTihI1DPcKgToSzM/MAyeXi866nk=
+X-Google-Smtp-Source: AA0mqf6Ide4+sp8VWwohGr/fTMvzoa8oN76VSzU4an/ivwpfuzoPSBg3rAh6NB3hKlkh7TXGWyqSO8u/qTTMSXywbfY=
+X-Received: by 2002:a05:651c:c85:b0:278:f572:c9ac with SMTP id
+ bz5-20020a05651c0c8500b00278f572c9acmr30906647ljb.73.1670418109344; Wed, 07
+ Dec 2022 05:01:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <02b9663-4377-bd67-8da2-aad72240da@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221205085351.27566-1-tmaimon77@gmail.com> <20221205085351.27566-3-tmaimon77@gmail.com>
+ <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
+ <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
+ <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
+ <c200557f-c30a-62f9-287a-af804e818cf1@intel.com> <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
+ <CAHp75VemBiGUTspEYDe3hwA9pEzjNMQGY6_kUoVMJyCuEWgChw@mail.gmail.com> <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com>
+In-Reply-To: <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Wed, 7 Dec 2022 15:01:38 +0200
+Message-ID: <CAP6Zq1h9XvH501e_nH9TkUCKPNOuH7dhOM8FrsUM=PYX4gt0qw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        ulf.hansson@linaro.org, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com,
+        skhan@linuxfoundation.org, davidgow@google.com,
+        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
+        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:58:14PM -0800, Hugh Dickins wrote:
-> On Tue, 6 Dec 2022, Johannes Weiner wrote:
-> 
-> > Charge moving mode in cgroup1 allows memory to follow tasks as they
-> > migrate between cgroups. This is, and always has been, a questionable
-> > thing to do - for several reasons.
-> > 
-> > First, it's expensive. Pages need to be identified, locked and
-> > isolated from various MM operations, and reassigned, one by one.
-> > 
-> > Second, it's unreliable. Once pages are charged to a cgroup, there
-> > isn't always a clear owner task anymore. Cache isn't moved at all, for
-> > example. Mapped memory is moved - but if trylocking or isolating a
-> > page fails, it's arbitrarily left behind. Frequent moving between
-> > domains may leave a task's memory scattered all over the place.
-> > 
-> > Third, it isn't really needed. Launcher tasks can kick off workload
-> > tasks directly in their target cgroup. Using dedicated per-workload
-> > groups allows fine-grained policy adjustments - no need to move tasks
-> > and their physical pages between control domains. The feature was
-> > never forward-ported to cgroup2, and it hasn't been missed.
-> > 
-> > Despite it being a niche usecase, the maintenance overhead of
-> > supporting it is enormous. Because pages are moved while they are live
-> > and subject to various MM operations, the synchronization rules are
-> > complicated. There are lock_page_memcg() in MM and FS code, which
-> > non-cgroup people don't understand. In some cases we've been able to
-> > shift code and cgroup API calls around such that we can rely on native
-> > locking as much as possible. But that's fragile, and sometimes we need
-> > to hold MM locks for longer than we otherwise would (pte lock e.g.).
-> > 
-> > Mark the feature deprecated. Hopefully we can remove it soon.
-> > 
-> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> 
-> Acked-by: Hugh Dickins <hughd@google.com>
+Hi Andy and Adrian,
 
-Thanks
+Thanks for your clarifications
 
-> but I wonder if it would be helpful to mention move_charge_at_immigrate
-> in the deprecation message: maybe the first line should be
-> "Cgroup memory moving (move_charge_at_immigrate) is deprecated.\n"
+On Mon, 5 Dec 2022 at 16:33, Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 5/12/22 16:17, Andy Shevchenko wrote:
+> > On Mon, Dec 5, 2022 at 4:14 PM Andy Shevchenko
+> > <andy.shevchenko@gmail.com> wrote:
+> >>
+> >> On Mon, Dec 5, 2022 at 3:41 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>> On 5/12/22 15:25, Andy Shevchenko wrote:
+> >>>> On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >>>>> On Mon, 5 Dec 2022 at 12:54, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+> >>>>>> On Mon, Dec 5, 2022 at 10:54 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >>
+> >> ...
+> >>
+> >>>>>>> +       pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
+> >>>>>>
+> >>>>>> You can't mix devm with non-devm in this way.
+> >>>>> Can you explain what you mean You can't mix devm with non-devm in this
+> >>>>> way, where is the mix?
+> >>>>> In version 1 used devm_clk_get, is it problematic?
+> >>>>
+> >>>> devm_ is problematic in your case.
+> >>>> TL;DR: you need to use clk_get_optional() and clk_put().
+> >>>
+> >>> devm_ calls exactly those, so what is the issue?
+> >>
+> >> The issue is the error path or removal stage where it may or may be
+> >> not problematic. To be on the safe side, the best approach is to make
+> >> sure that allocated resources are being deallocated in the reversed
+> >> order. That said, the
+> >>
+> >> 1. call non-devm_func()
+> >> 2. call devm_func()
+> >>
+> >> is wrong strictly speaking.
+> >
+> > To elaborate more, the
+> >
+> > 1. call all devm_func()
+> > 2. call only non-devm_func()
+> >
+> > is the correct order.
+>
+> 1. WRT pltfm_host->clk, that is what is happening
+> 2. WRT other resources that is simply not always possible because not every resource is wrapped by devm_
+> e.g. mmc_alloc_host() / mmc_free_host()
+I little confused about what to decide, should I use only
+non-devm_func because mmc_alloc_host() / mmc_free_host() is not
+warrped with devm_?
+>
+> >
+> > Hence in this case the driver can be worked around easily (by
+> > shuffling the order in ->probe() to call devm_ first), but as I said
+> > looking into implementation of the _unregister() I'm pretty sure that
+> > clock management should be in sdhci-pltfm, rather than in all callers
+> > who won't need the full customization.
+> >
+> > Hope this helps to understand my point.
+> >
+> >>>> Your ->remove() callback doesn't free resources in the reversed order
+> >>>> which may or, by luck, may not be the case of all possible crashes,
+> >>>> UAFs, races, etc during removal stage. All the same for error path in
+> >>>> ->probe().
+> >>
+> >> I also pointed out above what would be the outcome of neglecting this rule.
+> >>
+> >>>>>>> +       if (IS_ERR(pltfm_host->clk))
+> >>>>>>> +               return PTR_ERR(pltfm_host->clk);
+> >>>>>>> +
+> >>>>>>> +       ret = clk_prepare_enable(pltfm_host->clk);
+> >>>>>>> +       if (ret)
+> >>>>>>> +               return ret;
+> >>>>>>> +
+> >>>>>>> +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
+> >>>>>>> +       if (caps & SDHCI_CAN_DO_8BIT)
+> >>>>>>> +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
+> >>>>>>> +
+> >>>>>>> +       ret = mmc_of_parse(host->mmc);
+> >>>>>>> +       if (ret)
+> >>>>>>> +               goto err_sdhci_add;
+> >>>>>>> +
+> >>>>>>> +       ret = sdhci_add_host(host);
+> >>>>>>> +       if (ret)
+> >>>>>>> +               goto err_sdhci_add;
+> >>>>>>
+> >>>>>> Why can't you use sdhci_pltfm_register()?
+> >>>>> two things are missing in sdhci_pltfm_register
+> >>>>> 1. clock.
+> >>>>
+> >>>> Taking into account the implementation of the corresponding
+> >>>> _unregister() I would add the clock handling to the _register() one.
+> >>>> Perhaps via a new member of the platform data that supplies the name
+> >>>> and index of the clock and hence all clk_get_optional() / clk_put will
+> >>>> be moved there.
+Do you mean to add it to sdhci_pltfm_register function? if yes I
+believe it will take some time to modify sdhci_pltfm_register
+I prefer not to use sdhci_pltfm_register.
+> >>>>
+> >>>>> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
+> >>>>
+> >>>> All the same, why can't platform data be utilised for this?
+> >>>>
+> >>>>>>> +       return 0;
+> >>>>>>> +
+> >>>>>>> +err_sdhci_add:
+> >>>>>>> +       clk_disable_unprepare(pltfm_host->clk);
+> >>>>>>> +       sdhci_pltfm_free(pdev);
+> >>>>>>> +       return ret;
+> >>>>>>> +}
+> >>
+> >>
+> >> --
+> >> With Best Regards,
+> >> Andy Shevchenko
+> >
+> >
+> >
+>
 
-Fair enough! Here is the updated patch.
+Best regards,
 
----
-
-From 0e791e6ab8ba2f75dd4205684c06bcc7308d9867 Mon Sep 17 00:00:00 2001
-From: Johannes Weiner <hannes@cmpxchg.org>
-Date: Mon, 5 Dec 2022 19:57:06 +0100
-Subject: [PATCH] mm: memcontrol: deprecate charge moving
-
-Charge moving mode in cgroup1 allows memory to follow tasks as they
-migrate between cgroups. This is, and always has been, a questionable
-thing to do - for several reasons.
-
-First, it's expensive. Pages need to be identified, locked and
-isolated from various MM operations, and reassigned, one by one.
-
-Second, it's unreliable. Once pages are charged to a cgroup, there
-isn't always a clear owner task anymore. Cache isn't moved at all, for
-example. Mapped memory is moved - but if trylocking or isolating a
-page fails, it's arbitrarily left behind. Frequent moving between
-domains may leave a task's memory scattered all over the place.
-
-Third, it isn't really needed. Launcher tasks can kick off workload
-tasks directly in their target cgroup. Using dedicated per-workload
-groups allows fine-grained policy adjustments - no need to move tasks
-and their physical pages between control domains. The feature was
-never forward-ported to cgroup2, and it hasn't been missed.
-
-Despite it being a niche usecase, the maintenance overhead of
-supporting it is enormous. Because pages are moved while they are live
-and subject to various MM operations, the synchronization rules are
-complicated. There are lock_page_memcg() in MM and FS code, which
-non-cgroup people don't understand. In some cases we've been able to
-shift code and cgroup API calls around such that we can rely on native
-locking as much as possible. But that's fragile, and sometimes we need
-to hold MM locks for longer than we otherwise would (pte lock e.g.).
-
-Mark the feature deprecated. Hopefully we can remove it soon.
-
-Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-Acked-by: Shakeel Butt <shakeelb@google.com>
-Acked-by: Hugh Dickins <hughd@google.com>
-Cc: stable@vger.kernel.org
----
- Documentation/admin-guide/cgroup-v1/memory.rst | 11 ++++++++++-
- mm/memcontrol.c                                |  4 ++++
- 2 files changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
-index 60370f2c67b9..87d7877b98ec 100644
---- a/Documentation/admin-guide/cgroup-v1/memory.rst
-+++ b/Documentation/admin-guide/cgroup-v1/memory.rst
-@@ -86,6 +86,8 @@ Brief summary of control files.
-  memory.swappiness		     set/show swappiness parameter of vmscan
- 				     (See sysctl's vm.swappiness)
-  memory.move_charge_at_immigrate     set/show controls of moving charges
-+                                     This knob is deprecated and shouldn't be
-+                                     used.
-  memory.oom_control		     set/show oom controls.
-  memory.numa_stat		     show the number of memory usage per numa
- 				     node
-@@ -717,9 +719,16 @@ Soft limits can be setup by using the following commands (in this example we
-        It is recommended to set the soft limit always below the hard limit,
-        otherwise the hard limit will take precedence.
- 
--8. Move charges at task migration
-+8. Move charges at task migration (DEPRECATED!)
- =================================
- 
-+THIS IS DEPRECATED!
-+
-+It's expensive and unreliable! It's better practice to launch workload
-+tasks directly from inside their target cgroup. Use dedicated workload
-+cgroups to allow fine-grained policy adjustments without having to
-+move physical pages between control domains.
-+
- Users can move charges associated with a task along with task migration, that
- is, uncharge task's pages from the old cgroup and charge them to the new cgroup.
- This feature is not supported in !CONFIG_MMU environments because of lack of
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index b696354c1b21..9c9a42153b76 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -3919,6 +3919,10 @@ static int mem_cgroup_move_charge_write(struct cgroup_subsys_state *css,
- {
- 	struct mem_cgroup *memcg = mem_cgroup_from_css(css);
- 
-+	pr_warn_once("Cgroup memory moving (move_charge_at_immigrate) is deprecated. "
-+		     "Please report your usecase to linux-mm@kvack.org if you "
-+		     "depend on this functionality.\n");
-+
- 	if (val & ~MOVE_MASK)
- 		return -EINVAL;
- 
--- 
-2.38.1
-
+Tomer
