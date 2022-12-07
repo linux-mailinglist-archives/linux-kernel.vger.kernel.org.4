@@ -2,42 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1544C64567C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8C5364567F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiLGJ3i convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Dec 2022 04:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43746 "EHLO
+        id S229941AbiLGJca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:32:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiLGJ3b (ORCPT
+        with ESMTP id S229501AbiLGJc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:29:31 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 218C23D93B;
-        Wed,  7 Dec 2022 01:29:21 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 99A352000C;
-        Wed,  7 Dec 2022 09:29:16 +0000 (UTC)
-Message-ID: <e7eb0e0c9aea30c0e3205b2f3d96b74a52283b40.camel@hadess.net>
-Subject: Re: [PATCH v1 2/2] HID: logitech-hidpp: Add Bluetooth Mouse
- M336/M337/M535 to unhandled_hidpp_devices[]
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Date:   Wed, 07 Dec 2022 10:29:16 +0100
-In-Reply-To: <2283816.ElGaqSPkdT@kreacher>
-References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
-         <2283816.ElGaqSPkdT@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Wed, 7 Dec 2022 04:32:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8533F29CA9;
+        Wed,  7 Dec 2022 01:32:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2D4BCB81B99;
+        Wed,  7 Dec 2022 09:32:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7CB5C433C1;
+        Wed,  7 Dec 2022 09:32:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670405544;
+        bh=C2Qa7eO4zQqZVnZMMcDQ10lrJR5JlYJLYE/HH767lRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lo6cuRBNx512Shd/pKt+RH5NrQdFx5FbLrfNf9ugYuUB7uy85iueP+9LeSiuAxtvH
+         5Izxj51Ja/X8TYy5vY/N6DkIYq0cl3RIr9ZFB6RrNSf0KmVM+WtaE3C2xCrZ5LdpVy
+         K9cYsYh8WcJqUEDocjfqf6eVEsmMqtY4Kw899xC3lCJpUBXEcoPztQwgdO1jpvhgi/
+         eJF5YpSMenAX0XKPOBfARDockhuE1KiefAOMqwdimRmjHFRpRe4DBdq+dhD87wsmp9
+         +QmXX6uOCGzRsaRdSyya1lzifeBHA8oHO/bArUbrY+Z5LCtLjsrldupGlaahY2vbGf
+         oHLLHTiP8g9yw==
+Date:   Wed, 7 Dec 2022 09:32:20 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     guoren@kernel.org
+Cc:     palmer@rivosinc.com, conor.dooley@microchip.com,
+        liaochang1@huawei.com, lizhengyu3@huawei.com,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] riscv: Fixup compile error with !MMU
+Message-ID: <Y5BdpHrKrRCw9izQ@spud>
+References: <20221207091112.2258674-1-guoren@kernel.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="1Kg3KXAqPRPhThI7"
+Content-Disposition: inline
+In-Reply-To: <20221207091112.2258674-1-guoren@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,48 +58,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 10:12 +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Evidently, Logitech Bluetooth Mouse M336/M337/M535 (0xb016) does not
-> work when HID++ is enabled for it,
 
-This needs the output of the hidpp-list-features tool mentioned earlier
-in the thread so we can avoid words like "evidently" and provide
-concrete proof.
+--1Kg3KXAqPRPhThI7
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-But why is it needed in this case? We purposefully try to avoid blanket
-blocklists. The lack of HID++ can be probed, so the device should work
-just as it used to (if the fallback code works).
+On Wed, Dec 07, 2022 at 04:11:12AM -0500, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+>=20
+> Current nommu_virt_defconfig can't compile:
+>=20
+> In file included from
+> arch/riscv/kernel/crash_core.c:3:
+> arch/riscv/kernel/crash_core.c:
+> In function 'arch_crash_save_vmcoreinfo':
+> arch/riscv/kernel/crash_core.c:8:27:
+> error: 'VA_BITS' undeclared (first use in this function)
+>     8 |         VMCOREINFO_NUMBER(VA_BITS);
+>       |                           ^~~~~~~
+>=20
+> Add MMU dependency for KEXEC_FILE.
+>=20
+> Fixes: 6261586e0c91 ("RISC-V: Add kexec_file support")
+> Reported-by: Conor Dooley <conor@kernel.org>
 
-We should only list devices that need special handling, and the ones
-that don't work once HID++ was probed unsuccessfully.
+FWIW (but certainly don't resend for this)
+s/conor@kernel.org/conor.dooley@microchip.com
 
->  so add it to the list of devices
-> that are not handled by logitech-hidpp.
-> 
-> Fixes: 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the
-> Logitech Bluetooth devices")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Thanks for the quick fix, there's other issues w/ that config for me,
+but this fixed the kexec bits :)
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
+
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
 > ---
->  drivers/hid/hid-logitech-hidpp.c |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> Index: linux-pm/drivers/hid/hid-logitech-hidpp.c
-> ===================================================================
-> --- linux-pm.orig/drivers/hid/hid-logitech-hidpp.c
-> +++ linux-pm/drivers/hid/hid-logitech-hidpp.c
-> @@ -4274,6 +4274,7 @@ static const struct hid_device_id unhand
->         { HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH,
-> USB_DEVICE_ID_LOGITECH_HARMONY_PS3) },
->         /* Handled in hid-generic */
->         { HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH,
-> USB_DEVICE_ID_LOGITECH_DINOVO_EDGE_KBD) },
-> +       { HID_BLUETOOTH_DEVICE(USB_VENDOR_ID_LOGITECH, 0xb016) },
->         {}
->  };
->  
-> 
-> 
-> 
+>  arch/riscv/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index ef8d66de5f38..91319044fd13 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -496,7 +496,7 @@ config KEXEC_FILE
+>  	select KEXEC_CORE
+>  	select KEXEC_ELF
+>  	select HAVE_IMA_KEXEC if IMA
+> -	depends on 64BIT
+> +	depends on 64BIT && MMU
+>  	help
+>  	  This is new version of kexec system call. This system call is
+>  	  file based and takes file descriptors as system call argument
+> --=20
+> 2.36.1
+>=20
 
+--1Kg3KXAqPRPhThI7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5BdpAAKCRB4tDGHoIJi
+0su2AP9L8GJrDHopTVfnWYXYEFOLjQEaJZfNXA0Xoy5+iOgxEAEAgOSw/WcDDknk
+9s5gANOjt2ba7ciDE2ephouE16QLBA8=
+=hTdX
+-----END PGP SIGNATURE-----
+
+--1Kg3KXAqPRPhThI7--
