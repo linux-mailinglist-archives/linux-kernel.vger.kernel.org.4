@@ -2,245 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CD7645E5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BFE645E76
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiLGQIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:08:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36378 "EHLO
+        id S229950AbiLGQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:11:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiLGQIb (ORCPT
+        with ESMTP id S230035AbiLGQLI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:08:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA190101DE;
-        Wed,  7 Dec 2022 08:08:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EB86B81E8B;
-        Wed,  7 Dec 2022 16:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3FAC433D6;
-        Wed,  7 Dec 2022 16:08:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670429308;
-        bh=vcyAyh2sLrxbL8pzcLbQv6twMaQG9hdT0WW2MzYtfuc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t+67XZVJXUWBmzO4Gi151p+9RzfGxGYQVf0sCUrOCCx3hH40QsJuv2PUGn7bkhU6A
-         ihijHKC+Qdv4mZJ9aRU8DxGnHSuDaA7+rVXTEEhaMHlhDv4qzJ4C3q3qbnVmWueJiS
-         dQQmmmRktGJwTOaT85BWxxVAIVGZB8lVzEdxIfm+9fwKEt53MCPYeVJ6HUJOTHjv0M
-         A82fS7ymPqZOXl/eOksp51JrzR8Bq21yf3dxRV37C0IKpouxswUCoKsfvGf/vF9uF5
-         w3PsG0lYUFY/Xt/IX3vyywYxatyIzaKpImrB1G5itZwUqf3eV2EI7wvIjslv90GszD
-         5EEYm4LO+SV3Q==
-Date:   Wed, 7 Dec 2022 10:08:25 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        bp@alien8.de, tony.luck@intel.com, quic_saipraka@quicinc.com,
-        konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, stable@vger.kernel.org
-Subject: Re: [PATCH 02/12] dt-bindings: arm: msm: Fix register regions used
- for LLCC banks
-Message-ID: <20221207160825.nafywxehxjx42kww@builder.lan>
-References: <20221207135922.314827-1-manivannan.sadhasivam@linaro.org>
- <20221207135922.314827-3-manivannan.sadhasivam@linaro.org>
+        Wed, 7 Dec 2022 11:11:08 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3F366CA7;
+        Wed,  7 Dec 2022 08:11:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670429460; x=1701965460;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EX/E0ogleACTNBrig1L1Gk1DF0Q6RlzzbCNh3rOpf7o=;
+  b=RQxfZ3DPO0++VrU99eyIC3EjclXgnoWmLrXtwkec1xmRn4X7SBNszQV5
+   N04eg55uNCW9JFZzhAOR/0nCLgsEJIkqGlC/5d6kgYi6vmnZGEjmNPKaH
+   LCG+1dvoitZUXANiNYNzrMJCZNaUXsF+jd8CltSjWTNM9TU/4TrTKiy0y
+   ngmRl7A5KOr6FaJpZcXL4MRwkzOdohgnRNQtyF7snUalS4eg7a5wbD8aC
+   cZGhNqB426soDUc/5S8OVkw26EfDH4nyVwDUE05nhnYhwvULCUKqrvR3t
+   vYrdS2EAZ4PQDeSCEcxVIm/gYyyoBtcQ60SUENiQZZGtdLxl+YPRSLfyv
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="403199361"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="403199361"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 08:10:59 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="975513608"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="975513608"
+Received: from vkoppal-mobl.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.198.95])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 08:10:58 -0800
+Date:   Wed, 7 Dec 2022 08:10:57 -0800
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-cxl@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] cxl/mbox: Add GET_POISON_LIST mailbox command
+Message-ID: <Y5C7EYz1VrG2H7jh@aschofie-mobl2>
+References: <cover.1668115235.git.alison.schofield@intel.com>
+ <46c7c7339224744fce424b196da3e5566effec17.1668115235.git.alison.schofield@intel.com>
+ <638ffd5eaa3a7_c95729426@dwillia2-mobl3.amr.corp.intel.com.notmuch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207135922.314827-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <638ffd5eaa3a7_c95729426@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 07:29:11PM +0530, Manivannan Sadhasivam wrote:
-> Register regions of the LLCC banks are located at separate addresses.
-> Currently, the binding just lists the LLCC0 base address and specifies
-> the size to cover all banks. This is not the correct approach since,
-> there are holes and other registers located in between.
+On Tue, Dec 06, 2022 at 06:41:34PM -0800, Dan Williams wrote:
+> alison.schofield@ wrote:
+> > From: Alison Schofield <alison.schofield@intel.com>
+> > 
+> > CXL devices maintain a list of locations that are poisoned or result
+> > in poison if the addresses are accessed by the host.
+> > 
+> > Per the spec (CXL 3.0 8.2.9.8.4.1), the device returns this Poison
+> > list as a set of  Media Error Records that include the source of the
+> > error, the starting device physical address and length. The length is
+> > the number of adjacent DPAs in the record and is in units of 64 bytes.
+> > 
+> > Retrieve the list and log each Media Error Record as a trace event of
+> > type 'cxl_poison'.
+> > 
+> > When the poison list is requested by region, include the region name
+> > and uuid in the trace event.
+> > 
+> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
+> > ---
+> >  drivers/cxl/core/mbox.c | 81 +++++++++++++++++++++++++++++++++++++++++
+> >  drivers/cxl/cxlmem.h    | 37 +++++++++++++++++++
+> >  2 files changed, 118 insertions(+)
+> > 
+> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
+> > index 0c90f13870a4..88f034e97812 100644
+> > --- a/drivers/cxl/core/mbox.c
+> > +++ b/drivers/cxl/core/mbox.c
+> > @@ -9,6 +9,9 @@
+> >  
+> >  #include "core.h"
+> >  
+> > +#define CREATE_TRACE_POINTS
+> > +#include <trace/events/cxl.h>
+> > +
+> >  static bool cxl_raw_allow_all;
+> >  
+> >  /**
+> > @@ -752,6 +755,7 @@ int cxl_dev_state_identify(struct cxl_dev_state *cxlds)
+> >  {
+> >  	/* See CXL 2.0 Table 175 Identify Memory Device Output Payload */
+> >  	struct cxl_mbox_identify id;
+> > +	__le32 val = 0;
+> >  	int rc;
+> >  
+> >  	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_IDENTIFY, NULL, 0, &id,
+> > @@ -771,6 +775,9 @@ int cxl_dev_state_identify(struct cxl_dev_state *cxlds)
+> >  	cxlds->lsa_size = le32_to_cpu(id.lsa_size);
+> >  	memcpy(cxlds->firmware_version, id.fw_revision, sizeof(id.fw_revision));
+> >  
+> > +	memcpy(&val, id.poison_list_max_mer, 3);
 > 
-> So let's specify the base address of each LLCC bank. It should be noted
-> that the bank count differs for each SoC, so that also needs to be taken
-> into account in the binding.
+> I see Jonathan already commented on the need for get_unaligned_le24()
+> here, seconded.
 > 
-> Cc: <stable@vger.kernel.org> # 4.19
-> Fixes: 7e5700ae64f6 ("dt-bindings: Documentation for qcom, llcc")
-> Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../bindings/arm/msm/qcom,llcc.yaml           | 125 ++++++++++++++++--
->  1 file changed, 114 insertions(+), 11 deletions(-)
+Got it.
+
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-> index d1df49ffcc1b..7f694baa017c 100644
-> --- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-> @@ -33,14 +33,12 @@ properties:
->        - qcom,sm8550-llcc
->  
->    reg:
-> -    items:
-> -      - description: LLCC base register region
-> -      - description: LLCC broadcast base register region
-> +    minItems: 2
-> +    maxItems: 9
->  
->    reg-names:
-> -    items:
-> -      - const: llcc_base
-> -      - const: llcc_broadcast_base
-> +    minItems: 2
-> +    maxItems: 9
-
-Afaict changing llcc_base to llcc0_base would not allow the
-implementation to find the llcc_base region with an older DTB.
-
-But if you instead modify the driver to pick up N-1 regions for base and
-the last for broadcast, by index. This should continue to work for the
-platforms where it actually worked.
-
-Based on that I suggest that you just remove reg-names from the binding.
-It will clean up the binding and we won't have reg-names containing
-"llcc" or "base" :)
-
-Regards,
-Bjorn
-
->  
->    interrupts:
->      maxItems: 1
-> @@ -50,15 +48,120 @@ required:
->    - reg
->    - reg-names
->  
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sc7180-llcc
-> +              - qcom,sm6350-llcc
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: LLCC0 base register region
-> +            - description: LLCC broadcast base register region
-> +        reg-names:
-> +          items:
-> +            - const: llcc0_base
-> +            - const: llcc_broadcast_base
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sc7280-llcc
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: LLCC0 base register region
-> +            - description: LLCC1 base register region
-> +            - description: LLCC broadcast base register region
-> +        reg-names:
-> +          items:
-> +            - const: llcc0_base
-> +            - const: llcc1_base
-> +            - const: llcc_broadcast_base
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sc8180x-llcc
-> +              - qcom,sc8280xp-llcc
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: LLCC0 base register region
-> +            - description: LLCC1 base register region
-> +            - description: LLCC2 base register region
-> +            - description: LLCC3 base register region
-> +            - description: LLCC4 base register region
-> +            - description: LLCC5 base register region
-> +            - description: LLCC6 base register region
-> +            - description: LLCC7 base register region
-> +            - description: LLCC broadcast base register region
-> +        reg-names:
-> +          items:
-> +            - const: llcc0_base
-> +            - const: llcc1_base
-> +            - const: llcc2_base
-> +            - const: llcc3_base
-> +            - const: llcc4_base
-> +            - const: llcc5_base
-> +            - const: llcc6_base
-> +            - const: llcc7_base
-> +            - const: llcc_broadcast_base
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sdm845-llcc
-> +              - qcom,sm8150-llcc
-> +              - qcom,sm8250-llcc
-> +              - qcom,sm8350-llcc
-> +              - qcom,sm8450-llcc
-> +    then:
-> +      properties:
-> +        reg:
-> +          items:
-> +            - description: LLCC0 base register region
-> +            - description: LLCC1 base register region
-> +            - description: LLCC2 base register region
-> +            - description: LLCC3 base register region
-> +            - description: LLCC broadcast base register region
-> +        reg-names:
-> +          items:
-> +            - const: llcc0_base
-> +            - const: llcc1_base
-> +            - const: llcc2_base
-> +            - const: llcc3_base
-> +            - const: llcc_broadcast_base
-> +
->  additionalProperties: false
->  
->  examples:
->    - |
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
-> -    system-cache-controller@1100000 {
-> -      compatible = "qcom,sdm845-llcc";
-> -      reg = <0x1100000 0x200000>, <0x1300000 0x50000> ;
-> -      reg-names = "llcc_base", "llcc_broadcast_base";
-> -      interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
-> +    soc {
-> +        #address-cells = <2>;
-> +        #size-cells = <2>;
-> +
-> +        system-cache-controller@1100000 {
-> +          compatible = "qcom,sdm845-llcc";
-> +          reg = <0 0x01100000 0 0x50000>, <0 0x01180000 0 0x50000>,
-> +                <0 0x01200000 0 0x50000>, <0 0x01280000 0 0x50000>,
-> +                <0 0x01300000 0 0x50000>;
-> +          reg-names = "llcc0_base", "llcc1_base", "llcc2_base",
-> +                "llcc3_base", "llcc_broadcast_base";
-> +          interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
-> +        };
->      };
-> -- 
-> 2.25.1
+> > +	cxlds->poison_max = min_t(u32, le32_to_cpu(val), CXL_POISON_LIST_MAX);
+> > +
+> >  	return 0;
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_dev_state_identify, CXL);
+> > @@ -835,6 +842,79 @@ int cxl_mem_create_range_info(struct cxl_dev_state *cxlds)
+> >  }
+> >  EXPORT_SYMBOL_NS_GPL(cxl_mem_create_range_info, CXL);
+> >  
+> > +static void cxl_trace_poison(struct cxl_mbox_poison_payload_out *po,
+> > +			     struct cxl_region *cxlr,
+> > +			     const char *memdev_name,
+> > +			     const char *pcidev_name)
 > 
+> Type-safety please. Pass a 'struct cxl_memdev *' and 'struct pci_dev *'.
+> Might need to be 'struct device *' instead of 'struct pci_dev *'
+> depending on if this needs to be called from cxl_test, but anything is
+> better than a non-specific string.
+> 
+Got it.
+
+> > +{
+> > +	const char *region_name = cxlr ? dev_name(&cxlr->dev) : NULL;
+> 
+> ...and push this conversion into the trace point.
+> 
+Got that, and also pushed the decode of struct cxl_poison_record to
+the trace point like this:
+
+TP_PROTO(const struct device *memdev, const struct pci_dev *pcidev,
+                     const struct cxl_region *region,
+                     const struct cxl_poison_record *record,
+                     u8 flags, __le64 overflow_t),
+
+
+> > +	struct cxl_region_params *p = cxlr ? &cxlr->params : NULL;
+> > +	uuid_t *uuid = p ? &p->uuid : NULL;
+> > +	u64 addr, dpa, overflow_t = 0;
+> > +	u8 source;
+> > +	u32 len;
+> > +
+> > +	if (po->flags & CXL_POISON_FLAG_OVERFLOW)
+> > +		overflow_t = le64_to_cpu(po->overflow_timestamp);
+> > +
+> > +	for (int i = 0; i < le16_to_cpu(po->count); i++) {
+> > +		len = le32_to_cpu(po->record[i].length) * CXL_POISON_LEN_MULT;
+> > +		addr = le64_to_cpu(po->record[i].address);
+> > +		source = addr & CXL_POISON_SOURCE_MASK;
+> > +		dpa = addr & CXL_POISON_START_MASK;
+> > +
+> > +		trace_cxl_poison(memdev_name, pcidev_name, region_name, uuid,
+> > +				 dpa, len, source, po->flags, overflow_t);
+> > +	}
+> > +}
+> > +
+> > +int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
+> > +		       struct cxl_region *cxlr)
+> > +{
+> > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
+> > +	const char *memdev_name = dev_name(&cxlmd->dev);
+> > +	const char *pcidev_name = dev_name(cxlds->dev);
+> > +	struct cxl_mbox_poison_payload_out *po;
+> > +	struct cxl_mbox_poison_payload_in pi;
+> > +	int nr_records = 0;
+> > +	int rc;
+> > +
+> > +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
+> > +	if (!po)
+> > +		return -ENOMEM;
+> > +
+> > +	pi.offset = cpu_to_le64(offset);
+> > +	pi.length = cpu_to_le64(len);
+> > +
+> > +	rc = mutex_lock_interruptible(&cxlds->poison_list_mutex);
+> 
+> So I do not know what this mutex is protecting if there is an allocation
+> per cxl_mem_get_poison() invocation. Although I suspect that's somewhat
+> wasteful. Just allocate one buffer at the beginning of time and then use
+> the lock to protect that buffer.
+
+Intent was a single lock on the device to protect the state of the
+poison list retrieval - do not allow > 1 reader. With > 1 reader
+software may not know if it retrieved the complete list.
+
+I'm not understanding about protecting a buffer, instead of protecting
+the state. Here I try to protect the state.
+
+> 
+> Although, I wonder if this and Event handling should share locks and one
+> preallocated buffer? Otherwise I do think it is important for Events and
+> Poison handling to be able to make forward progress without needing to
+> allocate up to a megabyte of memory at runtime. The other payload_size
+> allocations are for one-off things that run at the beginning of time,
+> but Poison and Events run repeatedly.
+> 
+> > 
+snip
