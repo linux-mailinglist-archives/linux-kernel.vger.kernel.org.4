@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981466458C5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:19:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F016458C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:19:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiLGLTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:19:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
+        id S229930AbiLGLT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:19:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbiLGLTN (ORCPT
+        with ESMTP id S229981AbiLGLTO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:19:13 -0500
+        Wed, 7 Dec 2022 06:19:14 -0500
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C7C24BCF;
-        Wed,  7 Dec 2022 03:18:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4A024F2D;
+        Wed,  7 Dec 2022 03:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670411933; x=1701947933;
+  t=1670411938; x=1701947938;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=VyxA4tt9p6iV+N4mRj1pIbu4bzCNJHqjGIzPONeKW3I=;
-  b=lORf2RRLgA4wZIkwcPVAR6qbEDDIqfbZ9liZnsj6qpP3cFbW4WGI1Jjo
-   xtohowIRKV4WEJJGhpf0OrxF5kx1Vwr/UWHEg7VIvmuhFGXSacC3IjDic
-   U/qPwJf1UaGSySvssHk052TwMdgaEMuoZ7Eueip43qchnkEFyKWBn3X4a
-   jQrUXB9qUvDux5Xv0VZ9EedLKg0LjOFB7ju4CsmX5GHNwm1B5TInEADcl
-   BkGbnMjomx2ZkxOrMQKHdB2iGNq/CA/lYETB3U+pPBGhgX7ZQergQdt3r
-   hyPXx1F+fMm80MO8ck3VHqLPxZjYauEMQuHjL5OQ01CSxJEV2ae0vrLEw
-   Q==;
+  bh=Xvm4k8IG/KDGDueSQJZC6iE1/IQqMcr2szvU7GP+K20=;
+  b=DsM8lcY5bvqRaxlGCcKpbqnMB+nsg4KHbwPrFoxXjGehJoAaY4PGj8hX
+   ZqZeZFN2cg/OUY6AalfuOh8py9HxdLunsZl+ehLm16TNI9+ojIP29h8qZ
+   0nEp8E5GPzUH4yGgx4i5niNmUvg8939zbXj1XypYW2Xvy6SVP2auKwWTU
+   Ox9wwfJz/CR2E6sUUkP7Wx7Wni5uhTEHKtE6jl1Y09EU+ak8IqwU7Chpq
+   YPLS0ug7XLHVQfG1txQC2Ba0Bj+ajUkqdvOysFIzc5KX867IPDv0IHrV/
+   WEnb1Hnr/qM7ogyDq+RVC3pAQ3bcttbJ6E/QXP7N/+A7SqGo5OBccjVMF
+   w==;
 X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="126919609"
+   d="scan'208";a="126919635"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Dec 2022 04:18:47 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Dec 2022 04:18:57 -0700
 Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 7 Dec 2022 04:18:46 -0700
+ 15.1.2507.12; Wed, 7 Dec 2022 04:18:57 -0700
 Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
  chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 7 Dec 2022 04:18:41 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 7 Dec 2022 04:18:51 -0700
 From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
 To:     <linux-kernel@vger.kernel.org>
 CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
@@ -50,9 +50,9 @@ CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
         <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
         <etremblay@distech-controls.com>, <jk@ozlabs.org>,
         Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v7 tty-next 3/4] serial: 8250_pci1xxxx: Add RS485 support to quad-uart driver
-Date:   Thu, 8 Dec 2022 05:23:04 +0530
-Message-ID: <20221207235305.695541-4-kumaravel.thiagarajan@microchip.com>
+Subject: [PATCH v7 tty-next 4/4] serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
+Date:   Thu, 8 Dec 2022 05:23:05 +0530
+Message-ID: <20221207235305.695541-5-kumaravel.thiagarajan@microchip.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com>
 References: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com>
@@ -69,9 +69,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx uart supports RS485 mode of operation in the hardware with
-auto-direction control with configurable delay for releasing RTS after
-the transmission. This patch adds support for the RS485 mode.
+pci1xxxx's quad-uart function has the capability to wake up UART
+from suspend state. Enable wakeup before entering into suspend and
+disable wakeup on resume.
 
 Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
 Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
@@ -81,92 +81,165 @@ Changes in v7:
 - No Change
 
 Changes in v6:
-- Modified datatype of delay_in_baud_periods to u64 to avoid overflows
+- No Change
 
 Changes in v5:
-- Removed unnecessary assignments
-- Corrected styling issues in comments
+- Corrected commit message
 
 Changes in v4:
 - No Change
 
 Changes in v3:
-- Remove flags sanitization in driver which is taken care in core
+- Handled race condition in suspend and resume callbacks
 
 Changes in v2:
-- move pci1xxxx_rs485_config to a separate patch with
-  pci1xxxx_rs485_supported.
+- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
+- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
+- Change the return data type of pci1xxxx_port_suspend to bool from int.
 ---
- drivers/tty/serial/8250/8250_pci1xxxx.c | 49 +++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
+ drivers/tty/serial/8250/8250_pci1xxxx.c | 115 ++++++++++++++++++++++++
+ 1 file changed, 115 insertions(+)
 
 diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index be554e2d884b..9f0da264314a 100644
+index 9f0da264314a..f2365e67ffcd 100644
 --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
 +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -145,6 +145,53 @@ static void pci1xxxx_set_divisor(struct uart_port *port, unsigned int baud,
- 	       port->membase + UART_BAUD_CLK_DIVISOR_REG);
- }
+@@ -192,6 +192,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
+ 	/* Delay RTS before send is not supported */
+ };
  
-+static int pci1xxxx_rs485_config(struct uart_port *port,
-+				 struct ktermios *termios,
-+				 struct serial_rs485 *rs485)
++static bool pci1xxxx_port_suspend(int line)
 +{
-+	u32 clock_div = readl(port->membase + UART_BAUD_CLK_DIVISOR_REG);
-+	u64 delay_in_baud_periods;
-+	u32 baud_period_in_ns;
-+	u32 data = 0;
++	struct uart_8250_port *up = serial8250_get_port(line);
++	struct uart_port *port = &up->port;
++	struct tty_port *tport = &port->state->port;
++	unsigned long flags;
++	bool ret = false;
++	u8 wakeup_mask;
 +
-+	/*
-+	 * pci1xxxx's uart hardware supports only RTS delay after
-+	 * Tx and in units of bit times to a maximum of 15
-+	 */
-+	if (rs485->flags & SER_RS485_ENABLED) {
-+		data = ADCL_CFG_EN | ADCL_CFG_PIN_SEL;
++	mutex_lock(&tport->mutex);
++	if (port->suspended == 0 && port->dev) {
++		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
 +
-+		if (!(rs485->flags & SER_RS485_RTS_ON_SEND))
-+			data |= ADCL_CFG_POL_SEL;
++		spin_lock_irqsave(&port->lock, flags);
++		port->mctrl &= ~TIOCM_OUT2;
++		port->ops->set_mctrl(port, port->mctrl);
++		spin_unlock_irqrestore(&port->lock, flags);
 +
-+		if (rs485->delay_rts_after_send) {
-+			baud_period_in_ns =
-+				FIELD_GET(BAUD_CLOCK_DIV_INT_MSK, clock_div) *
-+				UART_BIT_SAMPLE_CNT;
-+			delay_in_baud_periods =
-+				rs485->delay_rts_after_send * NSEC_PER_MSEC /
-+				baud_period_in_ns;
-+			delay_in_baud_periods =
-+				min_t(u64, delay_in_baud_periods,
-+				      FIELD_MAX(ADCL_CFG_RTS_DELAY_MASK));
-+			data |= FIELD_PREP(ADCL_CFG_RTS_DELAY_MASK,
-+					   delay_in_baud_periods);
-+			rs485->delay_rts_after_send =
-+				baud_period_in_ns * delay_in_baud_periods /
-+				NSEC_PER_MSEC;
++		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
++	}
++
++	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
++	mutex_unlock(&tport->mutex);
++
++	return ret;
++}
++
++static void pci1xxxx_port_resume(int line)
++{
++	struct uart_8250_port *up = serial8250_get_port(line);
++	struct uart_port *port = &up->port;
++	struct tty_port *tport = &port->state->port;
++	unsigned long flags;
++
++	mutex_lock(&tport->mutex);
++	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
++	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
++
++	if (port->suspended == 0) {
++		spin_lock_irqsave(&port->lock, flags);
++		port->mctrl |= TIOCM_OUT2;
++		port->ops->set_mctrl(port, port->mctrl);
++		spin_unlock_irqrestore(&port->lock, flags);
++	}
++	mutex_unlock(&tport->mutex);
++}
++
++static int pci1xxxx_suspend(struct device *dev)
++{
++	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
++	struct pci_dev *pcidev = to_pci_dev(dev);
++	bool wakeup = false;
++	unsigned int data;
++	void __iomem *p;
++	int i;
++
++	for (i = 0; i < priv->nr; i++) {
++		if (priv->line[i] >= 0) {
++			serial8250_suspend_port(priv->line[i]);
++			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
 +		}
 +	}
-+	writel(data, port->membase + ADCL_CFG_REG);
++
++	p = pci_ioremap_bar(pcidev, 0);
++	if (!p) {
++		dev_err(dev, "remapping of bar 0 memory failed");
++		return -ENOMEM;
++	}
++
++	data = readl(p + UART_RESET_REG);
++	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
++
++	if (wakeup)
++		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
++
++	iounmap(p);
++	device_set_wakeup_enable(dev, true);
++	pci_wake_from_d3(pcidev, true);
++
 +	return 0;
 +}
 +
-+static const struct serial_rs485 pci1xxxx_rs485_supported = {
-+	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND |
-+		 SER_RS485_RTS_AFTER_SEND,
-+	.delay_rts_after_send = 1,
-+	/* Delay RTS before send is not supported */
-+};
++static int pci1xxxx_resume(struct device *dev)
++{
++	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
++	struct pci_dev *pcidev = to_pci_dev(dev);
++	unsigned int data;
++	void __iomem *p;
++	int i;
++
++	p = pci_ioremap_bar(pcidev, 0);
++	if (!p) {
++		dev_err(dev, "remapping of bar 0 memory failed");
++		return -ENOMEM;
++	}
++
++	data = readl(p + UART_RESET_REG);
++	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
++	iounmap(p);
++
++	for (i = 0; i < priv->nr; i++) {
++		if (priv->line[i] >= 0) {
++			pci1xxxx_port_resume(priv->line[i]);
++			serial8250_resume_port(priv->line[i]);
++		}
++	}
++
++	return 0;
++}
 +
  static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
  			  struct uart_8250_port *port, int port_idx)
  {
-@@ -155,6 +202,8 @@ static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 	port->port.set_termios = serial8250_do_set_termios;
- 	port->port.get_divisor = pci1xxxx_get_divisor;
- 	port->port.set_divisor = pci1xxxx_set_divisor;
-+	port->port.rs485_config = pci1xxxx_rs485_config;
-+	port->port.rs485_supported = pci1xxxx_rs485_supported;
+@@ -329,6 +439,8 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
+ 	}
+ }
  
- 	ret = serial8250_pci_setup_port(priv->pdev, port, 0, port_idx * 256, 0);
- 	if (ret < 0)
++static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend, pci1xxxx_resume);
++
+ static const struct pci_device_id pci1xxxx_pci_tbl[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
+@@ -343,6 +455,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
+ 	.name = "pci1xxxx serial",
+ 	.probe = pci1xxxx_serial_probe,
+ 	.remove = pci1xxxx_serial_remove,
++	.driver = {
++		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
++	},
+ 	.id_table = pci1xxxx_pci_tbl,
+ };
+ module_pci_driver(pci1xxxx_pci_driver);
 -- 
 2.25.1
 
