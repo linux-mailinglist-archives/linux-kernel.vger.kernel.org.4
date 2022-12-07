@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C79C646107
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:31:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9085564610C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:31:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLGSbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:31:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S229732AbiLGSbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:31:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLGSbB (ORCPT
+        with ESMTP id S229586AbiLGSbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:31:01 -0500
+        Wed, 7 Dec 2022 13:31:02 -0500
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6575E6A759;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2296C728;
         Wed,  7 Dec 2022 10:31:00 -0800 (PST)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 1CC5FC4A3F;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9A931CA469;
         Wed,  7 Dec 2022 18:30:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1670437858; bh=+eYqdfhUQtkHlB+nOxralti44nmznPQ11lDL/KUnEbE=;
-        h=Subject:From:Date:To:Cc;
-        b=QOG1fAae5D76Ctxap/tWPvZNbs06s9chtxLjrHZGf+4IBM5RQtrhpquufJQHRMrhQ
-         gGGThLlU0Bk1hHDCzNdzzSw/RhltQZ5uMwbvN31Elz4Cwk3Vk12IMeawSojREu1oyT
-         88BWh33Suz5N9Btd6915CGLts0w1mUKKTHni5uh0=
-Subject: [PATCH v3 0/9] Add a bunch of msm8953 dts files
+        t=1670437859; bh=CL5KW81BJDK7GvVQuSAfITYvbryePD8pkoaJleSZyVs=;
+        h=From:Date:Subject:References:In-Reply-To:To:Cc;
+        b=lqUvmB3H+zcRLd76BEXcRmo5w2kxggk7jGL3w/QqnJdSi7BeJLlNZ2xLgxVBaPR+l
+         UtWwCaB1wmhRqTWZ1rgkDDRYUdGNk/MW7rHHhEDuZizYY/nJ5YJI+iI4C6mpOxMm4i
+         zAOX+L1j/duJJ6U4FISia+GtIrISLVDoKiTA0wtw=
+From:   Luca Weiss <luca@z3ntu.xyz>
+Date:   Wed, 07 Dec 2022 19:30:38 +0100
+Subject: [PATCH v3 1/9] dt-bindings: arm: qcom: document new msm8953-family devices
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIAM3bkGMC/w3MQQqDMBBG4avIrPuDSYi2vU2SmdaATiFjpSDevVl+i/dOMmlVjJ7DSU2OavWjHe
- E2UFmSvgWVu8mP3js/zthsuz9iwAQHld8O3rPhCODXVDi6OTIH6nlOJsgtaVn6QL/rel1/3FkTnW8A AAA=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Wed, 07 Dec 2022 19:30:37 +0100
-Message-Id: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
+Message-Id: <20221207-msm8953-6-1-next-dtbs-v3-v3-1-a64b3b0af0eb@z3ntu.xyz>
+References: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
+In-Reply-To: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
@@ -58,120 +58,109 @@ Cc:     Gabriela David <ultracoolguy@disroot.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Alejandro Tafalla <atafalla@dnyon.com>
 X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3677; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=+eYqdfhUQtkHlB+nOxralti44nmznPQ11lDL/KUnEbE=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBjkNvZMqTNTSfhOxClEt1bhge+JyvK92AhPpZQ4fb/
- dBRreqmJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY5Db2QAKCRBy2EO4nU3XVhoVD/
- 918zncaubiVzxbEsWjIWUW1DiBeNDdpPPX60rXIRVFBQszXjwyx+tuti5mJBFBDjNDxr8evm9nyfjI
- 6IoGtLgA0Qw2mFEqio7Rffx1uhVIlT9oqCHsm17uRcJYE6Hmwn3urWQagq1sI1CR40IuPiKPvBKHJu
- UYDM/Akk92Jl5A5Lxp+j8pBfmBZFdKxLIMi+mz94kb4/C63DS5WK9rFwVxzNePMH1bagkwlzKcvBCn
- LgclhWq5HDYWlgnOUxHH49WqoGKP2W4Yn+wUnjO4foQwPoSlhLycKJEKZFDQIQ3vg5vWmVk/FCu6sw
- QbxJcsdPtzx/W74C3EK3fxF9/aqtXyp64b+8sGKGUR0jFe3rO7v8CHCsR1XPkgoRL3iSRQuspSV+6N
- sVMWplUx1+vQQHqSqY4jaCqtzCuNtmwqQThd+o/6Ks1cKPnnj/FTTVKA0ECHFbtBu9AH8NXVSXDZ1T
- UQO3fpCre4uNN2kINx/QG4JKj12rv4N3ggt7BFTXIeQ10nvL3ovsEaPqVuUUmbopqTPdC7w3wVn5NX
- ESraEaPe1kVISwxNEMy+dMGCPgnD/RWd+NCh/UkoCf3iI8LFP4R34H77k+cKb4DXy9mHMPaFARunSR
- rjjBVljSaWuD4HSG/IExybKwJ4e+7Y6Xo5Vigyz33P8Nl+XHxWvQ9BLT3q8A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2237; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=CL5KW81BJDK7GvVQuSAfITYvbryePD8pkoaJleSZyVs=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBjkNva3qghZA5biCuXwpgh6lMoB7b4T0KPile+mQOF
+ f8vGFkmJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY5Db2gAKCRBy2EO4nU3XVmnED/
+ 4gzcuAprln2W+j1EjLWFNbGWy9nN9sEUhLG1US94QGYE4tVTJpQtYWvYx2PRXBrJwKdpw/D7GctwKe
+ TRfNtaT4mRzmWaz8vDygAi+LygXuj7cZMPtXFOVORnzf8Rj9+PsFz++kU/qYUykPSeEfzWqZdzGboG
+ Gp/+u71MsYKFcZyP7iKigvMy7L/FqOUWULJp3HJrHD/ZaJyFhyWUrzlrdNkVD7wi/ziSHbzhzeVmwG
+ BQkkp4Bciw2saPod8opDibMB630eMdH6ffFo/N9RZgotx3s0ErWU4oC4IBqODJUUFBPdb4ejNMv0gN
+ kJKwaIOp9GCbff4mmZcqOt7Gu/pmpIUggm4Igg15wZvULKfSvZrQnObKBYHEgNyYO3sIjezcEodeqA
+ 5e28e6yVPItdNfFy+po4eUWsNvV/l7EJeYNLiZRMShsyGZl3GSo6gr6krS1s5EL1yQS5n1o0UE0xc8
+ GT+DXJXZItMKcY93+vCaPBssk336u+pohj6H18D5tB2yIlRATcFGzPCzWqdtyCNDh5PvmXsBJkJsv4
+ 8hRCPSsGeFnLa7HRqN7zZ7JNdMAvlEVLdrkYdrsbJ0J3aaMsoBAme+NO4ku15DEz60SaWz8HF7urM/
+ hG2M258N0X2nM1kkNPUeJF67LUMWxJSFI7S+jRvHtTEl4H2c1O+j2BUAbYAA==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following patches add a bunch of msm8953-based devices that have
-been created in the msm8953-mainline[0] repository, which includes
-Snapdragon 450 (SDM450), Snapdragon 625 (msm8953) and Snapdragon 632
-(SDM632) devices.
-The dts files are trimmed down to what is currently supported upstream,
-as a way to also minimizing diff for further patches.
+Document the various phones added in upcoming patches. Also allow
+qcom,msm-id and qcom,board-id for msm8953 and sdm450.
 
-I've tried my best in keeping all the relevant author tags based on the
-git info I could find there.
-
-[0] https://github.com/msm8953-mainline/linux
-
-To: Andy Gross <agross@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@linaro.org>
-To: Rob Herring <robh+dt@kernel.org>
-To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-To: Kees Cook <keescook@chromium.org>
-To: Tony Luck <tony.luck@intel.com>
-To: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-hardening@vger.kernel.org
-Cc: Julian Braha <julianbraha@gmail.com>
-Cc: Sireesh Kodali <sireeshkodali1@gmail.com>
-Cc: Alejandro Tafalla <atafalla@dnyon.com>
-Cc: Adam Skladowski <a39.skl@gmail.com>
-Cc: Anton Bambura <jenneron@protonmail.com>
-Cc: Danila Tikhonov <JIaxyga@protonmail.com>
-Cc: Vladimir Lypak <vladimir.lypak@gmail.com>
-Cc: Eugene Lepshy <fekz115@gmail.com>
-Cc: Gianluca Boiano <morf3089@gmail.com>
-Cc: Gabriela David <ultracoolguy@disroot.org>
-Cc: ~postmarketos/upstreaming@lists.sr.ht
-Cc: phone-devel@vger.kernel.org
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-Changes in v3:
-- Rebase on qcom/linux.git for-next
-- Fix non-alphabetical sort of sdhc_* nodes
-- Add missing supplies to sdhc nodes,
-    align order between all the devices,
-    remove some unnecessary pinctrl override
-- Pick up tags
-- Link to v2: https://lore.kernel.org/linux-arm-msm/20221119203758.888207-1-luca@z3ntu.xyz/
+ Documentation/devicetree/bindings/arm/qcom.yaml | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
----
-Adam Skladowski (1):
-      arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi Note 4X
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 27063a045bd0..aa83ef0e8ac1 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -35,6 +35,7 @@ description: |
+         mdm9615
+         msm8226
+         msm8916
++        msm8953
+         msm8956
+         msm8974
+         msm8976
+@@ -52,6 +53,7 @@ description: |
+         sc8180x
+         sc8280xp
+         sda660
++        sdm450
+         sdm630
+         sdm632
+         sdm636
+@@ -213,6 +215,15 @@ properties:
+           - const: qcom,msm8916-v1-qrd/9-v1
+           - const: qcom,msm8916
+ 
++      - items:
++          - enum:
++              - motorola,potter
++              - xiaomi,daisy
++              - xiaomi,mido
++              - xiaomi,tissot
++              - xiaomi,vince
++          - const: qcom,msm8953
++
+       - items:
+           - enum:
+               - lg,bullhead
+@@ -693,6 +704,11 @@ properties:
+               - qcom,sc8280xp-qrd
+           - const: qcom,sc8280xp
+ 
++      - items:
++          - enum:
++              - motorola,ali
++          - const: qcom,sdm450
++
+       - items:
+           - enum:
+               - sony,discovery-row
+@@ -709,6 +725,7 @@ properties:
+       - items:
+           - enum:
+               - fairphone,fp3
++              - motorola,ocean
+           - const: qcom,sdm632
+ 
+       - items:
+@@ -922,10 +939,12 @@ allOf:
+               - qcom,apq8026
+               - qcom,apq8094
+               - qcom,apq8096
++              - qcom,msm8953
+               - qcom,msm8992
+               - qcom,msm8994
+               - qcom,msm8996
+               - qcom,msm8998
++              - qcom,sdm450
+               - qcom,sdm630
+               - qcom,sdm632
+               - qcom,sdm845
 
-Alejandro Tafalla (1):
-      arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A2 Lite
-
-Danila Tikhonov (1):
-      arm64: dts: qcom: msm8953: Add device tree for Xiaomi Mi A1
-
-Eugene Lepshy (1):
-      arm64: dts: qcom: msm8953: Add device tree for Xiaomi Redmi 5 Plus
-
-Gabriela David (1):
-      arm64: dts: qcom: sdm632: Add device tree for Motorola G7 Power
-
-Julian Braha (1):
-      arm64: dts: qcom: sdm450: Add device tree for Motorola Moto G6
-
-Luca Weiss (2):
-      dt-bindings: arm: qcom: document new msm8953-family devices
-      arm64: dts: qcom: msm8953: Adjust reserved-memory nodes
-
-Sireesh Kodali (1):
-      arm64: dts: qcom: msm8953: Add device tree for Motorola G5 Plus
-
- Documentation/devicetree/bindings/arm/qcom.yaml    |  19 ++
- arch/arm64/boot/dts/qcom/Makefile                  |   7 +
- .../boot/dts/qcom/msm8953-motorola-potter.dts      | 305 +++++++++++++++++
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-daisy.dts  | 325 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-mido.dts   | 329 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-tissot.dts | 325 +++++++++++++++++++
- arch/arm64/boot/dts/qcom/msm8953-xiaomi-vince.dts  | 361 +++++++++++++++++++++
- arch/arm64/boot/dts/qcom/msm8953.dtsi              |  24 +-
- arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts   | 252 ++++++++++++++
- arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts | 291 +++++++++++++++++
- 10 files changed, 2226 insertions(+), 12 deletions(-)
----
-base-commit: ca14659da4341de75506516c16f66d84bf3f2fa0
-change-id: 20221207-msm8953-6-1-next-dtbs-v3-df6cd5175dd3
-
-Best regards,
 -- 
-Luca Weiss <luca@z3ntu.xyz>
+b4 0.10.1
