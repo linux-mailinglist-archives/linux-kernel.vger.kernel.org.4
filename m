@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44BB6464D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A726464E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbiLGXOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 18:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
+        id S230060AbiLGXQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 18:16:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLGXOD (ORCPT
+        with ESMTP id S230052AbiLGXQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 18:14:03 -0500
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A784E87CB8
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:14:02 -0800 (PST)
-Received: by mail-vs1-xe2e.google.com with SMTP id i2so18762322vsc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:14:02 -0800 (PST)
+        Wed, 7 Dec 2022 18:16:34 -0500
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4C8930B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:16:32 -0800 (PST)
+Received: by mail-vk1-xa30.google.com with SMTP id o136so594146vka.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:16:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X3AMraPxTEMML2QwIVTCEcNgf8lB6EELFHw2faoFhz0=;
-        b=JfQA+TEzoiHOj0cgo8aRIAdrr1vXuO7gCmCpgnRv/LqryVKtMxM90wYWRCOfJhdBYZ
-         vCFZZJjUUfImOp2oVS38W4AtJgY8i3PYAdRjHPf4iZdZFgThJdMTtiB08NgGKxaueAc2
-         IsBDgCy5EDpc0XdhQ+PCu9RAqOne071/FE0LZrMZ3C2wVxYiDQzpHuzDOptoRNPYtlRO
-         8SDzgWTqIltwPCk/SuX83NmJUhXGOeUd4715cFXy/BMAmNdQD9Vf40zz95vvFFt3fUlQ
-         0bOtcK5H4t0A2wKKF89etmINGB3nugcdbfYC7rI/nefgy6CXbjY/YlFMyRKom/r3pVCq
-         v1yA==
+        bh=qKhtWKuWhB3DUJ2H/EHTwp1GzrvWCjjlF4j8bshMOGg=;
+        b=RWItdZbEx9sodZbYh/mNiehmL8weMOlBg/LJdiWPUbuEkKFHf0IAViiYzIVqNIeDBq
+         JuyepTR4HRBjbUtZXabjpqNAi9B9HoYUaLmxKPshiN6I/EutIHREDQC3wJ1z4nve0Oif
+         d3//qbWsgckqa1nQ/G6uvB3SQ8XCMoe4vmFR2Ce/ukEXK/CHEt4Wm0hvDLqDBZnbQmqH
+         mFdjh7Ez+XvkgML8Z7StJJoaRk9/xj+V8GsFhBkmijvl2L75TsaoTLC6WMLofzSUrp7N
+         sE6bHCajUkKunMMRrzObVAfO68dQPZIf/5XQeW8lA8USYxP9WIpBuACEs4qqS0XVV0GM
+         5tFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=X3AMraPxTEMML2QwIVTCEcNgf8lB6EELFHw2faoFhz0=;
-        b=Kj0pPyFtvfjBXFEjp758I8EVlov+Af4LPuMJjWn9qpWRprKGP0DRxE1ykZ6RADV9Mb
-         nsdwWtF1gU6wK7fqah4O5j9WueszKQ1EiDaaByIE2K6OkKGHdS0aMqmh+3UWlt8mUsYZ
-         U87dkA8p9mRhqZxI6RQhVS9JLpi59Hp/wiIijDC2bOplQEdqfeE22wxddYgS4iwlMF+1
-         V4B2XvPpnqLAcTxAFADbrQ2LSR/G2F2U2ME+GLH0mw2pqIcFc49Clxs3ueJGXIG90XDJ
-         OwH4GuSKXv4imOnW9SpgW9Ep8ONQjZ74v9rFYyzTTOy+Nrslx6857IC2XxuUZVnWu1ON
-         L/1w==
-X-Gm-Message-State: ANoB5pk8a2XRKl0osqL0pD1hkqN05sM0u2O8lGeLGDLSNOZf8BuWCk4Z
-        V6EnWEYCAtxLXzGO/XTXCbfZxTGGq06u9ce9fS37Bw==
-X-Google-Smtp-Source: AA0mqf5hc2cyG+r40eIgDTUY2j584KDq0fVV2uUzVoIpSZ9CKcMf4xVlyU03mDhKWsozpDgxpp+aZJFN1i8V0OV6qAs=
-X-Received: by 2002:a05:6102:cd1:b0:3aa:1bff:a8a5 with SMTP id
- g17-20020a0561020cd100b003aa1bffa8a5mr52101595vst.67.1670454841616; Wed, 07
- Dec 2022 15:14:01 -0800 (PST)
+        bh=qKhtWKuWhB3DUJ2H/EHTwp1GzrvWCjjlF4j8bshMOGg=;
+        b=GOzZFcXlMbywMMZcenT+hsAVQV1YBwmq1ZU7HfVw+20ACsGC3IOIaCESr3WqKhNnY0
+         uhcy6LPd1jGKtzZMgIu6cwzbNv74Y578RIn0ChXhv9hrtsFACj7z2SZoCm7n9Lc5cxpJ
+         590YSEOD9hWg81kHivVHw+ZsG9UWX3EZOokv/NOFXx7Vs/CpGAbQ7xEe5adPDNeyB0Id
+         HHgbguV7BpMGZk8W2J4AWFgi2TdFrbd+lC6s1XlzTsQviHvAkxQlW+ijnBbHdsKDEbFD
+         gPf7gh+WPjOzkD0IH2nPiiIPZPvMbgT51iRx5ERk+49qpBvVTq2JZDZSdY4yGpnSh/5X
+         yv8g==
+X-Gm-Message-State: ANoB5plPYygd5xgaGosOSXkbf2h49LsYklyLTTZyYXQ5s8XMa8Y3wn9h
+        o1XuUtBCLRLXQGXKnW5CuQBHW/KamM/cZCVTP+Y9/w==
+X-Google-Smtp-Source: AA0mqf5A5DpDdfJWGB9crw0LgSp4qBZJrveaASusUoBLRh4msF9wZg/3Rjo79pIAegyMmLR1/3R34jfpQmkGjCipZ0s=
+X-Received: by 2002:a1f:2348:0:b0:3bd:51f6:1f3 with SMTP id
+ j69-20020a1f2348000000b003bd51f601f3mr14369835vkj.35.1670454991528; Wed, 07
+ Dec 2022 15:16:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com> <20221021163703.3218176-3-jthoughton@google.com>
-In-Reply-To: <20221021163703.3218176-3-jthoughton@google.com>
+References: <20221021163703.3218176-1-jthoughton@google.com> <20221021163703.3218176-4-jthoughton@google.com>
+In-Reply-To: <20221021163703.3218176-4-jthoughton@google.com>
 From:   Mina Almasry <almasrymina@google.com>
-Date:   Wed, 7 Dec 2022 15:13:50 -0800
-Message-ID: <CAHS8izMyO=AJcZAKRNVfWS2-AQvzxk6mNsTgK_6u7V=P09Ykcg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 02/47] hugetlb: remove mk_huge_pte; it is unused
+Date:   Wed, 7 Dec 2022 15:16:20 -0800
+Message-ID: <CAHS8izNh6wNBhMJ-_On2OHrL5-y_75qftFy59AuGbhTe6Gmsuw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 03/47] hugetlb: remove redundant pte_mkhuge in
+ migration path
 To:     James Houghton <jthoughton@google.com>
 Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Muchun Song <songmuchun@bytedance.com>,
@@ -85,88 +86,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Oct 21, 2022 at 9:37 AM James Houghton <jthoughton@google.com> wrote:
 >
-> mk_huge_pte is unused and not necessary. pte_mkhuge is the appropriate
-> function to call to create a HugeTLB PTE (see
-> Documentation/mm/arch_pgtable_helpers.rst).
->
-> It is being removed now to avoid complicating the implementation of
-> HugeTLB high-granularity mapping.
+> arch_make_huge_pte, which is called immediately following pte_mkhuge,
+> already makes the necessary changes to the PTE that pte_mkhuge would
+> have. The generic implementation of arch_make_huge_pte simply calls
+> pte_mkhuge.
 >
 > Signed-off-by: James Houghton <jthoughton@google.com>
 
 Acked-by: Mina Almasry <almasrymina@google.com>
 
 > ---
->  arch/s390/include/asm/hugetlb.h | 5 -----
->  include/asm-generic/hugetlb.h   | 5 -----
->  mm/debug_vm_pgtable.c           | 2 +-
->  mm/hugetlb.c                    | 7 +++----
->  4 files changed, 4 insertions(+), 15 deletions(-)
+>  mm/migrate.c | 1 -
+>  1 file changed, 1 deletion(-)
 >
-> diff --git a/arch/s390/include/asm/hugetlb.h b/arch/s390/include/asm/hugetlb.h
-> index ccdbccfde148..c34893719715 100644
-> --- a/arch/s390/include/asm/hugetlb.h
-> +++ b/arch/s390/include/asm/hugetlb.h
-> @@ -77,11 +77,6 @@ static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
->         set_huge_pte_at(mm, addr, ptep, pte_wrprotect(pte));
->  }
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 8e5eb6ed9da2..1457cdbb7828 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -237,7 +237,6 @@ static bool remove_migration_pte(struct folio *folio,
+>                 if (folio_test_hugetlb(folio)) {
+>                         unsigned int shift = huge_page_shift(hstate_vma(vma));
 >
-> -static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
-> -{
-> -       return mk_pte(page, pgprot);
-> -}
-> -
->  static inline int huge_pte_none(pte_t pte)
->  {
->         return pte_none(pte);
-> diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
-> index a57d667addd2..aab9e46fa628 100644
-> --- a/include/asm-generic/hugetlb.h
-> +++ b/include/asm-generic/hugetlb.h
-> @@ -5,11 +5,6 @@
->  #include <linux/swap.h>
->  #include <linux/swapops.h>
->
-> -static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
-> -{
-> -       return mk_pte(page, pgprot);
-> -}
-> -
->  static inline unsigned long huge_pte_write(pte_t pte)
->  {
->         return pte_write(pte);
-> diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-> index 2b61fde8c38c..10573a283a12 100644
-> --- a/mm/debug_vm_pgtable.c
-> +++ b/mm/debug_vm_pgtable.c
-> @@ -929,7 +929,7 @@ static void __init hugetlb_basic_tests(struct pgtable_debug_args *args)
->          * as it was previously derived from a real kernel symbol.
->          */
->         page = pfn_to_page(args->fixed_pmd_pfn);
-> -       pte = mk_huge_pte(page, args->page_prot);
-> +       pte = mk_pte(page, args->page_prot);
->
->         WARN_ON(!huge_pte_dirty(huge_pte_mkdirty(pte)));
->         WARN_ON(!huge_pte_write(huge_pte_mkwrite(huge_pte_wrprotect(pte))));
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index 650761cdd2f6..20a111b532aa 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -4728,11 +4728,10 @@ static pte_t make_huge_pte(struct vm_area_struct *vma, struct page *page,
->         unsigned int shift = huge_page_shift(hstate_vma(vma));
->
->         if (writable) {
-> -               entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_huge_pte(page,
-> -                                        vma->vm_page_prot)));
-> +               entry = huge_pte_mkwrite(huge_pte_mkdirty(mk_pte(page,
-> +                                               vma->vm_page_prot)));
->         } else {
-> -               entry = huge_pte_wrprotect(mk_huge_pte(page,
-> -                                          vma->vm_page_prot));
-> +               entry = huge_pte_wrprotect(mk_pte(page, vma->vm_page_prot));
->         }
->         entry = pte_mkyoung(entry);
->         entry = arch_make_huge_pte(entry, shift, vma->vm_flags);
+> -                       pte = pte_mkhuge(pte);
+>                         pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
+>                         if (folio_test_anon(folio))
+>                                 hugepage_add_anon_rmap(new, vma, pvmw.address,
 > --
 > 2.38.0.135.g90850a2211-goog
 >
