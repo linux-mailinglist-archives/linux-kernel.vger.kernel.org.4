@@ -2,157 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D286645915
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 923C6645918
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:34:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiLGLd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:33:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S230085AbiLGLeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbiLGLdX (ORCPT
+        with ESMTP id S229507AbiLGLeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:33:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533CC1A238;
-        Wed,  7 Dec 2022 03:33:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8BBCB81D75;
-        Wed,  7 Dec 2022 11:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258F9C433D7;
-        Wed,  7 Dec 2022 11:33:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670412799;
-        bh=3iUZUuHkcIvwtOgND+IUFfeLoZ05Y/NDVmrMzsGnk6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ceUfHsLwXidT2LV0zG8VgVjdgYF4UGdMFkvTuXrhlY0aeDko6+bV9FLQBG8LWBLy7
-         cmg2RaLjmQ/rvewb1fYfc4F7hRB5ToX7sXDEWyKnn2eYkOur76Pp0rgzAPQK2Txa1h
-         aXKDsv+IGMQV/A2xrTcSbl/i6tmss4V9t6Zruzww/xfcXpNHlEpZ96jZbgdtFi0IPm
-         oAfZqyTIwGcQ0DovBu3IHwpp0ZQ09nOv+/9iLL+XN6KX8K8o8VMeyCZ54b4ElXDa9Y
-         E/W6HpQ/Bj1jxdDIbPOC5KRwwXqsJMeljL8jmgHI9DhNquqvbdMAeSXG0pPxI5KyLD
-         GbpYPCdOWr4Rw==
-Date:   Wed, 7 Dec 2022 11:33:14 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Icenowy Zheng <uwu@icenowy.me>
-Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add comaptibles
- for T-Head's C9xx
-Message-ID: <Y5B5+vUjYxepn53g@spud>
-References: <20221121041757.418645-1-uwu@icenowy.me>
- <20221121041757.418645-2-uwu@icenowy.me>
- <34fe4161718e395f5e9890f9358a25f697af9e24.camel@icenowy.me>
+        Wed, 7 Dec 2022 06:34:02 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1174FBF59;
+        Wed,  7 Dec 2022 03:34:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670412842; x=1701948842;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=C1dF2Zq2kxySe5YwoU7Zscer4blAdIuOMHgGu059vG4=;
+  b=Q0wFlbPOr9i+uJn3AeH41LJ+KmpV2MKBiX4b6s+ajXNRSAed79N80RRC
+   DiNRQMaCGuPG19p3Agg2Lo59pEHavQgqvxCobK2R6qFzDr4QGkpI0Erz5
+   G1ld8kxH76nO86BlzGF9veqHdxovLHmn1R6QmSEWurBecHT/WGeLx5lkO
+   AmNSS2TZyJP/MpQHkpwLTyjXeKmEmuFotNpEfYkVMNi+xVwh6szpeVrta
+   xMBdArySoT/n9SJMiq0bXbEr5BGjN7g5g6mfR7oYEEOfxYo3tnCiGYcsZ
+   RIOg/PhJx8P726XeeW0IIxcJZah4Yd3glfUFfpcjjGBEmbUJ/xUf3/u23
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="379036530"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="379036530"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 03:34:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="788862106"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="788862106"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 07 Dec 2022 03:33:57 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 07 Dec 2022 13:33:56 +0200
+Date:   Wed, 7 Dec 2022 13:33:56 +0200
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Ferry Toth <ftoth@exalondelft.nl>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Ferry Toth <fntoth@gmail.com>,
+        Andrey Smirnov <andrew.smirnov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v5 1/2] usb: ulpi: defer ulpi_register on ulpi_read_id
+ timeout
+Message-ID: <Y5B6JB6C+K1FdLk9@kuha.fi.intel.com>
+References: <20221205201527.13525-1-ftoth@exalondelft.nl>
+ <20221205201527.13525-2-ftoth@exalondelft.nl>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="JWqOn8OBCdKsE8RV"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <34fe4161718e395f5e9890f9358a25f697af9e24.camel@icenowy.me>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221205201527.13525-2-ftoth@exalondelft.nl>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Dec 05, 2022 at 09:15:26PM +0100, Ferry Toth wrote:
+> Since commit 0f0101719138 ("usb: dwc3: Don't switch OTG -> peripheral
+> if extcon is present") Dual Role support on Intel Merrifield platform
+> broke due to rearranging the call to dwc3_get_extcon().
+> 
+> It appears to be caused by ulpi_read_id() on the first test write failing
+> with -ETIMEDOUT. Currently ulpi_read_id() expects to discover the phy via
+> DT when the test write fails and returns 0 in that case, even if DT does not
+> provide the phy. As a result usb probe completes without phy.
+> 
+> Make ulpi_read_id() return -ETIMEDOUT to its user if the first test write
+> fails. The user should then handle it appropriately. A follow up patch
+> will make dwc3_core_init() set -EPROBE_DEFER in this case and bail out.
+> 
+> Fixes: ef6a7bcfb01c ("usb: ulpi: Support device discovery via DT")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
 
---JWqOn8OBCdKsE8RV
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-On Wed, Dec 07, 2022 at 06:47:26PM +0800, Icenowy Zheng wrote:
-> =E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 12:17 +0800=EF=
-=BC=8CIcenowy Zheng=E5=86=99=E9=81=93=EF=BC=9A
-> > T-Head C906/C910 CLINT is not compliant to SiFive ones (and even not
-> > compliant to the newcoming ACLINT spec) because of lack of mtime
-> > register.
-> >=20
-> > Add a compatible string formatted like the C9xx-specific PLIC
-> > compatible, and do not allow a SiFive one as fallback because they're
-> > not really compliant.
-> >=20
-> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
->=20
-> Hi, could this patch be picked ASAP? Becuase it will be used then in
-> further OpenSBI patches to enable proper operation of T-Head timer.
->=20
-> I know the following 2 patches are in doubt and further rework for them
-> are needed.
+> ---
+>  drivers/usb/common/ulpi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/common/ulpi.c b/drivers/usb/common/ulpi.c
+> index d7c8461976ce..60e8174686a1 100644
+> --- a/drivers/usb/common/ulpi.c
+> +++ b/drivers/usb/common/ulpi.c
+> @@ -207,7 +207,7 @@ static int ulpi_read_id(struct ulpi *ulpi)
+>  	/* Test the interface */
+>  	ret = ulpi_write(ulpi, ULPI_SCRATCH, 0xaa);
+>  	if (ret < 0)
+> -		goto err;
+> +		return ret;
+>  
+>  	ret = ulpi_read(ulpi, ULPI_SCRATCH);
+>  	if (ret < 0)
 
-Since it's me that's asking the questions about the other patches, but
-have no comments about this particular one:
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+thanks,
 
-HTH Icenowy!
-
-> > ---
-> > =C2=A0Documentation/devicetree/bindings/timer/sifive,clint.yaml | 8
-> > ++++++++
-> > =C2=A01 file changed, 8 insertions(+)
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > index bbad24165837..aada6957216c 100644
-> > --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> > @@ -20,6 +20,10 @@ description:
-> > =C2=A0=C2=A0 property of "/cpus" DT node. The "timebase-frequency" DT p=
-roperty
-> > is
-> > =C2=A0=C2=A0 described in Documentation/devicetree/bindings/riscv/cpus.=
-yaml
-> > =C2=A0
-> > +=C2=A0 T-Head C906/C910 CPU cores include an implementation of CLINT t=
-oo,
-> > however
-> > +=C2=A0 their implementation lacks a memory-mapped MTIME register, thus
-> > not
-> > +=C2=A0 compatible with SiFive ones.
-> > +
-> > =C2=A0properties:
-> > =C2=A0=C2=A0 compatible:
-> > =C2=A0=C2=A0=C2=A0=C2=A0 oneOf:
-> > @@ -29,6 +33,10 @@ properties:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 - starfive,jh7100-clint
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 - canaan,k210-clint
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: s=
-ifive,clint0
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 - allwinner,sun20i-d1-clint
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: thead,=
-c900-clint
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: s=
-ifive,clint0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: r=
-iscv,clint0
->=20
->=20
-
---JWqOn8OBCdKsE8RV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5B59wAKCRB4tDGHoIJi
-0l5EAP0d8+bmSdQwOL1zh+4ekUZkbwUid4O2E8SRuJ//7ZbjjAD/cbWLeF0c/mVr
-WKzBDTFx9jlc7gXrewlZxdymFvnXZwQ=
-=5Qqt
------END PGP SIGNATURE-----
-
---JWqOn8OBCdKsE8RV--
+-- 
+heikki
