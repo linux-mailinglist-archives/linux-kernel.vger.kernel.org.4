@@ -2,72 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807246455F2
+	by mail.lfdr.de (Postfix) with ESMTP id D47746455F3
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiLGJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:00:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
+        id S229565AbiLGJA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:00:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiLGI7v (ORCPT
+        with ESMTP id S229797AbiLGI75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:59:51 -0500
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBD5B64;
-        Wed,  7 Dec 2022 00:59:49 -0800 (PST)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B73eoE9005999;
-        Wed, 7 Dec 2022 09:59:38 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=nv6CSPzVcW61iwkrykBZRIYhH/dOHXw9fTiSF2/SiQM=;
- b=K5E2/ZFV72JXYOOO2qm+i5qqzlKR3RZqMka9beO8GWMopK6Ec60Rw26b05aEI+TmNL3+
- y89RUzlNV7+NxHi1aVgXIZj9ggtiZtTC7rbOhDjm/i1bhiCtSjN/VP5atSJL2TNyXBOb
- yeAxPa+bWYzV4kC5GpUj0WfR6AIRD337HG7A5CF/DrU4Yzd2c5yX58xO6nj0HlsrTAX4
- jFAWC4s7M7nLNHxIqBWl/lVbYKequzvRzGjjYRyian+ZzsFulCaOxvsIkJUJRJgdA4zl
- KpEvqV+cgnI9DrZB14/SUlsRkaxgW8ZKmFr4Xvwgbnn8NVZp6JFANPBTV6QIZB8FGP+/ 7Q== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3m7x7py2bc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Dec 2022 09:59:38 +0100
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 290B010002A;
-        Wed,  7 Dec 2022 09:59:33 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0F79D21BF66;
-        Wed,  7 Dec 2022 09:59:33 +0100 (CET)
-Received: from [10.201.20.73] (10.201.20.73) by SHFDAG1NODE2.st.com
- (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 7 Dec
- 2022 09:59:32 +0100
-Message-ID: <9dbc355c-2f73-cfb9-4808-fce65d7860e3@foss.st.com>
-Date:   Wed, 7 Dec 2022 09:59:30 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] rpmsg: char: Use preallocated SKBs.
-Content-Language: en-US
-To:     Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
-CC:     Ohad Ben-Cohen <ohad@wizery.com>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-References: <20221206085008.25388-1-piotr.wojtaszczyk@timesys.com>
- <0987cae3-0edc-918b-5b23-22f238f22aa2@foss.st.com>
- <CAG+cZ05b9W4e=AhoiAgehW7V7uWTPaBReAcQkTcVQmDsXwUYFw@mail.gmail.com>
-From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
-Organization: STMicroelectronics
-In-Reply-To: <CAG+cZ05b9W4e=AhoiAgehW7V7uWTPaBReAcQkTcVQmDsXwUYFw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.201.20.73]
-X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
- (10.75.129.70)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_04,2022-12-06_01,2022-06-22_01
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        Wed, 7 Dec 2022 03:59:57 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3DE1D0F2;
+        Wed,  7 Dec 2022 00:59:55 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E11FC32009BE;
+        Wed,  7 Dec 2022 03:59:54 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 07 Dec 2022 03:59:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670403594; x=1670489994; bh=nlpaUoviu+
+        Qxrq04vf4bc0HEZWMsaQTQBqwbNWHZ6ms=; b=MpfQHCTPCVZ5PMA1MVdiTU4cpL
+        b7hcJcR7JCZTCagfZKygFWH01hsgklXSN1ZtnT1WDYjQtHT8aUdFb1jsnL9PBOFf
+        s01MGjPswaQDgg4boZsMBQeGNESofWLOUpFYL3tWm0aE6Xo16VK24uyao0p/6Lka
+        NNvRlrCHpbW8SPX+egI1onJVJ6BVTIxh43Dbw3TzVGyEBjFCQPVxuZK8eVEzwPmk
+        hU9A+diO31bx1q014tEJLy6eAJ5rOQtYAl+2ADb/Ie+Up7rXXQ39I9XcvXKv8rC2
+        jWbomNz7RXwS6vaBdHjKPykdkJ743aDNhuDP0pgxkjQHuPJIkAnh2algjznw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670403594; x=1670489994; bh=nlpaUoviu+Qxrq04vf4bc0HEZWMs
+        aQTQBqwbNWHZ6ms=; b=XswPz6dvx8NTWZqmrWKFxTUZoCvqW0jR48oaFW4gXXIZ
+        vk05CIx8hEmrOCGShjag31JtgCv8JVHI7Hhlj6IPkM2UZkItbPGvcFlCfquFVGfd
+        mz5afEL7EQVeVxuyM2VQt9IXnN0y/dtbrFhvsaQ2oZpoL0B5tyK2rFaPFxN6WU/u
+        Kfigz9sbn40/ozpuLi+LQlZ+4/lh5/OR2h475rxwQ/uwKTot1BG1cq1cGbGOj9xM
+        MHYI3/UsL6FDi9BAeeKvL1X9y6CnJ3eHYWfEX/e/yGJS5n+ySlyokRrnJMvXAyIB
+        0QdcrSDAqFYJ+X/uVqILG3f3JcJVkTI0YQc3IRC+DA==
+X-ME-Sender: <xms:CVaQY5c69UrMkwcTwYtMeqbX_NQ95-BwJqJKF4-18sdet10VaOhfpA>
+    <xme:CVaQY3O4N3qJF--bZHONBb13XEmslwfwDT9whJIYqyf6HOW18lkyv_42DhQScfhKN
+    _zwNY_ARFzO_693VAo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejgdduvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeffgeffuddtvdehffefleethfejjeegvdelffejieegueetledvtedtudelgfdu
+    gfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
+    hnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:CVaQYygz1dSre9W_EvIBBFyA4lA4li7chjy2vYj6m-4iqZiuiV25Hg>
+    <xmx:CVaQYy8kgEi0PfJsoA0YFbO_UfKHxt7T8t1TRfoDcaZ1F1Powk-p0Q>
+    <xmx:CVaQY1tmqVi9jaguYgCN8UNBIdrFOIIaJPo8baXXw64IZ9VwxG0JBg>
+    <xmx:ClaQY_K5Ib-Ub6CJU25_nH9p9ZV6jz8STqEccqizft6CgUhVAso-4A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D690AB60086; Wed,  7 Dec 2022 03:59:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <5a57e163-c705-4308-93ac-11e0cea2804b@app.fastmail.com>
+In-Reply-To: <ff70222596646757cbd6e2f24aadf3247183061d.camel@codeconstruct.com.au>
+References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
+ <20221206073916.1606125-3-jk@codeconstruct.com.au>
+ <e46a680f-e891-489c-9747-98ae3df42ade@app.fastmail.com>
+ <a83f62d604e70a8e58309dc7a5e2e3515227e1c4.camel@pengutronix.de>
+ <b29dceb0-a07f-4e12-9e7b-6fead4db826d@app.fastmail.com>
+ <ff70222596646757cbd6e2f24aadf3247183061d.camel@codeconstruct.com.au>
+Date:   Wed, 07 Dec 2022 09:59:32 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jeremy Kerr" <jk@codeconstruct.com.au>,
+        "Philipp Zabel" <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Lee Jones" <lee@kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [RFC PATCH 2/2] mfd: syscon: allow reset control for syscon devices
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,82 +89,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 7, 2022, at 08:56, Jeremy Kerr wrote:
+> Hi Arnd,
+>
+> Thanks for taking a look a this. Just a question about the early
+> approach; I'm not too familiar with the internals of the syscon/regmap
+> infrastructure:
+>
+>> > reset_controller_register() only initializes a few fields in the
+>> > passed rcdev structure and adds it to a static list under a static
+>> > mutex, so there's not much of a limit.
+>> 
+>> Ok, in that case I think we should at least leave the option of
+>> doing the reset from an early syscon as well.
+>
+> OK, sounds good - I'll add a direct of_reset_control_get_<variant>() in
+> the early of_syscon_register path, which should work in a similar way to
+> the clocks properties.
+>
+> However: this may conflict with the later platform_device syscon; if the
+> late syscon tries to of_reset_control_get_exclusive() the same reset
+> controller (because it's the same syscon node), that will (of course)
+> fail.
+>
+> Hence a question about the syscon infrastructure: how are the late- and
+> early- syscon registrations supposed to interact? Should I allow for
+> there to be two syscons registered (one through of_syscon_register(),
+> the other through the platform device probe), or do we expect that to
+> never happen?
+>
+> In case of the former, I can just grab a shared handle to the reset
+> controller instead, but I want to make sure that's the correct thing to do.
 
+Hmm, it's clearly not doing what I was remembering it to do ;-)
 
-On 12/6/22 15:40, Piotr Wojtaszczyk wrote:
-> Hi Arnaud,
-> 
-> On Tue, Dec 6, 2022 at 1:54 PM Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com
-> <mailto:arnaud.pouliquen@foss.st.com>> wrote:
->> On 12/6/22 09:50, Piotr Wojtaszczyk wrote:
->> > On a message reception copy the message to a SKB taken from preallocated
->> > pool instead of allocating a new SKB each time.
->> > During high rpmsg traffic this reduces consumed CPU time noticeably.
->>
->> Do you have any metrics to share?
-> Tested on 1GHZ single core ARM Cortex-A55 (64bit), virtio backend.
-> Ping-pong pair messages (receive + send) every 125us reduced cpu load from 7% to 6%.
-> 
->> > +static inline
->> > +struct sk_buff *rpmsg_eptdev_get_skb(struct rpmsg_eptdev *eptdev)
->> > +{
->> > +     struct sk_buff *skb;
->> > +
->> > +     skb = skb_dequeue(&eptdev->skb_pool);
->> > +     if (!skb)
->> > +             skb = alloc_skb(MAX_RPMSG_BUF_SIZE, GFP_ATOMIC);
->>
->> The "get_mtu" endpoint ops should be used here.
->> But in any case this works for the virtio backend which defines get_mtu ops
->> (asit define the MAX_RPMSG_BUF_SIZE), but not for other backend such as glink.
->> Your proposal needs to be compatible with the legacy.
->>
->> Here is a proposal:
->>
->> static struct
->> sk_buff *rpmsg_eptdev_get_skb(struct rpmsg_eptdev *eptdev, int len)
->> {
->>         struct sk_buff *skb;
->>
->>         if (eptdev->ept->ops->get_mtu) {
->>                 skb = skb_dequeue(&eptdev->skb_pool);
->>                 if (!skb)
->>                         skb = alloc_skb(eptdev->ept->ops->get_mtu(eptdev->ept),
->>                                         GFP_ATOMIC);
->>         } else {
->>                 alloc_skb (len);
->>         }
->> }
-> The received messages can have different lengths, if we try to reuse skb
-> which was allocated for smaller a message previously, that is a problem, isn't it?
-> I went for the worst case scenario in the virtio backend.
+Before 2014 commit bdb0066df96e ("mfd: syscon: Decouple syscon interface
+from platform devices"), it was supposed to be the same regmap in
+both cases, with the linked list being maintained to ensure we
+never get more than one instance for device_node.
 
-The get_mtu give you the max transmit unit which should be > len, but some
-checks can be added
+After this commit, I see that the platform_driver no longer matches
+syscon nodes from devicetree, but only those nodes that have
+platform_device.dev.name="syscon" and are created from board
+files. The only user of manually created syscon devices at the
+time was mach-clps711x, but that has been converted to DT
+a long time ago, so I don't even see anything using the
+platform_device at all.
 
-Regards,
-Arnaud
-> 
-> 
->> > @@ -126,6 +161,18 @@ static int rpmsg_eptdev_open(struct inode *inode,
-> struct file *filp)
->> >       struct rpmsg_endpoint *ept;
->> >       struct rpmsg_device *rpdev = eptdev->rpdev;
->> >       struct device *dev = &eptdev->dev;
->> > +     struct sk_buff *skb;
->> > +     int i;
->> > +
->> > +     /* Preallocate 8 SKBs */
->> > +     for (i = 0; i < 8; i++) {
->>
->> Do you need to preallocate them?
->> during runtime, it will try to reuse SKBs of the skb_pool and if no more
->> available it will create a new one.
->> This would also help to solve the issue of using MAX_RPMSG_BUF_SIZE
-> Agree, we can allocate SKBs at run time if needed. I thought it would be better
-> to start with some SKBs but I think now it's an overkill.
-> 
-> 
-> -- 
-> Piotr Wojtaszczyk
-> Timesys
+This would in turn indicate that we can completely remove the
+platform_driver code, but I don't see how your RFC patch then
+had any effect because it wouldn't actually perform the
+reset for any devices in mainline kernels.
+
+    Arnd
