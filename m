@@ -2,73 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 985BA645649
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:17:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1EC6645645
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:16:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiLGJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:16:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59892 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiLGJQe (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230152AbiLGJQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 7 Dec 2022 04:16:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648C42FFF9;
-        Wed,  7 Dec 2022 01:16:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 055C560F0A;
-        Wed,  7 Dec 2022 09:16:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B959C433B5;
-        Wed,  7 Dec 2022 09:16:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670404563;
-        bh=M6Ekm/pBdbN2VgTeBU6QuIeBCliKnzJIhys71gOS+d0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=SBj3erXrpM7SKu2ifbOUpX3wKID68lmLvBnU0RGS2/++cQNasZXKvMM2OJ9LTK1eh
-         gc8Ub8ieF6mOax/guLupkvNN6UCV9Mlz86F13PIukxhrLZGPGKnk4zG2kpPmEC5Hws
-         AVdIYQLv09SWsTNXr+6/3iv66otl/zTN+ac2d1BPO1ZREPcEAGbXCKW88gm/jAnON9
-         uSsr2h5EBygWTHNAoFmrj2uiPvmrUAs6uOc9JFBFpEuzElQvo4tzB1EWvZ8l7LUTpK
-         TGS71hUMTk9TFeTQU7+lGkMAqzsXcPRhYRnBmXZkFwhojgKS2+ihPibqENF75FZoCc
-         lPOvHVd3/8j9g==
-Received: by mail-ej1-f53.google.com with SMTP id m18so10914503eji.5;
-        Wed, 07 Dec 2022 01:16:03 -0800 (PST)
-X-Gm-Message-State: ANoB5pn3LdjrlVLsy6J/lbjfi2BitRw4GAsD0k6hUdIM2yEWTOAnv6fN
-        9LQjLhcdP0upuFkGrHMRLgkvnHQH2OztbB0iUqQ=
-X-Google-Smtp-Source: AA0mqf67yTNxeGO6KdbhCdkH31rJ/Paiugzi9lc5kAdca+uBigxLbwyxQZlYijCAZ9E2wUfKATEqoUcb5D3fczCp98c=
-X-Received: by 2002:a17:906:8309:b0:7c0:dab0:d722 with SMTP id
- j9-20020a170906830900b007c0dab0d722mr13703762ejx.353.1670404561525; Wed, 07
- Dec 2022 01:16:01 -0800 (PST)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58744 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230007AbiLGJP6 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 7 Dec 2022 04:15:58 -0500
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA29331EC6;
+        Wed,  7 Dec 2022 01:15:09 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4NRs6f6tVgz15MwZ;
+        Wed,  7 Dec 2022 17:14:18 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 7 Dec 2022 17:15:07 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <zanussi@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH] tracing: Fix issue of missing one synthetic field
+Date:   Wed, 7 Dec 2022 17:15:57 +0800
+Message-ID: <20221207091557.3137904-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
- <167002857934.4256.16584443879212253129.b4-ty@rivosinc.com>
- <Y4/KoiFhdvRBDdzH@spud> <CAJF2gTQX6361ME9UkOykvUEQifqioLMqovbfpqugkk174pKqfA@mail.gmail.com>
- <Y5BJ/EeBTEJK2QLF@spud>
-In-Reply-To: <Y5BJ/EeBTEJK2QLF@spud>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Dec 2022 17:15:49 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRFif+Ntkq0MUekRy74uFn1gnzZcGNOAdQakNi68djS_g@mail.gmail.com>
-Message-ID: <CAJF2gTRFif+Ntkq0MUekRy74uFn1gnzZcGNOAdQakNi68djS_g@mail.gmail.com>
-Subject: Re: [PATCH V5 0/2] Support VMCOREINFO export for RISCV64
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        mick@ics.forth.gr, corbet@lwn.net, alexandre.ghiti@canonical.com,
-        vgoyal@redhat.com, bhe@redhat.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        bagasdotme@gmail.com, dyoung@redhat.com,
-        Palmer Dabbelt <palmer@dabbelt.com>, heiko@sntech.de,
-        anup@brainfault.org, aou@eecs.berkeley.edu,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com,
-        kexec@lists.infradead.org, heinrich.schuchardt@canonical.com,
-        linux-doc@vger.kernel.org, crash-utility@redhat.com,
-        linux-kernel@vger.kernel.org, k-hagio-ab@nec.com,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,76 +45,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 4:08 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Wed, Dec 07, 2022 at 11:34:57AM +0800, Guo Ren wrote:
-> > On Wed, Dec 7, 2022 at 7:05 AM Conor Dooley <conor@kernel.org> wrote:
-> > >
-> > > Hey Palmer, Xianting,
-> > >
-> > > On Fri, Dec 02, 2022 at 04:49:39PM -0800, Palmer Dabbelt wrote:
-> > > > On Wed, 26 Oct 2022 22:42:06 +0800, Xianting Tian wrote:
-> > > > > As disscussed in below patch set, the patch of 'describe VMCOREINFO export in Documentation'
-> > > > > need to update according to Bagas's comments.
-> > > > > https://lore.kernel.org/linux-riscv/22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org/
-> > > > >
-> > > > > As others patches in above patch set already applied, so this patch set only contains below two
-> > > > > patches.
-> > > > >
-> > > > > [...]
-> > > >
-> > > > Applied, thanks!
-> > > >
-> > > > [1/2] RISC-V: Add arch_crash_save_vmcoreinfo support
-> > > >       https://git.kernel.org/palmer/c/649d6b1019a2
-> > >
-> > > So this patch seems to be causing issues for the nommu build:
-> > > https://lore.kernel.org/oe-kbuild-all/202212062250.tR0otHcz-lkp@intel.com/
-> > >
-> > > I had a bit of a poke at trying to see if there were some headers we
-> > > could pull in before actually checking the .config only to see:
-> > > # CONFIG_MMU is not set
-> > >
-> > > Do we have to wrap the whole thing in a `#ifdef CONFIG_MMU` to fix
-> > > compilation here?
-> > The problem does not belong to the patch.
-> >
-> > Could I send a fixup patch? like this?
->
-> That seems like a sane dependancy, but did you build that config?
-> This doesn't fix the problem for me :/
-Sorry, It's the wrong fixup. Here is the new version, and tested. Thx
-for the report.
+The maximum number of synthetic fields supported is defined as
+SYNTH_FIELDS_MAX which value currently is 64, but it actually fails
+when try to generate a synthetic event with 64 fields by executing like:
 
-https://lore.kernel.org/linux-riscv/20221207091112.2258674-1-guoren@kernel.org/
+  # echo "my_synth_event int v1; int v2; int v3; int v4; int v5; int v6;\
+   int v7; int v8; int v9; int v10; int v11; int v12; int v13; int v14;\
+   int v15; int v16; int v17; int v18; int v19; int v20; int v21; int v22;\
+   int v23; int v24; int v25; int v26; int v27; int v28; int v29; int v30;\
+   int v31; int v32; int v33; int v34; int v35; int v36; int v37; int v38;\
+   int v39; int v40; int v41; int v42; int v43; int v44; int v45; int v46;\
+   int v47; int v48; int v49; int v50; int v51; int v52; int v53; int v54;\
+   int v55; int v56; int v57; int v58; int v59; int v60; int v61; int v62;\
+   int v63; int v64" >> /sys/kernel/tracing/synthetic_events
 
->
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index ef8d66de5f38..d8c07999426c 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -512,6 +512,7 @@ config ARCH_HAS_KEXEC_PURGATORY
-> >
-> >  config CRASH_DUMP
-> >         bool "Build kdump crash kernel"
-> > +       depends on KEXEC
-> >         help
-> >           Generate crash dump after being started by kexec. This should
-> >           be normally only set in special crash dump kernels which are
-> >
-> > >
-> > > Thanks,
-> > > Conor.
-> > >
-> >
-> >
-> > --
-> > Best Regards
-> >  Guo Ren
+Correct the field counting to fix it.
 
+Fixes: c9e759b1e845 ("tracing: Rework synthetic event command parsing")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ kernel/trace/trace_events_synth.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
+diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
+index c3b582d19b62..67592eed0be8 100644
+--- a/kernel/trace/trace_events_synth.c
++++ b/kernel/trace/trace_events_synth.c
+@@ -1282,12 +1282,12 @@ static int __create_synth_event(const char *name, const char *raw_fields)
+ 				goto err_free_arg;
+ 			}
+ 
+-			fields[n_fields++] = field;
+ 			if (n_fields == SYNTH_FIELDS_MAX) {
+ 				synth_err(SYNTH_ERR_TOO_MANY_FIELDS, 0);
+ 				ret = -EINVAL;
+ 				goto err_free_arg;
+ 			}
++			fields[n_fields++] = field;
+ 
+ 			n_fields_this_loop++;
+ 		}
 -- 
-Best Regards
- Guo Ren
+2.25.1
+
