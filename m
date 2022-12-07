@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 419FB6453D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:07:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8076453D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiLGGHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 01:07:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
+        id S229782AbiLGGKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 01:10:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiLGGHJ (ORCPT
+        with ESMTP id S229759AbiLGGKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 01:07:09 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E755E578F3
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 22:07:08 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id bs21so26603267wrb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 22:07:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1NNlelo+bGXhdIW+f+uuoPKsjyd+V452C21PX0TjzD4=;
-        b=g0Lb24cqACkLATTe+DrUsuaUC7i6XnCefnPMQGxoVYyF5A3kBch4ow7tJNoDtGGdUQ
-         WHL2//34SZwyrMOQaM3fxHfpUQ+h4Ln5D1Cb1N3exJ6yHuihEHraULmXJeVhdxPo7OvV
-         cIV5xo1JYwjWAG4nKAWH98k1MU66y3JNfOiOOti8NDw3qvmBG9lF8qIYRYPuFveK9Va0
-         auZZv3rAd1kpd8d6ZmxRB+at8Yyf9B7kxwInqyZ2nshcCrz4wIJK02lB0YHld6WmsePd
-         T/BPiack3QobARw9ZIZS2qBvGc6tcSXuUVCuEFVqiQU2mqKz4mG6z9bV0REHPu3PcL6A
-         5RVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1NNlelo+bGXhdIW+f+uuoPKsjyd+V452C21PX0TjzD4=;
-        b=JaJyRmy9hJwnzmyb+Ns5nbN9X109uwJkuFJ8KpZzN6E4chHOHp90XSDT6RMNlM4RBM
-         fRVYzYKFUVHyuuz9mekq8qO9Vq20RbMTXKYaAZotmTXS0l5x1iKgndyal5iCiBCnAljv
-         FD25Gcpmb78PuKIhRAW+0VDcguDU3eK+C4ksaCtM/eWAx7FSNXvWsAjmyDMD+HqM1v+e
-         gkOWzqdzPHORNXE6DW6SpYxQ9BN8Y5xLoHP745jI1VFxSfEgTDM3wrIdERpp9uPXJYnr
-         pP6uq5VzEpuhaHYNpfOyR982L/UWQNodcaS0YgJaP8YJm6yZhlzJn6JXBW5NhdsNOgfR
-         S4Tw==
-X-Gm-Message-State: ANoB5pn6aQCoOvaFAOUVDQsQPtGgvaAsFs2Xntt4Mif1lveiMz99XB/B
-        l1GaFCqSVTZO3gC7UIX0bRYK1CQ73L65Ifx7nXeJSw==
-X-Google-Smtp-Source: AA0mqf66E83vyMRKRbuhDE+5gVUOcjX4AEFyQIhIEchTMD0xax9Wn/YSIBRo9yFk3BUgDpDH8il296pATsihbC75nEU=
-X-Received: by 2002:adf:f944:0:b0:236:8f54:f1f4 with SMTP id
- q4-20020adff944000000b002368f54f1f4mr55202872wrr.654.1670393227267; Tue, 06
- Dec 2022 22:07:07 -0800 (PST)
+        Wed, 7 Dec 2022 01:10:15 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0996E5984C;
+        Tue,  6 Dec 2022 22:10:12 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2B76A0Iw106300;
+        Wed, 7 Dec 2022 00:10:00 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1670393400;
+        bh=CZx2YYGidUXCNUEuGr4xCdXPppfNpvQufFTXwZLi/FY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=hOt/HKigxP9Ir8oKq+TD408TSJABBlzcpZt0Hl/8fkgagVhjbKZCGKQpU1tETLuT9
+         03xTcmjS/mz9vYb5wj4OWz5kGDAo2Q1qDx15csE2cgxrI3WGtl1U/N3kg4N44xx+UX
+         jngulxrpCbzrMUd6A+q+RWx5qkIPku3mKPaDC9pg=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2B76A0ef004847
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 7 Dec 2022 00:10:00 -0600
+Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Wed, 7
+ Dec 2022 00:09:59 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Wed, 7 Dec 2022 00:09:59 -0600
+Received: from [172.24.145.182] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2B769uOr024284;
+        Wed, 7 Dec 2022 00:09:57 -0600
+Message-ID: <8e93f459-53e0-ee39-96cc-2c9e51a72547@ti.com>
+Date:   Wed, 7 Dec 2022 11:39:56 +0530
 MIME-Version: 1.0
-References: <20221207053007.336806-1-sandipan.das@amd.com>
-In-Reply-To: <20221207053007.336806-1-sandipan.das@amd.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 6 Dec 2022 22:06:55 -0800
-Message-ID: <CAP-5=fWhqWfwTwnh5SWiLamXkuZbMnefASxkLByH6a44kdc5Bg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] perf vendor events amd: Add Zen 4 events and metrics
-To:     Sandipan Das <sandipan.das@amd.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com,
-        jhladky@redhat.com, ravi.bangoria@amd.com, ananth.narayan@amd.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 1/5] dt-bindings: dma: ti: k3-bcdma: Add bindings for
+ BCDMA CSI RX
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221206043554.1521522-1-vigneshr@ti.com>
+ <20221206043554.1521522-2-vigneshr@ti.com>
+ <63e1e565-b1e7-ecfc-009a-ee036108f160@linaro.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <63e1e565-b1e7-ecfc-009a-ee036108f160@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,45 +73,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 9:30 PM Sandipan Das <sandipan.das@amd.com> wrote:
->
-> Add events and metrics taken from the Processor Programming Reference
-> (PPR) for AMD Family 19h Model 11h Revision B1 processors which can be
-> found at: https://www.amd.com/system/files/TechDocs/55901_0.25.zip
->
-> Sandipan Das (4):
->   perf vendor events amd: Add Zen 4 mapping
+Hi Krzysztof,
 
-Adding the mapping first may break the build until the core events are added.
+On 06/12/22 14:02, Krzysztof Kozlowski wrote:
+> On 06/12/2022 05:35, Vignesh Raghavendra wrote:
+>> AM62A SoC has a dedicated BCDMA that serves Camera Serial Interface
+>> (CSI) IP. Add new compatible for the same. Unlike system
+>> BCDMA, this instance only has RX DMA channels and lack TX or block copy
+>> channel. Thus make those properties optional. Additionally CSI RX has
+>> independent power domain, add the binding for the same.
+>>
+>> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+>> ---
+>>  .../devicetree/bindings/dma/ti/k3-bcdma.yaml  | 87 ++++++++++++++-----
+>>  1 file changed, 63 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+>> index 08627d91e607..d7b5adbb9b2e 100644
+>> --- a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+>> +++ b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
+>> @@ -32,9 +32,66 @@ allOf:
+>>    - $ref: /schemas/dma/dma-controller.yaml#
+>>    - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
+>>  
+> 
+> When adding if:then:, please move entire allOf after "required:" part.
 
-Thanks,
-Ian
+Sure, will do
 
->   perf vendor events amd: Add Zen 4 core events
->   perf vendor events amd: Add Zen 4 uncore events
->   perf vendor events amd: Add Zen 4 metrics
->
->  .../pmu-events/arch/x86/amdzen4/branch.json   |   82 ++
->  .../pmu-events/arch/x86/amdzen4/cache.json    |  772 ++++++++++++
->  .../pmu-events/arch/x86/amdzen4/core.json     |  122 ++
->  .../arch/x86/amdzen4/data-fabric.json         | 1090 +++++++++++++++++
->  .../arch/x86/amdzen4/floating-point.json      |  818 +++++++++++++
->  .../pmu-events/arch/x86/amdzen4/memory.json   |  174 +++
->  .../pmu-events/arch/x86/amdzen4/other.json    |  138 +++
->  .../pmu-events/arch/x86/amdzen4/pipeline.json |   98 ++
->  .../arch/x86/amdzen4/recommended.json         |  334 +++++
->  tools/perf/pmu-events/arch/x86/mapfile.csv    |    3 +-
->  10 files changed, 3630 insertions(+), 1 deletion(-)
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/branch.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/cache.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/core.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/data-fabric.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/floating-point.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/memory.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/other.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/pipeline.json
->  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/recommended.json
->
-> --
-> 2.34.1
->
+> 
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: ti,am62a-dmss-bcdma-csirx
+>> +    then:
+>> +      properties:
+>> +        ti,sci-rm-range-bchan: false
+>> +        ti,sci-rm-range-tchan: false
+>> +
+>> +        reg:
+>> +          maxItems: 3
+>> +
+>> +        reg-names:
+>> +          items:
+>> +            - const: gcfg
+>> +            - const: rchanrt
+>> +            - const: ringrt
+> 
+> With my changes further this can be only "maxItems: 3"
+
+Yes, but wont that mean any of the 3 reg-names out of the 5? Would it
+not be better to further restrict specifically to above 3 reg-names (as
+thats how the IP is)
+
+> 
+>> +
+>> +      required:
+>> +        - compatible
+>> +        - "#dma-cells"
+>> +        - reg
+>> +        - reg-names
+>> +        - msi-parent
+>> +        - ti,sci
+>> +        - ti,sci-dev-id
+>> +        - ti,sci-rm-range-rchan
+>> +        - power-domains
+>> +
+>> +    else:
+>> +      properties:
+>> +        reg:
+>> +          maxItems: 5
+>> +
+>> +        reg-names:
+>> +          items:
+>> +            - const: gcfg
+>> +            - const: bchanrt
+>> +            - const: rchanrt
+>> +            - const: tchanrt
+>> +            - const: ringrt
+> 
+> With my changes further this can be only "minItems: 5"
+
+Ok.
+
+> 
+>> +
+>> +      required:
+>> +        - compatible
+>> +        - "#dma-cells"
+>> +        - reg
+>> +        - reg-names
+>> +        - msi-parent
+>> +        - ti,sci
+>> +        - ti,sci-dev-id
+>> +        - ti,sci-rm-range-bchan
+>> +        - ti,sci-rm-range-tchan
+>> +        - ti,sci-rm-range-rchan
+>> +
+>>  properties:
+>>    compatible:
+>> -    const: ti,am64-dmss-bcdma
+>> +    enum:
+>> +      - ti,am64-dmss-bcdma
+>> +      - ti,am62a-dmss-bcdma-csirx
+> 
+> Keep some order, e.g. alphabetical. This reduces later conflicts on
+> simultaneous edits.
+
+Will fix!
+
+> 
+>>  
+>>    "#dma-cells":
+>>      const: 3
+>> @@ -65,19 +122,13 @@ properties:
+>>  
+>>        cell 3: ASEL value for the channel
+>>  
+>> -  reg:
+>> -    maxItems: 5
+> 
+> Keep it here with widest constrains - minItems: 3, maxItems: 5
+> 
+>> -
+>> -  reg-names:
+>> -    items:
+>> -      - const: gcfg
+>> -      - const: bchanrt
+>> -      - const: rchanrt
+>> -      - const: tchanrt
+>> -      - const: ringrt
+> 
+> Keep the list here with minItems: 3
+> 
+>> -
+>>    msi-parent: true
+>>  
+>> +  power-domains:
+>> +    description:
+>> +      Power domain if available
+>> +    maxItems: 1
+>> +
+>>    ti,asel:
+>>      $ref: /schemas/types.yaml#/definitions/uint32
+>>      description: ASEL value for non slave channels
+>> @@ -115,18 +166,6 @@ properties:
+>>      items:
+>>        maximum: 0x3f
+>>  
+>> -required:
+>> -  - compatible
+>> -  - "#dma-cells"
+>> -  - reg
+>> -  - reg-names
+>> -  - msi-parent
+>> -  - ti,sci
+>> -  - ti,sci-dev-id
+>> -  - ti,sci-rm-range-bchan
+>> -  - ti,sci-rm-range-tchan
+>> -  - ti,sci-rm-range-rchan
+> 
+> Keep required here. Customize it if needed in if:then:else.
+
+Got it, will fix accordingly...
+
+> 
+>> -
+>>  unevaluatedProperties: false
+>>  
+>>  examples:
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Thanks for the review!
+
+
+-- 
+Regards
+Vignesh
