@@ -2,64 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCF5864515A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:42:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0D364513F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:31:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbiLGBmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54386 "EHLO
+        id S229835AbiLGBbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:31:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiLGBlu (ORCPT
+        with ESMTP id S229511AbiLGBbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:41:50 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7283326CE;
-        Tue,  6 Dec 2022 17:41:49 -0800 (PST)
-Received: from dggpemm500006.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NRg3Z5wQgzJqGv;
-        Wed,  7 Dec 2022 09:40:58 +0800 (CST)
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Dec 2022 09:30:43 +0800
-Subject: Re: [PATCH v8 6/9] livepatch: Use kallsyms_on_each_match_symbol() to
- improve performance
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Petr Mladek <pmladek@suse.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-modules@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        David Laight <David.Laight@aculab.com>
-References: <20221102084921.1615-1-thunder.leizhen@huawei.com>
- <20221102084921.1615-7-thunder.leizhen@huawei.com> <Y34f+IqqSGbtC82V@alley>
- <45a28bcf-c6e1-8d39-613a-d30bd7b685f0@huawei.com>
- <Y4+9Zr1BBqsYRxqT@bombadil.infradead.org>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <c5e3a54d-cd05-1081-2e76-01ca61ce3a8a@huawei.com>
-Date:   Wed, 7 Dec 2022 09:30:31 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Tue, 6 Dec 2022 20:31:16 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB0652158;
+        Tue,  6 Dec 2022 17:31:16 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id p24so15688564plw.1;
+        Tue, 06 Dec 2022 17:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=k7urdQE78p912qO0A7x+cXXIHloLKsW1NnErtpLTCgE=;
+        b=PF8d6NSlKi9CbBejIf+IJfb6sGIV2inLi1UDQw0YGbamjjviRKOD3JWzJnDVQlpXLM
+         +XF+oUZpjIUV3TJ6+WrZnarkThTgxf3wpqn6rf1kzZ1lmVQgI99WNByJ+hZMyrrtj3Ax
+         OpMj9NyrxTrNiypIavUPCnzeYbqeuXV/T9MgUdDZMtFmhHqagqhJwSPFQUeABGoAqWiX
+         JTsQIYMl3wxud32/MkncAmheSThngjdKGLc7V+NAawh6vrrzYy7jVF+7OOfP4Oqjm8C9
+         j3hSfseiaY2BFVaSFTIi8w11Firj2Edev8kItXukE8NnU2gFPbytv6awkw1eLujE/Nqi
+         XCmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k7urdQE78p912qO0A7x+cXXIHloLKsW1NnErtpLTCgE=;
+        b=AMoiKQAJ8iKh6w17EZIg+XWAhkFqgvQA3V82JNQfANbzOXfNTKw87MQW1WjbIDulGU
+         AMYd7VqwzCZnkgVBVN9aKtUVk1SKR0RpcPozBuNxBG0p4SdRodZnor14a/vsHE+v3kPw
+         NWJ3i16aN8JfCcViA9iermXRI4gcGWqRcrdmSBGuINlIqGUXdWGcRxb6rAjLXJbN3M49
+         EwteFYFN2diIUIaS5Z5pd5vDyNCtRWOKwgxUeVqq8ILSisYL/Ht8DF8CsZPF93oRW0M4
+         D9lG3MXtGYt5x3Dm+QaHFSyduNK6zvnmIxoe/4AHkc3OODDtdQQ1AniC1pRC4ip7OZGZ
+         YdgA==
+X-Gm-Message-State: ANoB5pmKmg439EtRnqi6BcLND6ZgEqpL4UqdTtqJKaBseQhPtfRiJJcM
+        j75QmhxYYiV4NHDxkPmAiQsXKa7h3JU=
+X-Google-Smtp-Source: AA0mqf6muuuxbEIJAn0cAhL8ISoINjfzW0o2hKewGkvmHMwrtI+1P5hPiYKRmPvzM/rJEuIuw07Bmw==
+X-Received: by 2002:a17:903:1246:b0:189:63f2:d584 with SMTP id u6-20020a170903124600b0018963f2d584mr58297572plh.156.1670376675391;
+        Tue, 06 Dec 2022 17:31:15 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:7a61:38c7:d37a:7f43])
+        by smtp.gmail.com with ESMTPSA id 65-20020a620544000000b00575448ab0e9sm12247461pff.123.2022.12.06.17.31.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 17:31:14 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:31:11 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
+ devm_gpiod_get_optional()
+Message-ID: <Y4/s3227WQyGQiOI@google.com>
+References: <Y3KMEZFv6dpxA+Gv@google.com>
 MIME-Version: 1.0
-In-Reply-To: <Y4+9Zr1BBqsYRxqT@bombadil.infradead.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3KMEZFv6dpxA+Gv@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,75 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/12/7 6:08, Luis Chamberlain wrote:
-> On Thu, Nov 24, 2022 at 10:36:23AM +0800, Leizhen (ThunderTown) wrote:
->>
->>
->> On 2022/11/23 21:28, Petr Mladek wrote:
->>> Hi,
->>>
->>> I am sorry for the late review. I have been snowed under another
->>> tasks.
->>>
->>> On Wed 2022-11-02 16:49:18, Zhen Lei wrote:
->>>> Based on the test results of kallsyms_on_each_match_symbol() and
->>>> kallsyms_on_each_symbol(), the average performance can be improved by
->>>> more than 1500 times.
->>>
->>> Sounds great.
->>>
->>>> --- a/kernel/livepatch/core.c
->>>> +++ b/kernel/livepatch/core.c
->>>> @@ -153,6 +153,24 @@ static int klp_find_callback(void *data, const char *name,
->>>>  	return 0;
->>>>  }
->>>>  
->>>> +static int klp_match_callback(void *data, unsigned long addr)
->>>> +{
->>>> +	struct klp_find_arg *args = data;
->>>> +
->>>> +	args->addr = addr;
->>>> +	args->count++;
->>>> +
->>>> +	/*
->>>> +	 * Finish the search when the symbol is found for the desired position
->>>> +	 * or the position is not defined for a non-unique symbol.
->>>> +	 */
->>>> +	if ((args->pos && (args->count == args->pos)) ||
->>>> +	    (!args->pos && (args->count > 1)))
->>>> +		return 1;
->>>> +
->>>> +	return 0;
->>>
->>> This duplicates most of the klp_find_callback(). Please, call this
->>> new function in klp_find_callback() instead of the duplicated code.
->>> I mean to do:
->>>
->>> static int klp_find_callback(void *data, const char *name, unsigned long addr)
->>> {
->>> 	struct klp_find_arg *args = data;
->>>
->>> 	if (strcmp(args->name, name))
->>> 		return 0;
->>>
->>> 	return klp_match_callback(data, addr);
->>> }
->>
->> Good idea. But these patches have been merged into linux-next, how about I post
->> a new cleanup patch after v6.2-rc1?
+On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
+> Switch the driver to the generic version of gpiod API (and away from
+> OF-specific variant), so that we can stop exporting
+> devm_gpiod_get_from_of_node().
 > 
-> You can send the cleanup now. The code doesn't change drastically, just
-> base it on modules-next.
-
-OK
-
+> Acked-by: Pali Rohár <pali@kernel.org>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
 > 
->   Luis
-> .
+> v2:
+>  - collected reviewed-by/acked-by tags
+>  - updated commit description to remove incorrect assumption of why
+>    devm_gpiod_get_from_of_node() was used in the first place
 > 
+> This is the last user of devm_gpiod_get_from_of_node() in the mainline
+> (next), it would be great to have it in so that we can remove the API in
+> the next release cycle.
+> 
+> Thanks!
+
+Gentle ping on this one... I'd really like to remove
+[devm_]gpiod_get_from_of_node() API from 6.2.
+
+Thanks.
 
 -- 
-Regards,
-  Zhen Lei
+Dmitry
