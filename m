@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4491645E4A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9FB5645E4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiLGQBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:01:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33034 "EHLO
+        id S229945AbiLGQCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:02:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiLGQB3 (ORCPT
+        with ESMTP id S229651AbiLGQCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:01:29 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21E623E0BE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:01:28 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id r18so16729715pgr.12
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:01:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d1kIptz7lKS34gKJ86GNyP5WqgoufGO1GV/3C71h5+Y=;
-        b=Zv+M3sdOTc2OaYw1U1lD9VTedffjOCXGlzUX5YnRjqpDj/9mhaAVkhtuzC+ogifVNu
-         p1S/8EKd2QORb28ZpoA3LQnVibjwCkCNAAb9dr9XCl2C4l+Lt3Z6K4ir7sm+3mW4x/85
-         6pBJiFAc5UE0fruWDoMsAuJxxN5FRe4wKarL0lpXgBiZNMb0+WQ3q6mYx9fH+BVE9sXN
-         gbcBsoVcq0qongaEmXQHvGOHZ7fI+IIGnay3mc2RIntIRbvuzxhNHt+9sR/XJZeaoNbC
-         fkZqCAqy2kkWqJJLUpz0hIpe2AeBemrvPLy50G6cklmneX0nbRZt8TDVpi+8T7V/GUDd
-         oNxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d1kIptz7lKS34gKJ86GNyP5WqgoufGO1GV/3C71h5+Y=;
-        b=VafLhWN0fa/X/sA/ST/0mXgDJtgGdzldyvB65Jc1Df4MzdFuAZU25g3cxLnt+/TfNx
-         W0HCztjMQqtn4UIAVC6TA+TLQSfVqaoLDaw3LgSJNmsZMQNaP0Z8KvuBADo3hk2E5jQT
-         Z0YTIE6BODQKd3zIOuZuaZA40RnV+NDRoYuBTaXGKYSxvzn/QJwK6xiJlxXUtVtjOSeB
-         WFq1GA7Q4g0HsoYY9cr2eiW6sfFeda59QfffZTc1n7ch3dOzHS30g3F/JXPLQV7+JcDk
-         pyEjERCr1NrwO12V4EJQpxVc8YILmmK+iSEZ12V26vv2PMBkO2MCQ+yODDyDPvlqaqe6
-         YONg==
-X-Gm-Message-State: ANoB5plK6nyqeU3CJ5bTmcuWyxnJw0wXHSFunJVhSoiVTHK4F+fkwVDE
-        JjOj7r3gAdB4AXKswZ+ZKwkx1v/cbOCOp2VAUGkUrg==
-X-Google-Smtp-Source: AA0mqf6sjup+AAww0D1CxABtpTEw5G9veD+P+n64BdJc1XGnX7DToNoJVds9RCkhIAyxzhqjXASkgW/44ET/nN1v+Fo=
-X-Received: by 2002:aa7:951d:0:b0:577:3e5e:7a4 with SMTP id
- b29-20020aa7951d000000b005773e5e07a4mr8456102pfp.57.1670428887514; Wed, 07
- Dec 2022 08:01:27 -0800 (PST)
+        Wed, 7 Dec 2022 11:02:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233E432BAB;
+        Wed,  7 Dec 2022 08:02:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B617261AC8;
+        Wed,  7 Dec 2022 16:02:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1368C433D6;
+        Wed,  7 Dec 2022 16:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670428938;
+        bh=uMOXr6asjMdriSGzhh1L9jUcP/oV+ntlK5yoRVR1d14=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ssf2VM6aWopVI15Ca1rw1MvKdSYqXhn5m3yBXpsDE2faRXmLniOu0wTYPouspelBs
+         dmsh88Z6jfbtwZOrYsQmUslXoTaQ3OBUSrqqlKoqAQd6c4x8gQr5B9FbI4y4ytdQm4
+         Y3i7EOkuSkrvjk/BQvmhcxAWaEEldc+r3REsAGyE1Ggsdk2/H/Hx6nMEEzGJq7EIor
+         LYd48QJxRA4w8IQYsR1B0SEuvqe6jbexIgxL9UvNX3JVGc8AcxydsYXDGsC+45U3XR
+         aSyim+dyPcXEdIQqyYITJc1sCjSxHkb28/gGkRrONG6GVZ+gPi0HtsN4xfskWsgBql
+         KAjaOXyCRtCPw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id AB02240404; Wed,  7 Dec 2022 13:02:09 -0300 (-03)
+Date:   Wed, 7 Dec 2022 13:02:09 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [ALMOST ready] Re: [PATCH 2/3] perf build: Use libtraceevent
+ from the system
+Message-ID: <Y5C5AZ1YfthY0tx2@kernel.org>
+References: <Y49vx0v6Z7EiR8jr@kernel.org>
+ <Y49wxSIK7dJ7iTDg@kernel.org>
+ <Y491d1wEW4TfUi5f@kernel.org>
+ <Y4921D+36UGdhK92@kernel.org>
+ <Y494TNa0ZyPH9YSD@kernel.org>
+ <Y498YP2N3gvFSr/X@kernel.org>
+ <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
+ <Y5ChXjt0uv/yDNwV@kernel.org>
+ <Y5Cjylv9dJh796dw@kernel.org>
+ <20221207093958.09ae35c2@gandalf.local.home>
 MIME-Version: 1.0
-References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com> <20221201225705.46r2m35ketvzipox@builder.lan>
-In-Reply-To: <20221201225705.46r2m35ketvzipox@builder.lan>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 7 Dec 2022 17:00:51 +0100
-Message-ID: <CAPDyKFofsqcoFbYt-9BcisbPdreLGqAAMWorqHi0_D1kwCdYhg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
- 'reset' interface
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207093958.09ae35c2@gandalf.local.home>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,55 +74,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 at 23:57, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
-> >
->
-> @Ulf, Akhil has a power-domain for a piece of hardware which may be
-> voted active by multiple different subsystems (co-processors/execution
-> contexts) in the system.
->
-> As such, during the powering down sequence we don't wait for the
-> power-domain to turn off. But in the event of an error, the recovery
-> mechanism relies on waiting for the hardware to settle in a powered off
-> state.
->
-> The proposal here is to use the reset framework to wait for this state
-> to be reached, before continuing with the recovery mechanism in the
-> client driver.
+Em Wed, Dec 07, 2022 at 09:39:58AM -0500, Steven Rostedt escreveu:
+> On Wed, 7 Dec 2022 11:31:38 -0300
+> Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> 
+> > No distro I tested so far has a package for libtracevent in is default
+> > repositories:
+> 
+> Not sure what you mean by "default repository".
+> 
+> At least on Debian testing, I have libtraceevent-dev available.
 
-I tried to review the series (see my other replies), but I am not sure
-I fully understand the consumer part.
+Right, I'm talking about non-bleeding edge, distros that are still
+supported. I'm still checking, fedora is ok all the way back to 33, wrt
+having libtraceevent available.
 
-More exactly, when and who is going to pull the reset and at what point?
-
->
-> Given our other discussions on quirky behavior, do you have any
-> input/suggestions on this?
->
-> > Some clients like adreno gpu driver would like to ensure that its gdsc
-> > is collapsed at hardware during a gpu reset sequence. This is because it
-> > has a votable gdsc which could be ON due to a vote from another subsystem
-> > like tz, hyp etc or due to an internal hardware signal. To allow
-> > this, gpucc driver can expose an interface to the client driver using
-> > reset framework. Using this the client driver can trigger a polling within
-> > the gdsc driver.
->
-> @Akhil, this description is fairly generic. As we've reached the state
-> where the hardware has settled and we return to the client, what
-> prevents it from being powered up again?
->
-> Or is it simply a question of it hitting the powered-off state, not
-> necessarily staying there?
-
-Okay, so it's indeed the GPU driver that is going to assert/de-assert
-the reset at some point. Right?
-
-That seems like a reasonable approach to me, even if it's a bit
-unclear under what conditions that could happen.
-
-[...]
-
-Kind regards
-Uffe
+- Arnaldo
