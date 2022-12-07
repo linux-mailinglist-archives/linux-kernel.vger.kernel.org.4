@@ -2,82 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EF9646001
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:20:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 245BF646005
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiLGRT4 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Dec 2022 12:19:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S229544AbiLGRV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:21:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLGRTf (ORCPT
+        with ESMTP id S229745AbiLGRVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:19:35 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBBD218E;
-        Wed,  7 Dec 2022 09:19:33 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7DD24E0003;
-        Wed,  7 Dec 2022 17:19:30 +0000 (UTC)
-Message-ID: <91367d07a72ecb2065faebe974c54ebd966e0d59.camel@hadess.net>
-Subject: Re: [Regression] Logitech BT mouse unusable after commit
- 532223c8ac57 (still in 6.1-rc8)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Date:   Wed, 07 Dec 2022 18:19:29 +0100
-In-Reply-To: <CAJZ5v0gRm1NG=QuDFDFdcZgTu7Q0Z3cW3fwGg09sD+3BBV8E1A@mail.gmail.com>
-References: <2262737.ElGaqSPkdT@kreacher>
-         <1df12728a2e788788fd387588bac62023e123d16.camel@hadess.net>
-         <2145955.irdbgypaU6@kreacher>
-         <CAJZ5v0ic+pm+NWD8g4O2MwQEvi+xuB-W9Wpd6c1RhprhoxuK1g@mail.gmail.com>
-         <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
-         <CAJZ5v0gjAGZFS6ap+NAbsi96hq7y9MRGE0h_A-n6xfB1CMs=2g@mail.gmail.com>
-         <cd8b2a2160f5d36d1b73bc0567cd0f6e7e5751c4.camel@hadess.net>
-         <CAJZ5v0gRm1NG=QuDFDFdcZgTu7Q0Z3cW3fwGg09sD+3BBV8E1A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Wed, 7 Dec 2022 12:21:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46B2B62E91;
+        Wed,  7 Dec 2022 09:20:44 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9FECF23A;
+        Wed,  7 Dec 2022 09:20:50 -0800 (PST)
+Received: from [10.1.197.38] (unknown [10.1.197.38])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 312853F73B;
+        Wed,  7 Dec 2022 09:20:39 -0800 (PST)
+Message-ID: <7ce5bcda-bb42-4166-ab7e-8a07b8fb28a7@arm.com>
+Date:   Wed, 7 Dec 2022 17:20:32 +0000
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v8 10/13] x86/resctrl: Add sysfs interface to write
+ mbm_total_bytes_config
+Content-Language: en-GB
+To:     Babu Moger <babu.moger@amd.com>
+Cc:     fenghua.yu@intel.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, paulmck@kernel.org, akpm@linux-foundation.org,
+        quic_neeraju@quicinc.com, rdunlap@infradead.org,
+        damien.lemoal@opensource.wdc.com, songmuchun@bytedance.com,
+        peterz@infradead.org, jpoimboe@kernel.org, pbonzini@redhat.com,
+        chang.seok.bae@intel.com, pawan.kumar.gupta@linux.intel.com,
+        jmattson@google.com, daniel.sneddon@linux.intel.com,
+        sandipan.das@amd.com, tony.luck@intel.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bagasdotme@gmail.com, eranian@google.com, corbet@lwn.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        reinette.chatre@intel.com
+References: <166759188265.3281208.11769277079826754455.stgit@bmoger-ubuntu>
+ <166759206900.3281208.11975514088019160962.stgit@bmoger-ubuntu>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <166759206900.3281208.11975514088019160962.stgit@bmoger-ubuntu>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 12:07 +0100, Rafael J. Wysocki wrote:
-> # hidpp-list-features /dev/hidraw1
-> Bluetooth Mouse M336/M337/M535 (046d:b016) is a HID++ 4.5 device
-> Feature 0x01: [0x0001] Feature set
-> Feature 0x02: [0x0003] Device FW version
-> Feature 0x03: [0x0005] Device name
-> Feature 0x04: [0x0020] Reset
-> Feature 0x05: [0x1e00] Enable hidden features (hidden)
-> Feature 0x06: [0x1800] Generic Test (hidden, internal)
-> Feature 0x07: [0x1000] Battery status
-> Feature 0x08: [0x1b04] Reprog controls v4
-> Feature 0x09: [0x2100] Vertical scrolling
-> Feature 0x0a: [0x2200] Mouse pointer
-> Feature 0x0b: [0x2205] Pointer speed
-> Feature 0x0c: [0x18b1] ? (hidden, internal)
-> Feature 0x0d: [0x2121] Hi-res wheel
-> Feature 0x0e: [0x1f03] ? (hidden, internal)
+Hi Babu,
 
-Would you be able to enable debugging for the hid subsystem to get some
-debug data when getting the version from the device fails?
+(Nit: all the 'sysfs' in the subjects should really be 'resctrl', but as they already have
+'x86/resctrl', could you just remove the sysfs?
+This patch would be "x86/resctrl: Add interface to write mbm_total_bytes_config")
 
-I can't see any problems in there that wouldn't also have impacted all
-the other Logitech Bluetooth devices listed in the support devices
-list.
+On 04/11/2022 20:01, Babu Moger wrote:
+> The current event configuration for mbm_total_bytes can be changed by
+> the user by writing to the file
+> /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config.
+> 
+> The event configuration settings are domain specific and will affect all
+> the CPUs in the domain.
+> 
+> Following are the types of events supported:
+> 
+> ====  ===========================================================
+> Bits   Description
+> ====  ===========================================================
+> 6      Dirty Victims from the QOS domain to all types of memory
+> 5      Reads to slow memory in the non-local NUMA domain
+> 4      Reads to slow memory in the local NUMA domain
+> 3      Non-temporal writes to non-local NUMA domain
+> 2      Non-temporal writes to local NUMA domain
+> 1      Reads to memory in the non-local NUMA domain
+> 0      Reads to memory in the local NUMA domain
+> ====  ===========================================================
+> 
+> For example:
+> To change the mbm_total_bytes to count only reads on domain 0, the bits
+> 0, 1, 4 and 5 needs to be set, which is 110011b (in hex 0x33). Run the
+> command.
+> 	$echo  0=0x33 > /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config
+> 
+> To change the mbm_total_bytes to count all the slow memory reads on
+> domain 1, the bits 4 and 5 needs to be set which is 110000b (in hex 0x30).
+> Run the command.
+> 	$echo  1=0x30 > /sys/fs/resctrl/info/L3_MON/mbm_total_bytes_config
 
-If the problem is a timeout, maybe we should lower the timeouts we
-currently have (5*HZ = 5 seconds, right?), so we can retry 5 times one
-second instead.
+> diff --git a/arch/x86/kernel/cpu/resctrl/rdtgroup.c b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> index 18f9588a41cf..0cdccb69386e 100644
+> --- a/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> +++ b/arch/x86/kernel/cpu/resctrl/rdtgroup.c
+> @@ -1505,6 +1505,133 @@ static int mbm_local_bytes_config_show(struct kernfs_open_file *of,
+>  	return 0;
+>  }
+>  
+> +static void mon_event_config_write(void *info)
+> +{
+> +	struct mon_config_info *mon_info = info;
+> +	u32 index;
+> +
+> +	index = mon_event_config_index_get(mon_info->evtid);
+> +	if (index >= MAX_CONFIG_EVENTS) {
+> +		pr_warn_once("Invalid event id %d\n", mon_info->evtid);
+> +		return;
+> +	}
+> +	wrmsr(MSR_IA32_EVT_CFG_BASE + index, mon_info->mon_config, 0);
+> +}
+> +
+> +static int mbm_config_write(struct rdt_resource *r, struct rdt_domain *d,
+> +			    u32 evtid, u32 val)
+> +{
+> +	struct mon_config_info mon_info = {0};
+> +	int ret = 0;
+> +
+> +	rdt_last_cmd_clear();
+> +
+> +	/* mon_config cannot be more than the supported set of events */
+> +	if (val > MAX_EVT_CONFIG_BITS) {
+> +		rdt_last_cmd_puts("Invalid event configuration\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/*
+> +	 * Read the current config value first. If both are same then
+> +	 * we don't need to write it again.
+> +	 */
+> +	mon_info.evtid = evtid;
 
-Still, as I mentioned earlier, I can't reproduce the problem on another
-Bluetooth Classic device...
+> +	mondata_config_read(d, &mon_info);
+
+This reads the MSR on this CPU, which gets the result for this domain...
+
+
+> +	if (mon_info.mon_config == val)
+> +		goto write_exit;
+> +
+> +	mon_info.mon_config = val;
+> +
+> +	/*
+> +	 * Update MSR_IA32_EVT_CFG_BASE MSRs on all the CPUs in the
+> +	 * domain. The MSRs offset from MSR MSR_IA32_EVT_CFG_BASE
+> +	 * are scoped at the domain level. Writing any of these MSRs
+> +	 * on one CPU is supposed to be observed by all CPUs in the
+> +	 * domain. However, the hardware team recommends to update
+> +	 * these MSRs on all the CPUs in the domain.
+> +	 */
+
+> +	on_each_cpu_mask(&d->cpu_mask, mon_event_config_write, &mon_info, 1);
+
+... but here you IPI all the CPUs in the target domain to update them.
+
+This means you unnecessarily IPI the CPUs in the target domain if they already had this
+value, but the write syscall occurred on a domain that differs. This isn't what you
+intended, but its benign.
+More of a problem is: Won't this get skipped if the write syscall occurs on a domain that
+happens to have the target configuration already?
+
+Because you need the same value to be written on every CPU ... what happens to CPUs that
+are offline when the configuration is changed? Do they keep their previous value, or does
+it get reset?
+
+
+I think this is best solved with a percpu variable for the current value of the MSR. You
+can then read it for CPUs in a remote domain, and only issue IPIs to 'sync' the value if
+needed. You can then re-use the sync call in resctrl_online_cpu() to set the MSR to
+whatever value it should currently be.
+
+
+> +
+> +	/*
+> +	 * When an Event Configuration is changed, the bandwidth counters
+> +	 * for all RMIDs and Events will be cleared by the hardware. The
+> +	 * hardware also sets MSR_IA32_QM_CTR.Unavailable (bit 62) for
+> +	 * every RMID on the next read to any event for every RMID.
+> +	 * Subsequent reads will have MSR_IA32_QM_CTR.Unavailable (bit 62)
+> +	 * cleared while it is tracked by the hardware. Clear the
+> +	 * mbm_local and mbm_total counts for all the RMIDs.
+> +	 */
+> +	memset(d->mbm_local, 0, sizeof(struct mbm_state) * r->num_rmid);
+> +	memset(d->mbm_total, 0, sizeof(struct mbm_state) * r->num_rmid);
+> +
+> +write_exit:
+> +	return ret;
+> +}
+
+
+> +static int mon_config_parse(struct rdt_resource *r, char *tok, u32 evtid)
+> +{
+> +	char *dom_str = NULL, *id_str;
+> +	unsigned long dom_id, val;
+> +	struct rdt_domain *d;
+> +	int ret = 0;
+> +
+> +next:
+> +	if (!tok || tok[0] == '\0')
+> +		return 0;
+> +
+> +	/* Start processing the strings for each domain */
+> +	dom_str = strim(strsep(&tok, ";"));
+> +	id_str = strsep(&dom_str, "=");
+> +
+> +	if (!dom_str || kstrtoul(id_str, 10, &dom_id)) {
+> +		rdt_last_cmd_puts("Missing '=' or non-numeric domain id\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (!dom_str || kstrtoul(dom_str, 16, &val)) {
+> +		rdt_last_cmd_puts("Missing '=' or non-numeric event configuration value\n");
+> +		return -EINVAL;
+> +	}
+
+This is parsing the same format strings as parse_line(). Is there any chance that code
+could be re-used instead of duplicated? This way anything that is added to the format (or
+bugs found!) only need supporting in once place.
+
+
+
+> +	list_for_each_entry(d, &r->domains, list) {
+> +		if (d->id == dom_id) {
+> +			ret = mbm_config_write(r, d, evtid, val);
+> +			if (ret)
+> +				return -EINVAL;
+> +			goto next;
+> +		}
+> +	}
+> +
+> +	return -EINVAL;
+> +}
+
+
+Thanks,
+
+James
