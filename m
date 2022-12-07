@@ -2,183 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6530A645DCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:42:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12966645DC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiLGPmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:42:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S229638AbiLGPlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:41:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGPmt (ORCPT
+        with ESMTP id S229437AbiLGPlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:42:49 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D30212096;
-        Wed,  7 Dec 2022 07:42:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670427768; x=1701963768;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=S2oZsetW7iPEBVhqx/feOGn0yhjsgnW9M1+nukZd+TM=;
-  b=PzDc1H/zWZkgTjM0KxkUQTgaTOYlAzCNZIAl9j5F1Mlu+Ro5CQhiNpSl
-   C6WUOapgX9H6+gyJmLdjEZNmsW4R7G3Xh67ZvbAJNbU2Rswg+iMuobyzL
-   brOYaECsbUXBbtXZR3//8ruL7RZec6f4SCjifwn9k6Ig9NlJQZiaTtvlr
-   T6gxQInO2kNQLrYY0qQvJE0JCTEYKIzVUEyhiPi05Q6gCKTBwGn0C1WQS
-   p2haVA/3bGw2OIEIposjuXErC+yaP3lteYR9ywfs4ztO2LTtezYKCHpih
-   5xke7Fmj0Km/ybMSzX13pGWuizneggiVHe9o9YT93na11xNS1GDDNkcdU
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="381214559"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="381214559"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 07:42:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="820996925"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="820996925"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2022 07:42:41 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2B7FgeKK020747;
-        Wed, 7 Dec 2022 15:42:40 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH v3 3/5] kbuild: add read-file macro
-Date:   Wed,  7 Dec 2022 16:40:44 +0100
-Message-Id: <20221207154044.2181347-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221126225624.751661-3-masahiroy@kernel.org>
-References: <20221126225624.751661-1-masahiroy@kernel.org> <20221126225624.751661-3-masahiroy@kernel.org>
+        Wed, 7 Dec 2022 10:41:20 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C46721252
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:41:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=ai9AyaYCOP+1mwEvT2GphqrR/8UUpCv7twpnp2ghV2Y=; b=XFnLUGerdTFheh129qR9NxuuEE
+        wE6qV8cHZ/Xe8fWU6RCnXrx2owtf4Pv3lQ3g3b6gwVp1mdGe0Vo2a4BwKigQg1O3Xy9rT4S8YxWhj
+        TBwt2OJFMefQ5Y3q9dlJojxrbircOIWKn7yD897QcPH0k6PMbqb1rjmAXKttaQtJTUgs71jJ6yDG4
+        PyGxnWT0kOonCAzoFe5yX6gNnBFUMb+KXLz8T7oCcqPnTKAfwbGyRbm8402RZ9vE8P/09PvIFw7DN
+        79gB74o+AD0ZZIVOVwbLBGQ44x8hd9QblrDJBSoiLyMefOHiqf5kh7G4gN6t+qIhPd0xyPWiAmD/2
+        5X48Z14g==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35618)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1p2wXp-0000m5-1X; Wed, 07 Dec 2022 15:41:13 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1p2wXn-0000qu-B2; Wed, 07 Dec 2022 15:41:11 +0000
+Date:   Wed, 7 Dec 2022 15:41:11 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        linux-arm-kernel@lists.infradead.org,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org
+Subject: Re: PXA25x: GPIO driver fails probe due to resource conflict with
+ pinctrl driver
+Message-ID: <Y5C0F/o4JS5MwkkJ@shell.armlinux.org.uk>
+References: <Y5B4QeNMNboJ42n4@probook>
+ <Y5CxBzy47Gjn/V5a@lunn.ch>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5CxBzy47Gjn/V5a@lunn.ch>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Sun, 27 Nov 2022 07:56:22 +0900
-
-> Since GNU Make 4.2, $(file ...) supports the read operater '<', which
-> is useful to read a file without forking any process. No warning is
-> shown even if the input file is missing.
+On Wed, Dec 07, 2022 at 04:28:07PM +0100, Andrew Lunn wrote:
+> On Wed, Dec 07, 2022 at 12:25:53PM +0100, Jonathan Neuschäfer wrote:
+> > Hello,
+> > 
+> > I am currently trying to bring up Linux 6.1-rcX on a PXA255 board, using a
+> > devicetree. One problem I encountered is that the PXA GPIO driver fails to
+> > probe because it uses the same MMIO register range as the pinctrl driver:
+> > 
+> > [    0.666169] pxa25x-pinctrl 40e00054.pinctrl: initialized pxa2xx pinctrl driver
+> > [    0.694407] pxa-gpio 40e00000.gpio: can't request region for resource [mem 0x40e00000-0x40e0ffff]
+> > [    0.695050] pxa-gpio: probe of 40e00000.gpio failed with error -16
+> > 
+> > Before I try to fix this myself: Is GPIO on PXA25x currently expected to
+> > work and when has it last been seen working?
+> > 
+> > What would be a good way to fix this?
 > 
-> For older Make versions, it falls back to the cat command.
-> 
-> The added ifeq will break when GNU Make 4.10 or 10.0 is released.
-> It will take a long time if the current release pace continues.
-> 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
-> ---
-> 
-> (no changes since v1)
-> 
->  Makefile                  |  2 +-
->  scripts/Kbuild.include    | 15 +++++++++++++++
->  scripts/Makefile.modfinal |  2 +-
->  scripts/Makefile.modinst  |  2 +-
->  4 files changed, 18 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Makefile b/Makefile
-> index eb80332f7b51..60ce9dcafc72 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -369,7 +369,7 @@ else # !mixed-build
->  include $(srctree)/scripts/Kbuild.include
->  
->  # Read KERNELRELEASE from include/config/kernel.release (if it exists)
-> -KERNELRELEASE = $(shell cat include/config/kernel.release 2> /dev/null)
-> +KERNELRELEASE = $(call read-file, include/config/kernel.release)
->  KERNELVERSION = $(VERSION)$(if $(PATCHLEVEL),.$(PATCHLEVEL)$(if $(SUBLEVEL),.$(SUBLEVEL)))$(EXTRAVERSION)
->  export VERSION PATCHLEVEL SUBLEVEL KERNELRELEASE KERNELVERSION
->  
-> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-> index 4b8cf464b53b..55c2243f91c8 100644
-> --- a/scripts/Kbuild.include
-> +++ b/scripts/Kbuild.include
-> @@ -10,6 +10,10 @@ empty   :=
->  space   := $(empty) $(empty)
->  space_escape := _-_SPACE_-_
->  pound := \#
-> +define newline
-> +
-> +
-> +endef
->  
->  ###
->  # Comparison macros.
-> @@ -55,6 +59,17 @@ stringify = $(squote)$(quote)$1$(quote)$(squote)
->  kbuild-dir = $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
->  kbuild-file = $(or $(wildcard $(kbuild-dir)/Kbuild),$(kbuild-dir)/Makefile)
->  
-> +###
-> +# Read a file, replacing newlines with spaces
-> +#
-> +# This ifeq will break when GNU Make 4.10 is released.
-> +# Remove this conditional until then.
-> +ifeq ($(call test-ge, $(MAKE_VERSION), 4.2),y)
-> +read-file = $(subst $(newline),$(space),$(file < $1))
-> +else
-> +read-file = $(shell cat $1 2>/dev/null)
-> +endif
-> +
+> How are the registers arranged?
 
-Great stuff. Used it in my upcoming series to simplify things, works
-as expected.
+As documented in drivers/gpio/gpio-pxa.c - it'll be easier for you to
+look there rather than for me to explain it - but suffice it to say
+that the pinctrl registers are amongst the GPIO registers.
 
-sed-syms = $(subst $(space),\|,$(foreach file,$(sym-files-y),$(call read-file,$(file))))
+> Is 0x40e00000-0x40e0ffff simply too
+> large, and making it smaller would fix the issue? Or are the registers
+> interleaved?
 
-The only thing that came to my mind while I was implementing the
-oneliner above: maybe add ability to read multiple files? For now,
-I used a foreach, could it be somehow incorporated into read-file
-already?
+They're interleaved. Looking at the .dtsi file for PXA25x, it seems
+that the pinctrl claims just the addresses that it needs, but the GPIO
+controller has no reg property in the .dtsi, so I'm not sure what fills
+that information in.
 
-Besides that:
+DT could describe the region for PXA25x, which is just:
 
-Reviewed-and-tested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
+	0x40e00000 - 0x40e00054
 
->  ###
->  # Easy method for doing a status message
->         kecho := :
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 25bedd83644b..7252f6cf7837 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
-> @@ -13,7 +13,7 @@ include $(srctree)/scripts/Kbuild.include
->  include $(srctree)/scripts/Makefile.lib
->  
->  # find all modules listed in modules.order
-> -modules := $(sort $(shell cat $(MODORDER)))
-> +modules := $(sort $(call read-file, $(MODORDER)))
->  
->  __modfinal: $(modules)
->  	@:
-> diff --git a/scripts/Makefile.modinst b/scripts/Makefile.modinst
-> index a4c987c23750..509d424dbbd2 100644
-> --- a/scripts/Makefile.modinst
-> +++ b/scripts/Makefile.modinst
-> @@ -9,7 +9,7 @@ __modinst:
->  include include/config/auto.conf
->  include $(srctree)/scripts/Kbuild.include
->  
-> -modules := $(sort $(shell cat $(MODORDER)))
-> +modules := $(sort $(call read-file, $(MODORDER)))
->  
->  ifeq ($(KBUILD_EXTMOD),)
->  dst := $(MODLIB)/kernel
-> -- 
-> 2.34.1
+Later PXA have more banks, so would require additional resources to be
+listed.
 
-Thanks,
-Olek
+However, first, we need to know what provides the iomem resource for
+this:
+
+                gpio: gpio@40e00000 {
+                        compatible = "intel,pxa25x-gpio";
+                        gpio-ranges = <&pinctrl 0 0 84>;
+                        clocks = <&clks CLK_NONE>;
+                };
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
