@@ -2,119 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99B5646078
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E89D646081
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiLGRnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48790 "EHLO
+        id S229914AbiLGRoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:44:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLGRnG (ORCPT
+        with ESMTP id S229507AbiLGRoN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:43:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BEF226;
-        Wed,  7 Dec 2022 09:43:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 7 Dec 2022 12:44:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C6655AA1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:43:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670434992;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zDbg1E4iQ8iZrWi8icOJENxqpZHADn0utZrnGIpmHdg=;
+        b=Dq+jQyK7XDclzHJT+yphSR1uc8a8HIJyHLXDpOVb5XAICtqdbXTbvuu3JIvIV8YKTqy85e
+        DDjpRHnwMHSlMgsAKp9pK1UMN1VMTiCj1ErLBWlsAr/Gb/O6+1L9tj8aNF1YvWzeEXPqp5
+        pg9lrL8EyJtEOdnnXUCoMXxLqUTHKyU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-240-YuaXwoa-P9aTenAEJ_l2Iw-1; Wed, 07 Dec 2022 12:43:09 -0500
+X-MC-Unique: YuaXwoa-P9aTenAEJ_l2Iw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75D5261B59;
-        Wed,  7 Dec 2022 17:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A115C433D6;
-        Wed,  7 Dec 2022 17:43:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670434983;
-        bh=goeB/rRth2x4b9Asjebd0IlWBnTeqRBWnHgyNNDbMOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OLXE2PusPNeYTsQ53oYgGC1EHAPJiaigWQr8ek8DQSDk+asI29g827Xzmow+7SIg3
-         c4UTnCl5eQYAxKbvrBBPU1ddnUuixrJilSqpqekcgIfevV+IGGiolcYQgW0sHHbGmt
-         6E4H4/twrLbwo9FsVU6KoHJNdedKY7BUjTAHH0Ul2D8qhf2af4J0j+hO9T46ot0tmo
-         OM4l7zs5rF40mVNvPJrk80ryTrnkaTAUbj8QBpl9F6bXWPI/ofA4cDdZpfnHFZX6Kn
-         oZma7XYQoSxalyVzNcqh7bUqUqRcjve7gCUtEfVF+uLrw9Waw7xyaop9VH0gyHiiX0
-         hX6zr/R9oLoTg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 89B8340404; Wed,  7 Dec 2022 14:43:01 -0300 (-03)
-Date:   Wed, 7 Dec 2022 14:43:01 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y5DQpZmkNsT9vdwg@kernel.org>
-References: <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
- <Y5DNBZNC5rBBqlJW@kernel.org>
- <Y5DN90m5D0HVOPK8@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A3A38582B9;
+        Wed,  7 Dec 2022 17:43:09 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BFD8940C6EC2;
+        Wed,  7 Dec 2022 17:43:07 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000229f1505ef2b6159@google.com>
+References: <000000000000229f1505ef2b6159@google.com>
+To:     syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5DN90m5D0HVOPK8@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1543007.1670434984.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 07 Dec 2022 17:43:04 +0000
+Message-ID: <1543008.1670434984@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Dec 07, 2022 at 02:31:35PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Dec 07, 2022 at 02:27:33PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Wed, Dec 07, 2022 at 07:08:28PM +0530, Athira Rajeev escreveu:
-> > > > On 06-Dec-2022, at 11:01 PM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > Can you try again? tmp.perf/core? That "tmp." part means its a force
-> > pushed branch, so I just force pushed with some arch specific fixes, now
-> > I'm down to (removing the successful builds and unrelated failures, now
-> > related to libbpf's F_DUPFD_CLOEXEC kaboom):
-> > 
-> >   14     8.49 ubuntu:18.04-x-s390           : FAIL gcc version 7.5.0 (Ubuntu 7.5.0-3ubuntu1~18.04)
-> >     tests/parse-events.c:1893:12: error: 'test__checkevent_tracepoint' undeclared here (not in a function); did you mean 'test__checkevent_breakpoint'?
-> >        .check = test__checkevent_tracepoint,
-> >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >                 test__checkevent_breakpoint
-> >     /git/perf-6.1.0-rc6/tools/build/Makefile.build:139: recipe for target 'tests' failed
-> >     make[3]: *** [tests] Error 2
-> 
-> This should fix the above:
-> 
-> 
-> ⬢[acme@toolbox perf]$ vim tools/perf/tests/parse-events.c
-> ⬢[acme@toolbox perf]$ git diff
-> diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-> index dcbfb93287e80e78..bebb677682deff98 100644
-> --- a/tools/perf/tests/parse-events.c
-> +++ b/tools/perf/tests/parse-events.c
-> @@ -1887,7 +1887,7 @@ static const struct evlist_test test__events[] = {
->                 .check = test__checkevent_breakpoint_len_rw_modifier,
->                 /* 4 */
->         },
-> -#if defined(__s390x__)
-> +#if defined(__s390x__) and defined(HAVE_LIBTRACEEVENT)
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next=
+.git master
 
-s/and/&&/g
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index f97fd01a2932..1335c89c6225 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -336,7 +336,6 @@ static int kthread(void *_create)
+ 	void *data =3D create->data;
+ 	struct completion *done;
+ 	struct kthread *self;
+-	int ret;
+ =
 
->         {
->                 .name  = "kvm-s390:kvm_s390_create_vm",
->                 .check = test__checkevent_tracepoint,
-> ⬢[acme@toolbox perf]$
+ 	self =3D to_kthread(current);
+ =
 
--- 
+@@ -365,17 +364,20 @@ static int kthread(void *_create)
+ 	 * or the creator may spend more time in wait_task_inactive().
+ 	 */
+ 	preempt_disable();
++	if (test_bit(KTHREAD_SHOULD_STOP, &self->flags)) {
++		preempt_enable();
++		create->result =3D ERR_PTR(-EINTR);
++		complete(done);
++		do_exit(0);
++	}
+ 	complete(done);
+ 	schedule_preempt_disabled();
+ 	preempt_enable();
+ =
 
-- Arnaldo
+-	ret =3D -EINTR;
+-	if (!test_bit(KTHREAD_SHOULD_STOP, &self->flags)) {
+-		cgroup_kthread_ready();
+-		__kthread_parkme(self);
+-		ret =3D threadfn(data);
+-	}
+-	kthread_exit(ret);
++	cgroup_kthread_ready();
++	__kthread_parkme(self);
++	/* Run the actual thread function. */
++	kthread_exit(threadfn(data));
+ }
+ =
+
+ /* called from kernel_clone() to get node information for about to be cre=
+ated task */
+diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
+index 44222923c0d1..24ee585d9aaf 100644
+--- a/net/rxrpc/local_object.c
++++ b/net/rxrpc/local_object.c
+@@ -357,10 +357,11 @@ struct rxrpc_local *rxrpc_use_local(struct rxrpc_loc=
+al *local,
+  */
+ void rxrpc_unuse_local(struct rxrpc_local *local, enum rxrpc_local_trace =
+why)
+ {
+-	unsigned int debug_id =3D local->debug_id;
++	unsigned int debug_id;
+ 	int r, u;
+ =
+
+ 	if (local) {
++		debug_id =3D local->debug_id;
+ 		r =3D refcount_read(&local->ref);
+ 		u =3D atomic_dec_return(&local->active_users);
+ 		trace_rxrpc_local(debug_id, why, r, u);
+
