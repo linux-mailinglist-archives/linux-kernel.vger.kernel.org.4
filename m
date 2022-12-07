@@ -2,74 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283EB645F31
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:45:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2445645F3E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:49:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230020AbiLGQpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:45:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S229966AbiLGQtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:49:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbiLGQpK (ORCPT
+        with ESMTP id S229777AbiLGQtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:45:10 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937D25E3C2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:45:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1670431500; bh=UycZekzkSjqnF2N5+loQlLUpBO/scCgp/bD64AOybyw=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=BhhUIxINl8Jin6/mwCEUM7+dbZN6yi2VAO45J06SPoSCB9MDlINUrh83Isd5+InfZ
-         aqNRg3rmXuoQv7Ex16e95I/AgndaqxuDuzpHHpgTNY59mW0ckAHld8ABNGZKCZHPNy
-         0JWUBqUJoLFos45S2jD9wHJP3bfxAp7wKxbQ/HEC7WikZ+ZUJJS3Z0IZRK2OZjP9/u
-         aZdzxtZwDMNWKJlnbaP++K1kytAffpq+1j0A3So6V6GF2rO2V/xlWdrt5z+MqgJunt
-         +vmHhJ/EYRxL1us8B/4Nno3Bb3EBaQkVnFIIubQSUWiNG9X9Q8tGd3r34+4hjG+eKp
-         uEwZdq2OAwYMA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MVvPJ-1pUhZZ2M8j-00RmKU; Wed, 07
- Dec 2022 17:45:00 +0100
-Date:   Wed, 7 Dec 2022 17:44:58 +0100
-From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org
-Subject: Re: PXA25x: GPIO driver fails probe due to resource conflict with
- pinctrl driver
-Message-ID: <Y5DDCmXnamC6Zikx@probook>
-References: <Y5B4QeNMNboJ42n4@probook>
- <Y5CxBzy47Gjn/V5a@lunn.ch>
- <Y5C0F/o4JS5MwkkJ@shell.armlinux.org.uk>
+        Wed, 7 Dec 2022 11:49:19 -0500
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4494858BD0;
+        Wed,  7 Dec 2022 08:49:18 -0800 (PST)
+Received: by mail-qk1-x735.google.com with SMTP id c2so10416540qko.1;
+        Wed, 07 Dec 2022 08:49:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=y18DIpbfCukk25TWC8zheO2SUvaGDQaONDYCY89KTGU=;
+        b=SMK2V74sU8D3TcIrRaSUNwZYnaaTCeoM4k+ZcZTFw/ydUkhwZLbo1yEKDxUMIBS4gA
+         iwNJGXqzS6w1suvYGlU8ecRhl6NNxEKbu7JAvBOIviytxXOltcSBfBeWp+TnxyBxXr9j
+         aMWtjDuBUNQOGk7gO4jGnxDWTQ8/yXDvz53Y4z4R9i7/KWUTuiCGkDsrHLRa/o9SuTb7
+         KqorQSVIORS6lv2KWgYWjY+eZry7XlEBoWrdcJ1POsluOkv3Gc8qESPlNGyPzJ94Jsq1
+         5AvRk0IRxLOSHpjNN6gxt9LAglz7AWcGJObOYuX4CKqkCJ0dV+a7TLBA1pKfycAlJzKC
+         YqrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y18DIpbfCukk25TWC8zheO2SUvaGDQaONDYCY89KTGU=;
+        b=mtKrzpYlOQ6xEDqaXzPNF4YAcmytXfDrb+h/1hUvV1GVXU2/uSmFYdqBl4H0gIYzq9
+         wgmcWiAwFCYtG+yjdPyYXu3J83VPiev2NylKlotcMZKdVzaSOsqYt7/X18vgcm4zO+vY
+         tn/6zrPdjBoJFNNqq4kh6r+ZQgd2mrIVukm3O9cltaN7sJL7vR/LNdj6o5k0T7Z5mmXM
+         JD2Wgivev6TRLaldbkEBbhVkzb9PnywtADQj9XR4i3qgkb+EFITdXXPjK0K3rc/OFFcM
+         PHTgcvkAfqp2K1W8nPlAhmC+19Ppoj0eD0JLxHbc1Ix/OVhLyvhcRSRAhPvPh8/OwBvr
+         KkWQ==
+X-Gm-Message-State: ANoB5pl5eOAT6pfydNLuQ8J29ogf6Gjn+LdqxbVVdT7zH9QjqMrm75Pp
+        5wL6rcPRLapYiFhG3lcM55BEgyQee0RodUqFgmE=
+X-Google-Smtp-Source: AA0mqf6Z3cBlsiKEerUxS5aa9mOeKvWW6A2uIvZwb1fbjWfE4NyTIrR4VodmXjDwbwquQncYrV7lhOxx/sjwJ4ekXxA=
+X-Received: by 2002:a37:f504:0:b0:6cf:5fa1:15f8 with SMTP id
+ l4-20020a37f504000000b006cf5fa115f8mr81140787qkk.748.1670431757330; Wed, 07
+ Dec 2022 08:49:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9eeF8hcRYDtZ6Gsw"
-Content-Disposition: inline
-In-Reply-To: <Y5C0F/o4JS5MwkkJ@shell.armlinux.org.uk>
-X-Provags-ID: V03:K1:Qyv1+6D31pbICyUtF8wJztcfBXIPqJfe5tRyNZfKUhTGLW7WYST
- Uso18McbxZmJrI3w+NBRAg49NmEMFua1O04lTfSlb6wQ8aWRKrqmqL2bZbX7B+1dUT/6rNS
- ZCpacMs4BMsDMAbCDw+UuukBNPDSyUCnjiAXwNFr5GaLgTbnYCeuY8vh20EA5vqrW5KRjsr
- KOG8mKIipL2Hg0yn5PkTw==
-UI-OutboundReport: notjunk:1;M01:P0:rRQQ3ODs+YY=;a8Hh2vyzQ7USdBEBAUMStghykh5
- 9texXMvOcDkCu8solosQbttnpoMTVgI4ykoA2eluNlEt4CtAnzDTvDuFDK/zcyhUg9QcoU4tZ
- 5orj/JWK/qakSIVDTqhJbjydXtUQOVx78tf49Cs031SFgTELIkRGgt4aoI1uw4PUbHZSZJRNJ
- ATOxDwn0f/VxtNeWK2LTN8u7++JPI4c1lx+gOALCiGlCqR1WF15IAlBIAmWMAWsLVtowvl4Rl
- EjjFfx/PLI1mMlGsF66X5HzUfINLTmq/P2hZIjm/nHa3/0nw/3u6qzVZuX8jIJrP1+OO8gSLf
- 9ZtYLxfYP3395rWSq0w8j1g9dOq8Ghv3jnPhvZ6y75i+lJszTxN8ccdGRt5FhBAVa+ilMuZPN
- U7qaqhLm7RrmW/GKOyq/T4HVwie2Jun77TsEgHhlMe+WBHinyjwpUdtFNc7xKo1aGNwkPtQ1w
- 26ysLkTmyeaObEPHQeZaZdH7YwcLi+zN5acwT2bJT8WvIiW7YrTpUrIjF+wTlWjJQ4P/Q9fN/
- M+kL/0WM0H9ukg0iPQ1wQrEg1B/meT04jyrfPU69cBCCpyVlfqd9Snm1nOEN5UysHe+GkoI4V
- w3YE2Ck7h9ZGOm2Vx3qlTR8jUDH4Q0xFEA7P00e/r0MQ4ia+A4AH2SHFi3+wTwQO0Y4C2DS1R
- 1wq4myLmA3tHo9bMXZYcv3jqYR240XBMI1oEwpyvG75huGi82z0OgZ8Bo7R9gbj7wvWQ77GsY
- vw5vPHOL5NoU3mZchaa5d1IYpIBE4tVji7v+hnGKR8kga4eEfgAnD5oRbqKngPLKxBRaIi8Py
- W602uN+0Sxo1l1WI2vnCq6GeurGQw92UVMTnk1uFrEuQgKbDCg99w3/oYnJ3ORQg6Bv+S1sQ+
- RjDAQ9DROz6UYIDawKbFpAFw/xOaQRo6JuABSk08DidQJKiC7d6c+4LopxNBayRcLTykYh2GH
- v8mE3Cp1wnSM8iYLdBvf8ft8chg=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221205085351.27566-1-tmaimon77@gmail.com> <20221205085351.27566-3-tmaimon77@gmail.com>
+ <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
+ <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
+ <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
+ <c200557f-c30a-62f9-287a-af804e818cf1@intel.com> <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
+ <CAHp75VemBiGUTspEYDe3hwA9pEzjNMQGY6_kUoVMJyCuEWgChw@mail.gmail.com>
+ <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com> <CAP6Zq1h9XvH501e_nH9TkUCKPNOuH7dhOM8FrsUM=PYX4gt0qw@mail.gmail.com>
+ <CAHp75Vd5DzkCW0Gpouv+0Or=Yhjp_KdFGP-jXkpHD=UZrG2ajA@mail.gmail.com> <cae6475a-a1e9-ae57-6e64-59931f467050@intel.com>
+In-Reply-To: <cae6475a-a1e9-ae57-6e64-59931f467050@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 7 Dec 2022 18:48:41 +0200
+Message-ID: <CAHp75VfVRa5m3WeEvMvGCRK7YRBD5BCxOL2DHDzyuQ1cD4J9UA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Tomer Maimon <tmaimon77@gmail.com>, ulf.hansson@linaro.org,
+        avifishman70@gmail.com, tali.perry1@gmail.com, joel@jms.id.au,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        skhan@linuxfoundation.org, davidgow@google.com,
+        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
+        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,74 +80,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 7, 2022 at 3:49 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> On 7/12/22 15:25, Andy Shevchenko wrote:
+> > On Wed, Dec 7, 2022 at 3:01 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> >> On Mon, 5 Dec 2022 at 16:33, Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>> On 5/12/22 16:17, Andy Shevchenko wrote:
+> >>>> On Mon, Dec 5, 2022 at 4:14 PM Andy Shevchenko
+> >>>> <andy.shevchenko@gmail.com> wrote:
+> >>>>> On Mon, Dec 5, 2022 at 3:41 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>>>>> On 5/12/22 15:25, Andy Shevchenko wrote:
+> >>>>>>> On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
 
---9eeF8hcRYDtZ6Gsw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Wed, Dec 07, 2022 at 03:41:11PM +0000, Russell King (Oracle) wrote:
-> On Wed, Dec 07, 2022 at 04:28:07PM +0100, Andrew Lunn wrote:
-[...]
-> > How are the registers arranged?
->=20
-> As documented in drivers/gpio/gpio-pxa.c - it'll be easier for you to
-> look there rather than for me to explain it - but suffice it to say
-> that the pinctrl registers are amongst the GPIO registers.
->=20
-> > Is 0x40e00000-0x40e0ffff simply too
-> > large, and making it smaller would fix the issue? Or are the registers
-> > interleaved?
->=20
-> They're interleaved. Looking at the .dtsi file for PXA25x, it seems
-> that the pinctrl claims just the addresses that it needs, but the GPIO
-> controller has no reg property in the .dtsi, so I'm not sure what fills
-> that information in.
+> >>>>>>> devm_ is problematic in your case.
+> >>>>>>> TL;DR: you need to use clk_get_optional() and clk_put().
+> >>>>>>
+> >>>>>> devm_ calls exactly those, so what is the issue?
+> >>>>>
+> >>>>> The issue is the error path or removal stage where it may or may be
+> >>>>> not problematic. To be on the safe side, the best approach is to make
+> >>>>> sure that allocated resources are being deallocated in the reversed
+> >>>>> order. That said, the
+> >>>>>
+> >>>>> 1. call non-devm_func()
+> >>>>> 2. call devm_func()
+> >>>>>
+> >>>>> is wrong strictly speaking.
+> >>>>
+> >>>> To elaborate more, the
+> >>>>
+> >>>> 1. call all devm_func()
+> >>>> 2. call only non-devm_func()
+> >>>>
+> >>>> is the correct order.
+> >>>
+> >>> 1. WRT pltfm_host->clk, that is what is happening
+> >>> 2. WRT other resources that is simply not always possible because not every resource is wrapped by devm_
+> >>> e.g. mmc_alloc_host() / mmc_free_host()
+> >> I little confused about what to decide, should I use only
+> >> non-devm_func because mmc_alloc_host() / mmc_free_host() is not
+> >> warrped with devm_?
+> >
+> > It is up to you how to proceed. I pointed out the problem with your
+> > code which may or may not be fatal.
+> >
+> > If you want to solve it, there are several approaches:
+> > 1) get rid of devm_ completely;
+> > 2) properly shuffle the ordering in ->probe(), so all devm_ calls are
+> > followed by non-devm_;
+> > 3) wrap non-devm_ cals to become managed (see
+> > devm_add_action_or_reset() approach);
+> > 4) fix SDHCI / MMC layer by providing necessary devm_ calls and/or fix
+> > sdhci_pltfm_register() to handle the clock.
+>
+> I can take care of sdhci_pltfm when I next have some time.
+> Otherwise it looks OK to me, so I am acking it.
 
-The GPIO reg property is in pxa2xx.dtsi.
+Thank you!
 
->=20
-> DT could describe the region for PXA25x, which is just:
->=20
-> 	0x40e00000 - 0x40e00054
->=20
-> Later PXA have more banks, so would require additional resources to be
-> listed.
->=20
-> However, first, we need to know what provides the iomem resource for
-> this:
->=20
->                 gpio: gpio@40e00000 {
->                         compatible =3D "intel,pxa25x-gpio";
->                         gpio-ranges =3D <&pinctrl 0 0 84>;
->                         clocks =3D <&clks CLK_NONE>;
->                 };
->=20
-> --=20
-> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-> FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> > Personally, the list order is from the least, what I prefer, to the
+> > most (i.o.w. I would like to see rather 4) than 1) to be implemented).
+> >
+> >>>> Hence in this case the driver can be worked around easily (by
+> >>>> shuffling the order in ->probe() to call devm_ first), but as I said
+> >>>> looking into implementation of the _unregister() I'm pretty sure that
+> >>>> clock management should be in sdhci-pltfm, rather than in all callers
+> >>>> who won't need the full customization.
+> >>>>
+> >>>> Hope this helps to understand my point.
+> >>>>
+> >>>>>>> Your ->remove() callback doesn't free resources in the reversed order
+> >>>>>>> which may or, by luck, may not be the case of all possible crashes,
+> >>>>>>> UAFs, races, etc during removal stage. All the same for error path in
+> >>>>>>> ->probe().
+> >>>>>
+> >>>>> I also pointed out above what would be the outcome of neglecting this rule.
 
+...
 
-Jonathan
+> >>>>>>>>> Why can't you use sdhci_pltfm_register()?
+> >>>>>>>> two things are missing in sdhci_pltfm_register
+> >>>>>>>> 1. clock.
+> >>>>>>>
+> >>>>>>> Taking into account the implementation of the corresponding
+> >>>>>>> _unregister() I would add the clock handling to the _register() one.
+> >>>>>>> Perhaps via a new member of the platform data that supplies the name
+> >>>>>>> and index of the clock and hence all clk_get_optional() / clk_put will
+> >>>>>>> be moved there.
+> >> Do you mean to add it to sdhci_pltfm_register function? if yes I
+> >> believe it will take some time to modify sdhci_pltfm_register
+> >> I prefer not to use sdhci_pltfm_register.
+> >
+> > In the Linux kernel we are trying hard to avoid code duplication. Why
+> > do you need it to be open coded? (Yes, I heard you, but somebody
+> > should fix the issues with that funcion at some point, right?)
+> >
+> >>>>>>>> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
+> >>>>>>>
+> >>>>>>> All the same, why can't platform data be utilised for this?
 
---9eeF8hcRYDtZ6Gsw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmOQwwoACgkQCDBEmo7z
-X9vPtQ//W+FQ7O1MJS7Wep4GMQxQyamklotEVos/5WUxWxRXD3RE9PP8w0tEyLzP
-bNUTba+1rJDZO+NL9CJlYLwvD+B8V1gzSpGBc6ak4+4ANGd9GLxdAWM8/rt5QAXv
-AeGrzXNM1v5gpY+yBQgLf1uW17Aecg3evFasblbjVUXhZiWToyYwbju+83inIAip
-bQ+49Oru0jdXUIJiygFGqRyUCpOa1BK9Ami5XNBNQo8XtharZTlMBKQFtmS5VdGo
-cpplEVnwiGJ0BSNzwy93lU+TzRsxSesqPyJja4Lgb5jixtP3CxMy4Jxoi3AU7nOz
-t9SFVPN2Ps/tBznQkvoz5942TrXAC/5yTzs8cfDHt9zDbXmNaj8QNXG11QTgtrP+
-nrElbbI2eYnH1q87ZhwoeBnEA9Fu5jKz2cfCKbXAmNNHIhkOnKEBi/yz/HpySbHY
-DM+scWSdwnbWIC1u4zFMk0ArZfMcBvLJmUIK04KTUdjVRjjCvR2bmMwN4O/xNQ22
-RxQQ4ugZSFYs99AheaAjMHAeWqrWmM88b+HdtH/YreOQ4wlSlfOsHrWdb0jw8Qh5
-phqAq5MqSibWgfx+x1FXSl2byQXoqdsDGAStiidsMmu7rNS5vgmGDKgMQvmbYxoW
-D8VBOKUVEIheoZWGrouRleVDOwamaJc9PpklNSB41hrz0LJJv4E=
-=o/Ap
------END PGP SIGNATURE-----
-
---9eeF8hcRYDtZ6Gsw--
+-- 
+With Best Regards,
+Andy Shevchenko
