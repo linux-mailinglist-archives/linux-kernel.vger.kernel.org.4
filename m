@@ -2,190 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED42F6458CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FF36458D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiLGLTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S230085AbiLGLUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:20:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiLGLTS (ORCPT
+        with ESMTP id S230098AbiLGLUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:19:18 -0500
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01olkn2106.outbound.protection.outlook.com [40.92.65.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABBED2B240;
-        Wed,  7 Dec 2022 03:19:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cTZ30kMzq1mxrRDw0p94coAdTyfHiyK5frEiMdpXPgE0ElxK484MndvG7fTF85791Bm/ueFXwtSAwp1hlh3THuAO9tLqKiKfDOBfZbtmVbc3BcXUaXIMqJRSEEUhkennxUrEMO+ATpat57UZtXbMv5PbHo1czDrf7rgNXuuDTVLbFVLKMnWVQGjjoL6txQJ8gcF0uS1fZlgE4nmtQCow8BISfQ1gZRTdSpmBlbr3NtX5yOjhQ9OHsiMNVb2QCB2pqapbPZkCw89Pe2x9+SkujFFpm3NA8u5n4FAqQos5NVMmwuVR8SxgOU4subk2JIB12+H/Rj4QqtII0FIr5hbduA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wBfAqGEhZXwQ6K6DDESveyOex8gfR/VhSQjdPa6Uuak=;
- b=PdEkv8Yl60z0xPM2cZt4j9Detd4wzu3DyA/Zz4Y8C6+r7NR9Fef5B+HcEtPKFgyMcD+i1KnYPxEE8vwM5cieGRuTmJPQDDsezRLYL5AhEkBUMo2zq47BD9GuO6lqZS9je4sveGF5uEl4UtRPYeOvJ1C2KxQqHJdjVz50Igx7gZO02WSbFWDe9r3g3k4b8sGrl3TnlGx3Ycr6mdn74LyUgQSgXb/omGJiN9X6kGNmiV0Ubw6J2xhn8RqURv2E7bVV/ZwCEa5YERMbsgm1UP6E3K8sC4Ht2ZSfeKAqNFORNY2bg+uFXgo3/qizibx9j2J3XhQW7h0gbhJs11tnj3SL5A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wBfAqGEhZXwQ6K6DDESveyOex8gfR/VhSQjdPa6Uuak=;
- b=aWgOQF6v4gxDWXeHSgHVrgIPpXlPXB/8hZR0XuSgqCiY+N+ybVEVzSAe/8a6DZI5GBIIgXN9ADT6XdbXHP6MmZZlA5DNaR/eUsHWiOxjCWOvp5tqDsZZzkF8CFQvJAGbpjwShKk8oBlFO99yQrNGe6a6zTgfqVHuhLZyFB58pCmvMWyapN5GFWNARlhHYImiCnURmarEbH64LIqcOcwGizuklkJv9T0fKe/n3MRKPFGXCTWUZ0vcFEyNVm+TIAG2sT4Kyg3MFo3FhD2XfdLm522KOVglVRCDyWIQVqMj9NS4yja+E02fhrUaWBOB05mDiJIS31LrTWnQoFdvXJsqYg==
-Received: from DU0P192MB1547.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:34b::15)
- by DB8P192MB0823.EURP192.PROD.OUTLOOK.COM (2603:10a6:10:165::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 11:19:12 +0000
-Received: from DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
- ([fe80::a67b:5da2:88f8:f28b]) by DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
- ([fe80::a67b:5da2:88f8:f28b%9]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 11:19:12 +0000
-Message-ID: <DU0P192MB1547DA9F22139A0B09FF5877D61A9@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
+        Wed, 7 Dec 2022 06:20:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EA62A431
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:19:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670411964;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q1W3rW8sfu1CjgInkH0nXkYcONTUPfXA2GwC5iI72uc=;
+        b=Kn53mxDyAOxF3u0C++f6Iwjl1OA8jQtTsk4VobwFfDL1FvhVP3v9UcwJbp7nyjmnE5UVvp
+        QGTWCzh1jQbDM+6E/2AaOsb0YDVwoRLBqtM3VQemohNys9r8Ks9eGYsdWtFl518geMCb7/
+        rI620zo5xjRByQEAZ4OQPyLBQe0viO8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-271-ONNDL37xNUGJ1j6tr2z1XQ-1; Wed, 07 Dec 2022 06:19:20 -0500
+X-MC-Unique: ONNDL37xNUGJ1j6tr2z1XQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0264C85A5B6;
+        Wed,  7 Dec 2022 11:19:19 +0000 (UTC)
+Received: from T590 (ovpn-8-28.pek2.redhat.com [10.72.8.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0DE9B2027061;
+        Wed,  7 Dec 2022 11:19:05 +0000 (UTC)
 Date:   Wed, 7 Dec 2022 19:19:00 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-From:   Ji Rongfeng <SikoJobs@outlook.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Upgrade bpf_{g,s}etsockopt return values
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, ast@kernel.org,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <DU0P192MB1547FE6F35CC1A3EEA1AFDECD6179@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
- <deb77161-3091-a134-4b82-78fef06efe85@linux.dev>
-Content-Language: en-US
-In-Reply-To: <deb77161-3091-a134-4b82-78fef06efe85@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [4Sq5dvk9ZC5vE6KKvSddkVjXqSVKAXff]
-X-ClientProxiedBy: SJ0PR03CA0351.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::26) To DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
- (2603:10a6:10:34b::15)
-X-Microsoft-Original-Message-ID: <7901fd2a-e6d5-8176-73bd-b910f8abee33@outlook.com>
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Nitesh Shetty <nj.shetty@samsung.com>
+Cc:     axboe@kernel.dk, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, kbusch@kernel.org, hch@lst.de,
+        sagi@grimberg.me, james.smart@broadcom.com, kch@nvidia.com,
+        damien.lemoal@opensource.wdc.com, naohiro.aota@wdc.com,
+        jth@kernel.org, viro@zeniv.linux.org.uk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-fsdevel@vger.kernel.org,
+        anuj20.g@samsung.com, joshi.k@samsung.com, p.raghav@samsung.com,
+        nitheshshetty@gmail.com, gost.dev@samsung.com
+Subject: Re: [PATCH v5 02/10] block: Add copy offload support infrastructure
+Message-ID: <Y5B2pCiYsWb5hdrI@T590>
+References: <20221123055827.26996-1-nj.shetty@samsung.com>
+ <CGME20221123061017epcas5p246a589e20eac655ac340cfda6028ff35@epcas5p2.samsung.com>
+ <20221123055827.26996-3-nj.shetty@samsung.com>
+ <Y33UAp6ncSPO84XI@T590>
+ <20221123100712.GA26377@test-zns>
+ <Y3607N6lDRK6WU7/@T590>
+ <20221129114428.GA16802@test-zns>
+ <20221207055400.GA6497@test-zns>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU0P192MB1547:EE_|DB8P192MB0823:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3020054a-df48-4339-7839-08dad844de09
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dzjwEWQ54CvsIk8PtIQrvt10RnM0vExkm7AkFUTyZRdVESSCTOGwrohPyLw433pvcPJ8/Q0ahbOLN5MmcJ64g37rMgTkm+QS+hNKISRIyI6rjbKIzPLPvW+XHqmRJ1EWITK8LJ3wa3Bw2eRQjLW+lUnHlZMuvMxQLw5/BPDU+lFdGDOMCtm6ojR8ol0Rhph2Rl/yYif5NTiEhY75FXk+9Yhh3l9r7i5zF8pP7T6WtVDtQFvH2F71GLag/uSzF/cr8p14PN1WtSBG/8kxZXOgbDO2pLx6+1CLIlcbIBh0dFzukx1zLxLRX/8NmVCS5SeQFHULzRrU8OgS72Umcs+c8yPf+QJeXKbgbXbJ99pCmkf1HqKrf+7j4PcF4ghrcENDncfnlDsLAsgjdtAIiM+E5xnnIW9OXVPbcme1MeG8tWy9oYdUBJ1B8tsTQb258CPNoAl8jAes/SVbL0U7jTaOc8vKf3UypeIyDO8kDIgB3JlVRgigvxGWJ9wFnvyjus3c9RJCyst61rf4ctEaKdGGeMyAA6oef/8B35G7+EpKq8ajJsjGqnH6clgWFSUlFPDhUWkzpg2+uB4XnU192BBVPtshMpZBaLtoumu4DKtk10IAzA7w/GCzBX7JTROZiQc9Up3xIZ4+27e55Y52KiqeSg==
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c25sQUlxNVN1WnZ5b0E0NEl6SGZGVm93N2dScVBlcWlqS1Q2NHNsZ2dKT2pp?=
- =?utf-8?B?ZGVZMGtJejN6cmpRS2dEOGJoODh5NHB3YllDMWRFNm1hSGdTU1pjbVRuUmdZ?=
- =?utf-8?B?cHQxRzVxbjRpTlNQVU52R3U5TnVYcDR6TVFucGxiWXZmRFNaYVlzMXIydUt6?=
- =?utf-8?B?ZFhjYWQ3NlcrMFBoRGJnQnFFVGhCOFdodGJaUzNtYVl3RElpUHZrcnJSTk1n?=
- =?utf-8?B?VFZHV3ZRYkU5NVhqZnZsVDlMMnZkUXB3MkZ6aDU5UGdrRGFRSWJ5YWJoT09K?=
- =?utf-8?B?aFJYQ01xQWZkR2lPQnlLb3ZnWXdubWtRNEFrenlxL3RpR2RxUWlhNCt3dXJm?=
- =?utf-8?B?QmxZMmNZV20rTFNLOE9jSWZSQW1Pa08wNXJxRmR4NzNkSFk3YzVPeGhIWFli?=
- =?utf-8?B?M3kzRnh0WUtvTWNOd3RwWnB6Mng1eG1JdWZZeEgyRWZaNEdoMnhhQTk2czdq?=
- =?utf-8?B?YnhjaFVPc2dvRkt6TzNTd1ViY29jRDFET2tHWjRpQ0FidmxpNFhTUVhFSjlS?=
- =?utf-8?B?UmFNSDAydjFBeE05WS8xRGpHNGZYenJoalRIckl5cWQxTkdPQzdzbE1CUVBt?=
- =?utf-8?B?QkU1OTFJeUdMbk9QTVVRVnUzYUx2YWJ6VDJ6QmVqa2ZZRDN5bGpSdG5qeHJR?=
- =?utf-8?B?aFEybFpnRXE3T1Q3Nzc3Q29FUmtBNnJaMEs0cExJajh4KzVDeGxWTzR3NjZx?=
- =?utf-8?B?R0NOQ3hGTmt4Wk1DWGgwY3lVcktMalJwWkFEMDdzeGVQeXc0T0NZVkpKNjdD?=
- =?utf-8?B?YllnZFNZUWZWQ2JyRlZoMXUwbnd5OUJDamNvZ2M3bHNvY1dBbGdIMGVwWmRQ?=
- =?utf-8?B?M1N6bm1HbU5QeFM5YjdIRXBGUUI3dW9zcEF0ZitnTUFTT0ZISENGTk5DTncw?=
- =?utf-8?B?SU5UZ0ZSdmhKczVuUFRoekg2cXRqcS9ZTnpBWjVhUktKVDloWnBqbDI0RzVP?=
- =?utf-8?B?cUovWk9MZUJuMi9RK2NUNlk0R213dG9adENQWkFjV1M3SU1Fbmk4V3ZHY3d1?=
- =?utf-8?B?OUdQQ1dtS3N0bjNGL3M2MFhQLzVORitjTlJUSWc3ODk1dHQrWVU1Zkw1NGht?=
- =?utf-8?B?bTkvUVNSK1BIbC9HaTZKYXZ5NFNBeVg4MU05eGZSSDV0R1B3MFBBSVArdnR6?=
- =?utf-8?B?K2Npa1BCMW5uamtGdmQ4bGdVUllxckJJMjZxTUJYS2lzUWRFdDBtdXJ2RHJy?=
- =?utf-8?B?RDc1WmpDMDRlN2RWN2FrTU5iOU0xNHRycjRJSG9YZEhQUStLblM3MzFPQkFE?=
- =?utf-8?B?eGQxSyt6TGlaL2crTzZ5OFZITmhWS1R5SFRQZ2hYdU5tOTRhNXNmcHRtQTZH?=
- =?utf-8?B?WjZ0RXZBVnlKazNpenBGci84NkwvMUluVmk0MFdqb2w1WXZ0Y1QzTFNaNmNh?=
- =?utf-8?B?UzNhNVlBZVBTaEJ1VUxrWnV5cnlSQklXVzZnZlM1VERmcUxiaVZNelBRbkx1?=
- =?utf-8?B?b2d5YUhwTVpBS0JSZVhuUGJoVG5QZ1dvVDFZNjI5Rlo3UFZlZGJUMENiL3cw?=
- =?utf-8?B?bkkwdnBGeXlwNnRFRkdNVEhvb1c2dWI5NE1rZW5FVVc5bHlac1F2enh4NkVt?=
- =?utf-8?B?eFB5UHJvVVpZNHMrSWg5TXdrMHFlV29wbG5rbmczWEFMV2hqN21INFpDV1FI?=
- =?utf-8?B?U0xxaStUK3d3YnNuQnlxTHZLWVAvOWRBbUxLYlM1UjAyUDhuUWlFUm9kRGR4?=
- =?utf-8?B?STJYb0JqTzV3UlNlVWczUFEwdGdOaWhtc1JVNjQ3djRkVHBqSmlOTlNnPT0=?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3020054a-df48-4339-7839-08dad844de09
-X-MS-Exchange-CrossTenant-AuthSource: DU0P192MB1547.EURP192.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 11:19:12.3071
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8P192MB0823
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207055400.GA6497@test-zns>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/7 2:36, Martin KaFai Lau wrote:
-> On 12/2/22 9:39 AM, Ji Rongfeng wrote:
->> Returning -EINVAL almost all the time when error occurs is not very
->> helpful for the bpf prog to figure out what is wrong. This patch
->> upgrades some return values so that they will be much more helpful.
->>
->> * return -ENOPROTOOPT when optname is unsupported
->>
->>    The same as {g,s}etsockopt() syscall does. Before this patch,
->>    bpf_setsockopt(TCP_SAVED_SYN) already returns -ENOPROTOOPT, which
->>    may confuse the user, as -EINVAL is returned on other unsupported
->>    optnames. This patch also rejects TCP_SAVED_SYN right in
->>    sol_tcp_sockopt() when getopt is false, since do_tcp_setsockopt()
->>    is just the executor and it's not its duty to discover such error
->>    in bpf. We should maintain a precise allowlist to control whether
->>    an optname is supported and allowed to enter the executor or not.
->>    Functions like do_tcp_setsockopt(), their behaviour are not fully
->>    controllable by bpf. Imagine we let an optname pass, expecting
->>    -ENOPROTOOPT will be returned, but someday that optname is
->>    actually processed and unfortunately causes deadlock when calling
->>    from bpf. Thus, precise access control is essential.
+On Wed, Dec 07, 2022 at 11:24:00AM +0530, Nitesh Shetty wrote:
+> On Tue, Nov 29, 2022 at 05:14:28PM +0530, Nitesh Shetty wrote:
+> > On Thu, Nov 24, 2022 at 08:03:56AM +0800, Ming Lei wrote:
+> > > On Wed, Nov 23, 2022 at 03:37:12PM +0530, Nitesh Shetty wrote:
+> > > > On Wed, Nov 23, 2022 at 04:04:18PM +0800, Ming Lei wrote:
+> > > > > On Wed, Nov 23, 2022 at 11:28:19AM +0530, Nitesh Shetty wrote:
+> > > > > > Introduce blkdev_issue_copy which supports source and destination bdevs,
+> > > > > > and an array of (source, destination and copy length) tuples.
+> > > > > > Introduce REQ_COPY copy offload operation flag. Create a read-write
+> > > > > > bio pair with a token as payload and submitted to the device in order.
+> > > > > > Read request populates token with source specific information which
+> > > > > > is then passed with write request.
+> > > > > > This design is courtesy Mikulas Patocka's token based copy
+> > > > > 
+> > > > > I thought this patchset is just for enabling copy command which is
+> > > > > supported by hardware. But turns out it isn't, because blk_copy_offload()
+> > > > > still submits read/write bios for doing the copy.
+> > > > > 
+> > > > > I am just wondering why not let copy_file_range() cover this kind of copy,
+> > > > > and the framework has been there.
+> > > > > 
+> > > > 
+> > > > Main goal was to enable copy command, but community suggested to add
+> > > > copy emulation as well.
+> > > > 
+> > > > blk_copy_offload - actually issues copy command in driver layer.
+> > > > The way read/write BIOs are percieved is different for copy offload.
+> > > > In copy offload we check REQ_COPY flag in NVMe driver layer to issue
+> > > > copy command. But we did missed it to add in other driver's, where they
+> > > > might be treated as normal READ/WRITE.
+> > > > 
+> > > > blk_copy_emulate - is used if we fail or if device doesn't support native
+> > > > copy offload command. Here we do READ/WRITE. Using copy_file_range for
+> > > > emulation might be possible, but we see 2 issues here.
+> > > > 1. We explored possibility of pulling dm-kcopyd to block layer so that we 
+> > > > can readily use it. But we found it had many dependecies from dm-layer.
+> > > > So later dropped that idea.
+> > > 
+> > > Is it just because dm-kcopyd supports async copy? If yes, I believe we
+> > > can reply on io_uring for implementing async copy_file_range, which will
+> > > be generic interface for async copy, and could get better perf.
+> > >
+> > 
+> > It supports both sync and async. But used only inside dm-layer.
+> > Async version of copy_file_range can help, using io-uring can be helpful
+> > for user , but in-kernel users can't use uring.
+> > 
+> > > > 2. copy_file_range, for block device atleast we saw few check's which fail
+> > > > it for raw block device. At this point I dont know much about the history of
+> > > > why such check is present.
+> > > 
+> > > Got it, but IMO the check in generic_copy_file_checks() can be
+> > > relaxed to cover blkdev cause splice does support blkdev.
+> > > 
+> > > Then your bdev offload copy work can be simplified into:
+> > > 
+> > > 1) implement .copy_file_range for def_blk_fops, suppose it is
+> > > blkdev_copy_file_range()
+> > > 
+> > > 2) inside blkdev_copy_file_range()
+> > > 
+> > > - if the bdev supports offload copy, just submit one bio to the device,
+> > > and this will be converted to one pt req to device
+> > > 
+> > > - otherwise, fallback to generic_copy_file_range()
+> > >
+> > 
 > 
-> Please leave the current -EINVAL to distinguish between optnames 
-> rejected by bpf and optnames rejected by the do_*_{get,set}sockopt().
+> Actually we sent initial version with single bio, but later community
+> suggested two bio's is must for offload, main reasoning being
 
-To reach that goal, it would be better for us to pick a value other than 
--ENOPROTOOPT or -EINVAL. This patch actually makes sk-related errors, 
-level-reletad errors, optname-related errors and opt{val,len}-related 
-errors distinguishable, as they should be, by leaving -EINVAL to 
-opt{val,len}-related errors only. man setsockopt:
+Is there any link which holds the discussion?
 
- > EINVAL optlen invalid in setsockopt().  In some cases this error
- >        can also occur for an invalid value in optval (e.g., for
- >        the IP_ADD_MEMBERSHIP option described in ip(7)).
+> dm-layer,Xcopy,copy across namespace compatibilty.
 
-With an unique return value, the bpf prog developer will be able to know 
-that the error is "unsupported or unknown optname" for sure, saving time 
-on figuring the actual cause of the error. In production environment, 
-the bpf prog will be able to test whether an optname is available in 
-current bpf env and decide what to do next also, which is very useful.
+But dm kcopy has supported bdev copy already, so once your patch is
+ready, dm kcopy can just sends one bio with REQ_COPY if the device
+supports offload command, otherwise the current dm kcopy code can work
+as before.
 
 > 
->>
->> * return -EOPNOTSUPP on level-related errors
->>
->>    In do_ip_getsockopt(), -EOPNOTSUPP will be returned if level !=
->>    SOL_IP. In ipv6_getsockopt(), -ENOPROTOOPT will be returned if
->>    level != SOL_IPV6. To be distinguishable, the former is chosen.
+> > We will check the feasibilty and try to implement the scheme in next versions.
+> > It would be helpful, if someone in community know's why such checks were
+> > present ? We see copy_file_range accepts only regular file. Was it
+> > designed only for regular files or can we extend it to regular block
+> > device.
+> >
 > 
-> I would leave this one as is also.  Are you sure the do_ip_*sockopt 
-> cannot handle sk_family == AF_INET6?  afaict, bpf is rejecting those 
-> optnames instead.
+> As you suggested we were able to integrate def_blk_ops and
+> run with user application, but we see one main issue with this approach.
+> Using blkdev_copy_file_range requires having 2 file descriptors, which
+> is not possible for in kernel users such as fabrics/dm-kcopyd which has
+> only bdev descriptors.
+> Do you have any plumbing suggestions here ?
 
--EOPNOTSUPP is just picked here as an unique return value representing 
-"unknown level or unsupported sk_family or mismatched protocol in 
-bpf_{g,s}etsockopt()". I'm ok if you want to pick another unique value 
-for them or pick three unique values for each type of error : )
+What is the fabrics kernel user? Any kernel target code(such as nvme target)
+has file/bdev path available, vfs_copy_file_range() should be fine.
 
-> 
->>
->> * return -EBADFD when sk is not a full socket
->>
->>    -EPERM or -EBUSY was an option, but in many cases one of them
->>    will be returned, especially under level SOL_TCP. -EBADFD is the
->>    better choice, since it is hardly returned in all cases. The bpf
->>    prog will be able to recognize it and decide what to do next.
-> 
-> This one makes sense and is useful.
-> 
+Also IMO, kernel copy user shouldn't be important long term, especially if
+io_uring copy_file_range() can be supported, forwarding to userspace not
+only gets better performance, but also cleanup kernel related copy code
+much.
+
+
+thanks, 
+Ming
 
