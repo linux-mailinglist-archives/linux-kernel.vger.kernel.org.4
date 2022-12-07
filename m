@@ -2,101 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A58645658
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:19:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C750064565C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiLGJT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:19:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37548 "EHLO
+        id S229658AbiLGJV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiLGJTW (ORCPT
+        with ESMTP id S229441AbiLGJV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:19:22 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EECB8248;
-        Wed,  7 Dec 2022 01:19:21 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id d1so27127095wrs.12;
-        Wed, 07 Dec 2022 01:19:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yk+01Q5hHrzjtzXY624bUUvdeMShY716sfcUJDXSwKg=;
-        b=O8dAy4F4NMkE1i/p/ypI70kJIQgWtxRJ/NNVonelkZ3zTrSvsZ3oYoiyXrrDlff9En
-         H4yH5zVTgR28Ad37YhCcVYUs0M2xMmNVMAU4t6PImcToM4VWsTt0Uh/21poLG17MNgT1
-         /wlnTI4kseap6HDWgA3HH4f5RS4zKsb1wgCzx7HlBz29Fr94+Lrq4M0d6lx0QlCeiepg
-         RwJnqlxk/dbHOEx4NCf259WQBIubYYZQa5Fbwn5Ymqa7VK8rGP2UH0wAixlDZMZ20CfF
-         bUuP3k7jk5D7hmFHLQexGng6cL/fQ8SnTeRhoZXr+5GRe+T8BzQ2tFYyawtsVyQ2AEuF
-         zvxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yk+01Q5hHrzjtzXY624bUUvdeMShY716sfcUJDXSwKg=;
-        b=KFfNw3SoiKSw1+99wbfLQcEMsSzUPyqw3E0nVep/eWyiVvBE4yrD/HLa3tWk+0raOH
-         3/sc3I1s15NwEC7dYRMtFXbbVfXPxUzexdQ2Z9ut4beRLPXJnZh5d6ZQx7THT+tum5wH
-         e3ZSVZ6GB9tyLfH7cRWDFoOB2JtaJP7XmGJ8yfR7yjXFdCnFvNcNeSU9hXfXQu+HJrRW
-         memo1Qrq5cxjA6JJRPXpWnX9k6nMCNNXWXRhJ6+CqcgrSg6s12uOUtnrT3FWciKpMDmq
-         C+5uMIFxHMXlMKIm9OrcYo5V3OSB5s05GtetRntLP/JATtnyIHeBi5im12A4hjBR0BQ5
-         TdhA==
-X-Gm-Message-State: ANoB5plD2pJHPQwNdfwE6KzSODcuRajKWmJaMOZtubR0+r9wBj3Xut1o
-        hMLvEekYCKRAhBE3TpzdY2Q=
-X-Google-Smtp-Source: AA0mqf7p3ejbcewgNSyVTrvdicC8SFx2IBdkYmatYw/nRnWSivQak6ErtxEUTf2R0z4jWRVPqE/B5A==
-X-Received: by 2002:adf:db87:0:b0:242:2719:5784 with SMTP id u7-20020adfdb87000000b0024227195784mr21046332wri.130.1670404760305;
-        Wed, 07 Dec 2022 01:19:20 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id u19-20020a05600c19d300b003d07de1698asm1054951wmq.46.2022.12.07.01.19.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 01:19:19 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Simon Horman <simon.horman@corigine.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Huanhuan Wang <huanhuan.wang@corigine.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Louis Peens <louis.peens@corigine.com>,
-        oss-drivers@corigine.com, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] xfrm: Fix spelling mistake "tyoe" -> "type"
-Date:   Wed,  7 Dec 2022 09:19:19 +0000
-Message-Id: <20221207091919.2278416-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 7 Dec 2022 04:21:27 -0500
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 03B212F8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 01:21:24 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowADnx6QPW5Bje6Q8BQ--.15728S2;
+        Wed, 07 Dec 2022 17:21:19 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     liviu.dudau@arm.com, brian.starkey@arm.com, airlied@gmail.com,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm: mali-dp: Add check for kzalloc
+Date:   Wed,  7 Dec 2022 17:21:18 +0800
+Message-Id: <20221207092118.20603-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowADnx6QPW5Bje6Q8BQ--.15728S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr1UWF43Aw43XrykWrW5Awb_yoWkXFX_Gr
+        4DWanrX39Ikry8W3W2yw4fK34S9wn3uF4kXw4rtryftrZYq347Cw4vv34Fkr1UWFyUXr9F
+        k3WY9FyfAr97KjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
+        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU4BT5UUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a nn_err message. Fix it.
+As kzalloc may fail and return NULL pointer, it should be better to check
+the return value in order to avoid the NULL pointer dereference in
+__drm_atomic_helper_connector_reset.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Fixes: 8cbc5caf36ef ("drm: mali-dp: Add writeback connector")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/net/ethernet/netronome/nfp/crypto/ipsec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/arm/malidp_mw.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/netronome/nfp/crypto/ipsec.c b/drivers/net/ethernet/netronome/nfp/crypto/ipsec.c
-index 4632268695cb..266368386836 100644
---- a/drivers/net/ethernet/netronome/nfp/crypto/ipsec.c
-[next]+++ b/drivers/net/ethernet/netronome/nfp/crypto/ipsec.c
-@@ -303,7 +303,7 @@ static int nfp_net_xfrm_add_state(struct xfrm_state *x)
- 	}
+diff --git a/drivers/gpu/drm/arm/malidp_mw.c b/drivers/gpu/drm/arm/malidp_mw.c
+index ef76d0e6ee2f..fe4474c2ddcf 100644
+--- a/drivers/gpu/drm/arm/malidp_mw.c
++++ b/drivers/gpu/drm/arm/malidp_mw.c
+@@ -72,7 +72,11 @@ static void malidp_mw_connector_reset(struct drm_connector *connector)
+ 		__drm_atomic_helper_connector_destroy_state(connector->state);
  
- 	if (x->xso.type != XFRM_DEV_OFFLOAD_CRYPTO) {
--		nn_err(nn, "Unsupported xfrm offload tyoe\n");
-+		nn_err(nn, "Unsupported xfrm offload type\n");
- 		return -EINVAL;
- 	}
+ 	kfree(connector->state);
+-	__drm_atomic_helper_connector_reset(connector, &mw_state->base);
++
++	if (mw_state)
++		__drm_atomic_helper_connector_reset(connector, &mw_state->base);
++	else
++		__drm_atomic_helper_connector_reset(connector, NULL);
+ }
  
+ static enum drm_connector_status
 -- 
-2.38.1
+2.25.1
 
