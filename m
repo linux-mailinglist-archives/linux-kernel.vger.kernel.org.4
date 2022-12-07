@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD70F645328
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EB364532B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229669AbiLGEpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 23:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S229696AbiLGEqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 23:46:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLGEpc (ORCPT
+        with ESMTP id S229448AbiLGEqo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 23:45:32 -0500
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C5C56EFD;
-        Tue,  6 Dec 2022 20:45:30 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id c17so14716003edj.13;
-        Tue, 06 Dec 2022 20:45:30 -0800 (PST)
+        Tue, 6 Dec 2022 23:46:44 -0500
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B41CF56EFD;
+        Tue,  6 Dec 2022 20:46:42 -0800 (PST)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-144bd860fdbso6890967fac.0;
+        Tue, 06 Dec 2022 20:46:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9rz5RXsefs8IUrVRbKuQXJ4nANoI2MNNqTGiEbhFsD4=;
-        b=cwvIfXQ9y3KKIaXZ4Pf9AL8BHYbLgALfc9c3tr8apSNTJpatt4tT0wdHxfswZSpDBN
-         HePwJZvGZlLnbxgzB+MMFbARgeAN0eEMoVcvMhcrGXZUuNYY4dqSv2ut28oi+CcUm/VC
-         bd3Ioy7SLHZ1B8Z8zt7Je9vulJvF9wxp5gACsNVg3N8rIcJXVITV1N2oN0PSq35GIYTL
-         +7zJAHjk2QE6/40nDTU4usYqptQZ2QiLHjtWqfqsSJJmgD1fuuflw03peDN8GSSmxAs8
-         MIqXNTDMHU/LlBW3XoNNzbD9cDGYRvufXZn1kJPiZfwXZl0pTroT3wtfpB1u91w/zGtA
-         oBtg==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r1/Ng+Dr2rkqsmZDPUsgrcOu+0tsMrp/RZvVMuJ/HlU=;
+        b=ZZpWywYsd8k0y/0fsZ/u4iyM9Lxlpw+2K+yMBJBA9sJf5oXusPeQK53/YMwXepBj4B
+         AmqhyrEz8QndwjjCQ6mnP4PS23tKD+iq6gEy9NHk+y8lH23jBrWyGjhDuL1WUhJLi+by
+         2IKK23FZyq6NmzKQ36AxS0lWsOYUWR0xXUjyeYzso1tHiaN/YyipDsXH79O0sfO8WkpX
+         u4O9Ke/rMEbGzV3zxy5XeYywQoqHS0UIxTZJFMVbZLPCz3LGswBqiqO5BH3VLBzEyiUJ
+         nVUc4ynna4SnEiXuKMBvH9i8QdFXU/672El7IxGkL+yzHxVdB3do/s7QNhExmIqMRgcK
+         Wl6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9rz5RXsefs8IUrVRbKuQXJ4nANoI2MNNqTGiEbhFsD4=;
-        b=ggYPeP8uNf6hgcPG/goyG4DfzSlGuUypsHUlsReQGNtu52tzBan7/bxrAj7et0PDMC
-         dfxoQldiaEc0405+yenWkDVG0pSRM+rO34c/S2nvpw//s/BjbvLJ93vCU9tJmZuGEx0N
-         p+4r0G8jgBhSeGAW/lFo0zm691O2bvOCiS9sbPN/pf7MS+c+h1gveWatpMVfhYMFvprr
-         Cge9T/XxfxoL+uADb11r54DPowWqVSbH4i6wVbb3Ua4sznJKE5LVEE/H6oFvYlZe6KDL
-         bNukds9cm7KoHMdhfEqFPWncxhpYz+5rbU9lGzHZhRL4v6n8zd42oadTtC9mqWwCdN7w
-         29CA==
-X-Gm-Message-State: ANoB5plVYobmCuypJfsT8pCUi7i18s8STYDHSW/UgFjSGL96YSxn/Y0Z
-        tNbmhSnfFWPmPv8AxItGtLskdVxz+n1Hb36khvE=
-X-Google-Smtp-Source: AA0mqf58yA7mZKTc3sjRqY2HADZUwkR0MOmXUiNeyLQ9N68tP9LjTiRynocXIGHORETS+Phn2Pqjc+89CK0OHxhbmKk=
-X-Received: by 2002:a05:6402:5289:b0:462:70ee:fdb8 with SMTP id
- en9-20020a056402528900b0046270eefdb8mr46162424edb.66.1670388328609; Tue, 06
- Dec 2022 20:45:28 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r1/Ng+Dr2rkqsmZDPUsgrcOu+0tsMrp/RZvVMuJ/HlU=;
+        b=KdvyGwWl/Oor5jxBqlb0gJOV50v0UC2IDFtRlu1B1IpEI5sylU2+J8FZpAn+dlG0lw
+         nByWH/T65xQfCfLHOVOSx+/sUDb2vo9IQju6pZlBJFQOSaRAUDYzfCQvnKG7m64mtksT
+         NybyDwSqegamYCg/mSZtqUS4VFippZHW7ChrjOpw1xekicWZUFh6QaXffTa61pcZsujr
+         7UGaz6Fe5S5j5AoLREw3WK81w39qPseoJ9MccaSbM4U6PYQUKpuiR5xVZs7I6o2uTPs9
+         6eKr5g42pRozlVdvFFJg7LIa/I25i2Ms5snOKw5mTXPGx0aBHvT8X9k9jXqrqrpbaEp9
+         A5EA==
+X-Gm-Message-State: ANoB5pkYytTsazuwG9kaVgTAeggYNL23Cd8Xm7mRVwHczAZnYRFEXEd4
+        3S7wy5akcMPWM/mjQ3UOhcrhi1WF/A0=
+X-Google-Smtp-Source: AA0mqf7RlxYY/y7aZmw8C5UIkz6KslfCL8Wn3tP1DjdGDhtHR0lc1AVg5gbcRFCBSHLWYOauAMlveA==
+X-Received: by 2002:a05:6870:9d8b:b0:143:cbc:ac46 with SMTP id pv11-20020a0568709d8b00b001430cbcac46mr38499211oab.271.1670388401977;
+        Tue, 06 Dec 2022 20:46:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id f8-20020a056870c10800b001446d5702b5sm6675584oad.56.2022.12.06.20.46.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 20:46:41 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <61eb8715-958a-f81d-17ad-7086f9ea81f5@roeck-us.net>
+Date:   Tue, 6 Dec 2022 20:46:39 -0800
 MIME-Version: 1.0
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
- <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
- <20221205075921.02edfe6b54abc5c2f9831875@kernel.org> <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
- <20221206162035.97ae19674d6d17108bed1910@kernel.org> <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
- <20221206233947.4c27cc9d@gandalf.local.home>
-In-Reply-To: <20221206233947.4c27cc9d@gandalf.local.home>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 6 Dec 2022 20:45:17 -0800
-Message-ID: <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Saravanan Sekar <saravanan@linumiz.com>
+Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        marten.lindahl@axis.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221201044643.1150870-1-saravanan@linumiz.com>
+ <20221201044643.1150870-4-saravanan@linumiz.com>
+ <00de62b2-51dc-2a72-6659-3425d5e1b72c@roeck-us.net>
+ <6773256d-2842-fadc-1222-f76e0b495eda@linumiz.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
+ Power Management IC
+In-Reply-To: <6773256d-2842-fadc-1222-f76e0b495eda@linumiz.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,26 +83,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 8:39 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> >
-> > [   49.281382] general protection fault, probably for non-canonical address 0x57e006e00000000: 0000 [#1] PREEMPT SMP KASAN
-> > [   49.282226] CPU: 6 PID: 1688 Comm: test_progs Tainted: G    B      O       6.1.0-rc7-01508-gf0c5a2d9f234 #4343
-> > [   49.283751] RIP: 0010:rethook_trampoline_handler+0xff/0x1d0
-> > [   49.289900] Call Trace:
-> > [   49.290083]  <TASK>
-> > [   49.290248]  arch_rethook_trampoline_callback+0x6c/0xa0
-> > [   49.290631]  arch_rethook_trampoline+0x2c/0x50
-> > [   49.290964]  ? lock_release+0xad/0x3f0
-> > [   49.291245]  ? bpf_prog_test_run_tracing+0x235/0x380
-> > [   49.291609]  trace_clock_x86_tsc+0x10/0x10
-> >
-> > This is just running bpf selftests in parallel mode on 16-cpu VM on bpf-next.
-> > Notice 'Tained' flags.
-> > Please take a look.
-> >
->
-> "G - Proprietary module" - "O - out of tree module"
->
-> Can you reproduce this without those taints?
+On 12/6/22 19:51, Saravanan Sekar wrote:
+> On 01/12/22 16:34, Guenter Roeck wrote:
+>> On 11/30/22 20:46, Saravanan Sekar wrote:
+>>> The MPQ7932 is a power management IC designed to operate from 5V buses to
+>>> power a variety of Advanced driver-assistance system SOCs. Six integrated
+>>> buck converters with hardware monitoring capability powers a variety of
+>>> target rails configurable over PMBus interface.
+>>>
+>>> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
+>>> ---
+>>>   drivers/hwmon/pmbus/Kconfig   |  10 +++
+>>>   drivers/hwmon/pmbus/Makefile  |   1 +
+>>>   drivers/hwmon/pmbus/mpq7932.c | 144 ++++++++++++++++++++++++++++++++++
+>>>   3 files changed, 155 insertions(+)
+>>>   create mode 100644 drivers/hwmon/pmbus/mpq7932.c
+>>>
+>>> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
+>>> index 89668af67206..4a1538949a73 100644
+>>> --- a/drivers/hwmon/pmbus/Kconfig
+>>> +++ b/drivers/hwmon/pmbus/Kconfig
+>>> @@ -317,6 +317,16 @@ config SENSORS_MP5023
+>>>         This driver can also be built as a module. If so, the module will
+>>>         be called mp5023.
+>>> +config SENSORS_MPQ7932
+>>> +    tristate "MPS MPQ7932"
+>>
+>> As written, a dependency on REGULATOR is missing. However, we want the driver
+>> enabled even if CONFIG_REGULATOR is not enabled. I would suggest to follow the
+>> approach used by other drivers: add a second configuration option
+>> SENSORS_MPQ7932_REGULATOR which depends on SENSORS_MPQ7932 and REGULATOR
+>> and enables regulator functionality, and use that in the driver to
+>> make regulator support optional.
+>>
+> 
+> Hello Guenter,
+> 
+> I need clarification or confirmation from you before V3.
+> 
+> Here is my view, communication to MPQ7932 PMIC chip is based on pmbus specification.
+> 
+> Now the conflict is that we have pmbus directory under hwmon subsystem, if pmbus spec implementation would have been separate like i2c-smbus then we can implement chip driver in regulator subsystem which access pmbus.
+> 
+> pmbus_core does supports regulator framework PMBUS_REGUALTOR and I believe it is valid MPQ7932 driver implantation under pmbus directory.
+> 
+> Kindly suggest to remove pmbus dependency on hwmon and proceed further.
+> 
 
-Lol. That question is exactly the reason why my Nack stands.
+Every chip supporting PMBus has hwmon functionality. The PMBus core
+as implemented primarily supports hardware monitoring. Some can
+act as regulators; that is why regulator support was added to
+the PMBus core. Trying to extract it would make no sense.
+
+If you want to implement a driver without hardware monitoring
+support for this chip, you won't need the PMBus core. I would not
+agree with such an approach, but there is nothing that prevents you
+from implementing a regulator-only driver for this chip in the
+regulator subsystem.
+
+Guenter
+
