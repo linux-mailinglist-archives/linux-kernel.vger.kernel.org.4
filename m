@@ -2,114 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D0F64591E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:36:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EEBD645920
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbiLGLgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:36:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
+        id S229739AbiLGLgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLGLgM (ORCPT
+        with ESMTP id S229638AbiLGLg2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:36:12 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134C63C6D9;
-        Wed,  7 Dec 2022 03:36:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670412971; x=1701948971;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=VvwhIvwaFGUDcYzjVl+wTAcDDnf124tu8EmNNmPTQfQ=;
-  b=BTF0Q0E6V33wox1peEsg6wHFA2XHBwX22kSZEPayNjf42lC46F+p7vbf
-   /iQ4+SoQXo+LGK5bp1AwfNvFzlsgHFFuujS7XtbNov74y4IywmNt0/Eiw
-   +bx4UmdWVBKZD1MfpmbBDhZvP94uId8sk6CX5Ss129fB9iJP/FcP2kxqC
-   mZqw28ZUJpEaQroY5gaSbBiB/WcN79X6pXuWziax3/Cy2uOzNJKjsYeC5
-   ix4eE49YC2F2Y1Gu1aYkWfVhu2IajE3oAaSbyAq+iP7BYDyOTCigbbx89
-   d1b2ScY5SBnUVNO+kciJVlo4jiti7FrTY8TRkXg/plNxm/uhKM9k1fxJz
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="379036901"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="379036901"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 03:36:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="715159275"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="715159275"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Dec 2022 03:36:06 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p2siZ-005kA2-10;
-        Wed, 07 Dec 2022 13:36:03 +0200
-Date:   Wed, 7 Dec 2022 13:36:03 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, macro@orcam.me.uk, cang1@live.co.uk,
-        colin.i.king@gmail.com, phil.edworthy@renesas.com,
-        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
-        lukas@wunner.de, u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v7 tty-next 1/4] serial: 8250_pci: Add
- serial8250_pci_setup_port definition in 8250_pcilib.c
-Message-ID: <Y5B6o5DL7piRnNjy@smile.fi.intel.com>
-References: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com>
- <20221207235305.695541-2-kumaravel.thiagarajan@microchip.com>
+        Wed, 7 Dec 2022 06:36:28 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913604B741
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:36:27 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id j16so456548qtv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 03:36:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ACrrpZCC63dxQs3dwmnuOhX3jpkl+rhtIUueg16B60c=;
+        b=R7DhKYXoMBmoXIE2USdSfijStsZn+SjRxz8nXj1QmUs0VVxxWTvfBuwyQRdquVeBq6
+         xj0DVKefbm3hXLS/gJj6c39YeLQL2FaI1iIKtRzVJgGBpQ3WTcGEKXw+W9aS9mb515j3
+         0byPM2iw1RrKLyy44NcK1vsgngqgzYFwDPVTNCmRxtE/DTwW3+JQz4tozszvUmuNJXbA
+         udFT45Bxzf4v6AWRUBKGdWyiMZrxMERKyThNthoy50cHnE9tJg8Mz9BC1tqsP4BgzFUi
+         PSiSH9pkmzEAVer9abuGfuhjQVo7bwe1O1gBCQ2U0zhbYlVoJVBjpPQ9MLo0A+EvRPLh
+         nEXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ACrrpZCC63dxQs3dwmnuOhX3jpkl+rhtIUueg16B60c=;
+        b=1zK9BpXTkRgl//NsUF8/116op4/9FHyi53XzBbS3rd7pQzOU/vafB8leJdwqIbeok9
+         c7lQG5H65obZeUUJON5xXoq/mhHbSOzbLOmRPddvuZVDNkfBlihK5u8hynuzHZeC5APz
+         jrxqYmNTjN06KlrKims3xuFVaNHyRL8ginZnCAGqQOzmdtmXKPylplde+FDBgbbhO0YZ
+         drcLi85QpU3gIu7Liiab3sbkCOVjruk980lUKDT2g5hPqEExDnllcxgAkgHfBhf0gqwa
+         SXaSXBJH3iQ8cYWInut3uNNdihIzW5tLWISTfwyM7lwLgr4/WecxLvBn/8CHL9aQTVVg
+         oRXg==
+X-Gm-Message-State: ANoB5plGe4ZL95akVU4D2EBypgXVkBeAUSpCCjJunaEIutr5pGDggJwl
+        hiohHK1x49DsSKkZ/hducDqG/R9TMEz9z/W5Gehfsg==
+X-Google-Smtp-Source: AA0mqf6umlUYAgAxSTXVHHj5Q/UJdxwYw5nZX0L03WMHtsdqo7ZewMO5+3T442xIDdrY5GCqcE/Ofy0SAskz9BE87+M=
+X-Received: by 2002:ac8:148a:0:b0:399:a020:2aa with SMTP id
+ l10-20020ac8148a000000b00399a02002aamr67293925qtj.247.1670412986460; Wed, 07
+ Dec 2022 03:36:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221207235305.695541-2-kumaravel.thiagarajan@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206124054.310184563@linuxfoundation.org>
+In-Reply-To: <20221206124054.310184563@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 7 Dec 2022 17:06:15 +0530
+Message-ID: <CA+G9fYswCWTCUXJsrK7DG7C94K9Nc=jMj2rAd3ciQTGwPY8DeQ@mail.gmail.com>
+Subject: Re: [PATCH 5.4 000/157] 5.4.226-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:23:02AM +0530, Kumaravel Thiagarajan wrote:
-> Move implementation of setup_port func() to serial8250_pci_setup_port.
-> 
-> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+On Tue, 6 Dec 2022 at 18:12, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.226 release.
+> There are 157 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.226-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-(One nit-pick below, though)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-...
+## Build
+* kernel: 5.4.226-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: b5f84e63b272111a94d1a192e10dc955ea27f0c2
+* git describe: v5.4.225-158-gb5f84e63b272
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+25-158-gb5f84e63b272
 
->  config SERIAL_8250_PCI
->  	tristate "8250/16550 PCI device support"
->  	depends on SERIAL_8250 && PCI
-> +	select SERIAL_8250_PCILIB
->  	default SERIAL_8250
->  	help
->  	  This builds standard PCI serial support. You may be able to
-> @@ -500,6 +501,9 @@ config SERIAL_8250_MID
->  	  Intel Medfield SOC and various other Intel platforms that is not
->  	  covered by the more generic SERIAL_8250_PCI option.
->  
-> +config SERIAL_8250_PCILIB
-> +	bool
-> +
+## Test Regressions (compared to v5.4.225)
 
-Not sure why it's here and not just above 8250_PCI, but it's minor thing.
+## Metric Regressions (compared to v5.4.225)
 
->  	tristate "Support for Pericom and Acces I/O serial ports"
->  	default SERIAL_8250
+## Test Fixes (compared to v5.4.225)
 
--- 
-With Best Regards,
-Andy Shevchenko
+## Metric Fixes (compared to v5.4.225)
 
+## Test result summary
+total: 54367, pass: 45525, fail: 979, skip: 7495, xfail: 368
 
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 146 total, 145 passed, 1 failed
+* arm64: 44 total, 40 passed, 4 failed
+* i386: 26 total, 20 passed, 6 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 12 total, 12 passed, 0 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 37 total, 35 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
