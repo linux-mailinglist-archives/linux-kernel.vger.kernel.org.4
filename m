@@ -2,42 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1361645B6C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:52:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0084B645B75
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiLGNws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:52:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49040 "EHLO
+        id S229850AbiLGNyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229741AbiLGNwn (ORCPT
+        with ESMTP id S229929AbiLGNy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:52:43 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C705D6344;
-        Wed,  7 Dec 2022 05:52:39 -0800 (PST)
-Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRzBy0p85zqSqk;
-        Wed,  7 Dec 2022 21:48:26 +0800 (CST)
-Received: from localhost.localdomain (10.67.175.61) by
- dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Dec 2022 21:52:36 +0800
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <zanussi@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
-Subject: [PATCH] tracing/hist: Fix issue of losting command info in error_log
-Date:   Wed, 7 Dec 2022 21:53:26 +0800
-Message-ID: <20221207135326.3483216-1-zhengyejian1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Dec 2022 08:54:28 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67FA4908F;
+        Wed,  7 Dec 2022 05:54:26 -0800 (PST)
+X-QQ-mid: bizesmtp74t1670421234t6glizjv
+Received: from ubuntu.. ( [111.196.135.79])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 07 Dec 2022 21:53:53 +0800 (CST)
+X-QQ-SSF: 01200000002000B0B000B00A0000000
+X-QQ-FEAT: znfcQSa1hKahN1m9MXihhlD9H25KcTrmlTsiK+jnZWRL9/KxDfCfAcvhFsc/S
+        H6xwwcByw5o8tyboieoNR+AmVut1u5dwzH1z7kU8wcl95Mbu8Q5d9o585jd++GMqxXex3jm
+        CkZv5G0mO+lxy1HIvqPQgiBjL+Xg/FTbI3XP92dc2IIwtBscteuxqYwu9H8dMfTPR2pi76w
+        XdcDgwtn7ldi7QrfHXzB8kvjGfAzHnmjj/vVARdO1lFukykzUI/F+5Z05FMnzMCP0w6VihL
+        Ij5qHkPkSvQihQ2PzgtxZMIcnd8yQ+naJaNuU5uA8uQjy5YHwcnRNQRB0Q3PWeJGSSWdsg4
+        lZEa5S3bFSh34fllrOvku39hQehmbNfimeWSEpMnQ1n/6Mvmn1T+aPsOt85ag==
+X-QQ-GoodBg: 0
+From:   Bin Meng <bmeng@tinylab.org>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2 1/3] serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h
+Date:   Wed,  7 Dec 2022 21:53:50 +0800
+Message-Id: <20221207135352.592556-1-bmeng@tinylab.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpeml100012.china.huawei.com (7.185.36.121)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,81 +52,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When input some constructed invalid 'trigger' command, command info
-in 'error_log' are lost [1].
+Move smh_putc() variants in respective arch/*/include/asm/semihost.h,
+in preparation to add RISC-V support.
 
-The root cause is that there is a path that event_hist_trigger_parse()
-is recursely called once and 'last_cmd' which save origin command is
-cleared, then later calling of hist_err() will no longer record origin
-command info:
+Signed-off-by: Bin Meng <bmeng@tinylab.org>
 
-  event_hist_trigger_parse() {
-    last_cmd_set()  // <1> 'last_cmd' save origin command here at first
-    create_actions() {
-      onmatch_create() {
-        action_create() {
-          trace_action_create() {
-            trace_action_create_field_var() {
-              create_field_var_hist() {
-                event_hist_trigger_parse() {  // <2> recursely called once
-                  hist_err_clear()  // <3> 'last_cmd' is cleared here
-                }
-                hist_err()  // <4> No longer find origin command!!!
-
-Since 'glob' is empty string while running into the recurse call, we
-can trickly check it and bypass the call of hist_err_clear() to solve it.
-
-[1]
- # cd /sys/kernel/tracing
- # echo "my_synth_event int v1; int v2; int v3;" >> synthetic_events
- # echo 'hist:keys=pid' >> events/sched/sched_waking/trigger
- # echo "hist:keys=next_pid:onmatch(sched.sched_waking).my_synth_event(\
-pid,pid1)" >> events/sched/sched_switch/trigger
- # cat error_log
-[  8.405018] hist:sched:sched_switch: error: Couldn't find synthetic event
-  Command:
-hist:keys=next_pid:onmatch(sched.sched_waking).my_synth_event(pid,pid1)
-                                                          ^
-[  8.816902] hist:sched:sched_switch: error: Couldn't find field
-  Command:
-hist:keys=next_pid:onmatch(sched.sched_waking).my_synth_event(pid,pid1)
-                          ^
-[  8.816902] hist:sched:sched_switch: error: Couldn't parse field variable
-  Command:
-hist:keys=next_pid:onmatch(sched.sched_waking).my_synth_event(pid,pid1)
-                          ^
-[  8.999880] : error: Couldn't find field
-  Command:
-           ^
-[  8.999880] : error: Couldn't parse field variable
-  Command:
-           ^
-[  8.999880] : error: Couldn't find field
-  Command:
-           ^
-[  8.999880] : error: Couldn't create histogram for field
-  Command:
-           ^
-
-Fixes: f404da6e1d46 ("tracing: Add 'last error' error facility for hist triggers")
-Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
- kernel/trace/trace_events_hist.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 1c82478e8dff..b6e5724a9ea3 100644
---- a/kernel/trace/trace_events_hist.c
-+++ b/kernel/trace/trace_events_hist.c
-@@ -6438,7 +6438,7 @@ static int event_hist_trigger_parse(struct event_command *cmd_ops,
- 	if (se)
- 		se->ref++;
-  out:
--	if (ret == 0)
-+	if (ret == 0 && glob[0])
- 		hist_err_clear();
+Changes in v2:
+- new patch: "serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h"
+
+ arch/arm/include/asm/semihost.h            | 23 ++++++++++++++++++++
+ arch/arm64/include/asm/semihost.h          | 17 +++++++++++++++
+ drivers/tty/serial/earlycon-arm-semihost.c | 25 +---------------------
+ 3 files changed, 41 insertions(+), 24 deletions(-)
+ create mode 100644 arch/arm/include/asm/semihost.h
+ create mode 100644 arch/arm64/include/asm/semihost.h
+
+diff --git a/arch/arm/include/asm/semihost.h b/arch/arm/include/asm/semihost.h
+new file mode 100644
+index 000000000000..c33cb5124376
+--- /dev/null
++++ b/arch/arm/include/asm/semihost.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2012 ARM Ltd.
++ * Author: Marc Zyngier <marc.zyngier@arm.com>
++ *
++ * Adapted for ARM and earlycon:
++ * Copyright (C) 2014 Linaro Ltd.
++ * Author: Rob Herring <robh@kernel.org>
++ */
++
++#ifdef CONFIG_THUMB2_KERNEL
++#define SEMIHOST_SWI	"0xab"
++#else
++#define SEMIHOST_SWI	"0x123456"
++#endif
++
++static inline void smh_putc(struct uart_port *port, unsigned char c)
++{
++	asm volatile("mov  r1, %0\n"
++		     "mov  r0, #3\n"
++		     "svc  " SEMIHOST_SWI "\n"
++		     : : "r" (&c) : "r0", "r1", "memory");
++}
+diff --git a/arch/arm64/include/asm/semihost.h b/arch/arm64/include/asm/semihost.h
+new file mode 100644
+index 000000000000..9e56d38fe5fd
+--- /dev/null
++++ b/arch/arm64/include/asm/semihost.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2012 ARM Ltd.
++ * Author: Marc Zyngier <marc.zyngier@arm.com>
++ *
++ * Adapted for ARM and earlycon:
++ * Copyright (C) 2014 Linaro Ltd.
++ * Author: Rob Herring <robh@kernel.org>
++ */
++
++static inline void smh_putc(struct uart_port *port, unsigned char c)
++{
++	asm volatile("mov  x1, %0\n"
++		     "mov  x0, #3\n"
++		     "hlt  0xf000\n"
++		     : : "r" (&c) : "x0", "x1", "memory");
++}
+diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-arm-semihost.c
+index fcdec5f42376..e4692a8433f9 100644
+--- a/drivers/tty/serial/earlycon-arm-semihost.c
++++ b/drivers/tty/serial/earlycon-arm-semihost.c
+@@ -11,30 +11,7 @@
+ #include <linux/console.h>
+ #include <linux/init.h>
+ #include <linux/serial_core.h>
+-
+-#ifdef CONFIG_THUMB2_KERNEL
+-#define SEMIHOST_SWI	"0xab"
+-#else
+-#define SEMIHOST_SWI	"0x123456"
+-#endif
+-
+-/*
+- * Semihosting-based debug console
+- */
+-static void smh_putc(struct uart_port *port, unsigned char c)
+-{
+-#ifdef CONFIG_ARM64
+-	asm volatile("mov  x1, %0\n"
+-		     "mov  x0, #3\n"
+-		     "hlt  0xf000\n"
+-		     : : "r" (&c) : "x0", "x1", "memory");
+-#else
+-	asm volatile("mov  r1, %0\n"
+-		     "mov  r0, #3\n"
+-		     "svc  " SEMIHOST_SWI "\n"
+-		     : : "r" (&c) : "r0", "r1", "memory");
+-#endif
+-}
++#include <asm/semihost.h>
  
- 	return ret;
+ static void smh_write(struct console *con, const char *s, unsigned n)
+ {
 -- 
-2.25.1
+2.34.1
 
