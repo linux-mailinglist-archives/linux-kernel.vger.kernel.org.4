@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09428645B97
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD9CF645B9B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:57:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiLGN5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
+        id S230240AbiLGN5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:57:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiLGN4t (ORCPT
+        with ESMTP id S229863AbiLGN5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:56:49 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BCC5BD72;
-        Wed,  7 Dec 2022 05:56:47 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id h12so28163299wrv.10;
-        Wed, 07 Dec 2022 05:56:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RYrYY/fm6aX39Ixp9LpWPNUVB2qUa51Mk5FBV63lR/s=;
-        b=GCVATqAgYI6b2pNpJJm2LfaW175fXxR+izq/VPTFa8KVQ1yOnR5IrWn3C80fnuN0Wd
-         +/aw3SUKtWyLIhiB2VjVXAmbWiZ4jlvKIA8ZWGdxIYCNpcrE1f9WSD7Sx84CqATK9gmN
-         5qs+AihyZvqGSKKlr7le7x1WDk7tiCZmJ8ltAvXSIOTa5y8VUdkSQm6BLx7GUIuImeeo
-         PFCkCA7KhwWyX1uo6ZHwIfAGOcFC3wnt5qC1YtX2ahEylh6w80BUkvd79NeBw7a/kAv6
-         QNVpfsyEUPsCyw27ltDWSPqQc+/Ox05FGtAUrssnOiDhh/fYFOfSBYA2k4iEW38KPzzR
-         H+Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RYrYY/fm6aX39Ixp9LpWPNUVB2qUa51Mk5FBV63lR/s=;
-        b=LDu/9S4VK3sVGTg+2LGliSBMNq6NS2C6I1rzRgl8gWABZySryQVd3f9zoBrMiGx8uh
-         HmCT6F65OYKNQTZ2FkeUtP8oAlMSjh2kxjWXdk/0Tzx6muwvekj7zwlzZPk4cb7aBQp/
-         OirEXA6hHUe4VUPXXwLDkUjEgd4N9H3Y/7qSyIr/o+ogg9ZpvavA43ZiAvha4i5errKm
-         hpukETTh+no6TcczCoJPO/JY7Dmq9D7ftQIi144T9FsHJMPLhUIdtcfp46qZ9yS1Oth+
-         O4H6H0ageV8ZzVuqmN3q7nZBix/LWVkxPOxTJIMeDvCC0AtgD0lAQf2zUliv09hVdgQm
-         KZVw==
-X-Gm-Message-State: ANoB5pnbKbqWd9ajzljHOazKzRRNSqczhT9Y1fVSVk3pQUwORQZDTFz1
-        OK7z8Ft44nYfx9wzanN0CTg=
-X-Google-Smtp-Source: AA0mqf78tDp/NbW5pJ5zC7IruwhOp2apHPbj5OpwxqwSxL3nqgqQ5BfEHvDHxyaoryVf9MFVK8FeDg==
-X-Received: by 2002:adf:ebc5:0:b0:241:6c90:79e9 with SMTP id v5-20020adfebc5000000b002416c9079e9mr39623325wrn.642.1670421406257;
-        Wed, 07 Dec 2022 05:56:46 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003b49bd61b19sm2130825wms.15.2022.12.07.05.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 05:56:45 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] perf vendor events powerpc: Fix spelling mistake "fpr" -> "for"
-Date:   Wed,  7 Dec 2022 13:56:45 +0000
-Message-Id: <20221207135645.2327224-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 7 Dec 2022 08:57:15 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D9D5BD4E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:57:13 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2uv4-0007VL-LE; Wed, 07 Dec 2022 14:57:06 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2uv2-002vut-QL; Wed, 07 Dec 2022 14:57:05 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2uv2-003I87-Ta; Wed, 07 Dec 2022 14:57:04 +0100
+Date:   Wed, 7 Dec 2022 14:57:04 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        linux-amlogic@lists.infradead.org, Lee Jones <lee.jones@linaro.org>
+Subject: Re: [PATCH 431/606] mfd: khadas-mcu: Convert to i2c's .probe_new()
+Message-ID: <20221207135704.oxyu2gfm6wrns5t4@pengutronix.de>
+References: <Y3tvypIDVdCYxAVB@google.com>
+ <20221121150854.3mwczqtbusawho4m@pengutronix.de>
+ <Y3usiUm1K+5xCWhY@google.com>
+ <20221206105908.jzcdnast3yw22eel@pengutronix.de>
+ <Y49pi54DKsvLOzvb@google.com>
+ <20221206163516.i6rzewxts7do75y5@pengutronix.de>
+ <Y490W6k4N8iBxLHf@google.com>
+ <20221207110007.yfjfiakmh4ma3sfo@pengutronix.de>
+ <Y5B3otGG06QCjldc@google.com>
+ <Y5CWSZpndGi4mU5e@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="444ob3jqs3mc3uhm"
+Content-Disposition: inline
+In-Reply-To: <Y5CWSZpndGi4mU5e@google.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in the description text. Fix it.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/perf/pmu-events/arch/powerpc/power8/other.json | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+--444ob3jqs3mc3uhm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/perf/pmu-events/arch/powerpc/power8/other.json b/tools/perf/pmu-events/arch/powerpc/power8/other.json
-index f1f2965f6775..6de8c472ec99 100644
---- a/tools/perf/pmu-events/arch/powerpc/power8/other.json
-+++ b/tools/perf/pmu-events/arch/powerpc/power8/other.json
-@@ -2996,7 +2996,7 @@
-   {
-     "EventCode": "0x308e",
-     "EventName": "PM_SWAP_COMPLETE_GPR",
--    "BriefDescription": "swap cast in completed fpr gpr",
-+    "BriefDescription": "swap cast in completed for gpr",
-     "PublicDescription": ""
-   },
-   {
--- 
-2.38.1
+Hello Lee,
 
+On Wed, Dec 07, 2022 at 01:34:01PM +0000, Lee Jones wrote:
+> On Wed, 07 Dec 2022, Lee Jones wrote:
+> > On Wed, 07 Dec 2022, Uwe Kleine-K=F6nig wrote:
+> > > I see you added my commits to your tree now, however there is a probl=
+em:
+> > >=20
+> > >   [...]
+> > >=20
+> > > That means that the commit introducing i2c_client_get_device_id() isn=
+'t
+> > > an ancestor of the commits that make use of the new function. So
+> > > 63909fec136e (which is the first commit making use of the new functio=
+n)
+> > > likely won't compile:
+> > >=20
+> > > 	$ git grep i2c_client_get_device_id 63909fec136e
+> > > 	63909fec136e:drivers/mfd/adp5520.c:     const struct i2c_device_id *=
+id =3D i2c_client_get_device_id(client);
+> > >=20
+> > > Starting with 7281458f4396 everything is fine again, but still this
+> > > hurts a bisection.
+> >=20
+> > Fair point - I'll rebase the my topic branch on top of Wolfram's.
+>=20
+> Okay, try now.
+
+Looks good now, thanks!
+
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--444ob3jqs3mc3uhm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOQm60ACgkQwfwUeK3K
+7AnwYwf7BJNhpOShM+y1sPNPmv1EtCLVMQ5BRS5kTzzqK8U3WDaJ4h+0gqiakqR6
+q/SUJSzkLtGDo3uzt3CxEeUXk++AyWt6izQKjYIRoGGM6/aIEKJGoNvthphjH5C3
+ex7x4QUrSZIApKlQmiHa4yUhogpGjD8p/WJsw6kO6VlIsK4gyn0UVdwP1XuReucA
+mY/MnyLv4X/IE4JFwfKeyxgUmhzKUSi2zl4JuZP0RCNK+uV9ZknKs+9wnqxF1JJ4
+xXr/1Ft9OLfs3dnEmyKyIOCgac5BHQL8jEE6LF10qWxlsX4N6sf9Uv5A3B/rXCLL
+IdHOr0s6H4PFD7LBaA0Mrl3QPcs5Uw==
+=JuPy
+-----END PGP SIGNATURE-----
+
+--444ob3jqs3mc3uhm--
