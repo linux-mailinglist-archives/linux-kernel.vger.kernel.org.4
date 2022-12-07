@@ -2,165 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1E0645190
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:54:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A9E645196
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiLGByY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:54:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S229750AbiLGBzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiLGBx4 (ORCPT
+        with ESMTP id S229613AbiLGBzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:53:56 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AC42ED
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:52:33 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1447c7aa004so11539417fac.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:52:33 -0800 (PST)
+        Tue, 6 Dec 2022 20:55:07 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A86DAC
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:55:05 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id cf42so20701778lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:55:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2g4EnU2Zj/9WIHBvH/VdPM01QEtKqmAnMzJgcZ6VHQ=;
-        b=qApXaWmIPSsbt1t37N/UXspIRY2YX9G+lCexd6I3+q6DAhcxsVtC5HiGEtNK+yKsla
-         fR5UsohH8fXItmA4XTxpP+SWfNUOP6XeF7COYuJhZ2CCNwm6hOTCPy8fm6TzWBrx1cOC
-         tYSILyxmygDVz91nN0ryG2YtYMT7+JzTDgNBIBbZb+WOJsypItnaG1ncTsMp2zqGaZMm
-         feEYFcfotDSARSmqNRvtE4qiibFVHHWf5vwwoy0DFxFgN+j5ExbVRoG6P9Qpu5OD2dhD
-         Bd8sp/0CuRHT2nZ8/5uuq9OOF9Dgh8lToFyOEbRhV+EDLbRGT4zlvs4W7ik63KUpAUU+
-         sKrg==
+        d=chromium.org; s=google;
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9gPf1c0smtvvJKefQzCjT4En/iaFZ6itMFzysD6Z4OM=;
+        b=F5XdJ8P+8uBnBb+dUBfic7nm5SikL1KNbn7ae+J0KeUhJ7YubLk0eOko+SSKw4JMIL
+         RMowVv0fhZjZxvuuC5XCrjHqcsOTFUOkFuxnVS4R0yoybdhUosKxPSJWgXlG8BRCR4Bl
+         qByb0+sg9hXnmrQuwKfm+1pfSWG6rpvT2eFiE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b2g4EnU2Zj/9WIHBvH/VdPM01QEtKqmAnMzJgcZ6VHQ=;
-        b=x5GiafwdsNOylfDKIjU/7rfrsnytACqNK/EENO9dvLxBCKL6y6N4UB3bJtL4vHDvgz
-         oPRtDYUoHGMX9xrn32C0xl/YWJDaiPZXC9vuki2FmH/znnZo9NbVAV7hM8mbvCdMRlQY
-         WGAlBYHbGsolgyC1l8Dk+q2AN09VIlW7oa9LDX57ft/kT6r5kOEjywx0XnrfA53/NV/W
-         VPvnvdQlk2653QcFYA4S6pLJUTb96vNR9NejOOWG8ykC5kRAJEM+qrOz4Hk8SnCONeA/
-         N/5owHsxIGDUQDsmIvk8c+8387pbx189XKsXWkiULA6JP6zG9pNSJNQpscI4jdWKRdbp
-         TaTg==
-X-Gm-Message-State: ANoB5ply7XDrQHLvTjfWhuZVhla2cOv0pl419OVEV/us448b2qBvuGjv
-        qupD5TdtWmcwYeka71tefZ5hug==
-X-Google-Smtp-Source: AA0mqf4cXyGL0A42a2mTKQwSekTuTxTQXhOz0FH3P94K3qPwPpOrqkXbj3XjCtzEjrVmenSz6bWusA==
-X-Received: by 2002:a05:6870:638f:b0:144:cbb4:7fd4 with SMTP id t15-20020a056870638f00b00144cbb47fd4mr2395995oap.136.1670377952773;
-        Tue, 06 Dec 2022 17:52:32 -0800 (PST)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id b24-20020a9d5d18000000b0066da36d2c45sm9763064oti.22.2022.12.06.17.52.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 17:52:32 -0800 (PST)
-Date:   Tue, 6 Dec 2022 17:52:30 -0800 (PST)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Johannes Weiner <hannes@cmpxchg.org>
-cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] mm: rmap: remove lock_page_memcg()
-In-Reply-To: <20221206171340.139790-3-hannes@cmpxchg.org>
-Message-ID: <424a805a-28b8-afe1-ad61-f4fdc42aaa8@google.com>
-References: <20221206171340.139790-1-hannes@cmpxchg.org> <20221206171340.139790-3-hannes@cmpxchg.org>
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9gPf1c0smtvvJKefQzCjT4En/iaFZ6itMFzysD6Z4OM=;
+        b=yjggHGDWW7/FFoOWSUx1m9oeQAwb3uJhjUD0NZFzENmTW3DCPgZSXB5DLbLqxxQF5i
+         YJS0Iovorijfbf6QgJuchkLOSkyHeaQgdxxuKpa+zjtACOLnXu9FX3PDMAZJzT/DGHGn
+         w6NCBxAO/I2jB7MstkltdsWDrP1oCXJ5V7rI4vXOGK8wRXDkwrImvbgG4sucpvLGrEFK
+         vB0PdPM97D5S5Ly02Z22r2yIM0ssIdM+mFAfYcTo3QR9NLAqHodQI3AnuKc5Aj8UoLlS
+         5KKcJuOBM6jy15Vs9VwfPASF/T03HlB41Y8CsaOJKJFT6SuxsWAaLg7r03sk2M8j/z5B
+         Ak+A==
+X-Gm-Message-State: ANoB5plhgdnx3zgpEYnlKR8uIAyrxDNQ+4/C9aMcML20sL2WHV+FQu8o
+        fdE11Cu7fcMdQ75eKt+eZhl9pCETzSKmbmNJd97ZfQ==
+X-Google-Smtp-Source: AA0mqf7wtJbEWs3XklSLGf4TQG/d7BmGx6U75OCnWt3zypvQNfxMpgMOwZeyvletG+StOnG/ChUnbuE8/zaGl5Fx4vs=
+X-Received: by 2002:a05:6512:33d1:b0:4b5:1c86:9267 with SMTP id
+ d17-20020a05651233d100b004b51c869267mr15140973lfg.297.1670378104033; Tue, 06
+ Dec 2022 17:55:04 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 7 Dec 2022 01:55:03 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
+References: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 7 Dec 2022 01:55:03 +0000
+Message-ID: <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com>
+Subject: Re: [PATCH] remoteproc: elf_loader: Update resource table name check
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, bgoswami@quicinc.com,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, krzysztof.kozlowski@linaro.org,
+        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mathieu.poirier@linaro.org, perex@perex.cz, quic_plai@quicinc.com,
+        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022, Johannes Weiner wrote:
+Quoting Srinivasa Rao Mandadapu (2022-12-01 04:20:48)
+> Update resource table name check with sub string search instead of
+> complete string search.
+> In general Qualcomm binary contains, section header name
+> (e.g. .resource_table), amended with extra string to differentiate
+> with other sections.
+> So far Android adsp binaries are being authenticated using TZ,
+> hence this mismatch hasn't created any problem.
+> In recent developments, ADSP binary is being used in Chrome based
+> platforms, which doesn't have TZ path, hence resource table is
+> required for memory sandboxing.
+>
 
-> The previous patch made sure charge moving only touches pages for
-> which page_mapped() is stable. lock_page_memcg() is no longer needed.
-> 
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Does this need a Fixes tag?
 
-Acked-by: Hugh Dickins <hughd@google.com>
-
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
 > ---
->  mm/rmap.c | 26 ++++++++------------------
->  1 file changed, 8 insertions(+), 18 deletions(-)
-> 
-> diff --git a/mm/rmap.c b/mm/rmap.c
-> index b616870a09be..32e48b1c5847 100644
-> --- a/mm/rmap.c
-> +++ b/mm/rmap.c
-> @@ -1222,9 +1222,6 @@ void page_add_anon_rmap(struct page *page,
->  	bool compound = flags & RMAP_COMPOUND;
->  	bool first = true;
->  
-> -	if (unlikely(PageKsm(page)))
-> -		lock_page_memcg(page);
-> -
->  	/* Is page being mapped by PTE? Is this its first map to be added? */
->  	if (likely(!compound)) {
->  		first = atomic_inc_and_test(&page->_mapcount);
-> @@ -1262,15 +1259,14 @@ void page_add_anon_rmap(struct page *page,
->  	if (nr)
->  		__mod_lruvec_page_state(page, NR_ANON_MAPPED, nr);
->  
-> -	if (unlikely(PageKsm(page)))
-> -		unlock_page_memcg(page);
-> -
-> -	/* address might be in next vma when migration races vma_adjust */
-> -	else if (first)
-> -		__page_set_anon_rmap(page, vma, address,
-> -				     !!(flags & RMAP_EXCLUSIVE));
-> -	else
-> -		__page_check_anon_rmap(page, vma, address);
-> +	if (likely(!PageKsm(page))) {
-> +		/* address might be in next vma when migration races vma_adjust */
-> +		if (first)
-> +			__page_set_anon_rmap(page, vma, address,
-> +					     !!(flags & RMAP_EXCLUSIVE));
-> +		else
-> +			__page_check_anon_rmap(page, vma, address);
-> +	}
->  
->  	mlock_vma_page(page, vma, compound);
->  }
-> @@ -1329,7 +1325,6 @@ void page_add_file_rmap(struct page *page,
->  	bool first;
->  
->  	VM_BUG_ON_PAGE(compound && !PageTransHuge(page), page);
-> -	lock_page_memcg(page);
->  
->  	/* Is page being mapped by PTE? Is this its first map to be added? */
->  	if (likely(!compound)) {
-> @@ -1365,7 +1360,6 @@ void page_add_file_rmap(struct page *page,
->  			NR_SHMEM_PMDMAPPED : NR_FILE_PMDMAPPED, nr_pmdmapped);
->  	if (nr)
->  		__mod_lruvec_page_state(page, NR_FILE_MAPPED, nr);
-> -	unlock_page_memcg(page);
->  
->  	mlock_vma_page(page, vma, compound);
->  }
-> @@ -1394,8 +1388,6 @@ void page_remove_rmap(struct page *page,
->  		return;
->  	}
->  
-> -	lock_page_memcg(page);
-> -
->  	/* Is page being unmapped by PTE? Is this its last map to be removed? */
->  	if (likely(!compound)) {
->  		last = atomic_add_negative(-1, &page->_mapcount);
-> @@ -1451,8 +1443,6 @@ void page_remove_rmap(struct page *page,
->  	 * and remember that it's only reliable while mapped.
->  	 */
->  
-> -	unlock_page_memcg(page);
-> -
->  	munlock_vma_page(page, vma, compound);
->  }
->  
-> -- 
-> 2.38.1
-> 
-> 
+>  drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+> index 5a412d7..0feb120 100644
+> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
+>                 u64 offset = elf_shdr_get_sh_offset(class, shdr);
+>                 u32 name = elf_shdr_get_sh_name(class, shdr);
+>
+> -               if (strcmp(name_table + name, ".resource_table"))
+> +               if (!strstr(name_table + name, ".resource_table"))
+
+Was the strcmp not working before because the 'name_table' has something
+else in it? It really looks like your elf file is malformed.
