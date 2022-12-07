@@ -2,303 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED62C6463EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73EA06463ED
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:14:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiLGWOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:14:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
+        id S229591AbiLGWOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLGWOV (ORCPT
+        with ESMTP id S229479AbiLGWO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:14:21 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E72E5C757;
-        Wed,  7 Dec 2022 14:14:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670451260; x=1701987260;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6Iw+b7sYxcigcPQIf71g5CO0STZk5hjAYSULaVteNXc=;
-  b=f7+rxxk3jn3zxJ7m+i4cUCQ1Etwn5pWR7N5QEwsnD8jiWZM3u94J+28C
-   a9ojJyAIt3PqPMxYmAI6LQXNL4tyqArLTEV3reCF4Ga2tZcAARqflET/I
-   kHi96yoJdOqFT5nWKyIjNaDoVFqWtB+QIKcyoCY1Bwp7QX5MIZyanhQ24
-   HWQLRBC5KGWA3EhC+/JGrGG8KP3Q3TyirzLr5PNpXxNRJGJiGVAPg8nMd
-   +hdCv3/3DgNRpcYfCRGtTqr1V8I9eG7Gu102WZtwCC3loaZX1f/s9nSj+
-   CWiB0WBXf2PEKhzLwzq6oMiQw6bBEpNLAFlSbBjfuH/pTvBcHSDW0POKu
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="300433289"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="300433289"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 14:14:19 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="735552582"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="735552582"
-Received: from gjalliso-mobl.amr.corp.intel.com (HELO [10.212.135.231]) ([10.212.135.231])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 14:14:18 -0800
-Message-ID: <e6a4aeeb-382f-18cc-64da-7730101282c6@linux.intel.com>
-Date:   Wed, 7 Dec 2022 14:14:17 -0800
+        Wed, 7 Dec 2022 17:14:27 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D2A5E3CC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:14:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2700B8218F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 22:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981B2C433D7;
+        Wed,  7 Dec 2022 22:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670451263;
+        bh=WFUqKVB8/KpZpKMPTqOQfRqUGH9cdOM5wSUYCJsVlnM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=aLKutt5lt3l9sJTCGgi8fl+KzJk3SEmYrWbKqLr+ZEeORwgomHb0CelnFhmrud2fQ
+         iA9KrHKcFaF9yr+lvetdzCEmIGIOIbcryiycwbJpgvEx4CoAvxrKyNqERv8d7c5Ri/
+         sh021gyrHaBI5PNlepWhhMihGZLaeDANXooekXBRBfd0bW1qPaNkjL04JF2X+ri0SY
+         Z6jVdPAXcdXncNRO+GXbUTeMKGEB7uGa6f33MN/Al1ppHcsqfGfeh1KQ3VZi/EZpqz
+         fF92diqjSIWm6qZ7AFCwhANtmpTU1USBHQiaLgJrbHkbxk7DiZ6pkKu5The4N+e293
+         ZauSUY0iIQVRQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3B0985C0952; Wed,  7 Dec 2022 14:14:23 -0800 (PST)
+Date:   Wed, 7 Dec 2022 14:14:23 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        kernel-team@android.com, John Stultz <jstultz@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Connor O'Brien <connoro@google.com>
+Subject: Re: [PATCH RFC 2/3] locktorture: Allow non-rtmutex lock types to be
+ boosted
+Message-ID: <20221207221423.GH4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221123012104.3317665-1-joel@joelfernandes.org>
+ <20221123012104.3317665-3-joel@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/6] x86/tdx: Expand __tdx_hypercall() to handle more
- arguments
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
-        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
-        kirill.shutemov@linux.intel.com, kys@microsoft.com,
-        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        rostedt@goodmis.org, seanjc@google.com, tglx@linutronix.de,
-        tony.luck@intel.com, wei.liu@kernel.org, x86@kernel.org,
-        mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org
-References: <20221207003325.21503-1-decui@microsoft.com>
- <20221207003325.21503-5-decui@microsoft.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20221207003325.21503-5-decui@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221123012104.3317665-3-joel@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/6/22 4:33 PM, Dexuan Cui wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+On Wed, Nov 23, 2022 at 01:21:03AM +0000, Joel Fernandes (Google) wrote:
+> Currently RT boosting is only done for rtmutex_lock, however with proxy
+> execution, we also have the mutex_lock participating in priorities. To
+> exercise the testing better, add RT boosting to other lock testing types
+> as well, using a new knob (rt_boost).
 > 
-> So far __tdx_hypercall() only handles six arguments for VMCALL.
-> Expanding it to six more register would allow to cover more use-cases.
+> Tested with boot parameters:
+> locktorture.torture_type=mutex_lock
+> locktorture.onoff_interval=1
+> locktorture.nwriters_stress=8
+> locktorture.stutter=0
+> locktorture.rt_boost=1
+> locktorture.rt_boost_factor=1
+> locktorture.nlocks=3
 > 
-> Using RDI and RSI as VMCALL arguments requires more register shuffling.
-> RAX is used to hold tdx_hypercall_args pointer and RBP stores flags.
+> For the rtmutex test, rt_boost is always enabled even if disabling is
+> requested.
 > 
-> While there, fix typo in the comment on panic branch.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dexuan Cui <decui@microsoft.com>
-> Tested-by: Dexuan Cui <decui@microsoft.com>
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 > ---
+>  kernel/locking/locktorture.c | 91 +++++++++++++++++++-----------------
+>  1 file changed, 48 insertions(+), 43 deletions(-)
 > 
-> This patch is from Kirill. I'm posting the patch on behalf him:
-> https://lwn.net/ml/linux-kernel/20221202214741.7vfmqgvgubxqffen@box.shutemov.name/
-> 
-> This is actually v1, but let's use v2 in the Subject to be consistent
-> with the Subjects of the other patches.
-> 
->  arch/x86/coco/tdx/tdcall.S        | 82 ++++++++++++++++++++++---------
->  arch/x86/include/asm/shared/tdx.h |  6 +++
->  arch/x86/kernel/asm-offsets.c     |  6 +++
->  3 files changed, 70 insertions(+), 24 deletions(-)
-> 
-> diff --git a/arch/x86/coco/tdx/tdcall.S b/arch/x86/coco/tdx/tdcall.S
-> index f9eb1134f22d..64e57739dc9d 100644
-> --- a/arch/x86/coco/tdx/tdcall.S
-> +++ b/arch/x86/coco/tdx/tdcall.S
-> @@ -13,6 +13,12 @@
->  /*
->   * Bitmasks of exposed registers (with VMM).
->   */
-> +#define TDX_RDX		BIT(2)
-> +#define TDX_RBX		BIT(3)
-> +#define TDX_RSI		BIT(6)
-> +#define TDX_RDI		BIT(7)
-> +#define TDX_R8		BIT(8)
-> +#define TDX_R9		BIT(9)
->  #define TDX_R10		BIT(10)
->  #define TDX_R11		BIT(11)
->  #define TDX_R12		BIT(12)
-> @@ -27,9 +33,9 @@
->   * details can be found in TDX GHCI specification, section
->   * titled "TDCALL [TDG.VP.VMCALL] leaf".
->   */
-> -#define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
-> -					  TDX_R12 | TDX_R13 | \
-> -					  TDX_R14 | TDX_R15 )
-> +#define TDVMCALL_EXPOSE_REGS_MASK	\
-> +	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
-> +	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
+> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
+> index bc3557677eed..5a388ac96a9b 100644
+> --- a/kernel/locking/locktorture.c
+> +++ b/kernel/locking/locktorture.c
+> @@ -46,6 +46,7 @@ torture_param(int, shutdown_secs, 0, "Shutdown time (j), <= zero to disable.");
+>  torture_param(int, stat_interval, 60,
+>  	     "Number of seconds between stats printk()s");
+>  torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
+> +torture_param(int, rt_boost, 0, "Perform an rt-boost from the writer, always 1 for rtmutex_lock");
+>  torture_param(int, verbose, 1,
+>  	     "Enable verbose debugging printk()s");
+>  torture_param(int, nlocks, 1,
+> @@ -129,15 +130,44 @@ static void torture_lock_busted_write_unlock(int tid __maybe_unused)
+>  	  /* BUGGY, do not use in real life!!! */
+>  }
 >  
+> -static void torture_boost_dummy(struct torture_random_state *trsp)
 
-You seem to have expanded the list to include all VMCALL supported
-registers except RBP. Why not include it as well? That way, it will be
-a complete support.
+We no longer have torture_boot_dummy().  Is the point that the
+"spinlocks" to priority boosting in PREEMPT_RT kernels?  If so,
+would it make sense to do something like this for spinlock?
 
->  /*
->   * __tdx_module_call()  - Used by TDX guests to request services from
-> @@ -124,19 +130,32 @@ SYM_FUNC_START(__tdx_hypercall)
->  	push %r14
->  	push %r13
->  	push %r12
-> +	push %rbx
-> +	push %rbp
+	.task_boost     = IS_ENABLED(CONFIG_PREEMPT_RT) ? torture_rt_boost : torture_boost_dummy,
+
+Or maybe using a similar approach for the default value of the rt_boost
+module parameter?
+
+Or is there some benefit of priority boosting for spinlocks even in
+non-PREEMPT_RT kernels that I am missing?
+
+> +static void torture_rt_boost(struct torture_random_state *trsp)
+>  {
+> -	/* Only rtmutexes care about priority */
+> +	const unsigned int factor = 50000; /* yes, quite arbitrary */
+
+OK, this one looks like code movement combined with 50000 being named
+"factor".  Whoever originally wrote these comments needs to have done
+a better job.  ;-)
+
 > +
-> +	movq %rdi, %rax
-> +	movq %rsi, %rbp
+> +	if (!rt_boost)
+> +		return;
 > +
-> +	/* Copy hypercall registers from arg struct: */
-> +	movq TDX_HYPERCALL_r8(%rax),  %r8
-> +	movq TDX_HYPERCALL_r9(%rax),  %r9
-> +	movq TDX_HYPERCALL_r10(%rax), %r10
-> +	movq TDX_HYPERCALL_r11(%rax), %r11
-> +	movq TDX_HYPERCALL_r12(%rax), %r12
-> +	movq TDX_HYPERCALL_r13(%rax), %r13
-> +	movq TDX_HYPERCALL_r14(%rax), %r14
-> +	movq TDX_HYPERCALL_r15(%rax), %r15
-> +	movq TDX_HYPERCALL_rdi(%rax), %rdi
-> +	movq TDX_HYPERCALL_rsi(%rax), %rsi
-> +	movq TDX_HYPERCALL_rbx(%rax), %rbx
-> +	movq TDX_HYPERCALL_rdx(%rax), %rdx
-> +
-> +	push %rax
+> +	if (!rt_task(current)) {
+> +		/*
+> +		 * Boost priority once every ~50k operations. When the
+> +		 * task tries to take the lock, the rtmutex it will account
+> +		 * for the new priority, and do any corresponding pi-dance.
+> +		 */
+> +		if (trsp && !(torture_random(trsp) %
+> +			      (cxt.nrealwriters_stress * factor))) {
+> +			sched_set_fifo(current);
+> +		} else /* common case, do nothing */
+> +			return;
+> +	} else {
+> +		/*
+> +		 * The task will remain boosted for another ~500k operations,
+> +		 * then restored back to its original prio, and so forth.
+> +		 *
+> +		 * When @trsp is nil, we want to force-reset the task for
+> +		 * stopping the kthread.
+> +		 */
+> +		if (!trsp || !(torture_random(trsp) %
+> +			       (cxt.nrealwriters_stress * factor * 2))) {
+> +			sched_set_normal(current, 0);
+> +		} else /* common case, do nothing */
+> +			return;
+> +	}
+>  }
 >  
->  	/* Mangle function call ABI into TDCALL ABI: */
->  	/* Set TDCALL leaf ID (TDVMCALL (0)) in RAX */
->  	xor %eax, %eax
+>  static struct lock_torture_ops lock_busted_ops = {
+>  	.writelock	= torture_lock_busted_write_lock,
+>  	.write_delay	= torture_lock_busted_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_lock_busted_write_unlock,
+>  	.readlock       = NULL,
+>  	.read_delay     = NULL,
+> @@ -181,7 +211,7 @@ __releases(torture_spinlock)
+>  static struct lock_torture_ops spin_lock_ops = {
+>  	.writelock	= torture_spin_lock_write_lock,
+>  	.write_delay	= torture_spin_lock_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_spin_lock_write_unlock,
+>  	.readlock       = NULL,
+>  	.read_delay     = NULL,
+> @@ -208,7 +238,7 @@ __releases(torture_spinlock)
+>  static struct lock_torture_ops spin_lock_irq_ops = {
+>  	.writelock	= torture_spin_lock_write_lock_irq,
+>  	.write_delay	= torture_spin_lock_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_lock_spin_write_unlock_irq,
+>  	.readlock       = NULL,
+>  	.read_delay     = NULL,
+> @@ -277,7 +307,7 @@ __releases(torture_rwlock)
+>  static struct lock_torture_ops rw_lock_ops = {
+>  	.writelock	= torture_rwlock_write_lock,
+>  	.write_delay	= torture_rwlock_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_rwlock_write_unlock,
+>  	.readlock       = torture_rwlock_read_lock,
+>  	.read_delay     = torture_rwlock_read_delay,
+> @@ -320,7 +350,7 @@ __releases(torture_rwlock)
+>  static struct lock_torture_ops rw_lock_irq_ops = {
+>  	.writelock	= torture_rwlock_write_lock_irq,
+>  	.write_delay	= torture_rwlock_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_rwlock_write_unlock_irq,
+>  	.readlock       = torture_rwlock_read_lock_irq,
+>  	.read_delay     = torture_rwlock_read_delay,
+> @@ -362,7 +392,7 @@ __releases(torture_mutex)
+>  static struct lock_torture_ops mutex_lock_ops = {
+>  	.writelock	= torture_mutex_lock,
+>  	.write_delay	= torture_mutex_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_mutex_unlock,
+>  	.readlock       = NULL,
+>  	.read_delay     = NULL,
+> @@ -460,7 +490,7 @@ static struct lock_torture_ops ww_mutex_lock_ops = {
+>  	.exit		= torture_ww_mutex_exit,
+>  	.writelock	= torture_ww_mutex_lock,
+>  	.write_delay	= torture_mutex_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_ww_mutex_unlock,
+>  	.readlock       = NULL,
+>  	.read_delay     = NULL,
+> @@ -471,6 +501,11 @@ static struct lock_torture_ops ww_mutex_lock_ops = {
+>  #ifdef CONFIG_RT_MUTEXES
+>  static DEFINE_RT_MUTEX(torture_rtmutex);
 >  
-> -	/* Copy hypercall registers from arg struct: */
-> -	movq TDX_HYPERCALL_r10(%rdi), %r10
-> -	movq TDX_HYPERCALL_r11(%rdi), %r11
-> -	movq TDX_HYPERCALL_r12(%rdi), %r12
-> -	movq TDX_HYPERCALL_r13(%rdi), %r13
-> -	movq TDX_HYPERCALL_r14(%rdi), %r14
-> -	movq TDX_HYPERCALL_r15(%rdi), %r15
+> +static void torture_rtmutex_init(void)
+> +{
+> +	rt_boost = 1;
+> +}
+> +
+>  static int torture_rtmutex_lock(int tid __maybe_unused)
+>  __acquires(torture_rtmutex)
+>  {
+> @@ -478,37 +513,6 @@ __acquires(torture_rtmutex)
+>  	return 0;
+>  }
+>  
+> -static void torture_rtmutex_boost(struct torture_random_state *trsp)
+> -{
+> -	const unsigned int factor = 50000; /* yes, quite arbitrary */
 > -
->  	movl $TDVMCALL_EXPOSE_REGS_MASK, %ecx
+> -	if (!rt_task(current)) {
+> -		/*
+> -		 * Boost priority once every ~50k operations. When the
+> -		 * task tries to take the lock, the rtmutex it will account
+> -		 * for the new priority, and do any corresponding pi-dance.
+> -		 */
+> -		if (trsp && !(torture_random(trsp) %
+> -			      (cxt.nrealwriters_stress * factor))) {
+> -			sched_set_fifo(current);
+> -		} else /* common case, do nothing */
+> -			return;
+> -	} else {
+> -		/*
+> -		 * The task will remain boosted for another ~500k operations,
+> -		 * then restored back to its original prio, and so forth.
+> -		 *
+> -		 * When @trsp is nil, we want to force-reset the task for
+> -		 * stopping the kthread.
+> -		 */
+> -		if (!trsp || !(torture_random(trsp) %
+> -			       (cxt.nrealwriters_stress * factor * 2))) {
+> -			sched_set_normal(current, 0);
+> -		} else /* common case, do nothing */
+> -			return;
+> -	}
+> -}
+> -
+>  static void torture_rtmutex_delay(struct torture_random_state *trsp)
+>  {
+>  	const unsigned long shortdelay_us = 2;
+> @@ -535,9 +539,10 @@ __releases(torture_rtmutex)
+>  }
 >  
->  	/*
-> @@ -148,14 +167,14 @@ SYM_FUNC_START(__tdx_hypercall)
->  	 * HLT operation indefinitely. Since this is the not the desired
->  	 * result, conditionally call STI before TDCALL.
->  	 */
-> -	testq $TDX_HCALL_ISSUE_STI, %rsi
-> +	testq $TDX_HCALL_ISSUE_STI, %rbp
->  	jz .Lskip_sti
->  	sti
->  .Lskip_sti:
->  	tdcall
->  
->  	/*
-> -	 * RAX==0 indicates a failure of the TDVMCALL mechanism itself and that
-> +	 * RAX!=0 indicates a failure of the TDVMCALL mechanism itself and that
->  	 * something has gone horribly wrong with the TDX module.
->  	 *
->  	 * The return status of the hypercall operation is in a separate
-> @@ -165,30 +184,45 @@ SYM_FUNC_START(__tdx_hypercall)
->  	testq %rax, %rax
->  	jne .Lpanic
->  
-> -	/* TDVMCALL leaf return code is in R10 */
-> -	movq %r10, %rax
-> +	pop %rax
->  
->  	/* Copy hypercall result registers to arg struct if needed */
-> -	testq $TDX_HCALL_HAS_OUTPUT, %rsi
-> +	testq $TDX_HCALL_HAS_OUTPUT, %rbp
->  	jz .Lout
->  
-> -	movq %r10, TDX_HYPERCALL_r10(%rdi)
-> -	movq %r11, TDX_HYPERCALL_r11(%rdi)
-> -	movq %r12, TDX_HYPERCALL_r12(%rdi)
-> -	movq %r13, TDX_HYPERCALL_r13(%rdi)
-> -	movq %r14, TDX_HYPERCALL_r14(%rdi)
-> -	movq %r15, TDX_HYPERCALL_r15(%rdi)
-> +	movq %r8,  TDX_HYPERCALL_r8(%rax)
-> +	movq %r9,  TDX_HYPERCALL_r9(%rax)
-> +	movq %r10, TDX_HYPERCALL_r10(%rax)
-> +	movq %r11, TDX_HYPERCALL_r11(%rax)
-> +	movq %r12, TDX_HYPERCALL_r12(%rax)
-> +	movq %r13, TDX_HYPERCALL_r13(%rax)
-> +	movq %r14, TDX_HYPERCALL_r14(%rax)
-> +	movq %r15, TDX_HYPERCALL_r15(%rax)
-> +	movq %rdi, TDX_HYPERCALL_rdi(%rax)
-> +	movq %rsi, TDX_HYPERCALL_rsi(%rax)
-> +	movq %rbx, TDX_HYPERCALL_rbx(%rax)
-> +	movq %rdx, TDX_HYPERCALL_rdx(%rax)
->  .Lout:
-> +	/* TDVMCALL leaf return code is in R10 */
-> +	movq %r10, %rax
-> +
->  	/*
->  	 * Zero out registers exposed to the VMM to avoid speculative execution
->  	 * with VMM-controlled values. This needs to include all registers
-> -	 * present in TDVMCALL_EXPOSE_REGS_MASK (except R12-R15). R12-R15
-> -	 * context will be restored.
-> +	 * present in TDVMCALL_EXPOSE_REGS_MASK, except RBX, and R12-R15 which
-> +	 * will be restored.
->  	 */
-> +	xor %r8d,  %r8d
-> +	xor %r9d,  %r9d
->  	xor %r10d, %r10d
->  	xor %r11d, %r11d
-> +	xor %rdi,  %rdi
-> +	xor %rsi,  %rsi
-> +	xor %rdx,  %rdx
->  
->  	/* Restore callee-saved GPRs as mandated by the x86_64 ABI */
-> +	pop %rbp
-> +	pop %rbx
->  	pop %r12
->  	pop %r13
->  	pop %r14
-> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-> index e53f26228fbb..8068faa52de1 100644
-> --- a/arch/x86/include/asm/shared/tdx.h
-> +++ b/arch/x86/include/asm/shared/tdx.h
-> @@ -22,12 +22,18 @@
->   * This is a software only structure and not part of the TDX module/VMM ABI.
->   */
->  struct tdx_hypercall_args {
-> +	u64 r8;
-> +	u64 r9;
->  	u64 r10;
->  	u64 r11;
->  	u64 r12;
->  	u64 r13;
->  	u64 r14;
->  	u64 r15;
-> +	u64 rdi;
-> +	u64 rsi;
-> +	u64 rbx;
-> +	u64 rdx;
->  };
->  
->  /* Used to request services from the VMM */
-> diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-> index 437308004ef2..9f09947495e2 100644
-> --- a/arch/x86/kernel/asm-offsets.c
-> +++ b/arch/x86/kernel/asm-offsets.c
-> @@ -75,12 +75,18 @@ static void __used common(void)
->  	OFFSET(TDX_MODULE_r11, tdx_module_output, r11);
->  
->  	BLANK();
-> +	OFFSET(TDX_HYPERCALL_r8,  tdx_hypercall_args, r8);
-> +	OFFSET(TDX_HYPERCALL_r9,  tdx_hypercall_args, r9);
->  	OFFSET(TDX_HYPERCALL_r10, tdx_hypercall_args, r10);
->  	OFFSET(TDX_HYPERCALL_r11, tdx_hypercall_args, r11);
->  	OFFSET(TDX_HYPERCALL_r12, tdx_hypercall_args, r12);
->  	OFFSET(TDX_HYPERCALL_r13, tdx_hypercall_args, r13);
->  	OFFSET(TDX_HYPERCALL_r14, tdx_hypercall_args, r14);
->  	OFFSET(TDX_HYPERCALL_r15, tdx_hypercall_args, r15);
-> +	OFFSET(TDX_HYPERCALL_rdi, tdx_hypercall_args, rdi);
-> +	OFFSET(TDX_HYPERCALL_rsi, tdx_hypercall_args, rsi);
-> +	OFFSET(TDX_HYPERCALL_rbx, tdx_hypercall_args, rbx);
-> +	OFFSET(TDX_HYPERCALL_rdx, tdx_hypercall_args, rdx);
->  
->  	BLANK();
->  	OFFSET(BP_scratch, boot_params, scratch);
+>  static struct lock_torture_ops rtmutex_lock_ops = {
+> +	.init		= torture_rtmutex_init,
 
--- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+OK, so rt_boost defaults on for rtmutex.  In fact, it cannot be disabled,
+which might make things more difficult for debugging.
+
+Another approach would to do something similar to the test_boost module
+parameter for RCU.  This defaults to "1", which means "Boost if it
+makes sense in this situation".  It can be set to "0", which means
+"Never boost", and also to "2", which means "Boost even if it makes no
+sense to do so.  This last helps verify rcutorture's ability to detect
+boost failures.  There is a can_boost field in the rcu_torture_ops
+structure that defines when it makes sense to boost, and this field
+is initialized based on CONFIG_RCU_BOOST.
+
+In this case, it makes sense to boost rt_mutex always, and it makes
+sense to boost exclusive spinlocks in PREEMPT_RT kernels.  It might make
+sense to boost reader-writer spinlock situations involving only writers,
+but that would likely require additional changes.
+
+Or is there some reason why this approach would not work well?
+
+							Thanx, Paul
+
+>  	.writelock	= torture_rtmutex_lock,
+>  	.write_delay	= torture_rtmutex_delay,
+> -	.task_boost     = torture_rtmutex_boost,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_rtmutex_unlock,
+>  	.readlock       = NULL,
+>  	.read_delay     = NULL,
+> @@ -604,7 +609,7 @@ __releases(torture_rwsem)
+>  static struct lock_torture_ops rwsem_lock_ops = {
+>  	.writelock	= torture_rwsem_down_write,
+>  	.write_delay	= torture_rwsem_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_rwsem_up_write,
+>  	.readlock       = torture_rwsem_down_read,
+>  	.read_delay     = torture_rwsem_read_delay,
+> @@ -656,7 +661,7 @@ static struct lock_torture_ops percpu_rwsem_lock_ops = {
+>  	.exit		= torture_percpu_rwsem_exit,
+>  	.writelock	= torture_percpu_rwsem_down_write,
+>  	.write_delay	= torture_rwsem_write_delay,
+> -	.task_boost     = torture_boost_dummy,
+> +	.task_boost     = torture_rt_boost,
+>  	.writeunlock	= torture_percpu_rwsem_up_write,
+>  	.readlock       = torture_percpu_rwsem_down_read,
+>  	.read_delay     = torture_rwsem_read_delay,
+> -- 
+> 2.38.1.584.g0f3c55d4c2-goog
+> 
