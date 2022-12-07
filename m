@@ -2,99 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7A5645A47
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EACA645A49
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:00:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiLGNAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:00:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S229749AbiLGNAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLGNAm (ORCPT
+        with ESMTP id S229603AbiLGNAo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:00:42 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2C25133D;
-        Wed,  7 Dec 2022 05:00:41 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id j16so593083qtv.4;
-        Wed, 07 Dec 2022 05:00:41 -0800 (PST)
+        Wed, 7 Dec 2022 08:00:44 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EA05133D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:00:43 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id co23so526840wrb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:00:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xR1noXbyPM5kt/sYfkF4dJpSqyLI733A+gni4V3Hl+g=;
+        b=yeFZCjZBCI9Jl2kn0mMwm5h3PCNQV0qMVvCmJLEPczp/jvmDAWIfUZZZbfXW/EXohY
+         p2XOzLBhN+FZBTdxRVYo44n24EZiyP96Jx5kd/7p3Hc+l8wdcRpierf6Dp49w8DJUQDy
+         rlBFc+EHmIFOsMjJqc5U/27MwGIGi1dyA0aOpjKrEGMwSdLG15MR/hFUANlgdcLoVSMy
+         tGxtn8JsPnRt/XqqdlJcxbVGkDLHo+cYI60OVm5g44w4aaSGFBdCTWJ5kcy1eAG75Mkg
+         tJLpMweFuT/1HwNNf/oHnBgCm87mrMqKt+FPX76ImHI3UkxCCwnkVWry+O/oi/fCry9i
+         XXNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zUPGz9duJAj674G1HKLRXDzt7EeIFrS+Dk9kzWixWeI=;
-        b=A+xUc9crwAMbkULycC9Hc56ijghLDy+WWfpBBPnSBVd+aGNetNzk6wf+cNCxss7afM
-         cepA9KQczllyj2mHUMA32slZfTdhTeip+S5jk4JpAfwa0zuHjCJuBIALWddxXvkTP0hz
-         QkbR6rg0pz7Fs691rbqi02rliJYaj7DJKePvDrWBY26b4xYFEdeVI0rCZCnW7+2eBub3
-         f+yxlnZCLruAsKDW+w++ZlckdvzRsRrtu1qGF7YNloJBtXCGofacuTjiyx9SM2d43VkI
-         vuYJmvCUD5ZiSGx7FJKOaBeQ9cHqLsxk9Cn0tMwoPXxBaOiDWvgypgnI0+5TR8mEIiNf
-         1hww==
-X-Gm-Message-State: ANoB5pk/8jyGfdC86gOdwbdgXrMMz5MvBuA1rScVUoS+p3HsxrDVoSS/
-        wdQ4x9hncfwzq+IYW6W1GAcGwxXhB8U3rcFLDSk=
-X-Google-Smtp-Source: AA0mqf65Zc7aQsSeuNEVmbOtyMubetzIfXmSi9RGmeblMfyRFofgtOIIBWWEcUhvRTa44wkT20Qizvbt3ytpi3/gmVQ=
-X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
- c11-20020ac87dcb000000b003a68dd04712mr27914500qte.411.1670418040428; Wed, 07
- Dec 2022 05:00:40 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xR1noXbyPM5kt/sYfkF4dJpSqyLI733A+gni4V3Hl+g=;
+        b=iBgOJLX4fkrEZTHO7LzuPDTBMIcszbKOievVZU8U03HmNR+OXriDI9U5TFfHTyezUZ
+         iQVCZQqCmNZXXIZT0ExB/kA8ZmBU25wfgN8cXNGljGGhTPml2k0nQ095rpZkoxRk8g9W
+         7LhkjaSEDgekNUlNre5Viaic9KhuoEsn1HjNYCKF5tWiuGBjGg62/m+SMh0Cbfu7miBq
+         JJALwh1XsFK9hfp+udmJIXjRro4f/Mtm+/wK2kOUHpUfqfjjAWBBVWnUjpbK0idApZji
+         pUlw/8rrshpUFrfgHpfHKKnLb7LViiC4N80u6hZGZS3NbSKfvReL7d5PHWi273Y7dgQ9
+         aFGw==
+X-Gm-Message-State: ANoB5pn2eWkBGqvF67lIBgRenHYd84RQv8dBqPhN/Ue5ePKnzraCqg5Z
+        o0Znvl4BXDv4hTs+jozv+5+6tg==
+X-Google-Smtp-Source: AA0mqf5ZqtIW3Nlw0Hn0bcSCxhPju08BUFN33Uu0nIt2jrv6oohoW/Xp5yzOalr4pHN+P7tCxG+4GA==
+X-Received: by 2002:a05:6000:1d92:b0:241:6e0a:bfe6 with SMTP id bk18-20020a0560001d9200b002416e0abfe6mr47301524wrb.34.1670418041694;
+        Wed, 07 Dec 2022 05:00:41 -0800 (PST)
+Received: from localhost (ip-046-005-139-011.um12.pools.vodafone-ip.de. [46.5.139.11])
+        by smtp.gmail.com with ESMTPSA id t14-20020a05600c198e00b003cfd4a50d5asm1645753wmq.34.2022.12.07.05.00.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 05:00:41 -0800 (PST)
+Date:   Wed, 7 Dec 2022 14:00:39 +0100
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] mm: memcontrol: deprecate charge moving
+Message-ID: <Y5COd+qXwk/S+n8N@cmpxchg.org>
+References: <20221206171340.139790-1-hannes@cmpxchg.org>
+ <20221206171340.139790-4-hannes@cmpxchg.org>
+ <02b9663-4377-bd67-8da2-aad72240da@google.com>
 MIME-Version: 1.0
-References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
- <2283816.ElGaqSPkdT@kreacher> <e7eb0e0c9aea30c0e3205b2f3d96b74a52283b40.camel@hadess.net>
- <CAJZ5v0ibpzoBLXKiqzciYv1Htks0=4+4_XGLvpH7MCyFoYJiDg@mail.gmail.com>
- <CAO-hwJL7n7HFk4MTKvLcvBPSLDwm9pHqLaZvmuwvSNDVWUF76g@mail.gmail.com>
- <nycvar.YFH.7.76.2212071117420.6045@cbobk.fhfr.pm> <f0ccee0d2f85099c146ee682b25d30c832155fa3.camel@hadess.net>
-In-Reply-To: <f0ccee0d2f85099c146ee682b25d30c832155fa3.camel@hadess.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 14:00:28 +0100
-Message-ID: <CAJZ5v0iwEKtLVzzJw+XG5-w=qr86ec0yKpAWCU-KLwYmFnt5Zg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] HID: logitech-hidpp: Add Bluetooth Mouse
- M336/M337/M535 to unhandled_hidpp_devices[]
-To:     Bastien Nocera <hadess@hadess.net>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <02b9663-4377-bd67-8da2-aad72240da@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 1:43 PM Bastien Nocera <hadess@hadess.net> wrote:
->
-> On Wed, 2022-12-07 at 11:19 +0100, Jiri Kosina wrote:
-> > On Wed, 7 Dec 2022, Benjamin Tissoires wrote:
-> >
-> > > Agree, but OTOH, Rafael, your mouse is not brand new AFAICT, so I
-> > > am
-> > > worried that you won't be the only one complaining we just killed
-> > > their
-> > > mouse. So I think the even wiser solution would be to delay (and so
-> > > revert in 6.1 or 6.2) the 2 patches that enable hid++ on all
-> > > logitech
-> > > mice (8544c812e43ab7bdf40458411b83987b8cba924d and
-> > > 532223c8ac57605a10e46dc0ab23dcf01c9acb43).
-> >
-> > If we were not at -rc8 timeframe, I'd be in favor to coming up with
-> > proper
-> > fix still for 6.1. But as things currently are, let's just revert
-> > those
-> > and reschedule them with proper fix for 6.2+.
->
-> Has anyone seen any other reports?
->
-> Because, honestly, seeing work that adds support for dozens of devices
-> getting tossed out at the last minute based on a single report with no
-> opportunity to fix the problem is really frustrating.
+On Tue, Dec 06, 2022 at 05:58:14PM -0800, Hugh Dickins wrote:
+> On Tue, 6 Dec 2022, Johannes Weiner wrote:
+> 
+> > Charge moving mode in cgroup1 allows memory to follow tasks as they
+> > migrate between cgroups. This is, and always has been, a questionable
+> > thing to do - for several reasons.
+> > 
+> > First, it's expensive. Pages need to be identified, locked and
+> > isolated from various MM operations, and reassigned, one by one.
+> > 
+> > Second, it's unreliable. Once pages are charged to a cgroup, there
+> > isn't always a clear owner task anymore. Cache isn't moved at all, for
+> > example. Mapped memory is moved - but if trylocking or isolating a
+> > page fails, it's arbitrarily left behind. Frequent moving between
+> > domains may leave a task's memory scattered all over the place.
+> > 
+> > Third, it isn't really needed. Launcher tasks can kick off workload
+> > tasks directly in their target cgroup. Using dedicated per-workload
+> > groups allows fine-grained policy adjustments - no need to move tasks
+> > and their physical pages between control domains. The feature was
+> > never forward-ported to cgroup2, and it hasn't been missed.
+> > 
+> > Despite it being a niche usecase, the maintenance overhead of
+> > supporting it is enormous. Because pages are moved while they are live
+> > and subject to various MM operations, the synchronization rules are
+> > complicated. There are lock_page_memcg() in MM and FS code, which
+> > non-cgroup people don't understand. In some cases we've been able to
+> > shift code and cgroup API calls around such that we can rely on native
+> > locking as much as possible. But that's fragile, and sometimes we need
+> > to hold MM locks for longer than we otherwise would (pte lock e.g.).
+> > 
+> > Mark the feature deprecated. Hopefully we can remove it soon.
+> > 
+> > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> 
+> Acked-by: Hugh Dickins <hughd@google.com>
 
-Well, that's why I sent patches to address this particular case
-without possibly breaking anything else.
+Thanks
 
-Improvements can be made on top of them and the blocklist entry added
-by patch [2/2] need not stay there forever, FWIW.
+> but I wonder if it would be helpful to mention move_charge_at_immigrate
+> in the deprecation message: maybe the first line should be
+> "Cgroup memory moving (move_charge_at_immigrate) is deprecated.\n"
+
+Fair enough! Here is the updated patch.
+
+---
+
+From 0e791e6ab8ba2f75dd4205684c06bcc7308d9867 Mon Sep 17 00:00:00 2001
+From: Johannes Weiner <hannes@cmpxchg.org>
+Date: Mon, 5 Dec 2022 19:57:06 +0100
+Subject: [PATCH] mm: memcontrol: deprecate charge moving
+
+Charge moving mode in cgroup1 allows memory to follow tasks as they
+migrate between cgroups. This is, and always has been, a questionable
+thing to do - for several reasons.
+
+First, it's expensive. Pages need to be identified, locked and
+isolated from various MM operations, and reassigned, one by one.
+
+Second, it's unreliable. Once pages are charged to a cgroup, there
+isn't always a clear owner task anymore. Cache isn't moved at all, for
+example. Mapped memory is moved - but if trylocking or isolating a
+page fails, it's arbitrarily left behind. Frequent moving between
+domains may leave a task's memory scattered all over the place.
+
+Third, it isn't really needed. Launcher tasks can kick off workload
+tasks directly in their target cgroup. Using dedicated per-workload
+groups allows fine-grained policy adjustments - no need to move tasks
+and their physical pages between control domains. The feature was
+never forward-ported to cgroup2, and it hasn't been missed.
+
+Despite it being a niche usecase, the maintenance overhead of
+supporting it is enormous. Because pages are moved while they are live
+and subject to various MM operations, the synchronization rules are
+complicated. There are lock_page_memcg() in MM and FS code, which
+non-cgroup people don't understand. In some cases we've been able to
+shift code and cgroup API calls around such that we can rely on native
+locking as much as possible. But that's fragile, and sometimes we need
+to hold MM locks for longer than we otherwise would (pte lock e.g.).
+
+Mark the feature deprecated. Hopefully we can remove it soon.
+
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+Acked-by: Shakeel Butt <shakeelb@google.com>
+Acked-by: Hugh Dickins <hughd@google.com>
+Cc: stable@vger.kernel.org
+---
+ Documentation/admin-guide/cgroup-v1/memory.rst | 11 ++++++++++-
+ mm/memcontrol.c                                |  4 ++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
+index 60370f2c67b9..87d7877b98ec 100644
+--- a/Documentation/admin-guide/cgroup-v1/memory.rst
++++ b/Documentation/admin-guide/cgroup-v1/memory.rst
+@@ -86,6 +86,8 @@ Brief summary of control files.
+  memory.swappiness		     set/show swappiness parameter of vmscan
+ 				     (See sysctl's vm.swappiness)
+  memory.move_charge_at_immigrate     set/show controls of moving charges
++                                     This knob is deprecated and shouldn't be
++                                     used.
+  memory.oom_control		     set/show oom controls.
+  memory.numa_stat		     show the number of memory usage per numa
+ 				     node
+@@ -717,9 +719,16 @@ Soft limits can be setup by using the following commands (in this example we
+        It is recommended to set the soft limit always below the hard limit,
+        otherwise the hard limit will take precedence.
+ 
+-8. Move charges at task migration
++8. Move charges at task migration (DEPRECATED!)
+ =================================
+ 
++THIS IS DEPRECATED!
++
++It's expensive and unreliable! It's better practice to launch workload
++tasks directly from inside their target cgroup. Use dedicated workload
++cgroups to allow fine-grained policy adjustments without having to
++move physical pages between control domains.
++
+ Users can move charges associated with a task along with task migration, that
+ is, uncharge task's pages from the old cgroup and charge them to the new cgroup.
+ This feature is not supported in !CONFIG_MMU environments because of lack of
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index b696354c1b21..9c9a42153b76 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -3919,6 +3919,10 @@ static int mem_cgroup_move_charge_write(struct cgroup_subsys_state *css,
+ {
+ 	struct mem_cgroup *memcg = mem_cgroup_from_css(css);
+ 
++	pr_warn_once("Cgroup memory moving (move_charge_at_immigrate) is deprecated. "
++		     "Please report your usecase to linux-mm@kvack.org if you "
++		     "depend on this functionality.\n");
++
+ 	if (val & ~MOVE_MASK)
+ 		return -EINVAL;
+ 
+-- 
+2.38.1
+
