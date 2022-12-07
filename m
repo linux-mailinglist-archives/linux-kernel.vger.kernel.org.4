@@ -2,222 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BFE645E76
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:11:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D97D8645E7A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiLGQL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37778 "EHLO
+        id S229971AbiLGQMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLGQLI (ORCPT
+        with ESMTP id S229713AbiLGQL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:11:08 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C3F366CA7;
-        Wed,  7 Dec 2022 08:11:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670429460; x=1701965460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EX/E0ogleACTNBrig1L1Gk1DF0Q6RlzzbCNh3rOpf7o=;
-  b=RQxfZ3DPO0++VrU99eyIC3EjclXgnoWmLrXtwkec1xmRn4X7SBNszQV5
-   N04eg55uNCW9JFZzhAOR/0nCLgsEJIkqGlC/5d6kgYi6vmnZGEjmNPKaH
-   LCG+1dvoitZUXANiNYNzrMJCZNaUXsF+jd8CltSjWTNM9TU/4TrTKiy0y
-   ngmRl7A5KOr6FaJpZcXL4MRwkzOdohgnRNQtyF7snUalS4eg7a5wbD8aC
-   cZGhNqB426soDUc/5S8OVkw26EfDH4nyVwDUE05nhnYhwvULCUKqrvR3t
-   vYrdS2EAZ4PQDeSCEcxVIm/gYyyoBtcQ60SUENiQZZGtdLxl+YPRSLfyv
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="403199361"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="403199361"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 08:10:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="975513608"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="975513608"
-Received: from vkoppal-mobl.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.198.95])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 08:10:58 -0800
-Date:   Wed, 7 Dec 2022 08:10:57 -0800
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-cxl@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] cxl/mbox: Add GET_POISON_LIST mailbox command
-Message-ID: <Y5C7EYz1VrG2H7jh@aschofie-mobl2>
-References: <cover.1668115235.git.alison.schofield@intel.com>
- <46c7c7339224744fce424b196da3e5566effec17.1668115235.git.alison.schofield@intel.com>
- <638ffd5eaa3a7_c95729426@dwillia2-mobl3.amr.corp.intel.com.notmuch>
+        Wed, 7 Dec 2022 11:11:59 -0500
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3422AC75;
+        Wed,  7 Dec 2022 08:11:58 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5120D5803C1;
+        Wed,  7 Dec 2022 11:11:57 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 07 Dec 2022 11:11:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1670429517; x=1670436717; bh=TEYFS/6gZa
+        DWc2dblU5iUytEgOwH+PjKNL3XF1HvRjU=; b=cs53TPq2aKVUc/54sdr6wrQJ6/
+        sTylapB4ECbP99K5rPXD/P+HwtDQTRwedGcP4op1DnSC6/EXWA5w7/AaERO0CqOP
+        bVmzP/ZS6ToEMJ/anbsvNy/WDndoQsVLaZ12ed5n3bY+Vp1GKGiQY4Mp8fxrRw0U
+        8PiGUU1u2kRyPk5zUZNpf4kwK+X9/zDe1bbCDaD/FvtSrsyg6DydyseOLSkFiOzk
+        HWL4TBkjzM9+MA6fN00FAJOLjesJLM9ik2WIu7ogM0vyV0hZEL68A+tyn/O0PUb9
+        W9eUFeqZs6vA0d2RP37Rj/Rxe0R3Q9lGPFmpvl+u3sBA7cy+jaP70pnuhPxg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670429517; x=1670436717; bh=TEYFS/6gZaDWc2dblU5iUytEgOwH
+        +PjKNL3XF1HvRjU=; b=OZ6xj64jvFJ+ccr2+ELVBBlpfPAaPAY3DphauI71FgMd
+        KxqgrbQurGdB7DNhZx06gw9PKOURZyKFMSMF9ihBZF1QETX4EHhSN+o2hgPRYGq0
+        +3nSyBTQjfkcjWalROC19CHF6Ve8HFI5bRhqI8ITk9OJBDsKvxNycfdvcZyqoeAM
+        wGsTRkSf2oKGsivCa6zJT1DxOqqKXouYztfjWRfkBbVTgyZNSNx5J6DOZtwNfKyv
+        /bvxTElb9cXqilFKgK0+FkadRAog1Wd7HxzWJkg2+SuDV90E1E4w14WksdhLEll/
+        7ZVxokjTOocI9bOk+F3imkbU7O5+lOtlQBd39yewDw==
+X-ME-Sender: <xms:TLuQY6jxrRX76Sfo6zcqdzhjgOx-u-DVuvGRmUvkMcrZ_llLqifB-w>
+    <xme:TLuQY7DwAkHw6ATcYa-tEGkEh6sp9FdZOR1D-UPG3yUq68hi_EfCk9LW7kI_8bvfn
+    fWqwwfPolMLvvS_1ys>
+X-ME-Received: <xmr:TLuQYyHzHsye05U_uFppho6SxxQewvcycEAYbqmhC_QxAryaTAmCAU2GfLsRzNov2wNzR6tXFWa9_WWVEMx8mT5wUQW2sO7AyhXZi_KsTGHMqg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdekgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
+    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:TLuQYzSX7LwGPf3qOKl-_mgQdgT8SFnrpSs5UtcJQcIRigDD8S1DvQ>
+    <xmx:TLuQY3zdyLjU321g6mIVtkQEEXOcwGQAMumek5T1lBckGt_GwOVdgQ>
+    <xmx:TLuQYx5SultAK7aZz5U1dKZoDPqCkZPOHvFgZkuFMzsq8-OyplLhLg>
+    <xmx:TbuQYyI8abNlVCW1NSf6kZ8Ur3xaFFtlgmhIKhDvgL78eRjIure5IA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Dec 2022 11:11:55 -0500 (EST)
+Date:   Wed, 7 Dec 2022 17:11:54 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        David Gow <davidgow@google.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH v3 18/20] drm/vc4: tests: Fail the current test if we
+ access a register
+Message-ID: <20221207161154.clgmuweddljvco5n@houat>
+References: <20221123-rpi-kunit-tests-v3-0-4615a663a84a@cerno.tech>
+ <20221123-rpi-kunit-tests-v3-18-4615a663a84a@cerno.tech>
+ <51fb1fdd-edf0-b2a3-0573-76a9101adfb3@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zqyddbg4vv7dqu6f"
 Content-Disposition: inline
-In-Reply-To: <638ffd5eaa3a7_c95729426@dwillia2-mobl3.amr.corp.intel.com.notmuch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <51fb1fdd-edf0-b2a3-0573-76a9101adfb3@igalia.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 06:41:34PM -0800, Dan Williams wrote:
-> alison.schofield@ wrote:
-> > From: Alison Schofield <alison.schofield@intel.com>
-> > 
-> > CXL devices maintain a list of locations that are poisoned or result
-> > in poison if the addresses are accessed by the host.
-> > 
-> > Per the spec (CXL 3.0 8.2.9.8.4.1), the device returns this Poison
-> > list as a set of  Media Error Records that include the source of the
-> > error, the starting device physical address and length. The length is
-> > the number of adjacent DPAs in the record and is in units of 64 bytes.
-> > 
-> > Retrieve the list and log each Media Error Record as a trace event of
-> > type 'cxl_poison'.
-> > 
-> > When the poison list is requested by region, include the region name
-> > and uuid in the trace event.
-> > 
-> > Signed-off-by: Alison Schofield <alison.schofield@intel.com>
-> > ---
-> >  drivers/cxl/core/mbox.c | 81 +++++++++++++++++++++++++++++++++++++++++
-> >  drivers/cxl/cxlmem.h    | 37 +++++++++++++++++++
-> >  2 files changed, 118 insertions(+)
-> > 
-> > diff --git a/drivers/cxl/core/mbox.c b/drivers/cxl/core/mbox.c
-> > index 0c90f13870a4..88f034e97812 100644
-> > --- a/drivers/cxl/core/mbox.c
-> > +++ b/drivers/cxl/core/mbox.c
-> > @@ -9,6 +9,9 @@
-> >  
-> >  #include "core.h"
-> >  
-> > +#define CREATE_TRACE_POINTS
-> > +#include <trace/events/cxl.h>
-> > +
-> >  static bool cxl_raw_allow_all;
-> >  
-> >  /**
-> > @@ -752,6 +755,7 @@ int cxl_dev_state_identify(struct cxl_dev_state *cxlds)
-> >  {
-> >  	/* See CXL 2.0 Table 175 Identify Memory Device Output Payload */
-> >  	struct cxl_mbox_identify id;
-> > +	__le32 val = 0;
-> >  	int rc;
-> >  
-> >  	rc = cxl_mbox_send_cmd(cxlds, CXL_MBOX_OP_IDENTIFY, NULL, 0, &id,
-> > @@ -771,6 +775,9 @@ int cxl_dev_state_identify(struct cxl_dev_state *cxlds)
-> >  	cxlds->lsa_size = le32_to_cpu(id.lsa_size);
-> >  	memcpy(cxlds->firmware_version, id.fw_revision, sizeof(id.fw_revision));
-> >  
-> > +	memcpy(&val, id.poison_list_max_mer, 3);
-> 
-> I see Jonathan already commented on the need for get_unaligned_le24()
-> here, seconded.
-> 
-Got it.
 
-> 
-> > +	cxlds->poison_max = min_t(u32, le32_to_cpu(val), CXL_POISON_LIST_MAX);
-> > +
-> >  	return 0;
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(cxl_dev_state_identify, CXL);
-> > @@ -835,6 +842,79 @@ int cxl_mem_create_range_info(struct cxl_dev_state *cxlds)
-> >  }
-> >  EXPORT_SYMBOL_NS_GPL(cxl_mem_create_range_info, CXL);
-> >  
-> > +static void cxl_trace_poison(struct cxl_mbox_poison_payload_out *po,
-> > +			     struct cxl_region *cxlr,
-> > +			     const char *memdev_name,
-> > +			     const char *pcidev_name)
-> 
-> Type-safety please. Pass a 'struct cxl_memdev *' and 'struct pci_dev *'.
-> Might need to be 'struct device *' instead of 'struct pci_dev *'
-> depending on if this needs to be called from cxl_test, but anything is
-> better than a non-specific string.
-> 
-Got it.
+--zqyddbg4vv7dqu6f
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > +{
-> > +	const char *region_name = cxlr ? dev_name(&cxlr->dev) : NULL;
-> 
-> ...and push this conversion into the trace point.
-> 
-Got that, and also pushed the decode of struct cxl_poison_record to
-the trace point like this:
+Hi Ma=EDra,
 
-TP_PROTO(const struct device *memdev, const struct pci_dev *pcidev,
-                     const struct cxl_region *region,
-                     const struct cxl_poison_record *record,
-                     u8 flags, __le64 overflow_t),
+Thanks for your review!
 
+On Wed, Dec 07, 2022 at 11:26:13AM -0300, Ma=EDra Canal wrote:
+> On 12/1/22 12:11, Maxime Ripard wrote:
+> > Accessing a register when running under kunit is a bad idea since our
+> > device is completely mocked.
+> >=20
+> > Fail the current test if we ever access any of our hardware registers.
+> >=20
+> > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+>=20
+> Reviewed-by: Ma=EDra Canal <mcanal@igalia.com>
+>=20
+> Just a small nit: I believe that macros with multiple statements should be
+> enclosed in a do-while block [1], even READ macros. I saw that you enclos=
+ed
+> the WRITE macros on a do-while block, but not the READ macros.
 
-> > +	struct cxl_region_params *p = cxlr ? &cxlr->params : NULL;
-> > +	uuid_t *uuid = p ? &p->uuid : NULL;
-> > +	u64 addr, dpa, overflow_t = 0;
-> > +	u8 source;
-> > +	u32 len;
-> > +
-> > +	if (po->flags & CXL_POISON_FLAG_OVERFLOW)
-> > +		overflow_t = le64_to_cpu(po->overflow_timestamp);
-> > +
-> > +	for (int i = 0; i < le16_to_cpu(po->count); i++) {
-> > +		len = le32_to_cpu(po->record[i].length) * CXL_POISON_LEN_MULT;
-> > +		addr = le64_to_cpu(po->record[i].address);
-> > +		source = addr & CXL_POISON_SOURCE_MASK;
-> > +		dpa = addr & CXL_POISON_START_MASK;
-> > +
-> > +		trace_cxl_poison(memdev_name, pcidev_name, region_name, uuid,
-> > +				 dpa, len, source, po->flags, overflow_t);
-> > +	}
-> > +}
-> > +
-> > +int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
-> > +		       struct cxl_region *cxlr)
-> > +{
-> > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> > +	const char *memdev_name = dev_name(&cxlmd->dev);
-> > +	const char *pcidev_name = dev_name(cxlds->dev);
-> > +	struct cxl_mbox_poison_payload_out *po;
-> > +	struct cxl_mbox_poison_payload_in pi;
-> > +	int nr_records = 0;
-> > +	int rc;
-> > +
-> > +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
-> > +	if (!po)
-> > +		return -ENOMEM;
-> > +
-> > +	pi.offset = cpu_to_le64(offset);
-> > +	pi.length = cpu_to_le64(len);
-> > +
-> > +	rc = mutex_lock_interruptible(&cxlds->poison_list_mutex);
-> 
-> So I do not know what this mutex is protecting if there is an allocation
-> per cxl_mem_get_poison() invocation. Although I suspect that's somewhat
-> wasteful. Just allocate one buffer at the beginning of time and then use
-> the lock to protect that buffer.
+This is on purpose: do-while blocks don't return a value, but ({ ... })
+blocks do. So we can do a write macros with a do-while, but can't for
+read since we expect to get a value back.
 
-Intent was a single lock on the device to protect the state of the
-poison list retrieval - do not allow > 1 reader. With > 1 reader
-software may not know if it retrieved the complete list.
+Maxime
 
-I'm not understanding about protecting a buffer, instead of protecting
-the state. Here I try to protect the state.
+--zqyddbg4vv7dqu6f
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> Although, I wonder if this and Event handling should share locks and one
-> preallocated buffer? Otherwise I do think it is important for Events and
-> Poison handling to be able to make forward progress without needing to
-> allocate up to a megabyte of memory at runtime. The other payload_size
-> allocations are for one-off things that run at the beginning of time,
-> but Poison and Events run repeatedly.
-> 
-> > 
-snip
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY5C7SgAKCRDj7w1vZxhR
+xS7mAP9bKwgLyqEhbFvH4crEyk/rKt4WWQzQ53q0+mdYj8Ke2wEAna4d7Vv87Jfa
+nISBFEINS8khtUTgsX0GgF+ipLJnGQ0=
+=6CdP
+-----END PGP SIGNATURE-----
+
+--zqyddbg4vv7dqu6f--
