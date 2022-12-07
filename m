@@ -2,86 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4559645F18
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:39:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB44645F1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:40:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiLGQjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:39:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60642 "EHLO
+        id S229778AbiLGQkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:40:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLGQjD (ORCPT
+        with ESMTP id S229486AbiLGQkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:39:03 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9A0164A7;
-        Wed,  7 Dec 2022 08:39:02 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 83FB967373; Wed,  7 Dec 2022 17:38:57 +0100 (CET)
-Date:   Wed, 7 Dec 2022 17:38:57 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Christoph Hellwig <hch@lst.de>, Lei Rao <lei.rao@intel.com>,
-        kbusch@kernel.org, axboe@fb.com, kch@nvidia.com, sagi@grimberg.me,
-        alex.williamson@redhat.com, cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <20221207163857.GB2010@lst.de>
-References: <20221206135810.GA27689@lst.de> <Y49eObpI7QoSnugu@ziepe.ca> <20221206153811.GB2266@lst.de> <Y49k++D3i8DfLOLL@ziepe.ca> <20221206165503.GA8677@lst.de> <Y4+U3VR2LeEh2S7B@ziepe.ca> <20221207075415.GB2283@lst.de> <Y5CWVu08abcOuEQH@ziepe.ca> <20221207135203.GA22803@lst.de> <Y5CsH5PqMYAWYatw@ziepe.ca>
+        Wed, 7 Dec 2022 11:40:14 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D9565B0;
+        Wed,  7 Dec 2022 08:40:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6839ECE1AFE;
+        Wed,  7 Dec 2022 16:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A02C433C1;
+        Wed,  7 Dec 2022 16:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670431210;
+        bh=g5fGGrWSIRqwNSexjwtqPOCti3BgIlEU85pKTBf8T0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Oo5QBkISEd5C93re2xC0MAd5GbmcJS0EQqCFX92m+ZL2Nnj+W+l6Aa8NisLDN8s2+
+         T/59VugOVhDKZk6+JfIq19yMgs9W72I7zpqEoVvLjqhwYaGveEsjBalrCI/i9FYgpi
+         GRSSZt4wnoHmFdjJya2qZ2v6WPaiqIAOgtedaL1X6wHhznVa3upGa5A4T7yrYIH67B
+         E4KovPtFNabXUFMrqkNctQza7wTDUZlfNqI0Y0kN7wBNdJAqcQgul/ISBt0ja9HSUx
+         24oqNM/bS5VlKbyeAGSVDrOv390/2jSLOD5C3VBU1dHcR9zdD6AcLhueUri6w+Obo/
+         RZQPBhowOylmw==
+Date:   Wed, 7 Dec 2022 16:40:05 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Bin Meng <bmeng@tinylab.org>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: Re: [PATCH v2 2/3] riscv: Implement semihost.h for earlycon semihost
+ driver
+Message-ID: <Y5DB5c7O4oAMkTa/@spud>
+References: <20221207135352.592556-1-bmeng@tinylab.org>
+ <20221207135352.592556-2-bmeng@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="P16++YdENF2wGyvg"
 Content-Disposition: inline
-In-Reply-To: <Y5CsH5PqMYAWYatw@ziepe.ca>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221207135352.592556-2-bmeng@tinylab.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 11:07:11AM -0400, Jason Gunthorpe wrote:
-> > And while that is a fine concept per see, the current incarnation of
-> > that is fundamentally broken is it centered around the controlled
-> > VM.  Which really can't work.
-> 
-> I don't see why you keep saying this. It is centered around the struct
-> vfio_device object in the kernel, which is definately NOT the VM.
 
-Sorry, I meant VF.  Your continued using of SR-IOV teminology now keeps
-confusing my mind so much that I start mistyping things.
+--P16++YdENF2wGyvg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > Even then you need a controlling and a controlled entity.  The
-> > controlling entity even in SIOV remains a PCIe function.  The
-> > controlled entity might just be a bunch of hardware resoures and
-> > a PASID.  Making it important again that all migration is driven
-> > by the controlling entity.
-> 
-> If they are the same driver implementing vfio_device you may be able
-> to claim they conceptually exist, but it is pretty artificial to draw
-> this kind of distinction inside a single driver.
+Hello,
 
-How are they in this reply?  I can't parse how this even relates to
-what I wrote.
+Two tiny nits for whenever other comments require a v3.
 
-> > Also the whole concept that only VFIO can do live migration is
-> > a little bogus.  With checkpoint and restart it absolutely
-> > does make sense to live migrate a container, and with that
-> > the hardware interface (e.g. nvme controller) assigned to it.
-> 
-> I agree people may want to do this, but it is very unclear how SRIOV
-> live migration can help do this.
+On Wed, Dec 07, 2022 at 09:53:51PM +0800, Bin Meng wrote:
+> Per RISC-V semihosting spec [1], implement semihost.h for the existing
+> Arm semihosting earlycon driver to work on RISC-V.
+>=20
+> [1] https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semih=
+osting-spec.adoc
 
-SRIOV live migration doesn't, because honestly there is no such
-thing as "SRIOV" live migration to start with.
+Could you please use regular Link: tags? Also, for a multi-patch series
+please send a cover letter :)
 
-> Let alone how to solve the security problems of allow userspace to
-> load arbitary FW blobs into a device with potentially insecure DMA
-> access..
+Thanks,
+Conor.
 
-Any time you assign a PCI device to userspace you might get into that.
+
+--P16++YdENF2wGyvg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5DB5QAKCRB4tDGHoIJi
+0pZKAQCwhsweZT35rE6Qa9nOrzhd5VKjCEPMMwbXWCfug86MmAEAmCRVZoYRpUvE
+E1k+9d6yojCvx8N+tjKoPiR/Bzb88w4=
+=64rp
+-----END PGP SIGNATURE-----
+
+--P16++YdENF2wGyvg--
