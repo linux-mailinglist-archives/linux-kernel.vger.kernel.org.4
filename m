@@ -2,97 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2643645C8C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A7D4645C9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiLGO2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:28:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
+        id S229811AbiLGO3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiLGO2T (ORCPT
+        with ESMTP id S230349AbiLGO2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:28:19 -0500
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC16358BEF;
-        Wed,  7 Dec 2022 06:27:54 -0800 (PST)
-Received: by mail-oi1-x22b.google.com with SMTP id c129so20946967oia.0;
-        Wed, 07 Dec 2022 06:27:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vtPX/PeXD/CT3jETn94lbUFp/CKvHFvwMs0e36odJZQ=;
-        b=KqIcB13Vh7JZpRWe/CFunigv5/0N9QhsbuUVVPh0iOIKb81oXQ+zUzXkIAMTr35hWW
-         EAIBvcY0lMfV2AvQiiC48lQvNvYxcAY//h+wA7qJ0lGPjaeEzy2NRDARFxbHFL1kp3KJ
-         qJ9zJ6e7IDkKFwHdLhqixRE/x4Hrh1NsW7c3h8tF19Q4t+IJCQC8g5IbUdsHwiocwWBA
-         MJir1IYTyizzDVassFlAC8EoViBcbh7VMbbzponKT4uCIkoyUpabPOM+H1lCLPyXpQ64
-         v4l2UU4ErcKSP/2krgV+6C0b+PkTRIm0dO3uu4GBKA1VN9YtxY+yPDSdeefPKRRut2+r
-         ByoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vtPX/PeXD/CT3jETn94lbUFp/CKvHFvwMs0e36odJZQ=;
-        b=tbdBbAclAZKa53vWZYT1WrJGOdd2Fk94m2ro4V/JpFx5n+R8Ldmn87Wh/wBJZbYegI
-         BZjF7bbXK8xUq4DWVW/Y9s3ve5nUDpP5Z2rBj0pw2qCCIOp+wk3cmTZ6mN21bJBMa1FE
-         ApG8ZHnmntf3zHbryHPxKjWMNazw5vNCbTBsmBRdBkk4fylRkfIs56CRZU7Zw8iV0dui
-         UqHC2Z1R2Wyrd3A3jdjVR6HLgJzCTgXtAnhQ6mDbWeNOb9F/CJXWTlczY1ViFUjD0fKS
-         +TYXHg4LyWQ2lK4FeHLZDvgq1IRPF6R9EafRo/yt8dk2Wfr6PAX1Z8HQ3WKrnAMNFbmo
-         RzsQ==
-X-Gm-Message-State: ANoB5pm/aKEF/KEnZ3QDsI/MdqkaWqzuNhpWAeJQNf1yBXXvkUYtKopM
-        DWGj/FlEon+lxs0JksKh9to=
-X-Google-Smtp-Source: AA0mqf7QIRnirBgGVxMO0y16NszEEI8vdPkjJNUa0yuqyoT3FBCqgdmWBmJyfI39/5Y4AdBs6VDHZQ==
-X-Received: by 2002:a05:6808:1584:b0:35a:774e:d352 with SMTP id t4-20020a056808158400b0035a774ed352mr35544840oiw.193.1670423274021;
-        Wed, 07 Dec 2022 06:27:54 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id v188-20020a4a7cc5000000b004a066f9a7b4sm8977711ooc.34.2022.12.07.06.27.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 06:27:53 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 7 Dec 2022 06:27:52 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/125] 6.0.12-rc3 review
-Message-ID: <20221207142752.GG319836@roeck-us.net>
-References: <20221206163445.868107856@linuxfoundation.org>
+        Wed, 7 Dec 2022 09:28:44 -0500
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EBBE63C1;
+        Wed,  7 Dec 2022 06:28:31 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 3F01F18641CD;
+        Wed,  7 Dec 2022 17:28:27 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id GISrUkIlnUMT; Wed,  7 Dec 2022 17:28:27 +0300 (MSK)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id E683418641D2;
+        Wed,  7 Dec 2022 17:28:26 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id kN8wJLelYFIx; Wed,  7 Dec 2022 17:28:26 +0300 (MSK)
+Received: from rbta-msk-lt-106062.astralinux.ru (unknown [10.177.20.20])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 3E16918641CD;
+        Wed,  7 Dec 2022 17:28:26 +0300 (MSK)
+From:   Anastasia Belova <abelova@astralinux.ru>
+To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     Anastasia Belova <abelova@astralinux.ru>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Maxime Bizon <mbizon@freebox.fr>,
+        Ralf Baechle <ralf@linux-mips.org>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: [PATCH v2 1/2] MIPS: BCM63xx: Add check for NULL for clk in clk_enable
+Date:   Wed,  7 Dec 2022 17:28:23 +0300
+Message-Id: <20221207142824.8706-1-abelova@astralinux.ru>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206163445.868107856@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:39:48PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.12 release.
-> There are 125 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 08 Dec 2022 16:34:27 +0000.
-> Anything received after that time might be too late.
-> 
+Check clk for NULL before calling clk_enable_unlocked where clk
+is dereferenced. There is such check in other implementations
+of clk_enable.
 
-Build results:
-	total: 155 pass: 155 fail: 0
-Qemu test results:
-	total: 500 pass: 500 fail: 0
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+Fixes: e7300d04bd08 ("MIPS: BCM63xx: Add support for the Broadcom BCM63xx=
+ family of SOCs.")
+Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+---
+ arch/mips/bcm63xx/clk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+diff --git a/arch/mips/bcm63xx/clk.c b/arch/mips/bcm63xx/clk.c
+index 6e6756e8fa0a..401140cf36d9 100644
+--- a/arch/mips/bcm63xx/clk.c
++++ b/arch/mips/bcm63xx/clk.c
+@@ -361,6 +361,9 @@ static struct clk clk_periph =3D {
+  */
+ int clk_enable(struct clk *clk)
+ {
++	if (!clk)
++		return;
++
+ 	mutex_lock(&clocks_mutex);
+ 	clk_enable_unlocked(clk);
+ 	mutex_unlock(&clocks_mutex);
+--=20
+2.30.2
 
-Guenter
