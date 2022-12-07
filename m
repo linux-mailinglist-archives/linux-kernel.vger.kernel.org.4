@@ -2,78 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8BC36455E6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:58:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807246455F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:00:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiLGI6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S229713AbiLGJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:00:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLGI6e (ORCPT
+        with ESMTP id S229704AbiLGI7v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:58:34 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B4EBEA;
-        Wed,  7 Dec 2022 00:58:32 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id n3so12700673pfq.10;
-        Wed, 07 Dec 2022 00:58:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3kRlTBcDxyj5ptNZ14o1YVXGmrqFxRI2/QpD88qWYiQ=;
-        b=pgoiqd8jUZVnnOCnDAzMxflF6HGuST/I9gEfUjqkMJROwp6XfWDHZNniCByRWCa7+t
-         RnC61XywTSJpzGwcFk6BamEkmE0TXLUXuBJw9eYmqFY6ZYzXW7nOD4FCUBzvlslwE4hh
-         K0pelResXxqzJigLV+9v0/HKhyR7+uBGdGzBvQnVFPFW3qjkP+m90rlXFQPR1JI9D/VH
-         L5g6nidU/g4vdofdkkcBoJVm68l8jnzFvszrmr/K6mfzVdhYtAoTpkG5xY/PAyO16kOv
-         cEikK3MA3tiPlBpiZasPoz3R1O914R9QuaM/oOTufXTHdD8gYkS6RHO9X6YRaEGcsecB
-         HpTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3kRlTBcDxyj5ptNZ14o1YVXGmrqFxRI2/QpD88qWYiQ=;
-        b=sSgyWjaLrC4WkZEZRIFMGIQBWtUOBJ9qfSS3ZbJl/UkhHvk62qT0N8TbFnZrOP1tG5
-         mWG9YJSyh7XmZkLPgjSX5ksnK7VPzUIdINLjBDYlsnt5jUvHWtPVRmY8ALTMlTq2gxBo
-         H04qNJn83mYTuAWPB+p0ACarMVje8gFm04cTUpaFzY+eP8L94C3qroHGcxkIR3Mp0rtg
-         Wx4Rt/SVYcsf9vw+UJSD9HE/kuifsxYF6kc32hYEzBJEVzWw+EOXdA14eA9Chr+Is2tC
-         B1jFuRJ7+nRF9jqG3386Lx/jGJphc5g3MwEXho3BSDXB7ziz8PI0r4NxA2BcnooyK4SF
-         ZjGA==
-X-Gm-Message-State: ANoB5pnFx6gxsqK+ueMxZnI89Ca2/zIgkzN6PKHRyfxoRyjwciH3t65o
-        cZmXNNIIWwt8CKhjkJGOecw=
-X-Google-Smtp-Source: AA0mqf4ZgSAfgs0hcNgueeE8FLs2MF0/38xphbpqsrdRo44kAFrVjIjUCGSHiF/dC/wUBsv7UacLBw==
-X-Received: by 2002:a63:1e49:0:b0:46b:1590:2625 with SMTP id p9-20020a631e49000000b0046b15902625mr62802011pgm.569.1670403511826;
-        Wed, 07 Dec 2022 00:58:31 -0800 (PST)
-Received: from debian.me (subs03-180-214-233-90.three.co.id. [180.214.233.90])
-        by smtp.gmail.com with ESMTPSA id ml13-20020a17090b360d00b00219f8eb271fsm740610pjb.5.2022.12.07.00.58.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 00:58:31 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id B381A1042C6; Wed,  7 Dec 2022 15:58:28 +0700 (WIB)
-Date:   Wed, 7 Dec 2022 15:58:28 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Sadiya Kazi <sadiyakazi@google.com>,
-        Rae Moar <rmoar@google.com>, Jonathan Corbet <corbet@lwn.net>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation: kunit: Fix "How Do I Use This" / "Next
- Steps" sections
-Message-ID: <Y5BVtHjnwpn5CFzf@debian.me>
-References: <20221207043319.1890954-1-davidgow@google.com>
+        Wed, 7 Dec 2022 03:59:51 -0500
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDBD5B64;
+        Wed,  7 Dec 2022 00:59:49 -0800 (PST)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B73eoE9005999;
+        Wed, 7 Dec 2022 09:59:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=nv6CSPzVcW61iwkrykBZRIYhH/dOHXw9fTiSF2/SiQM=;
+ b=K5E2/ZFV72JXYOOO2qm+i5qqzlKR3RZqMka9beO8GWMopK6Ec60Rw26b05aEI+TmNL3+
+ y89RUzlNV7+NxHi1aVgXIZj9ggtiZtTC7rbOhDjm/i1bhiCtSjN/VP5atSJL2TNyXBOb
+ yeAxPa+bWYzV4kC5GpUj0WfR6AIRD337HG7A5CF/DrU4Yzd2c5yX58xO6nj0HlsrTAX4
+ jFAWC4s7M7nLNHxIqBWl/lVbYKequzvRzGjjYRyian+ZzsFulCaOxvsIkJUJRJgdA4zl
+ KpEvqV+cgnI9DrZB14/SUlsRkaxgW8ZKmFr4Xvwgbnn8NVZp6JFANPBTV6QIZB8FGP+/ 7Q== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3m7x7py2bc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 07 Dec 2022 09:59:38 +0100
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 290B010002A;
+        Wed,  7 Dec 2022 09:59:33 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node2.st.com [10.75.129.70])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 0F79D21BF66;
+        Wed,  7 Dec 2022 09:59:33 +0100 (CET)
+Received: from [10.201.20.73] (10.201.20.73) by SHFDAG1NODE2.st.com
+ (10.75.129.70) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.13; Wed, 7 Dec
+ 2022 09:59:32 +0100
+Message-ID: <9dbc355c-2f73-cfb9-4808-fce65d7860e3@foss.st.com>
+Date:   Wed, 7 Dec 2022 09:59:30 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="gQZZMfvjrIhTAV6r"
-Content-Disposition: inline
-In-Reply-To: <20221207043319.1890954-1-davidgow@google.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] rpmsg: char: Use preallocated SKBs.
+Content-Language: en-US
+To:     Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>
+CC:     Ohad Ben-Cohen <ohad@wizery.com>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+References: <20221206085008.25388-1-piotr.wojtaszczyk@timesys.com>
+ <0987cae3-0edc-918b-5b23-22f238f22aa2@foss.st.com>
+ <CAG+cZ05b9W4e=AhoiAgehW7V7uWTPaBReAcQkTcVQmDsXwUYFw@mail.gmail.com>
+From:   Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Organization: STMicroelectronics
+In-Reply-To: <CAG+cZ05b9W4e=AhoiAgehW7V7uWTPaBReAcQkTcVQmDsXwUYFw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.201.20.73]
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE2.st.com
+ (10.75.129.70)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-07_04,2022-12-06_01,2022-06-22_01
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,130 +76,81 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---gQZZMfvjrIhTAV6r
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 07, 2022 at 12:33:19PM +0800, David Gow wrote:
-> The "How Do I Use This" section of index.rst and "Next Steps" section of
-> start.rst were just copies of the table of contents, and therefore
-> weren't really useful either when looking a sphinx generated output
-> (which already had the TOC visible) or when reading the source (where
-> it's just a list of files that ls could give you).
->=20
-> Instead, provide a small number of concrete next steps, and a bit more
-> description about what the pages contain.
->=20
-> This also removes the broken reference to 'tips.rst', which was
-> previously removed.
->=20
-> Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' p=
-age")
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->=20
-> Thanks everyone for reviewing v1. Since this is pretty much a complete
-> rewrite, I've left Reviewed-by tags off, as I don't feel the previous
-> reviews totally apply. Feel free to review again if you have any
-> comments.
->=20
-> Cheers,
-> -- David
->=20
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20221129094732.306449-1-davidgow@=
-google.com/
-> - Totally rewrite both sections to only include (and provide more
->   context for) the most concrete next steps.
->   - Thanks Bagas for pointing out that this basically duplicates the TOC
->     as-is.
->=20
-> ---
->  Documentation/dev-tools/kunit/index.rst | 19 ++++++++-----------
->  Documentation/dev-tools/kunit/start.rst | 19 +++++++++----------
->  2 files changed, 17 insertions(+), 21 deletions(-)
->=20
-> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-=
-tools/kunit/index.rst
-> index d5629817cd72..b3593ae29ace 100644
-> --- a/Documentation/dev-tools/kunit/index.rst
-> +++ b/Documentation/dev-tools/kunit/index.rst
-> @@ -99,14 +99,11 @@ Read also :ref:`kinds-of-tests`.
->  How do I use it?
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
-> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
-> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
-> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kun=
-it_tool.
-> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
-> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> -    examples.
-> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> -    used for testing.
-> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> -    answers.
-> +You can find a step-by-step guide to writing and running KUnit tests in
-> +Documentation/dev-tools/kunit/start.rst
-> +
-> +Alternatively, feel free to look through the rest of the KUnit documenta=
-tion,
-> +or to experiment with tools/testing/kunit/kunit.py and the example test =
-under
-> +lib/kunit/kunit-example-test.c
-> +
-> +Happy testing!
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-=
-tools/kunit/start.rst
-> index f4f504f1fb15..224387a43543 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -294,13 +294,12 @@ Congrats! You just wrote your first KUnit test.
->  Next Steps
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =20
-> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
-> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
-> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kun=
-it_tool.
-> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
-> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> -    examples.
-> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> -    used for testing.
-> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> -    answers.
-> +If you're interested in using some of the more advanced features of kuni=
-t.py,
-> +take a look at Documentation/dev-tools/kunit/run_wrapper.rst
-> +
-> +If you'd like to run tests without using kunit.py, check out
-> +Documentation/dev-tools/kunit/run_manual.rst
-> +
-> +For more information on writing KUnit tests (including some common techn=
-iques
-> +for testing different things), see Documentation/dev-tools/kunit/usage.r=
-st
-> +
+On 12/6/22 15:40, Piotr Wojtaszczyk wrote:
+> Hi Arnaud,
+> 
+> On Tue, Dec 6, 2022 at 1:54 PM Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com
+> <mailto:arnaud.pouliquen@foss.st.com>> wrote:
+>> On 12/6/22 09:50, Piotr Wojtaszczyk wrote:
+>> > On a message reception copy the message to a SKB taken from preallocated
+>> > pool instead of allocating a new SKB each time.
+>> > During high rpmsg traffic this reduces consumed CPU time noticeably.
+>>
+>> Do you have any metrics to share?
+> Tested on 1GHZ single core ARM Cortex-A55 (64bit), virtio backend.
+> Ping-pong pair messages (receive + send) every 125us reduced cpu load from 7% to 6%.
+> 
+>> > +static inline
+>> > +struct sk_buff *rpmsg_eptdev_get_skb(struct rpmsg_eptdev *eptdev)
+>> > +{
+>> > +     struct sk_buff *skb;
+>> > +
+>> > +     skb = skb_dequeue(&eptdev->skb_pool);
+>> > +     if (!skb)
+>> > +             skb = alloc_skb(MAX_RPMSG_BUF_SIZE, GFP_ATOMIC);
+>>
+>> The "get_mtu" endpoint ops should be used here.
+>> But in any case this works for the virtio backend which defines get_mtu ops
+>> (asit define the MAX_RPMSG_BUF_SIZE), but not for other backend such as glink.
+>> Your proposal needs to be compatible with the legacy.
+>>
+>> Here is a proposal:
+>>
+>> static struct
+>> sk_buff *rpmsg_eptdev_get_skb(struct rpmsg_eptdev *eptdev, int len)
+>> {
+>>         struct sk_buff *skb;
+>>
+>>         if (eptdev->ept->ops->get_mtu) {
+>>                 skb = skb_dequeue(&eptdev->skb_pool);
+>>                 if (!skb)
+>>                         skb = alloc_skb(eptdev->ept->ops->get_mtu(eptdev->ept),
+>>                                         GFP_ATOMIC);
+>>         } else {
+>>                 alloc_skb (len);
+>>         }
+>> }
+> The received messages can have different lengths, if we try to reuse skb
+> which was allocated for smaller a message previously, that is a problem, isn't it?
+> I went for the worst case scenario in the virtio backend.
 
-Much better, thanks!
+The get_mtu give you the max transmit unit which should be > len, but some
+checks can be added
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---gQZZMfvjrIhTAV6r
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5BVrwAKCRD2uYlJVVFO
-o90qAP0W0QiL12+wE0JzXPGrOMlc9sFK4uQuxOTzzy+QLsgflwEA+ZWGwB0Yy8f8
-m2zrxJFPUg5QDxd6u2KAbBX0ztNinAg=
-=m9er
------END PGP SIGNATURE-----
-
---gQZZMfvjrIhTAV6r--
+Regards,
+Arnaud
+> 
+> 
+>> > @@ -126,6 +161,18 @@ static int rpmsg_eptdev_open(struct inode *inode,
+> struct file *filp)
+>> >       struct rpmsg_endpoint *ept;
+>> >       struct rpmsg_device *rpdev = eptdev->rpdev;
+>> >       struct device *dev = &eptdev->dev;
+>> > +     struct sk_buff *skb;
+>> > +     int i;
+>> > +
+>> > +     /* Preallocate 8 SKBs */
+>> > +     for (i = 0; i < 8; i++) {
+>>
+>> Do you need to preallocate them?
+>> during runtime, it will try to reuse SKBs of the skb_pool and if no more
+>> available it will create a new one.
+>> This would also help to solve the issue of using MAX_RPMSG_BUF_SIZE
+> Agree, we can allocate SKBs at run time if needed. I thought it would be better
+> to start with some SKBs but I think now it's an overkill.
+> 
+> 
+> -- 
+> Piotr Wojtaszczyk
+> Timesys
