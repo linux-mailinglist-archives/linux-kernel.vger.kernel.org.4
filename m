@@ -2,45 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FDF646191
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60AF646193
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:23:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLGTXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 14:23:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44272 "EHLO
+        id S229591AbiLGTXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 14:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLGTXI (ORCPT
+        with ESMTP id S229555AbiLGTXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 14:23:08 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1FF4E63D5C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 11:23:06 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EE2A823A;
-        Wed,  7 Dec 2022 11:23:12 -0800 (PST)
-Received: from [10.57.8.186] (unknown [10.57.8.186])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 128233F71A;
-        Wed,  7 Dec 2022 11:23:04 -0800 (PST)
-Message-ID: <2f58d821-000e-8612-31d0-e4e7be02cd4a@arm.com>
-Date:   Wed, 7 Dec 2022 19:23:00 +0000
+        Wed, 7 Dec 2022 14:23:30 -0500
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E072063D5C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 11:23:29 -0800 (PST)
+Received: by mail-qt1-x834.google.com with SMTP id h16so16987016qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 11:23:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bqmkicGOJ5e//ce4kCmYG53j4OuPG6YbSgOOMs5e4gM=;
+        b=UCSMmQXIFyjNhYU7ewN//lzdYz1bZ/AW74FjJo6u4vWsyXAb5sEgYSepzBxCKxXK8M
+         r0EP59OVzR9xyZYDPgtcsf/NWMSwYCzKWC5JZqzxQPwd+NycjK6+8vhdk1V+Mtg6WbwC
+         7Yw8RuycTo1ojdg+AUQ8/nZuCRRvBbQ9EIbB8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bqmkicGOJ5e//ce4kCmYG53j4OuPG6YbSgOOMs5e4gM=;
+        b=At1k2aqfPf1NwPIkw2wVXIDsv+TyNqZF6wXqXnTzrhwnLo1Q9+OegpoKdS59U8kh0Y
+         dQyio3oigRJwlBnJQglEVEZ/DhaK6jZWL32R/cHVAttLp9Ey7AqmA1GKeD1sMGa3QYTi
+         8sZGVKIqGDB8F7MOqL7FSkfMUORS0iGaqSLHQo2aOPOU7TAtM99/RYpZ1msdF9glSFnR
+         de/c6bkzxlzb4GbfLlMaHPYa3bMaOiFXyZHRyP+Swe0oCqqoMq07OYF1niQBhalHj/AZ
+         LsXICG3jDNMQjOUuDdq/P0MdM8yxNSWWD8+2wnLCoXh91TPSgqC9CnSo7Y9hPGf2stDw
+         43NQ==
+X-Gm-Message-State: ANoB5plLCAGyz9VgXEG6kzojpD+TbB1A4SrCecbRmUNRilYvL/8S8EAG
+        iRFJOizF1/DuMiV9SyG2upbdXL6uAsXkNnwR
+X-Google-Smtp-Source: AA0mqf50oLkyhw9px+92URRQvGAN37lXrkqNCEuqbgJ7iLi+15U9GD4c1EaH7aGSXw9lGLFnwUKDSw==
+X-Received: by 2002:a05:622a:2283:b0:3a5:943b:8441 with SMTP id ay3-20020a05622a228300b003a5943b8441mr86107173qtb.90.1670441008686;
+        Wed, 07 Dec 2022 11:23:28 -0800 (PST)
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com. [209.85.219.41])
+        by smtp.gmail.com with ESMTPSA id r26-20020ac867da000000b003a5689134afsm13965790qtp.36.2022.12.07.11.23.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 11:23:26 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id p12so13345560qvu.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 11:23:26 -0800 (PST)
+X-Received: by 2002:a0c:c790:0:b0:4c6:608c:6b2c with SMTP id
+ k16-20020a0cc790000000b004c6608c6b2cmr65839406qvj.130.1670441005701; Wed, 07
+ Dec 2022 11:23:25 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] drm: mali-dp: Add check for kzalloc
-To:     Liviu Dudau <liviu.dudau@arm.com>
-Cc:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, brian.starkey@arm.com,
-        airlied@gmail.com, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-References: <20221207092118.20603-1-jiasheng@iscas.ac.cn>
- <17efaae0-9b6c-86ea-5fec-568d024d229f@arm.com>
- <Y5CxbDENPVbyqM6C@e110455-lin.cambridge.arm.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <Y5CxbDENPVbyqM6C@e110455-lin.cambridge.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <CA+55aFyJkpSa6rwZ-5xTihfGiNC_T0oL6txrodYBEo2-0O=p7g@mail.gmail.com>
+ <1499156564-29458-1-git-send-email-peda@axentia.se> <053d7bf2-9bf3-a71c-5713-7cce19413c37@infradead.org>
+ <a546f2db-371e-4d2f-a0ee-c71fcae8c548@app.fastmail.com> <41a5931e-3543-6a3d-ca85-2dd8ad581f2e@infradead.org>
+ <efaf326b-3cd9-40a4-8424-b5f60270beae@app.fastmail.com> <f5fe43c0-907e-e5b0-7642-6748f3b1b31c@infradead.org>
+ <09f2daca-2f5c-5371-2219-b4804a70c117@infradead.org>
+In-Reply-To: <09f2daca-2f5c-5371-2219-b4804a70c117@infradead.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 7 Dec 2022 11:23:09 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wieKH8mGJzDNUKuPTeXB19+9cyDa5zyKOaRasjZuZLxDA@mail.gmail.com>
+Message-ID: <CAHk-=wieKH8mGJzDNUKuPTeXB19+9cyDa5zyKOaRasjZuZLxDA@mail.gmail.com>
+Subject: Re: [PATCH v2] mux: remove the Kconfig question for the subsystem
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Peter Rosin <peda@axentia.se>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,75 +80,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-07 15:29, Liviu Dudau wrote:
-> On Wed, Dec 07, 2022 at 01:59:04PM +0000, Robin Murphy wrote:
->> On 2022-12-07 09:21, Jiasheng Jiang wrote:
->>> As kzalloc may fail and return NULL pointer, it should be better to check
->>> the return value in order to avoid the NULL pointer dereference in
->>> __drm_atomic_helper_connector_reset.
->>
->> This commit message is nonsense; if __drm_atomic_helper_connector_reset()
->> would dereference the NULL implied by &mw_state->base, it would equally
->> still dereference the explicit NULL pointer passed after this patch.
-> 
-> Where?
+On Wed, Dec 7, 2022 at 11:15 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> Oops. One more thing:
+> Your statement leads me to conclude that since nothing selects those 3 mux drivers,
+> they don't need to be in the kernel tree at all.
+>
+> Done. (I hope.)
 
-Exactly, that function already checks conn_state for NULL anyway, so any 
-reasoning based on it not doing that is clearly erroneous. Even if 
-something else changed in future to actually make this a bug, it still 
-wouldn't strictly dereference NULL, but some small non-NULL value.
+What?
 
->> The current code works out OK because "base" is the first member of struct
->> malidp_mw_connector_state, thus if mw_state is NULL then &mw_state->base ==
->> NULL + 0 == NULL. Now you *could* argue that this isn't robust if the layout
->> of struct malidp_mw_connector_state ever changes, and that could be a valid
->> justification for making this change, but the reason given certainly isn't.
-> 
-> I appreciate the input and I agree with your analysis, however I don't have the same
-> confidence that compilers will always do the NULL + 0 math to get address of base.
-> Would this always work when you have authenticated pointers or is the compiler going
-> to generate some plumbing code that checks the pointer before doing the math?
+Randy, do you even *read* what you write? Or, perhaps even more
+importantly, what *other* people write?
 
-For the current definition of struct malidp_mw_connector_state, 
-&mw_state->base is equal to mw_state, that's just how C works:
+It's not that those individual MUX drivers need to be selected to be
+asked about.
 
-"A pointer to a structure object, suitably converted, points to its 
-initial member (or if that member is a bit-field, then to the unit in 
-which it resides), and vice versa. There may be unnamed padding within a 
-structure object, but not at its beginning."
+But they won't be asked about UNLESS SOMEBODY WANTS A MULTIPLEXER.
 
-Indeed a C compiler is technically at liberty to make checks for whether 
-any pointer points to a valid object when evaluating it, but in practice 
-no compiler is going to do that because it would be horrendously 
-inefficient, and since the behaviour of dereferencing an invalid pointer 
-is undefined, compilers are also able to simply assume all pointers are 
-valid and generate good code based on that. Don't forget that there are 
-several compiler optimisations that Linux actually depends on; AFAICT 
-this is one of them.
+What is your problem here?
 
->> Arithmetic on a (potentially) NULL pointer may well be a sign that it's
->> worth a closer look to check whether it really is what the code intended to
->> do, but don't automatically assume it has to be a bug. Otherwise, good luck
->> with "fixing" every user of container_of() throughout the entire kernel.
-> 
-> My understanding is that you're supposed to use container_of() only when you're sure
-> that your pointer is valid. container_of_safe() seems to be the one to use when you
-> don't care about NULL pointers.
+Basically, you will only see those questions if you have a driver (or
+subsystem) that does
 
-I was thinking more along the lines of the "((type *)0)->member" 
-expression in the definition, but fair enough, that's perhaps not the 
-best example since you can argue it's an operand of typeof() which won't 
-actually be evaluated. Try `git grep '&((.\+ *)\(0\|NULL\))->'` for more 
-examples that will be. If none of those are going to work as intended, 
-the kernel likely has bigger problems than how one driver might behave 
-in OOM conditions.
+        select MULTIPLEXER
 
-Anyway, like I say I'm not objecting to the code change - even if the 
-current non-bug wasn't an oversight, it's still a bit too clever for its 
-own good. However, if the *justification* for making that change is 
-going to go beyond "do this because static analysis suggested it", then 
-it needs to explain a potential issue that actually exists and is worthy 
-of fixing, not make up one that doesn't.
+to let the Kconfig know that "yes, I'm actually interested".
 
-Cheers,
-Robin.
+If there is no use for those mux drivers, the "depends on MULTIPLEXER"
+means that those STUPID AND POINTLESS questions won't be asked.
+
+What's so hard to understand about this?
+
+               Linus
