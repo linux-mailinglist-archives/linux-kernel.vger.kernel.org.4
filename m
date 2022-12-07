@@ -2,128 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D8164516D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC405645172
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:49:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiLGBqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:46:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
+        id S229806AbiLGBtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:49:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbiLGBqH (ORCPT
+        with ESMTP id S229616AbiLGBtw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:46:07 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4112F4D5F6;
-        Tue,  6 Dec 2022 17:46:02 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8CxZPBZ8I9jybQDAA--.8534S3;
-        Wed, 07 Dec 2022 09:46:01 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_eFU8I9jo_omAA--.30148S2;
-        Wed, 07 Dec 2022 09:46:00 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Tue, 6 Dec 2022 20:49:52 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A455289F;
+        Tue,  6 Dec 2022 17:49:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670377791; x=1701913791;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=mKZR8pGZr9YedBSYT9wia+N/Q+rEF5aGSppbNIVw7Ug=;
+  b=ehbjZCf4c3OGOR84xoGt514DaicU/OCRKL7xwTH4O/Sl4ZZDpMnngmhd
+   jzwh6QS95SxKIyrRhYn6I8XDASu5CZcim4PmtAuQwJ9htaFqEJhAT64qm
+   PUrtiynlp5IN5oyK87pgPXAIsb0eIMshMtgrMdyspKo/O1kFjuuN54VCr
+   0UgWHCaqCE6myC8dIOvkalDxM5l715GJSN/CCv17tFbt50xTqJFlsxmbH
+   Dk+sBpYHDR61/gG4ZixNeMCIvZsfTOQ7Vmtq+zwrUK1xD/A+/3MoiGSSB
+   PbmIi4PDxf3EPoTf8NsX/ih0IkAAABiqMBAsuQDVlN9eh5h4UtdDWkTMP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="316794370"
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="316794370"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 17:49:50 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="640082262"
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="640082262"
+Received: from puneets1-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.38.123])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 17:49:42 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 2CF7C109C84; Wed,  7 Dec 2022 04:49:39 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1] irqchip: loongson-liointc: add hierarchy irq support
-Date:   Wed,  7 Dec 2022 09:45:55 +0800
-Message-Id: <20221207014555.22465-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv8 00/14] mm, x86/cc: Implement support for unaccepted memory
+Date:   Wed,  7 Dec 2022 04:49:19 +0300
+Message-Id: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_eFU8I9jo_omAA--.30148S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7WF43GF43GrW7Xr47Ar1UJrb_yoW8tryfpF
-        4rAwnFvr45Jw42gw43CF1DX34akFWFqrZFyayfKF9rZFs8J3s5CF1ruFnF9r4akr1UG3WU
-        ZFn7XFWruF45JaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b78Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
-        UvcSsGvfC2KfnxnUUI43ZEXa7IU1tl1PUUUUU==
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the irq of hierarchical interrupt chip was routed to liointc
-that asked liointc driver to support hierarchy irq and this patch
-was to add such support.
+UEFI Specification version 2.9 introduces the concept of memory
+acceptance: some Virtual Machine platforms, such as Intel TDX or AMD
+SEV-SNP, requiring memory to be accepted before it can be used by the
+guest. Accepting happens via a protocol specific for the Virtual
+Machine platform.
 
-In addition, this patch only consider dts, and acpi hierarchy irq
-support will be added later as required.
+Accepting memory is costly and it makes VMM allocate memory for the
+accepted guest physical address range. It's better to postpone memory
+acceptance until memory is needed. It lowers boot time and reduces
+memory overhead.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- drivers/irqchip/irq-loongson-liointc.c | 31 ++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+The kernel needs to know what memory has been accepted. Firmware
+communicates this information via memory map: a new memory type --
+EFI_UNACCEPTED_MEMORY -- indicates such memory.
 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 0da8716f8f24..58e43a2cd02e 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -177,6 +177,32 @@ static const struct irq_domain_ops acpi_irq_gc_ops = {
- 	.xlate	= liointc_domain_xlate,
- };
- 
-+#ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
-+static int liointc_domain_alloc(struct irq_domain *domain, unsigned int virq,
-+				unsigned int nr_irqs, void *arg)
-+{
-+	int i, ret;
-+	irq_hw_number_t hwirq;
-+	unsigned int type = IRQ_TYPE_NONE;
-+	struct irq_fwspec *fwspec = arg;
-+
-+	ret = irq_domain_translate_twocell(domain, fwspec, &hwirq, &type);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < nr_irqs; i++)
-+		irq_map_generic_chip(domain, virq + i, hwirq + i);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops of_irq_gc_ops = {
-+	.translate	= irq_domain_translate_twocell,
-+	.alloc		= liointc_domain_alloc,
-+	.free		= irq_domain_free_irqs_top,
-+};
-+#endif
-+
- static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
- 		struct fwnode_handle *domain_handle, struct device_node *node)
- {
-@@ -218,8 +244,13 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
- 		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
- 					&acpi_irq_gc_ops, priv);
- 	else
-+#ifdef	CONFIG_IRQ_DOMAIN_HIERARCHY
-+		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
-+					&of_irq_gc_ops, priv);
-+#else
- 		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
- 					&irq_generic_chip_ops, priv);
-+#endif
- 	if (!domain) {
- 		pr_err("loongson-liointc: cannot add IRQ domain\n");
- 		goto out_iounmap;
+Range-based tracking works fine for firmware, but it gets bulky for
+the kernel: e820 has to be modified on every page acceptance. It leads
+to table fragmentation, but there's a limited number of entries in the
+e820 table
+
+Another option is to mark such memory as usable in e820 and track if the
+range has been accepted in a bitmap. One bit in the bitmap represents
+2MiB in the address space: one 4k page is enough to track 64GiB or
+physical address space.
+
+In the worst-case scenario -- a huge hole in the middle of the
+address space -- It needs 256MiB to handle 4PiB of the address
+space.
+
+Any unaccepted memory that is not aligned to 2M gets accepted upfront.
+
+The approach lowers boot time substantially. Boot to shell is ~2.5x
+faster for 4G TDX VM and ~4x faster for 64G.
+
+TDX-specific code isolated from the core of unaccepted memory support. It
+supposed to help to plug-in different implementation of unaccepted memory
+such as SEV-SNP.
+
+The tree can be found here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git unaccepted-memory
+
+v8:
+ - Rewrite core-mm support for unaccepted memory (patch 02/14);
+ - s/UnacceptedPages/Unaccepted/ in meminfo;
+ - Drop arch/x86/boot/compressed/compiler.h;
+ - Fix build errors;
+ - Adjust commit messages and comments;
+ - Reviewed-bys from Dave and Borislav;
+ - Rebased to tip/master.
+v7:
+ - Rework meminfo counter to use PageUnaccepted() and move to generic code;
+ - Fix range_contains_unaccepted_memory() on machines without unaccepted memory;
+ - Add Reviewed-by from David;
+v6:
+ - Fix load_unaligned_zeropad() on machine with unaccepted memory;
+ - Clear PageUnaccepted() on merged pages, leaving it only on head;
+ - Clarify error handling in allocate_e820();
+ - Fix build with CONFIG_UNACCEPTED_MEMORY=y, but without TDX;
+ - Disable kexec at boottime instead of build conflict;
+ - Rebased to tip/master;
+ - Spelling fixes;
+ - Add Reviewed-by from Mike and David;
+v5:
+ - Updates comments and commit messages;
+   + Explain options for unaccepted memory handling;
+ - Expose amount of unaccepted memory in /proc/meminfo
+ - Adjust check in page_expected_state();
+ - Fix error code handling in allocate_e820();
+ - Centralize __pa()/__va() definitions in the boot stub;
+ - Avoid includes from the main kernel in the boot stub;
+ - Use an existing hole in boot_param for unaccepted_memory, instead of adding
+   to the end of the structure;
+ - Extract allocate_unaccepted_memory() form allocate_e820();
+ - Complain if there's unaccepted memory, but kernel does not support it;
+ - Fix vmstat counter;
+ - Split up few preparatory patches;
+ - Random readability adjustments;
+v4:
+ - PageBuddyUnaccepted() -> PageUnaccepted;
+ - Use separate page_type, not shared with offline;
+ - Rework interface between core-mm and arch code;
+ - Adjust commit messages;
+ - Ack from Mike;
+Kirill A. Shutemov (14):
+  x86/boot: Centralize __pa()/__va() definitions
+  mm: Add support for unaccepted memory
+  mm: Report unaccepted memory in meminfo
+  efi/x86: Get full memory map in allocate_e820()
+  x86/boot: Add infrastructure required for unaccepted memory support
+  efi/x86: Implement support for unaccepted memory
+  x86/boot/compressed: Handle unaccepted memory
+  x86/mm: Reserve unaccepted memory bitmap
+  x86/mm: Provide helpers for unaccepted memory
+  x86/mm: Avoid load_unaligned_zeropad() stepping into unaccepted memory
+  x86: Disable kexec if system has unaccepted memory
+  x86/tdx: Make _tdx_hypercall() and __tdx_module_call() available in
+    boot stub
+  x86/tdx: Refactor try_accept_one()
+  x86/tdx: Add unaccepted memory support
+
+ Documentation/x86/zero-page.rst          |   1 +
+ arch/x86/Kconfig                         |   2 +
+ arch/x86/boot/bitops.h                   |  40 ++++++++
+ arch/x86/boot/compressed/Makefile        |   3 +-
+ arch/x86/boot/compressed/align.h         |  14 +++
+ arch/x86/boot/compressed/bitmap.c        |  43 ++++++++
+ arch/x86/boot/compressed/bitmap.h        |  49 +++++++++
+ arch/x86/boot/compressed/bits.h          |  36 +++++++
+ arch/x86/boot/compressed/efi.h           |   1 +
+ arch/x86/boot/compressed/error.c         |  19 ++++
+ arch/x86/boot/compressed/error.h         |   1 +
+ arch/x86/boot/compressed/find.c          |  54 ++++++++++
+ arch/x86/boot/compressed/find.h          |  79 +++++++++++++++
+ arch/x86/boot/compressed/ident_map_64.c  |   8 --
+ arch/x86/boot/compressed/kaslr.c         |  35 ++++---
+ arch/x86/boot/compressed/math.h          |  37 +++++++
+ arch/x86/boot/compressed/mem.c           | 122 ++++++++++++++++++++++
+ arch/x86/boot/compressed/minmax.h        |  61 +++++++++++
+ arch/x86/boot/compressed/misc.c          |   6 ++
+ arch/x86/boot/compressed/misc.h          |  15 +++
+ arch/x86/boot/compressed/pgtable_types.h |  25 +++++
+ arch/x86/boot/compressed/sev.c           |   2 -
+ arch/x86/boot/compressed/tdx-shared.c    |   2 +
+ arch/x86/boot/compressed/tdx.c           |  39 +++++++
+ arch/x86/coco/tdx/Makefile               |   2 +-
+ arch/x86/coco/tdx/tdx-shared.c           |  95 +++++++++++++++++
+ arch/x86/coco/tdx/tdx.c                  | 113 +--------------------
+ arch/x86/include/asm/kexec.h             |   5 +
+ arch/x86/include/asm/page.h              |   3 +
+ arch/x86/include/asm/shared/tdx.h        |  48 +++++++++
+ arch/x86/include/asm/tdx.h               |  21 +---
+ arch/x86/include/asm/unaccepted_memory.h |  16 +++
+ arch/x86/include/uapi/asm/bootparam.h    |   2 +-
+ arch/x86/kernel/e820.c                   |  17 ++++
+ arch/x86/mm/Makefile                     |   2 +
+ arch/x86/mm/unaccepted_memory.c          | 123 +++++++++++++++++++++++
+ drivers/base/node.c                      |   7 ++
+ drivers/firmware/efi/Kconfig             |  14 +++
+ drivers/firmware/efi/efi.c               |   1 +
+ drivers/firmware/efi/libstub/x86-stub.c  | 101 ++++++++++++++++---
+ fs/proc/meminfo.c                        |   5 +
+ include/linux/efi.h                      |   3 +-
+ include/linux/kexec.h                    |   7 ++
+ include/linux/mmzone.h                   |   8 ++
+ include/linux/page-flags.h               |  24 +++++
+ kernel/kexec.c                           |   4 +
+ kernel/kexec_file.c                      |   4 +
+ mm/internal.h                            |  12 +++
+ mm/memblock.c                            |   9 ++
+ mm/page_alloc.c                          | 121 ++++++++++++++++++++++
+ mm/vmstat.c                              |   1 +
+ 51 files changed, 1291 insertions(+), 171 deletions(-)
+ create mode 100644 arch/x86/boot/compressed/align.h
+ create mode 100644 arch/x86/boot/compressed/bitmap.c
+ create mode 100644 arch/x86/boot/compressed/bitmap.h
+ create mode 100644 arch/x86/boot/compressed/bits.h
+ create mode 100644 arch/x86/boot/compressed/find.c
+ create mode 100644 arch/x86/boot/compressed/find.h
+ create mode 100644 arch/x86/boot/compressed/math.h
+ create mode 100644 arch/x86/boot/compressed/mem.c
+ create mode 100644 arch/x86/boot/compressed/minmax.h
+ create mode 100644 arch/x86/boot/compressed/pgtable_types.h
+ create mode 100644 arch/x86/boot/compressed/tdx-shared.c
+ create mode 100644 arch/x86/coco/tdx/tdx-shared.c
+ create mode 100644 arch/x86/include/asm/unaccepted_memory.h
+ create mode 100644 arch/x86/mm/unaccepted_memory.c
+
 -- 
-2.31.1
+2.38.0
 
