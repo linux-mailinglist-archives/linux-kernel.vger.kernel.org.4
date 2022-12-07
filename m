@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A8C645637
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:14:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08C6645630
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:13:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiLGJNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60152 "EHLO
+        id S230166AbiLGJNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:13:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiLGJNH (ORCPT
+        with ESMTP id S230011AbiLGJMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:13:07 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753CC286F5;
-        Wed,  7 Dec 2022 01:13:06 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 71a7a6d26ff50113; Wed, 7 Dec 2022 10:13:04 +0100
-Received: from kreacher.localnet (unknown [213.134.169.108])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 7 Dec 2022 04:12:37 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D7211B;
+        Wed,  7 Dec 2022 01:12:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 22F24780872;
-        Wed,  7 Dec 2022 10:13:04 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Jiri Kosina <jikos@kernel.org>, Bastien Nocera <hadess@hadess.net>
-Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: [PATCH v1 1/2] HID: generic: Add ->match() check to __check_hid_generic()
-Date:   Wed, 07 Dec 2022 10:11:50 +0100
-Message-ID: <4809717.31r3eYUQgx@kreacher>
-In-Reply-To: <5647715.DvuYhMxLoT@kreacher>
-References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C39EB80189;
+        Wed,  7 Dec 2022 09:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582E7C433D6;
+        Wed,  7 Dec 2022 09:12:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670404349;
+        bh=fQa6B7E0Sk8yD7Z1ApAog2OUJ3gEMBIbSKp3KTXR5Co=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdCl54ESA51k3chtydSBzfMUZGWmc+kMfLRk4eI7dpVYPq+4r36oiHVvfzqPTnmmv
+         4ftXtc98gIzTgMHHIF4Y4jtQG/ca7pciF1J39Gon2IrB2bYHwAWRm4PcjGRLW/j2xt
+         H2mfj4QWT+tBge/2vsM2Hi77ptoGhfcUwx+jhsKaZosI58yehEJavBPMcsJq82pYnG
+         Tl5102MRgBdTAGkcuBdCw68qE+lRDrcpCR6XhNdFAVsQ8tLMzIDCcXJxz69j0KfYpc
+         9D0uBrGCxHHSDXffT4+yTnqwIDtr6Wetw/1L2VWDB+NkSZkzL9bE6N54C5BaqCQ1++
+         NU4crXp14djwg==
+Date:   Wed, 7 Dec 2022 11:12:25 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Zhang Changzhong <zhangchangzhong@huawei.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: stmmac: selftests: fix potential memleak in
+ stmmac_test_arpoffload()
+Message-ID: <Y5BY+ZpW20XpkVZw@unreal>
+References: <1670401920-7574-1-git-send-email-zhangchangzhong@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.169.108
-X-CLIENT-HOSTNAME: 213.134.169.108
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrdduieelrddutdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiledruddtkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepkedprhgtphhtthhopehjihhkohhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehhrgguvghssheshhgruggvshhsrdhnvghtpdhrtghpthhtoheplhgrihhnshesrhhishgvuhhprdhnvghtpdhrtghpthhtohepsggvnhhjrghmihhnrdhtihhsshhoihhrvghssehrvgguhhgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhinhhpuhhtsehvghgvrhdrkhgvrhhn
- vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrvghgrhgvshhsihhonhhssehlvggvmhhhuhhishdrihhnfhho
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1670401920-7574-1-git-send-email-zhangchangzhong@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Dec 07, 2022 at 04:31:59PM +0800, Zhang Changzhong wrote:
+> The skb allocated by stmmac_test_get_arp_skb() hasn't been released in
+> some error handling case, which will lead to a memory leak. Fix this up
+> by adding kfree_skb() to release skb.
+> 
+> Compile tested only.
+> 
+> Fixes: 5e3fb0a6e2b3 ("net: stmmac: selftests: Implement the ARP Offload test")
+> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+> index 49af7e7..687f43c 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
+> @@ -1654,12 +1654,16 @@ static int stmmac_test_arpoffload(struct stmmac_priv *priv)
+>  	}
+>  
+>  	ret = stmmac_set_arp_offload(priv, priv->hw, true, ip_addr);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree_skb(skb);
+>  		goto cleanup;
+> +	}
+>  
+>  	ret = dev_set_promiscuity(priv->dev, 1);
+> -	if (ret)
+> +	if (ret) {
+> +		kfree_skb(skb);
+>  		goto cleanup;
+> +	}
+>  
+>  	ret = dev_direct_xmit(skb, 0);
+>  	if (ret)
 
-Some special HID drivers (for example, hid-logitech-hidpp) use ->match()
-callbacks to reject specific devices that otherwise would match the
-driver's device ID list, with the expectation that those devices will
-be handled by some other drivers.  However, this doesn't work if
-hid-generic is expected to bind to the given device, because its
-->match() callback, hid_generic_match(), rejects all devices that match
-device ID lists of the other HID drivers regardless of what is returned
-by the other drivers' ->match() callbacks.
+You should release skb here too. So the better patch will be to write
+something like that:
 
-To make it work, amend the function used by hid_generic_match() for
-checking an individual driver, __check_hid_generic(), with a check
-involving the given driver's ->match() callback, so 0 is returned
-when that callback rejects the device in question.
+cleanup:
+  stmmac_set_arp_offload(priv, priv->hw, false, 0x0);
+  if (ret)
+  	kfree_skb(skb);
 
-Fixes: 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the Logitech Bluetooth devices")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/hid/hid-generic.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Thanks
 
-Index: linux-pm/drivers/hid/hid-generic.c
-===================================================================
---- linux-pm.orig/drivers/hid/hid-generic.c
-+++ linux-pm/drivers/hid/hid-generic.c
-@@ -31,7 +31,13 @@ static int __check_hid_generic(struct de
- 	if (hdrv == &hid_generic)
- 		return 0;
- 
--	return hid_match_device(hdev, hdrv) != NULL;
-+	if (!hid_match_device(hdev, hdrv))
-+		return 0;
-+
-+	if (hdrv->match)
-+		return hdrv->match(hdev, false);
-+
-+	return 1;
- }
- 
- static bool hid_generic_match(struct hid_device *hdev,
-
-
-
+> -- 
+> 2.9.5
+> 
