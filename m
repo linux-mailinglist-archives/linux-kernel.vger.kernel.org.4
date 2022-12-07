@@ -2,92 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1286E645CC7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895F1645CCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:40:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiLGOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:39:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S229974AbiLGOkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:40:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLGOjT (ORCPT
+        with ESMTP id S229583AbiLGOkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:39:19 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565B528E2F;
-        Wed,  7 Dec 2022 06:39:18 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id g7so4942740qts.1;
-        Wed, 07 Dec 2022 06:39:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=st69qTJtNhLQP+45bZZhSRzLZ9Ow1Uh7dUebsxtqTbs=;
-        b=rZ9P0EGiGdp7TwlzuqpQl29OwsXX6vVKzjDW0iUfHq1FgQIviFnEfa+um0/3HziqBI
-         sviKN3TO9zuiMhzlvgO7N1PjptB/LCxCAJnlhHYAzZRVzjKiBWEWE1lLOvQt9RTw3AB6
-         AziGfmRZH9AQuAxlmRUShty9XXnOX8q2D/fMISSRsZuyji+rX1TuYCPi6XW7qUhMepon
-         HL+AWC4C4dov0Mw1+5yKRfJAl+19jpkXp0WmWTIg4f1xC1V6W4NPrJO5e4P5dnxt31b+
-         HRMEarwjTrsg82+wAAuGVkQXInlEloKSR9U0Pm3bfk88mLxMg2U2PdHf3Ouej4WDgfa+
-         ssSg==
-X-Gm-Message-State: ANoB5pkH1WzrLmpAF32rSTHzTIT/KaeFo6iHO5qaFF8nZKljOkr8uWuT
-        FKQ6G83lK7EAaS4qbXaZI1Tv1vTVtOKUtu68srM=
-X-Google-Smtp-Source: AA0mqf6F7hRchNoSenvN19KkCmprz9FxYTZLsuAvm+FIKPdB9bG4wIPaOnsioD3rFZktc2SkAHISX/QhjJAStmaiBGo=
-X-Received: by 2002:ac8:6b08:0:b0:3a7:eaad:3367 with SMTP id
- w8-20020ac86b08000000b003a7eaad3367mr6855723qts.153.1670423957465; Wed, 07
- Dec 2022 06:39:17 -0800 (PST)
+        Wed, 7 Dec 2022 09:40:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6412A975;
+        Wed,  7 Dec 2022 06:40:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F904B81E5D;
+        Wed,  7 Dec 2022 14:40:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B274C433D6;
+        Wed,  7 Dec 2022 14:40:00 +0000 (UTC)
+Date:   Wed, 7 Dec 2022 09:39:58 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Subject: Re: [ALMOST ready] Re: [PATCH 2/3] perf build: Use libtraceevent
+ from the system
+Message-ID: <20221207093958.09ae35c2@gandalf.local.home>
+In-Reply-To: <Y5Cjylv9dJh796dw@kernel.org>
+References: <Y49skYa5VYPMU+RF@kernel.org>
+        <Y49uKfzfCoZ1ok62@kernel.org>
+        <Y49vx0v6Z7EiR8jr@kernel.org>
+        <Y49wxSIK7dJ7iTDg@kernel.org>
+        <Y491d1wEW4TfUi5f@kernel.org>
+        <Y4921D+36UGdhK92@kernel.org>
+        <Y494TNa0ZyPH9YSD@kernel.org>
+        <Y498YP2N3gvFSr/X@kernel.org>
+        <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
+        <Y5ChXjt0uv/yDNwV@kernel.org>
+        <Y5Cjylv9dJh796dw@kernel.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com> <1670416895-50172-2-git-send-email-lirongqing@baidu.com>
-In-Reply-To: <1670416895-50172-2-git-send-email-lirongqing@baidu.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 15:39:06 +0100
-Message-ID: <CAJZ5v0i9J2YimfQsqJiZjFMR9MLG0fdBf+Regr+_PcsYrAE=SQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2][v2] cpuidle-haltpoll: Build as module by default
-To:     lirongqing@baidu.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, peterz@infradead.org,
-        akpm@linux-foundation.org, tony.luck@intel.com,
-        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 1:41 PM <lirongqing@baidu.com> wrote:
->
-> From: Li RongQing <lirongqing@baidu.com>
->
-> Allow user to unload it in running
+On Wed, 7 Dec 2022 11:31:38 -0300
+Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 
-Just like that?  And corrupt things left and right while at it?
+> No distro I tested so far has a package for libtracevent in is default
+> repositories:
 
-No way.
+Not sure what you mean by "default repository".
 
-And why do you need this?
+At least on Debian testing, I have libtraceevent-dev available.
 
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> ---
->  drivers/cpuidle/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-> index ff71dd6..43ddb84 100644
-> --- a/drivers/cpuidle/Kconfig
-> +++ b/drivers/cpuidle/Kconfig
-> @@ -74,7 +74,7 @@ endmenu
->  config HALTPOLL_CPUIDLE
->         tristate "Halt poll cpuidle driver"
->         depends on X86 && KVM_GUEST
-> -       default y
-> +       default m
->         help
->          This option enables halt poll cpuidle driver, which allows to poll
->          before halting in the guest (more efficient than polling in the
-> --
+-- Steve
