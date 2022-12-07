@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1BC646555
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 739C9646551
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:45:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiLGXpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 18:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S230199AbiLGXpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 18:45:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiLGXpd (ORCPT
+        with ESMTP id S230187AbiLGXo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 18:45:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD24E8AACE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:44:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670456675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=U1znsFGAwUqLG+kZktt6UetlzDgCE2gBi75bO1V4Vw8=;
-        b=TQoPDyBvzLNaQ7uwBWOYTemxz4gxLsf9p3o3NaGXtYcAO1545jebdzp6XPRU84TQKRn29V
-        LWk8Cpz8a1WC759V5KWXyod4kyaWmwRUWkiftAcGsVxpBFJ+1B63TsdG6ICTTT7l3xtwRt
-        ojH8yk3+u56mQSMZNsW9vur9BMlN2cA=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-479-Mcepb5yGMX-ev1yskL8mQg-1; Wed, 07 Dec 2022 18:44:34 -0500
-X-MC-Unique: Mcepb5yGMX-ev1yskL8mQg-1
-Received: by mail-qt1-f199.google.com with SMTP id cm12-20020a05622a250c00b003a521f66e8eso40109807qtb.17
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:44:34 -0800 (PST)
+        Wed, 7 Dec 2022 18:44:58 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9953F8B18B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:44:54 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id g10so18533311plo.11
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:44:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6iCaSQa1HFCfJ8+bX1upEoM6MTaIn0UmKgjdPtgAjjc=;
+        b=KkMIutKijaPJLWWpORIH3M7DoEIXJXVArWkiJXMSz8T5xYL8iAo5sVXEy6sqiKL4Q6
+         GzONfdpncDOio5lHMt6K32MFchEpLDDS74m0k84wySF8/xUSWPDlRO2qHTFx5CJMTPXs
+         Pz6umlCMMEx5buAmxJt9/iKpq4sAYZrlfHRHXCB8Qi05gvNYWM87iJwBVi1GJFkHaJdf
+         ee9nlI6HgLtZD0zr9k1FZwi8siSZ1tDbxVjExGf5o7x44QyiPbec1tbcxkvIpEzPWM9t
+         c8szkfNSqQIk+eipVkW44sLAkuj6/o8y3vDsWwtHW9Cp/VMEqkIeC4CwH84SP4Y+4+N9
+         mnbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=U1znsFGAwUqLG+kZktt6UetlzDgCE2gBi75bO1V4Vw8=;
-        b=BWVZccUp2CcWSUb+hyO+reZu6TRpL+FwzdHqjG01s1g7Ap0EVXUp9X6zykOrWPa7q4
-         B26YOfsSK4glofliF5WJGWVGz3LQdXI7JT4xAwJslWcYSu6j1YyR/pgsQX/nHxA3h/5l
-         4k/XldK5LMb8S2f1kFf/TUyJRbp0rH6IUNwbXvugOsWIHGXXhQ54mUFK2qtxDuZs1JCf
-         X40ZzutToxz2DM335EgLz83YO9FLTdm3wIuujatnY5ZABRkVFwuZbWvhLsnPtwaKaUX7
-         cJOX6hYDb9wVeexUnkwmtQUk2GhZBkxBucL3KuFiglXbYPvQTVeQMS0aOPwfnE/feSMT
-         vgzw==
-X-Gm-Message-State: ANoB5plBWqtALr4WUXzIMe3bn1akSgU7rXaSXsF6vgO5rCeF31LEzZI5
-        laJsfYvjxjRJYHjxBGsSFZJHqOyD14mX2FZyhlGsBZazEc2PKqnba8GUc9VWsiTFaz2/F93M9He
-        ZcOw4FyuT9GUXixa3AY67fx9u
-X-Received: by 2002:a05:622a:1c1:b0:3a4:e849:a235 with SMTP id t1-20020a05622a01c100b003a4e849a235mr2155999qtw.34.1670456674095;
-        Wed, 07 Dec 2022 15:44:34 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5qazXJBp7t7e+vKfk/GGkwSEO9ydBAP5p90VGRjDUmsbibpQEcZsfVIbf6t+ghGod0ZatQjQ==
-X-Received: by 2002:a05:622a:1c1:b0:3a4:e849:a235 with SMTP id t1-20020a05622a01c100b003a4e849a235mr2155982qtw.34.1670456673844;
-        Wed, 07 Dec 2022 15:44:33 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id w3-20020ac87183000000b0039cd4d87aacsm13882213qto.15.2022.12.07.15.44.32
+        bh=6iCaSQa1HFCfJ8+bX1upEoM6MTaIn0UmKgjdPtgAjjc=;
+        b=VYqJaJUNuNNhP2p4IGzhP9CFPxVm9cwlAwneR0ghdWoz736STzXWjuG/e1OQA3ItGW
+         YG/jDEOcqim1m07T2aVSK5wBnPnzz/FcPANKKsaVDVmZB7aN39pro9aj48j3xkG34iEU
+         bd02jHCd3VIax/cXS2kLWlhw6MiYriaHksd3GIEy05jlZOWnLZdheDZ8/pvPRZ+0dv5t
+         i7OIg7SHg1uGAsQ9xcjK40TiRQi7Mr864bde3+5w8ecY812BfzR44n+DakmaR/dxYMcS
+         R/1kd8sovh6G2eCvfCwLtT90fk5/IUFk8FO43mWIxaHK5bIUuoXw/3s8e+cnMfTpfOpU
+         v0Og==
+X-Gm-Message-State: ANoB5pkg9REQQPDwOzc4zgbAXFd7j3IRygV9QpWhieIabKc328wW7k2Z
+        HK6Snax760tbk5mlSv+iLW1TDw==
+X-Google-Smtp-Source: AA0mqf5f+HSDTe/eFvdYT1KQV50ny+OsSgkb0jaUxxexfrGcapWSrpNJd+KINOsgbiEg2Rw5vCDanA==
+X-Received: by 2002:a17:90a:55c2:b0:219:f970:5119 with SMTP id o2-20020a17090a55c200b00219f9705119mr590148pjm.1.1670456693817;
+        Wed, 07 Dec 2022 15:44:53 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b001868ed86a95sm15155465plg.174.2022.12.07.15.44.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 15:44:32 -0800 (PST)
-Date:   Wed, 7 Dec 2022 18:44:31 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH v2 05/10] mm/hugetlb: Make userfaultfd_huge_must_wait()
- safe to pmd unshare
-Message-ID: <Y5ElX/Flm7lrHmCx@x1n>
-References: <20221207203034.650899-1-peterx@redhat.com>
- <20221207203034.650899-6-peterx@redhat.com>
- <b3308387-464a-52ae-114b-34ab94e3b5c6@nvidia.com>
+        Wed, 07 Dec 2022 15:44:53 -0800 (PST)
+Date:   Wed, 7 Dec 2022 23:44:50 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Peter Gonda <pgonda@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] KVM: selftests: Allocate ucall pool from
+ MEM_REGION_DATA
+Message-ID: <Y5ElcibE2CubONgm@google.com>
+References: <20221207214809.489070-1-oliver.upton@linux.dev>
+ <20221207214809.489070-5-oliver.upton@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b3308387-464a-52ae-114b-34ab94e3b5c6@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20221207214809.489070-5-oliver.upton@linux.dev>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,65 +82,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:19:55PM -0800, John Hubbard wrote:
-> On 12/7/22 12:30, Peter Xu wrote:
-> > We can take the hugetlb walker lock, here taking vma lock directly.
-> > 
-> > Reviewed-by: David Hildenbrand <david@redhat.com>
-> > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >   fs/userfaultfd.c | 18 ++++++++++++++----
-> >   1 file changed, 14 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> > index 07c81ab3fd4d..a602f008dde5 100644
-> > --- a/fs/userfaultfd.c
-> > +++ b/fs/userfaultfd.c
-> > @@ -376,7 +376,8 @@ static inline unsigned int userfaultfd_get_blocking_state(unsigned int flags)
-> >    */
-> >   vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
-> >   {
-> > -	struct mm_struct *mm = vmf->vma->vm_mm;
-> > +	struct vm_area_struct *vma = vmf->vma;
-> > +	struct mm_struct *mm = vma->vm_mm;
-> >   	struct userfaultfd_ctx *ctx;
-> >   	struct userfaultfd_wait_queue uwq;
-> >   	vm_fault_t ret = VM_FAULT_SIGBUS;
-> > @@ -403,7 +404,7 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
-> >   	 */
-> >   	mmap_assert_locked(mm);
-> > -	ctx = vmf->vma->vm_userfaultfd_ctx.ctx;
-> > +	ctx = vma->vm_userfaultfd_ctx.ctx;
-> >   	if (!ctx)
-> >   		goto out;
-> > @@ -493,6 +494,13 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
-> >   	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
-> > +	/*
-> > +	 * This stablizes pgtable for hugetlb on e.g. pmd unsharing.  Need
-> > +	 * to be before setting current state.
-> > +	 */
+On Wed, Dec 07, 2022, Oliver Upton wrote:
+> MEM_REGION_TEST_DATA is meant to hold data explicitly used by a
+> selftest, not implicit allocations due to the selftests infrastructure.
+> Allocate the ucall pool from MEM_REGION_DATA much like the rest of the
+> selftests library allocations.
 > 
-> Looking at this code, I am not able to come up with a reason for why the
-> vma lock/unlock placement is exactly where it is. It looks quite arbitrary.
-> 
-> Why not, for example, take and drop the vma lock within
-> userfaultfd_huge_must_wait()? That makes more sense to me, but I'm not familiar
-> with userfaultfd so of course I'm missing something.
-> 
-> But the comment above certainly doesn't supply that something.
+> Fixes: 426729b2cf2e ("KVM: selftests: Add ucall pool based implementation")
 
-The part that matters in the comment is "need to be before setting current
-state".
+Not that it really matters because no one will backport this verbatim, but this
+is the wrong commit to blame.  As of commit 426729b2cf2e, MEM_REGION_DATA does not
+exist.  And similarly, the common ucall code didn't exist when Ricardo's series
+introduced MEM_REGION_DATA.
 
-	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
-	if (is_vm_hugetlb_page(vma))
-		hugetlb_vma_lock_read(vma);
-	set_current_state(blocking_state);
+  $ git show 426729b2cf2e:tools/testing/selftests/kvm/include/kvm_util_base.h | grep MEM_REGION_DATA
+  $ git show 290c5b54012b7:tools/testing/selftests/kvm/lib/ucall_common.c
+  fatal: path 'tools/testing/selftests/kvm/lib/ucall_common.c' exists on disk, but not in '290c5b54012b7'
 
-down_read() can sleep and also modify the task state, we cannot take the
-lock after that point because otherwise the task state will be messed up.
+The commit where the two collided is:
 
--- 
-Peter Xu
+Fixes: cc7544101eec ("Merge tag 'kvmarm-6.2' of https://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD")
 
+> Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+> ---
+
+Fixes nit aside,
+
+Reviewed-by: Sean Christopherson <seanjc@google.com>
