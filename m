@@ -2,151 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE086645DBC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:35:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE566645DBF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:38:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiLGPf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:35:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
+        id S229638AbiLGPiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:38:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLGPf4 (ORCPT
+        with ESMTP id S229515AbiLGPiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:35:56 -0500
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEEA62E97;
-        Wed,  7 Dec 2022 07:35:55 -0800 (PST)
-Received: by mail-oi1-f181.google.com with SMTP id m204so21114252oib.6;
-        Wed, 07 Dec 2022 07:35:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lBpBd7+pFnpb+CGSyhsTaAtXlwJmyfr3U6zIXBU+CU8=;
-        b=bwGtDG3eaTxTwfAC4Zdz21uIFe4K9ZGaY/0UTxy9ORls3qAmbvRR9zTQu+0DggfeYL
-         NhOkXaf1SxTyFDAKqOIBfsMfjK+XZjqfOpA+VBiiZTc58ZmTEYEfibn4h1/HhPwfw/rJ
-         K9nSYlyd8DDT9HdJ3Xf0mfolpFZ2LXLWOc70+XS5xmXmM2cRtsmq59JjY4mUnboViJOJ
-         OrS3VTM50ivPdCMjT/T4qms4i+GRTxgYUT8S4D5z+hP978hqHP9RGHqYgw5T2lYUXLao
-         6Ppf6JJJ/Gnjdp6LxN5T5cp3pHnHmKmoE8uJkqrBP0olKy/3IRyEsdiAfFGHQj2VCEEZ
-         +eyw==
-X-Gm-Message-State: ANoB5plre3BEWqFqkkAjpLymJQYigJJe7UU9/hoJ2BLzo/8bx5JC8N4Q
-        ABDCusfpg3NpBEGggwqMiA==
-X-Google-Smtp-Source: AA0mqf6Feu1onLJPtKNVbwwfEe7rbawqt0LgfrOo7YBldPyEM5I/BsLZS0ysSmXTDBpwIUzHe7p7Mw==
-X-Received: by 2002:aca:1e0d:0:b0:35b:b54d:19a with SMTP id m13-20020aca1e0d000000b0035bb54d019amr21750341oic.242.1670427354571;
-        Wed, 07 Dec 2022 07:35:54 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id s17-20020a056870631100b00136f3e4bc29sm12245693oao.9.2022.12.07.07.35.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 07:35:54 -0800 (PST)
-Received: (nullmailer pid 2275786 invoked by uid 1000);
-        Wed, 07 Dec 2022 15:35:53 -0000
-Date:   Wed, 7 Dec 2022 09:35:53 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Wed, 7 Dec 2022 10:38:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 176BF60B7B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:38:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8947D61A74
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E494CC433D6;
+        Wed,  7 Dec 2022 15:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670427495;
+        bh=gIYSCsdNqdI8dXfIX111a9EORuoTxpENbiX41cBRPho=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ovPBjn0bru6h+x3hc6h++tolfTYgh7jfc1jV2vw7vCTVnghrv3HE+MUfcp3xAxdLZ
+         RNmOi5hiJmyyZt+5ixcgODPuaEHilPXTluUQw47QJIfDGAtHhI4MVG/bth+ayzH0id
+         4qPRnqw0IyY+AQjNOZMk8rNTQNvFREMS6Lo3X0Z3ofZafqgQepjIi2zcRrFpLt1FtE
+         T1zl9OVkqG9aurGN+4SbMS/0lndzv4wnn5TaZ0jF2fGdTWbycEm1gPy5w8kvbvv4CD
+         +HLBRKb54GIIpcvz8aqZuWnNh5IaoBd8G+/8+6ETZSTw/m7wthCDLybSf6ybzJB96R
+         j21ww/zxC6/9Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p2wUv-00B9ZW-I4;
+        Wed, 07 Dec 2022 15:38:13 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Eric Curtin <ecurtin@redhat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Jean Delvare <jdelvare@suse.de>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Michael Walle <michael@walle.cc>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Sean Anderson <sean.anderson@seco.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>,
+        Talel Shenhar <talel@amazon.com>,
+        wangjianli <wangjianli@cdjrlc.com>,
+        Wei Yongjun <weiyongjun1@huawei.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 09/16] dt-bindings: soc: socionext: Add UniPhier
- SoC-glue logic
-Message-ID: <20221207153553.GA2269092-robh@kernel.org>
-References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-10-hayashi.kunihiko@socionext.com>
+Subject: [GIT PULL] irqchip updates for 6.2
+Date:   Wed,  7 Dec 2022 15:37:58 +0000
+Message-Id: <20221207153758.570431-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207055405.30940-10-hayashi.kunihiko@socionext.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: tglx@linutronix.de, aidanmacdonald.0x0@gmail.com, angelogioacchino.delregno@collabora.com, christophe.jaillet@wanadoo.fr, ecurtin@redhat.com, chenhuacai@loongson.cn, jdelvare@suse.de, lvjianmin@loongson.cn, j.neuschaefer@gmx.net, konrad.dybcio@somainline.org, krzysztof.kozlowski@linaro.org, liupeibao@loongson.cn, michael@walle.cc, philmd@linaro.org, samuel@sholland.org, sean.anderson@seco.com, shangxiaojing@huawei.com, talel@amazon.com, wangjianli@cdjrlc.com, weiyongjun1@huawei.com, ye.xingchen@zte.com.cn, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 02:53:58PM +0900, Kunihiko Hayashi wrote:
-> Add devicetree binding schema for the SoC-glue logic implemented on
-> Socionext Uniphier SoCs.
-> 
-> This SoC-glue logic is a set of miscellaneous function registers
-> handling signals for specific devices outside system components,
-> and also has multiple functions such as I/O pinmux, usb-phy, debug,
-> clock-mux for a specific SoC, and so on.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../socionext,uniphier-soc-glue.yaml          | 113 ++++++++++++++++++
->  1 file changed, 113 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
-> new file mode 100644
-> index 000000000000..6fc790963660
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
-> @@ -0,0 +1,113 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-soc-glue.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Socionext UniPhier SoC-glue logic
-> +
-> +maintainers:
-> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> +
-> +description: |+
-> +  SoC-glue logic implemented on Socionext UniPhier SoCs is a collection of
-> +  miscellaneous function registers handling signals outside system components.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - socionext,uniphier-ld4-soc-glue
-> +          - socionext,uniphier-pro4-soc-glue
-> +          - socionext,uniphier-pro5-soc-glue
-> +          - socionext,uniphier-pxs2-soc-glue
-> +          - socionext,uniphier-sld8-soc-glue
-> +          - socionext,uniphier-ld11-soc-glue
-> +          - socionext,uniphier-ld20-soc-glue
-> +          - socionext,uniphier-pxs3-soc-glue
-> +          - socionext,uniphier-nx1-soc-glue
-> +      - const: simple-mfd
-> +      - const: syscon
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  "^pinctrl(@[0-9a-f]+)?$":
-> +    $ref: /schemas/pinctrl/socionext,uniphier-pinctrl.yaml#
-> +
-> +  "^usb-hub(@[0-9a-f]+)?$":
-> +    $ref: /schemas/phy/socionext,uniphier-usb2-phy.yaml#
-> +
-> +  "^clock-controller(@[0-9a-f]+)?$":
-> +    $ref: /schemas/clock/socionext,uniphier-clock.yaml#
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - socionext,uniphier-pro4-soc-glue
-> +              - socionext,uniphier-ld11-soc-glue
-> +    else:
-> +      patternProperties:
-> +        "^usb-hub(@[0-9a-f]+)?$": false
+Thomas,
 
-While just if and else is valid json-schema, we require 'then'. Can you 
-change this to 'if: { not: {...}, then: {}'.
+Here's a tiny set of updates for 6.2. It's all pretty uninteresting,
+and mostly focussed on the never ending of stream of Loongarch related
+patches. Because ACPI wasn't bad enough, they also have DT now.
 
-You should be getting a warning for this. The rest of the warnings from 
-the bot look like false positives you can ignore.
+Please pull¸
 
-Rob
+	M.
+
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
+
+  Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-6.2
+
+for you to fetch changes up to 6ed54e1789a29d3f1557454cc7d2eb9c10d1d37b:
+
+  Merge branch irq/misc-6.2 into irq/irqchip-next (2022-12-05 10:45:41 +0000)
+
+----------------------------------------------------------------
+irqchip updates for 6.2
+
+- More APCI fixes and improvements for the LoongArch architecture,
+  adding support for the HTVEC irqchip, suspend-resume, and some
+  PCI INTx workarounds
+
+- Initial DT support for LoongArch. I'm not even kidding.
+
+- Support for the MTK CIRQv2, a minor deviation from the original version
+
+- Error handling fixes for wpcm450, GIC...
+
+- BE detection for a FSL controller
+
+- Declare the Sifive PLIC as wake-up agnostic
+
+- Simplify fishing out the device data for the ST irqchip
+
+- Mark some data structures as __initconst in the apple-aic driver
+
+- Switch over from strtobool to kstrtobool
+
+- COMPILE_TEST fixes
+
+----------------------------------------------------------------
+Aidan MacDonald (1):
+      irqchip/sl28cpld: Replace irqchip mask_invert with unmask_base
+
+AngeloGioacchino Del Regno (4):
+      dt-bindings: interrupt-controller: mediatek,cirq: Migrate to dt schema
+      dt-bindings: interrupt-controller: mediatek,cirq: Document MT8192
+      irqchip/irq-mtk-cirq: Move register offsets to const array
+      irqchip/irq-mtk-cirq: Add support for System CIRQ on MT8192
+
+Christophe JAILLET (1):
+      irqchip/gic: Use kstrtobool() instead of strtobool()
+
+Huacai Chen (7):
+      irqchip/loongson-htvec: Add ACPI init support
+      irqchip/loongson-htvec: Add suspend/resume support
+      irqchip/loongson-eiointc: Add suspend/resume support
+      irqchip/loongson-pch-pic: Add suspend/resume support
+      irqchip/loongson-pch-lpc: Add suspend/resume support
+      irqchip/loongarch: Adjust acpi_cascade_irqdomain_init() and sub-routines
+      irqchip/loongarch-cpu: Fix a missing prototype warning
+
+Jean Delvare (1):
+      irqchip/al-fic: Drop obsolete dependency on COMPILE_TEST
+
+Jianmin Lv (4):
+      ACPI / PCI: fix LPIC IRQ model default PCI IRQ polarity
+      irqchip/loongson-pch-pic: Fix translate callback for DT path
+      irqchip/loongson-pch-pic: Support to set IRQ type for ACPI path
+      irqchip/loongson-liointc: Support to set IRQ type for ACPI path
+
+Konrad Dybcio (1):
+      irqchip/apple-aic: Mark aic_info structs __initconst
+
+Liu Peibao (3):
+      irqchip: loongarch-cpu: add DT support
+      dt-bindings: interrupt-controller: add yaml for LoongArch CPU interrupt controller
+      irqchip/loongson-liointc: Fix improper error handling in liointc_init()
+
+Marc Zyngier (4):
+      Merge branch irq/loongarch-acpi into irq/irqchip-next
+      Merge branch irq/loongarch-of into irq/irqchip-next
+      Merge branch irq/cirq-v2 into irq/irqchip-next
+      Merge branch irq/misc-6.2 into irq/irqchip-next
+
+Samuel Holland (1):
+      irqchip/sifive-plic: Support wake IRQs
+
+Sean Anderson (1):
+      irqchip/ls-extirq: Fix endianness detection
+
+Shang XiaoJing (1):
+      irqchip: gic-pm: Use pm_runtime_resume_and_get() in gic_probe()
+
+Wei Yongjun (1):
+      irqchip/wpcm450: Fix memory leak in wpcm450_aic_of_init()
+
+wangjianli (1):
+      irqchip/mips-gic: Drop repeated word in comment
+
+ye xingchen (1):
+      irqchip/st: Use device_get_match_data() to simplify the code
+
+ .../loongarch,cpu-interrupt-controller.yaml        |  34 ++++
+ .../interrupt-controller/mediatek,cirq.txt         |  33 ----
+ .../interrupt-controller/mediatek,mtk-cirq.yaml    |  68 ++++++++
+ arch/loongarch/include/asm/irq.h                   |   2 +-
+ drivers/acpi/pci_irq.c                             |   6 +-
+ drivers/irqchip/Kconfig                            |   3 +-
+ drivers/irqchip/irq-apple-aic.c                    |   6 +-
+ drivers/irqchip/irq-gic-pm.c                       |   2 +-
+ drivers/irqchip/irq-gic-v3.c                       |   3 +-
+ drivers/irqchip/irq-gic.c                          |   3 +-
+ drivers/irqchip/irq-loongarch-cpu.c                |  48 ++++--
+ drivers/irqchip/irq-loongson-eiointc.c             |  63 ++++++--
+ drivers/irqchip/irq-loongson-htvec.c               | 176 +++++++++++++++++----
+ drivers/irqchip/irq-loongson-liointc.c             |  37 ++++-
+ drivers/irqchip/irq-loongson-pch-lpc.c             |  25 +++
+ drivers/irqchip/irq-loongson-pch-pic.c             |  76 +++++++--
+ drivers/irqchip/irq-ls-extirq.c                    |   2 +-
+ drivers/irqchip/irq-mips-gic.c                     |   2 +-
+ drivers/irqchip/irq-mtk-cirq.c                     |  95 +++++++++--
+ drivers/irqchip/irq-sifive-plic.c                  |   6 +-
+ drivers/irqchip/irq-sl28cpld.c                     |   3 +-
+ drivers/irqchip/irq-st.c                           |   7 +-
+ drivers/irqchip/irq-wpcm450-aic.c                  |   1 +
+ 23 files changed, 557 insertions(+), 144 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
+ delete mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,cirq.txt
+ create mode 100644 Documentation/devicetree/bindings/interrupt-controller/mediatek,mtk-cirq.yaml
