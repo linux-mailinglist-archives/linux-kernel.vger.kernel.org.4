@@ -2,163 +2,689 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6456452A9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 04:48:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 236066452AB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 04:50:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiLGDsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 22:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S229816AbiLGDuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 22:50:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLGDsb (ORCPT
+        with ESMTP id S229497AbiLGDuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 22:48:31 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6BB14D5E2;
-        Tue,  6 Dec 2022 19:48:30 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B72Pj3B003004;
-        Wed, 7 Dec 2022 03:48:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=M4/gRUy3d92pp51SjZ7U1V0sbdyWCVuXJpuDkWCa7H4=;
- b=jvOVWiekojEWatujoY/gQncSvnODvqqcWRLk/5l4cAa1OJEt+v/6ka7YX5NlO0QL0lii
- P9zzv8xdOJEP2iaMuCfBzd/sPJm9WB2UU/FmC+MN6wWk/vLhdqsaj1qtKUUTS1rRIsBh
- RuGVL96ntxoVOXj5iioGjZl7n3vhU0QqjWesBMy2TdPRMiXZGiq+/Nr0XALFHGlgpQcv
- iC6bdq1UZz/FAdeQgC6erQgJxVw6dnebw8D5bLr15s6N+Cv9jLYHuhxMplCVQ0q8ghlW
- xQ8I16tyhEv6EC4WU5tg+H/M/33LpETWpKk7moh1ne6apcdF2YXrY+o1oiDHB/tBK/r9 uA== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ydjhv9b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 03:48:28 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B71vwWm030823;
-        Wed, 7 Dec 2022 03:48:28 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2168.outbound.protection.outlook.com [104.47.73.168])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa685d96-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 03:48:28 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oLA04qz0U4VqAJIwzhH7jCxk+NA4RwH27j3cDcvj/9BczmgxvLu2yeM2Sf4UMZ+dlOVeq4uzZFoXlG2cRouPBmETuSN7cJiR41Vj7JzwM0x+uDG2AVtzT3ZA68yE4jz0W433Wb1U3qELuCEY8ePxYkpx2CXK2rpNcmYrn1jlnnov7zZpjGCrtYYtlmEw5SzexL8Kc0L+vVS8/dWgpA4pTD+3HWnu4pEVRINt5+jpGQHI+c5E0F3HG85uhhmCdRJ6FfZtBisvZc5Y9Lj6EsH6eks/rS8wiaTEcjLFJ0UP8Ua0Y9FuWm+cQA38CQe271CzctB8+XqwvF6mFId2u8N8Ig==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M4/gRUy3d92pp51SjZ7U1V0sbdyWCVuXJpuDkWCa7H4=;
- b=CWPBPLSaOFDv3yotKYMSMKdxWtI+RZT2Q0/+mADnQA4nP/ECcKfnCDXmPW/EQ+108nuqVHBbADM8sGDEcD66YgBTsj9hRvuKrGxOVH/t8xRcRTPE1IFw4es5/4Krj60Oz8VIG7I9q9OBHYw9xH3eN3GE5SR3vPXJLtzkQsvb/r0LSLQgcE4N68r+5foImCXwzrAAzVgvAM6arSA/AL8SWQYJ3X7uQ0V0idiwA0WeaIthLaZ5Xm8ng0jCB+NkSrt5DPtEL4MXYn61uFaxtulsNlQ+hlMcUNJMwjHIGWy7JOaD5oBX3c7cSPwCwOUa8pPcOaRiltuxmHEic/kWCn27VA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M4/gRUy3d92pp51SjZ7U1V0sbdyWCVuXJpuDkWCa7H4=;
- b=R7IGQjHIoqtdQxaGOlFZzVLdIsAMr8cTNvTVxp+vYMYPJck5gi6EKS5xXlp5BXQn1lgSyAgXzQp+pn6WwGXRu5LHTPEFYhV+r2DuNX5ohzoNUU0Helwpo2ZbWqB9cBd/N+k2tX1fRyeeVFvyLVqOmjunXro9xCl1HqRm1DIdiBo=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by BLAPR10MB5156.namprd10.prod.outlook.com (2603:10b6:208:321::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 03:48:25 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::25bc:7f6f:954:ca22]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::25bc:7f6f:954:ca22%2]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 03:48:25 +0000
-To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Cc:     "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "beanhuo@micron.com" <beanhuo@micron.com>,
-        "linux-scsi@vger.kernel.org" <linux-scsi@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 0/4] ufs: core: Always read the descriptors with max
- length
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1wn73hoa8.fsf@ca-mkp.ca.oracle.com>
-References: <1669550910-9672-1-git-send-email-Arthur.Simchaev@wdc.com>
-        <BY5PR04MB6327A3C457A16BDFC5C13ADAED199@BY5PR04MB6327.namprd04.prod.outlook.com>
-Date:   Tue, 06 Dec 2022 22:48:22 -0500
-In-Reply-To: <BY5PR04MB6327A3C457A16BDFC5C13ADAED199@BY5PR04MB6327.namprd04.prod.outlook.com>
-        (Arthur Simchaev's message of "Sun, 4 Dec 2022 13:22:43 +0000")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0337.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::12) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+        Tue, 6 Dec 2022 22:50:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A06355A8C;
+        Tue,  6 Dec 2022 19:50:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 77DC06199C;
+        Wed,  7 Dec 2022 03:50:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 803ADC433C1;
+        Wed,  7 Dec 2022 03:50:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670385015;
+        bh=VNB11BwOk5m3P305D+e2l+GvV7EtvexFh0qA0NVTAbk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aAceGPXD33079mGi4Epdm15XAY+N9eeg7KBm6wMMylR8uIB9QE3lpSJjDohyDOUpF
+         g+C/k2vyDyGUxO6Ry12mdqUFAJthEC9ThVT4NmeR0ojKLZx9CWWsh5iXeHOwL6jvDJ
+         xfT2B43844fgwHwkN6hiRAnfES3PQz/QZrtgN9xK4s7yjUcBk/SRuXhIWmdH7lyh29
+         jJ5PnbO1yEnjamZUtvfh6xjrQoRVQIvRxsSI+xDWRAGhytsi1p7fsD056Whk6lMiOR
+         vGhD3/xXBpnSn6bItFVLl3pgRWc4FPfHPVYQYibEv0x9ney3g92a/G/gi9qKLE7aVO
+         VkFSgZ0rolneQ==
+Date:   Tue, 6 Dec 2022 19:50:14 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v5 net-next 1/5] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <20221206195014.10d7ec82@kernel.org>
+In-Reply-To: <350e640b5c3c7b9c25f6fd749dc0237e79e1c573.1670371013.git.piergiorgio.beruto@gmail.com>
+References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+        <350e640b5c3c7b9c25f6fd749dc0237e79e1c573.1670371013.git.piergiorgio.beruto@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|BLAPR10MB5156:EE_
-X-MS-Office365-Filtering-Correlation-Id: b52c4cac-c4de-407f-4269-08dad805e50a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: swMS5HjTnxH/maKkBiqz1YmtdghrxRZe12o86ZXPFdxMbgU5Mi+ehaHjtksX9zR2kecKRTuRgR19Vm+jVmP7vwhFNESCFjxskvMJK8t6o1mMYLAXZwmL+uD09YnlAbFF5OGPEdLKG9squQFBuTJFkpLe5Y+0A9YKHu+SrkdbEGGWwg9DbQu3Kk+1mxnvQsa9rw3LF3EnGdtorV2HV3/b03unLdXKDFEme/DxRMB1lnX685mmVb22RcUMlsh0TkLZFZeSkV/CsajZye4TjgQd0wqiwaaxnvpn7VF0QnIw1YAurX7rjC38UYMWcTBbaS9d0ZDdJ7ZcA8BfLLBCXiY4avDsgXfhBCU1gtPUfNHeIzq9Pa1jRqML4wtD3893fwkhO7ZQhjS5AisXn2yeBiugiwj2TTj1whtqg4OupWfpaXrHDXQLaXcHvIZ/iawz8G3NoHp+SnvmvLc8ucdtysMGP4HdDoSe2uNvCkpLtJ58QQzroR03E1+luzCeW55QuVEuhpIdPmT0K4281fSD2kH4TzS2uqcC7anRtp3vHR1rkeAjMp20A6eLEI+0NT1mOBpL8cbYoRuC5BVGrH0shb4ei2psL/SnEzm4Um4QFb8Ngq31pvun7BKhf9LzZv2h4I4aPSmVQNoitJIF0BOjKwH9MA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(366004)(39860400002)(136003)(396003)(346002)(451199015)(83380400001)(5660300002)(41300700001)(26005)(6512007)(8676002)(8936002)(186003)(4326008)(2906002)(316002)(86362001)(66946007)(66556008)(66476007)(6916009)(38100700002)(558084003)(54906003)(478600001)(36916002)(6486002)(6666004)(6506007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?eSd49x6P9gUWRZjrWre7l4/rXTY4ZJNKzas/4go7iKAZBoA/4v4WfhJ0s44w?=
- =?us-ascii?Q?6NHaU4VA67xspgflVkpkfUBJzjxPVQV1phTmfthcxJ1i4WmOhOLzj0zXmJwy?=
- =?us-ascii?Q?41cpIF1Io7ILTw8xiMTj0eZnZmiKuZxFX/sIH+1niyV9c4TIITCYUJmKIp1R?=
- =?us-ascii?Q?Iw0V+Q+L2OcPl90PYrJGueT1IZdVUsPRMZRymWIIXQJqmlqXKUnL4E/iBqax?=
- =?us-ascii?Q?CVzRuor4MFN09JH8d6grNKPDdmej8aqYwg1rJLlUBHupVZBC7Oup13JITHz1?=
- =?us-ascii?Q?8XeCbTmFP/wwJwB497JE/BSucqeuq67yd9C0gEfL3WnUIKXLScpRhmjoLIk2?=
- =?us-ascii?Q?wNE9i5bnNGUON2Uu/70hxnmiVqV2z8nA6nspU7qFqn0/q/ipO5pWU/cLVlDY?=
- =?us-ascii?Q?H6lJ+SBQGsOEW8ycqGDvhX+Q5JdGaZt/AUUSlx8/DRziiAK//V0mBeHqWuw3?=
- =?us-ascii?Q?SajDctBLGKSbP0Lf5J8UZueZgXshOCS+JC73nDKPzHPO/sMF0Yx6eoE+PbDq?=
- =?us-ascii?Q?h4KJ2ukUsKH9+OAcQTfpoWxle+BISgN+u4kwkCv7kNEWbFiIM/OjiCWmn+V2?=
- =?us-ascii?Q?L4D8WxCTj6Q2lX+pjj7GRVDOUVNOj968hRL0EX3eeyNCdGYkl+hVElPCUK6V?=
- =?us-ascii?Q?UO4jQR75AQd4xGxqwpwnda7KOVOO1cgZclXl/M7uKEEXfXH9ItG42AgcnMLL?=
- =?us-ascii?Q?bUQkKTXfF29SKsJrmOHlKiLchrmafWGhsASjsOMj66Gtgon59Swa2DI4CgFl?=
- =?us-ascii?Q?YIZhHqXcXSp/Hz+KmUhAnuFTdhgcVVc84e3lO631sRI2QUXnw2svrOQiwnDx?=
- =?us-ascii?Q?M24sAc5gw9TOMDb15S1GRoxj/chyk8sn1r+k7ZT16dZK1++72zTyr/Vv6wGE?=
- =?us-ascii?Q?4Xpvs+IxrAW4mAjw370fBTcMp4XBnOsD5Dud/bXRtqHZL26Q1sQQbdnB23xz?=
- =?us-ascii?Q?AyrbPn5VSeJTSUmEW1F2J2fcAd0Lly6+vaC+p+z7BZ65yo/rP3I+yGwWoEEV?=
- =?us-ascii?Q?S2eNBrt97kkHiy22x/afLA1X4n0pHJ/h85VHgMADtRbL6gwZAXqqSfaqyXpp?=
- =?us-ascii?Q?VUnXYoVv07vDWdVK4hXDfHD3v7UT4Xo+3Uk5TBQ095PZdjoIvQdoOZypLIe/?=
- =?us-ascii?Q?Uro4CgsiQsMXshxY1mfenUzipWZyNeaXhfhVCLXDIYUjcOIA87n9yuRStKHT?=
- =?us-ascii?Q?jQIr/jNn9b7tixsWTqU59CiG1xLQMhaUKUtcL93+F5ozFrDO3e3/iMMTRs4b?=
- =?us-ascii?Q?DZeFnu8Zb1ZDlqX6AbD8cj3iDRlV+w6olS/1K/jfmLieGrVN0vlLstfH3r32?=
- =?us-ascii?Q?Mo+FekLZHwvPAjdimHsh8ukqahqhqaWEc4mj8b+HVhbwebW1xbbFPqLNmE85?=
- =?us-ascii?Q?/8O/Gky3TjAQBrsNgn6DDlgkVoeRQLvHtTigo/jaUrcrrhPYFIlS3QF35cW1?=
- =?us-ascii?Q?Z3a5y0uV+S8QLjkBYkEV4Y0iJQHTEUrL4hhKOE2mqMh+uQRH4CuE1jLhhLsW?=
- =?us-ascii?Q?L7tSLQPzT/heobez3G12WYL5GyrvgVxyIC7v7gpuIKL5qJsN9q+ipS2ZH5Rs?=
- =?us-ascii?Q?vY1ooEjmQiGn0g04rCQ+cr7xSPTwfzpbjOga+UL1mAIuXnTNANVR1Kj91RlK?=
- =?us-ascii?Q?PQ=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: MALBS85HcBn79kAigQMJt5CTzuvlsrO3mbTyE+omBQg8xKLMyGWFx7gKNQhoRYvzX2UfOHYNSXwwYcCpMDFZ8UfwbNCeRbGhqMB9TBGeYv9hQdI8MUQFTsWuZBCJ/+Ng/4tYlsZieD745tIWBOcNcA++wqzatw4s0M8RlkiVbz5laft40+c+Bk5cbVtC0zJy1U0m1gXPXE1lc9Ul8OqJlR8tibZ4ExGFxRWSsgl64t8oMoW4WLzxu+S6J5HBs06uT+1xHWUktdK/79W9rHF9n72IR3W/GL6EsHbvzl4KoxGOGGXZBmTZJYioSx8ZxRIqPNx3uz2XT8hewNHrA/JbeznoM6fzjE/OTzAaW1irJ4UAq7BlX1e5BSxBm+LOk+3ybWueUlznu6C+z7irIbXA9SCUVcX7PP0cUbPuyF3bOQvZ0f+jpPcJUYPyyJS1fBlp4ylwsIm2T+vtIOC2K3pjfOBQbcoiv6gkfcjaH9vj8iVbFoqFA4p7ngXXp1MKlK5f2W1CAQHGE8FZu+7KFi7lg8WVDcfdZFWBYy8JVBiZX5gKXqVSB9X0mfkXB7pdkXaMUbk99rL2lWUW4E7qmtGu8gh9UZBd/2BJbLo8mTmPgM175i5/cQf6r3DfG5hqgLgt2PIX6arfYsev62/bkXdwtuXgCVhx57k2az3aooWa2c9cUIQSro/B+PvPyzRJ1g5W+B5n6+bBp1ul71nnTUJPPNbgvzxCfTTsV44B31hFrrBZGwsco3YAZaxxGheWZtu/MWZqD84m2Bk3VTkNfFFw2dlG3gus3zIZmzdv2CkLB1E+FSFHrclVAH6Pd2lkL51jZwdlJC0XxcQ7wIyZ+Z9D+C+XFNSRk5jj6Q/qtW8+zqA=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b52c4cac-c4de-407f-4269-08dad805e50a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 03:48:25.7312
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lHnBq30AXLxUPotlbB7tavtqgHq/4LOfQ1wHvNyIaPlt7bc7hF2SICYtK1p3nG6DFSK3sZXV033UxWLMfd0z6oh1iw0yQ4aWFLVKN+T2qpM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5156
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-06_12,2022-12-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
- malwarescore=0 phishscore=0 mlxlogscore=810 spamscore=0 adultscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212070026
-X-Proofpoint-ORIG-GUID: IAe2hB8NKox20X-bzHIEzOQq81mfgBJ8
-X-Proofpoint-GUID: IAe2hB8NKox20X-bzHIEzOQq81mfgBJ8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 7 Dec 2022 01:01:23 +0100 Piergiorgio Beruto wrote:
+> Add support for configuring the PLCA Reconciliation Sublayer on
+> multi-drop PHYs that support IEEE802.3cg-2019 Clause 148 (e.g.,
+> 10BASE-T1S). This patch adds the appropriate netlink interface
+> to ethtool.
 
-Hi Arthur!
+Please LMK if I'm contradicting prior reviewers, I've scanned=20
+the previous versions but may have missed stuff.
 
-> Gentle reminder
+> diff --git a/Documentation/networking/ethtool-netlink.rst b/Documentation=
+/networking/ethtool-netlink.rst
+> index f10f8eb44255..fe4847611299 100644
+> --- a/Documentation/networking/ethtool-netlink.rst
+> +++ b/Documentation/networking/ethtool-netlink.rst
+> @@ -1716,6 +1716,136 @@ being used. Current supported options are toeplit=
+z, xor or crc32.
+>  ETHTOOL_A_RSS_INDIR attribute returns RSS indrection table where each by=
+te
+>  indicates queue number.
+> =20
+> +PLCA_GET_CFG
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Gets PLCA RS attributes.
 
-We're just a few days away from release, not adding new code this late
-in the cycle. I would also like to see an additional review given that
-this is a core change.
+Let's spell out PLCA RS, this is the first use of the term in the doc.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> +Request contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +  ``ETHTOOL_A_PLCA_HEADER``              nested  request header
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Kernel response contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +  ``ETHTOOL_A_PLCA_HEADER``               nested  reply header
+> +  ``ETHTOOL_A_PLCA_VERSION``              u16     Supported PLCA managem=
+ent
+> +                                                  interface standard/ver=
+sion
+> +  ``ETHTOOL_A_PLCA_ENABLED``              u8      PLCA Admin State
+> +  ``ETHTOOL_A_PLCA_NODE_ID``              u8      PLCA unique local node=
+ ID
+> +  ``ETHTOOL_A_PLCA_NODE_CNT``             u8      Number of PLCA nodes o=
+n the
+> +                                                  netkork, including the
+
+netkork -> network
+
+> +                                                  coordinator
+
+This is 30.16.1.1.3 aPLCANodeCount ? The phrasing of the help is quite
+different than the standard. Pure count should be max node + 1 (IOW max
+of 256, which won't fit into u8, hence the question)
+Or is node 255 reserved?
+
+> +  ``ETHTOOL_A_PLCA_TO_TMR``               u8      Transmit Opportunity T=
+imer
+> +                                                  value in bit-times (BT)
+> +  ``ETHTOOL_A_PLCA_BURST_CNT``            u8      Number of additional p=
+ackets
+> +                                                  the node is allowed to=
+ send
+> +                                                  within a single TO
+> +  ``ETHTOOL_A_PLCA_BURST_TMR``            u8      Time to wait for the M=
+AC to
+> +                                                  transmit a new frame b=
+efore
+> +                                                  terminating the burst
+
+Please consider making the fields u16 or u32. Netlink pads all
+attributes to 4B, and once we decide the size in the user API
+we can never change it. So even if the standard says max is 255
+if some vendor somewhere may decide to allow a bigger range we
+may be better off using a u32 type and limiting the accepted
+range in the netlink policy (grep for NLA_POLICY_MAX())
+
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +When set, the optional ``ETHTOOL_A_PLCA_VERSION`` attribute indicates wh=
+ich
+> +standard and version the PLCA management interface complies to. When not=
+ set,
+> +the interface is vendor-specific and (possibly) supplied by the driver.
+> +The OPEN Alliance SIG specifies a standard register map for 10BASE-T1S P=
+HYs
+> +embedding the PLCA Reconcialiation Sublayer. See "10BASE-T1S PLCA Manage=
+ment
+> +Registers" at https://www.opensig.org/about/specifications/. When this s=
+tandard
+> +is supported, ETHTOOL_A_PLCA_VERSION is reported as 0Axx where 'xx' deno=
+tes the
+
+you put backticks around other attr names but not here
+
+TBH I can't parse the "ETHTOOL_A_PLCA_VERSION is reported as 0Axx
+where.." sentence. Specifically I'm confused about what the 0A is.
+
+> +map version (see Table A.1.0 =E2=80=94 IDVER bits assignment).
+
+> +When set, the optional ``ETHTOOL_A_PLCA_ENABLED`` attribute indicates the
+> +administrative state of the PLCA RS. When not set, the node operates in =
+"plain"
+> +CSMA/CD mode. This option is corresponding to ``IEEE 802.3cg-2019`` 30.1=
+6.1.1.1
+> +aPLCAAdminState / 30.16.1.2.1 acPLCAAdminControl.
+> +
+> +When set, the optional ``ETHTOOL_A_PLCA_NODE_ID`` attribute indicates the
+> +configured local node ID of the PHY. This ID determines which transmit
+> +opportunity (TO) is reserved for the node to transmit into. This option =
+is
+> +corresponding to ``IEEE 802.3cg-2019`` 30.16.1.1.4 aPLCALocalNodeID.
+> +
+> +When set, the optional ``ETHTOOL_A_PLCA_NODE_CNT`` attribute indicates t=
+he
+> +configured maximum number of PLCA nodes on the mixing-segment. This numb=
+er
+> +determines the total number of transmit opportunities generated during a
+> +PLCA cycle. This attribute is relevant only for the PLCA coordinator, wh=
+ich is
+> +the node with aPLCALocalNodeID set to 0. Follower nodes ignore this sett=
+ing.
+> +This option is corresponding to ``IEEE 802.3cg-2019`` 30.16.1.1.3
+> +aPLCANodeCount.
+> +
+> +When set, the optional ``ETHTOOL_A_PLCA_TO_TMR`` attribute indicates the
+> +configured value of the transmit opportunity timer in bit-times. This va=
+lue
+> +must be set equal across all nodes sharing the medium for PLCA to work
+> +correctly. This option is corresponding to ``IEEE 802.3cg-2019`` 30.16.1=
+.1.5
+> +aPLCATransmitOpportunityTimer.
+> +
+> +When set, the optional ``ETHTOOL_A_PLCA_BURST_CNT`` attribute indicates =
+the
+> +configured number of extra packets that the node is allowed to send duri=
+ng a
+> +single transmit opportunity. By default, this attribute is 0, meaning th=
+at
+> +the node can only send a sigle frame per TO. When greater than 0, the PL=
+CA RS
+> +keeps the TO after any transmission, waiting for the MAC to send a new f=
+rame
+> +for up to aPLCABurstTimer BTs. This can only happen a number of times pe=
+r PLCA
+> +cycle up to the value of this parameter. After that, the burst is over a=
+nd the
+> +normal counting of TOs resumes. This option is corresponding to
+> +``IEEE 802.3cg-2019`` 30.16.1.1.6 aPLCAMaxBurstCount.
+> +
+> +When set, the optional ``ETHTOOL_A_PLCA_BURST_TMR`` attribute indicates =
+how
+> +many bit-times the PLCA RS waits for the MAC to initiate a new transmiss=
+ion
+> +when aPLCAMaxBurstCount is greater than 0. If the MAC fails to send a new
+> +frame within this time, the burst ends and the counting of TOs resumes.
+> +Otherwise, the new frame is sent as part of the current burst. This opti=
+on
+> +is corresponding to ``IEEE 802.3cg-2019`` 30.16.1.1.7 aPLCABurstTimer.
+> +
+> +PLCA_SET_CFG
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Sets PLCA RS parameters.
+> +
+> +Request contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +  ``ETHTOOL_A_PLCA_HEADER``               nested  request header
+> +  ``ETHTOOL_A_PLCA_ENABLED``              u8      PLCA Admin State
+> +  ``ETHTOOL_A_PLCA_NODE_ID``              u8      PLCA unique local node=
+ ID
+> +  ``ETHTOOL_A_PLCA_NODE_CNT``             u8      Number of PLCA nodes o=
+n the
+> +                                                  netkork, including the
+> +                                                  coordinator
+> +  ``ETHTOOL_A_PLCA_TO_TMR``               u8      Transmit Opportunity T=
+imer
+> +                                                  value in bit-times (BT)
+> +  ``ETHTOOL_A_PLCA_BURST_CNT``            u8      Number of additional p=
+ackets
+> +                                                  the node is allowed to=
+ send
+> +                                                  within a single TO
+> +  ``ETHTOOL_A_PLCA_BURST_TMR``            u8      Time to wait for the M=
+AC to
+> +                                                  transmit a new frame b=
+efore
+> +                                                  terminating the burst
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +For a description of each attribute, see ``PLCA_GET_CFG``.
+> +
+> +PLCA_GET_STATUS
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Gets PLCA RS status information.
+> +
+> +Request contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +  ``ETHTOOL_A_PLCA_HEADER``              nested  request header
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Kernel response contents:
+> +
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +  ``ETHTOOL_A_PLCA_HEADER``               nested  reply header
+> +  ``ETHTOOL_A_PLCA_STATUS``               u8      PLCA RS operational st=
+atus
+> +  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D  =3D=3D=3D=3D=3D=3D  =3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D
+> +
+> +When set, the ``ETHTOOL_A_PLCA_STATUS`` attribute indicates whether the =
+node is
+> +detecting the presence of the BEACON on the network. This flag is
+> +corresponding to ``IEEE 802.3cg-2019`` 30.16.1.1.2 aPLCAStatus.
+
+I noticed some count attributes in the spec, are these statistics?
+Do any of your devices support them? It'd be good to add support in
+a fixed format via net/ethtool/stats.c from the start, so that people
+don't start inventing their own ways of reporting them.
+
+(feel free to ask for more guidance, the stats support is a bit spread
+out throughout the code)
+
+>   * struct ethtool_phy_ops - Optional PHY device options
+>   * @get_sset_count: Get number of strings that @get_strings will write.
+>   * @get_strings: Return a set of strings that describe the requested obj=
+ects
+>   * @get_stats: Return extended statistics about the PHY device.
+> + * @get_plca_cfg: Return PLCA configuration.
+> + * @set_plca_cfg: Set PLCA configuration.
+
+missing get status in kdoc
+
+>   * @start_cable_test: Start a cable test
+>   * @start_cable_test_tdr: Start a Time Domain Reflectometry cable test
+>   *
+> @@ -819,6 +823,13 @@ struct ethtool_phy_ops {
+>  	int (*get_strings)(struct phy_device *dev, u8 *data);
+>  	int (*get_stats)(struct phy_device *dev,
+>  			 struct ethtool_stats *stats, u64 *data);
+> +	int (*get_plca_cfg)(struct phy_device *dev,
+> +			    struct phy_plca_cfg *plca_cfg);
+> +	int (*set_plca_cfg)(struct phy_device *dev,
+> +			    struct netlink_ext_ack *extack,
+> +			    const struct phy_plca_cfg *plca_cfg);
+
+extack is usually the last argument
+
+> +	int (*get_plca_status)(struct phy_device *dev,
+> +			       struct phy_plca_status *plca_st);
+
+get status doesn't need exact? I guess..
+
+>  	int (*start_cable_test)(struct phy_device *phydev,
+>  				struct netlink_ext_ack *extack);
+>  	int (*start_cable_test_tdr)(struct phy_device *phydev,
+> diff --git a/include/linux/phy.h b/include/linux/phy.h
+> index 71eeb4e3b1fd..f3ecc9a86e67 100644
+> --- a/include/linux/phy.h
+> +++ b/include/linux/phy.h
+> @@ -765,6 +765,63 @@ struct phy_tdr_config {
+>  };
+>  #define PHY_PAIR_ALL -1
+> =20
+> +/**
+> + * struct phy_plca_cfg - Configuration of the PLCA (Physical Layer Colli=
+sion
+> + * Avoidance) Reconciliation Sublayer.
+> + *
+> + * @version: read-only PLCA register map version. 0 =3D not available. I=
+gnored
+
+                                                     ^^^^^^^^^^^^^^^^^^
+
+> + *   when setting the configuration. Format is the same as reported by t=
+he PLCA
+> + *   IDVER register (31.CA00). -1 =3D not available.
+
+                                  ^^^^^^^^^^^^^^^^^^^
+
+So is it 0 or -1 that's N/A for this field? :)
+
+> + * @enabled: PLCA configured mode (enabled/disabled). -1 =3D not availab=
+le / don't
+> + *   set. 0 =3D disabled, anything else =3D enabled.
+> + * @node_id: the PLCA local node identifier. -1 =3D not available / don'=
+t set.
+> + *   Allowed values [0 .. 254]. 255 =3D node disabled.
+> + * @node_cnt: the PLCA node count (maximum number of nodes having a TO).=
+ Only
+> + *   meaningful for the coordinator (node_id =3D 0). -1 =3D not availabl=
+e / don't
+> + *   set. Allowed values [0 .. 255].
+> + * @to_tmr: The value of the PLCA to_timer in bit-times, which determine=
+s the
+> + *   PLCA transmit opportunity window opening. See IEEE802.3 Clause 148 =
+for
+> + *   more details. The to_timer shall be set equal over all nodes.
+> + *   -1 =3D not available / don't set. Allowed values [0 .. 255].
+> + * @burst_cnt: controls how many additional frames a node is allowed to =
+send in
+> + *   single transmit opportunity (TO). The default value of 0 means that=
+ the
+> + *   node is allowed exactly one frame per TO. A value of 1 allows two f=
+rames
+> + *   per TO, and so on. -1 =3D not available / don't set.
+> + *   Allowed values [0 .. 255].
+> + * @burst_tmr: controls how many bit times to wait for the MAC to send a=
+ new
+> + *   frame before interrupting the burst. This value should be set to a =
+value
+> + *   greater than the MAC inter-packet gap (which is typically 96 bits).
+> + *   -1 =3D not available / don't set. Allowed values [0 .. 255].
+
+> +struct phy_plca_cfg {
+> +	s32 version;
+> +	s16 enabled;
+> +	s16 node_id;
+> +	s16 node_cnt;
+> +	s16 to_tmr;
+> +	s16 burst_cnt;
+> +	s16 burst_tmr;
+
+make them all int, oddly sized integers are only a source of trouble
+
+> +};
+> +
+> +/**
+> + * struct phy_plca_status - Status of the PLCA (Physical Layer Collision
+> + * Avoidance) Reconciliation Sublayer.
+> + *
+> + * @pst: The PLCA status as reported by the PST bit in the PLCA STATUS
+> + *	register(31.CA03), indicating BEACON activity.
+> + *
+> + * A structure containing status information of the PLCA RS configuratio=
+n.
+> + * The driver does not need to implement all the parameters, but should =
+report
+> + * what is actually used.
+> + */
+> +struct phy_plca_status {
+> +	bool pst;
+> +};
+
+> +#include <linux/phy.h>
+> +#include <linux/ethtool_netlink.h>
+> +
+> +#include "netlink.h"
+> +#include "common.h"
+> +
+> +struct plca_req_info {
+> +	struct ethnl_req_info		base;
+> +};
+> +
+> +struct plca_reply_data {
+> +	struct ethnl_reply_data		base;
+> +	struct phy_plca_cfg		plca_cfg;
+> +	struct phy_plca_status		plca_st;
+> +};
+> +
+> +#define PLCA_REPDATA(__reply_base) \
+> +	container_of(__reply_base, struct plca_reply_data, base)
+> +
+> +// PLCA get configuration message --------------------------------------=
+----- //
+> +
+> +const struct nla_policy ethnl_plca_get_cfg_policy[] =3D {
+> +	[ETHTOOL_A_PLCA_HEADER]		=3D
+> +		NLA_POLICY_NESTED(ethnl_header_policy),
+> +};
+> +
+> +static int plca_get_cfg_prepare_data(const struct ethnl_req_info *req_ba=
+se,
+> +				     struct ethnl_reply_data *reply_base,
+> +				     struct genl_info *info)
+> +{
+> +	struct plca_reply_data *data =3D PLCA_REPDATA(reply_base);
+> +	struct net_device *dev =3D reply_base->dev;
+> +	const struct ethtool_phy_ops *ops;
+> +	int ret;
+> +
+> +	// check that the PHY device is available and connected
+> +	if (!dev->phydev) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+> +	// note: rtnl_lock is held already by ethnl_default_doit
+> +	ops =3D ethtool_phy_ops;
+> +	if (!ops || !ops->get_plca_cfg) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+> +	ret =3D ethnl_ops_begin(dev);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	ret =3D ops->get_plca_cfg(dev->phydev, &data->plca_cfg);
+> +	if (ret < 0)
+> +		goto out;
+
+You still need to complete the op, no? Don't jump over that..
+
+> +	ethnl_ops_complete(dev);
+> +
+> +out:
+> +	return ret;
+> +}
+
+> +	if ((plca->version >=3D 0 &&
+> +	     nla_put_u16(skb, ETHTOOL_A_PLCA_VERSION, (u16)plca->version)) ||
+> +	    (plca->enabled >=3D 0 &&
+> +	     nla_put_u8(skb, ETHTOOL_A_PLCA_ENABLED, !!plca->enabled)) ||
+> +	    (plca->node_id >=3D 0 &&
+> +	     nla_put_u8(skb, ETHTOOL_A_PLCA_NODE_ID, (u8)plca->node_id)) ||
+> +	    (plca->node_cnt >=3D 0 &&
+> +	     nla_put_u8(skb, ETHTOOL_A_PLCA_NODE_CNT, (u8)plca->node_cnt)) ||
+> +	    (plca->to_tmr >=3D 0 &&
+> +	     nla_put_u8(skb, ETHTOOL_A_PLCA_TO_TMR, (u8)plca->to_tmr)) ||
+> +	    (plca->burst_cnt >=3D 0 &&
+> +	     nla_put_u8(skb, ETHTOOL_A_PLCA_BURST_CNT, (u8)plca->burst_cnt)) ||
+> +	    (plca->burst_tmr >=3D 0 &&
+> +	     nla_put_u8(skb, ETHTOOL_A_PLCA_BURST_TMR, (u8)plca->burst_tmr)))
+
+The casts are unnecessary, but if you really really want them they=20
+can stay..
+
+> +		return -EMSGSIZE;
+> +
+> +	return 0;
+> +};
+
+> +const struct nla_policy ethnl_plca_set_cfg_policy[] =3D {
+> +	[ETHTOOL_A_PLCA_HEADER]		=3D
+> +		NLA_POLICY_NESTED(ethnl_header_policy),
+> +	[ETHTOOL_A_PLCA_ENABLED]	=3D { .type =3D NLA_U8 },
+
+NLA_POLICY_MAX(NLA_U8, 1)
+
+> +	[ETHTOOL_A_PLCA_NODE_ID]	=3D { .type =3D NLA_U8 },
+
+Does this one also need check against 255 or is 255 allowed?
+
+> +	[ETHTOOL_A_PLCA_NODE_CNT]	=3D { .type =3D NLA_U8 },
+> +	[ETHTOOL_A_PLCA_TO_TMR]		=3D { .type =3D NLA_U8 },
+> +	[ETHTOOL_A_PLCA_BURST_CNT]	=3D { .type =3D NLA_U8 },
+> +	[ETHTOOL_A_PLCA_BURST_TMR]	=3D { .type =3D NLA_U8 },
+
+
+> +int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+> +{
+> +	struct ethnl_req_info req_info =3D {};
+> +	struct nlattr **tb =3D info->attrs;
+> +	const struct ethtool_phy_ops *ops;
+> +	struct phy_plca_cfg plca_cfg;
+> +	struct net_device *dev;
+> +
+
+spurious new line
+
+> +	bool mod =3D false;
+> +	int ret;
+> +
+> +	ret =3D ethnl_parse_header_dev_get(&req_info,
+> +					 tb[ETHTOOL_A_PLCA_HEADER],
+> +					 genl_info_net(info), info->extack,
+> +					 true);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	dev =3D req_info.dev;
+> +
+> +	// check that the PHY device is available and connected
+
+Comment slightly misplaced now?
+
+> +	rtnl_lock();
+> +
+> +	if (!dev->phydev) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out_rtnl;
+> +	}
+> +
+> +	ops =3D ethtool_phy_ops;
+> +	if (!ops || !ops->set_plca_cfg) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out_rtnl;
+> +	}
+> +
+> +	ret =3D ethnl_ops_begin(dev);
+> +	if (ret < 0)
+> +		goto out_rtnl;
+> +
+> +	memset(&plca_cfg, 0xFF, sizeof(plca_cfg));
+> +
+> +	if (tb[ETHTOOL_A_PLCA_ENABLED]) {
+> +		plca_cfg.enabled =3D !!nla_get_u8(tb[ETHTOOL_A_PLCA_ENABLED]);
+> +		mod =3D true;
+> +	}
+> +
+> +	if (tb[ETHTOOL_A_PLCA_NODE_ID]) {
+> +		plca_cfg.node_id =3D nla_get_u8(tb[ETHTOOL_A_PLCA_NODE_ID]);
+> +		mod =3D true;
+> +	}
+> +
+> +	if (tb[ETHTOOL_A_PLCA_NODE_CNT]) {
+> +		plca_cfg.node_cnt =3D nla_get_u8(tb[ETHTOOL_A_PLCA_NODE_CNT]);
+> +		mod =3D true;
+> +	}
+> +
+> +	if (tb[ETHTOOL_A_PLCA_TO_TMR]) {
+> +		plca_cfg.to_tmr =3D nla_get_u8(tb[ETHTOOL_A_PLCA_TO_TMR]);
+> +		mod =3D true;
+> +	}
+> +
+> +	if (tb[ETHTOOL_A_PLCA_BURST_CNT]) {
+> +		plca_cfg.burst_cnt =3D nla_get_u8(tb[ETHTOOL_A_PLCA_BURST_CNT]);
+> +		mod =3D true;
+> +	}
+> +
+> +	if (tb[ETHTOOL_A_PLCA_BURST_TMR]) {
+> +		plca_cfg.burst_tmr =3D nla_get_u8(tb[ETHTOOL_A_PLCA_BURST_TMR]);
+> +		mod =3D true;
+> +	}
+
+Could you add a helper for the modifications? A'la ethnl_update_u8, but
+accounting for the oddness in types (ergo probably locally in this file
+rather that in the global scope)?
+
+> +	ret =3D 0;
+> +	if (!mod)
+> +		goto out_ops;
+> +
+> +	ret =3D ops->set_plca_cfg(dev->phydev, info->extack, &plca_cfg);
+> +
+
+spurious new line
+
+> +	if (ret < 0)
+> +		goto out_ops;
+> +
+> +	ethtool_notify(dev, ETHTOOL_MSG_PLCA_NTF, NULL);
+> +
+> +out_ops:
+> +	ethnl_ops_complete(dev);
+> +out_rtnl:
+> +	rtnl_unlock();
+> +	ethnl_parse_header_dev_put(&req_info);
+> +
+> +	return ret;
+> +}
+> +
+> +// PLCA get status message ---------------------------------------------=
+----- //
+> +
+> +const struct nla_policy ethnl_plca_get_status_policy[] =3D {
+> +	[ETHTOOL_A_PLCA_HEADER]		=3D
+> +		NLA_POLICY_NESTED(ethnl_header_policy),
+> +};
+> +
+> +static int plca_get_status_prepare_data(const struct ethnl_req_info *req=
+_base,
+> +					struct ethnl_reply_data *reply_base,
+> +					struct genl_info *info)
+> +{
+> +	struct plca_reply_data *data =3D PLCA_REPDATA(reply_base);
+> +	struct net_device *dev =3D reply_base->dev;
+> +	const struct ethtool_phy_ops *ops;
+> +	int ret;
+> +
+> +	// check that the PHY device is available and connected
+> +	if (!dev->phydev) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+> +	// note: rtnl_lock is held already by ethnl_default_doit
+> +	ops =3D ethtool_phy_ops;
+> +	if (!ops || !ops->get_plca_status) {
+> +		ret =3D -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+> +	ret =3D ethnl_ops_begin(dev);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	ret =3D ops->get_plca_status(dev->phydev, &data->plca_st);
+> +	if (ret < 0)
+> +		goto out;
+
+don't skip complete
+
+> +	ethnl_ops_complete(dev);
+> +out:
+> +	return ret;
+> +}
+
