@@ -2,98 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682A764507B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 01:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B363645087
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 01:44:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiLGAhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 19:37:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S229777AbiLGAn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 19:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiLGAhN (ORCPT
+        with ESMTP id S229719AbiLGAnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 19:37:13 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8627432073
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 16:36:40 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3b5da1b3130so171341927b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 16:36:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=62EGeFEMBZyYp+itlwZq+NNn4g2Is1savivfamQujGU=;
-        b=VDhYGGnEhkawbxSr5eKbU7at+thNJzM6vSm941xH9pwMAaDdNMUfwod2BpG6Mo+rdO
-         JcJ+eAcdPSwVGX91V95BZrpAc6K32SLyRNnwlnHAIqxYg+1tIgN3BnNAAeLqMbGKRjhd
-         FniGuxp8C4sB47Ki5FWVxcUavnUn6RHYvN4030I9jyxg1MOxEnwx4R96j2dAo9XCCNX2
-         0qRYE438vo017a1MIAv66YxXd9Fc0ypizgPtYRqNdGCs5mQ3e/BilCCTosNbwoMPnand
-         WeXECAYLmOkA/z5yfEY223hAyOG/HeP0ACTKt6Ep1O6PYRNeH6+tNaYDIMhxnOT4Anvu
-         D+Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=62EGeFEMBZyYp+itlwZq+NNn4g2Is1savivfamQujGU=;
-        b=hKRaWCRtEapoLxptvx5PHIp50+xNryngKPoyygHchfSSkWuRrGONDnYpwsKTRPoNHj
-         0fQzrPXntK30YlJsYWjspmbq0DHw9BcG1Sa+U036orzbJDXTvaSA32tIzoXjw2NBn39X
-         mEd41CrA++8wOk9Gp9zFWfYeTugUoE60vhNqK4sR3QAGlqLAH1o8uIZi19pOG5Uf3o3J
-         Ob6fWevO1YNmX2TQ0D22GbUqKJaZdYcfU9D65KUT/rHY59qosbOWdNUFK9t3KzNhbxXm
-         87NCcSU3e3zu5SUzNMR/oBRVh8Z1gFetOypwc8CYgam1L9ahFdzpwLcoAW8dfn2IPInC
-         pJ2A==
-X-Gm-Message-State: ANoB5pl4kW6BClEsC5Q3iQ7MVRt5px6icWVVjY0p7baF3oIoxWHmHe2Q
-        CIk3XY0aJq0OaGgm9RpbucEmgE/VpTs=
-X-Google-Smtp-Source: AA0mqf5LgkbBbvGM/FL/y/jn9/jCI4RrPYc1rQe2nCJ2Hu9CnlUuYpjEpmCoRq8+o4LtrnyOcLRLvW8HjTg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:120d:0:b0:3d5:ecbb:2923 with SMTP id
- 13-20020a81120d000000b003d5ecbb2923mr29309362yws.485.1670373399803; Tue, 06
- Dec 2022 16:36:39 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  7 Dec 2022 00:36:37 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221207003637.2041211-1-seanjc@google.com>
-Subject: [PATCH] KVM: Delete extra block of "};" in the KVM API documentation
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 6 Dec 2022 19:43:55 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27BA2F659;
+        Tue,  6 Dec 2022 16:43:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=qSRlmxFiW/u/I0+7+hyvY/fyZuvvYpaLHCmoJB9SgDw=; b=5fpLBPC2REkQCRIgo9rb0q2w6G
+        ujcdHfCsPL1IJlss52ADwkKLXbv149BNPR30e2krg51tsxuzc9S5wiGV+sPGrNDQY3sh4nsZg8acC
+        fa43Wkh6jeuYNLV0auDpp1VBf4+t+x1DvAb1Dz6iqkB5nPIyvl51s7+M/7uMDZNC5gV0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2iXF-004aXA-23; Wed, 07 Dec 2022 01:43:41 +0100
+Date:   Wed, 7 Dec 2022 01:43:41 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v5 net-next 0/5] add PLCA RS support and onsemi NCN26000
+Message-ID: <Y4/hvercnlTtFCMd@lunn.ch>
+References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete an extra block of code/documentation that snuck in when KVM's
-documentation was converted to ReST format.
+On Wed, Dec 07, 2022 at 01:00:58AM +0100, Piergiorgio Beruto wrote:
+> This patchset adds support for getting/setting the Physical Layer 
+> Collision Avoidace (PLCA) Reconciliation Sublayer (RS) configuration and
+> status on Ethernet PHYs that supports it.
+> 
+> PLCA is a feature that provides improved media-access performance in terms
+> of throughput, latency and fairness for multi-drop (P2MP) half-duplex PHYs.
+> PLCA is defined in Clause 148 of the IEEE802.3 specifications as amended
+> by 802.3cg-2019. Currently, PLCA is supported by the 10BASE-T1S single-pair
+> Ethernet PHY defined in the same standard and related amendments. The OPEN
+> Alliance SIG TC14 defines additional specifications for the 10BASE-T1S PHY,
+> including a standard register map for PHYs that embeds the PLCA RS (see
+> PLCA management registers at https://www.opensig.org/about/specifications/).
+> 
+> The changes proposed herein add the appropriate ethtool netlink interface
+> for configuring the PLCA RS on PHYs that supports it. A separate patchset
+> further modifies the ethtool userspace program to show and modify the
+> configuration/status of the PLCA RS.
+> 
+> Additionally, this patchset adds support for the onsemi NCN26000
+> Industrial Ethernet 10BASE-T1S PHY that uses the newly added PLCA
+> infrastructure.
 
-Fixes: 106ee47dc633 ("docs: kvm: Convert api.txt to ReST format")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- Documentation/virt/kvm/api.rst | 5 -----
- 1 file changed, 5 deletions(-)
+You should be listing what has changed since the previous
+version. Either here, or in each patch, below the --- marker. It helps
+reviewers know their comments have been acted up.
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index c618fae44ad7..6fd348f88700 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6575,11 +6575,6 @@ Please note that the kernel is allowed to use the kvm_run structure as the
- primary storage for certain register types. Therefore, the kernel may use the
- values in kvm_run even if the corresponding bit in kvm_dirty_regs is not set.
- 
--::
--
--  };
--
--
- 
- 6. Capabilities that can be enabled on vCPUs
- ============================================
-
-base-commit: 3d7af7c5e000c68581429d533ed63414e4a48e6d
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
-
+	 Andrew
