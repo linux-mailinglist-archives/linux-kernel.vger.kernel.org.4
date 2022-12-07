@@ -2,69 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C29645CAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:33:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E418E645CAF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:33:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiLGOdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:33:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
+        id S230197AbiLGOd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:33:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiLGOdJ (ORCPT
+        with ESMTP id S229677AbiLGOdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:33:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C0374908B;
-        Wed,  7 Dec 2022 06:33:08 -0800 (PST)
+        Wed, 7 Dec 2022 09:33:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9424874A;
+        Wed,  7 Dec 2022 06:33:54 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4F68BB81B21;
-        Wed,  7 Dec 2022 14:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DF2C433C1;
-        Wed,  7 Dec 2022 14:33:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D00C61A21;
+        Wed,  7 Dec 2022 14:33:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F9DC433C1;
+        Wed,  7 Dec 2022 14:33:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670423586;
-        bh=njQMWtELGfJMIcWM9kb9IgwFu5KV72DiygTuaAut+w0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q4NllM9Vy2arKdUwpXcsgu9Xzjd1/tZ/rhIeU5KYn0AWSuKQZqf3yq7US+vohX2X6
-         Km0TJ0ziBBAm+aaWNjQA+Aw7nxtzOy8gdD+KkVQFcbyNehkfi9dWoMpc1s/6BMkeCE
-         83iMS+ildoHAnSvZiHSP5HOZq+5KBi3wFuIMVb05MTwwzGPYBkIvV1bYKu/wHiFqV0
-         f6S9/zVthURo94fhBvj/pSUHmmuAINZWfHaV3wcNgUyonid7gUUY2i2Z/KUdnqbrlP
-         7KnQzBnkCjRvzeTuZ9GRf9ZplvCAqQx18ojtiv0grPqA5VVTbx50ZaiQlmp9sP7KiB
-         pLXU+MPghuWug==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 902FA40404; Wed,  7 Dec 2022 11:33:03 -0300 (-03)
-Date:   Wed, 7 Dec 2022 11:33:03 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [ALMOST ready] Re: [PATCH 2/3] perf build: Use libtraceevent
- from the system
-Message-ID: <Y5CkH0cxwFi514sQ@kernel.org>
-References: <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
- <Y5ChXjt0uv/yDNwV@kernel.org>
- <Y5Cjylv9dJh796dw@kernel.org>
+        s=k20201202; t=1670423633;
+        bh=c+KvtVD0WLo5gwEphtibdZzJjkwLKgNGQrH2V1E1aXU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=OfTWS5hUSadr7o7xtdJ0R+zDfShXDpQX3tRV0YLBAE7y1YdiWf/4TVnd6XbwyfW7D
+         9pshZ5piIcEEBKGAYOwT7RUDqxscXns3qktQUeysF1bbMy9pqGvtqXK7NkBQj+jEGh
+         /En73LUpdGivrTIqPQyFldJ4/nB48m+P9QyqGDgqo93wMn++Ajsb4tc10erl+gKDZo
+         Ct+IenQvCaxiOaGQ6dHb8iaA9ISMa6FElcpXfhZ3cXxIpWqd5VMNravgNPjvu5xcNQ
+         HZ3INZyw87gUmXf31XYLPufE79jmKXRfW7vhhprjOPwcrq1DBnbKH2i4JhAr/q3LD7
+         VCg56qtXC+jmw==
+Date:   Wed, 7 Dec 2022 08:33:51 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
+ devm_gpiod_get_optional()
+Message-ID: <20221207143351.GA1439513@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <Y5Cjylv9dJh796dw@kernel.org>
-X-Url:  http://acmel.wordpress.com
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y3KMEZFv6dpxA+Gv@google.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -74,49 +59,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Dec 07, 2022 at 11:31:38AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Wed, Dec 07, 2022 at 11:21:18AM -0300, Arnaldo Carvalho de Melo escreveu:
-> > One thing I'm doing now is testing with the container builds, and I'm
-> > afraid we have to delay deleting the in-kernel old copy of
-> > tools/lib/traceevent till distros that don't ship libtraceevent as a
-> > separate package are EOLed.
-> > 
-> > We need in those cases to fallback to tools/lib/traceevent/, with a
-> > warning probably.
-> > 
-> > I'm now updating my container build recipes to install
-> > libtraceevent-devel, when available, which isn't the case, for instance,
-> > for almalinux:8, the first I tried updating.
+On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
+> Switch the driver to the generic version of gpiod API (and away from
+> OF-specific variant), so that we can stop exporting
+> devm_gpiod_get_from_of_node().
 > 
-> No distro I tested so far has a package for libtracevent in is default
-> repositories:
+> Acked-by: Pali Rohár <pali@kernel.org>
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+
+This is unrelated to other pending aardvark changes and will help
+unblock the API removal, so I applied this to pci/ctrl/aardvark for
+v6.2, thanks!
+
+> ---
 > 
-> almalinux 8 and 9 and the recently released Alpine Linux 3.17 (at least
-> I hadn't a recipe for that one, will try with edge).
-
-No luck:
-
-[perfbuilder@five edge]$ db
-acmel/linux-perf-tools-build-alpine:edge
-STEP 1/8: FROM alpine:edge
-STEP 2/8: MAINTAINER Arnaldo Carvalho de Melo <acme@kernel.org>
-STEP 3/8: RUN apk add --no-cache 	make gcc g++ flex bison curl 	bc findutils libcap-dev 	mandoc clang clang-dev llvm llvm-dev 	libc-dev linux-headers libdwarf-dev musl-obstack-dev argp-standalone 	elfutils-dev openssl-dev slang-dev 	gtk+3.0-dev perl-dev python3-dev py3-setuptools binutils-dev xz-dev 	numactl-dev libunwind-dev zstd-dev libcap-dev openjdk8 xmlto asciidoc cmake asciidoc xmlto 	libtraceevent-dev
-fetch https://dl-cdn.alpinelinux.org/alpine/edge/main/x86_64/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/edge/community/x86_64/APKINDEX.tar.gz
-ERROR: unable to select packages:
-  libtraceevent-dev (no such package):
-    required by: world[libtraceevent-dev]
-error building at STEP "RUN apk add --no-cache 	make gcc g++ flex bison curl 	bc findutils libcap-dev 	mandoc clang clang-dev llvm llvm-dev 	libc-dev linux-headers libdwarf-dev musl-obstack-dev argp-standalone 	elfutils-dev openssl-dev slang-dev 	gtk+3.0-dev perl-dev python3-dev py3-setuptools binutils-dev xz-dev 	numactl-dev libunwind-dev zstd-dev libcap-dev openjdk8 xmlto asciidoc cmake asciidoc xmlto 	libtraceevent-dev": error while running runtime: exit status 1
-[perfbuilder@five edge]$ vi Dockerfile
-[perfbuilder@five edge]$ db
-acmel/linux-perf-tools-build-alpine:edge
-STEP 1/8: FROM alpine:edge
-STEP 2/8: MAINTAINER Arnaldo Carvalho de Melo <acme@kernel.org>
-STEP 3/8: RUN apk add --no-cache 	make gcc g++ flex bison curl 	bc findutils libcap-dev 	mandoc clang clang-dev llvm llvm-dev 	libc-dev linux-headers libdwarf-dev musl-obstack-dev argp-standalone 	elfutils-dev openssl-dev slang-dev 	gtk+3.0-dev perl-dev python3-dev py3-setuptools binutils-dev xz-dev 	numactl-dev libunwind-dev zstd-dev libcap-dev openjdk8 xmlto asciidoc cmake asciidoc xmlto 	traceevent-dev
-fetch https://dl-cdn.alpinelinux.org/alpine/edge/main/x86_64/APKINDEX.tar.gz
-fetch https://dl-cdn.alpinelinux.org/alpine/edge/community/x86_64/APKINDEX.tar.gz
-ERROR: unable to select packages:
-  traceevent-dev (no such package):
-    required by: world[traceevent-dev]
-error building at STEP "RUN apk add --no-cache 	make gcc g++ flex bison curl 	bc findutils libcap-dev 	mandoc clang clang-dev llvm llvm-dev 	libc-dev linux-headers libdwarf-dev musl-obstack-dev argp-standalone 	elfutils-dev openssl-dev slang-dev 	gtk+3.0-dev perl-dev python3-dev py3-setuptools binutils-dev xz-dev 	numactl-dev libunwind-dev zstd-dev libcap-dev openjdk8 xmlto asciidoc cmake asciidoc xmlto 	traceevent-dev": error while running runtime: exit status 1
-[perfbuilder@five edge]$
+> v2:
+>  - collected reviewed-by/acked-by tags
+>  - updated commit description to remove incorrect assumption of why
+>    devm_gpiod_get_from_of_node() was used in the first place
+> 
+> This is the last user of devm_gpiod_get_from_of_node() in the mainline
+> (next), it would be great to have it in so that we can remove the API in
+> the next release cycle.
+> 
+> Thanks!
+> 
+> 
+>  drivers/pci/controller/pci-aardvark.c | 23 +++++++++++------------
+>  1 file changed, 11 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
+> index ba36bbc5897d..5ecfac23c9fc 100644
+> --- a/drivers/pci/controller/pci-aardvark.c
+> +++ b/drivers/pci/controller/pci-aardvark.c
+> @@ -1859,20 +1859,19 @@ static int advk_pcie_probe(struct platform_device *pdev)
+>  		return ret;
+>  	}
+>  
+> -	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
+> -						       "reset-gpios", 0,
+> -						       GPIOD_OUT_LOW,
+> -						       "pcie1-reset");
+> +	pcie->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
+>  	ret = PTR_ERR_OR_ZERO(pcie->reset_gpio);
+>  	if (ret) {
+> -		if (ret == -ENOENT) {
+> -			pcie->reset_gpio = NULL;
+> -		} else {
+> -			if (ret != -EPROBE_DEFER)
+> -				dev_err(dev, "Failed to get reset-gpio: %i\n",
+> -					ret);
+> -			return ret;
+> -		}
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to get reset-gpio: %i\n",
+> +				ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
+> +	if (ret) {
+> +		dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
+> +		return ret;
+>  	}
+>  
+>  	ret = of_pci_get_max_link_speed(dev->of_node);
+> -- 
+> 2.38.1.431.g37b22c650d-goog
+> 
+> 
+> -- 
+> Dmitry
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
