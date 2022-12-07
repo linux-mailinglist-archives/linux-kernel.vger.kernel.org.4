@@ -2,124 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA550645EFD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:32:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612BB645EEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiLGQcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:32:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54826 "EHLO
+        id S229727AbiLGQbN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:31:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbiLGQcH (ORCPT
+        with ESMTP id S229572AbiLGQbL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:32:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C534A18C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:31:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670430670;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7y+cbEtPc+wlYtqLTRORNpayKs22fDZ4GcXhgFMixiA=;
-        b=VvwdV43nL9rxgA97HaYAkOpstr+ogIJcfXZl4y1jRnsnB4GMWHG+uMnlEupndEkrMdYsB3
-        vZjK+yrB8i8dh+hAytEk34Y/T7FtP/2z+fehPGkjk9CftYM17j69WTdhYMgeR7wWvnrKcn
-        RSHbP1fNWOxpbM18r1KAUsPJJNMrR7E=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-449-CaHBLbYuM_6oJ-3n86cGvw-1; Wed, 07 Dec 2022 11:31:05 -0500
-X-MC-Unique: CaHBLbYuM_6oJ-3n86cGvw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 7 Dec 2022 11:31:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91C776415;
+        Wed,  7 Dec 2022 08:31:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B21C91C7FD;
-        Wed,  7 Dec 2022 16:30:45 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5DCE139D7C;
-        Wed,  7 Dec 2022 16:30:44 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-In-Reply-To: <20221207134234.7879-1-hdanton@sina.com>
-References: <20221207134234.7879-1-hdanton@sina.com> <20221207030740.7663-1-hdanton@sina.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     dhowells@redhat.com,
-        syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com,
-        linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
+        by ams.source.kernel.org (Postfix) with ESMTPS id 301D5B81B90;
+        Wed,  7 Dec 2022 16:31:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 948CAC433D6;
+        Wed,  7 Dec 2022 16:31:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670430667;
+        bh=XvN8Ts/aGY98RQx6MBG9BJW4THmGenJBnAKFdbfEvqA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=grIXzLSeWgfDquG6NpQcjVrZqcnCG3wwRYOCRKHk+W2cdIe+wUHnXajGIXMExoSS9
+         4PHxIHKXoVTplMw50ZbIhQYWJ6yJNUTH71wNzzo4Br+p6JnoorOS63spkZlZLQICtL
+         X1VNo0K1JuGlyyXUZxDX9vV8ShanaIEu15UqIkMK7CK6yyPd3vHSzSgm5GGrUFWw+a
+         btwsMh7jolMibDEHTgL7YFLgW2JeXbvrKYIguEjodrby6J1tvaQNrCOQB56Nt5frTp
+         kNsHp0KGyj9h1qRgN1pMVrZL1C/o9084Z2/Op6tsb6pnvg+8B1KxK/VG5wxfGbbefX
+         GPRQEoPYjduQQ==
+Date:   Wed, 7 Dec 2022 16:31:03 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        William Qiu <william.qiu@starfivetech.com>
+Cc:     William Qiu <william.qiu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: Add mmc node
+Message-ID: <Y5C/x80p8+6Tosk/@spud>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-4-william.qiu@starfivetech.com>
+ <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1504896.1670430624.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-From:   David Howells <dhowells@redhat.com>
-Date:   Wed, 07 Dec 2022 16:30:41 +0000
-Message-ID: <1504932.1670430641@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="nYE+9nWOMu6Q6hJB"
+Content-Disposition: inline
+In-Reply-To: <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hillf Danton <hdanton@sina.com> wrote:
 
-> > Hmmm...  That can't be the whole explanation.  As you say, the hlist_d=
-el is
-> > done under the mutex in rxrpc_destroy_local() - the same as the
-> > hlist_add/hlist_replace and the search in rxrpc_lookup_local().
-> =
+--nYE+9nWOMu6Q6hJB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> The uaf is simple and due to local ep freed without being deleted from
-> rxnet->local_endpoints while the list walker in rxrpc_lookup_local() stu=
-mbles
-> on it. rxrpc_destroy_local() is irrelevant as per the syzbot report.
+On Wed, Dec 07, 2022 at 04:14:53PM +0100, Krzysztof Kozlowski wrote:
+> On 07/12/2022 14:17, William Qiu wrote:
+> > This adds the mmc node for the StarFive JH7110 SoC.
+> > Set sdioo node to emmc and set sdio1 node to sd.
+> >=20
+> > Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> > ---
+> >  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
+> >  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
+> >  2 files changed, 63 insertions(+)
+> >=20
+> > diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2=
+=2Edts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+> > index c8946cf3a268..6ef8e303c2e6 100644
+> > --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+> > +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+> > @@ -47,6 +47,31 @@ &clk_rtc {
+> >  	clock-frequency =3D <32768>;
+> >  };
+> > =20
+> > +&sdio0 {
+> > +	max-frequency =3D <100000000>;
+> > +	card-detect-delay =3D <300>;
+> > +	bus-width =3D <8>;
+> > +	cap-mmc-highspeed;
+> > +	mmc-ddr-1_8v;
+> > +	mmc-hs200-1_8v;
+> > +	non-removable;
+> > +	cap-mmc-hw-reset;
+> > +	post-power-on-delay-ms =3D <200>;
+> > +	status =3D "okay";
+> > +};
+> > +
+> > +&sdio1 {
+> > +	max-frequency =3D <100000000>;
+> > +	card-detect-delay =3D <300>;
+> > +	bus-width =3D <4>;
+> > +	no-sdio;
+> > +	no-mmc;
+> > +	broken-cd;
+> > +	cap-sd-highspeed;
+> > +	post-power-on-delay-ms =3D <200>;
+> > +	status =3D "okay";
+> > +};
+> > +
+> >  &gmac0_rmii_refin {
+> >  	clock-frequency =3D <50000000>;
+> >  };
+> > diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot=
+/dts/starfive/jh7110.dtsi
+> > index c22e8f1d2640..e90b085d7e41 100644
+> > --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+> > @@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
+> >  			#reset-cells =3D <1>;
+> >  		};
+> > =20
+> > +		sys_syscon: sys_syscon@13030000 {
+>=20
+> No underscores in node names, generic node names (syscon or
+> system-controller)
+>=20
+> > +			compatible =3D "syscon";
+>=20
+> This is not allowed alone.
+>=20
+> > +			reg =3D <0x0 0x13030000 0x0 0x1000>;
+> > +		};
+> > +
+> >  		gpio: gpio@13040000 {
+> >  			compatible =3D "starfive,jh7110-sys-pinctrl";
+> >  			reg =3D <0x0 0x13040000 0x0 0x10000>;
+> > @@ -433,5 +438,38 @@ uart5: serial@12020000 {
+> >  			reg-shift =3D <2>;
+> >  			status =3D "disabled";
+> >  		};
+> > +
+> > +		/* unremovable emmc as mmcblk0 */
+> > +		sdio0: mmc@16010000 {
+> > +			compatible =3D "starfive,jh7110-sdio";
+> > +			reg =3D <0x0 0x16010000 0x0 0x10000>;
+> > +			clocks =3D <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
+> > +				 <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
+> > +			clock-names =3D "biu","ciu";
+> > +			resets =3D <&syscrg JH7110_SYSRST_SDIO0_AHB>;
+> > +			reset-names =3D "reset";
+> > +			interrupts =3D <74>;
+> > +			fifo-depth =3D <32>;
+> > +			fifo-watermark-aligned;
+> > +			data-addr =3D <0>;
+> > +			starfive,sys-syscon =3D <&sys_syscon 0x14 0x1a 0x7c000000>;
+>=20
+> This does not match your bindings at all. "&sys_syscon" is a phandle,
+> not a number of tuning retries, as you expect in your bindings.
 
-No, that's not the explanation.  We can't get that far unless the I/O thre=
-ad
-got started - kthread_run() has to wait for the task_struct pointer to bec=
-ome
-available - and the I/O thread should remove the link before it exits and
-before the rxrpc_local object is deallocated.
+Additionally, a Link: to the documentation for where-ever these "random"
+numbers that are being used would be nice.
 
-I've tracked the problem down.  It's due to kthread(), specifically this b=
-it:
++static int dw_mci_starfive_parse_dt(struct dw_mci *host)
++{
++	struct of_phandle_args args;
++	struct starfive_priv *priv;
++	int ret;
++
++	priv =3D devm_kzalloc(host->dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	ret =3D of_parse_phandle_with_fixed_args(host->dev->of_node,
++						"starfive,sys-syscon", 3, 0, &args);
++	if (ret) {
++		dev_err(host->dev, "Failed to parse starfive,sys-syscon\n");
++		return -EINVAL;
++	}
++
++	priv->reg_syscon =3D syscon_node_to_regmap(args.np);
++	of_node_put(args.np);
++	if (IS_ERR(priv->reg_syscon))
++		return PTR_ERR(priv->reg_syscon);
++
++	priv->syscon_offset =3D args.args[0];
++	priv->syscon_shift  =3D args.args[1];
++	priv->syscon_mask   =3D args.args[2];
 
-	preempt_disable();
-	complete(done);
-	schedule_preempt_disabled();
-	preempt_enable();
+Given the driver, the property description just seems incorrect and this
+is actually the bit of the syscon that is relevant to the tuning process
+(perhaps where the find the tuning values?). Without public docs or a
+better description it is hard for (me at least) to know :)
 
-	ret =3D -EINTR;
-	if (!test_bit(KTHREAD_SHOULD_STOP, &self->flags)) {
-		cgroup_kthread_ready();
-		__kthread_parkme(self);
-		ret =3D threadfn(data);
-	}
++
++	host->priv =3D priv;
++
++	return 0;
++}
 
-So the complete() is done before we've decided if we're going to call
-threadfn() or return an error.  This permits kthread_run() to resume befor=
-e
-we've checked KTHREAD_SHOULD_STOP - thus if kthread_stop() is called quick=
-ly
-enough by the rxrpc socket being released, kthread() skips calling threadf=
-n(),
-but kthread_run() returns success.
+--nYE+9nWOMu6Q6hJB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-The fact that the thread didn't start doesn't get seen until kthread_stop(=
-) is
-called.
+-----BEGIN PGP SIGNATURE-----
 
-I think the above code needs rearranging slightly.  KTHREAD_SHOULD_STOP sh=
-ould
-be tested and, if needed EINTR set, *before* complete(done).  That way
-kthread_run() will return -EINTR in this case.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5C/xwAKCRB4tDGHoIJi
+0jk2AP9Do21/KrvdLHeize3eZ8BVU/CtKfDVdT3HO5AAwF0HvQEAkVhgyA+vpmpH
++06lNw1rMoHAqo+Po4oo80d5HRfPCAs=
+=xHlT
+-----END PGP SIGNATURE-----
 
-David
-
+--nYE+9nWOMu6Q6hJB--
