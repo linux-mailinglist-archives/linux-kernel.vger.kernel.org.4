@@ -2,107 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D315645910
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D286645915
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLGLct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:32:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S230092AbiLGLd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:33:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiLGLcq (ORCPT
+        with ESMTP id S230053AbiLGLdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:32:46 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C258424BCE;
-        Wed,  7 Dec 2022 03:32:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670412764; x=1701948764;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oBQKpjPlutD4/zb2bT2mTk9Jl1yT2qCOW5u8WtSZQBA=;
-  b=aiiv/CLplaic/THC/twhv3bEehX8IIcVuFoeQI1BBKkYjdlcykuHSnYx
-   jiCXsfLVoPYQprpLvVeffhrCptkSWLXpQHDWj8X3mG6LMA/85wPiJpxjo
-   zD6X9fO1KWuTXylU/q4X4e8zpW6raTCakE8/sGeNeeVLe7aucUfrVIO26
-   P2nGw7TByjo3bku+Jk0FRujsN8BpZG3C4VT4IG0zQGZG7MLibUtItt0rY
-   83GmAyQlNE6Z8qO7Euru885zmXXIc4Nr5Oz6XESONxH3YFjBdglEdKGZ1
-   rY+EoXu7zpiQerscOiaBssgHO1I7q/WtTWBlmIGFFczfrgn5ZdZnEXV11
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="379036347"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="379036347"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 03:32:44 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="715158509"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="715158509"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 07 Dec 2022 03:32:41 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p2sfI-005k5f-0N;
-        Wed, 07 Dec 2022 13:32:40 +0200
-Date:   Wed, 7 Dec 2022 13:32:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] device property: Fix documentation for
- fwnode_get_next_parent()
-Message-ID: <Y5B51wScX5v2tr8m@smile.fi.intel.com>
-References: <20221207112219.2652411-1-linmq006@gmail.com>
+        Wed, 7 Dec 2022 06:33:23 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533CC1A238;
+        Wed,  7 Dec 2022 03:33:22 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8BBCB81D75;
+        Wed,  7 Dec 2022 11:33:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258F9C433D7;
+        Wed,  7 Dec 2022 11:33:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670412799;
+        bh=3iUZUuHkcIvwtOgND+IUFfeLoZ05Y/NDVmrMzsGnk6k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ceUfHsLwXidT2LV0zG8VgVjdgYF4UGdMFkvTuXrhlY0aeDko6+bV9FLQBG8LWBLy7
+         cmg2RaLjmQ/rvewb1fYfc4F7hRB5ToX7sXDEWyKnn2eYkOur76Pp0rgzAPQK2Txa1h
+         aXKDsv+IGMQV/A2xrTcSbl/i6tmss4V9t6Zruzww/xfcXpNHlEpZ96jZbgdtFi0IPm
+         oAfZqyTIwGcQ0DovBu3IHwpp0ZQ09nOv+/9iLL+XN6KX8K8o8VMeyCZ54b4ElXDa9Y
+         E/W6HpQ/Bj1jxdDIbPOC5KRwwXqsJMeljL8jmgHI9DhNquqvbdMAeSXG0pPxI5KyLD
+         GbpYPCdOWr4Rw==
+Date:   Wed, 7 Dec 2022 11:33:14 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Icenowy Zheng <uwu@icenowy.me>
+Cc:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add comaptibles
+ for T-Head's C9xx
+Message-ID: <Y5B5+vUjYxepn53g@spud>
+References: <20221121041757.418645-1-uwu@icenowy.me>
+ <20221121041757.418645-2-uwu@icenowy.me>
+ <34fe4161718e395f5e9890f9358a25f697af9e24.camel@icenowy.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="JWqOn8OBCdKsE8RV"
 Content-Disposition: inline
-In-Reply-To: <20221207112219.2652411-1-linmq006@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <34fe4161718e395f5e9890f9358a25f697af9e24.camel@icenowy.me>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:22:18PM +0400, Miaoqian Lin wrote:
-> Use fwnode_handle_put() on the node pointer to release the refcount.
-> Change fwnode_handle_node() to fwnode_handle_put().
 
-Looks correct to me, thanks!
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+--JWqOn8OBCdKsE8RV
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Fixes: 233872585de1 ("device property: Add fwnode_get_next_parent()")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-> ---
->  drivers/base/property.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/base/property.c b/drivers/base/property.c
-> index 2a5a37fcd998..daa1e379762b 100644
-> --- a/drivers/base/property.c
-> +++ b/drivers/base/property.c
-> @@ -601,7 +601,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_parent);
->   * node's parents.
->   *
->   * Returns a node pointer with refcount incremented, use
-> - * fwnode_handle_node() on it when done.
-> + * fwnode_handle_put() on it when done.
->   */
->  struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
->  {
-> -- 
-> 2.25.1
-> 
+On Wed, Dec 07, 2022 at 06:47:26PM +0800, Icenowy Zheng wrote:
+> =E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 12:17 +0800=EF=
+=BC=8CIcenowy Zheng=E5=86=99=E9=81=93=EF=BC=9A
+> > T-Head C906/C910 CLINT is not compliant to SiFive ones (and even not
+> > compliant to the newcoming ACLINT spec) because of lack of mtime
+> > register.
+> >=20
+> > Add a compatible string formatted like the C9xx-specific PLIC
+> > compatible, and do not allow a SiFive one as fallback because they're
+> > not really compliant.
+> >=20
+> > Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+>=20
+> Hi, could this patch be picked ASAP? Becuase it will be used then in
+> further OpenSBI patches to enable proper operation of T-Head timer.
+>=20
+> I know the following 2 patches are in doubt and further rework for them
+> are needed.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Since it's me that's asking the questions about the other patches, but
+have no comments about this particular one:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
+HTH Icenowy!
 
+> > ---
+> > =C2=A0Documentation/devicetree/bindings/timer/sifive,clint.yaml | 8
+> > ++++++++
+> > =C2=A01 file changed, 8 insertions(+)
+> >=20
+> > diff --git
+> > a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> > b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> > index bbad24165837..aada6957216c 100644
+> > --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> > +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+> > @@ -20,6 +20,10 @@ description:
+> > =C2=A0=C2=A0 property of "/cpus" DT node. The "timebase-frequency" DT p=
+roperty
+> > is
+> > =C2=A0=C2=A0 described in Documentation/devicetree/bindings/riscv/cpus.=
+yaml
+> > =C2=A0
+> > +=C2=A0 T-Head C906/C910 CPU cores include an implementation of CLINT t=
+oo,
+> > however
+> > +=C2=A0 their implementation lacks a memory-mapped MTIME register, thus
+> > not
+> > +=C2=A0 compatible with SiFive ones.
+> > +
+> > =C2=A0properties:
+> > =C2=A0=C2=A0 compatible:
+> > =C2=A0=C2=A0=C2=A0=C2=A0 oneOf:
+> > @@ -29,6 +33,10 @@ properties:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 - starfive,jh7100-clint
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 - canaan,k210-clint
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: s=
+ifive,clint0
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 - allwinner,sun20i-d1-clint
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: thead,=
+c900-clint
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: s=
+ifive,clint0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: r=
+iscv,clint0
+>=20
+>=20
+
+--JWqOn8OBCdKsE8RV
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCY5B59wAKCRB4tDGHoIJi
+0l5EAP0d8+bmSdQwOL1zh+4ekUZkbwUid4O2E8SRuJ//7ZbjjAD/cbWLeF0c/mVr
+WKzBDTFx9jlc7gXrewlZxdymFvnXZwQ=
+=5Qqt
+-----END PGP SIGNATURE-----
+
+--JWqOn8OBCdKsE8RV--
