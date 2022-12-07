@@ -2,76 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD43645501
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:58:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B2C645504
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:59:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiLGH6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 02:58:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S229915AbiLGH7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 02:59:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiLGH6l (ORCPT
+        with ESMTP id S229787AbiLGH7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 02:58:41 -0500
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828DD2B1BB;
-        Tue,  6 Dec 2022 23:58:39 -0800 (PST)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id DB37E68AA6; Wed,  7 Dec 2022 08:58:34 +0100 (CET)
-Date:   Wed, 7 Dec 2022 08:58:34 +0100
-From:   Christoph Hellwig <hch@lst.de>
-To:     Max Gurtovoy <mgurtovoy@nvidia.com>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>, Christoph Hellwig <hch@lst.de>,
-        Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
-        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
-        cohuck@redhat.com, yishaih@nvidia.com,
-        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
-        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
-        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
-        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
-Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
- issue admin commands for VF driver.
-Message-ID: <20221207075834.GC2283@lst.de>
-References: <20221206055816.292304-2-lei.rao@intel.com> <20221206061940.GA6595@lst.de> <Y49HKHP9NrId39iH@ziepe.ca> <20221206135810.GA27689@lst.de> <Y49eObpI7QoSnugu@ziepe.ca> <20221206153811.GB2266@lst.de> <Y49k++D3i8DfLOLL@ziepe.ca> <20221206165503.GA8677@lst.de> <Y4+U3VR2LeEh2S7B@ziepe.ca> <2975e217-749b-6929-cd2d-4b6276ef33d1@nvidia.com>
+        Wed, 7 Dec 2022 02:59:15 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6115417A96;
+        Tue,  6 Dec 2022 23:59:13 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NRqHm0zcXz9xFGy;
+        Wed,  7 Dec 2022 15:52:04 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnG_i2R5Bj6WfHAA--.59725S2;
+        Wed, 07 Dec 2022 08:58:53 +0100 (CET)
+Message-ID: <7225e76c09c7ff68937e37ee041fefdd6ccac1c8.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 2/2] lsm: Add/fix return values in lsm_hooks.h and
+ fix formatting
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     casey@schaufler-ca.com, omosnace@redhat.com,
+        john.johansen@canonical.com, kpsingh@kernel.org,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 07 Dec 2022 08:58:42 +0100
+In-Reply-To: <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
+References: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
+         <20221128144240.210110-3-roberto.sassu@huaweicloud.com>
+         <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2975e217-749b-6929-cd2d-4b6276ef33d1@nvidia.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwDnG_i2R5Bj6WfHAA--.59725S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4Dtw17Ary5ArWfZFWxCrg_yoW8Wr48pF
+        sxG3W3AFn5ZryIkF43X3W7Gw4S9395Gr1UJr17Ww18Z34FyrW2yFy7CF1YgFWDJrWkCFyj
+        9Fyagw1DuFy7A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
+        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
+        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
+        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4ZeLgACsT
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:30:20AM +0200, Max Gurtovoy wrote:
-> I'm not sure how awkward is for migration driver to ask the controlling 
-> device driver to operate a migration action.
+On Tue, 2022-12-06 at 19:21 -0500, Paul Moore wrote:
+> On Mon, Nov 28, 2022 at 9:43 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Ensure that for non-void LSM hooks there is a description of the return
+> > values.
+> > 
+> > Also, replace spaces with tab for indentation, remove empty lines between
+> > the hook description and the list of parameters, adjust semicolons and add
+> > the period at the end of the parameter description.
+> > 
+> > Finally, move the description of gfp parameter of the
+> > xfrm_policy_alloc_security hook together with the others.
+> > 
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  include/linux/lsm_hooks.h | 221 ++++++++++++++++++++++++--------------
+> >  1 file changed, 138 insertions(+), 83 deletions(-)
+> 
+> Thanks Roberto, I've merged this into lsm/next with one small tweak (below).
+> 
+> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+> > index c35e260efd8c..6502a1bea93a 100644
+> > --- a/include/linux/lsm_hooks.h
+> > +++ b/include/linux/lsm_hooks.h
+> > @@ -677,7 +695,7 @@
+> >   *     indicates which of the set*uid system calls invoked this hook.  If
+> >   *     @new is the set of credentials that will be installed.  Modifications
+> >   *     should be made to this rather than to @current->cred.
+> > - *     @old is the set of credentials that are being replaces
+> > + *     @old is the set of credentials that are being replaces.
+> 
+> Might as well change "replaces" to "replaced".  I'll go ahead and fix
+> that up during the merge.
 
-It can't.  That's the whole point.  The controlled function that is
-being migrate must be absolutely unaware of that (except for things
-like quiescing access or FLRs that could happen anyway), because
-otherwise your have a fundamental information leak.
+Thanks a lot!
 
-> The controlling device driver can expose limited API for that matter.
+Roberto
 
-No, it can't.  It must be in charge.
-
-> Also the concept of primary controller that control it's secondary 
-> controllers is already in the SPEC so we can use it. It's not introduced in 
-> this RFC but we're here to fix it.
-
-Yes, it is as I've pointed out multiple times.  But, that relationship
-is only visible to the primary controller.  It also doesn't help with
-the general problem where the secondary controller must be able to
-completely change it's identify and thus the subsystem.
-
-> In our case the primary controller is the PF and the secondary controllers 
-> are the VFs.
-
-Yes, that's your case, and probably a very common one.  But also far from
-the only one, so there is no way Linux or the specification can rely
-on that dumb fact.  Never mind that there are virtualization schemes
-(look at the s390 code) where the PF to VF relationship gets lost.
