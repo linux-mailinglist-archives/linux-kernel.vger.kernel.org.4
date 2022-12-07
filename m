@@ -2,156 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2E2645D3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4119645DB7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:33:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLGPGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53280 "EHLO
+        id S229796AbiLGPdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:33:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLGPGj (ORCPT
+        with ESMTP id S229811AbiLGPdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:06:39 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2086.outbound.protection.outlook.com [40.107.243.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1551313F;
-        Wed,  7 Dec 2022 07:06:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cxAAT0GGMG0w0vSsEe5CVE4oH0dPGDz9hNXBZaOOQc2Laf6eFgB1su+PTcIduO3Tb5/L5HUoZqT93rFxzhLzUj7F/dmHROEzyEB4MzU6HDTKwTERURkyAFCD2Fnjy8ca9jrzNKjvgAsYhJutIPm9EMfXMIS3OGrdnUIi7KIth8KYc5UG8byfhdS1y8cN/dl/r2/ytqmpLUeM0+UJAv+rNson4S3mIvaNZfdjg262zOjdMQVDRZDclaobbGMJJ9qyh8rzoZffqQk5YGn2PUSHCIamjtYACfpSNUle9b7thaNqomaAv3N+9obT/WwV8ozx6HDuBipR5HPm+LYtzay1qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/SMtSLkVo3gHS4UTTQ0BOJ/SXxyAgpGeQhytWdQPX+o=;
- b=EwcvxIThQTZCCT9sbcrDxLRhl2H6y81r+JW6DtnTFJI5rXrp9O7WZ3WK2NZHb+DKYQwyYO83qeLlVRTnDfodvzieRZhhcuvtIBzihegUvkctc2GnqvbT60ImXhJD7SgPhdMl+1IS8uXY9pPgFkXN5fmc/0lWzVBiOInQowJZODiExaQNvkQv0zQd6IZLI2Ggv6PsDCp/JsbyKcBwqtcZp7oCLXTzvbrhIeZ6jyIN4pqZZukbCcQDIJ6dY0PCNyInV3EP2ZLyk2dYZWexyIQRTQe/8V5FuHW5ABiGWNkbk+Da6FIi3LsmbkR4xTyRiNDblBrWePEefypf7ji6s+R9IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/SMtSLkVo3gHS4UTTQ0BOJ/SXxyAgpGeQhytWdQPX+o=;
- b=qeCExIaHV+L8dPCywXDZ4N19T814xfKuVaFz2pmBqD5WhmFQoEqbhE1MTRIbrX0vq8EsUkS00V3EQ4RaHP9nkUg/4sqeZdbmxheCQ11raCTmVV5s5AEMltNvIN8LoNDB6t0lcS3ZyDXQeZ6wWp5dSDsqsNHp33BC8I6rsH/Tljs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
- by BY5PR12MB4323.namprd12.prod.outlook.com (2603:10b6:a03:211::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 15:06:34 +0000
-Received: from BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::45b1:34fb:e14d:96e4]) by BL1PR12MB5874.namprd12.prod.outlook.com
- ([fe80::45b1:34fb:e14d:96e4%5]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 15:06:34 +0000
-Message-ID: <a10ed157-6d2e-4a97-b7cc-e07481706f2d@amd.com>
-Date:   Wed, 7 Dec 2022 09:06:32 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3 1/2] docs: Move rustdoc output, cross-reference it
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>, corbet@lwn.net,
-        akiyks@gmail.com, ojeda@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu, konstantin@linuxfoundation.org
-References: <20221201204814.2141401-1-carlos.bilbao@amd.com>
- <20221206153151.771038-1-carlos.bilbao@amd.com>
- <20221206153151.771038-2-carlos.bilbao@amd.com> <87359r39gg.fsf@intel.com>
- <5887a9cd-b48e-e2af-7639-3f9ff53fcd8a@amd.com> <87lenj1erb.fsf@intel.com>
-From:   Carlos Bilbao <carlos.bilbao@amd.com>
-In-Reply-To: <87lenj1erb.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BLAPR05CA0035.namprd05.prod.outlook.com
- (2603:10b6:208:335::16) To BL1PR12MB5874.namprd12.prod.outlook.com
- (2603:10b6:208:396::17)
+        Wed, 7 Dec 2022 10:33:39 -0500
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A76763B8C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:33:36 -0800 (PST)
+Received: by mail-qk1-x734.google.com with SMTP id x18so10218625qki.4
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:33:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wjikf8BONkNBHq/mdSHMPb1S0WDsfH+RsTxDU14w2U8=;
+        b=WLyP/sfOhBiMsNF2s65Gxuq7n9uP2ESaakKI/3HI1+vYUOiel9xaoXz4rrPACjE1t6
+         BcAHNJCIpzJ3DcERjul4uyDvWESyrxasi3bBWJGFp3W+fkHrf9Jvg3wGOJa8qBdBJbJJ
+         r+a2klUQv/qyzv7o81LiM0UrHNEE9sgzO2I00mp1FAqrnsn7/8TsfzUYJP+u3SP3Viab
+         XmkrnQPBMqktuVRXx1NySaLMv9T14aEYK0Pbr6gyMRycrQEN+aT528SEbc/byp3iOQh+
+         jGD3RhcmDgwvBvuaUIpDQq/WhR4jfDsEHX27fFvpg5PNbyPfHtWh4Iksxi/ZxJUi38g5
+         RaAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wjikf8BONkNBHq/mdSHMPb1S0WDsfH+RsTxDU14w2U8=;
+        b=UXownwd6UDo6wNRnzITtVEM+UnM1NA+4W7nogpWJsMEdYAsaYWH1+YbmpCxA2tzThS
+         ZJ8HAQbYnuRntFO3CNRPn3TROlq7cq8EXhfLP+KZJQ1V6FF9xq/fN8tj0aZI87t5n7hw
+         O3DrWHttgoOkvbYeSqRfvMkzuh2/XyLwj/ahSINZB09d1llFeUFlTrmxJTS91dAxJ2sW
+         UOeeMhqSbWq0DzGFx1yxaOfYeYhJ9tICiTg1tc5f+/6NDdzVNVvNRJch9l9c+say14lu
+         cQTXGqw9j1ZEgCJQG3BfY6XMXO9EmfEe2/n8U+ZyBk9svvdLWiWrnbEd+lDgDe7t2Qt9
+         2YMg==
+X-Gm-Message-State: ANoB5pnzUdvPr9NSzKyiG+oMegTCzqBFqmP8a+QrLQmQ//oBWu/Iy8po
+        0Fb5X9yoIgpNr7TbzPEL9XVE7g==
+X-Google-Smtp-Source: AA0mqf6H3CUbZahGNznYB0JQYDxDw79bxzgM/h4A32ynuBG2ju5kK/9OhXvFJpvphgAQq9r/tBJFwA==
+X-Received: by 2002:ae9:e919:0:b0:6fe:c7a2:b2d0 with SMTP id x25-20020ae9e919000000b006fec7a2b2d0mr8631309qkf.317.1670427215720;
+        Wed, 07 Dec 2022 07:33:35 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id o21-20020a05620a2a1500b006eeb3165554sm17830112qkp.19.2022.12.07.07.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 07:33:35 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1p2w0t-005E3g-AJ;
+        Wed, 07 Dec 2022 11:07:11 -0400
+Date:   Wed, 7 Dec 2022 11:07:11 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Lei Rao <lei.rao@intel.com>, kbusch@kernel.org, axboe@fb.com,
+        kch@nvidia.com, sagi@grimberg.me, alex.williamson@redhat.com,
+        cohuck@redhat.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        mjrosato@linux.ibm.com, linux-kernel@vger.kernel.org,
+        linux-nvme@lists.infradead.org, kvm@vger.kernel.org,
+        eddie.dong@intel.com, yadong.li@intel.com, yi.l.liu@intel.com,
+        Konrad.wilk@oracle.com, stephen@eideticom.com, hang.yuan@intel.com
+Subject: Re: [RFC PATCH 1/5] nvme-pci: add function nvme_submit_vf_cmd to
+ issue admin commands for VF driver.
+Message-ID: <Y5CsH5PqMYAWYatw@ziepe.ca>
+References: <Y49HKHP9NrId39iH@ziepe.ca>
+ <20221206135810.GA27689@lst.de>
+ <Y49eObpI7QoSnugu@ziepe.ca>
+ <20221206153811.GB2266@lst.de>
+ <Y49k++D3i8DfLOLL@ziepe.ca>
+ <20221206165503.GA8677@lst.de>
+ <Y4+U3VR2LeEh2S7B@ziepe.ca>
+ <20221207075415.GB2283@lst.de>
+ <Y5CWVu08abcOuEQH@ziepe.ca>
+ <20221207135203.GA22803@lst.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|BY5PR12MB4323:EE_
-X-MS-Office365-Filtering-Correlation-Id: 532fead1-fa3c-48d5-46d3-08dad864a186
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W/ULzlQZ0Pu0xGxFmfXifmQlQduOZYuT5isZP3deVeXNKFvfFrecvSFsYgj83uUuY6cSSEi6vEFsshhYAW6cPmWqMvRsINMUT5v+PcLNsxRd0IgKOuO39YWtA+Ultkf6Bv3es+/y7sts4UqLj10kns5LM4mkn8ofy6cqXEp26xSVnFk6W8/5hTGpY+FkIKYD5iE7wNy+wmU6vAAGMugHNxMoHuYaFlnqUSb6AYMt83PFz+tAizBKSSKDkDQh9RY1uQaCGY3m/RMHvSTW4GyXKdrOIdhEsisWEscMKQpgM/IsqY/l0DETkPtRYpn4LtuM3+fhMtIhaIKHnPU8+d2oIXxPB/k3y1OQQv8+mOAqdUPIHkpI6GdfEasyBycNsbZdggT223m6F8cFhg5zXaNzWs1WLB51KAnCDo1lY11lt432TKJBmdWmLFrrw5j4pM6NaaDVARkOTxxJcNDuR0b0I6limCK/waQTwycfqh3qLxi4NAG8XFnB5wuvqqtPCRgJB9cynbMBvgwKprOwp88ZVOKJ+LZ4hSoDOL2WH+di2JO2A1W9An+WytnQMDSESkX9nqGAkpGKNpSzobpYAHr0MmeL71d+zSGxoZdZulwXnar0QFQMXnkPdZRXlZpS3crR6saLYn0FgTEJVG0onrkZ2yQPcyO9IQJJMsA6JmqOpIjVsidz+AcoNRJMvwd0V/qFMIPbA+xsyf57xbNpar2em0DsS9XpMTywbTbttb0b8Wmtxf278KTbCwcNcfqsHrAl
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(376002)(39860400002)(136003)(396003)(451199015)(31686004)(31696002)(86362001)(36756003)(4744005)(6486002)(6506007)(478600001)(966005)(38100700002)(53546011)(26005)(8936002)(66476007)(6512007)(8676002)(44832011)(41300700001)(2906002)(316002)(4326008)(66556008)(66946007)(186003)(5660300002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VFlKZThSc3pOb3RwcjdSejVpd2wxNWFIbkJKLzJpanJPUmxydWR4Tm1DOVN2?=
- =?utf-8?B?dUpTVVdXTCtYK283TDBVdXB3NjNJOG9PQXE2c1I4ZG5jRDl0enMwSmo2M213?=
- =?utf-8?B?YXppK3V4VzN0OC9EYVhZTUZwOXhiRW1OWjBQTDJQSkY2dzJHN0FhamFQaTZx?=
- =?utf-8?B?bEFycFo0NTBPMDhYUkhpK3NuTWhmNjV5ZzdSNjhnOHQwd2lQdkZoWkpLU1FX?=
- =?utf-8?B?YVF1NFFxM0JsUHVJUC9SWHI0bEJSUG5aM24vdWsyZThYRGtCR2dkKzIwSE5l?=
- =?utf-8?B?R3F6bjJpOHB6QWV2WHZWVlgzQWtFbGJsYUNKbzlaaHVvR0VZd1hYNWgxK1oz?=
- =?utf-8?B?TFQ2UlovWmpiT3VSRE9BaytNNjVDMjFYejl3ZGllTXdINDYycFE0cm9kS2Yv?=
- =?utf-8?B?QlFkN1EwblRJMnpxN2RSS1NSVlRHVlhRTHZ5MjVIR1FxRzBXSnhiNFZiVS9w?=
- =?utf-8?B?eE5pMmpOOWkweVphOGhsa2FwVWlPcytJRUFPYXgzenRRS2xHbUFMN0xuMWEr?=
- =?utf-8?B?OTJFZ2lUVE56RGVsemtySURZdStVeHg2TzJTMWdyaVlEaHptb2J1MnNHL0E4?=
- =?utf-8?B?Vm1CellnM0prLzhVSUREbkQrR09jQVc1VnYyV0R3ako0bmhBeEhaZENyWlZC?=
- =?utf-8?B?MmJReVZRSzc0K1VVZDliN1QwOEJ1WmNTcjgwQ1FDSC9lQlhPQkFkK1R4NzJO?=
- =?utf-8?B?MTlEQ0hFSWY5NWEySWt1ZGVGSEJIdmlSb0JmZ09jM2JDcHQ5eGl3cDV0QzBO?=
- =?utf-8?B?ZFdFYmZXY205R0JSRXQyNHVSZkVmVng3VWZ5ZldmejZPQ2FIcG1ScHZWaFdB?=
- =?utf-8?B?QWRPNzlUaUdoSk5lcXR0QW1MbXRXZmlQZXhlSVZZV1pCUnBZU1lBSjhUbHhs?=
- =?utf-8?B?U1kwU013NEdHMms5WTRQWWM0VDM4ZWxhVmM2ZlA0SkxJNkJRUU5xaDk1c1Fz?=
- =?utf-8?B?c2tJcko5V25xM0M1dUk2cjRwR3lKYzMwYWpyWFd0RGZrVE1YWTM3MHZSYnY3?=
- =?utf-8?B?cmN3cjJhM1U4MDFPR0VSeFl5SUMvZWNwTGQ4SnU2Y095a2llblV6VWwweFRr?=
- =?utf-8?B?a29wTGZWcnlNU2dKWG5LUFZiK2NVWlROeWRTS3RFVlNrVGdmVWFFN2xIMmk0?=
- =?utf-8?B?K3BDSjJENHNBRWl4V0VEcVN3NDUrV3ZWdDcwYkRIQmYvdHp2SDJoUHQxMGw5?=
- =?utf-8?B?ZHMzWFFKU2ZkanpXYWQydmpadzVCbkFRR29SYjFsRlA3R2RBaktFTDc0ZEVR?=
- =?utf-8?B?V3R0MEl1aGtFN2tDY29CL0Q0eFBIbVltUkpuVU96dHR5T3FCT1V4K240VnBj?=
- =?utf-8?B?aDJKZXArTnBFSXFPUlR0NUVzdUQwTTNkSTQ1YmJkSlNZSllyT093SmRWYzI4?=
- =?utf-8?B?RkNWckp6U3NqSTlXM0pjZkxqSVZoRk5BdGFRKzZKTGhNMVFSNkExaTN0bmE0?=
- =?utf-8?B?MGZIcTBUWUJYNDlRUC96SFNTS3pqdXllVVd2S2hqUWt3TDdyR08xbmUxMlJP?=
- =?utf-8?B?eFRYa2dTdm56bC9zUmlabVhIVE9ZODJnaEI1TnZYUDdkZTczR3RCK2RQSmFy?=
- =?utf-8?B?UWY0enZMbHVDVlBmNG8yeDNHVXByenE0dHptMTdjRFZVWEs5Y1JMNnFwY2tT?=
- =?utf-8?B?T1diS083RHFsZ24vcUVTRnZpY09uVzIwdTNLQ3ZlM2tjS2Z3WHpQM2E4RmRR?=
- =?utf-8?B?QnJ6SU1BVDBDc0ZNbStmejVVMTZuaHBQZzB2cnRXdmJNdEM0S3pSSndiaWFh?=
- =?utf-8?B?eUUwUTFDWC90RlVCdWFmZjR5b1N0enRqeTk3YllYNndYMnFVN2p4MGNEUjVJ?=
- =?utf-8?B?a0tKZ2VLZ1NCazBXb21ORjE4R2xQT0FQQkk4UjhwMUZmUlMyOUNqaEZKN2Nt?=
- =?utf-8?B?eE9NVzFyeG12NzEremJhNnJobkxLNzlOTWFOVDYvQ2xFSWUyWk5nVGc3Rmxw?=
- =?utf-8?B?ajdkTzg5dkpPUXc5Z1RTWHVkcnZyQU9iY1NiWWJ5YzBrK1lueXlNODZ2NGxy?=
- =?utf-8?B?YVFwK2RBRGZyL2UxdnA4aEdGbmZWa3lBUnRiNHYrUXUrL1REVHU4K3QyMWpk?=
- =?utf-8?B?SFNySTdjVWpBWm5jR1BwOG5vMWowWE41ZEs3T1FRcUoxWFdjaWk1Vk13RFNM?=
- =?utf-8?Q?U7GSo0flrME/F+lArNWXHGcil?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 532fead1-fa3c-48d5-46d3-08dad864a186
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 15:06:34.5857
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6OUd+u42yKAsTWtClkYRZr5RNfQo3iGkTJ7ObNzrp2KJAGv9KwlEZuiyxvyUcE1RzdGpq/nLHFoJCfxu39wcPw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4323
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207135203.GA22803@lst.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 08:15, Jani Nikula wrote:
+On Wed, Dec 07, 2022 at 02:52:03PM +0100, Christoph Hellwig wrote:
+> On Wed, Dec 07, 2022 at 09:34:14AM -0400, Jason Gunthorpe wrote:
+> > The VFIO design assumes that the "vfio migration driver" will talk to
+> > both functions under the hood, and I don't see a fundamental problem
+> > with this beyond it being awkward with the driver core.
+> 
+> And while that is a fine concept per see, the current incarnation of
+> that is fundamentally broken is it centered around the controlled
+> VM.  Which really can't work.
 
-> On Wed, 07 Dec 2022, Carlos Bilbao <carlos.bilbao@amd.com> wrote:
->> On 12/7/22 2:27 AM, Jani Nikula wrote:
->>> Also, please don't use "here" as the link text.
->> Why not?
-> It's considered bad style, see e.g. [1] or [2] or the plethora of
-> results you get if you search for "here as the link text".
->
-> The link text should describe what's at the destination.
+I don't see why you keep saying this. It is centered around the struct
+vfio_device object in the kernel, which is definately NOT the VM.
 
+The struct vfio_device is the handle for the hypervisor to control
+the physical assigned device - and it is the hypervisor that controls
+the migration.
 
-Understood, thanks!
+We do not need the hypervisor userspace to have a handle to the hidden
+controlling function. It provides no additional functionality,
+security or insight to what qemu needs to do. Keeping that
+relationship abstracted inside the kernel is a reasonable choice and
+is not "fundamentally broken".
 
+> > Even the basic assumption that there would be a controlling/controlled
+> > relationship is not universally true. The mdev type drivers, and 
+> > SIOV-like devices are unlikely to have that. Once you can use PASID
+> > the reasons to split things at the HW level go away, and a VF could
+> > certainly self-migrate.
+> 
+> Even then you need a controlling and a controlled entity.  The
+> controlling entity even in SIOV remains a PCIe function.  The
+> controlled entity might just be a bunch of hardware resoures and
+> a PASID.  Making it important again that all migration is driven
+> by the controlling entity.
 
->
-> BR,
-> Jani.
->
->
-> [1] https://ux.stackexchange.com/questions/12100/why-shouldnt-we-use-words-such-as-here-and-this-in-textlinks
-> [2] https://www.w3.org/QA/Tips/noClickHere
->
->
+If they are the same driver implementing vfio_device you may be able
+to claim they conceptually exist, but it is pretty artificial to draw
+this kind of distinction inside a single driver.
 
-Best regards,
-Carlos
+> Also the whole concept that only VFIO can do live migration is
+> a little bogus.  With checkpoint and restart it absolutely
+> does make sense to live migrate a container, and with that
+> the hardware interface (e.g. nvme controller) assigned to it.
+
+I agree people may want to do this, but it is very unclear how SRIOV
+live migration can help do this.
+
+SRIOV live migration is all about not disturbing the kernel driver,
+assuming it is the same kernel driver on both sides. If you have two
+different kernel's there is nothing worth migrating. There isn't even
+an assurance the dma API will have IOMMU mapped the same objects to
+the same IOVAs. eg so you have re-establish your admin queue, IO
+queues, etc after migration anyhow.
+
+Let alone how to solve the security problems of allow userspace to
+load arbitary FW blobs into a device with potentially insecure DMA
+access..
+
+At that point it isn't really the same kind of migration.
+
+Jason
