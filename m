@@ -2,134 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC68645B98
+	by mail.lfdr.de (Postfix) with ESMTP id 09428645B97
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiLGN4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:56:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51388 "EHLO
+        id S229877AbiLGN5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:57:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbiLGN42 (ORCPT
+        with ESMTP id S230156AbiLGN4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:56:28 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F755B876
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:56:26 -0800 (PST)
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 9E03641520
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1670421385;
-        bh=AN5JF4JjPpOJkZ/tkyQphRahAoTXPLdfhR7No5Nhr94=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=mfGPEnrYxH7MDEe2VkNdKwpmEX4WJYgCMsTEItw2sH7O88OT9wPBhEgG6rVjY0xrO
-         dkLmQJtblU+z30Rtta4Vj2LWR10I8tvXbT0eStYqvruY2nrtZE2/9pldgufBEj5cJo
-         en9dLQ7o39BhXbjvGbqZn0ip7t5187CE0iMR6V4s9mUVFzlsBNsX6bCOWMJ2+EbcLG
-         cjSd3c6JR+TDZQwHHY4QCsHUPOIz4V4quR3ufjFy1xf2uLOKecO/6d0KogcoWCmI8R
-         4iBp/ta96LMWxwE6fZhi19+XNUrgS9b2SKk5IKbVgy0b1VbUi2opUDkjbGOyvYFCBY
-         cATEhd2WFykgA==
-Received: by mail-il1-f198.google.com with SMTP id n15-20020a056e021baf00b0030387c2e1d3so140974ili.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:56:25 -0800 (PST)
+        Wed, 7 Dec 2022 08:56:49 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BCC5BD72;
+        Wed,  7 Dec 2022 05:56:47 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id h12so28163299wrv.10;
+        Wed, 07 Dec 2022 05:56:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RYrYY/fm6aX39Ixp9LpWPNUVB2qUa51Mk5FBV63lR/s=;
+        b=GCVATqAgYI6b2pNpJJm2LfaW175fXxR+izq/VPTFa8KVQ1yOnR5IrWn3C80fnuN0Wd
+         +/aw3SUKtWyLIhiB2VjVXAmbWiZ4jlvKIA8ZWGdxIYCNpcrE1f9WSD7Sx84CqATK9gmN
+         5qs+AihyZvqGSKKlr7le7x1WDk7tiCZmJ8ltAvXSIOTa5y8VUdkSQm6BLx7GUIuImeeo
+         PFCkCA7KhwWyX1uo6ZHwIfAGOcFC3wnt5qC1YtX2ahEylh6w80BUkvd79NeBw7a/kAv6
+         QNVpfsyEUPsCyw27ltDWSPqQc+/Ox05FGtAUrssnOiDhh/fYFOfSBYA2k4iEW38KPzzR
+         H+Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AN5JF4JjPpOJkZ/tkyQphRahAoTXPLdfhR7No5Nhr94=;
-        b=6d/nsUVNWBEmzgBtkOllnzc/JXrY2gPGy5Dw4UQ9ck+wcJgIaDd0PS89uL9mTtijcM
-         gRmd8BPK6MoypWXAwb1OUff65rfcCiHhXHg7dk+siAy3iVjqyvNDuA0paJViNrCRapJH
-         WLEZJifB8xrKW8jpHGXkoufgjb8cNQ6lbxiTNjGG/0iTv4Tg8Dyt6UW7e6Q7yGDJzuzG
-         USF7UmoexYbbRjipRN6UyypWLUtCDB5ZSl9uiGqQwwmvkuNoIkB3+GOqf5bP0/JOdmf1
-         vLe9C0pSMlPyunS9SLkZNe4kN503fpFa3htyeq7fG4fop/wAEjrjo5aDplLjgWzA6iiF
-         yiCw==
-X-Gm-Message-State: ANoB5pnm/xc/IO0iDCTaKv7Wa/dWMKs0zeQWFCYU6fXSQ+6Y07IJW4fV
-        19zzukt3eeR75NJgOqm5dbOhq/jVnFAdmr9FLz2enyDR/BsPuutuXBepQKWLnWUBShWLcjyzR74
-        zYnyC10h+9VAWvf3pXCHTrtMWbVFqPXcZQXPSN++aiGHFba1VtMUnxcTFEg==
-X-Received: by 2002:a92:cd43:0:b0:303:2fd2:f612 with SMTP id v3-20020a92cd43000000b003032fd2f612mr15125924ilq.144.1670421384614;
-        Wed, 07 Dec 2022 05:56:24 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf68T1FZSxevGnNf72rEE0f+xwVzoSCPSjB0SLRGWkB37LRAqopLc6DAcKKSJpFo/ZWVkn24R+SZbWzdDyZVHaY=
-X-Received: by 2002:a92:cd43:0:b0:303:2fd2:f612 with SMTP id
- v3-20020a92cd43000000b003032fd2f612mr15125908ilq.144.1670421384463; Wed, 07
- Dec 2022 05:56:24 -0800 (PST)
+        bh=RYrYY/fm6aX39Ixp9LpWPNUVB2qUa51Mk5FBV63lR/s=;
+        b=LDu/9S4VK3sVGTg+2LGliSBMNq6NS2C6I1rzRgl8gWABZySryQVd3f9zoBrMiGx8uh
+         HmCT6F65OYKNQTZ2FkeUtP8oAlMSjh2kxjWXdk/0Tzx6muwvekj7zwlzZPk4cb7aBQp/
+         OirEXA6hHUe4VUPXXwLDkUjEgd4N9H3Y/7qSyIr/o+ogg9ZpvavA43ZiAvha4i5errKm
+         hpukETTh+no6TcczCoJPO/JY7Dmq9D7ftQIi144T9FsHJMPLhUIdtcfp46qZ9yS1Oth+
+         O4H6H0ageV8ZzVuqmN3q7nZBix/LWVkxPOxTJIMeDvCC0AtgD0lAQf2zUliv09hVdgQm
+         KZVw==
+X-Gm-Message-State: ANoB5pnbKbqWd9ajzljHOazKzRRNSqczhT9Y1fVSVk3pQUwORQZDTFz1
+        OK7z8Ft44nYfx9wzanN0CTg=
+X-Google-Smtp-Source: AA0mqf78tDp/NbW5pJ5zC7IruwhOp2apHPbj5OpwxqwSxL3nqgqQ5BfEHvDHxyaoryVf9MFVK8FeDg==
+X-Received: by 2002:adf:ebc5:0:b0:241:6c90:79e9 with SMTP id v5-20020adfebc5000000b002416c9079e9mr39623325wrn.642.1670421406257;
+        Wed, 07 Dec 2022 05:56:46 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003b49bd61b19sm2130825wms.15.2022.12.07.05.56.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 05:56:45 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf vendor events powerpc: Fix spelling mistake "fpr" -> "for"
+Date:   Wed,  7 Dec 2022 13:56:45 +0000
+Message-Id: <20221207135645.2327224-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
- <20221201090242.2381-2-yanhong.wang@starfivetech.com> <277f9665-e691-b0ad-e6ef-e11acddc2006@linaro.org>
- <22123903-ee95-a82e-d792-01417ceb63b1@starfivetech.com> <3a9ef360-73c3-cf26-3eca-4903b9a04ea3@linaro.org>
-In-Reply-To: <3a9ef360-73c3-cf26-3eca-4903b9a04ea3@linaro.org>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Wed, 7 Dec 2022 14:56:07 +0100
-Message-ID: <CAJM55Z-iLy1fZmoyk3FU7oDQcKBk6APYf-cbamKr7Gjx+NaoTQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/7] dt-bindings: net: snps,dwmac: Add compatible
- string for dwmac-5.20 version.
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     yanhong wang <yanhong.wang@starfivetech.com>,
-        linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2 Dec 2022 at 09:04, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 02/12/2022 03:53, yanhong wang wrote:
-> >
-> >
-> > On 2022/12/2 0:18, Krzysztof Kozlowski wrote:
-> >> On 01/12/2022 10:02, Yanhong Wang wrote:
-> >>> Add dwmac-5.20 version to snps.dwmac.yaml
-> >>
-> >> Drop full stop from subject and add it here instead.
-> >>
-> >
-> > Will update in the next version.
-> >
-> >>>
-> >>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> >>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
-> >>
-> >> Two people contributed this one single line?
-> >>
-> >
-> > Emil made this patch and I submitted it.
->
-> If Emil made this patch, then your From field is incorrect.
+There is a spelling mistake in the description text. Fix it.
 
-Yes, please don't change the author of the commits you cherry-picked
-from my tree.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/perf/pmu-events/arch/powerpc/power8/other.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-But now I'm curious. Did you check with your colleagues that the dwmac
-IP on the SoC is in fact version 5.20?
-This was just an educated guess from my side.
+diff --git a/tools/perf/pmu-events/arch/powerpc/power8/other.json b/tools/perf/pmu-events/arch/powerpc/power8/other.json
+index f1f2965f6775..6de8c472ec99 100644
+--- a/tools/perf/pmu-events/arch/powerpc/power8/other.json
++++ b/tools/perf/pmu-events/arch/powerpc/power8/other.json
+@@ -2996,7 +2996,7 @@
+   {
+     "EventCode": "0x308e",
+     "EventName": "PM_SWAP_COMPLETE_GPR",
+-    "BriefDescription": "swap cast in completed fpr gpr",
++    "BriefDescription": "swap cast in completed for gpr",
+     "PublicDescription": ""
+   },
+   {
+-- 
+2.38.1
 
-/Emil
-
-> Best regards,
-> Krzysztof
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
