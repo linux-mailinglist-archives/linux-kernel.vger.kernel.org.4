@@ -2,94 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BB466456C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:45:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED526456C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiLGJpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:45:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S230096AbiLGJqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:46:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbiLGJpR (ORCPT
+        with ESMTP id S229718AbiLGJqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:45:17 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA75415A0F;
-        Wed,  7 Dec 2022 01:45:14 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so625912wmb.2;
-        Wed, 07 Dec 2022 01:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hhPsMqZpZxSN/BwbeQUCeG26h3GFjHPuzh8scMwphDI=;
-        b=eAU1K6LSpOLHvC0r3qoqG9e/NJZgJZD7e2cMzgDIlpSESzjvwDFVuuRDWwUxCF7P0C
-         oJKVSp/EYncgL725eZmapyJB2fyG6KkkDbbbccPZV7upUopmbPqOSZ9BYAE2uWTUwVTn
-         IMQ3tc4F3VKqW/Spev3zABaEvvCWyxE3/NAC2KWF6mickj+IZ7EHKQESfgE8GTdHA8ut
-         44WRgA+w650jVgaWBxv1ZZLAqmfKuKS1RZ4tOrA2s62nHeBJ0szofby7Og6EVQS1LC4E
-         CeBS7/wymP26FRSW6JIeWVh8w4qbkgYe4Iy1+tcFatykZkB1OzrEC26y3cmWakelfzoL
-         8Xaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hhPsMqZpZxSN/BwbeQUCeG26h3GFjHPuzh8scMwphDI=;
-        b=Flknt4+OGJfybUAJSFuhINk/UIV7rAFHAQrBKAIeHcCWnhSDn8E08GBeHkvGsfoRhe
-         BSzzueG+OOHbkE0D8NquiBu0ko3Hn/HB0fQ1xFeirrDT3wzvxheBU6sslolAYVKzuG81
-         aZtD8jqp26nD2ImRG+WtaHEhbtQ1AnBYZ315QEmXNViATBbs2ME+yhBsQcjzeosqBHDH
-         /0jp+6ICSWcu/IqaZZWWA1SEmp3pBpEcyctocymObjQZj4HFFWQvGbknT+EXp+nvUOkF
-         p8bRMHl6t1GxeF/IYCvfNve9W1Vk8fNjhMdhUZP3XoRGZSLpXo5CYQ8HswETPZtiH1IC
-         /MuA==
-X-Gm-Message-State: ANoB5pm2nTYk3rClvK77tEQbD1BXLMqf8vW8rAD/aBDSOCgFsLtUjOoA
-        MQoBkigdrrcyqCQyXQMSexo=
-X-Google-Smtp-Source: AA0mqf5qAxMIKRUoubYZeX4bdYOYmEnjU7tK3LlnDtWfv5fQZI8kahnbNZjgvI8OgV50bGbE8yFhpQ==
-X-Received: by 2002:a05:600c:295:b0:3d1:bc4f:7d44 with SMTP id 21-20020a05600c029500b003d1bc4f7d44mr10246644wmk.127.1670406313408;
-        Wed, 07 Dec 2022 01:45:13 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id m18-20020adfe952000000b002421888a011sm18979019wrn.69.2022.12.07.01.45.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 01:45:12 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] objtool: Fix spelling mistake "teh" -> "the"
-Date:   Wed,  7 Dec 2022 09:45:12 +0000
-Message-Id: <20221207094512.2281808-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 7 Dec 2022 04:46:30 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E996726F3
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 01:46:28 -0800 (PST)
+Received: from kwepemm600020.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRskx00gYzqSdy;
+        Wed,  7 Dec 2022 17:42:16 +0800 (CST)
+Received: from localhost.localdomain (10.175.112.125) by
+ kwepemm600020.china.huawei.com (7.193.23.147) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 7 Dec 2022 17:46:26 +0800
+From:   Peng Zhang <zhangpeng362@huawei.com>
+To:     <almaz.alexandrovich@paragon-software.com>,
+        <kari.argillander@gmail.com>, <paskripkin@gmail.com>,
+        <jack@suse.cz>, <yi.zhang@huawei.com>, <hch@lst.de>,
+        <akpm@linux-foundation.org>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <sunnanyong@huawei.com>, <wangkefeng.wang@huawei.com>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        <syzbot+d882d57193079e379309@syzkaller.appspotmail.com>
+Subject: [PATCH] fs/ntfs3: Fix OOB read in indx_insert_into_buffer
+Date:   Wed, 7 Dec 2022 09:46:10 +0000
+Message-ID: <20221207094610.998485-1-zhangpeng362@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600020.china.huawei.com (7.193.23.147)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a WARN_FUNC message. Fix it.
+From: ZhangPeng <zhangpeng362@huawei.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Syzbot reported a OOB read bug:
+
+BUG: KASAN: slab-out-of-bounds in indx_insert_into_buffer+0xaa3/0x13b0
+fs/ntfs3/index.c:1755
+Read of size 17168 at addr ffff8880255e06c0 by task syz-executor308/3630
+
+Call Trace:
+ <TASK>
+ memmove+0x25/0x60 mm/kasan/shadow.c:54
+ indx_insert_into_buffer+0xaa3/0x13b0 fs/ntfs3/index.c:1755
+ indx_insert_entry+0x446/0x6b0 fs/ntfs3/index.c:1863
+ ntfs_create_inode+0x1d3f/0x35c0 fs/ntfs3/inode.c:1548
+ ntfs_create+0x3e/0x60 fs/ntfs3/namei.c:100
+ lookup_open fs/namei.c:3413 [inline]
+
+If the member struct INDEX_BUFFER *index of struct indx_node is
+incorrect, that is, the value of __le32 used is greater than the value
+of __le32 total in struct INDEX_HDR. Therefore, OOB read occurs when
+memmove is called in indx_insert_into_buffer().
+Fix this by adding a check in hdr_find_e().
+
+Fixes: 82cae269cfa9 ("fs/ntfs3: Add initialization of super block")
+Reported-by: syzbot+d882d57193079e379309@syzkaller.appspotmail.com
+Signed-off-by: ZhangPeng <zhangpeng362@huawei.com>
 ---
- tools/objtool/check.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ntfs3/index.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 4350be739f4f..71d6e9b85217 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3859,7 +3859,7 @@ static int validate_entry(struct objtool_file *file, struct instruction *insn)
- 		}
+diff --git a/fs/ntfs3/index.c b/fs/ntfs3/index.c
+index 440328147e7e..28af0a5afbf2 100644
+--- a/fs/ntfs3/index.c
++++ b/fs/ntfs3/index.c
+@@ -679,9 +679,13 @@ static struct NTFS_DE *hdr_find_e(const struct ntfs_index *indx,
+ 	u32 e_size, e_key_len;
+ 	u32 end = le32_to_cpu(hdr->used);
+ 	u32 off = le32_to_cpu(hdr->de_off);
++	u32 total = le32_to_cpu(hdr->total);
+ 	u16 offs[128];
  
- 		if (!next) {
--			WARN_FUNC("teh end!", insn->sec, insn->offset);
-+			WARN_FUNC("the end!", insn->sec, insn->offset);
- 			return -1;
- 		}
- 		insn = next;
+ fill_table:
++	if (end > total)
++		return NULL;
++
+ 	if (off + sizeof(struct NTFS_DE) > end)
+ 		return NULL;
+ 
 -- 
-2.38.1
+2.25.1
 
