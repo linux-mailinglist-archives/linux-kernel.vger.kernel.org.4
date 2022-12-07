@@ -2,64 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E152D645002
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 01:10:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 394F7645010
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 01:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229452AbiLGAKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 19:10:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58052 "EHLO
+        id S229775AbiLGAOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 19:14:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbiLGAKC (ORCPT
+        with ESMTP id S229675AbiLGAOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 19:10:02 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4E82F386
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 16:10:02 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id 38-20020a630b26000000b004773803dda1so13246452pgl.17
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 16:10:02 -0800 (PST)
+        Tue, 6 Dec 2022 19:14:15 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1513A4AF11;
+        Tue,  6 Dec 2022 16:14:13 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id a16so22674305edb.9;
+        Tue, 06 Dec 2022 16:14:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lFyjvE+/usZ3mHWbZDkMlHN2qIDbnx/TDXsa9Xl7diU=;
-        b=dRgE7CandgE839OqfBwtAVB5NMh/v3rnYdKjFozZHdPbpdwNQpIj+Z5ey1WMfdACTo
-         YqrFJX8ZLeDx2dAovWK1rk+CC28V5xnr7L+rvAv2Is6ewS7EOgvZL5tyzvDZA8Gxpr/N
-         9+QMcZwI17keGuCRIRzna/hTpBdqqdnIeo6ouvvm1QNoiZ1i7gv/NjJoB0GXD2VmPTQu
-         JQuGO/1UAP4fK0EMYjMnyKey8Gkxfx2O6dkOddHm0/Be10T9dofh48yqXyChvOMMGqOk
-         VVqym7N9fi/A7BSsOLLEl6oTExwoGpgF8Vi0Gb0M0OCQP7fvoqHjOGpOh4avxIk2m3iS
-         eOKw==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FjD33XBCjBjlL9V3wxoPhJx57MGOAvENyDvWmnhM+3w=;
+        b=RqqJiXUZXF62miMji1tNuYVWTfQ69wB0RwVJLPqHpFZ+T8QiwFlYc/PxnJerEFmpFv
+         8x52x6s+v+Gj33zN+mq0H9VshcX7oom7x3bJF9l8bQ8/3JGYIrbfUKpCOgHSBYXD78UE
+         6qTxPIgERgPrKQG0hLeQbmp42jm8wOB3Iso3wwKbS3O+HjgEYfTWYi46G80r5GCBP98d
+         q8quSymsFjWoTHbgxSPnOCh/V5x+2hPW6pXu6hl1zhbB545HlFke0QJTuQasT7duScS2
+         vYj5Uq1AhyiGE6EZ7EvfJ+T23VFdN1Rfhs5SPpYY9wVPsjT+fXI0L4VKPzbjxMrSVTM3
+         jgFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lFyjvE+/usZ3mHWbZDkMlHN2qIDbnx/TDXsa9Xl7diU=;
-        b=rZpL7ngB9pE6MLv3B/1HNx1y7xtT8bmICv/KEL1OQrwzvEfzAsTrFO3aXwQcWVbKQ6
-         gy/POWmK4Kxn1dWp7w7btKJKyQ6sm6wcoGZws4/CiUBpKWRQ2ilqAJBhARlN6cZbqXnX
-         Pu75zUCWFLwRaoL3AKAIFK9oVtLOa/kUYkrhskOpFpbzkkGlnaWqEcdDCSe3zxWSlc5r
-         7aHsQonc+OgeoDflTIUTdbuIbjAtuwIP2Z0kv+h9bFrWqpSfkmBGnP57QLUyCR2EZAPU
-         wDeNcNWdDGi94Jxj1gXPg5N8nOY0pWQ7uobCBwhU9TZ8K60PeAn7PVF8q9cl8da3CWso
-         OH7g==
-X-Gm-Message-State: ANoB5pk7uXYt+yBLiYyiIG9ksRA0iI8sbXVFOV4mLeMtP8hiRLqcldR8
-        EywEFgR9QC1Q8LtkC5q+csLRi3KXW80=
-X-Google-Smtp-Source: AA0mqf4cNsZWl1zzyodMeMpedAkAZqTR2t/dWfgEz4iIHZJvBatP9uhywFio0ZWjCQq3WwoJMdE9i8IqHko=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:168f:0:b0:574:80c6:7106 with SMTP id
- 137-20020a62168f000000b0057480c67106mr61852303pfw.23.1670371801577; Tue, 06
- Dec 2022 16:10:01 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed,  7 Dec 2022 00:09:59 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221207000959.2035098-1-seanjc@google.com>
-Subject: [PATCH] KVM: x86: Add proper ReST tables for userspace MSR exits/flags
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        bh=FjD33XBCjBjlL9V3wxoPhJx57MGOAvENyDvWmnhM+3w=;
+        b=8JCLSzr8r8hAqL/bqJQpDII4gwUSnB93kzYZANoZehwvB0sWa9thBbhO5FpXA8SEHo
+         HEjPTTfjgDu80YU50DlQemJxxBuxRVYI6A2GK7767+CwnoaiplpPCXpUasBPDklCgQYM
+         BgZCMARaPMXsy1RDvm0UitIuoBBF4QesL0SLMZv8WxdTbBxp8zInDZmYEQIXrfGybuGn
+         p/fYUCdhtuNkFRWoiw/S0juMNaoUI3Y6KqA4SEZKxd5XZF3UisCgJyxJ0r3+fJD/JDM0
+         Y60TwMPZMsCVHHwJ00/ZJiY/pDwqf20l6M+96QJ7WgDAGsn9PMXJy5rBxt8Tkz8VtOT+
+         2qug==
+X-Gm-Message-State: ANoB5pmDxwh/xCAJc1CtMVJdnyLzvE0qFjOwrc8adP+aQhCXALUnORbT
+        DyoITNCYMjqqJpCBaPROxA0=
+X-Google-Smtp-Source: AA0mqf7uKtpD++c9M56H3huPpf+6c7y4tqQc20X591VIjN8ORWgB8OkkadLjPaBdNMh6mj2xuJQILw==
+X-Received: by 2002:aa7:da01:0:b0:46b:9f6e:4005 with SMTP id r1-20020aa7da01000000b0046b9f6e4005mr28156064eds.203.1670372051636;
+        Tue, 06 Dec 2022 16:14:11 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id v6-20020a170906180600b007c0c679ca2fsm5496664eje.26.2022.12.06.16.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 16:14:10 -0800 (PST)
+Date:   Wed, 7 Dec 2022 01:14:21 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Michal Kubecek <mkubecek@suse.cz>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: [PATCH v2 ethtool-next 0/2] add support for PLCA RS
+Message-ID: <cover.1670371908.git.piergiorgio.beruto@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,62 +74,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ReST formatting to the set of userspace MSR exits/flags so that the
-resulting HTML docs generate a table instead of malformed gunk.  This
-also fixes a warning that was introduced by a recent cleanup of the
-relevant documentation (yay copy+paste).
+This patch adds support for the IEEE802.3cg-2019 Clause 148 PLCA
+Reconciliation Sublayer. It adds get/set configuration and get status
+functions. Additionally, shows PLCA capabilities and status when invoked
+without arguments.
 
- >> Documentation/virt/kvm/api.rst:7287: WARNING: Block quote ends
-    without a blank line; unexpected unindent.
+Piergiorgio Beruto (2):
+  update UAPI header copies
+  add support for IEEE 802.3cg-2019 Clause 148 - PLCA RS
 
-Fixes: 1ae099540e8c ("KVM: x86: Allow deflecting unknown MSR accesses to user space")
-Fixes: 1f158147181b ("KVM: x86: Clean up KVM_CAP_X86_USER_SPACE_MSR documentation")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- Documentation/virt/kvm/api.rst | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
+ Makefile.am                  |   1 +
+ ethtool.c                    |  21 +++
+ netlink/extapi.h             |   6 +
+ netlink/plca.c               | 304 +++++++++++++++++++++++++++++++++++
+ netlink/settings.c           |  89 +++++++++-
+ uapi/linux/ethtool.h         |   3 +
+ uapi/linux/ethtool_netlink.h |  39 +++++
+ 7 files changed, 461 insertions(+), 2 deletions(-)
+ create mode 100644 netlink/plca.c
 
-diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-index c618fae44ad7..778c6460d1de 100644
---- a/Documentation/virt/kvm/api.rst
-+++ b/Documentation/virt/kvm/api.rst
-@@ -6455,9 +6455,11 @@ The "reason" field specifies why the MSR interception occurred. Userspace will
- only receive MSR exits when a particular reason was requested during through
- ENABLE_CAP. Currently valid exit reasons are:
- 
--	KVM_MSR_EXIT_REASON_UNKNOWN - access to MSR that is unknown to KVM
--	KVM_MSR_EXIT_REASON_INVAL - access to invalid MSRs or reserved bits
--	KVM_MSR_EXIT_REASON_FILTER - access blocked by KVM_X86_SET_MSR_FILTER
-+============================ ========================================
-+ KVM_MSR_EXIT_REASON_UNKNOWN access to MSR that is unknown to KVM
-+ KVM_MSR_EXIT_REASON_INVAL   access to invalid MSRs or reserved bits
-+ KVM_MSR_EXIT_REASON_FILTER  access blocked by KVM_X86_SET_MSR_FILTER
-+============================ ========================================
- 
- For KVM_EXIT_X86_RDMSR, the "index" field tells userspace which MSR the guest
- wants to read. To respond to this request with a successful read, userspace
-@@ -7256,11 +7258,13 @@ to inform a user that an MSR was not emulated/virtualized by KVM.
- 
- The valid mask flags are:
- 
--	KVM_MSR_EXIT_REASON_UNKNOWN - intercept accesses to unknown (to KVM) MSRs
--	KVM_MSR_EXIT_REASON_INVAL   - intercept accesses that are architecturally
--                                invalid according to the vCPU model and/or mode
--	KVM_MSR_EXIT_REASON_FILTER  - intercept accesses that are denied by userspace
--                                via KVM_X86_SET_MSR_FILTER
-+============================ ===============================================
-+ KVM_MSR_EXIT_REASON_UNKNOWN intercept accesses to unknown (to KVM) MSRs
-+ KVM_MSR_EXIT_REASON_INVAL   intercept accesses that are architecturally
-+                             invalid according to the vCPU model and/or mode
-+ KVM_MSR_EXIT_REASON_FILTER  intercept accesses that are denied by userspace
-+                             via KVM_X86_SET_MSR_FILTER
-+============================ ===============================================
- 
- 7.22 KVM_CAP_X86_BUS_LOCK_EXIT
- -------------------------------
-
-base-commit: 3d7af7c5e000c68581429d533ed63414e4a48e6d
 -- 
-2.39.0.rc1.256.g54fd8350bd-goog
+2.35.1
 
