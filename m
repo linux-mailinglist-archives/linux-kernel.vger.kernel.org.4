@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2835645162
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A049645166
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:44:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiLGBnm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:43:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S229954AbiLGBo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:44:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiLGBnf (ORCPT
+        with ESMTP id S229870AbiLGBoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:43:35 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A30532C6
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:43:33 -0800 (PST)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B6LKmhJ003004;
-        Wed, 7 Dec 2022 01:43:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=qCZ/rl1dSjciR2lDFhUglen15jLBUafpTa9zJ3Bwgp0=;
- b=hUNrUknNtpDRP4szkXUBWM2cp5u5im9wJ30IyMfakdA2arU/Ar0ISxKKVy+OMU5PsIto
- b4M2rsu+Q6mCalMUyEBSY8dTDl2v4l5MM54bU88mqlGg8YMxOW7hw3c4QspbABnZ+DP/
- eZofHWaZVhygOo19kZ6CJU32yD1HwsnHn0Fibo9SkD4EzDsBAcfCmsXGP5S7lW2fU7km
- /qxOSeiUagZgPowPntvOaT+o2X0xgI+QBYay6tSPHTePNIr8MzO7qtQlXo74UQNaNBLP
- jK40RyPb/tE6rig9TRIjg9OdAG23DbcPgAyUtZ3A6Gx57mwgaCZljtNQJWxqkKWsBy3o ww== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ydjhpuq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 01:43:16 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B6NwpEg032422;
-        Wed, 7 Dec 2022 01:43:15 GMT
-Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1nam02lp2045.outbound.protection.outlook.com [104.47.57.45])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3maa7vj73d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 01:43:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=grDpJrnoAgPt7Kw7jqihJbYmnbXVwANC6SosrxPpwDpKTUbbxe0aQCrFggjTPRXlovN/0C5nZW05sonWTZPBaHm52PmiMDlMBG0sv36DVGudAkPaW8BF8abZdMS6mEt7ks3+NTD/oI7p933aeCiEMBhz7ZbBdFuJNT4M/PjxWhSRuuuK7eFzPTsLOnER4YRVLcKo9WAGwGFZY1fCui64cIkcSJys1BiwzFfN6tBZhIxo3rgEO29JtzI+6kjsvmqBXBqfaR8DdFfS6hYEoX/EW9x2cw90NxQo7fsfFCkdZaACq7aAwDiqfDRxtUz7YVObwYvyw+tGaPa5Wab1zZnGbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qCZ/rl1dSjciR2lDFhUglen15jLBUafpTa9zJ3Bwgp0=;
- b=nf7axclpn9TUi6iOcxOvMZ92QK1XoJZfW6bESYlC6YsmftZ6YFvL41vJBLQKJ5/Y8mEhIsjPTe790T6XKdBeO4WByKh2jiWL4BhYauouzkJZTDMv7u0MAN+tAZTO9jgiHkoayLGh46nsgoFmwGvBt4MTVKDdo/7gFXv58+XYAeuf+BvRm9Qfb9KURjry1xXzUzCogWa/cyhcm7H2dmT3ohZSWOV9zX+1LFOsGm8fTVuVDPVZxKJXqQ6bpJBodLd9bS4aHZNBVJ+UlKtRc98g4plWFGP6HSpe6Nb2EFHSP5xmK7DbXfNwIF2MiXQCpl3HxJ4kPXLFnp0RygbfrbqVyw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 6 Dec 2022 20:44:09 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD36532C6
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:43:57 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id ay32so7160600qtb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:43:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qCZ/rl1dSjciR2lDFhUglen15jLBUafpTa9zJ3Bwgp0=;
- b=Qm8GhDZ1K6bZMCMAQ3slcjiXOZxEYy9oOZAcrgArkkqrlxd80UrmMh+EJyCy7aIL3gHFJccsQO++b7EsRqUGhi8YAOO6zDyA1ZCfdoN9fVcWIhCbsOOwuzYKjQQr8E6HGwSldZ0HGze6t2bBvQxOcO4UWWvXniKsMzxilcsHhvU=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by IA1PR10MB6711.namprd10.prod.outlook.com (2603:10b6:208:418::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 01:43:13 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721%4]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 01:43:13 +0000
-Date:   Tue, 6 Dec 2022 17:43:09 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        willy@infradead.org, almasrymina@google.com, linmiaohe@huawei.com,
-        hughd@google.com, tsahu@linux.ibm.com, jhubbard@nvidia.com,
-        david@redhat.com
-Subject: Re: [PATCH mm-unstable v5 04/10] mm/hugetlb: convert
- remove_hugetlb_page() to folios
-Message-ID: <Y4/vrUJ8asJiYKkx@monkey>
-References: <20221129225039.82257-1-sidhartha.kumar@oracle.com>
- <20221129225039.82257-5-sidhartha.kumar@oracle.com>
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V1THvP0SuRG0XJWsLZQzh9RD4cVY0pdcXUBk5DgA59o=;
+        b=RvfiiSIsSKv1Mr4fQYH1zlgcQwdKE0GkJeC1lLKgACdvhmQE8JLalyVcWohaCBQNgA
+         RJHa1pUqu3EZQ7r6DWLOZ4JK3JTZcfxTJbQ5XJi9SPM4kx7LBQ7yv1IFNH7+j1NclQMy
+         0XWW+VlZ93ONiV4lI+4uOwYafw7Ie0zZ18MsaCKAz4VcWiGCRiGm0bmMBZA6tP5NfQ20
+         xQv4GVlQiFsTWvotMBU92nqFw29fmsUUEZYRcn8VYcDW1QHlApJ/zKy9IjYCesNpO6yG
+         UjGplmsbsp71ZUItB3d7XC0KQBXIxD2vHmmyBTWfGXBPJQGBij5Qq+UVoF8qtdipzt8X
+         nF8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V1THvP0SuRG0XJWsLZQzh9RD4cVY0pdcXUBk5DgA59o=;
+        b=JKhFu+jxXeDM/9PJY1YweEpB9RRgqLdzldEB01HCvDs4lg/wU8yYQszjJq+IevMzR9
+         2F2rSUcD8g6/EML5TcrS7HjsS5imzueJVN6XfcvaSEsMMGSemPNkNPgnIYfzu6eziPTC
+         Ib+Eli6QTpJTY6yi4yTUCqNtYD/rT7m6aiDydQji5PDsUuBEXVFRcTyjzFunS4MdOvJR
+         LNJ9Z85S21rzrqgnCSHU/rlZEMTI7HGQotQ5nC9rCIBka8ze2DK7nB2fNY8n7yJ2pfCD
+         rp1uV3uvVUp80oCX9yOBb+ny7Z1diypdnNSKwLryhXJFKQMg+0xBxHtY1eHAGJ1Pcp4S
+         vPbQ==
+X-Gm-Message-State: ANoB5pkU6kl1omg4cvKQj+F7B1ZAZ1a/4Xh8gjvAIt4DjTzxGgb8yED2
+        h6VQbNurapcSOz8pDxc/rSM=
+X-Google-Smtp-Source: AA0mqf5upxOEJmO3vtqr/HlChx1qpjJggsfhYPXzixoI7DhAlow3iBZE/XKsJPmUWm7w3eBrQOWLig==
+X-Received: by 2002:a05:622a:56:b0:3a6:a79a:a918 with SMTP id y22-20020a05622a005600b003a6a79aa918mr13823857qtw.569.1670377436716;
+        Tue, 06 Dec 2022 17:43:56 -0800 (PST)
+Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
+        by smtp.gmail.com with ESMTPSA id bj31-20020a05620a191f00b006ed61f18651sm16191519qkb.16.2022.12.06.17.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 17:43:56 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 60F7327C0054;
+        Tue,  6 Dec 2022 20:43:55 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 06 Dec 2022 20:43:55 -0500
+X-ME-Sender: <xms:2u-PY1jX6UncFMkiTOTog5hGJQCzb2u4nUu_mLwnmlNUzdVkOyZSVA>
+    <xme:2u-PY6DcH62K734KlJG3xJx-JPXpnH8nWdkcSZ71gPRp2T8jj2ipHmtVYb5XbMtXR
+    udmc31goW9z-IOGWQ>
+X-ME-Received: <xmr:2u-PY1EIqXH0eZhABUcO0g0cufh7EAbZFhbOerERyl7tiqvwal3eQOPBiew>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudejgdeflecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhquhhn
+    ucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrfgrth
+    htvghrnhepuddtfeelhfduveehffeljeevveehvdfhhfffgeejvdetgfduhfeiheekteet
+    hfelnecuffhomhgrihhnpehrvgifrhhithgvrdhmgienucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgruhhthhhp
+    vghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsohhquhhnrd
+    hfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:2u-PY6S8AHCjQ2FwdZ6t4Q4DtWCTE5PrfaghM65U2pyZa01sNcuxNw>
+    <xmx:2u-PYyxuP7WNWKQW6x26Pk89NkNznfOCmtLA-MzuWeFy_DZp_V-B5g>
+    <xmx:2u-PYw4NdGIsxX5WzYoYvVWSSyKwXxML4vz4f9kcTffJ7MMzYUrVHQ>
+    <xmx:2--PY3h7P69nNWyFN27IlAyYrEFxkElDlquVFWEjpNwib7rbfbWIbw>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 6 Dec 2022 20:43:53 -0500 (EST)
+Date:   Tue, 6 Dec 2022 17:43:49 -0800
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Jonas Oberhauser <jonas.oberhauser@huawei.com>
+Cc:     "paulmck@kernel.org" <paulmck@kernel.org>,
+        "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
+        "parri.andrea@gmail.com" <parri.andrea@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "j.alglave@ucl.ac.uk" <j.alglave@ucl.ac.uk>,
+        "luc.maranget@inria.fr" <luc.maranget@inria.fr>,
+        "akiyks@gmail.com" <akiyks@gmail.com>,
+        "dlustig@nvidia.com" <dlustig@nvidia.com>,
+        "joel@joelfernandes.org" <joel@joelfernandes.org>,
+        "urezki@gmail.com" <urezki@gmail.com>,
+        "quic_neeraju@quicinc.com" <quic_neeraju@quicinc.com>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] tools: memory-model: Make plain accesses carry
+ dependencies
+Message-ID: <Y4/v1bCjahxA1LVt@boqun-archlinux>
+References: <Y4pIwqK7SWft1xCl@boqun-archlinux>
+ <4262e55407294a5989e766bc4dc48293@huawei.com>
+ <20221203190226.GR4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4uyzDl49Zm3TSLh@rowland.harvard.edu>
+ <20221203204405.GW4001@paulmck-ThinkPad-P17-Gen-1>
+ <Y4vAYzJTTQtNkXFh@rowland.harvard.edu>
+ <20221203231122.GZ4001@paulmck-ThinkPad-P17-Gen-1>
+ <43c7ea9ebdd14497b85633950b014240@huawei.com>
+ <Y4xbQmnDEbFTvgQ/@Boquns-Mac-mini.local>
+ <d86295788ad14a02874ab030ddb8a6f8@huawei.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221129225039.82257-5-sidhartha.kumar@oracle.com>
-X-ClientProxiedBy: MW4PR04CA0384.namprd04.prod.outlook.com
- (2603:10b6:303:81::29) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|IA1PR10MB6711:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46b709a9-0dd3-4271-3c74-08dad7f46719
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: W5AOuwC9BNifv7RYb4zwfZ8gcv4faacHrrYKUTo06KXNYnL22O4W7/evgsw+Zu2iZNzUPnA7oU94BHMfpBhnVYisC14GXAJhw/W5/yWgGiNu8POHea84otIrM4S+d5s/v4uk1awZFMJss2JDvYeGaYS+tpbEoW5UnHWpM34n6p/Cn/9E+7zo37q0k0G9SUiz0vVA9a2C9HTRAnQU7PncSJmnsoxM3BO9J0fZRZUctYUeafYY8ZDN68a+BwupyiXaak3pvanWUYWWuucaEq/EKy9jTEZ7aOrZzwspfoMymyHJfbd47WXJ923Iok0qHk3aq/bQy1c8+ID+BByrwxk/0PH13JIuDgSj+OgfYs0k1+ZHaSQp4a3oqDroWr/UQM1SHXhRKt/t1/WwgypxidlX1gRFKAxB1BRe3S7Fn8O8yLLZl7pn2Q5qAIJVKnGy5g+2U45SVlarjN1mhMjjDWLbQRQf6A3LuO6oWftu0WpDNdZpfH1vMTfeyv608Vykds0tfCEBVhQp0buD5tvELAVFkuEV0ouaXaXjp9PUja3gCVI70prqplYXzT/WEzK9AS41PHtJ3rP+/ldpIyg24d0ggC93FOI2qs+eh0zkKa1zaYKwGAxnByIiCc1gOviFNgno3Y/wqtx1dCQ4yIApc7BujA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(136003)(376002)(346002)(366004)(396003)(451199015)(26005)(8936002)(6512007)(53546011)(9686003)(186003)(6862004)(33716001)(6666004)(6486002)(478600001)(5660300002)(7416002)(6636002)(38100700002)(4744005)(83380400001)(44832011)(41300700001)(66946007)(2906002)(6506007)(86362001)(66556008)(66476007)(8676002)(316002)(4326008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X05Vl8W4qsJMixyQNXfhXHvZ1NHKPJ6SfoyWshISXypv7mj4rG/GpaIwdikX?=
- =?us-ascii?Q?0ewvktowK/f1nMIFCisVd37cRA/GtfNIzvpNUXvss/krg6bMLoC7G+C79Q5o?=
- =?us-ascii?Q?3Nbo26wvySP2dQooptMhBZgB1yNonc1CmcatMAs9mIWwsTPbX83sXrTIyM3P?=
- =?us-ascii?Q?2XaMyj6ZP2plygOM9qyWgu78G86BC4/1i8YJYYT9dJPDPCRuDqktQ3/3p+/3?=
- =?us-ascii?Q?wUCmA5X6iXJb4PD0BiYdPf0V5uFyYLbnvaCa2j/CpIuPIMlT2w0yaL+xuA4S?=
- =?us-ascii?Q?JEv7CWL8FH4vQygk9hJjgkDmEU94S2rn10/IdC/WrIN2be/Uj2GYzPfNeXik?=
- =?us-ascii?Q?rF6taKScyOYhJqwW/anSMy176/HLPaJNO2xi8o2M+rCwJO9t3nw8rGQUChf+?=
- =?us-ascii?Q?QzoXBdc1tf2prXeLIdJRvrlLOAyOGVCI1+aC/mzgzGnbNh+l48jDW7uDqqvb?=
- =?us-ascii?Q?EOxkzR9k7eFMS7VfMEHHJ0zsxXa+0pwmwKlm+aik0/ctNRsQn4sy0nMqIEs2?=
- =?us-ascii?Q?aNtPv3eCMkGaC2bFLNYnuunAH45C0lcr08KFjTAFZQ/fECfX2vmVi3YaOFkW?=
- =?us-ascii?Q?IpFpOv0KvKyrFP06PHfqu28KOuVMr7w/wqRLoHbmZ3eI37OSMhNRfU7LMFWb?=
- =?us-ascii?Q?OFeQD3ntsFfU4LLIg4CQDnHmtgiX2aFK7hNxq1EFGVcQF5+AW5wBDEvalWHP?=
- =?us-ascii?Q?lIyidEkvtuKtib/DVBXRLHsJRJjpVmD5NvnEpqzhXFnW6m8yoJihY0MWBDtZ?=
- =?us-ascii?Q?hAengg430lptVfABdGmz6gXTFvdXQj0zl744tFaHP2vFzc9oIa60ei0SAC9/?=
- =?us-ascii?Q?Cs8Ed03EgYmROOBLo8cU/HTOqxapYM2sw4DuFW0kOZvwwCd/5ZE4mZDTRoJE?=
- =?us-ascii?Q?SDYVdGGI9kk4XBbNzqph5gGcQP2qfw0EGxrFyFzSuR7g2bDJsyzRxRj1mwqL?=
- =?us-ascii?Q?4sh5sr6hbkotgAoycqsNY5T9yplfB/wYKUl6/xipL80HM9I0qtr2zO1sILNc?=
- =?us-ascii?Q?n8rMgK/N92EdTt/b8EngGgcs8RO/tw6tly6zv9gM79LgdbWzWxSHBHavMxLS?=
- =?us-ascii?Q?VrTzABK1wcsuYm6LkW6YyvW7COD809VidtPpOCAg4MQqoep2TQKns7w65m+T?=
- =?us-ascii?Q?l/z+XsocmgbTh1nh96iDw1lnk/xqrul0zE5X/83HsR3S9Esxvg1u2bYJWqAc?=
- =?us-ascii?Q?hlADlCx4QOEXV6vbEVa/PPHweemJCXMD4+ZZp4nr5f11K55UcibsezpIqTH0?=
- =?us-ascii?Q?cjkTJMncAonDk9s2DLItHkP9AzwWSiSWLcnXeQot9wH5BjD0xVf5OPue1cVF?=
- =?us-ascii?Q?30ceaZ004rEed4xzWk/IVNFdwEebIcDyy/USA3WsnRqe3nOdwrTiQbXr7vmC?=
- =?us-ascii?Q?NBPjcXEfr+4DmoL7X+tEH7M0nsnwMtiXeNrrawe9rakpA28G4foA/cL+f3IK?=
- =?us-ascii?Q?+SrDyQNl29vTZg704KViweNh9AryjFl6j3tzsMF7AmYLlD2bOWmhERJQjAYl?=
- =?us-ascii?Q?RJ6SSsvNBo2lTvL/A909PzgzwuxtBLlwOx0qYnq6v3xghtJT+dC8Vdsdp6d/?=
- =?us-ascii?Q?oViFWe6PJtaAqENZWx8+IrV7fFziUpHtlcTmGGyphGIF9BFTTqubsQdsJkDB?=
- =?us-ascii?Q?Lg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?c5lley/pckd24ElyWt3XcCuUpmeN+MuaqfvyrsCXfQtx6ZipEoNRihINnXub?=
- =?us-ascii?Q?gFGXQSvTHPW3v61tuCAAdnpoWJgB5tFdiE+3W4NtIYDGDo0hAm6QerQL1Tbu?=
- =?us-ascii?Q?N1kECMv41G8fx/RDKoKZQRlWs1sAFzIaCCMvAkqQziGtKTpBSXfY6VE95r3E?=
- =?us-ascii?Q?TDWbpZz/NjpF1SCLoZ20EMiMDP3mScPN1kClOvVcELJ3aRwcUNLPbiwBSvd2?=
- =?us-ascii?Q?OXECktD6hNtP0+GfQ9kzfbSN2XIM5AJy4TEN2m91tbHCnz2GjVkAMNN4CkuP?=
- =?us-ascii?Q?39Gol47mniK/lfA0KheHJsXN4jRR5w1fRNXJUp1C1RP/o74VTuMoAaDIut6B?=
- =?us-ascii?Q?xp44OjD5tjrZ8jJ57wXn/SbC6nV7ZoIK9FzGK3aRYP7c2TEAr5oxmSPoPFwW?=
- =?us-ascii?Q?v4uCt003GuCR0steKd74NjnPieCpoF6R/umy/xwJtCzcMPNKpF+Jn+53HNxy?=
- =?us-ascii?Q?A8KnXKOQhSUMVlE4AG1cWXXEfs952tb80JXwrq9BVQNJ5yOxeCv8sjzbwKBY?=
- =?us-ascii?Q?+e8vtZq9/z+b+OpjIsfTystMCYMdzMW90yUQIOQ5Ypt0PrqRzKzcU5bGE+u+?=
- =?us-ascii?Q?dOvLPlqPNe66vrVT4v2PCHc6RgGFkmcU5IDqjA3e4RviVFRPilV10JnTvhl3?=
- =?us-ascii?Q?CevfENe8XaNyJy59wgEPflGbI0eXOCo3+rqqXA4ewfThrL1Dx1LuzLmbXUmL?=
- =?us-ascii?Q?QUzmfLNJnvTF/k5HVIiUaHveD6AVSzjVy9tDArj5AlmmCQIlHUToPyL2+21h?=
- =?us-ascii?Q?4h0vIAFyLot3SB6tKfwDJtbPPFuktYK4l38M0cbY6r6JiaJu1PDwfSf58gKe?=
- =?us-ascii?Q?2Wdf+uSbjf/xbw0YB+Jj0l3MOmTH4AU8t4uefkzy0XOTZyCQzZho47i9AAgb?=
- =?us-ascii?Q?vH8C5PRhiMfnEce6h6/AdPkhljbPHcAg4dxDNtLc9/KSS0Zae4TYHKNUPdO+?=
- =?us-ascii?Q?3Hs0drLY7RoM3/V3j8QrXUQ+1ynylmmqmcv/bVQ7vhXY1S/YJqePejCS6Oc+?=
- =?us-ascii?Q?Y7q2xA78JmafdoDRHpTRAPxPipLZAQnB8GJdGHVaFteknHwbqzm8GNhazrai?=
- =?us-ascii?Q?rQcT/8qaafT9EVL0WDEATjebPC2FVJ84rfoLfQdpaZCZ5xpOQgQ=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46b709a9-0dd3-4271-3c74-08dad7f46719
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 01:43:12.9764
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HS0ox5aP58ki+hvmSFKW1H4g+oiKFByB1Ren9v55U1ZA+v94WFhTh76dst+nv1pvHe2msPRkJ8HuNzCkm+5KRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6711
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-06_12,2022-12-06_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 spamscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 phishscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212070009
-X-Proofpoint-ORIG-GUID: szuvUiLMhJAv03curSXDR_Kpe7iSKXqk
-X-Proofpoint-GUID: szuvUiLMhJAv03curSXDR_Kpe7iSKXqk
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <d86295788ad14a02874ab030ddb8a6f8@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -169,16 +122,291 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 14:50, Sidhartha Kumar wrote:
-> Removes page_folio() call by converting callers to directly pass a folio
-> into __remove_hugetlb_page().
+On Mon, Dec 05, 2022 at 01:42:46PM +0000, Jonas Oberhauser wrote:
+[...]
+> > Besides, could you also explain a little bit why only "data;rfi" can
+> > be "carry-dep" but "ctrl;rfi" and "addr;rfi" cannot? I think it's
+> > because there are special cases when compilers can figure out a
+> > condition being true or an address being constant therefore break
+> > the dependency
 > 
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> ---
->  mm/hugetlb.c | 48 +++++++++++++++++++++++++-----------------------
->  1 file changed, 25 insertions(+), 23 deletions(-)
+> Oh, good question. A bit hard for me to write down the answer clearly
+> (which some people will claim that I don't understand it well myself,
+> but I beg to differ :) :( :) ).
+> 
+> In a nutshell, it's because  x ->data  [Plain]  ->rfi  y ->... z
+> fulfils the same role as storing something in a register and then
+> using it in a subsequent computation; x ->ctrl y ->... z (and ->addr)
+> don't. So it's not due to smart compilers, just the fact that the
+> other two cases seem unrelated to the problem being solved, and
+> including them might introduce some unsoundness (not that I have
+> checked if they do).
+> 
+> Mathematically I imagine the computation graph between register
+> accesses/computations r_1,...,r_n and memory accesses m_1,...m_k that
+> has an unlabeled edge  m_i -> r_j when m_i loads some data that is an
+> input to the access/computation r_j, similarly it has an unlabeled
+> edge r_i -> r_j  when the result of r_i is used as an input of r_j,
+> and finally r_i ->data/ctrl/addr m_j when the value computed by r_j is
+> the address/data or affects the ctrl of m_j.  So for example, if 'int
+> a' were to declare a register, then
+>     int a = READ_ONCE(&x);
+>     if (a == 5) { WRITE_ONCE(&y,5); }
+> would have something like (*) 4 events  (*= since I'm avoiding fully
+> formalizing the graph model here I don't really define to which extent
+> one splits up register reads, computations, etc., so I'll do it
+> somewhat arbitrarily)
+> m_1 = READ_ONCE(&x)
+> r_1 = store the result of m_1 in a
+> r_2 = compare the content of a to 5
+> m_2 = WRITE_ONCE(&y, 5)
+> 
+> with the edges m_1 -> r_1 -> r_2 ->ctrl m_2
+> 
+> Then in the LKMM graph, we would have m_i ->ctrl m_j (or data or addr)
+> iff there is a path m_i -> r_x1 -> ... -> r_xl ->ctrl m_j (or data or
+> addr).
+> So in the example above, m_1 ->ctrl m_2.
+> 
+> Now what we would do is look at what happens if the compiler/a
+> tool/me/whatever interprets 'int a' as a memory location. Instead of
+> r_1 and r_2 from above, we would have something like
+> 
+> m_1 = READ_ONCE(&x)
+> r_3 = the result of m_1 (stored in a CPU register)
+> m_3 = a := the r_3 result
+> m_4 = load from a
+> r_4 = the result of m_4 (stored in a CPU register)
+> m_2 = WRITE_ONCE(&y, 5)
+> 
+> with m_1 -> r_3 ->data -> m_3  ->rfi  m_4 -> r_4 ->ctrl m_2
+> and hence
+> m_1 ->data m_3 ->rfi m_4 ->ctrl m_2
+> 
+> What the patch does is make sure that even under this interpretation,
+> we still have m_1 ->ctrl m_2
+> Note that this ->data ->rfi applies in every case where something is
+> considered a register is turned into a memory location, because those
+> cases always introduce a store with a fixed address (that memory
+> location) where the data is the current content of the register, which
+> is then read (internally) at the next time that data is picked up. A
+> store to register never becomes a ctrl or addr edge, hence they are
+> not included in the patch.
+> 
 
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Let me see if I can describe your approach in a more formal way (look at
+me, pretending to know formal methods ;-))
 
--- 
-Mike Kravetz
+Bascially, what you are saying is that for every valid litmus test with
+dependencies (carried by local variables i.e. registers), there exists a
+way to rewrite the litmus test by treating all (or any number of) local
+variables as memory locations.
+
+Lets say the set of the litmus tests to start with is L and the set of
+the rewritten ones is L'is. Here is a rewrite rule I come up with:
+
+1)	for every local named <n> on processor <P>, add an extra memory
+	location (maybe named <n>_<P>) in the processor function, for
+	example
+
+		P0(int *x, int *y) {
+			int a ...;
+		}
+
+	became
+		P0(int *x, int *y, int *a_P0) {
+		}
+
+2)	for each <n> in 1), for each assignment of <n>, say:
+
+		int <n> = <expr>; // H
+
+		or 
+
+		<n> = <expr>; // H
+	
+	rewrite it to
+	
+		int computer_register_<seq> = <expr>; // A
+		*<n>_<P> = computer_register_<seq>; // B
+	
+	where <seq> is a self increasing counter that increases every
+	step or the rewrite.
+
+	This step introduces an extra edge A ->data B.
+
+3)	for each <n> in 1), for each the read of <n>, say:
+
+		Expr; // T
+	
+	rewrite it to
+
+		int computer_register_<seq> = *<n>_<P>; // C
+		Expr[<n>/computer_register_<seq>]; // D
+
+	where <seq> is a self increasing counter that increases every
+	step or the rewrite.
+
+	"M[x/y]" means changing the expression by replace all appearance
+	of variable x into y, e.g. (n1 = n + 1)[n/y] is n1 = y + 1.
+
+	Note that for every rewrite 3), there must exists a
+	corresponding rewrite 2), that C reads the value stored by the
+	B of the rewrite 2). This is because the litmus tests in set L
+	are valid, all variables must be assigned a value before used.
+
+	This step introduces an extra edge B ->rfi C, and also for every
+	dependency between H -> T in the old litmus test, it preserves
+	between C -> D in the new litmus test.
+
+4)	for each <n> and <P> in 1), for each expression in the exist
+	clause, say:
+
+		Expr
+	
+	rewrite it to
+
+		Expr[<P>:<n>/<n>_<P>]
+
+For example, by these rules, the following litmus test:
+
+	P0(int *x, int *y) {
+		int r = READ_ONCE(*x);
+		WRITE_ONCE(*y, r);
+	}
+	exists(0:r = 1)
+
+is rewritten into
+
+	P0(int *x, int *y, int *r_P0) {
+		int computer_register_0 = READ_ONCE(*x); // by 2)
+		*r_P0 = computer_register_0;             // by 2)
+		int computer_register_1 = *r_P0;         // by 3)
+		WRITE_ONCE(*y, computer_register_1);     // by 3)
+	}
+	exists(r_P0 = 1)                                 // by 4)
+
+
+It's obvious that the rewritten litmus tests are valid, and for every
+dependency
+	
+	H ->dep T in litmus tests of set L
+
+there must exists a
+
+	A ->data ->rfi ->dep D in L'
+
+("dep" is not the same as in linux-kernel.cat).
+
+And note since L' is a set of valid litmus tests, we can do another
+whole rewrite to L' and get L'' which will contains
+->data->rfi->data->rfi->dep, and this covers the (data;rfi)* ;-)
+
+
+Now the hard part, since the rewrite is only one-direction, i.e L => L',
+or more preciselly the transverse closure of the rewrite is
+one-direction. We can only prove that if there exists a valid litmus
+test with dependency ->dep, we can construct a number of litmus tests
+with (->data ->rfi)*->dep.
+
+But to accept the new rules in your patch, we need the opposite
+direction, that is, if there exists a (->data ->rfi)* ->dep, we can
+somehow find a litmus test that preserves anything else but reduce
+
+	(->data->rfi)*->dep
+into
+
+	->dep.
+
+(I'm not sure the following is sound, since some more work is needed)
+
+The first observation is that we can ignore ->data [Marked] ->rfi,
+because if we can reduce
+
+	(->data [Plain] ->rfi)* ->data [Marked] ->rfi -> (->data [Plain] ->rfi)* ->dep
+
+to
+	
+	->data [Marked] ->rfi ->dep
+
+we get "hb", which already has the ordering we want.
+
+Now we can focus on ->data [Plain] ->rfi ->dep, e.g.
+
+	x = READ_ONCE(..); // A
+	*<N> = <expr>; // B, contains x
+	r = Expr; // C, Expr contains *<N>
+	WRITE_ONCE(.., r); // D
+
+We need to assume that the litmus tests are data-race free, since we
+only care about valid litmus tests, then it's OK. The rewritten looks
+like the following:
+
+	int computer_register_<seq>;
+	x = READ_ONCE(..); // A
+	computer_register = <expr>; // B, contains x
+	// ^^^ basically reverse rewrite of the 2) above	
+
+	r = Expr[*<N>/computer_register_<seq>]; // C
+	// ^^^ basically reverse rewrite of the 3) above	
+
+	*<N> = computer_register_<seq>; // R
+	// ^^^ need this to keep the global memory effect
+
+	WRITE_ONCE(.., r); // D
+	
+We need the data-race free assumption to replace a memory cell into a
+local variable.
+
+By this rewrite, We reduce
+	A ->data B ->rfi C ->dep D
+into
+	A ->dep D.
+
+A few details are missing here, for example we may have multip Cs and
+need to rewrite all of them, and we need normalization work like
+converting litmus tests into canonical forms (e.g change the += into
+temporary variables and assignment). Also we need to prove that no more
+edges (or edges we care) are added. But these look obvious to me, and
+enough formally digging for me today ;-)
+
+As a result, the rewrite operation on L is proved to be isomorphic! ;-)
+In the sense that we think reducing to (->data [Marked] ->rfi)* ->dep
+is good enough ;-)
+
+Now for every litmus test with
+
+	(->data ->rfi)* ->dep
+
+we can rewrite it into another litmus test preserving all other edges
+except replacing the above with
+
+	(->data [Marked] ->rfi)* ->dep
+
+and the rewrite only contains replacing non-data-race accesses with
+local variables and in the sense of C standards and maybe other model
+tools these litmus tests are equivalent.
+
+> Please let me know if this is convincing and clear. If so we could
+> link to your e-mail and my response to provide context, without having
+> to put a huge explanation into the commit message. If that's not
+> desirable I can also think about how to compress this into a shorter
+> explanation.
+> 
+
+My intution now is the rewrite explanation above, which is good enough
+for me but not sure for other audience. Thank you for keep explaining
+this to me ;-)
+
+
+Regards,
+Boqun
+
+> Best wishes,
+> Jonas
+> 
+> PS:
+> 
+> > sometimes I'm just slow to understand things ;-)
+> 
+> Well, welcome in the club :D
