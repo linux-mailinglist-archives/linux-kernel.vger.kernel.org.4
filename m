@@ -2,35 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F293646118
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F6AC646113
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiLGSbr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:31:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43212 "EHLO
+        id S229619AbiLGSbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiLGSbc (ORCPT
+        with ESMTP id S229815AbiLGSbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Dec 2022 13:31:32 -0500
 Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0439E6C728;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67D3C6C738;
         Wed,  7 Dec 2022 10:31:31 -0800 (PST)
 Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 17F6BCA46D;
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 7E8E4CA46E;
         Wed,  7 Dec 2022 18:30:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1670437859; bh=B+AM+CcfgTRFOdwUZ63j7q7vBTSNvVXCXcySWzAp1hM=;
+        t=1670437859; bh=3NYobxsgmI/f1HWzVhaq1CGDv252AX/ZxmEmqHEFhmE=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=Mx4mU9BKB8YHc/pCCWTNpwjZwlu7khgaAy9Kf2Hleee930pwui9NL2JEWdiUKySz3
-         i/OuIUPUDuLofPcmVLKcoFv2hf1K3zoM3ADYzgTIdrSitzdMoFMKFVhH/Fi5/kH0gW
-         codKX8s7aLBMCgNXAEPK4+TXDBG8jJ+zAOvGjAOw=
+        b=lx4oaurzqOtPSl+fPQohVYH3UpKDyEKAwA3Zm7gzZAFwSFIv7J5RNphwQ2owj85ve
+         qURAl5ckONxr8C/bTJ4lpIgbYtH0UE+gu25YCbiz9HG74WLl5F6UOonMy6XmquGfQl
+         iWWXw+sIIa0gkOLxeXI5H4NLNztBUy743HHcIVAg=
 From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Wed, 07 Dec 2022 19:30:39 +0100
-Subject: [PATCH v3 2/9] arm64: dts: qcom: msm8953: Adjust reserved-memory nodes
+Date:   Wed, 07 Dec 2022 19:30:40 +0100
+Subject: [PATCH v3 3/9] arm64: dts: qcom: sdm450: Add device tree for Motorola Moto
+ G6
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221207-msm8953-6-1-next-dtbs-v3-v3-2-a64b3b0af0eb@z3ntu.xyz>
+Message-Id: <20221207-msm8953-6-1-next-dtbs-v3-v3-3-a64b3b0af0eb@z3ntu.xyz>
 References: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
 In-Reply-To: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -58,19 +59,19 @@ Cc:     Gabriela David <ultracoolguy@disroot.org>,
         linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
         Alejandro Tafalla <atafalla@dnyon.com>
 X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2417; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=B+AM+CcfgTRFOdwUZ63j7q7vBTSNvVXCXcySWzAp1hM=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBjkNvb8MkvoDCBCcRBiz6BD2Ywv5+8Tt+2/TenOAMP
- 9fleJw+JAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY5Db2wAKCRBy2EO4nU3XVgd8EA
- CiJhz7sSU4qDafwF0FGbFj13g+FFDaLxvmCLOzrLlvK7XrrmiwEb7Ii7Vx3x+CAbIApwerVAoY9Ibv
- 5th5dGa/saNnV5qJ4BSbtHPFJSbto1tQ3F4tTzEGAM9m+o6GWEPMmXjocwKAY7AT93U14r3pAzYEVZ
- y1WBm7b+tsm5GVeFyxBoE8vofMK46A+6WZ+mG3sb7NprxArhPpbOCcaiyOWQCbCd0IIUG//doqDY4y
- 1DOGN0CCE7wdNziNVEkKPCHpyswJKyufCPegR82ry9rMhuDZpnqBTse/+d4oN/hMnjXjw5E76b1AZi
- OU/PmBja55IpXfUxwFWPABIwQJeZcl9M1+brOUQDFdU0T6L/eBCmhRMkcOeU24OilPSXuCXPtTMYen
- Bw0ogjyZvsD1eOVHX9nUfNOwWj+Ik5/rZaHeEkuZoJAYEtWTWQCN1hzXBgCEGB/B4/diMG89d48oXM
- JFSxhUy2KdX4jMyevo9nHintjlmm4HIwsDCpneV0EYAX5BSss/qEyS+WV6MnPVLeFC0Hm7gYPVGYw+
- 6iRGwrIsbPo9J6x5AVReaiRvDCE4KplmRChaFXkM6a5lp9LgHdt1LKf5sdNQAbS/h3kJ5729ujOeOr
- Zcwg/LktIR6/UtFA48yeSUuNKYBR9tRqSeQOYHUUhiD5DgKrCgFkP5ZWj2xg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6927; i=luca@z3ntu.xyz;
+ h=from:subject:message-id; bh=rX1h49uDBw+/pYJ6x2ppOAB8FuHs0pUY9JI/ADxtvo4=;
+ b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBjkNvczbNQXVfIFJgUDTv7UHnFT1RjYuyv9cKQHdnb
+ cUoJNkSJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY5Db3AAKCRBy2EO4nU3XVjunD/
+ 4m1OWQBy6hh6thKtSv5thmNDb3bOQom5pu0wR0S6lgwDeAytJBuwY2H7PIfZPmaqkeakx7DxvGUCSE
+ 6SBRllytmSBFoj+gh0uibZ1uJ59NLqzs4igajH9LP/4O3htYl3viFk2TTs9sS8G1Bf2abgr3XTp5t1
+ zFFGJ0d1LZjOKeOsd9UXNEwtvprbLjJ7JJtX3cd2DI2XujpRI6L/ytJJe13ATmMrvF1fXdyitqKtV1
+ +iFEaOWW9tLiIp/a9SWLbKZf75vh73KFZ+6rT/5ZAOYVzbksAOkMwwx+cdxiXO17BRS0+11uTBnwDr
+ L0tQNnq77GTIzYF2/JEgP3meWdICWntQlukOuc2IgKiDDlktSgFYwWJ/BmaN+RRbpUavUT/1xyx862
+ WzMxdVNNSCz7k8AT5PZ2LW+SNsY5KOfL2n7kvlycu07BB70bv54DdKBkK1wjTuMjb/KSXdKAnAs/Nb
+ dFVx6+hdo1SDss5pJ/Ht4sSU/Rh9yzW3WyXXqjcHZzdT7eg0YNTLoA11rrCFIJAb2xuhmp4HoMGUT5
+ s9Kj7jRHYIGHus8Lirv6EP3gVcCmllin3iZzTcI1nT4+pwkoklYmKAioSDHmoLsoUAGTrmP7EsurwE
+ 2elsNqjkPl0xZdDGC7nLte30o2LvpqyrEQ8wcSXMldPGLIoB4E4+8RyYJj3w==
 X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
  fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,99 +84,289 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust node names so they're not just memory@ but actually show what
-they're used for. Also add labels to most nodes so we can easily
-reference them from devices.
+From: Julian Braha <julianbraha@gmail.com>
 
+Add device tree for the Motorola Moto G6 (ali) smartphone. This device
+is based on Snapdragon 450 (sdm450) SoC which is a variant of MSM8953.
+
+Signed-off-by: Julian Braha <julianbraha@gmail.com>
 Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8953.dtsi | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ arch/arm64/boot/dts/qcom/Makefile                |   1 +
+ arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts | 252 +++++++++++++++++++++++
+ 2 files changed, 253 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8953.dtsi b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-index 32349174c4bd..62d2ae30711b 100644
---- a/arch/arm64/boot/dts/qcom/msm8953.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8953.dtsi
-@@ -245,18 +245,18 @@ reserved-memory {
- 		#size-cells = <2>;
- 		ranges;
- 
--		zap_shader_region: memory@81800000 {
-+		zap_shader_region: zap@81800000 {
- 			compatible = "shared-dma-pool";
- 			reg = <0x0 0x81800000 0x0 0x2000>;
- 			no-map;
- 		};
- 
--		memory@85b00000 {
-+		qseecom_mem: qseecom@85b00000 {
- 			reg = <0x0 0x85b00000 0x0 0x800000>;
- 			no-map;
- 		};
- 
--		smem_mem: memory@86300000 {
-+		smem_mem: smem@86300000 {
- 			compatible = "qcom,smem";
- 			reg = <0x0 0x86300000 0x0 0x100000>;
- 			qcom,rpm-msg-ram = <&rpm_msg_ram>;
-@@ -264,47 +264,47 @@ smem_mem: memory@86300000 {
- 			no-map;
- 		};
- 
--		memory@86400000 {
-+		reserved@86400000 {
- 			reg = <0x0 0x86400000 0x0 0x400000>;
- 			no-map;
- 		};
- 
--		mpss_mem: memory@86c00000 {
-+		mpss_mem: mpss@86c00000 {
- 			reg = <0x0 0x86c00000 0x0 0x6a00000>;
- 			no-map;
- 		};
- 
--		adsp_fw_mem: memory@8d600000 {
-+		adsp_fw_mem: adsp@8d600000 {
- 			reg = <0x0 0x8d600000 0x0 0x1100000>;
- 			no-map;
- 		};
- 
--		wcnss_fw_mem: memory@8e700000 {
-+		wcnss_fw_mem: wcnss@8e700000 {
- 			reg = <0x0 0x8e700000 0x0 0x700000>;
- 			no-map;
- 		};
- 
--		memory@90000000 {
-+		dfps_data_mem: dfps-data@90000000 {
- 			reg = <0 0x90000000 0 0x1000>;
- 			no-map;
- 		};
- 
--		memory@90001000 {
-+		cont_splash_mem: cont-splash@90001000 {
- 			reg = <0x0 0x90001000 0x0 0x13ff000>;
- 			no-map;
- 		};
- 
--		venus_mem: memory@91400000 {
-+		venus_mem: venus@91400000 {
- 			reg = <0x0 0x91400000 0x0 0x700000>;
- 			no-map;
- 		};
- 
--		mba_mem: memory@92000000 {
-+		mba_mem: mba@92000000 {
- 			reg = <0x0 0x92000000 0x0 0x100000>;
- 			no-map;
- 		};
- 
--		memory@f2d00000 {
-+		rmtfs@f2d00000 {
- 			compatible = "qcom,rmtfs-mem";
- 			reg = <0x0 0xf2d00000 0x0 0x180000>;
- 			no-map;
+diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+index 3e79496292e7..dcca6f084509 100644
+--- a/arch/arm64/boot/dts/qcom/Makefile
++++ b/arch/arm64/boot/dts/qcom/Makefile
+@@ -127,6 +127,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-crd.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sc8280xp-lenovo-thinkpad-x13s.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sda660-inforce-ifc6560.dtb
++dtb-$(CONFIG_ARCH_QCOM)	+= sdm450-motorola-ali.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-ganges-kirin.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
+ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
+diff --git a/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+new file mode 100644
+index 000000000000..362be5719dd2
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/sdm450-motorola-ali.dts
+@@ -0,0 +1,252 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2022, Julian Braha <julianbraha@gmail.com>
++ */
++/dts-v1/;
++
++#include "msm8953.dtsi"
++#include "pm8953.dtsi"
++#include "pmi8950.dtsi"
++
++/delete-node/ &qseecom_mem;
++
++/ {
++	model = "Motorola Moto G6";
++	compatible = "motorola,ali", "qcom,sdm450";
++	chassis-type = "handset";
++	qcom,msm-id = <338 0>;
++	qcom,board-id = <0x43 0xc200>;
++
++	gpio-keys {
++		compatible = "gpio-keys";
++
++		key-volume-up {
++			label = "volume_up";
++			gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
++			linux,code = <KEY_VOLUMEUP>;
++		};
++	};
++
++	reserved-memory {
++		qseecom_mem: qseecom@84300000 {
++			reg = <0x0 0x84300000 0x0 0x2000000>;
++			no-map;
++		};
++
++		ramoops@ef000000 {
++			compatible = "ramoops";
++			reg = <0x0 0xef000000 0x0 0xc0000>;
++			console-size = <0x40000>;
++		};
++	};
++
++	vph_pwr: vph-pwr-regulator {
++		compatible = "regulator-fixed";
++		regulator-name = "vph_pwr";
++		regulator-always-on;
++		regulator-boot-on;
++	};
++};
++
++&hsusb_phy {
++	vdd-supply = <&pm8953_l3>;
++	vdda-pll-supply = <&pm8953_l7>;
++	vdda-phy-dpdm-supply = <&pm8953_l13>;
++
++	status = "okay";
++};
++
++&i2c_3 {
++	status = "okay";
++
++	touchscreen@38 {
++		compatible = "edt,edt-ft5406";
++		reg = <0x38>;
++		interrupt-parent = <&tlmm>;
++		interrupts = <65 IRQ_TYPE_EDGE_FALLING>;
++		vcc-supply = <&pm8953_l10>;
++
++		pinctrl-names = "default";
++		pinctrl-0 = <&ts_int_active &ts_reset_active>;
++
++		reset-gpios = <&tlmm 64 GPIO_ACTIVE_LOW>;
++		touchscreen-size-x = <1080>;
++		touchscreen-size-y = <2160>;
++	};
++};
++
++&pm8953_resin {
++	linux,code = <KEY_VOLUMEDOWN>;
++	status = "okay";
++};
++
++&pmi8950_wled {
++	qcom,num-strings = <3>;
++	qcom,external-pfet;
++	qcom,cabc;
++
++	status = "okay";
++};
++
++&rpm_requests {
++	regulators {
++		compatible = "qcom,rpm-pm8953-regulators";
++
++		vdd_s1-supply = <&vph_pwr>;
++		vdd_s2-supply = <&vph_pwr>;
++		vdd_s3-supply = <&vph_pwr>;
++		vdd_s4-supply = <&vph_pwr>;
++		vdd_s5-supply = <&vph_pwr>;
++		vdd_s6-supply = <&vph_pwr>;
++		vdd_s7-supply = <&vph_pwr>;
++		vdd_l1-supply = <&pm8953_s3>;
++		vdd_l2_l3-supply = <&pm8953_s3>;
++		vdd_l4_l5_l6_l7_l16_l19-supply = <&pm8953_s4>;
++		vdd_l8_l11_l12_l13_l14_l15-supply = <&vph_pwr>;
++		vdd_l9_l10_l17_l18_l22-supply = <&vph_pwr>;
++
++		pm8953_s1: s1 {
++			regulator-min-microvolt = <795000>;
++			regulator-max-microvolt = <1081000>;
++		};
++
++		pm8953_s3: s3 {
++			regulator-min-microvolt = <1224000>;
++			regulator-max-microvolt = <1224000>;
++		};
++
++		pm8953_s4: s4 {
++			regulator-min-microvolt = <1900000>;
++			regulator-max-microvolt = <2050000>;
++		};
++
++		pm8953_l1: l1 {
++			regulator-min-microvolt = <1000000>;
++			regulator-max-microvolt = <1100000>;
++		};
++
++		pm8953_l2: l2 {
++			regulator-min-microvolt = <975000>;
++			regulator-max-microvolt = <1225000>;
++		};
++
++		pm8953_l3: l3 {
++			regulator-min-microvolt = <925000>;
++			regulator-max-microvolt = <925000>;
++		};
++
++		pm8953_l5: l5 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8953_l6: l6 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8953_l7: l7 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1900000>;
++		};
++
++		pm8953_l8: l8 {
++			regulator-min-microvolt = <2900000>;
++			regulator-max-microvolt = <2900000>;
++		};
++
++		pm8953_l9: l9 {
++			regulator-min-microvolt = <3000000>;
++			regulator-max-microvolt = <3300000>;
++		};
++
++		pm8953_l10: l10 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <2850000>;
++		};
++
++		pm8953_l11: l11 {
++			regulator-min-microvolt = <2950000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8953_l12: l12 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <2950000>;
++		};
++
++		pm8953_l13: l13 {
++			regulator-min-microvolt = <3125000>;
++			regulator-max-microvolt = <3125000>;
++		};
++
++		pm8953_l16: l16 {
++			regulator-min-microvolt = <1800000>;
++			regulator-max-microvolt = <1800000>;
++		};
++
++		pm8953_l17: l17 {
++			regulator-min-microvolt = <2850000>;
++			regulator-max-microvolt = <2850000>;
++		};
++
++		pm8953_l19: l19 {
++			regulator-min-microvolt = <1200000>;
++			regulator-max-microvolt = <1350000>;
++		};
++
++		pm8953_l22: l22 {
++			regulator-min-microvolt = <2800000>;
++			regulator-max-microvolt = <2850000>;
++		};
++
++		pm8953_l23: l23 {
++			regulator-min-microvolt = <975000>;
++			regulator-max-microvolt = <1225000>;
++		};
++	};
++};
++
++&sdhc_1 {
++	vmmc-supply = <&pm8953_l8>;
++	vqmmc-supply = <&pm8953_l5>;
++
++	status = "okay";
++};
++
++&sdhc_2 {
++	vmmc-supply = <&pm8953_l11>;
++	vqmmc-supply = <&pm8953_l12>;
++
++	pinctrl-names = "default", "sleep";
++	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_off>;
++	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
++
++	status = "okay";
++};
++
++&tlmm {
++	gpio-reserved-ranges = <95 5>, <111 1>, <126 1>;
++
++	ts_int_active: ts-int-active-state {
++		pins = "gpio65";
++		function = "gpio";
++		drive-strength = <8>;
++		bias-pull-up;
++	};
++
++	ts_reset_active: ts-reset-active-state {
++		pins = "gpio64";
++		function = "gpio";
++		drive-strength = <0x08>;
++		bias-pull-up;
++	};
++};
++
++&usb3 {
++	status = "okay";
++};
++
++&usb3_dwc3 {
++	dr_mode = "peripheral";
++};
 
 -- 
 b4 0.10.1
