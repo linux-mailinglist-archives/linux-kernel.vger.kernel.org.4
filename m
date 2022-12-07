@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7766E646334
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9C35646339
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:25:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLGVXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:23:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55006 "EHLO
+        id S229879AbiLGVZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:25:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiLGVXc (ORCPT
+        with ESMTP id S229636AbiLGVZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:23:32 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213D67B554;
-        Wed,  7 Dec 2022 13:23:30 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NS9Hz6xThz4xFy;
-        Thu,  8 Dec 2022 08:23:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670448208;
-        bh=skFp02LLaaYnCICffHDRFegmfkjpdWAOsEShVo3tYzY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YZcTp0J4SPYZBkF8cGUuFlS9GtVMT/FvaOyPjKwhaCPeCU9jh8aOjZNSk2F/cjBzX
-         fQ4D/9iA8qrpZKxC9Z9vmJaVU0aJkRfpu7roNI29Tyw2uQ4PHJxEfpLHxPQWdDl22A
-         rLIjfKKpL079SNBV86ptjj7jQq7JFyCuBTev7JSH/81cXZWPcy0tRQ20ikm9RETACN
-         e/gbU9RDv5k1p4Ogf01PWjdImqJP3mzaBoD7o1GesuVrppXB12KUPHWd3a3Dnu/YI8
-         c3WRwLssh2hWkpzb/8Gio/EfUJ8PVLpC6Q5VnPIW9DHGbo6LXmhgh/tZfbrV+osEPO
-         w4iyncEfOkIDw==
-Date:   Thu, 8 Dec 2022 08:23:01 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Subject: linux-next: manual merge of the net tree with Linus' tree
-Message-ID: <20221208082301.5f7483e8@canb.auug.org.au>
+        Wed, 7 Dec 2022 16:25:42 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FC07B54F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:25:41 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso2687018pjt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 13:25:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n7Wqad3a8IV5+ECQhv7lWrLN4DRro+qo2JkXKZnEYlk=;
+        b=aA9X9Fd7k9K0PV7K3Z3gnZwSu8VOuiCOXNS6E8bHwHi6cg1VJ+PCAG375nLpa9ng78
+         W2ZwL2eG/vrKXXQRZFJMZHpnSMUkBFF3L27LwIHGNS90X14+Ef0jl6h9smk/ows9PeZ/
+         KpLm6WfIMp4xVPMerzBCsNnDWznbZp9wwf1VAn6CKSjWpeHnk+i/XyMgNtQI1+JK5cFz
+         fSIHo0SHR1CB+sDox/cABXVK2iDaTIxBCKvgDiIQ7PeMh6YK+IVOTsJhDwTqvcYJ1v/9
+         znol9s8Hikopre/rr1erAQdY0rA+DJc/9zNLS4Chk3hF3sOFNwaCTgSN47yLRAmjHd+H
+         0VPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n7Wqad3a8IV5+ECQhv7lWrLN4DRro+qo2JkXKZnEYlk=;
+        b=D+Y2iSbvyGiG/aj82u3L69qq2+G1zgWjl8QOWuAc17k6oOAz96HWK7aSqM0cSwrwWe
+         QThTqy45ri+Vh0TgsjwasIwlRKDRc8g5WU4ze6vqR1xcwLj9rfHoEpJRYLh3g/Jvkrgj
+         jD/0s37Dv79gDJOw98mqLx36lrDYVt5V+rLVLwhykGQ12UD2eQFobmk8h8s0ADaAkmuw
+         qjxsxxBrx+syx7j2W17vc2F4oazcKW5P7pUKFaxw9PNRC+OnvUA3c7VpZ/Gntpd91Nu6
+         iBtVrQgE2cviHdfSu5jHJSOo+Hp5KaWkCPl+g2NRO/xgaL3TY2vqR+vbQHSr2m6imx23
+         v8wA==
+X-Gm-Message-State: ANoB5pk4P+iEj3522LrS8WxqnNQ3GR2FYALAc7BtxSUDOfh3OlOzAllq
+        WN3kc/c1yQpKmBX1bIk3pdXx1ECGf0ESi11+
+X-Google-Smtp-Source: AA0mqf41RecvyUijjUGjKliHLNPG9FPRbNNOgwX4eGv1lZljQ1dLvQnmSxhSfIejb2l/XPFBc1KQwg==
+X-Received: by 2002:a17:90a:5641:b0:219:c2f2:f83c with SMTP id d1-20020a17090a564100b00219c2f2f83cmr725499pji.2.1670448341034;
+        Wed, 07 Dec 2022 13:25:41 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c9-20020a63ef49000000b0046feca0883fsm11675494pgk.64.2022.12.07.13.25.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 13:25:40 -0800 (PST)
+Date:   Wed, 7 Dec 2022 21:25:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: adjust entry after renaming the vmx hyperv
+ files
+Message-ID: <Y5EE0MOaLGZUqa38@google.com>
+References: <20221205082044.10141-1-lukas.bulwahn@gmail.com>
+ <87pmcydyp0.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BBoFWBm3G8D.uuP4C6PiDj_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87pmcydyp0.fsf@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,53 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/BBoFWBm3G8D.uuP4C6PiDj_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Dec 05, 2022, Vitaly Kuznetsov wrote:
+> Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
+> 
+> > Commit a789aeba4196 ("KVM: VMX: Rename "vmx/evmcs.{ch}" to
+> > "vmx/hyperv.{ch}"") renames the VMX specific Hyper-V files, but does not
+> > adjust the entry in MAINTAINERS.
+> >
+> > Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+> > broken reference.
+> >
+> > Repair this file reference in KVM X86 HYPER-V (KVM/hyper-v).
+> >
+> 
+> Fixes: a789aeba4196 ("KVM: VMX: Rename "vmx/evmcs.{ch}" to "vmx/hyperv.{ch}"")
+> 
+> maybe?
 
-Hi all,
+Ya.
 
-Today's linux-next merge of the net tree got a conflict in:
+> 
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> >  MAINTAINERS | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index ceda8a0abffa..8fda3844b55b 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -11457,7 +11457,7 @@ F:	arch/x86/kvm/hyperv.*
+> >  F:	arch/x86/kvm/kvm_onhyperv.*
+> >  F:	arch/x86/kvm/svm/hyperv.*
+> >  F:	arch/x86/kvm/svm/svm_onhyperv.*
+> > -F:	arch/x86/kvm/vmx/evmcs.*
+> > +F:	arch/x86/kvm/vmx/hyperv.*
+> >  
+> >  KVM X86 Xen (KVM/Xen)
+> >  M:	David Woodhouse <dwmw2@infradead.org>
+> 
+> Reviewed-by: 
 
-  drivers/net/xen-netback/rx.c
+Since Vitaly left you hanging :-)
 
-between commit:
-
-  74e7e1efdad4 ("xen/netback: don't call kfree_skb() with interrupts disabl=
-ed")
-
-from Linus' tree and commit:
-
-  9e6246518592 ("xen/netback: don't call kfree_skb() under spin_lock_irqsav=
-e()")
-
-from the net tree.
-
-I fixed it up (I just used the version from Linus' tree) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BBoFWBm3G8D.uuP4C6PiDj_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmORBDUACgkQAVBC80lX
-0Gw0awf+Ljq8FCkkBHKNr/Ow1PMqCcSfW6hDzj1DTusJr8dJ/bfwl+465fFNK47G
-XETYph0oA/coKmc3gpfQ3uU+HclRU3qDZklLLZwcw/MrBQ86m9z8VxwrcDhhZ/+O
-0Ckr6D3AinEbqRCd0gJ05Q/jWkdRjNORGrPrwo6uvDPi8JfbPANAQBHWpLO0hLyI
-a6lVtl7Y/7NeLeBgLLPz6j42Z7+9L0sh5ccagPmPLtrc+UIHSwYHu5CN5H656DFP
-JcEVovbfr8KsSAYit3npE2KD1BgmxuMoW3fCWGtfEJwWErWCNRZnJFWMp1ryHV/B
-du+cSCTFqqmCNIfLI1QiKfopjh+onQ==
-=uxy7
------END PGP SIGNATURE-----
-
---Sig_/BBoFWBm3G8D.uuP4C6PiDj_--
+Reviewed-by: Sean Christopherson <seanjc@google.com>
