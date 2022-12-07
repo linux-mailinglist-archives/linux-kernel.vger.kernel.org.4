@@ -2,226 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBEEA6457B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D35AE6457BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:26:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiLGKYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:24:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S229522AbiLGK01 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:26:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiLGKXU (ORCPT
+        with ESMTP id S229847AbiLGK0E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:23:20 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9261A07B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:23:12 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id bp15so27910776lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:23:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZM9WQMSIRdXApIoaHecsAc8xlOdjlTCuk4hJZlXZk6o=;
-        b=oOm0/ChZZbipR9FpLHwJ0+Yep6zyb2Kt/48SXcMWo2R9RGPNcR3M8PM7pUCGO0WmoN
-         AFlXzZOyrI5OJhoUW8+xBVEQFkhZ5nJvWtCH1WXZsx5hcfZPL97pMlViMK3WGEuQxlW2
-         4wBs1HGzZPucTyD3LaA39g0anfOGB+GrV+H0C/WYCcIHoPd+93+IwRRfi97m6n2LN6gT
-         1T2ts29S9ajtkpa2LOgzWgCV9K5ZsfBrm2wXWsk2aTv/DeJKkA/ozZDtlYaoPmyI/8Vy
-         L0SPdDf7U2hW3JjMyw6gZaiMdwZlxuDJq/vTBeD/0CDw2kj1nn0Ev83TJ6i6GwjoGqoU
-         6DRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZM9WQMSIRdXApIoaHecsAc8xlOdjlTCuk4hJZlXZk6o=;
-        b=4uF2I5LOHiUdz5CFIoSa3U34eFx0HgMxpuqOIJKtqCTK8mlrnopSln4ajwiPTgkrZ4
-         zrOc1KGkRxpLwBoKkYLqqbJH+Axfdi1176dudhLH+MFOsgOhVCZaky6BzQU+OtRMm8cQ
-         2vdWEaPQD4LGN56+HYW4LBaq6StcVriqjE3ov3/MNy6WVPsu84eq1wUwh4enjuVu12GP
-         kXnpjWbcpWvbnkwDzRKcHNUGi3M0NNMYxeMOsLeYmQVPgFPZBQRP/90g6OPCWN4fiT6E
-         Himo9B8oI508/4VKYD3LBPfwOx1ZFnfgfM8Pp5SbnDWvQ+xIQGx2HRT2xl738EMlHRV/
-         NgJQ==
-X-Gm-Message-State: ANoB5pngdUWkFRdjmcKZ2xnq6FsGOPo958rr3qj2FqvXYoEFeHJYfBKk
-        3Yf6mRqPrFN2lLx6t1QSzCFcVQ==
-X-Google-Smtp-Source: AA0mqf4i4pan9nVuFZyQ3Pgc1JmG5VLJywzu6/33XHF1cay1j9OCzA8QqNXiMLd9ghuMyhS7QaqBWg==
-X-Received: by 2002:ac2:4bc8:0:b0:4b3:9fcb:df92 with SMTP id o8-20020ac24bc8000000b004b39fcbdf92mr28983114lfq.607.1670408591839;
-        Wed, 07 Dec 2022 02:23:11 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bu31-20020a056512169f00b00499b27a329esm1953183lfb.300.2022.12.07.02.23.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:23:11 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Joe Tessler <jrt@google.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v3 9/9] media: dt-bindings: st,stih-cec: convert to DT schema
-Date:   Wed,  7 Dec 2022 11:22:53 +0100
-Message-Id: <20221207102253.26663-10-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
-References: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
+        Wed, 7 Dec 2022 05:26:04 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597AD2A418
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:25:57 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DEA9B1FDCD;
+        Wed,  7 Dec 2022 10:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670408755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U0XdCXVXpqjQNkWrbVjFvvNm5DuOUK/JRA//vhJE++k=;
+        b=BZvjAT6nGmbotT5gYiaKaRb/q6PlKaHqCTZUizz2e5rqmquSU/k2ecvse/vKlYiDZMZcju
+        7Ii7SP7TL9W2yHFZ2NZt3x1ktpEeOVA3/xLXPV4o+rLwt5Tsq2LsWDDuFLF80Y9txonk5m
+        7BkhNISoBIh3IWUzBvm1CnF8biW+A1o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670408755;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U0XdCXVXpqjQNkWrbVjFvvNm5DuOUK/JRA//vhJE++k=;
+        b=TIDGF/ZlrnH0iquGienzQf6UHu6uRJC5f0IqmqoAy+5tWumie626uRSJ22K8ryxIWFSyos
+        zspkRffp6vHlUgAQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id D0A93134CD;
+        Wed,  7 Dec 2022 10:25:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id qsrnMjNqkGOnCwAAGKfGzw
+        (envelope-from <jack@suse.cz>); Wed, 07 Dec 2022 10:25:55 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 613F8A0725; Wed,  7 Dec 2022 11:25:55 +0100 (CET)
+Date:   Wed, 7 Dec 2022 11:25:55 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Pengfei Xu <pengfei.xu@intel.com>
+Cc:     lczerner@redhat.com, linux-kernel@vger.kernel.org, jack@suse.cz,
+        heng.su@intel.com
+Subject: Re: [Syzkaller & bisect] There is "ext4_xattr_block_set" WARNING in
+ v6.1-rc8 guest kernel
+Message-ID: <20221207102555.m77yk7oznzx2b2xt@quack3>
+References: <Y5BT+k6xWqthZc1P@xpf.sh.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5BT+k6xWqthZc1P@xpf.sh.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert ST STIH4xx HDMI CEC bindings to DT schema.
+Hello!
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/media/cec/st,stih-cec.yaml       | 66 +++++++++++++++++++
- .../devicetree/bindings/media/stih-cec.txt    | 27 --------
- MAINTAINERS                                   |  2 +-
- 3 files changed, 67 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/stih-cec.txt
+On Wed 07-12-22 16:51:06, Pengfei Xu wrote:
+> Platform: raptor lake
+> 
+> There is "ext4_xattr_block_set" WARNING in v6.1-rc8 guest kernel.
+> "
+> [   27.922337] loop0: detected capacity change from 0 to 1024
+> [   27.922663] =======================================================
+> [   27.922663] WARNING: The mand mount option has been deprecated and
+> [   27.922663]          and is ignored by this kernel. Remove the mand
+> [   27.922663]          option from the mount to silence this warning.
+> [   27.922663] =======================================================
+> [   27.923771] EXT4-fs: Ignoring removed bh option
+> [   27.923947] EXT4-fs: Ignoring removed i_version option
+> [   27.924204] EXT4-fs: Journaled quota options ignored when QUOTA feature is enabled
+> [   27.925839] EXT4-fs (loop0): mounted filesystem without journal. Quota mode: writeback.
+> [   27.928984] ------------[ cut here ]------------
+> [   27.929173] WARNING: CPU: 0 PID: 567 at fs/ext4/xattr.c:2069 ext4_xattr_block_set+0x170d/0x1770
 
-diff --git a/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml b/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
-new file mode 100644
-index 000000000000..aeddf16ed339
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/cec/st,stih-cec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STIH4xx HDMI CEC
-+
-+maintainers:
-+  - Alain Volmat <alain.volmat@foss.st.com>
-+
-+allOf:
-+  - $ref: cec-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: st,stih-cec
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: cec-clk
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    items:
-+      - const: cec-irq
-+
-+  resets:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - hdmi-phandle
-+  - interrupts
-+  - resets
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/reset/stih407-resets.h>
-+
-+    cec@94a087c {
-+        compatible = "st,stih-cec";
-+        reg = <0x94a087c 0x64>;
-+
-+        clocks = <&clk_sysin>;
-+        clock-names = "cec-clk";
-+        hdmi-phandle = <&sti_hdmi>;
-+        interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "cec-irq";
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_cec0_default>;
-+        resets = <&softreset STIH407_LPM_SOFTRESET>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/stih-cec.txt b/Documentation/devicetree/bindings/media/stih-cec.txt
-deleted file mode 100644
-index ece0832fdeaf..000000000000
---- a/Documentation/devicetree/bindings/media/stih-cec.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--STMicroelectronics STIH4xx HDMI CEC driver
--
--Required properties:
-- - compatible : value should be "st,stih-cec"
-- - reg : Physical base address of the IP registers and length of memory
--	 mapped region.
-- - clocks : from common clock binding: handle to HDMI CEC clock
-- - interrupts : HDMI CEC interrupt number to the CPU.
-- - pinctrl-names: Contains only one value - "default"
-- - pinctrl-0: Specifies the pin control groups used for CEC hardware.
-- - resets: Reference to a reset controller
-- - hdmi-phandle: Phandle to the HDMI controller, see also cec.txt.
--
--Example for STIH407:
--
--sti-cec@94a087c {
--	compatible = "st,stih-cec";
--	reg = <0x94a087c 0x64>;
--	clocks = <&clk_sysin>;
--	clock-names = "cec-clk";
--	interrupts = <GIC_SPI 140 IRQ_TYPE_NONE>;
--	interrupt-names = "cec-irq";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_cec0_default>;
--	resets = <&softreset STIH407_LPM_SOFTRESET>;
--	hdmi-phandle = <&hdmi>;
--};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dee3f776be32..5bf8879b4a59 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19924,7 +19924,7 @@ F:	sound/soc/sti/
- STI CEC DRIVER
- M:	Alain Volmat <alain.volmat@foss.st.com>
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/stih-cec.txt
-+F:	Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
- F:	drivers/media/cec/platform/sti/
- 
- STK1160 USB VIDEO CAPTURE DRIVER
+Thanks for report! I see where the problem is, I just don't see why mount
+API would be really related to that. That is likely just a coincidence
+caused by the particular reproducer from syzbot.
+
+The core of the problem is that we try to expand i_extra_isize on every
+__ext4_mark_inode_dirty() call. Now there are certainly moments when the
+inode is dirtied without setting up quotas - in this case when
+ext4_setattr() was called to modify file permissions but e.g. timestamp
+updates can be another such occasion. If the inode already has enough
+xattrs that after expanding i_extra_isize they don't fit into the inode and
+we need to allocate external xattr block, the warning triggers.
+
+Generally we cannot initialize quotas in ext4_try_to_expand_extra_isize()
+because we may be relatively deep in the call stack and I'd be worried
+about the lock ordering. Also making sure quota is initialized whenever we
+call __ext4_mark_inode_dirty() looks like playing a whack-a-mole game. So I
+think the easiest approach would be bail from expansion if we need to
+allocate block and we don't have quotas initialized. I'll send a patch.
+
+								Honza
+
+> [   27.929514] Modules linked in:
+> [   27.929651] CPU: 0 PID: 567 Comm: repro Not tainted 6.1.0-rc8-76dcd734eca2 #1
+> [   27.929931] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+> [   27.930355] RIP: 0010:ext4_xattr_block_set+0x170d/0x1770
+> [   27.930562] Code: e8 78 18 ff ff 48 8b 7d a0 e8 4f eb e5 ff e9 80 fe ff ff e8 25 3d b5 ff 4c 89 ff e8 fd c2 e9 ff e9 b6 f5 ff ff e8 13 3d b5 ff <0f> 0b e9 21 1
+> [   27.931241] RSP: 0018:ffffc90000fc7a10 EFLAGS: 00010246
+> [   27.931442] RAX: 0000000000000000 RBX: 0000000000000001 RCX: ffffffff816fa04d
+> [   27.931708] RDX: 0000000000000000 RSI: ffff88800cb6cc80 RDI: 0000000000000002
+> [   27.931973] RBP: ffffc90000fc7ae8 R08: ffff88800bae3824 R09: ffff88800bae3bfe
+> [   27.932236] R10: ffffc90000fc7e28 R11: 00000000fa83b201 R12: 0000000000000000
+> [   27.932502] R13: ffff88800cb85800 R14: 0000000000000000 R15: 0000000000000000
+> [   27.932781] FS:  00007f69b3c68740(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
+> [   27.933079] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   27.933296] CR2: 000055c48486e5e8 CR3: 000000000b76a005 CR4: 0000000000770ef0
+> [   27.933569] PKRU: 55555554
+> [   27.933676] Call Trace:
+> [   27.933773]  <TASK>
+> [   27.933861]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   27.934048]  ext4_expand_extra_isize_ea+0x5e9/0xcd0
+> [   27.934242]  __ext4_expand_extra_isize+0x188/0x1f0
+> [   27.934443]  __ext4_mark_inode_dirty+0x246/0x370
+> [   27.934637]  ? ext4_setattr+0x1380/0x1380
+> [   27.934794]  ext4_dirty_inode+0x7a/0xa0
+> [   27.934946]  __mark_inode_dirty+0xa3/0x650
+> [   27.935107]  ? setattr_copy+0x11e/0x320
+> [   27.935259]  ext4_setattr+0xb26/0x1380
+> [   27.935407]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   27.935593]  ? ext4_journalled_write_end+0x900/0x900
+> [   27.935792]  notify_change+0x3f8/0xb50
+> [   27.935943]  chmod_common+0xef/0x200
+> [   27.936085]  ? chmod_common+0xef/0x200
+> [   27.936235]  ? __sanitizer_cov_trace_pc+0x25/0x60
+> [   27.936420]  do_fchmodat+0x76/0xf0
+> [   27.936558]  __x64_sys_chmod+0x28/0x40
+> [   27.936713]  do_syscall_64+0x3b/0x90
+> [   27.936862]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [   27.937062] RIP: 0033:0x7f69b3d8d59d
+> [   27.937203] Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 8
+> [   27.937900] RSP: 002b:00007ffccac7eef8 EFLAGS: 00000246 ORIG_RAX: 000000000000005a
+> [   27.938184] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f69b3d8d59d
+> [   27.938450] RDX: 0031656c69662f2e RSI: 0000000000000140 RDI: 0000000020000100
+> [   27.938719] RBP: 00007ffccac7ef00 R08: 00007ffccac7ed60 R09: 00000000004028e0
+> [   27.938985] R10: 00007ffccac7ed60 R11: 0000000000000246 R12: 00000000004011a0
+> [   27.939250] R13: 00007ffccac7efe0 R14: 0000000000000000 R15: 0000000000000000
+> [   27.939517]  </TASK>
+> [   27.939605] ---[ end trace 0000000000000000 ]---
 -- 
-2.34.1
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
