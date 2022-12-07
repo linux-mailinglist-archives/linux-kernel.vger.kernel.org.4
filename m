@@ -2,110 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9EC64628A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:43:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C7E264628D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:43:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiLGUnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:43:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56918 "EHLO
+        id S229787AbiLGUng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:43:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiLGUnW (ORCPT
+        with ESMTP id S229731AbiLGUne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:43:22 -0500
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632B218BD;
-        Wed,  7 Dec 2022 12:43:20 -0800 (PST)
-Received: (Authenticated sender: alex@alexyzhang.dev)
-        by mail.gandi.net (Postfix) with ESMTPSA id D4CB5E0002;
-        Wed,  7 Dec 2022 20:43:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alexyzhang.dev;
-        s=gm1; t=1670445799;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2N9hnmu56AlKFNM0m8698mHeE5RNpS8O5eMCSU1Yeqw=;
-        b=SGMLJz1dBVEdAZ7W38DQGlw5LUdwQx+IPQTQg+fWFKk60lLU8I2FCWINXXb8C9rPN9rfqW
-        6AHVOWaLMxEOT4mZ1XrpJ40eDtHIGgPJOC907Kjp4o9hQhARXKm+y3JgtgzKyRC63UaI7q
-        yadISaGLTDVililEWOy/s7Ic2jOnufEv646WLOw021QTNAyfNt+Z5DFZG6e/4UmPiP1ulx
-        eF0zIy6Vhw6iRTiExvXc6lcfkdV5lA+K1UZhDu9B7gZqYUHVPV8mRcCx8FZBkk4C0whfS7
-        f5dfPCndwLB+H/x6EabqA9TBS72CViAAnRGRrjuUWCKgdcD9K7qu3yFx+3lhpA==
-Message-ID: <63d1ea8f-ded9-ed6b-31d9-0d3b8d8cd998@alexyzhang.dev>
-Date:   Wed, 7 Dec 2022 12:43:13 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 0/1] HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
-To:     =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, benjamin.tissoires@redhat.com,
-        openglfreak@googlemail.com, linux-input@vger.kernel.org,
+        Wed, 7 Dec 2022 15:43:34 -0500
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3014F2C65B;
+        Wed,  7 Dec 2022 12:43:32 -0800 (PST)
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-1445ca00781so16131950fac.1;
+        Wed, 07 Dec 2022 12:43:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=clsoCCY66HioZ8dD2GeAWKW0zSQrMxZw2XXN7NxYt3A=;
+        b=LLoSKIukcSrUDGWNElsslTpBqGb/p0xu7LBNlhTn9fq3TwZqi7M8HEIYtp6R5frnWq
+         4vAcvyShuebmweOPVVPECvqk2/58prb2Vn3Hw/b8ZODN9GxTBeZuiZ3VrmNfMKN07j2G
+         DUYVHRQv2kGGc+JPDaf7B9TShhSIWty6yI+KrZsXfuXUPoWlnH9sn621uK3cbNvfTexk
+         5hXjzuGPsyN0f6DOL1T7No0lV3mi0+GMAXms+XSXGAJk75CNckrS0FQNEvFRyahughne
+         K/9q4XlOpAODR4syMW9tjvpEffP/7jOfwkJqq3Id3tdbq/+GHX/e92j2x03/7O6nlbaq
+         ow3A==
+X-Gm-Message-State: ANoB5pmKkv7NLsxUrHbgNBchnshJM++8MKualfIfB6YZgOAAsyrGn7wo
+        0Wsx+hFppXqpFSeFVCUXVQ==
+X-Google-Smtp-Source: AA0mqf7uG9MBmgLp3fO95KnMvzIt6eIUOGbfoadp1aCxQjPuXRTndixvrCmpsYIPYUKNQruFQ5Ps1w==
+X-Received: by 2002:a05:6870:c18a:b0:142:870e:bd06 with SMTP id h10-20020a056870c18a00b00142870ebd06mr48346239oad.181.1670445812066;
+        Wed, 07 Dec 2022 12:43:32 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w12-20020a056830410c00b006619295af60sm10798290ott.70.2022.12.07.12.43.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 12:43:31 -0800 (PST)
+Received: (nullmailer pid 2810095 invoked by uid 1000);
+        Wed, 07 Dec 2022 20:43:31 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Pavel Machek <pavel@ucw.cz>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yi Xin <Yixin.zhu@intel.com>,
+        Mallikarjuna reddy <mallikarjunax.reddy@intel.com>
+Cc:     linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20221110174056.393697-1-jose.exposito89@gmail.com>
- <e1daf0a9-b699-affd-0d14-e46981733096@alexyzhang.dev>
- <nycvar.YFH.7.76.2211141509340.6045@cbobk.fhfr.pm>
- <d08049f2-443b-f769-cfde-629cdfb96fc0@alexyzhang.dev>
- <1dc9d0ba-4836-dfc6-8bf2-322ce3b5c24d@alexyzhang.dev>
- <Y5B0gwGZJ/PQyV4+@fedora>
-Content-Language: en-US
-From:   Alexander Zhang <alex@alexyzhang.dev>
-In-Reply-To: <Y5B0gwGZJ/PQyV4+@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH 1/2] dt-bindings: leds: intel,lgm: Add missing 'led-gpios' property
+Date:   Wed,  7 Dec 2022 14:43:26 -0600
+Message-Id: <20221207204327.2810001-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 3:09 AM, José Expósito wrote:
-> Hi Alexander,
-> 
-> On Mon, Dec 05, 2022 at 04:49:10PM -0800, Alexander Zhang wrote:
->> Hello,
->>
->> On 11/19/22 11:01 PM, Alexander Zhang wrote:
->>> On 11/14/22 6:10 AM, Jiri Kosina wrote:
->>>> On Thu, 10 Nov 2022, Alexander Zhang wrote:
->>>>
->>>>> Hi José,
->>>>>
->>>>> On 11/10/22 9:40 AM, José Expósito wrote:
->>>>>> Hi everyone,
->>>>>>
->>>>>> About 3 months ago, Torge Matthies sent a patch fixing an issue with
->>>>>> his XP-Pen Star G640 [1].
->>>>>>
->>>>>> His patch changes the IS_INPUT_APPLICATION() macro to accept
->>>>>> HID_DG_DIGITIZER. However, it looks like it is not being merged because
->>>>>> of the possible side effects that changing that macro could generate.
->>>>>>
->>>>>> This patch aims to fix the same issue but using a more conservative
->>>>>> approach hoping that the bug can be fixed.
->>>>>>
->>>>>> Torge, Alexander, could you test it and confirm that it fixes your
->>>>>> issues, please?
->>>>>
->>>>> I tested the patch on commit 4bbf3422df78 and it fixes the issue.
->>>>
->>>> I will add
->>>>
->>>>      Tested-by: Alexander Zhang <alex@alexyzhang.dev>
->>>>
->>>> to the commit; please speak up if you disagree.
->>>
->>> I'm not sure if you're still waiting for a response from me but I'm fine
->>> with that.
->>
->> Is there something preventing this patch from being merged? I'm not very
->> familiar with the kernel development process.
-> 
-> The patch is already applied in the for-next branch, you can find it here:
-> https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git/commit/?h=for-next&id=3405a4beaaa8
+The example has 'led-gpio' properties, but that's not documented. As the
+'gpio' form is deprecated, add 'led-gpios' to the schema and update the
+example.
 
-I see, thank you very much!
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ Documentation/devicetree/bindings/leds/leds-lgm.yaml | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-Best,
-Alexander Zhang
+diff --git a/Documentation/devicetree/bindings/leds/leds-lgm.yaml b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
+index f8d7963c3a13..3f13db0dc915 100644
+--- a/Documentation/devicetree/bindings/leds/leds-lgm.yaml
++++ b/Documentation/devicetree/bindings/leds/leds-lgm.yaml
+@@ -64,6 +64,9 @@ properties:
+             minimum: 0
+             maximum: 2
+ 
++          led-gpios:
++            maxItems: 1
++
+           intel,sso-hw-trigger:
+             type: boolean
+             description: This property indicates Hardware driven/control LED.
+@@ -118,14 +121,14 @@ examples:
+           reg = <0>;
+           function = "gphy";
+           color = <LED_COLOR_ID_GREEN>;
+-          led-gpio = <&ssogpio 0 0>;
++          led-gpios = <&ssogpio 0 0>;
+         };
+ 
+         led@2 {
+           reg = <2>;
+           function = LED_FUNCTION_POWER;
+           color = <LED_COLOR_ID_GREEN>;
+-          led-gpio = <&ssogpio 23 0>;
++          led-gpios = <&ssogpio 23 0>;
+         };
+       };
+     };
+-- 
+2.35.1
+
