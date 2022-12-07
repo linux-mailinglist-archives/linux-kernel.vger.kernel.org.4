@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4118F6453B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:55:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70D46453A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiLGFzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 00:55:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S229742AbiLGFyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 00:54:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiLGFyg (ORCPT
+        with ESMTP id S229676AbiLGFyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 00:54:36 -0500
+        Wed, 7 Dec 2022 00:54:33 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AE1D58BEC;
-        Tue,  6 Dec 2022 21:54:32 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6DB858BFF;
+        Tue,  6 Dec 2022 21:54:31 -0800 (PST)
+Received: from unknown (HELO kinkan2-ex.css.socionext.com) ([172.31.9.52])
   by mx.socionext.com with ESMTP; 07 Dec 2022 14:54:31 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 4C1552058B4F;
-        Wed,  7 Dec 2022 14:54:31 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 7 Dec 2022 14:54:31 +0900
+Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
+        by kinkan2-ex.css.socionext.com (Postfix) with ESMTP id F20052059054;
+        Wed,  7 Dec 2022 14:54:30 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 7 Dec 2022 14:54:30 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 5F1ED1DA6;
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 8C84CA6B9C;
         Wed,  7 Dec 2022 14:54:30 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
@@ -30,9 +30,9 @@ To:     Rob Herring <robh+dt@kernel.org>,
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v2 04/16] dt-bindings: watchdog: Fix node descriptions in uniphier-wdt example
-Date:   Wed,  7 Dec 2022 14:53:53 +0900
-Message-Id: <20221207055405.30940-5-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 05/16] dt-bindings: thermal: Fix node descriptions in uniphier-thermal example
+Date:   Wed,  7 Dec 2022 14:53:54 +0900
+Message-Id: <20221207055405.30940-6-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
 References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
@@ -46,26 +46,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename the parent node to the generic node name "syscon".
+Prior to adding dt-bindings for SoC-dependent controllers, rename the
+thermal node and its parent node to the generic names in the example.
 
 Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 ---
- .../devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml    | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../bindings/thermal/socionext,uniphier-thermal.yaml          | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-index 90698cfa8f94..33fb94f9c730 100644
---- a/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/socionext,uniphier-wdt.yaml
-@@ -25,7 +25,7 @@ examples:
+diff --git a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+index c5b25ce44956..dcc02f86ac5a 100644
+--- a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yaml
+@@ -46,12 +46,12 @@ examples:
    - |
-     // The UniPhier watchdog should be a subnode of a "syscon" compatible node.
+     // The UniPhier thermal should be a subnode of a "syscon" compatible node.
  
 -    sysctrl@61840000 {
 +    syscon@61840000 {
-         compatible = "socionext,uniphier-ld11-sysctrl",
+         compatible = "socionext,uniphier-ld20-sysctrl",
                       "simple-mfd", "syscon";
          reg = <0x61840000 0x10000>;
+ 
+-        pvtctl: thermal {
++        pvtctl: thermal-sensor {
+             compatible = "socionext,uniphier-ld20-thermal";
+             interrupts = <0 3 1>;
+             #thermal-sensor-cells = <0>;
 -- 
 2.25.1
 
