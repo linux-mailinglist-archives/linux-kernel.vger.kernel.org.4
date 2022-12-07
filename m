@@ -2,222 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01075646329
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFDC64632C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:21:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbiLGVTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S229753AbiLGVV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:21:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiLGVTe (ORCPT
+        with ESMTP id S229635AbiLGVV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:19:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8EC74E402
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:18:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670447909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UZoulz6jSV4QDo6LCWvnK9BE6ZYvLdrmqHb/WNLMVyI=;
-        b=JzUSDWhcB6jhRfZn9CcmpapAyTKapBqCLWi1VL/lCpI0NMyG9b9Th0ViTYXFz9oVRbdNe3
-        cGzb5yX1JexXyNAK5cOrkaX6PeLlLGjy0/zds0a9394CNM3hWBh2XRGmZNooBvjsNzaVh9
-        bAASB+qsCBVoVZnelCGYqz3AyJNbYNE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-651-CQv5beGgM8WZxVh9W2Hfxw-1; Wed, 07 Dec 2022 16:18:28 -0500
-X-MC-Unique: CQv5beGgM8WZxVh9W2Hfxw-1
-Received: by mail-wm1-f69.google.com with SMTP id b47-20020a05600c4aaf00b003d031aeb1b6so1326102wmp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 13:18:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UZoulz6jSV4QDo6LCWvnK9BE6ZYvLdrmqHb/WNLMVyI=;
-        b=u0IHrarNTZj4LIoafVM8PkFxGVyZ/she/G1eI/Zgb+KnM7bnNkhy/+YXA4YaJXf1W1
-         5QzTHM3YtnYMpRkl+TOpzGCSxkOQ2q2zSodBuIsCX3NfFTmdehDdldwJH2awpv/chSC+
-         q4ihbYnZz2CNDwIO80A0NaULNGDHzG9xdlVYOFd2vcjb5hZjP6blSflOj9RX5+6Xwvq5
-         Oy4G2w4WvU9DK3q0vWwpPbaflLOD4PYQktOAfd5D31pbjQyR/1YK7anRtn4r7aE+KbRE
-         Dd1QxQ5uUQVwe9fIPTbe38WUi+un1PZxdbhiOzBgHdOziB/2WC38hAoPo+s+hENMVrH8
-         u9xA==
-X-Gm-Message-State: ANoB5ploFpVmds+lVz6Jjv5BleMJZgaerlI3h7vscmNtLJrdnpHFwCXj
-        2EtGCZicfmcqqkzowwles+ec/jPXL8KHizx2jJYZdTC+vCBX0w4TTl6IS4z2pyUjHesOteRVgAX
-        NOre7nzuOww4kKZ1hew8oDpWO
-X-Received: by 2002:a5d:4f92:0:b0:242:1845:8097 with SMTP id d18-20020a5d4f92000000b0024218458097mr27220509wru.666.1670447907453;
-        Wed, 07 Dec 2022 13:18:27 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5fgorQG0KcxOAv9s8Iw+8eIlItbbpS2TXSd8gWnoUAbysFboAAFOCTtaRXkWFQxKp0ME8+pg==
-X-Received: by 2002:a5d:4f92:0:b0:242:1845:8097 with SMTP id d18-20020a5d4f92000000b0024218458097mr27220503wru.666.1670447907124;
-        Wed, 07 Dec 2022 13:18:27 -0800 (PST)
-Received: from ?IPV6:2003:cb:c702:2500:fe2d:7534:ffa4:c1e5? (p200300cbc7022500fe2d7534ffa4c1e5.dip0.t-ipconnect.de. [2003:cb:c702:2500:fe2d:7534:ffa4:c1e5])
-        by smtp.gmail.com with ESMTPSA id j42-20020a05600c1c2a00b003c6d21a19a0sm3473213wms.29.2022.12.07.13.18.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 13:18:26 -0800 (PST)
-Message-ID: <1f157500-2676-7cef-a84e-9224ed64e540@redhat.com>
-Date:   Wed, 7 Dec 2022 22:18:25 +0100
+        Wed, 7 Dec 2022 16:21:27 -0500
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2048.outbound.protection.outlook.com [40.107.100.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7015435B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:21:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hC7RH9Hr4oJ4TQcf/MXy3OzURebrW80ta8mCSGCT2yRGL5U/V1S7hmO+AEA49yVavDdBOwUhWakkss7F449Cxvl58C0nWPTR/n6xyohuVDeF2h9GbPWHQyperiyChu/mM9lz/PJcd5Lcw92v51TpXlzPWejgibH3wFjeGO98Z3K/g8l7dqtr7CihlDlIQTDtObzGNRC7mh8ZXigVzDEd3A5+Cl4JITXWURXbTU6vo5sRdKD2oAm2ephnC2eELKEqpnzH9nFpHhAX1ZQKPR0i6FaCPqGsGC306y3PSRMx2QzCHBrh3v3f1wuwL1P4f9OcwWXaa1W8XNxeV0y192atDg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gw6etKoKbhI5UOmQDWSnwQkbKmxcGeVEhUL6Kb78D4s=;
+ b=Emem0aYuj1CKrA+tB7IZNNgKlIGNW7QXcb0r7d+2PnYLX8/UPOpWELYlVySIC9qMmfBJB4DXhhjccYd5bZUYzaFXbJMW2GAycwFQIKCyLJkLxt/TSI1cg+3sotWbUuqED3ymNqpLsDbCQ4dlZiiawSGP4vwtrG3NjVn0EQFOEf+vZxnyPrmd9BSesnI2u6eOBC5fvHdI86P3LPPQJ7xza/S9MGI8ctafAuE6l0uVAYNeMX1T44esfRGaC1MbvpTHFP4I9cFj62jbbgzReShNwTys9ELfXh5LgAb5x2SaRoXUtB2YT8jpu0LOR1QXrKcquxhOunD0+kx6YVaQUD9isQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gw6etKoKbhI5UOmQDWSnwQkbKmxcGeVEhUL6Kb78D4s=;
+ b=s7ZOIrGTMgoN6ncTOreAnuDMwNfc8L7Jau+wXcE2Qyb/wdn+6Gls6VO6K79agkg+h5e/qzqeQz85P2syx9LaqTjgjdRBaZ6hsCSxROso6HskGr1D2x5Rnzym/TGd66mxeHoStBqYHv5BUFUattt62mAlHPvRZ8667gKsW30c7AN9GH3oppOpR0MFzbrDBLLz1+VibTqayghe42N/ATRveflCHPEupAHusr2wV+p7MhxMrJStZHRLmrxzI3PXWYL5YrElwJaaeh3DvXCMRIoMR0fU99piWucPTYgfEh7aZEQITW+CLbdzQSP1SlATtft1gr3Z0e7GROZUvZyMKAwLaQ==
+Received: from DM6PR04CA0008.namprd04.prod.outlook.com (2603:10b6:5:334::13)
+ by PH0PR12MB8031.namprd12.prod.outlook.com (2603:10b6:510:28e::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 21:21:24 +0000
+Received: from DS1PEPF0000E659.namprd02.prod.outlook.com
+ (2603:10b6:5:334:cafe::83) by DM6PR04CA0008.outlook.office365.com
+ (2603:10b6:5:334::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
+ Transport; Wed, 7 Dec 2022 21:21:24 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF0000E659.mail.protection.outlook.com (10.167.18.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.8 via Frontend Transport; Wed, 7 Dec 2022 21:21:24 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
+ 13:21:13 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
+ 13:21:12 -0800
+Message-ID: <e1f40f3f-162e-7d3c-00f1-8c71e3b5dc31@nvidia.com>
+Date:   Wed, 7 Dec 2022 13:21:12 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 01/10] mm/hugetlb: Let vma_offset_start() to return
+ start
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+To:     Peter Xu <peterx@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-References: <20221206105737.69478-1-david@redhat.com> <Y4++QNzYx1CE1ayY@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2] mm/swap: fix SWP_PFN_BITS with
- CONFIG_PHYS_ADDR_T_64BIT on 32bit
-In-Reply-To: <Y4++QNzYx1CE1ayY@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        "Mike Kravetz" <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203034.650899-2-peterx@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20221207203034.650899-2-peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E659:EE_|PH0PR12MB8031:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2d393121-a19d-4f8d-8a73-08dad898fe8b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: m654IGVLoL01aBdMWINN9oYkCZGZ+AG1Bd6SJ0yyDC0tlJ5yA6m8262+mLtakTmJlY11UsRBMrae08dvUp7mqxMZuhlg5TIgwU/5MU2rOLrZIyCzZUYPIM63r0xVIVZMtpfjAV+CeZBi/LloXplkSQDUwfMDKsqrCi7YOkrccSTYdGLjKmRKufvOLpcIBpuLUdvVHCG5sWZk+dNe/yFSvwYomfsuvJok8Ff21VMK/OJn+3isUXLLpFLp+IQHCZknMAi2lQ10A2lfDXtjy9ugJ65Y6vNAEnmaPJOVZ+itb5+TVN/j/UfUmGvNL/QzEkH6/+CuxTw0rc+uAnuf3qZGJoX6fe/QLhL0Uj+e9B729pg8NvJrjOGOng+zMQ4rWT8TsXT0xOeDkxi45W9VR4Vfac9f7RUAjkyWQmn0VIMTWpX4cfXPgyoDYAPiAK2Js0ts2/4+0KZCfVGqfvCfDmTymTAqMUvGMJLPsq2gsGXB+X6M9gSpN/H6a3hw09C7YkZX7T+RSF4Z6sNInAGKVwVp0PZcRP5Us0ruYWVQko0ghdtQjssWvlGKFuGoHgiPdyaAWNFZ4k+XIvPTZRH9YbfNuAFyOL/C85fD7DRN/UcD0Jno4YsPsiorxyuuGVrQzwsjJONWDn57sv/EtHRg/quCbH2gO3pXb19qIDxTqp+nQxDqoFJjX/p05Do+LIXq9k/EkMc7eZV1iWYuwe1iZD79OJFzjQGfBPTUBDDZQ5SG3CSQJ1YINYR7Pf16IWovdxjR
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(136003)(346002)(396003)(451199015)(36840700001)(46966006)(40470700004)(31696002)(70206006)(16526019)(40460700003)(40480700001)(41300700001)(186003)(86362001)(36756003)(70586007)(336012)(8676002)(4326008)(316002)(2616005)(426003)(8936002)(47076005)(7416002)(16576012)(5660300002)(53546011)(54906003)(478600001)(26005)(110136005)(7636003)(356005)(82310400005)(82740400003)(2906002)(36860700001)(83380400001)(31686004)(43740500002)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 21:21:24.1970
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2d393121-a19d-4f8d-8a73-08dad898fe8b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E659.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8031
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06.12.22 23:12, Peter Xu wrote:
-> On Tue, Dec 06, 2022 at 11:57:37AM +0100, David Hildenbrand wrote:
->> We use "unsigned long" to store a PFN in the kernel and phys_addr_t to
->> store a physical address.
->>
->> On a 64bit system, both are 64bit wide. However, on a 32bit system, the
->> latter might be 64bit wide. This is, for example, the case on x86 with
->> PAE: phys_addr_t and PTEs are 64bit wide, while "unsigned long" only
->> spans 32bit.
->>
->> The current definition of SWP_PFN_BITS without MAX_PHYSMEM_BITS misses
->> that case, and assumes that the maximum PFN is limited by an 32bit
->> phys_addr_t. This implies, that SWP_PFN_BITS will currently only be able to
->> cover 4 GiB - 1 on any 32bit system with 4k page size, which is wrong.
->>
->> Let's rely on the number of bits in phys_addr_t instead, but make sure to
->> not exceed the maximum swap offset, to not make the  BUILD_BUG_ON() in
->> is_pfn_swap_entry() unhappy. Note that swp_entry_t is effectively an
->> unsigned long and the maximum swap offset shares that value with the
->> swap type.
->>
->> For example, on an 8 GiB x86 PAE system with a kernel config based on
->> Debian 11.5 (-> CONFIG_FLATMEM=y, CONFIG_X86_PAE=y), we will currently fail
->> removing migration entries (remove_migration_ptes()), because
->> mm/page_vma_mapped.c:check_pte() will fail to identify a PFN match as
->> swp_offset_pfn() wrongly masks off PFN bits. For example,
->> split_huge_page_to_list()->...->remap_page() will leave migration
->> entries in place and continue to unlock the page.
->>
->> Later, when we stumble over these migration entries (e.g., via
->> /proc/self/pagemap), pfn_swap_entry_to_page() will BUG_ON() because
->> these migration entries shouldn't exist anymore and the page was
->> unlocked.
->>
->> [   33.067591] kernel BUG at include/linux/swapops.h:497!
->> [   33.067597] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
->> [   33.067602] CPU: 3 PID: 742 Comm: cow Tainted: G            E      6.1.0-rc8+ #16
->> [   33.067605] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
->> [   33.067606] EIP: pagemap_pmd_range+0x644/0x650
->> [   33.067612] Code: 00 00 00 00 66 90 89 ce b9 00 f0 ff ff e9 ff fb ff ff 89 d8 31 db e8 48 c6 52 00 e9 23 fb ff ff e8 61 83 56 00 e9 b6 fe ff ff <0f> 0b bf 00 f0 ff ff e9 38 fa ff ff 3e 8d 74 26 00 55 89 e5 57 31
->> [   33.067615] EAX: ee394000 EBX: 00000002 ECX: ee394000 EDX: 00000000
->> [   33.067617] ESI: c1b0ded4 EDI: 00024a00 EBP: c1b0ddb4 ESP: c1b0dd68
->> [   33.067619] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010246
->> [   33.067624] CR0: 80050033 CR2: b7a00000 CR3: 01bbbd20 CR4: 00350ef0
->> [   33.067625] Call Trace:
->> [   33.067628]  ? madvise_free_pte_range+0x720/0x720
->> [   33.067632]  ? smaps_pte_range+0x4b0/0x4b0
->> [   33.067634]  walk_pgd_range+0x325/0x720
->> [   33.067637]  ? mt_find+0x1d6/0x3a0
->> [   33.067641]  ? mt_find+0x1d6/0x3a0
->> [   33.067643]  __walk_page_range+0x164/0x170
->> [   33.067646]  walk_page_range+0xf9/0x170
->> [   33.067648]  ? __kmem_cache_alloc_node+0x2a8/0x340
->> [   33.067653]  pagemap_read+0x124/0x280
->> [   33.067658]  ? default_llseek+0x101/0x160
->> [   33.067662]  ? smaps_account+0x1d0/0x1d0
->> [   33.067664]  vfs_read+0x90/0x290
->> [   33.067667]  ? do_madvise.part.0+0x24b/0x390
->> [   33.067669]  ? debug_smp_processor_id+0x12/0x20
->> [   33.067673]  ksys_pread64+0x58/0x90
->> [   33.067675]  __ia32_sys_ia32_pread64+0x1b/0x20
->> [   33.067680]  __do_fast_syscall_32+0x4c/0xc0
->> [   33.067683]  do_fast_syscall_32+0x29/0x60
->> [   33.067686]  do_SYSENTER_32+0x15/0x20
->> [   33.067689]  entry_SYSENTER_32+0x98/0xf1
->>
->> Decrease the indentation level of SWP_PFN_BITS and SWP_PFN_MASK to keep
->> it readable and consistent.
->>
->> Fixes: 0d206b5d2e0d ("mm/swap: add swp_offset_pfn() to fetch PFN from swap entry")
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Peter Xu <peterx@redhat.com>
->> Cc: Yang Shi <shy828301@gmail.com>
->> Cc: Hugh Dickins <hughd@google.com>
->> Cc: Andrea Arcangeli <aarcange@redhat.com>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>
->> v1 -> v2:
->> * Rely on sizeof(phys_addr_t) and min_t() instead.
->> * Survives my various cross compilations and testing on x86 PAE.
+On 12/7/22 12:30, Peter Xu wrote:
+> Even though vma_offset_start() is named like that, it's not returning "the
+> start address of the range" but rather the offset we should use to offset
+> the vma->vm_start address.
 > 
-> Good to know it works, thanks a lot.
+> Make it return the real value of the start vaddr, and it also helps for all
+> the callers because whenever the retval is used, it'll be ultimately added
+> into the vma->vm_start anyway, so it's better.
 > 
-> Acked-by: Peter Xu <peterx@redhat.com>
-> 
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   fs/hugetlbfs/inode.c | 24 ++++++++++++------------
+>   1 file changed, 12 insertions(+), 12 deletions(-)
 
-Thanks. I realized that we can simply use
-	min_t(int,
-instead of
-	min_t(phys_addr_t,
-because we're only comparing numbers < 64 ...
+This is a nice refinement.
 
-Might look cleaner and less complicated.
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
 
- From e6f0c1099de69a11e643e4d4ee6f470147aa174e Mon Sep 17 00:00:00 2001
-From: David Hildenbrand <david@redhat.com>
-Date: Wed, 7 Dec 2022 21:15:36 +0100
-Subject: [PATCH] Fixup: "mm/swap: fix SWP_PFN_BITS with
-  CONFIG_PHYS_ADDR_T_64BIT on 32bit"
-
-Let's use "int" for comparison, as we're only comparing numbers < 64.
-
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-  include/linux/swapops.h | 2 +-
-  1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index a70b5c3a68d7..b982dd614572 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -35,7 +35,7 @@
-  #ifdef MAX_PHYSMEM_BITS
-  #define SWP_PFN_BITS		(MAX_PHYSMEM_BITS - PAGE_SHIFT)
-  #else  /* MAX_PHYSMEM_BITS */
--#define SWP_PFN_BITS		min_t(phys_addr_t, \
-+#define SWP_PFN_BITS		min_t(int, \
-  				      sizeof(phys_addr_t) * 8 - PAGE_SHIFT, \
-  				      SWP_TYPE_SHIFT)
-  #endif	/* MAX_PHYSMEM_BITS */
+thanks,
 -- 
-2.38.1
+John Hubbard
+NVIDIA
 
-
-
-@Andrew, I just cross-compiled and retested with that successfully.
-
--- 
-Thanks,
-
-David / dhildenb
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index 790d2727141a..fdb16246f46e 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -412,10 +412,12 @@ static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
+>    */
+>   static unsigned long vma_offset_start(struct vm_area_struct *vma, pgoff_t start)
+>   {
+> +	unsigned long offset = 0;
+> +
+>   	if (vma->vm_pgoff < start)
+> -		return (start - vma->vm_pgoff) << PAGE_SHIFT;
+> -	else
+> -		return 0;
+> +		offset = (start - vma->vm_pgoff) << PAGE_SHIFT;
+> +
+> +	return vma->vm_start + offset;
+>   }
+>   
+>   static unsigned long vma_offset_end(struct vm_area_struct *vma, pgoff_t end)
+> @@ -457,7 +459,7 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
+>   		v_start = vma_offset_start(vma, start);
+>   		v_end = vma_offset_end(vma, end);
+>   
+> -		if (!hugetlb_vma_maps_page(vma, vma->vm_start + v_start, page))
+> +		if (!hugetlb_vma_maps_page(vma, v_start, page))
+>   			continue;
+>   
+>   		if (!hugetlb_vma_trylock_write(vma)) {
+> @@ -473,8 +475,8 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
+>   			break;
+>   		}
+>   
+> -		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
+> -				NULL, ZAP_FLAG_DROP_MARKER);
+> +		unmap_hugepage_range(vma, v_start, v_end, NULL,
+> +				     ZAP_FLAG_DROP_MARKER);
+>   		hugetlb_vma_unlock_write(vma);
+>   	}
+>   
+> @@ -507,10 +509,9 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
+>   		 */
+>   		v_start = vma_offset_start(vma, start);
+>   		v_end = vma_offset_end(vma, end);
+> -		if (hugetlb_vma_maps_page(vma, vma->vm_start + v_start, page))
+> -			unmap_hugepage_range(vma, vma->vm_start + v_start,
+> -						v_end, NULL,
+> -						ZAP_FLAG_DROP_MARKER);
+> +		if (hugetlb_vma_maps_page(vma, v_start, page))
+> +			unmap_hugepage_range(vma, v_start, v_end, NULL,
+> +					     ZAP_FLAG_DROP_MARKER);
+>   
+>   		kref_put(&vma_lock->refs, hugetlb_vma_lock_release);
+>   		hugetlb_vma_unlock_write(vma);
+> @@ -540,8 +541,7 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
+>   		v_start = vma_offset_start(vma, start);
+>   		v_end = vma_offset_end(vma, end);
+>   
+> -		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
+> -				     NULL, zap_flags);
+> +		unmap_hugepage_range(vma, v_start, v_end, NULL, zap_flags);
+>   
+>   		/*
+>   		 * Note that vma lock only exists for shared/non-private
 
