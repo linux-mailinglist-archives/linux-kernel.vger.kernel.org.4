@@ -2,71 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF7C36456E4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:54:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED56E6456E7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:54:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiLGJx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:53:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S230078AbiLGJyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:54:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLGJx4 (ORCPT
+        with ESMTP id S230025AbiLGJyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:53:56 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F816102A;
-        Wed,  7 Dec 2022 01:53:55 -0800 (PST)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRszM70p7zmWJX;
-        Wed,  7 Dec 2022 17:53:03 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 7 Dec
- 2022 17:53:52 +0800
-From:   Lv Ying <lvying6@huawei.com>
-To:     <xueshuai@linux.alibaba.com>
-CC:     <akpm@linux-foundation.org>, <baolin.wang@linux.alibaba.com>,
-        <bp@alien8.de>, <cuibixuan@linux.alibaba.com>,
-        <dave.hansen@linux.intel.com>, <james.morse@arm.com>,
-        <jarkko@kernel.org>, <lenb@kernel.org>, <linmiaohe@huawei.com>,
-        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <naoya.horiguchi@nec.com>, <rafael@kernel.org>,
-        <tony.luck@intel.com>, <zhuo.song@linux.alibaba.com>,
-        <xiezhipeng1@huawei.com>, <lvying6@huawei.com>
-Subject: reply for ACPI: APEI: handle synchronous exceptions in task work
-Date:   Wed, 7 Dec 2022 17:54:13 +0800
-Message-ID: <20221207095413.1980862-1-lvying6@huawei.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221206153354.92394-1-xueshuai@linux.alibaba.com>
-References: <20221206153354.92394-1-xueshuai@linux.alibaba.com>
+        Wed, 7 Dec 2022 04:54:37 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2043410041;
+        Wed,  7 Dec 2022 01:54:37 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id jr1so15765384qtb.7;
+        Wed, 07 Dec 2022 01:54:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/3f+gdO/l4zoXmHbMZWEeq0qWLxYGubzRtoW6X4DXRo=;
+        b=gPIsHfSaSpXVT/nShN4nSlCaIULuB6/a5WkBraXTPAdIRa1hr0qq5Ou7GK+QAOMEl8
+         OYe2tw/DbEFd9zKn9QW6cfu+aqt6hioYFRZIK47xp8wHHDQmCugOkVExMLT7gtb6qISV
+         BHV6WSnFJeky6gS2YHeuv1tp+s7LDVIVvawevCIzJN4L37N7WhzqIna8reFDGWRvT/ce
+         BFThJ7IDpNW0NysAwLAYCEoovT8+tOe852bU3uXt4KP4dJhvVrhk2vT2M9euFs/SM1bB
+         zwI0KHQ3XbXiaQHQlPNU3rP1D0v3IGJLOIr0YMqkmyvikQ5FqMSqG9+JKm3Uib+gbcoq
+         PUqw==
+X-Gm-Message-State: ANoB5pm0SMevoPvEJ4zjO3VtJBHz6TAAYwimIKuHdzsHyCOaxs9RDnae
+        y85buTdImXu6cj8NIyuwoJCByT6JwkWfhlCJD7I=
+X-Google-Smtp-Source: AA0mqf6whBmeuVF8x+kNNAo3AW4sEpx6bH08ItOsijasUfPje2VhzUPvs3yXVbAOdgL/hCX7rnwqGxso6OrltV/hkS0=
+X-Received: by 2002:a05:622a:410a:b0:3a5:5987:42c6 with SMTP id
+ cc10-20020a05622a410a00b003a5598742c6mr83109409qtb.147.1670406876197; Wed, 07
+ Dec 2022 01:54:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
+ <4809717.31r3eYUQgx@kreacher> <CAO-hwJJkWOn3N-UrhjFxiKh7jxPk_BLeL-wj6fnD+mcgHMEHfg@mail.gmail.com>
+In-Reply-To: <CAO-hwJJkWOn3N-UrhjFxiKh7jxPk_BLeL-wj6fnD+mcgHMEHfg@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 7 Dec 2022 10:54:25 +0100
+Message-ID: <CAJZ5v0iToPPCaqNeRsamcorJAu3CVW3TOf7OsMWLgDP9vZorYA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] HID: generic: Add ->match() check to __check_hid_generic()
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Bastien Nocera <hadess@hadess.net>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Shuai Xue:
+On Wed, Dec 7, 2022 at 10:27 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Wed, Dec 7, 2022 at 10:13 AM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+> >
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Some special HID drivers (for example, hid-logitech-hidpp) use ->match()
+> > callbacks to reject specific devices that otherwise would match the
+> > driver's device ID list, with the expectation that those devices will
+> > be handled by some other drivers.  However, this doesn't work if
+> > hid-generic is expected to bind to the given device, because its
+> > ->match() callback, hid_generic_match(), rejects all devices that match
+> > device ID lists of the other HID drivers regardless of what is returned
+> > by the other drivers' ->match() callbacks.
+>
+> Thanks Rafael for spotting that corner case in the ->match() processing.
+>
+> >
+> > To make it work, amend the function used by hid_generic_match() for
+> > checking an individual driver, __check_hid_generic(), with a check
+> > involving the given driver's ->match() callback, so 0 is returned
+> > when that callback rejects the device in question.
+>
+> Shouldn't we add that logic to hid_match_device() directly in
+> hid-core.c instead?
+> It feels wrong to have a function named "hid_match_device()" and have
+> to manually call later "->match()" on the driver itself.
 
-I notice that  we are both handling the same problem, my patchset:
-RFC: https://lkml.org/lkml/fancy/2022/12/5/364
-RFC PATCH v1: https://lkml.org/lkml/2022/12/7/244
-has CC to you 
+Well, I've followed the pattern present in hid_device_probe(), where
+hid_match_device() is first called to check against the device ID list
+and then ->match() is invoked later only if that doesn't fail.
 
-Yingwen's proposal in 2022/12/06[1]:
-Add Bit 8 in "Common Platform Error Record" -> "Section Descriptor" ->
-Flags (which Now, Bit 8 through 31 – Reserved) 
+Also changing hid_match_device() would change the way in which
+hid_bus_match() works and that may lead to subsequent regressions,
+potentially, so I'd rather avoid doing that ATM.
 
-[1] https://members.uefi.org/wg/uswg/mail/thread/9453
+> Ack on the general idea anyway.
 
-Yingwen's proposal makes distinguish synchronous error by CPER report more
-easy, however, it's not supported yet.
-Looking forward to your reply if there is any progress on the proposal and
-your suggestions about my patchset.
+Thanks!
+
+> >
+> > Fixes: 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the Logitech Bluetooth devices")
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/hid/hid-generic.c |    8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >
+> > Index: linux-pm/drivers/hid/hid-generic.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/hid/hid-generic.c
+> > +++ linux-pm/drivers/hid/hid-generic.c
+> > @@ -31,7 +31,13 @@ static int __check_hid_generic(struct de
+> >         if (hdrv == &hid_generic)
+> >                 return 0;
+> >
+> > -       return hid_match_device(hdev, hdrv) != NULL;
+> > +       if (!hid_match_device(hdev, hdrv))
+> > +               return 0;
+> > +
+> > +       if (hdrv->match)
+> > +               return hdrv->match(hdev, false);
+> > +
+> > +       return 1;
+> >  }
+> >
+> >  static bool hid_generic_match(struct hid_device *hdev,
+> >
+> >
+> >
+>
