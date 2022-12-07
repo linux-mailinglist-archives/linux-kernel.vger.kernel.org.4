@@ -2,98 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C415645CD0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F147645CDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiLGOmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
+        id S229878AbiLGOqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:46:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLGOmh (ORCPT
+        with ESMTP id S229441AbiLGOqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:42:37 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2062.outbound.protection.outlook.com [40.107.95.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1509E266C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 06:42:36 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ALrgfkb6zZrNXgptRWRF2KTFnTKKUMZmKU1D5z/9A1BhnP/a/gCDxdPOe+zssJ1vyqj11YRwtWUEB1j3X8vTp049NzqP7MqXj+caJ86cggzTyyiIs26IiE7FAyUrAwSehvVkS1RJYpDlw4RdfyX3P6Fz3nKT5gcMZgmOCcb7z+MDszt3lHHpVGbyfY7t4xuUXLf4Yx1zmnf5Oo58yoc6QgeHnkPn3W61wYCQJmzspY3Gt5Z6I2Q7vOUHvdxbZqLaqiLT4NDd0kqemRaFApuvvAeYtQVzqXsyoz015pWTCjW+XFqmN4KIVOqgfx0IDyODez1yL9/8YYSv3nbWPXr4rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=O7d3kb5B2ez54HRT926x65Fmjlek5gN/1tThS2aTKaI=;
- b=kTOTEYu8Atbfs1X7c72/AKqCXKVzqUeovm6CJcTvR0iYis+sTZ6vuqMySd7WLQIYTk215g+329DQBQHiy4qBhEUGj1yWNqYOtrPDsE5H2Cfq0qtKZGR27yPw0OKpS69VUgylxkojldNCkZFKrzs8nvYO178IAz54HfnxtiVUF6Vhr7GjSTQ8eNqiHHRRl4K/2+OUKHUZsWdn7tICN9mqmm/zsheRAz1CinSYbzqzmXblT9afnTH3wogcQS6o0MxI7majT/d+Bh6OJ6AgzynYFfLF/nlZTNMGO5e55CPKvJsQDml62BF33MmpCTXJgX/UleA41bkSuDH1zAN7Z41XIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=O7d3kb5B2ez54HRT926x65Fmjlek5gN/1tThS2aTKaI=;
- b=QbsdwnNwlcUPEyfEel+G13b/5ArsirKxOf70xG5sbCdUUYuUWuWxdAqdasRlFKAVmliBqiIL1LwQ1yg3mA79WAS5ub2JTIfE+AgDECbyS+ZxRhZenWl9SXuEGboqEmjKckJE2ipP/bC3gJO9KnX5J2+QtKYWXShP37Emj81k6DA=
-Received: from DM6PR12CA0002.namprd12.prod.outlook.com (2603:10b6:5:1c0::15)
- by MN0PR12MB5956.namprd12.prod.outlook.com (2603:10b6:208:37f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 14:42:33 +0000
-Received: from DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1c0:cafe::89) by DM6PR12CA0002.outlook.office365.com
- (2603:10b6:5:1c0::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
- Transport; Wed, 7 Dec 2022 14:42:33 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT079.mail.protection.outlook.com (10.13.173.4) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5901.16 via Frontend Transport; Wed, 7 Dec 2022 14:42:32 +0000
-Received: from [10.254.241.50] (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 7 Dec
- 2022 08:42:27 -0600
-Message-ID: <d1abd7c7-299b-4a2b-456c-2c0e0ef6436a@amd.com>
-Date:   Wed, 7 Dec 2022 15:42:06 +0100
+        Wed, 7 Dec 2022 09:46:17 -0500
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282385915F;
+        Wed,  7 Dec 2022 06:46:14 -0800 (PST)
+Received: by mail-ot1-x32c.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so5838067otp.9;
+        Wed, 07 Dec 2022 06:46:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pCx/E76TgK/9YaFBrP8sS3CTQZp59lVD/AHPvEf9LTo=;
+        b=hOvi/ppN1s+rwt2vnOeSAFAGsHGLoFSY+ASbI5Kqs5egtVEYsq6csNx2XV/4S5iF+e
+         LhY77bBtB03M2NPj9vnMcXYE5vqSO3XcNMEkKbWUfWXJoH0P3IJyjOD2DjcwlbhHgyji
+         4aVxsbHjchRcrFRfDIfkk2tP5C5GoJjm1Kzfd+qdBPdUeR50a0VvjRTP6HxW5EqhiiGU
+         GiaWEgNA6T/06KhkSClbVg0ZmMbvTc86ID8d5V81EQ1BqgzW4M781QxRxpXlfLzE1tWh
+         bOl8+0Ige7/i+uYkhfCiXxpzeKNOIQujl6pXDGctLZsiu6lYUrMR7phFydDsWpx4mW4h
+         4e+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pCx/E76TgK/9YaFBrP8sS3CTQZp59lVD/AHPvEf9LTo=;
+        b=WVJVKpPMvqOtzrZaqKi0gZVWIglnGl6nFKUi2TjZypHU8oVu0wVcBXCOqVBKk++pEG
+         zlpSO0SUCynA1vFzRULLLbw1Heyl69F10vtonCCK/dHWmtKE9IhCmahKuiXP9G3UCDqN
+         LccSJTfgYvSHlu5uI3O0gOYZ1cAJlVah+hfcBLBFdj0w42KeyoT0HLNDwTY7rzb5q0U1
+         EECmNkzTPK8pKv/RRdmqfHFuaSBY3aqwKa42bD0JIntIysfivrRqHk7ljWtpWLG5gSqx
+         daVp70vAdZQuOi/HGbZOENZbWZvnCYz73/xVgFSYWkYPdFWqrDNj+RPRH3DCCcUJ7u//
+         EpBQ==
+X-Gm-Message-State: ANoB5pljLfyy3GT2Vf4zFupCrreoz1SDE2uPQ2rNoGxJAC9xcXlZG3f7
+        GhRGOpBs195BlbcR84iAk0eGu6treaBqOwUACVo=
+X-Google-Smtp-Source: AA0mqf4eof0tNHTw1xsmbn9ySQtKoofw7nwky/Tb+KzP9HTjiiwLw4FWjzKNXXQaSmGg3mwLh5PElZz2fFxLxErXwg0=
+X-Received: by 2002:a9d:75d5:0:b0:667:7361:7db5 with SMTP id
+ c21-20020a9d75d5000000b0066773617db5mr38441176otl.22.1670424373348; Wed, 07
+ Dec 2022 06:46:13 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] ARM: zynq: Fix refcount leak in zynq_early_slcr_init
-Content-Language: en-US
-To:     Qiheng Lin <linqiheng@huawei.com>
-CC:     <michal.simek@xilinx.com>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221129140544.41293-1-linqiheng@huawei.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <20221129140544.41293-1-linqiheng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT079:EE_|MN0PR12MB5956:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3f1a7f79-e59c-425c-59d0-08dad8614639
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3JDl+s0Jv1h9Iupca+lIKJzORJ2fFImiA+ds5gNQhN/uqAYjCrXuKLb70chZ+jc9MLcavlIFRp24z/WSvDNEVTony2de1lNfMk3EgQW7BNhAY9El/jiHzy7LQyV0hYR9QXL33/LaTj7fWPpbn5C7fnqU5VUbVAdl1uJq40ZJHuNfRfFO7JkWwayojHNasht44wiBpYDQ2nEiOMtFXD0/lUtgie3rlsNPQmLRuQvwV1lz2qk2uxDa6hQVg6aRc5TGCioOz7XcKS+rBeJb/i5BQCWTmbn2Eg9/T9T6OiHJnW9fmxtW5WyWiv+cY++y5tvOj0YHVex+qYIn82rJhnok3818Wl4lCR/gzwdMmL4ijUjgd0BMgmBNWOumN5WxF9EeWH5GkJCLQINwSKnWhceyIARJwxzpaZAYQ90Nkz9FW1iYL4amIGxvDsdKxRDhWClfc2Z4rkyRuy7hbvuvywxW1a2dEVa0Y8y7YFd2LwNsi6n4asNFOX0V3z8XpFWZl2tirXvJacMBwGsid9XouB5IXsMPx/Oz1iX5VW00YCYp61m0bOhLcdKjK5gLY15qZ596wLp9XgAogc83+wX5UH16EKOsm72RP8ZvGtg5i+NRMGPZWBZaYPT50/AA1iUlEybhrEjh2GBJAFkfLq7iJWrUOh63twEQ6BXuJF9eCwdxs8EoNNLCYnM09AgX6mngRgZNMYmnYBXy3bYKMbGkMWI/aevXJteRcKdibcaWwNaLB6ZPp9fmTi6rwiQy2gF876Caf+ndUS/XQZtiK/dr/KkceA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(396003)(376002)(39860400002)(451199015)(46966006)(40470700004)(36840700001)(5660300002)(40480700001)(8936002)(4744005)(53546011)(47076005)(426003)(44832011)(186003)(86362001)(26005)(40460700003)(336012)(2616005)(16526019)(2906002)(31686004)(6666004)(6916009)(36860700001)(54906003)(36756003)(82740400003)(4326008)(70206006)(41300700001)(8676002)(31696002)(70586007)(16576012)(478600001)(81166007)(356005)(316002)(82310400005)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 14:42:32.7000
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3f1a7f79-e59c-425c-59d0-08dad8614639
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT079.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5956
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221206192123.661448-1-robdclark@gmail.com> <d3433e207ff8ea243ff1d4cceeea19e4676c97c5.camel@pengutronix.de>
+In-Reply-To: <d3433e207ff8ea243ff1d4cceeea19e4676c97c5.camel@pengutronix.de>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Wed, 7 Dec 2022 06:46:08 -0800
+Message-ID: <CAF6AEGtO8hjJocOccsxwWmtLFUfMH7e1EMm-2xLKa2zSr0JCKQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/msm: Add MSM_SUBMIT_BO_NO_IMPLICIT
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     dri-devel@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,37 +73,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Dec 7, 2022 at 2:15 AM Lucas Stach <l.stach@pengutronix.de> wrote:
+>
+> Hi Rob,
+>
+> Am Dienstag, dem 06.12.2022 um 11:21 -0800 schrieb Rob Clark:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > In cases where implicit sync is used, it is still useful (for things
+> > like sub-allocation, etc) to allow userspace to opt-out of implicit
+> > sync on per-BO basis.
+> >
+> Out of curiosity and because I have been thinking about something like
+> that for etnaviv for while: do you only use this for immutable buffers
+> or do you have some kind of userspace fencing in place for the
+> suballocated buffers?
 
-On 11/29/22 15:05, Qiheng Lin wrote:
-> 
-> of_find_compatible_node() returns a node pointer with refcount incremented,
-> we should use of_node_put() on error path.
-> Add missing of_node_put() to avoid refcount leak.
-> 
-> Fixes: 3329659df030 ("ARM: zynq: Simplify SLCR initialization")
-> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
-> ---
->   arch/arm/mach-zynq/slcr.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm/mach-zynq/slcr.c b/arch/arm/mach-zynq/slcr.c
-> index 37707614885a..9765b3f4c2fc 100644
-> --- a/arch/arm/mach-zynq/slcr.c
-> +++ b/arch/arm/mach-zynq/slcr.c
-> @@ -213,6 +213,7 @@ int __init zynq_early_slcr_init(void)
->          zynq_slcr_regmap = syscon_regmap_lookup_by_compatible("xlnx,zynq-slcr");
->          if (IS_ERR(zynq_slcr_regmap)) {
->                  pr_err("%s: failed to find zynq-slcr\n", __func__);
-> +               of_node_put(np);
->                  return -ENODEV;
->          }
-> 
-> --
-> 2.32.0
-> 
+yup, userspace fences.. which is a thing you'd really want for doing
+suballocation
 
-Applied.
+BR,
+-R
 
-Thanks,
-Michal
+>
+> Regards,
+> Lucas
+>
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> >  drivers/gpu/drm/msm/msm_drv.c        |  3 ++-
+> >  drivers/gpu/drm/msm/msm_gem_submit.c | 11 +++++++++++
+> >  include/uapi/drm/msm_drm.h           |  4 +++-
+> >  3 files changed, 16 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> > index 017a512982a2..e0e1199a822f 100644
+> > --- a/drivers/gpu/drm/msm/msm_drv.c
+> > +++ b/drivers/gpu/drm/msm/msm_drv.c
+> > @@ -45,9 +45,10 @@
+> >   * - 1.7.0 - Add MSM_PARAM_SUSPENDS to access suspend count
+> >   * - 1.8.0 - Add MSM_BO_CACHED_COHERENT for supported GPUs (a6xx)
+> >   * - 1.9.0 - Add MSM_SUBMIT_FENCE_SN_IN
+> > + * - 1.10.0 - Add MSM_SUBMIT_BO_NO_IMPLICIT
+> >   */
+> >  #define MSM_VERSION_MAJOR    1
+> > -#define MSM_VERSION_MINOR    9
+> > +#define MSM_VERSION_MINOR    10
+> >  #define MSM_VERSION_PATCHLEVEL       0
+> >
+> >  static const struct drm_mode_config_funcs mode_config_funcs = {
+> > diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+> > index eb3536e3d66a..8bad07a04f85 100644
+> > --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> > +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> > @@ -334,9 +334,20 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
+> >               if (ret)
+> >                       return ret;
+> >
+> > +             /* If userspace has determined that explicit fencing is
+> > +              * used, it can disable implicit sync on the entire
+> > +              * submit:
+> > +              */
+> >               if (no_implicit)
+> >                       continue;
+> >
+> > +             /* Otherwise userspace can ask for implicit sync to be
+> > +              * disabled on specific buffers.  This is useful for internal
+> > +              * usermode driver managed buffers, suballocation, etc.
+> > +              */
+> > +             if (submit->bos[i].flags & MSM_SUBMIT_BO_NO_IMPLICIT)
+> > +                     continue;
+> > +
+> >               ret = drm_sched_job_add_implicit_dependencies(&submit->base,
+> >                                                             obj,
+> >                                                             write);
+> > diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+> > index f54b48ef6a2d..329100016e7c 100644
+> > --- a/include/uapi/drm/msm_drm.h
+> > +++ b/include/uapi/drm/msm_drm.h
+> > @@ -222,10 +222,12 @@ struct drm_msm_gem_submit_cmd {
+> >  #define MSM_SUBMIT_BO_READ             0x0001
+> >  #define MSM_SUBMIT_BO_WRITE            0x0002
+> >  #define MSM_SUBMIT_BO_DUMP             0x0004
+> > +#define MSM_SUBMIT_BO_NO_IMPLICIT      0x0008
+> >
+> >  #define MSM_SUBMIT_BO_FLAGS            (MSM_SUBMIT_BO_READ | \
+> >                                       MSM_SUBMIT_BO_WRITE | \
+> > -                                     MSM_SUBMIT_BO_DUMP)
+> > +                                     MSM_SUBMIT_BO_DUMP | \
+> > +                                     MSM_SUBMIT_BO_NO_IMPLICIT)
+> >
+> >  struct drm_msm_gem_submit_bo {
+> >       __u32 flags;          /* in, mask of MSM_SUBMIT_BO_x */
+>
+>
