@@ -2,209 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C34645F92
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34702645F96
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiLGRCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:02:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47476 "EHLO
+        id S229796AbiLGREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:04:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbiLGRBt (ORCPT
+        with ESMTP id S229759AbiLGRD7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:01:49 -0500
-X-Greylist: delayed 477 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 09:01:47 PST
-Received: from mail.ptr1337.dev (unknown [IPv6:2a03:4000:56:b87:463:c8ff:fee4:a8c1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79CC63B9B;
-        Wed,  7 Dec 2022 09:01:47 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5028F280236;
-        Wed,  7 Dec 2022 17:53:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cachyos.org; s=dkim;
-        t=1670432028; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-         content-transfer-encoding:content-language:in-reply-to:references;
-        bh=Fd9owE0M0AMh/gPHes5KTqqFXaIkb5Vj2avnF3sKQ1E=;
-        b=Ih6JIUE2lJuDDvGrjuqPNzW+X+ngnKX/YAV+Mw9EWqNAST5PPSbtR3mM5fs4a+AyCMO+Ie
-        FE+2mWDmvTxLvu7QsKXpVXxyApay3HCT23WY60tU5FXHrftazLxcmB/6fop2AAAuupEpvN
-        QScr7HAyMTtVuPbYKJ/bO+f4tfgF5O8dg7a7N2ZOzDXX5Lh22PM+FdIcLGXID/xFSpkvg3
-        yqFzQGkMilZW7fgYjM6SUrjSwt/PndIuR23J/8s4o9LgvlpkTyf11WQuKJUZcUsvO1xagZ
-        v4QUKX2M5fZ/y5edf2Sr+KRKHxRplw6E+RkxkW75c+ZNRg1ieDBxgB4xIsjM6g==
-Message-ID: <36d27afc-bee8-127d-12d1-31c0a5dcda4e@cachyos.org>
-Date:   Wed, 7 Dec 2022 17:53:46 +0100
+        Wed, 7 Dec 2022 12:03:59 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC095654DA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:03:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670432585;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jOQIidfQ3sbnFLjha2rLDG/XELirqixmyLKRkZZW63g=;
+        b=PjIL3S5WAw2nrg0ZVHtfyvf/COeQBHlF2fxQ67vpsQIFJUhLmkw/WRG87qO9ENoIDRg01M
+        14BiseAQEY0rQe1Byia7jBhof+QVqs4kMljzcKHknFTf06I36EHigQCw7h7QQvitV5KJUa
+        JtmumD5Kw0fDOJzQXOgQhXT9OzS/6Gs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-619-mGiSbEM7NoeOdPuV-rm_ww-1; Wed, 07 Dec 2022 12:03:04 -0500
+X-MC-Unique: mGiSbEM7NoeOdPuV-rm_ww-1
+Received: by mail-ed1-f69.google.com with SMTP id h8-20020a056402280800b0046af59e0986so10606563ede.22
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:03:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOQIidfQ3sbnFLjha2rLDG/XELirqixmyLKRkZZW63g=;
+        b=hHrv5B9LrbmRXYjeDTyP2vWBqTcYwjuRFv/Xuwlh9UDtlvvV0vFElGy3ygykIP5zW1
+         MW+6sB6e/J6/DO9/4eK1khaa/aEt1OtonjQYwKSc+BurzoHSPcd/1dQHfaAU+ytJdi2w
+         p0eynCezT6h8e92K5vo+pSNXedEtIC5sYO/BxbK9TggwzvgNs3qa1DiOnUs6L55mkN2Q
+         FdkN/SIZ6Rbw0rEOXuwLYfRVsoZ3ohUaGqwBQqeYyFjJkzfagJP0pIEgFEbDAlsM9KqW
+         oDnysALd5mOweD6QZ8fuxR0RryY9LaMmnVaeZmzOzbavGK/pWqZt518IYUSyeugV9f6K
+         1Hsw==
+X-Gm-Message-State: ANoB5pkZKYip8w/MbLT2fjvu4Jz8g85QbCfNugoENq/xX3RfrsnNbpJC
+        vDbcJNbU5GalRslRcOAeGQPX1McYFoPewGfvN9bSu+ddGjXBjb3+DEEeDSXIELk/6n3usr1x/fK
+        wdrqmHWR21zspoTuF11hzBuK1
+X-Received: by 2002:a17:906:d782:b0:7bc:9d14:a2db with SMTP id pj2-20020a170906d78200b007bc9d14a2dbmr45551820ejb.770.1670432583348;
+        Wed, 07 Dec 2022 09:03:03 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4hY1hd3kXz3CHOlo4t5MTSfkJs8W9NDntOh8GHLT7DUWqJ7CgOGM7kz24jRb0n5QnPy2AAQQ==
+X-Received: by 2002:a17:906:d782:b0:7bc:9d14:a2db with SMTP id pj2-20020a170906d78200b007bc9d14a2dbmr45551810ejb.770.1670432583144;
+        Wed, 07 Dec 2022 09:03:03 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id vs19-20020a170907139300b007bee745759bsm8712515ejb.20.2022.12.07.09.03.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 09:03:02 -0800 (PST)
+Message-ID: <df129d35-6015-4745-afef-e8b261224f34@redhat.com>
+Date:   Wed, 7 Dec 2022 18:03:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] module/decompress: Support zstd in-kernel decompression
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-modules@vger.kernel.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Nick Terrell <terrelln@fb.com>
-References: <20221206215318.3955400-1-swboyd@chromium.org>
-From:   Piotr Gorski <piotrgorski@cachyos.org>
-In-Reply-To: <20221206215318.3955400-1-swboyd@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] drm: Add orientation quirk for DynaBook K50
+Content-Language: en-US, nl
+To:     Allen Ballway <ballway@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>
+References: <20221130170811.1.Iee9a494547541dade9eeee9521cc8b811e76a8a0@changeid>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221130170811.1.Iee9a494547541dade9eeee9521cc8b811e76a8a0@changeid>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Piotr Gorski <lucjan.lucjanov@gmail.com>
+Hi,
 
-> Add support for zstd compressed modules to the in-kernel decompression
-> code. This allows zstd compressed modules to be decompressed by the
-> kernel, similar to the existing support for gzip and xz compressed
-> modules.
->
-> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> Cc: Piotr Gorski <lucjan.lucjanov@gmail.com>
-> Cc: Nick Terrell <terrelln@fb.com>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+On 11/30/22 18:08, Allen Ballway wrote:
+> Like the ASUS T100HAN for which there is already a quirk,
+> the DynaBook K50 has a 800x1280 portrait screen mounted
+> in the tablet part of a landscape oriented 2-in-1.
+> Update the quirk to be more generic and apply to this device.
+> 
+> Signed-off-by: Allen Ballway <ballway@chromium.org>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+I've pushed this to drm-misc-next now.
+
+Regards,
+
+Hans
+
+
+
+
 > ---
->   kernel/module/Kconfig      |  3 +-
->   kernel/module/decompress.c | 92 +++++++++++++++++++++++++++++++++++++-
->   2 files changed, 92 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/module/Kconfig b/kernel/module/Kconfig
-> index 26ea5d04f56c..424b3bc58f3f 100644
-> --- a/kernel/module/Kconfig
-> +++ b/kernel/module/Kconfig
-> @@ -221,9 +221,10 @@ endchoice
->   
->   config MODULE_DECOMPRESS
->   	bool "Support in-kernel module decompression"
-> -	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ
-> +	depends on MODULE_COMPRESS_GZIP || MODULE_COMPRESS_XZ || MODULE_COMPRESS_ZSTD
->   	select ZLIB_INFLATE if MODULE_COMPRESS_GZIP
->   	select XZ_DEC if MODULE_COMPRESS_XZ
-> +	select ZSTD_DECOMPRESS if MODULE_COMPRESS_ZSTD
->   	help
->   
->   	  Support for decompressing kernel modules by the kernel itself
-> diff --git a/kernel/module/decompress.c b/kernel/module/decompress.c
-> index c033572d83f0..44f14643d014 100644
-> --- a/kernel/module/decompress.c
-> +++ b/kernel/module/decompress.c
-> @@ -50,7 +50,7 @@ static struct page *module_get_next_page(struct load_info *info)
->   	return page;
->   }
->   
-> -#ifdef CONFIG_MODULE_COMPRESS_GZIP
-> +#if defined(CONFIG_MODULE_COMPRESS_GZIP)
->   #include <linux/zlib.h>
->   #define MODULE_COMPRESSION	gzip
->   #define MODULE_DECOMPRESS_FN	module_gzip_decompress
-> @@ -141,7 +141,7 @@ static ssize_t module_gzip_decompress(struct load_info *info,
->   	kfree(s.workspace);
->   	return retval;
->   }
-> -#elif CONFIG_MODULE_COMPRESS_XZ
-> +#elif defined(CONFIG_MODULE_COMPRESS_XZ)
->   #include <linux/xz.h>
->   #define MODULE_COMPRESSION	xz
->   #define MODULE_DECOMPRESS_FN	module_xz_decompress
-> @@ -199,6 +199,94 @@ static ssize_t module_xz_decompress(struct load_info *info,
->   	xz_dec_end(xz_dec);
->   	return retval;
->   }
-> +#elif defined(CONFIG_MODULE_COMPRESS_ZSTD)
-> +#include <linux/zstd.h>
-> +#define MODULE_COMPRESSION	zstd
-> +#define MODULE_DECOMPRESS_FN	module_zstd_decompress
+> 
+>  .../gpu/drm/drm_panel_orientation_quirks.c    | 20 ++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> index 52d8800a8ab86..14f870fb2db04 100644
+> --- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> +++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+> @@ -30,12 +30,6 @@ struct drm_dmi_panel_orientation_data {
+>  	int orientation;
+>  };
+> 
+> -static const struct drm_dmi_panel_orientation_data asus_t100ha = {
+> -	.width = 800,
+> -	.height = 1280,
+> -	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
+> -};
+> -
+>  static const struct drm_dmi_panel_orientation_data gpd_micropc = {
+>  	.width = 720,
+>  	.height = 1280,
+> @@ -121,6 +115,12 @@ static const struct drm_dmi_panel_orientation_data lcd1280x1920_rightside_up = {
+>  	.orientation = DRM_MODE_PANEL_ORIENTATION_RIGHT_UP,
+>  };
+> 
+> +static const struct drm_dmi_panel_orientation_data lcd800x1280_leftside_up = {
+> +	.width = 800,
+> +	.height = 1280,
+> +	.orientation = DRM_MODE_PANEL_ORIENTATION_LEFT_UP,
+> +};
 > +
-> +static ssize_t module_zstd_decompress(struct load_info *info,
-> +				    const void *buf, size_t size)
-> +{
-> +	static const u8 signature[] = { 0x28, 0xb5, 0x2f, 0xfd };
-> +	ZSTD_outBuffer zstd_dec;
-> +	ZSTD_inBuffer zstd_buf;
-> +	zstd_frame_header header;
-> +	size_t wksp_size;
-> +	void *wksp = NULL;
-> +	ZSTD_DStream *dstream;
-> +	size_t ret;
-> +	size_t new_size = 0;
-> +	int retval;
-> +
-> +	if (size < sizeof(signature) ||
-> +	    memcmp(buf, signature, sizeof(signature))) {
-> +		pr_err("not a zstd compressed module\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	zstd_buf.src = buf;
-> +	zstd_buf.pos = 0;
-> +	zstd_buf.size = size;
-> +
-> +	ret = zstd_get_frame_header(&header, zstd_buf.src, zstd_buf.size);
-> +	if (ret != 0) {
-> +		pr_err("ZSTD-compressed data has an incomplete frame header\n");
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +	if (header.windowSize > (1 << ZSTD_WINDOWLOG_MAX)) {
-> +		pr_err("ZSTD-compressed data has too large a window size\n");
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	wksp_size = zstd_dstream_workspace_bound(header.windowSize);
-> +	wksp = kmalloc(wksp_size, GFP_KERNEL);
-> +	if (!wksp) {
-> +		retval = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	dstream = zstd_init_dstream(header.windowSize, wksp, wksp_size);
-> +	if (!dstream) {
-> +		pr_err("Can't initialize ZSTD stream\n");
-> +		retval = -ENOMEM;
-> +		goto out;
-> +	}
-> +
-> +	do {
-> +		struct page *page = module_get_next_page(info);
-> +
-> +		if (!IS_ERR(page)) {
-> +			retval = PTR_ERR(page);
-> +			goto out;
-> +		}
-> +
-> +		zstd_dec.dst = kmap_local_page(page);
-> +		zstd_dec.pos = 0;
-> +		zstd_dec.size = PAGE_SIZE;
-> +
-> +		ret = zstd_decompress_stream(dstream, &zstd_dec, &zstd_buf);
-> +		kunmap(page);
-> +		retval = zstd_get_error_code(ret);
-> +		if (retval)
-> +			break;
-> +
-> +		new_size += zstd_dec.pos;
-> +	} while (zstd_dec.pos == PAGE_SIZE && ret != 0);
-> +
-> +	if (retval) {
-> +		pr_err("ZSTD-decompression failed with status %d\n", retval);
-> +		retval = -EINVAL;
-> +		goto out;
-> +	}
-> +
-> +	retval = new_size;
-> +
-> + out:
-> +	kfree(wksp);
-> +	return retval;
-> +}
->   #else
->   #error "Unexpected configuration for CONFIG_MODULE_DECOMPRESS"
->   #endif
->
-> base-commit: 76dcd734eca23168cb008912c0f69ff408905235
+>  static const struct drm_dmi_panel_orientation_data lcd1600x2560_leftside_up = {
+>  	.width = 1600,
+>  	.height = 2560,
+> @@ -151,7 +151,7 @@ static const struct dmi_system_id orientation_data[] = {
+>  		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+>  		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "T100HAN"),
+>  		},
+> -		.driver_data = (void *)&asus_t100ha,
+> +		.driver_data = (void *)&lcd800x1280_leftside_up,
+>  	}, {	/* Asus T101HA */
+>  		.matches = {
+>  		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
+> @@ -196,6 +196,12 @@ static const struct dmi_system_id orientation_data[] = {
+>  		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "Hi10 pro tablet"),
+>  		},
+>  		.driver_data = (void *)&lcd1200x1920_rightside_up,
+> +	}, {	/* Dynabook K50 */
+> +		.matches = {
+> +		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dynabook Inc."),
+> +		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "dynabook K50/FR"),
+> +		},
+> +		.driver_data = (void *)&lcd800x1280_leftside_up,
+>  	}, {	/* GPD MicroPC (generic strings, also match on bios date) */
+>  		.matches = {
+>  		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Default string"),
+> --
+> 2.38.1.584.g0f3c55d4c2-goog
+> 
+
