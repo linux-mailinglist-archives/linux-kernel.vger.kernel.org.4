@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 593766454CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DB36454CD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:44:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiLGHoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 02:44:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38314 "EHLO
+        id S229876AbiLGHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 02:44:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiLGHoK (ORCPT
+        with ESMTP id S229868AbiLGHof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 02:44:10 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02EB33B2;
-        Tue,  6 Dec 2022 23:44:08 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NRq6Z3XHxz8R03x;
-        Wed,  7 Dec 2022 15:44:06 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.40.52])
-        by mse-fl2.zte.com.cn with SMTP id 2B77i1YT066091;
-        Wed, 7 Dec 2022 15:44:01 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 7 Dec 2022 15:44:03 +0800 (CST)
-Date:   Wed, 7 Dec 2022 15:44:03 +0800 (CST)
-X-Zmail-TransId: 2af963904443ffffffffaf5897d8
-X-Mailer: Zmail v1.0
-Message-ID: <202212071544032182658@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <andriy.shevchenko@linux.intel.com>
-Cc:     <jic23@kernel.org>, <lars@metafoo.de>,
-        <u.kleine-koenig@pengutronix.de>, <benjamin.mugnier@foss.st.com>,
-        <peda@axentia.se>, <ye.xingchen@zte.com.cn>,
-        <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBpaW86IGxpZ2h0OiBsdHI1MDE6IENvbnZlcnQgdG8gdXNlIHN5c2ZzX2VtaXRfYXQoKSBBUEk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2B77i1YT066091
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63904446.001 by FangMail milter!
-X-FangMail-Envelope: 1670399046/4NRq6Z3XHxz8R03x/63904446.001/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63904446.001/4NRq6Z3XHxz8R03x
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 02:44:35 -0500
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA08C270E;
+        Tue,  6 Dec 2022 23:44:33 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id t18so6478426pfq.13;
+        Tue, 06 Dec 2022 23:44:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TYcJedqceCKJCpFPFxJow6CSmDipVKauFhPeqGOV/Tg=;
+        b=PdDjmJl5uuQye6jtbYIsbO1a4xzZy49l/O6OZlD+8bdEJmqnjD/zsM9HMr530wRvT6
+         hnVfFXsI6cXv77hgZcdffmalC0t18vNtbH465BaymYLGVdGr0kp4/Hj7vhv3OZrMovup
+         NznZeyKou9WrKo4T7pqmM6YpYV/O+rYMhYj00ZyxJEse2DDiy9w+zW6Hho/xJzF/WMDa
+         4gk3gy8E3JFpkrvLfdOhdDHQzLVIhsCiPoLcjGVo9f/tS4f2zZ4UzzaJduTZ7ACs58kl
+         tgvDk+/MA0cH9SuKsbm0z8KuRcAS72XKzofUwIR2kJtm47t3/6qJv7BxvdWf7YP3Vjyg
+         rLjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TYcJedqceCKJCpFPFxJow6CSmDipVKauFhPeqGOV/Tg=;
+        b=nqEOf8Wkn+qMxdf5hUiGt9L6rblCdSOrFfojHIXf6gbJNJYg6/7EwT+StZCJB/6rVb
+         G3lAo7qDD5LkpWAt47QolU4GA2xCAEA41IAlVA/MWhS4nm0j5y3kl3mqLMgiUjRzRn/F
+         n2KGCtP6/OSZrGu4A9cSnVtG/shKLVbuHKn91oWWgSNGsGpO5eDNsSjmLecTqGwG4v1c
+         txB4wl+bolYZk5321SVd1D+U13Q29XxxhhyK/qqoiocaUpyrbS035Z9bZXQdxZia6GJc
+         TnhlR8GwcGIz5dnc5iPIye6F1D3VUADDDryZZ6B8i1NaWnhKm/oX9xsE7V018KgJ2TbB
+         4Xbw==
+X-Gm-Message-State: ANoB5pkPqbtiB5lt6fahw90IMDrl5QC51VjoW9k4alo06YiTZ7rYuXqk
+        Qi0C7G02NH/JW6wPMXZ1Pgk=
+X-Google-Smtp-Source: AA0mqf4cpKsnKtBYCs/kxCCvXfCAD7/3g9icCNgsAVArpgoFDFUzzvBfcI/io0QmO69Nv/QMGGCeaQ==
+X-Received: by 2002:a63:4d2:0:b0:478:95ed:5d6d with SMTP id 201-20020a6304d2000000b0047895ed5d6dmr17942333pge.162.1670399073237;
+        Tue, 06 Dec 2022 23:44:33 -0800 (PST)
+Received: from debian.me (subs02-180-214-232-19.three.co.id. [180.214.232.19])
+        by smtp.gmail.com with ESMTPSA id l11-20020a170903244b00b0017f592a7eccsm13855818pls.298.2022.12.06.23.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 23:44:32 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id 084541042C6; Wed,  7 Dec 2022 14:44:29 +0700 (WIB)
+Date:   Wed, 7 Dec 2022 14:44:29 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v2 6/6] ext4: fix inode leak in
+ 'ext4_xattr_inode_create()'
+Message-ID: <Y5BEXTyXkVh+XZW1@debian.me>
+References: <20221207074043.1286731-1-yebin@huaweicloud.com>
+ <20221207074043.1286731-7-yebin@huaweicloud.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="3ch33433gQYX2hYg"
+Content-Disposition: inline
+In-Reply-To: <20221207074043.1286731-7-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+--3ch33433gQYX2hYg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/iio/light/ltr501.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On Wed, Dec 07, 2022 at 03:40:43PM +0800, Ye Bin wrote:
+> Above issue occur in 'ext4_xattr_inode_create()', if 'ext4_mark_inode_dir=
+ty()'
+> failed need to drop inode's i_nlink. Or will lead to inode leak.
+>=20
 
-diff --git a/drivers/iio/light/ltr501.c b/drivers/iio/light/ltr501.c
-index bdbd918213e4..436f060a34e2 100644
---- a/drivers/iio/light/ltr501.c
-+++ b/drivers/iio/light/ltr501.c
-@@ -1116,9 +1116,9 @@ static ssize_t ltr501_show_proximity_scale_avail(struct device *dev,
- 	for (i = 0; i < info->ps_gain_tbl_size; i++) {
- 		if (info->ps_gain[i].scale == LTR501_RESERVED_GAIN)
- 			continue;
--		len += scnprintf(buf + len, PAGE_SIZE - len, "%d.%06d ",
--				 info->ps_gain[i].scale,
--				 info->ps_gain[i].uscale);
-+		len += sysfs_emit_at(buf, len, "%d.%06d ",
-+				     info->ps_gain[i].scale,
-+				     info->ps_gain[i].uscale);
- 	}
+What about "This occurs in ... . If ... fails, dropping i_nlink of the
+inode is needed, otherwise inode leak can occur."?
 
- 	buf[len - 1] = '\n';
-@@ -1138,9 +1138,9 @@ static ssize_t ltr501_show_intensity_scale_avail(struct device *dev,
- 	for (i = 0; i < info->als_gain_tbl_size; i++) {
- 		if (info->als_gain[i].scale == LTR501_RESERVED_GAIN)
- 			continue;
--		len += scnprintf(buf + len, PAGE_SIZE - len, "%d.%06d ",
--				 info->als_gain[i].scale,
--				 info->als_gain[i].uscale);
-+		len += sysfs_emit_at(buf, len, "%d.%06d ",
-+				     info->als_gain[i].scale,
-+				     info->als_gain[i].uscale);
- 	}
+--=20
+An old man doll... just what I always wanted! - Clara
 
- 	buf[len - 1] = '\n';
--- 
-2.25.1
+--3ch33433gQYX2hYg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5BEXQAKCRD2uYlJVVFO
+o9S/APwNWBjguUmtCD77SDwA2SlTP2eRYnR7mT11nojNnMH+BQD/R1DMOhfiOy73
+HCaHV+bfSnnne6L5P8T7i/fYkP6oHAU=
+=V10K
+-----END PGP SIGNATURE-----
+
+--3ch33433gQYX2hYg--
