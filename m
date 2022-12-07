@@ -2,317 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9D2646439
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C93164643D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:47:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLGWoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:44:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S229798AbiLGWrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:47:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGWoo (ORCPT
+        with ESMTP id S229437AbiLGWrW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:44:44 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D7483E84;
-        Wed,  7 Dec 2022 14:44:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 234BEB8216F;
-        Wed,  7 Dec 2022 22:44:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB69C433B5;
-        Wed,  7 Dec 2022 22:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670453079;
-        bh=XAcqFqnFKkKqA599RAuFn6x75NBJPlgLtoI8Xyl5XIA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JwmxGf5VCKDlRp1Df2gEbJq9PepRvy2apeCS5vibB/MFZlHvB8UKPCDpjSHV7Iccc
-         eW0jroojuCE6ICtsPD7JRf4ruzYGM0bBhLK40qxun/bJ6fs3EpE4GoyUcr7qdE11dB
-         1PbEQLtv3bBi/w/c5WldelqqAhCgrZwCTYkjc1eid0ZT8LL05c6ZzONqsTP9UQ0vJW
-         6PJ1ispY84S/CzFvHk/2yj0D2NmjAH2h+qL0OzMlhxJ4STVTnxwow5q19KIiQjGiro
-         cDGXaGJIlvwdm3SdsDPCSD8m/qkNrvJI1N/zJkm8LqSb4hupLGDl1MS4mkJIebeqsO
-         hD6M/A+BtTkSA==
-Received: by mail-vs1-f42.google.com with SMTP id 125so18661510vsi.9;
-        Wed, 07 Dec 2022 14:44:39 -0800 (PST)
-X-Gm-Message-State: ANoB5pnUt15DbuDVAjlayEnAToAjyCIBV/egLbyt8GmpJbc+tU+TFPlF
-        wdh+fxuUytUQW32KX8uZUmrkGRh/j7IStLv4rw==
-X-Google-Smtp-Source: AA0mqf5oMyM7xeqCPLDzFrVzgXv7T5LEcJz0g3WYasB44gjnVAvyLWVqp9ro0y5JBb+kyHuglGfzJ1d5UArAJEdKGog=
-X-Received: by 2002:a67:af07:0:b0:3b1:1713:ba12 with SMTP id
- v7-20020a67af07000000b003b11713ba12mr12265983vsl.6.1670453078525; Wed, 07 Dec
- 2022 14:44:38 -0800 (PST)
+        Wed, 7 Dec 2022 17:47:22 -0500
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2612983E8D;
+        Wed,  7 Dec 2022 14:47:21 -0800 (PST)
+Received: by mail-oi1-f176.google.com with SMTP id l127so22423531oia.8;
+        Wed, 07 Dec 2022 14:47:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=5cRmcqMTQRbqCVVPhtzGwVwk+S86YVEqZnamcUPsWuw=;
+        b=YEfSwL7KdqriBiBRTfuFoEtbawfx3D1hfTtXDap+QSEY5QdTtFDqdhCLn0L8QNByWj
+         2LqAMp8SN5yMv5itiL1P3crHU8Wde7UipZvZEMngi6JLLwUiqvfDzfs94bz+J6LV/Col
+         7n16z+qB7MIxbndXsRoeULqnHniZQkrmVTVcVgEeG+HcbnWFQvv6mh1kX3DekHbwNrJd
+         4VEJZCFqI6TqKQiBwSdYybhC4fCkkPKq1GySDNCF5XVz2YiwrsNdpf/tMyJLXtf5i3og
+         nIiPS8/nKaKly/oKO/kK1YWNJidgfrSpi2Y2tFYiK/mDjYx1PiakUc1an6xJrQuYeQJo
+         2gCw==
+X-Gm-Message-State: ANoB5pnYimu/JD3kMMYMBWlUS4AUHdq7f5/xGcNse0y60/a5gny8OcrZ
+        yLH9cEZHDTdLtARjVVjh0w==
+X-Google-Smtp-Source: AA0mqf5UlSOz+vfnlBDLHjJdPNx/RAAKOFNV0hMbjpB8wdnbtdb+4ZbqIsJvE/QfEIFpIlrXEl8IaQ==
+X-Received: by 2002:a54:4506:0:b0:35b:9cc2:bfa7 with SMTP id l6-20020a544506000000b0035b9cc2bfa7mr26513888oil.263.1670453240350;
+        Wed, 07 Dec 2022 14:47:20 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d15-20020a056830138f00b0066e64c59bbcsm10705775otq.6.2022.12.07.14.47.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 14:47:19 -0800 (PST)
+Received: (nullmailer pid 3099979 invoked by uid 1000);
+        Wed, 07 Dec 2022 22:47:18 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <1669048984-56394-1-git-send-email-lizhi.hou@amd.com>
- <1669048984-56394-3-git-send-email-lizhi.hou@amd.com> <20221201211224.GA1225112-robh@kernel.org>
- <5e8eabf7-edc8-28a9-afd7-1ccf207d5018@amd.com>
-In-Reply-To: <5e8eabf7-edc8-28a9-afd7-1ccf207d5018@amd.com>
 From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 7 Dec 2022 16:44:27 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJyi3XYdSmgOQ3Xk1cnMeRXUzSsd=-SgweKiLnEsJ-9YQ@mail.gmail.com>
-Message-ID: <CAL_JsqJyi3XYdSmgOQ3Xk1cnMeRXUzSsd=-SgweKiLnEsJ-9YQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH RFC V4 2/3] PCI: Create device tree node for
- selected devices
-To:     Lizhi Hou <lizhi.hou@amd.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, frowand.list@gmail.com,
-        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
-        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
-        stefano.stabellini@xilinx.com, trix@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     agross@kernel.org, dri-devel@lists.freedesktop.org,
+        daniel@ffwll.ch, devicetree@vger.kernel.org,
+        dmitry.baryshkov@linaro.org, sean@poorly.run, robdclark@gmail.com,
+        linux-arm-msm@vger.kernel.org, airlied@gmail.com,
+        konrad.dybcio@somainline.org, swboyd@chromium.org,
+        quic_abhinavk@quicinc.com, andersson@kernel.org, vkoul@kernel.org,
+        linux-kernel@vger.kernel.org, airlied@linux.ie,
+        krzysztof.kozlowski+dt@linaro.org, freedreno@lists.freedesktop.org,
+        dianders@chromium.org, quic_sbillaka@quicinc.com,
+        robh+dt@kernel.org
+In-Reply-To: <1670432278-30643-3-git-send-email-quic_khsieh@quicinc.com>
+References: <1670432278-30643-1-git-send-email-quic_khsieh@quicinc.com>
+ <1670432278-30643-3-git-send-email-quic_khsieh@quicinc.com>
+Message-Id: <167045316457.3098064.10722096707360943971.robh@kernel.org>
+Subject: Re: [PATCH v10 2/5] dt-bindings: msm/dp: add data-lanes and
+ link-frequencies property
+Date:   Wed, 07 Dec 2022 16:47:18 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 6:30 PM Lizhi Hou <lizhi.hou@amd.com> wrote:
->
->
-> On 12/1/22 13:12, Rob Herring wrote:
-> > On Mon, Nov 21, 2022 at 08:43:03AM -0800, Lizhi Hou wrote:
-> >> The PCI endpoint device such as Xilinx Alveo PCI card maps the register
-> >> spaces from multiple hardware peripherals to its PCI BAR. Normally,
-> >> the PCI core discovers devices and BARs using the PCI enumeration process.
-> >> There is no infrastructure to discover the hardware peripherals that are
-> >> present in a PCI device, and which can be accessed through the PCI BARs.
-> >>
-> >> For Alveo PCI card, the card firmware provides a flattened device tree to
-> >> describe the hardware peripherals on its BARs. The Alveo card driver can
-> >> load this flattened device tree and leverage device tree framework to
-> >> generate platform devices for the hardware peripherals eventually.
-> >>
-> >> Apparently, the device tree framework requires a device tree node for the
-> >> PCI device. Thus, it can generate the device tree nodes for hardware
-> >> peripherals underneath. Because PCI is self discoverable bus, there might
-> >> not be a device tree node created for PCI devices. This patch is to add
-> >> support to generate device tree node for PCI devices.
-> >>
-> >> Added a kernel option. When the option is turned on, the kernel will
-> >> generate device tree nodes for PCI bridges unconditionally.
-> >>
-> >> Initially, the basic properties are added for the dynamically generated
-> >> device tree nodes.
-> >>
-> >> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
-> >> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
-> >> Signed-off-by: Max Zhen <max.zhen@amd.com>
-> >> Reviewed-by: Brian Xu <brian.xu@amd.com>
-> >> ---
-> >>   drivers/pci/Kconfig         |  12 ++
-> >>   drivers/pci/Makefile        |   1 +
-> >>   drivers/pci/bus.c           |   2 +
-> >>   drivers/pci/msi/irqdomain.c |   6 +-
-> >>   drivers/pci/of.c            |  71 ++++++++++
-> >>   drivers/pci/of_property.c   | 256 ++++++++++++++++++++++++++++++++++++
-> >>   drivers/pci/pci-driver.c    |   3 +-
-> >>   drivers/pci/pci.h           |  19 +++
-> >>   drivers/pci/remove.c        |   1 +
-> >>   9 files changed, 368 insertions(+), 3 deletions(-)
-> >>   create mode 100644 drivers/pci/of_property.c
-> >>
-> >> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
-> >> index 55c028af4bd9..126c31b79718 100644
-> >> --- a/drivers/pci/Kconfig
-> >> +++ b/drivers/pci/Kconfig
-> >> @@ -198,6 +198,18 @@ config PCI_HYPERV
-> >>        The PCI device frontend driver allows the kernel to import arbitrary
-> >>        PCI devices from a PCI backend to support PCI driver domains.
-> >>
-> >> +config PCI_DYNAMIC_OF_NODES
-> >> +    bool "Device tree node for PCI devices"
-> > Create Devicetree nodes for PCI devices
-> Sure.
-> >
-> > But as I've said before, making this a config option doesn't really work
-> > except as something to experiment with. Once you add your driver and
-> > want to do a 'select PCI_DYNAMIC_OF_NODES', you've affected everyone
-> > else.
->
-> Do you mean we should remove PCI_DYNAMIC_OF_NODES and make
-> creating dynamic tree node default?
 
-No, I'm saying as long as it is a config option, it's not useful for
-more than experimentation. A distro kernel has to decide how to set a
-config option for *everyone*.
+On Wed, 07 Dec 2022 08:57:55 -0800, Kuogee Hsieh wrote:
+> Add both data-lanes and link-frequencies property into endpoint
+> 
+> Changes in v7:
+> -- split yaml out of dtsi patch
+> -- link-frequencies from link rate to symbol rate
+> -- deprecation of old data-lanes property
+> 
+> Changes in v8:
+> -- correct Bjorn mail address to kernel.org
+> 
+> Changes in v10:
+> -- add menu item to data-lanes and link-frequecnis
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
+> ---
+>  .../devicetree/bindings/display/msm/dp-controller.yaml      | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
 
-> Based on the previous discussions, the approach I am implementing
-> is to create device tree nodes for all PCI bridges and devices defined
-> by pci quirks. I believe a PCI endpoint which is not defined by PCI quirks
-> should not to be affected because there is no device tree node is created
-> for it.
->
-> Are you fine with this approach?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-How does that work? The quirks run when a device is discovered. At
-that time you've already discovered and probed everything upstream of
-the device. So the only thing controlling the upstream devices getting
-a DT node is the config option, right?
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/display/msm/dp-controller.yaml:108:21: [error] syntax error: mapping values are not allowed here (syntax)
 
-> >> +    depends on OF
-> >> +    select OF_DYNAMIC
-> >> +    help
-> >> +      This option enables support for generating device tree nodes for some
-> >> +      PCI devices. Thus, the driver of this kind can load and overlay
-> >> +      flattened device tree for its downstream devices.
-> >> +
-> >> +      Once this option is selected, the device tree nodes will be generated
-> >> +      for all PCI bridges.
-> >> +
-> >>   choice
-> >>      prompt "PCI Express hierarchy optimization setting"
-> >>      default PCIE_BUS_DEFAULT
-> >> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
-> >> index 2680e4c92f0a..cc8b4e01e29d 100644
-> >> --- a/drivers/pci/Makefile
-> >> +++ b/drivers/pci/Makefile
-> >> @@ -32,6 +32,7 @@ obj-$(CONFIG_PCI_P2PDMA)   += p2pdma.o
-> >>   obj-$(CONFIG_XEN_PCIDEV_FRONTEND) += xen-pcifront.o
-> >>   obj-$(CONFIG_VGA_ARB)              += vgaarb.o
-> >>   obj-$(CONFIG_PCI_DOE)              += doe.o
-> >> +obj-$(CONFIG_PCI_DYNAMIC_OF_NODES) += of_property.o
-> >>
-> >>   # Endpoint library must be initialized before its users
-> >>   obj-$(CONFIG_PCI_ENDPOINT) += endpoint/
-> >> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
-> >> index 3cef835b375f..8507cc32b61d 100644
-> >> --- a/drivers/pci/bus.c
-> >> +++ b/drivers/pci/bus.c
-> >> @@ -316,6 +316,8 @@ void pci_bus_add_device(struct pci_dev *dev)
-> >>       */
-> >>      pcibios_bus_add_device(dev);
-> >>      pci_fixup_device(pci_fixup_final, dev);
-> >> +    if (pci_is_bridge(dev))
-> >> +            of_pci_make_dev_node(dev);
-> >>      pci_create_sysfs_dev_files(dev);
-> >>      pci_proc_attach_device(dev);
-> >>      pci_bridge_d3_update(dev);
-> >> diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
-> >> index e9cf318e6670..eeaf44169bfd 100644
-> >> --- a/drivers/pci/msi/irqdomain.c
-> >> +++ b/drivers/pci/msi/irqdomain.c
-> >> @@ -230,8 +230,10 @@ u32 pci_msi_domain_get_msi_rid(struct irq_domain *domain, struct pci_dev *pdev)
-> >>      pci_for_each_dma_alias(pdev, get_msi_id_cb, &rid);
-> >>
-> >>      of_node = irq_domain_get_of_node(domain);
-> >> -    rid = of_node ? of_msi_map_id(&pdev->dev, of_node, rid) :
-> >> -                    iort_msi_map_id(&pdev->dev, rid);
-> >> +    if (of_node && !of_node_check_flag(of_node, OF_DYNAMIC))
-> >> +            rid = of_msi_map_id(&pdev->dev, of_node, rid);
-> >> +    else
-> >> +            rid = iort_msi_map_id(&pdev->dev, rid);
-> > I have no idea if this works. It looks kind of broken already if
-> > !of_node calls iort_msi_map_id(). With a DT only system, I would think
-> > we'd always call of_msi_map_id(). Have you tested MSIs?
-> >
-> > With a mixed system, I have no idea what happens. That needs to be
-> > understood for MSI, DMA, and interrupts.
->
-> Yes, I tested MSI in VM.
->
-> # cat
-> /sys/devices/platform/3f000000.pcie/pci0000:00/0000:00:02.0/0000:09:00.0/0000:0a:00.0/msi_irqs/29
->
-> msi
-> # cat /proc/interrupts | grep 29
->   29:          1          0       MSI 5242880 Edge      pciehp
->
-> The idea is to preserve the current behaviror.
->
->        current: PCI device does not have dt node, thus iort_msi_map_id()
-> is called.
->
->        modified code: PCI device has dt node but with OF_DYNAMIC flag,
-> thus  iort_msi_map_id() is called.
->
-> I was planning to take on of_msi_map_id() for dynamically generated dt node
->
-> in future when we see a real use case?
->
-> >
-> >>
-> >>      return rid;
-> >>   }
-> >> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
-> >> index 196834ed44fe..fb60b04f0b93 100644
-> >> --- a/drivers/pci/of.c
-> >> +++ b/drivers/pci/of.c
-> >> @@ -469,6 +469,8 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
-> >>              } else {
-> >>                      /* We found a P2P bridge, check if it has a node */
-> >>                      ppnode = pci_device_to_OF_node(ppdev);
-> >> +                    if (of_node_check_flag(ppnode, OF_DYNAMIC))
-> >> +                            ppnode = NULL;
-> >>              }
-> >>
-> >>              /*
-> >> @@ -599,6 +601,75 @@ int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge)
-> >>      return pci_parse_request_of_pci_ranges(dev, bridge);
-> >>   }
-> >>
-> >> +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
-> >> +
-> >> +void of_pci_remove_node(struct pci_dev *pdev)
-> >> +{
-> >> +    struct device_node *dt_node;
-> > node or np are the typical names.
-> Will fix this.
-> >
-> >> +
-> >> +    dt_node = pci_device_to_OF_node(pdev);
-> >> +    if (!dt_node || !of_node_check_flag(dt_node, OF_DYNAMIC))
-> >> +            return;
-> >> +    pdev->dev.of_node = NULL;
-> >> +
-> >> +    of_destroy_node(dt_node);
-> >> +}
-> >> +
-> >> +void of_pci_make_dev_node(struct pci_dev *pdev)
-> >> +{
-> >> +    struct device_node *parent, *dt_node = NULL;
-> >> +    const char *pci_type = "dev";
-> >> +    struct of_changeset *cset;
-> >> +    const char *full_name;
-> >> +    int ret;
-> >> +
-> >> +    /*
-> >> +     * If there is already a device tree node linked to this device,
-> >> +     * return immediately.
-> >> +     */
-> >> +    if (pci_device_to_OF_node(pdev))
-> >> +            return;
-> >> +
-> >> +    /* Check if there is device tree node for parent device */
-> >> +    if (!pdev->bus->self)
-> >> +            parent = pdev->bus->dev.of_node;
-> >> +    else
-> >> +            parent = pdev->bus->self->dev.of_node;
-> >> +    if (!parent)
-> >> +            return;
-> >> +
-> >> +    if (pci_is_bridge(pdev))
-> >> +            pci_type = "pci";
-> > What's the node name if not a bridge? I don't see how that would work.
-> >
-> > It should depend on the device class if it has one.
->
-> pci_type is initialized with "dev"
->
-> +    const char *pci_type = "dev";
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/display/msm/dp-controller.example.dts'
+Documentation/devicetree/bindings/display/msm/dp-controller.yaml:108:21: mapping values are not allowed in this context
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/display/msm/dp-controller.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/display/msm/dp-controller.yaml:108:21: mapping values are not allowed in this context
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/msm/dp-controller.yaml: ignoring, error parsing file
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
-I missed that...
+doc reference errors (make refcheckdocs):
 
-> Do you mean I should use class instead of pci_is_bridge()?
->
-> if ((pdev->class >> 24) == PCI_BASE_CLASS_BRIDGE)
->      pci_type = "pci";
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/1670432278-30643-3-git-send-email-quic_khsieh@quicinc.com
 
-Well, maybe as preparation to support other classes. If you had a UART
-for example, the node name is 'serial'. I don't think you need to
-worry about those ATM. We may need some way for the name to come from
-the driver as not all devices have a class. Yours for example, we'd
-want something like 'fpga@...' ideally. Maybe that's fine to leave as
-a known issue.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-Rob
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
