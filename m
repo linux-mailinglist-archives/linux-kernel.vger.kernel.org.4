@@ -2,93 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDBF6454FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CE76454FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiLGH46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 02:56:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
+        id S229714AbiLGH6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 02:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiLGH4v (ORCPT
+        with ESMTP id S229530AbiLGH56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 02:56:51 -0500
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF3C30554;
-        Tue,  6 Dec 2022 23:56:50 -0800 (PST)
-Received: from pecola.lan (unknown [159.196.93.152])
-        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id D92B2200E6;
-        Wed,  7 Dec 2022 15:56:43 +0800 (AWST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=codeconstruct.com.au; s=2022a; t=1670399804;
-        bh=uhJAeKSiEwcETVAy29NnoEcD5gNca+lhmYO7Gqq/BtY=;
-        h=Subject:From:To:Date:In-Reply-To:References;
-        b=dlKVQEOzmnyuL9qOvd5MCYxwIzAeVELA/XEmPXM+Z7IBbog/shMY/oITCseV4FXPM
-         SSscjovRTYmUu8d89AQv6x4UxHKWbq7lZQYFJmEuTo3yTv8X31qzo+zE/cCpZ5tahq
-         /zZSvIP0dXqdignAqDcjwcHkmEw63IaGz7+jLKetrIPy43UTsUo/MRKBd/7RKBA5Sn
-         FdVV7AqKnj1F1t7+xe9QABb6L/SkpCWRyVIViNMPiOLTup5e42l99Edplx3+BjF8tH
-         Bv0/DL/DmYA5VPZ93Aiu8viPqSXd2OfZTt7q74hoULFaFSPTJ/h4M1lAmZ3oD/twfV
-         3b2+VsndQCi+w==
-Message-ID: <ff70222596646757cbd6e2f24aadf3247183061d.camel@codeconstruct.com.au>
-Subject: Re: [RFC PATCH 2/2] mfd: syscon: allow reset control for syscon
- devices
-From:   Jeremy Kerr <jk@codeconstruct.com.au>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Date:   Wed, 07 Dec 2022 15:56:42 +0800
-In-Reply-To: <b29dceb0-a07f-4e12-9e7b-6fead4db826d@app.fastmail.com>
-References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
-         <20221206073916.1606125-3-jk@codeconstruct.com.au>
-         <e46a680f-e891-489c-9747-98ae3df42ade@app.fastmail.com>
-         <a83f62d604e70a8e58309dc7a5e2e3515227e1c4.camel@pengutronix.de>
-         <b29dceb0-a07f-4e12-9e7b-6fead4db826d@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1-1 
+        Wed, 7 Dec 2022 02:57:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C389527CC2;
+        Tue,  6 Dec 2022 23:57:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE78B815D4;
+        Wed,  7 Dec 2022 07:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF0A6C433C1;
+        Wed,  7 Dec 2022 07:57:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670399874;
+        bh=QIubHp3cNpcEzieEe4V2CpRX/GSoVpl49aRjbV0Dzzs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I9rgaMxhx2b/hDw6MeXI4mKG8LxIMxeDPfrkmYjrT1bmz7ZzHbSiQ88zZ16wnLgnR
+         d2fgfxoC2kl983o58Tc7k/qBRjtyAwMIfK1qZ8VLaeesGJ94K0VuW2vvetGPx7aIVl
+         dZ40z0HCDvWHIZCwc5ffEcNZf7DPLQ+U76v8Dpuag63HkGrSukKfoZNhS04uFYAB/s
+         meSmCgUwaNfvpHYVIQCZu7W5Xd/mV4GWOay4P8ix7HlEsvcGpaUF2ZQXADduaJNnMz
+         72Flyg+CQk0wAJ7yiDX3xyjDtZWodhnUNkQR6z9deLqhil4SuUoHtJun2k0i6UfeaC
+         jP6NZtFD3gn0A==
+Received: by pali.im (Postfix)
+        id 1447A9D7; Wed,  7 Dec 2022 08:57:51 +0100 (CET)
+Date:   Wed, 7 Dec 2022 08:57:50 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
+ devm_gpiod_get_optional()
+Message-ID: <20221207075750.6usm4mgejtpcrktw@pali>
+References: <Y3KMEZFv6dpxA+Gv@google.com>
+ <Y4/s3227WQyGQiOI@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y4/s3227WQyGQiOI@google.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+On Tuesday 06 December 2022 17:31:11 Dmitry Torokhov wrote:
+> On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
+> > Switch the driver to the generic version of gpiod API (and away from
+> > OF-specific variant), so that we can stop exporting
+> > devm_gpiod_get_from_of_node().
+> > 
+> > Acked-by: Pali Rohár <pali@kernel.org>
+> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> > ---
+> > 
+> > v2:
+> >  - collected reviewed-by/acked-by tags
+> >  - updated commit description to remove incorrect assumption of why
+> >    devm_gpiod_get_from_of_node() was used in the first place
+> > 
+> > This is the last user of devm_gpiod_get_from_of_node() in the mainline
+> > (next), it would be great to have it in so that we can remove the API in
+> > the next release cycle.
+> > 
+> > Thanks!
+> 
+> Gentle ping on this one... I'd really like to remove
+> [devm_]gpiod_get_from_of_node() API from 6.2.
+> 
+> Thanks.
+> 
+> -- 
+> Dmitry
 
-Thanks for taking a look a this. Just a question about the early
-approach; I'm not too familiar with the internals of the syscon/regmap
-infrastructure:
-
-> > reset_controller_register() only initializes a few fields in the
-> > passed rcdev structure and adds it to a static list under a static
-> > mutex, so there's not much of a limit.
->=20
-> Ok, in that case I think we should at least leave the option of
-> doing the reset from an early syscon as well.
-
-OK, sounds good - I'll add a direct of_reset_control_get_<variant>() in
-the early of_syscon_register path, which should work in a similar way to
-the clocks properties.
-
-However: this may conflict with the later platform_device syscon; if the
-late syscon tries to of_reset_control_get_exclusive() the same reset
-controller (because it's the same syscon node), that will (of course)
-fail.
-
-Hence a question about the syscon infrastructure: how are the late- and
-early- syscon registrations supposed to interact? Should I allow for
-there to be two syscons registered (one through of_syscon_register(),
-the other through the platform device probe), or do we expect that to
-never happen?
-
-In case of the former, I can just grab a shared handle to the reset
-controller instead, but I want to make sure that's the correct thing to do.
-
-Cheers,
-
-
-Jeremy
+Hello Dmitry! You would need to wait with your change. There are more
+important fixes and less important cleanups for this aardvark driver
+which are waiting in the queue for longer time:
+https://patchwork.kernel.org/project/linux-pci/list/?series=&submitter=&state=&q=aardvark&archive=&delegate=
