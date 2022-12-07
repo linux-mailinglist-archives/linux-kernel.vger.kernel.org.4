@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6AF645341
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4988164534B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiLGFJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 00:09:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45714 "EHLO
+        id S229602AbiLGFKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 00:10:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLGFJh (ORCPT
+        with ESMTP id S229497AbiLGFKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 00:09:37 -0500
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92EB54779
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 21:09:35 -0800 (PST)
-Received: by mail-pg1-x536.google.com with SMTP id 62so15255235pgb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 21:09:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cp5ETJqrHiYeFuGRnxKQskAPFmw24R1Q/UXHvZqZ/1M=;
-        b=lB0Ys8xXH8tH632Sew02fiki9qGB/9NwBf9xBrSCxqmzCu0IoP2x7t5wXOYDpqE11d
-         QpOab+YYbaWwwMiSzaX28q3+e9BC5Wx/drzZEkqvxw+QNX4V4qA/sKPl/juzuXZbyuQ7
-         zvpg0FxcSH2CSJPfSNCISDBmESTYhaLLKL3vE6odPgB/QR2yKikuVRSActMx7xsD338G
-         8Xc4sYP0AR6zI1f2qgfTLq7bR5KGOhmfkBeAFh2bodipGxg4Dp3loPt5jGsh/6edgMW2
-         E/VayagUCT9nmF15fqLV0inBwCqmtWcs3e5nb/z+5U+yRLt72O9XxEmvbwPGDtFnCy9D
-         0AEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cp5ETJqrHiYeFuGRnxKQskAPFmw24R1Q/UXHvZqZ/1M=;
-        b=3kWdKPE+6UxYf1uEAy3JXNMBjQw+wJOxHPrcdZ+A44bUtLK8LRFicVfj4+vga+vACh
-         zCShJg6PWpZGm367vMy7AqHbudWkJKdyvsC6JN5CuPT/vlXfuLeemmyYcpAEW1iHbOrP
-         M+Y06unpSplpo/msJm+GW+tWL23g8RsGblSAYzo4mvm+HN9veFYMOuBpD8TI8lpIZB8s
-         wHiyI6o0qnYjRlo9nMcUufq/Iv1jYUB9UhvcfBGPw3HRd8TEl6QjB4N//KFRJzgsw9O5
-         GnNKC5m79usdE8VmxVYyD2EVHAHy0zM+kGC48aRsZyyOcHwPATDjxoYFFjXAXkRXIodm
-         jXEw==
-X-Gm-Message-State: ANoB5pk99mL3HOuZklfL11jNOnn/fkxiSlwIIwFyuAeOE68G4UQRobya
-        nKK1q/feTN3mkzVOcl4JJDLrlIpZVpFIdt+KtlDCnQ==
-X-Google-Smtp-Source: AA0mqf7Et/VLeZ5aIDMgiK8fgy8CIkxCZi3dHoTOg2e1YBUh5gq0elD3jqrAT94H+1ZHeMnc9mFzf1j9/i9S2TiZ7iw=
-X-Received: by 2002:a62:1c49:0:b0:575:b4c0:f664 with SMTP id
- c70-20020a621c49000000b00575b4c0f664mr36432897pfc.56.1670389775190; Tue, 06
- Dec 2022 21:09:35 -0800 (PST)
+        Wed, 7 Dec 2022 00:10:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D288354B00;
+        Tue,  6 Dec 2022 21:10:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gmNqBY6w4AK9O4I8y3E96Tg5h7/Vhp7NSY32+7XVFbg=; b=PRXmY7eDUZPnaO0xmD5wSHn6Ni
+        ak2PhljcKGOPoss6GNgxXq3Pplu9kwBBxyQH6sxlp31Gq9yzW+h6id1e7/CAZL1DhF9cilCQq8WA/
+        8KmQrIdhK45DzPWbrTYe9mJPI3en1dSYcLKovFjRWU8PlwUalJuH5g7vFLJkMsk7yDrNVkgnSwcbl
+        7FBFKQPXWeSESjoL6kWsAkIXEkMyeac/Ldus+mS6XzSPOp8HZmRENGk3Y7rtK8loWpqjlXyL8X9LC
+        yPEK37qBsYcAUM4XPGYf2JLgXVIYsvSQNHlVu8uHaQespNdwt+7DRW4M1lbFlM33opfVffAe+qbx1
+        32R5QvPA==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p2mh8-00BJwa-0p; Wed, 07 Dec 2022 05:10:10 +0000
+Date:   Tue, 6 Dec 2022 21:10:10 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        eugene.loh@oracle.com, kris.van.hees@oracle.com
+Subject: Re: [PATCH v10 05/13] kbuild: remove
+ MODULE_LICENSE/AUTHOR/DESCRIPTION in non-modules
+Message-ID: <Y5AgMuMu75gne6Ka@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <20221205163157.269335-6-nick.alcock@oracle.com>
+ <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+ <87mt80l2py.fsf@esperi.org.uk>
+ <5f0a5ea7-2d48-435f-aaa0-82b6ef8cfcc5@app.fastmail.com>
+ <Y5AeuI4RD0tpzlp5@bombadil.infradead.org>
 MIME-Version: 1.0
-References: <20221207043319.1890954-1-davidgow@google.com>
-In-Reply-To: <20221207043319.1890954-1-davidgow@google.com>
-From:   Sadiya Kazi <sadiyakazi@google.com>
-Date:   Wed, 7 Dec 2022 10:39:24 +0530
-Message-ID: <CAO2JNKXtay6fkDvJkievhPypK+hAY=EsoJp1C9dxdpxhB54t+w@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: kunit: Fix "How Do I Use This" / "Next
- Steps" sections
-To:     David Gow <davidgow@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Daniel Latypov <dlatypov@google.com>,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5AeuI4RD0tpzlp5@bombadil.infradead.org>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,107 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 10:03 AM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> The "How Do I Use This" section of index.rst and "Next Steps" section of
-> start.rst were just copies of the table of contents, and therefore
-> weren't really useful either when looking a sphinx generated output
-> (which already had the TOC visible) or when reading the source (where
-> it's just a list of files that ls could give you).
->
-> Instead, provide a small number of concrete next steps, and a bit more
-> description about what the pages contain.
->
-> This also removes the broken reference to 'tips.rst', which was
-> previously removed.
->
-> Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' page")
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->
-> Thanks everyone for reviewing v1. Since this is pretty much a complete
-> rewrite, I've left Reviewed-by tags off, as I don't feel the previous
-> reviews totally apply. Feel free to review again if you have any
-> comments.
->
-> Cheers,
-> -- David
->
-> Changes since v1:
-> https://lore.kernel.org/linux-kselftest/20221129094732.306449-1-davidgow@google.com/
-> - Totally rewrite both sections to only include (and provide more
->   context for) the most concrete next steps.
->   - Thanks Bagas for pointing out that this basically duplicates the TOC
->     as-is.
->
-This still looks good to me, thanks!
+On Tue, Dec 06, 2022 at 09:03:52PM -0800, Luis Chamberlain wrote:
+> On Tue, Dec 06, 2022 at 10:02:30PM +0100, Arnd Bergmann wrote:
+> > On Tue, Dec 6, 2022, at 21:03, Nick Alcock wrote:
+> > > On 6 Dec 2022, Geert Uytterhoeven uttered the following:
+> > > Only MODULE_LICENSE invokes MODULE_FILE and thus ends up introducing a
+> > > KBUILD_MODOBJS entry that triggers things going wrong iff not a module:
+> > > so only it needs to go out (or be replaced with a variant that doesn't
+> > > invoke MODULE_FILE, if you want to keep the license in too --
+> > 
+> > That sounds like a better alternative
+> > 
+> > > but if the thing is no longer a standalone entity at all I'm not sure
+> > > what meaning it could possibly have).
+> > 
+> > As far as I can tell, the general trend is to make more things modules,
+> > so there is a good chance that these come back eventually. If the
+> > information in the MODULE_LICENSE field isn't wrong, I would just
+> > leave it in there.
+> 
+> Tooling today uses it though to make a deterministic call on if something
+> *can* be a module. In particular after commit 8b41fc4454e ("kbuild: create
+> modules.builtin without Makefile.modbuiltin or tristate.conf") we rely on
+> the module license tag to generate the modules.builtin file. This in
+> turn is used to allow modprobe to *not* fail when trying to load a module
+> which is built-in.
+> 
+> So we can't just disable the tag for when the code is built-in as *want*
+> to carry it when modules are built-in, that is the point, to help
+> userspace with this determination.
+> 
+> I don't think we want to revert 8b41fc4454e as it means we'd force Kbuild to
+> traverse the source tree twice.
+> 
+> Geert's point was not keeping MODULE_LICENSE() but instead the other
+> MODULE_*() crap for things which are not modules in case in the future
+> code becomes a module...
+> 
+> But I don't see the point in keeping things around just in case, if we
+> want to keep things simple. Just use the SPDX license tag for the license.
 
-Reviewed-by: Sadiya Kazi <sadiyakazi@google.com>
+Or if you really want to keep it just make it an *eye-sore*, and comment it out.
 
-> ---
->  Documentation/dev-tools/kunit/index.rst | 19 ++++++++-----------
->  Documentation/dev-tools/kunit/start.rst | 19 +++++++++----------
->  2 files changed, 17 insertions(+), 21 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
-> index d5629817cd72..b3593ae29ace 100644
-> --- a/Documentation/dev-tools/kunit/index.rst
-> +++ b/Documentation/dev-tools/kunit/index.rst
-> @@ -99,14 +99,11 @@ Read also :ref:`kinds-of-tests`.
->  How do I use it?
->  ================
->
-> -*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
-> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
-> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
-> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
-> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
-> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> -    examples.
-> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> -    used for testing.
-> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> -    answers.
-> +You can find a step-by-step guide to writing and running KUnit tests in
-> +Documentation/dev-tools/kunit/start.rst
-> +
-> +Alternatively, feel free to look through the rest of the KUnit documentation,
-> +or to experiment with tools/testing/kunit/kunit.py and the example test under
-> +lib/kunit/kunit-example-test.c
-> +
-> +Happy testing!
-> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-tools/kunit/start.rst
-> index f4f504f1fb15..224387a43543 100644
-> --- a/Documentation/dev-tools/kunit/start.rst
-> +++ b/Documentation/dev-tools/kunit/start.rst
-> @@ -294,13 +294,12 @@ Congrats! You just wrote your first KUnit test.
->  Next Steps
->  ==========
->
-> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
-> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
-> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kunit_tool.
-> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
-> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
-> -    examples.
-> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
-> -    used for testing.
-> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
-> -    answers.
-> +If you're interested in using some of the more advanced features of kunit.py,
-> +take a look at Documentation/dev-tools/kunit/run_wrapper.rst
-> +
-> +If you'd like to run tests without using kunit.py, check out
-> +Documentation/dev-tools/kunit/run_manual.rst
-> +
-> +For more information on writing KUnit tests (including some common techniques
-> +for testing different things), see Documentation/dev-tools/kunit/usage.rst
-> +
-> --
-> 2.39.0.rc0.267.gcb52ba06e7-goog
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20221207043319.1890954-1-davidgow%40google.com.
+I don't see why at build-time we should suffer.
+
+  Luis
