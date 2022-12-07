@@ -2,173 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D3564590E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:30:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67CB6645913
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiLGLaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S229809AbiLGLdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:33:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiLGLaZ (ORCPT
+        with ESMTP id S230087AbiLGLdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:30:25 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E221748401;
-        Wed,  7 Dec 2022 03:30:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670412624; x=1701948624;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kh4y6l6w9SxnJx5xFBJLdTUfM4uJK7lKR1XZ4zn7eHc=;
-  b=gR+j7MNPRcvLGUula5OrV8AG48OpuYijt2nQcMbdILnUdzBXq/H/EI2x
-   FXOEc/SONQlf3VdCbHt/LPE1uD/uS441HxkeO34r+NWfZaN206sjwqK25
-   w/VQX4Gf9LGLJVgyw5i4eIaxpdOqrLO0L30IBgdFCMNsgKLwGiaLgg8wX
-   ceOhidlWKDm8LLfARkEWXEYm6kOjJ9msr7YdQIGMeyUMrRBjBvvRDUBW2
-   3vf3CJ1dblmGSkMJYs0SoYvlSSasCDSWWBsyWgeownkCwCXLyhbX843C4
-   3eSWZxe8PaH0sUoTv3ua7tEGqv4MeOP5fKA3BS5/T22Be3Y3F00aqnbZg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="381161641"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="381161641"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 03:30:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="820928509"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="820928509"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga005.jf.intel.com with ESMTP; 07 Dec 2022 03:30:19 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p2scz-005k27-02;
-        Wed, 07 Dec 2022 13:30:17 +0200
-Date:   Wed, 7 Dec 2022 13:30:16 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Okan Sahin <okan.sahin@analog.com>
-Cc:     outreachy@lists.linux.dev, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 7 Dec 2022 06:33:02 -0500
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44661AF32;
+        Wed,  7 Dec 2022 03:32:59 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 426913200488;
+        Wed,  7 Dec 2022 06:32:56 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 07 Dec 2022 06:32:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1670412775; x=1670499175; bh=CndWv91ai/XOQYpVh5b+BeS2Z
+        BrDaMbdKpng8qtdwuU=; b=KCWVvlna4+Kb/EdluMoXPN+WtKMPd2F0iC/h6qFzV
+        5ekt6iS6PAnrlui8yC5eUwTswNKpZGNwy+ZgqJPAMjljhCRIhLJ9AVHEErV1FgYr
+        /d11+gKvO9tfCRMarMNr6bCKSBfbIEmLNJTIqsEHaPCMVn63de5i5pemxWSNGxnH
+        23MFkYwwPgcSK+gPcnf7DzA6k/E3O98aSlwKAcDDsfyTCrE1Y6/UKdw+ZHFGuMWe
+        mMoEohagvvRKGYN9qPu8xMmx2Av8fdgqBh3PqAcW7GQvHf3hcMVNe5R4YJcjdki7
+        Zc4P8E0A2lWbiBhg/Jn85ilNUEfAWR41crlTdaazC2SDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1670412775; x=1670499175; bh=CndWv91ai/XOQYpVh5b+BeS2ZBrDaMbdKpn
+        g8qtdwuU=; b=dcNfwfUVrYO0aBWmUSrvu2CLE2bZBGW9WFnw6bwpotVvBmNplAy
+        Qd0R08POgiSxoVtRaL5KCqHbZ42LZ+0FjoVxN26gBif4NTpnLLbGLkbh4vugPlH0
+        V/wEOVP/xFGqYuZHyBwbIj50XcvW/9QqP9VMe2kQEFmoc576MApYNbahomtQYkbq
+        fuxzahzGuGQXcU8R/ZYlmRvSMEMiCb7mjNQLskxMKBvxhlSt+MPmGJxACrnzUEqw
+        3oToofMgqV6WXdE+7dRdtmCejTGhK9IuDqs5J2VcrtPdwDyjQD35lBNwV9v07pMi
+        TQCX7ODUi1KIZnRUmsINba/NhXQxBEXZ0vQ==
+X-ME-Sender: <xms:53mQY38AQkAzdS2O3vK_pXw6NLH__WbWYtiZmP1uI0p7D6F09MWJIQ>
+    <xme:53mQYztslocxRwNro-fKw0cb5LXTH4E_OUMoGmnrDaL6ocLHhs-KpBw5sU9RYnwkn
+    k-H_t_uLatQsIJdDbg>
+X-ME-Received: <xmr:53mQY1BvDcjZ0dNrqI_d0YnuX6Y77QEmq7p0YOHNBzYiRKOlDVgOvyQpejc4sRfRkothykNF_7seoC3bdRZSqkB8DXQZ376N6k1sdSkxl7Dmc8wU-fA4X7Y2Zg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdeftdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflrghrrhgrhhcu
+    ifhoshgsvghllhcuoehkvghrnhgvlhesuhhnuggvfhdrthhoohhlsheqnecuggftrfgrth
+    htvghrnhepjeeuvefgjeefgefhhfefhedvffelteehkeekvdefheeiteeutdehveeghfeg
+    kefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkh
+    gvrhhnvghlsehunhguvghfrdhtohholhhs
+X-ME-Proxy: <xmx:53mQYzexXYKWueBPc4KR5tXbNJPInfd1OVDxLFIE4PzLKZgRhZtkiw>
+    <xmx:53mQY8OiE_xs8SO3x-tTjU0M79r684Q-N1zCWSPc318qtXO5sVio3g>
+    <xmx:53mQY1kbQp9ElL_8W7O_V84_DfsC8hWXfyQatuSSkoCxfFmQNYCZFw>
+    <xmx:53mQYzd7L7crYHjTTHdrtpeozG1CEtp68ORQ3mMg2D1_1crx7VKLIg>
+Feedback-ID: id76147eb:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Dec 2022 06:32:52 -0500 (EST)
+From:   Jarrah Gosbell <kernel@undef.tools>
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        ChiYuan Huang <cy_huang@richtek.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Ramona Bolboaca <ramona.bolboaca@analog.com>,
-        William Breathitt Gray <william.gray@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH 5/5] staging: drivers: iio: adc: Adc MAX77541 ADC Support
-Message-ID: <Y5B5SHMHZoV5eMAt@smile.fi.intel.com>
-References: <20221207090906.5896-1-okan.sahin@analog.com>
- <20221207090906.5896-6-okan.sahin@analog.com>
+        Heiko Stuebner <heiko@sntech.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, Jarrah Gosbell <kernel@undef.tools>
+Subject: [PATCH] arm64: dts: rk3399-pinephone-pro: reduce thermal limits
+Date:   Wed,  7 Dec 2022 11:32:13 +0000
+Message-Id: <20221207113212.8216-1-kernel@undef.tools>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207090906.5896-6-okan.sahin@analog.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 12:08:44PM +0300, Okan Sahin wrote:
-> This patch add adc support for MAX77541.
-> 
-> The MAX77541 has an 8-bit Successive Approximation Register (SAR) ADC
-> with four multiplexers for supporting the telemetry feature
+While this device uses the rk3399 it is also enclosed in a tight package
+and cooled through the screen and back case. The default rk3399 thermal
+limits can result in a burnt screen.
 
-Same comment as per patch 2.
+These lower limits have resulted in the existing burn not expanding and
+will hopefully result in future devices not experiencing the issue.
 
-...
+Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
+---
+ arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> +#include <linux/bitfield.h>
-> +#include <linux/iio/iio.h>
-
-> +#include <include/linux/mfd/max77541.h>
-
-Hmm...
-
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +#include <linux/regulator/driver.h>
-> +#include <linux/regulator/of_regulator.h>
-
-...
-
-> +enum {
-> +	MAX77541_ADC_CH1_I = 0,
-> +	MAX77541_ADC_CH2_I,
-> +	MAX77541_ADC_CH3_I,
-> +	MAX77541_ADC_CH6_I,
-> +
-> +	MAX77541_ADC_IRQMAX_I,
-
-If it's a terminator, drop the trailing comma.
-
-> +};
-
-...
-
-> +	case MAX77541_ADC_TEMP:
-> +		*val = -273;
-
-I believe we have definition for this in units.h. Can you use it?
-
-> +		*val2 = 0;
-> +		return IIO_VAL_INT_PLUS_MICRO;
-
-
-> +	}
-> +}
-
-...
-
-> +		*val = 0;
-> +
-> +		if (reg_val == LOW_RANGE)
-> +			*val2 = 6250;
-> +		else if (reg_val == MID_RANGE)
-> +			*val2 = 12500;
-> +		else if (reg_val == HIGH_RANGE)
-> +			*val2 = 25000;
-> +		else
-> +			return -EINVAL;
-
-Can it be provided as a table?
-
-...
-
-> +		*val = 0;
-> +
-> +		if (reg_val == LOW_RANGE)
-> +			*val2 = 6250;
-> +		else if (reg_val == MID_RANGE)
-> +			*val2 = 12500;
-> +		else if (reg_val == HIGH_RANGE)
-> +			*val2 = 25000;
-> +		else
-> +			return -EINVAL;
-
-Ditto.
-
-...
-
-> +
-
-Redundant blank line.
-
-> +module_platform_driver(max77541_adc_driver);
-
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+index 2e058c315025..fccc2b2f327d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3399-pinephone-pro.dts
+@@ -83,6 +83,13 @@ vcc1v8_codec: vcc1v8-codec-regulator {
+ 	};
+ };
+ 
++&cpu_alert0 {
++	temperature = <65000>;
++};
++&cpu_alert1 {
++	temperature = <68000>;
++};
++
+ &cpu_l0 {
+ 	cpu-supply = <&vdd_cpu_l>;
+ };
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.35.1
 
