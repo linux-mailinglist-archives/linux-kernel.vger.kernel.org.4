@@ -2,92 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5329464615D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:01:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AD9646160
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiLGTBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 14:01:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S229713AbiLGTDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 14:03:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiLGTBi (ORCPT
+        with ESMTP id S229522AbiLGTDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 14:01:38 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB035D6AA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 11:01:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABB6AB82051
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 19:01:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D80C433D7;
-        Wed,  7 Dec 2022 19:01:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670439692;
-        bh=2vhrKfL5f5Th8736PXYY9evBIgWxXb6E39AhM7EvysA=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=sq0zbvj1RpcD2DkI+5o/yE00jR1KMvYaD0n2qpFbzwiVT40gHWm3lfwW6dm2QdNqZ
-         fiUAczDpUN/AcVcacvuwCIVH9euRhN3h7T5xZlKdvOB56/avUOM+9PgcYH0WExIdbD
-         E4Wq+c3tsvjVrBdZPxQScukgUEbd+LbiOZOKEuQUS735lK3DvNaz8NVBqBAVjTpYFa
-         yN7lCkvi35HX4ek9YdHGcQb4sP2s1j0QZzvVuiMDakp2aGib/TeaG+jAHqxWgTNTuU
-         sMmvlK3O+2nDYauJv5WAl0e39VkL1kJPD1sH+NlDgxPt2g7mxNp7Lu1axTL3PCAtmI
-         sJx3KwPMHOTJA==
-From:   Mark Brown <broonie@kernel.org>
-To:     srinivas.kandagatla@linaro.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc:     bgoswami@quicinc.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-In-Reply-To: <20221205073507.36071-1-jiapeng.chong@linux.alibaba.com>
-References: <20221205073507.36071-1-jiapeng.chong@linux.alibaba.com>
-Subject: Re: [PATCH] ASoC: codecs: wcd-clsh: Remove the unused function
-Message-Id: <167043969025.414898.9604459872443283940.b4-ty@kernel.org>
-Date:   Wed, 07 Dec 2022 19:01:30 +0000
+        Wed, 7 Dec 2022 14:03:18 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020ACD74
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 11:03:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Qu54kHFn/1rYfBOVAyjr/06fnq9wjbv3R/7Zoq7qA+M=; b=kMgXyU3OobTLG+UhXn6ttOIELf
+        bVAPHLP9+8837x61y9JZhTX1CDzlyY0guBU2yVcUaOI4Numce5bS8pj7kMln+JHTT7jyKLLa30Sv0
+        5UTQNTRqdmsEpVfmq2H5E0jqZrO09s9nYNYduknssto+oe8m9IOcntMYeMwkM50XwM3gQj3k7JOUo
+        HaRcFIHZmDCrVeqmD3ifnrqQS5TOKW7gmoL0DeknhtmU37VM42YT3YUlXBdUCardpux8iL9XeNhzz
+        PMwcgk3NDD7xUFC5iQt9T8Sy1xf/75djunCPYQUZKD419S2Vndr62r2WzfrqiKU+GzMIcyATSvmp6
+        o0fXurZg==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p2zhJ-00ACQg-0U; Wed, 07 Dec 2022 19:03:13 +0000
+Message-ID: <f5fe43c0-907e-e5b0-7642-6748f3b1b31c@infradead.org>
+Date:   Wed, 7 Dec 2022 11:03:12 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] mux: remove the Kconfig question for the subsystem
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, Peter Rosin <peda@axentia.se>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CA+55aFyJkpSa6rwZ-5xTihfGiNC_T0oL6txrodYBEo2-0O=p7g@mail.gmail.com>
+ <1499156564-29458-1-git-send-email-peda@axentia.se>
+ <053d7bf2-9bf3-a71c-5713-7cce19413c37@infradead.org>
+ <a546f2db-371e-4d2f-a0ee-c71fcae8c548@app.fastmail.com>
+ <41a5931e-3543-6a3d-ca85-2dd8ad581f2e@infradead.org>
+ <efaf326b-3cd9-40a4-8424-b5f60270beae@app.fastmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <efaf326b-3cd9-40a4-8424-b5f60270beae@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-b77ec
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Dec 2022 15:35:07 +0800, Jiapeng Chong wrote:
-> The function wcd_clsh_set_buck_mode() is defined in the wcd-clsh-v2.c
-> file, but not called elsewhere, so remove this unused function.
+
+
+On 12/7/22 10:57, Arnd Bergmann wrote:
+> On Wed, Dec 7, 2022, at 18:19, Randy Dunlap wrote:
+>> On 12/7/22 00:41, Arnd Bergmann wrote:
+>>> For the other subsystems I mentioned, there are occasionally 
+>>> problems with missing 'select' that tend to be a pain to find,
+>>> compared to subsystems consistently using 'depends on', which
+>>> show up as link failures in randconfig builds.
+>>
+>> I find that various drivers mixing the use of "select" and
+>> "depends on" is problematic.
 > 
-> sound/soc/codecs/wcd-clsh-v2.c:133:20: warning: unused function 'wcd_clsh_enable_status'.
+> Agreed. Even just mixing 'select' with user-visible symbols
+> is very confusing. The two sensible ways are either using
+> user-visible options with 'depends on' or hidden options with
+> 'select'.
 > 
+>> However, there was no answer for the original question:
+>> How does a user enable the 4 Kconfig symbols in drivers/mux/Kconfig
+>> if some other random driver has not selected MULTIPLEXER?
 > 
+> There is no need to enable any of them in this case, because
+> the mux drivers are not usable by themselves.
+> 
+>> I.e.:
+>>
+>> config MUX_ADG792A
+>> 	tristate "Analog Devices ADG792A/ADG792G Multiplexers"
+>>
+>> config MUX_ADGS1408
+>> 	tristate "Analog Devices ADGS1408/ADGS1409 Multiplexers"
+>>
+>> config MUX_GPIO
+>> 	tristate "GPIO-controlled Multiplexer"
+>>
+>> config MUX_MMIO
+>> 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
+>>
+>> OK, MUX_MMIO is selected from some other drivers, but if that is not done,
+>> how can the first 3 be enabled by a user?
+> 
+> They cannot, that is the entire point of hiding the subsystem
+> when it is not used.
 
-Applied to
+OK, if you say so. That doesn't make any sense to me, but whatever,
+I'll drop it.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+Thanks.
 
-Thanks!
-
-[1/1] ASoC: codecs: wcd-clsh: Remove the unused function
-      commit: 81ed7d9de18768fe0cb3d74a7a163a8c082e1346
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- 
+~Randy
