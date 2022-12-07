@@ -2,148 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B1D6463EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262AE6463F1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiLGWPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:15:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
+        id S229808AbiLGWPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:15:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiLGWPT (ORCPT
+        with ESMTP id S229674AbiLGWPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:15:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED756152A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:15:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E931FB820EA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 22:15:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B0FC433C1;
-        Wed,  7 Dec 2022 22:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670451315;
-        bh=zPudEDTJCzHqbNk8ISpfakhmqjq05skg35kiVSUpsWg=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=aUwrFHEsgfI2pghQwVCCM4a7g2TcuiDHvBAMJVk+870SpIYs98/W2XFRUO80Psp86
-         cTO8tLvJvnIPhf3E3K9lqycY6i15MLDW7iwHoUZzSXEPx809kfBbjvfoix2yJaCHZe
-         rTziCsBIV40v2ZubZMRpaKZ1XRR4hQRgkzDANSW62SmrPgiJe/6KZzSHx2/aM8YaiW
-         PmYYLsE8/5uWV/2ECikruP7zP1v6l5DPPLRqO9jEuWAUyF4a+S9UDnmAdXvrkfSvIV
-         IrRquxWYU7QYNTcGbI0OK4rCCe5ahNjLjzMsY4yMVap24q1nojMr+rYk/XpUqCv2x+
-         vdbGloL+wsCpQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5D54E5C0952; Wed,  7 Dec 2022 14:15:15 -0800 (PST)
-Date:   Wed, 7 Dec 2022 14:15:15 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Connor O'Brien <connoro@google.com>
-Subject: Re: [PATCH RFC 3/3] locktorture: Make the rt_boost factor a tunable
-Message-ID: <20221207221515.GI4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221123012104.3317665-1-joel@joelfernandes.org>
- <20221123012104.3317665-4-joel@joelfernandes.org>
+        Wed, 7 Dec 2022 17:15:30 -0500
+Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4F86153D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:15:29 -0800 (PST)
+Received: by mail-yb1-xb2d.google.com with SMTP id g4so4990278ybg.7
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:15:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6md11XMzi0tM9VfuttVehehretVvYJGzXswfjHRw2Yk=;
+        b=FVhyDC1j451hmgMkwi1V7ZI4X8jOVWr/eIXmSC2wvcstj2nqmH63mzvSgwTtApATU7
+         c5BKCleqCvOmWqkJMjNflr+8QXYBnxcOe+vMskQUHOYE6kLQMtsWp1TscflaWmBvVchW
+         1+T44q440TMM6kpmml1fH/7sz02N0B0oPTP/arw7d+LG2oYA1h3b83NbFIbbTJASfxrL
+         hvFcOa6aCxls9HxIdBn80Leq+fJS4b/Qu4JUpuIbAuBsk7hlWLhuzXiizfLeCfikD0Vu
+         kPIHF7EbCCpHToNq47vCM2gtuZGqmzjfqNe3Itbh8AzNvl7j1zF04iWA4a0LZgTg/mUY
+         hIwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6md11XMzi0tM9VfuttVehehretVvYJGzXswfjHRw2Yk=;
+        b=BGqM3Hzq0KQiweo4MvU2F528HPh7P5EMS/hg/Ii0qrnM+4OnCO95Z/thRG1K8ZGa5R
+         NxEydaCvAni+ei0br8hIyrtnhgAzW4BEhU+19se+H/x5/LBMdU/2+ZL5RPM1wi4VcToc
+         kocfoLJJ78n6MIRmkj4rBDJocB4JaP5edB6HMNgUWnWe7CvnYc5wFqXe+njWv6isH2RS
+         3r7kuHDrTiMLZDFd2nYQ/rL8VfFtbPsZ65s0y4wxcNzCzbkJSKpz7IU/uLP53qlUE0JU
+         H4pwb70RvjB0ouvwoiZxuYXrTHLe34UCyhzJBX8l2/CkVr/ztio4yu/ERysUx9dH61De
+         qIHg==
+X-Gm-Message-State: ANoB5pnVvsDHAU3XU+LG4j23Vqaj1HVl4D41ExD5sraRcu9npbOk0xa/
+        p1AKz2qSGmDkTnL5hjiXt/QjQFk38bcslEgXONazQQ==
+X-Google-Smtp-Source: AA0mqf7TLp05aDxpxhqV9kkhq645nCfRl6FYotHcE+YUw02Xl0zYpu/u76VpGq2O89cFFgpqbpUDHfwV18Nu9M3LsA4=
+X-Received: by 2002:a25:38ce:0:b0:6f2:2d94:2404 with SMTP id
+ f197-20020a2538ce000000b006f22d942404mr62740808yba.450.1670451328572; Wed, 07
+ Dec 2022 14:15:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221123012104.3317665-4-joel@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206171340.139790-1-hannes@cmpxchg.org> <20221206171340.139790-4-hannes@cmpxchg.org>
+ <CALvZod6WcBifeWJYG_QLr9Uy5aSbpLoCVyOp+FVx0ca1gzq4fA@mail.gmail.com> <20221207135108.fe1d51f7581f6ff86dbf9bc8@linux-foundation.org>
+In-Reply-To: <20221207135108.fe1d51f7581f6ff86dbf9bc8@linux-foundation.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Wed, 7 Dec 2022 14:15:17 -0800
+Message-ID: <CALvZod63UBrAGXpzs0ukdazvjmBfb61t9PCzUhjrbnDWTaP59Q@mail.gmail.com>
+Subject: Re: [PATCH 3/3] mm: memcontrol: deprecate charge moving
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 01:21:04AM +0000, Joel Fernandes (Google) wrote:
-> The rt boosting in locktorture has a factor variable large enough that
-> boosting only happens once every minute or so. Add a tunable to educe
-> the factor so that boosting happens more often, to test paths and arrive
-> at failure modes earlier. With this change, I can set the factor to
-> like 50 and have the boosting happens every 10 seconds or so.
-> 
-> Tested with boot parameters:
-> locktorture.torture_type=mutex_lock
-> locktorture.onoff_interval=1
-> locktorture.nwriters_stress=8
-> locktorture.stutter=0
-> locktorture.rt_boost=1
-> locktorture.rt_boost_factor=50
-> locktorture.nlocks=3
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+On Wed, Dec 7, 2022 at 1:51 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Tue, 6 Dec 2022 16:03:54 -0800 Shakeel Butt <shakeelb@google.com> wrote:
+>
+> > On Tue, Dec 6, 2022 at 9:14 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+> > >
+> > > Charge moving mode in cgroup1 allows memory to follow tasks as they
+> > > migrate between cgroups. This is, and always has been, a questionable
+> > > thing to do - for several reasons.
+> > >
+> > > First, it's expensive. Pages need to be identified, locked and
+> > > isolated from various MM operations, and reassigned, one by one.
+> > >
+> > > Second, it's unreliable. Once pages are charged to a cgroup, there
+> > > isn't always a clear owner task anymore. Cache isn't moved at all, for
+> > > example. Mapped memory is moved - but if trylocking or isolating a
+> > > page fails, it's arbitrarily left behind. Frequent moving between
+> > > domains may leave a task's memory scattered all over the place.
+> > >
+> > > Third, it isn't really needed. Launcher tasks can kick off workload
+> > > tasks directly in their target cgroup. Using dedicated per-workload
+> > > groups allows fine-grained policy adjustments - no need to move tasks
+> > > and their physical pages between control domains. The feature was
+> > > never forward-ported to cgroup2, and it hasn't been missed.
+> > >
+> > > Despite it being a niche usecase, the maintenance overhead of
+> > > supporting it is enormous. Because pages are moved while they are live
+> > > and subject to various MM operations, the synchronization rules are
+> > > complicated. There are lock_page_memcg() in MM and FS code, which
+> > > non-cgroup people don't understand. In some cases we've been able to
+> > > shift code and cgroup API calls around such that we can rely on native
+> > > locking as much as possible. But that's fragile, and sometimes we need
+> > > to hold MM locks for longer than we otherwise would (pte lock e.g.).
+> > >
+> > > Mark the feature deprecated. Hopefully we can remove it soon.
+> > >
+> > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+> >
+> > Acked-by: Shakeel Butt <shakeelb@google.com>
+> >
+> > I would request this patch to be backported to stable kernels as well
+> > for early warnings to users which update to newer kernels very late.
+>
+> Sounds reasonable, but the changelog should have a few words in it
+> explaining why we're requesting the backport.  I guess I can type those
+> in.
 
-This looks good, and is what I should have done to start with.  But
-it depends on the first commit, so I will hold off for the moment.
+Thanks a lot.
 
-						Thanx, Paul
+>
+> We're at -rc8 and I'm not planning on merging these up until after
+> 6.2-rc1 is out.  Please feel free to argue with me on that score.
 
-> ---
->  kernel/locking/locktorture.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-> index 5a388ac96a9b..e4529c2166e9 100644
-> --- a/kernel/locking/locktorture.c
-> +++ b/kernel/locking/locktorture.c
-> @@ -47,6 +47,7 @@ torture_param(int, stat_interval, 60,
->  	     "Number of seconds between stats printk()s");
->  torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
->  torture_param(int, rt_boost, 0, "Perform an rt-boost from the writer, always 1 for rtmutex_lock");
-> +torture_param(int, rt_boost_factor, 50000, "A factor determining how often rt-boost happens");
->  torture_param(int, verbose, 1,
->  	     "Enable verbose debugging printk()s");
->  torture_param(int, nlocks, 1,
-> @@ -132,15 +133,15 @@ static void torture_lock_busted_write_unlock(int tid __maybe_unused)
->  
->  static void torture_rt_boost(struct torture_random_state *trsp)
->  {
-> -	const unsigned int factor = 50000; /* yes, quite arbitrary */
-> +	const unsigned int factor = rt_boost_factor; /* yes, quite arbitrary */
->  
->  	if (!rt_boost)
->  		return;
->  
->  	if (!rt_task(current)) {
->  		/*
-> -		 * Boost priority once every ~50k operations. When the
-> -		 * task tries to take the lock, the rtmutex it will account
-> +		 * Boost priority once every rt_boost_factor operations. When
-> +		 * the task tries to take the lock, the rtmutex it will account
->  		 * for the new priority, and do any corresponding pi-dance.
->  		 */
->  		if (trsp && !(torture_random(trsp) %
-> @@ -150,8 +151,9 @@ static void torture_rt_boost(struct torture_random_state *trsp)
->  			return;
->  	} else {
->  		/*
-> -		 * The task will remain boosted for another ~500k operations,
-> -		 * then restored back to its original prio, and so forth.
-> +		 * The task will remain boosted for another 10*rt_boost_factor
-> +		 * operations, then restored back to its original prio, and so
-> +		 * forth.
->  		 *
->  		 * When @trsp is nil, we want to force-reset the task for
->  		 * stopping the kthread.
-> -- 
-> 2.38.1.584.g0f3c55d4c2-goog
-> 
+No, I totally agree with you. There is no such urgency in merging
+these and a couple of weeks delay is totally fine.
