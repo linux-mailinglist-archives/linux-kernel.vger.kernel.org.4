@@ -2,204 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391486461EC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E016461E8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiLGT5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 14:57:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58340 "EHLO
+        id S229593AbiLGT5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 14:57:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLGT5L (ORCPT
+        with ESMTP id S229437AbiLGT5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 14:57:11 -0500
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F765E3FD;
-        Wed,  7 Dec 2022 11:57:09 -0800 (PST)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7GDv8G010250;
-        Wed, 7 Dec 2022 19:56:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=tMaLcJnjsya6xB/fqoO37IigfwJeuy3AOFtxwKqlfco=;
- b=jhlLKV2McvFZxY9nAuyYC7kz+YHANvfcb2AcvIKCmTlhuDYacpZbeDmxQwlldJZmSF10
- g64Un8rtQFk4VdT+TMPCmBK9X3/x6L7g/XuUZRYGfp6H46whCDS7dasyornuQJfxVRkk
- ML2XX6EUqD3QtRh8eTbsUA2+9bB+RaipmCBZVh84UTiUCszaX9Hb2PErnx8gMar+U3e3
- NhnnLPQaMEHDHqjUtPqcsfk55eyeoRMNrrGDWJ71D0BmE/VIqiVzfjuCEt5eXMZY2pvt
- tQAfXE3cJ0vlOe5uyxNqSfESTGj8ZQb1hUAOoyz9izd2dYhRnckHlQygwkMh9S1TxCUj Jg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maudus7yr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 19:56:31 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B7J0HJm021708;
-        Wed, 7 Dec 2022 19:56:30 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2049.outbound.protection.outlook.com [104.47.73.49])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa8gbp80-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 19:56:30 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MbI1vu+49AoWgryg9EEH5fCLVQHpFROmZh0SuqPK6WZ9o9a04qT+hacCQqVIOahx4wfIXdcJiHbEUFpDneTurhakV65iPmlPmd0no4g5RQ2t41IWEUNMwlROpvH5CRD22D4UBQvLcprRyJyiQGzEPQmF/B2A+wb868ae0mK6yNHhD96dxjm8f1OZsy47BvYncjt+AHa+oqbJj3an+ypmu+9mJkOkawt1KMdLALbJx0myXV5cP/EJvRz6LKqdFmTgWwPEHA57NzObM6w7HIiEe2HM2VicZC2hs3Wshf/3PVdO9HNzNNl7vo/VXCXjM9BO7gHYiVwzJfPV6mTbngc86A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tMaLcJnjsya6xB/fqoO37IigfwJeuy3AOFtxwKqlfco=;
- b=WbsO892j4rtfIBAAFsa2r8uO547J4GtPJvkNDG1BY+oFT+68Ae64QDaFhv/gPo2Qp4J6TltG+YbNMcvCJjWhh44P860R+xzCyXuurMFhJFpwhnkPADdH86m4t7lSkDjcKe32fkih8COT+MlcBTnh3a5PbXh8tsKF2OPnGKpsOGVcI2ILc5iQDEBUMzAAaDAgjGumai52EN54qmPyEmn6c04gIo0/P60RgmpkSGtPlng4YyF39GrPkWC+u9+3OaqBilOlv87odKYMWnlycu0daU3FohtsNnb+Lt55MVBWq6xEOP+MAbtpFZHgviXSrD3D/YlwMXTzpY/zzklkfPCneQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tMaLcJnjsya6xB/fqoO37IigfwJeuy3AOFtxwKqlfco=;
- b=VZMtKs0d9mGNIr2qIvYReQLnasNBmpYAxItRdmC+Nq6fAvd1rThwIvZUR14X2n6RehbEibYGRTumcPSqj457r2Z4SmAwSIBTwnOe+Rkaxy46w7u6ZwuhAaL9WG+g+h8usWK/j9t14+7w4WLLizFdCYYWHlkvjcl72Wl+dovgOMU=
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com (2603:10b6:806:23e::20)
- by PH7PR10MB6553.namprd10.prod.outlook.com (2603:10b6:510:204::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 19:56:28 +0000
-Received: from SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::6a6a:2552:ef79:e2ec]) by SA1PR10MB5711.namprd10.prod.outlook.com
- ([fe80::6a6a:2552:ef79:e2ec%8]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 19:56:28 +0000
-Date:   Wed, 7 Dec 2022 14:56:23 -0500
-From:   Daniel Jordan <daniel.m.jordan@oracle.com>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Nicolas Schier <nicolas@fjasle.eu>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] padata: Mark padata_work_init() as __ref
-Message-ID: <20221207195623.mk4jt5vkc76s77cf@parnassus.localdomain>
-References: <20221207191657.2852229-1-nathan@kernel.org>
- <20221207191657.2852229-2-nathan@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207191657.2852229-2-nathan@kernel.org>
-X-ClientProxiedBy: BL1PR13CA0184.namprd13.prod.outlook.com
- (2603:10b6:208:2be::9) To SA1PR10MB5711.namprd10.prod.outlook.com
- (2603:10b6:806:23e::20)
+        Wed, 7 Dec 2022 14:57:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FDE5E3CD;
+        Wed,  7 Dec 2022 11:57:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C7D861BAF;
+        Wed,  7 Dec 2022 19:57:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95CFCC433D7;
+        Wed,  7 Dec 2022 19:57:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670443024;
+        bh=AvmeQtrnl7xMXtEnD6viJTvtLqEQcfiUyyyKZl/KgUI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ObplL2g8TxTO5JJOjfNmVoA6K7NHMQs2vaoeQ8u0mEZIQu8gLeqCx6d8mgaTga/BN
+         bc376wJENHG5Zx2mALAkvG9AD8eEcU2D2t+zU/g2gWfdHcB+YvjaUhf1eAM4ah9E6g
+         HxlHuQI1pnrpq56qd7fAIykbUO5dDDDDSSM2TpXQ+cHruqik5wqddbEmqONurSgYoO
+         iIs1QIs5quM6sNqIBbuV5a9PcQuIdKGKk2qlEiYFZqBY7GCJgFBA+/Q67aNSN+fjOe
+         TkuSnoXCog3/5QBkPYZiRnsqQ73zm7umoQBu2qcR0AedfrMHeLNUMMMLfwy05q6xsL
+         0hLaOMGk22yRw==
+Received: by mail-vk1-f173.google.com with SMTP id z23so4818562vkb.12;
+        Wed, 07 Dec 2022 11:57:04 -0800 (PST)
+X-Gm-Message-State: ANoB5pmXKTUU3z7RyEUdmyfNBWmcM12whZa7hI2gKV/vMGb8SyYDmGGX
+        2RbvxMiweIn/78pHXF2wYsHQRIsvgnNpOfCNEw==
+X-Google-Smtp-Source: AA0mqf79ttTFnrHyDKt4VUK0QUXtDvssZUfj1nXbNUgEZmKUPkzsNanut9A30xKpK3IOHRfaB9JBKoN+r9dpoMCKPpw=
+X-Received: by 2002:a1f:41ca:0:b0:3bd:ce89:f4e6 with SMTP id
+ o193-20020a1f41ca000000b003bdce89f4e6mr4493288vka.26.1670443023467; Wed, 07
+ Dec 2022 11:57:03 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR10MB5711:EE_|PH7PR10MB6553:EE_
-X-MS-Office365-Filtering-Correlation-Id: a17c4525-103b-4eef-62f2-08dad88d2090
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7tGa7qDiFVYufyKCZ3E1xQi324DN4yswjgCcS2pJRFOqWLgDdLJF3gxuvZomcX9YiyXGYaf58z+AdCkBKJq/zKCr4GamaNJdvtEGMYiBnJDMQ8UNE4snqAYf+IOOIISIQOpslvYOX6Ay3J39trz3xik2+EP5Bfmm5NXZioCSpezVbjRRPeMrqVRCxpdp8Nj1IL4K9SPBw6uamrPkxVnQsSwU8Oy9uSwmyZvYNnHWtD7tjFqfphfJz8+PMYA8KMf4CZlLMrhfnjq0ktLS3rcSLsF82UZ3Mce5bBchskYFXSFx4yUVUOisq5smaRrU5GqBw+iUg/2+x3eh7HhjowbMllT0+SGDoMuffx5uWOyk6lZyDKAQKD7KyuksKTn9QrOnzifAGX2KX+xBK7tCiX8Ef04HkEURy5Y80DPWSSko0ArJSZ+BBuOVxHvA1/R6kcLaSTBKqYb8nPJsV7yKWUYG4M1uPtqgZ/CKnrjQKg131NiR960jMuuZbNpdjJUQTVyMGLOjXKQ8ZvbONe1sG4fTXGyhLOj69kgqIgkVsoXm23Tk0uARI9FPRkACkofXpq/zsvzGUr2a2HpZIw1kGz9nlRNDTSQqT0g6YwqddluOeULt7ARBK8XNw25xFrCp79BalEKxWVtsu9H5gjEyRZEY0g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR10MB5711.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(366004)(376002)(396003)(346002)(39860400002)(451199015)(2906002)(83380400001)(41300700001)(1076003)(86362001)(66476007)(38100700002)(9686003)(26005)(6512007)(8676002)(8936002)(5660300002)(4326008)(7416002)(186003)(66946007)(316002)(6486002)(6506007)(6666004)(54906003)(478600001)(6916009)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Dl7PRs98j2XTuThZspcYpqYZbdg50l1JuqZT+i5J/rnL83u5SJlE7WDjNiim?=
- =?us-ascii?Q?3YkDARRWJ6vfffx0I0qKHYF835RzyBRqsB5g0Xi+Bu6W2xRwNJlw4/LW3Il+?=
- =?us-ascii?Q?89l3TpD8005uTwBd1ylAu6p8UdBi41foaDtVo7BoHPzF2fxl68Z/cqCouQyq?=
- =?us-ascii?Q?3VRIA1nx9KXZn87es15b1BLd91ahbesUYwJxaimNYaGSTL0vAK/O1ZD5PoTQ?=
- =?us-ascii?Q?PU4KxsPvSzOK4f05YBvOFwf+lmX6zBrqNhwqj8gwsz4srNCeLnwA3e7C5jXE?=
- =?us-ascii?Q?ZhORi1/Fy5gx6RFhQNhxTU5lhnmnvD29sJSr6QMv1YUfZXAKQXapQAw3DGYq?=
- =?us-ascii?Q?+Yd4LUXd9vLyomcqKwWfDxWljyKwa7+6i7Zi6VPJpfAgI3KRjJYC1AfaM8WE?=
- =?us-ascii?Q?nEbj4rKObn0XaCiId6Swk/CPX83PitgK43pEPxljci5rMqpK8hkeoyujJxZO?=
- =?us-ascii?Q?GolLc5I33sQGCX6LwjLyVd7gZnJ3JWckpcnzkXN0tbf+b4nlm+5gBOGtXFMm?=
- =?us-ascii?Q?1z4oPXiVcNs/uInAsuAvIdOGnmqmwOyNoDyKBstBCVSHGlJGiZJrlKiXAOK7?=
- =?us-ascii?Q?xoL5V3GdvqivAjNv1FQjxeXmTi/RM0dACiYq1Y1wcp03/nK/L4Mq5lMOU/vo?=
- =?us-ascii?Q?+NOqsQL4GDEKx9AaNMEN3jg/weF8qfnzfJbWCITwNaQDJQZ3AKUxIqxLtYV9?=
- =?us-ascii?Q?0f8ic8XPbYXHLUablU94lOr47XNaQJzwG+Qt3pOuP+LsBe1djhFCqweoTNnz?=
- =?us-ascii?Q?5WL6h/8NbG9TMm8012A46NTpOGDN/w54cwzS/nj32tziCQ3DCQKFtgCvuFqm?=
- =?us-ascii?Q?gf5KiVK76ShLbP5jOXtzAp6f7V9YHYg8NjfaT1uNfy0mDqq/wUVzZ6Yc6JW2?=
- =?us-ascii?Q?T4nXrsp70zHb4HY6X9RSqUPr7Py7YxN3Oq/3SGiJu+T7+VtUhkcw7Pw/9XXk?=
- =?us-ascii?Q?VDUGHQHybqxBFRO56LoIDpesaMw7cVqT6yStTNlgxZeGje17+3dYeOFDPYK7?=
- =?us-ascii?Q?luiHazZhyhEfUA+ZkWl1USjg5mKV7VDHeS5mlMMHKLYKq9G7lInRnMn+zPA2?=
- =?us-ascii?Q?MkugwKRZDSt27rrtz4J33CrgirB86ZXLAQMtPFp61xDMAVuBKgFVylzNjVuy?=
- =?us-ascii?Q?QenlTtfq+uLPSNu4ziPKv8DU9sjKEPjrlgF+84EfgQ1jggqDCFzmL8p0G3xF?=
- =?us-ascii?Q?doMQyDSDxpcrOv2O64Uve/iViuyPCnQU2Amls0RA2ShIko+YEOBjuxdTK/rf?=
- =?us-ascii?Q?DiF8BVhHgwf+zBf9z9ckHPi73V8b8+t3D2XbKgL7ITaNUfL9X6YSHimXRW7u?=
- =?us-ascii?Q?BIONnLEfle4HU1C6dLKFR8hhdLFaxdxujXcvLAkeMIwpBST7tIkh2uZuWFVd?=
- =?us-ascii?Q?aa6ldMPAHMsqhlHRlWwMzgILWLzUTZWtbB4xpXaEc9bYnvq+jxUIosUXKgEe?=
- =?us-ascii?Q?gX1wWAEHITsGY1hFlBdoilxG/zCvAsxSX7+hnV0e0Wjy/ioUteQor1U7YL0u?=
- =?us-ascii?Q?3c1Jj8uuXmnQUen4o2b9HiNZLV1LACIxog9YzWZLQnFQn0LAqmstjsx65rvS?=
- =?us-ascii?Q?60tZbk00objWSw6zni0WmDAtFMjlRPZOsYxvmIum5SF2E24Ka+xNbijoPj/q?=
- =?us-ascii?Q?BQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a17c4525-103b-4eef-62f2-08dad88d2090
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR10MB5711.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 19:56:28.0604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BZOQ/lSeA4ApVGwIIJvolw69q3F4s3uCVww2t1oW+uMfk1J/baPyVe3cFI+2IrY5lbi4SvEUe1P6QUFNBI6D6sWVLpvt1vvkfowmpjGJ7AU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6553
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_09,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212070168
-X-Proofpoint-ORIG-GUID: np24030zaTgUIVB0KjHf4nZtyT8Y3pVp
-X-Proofpoint-GUID: np24030zaTgUIVB0KjHf4nZtyT8Y3pVp
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220825-arm-spe-v8-7-v3-0-87682f78caac@kernel.org>
+ <20220825-arm-spe-v8-7-v3-7-87682f78caac@kernel.org> <20221118164943.GA4872@willie-the-truck>
+ <CAL_JsqJMxEWhqZV=yqG15zvEHrBTwRVfHA6zptu2TswxRMSR0A@mail.gmail.com>
+ <877czfujdj.fsf@ubik.fi.intel.com> <CAL_JsqKJYrEUzkzNMKMOGvzJN_EqacHZvBR6eVt35bRhhtRo=g@mail.gmail.com>
+ <Y49ttrv6W5k3ZNYw@FVFF77S0Q05N.cambridge.arm.com>
+In-Reply-To: <Y49ttrv6W5k3ZNYw@FVFF77S0Q05N.cambridge.arm.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 7 Dec 2022 13:56:52 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLfZVrwFgYDwA9mz3FPp3jf0r5OOajTJ=7QvwE8P8UKyw@mail.gmail.com>
+Message-ID: <CAL_JsqLfZVrwFgYDwA9mz3FPp3jf0r5OOajTJ=7QvwE8P8UKyw@mail.gmail.com>
+Subject: Re: [PATCH v3 7/8] perf: Add perf_event_attr::config3
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Will Deacon <will@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, James Clark <james.clark@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 12:16:56PM -0700, Nathan Chancellor wrote:
-> When building arm64 allmodconfig + ThinLTO with clang and a proposed
-> modpost update to account for -ffuncton-sections, the following warning
-> appears:
-> 
->   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
->   WARNING: modpost: vmlinux.o: section mismatch in reference: padata_work_init (section: .text.padata_work_init) -> padata_mt_helper (section: .init.text)
-> 
-> LLVM has optimized padata_work_init() to include the address of
-> padata_mt_helper() directly, which causes modpost to complain since
-> padata_work_init() is not __init, whereas padata_mt_helper() is. In
-> reality, padata_work_init() is only called with padata_mt_helper() as
-> the work_fn argument in code that is __init, so this warning will not
-> result in any problems. Silence it with __ref, which makes it clear to
-> modpost that padata_work_init() can only use padata_mt_helper() in
-> __init code.
+On Tue, Dec 6, 2022 at 10:28 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> Peter, it looks like this series is blocked on the below now; what would you
+> prefer out of:
+>
+> (a) Take this as is, and look add adding additional validation on top.
+>
+> (b) Add some flag to indicate a PMU driver supports config3, and have the core
+>     code check that, but leave the existing fields as-is for now (and hopefully
+>     follow up with further validation later for the existing fields).
 
-Thanks!
+That looks something like this:
 
-Acked-by: Daniel Jordan <daniel.m.jordan@oracle.com>
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index 853f64b6c8c2..845162b152ea 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -286,6 +286,7 @@ struct perf_event;
+ #define PERF_PMU_CAP_NO_EXCLUDE                        0x0080
+ #define PERF_PMU_CAP_AUX_OUTPUT                        0x0100
+ #define PERF_PMU_CAP_EXTENDED_HW_TYPE          0x0200
++#define PERF_PMU_CAP_CONFIG3                   0x0400
 
-> Suggested-by: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
-> Cc: Steffen Klassert <steffen.klassert@secunet.com>
-> Cc: Daniel Jordan <daniel.m.jordan@oracle.com>
-> Cc: linux-crypto@vger.kernel.org
-> ---
->  kernel/padata.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/padata.c b/kernel/padata.c
-> index e5819bb8bd1d..4c3137fe8449 100644
-> --- a/kernel/padata.c
-> +++ b/kernel/padata.c
-> @@ -83,8 +83,8 @@ static struct padata_work *padata_work_alloc(void)
->  	return pw;
->  }
->  
-> -static void padata_work_init(struct padata_work *pw, work_func_t work_fn,
-> -			     void *data, int flags)
-> +static __ref void padata_work_init(struct padata_work *pw, work_func_t work_fn,
-> +				   void *data, int flags)
->  {
->  	if (flags & PADATA_WORK_ONSTACK)
->  		INIT_WORK_ONSTACK(&pw->pw_work, work_fn);
-> 
-> base-commit: 76dcd734eca23168cb008912c0f69ff408905235
-> -- 
-> 2.38.1
-> 
+ struct perf_output_handle;
+
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index aefc1e08e015..4414ae64432a 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -11314,6 +11314,9 @@ static int perf_try_init_event(struct pmu
+*pmu, struct perf_event *event)
+                    event_has_any_exclude_flag(event))
+                        ret = -EINVAL;
+
++               if (!(pmu->capabilities & PERF_PMU_CAP_CONFIG3) &&
+event->attr.config3)
++                       ret = -EINVAL;
++
+                if (ret && event->destroy)
+                        event->destroy(event);
+        }
