@@ -2,71 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227536462F1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD1D6462F5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:07:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiLGVFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:05:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S229848AbiLGVHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:07:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbiLGVFR (ORCPT
+        with ESMTP id S229441AbiLGVHP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:05:17 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365B5716FC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:05:14 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id n188so12570199iof.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 13:05:14 -0800 (PST)
+        Wed, 7 Dec 2022 16:07:15 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA27716F5;
+        Wed,  7 Dec 2022 13:07:15 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id g1so10532640pfk.2;
+        Wed, 07 Dec 2022 13:07:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AdwiBta6Dmh/OYr9T4sarFHL36j6yKAVLPCIdX41e8E=;
-        b=iyOxLy9XHzFy2XbMQGIodfZwE74F2VQH2uw6Bajf8jyz3A4AAae++mdUyn3jXnEZwE
-         2R8olZssDCz82JVkilXJq20A90qXgGw/mu64hQYfp2GRa6GtFbqd0m0DtQU9Kmny7THl
-         muz0haDH8RD0Irkt7Mtqm0sVN73tJLeVnWmpg=
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V995C6MwqtUAmTG71E4cb1Pyxeu/S0wZo/QPEUz5JyI=;
+        b=LpQoDdBWH7AjZeARZIav9Ud/rp1eZav/ptYhNkj5zUs0aFgG1QvN3QpxTsdlTLfxQR
+         +U07pkjcNK24yiRBCGfqbHKVQqHgZ59x8Dukmo3jhYItpStJGQjJgkbeY9lg1t8S9HGH
+         yGRbNfl//dN49Tx0QTg8BglhjxBCcorbXlOzpdqMB3sdPYF+NFd1pmGteUpI7OtIWlhA
+         1+xvxpxN4T+QcploU54kSawaYMNk6EXzxqMI/1E/0ZhlMNFuVXM/C0Y1B1N5MMofO0dx
+         4jd5ol7KDGkncltwAkp2x7T9KHW1CeEtawu+NB5s9UxB7+BX9lBuaYLLHsGYDBU6fMYI
+         ckew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AdwiBta6Dmh/OYr9T4sarFHL36j6yKAVLPCIdX41e8E=;
-        b=mASPcukIbomklwTNg4U+9tFlEehLi6y6RApEmKHCGp7fJJRgzQodq+QfX2KDi0O2FY
-         GtJ0hYm0+sy1wMMAr63VPgZ8+DnkSKMjwW83amljnnlTKilnGIbPS+mVgTwgCC6312TD
-         Kw8h6aBcTsEcGopCdRUrG0PSgDj4ZktOYKi266BEPNU9Ev/NaoKiWP6fYS6RqjlyMMOQ
-         ybg39bUQImz+EnteowVdw/HuIiWZ0LvGAC99/k8uXZHUJaa1zfVbT50+crGZo6WFf3dP
-         EDybrXY0i8Q0co5D/Wv7BdrSQFB/Q+hOvSB6LGOjDR9UbglBv2p/+az4y3pJMiUMROZq
-         epCA==
-X-Gm-Message-State: ANoB5pmJJoybk7/xDKtDq/3q12LiOphXJ6EMn6WmraZlUHDN/WRxXlq5
-        /dkWcSMsTjfseSXEVN66/Hqz6g==
-X-Google-Smtp-Source: AA0mqf7+fo5y7xXq0Es3jfEYzCY+qMiBTplapo9Q5usgMzeur5M/qhUHuIanSgxE53hS1CuCZ9d9nQ==
-X-Received: by 2002:a02:954d:0:b0:375:569e:fb3f with SMTP id y71-20020a02954d000000b00375569efb3fmr43537632jah.200.1670447113419;
-        Wed, 07 Dec 2022 13:05:13 -0800 (PST)
-Received: from fedora64.linuxtx.org (99-47-93-78.lightspeed.rcsntx.sbcglobal.net. [99.47.93.78])
-        by smtp.gmail.com with ESMTPSA id q28-20020a027b1c000000b00349c45fd3a8sm7971766jac.29.2022.12.07.13.05.11
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V995C6MwqtUAmTG71E4cb1Pyxeu/S0wZo/QPEUz5JyI=;
+        b=2aLi7dWWnA9++GHcLTSzoTGnqQOXT/PzoOFK+Cyp4g/OkH+/iNfJNxPnwXz9uEZwNE
+         GQJr5ufWMbpX4UbppzhQs6lTtCs15Qk/f+72WcH/lHCUgUVM8f9enmY9NOvTpURbsM+B
+         vNsVJ+V9m2ZKKAAyHJssmrWTsmyG5pA+pVXH3YdzwLlFTw/18TOgqyDhWIckJAOBgfPc
+         0OZC2lZumxBFENsgI3Tu2VKFS8tz2KDCBDqpEalEvbbk+TQiy0TkXdWYP4IT4ZKAcog7
+         C0MztG8DzcqlP9wQFEN51Y86ixOQ7EDzVG7mVFkeE2dCnZftINZ/Sww99tQo8AvssiVM
+         kBlw==
+X-Gm-Message-State: ANoB5pkuNMkZ6qSKAw6N9Gk82fpCjkN2Vt7A7ZRTKrl17vODiUKMVbtE
+        ywV8Ikls2DbbGdYWU8VrenE=
+X-Google-Smtp-Source: AA0mqf4TRbwld+Rgp66Y4tIL68ENi6FOYJj8KLqyjxn7dTcjwWbWKSIY7F4QVxHmA4adoAqSlKP3pA==
+X-Received: by 2002:a63:f5a:0:b0:470:18d4:f18d with SMTP id 26-20020a630f5a000000b0047018d4f18dmr66492091pgp.295.1670447234255;
+        Wed, 07 Dec 2022 13:07:14 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:7a61:38c7:d37a:7f43])
+        by smtp.gmail.com with ESMTPSA id y23-20020a17090264d700b00187197c499asm15102485pli.164.2022.12.07.13.07.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 13:05:12 -0800 (PST)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Wed, 7 Dec 2022 15:05:10 -0600
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/125] 6.0.12-rc3 review
-Message-ID: <Y5EABpt77+wwnGLU@fedora64.linuxtx.org>
-References: <20221206163445.868107856@linuxfoundation.org>
+        Wed, 07 Dec 2022 13:07:13 -0800 (PST)
+Date:   Wed, 7 Dec 2022 13:07:10 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] PCI: mvebu: switch to using gpiod API
+Message-ID: <Y5EAft42YiT66mVj@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206163445.868107856@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,26 +73,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:39:48PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.12 release.
-> There are 125 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 08 Dec 2022 16:34:27 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.12-rc3.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+This patch switches the driver away from legacy gpio/of_gpio API to
+gpiod API, and removes use of of_get_named_gpio_flags() which I want to
+make private to gpiolib.
 
-Tested rc3 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+---
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+v3:
+ - add #include <linux/irqchip/chained_irq.h> to avoid compile errors.
+   This was previously included indirectly via linux/of_gpio.h ->
+   linux/gpio/driver.h
+
+v2:
+ - free port->reset_name when reset GPIO is not found (Pali)
+ - remove stray tab (Pali)
+
+This is the last user of of_get_named_gpio_flags() in the "next" tree.
+
+Thanks!
+
+ drivers/pci/controller/pci-mvebu.c | 51 ++++++++++--------------------
+ 1 file changed, 17 insertions(+), 34 deletions(-)
+
+diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+index 73db99035c2b..600964ba174c 100644
+--- a/drivers/pci/controller/pci-mvebu.c
++++ b/drivers/pci/controller/pci-mvebu.c
+@@ -11,15 +11,15 @@
+ #include <linux/bitfield.h>
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/init.h>
+ #include <linux/irqdomain.h>
++#include <linux/irqchip/chained_irq.h>
+ #include <linux/mbus.h>
+ #include <linux/slab.h>
+ #include <linux/platform_device.h>
+ #include <linux/of_address.h>
+ #include <linux/of_irq.h>
+-#include <linux/of_gpio.h>
+ #include <linux/of_pci.h>
+ #include <linux/of_platform.h>
+ 
+@@ -1262,9 +1262,8 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+ 	struct mvebu_pcie_port *port, struct device_node *child)
+ {
+ 	struct device *dev = &pcie->pdev->dev;
+-	enum of_gpio_flags flags;
+ 	u32 slot_power_limit;
+-	int reset_gpio, ret;
++	int ret;
+ 	u32 num_lanes;
+ 
+ 	port->pcie = pcie;
+@@ -1328,40 +1327,24 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
+ 			 port->name, child);
+ 	}
+ 
+-	reset_gpio = of_get_named_gpio_flags(child, "reset-gpios", 0, &flags);
+-	if (reset_gpio == -EPROBE_DEFER) {
+-		ret = reset_gpio;
++	port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
++					  port->name);
++	if (!port->reset_name) {
++		ret = -ENOMEM;
+ 		goto err;
+ 	}
+ 
+-	if (gpio_is_valid(reset_gpio)) {
+-		unsigned long gpio_flags;
+-
+-		port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
+-						  port->name);
+-		if (!port->reset_name) {
+-			ret = -ENOMEM;
++	port->reset_gpio = devm_fwnode_gpiod_get(dev, of_fwnode_handle(child),
++						 "reset", GPIOD_OUT_HIGH,
++						 port->name);
++	ret = PTR_ERR_OR_ZERO(port->reset_gpio);
++	if (ret) {
++		if (ret != -ENOENT)
+ 			goto err;
+-		}
+-
+-		if (flags & OF_GPIO_ACTIVE_LOW) {
+-			dev_info(dev, "%pOF: reset gpio is active low\n",
+-				 child);
+-			gpio_flags = GPIOF_ACTIVE_LOW |
+-				     GPIOF_OUT_INIT_LOW;
+-		} else {
+-			gpio_flags = GPIOF_OUT_INIT_HIGH;
+-		}
+-
+-		ret = devm_gpio_request_one(dev, reset_gpio, gpio_flags,
+-					    port->reset_name);
+-		if (ret) {
+-			if (ret == -EPROBE_DEFER)
+-				goto err;
+-			goto skip;
+-		}
+-
+-		port->reset_gpio = gpio_to_desc(reset_gpio);
++		/* reset gpio is optional */
++		port->reset_gpio = NULL;
++		devm_kfree(dev, port->reset_name);
++		port->reset_name = NULL;
+ 	}
+ 
+ 	slot_power_limit = of_pci_get_slot_power_limit(child,
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
+
+-- 
+Dmitry
