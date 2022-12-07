@@ -2,209 +2,254 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37FF64521E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28881645223
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbiLGCjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 21:39:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
+        id S229591AbiLGCk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 21:40:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiLGCjQ (ORCPT
+        with ESMTP id S229452AbiLGCkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 21:39:16 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2061.outbound.protection.outlook.com [40.107.223.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49CF4C27E
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 18:39:14 -0800 (PST)
+        Tue, 6 Dec 2022 21:40:24 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2953A3F06A;
+        Tue,  6 Dec 2022 18:40:23 -0800 (PST)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B72XY8t001109;
+        Wed, 7 Dec 2022 02:40:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=O8FXTmAIovbkLqs5AOdqBqcROOJJ2nNdgLaAUTQTo0s=;
+ b=C7IO/26Up+kO9ZBC4D3sKhH0BKa7/Vb+z4rfAorISSZ4CQvmyNXF+sYtaxS7M6AC4XSO
+ CpxOlr6mJZV7iMT3hqEtxOtv7Is/drQW4dgXmfzKDyq+YCCX4K3Fi+ryj4lMbbN0nxG9
+ rzBLOg+ZEK1E+K2WkBmRiACo30DNxssVhRkbWLVjzGhxi+PUZsNlgIQ4QIM+0xfbof7P
+ gyNg/ffm986KXyxb6R3ZDwY/PfBsGw24HUjNfcuGR8hwiKhXTuS1AnegKNWh7P3Htv1c
+ AVloLwRr1ZNqsZkF0oQdcYxiDEHWLkA/07pZMjw+1pzBI6f+D+tTUy/iCTgw+kuyiKdh LA== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3m7ya49j2w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Dec 2022 02:40:19 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B6NeusZ030541;
+        Wed, 7 Dec 2022 02:40:19 GMT
+Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2175.outbound.protection.outlook.com [104.47.59.175])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa683qff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Dec 2022 02:40:19 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K/kdGwAgBQ4uP9fRaG6MR+vrDbgpdDPvR+CCUbmbReDIAWfD3JgkTC2dzvuwrUZWM0ZHb4Ni+kxPOEi0hPtEUFaqo6/Zd+O2hd6vHT1pxaKTHhX2syFDGVASnpiYx4rkPCEnNU2OHgs4fvhCNEMdLj7Y5ty4LXK9mw+3yiq68fn13X65m0M2zGDxVfTJgcBFZUO/W43GjwQBCZeJF1mtkHyXs+iLIsIWAy0bN5hf5JHrlAHg0nqOPJnD36WDILsbjxq7EgFlLTnlfbGvn7O3ozOgQPZE+eSH/bjTi9lK/a1GR3MknMzbFmfwLM0LXjA3tI6MJSW8f5aS23RM+jIoig==
+ b=I927ZFryIjod0Vurf/FWPcmcd1jhFln4likMJ3beQkZLT5kNWIUh4iZKlA9/6jw952rONB1yphFLBhFGPUb9Ln4wAQJLxjE+QsT6Io/xDNjlVriwjr68ZPl3SD3f/UDx90zHFiigD1iuAfjFDzDZ4Ai7TdHDlF6LI/meA5smO5t1JKnMp/+FNHryHZtyipbvfhT1U2uMdtMybHXQEXO1pa7UKHbNvaLPHdVUJqNd2PtDZ/zsInwfTztkiWsCN6gFgLicIHktet4rjZmkAwrKrf1yaPBRw9MU4lhquWcnpnnbulsiWw0GdVFg0oghGNpBD6eG6di5uFr62Q43mcH6kQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7rv6nuKBhBb3t3Td3OTGm8ArPaDmEW81grqsMfreUwk=;
- b=aFBttzBZvDZVsWAcyTwjmqH6Y4DMXj5LR0kRs+bVoA21s6tpbnz43Jsdu1qGZm+Ris2Jw0O9YP/OkCyRFPGN87C3e/ezw8Baw4XTOLAB6nzLb/aI0bfnLvfXIQC7VU4gqEYMrnyQyh6R5BTBD5+7irjbNqm6XMZ4lJzJEAbe/AwLYcanU+KWGZI40oK3x5q4rUTFUDdl6YYIw251e86qIp5tB8wwHxLWMPm/FM6l6FhfTJiOGDuE6cqGQGiRCFikOtFvlepIXp3aqdOLaZzn2489vGq8fKIT2TenQdyShEO8SLkUPw9TWDsTrQ1EaInY9pFCgsuhqLzDY8Fj2Bd37A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=O8FXTmAIovbkLqs5AOdqBqcROOJJ2nNdgLaAUTQTo0s=;
+ b=hEOa2IOmbrWV1g8+59IbU9jXR8prGMMhlYzZBqvzgj6QLKDnpXXwvD1SHpiToD7r2dJE3yriuWNIMcq5Bplaz7jtwGGzNTo4HZIFXB1pdngPkr2DyV49HXqOkP6W1UoqDhuGESE5QTuzunczH3Gi8PHcA+FBh1zZsJdS7AkwGdZKV6OBH2oD3i/02TLXxdbrVr/UbNcfdTyGcoKroNiMA4Q7hl9THmEt5IyJeKNtteFISsq7qKRG2WFlXvb1gn6CtsnE8xrQYgmWp+DPISRc28U9nUKRdqzhWOpRh6E+ruWkqw5ZrIiKVqk3KuDfh+bq8JPZMzX510xQwPlyp0x2Zw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7rv6nuKBhBb3t3Td3OTGm8ArPaDmEW81grqsMfreUwk=;
- b=k+Jo55+cbOH7P0B5L8TBIOXwQu4RL9ylpK65AyoCGWanzEq4TvY9mMW+Ap9ZQZ14egdH9eVr94e7aUbgyZIyBJDSscc71IFUF/JSOr9jBm45EDPRIvH6agdmrixCozZDlpDjnaH3pgS5OzzT0a6t0JRhik7COjSk5X6O/O0azq9qxxzyUDpHhENNqfRLIQP/D1NKSAh5/W4C1PC0tU42+OKq3ieAaq5pdQllhcU7DS84o4Hgu+0WoG0TUXMOpMZCz8GESTvLDE+PXSyU7dJwGFTkLyih1JdACQyERlmrT1purG/hcjwvXaUExwhgYpYhglYofNFiIiWknihgDxf3JQ==
-Received: from MW4PR03CA0319.namprd03.prod.outlook.com (2603:10b6:303:dd::24)
- by MN0PR12MB6127.namprd12.prod.outlook.com (2603:10b6:208:3c5::11) with
+ bh=O8FXTmAIovbkLqs5AOdqBqcROOJJ2nNdgLaAUTQTo0s=;
+ b=s+98VKyJlXYTT8IQlZ149Ys87rQXMb4ejNPDonHzk7IsAV58LVaD1sr/sbdacH+Id/Ym+J+N2CHX2QPrkYBNc2wTa8p1d66PifX5j/RVtPvcothsqJel6y/q89lxlG+NOxh738P+QuAeqZ6fOON+pjZhs159L1+THOIZCJVzrnk=
+Received: from PH8PR10MB6290.namprd10.prod.outlook.com (2603:10b6:510:1c1::7)
+ by CO1PR10MB4707.namprd10.prod.outlook.com (2603:10b6:303:92::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 02:39:12 +0000
-Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:dd:cafe::8f) by MW4PR03CA0319.outlook.office365.com
- (2603:10b6:303:dd::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
- Transport; Wed, 7 Dec 2022 02:39:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5901.14 via Frontend Transport; Wed, 7 Dec 2022 02:39:11 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 6 Dec 2022
- 18:38:56 -0800
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 6 Dec 2022
- 18:38:55 -0800
-Message-ID: <3f032921-c373-e942-a857-4328d7993ef0@nvidia.com>
-Date:   Tue, 6 Dec 2022 18:38:54 -0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 08/10] mm/hugetlb: Make walk_hugetlb_range() safe to pmd
- unshare
+ 2022 02:40:16 +0000
+Received: from PH8PR10MB6290.namprd10.prod.outlook.com
+ ([fe80::1717:5a07:63ca:fdab]) by PH8PR10MB6290.namprd10.prod.outlook.com
+ ([fe80::1717:5a07:63ca:fdab%9]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 02:40:16 +0000
+Message-ID: <7fd0bddb-a9c4-e8cc-66c6-0cc9c3956c91@oracle.com>
+Date:   Wed, 7 Dec 2022 08:10:05 +0530
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.2
+Subject: Re: [PATCH] io_uring: Fix a null-ptr-deref in io_tctx_exit_cb()
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     harshit.m.mogalapalli@gmail.com, george.kennedy@oracle.com,
+        darren.kenny@oracle.com, syzkaller <syzkaller@googlegroups.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+        vegard.nossum@oracle.com
+References: <20221206093833.3812138-1-harshit.m.mogalapalli@oracle.com>
+ <5a643da7-1c28-b680-391e-ea8392210327@kernel.dk>
 Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-CC:     Mike Kravetz <mike.kravetz@oracle.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        James Houghton <jthoughton@google.com>,
-        "Jann Horn" <jannh@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Andrea Arcangeli" <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20221129193526.3588187-1-peterx@redhat.com>
- <20221129193526.3588187-9-peterx@redhat.com> <Y45/5ezH6uwn7Cfy@monkey>
- <0813b9ed-3c92-088c-4fb9-45fb648c6e73@nvidia.com> <Y49xlV8I2/92Flha@x1n>
- <97e3a8f2-df75-306e-2edf-85976c168955@nvidia.com> <Y4+5R+nh0W0RUX9R@x1n>
- <c5d839da-cb7e-e887-11a6-30ccd1c3c845@nvidia.com> <Y4/ZT3ab9TL1j5TL@x1n>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <Y4/ZT3ab9TL1j5TL@x1n>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+In-Reply-To: <5a643da7-1c28-b680-391e-ea8392210327@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
+X-ClientProxiedBy: TYCPR01CA0085.jpnprd01.prod.outlook.com
+ (2603:1096:405:3::25) To PH8PR10MB6290.namprd10.prod.outlook.com
+ (2603:10b6:510:1c1::7)
+MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT046:EE_|MN0PR12MB6127:EE_
-X-MS-Office365-Filtering-Correlation-Id: f47bade3-6d39-45fb-6f55-08dad7fc3942
+X-MS-TrafficTypeDiagnostic: PH8PR10MB6290:EE_|CO1PR10MB4707:EE_
+X-MS-Office365-Filtering-Correlation-Id: eca862a1-5419-4860-cb19-08dad7fc5eba
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vtofLvuJbCPI+sr3pHRS0OflHWBfCw+yqLsGSa4C+9uzc2DH9aK4kMS28bhggtWEa32mM3SYH1wQq8sqo5yAwV0fgPF0w5u494wHNbNas1KfjCh1CzeEbxGjfOK8rDnVLPJ30FsGr70sqjhAUVq9d9lCMruTdfL3NzDbZtCgeR7bH1aNewCBgcLOFiZxpyNfCilayyRGYNwiH82oPOyc1leuv5Kh7LcL8Hv4ruPSUYVqE8u5oOgPsijXDjyPRJlR4uNqEHAy90GMu3ioNMt5RUtDSmJuombKyDMi5XePk/IP/j4izVMjWg7OdC3htrBwaih/NL1C7YYvY2Iw3r7HZEjYPZNGust8Jsh7260FPaHozR7WWpmvrh77LaDFBJIPKba5WkI+q1xdGu+73H46iqOg1wvMMr+/WbuqMyCeV67Osb0sbZMEsxYBL0f4SgElogZVF5Czy6KlkqTsmn+v5Kg9av8QfXD6z63qLJTrUAyTU0StSiMihDfGerxCQf573SSZEbxVrlfOsvogPrgbvjuE5ck8ed28Aoe2Z4TGENAB4n1lfdjRTlNaygbg6p/exXm7nQ3OMuSxOWCYM9jVE5QmWn0Xdjvf1Ls8W6YuzvIRMkzeoNa9iHeu5y8K3xcvaInP1NIndHbw9AhSf5hld9PNPyYoNH6sGfadZTl2CyRqvT+13UbXJpsAJenu+LBz+th8Qrm64rkaqokL/3AU9XoXVQDR9TAwi2zj0j/c1cA=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(186003)(26005)(8936002)(53546011)(478600001)(356005)(7636003)(40480700001)(5660300002)(7416002)(86362001)(82310400005)(336012)(47076005)(6916009)(426003)(36860700001)(54906003)(82740400003)(40460700003)(83380400001)(16526019)(70586007)(2616005)(31696002)(31686004)(70206006)(41300700001)(2906002)(36756003)(8676002)(4326008)(16576012)(316002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 02:39:11.7794
+X-Microsoft-Antispam-Message-Info: tecv301jq9o1wn3tymeMhpp1cMOlaxOehmB5TH06yHBw6aNvwS41IhSDNT+8lIObm5PrIrdNtVlTpKyYB6uXgpzLcZcsWGES5YUTt7OR/nB3fR3yx2SYQuVgHi+00g43JrF4QfAEvecAgqsDnyo+h+UZ1vZRTwDfTFFOjPFHatcukohJP4C9C0eoC1PX9msbCgL/YGnq5QTOTatuvPwpbt9nZaAGsOHm6UJRr81dCL32kU8gkWE9KI81OWBCfCtYqa2/FRKPjQdN3ja7eK4ztWraD5VowLxOjP/vUXm8k1cN7lDb/8i5wLLmr84m43/VPZ95E5USq/UJHf+SLsTiAHgQ34r9Z/3+ctf0NcstmY+fPYuDkzsM/G1f4yfRSaLjnsQ2/zZyOxc2vJbeB7JTz6XipzH9ezh+YPL0W4pbatW1t9cNfHYRQxB1gTYuIGEqNjxPUPO8LaXfuFApOVZIaGSmaARndAzGNjnZxgLbiipmOCzAjI0ip7fWPWfmwrmkjAxQFM0jPVWUNJOGsXRvAAqOd14kqOcK1uFZqvhWzXaoWRawfaB9OARFzvX7cEGn5TAyO5Skfafcevm/wDkgvMQuQs3Mt+/1pAip1/Rr1A6EFaB4ViROFKWHG4/M3Yy+J3VJreerx2MrdhcIkwf0IWuSHwPHjtb16Vzt5UEqv6x6fGCjRNSCAbPZtxH7Werhozk6/aZubeLg3tMIQjNXgmHy2AVI111MiJsMMKDv68Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR10MB6290.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(136003)(396003)(366004)(39860400002)(451199015)(66899015)(36756003)(5660300002)(8936002)(31696002)(86362001)(4326008)(41300700001)(2906002)(83380400001)(66476007)(54906003)(316002)(6486002)(31686004)(2616005)(66556008)(66946007)(6916009)(38100700002)(8676002)(107886003)(478600001)(186003)(6506007)(6512007)(6666004)(53546011)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEJWcWdGRWNBMFdIVGZaMm81cEFESnV6NUFCL2QwbzNoc2wvNWlnTjM4L3JD?=
+ =?utf-8?B?NXJlK0U4VEZKZGVMcEx5SFhLaTk2ai82OVRsWkR3TERJK0hZYlZWdUZpcFZo?=
+ =?utf-8?B?OXRJMHpxMGxUTjZNMjY1RTgzRm1POGY1MWdDTE13bUtMK1RzYXl6RFNxSEJC?=
+ =?utf-8?B?L1gvZVVWdE9hWEpVZmdtOFREM1IrQ2Q3Tk5aVXA4Z2xydEhCcWJiaklVUk9a?=
+ =?utf-8?B?Qi9zQjdDaGtwTDZ4c1ZsdzgrcVRCMld2UkNNNmp3b0lkcDB4WVlhZGZFaWMx?=
+ =?utf-8?B?VGFrcmpIeWovZVhoSHdJWXVzakRDZm1DRkdoazRGYmpQM2FZbXNJRTNuV3Uw?=
+ =?utf-8?B?UlBDRE1iNHZGSjVYVnkxL0xFMEhYcVBqTGRNTDVSeC9CeXY5ckpFYWJIQll0?=
+ =?utf-8?B?cDBTRnZVUmN2T2tHQzlzUGJ1SzlCYjcrZTI0Wjc5TDVSZm8wTGxCM1AxcTNn?=
+ =?utf-8?B?N3pCRlJiSWxwRFRLdmxaWVVzOXhqRUdCZ20va0QwVnU2NnpQUmh0MmdBQlNa?=
+ =?utf-8?B?d1cxamVzVXQ1VW1RRVFmbTlqcjdxYTlxNGwwVE9HRTZTNWpzL2xQV2diRUxo?=
+ =?utf-8?B?dkhMbXBpeWVGYjJsYkNZUUl0TnlJYWxwSkdhVElXLzZ1dmVLMkpQSkZnZGVX?=
+ =?utf-8?B?R1VudXZuTGxYQ1NsYmFsci8yUEFnYkhzU1Yrb2VBTUd1T01TM095eVlHdUFS?=
+ =?utf-8?B?TmxOVVZWODBPZ1hFeUN0cU44R2p3Myt1TjU2MGNqRXBpeDJSaXJQelNsWmZD?=
+ =?utf-8?B?N2ppUjBoQXBkTVlDTWV4bDdPVUhUTkpRcVh3R3R4c1VyTVNGS0VYeWV1UzRQ?=
+ =?utf-8?B?YUZOVVBCTUxCSE92NFpuTm9DRFZMQ2NKMTlsaHliSmJDNmc5QzQyYVFCK0lU?=
+ =?utf-8?B?Y296R0VycCtiU2tXL3R2OXM4MU5FR2pFYWVRSGZvM3FUaHFDRi9DbTEyTzRx?=
+ =?utf-8?B?c0VPeGxLTURPdnlnTlV0YTlEcTQ4cnpEMzJmUTlsYnhsZXJ3dTF1QVViWUs4?=
+ =?utf-8?B?VlBTYXdTaStjY2VaQWVlSXVjT3ZUdjJuUzZEbWsydGxTUytUZkFDVWpwODda?=
+ =?utf-8?B?T2dPZlJ3Mys2cjQyRk0zRHpXVW0waGo2bjV3RU9KaCtFUTFSbkhKS3dZdFBv?=
+ =?utf-8?B?eEdPaDkzODZVNStRUUQyendxM0RvUFZDSVRkMVJqT01ZcGtkU092eDlqMkwz?=
+ =?utf-8?B?YkFjbERtS2cyTEZNVERBYkRncWNrMjJnc1JIOXBITWlVdW5jRG1zc1pSU095?=
+ =?utf-8?B?a2l6Ymo1dHFjUDZpaXNYZU0zSFFVOFI2S3B0ek9ucVZlWHB6dDE3c3pUTndu?=
+ =?utf-8?B?OTNMTzNRWUk0UnJod1FIN1JBWTA1MGpKWFpUSXBGeDUvMkViSy9mTVhMMmc3?=
+ =?utf-8?B?Q09wdHNuM2l6a1M1ZUNnUU1MQ0ZKb1hwL2pLZ3ZWSVNwa09nMWZxMUVTdU5K?=
+ =?utf-8?B?cDkyQ21UYk5aa3VwZjVZRHpSeTdLMzBsbFhQajREakNaaFJIQzkzS1pLK3Fj?=
+ =?utf-8?B?ejBtZzJ4VnhWc1Rxc2Z3UEd2dXl5bTluejRzM0RkMFhUOGdIM2xWQVE2cjBS?=
+ =?utf-8?B?MHQzYUxLYnhZMHJvV0ZmVEd3UU9FR3BvUmF6c0w5QTdTYmlUWlIvYm9HZC8z?=
+ =?utf-8?B?OENOeU1OZm1qL3dHMGI0NlJac2lMUXhIL0ZybEV6bFE1T21yK1JOUzVDRnI0?=
+ =?utf-8?B?elRjdmpUcjZzUG5BVTBQOGZ4Wi9ZQnp6bmNsRVV2am5oeHdremhYQjQzSUhB?=
+ =?utf-8?B?aGg5QWo1MzZmcFg4ZDFUT0UyeFVzUWFRdmtwSWlTTE95cnEvZWFKbS9xcGFC?=
+ =?utf-8?B?WHh0YTVDUTJsZXZZOUFGOUk1alU0Qm1jVHkzTkJHTTd0bjZ0Z0pNTk1PUkZY?=
+ =?utf-8?B?UThPNW56TkV3ck5ubzh5L1pSc25yQnFRbUpaVDVRRGNmOVVxWkZoR2l3KzNU?=
+ =?utf-8?B?d0xLOVd5T2xFR1VCR2VOQ3BCLzBKY0RGTE1zdkpzRXR3Z01wMDdyZmYxdWF0?=
+ =?utf-8?B?cFFiSkplZHNSK0JDSm1wSzR6cU9QOTBHNDd1S0paNTRuUVdySEZQWTk0VXRR?=
+ =?utf-8?B?U21Nb2poR29JM0cvUDVST3M3eFdIWVNvbWVtYUpEYnpmbDdsOGFLN2o0cjBX?=
+ =?utf-8?B?SXVrWWFPQ3hJb2IxUmpmcVl6QkFTUWZXOXJaUFh6VHE5R1lNUzQ0a3ppZjZV?=
+ =?utf-8?Q?Sn9kLVqE6qAd6aeLF9al7tE=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: vy50Ul9VJvsNyyxbC9MqeB8KgE9WvHAaJq2X6dyZvMgZtu6DzpANG5BBLGMw+kgTaMXjlVMy5glz+5SUh24C6mMgRuhCrKsruMtr88Ia2niH/kNDQl+yVwicTh9h4m8goUEqar3gQ7UVI3RBlpnCfbzms3iPu7VsbLEKd7KJw2SX4BRWNG7GmbU1rZqUVLW2d9c/uuyu4ukHcQoux0aUXt/GVvagjTLPtbG7FuCE9BqjLIwecGA9aDNhCmjF4WbSYuQ0WYo3V1nQ1lNps7/HPvxpqJXEGMZInVaGA2gAbfYFRO/a/PjveiMmaaxgofTfK62euoG3Xj7x7t0wziISBvmpCZqPqHYqKydQ9MhE4c0WA62NbpaOFTEcyxJvNsiN/ByaQzeJKflX/ohLJwBl+ACElVzG5Bpz7zUBZvt6cVAw/qNbIYSs4eVln3k59jzHBASylctqNMYTG+AnVyvBjco+IT2/JY1XpDH0blxLUJn+L/JXvfTvtnKAkHgt7C8iq0LO9+Ui1d/jSRZoXCWDxvC8R4HqNx2WzkYk27PpOD9/QeU9p2AJ9+ymKGqseq7dQkePcfjYsW1ho3mgIFtBasMTLVzmST1nswj2olrvV4qDTMkKSB96iYg2uT7nUpGbsNB9QQEnPIwnXznb5suilL5ynzcGR/tuu1SEtPFkUHi6rUoH7ZuRRGrXaWuCpVeijOBKkhVjenFd3YmTjzAO4xSoJLMoZIdvQ32YvmK8P+dGwEJZqgCGQwS+iTbjRP+8tBnRsiH+Y+qZReA491XpXL9OFQQBoh27PyoEkqPXrt8+LVUJi/gG+MUBWTn2IWrcSKgY/02Zb+t4H9iiIVfBFYvjnimJ6NocrmGw3OBWP0A4zyyIx99PQHsmjOss3m6qY502SPlYXr+JKytFds7nnOsj7xF04FXk4iOzMc6u0zU=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eca862a1-5419-4860-cb19-08dad7fc5eba
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR10MB6290.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 02:40:16.7208
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f47bade3-6d39-45fb-6f55-08dad7fc3942
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6127
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: VQ7bXxSo9RPVcGUR5aeUy8hHMreOr44KYhk4ncZE+ov3a/n93mw3bV8LI8Cy5UxAsUJ3JzhbvwY3NKj4plpTv07Oc1BJWU7uG+bkWSuwe4298yorhvd4KMXRlaSMMvy9
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4707
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-06_12,2022-12-06_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212070016
+X-Proofpoint-GUID: -HjzunAMbngqUkAh-7IQSKWFeId7xbJj
+X-Proofpoint-ORIG-GUID: -HjzunAMbngqUkAh-7IQSKWFeId7xbJj
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/6/22 16:07, Peter Xu wrote:
-> I thought I answered this one at [1] above.  If not, I can extend the
-> answer.
 
-[1] explains it, but it doesn't mention why it's safe to drop and reacquire.
 
-...
+On 07/12/22 2:45 am, Jens Axboe wrote:
+> On 12/6/22 2:38?AM, Harshit Mogalapalli wrote:
+>> Syzkaller reports a NULL deref bug as follows:
+>>
+>>   BUG: KASAN: null-ptr-deref in io_tctx_exit_cb+0x53/0xd3
+>>   Read of size 4 at addr 0000000000000138 by task file1/1955
+>>
+>>   CPU: 1 PID: 1955 Comm: file1 Not tainted 6.1.0-rc7-00103-gef4d3ea40565 #75
+>>   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.11.0-2.el7 04/01/2014
+>>   Call Trace:
+>>    <TASK>
+>>    dump_stack_lvl+0xcd/0x134
+>>    ? io_tctx_exit_cb+0x53/0xd3
+>>    kasan_report+0xbb/0x1f0
+>>    ? io_tctx_exit_cb+0x53/0xd3
+>>    kasan_check_range+0x140/0x190
+>>    io_tctx_exit_cb+0x53/0xd3
+>>    task_work_run+0x164/0x250
+>>    ? task_work_cancel+0x30/0x30
+>>    get_signal+0x1c3/0x2440
+>>    ? lock_downgrade+0x6e0/0x6e0
+>>    ? lock_downgrade+0x6e0/0x6e0
+>>    ? exit_signals+0x8b0/0x8b0
+>>    ? do_raw_read_unlock+0x3b/0x70
+>>    ? do_raw_spin_unlock+0x50/0x230
+>>    arch_do_signal_or_restart+0x82/0x2470
+>>    ? kmem_cache_free+0x260/0x4b0
+>>    ? putname+0xfe/0x140
+>>    ? get_sigframe_size+0x10/0x10
+>>    ? do_execveat_common.isra.0+0x226/0x710
+>>    ? lockdep_hardirqs_on+0x79/0x100
+>>    ? putname+0xfe/0x140
+>>    ? do_execveat_common.isra.0+0x238/0x710
+>>    exit_to_user_mode_prepare+0x15f/0x250
+>>    syscall_exit_to_user_mode+0x19/0x50
+>>    do_syscall_64+0x42/0xb0
+>>    entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>   RIP: 0023:0x0
+>>   Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+>>   RSP: 002b:00000000fffb7790 EFLAGS: 00000200 ORIG_RAX: 000000000000000b
+>>   RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>>   RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+>>   RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+>>   R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+>>   R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+>>    </TASK>
+>>   Kernel panic - not syncing: panic_on_warn set ...
+>>
+>> Add a NULL check on tctx to prevent this.
 > 
-> If we touch it, it's a potential bug as you mentioned.  But we didn't.
+> I agree with Vegard that I don't think this is fixing the core of
+> the issue. I think what is happening here is that we don't run the
+> task_work in io_uring_cancel_generic() unconditionally, if we don't
+> need to in the loop above. But we do need to ensure we run it before
+> we clear current->io_uring.
 > 
-> Hope it explains.
-
-I think it's OK after all, because hmm_vma_fault() does revalidate after
-it takes the vma lock, so that closes the loop that I was fretting over.
-
-I was just also worried that I'd missed some other place, but it looks
-like that's not the case.
-
-So, good.
-
-How about this incremental diff on top, as an attempt to clarify what's
-going on? Or is this too much wordage? Sometimes I write too many words:
-
-
-diff --git a/include/linux/pagewalk.h b/include/linux/pagewalk.h
-index 1f7c2011f6cb..27a6df448ee5 100644
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@ -21,13 +21,16 @@ struct mm_walk;
-   *			depth is -1 if not known, 0:PGD, 1:P4D, 2:PUD, 3:PMD.
-   *			Any folded depths (where PTRS_PER_P?D is equal to 1)
-   *			are skipped.
-- * @hugetlb_entry:	if set, called for each hugetlb entry.	Note that
-- *			currently the hook function is protected by hugetlb
-- *			vma lock to make sure pte_t* and the spinlock is valid
-- *			to access.  If the hook function needs to yield the
-- *			thread or retake the vma lock for some reason, it
-- *			needs to properly release the vma lock manually,
-- *			and retake it before the function returns.
-+ * @hugetlb_entry:	if set, called for each hugetlb entry. This hook
-+ *			function is called with the vma lock held, in order to
-+ *			protect against a concurrent freeing of the pte_t* or
-+ *			the ptl. In some cases, the hook function needs to drop
-+ *			and retake the vma lock in order to avoid deadlocks
-+ *			while calling other functions. In such cases the hook
-+ *			function must either refrain from accessing the pte or
-+ *			ptl after dropping the vma lock, or else revalidate
-+ *			those items after re-acquiring the vma lock and before
-+ *			accessing them.
-   * @test_walk:		caller specific callback function to determine whether
-   *			we walk over the current vma or not. Returning 0 means
-   *			"do page table walk over the current vma", returning
-diff --git a/mm/hmm.c b/mm/hmm.c
-index dcd624f28bcf..b428f2011cfd 100644
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -497,7 +497,13 @@ static int hmm_vma_walk_hugetlb_entry(pte_t *pte, unsigned long hmask,
-  
-  		spin_unlock(ptl);
-  		hugetlb_vma_unlock_read(vma);
--		/* hmm_vma_fault() can retake the vma lock */
-+		/*
-+		 * Avoid deadlock: drop the vma lock before calling
-+		 * hmm_vma_fault(), which will itself potentially take and drop
-+		 * the vma lock. This is also correct from a protection point of
-+		 * view, because there is no further use here of either pte or
-+		 * ptl after dropping the vma lock.
-+		 */
-  		ret = hmm_vma_fault(addr, end, required_fault, walk);
-  		hugetlb_vma_lock_read(vma);
-  		return ret;
-
->> I guess it's on me to think of something cleaner, so if I do I'll pipe
->> up. :)
+> Do you have a reproducer? If so, can you try the below? I _think_
+> this is all we need. We can't be hitting the delayed fput path as
+> the task isn't exiting, and we're dealing with current here.
 > 
-> That'll be very much appricated.
 > 
-> It's really that I don't know how to make this better, or I can rework the
-> series as long as it hasn't land upstream.
+Thanks Jens and Vegard for the suggestions and analysis.
+
+Yes, the below patch silences the reproducer.
+
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 36cb63e4174f..4791d94c88f5 100644
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -3125,6 +3125,15 @@ __cold void io_uring_cancel_generic(bool cancel_all, struct io_sq_data *sqd)
+>   
+>   	io_uring_clean_tctx(tctx);
+>   	if (cancel_all) {
+> +		/*
+> +		 * If we didn't run task_work in the loop above, ensure we
+> +		 * do so here. If an fput() queued up exit task_work for the
+> +		 * ring descriptor before we started the exec that led to this
+> +		 * cancelation, then we need to have that run before we proceed
+> +		 * with tearing down current->io_uring.
+> +		 */
+> +		io_run_task_work();
+> +
+>   		/*
+>   		 * We shouldn't run task_works after cancel, so just leave
+>   		 * ->in_idle set for normal exit.
 > 
 
-It's always 10x easier to notice an imperfection, than it is to improve on
-it. :)
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+Thanks,
+Harshit
