@@ -2,70 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702346452CC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26D826452CF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:02:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiLGEBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 23:01:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44802 "EHLO
+        id S229601AbiLGECQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 23:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLGEBi (ORCPT
+        with ESMTP id S229861AbiLGECA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 23:01:38 -0500
-Received: from pv50p00im-ztdg10012101.me.com (pv50p00im-ztdg10012101.me.com [17.58.6.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7434B303D9
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 20:01:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zzy040330.moe;
-        s=sig1; t=1670385696;
-        bh=RH16D7d4KZWO1+9ckND1BBAhK2hU1iiMrJQe/a56u8k=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=XWzr9wllFyCncqLTw2WwfDhjlvlp1/HW3q4qRBRTnE2jweuQnruh87GmLd4lVexY9
-         bAz5325C4MnPUzk7BhvyDtjVEDmILTAOeyAHt9Vnrk0xaWTq6YoGUIVElw+GtGXyxM
-         LcS9fJpl+FspSu49rX4stwcbXZflAvEJUDfeot3VeTwUI6BuVOwUpIYnz1vx39hNTJ
-         gg7ZyHnBhPmJHjn8+nggtbq881Hx5voTV1dMuG/ylZZrH2RbDAp9QsNl9BcVmxHMPl
-         M5IZnLv1dNihic+I1W5gcIp88ZP5vTgNqLl/ezZ9M5TM6c3gZEsVyxWb3rPMx/zPu3
-         loqgE8yX4rPOQ==
-Received: from [192.168.1.28] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-        by pv50p00im-ztdg10012101.me.com (Postfix) with ESMTPSA id 1ED2C74064F;
-        Wed,  7 Dec 2022 04:01:32 +0000 (UTC)
-Message-ID: <363010d3-b9f4-cf83-11d1-20174e7c0d14@zzy040330.moe>
-Date:   Wed, 7 Dec 2022 12:01:30 +0800
+        Tue, 6 Dec 2022 23:02:00 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6B0275CD;
+        Tue,  6 Dec 2022 20:01:51 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so323251pjo.3;
+        Tue, 06 Dec 2022 20:01:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8MfYzCBUds8jzYYfrEKFAuA4rbHmq+dDwHtDEGDzwOo=;
+        b=KGEwpNyuL4U+ZMiJQ1VqHVxZ/GfAQ1Vz20QjHjIu6v+8jcro8QKyF96tKCQiVYW+F0
+         7cqQyeWwM5Q5YSpBHdABXuush9cpJ4nE+4yQX/pi80CP8krov52kWCiBpzsIoPEsbmSN
+         znPr02XS7tk4YU5nn3Co4LAvry4GTd3mJvHZGV9k6isOfr4aeL/PiGzWRRT6z2DhzrBp
+         9Onf/1OQ+PAmAvC5hzgs4fDOkbYABSi+77l4JEDnESQdWI+/2ceM1qGwYhJrNvoPlsAW
+         HSzpkDpWsJqLyBScfX0qKeSdDy2D9qSARVfw6bxTAYBhELWsDyzubsxRUxoqVPxalpy9
+         kEpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8MfYzCBUds8jzYYfrEKFAuA4rbHmq+dDwHtDEGDzwOo=;
+        b=RuHQtCoirtYCfMAEBHC/PRUgwmk0MgFsb3a5U8kCMZXpF5uOgX33TKv4QjCqLT/xl9
+         1tfJn7B1nhU0hPVc05jVilfviGpSnFjgEDigA6pQ4iZGo3Njcb8UI4+41sEPIyJ/1ksn
+         sBJIdkcLnng1IHw3Cn1jXDzpTJ7YEZZ5kzR5l12D2pIfaY7nlPLGwAaMJ8Gx8VqqZkHy
+         mkJuLOv37QT3LWK1lvTr5DV9qXT3KXDzAnPS22KDuaei/aQdxk6EvueGINU5nRQWASz/
+         0XTaUA4dvrDhYmJ+jY6MpEtlDY9tI7uUFpbyR27vHLfcYefRTvPotxpN1cJR98AMdrVo
+         XGiw==
+X-Gm-Message-State: ANoB5pl/s3W/DlmOtO1ELkvRSql77qAMX1Qvu490yHvHhAHqpI5xVbMS
+        cH+FGfJLF1w+S33SQWorJxE=
+X-Google-Smtp-Source: AA0mqf5mKGQtReF+BaOHf5hDBemi0qcZYjA6luAXpDKjnyvytp9+8MDo+rM+VQfO0y2QWDDiz34c2Q==
+X-Received: by 2002:a17:903:264b:b0:189:ec62:3b2d with SMTP id je11-20020a170903264b00b00189ec623b2dmr501900plb.4.1670385710328;
+        Tue, 06 Dec 2022 20:01:50 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:11da])
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902ce8600b001743ba85d39sm13439017plg.110.2022.12.06.20.01.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 20:01:49 -0800 (PST)
+Date:   Tue, 6 Dec 2022 20:01:46 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, bpf@vger.kernel.org,
+        Borislav Petkov <bp@alien8.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-ID: <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+ <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+ <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+ <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+ <20221206162035.97ae19674d6d17108bed1910@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
-Content-Language: en-US
-To:     Ping-Ke Shih <pkshih@realtek.com>,
-        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
-Cc:     "kvalo@kernel.org" <kvalo@kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221207033926.11777-1-JunASAKA@zzy040330.moe>
- <2ac07b1d6e06443b95befb79d27549d2@realtek.com>
- <b4b65c74-792f-4df1-18bf-5c6f80845814@zzy040330.moe>
- <159ac3a296164b05b319bfb254a7901b@realtek.com>
-From:   Jun ASAKA <JunASAKA@zzy040330.moe>
-In-Reply-To: <159ac3a296164b05b319bfb254a7901b@realtek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: iAiE7nLz3jMdDG1L84geIUJloUJCSIjn
-X-Proofpoint-ORIG-GUID: iAiE7nLz3jMdDG1L84geIUJloUJCSIjn
-X-Proofpoint-Virus-Version: =?UTF-8?Q?vendor=3Dfsecure_engine=3D1.1.170-22c6f66c430a71ce266a39bfe25bc?=
- =?UTF-8?Q?2903e8d5c8f:6.0.138,18.0.572,17.11.64.514.0000000_definitions?=
- =?UTF-8?Q?=3D2020-02-14=5F11:2020-02-14=5F02,2020-02-14=5F11,2022-02-23?=
- =?UTF-8?Q?=5F01_signatures=3D0?=
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 suspectscore=0 bulkscore=0
- clxscore=1030 mlxscore=0 spamscore=0 adultscore=0 mlxlogscore=277
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2209130000 definitions=main-2212070029
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206162035.97ae19674d6d17108bed1910@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,45 +87,155 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Dec 06, 2022 at 04:20:35PM +0900, Masami Hiramatsu wrote:
+> On Mon, 5 Dec 2022 18:17:00 -0800
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> 
+> > On Mon, Dec 05, 2022 at 07:59:21AM +0900, Masami Hiramatsu wrote:
+> > > On Sun, 4 Dec 2022 14:30:01 -0800
+> > > Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> > > 
+> > > > On Mon, Dec 05, 2022 at 07:22:44AM +0900, Masami Hiramatsu (Google) wrote:
+> > > > > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > > > > 
+> > > > > Since the function error injection framework in the fault injection
+> > > > > subsystem can change the function code flow forcibly, it may cause
+> > > > > unexpected behavior (and that is the purpose of this feature) even
+> > > > > if it is applied to the ALLOW_ERROR_INJECTION functions.
+> > > > > So this feature must be used only for debugging or testing purpose.
+> > > > 
+> > > > The whole idea of tainting for kernel debugging is questionable.
+> > > > There are many other *inject* kconfigs and other debug flags
+> > > > for link lists, RCU, sleeping, etc.
+> > > > None of them taint the kernel.
+> > > > 
+> > > > > To identify this in the kernel oops message, add a new taint flag
+> > > > 
+> > > > Have you ever seen a single oops message because of this particular
+> > > > error injection?
+> > > 
+> > > No, but there is no guarantee that the FEI doesn't cause any issue
+> > > in the future too. If it happens, we need to know the precise
+> > > information about what FEI/bpf does.
+> > > FEI is a kind of temporal Livepatch for testing. If Livepatch taints
+> > > the kernel, why doesn't the FEI taint it too?
+> > 
+> > Live patching can replace an arbitrary function and the kernel has
+> > no visibility into what KLP module is doing.
+> > While 'bpf error injection' is predictable.
+> 
+> No, not much predictable because the kernel code can be changed.
+> 
+> > The functions marked with [BPF_]ALLOW_ERROR_INJECTION can return errors
+> > in the normal execution. So the callers of these functions have to deal with errors.
+> 
+> Right, but it might change something before checking the input, and
+> if it rejects the sane input, the caller may go into unexpected
+> status (e.g. the caller already checked input value, and does not
+> expect the call is fail). Such behaviors are buggy, yes. And the
+> FEI is designed for finding such buggy behavior.
+> (e.g. injecting error, but the caller passed successfully, it
+> means the caller code has some issue.)
+> 
+> > If kernel panics on such injected error it potentially would have paniced
+> > on it anyway.
+> 
+> Yes, but that doesn't cover all cases. If the function doesn't have
+> any internal state but returns an error according to the input,
+> FEI can make it return an error even if the input is correct.
+> And if it cause a kernel panic, that is a panic that must not
+> happen without FEI.
+> 
+> Thus, the ALLOW_ERROR_INJECTION should only be applied to the
+> function which has so-called 'side-effect', e.g. memory allocation,
+> external data (except for input data) read, etc. that could cause
+> an error regardless of the input value. Then the caller must
+> handle such errors.
 
-On 07/12/2022 11:55, Ping-Ke Shih wrote:
->
->> -----Original Message-----
->> From: Jun ASAKA <JunASAKA@zzy040330.moe>
->> Sent: Wednesday, December 7, 2022 11:51 AM
->> To: Ping-Ke Shih <pkshih@realtek.com>; Jes.Sorensen@gmail.com
->> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
->> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH v5] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
->>
->> On 07/12/2022 11:43, Ping-Ke Shih wrote:
->>>> -----Original Message-----
->>>> From: Jun ASAKA <JunASAKA@zzy040330.moe>
->>>> Sent: Wednesday, December 7, 2022 11:39 AM
->>>> To: Jes.Sorensen@gmail.com
->>>> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
->>>> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Jun ASAKA
->>>> <JunASAKA@zzy040330.moe>; Ping-Ke Shih <pkshih@realtek.com>
->>>> Subject: [PATCH v5] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
->>>>
->>>> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
->>>> issues for rtl8192eu chips by replacing the arguments with
->>>> the ones in the updated official driver as shown below.
->>>> 1. https://github.com/Mange/rtl8192eu-linux-driver
->>>> 2. vendor driver version: 5.6.4
->>>>
->>>> Tested-by: Jun ASAKA <JunASAKA@zzy040330.moe>
->>>> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
->>>> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
->>>> ---
->>>> v5:
->>>>    - no modification.
->>> Then, why do you need v5?
->> Well,  I just want to add the "Reviewed-By" line to the commit message.
->> Sorry for the noise if there is no need to do that.
->>
-> No need to add "Reviewed-By". Kalle will add it when this patch gets merged.
->
-> Ping-Ke
->
-Oh, I see. Sorry for bothering you.
+Not quite. I think you're confusing functions with 'side effect'
+with 'pure' functions.
+Your point about 'checking args before the call' applies to pure functions.
+We have some too: git grep __pure.
+Most of the time the compiler can identify the functions that return
+the same value with the same args, but sometimes it needs help
+and we mark such functions.
+Clearly such functions should never be marked as 'error inject'
+because changing return value of such function might lead to
+wrong code and _it will not be a kernel bug_.
+The compiler optimizations rely on the function being pure.
+Live kernel patching should be very careful with __pure functions too.
+No idea whether they do this now or not.
+
+Of course, there is a category of functions (with or without side effects)
+which return values should not be changed by error injecton mechanism.
+That's a given. Applying ALLOW_ERROR_INJECTION should not to be taken lightly.
+
+> 
+> > At this point crash dump might be necessary to debug.
+> 
+> Yes. So the TAINT flag can help. Please consider that the TAINT flag
+> doesn't mean you are guilty, but this is just a hint for debugging.
+> (good for the first triage)
+
+I think you misunderstand the reason behind 'tainted' flags.
+It's 'hint for debugging' only on the surface.
+See Documentation/admin-guide/tainted-kernels.rst
+"... That's why bug reports
+from tainted kernels will often be ignored by developers, hence try to reproduce
+problems with an untainted kernel."
+
+When 'error injection' finds a kernel bug the kernel developers need to
+look into it regardless whether it's syzbot error injection
+or whatever other mechanism.
+
+To change the topic to something ... else...
+
+We've just hit this panic using rethook.
+[   49.235708] ==================================================================
+[   49.236243] BUG: KASAN: use-after-free in rethook_try_get+0x7e/0x380
+[   49.236693] Read of size 8 at addr ffff888102e62c88 by task test_progs/1688
+[   49.240398]  kasan_report+0x90/0x190
+[   49.240934]  rethook_try_get+0x7e/0x380
+[   49.244885]  fprobe_handler.part.1+0x119/0x1f0
+[   49.245505]  arch_ftrace_ops_list_func+0x17d/0x1d0
+[   49.246544]  ftrace_regs_call+0x5/0x52
+[   49.247411]  bpf_fentry_test1+0x5/0x10
+
+[   49.262578] Allocated by task 1692:
+[   49.262804]  kasan_save_stack+0x1c/0x40
+[   49.263059]  kasan_set_track+0x21/0x30
+[   49.263335]  __kasan_kmalloc+0x7a/0x90
+[   49.263624]  rethook_alloc+0x2c/0xa0
+[   49.263879]  fprobe_init_rethook+0x6d/0x170
+[   49.264154]  register_fprobe_ips+0xae/0x130
+
+[   49.265938] Freed by task 0:
+[   49.266153]  kasan_save_stack+0x1c/0x40
+[   49.266440]  kasan_set_track+0x21/0x30
+[   49.266705]  kasan_save_free_info+0x26/0x40
+[   49.266995]  __kasan_slab_free+0x103/0x190
+[   49.267282]  __kmem_cache_free+0x1b7/0x3a0
+[   49.267559]  rcu_core+0x4d8/0xd50
+
+[   49.268181] Last potentially related work creation:
+[   49.268565]  kasan_save_stack+0x1c/0x40
+[   49.268898]  __kasan_record_aux_stack+0xa1/0xb0
+[   49.269260]  call_rcu+0x47/0x360
+[   49.269526]  unregister_fprobe+0x47/0x80
+
+[   49.281382] general protection fault, probably for non-canonical address 0x57e006e00000000: 0000 [#1] PREEMPT SMP KASAN
+[   49.282226] CPU: 6 PID: 1688 Comm: test_progs Tainted: G    B      O       6.1.0-rc7-01508-gf0c5a2d9f234 #4343
+[   49.283751] RIP: 0010:rethook_trampoline_handler+0xff/0x1d0
+[   49.289900] Call Trace:
+[   49.290083]  <TASK>
+[   49.290248]  arch_rethook_trampoline_callback+0x6c/0xa0
+[   49.290631]  arch_rethook_trampoline+0x2c/0x50
+[   49.290964]  ? lock_release+0xad/0x3f0
+[   49.291245]  ? bpf_prog_test_run_tracing+0x235/0x380
+[   49.291609]  trace_clock_x86_tsc+0x10/0x10
+
+This is just running bpf selftests in parallel mode on 16-cpu VM on bpf-next.
+Notice 'Tained' flags.
+Please take a look.
+
+Thanks!
