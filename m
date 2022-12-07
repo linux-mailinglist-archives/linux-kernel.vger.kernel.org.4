@@ -2,96 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A01A64535B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DCE464535D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbiLGFSf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Dec 2022 00:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49050 "EHLO
+        id S229573AbiLGFUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 00:20:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLGFSc (ORCPT
+        with ESMTP id S229479AbiLGFUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 00:18:32 -0500
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C292751330
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 21:18:31 -0800 (PST)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay04.hostedemail.com (Postfix) with ESMTP id 97EFD1A08DE;
-        Wed,  7 Dec 2022 05:18:29 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf11.hostedemail.com (Postfix) with ESMTPA id 1E0EF2002D;
-        Wed,  7 Dec 2022 05:17:58 +0000 (UTC)
-Date:   Wed, 07 Dec 2022 00:18:17 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3> <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com> <20221205075921.02edfe6b54abc5c2f9831875@kernel.org> <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com> <20221206162035.97ae19674d6d17108bed1910@kernel.org> <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com> <20221206233947.4c27cc9d@gandalf.local.home> <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
-Message-ID: <2ED74AA5-B2A5-43FA-ADF9-B6752FE410C4@goodmis.org>
+        Wed, 7 Dec 2022 00:20:11 -0500
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703C5220F8;
+        Tue,  6 Dec 2022 21:20:08 -0800 (PST)
+Received: from SHSend.spreadtrum.com (shmbx05.spreadtrum.com [10.29.1.56])
+        by SHSQR01.spreadtrum.com with ESMTPS id 2B75JHr9049655
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Wed, 7 Dec 2022 13:19:17 +0800 (CST)
+        (envelope-from Wenchao.Chen@unisoc.com)
+Received: from xm13705pcu.spreadtrum.com (10.13.3.189) by
+ shmbx05.spreadtrum.com (10.29.1.56) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Wed, 7 Dec 2022 13:19:15 +0800
+From:   Wenchao Chen <wenchao.chen@unisoc.com>
+To:     <adrian.hunter@intel.com>, <ulf.hansson@linaro.org>,
+        <orsonzhai@gmail.com>, <baolin.wang@linux.alibaba.com>,
+        <zhang.lyra@gmail.com>
+CC:     <linux-mmc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhenxiong.lai@unisoc.com>, <yuelin.tang@unisoc.com>
+Subject: [PATCH] mmc: sdhci-sprd: Disable CLK_AUTO when the clock is less than 400K
+Date:   Wed, 7 Dec 2022 13:19:09 +0800
+Message-ID: <20221207051909.32126-1-wenchao.chen@unisoc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Rspamd-Queue-Id: 1E0EF2002D
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
-X-Rspamd-Server: rspamout03
-X-Stat-Signature: 6q5ataj4w1quggag3oa4ox39gd6km3rb
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/eMrmZsD4+Eahg02CQ10Y97AFleKyzqq0=
-X-HE-Tag: 1670390278-928139
+Content-Type: text/plain
+X-Originating-IP: [10.13.3.189]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ shmbx05.spreadtrum.com (10.29.1.56)
+X-MAIL: SHSQR01.spreadtrum.com 2B75JHr9049655
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When the clock is less than 400K, some SD cards fail to initialize
+because CLK_AUTO is enabled.
 
+Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host controller")
+Signed-off-by: Wenchao Chen <wenchao.chen@unisoc.com>
+---
+ drivers/mmc/host/sdhci-sprd.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-On December 6, 2022 11:45:17 PM EST, Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->On Tue, Dec 6, 2022 at 8:39 PM Steven Rostedt <rostedt@goodmis.org> wrote:
->> >
->> > [   49.281382] general protection fault, probably for non-canonical address 0x57e006e00000000: 0000 [#1] PREEMPT SMP KASAN
->> > [   49.282226] CPU: 6 PID: 1688 Comm: test_progs Tainted: G    B      O       6.1.0-rc7-01508-gf0c5a2d9f234 #4343
->> > [   49.283751] RIP: 0010:rethook_trampoline_handler+0xff/0x1d0
->> > [   49.289900] Call Trace:
->> > [   49.290083]  <TASK>
->> > [   49.290248]  arch_rethook_trampoline_callback+0x6c/0xa0
->> > [   49.290631]  arch_rethook_trampoline+0x2c/0x50
->> > [   49.290964]  ? lock_release+0xad/0x3f0
->> > [   49.291245]  ? bpf_prog_test_run_tracing+0x235/0x380
->> > [   49.291609]  trace_clock_x86_tsc+0x10/0x10
->> >
->> > This is just running bpf selftests in parallel mode on 16-cpu VM on bpf-next.
->> > Notice 'Tained' flags.
->> > Please take a look.
->> >
->>
->> "G - Proprietary module" - "O - out of tree module"
->>
->> Can you reproduce this without those taints?
->
->Lol. That question is exactly the reason why my Nack stands.
-
-I only said the above *because* of your comment ;-) 
-
--- Steve
-
-
+diff --git a/drivers/mmc/host/sdhci-sprd.c b/drivers/mmc/host/sdhci-sprd.c
+index bec3f9e3cd3f..525f979e2a97 100644
+--- a/drivers/mmc/host/sdhci-sprd.c
++++ b/drivers/mmc/host/sdhci-sprd.c
+@@ -228,13 +228,15 @@ static inline void _sdhci_sprd_set_clock(struct sdhci_host *host,
+ 	div = ((div & 0x300) >> 2) | ((div & 0xFF) << 8);
+ 	sdhci_enable_clk(host, div);
+ 
+-	/* enable auto gate sdhc_enable_auto_gate */
+-	val = sdhci_readl(host, SDHCI_SPRD_REG_32_BUSY_POSI);
+-	mask = SDHCI_SPRD_BIT_OUTR_CLK_AUTO_EN |
+-	       SDHCI_SPRD_BIT_INNR_CLK_AUTO_EN;
+-	if (mask != (val & mask)) {
+-		val |= mask;
+-		sdhci_writel(host, val, SDHCI_SPRD_REG_32_BUSY_POSI);
++	/* Enable CLK_AUTO when the clock is greater than 400K. */
++	if (clk > 400000) {
++		val = sdhci_readl(host, SDHCI_SPRD_REG_32_BUSY_POSI);
++		mask = SDHCI_SPRD_BIT_OUTR_CLK_AUTO_EN |
++			SDHCI_SPRD_BIT_INNR_CLK_AUTO_EN;
++		if (mask != (val & mask)) {
++			val |= mask;
++			sdhci_writel(host, val, SDHCI_SPRD_REG_32_BUSY_POSI);
++		}
+ 	}
+ }
+ 
 -- 
-Sent from my Android device with K-9 Mail. Please excuse my brevity and top posting.
+2.17.1
+
