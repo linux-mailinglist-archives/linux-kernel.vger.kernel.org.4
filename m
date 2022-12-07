@@ -2,66 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB5D6457C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976EF6457E1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:31:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229572AbiLGK1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:27:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S229595AbiLGKbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:31:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbiLGK1R (ORCPT
+        with ESMTP id S229523AbiLGKbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:27:17 -0500
-Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93C2186CF;
-        Wed,  7 Dec 2022 02:27:14 -0800 (PST)
-Received: from ersatz.molgen.mpg.de (g017.RadioFreeInternet.molgen.mpg.de [141.14.12.17])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EC55D60027FC0;
-        Wed,  7 Dec 2022 11:27:11 +0100 (CET)
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Niklas Cassel <niklas.cassel@wdc.com>,
-        linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] libata: Sort Pioneer model in blacklist names lexicographically
-Date:   Wed,  7 Dec 2022 11:26:56 +0100
-Message-Id: <20221207102656.12486-1-pmenzel@molgen.mpg.de>
-X-Mailer: git-send-email 2.38.1
+        Wed, 7 Dec 2022 05:31:04 -0500
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3239194
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:31:01 -0800 (PST)
+Received: by mail-yb1-xb30.google.com with SMTP id o127so22102292yba.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Te+qRfL0gSPa2I5bK5OY5bAXbxohK6qh4ntuX06onLw=;
+        b=eBPc6LCdVbJNZrD/vNuWi34IC2I2EByvcZ8T0bOHHwJG02J4XKMyBtJKL5TXNyKr4l
+         d2If4UglHwt630P/gso8MBO1XAPD4/15iytfqwluNRAjCjHvYaQX6lqz92qU1KueqWLl
+         NmEtQ6abKgUm6qF8HpC29w+VmYMpJBX6lk06RhkXqIM9gvHs/UgSHGt9e1c749PUkstn
+         JEkgkYj0nWksUc/pyFxQvgoiSB+fxrbCrHfYpt751cz2XxTcjqE/hdsmUs5eBIkUlkj6
+         Y0xvfCUPe9v+Y3nCGvY+7x0g7pjw9eqxhnA819SOFLRlldbiFVDZtpE2xX/6x/MdWLVi
+         l40Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Te+qRfL0gSPa2I5bK5OY5bAXbxohK6qh4ntuX06onLw=;
+        b=5lSlBNfvT29u6tMnFTlxppI3NFCP7vTUZzwNcKvIi0QSVdT+sB6VMLM8bcT0nzhHOq
+         uIkEThbrHbfLGmHUc2CrtCW1yFpxgxQIkkn5seW5akHxNRsFjfaHClht7Sc0kLWhubMV
+         /bwxVX8k1v+VUAeCL8iLLOmTkIX72PiyeG4KI8bvzatcXiYGwQgX/96N7PlUPYgiB/Px
+         gg8EQHiL6bVZTTfA4W4//w1lLBFpxZ013/TjtsPy5GXTSPU7m+vlHJjRLW+aTA+6Ntim
+         rwNbPMtImAbPIB3boS7aA+D9z+pt3vt2ilDdBMDFqIk59rWxzzO4bhAi6asYywTS70Gw
+         NboQ==
+X-Gm-Message-State: ANoB5pkjR3yZ2EhOnipPPE3LDNtlk/fK4NnwA3ceHnLAa7MliLczFuq0
+        ml/Zmd6tMrcMgMlMoH6jv8uMhBhx1yUIQMcVbDlKeg==
+X-Google-Smtp-Source: AA0mqf6t39Rs8bP0A/bgsq+RjfUaGFwDeeFVVvJr2EUDgik0KecD4HhEv5Xo7lS6iqkDVNk/fFXWXXRma5m/Cfa/4Mw=
+X-Received: by 2002:a05:6902:1004:b0:6fe:d784:282a with SMTP id
+ w4-20020a056902100400b006fed784282amr17363367ybt.598.1670409060680; Wed, 07
+ Dec 2022 02:31:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206231659.never.929-kees@kernel.org> <20221206175557.1cbd3baa@kernel.org>
+In-Reply-To: <20221206175557.1cbd3baa@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Dec 2022 11:30:36 +0100
+Message-ID: <CANn89i+A49o1zXLJHTjQPrGrdATv7Mkis06FahZ0Yy2gLB1BXQ@mail.gmail.com>
+Subject: Re: [PATCH] skbuff: Reallocate to ksize() in __build_skb_around()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        pepsipu <soopthegoop@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes: commit ea08aec7e77b ("libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205")
-Cc: Niklas Cassel <niklas.cassel@wdc.com>
-Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
----
- drivers/ata/libata-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Dec 7, 2022 at 2:56 AM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Tue,  6 Dec 2022 15:17:14 -0800 Kees Cook wrote:
+> > -     unsigned int size = frag_size ? : ksize(data);
+> > +     unsigned int size = frag_size;
+> > +
+> > +     /* When frag_size == 0, the buffer came from kmalloc, so we
+> > +      * must find its true allocation size (and grow it to match).
+> > +      */
+> > +     if (unlikely(size == 0)) {
+> > +             void *resized;
+> > +
+> > +             size = ksize(data);
+> > +             /* krealloc() will immediate return "data" when
+> > +              * "ksize(data)" is requested: it is the existing upper
+> > +              * bounds. As a result, GFP_ATOMIC will be ignored.
+> > +              */
+> > +             resized = krealloc(data, size, GFP_ATOMIC);
+> > +             if (WARN_ON(resized != data))
+> > +                     data = resized;
+> > +     }
+> >
+>
+> Aammgh. build_skb(0) is plain silly, AFAIK. The performance hit of
+> using kmalloc()'ed heads is large because GRO can't free the metadata.
+> So we end up carrying per-MTU skbs across to the application and then
+> freeing them one by one. With pages we just aggregate up to 64k of data
+> in a single skb.
+>
+> I can only grep out 3 cases of build_skb(.. 0), could we instead
+> convert them into a new build_skb_slab(), and handle all the silliness
+> in such a new helper? That'd be a win both for the memory safety and one
+> fewer branch for the fast path.
+>
+> I think it's worth doing, so LMK if you're okay to do this extra work,
+> otherwise I can help (unless e.g. Eric tells me I'm wrong..).
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index d3ce5c383f3a..c08c534b7fc7 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -3990,8 +3990,8 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
- 	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
- 
- 	/* These specific Pioneer models have LPM issues */
--	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
- 	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
-+	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
- 
- 	/* Crucial BX100 SSD 500GB has broken LPM support */
- 	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
--- 
-2.38.1
-
+I totally agree, I would indeed remove ksize() use completely,
+let callers give us the size, and the head_frag boolean,
+instead of inferring from size==0
