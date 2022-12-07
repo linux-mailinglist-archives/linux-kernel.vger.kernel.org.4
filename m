@@ -2,70 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BBF36459C1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081386459C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiLGMWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 07:22:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229683AbiLGMXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 07:23:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiLGMWC (ORCPT
+        with ESMTP id S229583AbiLGMXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 07:22:02 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 720BC4C246;
-        Wed,  7 Dec 2022 04:22:01 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97D0D23A;
-        Wed,  7 Dec 2022 04:22:07 -0800 (PST)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 561E03F73D;
-        Wed,  7 Dec 2022 04:21:57 -0800 (PST)
-Message-ID: <40ff1e4c-b128-c0d0-a024-e454e843ee46@arm.com>
-Date:   Wed, 7 Dec 2022 13:21:47 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 04/22] sched/core: Add user_tick as argument to
- scheduler_tick()
-Content-Language: en-US
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
- <20221128132100.30253-5-ricardo.neri-calderon@linux.intel.com>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20221128132100.30253-5-ricardo.neri-calderon@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 07:23:35 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87CF3C6CA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 04:23:34 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 778B61FD7A;
+        Wed,  7 Dec 2022 12:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1670415813; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=loYT0A86SX2WIBPzHmVKDox+axk7EDHNAyPrWekbXbk=;
+        b=LXOxhGYm+9p4++SMpgRnRsQ0WhtzKsYZv9OtR75NL6ZUB2ZCPtH386Hx82yf5OMup1DjQi
+        f/OGvULMo7vhWSxuQQCbMsdJWIn4OKbD2xkpybA8hs+7+2rGSxjRkLLXnuq+57inILhuMm
+        888rt4TOJ2/j4eofilNkgAbaGgrw4y4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1670415813;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=loYT0A86SX2WIBPzHmVKDox+axk7EDHNAyPrWekbXbk=;
+        b=+KVE59kQ2HWV0RFbHpBCAowJZUAFLd8rils8ooCiT3igCSRpStb5XfVSIckJur5y10jvHW
+        4GMyr98i4pocpXCw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 559E1134CD;
+        Wed,  7 Dec 2022 12:23:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id TVtFFMWFkGNjSgAAGKfGzw
+        (envelope-from <tiwai@suse.de>); Wed, 07 Dec 2022 12:23:33 +0000
+Date:   Wed, 07 Dec 2022 13:23:32 +0100
+Message-ID: <87edtb8ksb.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     edward-p <edward@edward-p.xyz>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Stefan Binding <sbinding@opensource.cirrus.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        Kailang Yang <kailang@realtek.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: hda/realtek: Add quirk for Lenovo TianYi510Pro-14IOB
+In-Reply-To: <20221206180459.44260-1-edward@edward-p.xyz>
+References: <20221206180459.44260-1-edward@edward-p.xyz>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/11/2022 14:20, Ricardo Neri wrote:
-> Differentiate between user and kernel ticks so that the scheduler updates
-> the IPC class of the current task during the latter.
+On Tue, 06 Dec 2022 19:04:58 +0100,
+edward-p wrote:
+> 
+> Lenovo TianYi510Pro-14IOB (17aa:3742)
+> require quirk for enabling headset-mic
+> 
+> Signed-off-by: edward-p <edward@edward-p.xyz>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216756
 
-Just to make sure ,,, 05/22 introduces `rq->curr` IPCC update during
-user_tick, i.e. the former?
+The code change looks OK, but the Signed-off-by line has to be with
+the real full name.  As it's a legal requirement, it's mandatory.
 
-[...]
+Could you correct and resubmit?
+
+
+thanks,
+
+Takashi
