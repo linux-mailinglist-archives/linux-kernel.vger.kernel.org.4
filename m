@@ -2,247 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F6E645975
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:56:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 974DF64595F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:54:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiLGLz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:55:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52700 "EHLO
+        id S229573AbiLGLyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:54:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiLGLzX (ORCPT
+        with ESMTP id S229900AbiLGLyZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:55:23 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0E1C63
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:55:22 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id A874F5C01C2;
-        Wed,  7 Dec 2022 06:55:21 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 07 Dec 2022 06:55:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1670414121; x=
-        1670500521; bh=baD35foiFpwZCUKzO+BRxuNeos7NPkrjuUtRCB/nYf0=; b=Y
-        YEEa2jf7ntEmGlJQ8HtMqp6WK2a3/jxXLVx8jfb9kv+r3QswJoJBPO3mWSD5Udnh
-        NUSFyCPsTK+A5mLsn96EMdNlNmk9eiBd/MG+eeSNPlLc/Jlxp3sYkVJP3JZh/17e
-        LZ+QYZWac4q1eM7bpC82Pk+zrUg3pK+AaE5729vtTo3Etar4Cox4d9b+ikHkjnQg
-        PkPAM6IW368mZx3Qs+OalDi8qL7lMkW6e/xgN2CxfSihrHLmWeXqqWqJlb+B+VIp
-        8656+L2UJy9PIqm9im53jGdc4LSnU1bO7t7vJfNBAB9X5vBdodJnkpJ7Jkp3QyTK
-        LSKTLQ7K1+c0DbHm0/xxA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670414121; x=
-        1670500521; bh=baD35foiFpwZCUKzO+BRxuNeos7NPkrjuUtRCB/nYf0=; b=g
-        82id9ruI5uJ1rAya7gVjByPAxdrMG+PzEnvty32CmvPgw+qEwQF7LoqGBB1aCfci
-        dnJNyKzRw6ef8BMvRlJBEFZonwMfvVjQFkwvh+ed8lAhPaXXuGBQtLT9h6iwt5+t
-        WboQ6bNvTQXqIpnL+Vx9koIH1MiS5K/LHZ1j7XpZc6WWrParYV92Sm//GoESkO8l
-        tBKUqPr3Qcp71wKLL3dtYjdxazkjGIlZ2fUtOiVwXQouYotjf54kRCqMo0s4I/m4
-        w4wDP91DOwXOIxhaWAni9ubcAa430TpyDlwePjl/ysRJ+tBHKLXu3RZWWvxZ7zjr
-        NFARRWze0ArzfKw6YHgbA==
-X-ME-Sender: <xms:KX-QY8x3Zv6OOVfWYolGI7QltYPDvWx2MXzDfMsSHGLYlJd27IJo0g>
-    <xme:KX-QYwRmSAG_ky-Igi0yNVVhAvbnz8E7u1yJZb03OHtDmD5HY3_eDTeKD3TlSxqwg
-    UHDgi8gsJtF00y-Rgg>
-X-ME-Received: <xmr:KX-QY-VfixIiRUpQgMRiWWgMt0aIBHHT_8b5HTblQf-kVLvTs-ZVAXB4LeSJwsjRm25bZGqov6cQiNzAI6LYEcQs3NZtDZvAD8qMTH7DmWiYRA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdefgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevvdelieejgedvkeffheekheeilefhgefgffehteekueelvddtueffheet
-    ledtffenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:KX-QY6j-fl8Q7wewD3SYFm_EI-1fn2jJ9Ei05lDoWmhfwIz9h8bsqw>
-    <xmx:KX-QY-AhAXG-18lcCwEUa_9i_-tnlhj1s1cg5SYDAsgB9DLE5QZ9kg>
-    <xmx:KX-QY7JIUR2hXaPFxK3SMYj7CKAPwUm5uZuqs2GfBiFQ5Nzz46v5MA>
-    <xmx:KX-QY271DGErMqjR5comiqBL0AYuLBPBxwYdunAnlda8i7a8asbc0Q>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Dec 2022 06:55:21 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Wed, 07 Dec 2022 12:53:16 +0100
-Subject: [PATCH 05/15] drm/vc4: hvs: Support zpos on all planes
+        Wed, 7 Dec 2022 06:54:25 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F2453EC6;
+        Wed,  7 Dec 2022 03:53:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670414003; x=1701950003;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=yi1CvoW2ZnYsJeWqpB1M54BgrX9F2wgmCB/vqXuVrZQ=;
+  b=lkU7GPc/fqdJNcBL7nvCYyXOKx7PVW4jLKucUTauKGLstdaAx0W8b7aV
+   GvQmksnbe3xuUlVTOBYvI6rSUUyHOGKmFMyqk+dg7ltKrc2KFVgkVe8YF
+   +IYHM424iHPwrlRIGundevhgyzmN61jOkp6qk82Kw5ypktsa1/vWSUHiv
+   gCj/GkCZJoSagPlORNS8AlBM1mv7e9uuChkpcsjYNxQLzzcPORNdLJpn9
+   54m8SxlE+QdubZE3y3mlirSrtxo1J3oCl/uxbag9baOgwP+1j4lmd62Hq
+   Ni+3cym7WWmX9aGLF++ahhH05jHCioGaNiDjkcLK4Cvcz88NX2KiWekwr
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="343902402"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="343902402"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 03:53:22 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="753067135"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="753067135"
+Received: from mindrei-mobl2.ger.corp.intel.com ([10.249.37.139])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 03:53:18 -0800
+Date:   Wed, 7 Dec 2022 13:53:17 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, macro@orcam.me.uk,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        cang1@live.co.uk, colin.i.king@gmail.com,
+        phil.edworthy@renesas.com, biju.das.jz@bp.renesas.com,
+        geert+renesas@glider.be, Lukas Wunner <lukas@wunner.de>,
+        u.kleine-koenig@pengutronix.de, wander@redhat.com,
+        etremblay@distech-controls.com, jk@ozlabs.org,
+        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+Subject: Re: [PATCH v7 tty-next 3/4] serial: 8250_pci1xxxx: Add RS485 support
+ to quad-uart driver
+In-Reply-To: <20221207235305.695541-4-kumaravel.thiagarajan@microchip.com>
+Message-ID: <784d1b68-98b8-324-ad34-7ef13352855@linux.intel.com>
+References: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com> <20221207235305.695541-4-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221207-rpi-hvs-crtc-misc-v1-5-1f8e0770798b@cerno.tech>
-References: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech>
-In-Reply-To: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.11.0-dev-8c583
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5206; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=4CV2+PCYIvO5q3yVEDVtoCz7WaQzAp4zgRv5gDx5kMo=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkT6lZwCpbdUbyYvfhZg/zaUxuUN3xft/HKny+nrqXOiilz
- YGHv7ChlYRDjYpAVU2SJETZfEndq1utONr55MHNYmUCGMHBxCsBEbr9iZHj9rknw89GAD3Iv52vX3O
- F95dkZ0yZ3TOXDPTX74/3/2QMZGXabuPTop4WqfuR4GCBSvtdy8ZLEnIlvxHRutdz6q7lvIh8A
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+On Thu, 8 Dec 2022, Kumaravel Thiagarajan wrote:
 
-Adds the zpos property to all planes, and creates the dlist
-by placing the fragments in the correct order based on zpos.
+> pci1xxxx uart supports RS485 mode of operation in the hardware with
+> auto-direction control with configurable delay for releasing RTS after
+> the transmission. This patch adds support for the RS485 mode.
+> 
+> Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+> Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
+> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+> ---
+> Changes in v7:
+> - No Change
+> 
+> Changes in v6:
+> - Modified datatype of delay_in_baud_periods to u64 to avoid overflows
+> 
+> Changes in v5:
+> - Removed unnecessary assignments
+> - Corrected styling issues in comments
+> 
+> Changes in v4:
+> - No Change
+> 
+> Changes in v3:
+> - Remove flags sanitization in driver which is taken care in core
+> 
+> Changes in v2:
+> - move pci1xxxx_rs485_config to a separate patch with
+>   pci1xxxx_rs485_supported.
+> ---
+>  drivers/tty/serial/8250/8250_pci1xxxx.c | 49 +++++++++++++++++++++++++
+>  1 file changed, 49 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> index be554e2d884b..9f0da264314a 100644
+> --- a/drivers/tty/serial/8250/8250_pci1xxxx.c
+> +++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
+> @@ -145,6 +145,53 @@ static void pci1xxxx_set_divisor(struct uart_port *port, unsigned int baud,
+>  	       port->membase + UART_BAUD_CLK_DIVISOR_REG);
+>  }
+>  
+> +static int pci1xxxx_rs485_config(struct uart_port *port,
+> +				 struct ktermios *termios,
+> +				 struct serial_rs485 *rs485)
+> +{
+> +	u32 clock_div = readl(port->membase + UART_BAUD_CLK_DIVISOR_REG);
+> +	u64 delay_in_baud_periods;
+> +	u32 baud_period_in_ns;
+> +	u32 data = 0;
+> +
+> +	/*
+> +	 * pci1xxxx's uart hardware supports only RTS delay after
+> +	 * Tx and in units of bit times to a maximum of 15
+> +	 */
+> +	if (rs485->flags & SER_RS485_ENABLED) {
+> +		data = ADCL_CFG_EN | ADCL_CFG_PIN_SEL;
+> +
+> +		if (!(rs485->flags & SER_RS485_RTS_ON_SEND))
+> +			data |= ADCL_CFG_POL_SEL;
+> +
+> +		if (rs485->delay_rts_after_send) {
+> +			baud_period_in_ns =
+> +				FIELD_GET(BAUD_CLOCK_DIV_INT_MSK, clock_div) *
+> +				UART_BIT_SAMPLE_CNT;
+> +			delay_in_baud_periods =
+> +				rs485->delay_rts_after_send * NSEC_PER_MSEC /
+> +				baud_period_in_ns;
+> +			delay_in_baud_periods =
+> +				min_t(u64, delay_in_baud_periods,
+> +				      FIELD_MAX(ADCL_CFG_RTS_DELAY_MASK));
+> +			data |= FIELD_PREP(ADCL_CFG_RTS_DELAY_MASK,
+> +					   delay_in_baud_periods);
+> +			rs485->delay_rts_after_send =
+> +				baud_period_in_ns * delay_in_baud_periods /
+> +				NSEC_PER_MSEC;
 
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
----
- drivers/gpu/drm/vc4/vc4_hvs.c   | 43 +++++++++++++++++++++++++++--------------
- drivers/gpu/drm/vc4/vc4_kms.c   |  1 +
- drivers/gpu/drm/vc4/vc4_plane.c | 22 ++++++++++++++++++---
- 3 files changed, 48 insertions(+), 18 deletions(-)
+div_u64() or cast+comment if you can prove you never need the high-word at 
+this point.
 
-diff --git a/drivers/gpu/drm/vc4/vc4_hvs.c b/drivers/gpu/drm/vc4/vc4_hvs.c
-index d9fc0d03023b..3582ede1a0aa 100644
---- a/drivers/gpu/drm/vc4/vc4_hvs.c
-+++ b/drivers/gpu/drm/vc4/vc4_hvs.c
-@@ -570,6 +570,8 @@ void vc4_hvs_atomic_flush(struct drm_crtc *crtc,
- 	bool enable_bg_fill = false;
- 	u32 __iomem *dlist_start = vc4->hvs->dlist + vc4_state->mm.start;
- 	u32 __iomem *dlist_next = dlist_start;
-+	unsigned int zpos = 0;
-+	bool found = false;
- 	int idx;
- 
- 	if (!drm_dev_enter(dev, &idx)) {
-@@ -583,23 +585,34 @@ void vc4_hvs_atomic_flush(struct drm_crtc *crtc,
- 	}
- 
- 	/* Copy all the active planes' dlist contents to the hardware dlist. */
--	drm_atomic_crtc_for_each_plane(plane, crtc) {
--		/* Is this the first active plane? */
--		if (dlist_next == dlist_start) {
--			/* We need to enable background fill when a plane
--			 * could be alpha blending from the background, i.e.
--			 * where no other plane is underneath. It suffices to
--			 * consider the first active plane here since we set
--			 * needs_bg_fill such that either the first plane
--			 * already needs it or all planes on top blend from
--			 * the first or a lower plane.
--			 */
--			vc4_plane_state = to_vc4_plane_state(plane->state);
--			enable_bg_fill = vc4_plane_state->needs_bg_fill;
-+	do {
-+		found = false;
-+
-+		drm_atomic_crtc_for_each_plane(plane, crtc) {
-+			if (plane->state->normalized_zpos != zpos)
-+				continue;
-+
-+			/* Is this the first active plane? */
-+			if (dlist_next == dlist_start) {
-+				/* We need to enable background fill when a plane
-+				 * could be alpha blending from the background, i.e.
-+				 * where no other plane is underneath. It suffices to
-+				 * consider the first active plane here since we set
-+				 * needs_bg_fill such that either the first plane
-+				 * already needs it or all planes on top blend from
-+				 * the first or a lower plane.
-+				 */
-+				vc4_plane_state = to_vc4_plane_state(plane->state);
-+				enable_bg_fill = vc4_plane_state->needs_bg_fill;
-+			}
-+
-+			dlist_next += vc4_plane_write_dlist(plane, dlist_next);
-+
-+			found = true;
- 		}
- 
--		dlist_next += vc4_plane_write_dlist(plane, dlist_next);
--	}
-+		zpos++;
-+	} while (found);
- 
- 	writel(SCALER_CTL0_END, dlist_next);
- 	dlist_next++;
-diff --git a/drivers/gpu/drm/vc4/vc4_kms.c b/drivers/gpu/drm/vc4/vc4_kms.c
-index 7282545c54a1..44deee666032 100644
---- a/drivers/gpu/drm/vc4/vc4_kms.c
-+++ b/drivers/gpu/drm/vc4/vc4_kms.c
-@@ -1093,6 +1093,7 @@ int vc4_kms_load(struct drm_device *dev)
- 	dev->mode_config.helper_private = &vc4_mode_config_helpers;
- 	dev->mode_config.preferred_depth = 24;
- 	dev->mode_config.async_page_flip = true;
-+	dev->mode_config.normalize_zpos = true;
- 
- 	ret = vc4_ctm_obj_init(vc4);
- 	if (ret)
-diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
-index 8b92a45a3c89..c212f8c10388 100644
---- a/drivers/gpu/drm/vc4/vc4_plane.c
-+++ b/drivers/gpu/drm/vc4/vc4_plane.c
-@@ -1568,9 +1568,14 @@ struct drm_plane *vc4_plane_init(struct drm_device *dev,
- 					  DRM_COLOR_YCBCR_BT709,
- 					  DRM_COLOR_YCBCR_LIMITED_RANGE);
- 
-+	if (type == DRM_PLANE_TYPE_PRIMARY)
-+		drm_plane_create_zpos_immutable_property(plane, 0);
-+
- 	return plane;
- }
- 
-+#define VC4_NUM_OVERLAY_PLANES	16
-+
- int vc4_plane_create_additional_planes(struct drm_device *drm)
- {
- 	struct drm_plane *cursor_plane;
-@@ -1586,24 +1591,35 @@ int vc4_plane_create_additional_planes(struct drm_device *drm)
- 	 * modest number of planes to expose, that should hopefully
- 	 * still cover any sane usecase.
- 	 */
--	for (i = 0; i < 16; i++) {
-+	for (i = 0; i < VC4_NUM_OVERLAY_PLANES; i++) {
- 		struct drm_plane *plane =
- 			vc4_plane_init(drm, DRM_PLANE_TYPE_OVERLAY,
- 				       GENMASK(drm->mode_config.num_crtc - 1, 0));
- 
- 		if (IS_ERR(plane))
- 			continue;
-+
-+		/* Create zpos property. Max of all the overlays + 1 primary +
-+		 * 1 cursor plane on a crtc.
-+		 */
-+		drm_plane_create_zpos_property(plane, i + 1, 1,
-+					       VC4_NUM_OVERLAY_PLANES + 1);
- 	}
- 
- 	drm_for_each_crtc(crtc, drm) {
- 		/* Set up the legacy cursor after overlay initialization,
--		 * since we overlay planes on the CRTC in the order they were
--		 * initialized.
-+		 * since the zpos fallback is that planes are rendered by plane
-+		 * ID order, and that then puts the cursor on top.
- 		 */
- 		cursor_plane = vc4_plane_init(drm, DRM_PLANE_TYPE_CURSOR,
- 					      drm_crtc_mask(crtc));
- 		if (!IS_ERR(cursor_plane)) {
- 			crtc->cursor = cursor_plane;
-+
-+			drm_plane_create_zpos_property(cursor_plane,
-+						       VC4_NUM_OVERLAY_PLANES + 1,
-+						       1,
-+						       VC4_NUM_OVERLAY_PLANES + 1);
- 		}
- 	}
- 
+But why you even need u64 because delay_rts_after_send is limited to 
+RS485_MAX_RTS_DELAY (=100) by serial core? 100 * NSEC_PER_MSEC doesn't 
+overflow u32.
+
 
 -- 
-2.38.1
+ i.
+
