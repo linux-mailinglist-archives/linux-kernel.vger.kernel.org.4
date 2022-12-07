@@ -2,98 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CE76454FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7B06454FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiLGH6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 02:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S229769AbiLGH60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 02:58:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLGH56 (ORCPT
+        with ESMTP id S229743AbiLGH6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 02:57:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C389527CC2;
-        Tue,  6 Dec 2022 23:57:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6DE78B815D4;
-        Wed,  7 Dec 2022 07:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF0A6C433C1;
-        Wed,  7 Dec 2022 07:57:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670399874;
-        bh=QIubHp3cNpcEzieEe4V2CpRX/GSoVpl49aRjbV0Dzzs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=I9rgaMxhx2b/hDw6MeXI4mKG8LxIMxeDPfrkmYjrT1bmz7ZzHbSiQ88zZ16wnLgnR
-         d2fgfxoC2kl983o58Tc7k/qBRjtyAwMIfK1qZ8VLaeesGJ94K0VuW2vvetGPx7aIVl
-         dZ40z0HCDvWHIZCwc5ffEcNZf7DPLQ+U76v8Dpuag63HkGrSukKfoZNhS04uFYAB/s
-         meSmCgUwaNfvpHYVIQCZu7W5Xd/mV4GWOay4P8ix7HlEsvcGpaUF2ZQXADduaJNnMz
-         72Flyg+CQk0wAJ7yiDX3xyjDtZWodhnUNkQR6z9deLqhil4SuUoHtJun2k0i6UfeaC
-         jP6NZtFD3gn0A==
-Received: by pali.im (Postfix)
-        id 1447A9D7; Wed,  7 Dec 2022 08:57:51 +0100 (CET)
-Date:   Wed, 7 Dec 2022 08:57:50 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
- devm_gpiod_get_optional()
-Message-ID: <20221207075750.6usm4mgejtpcrktw@pali>
-References: <Y3KMEZFv6dpxA+Gv@google.com>
- <Y4/s3227WQyGQiOI@google.com>
+        Wed, 7 Dec 2022 02:58:24 -0500
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7377417A96
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 23:58:23 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-3c090251d59so178063557b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 23:58:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YsEzFVYWNb3PSDqX7gS5EcXxQ26G4nv0tvB50of4rR4=;
+        b=bl0LUe4BpedaJkvYgS3xhG2L/TRZR7Kr+X+zOk4HQGtaQuG5wOLRHc5Cmq4KZfoWVc
+         Wy98e/8RQunRXYgCxyXqGQqOWeTjgpWDEag2U3fSI0w8shSBSXf7+ciCl6oRPcce3mlL
+         qiPusHjOGl33yPEreHDFoaozVg5vnc8B4PbsWg5vSMAvjpnOn3vLdQLW+iB+Q9JoqjKz
+         rzi0DufB/Vo+a5NK/wToL/hx1FjNKyQ3sWyFYq/J+7KhgKKagMuW64zLwcXh0ZdcHqI1
+         YGmb7lzZn+wO7foQRYQwu6xLEEnGA6alh2eD4O8DpQZIhqSkOR9dmoMp13OCiJMTUkQw
+         k5PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YsEzFVYWNb3PSDqX7gS5EcXxQ26G4nv0tvB50of4rR4=;
+        b=cInA9MO82zZuw7hrPvytrzLOaCfXXtamWT+Po1Sz0sVrEg8qMIgmj7gvuY4CaJ1QMa
+         wXTtbW0SKqIgmI1yMJnHeBHpwzSsOYbaxvDFOZ02wqHqc5xNHXqtSwELDh8FbeMO/mKz
+         yM8SkKWnibSs+J6KaJhQJKI6yjLMD9H3A90vgXzzloKilkm65DQ+hpwVytIOfZqO49FZ
+         E6EyO0P9rFb4ExqGJRB/emle1L4nwff2PyUvrIQq4pZNQYgRbCgzqKVhNI26msZIvF7x
+         XqkJ4H0lGAtUqno5eOBWAejaD4DUptNtiPLYPb3D5Scz62qebApvYfOOjrxxdcvzhiCn
+         otCw==
+X-Gm-Message-State: ANoB5plb6DDywohjjNTrZIZ4fWP5mY8Vjl3d9yW5Cvhyy8Ip9ixcfngW
+        7rX9EbT2OZCiksfoCWs444kTpkkkPf6DKzBVaht4aw==
+X-Google-Smtp-Source: AA0mqf6J9chWLNqURxSv/bkiORvCD6QhQ2HABa8D/n90JoAuxIa5UCEjPDppjQ5IskzLdHp8YPNuS4CxUPZIovb05bE=
+X-Received: by 2002:a81:a8a:0:b0:37e:6806:a5f9 with SMTP id
+ 132-20020a810a8a000000b0037e6806a5f9mr5115644ywk.47.1670399902402; Tue, 06
+ Dec 2022 23:58:22 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4/s3227WQyGQiOI@google.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221205184742.0952fc75@kernel.org> <202212071527223155626@zte.com.cn>
+In-Reply-To: <202212071527223155626@zte.com.cn>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 7 Dec 2022 08:58:11 +0100
+Message-ID: <CANn89iKqb64sLT2r+2YrpDyMfZ8T6z2Ygtby-ruVNNYvniaV0g@mail.gmail.com>
+Subject: Re: [PATCH linux-next] net: record times of netdev_budget exhausted
+To:     yang.yang29@zte.com.cn
+Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        bigeasy@linutronix.de, imagedong@tencent.com, kuniyu@amazon.com,
+        petrm@nvidia.com, liu3101@purdue.edu, wujianguo@chinatelecom.cn,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tedheadster@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 06 December 2022 17:31:11 Dmitry Torokhov wrote:
-> On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
-> > Switch the driver to the generic version of gpiod API (and away from
-> > OF-specific variant), so that we can stop exporting
-> > devm_gpiod_get_from_of_node().
-> > 
-> > Acked-by: Pali Rohár <pali@kernel.org>
-> > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> > Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> > ---
-> > 
-> > v2:
-> >  - collected reviewed-by/acked-by tags
-> >  - updated commit description to remove incorrect assumption of why
-> >    devm_gpiod_get_from_of_node() was used in the first place
-> > 
-> > This is the last user of devm_gpiod_get_from_of_node() in the mainline
-> > (next), it would be great to have it in so that we can remove the API in
-> > the next release cycle.
-> > 
-> > Thanks!
-> 
-> Gentle ping on this one... I'd really like to remove
-> [devm_]gpiod_get_from_of_node() API from 6.2.
-> 
-> Thanks.
-> 
-> -- 
-> Dmitry
+On Wed, Dec 7, 2022 at 8:28 AM <yang.yang29@zte.com.cn> wrote:
+>
+> On Tue, 6 Dec 2022 10:47:07 +0800 (CST) kuba@kernel.org wrote:
+> > But are you seeing actual performance wins in terms of throughput
+> > or latency?
+>
+> I did a test and see 7~8% of performance difference with small and big
+> netdev_budget. Detail:
+> 1. machine
+> In qemu. CPU is QEMU TCG CPU version 2.5+.
+> 2. kernel
+> Linux (none) 5.14.0-rc6+ #91 SMP Tue Dec 6 19:55:14 CST 2022 x86_64 GNU/Linux
+> 3. test condition
+> Run 5 rt tasks to simulate workload, task is test.sh:
+> ---
+> #!/bin/bash
+>
+> while [ 1 ]
+> do
+>       ls  > /dev/null
+> done
+> ---
+> 4. test method
+> Use ping -f to flood.
+> # ping -f 192.168.1.201 -w 1800
+>
+> With netdev_buget is 500, and netdev_budget_usecs is 2000:
+> 497913 packets transmitted, 497779 received, 0% packet loss, time 1799992ms
+> rtt min/avg/max/mdev = 0.181/114.417/1915.343/246.098 ms, pipe 144, ipg/ewma 3.615/0.273 ms
+>
+> With netdev_budget is 1, and netdev_budget_usecs is 2000:
+> 457530 packets transmitted, 457528 received, 0% packet loss, time 1799997ms
+> rtt min/avg/max/mdev = 0.180/123.287/1914.186/253.883 ms, pipe 147, ipg/ewma 3.934/0.301 ms
+>
 
-Hello Dmitry! You would need to wait with your change. There are more
-important fixes and less important cleanups for this aardvark driver
-which are waiting in the queue for longer time:
-https://patchwork.kernel.org/project/linux-pci/list/?series=&submitter=&state=&q=aardvark&archive=&delegate=
+Sure, but netdev_budget set to 1 is extreme, don't you think ???
+
+Has anyone used such a setting ?
+
+> With small netdev_budget, avg latency increases 7%, packets transmitted
+> decreases 8%.
+>
+> > Have you tried threaded NAPI? (find files called 'threaded' in sysfs)
+>
+> Thanks, we had researched on threaded NAPI, much applaud for it!
+> But we think someone maynot use it because some kinds of reasons.
+> One is threaded NAPI is good for control, but maynot good for
+> throughput, especially for those who not care real-time too much.
+> Another reason is distribution kernel may too old to support
+> threaded NAPI?
+>
+> >Well, we can't be sure if there's really nobody that uses them :(
+>
+> As we still retain netdev_budget*, and there maybe some using it,
+> should it be improve? Netdev_budget* are sysctl for administrator,
+> when administrator adjust them, they may want to see the effect in
+> a direct or easy way. That's what this patch's purpose.
+
+We prefer not changing /proc file format as much as we can, they are
+deprecated/legacy.
+
+Presumably, modern tracing techniques can let you do what you want
+without adding new counters.
+
+I think that a per-cpu counter is old-fashioned, and incurs a cost for
+the vast majority of users who will
+never look at the counters.
