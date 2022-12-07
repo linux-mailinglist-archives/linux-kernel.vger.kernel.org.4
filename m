@@ -2,106 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72862646200
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:03:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06D3646202
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:03:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229500AbiLGUDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:03:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
+        id S229705AbiLGUDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:03:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiLGUC7 (ORCPT
+        with ESMTP id S229501AbiLGUDt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:02:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081B32FC27;
-        Wed,  7 Dec 2022 12:02:48 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5025C61BA9;
-        Wed,  7 Dec 2022 20:01:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D09C433C1;
-        Wed,  7 Dec 2022 20:01:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670443318;
-        bh=Demd/UfJqFw2eDXCVUg8SZIC3opSCXKHPmwW779cpVM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BtZx28qWQ2lj/cxCC/WUdC0hR5/c/5goXOTvWAXOlVOkqsMeCG/bLaJyM/AfUjtnx
-         t1N34HbY++iJpoElHzBSiDbDqy3gxEwUffWBjXw/8mKjo9oE6UdGgpsXmjMXp0w/yb
-         Od5UtLXeiFCvsQStP1JnzQ+kasPwPA7BCONQ0qtK1I/7YweYz3UOAgp+Qz8OyT13jH
-         VuAZyIkV4gBamAOpeNlFRmryaOB23w5t3mCSq4AiB7xV3QZMlfY3D85cbWghH2XeAL
-         ZM5DmU0mdKsr0823Azaxp45Mg5WDQw14SNxRTLDViCx9XaP/QOe4q0tpKiXRGw/sir
-         rL8jCGjAI8Nng==
-Date:   Wed, 7 Dec 2022 21:01:55 +0100
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Pengfei Xu <pengfei.xu@intel.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
-Subject: Re: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS
- zap_pid_ns_processes()
-Message-ID: <20221207200155.GA1840475@lothringen>
-References: <20221125135500.1653800-1-frederic@kernel.org>
- <20221125135500.1653800-4-frederic@kernel.org>
- <871qpkqof8.fsf@email.froward.int.ebiederm.org>
- <20221206164927.GD3866@redhat.com>
+        Wed, 7 Dec 2022 15:03:49 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8592E13D7C;
+        Wed,  7 Dec 2022 12:03:48 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 52F5D1C09FA; Wed,  7 Dec 2022 21:03:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1670443427;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rvBWmN92kGuv4fv/6ip6ueTE56gLU2bWdfROfEqlZ5g=;
+        b=QR8nW8zLXeYKFhsit8Lj69jLySPPDtB65qjAol0T1EQooKt1nxtSXUouXJ5YXDDRb7+EHN
+        3sSuWbKGaMSv5qhhwdgjmGUYVfKZkIH456EUjQI5H0WI5G7aIXM/VsrjsEkrt04p8+XOqv
+        ua50iGNl9l0QZTvEZlwZCRoCYZsMqmE=
+Date:   Wed, 7 Dec 2022 21:03:46 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-leds@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] leds: is31fl319x: Fix setting current limit for
+ is31fl319{0,1,3}
+Message-ID: <Y5DxoqlDdcOma+jC@duo.ucw.cz>
+References: <20221129212901.1049085-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="llhJ/jVmylD8gtto"
 Content-Disposition: inline
-In-Reply-To: <20221206164927.GD3866@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221129212901.1049085-1-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:49:28PM +0100, Oleg Nesterov wrote:
-> On 11/30, Eric W. Biederman wrote:
-> >
-> > 2) I keep thinking zap_pid_ns_processes() should be changed so that
-> >    after it sends SIGKILL to all of the relevant processes to not wait,
-> 
-> At least I think it should not wait for the tasks injected into this ns.
-> 
-> Because this looks like a kernel bug even if we forget about this deadlock.
-> 
-> Say we create a task P using clone(CLONE_NEWPID), then inject a task T into
-> P's pid-namespace via setns/fork. This make the process P "unkillable", it
-> will hang in zap_pid_ns_processes() "forever" until T->parent reaps a zombie
-> task T killed by P.
 
-I think this was made that way on purpose, see the comment in
-zap_pid_ns_processes():
+--llhJ/jVmylD8gtto
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	/*
-	 * kernel_wait4() misses EXIT_DEAD children, and EXIT_ZOMBIE
-	 * process whose parents processes are outside of the pid
-	 * namespace.  Such processes are created with setns()+fork().
-	 *
-	 * If those EXIT_ZOMBIE processes are not reaped by their
-	 * parents before their parents exit, they will be reparented
-	 * to pid_ns->child_reaper.  Thus pidns->child_reaper needs to
-	 * stay valid until they all go away.
-	 *
-	 * The code relies on the pid_ns->child_reaper ignoring
-	 * SIGCHILD to cause those EXIT_ZOMBIE processes to be
-	 * autoreaped if reparented.
-	 *
-	 * Semantically it is also desirable to wait for EXIT_ZOMBIE
-	 * processes before allowing the child_reaper to be reaped, as
-	 * that gives the invariant that when the init process of a
-	 * pid namespace is reaped all of the processes in the pid
-	 * namespace are gone.
+On Tue 2022-11-29 22:29:01, Luca Weiss wrote:
+> The current setting lives in bits 4:2 (as also defined by the mask) but
+> the current limit defines in the driver use bits 2:0 which should be
+> shifted over so they don't get masked out completely (except for 17.5mA
+> which became 10mA).
+>=20
+> Now checking /sys/kernel/debug/regmap/1-0068/registers shows that the
+> current limit is applied correctly and doesn't take the default b000 =3D
+> 42mA.
 
-I can't say I like the fact that a parent not belonging to a new namespace
-can create more than one child within that namespace but anyway this all look
-like an ABI that can't be reverted now.
+Thank you, applied.
 
-Thanks.
+Best regards,
+								Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--llhJ/jVmylD8gtto
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY5DxogAKCRAw5/Bqldv6
+8ibUAKCum3Kn5eVHgiC3K+xRT6VRbR3QiACgvWpVcAiDbap9igfW/1HEjaDvYac=
+=g+e4
+-----END PGP SIGNATURE-----
+
+--llhJ/jVmylD8gtto--
