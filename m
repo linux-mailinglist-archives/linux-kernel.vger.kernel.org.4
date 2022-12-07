@@ -2,125 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9CF645B9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FF7645BA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:58:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbiLGN5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:57:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S229989AbiLGN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:58:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLGN5P (ORCPT
+        with ESMTP id S230041AbiLGN57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:57:15 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D9D5BD4E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:57:13 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2uv4-0007VL-LE; Wed, 07 Dec 2022 14:57:06 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2uv2-002vut-QL; Wed, 07 Dec 2022 14:57:05 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p2uv2-003I87-Ta; Wed, 07 Dec 2022 14:57:04 +0100
-Date:   Wed, 7 Dec 2022 14:57:04 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Lee Jones <lee@kernel.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        linux-amlogic@lists.infradead.org, Lee Jones <lee.jones@linaro.org>
-Subject: Re: [PATCH 431/606] mfd: khadas-mcu: Convert to i2c's .probe_new()
-Message-ID: <20221207135704.oxyu2gfm6wrns5t4@pengutronix.de>
-References: <Y3tvypIDVdCYxAVB@google.com>
- <20221121150854.3mwczqtbusawho4m@pengutronix.de>
- <Y3usiUm1K+5xCWhY@google.com>
- <20221206105908.jzcdnast3yw22eel@pengutronix.de>
- <Y49pi54DKsvLOzvb@google.com>
- <20221206163516.i6rzewxts7do75y5@pengutronix.de>
- <Y490W6k4N8iBxLHf@google.com>
- <20221207110007.yfjfiakmh4ma3sfo@pengutronix.de>
- <Y5B3otGG06QCjldc@google.com>
- <Y5CWSZpndGi4mU5e@google.com>
+        Wed, 7 Dec 2022 08:57:59 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291DFC4E;
+        Wed,  7 Dec 2022 05:57:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=xpxd7dkkl5q/KfS0CZUbzeIRSdaT0Ah5HzKQhmaMNp0=; b=iEInDFH947pg3B8SyceyF7tc1j
+        wwP1ORmMPS5rvfEgJ1iNcND1f1blfyq0cP0kD0kFUmCSUaNheCWxXwvnle6mf7S5Xrx1J2Sgc3NbG
+        dTt/DtHtonV7Rvy/f3NvEGMYgs9n+mmNvvXKhvX5Ex+yTvpN3Zc/6qFjTT0INd5SHxd3dDqhRTCdF
+        kVb7NsAq3NF653osB67a2W+9/l8/yLMoAMsJ99BzJxpd4UDlKUkjTDcN19/ybAdGP16MVuQMijLZh
+        /3xoqLQ6mqgeSH901gFlRn6ijti1e5RF6eHJ0mnJ++Lp/9NW6bkLq32roOTxWAcj6ognkSrB21Tim
+        zd8Ciiuw==;
+Received: from [143.107.182.242] (helo=[10.41.75.14])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1p2uve-00GbYI-6l; Wed, 07 Dec 2022 14:57:42 +0100
+Message-ID: <35023956-d838-55af-63c2-e679a78a27eb@igalia.com>
+Date:   Wed, 7 Dec 2022 10:57:34 -0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="444ob3jqs3mc3uhm"
-Content-Disposition: inline
-In-Reply-To: <Y5CWSZpndGi4mU5e@google.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 02/20] drm/tests: Introduce a config option for the
+ KUnit helpers
+Content-Language: en-US
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>
+Cc:     David Gow <davidgow@google.com>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-media@vger.kernel.org
+References: <20221123-rpi-kunit-tests-v3-0-4615a663a84a@cerno.tech>
+ <20221123-rpi-kunit-tests-v3-2-4615a663a84a@cerno.tech>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
+In-Reply-To: <20221123-rpi-kunit-tests-v3-2-4615a663a84a@cerno.tech>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/1/22 12:11, Maxime Ripard wrote:
+> Driver-specific tests will need access to the helpers without pulling
+> every DRM framework test. Let's create an intermediate Kconfig options
+> for the helpers.
+> 
+> Suggested-by: Maíra Canal <mcanal@igalia.com>
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
---444ob3jqs3mc3uhm
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Maíra Canal <mcanal@igalia.com>
 
-Hello Lee,
+Best Regards,
+- Maíra Canal
 
-On Wed, Dec 07, 2022 at 01:34:01PM +0000, Lee Jones wrote:
-> On Wed, 07 Dec 2022, Lee Jones wrote:
-> > On Wed, 07 Dec 2022, Uwe Kleine-K=F6nig wrote:
-> > > I see you added my commits to your tree now, however there is a probl=
-em:
-> > >=20
-> > >   [...]
-> > >=20
-> > > That means that the commit introducing i2c_client_get_device_id() isn=
-'t
-> > > an ancestor of the commits that make use of the new function. So
-> > > 63909fec136e (which is the first commit making use of the new functio=
-n)
-> > > likely won't compile:
-> > >=20
-> > > 	$ git grep i2c_client_get_device_id 63909fec136e
-> > > 	63909fec136e:drivers/mfd/adp5520.c:     const struct i2c_device_id *=
-id =3D i2c_client_get_device_id(client);
-> > >=20
-> > > Starting with 7281458f4396 everything is fine again, but still this
-> > > hurts a bisection.
-> >=20
-> > Fair point - I'll rebase the my topic branch on top of Wolfram's.
->=20
-> Okay, try now.
-
-Looks good now, thanks!
-
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---444ob3jqs3mc3uhm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOQm60ACgkQwfwUeK3K
-7AnwYwf7BJNhpOShM+y1sPNPmv1EtCLVMQ5BRS5kTzzqK8U3WDaJ4h+0gqiakqR6
-q/SUJSzkLtGDo3uzt3CxEeUXk++AyWt6izQKjYIRoGGM6/aIEKJGoNvthphjH5C3
-ex7x4QUrSZIApKlQmiHa4yUhogpGjD8p/WJsw6kO6VlIsK4gyn0UVdwP1XuReucA
-mY/MnyLv4X/IE4JFwfKeyxgUmhzKUSi2zl4JuZP0RCNK+uV9ZknKs+9wnqxF1JJ4
-xXr/1Ft9OLfs3dnEmyKyIOCgac5BHQL8jEE6LF10qWxlsX4N6sf9Uv5A3B/rXCLL
-IdHOr0s6H4PFD7LBaA0Mrl3QPcs5Uw==
-=JuPy
------END PGP SIGNATURE-----
-
---444ob3jqs3mc3uhm--
+> ---
+>   drivers/gpu/drm/Kconfig        | 7 +++++++
+>   drivers/gpu/drm/Makefile       | 2 +-
+>   drivers/gpu/drm/tests/Makefile | 4 +++-
+>   3 files changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
+> index 315cbdf61979..9f019cd053e1 100644
+> --- a/drivers/gpu/drm/Kconfig
+> +++ b/drivers/gpu/drm/Kconfig
+> @@ -63,6 +63,12 @@ config DRM_USE_DYNAMIC_DEBUG
+>   	  bytes per callsite, the .data costs can be substantial, and
+>   	  are therefore configurable.
+>   
+> +config DRM_KUNIT_TEST_HELPERS
+> +	tristate
+> +	depends on DRM && KUNIT
+> +	help
+> +	  KUnit Helpers for KMS drivers.
+> +
+>   config DRM_KUNIT_TEST
+>   	tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
+>   	depends on DRM && KUNIT
+> @@ -73,6 +79,7 @@ config DRM_KUNIT_TEST
+>   	select DRM_KMS_HELPER
+>   	select DRM_BUDDY
+>   	select DRM_EXPORT_FOR_TESTS if m
+> +	select DRM_KUNIT_TEST_HELPERS
+>   	default KUNIT_ALL_TESTS
+>   	help
+>   	  This builds unit tests for DRM. This option is not useful for
+> diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
+> index f92cd7892711..8d61fbdfdfac 100644
+> --- a/drivers/gpu/drm/Makefile
+> +++ b/drivers/gpu/drm/Makefile
+> @@ -125,7 +125,7 @@ obj-$(CONFIG_DRM_KMS_HELPER) += drm_kms_helper.o
+>   # Drivers and the rest
+>   #
+>   
+> -obj-$(CONFIG_DRM_KUNIT_TEST) += tests/
+> +obj-y			+= tests/
+>   
+>   obj-$(CONFIG_DRM_MIPI_DBI) += drm_mipi_dbi.o
+>   obj-$(CONFIG_DRM_MIPI_DSI) += drm_mipi_dsi.o
+> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+> index 94fe546d937d..ef14bd481139 100644
+> --- a/drivers/gpu/drm/tests/Makefile
+> +++ b/drivers/gpu/drm/tests/Makefile
+> @@ -1,5 +1,8 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> +obj-$(CONFIG_DRM_KUNIT_TEST_HELPERS) += \
+> +	drm_kunit_helpers.o
+> +
+>   obj-$(CONFIG_DRM_KUNIT_TEST) += \
+>   	drm_buddy_test.o \
+>   	drm_cmdline_parser_test.o \
+> @@ -9,7 +12,6 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+>   	drm_format_helper_test.o \
+>   	drm_format_test.o \
+>   	drm_framebuffer_test.o \
+> -	drm_kunit_helpers.o \
+>   	drm_mm_test.o \
+>   	drm_modes_test.o \
+>   	drm_plane_helper_test.o \
+> 
