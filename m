@@ -2,113 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B39645ADA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:25:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1586645AC6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiLGNZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:25:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56902 "EHLO
+        id S229968AbiLGNXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiLGNYd (ORCPT
+        with ESMTP id S229952AbiLGNXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:24:33 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36253056A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:24:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=YOKduRxqOQ+ggRn/s0wpQfzORzZWr0CzU1FGkX5EVD0=; b=DPxXbUbrYZV8/6yujrWCdEem8+
-        /eFYPbecOcm3T5FzjKxYsA3M6J/6KNF7h2pqzC4+Gq/xOT28YXb+UCledR5MWWeMBfg5EqrZvqkZ6
-        k8JLwbPn7ctypP0xVJfvyp6vyKbxPEe1XLyRZac4Ueqf4iEc4Re35pFPjI1F0j8Ilz6S/NlpEeEr4
-        2t7oBJyXuZFJ4WKukPxsbsWELaIFHAh8fDFwmJcK+t6etuz8ITvKl6cu056oZwFXXVI7H+zbkIo4q
-        q6VGIwdmqT7yVxf/xQuoFXLr/SpyddbxVxPPl4hdyXIkr+7gh0P2GwvhoOxeb/XTRr+cItlDCDFT3
-        X6929ZAw==;
-Received: from [177.34.169.227] (helo=bowie..)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1p2uPO-00Gaon-Md; Wed, 07 Dec 2022 14:24:23 +0100
-From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Melissa Wen <mwen@igalia.com>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Wambui Karuga <wambui@karuga.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH v3 6/6] drm/todo: update the debugfs clean up task
-Date:   Wed,  7 Dec 2022 10:23:25 -0300
-Message-Id: <20221207132325.140393-7-mcanal@igalia.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221207132325.140393-1-mcanal@igalia.com>
-References: <20221207132325.140393-1-mcanal@igalia.com>
+        Wed, 7 Dec 2022 08:23:40 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E08421A9;
+        Wed,  7 Dec 2022 05:23:38 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id t17so13995103eju.1;
+        Wed, 07 Dec 2022 05:23:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VK4oX/zlkDf1Sawu/Y3PEllktpoDkp3XrcBiUizrnfE=;
+        b=BQXt8tbxEISTzk4tvDnUXevwzxf8kyTmV+G3AwWllACrMHNBNxgOujQrnwRhBY4SBA
+         9evguVLnCzaOcQMmApuT1GzbPR55M1zsDMSsLOdyB4S1IZQTy1N9tcOr4SWVLCHOK7z0
+         adzfrOosp01BpE08C2ZstemQyr9taEqfmkwBiyL570jaEQ1i3ZFGK94ZgJc6/Fk0cizv
+         TmhR402UgHlZeAgb8C/L64cDYNEmx210LsleK7YV9D/G4lS5J2k+sP/vGrTxtizSw/MY
+         8yOQlgmdgGJpux3ScytALgyhL/aHbmiu0M3BId55eRaaWxkAht7fdx9223SQNpJAKP1D
+         C5DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VK4oX/zlkDf1Sawu/Y3PEllktpoDkp3XrcBiUizrnfE=;
+        b=Amohtw3DdtecvPHqVOXcxGkNGICEqFg93gU8j6maYz+wXyJSxQ2cy5q19tuLwqAkB5
+         SD5Yc4xOQ+1MG6bbmDhupwzD3jdfXJaVxp2XLQ9nbC+BKUNlEW6ksgCFW+hLY5IEd94C
+         TNelRI9jEItGSv0mFvxAXvjsxApohFk9K91m7c5EbxNjDqLxcn+5emuys+McF1BIYg9Y
+         QpOzipDNt2LceLQrGzqCd/iEyGLTo1cedrHkrRpJQz9Khj3nO1/UK2iekN3O8AP2uNKe
+         ZM+vKUJ4AmoYyE4tUcwUTrsZLyQ49njchuEBdHmVEV6Vjn1FD73gwzzxGU7q9HoVaE9E
+         jFvQ==
+X-Gm-Message-State: ANoB5pkur19vDxYqSuh4OIBugO2sW+KkKcILoU29DBMlda1LS+eVZYmx
+        nuwyxuNd9G2CCTnIFa3RkqQ=
+X-Google-Smtp-Source: AA0mqf6OP9dplKn8vk3d31E1D/DuZQneONai1DCAFEVM3G/XqrLE0T5AJ40R8zx6Uo0RZl+mLVkEhg==
+X-Received: by 2002:a17:906:b19a:b0:7ad:bc7e:3ffd with SMTP id w26-20020a170906b19a00b007adbc7e3ffdmr388025ejy.42.1670419417276;
+        Wed, 07 Dec 2022 05:23:37 -0800 (PST)
+Received: from skbuf ([188.26.184.215])
+        by smtp.gmail.com with ESMTPSA id i16-20020a170906251000b007c10fe64c5dsm1693265ejb.86.2022.12.07.05.23.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 05:23:36 -0800 (PST)
+Date:   Wed, 7 Dec 2022 15:23:33 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [RFC Patch net-next 1/5] net: dsa: microchip: add rmon grouping
+ for ethtool statistics
+Message-ID: <20221207132333.tw3ztzfgo7i3cf5x@skbuf>
+References: <20221130132902.2984580-1-rakesh.sankaranarayanan@microchip.com>
+ <20221130132902.2984580-2-rakesh.sankaranarayanan@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130132902.2984580-2-rakesh.sankaranarayanan@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The structs drm_debugfs_info and drm_debugfs_entry introduced a new
-debugfs structure to DRM, centered on drm_device instead of drm_minor.
-Therefore, remove the tasks related to create a new device-centered
-debugfs structure and add a new task to replace the use of
-drm_debugfs_create_files() for the use of drm_debugfs_add_file() and
-drm_debugfs_add_files().
+On Wed, Nov 30, 2022 at 06:58:58PM +0530, Rakesh Sankaranarayanan wrote:
+> diff --git a/drivers/net/dsa/microchip/ksz_ethtool.c b/drivers/net/dsa/microchip/ksz_ethtool.c
+> new file mode 100644
+> index 000000000000..7e1f1b4d1e98
+> --- /dev/null
+> +++ b/drivers/net/dsa/microchip/ksz_ethtool.c
+> @@ -0,0 +1,178 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Microchip KSZ series ethtool statistics
+> + *
+> + * Copyright (C) 2022 Microchip Technology Inc.
+> + */
+> +
+> +#include "ksz_common.h"
+> +#include "ksz_ethtool.h"
+> +
+> +enum ksz8_mib_entry {
+> +	ksz8_rx,
+> +	ksz8_rx_hi,
+> +	ksz8_rx_undersize,
+> +	ksz8_rx_fragments,
+> +	ksz8_rx_oversize,
+> +	ksz8_rx_jabbers,
+> +	ksz8_rx_symbol_err,
+> +	ksz8_rx_crc_err,
+> +	ksz8_rx_align_err,
+> +	ksz8_rx_mac_ctrl,
+> +	ksz8_rx_pause,
+> +	ksz8_rx_bcast,
+> +	ksz8_rx_mcast,
+> +	ksz8_rx_ucast,
+> +	ksz8_rx_64_or_less,
+> +	ksz8_rx_65_127,
+> +	ksz8_rx_128_255,
+> +	ksz8_rx_256_511,
+> +	ksz8_rx_512_1023,
+> +	ksz8_rx_1024_1522,
+> +	ksz8_tx,
+> +	ksz8_tx_hi,
+> +	ksz8_tx_late_col,
+> +	ksz8_tx_pause,
+> +	ksz8_tx_bcast,
+> +	ksz8_tx_mcast,
+> +	ksz8_tx_ucast,
+> +	ksz8_tx_deferred,
+> +	ksz8_tx_total_col,
+> +	ksz8_tx_exc_col,
+> +	ksz8_tx_single_col,
+> +	ksz8_tx_mult_col,
+> +	ksz8_rx_discards = 0x100,
+> +	ksz8_tx_discards,
+> +};
+> +
+> +enum ksz9477_mib_entry {
+> +	ksz9477_rx_hi,
+> +	ksz9477_rx_undersize,
+> +	ksz9477_rx_fragments,
+> +	ksz9477_rx_oversize,
+> +	ksz9477_rx_jabbers,
+> +	ksz9477_rx_symbol_err,
+> +	ksz9477_rx_crc_err,
+> +	ksz9477_rx_align_err,
+> +	ksz9477_rx_mac_ctrl,
+> +	ksz9477_rx_pause,
+> +	ksz9477_rx_bcast,
+> +	ksz9477_rx_mcast,
+> +	ksz9477_rx_ucast,
+> +	ksz9477_rx_64_or_less,
+> +	ksz9477_rx_65_127,
+> +	ksz9477_rx_128_255,
+> +	ksz9477_rx_256_511,
+> +	ksz9477_rx_512_1023,
+> +	ksz9477_rx_1024_1522,
+> +	ksz9477_rx_1523_2000,
+> +	ksz9477_rx_2001,
+> +	ksz9477_tx_hi,
+> +	ksz9477_tx_late_col,
+> +	ksz9477_tx_pause,
+> +	ksz9477_tx_bcast,
+> +	ksz9477_tx_mcast,
+> +	ksz9477_tx_ucast,
+> +	ksz9477_tx_deferred,
+> +	ksz9477_tx_total_col,
+> +	ksz9477_tx_exc_col,
+> +	ksz9477_tx_single_col,
+> +	ksz9477_tx_mult_col,
+> +	ksz9477_rx_total = 0x80,
+> +	ksz9477_tx_total,
+> +	ksz9477_rx_discards,
+> +	ksz9477_tx_discards,
+> +};
 
-Signed-off-by: Maíra Canal <mcanal@igalia.com>
----
- Documentation/gpu/todo.rst | 9 ++-------
- 1 file changed, 2 insertions(+), 7 deletions(-)
+We usually name constants using all capitals.
 
-diff --git a/Documentation/gpu/todo.rst b/Documentation/gpu/todo.rst
-index b2c6aaf1edf2..f64abf69f341 100644
---- a/Documentation/gpu/todo.rst
-+++ b/Documentation/gpu/todo.rst
-@@ -508,17 +508,14 @@ Clean up the debugfs support
- 
- There's a bunch of issues with it:
- 
--- The drm_info_list ->show() function doesn't even bother to cast to the drm
--  structure for you. This is lazy.
-+- Convert drivers to support the drm_debugfs_add_files() function instead of
-+  the drm_debugfs_create_files() function.
- 
- - We probably want to have some support for debugfs files on crtc/connectors and
-   maybe other kms objects directly in core. There's even drm_print support in
-   the funcs for these objects to dump kms state, so it's all there. And then the
-   ->show() functions should obviously give you a pointer to the right object.
- 
--- The drm_info_list stuff is centered on drm_minor instead of drm_device. For
--  anything we want to print drm_device (or maybe drm_file) is the right thing.
--
- - The drm_driver->debugfs_init hooks we have is just an artifact of the old
-   midlayered load sequence. DRM debugfs should work more like sysfs, where you
-   can create properties/files for an object anytime you want, and the core
-@@ -527,8 +524,6 @@ There's a bunch of issues with it:
-   this (together with the drm_minor->drm_device move) would allow us to remove
-   debugfs_init.
- 
--Previous RFC that hasn't landed yet: https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karugax@gmail.com/
--
- Contact: Daniel Vetter
- 
- Level: Intermediate
--- 
-2.38.1
-
+Can you do something to reuse the ksz_mib_names structures?
