@@ -2,133 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976EF6457E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:31:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D01176457E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbiLGKbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:31:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S229650AbiLGKcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:32:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLGKbE (ORCPT
+        with ESMTP id S229522AbiLGKcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:31:04 -0500
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3239194
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:31:01 -0800 (PST)
-Received: by mail-yb1-xb30.google.com with SMTP id o127so22102292yba.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Te+qRfL0gSPa2I5bK5OY5bAXbxohK6qh4ntuX06onLw=;
-        b=eBPc6LCdVbJNZrD/vNuWi34IC2I2EByvcZ8T0bOHHwJG02J4XKMyBtJKL5TXNyKr4l
-         d2If4UglHwt630P/gso8MBO1XAPD4/15iytfqwluNRAjCjHvYaQX6lqz92qU1KueqWLl
-         NmEtQ6abKgUm6qF8HpC29w+VmYMpJBX6lk06RhkXqIM9gvHs/UgSHGt9e1c749PUkstn
-         JEkgkYj0nWksUc/pyFxQvgoiSB+fxrbCrHfYpt751cz2XxTcjqE/hdsmUs5eBIkUlkj6
-         Y0xvfCUPe9v+Y3nCGvY+7x0g7pjw9eqxhnA819SOFLRlldbiFVDZtpE2xX/6x/MdWLVi
-         l40Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Te+qRfL0gSPa2I5bK5OY5bAXbxohK6qh4ntuX06onLw=;
-        b=5lSlBNfvT29u6tMnFTlxppI3NFCP7vTUZzwNcKvIi0QSVdT+sB6VMLM8bcT0nzhHOq
-         uIkEThbrHbfLGmHUc2CrtCW1yFpxgxQIkkn5seW5akHxNRsFjfaHClht7Sc0kLWhubMV
-         /bwxVX8k1v+VUAeCL8iLLOmTkIX72PiyeG4KI8bvzatcXiYGwQgX/96N7PlUPYgiB/Px
-         gg8EQHiL6bVZTTfA4W4//w1lLBFpxZ013/TjtsPy5GXTSPU7m+vlHJjRLW+aTA+6Ntim
-         rwNbPMtImAbPIB3boS7aA+D9z+pt3vt2ilDdBMDFqIk59rWxzzO4bhAi6asYywTS70Gw
-         NboQ==
-X-Gm-Message-State: ANoB5pkjR3yZ2EhOnipPPE3LDNtlk/fK4NnwA3ceHnLAa7MliLczFuq0
-        ml/Zmd6tMrcMgMlMoH6jv8uMhBhx1yUIQMcVbDlKeg==
-X-Google-Smtp-Source: AA0mqf6t39Rs8bP0A/bgsq+RjfUaGFwDeeFVVvJr2EUDgik0KecD4HhEv5Xo7lS6iqkDVNk/fFXWXXRma5m/Cfa/4Mw=
-X-Received: by 2002:a05:6902:1004:b0:6fe:d784:282a with SMTP id
- w4-20020a056902100400b006fed784282amr17363367ybt.598.1670409060680; Wed, 07
- Dec 2022 02:31:00 -0800 (PST)
-MIME-Version: 1.0
-References: <20221206231659.never.929-kees@kernel.org> <20221206175557.1cbd3baa@kernel.org>
-In-Reply-To: <20221206175557.1cbd3baa@kernel.org>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 7 Dec 2022 11:30:36 +0100
-Message-ID: <CANn89i+A49o1zXLJHTjQPrGrdATv7Mkis06FahZ0Yy2gLB1BXQ@mail.gmail.com>
-Subject: Re: [PATCH] skbuff: Reallocate to ksize() in __build_skb_around()
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        pepsipu <soopthegoop@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
-        bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
-        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
-        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
-        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Menglong Dong <imagedong@tencent.com>,
-        David Ahern <dsahern@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Richard Gobert <richardbgobert@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 05:32:50 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400151F2C7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:32:49 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 012B921C1A;
+        Wed,  7 Dec 2022 10:32:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1670409168; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eKVlMJ51CppPCOSDHD95loKLQZYt0ubpr1b9urDAxbc=;
+        b=qniScK7JS4/6eNrlHzwYLy2i40lYaEeGCAlKNaXk8XE7C1GauzX6qI80P7TCl0GlMyBOCM
+        w57c2BsHTrAPZONn7x8T8JeDCXA8y9ZjZpQQCpmLe/bctxnOcWl2ntvPNywYQ8UxJ4zAyA
+        Jv0EkFAiwCqjGiPHD/OL8eNE6Am7CEc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1670409168;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eKVlMJ51CppPCOSDHD95loKLQZYt0ubpr1b9urDAxbc=;
+        b=e3NyDxwCsdQfKjAillCtcjTuiHRUYN5WvlNunUMQdSzBe5N60E6d8J3vrhArHLr6RnrUy7
+        +o+8hzq+rE6MbdAQ==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id B3DA3134CD;
+        Wed,  7 Dec 2022 10:32:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id 3k0jK89rkGNHDwAAGKfGzw
+        (envelope-from <tiwai@suse.de>); Wed, 07 Dec 2022 10:32:47 +0000
+Date:   Wed, 07 Dec 2022 11:32:47 +0100
+Message-ID: <87cz8va4hc.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Zhen Ni <nizhen@uniontech.com>
+Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ricardo Ribalda <ribalda@chromium.org>
+Subject: Re: [PATCH] ASoc: SOF: Fix sof-audio-pci-intel-tgl shutdown timeout during hibernation
+In-Reply-To: <20221207102229.25962-1-nizhen@uniontech.com>
+References: <20221207102229.25962-1-nizhen@uniontech.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 2:56 AM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Tue,  6 Dec 2022 15:17:14 -0800 Kees Cook wrote:
-> > -     unsigned int size = frag_size ? : ksize(data);
-> > +     unsigned int size = frag_size;
-> > +
-> > +     /* When frag_size == 0, the buffer came from kmalloc, so we
-> > +      * must find its true allocation size (and grow it to match).
-> > +      */
-> > +     if (unlikely(size == 0)) {
-> > +             void *resized;
-> > +
-> > +             size = ksize(data);
-> > +             /* krealloc() will immediate return "data" when
-> > +              * "ksize(data)" is requested: it is the existing upper
-> > +              * bounds. As a result, GFP_ATOMIC will be ignored.
-> > +              */
-> > +             resized = krealloc(data, size, GFP_ATOMIC);
-> > +             if (WARN_ON(resized != data))
-> > +                     data = resized;
-> > +     }
-> >
->
-> Aammgh. build_skb(0) is plain silly, AFAIK. The performance hit of
-> using kmalloc()'ed heads is large because GRO can't free the metadata.
-> So we end up carrying per-MTU skbs across to the application and then
-> freeing them one by one. With pages we just aggregate up to 64k of data
-> in a single skb.
->
-> I can only grep out 3 cases of build_skb(.. 0), could we instead
-> convert them into a new build_skb_slab(), and handle all the silliness
-> in such a new helper? That'd be a win both for the memory safety and one
-> fewer branch for the fast path.
->
-> I think it's worth doing, so LMK if you're okay to do this extra work,
-> otherwise I can help (unless e.g. Eric tells me I'm wrong..).
+On Wed, 07 Dec 2022 11:22:29 +0100,
+Zhen Ni wrote:
+> 
+> On Dell Latitude 3420 Notebook, sof-audio-pci-intel-tgl may fail to shutdown
+> sporadically during hibernation as following log:
+> 
+> [   43.281110] PM: Image saving done
+> [   43.281699] PM: hibernation: Wrote 2828852 kbytes in 2.78 seconds(1017.57 MB/s)
+> [   43.282359] PM: SI
+> [   43.345156] kvm: exiting hardware virtualization
+> [   43.345865] auxiliary snd_sof.hda-probes.0: shutdown
+> [   43.346359] skl_hda_dsp_generic skl_hda_dsp_generic: shutdown
+> [   43.346849] skl_hda_codec hdmi ehdaudio0D2: shutdown
+> [   43.398204] snd_hda_codec_realtek ehdaudio0DO: shutdown
+> [   43.419621] dmic-codec dmic-codec: shutdown
+> [   43.420194] sof-audio-pci-intel-tgl 0000:00:1f.3: shutdown
+> 
+> Call wait_xxx_timeout() to process the timeout.
+> 
+> Signed-off-by: Zhen Ni <nizhen@uniontech.com>
 
-I totally agree, I would indeed remove ksize() use completely,
-let callers give us the size, and the head_frag boolean,
-instead of inferring from size==0
+It's a known problem and being discussed (although it's a slightly
+different code path):
+  https://lore.kernel.org/r/20221127-snd-freeze-v4-0-51ca64b7f2ab@chromium.org
+
+We need the proper fix for ASoC shutdown.
+Adding relevant people to Cc.
+
+And, the unconditional exit from the sync is dangerous.  It may lead
+to use-after-free or such.
+
+
+thanks,
+
+Takashi
+
+> ---
+>  sound/core/init.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/sound/core/init.c b/sound/core/init.c
+> index 5377f94eb211..9bd674d7a0fd 100644
+> --- a/sound/core/init.c
+> +++ b/sound/core/init.c
+> @@ -574,9 +574,10 @@ void snd_card_disconnect_sync(struct snd_card *card)
+>  	}
+>  
+>  	spin_lock_irq(&card->files_lock);
+> -	wait_event_lock_irq(card->remove_sleep,
+> +	wait_event_lock_irq_timeout(card->remove_sleep,
+>  			    list_empty(&card->files_list),
+> -			    card->files_lock);
+> +			    card->files_lock,
+> +			    msecs_to_jiffies(2000));
+>  	spin_unlock_irq(&card->files_lock);
+>  }
+>  EXPORT_SYMBOL_GPL(snd_card_disconnect_sync);
+> @@ -659,7 +660,7 @@ int snd_card_free(struct snd_card *card)
+>  	if (ret)
+>  		return ret;
+>  	/* wait, until all devices are ready for the free operation */
+> -	wait_for_completion(&released);
+> +	wait_for_completion_timeout(&released, msecs_to_jiffies(2000))
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.20.1
+> 
+> 
