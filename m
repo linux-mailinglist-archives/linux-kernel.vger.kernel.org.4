@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C97C6461A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6456B6461A9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 20:24:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLGTXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 14:23:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S229656AbiLGTYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 14:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiLGTXh (ORCPT
+        with ESMTP id S229757AbiLGTXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 14:23:37 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC3E663F0
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 11:23:34 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h11so29455578wrw.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 11:23:34 -0800 (PST)
+        Wed, 7 Dec 2022 14:23:38 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1218D663FE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 11:23:36 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h11so29455658wrw.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 11:23:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=IKTKywHyIPCXBSUcfJeW1/Q8bxFrGPEAhsZglTH+lJs=;
-        b=VhLcSFA69TfU3tTYA+KzSGAqs4oCfIasSQUJtqfnLkN4gidG2uNmUyFHUtyWx4ay3D
-         jwBIfv/CSvkPZHF9dGZ3ISZpKtzbpSC30XzcGCxyDYsUezcyoeKhnnD4TPfVDyV77b7K
-         wqM4mazTIvYP5WGQHISThrK0SSCTEUW1Ap3wvktC9o/nKK+aD6y0rFqecEVU/sXXCrGl
-         3fEjksXD2bAmWXTCXjPP7nqa5hfF0cH53QNBhwfCAD+xQ3qS0Wl3kbNpxWDPR/3jUW7a
-         V7FzY7IoZcBP4vAN0cCs6ytpq4/+FeHGH8WH3VuIoYrt6f+/i+PM12hIgLkFsHnKn0bJ
-         PLSw==
+        bh=F81FRtQTN8/7lBiZFQTJl8otEU1xztcn6GaL7O0kwpk=;
+        b=iAh0f4iz+mX0i09dzivwvQxrpSJ6tUWuWNs3dyxy97ztn1j5QdDwFGk7N2z766Ug+7
+         CnGS1l9AgK5ONp97E1WaKIlY+JtVy07JNKqL//axFk+tjBlCqsOkI6YZRu/thexArcLF
+         NjoRBN6dmeeRwtBwnxOjvsMF7/kWu6ZMjV6mcNXjUsJjJ106lS4y8auehN0OyuOEzL3t
+         5MXWBV+o6E5+rqbN9QtdMucG8839zdRsreaW340NC3VfJempb86shfmcJtibrZnWCZeb
+         0VAu4fHDxnIstWU/2tDdvQMHjcLCWhnzACut5wBnUTYDx8kcNlTVzrqwKQIXPOA5RrFb
+         mIXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IKTKywHyIPCXBSUcfJeW1/Q8bxFrGPEAhsZglTH+lJs=;
-        b=cFWj+OeXyMY/rvd+NdJQeUcfgfzFadwVzj4/xGRZVt3x8W5G5+A1R6POpBkHGogmb1
-         EgHR0zcvqTVvxNd+z5P6tHOYkuXz2an7+pLlZ2yCrRhX4bCMb/PGGkPLad5Q8ZfQPP00
-         eEz2+J+QCzA3W4aNtkuObAaRT2T3NIB/eUjl8Ht9Y2x5vLvQGBu2Zq5tdlZpvlg1wZrr
-         2DlanyZ5pWLTp70t3ffKbnZu4hk1UApOHBkZU937SdUYRgKAipL/JlLodl5NsyMWlZTC
-         nOjKgSrE0f7ylIYaJVtocgSwKRlGANonz8V6/LcOx3vUrApll8RjyZfl1HXjM10rkVqW
-         bRgw==
-X-Gm-Message-State: ANoB5pmwCBxM0tBcDaXpKx8cf0xRVmTCY8L4cf/j2xPzcDLOVzfdimMd
-        LbVI4w1ZV1et4Qk6hbGiAuCa2Q==
-X-Google-Smtp-Source: AA0mqf61O+6qmFAt/ReXwL6EYsS8v7RI0vpNMnZgQa158zyNM8AudnisBmfCAS/cr+4SfAq9+JJw7A==
-X-Received: by 2002:adf:eb02:0:b0:236:5e6a:7ee with SMTP id s2-20020adfeb02000000b002365e6a07eemr57392748wrn.618.1670441013364;
-        Wed, 07 Dec 2022 11:23:33 -0800 (PST)
+        bh=F81FRtQTN8/7lBiZFQTJl8otEU1xztcn6GaL7O0kwpk=;
+        b=NoaMtaBuAoIvMEC8vHhhpOm4+HwmiDUt9I6m3zhpmEBVGFDlTLn5F/K3BDtktvGVsK
+         bCxy7cYXvQsT05+O3BVs7ANWvLpSig5DVXMEDpQcv+flhiJxVd0Ud7c+V2Aj2ZAkGK1B
+         nVY3sA/ssveBX6QPL4A1TxRRqoNTsFbEOGkevcr2Hni6agCQ6qiUqgAp3/Wd+2OkYGi6
+         h/M49aLfLKhPYOMjNGVamw7e17RrRkVzhl8+37d/52wuT/78GVPKQ7vhk6ONKmyYn6KS
+         mPQ8x87+nqx+zLslJETxroAwzkqB3DJYOAjK/5DcAdp1VPpQzQObGqlETCgfhuAJNzTK
+         d1tA==
+X-Gm-Message-State: ANoB5pn8+g3WN94JrgR7Ck4N8F9hX7a/p+w56Utz9cTr/0VQnfHy3fx6
+        RkAKrml5BzcTCL/URT9vluaWZ52olavlOXbgFM4=
+X-Google-Smtp-Source: AA0mqf43TW90DmKSOEt5s58/34WMr7FrxXo32ymy6tFNbD5920tWiFvNHDOBWUnj4roJ+Px/PsfwgQ==
+X-Received: by 2002:a5d:4281:0:b0:22e:3c69:f587 with SMTP id k1-20020a5d4281000000b0022e3c69f587mr50242752wrq.670.1670441014520;
+        Wed, 07 Dec 2022 11:23:34 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id w1-20020a5d5441000000b002422b462975sm19400355wrv.34.2022.12.07.11.23.32
+        by smtp.gmail.com with ESMTPSA id w1-20020a5d5441000000b002422b462975sm19400355wrv.34.2022.12.07.11.23.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 11:23:33 -0800 (PST)
+        Wed, 07 Dec 2022 11:23:34 -0800 (PST)
 From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Wed, 07 Dec 2022 20:23:24 +0100
-Subject: [PATCH v3 2/5] dt-bindings: remoteproc: qcom: adsp: document sm8550 adsp,
- cdsp & mpss compatible
+Date:   Wed, 07 Dec 2022 20:23:25 +0100
+Subject: [PATCH v3 3/5] remoteproc: qcom_q6v5_pas: add support for dtb co-firmware
+ loading
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v3-2-62162a1df718@linaro.org>
+Message-Id: <20221114-narmstrong-sm8550-upstream-remoteproc-v3-3-62162a1df718@linaro.org>
 References: <20221114-narmstrong-sm8550-upstream-remoteproc-v3-0-62162a1df718@linaro.org>
 In-Reply-To: <20221114-narmstrong-sm8550-upstream-remoteproc-v3-0-62162a1df718@linaro.org>
 To:     Amol Maheshwari <amahesh@qti.qualcomm.com>,
@@ -84,205 +84,286 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This documents the compatible for the component used to boot the
-aDSP, cDSP and MPSS on the SM8550 SoC.
+Starting from the SM8550 SoC, starting the aDSP, cDSP and MPSS will
+require loading a separate "Devicetree" firmware.
 
-The SM8550 boot process on SM8550 now requires a secondary "Devicetree"
-firmware to be passed along the main Firmware, and the cDSP a new power
-domain named "NSP".
+In order to satisfy the load & authentication order required by the SM8550
+SoC, the following is implemented:
+- "Devicetree" firmware request & load in dedicated memory
+- Q6V5 prepare
+- Power Domain & Clocks enable
+- "Devicetree" firmware authentication
+- Main firmware load in dedicated memory
+- Main firmware authentication
+- Q6V5 startup
+- "Devicetree" firmware metadata release
+- Main metadata release
 
-A third memory domain for the DSM memory zone is also needed for the MPSS
-PAS bindings.
+When booting older platforms, the "Devicetree" steps would be
+bypassed and the load & authentication order would still be valid.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- .../bindings/remoteproc/qcom,sm8550-pas.yaml       | 178 +++++++++++++++++++++
- 1 file changed, 178 insertions(+)
+ drivers/remoteproc/qcom_q6v5_pas.c | 134 +++++++++++++++++++++++++++++++++----
+ 1 file changed, 121 insertions(+), 13 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-new file mode 100644
-index 000000000000..ae612809e260
---- /dev/null
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,sm8550-pas.yaml
-@@ -0,0 +1,178 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/remoteproc/qcom,sm8550-pas.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/remoteproc/qcom_q6v5_pas.c b/drivers/remoteproc/qcom_q6v5_pas.c
+index 6afd0941e552..4fe09c7f25bd 100644
+--- a/drivers/remoteproc/qcom_q6v5_pas.c
++++ b/drivers/remoteproc/qcom_q6v5_pas.c
+@@ -35,7 +35,9 @@
+ struct adsp_data {
+ 	int crash_reason_smem;
+ 	const char *firmware_name;
++	const char *dtb_firmware_name;
+ 	int pas_id;
++	int dtb_pas_id;
+ 	unsigned int minidump_id;
+ 	bool has_aggre2_clk;
+ 	bool auto_boot;
+@@ -65,20 +67,29 @@ struct qcom_adsp {
+ 
+ 	int proxy_pd_count;
+ 
++	const char *dtb_firmware_name;
+ 	int pas_id;
++	int dtb_pas_id;
+ 	unsigned int minidump_id;
+ 	int crash_reason_smem;
+ 	bool has_aggre2_clk;
+ 	bool decrypt_shutdown;
+ 	const char *info_name;
+ 
++	const struct firmware *firmware;
++	const struct firmware *dtb_firmware;
 +
-+title: Qualcomm SM8550 Peripheral Authentication Service
+ 	struct completion start_done;
+ 	struct completion stop_done;
+ 
+ 	phys_addr_t mem_phys;
++	phys_addr_t dtb_mem_phys;
+ 	phys_addr_t mem_reloc;
++	phys_addr_t dtb_mem_reloc;
+ 	void *mem_region;
++	void *dtb_mem_region;
+ 	size_t mem_size;
++	size_t dtb_mem_size;
+ 
+ 	struct qcom_rproc_glink glink_subdev;
+ 	struct qcom_rproc_subdev smd_subdev;
+@@ -86,6 +97,7 @@ struct qcom_adsp {
+ 	struct qcom_sysmon *sysmon;
+ 
+ 	struct qcom_scm_pas_metadata pas_metadata;
++	struct qcom_scm_pas_metadata dtb_pas_metadata;
+ };
+ 
+ static void adsp_minidump(struct rproc *rproc)
+@@ -160,6 +172,8 @@ static int adsp_unprepare(struct rproc *rproc)
+ 	 * here.
+ 	 */
+ 	qcom_scm_pas_metadata_release(&adsp->pas_metadata);
++	if (adsp->dtb_pas_id)
++		qcom_scm_pas_metadata_release(&adsp->dtb_pas_metadata);
+ 
+ 	return 0;
+ }
+@@ -169,20 +183,40 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+ 	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+ 	int ret;
+ 
+-	ret = qcom_mdt_pas_init(adsp->dev, fw, rproc->firmware, adsp->pas_id,
+-				adsp->mem_phys, &adsp->pas_metadata);
+-	if (ret)
+-		return ret;
++	/* Store firmware handle to be used in adsp_start() */
++	adsp->firmware = fw;
+ 
+-	ret = qcom_mdt_load_no_init(adsp->dev, fw, rproc->firmware, adsp->pas_id,
+-				    adsp->mem_region, adsp->mem_phys, adsp->mem_size,
+-				    &adsp->mem_reloc);
+-	if (ret)
+-		return ret;
++	if (adsp->dtb_pas_id) {
++		ret = request_firmware(&adsp->dtb_firmware, adsp->dtb_firmware_name, adsp->dev);
++		if (ret) {
++			dev_err(adsp->dev, "request_firmware failed for %s: %d\n",
++				adsp->dtb_firmware_name, ret);
++			return ret;
++		}
+ 
+-	qcom_pil_info_store(adsp->info_name, adsp->mem_phys, adsp->mem_size);
++		ret = qcom_mdt_pas_init(adsp->dev, adsp->dtb_firmware, adsp->dtb_firmware_name,
++					adsp->dtb_pas_id, adsp->dtb_mem_phys,
++					&adsp->dtb_pas_metadata);
++		if (ret)
++			goto release_dtb_firmware;
 +
-+maintainers:
-+  - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
++		ret = qcom_mdt_load_no_init(adsp->dev, adsp->dtb_firmware, adsp->dtb_firmware_name,
++					    adsp->dtb_pas_id, adsp->dtb_mem_region,
++					    adsp->dtb_mem_phys, adsp->dtb_mem_size,
++					    &adsp->dtb_mem_reloc);
++		if (ret)
++			goto release_dtb_metadata;
++	}
+ 
+ 	return 0;
 +
-+description:
-+  Qualcomm SM8550 SoC Peripheral Authentication Service loads and boots firmware
-+  on the Qualcomm DSP Hexagon cores.
++release_dtb_metadata:
++	qcom_scm_pas_metadata_release(&adsp->dtb_pas_metadata);
 +
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sm8550-adsp-pas
-+      - qcom,sm8550-cdsp-pas
-+      - qcom,sm8550-mpss-pas
++release_dtb_firmware:
++	release_firmware(adsp->dtb_firmware);
 +
-+  reg:
-+    maxItems: 1
++	return ret;
+ }
+ 
+ static int adsp_start(struct rproc *rproc)
+@@ -218,24 +252,55 @@ static int adsp_start(struct rproc *rproc)
+ 			goto disable_cx_supply;
+ 	}
+ 
++	if (adsp->dtb_pas_id) {
++		ret = qcom_scm_pas_auth_and_reset(adsp->dtb_pas_id);
++		if (ret) {
++			dev_err(adsp->dev,
++				"failed to authenticate dtb image and release reset\n");
++			goto disable_px_supply;
++		}
++	}
 +
-+  clocks:
-+    items:
-+      - description: XO clock
++	ret = qcom_mdt_pas_init(adsp->dev, adsp->firmware, rproc->firmware, adsp->pas_id,
++				adsp->mem_phys, &adsp->pas_metadata);
++	if (ret)
++		goto disable_px_supply;
 +
-+  clock-names:
-+    items:
-+      - const: xo
++	ret = qcom_mdt_load_no_init(adsp->dev, adsp->firmware, rproc->firmware, adsp->pas_id,
++				    adsp->mem_region, adsp->mem_phys, adsp->mem_size,
++				    &adsp->mem_reloc);
++	if (ret)
++		goto release_pas_metadata;
 +
-+  qcom,qmp:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: Reference to the AOSS side-channel message RAM.
++	qcom_pil_info_store(adsp->info_name, adsp->mem_phys, adsp->mem_size);
 +
-+  smd-edge: false
+ 	ret = qcom_scm_pas_auth_and_reset(adsp->pas_id);
+ 	if (ret) {
+ 		dev_err(adsp->dev,
+ 			"failed to authenticate image and release reset\n");
+-		goto disable_px_supply;
++		goto release_pas_metadata;
+ 	}
+ 
+ 	ret = qcom_q6v5_wait_for_start(&adsp->q6v5, msecs_to_jiffies(5000));
+ 	if (ret == -ETIMEDOUT) {
+ 		dev_err(adsp->dev, "start timed out\n");
+ 		qcom_scm_pas_shutdown(adsp->pas_id);
+-		goto disable_px_supply;
++		goto release_pas_metadata;
+ 	}
+ 
+ 	qcom_scm_pas_metadata_release(&adsp->pas_metadata);
++	if (adsp->dtb_pas_id)
++		qcom_scm_pas_metadata_release(&adsp->dtb_pas_metadata);
 +
-+  firmware-name:
-+    $ref: /schemas/types.yaml#/definitions/string-array
-+    items:
-+      - description: Firmware name of the Hexagon core
-+      - description: Firmware name of the Hexagon Devicetree
++	/* Remove pointer to the loaded firmware, only valid in adsp_load() & adsp_start() */
++	adsp->firmware = NULL;
+ 
+ 	return 0;
+ 
++release_pas_metadata:
++	qcom_scm_pas_metadata_release(&adsp->pas_metadata);
++	if (adsp->dtb_pas_id)
++		qcom_scm_pas_metadata_release(&adsp->dtb_pas_metadata);
+ disable_px_supply:
+ 	if (adsp->px_supply)
+ 		regulator_disable(adsp->px_supply);
+@@ -251,6 +316,9 @@ static int adsp_start(struct rproc *rproc)
+ disable_irqs:
+ 	qcom_q6v5_unprepare(&adsp->q6v5);
+ 
++	/* Remove pointer to the loaded firmware, only valid in adsp_load() & adsp_start() */
++	adsp->firmware = NULL;
 +
-+  memory-region:
-+    minItems: 2
-+    items:
-+      - description: Memory region for main Firmware authentication
-+      - description: Memory region for Devicetree Firmware authentication
-+      - description: DSM Memory region
+ 	return ret;
+ }
+ 
+@@ -284,6 +352,12 @@ static int adsp_stop(struct rproc *rproc)
+ 	if (ret)
+ 		dev_err(adsp->dev, "failed to shutdown: %d\n", ret);
+ 
++	if (adsp->dtb_pas_id) {
++		ret = qcom_scm_pas_shutdown(adsp->dtb_pas_id);
++		if (ret)
++			dev_err(adsp->dev, "failed to shutdown dtb: %d\n", ret);
++	}
 +
-+required:
-+  - compatible
-+  - reg
+ 	handover = qcom_q6v5_unprepare(&adsp->q6v5);
+ 	if (handover)
+ 		qcom_pas_handover(&adsp->q6v5);
+@@ -461,6 +535,28 @@ static int adsp_alloc_memory_region(struct qcom_adsp *adsp)
+ 		return -EBUSY;
+ 	}
+ 
++	if (!adsp->dtb_pas_id)
++		return 0;
 +
-+allOf:
-+  - $ref: /schemas/remoteproc/qcom,pas-common.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sm8550-adsp-pas
-+            - qcom,sm8550-cdsp-pas
-+    then:
-+      properties:
-+        interrupts:
-+          maxItems: 5
-+        interrupt-names:
-+          maxItems: 5
-+        memory-region:
-+          maxItems: 2
-+    else:
-+      properties:
-+        interrupts:
-+          minItems: 6
-+        interrupt-names:
-+          minItems: 6
-+        memory-region:
-+          minItems: 3
++	node = of_parse_phandle(adsp->dev->of_node, "memory-region", 1);
++	if (!node) {
++		dev_err(adsp->dev, "no dtb memory-region specified\n");
++		return -EINVAL;
++	}
 +
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sm8550-adsp-pas
-+    then:
-+      properties:
-+        power-domains:
-+          items:
-+            - description: LCX power domain
-+            - description: LMX power domain
-+        power-domain-names:
-+          items:
-+            - const: lcx
-+            - const: lmx
++	ret = of_address_to_resource(node, 0, &r);
++	if (ret)
++		return ret;
 +
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sm8550-cdsp-pas
-+    then:
-+      properties:
-+        power-domains:
-+          items:
-+            - description: CX power domain
-+            - description: MXC power domain
-+        power-domain-names:
-+          items:
-+            - const: cx
-+            - const: mxc
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - qcom,sm8550-mpss-pas
-+    then:
-+      properties:
-+        power-domains:
-+          items:
-+            - description: CX power domain
-+            - description: MXC power domain
-+            - description: NSP power domain
-+        power-domain-names:
-+          items:
-+            - const: cx
-+            - const: mxc
-+            - const: nsp
++	adsp->dtb_mem_phys = adsp->dtb_mem_reloc = r.start;
++	adsp->dtb_mem_size = resource_size(&r);
++	adsp->dtb_mem_region = devm_ioremap_wc(adsp->dev, adsp->dtb_mem_phys, adsp->dtb_mem_size);
++	if (!adsp->dtb_mem_region) {
++		dev_err(adsp->dev, "unable to map dtb memory region: %pa+%zx\n",
++			&r.start, adsp->dtb_mem_size);
++		return -EBUSY;
++	}
 +
-+unevaluatedProperties: false
+ 	return 0;
+ }
+ 
+@@ -469,7 +565,7 @@ static int adsp_probe(struct platform_device *pdev)
+ 	const struct adsp_data *desc;
+ 	struct qcom_adsp *adsp;
+ 	struct rproc *rproc;
+-	const char *fw_name;
++	const char *fw_name, *dtb_fw_name = NULL;
+ 	const struct rproc_ops *ops = &adsp_ops;
+ 	int ret;
+ 
+@@ -486,6 +582,14 @@ static int adsp_probe(struct platform_device *pdev)
+ 	if (ret < 0 && ret != -EINVAL)
+ 		return ret;
+ 
++	if (desc->dtb_firmware_name) {
++		dtb_fw_name = desc->dtb_firmware_name;
++		ret = of_property_read_string_index(pdev->dev.of_node, "firmware-name", 1,
++					      &dtb_fw_name);
++		if (ret < 0 && ret != -EINVAL)
++			return ret;
++	}
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,rpmh.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/mailbox/qcom-ipcc.h>
-+
-+    remoteproc@30000000 {
-+        compatible = "qcom,sm8550-adsp-pas";
-+        reg = <0x030000000 0x100>;
-+
-+        clocks = <&rpmhcc RPMH_CXO_CLK>;
-+        clock-names = "xo";
-+
-+        interrupts-extended = <&pdc 6 IRQ_TYPE_EDGE_RISING>,
-+                              <&smp2p_adsp_in 0 IRQ_TYPE_EDGE_RISING>,
-+                              <&smp2p_adsp_in 1 IRQ_TYPE_EDGE_RISING>,
-+                              <&smp2p_adsp_in 2 IRQ_TYPE_EDGE_RISING>,
-+                              <&smp2p_adsp_in 3 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "wdog", "fatal", "ready",
-+                          "handover", "stop-ack";
-+
-+        memory-region = <&adsp_mem>, <&dtb_adsp_mem>;
-+
-+        firmware-name = "qcom/sm8550/adsp.mbn",
-+                        "qcom/sm8550/adsp_dtb.mbn";
-+
-+        power-domains = <&rpmhpd_sm8550_lcx>,
-+                        <&rpmhpd_sm8550_lmx>;
-+        power-domain-names = "lcx", "lmx";
-+
-+        qcom,qmp = <&aoss_qmp>;
-+        qcom,smem-states = <&smp2p_adsp_out 0>;
-+        qcom,smem-state-names = "stop";
-+
-+        glink-edge {
-+            interrupts-extended = <&ipcc IPCC_CLIENT_LPASS
-+                                         IPCC_MPROC_SIGNAL_GLINK_QMP
-+                                         IRQ_TYPE_EDGE_RISING>;
-+            mboxes = <&ipcc IPCC_CLIENT_LPASS IPCC_MPROC_SIGNAL_GLINK_QMP>;
-+
-+            label = "lpass";
-+            qcom,remote-pid = <2>;
-+
-+            /* ... */
-+        };
-+    };
+ 	if (desc->minidump_id)
+ 		ops = &adsp_minidump_ops;
+ 
+@@ -507,6 +611,10 @@ static int adsp_probe(struct platform_device *pdev)
+ 	adsp->has_aggre2_clk = desc->has_aggre2_clk;
+ 	adsp->info_name = desc->sysmon_name;
+ 	adsp->decrypt_shutdown = desc->decrypt_shutdown;
++	if (dtb_fw_name) {
++		adsp->dtb_firmware_name = dtb_fw_name;
++		adsp->dtb_pas_id = desc->dtb_pas_id;
++	}
+ 	platform_set_drvdata(pdev, adsp);
+ 
+ 	ret = device_init_wakeup(adsp->dev, true);
 
 -- 
 b4 0.10.1
