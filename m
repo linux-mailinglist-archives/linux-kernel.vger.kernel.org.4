@@ -2,246 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DCF2645901
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:28:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FBEA645902
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:29:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiLGL2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:28:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40564 "EHLO
+        id S230015AbiLGL3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:29:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiLGL2o (ORCPT
+        with ESMTP id S229702AbiLGL3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:28:44 -0500
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F196643B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:28:43 -0800 (PST)
-Received: by mail-qt1-x835.google.com with SMTP id g7so4562474qts.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 03:28:43 -0800 (PST)
+        Wed, 7 Dec 2022 06:29:21 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDB112E6BF
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:29:20 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id p24so16761770plw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 03:29:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c8F6zuUbnnWX6FbXjZkqcfyxeunydod4ZZtHAFDkt4o=;
-        b=MA0XEoFCJTXFG5RUybSr7AhZENvexNlpYrPT//vHNLyaskzWf1lGvgQaq5FCNwcC3+
-         oQlVc5pSUj0puILpM+bzL8YdNa2O3VHDID35WaFi7ZuvxcO1enD/zn/pgv0Eq58pWAJF
-         synNDcfAud98K+vvVzoBOvuHNBHMh3JlnJ/SebLx9aJr5zvVDafgK+EM6Mj3wdKFAtN1
-         GGoIBgd8sT9QxUq53bt/mwBNwMUb4ydter7QKarrqKUkfMfM25ACMxK+ja4GLIe8/GTy
-         okmqSoFwXLUGUsXsSmSfhYpAmwd1CvscnvpqRdW1EwdRUC4iWE59gQtE+IEXE4LubUXh
-         rGvw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xt0s6DqATufn0DNLjv/Y4V9qqe/cu6nc3D6m36jdz8E=;
+        b=crhz935DKX64Fr36S335EHU59RoazmPtGrt0qI7BOOSH1fCM5gIZyS2SJVdSAfEMZn
+         qhRJwfUb/mhUoVszPDEUSZgu/FRX7M45GIrzgQSvZyDZb18DjRD+mI80hb5WJaFzTWeZ
+         QdSZ5tmvS0X9Vf2fN4vkKKiZ1SmxNGsZRJy5zKkAR3Am52rr37KeEkYjj8wyJMDBraCl
+         mvq76fS+bZXXPsLM3p7dYRhP1WbAbbJ1FnLoNAFGcSYcaoF2nt9aAnXK1xjZBfIFylSI
+         1r3K2GR6x0gwHRJRDO/vil6BECqyAycgw6Aok/SMwE3NnNhBvl+1j7QKULNKtT7E6zjD
+         HEvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c8F6zuUbnnWX6FbXjZkqcfyxeunydod4ZZtHAFDkt4o=;
-        b=PDYFP7kBMnZhbChHk993yEe0zrgGvK8DiOeZmY77jzBblAeoFo22hu5lZ20MQWYrJm
-         lKme0ZErThDp5WMGD2jMch7/5YbkIjPwM9I3+d/uqT+G1ZhQ2OWLamxYUYm/3fdvFWOI
-         4cucvJ+hnBMjU/NzFXUjceNKsygCHFN+s9p2OFrKUZgCOJvQBK2KNiGHD1dlwFKed8wh
-         NnXhaBGIRgQ3fNuVJn+aPqQDEnLUWiRPtJvHw+5NFKS0ByNm9gGISBzhhGSOkycivOoN
-         AW8pTDT/QYI5PlT9lo/1tLa+yXjMBo7HUO/y0Ucg9X1eck9EQKzRNUbx+pV0giQO40KW
-         Ongg==
-X-Gm-Message-State: ANoB5pm24mEkMdefnkoyAH2pRMY46za1hC2kXh2Hj5EtAkrBoA81oiQo
-        vfU3DPesbcNhDOTmUX1FIYe58h5GIVAtCz6cJwhzxg==
-X-Google-Smtp-Source: AA0mqf6aRmzdWZl8DjEsLb5UWfJsO5sYcvlu4aJXx0h+FRnKY9DDMqDc1ivbkTWM7949CU9Jc84t3QbwEBKb6jGJ0Hw=
-X-Received: by 2002:a05:622a:4ac9:b0:3a5:ae7:9ada with SMTP id
- fx9-20020a05622a4ac900b003a50ae79adamr66967856qtb.191.1670412522083; Wed, 07
- Dec 2022 03:28:42 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xt0s6DqATufn0DNLjv/Y4V9qqe/cu6nc3D6m36jdz8E=;
+        b=sy6F1G61qf/4+GG8fifJXhjUVthWFY4kHhoqW0tfoQEPyTUKy/ILzlmVVCLkWOuYoo
+         Mu/bIQzMxF3UdKpY6y0curLlZV0QSrEbp6I+aJkNuJYNBFJO6i+l4JEIcvBkqK+WNr2B
+         QeO1tW4OCEbAtlIGWrUtREI29w8OQtdz80ccADJee41sB2GoZ/Uh+A5wM5YzNtVbpsRk
+         O+LS8EPX4elR4G+xBdjIaWR6Y7n12jAYkqhYo2MMAm0HwCL0Vf4ZG/eES1K9B0nv0BmT
+         feh/sf4MOo66IWK/HMBQT3dUi+Br0lZFXVDrzuMSMYwDKTCkfFHX4+VQFtR5hpGdOEEc
+         d5Gw==
+X-Gm-Message-State: ANoB5pknaPbRXqhA5mxRIngBJu6gcQRvcx8cpc5P8vBlpjhjvcNRIVQ3
+        bvAo37ZzsbBipoXH2anPwX56cCtQOeRYfPEF
+X-Google-Smtp-Source: AA0mqf4K2lKCaERMfu5mWJUHG4BGTld9gSMyUjyjjBecCE6g9XzI/uw9U8eXqqVsJLU8pXDrjybYZQ==
+X-Received: by 2002:a17:90a:e648:b0:219:2567:dc1e with SMTP id ep8-20020a17090ae64800b002192567dc1emr54697020pjb.237.1670412560302;
+        Wed, 07 Dec 2022 03:29:20 -0800 (PST)
+Received: from localhost.localdomain ([202.120.234.246])
+        by smtp.googlemail.com with ESMTPSA id i15-20020a63130f000000b00478eb777d18sm1372807pgl.72.2022.12.07.03.29.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 03:29:19 -0800 (PST)
+From:   Miaoqian Lin <linmq006@gmail.com>
+To:     Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Cc:     linmq006@gmail.com
+Subject: [PATCH] drm/i915: Fix documentation for intel_uncore_forcewake_put__locked
+Date:   Wed,  7 Dec 2022 15:29:09 +0400
+Message-Id: <20221207112909.2655251-1-linmq006@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221206124048.850573317@linuxfoundation.org>
-In-Reply-To: <20221206124048.850573317@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 7 Dec 2022 16:58:30 +0530
-Message-ID: <CA+G9fYtXnk2q8V5OH+UQv-4z9D_8qHEz5DPrwh7n4eMfPyMn4g@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/96] 5.10.158-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022 at 18:12, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.158 release.
-> There are 96 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.158-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+intel_uncore_forcewake_put__locked() is used to release a reference.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Fixes: a6111f7b6604 ("drm/i915: Reduce locking in execlist command submission")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+---
+ drivers/gpu/drm/i915/intel_uncore.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+diff --git a/drivers/gpu/drm/i915/intel_uncore.c b/drivers/gpu/drm/i915/intel_uncore.c
+index 5cd423c7b646..acb40543eb32 100644
+--- a/drivers/gpu/drm/i915/intel_uncore.c
++++ b/drivers/gpu/drm/i915/intel_uncore.c
+@@ -819,9 +819,9 @@ void intel_uncore_forcewake_flush(struct intel_uncore *uncore,
+ }
+ 
+ /**
+- * intel_uncore_forcewake_put__locked - grab forcewake domain references
++ * intel_uncore_forcewake_put__locked - release forcewake domain references
+  * @uncore: the intel_uncore structure
+- * @fw_domains: forcewake domains to get reference on
++ * @fw_domains: forcewake domains to put references
+  *
+  * See intel_uncore_forcewake_put(). This variant places the onus
+  * on the caller to explicitly handle the dev_priv->uncore.lock spinlock.
+-- 
+2.25.1
 
-## Build
-* kernel: 5.10.158-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 8dca57ec68a7eca30ce178d858b45748b2a65eaf
-* git describe: v5.10.157-97-g8dca57ec68a7
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.157-97-g8dca57ec68a7
-
-## Test Regressions (compared to v5.10.157)
-
-## Metric Regressions (compared to v5.10.157)
-
-## Test Fixes (compared to v5.10.157)
-
-## Metric Fixes (compared to v5.10.157)
-
-## Test result summary
-total: 61785, pass: 51491, fail: 2027, skip: 8109, xfail: 158
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 148 passed, 3 failed
-* arm64: 49 total, 46 passed, 3 failed
-* i386: 39 total, 37 passed, 2 failed
-* mips: 31 total, 29 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 32 total, 26 passed, 6 failed
-* riscv: 16 total, 14 passed, 2 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 40 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
