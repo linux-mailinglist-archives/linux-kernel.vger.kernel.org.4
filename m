@@ -2,172 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B97645666
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:25:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0598264566D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiLGJZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:25:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
+        id S229866AbiLGJ1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiLGJZc (ORCPT
+        with ESMTP id S229978AbiLGJ1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:25:32 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2087.outbound.protection.outlook.com [40.107.20.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E341AF06;
-        Wed,  7 Dec 2022 01:25:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7IYUOQqASEPZnhTEQb4SXyNr8qpD6T8ZJujLMXSXd/V1oIG2NoFHN8sPLdMHrRQ3UIGpLprA/SjsCpjqv/zdOj/s24ZCbikfVwSC4B0X8GN31qlV9+9QaP4XF+NFRpsJW/ZTGHCe0dLIg/9wBvRlLdOApOvU2lgOjFte6JBRBDTikiCVVENstrFhNaEvODFoSRDr6A184t321n0P94fxwiRtylgIceGZY4OWc5aCrvAyvi5xYmmMsvuhgU8kLOgQ8uorF+allDLuo0/azHthCfiEwekuXgpmzFcNUTQXumNICiZ+T88UUSim6EeCzXIXyfF4k1k/9zwKuhwCkrU1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=befQWy8Fikc/t+cK+SzIW+b6RViL3BWxejfV8faWEN8=;
- b=HoGpRt8T0mhzihFcdamLjoWaHIfPtuiwB1pwu7D1KSuyLsP8avxA7ozyGm4rxWbbUY+UJOCezwu2AUtsYFKKR0spcwq4AvM8ngs/ugzAL2r5uPioWDw937LdvYI2OZXLKDT1FIXzFksbLv6+HwAAfSS/EBDirVw9EeAWWkah8NZjUU3qmmoiTX03CQRGrPEtN05WiysiN8JHVaQvTenyPUvzkpD1Jq7kl3vCc3brqMYJkHgZELuwg8mHC39ZQv4xoSkwrDXcvjPnKaI43ZloBuhEJ22o7YNMI+ZlxmLmDPaoNrbfxRxPJEA04786gt6ZMkjyJGPlUyfzLIcn4hDn9w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=befQWy8Fikc/t+cK+SzIW+b6RViL3BWxejfV8faWEN8=;
- b=pir02oW5IUl2bRVUeQMZX8iPRhLLnGdRQklPDY3DMoAcUuRPcnwVYcKTO4L2VyF4DIZsSOUHrtxH/CnLFJv7YKSLnTh6uWnYp8z56uEaShvRX9jGpJlFGd1CEndHVEDnQxpD5VAfrh9EsXKfe1t5DR53VIE75/2HDIkxsyPxd70p7pjJFa0LY2FgDhXx3lSQg02CQdw/sR5iB73Pm50Mwd/JmjIOlRXnOAjih1GTjri37xEQ1kzrRaq57pAIA9ezBUBJKI/CJtAh9BAQwdvvqkdXR5uUJqfG5fhU261ZMT2Wv2bsFQKSg99U3CuD9FAPgpL5nonrW85YtyuWrjHVqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
- by AM8PR04MB7347.eurprd04.prod.outlook.com (2603:10a6:20b:1d0::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Wed, 7 Dec
- 2022 09:25:28 +0000
-Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::4da2:ea8b:e71e:b8d8]) by VE1PR04MB6560.eurprd04.prod.outlook.com
- ([fe80::4da2:ea8b:e71e:b8d8%4]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 09:25:28 +0000
-Message-ID: <46128e5c-f616-38c5-0ab2-1825e72985a8@suse.com>
-Date:   Wed, 7 Dec 2022 10:25:26 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] xen/netback: fix build warning
-Content-Language: en-US
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Wei Liu <wei.liu@kernel.org>, Paul Durrant <paul@xen.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Ross Lagerwall <ross.lagerwall@citrix.com>
-References: <20221207072349.28608-1-jgross@suse.com>
-From:   Jan Beulich <jbeulich@suse.com>
-In-Reply-To: <20221207072349.28608-1-jgross@suse.com>
+        Wed, 7 Dec 2022 04:27:00 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4F82AC4C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 01:26:58 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id b3so27747475lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 01:26:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rc5yQDqo/33XKmo9TFbw+UiOcuPLeLQIUtoBKIpmXO0=;
+        b=hpusZ9i/KP/+0osnv1x9yG0x4U7le0g2obDIvOu5VZxC7bNXSzblRCgBhlI1uqk1TP
+         gVTaKEs1KV615ZKEXzGLqHTJcy0dh6p1OJbcoFy9/3N49qRpRdFveGTU3ZWzt2Pwl9mE
+         GNSH8Xo3AzgWinYQhH6slHBPZmSRPeDTchnFc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rc5yQDqo/33XKmo9TFbw+UiOcuPLeLQIUtoBKIpmXO0=;
+        b=GOYnqvCfhnOOwIFL+OnKLmGQcZ4a1Y1iGeVpOK8jzLSK2gR4ASk1XqdzyUXPF/1qD0
+         gt6WfpQ77rn6lRNAqwEdJrhh6hfnBZbd2HnXEANeaVoWrjYYtj9o7jpvVbvl7YRSXw6a
+         D+nHN2PqjEDFUZ3DxYSANl0fW1wm+mNiaDDcwS6lhI7isIYTGpj+6WUjVurfn9zNtaCe
+         eHUbjVXDKREdaPoJE7bM5cXnClO/ODGp7jbIM28iv6u5rwCtIGAC2I97rx/oZAh2aIdN
+         9spJAIDCekUwAul38fqHj//91YniuU+tYR8PIlSXZi/NTBQdO/oW4idc59bh42VP4+em
+         zRlA==
+X-Gm-Message-State: ANoB5pkF7QKkuRUUh0nCWog2DRDSxLlvpqNtn+8uhPQnI2/QUY5YJTbo
+        nGSp28EH2VHSFgKu7ZG3iWFOCw==
+X-Google-Smtp-Source: AA0mqf4hWKfZ4riTjA3tCg125rG60+g5P5+1UK5nQnrVLXWRJJV5isE8QKJoHc9h/+JpqPYWkAWmzQ==
+X-Received: by 2002:a05:6512:128f:b0:4a2:4d89:aa58 with SMTP id u15-20020a056512128f00b004a24d89aa58mr26940806lfs.646.1670405217033;
+        Wed, 07 Dec 2022 01:26:57 -0800 (PST)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id r13-20020a2e94cd000000b002778a76a3c3sm1886477ljh.112.2022.12.07.01.26.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 01:26:55 -0800 (PST)
+Message-ID: <41c6f1b8-5c09-d7d4-14b7-214a9f844156@rasmusvillemoes.dk>
+Date:   Wed, 7 Dec 2022 10:26:54 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/4] container_of: add container_of_const() that
+ preserves const-ness of the pointer
+Content-Language: en-US, da
+To:     Matthew Wilcox <willy@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+References: <20221205121206.166576-1-gregkh@linuxfoundation.org>
+ <Y49cGRDBVP3bHJuT@casper.infradead.org> <Y49lxZMsKrXRciIg@kroah.com>
+ <Y495XgCv+dhGA2Tg@casper.infradead.org> <Y4+OFzfAh7XqOoWv@kroah.com>
+ <Y4+jrBBRQ6XfNMfY@casper.infradead.org>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Y4+jrBBRQ6XfNMfY@casper.infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FRYP281CA0014.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::24)
- To VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1PR04MB6560:EE_|AM8PR04MB7347:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58b3a9b2-64d1-44bc-db36-08dad834fa80
-X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qJgMDle8pNgWKMu6ZLAl0sfEc42MwlnpbFUQVQGTq817hIYwAjNgDsZvznHjUiRZdRjpGtJaPaxtuOCcrylG6GwBK8xUsWCCV71YHHwFLsc3zBF1etbKw9nr6uRueM+YrEIZDB2qjHcOAyt5zpb3RkezZXGOya7ObOg+rfo0qWb3/xZA5uCHc+QjsAIVkqc9Ut1Uxga8OALOUYif/Fi1oagQ+MFvo2RITHQ2kNBg8gu3qFdPu56yPhAmCDwRYQVaPNlFMR4LWnflvtePTzKktpHmGGiA44ZmJH9Da0qs/2Xp9wLNTl1d4XkMXAByOISov/r671lpFCyGACA9JGFW1KC7Pfwqgf4m1DkvRqXrFF3BPf/LGxf+71DqcJGE1WZbNQoZWm1juUES80JRayo35/3HNb5vteclDewQmc1VTZG/718206mIdWHIMjSmhs3d7yzxosZwSQGV2mMsMT8pnaZr6S5autJjNJlb3HMSHhLapO1ceX0eLUEoYqGEzUutdHAYCGpxkDDeIDUUDf2t4OmN5xlqfzodN8xsmlbf/0KABsVw8nVecDreQCnIffeQ+Kzf5toMDPNDU2fdLszhlmwsQezThBq2LD1FXk62MwfYDu8gusolsFniKOHNuTXzZxt++yh18LZ5JYBqSUrJ07fucwzUKQTQyQauhblHNLl0XJvMDDW5zol7aVoDMmeYFcImLzX7ntKw5BqV1Q0YeFynxH0L95sa0G5V+YHOAro=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(346002)(376002)(136003)(39860400002)(366004)(451199015)(36756003)(86362001)(31696002)(478600001)(6506007)(53546011)(6486002)(6512007)(8936002)(41300700001)(7416002)(6636002)(54906003)(6862004)(66476007)(8676002)(2906002)(4326008)(37006003)(66946007)(5660300002)(316002)(66556008)(83380400001)(38100700002)(186003)(26005)(2616005)(31686004)(66899015)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K202U05ic0RqdUxaVjl4bVFxd1k3MXhCMG5XWE85akprbCtJelphcHZYV3pK?=
- =?utf-8?B?YnhwK2VobEUxdzZWMVFGMndnaDFjNlovSE0zdDNJUCtQZ1M1b0dhbHBUUmFW?=
- =?utf-8?B?dUd1ZjNXTGF5b0poeVhVVDV0blkwM1RXUVFUeThwZkpDd2pFSE84NjI3dUEr?=
- =?utf-8?B?SHJ5OWNRelR1c0JVdzcrMDlnOFgzcWpFQUVENXpsK0RaNjNvcUFJQ2o3TWJK?=
- =?utf-8?B?L3JpY205ay80RkVJdFBSYUIvanFtMXdjQ1A1SUlCakpqYjhyNGI2TWJpWGZY?=
- =?utf-8?B?bUs4RGJEcloyMGZNS0ViSzI4QVJoQThqejA2VHFCT0dnQmhIWEtzRUMzUjh2?=
- =?utf-8?B?SldZVTY5TWt2ckZSQW1naFFLcFJNY1RJRldSaENsMjBMSjBxM3g2ZDBWR3dj?=
- =?utf-8?B?TkRSZkY1Z1dPWWRBTFFETUExcGcvRUViM3FSMjB2UVVFejRJSlJ1V3FTRkdX?=
- =?utf-8?B?NCt2SUdwRFY3N0pTVlFWM2xwc3FCVUp0SkJrc09la2p6VUxpYnRyVVdVeUZi?=
- =?utf-8?B?cER4aGpObXhleDRlMTRhT1JPK3FVWlVOYjhtNkdPVGl4Yi9sOGhaYnQ5Vk85?=
- =?utf-8?B?em9DNGVWRWkrMXRaTG9tb1pFbzVyTUNDbHJaQ3VuVENqRkIrNUFjbzR0cEh6?=
- =?utf-8?B?dVZuckx0NStlWi9qNkcxOG9iMmtnSTZMZmx0T3V3djZlUkwvcGdwL0V4aGRq?=
- =?utf-8?B?OFV2R3V1NmFRaFZqUFlqb3JScmNYL2F4NzNiZ2QxMDY0VzZBc0ZuOGx5eTZE?=
- =?utf-8?B?T2NsQTU1UWtFWDF4V0lDbXp0dDJpQm1YMEFGNUdha3FFZjQxM2tQMEJnR0dL?=
- =?utf-8?B?VmEyaDFnNXpibW54L20yVXl0eGd5d1N0R2cxWDhWMmVOMTN2dW9JTTY5VFEz?=
- =?utf-8?B?VkJWcFlNdnRjSWFoTHhLYmVvZXpkVlNTaHExVG9DY1YzY2VDNzMzMHdxaXFh?=
- =?utf-8?B?d0pQbVBxam9tNG40bk95UDBVTFg5M3YybzRGREJwblk0OExIeGRUMXBWdnAz?=
- =?utf-8?B?RGpLSFBxSDY4L1h5bVhKbTRGR3plM2taNUZxNnVqbEJQQmlpdWM1dThFcnBP?=
- =?utf-8?B?bHEwUENnN3gvdGxCa0FZa3Z5U2IwYzlKUWMwek5HUkFVczI5N2xPeGJEWFBH?=
- =?utf-8?B?RGk4MzlvUXdOcEtram1YWkpsMkQvT3JDMDNja01Ha2FaZzFWcmRIbmtFdnVq?=
- =?utf-8?B?M1FyRVZwLzNVbjM2UUZXcEhob0sxU2gwd3lQZHhSU1RvY2pzcHV0a05FRHZN?=
- =?utf-8?B?Y2RmdFRxVzN1dGhnTDB5cDhMdFljNXdhSUE3cis0dWJEcVZ5UHJrUXZMV0xU?=
- =?utf-8?B?UVU1UEpqUEduZzdKMjhRamxDelB3UW5tbHg0Y1RUbVdYaHFNUmpUQmYrcWxF?=
- =?utf-8?B?a3JVV25LZ3ZGWHRuZmxTa3lWNm9Icjg1OW5YNXBwTGxYelIzRGFZK3RsMXh6?=
- =?utf-8?B?cWIzUGh2eUZjL3Z2OWZDcC9jWitHcUFjaUl4QXllajg0QnZPdWdNbUk4NVBM?=
- =?utf-8?B?NGw2VmpIQVJnVTF1R3Z5c2pGa0dZVzlWYUo2bHo3KzJGdDNlSmlIR3pXOW9i?=
- =?utf-8?B?V2VQVWF5TzRLT1hTSzJsYU5xZzB1NnZaa3RHS3JqdzNpY3lSUUFpQ0VuWFBK?=
- =?utf-8?B?YW5iZGZoNnNURTdyR1ZTRWQyLzdHMVhYOU04TnJPWjhIVFhvODNBZEwxaUp5?=
- =?utf-8?B?Rm5BdnNhNnlIV1hTVlZFcWZRS2RlUm1hcUtmTUdscTJ1MXBSbmtka1FCdUY4?=
- =?utf-8?B?VnpZWVFjejNLb1UrbnB5anVCdVczaEZjNVFwc2xNelBEQi9MTVBPU2hjZVd6?=
- =?utf-8?B?enJHaURPc2tvNEtNTllGRTZOVTYyVWs4bm5sZWNlRHE4UTZTOVNINDNKVlF0?=
- =?utf-8?B?bmRxZlJlWEpsSFZBUkViOVF2ZHM0NUxlcVJTSnp5eWVpQWc0cmhCNklvNXps?=
- =?utf-8?B?d2lSSCtPenRFQ2RhTlg0U2xWSVM4QzBxU2VuSDRRcEZYVFRnN1NpNmtsTk13?=
- =?utf-8?B?RllidGVUWXlBcnU4RVNmMjhhS2hTb3ROd2VQamUzYjhwZGpTV21OUGR5aWsw?=
- =?utf-8?B?SklhSFcxSE5UNXorV1JBeThsSm9adytSYjBhMDhGMVFQSE51dGRMdi9wNExj?=
- =?utf-8?Q?brqmR6pnE71Kly4RvJmiTXYUt?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58b3a9b2-64d1-44bc-db36-08dad834fa80
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 09:25:28.0869
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xzeC4iZSoaCSMogRXjFz2zBWEfFH0y5BIu+xRyWTGLBNhNO8KmgThuuFIRThkMYqTMn09YBKMQo4fJHa6Sn3fA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7347
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.12.2022 08:23, Juergen Gross wrote:
-> Commit ad7f402ae4f4 ("xen/netback: Ensure protocol headers don't fall in
-> the non-linear area") introduced a (valid) build warning.
+On 06/12/2022 21.18, Matthew Wilcox wrote:
+> On Tue, Dec 06, 2022 at 07:46:47PM +0100, Greg Kroah-Hartman wrote:
+>> On Tue, Dec 06, 2022 at 05:18:22PM +0000, Matthew Wilcox wrote:
+>>>  static inline struct external_name *external_name(struct dentry *dentry)
+>>>  {
+>>> -	return container_of(dentry->d_name.name, struct external_name, name[0]);
+>>> +	return container_of_not_const(dentry->d_name.name,
+>>> +				      struct external_name, name[0]);
+>>>  }
+>>
+>> Will just:
+>> 	return container_of((unsigned char *)dentry->d_name.name, struct external_name, name[0]);
+>> work by casting away the "const" of the name?
+>>
+>> Yeah it's ugly, I never considered the address of a const char * being
+>> used as a base to cast back from.  The vfs is fun :)
 > 
-> Fix it.
+> Yes, that also works.  This isn't particularly common in the VFS, it's
+> just the dcache.  And I understand why it's done like this; you don't
+> want rando filesystems modifying dentry names without also updating
+> the hash.
 > 
-> Fixes: ad7f402ae4f4 ("xen/netback: Ensure protocol headers don't fall in the non-linear area")
-> Signed-off-by: Juergen Gross <jgross@suse.com>
+> I feel like all the options here are kind of ugly.  Seeing casts in
+> the arguments to container_of should be a red flag!
+> 
+> Here's a bit of a weird option ...
+> 
+> +#define container_of_2(ptr, p_m, type, member)                         \
+> +       _Generic(ptr,                                                   \
+> +               const typeof(*(ptr)) *: (const type *)container_of(ptr->p_m, type, member), \
+> +               default: ((type *)container_of(ptr->p_m, type, member)))
+> +
+> 
+>  static inline struct external_name *external_name(struct dentry *dentry)
+>  {
+> -       return container_of(dentry->d_name.name, struct external_name, name[0]);
+> +       return container_of_2(dentry, d_name.name, struct external_name,
+> +                               name[0]);
+>  }
+> 
+> so we actually split the first argument into two -- the pointer which
+> isn't const, then the pointer member which might be const, but we don't
+> use it for the return result of container_of_2.
 
-Reviewed-by: Jan Beulich <jbeulich@suse.com>
+Wait, what? The const-ness or not of dentry is completely irrelevant,
+we're not doing any pointer arithmetic on that to obtain some other
+pointer that morally should have the same const-ness. We're
+dereferencing dentry to get a pointer value, and _that_ pointer value is
+then subject to the pointer arithmetic.
 
-> --- a/drivers/net/xen-netback/netback.c
-> +++ b/drivers/net/xen-netback/netback.c
-> @@ -530,7 +530,7 @@ static int xenvif_tx_check_gop(struct xenvif_queue *queue,
->  	const bool sharedslot = nr_frags &&
->  				frag_get_pending_idx(&shinfo->frags[0]) ==
->  				    copy_pending_idx(skb, copy_count(skb) - 1);
-> -	int i, err;
-> +	int i, err = 0;
->  
->  	for (i = 0; i < copy_count(skb); i++) {
->  		int newerr;
+Note that external_name might as well have had the prototype
 
-I'm afraid other logic (below here) is now slightly wrong as well, in
-particular 
+static inline struct external_name *external_name(const struct dentry
+*dentry)
 
-				/* If the mapping of the first frag was OK, but
-				 * the header's copy failed, and they are
-				 * sharing a slot, send an error
-				 */
-				if (i == 0 && !first_shinfo && sharedslot)
-					xenvif_idx_release(queue, pending_idx,
-							   XEN_NETIF_RSP_ERROR);
-				else
-					xenvif_idx_release(queue, pending_idx,
-							   XEN_NETIF_RSP_OKAY);
+and then your container_of_2 would break.
 
-which looks to be intended to deal with _only_ failure of the one shared
-part of the header, whereas "err" now can indicate an error on any earlier
-part as well.
+I think that if we want to move towards container_of preserving the
+constness of the member pointer, the right fix here is indeed a cast,
+but not inside container_of, but rather to cast away the const afterwards:
 
-Jan
+  return (struct external_name *)container_of(dentry->d_name.name,
+struct external_name, name[0]);
+
+knowing that yes, the dentry only keeps a const pointer to the name[]
+member for good reasons, but the callers very much do need to modify the
+rest of the struct.
+
+Rasmus
+
