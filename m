@@ -2,240 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAA6964635A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B49364635C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLGVkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:40:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S229720AbiLGVm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:42:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLGVkG (ORCPT
+        with ESMTP id S229564AbiLGVm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:40:06 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D02748740;
-        Wed,  7 Dec 2022 13:40:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670449206; x=1701985206;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=OKXeDqh4fRr2y/27RCZDb9kbU0PNnPasxfo8dXtijd8=;
-  b=AFl1whBsMtjljjxpzPhyDeeVHP6XNN10jVtkyL90bF8NzRespAHUL17K
-   k2jiEFVjZCXN8PluOrTVwl06CNXEDhJBhlLnZ3WWeh5jr58bWznp+Vzwi
-   1k+4zbEqYmQEaaVRsrD3aOgC7s/EXd871MsTZDP+2PNOmwIUnQGfZ2uPR
-   +asSeQm2eiQyfvD5kpJGJ7TRX7t8PSTD9237VBa+dSN290rfsdYLKMrHc
-   1NruAz9h+2Huv8SDYmJfdVi2Igg6X/BZRv3GK0vil36Ffw9huT7Kl/sOy
-   rUalXFt2lfFcDwfkJHMeu6wpaA4cbdGt74aPFPdgxwbOmwepfyhkL2duj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="315723769"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="315723769"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 13:40:05 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="646762772"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="646762772"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga002.jf.intel.com with ESMTP; 07 Dec 2022 13:40:05 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 7 Dec 2022 13:40:05 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 7 Dec 2022 13:40:04 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Wed, 7 Dec 2022 13:40:04 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.47) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Wed, 7 Dec 2022 13:40:04 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gkL6E7xl+gyWTNcnHEtincMNK6ih/TCp7k+nHWvXA7/OIAC5HyOIjZSzEP6LqC2DdUXb8J/3Ofm89TTeBkc9ECfpnr8eHFes0Y5jAL6FZCMreEMnHt5Acj4IREqb3xs+ju6IKG0cqzFdYTPxxUZMznidnzPIMCkDcgTFaJFaOj7eItZ+9I4N9i0u0UHd/kfYHnLfdBkdObLPf/Ayu+7uGeHIbD++h/yGR99ZgAN45Imqr7l9YQyWjGsaIjNx3C7m3GM0W0tEyWCpuBIb1sspj6o/0SP7Gdutf1RP85q3RAf9ePchvSSQFn4XhDl/S+4l2zIg1l7d4n3kShXNpQg3vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qYfO6kxcNq8cJYwuSyQTGCPx73gW3VXFeRfLpsUsSpo=;
- b=HMRmmDjm+MWdfT8VguwSeoYiNq3ZvvsmekmMBZXAI0DYnCO3xWMAThwJb+Ayy1t4kYtpTtgNMSgad86XYOmuiIOk+K4RZhKJEs6rmN+tIPLysIh/g4coVgIy1wnLCuti9/g+R0E6M1pSjCoA+9xw72ndVGocqF3qbNxun+oQSlsFUuo/T6HyN39cp0hLxVGWgosEscr4+44YxiTcP9v6tuNDAT+T5kz9ON9ua4UwIpH+5Jk+078eGO5dhcAsKWctmZ+2Z+bRFzTo8XXsCgYI6jx7t4ouPmvL/DHDKzSIjsMqyuTxvrgcy3fw8AngnsJJ8PsB0M2YyOSaXGYBZTcL6A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20) by PH7PR11MB6499.namprd11.prod.outlook.com
- (2603:10b6:510:1f0::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 21:40:01 +0000
-Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
- ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 21:40:01 +0000
-Date:   Wed, 7 Dec 2022 13:39:58 -0800
-From:   Dan Williams <dan.j.williams@intel.com>
-To:     Alison Schofield <alison.schofield@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>
-CC:     Ira Weiny <ira.weiny@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-cxl@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/6] cxl/mbox: Add GET_POISON_LIST mailbox command
-Message-ID: <6391082ed3374_3cbe02947d@dwillia2-xfh.jf.intel.com.notmuch>
-References: <cover.1668115235.git.alison.schofield@intel.com>
- <46c7c7339224744fce424b196da3e5566effec17.1668115235.git.alison.schofield@intel.com>
- <638ffd5eaa3a7_c95729426@dwillia2-mobl3.amr.corp.intel.com.notmuch>
- <Y5C7EYz1VrG2H7jh@aschofie-mobl2>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <Y5C7EYz1VrG2H7jh@aschofie-mobl2>
-X-ClientProxiedBy: BYAPR05CA0028.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::41) To MWHPR1101MB2126.namprd11.prod.outlook.com
- (2603:10b6:301:50::20)
+        Wed, 7 Dec 2022 16:42:56 -0500
+Received: from server.eikelenboom.it (server.eikelenboom.it [91.121.65.215])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D5361741
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:42:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=eikelenboom.it; s=20180706; h=Content-Transfer-Encoding:Content-Type:
+        Subject:Cc:To:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=pnyuZgFg+xcx2S/BcdnBd13596bj5i02+Xe9V15Zwwk=; b=hPSvu2SMPFMrCBWzQxVSPHyrXR
+        0bDNGNoTgJbGkbcTTvEzH6E1G0lfO16Yi9l4Pu1UAyfXKNjKUGwi+gxPSEAs8RgH0p0BGOuoEQhq3
+        Yg1bbRfT/3PuhUcgBo6WwVIZnTWEyWlbI9wpAcvoq9H8erI44n8bUlV6sNHRwP2vd8tA=;
+Received: from 131-195-250-62.ftth.glasoperator.nl ([62.250.195.131]:37498 helo=[172.16.1.50])
+        by server.eikelenboom.it with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <linux@eikelenboom.it>)
+        id 1p32Cr-00080a-64; Wed, 07 Dec 2022 22:43:57 +0100
+Message-ID: <2f364567-3598-2d86-ae3d-e0fabad4704a@eikelenboom.it>
+Date:   Wed, 7 Dec 2022 22:42:45 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|PH7PR11MB6499:EE_
-X-MS-Office365-Filtering-Correlation-Id: 693418ed-147a-4f63-9c1f-08dad89b9835
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SHiif/DEqSOCG/e5bVba6p/ArtsR0TdVgl3ZPEqIfuaV5IADYFNhhWOrjLqgbpN45pAxJYRpVsMOszJTcmy9J4CAHv3eHZFBlP/QbG+l1znBODhG0s7jM4dLx8MrjnF4fobLmLePc2ACQmQ/QmJcuz5Elf+eezj6MFRmwIYDCr8kXUSnBewApn3APJxTg/c+NR8bBa5b2bDUMl4J+cyTOw6hyJyoPtbvppy8LZhXtiQMaD4UgcgrRyUAC7JWByFYrzkto8PhRqet2xWckK6k5TyzONc5DrVx79l0a8ZekYwiveUj5FZAD67UDBfi4fBgYImWosCe8h4WMVPAOM6gU/TlIuqZxrgro4VKY5xh/R9yF6OoVDhAXEjRQO5LkFqRLo3uev/jDMZXcTgReqLRzGA7FLVvIt4OiGq+n7+ikWLttl6lsDTFApZ4Nv+6uHFN5hY+Vc00G5U7mchATiEl+JFvX1oNX50CNhiqRLCspASACfBGPeDO3SWFfd/7NB1x4MjaxH5tNL+tcr966wz64FnYB4zDhvVtAl4KdYZlsEfTXc3MhRYh6JRpYlQtj+JWRXvE765tTXg3qZQSjWuA9ng8jk7FzO3NLSoCISWcvNuauANWLS2cFJ4RV0K4Fch+4umVqfl4i1Qd+t1kK8UFTw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(136003)(376002)(396003)(39860400002)(366004)(451199015)(26005)(478600001)(2906002)(6486002)(86362001)(41300700001)(6666004)(66476007)(82960400001)(38100700002)(66556008)(66946007)(6506007)(8676002)(4326008)(316002)(8936002)(186003)(5660300002)(9686003)(110136005)(6512007)(83380400001)(54906003)(15650500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Z3fCUCtf0qaOYkOPxK+LsI5/mXr3ll6AIoYkT+0+MUuvjrMtbob5N5hs1L6M?=
- =?us-ascii?Q?Z5RU+9uyNH6U37HkV5DivTRIbUZGglS3jzUbNcJtKlF/TH1jk5TqgOrFpiXb?=
- =?us-ascii?Q?0L0OUxtzNSOtHKu+ggI+HA6j33fjHNRAMiB7EXRWPnUzq/M5huv/muYnSRhe?=
- =?us-ascii?Q?EGX6O9KgZg4ynAtVdpj17zBXfThWSljnMi73gZ4NtrcVEOMppJ6CFERfeYrK?=
- =?us-ascii?Q?MLCtQU4uaOoEaFPy8Ov+d1taGIoQKbwAHpgTFEi/QZm3FMi2D8cDRU7vEEtK?=
- =?us-ascii?Q?dBfpGl2gk1sk3WFOAxtn1dIrfyTCKG7qYOXp0fJav99vBka3FkE2s65oiLXe?=
- =?us-ascii?Q?j4b694QmSs3xNcONea2himLlgzfOB2J13V/x+BLQ9x/BRmiNaSHyEmXsR+bA?=
- =?us-ascii?Q?7cXvg4hCcqQtUsYazGUKul136AQml/ZEFhFXHgOAPY6drbSQ7O1xFEWtonj4?=
- =?us-ascii?Q?oCdalhX8gMUvrKSvpU1SklReAuM0yzZjG5vLoNkFDkKKFRKlfzhCnNzh5tz6?=
- =?us-ascii?Q?aF94cn0+Gtws0P/6fRNBtn7aD0tH0rw1D41oLzQQQcdkBW+iOH4B6uwUH5xA?=
- =?us-ascii?Q?sL9zcHDLbVUMaxfMEqq3VQkJO4GjEaSLYzJj5WIqd5EFwjz/47wc/ZpOne6T?=
- =?us-ascii?Q?tXA166PJrNg/H4sfw09IHK6SgDzgrKMrt0EaA+/Dp0vUalcW9GYawQVYvh1B?=
- =?us-ascii?Q?KT16AXPZgaplkGpLVRJR4DMHyEhMA3kskIzaaMGLJ3vuq0jkW2Pz0wVm765c?=
- =?us-ascii?Q?6nibmI23IixSQ4xJOXuUJDmxL+BtuNrGgWmU5N3SDaOE4xd+EXew0EvvIHfR?=
- =?us-ascii?Q?97itNoW0IsxDWXYN1Bqj19ZI6c+NEEnQetKXpBs3pMORtDUHVsor/Xxx85KE?=
- =?us-ascii?Q?b52iVz5BDawUxfXmjBDgi9LSo299Z6odl5RWwLfVXxq0z/rbCvZtlEsfdI+D?=
- =?us-ascii?Q?9Noxd7Wdrj8taHa9yR4BRGNE0qi+gnF82HjpyqYlpMT3KCrRsh6u7nm00Avf?=
- =?us-ascii?Q?kftQ125RWOoB4yzgL4hjLIcWSIHEwisgNCysLFEOmaO8bHfPPl18ndJ/Fnbb?=
- =?us-ascii?Q?nvFnU0wNOO4JcJyHqcEVcybkOTmTcTPMt1Hq1+i4dWpVge10Di1Fclm1w6FZ?=
- =?us-ascii?Q?BFckDbl+usLfjhlPmo0BRUKwDFujafqMVKELeZqLpHUZQxPK0YpHeh972rT/?=
- =?us-ascii?Q?LrwSKLDopU127p9in80HLREry8dxZyl52K4v5qreMiYBcWAYQkdBNCF0jjub?=
- =?us-ascii?Q?uQSjL0bVR1XsUiywfOVZkpjSC1wzCXZaHvpWNrKng+BjSAr2QL5Yh/noP1Qn?=
- =?us-ascii?Q?p9uEYjtvVvHMHE09bydH2I0P6dnB6c6/u65MGfll7cu3h8YKIUryx/mmULXb?=
- =?us-ascii?Q?5U1I13h2NT34shkI0tQcBZGpMGevIARChBIf/hRRAzCp+8z/XkHvP+ahzVRs?=
- =?us-ascii?Q?SbDvsJumaEDfIEWXzDNxpGWy0eMIDu3wdN2WkzlmodUkAoSSACT3OsDkPItB?=
- =?us-ascii?Q?pmfucmGl5XzlgfbyyJCmOzyXBy48nY1z8dTpb8fslKzO+1ywdCfKxOGTx3HE?=
- =?us-ascii?Q?JIAFzgPiLfKjZXAMC+pWVT9uT5G1hzzZgNB3lhjfXWnaKqBfNLMo4mjOo1q2?=
- =?us-ascii?Q?7w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 693418ed-147a-4f63-9c1f-08dad89b9835
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 21:40:01.3714
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2PdsjjIc+OLlJXjoP3gfarEEfLT+anPiFbRNNyzLDU1tlrjKFnmrFdMvXd41vCbDJAGPsjcRWCCiX4mVk62AhPz/wyodQ4xXpYEtPA9dWcU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6499
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Content-Language: nl-NL, en-US
+From:   Sander Eikelenboom <linux@eikelenboom.it>
+To:     Ross Lagerwall <ross.lagerwall@citrix.com>,
+        Juergen Gross <jgross@suse.com>,
+        Xen-devel <xen-devel@lists.xen.org>, Paul Durrant <paul@xen.org>
+Cc:     linux-kernel@vger.kernel.org, netdev <netdev@vger.kernel.org>
+Subject: Xen + linux 6.1.0-rc8, network to guest VM not working after commit
+ ad7f402ae4f466647c3a669b8a6f3e5d4271c84a fixing XSA-423
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Alison Schofield wrote:
-> On Tue, Dec 06, 2022 at 06:41:34PM -0800, Dan Williams wrote:
-> > alison.schofield@ wrote:
-[..]
-> > > +int cxl_mem_get_poison(struct cxl_memdev *cxlmd, u64 offset, u64 len,
-> > > +		       struct cxl_region *cxlr)
-> > > +{
-> > > +	struct cxl_dev_state *cxlds = cxlmd->cxlds;
-> > > +	const char *memdev_name = dev_name(&cxlmd->dev);
-> > > +	const char *pcidev_name = dev_name(cxlds->dev);
-> > > +	struct cxl_mbox_poison_payload_out *po;
-> > > +	struct cxl_mbox_poison_payload_in pi;
-> > > +	int nr_records = 0;
-> > > +	int rc;
-> > > +
-> > > +	po = kvmalloc(cxlds->payload_size, GFP_KERNEL);
-> > > +	if (!po)
-> > > +		return -ENOMEM;
-> > > +
-> > > +	pi.offset = cpu_to_le64(offset);
-> > > +	pi.length = cpu_to_le64(len);
-> > > +
-> > > +	rc = mutex_lock_interruptible(&cxlds->poison_list_mutex);
-> > 
-> > So I do not know what this mutex is protecting if there is an allocation
-> > per cxl_mem_get_poison() invocation. Although I suspect that's somewhat
-> > wasteful. Just allocate one buffer at the beginning of time and then use
-> > the lock to protect that buffer.
-> 
-> Intent was a single lock on the device to protect the state of the
-> poison list retrieval - do not allow > 1 reader. With > 1 reader
-> software may not know if it retrieved the complete list.
-> 
-> I'm not understanding about protecting a buffer, instead of protecting
-> the state. Here I try to protect the state.
+Hi Ross / Juergen,
 
-Ah, sorry I read cxlds->poison_list_mutex and assumed it was serializing
-access to the buffer, not a state machine. I do think it would be
-worthwhile to make this a self contained structure with its own kdoc to
-explain what is going on, something like:
+I just updated my linux kernel to the latest of Linus his tree which included commit ad7f402ae4f466647c3a669b8a6f3e5d4271c84a fixing XSA-423.
 
-diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
-index ab138004f644..02697d1d951c 100644
---- a/drivers/cxl/cxlmem.h
-+++ b/drivers/cxl/cxlmem.h
-@@ -193,6 +193,19 @@ struct cxl_endpoint_dvsec_info {
-        struct range dvsec_range[2];
- };
- 
-+/**
-+ * struct cxl_poison_state - summary
-+ * @payload: ...
-+ * @lock: ...
-+ *
-+ * A bit more description of why state needs to be held over successive
-+ * mbox commands...
-+ */
-+struct cxl_poison_state {
-+       void *payload;
-+       struct mutex lock;
-+};
-+
- /**
-  * struct cxl_dev_state - The driver device state
-  *
-@@ -210,6 +223,7 @@ struct cxl_endpoint_dvsec_info {
-  * @lsa_size: Size of Label Storage Area
-  *                (CXL 2.0 8.2.9.5.1.1 Identify Memory Device)
-  * @mbox_mutex: Mutex to synchronize mailbox access.
-+ * @poison: Poison list retrieval and tracing
-  * @firmware_version: Firmware version for the memory device.
-  * @enabled_cmds: Hardware commands found enabled in CEL.
-  * @exclusive_cmds: Commands that are kernel-internal only
-@@ -244,6 +258,7 @@ struct cxl_dev_state {
-        size_t payload_size;
-        size_t lsa_size;
-        struct mutex mbox_mutex; /* Protects device mailbox and firmware */
-+       struct cxl_poison_state poison;
-        char firmware_version[0x10];
-        DECLARE_BITMAP(enabled_cmds, CXL_MEM_COMMAND_ID_MAX);
-        DECLARE_BITMAP(exclusive_cmds, CXL_MEM_COMMAND_ID_MAX);
+Unfortunately when using this kernel I can't SSH anymore into the Xen guest I start, but I don't see any apparent failures either.
+A straight revert of the commit ad7f402ae4f466647c3a669b8a6f3e5d4271c84a makes networking function normally again.
+
+I have added some of the logging below, perhaps it at gives some idea off the state around the Xen network front and backend.
+
+Any ideas or a test patch that I could run to shed some more light on what is going on ?
+
+--
+Sander
+
+
+
+
+Some of the logging from dom0 dmesg:
+
+[  149.520585] xen_bridge: port 1(vif1.0) entered blocking state
+[  149.520594] xen_bridge: port 1(vif1.0) entered disabled state
+[  149.520678] device vif1.0 entered promiscuous mode
+[  151.221975] xen-blkback: backend/vbd/1/51712: using 1 queues, protocol 1 (x86_64-abi) persistent grants
+[  151.601458] vif vif-1-0 vif1.0: Guest Rx ready
+[  151.601476] xen_bridge: port 1(vif1.0) entered blocking state
+[  151.601478] xen_bridge: port 1(vif1.0) entered forwarding state
+
+
+output xenstore-ls regarding vif for the Guest:
+
+     vif = ""
+      1 = ""
+       0 = ""
+        bridge = "xen_bridge"
+        feature-ctrl-ring = "1"
+        feature-dynamic-multicast-control = "1"
+        feature-gso-tcpv4 = "1"
+        feature-gso-tcpv6 = "1"
+        feature-ipv6-csum-offload = "1"
+        feature-multicast-control = "1"
+        feature-rx-copy = "1"
+        feature-rx-flip = "0"
+        feature-sg = "1"
+        feature-split-event-channels = "1"
+        feature-xdp-headroom = "1"
+        frontend = "/local/domain/1/device/vif/0"
+        frontend-id = "1"
+        handle = "0"
+        hotplug-status = "connected"
+        ip = "192.168.1.6"
+        mac = "00:16:3e:49:0e:fa"
+        multi-queue-max-queues = "8"
+        online = "1"
+        script = "/etc/xen/scripts/vif-bridge"
+        state = "4"
+        type = "vif"
+
+     vif = ""
+      0 = ""
+       backend = "/local/domain/0/backend/vif/1/0"
+       backend-id = "0"
+       event-channel-rx = "9"
+       event-channel-tx = "8"
+       feature-gso-tcpv4 = "1"
+       feature-gso-tcpv6 = "1"
+       feature-ipv6-csum-offload = "1"
+       feature-rx-notify = "1"
+       feature-sg = "1"
+       handle = "0"
+       mac = "00:16:3e:49:0e:fa"
+       mtu = "1500"
+       multi-queue-num-queues = "1"
+       request-rx-copy = "1"
+       rx-ring-ref = "524"
+       state = "4"
+       trusted = "1"
+       tx-ring-ref = "523"
+       xdp-headroom = "0"
+
+
+ifconfig output for the guest interface on dom0 side:
+
+vif1.0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+         ether fe:ff:ff:ff:ff:ff  txqueuelen 32  (Ethernet)
+         RX packets 0  bytes 0 (0.0 B)
+         RX errors 0  dropped 0  overruns 0  frame 0
+         TX packets 49  bytes 2058 (2.0 KiB)
+         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
