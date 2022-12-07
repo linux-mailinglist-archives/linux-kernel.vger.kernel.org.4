@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195D764539C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:54:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50B66453A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:54:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiLGFyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 00:54:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36332 "EHLO
+        id S229723AbiLGFyg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 00:54:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLGFyW (ORCPT
+        with ESMTP id S229674AbiLGFyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 00:54:22 -0500
+        Wed, 7 Dec 2022 00:54:32 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CA88758BC8;
-        Tue,  6 Dec 2022 21:54:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7D2558BE4;
+        Tue,  6 Dec 2022 21:54:30 -0800 (PST)
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 07 Dec 2022 14:54:19 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 9DD1E2058B4F;
-        Wed,  7 Dec 2022 14:54:19 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 7 Dec 2022 14:54:19 +0900
+  by mx.socionext.com with ESMTP; 07 Dec 2022 14:54:30 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 409492058B4F;
+        Wed,  7 Dec 2022 14:54:30 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Wed, 7 Dec 2022 14:54:30 +0900
 Received: from plum.e01.socionext.com (unknown [10.212.243.119])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 698081DA5;
-        Wed,  7 Dec 2022 14:54:19 +0900 (JST)
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id E1D251DA5;
+        Wed,  7 Dec 2022 14:54:29 +0900 (JST)
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Subject: [PATCH v2 00/16] dt-bindings: soc: Introduce UniPhier miscellaneous register blocks and fix examples
-Date:   Wed,  7 Dec 2022 14:53:49 +0900
-Message-Id: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
+Subject: [PATCH v2 01/16] dt-bindings: clock: Fix node descriptions in uniphier-clock example
+Date:   Wed,  7 Dec 2022 14:53:50 +0900
+Message-Id: <20221207055405.30940-2-hayashi.kunihiko@socionext.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
+References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -44,85 +46,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series introduces dt-bindings documents for miscellaneous register
-blocks implemented in Socionext UniPhier SoCs.
+Prior to adding dt-bindings for SoC-dependent controllers, rename the
+clock nodes their parent nodes to the generic names in the example.
 
-These are previously defined in the devicetree and used in the examples
-of subnodes' dt-bindings, however, not documented.
+And also fix the missing compatible string.
 
-These include two types of the blocks
+Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+---
+ .../clock/socionext,uniphier-clock.yaml       | 21 +++++++++++--------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-* independent block including miscellaneous registers and functions for
-  the whole SoC (system controller and SoC-glue logic)
-
-* sideband logic including control registers in the component (others)
-
-And prior to adding these dt-bindings, fix examples in the existing
-dt-bindings.
-
-This series is part of the previous series shown below:
-https://lore.kernel.org/linux-arm-kernel/20221107103410.3443-2-hayashi.kunihiko@socionext.com
-
-Changes since v1:
-- Fix examples in  the existing dt-bindings (Add PATCH 1-7)
-- Add dt-bindings for SoC-glue logic debug part (Add PATCH 10)
-- Drop generic and ld6b compatible strings
-- Change "usb-controller" node in soc-glue to "usb-hub"
-- Change "usb-controller" node in USB glue layer example to "usb"
-- Add negation of child properties by compatible string
-
-Kunihiko Hayashi (16):
-  dt-bindings: clock: Fix node descriptions in uniphier-clock example
-  dt-bindings: reset: Fix node descriptions in uniphier-reset example
-  dt-bindings: pinctrl: Fix node descriptions in uniphier-pinctrl
-    example
-  dt-bindings: watchdog: Fix node descriptions in uniphier-wdt example
-  dt-bindings: thermal: Fix node descriptions in uniphier-thermal
-    example
-  dt-bindings: phy: Fix node descriptions in uniphier-phy example
-  dt-bindings: nvmem: Fix node descriptions in uniphier-efuse example
-  dt-bindings: soc: socionext: Add UniPhier system controller
-  dt-bindings: soc: socionext: Add UniPhier SoC-glue logic
-  dt-bindings: soc: socionext: Add UniPhier SoC-glue logic debug part
-  dt-bindings: soc: socionext: Add UniPhier peripheral block
-  dt-bindings: soc: socionext: Add UniPhier media I/O block
-  dt-bindings: soc: socionext: Add UniPhier SD interface block
-  dt-bindings: soc: socionext: Add UniPhier ADAMV block
-  dt-bindings: soc: socionext: Add UniPhier DWC3 USB glue layer
-  dt-bindings: soc: socionext: Add UniPhier AHCI glue layer
-
- .../clock/socionext,uniphier-clock.yaml       |  21 ++--
- .../nvmem/socionext,uniphier-efuse.yaml       |   6 +-
- .../phy/socionext,uniphier-ahci-phy.yaml      |   1 +
- .../phy/socionext,uniphier-usb2-phy.yaml      |   4 +-
- .../phy/socionext,uniphier-usb3hs-phy.yaml    |   5 +-
- .../phy/socionext,uniphier-usb3ss-phy.yaml    |   5 +-
- .../pinctrl/socionext,uniphier-pinctrl.yaml   |   2 +-
- .../reset/socionext,uniphier-glue-reset.yaml  |   7 +-
- .../reset/socionext,uniphier-reset.yaml       |  28 +++--
- .../socionext/socionext,uniphier-adamv.yaml   |  51 ++++++++
- .../socionext,uniphier-ahci-glue.yaml         |  78 ++++++++++++
- .../socionext,uniphier-dwc3-glue.yaml         | 106 ++++++++++++++++
- .../socionext/socionext,uniphier-mioctrl.yaml |  66 ++++++++++
- .../socionext,uniphier-perictrl.yaml          |  65 ++++++++++
- .../socionext/socionext,uniphier-sdctrl.yaml  |  62 ++++++++++
- .../socionext,uniphier-soc-glue-debug.yaml    |  73 +++++++++++
- .../socionext,uniphier-soc-glue.yaml          | 113 ++++++++++++++++++
- .../socionext/socionext,uniphier-sysctrl.yaml | 105 ++++++++++++++++
- .../thermal/socionext,uniphier-thermal.yaml   |   4 +-
- .../watchdog/socionext,uniphier-wdt.yaml      |   2 +-
- MAINTAINERS                                   |   1 +
- 21 files changed, 769 insertions(+), 36 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-adamv.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-mioctrl.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-perictrl.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sdctrl.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue-debug.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
- create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
-
+diff --git a/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml b/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
+index 9a0cc7341630..672450a1ecda 100644
+--- a/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
++++ b/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
+@@ -61,11 +61,12 @@ required:
+ 
+ examples:
+   - |
+-    sysctrl@61840000 {
+-        compatible = "socionext,uniphier-sysctrl", "simple-mfd", "syscon";
++    syscon@61840000 {
++        compatible = "socionext,uniphier-ld11-sysctrl",
++                     "simple-mfd", "syscon";
+         reg = <0x61840000 0x4000>;
+ 
+-        clock {
++        clock-controller {
+             compatible = "socionext,uniphier-ld11-clock";
+             #clock-cells = <1>;
+         };
+@@ -74,11 +75,12 @@ examples:
+     };
+ 
+   - |
+-    mioctrl@59810000 {
+-        compatible = "socionext,uniphier-mioctrl", "simple-mfd", "syscon";
++    syscon@59810000 {
++        compatible = "socionext,uniphier-ld11-mioctrl",
++                     "simple-mfd", "syscon";
+         reg = <0x59810000 0x800>;
+ 
+-        clock {
++        clock-controller {
+             compatible = "socionext,uniphier-ld11-mio-clock";
+             #clock-cells = <1>;
+         };
+@@ -87,11 +89,12 @@ examples:
+     };
+ 
+   - |
+-    perictrl@59820000 {
+-        compatible = "socionext,uniphier-perictrl", "simple-mfd", "syscon";
++    syscon@59820000 {
++        compatible = "socionext,uniphier-ld11-perictrl",
++                     "simple-mfd", "syscon";
+         reg = <0x59820000 0x200>;
+ 
+-        clock {
++        clock-controller {
+             compatible = "socionext,uniphier-ld11-peri-clock";
+             #clock-cells = <1>;
+         };
 -- 
 2.25.1
 
