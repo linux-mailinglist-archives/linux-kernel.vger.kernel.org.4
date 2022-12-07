@@ -2,139 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D425964600B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:22:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1562D646010
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:23:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbiLGRWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:22:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
+        id S229676AbiLGRXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:23:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiLGRWO (ORCPT
+        with ESMTP id S229437AbiLGRXu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:22:14 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA805288D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:22:13 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id d123so6737879iof.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:22:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EpTDLOhW0V3+1aR8vlaV9Hai3rR7JGPJvFehDEM1z0k=;
-        b=WuLBfeGFwu+0r21caxzCY0+TP72iv0Vmz6j4f2nARaTkZ6MmLakC7hya4ycSRvqMDI
-         SuzvbugdfQlsXrJGaT4MBJtrovZDXTkclAPuy4ARX/NXLtySpWY43xZIWrBasgcQugq8
-         vQhfZ35UxQngr2AbHjR8VvqDdM2S7bawB1nbVd8IAIAtAJ6QIM0groms0cVRZmf/5hJ5
-         gYRuWN4pmn37QJI13DuMnWpuKPm3dQxH/KlZ9pWGQ70mwlSqfH7NoBL0xtcoQk0ex4xM
-         qbmg7ziYNHJJjBjTSvOZVicehGzE9TQ8n7q/GwtauEdZJAs9Wa7FXxqQQfBLwFZUidsz
-         /Q3A==
+        Wed, 7 Dec 2022 12:23:50 -0500
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B018142F74;
+        Wed,  7 Dec 2022 09:23:49 -0800 (PST)
+Received: by mail-oo1-f48.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so18331ooi.5;
+        Wed, 07 Dec 2022 09:23:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EpTDLOhW0V3+1aR8vlaV9Hai3rR7JGPJvFehDEM1z0k=;
-        b=4MElZbq5TzKiU/MxMV8OssUaURm6AWFfIUCSWki2y70fN+kPsEcq9SvM4o0LILm0Zo
-         nCmFqExQHm0lpytwZswnPI0zKT9C3TeNevuxdTsfEapvvidOuO0T8JW1dcSsgOuAeQGq
-         JbpX3Xwo4G0MBhjz5aFHXPs/ZxkaDSPKWbxUlQhz1xop+dFrkEK6VFkztdhL+Jx6a6uU
-         QA/h/3fGoOWonf5zpGzyMOgIsxKx2YHZf8/gq9QdjC2UMveqsnWFLDWVhvJnwY0oQdEe
-         KmxI7vRSPnKapWTdfE7q5uTLXQ2K0M34RfjzY35wPFiFEnwIOrNhIUT2mai3WrTIUFXO
-         wBYA==
-X-Gm-Message-State: ANoB5pmPuNtLyZT7z98tieHbEqw38+/T1cF511iyDBqd+tLKm8ZZ0yIi
-        ZPwRTWs9gViAv/yfCW/F/hh4rA==
-X-Google-Smtp-Source: AA0mqf7/gBf7/XEEClF7Gq7hMc0QmhQHunFYc2f4SCWfcKxA9tFoQkk2RXV+JEDjVFWOG2u7WxQZig==
-X-Received: by 2002:a05:6602:4296:b0:6e0:1464:a7d7 with SMTP id cd22-20020a056602429600b006e01464a7d7mr5843517iob.60.1670433732410;
-        Wed, 07 Dec 2022 09:22:12 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id q34-20020a056638346200b0038a44dbbd8fsm3597816jav.123.2022.12.07.09.22.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 09:22:11 -0800 (PST)
-Message-ID: <b8deb6fa-8a09-c1af-278f-24e66afe367d@kernel.dk>
-Date:   Wed, 7 Dec 2022 10:22:09 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9qhhglclNe/Y+Ww2TBaF/Rt3nwv66/xfoqUyqPeiMww=;
+        b=BRHTE9fkdjDmVOpu+hy4mrR8CKSU9jiit/CBiDLDpqwEJwDMIqIrP9vAaNZ5I7oXnr
+         eM4VzwHbo44qUbWWg4DW+mBSKJ2TuvCBjTKkWZTMF7J97TrRcOl6XIpKBhSTIfYDzdZ8
+         WN6bOWUPPDrChtS2li0kuJ8amvmzhzqlbpvdPWQ+jg5H1Odt5Had1AIQ8/YVLQRc1WCx
+         4C49f4zzMus3AycOQSW42jWMn6LijK2GOhYx9Juh45ZkR3r5xwEbEpbSY6XpTYzSCEhM
+         m60DXJLmBD2TsgpBvw3JE4OBIMNt8TEHMW7FSm5R6KzlGSvREhnKZUeBJcSSa1OhbLX4
+         21Qw==
+X-Gm-Message-State: ANoB5plPMyrrxivGwhR0raJal7TxkR/Y4gzmHftbaR49KfO3kWvc4KAe
+        xaKLMhGJklKqRNURUwhIgg==
+X-Google-Smtp-Source: AA0mqf6Rie1pRr+wry5Yh3B2mB24YYud/ZXySwS1VnTqqk88pTw8r/yGavdUGW7iQk1zoJz50LknPg==
+X-Received: by 2002:a4a:b145:0:b0:49f:449a:5f6c with SMTP id e5-20020a4ab145000000b0049f449a5f6cmr30324598ooo.93.1670433828843;
+        Wed, 07 Dec 2022 09:23:48 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t4-20020a4adbc4000000b0049f5ce88583sm9112297oou.7.2022.12.07.09.23.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 09:23:48 -0800 (PST)
+Received: (nullmailer pid 2437289 invoked by uid 1000);
+        Wed, 07 Dec 2022 17:23:47 -0000
+Date:   Wed, 7 Dec 2022 11:23:47 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, Steve Cho <stevecho@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Subject: Re: [PATCH v5,1/3] media: dt-bindings: media: mediatek: vcodec:
+ adapt to the 'clock-names' of different platforms
+Message-ID: <167043382716.2437231.1367322252075275050.robh@kernel.org>
+References: <20221206064536.16592-1-yunfei.dong@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC] block: Change the granularity of io ticks from ms to ns
-Content-Language: en-US
-To:     Yu Kuai <yukuai1@huaweicloud.com>, Ming Lei <ming.lei@redhat.com>
-Cc:     Gulam Mohamed <gulam.mohamed@oracle.com>,
-        linux-block@vger.kernel.org, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
-        minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        colyli@suse.de, kent.overstreet@gmail.com, agk@redhat.com,
-        snitzer@kernel.org, dm-devel@redhat.com, song@kernel.org,
-        dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        dave.jiang@intel.com, ira.weiny@intel.com, junxiao.bi@oracle.com,
-        martin.petersen@oracle.com, kch@nvidia.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
-        nvdimm@lists.linux.dev, konrad.wilk@oracle.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221206181536.13333-1-gulam.mohamed@oracle.com>
- <936a498b-19fe-36d5-ff32-817f153e57e3@huaweicloud.com>
- <Y5AFX4sxLRLV4uSt@T590>
- <aadfc6d2-ad04-279c-a1d6-7f634d0b2c99@huaweicloud.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <aadfc6d2-ad04-279c-a1d6-7f634d0b2c99@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206064536.16592-1-yunfei.dong@mediatek.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 6:09 AM, Yu Kuai wrote:
-> Hi,
+
+On Tue, 06 Dec 2022 14:45:34 +0800, Yunfei Dong wrote:
+> mt8195 and mt8192 have different clock numbers, separate 'clock-names'
+> according to compatible name.
 > 
-> 在 2022/12/07 11:15, Ming Lei 写道:
->> On Wed, Dec 07, 2022 at 10:19:08AM +0800, Yu Kuai wrote:
->>> Hi,
->>>
->>> 在 2022/12/07 2:15, Gulam Mohamed 写道:
->>>> Use ktime to change the granularity of IO accounting in block layer from
->>>> milli-seconds to nano-seconds to get the proper latency values for the
->>>> devices whose latency is in micro-seconds. After changing the granularity
->>>> to nano-seconds the iostat command, which was showing incorrect values for
->>>> %util, is now showing correct values.
->>>
->>> This patch didn't correct the counting of io_ticks, just make the
->>> error accounting from jiffies(ms) to ns. The problem that util can be
->>> smaller or larger still exist.
->>
->> Agree.
->>
->>>
->>> However, I think this change make sense consider that error margin is
->>> much smaller, and performance overhead should be minimum.
->>>
->>> Hi, Ming, how do you think?
->>
->> I remembered that ktime_get() has non-negligible overhead, is there any
->> test data(iops/cpu utilization) when running fio or t/io_uring on
->> null_blk with this patch?
+> Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+> ---
+> compared with v4:
+> - change min clocks and clock-names from 1 to 4
+> compared with v3:
+> - rewrite clock-names according to different platforms.
 > 
-> Yes, testing with null_blk is necessary, we don't want any performance
-> regression.
+> Reference series:
+> [1]: v5 of this series is presend by Allen-KH Cheng.
+>      message-id: 20221128143832.25584-4-allen-kh.cheng@mediatek.com
+> ---
+>  .../media/mediatek,vcodec-subdev-decoder.yaml | 41 ++++++++++++++++---
+>  1 file changed, 35 insertions(+), 6 deletions(-)
+> 
 
-null_blk is fine as a substitute, but I'd much rather run this on my
-test bench with actual IO and devices.
-
-> BTW, I thought it's fine because it's already used for tracking io
-> latency.
-
-Reading a nsec timestamp is a LOT more expensive than reading jiffies,
-which is essentially free. If you look at the amount of work that's
-gone into minimizing ktime_get() for the fast path in the IO stack,
-then that's a testament to that.
-
-So that's a very bad assumption, and definitely wrong.
-
--- 
-Jens Axboe
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>
