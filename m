@@ -2,95 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EA2C6451EB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:20:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 166BD6451F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:23:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLGCUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 21:20:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S229683AbiLGCW7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 21:22:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLGCUW (ORCPT
+        with ESMTP id S229452AbiLGCW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 21:20:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB7350D69;
-        Tue,  6 Dec 2022 18:20:22 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DD4C611E6;
-        Wed,  7 Dec 2022 02:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFB85C433D7;
-        Wed,  7 Dec 2022 02:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670379621;
-        bh=M7DAFgr5ThBCqevusk/kXC0uBMdqkqiwzdl12Q/57kw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rFPttW95JTwhqxZFIY8aR9h89fCfvy0+8zfWbk4Q9vxKFtM/rNjAZ9iAQ3Rts4vML
-         AQcYlGB1fwroNhmKI9Ydv6DkEEO1xjeHcPUEHSU/9Axf7fgWDV9jLz7i3HrkIPqltK
-         9ai4HwyLFrfyUZiqft0qI05s7IyyGpsVbw/ozpxCqGwTSlWNGvd2kTka1yQeOGLYtM
-         e9YOhUWqAuNO+ctyN7JZ6btBIYaj3X+ZUowF1rPBhlgAl4izdX3aPAhaBCAB/84d9t
-         4R/fDHWV5PRGDbvfdPkOw67hdFfomR9Tk4z2V/biDNAQpycQxaUqEsfzd577/3Vzs7
-         i+E39xfpUIwgQ==
-Date:   Tue, 6 Dec 2022 21:20:18 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        "David S . Miller" <davem@davemloft.net>, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org
-Subject: Re: [PATCH AUTOSEL 6.0 09/13] net: loopback: use
- NET_NAME_PREDICTABLE for name_assign_type
-Message-ID: <Y4/4Yts6nwDCqC1q@sashalap>
-References: <20221206094916.987259-1-sashal@kernel.org>
- <20221206094916.987259-9-sashal@kernel.org>
- <20221206114956.4c5a3605@kernel.org>
+        Tue, 6 Dec 2022 21:22:56 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA2823E88;
+        Tue,  6 Dec 2022 18:22:54 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3c090251d59so172315607b3.4;
+        Tue, 06 Dec 2022 18:22:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=87hK10glcNhHV4zXDkx3UM3r+PG7Ihr6tBkX6WXhAAs=;
+        b=qltconEcysCUnspDzr69AWdD+WTITkmGJ/O9Gu6/NLZ2gSyt+up7KdtKj1FIg4ateY
+         bX6cRHtwX39uHlNiNT+Lscfei3Oqvw3MhORzh14n57S9bK8ByM76VVHENrtYtO707pIT
+         FrCYQ9A5vEUU61mxpgTfZ0kBqIUzMn2PtFWVxga7qHFXaemEpoOhp1jk/NiWjxXomb2k
+         GXC9X+EZWGnOVFfPm9UPMnOWgJsqoNVVNZbhaD4unvDqyRHYbImrHbbHaEvEO9snEAQF
+         /nTdRfGcrcpHdRSWHgXM1XhL+NWjcUsuE6NctOVt6SOLcyGGnDKi/Vu2SsQYkdrcjXfd
+         reXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=87hK10glcNhHV4zXDkx3UM3r+PG7Ihr6tBkX6WXhAAs=;
+        b=fbzcNgKXFtXmZYzO1Gh/AZp8LBZwOBHNaUmN6FgODmP9XPCTdfJT9+i1zGuhS/V46o
+         3QxlpOhfaeQjBhNLlhEbISKSS+/5nuTwOWfpLLYZlS+bqjPBFQSb/TrHGvJMOrN9KRLa
+         /IYT4TYy+4RFqX5rucyTYcWC3vMZA6tauCls/glgsiiQONOHKGGljJerab+j8LdQpLuG
+         +wemaIcluXKZ8hHIgyF87D4JrK1VespMTPT1P80oKaLltDBqEwnz0wbLXvzZ6xxZSKRM
+         9kZz2S4SvhovsWOUeIxSTgQc4tqazddHSYg0SBNRkdkCeASHKOducXsXCFbxu6iWc5zR
+         JNIA==
+X-Gm-Message-State: ANoB5pmVvZX+zsMcxLpMiOVMR3Hk7NSAFEAKb9vGnoYe4uvafI9CZNyL
+        4AUAMk0+rti4Xdvk2LCS7SP/NVLiTiJckfqGTHsdlMBj
+X-Google-Smtp-Source: AA0mqf4I1wEjh5sgajMRo+CQcrClD/fT861+BuD2d2kayotVh0KVGoz2tHJ3VFd14XzvDDEF5d3Rxh71qvj3afQa16s=
+X-Received: by 2002:a81:5243:0:b0:3d2:2098:c5fb with SMTP id
+ g64-20020a815243000000b003d22098c5fbmr34140855ywb.121.1670379773652; Tue, 06
+ Dec 2022 18:22:53 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221206114956.4c5a3605@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206204115.35258-1-vishal.moola@gmail.com> <Y4+q+vYuqqM0RKOT@casper.infradead.org>
+In-Reply-To: <Y4+q+vYuqqM0RKOT@casper.infradead.org>
+From:   Vishal Moola <vishal.moola@gmail.com>
+Date:   Tue, 6 Dec 2022 18:22:42 -0800
+Message-ID: <CAOzc2pzwzmXZPXj4M1aY5AUoKrSQvoDGAnVN6b3mXaw0i1TGaQ@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable] ext4: Convert mext_page_double_lock() to mext_folio_double_lock()
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, tytso@mit.edu, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 11:49:56AM -0800, Jakub Kicinski wrote:
->On Tue,  6 Dec 2022 04:49:12 -0500 Sasha Levin wrote:
->> From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
->>
->> [ Upstream commit 31d929de5a112ee1b977a89c57de74710894bbbf ]
->>
->> When the name_assign_type attribute was introduced (commit
->> 685343fc3ba6, "net: add name_assign_type netdev attribute"), the
->> loopback device was explicitly mentioned as one which would make use
->> of NET_NAME_PREDICTABLE:
->>
->>     The name_assign_type attribute gives hints where the interface name of a
->>     given net-device comes from. These values are currently defined:
->> ...
->>       NET_NAME_PREDICTABLE:
->>         The ifname has been assigned by the kernel in a predictable way
->>         that is guaranteed to avoid reuse and always be the same for a
->>         given device. Examples include statically created devices like
->>         the loopback device [...]
->>
->> Switch to that so that reading /sys/class/net/lo/name_assign_type
->> produces something sensible instead of returning -EINVAL.
+> Three are inline, which makes sense for the 146 bytes, but we're also
+> removing out of line calls as well as the inline calls.
 >
->Yeah... we should have applied it to -next, I think backporting it is
->a good idea but I wish it had more time in the -next tree since it's
->a "uAPI alignment" :(
->
->Oh, well, very unlikely it will break anything, tho, so let's do it.
+> Anyway, whether the description is updated or not, this looks good to me.
 
-Want me to push it back a week to the next batch? It'll give it two
-weeks instead of the usual week.
+I seem to have miscounted. We can correct that part in the description
+to "removes 6 calls to compound_head() and 2 calls to folio_file_page()."
+Thanks for the review!
 
--- 
-Thanks,
-Sasha
+> Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
