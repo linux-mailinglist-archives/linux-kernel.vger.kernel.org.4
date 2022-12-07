@@ -2,44 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8536457BC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B88176457C6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiLGK0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:26:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51864 "EHLO
+        id S229902AbiLGK1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:27:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiLGKZt (ORCPT
+        with ESMTP id S229557AbiLGK1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:25:49 -0500
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B749C45EE9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:24:57 -0800 (PST)
-X-QQ-mid: bizesmtp85t1670408559tp98jp1j
-Received: from localhost.localdomain ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Dec 2022 18:22:32 +0800 (CST)
-X-QQ-SSF: 01400000000000C0M000000A0000000
-X-QQ-FEAT: 3M0okmaRx3hQ3ejzzir6kxAEdcpGlwVKZV2ObtT+XuxHIegLx4pKfS/rgI+AD
-        LmHVc9VOhAi9DI76w+Pqjz8EpAo0vSYrVcaixSn7er9JkG4dzLW/Ap2Gk06OTMILIY9Xnes
-        /EONVPHo0LuLNNwnmxyr1Fy1UJjCwqdhfpkIafCdq2KE+ZsanKLQw3myFDcyFWvCs6yQ0sS
-        hFyt2rLBvFvNeAsnzfH2e/oAY92UFxXWR2jg/DV284U7FYyhJQQyNDO9qN+nPV9crYkp7Ck
-        JPmPAKeNd5yuHJCp3sOJyWoLfyHB9Z+K5epkJp2mcrwqQg1PMDRx+VVA4oys2F7fweqzynt
-        deD0Jf5whHKUDvolwyLW5UOcHQE7gapk5rsK9emMLkzZjL+TZRFjAjGS57o1Rz3wuni3P97
-X-QQ-GoodBg: 1
-From:   Zhen Ni <nizhen@uniontech.com>
-To:     perex@perex.cz, tiwai@suse.com
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Zhen Ni <nizhen@uniontech.com>
-Subject: [PATCH] ASoc: SOF: Fix sof-audio-pci-intel-tgl shutdown timeout during hibernation
-Date:   Wed,  7 Dec 2022 18:22:29 +0800
-Message-Id: <20221207102229.25962-1-nizhen@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 7 Dec 2022 05:27:19 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCEB167F1
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:27:17 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7C93F5C0114;
+        Wed,  7 Dec 2022 05:27:15 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Wed, 07 Dec 2022 05:27:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1670408835; x=1670495235; bh=loLEWF9/Hm
+        qi4zpCJxwmMjkK/vA2L1bwza6NoHA9Kbc=; b=PpkJDUMfjfnmhoYYGZxyQgUL7T
+        d1TlwuTPBSsGVB8ELxNhpZjzsfnLHZXApLQ5nKdjOrMEHWUG8z9LEg/f6R7bs6RL
+        Ivvw/pXy3VCV05fbkEfdR0n+J4oDMHfysqv++7jSDSLkfQ4Wbo2gBx2m57zupLCf
+        5dFWACyLgQq/N1RE3earoj/qjt3pMmIc4Xm1pSyFF9ljkmWHGUSgPpm0hf3pibSK
+        bJQFPIlpD1IA8RNcrNJE324VeOUMS+01bROOUK7KqBoAOP+NcarHYNZEfnY4zqUA
+        0Yr8I/teOEuRjjpriiAPbg5uW6nJFA3ZM7TCX+pqQqsLkK8kxN9Nhg03lQwg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1670408835; x=1670495235; bh=loLEWF9/Hmqi4
+        zpCJxwmMjkK/vA2L1bwza6NoHA9Kbc=; b=QSbQJ6r1cM7ZZDUHUFeUP+i3vobGj
+        vIWAKpFEzpIcVT3f/zQxqc8AbdhSWRrt+yK/fGB4NtVW0y6ShRiuIjA4z0nK1bKr
+        Cxs8McLNSnhwwVGJWAeiKTpzLp6801m6d2TssAwxXl5KSYcRbUL71/tZJshI9N61
+        Gy8Fb8MKNEbjWhvHQV0VRMHAz/tbgi1jDXgwhaYSKzKE1NeRe+VvxNIssW19qdwJ
+        /BoQsovIP/7JhYVuIDF91evqmkl9stD8U/47BnaTPwCkqT6OdOB16kD6dtPTC9Iv
+        tRA7AD1Pwz06Z3375HikhFF2GPdRtbF7EK7d18cn8hGnttfVAy20p/lLQ==
+X-ME-Sender: <xms:g2qQY4GNeBKTSX3a7s58HVibk65yx-gk_SsdduvmEnQpWnyqDaWQRg>
+    <xme:g2qQYxVCWMWm_F9ljE-rrX4w9OJwRGatnUgIYraPQVIskGyPPD90Rk-qLkIO1H2HP
+    0kLu-45brUYlNUAiXk>
+X-ME-Received: <xmr:g2qQYyJZr2rwsIBIghgxU5R8J1WTpuRh9I7gE6mU7ANKkkkE3S58ts5m_-eDWl4vxZbS22S4peO2wNdSx4W0g_4efjlZQgvNdUI5eSzFGYU-SA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgddugecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefugggtgffhfffkvfevofesthejredtredtjeenucfhrhhomhepofgrgihimhgv
+    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
+    gvrhhnpeevgfeiffffhfeugedvvdffgfevhfelgfehueeujeeiffejfffgleelvdffgeek
+    keenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
+    igihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:g2qQY6Hr-OK3xK9sJjnIYtQm5Ze1X-MzzXm_713VpAEReqsDjCcdMw>
+    <xmx:g2qQY-W9Xlrz7XmZQRV4oaVP3pe2KMhqWhFuxMCfkct-DrS0MQPyCQ>
+    <xmx:g2qQY9M09b55Sdme-UcQ1znxQkrBG3Fx9b_-xxKvPm1xNS5fmhmwGw>
+    <xmx:g2qQY_sarJDSZ5yPd1Bv2HPVAMVa-ahQYfAx7Z-TML3JdLyIgO8g_A>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Dec 2022 05:27:14 -0500 (EST)
+Subject: [PATCH 0/6] drm/vc4: dsi: Conversion to bridge
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHNpkGMC/w3LQQqAMAwAwa9IzhZqRER/0zTBBqRKg16kfzfHZd
+ gPTJqKwT580ORV06t6TOMAuaR6SFD2BoyIE8Y1tFsDmwZqyq5xk5loicyC4BMlE7dUc/GtPufZ+w
+ 9avD+4ZQAAAA==
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Wed, 07 Dec 2022 11:22:43 +0100
+Message-Id: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
+To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Maxime Ripard <maxime@cerno.tech>
+X-Mailer: b4 0.11.0-dev-8c583
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1178; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=wiRS50xN096d81HEbkRBXzZ5VsP627i9wgG9QKVbDkc=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkTMkv6WZTrlyZdSJ8y0SKcPWlmn4XEukK5uTF9DFqWjfFy
+ a3Z1lLIwiHExyIopssQImy+JOzXrdScb3zyYOaxMIEMYuDgFYCI2ZYwMy7askeLeE9DGtYBBqvESR2
+ /023ONahvmCIiqlKsxrXg7iZFh2mcGk5+3tbxeeh4zO/usvl1E49oBntAPZ1r4Z+mb3brCAAA=
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,54 +95,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dell Latitude 3420 Notebook, sof-audio-pci-intel-tgl may fail to shutdown
-sporadically during hibernation as following log:
+Hi,
 
-[   43.281110] PM: Image saving done
-[   43.281699] PM: hibernation: Wrote 2828852 kbytes in 2.78 seconds(1017.57 MB/s)
-[   43.282359] PM: SI
-[   43.345156] kvm: exiting hardware virtualization
-[   43.345865] auxiliary snd_sof.hda-probes.0: shutdown
-[   43.346359] skl_hda_dsp_generic skl_hda_dsp_generic: shutdown
-[   43.346849] skl_hda_codec hdmi ehdaudio0D2: shutdown
-[   43.398204] snd_hda_codec_realtek ehdaudio0DO: shutdown
-[   43.419621] dmic-codec dmic-codec: shutdown
-[   43.420194] sof-audio-pci-intel-tgl 0000:00:1f.3: shutdown
+This series converts the vc4 DSI driver to a bridge. It's been in use for a
+while on the downstream tree.
 
-Call wait_xxx_timeout() to process the timeout.
+Let me know what you think,
+Maxime
 
-Signed-off-by: Zhen Ni <nizhen@uniontech.com>
+To: Emma Anholt <emma@anholt.net>
+To: Maxime Ripard <mripard@kernel.org>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+
 ---
- sound/core/init.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Dave Stevenson (6):
+      drm/vc4: dsi: Rename bridge to out_bridge
+      drm/vc4: dsi: Move initialisation to encoder_mode_set
+      drm/vc4: dsi: Remove splitting the bridge chain from the driver
+      drm/vc4: dsi: Convert to use atomic operations
+      drm/vc4: dsi: Convert to using a bridge instead of encoder
+      drm/vc4: dsi: Remove entry to ULPS from vc4_dsi post_disable
 
-diff --git a/sound/core/init.c b/sound/core/init.c
-index 5377f94eb211..9bd674d7a0fd 100644
---- a/sound/core/init.c
-+++ b/sound/core/init.c
-@@ -574,9 +574,10 @@ void snd_card_disconnect_sync(struct snd_card *card)
- 	}
- 
- 	spin_lock_irq(&card->files_lock);
--	wait_event_lock_irq(card->remove_sleep,
-+	wait_event_lock_irq_timeout(card->remove_sleep,
- 			    list_empty(&card->files_list),
--			    card->files_lock);
-+			    card->files_lock,
-+			    msecs_to_jiffies(2000));
- 	spin_unlock_irq(&card->files_lock);
- }
- EXPORT_SYMBOL_GPL(snd_card_disconnect_sync);
-@@ -659,7 +660,7 @@ int snd_card_free(struct snd_card *card)
- 	if (ret)
- 		return ret;
- 	/* wait, until all devices are ready for the free operation */
--	wait_for_completion(&released);
-+	wait_for_completion_timeout(&released, msecs_to_jiffies(2000))
- 
- 	return 0;
- }
+ drivers/gpu/drm/vc4/vc4_dsi.c | 173 ++++++++++++++++++++++++------------------
+ 1 file changed, 99 insertions(+), 74 deletions(-)
+---
+base-commit: 99e2d98adc738597abcc5d38b03d0e9858db5c00
+change-id: 20221207-rpi-dsi-bridge-09e3bb50dde2
+
+Best regards,
 -- 
-2.20.1
-
-
+Maxime Ripard <maxime@cerno.tech>
