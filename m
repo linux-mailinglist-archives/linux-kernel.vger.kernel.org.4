@@ -2,238 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EB36646125
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EF94646126
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:34:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiLGScN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:32:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
+        id S229907AbiLGSd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:33:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLGSbt (ORCPT
+        with ESMTP id S229938AbiLGSdj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:31:49 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE5A6E567;
-        Wed,  7 Dec 2022 10:31:48 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id n20so16174925ejh.0;
-        Wed, 07 Dec 2022 10:31:48 -0800 (PST)
+        Wed, 7 Dec 2022 13:33:39 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2BB73F7B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 10:33:05 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id ud5so16077388ejc.4
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 10:33:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HNms7Hi4w1RYlFMn8tQ29mfpUPBacg1jiG+VyuPjD8I=;
-        b=Mdm4YR7dpQnvJdWvX0qiSEPorThhnrBexUuWZP88nDlJgrNGQi7wXNMdIMj96niLo8
-         hNqrowKAmOY8/CnyRQPbwIFTRPpq1ekqIQv2tn2Sdpzg67jEW5FqK4QFjNCJNEPA1C6K
-         QtXWnv7wcr4x5p8ToOZDb4PK6k/EDKpCkvIToky9JaOKmOYM55pW0JBMkSDsJLZHs3PM
-         Fu/h/FhxH8Rzf3Y7oAbVtlIOhJT+qJAZQ4WzrUlQlHID5QzrKs1zFO3hF+YGtT7N/IJZ
-         azVRiTdXugfjPUR7QkOQN9ryDwns8HDW5TeAhOopqA1D0NFXfmsa62NnC87mQoXRYIEv
-         Ldyg==
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VKwf7b34iwDJam10Xe4ksrS3pTY0DPZX7DaGHPXX4g0=;
+        b=hl14LEOJb3n9VhrtnRCQqjs/pbqeIQf4yr8GkDySmLeVCwJITB8h7t6s0951cLgx8X
+         jhtbg6XtYWLq3HNxRRwFVJioFFpL8Z8MnFL7bKNMFmgdOex6H31t6zCI85A2Nu6Nb+wD
+         V0Wb+DuZ1ii/O53g/CCb6QzWceaUNsS/Pzc4tbdHGaqi/rtK2/nYLFDOjCs2Y7fhnilG
+         zaQ4nM4KjZl9fhhfzHXzFJRNXYjUOPV3y6e1KlPAfhj/A/F1Z3mysjOFCPFKAMT0DmhA
+         KoEsRIjHQpQ0x8u+1i11adkLRibULT+amAGDUtfo3W7hTbzb2KnW5R+ec19Y/VaUU+np
+         UAbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HNms7Hi4w1RYlFMn8tQ29mfpUPBacg1jiG+VyuPjD8I=;
-        b=RLl/Y6UPgjMxo1oJhBggVsxh0WL1BJJCknIHzLZzVxCrmkbrmwrWBkZ1iqfOcEAH9g
-         /4kEkTO1cyS7lbSD3NRxBhGwZwVwZWyXjyDxwICaij0e48jsBuKcuMTp2TeNW9/IENuQ
-         3DgZbWe8PwlMsdEHsXxcCWiLNUl6uxgky2aHdKbZLnoGDUeRY6B66bHD9dJ1vufMbEp0
-         5iRduR3cew4jXbXDjYxniAfptG9rcVhAWFG9/kYPUa6xyTRdObHM56NVH05/7k+jvvtb
-         YN+yHrrCjPHLaw+Gv9VaobUOcLqiVv61a0nSI34kh9G5/kixScyizYSCEHcuIORdd+aS
-         9X4A==
-X-Gm-Message-State: ANoB5plIlFuwBdopMHK2nBtw9KAscKimRPMZJcW3YNNafrB48zyHe4Ed
-        pETGzygkbMZ8Zc5W64f2hT1KiMNXpwSZWSvqZlY=
-X-Google-Smtp-Source: AA0mqf7PiTvOMdup8c6tLZlJguE1SyMAw51mfWFNj75ihz/N/FvtvIw8f0GxRE8/GS68owj7T/wB73KEcjm1ocZmjlA=
-X-Received: by 2002:a17:906:68a:b0:78d:3188:9116 with SMTP id
- u10-20020a170906068a00b0078d31889116mr78551225ejb.176.1670437906724; Wed, 07
- Dec 2022 10:31:46 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VKwf7b34iwDJam10Xe4ksrS3pTY0DPZX7DaGHPXX4g0=;
+        b=zQHUq6yrz6tssVL31qvH61OYO4LtVHlqbI/tSwSi8FYfid8vrlqEHpgxf+39kopifN
+         8eUTvk3VQd58A41mzir21waFXOC0BLbfQQRl9aJRnxspexXgYj3TkATHAvCl3mO0y0FF
+         pXGFXI9rKt8Ltix522byZQfuXWNlS3Ef4gSGHI/44xTE767ZNlQu1O+IX+uQOQ4/IPZR
+         +2X0ABYQw6nTHtRowAaF4mJ5WUgsqgWT1jvSBmGZQ09xQL915TE71PesxZsXOM9WUuEL
+         1aNL4IvaTGYVrphYUbXcI4FNEvxmXQSxXGrRHH6i3ksrMNdrxtmnD/G+fLSQPakmy2i+
+         jXAg==
+X-Gm-Message-State: ANoB5plUKLMjZvrwwd1QRiun/PzihCt2CJLKMkIvQbIAsE/lIfen+Os6
+        MbEFNHcmPFmuSjwUNksqEOY=
+X-Google-Smtp-Source: AA0mqf6MKl/KU4aaJNYUAwaa09mq7pM6V/KW+N1GCA1J8y+vF8WUfk5GPPAu0WLUVHf1TpusLUTZiw==
+X-Received: by 2002:a17:906:a449:b0:7c1:ff2:d48e with SMTP id cb9-20020a170906a44900b007c10ff2d48emr6393375ejb.343.1670437984290;
+        Wed, 07 Dec 2022 10:33:04 -0800 (PST)
+Received: from [172.22.204.227] (ppp85-140-58-71.pppoe.mtu-net.ru. [85.140.58.71])
+        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b007ba46867e6asm8931415ejc.16.2022.12.07.10.33.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 10:33:03 -0800 (PST)
+Message-ID: <4999a9ee-ba08-6e4c-a1d1-074687f82d5e@gmail.com>
+Date:   Wed, 7 Dec 2022 21:32:41 +0300
 MIME-Version: 1.0
-References: <20221203093740.218935-1-liuxin350@huawei.com> <6ac9f767-e7f5-6603-6234-97126ea22005@iogearbox.net>
- <CAEf4BzaC6hhNzKkzFa+s4bws7APWj-Nk8Uup+3J6avCXnMFziA@mail.gmail.com> <660fd781-2d86-9d99-2851-127d6b4d4595@iogearbox.net>
-In-Reply-To: <660fd781-2d86-9d99-2851-127d6b4d4595@iogearbox.net>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 7 Dec 2022 10:31:34 -0800
-Message-ID: <CAEf4BzYV=tCDMOO8xYwNgpogyEo6dbfnAHyYKnf59rUeG5TNSw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] libbpf: Optimized return value in
- libbpf_strerror when errno is libbpf errno
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Xin Liu <liuxin350@huawei.com>, andrii@kernel.org, ast@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yanan@huawei.com,
-        wuchangye@huawei.com, xiesongyang@huawei.com,
-        kongweibin2@huawei.com, zhangmingyi5@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+From:   Mikhail Zhilkin <csharper2005@gmail.com>
+Subject: Re: ld.lld: error: undefined symbol: __udivdi3
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        NOGUCHI Hiroshi <drvlabo@gmail.com>
+References: <202212010140.pIueEBNb-lkp@intel.com>
+ <20221201091610.524f7786@xps-13> <Y4jPubD53yN32OUL@dev-arch.thelio-3990X>
+ <20221201171331.42f05097@xps-13>
+ <CAC2txAZpGooRGSxh4x9T7Y9b4OvfePx5=YuJoyaSwk1M_EvwtQ@mail.gmail.com>
+ <Y4913gH2tvIED61P@dev-arch.thelio-3990X>
+Content-Language: en-US
+In-Reply-To: <Y4913gH2tvIED61P@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 1:09 AM Daniel Borkmann <daniel@iogearbox.net> wrote=
-:
->
-> On 12/7/22 1:00 AM, Andrii Nakryiko wrote:
-> > On Mon, Dec 5, 2022 at 1:11 PM Daniel Borkmann <daniel@iogearbox.net> w=
-rote:
-> >>
-> >> On 12/3/22 10:37 AM, Xin Liu wrote:
-> >>> This is a small improvement in libbpf_strerror. When libbpf_strerror
-> >>> is used to obtain the system error description, if the length of the
-> >>> buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
-> >>> ERANGE.
-> >>>
-> >>> However, this processing is not performed when the error code
-> >>> customized by libbpf is obtained. Make some minor improvements here,
-> >>> return -ERANGE and set errno to ERANGE when buf is not enough for
-> >>> custom description.
-> >>>
-> >>> Signed-off-by: Xin Liu <liuxin350@huawei.com>
-> >>> ---
-> >>>    tools/lib/bpf/libbpf_errno.c | 6 ++++++
-> >>>    1 file changed, 6 insertions(+)
-> >>>
-> >>> diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errn=
-o.c
-> >>> index 96f67a772a1b..48ce7d5b5bf9 100644
-> >>> --- a/tools/lib/bpf/libbpf_errno.c
-> >>> +++ b/tools/lib/bpf/libbpf_errno.c
-> >>> @@ -54,10 +54,16 @@ int libbpf_strerror(int err, char *buf, size_t si=
-ze)
-> >>>
-> >>>        if (err < __LIBBPF_ERRNO__END) {
-> >>>                const char *msg;
-> >>> +             size_t msg_size;
-> >>>
-> >>>                msg =3D libbpf_strerror_table[ERRNO_OFFSET(err)];
-> >>>                snprintf(buf, size, "%s", msg);
-> >>>                buf[size - 1] =3D '\0';
-> >>> +
-> >>> +             msg_size =3D strlen(msg);
-> >>> +             if (msg_size >=3D size)
-> >>> +                     return libbpf_err(-ERANGE);
-> >>
-> >> Given this is related to libbpf_strerror_table[] where the error strin=
-gs are known
-> >> lets do compile-time error instead. All callers should pass in a buffe=
-r of STRERR_BUFSIZE
-> >> size in libbpf.
-> >
-> > That sounds a bit too pessimistic?.. If the actual error message fits
-> > in the buffer, why return -ERANGE just because theoretically some
-> > error descriptions might fit?
-> >
-> > But I don't think we need to calculate strlen(). snprintf above
-> > returns the number of bytes required to print a full string, even if
-> > it was truncated. So just comparing snprintf's result to size should
-> > be enough.
->
-> I meant sth like below. For example if we were to shrink STRERR_BUFSIZE d=
-own
-> to 32 for testing, you'd then get:
+Hi Nathan,
 
-Sure, but I'm not sure why do we need to do this? Array of pointers to
-string will overall use less memory, as each string will take as much
-space as needed and no more.
+On 12/6/2022 8:03 PM, Nathan Chancellor wrote:
 
-I guess I'm missing which problem you are trying to solve. I believe
-Xin was addressing a concern of extern (to libbpf) callers not getting
--ERANGE in cases when they provide too small a buffer, which is just a
-simple snprintf() use adjustment to be a proper fix.
+> Hi Mikhail,
+>
+> First and foremost, apologies for the delay in my response!
+>
+> On Thu, Dec 01, 2022 at 09:39:22PM +0300, Mikhail Zhilkin wrote:
+>> Hi Miquèl, Nathan,
+>>
+>> On 12/1/2022 7:13 PM, Miquel Raynal wrote:
+>>> Hi Nathan,
+>>>
+>>> nathan@kernel.org wrote on Thu, 1 Dec 2022 09:00:57 -0700:
+>>>
+>>>> On Thu, Dec 01, 2022 at 09:16:10AM +0100, Miquel Raynal wrote:
+>>>>> Hi Mikhail, Hiroshi,
+>>>>>
+>>>>> lkp@intel.com wrote on Thu, 1 Dec 2022 01:46:36 +0800:
+>>>>>
+>>>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>>>>> head:   01f856ae6d0ca5ad0505b79bf2d22d7ca439b2a1
+>>>>>> commit: 9b78ef0c7997052e9eaa0f7a4513d546fa17358c mtd: parsers: add support for Sercomm partitions
+>>>>>> date:   6 months ago
+>>>>>> config: mips-randconfig-r033-20221128
+>>>>>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 6e4cea55f0d1104408b26ac574566a0e4de48036)
+>>>>>> reproduce (this is a W=1 build):
+>>>>>>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>>>         chmod +x ~/bin/make.cross
+>>>>>>         # install mips cross compiling tool for clang build
+>>>>>>         # apt-get install binutils-mipsel-linux-gnu
+>>>>>>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9b78ef0c7997052e9eaa0f7a4513d546fa17358c
+>>>>>>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>>         git fetch --no-tags linus master
+>>>>>>         git checkout 9b78ef0c7997052e9eaa0f7a4513d546fa17358c
+>>>>>>         # save the config file
+>>>>>>         mkdir build_dir && cp config build_dir/.config
+>>>>>>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+>>>>>>
+>>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>>> | Reported-by: kernel test robot <lkp@intel.com>
+>>>>>>
+>>>>>> All errors (new ones prefixed by >>):
+>>>>>>
+>>>>>>>> ld.lld: error: undefined symbol: __udivdi3
+>>>>>>    >>> referenced by scpart.c
+>>>>>>    >>>               mtd/parsers/scpart.o:(scpart_parse) in archive drivers/built-in.a
+>>>>>>
+>>>>> Can you please try to reproduce this with a mips toolchain as advised
+>>>>> and send a fix?
+>>>> For what it's worth, this is likely our bug:
+>>>>
+>>>> https://github.com/ClangBuiltLinux/linux/issues/1635
+>>>>
+>>>> It sounds like there are some merged LLVM patches that should help but I
+>>>> guess not based on this report...
+>>> Ah, yeah, thanks a lot for the share.
+>>>
+>>> Cheers, Miquèl
+>> I could reproduce the issue and found that reference to __udivdi3
+>> appears in this function:
+>>
+>> static uint32_t scpart_desc_is_valid(struct sc_part_desc *pdesc)
+>> {
+>>         return ((pdesc->part_id != 0xffffffffUL) &&
+>>                 (pdesc->part_offs != 0xffffffffUL) &&
+>>                 (pdesc->part_bytes != 0xffffffffUL));
+>> }
+>>
+>> There is no LLVM compiler error if:
+>>
+>> static uint32_t scpart_desc_is_valid(struct sc_part_desc *pdesc)
+>> {
+>>         return (0);
+>> }
+>>
+>> Currently I have no ideas where does __udivdi3 come from, because
+>> there's no division here. Should I try to rewrite somehow the function
+>> to avoid the error?
+>> I would greatly appreciate any ideas.
+> I do not think it is that function that is causing the problem. Making
+> it return zero just causes the code generation to change enough to avoid
+> this issue.
+>
+> Based on the previous analysis and reduction [1], LLVM is transforming
+> the for loop in scpart_scan_partmap() into division; you can verify this
+> by commenting it out some way then rebuilding and running 'readelf -s'
+> to look for __udivdi3.
+>
+> Arnd suggested working around this problem by making offs a 32-bit type,
+> as it is already bounded by ->erasesize, which appears to be a 32-bit
+> value from what I can tell. Making a change like so appears to resolve
+> the issue for me but I am not sure if that has any other implications.
+>
+> diff --git a/drivers/mtd/parsers/scpart.c b/drivers/mtd/parsers/scpart.c
+> index 02601bb33de4..6e5e11c37078 100644
+> --- a/drivers/mtd/parsers/scpart.c
+> +++ b/drivers/mtd/parsers/scpart.c
+> @@ -50,7 +50,7 @@ static int scpart_scan_partmap(struct mtd_info *master, loff_t partmap_offs,
+>  	int cnt = 0;
+>  	int res = 0;
+>  	int res2;
+> -	loff_t offs;
+> +	uint32_t offs;
+>  	size_t retlen;
+>  	struct sc_part_desc *pdesc = NULL;
+>  	struct sc_part_desc *tmpdesc;
+>
+> [1]: https://github.com/ClangBuiltLinux/linux/issues/1635
 
->
-> # make libbpf_errno.o
-> gcc -g -O2 -std=3Dgnu89 -Wbad-function-cast -Wdeclaration-after-statement=
- -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations -Wmissin=
-g-prototypes -Wnested-externs -Wno-system-headers -Wold-style-definition -W=
-packed -Wredundant-decls -Wstrict-prototypes -Wswitch-default -Wswitch-enum=
- -Wundef -Wwrite-strings -Wformat -Wno-type-limits -Wstrict-aliasing=3D3 -W=
-shadow -Wno-switch-enum -Werror -Wall -I. -I/home/darkstar/trees/bpf-next/t=
-ools/include -I/home/darkstar/trees/bpf-next/tools/include/uapi -fvisibilit=
-y=3Dhidden -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64    -c -o libbpf_e=
-rrno.o libbpf_errno.c
-> libbpf_errno.c:27:31: error: initializer-string for array of chars is too=
- long [-Werror]
->     27 |  [ERRCODE_OFFSET(KVERSION)] =3D "'version' section incorrect or =
-lost",
->        |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~
-> libbpf_errno.c:27:31: note: (near initialization for =E2=80=98libbpf_stre=
-rror_table[2]=E2=80=99)
-> libbpf_errno.c:31:29: error: initializer-string for array of chars is too=
- long [-Werror]
->     31 |  [ERRCODE_OFFSET(VERIFY)] =3D "Kernel verifier blocks program lo=
-ading",
->        |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~
-> libbpf_errno.c:31:29: note: (near initialization for =E2=80=98libbpf_stre=
-rror_table[7]=E2=80=99)
-> libbpf_errno.c:34:31: error: initializer-string for array of chars is too=
- long [-Werror]
->     34 |  [ERRCODE_OFFSET(PROGTYPE)] =3D "Kernel doesn't support this pro=
-gram type",
->        |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~~~
-> libbpf_errno.c:34:31: note: (near initialization for =E2=80=98libbpf_stre=
-rror_table[10]=E2=80=99)
-> libbpf_errno.c:37:30: error: initializer-string for array of chars is too=
- long [-Werror]
->     37 |  [ERRCODE_OFFSET(NLPARSE)] =3D "Incorrect netlink message parsin=
-g",
->        |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> libbpf_errno.c:37:30: note: (near initialization for =E2=80=98libbpf_stre=
-rror_table[13]=E2=80=99)
-> cc1: all warnings being treated as errors
-> make: *** [<builtin>: libbpf_errno.o] Error 1
->
->
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 2a82f49ce16f..2e5df1624f79 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -265,8 +265,6 @@ static void pr_perm_msg(int err)
->                 buf);
->   }
->
-> -#define STRERR_BUFSIZE  128
-> -
->   /* Copied from tools/perf/util/util.h */
->   #ifndef zfree
->   # define zfree(ptr) ({ free(*ptr); *ptr =3D NULL; })
-> diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errno.c
-> index 96f67a772a1b..2f03f861b8b6 100644
-> --- a/tools/lib/bpf/libbpf_errno.c
-> +++ b/tools/lib/bpf/libbpf_errno.c
-> @@ -21,7 +21,7 @@
->   #define ERRCODE_OFFSET(c)     ERRNO_OFFSET(LIBBPF_ERRNO__##c)
->   #define NR_ERRNO      (__LIBBPF_ERRNO__END - __LIBBPF_ERRNO__START)
->
-> -static const char *libbpf_strerror_table[NR_ERRNO] =3D {
-> +static const char libbpf_strerror_table[NR_ERRNO][STRERR_BUFSIZE] =3D {
->         [ERRCODE_OFFSET(LIBELF)]        =3D "Something wrong in libelf",
->         [ERRCODE_OFFSET(FORMAT)]        =3D "BPF object format invalid",
->         [ERRCODE_OFFSET(KVERSION)]      =3D "'version' section incorrect =
-or lost",
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-> index 377642ff51fc..d4dc4fe945a6 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -57,6 +57,8 @@
->   #define ELF64_ST_VISIBILITY(o) ((o) & 0x03)
->   #endif
->
-> +#define STRERR_BUFSIZE 128
-> +
->   #define BTF_INFO_ENC(kind, kind_flag, vlen) \
->         ((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN)=
-)
->   #define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or=
-_type)
+Many thanks for your time and very clear explanation!
+
+I've made compile and run tests. It seems that have the working
+workaround and I'm going to send the patch. After analyzing the code, I
+don't expect any other implications.
+
+Who should I add to Suggested-by of the patch: You or maybe Arndt?
+
+> Cheers,
+> Nathan
+
+-- 
+Best regards,
+Mikhail
+
