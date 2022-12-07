@@ -2,212 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A985646152
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:56:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C910646155
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLGS4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:56:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S229700AbiLGS6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:58:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbiLGS4F (ORCPT
+        with ESMTP id S229529AbiLGS57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:56:05 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7017532FE;
-        Wed,  7 Dec 2022 10:56:03 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 54ADC1EC0426;
-        Wed,  7 Dec 2022 19:56:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670439362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=w/3sUk/0rfDRuqVgEsIw3ITuf0RQoY4ZUXxH88HqJ9A=;
-        b=FRcXo6P1WXcDtzyF+tdgCucKnoo5G7CTBSrh1jzak3+i6ipLz7ffxEIkZwkEnfelNrqP2R
-        054sS/PfrLqdrjogmm+N5+bc6rgxmeLUiWEkB2CuygYNLaRavmTBw6FXltMoPFxwXhkNXi
-        Q+CsZIgDK/J76gYZweohlXECXomsKJE=
-Date:   Wed, 7 Dec 2022 19:55:57 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Sterritt <sterritt@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu
- variables
-Message-ID: <Y5DhvRZX0Aizu1ya@zn.tnic>
-References: <20221201021948.9259-1-aik@amd.com>
- <20221201021948.9259-2-aik@amd.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221201021948.9259-2-aik@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 13:57:59 -0500
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BA71A839
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 10:57:57 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 6840E32006F2;
+        Wed,  7 Dec 2022 13:57:53 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 07 Dec 2022 13:57:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670439472; x=1670525872; bh=IYyFVXq4uP
+        LEhfNx5cFnxsu3093usNvyCS91OgsAon4=; b=SMIN2njeTfwiE019ekb1g6bijV
+        NKHv0vYTHXtMT+UINLaSRtX1NpXVxCIDBRcnMDpbRrbF8A46/sxNlk1nX7wVZR0W
+        BHYJZf8dO/czk+33+Zjmn5IPtmqT2VhUFWLtFd0a52CXZqHz3w6C8kvHrHLFVKUi
+        MAwWNNzoIe049XNoDE4HPMlfu0UAblDb+N2krIotQQpGWCuZG1wRwtYZYNrMOqTx
+        WETqRdVZ2o49/wPGdDkBg/1h+pPGVBCuz/ATjDB98H+HxB1EJvrZUZMBJ5fK1zZB
+        js2iQyL839A2tE7ExtJyv37uOSTB1DIO8T2isSL5o6sHbk9wd4LlKLzBSriQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1670439472; x=1670525872; bh=IYyFVXq4uPLEhfNx5cFnxsu3093u
+        sNvyCS91OgsAon4=; b=DBSZj6QcexkjNBaxNJTyJo3URZLeUZT5VkAy78Vn/oCZ
+        Sqo1TTvs9gTDN2lK+xZalLMzu9bZrZw+/sDCxBfHUKD5OTJEe8u/yv6ieWntDSIT
+        m7TMEfg3SrokXNCVuoE+40+0oOYxjTbJISEpO3EO2hBYdzi9F0+OJ48TNQnGgCSV
+        CczUKFxwW7aAZyBrTFxYFyEsnvm1EYHEBb+z+s9Z7NaRWj5igfgHnFlWVLGN7R1Y
+        p1sxVYCr+Kuaq2rX8b8mFm5Dcsv6o6JmzMC1hpYVVnD+N0h/k5Qm0kqRICT9qs/N
+        4g1e+QdSDZ+B0rHduklu4CY7+51tihP8/BnY/y65jQ==
+X-ME-Sender: <xms:MOKQY595cdVAeyRxDx7a39Qsj4hW3bNov3SN_BdPsWFLWYN9CrLQFA>
+    <xme:MOKQY9u-Hx2D387zPssewjvndRGX4jxEO9wQTjTANkvyCIBe8WQK1H2Xk0mbfq9P_
+    eothuQRcl64AH5drgo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdduudelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:MOKQY3BdQb_tvKSlP52pmMGrnJeYKbmJz9Sv8W0fnuJJYbC9DfaVgQ>
+    <xmx:MOKQY9fU6rDQrBqjE1aaIJgqstlUUpnoLLnxDeX5B94Kz4RJJXQA_Q>
+    <xmx:MOKQY-ONrTN3eLSbvqMBidOX272KLRX0IbvbMG29v1CoEj2u2ZG02Q>
+    <xmx:MOKQY7oDcvzpd7B0sitpjJXj3JXVmH9t0RbFktG7LOCc5Fwzse8z8Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 7394AB60086; Wed,  7 Dec 2022 13:57:52 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <efaf326b-3cd9-40a4-8424-b5f60270beae@app.fastmail.com>
+In-Reply-To: <41a5931e-3543-6a3d-ca85-2dd8ad581f2e@infradead.org>
+References: <CA+55aFyJkpSa6rwZ-5xTihfGiNC_T0oL6txrodYBEo2-0O=p7g@mail.gmail.com>
+ <1499156564-29458-1-git-send-email-peda@axentia.se>
+ <053d7bf2-9bf3-a71c-5713-7cce19413c37@infradead.org>
+ <a546f2db-371e-4d2f-a0ee-c71fcae8c548@app.fastmail.com>
+ <41a5931e-3543-6a3d-ca85-2dd8ad581f2e@infradead.org>
+Date:   Wed, 07 Dec 2022 19:57:31 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Randy Dunlap" <rdunlap@infradead.org>,
+        "Peter Rosin" <peda@axentia.se>,
+        "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mux: remove the Kconfig question for the subsystem
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 01, 2022 at 01:19:46PM +1100, Alexey Kardashevskiy wrote:
-> Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu variables
+On Wed, Dec 7, 2022, at 18:19, Randy Dunlap wrote:
+> On 12/7/22 00:41, Arnd Bergmann wrote:
+>> For the other subsystems I mentioned, there are occasionally 
+>> problems with missing 'select' that tend to be a pain to find,
+>> compared to subsystems consistently using 'depends on', which
+>> show up as link failures in randconfig builds.
+>
+> I find that various drivers mixing the use of "select" and
+> "depends on" is problematic.
 
-"x86/amd: " is perfectly fine as a prefix.
+Agreed. Even just mixing 'select' with user-visible symbols
+is very confusing. The two sensible ways are either using
+user-visible options with 'depends on' or hidden options with
+'select'.
 
-> Reading DR[0-3]_ADDR_MASK MSRs takes about 250 cycles which is going to
-> be noticeable when the AMD KVM SEV-ES's DebugSwap feature is enabled and
+> However, there was no answer for the original question:
+> How does a user enable the 4 Kconfig symbols in drivers/mux/Kconfig
+> if some other random driver has not selected MULTIPLEXER?
 
-which does what? I.e., a sort of lazy DR regs swapping...
+There is no need to enable any of them in this case, because
+the mux drivers are not usable by themselves.
 
-> KVM needs to store these before switching to a guest; the DebugSwitch
-> hardware support restores them as type B swap.
+> I.e.:
+>
+> config MUX_ADG792A
+> 	tristate "Analog Devices ADG792A/ADG792G Multiplexers"
+>
+> config MUX_ADGS1408
+> 	tristate "Analog Devices ADGS1408/ADGS1409 Multiplexers"
+>
+> config MUX_GPIO
+> 	tristate "GPIO-controlled Multiplexer"
+>
+> config MUX_MMIO
+> 	tristate "MMIO/Regmap register bitfield-controlled Multiplexer"
+>
+> OK, MUX_MMIO is selected from some other drivers, but if that is not done,
+> how can the first 3 be enabled by a user?
 
-I know this is all clear to you but you should explain what type B
-register swap is.
+They cannot, that is the entire point of hiding the subsystem
+when it is not used.
 
-> This stores MSR values from set_dr_addr_mask() in percpu values and
-
-s/This stores/Store/
-
-From Documentation/process/submitting-patches.rst:
-
- "Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
-  instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
-  to do frotz", as if you are giving orders to the codebase to change
-  its behaviour."
-
-Also, do not talk about what your patch does - that should hopefully be
-visible in the diff itself. Rather, talk about *why* you're doing what
-you're doing.
-
-> returns them via new get_dr_addr_mask(). The gain here is about 10x.
-> 
-> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
-> ---
->  arch/x86/include/asm/debugreg.h |  1 +
->  arch/x86/kernel/cpu/amd.c       | 32 ++++++++++++++++++++
->  2 files changed, 33 insertions(+)
-> 
-> diff --git a/arch/x86/include/asm/debugreg.h b/arch/x86/include/asm/debugreg.h
-> index cfdf307ddc01..c4324d0205b5 100644
-> --- a/arch/x86/include/asm/debugreg.h
-> +++ b/arch/x86/include/asm/debugreg.h
-> @@ -127,6 +127,7 @@ static __always_inline void local_db_restore(unsigned long dr7)
->  
->  #ifdef CONFIG_CPU_SUP_AMD
->  extern void set_dr_addr_mask(unsigned long mask, int dr);
-> +extern unsigned long get_dr_addr_mask(int dr);
->  #else
->  static inline void set_dr_addr_mask(unsigned long mask, int dr) { }
->  #endif
-> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
-> index c75d75b9f11a..ec7efcef4e14 100644
-> --- a/arch/x86/kernel/cpu/amd.c
-> +++ b/arch/x86/kernel/cpu/amd.c
-> @@ -1158,6 +1158,11 @@ static bool cpu_has_amd_erratum(struct cpuinfo_x86 *cpu, const int *erratum)
->  	return false;
->  }
->  
-> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr0_addr_mask);
-> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr1_addr_mask);
-> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr2_addr_mask);
-> +DEFINE_PER_CPU_READ_MOSTLY(unsigned long, dr3_addr_mask);
-
-This BPEXT thing is AMD-only, right?
-
-I guess those should be called amd_drX_addr_mask where X in [0-3].
-
-Yeah yeah, they are used in AMD-only code - svm* - but still.
-
->  void set_dr_addr_mask(unsigned long mask, int dr)
->  {
->  	if (!boot_cpu_has(X86_FEATURE_BPEXT))
-> @@ -1166,17 +1171,44 @@ void set_dr_addr_mask(unsigned long mask, int dr)
->  	switch (dr) {
->  	case 0:
->  		wrmsr(MSR_F16H_DR0_ADDR_MASK, mask, 0);
-> +		per_cpu(dr0_addr_mask, smp_processor_id()) = mask;
->  		break;
->  	case 1:
-> +		wrmsr(MSR_F16H_DR1_ADDR_MASK - 1 + dr, mask, 0);
-> +		per_cpu(dr1_addr_mask, smp_processor_id()) = mask;
-> +		break;
->  	case 2:
-> +		wrmsr(MSR_F16H_DR1_ADDR_MASK - 1 + dr, mask, 0);
-> +		per_cpu(dr2_addr_mask, smp_processor_id()) = mask;
-> +		break;
->  	case 3:
->  		wrmsr(MSR_F16H_DR1_ADDR_MASK - 1 + dr, mask, 0);
-> +		per_cpu(dr3_addr_mask, smp_processor_id()) = mask;
->  		break;
->  	default:
->  		break;
->  	}
->  }
->  
-> +unsigned long get_dr_addr_mask(int dr)
-
-This function name is too generic for an exported function.
-
-amd_get_dr_addr_mask() I'd say.
-
-> +	if (!boot_cpu_has(X86_FEATURE_BPEXT))
-
-check_for_deprecated_apis: WARNING: arch/x86/kernel/cpu/amd.c:1195: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
-
-You could fix the above one too, while at it.
-
-> +		return 0;
-> +
-> +	switch (dr) {
-> +	case 0:
-> +		return per_cpu(dr0_addr_mask, smp_processor_id());
-> +	case 1:
-> +		return per_cpu(dr1_addr_mask, smp_processor_id());
-> +	case 2:
-> +		return per_cpu(dr2_addr_mask, smp_processor_id());
-> +	case 3:
-> +		return per_cpu(dr3_addr_mask, smp_processor_id());
-
-	default:	
-		WARN_ON_ONCE(1);
-		break;
-
-Just in case.
-
-And as a matter of fact, make that short and succinct:
-
-        switch (dr) {
-        case 0: return per_cpu(dr0_addr_mask, smp_processor_id());
-        case 1: return per_cpu(dr1_addr_mask, smp_processor_id());
-        case 2: return per_cpu(dr2_addr_mask, smp_processor_id());
-        case 3: return per_cpu(dr3_addr_mask, smp_processor_id());
-        default: WARN_ON_ONCE(1); break;
-        }
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+      Arnd
