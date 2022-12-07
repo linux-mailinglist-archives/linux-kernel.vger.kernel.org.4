@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF31645C45
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13C55645C4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:20:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiLGOTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
+        id S230269AbiLGOUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:20:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiLGOTx (ORCPT
+        with ESMTP id S230198AbiLGOT5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:19:53 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC4555C81;
-        Wed,  7 Dec 2022 06:19:51 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1445ca00781so14841550fac.1;
-        Wed, 07 Dec 2022 06:19:51 -0800 (PST)
+        Wed, 7 Dec 2022 09:19:57 -0500
+Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08FDE5C779;
+        Wed,  7 Dec 2022 06:19:57 -0800 (PST)
+Received: by mail-ot1-f54.google.com with SMTP id z14-20020a9d65ce000000b0067059c25facso3225828oth.6;
+        Wed, 07 Dec 2022 06:19:57 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=pi2o5fQQUNnXltuus7EPRUPgm6i8PxvXv763Tq5/HAM=;
-        b=qcgZANJtSl5kHUfdJezRBdoLmkO2QWLGaRJIJyRokGrTc/DNMbXA7BugUQtaFp3qSN
-         XyKiFI2SI+ZFYu6cUPWhRtrGlsM9bsi+Up9/5qf/AQKBGK+xxmX1YyKjApnEGx0RbBkV
-         RLHihQMbQZBoQ3RzhSo3kMsDcewzGaDjTE+Tv4fKVSQZRBql5R7B6pR2eaBZpYjyFVXB
-         A5TCKzoScO0frBnvv395Obpb6f1T7xoZkyDsPpav2Dao09eeqN48dIiL6NViK+k05sNN
-         Jd1P21hBeJ0CYOvJKLv+KfSa+igbbKFwlzYqLyxa2vmUoZYt3unNblAX94JkFQb1IsS7
-         8InQ==
-X-Gm-Message-State: ANoB5pnwetmxm/DrovN2L3VQHLw0I795w1YXaqFMn+IPt3HEQ7vQUFev
-        5DcPrbUoUPwVqyaVaMiL7A==
-X-Google-Smtp-Source: AA0mqf5VSOef30zOp0qgUOwJNVFltclH7wjWy25TlqQr4xsb/OjxWJmLXhaaOSqiPhBVUECq3YL4wQ==
-X-Received: by 2002:a05:6871:b21:b0:143:cc3d:58f with SMTP id fq33-20020a0568710b2100b00143cc3d058fmr23003973oab.210.1670422791094;
-        Wed, 07 Dec 2022 06:19:51 -0800 (PST)
+        bh=t0xsqqRAAwkCH90xN5tDo0UY2Z+9ZzZVHejNWkAJfeY=;
+        b=0r3rbxKIpw3HkjKrPB3MxmniMNtX8C4aaEnufzDuDs3NyIK2r8XNk2GrqPi4dNrFXy
+         P9wdpLMaDHk1pDkQjRb9KXXLm8zRlvzsQCIgy2UwdwIumpIuLdfKbxjd3wHnq9xB+rWB
+         aNhp/aAvlmidg0f7mPGIUN8fEonvB6Z9BstrFYKxuUqv58N+PDSzxHwt0ty2XG7HlVIk
+         hFilYBNAtsQPmJSUk7zXxD98udxLgte+EvaIiDszkcp9YwwmhZSBoMgBksUJZqNiFfDG
+         mu05ytH5w76stbnCoZxeRAVM24KucTxdnDOSLF5WiriS6wiJLU1eJhSpzfdnneh6Y6s6
+         oxsA==
+X-Gm-Message-State: ANoB5pnikM4R55PNFwUfILjtilP0fqYDp5c8KOtA+1uJWH5Md9flTmf9
+        g6NDoaBQ/gicWo0r9M0SkQ==
+X-Google-Smtp-Source: AA0mqf5uSaAugZRJi+A+E/uxyhpPDRKenpx8oRR0Qkl8Aa2el1QUalmTuXET2L/0ToRRdW9ZonSPSg==
+X-Received: by 2002:a9d:84b:0:b0:66e:f6cb:99ec with SMTP id 69-20020a9d084b000000b0066ef6cb99ecmr6303505oty.330.1670422796137;
+        Wed, 07 Dec 2022 06:19:56 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bt3-20020a05683039c300b0066e93d2b858sm6614711otb.55.2022.12.07.06.19.50
+        by smtp.gmail.com with ESMTPSA id m22-20020a056870059600b0013c8ae74a14sm12204892oap.42.2022.12.07.06.19.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 06:19:50 -0800 (PST)
-Received: (nullmailer pid 2124798 invoked by uid 1000);
+        Wed, 07 Dec 2022 06:19:55 -0800 (PST)
+Received: (nullmailer pid 2124811 invoked by uid 1000);
         Wed, 07 Dec 2022 14:19:49 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-In-Reply-To: <20221207055405.30940-9-hayashi.kunihiko@socionext.com>
-References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-9-hayashi.kunihiko@socionext.com>
-Message-Id: <167042221991.2111700.14995917692321113955.robh@kernel.org>
-Subject: Re: [PATCH v2 08/16] dt-bindings: soc: socionext: Add UniPhier system
- controller
+To:     William Qiu <william.qiu@starfivetech.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-mmc@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-riscv@lists.infradead.org,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20221207131731.1291517-2-william.qiu@starfivetech.com>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-2-william.qiu@starfivetech.com>
+Message-Id: <167042222472.2111911.2050446708831690640.robh@kernel.org>
+Subject: Re: [PATCH v1 1/3] dt-bindings: mmc: Add bindings for StarFive
 Date:   Wed, 07 Dec 2022 08:19:49 -0600
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -69,19 +70,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 07 Dec 2022 14:53:57 +0900, Kunihiko Hayashi wrote:
-> Add devicetree binding schema for the system controller implemented on
-> Socionext Uniphier SoCs.
+On Wed, 07 Dec 2022 21:17:29 +0800, William Qiu wrote:
+> Add documentation to describe StarFive
+> designware mobile storage host controller driver.
 > 
-> This system controller has multiple functions such as clock control,
-> reset control, internal watchdog timer, thermal management, and so on.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
 > ---
->  .../socionext/socionext,uniphier-sysctrl.yaml | 105 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+>  .../bindings/mmc/starfive,jh7110-sdio.yaml    | 71 +++++++++++++++++++
+>  1 file changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mmc/starfive,jh7110-sdio.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -90,12 +87,17 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.example.dtb: sysctrl@61840000: 'thermal' does not match any of the regexes: '^clock-controller(@[0-9a-f]+)?$', '^reset-controller(@[0-9a-f]+)?$', '^thermal-sensor(@[0-9a-f]+)?$', '^watchdog(@[0-9a-f]+)?$', 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
+Documentation/devicetree/bindings/mmc/starfive,jh7110-sdio.example.dts:21:18: fatal error: dt-bindings/clock/starfive-jh7110.h: No such file or directory
+   21 |         #include <dt-bindings/clock/starfive-jh7110.h>
+      |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindings/mmc/starfive,jh7110-sdio.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221207055405.30940-9-hayashi.kunihiko@socionext.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221207131731.1291517-2-william.qiu@starfivetech.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
