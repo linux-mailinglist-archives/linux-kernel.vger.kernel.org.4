@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89D7645C2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE51645C2D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLGOQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42860 "EHLO
+        id S230023AbiLGOQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLGOQB (ORCPT
+        with ESMTP id S229829AbiLGOQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:16:01 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B44A4A58E;
-        Wed,  7 Dec 2022 06:16:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670422560; x=1701958560;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=PP7KOTPt4ERsWQH2CfJ+vJdbgsy5iXmqVONYHIHapR4=;
-  b=kXZP52tHgBKlRbUjf4cjKgOnQOwPjTpNR2WwLI4f5WkarHsfbCwS2ck/
-   77uI5sJzvgVvlKDy+19JAbgPIinlG+EujQoB9rJVsBJf2peG2A9hP3c3C
-   Nc/Q/mStPnVlUXk79OnicIORcl5lT7DswP/8Y3k/uNtq8ouJ6MuKaqpsn
-   FdqMLbZfJKxCeYM897PM8PsxL6x9++5vszfGsEnMJvZrGbMl8G0eEalZ5
-   mhxsxL6shvgP8T/bbm4Fjp5Oei0PSJQEAvbqIRRN85/e4h1Z+aXtJ/N8y
-   b9U/p5uZ+dS23Oc9yaya/Cya+lyFP2gs7vb+gvfau7+0xw7rHLCjfwx8V
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="318756464"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="318756464"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 06:15:42 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="753111853"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="753111853"
-Received: from fbackhou-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.192])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 06:15:39 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, corbet@lwn.net,
-        akiyks@gmail.com, ojeda@kernel.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu, konstantin@linuxfoundation.org
-Subject: Re: [PATCH v3 1/2] docs: Move rustdoc output, cross-reference it
-In-Reply-To: <5887a9cd-b48e-e2af-7639-3f9ff53fcd8a@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221201204814.2141401-1-carlos.bilbao@amd.com>
- <20221206153151.771038-1-carlos.bilbao@amd.com>
- <20221206153151.771038-2-carlos.bilbao@amd.com> <87359r39gg.fsf@intel.com>
- <5887a9cd-b48e-e2af-7639-3f9ff53fcd8a@amd.com>
-Date:   Wed, 07 Dec 2022 16:15:36 +0200
-Message-ID: <87lenj1erb.fsf@intel.com>
+        Wed, 7 Dec 2022 09:16:02 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE80E4A58E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 06:16:01 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2vDC-0001ta-JR; Wed, 07 Dec 2022 15:15:50 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2vD8-002wMu-SR; Wed, 07 Dec 2022 15:15:47 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p2vD8-003Ib5-Ip; Wed, 07 Dec 2022 15:15:46 +0100
+Date:   Wed, 7 Dec 2022 15:15:46 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <robert.foss@linaro.org>
+Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Grant Likely <grant.likely@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        kernel@pengutronix.de,
+        "linux-i2c@vger.kernel.org Doug Anderson" <dianders@chromium.org>
+Subject: Re: [PATCH 019/606] drm/bridge: chrontel-ch7033: Convert to i2c's
+ .probe_new()
+Message-ID: <20221207141546.tvpbgmjej5kmoxtm@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-20-uwe@kleine-koenig.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="l2rbrpd32oap35sa"
+Content-Disposition: inline
+In-Reply-To: <20221118224540.619276-20-uwe@kleine-koenig.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Dec 2022, Carlos Bilbao <carlos.bilbao@amd.com> wrote:
-> On 12/7/22 2:27 AM, Jani Nikula wrote:
->> Also, please don't use "here" as the link text.
->
-> Why not?
 
-It's considered bad style, see e.g. [1] or [2] or the plethora of
-results you get if you search for "here as the link text".
+--l2rbrpd32oap35sa
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The link text should describe what's at the destination.
+Hello dear drm/bridge maintainers,
 
-BR,
-Jani.
+On Fri, Nov 18, 2022 at 11:35:53PM +0100, Uwe Kleine-K=F6nig wrote:
+> From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+>=20
+> The probe function doesn't make use of the i2c_device_id * parameter so it
+> can be trivially converted.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
+Do you plan to pick up the drm/bridge patches in the upcoming cycle?
 
-[1] https://ux.stackexchange.com/questions/12100/why-shouldnt-we-use-words-such-as-here-and-this-in-textlinks
-[2] https://www.w3.org/QA/Tips/noClickHere
+You could do that using:
 
+	git pull https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c=
+/client_device_id_helper-immutable
+	b4 am -l -3 -P 14-35,37 20221118224540.619276-20-uwe@kleine-koenig.org
+	git am -s ./20221118_uwe_i2c_complete_conversion_to_i2c_probe_new.mbx
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+Note that Doug Anderson already applied the patch for ti-sn65dsi86,
+which is patch #36 and so this is skipped in the above range.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--l2rbrpd32oap35sa
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmOQoA8ACgkQwfwUeK3K
+7AmTvQf+O0i7VtSADqiMoJs9sq9Fluo3k8UY/bEqNB+pOcYy235FAgJxc0E9D4gW
+BxMvHSQd3ZaTGX/OsHP9M9cAnkPssVsRi8lNXJytML+PHpYzkjQMrae+tRVWbudl
+coXdeL48lhc4j2vA2daJOY+yy82MK/e7HOhsa6/7wEZGwap/Xwp/hVYP5VKjCL00
+fHtiMFWAhbiH3M0DLsMJHjypPOF5az87YGWHZKoAnEO/4Mmeg5NmrP2wgI1aHskG
+t5xsFM7W1+6u2FLzp3Qr3J3IYkvifPJXK7cwDAgvhRHaKenW4fOhxZN7k5I9GnlT
+BAE6LlxymZ7ejoDl2VDlbfdrTQ9vOg==
+=rylK
+-----END PGP SIGNATURE-----
+
+--l2rbrpd32oap35sa--
