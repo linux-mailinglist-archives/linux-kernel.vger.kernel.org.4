@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F1B6456D3
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C786456D0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:49:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiLGJtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:49:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55642 "EHLO
+        id S230232AbiLGJtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:49:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbiLGJtg (ORCPT
+        with ESMTP id S230210AbiLGJtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:49:36 -0500
+        Wed, 7 Dec 2022 04:49:35 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A60027D;
-        Wed,  7 Dec 2022 01:49:35 -0800 (PST)
-X-UUID: 37be9170f0514ba9bdcaa9f74a10d17d-20221207
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA522FA4A;
+        Wed,  7 Dec 2022 01:49:34 -0800 (PST)
+X-UUID: 7015714541024174a3809cb6f43897b7-20221207
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=crufHaBJqDwuFiPQOlCXJvq1DOxDaZbIVtDdwONvRV4=;
-        b=Dpra1l8pJFu9XIRFTn2JlLHC2MpfMb1yDkDRRjN25YnWWlVlLJ0Be2bQpn7/K5ewjmV2Jfz/8vk/mH/900hxdhu/ss515DqzpoKq58Gs7fL7fdroP69y8b8rl9+fM6n6f8Wk4r1nYLAXBK5vY3jljSSxOGI1kuFpaMAUwvy1tss=;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=z0BwPTiJq45XxbEGYv/PjtFL9GF0yWhObVdRootrVoo=;
+        b=NZISzmMPCWLw+tiyDk2CvqgUXkLuboVppHNtIuf9e3DvOyWPImRq2U14cLm6MWuGjZ/+Js26SOBibJxuGO/zen9MvTQxQMLuvYRNe6oi2XmmC677jw7uIc5BuWpKnquwb5joZLyHBJIqSgTvqn8x1DO5vL3YPJn9ZPREF3/rBEw=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:f3ae7130-d8ed-4a3b-b1d8-1e1d707f738c,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-        :release,TS:-5
-X-CID-META: VersionHash:dcaaed0,CLOUDID:06fd9224-4387-4253-a41d-4f6f2296b154,B
+X-CID-O-INFO: VERSION:1.1.14,REQID:0d828875-3d90-46fd-9377-0b89f41d17dc,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:e800ce16-b863-49f8-8228-cbdfeedd1fa4,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 37be9170f0514ba9bdcaa9f74a10d17d-20221207
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+X-UUID: 7015714541024174a3809cb6f43897b7-20221207
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
         (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 54277046; Wed, 07 Dec 2022 17:49:24 +0800
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 267878221; Wed, 07 Dec 2022 17:49:25 +0800
 Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
  15.2.792.15; Wed, 7 Dec 2022 17:49:23 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
@@ -50,9 +50,9 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-mediatek@lists.infradead.org>,
         <Project_Global_Chrome_Upstream_Group@mediatek.com>,
         Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v4 1/8] dt-bindings: arm: mediatek: mmsys: Add support for MT8195 VPPSYS
-Date:   Wed, 7 Dec 2022 17:49:14 +0800
-Message-ID: <20221207094921.15450-2-moudy.ho@mediatek.com>
+Subject: [PATCH v4 4/8] arm64: dts: mediatek: mt8195: add MUTEX configuration for VPPSYS
+Date:   Wed, 7 Dec 2022 17:49:17 +0800
+Message-ID: <20221207094921.15450-5-moudy.ho@mediatek.com>
 X-Mailer: git-send-email 2.18.0
 In-Reply-To: <20221207094921.15450-1-moudy.ho@mediatek.com>
 References: <20221207094921.15450-1-moudy.ho@mediatek.com>
@@ -69,32 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For MT8195, VPPSYS0 and VPPSYS1 are 2 display pipes with
-hardware differences in power domains, clocks and subsystem counts,
-which should be determined by compatible names.
+In MT8195, the MMSYS has two Video Processor Pipepline Subsystems
+named VPPSYS0 and VPPSYS1, each with specific MUTEX to control
+Start of Frame(SOF) and End of Frame (EOF) signals.
+Before working with them, the addresses, interrupts, clocks and power
+domains need to be set up in dts.
 
 Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- .../devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml     | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-index 0711f1834fbd..493aa9e8d484 100644
---- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-+++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,mmsys.yaml
-@@ -48,7 +48,10 @@ properties:
-           - const: syscon
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index bd33b414c484..0ece3b46b66a 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -1639,6 +1639,15 @@
+ 			#clock-cells = <1>;
+ 		};
  
-       - items:
--          - const: mediatek,mt8195-vdosys0
-+          - enum:
-+              - mediatek,mt8195-vdosys0
-+              - mediatek,mt8195-vppsys0
-+              - mediatek,mt8195-vppsys1
-           - const: mediatek,mt8195-mmsys
-           - const: syscon
++		mutex@1400f000 {
++			compatible = "mediatek,mt8195-vpp-mutex";
++			reg = <0 0x1400f000 0 0x1000>;
++			interrupts = <GIC_SPI 592 IRQ_TYPE_LEVEL_HIGH 0>;
++			mediatek,gce-client-reg = <&gce1 SUBSYS_1400XXXX 0xf000 0x1000>;
++			clocks = <&vppsys0 CLK_VPP0_MUTEX>;
++			power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS0>;
++		};
++
+ 		smi_sub_common_vpp0_vpp1_2x1: smi@14010000 {
+ 			compatible = "mediatek,mt8195-smi-sub-common";
+ 			reg = <0 0x14010000 0 0x1000>;
+@@ -1745,6 +1754,15 @@
+ 			#clock-cells = <1>;
+ 		};
  
++		mutex@14f01000 {
++			compatible = "mediatek,mt8195-vpp-mutex";
++			reg = <0 0x14f01000 0 0x1000>;
++			interrupts = <GIC_SPI 635 IRQ_TYPE_LEVEL_HIGH 0>;
++			mediatek,gce-client-reg = <&gce1 SUBSYS_14f0XXXX 0x1000 0x1000>;
++			clocks = <&vppsys1 CLK_VPP1_DISP_MUTEX>;
++			power-domains = <&spm MT8195_POWER_DOMAIN_VPPSYS1>;
++		};
++
+ 		larb5: larb@14f02000 {
+ 			compatible = "mediatek,mt8195-smi-larb";
+ 			reg = <0 0x14f02000 0 0x1000>;
 -- 
 2.18.0
 
