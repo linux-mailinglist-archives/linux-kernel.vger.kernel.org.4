@@ -2,153 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 272136461FF
+	by mail.lfdr.de (Postfix) with ESMTP id 72862646200
 	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:03:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiLGUCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33256 "EHLO
+        id S229500AbiLGUDD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:03:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiLGUCp (ORCPT
+        with ESMTP id S229701AbiLGUC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:02:45 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E352B1EC;
-        Wed,  7 Dec 2022 12:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670443363; x=1701979363;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QiA1odkP/pscG7ADNPdd2N2pEJ4aIYrRjeu1tiCya+Q=;
-  b=hsGRty4XNVkp+TO0q5smPEFkduI+mtNji1hQzVK6Z+9lrucvzVguOtJo
-   2Yxt1z1YlEHWkJAx4rGquIuAdlFGrCKYC7jjKOsqmdzrN8nqsElee07yx
-   aDM2KIT8OpETA5f430NCjh7LpYUxfTb5z6sIi/Gt84PmNAKi5WtlIxA9Z
-   bJRsuKxqr8xWAxuXRKXM/krFMm1J19AT4dlzvOzd+r4/yq0gc1yZw3eAd
-   aOyqY+0tz9tnN9clHRItqqi44bnXehApmuWdxBbl+L9eCcYO5oUT0Yz6G
-   e+6MfvlQceuoYCr8vJgdVvZGrwKZRnKB6pBGTQ8ApjqejdpZQRTTgnCA8
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="381283040"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="381283040"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 12:01:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="679261930"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="679261930"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga001.jf.intel.com with ESMTP; 07 Dec 2022 12:01:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p30bb-005yGd-17;
-        Wed, 07 Dec 2022 22:01:23 +0200
-Date:   Wed, 7 Dec 2022 22:01:22 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, macro@orcam.me.uk, cang1@live.co.uk,
-        colin.i.king@gmail.com, phil.edworthy@renesas.com,
-        biju.das.jz@bp.renesas.com, geert+renesas@glider.be,
-        lukas@wunner.de, u.kleine-koenig@pengutronix.de, wander@redhat.com,
-        etremblay@distech-controls.com, jk@ozlabs.org,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: Re: [PATCH v7 tty-next 2/4] serial: 8250_pci1xxxx: Add driver for
- quad-uart support
-Message-ID: <Y5DxEszrq0rXVqvl@smile.fi.intel.com>
-References: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com>
- <20221207235305.695541-3-kumaravel.thiagarajan@microchip.com>
+        Wed, 7 Dec 2022 15:02:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081B32FC27;
+        Wed,  7 Dec 2022 12:02:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5025C61BA9;
+        Wed,  7 Dec 2022 20:01:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51D09C433C1;
+        Wed,  7 Dec 2022 20:01:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670443318;
+        bh=Demd/UfJqFw2eDXCVUg8SZIC3opSCXKHPmwW779cpVM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BtZx28qWQ2lj/cxCC/WUdC0hR5/c/5goXOTvWAXOlVOkqsMeCG/bLaJyM/AfUjtnx
+         t1N34HbY++iJpoElHzBSiDbDqy3gxEwUffWBjXw/8mKjo9oE6UdGgpsXmjMXp0w/yb
+         Od5UtLXeiFCvsQStP1JnzQ+kasPwPA7BCONQ0qtK1I/7YweYz3UOAgp+Qz8OyT13jH
+         VuAZyIkV4gBamAOpeNlFRmryaOB23w5t3mCSq4AiB7xV3QZMlfY3D85cbWghH2XeAL
+         ZM5DmU0mdKsr0823Azaxp45Mg5WDQw14SNxRTLDViCx9XaP/QOe4q0tpKiXRGw/sir
+         rL8jCGjAI8Nng==
+Date:   Wed, 7 Dec 2022 21:01:55 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS
+ zap_pid_ns_processes()
+Message-ID: <20221207200155.GA1840475@lothringen>
+References: <20221125135500.1653800-1-frederic@kernel.org>
+ <20221125135500.1653800-4-frederic@kernel.org>
+ <871qpkqof8.fsf@email.froward.int.ebiederm.org>
+ <20221206164927.GD3866@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207235305.695541-3-kumaravel.thiagarajan@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221206164927.GD3866@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:23:03AM +0530, Kumaravel Thiagarajan wrote:
-> pci1xxxx is a PCIe switch with a multi-function endpoint on one of
-> its downstream ports. Quad-uart is one of the functions in the
-> multi-function endpoint. This driver loads for the quad-uart and
-> enumerates single or multiple instances of uart based on the PCIe
-> subsystem device ID.
+On Tue, Dec 06, 2022 at 05:49:28PM +0100, Oleg Nesterov wrote:
+> On 11/30, Eric W. Biederman wrote:
+> >
+> > 2) I keep thinking zap_pid_ns_processes() should be changed so that
+> >    after it sends SIGKILL to all of the relevant processes to not wait,
+> 
+> At least I think it should not wait for the tasks injected into this ns.
+> 
+> Because this looks like a kernel bug even if we forget about this deadlock.
+> 
+> Say we create a task P using clone(CLONE_NEWPID), then inject a task T into
+> P's pid-namespace via setns/fork. This make the process P "unkillable", it
+> will hang in zap_pid_ns_processes() "forever" until T->parent reaps a zombie
+> task T killed by P.
 
-...
+I think this was made that way on purpose, see the comment in
+zap_pid_ns_processes():
 
-> +static int pci1xxxx_get_physical_port(int subsys_dev, int port)
-> +{
-> +	static int logical_to_physical_port_idx[][MAX_PORTS] = {
-> +		{0, 1, 2, 3},   /* PCI12000 PCI11010 PCI11101 PCI11400 PCI11414 */
-> +		{0, 1, 2, 3},   /* PCI4p */
-> +		{0, 1, 2, -1},  /* PCI3p012 */
-> +		{0, 1, 3, -1},  /* PCI3p013 */
-> +		{0, 2, 3, -1},  /* PCI3p023 */
-> +		{1, 2, 3, -1},  /* PCI3p123 */
-> +		{0, 1, -1, -1}, /* PCI2p01 */
-> +		{0, 2, -1, -1}, /* PCI2p02 */
-> +		{0, 3, -1, -1}, /* PCI2p03 */
-> +		{1, 2, -1, -1}, /* PCI2p12 */
-> +		{1, 3, -1, -1}, /* PCI2p13 */
-> +		{2, 3, -1, -1}, /* PCI2p23 */
-> +		{0, -1, -1, -1},/* PCI1p0 */
-> +		{1, -1, -1, -1},/* PCI1p1 */
-> +		{2, -1, -1, -1},/* PCI1p2 */
-> +		{3, -1, -1, -1},/* PCI1p3 */
+	/*
+	 * kernel_wait4() misses EXIT_DEAD children, and EXIT_ZOMBIE
+	 * process whose parents processes are outside of the pid
+	 * namespace.  Such processes are created with setns()+fork().
+	 *
+	 * If those EXIT_ZOMBIE processes are not reaped by their
+	 * parents before their parents exit, they will be reparented
+	 * to pid_ns->child_reaper.  Thus pidns->child_reaper needs to
+	 * stay valid until they all go away.
+	 *
+	 * The code relies on the pid_ns->child_reaper ignoring
+	 * SIGCHILD to cause those EXIT_ZOMBIE processes to be
+	 * autoreaped if reparented.
+	 *
+	 * Semantically it is also desirable to wait for EXIT_ZOMBIE
+	 * processes before allowing the child_reaper to be reaped, as
+	 * that gives the invariant that when the init process of a
+	 * pid namespace is reaped all of the processes in the pid
+	 * namespace are gone.
 
-You can make columns nicely indented, but it is up to you,
+I can't say I like the fact that a parent not belonging to a new namespace
+can create more than one child within that namespace but anyway this all look
+like an ABI that can't be reverted now.
 
-		...
-		{0,  1,  2,  3}, /* PCI4p */
-		...
-		{1,  2,  3, -1}, /* PCI3p123 */
-		...
-		{2,  3, -1, -1}, /* PCI2p23 */
-		{0, -1, -1, -1}, /* PCI1p0 */
-		...
-
-> +	};
-> +
-> +	return logical_to_physical_port_idx[subsys_dev][port];
-> +}
-
-...
-
-> +	priv->membase = pcim_iomap(pdev, 0, 0);
-
-Is any of those card can have an IO bar (instead of MEM)?
-
-> +	if (!priv->membase)
-> +		return -ENOMEM;
-
-...
-
-> +	if (num_vectors == 4)
-> +		writeb(UART_PCI_CTRL_SET_MULTIPLE_MSI,
-> +		       priv->membase + UART_PCI_CTRL_REG);
-
-If you set this unconditionally when num_vectors < 4, would it still work?
-
-> +	else
-> +		uart.port.irq = pci_irq_vector(pdev, 0);
-
-I would move this to the below...
-
-...
-
-> +		if (num_vectors == 4)
-> +			uart.port.irq = pci_irq_vector(priv->pdev, port_idx);
-
-...here as IRQ assignment to be seen at one place.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks.
