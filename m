@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3CC6451CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0326451D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:15:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiLGCLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 21:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
+        id S229895AbiLGCPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 21:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLGCLs (ORCPT
+        with ESMTP id S229565AbiLGCPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 21:11:48 -0500
+        Tue, 6 Dec 2022 21:15:38 -0500
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 70BB745A06;
-        Tue,  6 Dec 2022 18:11:45 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C9F353EF0;
+        Tue,  6 Dec 2022 18:15:36 -0800 (PST)
 Received: from loongson.cn (unknown [117.133.84.183])
-        by gateway (Coremail) with SMTP id _____8AxCelf9o9jKrYDAA--.5317S3;
-        Wed, 07 Dec 2022 10:11:43 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8BxnutH949jZbYDAA--.8926S3;
+        Wed, 07 Dec 2022 10:15:35 +0800 (CST)
 Received: from [192.168.1.2] (unknown [117.133.84.183])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxLuJe9o9jtP0mAA--.30836S3;
-        Wed, 07 Dec 2022 10:11:42 +0800 (CST)
-Message-ID: <f5d0f796-0147-8789-5bed-edf38b28229e@loongson.cn>
-Date:   Wed, 7 Dec 2022 10:11:40 +0800
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_1dF949jNf4mAA--.30496S3;
+        Wed, 07 Dec 2022 10:15:33 +0800 (CST)
+Message-ID: <e3bf1f8a-e37e-46e3-f9b3-20a9031d49e2@loongson.cn>
+Date:   Wed, 7 Dec 2022 10:15:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v12 1/2] thermal: loongson-2: add thermal management
+Subject: Re: [PATCH v10 2/4] clk: clk-loongson2: add clock controller driver
  support
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
-References: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+References: <20221129034157.15036-1-zhuyinbo@loongson.cn>
+ <20221129034157.15036-2-zhuyinbo@loongson.cn>
 From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-In-Reply-To: <20221114024709.7975-1-zhuyinbo@loongson.cn>
+In-Reply-To: <20221129034157.15036-2-zhuyinbo@loongson.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxLuJe9o9jtP0mAA--.30836S3
+X-CM-TRANSID: AQAAf8Dx_1dF949jNf4mAA--.30496S3
 X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvAXoWfGFW3WFWkGw13try5try7KFg_yoW8Jr1rKo
-        WfJr1v9F4Syr1IyFyqqryUJFyaqa4UZ3W3ZFySkrs0qFWFqwn8ZrW5Gr43GF1rua1rtr47
-        JFy2ga1rXF4ft395n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
-        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
-        UUvF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFV
-        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2
-        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr
-        1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxI
-        r21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-        v20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-        F7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF04k20x
-        vE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWU
-        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
-        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4U
-        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
-        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
+X-Coremail-Antispam: 1Uk129KBjvJXoWfJF4DKr18trWUJr1rJFy3twb_yoWktFy7pF
+        yfAay3GFWjqr4Uurs8JryDGFn8Aas3K3W7ZF43G34UuFZ7X34UWr48GFyxCF4UZrWkAay2
+        vFZa9rWUCFs8W37anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bq8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
+        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
+        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
+        0Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC
+        6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7
+        AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUc9mRUUUUU
 X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
@@ -71,7 +74,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi thermal maintainer,
+Hi clock maintainer,
 
 
 Could you help me merge this series patch.
@@ -79,376 +82,395 @@ Could you help me merge this series patch.
 
 Thanks.
 
-在 2022/11/14 10:47, Yinbo Zhu 写道:
-> This patch adds the support for Loongson-2 thermal sensor controller,
-> which can support maximum 4 sensors.
+在 2022/11/29 11:41, Yinbo Zhu 写道:
+> This driver provides support for clock controller on Loongson-2 SoC,
+> the Loongson-2 SoC uses a 100MHz clock as the PLL reference clock,
+> there are five independent PLLs inside, each of which PLL can
+> provide up to three sets of frequency dependent clock outputs.
 >
-> It's based on thermal of framework:
->   - Trip points defined in device tree.
->   - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
->   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
->
-> Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
 > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 > ---
-> Change in v12:
-> 		1. Fixup it about min and max.
-> 		2. Use dev_err_probe replace dev_err in devm_request_threaded_irq context.
-> Change in v11:
-> 		1. Add min() and max() to replace related code in function
-> 		   loongson2_thermal_set.
-> 		2. Add dev_err_probe to to replace related code for function
-> 		   return value use devm_thermal_of_zone_register.
-> 		3. Replace thermal_add_hwmon_sysfs with devm_thermal_add_hwmon_sysfs
-> 		   and use dev_warn replace dev_err in this context.
 > Change in v10:
-> 		1. Add all history change log information.
+> 		1. Detach of_clk_init to another patch.
 > Change in v9:
-> 		1. Switch new API that use devm_thermal_of_zone_register
-> 		   to replace previous interfaces.
-> 		2. Add depend on LOONGARCH || COMPILE_TEST.
+> 		1. Add all history changelog information.
 > Change in v8:
->                  1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
->                     Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
-> 		   files.
+> 		1. Remove the flag "CLK_IS_BASIC".
 > Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> 		2. Remove the unless code annotation to fix the compile warning
-> 		   when compile C code with W=1.
+> 		1. Adjust position alphabetically in Kconfig and Makefile.
+> 		2. Add static for loongson2_pll_base.
+> 		3. Move other file-scope variables in probe.
 > Change in v6:
-> 		1. NO change, but other patch in this series of patches set has
+> 		1. NO change, but other patch in this series of patches has
 > 		   changes.
 > Change in v5:
-> 		1. NO change, but other patch in this series of patches set has
-> 		   changes.
+> 		1. Replace loongson2 with Loongson-2 in commit info.
+> 		2. Replace Loongson2 with Loongson-2 in binding and
+> 		   Kconfig file.
+> 		3. Replace soc with SoC.
 > Change in v4:
-> 		1. Fixup the compatible.
+> 		1. Fixup clock-names that replace "xxx-clk" with "xxx".
 > Change in v3:
-> 		1. Add a function to gain sensor id an remove dts id.
+> 		1. NO change, but other patch in this series of patches has
+> 		   changes.
 > Change in v2:
-> 		1. Remove error msg printing when addr ioremap has error.
-> 		2. Make loongson2 thermal driver was built-in by default.
-> 		3. Replace ls2k with loongson2.
-> 		4. Remove CONFIG_PM_SLEEP and set pm function type was
-> 		   __maybe_unused.
+> 		1. Update the include filename.
+> 		2. Change string from refclk/REFCLK to ref/REF.
 >
->   MAINTAINERS                         |   7 +
->   drivers/thermal/Kconfig             |  10 ++
->   drivers/thermal/Makefile            |   1 +
->   drivers/thermal/loongson2_thermal.c | 260 ++++++++++++++++++++++++++++
->   4 files changed, 278 insertions(+)
->   create mode 100644 drivers/thermal/loongson2_thermal.c
+>   MAINTAINERS                 |   1 +
+>   arch/loongarch/Kconfig      |   1 +
+>   drivers/clk/Kconfig         |   9 ++
+>   drivers/clk/Makefile        |   1 +
+>   drivers/clk/clk-loongson2.c | 286 ++++++++++++++++++++++++++++++++++++
+>   5 files changed, 298 insertions(+)
+>   create mode 100644 drivers/clk/clk-loongson2.c
 >
 > diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1b391ca7cf91..0d867573fe4c 100644
+> index ab94893fe2f6..73fa56f1fd5d 100644
 > --- a/MAINTAINERS
 > +++ b/MAINTAINERS
-> @@ -12013,6 +12013,13 @@ F:	drivers/*/*loongarch*
->   F:	Documentation/loongarch/
->   F:	Documentation/translations/zh_CN/loongarch/
+> @@ -12025,6 +12025,7 @@ LOONGSON-2 SOC SERIES CLOCK DRIVER
+>   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+>   L:	linux-clk@vger.kernel.org
+>   S:	Maintained
+> +F:	drivers/clk/clk-loongson2.c
+>   F:	include/dt-bindings/clock/loongson,ls2k-clk.h
 >   
-> +LOONGSON-2 SOC SERIES THERMAL DRIVER
-> +M:	zhanghongchen <zhanghongchen@loongson.cn>
-> +M:	Yinbo Zhu <zhuyinbo@loongson.cn>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/thermal/loongson2_thermal.c
-> +
 >   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
->   M:	Sathya Prakash <sathya.prakash@broadcom.com>
->   M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e052dae614eb..93d84bcb16dd 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->   	  If you say yes here you get support for the FAN controlled
->   	  by the Microcontroller found on the Khadas VIM boards.
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 903096bd87f8..4f8f1b8f796d 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -127,6 +127,7 @@ config LOONGARCH
+>   	select USE_PERCPU_NUMA_NODE_ID
+>   	select USER_STACKTRACE_SUPPORT
+>   	select ZONE_DMA32
+> +	select COMMON_CLK
 >   
-> +config LOONGSON2_THERMAL
-> +	tristate "Loongson-2 SoC series thermal driver"
-> +	depends on LOONGARCH || COMPILE_TEST
-> +	depends on OF
+>   config 32BIT
+>   	bool
+> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+> index d79905f3e174..d13626f63739 100644
+> --- a/drivers/clk/Kconfig
+> +++ b/drivers/clk/Kconfig
+> @@ -326,6 +326,15 @@ config COMMON_CLK_LOCHNAGAR
+>   	  This driver supports the clocking features of the Cirrus Logic
+>   	  Lochnagar audio development board.
+>   
+> +config COMMON_CLK_LOONGSON2
+> +	bool "Clock driver for Loongson-2 SoC"
+> +	depends on COMMON_CLK && OF
 > +	help
-> +	  Support for Thermal driver found on Loongson-2 SoC series platforms.
-> +	  It supports one critical trip point and one passive trip point. The
-> +	  cpufreq and the pwm fan is used as the cooling device to throttle
-> +	  CPUs when the passive trip is crossed.
+> +	  This driver provides support for Clock Controller that base on
+> +	  Common Clock Framework Controller (CCF) on Loongson-2 SoC. The
+> +	  Clock Controller can generates and supplies clock to various
+> +	  peripherals within the SoC.
 > +
->   endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 2506c6c8ca83..02f3db809858 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
-> diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+>   config COMMON_CLK_NXP
+>   	def_bool COMMON_CLK && (ARCH_LPC18XX || ARCH_LPC32XX)
+>   	select REGMAP_MMIO if ARCH_LPC32XX
+> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> index e3ca0d058a25..b298c5dabc1a 100644
+> --- a/drivers/clk/Makefile
+> +++ b/drivers/clk/Makefile
+> @@ -43,6 +43,7 @@ obj-$(CONFIG_COMMON_CLK_K210)		+= clk-k210.o
+>   obj-$(CONFIG_LMK04832)			+= clk-lmk04832.o
+>   obj-$(CONFIG_COMMON_CLK_LAN966X)	+= clk-lan966x.o
+>   obj-$(CONFIG_COMMON_CLK_LOCHNAGAR)	+= clk-lochnagar.o
+> +obj-$(CONFIG_COMMON_CLK_LOONGSON2)	+= clk-loongson2.o
+>   obj-$(CONFIG_COMMON_CLK_MAX77686)	+= clk-max77686.o
+>   obj-$(CONFIG_COMMON_CLK_MAX9485)	+= clk-max9485.o
+>   obj-$(CONFIG_ARCH_MILBEAUT_M10V)	+= clk-milbeaut.o
+> diff --git a/drivers/clk/clk-loongson2.c b/drivers/clk/clk-loongson2.c
 > new file mode 100644
-> index 000000000000..2d495469e8dd
+> index 000000000000..7487effceeab
 > --- /dev/null
-> +++ b/drivers/thermal/loongson2_thermal.c
-> @@ -0,0 +1,260 @@
+> +++ b/drivers/clk/clk-loongson2.c
+> @@ -0,0 +1,286 @@
 > +// SPDX-License-Identifier: GPL-2.0+
 > +/*
-> + * Author: zhanghongchen <zhanghongchen@loongson.cn>
-> + *         Yinbo Zhu <zhuyinbo@loongson.cn>
+> + * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
 > + * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
 > + */
 > +
-> +#include <linux/cpufreq.h>
-> +#include <linux/delay.h>
-> +#include <linux/interrupt.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/io.h>
-> +#include <linux/of_device.h>
-> +#include <linux/thermal.h>
-> +#include "thermal_hwmon.h"
+> +#include <linux/clkdev.h>
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <dt-bindings/clock/loongson,ls2k-clk.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/slab.h>
+> +#include <linux/clk.h>
 > +
-> +#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
+> +#define LOONGSON2_PLL_MULT_SHIFT		32
+> +#define LOONGSON2_PLL_MULT_WIDTH		10
+> +#define LOONGSON2_PLL_DIV_SHIFT			26
+> +#define LOONGSON2_PLL_DIV_WIDTH			6
+> +#define LOONGSON2_APB_FREQSCALE_SHIFT		20
+> +#define LOONGSON2_APB_FREQSCALE_WIDTH		3
+> +#define LOONGSON2_USB_FREQSCALE_SHIFT		16
+> +#define LOONGSON2_USB_FREQSCALE_WIDTH		3
+> +#define LOONGSON2_SATA_FREQSCALE_SHIFT		12
+> +#define LOONGSON2_SATA_FREQSCALE_WIDTH		3
 > +
-> +#define LOONGSON2_TSENSOR_CTRL_HI			0x0
-> +#define LOONGSON2_TSENSOR_CTRL_LO			0x8
-> +#define LOONGSON2_TSENSOR_STATUS			0x10
-> +#define LOONGSON2_TSENSOR_OUT				0x14
+> +static void __iomem *loongson2_pll_base;
 > +
-> +struct loongson2_thermal_data {
-> +	struct thermal_zone_device *tzd;
-> +	int irq;
-> +	int id;
-> +	void __iomem *regs;
-> +	struct platform_device *pdev;
-> +	u16 ctrl_low_val;
-> +	u16 ctrl_hi_val;
-> +};
-> +
-> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
-> +					int low, int high, bool enable)
+> +static struct clk_hw *loongson2_clk_register(struct device *dev,
+> +					  const char *name,
+> +					  const char *parent_name,
+> +					  const struct clk_ops *ops,
+> +					  unsigned long flags)
 > +{
-> +	u64 reg_ctrl = 0;
-> +	int reg_off = data->id * 2;
-> +
-> +	if (low > high)
-> +		return -EINVAL;
-> +
-> +	low = max(low, -100);
-> +	high = min(high, 155);
-> +
-> +	low += 100;
-> +	high += 100;
-> +
-> +	reg_ctrl |= low;
-> +	reg_ctrl |= enable ? 0x100 : 0;
-> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-> +
-> +	reg_ctrl = 0;
-> +	reg_ctrl |= high;
-> +	reg_ctrl |= enable ? 0x100 : 0;
-> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	u32 reg_val;
-> +	struct loongson2_thermal_data *data = tz->devdata;
-> +
-> +	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
-> +	*temp = ((reg_val & 0xff) - 100) * 1000;
-> +
-> +	return 0;
-> +}
-> +
-> +static int loongson2_thermal_get_sensor_id(void)
-> +{
-> +	int ret, id;
-> +	struct of_phandle_args sensor_specs;
-> +	struct device_node *np, *sensor_np;
-> +
-> +	np = of_find_node_by_name(NULL, "thermal-zones");
-> +	if (!np)
-> +		return -ENODEV;
-> +
-> +	sensor_np = of_get_next_child(np, NULL);
-> +	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
-> +			"#thermal-sensor-cells",
-> +			0, &sensor_specs);
-> +	if (ret) {
-> +		of_node_put(np);
-> +		of_node_put(sensor_np);
-> +		return ret;
-> +	}
-> +
-> +	if (sensor_specs.args_count >= 1) {
-> +		id = sensor_specs.args[0];
-> +		WARN(sensor_specs.args_count > 1,
-> +				"%s: too many cells in sensor specifier %d\n",
-> +				sensor_specs.np->name, sensor_specs.args_count);
-> +	} else {
-> +		id = 0;
-> +	}
-> +
-> +	of_node_put(np);
-> +	of_node_put(sensor_np);
-> +
-> +	return id;
-> +}
-> +
-> +static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
-> +{
-> +	struct loongson2_thermal_data *data = dev;
-> +
-> +	/* clear interrupt */
-> +	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
-> +
-> +	disable_irq_nosync(irq);
-> +
-> +	return IRQ_WAKE_THREAD;
-> +}
-> +
-> +static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
-> +{
-> +	struct loongson2_thermal_data *data = dev;
-> +
-> +	thermal_zone_device_update(data->tzd,
-> +				   THERMAL_EVENT_UNSPECIFIED);
-> +	enable_irq(data->irq);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
-> +{
-> +	struct loongson2_thermal_data *data = tz->devdata;
-> +
-> +	return loongson2_thermal_set(data, low/1000, high/1000, true);
-> +}
-> +
-> +static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
-> +	.get_temp = loongson2_thermal_get_temp,
-> +	.set_trips = loongson2_thermal_set_trips,
-> +};
-> +
-> +static int loongson2_thermal_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct resource *res;
-> +	struct loongson2_thermal_data *data;
 > +	int ret;
+> +	struct clk_hw *hw;
+> +	struct clk_init_data init;
 > +
-> +	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data)
-> +		return -ENOMEM;
+> +	/* allocate the divider */
+> +	hw = kzalloc(sizeof(*hw), GFP_KERNEL);
+> +	if (!hw)
+> +		return ERR_PTR(-ENOMEM);
 > +
-> +	data->pdev = pdev;
-> +	platform_set_drvdata(pdev, data);
+> +	init.name = name;
+> +	init.ops = ops;
+> +	init.flags = flags;
+> +	init.parent_names = (parent_name ? &parent_name : NULL);
+> +	init.num_parents = (parent_name ? 1 : 0);
+> +	hw->init = &init;
 > +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	data->regs = devm_ioremap(dev, res->start, resource_size(res));
-> +	if (IS_ERR(data->regs))
-> +		return PTR_ERR(data->regs);
-> +
-> +	/* get irq */
-> +	data->irq = platform_get_irq(pdev, 0);
-> +	if (data->irq < 0)
-> +		return data->irq;
-> +
-> +	/* get id */
-> +	data->id = loongson2_thermal_get_sensor_id();
-> +	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
-> +		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
-> +				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
-> +		return -EINVAL;
+> +	/* register the clock */
+> +	ret = clk_hw_register(dev, hw);
+> +	if (ret) {
+> +		kfree(hw);
+> +		hw = ERR_PTR(ret);
 > +	}
 > +
-> +	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+> +	return hw;
+> +}
 > +
-> +	loongson2_thermal_set(data, 0, 0, false);
+> +static struct clk_hw *loongson2_clk_pll_register(const char *name,
+> +				const char *parent, void __iomem *reg)
+> +{
+> +	u64 val;
+> +	u32 mult = 1, div = 1;
 > +
-> +	data->tzd = devm_thermal_of_zone_register(&pdev->dev, data->id, data,
-> +			&loongson2_of_thermal_ops);
-> +	if (IS_ERR(data->tzd))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(data->tzd),
-> +				"failed to register");
+> +	val = readq((void *)reg);
 > +
-> +	ret = devm_request_threaded_irq(dev, data->irq,
-> +			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
-> +			IRQF_ONESHOT, "loongson2_thermal", data);
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "failed to request alarm irq\n");
+> +	mult = (val >> LOONGSON2_PLL_MULT_SHIFT) &
+> +			clk_div_mask(LOONGSON2_PLL_MULT_WIDTH);
+> +	div = (val >> LOONGSON2_PLL_DIV_SHIFT) &
+> +			clk_div_mask(LOONGSON2_PLL_DIV_WIDTH);
+> +
+> +	return clk_hw_register_fixed_factor(NULL, name, parent,
+> +				CLK_SET_RATE_PARENT, mult, div);
+> +}
+> +
+> +static unsigned long loongson2_apb_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	u64 val;
+> +	u32 mult;
+> +	unsigned long rate;
+> +
+> +	val = readq((void *)(loongson2_pll_base + 0x50));
+> +
+> +	mult = (val >> LOONGSON2_APB_FREQSCALE_SHIFT) &
+> +			clk_div_mask(LOONGSON2_APB_FREQSCALE_WIDTH);
+> +
+> +	rate = parent_rate * (mult + 1);
+> +	do_div(rate, 8);
+> +
+> +	return rate;
+> +}
+> +
+> +static const struct clk_ops loongson2_apb_clk_ops = {
+> +	.recalc_rate = loongson2_apb_recalc_rate,
+> +};
+> +
+> +static unsigned long loongson2_usb_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	u64 val;
+> +	u32 mult;
+> +	unsigned long rate;
+> +
+> +	val = readq((void *)(loongson2_pll_base + 0x50));
+> +
+> +	mult = (val >> LOONGSON2_USB_FREQSCALE_SHIFT) &
+> +			clk_div_mask(LOONGSON2_USB_FREQSCALE_WIDTH);
+> +
+> +	rate = parent_rate * (mult + 1);
+> +	do_div(rate, 8);
+> +
+> +	return rate;
+> +}
+> +
+> +static const struct clk_ops loongson2_usb_clk_ops = {
+> +	.recalc_rate = loongson2_usb_recalc_rate,
+> +};
+> +
+> +static unsigned long loongson2_sata_recalc_rate(struct clk_hw *hw,
+> +					  unsigned long parent_rate)
+> +{
+> +	u64 val;
+> +	u32 mult;
+> +	unsigned long rate;
+> +
+> +	val = readq((void *)(loongson2_pll_base + 0x50));
+> +
+> +	mult = (val >> LOONGSON2_SATA_FREQSCALE_SHIFT) &
+> +			clk_div_mask(LOONGSON2_SATA_FREQSCALE_WIDTH);
+> +
+> +	rate = parent_rate * (mult + 1);
+> +	do_div(rate, 8);
+> +
+> +	return rate;
+> +}
+> +
+> +static const struct clk_ops loongson2_sata_clk_ops = {
+> +	.recalc_rate = loongson2_sata_recalc_rate,
+> +};
+> +
+> +static void loongson2_check_clk_hws(struct clk_hw *clks[], unsigned int count)
+> +{
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < count; i++)
+> +		if (IS_ERR(clks[i]))
+> +			pr_err("Loongson2 clk %u: register failed with %ld\n"
+> +				, i, PTR_ERR(clks[i]));
+> +}
+> +
+> +static struct clk_hw *loongson2_obtain_fixed_clk_hw(
+> +					struct device_node *np,
+> +					const char *name)
+> +{
+> +	struct clk *clk;
+> +
+> +	clk = of_clk_get_by_name(np, name);
+> +	if (IS_ERR(clk))
+> +		return ERR_PTR(-ENOENT);
+> +
+> +	return __clk_get_hw(clk);
+> +}
+> +
+> +static void __init loongson2_clocks_init(struct device_node *np)
+> +{
+> +	struct clk_hw **hws;
+> +	struct clk_hw_onecell_data *clk_hw_data;
+> +	spinlock_t loongson2_clk_lock;
+> +
+> +	loongson2_pll_base = of_iomap(np, 0);
+> +
+> +	if (!loongson2_pll_base) {
+> +		pr_err("clk: unable to map loongson2 clk registers\n");
+> +		goto err;
+> +	}
+> +
+> +	clk_hw_data = kzalloc(struct_size(clk_hw_data, hws, LOONGSON2_CLK_END),
+> +					GFP_KERNEL);
+> +	if (WARN_ON(!clk_hw_data))
+> +		goto err;
+> +
+> +	clk_hw_data->num = LOONGSON2_CLK_END;
+> +	hws = clk_hw_data->hws;
+> +
+> +	hws[LOONGSON2_REF_100M] = loongson2_obtain_fixed_clk_hw(np,
+> +						"ref_100m");
+> +
+> +	hws[LOONGSON2_NODE_PLL] = loongson2_clk_pll_register("node_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base);
+> +
+> +	hws[LOONGSON2_DDR_PLL] = loongson2_clk_pll_register("ddr_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x10);
+> +
+> +	hws[LOONGSON2_DC_PLL] = loongson2_clk_pll_register("dc_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x20);
+> +
+> +	hws[LOONGSON2_PIX0_PLL] = loongson2_clk_pll_register("pix0_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x30);
+> +
+> +	hws[LOONGSON2_PIX1_PLL] = loongson2_clk_pll_register("pix1_pll",
+> +						"ref_100m",
+> +						loongson2_pll_base + 0x40);
+> +
+> +	hws[LOONGSON2_NODE_CLK] = clk_hw_register_divider(NULL, "node",
+> +						"node_pll", 0,
+> +						loongson2_pll_base + 0x8, 0,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
 > +
 > +	/*
-> +	 * Thermal_zone doesn't enable hwmon as default,
-> +	 * enable it here
+> +	 * The hda clk divisor in the upper 32bits and the clk-prodiver
+> +	 * layer code doesn't support 64bit io operation thus a conversion
+> +	 * is required that subtract shift by 32 and add 4byte to the hda
+> +	 * address
 > +	 */
-> +	data->tzd->tzp->no_hwmon = false;
-> +	if (devm_thermal_add_hwmon_sysfs(data->tzd))
-> +		dev_warn(&pdev->dev, "Failed to add hwmon sysfs attributes\n");
+> +	hws[LOONGSON2_HDA_CLK] = clk_hw_register_divider(NULL, "hda",
+> +						"ddr_pll", 0,
+> +						loongson2_pll_base + 0x22, 12,
+> +						7, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
 > +
-> +	return 0;
+> +	hws[LOONGSON2_GPU_CLK] = clk_hw_register_divider(NULL, "gpu",
+> +						"ddr_pll", 0,
+> +						loongson2_pll_base + 0x18, 22,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_DDR_CLK] = clk_hw_register_divider(NULL, "ddr",
+> +						"ddr_pll", 0,
+> +						loongson2_pll_base + 0x18, 0,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_GMAC_CLK] = clk_hw_register_divider(NULL, "gmac",
+> +						"dc_pll", 0,
+> +						loongson2_pll_base + 0x28, 22,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_DC_CLK] = clk_hw_register_divider(NULL, "dc",
+> +						"dc_pll", 0,
+> +						loongson2_pll_base + 0x28, 0,
+> +						6, CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_APB_CLK] = loongson2_clk_register(NULL, "apb",
+> +						"gmac",
+> +						&loongson2_apb_clk_ops, 0);
+> +
+> +	hws[LOONGSON2_USB_CLK] = loongson2_clk_register(NULL, "usb",
+> +						"gmac",
+> +						&loongson2_usb_clk_ops, 0);
+> +
+> +	hws[LOONGSON2_SATA_CLK] = loongson2_clk_register(NULL, "sata",
+> +						"gmac",
+> +						&loongson2_sata_clk_ops, 0);
+> +
+> +	hws[LOONGSON2_PIX0_CLK] = clk_hw_register_divider(NULL, "pix0",
+> +						"pix0_pll", 0,
+> +						loongson2_pll_base + 0x38, 0, 6,
+> +						CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	hws[LOONGSON2_PIX1_CLK] = clk_hw_register_divider(NULL, "pix1",
+> +						"pix1_pll", 0,
+> +						loongson2_pll_base + 0x48, 0, 6,
+> +						CLK_DIVIDER_ONE_BASED,
+> +						&loongson2_clk_lock);
+> +
+> +	loongson2_check_clk_hws(hws, LOONGSON2_CLK_END);
+> +
+> +	of_clk_add_hw_provider(np, of_clk_hw_onecell_get, clk_hw_data);
+> +
+> +err:
+> +	iounmap(loongson2_pll_base);
 > +}
 > +
-> +static int loongson2_thermal_remove(struct platform_device *pdev)
-> +{
-> +	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
-> +	int reg_off = data->id * 2;
-> +
-> +	/* disable interrupt */
-> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct of_device_id of_loongson2_thermal_match[] = {
-> +	{ .compatible = "loongson,ls2k-thermal",},
-> +	{ /* end */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
-> +
-> +static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
-> +{
-> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-> +	int reg_off = data->id * 2;
-> +
-> +	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-> +	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-> +	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __maybe_unused loongson2_thermal_resume(struct device *dev)
-> +{
-> +	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
-> +	int reg_off = data->id * 2;
-> +
-> +	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
-> +	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
-> +
-> +	return 0;
-> +}
-> +
-> +static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
-> +			 loongson2_thermal_suspend, loongson2_thermal_resume);
-> +
-> +static struct platform_driver loongson2_thermal_driver = {
-> +	.driver = {
-> +		.name		= "loongson2_thermal",
-> +		.pm = &loongson2_thermal_pm_ops,
-> +		.of_match_table = of_loongson2_thermal_match,
-> +	},
-> +	.probe	= loongson2_thermal_probe,
-> +	.remove	= loongson2_thermal_remove,
-> +};
-> +module_platform_driver(loongson2_thermal_driver);
-> +
-> +MODULE_DESCRIPTION("Loongson2 thermal driver");
-> +MODULE_LICENSE("GPL");
+> +CLK_OF_DECLARE(loongson2_clk, "loongson,ls2k-clk", loongson2_clocks_init);
 
