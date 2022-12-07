@@ -2,70 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7685D645BA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:59:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77E5A645BA1
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:58:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiLGN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:59:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
+        id S230048AbiLGN6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiLGN64 (ORCPT
+        with ESMTP id S230001AbiLGN54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:58:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857A239A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:57:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670421476;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3+JlsJ+T+0zmdcrgV//HeWy7oKJHU0vdTnsFfLVk0g0=;
-        b=LkjZ0HfNDChwcfCQs/Ycp/dggfhqGa5uEZVoHAkkLezuqf+GMPXDh+3LxZVVBpKI+hT0q8
-        QvJW4ffVWT1GOw8droVkHy/3Zl/m1tzi1CCqbK8XfAFJE2mdd96G/VzFA/AI7wFtry52pD
-        dd7jGIHW+jyrraJKH3vozwhvtUUAPzI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-255-2ktB4nM3PwGAN1inS689RA-1; Wed, 07 Dec 2022 08:57:53 -0500
-X-MC-Unique: 2ktB4nM3PwGAN1inS689RA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC8D43C38FE8;
-        Wed,  7 Dec 2022 13:57:52 +0000 (UTC)
-Received: from localhost (ovpn-13-181.pek2.redhat.com [10.72.13.181])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id A30E340C2064;
-        Wed,  7 Dec 2022 13:57:51 +0000 (UTC)
-Date:   Wed, 7 Dec 2022 21:57:48 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Eric DeVolder <eric.devolder@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
-        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v14 3/7] crash: add generic infrastructure for crash
- hotplug support
-Message-ID: <Y5Cb3KGDXijyBXfM@MiWiFi-R3L-srv>
-References: <20221116214643.6384-1-eric.devolder@oracle.com>
- <20221116214643.6384-4-eric.devolder@oracle.com>
- <Y4A1/cSekXUTFriC@MiWiFi-R3L-srv>
- <Y5BkL8x01KWoF502@zn.tnic>
- <Y5CIvcZLuokwyGYT@MiWiFi-R3L-srv>
- <Y5CKNqtDm5VT+gsz@zn.tnic>
+        Wed, 7 Dec 2022 08:57:56 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B2856545
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:57:55 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id vv4so14224218ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:57:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=6R6RPhEMnDDwr3AtfavGsulA8T0smLmthgPNwTxk7do=;
+        b=rFZLKzuxSCXL0/RVKoW+2JN4Rhlu7jPPPMgyWfU8TeLIsLHk1bujos1jkakP3oAw7p
+         0bemsdoifiqJFY069nVhiehDpd+hhgQPnV4RaSLdEJiEQ6Hgudm4NKoOxgoHWPoHHK8G
+         PjCHChNsPqqdvW2kF1dWmNzrQSPGOq7lqcy6+rqFOdRZ3SwMQqQLDNwbSMQ9qIoaHQJo
+         3dHSKfM4LAu81L+MBAw0oYiw7jaAHNuxK5AByyHBQMv9BND8lpLe76R24GF22PrRt6Uh
+         MagZbcVq7S0RWa9EFh2wA7A/G2kBOtOhlV5pg0THEOpcqV/EO001P1iFCFWfrHedZ7yr
+         UEyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6R6RPhEMnDDwr3AtfavGsulA8T0smLmthgPNwTxk7do=;
+        b=uNy70SUrMHdHXF5fM/hqFsAggX3RYLcy3EBoew7UFhdGdepDqlr1XEBGjuaZZxG4g/
+         OalQVY91sYe0bK68FlunbcgoBkbeAY00bdjrPUdsTA32Xd2e0FVLt4LxQnbaiS1FSLKv
+         ML4C+2EQaAIHnxZ7aD497VjhpCnZIRHBV0W6oa0eVkcFVbWa5IVodR6BBKGQfVCcIsGJ
+         cBUJvzn+5S1FNccfM/Clrn3NBvZZ0xHwzJmWkwhvx25ZxkNtVGnGW4fNZIow5wvrhmVG
+         ZSn89RqAtvSDYg4q9ryavXLK/FqfgaDVt5d+aTDCaNkzVXVbvTArtSUxYvuagZ8hTmmP
+         4cOA==
+X-Gm-Message-State: ANoB5plkO3MbWJvQmFH/6Avr+TeUpar+xxC8FlMPx9KFtYaiYvJV5bgz
+        Qo2BpWXphzq0rLNxI6CCQQmtcQ==
+X-Google-Smtp-Source: AA0mqf4cs3jAxjVlM/djRjoy8ts1G83WugKPd01O9HoGR4w0IADcpL+ZW8XmzZBxKvAi0gGDSHR4Qg==
+X-Received: by 2002:a17:906:ef1:b0:78d:260d:a6e4 with SMTP id x17-20020a1709060ef100b0078d260da6e4mr75140483eji.93.1670421474344;
+        Wed, 07 Dec 2022 05:57:54 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id b7-20020a17090630c700b007b790c18264sm8500628ejb.159.2022.12.07.05.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 05:57:53 -0800 (PST)
+Date:   Wed, 7 Dec 2022 14:57:52 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Yongqiang Liu <liuyongqiang13@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        macro@orcam.me.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, ralf@linux-mips.org,
+        jeff@garzik.org, akpm@linux-foundation.org, zhangxiaoxu5@huawei.com
+Subject: Re: [PATCH net] net: defxx: Fix missing err handling in dfx_init()
+Message-ID: <Y5Cb4EMML3f0Ivdx@nanopsycho>
+References: <20221207072045.604872-1-liuyongqiang13@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5CKNqtDm5VT+gsz@zn.tnic>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+In-Reply-To: <20221207072045.604872-1-liuyongqiang13@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,18 +72,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/07/22 at 01:42pm, Borislav Petkov wrote:
-> On Wed, Dec 07, 2022 at 08:36:13PM +0800, Baoquan He wrote:
-> > Below is my last reply to Eric about my thinking on this.
-> 
-> Yes, I saw that.
-> 
-> So think about it: if a CONFIG_ item is not present, what does that mean
-> for the code which is enclosed around it?
+Wed, Dec 07, 2022 at 08:20:45AM CET, liuyongqiang13@huawei.com wrote:
+>When eisa_driver_register() or tc_register_driver() failed,
+>the modprobe defxx would fail with some err log as follows:
+>
+> Error: Driver 'defxx' is already registered, aborting...
+>
+>Fix this issue by adding err hanling in dfx_init().
+>
+>Fixes: e89a2cfb7d7b5 ("[TC] defxx: TURBOchannel support")
+>Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
 
-Ignored by compiler.
-
-I thought we usually need to introduce the kernel config option, then
-add code related to it, so that is a wrong idea. It would be helpful to
-tell this somewhere in document.
-
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
