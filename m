@@ -2,150 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FF7645BA2
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:58:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7685D645BA7
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:59:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiLGN6P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:58:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S230166AbiLGN7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:59:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiLGN57 (ORCPT
+        with ESMTP id S229812AbiLGN64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:57:59 -0500
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291DFC4E;
-        Wed,  7 Dec 2022 05:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xpxd7dkkl5q/KfS0CZUbzeIRSdaT0Ah5HzKQhmaMNp0=; b=iEInDFH947pg3B8SyceyF7tc1j
-        wwP1ORmMPS5rvfEgJ1iNcND1f1blfyq0cP0kD0kFUmCSUaNheCWxXwvnle6mf7S5Xrx1J2Sgc3NbG
-        dTt/DtHtonV7Rvy/f3NvEGMYgs9n+mmNvvXKhvX5Ex+yTvpN3Zc/6qFjTT0INd5SHxd3dDqhRTCdF
-        kVb7NsAq3NF653osB67a2W+9/l8/yLMoAMsJ99BzJxpd4UDlKUkjTDcN19/ybAdGP16MVuQMijLZh
-        /3xoqLQ6mqgeSH901gFlRn6ijti1e5RF6eHJ0mnJ++Lp/9NW6bkLq32roOTxWAcj6ognkSrB21Tim
-        zd8Ciiuw==;
-Received: from [143.107.182.242] (helo=[10.41.75.14])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1p2uve-00GbYI-6l; Wed, 07 Dec 2022 14:57:42 +0100
-Message-ID: <35023956-d838-55af-63c2-e679a78a27eb@igalia.com>
-Date:   Wed, 7 Dec 2022 10:57:34 -0300
+        Wed, 7 Dec 2022 08:58:56 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857A239A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:57:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670421476;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3+JlsJ+T+0zmdcrgV//HeWy7oKJHU0vdTnsFfLVk0g0=;
+        b=LkjZ0HfNDChwcfCQs/Ycp/dggfhqGa5uEZVoHAkkLezuqf+GMPXDh+3LxZVVBpKI+hT0q8
+        QvJW4ffVWT1GOw8droVkHy/3Zl/m1tzi1CCqbK8XfAFJE2mdd96G/VzFA/AI7wFtry52pD
+        dd7jGIHW+jyrraJKH3vozwhvtUUAPzI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-255-2ktB4nM3PwGAN1inS689RA-1; Wed, 07 Dec 2022 08:57:53 -0500
+X-MC-Unique: 2ktB4nM3PwGAN1inS689RA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AC8D43C38FE8;
+        Wed,  7 Dec 2022 13:57:52 +0000 (UTC)
+Received: from localhost (ovpn-13-181.pek2.redhat.com [10.72.13.181])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id A30E340C2064;
+        Wed,  7 Dec 2022 13:57:51 +0000 (UTC)
+Date:   Wed, 7 Dec 2022 21:57:48 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Eric DeVolder <eric.devolder@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, hpa@zytor.com,
+        nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v14 3/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <Y5Cb3KGDXijyBXfM@MiWiFi-R3L-srv>
+References: <20221116214643.6384-1-eric.devolder@oracle.com>
+ <20221116214643.6384-4-eric.devolder@oracle.com>
+ <Y4A1/cSekXUTFriC@MiWiFi-R3L-srv>
+ <Y5BkL8x01KWoF502@zn.tnic>
+ <Y5CIvcZLuokwyGYT@MiWiFi-R3L-srv>
+ <Y5CKNqtDm5VT+gsz@zn.tnic>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 02/20] drm/tests: Introduce a config option for the
- KUnit helpers
-Content-Language: en-US
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-media@vger.kernel.org
-References: <20221123-rpi-kunit-tests-v3-0-4615a663a84a@cerno.tech>
- <20221123-rpi-kunit-tests-v3-2-4615a663a84a@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mcanal@igalia.com>
-In-Reply-To: <20221123-rpi-kunit-tests-v3-2-4615a663a84a@cerno.tech>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5CKNqtDm5VT+gsz@zn.tnic>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/1/22 12:11, Maxime Ripard wrote:
-> Driver-specific tests will need access to the helpers without pulling
-> every DRM framework test. Let's create an intermediate Kconfig options
-> for the helpers.
+On 12/07/22 at 01:42pm, Borislav Petkov wrote:
+> On Wed, Dec 07, 2022 at 08:36:13PM +0800, Baoquan He wrote:
+> > Below is my last reply to Eric about my thinking on this.
 > 
-> Suggested-by: Maíra Canal <mcanal@igalia.com>
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-
-Reviewed-by: Maíra Canal <mcanal@igalia.com>
-
-Best Regards,
-- Maíra Canal
-
-> ---
->   drivers/gpu/drm/Kconfig        | 7 +++++++
->   drivers/gpu/drm/Makefile       | 2 +-
->   drivers/gpu/drm/tests/Makefile | 4 +++-
->   3 files changed, 11 insertions(+), 2 deletions(-)
+> Yes, I saw that.
 > 
-> diff --git a/drivers/gpu/drm/Kconfig b/drivers/gpu/drm/Kconfig
-> index 315cbdf61979..9f019cd053e1 100644
-> --- a/drivers/gpu/drm/Kconfig
-> +++ b/drivers/gpu/drm/Kconfig
-> @@ -63,6 +63,12 @@ config DRM_USE_DYNAMIC_DEBUG
->   	  bytes per callsite, the .data costs can be substantial, and
->   	  are therefore configurable.
->   
-> +config DRM_KUNIT_TEST_HELPERS
-> +	tristate
-> +	depends on DRM && KUNIT
-> +	help
-> +	  KUnit Helpers for KMS drivers.
-> +
->   config DRM_KUNIT_TEST
->   	tristate "KUnit tests for DRM" if !KUNIT_ALL_TESTS
->   	depends on DRM && KUNIT
-> @@ -73,6 +79,7 @@ config DRM_KUNIT_TEST
->   	select DRM_KMS_HELPER
->   	select DRM_BUDDY
->   	select DRM_EXPORT_FOR_TESTS if m
-> +	select DRM_KUNIT_TEST_HELPERS
->   	default KUNIT_ALL_TESTS
->   	help
->   	  This builds unit tests for DRM. This option is not useful for
-> diff --git a/drivers/gpu/drm/Makefile b/drivers/gpu/drm/Makefile
-> index f92cd7892711..8d61fbdfdfac 100644
-> --- a/drivers/gpu/drm/Makefile
-> +++ b/drivers/gpu/drm/Makefile
-> @@ -125,7 +125,7 @@ obj-$(CONFIG_DRM_KMS_HELPER) += drm_kms_helper.o
->   # Drivers and the rest
->   #
->   
-> -obj-$(CONFIG_DRM_KUNIT_TEST) += tests/
-> +obj-y			+= tests/
->   
->   obj-$(CONFIG_DRM_MIPI_DBI) += drm_mipi_dbi.o
->   obj-$(CONFIG_DRM_MIPI_DSI) += drm_mipi_dsi.o
-> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
-> index 94fe546d937d..ef14bd481139 100644
-> --- a/drivers/gpu/drm/tests/Makefile
-> +++ b/drivers/gpu/drm/tests/Makefile
-> @@ -1,5 +1,8 @@
->   # SPDX-License-Identifier: GPL-2.0
->   
-> +obj-$(CONFIG_DRM_KUNIT_TEST_HELPERS) += \
-> +	drm_kunit_helpers.o
-> +
->   obj-$(CONFIG_DRM_KUNIT_TEST) += \
->   	drm_buddy_test.o \
->   	drm_cmdline_parser_test.o \
-> @@ -9,7 +12,6 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
->   	drm_format_helper_test.o \
->   	drm_format_test.o \
->   	drm_framebuffer_test.o \
-> -	drm_kunit_helpers.o \
->   	drm_mm_test.o \
->   	drm_modes_test.o \
->   	drm_plane_helper_test.o \
-> 
+> So think about it: if a CONFIG_ item is not present, what does that mean
+> for the code which is enclosed around it?
+
+Ignored by compiler.
+
+I thought we usually need to introduce the kernel config option, then
+add code related to it, so that is a wrong idea. It would be helpful to
+tell this somewhere in document.
+
