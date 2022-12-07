@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB64645679
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:29:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A8C645672
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiLGJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43348 "EHLO
+        id S229941AbiLGJ2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:28:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiLGJ3N (ORCPT
+        with ESMTP id S229583AbiLGJ2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:29:13 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A75303EE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 01:29:12 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p2qjF-0003BG-VX; Wed, 07 Dec 2022 10:28:38 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:9850:a364:9342:887])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 42D5C13868A;
-        Wed,  7 Dec 2022 09:28:31 +0000 (UTC)
-Date:   Wed, 7 Dec 2022 10:28:22 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     yang.yang29@zte.com.cn
-Cc:     wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mailhol.vincent@wanadoo.fr,
-        stefan.maetje@esd.eu, socketcan@hartkopp.net, dzm91@hust.edu.cn,
-        julia.lawall@inria.fr, gustavoars@kernel.org,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xu.panda@zte.com.cn
-Subject: Re: [PATCH linux-next] can: ucan: use strscpy() to instead of
- strncpy()
-Message-ID: <20221207092822.d7zgkgprun5iqj5v@pengutronix.de>
-References: <202212070909095189693@zte.com.cn>
+        Wed, 7 Dec 2022 04:28:46 -0500
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F3D211A35;
+        Wed,  7 Dec 2022 01:28:43 -0800 (PST)
+Received: from [192.168.182.212] (pa49-196-243-253.pa.vic.optusnet.com.au [49.196.243.253])
+        by mail.codeconstruct.com.au (Postfix) with ESMTPSA id B9E26200E6;
+        Wed,  7 Dec 2022 17:28:39 +0800 (AWST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=codeconstruct.com.au; s=2022a; t=1670405321;
+        bh=6l4r7simpKUMuXx6ig8BZefzYMf1MV2GW2hjFSVYB3I=;
+        h=Subject:From:To:Date:In-Reply-To:References;
+        b=iih8kZY/n9JA/10HAslqwyMusOnuWGjLwPpGhYdw2IMqfTOcW+o4KNQP0AmGIb4ZT
+         akNoXR1EHZTvgDeWvIhq3ubcu9h+zRxXNY0v+kRBJTQAfb4Iw0sJ4DilekDMANSSLv
+         RfsT5ETPLVqf2t3Nt5vUoYa5JgKQIk6iT3NGFXf/E8PkTCD8otLPH/RDtd/GyTZeDV
+         6jM5A58z+nP9pyrE/qFmawfvuXoPxHCCsHrgErmI8I+niZktNz2bgzKXx+ZZazyWA7
+         aF7LrFy9u6HLWNb6ojOAT5vU33mfu0eb+bzEu3utDglg3PDiR60atnP8DJbMIXYzyP
+         pPD9Y1tQy0jyQ==
+Message-ID: <0a8f144c920c63598a7283ad95975c3d5a7d7018.camel@codeconstruct.com.au>
+Subject: Re: [RFC PATCH 2/2] mfd: syscon: allow reset control for syscon
+ devices
+From:   Jeremy Kerr <jk@codeconstruct.com.au>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Date:   Wed, 07 Dec 2022 17:28:39 +0800
+In-Reply-To: <5a57e163-c705-4308-93ac-11e0cea2804b@app.fastmail.com>
+References: <20221206073916.1606125-1-jk@codeconstruct.com.au>
+         <20221206073916.1606125-3-jk@codeconstruct.com.au>
+         <e46a680f-e891-489c-9747-98ae3df42ade@app.fastmail.com>
+         <a83f62d604e70a8e58309dc7a5e2e3515227e1c4.camel@pengutronix.de>
+         <b29dceb0-a07f-4e12-9e7b-6fead4db826d@app.fastmail.com>
+         <ff70222596646757cbd6e2f24aadf3247183061d.camel@codeconstruct.com.au>
+         <5a57e163-c705-4308-93ac-11e0cea2804b@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1-1 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="mvncjmsvupsgvwxc"
-Content-Disposition: inline
-In-Reply-To: <202212070909095189693@zte.com.cn>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnd,
 
---mvncjmsvupsgvwxc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 07.12.2022 09:09:09, yang.yang29@zte.com.cn wrote:
-> From: Xu Panda <xu.panda@zte.com.cn>
+> Hmm, it's clearly not doing what I was remembering it to do ;-)
 >=20
-> The implementation of strscpy() is more robust and safer.
-> That's now the recommended way to copy NUL terminated strings.
+> Before 2014 commit bdb0066df96e ("mfd: syscon: Decouple syscon
+> interface
+> from platform devices"), it was supposed to be the same regmap in
+> both cases, with the linked list being maintained to ensure we
+> never get more than one instance for device_node.
+
+Yep, that makes sense with your earlier suggestions.
+
+> After this commit, I see that the platform_driver no longer matches
+> syscon nodes from devicetree, but only those nodes that have
+> platform_device.dev.name=3D"syscon" and are created from board
+> files. The only user of manually created syscon devices at the
+> time was mach-clps711x, but that has been converted to DT
+> a long time ago, so I don't even see anything using the
+> platform_device at all.
 >=20
-> Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
-> Signed-off-by: Yang Yang <yang.yang29@zte.com>
+> This would in turn indicate that we can completely remove the
+> platform_driver code, but I don't see how your RFC patch then
+> had any effect because it wouldn't actually perform the
+> reset for any devices in mainline kernels.
 
-Applied to linux-can-next.
+I've been changing a few things at once, it's entirely possible that my
+testing is incorrect!
 
-Thanks,
-Marc
+So, I'll add the reset controller linkage in just the DT-based code,
+and leave the platform device as-is. And then make sure that I'm
+getting the correct regmap <--> reset interactions :D
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+Cheers,
 
---mvncjmsvupsgvwxc
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmOQXLMACgkQrX5LkNig
-013UFAf/a9soVoeGWc2ul0Ld/JoH7fO1zRpPbW0Qbhj96LxdIUqTELFuKnp5d6IV
-WJp0UgO4hjzotCPu3oVUhlTMidJqGV7GjiroxulZPQ7Awdp6QDbB9Y9jiR7pMSTn
-H57LSZXIvay01w5anzskHtSJlqtlcCRO2biw3767Dnceo7Ke+7oVG1tbOow1CUyY
-bqVVSBfzfoXR0J2nGNeJ3sZmRAgYt7wn4CQ6DDP9VM7rxBrU519UE1K8fgEbKJkq
-FB1DyVoa2XbhyKYj770wJ9nbszG48hdJ/H/isxpTCAj5iTqwmkxjUrVUEbDnLXpg
-rYtfZ7QWNr58H4Kv/3TyC+pXFS+Fuw==
-=RqTJ
------END PGP SIGNATURE-----
-
---mvncjmsvupsgvwxc--
+Jeremy
