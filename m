@@ -2,253 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895A3645A31
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB07645A36
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:54:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiLGMxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 07:53:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35166 "EHLO
+        id S229718AbiLGMyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 07:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbiLGMxj (ORCPT
+        with ESMTP id S229753AbiLGMyI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 07:53:39 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7112E1275E
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 04:53:38 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id x28so14921488qtv.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 04:53:38 -0800 (PST)
+        Wed, 7 Dec 2022 07:54:08 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938BE5217D;
+        Wed,  7 Dec 2022 04:54:07 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id fc4so13684006ejc.12;
+        Wed, 07 Dec 2022 04:54:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3oX2hEWcNCnMhXAw0Zyyc0hdlvqduzjj1VD9AltKk4o=;
-        b=Dvnw3p+w6JbEhxONWTqtnhUyE29QVMK2SccqWoyfZMnh30k3DBWuFeByzNI3eKyXtm
-         OLblWOgvb4si9Rh0i/qZjckJjp0dsIjkqb0OlUDhXNX4qboa5bJ7V8xkbkApAV3eZhDc
-         LUtb2y4D6QbwltqX3/6cpfyrlH5V2FhCdP9+dIlIWwsR88B3Q5APJZNf0nG/R+6jDkTf
-         0IRyiTxyC4D9S+pKnsx12LqwkjBHjkzXi6LgJAmFOMD57V4Uht9Ekundfxq7U+SYwuGl
-         +1CA/+sIa0oRhhsksyTL4Ae3MoMXd3x9jJEWz5kG5jDwIyj2vT79SODdeuaaiS4ZJQdj
-         CHyg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3wHEueCe02/dFo7mDV34CjEc4Hqty62444bWhBRSbJ4=;
+        b=VzNNWJf1AddOafMP3bB5Jbnh04AX1NzHjVhFQA7rKO7lzu+Y9HTI9wgx2Xl9ojcDzK
+         s+D3GU5oT6JD3rhB7arH48dXPoYnxgzLx4GlXrIqnVwsg6sgG/A8DHkkwgdgYZygW7LJ
+         WYdrR6JS3jYsPycNHsP0LFCt5DDkSeO7BcCrLeaW8H8/QasiZR0aC3uGtSzkLkPWWXIg
+         m9w3hTuF188F9NDur0WwC+CpYuj3ubkJQ0N7GqsYEnrg80OFVwex3ofZlMf014sOi5ja
+         VZ5QHiSsXgaOLa0vqbc8QZMlNd52akbeeHaaH7OQVMOb8VrFpw7h0ouL06vw6ZPVJxLy
+         4Bjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3oX2hEWcNCnMhXAw0Zyyc0hdlvqduzjj1VD9AltKk4o=;
-        b=VtV20noeSoIACsVZmp06pqJp/upm62sHs4329Wu7Pz5sD1IXyNqmVbFYeBpb/2P233
-         DBc2BKybT6w+M8m9XUKBZMu7FfzMszG9kvvNNGnGvtA+NvpectDTDnfe98VSEpGrXIlE
-         6HSmZanpk1C3R4nKHVj5k+L/6q97LPivWY2UNK9IvaQ3WRyUuYxkpe0QpvuJLWiXk0X6
-         ZuieD8euHD6xLoQ2NCIbvG3TBlWOpybMna8iaeaSTuuKldYutczNpJ39Fv1awBzPNYg2
-         /X1EItdazYGqlnVsmygE3HUZW7UWTjKbT98UEGApNSpP4CXBhLlIVtts9+5QEeAVMOT2
-         1oGQ==
-X-Gm-Message-State: ANoB5pnY22tuQt8lh20cbQGRK3TTTB8vaKFqM229kMlJpkMK+j41unzS
-        EuZ1WrcHiztVqZTDqyOUNeYfxHSAicNvhcFbTqJqgg==
-X-Google-Smtp-Source: AA0mqf6sWEhh/YM6/9+5j/MgiOggRCCx9lK7v+SXkN2suW5zL7i1zui1qdoJpwcFpSA9+UQRU8WLJrfjw6j1MGn8CXc=
-X-Received: by 2002:a05:622a:4ac9:b0:3a5:ae7:9ada with SMTP id
- fx9-20020a05622a4ac900b003a50ae79adamr67195959qtb.191.1670417617339; Wed, 07
- Dec 2022 04:53:37 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3wHEueCe02/dFo7mDV34CjEc4Hqty62444bWhBRSbJ4=;
+        b=opo9NHeulkFpvm8P4XUVFI6U7CLROf0GLJUps7yE1+MGFml3ixNEwKU3HlVT0dpbVg
+         jB9A0keTD6MrocBUd1P299ixlkd4VKhRPOqRyz0cPwhuB9VVVkUsQusiLxENc5OkTsdJ
+         pH8c90Y3/9hzKcy1bF6f4T7Am+uBbd8WFD7hqTLjM5bJzCXnhg45srCyi+4QdFe6nm7W
+         xcDCJR86i5aVnPRcYoBnHq6tRbUGEHiZWuzhMANl+f6Ok7N5QYrPgrSsMLtqRul6IURc
+         zBReUMHYx+4OsQteqH4teawOyMM2vftFbl/u1Ky5ef4wiVpv5nbKiL7zLSHV48FG0uQ7
+         imnQ==
+X-Gm-Message-State: ANoB5pmcZ5d522NBfXGVcqhZg8YRfYLT20uBGtFtDpumQLWiL93dpp7U
+        c9rlo5h/MwtZWR8GvsrFnC8=
+X-Google-Smtp-Source: AA0mqf5rJ8Y2G5K8J77Da+1fY6fh0SokcCUuw7mN1S5LXHOpp/KJnxOL0OG+9lxX8aLNgrMq9yk9mA==
+X-Received: by 2002:a17:906:258d:b0:7c0:aea3:a9a8 with SMTP id m13-20020a170906258d00b007c0aea3a9a8mr23156206ejb.718.1670417645965;
+        Wed, 07 Dec 2022 04:54:05 -0800 (PST)
+Received: from [192.168.0.105] ([77.126.19.155])
+        by smtp.gmail.com with ESMTPSA id j16-20020a170906535000b007c0f2c4cdffsm3671712ejo.44.2022.12.07.04.54.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 04:54:05 -0800 (PST)
+Message-ID: <19cbfb5e-22b1-d9c1-8d50-38714e3eaf7d@gmail.com>
+Date:   Wed, 7 Dec 2022 14:53:58 +0200
 MIME-Version: 1.0
-References: <20221206124049.108349681@linuxfoundation.org>
-In-Reply-To: <20221206124049.108349681@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 7 Dec 2022 18:23:25 +0530
-Message-ID: <CA+G9fYtuHd3Nxy0ry=Zjqonp1wQWoToHO8o_S6RfuHK_v=Dhyw@mail.gmail.com>
-Subject: Re: [PATCH 4.19 000/110] 4.19.268-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 0/4] cpumask: improve on cpumask_local_spread()
+ locality
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <20221112190946.728270-1-yury.norov@gmail.com>
+ <xhsmh7czwyvtj.mognet@vschneid.remote.csb> <Y3PXw8Hqn+RCMg2J@yury-laptop>
+ <xhsmho7t5ydke.mognet@vschneid.remote.csb>
+ <665b6081-be55-de9a-1f7f-70a143df329d@gmail.com>
+ <Y4a2MBVEYEY+alO8@yury-laptop>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <Y4a2MBVEYEY+alO8@yury-laptop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022 at 18:12, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.268 release.
-> There are 110 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.19.268-rc2.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.19.268-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 4ab1b944115715d57d8b573c00bd402e60810d30
-* git describe: v4.19.267-111-g4ab1b9441157
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
-.267-111-g4ab1b9441157
-
-## Test Regressions (compared to v4.19.266-114-gc1ccef20f08e)
-
-## Metric Regressions (compared to v4.19.266-114-gc1ccef20f08e)
-
-## Test Fixes (compared to v4.19.266-114-gc1ccef20f08e)
-
-## Metric Fixes (compared to v4.19.266-114-gc1ccef20f08e)
 
 
-## Test result summary
-total: 52261, pass: 44029, fail: 858, skip: 6622, xfail: 752
+On 11/30/2022 3:47 AM, Yury Norov wrote:
+> On Mon, Nov 28, 2022 at 08:39:24AM +0200, Tariq Toukan wrote:
+>>
+>>
+>> On 11/17/2022 2:23 PM, Valentin Schneider wrote:
+>>> On 15/11/22 10:32, Yury Norov wrote:
+>>>> On Tue, Nov 15, 2022 at 05:24:56PM +0000, Valentin Schneider wrote:
+>>>>>
+>>>>> Is this meant as a replacement for [1]?
+>>>>
+>>>> No. Your series adds an iterator, and in my experience the code that
+>>>> uses iterators of that sort is almost always better and easier to
+>>>> understand than cpumask_nth() or cpumask_next()-like users.
+>>>>
+>>>> My series has the only advantage that it allows keep existing codebase
+>>>> untouched.
+>>>>
+>>>
+>>> Right
+>>>
+>>>>> I like that this is changing an existing interface so that all current
+>>>>> users directly benefit from the change. Now, about half of the users of
+>>>>> cpumask_local_spread() use it in a loop with incremental @i parameter,
+>>>>> which makes the repeated bsearch a bit of a shame, but then I'm tempted to
+>>>>> say the first point makes it worth it.
+>>>>>
+>>>>> [1]: https://lore.kernel.org/all/20221028164959.1367250-1-vschneid@redhat.com/
+>>>>
+>>>> In terms of very common case of sequential invocation of local_spread()
+>>>> for cpus from 0 to nr_cpu_ids, the complexity of my approach is n * log n,
+>>>> and your approach is amortized O(n), which is better. Not a big deal _now_,
+>>>> as you mentioned in the other email. But we never know how things will
+>>>> evolve, right?
+>>>>
+>>>> So, I would take both and maybe in comment to cpumask_local_spread()
+>>>> mention that there's a better alternative for those who call the
+>>>> function for all CPUs incrementally.
+>>>>
+>>>
+>>> Ack, sounds good.
+>>>
+>>
+>> Good.
+>> Is a respin needed, to add the comment mentioned above?
+> 
+> If you think it's worth the effort.
 
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 323 total, 318 passed, 5 failed
-* arm64: 59 total, 58 passed, 1 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 46 total, 46 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 63 total, 63 passed, 0 failed
-* s390: 15 total, 15 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 53 total, 52 passed, 1 failed
+No, not sure it is...
 
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
+I asked because this mail thread was inactive for a while, with the 
+patches not accepted to the kernel yet.
 
---
-Linaro LKFT
-https://lkft.linaro.org
+If everyone is happy with it, let's make it to this kernel while possible.
+
+To which tree should it go?
+
+Thanks,
+Tariq
