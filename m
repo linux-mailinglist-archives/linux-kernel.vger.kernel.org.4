@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E418E645CAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:33:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377E2645CB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:34:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiLGOd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:33:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
+        id S230138AbiLGOeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:34:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiLGOdz (ORCPT
+        with ESMTP id S229677AbiLGOer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:33:55 -0500
+        Wed, 7 Dec 2022 09:34:47 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9424874A;
-        Wed,  7 Dec 2022 06:33:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C086D48418;
+        Wed,  7 Dec 2022 06:34:46 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D00C61A21;
-        Wed,  7 Dec 2022 14:33:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61F9DC433C1;
-        Wed,  7 Dec 2022 14:33:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D10461A22;
+        Wed,  7 Dec 2022 14:34:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82BBC433D6;
+        Wed,  7 Dec 2022 14:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670423633;
-        bh=c+KvtVD0WLo5gwEphtibdZzJjkwLKgNGQrH2V1E1aXU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=OfTWS5hUSadr7o7xtdJ0R+zDfShXDpQX3tRV0YLBAE7y1YdiWf/4TVnd6XbwyfW7D
-         9pshZ5piIcEEBKGAYOwT7RUDqxscXns3qktQUeysF1bbMy9pqGvtqXK7NkBQj+jEGh
-         /En73LUpdGivrTIqPQyFldJ4/nB48m+P9QyqGDgqo93wMn++Ajsb4tc10erl+gKDZo
-         Ct+IenQvCaxiOaGQ6dHb8iaA9ISMa6FElcpXfhZ3cXxIpWqd5VMNravgNPjvu5xcNQ
-         HZ3INZyw87gUmXf31XYLPufE79jmKXRfW7vhhprjOPwcrq1DBnbKH2i4JhAr/q3LD7
-         VCg56qtXC+jmw==
-Date:   Wed, 7 Dec 2022 08:33:51 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
- devm_gpiod_get_optional()
-Message-ID: <20221207143351.GA1439513@bhelgaas>
+        s=k20201202; t=1670423685;
+        bh=lBKJBpVB6cbpxtDkoojthxARG0HGrqEdw1sgH86GMnY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=fKsN2YiHRHTHyiHmrZsg1L8AzS7evSfvVTzCQVk4rQ9lcY/jcucuMWzwF6ka3dJUw
+         XX85ugsOwwPxT9tqW8ujJvoBqRB1z9Xtqvh4bP8HPnGgUg1nh5dF0QhfcGowkOJOyt
+         mdpjjhPE4d1TorIUcKr+Vb4jsA8jantfgQIg9Vem4JR3asu7gfYLDnM+FuMULmjj/o
+         rp3VShtVk2IrVB/gqoG5l7pbN8rSNvQRs2bFc1YjroXt4n0tAJC4NffeUYObJctuir
+         CCIAyk9bkffGyqLfeKndLv5KR0W8uuPc5F6yJpgxDbVYMhTRBw/PNm343w8Wh8Ie3P
+         HdGzIR74Acc6w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 44BA45C0AFC; Wed,  7 Dec 2022 06:34:45 -0800 (PST)
+Date:   Wed, 7 Dec 2022 06:34:45 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Oleg Nesterov <oleg@redhat.com>
+Cc:     "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Pengfei Xu <pengfei.xu@intel.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org
+Subject: Re: [PATCH 3/3] rcu-tasks: Fix synchronize_rcu_tasks() VS
+ zap_pid_ns_processes()
+Message-ID: <20221207143445.GA4001@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221125135500.1653800-1-frederic@kernel.org>
+ <20221125135500.1653800-4-frederic@kernel.org>
+ <871qpkqof8.fsf@email.froward.int.ebiederm.org>
+ <20221206164927.GD3866@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y3KMEZFv6dpxA+Gv@google.com>
+In-Reply-To: <20221206164927.GD3866@redhat.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,80 +65,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 10:42:25AM -0800, Dmitry Torokhov wrote:
-> Switch the driver to the generic version of gpiod API (and away from
-> OF-specific variant), so that we can stop exporting
-> devm_gpiod_get_from_of_node().
+On Tue, Dec 06, 2022 at 05:49:28PM +0100, Oleg Nesterov wrote:
+> On 11/30, Eric W. Biederman wrote:
+> >
+> > 2) I keep thinking zap_pid_ns_processes() should be changed so that
+> >    after it sends SIGKILL to all of the relevant processes to not wait,
 > 
-> Acked-by: Pali Rohár <pali@kernel.org>
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> At least I think it should not wait for the tasks injected into this ns.
+> 
+> Because this looks like a kernel bug even if we forget about this deadlock.
+> 
+> Say we create a task P using clone(CLONE_NEWPID), then inject a task T into
+> P's pid-namespace via setns/fork. This make the process P "unkillable", it
+> will hang in zap_pid_ns_processes() "forever" until T->parent reaps a zombie
+> task T killed by P.
 
-This is unrelated to other pending aardvark changes and will help
-unblock the API removal, so I applied this to pci/ctrl/aardvark for
-v6.2, thanks!
+Given that this is not the first time that Tasks Trace RCU has been
+involved in a deadlock involving this exit path, I could certainly get
+behind this approach.  ;-)
 
-> ---
-> 
-> v2:
->  - collected reviewed-by/acked-by tags
->  - updated commit description to remove incorrect assumption of why
->    devm_gpiod_get_from_of_node() was used in the first place
-> 
-> This is the last user of devm_gpiod_get_from_of_node() in the mainline
-> (next), it would be great to have it in so that we can remove the API in
-> the next release cycle.
-> 
-> Thanks!
-> 
-> 
->  drivers/pci/controller/pci-aardvark.c | 23 +++++++++++------------
->  1 file changed, 11 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-aardvark.c b/drivers/pci/controller/pci-aardvark.c
-> index ba36bbc5897d..5ecfac23c9fc 100644
-> --- a/drivers/pci/controller/pci-aardvark.c
-> +++ b/drivers/pci/controller/pci-aardvark.c
-> @@ -1859,20 +1859,19 @@ static int advk_pcie_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> -	pcie->reset_gpio = devm_gpiod_get_from_of_node(dev, dev->of_node,
-> -						       "reset-gpios", 0,
-> -						       GPIOD_OUT_LOW,
-> -						       "pcie1-reset");
-> +	pcie->reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
->  	ret = PTR_ERR_OR_ZERO(pcie->reset_gpio);
->  	if (ret) {
-> -		if (ret == -ENOENT) {
-> -			pcie->reset_gpio = NULL;
-> -		} else {
-> -			if (ret != -EPROBE_DEFER)
-> -				dev_err(dev, "Failed to get reset-gpio: %i\n",
-> -					ret);
-> -			return ret;
-> -		}
-> +		if (ret != -EPROBE_DEFER)
-> +			dev_err(dev, "Failed to get reset-gpio: %i\n",
-> +				ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = gpiod_set_consumer_name(pcie->reset_gpio, "pcie1-reset");
-> +	if (ret) {
-> +		dev_err(dev, "Failed to set reset gpio name: %d\n", ret);
-> +		return ret;
->  	}
->  
->  	ret = of_pci_get_max_link_speed(dev->of_node);
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
-> 
-> -- 
-> Dmitry
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+							Thanx, Paul
