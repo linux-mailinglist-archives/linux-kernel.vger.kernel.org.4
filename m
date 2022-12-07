@@ -2,63 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C621645B64
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:50:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BC68645B5C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:49:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiLGNuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:50:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45734 "EHLO
+        id S230110AbiLGNtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:49:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiLGNuW (ORCPT
+        with ESMTP id S230097AbiLGNt3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:50:22 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B96F85B5A6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:49:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670420962;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=I/Q1ZC0666M/joFWQlCN9lqG3/HMmtk+XlUWPgiJ26M=;
-        b=hWKkhcLRH1gLx28rTACw+DyGfQrWiraDR6T9QY/jNVOT7c/IO34qn/U4CIzis5KfEIr3aY
-        XJnK4LCTyUhH5kLKRkpn13tEUni5FCqB9pwlFRF2/gVmMGJbnZOvEw6LB0OMAeATvjPkMK
-        IMF45B81GtFrN9ReuBFYCAs1Q94Chws=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-270-X3Xu_TEOOP-EuEvY-wnVbg-1; Wed, 07 Dec 2022 08:49:19 -0500
-X-MC-Unique: X3Xu_TEOOP-EuEvY-wnVbg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4C9E685A588;
-        Wed,  7 Dec 2022 13:49:19 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1F7DC2166B26;
-        Wed,  7 Dec 2022 13:49:18 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-To:     torvalds@linux-foundation.org
-cc:     dhowells@redhat.com, Dave Wysochanski <dwysocha@redhat.com>,
-        Daire Byrne <daire.byrne@gmail.com>,
-        Benjamin Maynard <benmaynard@google.com>,
-        linux-cachefs@redhat.com, linux-nfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] fscache: Fix oops due to race with cookie_lru and use_cookie
+        Wed, 7 Dec 2022 08:49:29 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A8959876;
+        Wed,  7 Dec 2022 05:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670420967; x=1701956967;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=244oBt7BYcfp9OKLgDcoevrJ5DGlb+K1/OKrzuTdtw8=;
+  b=dmNw4xSB8lAyuaDHob2osPr+3zEPleJt8cKRVNCLO/rfDT+VHrY24Yh8
+   5uh5r2bmgUBPetPXkI8SOIOwsDXIE48GuFbZEDywxzJum9GN9+wQxlBnL
+   Unoe65vx2G9ow7ozmOPmceQwOqcLkLb5IEvV5lnz5S8pumqu85w5QcQBJ
+   zY+N5RpfqaGo/SUmppFqO+lmvZXv/ZtfTzEMFV/qwJxEtc3vnQEytPc5J
+   JE3SWAnRLYdvRXcq0OBxiBxTsboEygJeKnK/HIgtGu4sP9Zuk1EP4NZpO
+   Na5hyJzkMcHdwY0eCVAAqTk25AP/2xe9YX9gtor2FhrP8rMKU7qAEIrG2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="381185384"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="381185384"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 05:49:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="710069060"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="710069060"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.38.130])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 05:49:21 -0800
+Message-ID: <cae6475a-a1e9-ae57-6e64-59931f467050@intel.com>
+Date:   Wed, 7 Dec 2022 15:49:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1432089.1670420955.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 07 Dec 2022 13:49:15 +0000
-Message-ID: <1432090.1670420955@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.5.1
+Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
+Content-Language: en-US
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>
+Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
+        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
+        yuenn@google.com, benjaminfair@google.com,
+        skhan@linuxfoundation.org, davidgow@google.com,
+        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
+        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221205085351.27566-1-tmaimon77@gmail.com>
+ <20221205085351.27566-3-tmaimon77@gmail.com>
+ <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
+ <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
+ <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
+ <c200557f-c30a-62f9-287a-af804e818cf1@intel.com>
+ <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
+ <CAHp75VemBiGUTspEYDe3hwA9pEzjNMQGY6_kUoVMJyCuEWgChw@mail.gmail.com>
+ <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com>
+ <CAP6Zq1h9XvH501e_nH9TkUCKPNOuH7dhOM8FrsUM=PYX4gt0qw@mail.gmail.com>
+ <CAHp75Vd5DzkCW0Gpouv+0Or=Yhjp_KdFGP-jXkpHD=UZrG2ajA@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAHp75Vd5DzkCW0Gpouv+0Or=Yhjp_KdFGP-jXkpHD=UZrG2ajA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,100 +82,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 7/12/22 15:25, Andy Shevchenko wrote:
+> On Wed, Dec 7, 2022 at 3:01 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+>> On Mon, 5 Dec 2022 at 16:33, Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>> On 5/12/22 16:17, Andy Shevchenko wrote:
+>>>> On Mon, Dec 5, 2022 at 4:14 PM Andy Shevchenko
+>>>> <andy.shevchenko@gmail.com> wrote:
+>>>>> On Mon, Dec 5, 2022 at 3:41 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>>>> On 5/12/22 15:25, Andy Shevchenko wrote:
+>>>>>>> On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
+> 
+> ...
+> 
+>>>>>>> devm_ is problematic in your case.
+>>>>>>> TL;DR: you need to use clk_get_optional() and clk_put().
+>>>>>>
+>>>>>> devm_ calls exactly those, so what is the issue?
+>>>>>
+>>>>> The issue is the error path or removal stage where it may or may be
+>>>>> not problematic. To be on the safe side, the best approach is to make
+>>>>> sure that allocated resources are being deallocated in the reversed
+>>>>> order. That said, the
+>>>>>
+>>>>> 1. call non-devm_func()
+>>>>> 2. call devm_func()
+>>>>>
+>>>>> is wrong strictly speaking.
+>>>>
+>>>> To elaborate more, the
+>>>>
+>>>> 1. call all devm_func()
+>>>> 2. call only non-devm_func()
+>>>>
+>>>> is the correct order.
+>>>
+>>> 1. WRT pltfm_host->clk, that is what is happening
+>>> 2. WRT other resources that is simply not always possible because not every resource is wrapped by devm_
+>>> e.g. mmc_alloc_host() / mmc_free_host()
+>> I little confused about what to decide, should I use only
+>> non-devm_func because mmc_alloc_host() / mmc_free_host() is not
+>> warrped with devm_?
+> 
+> It is up to you how to proceed. I pointed out the problem with your
+> code which may or may not be fatal.
+> 
+> If you want to solve it, there are several approaches:
+> 1) get rid of devm_ completely;
+> 2) properly shuffle the ordering in ->probe(), so all devm_ calls are
+> followed by non-devm_;
+> 3) wrap non-devm_ cals to become managed (see
+> devm_add_action_or_reset() approach);
+> 4) fix SDHCI / MMC layer by providing necessary devm_ calls and/or fix
+> sdhci_pltfm_register() to handle the clock.
 
-Could you apply this, please?
+I can take care of sdhci_pltfm when I next have some time.
+Otherwise it looks OK to me, so I am acking it.
 
-Thanks,
-David
----
-From: Dave Wysochanski <dwysocha@redhat.com>
-
-If a cookie expires from the LRU and the LRU_DISCARD flag is set,
-but the state machine has not run yet, it's possible another thread
-can call fscache_use_cookie and begin to use it.  When the
-cookie_worker finally runs, it will see the LRU_DISCARD flag set,
-transition the cookie->state to LRU_DISCARDING, which will then
-withdraw the cookie.  Once the cookie is withdrawn the object is
-removed the below oops will occur because the object associated
-with the cookie is now NULL.
-
-Fix the oops by clearing the LRU_DISCARD bit if another thread
-uses the cookie before the cookie_worker runs.
-
-  BUG: kernel NULL pointer dereference, address: 0000000000000008
-  ...
-  CPU: 31 PID: 44773 Comm: kworker/u130:1 Tainted: G     E    6.0.0-5.dneg=
-.x86_64 #1
-  Hardware name: Google Compute Engine/Google Compute Engine, BIOS Google =
-08/26/2022
-  Workqueue: events_unbound netfs_rreq_write_to_cache_work [netfs]
-  RIP: 0010:cachefiles_prepare_write+0x28/0x90 [cachefiles]
-  ...
-  Call Trace:
-   netfs_rreq_write_to_cache_work+0x11c/0x320 [netfs]
-   process_one_work+0x217/0x3e0
-   worker_thread+0x4a/0x3b0
-   ? process_one_work+0x3e0/0x3e0
-   kthread+0xd6/0x100
-   ? kthread_complete_and_exit+0x20/0x20
-   ret_from_fork+0x1f/0x30
-
-Fixes: 12bb21a29c19 ("fscache: Implement cookie user counting and resource=
- pinning")
-Reported-by: Daire Byrne <daire.byrne@gmail.com>
-Signed-off-by: Dave Wysochanski <dwysocha@redhat.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Tested-by: Daire Byrne <daire@dneg.com>
-Link: https://lore.kernel.org/r/20221117115023.1350181-1-dwysocha@redhat.c=
-om/ # v1
-Link: https://lore.kernel.org/r/20221117142915.1366990-1-dwysocha@redhat.c=
-om/ # v2
----
- fs/fscache/cookie.c            | 8 ++++++++
- include/trace/events/fscache.h | 2 ++
- 2 files changed, 10 insertions(+)
-
-diff --git a/fs/fscache/cookie.c b/fs/fscache/cookie.c
-index 451d8a077e12..bce2492186d0 100644
---- a/fs/fscache/cookie.c
-+++ b/fs/fscache/cookie.c
-@@ -605,6 +605,14 @@ void __fscache_use_cookie(struct fscache_cookie *cook=
-ie, bool will_modify)
- 			set_bit(FSCACHE_COOKIE_DO_PREP_TO_WRITE, &cookie->flags);
- 			queue =3D true;
- 		}
-+		/*
-+		 * We could race with cookie_lru which may set LRU_DISCARD bit
-+		 * but has yet to run the cookie state machine.  If this happens
-+		 * and another thread tries to use the cookie, clear LRU_DISCARD
-+		 * so we don't end up withdrawing the cookie while in use.
-+		 */
-+		if (test_and_clear_bit(FSCACHE_COOKIE_DO_LRU_DISCARD, &cookie->flags))
-+			fscache_see_cookie(cookie, fscache_cookie_see_lru_discard_clear);
- 		break;
- =
-
- 	case FSCACHE_COOKIE_STATE_FAILED:
-diff --git a/include/trace/events/fscache.h b/include/trace/events/fscache=
-.h
-index c078c48a8e6d..a6190aa1b406 100644
---- a/include/trace/events/fscache.h
-+++ b/include/trace/events/fscache.h
-@@ -66,6 +66,7 @@ enum fscache_cookie_trace {
- 	fscache_cookie_put_work,
- 	fscache_cookie_see_active,
- 	fscache_cookie_see_lru_discard,
-+	fscache_cookie_see_lru_discard_clear,
- 	fscache_cookie_see_lru_do_one,
- 	fscache_cookie_see_relinquish,
- 	fscache_cookie_see_withdraw,
-@@ -149,6 +150,7 @@ enum fscache_access_trace {
- 	EM(fscache_cookie_put_work,		"PQ  work ")		\
- 	EM(fscache_cookie_see_active,		"-   activ")		\
- 	EM(fscache_cookie_see_lru_discard,	"-   x-lru")		\
-+	EM(fscache_cookie_see_lru_discard_clear,"-   lrudc")            \
- 	EM(fscache_cookie_see_lru_do_one,	"-   lrudo")		\
- 	EM(fscache_cookie_see_relinquish,	"-   x-rlq")		\
- 	EM(fscache_cookie_see_withdraw,		"-   x-wth")		\
+> 
+> Personally, the list order is from the least, what I prefer, to the
+> most (i.o.w. I would like to see rather 4) than 1) to be implemented).
+> 
+>>>> Hence in this case the driver can be worked around easily (by
+>>>> shuffling the order in ->probe() to call devm_ first), but as I said
+>>>> looking into implementation of the _unregister() I'm pretty sure that
+>>>> clock management should be in sdhci-pltfm, rather than in all callers
+>>>> who won't need the full customization.
+>>>>
+>>>> Hope this helps to understand my point.
+>>>>
+>>>>>>> Your ->remove() callback doesn't free resources in the reversed order
+>>>>>>> which may or, by luck, may not be the case of all possible crashes,
+>>>>>>> UAFs, races, etc during removal stage. All the same for error path in
+>>>>>>> ->probe().
+>>>>>
+>>>>> I also pointed out above what would be the outcome of neglecting this rule.
+> 
+> ...
+> 
+>>>>>>>>> Why can't you use sdhci_pltfm_register()?
+>>>>>>>> two things are missing in sdhci_pltfm_register
+>>>>>>>> 1. clock.
+>>>>>>>
+>>>>>>> Taking into account the implementation of the corresponding
+>>>>>>> _unregister() I would add the clock handling to the _register() one.
+>>>>>>> Perhaps via a new member of the platform data that supplies the name
+>>>>>>> and index of the clock and hence all clk_get_optional() / clk_put will
+>>>>>>> be moved there.
+>> Do you mean to add it to sdhci_pltfm_register function? if yes I
+>> believe it will take some time to modify sdhci_pltfm_register
+>> I prefer not to use sdhci_pltfm_register.
+> 
+> In the Linux kernel we are trying hard to avoid code duplication. Why
+> do you need it to be open coded? (Yes, I heard you, but somebody
+> should fix the issues with that funcion at some point, right?)
+> 
+>>>>>>>> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
+>>>>>>>
+>>>>>>> All the same, why can't platform data be utilised for this?
+> 
 
