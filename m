@@ -2,116 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0096645DC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 097C3645DCF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:46:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiLGPmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:42:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S229543AbiLGPqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:46:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGPmG (ORCPT
+        with ESMTP id S229513AbiLGPqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:42:06 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9D60B6E;
-        Wed,  7 Dec 2022 07:42:05 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id f7so25442046edc.6;
-        Wed, 07 Dec 2022 07:42:05 -0800 (PST)
+        Wed, 7 Dec 2022 10:46:12 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E01C26ACB
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:46:11 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id t18so7454771pfq.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:46:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OwH4Gcv5FX9Ez7R0y/eSqA6CTqQLAguixPLNHBhie6U=;
-        b=goeqfASTX5lCuxyfo1TbHWXrIzFXfbhVoRJ/xt2x+08aKMjEeJ2LkACRwMUP0hT6KI
-         v6o70BZKwQFFU+QKFBuJGQmErWRlWoOXT898wjEBvKiVNl113lXTJhtTtSTWJ9aXUBib
-         lDzE2kp4EqPXmMm0kQPJasS4HyKy1+sEIJYhPMC4UnykbSzcJz2hkTkITHvDSou4vhEN
-         ZgL3uk+y96l1KSH8RimXq+SYbJIUFAr8pSubggGo6dRSt9QWEoEnXBEN55J13UJ31PIQ
-         fmL4lrjJZdILcAJEJGtRqHJIO2F6GZxzqiRdFY8y0FKCHXrnraQj7+Hj9LMj4xGuusBC
-         Sx2A==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UfOHvK7ecYIuUe0s4A5xd+Shfnx26W2C73pfnXWOFPw=;
+        b=iT5h2rMguX+IY5q8yLBNZmN/99vOp91cbgceJR1iIMkvim2gs5WBUbHDUfjpuyh0H+
+         uzXwjjS7uqH45oKea6deOwTqj2zlfFWOhsQTwYzT8WxQ5cjhPChGJQd8t0UwQN66xUN7
+         QV8nuyqydi5raOny0PZCpMlfZ9XQE2IwcZbnWzNskDHsPkKwnTPS7Me3nnP12TY9m6NO
+         dbGAJGkjQzuRtXz0Y0XZEaim3vlqvfbkbQRK+SzWOZIrqR0SDFTGlByFU4ILTSI0DFwJ
+         LGPPpy3VjocWPnrf7+O1+gA2pUvdbEP0tSuWlI3kBXgvvMEYfcTSO1aYrXgmfBI+ra3q
+         nAMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OwH4Gcv5FX9Ez7R0y/eSqA6CTqQLAguixPLNHBhie6U=;
-        b=xj042L07C+FZjlAgeXoMd2de2mIo49nBph82AP6kXY8UpLhiqaVSZd8CWl3VDEr1KI
-         NQvVDA4YDktx9bvzOOw9vNFizfk9bjP5a4yp84NG9bdGl6+HiFalo0HWw8IdsP0s0FI7
-         durZYC9J/XdenVYmi2YasYU2De3McXLwwvmVzBxBKN8O1pE2dP1GQu71L4XTxJbtL7Eh
-         HLRfetxtGgjcfhe/FIslpvWd1b7PJr0MrqQZr2cQ/Am/vUrrPmnGflE0+EZ/GFcNKe6P
-         xBIiy6++FEPgkHpJrcbX/WaDwgqhkcIupYxcSBzdRJz8P92Tt4EAHli8hxFk5UCgU/UZ
-         hntg==
-X-Gm-Message-State: ANoB5pkuTYHNfbN8zZ5skmvVMZ0fWjHdfnGpa+gXFsZw3gY+cqoG0TAW
-        hwn34AEztQ/MJJnjDn5+s9M=
-X-Google-Smtp-Source: AA0mqf51a/63Urivpl9xqLseyeQIr6ko65qJhVWeB7WY2Td1bjdAYAL7YOLHLnhMxvP6OjgpSyLHFQ==
-X-Received: by 2002:a05:6402:3441:b0:46b:2aaf:754e with SMTP id l1-20020a056402344100b0046b2aaf754emr39976106edc.139.1670427723383;
-        Wed, 07 Dec 2022 07:42:03 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id ck3-20020a0564021c0300b0046778ce5fdfsm2352977edb.10.2022.12.07.07.42.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 07:42:02 -0800 (PST)
-Date:   Wed, 7 Dec 2022 16:42:15 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: Re: [PATCH v5 net-next 1/5] net/ethtool: add netlink interface for
- the PLCA RS
-Message-ID: <Y5C0V52DjS+1GNhJ@gvm01>
-References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
- <350e640b5c3c7b9c25f6fd749dc0237e79e1c573.1670371013.git.piergiorgio.beruto@gmail.com>
- <20221206195014.10d7ec82@kernel.org>
- <Y5CQY0pI+4DobFSD@gvm01>
- <Y5CgIL+cu4Fv43vy@lunn.ch>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UfOHvK7ecYIuUe0s4A5xd+Shfnx26W2C73pfnXWOFPw=;
+        b=jeFcGUWFOJW6Y2IscdX7HB5Mqcg3sABy2F6CnKnG5RWGG6zOgOi+x5lLMEw+DbtWqa
+         qc75WGnb2C1r0Ko+9zf6sQvqO9WOSOKb/Z3m606s+S8FC3l4RlYDAAyEAtVZv2/PqFr6
+         h9T1iyU6XQ/R9Gj416PZLkKBYTzc7OttyTp4sCN84ggBFAhtwykrADQUMh6f14c2iAUR
+         4y7MX/nHPHoNb8H5V60sl2l7DOOufe7f4ng/s/Rf8S2tWkzE4vQqO02XfwMGbstvReFb
+         GtC49kbBYwOWS8yViGYJO6a+ggef+6ZT02OZUv49+AfmyI61fQxcOKMg5lHCyyqlnVgg
+         Tg/g==
+X-Gm-Message-State: ANoB5plEsF7BNrSrnpD5gNB5ztPBfljS1+0uPHqhs2WQW+ZkjbtOaqPW
+        85atyFEZVZDQ9V6XxrhguVvst4n2eDVPZSVq3599TQ==
+X-Google-Smtp-Source: AA0mqf4loW0n0K8rBmh1RZRv2mZ9kBVaPS0r1AUXAFFSQCa/AbskGM6a4jYQ6OSdRF3Zfxqatvnkl5J1s9WWGmB6Y1o=
+X-Received: by 2002:aa7:951d:0:b0:577:3e5e:7a4 with SMTP id
+ b29-20020aa7951d000000b005773e5e07a4mr8405149pfp.57.1670427970858; Wed, 07
+ Dec 2022 07:46:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5CgIL+cu4Fv43vy@lunn.ch>
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com> <20221005143618.v7.3.I162c4be55f230cd439f0643f1624527bdc8a9831@changeid>
+In-Reply-To: <20221005143618.v7.3.I162c4be55f230cd439f0643f1624527bdc8a9831@changeid>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 7 Dec 2022 16:45:34 +0100
+Message-ID: <CAPDyKFpMUQo-Q2sbm3YXPeagt88zsRFWgc06GmNm0TVUPmPY_g@mail.gmail.com>
+Subject: Re: [PATCH v7 3/6] clk: qcom: gdsc: Add a reset op to poll gdsc collapse
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        krzysztof.kozlowski@linaro.org, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:16:00PM +0100, Andrew Lunn wrote:
-> > > TBH I can't parse the "ETHTOOL_A_PLCA_VERSION is reported as 0Axx
-> > > where.." sentence. Specifically I'm confused about what the 0A is.
-> > How about this: "When this standard is supported, the upper byte of
-> > ``ETHTOOL_A_PLCA_VERSION`` shall be 0x0A (see Table A.1.0 — IDVER 
-> > bits assignment).
-> 
-> I think the 0x0A is pointless and should not be included here. If the
-> register does not contain 0x0A, the device does not follow the open
-> alliance standard, and hence the lower part of the register is
-> meaningless.
-> 
-> This is why i suggested -ENODEV should actually be returned on invalid
-> values in this register.
-I already integrated this change in v5 (returning -ENODEV). Give what you're
-saying, I can just remove that sentence from the documentations. Agreed?
+On Wed, 5 Oct 2022 at 11:08, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> Add a reset op compatible function to poll for gdsc collapse. This is
+> required because:
+>   1. We don't wait for it to turn OFF at hardware for VOTABLE GDSCs.
+>   2. There is no way for client drivers (eg. gpu driver) to do
+>   put-with-wait for these gdscs which is required in some scenarios
+>   (eg. GPU recovery).
 
-> 
-> > > >   * struct ethtool_phy_ops - Optional PHY device options
-> > > >   * @get_sset_count: Get number of strings that @get_strings will write.
-> > > >   * @get_strings: Return a set of strings that describe the requested objects
-> > > >   * @get_stats: Return extended statistics about the PHY device.
-> > > > + * @get_plca_cfg: Return PLCA configuration.
-> > > > + * @set_plca_cfg: Set PLCA configuration.
-> > > 
-> > > missing get status in kdoc
-> > Fixed. Good catch.
-> 
-> Building with W=1 C=2 will tell you about kerneldoc issues. Ideally we
-> want all network code to be clean with these two options.
-Ok thanks. I probably need to upgrade my machine to achieve this. Will
-do.
+What puzzles me a bit, who is the typical consumer of the reset.
+
+I looked at patch4 and tried to figure it out, but let's discuss that
+in that thread instead. Some more comments, see below.
+
+>
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>
+> Changes in v7:
+> - Update commit message (Bjorn)
+>
+> Changes in v2:
+> - Minor update to function prototype
+>
+>  drivers/clk/qcom/gdsc.c | 23 +++++++++++++++++++----
+>  drivers/clk/qcom/gdsc.h |  7 +++++++
+>  2 files changed, 26 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index 7cf5e13..ccef742 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/reset-controller.h>
+>  #include <linux/slab.h>
+>  #include "gdsc.h"
+> +#include "reset.h"
+>
+>  #define PWR_ON_MASK            BIT(31)
+>  #define EN_REST_WAIT_MASK      GENMASK_ULL(23, 20)
+> @@ -116,7 +117,8 @@ static int gdsc_hwctrl(struct gdsc *sc, bool en)
+>         return regmap_update_bits(sc->regmap, sc->gdscr, HW_CONTROL_MASK, val);
+>  }
+>
+> -static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
+> +static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status,
+> +               s64 timeout_us, unsigned int interval_ms)
+>  {
+>         ktime_t start;
+>
+> @@ -124,7 +126,9 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
+>         do {
+>                 if (gdsc_check_status(sc, status))
+>                         return 0;
+> -       } while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
+> +               if (interval_ms)
+> +                       msleep(interval_ms);
+> +       } while (ktime_us_delta(ktime_get(), start) < timeout_us);
+
+Rather than continue to open code this polling loop, would it not make
+sense to convert the code into using readx_poll_timeout() (or some of
+its friends).
+
+Down the road, this leads to that the msleep() above should become
+usleep_range() instead, which seems more correct to me.
+
+>
+>         if (gdsc_check_status(sc, status))
+>                 return 0;
+> @@ -189,7 +193,7 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
+>                 udelay(1);
+>         }
+>
+> -       ret = gdsc_poll_status(sc, status);
+> +       ret = gdsc_poll_status(sc, status, TIMEOUT_US, 0);
+>         WARN(ret, "%s status stuck at 'o%s'", sc->pd.name, status ? "ff" : "n");
+>
+>         if (!ret && status == GDSC_OFF && sc->rsupply) {
+> @@ -360,7 +364,7 @@ static int _gdsc_disable(struct gdsc *sc)
+>                  */
+>                 udelay(1);
+>
+> -               ret = gdsc_poll_status(sc, GDSC_ON);
+> +               ret = gdsc_poll_status(sc, GDSC_ON, TIMEOUT_US, 0);
+>                 if (ret)
+>                         return ret;
+>         }
+> @@ -608,3 +612,14 @@ int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain)
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(gdsc_gx_do_nothing_enable);
+> +
+> +int gdsc_wait_for_collapse(void *priv)
+> +{
+> +       struct gdsc *sc = priv;
+> +       int ret;
+> +
+> +       ret = gdsc_poll_status(sc, GDSC_OFF, 500000, 5);
+> +       WARN(ret, "%s status stuck at 'on'", sc->pd.name);
+> +       return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(gdsc_wait_for_collapse);
+> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+> index 981a12c..5395f69 100644
+> --- a/drivers/clk/qcom/gdsc.h
+> +++ b/drivers/clk/qcom/gdsc.h
+> @@ -12,6 +12,7 @@
+>  struct regmap;
+>  struct regulator;
+>  struct reset_controller_dev;
+> +struct qcom_reset_map;
+>
+>  /**
+>   * struct gdsc - Globally Distributed Switch Controller
+> @@ -88,6 +89,7 @@ int gdsc_register(struct gdsc_desc *desc, struct reset_controller_dev *,
+>                   struct regmap *);
+>  void gdsc_unregister(struct gdsc_desc *desc);
+>  int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain);
+> +int gdsc_wait_for_collapse(void *priv);
+>  #else
+>  static inline int gdsc_register(struct gdsc_desc *desc,
+>                                 struct reset_controller_dev *rcdev,
+> @@ -97,5 +99,10 @@ static inline int gdsc_register(struct gdsc_desc *desc,
+>  }
+>
+>  static inline void gdsc_unregister(struct gdsc_desc *desc) {};
+> +
+> +static int gdsc_wait_for_collapse(void *priv)
+> +{
+> +       return  -ENOSYS;
+> +}
+>  #endif /* CONFIG_QCOM_GDSC */
+>  #endif /* __QCOM_GDSC_H__ */
+
+Kind regards
+Uffe
