@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D12645CC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:37:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5861F645CC2
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiLGOho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:37:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
+        id S229441AbiLGOiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiLGOhk (ORCPT
+        with ESMTP id S230186AbiLGOh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:37:40 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47F43E10;
-        Wed,  7 Dec 2022 06:37:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D903161A22;
-        Wed,  7 Dec 2022 14:37:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B35EC433B5;
-        Wed,  7 Dec 2022 14:37:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670423859;
-        bh=RAlHgKqZZZm+DQ/f0MYPxHfZBwykr3Y8qGJYKBulNe0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=scD0kHl4xIu2Mcvt+TzLJwIu92z2/MqOzwITkuEcX8llvbN9MnUT52rHxjyl6GeYt
-         /CMX/KemMCGEo0nG5nHa1ot80nAO6Ll/i7UZz9RpeEwuvCU7zJJ38Qah7zKAV12Rgw
-         eh6H8qsZYkgW9X7i5Ch9vrdu28s7znO4z1eybD3sImrclphu0UsE/QCL1EI1Las0Ge
-         PW6DMOcwPP61/Stgtz7xMMlOevquIMYcGphlYw2AcgysNy+qANbitcoEax1CusUoFU
-         eu2KVkEO6tSrWYp1dc0oZSYULnJrOeLNnb6PGg5jdADsbSSv9hc60N7FUS2e+A1uYT
-         97LT0GwbWfMNg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 67BE140404; Wed,  7 Dec 2022 11:37:36 -0300 (-03)
-Date:   Wed, 7 Dec 2022 11:37:36 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
-Subject: Re: [ALMOST ready] Re: [PATCH 2/3] perf build: Use libtraceevent
- from the system
-Message-ID: <Y5ClMLqub898mtVs@kernel.org>
-References: <Y49skYa5VYPMU+RF@kernel.org>
- <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
- <Y5ChXjt0uv/yDNwV@kernel.org>
+        Wed, 7 Dec 2022 09:37:58 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169935FBB6;
+        Wed,  7 Dec 2022 06:37:55 -0800 (PST)
+Received: by mail-qk1-f169.google.com with SMTP id z17so10078172qki.11;
+        Wed, 07 Dec 2022 06:37:55 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5taqlCVSBSBpZvPjZD+3+7kbvDpWqxTM95A9eF8jh5A=;
+        b=Ag/o/tlh4QhAnOahLuEIqRh1MGlt5v28rqOL0ClykKbt40gmG7JQD2whmDvDlIfsaW
+         ZYiDfGz2SJQV2eeODb1aR2ZncsTnteSwzzmaDqblAcqMJPvPeqDEwgclTEs11jm/pTdD
+         zXLkVGHfn3PwztnlAiBMQsvkqavXOE53MULmYU/aLN4hpd9PRjNl3Smfkumgs/BL93Da
+         4+vGUrM+Jp9sJhhTyGdavHK9RxkYdvtVdUctwuLoTywvucCk4bBsYE+3dRiAhCckplm3
+         F6oYgW0diu/sdK6iEFkEBf/ZnK1aAQGY+b4aQMKD3Vq1GV/nIFOYgRbtuLJyDcgc1dax
+         nFgw==
+X-Gm-Message-State: ANoB5pmvu64tz9OeSCYlC9qObgEWOT7Py0iACpWNvNuecUxXTGxPNvI7
+        PAXO03ir5dEbPZlRQlUQ5qZD5Wghdiara5+NB/Ul8Vnz
+X-Google-Smtp-Source: AA0mqf6AMNMTdZd9I/1yIXOCkswsx4zgNkHAge4qWVOiD4FraWYJz+lz3MuTpXyfxCy6bVLE6CNWQn4S3kmVD/QCt80=
+X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
+ br17-20020a05620a461100b006faaf7e927cmr78745245qkb.443.1670423874205; Wed, 07
+ Dec 2022 06:37:54 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5ChXjt0uv/yDNwV@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
+In-Reply-To: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 7 Dec 2022 15:37:43 +0100
+Message-ID: <CAJZ5v0g5kTRE+x-8xC2WwQr11j01ox=Nk0aguiC1_HGPU8W=Rw@mail.gmail.com>
+Subject: Re: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with arch_cpu_idle
+To:     lirongqing@baidu.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, peterz@infradead.org,
+        akpm@linux-foundation.org, tony.luck@intel.com,
+        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Dec 07, 2022 at 11:21:18AM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Tue, Dec 06, 2022 at 02:22:15PM -0800, Ian Rogers escreveu:
-> > On Tue, Dec 6, 2022 at 9:31 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > Em Tue, Dec 06, 2022 at 02:13:48PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > > I'm missing some detail, this isn't working, util/trace-event.c is still
-> > > being built and linked.
-> 
-> > > The python binding should be usable without tracepoints, in fact its
-> > > first usage was just to have access to the perf metaevents, see
-> > > tools/perf/python/twatch.py.
-> 
-> > You're right. I'd assumed that if you were disabling libtraceevent
-> > then you'd also disable python. To fix the issue above you can do:
-> 
-> > --- a/tools/perf/util/python-ext-sources
-> > +++ b/tools/perf/util/python-ext-sources
-> > @@ -30,7 +30,6 @@ util/rblist.c
-> > util/counts.c
-> > util/print_binary.c
-> > util/strlist.c
-> > -util/trace-event.c
-> > ../lib/rbtree.c
-> > util/string.c
-> > util/symbol_fprintf.c
-> 
-> > but this needs making conditional (possibly in setup.py) on whether
-> > libtraceevent is present or not.
-> 
-> Ok, I fixed this by removing the util/trace-event.c file at setup.py
-> time, and removing it from the list of dependencies for python.so build,
-> etc.
-> 
-> With what I have at tmp.perf/core I'm being able to build with
-> combinations of:
-> 
-> - Having or not libtraceevent-devel installed
-> 
-> - Using NO_LIBTRACEEVENT=1
-> 
-> - The default build
+On Wed, Dec 7, 2022 at 1:42 PM <lirongqing@baidu.com> wrote:
+>
+> From: Li RongQing <lirongqing@baidu.com>
+>
+> When KVM guest has MWAIT and mwait_idle is used as default idle function,
+> but once cpuidle-haltpoll is loaded, default_idle in default_enter_idle is
+> used, which is using HLT, and cause a performance regression. As the commit
+> aebef63cf7ff ("x86: Remove vendor checks from prefer_mwait_c1_over_halt")
+> explains that mwait is preferred
+>
+> so replace default_idle with arch_cpu_idle which can using MWAIT
+> optimization.
+>
+> latency of sockperf ping-pong localhost test is reduced by more 20%
+> unixbench has 5% performance improvements for single core
+>
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Suggested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> ---
+>  arch/x86/kernel/process.c          | 1 +
+>  drivers/cpuidle/cpuidle-haltpoll.c | 2 +-
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index c21b734..303afad 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -721,6 +721,7 @@ void arch_cpu_idle(void)
+>  {
+>         x86_idle();
+>  }
+> +EXPORT_SYMBOL(arch_cpu_idle);
 
-cross building reveals some more:
+Why do you need this export at all?
 
-  22    11.70 debian:experimental-x-arm64   : FAIL gcc version 12.2.0 (Debian 12.2.0-9)
-    arch/arm64/util/kvm-stat.c: In function 'event_get_key':
-    arch/arm64/util/kvm-stat.c:30:20: error: implicit declaration of function 'evsel__intval'; did you mean 'evsel__env'? [-Werror=implicit-function-declaration]
-       30 |         key->key = evsel__intval(evsel, sample, kvm_exit_reason);
-          |                    ^~~~~~~~~~~~~
-          |                    evsel__env
-    cc1: all warnings being treated as errors
-    make[5]: *** [/git/perf-6.1.0-rc6/tools/build/Makefile.build:139: util] Error 2
-    make[4]: *** [/git/perf-6.1.0-rc6/tools/build/Makefile.build:139: arm64] Error 2
-    make[3]: *** [/git/perf-6.1.0-rc6/tools/build/Makefile.build:139: arch] Error 2
-
-	I'll conditionalise tha one as well...
-
-- Arnaldo
+>
+>  /*
+>   * We use this if we don't have any better idle routine..
+> diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+> index 3a39a7f..e66df22 100644
+> --- a/drivers/cpuidle/cpuidle-haltpoll.c
+> +++ b/drivers/cpuidle/cpuidle-haltpoll.c
+> @@ -32,7 +32,7 @@ static int default_enter_idle(struct cpuidle_device *dev,
+>                 local_irq_enable();
+>                 return index;
+>         }
+> -       default_idle();
+> +       arch_cpu_idle();
+>         return index;
+>  }
+>
+> --
+> 2.9.4
+>
