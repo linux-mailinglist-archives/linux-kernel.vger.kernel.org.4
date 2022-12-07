@@ -2,110 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEC264654E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D1BC646555
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:45:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiLGXoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 18:44:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52256 "EHLO
+        id S230139AbiLGXpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 18:45:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiLGXog (ORCPT
+        with ESMTP id S229797AbiLGXpd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 18:44:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85388565C;
-        Wed,  7 Dec 2022 15:44:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76BB061CFD;
-        Wed,  7 Dec 2022 23:44:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF14BC433D6;
-        Wed,  7 Dec 2022 23:44:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670456674;
-        bh=vzFgktuwaRPidWb2pU12cG5dAs7LJ+oJf2cZXi+LxTI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MfQDnXLUfgTMPTxCYCpzvXC+bUdxJGgb80VCx1DLHpAdJs2CV4KfymvzvO+WABwCy
-         3qIKnUm/Ux/kout40G7r9tA1qVUYd6OCukGhraq+FaAzpQ1EydVJdyYp/eprKGm6/3
-         fBkd/OFz2tLketcozQhKJ1O4P/jkrnJ1xZrmME7TXNSGbgtHVl5BZ2kwtRxcjiNZJl
-         Bx8nyC2m6TYRkKRx69He3W+h/Olb0VD1MXE4ryPDV3pzIXIrCK8DrspEQ+rEUsLoc5
-         CybVG6Hv1H0HTRFJFli1+YmNSkvChh8fDkxDI9oPjP7PZcWOapRaUXrXaA4HKgVOfk
-         3+1bbrbJfOsGw==
-Date:   Wed, 7 Dec 2022 23:44:30 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Kris Bahnsen <kris@embeddedts.com>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark@embeddedts.com
-Subject: Re: [PATCH] spi: spi-gpio: Don't set MOSI as an input if not 3WIRE
- mode
-Message-ID: <Y5ElXqDduIZhIiAm@sirena.org.uk>
-References: <20221207230853.6174-1-kris@embeddedTS.com>
+        Wed, 7 Dec 2022 18:45:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD24E8AACE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:44:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670456675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=U1znsFGAwUqLG+kZktt6UetlzDgCE2gBi75bO1V4Vw8=;
+        b=TQoPDyBvzLNaQ7uwBWOYTemxz4gxLsf9p3o3NaGXtYcAO1545jebdzp6XPRU84TQKRn29V
+        LWk8Cpz8a1WC759V5KWXyod4kyaWmwRUWkiftAcGsVxpBFJ+1B63TsdG6ICTTT7l3xtwRt
+        ojH8yk3+u56mQSMZNsW9vur9BMlN2cA=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-479-Mcepb5yGMX-ev1yskL8mQg-1; Wed, 07 Dec 2022 18:44:34 -0500
+X-MC-Unique: Mcepb5yGMX-ev1yskL8mQg-1
+Received: by mail-qt1-f199.google.com with SMTP id cm12-20020a05622a250c00b003a521f66e8eso40109807qtb.17
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:44:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U1znsFGAwUqLG+kZktt6UetlzDgCE2gBi75bO1V4Vw8=;
+        b=BWVZccUp2CcWSUb+hyO+reZu6TRpL+FwzdHqjG01s1g7Ap0EVXUp9X6zykOrWPa7q4
+         B26YOfsSK4glofliF5WJGWVGz3LQdXI7JT4xAwJslWcYSu6j1YyR/pgsQX/nHxA3h/5l
+         4k/XldK5LMb8S2f1kFf/TUyJRbp0rH6IUNwbXvugOsWIHGXXhQ54mUFK2qtxDuZs1JCf
+         X40ZzutToxz2DM335EgLz83YO9FLTdm3wIuujatnY5ZABRkVFwuZbWvhLsnPtwaKaUX7
+         cJOX6hYDb9wVeexUnkwmtQUk2GhZBkxBucL3KuFiglXbYPvQTVeQMS0aOPwfnE/feSMT
+         vgzw==
+X-Gm-Message-State: ANoB5plBWqtALr4WUXzIMe3bn1akSgU7rXaSXsF6vgO5rCeF31LEzZI5
+        laJsfYvjxjRJYHjxBGsSFZJHqOyD14mX2FZyhlGsBZazEc2PKqnba8GUc9VWsiTFaz2/F93M9He
+        ZcOw4FyuT9GUXixa3AY67fx9u
+X-Received: by 2002:a05:622a:1c1:b0:3a4:e849:a235 with SMTP id t1-20020a05622a01c100b003a4e849a235mr2155999qtw.34.1670456674095;
+        Wed, 07 Dec 2022 15:44:34 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5qazXJBp7t7e+vKfk/GGkwSEO9ydBAP5p90VGRjDUmsbibpQEcZsfVIbf6t+ghGod0ZatQjQ==
+X-Received: by 2002:a05:622a:1c1:b0:3a4:e849:a235 with SMTP id t1-20020a05622a01c100b003a4e849a235mr2155982qtw.34.1670456673844;
+        Wed, 07 Dec 2022 15:44:33 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id w3-20020ac87183000000b0039cd4d87aacsm13882213qto.15.2022.12.07.15.44.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 15:44:32 -0800 (PST)
+Date:   Wed, 7 Dec 2022 18:44:31 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+Subject: Re: [PATCH v2 05/10] mm/hugetlb: Make userfaultfd_huge_must_wait()
+ safe to pmd unshare
+Message-ID: <Y5ElX/Flm7lrHmCx@x1n>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203034.650899-6-peterx@redhat.com>
+ <b3308387-464a-52ae-114b-34ab94e3b5c6@nvidia.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="56KIyPEz17IU8OgZ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221207230853.6174-1-kris@embeddedTS.com>
-X-Cookie: What!?  Me worry?
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b3308387-464a-52ae-114b-34ab94e3b5c6@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 07, 2022 at 03:19:55PM -0800, John Hubbard wrote:
+> On 12/7/22 12:30, Peter Xu wrote:
+> > We can take the hugetlb walker lock, here taking vma lock directly.
+> > 
+> > Reviewed-by: David Hildenbrand <david@redhat.com>
+> > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >   fs/userfaultfd.c | 18 ++++++++++++++----
+> >   1 file changed, 14 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index 07c81ab3fd4d..a602f008dde5 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -376,7 +376,8 @@ static inline unsigned int userfaultfd_get_blocking_state(unsigned int flags)
+> >    */
+> >   vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+> >   {
+> > -	struct mm_struct *mm = vmf->vma->vm_mm;
+> > +	struct vm_area_struct *vma = vmf->vma;
+> > +	struct mm_struct *mm = vma->vm_mm;
+> >   	struct userfaultfd_ctx *ctx;
+> >   	struct userfaultfd_wait_queue uwq;
+> >   	vm_fault_t ret = VM_FAULT_SIGBUS;
+> > @@ -403,7 +404,7 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+> >   	 */
+> >   	mmap_assert_locked(mm);
+> > -	ctx = vmf->vma->vm_userfaultfd_ctx.ctx;
+> > +	ctx = vma->vm_userfaultfd_ctx.ctx;
+> >   	if (!ctx)
+> >   		goto out;
+> > @@ -493,6 +494,13 @@ vm_fault_t handle_userfault(struct vm_fault *vmf, unsigned long reason)
+> >   	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+> > +	/*
+> > +	 * This stablizes pgtable for hugetlb on e.g. pmd unsharing.  Need
+> > +	 * to be before setting current state.
+> > +	 */
+> 
+> Looking at this code, I am not able to come up with a reason for why the
+> vma lock/unlock placement is exactly where it is. It looks quite arbitrary.
+> 
+> Why not, for example, take and drop the vma lock within
+> userfaultfd_huge_must_wait()? That makes more sense to me, but I'm not familiar
+> with userfaultfd so of course I'm missing something.
+> 
+> But the comment above certainly doesn't supply that something.
 
---56KIyPEz17IU8OgZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The part that matters in the comment is "need to be before setting current
+state".
 
-On Wed, Dec 07, 2022 at 03:08:53PM -0800, Kris Bahnsen wrote:
-> The addition of 3WIRE support would affect MOSI direction even
-> when still in standard (4 wire) mode. This can lead to MOSI being
-> at an invalid logic level when a device driver sets an SPI
-> message with a NULL tx_buf.
->=20
-> spi.h states that if tx_buf is NULL then "zeros will be shifted
-> out ... " If MOSI is tristated then the data shifted out is subject
-> to pull resistors, keepers, or in the absence of those, noise.
->=20
-> This issue came to light when using spi-gpio connected to an
-> ADS7843 touchscreen controller. MOSI pulled high when clocking
-> MISO data in caused the SPI device to interpret this as a command
-> which would put the device in an unexpected and non-functional
-> state.
+	blocking_state = userfaultfd_get_blocking_state(vmf->flags);
+	if (is_vm_hugetlb_page(vma))
+		hugetlb_vma_lock_read(vma);
+	set_current_state(blocking_state);
 
-A cleaner fix which is probably marginally more performant would be to
-make the setting of spi_gpio_set_direction() conditional on SPI_3WIRE -
-then we won't call into the function at all when not doing 3 wire,
-avoiding the issue entirely.
+down_read() can sleep and also modify the task state, we cannot take the
+lock after that point because otherwise the task state will be messed up.
 
-> As an aside, I wasn't sure how to best put down the Fixes: tags.
-> 4b859db2c606 ("spi: spi-gpio: add SPI_3WIRE support") introduced the
-> actual bug, but 5132b3d28371 ("spi: gpio: Support 3WIRE high-impedance tu=
-rn-around")
-> modified that commit slightly and is what this patch actually applies
-> to. Let me know if marking both as fixes is incorrect and I can
-> create another patch.
+-- 
+Peter Xu
 
-That's fine, it doesn't really matter either way.
-
---56KIyPEz17IU8OgZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmORJV0ACgkQJNaLcl1U
-h9Be+Qf+MxW4hMRQzDRJd9NFAhwkIiirk2ELo1vuSbRGPl/593kSW6wvsgXW+0zG
-EWFNMMbJ0cJqDUbCxSOGAC9MCg0Rg6gDoFeFf0JLWzB1A6a7bRQ/jkzUqyQV/R0H
-LqCAaAPvqFseiYJmoIinWc6Qb/5ANNC9/VEt6wFNefFY4gXDcqQBS2ccN29cay62
-2I6rfBf3646lDLVbZOpJe00HKwn0mJV7Ga8Amol6lNu8qrVHXlgXOJz6rJggTI+T
-FbGtaTtzYwwBCGj9najlZKH0R1UVY+cdqnkBwGLwymyR6534+kDIGqG6D9d/dtx7
-J9Ftqf+gqMSYxLpSAweFLrRGJHbtAg==
-=zBN5
------END PGP SIGNATURE-----
-
---56KIyPEz17IU8OgZ--
