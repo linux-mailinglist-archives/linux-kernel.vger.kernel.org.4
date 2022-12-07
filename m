@@ -2,148 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552786456CE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:49:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD9786456D4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:49:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiLGJs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 04:48:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S230184AbiLGJtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:49:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229718AbiLGJs4 (ORCPT
+        with ESMTP id S229888AbiLGJth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:48:56 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4F63137D;
-        Wed,  7 Dec 2022 01:48:50 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7F4686602BC8;
-        Wed,  7 Dec 2022 09:48:47 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670406528;
-        bh=qNEpnM8ClbrtXrZA6HU6eUiqyAOy4w4SGFwvj+Zg7ZU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gYO5sj0NeKHGQdOIykdzKDXaUMR4eTpN/Gf5vQW9433/FCKI5EhWReF8ANjQZz+9T
-         W0yfMuhK2NpiNeriKtbQdjar477D0D4bftjuQv1UBwHpISOf+a2P8QSaLSV2CTAPpX
-         PVWvv2MgZF2bo4rBeATogcd6pXZX+O9TJeFqHAVOHIsz7DLGPcq0peRCGaCNeCCozj
-         ycUDIRukQFQmbdZRm495QMNSBFSreFa60eyKqlABw8OS+8W6i2+OZX1ZwEZ5cO+mGD
-         SyagMVmgnx4+tBSYfZkiyNLcqotoE5Qfh3RJxuktLwks9Chjnni+BLLfg4ECF7LEHz
-         U779io82HGe+w==
-Message-ID: <b877af37-462e-c923-41c0-09c370062700@collabora.com>
-Date:   Wed, 7 Dec 2022 10:48:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 7/9] dt-bindings: spi: mtk-snfi: Add read latch latency
- property
-To:     =?UTF-8?B?WGlhbmdzaGVuZyBIb3UgKOS+r+elpeiDnCk=?= 
-        <Xiangsheng.Hou@mediatek.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "gch981213@gmail.com" <gch981213@gmail.com>,
-        "vigneshr@ti.com" <vigneshr@ti.com>,
-        "richard@nod.at" <richard@nod.at>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?QmVubGlhbmcgWmhhbyAo6LW15pys5LquKQ==?= 
-        <Benliang.Zhao@mediatek.com>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
+        Wed, 7 Dec 2022 04:49:37 -0500
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 225302E9D2;
+        Wed,  7 Dec 2022 01:49:36 -0800 (PST)
+X-UUID: 2ae7fba27713489f97648e931b417b1d-20221207
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=+DlieiQH5x/y67QutSHJcSuOjfcivZx2Dzr1Dzpgv0E=;
+        b=SRUur7vy1a+HaAGFca6Ez+G687Ob+E2JnOn2BRYukFT6Ow1VQOg0yc06PdpMzYgJW4pA5HIxUpQirfMJwa+AhiukYoq4O2ekxupjNNtfVP0gnmFeK54HvgSyQdZiOKdwhTap5N0B8FkOIn1ZJDMpLLwab5XEZQ/4+31L4xVvXDg=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:7bf139e7-77ba-403e-9e5e-8d7973dd8582,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:e600ce16-b863-49f8-8228-cbdfeedd1fa4,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2ae7fba27713489f97648e931b417b1d-20221207
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <moudy.ho@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1645931037; Wed, 07 Dec 2022 17:49:24 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Wed, 7 Dec 2022 17:49:23 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Wed, 7 Dec 2022 17:49:23 +0800
+From:   Moudy Ho <moudy.ho@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        =?UTF-8?B?QmluIFpoYW5nICjnq6Dmlowp?= <bin.zhang@mediatek.com>
-References: <20221205065756.26875-1-xiangsheng.hou@mediatek.com>
- <20221205065756.26875-8-xiangsheng.hou@mediatek.com>
- <ce449a0c-efcc-0ac1-fb8e-c2b4148a5bc1@collabora.com>
- <a8f706b37f5decf91bfa9a9ac8cf04be4346dd85.camel@mediatek.com>
- <9992c9a5-059a-9396-32ce-7ed63cd12a96@collabora.com>
- <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <e2ccf42f94152ccacad3a2eaec234ae0566474ec.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        mtk18742 <moudy.ho@mediatek.com>
+Subject: [PATCH v4 0/8] add support MDP3 on MT8195 platform
+Date:   Wed, 7 Dec 2022 17:49:13 +0800
+Message-ID: <20221207094921.15450-1-moudy.ho@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+MIME-Version: 1.0
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/12/22 03:00, Xiangsheng Hou (侯祥胜) ha scritto:
-> Hi Angelo,
-> 
-> On Tue, 2022-12-06 at 13:19 +0100, AngeloGioacchino Del Regno wrote:
->>>>> diff --git
->>>>> a/Documentation/devicetree/bindings/spi/mediatek,spi-
->>>>> mtk-snfi.yaml
->>>>> b/Documentation/devicetree/bindings/spi/mediatek,spi-
->>>>> mtk-snfi.yaml
->>>>> index bab23f1b11fd..6e6ff8d73fcd 100644
->>>>> --- a/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>>>> snfi.yaml
->>>>> +++ b/Documentation/devicetree/bindings/spi/mediatek,spi-mtk-
->>>>> snfi.yaml
->>>>> @@ -45,6 +45,13 @@ properties:
->>>>>         description: device-tree node of the accompanying ECC
->>>>> engine.
->>>>>         $ref: /schemas/types.yaml#/definitions/phandle
->>>>>     
->>>>> +  mediatek,rx-latch-latency:
->>>>> +    description: Rx delay to sample data with this value, the
->>>>> value
->>>>> +                 unit is clock cycle.
->>>>
->>>> Can't we use nanoseconds or microseconds as a unit here, instead
->>>> of
->>>> clock cycles?
->>>
->>> The clock cycle will be various with MediaTek SPI NAND controller
->>> which
->>> clock frequency can support 26/52/68/81/104MHz...
->>> It`s may be easy to configure and understand with clock cycle in
->>> unit.
->>>
->>
->> Yes, but whatever clock frequency we use, the target is to always
->> wait for
->> X nanoseconds, right?
->>
->> Waiting for 5 clock cycles at 104MHz is obviously not the same as
->> waiting
->> for the same 5 clock cycles at 26MHz: in that case, expressing the
->> value
->> in nanoseconds or microseconds would make that independent from the
->> controller's clock frequency as the calculation from `time` to
->> `cycles`
->> would be performed inside of the driver.
-> 
-> There have two rx related timing properties in spi-peripheral-props.
-> The rx-sample-delay-ns have been used in Mediatek snfi driver to adjust
-> controller sample delay.
-> However another spi-rx-delay-us is in microseconds. Take 52MHz for
-> example, the clock cycle will be 19.23ns which lower than 1us. This may
-> not easy to by one clock cycle.
-> 
+From: mtk18742 <moudy.ho@mediatek.com>
 
-I agree, but nothing prevents you from adding your own property for that.
+Changes since v3:
+- Rebase on linux-next
 
-I propose "mediatek,rx-latch-latency-ns" or "mediatek,rx-latency-ns", so that
-we can specify the delay in nanoseconds: in that case, when we specify 19ns,
-the driver will safely round that resulting in 52MHz == 19.23ns => 19ns valid.
+Changes since v2:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+- Split dts settings into two patches based on belonging to MMSYS or MUTEX.
 
-Regards,
-Angelo
+Changes since v1:
+- Depend on :
+  [1] https://patchwork.kernel.org/project/linux-mediatek/list/?series=681097
+- Add compatible names to VPPSYS0 and VPPSYS1 in MMSYS binding file.
+- Fix VPPSYS's MMSYS and MUTEX dts to pass the dtsb_check.
+- Rename mtk_mmsys_merge_config() and mtk_mmsys_rsz_dcm_config() to
+  mtk_mmsys_vpp_rsz_merge_config() and mtk_mmsys_vpp_rsz_dcm_config().
+- Clean up mtk_mmsys_vpp_rsz_dcm_config().
+- Add a comment to mtk_mutex_write_mod() and clean it up for use in more
+  than 32 mods.
+
+Hi,
+
+This series add support for MT8195's two VPPSYS(Video Processor Pipe Subsystem),
+under which there will be corresponding MMSYS and MUTEX settings that
+need to be configured.
+
+Moudy Ho (2):
+  dt-bindings: arm: mediatek: mmsys: Add support for MT8195 VPPSYS
+  arm64: dts: mediatek: mt8195: add MUTEX configuration for VPPSYS
+
+Roy-CW.Yeh (6):
+  dt-bindings: soc: mediatek: Add support for MT8195 VPPSYS
+  arm64: dts: mediatek: mt8195: add MMSYS configuration for VPPSYS
+  soc: mediatek: mmsys: add support for MT8195 VPPSYS
+  soc: mediatek: mmsys: add config api for RSZ switching and DCM
+  soc: mediatek: mutex: Add mtk_mutex_set_mod support to set MOD1
+  soc: mediatek: mutex: support MT8195 VPPSYS
+
+ .../bindings/arm/mediatek/mediatek,mmsys.yaml |   5 +-
+ .../bindings/soc/mediatek/mediatek,mutex.yaml |   1 +
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  28 +++-
+ drivers/soc/mediatek/mt8195-mmsys.h           |  13 ++
+ drivers/soc/mediatek/mtk-mmsys.c              |  64 +++++++++
+ drivers/soc/mediatek/mtk-mmsys.h              |   1 +
+ drivers/soc/mediatek/mtk-mutex.c              | 135 +++++++++++++++++-
+ include/linux/soc/mediatek/mtk-mmsys.h        |   4 +
+ include/linux/soc/mediatek/mtk-mutex.h        |  35 +++++
+ 9 files changed, 274 insertions(+), 12 deletions(-)
+
+-- 
+2.18.0
 
