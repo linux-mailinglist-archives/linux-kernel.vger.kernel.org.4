@@ -2,98 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC41645CA6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:31:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 727E8645CB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiLGObA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:31:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S230109AbiLGOfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiLGOa4 (ORCPT
+        with ESMTP id S229437AbiLGOfl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:30:56 -0500
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809D2C1;
-        Wed,  7 Dec 2022 06:30:55 -0800 (PST)
-Received: by mail-qv1-f46.google.com with SMTP id i12so12736951qvs.2;
-        Wed, 07 Dec 2022 06:30:55 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TfJ7juuz7Ryq2gBRSh+TE4rPx2k8D+cEUA0AQUke7aI=;
-        b=bwDXUKF93BGLJZD0Kh9NZR5Mcp2A/Cq3D18+Cgo6uaU5bNns9UjDQufqQqoxWb9xH+
-         lWEI+Vx8mCibQUD2iadYdO2YMk6hwgUqEOMAE5aG8CObn6YBYz1b+ENS1TjT6aUt5wRo
-         EkeEFDKaFLVozchxhLl1raUjYhxwGDClDHmuer5q40+hJ3Un+zOIXST+nUaxg8wHu8cB
-         RaivLQCrPBqo1LMroU6Tiwsu+p8GLzm9mLTFrVJkB9uluQGKvI+YrTr2jgeIVM2OjN7B
-         979IHNfEly1blj52crhV5+CHkpGPBIMUzGZF9MC8M8Xu4pKN/w6NzwNfPbnpF+kT1xMj
-         04Ig==
-X-Gm-Message-State: ANoB5pmdnA9My1oyuwZlJEnNUxj9doCdKlGyopWdAC9sGa4uvB7W08nm
-        LftaU6ToMA5bL0H2tgqkM2qwRyBg7D7Jsx7m2Oo=
-X-Google-Smtp-Source: AA0mqf5CH1LldVknMmPiAOl4Y7lZZGFneSb+fPnltCoLIy1BXWcECiva/yE+Hq/5Uitog6jsJsGSWxjKez12MfjcKuU=
-X-Received: by 2002:a05:6214:2b90:b0:4c7:27cf:dfca with SMTP id
- kr16-20020a0562142b9000b004c727cfdfcamr26090351qvb.3.1670423454756; Wed, 07
- Dec 2022 06:30:54 -0800 (PST)
+        Wed, 7 Dec 2022 09:35:41 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD9156EC0;
+        Wed,  7 Dec 2022 06:35:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670423740; x=1701959740;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=7EG1tTmoObEDuvvLIPiEYSoj23URjti2eUKjBDyglO0=;
+  b=MQNfNVaEXjVv8NPlLMgkAxd7Fpv4rCdVWqxZ7YszaiR9GEp6aDqAu6nn
+   rWqGbk+smFtPf2GeGWLg+38+VnpzFP8g7yMdHMnkn7VN5Lm12Jl3FVdtx
+   KQtncnpMXJQw2qEt6Qw5yasPsFI8szLaPtzsXh2ZRjqpEUQxdR5X6EUGd
+   7yQVNIQsQIr9mieLxl1VmVWEfnw4MeYdmAwG7cNx3xAjmH0Hbsacs0Daw
+   wxwA3GWaA75RsJCtUS4dPmHsx/Y6+OtHhv7VBkuqurVaVF551PkX8UujJ
+   2IqhLsx/DbaXw2IUij7e8GTeh3M5WFMry+MZxnXMEi7Xt+STI3WMSw35C
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="296598364"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="296598364"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 06:35:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="640266025"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="640266025"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2022 06:35:27 -0800
+Date:   Wed, 7 Dec 2022 22:31:08 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Fabiano Rosas <farosas@suse.de>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+Message-ID: <20221207143108.GB1275553@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com>
+ <877cz4ac5z.fsf@suse.de>
 MIME-Version: 1.0
-References: <20221207112219.2652411-1-linmq006@gmail.com> <Y5CFVHL0xTeWbKfU@paasikivi.fi.intel.com>
-In-Reply-To: <Y5CFVHL0xTeWbKfU@paasikivi.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 15:30:43 +0100
-Message-ID: <CAJZ5v0hWhY5ZG+jYR8BfxTfwgwYKkOP33K4+Qc7FJeMheQQcEA@mail.gmail.com>
-Subject: Re: [PATCH] device property: Fix documentation for fwnode_get_next_parent()
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Miaoqian Lin <linmq006@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <877cz4ac5z.fsf@suse.de>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 1:21 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> On Wed, Dec 07, 2022 at 03:22:18PM +0400, Miaoqian Lin wrote:
-> > Use fwnode_handle_put() on the node pointer to release the refcount.
-> > Change fwnode_handle_node() to fwnode_handle_put().
+On Tue, Dec 06, 2022 at 10:34:32AM -0300, Fabiano Rosas wrote:
+> Chao Peng <chao.p.peng@linux.intel.com> writes:
+> 
+> > In confidential computing usages, whether a page is private or shared is
+> > necessary information for KVM to perform operations like page fault
+> > handling, page zapping etc. There are other potential use cases for
+> > per-page memory attributes, e.g. to make memory read-only (or no-exec,
+> > or exec-only, etc.) without having to modify memslots.
 > >
-> > Fixes: 233872585de1 ("device property: Add fwnode_get_next_parent()")
-> > Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
->
-> Thanks!
->
-> Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-
-So I'm assuming that Greg will pick up this one or please let me know otherwise.
-
+> > Introduce two ioctls (advertised by KVM_CAP_MEMORY_ATTRIBUTES) to allow
+> > userspace to operate on the per-page memory attributes.
+> >   - KVM_SET_MEMORY_ATTRIBUTES to set the per-page memory attributes to
+> >     a guest memory range.
+> >   - KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES to return the KVM supported
+> >     memory attributes.
+> >
+> > KVM internally uses xarray to store the per-page memory attributes.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > Link: https://lore.kernel.org/all/Y2WB48kD0J4VGynX@google.com/
 > > ---
-> >  drivers/base/property.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  Documentation/virt/kvm/api.rst | 63 ++++++++++++++++++++++++++++
+> >  arch/x86/kvm/Kconfig           |  1 +
+> >  include/linux/kvm_host.h       |  3 ++
+> >  include/uapi/linux/kvm.h       | 17 ++++++++
+> >  virt/kvm/Kconfig               |  3 ++
+> >  virt/kvm/kvm_main.c            | 76 ++++++++++++++++++++++++++++++++++
+> >  6 files changed, 163 insertions(+)
 > >
-> > diff --git a/drivers/base/property.c b/drivers/base/property.c
-> > index 2a5a37fcd998..daa1e379762b 100644
-> > --- a/drivers/base/property.c
-> > +++ b/drivers/base/property.c
-> > @@ -601,7 +601,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_parent);
-> >   * node's parents.
-> >   *
-> >   * Returns a node pointer with refcount incremented, use
-> > - * fwnode_handle_node() on it when done.
-> > + * fwnode_handle_put() on it when done.
-> >   */
-> >  struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
+> > diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> > index 5617bc4f899f..bb2f709c0900 100644
+> > --- a/Documentation/virt/kvm/api.rst
+> > +++ b/Documentation/virt/kvm/api.rst
+> > @@ -5952,6 +5952,59 @@ delivery must be provided via the "reg_aen" struct.
+> >  The "pad" and "reserved" fields may be used for future extensions and should be
+> >  set to 0s by userspace.
+> >  
+> > +4.138 KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES
+> > +-----------------------------------------
+> > +
+> > +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> > +:Architectures: x86
+> > +:Type: vm ioctl
+> > +:Parameters: u64 memory attributes bitmask(out)
+> > +:Returns: 0 on success, <0 on error
+> > +
+> > +Returns supported memory attributes bitmask. Supported memory attributes will
+> > +have the corresponding bits set in u64 memory attributes bitmask.
+> > +
+> > +The following memory attributes are defined::
+> > +
+> > +  #define KVM_MEMORY_ATTRIBUTE_READ              (1ULL << 0)
+> > +  #define KVM_MEMORY_ATTRIBUTE_WRITE             (1ULL << 1)
+> > +  #define KVM_MEMORY_ATTRIBUTE_EXECUTE           (1ULL << 2)
+> > +  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+> > +
+> > +4.139 KVM_SET_MEMORY_ATTRIBUTES
+> > +-----------------------------------------
+> > +
+> > +:Capability: KVM_CAP_MEMORY_ATTRIBUTES
+> > +:Architectures: x86
+> > +:Type: vm ioctl
+> > +:Parameters: struct kvm_memory_attributes(in/out)
+> > +:Returns: 0 on success, <0 on error
+> > +
+> > +Sets memory attributes for pages in a guest memory range. Parameters are
+> > +specified via the following structure::
+> > +
+> > +  struct kvm_memory_attributes {
+> > +	__u64 address;
+> > +	__u64 size;
+> > +	__u64 attributes;
+> > +	__u64 flags;
+> > +  };
+> > +
+> > +The user sets the per-page memory attributes to a guest memory range indicated
+> > +by address/size, and in return KVM adjusts address and size to reflect the
+> > +actual pages of the memory range have been successfully set to the attributes.
+> 
+> This wording could cause some confusion, what about a simpler:
+> 
+> "reflect the range of pages that had its attributes successfully set"
+
+Thanks, this is much better.
+
+> 
+> > +If the call returns 0, "address" is updated to the last successful address + 1
+> > +and "size" is updated to the remaining address size that has not been set
+> > +successfully.
+> 
+> "address + 1 page" or "subsequent page" perhaps.
+> 
+> In fact, wouldn't this all become simpler if size were number of pages instead?
+
+It indeed becomes better if the size is number of pages and the address
+is gfn, but I think we don't want to imply that the page size is 4K to
+userspace.
+
+> 
+> > The user should check the return value as well as the size to
+> > +decide if the operation succeeded for the whole range or not. The user may want
+> > +to retry the operation with the returned address/size if the previous range was
+> > +partially successful.
+> > +
+> > +Both address and size should be page aligned and the supported attributes can be
+> > +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
+> > +
+> > +The "flags" field may be used for future extensions and should be set to 0s.
+> > +
+> 
+> ...
+> 
+> > +static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+> > +					   struct kvm_memory_attributes *attrs)
+> > +{
+> > +	gfn_t start, end;
+> > +	unsigned long i;
+> > +	void *entry;
+> > +	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+> > +
+> > +	/* flags is currently not used. */
+> > +	if (attrs->flags)
+> > +		return -EINVAL;
+> > +	if (attrs->attributes & ~supported_attrs)
+> > +		return -EINVAL;
+> > +	if (attrs->size == 0 || attrs->address + attrs->size < attrs->address)
+> > +		return -EINVAL;
+> > +	if (!PAGE_ALIGNED(attrs->address) || !PAGE_ALIGNED(attrs->size))
+> > +		return -EINVAL;
+> > +
+> > +	start = attrs->address >> PAGE_SHIFT;
+> > +	end = (attrs->address + attrs->size - 1 + PAGE_SIZE) >> PAGE_SHIFT;
+> 
+> Here PAGE_SIZE and -1 cancel out.
+
+Correct!
+
+> 
+> Consider using gpa_to_gfn as well.
+
+Yes using gpa_to_gfn is appropriate.
+
+Thanks,
+Chao
+> 
+> > +
+> > +	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+> > +
+> > +	mutex_lock(&kvm->lock);
+> > +	for (i = start; i < end; i++)
+> > +		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> > +				    GFP_KERNEL_ACCOUNT)))
+> > +			break;
+> > +	mutex_unlock(&kvm->lock);
+> > +
+> > +	attrs->address = i << PAGE_SHIFT;
+> > +	attrs->size = (end - i) << PAGE_SHIFT;
+> > +
+> > +	return 0;
+> > +}
+> > +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> > +
+> >  struct kvm_memory_slot *gfn_to_memslot(struct kvm *kvm, gfn_t gfn)
 > >  {
->
-> --
+> >  	return __gfn_to_memslot(kvm_memslots(kvm), gfn);
+> > @@ -4459,6 +4508,9 @@ static long kvm_vm_ioctl_check_extension_generic(struct kvm *kvm, long arg)
+> >  #ifdef CONFIG_HAVE_KVM_MSI
+> >  	case KVM_CAP_SIGNAL_MSI:
+> >  #endif
+> > +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> > +	case KVM_CAP_MEMORY_ATTRIBUTES:
+> > +#endif
+> >  #ifdef CONFIG_HAVE_KVM_IRQFD
+> >  	case KVM_CAP_IRQFD:
+> >  	case KVM_CAP_IRQFD_RESAMPLE:
+> > @@ -4804,6 +4856,30 @@ static long kvm_vm_ioctl(struct file *filp,
+> >  		break;
+> >  	}
+> >  #endif /* CONFIG_HAVE_KVM_IRQ_ROUTING */
+> > +#ifdef CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES
+> > +	case KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES: {
+> > +		u64 attrs = kvm_supported_mem_attributes(kvm);
+> > +
+> > +		r = -EFAULT;
+> > +		if (copy_to_user(argp, &attrs, sizeof(attrs)))
+> > +			goto out;
+> > +		r = 0;
+> > +		break;
+> > +	}
+> > +	case KVM_SET_MEMORY_ATTRIBUTES: {
+> > +		struct kvm_memory_attributes attrs;
+> > +
+> > +		r = -EFAULT;
+> > +		if (copy_from_user(&attrs, argp, sizeof(attrs)))
+> > +			goto out;
+> > +
+> > +		r = kvm_vm_ioctl_set_mem_attributes(kvm, &attrs);
+> > +
+> > +		if (!r && copy_to_user(argp, &attrs, sizeof(attrs)))
+> > +			r = -EFAULT;
+> > +		break;
+> > +	}
+> > +#endif /* CONFIG_HAVE_KVM_MEMORY_ATTRIBUTES */
+> >  	case KVM_CREATE_DEVICE: {
+> >  		struct kvm_create_device cd;
