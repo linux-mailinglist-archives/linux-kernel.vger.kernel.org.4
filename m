@@ -2,85 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D94646563
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F4F646565
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLGXsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 18:48:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
+        id S229728AbiLGXsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 18:48:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLGXsb (ORCPT
+        with ESMTP id S229621AbiLGXsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 18:48:31 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FC92FC3F;
-        Wed,  7 Dec 2022 15:48:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DAFD6B81CEC;
-        Wed,  7 Dec 2022 23:48:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16F6FC433D6;
-        Wed,  7 Dec 2022 23:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670456907;
-        bh=yayt23wn+GArDo93jmU42JfNMrSGxzH7B3q5Dt5xjDs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=YIEQIkN64G6nXouBGC+7JU9QUuFiz3lrFfVpTk+ohMLKv1xw1FyRA3of3z3bv6XfT
-         SkT02OLQKvTQCMc9WI9xU2HgAncYVxrxBvzOhkKjVGU7vUqoDdB8YZthHizwZaCuTY
-         rKin3G1hQcoNu/RF68kq67U+4YMXRI482LOXKd0axsYatLqtD9Ah0cul6PagFMkEEK
-         amPlp8dmvZDHtVQ88QB6IEYUwy/l511ipdBYU3naT+Ng8nBa0H+zqk16QA0fcU3qMM
-         9haF0Ry7JZ1CO5JQanEijimlVOw8wWlmK9iX3jVZCwOZFwOp8V9clJVsZLYvYl6Eud
-         OkLhW5cw0rijA==
-Date:   Wed, 7 Dec 2022 15:48:26 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64
- support for ksz8 series of switches
-Message-ID: <20221207154826.5477008b@kernel.org>
-In-Reply-To: <20221207061630.GC19179@pengutronix.de>
-References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
-        <20221206114133.291881a4@kernel.org>
-        <20221207061630.GC19179@pengutronix.de>
+        Wed, 7 Dec 2022 18:48:40 -0500
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0DF326E0;
+        Wed,  7 Dec 2022 15:48:40 -0800 (PST)
+Received: by mail-pl1-f172.google.com with SMTP id y4so18568267plb.2;
+        Wed, 07 Dec 2022 15:48:40 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o7a+uhOneXeh+M/4xbj/mmiDcvMYDJs8/IOF16FOfOs=;
+        b=5Mrh5LbSWWDPCoQe87uIFlIQzI2HgXWqxOzToCWGDANga8re0bpSxcvEJmBV6ZLJUZ
+         wJY6kVbWUwrSgJH/jluizC+XXG8HDECydP6n6e+DBxrpwe8TNryWhkG/hhjKoyagpUOG
+         UGE36OFeM0rzPbBPvU8VZtZzafaUqAz5yoxx7LzjDssJ80Ky+Loy4qm6x3TU6xvi/z0F
+         8Dlt303D+aESkO6hEB9v30ahTNBRFMU4wmsmZIyv+l1VQrKKn4tmI3EhqEGrAW5iMXmI
+         TGxuWgmjdlonuIEbTyqdJ/Fv8/W/RokLzLqQxo1XymFY5jrckCHfatLr0n2+jBJuQrEF
+         GQpA==
+X-Gm-Message-State: ANoB5plxpAtDchntBQOfVJyIY3WzLjx93JANWd1tBq+m0ytQM6gBX7av
+        J1XJbFXcLoDfqOpgLAlu+KU=
+X-Google-Smtp-Source: AA0mqf5FpIjjhD7YD/kAc4ys9rF55vSHPka+BMSa/hmKy0AybxGAvzTj63v9+xWEgY+GPTef7rq9JQ==
+X-Received: by 2002:a17:90b:b06:b0:219:c1fb:5da8 with SMTP id bf6-20020a17090b0b0600b00219c1fb5da8mr19655148pjb.221.1670456919425;
+        Wed, 07 Dec 2022 15:48:39 -0800 (PST)
+Received: from [192.168.51.14] ([98.51.102.78])
+        by smtp.gmail.com with ESMTPSA id u2-20020a17090341c200b00174c0dd29f0sm5858470ple.144.2022.12.07.15.48.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 15:48:38 -0800 (PST)
+Message-ID: <0abd2e8a-1482-d88a-4d58-cf17ef82c3f6@acm.org>
+Date:   Wed, 7 Dec 2022 15:48:36 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 3/4] ufs: core: Remove len parameter from
+ ufshcd_set_active_icc_lvl
+Content-Language: en-US
+To:     Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        martin.petersen@oracle.com
+Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1669550910-9672-1-git-send-email-Arthur.Simchaev@wdc.com>
+ <1669550910-9672-4-git-send-email-Arthur.Simchaev@wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1669550910-9672-4-git-send-email-Arthur.Simchaev@wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Dec 2022 07:16:30 +0100 Oleksij Rempel wrote:
-> > FWIW for normal netdevs / NICs the rtnl_link_stat pkts do not include
-> > pause frames, normally. Otherwise one can't maintain those stats in SW
-> > (and per-ring stats, if any, don't add up to the full link stats).
-> > But if you have a good reason to do this - I won't nack..  
-> 
-> Pause frames are accounted by rx/tx_bytes by HW. Since pause frames may
-> have different size, it is not possible to correct byte counters, so I
-> need to add them to the packet counters.
+On 11/27/22 04:08, Arthur Simchaev wrote:
+> len argument is not used anymore in ufshcd_set_active_icc_lvl function.
 
-I have embarrassed myself with my lack of understanding of pause frames
-before but nonetheless - are you sure?  I thought they are always 64B.
-Quick look at the standard seems to agree:
-
- 31C.3.1 Receive state diagram (INITIATE MAC CONTROL FUNCTION) for
-         EXTENSION operation
-
-shows a 64 octet frame.
-
-Sending long pause frames seems self-defeating as we presumably want
-the receiver to react ASAP.
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
