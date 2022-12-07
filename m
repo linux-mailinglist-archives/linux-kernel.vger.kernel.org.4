@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FFB64519C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F92764519F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:58:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229979AbiLGB4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:56:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S229968AbiLGB6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:58:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiLGB4Q (ORCPT
+        with ESMTP id S229750AbiLGB6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:56:16 -0500
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A68532D7
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:56:11 -0800 (PST)
-Received: by mail-vs1-xe2c.google.com with SMTP id f189so11441081vsc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:56:11 -0800 (PST)
+        Tue, 6 Dec 2022 20:58:18 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54380442FE
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:58:17 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1433ef3b61fso19655086fac.10
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:58:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mL42ZLeHwCOgm2dvIiRUP/S/P8aaOI55orVdQTEq1so=;
-        b=p8ZTQ2rU5P4QOtPRFnTYHuXdD+XDdWS37wPhaV6Vzsl06SEO63uhm5y8g5EY4pVhHt
-         vZ/WZm1jjEnByccyvCIV8pS12Gnll4Vns3pQ1kk8YJWbgGaiw4TrKIGGyqj45oZ1YFFe
-         0dSIWF7rVcT5bNaqFYEy6JH/GmKfvqQeTdqyZSRbphVYy9hGksGun8HPh+NqpWfPhkiy
-         SdgwG8QD74z9eeJc+IN5LumC8Co5cOyVoWz9UpdZKaUVBSYDPaJRPkyfx0LtPQD1TRzg
-         7cgd86WssXlHvN31iH8Z7rZ1uNOY7NiiNA0pJE/4KIgCyQKo9XZ0v34+6FaEQbMX65kq
-         z+wQ==
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=L8963QVuWzMlre8yLN4891ujCBmWo5SyqcLZ8tSbZjQ=;
+        b=eBRBdaHXvgKpW6/nBEGd/saUzFoozLpzIKQmkJccf22pFYLqqUwQmUXP7zz+NHarWr
+         y6oNwxxTkbGSuO+M05BGsjg+XcnEor7+ZxHUaOF9F0dTgXN7JIhH9mxY69OxgcpyIJtb
+         qj/GNdr7md0XD0zM0Hpy6wzMv9vqEvJfEd51lxXbNqMjf1P3z2dC4uoPY6R4fKcFL2FB
+         9h3S323dKwW0PyiDSM/OYs9Vn6du77A0CRL7M/dX4DwA8nNcujWN5Rkdp2SbA9XC6Lsj
+         UTrD1polfnjmptxxWF4CLi5v3jR2pGansFPDF0QCUdjds6TL4/tG/rF5tcpCKINWjhf6
+         5Gaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mL42ZLeHwCOgm2dvIiRUP/S/P8aaOI55orVdQTEq1so=;
-        b=IK3JHr320scAOYhCiTnyU/tKYb2q34qwhTePL9Jd+/aq9B/nYISHgDsiv/yLT3bb4S
-         qhWNGTLZKhpf/16t4nZefuhGk5WOMp/UAbDjlJr3O3HYwYjS1A3FWMB4hJl25UPiQW5X
-         v00UamunufylGvEaxw+likbs2vemO1xb00dczybPpZLZb3G+2jmc/53HvrfxF0fssTJn
-         zZJzlzRfGKmK81hB47wxmcDzxqPkw2U8fKBNbKz7K62KD0+kuvMNyTJKb6I5bJ5JlnJN
-         cU1PK0HwLsck86NPmP9LuTcw3TVWxYpWh5W2n0XI3eU519fGGtIQf0jS+Rw0F6zORzgF
-         JuKw==
-X-Gm-Message-State: ANoB5pnB+djX8DhACsgJl0kfQB4Vp4BMZlaAk2EVl3Af+XYz4ai0LBop
-        2Vkq/47G5zcUkg+s3YrWqHasLXG8lC2vSY5b2CrWwQ==
-X-Google-Smtp-Source: AA0mqf7Q5B67Pew3oFXM7oertV7l9BHogxhEnaO+dnmzmB/oGQH6BC7i3f6rXUCoLEzBckkxwigZoGYxLfaVPlELQLI=
-X-Received: by 2002:a05:6102:54a5:b0:3b0:7462:a88c with SMTP id
- bk37-20020a05610254a500b003b07462a88cmr34065725vsb.49.1670378170228; Tue, 06
- Dec 2022 17:56:10 -0800 (PST)
-MIME-Version: 1.0
-References: <20221206023406.3182800-1-almasrymina@google.com>
- <Y48zlaimOb/wr8qd@dhcp22.suse.cz> <CAHS8izMKz_JtN-P7BTHydE2x2rmSg5-JRoHgaDCdCHV-S0YLJw@mail.gmail.com>
- <Y4+eLyl8HQNZS5ot@dhcp22.suse.cz>
-In-Reply-To: <Y4+eLyl8HQNZS5ot@dhcp22.suse.cz>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Tue, 6 Dec 2022 17:55:58 -0800
-Message-ID: <CAHS8izOW70Eb7RRePQv6SP8hW3iUnAcPSD=aOY+aMu=6ReEtHQ@mail.gmail.com>
-Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L8963QVuWzMlre8yLN4891ujCBmWo5SyqcLZ8tSbZjQ=;
+        b=1avFbz/x/gE854n7FTg0E9leOyoVtqdlBcXe5odXCyzK2QFlRguTCcYH2xwsdOz/p4
+         I95PNgZRHK4b9nviaSiIylB/I8EcMPduad3szTE4Qr0J/mKqqFSmS6+Z9Ix6EGXu6YFZ
+         XrWbjbJBDOGc8Y2Iu7UHrLv9eTTo7bNm0pG17W8FcH+n12G+ZL+9ZnZLoSIUxrG+x0Sb
+         fZie292uU7qih5SRZGb5K82/bpy/VboClCAIGvqPLk/oiLHNNbXl1ZzvgnJOAmj/leuK
+         34NJ6rdK3tNnG7CDQIpEwDyYo3HeosHxwQIc2MGYuU+r20xDGOgNYme/lJaTv8fmOZ7X
+         qsuA==
+X-Gm-Message-State: ANoB5pm9n8kd0MNbEWiFmEbbWyNWFoDIOpKKxsJzz4IC4A7bWSOKmluL
+        VRzCanuoipqdAiIiaDSv1T1G/Q==
+X-Google-Smtp-Source: AA0mqf5/RI59FAboxfx2566HImOLKq9uSfCZXsGND07TLSEOb93NMRKIOCrF49q2VX8skzs0kz/enw==
+X-Received: by 2002:a05:6870:8882:b0:132:6f79:9ffb with SMTP id m2-20020a056870888200b001326f799ffbmr41793603oam.61.1670378296550;
+        Tue, 06 Dec 2022 17:58:16 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id k7-20020a056830168700b006705cddb73fsm1205278otr.31.2022.12.06.17.58.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 17:58:16 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:58:14 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Johannes Weiner <hannes@cmpxchg.org>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
         Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] mm: memcontrol: deprecate charge moving
+In-Reply-To: <20221206171340.139790-4-hannes@cmpxchg.org>
+Message-ID: <02b9663-4377-bd67-8da2-aad72240da@google.com>
+References: <20221206171340.139790-1-hannes@cmpxchg.org> <20221206171340.139790-4-hannes@cmpxchg.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -77,139 +75,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 11:55 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 06-12-22 08:06:51, Mina Almasry wrote:
-> > On Tue, Dec 6, 2022 at 4:20 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Mon 05-12-22 18:34:05, Mina Almasry wrote:
-> > > > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
-> > > > reclaim"") enabled demotion in memcg reclaim, which is the right thing
-> > > > to do, however, it introduced a regression in the behavior of
-> > > > try_to_free_mem_cgroup_pages().
-> > > >
-> > > > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
-> > > > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
-> > > > of the cgroup should reduce by nr_pages. The callers expect
-> > > > try_to_free_mem_cgroup_pages() to also return the number of pages
-> > > > reclaimed, not demoted.
-> > > >
-> > > > However, what try_to_free_mem_cgroup_pages() actually does is it
-> > > > unconditionally counts demoted pages as reclaimed pages. So in practice
-> > > > when it is called it will often demote nr_pages and return the number of
-> > > > demoted pages to the caller. Demoted pages don't lower the memcg usage,
-> > > > and so try_to_free_mem_cgroup_pages() is not actually doing what the
-> > > > callers want it to do.
-> > > >
-> > > > Various things work suboptimally on memory tiered systems or don't work
-> > > > at all due to this:
-> > > >
-> > > > - memory.high enforcement likely doesn't work (it just demotes nr_pages
-> > > >   instead of lowering the memcg usage by nr_pages).
-> > > > - try_charge_memcg() will keep retrying the charge while
-> > > >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
-> > > >   making any room for the charge.
-> > >
-> > > This has been brought up during the review https://lore.kernel.org/all/YoYTEDD+c4GT0xYY@dhcp22.suse.cz/
-> > >
-> >
-> > Ah, I did indeed miss this. Thanks for the pointer. However I don't
-> > understand this bit from your email (sorry I'm probably missing
-> > something):
-> >
-> > "I suspect this is rather unlikely situation, though. The last tear
-> > (without any fallback) should have some memory to reclaim most of
-> > the time."
-> >
-> > Reading the code in try_charge_memcg(), I don't see the last retry for
-> > try_to_free_mem_cgroup_pages() do anything special. My concern here is
-> > that try_charge_memcg() calls try_to_free_mem_cgroup_pages()
-> > MAX_RECLAIM_RETRIES times. Each time that call may demote pages and
-> > report back that it was able to 'reclaim' memory, but the charge keeps
-> > failing because the memcg reclaim didn't actually make room for the
-> > charge. What happens in this case? My understanding is that the memcg
-> > oom-killer gets wrongly invoked.
->
-> The memcg reclaim shrinks from all zones in the allowed zonelist. In
-> general from all nodes. So unless the lower tier is outside of this
-> zonelist then there is a zone to reclaim from which cannot demote.
-> Correct?
->
+On Tue, 6 Dec 2022, Johannes Weiner wrote:
 
-Ah, thanks for pointing this out. I did indeed miss that the memcg
-reclaim tries to apply pressure equally to all the nodes. With some
-additional testing I'm able to see what you said: there could be no
-premature oom kill invocation because generally the memcg reclaim will
-find some pages to reclaim from lower tier nodes.
+> Charge moving mode in cgroup1 allows memory to follow tasks as they
+> migrate between cgroups. This is, and always has been, a questionable
+> thing to do - for several reasons.
+> 
+> First, it's expensive. Pages need to be identified, locked and
+> isolated from various MM operations, and reassigned, one by one.
+> 
+> Second, it's unreliable. Once pages are charged to a cgroup, there
+> isn't always a clear owner task anymore. Cache isn't moved at all, for
+> example. Mapped memory is moved - but if trylocking or isolating a
+> page fails, it's arbitrarily left behind. Frequent moving between
+> domains may leave a task's memory scattered all over the place.
+> 
+> Third, it isn't really needed. Launcher tasks can kick off workload
+> tasks directly in their target cgroup. Using dedicated per-workload
+> groups allows fine-grained policy adjustments - no need to move tasks
+> and their physical pages between control domains. The feature was
+> never forward-ported to cgroup2, and it hasn't been missed.
+> 
+> Despite it being a niche usecase, the maintenance overhead of
+> supporting it is enormous. Because pages are moved while they are live
+> and subject to various MM operations, the synchronization rules are
+> complicated. There are lock_page_memcg() in MM and FS code, which
+> non-cgroup people don't understand. In some cases we've been able to
+> shift code and cgroup API calls around such that we can rely on native
+> locking as much as possible. But that's fragile, and sometimes we need
+> to hold MM locks for longer than we otherwise would (pte lock e.g.).
+> 
+> Mark the feature deprecated. Hopefully we can remove it soon.
+> 
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-I do find that the first call to try_to_free_mem_cgroup_pages()
-sometimes will mostly demote and not do much reclaim. I haven't been
-able to fully track the cause of that down but I suspect that the
-first call in my test will find most of the cgroup's memory on top
-tier nodes. However we do retry a bunch of times before we invoke oom,
-and in my testing subsequent calls will find plenty of memory in the
-lower tier nodes that it can reclaim. I'll update the commit message
-in the next version.
+Acked-by: Hugh Dickins <hughd@google.com>
 
-> > > > - memory.reclaim has a wonky interface. It advertises to the user it
-> > > >   reclaims the provided amount but it will actually often demote that
-> > > >   amount.
-> > > >
-> > > > There may be more effects to this issue.
-> > > >
-> > > > To fix these issues I propose shrink_folio_list() to only count pages
-> > > > demoted from inside of sc->nodemask to outside of sc->nodemask as
-> > > > 'reclaimed'.
-> > >
-> > > Could you expand on why the node mask matters? From the charge point of
-> > > view it should be completely uninteresting as the charge remains.
-> > >
-> > > I suspect we really need to change to reclaim metrics for memcg reclaim.
-> > > In the memory balancing reclaim we can indeed consider demotions as a
-> > > reclaim because the memory is freed in the end but for the memcg reclaim
-> > > we really should be counting discharges instead. No demotion/migration will
-> > > free up charges.
-> >
-> > I think what you're describing is exactly what this patch aims to do.
-> > I'm proposing an interface change to shrink_folio_list() such that it
-> > only counts demoted pages as reclaimed iff sc->nodemask is provided by
-> > the caller and the demotion removed pages from inside sc->nodemask to
-> > outside sc->nodemask. In this case:
-> >
-> > 1. memory balancing reclaim would pass sc->nodemask=nid to
-> > shrink_folio_list() indicating that it should count pages demoted from
-> > sc->nodemask as reclaimed.
-> >
-> > 2. memcg reclaim would pass sc->nodemask=NULL to shrink_folio_list()
-> > indicating that it is looking for reclaim across all nodes and no
-> > demoted pages should count as reclaimed.
-> >
-> > Sorry if the commit message was not clear. I can try making it clearer
-> > in the next version but it's already very long.
->
-> Either I am missing something or I simply do not understand why you are
-> hooked into nodemask so much. Why cannot we have a simple rule that
-> only global reclaim considers demotions as nr_reclaimed?
->
+but I wonder if it would be helpful to mention move_charge_at_immigrate
+in the deprecation message: maybe the first line should be
+"Cgroup memory moving (move_charge_at_immigrate) is deprecated.\n"
 
-Thanks. I think this approach would work for most callers. My issue
-here is properly supporting the recently added nodes= arg[1] to
-memory.reclaim. If the user specifies all nodes or provides no arg,
-I'd like to treat it as memcg reclaim which doesn't count demotions.
-If the user provides the top tier nodes, I would like to count
-demotions as this interface is the way to trigger proactive demotion
-from top tier nodes.
-
-I guess I can check which args the user is passing and decide whether
-or not to count demotions. But the user right now can specify any
-combination of nodes, some of them top tier, some lower tier, some in
-the middle. I can return -EINVAL for that, but that seems like a
-shame. I thought a generic way to address this was what I'm doing
-here, i.e. counting pages demoted from the nodemask as reclaimed. Is
-that not acceptable? Is -EINVAL preferred here?
-
-[1] https://lore.kernel.org/linux-mm/87tu2a1v3y.fsf@yhuang6-desk2.ccr.corp.intel.com/
-
-> --
-> Michal Hocko
-> SUSE Labs
+> ---
+>  Documentation/admin-guide/cgroup-v1/memory.rst | 11 ++++++++++-
+>  mm/memcontrol.c                                |  4 ++++
+>  2 files changed, 14 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/cgroup-v1/memory.rst b/Documentation/admin-guide/cgroup-v1/memory.rst
+> index 60370f2c67b9..87d7877b98ec 100644
+> --- a/Documentation/admin-guide/cgroup-v1/memory.rst
+> +++ b/Documentation/admin-guide/cgroup-v1/memory.rst
+> @@ -86,6 +86,8 @@ Brief summary of control files.
+>   memory.swappiness		     set/show swappiness parameter of vmscan
+>  				     (See sysctl's vm.swappiness)
+>   memory.move_charge_at_immigrate     set/show controls of moving charges
+> +                                     This knob is deprecated and shouldn't be
+> +                                     used.
+>   memory.oom_control		     set/show oom controls.
+>   memory.numa_stat		     show the number of memory usage per numa
+>  				     node
+> @@ -717,9 +719,16 @@ Soft limits can be setup by using the following commands (in this example we
+>         It is recommended to set the soft limit always below the hard limit,
+>         otherwise the hard limit will take precedence.
+>  
+> -8. Move charges at task migration
+> +8. Move charges at task migration (DEPRECATED!)
+>  =================================
+>  
+> +THIS IS DEPRECATED!
+> +
+> +It's expensive and unreliable! It's better practice to launch workload
+> +tasks directly from inside their target cgroup. Use dedicated workload
+> +cgroups to allow fine-grained policy adjustments without having to
+> +move physical pages between control domains.
+> +
+>  Users can move charges associated with a task along with task migration, that
+>  is, uncharge task's pages from the old cgroup and charge them to the new cgroup.
+>  This feature is not supported in !CONFIG_MMU environments because of lack of
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index b696354c1b21..e650a38d9a90 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -3919,6 +3919,10 @@ static int mem_cgroup_move_charge_write(struct cgroup_subsys_state *css,
+>  {
+>  	struct mem_cgroup *memcg = mem_cgroup_from_css(css);
+>  
+> +	pr_warn_once("Cgroup memory moving is deprecated. "
+> +		     "Please report your usecase to linux-mm@kvack.org if you "
+> +		     "depend on this functionality.\n");
+> +
+>  	if (val & ~MOVE_MASK)
+>  		return -EINVAL;
+>  
+> -- 
+> 2.38.1
+> 
+> 
