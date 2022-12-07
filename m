@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A1B645EE1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC34F645EA8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:22:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbiLGQ0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S229612AbiLGQW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:22:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbiLGQZw (ORCPT
+        with ESMTP id S229849AbiLGQWv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:25:52 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA24F68C52;
-        Wed,  7 Dec 2022 08:25:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670430320; x=1701966320;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5Sq055jlCLi5Ln1Yk3k2vHgwekeacL/n/QnkIrnplU4=;
-  b=dAUrLmgU865qKvBmTmAq8qhBEBFl7MrjO2msPc6zNIZYvOpO6ecoL7Hv
-   OurXvA834QlzWrE4nk9zCEx0f6TH3W1+Yy37k2A/qnWMpzEkyXxjhjryO
-   z3l6EhcXLPhYrjVz2Rkh8NLkUBdJtEA+Mv56vtnN+1dyvKA0atNungGfj
-   d40po98Ayb73QyL6ycefOXOfhBSuDlCfxZ4rkaF6LJCe94smPIxGMzo92
-   uwVULnGeyzbkdA3mfjJnLKsbAMtdSAvom4kLILKb9frvei9NLXXr02TBj
-   KtDsUlr2hpbbKlxZwzoPwwLjteVs2dEcCP2u7DKZKfdJCT0qoX8XGUX/2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="343972627"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="343972627"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 08:24:01 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="640302593"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="640302593"
-Received: from irvmail001.ir.intel.com ([10.43.11.63])
-  by orsmga007.jf.intel.com with ESMTP; 07 Dec 2022 08:23:59 -0800
-Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
-        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2B7GNwPH026724;
-        Wed, 7 Dec 2022 16:23:58 GMT
-From:   Alexander Lobakin <alexandr.lobakin@intel.com>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Nicolas Schier" <nicolas@fjasle.eu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>
-Subject: Re: [PATCH v3 3/5] kbuild: add read-file macro
-Date:   Wed,  7 Dec 2022 17:22:08 +0100
-Message-Id: <20221207162208.2200189-1-alexandr.lobakin@intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221207154044.2181347-1-alexandr.lobakin@intel.com>
-References: <20221126225624.751661-1-masahiroy@kernel.org> <20221126225624.751661-3-masahiroy@kernel.org> <20221207154044.2181347-1-alexandr.lobakin@intel.com>
+        Wed, 7 Dec 2022 11:22:51 -0500
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C025C7A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:22:47 -0800 (PST)
+Received: by mail-io1-xd2d.google.com with SMTP id n188so12065425iof.8
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:22:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Bn9I9xV79fJUCgoxsa3ub+uGmmlj3Tv0J26ZcN9So2c=;
+        b=oktSzxAShr3BHoD72bP4RFPVPK2PQ9754FcMwUZLSN4JtDJnGYSSmZWOGHv94kk8p2
+         hRwss1tlAVG7p8Av2GnMo81SayC6jYcGxuvgfQjOmrGY3anuIuUmHTnrOwK4bjFlrHLH
+         8X2zXyi3q6BymHi1hN9CxD5+hoxVUb4cv+kVB+LerzeBetWY4WfSZ5+f327qAreMbIrn
+         68t4pMOeqqBpF9HLmnL9+4GnvtxCjB6tGckAQYSJQEdBSt77fS7PfaRqOq6S74eXp1OI
+         HyGz4pZzTJh8yNYLubKPUaRkK+fiekioy/q9ElL9E6hHGOMvjaC1n0ZrZ+A9RVFAaNNK
+         rmtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bn9I9xV79fJUCgoxsa3ub+uGmmlj3Tv0J26ZcN9So2c=;
+        b=g94zhfWQRLBd/sGA5OP7A9o5zpLs0fSyXdG0rIZk1pXzRetQtp64wrxCq/hOk3kBqB
+         J2clymFNKO3fApMpQy26TCeSPzLlPpn3Mk345rkjzwoiHBUyF7P/1E2XXa9MVo8ChMur
+         yMlwCHgM9Tca7EHcFS6SaXpKrFSs0jWPQQmGfHIDichzSKhrUOJLgiAPjNrqaTSzmWfc
+         jVzQxIdVO5+TOvv60+9wJ1FzyizQ/1Wdw7aX8M+G3FOp0psQWscBwCYALinW4vax7dIZ
+         jwn57sHLdgARW2aVI7mGP24dA+SdxQX22WZSjZMjSgRXLzhooM1RofWpzvCqpPhBG3Ia
+         a13A==
+X-Gm-Message-State: ANoB5plwVDQGU9MJ4cuM17bgUmAn34SZ4KXljPJDuaxvb1ndojP/2y4e
+        svRGZDZdAFLYk6Z1sw3cCwh66Q==
+X-Google-Smtp-Source: AA0mqf4ybGl8vC1UVIEO3y/JfQbgJP/6fnnH7vd2PgBXxTLGzha4ra0sC3Q2OFIDuj9XNhFK1cMt4Q==
+X-Received: by 2002:a02:334d:0:b0:376:22fe:5e7c with SMTP id k13-20020a02334d000000b0037622fe5e7cmr43131407jak.126.1670430167275;
+        Wed, 07 Dec 2022 08:22:47 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id p12-20020a056e0206cc00b00302f958e71dsm7202366ils.49.2022.12.07.08.22.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 08:22:46 -0800 (PST)
+Message-ID: <b7d8193c-7e15-f5cd-08d4-8ef788d9bb36@kernel.dk>
+Date:   Wed, 7 Dec 2022 09:22:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: next: LTP: syscalls: epoll_clt() if fd is an invalid fd expected
+ EBADF: EINVAL (22)
+Content-Language: en-US
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, chrubis <chrubis@suse.cz>
+References: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alexandr.lobakin@intel.com>
-Date: Wed, 7 Dec 2022 16:40:44 +0100
-
-> From: Masahiro Yamada <masahiroy@kernel.org>
-> Date: Sun, 27 Nov 2022 07:56:22 +0900
+On 12/7/22 8:58?AM, Naresh Kamboju wrote:
+> LTP syscalls epoll_ctl02 is failing on Linux next master.
+> The reported problem is always reproducible and starts from next-20221205.
 > 
-> > Since GNU Make 4.2, $(file ...) supports the read operater '<', which
-> > is useful to read a file without forking any process. No warning is
-> > shown even if the input file is missing.
-
-[...]
-
-> Great stuff. Used it in my upcoming series to simplify things, works
-> as expected.
+> GOOD tag: next-20221202
+> BAD tag: next-20221205
 > 
-> sed-syms = $(subst $(space),\|,$(foreach file,$(sym-files-y),$(call read-file,$(file))))
-> 
-> The only thing that came to my mind while I was implementing the
-> oneliner above: maybe add ability to read multiple files? For now,
-> I used a foreach, could it be somehow incorporated into read-file
-> already?
+> tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if epfd is an invalid fd : EBADF (9)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd does not support epoll : EPERM (1)
+> epoll_ctl02.c:87: TFAIL: epoll_clt(...) if fd is an invalid fd
+> expected EBADF: EINVAL (22)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if op is not supported : EINVAL (22)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is the same as epfd : EINVAL (22)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if events is NULL : EFAULT (14)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
+> EPOLL_CTL_DEL : ENOENT (2)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
+> EPOLL_CTL_MOD : ENOENT (2)
+> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is already registered
+> with EPOLL_CTL_ADD : EEXIST (17)
 
-Oh, nevermind. This one also works:
+This should fix it:
 
-sed-syms = $(subst $(space),\|,$(call read-file,$(sym-files-y)))
 
-So I believe read-file works for an arbitrary number of files.
+diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+index ec7ffce8265a..de9c551e1993 100644
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@ -2195,6 +2195,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
+ 	}
+ 
+ 	/* Get the "struct file *" for the target file */
++	error = -EBADF;
+ 	tf = fdget(fd);
+ 	if (!tf.file)
+ 		goto error_fput;
 
-> 
-> Besides that:
-> 
-> Reviewed-and-tested-by: Alexander Lobakin <alexandr.lobakin@intel.com>
-
-[...]
-
-> > -- 
-> > 2.34.1
-> 
-> Thanks,
-> Olek
-
-Thanks!
-Olek
+-- 
+Jens Axboe
