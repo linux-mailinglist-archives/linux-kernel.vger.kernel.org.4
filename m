@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C4B645E09
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E55C645E18
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiLGPwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:52:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52290 "EHLO
+        id S229905AbiLGPyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:54:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLGPw2 (ORCPT
+        with ESMTP id S230096AbiLGPxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:52:28 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703EB63BAA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:52:27 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
+        Wed, 7 Dec 2022 10:53:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1605BE0C;
+        Wed,  7 Dec 2022 07:53:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0B62C1EC0513;
-        Wed,  7 Dec 2022 16:52:26 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670428346;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KVcnPS5tJOaRRHzJjUSCWhz9ymXO6hwKKU1q+t1xjH0=;
-        b=RE9PsnE3691Ny/BygbI/qr4QyIKpAqjn42XJ0S5AILjdNpbTh4O7wD1ksfd7OHzlfk9v5G
-        XZWHsNhFlFEbMttRgcEszGkHnnJPZSAD6oaOw2BLrnLE5k/FapU3jo2Q9MLi39/cDZ0wG5
-        kqPZ7b7XI6cndH6Vs2vokIhNOjU0Lx0=
-Date:   Wed, 7 Dec 2022 16:52:21 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>
-Cc:     x86@kernel.org, Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] x86/boot: fix relying on link order
-Message-ID: <Y5C2tXX7OazmJtEq@zn.tnic>
-References: <20221101161529.1634188-1-alexandr.lobakin@intel.com>
- <20221107125528.543764-1-alexandr.lobakin@intel.com>
- <2993a60c-edaa-a29a-2644-3ee86c622847@intel.com>
- <20221121120918.388035-1-alexandr.lobakin@intel.com>
- <Y3t5wxKwIAycpDV8@zn.tnic>
- <20221121160030.395096-1-alexandr.lobakin@intel.com>
- <20221207150854.2077580-1-alexandr.lobakin@intel.com>
- <Y5CwECT3a7tySawo@zn.tnic>
- <20221207153000.2146772-1-alexandr.lobakin@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3554A61AA0;
+        Wed,  7 Dec 2022 15:53:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D51EC433D7;
+        Wed,  7 Dec 2022 15:53:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670428412;
+        bh=IZZx+Ki5noX8jGBotoEV8vMit8npaFRikHxYnAFS9h4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nkNUCkjRbA94oNYJPHhO6lVfzHZWR6BW4DzN9hhmZmMDfvYHDj1JWTApBnw/QJX8E
+         0Au/G+i+fDcxjA5/7hqj+fPYYAlGJO+t4Zy29mciqK8fWlN1WjSOZ1uNUjtzeRIi3x
+         XcFun6unQDCSh4vM1zu9lfvUcjoW9eEBvOVdnJsOpU5lQgnPdi1khrOboAdNIgIshf
+         Z7+bcRiJngn7unvVivGjhBKDsjc3ix4AIorT6UAcPbLRsCiNcLtdSE87uQbvCbuYl9
+         mGsN86Tbe9YSAX38dk02OnbpX6Cw7gRk6MbdRB92FReIG6xYYgszhwGg0kMCjhVk8Z
+         QssPPpZpDSsrg==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     linux-arm-msm@vger.kernel.org, luca.weiss@fairphone.com
+Cc:     linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        quic_mojha@quicinc.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        konrad.dybcio@somainline.org, rishabhb@codeaurora.org,
+        quic_sibis@quicinc.com, mathieu.poirier@linaro.org,
+        agross@kernel.org, sidgup@codeaurora.org
+Subject: Re: (subset) [PATCH v2 1/2] remoteproc: qcom_q6v5_pas: disable wakeup on probe fail or remove
+Date:   Wed,  7 Dec 2022 09:53:25 -0600
+Message-Id: <167042840345.3235426.16469925193980791677.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20221118090816.100012-1-luca.weiss@fairphone.com>
+References: <20221118090816.100012-1-luca.weiss@fairphone.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221207153000.2146772-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:30:00PM +0100, Alexander Lobakin wrote:
-> But not every fix is a fix only when it's easy to find a repro,
-> right...?
+On Fri, 18 Nov 2022 10:08:15 +0100, Luca Weiss wrote:
+> Leaving wakeup enabled during probe fail (-EPROBE_DEFER) or remove makes
+> the subsequent probe fail.
+> 
+> [    3.749454] remoteproc remoteproc0: releasing 3000000.remoteproc
+> [    3.752949] qcom_q6v5_pas: probe of 3000000.remoteproc failed with error -17
+> [    3.878935] remoteproc remoteproc0: releasing 4080000.remoteproc
+> [    3.887602] qcom_q6v5_pas: probe of 4080000.remoteproc failed with error -17
+> [    4.319552] remoteproc remoteproc0: releasing 8300000.remoteproc
+> [    4.332716] qcom_q6v5_pas: probe of 8300000.remoteproc failed with error -17
+> 
+> [...]
 
-The basic rule is: only regression fixes during the -rc phase.
+Applied, thanks!
 
-Documentation/process/2.Process.rst
+[1/2] remoteproc: qcom_q6v5_pas: disable wakeup on probe fail or remove
+      commit: 9a70551996e699fda262e8d54bbd41739d7aad6d
+[2/2] remoteproc: qcom_q6v5_pas: detach power domains on remove
+      commit: 34d01df00b84127be04c914fc9f8e8be1fcdf851
 
-although there it is not spelled out that it is regressions only. But
-this is the rule we adhere to in the tip tree in general.
-
+Best regards,
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Bjorn Andersson <andersson@kernel.org>
