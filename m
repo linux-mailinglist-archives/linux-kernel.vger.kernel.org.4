@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC34F645EA8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CC03645EAB
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiLGQW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:22:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
+        id S229719AbiLGQXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:23:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiLGQWv (ORCPT
+        with ESMTP id S229778AbiLGQXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:22:51 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3C025C7A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:22:47 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id n188so12065425iof.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:22:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bn9I9xV79fJUCgoxsa3ub+uGmmlj3Tv0J26ZcN9So2c=;
-        b=oktSzxAShr3BHoD72bP4RFPVPK2PQ9754FcMwUZLSN4JtDJnGYSSmZWOGHv94kk8p2
-         hRwss1tlAVG7p8Av2GnMo81SayC6jYcGxuvgfQjOmrGY3anuIuUmHTnrOwK4bjFlrHLH
-         8X2zXyi3q6BymHi1hN9CxD5+hoxVUb4cv+kVB+LerzeBetWY4WfSZ5+f327qAreMbIrn
-         68t4pMOeqqBpF9HLmnL9+4GnvtxCjB6tGckAQYSJQEdBSt77fS7PfaRqOq6S74eXp1OI
-         HyGz4pZzTJh8yNYLubKPUaRkK+fiekioy/q9ElL9E6hHGOMvjaC1n0ZrZ+A9RVFAaNNK
-         rmtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bn9I9xV79fJUCgoxsa3ub+uGmmlj3Tv0J26ZcN9So2c=;
-        b=g94zhfWQRLBd/sGA5OP7A9o5zpLs0fSyXdG0rIZk1pXzRetQtp64wrxCq/hOk3kBqB
-         J2clymFNKO3fApMpQy26TCeSPzLlPpn3Mk345rkjzwoiHBUyF7P/1E2XXa9MVo8ChMur
-         yMlwCHgM9Tca7EHcFS6SaXpKrFSs0jWPQQmGfHIDichzSKhrUOJLgiAPjNrqaTSzmWfc
-         jVzQxIdVO5+TOvv60+9wJ1FzyizQ/1Wdw7aX8M+G3FOp0psQWscBwCYALinW4vax7dIZ
-         jwn57sHLdgARW2aVI7mGP24dA+SdxQX22WZSjZMjSgRXLzhooM1RofWpzvCqpPhBG3Ia
-         a13A==
-X-Gm-Message-State: ANoB5plwVDQGU9MJ4cuM17bgUmAn34SZ4KXljPJDuaxvb1ndojP/2y4e
-        svRGZDZdAFLYk6Z1sw3cCwh66Q==
-X-Google-Smtp-Source: AA0mqf4ybGl8vC1UVIEO3y/JfQbgJP/6fnnH7vd2PgBXxTLGzha4ra0sC3Q2OFIDuj9XNhFK1cMt4Q==
-X-Received: by 2002:a02:334d:0:b0:376:22fe:5e7c with SMTP id k13-20020a02334d000000b0037622fe5e7cmr43131407jak.126.1670430167275;
-        Wed, 07 Dec 2022 08:22:47 -0800 (PST)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id p12-20020a056e0206cc00b00302f958e71dsm7202366ils.49.2022.12.07.08.22.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 08:22:46 -0800 (PST)
-Message-ID: <b7d8193c-7e15-f5cd-08d4-8ef788d9bb36@kernel.dk>
-Date:   Wed, 7 Dec 2022 09:22:45 -0700
+        Wed, 7 Dec 2022 11:23:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284505288B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:23:16 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B897D610A4
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:23:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DCB8C433C1;
+        Wed,  7 Dec 2022 16:23:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670430195;
+        bh=5ofuW648j4qVgik7LJj9XY7ye1p2+tfeBtfP6OcjbuU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QNDs8axrZb0pYmqMNh52GFRMOhbCY4PYZ8VZ2pFZur1DJ3nX6O/zq+q9/ZFjskMaQ
+         o8JKVNsTMo9oSdBuZ2/g8JONoKUnhp9f/4MGR+boOcCgjnD98Rey4Yq6MJOff+l0yR
+         3peo+CpyPkKqbT4UHfvt3HQ9pt+ZMwdnZUKcFwOQ=
+Date:   Wed, 7 Dec 2022 17:23:12 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Aleksandr Burakov <a.burakov@rosalinux.ru>
+Cc:     Frank Haverkamp <haver@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 2/2] misc: genwqe: card_dev: Array index overflow fix in
+ ddcb_cmd_fixups()
+Message-ID: <Y5C98NpQr2G1bkvs@kroah.com>
+References: <20221207141808.22922-1-a.burakov@rosalinux.ru>
+ <20221207141808.22922-2-a.burakov@rosalinux.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: next: LTP: syscalls: epoll_clt() if fd is an invalid fd expected
- EBADF: EINVAL (22)
-Content-Language: en-US
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, regressions@lists.linux.dev,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        LTP List <ltp@lists.linux.it>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, chrubis <chrubis@suse.cz>
-References: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CA+G9fYv_UU+oVUbd8Mzt8FkXscenX2kikRSCZ7DPXif9i5erNg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207141808.22922-2-a.burakov@rosalinux.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 8:58?AM, Naresh Kamboju wrote:
-> LTP syscalls epoll_ctl02 is failing on Linux next master.
-> The reported problem is always reproducible and starts from next-20221205.
+On Wed, Dec 07, 2022 at 05:18:08PM +0300, Aleksandr Burakov wrote:
+> &cmd->asiv of size 96 can overflow because its index (asiv_offs + 8)
+> can be equal to 96 (0x58 + 0x08) that is out of range.
 > 
-> GOOD tag: next-20221202
-> BAD tag: next-20221205
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> tst_test.c:1524: TINFO: Timeout per run is 0h 05m 00s
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if epfd is an invalid fd : EBADF (9)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd does not support epoll : EPERM (1)
-> epoll_ctl02.c:87: TFAIL: epoll_clt(...) if fd is an invalid fd
-> expected EBADF: EINVAL (22)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if op is not supported : EINVAL (22)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is the same as epfd : EINVAL (22)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if events is NULL : EFAULT (14)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
-> EPOLL_CTL_DEL : ENOENT (2)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is not registered with
-> EPOLL_CTL_MOD : ENOENT (2)
-> epoll_ctl02.c:87: TPASS: epoll_clt(...) if fd is already registered
-> with EPOLL_CTL_ADD : EEXIST (17)
+> Signed-off-by: Aleksandr Burakov <a.burakov@rosalinux.ru>
+> Fixes: eaf4722d4645 ("GenWQE Character device and DDCB queue")
+> ---
+>  drivers/misc/genwqe/card_dev.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/genwqe/card_dev.c b/drivers/misc/genwqe/card_dev.c
+> index 55fc5b80e649..d58ce2622307 100644
+> --- a/drivers/misc/genwqe/card_dev.c
+> +++ b/drivers/misc/genwqe/card_dev.c
+> @@ -867,7 +867,7 @@ static int ddcb_cmd_fixups(struct genwqe_file *cfile, struct ddcb_requ *req)
+>  	struct genwqe_ddcb_cmd *cmd = &req->cmd;
+>  	struct dma_mapping *m;
+>  
+> -	for (i = 0, asiv_offs = 0x00; asiv_offs <= 0x58;
+> +	for (i = 0, asiv_offs = 0x00; asiv_offs < 0x58;
+>  	     i++, asiv_offs += 0x08) {
+>  
+>  		u64 u_addr;
+> -- 
+> 2.25.1
+> 
 
-This should fix it:
-
-
-diff --git a/fs/eventpoll.c b/fs/eventpoll.c
-index ec7ffce8265a..de9c551e1993 100644
---- a/fs/eventpoll.c
-+++ b/fs/eventpoll.c
-@@ -2195,6 +2195,7 @@ int do_epoll_ctl(int epfd, int op, int fd, struct epoll_event *epds,
- 	}
- 
- 	/* Get the "struct file *" for the target file */
-+	error = -EBADF;
- 	tf = fdget(fd);
- 	if (!tf.file)
- 		goto error_fput;
-
--- 
-Jens Axboe
+Where is patch 1/2 of this series?
