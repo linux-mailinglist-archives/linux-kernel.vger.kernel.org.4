@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B2C645504
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 08:59:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0565B645507
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:00:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLGH7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 02:59:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
+        id S229919AbiLGIAi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:00:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiLGH7P (ORCPT
+        with ESMTP id S229451AbiLGIAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 02:59:15 -0500
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6115417A96;
-        Tue,  6 Dec 2022 23:59:13 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NRqHm0zcXz9xFGy;
-        Wed,  7 Dec 2022 15:52:04 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwDnG_i2R5Bj6WfHAA--.59725S2;
-        Wed, 07 Dec 2022 08:58:53 +0100 (CET)
-Message-ID: <7225e76c09c7ff68937e37ee041fefdd6ccac1c8.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 2/2] lsm: Add/fix return values in lsm_hooks.h and
- fix formatting
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     casey@schaufler-ca.com, omosnace@redhat.com,
-        john.johansen@canonical.com, kpsingh@kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Wed, 07 Dec 2022 08:58:42 +0100
-In-Reply-To: <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
-References: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
-         <20221128144240.210110-3-roberto.sassu@huaweicloud.com>
-         <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Wed, 7 Dec 2022 03:00:36 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6ECDF9E;
+        Wed,  7 Dec 2022 00:00:33 -0800 (PST)
+Date:   Wed, 7 Dec 2022 09:00:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670400031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wKDkOx0HlWRonLHxoYKpkkIPzXELWNRGE8f2sh6dWn4=;
+        b=FztapfyXQvvcURZVkmrjRLVDpPa6ZPN5boUQdlMmLKFsX5vJkaY//PUztOqY92SrOo8G8B
+        SLoVfXgVMXn85Liq5FCfNNcvNGUxsZENDigDzVxAtE9ZEM3+OMLhdo5B5qXaPdIqwZhK6v
+        VctHFevjvTXT+KG58RvEZTEQ6cLm0kYCDGws7TzEyaDW8sJcZ5iLco8VvMNCBXYtnpZC8S
+        es5zLl42QQF2G16cX2DeMzrKvD8jVejEfWrUmk0KVW9nFQ/KTiSy//6Ni8UNeI4XJKKczt
+        5Hyor+wia27pASnc2ganH+p9SQGGk3COCkshNY2wPyVv2W3Wu6le415qx5snng==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670400031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wKDkOx0HlWRonLHxoYKpkkIPzXELWNRGE8f2sh6dWn4=;
+        b=WOp/gj5libGx/W+qHdWiQ5H6ool2s1vfj8ByaK8sUZ+b8Oj5TjUZqg8s5hIQ5OizCW0yqO
+        ZtraWhg4BVPe3vCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] mm/highmem: Add notes about conversions from
+ kmap{,_atomic}()
+Message-ID: <Y5BIHdnP4yeJ8svL@linutronix.de>
+References: <20221206070029.7342-1-fmdefrancesco@gmail.com>
+ <Y472ipY908pHip+B@linutronix.de>
+ <2093077.OBFZWjSADL@suse>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwDnG_i2R5Bj6WfHAA--.59725S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4Dtw17Ary5ArWfZFWxCrg_yoW8Wr48pF
-        sxG3W3AFn5ZryIkF43X3W7Gw4S9395Gr1UJr17Ww18Z34FyrW2yFy7CF1YgFWDJrWkCFyj
-        9Fyagw1DuFy7A37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUgmb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
-        Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
-        AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAI
-        cVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMI
-        IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2
-        KfnxnUUI43ZEXa7IU1zuWJUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQATBF1jj4ZeLgACsT
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2093077.OBFZWjSADL@suse>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,43 +64,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-12-06 at 19:21 -0500, Paul Moore wrote:
-> On Mon, Nov 28, 2022 at 9:43 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > 
-> > Ensure that for non-void LSM hooks there is a description of the return
-> > values.
-> > 
-> > Also, replace spaces with tab for indentation, remove empty lines between
-> > the hook description and the list of parameters, adjust semicolons and add
-> > the period at the end of the parameter description.
-> > 
-> > Finally, move the description of gfp parameter of the
-> > xfrm_policy_alloc_security hook together with the others.
-> > 
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  include/linux/lsm_hooks.h | 221 ++++++++++++++++++++++++--------------
-> >  1 file changed, 138 insertions(+), 83 deletions(-)
+On 2022-12-06 20:12:13 [+0100], Fabio M. De Francesco wrote:
+> >   Furthermore, code between the kmap_atomic() and kunmap_atomic()
+> >   functions may implicitly depended 
 > 
-> Thanks Roberto, I've merged this into lsm/next with one small tweak (below).
+> I suppose it should be "depend"? Shouldn't it?
+
+Ehm, yes, correct.
+
+> >   on the side effects of kmap_atomic()
+> >   namely disabling pagefaults or preemption or both.
 > 
-> > diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> > index c35e260efd8c..6502a1bea93a 100644
-> > --- a/include/linux/lsm_hooks.h
-> > +++ b/include/linux/lsm_hooks.h
-> > @@ -677,7 +695,7 @@
-> >   *     indicates which of the set*uid system calls invoked this hook.  If
-> >   *     @new is the set of credentials that will be installed.  Modifications
-> >   *     should be made to this rather than to @current->cred.
-> > - *     @old is the set of credentials that are being replaces
-> > + *     @old is the set of credentials that are being replaces.
+> I agree with you for rephrasing, mainly because it is 
+> written in poor English.
 > 
-> Might as well change "replaces" to "replaced".  I'll go ahead and fix
-> that up during the merge.
+> However, I still have doubts about why you deleted "migration". 
+> AFAIK, __kmap_local_pfn_prot() always takes care of disabling migration for 
+> HIGHMEM enabled kernels. 
 
-Thanks a lot!
+That is correct. Historically kmap_atomic() never had a
+migrate_disable() statement - only preempt_disable(). With disabled
+preemption the task migration is implicitly disabled.
 
-Roberto
+> How about !HIGHMEM, where kmap_local_page() is an indirect call to 
+> page_address()? Did you mean that, if the code between kmap_atomic() and 
+> kunmap_atomic() depended on migrate_disable() (in PREEMPT_RT) we should always 
+> just stay safe and call preempt_disable() together with conversion to 
+> kmap_local_page()?
 
+Even in the !HIGHMEM case it always uses preempt_disable(). With
+PREEMPT_RT it is different as it never disabled preemption and always
+did a migrate_disable() instead. If you talk about what needs to be
+considered while migrating away from kmap_atomic() then I wouldn't add
+the PREEMPT_RT bits to it since it was never in the picture while the
+code (using kmap_atomic()) was originally written.
+
+> If so, I understand and I again agree with you. If not, I'm missing something; 
+> so please let me understand properly.
+> 
+> Aside from the above, I'm not sure whether you deleted the last phrase before 
+> your suggestion. What about making it to become "For the above-mentioned 
+> cases, conversions should also explicitly disable page-faults and/or 
+> preemption"? 
+
+They need to disable preemption or page-faults or both if it is needed
+(not unconditionally) and where it is needed. This means not
+unconditionally over the whole kmap-ed section.
+
+> Thanks again for noticing my mistakes.
+> 
+> Fabio
+
+Sebastian
