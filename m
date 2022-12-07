@@ -2,195 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A20645A9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:18:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CBA4645A9D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:19:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiLGNSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:18:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S229507AbiLGNTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:19:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiLGNSa (ORCPT
+        with ESMTP id S229945AbiLGNSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:18:30 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679B1EE23;
-        Wed,  7 Dec 2022 05:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670419106; x=1701955106;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=Lb5STIL8Ik7pLbD8CfdBIKK+PIMIjQezB8pSNdxlqFg=;
-  b=c/qLsLi4yxabq/iixHwoAx/8Sa1DAxD1LMcpKgqHYnlK84Oe69SBADAX
-   SnqEsAR9cmO6/o3J+hY6KoVxG6a6EhqVf2s0sPjb+aTXyINiIBH3P12Uj
-   z+QKvxsLbsq11J4Mqc1Ypg0WqXAEgrIwQ7iBj4eXh6V38AGeD54pWRPGK
-   GvUynQNy9ww5bBkjJrdVUhtHrvze8F0CGhJ25vvq4pke+/F1VmKjsQb6P
-   odPnBVk3JjbhU9yYibFXPUEmhl3sdJrIeG+qJuki6exR1hO52/VjFAITZ
-   lVTn8mcR+0xqC8uu0pj1UMzgUy5dWnPaokwvJYCNtGzdNMx1LPl+wxtU3
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="403158348"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="403158348"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 05:18:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="648731486"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="648731486"
-Received: from liming1-mobl1.ccr.corp.intel.com (HELO [10.254.215.192]) ([10.254.215.192])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 05:18:21 -0800
-Message-ID: <f9433a12-eacd-9e6b-a517-c3be438193d1@linux.intel.com>
-Date:   Wed, 7 Dec 2022 21:18:19 +0800
+        Wed, 7 Dec 2022 08:18:52 -0500
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AA612A92
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:18:51 -0800 (PST)
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com [209.85.219.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2A1554166A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1670419130;
+        bh=TJPCP4AbYzmGzRRwQknWvZ7ec7wLffR2M+z5Bb6OJxQ=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=k4v/YJR/Hl/02Id9DLkhlc9r47+LXEM/ybLui3HTWTU0XMoXQR/0PaMVD03rKmMBz
+         AEIw4oq7s6pOwyndMIOgnD8OH+iZOIVtpG0rVVUPhiCwOefnZvkIbIKdJTUSKRtIYy
+         0O+/zYHNa8nQlvIxGZDMPy0zt7WhDVBjBDAseNVLm0HhuGwVJJQw4Jw+yGAv2OdlrC
+         Lic3mj46g1tz0ohv5rR2w/rFdGVqEPgaGRQ/2oQEkXLZ2/K1ixc9Nz6tDAa81L/ciR
+         sFzsAPFRIEhPwqgAqaQm2BUqIkZm5EggVT/vl8VGvH3z8pY76LhBuE5kAooGmKm8DE
+         uq4zYNnYqghBA==
+Received: by mail-yb1-f198.google.com with SMTP id 203-20020a2502d4000000b006f94ab02400so18808144ybc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:18:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TJPCP4AbYzmGzRRwQknWvZ7ec7wLffR2M+z5Bb6OJxQ=;
+        b=HGHlp1UShusbDKvLWZ7efuyHxMWs40CjIx4dsP0GU2lHeUveYXDfgr4GaYSqwBVVaA
+         lPAwQKf5ZUYP6FQvI1Bu3piqhyAbm7p1BMNi9o6BQY8z4mp9A23vMg7IDvQ0I4O9utG8
+         3gh1MxTC8ldx1WJuJKx+2Gedw6zTwfJHD48BpmjpKN68YBgHZrX5kxt0e4r03v90+u8c
+         Og2WFFm2H33kyGjHLqS8XLevxHwnraB+mWS1Ogixg5CEVZ3wY7JHzyZoDTFVlJhVHHVQ
+         rCAWbbSb48G2E7R+PtcyizucaQYIFZRwRSD6fHKAkS6wDmqrL9hGltjEIC62j1tsAS7q
+         ltlg==
+X-Gm-Message-State: ANoB5pnA4vS3EpTg36P05NNANA5Mw0tXhu+xMDa7E5qsEt0V0X51whdA
+        8Q3e+W9bBlxeNi06jo1nA2gZKtT+0PekCyQUvnDPl40W+5DASYzDjYNZoyrJcAsjM4EboC/Jp11
+        1ykQcKvYBKdM5EihYxL4mjad5Wz91SOCrai0fKCTf7NPBHjv3AoSAPpDZVQ==
+X-Received: by 2002:a25:cacc:0:b0:703:7a54:1eb4 with SMTP id a195-20020a25cacc000000b007037a541eb4mr6402943ybg.92.1670419128748;
+        Wed, 07 Dec 2022 05:18:48 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4Ct0zcjhvO/lIYRqtfmC2g6qD1HFP4oBj9GYyJSZASF1KApk+xbXqqU8oZ8UVDSlhwK1eLfQPHOy1Noi9MuAA=
+X-Received: by 2002:a25:cacc:0:b0:703:7a54:1eb4 with SMTP id
+ a195-20020a25cacc000000b007037a541eb4mr6402917ybg.92.1670419128448; Wed, 07
+ Dec 2022 05:18:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Niklas Schnelle <schnelle@linux.ibm.com>
-References: <33eea9bd-e101-4836-19e8-d4b191b78b00@linux.intel.com>
- <9163440eb6a47fe02730638bbdf72fda5ee5ad2c.camel@linux.ibm.com>
- <Y4S3z6IpeDHmdUs/@nvidia.com>
- <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
- <Y4TjWOXYD+DK+d/B@nvidia.com> <6c4c3a3e-1d8d-7994-3c03-388ef63dddb3@arm.com>
- <Y4ZCVgLO9AHatwXe@nvidia.com> <eb30ad63-92d4-2af4-22e7-d82cdf08565e@arm.com>
- <Y4Zm53o1ovdIAqr/@nvidia.com>
- <4b34be4433856d9a3a5bf13dad7a77c1ba93db13.camel@linux.ibm.com>
- <Y4/LsZKmR3iWFphU@nvidia.com>
-Content-Language: en-US
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-In-Reply-To: <Y4/LsZKmR3iWFphU@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221118011108.70715-1-hal.feng@starfivetech.com>
+ <20221118011108.70715-3-hal.feng@starfivetech.com> <468b06ea-e314-ce51-7fe5-12b83032a382@linaro.org>
+ <2a2cc5c9-650b-d2c8-f547-a2aadf5c7af4@starfivetech.com>
+In-Reply-To: <2a2cc5c9-650b-d2c8-f547-a2aadf5c7af4@starfivetech.com>
+From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
+Date:   Wed, 7 Dec 2022 14:18:31 +0100
+Message-ID: <CAJM55Z9h2eiVEYf4OEmj8C8OZS5SAe=TR1t5v6wMELKUTzi9pA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] dt-bindings: pinctrl: Add StarFive JH7110 sys pinctrl
+To:     Jianlong Huang <jianlong.huang@starfivetech.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/7 7:09, Jason Gunthorpe wrote:
->   static ssize_t iommu_group_store_type(struct iommu_group *group,
->   				      const char *buf, size_t count)
->   {
-> -	struct group_device *grp_dev;
-> -	struct device *dev;
-> -	int ret, req_type;
-> +	enum dma_api_policy policy;
-> +	int ret;
->   
->   	if (!capable(CAP_SYS_ADMIN) || !capable(CAP_SYS_RAWIO))
->   		return -EACCES;
-> @@ -2977,77 +2907,30 @@ static ssize_t iommu_group_store_type(struct iommu_group *group,
->   		return -EINVAL;
->   
->   	if (sysfs_streq(buf, "identity"))
-> -		req_type = IOMMU_DOMAIN_IDENTITY;
-> +		policy = DMA_API_POLICY_IDENTITY;
->   	else if (sysfs_streq(buf, "DMA"))
-> -		req_type = IOMMU_DOMAIN_DMA;
-> +		policy = DMA_API_POLICY_STRICT;
->   	else if (sysfs_streq(buf, "DMA-FQ"))
-> -		req_type = IOMMU_DOMAIN_DMA_FQ;
-> +		policy = DMA_API_POLICY_LAZY;
->   	else if (sysfs_streq(buf, "auto"))
-> -		req_type = 0;
-> +		policy = DMA_API_POLICY_ANY;
->   	else
->   		return -EINVAL;
->   
->   	/*
-> -	 * Lock/Unlock the group mutex here before device lock to
-> -	 * 1. Make sure that the iommu group has only one device (this is a
-> -	 *    prerequisite for step 2)
-> -	 * 2. Get struct *dev which is needed to lock device
-> -	 */
-> -	mutex_lock(&group->mutex);
-> -	if (iommu_group_device_count(group) != 1) {
-> -		mutex_unlock(&group->mutex);
-> -		pr_err_ratelimited("Cannot change default domain: Group has more than one device\n");
-> -		return -EINVAL;
-> -	}
-> -
-> -	/* Since group has only one device */
-> -	grp_dev = list_first_entry(&group->devices, struct group_device, list);
-> -	dev = grp_dev->dev;
-> -	get_device(dev);
-> -
-> -	/*
-> -	 * Don't hold the group mutex because taking group mutex first and then
-> -	 * the device lock could potentially cause a deadlock as below. Assume
-> -	 * two threads T1 and T2. T1 is trying to change default domain of an
-> -	 * iommu group and T2 is trying to hot unplug a device or release [1] VF
-> -	 * of a PCIe device which is in the same iommu group. T1 takes group
-> -	 * mutex and before it could take device lock assume T2 has taken device
-> -	 * lock and is yet to take group mutex. Now, both the threads will be
-> -	 * waiting for the other thread to release lock. Below, lock order was
-> -	 * suggested.
-> -	 * device_lock(dev);
-> -	 *	mutex_lock(&group->mutex);
-> -	 *		iommu_change_dev_def_domain();
-> -	 *	mutex_unlock(&group->mutex);
-> -	 * device_unlock(dev);
-> -	 *
-> -	 * [1] Typical device release path
-> -	 * device_lock() from device/driver core code
-> -	 *  -> bus_notifier()
-> -	 *   -> iommu_bus_notifier()
-> -	 *    -> iommu_release_device()
-> -	 *     -> ops->release_device() vendor driver calls back iommu core code
-> -	 *      -> mutex_lock() from iommu core code
-> +	 * Taking ownership disables the DMA API domain, prevents drivers from
-> +	 * being attached, and switches to a blocking domain. Releasing
-> +	 * ownership will put back the new or original DMA API domain.
->   	 */
-> -	mutex_unlock(&group->mutex);
-> -
-> -	/* Check if the device in the group still has a driver bound to it */
-> -	device_lock(dev);
+On Mon, 28 Nov 2022 at 02:04, Jianlong Huang
+<jianlong.huang@starfivetech.com> wrote:
+>
+> On 2022/11/21 16:43, Krzysztof Kozlowski wrote:
+> > On 18/11/2022 02:11, Hal Feng wrote:
+> >> From: Jianlong Huang <jianlong.huang@starfivetech.com>
+> >>
+> >> Add pinctrl bindings for StarFive JH7110 SoC sys pinctrl controller.
+> >>
+> >> Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
+> >> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
+> >> ---
+> >>  .../pinctrl/starfive,jh7110-sys-pinctrl.yaml  | 165 ++++++++++++++++++
+> >>  1 file changed, 165 insertions(+)
+> >>  create mode 100644 Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+> >>
+> >> diff --git a/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+> >> new file mode 100644
+> >> index 000000000000..79623f884a9c
+> >> --- /dev/null
+> >> +++ b/Documentation/devicetree/bindings/pinctrl/starfive,jh7110-sys-pinctrl.yaml
+> >> @@ -0,0 +1,165 @@
+> >> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> >> +%YAML 1.2
+> >> +---
+> >> +$id: http://devicetree.org/schemas/pinctrl/starfive,jh7110-sys-pinctrl.yaml#
+> >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> >> +
+> >> +title: StarFive JH7110 Sys Pin Controller
+> >> +
+> >> +description: |
+> >> +  Bindings for the JH7110 RISC-V SoC from StarFive Technology Ltd.
+> >> +
+> >> +  Out of the SoC's many pins only the ones named PAD_GPIO0 to PAD_GPIO63
+> >> +  can be multiplexed and have configurable bias, drive strength,
+> >> +  schmitt trigger etc.
+> >> +  Some peripherals have their I/O go through the 64 "GPIOs". This also
+> >> +  includes a number of other UARTs, I2Cs, SPIs, PWMs etc.
+> >> +  All these peripherals are connected to all 64 GPIOs such that
+> >> +  any GPIO can be set up to be controlled by any of the peripherals.
+> >> +
+> >> +maintainers:
+> >> +  - Jianlong Huang <jianlong.huang@starfivetech.com>
+> >> +
+> >> +properties:
+> >> +  compatible:
+> >> +    const: starfive,jh7110-sys-pinctrl
+> >> +
+> >> +  reg:
+> >> +    maxItems: 1
+> >> +
+> >> +  reg-names:
+> >> +    items:
+> >> +      - const: control
+> >
+> > Why reg-names for one entry? Perhaps just drop it.
+>
+> Will fix, drop it.
+>
+> >
+> >> +
+> >> +  clocks:
+> >> +    maxItems: 1
+> >> +
+> >> +  resets:
+> >> +    maxItems: 1
+> >> +
+> >> +  gpio-controller: true
+> >> +
+> >> +  "#gpio-cells":
+> >> +    const: 2
+> >> +
+> >> +  interrupts:
+> >> +    maxItems: 1
+> >> +    description: The GPIO parent interrupt.
+> >
+> > Drop description, it's obvious.
+>
+> Will fix, drop it.
+>
+> >
+> >> +
+> >> +  interrupt-controller: true
+> >> +
+> >> +  "#interrupt-cells":
+> >> +    const: 2
+> >> +
+> >> +required:
+> >> +  - compatible
+> >> +  - reg
+> >> +  - reg-names
+> >> +  - clocks
+> >> +  - gpio-controller
+> >> +  - "#gpio-cells"
+> >> +  - interrupts
+> >> +  - interrupt-controller
+> >> +  - "#interrupt-cells"
+> >> +
+> >> +patternProperties:
+> >> +  '-[0-9]+$':
+> >
+> > Keep consistent quotes, either ' or "
+> >
+> > How do you differentiate hogs? The pattern is a bit unspecific.
+>
+> Will fix.
+> Keep consisitent quotes, use '
+>
+> >
+> >> +    type: object
+> >> +    patternProperties:
+> >> +      '-pins$':
+> >> +        type: object
+> >> +        description: |
+> >> +          A pinctrl node should contain at least one subnode representing the
+> >> +          pinctrl groups available on the machine. Each subnode will list the
+> >> +          pins it needs, and how they should be configured, with regard to
+> >> +          muxer configuration, system signal configuration, pin groups for
+> >> +          vin/vout module, pin voltage, mux functions for output, mux functions
+> >> +          for output enable, mux functions for input.
+> >> +
+> >> +        properties:
+> >> +          pinmux:
+> >> +            description: |
+> >> +              The list of GPIOs and their mux settings that properties in the
+> >> +              node apply to. This should be set using the GPIOMUX macro.
+> >> +            $ref: "/schemas/pinctrl/pinmux-node.yaml#/properties/pinmux"
+> >
+> > Drop quotes.
+>
+> Will fix, drop quotes.
+>
+> >
+> >> +
+> >> +          bias-disable: true
+> >> +
+> >> +          bias-pull-up:
+> >> +            type: boolean
+> >> +
+> >> +          bias-pull-down:
+> >> +            type: boolean
+> >> +
+> >> +          drive-strength:
+> >> +            enum: [ 2, 4, 8, 12 ]
+> >> +
+> >> +          input-enable: true
+> >> +
+> >> +          input-disable: true
+> >> +
+> >> +          input-schmitt-enable: true
+> >> +
+> >> +          input-schmitt-disable: true
+> >> +
+> >> +          slew-rate:
+> >> +            maximum: 1
+> >> +
+> >> +        additionalProperties: false
+> >> +
+> >> +    additionalProperties: false
+> >> +
+> >> +additionalProperties: false
+> >> +
+> >> +examples:
+> >> +  - |
+> >> +    #include <dt-bindings/clock/starfive-jh7110.h>
+> >> +    #include <dt-bindings/reset/starfive-jh7110.h>
+> >> +    #include <dt-bindings/pinctrl/pinctrl-starfive-jh7110.h>
+> >> +
+> >> +        soc {
+> >
+> > Use 4 spaces for example indentation.
+>
+> Will fix.
+>
+> >
+> >> +                #address-cells = <2>;
+> >> +                #size-cells = <2>;
 
-With device_lock() removed, this probably races with the
-iommu_release_device() path? group->mutex seems insufficient to avoid
-the race. Perhaps I missed anything.
+You can also drop these to lines..
 
-> -	if (device_is_bound(dev) && !(req_type == IOMMU_DOMAIN_DMA_FQ &&
-> -	    group->default_domain->type == IOMMU_DOMAIN_DMA)) {
-> -		pr_err_ratelimited("Device is still bound to driver\n");
-> -		ret = -EBUSY;
-> -		goto out;
-> -	}
-> -
-> -	ret = iommu_change_dev_def_domain(group, dev, req_type);
-> -	ret = ret ?: count;
-> -
-> -out:
-> -	device_unlock(dev);
-> -	put_device(dev);
-> +	ret = iommu_group_claim_dma_owner(group, &ret);
-> +	if (ret)
-> +		return ret;
->   
-> -	return ret;
-> +	ret = iommu_change_group_dma_api_policy(group, policy);
-> +	iommu_group_release_dma_owner(group);
-> +	if (ret)
-> +		return ret;
-> +	return count;
->   }
->   
->   static bool iommu_is_default_domain(struct iommu_group *group)
+> >> +
+> >> +                gpio: gpio@13040000 {
+> >> +                        compatible = "starfive,jh7110-sys-pinctrl";
+> >> +                        reg = <0x0 0x13040000 0x0 0x10000>;
 
-Best regards,
-baolu
+..and then just make this
+reg = <0x13040000 0x10000>;
+
+> >> +                        reg-names = "control";
+> >> +                        clocks = <&syscrg_clk JH7110_SYSCLK_IOMUX>;
+> >> +                        resets = <&syscrg_rst JH7110_SYSRST_IOMUX>;
+> >> +                        interrupts = <86>;
+> >> +                        interrupt-controller;
+> >> +                        #interrupt-cells = <2>;
+> >> +                        #gpio-cells = <2>;
+> >> +                        gpio-controller;
+> >> +                        status = "okay";
+> >
+> > No status in examples.
+>
+> Will fix, drop it.
+>
+> >
+> >> +
+> >> +                        uart0_pins: uart0-0 {
+> >> +                                tx-pins {
+> >> +                                        pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX, GPOEN_ENABLE, GPI_NONE)>;
+> >> +                                        bias-disable;
+> >> +                                        drive-strength = <12>;
+> >> +                                        input-disable;
+> >> +                                        input-schmitt-disable;
+> >> +                                        slew-rate = <0>;
+> >> +                                };
+> >> +
+> >> +                                rx-pins {
+> >> +                                        pinmux = <GPIOMUX(6, GPOUT_LOW, GPOEN_DISABLE, GPI_SYS_UART0_RX)>;
+> >> +                                        bias-pull-up;
+> >> +                                        drive-strength = <2>;
+> >> +                                        input-enable;
+> >> +                                        input-schmitt-enable;
+> >> +                                        slew-rate = <0>;
+> >> +                                };
+> >> +                        };
+> >> +                };
+> >> +
+> >> +                uart0 {
+> >> +                        pinctrl-names = "default";
+> >> +                        pinctrl-0 = <&uart0_pins>;
+> >> +                        status = "okay";
+> >
+> > Drop this node, useless.
+>
+> Will fix, drop this node.
+>
+> >
+> >> +                };
+> >> +        };
+> >> +
+> >> +...
+> >
+>
+> Best regards,
+> Jianlong Huang
+>
+>
