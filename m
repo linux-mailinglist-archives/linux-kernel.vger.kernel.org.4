@@ -2,121 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE5A64571C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:07:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B7B645723
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiLGKHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:07:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S229942AbiLGKHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:07:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLGKHT (ORCPT
+        with ESMTP id S229848AbiLGKHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:07:19 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91ACD63D8;
-        Wed,  7 Dec 2022 02:07:18 -0800 (PST)
-Received: from dggpeml500006.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRtGq1JcFzmWFQ;
-        Wed,  7 Dec 2022 18:06:27 +0800 (CST)
-Received: from [10.174.178.240] (10.174.178.240) by
- dggpeml500006.china.huawei.com (7.185.36.76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 7 Dec 2022 18:07:16 +0800
-Subject: Re: [PATCH net] net: stmmac: selftests: fix potential memleak in
- stmmac_test_arpoffload()
-To:     Leon Romanovsky <leon@kernel.org>
-CC:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1670401920-7574-1-git-send-email-zhangchangzhong@huawei.com>
- <Y5BY+ZpW20XpkVZw@unreal>
-From:   Zhang Changzhong <zhangchangzhong@huawei.com>
-Message-ID: <100d8307-4ae6-d370-e836-6c76aff4d920@huawei.com>
-Date:   Wed, 7 Dec 2022 18:07:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.0
+        Wed, 7 Dec 2022 05:07:44 -0500
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA3B2A8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:07:42 -0800 (PST)
+Received: by mail-lj1-x236.google.com with SMTP id l8so20283614ljh.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:07:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2lgyDc2BPaf6a7xLJztu7FglI3cnhZOU9b/y2TvNFgc=;
+        b=vRsLv/GaSy9EPmAQq+63dZ6M4t6p4/CzDF2JAjaJSIcxWJOx9uVeZqJVNVq3dmnpPb
+         lBbab6edWfxx7MxVCDMbL855Z5mWItwy5YdIfEfZyiS/JHuT2O+8bt92/90S+I4d4l8V
+         iFrpKD1UpAiPDqcnWIxRmPay3c38uIZ7FH1b8s6ecILw68jJqX4NunJSc1velN82iOav
+         NUhsUSK7gdRRkiBhDUH99oazExjAQxTUARi1CHM2K0dmmwiheHUfoas2SOLG3QpcGJTO
+         QqFBw3rMuSN7y7RbUu8bMOcFQHvG/oSb+scJ7gW2JFLzjvH+VqXs+Kj8KfPIvB7wpqr+
+         Fkkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2lgyDc2BPaf6a7xLJztu7FglI3cnhZOU9b/y2TvNFgc=;
+        b=H4jxQ0OHYeRPfqc+OKelp3skK08rknX6ROyYQSzVb0UXiO2q25dkmRWPUZgfajF93Y
+         okhHD9zcHMoVrClGW06HXSlKyAInAGOQ+VmziycOGDkdWg1+0UD6Nk+DCw5Avx5lNhom
+         TaRgOVdZaXMIWrKbeCElsDG5+Qz8UxUUdsw9gtF2XphJ4vPKCwdaW6GmFc/YyXvWWB1f
+         Y1U6iVF5uSwgjSqy8Vnk8DW6hYU8jv3jDVAtfmD2ADDJSHWCP6WhlRlZcbnII6+11r4q
+         orr7jv+/ogkpMy2ez1O2AWju6DDySj4xcGrr1lpMTV1p1d2E2H3MDTYwCPJZ0ClvOdTH
+         VaAA==
+X-Gm-Message-State: ANoB5plrbphTsEb9qeqJJMXMRTqAsSKYEskFk8H2InadkLqV/ZNeT62h
+        Mg2mMFEyyZnj0F4W65R+RRcshQ==
+X-Google-Smtp-Source: AA0mqf7rtzVO4OcdPniGSM3lTHYW3jU+eQ+5NKwi22IsC1vflmvtS1Aibm/8Ce1hrOnOkE5hsrF3pw==
+X-Received: by 2002:a2e:9e11:0:b0:26e:3292:12ad with SMTP id e17-20020a2e9e11000000b0026e329212admr24627754ljk.271.1670407660835;
+        Wed, 07 Dec 2022 02:07:40 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v7-20020ac25927000000b004ab4ebb5d92sm2807906lfi.5.2022.12.07.02.07.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 02:07:40 -0800 (PST)
+Message-ID: <7deb14ee-aae1-b521-c75e-6e33cd052c44@linaro.org>
+Date:   Wed, 7 Dec 2022 11:07:39 +0100
 MIME-Version: 1.0
-In-Reply-To: <Y5BY+ZpW20XpkVZw@unreal>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 4/5] staging: dt-bindings: regulator: adi,max77541.yaml
+ Add MAX77541 Regulator bindings
 Content-Language: en-US
+To:     Okan Sahin <okan.sahin@analog.com>, outreachy@lists.linux.dev
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Ramona Bolboaca <ramona.bolboaca@analog.com>,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Marcelo Schmitt <marcelo.schmitt1@gmail.com>,
+        Marcus Folkesson <marcus.folkesson@gmail.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20221207090906.5896-1-okan.sahin@analog.com>
+ <20221207090906.5896-5-okan.sahin@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221207090906.5896-5-okan.sahin@analog.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.240]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500006.china.huawei.com (7.185.36.76)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/7 17:12, Leon Romanovsky wrote:
-> On Wed, Dec 07, 2022 at 04:31:59PM +0800, Zhang Changzhong wrote:
->> The skb allocated by stmmac_test_get_arp_skb() hasn't been released in
->> some error handling case, which will lead to a memory leak. Fix this up
->> by adding kfree_skb() to release skb.
->>
->> Compile tested only.
->>
->> Fixes: 5e3fb0a6e2b3 ("net: stmmac: selftests: Implement the ARP Offload test")
->> Signed-off-by: Zhang Changzhong <zhangchangzhong@huawei.com>
->> ---
->>  drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c | 8 ++++++--
->>  1 file changed, 6 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
->> index 49af7e7..687f43c 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
->> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_selftests.c
->> @@ -1654,12 +1654,16 @@ static int stmmac_test_arpoffload(struct stmmac_priv *priv)
->>  	}
->>  
->>  	ret = stmmac_set_arp_offload(priv, priv->hw, true, ip_addr);
->> -	if (ret)
->> +	if (ret) {
->> +		kfree_skb(skb);
->>  		goto cleanup;
->> +	}
->>  
->>  	ret = dev_set_promiscuity(priv->dev, 1);
->> -	if (ret)
->> +	if (ret) {
->> +		kfree_skb(skb);
->>  		goto cleanup;
->> +	}
->>  
->>  	ret = dev_direct_xmit(skb, 0);
->>  	if (ret)
-> 
-> You should release skb here too. So the better patch will be to write
-> something like that:
-> 
+On 07/12/2022 10:08, Okan Sahin wrote:
+> This patch adds document the bindings for MAX77541 and MAX77540
+> regulator drivers.
 
-Hi Leon,
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-Thanks for your review, but I don't think we need release skb here,
-because dev_direct_xmit() is responsible for freeing it.
-
-Regards,
-Changzhong
-
-> cleanup:
->   stmmac_set_arp_offload(priv, priv->hw, false, 0x0);
->   if (ret)
->   	kfree_skb(skb);
->> Thanks
 > 
->> -- 
->> 2.9.5
->>
-> .
+> Signed-off-by: Okan Sahin <okan.sahin@analog.com>
+> ---
+>  .../bindings/regulator/adi,max77541.yaml      | 44 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 45 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77541.yaml
 > 
+> diff --git a/Documentation/devicetree/bindings/regulator/adi,max77541.yaml b/Documentation/devicetree/bindings/regulator/adi,max77541.yaml
+> new file mode 100644
+> index 000000000000..1f828895ab3a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/regulator/adi,max77541.yaml
+> @@ -0,0 +1,44 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/regulator/adi,max77541.yaml#
+
+Filename matching compatible, so adi,max77541-regulator.yaml
+
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Buck Converter driver for MAX77540/MAX77541
+
+Drop "driver" and any other references to Linux drivers.
+
+> +
+> +maintainers:
+> +  - Okan Sahin <okan.sahin@analog.com>
+> +
+> +description: |
+> +  This is a part of device tree bindings for ADI MAX77540/MAX77541
+> +
+> +  The buck convertere is represented as a sub-node of the PMIC node on the device tree.
+
+Typo, converter
+
+> +
+> +  The device has two buck regulators.
+> +  See also Documentation/devicetree/bindings/mfd/adi,max77541.yaml for
+> +  additional information and example.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - adi,max77540-regulator
+> +      - adi,max77541-regulator
+> +
+> +patternProperties:
+> +  "^BUCK[12]$":
+
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
+
+> +    type: object
+> +    $ref: regulator.yaml#
+> +    additionalProperties: false
+> +    description: |
+> +      Buck regulator.
+> +
+> +    properties:
+> +      regulator-name: true
+> +      regulator-always-on: true
+> +      regulator-boot-on: true
+> +      regulator-min-microvolt:
+> +        minimum: 300000
+> +      regulator-max-microvolt:
+> +        maximum: 5200000
+> +
+> +additionalProperties: false
+> \ No newline at end of file
+
+Check your patches before sending...
+
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5704ed5afce3..8e5572b28a8c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12502,6 +12502,7 @@ M:	Okan Sahin <okan.sahin@analog.com>
+>  L:	linux-kernel@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/mfd/adi,max77541.yaml
+> +F:	Documentation/devicetree/bindings/regulator/adi,max77541.yaml
+>  F:	drivers/mfd/max77541.c
+>  F:	drivers/regulator/max77541-regulator.c
+>  F:	include/linux/mfd/max77541.h
+
+Best regards,
+Krzysztof
+
