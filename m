@@ -2,115 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A726464E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D735A6464E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:16:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiLGXQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 18:16:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
+        id S230053AbiLGXQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 18:16:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230052AbiLGXQe (ORCPT
+        with ESMTP id S229470AbiLGXQV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 18:16:34 -0500
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85E4C8930B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:16:32 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id o136so594146vka.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:16:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qKhtWKuWhB3DUJ2H/EHTwp1GzrvWCjjlF4j8bshMOGg=;
-        b=RWItdZbEx9sodZbYh/mNiehmL8weMOlBg/LJdiWPUbuEkKFHf0IAViiYzIVqNIeDBq
-         JuyepTR4HRBjbUtZXabjpqNAi9B9HoYUaLmxKPshiN6I/EutIHREDQC3wJ1z4nve0Oif
-         d3//qbWsgckqa1nQ/G6uvB3SQ8XCMoe4vmFR2Ce/ukEXK/CHEt4Wm0hvDLqDBZnbQmqH
-         mFdjh7Ez+XvkgML8Z7StJJoaRk9/xj+V8GsFhBkmijvl2L75TsaoTLC6WMLofzSUrp7N
-         sE6bHCajUkKunMMRrzObVAfO68dQPZIf/5XQeW8lA8USYxP9WIpBuACEs4qqS0XVV0GM
-         5tFg==
+        Wed, 7 Dec 2022 18:16:21 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 100A988B67
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:16:21 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id a11-20020a92c54b000000b003034a80704fso11265429ilj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 15:16:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qKhtWKuWhB3DUJ2H/EHTwp1GzrvWCjjlF4j8bshMOGg=;
-        b=GOzZFcXlMbywMMZcenT+hsAVQV1YBwmq1ZU7HfVw+20ACsGC3IOIaCESr3WqKhNnY0
-         uhcy6LPd1jGKtzZMgIu6cwzbNv74Y578RIn0ChXhv9hrtsFACj7z2SZoCm7n9Lc5cxpJ
-         590YSEOD9hWg81kHivVHw+ZsG9UWX3EZOokv/NOFXx7Vs/CpGAbQ7xEe5adPDNeyB0Id
-         HHgbguV7BpMGZk8W2J4AWFgi2TdFrbd+lC6s1XlzTsQviHvAkxQlW+ijnBbHdsKDEbFD
-         gPf7gh+WPjOzkD0IH2nPiiIPZPvMbgT51iRx5ERk+49qpBvVTq2JZDZSdY4yGpnSh/5X
-         yv8g==
-X-Gm-Message-State: ANoB5plPYygd5xgaGosOSXkbf2h49LsYklyLTTZyYXQ5s8XMa8Y3wn9h
-        o1XuUtBCLRLXQGXKnW5CuQBHW/KamM/cZCVTP+Y9/w==
-X-Google-Smtp-Source: AA0mqf5A5DpDdfJWGB9crw0LgSp4qBZJrveaASusUoBLRh4msF9wZg/3Rjo79pIAegyMmLR1/3R34jfpQmkGjCipZ0s=
-X-Received: by 2002:a1f:2348:0:b0:3bd:51f6:1f3 with SMTP id
- j69-20020a1f2348000000b003bd51f601f3mr14369835vkj.35.1670454991528; Wed, 07
- Dec 2022 15:16:31 -0800 (PST)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPVql0dVm3BxrCwPiGc6AiQiIEcXU1yzGMmr3t8ps3c=;
+        b=8B1n+RTAasccQw8EzdFfTt2dfURuorEDmNmsaRAdrMCSvP0tMfI0RLBp5FDBxXRlq+
+         YdyYYlachFUtg+eHlzF12jA6FrMJKkOxppR4kXPYkzEKbIj0NhEk/MLILRNHUdBdcx9e
+         mAM02WYIKaBBybTAlUfxjgeHhREs+YUwk1B1ZGFxf0oNNU3Zs+HzWsQ90AFoaJES3fh0
+         /tOFbIauSIriGc1eQrvllL4SLmFo1slVftmQ4ZFEKvI11kbbCMi5EAXLRyISbERT22PS
+         hBYoGFOjbga4MrdENX4y9eBAWKF50Ieeq4K+QkvK6vOs/NUTRohn6pKnu7tvM6CX90/l
+         +XEw==
+X-Gm-Message-State: ANoB5pllUvj6pDf/xhU0lKSEH2CccWwV8tdjqdjDtD0NUv5+fPf0DJ7U
+        8d1OzLQp++qzAKWuuT9Rj9Brcpze4P0EPBaEx/D36SGR5S5O
+X-Google-Smtp-Source: AA0mqf7XpmJgyIxWRVMPWgwtWEezWbR9GRv3RL9k8HNQHy9fV7ck5KOFth0hSntK8RYoaEdFbb/GC+pNQ3+OUacdSw02DJIyQxmC
 MIME-Version: 1.0
-References: <20221021163703.3218176-1-jthoughton@google.com> <20221021163703.3218176-4-jthoughton@google.com>
-In-Reply-To: <20221021163703.3218176-4-jthoughton@google.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Wed, 7 Dec 2022 15:16:20 -0800
-Message-ID: <CAHS8izNh6wNBhMJ-_On2OHrL5-y_75qftFy59AuGbhTe6Gmsuw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 03/47] hugetlb: remove redundant pte_mkhuge in
- migration path
-To:     James Houghton <jthoughton@google.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Zach O'Keefe" <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a6b:cd8d:0:b0:6e0:d9a:2898 with SMTP id
+ d135-20020a6bcd8d000000b006e00d9a2898mr6682695iog.99.1670454980453; Wed, 07
+ Dec 2022 15:16:20 -0800 (PST)
+Date:   Wed, 07 Dec 2022 15:16:20 -0800
+In-Reply-To: <1543008.1670434984@warthog.procyon.org.uk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b92ca505ef451b46@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
+From:   syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 9:37 AM James Houghton <jthoughton@google.com> wrote:
->
-> arch_make_huge_pte, which is called immediately following pte_mkhuge,
-> already makes the necessary changes to the PTE that pte_mkhuge would
-> have. The generic implementation of arch_make_huge_pte simply calls
-> pte_mkhuge.
->
-> Signed-off-by: James Houghton <jthoughton@google.com>
+Hello,
 
-Acked-by: Mina Almasry <almasrymina@google.com>
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> ---
->  mm/migrate.c | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 8e5eb6ed9da2..1457cdbb7828 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -237,7 +237,6 @@ static bool remove_migration_pte(struct folio *folio,
->                 if (folio_test_hugetlb(folio)) {
->                         unsigned int shift = huge_page_shift(hstate_vma(vma));
->
-> -                       pte = pte_mkhuge(pte);
->                         pte = arch_make_huge_pte(pte, shift, vma->vm_flags);
->                         if (folio_test_anon(folio))
->                                 hugepage_add_anon_rmap(new, vma, pvmw.address,
-> --
-> 2.38.0.135.g90850a2211-goog
->
+Reported-and-tested-by: syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com
+
+Tested on:
+
+commit:         a2220b54 Merge branch 'cn10kb-mac-block-support'
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1589fa4d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c608c21151db14f2
+dashboard link: https://syzkaller.appspot.com/bug?extid=3538a6a72efa8b059c38
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1473515b880000
+
+Note: testing is done by a robot and is best-effort only.
