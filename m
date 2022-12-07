@@ -2,72 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A92864529A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 04:42:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A990864529E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 04:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiLGDmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 22:42:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33590 "EHLO
+        id S229763AbiLGDno convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 6 Dec 2022 22:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLGDmW (ORCPT
+        with ESMTP id S229513AbiLGDnm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 22:42:22 -0500
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD76155AB4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 19:42:21 -0800 (PST)
-Received: by mail-il1-f200.google.com with SMTP id a13-20020a056e0208ad00b003034c36b8b5so8959630ilt.9
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 19:42:21 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tZyh3AfUyX94svegFlynysJ+yi96ec/SiSH2LS//Udc=;
-        b=DymHN5f+a7DDtsWo86AGrNeTZ4hNjzLWEJer70JnqZDKq/H9N1iMFfN+QsB5AJHMNM
-         GDPykOq1pgIFcFyTRjjgpJ3cbMqULri3Lf2Zf7DhUtdCjfdEj/wSBg7SI4u2BS3ckK2c
-         GAa38+AKF9csM0ThXXA81BAfr5sDguT63RmpMJCDJpKV7s4yT2F0dSADRm1uaf5TwVHg
-         m6eLs8kj7BZCRWHtOVteljy0cEEIHnrOa2WvH8nPbSckbhYuvkp/sJkTUuGuttIn/m/H
-         XHSdC9bJ4xUzKbpY62JvOlPHKyG5fkuF3R1lPwZ+ZIlpMQxGHTBdVDazft30QSTcr8Z1
-         vTJQ==
-X-Gm-Message-State: ANoB5pnlYJmYj6NHdC7nsrdGLYwvgbiHolHTVF1Gn21h+lV7Hb+sENlG
-        mSQn/DlCFFv4oiUvjBrm954ZQxKeeiadtJwuTLfDdsZHSomg
-X-Google-Smtp-Source: AA0mqf7niVu5EpbhUn/1Je/UK0nO1DNcwzpiWsG9J6hwqLdZLf+BlCGsbOHS/GQ/thV7alWkF9ivDLoX4CwgGGi5dfjui2a0G6MI
+        Tue, 6 Dec 2022 22:43:42 -0500
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24DDAB57;
+        Tue,  6 Dec 2022 19:43:41 -0800 (PST)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2B73gUfqD027835, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2B73gUfqD027835
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 7 Dec 2022 11:42:30 +0800
+Received: from RTEXMBS06.realtek.com.tw (172.21.6.99) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Wed, 7 Dec 2022 11:43:17 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS06.realtek.com.tw (172.21.6.99) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Wed, 7 Dec 2022 11:43:17 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b]) by
+ RTEXMBS04.realtek.com.tw ([fe80::15b5:fc4b:72f3:424b%5]) with mapi id
+ 15.01.2375.007; Wed, 7 Dec 2022 11:43:17 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Jun ASAKA <JunASAKA@zzy040330.moe>,
+        "Jes.Sorensen@gmail.com" <Jes.Sorensen@gmail.com>
+CC:     "kvalo@kernel.org" <kvalo@kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v5] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Thread-Topic: [PATCH v5] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+Thread-Index: AQHZCe2b+2Cm8cdsR0GFzEgG7Xr+X65hx/Zw
+Date:   Wed, 7 Dec 2022 03:43:17 +0000
+Message-ID: <2ac07b1d6e06443b95befb79d27549d2@realtek.com>
+References: <20221207033926.11777-1-JunASAKA@zzy040330.moe>
+In-Reply-To: <20221207033926.11777-1-JunASAKA@zzy040330.moe>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS06.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/12/7_=3F=3F_01:28:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-X-Received: by 2002:a5d:971a:0:b0:6d5:2f6e:834 with SMTP id
- h26-20020a5d971a000000b006d52f6e0834mr41394099iol.181.1670384540907; Tue, 06
- Dec 2022 19:42:20 -0800 (PST)
-Date:   Tue, 06 Dec 2022 19:42:20 -0800
-In-Reply-To: <20221207030740.7663-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000033009b05ef34b511@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
-From:   syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>
-To:     dhowells@redhat.com, hdanton@sina.com,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: protection disabled
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-and-tested-by: syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com
+> -----Original Message-----
+> From: Jun ASAKA <JunASAKA@zzy040330.moe>
+> Sent: Wednesday, December 7, 2022 11:39 AM
+> To: Jes.Sorensen@gmail.com
+> Cc: kvalo@kernel.org; davem@davemloft.net; edumazet@google.com; kuba@kernel.org; pabeni@redhat.com;
+> linux-wireless@vger.kernel.org; netdev@vger.kernel.org; linux-kernel@vger.kernel.org; Jun ASAKA
+> <JunASAKA@zzy040330.moe>; Ping-Ke Shih <pkshih@realtek.com>
+> Subject: [PATCH v5] wifi: rtl8xxxu: fixing IQK failures for rtl8192eu
+> 
+> Fixing "Path A RX IQK failed" and "Path B RX IQK failed"
+> issues for rtl8192eu chips by replacing the arguments with
+> the ones in the updated official driver as shown below.
+> 1. https://github.com/Mange/rtl8192eu-linux-driver
+> 2. vendor driver version: 5.6.4
+> 
+> Tested-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+> Signed-off-by: Jun ASAKA <JunASAKA@zzy040330.moe>
+> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+> ---
+> v5:
+>  - no modification.
 
-Tested on:
+Then, why do you need v5?
 
-commit:         c9f8d736 net: mtk_eth_soc: enable flow offload support..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=1205f597880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c608c21151db14f2
-dashboard link: https://syzkaller.appspot.com/bug?extid=3538a6a72efa8b059c38
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13c7a51d880000
+> v4:
+>  - fixed some mistakes.
+> v3:
+>  - add detailed info about the newer version this patch used.
+>  - no functional update.
+> ---
+> ---
 
-Note: testing is done by a robot and is best-effort only.
+[...]
+
