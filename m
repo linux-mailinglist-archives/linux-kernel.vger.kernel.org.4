@@ -2,125 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D0B7645BF8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9561645BF6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiLGOD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:03:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S230208AbiLGODu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:03:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiLGODY (ORCPT
+        with ESMTP id S230261AbiLGOCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:03:24 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE555CD27;
-        Wed,  7 Dec 2022 06:01:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CAC1B81E09;
-        Wed,  7 Dec 2022 14:01:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38088C433D6;
-        Wed,  7 Dec 2022 14:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670421688;
-        bh=w6UAheOP9K9CZ5W+S4wCRu1UQ6+nS3YNGMMAjD5DFyY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MLrY/zqjG/ZJ7HYgA23kiPlkV0x+qkbC/tPOePS7+em9Swf4jrZh9x7/yoPhl2jF/
-         g6pbbE72mZS7xm76MLD2nKtp8MFbruMYbtDnP+ExJZP1N6vW4oYU4xC84ylMuHFAXq
-         kWQ1Yh/rXA5Be06ZEZuSJqWfBJjgY0IW4vnGhzYt6D6dMAf6aumhOasT7A6LtStxbR
-         diAhbtLLPxBppYciQQhdTFNru5YsXcKV/vEbNKDkAGf2hYO3CaKh5fn/IYHORQlBTE
-         cHdSvjCZn/vOSGtHVoZW4L36e+2Z1Q7Y9VLNJuFLt6qa7bxaVVo89OLe+cxCYSqdzB
-         bIc2/mQ/Pdv6A==
-Received: by mail-ed1-f41.google.com with SMTP id r26so24972601edc.10;
-        Wed, 07 Dec 2022 06:01:28 -0800 (PST)
-X-Gm-Message-State: ANoB5pnssUNhmq9rdxoqvI7lB/syoAlKHGT0+SEUfCkaSUXx2al02yc6
-        sXlc7wSh8krXmlrkSccM7VoSUV+jBGq0knuGJpw=
-X-Google-Smtp-Source: AA0mqf5e447ZTB0mmY7c1BgYGRUmx4Bc61x2rBDn1ATvJuU5w3XAlzlyO8fRfBuxcJ0pFx5jkb8Tn1kE9DIihu4T8xQ=
-X-Received: by 2002:a05:6402:289d:b0:46c:2460:cdf with SMTP id
- eg29-20020a056402289d00b0046c24600cdfmr20874014edb.103.1670421686467; Wed, 07
- Dec 2022 06:01:26 -0800 (PST)
+        Wed, 7 Dec 2022 09:02:51 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD8B5FB8B;
+        Wed,  7 Dec 2022 06:01:27 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id b2so14172335eja.7;
+        Wed, 07 Dec 2022 06:01:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CWIrJH4UoIoZiDf7F/vSiZ3gjhe55HNOLzi7v49e38Q=;
+        b=KTxCfa1p6hMuXO79BUyUaKZi9fdoUIy1ql/gWYLm+XaTdUQlVpN+TGZh8gg4e2Mgkz
+         vclE5n2y3/LhAasB8jIJYB+ELvF+vlPW9uPX9vg9PxYki+3DN291q387sL3AE7LYCz20
+         ztJJpekAnHucjdNoq5AUsT9e2QfMrYZjujg4DkhvY0o4HGa5e+v3bMAkACdo9Ta7FRed
+         RkvIxB0v4grpMBShJr2Zep4txSWuiwjsEJTiAZvtjD7Clu2KbZJsbpwnuke0/FYFBK+e
+         Fux+A5XMmu+JczVhlShF0LS1AZ4gOlLNQty7LK1PRFuOJ49k9xyzcwhJYD7Ci+nkoXZP
+         PGFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CWIrJH4UoIoZiDf7F/vSiZ3gjhe55HNOLzi7v49e38Q=;
+        b=FsKPkVwKO13rf4eKpvttsXgXomXy8r8aQe+dv5imjjVGHgbT1QC3d11QAyDFU4XjnR
+         6RBe69lSpUjnaO8i29hOme4Mxt29hb/jwK0c3qQ3ME9UdtBO9bxvm6cotYWghzlAEktq
+         pkAJoesNhlKM5vWsK+BGZWSufJWVvw5h0tjSqzhoEBz/sDgUTmSe9BdQHbn3qNIap2xn
+         BJzV1qt6FQGr6kNJa5ZSWu2kK3EhhyjxF9SRi3fTSM+YnpzlScyCaaJWOi3Ewegc0ilR
+         4MvwBKY/wl5PcMqfxqaJ/AqoJ9OSNvMtEB6NfRUq2HyU7jJcI/rFXiLLkSRNbXMI6JbI
+         nZ1A==
+X-Gm-Message-State: ANoB5pkxFXd2177A89UUNAhTQ2CzlY+H+/8KPb6oIScztmF96Lq4HM4o
+        5NPhZKBqrQrQUAT1GAAAHeM=
+X-Google-Smtp-Source: AA0mqf6rBGqvRQsRou+yh2RvdQOdILMIX+g40OrtXH4aFEi+omtmw7algnxe3rbCsiAieWjCf9xHLw==
+X-Received: by 2002:a17:906:4704:b0:7c1:13b7:a5a1 with SMTP id y4-20020a170906470400b007c113b7a5a1mr374947ejq.46.1670421685525;
+        Wed, 07 Dec 2022 06:01:25 -0800 (PST)
+Received: from skbuf ([188.26.184.215])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906211200b007b29eb8a4dbsm8693074ejt.13.2022.12.07.06.01.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 06:01:25 -0800 (PST)
+Date:   Wed, 7 Dec 2022 16:01:22 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Jerry.Ray@microchip.com
+Cc:     linux@armlinux.org.uk, andrew@lunn.ch, f.fainelli@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/2] dsa: lan9303: Move to PHYLINK
+Message-ID: <20221207140122.usg7vvfutcpmy7py@skbuf>
+References: <20221206183500.6898-1-jerry.ray@microchip.com>
+ <20221206183500.6898-1-jerry.ray@microchip.com>
+ <20221206183500.6898-3-jerry.ray@microchip.com>
+ <20221206183500.6898-3-jerry.ray@microchip.com>
+ <20221206193224.f3obnsjtphbxole4@skbuf>
+ <Y4+vKh8EfA9vtC2B@shell.armlinux.org.uk>
+ <MWHPR11MB1693565E49EAB189C2084C58EF1B9@MWHPR11MB1693.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-References: <20221207091112.2258674-1-guoren@kernel.org> <Y5BdpHrKrRCw9izQ@spud>
-In-Reply-To: <Y5BdpHrKrRCw9izQ@spud>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Wed, 7 Dec 2022 22:01:15 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRiTqnDiWtqkOrJFxLDFHjwikSeREFWVSJH2uV_WpAz4g@mail.gmail.com>
-Message-ID: <CAJF2gTRiTqnDiWtqkOrJFxLDFHjwikSeREFWVSJH2uV_WpAz4g@mail.gmail.com>
-Subject: Re: [PATCH] riscv: Fixup compile error with !MMU
-To:     Conor Dooley <conor@kernel.org>
-Cc:     palmer@rivosinc.com, conor.dooley@microchip.com,
-        liaochang1@huawei.com, lizhengyu3@huawei.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MWHPR11MB1693565E49EAB189C2084C58EF1B9@MWHPR11MB1693.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 5:32 PM Conor Dooley <conor@kernel.org> wrote:
->
-> On Wed, Dec 07, 2022 at 04:11:12AM -0500, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > Current nommu_virt_defconfig can't compile:
-> >
-> > In file included from
-> > arch/riscv/kernel/crash_core.c:3:
-> > arch/riscv/kernel/crash_core.c:
-> > In function 'arch_crash_save_vmcoreinfo':
-> > arch/riscv/kernel/crash_core.c:8:27:
-> > error: 'VA_BITS' undeclared (first use in this function)
-> >     8 |         VMCOREINFO_NUMBER(VA_BITS);
-> >       |                           ^~~~~~~
-> >
-> > Add MMU dependency for KEXEC_FILE.
-> >
-> > Fixes: 6261586e0c91 ("RISC-V: Add kexec_file support")
-> > Reported-by: Conor Dooley <conor@kernel.org>
->
-> FWIW (but certainly don't resend for this)
-> s/conor@kernel.org/conor.dooley@microchip.com
->
-> Thanks for the quick fix, there's other issues w/ that config for me,
-> but this fixed the kexec bits :)
-> Tested-by: Conor Dooley <conor.dooley@microchip.com>
-Thx for the report and test.
+On Tue, Dec 06, 2022 at 10:58:25PM +0000, Jerry.Ray@microchip.com wrote:
+> I, too, thought I would need phylink_mac_config and phylink_mac_link_up to
+> completely migrate away from PHYLIB to PHYLINK.  But it seems as though the
+> phylink layer is now taking care of the speed / duplex / etc settings of the
+> phy registers.  There is no DSA driver housecleaning needed at these other
+> phylink_ api hook functions.  At least, that's my current level of
+> understanding...
 
->
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Guo Ren <guoren@kernel.org>
-> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> > ---
-> >  arch/riscv/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> > index ef8d66de5f38..91319044fd13 100644
-> > --- a/arch/riscv/Kconfig
-> > +++ b/arch/riscv/Kconfig
-> > @@ -496,7 +496,7 @@ config KEXEC_FILE
-> >       select KEXEC_CORE
-> >       select KEXEC_ELF
-> >       select HAVE_IMA_KEXEC if IMA
-> > -     depends on 64BIT
-> > +     depends on 64BIT && MMU
-> >       help
-> >         This is new version of kexec system call. This system call is
-> >         file based and takes file descriptors as system call argument
-> > --
-> > 2.36.1
-> >
-
-
-
--- 
-Best Regards
- Guo Ren
+Did you understand my request? To create a separate patch, not phylink
+conversion, which deletes the MII_BMCR writes to the Virtual PHY, which
+says that you don't know why they're there and you don't think that
+they're needed, but at least you thought about what you're doing?
