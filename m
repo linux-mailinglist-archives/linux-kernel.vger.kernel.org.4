@@ -2,177 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C2B646459
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5C064645B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiLGWyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
+        id S229745AbiLGW6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:58:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229895AbiLGWyo (ORCPT
+        with ESMTP id S229554AbiLGW55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:54:44 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D24321824
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:54:43 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-352e29ff8c2so205395827b3.21
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:54:43 -0800 (PST)
+        Wed, 7 Dec 2022 17:57:57 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 939C1201AD;
+        Wed,  7 Dec 2022 14:57:55 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso4472615pjb.1;
+        Wed, 07 Dec 2022 14:57:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6eA6qqKwG6dZW9afQyr40lctIIKutYT4UeqLtVUnJPg=;
-        b=KdmkcfUs9Wx8KNcQPfeWbYT7H7WWFrZ8Ml5GcijxSii2u2vUq6qwZ28Aob1squFjvs
-         zHotApR1VCBqi4EO8uIZUCJlBgNPhVjfzX7NGehOXckHoCItsa0htlHiwmtTCl8v4FOI
-         MrC5wx8Q3edQimJFQ4ZoitXRJe1MsNR9ftmTsYNHBdUpHKULp+MSHJj8Vp/zoKJqbhji
-         tV1BjFxlEFkwlE1rkCyWrMft86K9UKk/E3rGVOC/6Ix3kKPg4+W4CuSkxSFH+9EmqyGl
-         5twRLqm7yvGf2dBzZA8RHM1vXXpvPxcbMJfNBMgNnPVQbThGUt2M0/D3RYBrZiOBZ6Tb
-         OTZw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zjGta1oDX6IdWT6WPqCF/5mm9nV5vOqTsTIu1TCC9qc=;
+        b=ewYgGJIQD1H+ia7Gf468w1wac7/IQYHWkha8NBb4nQfYN8Mb7WIj28A3JSoMO8ORxZ
+         aC7JAxYlFevCpvdDzDF7AbGcob3l+JOd4zrWQel7TyG32KFciALM+YJ11bMqjAFa2JHy
+         AITMK2Ya8LMUEm/LFUMGWcRmtPanZcESBe3W64MWHlkbZo9O4BGmHgzqa/pMkIrIgvUf
+         EdGUkZbXMVYk1uQvx7fqC9ACzOVSHcqFnkEQXmPkOYMGm+bqccTgqM6JEsdxJvDTgN/2
+         4YyEPwwBYN1WS3elm3MSOXls5KaRzD2jBfNpUklvriv9X9Y/8VIaP4ufGc7LfCkLG6mC
+         5RLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6eA6qqKwG6dZW9afQyr40lctIIKutYT4UeqLtVUnJPg=;
-        b=nvV+4Jfx8mQsErRk9di5rYvcDpvhG2Dd98ayig6OL7aKnKr4AKkHMk1sdMH6glCusG
-         /YbmQ+CkNPFE3xzpxUQrbYn4c9shWs1PMMdStTYR2oYOu7aTg1NULSwMeGmLdq9KEF2M
-         0H4PfgSfKGLvv6K0iWYAPD6X8xsBlddJZ0DLijZJnVYxw1zY0DDR7gRGw+w/JEYwkejf
-         4SOTaE6g8x5WaC0zEbAaiB5uCH/wehvgcsJKx/iq2tEQ4OtbK0lz8e3vWNchVenWfRBb
-         5rzOi9oA5sFt3R1/cpG0JR/5qFBPQu/I4BE939qyFliGgl5x5cl7DlU6ZsMLtRn5TknI
-         gvVA==
-X-Gm-Message-State: ANoB5plp+kEWRD2YsRLgjCZMLWPTFsP9T9lOSR6jpOsXv2tXyHDKX82w
-        r4EOEJrNQq5LPWG/4//R1+P15UaHHyv6FyE=
-X-Google-Smtp-Source: AA0mqf5S8DtWmHT4Yc0HNTsk+kb/mfkCgjhpNekfH1S//tO6aiOkT3To9phKOAAfSIggZkCWENw94dc43+RPygY=
-X-Received: from lixiaoyan-desktop.svl.corp.google.com ([2620:15c:2c4:201:4f64:90f:3bcd:e820])
- (user=lixiaoyan job=sendgmr) by 2002:a05:690c:a84:b0:3ea:454d:d1ee with SMTP
- id ci4-20020a05690c0a8400b003ea454dd1eemr16167530ywb.27.1670453682703; Wed,
- 07 Dec 2022 14:54:42 -0800 (PST)
-Date:   Wed,  7 Dec 2022 14:54:35 -0800
-In-Reply-To: <20221207225435.1273226-1-lixiaoyan@google.com>
-Mime-Version: 1.0
-References: <20221207225435.1273226-1-lixiaoyan@google.com>
-X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
-Message-ID: <20221207225435.1273226-2-lixiaoyan@google.com>
-Subject: [RFC net-next v5 2/2] bnxt: Use generic HBH removal helper in tx path
-From:   Coco Li <lixiaoyan@google.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <michael.chan@broadcom.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Coco Li <lixiaoyan@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zjGta1oDX6IdWT6WPqCF/5mm9nV5vOqTsTIu1TCC9qc=;
+        b=1AKhg7+AWoJVV4wSizdFrbssNYgN5jFAk5aNNZnz4ZEjwX/jprkipgeImOtkiir9wy
+         gG1iE4h6uvh2wSHbbB8327VnDxVpLoe5fd+YPUBU+e8N92W1b7XBUODshxXodaW6bC5y
+         orvyInnglyF/7exL54dMPhE2BKQVQfLHaqhvMp9nPtQs2E+qQPi4hhlkaP4w6Y3WuTHD
+         ewCbG1PROwj9ILXvl96utzmD0fTzYsmCzG3W8mkqyZym3roBYl++f2gpBHWQaUwX9+xm
+         OF0J6JjQWM51TQvFIY+8O2T0hd25mVClkgotvQMLVUwC6SMZ4sBxec/ZhLzsoGGbdk54
+         HMwA==
+X-Gm-Message-State: ANoB5pldz6mF51SrndFc5fQ44ZPCrBFLeud8AHZiMsCTQ2MeE89icAur
+        Y+mKnMw1dDfiJDeXOP+z0vA=
+X-Google-Smtp-Source: AA0mqf43/RZXu2nCjF/73sn5835DiPfFelfjnNG2VzLc4ZdmFshJTp+t6A52J7Qszx2ff7Lp+qNvLQ==
+X-Received: by 2002:a05:6a21:3d0c:b0:ac:ba82:f6ab with SMTP id bi12-20020a056a213d0c00b000acba82f6abmr719376pzc.33.1670453875063;
+        Wed, 07 Dec 2022 14:57:55 -0800 (PST)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id gw22-20020a17090b0a5600b0021885b05660sm1662580pjb.24.2022.12.07.14.57.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 14:57:54 -0800 (PST)
+Message-ID: <e3d15de9-521c-5017-112a-6cc7fcd54437@gmail.com>
+Date:   Thu, 8 Dec 2022 07:57:50 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 1/2] docs: Move rustdoc output, cross-reference it
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        konstantin@linuxfoundation.org, ojeda@kernel.org, corbet@lwn.net,
+        jani.nikula@linux.intel.com, rdunlap@infradead.org,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
+ <20221207173053.1463800-2-carlos.bilbao@amd.com>
+Content-Language: en-US
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <20221207173053.1463800-2-carlos.bilbao@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
-for IPv6 traffic. See patch series:
-'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+Hi,
 
-This reduces the number of packets traversing the networking stack and
-should usually improves performance. However, it also inserts a
-temporary Hop-by-hop IPv6 extension header.
+On Wed, 7 Dec 2022 11:30:52 -0600, Carlos Bilbao wrote:
+> Generate rustdoc documentation with the rest of subsystem's documentation
+> in Documentation/output. Add a cross reference to the generated rustdoc in
+> Documentation/rust/index.rst if Sphinx target rustdoc is set.
 
-Using the HBH header removal method in the previous path, the extra header
-be removed in bnxt drivers to allow it to send big TCP packets (bigger
-TSO packets) as well.
+The note on rustdoc won't help much in non-html outputs.
+Please apply patch below on top.
 
-Tested:
-Compiled locally
+You can keep my Rb tag.
 
-To further test functional correctness, update the GSO/GRO limit on the
-physical NIC:
+When rustdoc arrives at https://www.kernel.org/doc/, a note
+for non-html outputs directing people there might be helpful,
+I guess.
 
-ip link set eth0 gso_max_size 181000
-ip link set eth0 gro_max_size 181000
+        Thanks, Akira
 
-Note that if there are bonding or ipvan devices on top of the physical
-NIC, their GSO sizes need to be updated as well.
+> 
+> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+>  Documentation/rust/index.rst |  8 ++++++++
+>  rust/Makefile                | 15 +++++++++------
+>  2 files changed, 17 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
+> index 4ae8c66b94fa..4fc97c1eb1d1 100644
+> --- a/Documentation/rust/index.rst
+> +++ b/Documentation/rust/index.rst
+> @@ -6,6 +6,14 @@ Rust
+>  Documentation related to Rust within the kernel. To start using Rust
+>  in the kernel, please read the quick-start.rst guide.
+>  
+> +.. only:: rustdoc
+> +
+> +	You can also browse `rustdoc documentation <rustdoc/kernel/index.html>`_.
+> +
+> +.. only:: not rustdoc
+> +
+> +	This documentation does not include rustdoc generated information.
+> +
+>  .. toctree::
+>      :maxdepth: 1
+>  
 
-Then, IPv6/TCP packets with sizes larger than 64k can be observed.
-
-Big TCP functionality is tested by Michael, feature checks not yet.
-
-Tested by Michael:
-I've confirmed with our hardware team that this is supported by our
-chips, and I've tested it up to gso_max_size of 524280.  Thanks.
-
-Tested-by: Michael Chan <michael.chan@broadcom.com>
-Reviewed-by: Michael Chan <michael.chan@broadcom.com>
-Signed-off-by: Coco Li <lixiaoyan@google.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 26 ++++++++++++++++++++++-
- 1 file changed, 25 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index 0fe164b42c5d..6ba1cd342a80 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
- 			return NETDEV_TX_BUSY;
- 	}
+--- a/Documentation/rust/index.rst
++++ b/Documentation/rust/index.rst
+@@ -6,11 +6,11 @@ Rust
+ Documentation related to Rust within the kernel. To start using Rust
+ in the kernel, please read the quick-start.rst guide.
  
-+	if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
-+		goto tx_free;
-+
- 	length = skb->len;
- 	len = skb_headlen(skb);
- 	last_frag = skb_shinfo(skb)->nr_frags;
-@@ -11315,6 +11318,7 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
- 			      u8 **nextp)
- {
- 	struct ipv6hdr *ip6h = (struct ipv6hdr *)(skb->data + nw_off);
-+	struct hop_jumbo_hdr *jhdr;
- 	int hdr_count = 0;
- 	u8 *nexthdr;
- 	int start;
-@@ -11342,9 +11346,27 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+-.. only:: rustdoc
++.. only:: rustdoc and html
  
- 		if (hdrlen > 64)
- 			return false;
-+
-+		/* The ext header may be a hop-by-hop header inserted for
-+		 * big TCP purposes. This will be removed before sending
-+		 * from NIC, so do not count it.
-+		 */
-+		if (*nexthdr == NEXTHDR_HOP) {
-+			if (likely(skb->len <= GRO_LEGACY_MAX_SIZE))
-+				goto increment_hdr;
-+
-+			jhdr = (struct hop_jumbo_hdr *)nexthdr;
-+			if (jhdr->tlv_type != IPV6_TLV_JUMBO || jhdr->hdrlen != 0 ||
-+			    jhdr->nexthdr != IPPROTO_TCP)
-+				goto increment_hdr;
-+
-+			goto next_hdr;
-+		}
-+increment_hdr:
-+		hdr_count++;
-+next_hdr:
- 		nexthdr = &hp->nexthdr;
- 		start += hdrlen;
--		hdr_count++;
- 	}
- 	if (nextp) {
- 		/* Caller will check inner protocol */
-@@ -13657,6 +13679,8 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
- 		dev->features &= ~NETIF_F_LRO;
- 	dev->priv_flags |= IFF_UNICAST_FLT;
+ 	You can also browse `rustdoc documentation <rustdoc/kernel/index.html>`_.
  
-+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
-+
- #ifdef CONFIG_BNXT_SRIOV
- 	init_waitqueue_head(&bp->sriov_cfg_wait);
- #endif
+-.. only:: not rustdoc
++.. only:: not rustdoc and html
+ 
+ 	This documentation does not include rustdoc generated information.
+ 
 -- 
-2.39.0.rc0.267.gcb52ba06e7-goog
 
