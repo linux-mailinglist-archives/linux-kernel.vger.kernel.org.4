@@ -2,113 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCBF6457EE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:34:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA52645806
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbiLGKe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:34:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
+        id S229701AbiLGKhI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLGKe0 (ORCPT
+        with ESMTP id S229849AbiLGKgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:34:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648172A71C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:33:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670409214;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ls/fVzNOQDXdkwGawkCzgkRpahtmHyBL8VCkLV4JQsI=;
-        b=QnpGxv/3WbhkxYxL3Ad7myYk4nCNvDW6lvZqXa4YHgwCz3yQ4HQuCyWh2sU1haXjcDCZ+d
-        5N1cbc1A7ETM7FcJXPtZ7DQO8k6yKkMGg75oGMsHP574q2h8up31N7lEX51ST5A2tMEWte
-        IZt2ma6w+GM8qHj2TKzsdqMtg4zbfao=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-184-DRat6p5kM5Km6kouVFEnPQ-1; Wed, 07 Dec 2022 05:33:32 -0500
-X-MC-Unique: DRat6p5kM5Km6kouVFEnPQ-1
-Received: by mail-wm1-f71.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso441642wml.9
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:33:32 -0800 (PST)
+        Wed, 7 Dec 2022 05:36:43 -0500
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAB94666A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:36:31 -0800 (PST)
+Received: by mail-pl1-x636.google.com with SMTP id p24so16652763plw.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:36:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BXDt43WcxRi0yEl4LUCrE6EiS048gbigVAfotYTXWMA=;
+        b=OfSidZZyzHwOccnkBhJr31EUDTd0aqwPIP2Vy/2s64q3/hYi2Cj9nhU6X4OXnM9kj8
+         cQk/Sc2/UcvAJR0ySTJ52FJIBDWbBfNWy0RjyUPgwLQt/ogm3pY2AmsIHPwcK6x4kOlS
+         3iGTfY/9iJ7W3ZFSgE28u9R6mSyzxBmb2YERT2AslNmqSlU2rniGfwDviVxrAjzokS1R
+         gybmuvaODSUe6TU/7pIfG3IvMTn4GTtJ+TvkJfoB93SgnNm3mxEz3y5eaGbamFMhjcT0
+         LbfFb+olIQfp2rVKtrpE38IK2+py5xywcKPP+xbQGFSyBFNl821c4Io5TvIaenR2Xh9z
+         ML+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ls/fVzNOQDXdkwGawkCzgkRpahtmHyBL8VCkLV4JQsI=;
-        b=K0UcBoHMajD9tR+etbyvVQSZbe5ilsDUXYVBe7N+fb+x+K6i5uTnYugIbjbeARANbe
-         q+RXwtv88fPiu009IJ47Ju3m0HxHOzpGTF4lI+xLnjQ/R1yAdYrr54cfcBRI99l0ZXI2
-         N25NTVAJrPWQaeknVg0ukplG+Ip9h80jgBSSG0nsbfS8iDs1EarHjdnoxpqRs+U3F7Ll
-         EwtjyKni0TMEaDJAIIMTHVL0w2fHJ8VxUlsVmOMnq6xtB/Xt7IOWCmjNPMC+5con228N
-         84c4Q+qqwA+mFJEU/oqThl3ZcrgxcRHvcpI0Fkr31/iXYkIblqcGH8c0QoT+rbJMoPtM
-         I5UA==
-X-Gm-Message-State: ANoB5pl9/0y10xhRuEQvgPzLzIFw3vSE2kM0eIBeNiTrLfv6tce00V4l
-        OHQ9TbNH/QsCWIJyU1fumpjOo619U2YuKFy5wvkcjnzWKJpxrJ4ma6Eh/ZEpN7rx17xP4sCdagA
-        yOEOuajoq0ryjPE6f7HpOkTnI
-X-Received: by 2002:a5d:6dd1:0:b0:236:75a8:58d with SMTP id d17-20020a5d6dd1000000b0023675a8058dmr56602608wrz.295.1670409211072;
-        Wed, 07 Dec 2022 02:33:31 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6FBlRBE2GeVd3WJhHDz0cWwP9kKA/AUXb7mzTw2ZMVDwXZf0YLLk4DOpcAQ2mrMfXIGB+xvw==
-X-Received: by 2002:a5d:6dd1:0:b0:236:75a8:58d with SMTP id d17-20020a5d6dd1000000b0023675a8058dmr56602601wrz.295.1670409210856;
-        Wed, 07 Dec 2022 02:33:30 -0800 (PST)
-Received: from redhat.com ([2.52.154.114])
-        by smtp.gmail.com with ESMTPSA id b18-20020a05600010d200b002423a5d7cb1sm16105958wrx.113.2022.12.07.02.33.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:33:30 -0800 (PST)
-Date:   Wed, 7 Dec 2022 05:33:26 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
-Cc:     Michael Sammler <sammler@google.com>,
-        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Mina Almasry <almasrymina@google.com>, nvdimm@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Sammler <mich.sammler@gmail.com>,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH v2] virtio_pmem: populate numa information
-Message-ID: <20221207053242-mutt-send-email-mst@kernel.org>
-References: <20221115214036.1571015-1-sammler@google.com>
- <CAFPP518x6cg97tK_Gm-qqj9htoydsBtYm5jbG_KivK5rfLcHtA@mail.gmail.com>
- <3f7821a0-7139-7a97-ab24-dfca02811fc0@amd.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BXDt43WcxRi0yEl4LUCrE6EiS048gbigVAfotYTXWMA=;
+        b=O8v1mB25dYwv/65i90aK4Mb5g1zoGPhkBtybNSBcq1c/tyxrQiFaLFe4vV7pENUSQ9
+         rXYwmo4giW8MEnqxAgJZ0cse5SxAHTYdJYBjctGAt0G4dn+J+ExchX3LumwvXvFDn9Rb
+         3bCSD2hwtk1+e61PulOyQxIkM1INlLVCDY8XVg3pUbPBFxVPyRxplA1lu49t7sPs22JK
+         sgSVjFnjWU2xWKllRrE/OE2D+QaaZsha3O5MuVndZYZk/edXwYyHZ5/JbOofEJgmchoL
+         bk2MaNnKv/JazJAS/jgPQWxbDFXpgeOAilXg6UGGJQwm4+reaSJKr0knQ05UhJDYYAFq
+         93SA==
+X-Gm-Message-State: ANoB5pmtf7qu1XP+P7RQ58kjv4ovNZqqa5jyiBZLn8+FKqmvxUvZIdoI
+        HvhSnU99KdzIZWrNi23SpZduZuCn9iwD0LHnQeZEFA==
+X-Google-Smtp-Source: AA0mqf6POyxwbgYFsLY6UGBqsMViLNvBcr1ewyhVLGs8qFhj4QOL8HVd374Y0hYDeyCuP7dK9zIMkn3CGStA+VYOKYM=
+X-Received: by 2002:a17:90a:7485:b0:219:ef02:a5eb with SMTP id
+ p5-20020a17090a748500b00219ef02a5ebmr10202121pjk.84.1670409391243; Wed, 07
+ Dec 2022 02:36:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f7821a0-7139-7a97-ab24-dfca02811fc0@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <202212011950119139713@zte.com.cn>
+In-Reply-To: <202212011950119139713@zte.com.cn>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 7 Dec 2022 11:35:55 +0100
+Message-ID: <CAPDyKFpEqKUaqoJhD4xQYXaG-fmsG_XgqD3AJV=DjftiGbW1bA@mail.gmail.com>
+Subject: Re: [PATCH] memstick/mspro_block: use sysfs_emit() to instead of scnprintf()
+To:     ye.xingchen@zte.com.cn
+Cc:     maximlevitsky@gmail.com, oakad@yahoo.com, axboe@kernel.dk,
+        hare@suse.de, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 05:09:42AM +0100, Gupta, Pankaj wrote:
-> +Cc [MST, virtualization-list]
-> 
-> Hi Dan, MST,
-> 
-> > This patch is reviewed and tested. Is there anything that needs to be
-> > done from my side (e.g. sync with mainline)?
-> 
-> If there are no further comments, Can we please merge this patch?
-> 
-> Thank You,
-> Pankaj
+On Thu, 1 Dec 2022 at 12:50, <ye.xingchen@zte.com.cn> wrote:
+>
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 
+There are plenty of other conversions that can be done using
+sysfs_emit_at() in drivers/memstick/core/mspro_block.c. Would you mind
+doing that too, as part of the $subject patch?
 
-I'll take a look. Generally if you want my attention you
-should CC me on the patch.
+Kind regards
+Uffe
 
-Thanks,
-MST
-
-> > 
-> > (Adding my alternative email address to this thread as I will soon
-> > lose access to the address I am sending this email from.)
-
+>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/memstick/core/mspro_block.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/memstick/core/mspro_block.c b/drivers/memstick/core/mspro_block.c
+> index 61cf75d4a01e..ae3a5dc00344 100644
+> --- a/drivers/memstick/core/mspro_block.c
+> +++ b/drivers/memstick/core/mspro_block.c
+> @@ -356,7 +356,7 @@ static ssize_t mspro_block_attr_show_modelname(struct device *dev,
+>                                                      struct mspro_sys_attr,
+>                                                      dev_attr);
+>
+> -       return scnprintf(buffer, PAGE_SIZE, "%s", (char *)s_attr->data);
+> +       return sysfs_emit(buffer, "%s\n", (char *)s_attr->data);
+>  }
+>
+>  static ssize_t mspro_block_attr_show_mbr(struct device *dev,
+> --
+> 2.25.1
