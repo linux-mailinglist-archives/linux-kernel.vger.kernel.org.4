@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EF06457E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:33:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BCBF6457EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiLGKdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59660 "EHLO
+        id S229782AbiLGKe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:34:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiLGKdT (ORCPT
+        with ESMTP id S229628AbiLGKe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:33:19 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9007926493;
-        Wed,  7 Dec 2022 02:33:18 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id t17so12955469eju.1;
-        Wed, 07 Dec 2022 02:33:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AQ+rKetvs9glfZtSdIu3eRMWCUE4jvDtp/rzk0nJvKI=;
-        b=YdolyPRyLIsEN2zsOpZG+Qd//a3Z7C5QysDCkHOVs0KWBWQ8yFbRHlc2qCvgMo1tCn
-         B6EO/GG3zpKC/qb9zRoGm70zUhZnIjBb9BE9YB1kH0XppZrS3cVKLPC/afoe9juXJDPN
-         7OOkZUb5HYhy6cNQ6uGiVfibHvEF2bKz1TxnnVk04y3idum5RlVyR34ZYEkEhuOt7TW9
-         90HklIQ7nS4HoM8DD+wCLkYUFJ/88Vr2xMJQYU4kGLyai+eeytkZUjCEffTR2IDvZ1am
-         75nVe5I+whO3FDNVFpid7UJT9//wEXjRPFTa8XlnQqqtRKoWmAHEJHv9aAi97VVfbRl9
-         woQg==
+        Wed, 7 Dec 2022 05:34:26 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648172A71C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:33:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670409214;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ls/fVzNOQDXdkwGawkCzgkRpahtmHyBL8VCkLV4JQsI=;
+        b=QnpGxv/3WbhkxYxL3Ad7myYk4nCNvDW6lvZqXa4YHgwCz3yQ4HQuCyWh2sU1haXjcDCZ+d
+        5N1cbc1A7ETM7FcJXPtZ7DQO8k6yKkMGg75oGMsHP574q2h8up31N7lEX51ST5A2tMEWte
+        IZt2ma6w+GM8qHj2TKzsdqMtg4zbfao=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-184-DRat6p5kM5Km6kouVFEnPQ-1; Wed, 07 Dec 2022 05:33:32 -0500
+X-MC-Unique: DRat6p5kM5Km6kouVFEnPQ-1
+Received: by mail-wm1-f71.google.com with SMTP id f20-20020a7bc8d4000000b003d1cda5bd6fso441642wml.9
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:33:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=AQ+rKetvs9glfZtSdIu3eRMWCUE4jvDtp/rzk0nJvKI=;
-        b=E0108StwmW5YUy6vQzt/NYiFfvDHNlkRMRW1MQu+lbMr3I/nTMhvyor4CAS6r9cJ5S
-         dB7KXDzk/1ACUVsuPJDwIBxQw1p+Cg1/EQ9h2VJXknbUP8/1dnX/hkjCqlakIo7t0lUG
-         IoQubyWO5erzHex5VNORC3dQJS/o+/Y49R4IwH2v+bXhFqmbcN+IlOsUnyhSJI1CfR+8
-         WTxINFNo1a1IqxqwMvMOwECMlt8hUTLhWG+36xKQzzm+xKA4E4qGmrQ6eTiwHysTkXed
-         GD3rVoxPYtX9JsrJ/0ePxN0rjsqUUDHVIuTBB1LoIhFxGXTeV2Gs5rkKgiZNbvMMxg/3
-         EkuA==
-X-Gm-Message-State: ANoB5pnbe/WVUmFgvfe21HvlxxgYoCnuOYHch3RaGcM56WPKOOgggY+d
-        vfcc0QHS1jCDUWhVtdM4FXA=
-X-Google-Smtp-Source: AA0mqf4tAOYrTuQuGHDqsGS5/EEoVpbDZyPxu0SwpOgq9cNr/W+w7nHyyd/JIfoPsYjGqALYo7pNNQ==
-X-Received: by 2002:a17:907:6744:b0:7c0:8d04:d1f1 with SMTP id qm4-20020a170907674400b007c08d04d1f1mr30228920ejc.208.1670409196916;
-        Wed, 07 Dec 2022 02:33:16 -0800 (PST)
-Received: from skbuf ([188.26.184.215])
-        by smtp.gmail.com with ESMTPSA id i16-20020a170906251000b007c10fe64c5dsm1528574ejb.86.2022.12.07.02.33.15
+        bh=Ls/fVzNOQDXdkwGawkCzgkRpahtmHyBL8VCkLV4JQsI=;
+        b=K0UcBoHMajD9tR+etbyvVQSZbe5ilsDUXYVBe7N+fb+x+K6i5uTnYugIbjbeARANbe
+         q+RXwtv88fPiu009IJ47Ju3m0HxHOzpGTF4lI+xLnjQ/R1yAdYrr54cfcBRI99l0ZXI2
+         N25NTVAJrPWQaeknVg0ukplG+Ip9h80jgBSSG0nsbfS8iDs1EarHjdnoxpqRs+U3F7Ll
+         EwtjyKni0TMEaDJAIIMTHVL0w2fHJ8VxUlsVmOMnq6xtB/Xt7IOWCmjNPMC+5con228N
+         84c4Q+qqwA+mFJEU/oqThl3ZcrgxcRHvcpI0Fkr31/iXYkIblqcGH8c0QoT+rbJMoPtM
+         I5UA==
+X-Gm-Message-State: ANoB5pl9/0y10xhRuEQvgPzLzIFw3vSE2kM0eIBeNiTrLfv6tce00V4l
+        OHQ9TbNH/QsCWIJyU1fumpjOo619U2YuKFy5wvkcjnzWKJpxrJ4ma6Eh/ZEpN7rx17xP4sCdagA
+        yOEOuajoq0ryjPE6f7HpOkTnI
+X-Received: by 2002:a5d:6dd1:0:b0:236:75a8:58d with SMTP id d17-20020a5d6dd1000000b0023675a8058dmr56602608wrz.295.1670409211072;
+        Wed, 07 Dec 2022 02:33:31 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6FBlRBE2GeVd3WJhHDz0cWwP9kKA/AUXb7mzTw2ZMVDwXZf0YLLk4DOpcAQ2mrMfXIGB+xvw==
+X-Received: by 2002:a5d:6dd1:0:b0:236:75a8:58d with SMTP id d17-20020a5d6dd1000000b0023675a8058dmr56602601wrz.295.1670409210856;
+        Wed, 07 Dec 2022 02:33:30 -0800 (PST)
+Received: from redhat.com ([2.52.154.114])
+        by smtp.gmail.com with ESMTPSA id b18-20020a05600010d200b002423a5d7cb1sm16105958wrx.113.2022.12.07.02.33.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:33:16 -0800 (PST)
-Date:   Wed, 7 Dec 2022 12:33:14 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun.Ramadoss@microchip.com
-Cc:     richardcochran@gmail.com, andrew@lunn.ch,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        vivien.didelot@gmail.com, linux@armlinux.org.uk, ceggers@arri.de,
-        Tristram.Ha@microchip.com, f.fainelli@gmail.com, kuba@kernel.org,
-        edumazet@google.com, pabeni@redhat.com, netdev@vger.kernel.org,
-        Woojung.Huh@microchip.com, davem@davemloft.net
-Subject: Re: [Patch net-next v2 06/13] net: ptp: add helper for one-step P2P
- clocks
-Message-ID: <20221207103314.rmmh5halvcsugute@skbuf>
-References: <20221206091428.28285-1-arun.ramadoss@microchip.com>
- <20221206091428.28285-7-arun.ramadoss@microchip.com>
- <Y49v73+Hg7x3JhFS@hoboy.vegasvil.org>
- <27ed1d631d1c804565056c4ff207dc66cfa78c80.camel@microchip.com>
+        Wed, 07 Dec 2022 02:33:30 -0800 (PST)
+Date:   Wed, 7 Dec 2022 05:33:26 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>
+Cc:     Michael Sammler <sammler@google.com>,
+        Pankaj Gupta <pankaj.gupta.linux@gmail.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Mina Almasry <almasrymina@google.com>, nvdimm@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Michael Sammler <mich.sammler@gmail.com>,
+        virtualization@lists.linux-foundation.org
+Subject: Re: [PATCH v2] virtio_pmem: populate numa information
+Message-ID: <20221207053242-mutt-send-email-mst@kernel.org>
+References: <20221115214036.1571015-1-sammler@google.com>
+ <CAFPP518x6cg97tK_Gm-qqj9htoydsBtYm5jbG_KivK5rfLcHtA@mail.gmail.com>
+ <3f7821a0-7139-7a97-ab24-dfca02811fc0@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <27ed1d631d1c804565056c4ff207dc66cfa78c80.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <3f7821a0-7139-7a97-ab24-dfca02811fc0@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,9 +88,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:15:04AM +0000, Arun.Ramadoss@microchip.com wrote:
-> Kindly suggest on where to add tag, before signed-off or in the patch
-> revision list.
+On Wed, Dec 07, 2022 at 05:09:42AM +0100, Gupta, Pankaj wrote:
+> +Cc [MST, virtualization-list]
+> 
+> Hi Dan, MST,
+> 
+> > This patch is reviewed and tested. Is there anything that needs to be
+> > done from my side (e.g. sync with mainline)?
+> 
+> If there are no further comments, Can we please merge this patch?
+> 
+> Thank You,
+> Pankaj
 
-Nowhere. Just do it if you fix a problem using the robot for a patch
-that has already been merged.
+
+I'll take a look. Generally if you want my attention you
+should CC me on the patch.
+
+Thanks,
+MST
+
+> > 
+> > (Adding my alternative email address to this thread as I will soon
+> > lose access to the address I am sending this email from.)
+
