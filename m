@@ -2,65 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8EB645821
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:47:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8468C645824
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbiLGKr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:47:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S229732AbiLGKtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiLGKry (ORCPT
+        with ESMTP id S229489AbiLGKtC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:47:54 -0500
-Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F60824BF1;
-        Wed,  7 Dec 2022 02:47:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670410055; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=mBtk1g3a7Q1rismQYQWGRJkcALrsuKhh4yvLL8CeyRqRdk9enQD2KRoOeJMpeJlrg927BvWeMyyJr5aGsw5VWpi8ji/iq5V6D8sDQp4c6qe8GIlNH7gkf83pwkNf48nU3kCmq8Xn2EQKChN9s6Nsr0Eh3OV+SX4dzaTPCnBgr5Y=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1670410055; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=1JCTlL48DT3zfL4rO5+nUh4+FmToPbXqE2w5MYGFziQ=; 
-        b=I86dJHbw6Gg+WK9G7fEtSjh9xf5/Q5BKzAGMPfh249ALQQn417It3xum7gcsUwamh+NoA2FZ4Exkysnhlzs1/Lu/fIHJHWPHzYMZerRlp9yv9QxvKkX+8cnxlAljDlM3ReDUf5+Pv8JUQcH89xD59w2LoTW9mdO2DUS0L14mEeA=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=icenowy.me;
-        spf=pass  smtp.mailfrom=uwu@icenowy.me;
-        dmarc=pass header.from=<uwu@icenowy.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670410055;
-        s=zmail; d=icenowy.me; i=uwu@icenowy.me;
-        h=Message-ID:Subject:Subject:From:From:To:To:Cc:Cc:Date:Date:In-Reply-To:References:Content-Type:Content-Transfer-Encoding:MIME-Version:Message-Id:Reply-To;
-        bh=1JCTlL48DT3zfL4rO5+nUh4+FmToPbXqE2w5MYGFziQ=;
-        b=evjAeK9ZnmkLF9u2/Jh/+ayHl4FANQIIndJCGtwgRpNkPApxo2x5OTrg+lI7cW/0
-        RX992Lx+SjGoY1R4Xhxp3cVMrBHZ6ycoJLHQQuEODfWgne0mEzLRJqAirLW5lyCh8oB
-        1IupoqBpExbx7iZgQXVwSF5DzeoJq1jwvSXgNAIo=
-Received: from edelgard.fodlan.icenowy.me (120.85.99.143 [120.85.99.143]) by mx.zohomail.com
-        with SMTPS id 1670410054297195.35225821177994; Wed, 7 Dec 2022 02:47:34 -0800 (PST)
-Message-ID: <34fe4161718e395f5e9890f9358a25f697af9e24.camel@icenowy.me>
-Subject: Re: [PATCH 1/3] dt-bindings: timer: sifive,clint: add comaptibles
- for T-Head's C9xx
-From:   Icenowy Zheng <uwu@icenowy.me>
-To:     Marc Zyngier <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Wed, 7 Dec 2022 05:49:02 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2118.outbound.protection.outlook.com [40.107.21.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC91A2F01A;
+        Wed,  7 Dec 2022 02:49:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=CHdzQY1AzWpL/DFEeRwN+hdy6PxHy8Vdg6dzkakCU8I8bn2f3gWEQdEBA6x5qv0SuP2aPZqjkl9mSzRhLTKlLGUqtFOptz0RAUmRixLa+3Ht604e0yU6FD/Ln36+1CqK3hGDyuLhOasHTNV7tZUo7QXi+gJBLgb+UrpJyS1F27krUy8/P3HFgNwtivhJ0DdPspFYb4RxuLCviVo/6aDi35+FwxP4uRV41Mc/z4WljroeJOUmn44Wxwjah20K/WrMqnlvs1tjw/0xijFmvDYTM5AAlFIfT8lSW209BcaiVb9Xse1tqANcF7pzuurheHBcfQ1mO0zS9FNxwH1rGb5FKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iUYHB1y4AfmRHGh17c59j3SXMNU3wgBvIwOJkeSMjpw=;
+ b=i/DD7+fAM+FDdzbHzcoiasHwrwQ5wr/HTKvj635e3gyt0rPGcWcrqrspFclZYv/vKV82WE5iPgLIvbhNnQ/WvpByAi/WoL03ECz0RUzklGz8pMm+Ho2EVF7Cory+wrEQ9xeK0yhmFYDlLFsgOD+bU0VCpbmdJl+pVNUdhXW0YFzc7QumFMwc/lD1jJOETdkq+tnMj1n9T/iW7UoeWj4DWsYBCRebDDbOd/VZjfV8t7qucB5vpheBwr76uWfTIWsg1YPaE38I+eZiKBIGc1jzC6wuMij3Fvjrq4p0RfST1tG4o0sNkQebt7zy65T6cexwNg7w0Pm7qZ5nF+k7908J1A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iUYHB1y4AfmRHGh17c59j3SXMNU3wgBvIwOJkeSMjpw=;
+ b=mguaHpVGujUq6j6QBqdFa6LpMW2eBP2g/+h12xaZxD7GKQfOjfnZWiWtyiUxo2DspS6Tv4pwy4dMU08DRE9zi3UyknSw9R2kE1YgpPLSPC2n2230mqSDiKaUA4yn01kg4mQTYXS3ZChw2Z5TzuGiVDSrIN/oqzlXypyfo6Odx6w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:34a::22)
+ by AS8PR10MB7498.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5ad::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 10:48:57 +0000
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::732f:4316:a0be:bdbc]) by DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::732f:4316:a0be:bdbc%3]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 10:48:57 +0000
+Message-ID: <3edb5124-f01b-f77b-d929-9b360ec67593@prevas.dk>
+Date:   Wed, 7 Dec 2022 11:48:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 0/3] add dt configuration for dp83867 led modes
+Content-Language: en-US, da
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Tim Harvey <tharvey@gateworks.com>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Date:   Wed, 07 Dec 2022 18:47:26 +0800
-In-Reply-To: <20221121041757.418645-2-uwu@icenowy.me>
-References: <20221121041757.418645-1-uwu@icenowy.me>
-         <20221121041757.418645-2-uwu@icenowy.me>
-Organization: Anthon Open-Source Community
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        Andrew Lunn <andrew@lunn.ch>
+References: <20221118001548.635752-1-tharvey@gateworks.com>
+ <CAJ+vNU2AbaDAMhQ0-mDh6ROC7rdkbmXoiSijRTN2ryEgT=QHiQ@mail.gmail.com>
+ <6388f4ab.5d0a0220.a137.068e@mx.google.com> <4792263.31r3eYUQgx@steina-w>
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+In-Reply-To: <4792263.31r3eYUQgx@steina-w>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MM0P280CA0046.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:190:b::20) To DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:34a::22)
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR10MB5266:EE_|AS8PR10MB7498:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46550be7-f824-4416-561d-08dad840a455
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VvYkFahEu3UM3JFxUTDvl6xIo9KmKwleWLq4MvJokGjJIodR8D/e7VMrtM3KH2zzuN7mEeYm+V26fczGimNxAY9B6OrAtUn30MS9CF18FaXTkujwyVOGvpgEav80PjBsaoozcxGHREH/0muyax3SJu1SY4jippIZLMJz1ky4ZcEf3AJzIgZ45ppQYisTNzPlzfnRMCPWeuCGBavaU/LFVzBdJv9m8tZUg0/SWAggmN/frbUjy4WEgp/pK9zbh8dPg+BteOsRoJyU1OUaY0BVAXymCznNanVFfkr+lr/BeRU0DPHqECS1Y8YYT3k+7cG4Gia1bdc7aUUSRBkK2lL2VJPM8QxFBAiCuwTV5XbaEMKuqy87bPXt6ecVE2dehuHfSH5nQNf9uPJN6rE4lw3TpHXcl0l855vbco9/36/SsGiAHu4Y0ZOUK31RPQBD9x6aaX/YVi855eNf5jNZyVA+LWT+q7BZ33TsXAXYsxsWLOiU2harsh7HRB6teNW/jBzNLX0xAl4NxYhLy2Cyp5XfQN10aDgVSZAetF6qEOSRgRhh5dl3BGakqUJANWF0LiY/8/cbd9uPOQFONEqPB44W/BMp1XoKaJK36Ew9f8Kfcm2L8dk0wQxklDmDtGTSF4iVnDQTYA6Y9YqK4rpMkX4PbL7IdNvsgfpvZOulVPtdmw5wYy6k7i4B5Lexmcx5o06Suf/mmsgMKT2E/ydfZA3QeS6vDpddZ8zHIVl3P61Pxm5TcYQiRzhajYilICZPJ3BN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(376002)(136003)(346002)(39850400004)(396003)(366004)(451199015)(478600001)(8936002)(86362001)(2906002)(54906003)(31696002)(38100700002)(8976002)(4326008)(5660300002)(7416002)(44832011)(8676002)(186003)(66476007)(6666004)(6512007)(26005)(52116002)(6506007)(41300700001)(38350700002)(110136005)(2616005)(316002)(66556008)(66946007)(6486002)(31686004)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y0E3UEdlTG4wT3QyY2MrQWFlNVUxT3B2dlRJVUZXVnJSM0pocTZHM1VqV2pD?=
+ =?utf-8?B?VmVidXVFTmFIVHpBcUswZ2wwbkxDajZNRUYrdURNRnpDVXUyRG9TWWF1aDJI?=
+ =?utf-8?B?WUpjYlBPYmYza0RoZEhYVWpmQkxLVFF4dDRBTUorODRON2w4MjR2VE40VjZV?=
+ =?utf-8?B?UnFuZFJrcjYzeWltUzBSWGoybHcvWjJ0TmhqRjBsN1AwcU4vaHR4QjhRdEVh?=
+ =?utf-8?B?VFJ2Rjg3Q05ZMG9FRUUvVnd0bThxdU5JRFlsZ0JpZ1hqZTZ5cnNSb1Rma1dH?=
+ =?utf-8?B?TFRGekx6cC90NjRkeXRlV01HLzFncDdwQ1hUcDhDUzZqK1NLREhKcmhTMjZm?=
+ =?utf-8?B?UnRNM2l0bVVTLzFtTjBKejd3V1VNVkZ4TnkxaVlFQm5BLzN3VFl0OUIzYitt?=
+ =?utf-8?B?bjc4dTJhNCttU09wdEpFUUtUQXFsdm9oZVdZN1MvTHFzMHNtODRPcENIYU1h?=
+ =?utf-8?B?SmRiZEE1Tk1JZmtGWjRCT0JQRnNsL09OUm9ObFZrRmFQMXg2ejlCSHd1b1BZ?=
+ =?utf-8?B?N2I3dnVDU0VIcXNNcVU1d3ZKY3JCcUNpSWZnODJMZGk2SkpkbUdaemxvbGc5?=
+ =?utf-8?B?Y2xpN2xaSkJseFZMemdmV2ZUM2pxS3VDcE1uazBhQzJ3WkFMZHVDVGhxNTlT?=
+ =?utf-8?B?aVFCYko1Qkk4ZjVuY3BwMHk3VFk5dWhnSjhZQU8yV0NNcERMNEMyYUk3Z3Y3?=
+ =?utf-8?B?OUVpSWVta3BFZnJBN0UrTURRQnEyenFrYWkvcEt6bUVsUEcyQ09SZDNaNk9o?=
+ =?utf-8?B?aVc5UDNJTkZTVDA2SVdGaVV6dU5BSlNpYzRHOXpWOExxZzJsMWptSW10cmlZ?=
+ =?utf-8?B?cUM1czl6NHFHaVJ5TzJRN3ViWkRLdVowMUY4d2UrU0IwTDB5SlJDbDI4Ukd4?=
+ =?utf-8?B?SFY2cXlqeHRacGxzWDBZZGRraGczSmREOWtWUk1QWkg2QUtRV2dQVG9Scnor?=
+ =?utf-8?B?SkJwbVlJNUNXT3NHeTN3c1FlTFBSTGlidk1HaEVHVUlNUjVGRDEvdkpoQkFL?=
+ =?utf-8?B?VG5ZUlJIRUhOUHNRUHJwcTAvVWZMN0ZmSHk0K2x4TElMUS8vRk9HLzg0WGdo?=
+ =?utf-8?B?KzgyNDNJUDllZWRtaDFnU1JKYjd6YWlLZnpHRDAwa0kwQVprelJsK09WaWNk?=
+ =?utf-8?B?a0dIYlBjYVozQmNBYWsrUjZkenk5L25nUXpEcGJ2LytteGlIMVMyRCs1UDlE?=
+ =?utf-8?B?aVQ1endSYklpdW9YM1pkbDJmZFlKaDRMNUpUaFk1SHdIT2JaeDYyL044aVBC?=
+ =?utf-8?B?RVpuM2RkU0w3M1Z5Z3V4Sk1pcnhtSEVvT1c5cERBaWhzYU50MzNOQ3ZhbU8x?=
+ =?utf-8?B?R2UwYU1lalZheXRaTDJ2Wjh2Mm11Y0JkY0tIQkVrazFHSFJibUgzaWgrZFI3?=
+ =?utf-8?B?K09zcFJ0QUxzZ3FtT2V0TndUc0MxanJBNitJeDQ5bjVTblN5SnNVZmgrSGQy?=
+ =?utf-8?B?NCtITlF6Sm4wSWVDZll1cVE3N2JPNWhxU2tyV2F2NjdxYTQ4dm8zdUVSZ2xN?=
+ =?utf-8?B?ZkVSSWNCNFdXUEVJdkxjTVJ1SVNGRWpCT0dOUzR4RE9zOGNvRGZ3ak1zaGVk?=
+ =?utf-8?B?MGx3ckl1NE14T2d2Q2pkNFZQM1dzcnYxT091RGNHVUt4ZXVlbjFHOWNMQk54?=
+ =?utf-8?B?RDlFclREcGxFTnYyK29YYUVZZ1VtWjMwdE1kOTZKTFo4eFBDQWZHaGVzcEFh?=
+ =?utf-8?B?YVZEVmliMFVpRnR1UExHai9ob3BUS3YyQXA0Y0tVK0VWc25mRGFkSUNvSmJr?=
+ =?utf-8?B?cVcyMUJwNUk0WWEwOVlHK2RadU4rZHduazFzYnYvV2VSREwvb2s5cjdXZXFI?=
+ =?utf-8?B?eS9tTmM1YURnejdOSHUxVEg2UTZOWDE4WHh3emhIemM3d1U3dEIvd2piMEQv?=
+ =?utf-8?B?dENyQXowcVFCZEQrdzk4ZXdXeGJiRmduM2N2RkJVSFJPcGx3b1g2d29GcWxG?=
+ =?utf-8?B?TUZqWmZBcmxXNGREZnNjbFJ4SjRhREVZOVdhRm11YkkrdG1HOCt0TzdVZERC?=
+ =?utf-8?B?VVA4VVV2Q1c0MzBGYXlDWTl2WEJSbFBjZDdXdmFUKzFzUnRXM0hLUWt0VVRR?=
+ =?utf-8?B?eEZiWnpJaThLdWNLNndRQmlYbmJDL0hwaWhpU1lTNE9CUmVKbFZNRTR1UElY?=
+ =?utf-8?B?UzJZRUFFeTBScnRZMlM4b3ljeU5JbUxoUFYxbGs5WTVRRnhXdzZyYXFmWWtR?=
+ =?utf-8?B?VWc9PQ==?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46550be7-f824-4416-561d-08dad840a455
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 10:48:57.4627
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qLA9dqIyo4KwZ3dsozWDKWzj5EODMuU9MUscEmTpzPeBQfEiPLJFxKm3bU96bUDue3urPPcM9SsgS0eCPNrHd31wBHaExLsbZUouU98mTa8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR10MB7498
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,68 +138,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-=E5=9C=A8 2022-11-21=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 12:17 +0800=EF=BC=
-=8CIcenowy Zheng=E5=86=99=E9=81=93=EF=BC=9A
-> T-Head C906/C910 CLINT is not compliant to SiFive ones (and even not
-> compliant to the newcoming ACLINT spec) because of lack of mtime
-> register.
->=20
-> Add a compatible string formatted like the C9xx-specific PLIC
-> compatible, and do not allow a SiFive one as fallback because they're
-> not really compliant.
->=20
-> Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+On 07/12/2022 11.40, Alexander Stein wrote:
+> Hello Ansuel,
+> 
+> Am Donnerstag, 1. Dezember 2022, 19:38:36 CET schrieb Christian Marangi:
 
-Hi, could this patch be picked ASAP? Becuase it will be used then in
-further OpenSBI patches to enable proper operation of T-Head timer.
+>>> Considering Andrew is nak'ing any phy code to configure LED's until a
+>>> solution using via /sys/class/leds is provided I would say there is
+>>> real interest.
+>>>
+>>> It seems to me that you got very positive feedback for this last
+>>> series. I would think if you submitted without RFC it would catch more
+>>> eyes as well.
+>>
+>> Well yes that's the fun part. netdev really liked the concept and how it
+>> was implemented (and actually also liked the use of a dedicated trigger
+>> instead of bloating the netdev trigger)
+>>
+>> But I never got a review from LED team and that result in having the
+>> patch stalled and never merged... But ok I will recover the work and
+>> recheck/retest everything from the start hoping to get more traction
+>> now...
+> 
+> I was just trying to use your RFC patchset from May 2022 for dp83867 as well, 
+> with some success at least.
+> I have some comments, fixes and uncertainties. How do you want to progress? 
+> Resend so I can rebase on that? Anyway, put me on CC.
 
-I know the following 2 patches are in doubt and further rework for them
-are needed.
+Yes, I'm also very interested in getting mainline support for hardware
+LED triggers, and incidentally one of my peripherals also happens to be
+a dp83867. So please also include me on cc if and when you find time to
+post a v+1, and I'll help with testing and reviewing.
 
-> ---
-> =C2=A0Documentation/devicetree/bindings/timer/sifive,clint.yaml | 8
-> ++++++++
-> =C2=A01 file changed, 8 insertions(+)
->=20
-> diff --git
-> a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> index bbad24165837..aada6957216c 100644
-> --- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> +++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
-> @@ -20,6 +20,10 @@ description:
-> =C2=A0=C2=A0 property of "/cpus" DT node. The "timebase-frequency" DT pro=
-perty
-> is
-> =C2=A0=C2=A0 described in Documentation/devicetree/bindings/riscv/cpus.ya=
-ml
-> =C2=A0
-> +=C2=A0 T-Head C906/C910 CPU cores include an implementation of CLINT too=
-,
-> however
-> +=C2=A0 their implementation lacks a memory-mapped MTIME register, thus
-> not
-> +=C2=A0 compatible with SiFive ones.
-> +
-> =C2=A0properties:
-> =C2=A0=C2=A0 compatible:
-> =C2=A0=C2=A0=C2=A0=C2=A0 oneOf:
-> @@ -29,6 +33,10 @@ properties:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 - starfive,jh7100-clint
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 - canaan,k210-clint
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: sif=
-ive,clint0
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0 - allwinner,sun20i-d1-clint
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: thead,c9=
-00-clint
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: sif=
-ive,clint0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: ris=
-cv,clint0
+Rasmus
 
