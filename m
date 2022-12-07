@@ -2,76 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4662C645A4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDD8A645A4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiLGNB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:01:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
+        id S229723AbiLGNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:02:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbiLGNBw (ORCPT
+        with ESMTP id S229763AbiLGNBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:01:52 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFD35133D;
-        Wed,  7 Dec 2022 05:01:51 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id bn5so20840171ljb.2;
-        Wed, 07 Dec 2022 05:01:51 -0800 (PST)
+        Wed, 7 Dec 2022 08:01:55 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD93A56D5A;
+        Wed,  7 Dec 2022 05:01:54 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id co23so532211wrb.4;
+        Wed, 07 Dec 2022 05:01:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=58n9OnzkX+f+tALJ3x9hXjitd2F/uK0zQDu7nLFK8BM=;
-        b=Wb7aJUSwSAqnww08AQep8NInEPaa3G9cUjc8sQqZCF2rSZLiFiCkbPvi90Q2W/JB50
-         AkZ0elNUWOZAg6iyS7IFebYNSJCSfUVNBIpyGC09Wu/HfrXcsqaxszfmVUhIfIbdz+tG
-         G+oCaum5ZcLDLT9G7P/Z0Agwbw7BLr4LKCvjVbpsts29SYIH+YuFthAG5XZtiKOgPS/P
-         ZthMdAxkIZxycgbGnmvGTYQR3cEhqarrfoenHuJepkHLokhiBap+28SWnHwc7p6Shlxp
-         nwxvkfNOpUxUFzKkXI8arTvSilK593jhVasK23lsIaSSOhsg/gGZL6ZmBnWC095w8U3Y
-         noGw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0YVq0+UudzmdQRaa093Lbr3RyPe8FvBPlb/bI7jjFrI=;
+        b=CMORAutNrxMOSyZ3nsb0/8TpMLFDIPZ1Qz88/ymw+/kMn53Q+YInmlWDf+8eXThgQP
+         pUArjM4WqUjQv0jcKnrLBQ1l74ru2Ca4yQkYzeqpqamSIhlhLgmkbwsWkiznpae1DFzd
+         OEx/COJhWbu07iLBtfhMjVhjZEvnYxtVJha7KpunLVu9soEiJW7v2q3StiQXbtjUapkf
+         8P0fbk8Yak01+o9CcBErx3J3UDmDGKQmj9JgAbtgcaCXoMbz0i8Hlv3fOToMJX0aW87y
+         j3goQM/7HUnfnInWniUErWN+jKWLADK8mbhPWSmBFYqK3X69t5vOF67W5e0TBLkeLOJL
+         qczw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=58n9OnzkX+f+tALJ3x9hXjitd2F/uK0zQDu7nLFK8BM=;
-        b=AIX2JyowqM1l8YEOax8X0uC/g/lloZEwk9L64AJfFeqmBWI2a411Oy7hNxEah0EHdS
-         fnLMQrTvwoYn+xpHq1s3G/A1AdUgL9SQSdrCEo/72U5Dl/AOpMDqdJQfcC4KKHmnjPhp
-         4cMBErd58yiyOYoesBvgRH3z63a7pD6twt2TNlA3ha67UGvsDb+jl0PM8GGAo1QI5FBr
-         fPYWICOj8gyC/P9aZaQSaZyQkrQ29tf33cWtcqYBKRnjlZKDDJH2b9CGwbyjBGWc5SeT
-         LCUO2hDYcpxl9vgZ+p06pgNgsVZkTOrQ9pRBVf6saC9jx9jqVAzZUZSMwWWyEhgK4bOe
-         UPgQ==
-X-Gm-Message-State: ANoB5pnnbVTeLLODKxw78frcFvk/DokvFeBFXeDn45zbW0mrhqRt9Rw5
-        V+XwIUNiuNxKTihI1DPcKgToSzM/MAyeXi866nk=
-X-Google-Smtp-Source: AA0mqf6Ide4+sp8VWwohGr/fTMvzoa8oN76VSzU4an/ivwpfuzoPSBg3rAh6NB3hKlkh7TXGWyqSO8u/qTTMSXywbfY=
-X-Received: by 2002:a05:651c:c85:b0:278:f572:c9ac with SMTP id
- bz5-20020a05651c0c8500b00278f572c9acmr30906647ljb.73.1670418109344; Wed, 07
- Dec 2022 05:01:49 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0YVq0+UudzmdQRaa093Lbr3RyPe8FvBPlb/bI7jjFrI=;
+        b=fm0ODJsgHQC5AjMNB9B6cxJZ8ihkqja0DKLiF3+aQfnuUVaghaCYzYVsTDRMrqTrym
+         WEhuK6ijhJpu75DbIZ272Uz9Sreoq+uMFJOvou76xAcpr3E0duzSsqbebBoaMOo5tKQB
+         JDBtY4e4a70n0R8K9z1mNnBWuZ/ksbfwhmGfayJwtVOk/WK/2XCDLHm5h704XmFUNjxM
+         C6JHeaJi8X9+aF+x646pWp3iR1g83Icw8Ft04vMBRWcpnZIYBgzbg7ILrWQAwqUdySit
+         Zgbdn0Qd6bKQkkxPK442tMi3FSw9JZ+6FyaVAsy613A2WSyqxutk1ssGzUzW7qzn+fC9
+         oBbA==
+X-Gm-Message-State: ANoB5pkZgszRwagpbtT7xGIHrGtHfFsw01SQzFBg3p8Xcp923Lw0v1ej
+        YQ1TBEuq/mTh0VWFmnc/TSA=
+X-Google-Smtp-Source: AA0mqf6XKt9c4pFnmhN0NNmHU8welUubyeVCDFFUuu+/FqSi0mi4la0JgJ4FBHRH0u3/QFEiWQ2ICA==
+X-Received: by 2002:adf:da4c:0:b0:242:137d:9ce4 with SMTP id r12-20020adfda4c000000b00242137d9ce4mr325754wrl.3.1670418112988;
+        Wed, 07 Dec 2022 05:01:52 -0800 (PST)
+Received: from suse.localnet (host-79-26-108-238.retail.telecomitalia.it. [79.26.108.238])
+        by smtp.gmail.com with ESMTPSA id m18-20020adfe952000000b002421888a011sm19432882wrn.69.2022.12.07.05.01.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 05:01:52 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] mm/highmem: Add notes about conversions from kmap{,_atomic}()
+Date:   Wed, 07 Dec 2022 14:01:50 +0100
+Message-ID: <2130641.irdbgypaU6@suse>
+In-Reply-To: <Y5BIHdnP4yeJ8svL@linutronix.de>
+References: <20221206070029.7342-1-fmdefrancesco@gmail.com> <2093077.OBFZWjSADL@suse> <Y5BIHdnP4yeJ8svL@linutronix.de>
 MIME-Version: 1.0
-References: <20221205085351.27566-1-tmaimon77@gmail.com> <20221205085351.27566-3-tmaimon77@gmail.com>
- <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
- <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
- <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
- <c200557f-c30a-62f9-287a-af804e818cf1@intel.com> <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
- <CAHp75VemBiGUTspEYDe3hwA9pEzjNMQGY6_kUoVMJyCuEWgChw@mail.gmail.com> <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com>
-In-Reply-To: <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com>
-From:   Tomer Maimon <tmaimon77@gmail.com>
-Date:   Wed, 7 Dec 2022 15:01:38 +0200
-Message-ID: <CAP6Zq1h9XvH501e_nH9TkUCKPNOuH7dhOM8FrsUM=PYX4gt0qw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,129 +78,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy and Adrian,
+On mercoled=EC 7 dicembre 2022 09:00:29 CET Sebastian Andrzej Siewior wrote:
+> On 2022-12-06 20:12:13 [+0100], Fabio M. De Francesco wrote:
+> > >   Furthermore, code between the kmap_atomic() and kunmap_atomic()
+> > >   functions may implicitly depended
+> >=20
+> > I suppose it should be "depend"? Shouldn't it?
+>=20
+> Ehm, yes, correct.
+>=20
+> > >   on the side effects of kmap_atomic()
+> > >   namely disabling pagefaults or preemption or both.
+> >=20
+> > I agree with you for rephrasing, mainly because it is
+> > written in poor English.
+> >=20
+> > However, I still have doubts about why you deleted "migration".
+> > AFAIK, __kmap_local_pfn_prot() always takes care of disabling migration=
+=20
+for
+> > HIGHMEM enabled kernels.
+>=20
+> That is correct. Historically kmap_atomic() never had a
+> migrate_disable() statement - only preempt_disable(). With disabled
+> preemption the task migration is implicitly disabled.
 
-Thanks for your clarifications
+Sure, I understand this mechanism: task migration is implicitly disabled wi=
+th=20
+disabled preemption.
 
-On Mon, 5 Dec 2022 at 16:33, Adrian Hunter <adrian.hunter@intel.com> wrote:
->
-> On 5/12/22 16:17, Andy Shevchenko wrote:
-> > On Mon, Dec 5, 2022 at 4:14 PM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> >>
-> >> On Mon, Dec 5, 2022 at 3:41 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >>> On 5/12/22 15:25, Andy Shevchenko wrote:
-> >>>> On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >>>>> On Mon, 5 Dec 2022 at 12:54, Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> >>>>>> On Mon, Dec 5, 2022 at 10:54 AM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> >>
-> >> ...
-> >>
-> >>>>>>> +       pltfm_host->clk = devm_clk_get_optional(&pdev->dev, NULL);
-> >>>>>>
-> >>>>>> You can't mix devm with non-devm in this way.
-> >>>>> Can you explain what you mean You can't mix devm with non-devm in this
-> >>>>> way, where is the mix?
-> >>>>> In version 1 used devm_clk_get, is it problematic?
-> >>>>
-> >>>> devm_ is problematic in your case.
-> >>>> TL;DR: you need to use clk_get_optional() and clk_put().
-> >>>
-> >>> devm_ calls exactly those, so what is the issue?
-> >>
-> >> The issue is the error path or removal stage where it may or may be
-> >> not problematic. To be on the safe side, the best approach is to make
-> >> sure that allocated resources are being deallocated in the reversed
-> >> order. That said, the
-> >>
-> >> 1. call non-devm_func()
-> >> 2. call devm_func()
-> >>
-> >> is wrong strictly speaking.
-> >
-> > To elaborate more, the
-> >
-> > 1. call all devm_func()
-> > 2. call only non-devm_func()
-> >
-> > is the correct order.
->
-> 1. WRT pltfm_host->clk, that is what is happening
-> 2. WRT other resources that is simply not always possible because not every resource is wrapped by devm_
-> e.g. mmc_alloc_host() / mmc_free_host()
-I little confused about what to decide, should I use only
-non-devm_func because mmc_alloc_host() / mmc_free_host() is not
-warrped with devm_?
->
-> >
-> > Hence in this case the driver can be worked around easily (by
-> > shuffling the order in ->probe() to call devm_ first), but as I said
-> > looking into implementation of the _unregister() I'm pretty sure that
-> > clock management should be in sdhci-pltfm, rather than in all callers
-> > who won't need the full customization.
-> >
-> > Hope this helps to understand my point.
-> >
-> >>>> Your ->remove() callback doesn't free resources in the reversed order
-> >>>> which may or, by luck, may not be the case of all possible crashes,
-> >>>> UAFs, races, etc during removal stage. All the same for error path in
-> >>>> ->probe().
-> >>
-> >> I also pointed out above what would be the outcome of neglecting this rule.
-> >>
-> >>>>>>> +       if (IS_ERR(pltfm_host->clk))
-> >>>>>>> +               return PTR_ERR(pltfm_host->clk);
-> >>>>>>> +
-> >>>>>>> +       ret = clk_prepare_enable(pltfm_host->clk);
-> >>>>>>> +       if (ret)
-> >>>>>>> +               return ret;
-> >>>>>>> +
-> >>>>>>> +       caps = sdhci_readl(host, SDHCI_CAPABILITIES);
-> >>>>>>> +       if (caps & SDHCI_CAN_DO_8BIT)
-> >>>>>>> +               host->mmc->caps |= MMC_CAP_8_BIT_DATA;
-> >>>>>>> +
-> >>>>>>> +       ret = mmc_of_parse(host->mmc);
-> >>>>>>> +       if (ret)
-> >>>>>>> +               goto err_sdhci_add;
-> >>>>>>> +
-> >>>>>>> +       ret = sdhci_add_host(host);
-> >>>>>>> +       if (ret)
-> >>>>>>> +               goto err_sdhci_add;
-> >>>>>>
-> >>>>>> Why can't you use sdhci_pltfm_register()?
-> >>>>> two things are missing in sdhci_pltfm_register
-> >>>>> 1. clock.
-> >>>>
-> >>>> Taking into account the implementation of the corresponding
-> >>>> _unregister() I would add the clock handling to the _register() one.
-> >>>> Perhaps via a new member of the platform data that supplies the name
-> >>>> and index of the clock and hence all clk_get_optional() / clk_put will
-> >>>> be moved there.
-Do you mean to add it to sdhci_pltfm_register function? if yes I
-believe it will take some time to modify sdhci_pltfm_register
-I prefer not to use sdhci_pltfm_register.
-> >>>>
-> >>>>> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
-> >>>>
-> >>>> All the same, why can't platform data be utilised for this?
-> >>>>
-> >>>>>>> +       return 0;
-> >>>>>>> +
-> >>>>>>> +err_sdhci_add:
-> >>>>>>> +       clk_disable_unprepare(pltfm_host->clk);
-> >>>>>>> +       sdhci_pltfm_free(pdev);
-> >>>>>>> +       return ret;
-> >>>>>>> +}
-> >>
-> >>
-> >> --
-> >> With Best Regards,
-> >> Andy Shevchenko
-> >
-> >
-> >
->
+>=20
+> > How about !HIGHMEM, where kmap_local_page() is an indirect call to
+> > page_address()? Did you mean that, if the code between kmap_atomic() and
+> > kunmap_atomic() depended on migrate_disable() (in PREEMPT_RT) we should
+> > always just stay safe and call preempt_disable() together with conversi=
+on
+> > to kmap_local_page()?
+>=20
+> Even in the !HIGHMEM case it always uses preempt_disable().
 
-Best regards,
+With the only exception of PREEMPT_RT kernels, which instead use=20
+migrate_disable().
 
-Tomer
+> With
+> PREEMPT_RT it is different as it never disabled preemption and always
+> did a migrate_disable() instead.
+
+OK, I see that I'm recalling correctly :-)=20
+
+> If you talk about what needs to be
+> considered while migrating away from kmap_atomic()
+
+Yes, I'm trying to explain what needs to be considered while converting fro=
+m=20
+kmap_atomic() by looking at all the different cases.
+
+> then I wouldn't add
+> the PREEMPT_RT bits to it since it was never in the picture while the
+> code (using kmap_atomic()) was originally written.
+
+Ah, OK. Now I understand why you changed my last phrase.
+I agree with you, so I won't add anything about the special PREEMPT_RT case.
+
+> > If so, I understand and I again agree with you. If not, I'm missing
+> > something; so please let me understand properly.
+> >=20
+> > Aside from the above, I'm not sure whether you deleted the last phrase
+> > before
+> > your suggestion. What about making it to become "For the above-mentioned
+> > cases, conversions should also explicitly disable page-faults and/or
+> > preemption"?
+>=20
+> They need to disable preemption or page-faults or both if it is needed
+> (not unconditionally) and where it is needed. This means not
+> unconditionally over the whole kmap-ed section.
+
+I never meant to suggest to _unconditionally_ disable page-faults=20
+and/or preemption. I was only trying to say that developers must carefully=
+=20
+check whether or not the whole kmap-ed section depended on those side effec=
+ts.
+
+If so, they must _explicitly_ disable preemption or page-faults or both=20
+together with the use of kmap_local_page(). Instead, if the section doesn't=
+=20
+depend on preemption and/or page-faults disabling, they must only replace=20
+kmap_atomic() with kmap_local_page().
+
+I had probably used a bad wording when trying to say the same things that y=
+ou=20
+wrote much more clearly.
+
+Thanks,
+
+=46abio
+
+>=20
+> > Thanks again for noticing my mistakes.
+> >=20
+> > Fabio
+>=20
+> Sebastian
+
+
+
+
