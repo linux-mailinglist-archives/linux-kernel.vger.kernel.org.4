@@ -2,183 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A48506457D1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553DC6457A8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbiLGK1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:27:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S230085AbiLGKX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:23:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiLGK1X (ORCPT
+        with ESMTP id S230399AbiLGKXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:27:23 -0500
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249181DA42
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:27:23 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9044B5C0113;
-        Wed,  7 Dec 2022 05:27:22 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Wed, 07 Dec 2022 05:27:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1670408842; x=
-        1670495242; bh=j72BaHFyaTxFOjEUAha4RtUDZFCZoWNUBdI79nsXaTQ=; b=R
-        TxHcrcOJG43IWsUGKtFeTz45rZzwmVW1r2KFSQXX1Xf4tFxpC14QNFMLp5HJkYzF
-        mV7gJaH1rU5YIxMFkHac+XJQPosI6Lf2/WVc5u9Uf/34zUCa47UE32MF5AoCI+nm
-        otQQ2pRvyeWAwbK5SyzqTrrPPWI5gG/Ueud9IlicdoSQyZ5WKy5YQbdPNT0lM8wx
-        D31yBK4ziALKFMmMDLOHmg3j5RDrN3Xq/dd1W21p5Jf+iJL91+ozIdexDB5F7tki
-        flSV8aC7k6EiVVtEtCVlQnKAG+ybWVGb5DJicr6y8y2lRVLPklDtOQVvhR4YHBAv
-        G5o9llUwDedG/PbLK/Ipw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670408842; x=
-        1670495242; bh=j72BaHFyaTxFOjEUAha4RtUDZFCZoWNUBdI79nsXaTQ=; b=s
-        0Xs//yopxl2aiiorM0laR64MDvfw0i7gJIRWRfrXyK0Ni8GnzRcJ1CoPaDS3A/te
-        OL4oMVD5UgHunRLSSyrMy2q4z2xd8kDtC9VqkwXtKupMIR/W0d797CshUJTiG2vN
-        MZLzI9UuOC3IV1g4A7PQOm+u0pxWUJ3vIuCqbjCM7n2D5icW+LU7IqSaLqdboR7/
-        fR3p7DbEy7PTPvFijvbeyvkoRiBVmVu2zObPrCggyAshLP+Dmkv/orJ+se3/jXxA
-        GKmPgl/ptRjAWsz4yt8qNtiAzPRdh+NHPrHUQlWZK2jfN+nAWOAZzDIVRwu3nL4l
-        B9i/btWB7m7hvA8MGD60Q==
-X-ME-Sender: <xms:imqQYzSrqI5Mh-ZL5l3WGJeFHRUCJjDGveVivJ5QbkoGvi999_ZWrw>
-    <xme:imqQY0y5h3ueePRniOdIfObaxD5Xpu1HXhkdtDN41tDydjTptwGU_h0FCqWrWdr-Q
-    iJgtUxiJVVLJueQ1qs>
-X-ME-Received: <xmr:imqQY42FtDrGULKvzlryj__geJy47AcLllBLttdAWTTrnp0PCvMqp396SmRZ7nzQBJdssMs9TdV5qijaanrvbRAlGF7eHBCTGcg4EpFLfBWhRg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdduhecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeevvdelieejgedvkeffheekheeilefhgefgffehteekueelvddtueffheet
-    ledtffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:imqQYzD3uNd2wZSmQFN_vNIfmqEkDA7ZSN264wyhBPIqdV7EbIuSgg>
-    <xmx:imqQY8gjWsQ9BKehDp86x676o8G2Hr_i7cZw3nCI9Dbyl9dt6iJ78A>
-    <xmx:imqQY3qIzYNtjvZsd6FqxNNk_c5AEIYPDGVv5BB9aB0jBSEsC1kN-g>
-    <xmx:imqQY86GD7XmE9YSaQlL8ccBDCLnk61-_UDwiFlZvSzq2tmvqGjjKQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Dec 2022 05:27:21 -0500 (EST)
-From:   Maxime Ripard <maxime@cerno.tech>
-Date:   Wed, 07 Dec 2022 11:22:47 +0100
-Subject: [PATCH 4/6] drm/vc4: dsi: Convert to use atomic operations
+        Wed, 7 Dec 2022 05:23:04 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A24313E9B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:23:03 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id d6so27940232lfs.10
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 02:23:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ftjSB9JJ8yBkXE+8vCPq7doIFKzD/Pbisdda5DVy8ec=;
+        b=WIyixd4HXawkevgN9swStc9TJ6yWZGGmbayM6ArIH6QU1OLmhpDd3KxItyoF9x5zw2
+         uKPZvAEgvbygXM3F2LJeDNdN4q/aofkOilIlQaHVR9k9Be7josKZNuB23lQVsEX51RNE
+         rhfPr5IeWj/ByE3TGRnjcfyHF2GKQsHUl6m6/X98npaeg00dn/b8r4Z2nUV5X/qpzGBZ
+         cqORDrRBpgt9P1uXgj5rQEDdmHXgYysSvfzS5UhoD/Q5NxYJ+FRVSix3EA2iUjwJ+5dD
+         ud+j1hZZq0/0U3c2ajWUDhgq/ztWY0Lj2pb/+HTI8UebDMqThOTFut+exVMuNlVGkC8Q
+         8xqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ftjSB9JJ8yBkXE+8vCPq7doIFKzD/Pbisdda5DVy8ec=;
+        b=Tgd+MRDNlxyFfmlAka32v3lEYVH8mMbkWb6NQBOKP2E56Xu+kkuZrlNsPfWPXqWjPa
+         aTj7RRovH97C47XZB8zzU0kvOVG8rR5YYXQOE76cDx866AJPSrraTNWwLB6ipRRxZirm
+         bZHog/kCmRr9vEVkP8NIc3XZP5fWbOrW0qlyZi3mt4mSCqMNB/ZBzP2HunPIUysgNF5z
+         ApYKrZPpYbzwiy9w3yarEKT53N1cXpEDu1m3PWonhBjs5xdnU60s4sE+Bt7NsoiwSkuZ
+         yYgTNvmuvghmg7X0t/SAo2XMVx5NrLGwKK9Ux11s8QIw891UaeMe+HxtAvpW6K9+zJEm
+         gumw==
+X-Gm-Message-State: ANoB5plLd15QjSSfJ3+WKGeZUYqn62NuQ3WZAojRBfRid41DIwKFHorP
+        efX8UPhGeWiUBs9z1JmMDK1qKg==
+X-Google-Smtp-Source: AA0mqf4om2ZDcm1wROjWKvlDZ4YHUcOqiqFmBIx5LemQjgt2gr26PuNmCDHVgdcNxCeZZI4G2HTlGA==
+X-Received: by 2002:a05:6512:c9:b0:4b5:9055:141 with SMTP id c9-20020a05651200c900b004b590550141mr1145685lfp.200.1670408581624;
+        Wed, 07 Dec 2022 02:23:01 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id bu31-20020a056512169f00b00499b27a329esm1953183lfb.300.2022.12.07.02.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 02:23:01 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alain Volmat <alain.volmat@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Joe Tessler <jrt@google.com>,
+        Yannick Fertre <yannick.fertre@foss.st.com>,
+        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 3/9] media: dt-bindings: cec: convert common CEC properties to DT schema
+Date:   Wed,  7 Dec 2022 11:22:47 +0100
+Message-Id: <20221207102253.26663-4-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
+References: <20221207102253.26663-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221207-rpi-dsi-bridge-v1-4-8f68ee0b0adb@cerno.tech>
-References: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
-In-Reply-To: <20221207-rpi-dsi-bridge-v1-0-8f68ee0b0adb@cerno.tech>
-To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Maxime Ripard <maxime@cerno.tech>
-X-Mailer: b4 0.11.0-dev-8c583
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3055; i=maxime@cerno.tech;
- h=from:subject:message-id; bh=CXisU7c7qlb5YkMujGkhm32rlKYH8x7P9zn1D9smdLI=;
- b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkTMkulWlkX6qxZeGDyZBmP1WLT60yuaa2Wc3DoZVouFyx0
- JUKno5SFQYyLQVZMkSVG2HxJ3KlZrzvZ+ObBzGFlAhnCwMUpABPpqGf4p8l4XMD6u0TzO2a1Xytnzv
- K+aX5l8U+LkoiVoWem/VT+2MLwz/Tzf94Foa0lnfpPT5dduqr2K+TF4TMmr9fdbNl/b/VeRS4A
-X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Convert common HDMI CEC adapter bindings to DT schema.
 
-The atomic calls are preferred as the non-atomic ones
-are deprecated. In preparation for conversion to a bridge,
-switch to the atomic calls.
-
-Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_dsi.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+ .../devicetree/bindings/media/cec.txt         |  8 ------
+ .../bindings/media/cec/cec-common.yaml        | 28 +++++++++++++++++++
+ MAINTAINERS                                   |  2 +-
+ 3 files changed, 29 insertions(+), 9 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/media/cec.txt
+ create mode 100644 Documentation/devicetree/bindings/media/cec/cec-common.yaml
 
-diff --git a/drivers/gpu/drm/vc4/vc4_dsi.c b/drivers/gpu/drm/vc4/vc4_dsi.c
-index 53d73a6590b7..b90186f38749 100644
---- a/drivers/gpu/drm/vc4/vc4_dsi.c
-+++ b/drivers/gpu/drm/vc4/vc4_dsi.c
-@@ -789,7 +789,8 @@ dsi_esc_timing(u32 ns)
- 	return DIV_ROUND_UP(ns, ESC_TIME_NS);
- }
- 
--static void vc4_dsi_encoder_disable(struct drm_encoder *encoder)
-+static void vc4_dsi_encoder_disable(struct drm_encoder *encoder,
-+				    struct drm_atomic_state *state)
- {
- 	struct vc4_dsi *dsi = to_vc4_dsi(encoder);
- 	struct device *dev = &dsi->pdev->dev;
-@@ -853,17 +854,18 @@ static bool vc4_dsi_encoder_mode_fixup(struct drm_encoder *encoder,
- }
- 
- static void vc4_dsi_encoder_mode_set(struct drm_encoder *encoder,
--				     struct drm_display_mode *mode,
--				     struct drm_display_mode *adjusted_mode)
-+				     struct drm_crtc_state *crtc_state,
-+				     struct drm_connector_state *conn_state)
- {
- 	struct vc4_dsi *dsi = to_vc4_dsi(encoder);
- 	struct device *dev = &dsi->pdev->dev;
-+	const struct drm_display_mode *mode;
- 	bool debug_dump_regs = false;
- 	unsigned long hs_clock;
- 	u32 ui_ns;
- 	/* Minimum LP state duration in escape clock cycles. */
- 	u32 lpx = dsi_esc_timing(60);
--	unsigned long pixel_clock_hz = adjusted_mode->clock * 1000;
-+	unsigned long pixel_clock_hz;
- 	unsigned long dsip_clock;
- 	unsigned long phy_clock;
- 	int ret;
-@@ -880,6 +882,10 @@ static void vc4_dsi_encoder_mode_set(struct drm_encoder *encoder,
- 		drm_print_regset32(&p, &dsi->regset);
- 	}
- 
-+	mode = &crtc_state->adjusted_mode;
+diff --git a/Documentation/devicetree/bindings/media/cec.txt b/Documentation/devicetree/bindings/media/cec.txt
+deleted file mode 100644
+index 22d7aae3d3d7..000000000000
+--- a/Documentation/devicetree/bindings/media/cec.txt
++++ /dev/null
+@@ -1,8 +0,0 @@
+-Common bindings for HDMI CEC adapters
+-
+-- hdmi-phandle: phandle to the HDMI controller.
+-
+-- needs-hpd: if present the CEC support is only available when the HPD
+-  is high. Some boards only let the CEC pin through if the HPD is high,
+-  for example if there is a level converter that uses the HPD to power
+-  up or down.
+diff --git a/Documentation/devicetree/bindings/media/cec/cec-common.yaml b/Documentation/devicetree/bindings/media/cec/cec-common.yaml
+new file mode 100644
+index 000000000000..af6ee5f1c73f
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/cec/cec-common.yaml
+@@ -0,0 +1,28 @@
++# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/cec/cec-common.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+	pixel_clock_hz = mode->clock * 1000;
++title: HDMI CEC Adapters Common Properties
 +
- 	/* Round up the clk_set_rate() request slightly, since
- 	 * PLLD_DSI1 is an integer divider and its rate selection will
- 	 * never round up.
-@@ -1092,7 +1098,8 @@ static void vc4_dsi_encoder_mode_set(struct drm_encoder *encoder,
- 	vc4_dsi_ulps(dsi, false);
- }
- 
--static void vc4_dsi_encoder_enable(struct drm_encoder *encoder)
-+static void vc4_dsi_encoder_enable(struct drm_encoder *encoder,
-+				   struct drm_atomic_state *state)
- {
- 	struct vc4_dsi *dsi = to_vc4_dsi(encoder);
- 	bool debug_dump_regs = false;
-@@ -1348,10 +1355,10 @@ static const struct mipi_dsi_host_ops vc4_dsi_host_ops = {
- };
- 
- static const struct drm_encoder_helper_funcs vc4_dsi_encoder_helper_funcs = {
--	.disable = vc4_dsi_encoder_disable,
--	.enable = vc4_dsi_encoder_enable,
-+	.atomic_disable = vc4_dsi_encoder_disable,
-+	.atomic_enable = vc4_dsi_encoder_enable,
- 	.mode_fixup = vc4_dsi_encoder_mode_fixup,
--	.mode_set = vc4_dsi_encoder_mode_set,
-+	.atomic_mode_set = vc4_dsi_encoder_mode_set,
- };
- 
- static int vc4_dsi_late_register(struct drm_encoder *encoder)
-
++maintainers:
++  - Hans Verkuil <hverkuil@xs4all.nl>
++
++properties:
++  $nodename:
++    pattern: "^cec(@[0-9a-f]+|-[0-9]+)?$"
++
++  hdmi-phandle:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      Phandle to the HDMI controller.
++
++  needs-hpd:
++    type: boolean
++    description:
++      The CEC support is only available when the HPD is high. Some boards only
++      let the CEC pin through if the HPD is high, for example if there is a
++      level converter that uses the HPD to power up or down.
++
++additionalProperties: true
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 07cb85cac4c3..45402e03cda5 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4832,7 +4832,7 @@ S:	Supported
+ W:	http://linuxtv.org
+ T:	git git://linuxtv.org/media_tree.git
+ F:	Documentation/ABI/testing/debugfs-cec-error-inj
+-F:	Documentation/devicetree/bindings/media/cec.txt
++F:	Documentation/devicetree/bindings/media/cec/cec-common.yaml
+ F:	Documentation/driver-api/media/cec-core.rst
+ F:	Documentation/userspace-api/media/cec
+ F:	drivers/media/cec/
 -- 
-2.38.1
+2.34.1
+
