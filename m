@@ -2,157 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B0C645AC8
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDA27645AD4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:24:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbiLGNXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56232 "EHLO
+        id S230029AbiLGNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiLGNXv (ORCPT
+        with ESMTP id S230051AbiLGNYS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:23:51 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2085.outbound.protection.outlook.com [40.107.223.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D59259177;
-        Wed,  7 Dec 2022 05:23:49 -0800 (PST)
+        Wed, 7 Dec 2022 08:24:18 -0500
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2067.outbound.protection.outlook.com [40.107.6.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A60275D5;
+        Wed,  7 Dec 2022 05:24:13 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RQryyM8WXCJqimCqrjsP8kkuTWwqbxzDE6wxPXXfzCK9/YTMs3IC23XO6yZsq99Sk0Qjvg71KU10zAbWtahytTb2d+iC/M17HJkMZ5ewaqd7Bf74MPzpEQiumEJf9zretXHjCifQOxcRKojkFeknYgiPtjtbFdlYNB7tnn75NNSenXPUom+3gDOgMeLaqTIr0I/lYa63VDnAoGjJEMslRUV+Qpb2NhQryvMTPyLXVm8p6Ck8gRKiQmvSpVFvNmbyPYjkme+uK7jDa7QdtCxG4BXBYtP8Ix9EATWzH3zp9YVzuroMrLg3hp4iqnV5+zLFWFH48IT0ClDxmGoANTx8mw==
+ b=kWN1Kx2UUuC9Mv6Z2XUx6ACaUHVUmXxjwThwz+HuuXyYeLOl8VTZ+8bsQHnbVXlGuSAlEwTDfMjerf9B9CB95bT8Y3QHCdcoPpX14v8ZkQL8jQD6IykCjdE0n69RmQRv6kJDZAhY1BJ5ZegCD62L7LtcJsh19Sectb0az8GOeYkrA9xvCRTzY8ZNVTImz/P5sYc5uTXsU965/YWvRdLlUgLRk2WhGgL8SOO/2OhA+OGL9iBo5hhlmywUMxHfBozf8Sr7QmGPZkTDw4bi1RRo2X60d1fcJJt0EToTRmCBjA8ZKS4TOW1VGwxLA7GG+X53GlQTODPHgxYTcwGyAFGQJg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TbSciM4inIhGX6Kp4lwBdn2OzijwnzcsLqUy3hK9ENI=;
- b=N4uGkRNEU4+kUPxFsIYBbz9kLVMVnjWEfR01CfHvkycNTf/0YkO1u2l/f0bujSID2PkcIHO5zQGIEVGN4rXF6tt1ler7rbHTmQwPkLAvUU8tuFBSnKAVMQuL3cuMRWj6eS15WJthZ3Rja2lkPg6z3m+3ATDGd/4aijHat7LHhMg4Fi+OoJfRnJVrgN4j/oZpa7sJB3dAb4zpXMPy5C5utyQd2nVuvXN886970h2wdAcwrsF/D9eRIgiJCc3DXH2lJlst/glVYevQZGaSLJt1/rggSHeo53/JnpinqMTVszekhNObYmLM3VuP/O5lD3AMJhefkKaqGJvGMzVDA/uJVg==
+ bh=9CY5tFP91/Q3CSUI6if6M1GwyXKLj9bscrMh418YQ1Y=;
+ b=E4vElPwBqlUmTX/u7x1rVuJShMZi8uMxB2E5r/Seg1ugXOr/4WdjNoLg1dI/PHHQvYvFkbLeo5EOxPIgMlvK5eOEcmWtZGNL96nfI0KGvutcWv2zQSyyL0nGZbEcAuOB2txTpiat2KZI3KmYa0KP5bH7b3Yp6m/KWOSY75+qK3ka0eaQG/dl031VQoBhmvkFxZe5I3hvnl8MO61tYdnrZ7hnI9fPBIKz8Kx0S9pyWjjKx2R0cn/gUNgOt0iFb3ZO56+1MBf04tfG4jTlQ4+yXNIo2hV95IKeFrYGDdKPUfcDQarxQvtpjgg2g4MqqzBX7YCLccUoTzlNYjGXrUkBbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TbSciM4inIhGX6Kp4lwBdn2OzijwnzcsLqUy3hK9ENI=;
- b=Z/2wHl1N4R8ksfdECZqYlIXjT285w+TPdJlC7ave8x2g0TXmPTZobEwZQQpVIq5yeBAHVaIhHzGQhUsgjWuUsBPr1bEiU+iXmv+8H9RwQ3SZCuOwPnXL4POwNKgGyPUQy+dzT1Nam8xR4LUILBXbs5evWg1dXLIOY/WoFE7cgKU2eP7M/98uVH4/7agea40qujlLWoN+6eLubZFQ56HZWQ3+lhNCfwCD5OaVQAYK+mvsYnCrKxlc4xXJQVc4Xu+GnATJJGvqhv+P6CYQlIyvC3a4LyYNKzOQRehQU2givGA1YTVFHadJ/3uVr2VNhB4IZhazMfjCAUktZ2WGFs8R6g==
+ bh=9CY5tFP91/Q3CSUI6if6M1GwyXKLj9bscrMh418YQ1Y=;
+ b=B4ZhLHsxB8+M9h/kEdjvK/Nqz/v/7Au8lDlQFaYcagfrWaQsWY7qzNJyKVXTecgoRJpJw/2T2N/poSg0tGSoX80kBFwW2XSO1zwCxwNM3OUl0RIs7z3smrjxR5IAIXOFZ7VHyOGQcs9dwjedPEarsKYpwkj1TJJyQG6gk9lsevw=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SJ0PR12MB5636.namprd12.prod.outlook.com (2603:10b6:a03:42b::20) with
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
+ by AM8PR04MB8002.eurprd04.prod.outlook.com (2603:10a6:20b:247::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 13:23:45 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f8b0:df13:5f8d:12a%7]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 13:23:45 +0000
-Date:   Wed, 7 Dec 2022 09:23:44 -0400
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Baolu Lu <baolu.lu@linux.intel.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Gerd Bayer <gbayer@linux.ibm.com>, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, linux-kernel@vger.kernel.org,
-        Julian Ruess <julianr@linux.ibm.com>
-Subject: Re: [PATCH v2 4/7] iommu: Let iommu.strict override
- ops->def_domain_type
-Message-ID: <Y5CT4BBO9hsmjJfD@nvidia.com>
-References: <Y4S3z6IpeDHmdUs/@nvidia.com>
- <52fe7769ca5b66523c2c93c7d46ebc17dc144aca.camel@linux.ibm.com>
- <Y4TjWOXYD+DK+d/B@nvidia.com>
- <6c4c3a3e-1d8d-7994-3c03-388ef63dddb3@arm.com>
- <Y4ZCVgLO9AHatwXe@nvidia.com>
- <eb30ad63-92d4-2af4-22e7-d82cdf08565e@arm.com>
- <Y4Zm53o1ovdIAqr/@nvidia.com>
- <4b34be4433856d9a3a5bf13dad7a77c1ba93db13.camel@linux.ibm.com>
- <Y4/LsZKmR3iWFphU@nvidia.com>
- <f9433a12-eacd-9e6b-a517-c3be438193d1@linux.intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f9433a12-eacd-9e6b-a517-c3be438193d1@linux.intel.com>
-X-ClientProxiedBy: BL1PR13CA0314.namprd13.prod.outlook.com
- (2603:10b6:208:2c1::19) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Wed, 7 Dec
+ 2022 13:24:11 +0000
+Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
+ ([fe80::8966:68e3:9b91:a6e9]) by AM9PR04MB8954.eurprd04.prod.outlook.com
+ ([fe80::8966:68e3:9b91:a6e9%8]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 13:24:11 +0000
+From:   "Radu Nicolae Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
+To:     olteanv@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        davem@davemloft.net, gregkh@linuxfoundation.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Radu Nicolae Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>,
+        stable@vger.kernel.org
+Subject: [PATCH RESEND v2] net: dsa: sja1105: avoid out of bounds access in sja1105_init_l2_policing()
+Date:   Wed,  7 Dec 2022 15:23:47 +0200
+Message-Id: <20221207132347.38698-1-radu-nicolae.pirea@oss.nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: AM0PR02CA0187.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28e::24) To AM9PR04MB8954.eurprd04.prod.outlook.com
+ (2603:10a6:20b:409::7)
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB5636:EE_
-X-MS-Office365-Filtering-Correlation-Id: 910c307c-1454-4812-d86a-08dad856445f
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AM8PR04MB8002:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8334862-627d-448d-a992-08dad8565391
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cRnZSWeqRyJF8SFZni6hJT7fol6oV2wwiMSSmzG9lITbGBYG7pH5L5f9LTMSgWqmjLc4X8gtlCNeqZYgF4NPRCb/nAkWooiG0/RRfEyHS+PIOql8orYiO4O5qANatxkvrInCBbM0fgwnIqOlPL4SIyLj9JSwpq8qHttFhoUrMngAVcnLNqyD9Yn2TK1Zol2OTCimDffFHr5lBzzU3TNwu5cPW510kbvcd/p5KIPSe4wFXWBxJrZXX1wYzcruzwR6q4P5Hv2TbeFSfdTsEUx1q4ozB7JyVMJpiXDgtq0BPTp9us5VeQGikTmViCN/IxeHFaLfXW+tMVE59O6oA0UTRw8B10MvYYUI84sm/ScgwEsJH0LW7i30TqdbQvmIj2+7Z4Z4fq4iZnCB2zU+8hu9ACjSfP6KoZ3y37JovAZH9Mm7CXeElaOj/IWTq0Y2w18gLmlTDW2zWpZghDP5IaCypik6wbfdYEn9PxshzMfko3xin60k6FqN9I5ENm1Nr5uZak5++MrYIRepn4066I5mMueRIZSNmnEgzwOE889FFFu/2wx09KE7WVtTuXsUCNWxmD+E0ainkJuS4VlJymuJq3pOPujREDvNJJF/VkaTxUOSTsD9f0soOT0uprpJWoAF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(39860400002)(366004)(346002)(376002)(451199015)(7416002)(5660300002)(66899015)(4744005)(8936002)(316002)(2906002)(38100700002)(54906003)(83380400001)(6916009)(478600001)(6486002)(66556008)(86362001)(66946007)(66476007)(36756003)(6512007)(8676002)(4326008)(26005)(186003)(41300700001)(2616005)(6506007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ACoLX8H1Jdn9iMBH1R8x4oO1HHY69Y2/bHiaThsL+ctGhc0RyOsub/UpCj7leBMu8vmRHNtOgTRhcAJ1/li5h4djt70X8UAnOSdNbiC/2ujbemjHgV6a2dwKGZ1tWyM/J1QbuYaSp1ezY0DIvHy4xuqtb2sQhGqK7sMFuhWGqmHPk5tVGzvd7FRit8kgJZYrzR5qrXaCwcB4s3DIQTrpffNa8DbPxhNeXdJ0UeW4BQjV/lckD82r+LAnJxB8LiIrftJmYp9ZvH7i0ZW/0qZxh01cZgtDI3NlOQdbNbH5g93HBDJbXn7EG5CN1Var67uCbnFIZUycfm+zyIT0li4lQjtV8dwsH/Xvs/4gRU3YByKqVxHmJtVTxP9ugWDGFNk49tlgtOWzXRLTTfYIw+ci0ty8cycffVV2dQKgfouF5tFNkwTQTLk9r556JiwndX8MBJlTXoy8HK/iqpseTbUOP4QroZdX5MyFYwqAlXndXRREjRkywMhGtQk0oycnzqO3h5HvzarpfoJ1aHLupn0Is7LhomUVWQfjVbHj74eX8X2VelZ9r7eEWH+Vrh+dHQMTwUP336onnhjsqstuuETlCU9dgARxJoC/5VXDoBT9J5h2lYtGLbdJIn+etxEufUjFwNpmfW0sG9XvGVrNlSfvhed80LZtj+FlI7ARTyaAa9zob0q3N1wK9rkiFlIwq4QW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199015)(86362001)(4326008)(2906002)(8936002)(38100700002)(83380400001)(5660300002)(66556008)(2616005)(1076003)(316002)(66946007)(186003)(66476007)(8676002)(38350700002)(6486002)(478600001)(41300700001)(6666004)(6506007)(26005)(52116002)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?OqRFA3W6Q2bAeCpz07KZP0Rjmahn+CRJEGHqZCULh2k44tFYRWy1IzgW9piG?=
- =?us-ascii?Q?lLbjX6cSgPFm+2H76fjrNSZ/jOkkhGAAZ01NUDS5e+FS7S3EJO0PkkRFssGd?=
- =?us-ascii?Q?FBTKriAq5SNyRcj/lv7A51gpeMeenK6mGqz8ipqFIOR89UGHc07rlOq/mFL7?=
- =?us-ascii?Q?lDi0WsEKhJ7AzN8V0DR0h3APLpOu89Fvy9p5gGxMKDMTi4v+DL1lcUYS4tL+?=
- =?us-ascii?Q?Y+JdPWenMoWWv/pO98MvYIV2qTtBt/Bo82wWSRDjfAUziLI/QMM0LTEw5bH9?=
- =?us-ascii?Q?KZ6PCscy8dIcXlqkb1Sm4jSMExzNdaM6odeV9XUrUOaWoRUeXcv1qJrQpGwa?=
- =?us-ascii?Q?nqWAeC2vXKTHRenUjwaGKp8r41VWgz9InuueaOxbyMa4rYKJtpmv+qn2YQjy?=
- =?us-ascii?Q?Xq7dQ988/fOzUEJqLrGYEEaO2f/Q2w9xQ6ZmLVsITuLilTiusKsaeoJKpbic?=
- =?us-ascii?Q?tv2+UO0bAmPgLhTLRuQzu9YwVRX4x095Y1DjjeOFsYQs4QlzziHqAkHUdvh2?=
- =?us-ascii?Q?hvamwfpR0RYyywRXSR1GjgiL7FIWVRCvQoPXoEk/Tq/b+DTpoYvLQnmxM9Im?=
- =?us-ascii?Q?Kftxp/HpszR48LcikBNVGMrdG+C6HBdiCks+vCR+oZ5QfU186f9DjUtsXD5S?=
- =?us-ascii?Q?oYA279tvUpowsCDaYnZVIoWuXjHIosfO7IyzdbBqR1tGZwEgvj1GEjAwdVwP?=
- =?us-ascii?Q?gX1uWlBvxdZ4zFmBtK74sX9hrE5Z30nK+shox6ifTt+vzzT+0IPAx9wB1b1j?=
- =?us-ascii?Q?dGE9mDGsu9nFAyjfqGkuyt/K1UTpLQ9+8F1nO95Fc8HJUfhy0B6R9ZRyF40v?=
- =?us-ascii?Q?kI/FQc4JosgTjcihhxlHrOISHZOY1FrXWcqBSlFTUzvwy9b3VlUbYaV2E17U?=
- =?us-ascii?Q?avRn6ZY6FtruSVg0bMyqBQcofXghAGqf8Ew13mpPkWVscggqntK+s7uj8k6M?=
- =?us-ascii?Q?yz91UkK+OHx8H3gm6qFaCefMM3VaThK5mtUHOJoINCfF2nK9fRV8WnNvkEKO?=
- =?us-ascii?Q?KwGjeFEPmbS7sFCEolsNvP1L10pY6RFlNzXIKpv3B6dvimsTZpPuBWL5Rd+E?=
- =?us-ascii?Q?YbME/p7crUIPc7DefAiPFxXCJPGH/lkG9fOvc/LSg1DeL2mQoXpMD8bNIazP?=
- =?us-ascii?Q?IQB/AGnpAvIbtBxSmVdOGFdh7KBVBKyUAO6Dlyp9SWIzlg2OmQAeyUBntpD3?=
- =?us-ascii?Q?TwkLeW6LUrPnBljpQky6PJ7SrAZkNwrnoAtijwyxbX+0EaUe68GZIq3eT+Lc?=
- =?us-ascii?Q?wfxiQFHNUvoteDLpawImTYa/lX79euY2nh8/9k7W08sieHLk3427mwVkFhan?=
- =?us-ascii?Q?XtxmhevJ1kGrl68Kxl3KfkQr7YKeyMMryo/fs1YMjqqwG8GYAdyC/YRoi7Zv?=
- =?us-ascii?Q?EqelSpBdqAOf/gzHoAZ2RiYU4m6+VhCQdApVJEzmxSKnMli9pPxiLMWvDgqh?=
- =?us-ascii?Q?ktHWuzFVV0ityj21+bZdfxgKoDyOlIP1OSw1tcQerrSAHdtu5oY7W4CA8jhQ?=
- =?us-ascii?Q?GYpQr3tGrclw8tod1xDDXAkx/rtcB1Ld9i6wzpENx3MW20Cden0UgqDpovXO?=
- =?us-ascii?Q?/+pL0uU0TYpbb4O034U=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 910c307c-1454-4812-d86a-08dad856445f
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KxXzJQlOBpWlcqYwprv7gl9TXj7m4KEWdiaMqu6V+wc/N6eINabj8fhhLqtr?=
+ =?us-ascii?Q?O+sIReDGXi4HRrqqMR0/boXuT4oERTZgNA9p7aR4NrCdhxNH+HK2vKv0/zt3?=
+ =?us-ascii?Q?qzVjDDHmA1WIv+O5fppqYWmYPs1Tpbn3QTKiXUTIa+PC+SakqjRRNd/janKE?=
+ =?us-ascii?Q?crIQ53OsYpCZFIAMMkJEalLNzWIjLSiPRLa/ibkYVgaTr+mbflI2pa81z0yp?=
+ =?us-ascii?Q?JqJM6ePbYR8RJyBkcGxAp+fDZciimMUlpqlQPa/bueh4AMp5o2J8QYMFBQcX?=
+ =?us-ascii?Q?04GaDCikzPLtsv+JjMKbijAb6csm8mY3rgHQ5DNpJJnX2ur39X/XJpYzhZbE?=
+ =?us-ascii?Q?RHzNRjDh5BshlAlPqvxRP/XimvwPvqw/m/jGUtVenAuyCjGmxS3ETjVgDu0q?=
+ =?us-ascii?Q?0nNX85kio79H6ftf3KcLrFrqMzaDFHCK2N7WxYJJAkHwdVpwBP4Y2TkNPSoX?=
+ =?us-ascii?Q?CoZNCjrqP68Y/FbLCyLBTO6NaLOpZy+InmyRUnSfM859R9+YQwt43Y0f+jZ5?=
+ =?us-ascii?Q?dBE6kFbLNh63LTU08fqMCt32EIFF7ansyuycWUmJoEreLGNwMcyeC8yZyw1B?=
+ =?us-ascii?Q?Tl7jYl1JCKZ0Y+txK82D3pqjnRYIwM4pjMSAaTy4/g6aikvz8PxITzCNGYNW?=
+ =?us-ascii?Q?watFCs491W78WJL89YAMEWrkxI57HMrvSu0J1sv236Z0E5oB5yWOvwct6USw?=
+ =?us-ascii?Q?Z9Wg9TzanUNSa/jF5ycnvCsM8cQlw+t2pzH4vFlOEUteRUuv+xnGY1u8zcef?=
+ =?us-ascii?Q?bC10P1pYo+jZBcTb5OdGcrX6/0h+bGKKofmECfAO2gOPerBGu5+VuAPp9FA3?=
+ =?us-ascii?Q?/YAbYq6ReAfvdo4QYbpsNA/q6+8Iug8kcTazZQyhwmVOr0QOWRRrHIpPiQRs?=
+ =?us-ascii?Q?+8WCKEncIpk3GYO3k7s0H3/4DKUOnVrXcCau15WngsUZtcrIhUfktyUF7N3k?=
+ =?us-ascii?Q?KLKyXMtQHd+sEUpQPqNKyaDuQUMj3APuBdqISJZr7sBBlGw3DTGk8sm3f+B1?=
+ =?us-ascii?Q?7l+TzDfuCPld0lnJa8EzyQhdr9NecMsaB1ReUEemtMFpcj2z0eNWBTVKG2II?=
+ =?us-ascii?Q?yBaUAYophS/OleNMfQv6pKSHGv38gxgMgllpLXCxodrllMPs4tFKFeNy+XZs?=
+ =?us-ascii?Q?qaaFkh0b5NLmmi+4TAVOixx+zyrbZP+dMNmJKj1X0TdD0BT6cDUBaVZmTCpz?=
+ =?us-ascii?Q?QkBSU9FmqcGAu7f8xzWNa8jPWr0BzuT9xb4IU11ncxNRNmhh1saF6XJF1pmh?=
+ =?us-ascii?Q?8wio2NEx+/grKRDVPgpTk/fsLOH2Q7RAIsmnicTGEFROh14Z4VdpL+G5r4/x?=
+ =?us-ascii?Q?Tv9esJIGT39ieWHlVi1KQ//ePj4AY0xqGP41K9EBLRVM4QJCzfzlujsGWT0H?=
+ =?us-ascii?Q?wGrqufZQgO37Yl5SpfsOy78rODBVk/TiKnJWWE1r1KytJjWhKhy5J2l2sh/b?=
+ =?us-ascii?Q?jKi06myA+S5pQ76Jrr+DSVRGmlSScz3wl52w7O1Z9KlyDFxzSwJwk/jcUf5p?=
+ =?us-ascii?Q?oy5LRhvDtzM6hxY2kEkMZQh9Ff5kUdy5DiAxm4+DbObvUmeYPjSNIDwIY+hV?=
+ =?us-ascii?Q?pam2FxWsFAWMgXI4KhVPMfGfuJ62uoJx4H05Bf1OwuUFVMsibLu1Ugjg7k90?=
+ =?us-ascii?Q?SA=3D=3D?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8334862-627d-448d-a992-08dad8565391
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 13:23:45.3996
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 13:24:11.3919
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZM3ZpEQYQ17/JAyNdNB0mnD3dwhoy3NKI4zVWI/TkjKxpYBbFsXICbwiwhonOqQ7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5636
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: +TwfCpRl/hskVIj723LvCTwfK2h9uFSIiSQssFA14rsTyvJOUb3K6y0fhrf6k3qYSe5BYvjLK5HFz4tjRnDdE2vgAimAXLo4AnT57n2hd6c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8002
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 09:18:19PM +0800, Baolu Lu wrote:
+The SJA1105 family has 45 L2 policing table entries
+(SJA1105_MAX_L2_POLICING_COUNT) and SJA1110 has 110
+(SJA1110_MAX_L2_POLICING_COUNT). Keeping the table structure but
+accounting for the difference in port count (5 in SJA1105 vs 10 in
+SJA1110) does not fully explain the difference. Rather, the SJA1110 also
+has L2 ingress policers for multicast traffic. If a packet is classified
+as multicast, it will be processed by the policer index 99 + SRCPORT.
 
-> > -	/* Check if the device in the group still has a driver bound to it */
-> > -	device_lock(dev);
-> 
-> With device_lock() removed, this probably races with the
-> iommu_release_device() path? group->mutex seems insufficient to avoid
-> the race. Perhaps I missed anything.
+The sja1105_init_l2_policing() function initializes all L2 policers such
+that they don't interfere with normal packet reception by default. To have
+a common code between SJA1105 and SJA1110, the index of the multicast
+policer for the port is calculated because it's an index that is out of
+bounds for SJA1105 but in bounds for SJA1110, and a bounds check is
+performed.
 
-This path only deals with group, so there is no 'dev' and no race with
-removal.
+The code fails to do the proper thing when determining what to do with the
+multicast policer of port 0 on SJA1105 (ds->num_ports = 5). The "mcast"
+index will be equal to 45, which is also equal to
+table->ops->max_entry_count (SJA1105_MAX_L2_POLICING_COUNT). So it passes
+through the check. But at the same time, SJA1105 doesn't have multicast
+policers. So the code programs the SHARINDX field of an out-of-bounds
+element in the L2 Policing table of the static config.
 
-Later on we obtain the group mutex and then extract the first device
-from the group list as a representative device of the group - eg to
-perform iommu_domain allocation.
+The comparison between index 45 and 45 entries should have determined the
+code to not access this policer index on SJA1105, since its memory wasn't
+even allocated.
 
-Under the group mutex devices on the device list cannot become
-invalid.
+With enough bad luck, the out-of-bounds write could even overwrite other
+valid kernel data, but in this case, the issue was detected using KASAN.
 
-It is the same reasoning we use in other places that iterate over the
-group device list under lock.
+Kernel log:
 
-Jason
+sja1105 spi5.0: Probed switch chip: SJA1105Q
+==================================================================
+BUG: KASAN: slab-out-of-bounds in sja1105_setup+0x1cbc/0x2340
+Write of size 8 at addr ffffff880bd57708 by task kworker/u8:0/8
+...
+Workqueue: events_unbound deferred_probe_work_func
+Call trace:
+...
+sja1105_setup+0x1cbc/0x2340
+dsa_register_switch+0x1284/0x18d0
+sja1105_probe+0x748/0x840
+...
+Allocated by task 8:
+...
+sja1105_setup+0x1bcc/0x2340
+dsa_register_switch+0x1284/0x18d0
+sja1105_probe+0x748/0x840
+...
+
+Fixes: 38fbe91f2287 ("net: dsa: sja1105: configure the multicast policers, if present")
+CC: stable@vger.kernel.org # 5.15+
+Signed-off-by: Radu Nicolae Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
+---
+ drivers/net/dsa/sja1105/sja1105_main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+Hi,
+
+This is the v2 of "net: dsa: sja1105: fix slab-out-of-bounds in
+sja1105_setup" and it is a resend because the first time it was send only
+to stable stable@vger.kernel.org.
+
+Cheers.
+Radu P.
+
+diff --git a/drivers/net/dsa/sja1105/sja1105_main.c b/drivers/net/dsa/sja1105/sja1105_main.c
+index 412666111b0c..b70dcf32a26d 100644
+--- a/drivers/net/dsa/sja1105/sja1105_main.c
++++ b/drivers/net/dsa/sja1105/sja1105_main.c
+@@ -1038,7 +1038,7 @@ static int sja1105_init_l2_policing(struct sja1105_private *priv)
+ 
+ 		policing[bcast].sharindx = port;
+ 		/* Only SJA1110 has multicast policers */
+-		if (mcast <= table->ops->max_entry_count)
++		if (mcast < table->ops->max_entry_count)
+ 			policing[mcast].sharindx = port;
+ 	}
+ 
+-- 
+2.34.1
+
