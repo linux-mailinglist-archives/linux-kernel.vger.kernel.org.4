@@ -2,87 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B266B645330
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:50:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9292464533A
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 06:04:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiLGEuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 23:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S229660AbiLGFEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 00:04:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbiLGEuT (ORCPT
+        with ESMTP id S229437AbiLGFED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 23:50:19 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F071B78F;
-        Tue,  6 Dec 2022 20:50:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C513361A1B;
-        Wed,  7 Dec 2022 04:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1F138C43148;
-        Wed,  7 Dec 2022 04:50:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670388617;
-        bh=tw43Of0wcHK6MxbRZMdXCJpNagRSSOU276B/f1NfVGE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ToOPW2RKNE1t8RApk/4fZuXj9azJI6TQoVjs7XXmkLyF1pgA/Bc8UasHpMgqImfkf
-         78FHpKgcHMN0LIkiNTiuaOIFYNSHKnOWshMoAzuHJ6PLzix0sGsbtFTFjox33Z4b4e
-         RfBIGbsUlskbQPpniko8oRuJScmfvrHyglvODlBFJux4wMjJcHpAP8sjldDndUFv8k
-         dhEP2Pzh3vxZANSIB63QhyXnyCxRt5C+a37cx4UUGZQV7JTgQ2Zq5BymeAkm2dXtz9
-         A8QN7tdTroHb8NnqTa01bl2rdyyiEmeAt2KGF+9epXkKRGFU/6U60o2P/AexN0IYSt
-         Awr2prPhag0NQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 025D9C5C7C6;
-        Wed,  7 Dec 2022 04:50:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 7 Dec 2022 00:04:03 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460065133A;
+        Tue,  6 Dec 2022 21:04:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xBOynPlFMRVXHrZbltIiIs3+eUjeKTYRLQ8vKsVHLL0=; b=wnUIajY0Ex8709cgC4fa5Tj8TC
+        By/5u/pj9KIABTn6UyjsKbfCdzWI70uDH9lTx56ynaSSsCaBJ0oM5ncoEYMPUc6KjbOAk5Z4B32Gd
+        pAs/bEuBOjvrO5EzCy1dPWqeP8U0PQKci5wQ9KivAuqGaJJxZz4cxAdOxE3nl+S0tPI68XreYgQ7I
+        +9/+oBUdmLLG4YgxczhiIB3icUuW/2oM/GCvjq6P1xa9WVoIVaHiOTeFJZ3c186uNlzSpsH5YhES4
+        Sn80X1aRfP0+P+/S3+5/ObjMwqiTOaIrxwGmzP0+MbHZkhPtfdzBV6W4w5gu+Y3vLT7FGl1GeE5ow
+        uuZS01Zg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p2mb2-00BBoJ-DF; Wed, 07 Dec 2022 05:03:52 +0000
+Date:   Tue, 6 Dec 2022 21:03:52 -0800
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Nick Alcock <nick.alcock@oracle.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-modules@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        eugene.loh@oracle.com, kris.van.hees@oracle.com
+Subject: Re: [PATCH v10 05/13] kbuild: remove
+ MODULE_LICENSE/AUTHOR/DESCRIPTION in non-modules
+Message-ID: <Y5AeuI4RD0tpzlp5@bombadil.infradead.org>
+References: <20221205163157.269335-1-nick.alcock@oracle.com>
+ <20221205163157.269335-6-nick.alcock@oracle.com>
+ <CAMuHMdVrP1sLGRS999q=2L-5JhxXwcjBLkQREdcJhDerg70OtA@mail.gmail.com>
+ <87mt80l2py.fsf@esperi.org.uk>
+ <5f0a5ea7-2d48-435f-aaa0-82b6ef8cfcc5@app.fastmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: =?utf-8?q?=5BPATCH_net-next_v2=5D_net=3A_microchip=3A_vcap=3A_Remov?=
-        =?utf-8?q?e_unneeded_semicolons?=
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167038861700.25696.16360007989331129867.git-patchwork-notify@kernel.org>
-Date:   Wed, 07 Dec 2022 04:50:17 +0000
-References: <202212051422158113766@zte.com.cn>
-In-Reply-To: <202212051422158113766@zte.com.cn>
-To:     <zhang.songyi@zte.com.cn>
-Cc:     kuba@kernel.org, lars.povlsen@microchip.com,
-        steen.hegelund@microchip.com, daniel.machon@microchip.com,
-        unglinuxdriver@microchip.com, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5f0a5ea7-2d48-435f-aaa0-82b6ef8cfcc5@app.fastmail.com>
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon, 5 Dec 2022 14:22:15 +0800 (CST) you wrote:
-> From: zhang songyi <zhang.songyi@zte.com.cn>
+On Tue, Dec 06, 2022 at 10:02:30PM +0100, Arnd Bergmann wrote:
+> On Tue, Dec 6, 2022, at 21:03, Nick Alcock wrote:
+> > On 6 Dec 2022, Geert Uytterhoeven uttered the following:
+> > Only MODULE_LICENSE invokes MODULE_FILE and thus ends up introducing a
+> > KBUILD_MODOBJS entry that triggers things going wrong iff not a module:
+> > so only it needs to go out (or be replaced with a variant that doesn't
+> > invoke MODULE_FILE, if you want to keep the license in too --
 > 
-> Semicolons after "}" are not needed.
+> That sounds like a better alternative
 > 
-> Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
-> ---
->  drivers/net/ethernet/microchip/vcap/vcap_api.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+> > but if the thing is no longer a standalone entity at all I'm not sure
+> > what meaning it could possibly have).
+> 
+> As far as I can tell, the general trend is to make more things modules,
+> so there is a good chance that these come back eventually. If the
+> information in the MODULE_LICENSE field isn't wrong, I would just
+> leave it in there.
 
-Here is the summary with links:
-  - [net-next,v2] net: microchip: vcap: Remove unneeded semicolons
-    https://git.kernel.org/netdev/net-next/c/e3bd74c3d190
+Tooling today uses it though to make a deterministic call on if something
+*can* be a module. In particular after commit 8b41fc4454e ("kbuild: create
+modules.builtin without Makefile.modbuiltin or tristate.conf") we rely on
+the module license tag to generate the modules.builtin file. This in
+turn is used to allow modprobe to *not* fail when trying to load a module
+which is built-in.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+So we can't just disable the tag for when the code is built-in as *want*
+to carry it when modules are built-in, that is the point, to help
+userspace with this determination.
 
+I don't think we want to revert 8b41fc4454e as it means we'd force Kbuild to
+traverse the source tree twice.
 
+Geert's point was not keeping MODULE_LICENSE() but instead the other
+MODULE_*() crap for things which are not modules in case in the future
+code becomes a module...
+
+But I don't see the point in keeping things around just in case, if we
+want to keep things simple. Just use the SPDX license tag for the license.
+
+  Luis
