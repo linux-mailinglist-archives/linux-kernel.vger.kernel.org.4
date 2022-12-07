@@ -2,138 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035F0646436
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:44:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B9D2646439
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiLGWoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:44:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S229760AbiLGWoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:44:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGWoL (ORCPT
+        with ESMTP id S229437AbiLGWoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:44:11 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA1A83273
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:43:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670452989;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=CWjwloNvUEkkIL4IH5jVpeAOiD4Eko/MVERp2bOyZdg=;
-        b=VU9nXVshkihD69icg6t4I579efh3XhiMmCs5E0rWnicRDGWrFYCBKya4bvaDpDvdI3rq9D
-        QMVDlRfRNhPrcNzqBlYiHq+xgAoZQW+LdGPW564pj8/2f2XuMcWedwH7IJlCd3zdVLvSON
-        It49mLuJlJW2JyHq2o/5gD9AzNtdFuY=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-411-o0BlPDJsOI-jwkL_O6vGpQ-1; Wed, 07 Dec 2022 17:43:08 -0500
-X-MC-Unique: o0BlPDJsOI-jwkL_O6vGpQ-1
-Received: by mail-qk1-f199.google.com with SMTP id bi42-20020a05620a31aa00b006faaa1664b9so25975630qkb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:43:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CWjwloNvUEkkIL4IH5jVpeAOiD4Eko/MVERp2bOyZdg=;
-        b=pj9XBmos382v0sJ/UTkOVVO5l54av+1+eK0iB3cmLUJzBJPcD/Td4ClMFAnPvcXr6X
-         O15Y8u3XF05yOQMfU8fSCO3jfuchGLEmkzW9IJ0VpxAeUJ+viS82989qR3qHEUvsoYv0
-         HkVTeN5I6XY+u8tGtVvKxQ7jK+e7EMS1CBODTB5IiIwg07ycTLVKk2Noyc699qoMdpgd
-         9LuhzApuLHbN3LyGYxAOiksdgrSxfcWwOSdVixoH6CyNR9CbnsHR9Sr+wqquKv8BcueA
-         4Q5M+b7G7V0AKdUmf+y4Br5P56SDeME/DKhA37t4fVmJjDcH90ednhHmDKG2/bGdkUe5
-         BdVQ==
-X-Gm-Message-State: ANoB5plXRL4WPZBMd7ZbVrY0Z1Mi6x6Xpp5QLc5QmS4g2I98msqmBlKt
-        rsjFagbcKmGDDCAz5IueDyNe9KC50CqJXBUMzLqeofi2zndTAt4nyyI/hfAM0CwfigwHgeFU4/y
-        FaMk/52LFFttdGeUjsRvdbGk1
-X-Received: by 2002:ac8:6b16:0:b0:3a5:c7d9:15f9 with SMTP id w22-20020ac86b16000000b003a5c7d915f9mr1480100qts.49.1670452987686;
-        Wed, 07 Dec 2022 14:43:07 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5+IvWHCzpkzEmIQzaT31AjgoZDyI4bcsd2RFr41CcZw0um/Oq2E2tah8eU0le0YiwGZcXHbg==
-X-Received: by 2002:ac8:6b16:0:b0:3a5:c7d9:15f9 with SMTP id w22-20020ac86b16000000b003a5c7d915f9mr1480084qts.49.1670452987444;
-        Wed, 07 Dec 2022 14:43:07 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id l27-20020ac84cdb000000b00399fe4aac3esm13722291qtv.50.2022.12.07.14.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 14:43:06 -0800 (PST)
-Date:   Wed, 7 Dec 2022 17:43:05 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH v2 04/10] mm/hugetlb: Move swap entry handling into vma
- lock when faulted
-Message-ID: <Y5EW+RTuGuGhfdNk@x1n>
-References: <20221207203034.650899-1-peterx@redhat.com>
- <20221207203034.650899-5-peterx@redhat.com>
- <326789a5-85ba-f13c-389e-fd21d673e3ae@nvidia.com>
+        Wed, 7 Dec 2022 17:44:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D7483E84;
+        Wed,  7 Dec 2022 14:44:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 234BEB8216F;
+        Wed,  7 Dec 2022 22:44:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBB69C433B5;
+        Wed,  7 Dec 2022 22:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670453079;
+        bh=XAcqFqnFKkKqA599RAuFn6x75NBJPlgLtoI8Xyl5XIA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JwmxGf5VCKDlRp1Df2gEbJq9PepRvy2apeCS5vibB/MFZlHvB8UKPCDpjSHV7Iccc
+         eW0jroojuCE6ICtsPD7JRf4ruzYGM0bBhLK40qxun/bJ6fs3EpE4GoyUcr7qdE11dB
+         1PbEQLtv3bBi/w/c5WldelqqAhCgrZwCTYkjc1eid0ZT8LL05c6ZzONqsTP9UQ0vJW
+         6PJ1ispY84S/CzFvHk/2yj0D2NmjAH2h+qL0OzMlhxJ4STVTnxwow5q19KIiQjGiro
+         cDGXaGJIlvwdm3SdsDPCSD8m/qkNrvJI1N/zJkm8LqSb4hupLGDl1MS4mkJIebeqsO
+         hD6M/A+BtTkSA==
+Received: by mail-vs1-f42.google.com with SMTP id 125so18661510vsi.9;
+        Wed, 07 Dec 2022 14:44:39 -0800 (PST)
+X-Gm-Message-State: ANoB5pnUt15DbuDVAjlayEnAToAjyCIBV/egLbyt8GmpJbc+tU+TFPlF
+        wdh+fxuUytUQW32KX8uZUmrkGRh/j7IStLv4rw==
+X-Google-Smtp-Source: AA0mqf5oMyM7xeqCPLDzFrVzgXv7T5LEcJz0g3WYasB44gjnVAvyLWVqp9ro0y5JBb+kyHuglGfzJ1d5UArAJEdKGog=
+X-Received: by 2002:a67:af07:0:b0:3b1:1713:ba12 with SMTP id
+ v7-20020a67af07000000b003b11713ba12mr12265983vsl.6.1670453078525; Wed, 07 Dec
+ 2022 14:44:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <326789a5-85ba-f13c-389e-fd21d673e3ae@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1669048984-56394-1-git-send-email-lizhi.hou@amd.com>
+ <1669048984-56394-3-git-send-email-lizhi.hou@amd.com> <20221201211224.GA1225112-robh@kernel.org>
+ <5e8eabf7-edc8-28a9-afd7-1ccf207d5018@amd.com>
+In-Reply-To: <5e8eabf7-edc8-28a9-afd7-1ccf207d5018@amd.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 7 Dec 2022 16:44:27 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJyi3XYdSmgOQ3Xk1cnMeRXUzSsd=-SgweKiLnEsJ-9YQ@mail.gmail.com>
+Message-ID: <CAL_JsqJyi3XYdSmgOQ3Xk1cnMeRXUzSsd=-SgweKiLnEsJ-9YQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH RFC V4 2/3] PCI: Create device tree node for
+ selected devices
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, frowand.list@gmail.com,
+        helgaas@kernel.org, clement.leger@bootlin.com, max.zhen@amd.com,
+        sonal.santan@amd.com, larry.liu@amd.com, brian.xu@amd.com,
+        stefano.stabellini@xilinx.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, John,
+On Mon, Dec 5, 2022 at 6:30 PM Lizhi Hou <lizhi.hou@amd.com> wrote:
+>
+>
+> On 12/1/22 13:12, Rob Herring wrote:
+> > On Mon, Nov 21, 2022 at 08:43:03AM -0800, Lizhi Hou wrote:
+> >> The PCI endpoint device such as Xilinx Alveo PCI card maps the register
+> >> spaces from multiple hardware peripherals to its PCI BAR. Normally,
+> >> the PCI core discovers devices and BARs using the PCI enumeration process.
+> >> There is no infrastructure to discover the hardware peripherals that are
+> >> present in a PCI device, and which can be accessed through the PCI BARs.
+> >>
+> >> For Alveo PCI card, the card firmware provides a flattened device tree to
+> >> describe the hardware peripherals on its BARs. The Alveo card driver can
+> >> load this flattened device tree and leverage device tree framework to
+> >> generate platform devices for the hardware peripherals eventually.
+> >>
+> >> Apparently, the device tree framework requires a device tree node for the
+> >> PCI device. Thus, it can generate the device tree nodes for hardware
+> >> peripherals underneath. Because PCI is self discoverable bus, there might
+> >> not be a device tree node created for PCI devices. This patch is to add
+> >> support to generate device tree node for PCI devices.
+> >>
+> >> Added a kernel option. When the option is turned on, the kernel will
+> >> generate device tree nodes for PCI bridges unconditionally.
+> >>
+> >> Initially, the basic properties are added for the dynamically generated
+> >> device tree nodes.
+> >>
+> >> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> >> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+> >> Signed-off-by: Max Zhen <max.zhen@amd.com>
+> >> Reviewed-by: Brian Xu <brian.xu@amd.com>
+> >> ---
+> >>   drivers/pci/Kconfig         |  12 ++
+> >>   drivers/pci/Makefile        |   1 +
+> >>   drivers/pci/bus.c           |   2 +
+> >>   drivers/pci/msi/irqdomain.c |   6 +-
+> >>   drivers/pci/of.c            |  71 ++++++++++
+> >>   drivers/pci/of_property.c   | 256 ++++++++++++++++++++++++++++++++++++
+> >>   drivers/pci/pci-driver.c    |   3 +-
+> >>   drivers/pci/pci.h           |  19 +++
+> >>   drivers/pci/remove.c        |   1 +
+> >>   9 files changed, 368 insertions(+), 3 deletions(-)
+> >>   create mode 100644 drivers/pci/of_property.c
+> >>
+> >> diff --git a/drivers/pci/Kconfig b/drivers/pci/Kconfig
+> >> index 55c028af4bd9..126c31b79718 100644
+> >> --- a/drivers/pci/Kconfig
+> >> +++ b/drivers/pci/Kconfig
+> >> @@ -198,6 +198,18 @@ config PCI_HYPERV
+> >>        The PCI device frontend driver allows the kernel to import arbitrary
+> >>        PCI devices from a PCI backend to support PCI driver domains.
+> >>
+> >> +config PCI_DYNAMIC_OF_NODES
+> >> +    bool "Device tree node for PCI devices"
+> > Create Devicetree nodes for PCI devices
+> Sure.
+> >
+> > But as I've said before, making this a config option doesn't really work
+> > except as something to experiment with. Once you add your driver and
+> > want to do a 'select PCI_DYNAMIC_OF_NODES', you've affected everyone
+> > else.
+>
+> Do you mean we should remove PCI_DYNAMIC_OF_NODES and make
+> creating dynamic tree node default?
 
-Firstly, thanks for taking a look at the whole set.
+No, I'm saying as long as it is a config option, it's not useful for
+more than experimentation. A distro kernel has to decide how to set a
+config option for *everyone*.
 
-On Wed, Dec 07, 2022 at 02:36:21PM -0800, John Hubbard wrote:
-> > @@ -5886,8 +5866,22 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
-> >   	 * fault, and is_hugetlb_entry_(migration|hwpoisoned) check will
-> >   	 * properly handle it.
-> >   	 */
-> > -	if (!pte_present(entry))
-> > +	if (!pte_present(entry)) {
-> > +		if (unlikely(is_hugetlb_entry_migration(entry))) {
-> > +			/*
-> > +			 * Release fault lock first because the vma lock is
-> > +			 * needed to guard the huge_pte_lockptr() later in
-> > +			 * migration_entry_wait_huge().  The vma lock will
-> > +			 * be released there.
-> > +			 */
-> > +			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-> > +			migration_entry_wait_huge(vma, ptep);
-> > +			return 0;
-> 
-> Oh, but now (and also one other, pre-existing case, above)
-> hugetlb_fault() is returning with the vma lock held.
+> Based on the previous discussions, the approach I am implementing
+> is to create device tree nodes for all PCI bridges and devices defined
+> by pci quirks. I believe a PCI endpoint which is not defined by PCI quirks
+> should not to be affected because there is no device tree node is created
+> for it.
+>
+> Are you fine with this approach?
 
-Note that here migration_entry_wait_huge() will release it.
+How does that work? The quirks run when a device is discovered. At
+that time you've already discovered and probed everything upstream of
+the device. So the only thing controlling the upstream devices getting
+a DT node is the config option, right?
 
-Sorry it's definitely not as straightforward, but this is also something I
-didn't come up with a better solution, because we need the vma lock to
-protect the spinlock, which is used in deep code path of the migration
-code.
+> >> +    depends on OF
+> >> +    select OF_DYNAMIC
+> >> +    help
+> >> +      This option enables support for generating device tree nodes for some
+> >> +      PCI devices. Thus, the driver of this kind can load and overlay
+> >> +      flattened device tree for its downstream devices.
+> >> +
+> >> +      Once this option is selected, the device tree nodes will be generated
+> >> +      for all PCI bridges.
+> >> +
+> >>   choice
+> >>      prompt "PCI Express hierarchy optimization setting"
+> >>      default PCIE_BUS_DEFAULT
+> >> diff --git a/drivers/pci/Makefile b/drivers/pci/Makefile
+> >> index 2680e4c92f0a..cc8b4e01e29d 100644
+> >> --- a/drivers/pci/Makefile
+> >> +++ b/drivers/pci/Makefile
+> >> @@ -32,6 +32,7 @@ obj-$(CONFIG_PCI_P2PDMA)   += p2pdma.o
+> >>   obj-$(CONFIG_XEN_PCIDEV_FRONTEND) += xen-pcifront.o
+> >>   obj-$(CONFIG_VGA_ARB)              += vgaarb.o
+> >>   obj-$(CONFIG_PCI_DOE)              += doe.o
+> >> +obj-$(CONFIG_PCI_DYNAMIC_OF_NODES) += of_property.o
+> >>
+> >>   # Endpoint library must be initialized before its users
+> >>   obj-$(CONFIG_PCI_ENDPOINT) += endpoint/
+> >> diff --git a/drivers/pci/bus.c b/drivers/pci/bus.c
+> >> index 3cef835b375f..8507cc32b61d 100644
+> >> --- a/drivers/pci/bus.c
+> >> +++ b/drivers/pci/bus.c
+> >> @@ -316,6 +316,8 @@ void pci_bus_add_device(struct pci_dev *dev)
+> >>       */
+> >>      pcibios_bus_add_device(dev);
+> >>      pci_fixup_device(pci_fixup_final, dev);
+> >> +    if (pci_is_bridge(dev))
+> >> +            of_pci_make_dev_node(dev);
+> >>      pci_create_sysfs_dev_files(dev);
+> >>      pci_proc_attach_device(dev);
+> >>      pci_bridge_d3_update(dev);
+> >> diff --git a/drivers/pci/msi/irqdomain.c b/drivers/pci/msi/irqdomain.c
+> >> index e9cf318e6670..eeaf44169bfd 100644
+> >> --- a/drivers/pci/msi/irqdomain.c
+> >> +++ b/drivers/pci/msi/irqdomain.c
+> >> @@ -230,8 +230,10 @@ u32 pci_msi_domain_get_msi_rid(struct irq_domain *domain, struct pci_dev *pdev)
+> >>      pci_for_each_dma_alias(pdev, get_msi_id_cb, &rid);
+> >>
+> >>      of_node = irq_domain_get_of_node(domain);
+> >> -    rid = of_node ? of_msi_map_id(&pdev->dev, of_node, rid) :
+> >> -                    iort_msi_map_id(&pdev->dev, rid);
+> >> +    if (of_node && !of_node_check_flag(of_node, OF_DYNAMIC))
+> >> +            rid = of_msi_map_id(&pdev->dev, of_node, rid);
+> >> +    else
+> >> +            rid = iort_msi_map_id(&pdev->dev, rid);
+> > I have no idea if this works. It looks kind of broken already if
+> > !of_node calls iort_msi_map_id(). With a DT only system, I would think
+> > we'd always call of_msi_map_id(). Have you tested MSIs?
+> >
+> > With a mixed system, I have no idea what happens. That needs to be
+> > understood for MSI, DMA, and interrupts.
+>
+> Yes, I tested MSI in VM.
+>
+> # cat
+> /sys/devices/platform/3f000000.pcie/pci0000:00/0000:00:02.0/0000:09:00.0/0000:0a:00.0/msi_irqs/29
+>
+> msi
+> # cat /proc/interrupts | grep 29
+>   29:          1          0       MSI 5242880 Edge      pciehp
+>
+> The idea is to preserve the current behaviror.
+>
+>        current: PCI device does not have dt node, thus iort_msi_map_id()
+> is called.
+>
+>        modified code: PCI device has dt node but with OF_DYNAMIC flag,
+> thus  iort_msi_map_id() is called.
+>
+> I was planning to take on of_msi_map_id() for dynamically generated dt node
+>
+> in future when we see a real use case?
+>
+> >
+> >>
+> >>      return rid;
+> >>   }
+> >> diff --git a/drivers/pci/of.c b/drivers/pci/of.c
+> >> index 196834ed44fe..fb60b04f0b93 100644
+> >> --- a/drivers/pci/of.c
+> >> +++ b/drivers/pci/of.c
+> >> @@ -469,6 +469,8 @@ static int of_irq_parse_pci(const struct pci_dev *pdev, struct of_phandle_args *
+> >>              } else {
+> >>                      /* We found a P2P bridge, check if it has a node */
+> >>                      ppnode = pci_device_to_OF_node(ppdev);
+> >> +                    if (of_node_check_flag(ppnode, OF_DYNAMIC))
+> >> +                            ppnode = NULL;
+> >>              }
+> >>
+> >>              /*
+> >> @@ -599,6 +601,75 @@ int devm_of_pci_bridge_init(struct device *dev, struct pci_host_bridge *bridge)
+> >>      return pci_parse_request_of_pci_ranges(dev, bridge);
+> >>   }
+> >>
+> >> +#if IS_ENABLED(CONFIG_PCI_DYNAMIC_OF_NODES)
+> >> +
+> >> +void of_pci_remove_node(struct pci_dev *pdev)
+> >> +{
+> >> +    struct device_node *dt_node;
+> > node or np are the typical names.
+> Will fix this.
+> >
+> >> +
+> >> +    dt_node = pci_device_to_OF_node(pdev);
+> >> +    if (!dt_node || !of_node_check_flag(dt_node, OF_DYNAMIC))
+> >> +            return;
+> >> +    pdev->dev.of_node = NULL;
+> >> +
+> >> +    of_destroy_node(dt_node);
+> >> +}
+> >> +
+> >> +void of_pci_make_dev_node(struct pci_dev *pdev)
+> >> +{
+> >> +    struct device_node *parent, *dt_node = NULL;
+> >> +    const char *pci_type = "dev";
+> >> +    struct of_changeset *cset;
+> >> +    const char *full_name;
+> >> +    int ret;
+> >> +
+> >> +    /*
+> >> +     * If there is already a device tree node linked to this device,
+> >> +     * return immediately.
+> >> +     */
+> >> +    if (pci_device_to_OF_node(pdev))
+> >> +            return;
+> >> +
+> >> +    /* Check if there is device tree node for parent device */
+> >> +    if (!pdev->bus->self)
+> >> +            parent = pdev->bus->dev.of_node;
+> >> +    else
+> >> +            parent = pdev->bus->self->dev.of_node;
+> >> +    if (!parent)
+> >> +            return;
+> >> +
+> >> +    if (pci_is_bridge(pdev))
+> >> +            pci_type = "pci";
+> > What's the node name if not a bridge? I don't see how that would work.
+> >
+> > It should depend on the device class if it has one.
+>
+> pci_type is initialized with "dev"
+>
+> +    const char *pci_type = "dev";
 
-That's also why I added a rich comment above, and there's "The vma lock
-will be released there" which is just for that.
+I missed that...
 
-> This is in contrast
-> with most of the rest of the function, which takes great care to release
-> locks before returning.
-> 
-> Which makes this new case really quite irregular and makes the overall
-> locking harder to follow. It would be ideal to avoid doing this! But at
-> the very least, there should be a little note above hugetlb_fault(),
-> explaining this deviation and how it fits in with the locking rules.
-> 
-> Do we really have to structure it this way, though?
+> Do you mean I should use class instead of pci_is_bridge()?
+>
+> if ((pdev->class >> 24) == PCI_BASE_CLASS_BRIDGE)
+>      pci_type = "pci";
 
--- 
-Peter Xu
+Well, maybe as preparation to support other classes. If you had a UART
+for example, the node name is 'serial'. I don't think you need to
+worry about those ATM. We may need some way for the name to come from
+the driver as not all devices have a class. Yours for example, we'd
+want something like 'fpga@...' ideally. Maybe that's fine to leave as
+a known issue.
 
+Rob
