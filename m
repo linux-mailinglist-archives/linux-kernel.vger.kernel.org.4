@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5BA646064
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDEE646065
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:38:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiLGRiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:38:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S230168AbiLGRi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:38:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiLGRhv (ORCPT
+        with ESMTP id S230121AbiLGRiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:37:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683893AC2D
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:37:48 -0800 (PST)
+        Wed, 7 Dec 2022 12:38:03 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E5F5B869
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:37:53 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B108961B59
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 17:37:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29E7EC433C1;
-        Wed,  7 Dec 2022 17:37:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1FDA61B80
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 17:37:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B249C433B5;
+        Wed,  7 Dec 2022 17:37:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670434667;
-        bh=l/hr3BP10VYHJeYpDguxTDL8VV9ctO18e0697lGL23A=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=f4VXUaOBnDz1nVz+ytjxdy2D8CLl7kX5Yv5JY7ql4RBSUAdMti8E9PaBszdkfKYZ1
-         MYNoLzCpxrZcdneiYmj1GJkI8gwHzcwY48M8Johq3/l6KUpsm+ouFPNmhktLAjx2lF
-         xTdjiI+/XELJ0DB6PQA3S+m28IayyyyFBVZVfSHsc+SsF3180cqLhJtkXF/pOSng6l
-         HXrCrAn6PZvOQJ0LxlyaZ1c2MdMOFomHENjXyZ+R3xvH6tRQzWDEM/ueaNl/iA2UUS
-         x9MdwjM5lAEr1qpVSEM9U49KiGhnJK7lk00Wb++6Gfohrt7PvZDN46gjbAcic34BID
-         Q2LuIxwKdnDpQ==
+        s=k20201202; t=1670434672;
+        bh=8QWEQn+zKzCFj1WRsl+nO7lAaKxvMO0yYD7CsBPujQE=;
+        h=From:To:In-Reply-To:References:Subject:Date:From;
+        b=ReRQ0peILFdvUb8wufK8d2EnzPSJhzPn9TjYRfXAlEmvz+GrhL+OS7HXX6vFXij9a
+         LoJyUsn/96/R9fXkV/lAepwqPPba0NV1yuVxu65XqZHrp3AN4K3kiWiqEA5HV4ICPT
+         FkCj5+/6Wfo3GCkm7fq2mAsJkH6wUm/TcihgceKxr2Pz365hJcKK5xQsjGpAo3LNMi
+         nA6owA7Jek2ygIlmYp+dMVncFFwZLtGzh37gPcDW+a/XrK0PBRa9qLZyDsu8yjgm9S
+         Cinon+hXXL4+wb/jtNz1Aiv/Q2cXqlZX8G2CIKcdUuymTB7ZME0xs7ob+DtTnvq9H9
+         m66xmZctzNnSQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     ye.xingchen@zte.com.cn
-Cc:     shengjiu.wang@gmail.com, xiubo.lee@gmail.com, festevam@gmail.com,
-        nicoleotsuka@gmail.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, linux-imx@nxp.com,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <202212051943476482106@zte.com.cn>
-References: <202212051943476482106@zte.com.cn>
-Subject: Re: [PATCH] ASoC: imx-audmux: use sysfs_emit() to instead of scnprintf()
-Message-Id: <167043466270.393374.10705355616730317824.b4-ty@kernel.org>
-Date:   Wed, 07 Dec 2022 17:37:42 +0000
+To:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        heiko@sntech.de, sugar.zhang@rock-chips.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Wang Jingjin <wangjingjin1@huawei.com>
+In-Reply-To: <20221205032802.2422983-1-wangjingjin1@huawei.com>
+References: <20221205032802.2422983-1-wangjingjin1@huawei.com>
+Subject: Re: [PATCH] ASoC: rockchip: pdm: Add missing clk_disable_unprepare()
+ in rockchip_pdm_runtime_resume()
+Message-Id: <167043466982.393374.17030767228632271968.b4-ty@kernel.org>
+Date:   Wed, 07 Dec 2022 17:37:49 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -58,10 +57,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 05 Dec 2022 19:43:47 +0800, ye.xingchen@zte.com.cn wrote:
-> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-> should only use sysfs_emit() or sysfs_emit_at() when formatting the
-> value to be returned to user space.
+On Mon, 05 Dec 2022 11:28:02 +0800, Wang Jingjin wrote:
+> The clk_disable_unprepare() should be called in the error handling of
+> rockchip_pdm_runtime_resume().
 > 
 > 
 
@@ -71,8 +69,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: imx-audmux: use sysfs_emit() to instead of scnprintf()
-      commit: a39bc7cf8e284653fb6fd9d897f269f4ac80cf52
+[1/1] ASoC: rockchip: pdm: Add missing clk_disable_unprepare() in rockchip_pdm_runtime_resume()
+      commit: ef0a098efb36660326c133af9b5a04a96a00e3ca
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
