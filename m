@@ -2,193 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4A50645D66
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84D03645D6E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiLGPP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S230090AbiLGPPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:15:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLGPPY (ORCPT
+        with ESMTP id S229848AbiLGPPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:15:24 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504765FB96;
-        Wed,  7 Dec 2022 07:15:23 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id ED1DE21E8C;
-        Wed,  7 Dec 2022 15:15:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670426121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=doN8OAAvm/Kul2jr/dWYi2PVymsfdKhPapqin9FX5hk=;
-        b=mMG6q1ALjgO/KA7H5MVoSFAxPUtwgcc1JVntKEZUHrNOApEsYDD5V3e9vXjJMKD5Ei9cqs
-        h8IAYK+d1J8TVa0xLQ2Pd+eMVBRRJwecuFEHegxhQCu+mOK16qbKNlGk89uLF3SqmRBhTY
-        d8aVGdSJaLd2qWS9jmLyjY6ST8AIwQg=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D20782C141;
-        Wed,  7 Dec 2022 15:15:21 +0000 (UTC)
-Date:   Wed, 7 Dec 2022 16:15:21 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Petr Pavlu <petr.pavlu@suse.com>
-Cc:     mcgrof@kernel.org, prarit@redhat.com, david@redhat.com,
-        mwilck@suse.com, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <Y5CuCVe02W5Ni/Fc@alley>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y45MXVrGNkY/bGSl@alley>
- <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
+        Wed, 7 Dec 2022 10:15:34 -0500
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF3B60B4F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1670426133; x=1701962133;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bVoGkw+X84VJ7BOqchRYfb4zBhhEAZDkBHYvKmDuHAQ=;
+  b=Im8QPvWZhAOZZSx0cD4LkZjZ9QRwP48PeCDlescQ/ChXCokGOSha/v/M
+   WBkmce5fXSgCHmT+zeb+TEho1sT2DUtksL66WgPc0iCkZalQ+DxfqsUKp
+   vv3Hj++uBiag22c6r93KFy9d3Hwq2bIgurghDteoApKj6HBt9ue5EJqse
+   eXqtIsVMWoP1OIJ3d2ejTmXIh+vNcY5cYz4j5rbDolzNt0PQRKec1UOyZ
+   23XNY6ODkCTOXtD78LhzSJ2cnlK7tMc7IShaihPYQ3pOOjoflRvmgt5Vn
+   VIexnTs6bSdQ+trR0C9usW3Yh7ddz+sftwEwAO+OSkhYVpHa/DHgy6dnJ
+   w==;
+X-IronPort-AV: E=Sophos;i="5.96,225,1665417600"; 
+   d="scan'208";a="330200224"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 07 Dec 2022 23:15:32 +0800
+IronPort-SDR: +WzlX4+KJ5yndLj0q0HDkFi1zX1Z37w5SBI+ryBG5ODhFhnnsnjXPUGfI1E8wHMIFZwgleB5mc
+ yFcCoguQf3HChFBbonmNulHGlGBvh3tdIQiMgEv1nPtKqO/gtt54xdhGUBuKuHOZTPS+b72QEX
+ CZbKrPjiWDxpihDF3+LKckMv1Auy4Da4jhwtRZ3rWw8+L5dpCE0gBpI0/FJi+9YBZPshulHt3o
+ tjNxf39zCg2rJTRYLUh6c0zU+CUsA9LFkJGwXdrq52dEpXJYHJhrqyO1/xvNX7M8tGt63tUBLj
+ ybY=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Dec 2022 06:28:19 -0800
+IronPort-SDR: RfKjdWqlWEn+RlaQ6xZHmOT6w6HMJN2wzQ87NRUDqyr5VYyvMikHR9iFVeO02rUl6Wpgptg15P
+ V4LHrrQekMlI9Psv67gYmWWOym7aeWHkHg8ww+cuUw45vX20IXtXostbYoBzMOGLwEg+ihxsom
+ 3E0lHbyBgTRflyk9d4nDsidcU2yulcfSLXUtP6hvhWkmUVUmiUN1poaNs16NiW25dD/EXOu42n
+ Z6FeWXpqZl1JSANWsHcs6QHbmCwG7ssa0KCuNs+lwtUiI9sCM81aeZTnEujJ+0tOzO38ha9wOM
+ J2Y=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Dec 2022 07:15:33 -0800
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NS17S3Tgrz1RvTr
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:15:32 -0800 (PST)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1670426132; x=1673018133; bh=bVoGkw+X84VJ7BOqchRYfb4zBhhEAZDkBHY
+        vKmDuHAQ=; b=p0llbitGO+Q3LQ9XE9giV8LXcLq5jPRe1vZxPnKC8PS0tD44AuT
+        IQOwd4BwCBb4PDRbnv+8VJW7uJKvpu8CHW0Mrl0eWRmDApE2rvAZYKry7wXn7Vx2
+        Bf+8Zx6I9OOF0sdTz3skFYzuXKBrJuIFybSnzO0bN3YUIGrXnQvW5FLzi+zF07vr
+        m9Iy7Ri0j+/ZIIbE8Vejbgp5JWmE07DwjqqC1itFW6zHLYGV7KU1ZSP0vfkVcu+K
+        lCWghHHFg6cukRUhESjOYxtU1McGK6No0vuPOKyaQjNuP+eX13uCKVQixqmzYOMY
+        0qtsh4mn6H8GQ9U3+jN7+TusJjwPTlt7Tsw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id va52X9mMFK12 for <linux-kernel@vger.kernel.org>;
+        Wed,  7 Dec 2022 07:15:32 -0800 (PST)
+Received: from [10.225.163.74] (unknown [10.225.163.74])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NS17R3XkRz1RvLy;
+        Wed,  7 Dec 2022 07:15:31 -0800 (PST)
+Message-ID: <7ee6b490-baa7-44f5-733d-528755f37d81@opensource.wdc.com>
+Date:   Thu, 8 Dec 2022 00:15:30 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] libata: Sort Pioneer model in blacklist names
+ lexicographically
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Niklas Cassel <niklas.cassel@wdc.com>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221207102656.12486-1-pmenzel@molgen.mpg.de>
+ <4d105e81-7f99-a17a-2a84-5eb70c74cc91@opensource.wdc.com>
+ <5ba31f2c-89b0-c059-dda0-674db08e7466@molgen.mpg.de>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <5ba31f2c-89b0-c059-dda0-674db08e7466@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 2022-12-06 17:57:30, Petr Pavlu wrote:
-> On 12/5/22 20:54, Petr Mladek wrote:
-> > On Mon 2022-12-05 11:35:57, Petr Pavlu wrote:
-> >> During a system boot, it can happen that the kernel receives a burst of
-> >> requests to insert the same module but loading it eventually fails
-> >> during its init call. For instance, udev can make a request to insert
-> >> a frequency module for each individual CPU when another frequency module
-> >> is already loaded which causes the init function of the new module to
-> >> return an error.
-> >>
-> >> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
-> >> modules that have finished loading"), the kernel waits for modules in
-> >> MODULE_STATE_GOING state to finish unloading before making another
-> >> attempt to load the same module.
-> >>
-> >> This creates unnecessary work in the described scenario and delays the
-> >> boot. In the worst case, it can prevent udev from loading drivers for
-> >> other devices and might cause timeouts of services waiting on them and
-> >> subsequently a failed boot.
-> >>
-> >> This patch attempts a different solution for the problem 6e6de3dee51a
-> >> was trying to solve. Rather than waiting for the unloading to complete,
-> >> it returns a different error code (-EBUSY) for modules in the GOING
-> >> state. This should avoid the error situation that was described in
-> >> 6e6de3dee51a (user space attempting to load a dependent module because
-> >> the -EEXIST error code would suggest to user space that the first module
-> >> had been loaded successfully), while avoiding the delay situation too.
-> >>
-> >> --- a/kernel/module/main.c
-> >> +++ b/kernel/module/main.c
-> >> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
-> >>  	sched_annotate_sleep();
-> >>  	mutex_lock(&module_mutex);
-> >>  	mod = find_module_all(name, strlen(name), true);
-> >> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
-> >> +	ret = !mod || mod->state == MODULE_STATE_LIVE
-> >> +		|| mod->state == MODULE_STATE_GOING;
-> > 
-> > There is a actually one more race.
-> > 
-> > This function is supposed to wait until load of a particular module
-> > finishes. But we might find some another module of the same name here.
-> > 
-> > Maybe, it is not that bad. If many modules of the same name are loaded
-> > in parallel then hopefully most of them would wait for the first one
-> > in add_unformed_module(). And they will never appear in the @modules
-> > list.
+On 12/7/22 22:26, Paul Menzel wrote:
+> Dear Damien,
 > 
-> Good point, a load waiting in add_unformed_module() could miss that its older
-> parallel load already finished if another insert of the same module appears in
-> the modules list in the meantime. This requires that the new load happens to
-> arrive just after the old one finishes and before the waiting load makes its
-> check.
->
-> This is somewhat similar to the current state where new same-name insert
-> requests can skip and starve the ones already waiting in
-> add_unformed_module().
 > 
-> I think in practice the situation should occur very rarely and be cleared
-> soon, as long one doesn't continuously try to insert the same module.
-
-I am not completely sure how rare it is. Anyway, the conditions are
-rather complex so it feels rare ;-)
-
-Anyway, the important part of this race is that the new module
-found in finished_loading() did not see the previously loaded
-module and did not wait in add_unformed_module(). It means
-that the load was not parallel enough. It means that the
-optimization added by this patch was not used.
-
-By other words, if the multiple loads are not parallel enough
-then the optimization added by this patch will not help.
-
-And the other way. If this patch helps in practice then
-this race is not important.
-
-> > Anyway, to be on the safe side. We might want to pass the pointer
-> > to the @old module found in add_unformed_module() and make sure
-> > that we find the same module here. Something like:
-> > 
-> > /*
-> >  * @pending_mod: pointer to module that we are waiting for
-> >  * @name: name of the module; the string must stay even when
-> >  *	the pending module goes away completely
-> >  */
-> > static bool finished_loading(const struct module *pending_mod,
-> > 			    const char *name)
-> > {
-> > 	struct module *mod;
-> > 	bool ret = true;
-> > 
-> > 	/*
-> > 	 * The module_mutex should not be a heavily contended lock;
-> > 	 * if we get the occasional sleep here, we'll go an extra iteration
-> > 	 * in the wait_event_interruptible(), which is harmless.
-> > 	 */
-> > 	sched_annotate_sleep();
-> > 	mutex_lock(&module_mutex);
-> > 
-> > 	mod = find_module_all(name, strlen(name), true);
-> > 	/* Check if the pending module is still being loaded */
-> > 	if (mod == pending_mod &&
-> > 	    (mod->state == MODULE_STATE_UNFORMED ||
-> > 	       mod->state == MODULE_STATE_COMMING))
-> > 	       ret = false;
-> > 	mutex_unlock(&module_mutex);
-> > 
-> > 	return ret;
-> > }
+> Am 07.12.22 um 14:22 schrieb Damien Le Moal:
+>> On 12/7/22 19:26, Paul Menzel wrote:
+>>> Fixes: commit ea08aec7e77b ("libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205")
+>>> Cc: Niklas Cassel <niklas.cassel@wdc.com>
+>>> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
+>>> ---
+>>>   drivers/ata/libata-core.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+>>> index d3ce5c383f3a..c08c534b7fc7 100644
+>>> --- a/drivers/ata/libata-core.c
+>>> +++ b/drivers/ata/libata-core.c
+>>> @@ -3990,8 +3990,8 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
+>>>   	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
+>>>   
+>>>   	/* These specific Pioneer models have LPM issues */
+>>> -	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
+>>>   	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
+>>> +	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
+>>
+>> Nah... Not worse the trouble. If anything, I would rather have the entire
+>> ata_device_blacklist array entries sorted alphabetically by vendor and models.
 > 
-> The new pending_mod pointer has no ownership of the target module which can be
-> then destroyed at any time. While no dereference of pending_mod is made in
-> finished_loading(), this looks still problematic to me.
+> What trouble?
+
+Manner of speaking. I meant the patch value is not worth the time to
+process it.
+As suggested, sorting the entire array would be a more valuable change.
+
 > 
-> I think it is generally good to treat a pointer as invalid and its value as
-> indeterminate when the object it points to reaches the end of its lifetime.
-> One specific problem here is that nothing guarantees that a new module doesn't
-> get allocated at the exactly same address as the old one that got released and
-> the code is actually waiting on.
->
-> Improving this case then likely results in a more complex solution, similar
-> to the one that was discussed originally.
+>>>   	/* Crucial BX100 SSD 500GB has broken LPM support */
+>>>   	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
+> 
+> 
+> Kind regards,
+> 
+> Paul
 
-Fair enough. Let's ignore the race in finished_loading().
+-- 
+Damien Le Moal
+Western Digital Research
 
-Otherwise, the patch looks good to me. It is easy enough.
-IMHO, it makes sense to use it if it helps in practice
-(multiple loads are parallel enough[*]). Feel free to use:
-
-Reviewed-by: Petr Mladek <pmladek@suse.com>
-
-Of course, the ideal solution would be to avoid the multiple
-loads in the first place. AFAIK, everything starts in the kernel
-that sends the same udev events for each CPU...
-
-Best Regards,
-Petr
