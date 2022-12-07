@@ -2,146 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F03D4645F88
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5471C645F8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:00:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiLGRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:00:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S229769AbiLGRAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:00:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiLGQ7x (ORCPT
+        with ESMTP id S229905AbiLGRAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:59:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B736933D;
-        Wed,  7 Dec 2022 08:59:36 -0800 (PST)
-Received: from mercury (dyndsl-091-096-059-166.ewe-ip-backbone.de [91.96.59.166])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F4976602BC8;
-        Wed,  7 Dec 2022 16:59:34 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670432374;
-        bh=bEvlL0mnv13cihi3HCIkl9DCfnP1k298XjhbL7LAufA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fVlDFCTzOHXdtF44MPRDBp745dkSoal+m9XlgbrVk0eVveZ4SV+Bv1Rnj0ZBG6Rt3
-         iZzkYM/8F/qgm/5INpH4ZuEVZdheQuxkmKnjbF4NYwKekrccgWZ80uTQ5fVMnlVnEK
-         7sz8TmoCZwYK3OEI28mJ6n6F3xGALBFdeq22ossum96yZrYwJqiWDu1PsWPLAsHI7x
-         hRrGzEFqetXXh+ZUi+bUOEraSs2OtVyf9i/MzyAzh8Cjc9+JImlrgZ8QqwdNdYumLv
-         0XdveLAuHK+do5iCZu9zBRZS6X/efajXc1hQZdTXVcNAcNiE0Vb1uyxHCLrTy7hmA0
-         6hG/oUhpNGlZw==
-Received: by mercury (Postfix, from userid 1000)
-        id 119591060F43; Wed,  7 Dec 2022 17:59:32 +0100 (CET)
-Date:   Wed, 7 Dec 2022 17:59:32 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Gene Chen <gene_chen@richtek.com>,
-        Daniel Mack <zonque@gmail.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Add missing 'unevaluatedProperties' to
- regulator nodes
-Message-ID: <20221207165932.hmgj4giz5ivei46i@mercury.elektranox.org>
-References: <20221206211554.92005-1-robh@kernel.org>
+        Wed, 7 Dec 2022 12:00:42 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCF468C6C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:00:41 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m19so14146078wms.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:00:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BXesToSWwwnCKV+g1AwRtRU3qfEBkcVEBg6QS+SjDxU=;
+        b=KPDXYZ3duUZaAEdvvywMI9z5Q7Ah5nmdDmWoMbtDIcnjhdbFOj2001pt6dx2i9HBiI
+         WIsFHDZF0EdUsKqoKTZmIXT9iahUvqWD65BZfbKTUXH73lJY+4MGRPSgJGb5ByJzVEK0
+         iXGZ4gWRH/OV56kGeneKC6DzoKTwdwRdhJKeTXZn3H0S2+XQONlr21k27tQ533O1+Yj7
+         MeSPWUXxsF4FnXNm9htMujyhue+JWos9/2r8PgnFHGUl/7zfCuEzfQh7oCcZgVZL5U3g
+         1IgHzPewSxwcR9wCH2Khb50u7jgqj+Z4huhBLnlL31H2Om9m5RYaIlL866IJDKXjq5wz
+         lUNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BXesToSWwwnCKV+g1AwRtRU3qfEBkcVEBg6QS+SjDxU=;
+        b=IcTEQzHr5rFDpxjOgZduZHPZAgYqmmME9I6NeOcqKi71XVM13PNG0Ocr7JlYfaaJyw
+         4XbJcOC1myRl8mR/S2X2ArTUXE/iBEhG9QC+XIUxlWzFwlHLMJ90RL9vmfjwlDYIu+XY
+         dAuaSDAKuMW0/GH1c3NqoM0pjIDhZHFiKyvcCQ7yfwLD+jmWnCX0CI0pQ7FzHUuHX7rM
+         kW5hDWR/V8BmQADhspRf/JBFwePLDQyRFeGnoaealSgd4jblkS9hUsrFQhp8lcTqkuSp
+         59DSab+7+UvREWfQLzX4ngMKF1wGCcmIsKUHVQz64ubjQHy3kk5htfp36URuiU+nd6wc
+         BeQA==
+X-Gm-Message-State: ANoB5pk9bSCS3gCmi9aiuCbMiqloXTI9NWSXP7saiE3fnmil+kkGGc67
+        peR1nvmrGmwxYdEmNOAh+RWnpo03q5VpM/h9Di5mtA==
+X-Google-Smtp-Source: AA0mqf7EL9SVPdzmspMbX3uo2aj+Ffe0HMOfPSEBf1yBBX6KBSWuzkXm7BPUhNMirUVS0NsphHZk0Oyhelhb25tR8jw=
+X-Received: by 2002:a05:600c:3d8f:b0:3cf:6a4c:af8b with SMTP id
+ bi15-20020a05600c3d8f00b003cf6a4caf8bmr55219737wmb.115.1670432439791; Wed, 07
+ Dec 2022 09:00:39 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tn5la4fl5slxzyzl"
-Content-Disposition: inline
-In-Reply-To: <20221206211554.92005-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y49vx0v6Z7EiR8jr@kernel.org> <Y49wxSIK7dJ7iTDg@kernel.org>
+ <Y491d1wEW4TfUi5f@kernel.org> <Y4921D+36UGdhK92@kernel.org>
+ <Y494TNa0ZyPH9YSD@kernel.org> <Y498YP2N3gvFSr/X@kernel.org>
+ <CAP-5=fW2Fdfo9njgXxCVDP0dF3gTsUtaPMh88uSC5bRVjp+1Uw@mail.gmail.com>
+ <Y5ChXjt0uv/yDNwV@kernel.org> <Y5Cjylv9dJh796dw@kernel.org>
+ <20221207093958.09ae35c2@gandalf.local.home> <Y5C5AZ1YfthY0tx2@kernel.org>
+In-Reply-To: <Y5C5AZ1YfthY0tx2@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 7 Dec 2022 09:00:27 -0800
+Message-ID: <CAP-5=fWBzNP=uDLdyODC8gvT3KT5Kz9rRNouyLn=22_ouD8wEg@mail.gmail.com>
+Subject: Re: [ALMOST ready] Re: [PATCH 2/3] perf build: Use libtraceevent from
+ the system
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---tn5la4fl5slxzyzl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Tue, Dec 06, 2022 at 03:15:55PM -0600, Rob Herring wrote:
-> Several regulator schemas are missing 'unevaluatedProperties' constraint
-> which means any extra properties are allowed. Upon adding the
-> constraint, there's numerous warnings from using the deprecated
-> 'regulator-compatible' property. Remove the usage as examples shouldn't
-> be using long since deprecated properties.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> I'd suggest that Mark take this if that's okay with Lee. Or I can take=20
-> it.
->=20
->  Documentation/devicetree/bindings/mfd/max77650.yaml  |  2 --
->  .../devicetree/bindings/mfd/mediatek,mt6360.yaml     |  9 ---------
->  .../bindings/power/supply/mt6360_charger.yaml        |  2 +-
->  .../bindings/regulator/max77650-regulator.yaml       |  1 +
->  .../devicetree/bindings/regulator/max8660.yaml       |  6 +-----
->  .../bindings/regulator/mt6360-regulator.yaml         | 12 +++---------
->  6 files changed, 6 insertions(+), 26 deletions(-)
->=20
-> [...]
+On Wed, Dec 7, 2022 at 8:02 AM Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
 >
-> diff --git a/Documentation/devicetree/bindings/power/supply/mt6360_charge=
-r.yaml b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
-> index b89b15a5bfa4..4c74cc78729e 100644
-> --- a/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
-> @@ -26,6 +26,7 @@ properties:
->      type: object
->      description: OTG boost regulator.
->      $ref: /schemas/regulator/regulator.yaml#
-> +    unevaluatedProperties: false
-> =20
->  required:
->    - compatible
-> @@ -39,7 +40,6 @@ examples:
->        richtek,vinovp-microvolt =3D <14500000>;
-> =20
->        otg_vbus_regulator: usb-otg-vbus-regulator {
-> -        regulator-compatible =3D "usb-otg-vbus";
->          regulator-name =3D "usb-otg-vbus";
->          regulator-min-microvolt =3D <4425000>;
->          regulator-max-microvolt =3D <5825000>;
+> Em Wed, Dec 07, 2022 at 09:39:58AM -0500, Steven Rostedt escreveu:
+> > On Wed, 7 Dec 2022 11:31:38 -0300
+> > Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
+> >
+> > > No distro I tested so far has a package for libtracevent in is default
+> > > repositories:
+> >
+> > Not sure what you mean by "default repository".
+> >
+> > At least on Debian testing, I have libtraceevent-dev available.
+>
+> Right, I'm talking about non-bleeding edge, distros that are still
+> supported. I'm still checking, fedora is ok all the way back to 33, wrt
+> having libtraceevent available.
+>
+> - Arnaldo
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+I think this is both similar to the python2 issue and different. With
+python we now have a build time dependency on having at least Python
+3.6 if you want json events. With this change you need the system to
+have libtraceevent if you want to have various commands like perf
+sched, perf trace, etc. Losing entire commands with this change is
+more than happened with the Python 3.6 dependency. With the python
+issue, you can fix the build issue by installing Python 3.6 and with
+this issue you can fix it by installing libtraceevent-devel. In both
+cases you can install via a package manager, but given you are likely
+building the perf tool from source, you can also build both python and
+libtraceevent from source. Saying that an old distro is broken by this
+change, or the Python 3.6 change, I think is too strong and we're in
+danger of holding things back for a very small (possibly 0) set of
+people. They'd have to be upset about building from source on an old
+distro, then losing the less commonly used commands of perf sched,
+perf trace, etc. and be unwilling to build libtraceevent from source.
+Given they are building the perf tool from source I just can't imagine
+they'd be too upset about building libtraceevent from source.
 
-> [...]
+I think a problem with both changes is that the build time warning
+given isn't loud enough. Perhaps we can make it that at build time we
+$(error for these recommended dependencies, unless NO_JEVENTS=1 or
+NO_LIBTRACEEVENT=1 are added. Losing functionality and just having a
+small $(warning seems error prone and likely to cause functionality to
+be accidentally lost.
 
--- Sebastian
-
---tn5la4fl5slxzyzl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOQxmgACgkQ2O7X88g7
-+pqenQ/9Ho8lsTUBjGsxEgwS8RpLC8U1AP8yglgqBuUrbdcwAuL3g0yWJMB4Cm4a
-trhgJgCBr2fd4LLFbJzQH/tVrcUZtFJ957ZmvKr0E1xcVkiDgR8ujhhCCCOgB5vG
-IpjFq+8lXplomNmb3hOlRKkuC+2YWYM1cXvEQyFyPOYZAThebqOpYQcETx5rxegs
-VTdhV4cB6b+jG2fsR+3BVw+rJ9U3oxjbY5XuwUJ2GyA15InCnBOh0945mc6vLDvN
-vNCwgsgvS8D7emYsLt666/gI3LKRLH6H+3p8Vu2yYAU58mu21gg7L6z6jswSlm+V
-MsMVDTiwzLYq/EaYQbGaTazJjigroldPnUf268xI6OgG7tSqowA0PuYaT+GkKfrY
-0dPGbQf1K6NbCQ4V+Fh1BO1h0kOtX6FCjkLJ0d1ZZTC7DwIMe1tLgXZux0mETsQo
-aCli/01Y+oVc6vulRN9HRGvthS01OoByy5vdikomiO6cJH3l8Jwb7gNz07kVrJyF
-aDzTDqorec2e7bMleqRGwncCINLYqw0z/Mh0ZLKPgbs/L2YXOI7nhGVaCj5p4wNb
-44Nky3qwmg0iu12vbmydFMWjRIICBnOU3xCqfe7tDfi4jDCJqKkHcHU15JR2bPPC
-LYL6vJb5f66lQGyI+SWJoXT+q5bps6L/KhDMea6xKmWTjss81gM=
-=VLUI
------END PGP SIGNATURE-----
-
---tn5la4fl5slxzyzl--
+Thanks,
+Ian
