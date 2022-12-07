@@ -2,1053 +2,576 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B8F645A5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B914E645A70
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbiLGNGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:06:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S229758AbiLGNIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:08:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLGNGD (ORCPT
+        with ESMTP id S229600AbiLGNIo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:06:03 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED982AE17;
-        Wed,  7 Dec 2022 05:06:00 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 114A36602BB7;
-        Wed,  7 Dec 2022 13:05:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670418358;
-        bh=m9tJPWs/sCKXUILTGI6rpQdsUo1PI8lzS/z0Su5LkwQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CHgm7gczly3Bcu4sWxIlkrHHKNcDJ9ylcpKI2+VPLIdY3ijvYSZM00NW39cOItD6e
-         a6Lx+RsYT9IPMF21GWuRSt21RPioMjKrxoy5rM8veA0ry2jcT8r+oO1o7Efpv9jZUI
-         nCrZ4+71rCo8svxPTH18ybc7ybtzlym66XzFTJeAlXfdIu4Cm+MnBZZG8IaCrYeXQo
-         S6fGmzzKZMYRrRdMhqjck0Ev/vmW4Iy0vPFlZUgZPkp3w5dDR+hHYc4m/KvMohINy7
-         X0SFDYDcj+CG43OCKSS3iNcLikhTOD6rDgXvuUtfIFlWxanYMGmDlsFNpT7MhqnNTz
-         oS11ihaRI5Y+w==
-Message-ID: <c57af009-6453-db07-6190-69d9247dd50e@collabora.com>
-Date:   Wed, 7 Dec 2022 14:05:54 +0100
+        Wed, 7 Dec 2022 08:08:44 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311FF56D4A;
+        Wed,  7 Dec 2022 05:08:42 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id e13so24779022edj.7;
+        Wed, 07 Dec 2022 05:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=47rO/7aVQY4amsaO7WuA39lvAV9PAFsmXkDfd09QKpU=;
+        b=kebtCnZzIanYlkWoZVp9sc0N4Gb7sTRJGSKlS30YyKewuRl88abfnX1ZpqheVbB44z
+         TSPkX8Lf4A9YiWlk6r/aoPkV5JJfCqt4wiaBKIozaOHfeixxK3tY1+bylc8ILBKPYi8P
+         +01JE3oI4/z7els8FhiVpvTZhWVBKpgXCJ6Wg0zP+uRzA2559qn6HIeLhtOJgHxJvDZW
+         tTIWFSvhEuiTIAsulJKo0U772aXLa9Y6fcAHzTXNEnpgY0d8HeRPoLgrExB1iybud+rl
+         FJQG5FnwS7jqlQV4ZBIPfPS+Os7n03zD6hMdQZ2aJc/36RZtlP7vZsjR8ZOOFl8+6CAF
+         b5LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=47rO/7aVQY4amsaO7WuA39lvAV9PAFsmXkDfd09QKpU=;
+        b=XUZ1VYWDXYiBffbduwx5GnIvDU0Z99GuMjBz3ymyUaPHmluYFjuXGhRCXqsZUqGjP/
+         /Id3nNWxOVJgP3DaEwR6IjAUcb9ihWfRSbPm3GDNkNuzuZceJKlpcgB7Ai2ewpkthTNP
+         ohT2uDEUlp+KCL0+M/p36R5h1hCHToOf8tojSKbc4X8V1maEPVVccLclvQmuMVZ8kd8l
+         tkpLe+an3S2EHvePvYzlxgdpLFUIuSE7LwH8BpVf6MObem2uaFaqnM+rRmt4nbfVP4+L
+         EdV8YTOTPimVmxt1OzoYdg4ljFvFoIK/aktynM30YlHdjUajOpGQHXPjzqaQDr2Fw9Wj
+         6s4w==
+X-Gm-Message-State: ANoB5pm9zcxBZZRQRuiRFZcBIGx2hh6WcMrM7a0hhkC66+OCnFbTl4m0
+        /PCuwTOiIpNaw1mrCL+T4og=
+X-Google-Smtp-Source: AA0mqf7U0VJGQpOjQQDXA3p7oZtgXulfBVu4LXrXGg0oLuNftBPS6v7NGsc4OWUmOG8Io6qqNcWFmg==
+X-Received: by 2002:a05:6402:43cc:b0:46c:d5e8:30e7 with SMTP id p12-20020a05640243cc00b0046cd5e830e7mr10527384edc.268.1670418520258;
+        Wed, 07 Dec 2022 05:08:40 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id j9-20020a17090623e900b007bf24b8f80csm8508176ejg.63.2022.12.07.05.08.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 05:08:39 -0800 (PST)
+Date:   Wed, 7 Dec 2022 14:08:51 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v5 net-next 1/5] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y5CQY0pI+4DobFSD@gvm01>
+References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+ <350e640b5c3c7b9c25f6fd749dc0237e79e1c573.1670371013.git.piergiorgio.beruto@gmail.com>
+ <20221206195014.10d7ec82@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v11 2/6] media: chips-media: wave5: Add vpuapi layer
-Content-Language: en-US
-To:     Sebastian Fricke <sebastian.fricke@collabora.com>,
-        linux-media@vger.kernel.org, Nas Chung <nas.chung@chipsnmedia.com>,
-        Robert Beckett <bob.beckett@collabora.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     kernel@collabora.com, hverkuil-cisco@xs4all.nl,
-        nicolas.dufresne@collabora.com, linux-kernel@vger.kernel.org
-References: <20221207121350.66217-1-sebastian.fricke@collabora.com>
- <20221207121350.66217-3-sebastian.fricke@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221207121350.66217-3-sebastian.fricke@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221206195014.10d7ec82@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/12/22 13:13, Sebastian Fricke ha scritto:
-> From: Nas Chung <nas.chung@chipsnmedia.com>
+Hi Jakub,
+thank you very much for your thorough review. Please see my answers
+interleaved.
+
+On Tue, Dec 06, 2022 at 07:50:14PM -0800, Jakub Kicinski wrote:
+> > diff --git a/Documentation/networking/ethtool-netlink.rst b/Documentation/networking/ethtool-netlink.rst
+> > index f10f8eb44255..fe4847611299 100644
+> > --- a/Documentation/networking/ethtool-netlink.rst
+> > +++ b/Documentation/networking/ethtool-netlink.rst
+> > @@ -1716,6 +1716,136 @@ being used. Current supported options are toeplitz, xor or crc32.
+> >  ETHTOOL_A_RSS_INDIR attribute returns RSS indrection table where each byte
+> >  indicates queue number.
+> >  
+> > +PLCA_GET_CFG
+> > +============
+> > +
+> > +Gets PLCA RS attributes.
 > 
-> Add the vpuapi layer of the wave5 codec driver.
-> This layer is used to configure the hardware according
-> to the parameters.
+> Let's spell out PLCA RS, this is the first use of the term in the doc.
+Fixed. New sentence is "Gets the IEEE 802.3cg-2019 Clause 148 Physical
+Layer Collision Avoidance (PLCA) Reconciliation Sublayer (RS) attributes."
+ 
+> > +Request contents:
+> > +
+> > +  =====================================  ======  ==========================
+> > +  ``ETHTOOL_A_PLCA_HEADER``              nested  request header
+> > +  =====================================  ======  ==========================
+> > +
+> > +Kernel response contents:
+> > +
+> > +  ======================================  ======  =============================
+> > +  ``ETHTOOL_A_PLCA_HEADER``               nested  reply header
+> > +  ``ETHTOOL_A_PLCA_VERSION``              u16     Supported PLCA management
+> > +                                                  interface standard/version
+> > +  ``ETHTOOL_A_PLCA_ENABLED``              u8      PLCA Admin State
+> > +  ``ETHTOOL_A_PLCA_NODE_ID``              u8      PLCA unique local node ID
+> > +  ``ETHTOOL_A_PLCA_NODE_CNT``             u8      Number of PLCA nodes on the
+> > +                                                  netkork, including the
 > 
-> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
-> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
-> Signed-off-by: Nas Chung <nas.chung@chipsnmedia.com>
-> ---
->   .../platform/chips-media/wave5/wave5-hw.c     | 3359 +++++++++++++++++
->   .../chips-media/wave5/wave5-regdefine.h       |  743 ++++
->   .../platform/chips-media/wave5/wave5-vdi.c    |  245 ++
->   .../platform/chips-media/wave5/wave5-vdi.h    |   67 +
->   .../platform/chips-media/wave5/wave5-vpuapi.c | 1040 +++++
->   .../platform/chips-media/wave5/wave5-vpuapi.h | 1136 ++++++
->   .../chips-media/wave5/wave5-vpuconfig.h       |   90 +
->   .../chips-media/wave5/wave5-vpuerror.h        |  454 +++
->   .../media/platform/chips-media/wave5/wave5.h  |   94 +
->   9 files changed, 7228 insertions(+)
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-hw.c
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-regdefine.h
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.c
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.h
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi.c
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuconfig.h
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuerror.h
->   create mode 100644 drivers/media/platform/chips-media/wave5/wave5.h
+> netkork -> network
+Got it, thanks.
+
+> > +                                                  coordinator
 > 
-> diff --git a/drivers/media/platform/chips-media/wave5/wave5-hw.c b/drivers/media/platform/chips-media/wave5/wave5-hw.c
-> new file mode 100644
-> index 000000000000..25705e61cdb3
-> --- /dev/null
-> +++ b/drivers/media/platform/chips-media/wave5/wave5-hw.c
-> @@ -0,0 +1,3359 @@
-> +// SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-> +/*
-> + * Wave5 series multi-standard codec IP - wave5 backend logic
-> + *
-> + * Copyright (C) 2021 CHIPS&MEDIA INC
-> + */
-> +
-> +#include <linux/iopoll.h>
-> +#include "wave5-vpu.h"
-> +#include "wave5.h"
-> +#include "wave5-regdefine.h"
-> +
-> +#define FIO_TIMEOUT			10000000
-
-FIO_TIMEOUT_US looks better :-)
-
-> +#define FIO_CTRL_READY			BIT(31)
-> +#define FIO_CTRL_WRITE			BIT(16)
-> +#define VPU_BUSY_CHECK_TIMEOUT		10000000
-> +#define QUEUE_REPORT_MASK		0xffff
-> +
-> +static void wave5_print_reg_err(struct vpu_device *vpu_dev, u32 reg_fail_reason)
-> +{
-> +	char *caller = __builtin_return_address(0);
-> +	struct device *dev = vpu_dev->dev;
-> +	u32 reg_val;
-> +
-> +	switch (reg_fail_reason) {
-> +	case WAVE5_SYSERR_QUEUEING_FAIL:
-> +		reg_val = vpu_read_reg(vpu_dev, W5_RET_QUEUE_FAIL_REASON);
-> +		dev_dbg(dev, "%s: queueing failure: 0x%x\n", caller, reg_val);
-> +		break;
-> +	case WAVE5_SYSERR_RESULT_NOT_READY:
-> +		dev_err(dev, "%s: result not ready: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	case WAVE5_SYSERR_ACCESS_VIOLATION_HW:
-> +		dev_err(dev, "%s: access violation: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	case WAVE5_SYSERR_WATCHDOG_TIMEOUT:
-> +		dev_err(dev, "%s: watchdog timeout: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	case WAVE5_SYSERR_BUS_ERROR:
-> +		dev_err(dev, "%s: bus error: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	case WAVE5_SYSERR_DOUBLE_FAULT:
-> +		dev_err(dev, "%s: double fault: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	case WAVE5_SYSERR_VPU_STILL_RUNNING:
-> +		dev_err(dev, "%s: still running: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	case WAVE5_SYSERR_VLC_BUF_FULL:
-> +		dev_err(dev, "%s: vlc buf full: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	default:
-> +		dev_err(dev, "%s: failure:: 0x%x\n", caller, reg_fail_reason);
-> +		break;
-> +	}
-> +}
-> +
-> +static int wave5_wait_fio_readl(struct vpu_device *vpu_dev, u32 addr, u32 val)
-> +{
-> +	u32 ctrl;
-> +	int ret;
-> +
-> +	ctrl = addr & 0xffff;
-> +	wave5_vdi_write_register(vpu_dev, W5_VPU_FIO_CTRL_ADDR, ctrl);
-> +	ret = read_poll_timeout(wave5_vdi_readl, ctrl, ctrl & FIO_CTRL_READY,
-> +				0, FIO_TIMEOUT, false, vpu_dev, W5_VPU_FIO_CTRL_ADDR);
-> +	if (ret)
-> +		return ret;
-> +	if (wave5_vdi_readl(vpu_dev, W5_VPU_FIO_DATA) != val)
-> +		return -ETIMEDOUT;
-
-Are you sure that this is a timeout?
-if (read_data != expected_data) => invalid data => return -EINVAL ?
-
-> +	return 0;
-> +}
-> +
-
-..snip..
-
-> +
-> +static int wave5_wait_bus_busy(struct vpu_device *vpu_dev, unsigned int addr)
-> +{
-> +	u32 gdi_status_check_value = 0x3f;
-> +
-> +	if (vpu_dev->product_code == WAVE521C_CODE ||
-> +	    vpu_dev->product_code == WAVE521_CODE ||
-> +	    vpu_dev->product_code == WAVE521E1_CODE)
-> +		gdi_status_check_value = 0x00ff1f3f;
-
-#define SOME_VALUE 0x3f
-#define ANOTHER_VALUE 0xff1f3f
-
-> +
-> +	return wave5_wait_fio_readl(vpu_dev, addr, gdi_status_check_value);
-> +}
-> +
-
-..snip..
-
-> +
-> +static int setup_wave5_properties(struct device *dev)
-> +{
-> +	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
-> +	struct vpu_attr *p_attr = &vpu_dev->attr;
-> +	u32 reg_val;
-> +	u8 *str;
-> +	int ret;
-> +	u32 hw_config_def0, hw_config_def1, hw_config_feature, hw_config_rev;
-> +
-> +	vpu_write_reg(vpu_dev, W5_QUERY_OPTION, GET_VPU_INFO);
-> +	vpu_write_reg(vpu_dev, W5_VPU_BUSY_STATUS, 1);
-> +	vpu_write_reg(vpu_dev, W5_COMMAND, W5_QUERY);
-> +	vpu_write_reg(vpu_dev, W5_VPU_HOST_INT_REQ, 1);
-> +	ret = wave5_wait_vpu_busy(vpu_dev, W5_VPU_BUSY_STATUS);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (!vpu_read_reg(vpu_dev, W5_RET_SUCCESS))
-> +		return -EIO;
-> +
-> +	reg_val = vpu_read_reg(vpu_dev, W5_RET_PRODUCT_NAME);
-> +	str = (u8 *)&reg_val;
-> +	p_attr->product_name[0] = str[3];
-> +	p_attr->product_name[1] = str[2];
-> +	p_attr->product_name[2] = str[1];
-> +	p_attr->product_name[3] = str[0];
-> +	p_attr->product_name[4] = 0;
-> +
-> +	p_attr->product_id = wave5_vpu_get_product_id(vpu_dev);
-> +	p_attr->product_version = vpu_read_reg(vpu_dev, W5_RET_PRODUCT_VERSION);
-> +	p_attr->fw_version = vpu_read_reg(vpu_dev, W5_RET_FW_VERSION);
-> +	p_attr->customer_id = vpu_read_reg(vpu_dev, W5_RET_CUSTOMER_ID);
-> +	hw_config_def0 = vpu_read_reg(vpu_dev, W5_RET_STD_DEF0);
-> +	hw_config_def1 = vpu_read_reg(vpu_dev, W5_RET_STD_DEF1);
-> +	hw_config_feature = vpu_read_reg(vpu_dev, W5_RET_CONF_FEATURE);
-> +	hw_config_rev = vpu_read_reg(vpu_dev, W5_RET_CONF_REVISION);
-> +
-> +	p_attr->support_hevc10bit_enc = (hw_config_feature >> 3) & 1;
-
-This looks like being BIT(3), and the latter is BIT(11)...
-
-#define W5_CONF_FEATURE_HEVC10_ENC	BIT(3)
-#define W5_CONF_FEATURE_AVC10_ENC	BIT(11)
-
-p_attr->support_hevc10bit_enc = FIELD_GET(W5_CONF_FEATURE_HEVC10_ENC, 
-hw_config_feature);
-
-if (hw_config_rev > W5_REVISION_SOMETHING)
-	p_attr->support_avc10bit_enc = FIELD_GET(W5_CONF_FEATURE_AVC10_ENC,
-						 hw_config_feature);
-else
-	p_attr->support_avc10bit_enc = p_attr->support_hevc10bit_enc;
-
-
-> +	if (hw_config_rev > 167455) //20190321
-> +		p_attr->support_avc10bit_enc = (hw_config_feature >> 11) & 1;
-> +	else
-> +		p_attr->support_avc10bit_enc = p_attr->support_hevc10bit_enc;
-> +
-> +	p_attr->support_decoders = 0;
-> +	p_attr->support_encoders = 0;
-> +	if (p_attr->product_id == PRODUCT_ID_521) {
-> +		p_attr->support_dual_core = ((hw_config_def1 >> 26) & 0x01);
-
-p_attr->support_dual_core = FIELD_GET(W5_CONF_DEF_HW_DUAL_CORE, hw_config_def1);
-
-....and there are others below, but I think I gave enough examples... :-)
-
-> +		if (p_attr->support_dual_core || hw_config_rev < 206116) {
-> +			p_attr->support_decoders = BIT(STD_AVC);
-> +			p_attr->support_decoders |= BIT(STD_HEVC);
-> +			p_attr->support_encoders = BIT(STD_AVC);
-> +			p_attr->support_encoders |= BIT(STD_HEVC);
-> +		} else {
-> +			p_attr->support_decoders |= (((hw_config_def1 >> 3) & 0x01) << STD_AVC);
-> +			p_attr->support_decoders |= (((hw_config_def1 >> 2) & 0x01) << STD_HEVC);
-> +			p_attr->support_encoders = (((hw_config_def1 >> 1) & 0x01) << STD_AVC);
-> +			p_attr->support_encoders |= ((hw_config_def1 & 0x01) << STD_HEVC);
-> +		}
-> +	} else if (p_attr->product_id == PRODUCT_ID_511) {
-> +		p_attr->support_decoders = BIT(STD_HEVC);
-> +		p_attr->support_decoders |= BIT(STD_AVC);
-> +	} else if (p_attr->product_id == PRODUCT_ID_517) {
-> +		p_attr->support_decoders = (((hw_config_def1 >> 4) & 0x01) << STD_AV1);
-> +		p_attr->support_decoders |= (((hw_config_def1 >> 3) & 0x01) << STD_AVS2);
-> +		p_attr->support_decoders |= (((hw_config_def1 >> 2) & 0x01) << STD_AVC);
-> +		p_attr->support_decoders |= (((hw_config_def1 >> 1) & 0x01) << STD_VP9);
-> +		p_attr->support_decoders |= ((hw_config_def1 & 0x01) << STD_HEVC);
-> +	}
-> +
-> +	p_attr->support_backbone = (hw_config_def0 >> 16) & 0x01;
-> +	p_attr->support_vcpu_backbone = (hw_config_def0 >> 28) & 0x01;
-> +	p_attr->support_vcore_backbone = (hw_config_def0 >> 22) & 0x01;
-> +	p_attr->support_dual_core = (hw_config_def1 >> 26) & 0x01;
-> +	p_attr->support_endian_mask = BIT(VDI_LITTLE_ENDIAN) |
-> +				      BIT(VDI_BIG_ENDIAN) |
-> +				      BIT(VDI_32BIT_LITTLE_ENDIAN) |
-> +				      BIT(VDI_32BIT_BIG_ENDIAN) |
-> +				      (0xffffUL << 16);
-> +	p_attr->support_bitstream_mode = BIT(BS_MODE_INTERRUPT) |
-> +		BIT(BS_MODE_PIC_END);
-> +
-> +	return 0;
-> +}
-> +
-> +int wave5_vpu_get_version(struct vpu_device *vpu_dev, u32 *revision)
-> +{
-> +	u32 reg_val;
-> +	int ret;
-> +
-> +	vpu_write_reg(vpu_dev, W5_QUERY_OPTION, GET_VPU_INFO);
-> +	vpu_write_reg(vpu_dev, W5_VPU_BUSY_STATUS, 1);
-> +	vpu_write_reg(vpu_dev, W5_COMMAND, W5_QUERY);
-> +	vpu_write_reg(vpu_dev, W5_VPU_HOST_INT_REQ, 1);
-> +	ret = wave5_wait_vpu_busy(vpu_dev, W5_VPU_BUSY_STATUS);
-> +	if (ret) {
-> +		dev_err(vpu_dev->dev, "%s: timeout\n", __func__);
-> +		return ret;
-> +	}
-> +
-> +	if (!vpu_read_reg(vpu_dev, W5_RET_SUCCESS)) {
-> +		dev_err(vpu_dev->dev, "%s: failed\n", __func__);
-> +		return -EIO;
-> +	}
-> +
-> +	reg_val = vpu_read_reg(vpu_dev, W5_RET_FW_VERSION);
-> +	if (revision)
-
-Move the revision pointer null check at the beginning and return an error
-if that happens to be null: it doesn't make a lot of sense to read many
-registers before the check as the whole point of this function is to get
-the version and return it to that variable.
-
-
-> +		*revision = reg_val;
-> +
-> +	return 0;
-> +}
-> +
-> +static void remap_page(struct vpu_device *vpu_dev, dma_addr_t code_base, u32 index)
-> +{
-> +	u32 remap_size = (W5_REMAP_MAX_SIZE >> 12) & 0x1ff;
-> +	u32 reg_val = 0x80000000 | (WAVE5_UPPER_PROC_AXI_ID << 20) | (index << 12) | BIT(11)
-> +		| remap_size;
-> +
-> +	vpu_write_reg(vpu_dev, W5_VPU_REMAP_CTRL, reg_val);
-> +	vpu_write_reg(vpu_dev, W5_VPU_REMAP_VADDR, index * W5_REMAP_MAX_SIZE);
-> +	vpu_write_reg(vpu_dev, W5_VPU_REMAP_PADDR, code_base + index * W5_REMAP_MAX_SIZE);
-> +}
-> +
-
-..snip..
-
-> +
-> +int wave5_vpu_build_up_dec_param(struct vpu_instance *inst,
-> +				 struct dec_open_param *param)
-> +{
-> +	int ret;
-> +	struct dec_info *p_dec_info = &inst->codec_info->dec_info;
-> +	u32 bs_endian;
-> +	struct dma_vpu_buf *sram_vb;
-> +	struct vpu_device *vpu_dev = inst->dev;
-> +
-> +	p_dec_info->cycle_per_tick = 256;
-> +	switch (inst->std) {
-> +	case W_HEVC_DEC:
-> +		p_dec_info->seq_change_mask = SEQ_CHANGE_ENABLE_ALL_HEVC;
-> +		break;
-> +	case W_VP9_DEC:
-> +		p_dec_info->seq_change_mask = SEQ_CHANGE_ENABLE_ALL_VP9;
-> +		break;
-> +	case W_AVS2_DEC:
-> +		p_dec_info->seq_change_mask = SEQ_CHANGE_ENABLE_ALL_AVS2;
-> +		break;
-> +	case W_AVC_DEC:
-> +		p_dec_info->seq_change_mask = SEQ_CHANGE_ENABLE_ALL_AVC;
-> +		break;
-> +	case W_AV1_DEC:
-> +		p_dec_info->seq_change_mask = SEQ_CHANGE_ENABLE_ALL_AV1;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (vpu_dev->product == PRODUCT_ID_517)
-
-Another switch would be good here.
-
-> +		p_dec_info->vb_work.size = WAVE517_WORKBUF_SIZE;
-> +	else if (vpu_dev->product == PRODUCT_ID_521)
-> +		p_dec_info->vb_work.size = WAVE521DEC_WORKBUF_SIZE;
-> +	else if (vpu_dev->product == PRODUCT_ID_511)
-> +		p_dec_info->vb_work.size = WAVE521DEC_WORKBUF_SIZE;
-> +
-> +	ret = wave5_vdi_allocate_dma_memory(inst->dev, &p_dec_info->vb_work);
-> +	if (ret)
-> +		return ret;
-> +
-> +	vpu_write_reg(inst->dev, W5_CMD_DEC_VCORE_INFO, 1);
-> +
-> +	sram_vb = &vpu_dev->sram_buf;
-> +	p_dec_info->sec_axi_info.buf_base = sram_vb->daddr;
-> +	p_dec_info->sec_axi_info.buf_size = sram_vb->size;
-> +
-> +	wave5_vdi_clear_memory(inst->dev, &p_dec_info->vb_work);
-> +
-> +	vpu_write_reg(inst->dev, W5_ADDR_WORK_BASE, p_dec_info->vb_work.daddr);
-> +	vpu_write_reg(inst->dev, W5_WORK_SIZE, p_dec_info->vb_work.size);
-> +
-> +	vpu_write_reg(inst->dev, W5_CMD_DEC_BS_START_ADDR, p_dec_info->stream_buf_start_addr);
-> +	vpu_write_reg(inst->dev, W5_CMD_DEC_BS_SIZE, p_dec_info->stream_buf_size);
-> +
-> +	/* NOTE: when endian mode is 0, SDMA reads MSB first */
-> +	bs_endian = wave5_vdi_convert_endian(inst->dev, param->stream_endian);
-> +	bs_endian = (~bs_endian & VDI_128BIT_ENDIAN_MASK);
-> +	vpu_write_reg(inst->dev, W5_CMD_BS_PARAM, bs_endian);
-> +	vpu_write_reg(inst->dev, W5_CMD_EXT_ADDR, (param->pri_axprot << 20) |
-> +			(param->pri_axcache << 16) | param->pri_ext_addr);
-> +	vpu_write_reg(inst->dev, W5_CMD_NUM_CQ_DEPTH_M1, (COMMAND_QUEUE_DEPTH - 1));
-> +	vpu_write_reg(inst->dev, W5_CMD_ERR_CONCEAL, (param->error_conceal_unit << 2) |
-> +			(param->error_conceal_mode));
-> +
-> +	wave5_bit_issue_command(inst, W5_CREATE_INSTANCE);
-> +	// check QUEUE_DONE
-
-Please be consistent in comments format. Use C-style comments.
-
-> +	ret = wave5_wait_vpu_busy(inst->dev, W5_VPU_BUSY_STATUS);
-> +	if (ret) {
-> +		dev_warn(inst->dev->dev, "command: 'W5_CREATE_INSTANCE' timed out\n");
-> +		goto free_vb_work;
-> +	}
-> +
-> +	// Check if we were able to add the parameters into the VCPU QUEUE
-> +	if (!vpu_read_reg(inst->dev, W5_RET_SUCCESS)) {
-> +		ret = -EIO;
-> +		goto free_vb_work;
-> +	}
-> +
-> +	p_dec_info->product_code = vpu_read_reg(inst->dev, W5_PRODUCT_NUMBER);
-> +
-> +	return 0;
-> +free_vb_work:
-> +	wave5_vdi_free_dma_memory(vpu_dev, &p_dec_info->vb_work);
-> +	return ret;
-> +}
-> +
-
-..snip..
-
-> +
-> +static void wave5_get_dec_seq_result(struct vpu_instance *inst, struct dec_initial_info *info)
-> +{
-> +	u32 reg_val, sub_layer_info;
-> +	u32 profile_compatibility_flag;
-> +	u32 output_bit_depth_minus8;
-> +	struct dec_info *p_dec_info = &inst->codec_info->dec_info;
-> +
-> +	p_dec_info->stream_rd_ptr = wave5_vpu_dec_get_rd_ptr(inst);
-> +	info->rd_ptr = p_dec_info->stream_rd_ptr;
-> +
-> +	p_dec_info->frame_display_flag = vpu_read_reg(inst->dev, W5_RET_DEC_DISP_IDC);
-> +
-> +	reg_val = vpu_read_reg(inst->dev, W5_RET_DEC_PIC_SIZE);
-> +	info->pic_width = ((reg_val >> 16) & 0xffff);
-> +	info->pic_height = (reg_val & 0xffff);
-> +	info->min_frame_buffer_count = vpu_read_reg(inst->dev, W5_RET_DEC_NUM_REQUIRED_FB);
-> +	info->frame_buf_delay = vpu_read_reg(inst->dev, W5_RET_DEC_NUM_REORDER_DELAY);
-> +
-> +	reg_val = vpu_read_reg(inst->dev, W5_RET_DEC_CROP_LEFT_RIGHT);
-> +	info->pic_crop_rect.left = (reg_val >> 16) & 0xffff;
-> +	info->pic_crop_rect.right = reg_val & 0xffff;
-> +	reg_val = vpu_read_reg(inst->dev, W5_RET_DEC_CROP_TOP_BOTTOM);
-> +	info->pic_crop_rect.top = (reg_val >> 16) & 0xffff;
-> +	info->pic_crop_rect.bottom = reg_val & 0xffff;
-> +
-> +	info->f_rate_numerator = vpu_read_reg(inst->dev, W5_RET_DEC_FRAME_RATE_NR);
-> +	info->f_rate_denominator = vpu_read_reg(inst->dev, W5_RET_DEC_FRAME_RATE_DR);
-> +
-> +	reg_val = vpu_read_reg(inst->dev, W5_RET_DEC_COLOR_SAMPLE_INFO);
-> +	info->luma_bitdepth = reg_val & 0xf;
-> +	info->chroma_bitdepth = (reg_val >> 4) & 0xf;
-> +	info->chroma_format_idc = (reg_val >> 8) & 0xf;
-> +	info->aspect_rate_info = (reg_val >> 16) & 0xff;
-
-Bitfield macros would make this way more readable.
-
-> +	info->is_ext_sar = ((info->aspect_rate_info == 255) ? true : false);
-> +	/* [0:15] - vertical size, [16:31] - horizontal size */
-> +	if (info->is_ext_sar)
-> +		info->aspect_rate_info = vpu_read_reg(inst->dev, W5_RET_DEC_ASPECT_RATIO);
-> +	info->bit_rate = vpu_read_reg(inst->dev, W5_RET_DEC_BIT_RATE);
-> +
-> +	sub_layer_info = vpu_read_reg(inst->dev, W5_RET_DEC_SUB_LAYER_INFO);
-> +	info->max_temporal_layers = (sub_layer_info >> 8) & 0x7;
-> +
-> +	reg_val = vpu_read_reg(inst->dev, W5_RET_DEC_SEQ_PARAM);
-> +	info->level = reg_val & 0xff;
-> +	profile_compatibility_flag = (reg_val >> 12) & 0xff;
-> +	info->profile = (reg_val >> 24) & 0x1f;
-> +	info->tier = (reg_val >> 29) & 0x01;
-> +	output_bit_depth_minus8 = (reg_val >> 30) & 0x03;
-> +
-> +	if (inst->std == W_HEVC_DEC) {
-> +		/* guessing profile */
-> +		if (!info->profile) {
-> +			if ((profile_compatibility_flag & 0x06) == 0x06)
-> +				info->profile = HEVC_PROFILE_MAIN; /* main profile */
-
-main/main10 profile comments are stating the obvious, please remove them.
-
-> +			else if ((profile_compatibility_flag & 0x04) == 0x04)
-> +				info->profile = HEVC_PROFILE_MAIN10; /* main10 profile */
-> +			else if ((profile_compatibility_flag & 0x08) == 0x08)
-> +				/* main still picture profile */
-> +				info->profile = HEVC_PROFILE_STILLPICTURE;
-> +			else
-> +				info->profile = HEVC_PROFILE_MAIN; /* for old version HM */
-> +		}
-> +
-> +	} else if (inst->std == W_AVS2_DEC) {
-> +		if (info->luma_bitdepth == 10 && output_bit_depth_minus8 == 2)
-> +			info->output_bit_depth = 10;
-> +		else
-> +			info->output_bit_depth = 8;
-> +
-> +	} else if (inst->std == W_AVC_DEC) {
-> +		info->profile = (reg_val >> 24) & 0x7f;
-> +	}
-> +
-> +	info->vlc_buf_size = vpu_read_reg(inst->dev, W5_RET_VLC_BUF_SIZE);
-> +	info->param_buf_size = vpu_read_reg(inst->dev, W5_RET_PARAM_BUF_SIZE);
-> +	p_dec_info->vlc_buf_size = info->vlc_buf_size;
-> +	p_dec_info->param_buf_size = info->param_buf_size;
-> +}
-> +
-
-..snip..
-
-> +
-> +static u32 calculate_table_size(u32 bit_depth, u32 frame_width, u32 frame_height, u32 ot_bg_width)
-> +{
-> +	u32 bgs_width = ((bit_depth > 8) ? 256 : 512);
-> +	u32 comp_frame_width = ALIGN(ALIGN(frame_width, 16) + 16, 16);
-> +	u32 ot_frame_width = ALIGN(comp_frame_width, ot_bg_width);
-> +
-> +	// sizeof_offset_table()
-> +	u32 ot_bg_height = 32;
-> +	u32 bgs_height = BIT(14) / bgs_width / ((bit_depth > 8) ? 2 : 1);
-
-Please, no magic BIT(x) usage: add a definition for that bit.
-
-> +	u32 comp_frame_height = ALIGN(ALIGN(frame_height, 4) + 4, bgs_height);
-> +	u32 ot_frame_height = ALIGN(comp_frame_height, ot_bg_height);
-> +
-> +	return (ot_frame_width / 16) * (ot_frame_height / 4) * 2;
-> +}
-> +
-
-..snip..
-
-> +
-> +int wave5_vpu_decode(struct vpu_instance *inst, struct dec_param *option, u32 *fail_res)
-> +{
-> +	u32 mode_option = DEC_PIC_NORMAL, bs_option, reg_val;
-> +	u32 force_latency = 0;
-> +	struct dec_info *p_dec_info = &inst->codec_info->dec_info;
-> +	struct dec_open_param *p_open_param = &p_dec_info->open_param;
-> +	int ret;
-> +
-
-switch (option->skipframe_mode) {
-case ...
-...
-default:
-	break;
-};
-
-if (p_dec_info->thumbnail_mode) {
-	mode_option = DEC_PIC_W_THUMBNAIL;
-	if (mode_option != DEC_PIC_NORMAL)
-		... do something: as I read the code, this is not a supported case.
-}
-
-^^^^ this should improve the flow.
-
-> +	if (p_dec_info->thumbnail_mode) {
-> +		mode_option = DEC_PIC_W_THUMBNAIL;
-> +	} else if (option->skipframe_mode) {
-> +		switch (option->skipframe_mode) {
-> +		case WAVE_SKIPMODE_NON_IRAP:
-> +			mode_option = SKIP_NON_IRAP;
-> +			force_latency = 1;
-> +			break;
-> +		case WAVE_SKIPMODE_NON_REF:
-> +			mode_option = SKIP_NON_REF_PIC;
-> +			break;
-> +		default:
-> +			// skip mode off
-> +			break;
-> +		}
-> +	}
-> +
-> +	// set disable reorder
-> +	if (!p_dec_info->reorder_enable)
-> +		force_latency = 1;
-> +
-> +	/* set attributes of bitstream buffer controller */
-> +	bs_option = 0;
-
-You don't have to initialize this variable at all, as you're either writing twice
-or failing.
-
-> +	switch (p_open_param->bitstream_mode) {
-> +	case BS_MODE_INTERRUPT:
-> +		bs_option = BSOPTION_ENABLE_EXPLICIT_END;
-> +		break;
-> +	case BS_MODE_PIC_END:
-> +		bs_option = BSOPTION_ENABLE_EXPLICIT_END;
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-
-..snip..
-
-> +
-> +int wave5_vpu_re_init(struct device *dev, u8 *fw, size_t size)
-> +{
-> +	struct vpu_buf *common_vb;
-> +	dma_addr_t code_base, temp_base;
-> +	dma_addr_t old_code_base, temp_size;
-> +	u32 code_size;
-> +	u32 reg_val;
-> +	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
-> +
-> +	common_vb = &vpu_dev->common_mem;
-> +
-> +	code_base = common_vb->daddr;
-> +	/* ALIGN TO 4KB */
-> +	code_size = (WAVE5_MAX_CODE_BUF_SIZE & ~0xfff);
-> +	if (code_size < size * 2)
-> +		return -EINVAL;
-> +	temp_base = common_vb->daddr + WAVE5_TEMPBUF_OFFSET;
-> +	temp_size = WAVE5_TEMPBUF_SIZE;
-> +
-> +	old_code_base = vpu_read_reg(vpu_dev, W5_VPU_REMAP_PADDR);
-> +
-> +	if (old_code_base != code_base + W5_REMAP_INDEX1 * W5_REMAP_MAX_SIZE) {
-
-Put the contents of this branch into another function maybe?
-
-	if (old_code_base != code_base + W5_REMAP_INDEX1 * W5_REMAP_MAX_SIZE) {
-		ret = do_that_vpu_init_flow(things);
-		if (ret)
-			return ret;
-	}
-
-
-	return setup_wave5_properties(dev);
-};
-
-Alternatively, invert the conditional and use a goto, but I personally don't
-really like using gotos unless it's *totally* necessary.
-
-> +		int ret;
-> +		struct dma_vpu_buf *sram_vb;
-> +
-> +		ret = wave5_vdi_write_memory(vpu_dev, common_vb, 0, fw, size,
-> +					     VDI_128BIT_LITTLE_ENDIAN);
-> +		if (ret < 0) {
-> +			dev_err(vpu_dev->dev,
-> +				"VPU init, Writing firmware to common buffer, fail: %d\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		vpu_write_reg(vpu_dev, W5_PO_CONF, 0);
-> +
-> +		ret = wave5_vpu_reset(dev, SW_RESET_ON_BOOT);
-> +		if (ret < 0) {
-> +			dev_err(vpu_dev->dev, "VPU init, Resetting the VPU, fail: %d\n", ret);
-> +			return ret;
-> +		}
-> +
-> +		remap_page(vpu_dev, code_base, W5_REMAP_INDEX0);
-> +		remap_page(vpu_dev, code_base, W5_REMAP_INDEX1);
-> +
-> +		vpu_write_reg(vpu_dev, W5_ADDR_CODE_BASE, code_base);
-> +		vpu_write_reg(vpu_dev, W5_CODE_SIZE, code_size);
-> +		vpu_write_reg(vpu_dev, W5_CODE_PARAM, (WAVE5_UPPER_PROC_AXI_ID << 4) | 0);
-> +		vpu_write_reg(vpu_dev, W5_ADDR_TEMP_BASE, temp_base);
-> +		vpu_write_reg(vpu_dev, W5_TEMP_SIZE, temp_size);
-> +
-> +		vpu_write_reg(vpu_dev, W5_HW_OPTION, 0);
-> +
-> +		reg_val = (WAVE5_PROC_AXI_EXT_ADDR & 0xFFFF);
-> +		wave5_fio_writel(vpu_dev, W5_BACKBONE_PROC_EXT_ADDR, reg_val);
-> +		reg_val = ((WAVE5_PROC_AXI_AXPROT & 0x7) << 4) |
-> +			(WAVE5_PROC_AXI_AXCACHE & 0xF);
-> +		wave5_fio_writel(vpu_dev, W5_BACKBONE_AXI_PARAM, reg_val);
-> +		reg_val = ((WAVE5_SEC_AXI_AXPROT & 0x7) << 20) |
-> +			((WAVE5_SEC_AXI_AXCACHE & 0xF) << 16) |
-> +			(WAVE5_SEC_AXI_EXT_ADDR & 0xFFFF);
-> +		vpu_write_reg(vpu_dev, W5_SEC_AXI_PARAM, reg_val);
-> +
-> +		/* interrupt */
-> +		// encoder
-> +		reg_val = BIT(INT_WAVE5_ENC_SET_PARAM);
-> +		reg_val |= BIT(INT_WAVE5_ENC_PIC);
-> +		reg_val |= BIT(INT_WAVE5_BSBUF_FULL);
-> +		// decoder
-> +		reg_val |= BIT(INT_WAVE5_INIT_SEQ);
-> +		reg_val |= BIT(INT_WAVE5_DEC_PIC);
-> +		reg_val |= BIT(INT_WAVE5_BSBUF_EMPTY);
-> +		vpu_write_reg(vpu_dev, W5_VPU_VINT_ENABLE, reg_val);
-> +
-> +		reg_val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG0);
-> +		if ((reg_val >> 16) & 1) {
-> +			reg_val = ((WAVE5_PROC_AXI_ID << 28) |
-> +					(WAVE5_PRP_AXI_ID << 24) |
-> +					(WAVE5_FBD_Y_AXI_ID << 20) |
-> +					(WAVE5_FBC_Y_AXI_ID << 16) |
-> +					(WAVE5_FBD_C_AXI_ID << 12) |
-> +					(WAVE5_FBC_C_AXI_ID << 8) |
-> +					(WAVE5_PRI_AXI_ID << 4) |
-> +					WAVE5_SEC_AXI_ID);
-> +			wave5_fio_writel(vpu_dev, W5_BACKBONE_PROG_AXI_ID, reg_val);
-> +		}
-> +
-> +		sram_vb = &vpu_dev->sram_buf;
-> +
-> +		vpu_write_reg(vpu_dev, W5_ADDR_SEC_AXI, sram_vb->daddr);
-> +		vpu_write_reg(vpu_dev, W5_SEC_AXI_SIZE, sram_vb->size);
-> +		vpu_write_reg(vpu_dev, W5_VPU_BUSY_STATUS, 1);
-> +		vpu_write_reg(vpu_dev, W5_COMMAND, W5_INIT_VPU);
-> +		vpu_write_reg(vpu_dev, W5_VPU_REMAP_CORE_START, 1);
-> +
-> +		ret = wave5_wait_vpu_busy(vpu_dev, W5_VPU_BUSY_STATUS);
-> +		if (ret) {
-> +			dev_err(vpu_dev->dev, "VPU reinit(W5_VPU_REMAP_CORE_START) timeout\n");
-> +			return ret;
-> +		}
-> +
-> +		reg_val = vpu_read_reg(vpu_dev, W5_RET_SUCCESS);
-> +		if (!reg_val) {
-> +			u32 reason_code = vpu_read_reg(vpu_dev, W5_RET_FAIL_REASON);
-> +
-> +			wave5_print_reg_err(vpu_dev, reason_code);
-> +			return -EIO;
-> +		}
-> +	}
-> +
-> +	return setup_wave5_properties(dev);
-> +}
-> +
-
-..snip..
-
-> +
-> +int wave5_vpu_reset(struct device *dev, enum sw_reset_mode reset_mode)
-> +{
-> +	u32 val = 0;
-> +	int ret = 0;
-> +	struct vpu_device *vpu_dev = dev_get_drvdata(dev);
-> +	struct vpu_attr *p_attr = &vpu_dev->attr;
-> +	// VPU doesn't send response. force to set BUSY flag to 0.
-> +	vpu_write_reg(vpu_dev, W5_VPU_BUSY_STATUS, 0);
-> +
-> +	if (reset_mode == SW_RESET_SAFETY) {
-> +		ret = wave5_vpu_sleep_wake(dev, true, NULL, 0);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG0);
-> +	if ((val >> 16) & 0x1)
-> +		p_attr->support_backbone = true;
-
-bitfield macros ftw.
-
-> +	if ((val >> 22) & 0x1)
-> +		p_attr->support_vcore_backbone = true;
-> +	if ((val >> 28) & 0x1)
-> +		p_attr->support_vcpu_backbone = true;
-> +
-> +	val = vpu_read_reg(vpu_dev, W5_VPU_RET_VPU_CONFIG1);
-> +	if ((val >> 26) & 0x1)
-> +		p_attr->support_dual_core = true;
-> +
-
-
-..snip..
-
-> +static void wave5_set_enc_crop_info(u32 codec, struct enc_wave_param *param, int rot_mode,
-> +				    int src_width, int src_height)
-> +{
-> +	int aligned_width = (codec == W_HEVC_ENC) ? ALIGN(src_width, 32) : ALIGN(src_width, 16);
-> +	int aligned_height = (codec == W_HEVC_ENC) ? ALIGN(src_height, 32) : ALIGN(src_height, 16);
-> +	int pad_right, pad_bot;
-> +	int crop_right, crop_left, crop_top, crop_bot;
-> +	int prp_mode = rot_mode >> 1; // remove prp_enable bit
-> +
-> +	if (codec == W_HEVC_ENC &&
-> +	    (!rot_mode || prp_mode == 14)) // prp_mode 14 : hor_mir && ver_mir && rot_180
-> +		return;
-> +
-> +	pad_right = aligned_width - src_width;
-> +	pad_bot = aligned_height - src_height;
-> +
-> +	if (param->conf_win_right > 0)
-> +		crop_right = param->conf_win_right + pad_right;
-> +	else
-> +		crop_right = pad_right;
-> +
-> +	if (param->conf_win_bot > 0)
-> +		crop_bot = param->conf_win_bot + pad_bot;
-> +	else
-> +		crop_bot = pad_bot;
-> +
-> +	crop_top = param->conf_win_top;
-> +	crop_left = param->conf_win_left;
-> +
-> +	param->conf_win_top = crop_top;
-> +	param->conf_win_left = crop_left;
-> +	param->conf_win_bot = crop_bot;
-> +	param->conf_win_right = crop_right;
-> +
-> +	if (prp_mode == 1 || prp_mode == 15) {
-
-#define PRP_MODE_SOMETHING 1
-#define PRP_MODE_SOMETHING_ELSE 2
-
-or use an enumeration... otherwise it's not really understandable...
-
-> +		param->conf_win_top = crop_right;
-> +		param->conf_win_left = crop_top;
-> +		param->conf_win_bot = crop_left;
-> +		param->conf_win_right = crop_bot;
-> +	} else if (prp_mode == 2 || prp_mode == 12) {
-> +		param->conf_win_top = crop_bot;
-> +		param->conf_win_left = crop_right;
-> +		param->conf_win_bot = crop_top;
-> +		param->conf_win_right = crop_left;
-> +	} else if (prp_mode == 3 || prp_mode == 13) {
-> +		param->conf_win_top = crop_left;
-> +		param->conf_win_left = crop_bot;
-> +		param->conf_win_bot = crop_right;
-> +		param->conf_win_right = crop_top;
-> +	} else if (prp_mode == 4 || prp_mode == 10) {
-> +		param->conf_win_top = crop_bot;
-> +		param->conf_win_bot = crop_top;
-> +	} else if (prp_mode == 8 || prp_mode == 6) {
-> +		param->conf_win_left = crop_right;
-> +		param->conf_win_right = crop_left;
-> +	} else if (prp_mode == 5 || prp_mode == 11) {
-> +		param->conf_win_top = crop_left;
-> +		param->conf_win_left = crop_top;
-> +		param->conf_win_bot = crop_right;
-> +		param->conf_win_right = crop_bot;
-> +	} else if (prp_mode == 7 || prp_mode == 9) {
-> +		param->conf_win_top = crop_right;
-> +		param->conf_win_left = crop_bot;
-> +		param->conf_win_bot = crop_left;
-> +		param->conf_win_right = crop_top;
-> +	}
-> +}
-> +
-> +int wave5_vpu_enc_init_seq(struct vpu_instance *inst)
-> +{
-> +	u32 reg_val = 0, rot_mir_mode, fixed_cu_size_mode = 0x7;
-> +	struct enc_info *p_enc_info = &inst->codec_info->enc_info;
-> +	struct enc_open_param *p_open_param = &p_enc_info->open_param;
-> +	struct enc_wave_param *p_param = &p_open_param->wave_param;
-> +	int ret;
-> +
-> +	if (inst->dev->product != PRODUCT_ID_521)
-> +		return -EINVAL;
-> +
-> +	/*==============================================*/
-> +	/* OPT_CUSTOM_GOP */
-> +	/*==============================================*/
-
-Comments like these are usually like
-
-	/*
-	 * OPT_CUSTOM_GOP
-	 *
-	 * SET_PARAM + CUSTOM_GOP
-	 * only when... blah
-	 */
-
-> +	/*
-> +	 * SET_PARAM + CUSTOM_GOP
-> +	 * only when gop_preset_idx == custom_gop, custom_gop related registers should be set
-> +	 */
-
-..snip..
-
-> +}
-> diff --git a/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h b/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
-> new file mode 100644
-> index 000000000000..1b3ffb737925
-> --- /dev/null
-> +++ b/drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
-> @@ -0,0 +1,1136 @@
-> +/* SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause) */
-> +/*
-> + * Wave5 series multi-standard codec IP - helper definitions
-> + *
-> + * Copyright (C) 2021 CHIPS&MEDIA INC
-> + */
-> +
-> +#ifndef VPUAPI_H_INCLUDED
-> +#define VPUAPI_H_INCLUDED
-> +
-> +#include <linux/kfifo.h>
-> +#include <linux/idr.h>
-> +#include <media/v4l2-device.h>
-> +#include <media/v4l2-mem2mem.h>
-> +#include <media/v4l2-ctrls.h>
-> +#include "wave5-vpuerror.h"
-> +#include "wave5-vpuconfig.h"
-> +#include "wave5-vdi.h"
-> +
-> +enum product_id {
-> +	PRODUCT_ID_521,
-> +	PRODUCT_ID_511,
-> +	PRODUCT_ID_517,
-> +	PRODUCT_ID_NONE,
-> +};
-> +
-> +struct vpu_attr;
-> +
-> +enum vpu_instance_type {
-> +	VPU_INST_TYPE_DEC = 0,
-
-The default for the first enum entry is always zero, and the next one will always
-be 1, 2, 3, 4.....
-
-.....so you don't need to assign any number.
-
-> +	VPU_INST_TYPE_ENC = 1
-> +};
-> +
-> +enum vpu_instance_state {
-> +	VPU_INST_STATE_NONE = 0,
-> +	VPU_INST_STATE_OPEN = 1,
-> +	VPU_INST_STATE_INIT_SEQ = 2,
-> +	VPU_INST_STATE_PIC_RUN = 3,
-> +	VPU_INST_STATE_STOP = 4
-
-ditto
-
-> +};
-> +
-> +#define WAVE5_MAX_FBS 32
-> +
-> +#define MAX_REG_FRAME (WAVE5_MAX_FBS * 2)
-> +
-> +#define WAVE5_DEC_HEVC_BUF_SIZE(_w, _h) (DIV_ROUND_UP(_w, 64) * DIV_ROUND_UP(_h, 64) * 256 + 64)
-> +#define WAVE5_DEC_AVC_BUF_SIZE(_w, _h) ((((ALIGN(_w, 256) / 16) * (ALIGN(_h, 16) / 16)) + 16) * 80)
-> +#define WAVE5_DEC_VP9_BUF_SIZE(_w, _h) (((ALIGN(_w, 64) * ALIGN(_h, 64)) >> 2))
-> +#define WAVE5_DEC_AVS2_BUF_SIZE(_w, _h) (((ALIGN(_w, 64) * ALIGN(_h, 64)) >> 5))
-> +// AV1 BUF SIZE : MFMV + segment ID + CDF probs table + film grain param Y+ film graim param C
-> +#define WAVE5_DEC_AV1_BUF_SZ_1(_w, _h)	\
-> +	(((ALIGN(_w, 64) / 64) * (ALIGN(_h, 64) / 64) * 512) + 41984 + 8192 + 4864)
-> +#define WAVE5_DEC_AV1_BUF_SZ_2(_w1, _w2, _h)	\
-> +	(((ALIGN(_w1, 64) / 64) * 256 + (ALIGN(_w2, 256) / 64) * 128) * (ALIGN(_h, 64) / 64))
-> +
-> +#define WAVE5_FBC_LUMA_TABLE_SIZE(_w, _h) (ALIGN(_h, 64) * ALIGN(_w, 256) / 32)
-> +#define WAVE5_FBC_CHROMA_TABLE_SIZE(_w, _h) (ALIGN((_h), 64) * ALIGN((_w) / 2, 256) / 32)
-> +#define WAVE5_ENC_AVC_BUF_SIZE(_w, _h) (ALIGN(_w, 64) * ALIGN(_h, 64) / 32)
-> +#define WAVE5_ENC_HEVC_BUF_SIZE(_w, _h) (ALIGN(_w, 64) / 64 * ALIGN(_h, 64) / 64 * 128)
-> +
-> +/*
-> + * common struct and definition
-> + */
-> +enum cod_std {
-> +	STD_AVC = 0,
-> +	STD_VC1 = 1,
-> +	STD_MPEG2 = 2,
-> +	STD_MPEG4 = 3,
-> +	STD_H263 = 4,
-> +	STD_DIV3 = 5,
-> +	STD_RV = 6,
-> +	STD_AVS = 7,
-
-and same here, so that becomes
-
-	.....
-	STD_AVS,
-	STD_RESERVED,
-	STD_THO,
-
-
-> +	STD_THO = 9 > +	STD_VP3 = 10,
-> +	STD_VP8 = 11,
-> +	STD_HEVC = 12,
-> +	STD_VP9 = 13,
-> +	STD_AVS2 = 14,
-
-STD_RESERVED2, (which will be 15)...
-
-> +	STD_AV1 = 16,
-> +	STD_MAX
-> +};
-> +
-> +enum wave_std {
-> +	W_HEVC_DEC = 0x00,
-> +	W_HEVC_ENC = 0x01,
-> +	W_AVC_DEC = 0x02,
-> +	W_AVC_ENC = 0x03,
-> +	W_VP9_DEC = 0x16,
-> +	W_AVS2_DEC = 0x18,
-> +	W_AV1_DEC = 0x1A,
-> +	STD_UNKNOWN = 0xFF
-> +};
-> +
-> +enum SET_PARAM_OPTION {
-
-Lowercase names for enums please.
-
-> +	OPT_COMMON = 0, /* SET_PARAM command option for encoding sequence */
-> +	OPT_CUSTOM_GOP = 1, /* SET_PARAM command option for setting custom GOP */
-> +	OPT_CUSTOM_HEADER = 2, /* SET_PARAM command option for setting custom VPS/SPS/PPS */
-> +	OPT_VUI = 3, /* SET_PARAM command option for encoding VUI */
-> +	OPT_CHANGE_PARAM = 0x10,
-> +};
-> +
-> +enum DEC_PIC_HDR_OPTION {
-> +	INIT_SEQ_NORMAL = 0x01,
-> +	INIT_SEQ_W_THUMBNAIL = 0x11,
-> +};
-> +
-> +enum DEC_PIC_OPTION {
-> +	DEC_PIC_NORMAL = 0x00, /* it is normal mode of DEC_PIC command */
-> +	DEC_PIC_W_THUMBNAIL = 0x10, /* thumbnail mode (skip non-IRAP without reference reg) */
-> +	SKIP_NON_IRAP = 0x11, /* it skips to decode non-IRAP pictures */
-> +	SKIP_NON_REF_PIC = 0x13
-> +};
-> +
-
-
-There's probably more, but starting with that is surely something :-)
-
-
-Regards,
-Angelo
-
+> This is 30.16.1.1.3 aPLCANodeCount ? The phrasing of the help is quite
+> different than the standard. Pure count should be max node + 1 (IOW max
+> of 256, which won't fit into u8, hence the question)
+> Or is node 255 reserved?
+This is indeed aPLCANodeCount. What standard are you referring to
+exactly? This is the excerpt from IEEE802.3cg-2019
+
+"
+30.16.1.1.3 aPLCANodeCount
+ATTRIBUTE
+APPROPRIATE SYNTAX:
+INTEGER
+BEHAVIOUR DEFINED AS:
+This value is assigned to define the number of nodes getting a transmit opportunity before a new
+BEACON is generated. Valid range is 0 to 255, inclusive. The default value is 8.;
+"
+
+This is what I can read from Clause 148.4.4.1:
+"
+plca_node_count
+
+Maximum number of PLCA nodes on the mixing segment receiving transmit
+opportunities before the node with local_nodeID = 0 generates a new 
+BEACON, reflecting the value of aPLCANodeCount. This parameter is 
+meaningful only for the node with local_nodeID = 0; otherwise, it is
+ignored.
+
+Values: integer number from 0 to 255
+"
+
+And this is what I can read in the OPEN Alliance documentation:
+
+"
+4.3.1 NCNT
+This field sets the maximum number of PLCA nodes supported on the multidrop
+network. On the node with PLCA ID = 0 (see 4.3.2), this value must be set at
+least to the number of nodes that may be plugged to the network in order for
+PLCA to operate properly. This bit maps to the aPLCANodeCount object in [1]
+Clause 30.
+"
+
+So the valid range is actually 1..255. A value of 0 does not really mean
+anything. PHYs would just clamp this to 1. So maybe we should set a
+minimum limit in the kernel?
+
+Please, feel free to ask more questions here, it is important that we
+fully understand what this is. Fortunately, I am the guy who invented
+PLCA and wrote the specs, so I should be able to answer these questions :-D.
+
+> 
+> > +  ``ETHTOOL_A_PLCA_TO_TMR``               u8      Transmit Opportunity Timer
+> > +                                                  value in bit-times (BT)
+> > +  ``ETHTOOL_A_PLCA_BURST_CNT``            u8      Number of additional packets
+> > +                                                  the node is allowed to send
+> > +                                                  within a single TO
+> > +  ``ETHTOOL_A_PLCA_BURST_TMR``            u8      Time to wait for the MAC to
+> > +                                                  transmit a new frame before
+> > +                                                  terminating the burst
+> 
+> Please consider making the fields u16 or u32. Netlink pads all
+> attributes to 4B, and once we decide the size in the user API
+> we can never change it. So even if the standard says max is 255
+> if some vendor somewhere may decide to allow a bigger range we
+> may be better off using a u32 type and limiting the accepted
+> range in the netlink policy (grep for NLA_POLICY_MAX())
+Ok, modifed according to your indication. I honestly hardly believe it
+would make any sense to expand those variables in the future, PLCA works
+well for a limited number of nodes and for small TO_TIMER values. Above
+128, CSMA/CD starts to be competitive and above 255 there is no question
+that CSMA/CD is better. But nevertheless, I'm ok with this change.
+
+
+> > +  ======================================  ======  =============================
+> > +
+> > +When set, the optional ``ETHTOOL_A_PLCA_VERSION`` attribute indicates which
+> > +standard and version the PLCA management interface complies to. When not set,
+> > +the interface is vendor-specific and (possibly) supplied by the driver.
+> > +The OPEN Alliance SIG specifies a standard register map for 10BASE-T1S PHYs
+> > +embedding the PLCA Reconcialiation Sublayer. See "10BASE-T1S PLCA Management
+> > +Registers" at https://www.opensig.org/about/specifications/. When this standard
+> > +is supported, ETHTOOL_A_PLCA_VERSION is reported as 0Axx where 'xx' denotes the
+> 
+> you put backticks around other attr names but not here
+Got it, thanks.
+
+> TBH I can't parse the "ETHTOOL_A_PLCA_VERSION is reported as 0Axx
+> where.." sentence. Specifically I'm confused about what the 0A is.
+How about this: "When this standard is supported, the upper byte of
+``ETHTOOL_A_PLCA_VERSION`` shall be 0x0A (see Table A.1.0 — IDVER 
+bits assignment).
+
+> > +
+> > +When set, the ``ETHTOOL_A_PLCA_STATUS`` attribute indicates whether the node is
+> > +detecting the presence of the BEACON on the network. This flag is
+> > +corresponding to ``IEEE 802.3cg-2019`` 30.16.1.1.2 aPLCAStatus.
+> 
+> I noticed some count attributes in the spec, are these statistics?
+> Do any of your devices support them? It'd be good to add support in
+> a fixed format via net/ethtool/stats.c from the start, so that people
+> don't start inventing their own ways of reporting them.
+> 
+> (feel free to ask for more guidance, the stats support is a bit spread
+> out throughout the code)
+Are you referring to this?
+
+"
+45.2.3.68f.1 CorruptedTxCnt (3.2294.15:0)
+Bits 3.2294.15:0 count up at each positive edge of the MII signal COL.
+When the maximum allowed value (65 535) is reached, the count stops until
+this register is cleared by a read operation.
+"
+
+This is the only one statistic counter I can think of. Although, it is a
+10BASE-T1S PHY related register, it is not specific to PLCA, even if its
+main purpose is to help the user distinguish between logical and
+physical collisions.
+
+I would be inclined to add this as a separate feature unrelated to PLCA.
+Please, let me know what you think.
+
+> >   * struct ethtool_phy_ops - Optional PHY device options
+> >   * @get_sset_count: Get number of strings that @get_strings will write.
+> >   * @get_strings: Return a set of strings that describe the requested objects
+> >   * @get_stats: Return extended statistics about the PHY device.
+> > + * @get_plca_cfg: Return PLCA configuration.
+> > + * @set_plca_cfg: Set PLCA configuration.
+> 
+> missing get status in kdoc
+Fixed. Good catch.
+
+> 
+> >   * @start_cable_test: Start a cable test
+> >   * @start_cable_test_tdr: Start a Time Domain Reflectometry cable test
+> >   *
+> > @@ -819,6 +823,13 @@ struct ethtool_phy_ops {
+> >  	int (*get_strings)(struct phy_device *dev, u8 *data);
+> >  	int (*get_stats)(struct phy_device *dev,
+> >  			 struct ethtool_stats *stats, u64 *data);
+> > +	int (*get_plca_cfg)(struct phy_device *dev,
+> > +			    struct phy_plca_cfg *plca_cfg);
+> > +	int (*set_plca_cfg)(struct phy_device *dev,
+> > +			    struct netlink_ext_ack *extack,
+> > +			    const struct phy_plca_cfg *plca_cfg);
+> 
+> extack is usually the last argument
+I actually copied from the cable_test_tdr callback below. Do you still
+want me to change the order? Should we do this for cable test as well?
+(as a different patch maybe?). Please, let me know.
+
+> 
+> > +	int (*get_plca_status)(struct phy_device *dev,
+> > +			       struct phy_plca_status *plca_st);
+> 
+> get status doesn't need exact? I guess..
+This is my assumption. I would say it is similar to get_config, and I
+would say it is mandatory. I can hardly think of a system that does not
+implement get_status when supporting PLCA.
+Thoughts?
+
+> 
+> >  	int (*start_cable_test)(struct phy_device *phydev,
+> >  				struct netlink_ext_ack *extack);
+> >  	int (*start_cable_test_tdr)(struct phy_device *phydev,
+> > diff --git a/include/linux/phy.h b/include/linux/phy.h
+> > index 71eeb4e3b1fd..f3ecc9a86e67 100644
+> > --- a/include/linux/phy.h
+> > +++ b/include/linux/phy.h
+> > @@ -765,6 +765,63 @@ struct phy_tdr_config {
+> >  };
+> >  #define PHY_PAIR_ALL -1
+> >  
+> > +/**
+> > + * struct phy_plca_cfg - Configuration of the PLCA (Physical Layer Collision
+> > + * Avoidance) Reconciliation Sublayer.
+> > + *
+> > + * @version: read-only PLCA register map version. 0 = not available. Ignored
+> 
+>                                                      ^^^^^^^^^^^^^^^^^^
+> 
+> > + *   when setting the configuration. Format is the same as reported by the PLCA
+> > + *   IDVER register (31.CA00). -1 = not available.
+> 
+>                                   ^^^^^^^^^^^^^^^^^^^
+> 
+> So is it 0 or -1 that's N/A for this field? :)
+Ah! It's obviously -1. I just forgot to update the comment... Thanks for
+noticing!
+
+> 
+> > + * @enabled: PLCA configured mode (enabled/disabled). -1 = not available / don't
+> > + *   set. 0 = disabled, anything else = enabled.
+> > + * @node_id: the PLCA local node identifier. -1 = not available / don't set.
+> > + *   Allowed values [0 .. 254]. 255 = node disabled.
+> > + * @node_cnt: the PLCA node count (maximum number of nodes having a TO). Only
+> > + *   meaningful for the coordinator (node_id = 0). -1 = not available / don't
+> > + *   set. Allowed values [0 .. 255].
+> > + * @to_tmr: The value of the PLCA to_timer in bit-times, which determines the
+> > + *   PLCA transmit opportunity window opening. See IEEE802.3 Clause 148 for
+> > + *   more details. The to_timer shall be set equal over all nodes.
+> > + *   -1 = not available / don't set. Allowed values [0 .. 255].
+> > + * @burst_cnt: controls how many additional frames a node is allowed to send in
+> > + *   single transmit opportunity (TO). The default value of 0 means that the
+> > + *   node is allowed exactly one frame per TO. A value of 1 allows two frames
+> > + *   per TO, and so on. -1 = not available / don't set.
+> > + *   Allowed values [0 .. 255].
+> > + * @burst_tmr: controls how many bit times to wait for the MAC to send a new
+> > + *   frame before interrupting the burst. This value should be set to a value
+> > + *   greater than the MAC inter-packet gap (which is typically 96 bits).
+> > + *   -1 = not available / don't set. Allowed values [0 .. 255].
+> 
+> > +struct phy_plca_cfg {
+> > +	s32 version;
+> > +	s16 enabled;
+> > +	s16 node_id;
+> > +	s16 node_cnt;
+> > +	s16 to_tmr;
+> > +	s16 burst_cnt;
+> > +	s16 burst_tmr;
+> 
+> make them all int, oddly sized integers are only a source of trouble
+Ok, done.
+
+> > +	ret = ethnl_ops_begin(dev);
+> > +	if (ret < 0)
+> > +		goto out;
+> > +
+> > +	ret = ops->get_plca_cfg(dev->phydev, &data->plca_cfg);
+> > +	if (ret < 0)
+> > +		goto out;
+> 
+> You still need to complete the op, no? Don't jump over that..
+Oops. Fixed it.
+
+
+> > +	ethnl_ops_complete(dev);
+> > +
+> > +out:
+> > +	return ret;
+> > +}
+> 
+> > +	if ((plca->version >= 0 &&
+> > +	     nla_put_u16(skb, ETHTOOL_A_PLCA_VERSION, (u16)plca->version)) ||
+> > +	    (plca->enabled >= 0 &&
+> > +	     nla_put_u8(skb, ETHTOOL_A_PLCA_ENABLED, !!plca->enabled)) ||
+> > +	    (plca->node_id >= 0 &&
+> > +	     nla_put_u8(skb, ETHTOOL_A_PLCA_NODE_ID, (u8)plca->node_id)) ||
+> > +	    (plca->node_cnt >= 0 &&
+> > +	     nla_put_u8(skb, ETHTOOL_A_PLCA_NODE_CNT, (u8)plca->node_cnt)) ||
+> > +	    (plca->to_tmr >= 0 &&
+> > +	     nla_put_u8(skb, ETHTOOL_A_PLCA_TO_TMR, (u8)plca->to_tmr)) ||
+> > +	    (plca->burst_cnt >= 0 &&
+> > +	     nla_put_u8(skb, ETHTOOL_A_PLCA_BURST_CNT, (u8)plca->burst_cnt)) ||
+> > +	    (plca->burst_tmr >= 0 &&
+> > +	     nla_put_u8(skb, ETHTOOL_A_PLCA_BURST_TMR, (u8)plca->burst_tmr)))
+> 
+> The casts are unnecessary, but if you really really want them they 
+> can stay..
+Removed it. Sorry, In the past I used to work in an environment where
+thay wanted -unnecessary- casts everywhere. I just need to get used to
+this...
+
+> 
+> > +		return -EMSGSIZE;
+> > +
+> > +	return 0;
+> > +};
+> 
+> > +const struct nla_policy ethnl_plca_set_cfg_policy[] = {
+> > +	[ETHTOOL_A_PLCA_HEADER]		=
+> > +		NLA_POLICY_NESTED(ethnl_header_policy),
+> > +	[ETHTOOL_A_PLCA_ENABLED]	= { .type = NLA_U8 },
+> 
+> NLA_POLICY_MAX(NLA_U8, 1)
+Oh, yes, it is a bool. Fixed.
+
+> 
+> > +	[ETHTOOL_A_PLCA_NODE_ID]	= { .type = NLA_U8 },
+> 
+> Does this one also need check against 255 or is 255 allowed?
+Good question. 255 has a special meaning --> unconfigured.
+So the question is, do we allow the user to set nodeID back to
+unconfigured? My opinion is yes, I don't really see a reson why not and
+I can see cases where I actually want to do this.
+Would you agree?
+
+> 
+> > +	[ETHTOOL_A_PLCA_NODE_CNT]	= { .type = NLA_U8 },
+> > +	[ETHTOOL_A_PLCA_TO_TMR]		= { .type = NLA_U8 },
+> > +	[ETHTOOL_A_PLCA_BURST_CNT]	= { .type = NLA_U8 },
+> > +	[ETHTOOL_A_PLCA_BURST_TMR]	= { .type = NLA_U8 },
+> 
+> 
+> > +int ethnl_set_plca_cfg(struct sk_buff *skb, struct genl_info *info)
+> > +{
+> > +	struct ethnl_req_info req_info = {};
+> > +	struct nlattr **tb = info->attrs;
+> > +	const struct ethtool_phy_ops *ops;
+> > +	struct phy_plca_cfg plca_cfg;
+> > +	struct net_device *dev;
+> > +
+> 
+> spurious new line
+Fixed
+
+> 
+> > +	bool mod = false;
+> > +	int ret;
+> > +
+> > +	ret = ethnl_parse_header_dev_get(&req_info,
+> > +					 tb[ETHTOOL_A_PLCA_HEADER],
+> > +					 genl_info_net(info), info->extack,
+> > +					 true);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	dev = req_info.dev;
+> > +
+> > +	// check that the PHY device is available and connected
+> 
+> Comment slightly misplaced now?
+Fixed
+
+> 
+> > +	rtnl_lock();
+> > +
+> > +	if (!dev->phydev) {
+> > +		ret = -EOPNOTSUPP;
+> > +		goto out_rtnl;
+> > +	}
+> > +
+> > +	ops = ethtool_phy_ops;
+> > +	if (!ops || !ops->set_plca_cfg) {
+> > +		ret = -EOPNOTSUPP;
+> > +		goto out_rtnl;
+> > +	}
+> > +
+> > +	ret = ethnl_ops_begin(dev);
+> > +	if (ret < 0)
+> > +		goto out_rtnl;
+> > +
+> > +	memset(&plca_cfg, 0xFF, sizeof(plca_cfg));
+> > +
+> > +	if (tb[ETHTOOL_A_PLCA_ENABLED]) {
+> > +		plca_cfg.enabled = !!nla_get_u8(tb[ETHTOOL_A_PLCA_ENABLED]);
+> > +		mod = true;
+> > +	}
+> > +
+> > +	if (tb[ETHTOOL_A_PLCA_NODE_ID]) {
+> > +		plca_cfg.node_id = nla_get_u8(tb[ETHTOOL_A_PLCA_NODE_ID]);
+> > +		mod = true;
+> > +	}
+> > +
+> > +	if (tb[ETHTOOL_A_PLCA_NODE_CNT]) {
+> > +		plca_cfg.node_cnt = nla_get_u8(tb[ETHTOOL_A_PLCA_NODE_CNT]);
+> > +		mod = true;
+> > +	}
+> > +
+> > +	if (tb[ETHTOOL_A_PLCA_TO_TMR]) {
+> > +		plca_cfg.to_tmr = nla_get_u8(tb[ETHTOOL_A_PLCA_TO_TMR]);
+> > +		mod = true;
+> > +	}
+> > +
+> > +	if (tb[ETHTOOL_A_PLCA_BURST_CNT]) {
+> > +		plca_cfg.burst_cnt = nla_get_u8(tb[ETHTOOL_A_PLCA_BURST_CNT]);
+> > +		mod = true;
+> > +	}
+> > +
+> > +	if (tb[ETHTOOL_A_PLCA_BURST_TMR]) {
+> > +		plca_cfg.burst_tmr = nla_get_u8(tb[ETHTOOL_A_PLCA_BURST_TMR]);
+> > +		mod = true;
+> > +	}
+> 
+> Could you add a helper for the modifications? A'la ethnl_update_u8, but
+> accounting for the oddness in types (ergo probably locally in this file
+> rather that in the global scope)?
+I put the helper locally. We can always promote them later if more
+features follow this 'new' approach suggested by Andrew. Makes sense?
+
+> 
+> > +	ret = 0;
+> > +	if (!mod)
+> > +		goto out_ops;
+> > +
+> > +	ret = ops->set_plca_cfg(dev->phydev, info->extack, &plca_cfg);
+> > +
+> 
+> spurious new line
+Fixed
+
+> 
+> > +	if (ret < 0)
+> > +		goto out_ops;
+> > +
+> > +	ethtool_notify(dev, ETHTOOL_MSG_PLCA_NTF, NULL);
+> > +
+> > +out_ops:
+> > +	ethnl_ops_complete(dev);
+> > +out_rtnl:
+> > +	rtnl_unlock();
+> > +	ethnl_parse_header_dev_put(&req_info);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +// PLCA get status message -------------------------------------------------- //
+> > +
+> > +const struct nla_policy ethnl_plca_get_status_policy[] = {
+> > +	[ETHTOOL_A_PLCA_HEADER]		=
+> > +		NLA_POLICY_NESTED(ethnl_header_policy),
+> > +};
+> > +
+> > +static int plca_get_status_prepare_data(const struct ethnl_req_info *req_base,
+> > +					struct ethnl_reply_data *reply_base,
+> > +					struct genl_info *info)
+> > +{
+> > +	struct plca_reply_data *data = PLCA_REPDATA(reply_base);
+> > +	struct net_device *dev = reply_base->dev;
+> > +	const struct ethtool_phy_ops *ops;
+> > +	int ret;
+> > +
+> > +	// check that the PHY device is available and connected
+> > +	if (!dev->phydev) {
+> > +		ret = -EOPNOTSUPP;
+> > +		goto out;
+> > +	}
+> > +
+> > +	// note: rtnl_lock is held already by ethnl_default_doit
+> > +	ops = ethtool_phy_ops;
+> > +	if (!ops || !ops->get_plca_status) {
+> > +		ret = -EOPNOTSUPP;
+> > +		goto out;
+> > +	}
+> > +
+> > +	ret = ethnl_ops_begin(dev);
+> > +	if (ret < 0)
+> > +		goto out;
+> > +
+> > +	ret = ops->get_plca_status(dev->phydev, &data->plca_st);
+> > +	if (ret < 0)
+> > +		goto out;
+> 
+> don't skip complete
+Copy & paste error... Fixed again! Thanks!
+
+> 
+> > +	ethnl_ops_complete(dev);
+> > +out:
+> > +	return ret;
+> > +}
+> 
