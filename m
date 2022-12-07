@@ -2,246 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19EB6645DBA
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:35:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE086645DBC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:35:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiLGPfg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:35:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
+        id S229705AbiLGPf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:35:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiLGPfe (ORCPT
+        with ESMTP id S229545AbiLGPf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:35:34 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F092F61BBE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:35:32 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id m18so13345254eji.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:35:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ynYOXTDJ+jSbaP4iA8SQ13bAss1f1uhiQjcqDmiTglw=;
-        b=WwwNOsjxvwHD6s8xzzPvCkg4ToWiYnoTrCjrr/x7v3+SU2iBeLlffNNchctzk6i5T/
-         e8Y/Hu7P2qTCxS8P33notKeHaNpG8nmWSs3Llo3rmlVjJ5/iz2Twkulu7jbeoI/+vo2X
-         c21vxk/ozvIGjfy0fKgGn3D861N8fV11IeVhJrG6nJuMyp8gq38XpJB0sZ7v8sjKD2Iw
-         +81hq10pKgqAxl4hFkjJEJ3I9Xr8Vh2tsTrlhlaQGEsldI4xzwpi/RQSA15J1g9LWroK
-         AqH9yOV+1cWjCvRrL5MU+elO/boWTB6eVUrYvjbFL+EfhvK8tjQWGQum4qYlb6vvKE97
-         8BSw==
+        Wed, 7 Dec 2022 10:35:56 -0500
+Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEEA62E97;
+        Wed,  7 Dec 2022 07:35:55 -0800 (PST)
+Received: by mail-oi1-f181.google.com with SMTP id m204so21114252oib.6;
+        Wed, 07 Dec 2022 07:35:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ynYOXTDJ+jSbaP4iA8SQ13bAss1f1uhiQjcqDmiTglw=;
-        b=MuFGeWJmdFDKBpsi36PlOzVikxyjcvTztCM0cBctWrnTfU4B8EBxZ6T/Sgt57W4LWp
-         N/EXxzVMUXKQ8T5XcTeqbMxw829pOZy3X23QoXqe58c024r19DXGSLnpOrhKuDFow6Qg
-         7TOSDhhmwqAVnuKU7jLmGO5yc3AZN9J9F0+70DVN8+/7nCK5QlmBIC5FIni4KjxCMzC8
-         LtjpodK21v4q2jw507bt/QxEoA7GwwNLUpdodLAvTCTiMfUPh07/S6hORZaPu45MNHBh
-         jb6oMSWGln9sLYmWop1CF/MyU/87HJKX/JIG072cIDyWXgVSRveLRuV8A+zPXHwZEGe6
-         aKGA==
-X-Gm-Message-State: ANoB5pmbVERQ7e+c9Uw7BtAj5+7KmgsBTJ6ovruwuXZQSgVAmdH4euDQ
-        5hkmZc8Pp7eKrws3YNoI37Tw0g==
-X-Google-Smtp-Source: AA0mqf7pgoIqSKjUOJCg7WiXNt9q/UBQJT1tU0hIZvDz/NC3edkqWGaw8gcWN07m6k7uZOEB0ISlcw==
-X-Received: by 2002:a17:906:1b48:b0:7c1:706:d63c with SMTP id p8-20020a1709061b4800b007c10706d63cmr7352480ejg.697.1670427331526;
-        Wed, 07 Dec 2022 07:35:31 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id kx16-20020a170907775000b007c0934db0e0sm8720403ejc.141.2022.12.07.07.35.30
+        bh=lBpBd7+pFnpb+CGSyhsTaAtXlwJmyfr3U6zIXBU+CU8=;
+        b=bwGtDG3eaTxTwfAC4Zdz21uIFe4K9ZGaY/0UTxy9ORls3qAmbvRR9zTQu+0DggfeYL
+         NhOkXaf1SxTyFDAKqOIBfsMfjK+XZjqfOpA+VBiiZTc58ZmTEYEfibn4h1/HhPwfw/rJ
+         K9nSYlyd8DDT9HdJ3Xf0mfolpFZ2LXLWOc70+XS5xmXmM2cRtsmq59JjY4mUnboViJOJ
+         OrS3VTM50ivPdCMjT/T4qms4i+GRTxgYUT8S4D5z+hP978hqHP9RGHqYgw5T2lYUXLao
+         6Ppf6JJJ/Gnjdp6LxN5T5cp3pHnHmKmoE8uJkqrBP0olKy/3IRyEsdiAfFGHQj2VCEEZ
+         +eyw==
+X-Gm-Message-State: ANoB5plre3BEWqFqkkAjpLymJQYigJJe7UU9/hoJ2BLzo/8bx5JC8N4Q
+        ABDCusfpg3NpBEGggwqMiA==
+X-Google-Smtp-Source: AA0mqf6Feu1onLJPtKNVbwwfEe7rbawqt0LgfrOo7YBldPyEM5I/BsLZS0ysSmXTDBpwIUzHe7p7Mw==
+X-Received: by 2002:aca:1e0d:0:b0:35b:b54d:19a with SMTP id m13-20020aca1e0d000000b0035bb54d019amr21750341oic.242.1670427354571;
+        Wed, 07 Dec 2022 07:35:54 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s17-20020a056870631100b00136f3e4bc29sm12245693oao.9.2022.12.07.07.35.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 07:35:30 -0800 (PST)
-Date:   Wed, 7 Dec 2022 16:35:29 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     ehakim@nvidia.com
-Cc:     linux-kernel@vger.kernel.org, raeds@nvidia.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, sd@queasysnail.net,
-        atenart@kernel.org
-Subject: Re: [PATCH net-next v3 1/2] macsec: add support for
- IFLA_MACSEC_OFFLOAD in macsec_changelink
-Message-ID: <Y5CywXgUaNMtLBGx@nanopsycho>
-References: <20221207101017.533-1-ehakim@nvidia.com>
+        Wed, 07 Dec 2022 07:35:54 -0800 (PST)
+Received: (nullmailer pid 2275786 invoked by uid 1000);
+        Wed, 07 Dec 2022 15:35:53 -0000
+Date:   Wed, 7 Dec 2022 09:35:53 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 09/16] dt-bindings: soc: socionext: Add UniPhier
+ SoC-glue logic
+Message-ID: <20221207153553.GA2269092-robh@kernel.org>
+References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
+ <20221207055405.30940-10-hayashi.kunihiko@socionext.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207101017.533-1-ehakim@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20221207055405.30940-10-hayashi.kunihiko@socionext.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Dec 07, 2022 at 11:10:16AM CET, ehakim@nvidia.com wrote:
->From: Emeel Hakim <ehakim@nvidia.com>
->
->Add support for changing Macsec offload selection through the
->netlink layer by implementing the relevant changes in
->macsec_change link.
->
->Since the handling in macsec_changelink is similar to macsec_upd_offload,
->update macsec_upd_offload to use a common helper function to avoid
->duplication.
->
->Example for setting offload for a macsec device:
->    ip link set macsec0 type macsec offload mac
->
->Reviewed-by: Raed Salem <raeds@nvidia.com>
->Signed-off-by: Emeel Hakim <ehakim@nvidia.com>
->---
->V2 -> V3: - Split the original patch into 3 patches, the macsec_rtnl_policy related change (separate patch)
->			to be sent to "net" branch as a fix.
->		  - Change the original patch title to make it clear that it's only adding IFLA_MACSEC_OFFLOAD
->		    to changelink
->V1 -> V2: Add common helper to avoid duplicating code 
->
-> drivers/net/macsec.c | 102 +++++++++++++++++++++++++++----------------
-> 1 file changed, 64 insertions(+), 38 deletions(-)
->
->diff --git a/drivers/net/macsec.c b/drivers/net/macsec.c
->index d73b9d535b7a..1850a1ee4380 100644
->--- a/drivers/net/macsec.c
->+++ b/drivers/net/macsec.c
->@@ -2583,16 +2583,45 @@ static bool macsec_is_configured(struct macsec_dev *macsec)
-> 	return false;
-> }
+On Wed, Dec 07, 2022 at 02:53:58PM +0900, Kunihiko Hayashi wrote:
+> Add devicetree binding schema for the SoC-glue logic implemented on
+> Socionext Uniphier SoCs.
 > 
->+static int macsec_update_offload(struct macsec_dev *macsec, enum macsec_offload offload)
->+{
->+	enum macsec_offload prev_offload;
->+	const struct macsec_ops *ops;
->+	struct macsec_context ctx;
->+	int ret = 0;
->+
->+	prev_offload = macsec->offload;
->+
->+	/* Check if the device already has rules configured: we do not support
->+	 * rules migration.
->+	 */
->+	if (macsec_is_configured(macsec))
->+		return -EBUSY;
->+
->+	ops = __macsec_get_ops(offload == MACSEC_OFFLOAD_OFF ? prev_offload : offload,
->+			       macsec, &ctx);
->+	if (!ops)
->+		return -EOPNOTSUPP;
->+
->+	macsec->offload = offload;
->+
->+	ctx.secy = &macsec->secy;
->+	ret = (offload == MACSEC_OFFLOAD_OFF) ? macsec_offload(ops->mdo_del_secy, &ctx) :
->+		      macsec_offload(ops->mdo_add_secy, &ctx);
->+
->+	if (ret)
->+		macsec->offload = prev_offload;
->+
->+	return ret;
->+}
->+
-> static int macsec_upd_offload(struct sk_buff *skb, struct genl_info *info)
-> {
-> 	struct nlattr *tb_offload[MACSEC_OFFLOAD_ATTR_MAX + 1];
->-	enum macsec_offload offload, prev_offload;
->-	int (*func)(struct macsec_context *ctx);
-> 	struct nlattr **attrs = info->attrs;
->-	struct net_device *dev;
->-	const struct macsec_ops *ops;
->-	struct macsec_context ctx;
->+	enum macsec_offload offload;
-> 	struct macsec_dev *macsec;
->+	struct net_device *dev;
-> 	int ret;
+> This SoC-glue logic is a set of miscellaneous function registers
+> handling signals for specific devices outside system components,
+> and also has multiple functions such as I/O pinmux, usb-phy, debug,
+> clock-mux for a specific SoC, and so on.
 > 
-> 	if (!attrs[MACSEC_ATTR_IFINDEX])
->@@ -2629,39 +2658,7 @@ static int macsec_upd_offload(struct sk_buff *skb, struct genl_info *info)
+> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> ---
+>  .../socionext,uniphier-soc-glue.yaml          | 113 ++++++++++++++++++
+>  1 file changed, 113 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
 > 
-> 	rtnl_lock();
-> 
->-	prev_offload = macsec->offload;
->-	macsec->offload = offload;
->-
->-	/* Check if the device already has rules configured: we do not support
->-	 * rules migration.
->-	 */
->-	if (macsec_is_configured(macsec)) {
->-		ret = -EBUSY;
->-		goto rollback;
->-	}
->-
->-	ops = __macsec_get_ops(offload == MACSEC_OFFLOAD_OFF ? prev_offload : offload,
->-			       macsec, &ctx);
->-	if (!ops) {
->-		ret = -EOPNOTSUPP;
->-		goto rollback;
->-	}
->-
->-	if (prev_offload == MACSEC_OFFLOAD_OFF)
->-		func = ops->mdo_add_secy;
->-	else
->-		func = ops->mdo_del_secy;
->-
->-	ctx.secy = &macsec->secy;
->-	ret = macsec_offload(func, &ctx);
->-	if (ret)
->-		goto rollback;
->-
->-	rtnl_unlock();
->-	return 0;
->-
->-rollback:
->-	macsec->offload = prev_offload;
->+	ret = macsec_update_offload(macsec, offload);
-> 
-> 	rtnl_unlock();
-> 	return ret;
->@@ -3803,6 +3800,29 @@ static int macsec_changelink_common(struct net_device *dev,
-> 	return 0;
-> }
-> 
->+static int macsec_changelink_upd_offload(struct net_device *dev, struct nlattr *data[])
+> diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
+> new file mode 100644
+> index 000000000000..6fc790963660
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue.yaml
+> @@ -0,0 +1,113 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-soc-glue.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Socionext UniPhier SoC-glue logic
+> +
+> +maintainers:
+> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+> +
+> +description: |+
+> +  SoC-glue logic implemented on Socionext UniPhier SoCs is a collection of
+> +  miscellaneous function registers handling signals outside system components.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - socionext,uniphier-ld4-soc-glue
+> +          - socionext,uniphier-pro4-soc-glue
+> +          - socionext,uniphier-pro5-soc-glue
+> +          - socionext,uniphier-pxs2-soc-glue
+> +          - socionext,uniphier-sld8-soc-glue
+> +          - socionext,uniphier-ld11-soc-glue
+> +          - socionext,uniphier-ld20-soc-glue
+> +          - socionext,uniphier-pxs3-soc-glue
+> +          - socionext,uniphier-nx1-soc-glue
+> +      - const: simple-mfd
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +patternProperties:
+> +  "^pinctrl(@[0-9a-f]+)?$":
+> +    $ref: /schemas/pinctrl/socionext,uniphier-pinctrl.yaml#
+> +
+> +  "^usb-hub(@[0-9a-f]+)?$":
+> +    $ref: /schemas/phy/socionext,uniphier-usb2-phy.yaml#
+> +
+> +  "^clock-controller(@[0-9a-f]+)?$":
+> +    $ref: /schemas/clock/socionext,uniphier-clock.yaml#
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - socionext,uniphier-pro4-soc-glue
+> +              - socionext,uniphier-ld11-soc-glue
+> +    else:
+> +      patternProperties:
+> +        "^usb-hub(@[0-9a-f]+)?$": false
 
-Only data[IFLA_MACSEC_OFFLOAD] is used there. Pass just this attr.
+While just if and else is valid json-schema, we require 'then'. Can you 
+change this to 'if: { not: {...}, then: {}'.
 
+You should be getting a warning for this. The rest of the warnings from 
+the bot look like false positives you can ignore.
 
->+{
->+	enum macsec_offload offload;
->+	struct macsec_dev *macsec;
->+
->+	macsec = macsec_priv(dev);
->+	offload = nla_get_u8(data[IFLA_MACSEC_OFFLOAD]);
->+
->+	if (macsec->offload == offload)
->+		return 0;
->+
->+	/* Check if the offloading mode is supported by the underlying layers */
->+	if (offload != MACSEC_OFFLOAD_OFF &&
->+	    !macsec_check_offload(offload, macsec))
->+		return -EOPNOTSUPP;
->+
->+	/* Check if the net device is busy. */
->+	if (netif_running(dev))
->+		return -EBUSY;
->+
->+	return macsec_update_offload(macsec, offload);
->+}
->+
-> static int macsec_changelink(struct net_device *dev, struct nlattr *tb[],
-> 			     struct nlattr *data[],
-> 			     struct netlink_ext_ack *extack)
->@@ -3831,6 +3851,12 @@ static int macsec_changelink(struct net_device *dev, struct nlattr *tb[],
-> 	if (ret)
-> 		goto cleanup;
-> 
->+	if (data[IFLA_MACSEC_OFFLOAD]) {
->+		ret = macsec_changelink_upd_offload(dev, data);
->+		if (ret)
->+			goto cleanup;
->+	}
->+
-> 	/* If h/w offloading is available, propagate to the device */
-> 	if (macsec_is_offloaded(macsec)) {
-> 		const struct macsec_ops *ops;
->-- 
->2.21.3
->
+Rob
