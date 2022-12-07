@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034B8645C50
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:20:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF31645C45
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:19:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiLGOUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:20:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46754 "EHLO
+        id S230093AbiLGOTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:19:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiLGOT7 (ORCPT
+        with ESMTP id S229728AbiLGOTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:19:59 -0500
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7735CD2A;
-        Wed,  7 Dec 2022 06:19:57 -0800 (PST)
-Received: by mail-ot1-f54.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so11344038otl.10;
-        Wed, 07 Dec 2022 06:19:57 -0800 (PST)
+        Wed, 7 Dec 2022 09:19:53 -0500
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC4555C81;
+        Wed,  7 Dec 2022 06:19:51 -0800 (PST)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1445ca00781so14841550fac.1;
+        Wed, 07 Dec 2022 06:19:51 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=QgVOiHXNq8Eg/RbdXIqm53C1ukjaOPMLva8zWgn7a2M=;
-        b=WBaExhRs3nHA0FXvfCy0sdSdQn2ckfyQxLUzw1F1eRyMMjs/yZLMOwrnFMRZevzUA1
-         8oK7A1lMo2st6Mjr7PVKcu9mlNVdbE5g59Hl0Ml6v8FNVcGElLIP2yLotiyw3n0xRJLZ
-         PJRXyn3tV21sSh8VgtGc/UA17KyFS1mKFvKFAQzXb+HcESyODwbj6tJqkVKlUHP3Nlzx
-         5ajUvZNIZrtfwCJsGw0I96RzYfOFG2a3cvifPKcAFzDImwOaCjgaeyfPU+Pa9LmzlQD0
-         vSjDr6Y41QsLZMwhcLO8445ybWbu3ry412JSSStfh76eoGCyu1hojWSucWcB5S5c3b0E
-         uwMg==
-X-Gm-Message-State: ANoB5plkGnLcp2eRShZuhG6dw+5nRWAvH5h26c3rhmU+xRC0KczLi0Rd
-        gFkYqK+o/GTXUu6oj9EfNQ==
-X-Google-Smtp-Source: AA0mqf422GoEENzKggll1Vr+0LCwcJG1tEGJNJCcx00he4Eb012EfRCZ1zlWY/G3Oy+Ad/qk/rDIgQ==
-X-Received: by 2002:a05:6830:1419:b0:670:6518:157e with SMTP id v25-20020a056830141900b006706518157emr1109531otp.269.1670422797191;
-        Wed, 07 Dec 2022 06:19:57 -0800 (PST)
+        bh=pi2o5fQQUNnXltuus7EPRUPgm6i8PxvXv763Tq5/HAM=;
+        b=qcgZANJtSl5kHUfdJezRBdoLmkO2QWLGaRJIJyRokGrTc/DNMbXA7BugUQtaFp3qSN
+         XyKiFI2SI+ZFYu6cUPWhRtrGlsM9bsi+Up9/5qf/AQKBGK+xxmX1YyKjApnEGx0RbBkV
+         RLHihQMbQZBoQ3RzhSo3kMsDcewzGaDjTE+Tv4fKVSQZRBql5R7B6pR2eaBZpYjyFVXB
+         A5TCKzoScO0frBnvv395Obpb6f1T7xoZkyDsPpav2Dao09eeqN48dIiL6NViK+k05sNN
+         Jd1P21hBeJ0CYOvJKLv+KfSa+igbbKFwlzYqLyxa2vmUoZYt3unNblAX94JkFQb1IsS7
+         8InQ==
+X-Gm-Message-State: ANoB5pnwetmxm/DrovN2L3VQHLw0I795w1YXaqFMn+IPt3HEQ7vQUFev
+        5DcPrbUoUPwVqyaVaMiL7A==
+X-Google-Smtp-Source: AA0mqf5VSOef30zOp0qgUOwJNVFltclH7wjWy25TlqQr4xsb/OjxWJmLXhaaOSqiPhBVUECq3YL4wQ==
+X-Received: by 2002:a05:6871:b21:b0:143:cc3d:58f with SMTP id fq33-20020a0568710b2100b00143cc3d058fmr23003973oab.210.1670422791094;
+        Wed, 07 Dec 2022 06:19:51 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t26-20020a05683014da00b0066cb9069e0bsm10508365otq.42.2022.12.07.06.19.56
+        by smtp.gmail.com with ESMTPSA id bt3-20020a05683039c300b0066e93d2b858sm6614711otb.55.2022.12.07.06.19.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 06:19:56 -0800 (PST)
-Received: (nullmailer pid 2124805 invoked by uid 1000);
+        Wed, 07 Dec 2022 06:19:50 -0800 (PST)
+Received: (nullmailer pid 2124798 invoked by uid 1000);
         Wed, 07 Dec 2022 14:19:49 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+Cc:     Rob Herring <robh+dt@kernel.org>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        devicetree@vger.kernel.org
-In-Reply-To: <20221207055405.30940-17-hayashi.kunihiko@socionext.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+In-Reply-To: <20221207055405.30940-9-hayashi.kunihiko@socionext.com>
 References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-17-hayashi.kunihiko@socionext.com>
-Message-Id: <167042222204.2111807.2226062109962666582.robh@kernel.org>
-Subject: Re: [PATCH v2 16/16] dt-bindings: soc: socionext: Add UniPhier AHCI
- glue layer
+ <20221207055405.30940-9-hayashi.kunihiko@socionext.com>
+Message-Id: <167042221991.2111700.14995917692321113955.robh@kernel.org>
+Subject: Re: [PATCH v2 08/16] dt-bindings: soc: socionext: Add UniPhier system
+ controller
 Date:   Wed, 07 Dec 2022 08:19:49 -0600
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -69,18 +69,19 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 07 Dec 2022 14:54:05 +0900, Kunihiko Hayashi wrote:
-> Add DT binding schema for components belonging to the platform-specific
-> AHCI glue layer implemented in UniPhier SoCs.
+On Wed, 07 Dec 2022 14:53:57 +0900, Kunihiko Hayashi wrote:
+> Add devicetree binding schema for the system controller implemented on
+> Socionext Uniphier SoCs.
 > 
-> This AHCI glue layer works as a sideband logic for the host controller,
-> including core reset, PHYs, and some signals to the controller.
+> This system controller has multiple functions such as clock control,
+> reset control, internal watchdog timer, thermal management, and so on.
 > 
 > Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > ---
->  .../socionext,uniphier-ahci-glue.yaml         | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
+>  .../socionext/socionext,uniphier-sysctrl.yaml | 105 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -89,12 +90,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/socionext,uniphier-ahci-phy.example.dtb: ahci-glue@65700000: 'reg' is a required property
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.example.dtb: sysctrl@61840000: 'thermal' does not match any of the regexes: '^clock-controller(@[0-9a-f]+)?$', '^reset-controller(@[0-9a-f]+)?$', '^thermal-sensor(@[0-9a-f]+)?$', '^watchdog(@[0-9a-f]+)?$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-sysctrl.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221207055405.30940-17-hayashi.kunihiko@socionext.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221207055405.30940-9-hayashi.kunihiko@socionext.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
