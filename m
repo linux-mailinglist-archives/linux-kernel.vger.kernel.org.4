@@ -2,142 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B49364635C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:42:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB61464635E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:44:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLGVm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:42:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S229741AbiLGVoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLGVm4 (ORCPT
+        with ESMTP id S229543AbiLGVoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:42:56 -0500
-Received: from server.eikelenboom.it (server.eikelenboom.it [91.121.65.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1D5361741
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:42:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=eikelenboom.it; s=20180706; h=Content-Transfer-Encoding:Content-Type:
-        Subject:Cc:To:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pnyuZgFg+xcx2S/BcdnBd13596bj5i02+Xe9V15Zwwk=; b=hPSvu2SMPFMrCBWzQxVSPHyrXR
-        0bDNGNoTgJbGkbcTTvEzH6E1G0lfO16Yi9l4Pu1UAyfXKNjKUGwi+gxPSEAs8RgH0p0BGOuoEQhq3
-        Yg1bbRfT/3PuhUcgBo6WwVIZnTWEyWlbI9wpAcvoq9H8erI44n8bUlV6sNHRwP2vd8tA=;
-Received: from 131-195-250-62.ftth.glasoperator.nl ([62.250.195.131]:37498 helo=[172.16.1.50])
-        by server.eikelenboom.it with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <linux@eikelenboom.it>)
-        id 1p32Cr-00080a-64; Wed, 07 Dec 2022 22:43:57 +0100
-Message-ID: <2f364567-3598-2d86-ae3d-e0fabad4704a@eikelenboom.it>
-Date:   Wed, 7 Dec 2022 22:42:45 +0100
+        Wed, 7 Dec 2022 16:44:09 -0500
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0104C813B0
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:44:07 -0800 (PST)
+Received: by mail-vk1-xa34.google.com with SMTP id o136so499343vka.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 13:44:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=uup7IkDj0Tj4wV+c1b16APmIL8/YUUL2/TzkGwezP54=;
+        b=Ktalp9HZmEqYzzFA53wP+de1fhUrCUieTsR0ijbVrH2vpxmqnMu08SGmtDf6uA3hxB
+         GYqGNC6CvxNBtX2ikrJPcpNe2FKF8GDITCJgvUQF4MrgphGC3Ih2Z+ansZ/FoxHG6xTB
+         75JICu2DCJCamAqbthcAFX63+5E/Gu+sZJUCaML0GEWCYYL+w+J6jmbtvj+LtzZDEU9V
+         8gTwjIT749WCnEQVgyEn7lfd7Tvy+V9wT12Hw1EUeEpdrcflFtf/Ao7Px6l2jt6jiIbR
+         5cT93ROCIYF6H+m6xUdbx7u44uuJMGny2r9oReJAHt2KkKF9tXdi4IFUdTvbq8k3PmqG
+         W6VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uup7IkDj0Tj4wV+c1b16APmIL8/YUUL2/TzkGwezP54=;
+        b=pkrOnBLhNaw1FsivQL/5O5JliQdqT0wD8peA6MjwHYeXDKTfIav/RrzH8tVxwH+aqz
+         RCNlSpKTvyFpoa/m0CZ/PMcxfi+unsirkCTzL8wOOSzrLRInxl333W7K7J2ADbSCFieb
+         URATWkVP21nYFHnxDcpeh/zasMR/TCcqem5gXXGoI+qTLtiFDVX3wILliUXorOD5PiLO
+         RNK7HiJ8GqpNyyugBk6a+33gE2MYWGslRwUo4tnE5o7I+o9sagLiRIqztlMMXzwdR5Ry
+         661A3rQgbDD7V2KoN/A4GXrPAuXPAAXKRRVVUDvvKvjf/+HUK7Zl7N/DHROExNo4TUIu
+         VGqw==
+X-Gm-Message-State: ANoB5pkiMUSdis2BEMSFsH3l2nDNq/FAA859ASRgPE85CIW8V+oDRmFf
+        FSfx6RaPK2TngvtY2sbGta3OOt5dZi3W4xWpJPsYoQ==
+X-Google-Smtp-Source: AA0mqf4G+r8VHesiFpRJVFS+4Uqt+AYMPWd4+05cWYFuYFwaSaULZlFLvOXyV30k+oepYxdsjKpoEEf5j0owzBAptak=
+X-Received: by 2002:a05:6122:41e:b0:3bd:ad7c:b3ec with SMTP id
+ e30-20020a056122041e00b003bdad7cb3ecmr7972933vkd.0.1670449446897; Wed, 07 Dec
+ 2022 13:44:06 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Content-Language: nl-NL, en-US
-From:   Sander Eikelenboom <linux@eikelenboom.it>
-To:     Ross Lagerwall <ross.lagerwall@citrix.com>,
-        Juergen Gross <jgross@suse.com>,
-        Xen-devel <xen-devel@lists.xen.org>, Paul Durrant <paul@xen.org>
-Cc:     linux-kernel@vger.kernel.org, netdev <netdev@vger.kernel.org>
-Subject: Xen + linux 6.1.0-rc8, network to guest VM not working after commit
- ad7f402ae4f466647c3a669b8a6f3e5d4271c84a fixing XSA-423
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221206023406.3182800-1-almasrymina@google.com>
+ <Y48zlaimOb/wr8qd@dhcp22.suse.cz> <CAHS8izMKz_JtN-P7BTHydE2x2rmSg5-JRoHgaDCdCHV-S0YLJw@mail.gmail.com>
+ <Y4+eLyl8HQNZS5ot@dhcp22.suse.cz> <CAHS8izOW70Eb7RRePQv6SP8hW3iUnAcPSD=aOY+aMu=6ReEtHQ@mail.gmail.com>
+ <Y5B1K5zAE0PkjFZx@dhcp22.suse.cz>
+In-Reply-To: <Y5B1K5zAE0PkjFZx@dhcp22.suse.cz>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 7 Dec 2022 13:43:55 -0800
+Message-ID: <CAHS8izMKK107wVFSJvg36nQ=WzXd8_cjYBtR0p47L+XLYUSsqA@mail.gmail.com>
+Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
+        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ross / Juergen,
+On Wed, Dec 7, 2022 at 3:12 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Tue 06-12-22 17:55:58, Mina Almasry wrote:
+> > On Tue, Dec 6, 2022 at 11:55 AM Michal Hocko <mhocko@suse.com> wrote:
+> > >
+> > > On Tue 06-12-22 08:06:51, Mina Almasry wrote:
+> > > > On Tue, Dec 6, 2022 at 4:20 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > > >
+> > > > > On Mon 05-12-22 18:34:05, Mina Almasry wrote:
+> > > > > > commit 3f1509c57b1b ("Revert "mm/vmscan: never demote for memcg
+> > > > > > reclaim"") enabled demotion in memcg reclaim, which is the right thing
+> > > > > > to do, however, it introduced a regression in the behavior of
+> > > > > > try_to_free_mem_cgroup_pages().
+> > > > > >
+> > > > > > The callers of try_to_free_mem_cgroup_pages() expect it to attempt to
+> > > > > > reclaim - not demote - nr_pages from the cgroup. I.e. the memory usage
+> > > > > > of the cgroup should reduce by nr_pages. The callers expect
+> > > > > > try_to_free_mem_cgroup_pages() to also return the number of pages
+> > > > > > reclaimed, not demoted.
+> > > > > >
+> > > > > > However, what try_to_free_mem_cgroup_pages() actually does is it
+> > > > > > unconditionally counts demoted pages as reclaimed pages. So in practice
+> > > > > > when it is called it will often demote nr_pages and return the number of
+> > > > > > demoted pages to the caller. Demoted pages don't lower the memcg usage,
+> > > > > > and so try_to_free_mem_cgroup_pages() is not actually doing what the
+> > > > > > callers want it to do.
+> > > > > >
+> > > > > > Various things work suboptimally on memory tiered systems or don't work
+> > > > > > at all due to this:
+> > > > > >
+> > > > > > - memory.high enforcement likely doesn't work (it just demotes nr_pages
+> > > > > >   instead of lowering the memcg usage by nr_pages).
+> > > > > > - try_charge_memcg() will keep retrying the charge while
+> > > > > >   try_to_free_mem_cgroup_pages() is just demoting pages and not actually
+> > > > > >   making any room for the charge.
+> > > > >
+> > > > > This has been brought up during the review https://lore.kernel.org/all/YoYTEDD+c4GT0xYY@dhcp22.suse.cz/
+> > > > >
+> > > >
+> > > > Ah, I did indeed miss this. Thanks for the pointer. However I don't
+> > > > understand this bit from your email (sorry I'm probably missing
+> > > > something):
+> > > >
+> > > > "I suspect this is rather unlikely situation, though. The last tear
+> > > > (without any fallback) should have some memory to reclaim most of
+> > > > the time."
+> > > >
+> > > > Reading the code in try_charge_memcg(), I don't see the last retry for
+> > > > try_to_free_mem_cgroup_pages() do anything special. My concern here is
+> > > > that try_charge_memcg() calls try_to_free_mem_cgroup_pages()
+> > > > MAX_RECLAIM_RETRIES times. Each time that call may demote pages and
+> > > > report back that it was able to 'reclaim' memory, but the charge keeps
+> > > > failing because the memcg reclaim didn't actually make room for the
+> > > > charge. What happens in this case? My understanding is that the memcg
+> > > > oom-killer gets wrongly invoked.
+> > >
+> > > The memcg reclaim shrinks from all zones in the allowed zonelist. In
+> > > general from all nodes. So unless the lower tier is outside of this
+> > > zonelist then there is a zone to reclaim from which cannot demote.
+> > > Correct?
+> > >
+> >
+> > Ah, thanks for pointing this out. I did indeed miss that the memcg
+> > reclaim tries to apply pressure equally to all the nodes. With some
+> > additional testing I'm able to see what you said: there could be no
+> > premature oom kill invocation because generally the memcg reclaim will
+> > find some pages to reclaim from lower tier nodes.
+> >
+> > I do find that the first call to try_to_free_mem_cgroup_pages()
+> > sometimes will mostly demote and not do much reclaim. I haven't been
+> > able to fully track the cause of that down but I suspect that the
+> > first call in my test will find most of the cgroup's memory on top
+> > tier nodes. However we do retry a bunch of times before we invoke oom,
+> > and in my testing subsequent calls will find plenty of memory in the
+> > lower tier nodes that it can reclaim. I'll update the commit message
+> > in the next version.
+>
+> In the past we used to break out early from the memcg reclaim if the
+> reclaim target has been completed - see 1ba6fc9af35b ("mm: vmscan: do
+> not share cgroup iteration between reclaimers"). But I do not see early
+> break from the reclaim anywhere anymore so the precise nr_reclaimed
+> tracking shouldn't make a lot of difference. There are cases where we
+> really have hard time to find proper candidates and need to dip into
+> hogher reclaim priorities though.
+>
 
-I just updated my linux kernel to the latest of Linus his tree which included commit ad7f402ae4f466647c3a669b8a6f3e5d4271c84a fixing XSA-423.
+Yes, I agree. Thank you for your patient explanation. I now see why
+precise accounting of nr_reclaimed is not an issue (or at least as big
+an issue as I once thought).
 
-Unfortunately when using this kernel I can't SSH anymore into the Xen guest I start, but I don't see any apparent failures either.
-A straight revert of the commit ad7f402ae4f466647c3a669b8a6f3e5d4271c84a makes networking function normally again.
+> Anyway a proper nr_reclaimed tracking should be rather straightforward
+> but I do not expect to make a big difference in practice
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 026199c047e0..1b7f2d8cb128 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -1633,7 +1633,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>         LIST_HEAD(ret_folios);
+>         LIST_HEAD(free_folios);
+>         LIST_HEAD(demote_folios);
+> -       unsigned int nr_reclaimed = 0;
+> +       unsigned int nr_reclaimed = 0, nr_demoted = 0;
+>         unsigned int pgactivate = 0;
+>         bool do_demote_pass;
+>         struct swap_iocb *plug = NULL;
+> @@ -2065,8 +2065,17 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
+>         }
+>         /* 'folio_list' is always empty here */
+>
+> -       /* Migrate folios selected for demotion */
+> -       nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
+> +       /*
+> +        * Migrate folios selected for demotion.
+> +        * Do not consider demoted pages to be reclaimed for the memcg reclaim
+> +        * because no charges are really freed during the migration. Global
+> +        * reclaim aims at releasing memory from nodes/zones so consider
+> +        * demotion to reclaim memory.
+> +        */
+> +       nr_demoted += demote_folio_list(&demote_folios, pgdat);
+> +       if (!cgroup_reclaim(sc))
+> +               nr_reclaimed += nr_demoted;
+> +
+>         /* Folios that could not be demoted are still in @demote_folios */
+>         if (!list_empty(&demote_folios)) {
+>                 /* Folios which weren't demoted go back on @folio_list for retry: */
+>
+> [...]
 
-I have added some of the logging below, perhaps it at gives some idea off the state around the Xen network front and backend.
+Thank you again, but this patch breaks the memory.reclaim nodes arg
+for me. This is my test case. I run it on a machine with 2 memory
+tiers.
 
-Any ideas or a test patch that I could run to shed some more light on what is going on ?
+Memory tier 1= nodes 0-2
+Memory tier 2= node 3
 
---
-Sander
+    mkdir -p /sys/fs/cgroup/unified/test
+    cd /sys/fs/cgroup/unified/test
+    echo $$ > cgroup.procs
+    head -c 500m /dev/random > /tmp/testfile
+    echo $$ > /sys/fs/cgroup/unified/cgroup.procs
+    echo "1m nodes=0-2" > memory.reclaim
 
+In my opinion the expected behavior is for the kernel to demote 1mb of
+memory from nodes 0-2 to node 3.
 
+Actual behavior on the tip of mm-unstable is as expected.
 
+Actual behavior with your patch cherry-picked to mm-unstable is that
+the kernel demotes all 500mb of memory from nodes 0-2 to node 3, and
+returns -EAGAIN to the user. This may be the correct behavior you're
+intending, but it completely breaks the use case I implemented the
+nodes= arg for and listed on the commit message of that change.
 
-Some of the logging from dom0 dmesg:
+> > > Either I am missing something or I simply do not understand why you are
+> > > hooked into nodemask so much. Why cannot we have a simple rule that
+> > > only global reclaim considers demotions as nr_reclaimed?
+> > >
+> >
+> > Thanks. I think this approach would work for most callers. My issue
+> > here is properly supporting the recently added nodes= arg[1] to
+> > memory.reclaim. If the user specifies all nodes or provides no arg,
+> > I'd like to treat it as memcg reclaim which doesn't count demotions.
+> > If the user provides the top tier nodes, I would like to count
+> > demotions as this interface is the way to trigger proactive demotion
+> > from top tier nodes.
+>
+> Sorry to repeat myself but nodemask doesn't really make any difference.
+> The reclaim should only count pages which really free memory in the
+> domain. Even if you demote to a node outside of the given nodemask then
+> the charge stays with the existing memcg so it is rather dubious to
+> count it as a reclaimed page. Or do I still miss what you are trying to
+> achieve?
+>
 
-[  149.520585] xen_bridge: port 1(vif1.0) entered blocking state
-[  149.520594] xen_bridge: port 1(vif1.0) entered disabled state
-[  149.520678] device vif1.0 entered promiscuous mode
-[  151.221975] xen-blkback: backend/vbd/1/51712: using 1 queues, protocol 1 (x86_64-abi) persistent grants
-[  151.601458] vif vif-1-0 vif1.0: Guest Rx ready
-[  151.601476] xen_bridge: port 1(vif1.0) entered blocking state
-[  151.601478] xen_bridge: port 1(vif1.0) entered forwarding state
+I think you've convinced me that the issue is not as serious as I
+first thought, thanks. We can maybe abandon this fix? If we do want to
+fix this now or in the future, if possible let the fix be compatible
+with memory.reclaim and its nodes= arg. I'm happy to provide patches
+for whatever fix you find acceptable.
 
-
-output xenstore-ls regarding vif for the Guest:
-
-     vif = ""
-      1 = ""
-       0 = ""
-        bridge = "xen_bridge"
-        feature-ctrl-ring = "1"
-        feature-dynamic-multicast-control = "1"
-        feature-gso-tcpv4 = "1"
-        feature-gso-tcpv6 = "1"
-        feature-ipv6-csum-offload = "1"
-        feature-multicast-control = "1"
-        feature-rx-copy = "1"
-        feature-rx-flip = "0"
-        feature-sg = "1"
-        feature-split-event-channels = "1"
-        feature-xdp-headroom = "1"
-        frontend = "/local/domain/1/device/vif/0"
-        frontend-id = "1"
-        handle = "0"
-        hotplug-status = "connected"
-        ip = "192.168.1.6"
-        mac = "00:16:3e:49:0e:fa"
-        multi-queue-max-queues = "8"
-        online = "1"
-        script = "/etc/xen/scripts/vif-bridge"
-        state = "4"
-        type = "vif"
-
-     vif = ""
-      0 = ""
-       backend = "/local/domain/0/backend/vif/1/0"
-       backend-id = "0"
-       event-channel-rx = "9"
-       event-channel-tx = "8"
-       feature-gso-tcpv4 = "1"
-       feature-gso-tcpv6 = "1"
-       feature-ipv6-csum-offload = "1"
-       feature-rx-notify = "1"
-       feature-sg = "1"
-       handle = "0"
-       mac = "00:16:3e:49:0e:fa"
-       mtu = "1500"
-       multi-queue-num-queues = "1"
-       request-rx-copy = "1"
-       rx-ring-ref = "524"
-       state = "4"
-       trusted = "1"
-       tx-ring-ref = "523"
-       xdp-headroom = "0"
-
-
-ifconfig output for the guest interface on dom0 side:
-
-vif1.0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-         ether fe:ff:ff:ff:ff:ff  txqueuelen 32  (Ethernet)
-         RX packets 0  bytes 0 (0.0 B)
-         RX errors 0  dropped 0  overruns 0  frame 0
-         TX packets 49  bytes 2058 (2.0 KiB)
-         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+> --
+> Michal Hocko
+> SUSE Labs
