@@ -2,154 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEEA64609E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0282A6460A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiLGRtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:49:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53366 "EHLO
+        id S230115AbiLGRtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:49:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiLGRtE (ORCPT
+        with ESMTP id S230092AbiLGRtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:49:04 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C19E68697
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:49:03 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so2138086pjs.4
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:49:03 -0800 (PST)
+        Wed, 7 Dec 2022 12:49:43 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85DC686BD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:49:42 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so2156234pjj.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:49:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DoJAqfR7ZvwAFiT9srWB2lyZBimUwRAh5SkQOgCpWVU=;
-        b=agsFaYqECAL1MPKDSRlaJV8kh8LVOmH7JyrbPFY5LZHTSTSh4H1W0rBB/2jFHBM+ug
-         Ftz6j0F8PaZ/B0r106lYXc+WPNhnsE5AeHrn52PmxZ6jA4CxChancNX5S4XeRqatj7ml
-         Z+VNICtE76VbH/asrkz0yXijc36RDB2MozVL3yONb34dKckZdK3ORVSMef3B+SAWUYjR
-         yf7dCgc2ybBs1pTC7KU/zZ+J/nXsJjgUWHmLWU6YMVhQRl92etqNEXmiqUjBKcSSso3V
-         eYgjy4z83ZLVYjGSAkg+BH96z7VcIMqQ95O6AgQNoxiKZfnRe8UCGwDOPQ48N9xy8ZrG
-         Lw+g==
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fmTU/mImpT1iElM9ydVbPQ5+jzfhrjd8hKLmNuCnrtA=;
+        b=FoCp6OwOkMomeJki5qTJ5ZIwdluYVoJuDIuM7dVE4M7I570uNFFkDoKGWWMI3bIaJ7
+         nR40KGXb/l6O469TFTUxwqgs5P11smJAk4DYuGLERKacF+9pfcoYyUnO3vTab+VTvgoB
+         KRscF1wS12ZEhcYoR1/UzR+qQt7FMef4IqZrw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DoJAqfR7ZvwAFiT9srWB2lyZBimUwRAh5SkQOgCpWVU=;
-        b=BoAGznVELt054AoJpyUALIzEheS9G7hv4Nov0VEqwo744PKKwG/gPpW4WGUbLikAXE
-         EPttJ+WAyVKm9jQFFsXvA8hG2WJFsgXPH+gjr3Z1HA5XEfJ3NNWPerYYoafu0rSFvKo/
-         YR4MdvcalSCp+TCITnm6WBK2c7jqpF0K2OmfKCT2d9wODk592w548W4Kr7LmOkELai+T
-         sZByj++ktM3Y7NTwdxK/niVK4LZGEBrnHR8GhkN/Lel8rMmd5m1Rh0TZR0uF+/7aSMiN
-         CN3OhhIBvpbJurWia71RHlVL42p8Mljss0yfDZ6sm/AHWC4lZtlMwg2Hp9NNMaaRJmoj
-         Sl0w==
-X-Gm-Message-State: ANoB5pkiuRD/+tMixwEDWksvgqWutX/GPgw7lL4q1gWXwtV2RwCgp4rq
-        J4FeO0yJIpo/MdTc9+no+o408Q==
-X-Google-Smtp-Source: AA0mqf7+cEw6DpVd/xxS6KqoKAuqr/wjwSNyv+uy7vc511bTIAbG5FcprGnJgigMDg5CjC3wkWNHWQ==
-X-Received: by 2002:a05:6a21:9996:b0:a4:efde:2ed8 with SMTP id ve22-20020a056a21999600b000a4efde2ed8mr1749638pzb.0.1670435342977;
-        Wed, 07 Dec 2022 09:49:02 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id m17-20020a170902f21100b00189393ab02csm14805031plc.99.2022.12.07.09.49.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 09:49:02 -0800 (PST)
-Date:   Wed, 7 Dec 2022 17:48:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: x86/pmu: Avoid ternary operator by directly
- referring to counters->type
-Message-ID: <Y5DSChtav9fqfeEA@google.com>
-References: <20221205113718.1487-1-likexu@tencent.com>
- <Y44gbvm5Zb7a1Sbj@google.com>
- <38b2a836-f9a4-23e4-107b-61efc74638a4@gmail.com>
- <Y495sF0rDGrrfstD@google.com>
- <7db2bc22-99b8-96f3-66f3-d1695e2e82c1@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fmTU/mImpT1iElM9ydVbPQ5+jzfhrjd8hKLmNuCnrtA=;
+        b=PGH82+ZifPfyvIFk5zYd4OpuIu0iTea5XzubB4feGarFTQJLnjfdpvOTrDMJZlWeow
+         HAyXnkSOp4+xUudAuDbUjKTr6dpyK3XjLgH++E9esd5vB1tIu4n5wbW/q+geiAGqmoId
+         1k7AHfqsFL84Fymk0KT2UA68E+y545mzUdCgJc4vyarj+aEV8dLQg0EtE1XWTq2hAvhd
+         atuMaXj3xR1WU6WOa37gC7ut+ElFW6cPSTeD4zVTg0X4xvDNPro+dl59Gcjab45zJ4RJ
+         k0uMxzjmbeeIoWEBvAqaVZqaVodYvpwPS9lSWZ72HnncScywwFKuSLzuWqHxMFnOv72n
+         tgyQ==
+X-Gm-Message-State: ANoB5pnIPxQ1ePZU7yXx7mIspqtRHNnF7Ml1M78sd3bUsBWMb7BHqMCL
+        8ezMVotlYqZUGTCDjdXFKU3EgbP1HU/uHJeC80c6iw==
+X-Google-Smtp-Source: AA0mqf6Jec+BV32PawqxyCKhdJcUXmZ/RKDowT11RNYNv1j4ZJEdrGiT81JrGbP3mwHIMdTQ58+F8XjRbkav02c5nOk=
+X-Received: by 2002:a17:90a:4745:b0:213:1442:24be with SMTP id
+ y5-20020a17090a474500b00213144224bemr103534897pjg.15.1670435382094; Wed, 07
+ Dec 2022 09:49:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7db2bc22-99b8-96f3-66f3-d1695e2e82c1@gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221109184244.7032-1-ajit.khaparde@broadcom.com>
+ <Y2zYPOUKgoArq7mM@unreal> <CACZ4nhu_2FoOTmXPuq+amRYAipusq1XcobavytN0cFK=TSE5mQ@mail.gmail.com>
+ <Y3Tj/BrskSJPuTFw@unreal> <CACZ4nhsv4zyzANrGh90WGKORz0Su=i7+Jmsk6nWoOq4or7Y0=Q@mail.gmail.com>
+ <Y33ErZHAsX76y34Z@unreal> <CACZ4nhvJV32pmOU7mRfaYYnatN6Ef5T3M=nVTYjuk7mnqcUxtw@mail.gmail.com>
+ <Y4XNSBO+2/YOL9+C@unreal>
+In-Reply-To: <Y4XNSBO+2/YOL9+C@unreal>
+From:   Ajit Khaparde <ajit.khaparde@broadcom.com>
+Date:   Wed, 7 Dec 2022 09:49:24 -0800
+Message-ID: <CACZ4nhtOkCDEhONdR-dX7CnLq44bn=OsRirkKxdcxaUYzvyUjw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/6] Add Auxiliary driver support
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
+        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        michael.chan@broadcom.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, selvin.xavier@broadcom.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000972f8105ef408b37"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022, Like Xu wrote:
-> On 7/12/2022 1:19 am, Sean Christopherson wrote:
-> > On Tue, Dec 06, 2022, Like Xu wrote:
-> > > > > diff --git a/arch/x86/kvm/vmx/pmu_intel.c b/arch/x86/kvm/vmx/pmu_intel.c
-> > > > > index e5cec07ca8d9..28b0a784f6e9 100644
-> > > > > --- a/arch/x86/kvm/vmx/pmu_intel.c
-> > > > > +++ b/arch/x86/kvm/vmx/pmu_intel.c
-> > > > > @@ -142,7 +142,7 @@ static struct kvm_pmc *intel_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
-> > > > >    	}
-> > > > >    	if (idx >= num_counters)
-> > > > >    		return NULL;
-> > > > > -	*mask &= pmu->counter_bitmask[fixed ? KVM_PMC_FIXED : KVM_PMC_GP];
-> > > > > +	*mask &= pmu->counter_bitmask[counters->type];
-> > > > 
-> > > > In terms of readability, I have a slight preference for the current code as I
-> 
-> IMO, using counters->type directly just like pmc_bitmask() will add more readability
-> and opportunistically helps some stale compilers behave better.
+--000000000000972f8105ef408b37
+Content-Type: text/plain; charset="UTF-8"
 
-Anyone that cares about this level of micro-optimization absolutely should be
-using a toolchain that's at or near the bleeding edge.
+On Tue, Nov 29, 2022 at 1:13 AM Leon Romanovsky <leon@kernel.org> wrote:
+>
+> On Mon, Nov 28, 2022 at 06:01:13PM -0800, Ajit Khaparde wrote:
+> > On Tue, Nov 22, 2022 at 10:59 PM Leon Romanovsky <leon@kernel.org> wrote:
+> > >
+::: snip :::
+> >
+> > >
+> > > > So we are trying to call the
+> > > > bnxt_re_sriov_config in the context of handling the PF's
+> > > > sriov_configure implementation.  Having the ulp_ops is allowing us to
+> > > > avoid resource wastage and assumptions in the bnxt_re driver.
+> > >
+> > > To which resource wastage are you referring?
+> > Essentially the PF driver reserves a set of above resources for the PF,
+> > and divides the remaining resources among the VFs.
+> > If the calculation is based on sriov_totalvfs instead of sriov_numvfs,
+> > there can be a difference in the resources provisioned for a VF.
+> > And that is because a user may create a subset of VFs instead of the
+> > total VFs allowed in the PCI SR-IOV capability register.
+> > I was referring to the resource wastage in that deployment scenario.
+>
+> It is ok, set all needed limits in bnxt_en. You don't need to call to
+> bnxt_re for that.
+Thanks. We have removed the sriov_config callback.
+I will send the fresh patchset in a few minutes.
 
-> > > > don't have to look at counters->type to understand its possible values.
-> > > When someone tries to add a new type of pmc type, the code bugs up.
-> > 
-> > Are there new types coming along?  If so, I definitely would not object to refactoring
-> > this code in the context of a series that adds a new type(s).  But "fixing" this one
-> > case is not sufficient to support a new type, e.g. intel_is_valid_rdpmc_ecx() also
-> > needs to be updated.  Actually, even this function would need additional updates
-> > to perform a similar sanity check.
-> 
-> True but this part of the change is semantically relevant, which should not
-> be present in a harmless generic optimization like this one. Right ?
+>
+> >
+> > Thanks
+> > Ajit
+> >
+> > >
+> > > There are no differences if same limits will be in bnxt_en driver when
+> > > RDMA bnxt device is created or in bnxt_re which will be called once RDMA
+> > > device is created.
+> > >
+> > > Thanks
+> > >
+> > > >
+> > > > ::snip::
+> > >
+> > >
+>
+>
 
-For modern compilers, it's not an optimization.
+--000000000000972f8105ef408b37
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-> > 	if (fixed) {
-> > 		counters = pmu->fixed_counters;
-> > 		num_counters = pmu->nr_arch_fixed_counters;
-> > 	} else {
-> > 		counters = pmu->gp_counters;
-> > 		num_counters = pmu->nr_arch_gp_counters;
-> > 	}
-> > 	if (idx >= num_counters)
-> > 		return NULL;
-> > 
-> > > And, this one will make all usage of pmu->counter_bitmask[] more consistent.
-> > 
-> > How's that?  There's literally one instance of using ->type
-> > 
-> >    static inline u64 pmc_bitmask(struct kvm_pmc *pmc)
-> >    {
-> > 	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
-> > 
-> > 	return pmu->counter_bitmask[pmc->type];
-> >    }
-> > 
-> > everything else is hardcoded.  And using pmc->type there make perfect sense in
-> > that case.  But in intel_rdpmc_ecx_to_pmc(), there is already usage of "fixed",
-> > so IMO switching to ->type makes that function somewhat inconsistent with itself.
-> 
-> More, it's rare to see code like " [ a ? b : c] " in the world of both KVM and x86.
-
-There are a few false positives here, but ternary operators are common.
-
-  $ git grep ? arch/x86/kvm | wc -l
-  292
-
-If you're saying that indexing an array with a ternary operator is rare, then sure,
-but only because there is almost never anything that fits such a pattern, not because
-it's an inherently bad pattern.
-
-> Good practice (branchless) should be scattered everywhere and not the other
-> way around.
-
-Once again, modern compilers will not generate branches for this code.
+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
+pZEyqKnwS1lKCzjX7mV5W955rFsFxChdAKfw0HilwtqdY24mhy62+GeaEkD0gYIj1tCmw9gnQToc
+K+0s7xEunfR9pBrzmOwS3OQbcP0nJ8SmQ8R+reroH6LYuFpaqK1rgQIDAQABo4IB2zCCAdcwDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAlBgNVHREEHjAcgRphaml0LmtoYXBhcmRlQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEF
+BQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUbrcTuh0mr2qP
+xYdtyDgFeRIiE/gwDQYJKoZIhvcNAQELBQADggEBALrc1TljKrDhXicOaZlzIQyqOEkKAZ324i8X
+OwzA0n2EcPGmMZvgARurvanSLD3mLeeuyq1feCcjfGM1CJFh4+EY7EkbFbpVPOIdstSBhbnAJnOl
+aC/q0wTndKoC/xXBhXOZB8YL/Zq4ZclQLMUO6xi/fFRyHviI5/IrosdrpniXFJ9ukJoOXtvdrEF+
+KlMYg/Deg9xo3wddCqQIsztHSkR4XaANdn+dbLRQpctZ13BY1lim4uz5bYn3M0IxyZWkQ1JuPHCK
+aRJv0SfR88PoI4RB7NCEHqFwARTj1KvFPQi8pK/YISFydZYbZrxQdyWDidqm4wSuJfpE6i0cWvCd
+u50xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNh
+MTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwM2Vrj
+4nZK0WWosNswDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIDZ4q+kOZPmwKfPY4f+4
+ittD9mKQf6bbiYBDgrmOJpj9MBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkF
+MQ8XDTIyMTIwNzE3NDk0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUD
+BAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsG
+CWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBHd54PVU5nhfPQkvd6QUcpJ53ROXdNlCVBOaDM
+hQK6cRwxWnUs4h7ZrTD+kQv7N0rnARbJeGlFGYW7jJWOiYmgl962Mi/kSXYg25feo0tWws1WP6fl
+jHPqUXq7I4cp8AWSoAN2K1Xqr5+iEIutzWY1ZkyPKxm/MVyjNTNoIR1g3d8OAUbPRVPPoeb/kyi5
+xaPkJUfahfTK1nf14KEX580QLhMP9YBdKRcR16ErqBZFGgpp33YDfHdRRAM1N8EkfeeWqZ/kh3Xl
+kGp0EyEXUhwn0qQwloRILBgY8ExTJkPvuVO5w3efmHXhABpUhv6XGzxCynw6XKYUbTf61SQqEHMh
+--000000000000972f8105ef408b37--
