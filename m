@@ -2,68 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCDD064611E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:31:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EB36646125
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:32:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiLGSbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:31:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
+        id S229821AbiLGScN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:32:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiLGSbd (ORCPT
+        with ESMTP id S229486AbiLGSbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:31:33 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5906DCE6
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 10:31:31 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 142so1696158pga.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 10:31:31 -0800 (PST)
+        Wed, 7 Dec 2022 13:31:49 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE5A6E567;
+        Wed,  7 Dec 2022 10:31:48 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id n20so16174925ejh.0;
+        Wed, 07 Dec 2022 10:31:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9twUK2BdOE0AIhzkr88aFbMfohNAzl5Qt9U40b/hedQ=;
-        b=I/NwqUQM0zkj77mtA8W82ZQY1P2Ln0LXrgCzcRWl1ovl8jRpvovaNnMx9jKQTMbBJO
-         Y7JoqgY0IjC+XDt29FZ6Hr9KxlToqmP7QaU07dM8dLTepd3sh6M27XMPAoHoM4jsOnDE
-         YY4KTCh7Du86pt4x1+AliOpfXkxBV3oO8qNxo3NaIy4UADZLqIT6EQ0bsPT9fS79ZbGM
-         u1DlFWMYl3MuaQKIJ1gd2jkxaP3G60AW7punvAtsMn37umXD+G015RHLLzXRKzxYsZY4
-         G5oWdhnUaAYg+aEawcQVYigHQ5BIJuX8h18wTTcDD3jH84bAlECSNWyUQ8L5jksPDHMx
-         TnFg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HNms7Hi4w1RYlFMn8tQ29mfpUPBacg1jiG+VyuPjD8I=;
+        b=Mdm4YR7dpQnvJdWvX0qiSEPorThhnrBexUuWZP88nDlJgrNGQi7wXNMdIMj96niLo8
+         hNqrowKAmOY8/CnyRQPbwIFTRPpq1ekqIQv2tn2Sdpzg67jEW5FqK4QFjNCJNEPA1C6K
+         QtXWnv7wcr4x5p8ToOZDb4PK6k/EDKpCkvIToky9JaOKmOYM55pW0JBMkSDsJLZHs3PM
+         Fu/h/FhxH8Rzf3Y7oAbVtlIOhJT+qJAZQ4WzrUlQlHID5QzrKs1zFO3hF+YGtT7N/IJZ
+         azVRiTdXugfjPUR7QkOQN9ryDwns8HDW5TeAhOopqA1D0NFXfmsa62NnC87mQoXRYIEv
+         Ldyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9twUK2BdOE0AIhzkr88aFbMfohNAzl5Qt9U40b/hedQ=;
-        b=oq75nSs70yhndlVWc7k5nLMVnQaT5uzvYZk7PVTJvUsTI1Ur3dRb3+Js1vPMrbEaAQ
-         E8cjWtfnOj6fl+tjIwTOX0ktpWKwbwdMs1EN2spS5noNHwolgsm2kX5FZ166ZUvZPjUW
-         iEKls79PMiJ74tdJKsds8MyxjGqKo24Dt820Z/Jt2Yz7p8RQh7zAqrC2QdB3dqZVdSBa
-         94B6BlmGf4PeRasBAotR5JpiGx8fq5llcv0lPgLYEjWtA2IetVCkBz5uBNQcENyXOmt4
-         od+m79Xdy4I2EtHgepxqCGXwGCb3b18QjDon+3Y+vx9qT7sbhqhGKhzXs6d96Sb7oF16
-         rGiw==
-X-Gm-Message-State: ANoB5pmBcm5Dg41esJkCy4yoBR1p2trvaDUU0V5TqGgr9gtXwovnWSwM
-        BsUuzLsTDl6crQvOWsuD3n1crx3PA+YSZsigBO8=
-X-Google-Smtp-Source: AA0mqf5Nmm+DUOdYgBwjlIg18FdT+GbIS4rzeP3/XhKnwXZwm8sB4n6LS46XiycgM9D2BbbnoAEdbcY7DJ2/IL1sk1M=
-X-Received: by 2002:aa7:91d6:0:b0:574:c543:f804 with SMTP id
- z22-20020aa791d6000000b00574c543f804mr58219767pfa.51.1670437890943; Wed, 07
- Dec 2022 10:31:30 -0800 (PST)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HNms7Hi4w1RYlFMn8tQ29mfpUPBacg1jiG+VyuPjD8I=;
+        b=RLl/Y6UPgjMxo1oJhBggVsxh0WL1BJJCknIHzLZzVxCrmkbrmwrWBkZ1iqfOcEAH9g
+         /4kEkTO1cyS7lbSD3NRxBhGwZwVwZWyXjyDxwICaij0e48jsBuKcuMTp2TeNW9/IENuQ
+         3DgZbWe8PwlMsdEHsXxcCWiLNUl6uxgky2aHdKbZLnoGDUeRY6B66bHD9dJ1vufMbEp0
+         5iRduR3cew4jXbXDjYxniAfptG9rcVhAWFG9/kYPUa6xyTRdObHM56NVH05/7k+jvvtb
+         YN+yHrrCjPHLaw+Gv9VaobUOcLqiVv61a0nSI34kh9G5/kixScyizYSCEHcuIORdd+aS
+         9X4A==
+X-Gm-Message-State: ANoB5plIlFuwBdopMHK2nBtw9KAscKimRPMZJcW3YNNafrB48zyHe4Ed
+        pETGzygkbMZ8Zc5W64f2hT1KiMNXpwSZWSvqZlY=
+X-Google-Smtp-Source: AA0mqf7PiTvOMdup8c6tLZlJguE1SyMAw51mfWFNj75ihz/N/FvtvIw8f0GxRE8/GS68owj7T/wB73KEcjm1ocZmjlA=
+X-Received: by 2002:a17:906:68a:b0:78d:3188:9116 with SMTP id
+ u10-20020a170906068a00b0078d31889116mr78551225ejb.176.1670437906724; Wed, 07
+ Dec 2022 10:31:46 -0800 (PST)
 MIME-Version: 1.0
-References: <e97bc607-a913-dbbd-1965-b60d55d956b8@gmail.com>
- <c5edaa34-6f85-c6a8-84f5-75413dc864ea@gmail.com> <202208091600.D19DFF9C7D@keescook>
- <CAC=U0a3F6172JH+xvA0pSb0bewu_0PX9XFKmL32ge+KyTOdaZA@mail.gmail.com>
-In-Reply-To: <CAC=U0a3F6172JH+xvA0pSb0bewu_0PX9XFKmL32ge+KyTOdaZA@mail.gmail.com>
-From:   Kamal Dasu <kdasu.kdev@gmail.com>
-Date:   Wed, 7 Dec 2022 13:31:19 -0500
-Message-ID: <CAC=U0a1n_hKLgyD5rH_cktzaW_mW_UEFZLAQ4g65YXD9Ea_R3w@mail.gmail.com>
-Subject: Re: Invalid pstore_blk use?
-To:     Kees Cook <keescook@chromium.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>
+References: <20221203093740.218935-1-liuxin350@huawei.com> <6ac9f767-e7f5-6603-6234-97126ea22005@iogearbox.net>
+ <CAEf4BzaC6hhNzKkzFa+s4bws7APWj-Nk8Uup+3J6avCXnMFziA@mail.gmail.com> <660fd781-2d86-9d99-2851-127d6b4d4595@iogearbox.net>
+In-Reply-To: <660fd781-2d86-9d99-2851-127d6b4d4595@iogearbox.net>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Wed, 7 Dec 2022 10:31:34 -0800
+Message-ID: <CAEf4BzYV=tCDMOO8xYwNgpogyEo6dbfnAHyYKnf59rUeG5TNSw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] libbpf: Optimized return value in
+ libbpf_strerror when errno is libbpf errno
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Xin Liu <liuxin350@huawei.com>, andrii@kernel.org, ast@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yanan@huawei.com,
+        wuchangye@huawei.com, xiesongyang@huawei.com,
+        kongweibin2@huawei.com, zhangmingyi5@huawei.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -74,119 +76,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Adrain Hunter
-+ Ulf Hansoon
+On Wed, Dec 7, 2022 at 1:09 AM Daniel Borkmann <daniel@iogearbox.net> wrote=
+:
+>
+> On 12/7/22 1:00 AM, Andrii Nakryiko wrote:
+> > On Mon, Dec 5, 2022 at 1:11 PM Daniel Borkmann <daniel@iogearbox.net> w=
+rote:
+> >>
+> >> On 12/3/22 10:37 AM, Xin Liu wrote:
+> >>> This is a small improvement in libbpf_strerror. When libbpf_strerror
+> >>> is used to obtain the system error description, if the length of the
+> >>> buf is insufficient, libbpf_sterror returns ERANGE and sets errno to
+> >>> ERANGE.
+> >>>
+> >>> However, this processing is not performed when the error code
+> >>> customized by libbpf is obtained. Make some minor improvements here,
+> >>> return -ERANGE and set errno to ERANGE when buf is not enough for
+> >>> custom description.
+> >>>
+> >>> Signed-off-by: Xin Liu <liuxin350@huawei.com>
+> >>> ---
+> >>>    tools/lib/bpf/libbpf_errno.c | 6 ++++++
+> >>>    1 file changed, 6 insertions(+)
+> >>>
+> >>> diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errn=
+o.c
+> >>> index 96f67a772a1b..48ce7d5b5bf9 100644
+> >>> --- a/tools/lib/bpf/libbpf_errno.c
+> >>> +++ b/tools/lib/bpf/libbpf_errno.c
+> >>> @@ -54,10 +54,16 @@ int libbpf_strerror(int err, char *buf, size_t si=
+ze)
+> >>>
+> >>>        if (err < __LIBBPF_ERRNO__END) {
+> >>>                const char *msg;
+> >>> +             size_t msg_size;
+> >>>
+> >>>                msg =3D libbpf_strerror_table[ERRNO_OFFSET(err)];
+> >>>                snprintf(buf, size, "%s", msg);
+> >>>                buf[size - 1] =3D '\0';
+> >>> +
+> >>> +             msg_size =3D strlen(msg);
+> >>> +             if (msg_size >=3D size)
+> >>> +                     return libbpf_err(-ERANGE);
+> >>
+> >> Given this is related to libbpf_strerror_table[] where the error strin=
+gs are known
+> >> lets do compile-time error instead. All callers should pass in a buffe=
+r of STRERR_BUFSIZE
+> >> size in libbpf.
+> >
+> > That sounds a bit too pessimistic?.. If the actual error message fits
+> > in the buffer, why return -ERANGE just because theoretically some
+> > error descriptions might fit?
+> >
+> > But I don't think we need to calculate strlen(). snprintf above
+> > returns the number of bytes required to print a full string, even if
+> > it was truncated. So just comparing snprintf's result to size should
+> > be enough.
+>
+> I meant sth like below. For example if we were to shrink STRERR_BUFSIZE d=
+own
+> to 32 for testing, you'd then get:
 
+Sure, but I'm not sure why do we need to do this? Array of pointers to
+string will overall use less memory, as each string will take as much
+space as needed and no more.
 
+I guess I'm missing which problem you are trying to solve. I believe
+Xin was addressing a concern of extern (to libbpf) callers not getting
+-ERANGE in cases when they provide too small a buffer, which is just a
+simple snprintf() use adjustment to be a proper fix.
 
-On Fri, Nov 18, 2022 at 3:41 PM Kamal Dasu <kdasu.kdev@gmail.com> wrote:
 >
-> Kees,
+> # make libbpf_errno.o
+> gcc -g -O2 -std=3Dgnu89 -Wbad-function-cast -Wdeclaration-after-statement=
+ -Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations -Wmissin=
+g-prototypes -Wnested-externs -Wno-system-headers -Wold-style-definition -W=
+packed -Wredundant-decls -Wstrict-prototypes -Wswitch-default -Wswitch-enum=
+ -Wundef -Wwrite-strings -Wformat -Wno-type-limits -Wstrict-aliasing=3D3 -W=
+shadow -Wno-switch-enum -Werror -Wall -I. -I/home/darkstar/trees/bpf-next/t=
+ools/include -I/home/darkstar/trees/bpf-next/tools/include/uapi -fvisibilit=
+y=3Dhidden -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64    -c -o libbpf_e=
+rrno.o libbpf_errno.c
+> libbpf_errno.c:27:31: error: initializer-string for array of chars is too=
+ long [-Werror]
+>     27 |  [ERRCODE_OFFSET(KVERSION)] =3D "'version' section incorrect or =
+lost",
+>        |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~
+> libbpf_errno.c:27:31: note: (near initialization for =E2=80=98libbpf_stre=
+rror_table[2]=E2=80=99)
+> libbpf_errno.c:31:29: error: initializer-string for array of chars is too=
+ long [-Werror]
+>     31 |  [ERRCODE_OFFSET(VERIFY)] =3D "Kernel verifier blocks program lo=
+ading",
+>        |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~
+> libbpf_errno.c:31:29: note: (near initialization for =E2=80=98libbpf_stre=
+rror_table[7]=E2=80=99)
+> libbpf_errno.c:34:31: error: initializer-string for array of chars is too=
+ long [-Werror]
+>     34 |  [ERRCODE_OFFSET(PROGTYPE)] =3D "Kernel doesn't support this pro=
+gram type",
+>        |                               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
+~~~~~~~~
+> libbpf_errno.c:34:31: note: (near initialization for =E2=80=98libbpf_stre=
+rror_table[10]=E2=80=99)
+> libbpf_errno.c:37:30: error: initializer-string for array of chars is too=
+ long [-Werror]
+>     37 |  [ERRCODE_OFFSET(NLPARSE)] =3D "Incorrect netlink message parsin=
+g",
+>        |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> libbpf_errno.c:37:30: note: (near initialization for =E2=80=98libbpf_stre=
+rror_table[13]=E2=80=99)
+> cc1: all warnings being treated as errors
+> make: *** [<builtin>: libbpf_errno.o] Error 1
 >
-> I am in the process of implementing  mmcpstore  backend for mmc  based
-> on the mtdpstore driver
 >
-> This is what is registered with register_pstore_device(&cxt->dev);
-> cxt->dev.flags = PSTORE_FLAGS_DMESG;
-> cxt->dev.zone.read = mmcpstore_read;
-> cxt->dev.zone.write = mmcpstore_write;
-> cxt->dev.zone.erase = mmcpstore_erase;
-> cxt->dev.zone.panic_write = mmcpstore_panic_write;
 >
-> # dmesg | grep pstor
-> [    0.000000] Kernel command line: pstore_blk.blkdev=/dev/mmcblk1p8
-> crash_kexec_post_notifiers printk.always_kmsg_dump
-> [    1.993986] pstore_zone: registered pstore_blk as backend for
-> kmsg(Oops,panic_write) pmsg
-> [    2.002582] pstore: Using crash dump compression: deflate
-> [    2.008133] pstore: Registered pstore_blk as persistent store backend
-> [    2.020907] mmcpstore: /dev/mmcblk1p8 size 131072 start sector
-> 34468 registered as psblk backend
-> [   17.868753] psz_kmsg_recover_meta: pstore_zone: no valid data in
-> kmsg dump zone 0
-> [   18.298933] psz_recover_zone: pstore_zone: no valid data in zone pmsg
-> [   18.305398] psz_recovery: pstore_zone: recover end!
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 2a82f49ce16f..2e5df1624f79 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -265,8 +265,6 @@ static void pr_perm_msg(int err)
+>                 buf);
+>   }
 >
-> The driver is successfully registered and the read path works when
-> /sys/fs/pstor is mounted , however mmc_pstore_panic_write is not
-> called.
-> Need help in understanding what could be missing. I am using the
-> latest upstream kernel for testing.
+> -#define STRERR_BUFSIZE  128
+> -
+>   /* Copied from tools/perf/util/util.h */
+>   #ifndef zfree
+>   # define zfree(ptr) ({ free(*ptr); *ptr =3D NULL; })
+> diff --git a/tools/lib/bpf/libbpf_errno.c b/tools/lib/bpf/libbpf_errno.c
+> index 96f67a772a1b..2f03f861b8b6 100644
+> --- a/tools/lib/bpf/libbpf_errno.c
+> +++ b/tools/lib/bpf/libbpf_errno.c
+> @@ -21,7 +21,7 @@
+>   #define ERRCODE_OFFSET(c)     ERRNO_OFFSET(LIBBPF_ERRNO__##c)
+>   #define NR_ERRNO      (__LIBBPF_ERRNO__END - __LIBBPF_ERRNO__START)
 >
-> Kamal
+> -static const char *libbpf_strerror_table[NR_ERRNO] =3D {
+> +static const char libbpf_strerror_table[NR_ERRNO][STRERR_BUFSIZE] =3D {
+>         [ERRCODE_OFFSET(LIBELF)]        =3D "Something wrong in libelf",
+>         [ERRCODE_OFFSET(FORMAT)]        =3D "BPF object format invalid",
+>         [ERRCODE_OFFSET(KVERSION)]      =3D "'version' section incorrect =
+or lost",
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index 377642ff51fc..d4dc4fe945a6 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -57,6 +57,8 @@
+>   #define ELF64_ST_VISIBILITY(o) ((o) & 0x03)
+>   #endif
 >
-> On Tue, Aug 9, 2022 at 7:06 PM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Tue, Aug 09, 2022 at 11:35:08AM -0700, Florian Fainelli wrote:
-> > > Hi Kees, WeiXiong,
-> > >
-> > > On 7/14/22 20:49, Florian Fainelli wrote:
-> > > > Hi Kees, WeiXiong,
-> > > >
-> > > > I am trying to make use of pstore_blk which is BTW exactly what I had
-> > > > been looking for to store panic/console logs onto an eMMC partition.
-> > > >
-> > > > Using the 5.10 kernel plus:
-> > > >
-> > > > 7e2e92e9861b Revert "mark pstore-blk as broken"
-> > > > 01c28bc8f389 pstore/blk: Use the normal block device I/O path
-> > > > 2a7507999638 pstore/blk: remove {un,}register_pstore_blk
-> > > > fef0b337cd25 pstore/zone: cap the maximum device size
-> > > >
-> > > > or the android13-5.15 (at Merge 5.15.40 into android13-5.15) kernel with
-> > > > no changes and using:
-> > > >
-> > > > mount -t pstore pstore /sys/fs/pstore
-> > > > modprobe pstore_blk blkdev=/dev/mmcblk1p9 best_effort=yes
-> > > >
-> > > > upon triggering a crash with:
-> > > >
-> > > > echo c > /proc/sysrq-trigger
-> > > >
-> > > > and rebooting and remounting the pstore filesystem and loading
-> > > > pstore_blk, I only have:
-> > > >
-> > > > # ls /sys/fs/pstore/
-> > > > console-pstore_blk-0
-> > > >
-> > > > which contains the entire console log up to, but excluding the crash.
-> > > > The kernel does show that pstore_blk was used for all 3 types of kmsg,
-> > > > pmsg and console:
-> > > >
-> > > > [   28.649514] pstore_zone: capping size to 128MiB
-> > > > [   28.712894] pstore_zone: registered pstore_blk as backend for
-> > > > kmsg(Oops) pmsg console
-> > > > [   28.721145] pstore: Using crash dump compression: deflate
-> > > > [   28.906253] printk: console [pstore_blk-1] enabled
-> > > > [   28.911229] pstore: Registered pstore_blk as persistent store backend
-> > > > [   28.917735] pstore_blk: attached pstore_blk:/dev/mmcblk1p9
-> > > > (134217728) (no dedicated panic_write!)
-> > > >
-> > > > there is no automatic reboot upon panic, so I just tend to reboot after
-> > > > 2-3 seconds manually. The kernel is configured with the default
-> > > > CONFIG_PSTORE_* options.
-> > > >
-> > > > Is the observed behavior a limitation of the best_effort mode? If so, do
-> > > > we have any plans to implementing a non-best effort mode for eMMC
-> > > > devices?
-> > >
-> > > Any feedback on my email? I did try to get kernel panics to be dumped out to
-> >
-> > Hi! Sorry I lost this email originally. :)
-> >
-> > > a dedicated /dev/mtdblock* partition for which there ought to be support for
-> > > mtd->panic_write, but it still did not work any better. Is there something
-> >
-> > With the mtdblock driver, do you still see:
-> >
-> >     pstore_blk: attached pstore_blk:/dev/... (no dedicated panic_write!)
-> >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
-> >
-> > > obvious that I am missing which prevents kernel panics from being logged?
-> >
-> > Unfortunately it really depends on how the drivers are built. If the
-> > block layer is shut down during a panic, pstore_blk won't catch the
-> > panic. :(
-> >
-> > --
-> > Kees Cook
+> +#define STRERR_BUFSIZE 128
+> +
+>   #define BTF_INFO_ENC(kind, kind_flag, vlen) \
+>         ((!!(kind_flag) << 31) | ((kind) << 24) | ((vlen) & BTF_MAX_VLEN)=
+)
+>   #define BTF_TYPE_ENC(name, info, size_or_type) (name), (info), (size_or=
+_type)
