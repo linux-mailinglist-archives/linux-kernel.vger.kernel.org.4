@@ -2,73 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F14E645960
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3504C645984
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:56:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbiLGLyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:54:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54558 "EHLO
+        id S230273AbiLGL4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:56:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiLGLy2 (ORCPT
+        with ESMTP id S229937AbiLGLzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:54:28 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54173537ED
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:53:25 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id o16-20020a056602225000b006e032e361ccso1887886ioo.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 03:53:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EyWZC0llqdYmncWtPwixLQNKka5YCKzs3jeozvLgpxg=;
-        b=5PD+iSQIeJrVUC8YziNSidVQCNULRpQUO1CbqA6p3KQcLr9kyqCmqBUuYusBzcFKit
-         T0zEASqLzMeRGRb+MrkxzaktJEvhkfGLVQ3ludlEn15mGlUSJ36DgFptQ+5+j97CBmie
-         8NmOxRQiGTjh8a0Hb7vMRkmfztCRyR28XteyJIzKAzztDyq5Iaycpuuq38gGaL0MZEep
-         IMgwfipp9mou5x/0p8AxBd0JDOXXAkL+X8vWoTM+Vup3m/0c3t0JKin1Uxgs6NGLvPao
-         D3+a9ShyjGNK1NY8kF7BpR6s8bee3zZWC9/q6BPDnWn1wvsRYMRNpMMYLFRsyZutChw0
-         qf5Q==
-X-Gm-Message-State: ANoB5pl141hmA4rkWm45XS/Ctul38afad7iM6v3UvJOMYd/QZq/qa9Gw
-        iiYJdcFoX4uDmtRqOhVxBI5Oev7z8Ljoi/SCYjqpF+ubsSrl
-X-Google-Smtp-Source: AA0mqf6wdms/YjxSqXYyKb/iaOK6kry5gOUGzSqZT2TjxCsbC3jgbRgUjNStD+BViyy7WmW03M2kWw8GWAanogb5BHGYzVCnjKKC
+        Wed, 7 Dec 2022 06:55:39 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58004109D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:55:38 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id C613F5C01D2;
+        Wed,  7 Dec 2022 06:55:37 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Wed, 07 Dec 2022 06:55:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1670414137; x=
+        1670500537; bh=KDXnofUNT0I/LkLW2Xe++pwe0GlWoAoqzj43/HZ72T4=; b=F
+        C9ZYvM4xYi843Q2Mbz5jmzjroekj2WSzYl5MtVzUFvJ+zjPdfMD9rwD/pfysarB5
+        JPTKlm/9yTBqMoz4XBhF8kRKxqvv6WNyBblKklUyh+YB83FoEfQY+ufAb4f7gWEr
+        cZTqQP/vf635WUwWCOOGp7R7WJIpzTcuk/pSS0pBsKdUWLtZhV5TZ6mUg5MtjGUx
+        gfZTfemltkyBpDV8Wf57ITDdSSvIl1Q08TbJak49Ci5p7R6Pn+kFpdsrplgelRyq
+        YaFOueHcVGzuaD5fKo9cVUh1oBuL3T8fLAagdBY1o4ZpZ5c8OLyVuJSWksbi4wI8
+        J6HJwNHBWOUEB9jFwyUiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1670414137; x=
+        1670500537; bh=KDXnofUNT0I/LkLW2Xe++pwe0GlWoAoqzj43/HZ72T4=; b=O
+        7eF9M92z4LzKfQPWFkJD948iQYfszcp+HfweaoYNlgvbIgY/ePMUf1X9s1HXOUXy
+        LleScZagN/HKmqd3CcHYrfU7KDdqk+zpEpOhMXDTwFBh01MLbHQIYIXJ98OOppiq
+        7DrOgKG8zbRRGoMZ59vB6N+/cmiZDrNYZxS0OO+KFsLLf9A3sq0cQbS8Ydy2aUDO
+        I142lhmF7amIglBDO1x6wAcaIZGpPHG/s0xgAhVMO989T0zrS1t9/d1gkj/dKiCV
+        gt1ffm8MA9y/bZl6rYb32Rr1PQWa+uzrKhZpYN4rbI08ZeBA48GlLMnUhSe1/y42
+        2UTm9E8eB4/KhMu9a4rCw==
+X-ME-Sender: <xms:OX-QY1qczVMuncqrbrft_bGmUHznv2mnitOweeS69NIbZuCvlkGlHQ>
+    <xme:OX-QY3qK8t-UJq7uCQZsgW4qgjTY0wCQUeTA4PU1jPcN24jE0hwPE-ZamZqhDb_fk
+    uRIsRGcOAYHd3v3xDw>
+X-ME-Received: <xmr:OX-QYyPqhq47DW9QGlNq0E2iSBJUOZppzM7-t7KDdm1ho1sC2UfL2q9NIksvEqTw545wB29H0OkE-NSWSRjWeaD8oC5u-pV5AkkVtDx2SQhMvQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdefgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhfffugggtgffkfhgjvfevofesthejredtredtjeenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeevvdelieejgedvkeffheekheeilefhgefgffehteekueelvddtueffheet
+    ledtffenucevlhhushhtvghrufhiiigvpeefnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:OX-QYw6P9Px1MJs6-izmvB4i3IPSDTP_lYTrBWpHuL0K9EELPfXbYw>
+    <xmx:OX-QY05B061o16Fa5SPQwI5qXd10pDeT1eIVcQusbAT7PeJQ7RU_1Q>
+    <xmx:OX-QY4h-bSidXQmSIwsRZgmMTWY3sRSca21qYC415tXtxo0_q8SBGw>
+    <xmx:OX-QYxx8fFoKrgsqFhSm6k766TWvI6bNG9WFRL42wx0Y4T0iVR62_Q>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 7 Dec 2022 06:55:37 -0500 (EST)
+From:   Maxime Ripard <maxime@cerno.tech>
+Date:   Wed, 07 Dec 2022 12:53:25 +0100
+Subject: [PATCH 14/15] drm/vc4: hdmi: Correct interlaced timings again
 MIME-Version: 1.0
-X-Received: by 2002:a92:d2c1:0:b0:302:dd82:2b98 with SMTP id
- w1-20020a92d2c1000000b00302dd822b98mr30473998ilg.230.1670414004665; Wed, 07
- Dec 2022 03:53:24 -0800 (PST)
-Date:   Wed, 07 Dec 2022 03:53:24 -0800
-In-Reply-To: <20221207112257.7806-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000060452a05ef3b9168@google.com>
-Subject: Re: [syzbot] INFO: trying to register non-static key in gsm_send
-From:   syzbot <syzbot+52fe5933e61fb1f048ae@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20221207-rpi-hvs-crtc-misc-v1-14-1f8e0770798b@cerno.tech>
+References: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech>
+In-Reply-To: <20221207-rpi-hvs-crtc-misc-v1-0-1f8e0770798b@cerno.tech>
+To:     Emma Anholt <emma@anholt.net>, Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Eric Anholt <eric@anholt.net>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Maxime Ripard <maxime@cerno.tech>
+X-Mailer: b4 0.11.0-dev-8c583
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1375; i=maxime@cerno.tech;
+ h=from:subject:message-id; bh=2Svk6pZ3lWM5+mLTO01TRJl0JjlnLEjaMR/enj/vUCc=;
+ b=owGbwMvMwCX2+D1vfrpE4FHG02pJDMkT6lb2qtkW3Z7X+fCoW5fyptnbzOfOrUnzYAiftvSYvL5p
+ rO3zjlIWBjEuBlkxRZYYYfMlcadmve5k45sHM4eVCWQIAxenAEzk8DyGf2rlLa1r7vxJ5342I5b72q
+ rd0tOVNr178S77jat40LzXHZKMDDc++jXoPFU5VXdw17OO54UPv8X+M02/cVgxknftFoWeGm4A
+X-Developer-Key: i=maxime@cerno.tech; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+The back porch timings were correct, only the sync offset was wrong.
+Correct timing is now reported for 1080i and 576i, but the h offset is
+incorrect for 480i for non-obvious reasons.
 
-Reported-and-tested-by: syzbot+52fe5933e61fb1f048ae@syzkaller.appspotmail.com
+Fixes: c0ba150ce468 ("drm/vc4: Correct HDMI timing registers for interlaced modes")
+Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+---
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Tested on:
+diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+index 12a00d644b61..e027381b7331 100644
+--- a/drivers/gpu/drm/vc4/vc4_hdmi.c
++++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+@@ -1298,11 +1298,12 @@ static void vc5_hdmi_set_timings(struct vc4_hdmi *vc4_hdmi,
+ 		     VC4_SET_FIELD(mode->crtc_vdisplay, VC5_HDMI_VERTA_VAL));
+ 	u32 vertb = (VC4_SET_FIELD(mode->htotal >> (2 - pixel_rep),
+ 				   VC5_HDMI_VERTB_VSPO) |
+-		     VC4_SET_FIELD(mode->crtc_vtotal - mode->crtc_vsync_end,
++		     VC4_SET_FIELD(mode->crtc_vtotal - mode->crtc_vsync_end +
++				   interlaced,
+ 				   VC4_HDMI_VERTB_VBP));
+ 	u32 vertb_even = (VC4_SET_FIELD(0, VC5_HDMI_VERTB_VSPO) |
+ 			  VC4_SET_FIELD(mode->crtc_vtotal -
+-					mode->crtc_vsync_end - interlaced,
++					mode->crtc_vsync_end,
+ 					VC4_HDMI_VERTB_VBP));
+ 	unsigned long flags;
+ 	unsigned char gcp;
 
-commit:         e3cb714f Merge branch 'for-next/core' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=13e83683880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec7118319bfb771e
-dashboard link: https://syzkaller.appspot.com/bug?extid=52fe5933e61fb1f048ae
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12452be3880000
-
-Note: testing is done by a robot and is best-effort only.
+-- 
+2.38.1
