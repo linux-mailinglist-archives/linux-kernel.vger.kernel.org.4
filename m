@@ -2,373 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA39A6452ED
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 05:12:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6FA96452AC
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 04:51:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiLGEMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 23:12:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
+        id S229778AbiLGDu7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 22:50:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiLGEMF (ORCPT
+        with ESMTP id S229497AbiLGDu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 23:12:05 -0500
-X-Greylist: delayed 1219 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 20:12:04 PST
-Received: from gateway32.websitewelcome.com (gateway32.websitewelcome.com [192.185.145.113])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E7B55CA6
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 20:12:04 -0800 (PST)
-Received: from atl1wswcm03.websitewelcome.com (unknown [50.6.129.164])
-        by atl3wswob03.websitewelcome.com (Postfix) with ESMTP id A1843E370
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:51:44 +0000 (UTC)
-Received: from md-in-79.webhostbox.net ([43.225.55.182])
-        by cmsmtp with ESMTP
-        id 2lTBprp5cHV9c2lTDpK9YH; Wed, 07 Dec 2022 03:51:44 +0000
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=linumiz.com
-        ; s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=IGd+S9iKxc/QWHPNM22V3DTZnmHuJbTeEl2S7KOPdTg=; b=FEyxXrPQoS41HvKRTptp5udgOA
-        1Jehj7dxZeCrCfAz5Rv2nM7i+RFlmSrFvPg7wtq/Q2Xt0EnzQAT169YLZG5QiOuaE7WpJLN2CVY20
-        txwCl9rEia9p0pCPTeIjaSigqdGRSoY9IqW+iDTCgLbq5y5WdlnespgorHtjqQb3GkDcggMRceKhk
-        DpmSM3Oz1sfb1C83wfN8I0sfyGYj2/AWmcsauiRyZlABHNdsAJgR6IhoTUG7vJGQePC7reFFKNEG/
-        hyg24qzH/2FpjtiYl0OcCYHqxRM8CJLB1A32SVqMT+ac79JEz6ptifOteSmNULVtinIHC62zcplaB
-        GtS+QRcQ==;
-Received: from [106.203.57.45] (port=20281 helo=[192.168.40.42])
-        by md-in-79.webhostbox.net with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <saravanan@linumiz.com>)
-        id 1p2lTA-001bAN-KR;
-        Wed, 07 Dec 2022 03:51:40 +0000
-Message-ID: <6773256d-2842-fadc-1222-f76e0b495eda@linumiz.com>
-Date:   Wed, 7 Dec 2022 04:51:37 +0100
+        Tue, 6 Dec 2022 22:50:56 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0E455C84;
+        Tue,  6 Dec 2022 19:50:55 -0800 (PST)
+Received: from dggpeml100012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NRjrh04tVzpW7T;
+        Wed,  7 Dec 2022 11:46:44 +0800 (CST)
+Received: from localhost.localdomain (10.67.175.61) by
+ dggpeml100012.china.huawei.com (7.185.36.121) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 7 Dec 2022 11:50:53 +0800
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+To:     <rostedt@goodmis.org>, <mhiramat@kernel.org>, <zanussi@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <zhengyejian1@huawei.com>
+Subject: [PATCH] tracing/hist: Fix out-of-bound write on 'action_data.var_ref_idx'
+Date:   Wed, 7 Dec 2022 11:51:43 +0800
+Message-ID: <20221207035143.2278781-1-zhengyejian1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 3/4] hwmon: (pmbus/mpq7932) Add a support for mpq7932
- Power Management IC
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-hwmon@vger.kernel.org, jdelvare@suse.com,
-        marten.lindahl@axis.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221201044643.1150870-1-saravanan@linumiz.com>
- <20221201044643.1150870-4-saravanan@linumiz.com>
- <00de62b2-51dc-2a72-6659-3425d5e1b72c@roeck-us.net>
-Content-Language: en-US
-From:   Saravanan Sekar <saravanan@linumiz.com>
-In-Reply-To: <00de62b2-51dc-2a72-6659-3425d5e1b72c@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - md-in-79.webhostbox.net
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - linumiz.com
-X-BWhitelist: no
-X-Source-IP: 106.203.57.45
-X-Source-L: No
-X-Exim-ID: 1p2lTA-001bAN-KR
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.40.42]) [106.203.57.45]:20281
-X-Source-Auth: saravanan@linumiz.com
-X-Email-Count: 1
-X-Source-Cap: bGludW1jbWM7aG9zdGdhdG9yO21kLWluLTc5LndlYmhvc3Rib3gubmV0
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDaAaZ6DHAkmc23jz6CA+vCQRUQYyMTDX/oBXNHkEwlS/ywgz29mI/1NEBptwZSVkohFvGXfFXmBkWz9M9xTUKSxpS7SO91SUZ1qKxhp2WB0i7ylzx+e
- /9dxJBRdqlYigk1ODnzZr0m5TxYDj98rgjn2HLYArll44tUQ0/iTBRAVxauBYKg86Yq+hl8AftG40EnVEbF5bhoNxYqKHBV2vjk=
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.175.61]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml100012.china.huawei.com (7.185.36.121)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/12/22 16:34, Guenter Roeck wrote:
-> On 11/30/22 20:46, Saravanan Sekar wrote:
->> The MPQ7932 is a power management IC designed to operate from 5V buses to
->> power a variety of Advanced driver-assistance system SOCs. Six integrated
->> buck converters with hardware monitoring capability powers a variety of
->> target rails configurable over PMBus interface.
->>
->> Signed-off-by: Saravanan Sekar <saravanan@linumiz.com>
->> ---
->>   drivers/hwmon/pmbus/Kconfig   |  10 +++
->>   drivers/hwmon/pmbus/Makefile  |   1 +
->>   drivers/hwmon/pmbus/mpq7932.c | 144 ++++++++++++++++++++++++++++++++++
->>   3 files changed, 155 insertions(+)
->>   create mode 100644 drivers/hwmon/pmbus/mpq7932.c
->>
->> diff --git a/drivers/hwmon/pmbus/Kconfig b/drivers/hwmon/pmbus/Kconfig
->> index 89668af67206..4a1538949a73 100644
->> --- a/drivers/hwmon/pmbus/Kconfig
->> +++ b/drivers/hwmon/pmbus/Kconfig
->> @@ -317,6 +317,16 @@ config SENSORS_MP5023
->>         This driver can also be built as a module. If so, the module will
->>         be called mp5023.
->> +config SENSORS_MPQ7932
->> +    tristate "MPS MPQ7932"
-> 
-> As written, a dependency on REGULATOR is missing. However, we want the 
-> driver
-> enabled even if CONFIG_REGULATOR is not enabled. I would suggest to 
-> follow the
-> approach used by other drivers: add a second configuration option
-> SENSORS_MPQ7932_REGULATOR which depends on SENSORS_MPQ7932 and REGULATOR
-> and enables regulator functionality, and use that in the driver to
-> make regulator support optional.
-> 
+When generate a synthetic event with many params and then create a trace
+action for it [1], kernel panic happened [2].
 
-Hello Guenter,
+It is because that in trace_action_create() 'data->n_params' is up to
+SYNTH_FIELDS_MAX (current value is 64), and array 'data->var_ref_idx'
+keeps indices into array 'hist_data->var_refs' for each synthetic event
+param, but the length of 'data->var_ref_idx' is TRACING_MAP_VARS_MAX
+(current value is 16), so out-of-bound write happened when 'data->n_params'
+more than 16. In this case, 'data->match_data.event' is overwritten and
+eventually cause the panic.
 
-I need clarification or confirmation from you before V3.
+To solve the issue, adjust the length of 'data->var_ref_idx' to be
+SYNTH_FIELDS_MAX and add sanity checks to avoid out-of-bound write.
 
-Here is my view, communication to MPQ7932 PMIC chip is based on pmbus 
-specification.
+[1]
+ # cd /sys/kernel/tracing/
+ # echo "my_synth_event int v1; int v2; int v3; int v4; int v5; int v6;\
+int v7; int v8; int v9; int v10; int v11; int v12; int v13; int v14;\
+int v15; int v16; int v17; int v18; int v19; int v20; int v21; int v22;\
+int v23; int v24; int v25; int v26; int v27; int v28; int v29; int v30;\
+int v31; int v32; int v33; int v34; int v35; int v36; int v37; int v38;\
+int v39; int v40; int v41; int v42; int v43; int v44; int v45; int v46;\
+int v47; int v48; int v49; int v50; int v51; int v52; int v53; int v54;\
+int v55; int v56; int v57; int v58; int v59; int v60; int v61; int v62;\
+int v63" >> synthetic_events
+ # echo 'hist:keys=pid:ts0=common_timestamp.usecs if comm=="bash"' >> \
+events/sched/sched_waking/trigger
+ # echo "hist:keys=next_pid:onmatch(sched.sched_waking).my_synth_event(\
+pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,\
+pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,\
+pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,pid,\
+pid,pid,pid,pid,pid,pid,pid,pid,pid)" >> events/sched/sched_switch/trigger
 
-Now the conflict is that we have pmbus directory under hwmon subsystem, 
-if pmbus spec implementation would have been separate like i2c-smbus 
-then we can implement chip driver in regulator subsystem which access pmbus.
+[2]
+BUG: unable to handle page fault for address: ffff91c900000000
+PGD 61001067 P4D 61001067 PUD 0
+Oops: 0000 [#1] PREEMPT SMP NOPTI
+CPU: 2 PID: 322 Comm: bash Tainted: G        W          6.1.0-rc8+ #229
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+rel-1.15.0-0-g2dd4b9b3f840-prebuilt.qemu.org 04/01/2014
+RIP: 0010:strcmp+0xc/0x30
+Code: 75 f7 31 d2 44 0f b6 04 16 44 88 04 11 48 83 c2 01 45 84 c0 75 ee
+c3 cc cc cc cc 0f 1f 00 31 c0 eb 08 48 83 c0 01 84 d2 74 13 <0f> b6 14
+07 3a 14 06 74 ef 19 c0 83 c8 01 c3 cc cc cc cc 31 c3
+RSP: 0018:ffff9b3b00f53c48 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffffffffba958a68 RCX: 0000000000000000
+RDX: 0000000000000010 RSI: ffff91c943d33a90 RDI: ffff91c900000000
+RBP: ffff91c900000000 R08: 00000018d604b529 R09: 0000000000000000
+R10: ffff91c9483eddb1 R11: ffff91ca483eddab R12: ffff91c946171580
+R13: ffff91c9479f0538 R14: ffff91c9457c2848 R15: ffff91c9479f0538
+FS:  00007f1d1cfbe740(0000) GS:ffff91c9bdc80000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff91c900000000 CR3: 0000000006316000 CR4: 00000000000006e0
+Call Trace:
+ <TASK>
+ __find_event_file+0x55/0x90
+ action_create+0x76c/0x1060
+ event_hist_trigger_parse+0x146d/0x2060
+ ? event_trigger_write+0x31/0xd0
+ trigger_process_regex+0xbb/0x110
+ event_trigger_write+0x6b/0xd0
+ vfs_write+0xc8/0x3e0
+ ? alloc_fd+0xc0/0x160
+ ? preempt_count_add+0x4d/0xa0
+ ? preempt_count_add+0x70/0xa0
+ ksys_write+0x5f/0xe0
+ do_syscall_64+0x3b/0x90
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f1d1d0cf077
+Code: 64 89 02 48 c7 c0 ff ff ff ff eb bb 0f 1f 80 00 00 00 00 f3 0f 1e
+fa 64 8b 04 25 18 00 00 00 85 c0 75 10 b8 01 00 00 00 0f 05 <48> 3d 00
+f0 ff ff 77 51 c3 48 83 ec 28 48 89 54 24 18 48 89 74
+RSP: 002b:00007ffcebb0e568 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000143 RCX: 00007f1d1d0cf077
+RDX: 0000000000000143 RSI: 00005639265aa7e0 RDI: 0000000000000001
+RBP: 00005639265aa7e0 R08: 000000000000000a R09: 0000000000000142
+R10: 000056392639c017 R11: 0000000000000246 R12: 0000000000000143
+R13: 00007f1d1d1ae6a0 R14: 00007f1d1d1aa4a0 R15: 00007f1d1d1a98a0
+ </TASK>
+Modules linked in:
+CR2: ffff91c900000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:strcmp+0xc/0x30
+Code: 75 f7 31 d2 44 0f b6 04 16 44 88 04 11 48 83 c2 01 45 84 c0 75 ee
+c3 cc cc cc cc 0f 1f 00 31 c0 eb 08 48 83 c0 01 84 d2 74 13 <0f> b6 14
+07 3a 14 06 74 ef 19 c0 83 c8 01 c3 cc cc cc cc 31 c3
+RSP: 0018:ffff9b3b00f53c48 EFLAGS: 00000246
+RAX: 0000000000000000 RBX: ffffffffba958a68 RCX: 0000000000000000
+RDX: 0000000000000010 RSI: ffff91c943d33a90 RDI: ffff91c900000000
+RBP: ffff91c900000000 R08: 00000018d604b529 R09: 0000000000000000
+R10: ffff91c9483eddb1 R11: ffff91ca483eddab R12: ffff91c946171580
+R13: ffff91c9479f0538 R14: ffff91c9457c2848 R15: ffff91c9479f0538
+FS:  00007f1d1cfbe740(0000) GS:ffff91c9bdc80000(0000)
+knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff91c900000000 CR3: 0000000006316000 CR4: 00000000000006e0
 
-pmbus_core does supports regulator framework PMBUS_REGUALTOR and I 
-believe it is valid MPQ7932 driver implantation under pmbus directory.
+Cc: stable@vger.kernel.org
+Fixes: d380dcde9a07 ("tracing: Fix now invalid var_ref_vals assumption in trace action")
+Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
+---
+ kernel/trace/trace_events_hist.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-Kindly suggest to remove pmbus dependency on hwmon and proceed further.
+diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
+index 1c82478e8dff..0a11671af952 100644
+--- a/kernel/trace/trace_events_hist.c
++++ b/kernel/trace/trace_events_hist.c
+@@ -617,7 +617,7 @@ struct action_data {
+ 	 * event param, and is passed to the synthetic event
+ 	 * invocation.
+ 	 */
+-	unsigned int		var_ref_idx[TRACING_MAP_VARS_MAX];
++	unsigned int		var_ref_idx[SYNTH_FIELDS_MAX];
+ 	struct synth_event	*synth_event;
+ 	bool			use_trace_keyword;
+ 	char			*synth_event_name;
+@@ -2173,7 +2173,9 @@ static struct hist_field *create_var_ref(struct hist_trigger_data *hist_data,
+ 			return ref_field;
+ 		}
+ 	}
+-
++	/* Sanity check to avoid out-of-bound write on 'hist_data->var_refs' */
++	if (hist_data->n_var_refs >= TRACING_MAP_VARS_MAX)
++		return NULL;
+ 	ref_field = create_hist_field(var_field->hist_data, NULL, flags, NULL);
+ 	if (ref_field) {
+ 		if (init_var_ref(ref_field, var_field, system, event_name)) {
+@@ -3922,6 +3924,10 @@ static int trace_action_create(struct hist_trigger_data *hist_data,
+ 
+ 	lockdep_assert_held(&event_mutex);
+ 
++	/* Sanity check to avoid out-of-bound write on 'data->var_ref_idx' */
++	if (data->n_params > SYNTH_FIELDS_MAX)
++		return -EINVAL;
++
+ 	if (data->use_trace_keyword)
+ 		synth_event_name = data->synth_event_name;
+ 	else
+-- 
+2.25.1
 
-
->> +    help
->> +      If you say yes here you get six integrated buck converter 
->> regulator
->> +      with hardware monitoring functionality support for power 
->> management
->> +      IC MPS MPQ7932.
-> 
-> That description is more appropriate for the second configuration option.
-> Primarily one gets hardware monitoring support for the chip.
-> 
->> +
->> +      This driver can also be built as a module. If so, the module will
->> +      be called mpq7932.
->> +
->>   config SENSORS_PIM4328
->>       tristate "Flex PIM4328 and compatibles"
->>       help
->> diff --git a/drivers/hwmon/pmbus/Makefile b/drivers/hwmon/pmbus/Makefile
->> index 0002dbe22d52..28a534629cc3 100644
->> --- a/drivers/hwmon/pmbus/Makefile
->> +++ b/drivers/hwmon/pmbus/Makefile
->> @@ -34,6 +34,7 @@ obj-$(CONFIG_SENSORS_MAX8688)    += max8688.o
->>   obj-$(CONFIG_SENSORS_MP2888)    += mp2888.o
->>   obj-$(CONFIG_SENSORS_MP2975)    += mp2975.o
->>   obj-$(CONFIG_SENSORS_MP5023)    += mp5023.o
->> +obj-$(CONFIG_SENSORS_MPQ7932_REGULATOR) += mpq7932.o
->>   obj-$(CONFIG_SENSORS_PLI1209BC)    += pli1209bc.o
->>   obj-$(CONFIG_SENSORS_PM6764TR)    += pm6764tr.o
->>   obj-$(CONFIG_SENSORS_PXE1610)    += pxe1610.o
->> diff --git a/drivers/hwmon/pmbus/mpq7932.c 
->> b/drivers/hwmon/pmbus/mpq7932.c
->> new file mode 100644
->> index 000000000000..3747d7862afd
->> --- /dev/null
->> +++ b/drivers/hwmon/pmbus/mpq7932.c
->> @@ -0,0 +1,144 @@
->> +/*
->> + * SPDX-License-Identifier: GPL-2.0+
-> 
-> The SPDX license must be in the first line and be a C++ style comment.
-> Please run checkpatch --strict and fix what it reports (including the
-> various continuation line misalignments and unnecessary empty lines).
-> 
->> + *
->> + * mpq7932.c  - regulator driver for mps mpq7932
->> + * Copyright 2022 Monolithic Power Systems, Inc
-> 
-> This is a hwmon driver with optional regulator functionality.
-> 
->> + *
->> + * Author: Saravanan Sekar <saravanan@linumiz.com>
->> + */
->> +
->> +#include <linux/err.h>
->> +#include <linux/i2c.h>
->> +#include <linux/init.h>
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/of_device.h>
->> +#include <linux/pmbus.h>
->> +#include "pmbus.h"
->> +
->> +#define MPQ7932_BUCK_UV_MIN        206250
->> +#define MPQ7932_UV_STEP            6250
->> +#define MPQ7932_N_VOLTAGES        0xFF
->> +#define MPQ7932_NUM_PAGES        6
->> +
->> +#define MPQ7932_TON_DELAY        0x60
->> +#define MPQ7932_VOUT_STARTUP_SLEW    0xA3
->> +#define MPQ7932_VOUT_SHUTDOWN_SLEW    0xA5
->> +#define MPQ7932_VOUT_SLEW_MASK        GENMASK(1, 0)
->> +#define MPQ7932_TON_DELAY_MASK        GENMASK(4, 0)
-> 
-> Please include the appropriate include file defining GENMASK.
-> 
->> +
->> +struct mpq7932_data {
->> +    struct pmbus_driver_info info;
->> +    struct pmbus_platform_data pdata;
->> +};
->> +
->> +static struct regulator_desc mpq7932_regulators_desc[] = {
->> +    PMBUS_REGULATOR_STEP("buck", 0, MPQ7932_N_VOLTAGES,
->> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
->> +    PMBUS_REGULATOR_STEP("buck", 1, MPQ7932_N_VOLTAGES,
->> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
->> +    PMBUS_REGULATOR_STEP("buck", 2, MPQ7932_N_VOLTAGES,
->> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
->> +    PMBUS_REGULATOR_STEP("buck", 3, MPQ7932_N_VOLTAGES,
->> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
->> +    PMBUS_REGULATOR_STEP("buck", 4, MPQ7932_N_VOLTAGES,
->> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
->> +    PMBUS_REGULATOR_STEP("buck", 5, MPQ7932_N_VOLTAGES,
->> +                MPQ7932_UV_STEP, MPQ7932_BUCK_UV_MIN),
->> +};
->> +
->> +static int mpq7932_write_word_data(struct i2c_client *client, int 
->> page, int reg,
->> +                   u16 word)
->> +{
->> +
->> +    switch (reg) {
->> +    case PMBUS_VOUT_COMMAND:
-> 
-> This needs a comment explaining why it is needed.
-> 
->> +        return pmbus_write_byte_data(client, page, reg, (u8)word);
-> 
-> word should be clamped to [0, 255], not cut off.
-> 
->> +
->> +    default:
->> +        return -ENODATA;
->> +    }
->> +}
->> +
->> +static int mpq7932_read_word_data(struct i2c_client *client, int page,
->> +                  int phase, int reg)
->> +{
->> +
->> +    switch (reg) {
->> +    case PMBUS_MFR_VOUT_MIN:
->> +        return 0;
->> +
->> +    case PMBUS_MFR_VOUT_MAX:
->> +        return MPQ7932_N_VOLTAGES;
-> 
-> The above need comments. Also, MPQ7932_N_VOLTAGES is inappropriate. This 
-> is not the
-> number of voltages, it is the maximum voltage. Even if the values happen 
-> to be the
-> same, the content is different.
-> 
-> Also, with PMBUS_MFR_VOUT_MIN=0 and PMBUS_MFR_VOUT_MAX=0xff, the number 
-> of voltages
-> would actually be 256, not 255.
-> 
->> +
->> +    case PMBUS_READ_VOUT:
->> +        return pmbus_read_byte_data(client, page, PMBUS_VOUT_COMMAND);
->> +
-> Needs same comment as above.
-> 
->> +    default:
->> +        return -ENODATA;
->> +    }
->> +}
->> +
->> +static int mpq7932_probe(struct i2c_client *client)
->> +{
->> +    struct mpq7932_data *data;
->> +    struct pmbus_driver_info *info;
->> +    struct device *dev = &client->dev;
->> +    int i;
->> +
->> +    if (!i2c_check_functionality(client->adapter,
->> +                     I2C_FUNC_SMBUS_READ_WORD_DATA))
-> 
-> Unnecessary check. This code doesn't use it, and pmbus_do_probe()
-> does its own check.
-> 
->> +        return -ENODEV;
->> +
->> +    data = devm_kzalloc(&client->dev, sizeof(struct mpq7932_data),
-> 
-> Use dev.
-> 
->> +                GFP_KERNEL);
->> +    if (!data)
->> +        return -ENOMEM;
->> +
->> +    info = &data->info;
->> +    info->pages = MPQ7932_NUM_PAGES;
->> +    info->num_regulators = ARRAY_SIZE(mpq7932_regulators_desc);
->> +    info->reg_desc = mpq7932_regulators_desc;
->> +    info->format[PSC_VOLTAGE_OUT] = direct;
->> +    info->m[PSC_VOLTAGE_OUT] = 160;
->> +    info->b[PSC_VOLTAGE_OUT] = -33;
->> +    for (i = 0; i < info->pages; i++) {
->> +        info->func[i] = PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT
->> +                | PMBUS_HAVE_STATUS_TEMP;
-> 
-> I think I already asked: Is this really all telemetry supported by the 
-> chip ?
-> I keep asking because that would be highly unusual.
-> 
-
-Yes, only the above.
-
-Thanks,
-Saravanan
-
->> +    }
->> +
->> +    info->read_word_data = mpq7932_read_word_data;
->> +    info->write_word_data = mpq7932_write_word_data;
->> +
->> +    data->pdata.flags = PMBUS_NO_CAPABILITY;
->> +    dev->platform_data = &data->pdata;
->> +
->> +    return pmbus_do_probe(client, info);
->> +}
->> +
->> +static const struct of_device_id mpq7932_of_match[] = {
->> +    { .compatible = "mps,mpq7932"},
->> +    {},
->> +};
->> +MODULE_DEVICE_TABLE(of, mpq7932_of_match);
->> +
->> +static const struct i2c_device_id mpq7932_id[] = {
->> +    { "mpq7932", },
->> +    { },
->> +};
->> +MODULE_DEVICE_TABLE(i2c, mpq7932_id);
->> +
->> +static struct i2c_driver mpq7932_regulator_driver = {
->> +    .driver = {
->> +        .name = "mpq7932",
->> +        .of_match_table = mpq7932_of_match,
->> +    },
->> +    .probe_new = mpq7932_probe,
->> +    .id_table = mpq7932_id,
->> +};
->> +module_i2c_driver(mpq7932_regulator_driver);
->> +
->> +MODULE_AUTHOR("Saravanan Sekar <saravanan@linumiz.com>");
->> +MODULE_DESCRIPTION("MPQ7932 PMIC regulator driver");
->> +MODULE_LICENSE("GPL");
->> +MODULE_IMPORT_NS(PMBUS);
-> 
