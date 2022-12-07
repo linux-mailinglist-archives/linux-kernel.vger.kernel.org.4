@@ -2,200 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA27645AD4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:24:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF450645AE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:27:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbiLGNYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:24:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S229999AbiLGN05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:26:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiLGNYS (ORCPT
+        with ESMTP id S229709AbiLGN0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:24:18 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2067.outbound.protection.outlook.com [40.107.6.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A60275D5;
-        Wed,  7 Dec 2022 05:24:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kWN1Kx2UUuC9Mv6Z2XUx6ACaUHVUmXxjwThwz+HuuXyYeLOl8VTZ+8bsQHnbVXlGuSAlEwTDfMjerf9B9CB95bT8Y3QHCdcoPpX14v8ZkQL8jQD6IykCjdE0n69RmQRv6kJDZAhY1BJ5ZegCD62L7LtcJsh19Sectb0az8GOeYkrA9xvCRTzY8ZNVTImz/P5sYc5uTXsU965/YWvRdLlUgLRk2WhGgL8SOO/2OhA+OGL9iBo5hhlmywUMxHfBozf8Sr7QmGPZkTDw4bi1RRo2X60d1fcJJt0EToTRmCBjA8ZKS4TOW1VGwxLA7GG+X53GlQTODPHgxYTcwGyAFGQJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9CY5tFP91/Q3CSUI6if6M1GwyXKLj9bscrMh418YQ1Y=;
- b=E4vElPwBqlUmTX/u7x1rVuJShMZi8uMxB2E5r/Seg1ugXOr/4WdjNoLg1dI/PHHQvYvFkbLeo5EOxPIgMlvK5eOEcmWtZGNL96nfI0KGvutcWv2zQSyyL0nGZbEcAuOB2txTpiat2KZI3KmYa0KP5bH7b3Yp6m/KWOSY75+qK3ka0eaQG/dl031VQoBhmvkFxZe5I3hvnl8MO61tYdnrZ7hnI9fPBIKz8Kx0S9pyWjjKx2R0cn/gUNgOt0iFb3ZO56+1MBf04tfG4jTlQ4+yXNIo2hV95IKeFrYGDdKPUfcDQarxQvtpjgg2g4MqqzBX7YCLccUoTzlNYjGXrUkBbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9CY5tFP91/Q3CSUI6if6M1GwyXKLj9bscrMh418YQ1Y=;
- b=B4ZhLHsxB8+M9h/kEdjvK/Nqz/v/7Au8lDlQFaYcagfrWaQsWY7qzNJyKVXTecgoRJpJw/2T2N/poSg0tGSoX80kBFwW2XSO1zwCxwNM3OUl0RIs7z3smrjxR5IAIXOFZ7VHyOGQcs9dwjedPEarsKYpwkj1TJJyQG6gk9lsevw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by AM8PR04MB8002.eurprd04.prod.outlook.com (2603:10a6:20b:247::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Wed, 7 Dec
- 2022 13:24:11 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::8966:68e3:9b91:a6e9]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::8966:68e3:9b91:a6e9%8]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 13:24:11 +0000
-From:   "Radu Nicolae Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-To:     olteanv@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        davem@davemloft.net, gregkh@linuxfoundation.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Radu Nicolae Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>,
-        stable@vger.kernel.org
-Subject: [PATCH RESEND v2] net: dsa: sja1105: avoid out of bounds access in sja1105_init_l2_policing()
-Date:   Wed,  7 Dec 2022 15:23:47 +0200
-Message-Id: <20221207132347.38698-1-radu-nicolae.pirea@oss.nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM0PR02CA0187.eurprd02.prod.outlook.com
- (2603:10a6:20b:28e::24) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Wed, 7 Dec 2022 08:26:34 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6AC5B5AC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:25:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670419508;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kCotRP+p4aRtgAlGIY3Q4W2JamDUfpxY8dqSo3+FJ5c=;
+        b=c0YlaGNetY/vYJRv+O3iGy95QdYb201rxNPA7F0b8UxHiFnnV0A1jd4iSo/vtsG37FX1Wf
+        tg4AwyYdJlwgDLq132uv90+PB8Q4NrLFhGEGVnlgelrfVQl5jOZM86HigiiYP1H22Q6IBa
+        X9oOnuipIt8T5+umPj6B0lTfgKOIC3E=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-368-c5BHGxM4OQerpoAUTfDU_g-1; Wed, 07 Dec 2022 08:25:07 -0500
+X-MC-Unique: c5BHGxM4OQerpoAUTfDU_g-1
+Received: by mail-io1-f71.google.com with SMTP id n23-20020a056602341700b00689fc6dbfd6so13371600ioz.8
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:25:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kCotRP+p4aRtgAlGIY3Q4W2JamDUfpxY8dqSo3+FJ5c=;
+        b=ZgCouThIW9/CU7niTGavYpCfrjChMl2c3qOBZhYAF2NJ0c79BFK9RQ7uxmBTRhoq6I
+         4SUeAx7rKtQ5iFYVEE9nMbY8Akx5iIOuxp3DoBn9dg+A6ZBJXDowhSoUSie+6jFtrJFU
+         OBETscdzvJK++mhV1F9/6GlG60fWXe8BpCatZn5fRXJ8E//1bZZ0gnH60CIrFTVkwrkm
+         XjB6lbn9jizMwATi3gBLSfmnUuUs22OZC5PIpozWWJ85Sxft02C0XuTSaTTb2ed3tykh
+         Hiv5eUGzTin7dvdNBwH2oZJZ15t+CCqwqJ8zcqJLD7N/2MZAl2uJS31v67hhsjI34wzD
+         uV8A==
+X-Gm-Message-State: ANoB5pn3tC5n+Gfz0gYanRFQPa2qNiVhosjr3sMijZaHUdwZpUxcdPLX
+        bzpe11jjMgNqMKIz1eOwz0DOAsUXA+2m+D4rPCTs2TII/cC6tWqeGgjxlbxuOubmo/FmiwsKXJX
+        k+71cgNwjmaN/OLaFkkqbaOM6e72OHcBv5rY2u1cT
+X-Received: by 2002:a02:c737:0:b0:375:1c5f:3127 with SMTP id h23-20020a02c737000000b003751c5f3127mr33947918jao.251.1670419506665;
+        Wed, 07 Dec 2022 05:25:06 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5ObJyw9BrClBrO0ARlsu1cIu7j2QCokaz8TTlg2NRS2PmqhY/MqLqpdexdcJdrXNSR5fW93Nu4WbKyKUR7d8w=
+X-Received: by 2002:a02:c737:0:b0:375:1c5f:3127 with SMTP id
+ h23-20020a02c737000000b003751c5f3127mr33947906jao.251.1670419506424; Wed, 07
+ Dec 2022 05:25:06 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AM8PR04MB8002:EE_
-X-MS-Office365-Filtering-Correlation-Id: d8334862-627d-448d-a992-08dad8565391
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ACoLX8H1Jdn9iMBH1R8x4oO1HHY69Y2/bHiaThsL+ctGhc0RyOsub/UpCj7leBMu8vmRHNtOgTRhcAJ1/li5h4djt70X8UAnOSdNbiC/2ujbemjHgV6a2dwKGZ1tWyM/J1QbuYaSp1ezY0DIvHy4xuqtb2sQhGqK7sMFuhWGqmHPk5tVGzvd7FRit8kgJZYrzR5qrXaCwcB4s3DIQTrpffNa8DbPxhNeXdJ0UeW4BQjV/lckD82r+LAnJxB8LiIrftJmYp9ZvH7i0ZW/0qZxh01cZgtDI3NlOQdbNbH5g93HBDJbXn7EG5CN1Var67uCbnFIZUycfm+zyIT0li4lQjtV8dwsH/Xvs/4gRU3YByKqVxHmJtVTxP9ugWDGFNk49tlgtOWzXRLTTfYIw+ci0ty8cycffVV2dQKgfouF5tFNkwTQTLk9r556JiwndX8MBJlTXoy8HK/iqpseTbUOP4QroZdX5MyFYwqAlXndXRREjRkywMhGtQk0oycnzqO3h5HvzarpfoJ1aHLupn0Is7LhomUVWQfjVbHj74eX8X2VelZ9r7eEWH+Vrh+dHQMTwUP336onnhjsqstuuETlCU9dgARxJoC/5VXDoBT9J5h2lYtGLbdJIn+etxEufUjFwNpmfW0sG9XvGVrNlSfvhed80LZtj+FlI7ARTyaAa9zob0q3N1wK9rkiFlIwq4QW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(396003)(39860400002)(346002)(376002)(136003)(451199015)(86362001)(4326008)(2906002)(8936002)(38100700002)(83380400001)(5660300002)(66556008)(2616005)(1076003)(316002)(66946007)(186003)(66476007)(8676002)(38350700002)(6486002)(478600001)(41300700001)(6666004)(6506007)(26005)(52116002)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?KxXzJQlOBpWlcqYwprv7gl9TXj7m4KEWdiaMqu6V+wc/N6eINabj8fhhLqtr?=
- =?us-ascii?Q?O+sIReDGXi4HRrqqMR0/boXuT4oERTZgNA9p7aR4NrCdhxNH+HK2vKv0/zt3?=
- =?us-ascii?Q?qzVjDDHmA1WIv+O5fppqYWmYPs1Tpbn3QTKiXUTIa+PC+SakqjRRNd/janKE?=
- =?us-ascii?Q?crIQ53OsYpCZFIAMMkJEalLNzWIjLSiPRLa/ibkYVgaTr+mbflI2pa81z0yp?=
- =?us-ascii?Q?JqJM6ePbYR8RJyBkcGxAp+fDZciimMUlpqlQPa/bueh4AMp5o2J8QYMFBQcX?=
- =?us-ascii?Q?04GaDCikzPLtsv+JjMKbijAb6csm8mY3rgHQ5DNpJJnX2ur39X/XJpYzhZbE?=
- =?us-ascii?Q?RHzNRjDh5BshlAlPqvxRP/XimvwPvqw/m/jGUtVenAuyCjGmxS3ETjVgDu0q?=
- =?us-ascii?Q?0nNX85kio79H6ftf3KcLrFrqMzaDFHCK2N7WxYJJAkHwdVpwBP4Y2TkNPSoX?=
- =?us-ascii?Q?CoZNCjrqP68Y/FbLCyLBTO6NaLOpZy+InmyRUnSfM859R9+YQwt43Y0f+jZ5?=
- =?us-ascii?Q?dBE6kFbLNh63LTU08fqMCt32EIFF7ansyuycWUmJoEreLGNwMcyeC8yZyw1B?=
- =?us-ascii?Q?Tl7jYl1JCKZ0Y+txK82D3pqjnRYIwM4pjMSAaTy4/g6aikvz8PxITzCNGYNW?=
- =?us-ascii?Q?watFCs491W78WJL89YAMEWrkxI57HMrvSu0J1sv236Z0E5oB5yWOvwct6USw?=
- =?us-ascii?Q?Z9Wg9TzanUNSa/jF5ycnvCsM8cQlw+t2pzH4vFlOEUteRUuv+xnGY1u8zcef?=
- =?us-ascii?Q?bC10P1pYo+jZBcTb5OdGcrX6/0h+bGKKofmECfAO2gOPerBGu5+VuAPp9FA3?=
- =?us-ascii?Q?/YAbYq6ReAfvdo4QYbpsNA/q6+8Iug8kcTazZQyhwmVOr0QOWRRrHIpPiQRs?=
- =?us-ascii?Q?+8WCKEncIpk3GYO3k7s0H3/4DKUOnVrXcCau15WngsUZtcrIhUfktyUF7N3k?=
- =?us-ascii?Q?KLKyXMtQHd+sEUpQPqNKyaDuQUMj3APuBdqISJZr7sBBlGw3DTGk8sm3f+B1?=
- =?us-ascii?Q?7l+TzDfuCPld0lnJa8EzyQhdr9NecMsaB1ReUEemtMFpcj2z0eNWBTVKG2II?=
- =?us-ascii?Q?yBaUAYophS/OleNMfQv6pKSHGv38gxgMgllpLXCxodrllMPs4tFKFeNy+XZs?=
- =?us-ascii?Q?qaaFkh0b5NLmmi+4TAVOixx+zyrbZP+dMNmJKj1X0TdD0BT6cDUBaVZmTCpz?=
- =?us-ascii?Q?QkBSU9FmqcGAu7f8xzWNa8jPWr0BzuT9xb4IU11ncxNRNmhh1saF6XJF1pmh?=
- =?us-ascii?Q?8wio2NEx+/grKRDVPgpTk/fsLOH2Q7RAIsmnicTGEFROh14Z4VdpL+G5r4/x?=
- =?us-ascii?Q?Tv9esJIGT39ieWHlVi1KQ//ePj4AY0xqGP41K9EBLRVM4QJCzfzlujsGWT0H?=
- =?us-ascii?Q?wGrqufZQgO37Yl5SpfsOy78rODBVk/TiKnJWWE1r1KytJjWhKhy5J2l2sh/b?=
- =?us-ascii?Q?jKi06myA+S5pQ76Jrr+DSVRGmlSScz3wl52w7O1Z9KlyDFxzSwJwk/jcUf5p?=
- =?us-ascii?Q?oy5LRhvDtzM6hxY2kEkMZQh9Ff5kUdy5DiAxm4+DbObvUmeYPjSNIDwIY+hV?=
- =?us-ascii?Q?pam2FxWsFAWMgXI4KhVPMfGfuJ62uoJx4H05Bf1OwuUFVMsibLu1Ugjg7k90?=
- =?us-ascii?Q?SA=3D=3D?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d8334862-627d-448d-a992-08dad8565391
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 13:24:11.3919
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +TwfCpRl/hskVIj723LvCTwfK2h9uFSIiSQssFA14rsTyvJOUb3K6y0fhrf6k3qYSe5BYvjLK5HFz4tjRnDdE2vgAimAXLo4AnT57n2hd6c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8002
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
+ <2283816.ElGaqSPkdT@kreacher> <e7eb0e0c9aea30c0e3205b2f3d96b74a52283b40.camel@hadess.net>
+ <CAJZ5v0ibpzoBLXKiqzciYv1Htks0=4+4_XGLvpH7MCyFoYJiDg@mail.gmail.com>
+ <CAO-hwJL7n7HFk4MTKvLcvBPSLDwm9pHqLaZvmuwvSNDVWUF76g@mail.gmail.com>
+ <nycvar.YFH.7.76.2212071117420.6045@cbobk.fhfr.pm> <f0ccee0d2f85099c146ee682b25d30c832155fa3.camel@hadess.net>
+ <CAJZ5v0iwEKtLVzzJw+XG5-w=qr86ec0yKpAWCU-KLwYmFnt5Zg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iwEKtLVzzJw+XG5-w=qr86ec0yKpAWCU-KLwYmFnt5Zg@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 7 Dec 2022 14:24:55 +0100
+Message-ID: <CAO-hwJLXPKwvFPHFq=y12p41Sx2Ab69sAY9Co7i0=iL1HzdXOg@mail.gmail.com>
+Subject: Re: [PATCH v1 2/2] HID: logitech-hidpp: Add Bluetooth Mouse
+ M336/M337/M535 to unhandled_hidpp_devices[]
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Bastien Nocera <hadess@hadess.net>, Jiri Kosina <jikos@kernel.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SJA1105 family has 45 L2 policing table entries
-(SJA1105_MAX_L2_POLICING_COUNT) and SJA1110 has 110
-(SJA1110_MAX_L2_POLICING_COUNT). Keeping the table structure but
-accounting for the difference in port count (5 in SJA1105 vs 10 in
-SJA1110) does not fully explain the difference. Rather, the SJA1110 also
-has L2 ingress policers for multicast traffic. If a packet is classified
-as multicast, it will be processed by the policer index 99 + SRCPORT.
+On Wed, Dec 7, 2022 at 2:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Dec 7, 2022 at 1:43 PM Bastien Nocera <hadess@hadess.net> wrote:
+> >
+> > On Wed, 2022-12-07 at 11:19 +0100, Jiri Kosina wrote:
+> > > On Wed, 7 Dec 2022, Benjamin Tissoires wrote:
+> > >
+> > > > Agree, but OTOH, Rafael, your mouse is not brand new AFAICT, so I
+> > > > am
+> > > > worried that you won't be the only one complaining we just killed
+> > > > their
+> > > > mouse. So I think the even wiser solution would be to delay (and so
+> > > > revert in 6.1 or 6.2) the 2 patches that enable hid++ on all
+> > > > logitech
+> > > > mice (8544c812e43ab7bdf40458411b83987b8cba924d and
+> > > > 532223c8ac57605a10e46dc0ab23dcf01c9acb43).
+> > >
+> > > If we were not at -rc8 timeframe, I'd be in favor to coming up with
+> > > proper
+> > > fix still for 6.1. But as things currently are, let's just revert
+> > > those
+> > > and reschedule them with proper fix for 6.2+.
+> >
+> > Has anyone seen any other reports?
 
-The sja1105_init_l2_policing() function initializes all L2 policers such
-that they don't interfere with normal packet reception by default. To have
-a common code between SJA1105 and SJA1110, the index of the multicast
-policer for the port is calculated because it's an index that is out of
-bounds for SJA1105 but in bounds for SJA1110, and a bounds check is
-performed.
+It's not so much about how many reports, but *what* the end result is.
+If the device were working-ish, that would have been OK. But here the
+device is completely ignored by the kernel which basically enters the
+"no regression rule".
 
-The code fails to do the proper thing when determining what to do with the
-multicast policer of port 0 on SJA1105 (ds->num_ports = 5). The "mcast"
-index will be equal to 45, which is also equal to
-table->ops->max_entry_count (SJA1105_MAX_L2_POLICING_COUNT). So it passes
-through the check. But at the same time, SJA1105 doesn't have multicast
-policers. So the code programs the SHARINDX field of an out-of-bounds
-element in the L2 Policing table of the static config.
+> >
+> > Because, honestly, seeing work that adds support for dozens of devices
+> > getting tossed out at the last minute based on a single report with no
+> > opportunity to fix the problem is really frustrating.
 
-The comparison between index 45 and 45 entries should have determined the
-code to not access this policer index on SJA1105, since its memory wasn't
-even allocated.
+I know, and I feel your pain as I was about to have the same last week
+for HID-BPF. But as much as I hate dropping patches from the queue,
+not being able to have at least a week to fix it properly ends up with
+"fixes" that are broken and that might break other devices. Talking
+from experience as my first fix from last week was exactly in that
+category.
 
-With enough bad luck, the out-of-bounds write could even overwrite other
-valid kernel data, but in this case, the issue was detected using KASAN.
+>
+> Well, that's why I sent patches to address this particular case
+> without possibly breaking anything else.
 
-Kernel log:
+My concern is more that we now have a data point were the series broke
+a device (pretty badly) and if (when) this happens shortly after 6.1
+is getting released, we would have to say, oh yes, we know, so we need
+to patch the kernel because our driver is buggy, and we knew it. This
+is not acceptable, and I am sure that if Linus reads that thread he
+would revert the 2 patches or maybe more.
 
-sja1105 spi5.0: Probed switch chip: SJA1105Q
-==================================================================
-BUG: KASAN: slab-out-of-bounds in sja1105_setup+0x1cbc/0x2340
-Write of size 8 at addr ffffff880bd57708 by task kworker/u8:0/8
-...
-Workqueue: events_unbound deferred_probe_work_func
-Call trace:
-...
-sja1105_setup+0x1cbc/0x2340
-dsa_register_switch+0x1284/0x18d0
-sja1105_probe+0x748/0x840
-...
-Allocated by task 8:
-...
-sja1105_setup+0x1bcc/0x2340
-dsa_register_switch+0x1284/0x18d0
-sja1105_probe+0x748/0x840
-...
+>
+> Improvements can be made on top of them and the blocklist entry added
+> by patch [2/2] need not stay there forever, FWIW.
+>
 
-Fixes: 38fbe91f2287 ("net: dsa: sja1105: configure the multicast policers, if present")
-CC: stable@vger.kernel.org # 5.15+
-Signed-off-by: Radu Nicolae Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
----
- drivers/net/dsa/sja1105/sja1105_main.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
- 
-Hi,
+I need to check with Jiri, but there is a chance we can re-introduce
+this in 6.2. This way we will have slightly more time to fix it in a
+proper way.
 
-This is the v2 of "net: dsa: sja1105: fix slab-out-of-bounds in
-sja1105_setup" and it is a resend because the first time it was send only
-to stable stable@vger.kernel.org.
-
-Cheers.
-Radu P.
-
-diff --git a/drivers/net/dsa/sja1105/sja1105_main.c b/drivers/net/dsa/sja1105/sja1105_main.c
-index 412666111b0c..b70dcf32a26d 100644
---- a/drivers/net/dsa/sja1105/sja1105_main.c
-+++ b/drivers/net/dsa/sja1105/sja1105_main.c
-@@ -1038,7 +1038,7 @@ static int sja1105_init_l2_policing(struct sja1105_private *priv)
- 
- 		policing[bcast].sharindx = port;
- 		/* Only SJA1110 has multicast policers */
--		if (mcast <= table->ops->max_entry_count)
-+		if (mcast < table->ops->max_entry_count)
- 			policing[mcast].sharindx = port;
- 	}
- 
--- 
-2.34.1
+Cheers,
+Benjamin
 
