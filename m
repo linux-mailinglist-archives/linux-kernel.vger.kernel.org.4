@@ -2,155 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E1E6462A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:46:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF2366462B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:48:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiLGUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:46:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S230045AbiLGUsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:48:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLGUqp (ORCPT
+        with ESMTP id S229974AbiLGUrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:46:45 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE2258BF4;
-        Wed,  7 Dec 2022 12:46:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670446004; x=1701982004;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=eTDbxYWR4ZutHid/GJ7kKhEcbnpjoulOObTQVkZ7K50=;
-  b=LyD3XsVRBaVBqRqnRlRBhDPg16G3t1089KIPF3faMTwO7VuiJG8QmDBm
-   L6ovRkdGFeLNGOm/A315pJAYVff+26IzH1upPF8AwPsXQzju3Op9IO6WX
-   kbGETnzJgmf1uPXQQTod2UeQ+aNGKuoff2eHpBbyDTt34KA+QUELg8od3
-   KQaAdfwHLAR5X8nkK17plqChQtVZTTAQLvRcURy/qqvSK8/UBcAj4MZYh
-   AcORv72qzTFgTWvgviKukr9XKHZi2s+xe2QwjGT+yD32JUU7hzXKSP3fj
-   /AQI1IkmkF/p30b4W+TxwRWh3KUHOGdn56AE/sLykbrXBGSoBBpv2g5qr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="297355962"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="297355962"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 12:46:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="975597739"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="975597739"
-Received: from fbackhou-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.36.192])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 12:46:40 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>, ojeda@kernel.org,
-        corbet@lwn.net, akiyks@gmail.com, rdunlap@infradead.org
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konstantin@linuxfoundation.org,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: Re: [PATCH v4 1/2] docs: Move rustdoc output, cross-reference it
-In-Reply-To: <20221207173053.1463800-2-carlos.bilbao@amd.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221207173053.1463800-1-carlos.bilbao@amd.com>
- <20221207173053.1463800-2-carlos.bilbao@amd.com>
-Date:   Wed, 07 Dec 2022 22:46:37 +0200
-Message-ID: <87cz8v0wnm.fsf@intel.com>
+        Wed, 7 Dec 2022 15:47:43 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E470A2AEC
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 12:47:35 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id t2-20020a6b6402000000b006dea34ad528so14219007iog.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 12:47:35 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfNaKa2Q6Dxio2+kzEH8IXgw2KHdb6DNTDuqymdug6o=;
+        b=i9VVB1+MecRXJTYxXB9aZBt+HCe+oHR7kzJpzRoe2n3XBk3ygR0HivsZ44nDgOsMfj
+         1LHYb2HisrI1ybc2BXNZ4Z5ye4SI5MYoPssJ2MQfL/Fwvu5DAjbHiYKwqRNdN3Zck28m
+         D0cSYtT/nvcc6j7Z1EcFeF8bE8w3bJK7e8ZbiZzk2MD8jdwnTmoA96Ac0N+sY+/6wgId
+         9w+mKev/2F6r4W7NyrYDxooKAA1KM/8mCyX4EWFxN1SDZ13XATzpnSmcrcRegAwTSa/k
+         KuJNyA6jCJUqLQYiwfio+fnYxvZNZubfP78rdLTdceULhZ/st3vuMikgtynVHVHXwhP/
+         rgow==
+X-Gm-Message-State: ANoB5pmK916OKw1LxyYotgprwRvtWYIX1qstCQRk97LdT06whxXWuwOe
+        qeO5rGlBT8Y3V3dyA1XojEL41wRltNOEDwfxlSWUlzK8MP2K
+X-Google-Smtp-Source: AA0mqf7ZuM64318il2XMLMCR7zdirTdZRcd8l+QJuEAAS1OwFrckjmz7LV2aiUsEi5LsL4Gif90bVO//lpsRz/W66+SGvvq8m4CV
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:241c:0:b0:38a:5b87:24e2 with SMTP id
+ f28-20020a02241c000000b0038a5b8724e2mr4026058jaa.159.1670446054920; Wed, 07
+ Dec 2022 12:47:34 -0800 (PST)
+Date:   Wed, 07 Dec 2022 12:47:34 -0800
+In-Reply-To: <000000000000decafe05ef372b92@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b85cdf05ef430758@google.com>
+Subject: Re: [syzbot] possible deadlock in ovl_fallocate
+From:   syzbot <syzbot+38a94e1872470e3450a6@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
+        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 07 Dec 2022, Carlos Bilbao <carlos.bilbao@amd.com> wrote:
-> Generate rustdoc documentation with the rest of subsystem's documentation
-> in Documentation/output. Add a cross reference to the generated rustdoc in
-> Documentation/rust/index.rst if Sphinx target rustdoc is set.
->
-> Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> ---
->  Documentation/rust/index.rst |  8 ++++++++
->  rust/Makefile                | 15 +++++++++------
->  2 files changed, 17 insertions(+), 6 deletions(-)
->
-> diff --git a/Documentation/rust/index.rst b/Documentation/rust/index.rst
-> index 4ae8c66b94fa..4fc97c1eb1d1 100644
-> --- a/Documentation/rust/index.rst
-> +++ b/Documentation/rust/index.rst
-> @@ -6,6 +6,14 @@ Rust
->  Documentation related to Rust within the kernel. To start using Rust
->  in the kernel, please read the quick-start.rst guide.
->  
-> +.. only:: rustdoc
-> +
-> +	You can also browse `rustdoc documentation <rustdoc/kernel/index.html>`_.
-> +
-> +.. only:: not rustdoc
-> +
-> +	This documentation does not include rustdoc generated information.
-> +
+syzbot has found a reproducer for the following issue on:
 
-FWIW, this and the -t rustdoc part in patch 2/2 look good to me.
+HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1044bbad880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=38a94e1872470e3450a6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15236fe3880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178313f3880000
 
-BR,
-Jani.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+38a94e1872470e3450a6@syzkaller.appspotmail.com
 
->  .. toctree::
->      :maxdepth: 1
->  
-> diff --git a/rust/Makefile b/rust/Makefile
-> index 7700d3853404..080c07048065 100644
-> --- a/rust/Makefile
-> +++ b/rust/Makefile
-> @@ -1,5 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> +# Where to place rustdoc generated documentation
-> +RUSTDOC_OUTPUT = $(objtree)/Documentation/output/rust/rustdoc
-> +
->  always-$(CONFIG_RUST) += target.json
->  no-clean-files += target.json
->  
-> @@ -58,7 +61,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
->  	OBJTREE=$(abspath $(objtree)) \
->  	$(RUSTDOC) $(if $(rustdoc_host),$(rust_common_flags),$(rust_flags)) \
->  		$(rustc_target_flags) -L$(objtree)/$(obj) \
-> -		--output $(objtree)/$(obj)/doc \
-> +		--output $(RUSTDOC_OUTPUT) \
->  		--crate-name $(subst rustdoc-,,$@) \
->  		@$(objtree)/include/generated/rustc_cfg $<
->  
-> @@ -75,15 +78,15 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
->  # and then retouch the generated files.
->  rustdoc: rustdoc-core rustdoc-macros rustdoc-compiler_builtins \
->      rustdoc-alloc rustdoc-kernel
-> -	$(Q)cp $(srctree)/Documentation/images/logo.svg $(objtree)/$(obj)/doc
-> -	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(objtree)/$(obj)/doc
-> -	$(Q)find $(objtree)/$(obj)/doc -name '*.html' -type f -print0 | xargs -0 sed -Ei \
-> +	$(Q)cp $(srctree)/Documentation/images/logo.svg $(RUSTDOC_OUTPUT)
-> +	$(Q)cp $(srctree)/Documentation/images/COPYING-logo $(RUSTDOC_OUTPUT)
-> +	$(Q)find $(RUSTDOC_OUTPUT) -name '*.html' -type f -print0 | xargs -0 sed -Ei \
->  		-e 's:rust-logo\.svg:logo.svg:g' \
->  		-e 's:rust-logo\.png:logo.svg:g' \
->  		-e 's:favicon\.svg:logo.svg:g' \
->  		-e 's:<link rel="alternate icon" type="image/png" href="[./]*favicon-(16x16|32x32)\.png">::g'
->  	$(Q)echo '.logo-container > img { object-fit: contain; }' \
-> -		>> $(objtree)/$(obj)/doc/rustdoc.css
-> +		>> $(RUSTDOC_OUTPUT)/rustdoc.css
->  
->  rustdoc-macros: private rustdoc_host = yes
->  rustdoc-macros: private rustc_target_flags = --crate-type proc-macro \
-> @@ -141,7 +144,7 @@ quiet_cmd_rustdoc_test = RUSTDOC T $<
->  		@$(objtree)/include/generated/rustc_cfg \
->  		$(rustc_target_flags) $(rustdoc_test_target_flags) \
->  		--sysroot $(objtree)/$(obj)/test/sysroot $(rustdoc_test_quiet) \
-> -		-L$(objtree)/$(obj)/test --output $(objtree)/$(obj)/doc \
-> +		-L$(objtree)/$(obj)/test --output $(RUSTDOC_OUTPUT) \
->  		--crate-name $(subst rusttest-,,$@) $<
->  
->  # We cannot use `-Zpanic-abort-tests` because some tests are dynamic,
+============================================
+WARNING: possible recursive locking detected
+6.1.0-rc8-next-20221207-syzkaller #0 Not tainted
+--------------------------------------------
+syz-executor169/5069 is trying to acquire lock:
+ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_remove_privs_unlocked fs/overlayfs/file.c:519 [inline]
+ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_fallocate+0x15c/0x270 fs/overlayfs/file.c:546
 
--- 
-Jani Nikula, Intel Open Source Graphics Center
+but task is already holding lock:
+ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_fallocate+0x9f/0x270 fs/overlayfs/file.c:535
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&ovl_i_mutex_key[depth]);
+  lock(&ovl_i_mutex_key[depth]);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+2 locks held by syz-executor169/5069:
+ #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: ksys_fallocate fs/open.c:346 [inline]
+ #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_fallocate fs/open.c:354 [inline]
+ #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_fallocate fs/open.c:352 [inline]
+ #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_fallocate+0xd3/0x140 fs/open.c:352
+ #1: ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
+ #1: ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_fallocate+0x9f/0x270 fs/overlayfs/file.c:535
+
+stack backtrace:
+CPU: 1 PID: 5069 Comm: syz-executor169 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_deadlock_bug kernel/locking/lockdep.c:2990 [inline]
+ check_deadlock kernel/locking/lockdep.c:3033 [inline]
+ validate_chain kernel/locking/lockdep.c:3818 [inline]
+ __lock_acquire.cold+0x116/0x3a7 kernel/locking/lockdep.c:5055
+ lock_acquire kernel/locking/lockdep.c:5668 [inline]
+ lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
+ down_write+0x94/0x220 kernel/locking/rwsem.c:1562
+ inode_lock include/linux/fs.h:756 [inline]
+ ovl_remove_privs_unlocked fs/overlayfs/file.c:519 [inline]
+ ovl_fallocate+0x15c/0x270 fs/overlayfs/file.c:546
+ vfs_fallocate+0x48b/0xe00 fs/open.c:323
+ ksys_fallocate fs/open.c:346 [inline]
+ __do_sys_fallocate fs/open.c:354 [inline]
+ __se_sys_fallocate fs/open.c:352 [inline]
+ __x64_sys_fallocate+0xd3/0x140 fs/open.c:352
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa3d1605c29
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffccc67e118 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa3d1605c29
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 00007fa3d15c9dd0 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000001000f4 R11: 0000000000000246 R12: 00007fa3d15c9e60
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
