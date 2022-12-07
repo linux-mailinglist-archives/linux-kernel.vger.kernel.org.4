@@ -2,130 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD708645ABC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E1FD645AD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:25:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLGNWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:22:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
+        id S230056AbiLGNZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:25:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiLGNWk (ORCPT
+        with ESMTP id S229982AbiLGNYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:22:40 -0500
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7155F65
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:22:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670419359; x=1701955359;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=MBA3RUU8atxV2pIWYj0d+jaKkWZZU9b5BLBBvfS8F40=;
-  b=IZwqiHt68X5LQeF6H4CKGLdOYLluoutSdihbkgYCW+m/z6XaAEIeErmT
-   /Jb084fZMqHofk1VoL7Ku9fi3Vy3RMNcVxoi5Ne0Cp1MiCv0Wdwz9FxG7
-   avj7nT8XOuywtEee93x2DX3AZG3VuUWvbcuukYHluSjam/GBJAQa+ombm
-   A6jTyYaijl0FmCwXrdidLiTyqTUNFOH9RIPnYQwEntIDts86TlNfh27E0
-   mtZrSllG/RFJ9TjeD6NvU1olFN+db9Ua/zLY5Tq/p6UM2Eke2rzKc7+Hw
-   mL+6MGaclMwBiyr4sCB9/lkYoLSQIYUNuewvzhMFGWy4w1QtXR+QxoMXo
-   A==;
-X-IronPort-AV: E=Sophos;i="5.96,225,1665417600"; 
-   d="scan'208";a="218095704"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 07 Dec 2022 21:22:35 +0800
-IronPort-SDR: yXczMUtKlfbLNOpC9QHY+oXT/FGHc88hAZrrIxRyQWiXcqWOSzriekzjZY1xe7Is2JvJbvYrb7
- 4LooAvBU5a5jvjFqzDkpHBVhtZSX8mwZ7doeQ4OtNrlFyG0GE9RBu5vYNG54veqKS06LvDlDf2
- Tfa4REoSJrNI0baAnKYdoFrEpo3OKOBBA0wjITda6Rl00TcTlYHmTIL3HKGGcCKPogPTAtK9pN
- YcYlOWmpVcnj1t2JV4G2+OyQO+/f05zeiEHFbEs6zbEqDFM2oBAA7JUd9FUmPhgvHKMksph3Cd
- dlI=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Dec 2022 04:35:21 -0800
-IronPort-SDR: Wg+xI+Ux+u84RXpqgNs8iTdm6P+l0cyt8Qg0mcopcUQiKV9E7Wzf5p0PaRLMa3GOEnAf2BA01O
- yXo3RfzuIEPYdN2PdF+o7CXLT8b0tRSCCTFkzekfmbJfuUfscQaUTiWVs25TgxUK3tX5pUP5NZ
- CVsd+7OiCQyMDYyK4pj2U8/RKsT8+y7jMVy96C3l+y3HMMOllb6skdlfxwQBjZKG1m78550g3p
- /oSMxFiOaS4RJ74LDs2seO1ROaK4fgxYyyGDAnbOTqkC5+ozZoP8vH6DUdcQ6d8PYQL1hFpMTv
- tYg=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Dec 2022 05:22:35 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NRyd670Bzz1RvTr
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:22:34 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1670419354; x=1673011355; bh=MBA3RUU8atxV2pIWYj0d+jaKkWZZU9b5BLB
-        BvfS8F40=; b=kucfA1Q+jycUqtYawXrLAgc95qX0hndDZ/YSlFIFBJkM0riSJXe
-        9owzJ/kjZX1maNEyjXTMQxTFR3vkm6rwz0yOBLPLH/3rCThrcHmDi9Gu1fOePlbm
-        aYPEKEIJty4lSjEwiujFikEqvYY0mvlMCLnXu5Kx7jeBdn2UUcxjlfytYdhRqcFK
-        IcqkveHcXMc/FdV4dcpOdqGBM5OFLLKnuXFcUVa1jSweJcDVVnffZrpRtqaxGCs2
-        4X0nGqI3DkN4NiBoDYk7z1mXsJPAoYzrl11Tmorj4ZlDN7i3zzDnTWNITLB+jL//
-        xVlzf/9tqsPoHnyueNV78Ap6EOYSSopH5SA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id SR7BEz7UpAEh for <linux-kernel@vger.kernel.org>;
-        Wed,  7 Dec 2022 05:22:34 -0800 (PST)
-Received: from [10.225.163.74] (unknown [10.225.163.74])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NRyd56nZJz1RvLy;
-        Wed,  7 Dec 2022 05:22:33 -0800 (PST)
-Message-ID: <4d105e81-7f99-a17a-2a84-5eb70c74cc91@opensource.wdc.com>
-Date:   Wed, 7 Dec 2022 22:22:32 +0900
+        Wed, 7 Dec 2022 08:24:16 -0500
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4A930F59
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:24:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-Id:
+        Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=svTf0BzRu73494imieY9kbrOVApVbOBehzGM3QYZS2Q=; b=j1J2WyUEaktyqGuNnpRLps13bH
+        ExVS61HMmR0Vgwnm/61RFEKAScN/atVQkrdwyCrSP41sep5/bUgYsw4KzmfBDq3KQRewy7dQAkDjG
+        9kjMKWnKNzT4DPlCv0HsxXIb1KRJzeXhn1qrLYdFqhmR1jYu8I58mAsUAvG99QfZsDd8+uYLRCDNA
+        7w3NquiXaIgebmICwMwtvqTqvG0ZP4+cyGQyvV5xJaQ7+YXZmc446t3/hAW1VUZPG51v0FmGqlaQT
+        CLSoP16siBj5msqRBA1jSQyD10uCs8T4whkmYamwjujeMkJvNaPuM/cefd9+16yhkK9DKpJtMcPnm
+        CgaHwzRA==;
+Received: from [177.34.169.227] (helo=bowie..)
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+        id 1p2uOp-00Gaon-SO; Wed, 07 Dec 2022 14:23:48 +0100
+From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Oded Gabbay <ogabbay@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Melissa Wen <mwen@igalia.com>,
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Emma Anholt <emma@anholt.net>,
+        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
+        Wambui Karuga <wambui@karuga.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
+Subject: [PATCH v3 0/6] Introduce debugfs device-centered functions
+Date:   Wed,  7 Dec 2022 10:23:19 -0300
+Message-Id: <20221207132325.140393-1-mcanal@igalia.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] libata: Sort Pioneer model in blacklist names
- lexicographically
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Niklas Cassel <niklas.cassel@wdc.com>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221207102656.12486-1-pmenzel@molgen.mpg.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221207102656.12486-1-pmenzel@molgen.mpg.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 19:26, Paul Menzel wrote:
-> Fixes: commit ea08aec7e77b ("libata: add ATA_HORKAGE_NOLPM for Pioneer BDR-207M and BDR-205")
-> Cc: Niklas Cassel <niklas.cassel@wdc.com>
-> Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
-> ---
->  drivers/ata/libata-core.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-> index d3ce5c383f3a..c08c534b7fc7 100644
-> --- a/drivers/ata/libata-core.c
-> +++ b/drivers/ata/libata-core.c
-> @@ -3990,8 +3990,8 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
->  	{ "PIONEER DVD-RW  DVR-216D",	NULL,	ATA_HORKAGE_NOSETXFER },
->  
->  	/* These specific Pioneer models have LPM issues */
-> -	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
->  	{ "PIONEER BD-RW   BDR-205",	NULL,	ATA_HORKAGE_NOLPM },
-> +	{ "PIONEER BD-RW   BDR-207M",	NULL,	ATA_HORKAGE_NOLPM },
+This series introduces the initial structure to make DRM debugfs more
+device-centered and it is the first step to drop the
+drm_driver->debugfs_init hooks in the future [1].
 
-Nah... Not worse the trouble. If anything, I would rather have the entire
-ata_device_blacklist array entries sorted alphabetically by vendor and models.
+Currently, DRM debugfs files are created using drm_debugfs_create_files()
+on request. The first patch of this series makes it possible for DRM devices
+for creating debugfs files during drm_dev_register(). For it, it introduces
+two new functions that can be used by the drivers: drm_debugfs_add_files()
+and drm_debugfs_add_file(). The requests are added to a list and are created
+all at once during drm_dev_register(). Moreover, the first patch was based on
+this RFC series [2].
 
->  
->  	/* Crucial BX100 SSD 500GB has broken LPM support */
->  	{ "CT500BX100SSD1",		NULL,	ATA_HORKAGE_NOLPM },
+The main difference between the RFC series and the current series is the
+creation of a new fops structure to accommodate the new structs and, also,
+the creation of a new drm_debugfs_open. Moreover, the new series uses
+device-managed allocation, returns memory allocation errors, and converts
+more drivers to the new structure.
+
+Apart from the first patch, the following patches are converting some drivers
+to the new DRM debugfs structure and the last patch update the TODO task
+related to it.
+
+[1] https://cgit.freedesktop.org/drm/drm/tree/Documentation/gpu/todo.rst#n506
+[2] https://lore.kernel.org/dri-devel/20200513114130.28641-2-wambui.karugax@gmail.com/
+
+Best Regards,
+- Maíra Canal
+
+---
+
+v1 -> v2: https://lore.kernel.org/dri-devel/20221122190314.185015-1-mcanal@igalia.com/T/#t
+
+- Fix compilation errors in the second patch (kernel test robot).
+- Drop debugfs_init hook from vkms (Maíra Canal).
+- Remove return values and error handling to debugfs related
+functions (Jani Nikula).
+- Remove entry from list after the file is created, so that drm_debugfs_init
+can be called more than once (Maíra Canal).
+
+v2 -> v3: https://lore.kernel.org/dri-devel/20221123220725.1272155-1-mcanal@igalia.com/
+
+- Rebase on top of drm-misc-next
+
+---
+
+Maíra Canal (6):
+  drm/debugfs: create device-centered debugfs functions
+  drm: use new debugfs device-centered functions on DRM core files
+  drm/vc4: use new debugfs device-centered functions
+  drm/v3d: use new debugfs device-centered functions
+  drm/vkms: use new debugfs device-centered functions
+  drm/todo: update the debugfs clean up task
+
+ Documentation/gpu/todo.rst            |  9 +--
+ drivers/gpu/drm/drm_atomic.c          | 11 ++--
+ drivers/gpu/drm/drm_client.c          | 11 ++--
+ drivers/gpu/drm/drm_debugfs.c         | 88 ++++++++++++++++++++++++---
+ drivers/gpu/drm/drm_drv.c             |  3 +
+ drivers/gpu/drm/drm_framebuffer.c     | 11 ++--
+ drivers/gpu/drm/drm_gem_vram_helper.c | 11 ++--
+ drivers/gpu/drm/v3d/v3d_debugfs.c     | 22 +++----
+ drivers/gpu/drm/vc4/vc4_bo.c          | 10 +--
+ drivers/gpu/drm/vc4/vc4_crtc.c        |  7 +--
+ drivers/gpu/drm/vc4/vc4_debugfs.c     | 36 +++--------
+ drivers/gpu/drm/vc4/vc4_dpi.c         |  5 +-
+ drivers/gpu/drm/vc4/vc4_drv.c         |  1 -
+ drivers/gpu/drm/vc4/vc4_drv.h         | 32 +++-------
+ drivers/gpu/drm/vc4/vc4_dsi.c         |  6 +-
+ drivers/gpu/drm/vc4/vc4_hdmi.c        | 12 ++--
+ drivers/gpu/drm/vc4/vc4_hvs.c         | 24 +++-----
+ drivers/gpu/drm/vc4/vc4_v3d.c         | 14 ++---
+ drivers/gpu/drm/vc4/vc4_vec.c         |  6 +-
+ drivers/gpu/drm/vkms/vkms_drv.c       | 17 ++----
+ include/drm/drm_debugfs.h             | 41 +++++++++++++
+ include/drm/drm_device.h              | 15 +++++
+ 22 files changed, 212 insertions(+), 180 deletions(-)
 
 -- 
-Damien Le Moal
-Western Digital Research
+2.38.1
 
