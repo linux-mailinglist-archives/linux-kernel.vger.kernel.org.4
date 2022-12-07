@@ -2,110 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB03564574D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 066A3645750
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbiLGKOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:14:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S230310AbiLGKPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230323AbiLGKOM (ORCPT
+        with ESMTP id S230166AbiLGKPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:14:12 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F6F2714D;
-        Wed,  7 Dec 2022 02:14:10 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so713032wms.0;
-        Wed, 07 Dec 2022 02:14:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jxmfktVo1c7I9TfGKhpFnuMsTMZSubcGd4XXjSjhiS8=;
-        b=HDDkcehqX+6CTSSx6ZcH7IBcmqUljP/LUYffmQaakWZHMVdRndoDLP98evMboJIONF
-         5Vyux7uiI28FUdq6tXvYHm004tuWiAofkFLtqmUd80yG9fA9v0zCneL55yeotADd3POK
-         J7dm28C79KXN5VKrAbzVu1T5FtcyCUlzKvqOKACxQzH1B48r0fogJJFeUWkv9aIb59eQ
-         tDdzBTlN9yXjxEduJUTHNwz5b+oLCO66HACgqVWN8rN7J4HiUt657QeJK0oJJUyabU/h
-         rLvUy8Av/S8xgi9HMpgIqq+SUzl8PdAINLfgS2TpN8gjf02X1APolkjhCQ7KPpct/7a7
-         9Vbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jxmfktVo1c7I9TfGKhpFnuMsTMZSubcGd4XXjSjhiS8=;
-        b=hSEwFW26hJVehMXPev07t7gcbd+2tdaHLJfGD97KykoeG1vFUmsVDZ1iKsfbCpZt/+
-         grrA9sQgathw5ZwVYFpvbrzqItJxyiVKJqZuJhs+0Y3sgIoPEtXQZHB+FuMkOe3hAWRz
-         haGHvi4ROp7OojQKyCA3uhSUaiAh5C3DVYY3+9zpGNNTYKHdUNHjJFrJaap8gQM2vbIE
-         LRJEeV43ClykilBHnTrbQYxl+9BcDndV5lJDMYhr+nQr9nQfuxDoUkYMFLwCzkyyPvXf
-         QIctcWbx9JMHYebZanuh3byeSKvKIGCNaksWByhEId1CtYC4cnIalPYqLt86JxvgvXlp
-         89kQ==
-X-Gm-Message-State: ANoB5pmSvWNZB+JKcJ7Bpmy6ljIxHRxLCWyS8RSe9HDPqjAhmyek0c6o
-        L20VIVodofPp9xmP2K7/YhF8pTBAtfgXxTcl
-X-Google-Smtp-Source: AA0mqf64RWzzi27+MgKKIt62u31McnZURFRGUmm0JvtRaf3tquhSgS8+d00TBNGsFF+MM7vHX4Y45A==
-X-Received: by 2002:a05:600c:314f:b0:3cf:9efc:a9b7 with SMTP id h15-20020a05600c314f00b003cf9efca9b7mr66575359wmo.10.1670408049403;
-        Wed, 07 Dec 2022 02:14:09 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id x11-20020adfec0b000000b00241f029e672sm18763941wrn.107.2022.12.07.02.14.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 02:14:08 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Fix spelling mistake "allright" -> "alright"
-Date:   Wed,  7 Dec 2022 10:14:07 +0000
-Message-Id: <20221207101407.2285701-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 7 Dec 2022 05:15:34 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4093019012
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:15:34 -0800 (PST)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1p2rSa-0001Ko-Bo; Wed, 07 Dec 2022 11:15:28 +0100
+Message-ID: <d3433e207ff8ea243ff1d4cceeea19e4676c97c5.camel@pengutronix.de>
+Subject: Re: [PATCH] drm/msm: Add MSM_SUBMIT_BO_NO_IMPLICIT
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Sean Paul <sean@poorly.run>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        freedreno@lists.freedesktop.org
+Date:   Wed, 07 Dec 2022 11:15:25 +0100
+In-Reply-To: <20221206192123.661448-1-robdclark@gmail.com>
+References: <20221206192123.661448-1-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are spelling mistakes in messages in the prctl tests. Fix these.
-Note: One can use "all right", or "alright", I'm fixing this to use
-the slightly more informal and more modern form of the spelling for
-the fix.
+Hi Rob,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c | 2 +-
- tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Am Dienstag, dem 06.12.2022 um 11:21 -0800 schrieb Rob Clark:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> In cases where implicit sync is used, it is still useful (for things
+> like sub-allocation, etc) to allow userspace to opt-out of implicit
+> sync on per-BO basis.
+> 
+Out of curiosity and because I have been thinking about something like
+that for etnaviv for while: do you only use this for immutable buffers
+or do you have some kind of userspace fencing in place for the
+suballocated buffers?
 
-diff --git a/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c b/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
-index 62a93cc61b7c..868f37fd1d5e 100644
---- a/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
-+++ b/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
-@@ -79,7 +79,7 @@ int main(void)
- {
- 	int n_tasks = 100, i;
- 
--	fprintf(stderr, "[No further output means we're allright]\n");
-+	fprintf(stderr, "[No further output means we're alright]\n");
- 
- 	for (i=0; i<n_tasks; i++)
- 		if (fork() == 0)
-diff --git a/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c b/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
-index 79950f9a26fd..3822532fc0c6 100644
---- a/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
-+++ b/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
-@@ -83,7 +83,7 @@ int main(void)
- {
- 	int n_tasks = 100, i;
- 
--	fprintf(stderr, "[No further output means we're allright]\n");
-+	fprintf(stderr, "[No further output means we're alright]\n");
- 
- 	for (i=0; i<n_tasks; i++)
- 		if (fork() == 0)
--- 
-2.38.1
+Regards,
+Lucas
+
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>  drivers/gpu/drm/msm/msm_drv.c        |  3 ++-
+>  drivers/gpu/drm/msm/msm_gem_submit.c | 11 +++++++++++
+>  include/uapi/drm/msm_drm.h           |  4 +++-
+>  3 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+> index 017a512982a2..e0e1199a822f 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.c
+> +++ b/drivers/gpu/drm/msm/msm_drv.c
+> @@ -45,9 +45,10 @@
+>   * - 1.7.0 - Add MSM_PARAM_SUSPENDS to access suspend count
+>   * - 1.8.0 - Add MSM_BO_CACHED_COHERENT for supported GPUs (a6xx)
+>   * - 1.9.0 - Add MSM_SUBMIT_FENCE_SN_IN
+> + * - 1.10.0 - Add MSM_SUBMIT_BO_NO_IMPLICIT
+>   */
+>  #define MSM_VERSION_MAJOR	1
+> -#define MSM_VERSION_MINOR	9
+> +#define MSM_VERSION_MINOR	10
+>  #define MSM_VERSION_PATCHLEVEL	0
+>  
+>  static const struct drm_mode_config_funcs mode_config_funcs = {
+> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm/msm_gem_submit.c
+> index eb3536e3d66a..8bad07a04f85 100644
+> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> @@ -334,9 +334,20 @@ static int submit_fence_sync(struct msm_gem_submit *submit, bool no_implicit)
+>  		if (ret)
+>  			return ret;
+>  
+> +		/* If userspace has determined that explicit fencing is
+> +		 * used, it can disable implicit sync on the entire
+> +		 * submit:
+> +		 */
+>  		if (no_implicit)
+>  			continue;
+>  
+> +		/* Otherwise userspace can ask for implicit sync to be
+> +		 * disabled on specific buffers.  This is useful for internal
+> +		 * usermode driver managed buffers, suballocation, etc.
+> +		 */
+> +		if (submit->bos[i].flags & MSM_SUBMIT_BO_NO_IMPLICIT)
+> +			continue;
+> +
+>  		ret = drm_sched_job_add_implicit_dependencies(&submit->base,
+>  							      obj,
+>  							      write);
+> diff --git a/include/uapi/drm/msm_drm.h b/include/uapi/drm/msm_drm.h
+> index f54b48ef6a2d..329100016e7c 100644
+> --- a/include/uapi/drm/msm_drm.h
+> +++ b/include/uapi/drm/msm_drm.h
+> @@ -222,10 +222,12 @@ struct drm_msm_gem_submit_cmd {
+>  #define MSM_SUBMIT_BO_READ             0x0001
+>  #define MSM_SUBMIT_BO_WRITE            0x0002
+>  #define MSM_SUBMIT_BO_DUMP             0x0004
+> +#define MSM_SUBMIT_BO_NO_IMPLICIT      0x0008
+>  
+>  #define MSM_SUBMIT_BO_FLAGS            (MSM_SUBMIT_BO_READ | \
+>  					MSM_SUBMIT_BO_WRITE | \
+> -					MSM_SUBMIT_BO_DUMP)
+> +					MSM_SUBMIT_BO_DUMP | \
+> +					MSM_SUBMIT_BO_NO_IMPLICIT)
+>  
+>  struct drm_msm_gem_submit_bo {
+>  	__u32 flags;          /* in, mask of MSM_SUBMIT_BO_x */
+
 
