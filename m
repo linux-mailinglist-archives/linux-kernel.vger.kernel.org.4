@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0084B645B75
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD7F645B71
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:54:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiLGNyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:54:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S229649AbiLGNyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:54:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiLGNy2 (ORCPT
+        with ESMTP id S229480AbiLGNyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:54:28 -0500
+        Wed, 7 Dec 2022 08:54:17 -0500
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C67FA4908F;
-        Wed,  7 Dec 2022 05:54:26 -0800 (PST)
-X-QQ-mid: bizesmtp74t1670421234t6glizjv
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A51E4AF07;
+        Wed,  7 Dec 2022 05:54:14 -0800 (PST)
+X-QQ-mid: bizesmtp74t1670421238tac3l1oe
 Received: from ubuntu.. ( [111.196.135.79])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 07 Dec 2022 21:53:53 +0800 (CST)
+        id ; Wed, 07 Dec 2022 21:53:57 +0800 (CST)
 X-QQ-SSF: 01200000002000B0B000B00A0000000
-X-QQ-FEAT: znfcQSa1hKahN1m9MXihhlD9H25KcTrmlTsiK+jnZWRL9/KxDfCfAcvhFsc/S
-        H6xwwcByw5o8tyboieoNR+AmVut1u5dwzH1z7kU8wcl95Mbu8Q5d9o585jd++GMqxXex3jm
-        CkZv5G0mO+lxy1HIvqPQgiBjL+Xg/FTbI3XP92dc2IIwtBscteuxqYwu9H8dMfTPR2pi76w
-        XdcDgwtn7ldi7QrfHXzB8kvjGfAzHnmjj/vVARdO1lFukykzUI/F+5Z05FMnzMCP0w6VihL
-        Ij5qHkPkSvQihQ2PzgtxZMIcnd8yQ+naJaNuU5uA8uQjy5YHwcnRNQRB0Q3PWeJGSSWdsg4
-        lZEa5S3bFSh34fllrOvku39hQehmbNfimeWSEpMnQ1n/6Mvmn1T+aPsOt85ag==
+X-QQ-FEAT: xwvWJGGFd7MwyO0I/Q6cO3SN87cXTA0Qqfh8HCCQSS6fqMBr/qkBzS+Hb4sLp
+        RIF6DZbbbporXK5SG5F4L4GnHn3cPJgPb5h4J9lKGr5wkCAxIZIeU5807depEIkwOLe/Mvy
+        w0fF2c1Xl1ux4LFQLywy9e9/clKPMiR6ZcYxicJ41cKAl3Xv6ZkiqQ6IruvUZk/stFlQJH8
+        iJdiwmmZOrFZdI9SL+AxAuRudDrkCSZ1BMsWKQjKaEPDbO972J8msrOerMwffpes+NXzixA
+        M0hzvtwl06PkTeG8l2CIIQ8YzQIf4d5qZW2xX3RNckdIF9+X7lJdOdEAGAlDSChORGQtg0r
+        FGahlUmropJkxzJ1wNuBcRJWrhJuK4yhfdO3fVCeNsWeoQ6Ohn9G58xYSpL8A==
 X-QQ-GoodBg: 0
 From:   Bin Meng <bmeng@tinylab.org>
 To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-serial@vger.kernel.org
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/3] serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h
-Date:   Wed,  7 Dec 2022 21:53:50 +0800
-Message-Id: <20221207135352.592556-1-bmeng@tinylab.org>
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Subject: [PATCH v2 2/3] riscv: Implement semihost.h for earlycon semihost driver
+Date:   Wed,  7 Dec 2022 21:53:51 +0800
+Message-Id: <20221207135352.592556-2-bmeng@tinylab.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221207135352.592556-1-bmeng@tinylab.org>
+References: <20221207135352.592556-1-bmeng@tinylab.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
@@ -52,111 +53,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move smh_putc() variants in respective arch/*/include/asm/semihost.h,
-in preparation to add RISC-V support.
+Per RISC-V semihosting spec [1], implement semihost.h for the existing
+Arm semihosting earlycon driver to work on RISC-V.
+
+[1] https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semihosting-spec.adoc
 
 Signed-off-by: Bin Meng <bmeng@tinylab.org>
 
 ---
 
 Changes in v2:
-- new patch: "serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h"
+- Move the RISC-V implementation to semihost.h
 
- arch/arm/include/asm/semihost.h            | 23 ++++++++++++++++++++
- arch/arm64/include/asm/semihost.h          | 17 +++++++++++++++
- drivers/tty/serial/earlycon-arm-semihost.c | 25 +---------------------
- 3 files changed, 41 insertions(+), 24 deletions(-)
- create mode 100644 arch/arm/include/asm/semihost.h
- create mode 100644 arch/arm64/include/asm/semihost.h
+ arch/riscv/include/asm/semihost.h | 19 +++++++++++++++++++
+ drivers/tty/serial/Kconfig        |  2 +-
+ 2 files changed, 20 insertions(+), 1 deletion(-)
+ create mode 100644 arch/riscv/include/asm/semihost.h
 
-diff --git a/arch/arm/include/asm/semihost.h b/arch/arm/include/asm/semihost.h
+diff --git a/arch/riscv/include/asm/semihost.h b/arch/riscv/include/asm/semihost.h
 new file mode 100644
-index 000000000000..c33cb5124376
+index 000000000000..886f21d7a476
 --- /dev/null
-+++ b/arch/arm/include/asm/semihost.h
-@@ -0,0 +1,23 @@
++++ b/arch/riscv/include/asm/semihost.h
+@@ -0,0 +1,19 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
-+ * Copyright (C) 2012 ARM Ltd.
-+ * Author: Marc Zyngier <marc.zyngier@arm.com>
-+ *
-+ * Adapted for ARM and earlycon:
-+ * Copyright (C) 2014 Linaro Ltd.
-+ * Author: Rob Herring <robh@kernel.org>
-+ */
-+
-+#ifdef CONFIG_THUMB2_KERNEL
-+#define SEMIHOST_SWI	"0xab"
-+#else
-+#define SEMIHOST_SWI	"0x123456"
-+#endif
-+
-+static inline void smh_putc(struct uart_port *port, unsigned char c)
-+{
-+	asm volatile("mov  r1, %0\n"
-+		     "mov  r0, #3\n"
-+		     "svc  " SEMIHOST_SWI "\n"
-+		     : : "r" (&c) : "r0", "r1", "memory");
-+}
-diff --git a/arch/arm64/include/asm/semihost.h b/arch/arm64/include/asm/semihost.h
-new file mode 100644
-index 000000000000..9e56d38fe5fd
---- /dev/null
-+++ b/arch/arm64/include/asm/semihost.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2012 ARM Ltd.
-+ * Author: Marc Zyngier <marc.zyngier@arm.com>
-+ *
-+ * Adapted for ARM and earlycon:
-+ * Copyright (C) 2014 Linaro Ltd.
-+ * Author: Rob Herring <robh@kernel.org>
++ * Copyright (C) 2022 tinylab.org
++ * Author: Bin Meng <bmeng@tinylab.org>
 + */
 +
 +static inline void smh_putc(struct uart_port *port, unsigned char c)
 +{
-+	asm volatile("mov  x1, %0\n"
-+		     "mov  x0, #3\n"
-+		     "hlt  0xf000\n"
-+		     : : "r" (&c) : "x0", "x1", "memory");
++	asm volatile("addi    a1, %0, 0\n"
++		     "addi    a0, zero, 3\n"
++		     ".balign 16\n"
++		     ".option push\n"
++		     ".option norvc\n"
++		     "slli    zero, zero, 0x1f\n"
++		     "ebreak\n"
++		     "srai    zero, zero, 0x7\n"
++		     ".option pop\n"
++		     : : "r" (&c) : "a0", "a1", "memory");
 +}
-diff --git a/drivers/tty/serial/earlycon-arm-semihost.c b/drivers/tty/serial/earlycon-arm-semihost.c
-index fcdec5f42376..e4692a8433f9 100644
---- a/drivers/tty/serial/earlycon-arm-semihost.c
-+++ b/drivers/tty/serial/earlycon-arm-semihost.c
-@@ -11,30 +11,7 @@
- #include <linux/console.h>
- #include <linux/init.h>
- #include <linux/serial_core.h>
--
--#ifdef CONFIG_THUMB2_KERNEL
--#define SEMIHOST_SWI	"0xab"
--#else
--#define SEMIHOST_SWI	"0x123456"
--#endif
--
--/*
-- * Semihosting-based debug console
-- */
--static void smh_putc(struct uart_port *port, unsigned char c)
--{
--#ifdef CONFIG_ARM64
--	asm volatile("mov  x1, %0\n"
--		     "mov  x0, #3\n"
--		     "hlt  0xf000\n"
--		     : : "r" (&c) : "x0", "x1", "memory");
--#else
--	asm volatile("mov  r1, %0\n"
--		     "mov  r0, #3\n"
--		     "svc  " SEMIHOST_SWI "\n"
--		     : : "r" (&c) : "r0", "r1", "memory");
--#endif
--}
-+#include <asm/semihost.h>
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index 434f83168546..e94d1265151c 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -75,7 +75,7 @@ config SERIAL_AMBA_PL011_CONSOLE
  
- static void smh_write(struct console *con, const char *s, unsigned n)
- {
+ config SERIAL_EARLYCON_ARM_SEMIHOST
+ 	bool "Early console using ARM semihosting"
+-	depends on ARM64 || ARM
++	depends on ARM64 || ARM || RISCV
+ 	select SERIAL_CORE
+ 	select SERIAL_CORE_CONSOLE
+ 	select SERIAL_EARLYCON
 -- 
 2.34.1
 
