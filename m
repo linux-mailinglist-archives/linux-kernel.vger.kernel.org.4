@@ -2,244 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F016458C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:19:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C46645A55
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiLGLT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S229743AbiLGNDi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:03:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiLGLTO (ORCPT
+        with ESMTP id S229554AbiLGNDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:19:14 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4A024F2D;
-        Wed,  7 Dec 2022 03:18:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670411938; x=1701947938;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Xvm4k8IG/KDGDueSQJZC6iE1/IQqMcr2szvU7GP+K20=;
-  b=DsM8lcY5bvqRaxlGCcKpbqnMB+nsg4KHbwPrFoxXjGehJoAaY4PGj8hX
-   ZqZeZFN2cg/OUY6AalfuOh8py9HxdLunsZl+ehLm16TNI9+ojIP29h8qZ
-   0nEp8E5GPzUH4yGgx4i5niNmUvg8939zbXj1XypYW2Xvy6SVP2auKwWTU
-   Ox9wwfJz/CR2E6sUUkP7Wx7Wni5uhTEHKtE6jl1Y09EU+ak8IqwU7Chpq
-   YPLS0ug7XLHVQfG1txQC2Ba0Bj+ajUkqdvOysFIzc5KX867IPDv0IHrV/
-   WEnb1Hnr/qM7ogyDq+RVC3pAQ3bcttbJ6E/QXP7N/+A7SqGo5OBccjVMF
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="126919635"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 07 Dec 2022 04:18:57 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 7 Dec 2022 04:18:57 -0700
-Received: from CHE-LT-UNGSOFTWARE.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 7 Dec 2022 04:18:51 -0700
-From:   Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <linux-serial@vger.kernel.org>, <gregkh@linuxfoundation.org>,
-        <jirislaby@kernel.org>, <ilpo.jarvinen@linux.intel.com>,
-        <macro@orcam.me.uk>, <andriy.shevchenko@linux.intel.com>,
-        <cang1@live.co.uk>, <colin.i.king@gmail.com>,
-        <phil.edworthy@renesas.com>, <biju.das.jz@bp.renesas.com>,
-        <geert+renesas@glider.be>, <lukas@wunner.de>,
-        <u.kleine-koenig@pengutronix.de>, <wander@redhat.com>,
-        <etremblay@distech-controls.com>, <jk@ozlabs.org>,
-        Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Subject: [PATCH v7 tty-next 4/4] serial: 8250_pci1xxxx: Add power management functions to quad-uart driver
-Date:   Thu, 8 Dec 2022 05:23:05 +0530
-Message-ID: <20221207235305.695541-5-kumaravel.thiagarajan@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com>
-References: <20221207235305.695541-1-kumaravel.thiagarajan@microchip.com>
+        Wed, 7 Dec 2022 08:03:37 -0500
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1182A734
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:03:36 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id fu10so7589612qtb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:03:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B2av9P4q0PWClAqjlk9+Sy30yJr7v0F5TZCLHKaqqno=;
+        b=mazFRj2d/QItG2GL7Vu0gXiEkXj5q49RE7uiQFWb+1kncwKex4qUT1U7glBufTLFYT
+         p2Aaq0sPV1ZyC/rjuWeyZ/aRTqb8Rgc5EmB+90sVsbAe9EYn6DS9sNgKEuHGhN0waWAg
+         2kRhpuwQBOTJPzi3CmOgXS4yx2YoJcEfcs7/mDst296JSugU2gV9UsAx1XS6uEzhoDJl
+         Npibkyjxd+MqQLU1weOXRq58t9s2NF5Qvpm/8c7BU2OLr9gTlZa3Q1o64uSnXVkZP2H1
+         CeBd+uujIeGoCtt+MVH7qYcLHbJMgj870bRSZxFya6JwJAiwG5JGCAcv9Xo1b8gV6Vcu
+         W4DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B2av9P4q0PWClAqjlk9+Sy30yJr7v0F5TZCLHKaqqno=;
+        b=0N/M8qXt5vs2TlVMJUyOFEosCPNE7/VAPHHQ2FnaOW6QURTCv3W1yeHb2Dgjd+vcLH
+         jylJmQU1kkY41byr1+N4Dq+cxz08j6lC/bAtRmGBPGa4AzVEwwDHuEDH4tVao7KjpjhM
+         n4/RGmdI/pdX2sKXi4jeT3dUfZgjyLWFlKbTPS2q/0oEUznV8GEQsTCKaKzU2CE0wExs
+         HSEGaWPOLM9XszsovpBoBpCSvozeAIStRETZ0FjwQ9cqgP0GiE2MU1O2zv96ItLyzReW
+         Dtg1zZw38fYrzMwIJCB3ZKFuXqrRch/TlWVfKvtVJChvrrmaZl6KKMxAT/eKO5z1LIg0
+         e2gQ==
+X-Gm-Message-State: ANoB5pka2lnuhwU9UQJZL+Y4w23ACHs/Eg3iNhpA+KqOHkuZNEct5+Vw
+        4TNbwsLyKiUtC7bPldNcXJw+9ooYfsqiYH0TwXJGMA==
+X-Google-Smtp-Source: AA0mqf7y4RypDqQ69GxKfE2SkP2KuvMCtQmjR0Ll8ehFHHQ5JvGK7wQPg5M/+gaS5rBRi9bTwsfthzdKPvjhrlu3bgE=
+X-Received: by 2002:ac8:148a:0:b0:399:a020:2aa with SMTP id
+ l10-20020ac8148a000000b00399a02002aamr67545276qtj.247.1670418215133; Wed, 07
+ Dec 2022 05:03:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221206124046.347571765@linuxfoundation.org>
+In-Reply-To: <20221206124046.347571765@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 7 Dec 2022 18:33:23 +0530
+Message-ID: <CA+G9fYtgAZwXn_BT86JM1m+RWsc0+_ebtvWPdCksVuYgbtp7ew@mail.gmail.com>
+Subject: Re: [PATCH 4.14 00/83] 4.14.301-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pci1xxxx's quad-uart function has the capability to wake up UART
-from suspend state. Enable wakeup before entering into suspend and
-disable wakeup on resume.
+On Tue, 6 Dec 2022 at 18:12, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.301 release.
+> There are 83 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 08 Dec 2022 12:40:31 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.301-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Co-developed-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>
-Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
----
-Changes in v7:
-- No Change
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Changes in v6:
-- No Change
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Changes in v5:
-- Corrected commit message
+## Build
+* kernel: 4.14.301-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: dd6fc0ede260695326bad7de0ba0122fe6ba8834
+* git describe: v4.14.300-84-gdd6fc0ede260
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.300-84-gdd6fc0ede260
 
-Changes in v4:
-- No Change
+## Test Regressions (compared to v4.14.299-88-g179ef7fe8677)
 
-Changes in v3:
-- Handled race condition in suspend and resume callbacks
+## Metric Regressions (compared to v4.14.299-88-g179ef7fe8677)
 
-Changes in v2:
-- Use DEFINE_SIMPLE_DEV_PM_OPS instead of SIMPLE_DEV_PM_OPS.
-- Use pm_sleep_ptr instead of CONFIG_PM_SLEEP.
-- Change the return data type of pci1xxxx_port_suspend to bool from int.
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 115 ++++++++++++++++++++++++
- 1 file changed, 115 insertions(+)
+## Test Fixes (compared to v4.14.299-88-g179ef7fe8677)
 
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 9f0da264314a..f2365e67ffcd 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -192,6 +192,116 @@ static const struct serial_rs485 pci1xxxx_rs485_supported = {
- 	/* Delay RTS before send is not supported */
- };
- 
-+static bool pci1xxxx_port_suspend(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+	bool ret = false;
-+	u8 wakeup_mask;
-+
-+	mutex_lock(&tport->mutex);
-+	if (port->suspended == 0 && port->dev) {
-+		wakeup_mask = readb(up->port.membase + UART_WAKE_MASK_REG);
-+
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl &= ~TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+
-+		ret = (wakeup_mask & UART_WAKE_SRCS) != UART_WAKE_SRCS;
-+	}
-+
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+	mutex_unlock(&tport->mutex);
-+
-+	return ret;
-+}
-+
-+static void pci1xxxx_port_resume(int line)
-+{
-+	struct uart_8250_port *up = serial8250_get_port(line);
-+	struct uart_port *port = &up->port;
-+	struct tty_port *tport = &port->state->port;
-+	unsigned long flags;
-+
-+	mutex_lock(&tport->mutex);
-+	writeb(UART_BLOCK_SET_ACTIVE, port->membase + UART_ACTV_REG);
-+	writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-+
-+	if (port->suspended == 0) {
-+		spin_lock_irqsave(&port->lock, flags);
-+		port->mctrl |= TIOCM_OUT2;
-+		port->ops->set_mctrl(port, port->mctrl);
-+		spin_unlock_irqrestore(&port->lock, flags);
-+	}
-+	mutex_unlock(&tport->mutex);
-+}
-+
-+static int pci1xxxx_suspend(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	bool wakeup = false;
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			serial8250_suspend_port(priv->line[i]);
-+			wakeup |= pci1xxxx_port_suspend(priv->line[i]);
-+		}
-+	}
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data | UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+
-+	if (wakeup)
-+		writeb(UART_PCI_CTRL_D3_CLK_ENABLE, p + UART_PCI_CTRL_REG);
-+
-+	iounmap(p);
-+	device_set_wakeup_enable(dev, true);
-+	pci_wake_from_d3(pcidev, true);
-+
-+	return 0;
-+}
-+
-+static int pci1xxxx_resume(struct device *dev)
-+{
-+	struct pci1xxxx_8250 *priv = dev_get_drvdata(dev);
-+	struct pci_dev *pcidev = to_pci_dev(dev);
-+	unsigned int data;
-+	void __iomem *p;
-+	int i;
-+
-+	p = pci_ioremap_bar(pcidev, 0);
-+	if (!p) {
-+		dev_err(dev, "remapping of bar 0 memory failed");
-+		return -ENOMEM;
-+	}
-+
-+	data = readl(p + UART_RESET_REG);
-+	writel(data & ~UART_RESET_D3_RESET_DISABLE, p + UART_RESET_REG);
-+	iounmap(p);
-+
-+	for (i = 0; i < priv->nr; i++) {
-+		if (priv->line[i] >= 0) {
-+			pci1xxxx_port_resume(priv->line[i]);
-+			serial8250_resume_port(priv->line[i]);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int pci1xxxx_setup(struct pci1xxxx_8250 *priv,
- 			  struct uart_8250_port *port, int port_idx)
- {
-@@ -329,6 +439,8 @@ static void pci1xxxx_serial_remove(struct pci_dev *dev)
- 	}
- }
- 
-+static DEFINE_SIMPLE_DEV_PM_OPS(pci1xxxx_pm_ops, pci1xxxx_suspend, pci1xxxx_resume);
-+
- static const struct pci_device_id pci1xxxx_pci_tbl[] = {
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11010) },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_EFAR, PCI_DEVICE_ID_EFAR_PCI11101) },
-@@ -343,6 +455,9 @@ static struct pci_driver pci1xxxx_pci_driver = {
- 	.name = "pci1xxxx serial",
- 	.probe = pci1xxxx_serial_probe,
- 	.remove = pci1xxxx_serial_remove,
-+	.driver = {
-+		.pm     = pm_sleep_ptr(&pci1xxxx_pm_ops),
-+	},
- 	.id_table = pci1xxxx_pci_tbl,
- };
- module_pci_driver(pci1xxxx_pci_driver);
--- 
-2.25.1
+## Metric Fixes (compared to v4.14.299-88-g179ef7fe8677)
 
+## Test result summary
+total: 48369, pass: 41437, fail: 896, skip: 5341, xfail: 695
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 313 total, 308 passed, 5 failed
+* arm64: 53 total, 50 passed, 3 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 51 total, 50 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
