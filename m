@@ -2,231 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF10464550B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3890164550C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiLGIDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50572 "EHLO
+        id S229915AbiLGIEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:04:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiLGIDl (ORCPT
+        with ESMTP id S229627AbiLGIEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:03:41 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3ADD29343
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:03:39 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id j4so27518233lfk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:03:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yn9nDIGn57BVhUGGyUSUzD23S1rxXpzrdnXEfSzJBj0=;
-        b=UIW5zMXgASAy+T2xjE2boa7e+J0qIv/9iCmwUo7tlbUZebVcBBNhTJP+sxPJmP0tZQ
-         k8njJByoFb+Ie9stov3JZI0U54YrvKHw8QEenO03owZGsMQOXOSx4H5m5nie5n/lysPm
-         pAtT26EDd+qJ7efs4OWJpO+mxCIx420wLdmUghd/z57NdlUTn/BM7Jt9OBobtM8cb2H/
-         Us8yg3iPm5mmcyjvHoVmfqrGcd1l9tX/Rojlio0NSvauNYu/vw7jhDQzVGWi0+J149Li
-         30/1cPK6aFfjxZbWgB1vcMmRkeQ+El2UeTxuVIfUTN4H23TKeluHhsEu8RNjroftQBy0
-         g63w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yn9nDIGn57BVhUGGyUSUzD23S1rxXpzrdnXEfSzJBj0=;
-        b=gBjSi82JykIwfVq/d3K1IwqsDxeXS2Z3Hm8Jje3+eEN1J9Ay7pXN/XQWnsJSwAzNTm
-         LmGF6i75a2A0Ln7dxdyvi8vdWwy2VagWJyHIuR7sfvztpiJ8ruq5mjiwz8tsxpAm2O76
-         kGLl+1qOCi6W89Vpp3ZUo33eLN0Op4TPL09IV5CD5Z1BO0+1d7MaHgKiyh6jf37zim9s
-         8BMLdENbOhh3HrQSBeaAVUO7mR/+nCaBgr51ALe41+BgM/ZTduYB/wbEZ+5oFo55kFKT
-         N5hdPBzaxZpkxHHQYfbsVtpGDup5BUyg5xb/HGoAdiCQUXpdbH1nLU0q/xz8ghS9LqU4
-         zVzg==
-X-Gm-Message-State: ANoB5pnYy1vknkYMyNJ6/Ax4qRzV1y6Cb0rRr0PaiBO6YyPCB2qTZGpW
-        qWlekHDrlkz2Gkn5WYNsyGmo6Q==
-X-Google-Smtp-Source: AA0mqf5NJN1ww/UQ0wHfpUCGJftcWeph6OoozsXSushoSpf3klqVk//uK8UNhsA/fIpfwc9vl3w7jg==
-X-Received: by 2002:a19:4f5d:0:b0:4b5:6704:e547 with SMTP id a29-20020a194f5d000000b004b56704e547mr5078003lfk.494.1670400218155;
-        Wed, 07 Dec 2022 00:03:38 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f19-20020ac251b3000000b004b583198d83sm636556lfk.186.2022.12.07.00.03.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 00:03:37 -0800 (PST)
-Message-ID: <cd6e259f-4216-17c2-fab0-a952c0177fee@linaro.org>
-Date:   Wed, 7 Dec 2022 09:03:36 +0100
+        Wed, 7 Dec 2022 03:04:47 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5768E2CC80
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:03:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670400231;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/ZK2czWg/DEIeFiIGwHXFZG1Ys/EXQYtJrnesdlM28Y=;
+        b=W9NOby6+6Rx8WcRRWTEdJeqfP8nfY5R38gdtL+LV3igW6awR96Kyc86UedSmAMhzcIpjVo
+        RfATwECxatQC3oQ82ReA4Au6OPFpvmXJou+3hZLZjc/xg7sMdhJ//nuWOHmnIHScyN7cLW
+        p4MQW6oyML+v9M3N/RkbSw3Na6+uXUo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-qvwxPhpAOYWkqHyt-y4m4Q-1; Wed, 07 Dec 2022 03:03:47 -0500
+X-MC-Unique: qvwxPhpAOYWkqHyt-y4m4Q-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9D49B3813F2D;
+        Wed,  7 Dec 2022 08:03:46 +0000 (UTC)
+Received: from localhost (ovpn-13-181.pek2.redhat.com [10.72.13.181])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6EF55C15BB5;
+        Wed,  7 Dec 2022 08:03:45 +0000 (UTC)
+Date:   Wed, 7 Dec 2022 16:03:41 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stephen.s.brennan@oracle.com, willy@infradead.org,
+        akpm@linux-foundation.org, hch@infradead.org
+Subject: Re: [PATCH v1 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
+Message-ID: <Y5BI3Sp8QCyweXwt@MiWiFi-R3L-srv>
+References: <20221204013046.154960-1-bhe@redhat.com>
+ <20221204013046.154960-3-bhe@redhat.com>
+ <Y43qfdseyq0zizJO@pc636>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 1/5] dt-bindings: dma: ti: k3-bcdma: Add bindings for
- BCDMA CSI RX
-To:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dmaengine@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221206043554.1521522-1-vigneshr@ti.com>
- <20221206043554.1521522-2-vigneshr@ti.com>
- <63e1e565-b1e7-ecfc-009a-ee036108f160@linaro.org>
- <8e93f459-53e0-ee39-96cc-2c9e51a72547@ti.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <8e93f459-53e0-ee39-96cc-2c9e51a72547@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y43qfdseyq0zizJO@pc636>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 07:09, Vignesh Raghavendra wrote:
-> Hi Krzysztof,
-> 
-> On 06/12/22 14:02, Krzysztof Kozlowski wrote:
->> On 06/12/2022 05:35, Vignesh Raghavendra wrote:
->>> AM62A SoC has a dedicated BCDMA that serves Camera Serial Interface
->>> (CSI) IP. Add new compatible for the same. Unlike system
->>> BCDMA, this instance only has RX DMA channels and lack TX or block copy
->>> channel. Thus make those properties optional. Additionally CSI RX has
->>> independent power domain, add the binding for the same.
->>>
->>> Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
->>> ---
->>>  .../devicetree/bindings/dma/ti/k3-bcdma.yaml  | 87 ++++++++++++++-----
->>>  1 file changed, 63 insertions(+), 24 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
->>> index 08627d91e607..d7b5adbb9b2e 100644
->>> --- a/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
->>> +++ b/Documentation/devicetree/bindings/dma/ti/k3-bcdma.yaml
->>> @@ -32,9 +32,66 @@ allOf:
->>>    - $ref: /schemas/dma/dma-controller.yaml#
->>>    - $ref: /schemas/arm/keystone/ti,k3-sci-common.yaml#
->>>  
->>
->> When adding if:then:, please move entire allOf after "required:" part.
-> 
-> Sure, will do
-> 
->>
->>> +  - if:
->>> +      properties:
->>> +        compatible:
->>> +          contains:
->>> +            const: ti,am62a-dmss-bcdma-csirx
->>> +    then:
->>> +      properties:
->>> +        ti,sci-rm-range-bchan: false
->>> +        ti,sci-rm-range-tchan: false
->>> +
->>> +        reg:
->>> +          maxItems: 3
->>> +
->>> +        reg-names:
->>> +          items:
->>> +            - const: gcfg
->>> +            - const: rchanrt
->>> +            - const: ringrt
->>
->> With my changes further this can be only "maxItems: 3"
-> 
-> Yes, but wont that mean any of the 3 reg-names out of the 5? Would it
-> not be better to further restrict specifically to above 3 reg-names (as
-> thats how the IP is)
+On 12/05/22 at 01:56pm, Uladzislau Rezki wrote:
+> > Through vmalloc API, a virtual kernel area is reserved for physical
+> > address mapping. And vmap_area is used to track them, while vm_struct
+> > is allocated to associate with the vmap_area to store more information
+> > and passed out.
+> > 
+> > However, area reserved via vm_map_ram() is an exception. It doesn't have
+> > vm_struct to associate with vmap_area. And we can't recognize the
+> > vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
+> > freeing path will set va->vm = NULL before unmapping, please see
+> > function remove_vm_area().
+> > 
+> > Meanwhile, there are two types of vm_map_ram area. One is the whole
+> > vmap_area being reserved and mapped at one time; the other is the
+> > whole vmap_area with VMAP_BLOCK_SIZE size being reserved, while mapped
+> > into split regions with smaller size several times via vb_alloc().
+> > 
+> > To mark the area reserved through vm_map_ram(), add flags field into
+> > struct vmap_area. Bit 0 indicates whether it's a vm_map_ram area,
+> > while bit 1 indicates whether it's a vmap_block type of vm_map_ram
+> > area.
+> > 
+> > This is a preparatoin for later use.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > ---
+> >  include/linux/vmalloc.h |  1 +
+> >  mm/vmalloc.c            | 18 +++++++++++++++++-
+> >  2 files changed, 18 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
+> > index 096d48aa3437..69250efa03d1 100644
+> > --- a/include/linux/vmalloc.h
+> > +++ b/include/linux/vmalloc.h
+> > @@ -76,6 +76,7 @@ struct vmap_area {
+> >  		unsigned long subtree_max_size; /* in "free" tree */
+> >  		struct vm_struct *vm;           /* in "busy" tree */
+> >  	};
+> > +	unsigned long flags; /* mark type of vm_map_ram area */
+> >  };
+> >  
+> >  /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
+> > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> > index 5d3fd3e6fe09..d6f376060d83 100644
+> > --- a/mm/vmalloc.c
+> > +++ b/mm/vmalloc.c
+> > @@ -1815,6 +1815,7 @@ static void free_vmap_area_noflush(struct vmap_area *va)
+> >  
+> >  	spin_lock(&vmap_area_lock);
+> >  	unlink_va(va, &vmap_area_root);
+> > +	va->flags = 0;
+> >  	spin_unlock(&vmap_area_lock);
+> >  
+> This is not a good place to set flags to zero. It looks to me like
+> corner and kind of specific.
 
-I thought that first three entries are the same, but they are not, so
-indeed keep it like you have it now.
+Thanks for reviewing.
 
+Here, I thought to clear VMAP_RAM|VMAP_BLOCK on vmap->flags when free
+the vmap_block. I didn't find a good place to do the clearing. When we
+call free_vmap_block(), we either come from purge_fragmented_blocks(),
+or from vb_free(). In vb_free(), it will call free_vmap_block() when
+the whole vmap_block is dirty. In purge_fragmented_blocks(), it will
+try to purge all vmap_block which only has dirty or free regions.
+For both of above functions, they will call free_vmap_block() when
+there's no being used region in the vmap_block.
+
+  purge_fragmented_blocks()
+  vb_free()
+    -->free_vmap_block()
+
+So seems we don't need to clear the VMAP_RAM|VMAP_BLOCK on vmap->flags
+because there's no mapping existed in the vmap_block. The consequent
+free_vmap_block() will remove the relevant vmap_area from vmap_area_list
+and vmap_area_root tree.
+
+So I plan to remove code change in this place.
 > 
->>
->>> +
->>> +      required:
->>> +        - compatible
->>> +        - "#dma-cells"
->>> +        - reg
->>> +        - reg-names
->>> +        - msi-parent
->>> +        - ti,sci
->>> +        - ti,sci-dev-id
->>> +        - ti,sci-rm-range-rchan
->>> +        - power-domains
->>> +
->>> +    else:
->>> +      properties:
->>> +        reg:
->>> +          maxItems: 5
->>> +
->>> +        reg-names:
->>> +          items:
->>> +            - const: gcfg
->>> +            - const: bchanrt
->>> +            - const: rchanrt
->>> +            - const: tchanrt
->>> +            - const: ringrt
->>
->> With my changes further this can be only "minItems: 5"
 > 
-> Ok.
+> >  	nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
+> > @@ -1887,6 +1888,10 @@ struct vmap_area *find_vmap_area(unsigned long addr)
+> >  
+> >  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
+> >  
+> > +#define VMAP_RAM		0x1
+> > +#define VMAP_BLOCK		0x2
+> > +#define VMAP_FLAGS_MASK		0x3
+> > +
+> >  struct vmap_block_queue {
+> >  	spinlock_t lock;
+> >  	struct list_head free;
+> > @@ -1967,6 +1972,9 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+> >  		kfree(vb);
+> >  		return ERR_CAST(va);
+> >  	}
+> > +	spin_lock(&vmap_area_lock);
+> > +	va->flags = VMAP_RAM|VMAP_BLOCK;
+> > +	spin_unlock(&vmap_area_lock);
+> >
+> The per-cpu code was created as a fast per-cpu allocator because of high
+> vmalloc lock contention. If possible we should avoid of locking of the
+> vmap_area_lock. Because it has a high contention.
 
-I was wrong, keep it.
+Fair enough. I made below draft patch to address the concern. By
+adding argument va_flags to alloc_vmap_area(), we can pass the 
+vm_map_ram flags into alloc_vmap_area and filled into vmap_area->flags.
+With this, we don't need add extra action to acquire vmap_area_root lock
+and do the flags setting. Is it OK to you?
 
-> 
->>
->>> +
->>> +      required:
->>> +        - compatible
->>> +        - "#dma-cells"
->>> +        - reg
->>> +        - reg-names
->>> +        - msi-parent
->>> +        - ti,sci
->>> +        - ti,sci-dev-id
->>> +        - ti,sci-rm-range-bchan
->>> +        - ti,sci-rm-range-tchan
->>> +        - ti,sci-rm-range-rchan
->>> +
->>>  properties:
->>>    compatible:
->>> -    const: ti,am64-dmss-bcdma
->>> +    enum:
->>> +      - ti,am64-dmss-bcdma
->>> +      - ti,am62a-dmss-bcdma-csirx
->>
->> Keep some order, e.g. alphabetical. This reduces later conflicts on
->> simultaneous edits.
-> 
-> Will fix!
-> 
->>
->>>  
->>>    "#dma-cells":
->>>      const: 3
->>> @@ -65,19 +122,13 @@ properties:
->>>  
->>>        cell 3: ASEL value for the channel
->>>  
->>> -  reg:
->>> -    maxItems: 5
->>
->> Keep it here with widest constrains - minItems: 3, maxItems: 5
->>
->>> -
->>> -  reg-names:
->>> -    items:
->>> -      - const: gcfg
->>> -      - const: bchanrt
->>> -      - const: rchanrt
->>> -      - const: tchanrt
->>> -      - const: ringrt
->>
->> Keep the list here with minItems: 3
+From 115f6080b339d0cf9dd20c5f6c0d3121f6b22274 Mon Sep 17 00:00:00 2001
+From: Baoquan He <bhe@redhat.com>
+Date: Wed, 7 Dec 2022 11:08:14 +0800
+Subject: [PATCH] mm/vmalloc: change alloc_vmap_area() to pass in va_flags
 
-So here minItems:3, maxItems:5
+With this change, we can pass and set vmap_area->flags for vm_map_ram area
+in alloc_vmap_area(). Then no extra action need be added to acquire
+vmap_area_lock when doing the vmap_area->flags setting.
 
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ mm/vmalloc.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index ccaa461998f3..d74eddec352f 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -1586,7 +1586,9 @@ preload_this_cpu_lock(spinlock_t *lock, gfp_t gfp_mask, int node)
+ static struct vmap_area *alloc_vmap_area(unsigned long size,
+ 				unsigned long align,
+ 				unsigned long vstart, unsigned long vend,
+-				int node, gfp_t gfp_mask)
++				int node, gfp_t gfp_mask,
++				unsigned long va_flags)
++)
+ {
+ 	struct vmap_area *va;
+ 	unsigned long freed;
+@@ -1630,6 +1632,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
+ 	va->va_start = addr;
+ 	va->va_end = addr + size;
+ 	va->vm = NULL;
++	va->flags = va_flags;
+ 
+ 	spin_lock(&vmap_area_lock);
+ 	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
+@@ -1961,7 +1964,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
+ 
+ 	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
+ 					VMALLOC_START, VMALLOC_END,
+-					node, gfp_mask);
++					node, gfp_mask,
++					VMAP_RAM|VMAP_BLOCK);
+ 	if (IS_ERR(va)) {
+ 		kfree(vb);
+ 		return ERR_CAST(va);
+@@ -2258,7 +2262,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
+ 	} else {
+ 		struct vmap_area *va;
+ 		va = alloc_vmap_area(size, PAGE_SIZE,
+-				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
++				VMALLOC_START, VMALLOC_END,
++				node, GFP_KERNEL, VMAP_RAM|VMAP_BLOCK);
+ 		if (IS_ERR(va))
+ 			return NULL;
+ 
+@@ -2498,7 +2503,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
+ 	if (!(flags & VM_NO_GUARD))
+ 		size += PAGE_SIZE;
+ 
+-	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
++	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
+ 	if (IS_ERR(va)) {
+ 		kfree(area);
+ 		return NULL;
+-- 
+2.34.1
 
