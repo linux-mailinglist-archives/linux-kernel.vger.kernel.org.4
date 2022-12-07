@@ -2,136 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E57F645B22
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4DB645B1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:39:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiLGNjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:39:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S229722AbiLGNi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:38:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiLGNjg (ORCPT
+        with ESMTP id S229475AbiLGNiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:39:36 -0500
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B82259864;
-        Wed,  7 Dec 2022 05:39:35 -0800 (PST)
-Received: by mail-qv1-f42.google.com with SMTP id mn15so12607577qvb.13;
-        Wed, 07 Dec 2022 05:39:35 -0800 (PST)
+        Wed, 7 Dec 2022 08:38:54 -0500
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76B329C8A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:38:53 -0800 (PST)
+Received: by mail-yb1-xb29.google.com with SMTP id o127so22686730yba.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:38:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+GXkP58FsgYtEtV2kltJdQIO7NbuSAa5+nIq85bqPZc=;
+        b=VV1HQQXIg4IQoL/RTe8WTrB4W1JmiXDCo19eUo8d4rajcTHkrDsI5eLFjOY8ySkRmq
+         5+y5sDmoGbPTBHNlac4cxxD5rVcpmGaO6FeJ1wNsxxaIMo6tLWEFhrU9KSUCSPWmaHvS
+         ODgFs2lGeFgYlPY+wWNt45cF2srmGSOZ+OhJjsE0Gug/Pi8fW3FdTgY7lMz9CWq++YXV
+         LenGjA8X+TV8+k3iI0BQR6Alz3VY3ItruQgLyBfTuubLtf6/tyvDW9w4pQZuPB32Dqzc
+         PbCcYG6C20dUXqknwfagM9fckxA4vUqZ/ZYVEkl6lmDQWfw8U/Hjszgi/6azC7UL0ZLS
+         LATw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=POEYbus31nl5lGZyaVLCaTjVbQ3uHYNP++mB76/Ajas=;
-        b=mlJLD+o+TDbbAe5Mblf1F49emwji/WN6Z9pA2RQ6MB4eFhiRZB16ljnNLhl3LAGgHb
-         ZV2JcsGTvS3EyXsCVEYIbLjG/5PLhN2RO6WNTznNNuW7nYiiqYQu6BYbf9fEIHWMOt6O
-         H7xxhRZm1jZVRxOxA8CX8wZ7uJbkchPVF4NoNgjE8k/E/ggNFH3ZHZFgQ4d4JtmbrFAp
-         Gk0Wd5ovqlUVZhwtqpcOT2bd4Aj+Ef0lv3aE7wyExveab1rsy0Xs2dc8XLb23gu3sLpA
-         TcB4/yjGc66D8c+AoarAgl/iBgu7LsuBeKQtsFFw9ybndC5LU0GRK00qFElarKGEpPdw
-         I/gw==
-X-Gm-Message-State: ANoB5pk74FW3FdbTkLoHgcplo7vXrEvcKC7urNMetwh2IhDDO3G6peHR
-        V6ze3TnblAvSLqYmHEXBSuLZaBkJVn6Bp12ggYwqzooj
-X-Google-Smtp-Source: AA0mqf4OTkUP1xNO0vcVo/o2R+82M0M6ZHTHb5UlXGWqJGkjTGW10beKcidK0OM/pA+GawMER1rvfn1kA1zI3wa/IiM=
-X-Received: by 2002:a0c:c589:0:b0:4b1:a9ac:21de with SMTP id
- a9-20020a0cc589000000b004b1a9ac21demr64622850qvj.119.1670420374190; Wed, 07
- Dec 2022 05:39:34 -0800 (PST)
+        bh=+GXkP58FsgYtEtV2kltJdQIO7NbuSAa5+nIq85bqPZc=;
+        b=5u+osIWBmTgm92LPt23hWBt087qd7nkYe+7kCmekxqBllLickDw7cKcCqr/ZjoH4E4
+         3mqHjM3oqniToKqcqvrT8ovpm3Q5BIKg7pjf+txLi6zYi8D2y0+EIvfnHtRvbhenH1Tu
+         fsAJiaMwxs7xo/2wIaU+NabLKD21xRCuaX/zNobWTVhZ8cDZ21wzcQii3cYJ6ogvV9rI
+         uKL/uBdflxNUApzbXslRLCLu3sRzC0c/vOcdvXMz9344TfYslciRxwM0dodJpKaEscn9
+         jR/iGdLlHSFWKQvMNg31rA4nHlWVdhM9z13sTWuAFPnRR7JRJ5zJHaz6556lThY5nYQQ
+         DFrQ==
+X-Gm-Message-State: ANoB5pl3Dg0p18Pa0jOs7Y+ZlBkYjMS8PSEWdwnPNazHRBuief8z5dra
+        RHaHmBSeBlp1eq/9rLcKI9ZDhpvnc52tAdvxWc8kXx58h80EyovTmKM=
+X-Google-Smtp-Source: AA0mqf4I6ian1m6Wk2VTDE1G5nDA4SclhjAbtbpN52dNRHMyOMowzcjMfWb+j7vOLzrlsDSmYyH8p0ZYy9K2Uidtt/g=
+X-Received: by 2002:a25:1843:0:b0:6dc:b9ec:7c87 with SMTP id
+ 64-20020a251843000000b006dcb9ec7c87mr70316385yby.322.1670420333032; Wed, 07
+ Dec 2022 05:38:53 -0800 (PST)
 MIME-Version: 1.0
-References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
- <2283816.ElGaqSPkdT@kreacher> <e7eb0e0c9aea30c0e3205b2f3d96b74a52283b40.camel@hadess.net>
- <CAJZ5v0ibpzoBLXKiqzciYv1Htks0=4+4_XGLvpH7MCyFoYJiDg@mail.gmail.com>
- <CAO-hwJL7n7HFk4MTKvLcvBPSLDwm9pHqLaZvmuwvSNDVWUF76g@mail.gmail.com>
- <nycvar.YFH.7.76.2212071117420.6045@cbobk.fhfr.pm> <f0ccee0d2f85099c146ee682b25d30c832155fa3.camel@hadess.net>
- <CAJZ5v0iwEKtLVzzJw+XG5-w=qr86ec0yKpAWCU-KLwYmFnt5Zg@mail.gmail.com> <CAO-hwJLXPKwvFPHFq=y12p41Sx2Ab69sAY9Co7i0=iL1HzdXOg@mail.gmail.com>
-In-Reply-To: <CAO-hwJLXPKwvFPHFq=y12p41Sx2Ab69sAY9Co7i0=iL1HzdXOg@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 14:39:22 +0100
-Message-ID: <CAJZ5v0g-_o4AqMgNwihCb0jrwrcJZfRrX=jv8aH54WNKO7QB8A@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] HID: logitech-hidpp: Add Bluetooth Mouse
- M336/M337/M535 to unhandled_hidpp_devices[]
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
+References: <20221205105931.410686-1-vadym.kochan@plvision.eu> <20221205105931.410686-4-vadym.kochan@plvision.eu>
+In-Reply-To: <20221205105931.410686-4-vadym.kochan@plvision.eu>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 7 Dec 2022 14:40:09 +0100
+Message-ID: <CACRpkdaXQqrCEqu9HTMZMMWbnkQxXEmoJNtiH-HENZWeDqjqTw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
+To:     Vadym Kochan <vadym.kochan@plvision.eu>
+Cc:     Hu Ziji <huziji@marvell.com>, Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Elad Nachman <enachman@marvell.com>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 2:25 PM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Wed, Dec 7, 2022 at 2:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, Dec 7, 2022 at 1:43 PM Bastien Nocera <hadess@hadess.net> wrote:
-> > >
-> > > On Wed, 2022-12-07 at 11:19 +0100, Jiri Kosina wrote:
-> > > > On Wed, 7 Dec 2022, Benjamin Tissoires wrote:
-> > > >
-> > > > > Agree, but OTOH, Rafael, your mouse is not brand new AFAICT, so I
-> > > > > am
-> > > > > worried that you won't be the only one complaining we just killed
-> > > > > their
-> > > > > mouse. So I think the even wiser solution would be to delay (and so
-> > > > > revert in 6.1 or 6.2) the 2 patches that enable hid++ on all
-> > > > > logitech
-> > > > > mice (8544c812e43ab7bdf40458411b83987b8cba924d and
-> > > > > 532223c8ac57605a10e46dc0ab23dcf01c9acb43).
-> > > >
-> > > > If we were not at -rc8 timeframe, I'd be in favor to coming up with
-> > > > proper
-> > > > fix still for 6.1. But as things currently are, let's just revert
-> > > > those
-> > > > and reschedule them with proper fix for 6.2+.
-> > >
-> > > Has anyone seen any other reports?
->
-> It's not so much about how many reports, but *what* the end result is.
-> If the device were working-ish, that would have been OK. But here the
-> device is completely ignored by the kernel which basically enters the
-> "no regression rule".
->
-> > >
-> > > Because, honestly, seeing work that adds support for dozens of devices
-> > > getting tossed out at the last minute based on a single report with no
-> > > opportunity to fix the problem is really frustrating.
->
-> I know, and I feel your pain as I was about to have the same last week
-> for HID-BPF. But as much as I hate dropping patches from the queue,
-> not being able to have at least a week to fix it properly ends up with
-> "fixes" that are broken and that might break other devices. Talking
-> from experience as my first fix from last week was exactly in that
-> category.
->
-> >
-> > Well, that's why I sent patches to address this particular case
-> > without possibly breaking anything else.
->
-> My concern is more that we now have a data point were the series broke
-> a device (pretty badly) and if (when) this happens shortly after 6.1
-> is getting released, we would have to say, oh yes, we know, so we need
-> to patch the kernel because our driver is buggy, and we knew it. This
-> is not acceptable, and I am sure that if Linus reads that thread he
-> would revert the 2 patches or maybe more.
+On Mon, Dec 5, 2022 at 12:00 PM Vadym Kochan <vadym.kochan@plvision.eu> wrote:
 
-Well, I agree.
+> There is a limitation on AC5 SoC that mmc controller
+> can't have DMA access over 2G memory,
 
-> >
-> > Improvements can be made on top of them and the blocklist entry added
-> > by patch [2/2] need not stay there forever, FWIW.
-> >
->
-> I need to check with Jiri, but there is a chance we can re-introduce
-> this in 6.2. This way we will have slightly more time to fix it in a
-> proper way.
+That sounds like a pretty common problem when someone
+uses a 32bit address register in their DMA controller, or
+the integration engineer not connecting all address lines... :/
 
-Sounds good to me.
+>  so use SDMA with a bounce buffer. Swiotlb can't help because
+> on arm64 arch it reserves memblock's at the end of the memory.
+
+OK
+
+This:
+
+> Additionally set mask to 34 bit since on AC5 SoC RAM starts
+> at 0x2_00000000.
+(...)
+> +static int xenon_set_dma_mask(struct sdhci_host *host)
+> +{
+> +       struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+> +       struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
+> +       struct mmc_host *mmc = host->mmc;
+> +       struct device *dev = mmc_dev(mmc);
+> +
+> +       if (priv->hw_version == XENON_AC5) {
+> +               host->flags &= ~SDHCI_USE_64_BIT_DMA;
+> +
+> +               return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
+> +       }
+> +
+> +       return sdhci_set_dma_mask(host);
+> +}
+(...)
+> +       .set_dma_mask           = xenon_set_dma_mask,
+
+I don't know if is so good to assume the size and location of the
+SoC RAM like you do, that looks really fragile.
+
+Can't you check what physical RAM Linux actually think
+it has and where? You partly check it with meminfo below.
+
+> +static int xenon_ac5_probe(struct sdhci_host *host)
+> +{
+> +       struct sysinfo si;
+> +
+> +       si_meminfo(&si);
+> +
+> +       if ((si.totalram * si.mem_unit) > SZ_2G)
+
+This looks like a bug since you mention that the RAM does
+not start at 0x00000000 this means if the memory is
+2G it will partly be at physical addresses above 2G....
+
+> +               host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
+> +
+> +       return 0;
+> +}
+
+Here you check how big the RAM is using meminfo (if the
+bug is fixed).
+
+But is this really a good solution? ADMA still works on the lower
+2GB does it not?
+
+What you want is a new quirk that bounces only when you
+go above SZ_4G.
+
+There *is* SDHCI_QUIRK_32BIT_DMA_ADDR have you
+tried this? A 32bit DMA address is literally 4GB.
+I think all you need to do is set this flag for xenon.
+
+Yours,
+Linus Walleij
