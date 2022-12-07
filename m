@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E3F645F69
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79FF0645F70
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:58:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiLGQ6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:58:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
+        id S229879AbiLGQ6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:58:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLGQ6d (ORCPT
+        with ESMTP id S229627AbiLGQ6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 7 Dec 2022 11:58:33 -0500
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DCC62E9B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8353462E9F;
         Wed,  7 Dec 2022 08:58:32 -0800 (PST)
 Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7GnGUE028363;
-        Wed, 7 Dec 2022 16:58:23 GMT
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7GBUm1024545;
+        Wed, 7 Dec 2022 16:58:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=D0G4TADsne4GknsV3/DiDjdVyQbWExXugyPC5lUp4U0=;
- b=ExsOxCJwnWGIbdw+fRl+BhEYV8OJad3on+pcgVhVNpCmNtyRMJ48D5FsQajYKN4WAlNR
- 3i0oPikzYHwP2WHGmkYD2F7Q9oNPkXdu0/IW/PcuiHaGv7lYJdVv2MHYgIdJhCteJUiq
- 4f0xCm71I1r0nWzzprGVedDfUzO+eKmRp6UbdmS/EXVa/9RYPg5T3qH4B14qhaPJnZTu
- i0O/HHQ+3y15HgCn7sFZph9PCTt3jEDbKwThBXwmfsu59d6ukaV4GJmichX/twjTgXlt
- CEwLu45eVJDWy2JnO0yTVx5SUZt89e9+FehzHZe0h3l+wiWbVt3ikjn7izO7pp9YwQ8/ 0A== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3map4a175r-1
+ bh=fq1jdjbOEaw3v9/eII+pLaG7auDSLgn1tDjsTV6sElo=;
+ b=BWFpRD0b2kMTfkW+L2nBGqxEVwsaN2V4pBDrJu3dxQiseSMnNiDfWMkbpJ8oeQ+uR2ks
+ AkdiXvsqeic4U8xuWkvoVhQQeNmlPoDp1w7k4vIC1EYDRoWnm9B1JWjDym6TUWkbfL6T
+ dE/9P+9YAtmPqOS78b3aWVgj8K4xv3gka9sXeoJNRSeTcQrflAvH2EF0auxumxM7r+6u
+ 52Tq+y5nrRn+GgXEdcTPcYCqettwWKmaEYKF/sJZYL5ZaPpR4VXQAlcv9Ei1Igul5fFI
+ QSi+vnh/lGo/mXfPoiqOx3v07sG9jAGb7i6evc0wNQB3TjHCc1xRXY8jmxvE4JqocjIc 0g== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3map4a175s-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Dec 2022 16:58:22 +0000
+        Wed, 07 Dec 2022 16:58:24 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B7GwLrV001383
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B7GwMGf017541
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Dec 2022 16:58:21 GMT
+        Wed, 7 Dec 2022 16:58:23 GMT
 Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 7 Dec 2022 08:58:20 -0800
+ 15.2.986.36; Wed, 7 Dec 2022 08:58:22 -0800
 From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
 To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
         <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
@@ -51,9 +51,9 @@ CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
         <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
         <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v10 3/5] drm/msm/dp: parser data-lanes as property of dp_out endpoint
-Date:   Wed, 7 Dec 2022 08:57:56 -0800
-Message-ID: <1670432278-30643-4-git-send-email-quic_khsieh@quicinc.com>
+Subject: [PATCH v10 4/5] drm/msm/dp: parser link-frequencies as property of dp_out endpoint
+Date:   Wed, 7 Dec 2022 08:57:57 -0800
+Message-ID: <1670432278-30643-5-git-send-email-quic_khsieh@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1670432278-30643-1-git-send-email-quic_khsieh@quicinc.com>
 References: <1670432278-30643-1-git-send-email-quic_khsieh@quicinc.com>
@@ -64,8 +64,8 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zwLStHUbwvRq3c9HPaup9Zpr47n_yWy2
-X-Proofpoint-GUID: zwLStHUbwvRq3c9HPaup9Zpr47n_yWy2
+X-Proofpoint-ORIG-GUID: OyHBNx7LOxUuDmfqvOIt6pv7hL6s-L3w
+X-Proofpoint-GUID: OyHBNx7LOxUuDmfqvOIt6pv7hL6s-L3w
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-07_08,2022-12-07_01,2022-06-22_01
@@ -83,60 +83,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add capability to parser data-lanes as property of dp_out endpoint.
-Also retain the original capability to parser data-lanes as property
-of mdss_dp node to handle legacy case.
+Add capability to parser and retrieve max DP link supported rate from
+link-frequencies property of dp_out endpoint.
 
 Changes in v6:
--- first patch after split parser patch into two
+-- second patch after split parser patch into two patches
 
 Changes in v7:
--- check "data-lanes" from endpoint first
+-- without checking cnt against DP_MAX_NUM_DP_LANES to retrieve link rate
+
+Changes in v9:
+-- separate parser link-frequencies out of data-lanes
+
+Changes in v10:
+-- add dp_parser_link_frequencies()
 
 Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/gpu/drm/msm/dp/dp_parser.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ drivers/gpu/drm/msm/dp/dp_parser.c | 27 +++++++++++++++++++++++++++
+ drivers/gpu/drm/msm/dp/dp_parser.h |  2 ++
+ 2 files changed, 29 insertions(+)
 
 diff --git a/drivers/gpu/drm/msm/dp/dp_parser.c b/drivers/gpu/drm/msm/dp/dp_parser.c
-index dd73221..b5f7e70 100644
+index b5f7e70..9398abe 100644
 --- a/drivers/gpu/drm/msm/dp/dp_parser.c
 +++ b/drivers/gpu/drm/msm/dp/dp_parser.c
-@@ -94,16 +94,25 @@ static int dp_parser_ctrl_res(struct dp_parser *parser)
- static int dp_parser_misc(struct dp_parser *parser)
- {
- 	struct device_node *of_node = parser->pdev->dev.of_node;
--	int len;
--
--	len = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
--	if (len < 0) {
--		DRM_WARN("Invalid property \"data-lanes\", default max DP lanes = %d\n",
--			 DP_MAX_NUM_DP_LANES);
--		len = DP_MAX_NUM_DP_LANES;
-+	int cnt;
-+
-+	/*
-+	 * data-lanes is the property of dp_out endpoint
-+	 */
-+	cnt = drm_of_get_data_lanes_count_ep(of_node, 1, 0, 1, DP_MAX_NUM_DP_LANES);
-+	if (cnt > 0)
-+		parser->max_dp_lanes = cnt;
-+	else {
-+		/*
-+		 * legacy code, data-lanes is the property of mdss_dp node
-+		 */
-+		cnt = drm_of_get_data_lanes_count(of_node, 1, DP_MAX_NUM_DP_LANES);
-+		if (cnt > 0)
-+			parser->max_dp_lanes = cnt;
-+		else
-+			parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
- 	}
- 
--	parser->max_dp_lanes = len;
+@@ -91,6 +91,28 @@ static int dp_parser_ctrl_res(struct dp_parser *parser)
  	return 0;
  }
  
++static u32 dp_parser_link_frequencies(struct device_node *of_node)
++{
++	struct device_node *endpoint;
++	u64 frequency = 0;
++	int cnt = 0;
++
++	endpoint = of_graph_get_endpoint_by_regs(of_node, 1, 0); /* port@1 */
++	if (endpoint)
++		cnt = of_property_count_u64_elems(endpoint, "link-frequencies");
++
++	if (cnt > 0) {
++		of_property_read_u64_index(endpoint, "link-frequencies",
++						cnt - 1, &frequency);
++		frequency /= 10;	/* from symbol rate to link rate */
++		frequency /= 1000;	/* kbits */
++	}
++
++	of_node_put(endpoint);
++
++	return (u32)frequency;
++}
++
+ static int dp_parser_misc(struct dp_parser *parser)
+ {
+ 	struct device_node *of_node = parser->pdev->dev.of_node;
+@@ -113,6 +135,11 @@ static int dp_parser_misc(struct dp_parser *parser)
+ 			parser->max_dp_lanes = DP_MAX_NUM_DP_LANES; /* 4 lanes */
+ 	}
+ 
++	parser->max_dp_link_rate = dp_parser_link_frequencies(of_node);
++
++	if (!parser->max_dp_link_rate)
++                parser->max_dp_link_rate = DP_LINK_RATE_HBR2; /* 540000 khz */
++
+ 	return 0;
+ }
+ 
+diff --git a/drivers/gpu/drm/msm/dp/dp_parser.h b/drivers/gpu/drm/msm/dp/dp_parser.h
+index 866c1a8..6b10c3e 100644
+--- a/drivers/gpu/drm/msm/dp/dp_parser.h
++++ b/drivers/gpu/drm/msm/dp/dp_parser.h
+@@ -15,6 +15,7 @@
+ #define DP_LABEL "MDSS DP DISPLAY"
+ #define DP_MAX_PIXEL_CLK_KHZ	675000
+ #define DP_MAX_NUM_DP_LANES	4
++#define DP_LINK_RATE_HBR2	540000 /* khz */
+ 
+ enum dp_pm_type {
+ 	DP_CORE_PM,
+@@ -119,6 +120,7 @@ struct dp_parser {
+ 	struct dp_io io;
+ 	struct dp_display_data disp_data;
+ 	u32 max_dp_lanes;
++	u32 max_dp_link_rate;
+ 	struct drm_bridge *next_bridge;
+ 
+ 	int (*parse)(struct dp_parser *parser);
 -- 
 The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
 a Linux Foundation Collaborative Project
