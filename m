@@ -2,142 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2366462B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 926656462D5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiLGUsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60732 "EHLO
+        id S230134AbiLGUvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:51:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbiLGUrn (ORCPT
+        with ESMTP id S230062AbiLGUu3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:47:43 -0500
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E470A2AEC
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 12:47:35 -0800 (PST)
-Received: by mail-io1-f69.google.com with SMTP id t2-20020a6b6402000000b006dea34ad528so14219007iog.1
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 12:47:35 -0800 (PST)
+        Wed, 7 Dec 2022 15:50:29 -0500
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A184E7E431;
+        Wed,  7 Dec 2022 12:49:40 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id mn15so13498903qvb.13;
+        Wed, 07 Dec 2022 12:49:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xfNaKa2Q6Dxio2+kzEH8IXgw2KHdb6DNTDuqymdug6o=;
-        b=i9VVB1+MecRXJTYxXB9aZBt+HCe+oHR7kzJpzRoe2n3XBk3ygR0HivsZ44nDgOsMfj
-         1LHYb2HisrI1ybc2BXNZ4Z5ye4SI5MYoPssJ2MQfL/Fwvu5DAjbHiYKwqRNdN3Zck28m
-         D0cSYtT/nvcc6j7Z1EcFeF8bE8w3bJK7e8ZbiZzk2MD8jdwnTmoA96Ac0N+sY+/6wgId
-         9w+mKev/2F6r4W7NyrYDxooKAA1KM/8mCyX4EWFxN1SDZ13XATzpnSmcrcRegAwTSa/k
-         KuJNyA6jCJUqLQYiwfio+fnYxvZNZubfP78rdLTdceULhZ/st3vuMikgtynVHVHXwhP/
-         rgow==
-X-Gm-Message-State: ANoB5pmK916OKw1LxyYotgprwRvtWYIX1qstCQRk97LdT06whxXWuwOe
-        qeO5rGlBT8Y3V3dyA1XojEL41wRltNOEDwfxlSWUlzK8MP2K
-X-Google-Smtp-Source: AA0mqf7ZuM64318il2XMLMCR7zdirTdZRcd8l+QJuEAAS1OwFrckjmz7LV2aiUsEi5LsL4Gif90bVO//lpsRz/W66+SGvvq8m4CV
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gRxvJTGK2cDC3z7BCQUpnPVW1eaQaQ+xwEyipFCGWaw=;
+        b=OeTkfMkRCDnsPu4FeogmbzLgH4sWn0MB/ihZOzWeVunHIRsQH1xgH1/5Mcpzxa1YDS
+         G2AK45VZ4nAAX8RMxnpbchR/UEEy3W/ZK6UTXCC5r9M/rLdDEHvtgqhtxtdjvABD5sKu
+         jX8mL9lkoD2lVGLD3IOC1yORmKAZOREHQMZKWJM15ME0jZn5jzagvG3N8iWhZGOHyd0p
+         ylsR6edgruSAVN+RRLECAPOJ69zkNdpJF9Aa5lQgZNld5aTEmKg/p5qQMF8hMGb4zgdh
+         ikRJ6RTB8APqvSOrItekqJKnkS4I//c29JKvlnrf5bS4Ty37lVP4Ar2topZ5ByO2W0+M
+         ItJg==
+X-Gm-Message-State: ANoB5pnYaZFRKLr9Y1iMNrMCgZNiWtrrETqIa3hxu4Du9wE0hsWl8X/a
+        wvcy7G2R6TCGXcBqgzPvtVVTRHblP3Y7BzjG
+X-Google-Smtp-Source: AA0mqf4J9Y93qmicAwgoeEZJaFwLMCYoIcEM3pNYcQ5SJM+na68si7cedCrPb3EweynuYieINCPaVQ==
+X-Received: by 2002:ad4:57aa:0:b0:4c6:f83c:4741 with SMTP id g10-20020ad457aa000000b004c6f83c4741mr45473577qvx.11.1670446178850;
+        Wed, 07 Dec 2022 12:49:38 -0800 (PST)
+Received: from localhost ([2620:10d:c091:480::1:629d])
+        by smtp.gmail.com with ESMTPSA id z18-20020ac87112000000b0039853b7b771sm14191307qto.80.2022.12.07.12.49.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 12:49:38 -0800 (PST)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@meta.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/2] Document some recent core kfunc additions
+Date:   Wed,  7 Dec 2022 14:49:09 -0600
+Message-Id: <20221207204911.873646-1-void@manifault.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:241c:0:b0:38a:5b87:24e2 with SMTP id
- f28-20020a02241c000000b0038a5b8724e2mr4026058jaa.159.1670446054920; Wed, 07
- Dec 2022 12:47:34 -0800 (PST)
-Date:   Wed, 07 Dec 2022 12:47:34 -0800
-In-Reply-To: <000000000000decafe05ef372b92@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b85cdf05ef430758@google.com>
-Subject: Re: [syzbot] possible deadlock in ovl_fallocate
-From:   syzbot <syzbot+38a94e1872470e3450a6@syzkaller.appspotmail.com>
-To:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+A series of recent patch sets introduced kfuncs that allowed struct
+task_struct and struct cgroup objects to be used as kptrs. These were
+introduced in [0], [1], and [2].
 
-HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
-git tree:       linux-next
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1044bbad880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
-dashboard link: https://syzkaller.appspot.com/bug?extid=38a94e1872470e3450a6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15236fe3880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=178313f3880000
+[0]: https://lore.kernel.org/lkml/20221120051004.3605026-1-void@manifault.com/
+[1]: https://lore.kernel.org/lkml/20221122145300.251210-2-void@manifault.com/T/
+[2]: https://lore.kernel.org/lkml/20221122055458.173143-1-void@manifault.com/
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
+These are "core" kfuncs, in that they may be used by a wide variety of
+possible BPF tracepoint or struct_ops programs, and are defined in
+kernel/bpf/helpers.c. Even though as kfuncs they have no ABI stability
+guarantees, they should still be properly documented. This patch set
+adds that documentation.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+38a94e1872470e3450a6@syzkaller.appspotmail.com
+Some other kfuncs were added recently as well, such as
+bpf_rcu_read_lock() and bpf_rcu_read_unlock(). Those could and should be
+added to this "Core kfuncs" section as well in subsequent patch sets.
 
-============================================
-WARNING: possible recursive locking detected
-6.1.0-rc8-next-20221207-syzkaller #0 Not tainted
---------------------------------------------
-syz-executor169/5069 is trying to acquire lock:
-ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
-ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_remove_privs_unlocked fs/overlayfs/file.c:519 [inline]
-ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_fallocate+0x15c/0x270 fs/overlayfs/file.c:546
+Note that this patch set does not contain documentation for
+bpf_task_acquire_not_zero(), or bpf_task_kptr_get(). As discussed in
+[3], those kfuncs currently always return NULL pending resolution on how
+to properly protect their arguments using RCU.
 
-but task is already holding lock:
-ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
-ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_fallocate+0x9f/0x270 fs/overlayfs/file.c:535
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
+[3]: https://lore.kernel.org/all/20221206210538.597606-1-void@manifault.com/
 
-       CPU0
-       ----
-  lock(&ovl_i_mutex_key[depth]);
-  lock(&ovl_i_mutex_key[depth]);
+--
+Changelog:
+v2 -> v3:
+- Don't document bpf_task_kptr_get(), and instead provide a more
+  substantive example for bpf_cgroup_kptr_get().
+- Further clarify expected behavior of bpf_task_from_pid() in comments
+  (Alexei)
 
- *** DEADLOCK ***
+v1 -> v2:
+- Expand comment to specify that a map holds a reference to a task kptr
+  if we don't end up releasing it (Alexei)
+- Just read task->pid instead of using a probed read (Alexei)
 
- May be due to missing lock nesting notation
+David Vernet (2):
+  bpf/docs: Document struct task_struct * kfuncs
+  bpf/docs: Document struct cgroup * kfuncs
 
-2 locks held by syz-executor169/5069:
- #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: ksys_fallocate fs/open.c:346 [inline]
- #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: __do_sys_fallocate fs/open.c:354 [inline]
- #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: __se_sys_fallocate fs/open.c:352 [inline]
- #0: ffff88802b1d6460 (sb_writers#9){.+.+}-{0:0}, at: __x64_sys_fallocate+0xd3/0x140 fs/open.c:352
- #1: ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:756 [inline]
- #1: ffff8880750fa480 (&ovl_i_mutex_key[depth]){+.+.}-{3:3}, at: ovl_fallocate+0x9f/0x270 fs/overlayfs/file.c:535
+ Documentation/bpf/kfuncs.rst | 198 +++++++++++++++++++++++++++++++++++
+ kernel/bpf/helpers.c         |   4 +-
+ 2 files changed, 200 insertions(+), 2 deletions(-)
 
-stack backtrace:
-CPU: 1 PID: 5069 Comm: syz-executor169 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
- print_deadlock_bug kernel/locking/lockdep.c:2990 [inline]
- check_deadlock kernel/locking/lockdep.c:3033 [inline]
- validate_chain kernel/locking/lockdep.c:3818 [inline]
- __lock_acquire.cold+0x116/0x3a7 kernel/locking/lockdep.c:5055
- lock_acquire kernel/locking/lockdep.c:5668 [inline]
- lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
- down_write+0x94/0x220 kernel/locking/rwsem.c:1562
- inode_lock include/linux/fs.h:756 [inline]
- ovl_remove_privs_unlocked fs/overlayfs/file.c:519 [inline]
- ovl_fallocate+0x15c/0x270 fs/overlayfs/file.c:546
- vfs_fallocate+0x48b/0xe00 fs/open.c:323
- ksys_fallocate fs/open.c:346 [inline]
- __do_sys_fallocate fs/open.c:354 [inline]
- __se_sys_fallocate fs/open.c:352 [inline]
- __x64_sys_fallocate+0xd3/0x140 fs/open.c:352
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa3d1605c29
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffccc67e118 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fa3d1605c29
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
-RBP: 00007fa3d15c9dd0 R08: 0000000000000000 R09: 0000000000000000
-R10: 00000000001000f4 R11: 0000000000000246 R12: 00007fa3d15c9e60
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
+-- 
+2.38.1
 
