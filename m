@@ -2,81 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A85646123
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCDD064611E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 19:31:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbiLGScE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 13:32:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S229781AbiLGSbu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 13:31:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiLGSbf (ORCPT
+        with ESMTP id S229773AbiLGSbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 13:31:35 -0500
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65BF6E57A;
-        Wed,  7 Dec 2022 10:31:34 -0800 (PST)
-Received: from [192.168.178.23] (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 992B2CA474;
-        Wed,  7 Dec 2022 18:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1670437862; bh=S3rdsnAd+EN2Xrpqco5hkvF1iY6KBSEemrYqRZ09QIY=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc;
-        b=NitHY5mmigiSLN0KzddnI4U8I1P+e/GPwsuiYMVvUk3fgQHv2oAU5qaTWWRJhGw62
-         kID9XpLQGuOI4EcYDoSYj5TJzs++KjAhX7DD8UpPFOlUBWtH597lonc0VPUAzLJm36
-         yD1qDaCtAWZ5WiyVqAV84LYQe0TpUr1dL1VWaxLI=
-From:   Luca Weiss <luca@z3ntu.xyz>
-Date:   Wed, 07 Dec 2022 19:30:46 +0100
-Subject: [PATCH v3 9/9] arm64: dts: qcom: sdm632: Add device tree for Motorola G7
- Power
+        Wed, 7 Dec 2022 13:31:33 -0500
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5906DCE6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 10:31:31 -0800 (PST)
+Received: by mail-pg1-x52c.google.com with SMTP id 142so1696158pga.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 10:31:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9twUK2BdOE0AIhzkr88aFbMfohNAzl5Qt9U40b/hedQ=;
+        b=I/NwqUQM0zkj77mtA8W82ZQY1P2Ln0LXrgCzcRWl1ovl8jRpvovaNnMx9jKQTMbBJO
+         Y7JoqgY0IjC+XDt29FZ6Hr9KxlToqmP7QaU07dM8dLTepd3sh6M27XMPAoHoM4jsOnDE
+         YY4KTCh7Du86pt4x1+AliOpfXkxBV3oO8qNxo3NaIy4UADZLqIT6EQ0bsPT9fS79ZbGM
+         u1DlFWMYl3MuaQKIJ1gd2jkxaP3G60AW7punvAtsMn37umXD+G015RHLLzXRKzxYsZY4
+         G5oWdhnUaAYg+aEawcQVYigHQ5BIJuX8h18wTTcDD3jH84bAlECSNWyUQ8L5jksPDHMx
+         TnFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9twUK2BdOE0AIhzkr88aFbMfohNAzl5Qt9U40b/hedQ=;
+        b=oq75nSs70yhndlVWc7k5nLMVnQaT5uzvYZk7PVTJvUsTI1Ur3dRb3+Js1vPMrbEaAQ
+         E8cjWtfnOj6fl+tjIwTOX0ktpWKwbwdMs1EN2spS5noNHwolgsm2kX5FZ166ZUvZPjUW
+         iEKls79PMiJ74tdJKsds8MyxjGqKo24Dt820Z/Jt2Yz7p8RQh7zAqrC2QdB3dqZVdSBa
+         94B6BlmGf4PeRasBAotR5JpiGx8fq5llcv0lPgLYEjWtA2IetVCkBz5uBNQcENyXOmt4
+         od+m79Xdy4I2EtHgepxqCGXwGCb3b18QjDon+3Y+vx9qT7sbhqhGKhzXs6d96Sb7oF16
+         rGiw==
+X-Gm-Message-State: ANoB5pmBcm5Dg41esJkCy4yoBR1p2trvaDUU0V5TqGgr9gtXwovnWSwM
+        BsUuzLsTDl6crQvOWsuD3n1crx3PA+YSZsigBO8=
+X-Google-Smtp-Source: AA0mqf5Nmm+DUOdYgBwjlIg18FdT+GbIS4rzeP3/XhKnwXZwm8sB4n6LS46XiycgM9D2BbbnoAEdbcY7DJ2/IL1sk1M=
+X-Received: by 2002:aa7:91d6:0:b0:574:c543:f804 with SMTP id
+ z22-20020aa791d6000000b00574c543f804mr58219767pfa.51.1670437890943; Wed, 07
+ Dec 2022 10:31:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20221207-msm8953-6-1-next-dtbs-v3-v3-9-a64b3b0af0eb@z3ntu.xyz>
-References: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
-In-Reply-To: <20221207-msm8953-6-1-next-dtbs-v3-v3-0-a64b3b0af0eb@z3ntu.xyz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+References: <e97bc607-a913-dbbd-1965-b60d55d956b8@gmail.com>
+ <c5edaa34-6f85-c6a8-84f5-75413dc864ea@gmail.com> <202208091600.D19DFF9C7D@keescook>
+ <CAC=U0a3F6172JH+xvA0pSb0bewu_0PX9XFKmL32ge+KyTOdaZA@mail.gmail.com>
+In-Reply-To: <CAC=U0a3F6172JH+xvA0pSb0bewu_0PX9XFKmL32ge+KyTOdaZA@mail.gmail.com>
+From:   Kamal Dasu <kdasu.kdev@gmail.com>
+Date:   Wed, 7 Dec 2022 13:31:19 -0500
+Message-ID: <CAC=U0a1n_hKLgyD5rH_cktzaW_mW_UEFZLAQ4g65YXD9Ea_R3w@mail.gmail.com>
+Subject: Re: Invalid pstore_blk use?
+To:     Kees Cook <keescook@chromium.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
         Tony Luck <tony.luck@intel.com>
-Cc:     Gabriela David <ultracoolguy@disroot.org>,
-        Eugene Lepshy <fekz115@gmail.com>,
-        linux-hardening@vger.kernel.org,
-        Anton Bambura <jenneron@protonmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
-        Danila Tikhonov <JIaxyga@protonmail.com>,
-        Gianluca Boiano <morf3089@gmail.com>,
-        Sireesh Kodali <sireeshkodali1@gmail.com>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alejandro Tafalla <atafalla@dnyon.com>
-X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7685; i=luca@z3ntu.xyz;
- h=from:subject:message-id; bh=9S+RsrnSlN1BSxEP9zi4JIArpOHnf7x58PHkAZu4K3Q=;
- b=owEBbQKS/ZANAwAIAXLYQ7idTddWAcsmYgBjkNvhL9fP9Ci+H+fvhrD9iSucX4ZnGxU5W4r4UJf1
- j3su3nmJAjMEAAEIAB0WIQQ5utIvCCzakboVj/py2EO4nU3XVgUCY5Db4QAKCRBy2EO4nU3XVua6D/
- 9b6T+4I5jNQ1mqGef+/ce+CAx10lgbDZWvaulXM8gPe/vDVcWNX3xShsfn1BZVGFNnUmJTh+LHG1CU
- megwbI7ioJrxizo1PVSuSH89NEwHVrLlO0laLzr6XFEidUVVhI8mHN4XLgNer5jyCB7X71x/px6rmi
- MyuilswLTL061Fn90DBFBmv+mnE+E5wZC04FKirXKIYSYjTp8unJb5eSf4PT3d/Gs+EW3peEIriw3j
- 1Q5hJvAo4XNVGwWpFgsAtFNe0+sCvLVVT8LwRyJRvsjQoA8oXNlGPI5MkaM2barcRoOAQ+QOPGfFlk
- Aawm2dj5nteV3b1RB+nP1awti7BFZsM1za8rByzfO+l1fPCjBhLcWn7/pHLVYqh53H3Hq+KPay+T60
- pf7jpKfQ1Y8Yp/geS7dU+QPOMl7j+4fmU8TtA67A+BMabdTKwn4IoKDQOnOhDvqIKshzdphUxP9c6O
- 8FfHn8OjTveGG7o3q0palzkYySHPeAICm7QjE2WWXJp9Ier0gvuW1jP2Vq587/u1/QmzdgxjqKV5RH
- sfH517Wef+BoxEDof3i5UIN0sT5OaBeZyEQ56z/lQMobRwqo1dZWNwsBgcLNVoLJOSOlGbxZCJ5wX6
- sj3K/g1ynCN6VOjuAJV+uC66jwqDd30TfNZmPVWLeaH6X5JwhOUTK0b3LwXg==
-X-Developer-Key: i=luca@z3ntu.xyz; a=openpgp;
- fpr=BD04DA24C971B8D587B2B8D7FAF69CF6CD2D02CD
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,329 +74,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gabriela David <ultracoolguy@disroot.org>
++ Adrain Hunter
++ Ulf Hansoon
 
-Add device tree for the Motorola G7 Power (ocean) smartphone. This
-device is based on Snapdragon 632 (sdm632) SoC which is a variant of
-MSM8953.
 
-Signed-off-by: Gabriela David <ultracoolguy@disroot.org>
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/Makefile                  |   1 +
- arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts | 291 +++++++++++++++++++++
- 2 files changed, 292 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 995973d3960a..21fd4aae31bc 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -138,6 +138,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-discovery.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-pioneer.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm630-sony-xperia-nile-voyager.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm632-fairphone-fp3.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sdm632-motorola-ocean.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm636-sony-xperia-ganges-mermaid.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm660-xiaomi-lavender.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sdm670-google-sargo.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts b/arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts
-new file mode 100644
-index 000000000000..c82d6e628d2c
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sdm632-motorola-ocean.dts
-@@ -0,0 +1,291 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2022, Gabriela David
-+ */
-+/dts-v1/;
-+
-+#include "sdm632.dtsi"
-+#include "pm8953.dtsi"
-+#include <dt-bindings/leds/common.h>
-+
-+/delete-node/ &cont_splash_mem;
-+/delete-node/ &qseecom_mem;
-+
-+/ {
-+	model = "Motorola G7 Power";
-+	compatible = "motorola,ocean", "qcom,sdm632";
-+	chassis-type = "handset";
-+	qcom,msm-id = <349 0>;
-+	qcom,board-id = <0x141 0xc100>;
-+	qcom,pmic-id = <0x10016 0x25 0x00 0x00>;
-+
-+	backlight: backlight {
-+		compatible = "led-backlight";
-+		leds = <&led>;
-+	};
-+
-+	chosen {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		framebuffer@90001000 {
-+			compatible = "simple-framebuffer";
-+			reg = <0 0x90001000 0 (720 * 1520 * 3)>;
-+
-+			width = <720>;
-+			height = <1520>;
-+			stride = <(720 * 3)>;
-+			format = "r8g8b8";
-+
-+			power-domains = <&gcc MDSS_GDSC>;
-+
-+			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-+				 <&gcc GCC_MDSS_AXI_CLK>,
-+				 <&gcc GCC_MDSS_VSYNC_CLK>,
-+				 <&gcc GCC_MDSS_MDP_CLK>,
-+				 <&gcc GCC_MDSS_BYTE0_CLK>,
-+				 <&gcc GCC_MDSS_PCLK0_CLK>,
-+				 <&gcc GCC_MDSS_ESC0_CLK>;
-+		};
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&gpio_key_default>;
-+
-+		key-volume-up {
-+			label = "Volume Up";
-+			gpios = <&tlmm 85 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_VOLUMEUP>;
-+		};
-+	};
-+
-+	reserved-memory {
-+		qseecom_mem: qseecom@84300000 {
-+			reg = <0x0 0x84300000 0x0 0x2000000>;
-+			no-map;
-+		};
-+
-+		cont_splash_mem: cont-splash@90001000 {
-+			reg = <0x0 0x90001000 0x0 (720 * 1520 * 3)>;
-+			no-map;
-+		};
-+
-+		reserved@eefa1800 {
-+			reg = <0x00 0xeefa1800 0x00 0x5e800>;
-+			no-map;
-+		};
-+
-+		ramoops@ef000000 {
-+			compatible = "ramoops";
-+			reg = <0x0 0xef000000 0x0 0xbf800>;
-+			console-size = <0x40000>;
-+			pmsg-size = <0x40000>;
-+			record-size = <0x3f800>;
-+		};
-+	};
-+
-+	vph_pwr: vph-pwr-regulator {
-+		compatible = "regulator-fixed";
-+		regulator-name = "vph_pwr";
-+		regulator-always-on;
-+		regulator-boot-on;
-+	};
-+};
-+
-+&hsusb_phy {
-+	vdd-supply = <&pm8953_l3>;
-+	vdda-pll-supply = <&pm8953_l7>;
-+	vdda-phy-dpdm-supply = <&pm8953_l13>;
-+
-+	status = "okay";
-+};
-+
-+&i2c_3 {
-+	status = "okay";
-+
-+	touchscreen@41 {
-+		compatible = "ilitek,ili2117";
-+		reg = <0x41>;
-+
-+		interrupt-parent = <&tlmm>;
-+		interrupts = <65 IRQ_TYPE_EDGE_FALLING>;
-+
-+		touchscreen-inverted-x;
-+	};
-+};
-+
-+&i2c_5 {
-+	status = "okay";
-+
-+	led-controller@36 {
-+		compatible = "ti,lm3697";
-+		reg = <0x36>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		led: led@1 {
-+			reg = <1>;
-+			default-trigger = "backlight";
-+			function = LED_FUNCTION_BACKLIGHT;
-+			led-sources = <0 1 2>;
-+		};
-+	};
-+};
-+
-+&pm8953_resin {
-+	linux,code = <KEY_VOLUMEDOWN>;
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators {
-+		compatible = "qcom,rpm-pm8953-regulators";
-+
-+		vdd_l1-supply = <&pm8953_s3>;
-+		vdd_l2_l3-supply = <&pm8953_s3>;
-+		vdd_l4_l5_l6_l7_l16_l19-supply = <&pm8953_s4>;
-+		vdd_l8_l11_l12_l13_l14_l15-supply = <&vph_pwr>;
-+		vdd_l9_l10_l17_l18_l22-supply = <&vph_pwr>;
-+
-+		pm8953_s3: s3 {
-+			regulator-min-microvolt = <984000>;
-+			regulator-max-microvolt = <1240000>;
-+		};
-+
-+		pm8953_s4: s4 {
-+			regulator-min-microvolt = <1036000>;
-+			regulator-max-microvolt = <2040000>;
-+		};
-+
-+		pm8953_l1: l1 {
-+			regulator-min-microvolt = <975000>;
-+			regulator-max-microvolt = <1050000>;
-+		};
-+
-+		pm8953_l2: l2 {
-+			regulator-min-microvolt = <975000>;
-+			regulator-max-microvolt = <1175000>;
-+		};
-+
-+		pm8953_l3: l3 {
-+			regulator-min-microvolt = <925000>;
-+			regulator-max-microvolt = <925000>;
-+			regulator-allow-set-load;
-+		};
-+
-+		pm8953_l5: l5 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8953_l6: l6 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		pm8953_l7: l7 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1900000>;
-+		};
-+
-+		pm8953_l8: l8 {
-+			regulator-min-microvolt = <2900000>;
-+			regulator-max-microvolt = <2900000>;
-+		};
-+
-+		pm8953_l9: l9 {
-+			regulator-min-microvolt = <3000000>;
-+			regulator-max-microvolt = <3300000>;
-+		};
-+
-+		pm8953_l10: l10 {
-+			regulator-min-microvolt = <2800000>;
-+			regulator-max-microvolt = <3000000>;
-+		};
-+
-+		pm8953_l11: l11 {
-+			regulator-min-microvolt = <2950000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8953_l12: l12 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2950000>;
-+		};
-+
-+		pm8953_l13: l13 {
-+			regulator-min-microvolt = <3125000>;
-+			regulator-max-microvolt = <3125000>;
-+		};
-+
-+		pm8953_l16: l16 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+		};
-+
-+		pm8953_l17: l17 {
-+			regulator-min-microvolt = <2850000>;
-+			regulator-max-microvolt = <2850000>;
-+		};
-+
-+		pm8953_l18: l18 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <2700000>;
-+			regulator-always-on;
-+			regulator-boot-on;
-+		};
-+
-+		pm8953_l19: l19 {
-+			regulator-min-microvolt = <1200000>;
-+			regulator-max-microvolt = <1350000>;
-+		};
-+
-+		pm8953_l22: l22 {
-+			regulator-min-microvolt = <1800000>;
-+			regulator-max-microvolt = <1800000>;
-+			regulator-always-on;
-+		};
-+
-+		pm8953_l23: l23 {
-+			regulator-min-microvolt = <975000>;
-+			regulator-max-microvolt = <1225000>;
-+		};
-+	};
-+};
-+
-+&sdhc_1 {
-+	vmmc-supply = <&pm8953_l8>;
-+	vqmmc-supply = <&pm8953_l5>;
-+
-+	status = "okay";
-+};
-+
-+&sdhc_2 {
-+	vmmc-supply = <&pm8953_l11>;
-+	vqmmc-supply = <&pm8953_l12>;
-+
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc2_clk_on &sdc2_cmd_on &sdc2_data_on &sdc2_cd_on>;
-+	pinctrl-1 = <&sdc2_clk_off &sdc2_cmd_off &sdc2_data_off &sdc2_cd_off>;
-+
-+	status = "okay";
-+};
-+
-+&tlmm {
-+	gpio-reserved-ranges = <96 4>;
-+};
-+
-+&usb3 {
-+	status = "okay";
-+};
-+
-+&usb3_dwc3 {
-+	dr_mode = "peripheral";
-+};
-
--- 
-b4 0.10.1
+On Fri, Nov 18, 2022 at 3:41 PM Kamal Dasu <kdasu.kdev@gmail.com> wrote:
+>
+> Kees,
+>
+> I am in the process of implementing  mmcpstore  backend for mmc  based
+> on the mtdpstore driver
+>
+> This is what is registered with register_pstore_device(&cxt->dev);
+> cxt->dev.flags = PSTORE_FLAGS_DMESG;
+> cxt->dev.zone.read = mmcpstore_read;
+> cxt->dev.zone.write = mmcpstore_write;
+> cxt->dev.zone.erase = mmcpstore_erase;
+> cxt->dev.zone.panic_write = mmcpstore_panic_write;
+>
+> # dmesg | grep pstor
+> [    0.000000] Kernel command line: pstore_blk.blkdev=/dev/mmcblk1p8
+> crash_kexec_post_notifiers printk.always_kmsg_dump
+> [    1.993986] pstore_zone: registered pstore_blk as backend for
+> kmsg(Oops,panic_write) pmsg
+> [    2.002582] pstore: Using crash dump compression: deflate
+> [    2.008133] pstore: Registered pstore_blk as persistent store backend
+> [    2.020907] mmcpstore: /dev/mmcblk1p8 size 131072 start sector
+> 34468 registered as psblk backend
+> [   17.868753] psz_kmsg_recover_meta: pstore_zone: no valid data in
+> kmsg dump zone 0
+> [   18.298933] psz_recover_zone: pstore_zone: no valid data in zone pmsg
+> [   18.305398] psz_recovery: pstore_zone: recover end!
+>
+> The driver is successfully registered and the read path works when
+> /sys/fs/pstor is mounted , however mmc_pstore_panic_write is not
+> called.
+> Need help in understanding what could be missing. I am using the
+> latest upstream kernel for testing.
+>
+> Kamal
+>
+> On Tue, Aug 9, 2022 at 7:06 PM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > On Tue, Aug 09, 2022 at 11:35:08AM -0700, Florian Fainelli wrote:
+> > > Hi Kees, WeiXiong,
+> > >
+> > > On 7/14/22 20:49, Florian Fainelli wrote:
+> > > > Hi Kees, WeiXiong,
+> > > >
+> > > > I am trying to make use of pstore_blk which is BTW exactly what I had
+> > > > been looking for to store panic/console logs onto an eMMC partition.
+> > > >
+> > > > Using the 5.10 kernel plus:
+> > > >
+> > > > 7e2e92e9861b Revert "mark pstore-blk as broken"
+> > > > 01c28bc8f389 pstore/blk: Use the normal block device I/O path
+> > > > 2a7507999638 pstore/blk: remove {un,}register_pstore_blk
+> > > > fef0b337cd25 pstore/zone: cap the maximum device size
+> > > >
+> > > > or the android13-5.15 (at Merge 5.15.40 into android13-5.15) kernel with
+> > > > no changes and using:
+> > > >
+> > > > mount -t pstore pstore /sys/fs/pstore
+> > > > modprobe pstore_blk blkdev=/dev/mmcblk1p9 best_effort=yes
+> > > >
+> > > > upon triggering a crash with:
+> > > >
+> > > > echo c > /proc/sysrq-trigger
+> > > >
+> > > > and rebooting and remounting the pstore filesystem and loading
+> > > > pstore_blk, I only have:
+> > > >
+> > > > # ls /sys/fs/pstore/
+> > > > console-pstore_blk-0
+> > > >
+> > > > which contains the entire console log up to, but excluding the crash.
+> > > > The kernel does show that pstore_blk was used for all 3 types of kmsg,
+> > > > pmsg and console:
+> > > >
+> > > > [   28.649514] pstore_zone: capping size to 128MiB
+> > > > [   28.712894] pstore_zone: registered pstore_blk as backend for
+> > > > kmsg(Oops) pmsg console
+> > > > [   28.721145] pstore: Using crash dump compression: deflate
+> > > > [   28.906253] printk: console [pstore_blk-1] enabled
+> > > > [   28.911229] pstore: Registered pstore_blk as persistent store backend
+> > > > [   28.917735] pstore_blk: attached pstore_blk:/dev/mmcblk1p9
+> > > > (134217728) (no dedicated panic_write!)
+> > > >
+> > > > there is no automatic reboot upon panic, so I just tend to reboot after
+> > > > 2-3 seconds manually. The kernel is configured with the default
+> > > > CONFIG_PSTORE_* options.
+> > > >
+> > > > Is the observed behavior a limitation of the best_effort mode? If so, do
+> > > > we have any plans to implementing a non-best effort mode for eMMC
+> > > > devices?
+> > >
+> > > Any feedback on my email? I did try to get kernel panics to be dumped out to
+> >
+> > Hi! Sorry I lost this email originally. :)
+> >
+> > > a dedicated /dev/mtdblock* partition for which there ought to be support for
+> > > mtd->panic_write, but it still did not work any better. Is there something
+> >
+> > With the mtdblock driver, do you still see:
+> >
+> >     pstore_blk: attached pstore_blk:/dev/... (no dedicated panic_write!)
+> >                                               ^^^^^^^^^^^^^^^^^^^^^^^^^
+> >
+> > > obvious that I am missing which prevents kernel panics from being logged?
+> >
+> > Unfortunately it really depends on how the drivers are built. If the
+> > block layer is shut down during a panic, pstore_blk won't catch the
+> > panic. :(
+> >
+> > --
+> > Kees Cook
