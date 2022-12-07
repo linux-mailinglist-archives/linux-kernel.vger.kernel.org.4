@@ -2,152 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14503645F83
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F03D4645F88
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiLGRAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S229898AbiLGRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:00:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiLGQ7m (ORCPT
+        with ESMTP id S229746AbiLGQ7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:59:42 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB2668C6F
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:59:17 -0800 (PST)
-From:   John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670432355;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dT+YUSRS3ZTmcs7B0I7KHpOjmW1fKXcjAdDru8unKlo=;
-        b=3D1wKmsrHv8lkraWId+LY/jexAg94rjcG8kxRFml2Cuz2Q4RzxoNNSoJ568Bgaw8KR/Oyg
-        rmxW4ggj7DSFrgw1V6wXPWMh+CzQ+CLUvQhN9rsaTA9hkk173niwraNiX9Y26P8OdKPfOi
-        f3rDfQ27j1WS1BTGlSmeqKsgRWaXRy0KXTkeA4qgM0NPQQ0gC2uMRe5g5/KwiKn70V4pCW
-        B8CbUMn5CmbZ8plr/ivj6PXd/oupaKEkKzac42L0SSwojd3p7MGpwd7xpYYILBT4yivGY0
-        zV73Z9DkLxp9TJe3q0jP73Yo7d81N91AOWa9R53Lpnec0zh3qpahkxFlXk52eQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670432355;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=dT+YUSRS3ZTmcs7B0I7KHpOjmW1fKXcjAdDru8unKlo=;
-        b=ntK4phTaR4PCZN0fnTNi/XFc8XasXlugINJ5FE82nuoqzpN9PCrVNKjUI+gLStTuK6DJ7N
-        F7mYPYveH4SsDKCw==
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH printk v2 7/7] printk: Handle dropped message smarter
-In-Reply-To: <Y5CMD8iZND3rgugG@alley>
-References: <20221123231400.614679-1-john.ogness@linutronix.de>
- <20221123231400.614679-8-john.ogness@linutronix.de>
- <Y5CMD8iZND3rgugG@alley>
-Date:   Wed, 07 Dec 2022 18:04:56 +0106
-Message-ID: <87h6y71773.fsf@jogness.linutronix.de>
+        Wed, 7 Dec 2022 11:59:53 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B736933D;
+        Wed,  7 Dec 2022 08:59:36 -0800 (PST)
+Received: from mercury (dyndsl-091-096-059-166.ewe-ip-backbone.de [91.96.59.166])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F4976602BC8;
+        Wed,  7 Dec 2022 16:59:34 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670432374;
+        bh=bEvlL0mnv13cihi3HCIkl9DCfnP1k298XjhbL7LAufA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fVlDFCTzOHXdtF44MPRDBp745dkSoal+m9XlgbrVk0eVveZ4SV+Bv1Rnj0ZBG6Rt3
+         iZzkYM/8F/qgm/5INpH4ZuEVZdheQuxkmKnjbF4NYwKekrccgWZ80uTQ5fVMnlVnEK
+         7sz8TmoCZwYK3OEI28mJ6n6F3xGALBFdeq22ossum96yZrYwJqiWDu1PsWPLAsHI7x
+         hRrGzEFqetXXh+ZUi+bUOEraSs2OtVyf9i/MzyAzh8Cjc9+JImlrgZ8QqwdNdYumLv
+         0XdveLAuHK+do5iCZu9zBRZS6X/efajXc1hQZdTXVcNAcNiE0Vb1uyxHCLrTy7hmA0
+         6hG/oUhpNGlZw==
+Received: by mercury (Postfix, from userid 1000)
+        id 119591060F43; Wed,  7 Dec 2022 17:59:32 +0100 (CET)
+Date:   Wed, 7 Dec 2022 17:59:32 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Gene Chen <gene_chen@richtek.com>,
+        Daniel Mack <zonque@gmail.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing 'unevaluatedProperties' to
+ regulator nodes
+Message-ID: <20221207165932.hmgj4giz5ivei46i@mercury.elektranox.org>
+References: <20221206211554.92005-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,INVALID_DATE_TZ_ABSURD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tn5la4fl5slxzyzl"
+Content-Disposition: inline
+In-Reply-To: <20221206211554.92005-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-07, Petr Mladek <pmladek@suse.com> wrote:
->> +	/* Print it into ext_text, which is unused. */
->> +	len = snprintf(ext_text, DROPPED_TEXT_MAX,
->> +		       "** %lu printk messages dropped **\n", dropped);
->> +
->
-> I would feel better if we check here that the text fits into the rest
-> of the buffer.
->
-> 	if (WARN_ON_ONCE(len + cmsg->outbuf_len < sizeof(cbufs->ext_text)))
-> 		return;
->
-> I know that it is kind-of guaranteed by the above compilation check
-> of the *_MAX values. But there might be a bug and cmsg->outbuf_len
-> might contains a garbage.
 
-OK.
+--tn5la4fl5slxzyzl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->> +	/*
->> +	 * Append the record text to the dropped message so that it
->> +	 * goes out with one write.
->> +	 */
->> +	memcpy(ext_text + len, &cbufs->text[0], cmsg->outbuf_len);
->> +
->> +	/* Update the output buffer descriptor. */
->> +	cmsg->outbuf = ext_text;
->> +	cmsg->outbuf_len += len;
->
-> I still think that it would be better to rename the buffers in
-> struct console_message and avoid the switches of the purpose
-> of the two buffers.
->
-> We could print the message about dropped text into a local buffer
-> on stack. IMHO, 64 bytes are acceptable. And we could insert it
-> into the outbuf by shuffling the existing text. Something like:
->
-> static void msg_print_dropped(struct console_message *cmsg,
-> 			      unsinged long dropped)
-> {
-> 	char dropped_msg[DROPPED_TEXT_MAX];
-> 	int dropped_len;
->
-> 	if (!con->dropped)
-> 		return 0;
->
-> 	/* Print it into ext_text, which is unused. */
-> 	dropped_len = snprintf(dropped_msg, sizeof(dropped_msg),
-> 		       "** %lu printk messages dropped **\n", con->dropped);
->
-> 	/*
-> 	 * The buffer might already be full only where the message consist
-> 	 * of many very short lines. It is not much realistic.
-> 	 */
-> 	if (cmsg->outbuf_len + dropped_len + 1 > sizeof(cmsg->outbuf)) {
-> 		/* Should never happen. */
+Hi,
 
-This certainly can happen. @text is size CONSOLE_LOG_MAX, which is
-LOG_LINE_MAX+PREFIX_MAX. So a totally legal formatted message of length
-LOG_LINE_MAX-1 and a prefix will suddenly become truncated.
-
-> 		if (WARN_ON_ONCE(dropped_len + 1 > sizeof(cmsg->outbuf)))
-> 			return;
+On Tue, Dec 06, 2022 at 03:15:55PM -0600, Rob Herring wrote:
+> Several regulator schemas are missing 'unevaluatedProperties' constraint
+> which means any extra properties are allowed. Upon adding the
+> constraint, there's numerous warnings from using the deprecated
+> 'regulator-compatible' property. Remove the usage as examples shouldn't
+> be using long since deprecated properties.
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> I'd suggest that Mark take this if that's okay with Lee. Or I can take=20
+> it.
+>=20
+>  Documentation/devicetree/bindings/mfd/max77650.yaml  |  2 --
+>  .../devicetree/bindings/mfd/mediatek,mt6360.yaml     |  9 ---------
+>  .../bindings/power/supply/mt6360_charger.yaml        |  2 +-
+>  .../bindings/regulator/max77650-regulator.yaml       |  1 +
+>  .../devicetree/bindings/regulator/max8660.yaml       |  6 +-----
+>  .../bindings/regulator/mt6360-regulator.yaml         | 12 +++---------
+>  6 files changed, 6 insertions(+), 26 deletions(-)
+>=20
+> [...]
 >
-> 		/* Trunk the message like in record_print_text() */
-> 		cmsg->outbuf_len = sizeof(cmsg->outbuf) - dropped_len;
-> 		cmsg->outbuf[cmsg->outbuf_len] = '\0';
-> 	}
->
-> 	memmove(cmsg->outbuf + dropped_len, cmsg->outbuf, cmsg->outbuf_len + 1);
-> 	memcpy(cmsg->outbuf, dropped_msg, dropped_len);
-> }
+> diff --git a/Documentation/devicetree/bindings/power/supply/mt6360_charge=
+r.yaml b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
+> index b89b15a5bfa4..4c74cc78729e 100644
+> --- a/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
+> @@ -26,6 +26,7 @@ properties:
+>      type: object
+>      description: OTG boost regulator.
+>      $ref: /schemas/regulator/regulator.yaml#
+> +    unevaluatedProperties: false
+> =20
+>  required:
+>    - compatible
+> @@ -39,7 +40,6 @@ examples:
+>        richtek,vinovp-microvolt =3D <14500000>;
+> =20
+>        otg_vbus_regulator: usb-otg-vbus-regulator {
+> -        regulator-compatible =3D "usb-otg-vbus";
+>          regulator-name =3D "usb-otg-vbus";
+>          regulator-min-microvolt =3D <4425000>;
+>          regulator-max-microvolt =3D <5825000>;
 
-I do not like the idea of increasing stack usage, possibly cutting off
-messages, and performing extra memory operations all because of some
-variable naming. There is literally a larger unused buffer just sitting
-there.
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-I want struct console_buffers to be a black box of working buffers used
-to process the different types of messages. console_get_next_message()
-is the only function that should go inside that black box because it is
-responsible for creating the actual message.
+> [...]
 
-The caller does not care what is in the black box or how those internal
-working buffers are named. The caller just cares about cmsg->outbuf and
-cmsg->outbuf_len, which will point to the data that needs to be written
-out.
+-- Sebastian
 
-For v3 I would like to try my approach one more time. I will give the
-internal buffers new names so as not to mislead their roles. I will
-clearly document the black box nature of struct console_buffers.
+--tn5la4fl5slxzyzl
+Content-Type: application/pgp-signature; name="signature.asc"
 
-John Ogness
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOQxmgACgkQ2O7X88g7
++pqenQ/9Ho8lsTUBjGsxEgwS8RpLC8U1AP8yglgqBuUrbdcwAuL3g0yWJMB4Cm4a
+trhgJgCBr2fd4LLFbJzQH/tVrcUZtFJ957ZmvKr0E1xcVkiDgR8ujhhCCCOgB5vG
+IpjFq+8lXplomNmb3hOlRKkuC+2YWYM1cXvEQyFyPOYZAThebqOpYQcETx5rxegs
+VTdhV4cB6b+jG2fsR+3BVw+rJ9U3oxjbY5XuwUJ2GyA15InCnBOh0945mc6vLDvN
+vNCwgsgvS8D7emYsLt666/gI3LKRLH6H+3p8Vu2yYAU58mu21gg7L6z6jswSlm+V
+MsMVDTiwzLYq/EaYQbGaTazJjigroldPnUf268xI6OgG7tSqowA0PuYaT+GkKfrY
+0dPGbQf1K6NbCQ4V+Fh1BO1h0kOtX6FCjkLJ0d1ZZTC7DwIMe1tLgXZux0mETsQo
+aCli/01Y+oVc6vulRN9HRGvthS01OoByy5vdikomiO6cJH3l8Jwb7gNz07kVrJyF
+aDzTDqorec2e7bMleqRGwncCINLYqw0z/Mh0ZLKPgbs/L2YXOI7nhGVaCj5p4wNb
+44Nky3qwmg0iu12vbmydFMWjRIICBnOU3xCqfe7tDfi4jDCJqKkHcHU15JR2bPPC
+LYL6vJb5f66lQGyI+SWJoXT+q5bps6L/KhDMea6xKmWTjss81gM=
+=VLUI
+-----END PGP SIGNATURE-----
+
+--tn5la4fl5slxzyzl--
