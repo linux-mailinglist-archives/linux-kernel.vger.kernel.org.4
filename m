@@ -2,76 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D561C645755
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:15:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE28C645756
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiLGKPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44048 "EHLO
+        id S230391AbiLGKQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiLGKPt (ORCPT
+        with ESMTP id S230340AbiLGKQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:15:49 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0DC40901;
-        Wed,  7 Dec 2022 02:15:47 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        Wed, 7 Dec 2022 05:16:03 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C4419A8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:15:59 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 533C46602BCE;
-        Wed,  7 Dec 2022 10:15:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670408145;
-        bh=+LjBCBUFrmoCf4jsuAmPTeQcDLe0z20Y7u+s/Cq3KsU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L+LJ3Qe8NYPriv1jiBI1ZG2iMmY4lm7AG9CxVuCGfHG7SWNtTXElbkpi3HrLPQCLO
-         XJnusTBHqbFPBPUsrkopWZSCVnDnCjJtRIQdbkR2qlB9jz7qSTLeh8n1Joe8f1CKlE
-         /qHZBmAxVql1FAgsGSySL39rNj155F/czH9Ndad0e07aZdwrmBUUYbLvEaTD4mX4Vy
-         8Co/F7Ea0OkmkrUVzGwO+aWRl54XXa53Cs3ZqUeXfk/4SQ1G3a+iStuV6VAkcVmxXi
-         9SJI1M3rlJABj5/5rCxNGIWEd115GqdbDQoVQCF1vM3068rT/rPz0FGSFIgSeGhr+R
-         tN7/tbad9e4VA==
-Message-ID: <5c1dbeb0-c19f-cf47-a272-3346913a30c8@collabora.com>
-Date:   Wed, 7 Dec 2022 11:15:42 +0100
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A02B91EC0567;
+        Wed,  7 Dec 2022 11:15:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670408157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=CB+HW5SYmQa9vu11JBuiXhU2H+X9p7Qty7TqjfoWcPs=;
+        b=PxImldIWMyJnFqhbaAKRANb2xx6s9rRQ8l4HDxb3iz2d1Wt40FkMULJl/bae3hOPK+4ffB
+        Wf2qasuxj1jRTHsjQk+t+LrutUijBf+KpLG8RpPvGUTnuo6RzOD+FCzg6R6qdXqKNdE2Xs
+        XmVgu2bJ+SSJxkfIP3Mseuq9p93UXKM=
+Date:   Wed, 7 Dec 2022 11:15:53 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v14 3/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <Y5Bn2Y4ANWX0U89U@zn.tnic>
+References: <20221116214643.6384-1-eric.devolder@oracle.com>
+ <20221116214643.6384-4-eric.devolder@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 1/8] dt-bindings: arm: mediatek: mmsys: Add support for
- MT8195 VPPSYS
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221207094921.15450-1-moudy.ho@mediatek.com>
- <20221207094921.15450-2-moudy.ho@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221207094921.15450-2-moudy.ho@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221116214643.6384-4-eric.devolder@oracle.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/12/22 10:49, Moudy Ho ha scritto:
-> For MT8195, VPPSYS0 and VPPSYS1 are 2 display pipes with
-> hardware differences in power domains, clocks and subsystem counts,
-> which should be determined by compatible names.
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, Nov 16, 2022 at 04:46:39PM -0500, Eric DeVolder wrote:
+> +#ifndef arch_map_crash_pages
+> +/*
+> + * NOTE: The addresses and sizes passed to this routine have
+> + * already been fully aligned on page boundaries. There is no
+> + * need for massaging the address or size.
+> + */
+> +static inline void *arch_map_crash_pages(unsigned long paddr,
+> +					unsigned long size)
+> +{
+> +	if (size > 0)
+> +		return kmap_local_page(pfn_to_page(paddr >> PAGE_SHIFT));
+> +	else
+> +		return NULL;
+> +}
+> +#endif
+> +
+> +#ifndef arch_unmap_crash_pages
+> +static inline void arch_unmap_crash_pages(void *ptr)
+> +{
+> +	if (ptr)
+> +		kunmap_local(ptr);
+> +}
+> +#endif
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Why is that function still here and why aren't you calling
+kmap_local_page() simply?
 
+-- 
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
