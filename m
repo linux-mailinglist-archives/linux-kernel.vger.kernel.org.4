@@ -2,178 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3B4645D63
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A50645D66
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiLGPPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:15:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S229562AbiLGPP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:15:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229660AbiLGPO6 (ORCPT
+        with ESMTP id S229660AbiLGPPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:14:58 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D9C61517
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:14:57 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id g7so29212475lfv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:14:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/NtXR99YY/YnD6oXE1Csk2UNFUAjboD1pCOokVrfPfA=;
-        b=fnwxWVsZQarOW1g820iNU+J4Hfp4bvS/sVpkweWbQfS0GISHHYMqRhJSq15oSaBsTQ
-         7nswqkdmM01rF5SmW55qYHdVK/HTsrrin66Wh3jEL69myZXFH7ebBnRWTN+IveYfSfY5
-         ELrg3kdK1l+N86IMI8fbKGj0VjgvZkeYO4trktUIw0IkUj2r9rjrS6uwse6Vp2Bp7xHV
-         KnFrzkv6Inp0lj3L+fbvHLiBbszVxxc61m67g2TCjdD2qybaXvstb601hH7T57iQJbUj
-         WCGYbE42nm0e2Z+oCjmujlYTVPByZJZCiJ1IYRyVftVYTEB7C8B4GsTDTt0G/5KclvGF
-         oxDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/NtXR99YY/YnD6oXE1Csk2UNFUAjboD1pCOokVrfPfA=;
-        b=RQuQlxW2Ya+Xj+HdvCnxWa+sKdrLMiE07WXvHr0idwZgn2zdiSNNTRNZcApluxRaBO
-         nHKawu5KRU6D6iCT0e26tw18uyX12dk31PI/NK9kNULasS+NDiB3cImovcDtkuF0jy+Y
-         cBuADVOkdEuhObdcxce1HEdy4KFuVwfYjDfOk6f8BwdbI5KIT2gQ3l1p48fvyGqsh+dD
-         h+llfCbNMxWTBNY9klNK5omAnKmjD5HAtjZbhCrTSTacoTzYUaLHbLNXFyA7RjLprfDP
-         WgKJoSoYv971jde+j6ntv/9VzrdhzbCoPDVtnCa61AC5FiQWHXCz/my3J84j7VO00gbw
-         ishQ==
-X-Gm-Message-State: ANoB5pmz2r3VfOIT3TNrOfKK7eqQN2qUyRwMMukcTs3ZVcluwkPdtzaS
-        DUEt7Dn7qlA1jYfQ1hypCltIqw==
-X-Google-Smtp-Source: AA0mqf547wAIdfMLEczotwwPA5Zt/mVZpkdrWuFBMjOjByvhXT3cbXDKWUguS0TF5BEOaPkSWX+Pzw==
-X-Received: by 2002:ac2:4acf:0:b0:4b5:699e:6e9d with SMTP id m15-20020ac24acf000000b004b5699e6e9dmr5243135lfp.91.1670426094907;
-        Wed, 07 Dec 2022 07:14:54 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e13-20020ac24e0d000000b004946b549a19sm2898207lfr.45.2022.12.07.07.14.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 07:14:54 -0800 (PST)
-Message-ID: <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
-Date:   Wed, 7 Dec 2022 16:14:53 +0100
+        Wed, 7 Dec 2022 10:15:24 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504765FB96;
+        Wed,  7 Dec 2022 07:15:23 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id ED1DE21E8C;
+        Wed,  7 Dec 2022 15:15:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670426121; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=doN8OAAvm/Kul2jr/dWYi2PVymsfdKhPapqin9FX5hk=;
+        b=mMG6q1ALjgO/KA7H5MVoSFAxPUtwgcc1JVntKEZUHrNOApEsYDD5V3e9vXjJMKD5Ei9cqs
+        h8IAYK+d1J8TVa0xLQ2Pd+eMVBRRJwecuFEHegxhQCu+mOK16qbKNlGk89uLF3SqmRBhTY
+        d8aVGdSJaLd2qWS9jmLyjY6ST8AIwQg=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id D20782C141;
+        Wed,  7 Dec 2022 15:15:21 +0000 (UTC)
+Date:   Wed, 7 Dec 2022 16:15:21 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Petr Pavlu <petr.pavlu@suse.com>
+Cc:     mcgrof@kernel.org, prarit@redhat.com, david@redhat.com,
+        mwilck@suse.com, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] module: Don't wait for GOING modules
+Message-ID: <Y5CuCVe02W5Ni/Fc@alley>
+References: <20221205103557.18363-1-petr.pavlu@suse.com>
+ <Y45MXVrGNkY/bGSl@alley>
+ <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: Add mmc node
-Content-Language: en-US
-To:     William Qiu <william.qiu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-mmc@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
- <20221207131731.1291517-4-william.qiu@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207131731.1291517-4-william.qiu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d528111b-4caa-e292-59f4-4ce1eab1f27c@suse.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 14:17, William Qiu wrote:
-> This adds the mmc node for the StarFive JH7110 SoC.
-> Set sdioo node to emmc and set sdio1 node to sd.
+On Tue 2022-12-06 17:57:30, Petr Pavlu wrote:
+> On 12/5/22 20:54, Petr Mladek wrote:
+> > On Mon 2022-12-05 11:35:57, Petr Pavlu wrote:
+> >> During a system boot, it can happen that the kernel receives a burst of
+> >> requests to insert the same module but loading it eventually fails
+> >> during its init call. For instance, udev can make a request to insert
+> >> a frequency module for each individual CPU when another frequency module
+> >> is already loaded which causes the init function of the new module to
+> >> return an error.
+> >>
+> >> Since commit 6e6de3dee51a ("kernel/module.c: Only return -EEXIST for
+> >> modules that have finished loading"), the kernel waits for modules in
+> >> MODULE_STATE_GOING state to finish unloading before making another
+> >> attempt to load the same module.
+> >>
+> >> This creates unnecessary work in the described scenario and delays the
+> >> boot. In the worst case, it can prevent udev from loading drivers for
+> >> other devices and might cause timeouts of services waiting on them and
+> >> subsequently a failed boot.
+> >>
+> >> This patch attempts a different solution for the problem 6e6de3dee51a
+> >> was trying to solve. Rather than waiting for the unloading to complete,
+> >> it returns a different error code (-EBUSY) for modules in the GOING
+> >> state. This should avoid the error situation that was described in
+> >> 6e6de3dee51a (user space attempting to load a dependent module because
+> >> the -EEXIST error code would suggest to user space that the first module
+> >> had been loaded successfully), while avoiding the delay situation too.
+> >>
+> >> --- a/kernel/module/main.c
+> >> +++ b/kernel/module/main.c
+> >> @@ -2386,7 +2386,8 @@ static bool finished_loading(const char *name)
+> >>  	sched_annotate_sleep();
+> >>  	mutex_lock(&module_mutex);
+> >>  	mod = find_module_all(name, strlen(name), true);
+> >> -	ret = !mod || mod->state == MODULE_STATE_LIVE;
+> >> +	ret = !mod || mod->state == MODULE_STATE_LIVE
+> >> +		|| mod->state == MODULE_STATE_GOING;
+> > 
+> > There is a actually one more race.
+> > 
+> > This function is supposed to wait until load of a particular module
+> > finishes. But we might find some another module of the same name here.
+> > 
+> > Maybe, it is not that bad. If many modules of the same name are loaded
+> > in parallel then hopefully most of them would wait for the first one
+> > in add_unformed_module(). And they will never appear in the @modules
+> > list.
 > 
-> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
-> ---
->  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
->  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
->  2 files changed, 63 insertions(+)
+> Good point, a load waiting in add_unformed_module() could miss that its older
+> parallel load already finished if another insert of the same module appears in
+> the modules list in the meantime. This requires that the new load happens to
+> arrive just after the old one finishes and before the waiting load makes its
+> check.
+>
+> This is somewhat similar to the current state where new same-name insert
+> requests can skip and starve the ones already waiting in
+> add_unformed_module().
 > 
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> index c8946cf3a268..6ef8e303c2e6 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
-> @@ -47,6 +47,31 @@ &clk_rtc {
->  	clock-frequency = <32768>;
->  };
->  
-> +&sdio0 {
-> +	max-frequency = <100000000>;
-> +	card-detect-delay = <300>;
-> +	bus-width = <8>;
-> +	cap-mmc-highspeed;
-> +	mmc-ddr-1_8v;
-> +	mmc-hs200-1_8v;
-> +	non-removable;
-> +	cap-mmc-hw-reset;
-> +	post-power-on-delay-ms = <200>;
-> +	status = "okay";
-> +};
-> +
-> +&sdio1 {
-> +	max-frequency = <100000000>;
-> +	card-detect-delay = <300>;
-> +	bus-width = <4>;
-> +	no-sdio;
-> +	no-mmc;
-> +	broken-cd;
-> +	cap-sd-highspeed;
-> +	post-power-on-delay-ms = <200>;
-> +	status = "okay";
-> +};
-> +
->  &gmac0_rmii_refin {
->  	clock-frequency = <50000000>;
->  };
-> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> index c22e8f1d2640..e90b085d7e41 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-> @@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
->  			#reset-cells = <1>;
->  		};
->  
-> +		sys_syscon: sys_syscon@13030000 {
+> I think in practice the situation should occur very rarely and be cleared
+> soon, as long one doesn't continuously try to insert the same module.
 
-No underscores in node names, generic node names (syscon or
-system-controller)
+I am not completely sure how rare it is. Anyway, the conditions are
+rather complex so it feels rare ;-)
 
-> +			compatible = "syscon";
+Anyway, the important part of this race is that the new module
+found in finished_loading() did not see the previously loaded
+module and did not wait in add_unformed_module(). It means
+that the load was not parallel enough. It means that the
+optimization added by this patch was not used.
 
-This is not allowed alone.
+By other words, if the multiple loads are not parallel enough
+then the optimization added by this patch will not help.
 
-> +			reg = <0x0 0x13030000 0x0 0x1000>;
-> +		};
-> +
->  		gpio: gpio@13040000 {
->  			compatible = "starfive,jh7110-sys-pinctrl";
->  			reg = <0x0 0x13040000 0x0 0x10000>;
-> @@ -433,5 +438,38 @@ uart5: serial@12020000 {
->  			reg-shift = <2>;
->  			status = "disabled";
->  		};
-> +
-> +		/* unremovable emmc as mmcblk0 */
-> +		sdio0: mmc@16010000 {
-> +			compatible = "starfive,jh7110-sdio";
-> +			reg = <0x0 0x16010000 0x0 0x10000>;
-> +			clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
-> +				 <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
-> +			clock-names = "biu","ciu";
-> +			resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
-> +			reset-names = "reset";
-> +			interrupts = <74>;
-> +			fifo-depth = <32>;
-> +			fifo-watermark-aligned;
-> +			data-addr = <0>;
-> +			starfive,sys-syscon = <&sys_syscon 0x14 0x1a 0x7c000000>;
+And the other way. If this patch helps in practice then
+this race is not important.
 
-This does not match your bindings at all. "&sys_syscon" is a phandle,
-not a number of tuning retries, as you expect in your bindings.
+> > Anyway, to be on the safe side. We might want to pass the pointer
+> > to the @old module found in add_unformed_module() and make sure
+> > that we find the same module here. Something like:
+> > 
+> > /*
+> >  * @pending_mod: pointer to module that we are waiting for
+> >  * @name: name of the module; the string must stay even when
+> >  *	the pending module goes away completely
+> >  */
+> > static bool finished_loading(const struct module *pending_mod,
+> > 			    const char *name)
+> > {
+> > 	struct module *mod;
+> > 	bool ret = true;
+> > 
+> > 	/*
+> > 	 * The module_mutex should not be a heavily contended lock;
+> > 	 * if we get the occasional sleep here, we'll go an extra iteration
+> > 	 * in the wait_event_interruptible(), which is harmless.
+> > 	 */
+> > 	sched_annotate_sleep();
+> > 	mutex_lock(&module_mutex);
+> > 
+> > 	mod = find_module_all(name, strlen(name), true);
+> > 	/* Check if the pending module is still being loaded */
+> > 	if (mod == pending_mod &&
+> > 	    (mod->state == MODULE_STATE_UNFORMED ||
+> > 	       mod->state == MODULE_STATE_COMMING))
+> > 	       ret = false;
+> > 	mutex_unlock(&module_mutex);
+> > 
+> > 	return ret;
+> > }
+> 
+> The new pending_mod pointer has no ownership of the target module which can be
+> then destroyed at any time. While no dereference of pending_mod is made in
+> finished_loading(), this looks still problematic to me.
+> 
+> I think it is generally good to treat a pointer as invalid and its value as
+> indeterminate when the object it points to reaches the end of its lifetime.
+> One specific problem here is that nothing guarantees that a new module doesn't
+> get allocated at the exactly same address as the old one that got released and
+> the code is actually waiting on.
+>
+> Improving this case then likely results in a more complex solution, similar
+> to the one that was discussed originally.
 
+Fair enough. Let's ignore the race in finished_loading().
 
-Best regards,
-Krzysztof
+Otherwise, the patch looks good to me. It is easy enough.
+IMHO, it makes sense to use it if it helps in practice
+(multiple loads are parallel enough[*]). Feel free to use:
 
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+Of course, the ideal solution would be to avoid the multiple
+loads in the first place. AFAIK, everything starts in the kernel
+that sends the same udev events for each CPU...
+
+Best Regards,
+Petr
