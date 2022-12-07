@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B16CA645C58
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62784645C54
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:20:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiLGOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46890 "EHLO
+        id S230312AbiLGOUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:20:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230242AbiLGOUF (ORCPT
+        with ESMTP id S230048AbiLGOUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:20:05 -0500
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04305D687;
+        Wed, 7 Dec 2022 09:20:03 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316445D684;
         Wed,  7 Dec 2022 06:20:00 -0800 (PST)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-14455716674so15289667fac.7;
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-144b21f5e5fso9473250fac.12;
         Wed, 07 Dec 2022 06:20:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=xHlSsP9sT9bwwrLq6ZJT+hIh/CUBnM40ZAbK04sWFGY=;
-        b=yqp3ijtGaPAON3xXj6aR5UXjXceXUsywjbqvIHtHy0qRraZzNCtjOyx8dsbtiChCTa
-         I6wbh8pTRcup1eAIC5zPf3WXFcDMqs1f2X++YJ1/rka/OL5onSfqQd25agNuiiXZdoP3
-         ydCKXVLTrfXyjvK2pktp/TTNGV7gog8d4UKSfXS5Tc9DKHHnIWhP+ksQPoaeS1Tpwvb8
-         YB950v45+SSb7blxnHiuwRO57i1DfZbJtO3PdURBBiqn59weJRu5rs09z+nXguOIf2Qe
-         Y/U4RAZ5526yLwv8dYb6TszJ7cKioSOYxeP5HPDTBDuAbDngf0Hee/m3EY+8ehtyOxku
-         FZwQ==
-X-Gm-Message-State: ANoB5plSJEdj1XcnJT5ykKm2cNx/CJNssFgldXUxlPSVDXKlRT0CRkVU
-        o3whA7taM9kSGytjvDsDCg==
-X-Google-Smtp-Source: AA0mqf4BtNhu9QLCjBcEml69+DI0B+nsdDVqbYpMr5RsFckk1YgdMrCN9Ns8Sx0dIAUaQFO7oQQ9tA==
-X-Received: by 2002:a05:6870:9f86:b0:144:c3d9:61e7 with SMTP id xm6-20020a0568709f8600b00144c3d961e7mr4205266oab.259.1670422800430;
-        Wed, 07 Dec 2022 06:20:00 -0800 (PST)
+        bh=6REGDwsxUyupn+rXuHn0ky3P3vhdc4pwFOOga2lMtws=;
+        b=x90tUDf9gm80Zd1BX/j8Y3tAtdzxlIzLv3PYgpUV1CGDkJTqG7sPqOj+622JIw9ybm
+         m+49lokdJzpd3Vy6A0J+0Og7zp9jrsPyY0S+uRQBaIh1YfdyQhdbjucFI4jo1/03QxLg
+         1GLHSW9BggBDgPUTSfRZL350Qk3JTjdg/voLqVHzYZjq8qwTXfqsdsy6wIDEKJN7v4Nr
+         tjd5CbG34hVQhv4YJSYkk8V3OJ9AV7Tr1srKTYO9HqR3OeXScIv4Ln0z/ohvaOnQF6Jf
+         uz/0Zzs/Vt1JdBTUFPKV5jTYgYzKUeNVZb65q2DG8ChQ+RV+LL54QX0p8fbJ9jJqdhfC
+         +woA==
+X-Gm-Message-State: ANoB5pmbWD9f5Z8xMbF2BkSVyJs3qsXSUnoHXiv/PGTrlDDZBu17aiYO
+        JIUc6Cqx4Ehf72NylwNciIru4yXlew==
+X-Google-Smtp-Source: AA0mqf63rXZN63JQcpj3P1nEVS0QcOEf+qubo/c4ZeY90gJ2hofp6U8B7yWmwvjWjEBIfSd4QjQKpA==
+X-Received: by 2002:a05:6871:792:b0:141:c075:9346 with SMTP id o18-20020a056871079200b00141c0759346mr40349936oap.30.1670422799416;
+        Wed, 07 Dec 2022 06:19:59 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id d7-20020a9d5e07000000b0066c3ca7b12csm10152781oti.61.2022.12.07.06.19.59
+        by smtp.gmail.com with ESMTPSA id p184-20020acabfc1000000b00354efb5be11sm9321200oif.15.2022.12.07.06.19.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 06:20:00 -0800 (PST)
-Received: (nullmailer pid 2124813 invoked by uid 1000);
+        Wed, 07 Dec 2022 06:19:59 -0800 (PST)
+Received: (nullmailer pid 2124801 invoked by uid 1000);
         Wed, 07 Dec 2022 14:19:49 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     linux-kernel@vger.kernel.org,
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Masami Hiramatsu <mhiramat@kernel.org>
-In-Reply-To: <20221207055405.30940-11-hayashi.kunihiko@socionext.com>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+In-Reply-To: <20221207055405.30940-15-hayashi.kunihiko@socionext.com>
 References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-11-hayashi.kunihiko@socionext.com>
-Message-Id: <167042225783.2112928.12858605163990081059.robh@kernel.org>
-Subject: Re: [PATCH v2 10/16] dt-bindings: soc: socionext: Add UniPhier
- SoC-glue logic debug part
+ <20221207055405.30940-15-hayashi.kunihiko@socionext.com>
+Message-Id: <167042222062.2111748.7794629247981493591.robh@kernel.org>
+Subject: Re: [PATCH v2 14/16] dt-bindings: soc: socionext: Add UniPhier ADAMV block
 Date:   Wed, 07 Dec 2022 08:19:49 -0600
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -69,77 +67,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 07 Dec 2022 14:53:59 +0900, Kunihiko Hayashi wrote:
-> Add devicetree binding schema for the SoC-glue logic debug part
-> implemented on Socionext Uniphier SoCs.
+On Wed, 07 Dec 2022 14:54:03 +0900, Kunihiko Hayashi wrote:
+> Add devicetree binding schema for the ADAMV block implemented on Socionext
+> Uniphier SoCs.
 > 
-> This SoC-glue logic debug part is a set of miscellaneous function
-> registers handling signals for specific devices outside system
-> components, and also has multiple functions such as efuse, debug unit,
-> several monitors for specific SoC, and so on.
+> The ADAMV block is analog signal amplifier that is a part of the external
+> video and audio I/O system. This block is implemented on LD11 and LD20,
+> and this is defined for controlling audio I/O reset only.
 > 
 > Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 > ---
->  .../socionext,uniphier-soc-glue-debug.yaml    | 73 +++++++++++++++++++
->  1 file changed, 73 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-soc-glue-debug.yaml
+>  .../socionext/socionext,uniphier-adamv.yaml   | 51 +++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-adamv.yaml
 > 
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+yamllint warnings/errors:
 
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221207055405.30940-11-hayashi.kunihiko@socionext.com
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/reset/socionext,uniphier-reset.example.dtb: adamv@57920000: 'reset' does not match any of the regexes: '^reset-controller(@[0-9a-f]+)?$', 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-adamv.yaml
 
+doc reference errors (make refcheckdocs):
 
-soc-glue@5f900000: compatible: ['socionext,uniphier-ld11-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm64/boot/dts/socionext/uniphier-ld11-global.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld11-ref.dtb
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221207055405.30940-15-hayashi.kunihiko@socionext.com
 
-soc-glue@5f900000: compatible: ['socionext,uniphier-ld20-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld20-global.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dtb
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-soc-glue@5f900000: compatible: ['socionext,uniphier-ld4-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm/boot/dts/uniphier-ld4-ref.dtb
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-soc-glue@5f900000: compatible: ['socionext,uniphier-pro4-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm/boot/dts/uniphier-pro4-ace.dtb
-	arch/arm/boot/dts/uniphier-pro4-ref.dtb
-	arch/arm/boot/dts/uniphier-pro4-sanji.dtb
+pip3 install dtschema --upgrade
 
-soc-glue@5f900000: compatible: ['socionext,uniphier-pxs2-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm/boot/dts/uniphier-ld6b-ref.dtb
-	arch/arm/boot/dts/uniphier-pxs2-gentil.dtb
-	arch/arm/boot/dts/uniphier-pxs2-vodka.dtb
-
-soc-glue@5f900000: compatible: ['socionext,uniphier-pxs3-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dtb
-	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dtb
-	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dtb
-
-soc-glue@5f900000: compatible: ['socionext,uniphier-sld8-soc-glue-debug', 'simple-mfd'] is too short
-	arch/arm/boot/dts/uniphier-sld8-ref.dtb
-
-soc-glue@5f900000: 'reg' is a required property
-	arch/arm64/boot/dts/socionext/uniphier-ld11-global.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld11-ref.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld20-akebi96.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld20-global.dtb
-	arch/arm64/boot/dts/socionext/uniphier-ld20-ref.dtb
-	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref.dtb
-	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget0.dtb
-	arch/arm64/boot/dts/socionext/uniphier-pxs3-ref-gadget1.dtb
-	arch/arm/boot/dts/uniphier-ld4-ref.dtb
-	arch/arm/boot/dts/uniphier-ld6b-ref.dtb
-	arch/arm/boot/dts/uniphier-pro4-ace.dtb
-	arch/arm/boot/dts/uniphier-pro4-ref.dtb
-	arch/arm/boot/dts/uniphier-pro4-sanji.dtb
-	arch/arm/boot/dts/uniphier-pxs2-gentil.dtb
-	arch/arm/boot/dts/uniphier-pxs2-vodka.dtb
-	arch/arm/boot/dts/uniphier-sld8-ref.dtb
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
