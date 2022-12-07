@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C35646339
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:25:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EDF364633B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiLGVZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55522 "EHLO
+        id S229909AbiLGV0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiLGVZm (ORCPT
+        with ESMTP id S229649AbiLGV0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:25:42 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FC07B54F
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:25:41 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso2687018pjt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 13:25:41 -0800 (PST)
+        Wed, 7 Dec 2022 16:26:11 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B470781DBE;
+        Wed,  7 Dec 2022 13:26:09 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id fz10so17259734qtb.3;
+        Wed, 07 Dec 2022 13:26:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=n7Wqad3a8IV5+ECQhv7lWrLN4DRro+qo2JkXKZnEYlk=;
-        b=aA9X9Fd7k9K0PV7K3Z3gnZwSu8VOuiCOXNS6E8bHwHi6cg1VJ+PCAG375nLpa9ng78
-         W2ZwL2eG/vrKXXQRZFJMZHpnSMUkBFF3L27LwIHGNS90X14+Ef0jl6h9smk/ows9PeZ/
-         KpLm6WfIMp4xVPMerzBCsNnDWznbZp9wwf1VAn6CKSjWpeHnk+i/XyMgNtQI1+JK5cFz
-         fSIHo0SHR1CB+sDox/cABXVK2iDaTIxBCKvgDiIQ7PeMh6YK+IVOTsJhDwTqvcYJ1v/9
-         znol9s8Hikopre/rr1erAQdY0rA+DJc/9zNLS4Chk3hF3sOFNwaCTgSN47yLRAmjHd+H
-         0VPg==
+        bh=3iVn5Pq2ve6gBz9rsR6+/e6l3RP2MHL3O878IJfOVfI=;
+        b=QvblP0StWIys6WeKh/O1w1NGcZNvMa5ED4V4ajXq4SqT7fofTIqhHUkLSvI/M1WNVY
+         E1P32rYuly5goAoWiHb/lvsk0zUKuZJxZlPsqNv1x2EBpalFur8kWNUwC1OrIOFHeOJe
+         geWsIF1Rm7M6JAk14VEpAiPsftyBK9VZ6gF0QsqDMwsXtiLiLeDK0N+7qn1bMezRFwhf
+         4wi6PSjNh6zTWTQAKeYzoBy9+9UcT/9BVE6s5yHvIt3XS3kdLgITl8QGc7L5rKLKvbVN
+         PAGqW3cG8jWC4ljxDhUvSUgRACmJJ4Igk7wl6/LEHKK8W3k0DrIyM23W9B5mPdTqAAip
+         fWuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n7Wqad3a8IV5+ECQhv7lWrLN4DRro+qo2JkXKZnEYlk=;
-        b=D+Y2iSbvyGiG/aj82u3L69qq2+G1zgWjl8QOWuAc17k6oOAz96HWK7aSqM0cSwrwWe
-         QThTqy45ri+Vh0TgsjwasIwlRKDRc8g5WU4ze6vqR1xcwLj9rfHoEpJRYLh3g/Jvkrgj
-         jD/0s37Dv79gDJOw98mqLx36lrDYVt5V+rLVLwhykGQ12UD2eQFobmk8h8s0ADaAkmuw
-         qjxsxxBrx+syx7j2W17vc2F4oazcKW5P7pUKFaxw9PNRC+OnvUA3c7VpZ/Gntpd91Nu6
-         iBtVrQgE2cviHdfSu5jHJSOo+Hp5KaWkCPl+g2NRO/xgaL3TY2vqR+vbQHSr2m6imx23
-         v8wA==
-X-Gm-Message-State: ANoB5pk4P+iEj3522LrS8WxqnNQ3GR2FYALAc7BtxSUDOfh3OlOzAllq
-        WN3kc/c1yQpKmBX1bIk3pdXx1ECGf0ESi11+
-X-Google-Smtp-Source: AA0mqf41RecvyUijjUGjKliHLNPG9FPRbNNOgwX4eGv1lZljQ1dLvQnmSxhSfIejb2l/XPFBc1KQwg==
-X-Received: by 2002:a17:90a:5641:b0:219:c2f2:f83c with SMTP id d1-20020a17090a564100b00219c2f2f83cmr725499pji.2.1670448341034;
-        Wed, 07 Dec 2022 13:25:41 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id c9-20020a63ef49000000b0046feca0883fsm11675494pgk.64.2022.12.07.13.25.40
+        bh=3iVn5Pq2ve6gBz9rsR6+/e6l3RP2MHL3O878IJfOVfI=;
+        b=CFvcZUwO9nNINgqsTky+/z1EMN0DaJ/NCKctFkSAX9aboG0UeUfcSN5VJCIuO6JUtb
+         YyV32dJDK5Q19nlwIr+Cq+5sPTvQhXZMdKFdFrEOJqfBLzRfn3U8tj6UlAbxuddaiEL7
+         WNdALJZEQUj5M0NvYdUf0DBqr3+WQiZLDclQx1qOPeiR0clsGHEdZDM0zzDFFDB6Ct7l
+         8llegq0OVln+KVg+vdReVWdnfUvG4Z0ApwctKP5++2q2IYUz8b1fLQo5T8yriPm60PwV
+         FJ17ibXWjKmAna9Kpxfj8C9j/O3QxGSSGp7XwvoJUiQMok35fujj+V6f3pT2NrDE6Cus
+         un7A==
+X-Gm-Message-State: ANoB5pmLg3x5Zw3m4hgAnbkmlpSfQTFwMOI/X7tJqu3MFrby5lY6GrxF
+        hbdlFGzI5W2VLFCZ52HcDX4=
+X-Google-Smtp-Source: AA0mqf6yo5wCH9D0TexETyqio3e7qF0SO2QPUuN/6AMixl3W+j3K3sD3U2N0okFXjuZMB8ra3WDpGQ==
+X-Received: by 2002:a05:622a:1b89:b0:3a5:63ef:1d48 with SMTP id bp9-20020a05622a1b8900b003a563ef1d48mr84609685qtb.6.1670448368854;
+        Wed, 07 Dec 2022 13:26:08 -0800 (PST)
+Received: from debian-BULLSEYE-live-builder-AMD64 (h96-61-90-13.cntcnh.broadband.dynamic.tds.net. [96.61.90.13])
+        by smtp.gmail.com with ESMTPSA id k26-20020ac8605a000000b0035d08c1da35sm13843485qtm.45.2022.12.07.13.26.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 13:25:40 -0800 (PST)
-Date:   Wed, 7 Dec 2022 21:25:36 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: adjust entry after renaming the vmx hyperv
- files
-Message-ID: <Y5EE0MOaLGZUqa38@google.com>
-References: <20221205082044.10141-1-lukas.bulwahn@gmail.com>
- <87pmcydyp0.fsf@redhat.com>
+        Wed, 07 Dec 2022 13:26:08 -0800 (PST)
+Date:   Wed, 7 Dec 2022 16:26:06 -0500
+From:   Eric Whitney <enwlinux@gmail.com>
+To:     Ye Bin <yebin@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH v3 2/3] ext4: record error when detect abnormal
+ 'i_reserved_data_blocks'
+Message-ID: <Y5EE7gm66eDNe9Us@debian-BULLSEYE-live-builder-AMD64>
+References: <20221203025941.2661302-1-yebin@huaweicloud.com>
+ <20221203025941.2661302-3-yebin@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87pmcydyp0.fsf@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+In-Reply-To: <20221203025941.2661302-3-yebin@huaweicloud.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +74,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022, Vitaly Kuznetsov wrote:
-> Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
+* Ye Bin <yebin@huaweicloud.com>:
+> From: Ye Bin <yebin10@huawei.com>
 > 
-> > Commit a789aeba4196 ("KVM: VMX: Rename "vmx/evmcs.{ch}" to
-> > "vmx/hyperv.{ch}"") renames the VMX specific Hyper-V files, but does not
-> > adjust the entry in MAINTAINERS.
-> >
-> > Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
-> > broken reference.
-> >
-> > Repair this file reference in KVM X86 HYPER-V (KVM/hyper-v).
-> >
+> If 'i_reserved_data_blocks' is not cleared which mean something wrong with
+> code, free space accounting is likely wrong, according to Jan Kara's advice
+> use ext4_error() to record this abnormal let fsck to repair and also we can
+> capture this issue.
 > 
-> Fixes: a789aeba4196 ("KVM: VMX: Rename "vmx/evmcs.{ch}" to "vmx/hyperv.{ch}"")
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+> ---
+>  fs/ext4/super.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> maybe?
+> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+> index 840e0a614959..41413338c05b 100644
+> --- a/fs/ext4/super.c
+> +++ b/fs/ext4/super.c
+> @@ -1387,10 +1387,10 @@ static void ext4_destroy_inode(struct inode *inode)
+>  	}
+>  
+>  	if (EXT4_I(inode)->i_reserved_data_blocks)
+> -		ext4_msg(inode->i_sb, KERN_ERR,
+> -			 "Inode %lu (%p): i_reserved_data_blocks (%u) not cleared!",
+> -			 inode->i_ino, EXT4_I(inode),
+> -			 EXT4_I(inode)->i_reserved_data_blocks);
+> +		ext4_error(inode->i_sb,
+> +			"Inode %lu (%p): i_reserved_data_blocks (%u) not cleared!",
+> +			inode->i_ino, EXT4_I(inode),
+> +			EXT4_I(inode)->i_reserved_data_blocks);
 
-Ya.
+It would be better if the arguments to ext4_error after the first were aligned
+under "inode->i_sb", as you had in your first version.  That's typical ext4
+practice as seen earlier in this function, though this does pass checkpatch.
+Otherwise, looks good.
 
+That said, feel free to add:
+
+Reviewed-by: Eric Whitney <enwlinux@gmail.com>
+
+
+>  }
+>  
+>  static void init_once(void *foo)
+> -- 
+> 2.31.1
 > 
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >  MAINTAINERS | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index ceda8a0abffa..8fda3844b55b 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -11457,7 +11457,7 @@ F:	arch/x86/kvm/hyperv.*
-> >  F:	arch/x86/kvm/kvm_onhyperv.*
-> >  F:	arch/x86/kvm/svm/hyperv.*
-> >  F:	arch/x86/kvm/svm/svm_onhyperv.*
-> > -F:	arch/x86/kvm/vmx/evmcs.*
-> > +F:	arch/x86/kvm/vmx/hyperv.*
-> >  
-> >  KVM X86 Xen (KVM/Xen)
-> >  M:	David Woodhouse <dwmw2@infradead.org>
-> 
-> Reviewed-by: 
-
-Since Vitaly left you hanging :-)
-
-Reviewed-by: Sean Christopherson <seanjc@google.com>
