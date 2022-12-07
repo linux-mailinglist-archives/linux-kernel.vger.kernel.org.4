@@ -2,176 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92F38645F9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02ABF645FA5
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbiLGRHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
+        id S229699AbiLGRI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiLGRHf (ORCPT
+        with ESMTP id S229605AbiLGRIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:07:35 -0500
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C930F654CC;
-        Wed,  7 Dec 2022 09:07:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1670432847;
-        bh=G0BsHsdboL62GAeZrE9/3v4SjnUS0OVkBTj5YWSHERI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Z0Nnmg1qdSsWIw2lpWz58lE/xXLYDfy0d5fKUZ4Qi4aZz09IkQzK9616OTJ47uC8d
-         Y3curH3gWXr3DrHwmByGPJm+7EA16BOAnBU1yfElHAr31g/APGAQCdJQ36xd6Lkbz4
-         26SqIBnDHa29Ag7nhR/ErdXuT7HLIzqXBbAC4mUdrr+aPpfk9h30FGHNCoqgyGpIs9
-         xBt+skfa6oMHQSG9yJdjIjFkWVmClfKtOj+/LXa4dIIbXgOh36bBKUp2oP7Wfv4rJx
-         uQcrwnt9dwpCouZOw9Il8wI6H/uFd1ADSZZXzKSJWbsYYqfAyVAeRMXCY68UVEB/uB
-         ZuRsoVQeOnSZQ==
-Received: from [172.16.0.118] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NS3cb2w0kzZn1;
-        Wed,  7 Dec 2022 12:07:27 -0500 (EST)
-Message-ID: <843af7b5-8917-e9e3-de27-cb328f53fb70@efficios.com>
-Date:   Wed, 7 Dec 2022 12:07:46 -0500
+        Wed, 7 Dec 2022 12:08:55 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCF867216
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:08:53 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id z144so7880855iof.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:08:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+r3z2TzChBc0Vs/D1sJ6f4Z6Cq8sqK5Sifftb2ph/uA=;
+        b=sqgK4uVgdukFxIDxOvSAAyQFpMopVm99bZ5YD2B/lQFb1XglqtMEdjzv4zSPvnedAj
+         PlIMswBqc8UYikh4BdgySLaWBAmwPQLCA+DlUrsRTHy+/Y4trGeyfTrXAjWjIXqmWBgX
+         hTw2LZQ0rDXoDM9eo98BrRubaVVwABlt9qLRJHkrq14N5qdMHboXlGZVVHnZrW3foxss
+         cYd/kgCu+72av+pycZz+zetKRaKEH7IpVSwk9xgVJsZMOfSPMFagEGeyCzFLMIh9/Jhd
+         GCY129UD4jcHF5FgAomHtHxC6KVv+ObkjnkDwWHBHgewjgg/JqQUNZeIdPzgrsE+ubKz
+         hDYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+r3z2TzChBc0Vs/D1sJ6f4Z6Cq8sqK5Sifftb2ph/uA=;
+        b=1BXEeb/38UqBy/opSwl0MxqoqPH7bhXpv7cTQeOceXrd69ZnE9WUqJw6d/sD/H8Oeq
+         7WbRnxn1SlQycxV5Q+I6ELhfDmJBwSjJ2WrIRwnGQU1c2Qxkp+TqUvnxYXUokWMQ9wgW
+         3ah/RjVEqZjWvSx63nSN2dommq1nOKJy5kDmAcghS8EfA6AzQe71WzDcUXv2Z4B2g70m
+         EkS18yFjMrpGoAgIaJrw+xd9xgSNbLwCY4r+voCOWnQxtocFom1o8g8wd6dTsOjZBc/i
+         KE4L9vDDT3CAWa5RiJRDfgP/yGMibHMpnTWQfJ0ty3Nyc/Ho8VzJsaoazQrlmAP9k/5K
+         JUTg==
+X-Gm-Message-State: ANoB5pkQxJQnGkzNweZsCBr4DFwV4EKU+f4BdvImrMqTcx0qI+ebem2h
+        GbbYjgJXhoQUTiNZUHMMwgLroQ==
+X-Google-Smtp-Source: AA0mqf7yLejbRNfqMUu3ilEvsYdDj7YhVkPipELjA6VqWKNVXZJlTdAqiTcfQmriCKmlYB7qULxDWg==
+X-Received: by 2002:a05:6638:1124:b0:38a:171a:dee with SMTP id f4-20020a056638112400b0038a171a0deemr12454949jar.292.1670432932906;
+        Wed, 07 Dec 2022 09:08:52 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id o27-20020a02a1db000000b0038a0c2ae99bsm7327723jah.18.2022.12.07.09.08.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 09:08:52 -0800 (PST)
+Message-ID: <eaf4f9a8-dfc6-402e-4a1a-732034d1512d@kernel.dk>
+Date:   Wed, 7 Dec 2022 10:08:50 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 1/2] sched/membarrier: Introduce
- MEMBARRIER_CMD_GET_REGISTRATIONS
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC] block: Change the granularity of io ticks from ms to ns
+To:     Gulam Mohamed <gulam.mohamed@oracle.com>,
+        linux-block@vger.kernel.org
+Cc:     philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, colyli@suse.de,
+        kent.overstreet@gmail.com, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, dave.jiang@intel.com,
+        ira.weiny@intel.com, junxiao.bi@oracle.com,
+        martin.petersen@oracle.com, kch@nvidia.com,
+        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
+        nvdimm@lists.linux.dev, konrad.wilk@oracle.com
+References: <20221206181536.13333-1-gulam.mohamed@oracle.com>
 Content-Language: en-US
-To:     Michal Clapinski <mclapinski@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrei Vagin <avagin@gmail.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20221207164338.1535591-1-mclapinski@google.com>
- <20221207164338.1535591-2-mclapinski@google.com>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221207164338.1535591-2-mclapinski@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20221206181536.13333-1-gulam.mohamed@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-07 11:43, Michal Clapinski wrote:
-> Provide a method to query previously issued registrations.
+On 12/6/22 11:15?AM, Gulam Mohamed wrote:
+> Use ktime to change the granularity of IO accounting in block layer from
+> milli-seconds to nano-seconds to get the proper latency values for the
+> devices whose latency is in micro-seconds. After changing the granularity
+> to nano-seconds the iostat command, which was showing incorrect values for
+> %util, is now showing correct values.
 > 
-> Signed-off-by: Michal Clapinski <mclapinski@google.com>
-> ---
->   include/uapi/linux/membarrier.h |  4 ++++
->   kernel/sched/membarrier.c       | 39 ++++++++++++++++++++++++++++++++-
->   2 files changed, 42 insertions(+), 1 deletion(-)
+> We did not work on the patch to drop the logic for
+> STAT_PRECISE_TIMESTAMPS yet. Will do it if this patch is ok.
 > 
-> diff --git a/include/uapi/linux/membarrier.h b/include/uapi/linux/membarrier.h
-> index 737605897f36..5f3ad6d5be6f 100644
-> --- a/include/uapi/linux/membarrier.h
-> +++ b/include/uapi/linux/membarrier.h
-> @@ -137,6 +137,9 @@
->    * @MEMBARRIER_CMD_SHARED:
->    *                          Alias to MEMBARRIER_CMD_GLOBAL. Provided for
->    *                          header backward compatibility.
-> + * @MEMBARRIER_CMD_GET_REGISTRATIONS:
-> + *                          Returns a bitmask of previously issued
-> + *                          registration commands.
->    *
->    * Command to be passed to the membarrier system call. The commands need to
->    * be a single bit each, except for MEMBARRIER_CMD_QUERY which is assigned to
-> @@ -153,6 +156,7 @@ enum membarrier_cmd {
->   	MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE	= (1 << 6),
->   	MEMBARRIER_CMD_PRIVATE_EXPEDITED_RSEQ			= (1 << 7),
->   	MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ		= (1 << 8),
-> +	MEMBARRIER_CMD_GET_REGISTRATIONS			= (1 << 9),
->   
->   	/* Alias for header backward compatibility. */
->   	MEMBARRIER_CMD_SHARED			= MEMBARRIER_CMD_GLOBAL,
-> diff --git a/kernel/sched/membarrier.c b/kernel/sched/membarrier.c
-> index 0c5be7ebb1dc..2ad881d07752 100644
-> --- a/kernel/sched/membarrier.c
-> +++ b/kernel/sched/membarrier.c
-> @@ -159,7 +159,8 @@
->   	| MEMBARRIER_CMD_PRIVATE_EXPEDITED				\
->   	| MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED			\
->   	| MEMBARRIER_PRIVATE_EXPEDITED_SYNC_CORE_BITMASK		\
-> -	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK)
-> +	| MEMBARRIER_PRIVATE_EXPEDITED_RSEQ_BITMASK			\
-> +	| MEMBARRIER_CMD_GET_REGISTRATIONS)
->   
->   static void ipi_mb(void *info)
->   {
-> @@ -540,6 +541,40 @@ static int membarrier_register_private_expedited(int flags)
->   	return 0;
->   }
->   
-> +static int membarrier_get_registrations(void)
-> +{
-> +	struct task_struct *p = current;
-> +	struct mm_struct *mm = p->mm;
-> +	int registrations_mask = 0, membarrier_state, i;
-> +	static const int states[] = {
-> +		MEMBARRIER_STATE_GLOBAL_EXPEDITED |
-> +			MEMBARRIER_STATE_GLOBAL_EXPEDITED_READY,
+> The iostat command was run after starting the fio with following command
+> on an NVME disk. For the same fio command, the iostat %util was showing
+> ~100% for the disks whose latencies are in the range of microseconds.
+> With the kernel changes (granularity to nano-seconds), the %util was
+> showing correct values. Following are the details of the test and their
+> output:
 
-What is the purpose of checking for the _READY state flag as well here ?
-
-> +		MEMBARRIER_STATE_PRIVATE_EXPEDITED |
-> +			MEMBARRIER_STATE_PRIVATE_EXPEDITED_READY,
-> +		MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE |
-> +			MEMBARRIER_STATE_PRIVATE_EXPEDITED_SYNC_CORE_READY,
-> +		MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ |
-> +			MEMBARRIER_STATE_PRIVATE_EXPEDITED_RSEQ_READY
-> +	};
-> +	static const int registration_cmds[] = {
-> +		MEMBARRIER_CMD_REGISTER_GLOBAL_EXPEDITED,
-> +		MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED,
-> +		MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_SYNC_CORE,
-> +		MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ
-> +	};
-> +	BUILD_BUG_ON(ARRAY_SIZE(states) != ARRAY_SIZE(registration_cmds));
-> +
-> +	membarrier_state = atomic_read(&mm->membarrier_state);
-> +	for (i = 0; i < ARRAY_SIZE(states); ++i) {
-> +		if (membarrier_state & states[i]) {
-
-The mask will match if either of the flags to match are set. Is that 
-your intent ?
-
-> +			registrations_mask |= registration_cmds[i];
-> +			membarrier_state &= ~states[i];
-
-So I understand that those _READY flags are there purely for making sure 
-we clear the membarrier_state for validation that they have all been 
-checked with the following WARN_ON_ONCE(). Am I on the right track ?
-
-> +		}
-> +	}
-> +	WARN_ON_ONCE(membarrier_state != 0);
-
-Thanks,
-
-Mathieu
-
-> +	return registrations_mask;
-> +}
-> +
->   /**
->    * sys_membarrier - issue memory barriers on a set of threads
->    * @cmd:    Takes command values defined in enum membarrier_cmd.
-> @@ -623,6 +658,8 @@ SYSCALL_DEFINE3(membarrier, int, cmd, unsigned int, flags, int, cpu_id)
->   		return membarrier_private_expedited(MEMBARRIER_FLAG_RSEQ, cpu_id);
->   	case MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED_RSEQ:
->   		return membarrier_register_private_expedited(MEMBARRIER_FLAG_RSEQ);
-> +	case MEMBARRIER_CMD_GET_REGISTRATIONS:
-> +		return membarrier_get_registrations();
->   	default:
->   		return -EINVAL;
->   	}
+As mentioned, this will most likely have a substantial performance
+impact. I'd test it, but your patch is nowhere near applying to the
+current block tree. Please resend it against for-6.2/block so it can
+get tested.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
+Jens Axboe
 
