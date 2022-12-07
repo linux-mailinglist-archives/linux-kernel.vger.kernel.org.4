@@ -2,116 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 099256462FB
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:08:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 273796462FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 22:09:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLGVIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 16:08:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S229914AbiLGVJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 16:09:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiLGVIo (ORCPT
+        with ESMTP id S229554AbiLGVJU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 16:08:44 -0500
-X-Greylist: delayed 95450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 13:08:42 PST
-Received: from out-244.mta0.migadu.com (out-244.mta0.migadu.com [91.218.175.244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181EF6E544
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:08:42 -0800 (PST)
-Message-ID: <dbf316a8-7a26-c161-4009-fd0528fbf6f2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1670447320;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g1Z1+SgkfL777/y/++qbqNSavwo8xO4iHJsNFFTO5NA=;
-        b=T8mBvK7npvO07cUxkVfk2RSJYLG8m2t/0MhW80kknb5s20/bhsguHbVjPPTviBzQ1EnEyt
-        KH/L7Laaulxx5fM1bVXqdW/OsdjkJlXeeDq8Qpmq0E2/2XaEXMj1qvH9Oi3qxwT9ovhrOZ
-        0QAwr/hQTXWg/pZHToUdFhPh/UYuFIE=
-Date:   Wed, 7 Dec 2022 13:08:27 -0800
+        Wed, 7 Dec 2022 16:09:20 -0500
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4483A69305;
+        Wed,  7 Dec 2022 13:09:20 -0800 (PST)
+Received: by mail-pl1-x634.google.com with SMTP id k7so18214755pll.6;
+        Wed, 07 Dec 2022 13:09:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=btWEypjcT+k8JDXT8TUXEkd1ITl+OxYaOHRpyIuSB+Q=;
+        b=JdluR9hLQyzafIBwoxEuG3oOuTCDFymdGJahJS3FEGsD+BSsJiHevDsdsVDN94f0S1
+         t0qvC0VbXpgvj9IatQ0QFmjSe/MqiqBx/PGBuyxFXFFmkRmJZMznP+5w+QJ+N6QwM7/Y
+         c99YBeE/lIh1r37lUUR73Fe0lAW7BGpRblhFxio57bmptNFzkajL4PPkSu5BtvrvLwr4
+         I39svbz2VZluvxiRJV89HuoESIIgn6Gh56l1OGw4jAtvhwSxxFqUoAdueYf/w5w+WL8P
+         lhgtQ2GGm/PP9L04Kb2jruEbMMaLGVzFX5Lyp09LjyEXF0vY3y8xtpXKJg4yZ7V85/qV
+         IHUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=btWEypjcT+k8JDXT8TUXEkd1ITl+OxYaOHRpyIuSB+Q=;
+        b=eWESUyjfON3NMnaA+OE/Y2UEIX36y6u10+O+m6s5M3UQFVmId0ivmZF2hUrxkR81Di
+         pCq7pIEfl2lGIDFbUHkuh1sDuyEH21nhGQzvB2qE1Z/u6A1F5pZrwsGVPaZhTxJZ21VM
+         xmjFjsZCmheCYhyUxWpo0159iFbEbwmfMTyDeeakkTj3BDO5acpNHY2217P7TECKpG6A
+         Rnl5OkVnyj86WI9UqlpNSbXRPJMOnigrXDA1QD2o6ZURil7iquF27oG0xbGChPsPgDfv
+         r3Iz6a9owRnWXGUAgbry1xo3T4zvohC3Y35K4CWO6ZgFuQgPVw+B/fR6OVlLGUNpUHx6
+         CGyg==
+X-Gm-Message-State: ANoB5pkZfYrwoIMAKuWY5+w4AWaB4N8R1H5Iqfzmx69jhs+6yjumKgIm
+        aQbqy3GpA/c08q9Z5G3EmTQ=
+X-Google-Smtp-Source: AA0mqf7tdn9mnthjnsiCh4+fVFnlYxbawxeUHWV90HLGgMY48JD1D2x+FVc0JeApp+vU3mBr/GWgEw==
+X-Received: by 2002:a17:902:7805:b0:189:f06e:fd90 with SMTP id p5-20020a170902780500b00189f06efd90mr7245160pll.50.1670447359554;
+        Wed, 07 Dec 2022 13:09:19 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:524a:9944:58ed:e916])
+        by smtp.gmail.com with ESMTPSA id l125-20020a622583000000b0056b8181861esm6473280pfl.19.2022.12.07.13.09.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 13:09:18 -0800 (PST)
+Date:   Wed, 7 Dec 2022 13:09:15 -0800
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [v2 PATCH] PCI: aardvark: switch to using
+ devm_gpiod_get_optional()
+Message-ID: <Y5EA+4Ce/4IklLdJ@google.com>
+References: <Y5DhigXLHMZPhI/E@google.com>
+ <20221207201807.GA1468291@bhelgaas>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] bpf: Upgrade bpf_{g,s}etsockopt return values
-Content-Language: en-US
-To:     Ji Rongfeng <SikoJobs@outlook.com>
-Cc:     daniel@iogearbox.net, john.fastabend@gmail.com, ast@kernel.org,
-        andrii@kernel.org, song@kernel.org, yhs@fb.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <DU0P192MB1547FE6F35CC1A3EEA1AFDECD6179@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
- <deb77161-3091-a134-4b82-78fef06efe85@linux.dev>
- <DU0P192MB1547DA9F22139A0B09FF5877D61A9@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <DU0P192MB1547DA9F22139A0B09FF5877D61A9@DU0P192MB1547.EURP192.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207201807.GA1468291@bhelgaas>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 3:19 AM, Ji Rongfeng wrote:
-> On 2022/12/7 2:36, Martin KaFai Lau wrote:
->> On 12/2/22 9:39 AM, Ji Rongfeng wrote:
->>> Returning -EINVAL almost all the time when error occurs is not very
->>> helpful for the bpf prog to figure out what is wrong. This patch
->>> upgrades some return values so that they will be much more helpful.
->>>
->>> * return -ENOPROTOOPT when optname is unsupported
->>>
->>>    The same as {g,s}etsockopt() syscall does. Before this patch,
->>>    bpf_setsockopt(TCP_SAVED_SYN) already returns -ENOPROTOOPT, which
->>>    may confuse the user, as -EINVAL is returned on other unsupported
->>>    optnames. This patch also rejects TCP_SAVED_SYN right in
->>>    sol_tcp_sockopt() when getopt is false, since do_tcp_setsockopt()
->>>    is just the executor and it's not its duty to discover such error
->>>    in bpf. We should maintain a precise allowlist to control whether
->>>    an optname is supported and allowed to enter the executor or not.
->>>    Functions like do_tcp_setsockopt(), their behaviour are not fully
->>>    controllable by bpf. Imagine we let an optname pass, expecting
->>>    -ENOPROTOOPT will be returned, but someday that optname is
->>>    actually processed and unfortunately causes deadlock when calling
->>>    from bpf. Thus, precise access control is essential.
->>
->> Please leave the current -EINVAL to distinguish between optnames rejected by 
->> bpf and optnames rejected by the do_*_{get,set}sockopt().
+On Wed, Dec 07, 2022 at 02:18:07PM -0600, Bjorn Helgaas wrote:
+> On Wed, Dec 07, 2022 at 10:55:06AM -0800, Dmitry Torokhov wrote:
+> > ...
+> > I wonder if you could also consider picking up the mvebu patch:
+> > 
+> > 	https://lore.kernel.org/all/Y3KbhIi4ZsSO7+Cl@google.com/
+> > 
+> > pci-mvebu.c is the very last user of of_get_named_gpio_flags() in the
+> > next tree, which we also want to stop exporting.
 > 
-> To reach that goal, it would be better for us to pick a value other than 
-> -ENOPROTOOPT or -EINVAL. This patch actually makes sk-related errors, 
-> level-reletad errors, optname-related errors and opt{val,len}-related errors 
-> distinguishable, as they should be, by leaving -EINVAL to opt{val,len}-related 
-> errors only. man setsockopt:
+> Sure, but the 0-day bot found a couple issues, which I haven't
+> bothered to look into:
 > 
->  > EINVAL optlen invalid in setsockopt().  In some cases this error
->  >        can also occur for an invalid value in optval (e.g., for
->  >        the IP_ADD_MEMBERSHIP option described in ip(7)).
-> 
-> With an unique return value, the bpf prog developer will be able to know that 
-> the error is "unsupported or unknown optname" for sure, saving time on figuring 
-> the actual cause of the error. In production environment, the bpf prog will be 
-> able to test whether an optname is available in current bpf env and decide what 
-> to do next also, which is very useful.
+>   https://lore.kernel.org/all/202211151503.HLlq2Z4B-lkp@intel.com/
 
-It should be a non-goal for bpf_{set,get}sockopt to provide this level of 
-granularity (optlevel vs optname vs optlen) at this point when it requires this 
-kind of churns on the existing return values.  It is not like there is a lot of 
-optname that supports non integer optlen.  This should not be a limit factor if 
-the userspace wants to probe what optname is supported.  Hence, not convinced it 
-is needed.  I would like to hear how others think.
+Ugh, indeed, I asumed this was an existing issue and of course I was
+wrong. linux/irqchip/chained_irq.h was previously included indirectly
+via linux/of_gpio.h and linux/gpio/driver.h.
 
-If optname is not something that bpf_{set,get}sockopt rejects, it should then 
-rely on the do_*_{get,set}sockopt for handling which includes the error value.
+I sent out v3 tha compiles cleanly.
 
-For TCP_SAVED_SYN, tbh, it is too hypothetical that the do_tcp_setsockopt will 
-have a reasonable use case to ever support it.  If it did, we would make it 
-available to the bpf also because the bpf_getsockopt(TCP_SAVED_SYN) has already 
-been supported instead of now worrying about blacklisting it for the future.
+Thanks.
 
--EBADFD will be useful because the same level, optname, optval, and optlen will 
-fail because of different sk.
+-- 
+Dmitry
