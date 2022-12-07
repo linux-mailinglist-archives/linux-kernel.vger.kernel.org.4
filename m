@@ -2,83 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3641E645BFC
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:05:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1123F645BFF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 15:06:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiLGOFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 09:05:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S229907AbiLGOGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 09:06:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiLGOFb (ORCPT
+        with ESMTP id S229821AbiLGOFw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 09:05:31 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6BA5FB90
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 06:04:20 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id qk9so14251999ejc.3
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 06:04:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yLEQ1iziXxnm8tB1YfDZj59/p6SSPcwuVFJkFGvSq1g=;
-        b=dzpKqLY84Dr7Ud955bgc9eOFeA7FKkqyevWEX9bPYQYNfiQPXWBeFs7jmaIfYkncte
-         ap72TfM03WBZ22MFWrf9U6C2OFZWIKTZ5Z98jMrmvHyA336Cpu5KyLOs9zu3liPYJAhJ
-         +bwye+1znCiXHtxai+tl0/agLChGg3DrkXlTYx+OdiVtz1eI/JUtyQDD9VFYinsEOMR0
-         Ch7gGXu/BjX69v9MzRRg7Sv7CtHNWS9Fn/XjGmJfLXZAHO6nSGDjfuyaX5xw0FPb1p7L
-         XSS1zUb8Ab/fv6aNXj9nR60g2HjlvzXMvMbmd9+TYqrt+Pk0poQVjYmjnXBUsasAetpO
-         ArHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yLEQ1iziXxnm8tB1YfDZj59/p6SSPcwuVFJkFGvSq1g=;
-        b=HXuhB6srouWwwAm1wIZnw6xCoPTaDsEIaXk2S/NRZDD/iIauGrmWJQHAz8A6fAzHGY
-         UIseGuR9eZqUN/WtkljrWENMKvKGrNVqYMK2FOXRAVNP3m8mBgko/zTzdn9Xng0NBEXi
-         uYgJN/UCzjs2/dFSXxwaLXC7EtLrYvjvox7p79AwhbQ29LsqXn0OSF0lLaGX++d7b4BD
-         5hI7g3cm+u98R22Fh02HfZ3FXzB503BrGCK4WEeCbwAOKS7l60l2AC6Ygj/Z7IBJImD9
-         Yawrb7JqKwujzxRk3E/QMt+VRXZhwl1XxxKUHM+/td3C88yhP3BY20Ew9phVurrPQ1Pm
-         3ANg==
-X-Gm-Message-State: ANoB5pkWKySGFM7vdcnpXKb9aYnDG47pqYaYAYO28H6jySMS1U5Vkge0
-        lay+PHUlmRAt4i7teszfnxZWQw==
-X-Google-Smtp-Source: AA0mqf6u3BZDsigCe1eE4YZ5zUn3KvdPVP/j/ewkyVT3pq/rT1ZFfyAPgBDFioYpogO/OwrHjvQROg==
-X-Received: by 2002:a17:906:50a:b0:7c0:b995:8f8b with SMTP id j10-20020a170906050a00b007c0b9958f8bmr21986259eja.55.1670421855380;
-        Wed, 07 Dec 2022 06:04:15 -0800 (PST)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id r10-20020a17090609ca00b007ad94422cf6sm8448157eje.198.2022.12.07.06.04.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 06:04:14 -0800 (PST)
-Date:   Wed, 7 Dec 2022 15:04:13 +0100
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     ehakim@nvidia.com
-Cc:     linux-kernel@vger.kernel.org, raeds@nvidia.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org, sd@queasysnail.net,
-        atenart@kernel.org
-Subject: Re: [PATCH net] macsec: add missing attribute validation for offload
-Message-ID: <Y5CdXd9KkKDq+uIo@nanopsycho>
-References: <20221207101618.989-1-ehakim@nvidia.com>
+        Wed, 7 Dec 2022 09:05:52 -0500
+Received: from out30-57.freemail.mail.aliyun.com (out30-57.freemail.mail.aliyun.com [115.124.30.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E5AB9594;
+        Wed,  7 Dec 2022 06:04:58 -0800 (PST)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045176;MF=xueshuai@linux.alibaba.com;NM=0;PH=DS;RN=18;SR=0;TI=SMTPD_---0VWmLqB6_1670421893;
+Received: from 30.120.151.145(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0VWmLqB6_1670421893)
+          by smtp.aliyun-inc.com;
+          Wed, 07 Dec 2022 22:04:54 +0800
+Message-ID: <7accd70e-ce35-d540-8254-fa41403b9eab@linux.alibaba.com>
+Date:   Wed, 7 Dec 2022 22:04:52 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207101618.989-1-ehakim@nvidia.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Subject: Re: reply for ACPI: APEI: handle synchronous exceptions in task work
+Content-Language: en-US
+From:   Shuai Xue <xueshuai@linux.alibaba.com>
+To:     Lv Ying <lvying6@huawei.com>
+Cc:     akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
+        bp@alien8.de, cuibixuan@linux.alibaba.com,
+        dave.hansen@linux.intel.com, james.morse@arm.com,
+        jarkko@kernel.org, lenb@kernel.org, linmiaohe@huawei.com,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        naoya.horiguchi@nec.com, rafael@kernel.org, tony.luck@intel.com,
+        zhuo.song@linux.alibaba.com, xiezhipeng1@huawei.com,
+        yingwen.cyw@alibaba-inc.com
+References: <20221206153354.92394-1-xueshuai@linux.alibaba.com>
+ <20221207095413.1980862-1-lvying6@huawei.com>
+ <737ba26b-d7c1-0014-d97f-33782ea4cd20@linux.alibaba.com>
+In-Reply-To: <737ba26b-d7c1-0014-d97f-33782ea4cd20@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Dec 07, 2022 at 11:16:18AM CET, ehakim@nvidia.com wrote:
->From: Emeel Hakim <ehakim@nvidia.com>
->
->Add missing attribute validation for IFLA_MACSEC_OFFLOAD
->to the netlink policy.
->
->Fixes: 791bb3fcafce ("net: macsec: add support for specifying offload upon link creation")
->Signed-off-by: Emeel Hakim <ehakim@nvidia.com>
 
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+
+On 2022/12/7 PM8:56, Shuai Xue wrote:
+> 
+> 
+> On 2022/12/7 PM5:54, Lv Ying wrote:
+>> Hi Shuai Xue:
+>>
+>> I notice that  we are both handling the same problem, my patchset:
+>> RFC: https://lkml.org/lkml/fancy/2022/12/5/364
+>> RFC PATCH v1: https://lkml.org/lkml/2022/12/7/244
+>> has CC to you 
+> 
+> I am glad to see that the community is trying to address the same problems,
+> I have replied to your RFC version.
+> 
+>> Yingwen's proposal in 2022/12/06[1]:
+>> Add Bit 8 in "Common Platform Error Record" -> "Section Descriptor" ->
+>> Flags (which Now, Bit 8 through 31 – Reserved) 
+>>
+>> [1] https://members.uefi.org/wg/uswg/mail/thread/9453
+>>
+>> Yingwen's proposal makes distinguish synchronous error by CPER report more
+>> easy, however, it's not supported yet.
+>> Looking forward to your reply if there is any progress on the proposal and
+>> your suggestions about my patchset.
+> 
+> Yes, it is not supported yet. So we separated synchronous error handling into
+> task work based on a similar flag internally.
+> 
+> We submitted the proposal last month after discussed with Tony. But there
+> is still no progress, I will update it here in time.
+> 
+> Cheers,
+> Shuai
+
+By the way, if you agree with the proposal, please vote to approve it in UEFI community
+with your right on behalf of your organization, then we can make it happen soon. :)
+
+Thank you.
+
+Best Regards,
+Shuai
