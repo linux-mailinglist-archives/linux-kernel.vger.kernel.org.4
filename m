@@ -2,158 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F13CC645E89
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:17:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FED645E87
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiLGQRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:17:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42810 "EHLO
+        id S229974AbiLGQRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiLGQRa (ORCPT
+        with ESMTP id S229497AbiLGQRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:17:30 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC7F62EB0;
-        Wed,  7 Dec 2022 08:17:27 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A97B0CE1AFE;
-        Wed,  7 Dec 2022 16:17:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C569FC433C1;
-        Wed,  7 Dec 2022 16:17:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670429843;
-        bh=MvxnN6BYfRwcFGpZLKnETxCa2619sEnvs1dSo1RoeFA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GRMibxXYH8N/hivYh+EpOLDIMjG7QOqNUh7Kk72UspODOLVezObLy6b0mW5om2dw0
-         +G7JGeWxgqW1OF7FcYxpYx1AXqTwpdQjRY1mNdkRQIYpj5QKQ7rGFSsEsS10hYaqyB
-         LEboIrp+dNw754jzDaX2PGcjb8RfUkgge2dlw7ZBQFhuutPEo1xO3ThcRtWODVnHGn
-         U79yv85OMgrPtPW6e7PLkSt7cQgxADg0+mG0F+fdvEGko6FA9or2v5WcpvvhEVUJuE
-         IGg4exxY9wQ4nDNg+Y6zl+Vx62daDlzWZI3VIRY+EbcRq9q9jMar9klR3sgIDJDv7w
-         SlAa9lYeY7ltg==
-Date:   Wed, 7 Dec 2022 08:17:23 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     syzbot <syzbot+912776840162c13db1a3@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] xfs: dquot shrinker doesn't check for XFS_DQFLAG_FREEING
-Message-ID: <Y5C8k3ef4LqU4v0x@magnolia>
-References: <000000000000abbde005ef113644@google.com>
- <0000000000009a423705ef123f9a@google.com>
- <20221205225246.GP3600936@dread.disaster.area>
+        Wed, 7 Dec 2022 11:17:19 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965F129C9D;
+        Wed,  7 Dec 2022 08:17:18 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id fc4so15122207ejc.12;
+        Wed, 07 Dec 2022 08:17:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vexo47SWu18SUJUmhkZ6FDikOo7U0Q9P4r9hjmuRqO0=;
+        b=GIhImnhPXyK3YwyYO1hLrgSvqw2DQyvnyROXiTjgKZSdhI9OVCuQldSvYOHQo3bC/B
+         KNUhCXYdRYKX3B0iAXyT6gFk4q5YbsH5K8jmCmSK6KfpZQL/6Go/rC/OX8Wrzd23Fbxh
+         wQLEWpoN7Mcxg3zrFgnwPc2FiJdEm6ZRnAkIxiVFfeoqD6sgzr6q0+OpGG1rjCu+m3ly
+         pCWBD5EMyz3Ad92j/zs568mjIGf644oT4+4AJr0Yg4tHkHOR3scEylbBc+tIEk2lbJKj
+         jTKWjU8+s5o/ciKZriAuywvVx4yFL4UJ6mqPAhv9AGbt1w2uNHeRWapXlCGvcpiR6o3e
+         TNCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vexo47SWu18SUJUmhkZ6FDikOo7U0Q9P4r9hjmuRqO0=;
+        b=3lBTYbetuKisEXUH+zrudjvmtZKSSpH0oWiwBRZII+FGH8OP20e8Nw/MrYufhTakYL
+         dYA47+Wq44QOQdqYxJkYl9jU6G/1TH0Tms87y3fa0jqPHALS0rOuKn4QZwctgbTePX9O
+         yd0qEgEKJh2nXo1ks7TojsoYVcTV0atxGsEz3weLe5rjm6h29oI5AzGyZFeYFxeXKpn4
+         yWsUG96EuGIggYZ6kCGuSExQRZASYNYUhQNk+yz+T+OKIO15SGssHziotiyW7sKM+nr7
+         /1FHjIqZr5glxTIKxYwQP7dHTnMq7ZKGQarEf/joL0+9VhERulhenSZZOX7/KdwuTfod
+         UNMA==
+X-Gm-Message-State: ANoB5pka1E+4Xr6bNxxQdTjE1dUgWwEFjntazfwFSuTDlekQK+lN1WUL
+        EOvlXYfvfnZyLCg47RJgfQY=
+X-Google-Smtp-Source: AA0mqf6UYzg36G+moICbHOZwIfnlXACn/TE0whPJbX87BMYc+rgMGNYT+xr0xIwDmDLg0DmG9lDPwg==
+X-Received: by 2002:a17:907:8c8e:b0:78d:4167:cf08 with SMTP id td14-20020a1709078c8e00b0078d4167cf08mr29399838ejc.337.1670429837027;
+        Wed, 07 Dec 2022 08:17:17 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id l13-20020aa7c3cd000000b00467960d7b62sm2410225edr.35.2022.12.07.08.17.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 08:17:15 -0800 (PST)
+Date:   Wed, 7 Dec 2022 17:17:28 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v5 net-next 1/5] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y5C8mIQWpWmfmkJ0@gvm01>
+References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+ <350e640b5c3c7b9c25f6fd749dc0237e79e1c573.1670371013.git.piergiorgio.beruto@gmail.com>
+ <20221206195014.10d7ec82@kernel.org>
+ <Y5CQY0pI+4DobFSD@gvm01>
+ <Y5CgIL+cu4Fv43vy@lunn.ch>
+ <Y5C0V52DjS+1GNhJ@gvm01>
+ <Y5C6EomkdTuyjJex@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221205225246.GP3600936@dread.disaster.area>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5C6EomkdTuyjJex@lunn.ch>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 09:52:46AM +1100, Dave Chinner wrote:
-> On Mon, Dec 05, 2022 at 02:35:39AM -0800, syzbot wrote:
-> > syzbot has found a reproducer for the following issue on:
-> > 
-> > HEAD commit:    0ba09b173387 Revert "mm: align larger anonymous mappings o..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=15550c47880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=2325e409a9a893e1
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=912776840162c13db1a3
-> > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=128c9e23880000
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/9758ec2c06f4/disk-0ba09b17.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/06781dbfd581/vmlinux-0ba09b17.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/3d44a22d15fa/bzImage-0ba09b17.xz
-> > mounted in repro: https://storage.googleapis.com/syzbot-assets/335889b2d730/mount_0.gz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+912776840162c13db1a3@syzkaller.appspotmail.com
-> > 
-> > XFS (loop1): Quotacheck: Done.
-> > syz-executor.1 (4657): drop_caches: 2
-> > ==================================================================
-> > BUG: KASAN: use-after-free in xfs_dquot_type fs/xfs/xfs_dquot.h:136 [inline]
-> > BUG: KASAN: use-after-free in xfs_qm_dqfree_one+0x12f/0x170 fs/xfs/xfs_qm.c:1604
-> > Read of size 1 at addr ffff888079a6aa58 by task syz-executor.1/4657
+On Wed, Dec 07, 2022 at 05:06:42PM +0100, Andrew Lunn wrote:
+> On Wed, Dec 07, 2022 at 04:42:15PM +0100, Piergiorgio Beruto wrote:
+> > On Wed, Dec 07, 2022 at 03:16:00PM +0100, Andrew Lunn wrote:
+> > > > > TBH I can't parse the "ETHTOOL_A_PLCA_VERSION is reported as 0Axx
+> > > > > where.." sentence. Specifically I'm confused about what the 0A is.
+> > > > How about this: "When this standard is supported, the upper byte of
+> > > > ``ETHTOOL_A_PLCA_VERSION`` shall be 0x0A (see Table A.1.0 — IDVER 
+> > > > bits assignment).
+> > > 
+> > > I think the 0x0A is pointless and should not be included here. If the
+> > > register does not contain 0x0A, the device does not follow the open
+> > > alliance standard, and hence the lower part of the register is
+> > > meaningless.
+> > > 
+> > > This is why i suggested -ENODEV should actually be returned on invalid
+> > > values in this register.
+> > I already integrated this change in v5 (returning -ENODEV). Give what you're
+> > saying, I can just remove that sentence from the documentations. Agreed?
 > 
-> Looks like we've missed a XFS_DQUOT_FREEING check in
-> xfs_qm_shrink_scan(), and the dquot purge run by unmount has raced
-> with the shrinker. Patch below should fix it.
-> 
-> -Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
-> 
-> xfs: dquot shrinker doesn't check for XFS_DQFLAG_FREEING
-> 
-> From: Dave Chinner <dchinner@redhat.com>
-> 
-> Resulting in a UAF if the shrinker races with some other dquot
-> freeing mechanism that sets XFS_DQFLAG_FREEING before the dquot is
-> removed from the LRU. This can occur if a dquot purge races with
-> drop_caches.
-> 
-> Reported-by: syzbot+912776840162c13db1a3@syzkaller.appspotmail.com
-> Signed-off-by: Dave Chinner <dchinner@redhat.com>
-
-Please repost this as a toplevel thread so it doesn't get lost in the
-depths.  Anyway, this looks correct so:
-
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-
---D
-
-> ---
->  fs/xfs/xfs_qm.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/xfs/xfs_qm.c b/fs/xfs/xfs_qm.c
-> index 18bb4ec4d7c9..ff53d40a2dae 100644
-> --- a/fs/xfs/xfs_qm.c
-> +++ b/fs/xfs/xfs_qm.c
-> @@ -422,6 +422,14 @@ xfs_qm_dquot_isolate(
->  	if (!xfs_dqlock_nowait(dqp))
->  		goto out_miss_busy;
->  
-> +	/*
-> +	 * If something else is freeing this dquot and hasn't yet removed it
-> +	 * from the LRU, leave it for the freeing task to complete the freeing
-> +	 * process rather than risk it being free from under us here.
-> +	 */
-> +	if (dqp->q_flags & XFS_DQFLAG_FREEING)
-> +		goto out_miss_unlock;
-> +
->  	/*
->  	 * This dquot has acquired a reference in the meantime remove it from
->  	 * the freelist and try again.
-> @@ -441,10 +449,8 @@ xfs_qm_dquot_isolate(
->  	 * skip it so there is time for the IO to complete before we try to
->  	 * reclaim it again on the next LRU pass.
->  	 */
-> -	if (!xfs_dqflock_nowait(dqp)) {
-> -		xfs_dqunlock(dqp);
-> -		goto out_miss_busy;
-> -	}
-> +	if (!xfs_dqflock_nowait(dqp))
-> +		goto out_miss_unlock;
->  
->  	if (XFS_DQ_IS_DIRTY(dqp)) {
->  		struct xfs_buf	*bp = NULL;
-> @@ -478,6 +484,8 @@ xfs_qm_dquot_isolate(
->  	XFS_STATS_INC(dqp->q_mount, xs_qm_dqreclaims);
->  	return LRU_REMOVED;
->  
-> +out_miss_unlock:
-> +	xfs_dqunlock(dqp);
->  out_miss_busy:
->  	trace_xfs_dqreclaim_busy(dqp);
->  	XFS_STATS_INC(dqp->q_mount, xs_qm_dqreclaim_misses);
+> And only return the actual version value, not the 0x0A.
+About this, at the moment I am reporting the 0x0A to allow in the future
+possible extensions of the standard. A single byte for the version may
+be too limited given this technology is relatively fresh.
+What you think of this?
