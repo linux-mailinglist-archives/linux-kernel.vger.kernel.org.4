@@ -2,169 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39255645544
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5833C64554C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiLGINR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:13:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
+        id S229497AbiLGINs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiLGINP (ORCPT
+        with ESMTP id S229827AbiLGINf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:13:15 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47EDE31FB9
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:13:12 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id c140so21693236ybf.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:13:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9PwBs2OW6KV67ZD6N5qY5Z5ZOtyNNcvY0UpEdencGE=;
-        b=YvoabhEN5LkAlnAsj7FwPTX3hCLmWY46IgIkXkXbBLJzjwSepXsWfZFLj6pY8g6C63
-         PQsgbo5hbcEG9ffKMMMalFfu70ZsB+x3oAZA1HYrQtSmB/1T6mydnloFZfQvknM99heQ
-         tT2z487cne4nZ5KkxSWi11IWyeJBWFUCF5ZZd3utLKyBMYmhDAn41LLBY8+zWOJh/PL2
-         U0MODsrglmbnb6z1EILfAjO7urtuBzcmupKyIDCHUtph2j3Vv/5/lpAscyf6uXEy8VeJ
-         vQUhXYaOEqg3qnkjnHOzg491BRk9NY92NIzAlfUfeU/Dt5CHUK9iMKiJYhwg/3ubln0c
-         0gSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Q9PwBs2OW6KV67ZD6N5qY5Z5ZOtyNNcvY0UpEdencGE=;
-        b=d38PRTXXCY0W0wnD1sqASJQZcb9nMgXcNWmSyah/F/GgHLGvMjNbkLk+h+9XLNiEKS
-         JWYktxBnRKilsKrD0vwDU7MinFvTUvKDLRXv2s4NU4I9iJBw/kPX4VkrE0CQKe2b7Zpi
-         RGXumNUKPBGFk92ohIEer7J67bc962HGNsJsKwfu918QiZMe2tzqlcocTkZc18q87awK
-         u9VHVOmfgGLfV11tA9GWpM+HOFjBHFS4+fH0FxcTwUZkcR4CclR/ALfCaxW6L215lWd6
-         UxvbyWUq98J1BdIWctnq5lDbuHg+rXl2sK+LuRXhuWxVa1f0bg9Gdxw405hNuShsNowI
-         HbBg==
-X-Gm-Message-State: ANoB5pm/WVnY4SlmFZQCT82vTB0irhCND+cgLu0ZAnXiLousW4wFYKaP
-        +rheNp8f8bZaOb/oU8RVN6Wk/maUxWiw9FqQ6OZ3qg==
-X-Google-Smtp-Source: AA0mqf60uLxT8YTLpBIXQE3IHpdSFumG4AgCRXD/7v6KrWZDTPRMYpjKDtwszvVrwSJB+SiUy1iAwHu+5U4PJc9XZqM=
-X-Received: by 2002:a25:24d:0:b0:6fd:2917:cf60 with SMTP id
- 74-20020a25024d000000b006fd2917cf60mr20430226ybc.427.1670400791161; Wed, 07
- Dec 2022 00:13:11 -0800 (PST)
+        Wed, 7 Dec 2022 03:13:35 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6F7732060;
+        Wed,  7 Dec 2022 00:13:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670400809; x=1701936809;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yl9Co3r7F4v8TdI2qEH3YDUHsczbjLHcjIbxeDPrfJA=;
+  b=dGYp/gBUW1f73sWEU1+EB0Nc95e3zaSd7pP9A1hUxAHiPHF8bau7ScMN
+   9Mawy3S+xtV5lx3/3vvEwUw35v86ZDJc2OtnIip3FSKMnNUXvD2aLEpjU
+   2V0LNnabAIfa+/ZdFF7E3vxQtunM+Jg1wRzoqBwsmbuyhTVOPFypVHzAh
+   IYVYJQ0wbSdNErxn5NZoWcyVmb5+LfWdgFVJeI+KDy1g2HJ5H8v0RBJR5
+   kzQMpB7BeIn3B2IJHRN7uQ9u5oEk8lWdgwHksWz/VYB37ngCNj62ROn+M
+   3g7lymSRwmiYbeNUzwnV27TGGmw3PZogWANIwiDAy57k8gyTsVgSU7X4t
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="300252457"
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="300252457"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 00:13:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="596880364"
+X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
+   d="scan'208";a="596880364"
+Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
+  by orsmga003.jf.intel.com with ESMTP; 07 Dec 2022 00:13:14 -0800
+Date:   Wed, 7 Dec 2022 16:13:14 +0800
+From:   Yuan Yao <yuan.yao@linux.intel.com>
+To:     Chao Peng <chao.p.peng@linux.intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 6/9] KVM: Unmap existing mappings when change the
+ memory attributes
+Message-ID: <20221207081314.hfyavisybcraezrh@yy-desk-7060>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
 MIME-Version: 1.0
-References: <00000000000073b14905ef2e7401@google.com> <639034dda7f92_bb36208f5@john.notmuch>
-In-Reply-To: <639034dda7f92_bb36208f5@john.notmuch>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 7 Dec 2022 09:12:59 +0100
-Message-ID: <CANn89iK2UN1FmdUcH12fv_xiZkv2G+Nskvmq7fG6aA_6VKRf6g@mail.gmail.com>
-Subject: Re: [syzbot] BUG: stack guard page was hit in inet6_release
-To:     John Fastabend <john.fastabend@gmail.com>
-Cc:     syzbot <syzbot+04c21ed96d861dccc5cd@syzkaller.appspotmail.com>,
-        bpf@vger.kernel.org, davem@davemloft.net, jakub@cloudflare.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202061347.1070246-7-chao.p.peng@linux.intel.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 7:38 AM John Fastabend <john.fastabend@gmail.com> wrote:
+On Fri, Dec 02, 2022 at 02:13:44PM +0800, Chao Peng wrote:
+> Unmap the existing guest mappings when memory attribute is changed
+> between shared and private. This is needed because shared pages and
+> private pages are from different backends, unmapping existing ones
+> gives a chance for page fault handler to re-populate the mappings
+> according to the new attribute.
 >
-> syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    6a30d3e3491d selftests: net: Use "grep -E" instead of "egr..
-> > git tree:       net
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1576b11d880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=cc4b2e0a8e8a8366
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=04c21ed96d861dccc5cd
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e1656b880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1077da23880000
-> >
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/bbee3d5fc908/disk-6a30d3e3.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/bf9e258de70e/vmlinux-6a30d3e3.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/afaa6696b9e0/bzImage-6a30d3e3.xz
-> >
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+04c21ed96d861dccc5cd@syzkaller.appspotmail.com
-> >
-> > BUG: TASK stack guard page was hit at ffffc90003cd7fa8 (stack is ffffc90003cd8000..ffffc90003ce0000)
-> > stack guard page: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 0 PID: 3636 Comm: syz-executor238 Not tainted 6.1.0-rc7-syzkaller-00135-g6a30d3e3491d #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> > RIP: 0010:mark_lock.part.0+0x26/0x1910 kernel/locking/lockdep.c:4593
-> > Code: 00 00 00 00 41 57 41 56 41 55 41 89 d5 48 ba 00 00 00 00 00 fc ff df 41 54 49 89 f4 55 53 48 81 ec 38 01 00 00 48 8d 5c 24 38 <48> 89 3c 24 48 c7 44 24 38 b3 8a b5 41 48 c1 eb 03 48 c7 44 24 40
-> > RSP: 0018:ffffc90003cd7fb8 EFLAGS: 00010096
-> > RAX: 0000000000000004 RBX: ffffc90003cd7ff0 RCX: ffffffff8162a7bf
-> > RDX: dffffc0000000000 RSI: ffff88801f65e238 RDI: ffff88801f65d7c0
-> > RBP: ffff88801f65e25a R08: 0000000000000000 R09: ffffffff910f4aff
-> > R10: fffffbfff221e95f R11: 0000000000000000 R12: ffff88801f65e238
-> > R13: 0000000000000002 R14: 0000000000000000 R15: 0000000000040000
-> > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffc90003cd7fa8 CR3: 000000000c28e000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  mark_lock kernel/locking/lockdep.c:4598 [inline]
-> >  mark_usage kernel/locking/lockdep.c:4543 [inline]
-> >  __lock_acquire+0x847/0x56d0 kernel/locking/lockdep.c:5009
-> >  lock_acquire kernel/locking/lockdep.c:5668 [inline]
-> >  lock_acquire+0x1e3/0x630 kernel/locking/lockdep.c:5633
-> >  lock_sock_nested+0x3a/0xf0 net/core/sock.c:3447
-> >  lock_sock include/net/sock.h:1721 [inline]
-> >  sock_map_close+0x75/0x7b0 net/core/sock_map.c:1610
+> Only architecture has private memory support needs this and the
+> supported architecture is expected to rewrite the weak
+> kvm_arch_has_private_mem().
 >
-> I'll take a look likely something recent.
+> Also, during memory attribute changing and the unmapping time frame,
+> page fault handler may happen in the same memory range and can cause
+> incorrect page state, invoke kvm_mmu_invalidate_* helpers to let the
+> page fault handler retry during this time frame.
+>
+> Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> ---
+>  include/linux/kvm_host.h |   7 +-
+>  virt/kvm/kvm_main.c      | 168 ++++++++++++++++++++++++++-------------
+>  2 files changed, 116 insertions(+), 59 deletions(-)
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 3d69484d2704..3331c0c92838 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -255,7 +255,6 @@ bool kvm_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  int kvm_async_pf_wakeup_all(struct kvm_vcpu *vcpu);
+>  #endif
+>
+> -#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
+>  struct kvm_gfn_range {
+>  	struct kvm_memory_slot *slot;
+>  	gfn_t start;
+> @@ -264,6 +263,8 @@ struct kvm_gfn_range {
+>  	bool may_block;
+>  };
+>  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range);
+> +
+> +#ifdef KVM_ARCH_WANT_MMU_NOTIFIER
+>  bool kvm_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+>  bool kvm_test_age_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+>  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range);
+> @@ -785,11 +786,12 @@ struct kvm {
+>
+>  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+>  	struct mmu_notifier mmu_notifier;
+> +#endif
+>  	unsigned long mmu_invalidate_seq;
+>  	long mmu_invalidate_in_progress;
+>  	gfn_t mmu_invalidate_range_start;
+>  	gfn_t mmu_invalidate_range_end;
+> -#endif
+> +
+>  	struct list_head devices;
+>  	u64 manual_dirty_log_protect;
+>  	struct dentry *debugfs_dentry;
+> @@ -1480,6 +1482,7 @@ bool kvm_arch_dy_has_pending_interrupt(struct kvm_vcpu *vcpu);
+>  int kvm_arch_post_init_vm(struct kvm *kvm);
+>  void kvm_arch_pre_destroy_vm(struct kvm *kvm);
+>  int kvm_arch_create_vm_debugfs(struct kvm *kvm);
+> +bool kvm_arch_has_private_mem(struct kvm *kvm);
+>
+>  #ifndef __KVM_HAVE_ARCH_VM_ALLOC
+>  /*
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index ad55dfbc75d7..4e1e1e113bf0 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -520,6 +520,62 @@ void kvm_destroy_vcpus(struct kvm *kvm)
+>  }
+>  EXPORT_SYMBOL_GPL(kvm_destroy_vcpus);
+>
+> +void kvm_mmu_invalidate_begin(struct kvm *kvm)
+> +{
+> +	/*
+> +	 * The count increase must become visible at unlock time as no
+> +	 * spte can be established without taking the mmu_lock and
+> +	 * count is also read inside the mmu_lock critical section.
+> +	 */
+> +	kvm->mmu_invalidate_in_progress++;
+> +
+> +	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> +		kvm->mmu_invalidate_range_start = INVALID_GPA;
+> +		kvm->mmu_invalidate_range_end = INVALID_GPA;
+> +	}
+> +}
+> +
+> +void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
+> +{
+> +	WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
+> +
+> +	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> +		kvm->mmu_invalidate_range_start = start;
+> +		kvm->mmu_invalidate_range_end = end;
+> +	} else {
+> +		/*
+> +		 * Fully tracking multiple concurrent ranges has diminishing
+> +		 * returns. Keep things simple and just find the minimal range
+> +		 * which includes the current and new ranges. As there won't be
+> +		 * enough information to subtract a range after its invalidate
+> +		 * completes, any ranges invalidated concurrently will
+> +		 * accumulate and persist until all outstanding invalidates
+> +		 * complete.
+> +		 */
+> +		kvm->mmu_invalidate_range_start =
+> +			min(kvm->mmu_invalidate_range_start, start);
+> +		kvm->mmu_invalidate_range_end =
+> +			max(kvm->mmu_invalidate_range_end, end);
+> +	}
+> +}
+> +
+> +void kvm_mmu_invalidate_end(struct kvm *kvm)
+> +{
+> +	/*
+> +	 * This sequence increase will notify the kvm page fault that
+> +	 * the page that is going to be mapped in the spte could have
+> +	 * been freed.
+> +	 */
+> +	kvm->mmu_invalidate_seq++;
+> +	smp_wmb();
+> +	/*
+> +	 * The above sequence increase must be visible before the
+> +	 * below count decrease, which is ensured by the smp_wmb above
+> +	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
+> +	 */
+> +	kvm->mmu_invalidate_in_progress--;
+> +}
+> +
+>  #if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+>  static inline struct kvm *mmu_notifier_to_kvm(struct mmu_notifier *mn)
+>  {
+> @@ -714,45 +770,6 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+>  	kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+>  }
+>
+> -void kvm_mmu_invalidate_begin(struct kvm *kvm)
+> -{
+> -	/*
+> -	 * The count increase must become visible at unlock time as no
+> -	 * spte can be established without taking the mmu_lock and
+> -	 * count is also read inside the mmu_lock critical section.
+> -	 */
+> -	kvm->mmu_invalidate_in_progress++;
+> -
+> -	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> -		kvm->mmu_invalidate_range_start = INVALID_GPA;
+> -		kvm->mmu_invalidate_range_end = INVALID_GPA;
+> -	}
+> -}
+> -
+> -void kvm_mmu_invalidate_range_add(struct kvm *kvm, gfn_t start, gfn_t end)
+> -{
+> -	WARN_ON_ONCE(!kvm->mmu_invalidate_in_progress);
+> -
+> -	if (likely(kvm->mmu_invalidate_in_progress == 1)) {
+> -		kvm->mmu_invalidate_range_start = start;
+> -		kvm->mmu_invalidate_range_end = end;
+> -	} else {
+> -		/*
+> -		 * Fully tracking multiple concurrent ranges has diminishing
+> -		 * returns. Keep things simple and just find the minimal range
+> -		 * which includes the current and new ranges. As there won't be
+> -		 * enough information to subtract a range after its invalidate
+> -		 * completes, any ranges invalidated concurrently will
+> -		 * accumulate and persist until all outstanding invalidates
+> -		 * complete.
+> -		 */
+> -		kvm->mmu_invalidate_range_start =
+> -			min(kvm->mmu_invalidate_range_start, start);
+> -		kvm->mmu_invalidate_range_end =
+> -			max(kvm->mmu_invalidate_range_end, end);
+> -	}
+> -}
+> -
+>  static bool kvm_mmu_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+>  {
+>  	kvm_mmu_invalidate_range_add(kvm, range->start, range->end);
+> @@ -806,23 +823,6 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>  	return 0;
+>  }
+>
+> -void kvm_mmu_invalidate_end(struct kvm *kvm)
+> -{
+> -	/*
+> -	 * This sequence increase will notify the kvm page fault that
+> -	 * the page that is going to be mapped in the spte could have
+> -	 * been freed.
+> -	 */
+> -	kvm->mmu_invalidate_seq++;
+> -	smp_wmb();
+> -	/*
+> -	 * The above sequence increase must be visible before the
+> -	 * below count decrease, which is ensured by the smp_wmb above
+> -	 * in conjunction with the smp_rmb in mmu_invalidate_retry().
+> -	 */
+> -	kvm->mmu_invalidate_in_progress--;
+> -}
+> -
+>  static void kvm_mmu_notifier_invalidate_range_end(struct mmu_notifier *mn,
+>  					const struct mmu_notifier_range *range)
+>  {
+> @@ -1140,6 +1140,11 @@ int __weak kvm_arch_create_vm_debugfs(struct kvm *kvm)
+>  	return 0;
+>  }
+>
+> +bool __weak kvm_arch_has_private_mem(struct kvm *kvm)
+> +{
+> +	return false;
+> +}
+> +
+>  static struct kvm *kvm_create_vm(unsigned long type, const char *fdname)
+>  {
+>  	struct kvm *kvm = kvm_arch_alloc_vm();
+> @@ -2349,15 +2354,47 @@ static u64 kvm_supported_mem_attributes(struct kvm *kvm)
+>  	return 0;
+>  }
+>
+> +static void kvm_unmap_mem_range(struct kvm *kvm, gfn_t start, gfn_t end)
+> +{
+> +	struct kvm_gfn_range gfn_range;
+> +	struct kvm_memory_slot *slot;
+> +	struct kvm_memslots *slots;
+> +	struct kvm_memslot_iter iter;
+> +	int i;
+> +	int r = 0;
+> +
+> +	gfn_range.pte = __pte(0);
+> +	gfn_range.may_block = true;
+> +
+> +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
+> +		slots = __kvm_memslots(kvm, i);
+> +
+> +		kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+> +			slot = iter.slot;
+> +			gfn_range.start = max(start, slot->base_gfn);
+> +			gfn_range.end = min(end, slot->base_gfn + slot->npages);
+> +			if (gfn_range.start >= gfn_range.end)
+> +				continue;
+> +			gfn_range.slot = slot;
+> +
+> +			r |= kvm_unmap_gfn_range(kvm, &gfn_range);
+> +		}
+> +	}
+> +
+> +	if (r)
+> +		kvm_flush_remote_tlbs(kvm);
+> +}
+> +
+>  static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+>  					   struct kvm_memory_attributes *attrs)
+>  {
+>  	gfn_t start, end;
+>  	unsigned long i;
+>  	void *entry;
+> +	int idx;
+>  	u64 supported_attrs = kvm_supported_mem_attributes(kvm);
+>
+> -	/* flags is currently not used. */
+> +	/* 'flags' is currently not used. */
+>  	if (attrs->flags)
+>  		return -EINVAL;
+>  	if (attrs->attributes & ~supported_attrs)
+> @@ -2372,6 +2409,13 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+>
+>  	entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
+>
+> +	if (kvm_arch_has_private_mem(kvm)) {
+> +		KVM_MMU_LOCK(kvm);
+> +		kvm_mmu_invalidate_begin(kvm);
+> +		kvm_mmu_invalidate_range_add(kvm, start, end);
 
-Fact that sock_map_close  can call itself seems risky.
-We might issue a one time warning and keep the host alive.
+Nit: this works for KVM_MEMORY_ATTRIBUTE_PRIVATE, but
+the invalidation should be necessary yet for attribute change of:
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 81beb16ab1ebfcb166f51f89a029fe1c28a629a4..a79771a6627b9b2f38ae6ce153ceff9e8c0be8d4
-100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -1612,17 +1612,25 @@ void sock_map_close(struct sock *sk, long timeout)
-        psock = sk_psock_get(sk);
-        if (unlikely(!psock)) {
-                rcu_read_unlock();
-+               saved_close = sk->sk_prot->close;
-                release_sock(sk);
--               return sk->sk_prot->close(sk, timeout);
-+       } else {
-+               saved_close = psock->saved_close;
-+               sock_map_remove_links(sk, psock);
-+               rcu_read_unlock();
-+               sk_psock_stop(psock);
-+               release_sock(sk);
-+               cancel_work_sync(&psock->work);
-+               sk_psock_put(sk, psock);
-+       }
-+       /* Make sure we do not recurse to us.
-+        * This is a bug, we can leak the socket instead
-+        * of crashing on a stack overflow.
-+        */
-+       if (saved_close == sock_map_close) {
-+               WARN_ON_ONCE(1);
-+               return;
-        }
--
--       saved_close = psock->saved_close;
--       sock_map_remove_links(sk, psock);
--       rcu_read_unlock();
--       sk_psock_stop(psock);
--       release_sock(sk);
--       cancel_work_sync(&psock->work);
--       sk_psock_put(sk, psock);
-        saved_close(sk, timeout);
- }
- EXPORT_SYMBOL_GPL(sock_map_close);
+KVM_MEMORY_ATTRIBUTE_READ
+KVM_MEMORY_ATTRIBUTE_WRITE
+KVM_MEMORY_ATTRIBUTE_EXECUTE
+
+> +		KVM_MMU_UNLOCK(kvm);
+> +	}
+> +
+>  	mutex_lock(&kvm->lock);
+>  	for (i = start; i < end; i++)
+>  		if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
+> @@ -2379,6 +2423,16 @@ static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
+>  			break;
+>  	mutex_unlock(&kvm->lock);
+>
+> +	if (kvm_arch_has_private_mem(kvm)) {
+> +		idx = srcu_read_lock(&kvm->srcu);
+> +		KVM_MMU_LOCK(kvm);
+> +		if (i > start)
+> +			kvm_unmap_mem_range(kvm, start, i);
+> +		kvm_mmu_invalidate_end(kvm);
+
+Ditto.
+
+> +		KVM_MMU_UNLOCK(kvm);
+> +		srcu_read_unlock(&kvm->srcu, idx);
+> +	}
+> +
+>  	attrs->address = i << PAGE_SHIFT;
+>  	attrs->size = (end - i) << PAGE_SHIFT;
+>
+> --
+> 2.25.1
+>
+>
