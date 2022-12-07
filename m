@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDB8B64515F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:43:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34477645161
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:43:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiLGBnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
+        id S229799AbiLGBnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:43:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiLGBnO (ORCPT
+        with ESMTP id S229781AbiLGBnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:43:14 -0500
+        Tue, 6 Dec 2022 20:43:21 -0500
 Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5CB2EF7F;
-        Tue,  6 Dec 2022 17:43:13 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E280A52887;
+        Tue,  6 Dec 2022 17:43:19 -0800 (PST)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: linasend@asahilina.net)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 26E8341F98;
-        Wed,  7 Dec 2022 01:43:08 +0000 (UTC)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 06BBC41F72;
+        Wed,  7 Dec 2022 01:43:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=asahilina.net;
-        s=default; t=1670377391;
-        bh=oQYgSBif56vxQdHFPOTELw3/FtXZ0hY2uV7LPeyLQYs=;
-        h=From:To:Cc:Subject:Date;
-        b=HCE3UUQovp4m++sguRpMIpV5m8Chben63rZo237wf3Dc1927wq3OLdQWw1t266w9S
-         NZ1VVhw5roYnij+8QGPc/Zg4cGDTbG6LEkKL7EnfrGzbPXpbmhatlVLxGyZMOGbPSL
-         alW5AJBl+84fd9M5I/rwPnew4tfZ0q7zFiZjZLgx/gYIl5AX8WVQTvj1b2CAoIQNyQ
-         lUSkZnDaMK1ttxuYjm+/XAofHFL/oUmyXDuv7txjWlcyJU8I+UxWpmEFkY2DPe3AW5
-         TfIq9xaA7U3uU53NIz6BWwFN34rPGFK2F3a1hY35rWDal0jzXgzv59F4txcujdbjld
-         7h5egZNVWrrtw==
+        s=default; t=1670377398;
+        bh=OUQL2BwK22yCDGZU4/AGkA3BQUFil4yDcuraBSM6/Q0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=omNlpXQOoXIYIMWHUVP5k6HNLV5ZfkxIQeyWH0hWwT3WVQ/aHTnTsJ2jrQhRM6XX5
+         7TxmHeuifS2uLsnfLZcBlZzXm9WZiWwrRTikjrEFRJTKa0IpttgslzBOuEVWaNa33M
+         +3iLj3V5ThLV1IZ1eI3Pux1c3L+riMOGNUFXXhFQ4JSRgezCxSmZBwcTnBUCbJTFlc
+         nSxjFHGE/nOlz7GGkQ1kLnL7NW/V38AdqFdsSMScdSJ26p+wcpJhFiX1LeSpZIdXGl
+         HMMftdvUdT7DvvkRVXRc+s38FBwOQ8+rTXXBTyWnbvE4XipzU9amWRMYhaqF+xmSxh
+         efghuORndh2Rg==
 From:   Asahi Lina <lina@asahilina.net>
 To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
@@ -39,10 +39,12 @@ To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
 Cc:     Marc Zyngier <maz@kernel.org>, asahi@lists.linux.dev,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Asahi Lina <lina@asahilina.net>
-Subject: [PATCH] arm64: dts: apple: t6002: Fix GPU power domains
-Date:   Wed,  7 Dec 2022 10:43:04 +0900
-Message-Id: <20221207014305.21018-1-lina@asahilina.net>
+Subject: [PATCH] arm64 dts: apple: t600x-pmgr: Fix search & replace typo
+Date:   Wed,  7 Dec 2022 10:43:05 +0900
+Message-Id: <20221207014305.21018-2-lina@asahilina.net>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221207014305.21018-1-lina@asahilina.net>
+References: <20221207014305.21018-1-lina@asahilina.net>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,35 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On t6002 (M1 Ultra), each die contains a self-contained GPU block.
-However, only the coprocessor and global management circuitry of the
-first die are used. This is what is represented by the "gpu" PS (the
-one in die1 is disabled). Nonetheless, this shared component drives the
-processing blocks in both dies, and therefore depends on the AFR fabric
-being powered up on both dies.
-
-Add an explicit dependency from the GPU block on die0 to AFR on die1,
-next to the existing die0 AFR dependency.
+It looks like the search-and-replace that happened to add die IDs to
+the t600x PMGR tree was a little bit too eager on a comment, and nobody
+noticed! Let's fix that.
 
 Fixes: fa86294eb355 ("arm64: dts: apple: Add initial t6000/t6001/t6002 DTs")
 Signed-off-by: Asahi Lina <lina@asahilina.net>
 ---
- arch/arm64/boot/dts/apple/t6002.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm64/boot/dts/apple/t600x-pmgr.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/apple/t6002.dtsi b/arch/arm64/boot/dts/apple/t6002.dtsi
-index 1376103b49c6..8fa2d8dd72ff 100644
---- a/arch/arm64/boot/dts/apple/t6002.dtsi
-+++ b/arch/arm64/boot/dts/apple/t6002.dtsi
-@@ -296,3 +296,8 @@ &cpu_p20 &cpu_p21 &cpu_p22 &cpu_p23
- 		};
+diff --git a/arch/arm64/boot/dts/apple/t600x-pmgr.dtsi b/arch/arm64/boot/dts/apple/t600x-pmgr.dtsi
+index b8daeb0368d5..0bd44753b76a 100644
+--- a/arch/arm64/boot/dts/apple/t600x-pmgr.dtsi
++++ b/arch/arm64/boot/dts/apple/t600x-pmgr.dtsi
+@@ -225,7 +225,7 @@ DIE_NODE(ps_afr): power-controller@1e8 {
+ 		#power-domain-cells = <0>;
+ 		#reset-cells = <0>;
+ 		label = DIE_LABEL(afr);
+-		/* Apple Fabric, media DIE_NODE(stuff): this can power down */
++		/* Apple Fabric, media stuff: this can power down */
  	};
- };
-+
-+&ps_gfx {
-+	// On t6002, the die0 GPU power domain needs both AFR power domains
-+	power-domains = <&ps_afr>, <&ps_afr_die1>;
-+};
+ 
+ 	DIE_NODE(ps_afnc1_ioa): power-controller@1f0 {
 -- 
 2.35.1
 
