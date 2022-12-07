@@ -2,157 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050E1645D9B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95D4645D9E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:28:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLGP2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:28:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37254 "EHLO
+        id S229758AbiLGP2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:28:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiLGP2B (ORCPT
+        with ESMTP id S229677AbiLGP2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:28:01 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDC943867
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:27:59 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id bp15so29181143lfb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 07:27:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TokEjNlXlL75+xEzHHcfrOtvGUeNpxpixbHN6tlln1o=;
-        b=xZoAANYFUthrKrQWZ6Ci6dV24edG9wqHPi6R2TIHnGK70ZBmeBBMtRY+dHTIjC9yLD
-         X22I1hEtbP+dxqo+eq50o/QAuervEYat50fozHnFCVRyS1oqT/Rns4LPv88Z0KUfbj7N
-         dObCogEsL+cq8W1saACmHaxrUAOe+xr8PNLQdNKglVzJEnEbn78Rcr83cWzTK2YMmN85
-         Re3N58OP0QvOZLrtx6jWJByX6X4/gFzNmGlJQfrCAdwBK5Q7jkU3fphWGsIufqCx6VgZ
-         wjFWQZ/cQa8ds9qGRlSqBqxDJctnDgC6seOgWtciLCSeu1z0tjtn7zMx/dSN9V3eYrRn
-         Kxdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TokEjNlXlL75+xEzHHcfrOtvGUeNpxpixbHN6tlln1o=;
-        b=eNExP3T9ZeKj4b8wGsEActRKjLujwCrq44B5WV9vRpNFJQyBWeIxU3OdAI0Q5jAd3u
-         Wgh6oIL0AaORUT/u4Q2nqd+tTDvFT7BeoiyIv6sF0GVdHAUiytxzORexlSmiWb1gKjf5
-         ey+/Hg2x/EArgDOTGTL0NB/4Uoh1T14kk2RReJLo8Zs837vmypoPGZTRWT7RgsAsoLJ4
-         o4NZVdwLK30qatUKTVrIvPhJf/SSWNS5yW/BWAEDdVgTJnzMyXyatfdQFkQ1oqL00Aco
-         MstLrmjkyKf6NZCfHZXlXhRQUc18x0CenSvGYJmDrjNGz8chqF71R+eKDVSSWxCrFBNi
-         Yfag==
-X-Gm-Message-State: ANoB5pnknU1Zq4JJ2mWXvf4rUH7ggXLxVMRjpKtZvRVp7FzhphfaewP5
-        nr4sGG20HAM4YjJ4OSop7qAe0g==
-X-Google-Smtp-Source: AA0mqf5lFASv5Gt8Q+CtjFWyDlLlmnb/Ja3W9mhr64B6BAoDNOVmOlEhVOJQQAAb5p3q+sYnyzLLkw==
-X-Received: by 2002:ac2:4149:0:b0:4a2:217:18bf with SMTP id c9-20020ac24149000000b004a2021718bfmr24820910lfi.146.1670426877825;
-        Wed, 07 Dec 2022 07:27:57 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id b4-20020a056512024400b004a8b9c68735sm215425lfo.102.2022.12.07.07.27.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 07:27:57 -0800 (PST)
-Message-ID: <30166f9d-ebfa-ed8b-c08b-ff8e2599161f@linaro.org>
-Date:   Wed, 7 Dec 2022 16:27:56 +0100
+        Wed, 7 Dec 2022 10:28:32 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4128C442DE
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:28:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=zj38BmnGOye72rpiBgZnGVHn0M0x17AYI3xiFJfGamY=; b=MD
+        yre4p9nlS6VFm88/M8cPU1gOy1YXjfBRqWchbz3CCvi7RrMj8hkRNuUPAiYKRc/euU/RV/151R8Nb
+        bJntvRsGagibx2zMo5zJTUkq4dSc1wnV+XE/4TleHSPgZTBnun43Vczgel+3iv8glVXR/RG3bnVDh
+        mRG5YOb+E/d8rro=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1p2wL9-004fNs-43; Wed, 07 Dec 2022 16:28:07 +0100
+Date:   Wed, 7 Dec 2022 16:28:07 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org
+Subject: Re: PXA25x: GPIO driver fails probe due to resource conflict with
+ pinctrl driver
+Message-ID: <Y5CxBzy47Gjn/V5a@lunn.ch>
+References: <Y5B4QeNMNboJ42n4@probook>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v11 5/6] dt-bindings: media: wave5: add yaml devicetree
- bindings
-Content-Language: en-US
-To:     Sebastian Fricke <sebastian.fricke@collabora.com>
-Cc:     linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        kernel@collabora.com, bob.beckett@collabora.com,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com,
-        nas.chung@chipsnmedia.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221207121350.66217-1-sebastian.fricke@collabora.com>
- <20221207121350.66217-6-sebastian.fricke@collabora.com>
- <48d60bd0-4de1-4a5e-eca1-1f8a9303cce0@linaro.org>
- <20221207150925.frotwpm3ukwwlnig@basti-XPS-13-9310>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207150925.frotwpm3ukwwlnig@basti-XPS-13-9310>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5B4QeNMNboJ42n4@probook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 16:09, Sebastian Fricke wrote:
-> Hello Krzysztof, 
+On Wed, Dec 07, 2022 at 12:25:53PM +0100, Jonathan Neuschäfer wrote:
+> Hello,
 > 
-> On 07.12.2022 13:31, Krzysztof Kozlowski wrote:
->> On 07/12/2022 13:13, Sebastian Fricke wrote:
->>> From: Robert Beckett <bob.beckett@collabora.com>
->>>
->>> Add bindings for the wave5 chips&media codec driver
->>>
->>> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
->>> Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
->>> Signed-off-by: Sebastian Fricke <sebastian.fricke@collabora.com>
->>
->> What's happening with this patch? Where is the changelog?
+> I am currently trying to bring up Linux 6.1-rcX on a PXA255 board, using a
+> devicetree. One problem I encountered is that the PXA GPIO driver fails to
+> probe because it uses the same MMIO register range as the pinctrl driver:
 > 
-> The changelog is located in the cover letter.
-> https://lore.kernel.org/linux-media/20221207121350.66217-1-sebastian.fricke@collabora.com/
+> [    0.666169] pxa25x-pinctrl 40e00054.pinctrl: initialized pxa2xx pinctrl driver
+> [    0.694407] pxa-gpio 40e00000.gpio: can't request region for resource [mem 0x40e00000-0x40e0ffff]
+> [    0.695050] pxa-gpio: probe of 40e00000.gpio failed with error -16
+> 
+> Before I try to fix this myself: Is GPIO on PXA25x currently expected to
+> work and when has it last been seen working?
+> 
+> What would be a good way to fix this?
 
+How are the registers arranged? Is 0x40e00000-0x40e0ffff simply too
+large, and making it smaller would fix the issue? Or are the registers
+interleaved? It is possible to request a region in a non-exclusive
+manor. Or is it more than interleaving, individual registers need to
+be shared between the two drivers? If so, you have the locking issues
+you mentioned.
 
-Which you did not sent to us... so? How does it help us?
-
-> 
->> Why it is v11 and first time I see it?
-> 
-> You actually replied to V10:
-> https://lore.kernel.org/linux-media/20221023085341.s23qinjuw4qls3dn@basti-XPS-13-9310/
-> 
->> And why it is v11 with basic mistakes and lack of testing?!?
->> I would assume that v11 was already seen and tested...
-> 
-> Sorry I don't have a lot of experience with dt-bindings, thank you for
-> highlighting the issues, I will correct them. And I forgot to build the
-> documentation during my testing runs.
-> I took over the patch set from another contributor and as no one
-> complained about the dt-bindings for the last 10 versions, I concentrated
-> my energy on other problems.
-
-Because they were never sent to maintainers...
-
-> 
->>
->>
->>> ---
->>>  .../devicetree/bindings/cnm,wave5.yml         | 72 +++++++++++++++++++
->>>  1 file changed, 72 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/cnm,wave5.yml
->>
->> Wrong directory. It wasn't here at all before, so I am really confused
->> how this could happen.
-> 
-> Thanks for the highlight.
-> 
-> I will move it to:
-> Documentation/devicetree/bindings/media/cnm,wave5.yml
-> 
->>
->> Subject: drop redundant pieces: yaml, devicetree and bindings.
-> 
-> I call it:
-> 
-> dt-bindings: media: chips-media: add wave5 bindings
-> 
-> in V12
-> 
-> Sincerely,
-> Sebastian Fricke
-
-And the rest questions? Lack of response means agreement, which is fine,
-so in v12 questionable parts will be removed?
-
-Best regards,
-Krzysztof
-
+    Andrew
