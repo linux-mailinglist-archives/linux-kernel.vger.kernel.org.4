@@ -2,146 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18C26459BD
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:21:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02566459BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229605AbiLGMVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 07:21:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
+        id S229651AbiLGMVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 07:21:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiLGMVS (ORCPT
+        with ESMTP id S229557AbiLGMVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 07:21:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FC74876A;
-        Wed,  7 Dec 2022 04:21:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CCF56151B;
-        Wed,  7 Dec 2022 12:21:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70056C433C1;
-        Wed,  7 Dec 2022 12:21:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670415676;
-        bh=bJTOYGRKbBLBl4IJzYfsfgHZILlH+TXYGlIDqiob+aA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QQ7OVP0j9g8UjR2IdP7zKi2/TmTvDKxoLkKJ4hNt69mrYOdTdmf7W/4ZBtXDfrBt3
-         +avNeA0dI+Q9zQQDguOb2T5VFQyURoR0Q0xt0v+sdL33Q77DwK2ujq1BSoq9l0HggZ
-         nKLivTBiKxVnnym2e2fx8BDfxpTm4ILF362fpUaeVKF3aabLSPQ4MgkaB7rPhcqv7o
-         ymsUcR8xHY+/LGj0KwNRrqd5X8ep46rAAbXf+StEEe8YyaQKMmzGO52DyiC49mP9vm
-         Ikmm7CIj0+LoJhnY3djalDUkdSOabCIWiBxyJbf9Xo/jwQCBV8m4ml/0R8ViIkou53
-         ANgcXQtIfkI4g==
-Date:   Wed, 7 Dec 2022 12:21:10 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jialiang Wang <wangjialiang0806@163.com>, stable@kernel.org
-Cc:     simon.horman@corigine.com, kuba@kernel.org, davem@davemloft.net,
-        edumazet@google.com, pabeni@redhat.com, niejianglei2021@163.com,
-        oss-drivers@corigine.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] nfp: fix use-after-free in area_cache_get()
-Message-ID: <Y5CFNqYNMkryiDcP@google.com>
-References: <20220810073057.4032-1-wangjialiang0806@163.com>
+        Wed, 7 Dec 2022 07:21:47 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640D4391E9;
+        Wed,  7 Dec 2022 04:21:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670415706; x=1701951706;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0kGd/OiPW1PJ4cPEb4PPblp3AImCctx/hnYQmTGU6Mc=;
+  b=i8RyJaEwN4iHglzkfINp+KsNjzXgDW+kwVgWL5Hm2cVthgOivoV9eSDh
+   K0nSmo9WW80Q7vCKbYcSKIS/Y0MvuZSl1i3M7tTRYkOAVcaWxNhqwHf0J
+   duaepWr8r0qTFy4qpoBZNV1NuZ1ZhpVXlhdHTcN4NJBTKI6eLFcYrk1vS
+   dD59j4OAovHkWhaVb3+c66f5aVsOvMylwxsv2XDybGncNtaZQKo7Sgu36
+   3JJ4rBhgnHJAOM4aYwXtiSZXyDZl2nIm5RSvoRKuuVrZjTJYfMSk4fwj4
+   +MCrpMpEzB6DRO3xsaWtvhMTenwX6GeiksxasazBTgbqufw4vPkgqCHr/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="403148135"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="403148135"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 04:21:44 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="891782203"
+X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
+   d="scan'208";a="891782203"
+Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 04:21:42 -0800
+Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
+        by paasikivi.fi.intel.com (Postfix) with SMTP id 6AE092033F;
+        Wed,  7 Dec 2022 14:21:40 +0200 (EET)
+Date:   Wed, 7 Dec 2022 12:21:40 +0000
+From:   Sakari Ailus <sakari.ailus@linux.intel.com>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] device property: Fix documentation for
+ fwnode_get_next_parent()
+Message-ID: <Y5CFVHL0xTeWbKfU@paasikivi.fi.intel.com>
+References: <20221207112219.2652411-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220810073057.4032-1-wangjialiang0806@163.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221207112219.2652411-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022, Jialiang Wang wrote:
+On Wed, Dec 07, 2022 at 03:22:18PM +0400, Miaoqian Lin wrote:
+> Use fwnode_handle_put() on the node pointer to release the refcount.
+> Change fwnode_handle_node() to fwnode_handle_put().
+> 
+> Fixes: 233872585de1 ("device property: Add fwnode_get_next_parent()")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 
-> area_cache_get() is used to distribute cache->area and set cache->id,
->  and if cache->id is not 0 and cache->area->kref refcount is 0, it will
->  release the cache->area by nfp_cpp_area_release(). area_cache_get()
->  set cache->id before cpp->op->area_init() and nfp_cpp_area_acquire().
-> 
-> But if area_init() or nfp_cpp_area_acquire() fails, the cache->id is
->  is already set but the refcount is not increased as expected. At this
->  time, calling the nfp_cpp_area_release() will cause use-after-free.
-> 
-> To avoid the use-after-free, set cache->id after area_init() and
->  nfp_cpp_area_acquire() complete successfully.
-> 
-> Note: This vulnerability is triggerable by providing emulated device
->  equipped with specified configuration.
-> 
->  BUG: KASAN: use-after-free in nfp6000_area_init (/home/user/Kernel/v5.19
-> /x86_64/src/drivers/net/ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c:760)
->   Write of size 4 at addr ffff888005b7f4a0 by task swapper/0/1
-> 
->  Call Trace:
->   <TASK>
->  nfp6000_area_init (/home/user/Kernel/v5.19/x86_64/src/drivers/net
-> /ethernet/netronome/nfp/nfpcore/nfp6000_pcie.c:760)
->  area_cache_get.constprop.8 (/home/user/Kernel/v5.19/x86_64/src/drivers
-> /net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:884)
-> 
->  Allocated by task 1:
->  nfp_cpp_area_alloc_with_name (/home/user/Kernel/v5.19/x86_64/src/drivers
-> /net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:303)
->  nfp_cpp_area_cache_add (/home/user/Kernel/v5.19/x86_64/src/drivers/net
-> /ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:802)
->  nfp6000_init (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> /netronome/nfp/nfpcore/nfp6000_pcie.c:1230)
->  nfp_cpp_from_operations (/home/user/Kernel/v5.19/x86_64/src/drivers/net
-> /ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:1215)
->  nfp_pci_probe (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> /netronome/nfp/nfp_main.c:744)
-> 
->  Freed by task 1:
->  kfree (/home/user/Kernel/v5.19/x86_64/src/mm/slub.c:4562)
->  area_cache_get.constprop.8 (/home/user/Kernel/v5.19/x86_64/src/drivers
-> /net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:873)
->  nfp_cpp_read (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> /netronome/nfp/nfpcore/nfp_cppcore.c:924 /home/user/Kernel/v5.19/x86_64
-> /src/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c:973)
->  nfp_cpp_readl (/home/user/Kernel/v5.19/x86_64/src/drivers/net/ethernet
-> /netronome/nfp/nfpcore/nfp_cpplib.c:48)
-> 
-> Signed-off-by: Jialiang Wang <wangjialiang0806@163.com>
+Thanks!
 
-Any reason why this doesn't have a Fixes: tag applied and/or didn't
-get sent to Stable?
-
-Looks as if this needs to go back as far as v4.19.
-
-Fixes: 4cb584e0ee7df ("nfp: add CPP access core")
-
-commit 02e1a114fdb71e59ee6770294166c30d437bf86a upstream.
+Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
 
 > ---
->  drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  drivers/base/property.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c
-> index 34c0d2ddf9ef..a8286d0032d1 100644
-> --- a/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c
-> +++ b/drivers/net/ethernet/netronome/nfp/nfpcore/nfp_cppcore.c
-> @@ -874,7 +874,6 @@ area_cache_get(struct nfp_cpp *cpp, u32 id,
->  	}
->  
->  	/* Adjust the start address to be cache size aligned */
-> -	cache->id = id;
->  	cache->addr = addr & ~(u64)(cache->size - 1);
->  
->  	/* Re-init to the new ID and address */
-> @@ -894,6 +893,8 @@ area_cache_get(struct nfp_cpp *cpp, u32 id,
->  		return NULL;
->  	}
->  
-> +	cache->id = id;
-> +
->  exit:
->  	/* Adjust offset */
->  	*offset = addr - cache->addr;
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index 2a5a37fcd998..daa1e379762b 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -601,7 +601,7 @@ EXPORT_SYMBOL_GPL(fwnode_get_parent);
+>   * node's parents.
+>   *
+>   * Returns a node pointer with refcount incremented, use
+> - * fwnode_handle_node() on it when done.
+> + * fwnode_handle_put() on it when done.
+>   */
+>  struct fwnode_handle *fwnode_get_next_parent(struct fwnode_handle *fwnode)
+>  {
 
 -- 
-Lee Jones [李琼斯]
+Kind regards,
+
+Sakari Ailus
