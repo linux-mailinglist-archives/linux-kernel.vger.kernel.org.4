@@ -2,193 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60B7D645D7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F001645D89
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:19:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiLGPSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:18:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32976 "EHLO
+        id S229667AbiLGPTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:19:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiLGPR7 (ORCPT
+        with ESMTP id S229480AbiLGPTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:17:59 -0500
-X-Greylist: delayed 88796 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 07 Dec 2022 07:17:55 PST
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2F531377;
-        Wed,  7 Dec 2022 07:17:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1670426274;
-        bh=onhkbVgBkjqH4ScJ4IkB5Y+MP8n6mVP+AHCElM43xdY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=rYAPyx+3ucHq99LJmeqE0zjmk/D/hYr0Vo7W8O98l69XGRlqAf1oXlXzVgK+ACawp
-         QYe23xxchnBdv83eUSmzk7AhI0VZCgP6dGz3A5F8pEv9U+PsDMzgksw7Nq6l5mxMsq
-         tEYZLL6CCZqlT+dLXjjgOBdBk+1MfHmKWA39hjI8mdaQZifxnxJjURhp4pDYg0KAnB
-         OpJzbW+8QKyLPhe4TOSLINm+F711kIVTp9/a2ZQJgc/CMCNaRaHIazFAxTrQcjlXZr
-         kniYqOW8aUs4TJhUheLm1KzgqZ3+FyoMhQeySENS+n8hrm1M0850TXI2xITjYGWESc
-         wTtM8qS0QKcLQ==
-Received: from [172.16.0.118] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4NS1BB1Z7gzb3F;
-        Wed,  7 Dec 2022 10:17:54 -0500 (EST)
-Message-ID: <6db50470-ac37-0328-37a2-760665668b5f@efficios.com>
-Date:   Wed, 7 Dec 2022 10:18:13 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] powerpc/ftrace: fix syscall tracing on PPC64_ELF_ABI_V1
-Content-Language: en-US
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Jeanson <mjeanson@efficios.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michal Suchanek <msuchanek@suse.de>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20221201161442.2127231-1-mjeanson@efficios.com>
- <87pmcys9ae.fsf@mpe.ellerman.id.au>
- <d5dd1491-5d59-7987-9b5b-83f5fb1b29ee@efficios.com>
- <219580de-7473-f142-5ef2-1ed40e41d13d@csgroup.eu>
- <323f83c7-38fe-8a12-d77a-0a7249aad316@efficios.com>
- <dfe0b9ba-828d-e1a5-f9a3-416c6b5b1cf3@efficios.com>
- <87mt81sbxb.fsf@mpe.ellerman.id.au>
- <484763aa-e77b-b599-4786-ef4cdf16d7bd@efficios.com>
- <87cz8wrmm6.fsf@mpe.ellerman.id.au>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <87cz8wrmm6.fsf@mpe.ellerman.id.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 10:19:08 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1851DF37
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:19:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7FDBB80189
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:19:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87BE9C433C1;
+        Wed,  7 Dec 2022 15:19:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670426344;
+        bh=VQWsRMBC+GGrQQMr0CFeqK2fNl+WWigx5BDAvuQJ2I4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SuNR7Fn/vhi5ChmFZVwfUeLaRgArNdUEMhDlTBmTwpw+tcfYTHOXrmtyrZXt0Znft
+         xupjUyrXufvBnyScEXITMDedDUCxqUIvDAjMTDt4PuWrOG6dkX+goFed4jipeuAKcb
+         pe76S9XWbehmUlvHNEc7Vwrp/eT3QihCt1C4teN8b94y+fLxb0IS5SaGyWPDtz8QjF
+         tk2mUcWP5u3xqQZ63zM/wdXgQpv5GxBE9yGWBounyZgqY4ofS3HqJ1mVna0U2MF8m3
+         y5fpBDTyzDoj28Jji6mMTXt4hq9IWh7Gn8IapAXarUheswzMbGt2odYi2zUl/4bUAt
+         3Yldao6Xm84xQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p2wCM-00B9JD-7w;
+        Wed, 07 Dec 2022 15:19:02 +0000
+Date:   Wed, 07 Dec 2022 15:19:01 +0000
+Message-ID: <86a63zkzru.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Harry Song <jundongsong1@gmail.com>
+Cc:     tglx@linutronix.de, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/gic-v3-its: remove the shareability of ITS
+In-Reply-To: <20221207135223.3938-1-jundongsong1@gmail.com>
+References: <20221207135223.3938-1-jundongsong1@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: jundongsong1@gmail.com, tglx@linutronix.de, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-06 21:09, Michael Ellerman wrote:
-> Mathieu Desnoyers <mathieu.desnoyers@efficios.com> writes:
->> On 2022-12-05 17:50, Michael Ellerman wrote:
->>> Michael Jeanson <mjeanson@efficios.com> writes:
->>>> On 2022-12-05 15:11, Michael Jeanson wrote:
->>>>>>>> Michael Jeanson <mjeanson@efficios.com> writes:
->>>>>>>>> In v5.7 the powerpc syscall entry/exit logic was rewritten in C, on
->>>>>>>>> PPC64_ELF_ABI_V1 this resulted in the symbols in the syscall table
->>>>>>>>> changing from their dot prefixed variant to the non-prefixed ones.
->>>>>>>>>
->>>>>>>>> Since ftrace prefixes a dot to the syscall names when matching them to
->>>>>>>>> build its syscall event list, this resulted in no syscall events being
->>>>>>>>> available.
->>>>>>>>>
->>>>>>>>> Remove the PPC64_ELF_ABI_V1 specific version of
->>>>>>>>> arch_syscall_match_sym_name to have the same behavior across all powerpc
->>>>>>>>> variants.
->>>>>>>>
->>>>>>>> This doesn't seem to work for me.
->>>>>>>>
->>>>>>>> Event with it applied I still don't see anything in
->>>>>>>> /sys/kernel/debug/tracing/events/syscalls
->>>>>>>>
->>>>>>>> Did we break it in some other way recently?
->>>>>>>>
->>>>>>>> cheers
->>>>
->>>> I did some further testing, my config also enabled KALLSYMS_ALL, when I remove
->>>> it there is indeed no syscall events.
->>>
->>> Aha, OK that explains it I guess.
->>>
->>> I was using ppc64_guest_defconfig which has ABI_V1 and FTRACE_SYSCALLS,
->>> but does not have KALLSYMS_ALL. So I guess there's some other bug
->>> lurking in there.
->>
->> I don't have the setup handy to validate it, but I suspect it is caused
->> by the way scripts/kallsyms.c:symbol_valid() checks whether a symbol
->> entry needs to be integrated into the assembler output when
->> --all-symbols is not specified. It only keeps symbols which addresses
->> are in the text range. On PPC64_ELF_ABI_V1, this means only the
->> dot-prefixed symbols will be kept (those point to the function begin),
->> leaving out the non-dot-prefixed symbols (those point to the function
->> descriptors).
+On Wed, 07 Dec 2022 13:52:23 +0000,
+Harry Song <jundongsong1@gmail.com> wrote:
 > 
-> OK. So I guess it never worked without KALLSYMS_ALL.
+> I know this is a very wrong patch, but my platform
+> has an abnormal ITS problem caused by data consistency:
+> My chip does not support Cache Coherent Interconnect (CCI).
 
-I suspect it worked prior to kernel v5.7, because back then the PPC64 
-ABIv1 system call table contained pointers to the text section 
-(beginning of functions) rather than function descriptors.
+That doesn't mean much. Nothing mandates to have a CCI, and plenty of
+systems have other ways to maintain coherency.
 
-So changing this system call table to point to C functions introduced 
-the dot-prefix match issue for syscall tracing as well as a dependency 
-on KALLSYMS_ALL.
+> By default, ITS driver is the inner memory attribute.
+> gits_write_cbaser() is used to write the inner memory
+> attribute. But hw doesn't return the hardware's non-shareable
+> property,so I don't think reading GITS_CBASER and GICR_PROPBASER
+> here will get the real property of the current hardware: inner
+> or outer shareable is not supported, so I would like to know
+> whether ITS driver cannot be used on chips without CCI, or
+> what method can be used to use ITS driver on chips without CCI?
+
+It's not about CCI or not CCI. It is about which shareability domain
+your ITS is in.
+
+And it doesn't only affect the ITS. It also affects the
+redistributors, and anything that accesses memory.
 
 > 
-> It seems like most distros enable KALLSYMS_ALL, so I guess that's why
-> we've never noticed.
-
-Or very few people run recent PPC64 ABIv1 kernels :)
-
+> The current patch is designed to make ITS think that the current
+> chip has no inner or outer memory properties, and then use
+> its by flushing dcache.
 > 
->> So I see two possible solutions there: either we ensure that
->> FTRACE_SYSCALLS selects KALLSYMS_ALL on PPC64_ELF_ABI_V1, or we modify
->> scripts/kallsyms.c:symbol_valid() to also include function descriptor
->> symbols. This would mean accepting symbols pointing into the .opd ELF
->> section.
+> This is the log for bug reports without patches:
 > 
-> My only worry is that will cause some other breakage, because .opd
-> symbols are not really "text" in the normal sense, ie. you can't execute
-> them directly.
+> [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x0000000003460000
+> [    0.000000] ITS [mem 0x03440000-0x0345ffff]
+> [    0.000000] ITS@0x0000000003440000: allocated 8192 Devices @41850000 (indirect, esz 8, psz 64K, shr 0)
+> [    0.000000] ITS@0x0000000003440000: allocated 32768 Interrupt Collections @41860000 (flat, esz 2, psz 64K, shr 0)
+> [    0.000000] GICv3: using LPI property table @0x0000000041870000
+> [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000041880000
+> [    0.000000] ITS queue timeout (64 1)
+> [    0.000000] ITS cmd its_build_mapc_cmd failed
+> [    0.000000] ITS queue timeout (128 1)
+> [    0.000000] ITS cmd its_build_invall_cmd failed
 
-AFAIU adding the .opd section to scripts/kallsyms.c text_ranges will 
-only affect the result of symbol_valid(), which decides which symbols 
-get pulled into a KALLSYMS=n/KALLSYMS_ALL=n kernel build. Considering 
-that a KALLSYMS_ALL=y build pulls those function descriptor symbols into 
-  the image without breaking anything, I don't see why adding the .opd 
-section to this script text_ranges would have any ill side-effect.
+Ah, this suspiciously looks like a Rockchip machine...
 
+>
+> Signed-off-by: Harry Song <jundongsong1@gmail.com>
+> ---
 > 
-> On the other hand the help for KALLSYMS_ALL says:
-> 
->    "Normally kallsyms only contains the symbols of functions"
-> 
-> But without .opd included that's not really true. In practice it
-> probably doesn't really matter, because eg. backtraces will point to dot
-> symbols which can be resolved.
+> I am very sorry to bother you. This problem has been bothering me
+> for several weeks.  I am looking forward to your reply.
 
-Indeed, I don't see this affecting backtraces, but as soon as a lookup 
-depends on comparing the C function pointer to a function descriptor, 
-the .opd symbols are needed. Not having those function descriptor 
-symbols in KALLSYMS_ALL=n builds seems rather error-prone.
+If you have such issue, this needs to be handled as per-platform
+quirk. I'm not putting such generic hacks in the driver.
 
-> 
->> IMHO the second option would be better because it does not increase the
->> kernel image size as much as KALLSYMS_ALL.
-> 
-> Yes I agree.
-> 
-> Even if that did break something, any breakage would be limited to
-> arches which uses function descriptors, which are now all rare.
-
-Yes, it would only impact those arches using function descriptors, which 
-are broken today with respect to system call tracing. Are you aware of 
-other architectures other than PPC64 ELF ABI v1 supported by the Linux 
-kernel that use function descriptors ?
-
-> 
-> Relatedly we have a patch in next to optionally use ABIv2 for 64-bit big
-> endian builds.
-
-Interesting. Does it require a matching user-space ? (built with PPC64 
-ABIv2 ?) Does it handle legacy PPC32 executables ?
-
-Thanks,
-
-Mathieu
+	M.
 
 -- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Without deviation from the norm, progress is not possible.
