@@ -2,96 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 780E76458AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:13:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8A56458AF
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 12:13:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiLGLNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 06:13:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S229575AbiLGLNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 06:13:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiLGLMk (ORCPT
+        with ESMTP id S229705AbiLGLND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 06:12:40 -0500
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25BA4E6B1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:11:59 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id 1so14530532lfz.4
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 03:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E0iYqJnQf0sSNe9rxshze1YySuIt155ihLOCpKX2z5k=;
-        b=wTezHXPaL4l/5HAY8qbeZePY+DKfz3vY1J/a/QnRF3jRMoa2SuHSmVGZG1T2Eifr4W
-         rAoaufzCt+/dryglOiGYFvGcmEDATx8y2A3+4h4DV9OV+5+IH5SnJTjNdCEvbGTwG1n/
-         GSI7YoV/Hzhx3pK9rKg/E9Xms30rsyWuv8HylCnbFcaw9BF1mdkWNQOUboMEHq7yQoUx
-         xSOb6lys3b8s+XQt2ygXBeX2uiukZ6dx7tR/DaTb+wVlu0THe2A/VF/vup1HAtyarn0A
-         TU8YYuzvGe+zBMnefoVSlmrudsqJsrJx191X5Rble4bF9bXZ0OncXE23+r3hege/fpzw
-         J4GQ==
+        Wed, 7 Dec 2022 06:13:03 -0500
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F2152143
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 03:12:16 -0800 (PST)
+Received: by mail-io1-f71.google.com with SMTP id h11-20020a6b7a0b000000b006e0004fc167so7547423iom.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 03:12:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E0iYqJnQf0sSNe9rxshze1YySuIt155ihLOCpKX2z5k=;
-        b=2MdOwSZoTZHFa1v8dvlv0PE+ReHvA/BuqCcveyKrRpoWouKW2OulFl8bh7nlTIq6/n
-         Hf1HcSoiZYaO5ajDbGnmgNx8mFCn4il8C8EQWzU0JycNtx8SMPSQIvnMUhVJorVEJia/
-         p7Hw21ycm3MpSEPOjjOOyFEzrhobHAmNeQz7EhyLJ1EXlXveGEm6/B8RttJslOWFbnNO
-         iTLb21n9E6F73JYauMQpWtI9ilXBKyeU4340W8DJ5bz2Z518oL/08uELHC8p2N+up9zD
-         EqVMIufQD9Z6J7AwEUhjA1KG4OZlbCWyaDBOXN8+FOQvbZI0EhfaGGN5S1+F8TVsdU13
-         XJVg==
-X-Gm-Message-State: ANoB5pnFPnHpQvDrbCtfhXbyXRPUZuGcjykPSi8+NKQlPVlckv1gxvf+
-        6lMiInwyET0FMozYL6PW8BVAHA==
-X-Google-Smtp-Source: AA0mqf4uzvLKyl3k4Pb5t+QyvCxHerRe7zAYZU2BD51W/m4v4FdG4A3Lu0gU1HHRBMujAKiI5F3hBA==
-X-Received: by 2002:ac2:4462:0:b0:4b5:7780:cf5a with SMTP id y2-20020ac24462000000b004b57780cf5amr3829606lfl.283.1670411518113;
-        Wed, 07 Dec 2022 03:11:58 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 3-20020ac25f03000000b004aa543f3748sm2801528lfq.130.2022.12.07.03.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 03:11:57 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     wg@grandegger.com, pabeni@redhat.com, rcsekar@samsung.com,
-        mkl@pengutronix.de, pankaj.dubey@samsung.com, edumazet@google.com,
-        linux-fsd@tesla.com, krzysztof.kozlowski+dt@linaro.org,
-        alim.akhtar@samsung.com, ravi.patel@samsung.com,
-        robh+dt@kernel.org, Vivek Yadav <vivek.2311@samsung.com>,
-        kuba@kernel.org, davem@davemloft.net
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org, sriranjani.p@samsung.com,
-        linux-can@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        aswani.reddy@samsung.com, netdev@vger.kernel.org
-Subject: Re: (subset) [Patch v4 2/2] arm64: dts: fsd: Add MCAN device node
-Date:   Wed,  7 Dec 2022 12:11:54 +0100
-Message-Id: <167041151082.34325.8017885279639590973.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221207100632.96200-3-vivek.2311@samsung.com>
-References: <20221207100632.96200-1-vivek.2311@samsung.com> <CGME20221207100700epcas5p408c436aaaf0edd215b54f36f500cd02c@epcas5p4.samsung.com> <20221207100632.96200-3-vivek.2311@samsung.com>
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+/t+Me8/030Q5B30P+Xx4k8q643zdaz8TvlfSyAI0rw=;
+        b=v8BtQExzJ8mdm+l9+YM3Z9myrUSprXH4Ga3SFCfGCY0ZDa4KO1QrMxD5RuoLiahYTc
+         k9e0oKeKqxm0P6GWGgDWg6KuyjiY42K4IDgSKZ7FoAhAMJPQLv+TsHRiwTGZPOaS6Csf
+         FLGWqK+3Vb7naF6Dt8xnF/5mQ4AR6YFCDKPn/ma9PMloXybK7nRWlS1oXVUTBR1azWyo
+         BRK2GQQ/xTBOTb6vaDgtzPu2gEpKUVVyNLBJxjTSHJGP6GpXw74yORmgTHeKcHShWI9f
+         pD0lIZG+6oaKvhY0RVHO87bYATbdcnPmWq2xQTVILfez4XNMCSLs503BMSVsKR++s38G
+         CbCA==
+X-Gm-Message-State: ANoB5plnpTPpjlQKdJpycxt9ZvqAINVBmn6eol571/lctY4hDDGOreaX
+        2BvFHYWfdhUYWmWr4WIw5Yigda7UBYfRRRe+BqoHuVIrjfWW
+X-Google-Smtp-Source: AA0mqf5ww7+drHE0GeLT+JNJ6rONEjs5l7ybMhukmhPQH5dMBVpgfGWbj29axv2b0k80Es0gPlPJc5S2jtbKNZHjTvo1GURBSaQJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:1124:b0:38a:171a:dee with SMTP id
+ f4-20020a056638112400b0038a171a0deemr11854615jar.292.1670411535836; Wed, 07
+ Dec 2022 03:12:15 -0800 (PST)
+Date:   Wed, 07 Dec 2022 03:12:15 -0800
+In-Reply-To: <20221207081125.7740-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000038ea0a05ef3afe8a@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Write in l2tp_tunnel_del_work (2)
+From:   syzbot <syzbot+57d48d64daabde805330@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Dec 2022 15:36:32 +0530, Vivek Yadav wrote:
-> Add MCAN device node and enable the same for FSD platform.
-> This also adds the required pin configuration for the same.
-> 
-> 
+Hello,
 
-Applied, thanks!
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-[2/2] arm64: dts: fsd: Add MCAN device node
-      https://git.kernel.org/krzk/linux/c/142c693e6bd63d8dfaf7f808b015fc46180af731
+Reported-and-tested-by: syzbot+57d48d64daabde805330@syzkaller.appspotmail.com
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Tested on:
+
+commit:         355479c7 Merge tag 'efi-fixes-for-v6.1-4' of git://git..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16391af3880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=cc4b2e0a8e8a8366
+dashboard link: https://syzkaller.appspot.com/bug?extid=57d48d64daabde805330
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1311216b880000
+
+Note: testing is done by a robot and is best-effort only.
