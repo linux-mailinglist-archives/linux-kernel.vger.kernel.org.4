@@ -2,221 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFEBE645243
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:50:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B7964523D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:49:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiLGCuI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 21:50:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S229785AbiLGCtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 21:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiLGCt5 (ORCPT
+        with ESMTP id S229692AbiLGCtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 21:49:57 -0500
-Received: from mail1.bemta34.messagelabs.com (mail1.bemta34.messagelabs.com [195.245.231.2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07688554C9;
-        Tue,  6 Dec 2022 18:49:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1670381384; i=@fujitsu.com;
-        bh=mOuHndKhs7VITUYdzmDB/hEoxNRPMMBCPL8oHfOLmE8=;
-        h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=a/RfReDdkHHsilxbBTepweY0bNqPvjDVCT22FtGPepPDr73nYU9m7/erYsOpI5UHG
-         EAY6zsR+745s7/bUNp2aBllOIgqWn/4bCIN1mRW4gBt/kW55y6zL5uYaG2FM+tn4iH
-         5pHzxFb8z4GTEsKRJsHnnBrBrNzGC7GpbubBx/7sJB/nvEafdJTMr+eit60hJzmM9b
-         F5EylDwySpLvVanL2+a+uYSJTod8Wdwf3HaJ/+C5rk+XUDjrfN6th9eJPp0aSywBtw
-         OtfrO+SbXVijNNfuIkKNms0xVIsQJSrsjV23lYoYTYFGZHyAajFGYHczF8aIyWkP2N
-         sfwWITpCqSctA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDKsWRWlGSWpSXmKPExsViZ8ORqOv+vz/
-  ZYPknJos569ewWTS0tDFZTJ96gdFiy7F7jBaXn/BZ7Nl7ksXi8q45bBb31vxntdj1Zwe7xcof
-  f1gduDxOLZLwWLznJZPHplWdbB6bPk1i9zgx4zeLx4vNMxk9Pj69xeLxeZNcAEcUa2ZeUn5FA
-  mvGr12/2QoOKles/7CevYFxv2wXIxeHkMAWRolv2/vZIJzlTBIP/z2EcvYwSlw5eIqpi5GTg0
-  1AR+LCgr+sIAkRgUmMEsdu3GQGcZgFOhgl2lpusoBUCQsESPzs6WIEsVkEVCRaz05jBbF5BVw
-  k3p7awgZiSwgoSEx5+J4ZxOYUcJU48OghWL0QUM23t/Og6gUlTs58AjaTWUBC4uCLF0D1HEC9
-  ShIzu+MhxlRIzJrVxgRhq0lcPbeJeQKj4Cwk3bOQdC9gZFrFaFqcWlSWWqRrppdUlJmeUZKbm
-  Jmjl1ilm6iXWqpbnlpcomukl1herJdaXKxXXJmbnJOil5dasokRGFkpxUr3djBOW/ZH7xCjJA
-  eTkijvi+r+ZCG+pPyUyozE4oz4otKc1OJDjDIcHEoSvOv/AOUEi1LTUyvSMnOAUQ6TluDgURL
-  hnfoFKM1bXJCYW5yZDpE6xWjJMXX2v/3MHMvB5MyvbQeYhVjy8vNSpcR5bf4CNQiANGSU5sGN
-  gyWiS4yyUsK8jAwMDEI8BalFuZklqPKvGMU5GJWEeWP+AU3hycwrgdv6CuggJqCD7v3vBTmoJ
-  BEhJdXAxL3p0xH7v7w7DRvSdJ0yo1Zny4Yv6Vq/eD3fGj3R9hOnXRjcbL6c424JL9kqvyzqbl
-  EEv2zx08NLXc9PtXmhnlo0dc05SYXr/bxflJuqLj3qV9tnW/roRejdJq0nW3/91HqmxBOctut
-  F+V6/kIIwXtWj6wKuzRXzUSo0Op5xdM4Ko7TW3Necm/IyvLrYNPf42U/MtTjB8K0u0d0lsq0t
-  3tv9aOWc7qhLeXf+HDOITj44x0metVHqxJENDB/Eew95H5Y38Ql5ePTMzRWJPP0X165bULxl/
-  13Z71qvHjBHr/d9ZXDy/zIeruiwoxMv/fbadcfetnp9kNL1bnlDj/f39L4sdBX+rrDLRVOk4H
-  GrEktxRqKhFnNRcSIABxgbIr8DAAA=
-X-Env-Sender: ruansy.fnst@fujitsu.com
-X-Msg-Ref: server-9.tower-548.messagelabs.com!1670381382!3496!1
-X-Originating-IP: [62.60.8.97]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.101.2; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 32114 invoked from network); 7 Dec 2022 02:49:43 -0000
-Received: from unknown (HELO n03ukasimr01.n03.fujitsu.local) (62.60.8.97)
-  by server-9.tower-548.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 7 Dec 2022 02:49:43 -0000
-Received: from n03ukasimr01.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTP id AC980100192;
-        Wed,  7 Dec 2022 02:49:42 +0000 (GMT)
-Received: from R01UKEXCASM126.r01.fujitsu.local (R01UKEXCASM126 [10.183.43.178])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr01.n03.fujitsu.local (Postfix) with ESMTPS id A0329100188;
-        Wed,  7 Dec 2022 02:49:42 +0000 (GMT)
-Received: from localhost.localdomain (10.167.225.141) by
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178) with Microsoft SMTP Server
- (TLS) id 15.0.1497.42; Wed, 7 Dec 2022 02:49:38 +0000
-From:   Shiyang Ruan <ruansy.fnst@fujitsu.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-xfs@vger.kernel.org>,
-        <nvdimm@lists.linux.dev>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>
-CC:     <djwong@kernel.org>, <dan.j.williams@intel.com>,
-        <david@fromorbit.com>, <akpm@linux-foundation.org>,
-        <allison.henderson@oracle.com>
-Subject: [PATCH v2.2 1/8] fsdax: introduce page->share for fsdax in reflink mode
-Date:   Wed, 7 Dec 2022 02:49:19 +0000
-Message-ID: <1670381359-53-1-git-send-email-ruansy.fnst@fujitsu.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
-References: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
+        Tue, 6 Dec 2022 21:49:32 -0500
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2110.outbound.protection.outlook.com [40.107.244.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E87B27FC9;
+        Tue,  6 Dec 2022 18:49:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FYLj1H9IReZlImQpPmTgwg61gEnfLkFqCIxRo2EyyvQVkGs21opRKnkEMOh5YyMDHJtVQsJ7CEvUeNLqNDwnvUp+iN2KIIBqA+yGZiHQOao7csrPdEa+CBe6EDtWxiA90YdbMfeS95ne+7yXidv0lbz/g/E72NVgk16fF1IohXhSEcRLtB18NR8zBK1OmsMTqZeg16sgf03TeQ+fEDE97T9wycYbDCOViD3XsxbS5BfE++/aUSS0mDKqd+ckzSerKSbUN5WSBWoQqy66v+MGNv67wRZmTE2OsRcngc8TOdD3sak4xsyCYSdoqUixIIxJhbYizAVFjtB9sI0TStjNtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SsZs1BJNx6vGVPQsEvFkCkEl46RbmuNQkW/rxaMo010=;
+ b=D1Z4JWKhq52OWNVW7BM9WZkxqjLEzjxoAp7huKpJjHy8Tb7l5oKLGOsbLoMys6ReYnifl6LNCs9E+uDc0ij84gMtjSajjz2gACgONTa6h8JgXLitaULESmkey10erwK/NAaAK29AFCA6Y9nMpt/ghdCnaahelpD02fWuxs/GvXL/MLkAsAEcS/aDlThy1iAchYRE4WwoFivYpsF3ITNchCAxowZoTgZBxFVz5j8ly+79T8kauBJS4fucikAX8ThyVRNRmj+0jXEafhdqIWiLnQLuxW7c6f70D7c/QkKoGuSd9xjPxAV7n+2PUPtS8yP0HCy4Z6VJ6Xz5LmTYib9zjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=in-advantage.com; dmarc=pass action=none
+ header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SsZs1BJNx6vGVPQsEvFkCkEl46RbmuNQkW/rxaMo010=;
+ b=Jw8sTdPrMRB20KctfawHDwQFcVikJ72+7QjeYlZURTaLGbghTXIQERj5PemkP9m093rTTsO/SVpyFLgcCPFXRbfcJhagq0J7J8mU5cI1YSZJRRYKcFpQF4e1G93o6a7tB3Fet14E/JvyW4sdLRLA6Fi+Y2ei0iff9/uA0XS78Pw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=in-advantage.com;
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37) by SJ0PR10MB5693.namprd10.prod.outlook.com
+ (2603:10b6:a03:3ec::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 02:49:27 +0000
+Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::45b5:a860:9cea:a74c]) by MWHPR1001MB2351.namprd10.prod.outlook.com
+ ([fe80::45b5:a860:9cea:a74c%4]) with mapi id 15.20.5880.013; Wed, 7 Dec 2022
+ 02:49:27 +0000
+Date:   Tue, 6 Dec 2022 18:49:22 -0800
+From:   Colin Foster <colin.foster@in-advantage.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     linux-renesas-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        John Crispin <john@phrozen.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Marek Vasut <marex@denx.de>,
+        Sean Wang <sean.wang@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        =?utf-8?B?bsOnIMOcTkFM?= <arinc.unal@arinc9.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>,
+        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        UNGLinuxDriver@microchip.com,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        George McCollister <george.mccollister@gmail.com>
+Subject: Re: [PATCH v4 net-next 8/9] dt-bindings: net: add generic
+ ethernet-switch-port binding
+Message-ID: <Y4//Mtb0a3VHDN+K@euler>
+References: <20221202204559.162619-1-colin.foster@in-advantage.com>
+ <20221202204559.162619-1-colin.foster@in-advantage.com>
+ <20221202204559.162619-9-colin.foster@in-advantage.com>
+ <20221202204559.162619-9-colin.foster@in-advantage.com>
+ <20221206155049.erpgwrvt5gzdf2e6@skbuf>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206155049.erpgwrvt5gzdf2e6@skbuf>
+X-ClientProxiedBy: SJ0PR03CA0019.namprd03.prod.outlook.com
+ (2603:10b6:a03:33a::24) To MWHPR1001MB2351.namprd10.prod.outlook.com
+ (2603:10b6:301:35::37)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.167.225.141]
-X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
- R01UKEXCASM126.r01.fujitsu.local (10.183.43.178)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1001MB2351:EE_|SJ0PR10MB5693:EE_
+X-MS-Office365-Filtering-Correlation-Id: afc3d02f-12e1-4d1a-3521-08dad7fda7e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 63fPmzLc3vsizj907m99q5rMn37o1/0Ycy1B4HBYDXkFCE/eiAelwEsH2RmhHQbapMOk8tt5kzEz+fCkLYE2D5yzI/IJJE9OeEWI+eZAcWd2sXoDfYYYGJJuOKWBo9jfRAw1770dCTTT4COm0MGVZf+3CqRFbDqysm1rXWKg/+LrlJhl+mn6pX/G831UJeIsIgsl+JZTXwwGua2s6bW26kBLhebjCGTQ0bPxMuBrtK+hnnPCuHmYNKJThWGIguWLyW9V3V55eoZqtKzYbapTiklP1hDzD/si8yy7b7Ql/q/GQUkGE3jCVPVuBcT181fSFm1cmaU3HKYPJUdori+TQNpMqJ0RixzzZXixzaAPrDYqxPfqS1+DG1aYvB9guLskulF2tl8taEuwE1kueLs7T34ZYfUIw9FvApGjn30pJBqVDT3bdSsa2TM+IK5fjt/3iOlC1VbKCXivkT/xP8Xk/F1hnz15DsFu0SFS0w+RvOqx9kAJNU+XBQZFHD3ed3Il8Ja/XsMrbK24B/mSxa3NawmQhA7eiMlJlahMq+9qtUbEiLwmpVZc8XnZM9Gsk+EIqdRoGIKUpGMzE69IKzJnA3IUlJRNyWo79lkUtFDOFbkQwsj7PdohQ5A4wogCSk4+0x943P0cjIGutZunz86X9ToQDwTI97ioiiZJ3oZdPfW+lZenemvgD5tHlSAlRFA2COlcn3qOXJJaexcLFXEU8pmvpIMomSPjxvMF5XuRiV6dnW+pPGT3cXgTK1MjV0dP
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(136003)(39840400004)(376002)(346002)(451199015)(966005)(478600001)(6486002)(66556008)(9686003)(6512007)(6666004)(6506007)(26005)(186003)(41300700001)(83380400001)(7416002)(8936002)(8676002)(4326008)(66946007)(5660300002)(66476007)(44832011)(2906002)(7406005)(38100700002)(316002)(6916009)(54906003)(33716001)(86362001)(109320200003)(41533002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j7/8H9CM7YJdDAwCV8I+d5Ij30ad30b74/Qy8l8/hOVB1kU1qFOKC3ORmalO?=
+ =?us-ascii?Q?GVCJeVa5+UBpmi7mYgyBhS27syoyLSJ0SQVMXyJIjtPuPVfrbeTmATkJ41hY?=
+ =?us-ascii?Q?0m/GWYrGo/mdUx5HAkSrgOFlN+m3aYyZJRZzoQgbi9EdfYX/NK5tAQisGaUL?=
+ =?us-ascii?Q?Pro+k42YiV7nA+jBIN/V15w0wtiAYJbwf85VsZ/0gdiiCrTEhBPM3OienPnr?=
+ =?us-ascii?Q?gmldg1eBMIhH+srKP7oo9+b2f1ZsvJimG/6tTs7NOwb931yoOz7wKpiQd3rG?=
+ =?us-ascii?Q?MOZ/HRuw7m3XG+99ue2WW9HQF+H+7BKsSTnylaSxF25voKGkeBE99RlqUwVk?=
+ =?us-ascii?Q?/r1AsiiL8qXVByGqJtGjlal0LWgv2HkP9Jz7eVNP84sTlmYlADIkRZ9ZJBO1?=
+ =?us-ascii?Q?5mPAu/x/0MIOl2i0O8agLyCMvwFmL4MZIopnCh/dSLh9jRB0MxrjdEkY8sF4?=
+ =?us-ascii?Q?ifP6UXalqYWW7LIxR2xRNUR2iN4IWyefPP4htKH2G1CiQRiPm4qNupVv8wg6?=
+ =?us-ascii?Q?8IwM9FglDHxhXYenTlQoxXiO2k2RaheAQOQiZI5YdUBi1MR/Zqvf1R0mI2vo?=
+ =?us-ascii?Q?KTy/aw8kASz5traI+XapUG5M9pJj1nyeW+kNhjacXBeHM7gGAehAkW1BLQoA?=
+ =?us-ascii?Q?gsAqq4kG72eA0CNmNIrWJnxX+7fEx1NPr9s7NVEAiBt137fBKtE0t1/qhFa5?=
+ =?us-ascii?Q?nv5wwjt7+IxhyhlDoJw7+gApwnFUZkhzyT0mNJXY7t3yaDcIbPmyoqn6ELS5?=
+ =?us-ascii?Q?kVExs30+0bzoETqdex6iKzr9C89z9adzXOpGErlgKYXnWRef/XyeZY5JLElZ?=
+ =?us-ascii?Q?CNc1ChOb/BX2yz4hp6LG29iKpW/uhNC1jgjrjvruYbMpSuByXT1YeDZEWLBQ?=
+ =?us-ascii?Q?E2pyaOez9TwzOI5h2kOz2VZklGsD5luvUmA/nMKAdgCvvrrhEj/Wz+j7zZhQ?=
+ =?us-ascii?Q?v/WU9+T6ayJbdraVXJmrSFnrQNI1DiRRVYRKCjwbtAslwI/6Ckiyn24lEHCE?=
+ =?us-ascii?Q?Uw8F4wEWmdStyJl+tSkuRFkesLSwsMhzzbxvOZOnpjdYB06BuTSLW9Db5O+1?=
+ =?us-ascii?Q?AwvoN4vEZ/y+e+iqgCrqCNTdHOAgewBiGdIh3JQLfJ+2FNQxi1qvmqnfeEM6?=
+ =?us-ascii?Q?dP+RBw0Run3ZOu9a5KeG2wXKh0FKIW95thXTsKv2JdWDLJCB8Of50vqxnOCs?=
+ =?us-ascii?Q?Xt6ZHyMuPpQTOaFa9qEIU4Zqafm0mHySv8OSD6LV0iolwfKaPwS4/+vnptGZ?=
+ =?us-ascii?Q?CzH5P+ZWh+Rz23tXuUmWvTr1iU62fH7pgBrq8XcXK0XgTxyoX9cZFYpc9pST?=
+ =?us-ascii?Q?BLbnbm1yY/Igq3pcAh/aqJXL87ACruLaSj+f1lgUJj0MheVmmic6elNXrtRT?=
+ =?us-ascii?Q?Xztqq3QtSnkhhSClqFWEJS1QB3gN4RULMo7e3ElO9W20tj5Ydx1fM3oIf7LZ?=
+ =?us-ascii?Q?x45SFXRTn2yDE1Yh+drMkX5MN8bG/F3E2avnpkTLWvzTtpnuK01RvRaTsAgY?=
+ =?us-ascii?Q?xrxvObFrrRX6x6+ATPLeIBiXrh19jOUyDDFnyWL4xMDXw5kfL1YigY+KNOCH?=
+ =?us-ascii?Q?HgLN0hY4K8dz7ZDjaibdfyP9aNk07tyQAvJufk6e3WKBXnMIHJCCDL+dfUm3?=
+ =?us-ascii?Q?hg=3D=3D?=
+X-OriginatorOrg: in-advantage.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: afc3d02f-12e1-4d1a-3521-08dad7fda7e2
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 02:49:27.2007
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: KOPcguqsWMRTdT4CGcIIpDcHnWwAQDiqeQ8mRQtcyh94jvUbYDnE0kWyMi1jW6bt9rgfAA+8VY0uq1surHxnz3o4OClPzX6KCxj15vBcm5E=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5693
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fsdax page is used not only when CoW, but also mapread. To make the it
-easily understood, use 'share' to indicate that the dax page is shared
-by more than one extent.  And add helper functions to use it.
+On Tue, Dec 06, 2022 at 05:50:49PM +0200, Vladimir Oltean wrote:
+> On Fri, Dec 02, 2022 at 12:45:58PM -0800, Colin Foster wrote:
+> > --- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> > +++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
+> > @@ -4,7 +4,7 @@
+> >  $id: http://devicetree.org/schemas/net/dsa/dsa-port.yaml#
+> >  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> >  
+> > -title: Ethernet Switch port Device Tree Bindings
+> > +title: Generic DSA Switch port
+> 
+> What are the capitalization rules in titles? Looks odd that "port" is
+> lowercase but "switch" isn't.
 
-Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
+Agreed. A quick grep for "title:\ " shows... a fair amount of
+inconsistency. I'd lean toward Port. [insert nautical and/or fortified
+wine joke here]
 
-Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Reviewed-by: Allison Henderson <allison.henderson@oracle.com>
----
- fs/dax.c                   | 38 ++++++++++++++++++++++----------------
- include/linux/mm_types.h   |  5 ++++-
- include/linux/page-flags.h |  2 +-
- 3 files changed, 27 insertions(+), 18 deletions(-)
+> 
+> >  
+> >  maintainers:
+> >    - Andrew Lunn <andrew@lunn.ch>
+> > @@ -14,8 +14,7 @@ maintainers:
+> >  description:
+> >    Ethernet switch port Description
+> >  
+> > -allOf:
+> > -  - $ref: /schemas/net/ethernet-controller.yaml#
+> > +$ref: /schemas/net/ethernet-switch-port.yaml#
+> >  
+> >  properties:
+> >    reg:
+> > @@ -58,25 +57,6 @@ properties:
+> >        - rtl8_4t
+> >        - seville
+> >  
+> > -  phy-handle: true
+> > -
+> > -  phy-mode: true
+> > -
+> > -  fixed-link: true
+> > -
+> > -  mac-address: true
+> > -
+> > -  sfp: true
+> > -
+> > -  managed: true
+> > -
+> > -  rx-internal-delay-ps: true
+> > -
+> > -  tx-internal-delay-ps: true
+> > -
+> > -required:
+> > -  - reg
+> > -
+> >  # CPU and DSA ports must have phylink-compatible link descriptions
+> >  if:
+> >    oneOf:
+> > diff --git a/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> > new file mode 100644
+> > index 000000000000..3d7da6916fb8
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/ethernet-switch-port.yaml
+> > @@ -0,0 +1,25 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/ethernet-switch-port.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Generic Ethernet Switch port
+> > +
+> > +maintainers:
+> > +  - Andrew Lunn <andrew@lunn.ch>
+> > +  - Florian Fainelli <f.fainelli@gmail.com>
+> > +  - Vivien Didelot <vivien.didelot@gmail.com>
+> > +
+> > +description:
+> > +  Ethernet switch port Description
+> 
+> Sounds a bit too "lorem ipsum dolor sit amet". You can say that a port
+> is a component of a switch which manages one MAC, and can pass Ethernet
+> frames.
 
-diff --git a/fs/dax.c b/fs/dax.c
-index 1c6867810cbd..84fadea08705 100644
---- a/fs/dax.c
-+++ b/fs/dax.c
-@@ -334,35 +334,41 @@ static unsigned long dax_end_pfn(void *entry)
- 	for (pfn = dax_to_pfn(entry); \
- 			pfn < dax_end_pfn(entry); pfn++)
- 
--static inline bool dax_mapping_is_cow(struct address_space *mapping)
-+static inline bool dax_page_is_shared(struct page *page)
- {
--	return (unsigned long)mapping == PAGE_MAPPING_DAX_COW;
-+	return page->mapping == PAGE_MAPPING_DAX_SHARED;
- }
- 
- /*
-- * Set the page->mapping with FS_DAX_MAPPING_COW flag, increase the refcount.
-+ * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
-+ * refcount.
-  */
--static inline void dax_mapping_set_cow(struct page *page)
-+static inline void dax_page_share_get(struct page *page)
- {
--	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_COW) {
-+	if (page->mapping != PAGE_MAPPING_DAX_SHARED) {
- 		/*
- 		 * Reset the index if the page was already mapped
- 		 * regularly before.
- 		 */
- 		if (page->mapping)
--			page->index = 1;
--		page->mapping = (void *)PAGE_MAPPING_DAX_COW;
-+			page->share = 1;
-+		page->mapping = PAGE_MAPPING_DAX_SHARED;
- 	}
--	page->index++;
-+	page->share++;
-+}
-+
-+static inline unsigned long dax_page_share_put(struct page *page)
-+{
-+	return --page->share;
- }
- 
- /*
-- * When it is called in dax_insert_entry(), the cow flag will indicate that
-+ * When it is called in dax_insert_entry(), the shared flag will indicate that
-  * whether this entry is shared by multiple files.  If so, set the page->mapping
-- * FS_DAX_MAPPING_COW, and use page->index as refcount.
-+ * PAGE_MAPPING_DAX_SHARED, and use page->share as refcount.
-  */
- static void dax_associate_entry(void *entry, struct address_space *mapping,
--		struct vm_area_struct *vma, unsigned long address, bool cow)
-+		struct vm_area_struct *vma, unsigned long address, bool shared)
- {
- 	unsigned long size = dax_entry_size(entry), pfn, index;
- 	int i = 0;
-@@ -374,8 +380,8 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
- 	for_each_mapped_pfn(entry, pfn) {
- 		struct page *page = pfn_to_page(pfn);
- 
--		if (cow) {
--			dax_mapping_set_cow(page);
-+		if (shared) {
-+			dax_page_share_get(page);
- 		} else {
- 			WARN_ON_ONCE(page->mapping);
- 			page->mapping = mapping;
-@@ -396,9 +402,9 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
- 		struct page *page = pfn_to_page(pfn);
- 
- 		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
--		if (dax_mapping_is_cow(page->mapping)) {
--			/* keep the CoW flag if this page is still shared */
--			if (page->index-- > 0)
-+		if (dax_page_is_shared(page)) {
-+			/* keep the shared flag if this page is still shared */
-+			if (dax_page_share_put(page) > 0)
- 				continue;
- 		} else
- 			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 500e536796ca..f46cac3657ad 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -103,7 +103,10 @@ struct page {
- 			};
- 			/* See page-flags.h for PAGE_MAPPING_FLAGS */
- 			struct address_space *mapping;
--			pgoff_t index;		/* Our offset within mapping. */
-+			union {
-+				pgoff_t index;		/* Our offset within mapping. */
-+				unsigned long share;	/* share count for fsdax */
-+			};
- 			/**
- 			 * @private: Mapping-private opaque data.
- 			 * Usually used for buffer_heads if PagePrivate.
-diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-index 0b0ae5084e60..d8e94f2f704a 100644
---- a/include/linux/page-flags.h
-+++ b/include/linux/page-flags.h
-@@ -641,7 +641,7 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
-  * Different with flags above, this flag is used only for fsdax mode.  It
-  * indicates that this page->mapping is now under reflink case.
-  */
--#define PAGE_MAPPING_DAX_COW	0x1
-+#define PAGE_MAPPING_DAX_SHARED	((void *)0x1)
- 
- static __always_inline bool folio_mapping_flags(struct folio *folio)
- {
--- 
-2.38.1
+Good suggestion again. Happy to change this as well. I'm planning to
+send an update late tomorrow (Wednesday) to give a couple days before
+Sunday. Hopefully that's enough time for any suggestions on these last
+couple issues.
 
