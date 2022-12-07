@@ -2,258 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3C2645589
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3FC64558E
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:41:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbiLGIka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S229820AbiLGIlA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:41:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiLGIk2 (ORCPT
+        with ESMTP id S229756AbiLGIkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:40:28 -0500
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFD46317
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:40:27 -0800 (PST)
-Received: by mail-qk1-x72c.google.com with SMTP id z17so9488322qki.11
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:40:27 -0800 (PST)
+        Wed, 7 Dec 2022 03:40:55 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 241EF6599
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 00:40:54 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id t17so12315847eju.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 00:40:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MLC26Ke5fZpTRF2yXCb0Zzz0rWG7QspcEyfjjpZuefA=;
-        b=OLfMnsamTMztkSPHhCbImeUMn9iFFnW/C5MvcbYVR6UXWWhaqSlLKU4VvINPE29BsX
-         GE9ED7rztekxlZkH7wu33P22znQsxn8n7H2twRuuYOuwUbfoCOGAAS1bH1Y1pznOyQa0
-         /Yrsl5HrUP1KYmS/BMoa6R3KS/xM959I5mXDTt1icNj3N4LqqA7Zqqbwf4Nu2eq4vhxw
-         SOKnvUNVjcx1pAmL3paM4tENUfSJ0dYPJeyywmcI7em4lWQ0UFaalVbbgf341U9OMRMR
-         mMlQ+m0GMFndMY04lbgFqam5mZNzrBDBakmA+Y4dXcQO5KPvXjdxBpn7/qReUJwR1Pou
-         DMCw==
+        d=fairphone.com; s=fair;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8XELo1fO300N0txX2bi3UEYRaJ+M60DVCY2RyFyvGz8=;
+        b=TCecy/H/WK1gAkBTJ5GIKc+X1XC31M66Rla7gAYR1wRrlgJCAcTCRyXbsYXA03JzXx
+         JOcEi6F4tQYRZLWJirYh5RmB0UIdHH2tuRtnrGMM1mX38mq61gNNs3OIdk2xJsUa6Mqk
+         mCuAZ6/rIKB2BpF1G+vwRJLGuN2P98C7xvOBhJSIQWAkpOssgKkGh/kJ2ih2Yvn12pcG
+         ZpCedigP6QoDhTc5NVkItdJHsfTOM2j82buah4N42FtSwGZUyniCYdxgJY+sd0n6ESMc
+         PhPbrCkjOvVnnKaIaofP3r/tX35vnvZvB/XqDWuzN8BNApw1owEG6LIb7dswyal38tWW
+         mMlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MLC26Ke5fZpTRF2yXCb0Zzz0rWG7QspcEyfjjpZuefA=;
-        b=XSUerF4c8u5GdpXg+0SU4R8Vk+/0weYoUjrGrWoTHyP15nsqKMlxvjERrEVn2kC8dM
-         6TRuacQl1903Nmo3E+OvzRQhBhGhyjIMba5daKV7bT3rNinIhHFplWv3UQpcu8TPh2aX
-         nL80q2dN1esuy+SofaKUhcOfDEtqsNApicCwpeOW5E+J5UFylGKbeIcpk3LtcxpH0a2J
-         Pa6CHTlY6+OdBGAQro5YxecRoQ7p6nchbngb6o32QbKPqdfmXOqnjzzNhol6Yvp57pQq
-         xLDI2F2PaNt9+0SvHZDSgDLzmYzBXvkWi8e6PhU4CbjlKDWXXjXQ/IiJndsMqZenoETX
-         G0cQ==
-X-Gm-Message-State: ANoB5pnuTKvAX4kB88Nbhg7NzBz4vb0uYxsdB5ZgWBDxmoNj4PokN+q8
-        bNZDG4cANFqWFr+yc4jMBr3QTaHjRmn2SK472Zlecw==
-X-Google-Smtp-Source: AA0mqf4InsWz5gWyz42gsS73/ubeKbtB7JkhPdqfSzfmkW0T4JxuczOehqy6CZkXBTVB5vlGfBjt7LLkSPAtVvxScOg=
-X-Received: by 2002:a37:9a43:0:b0:6fe:c3d4:d9f4 with SMTP id
- c64-20020a379a43000000b006fec3d4d9f4mr8417472qke.646.1670402426282; Wed, 07
- Dec 2022 00:40:26 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8XELo1fO300N0txX2bi3UEYRaJ+M60DVCY2RyFyvGz8=;
+        b=oOkI8q1LmA1IlrL3x6/VvmU9QGCf+1SRn2V/+MOmL7jKwIubfKhlE5g54f0np5aXS7
+         l5rt/jg8qoremvRRhBdftFtynBO13k4/FLONFjxanZd0BLN+PwwLgcuvdR/4GpZoTMQw
+         EYOvDVrcRprr9gHdWgTSuzayUyuyf59c2+wTZhkSJm9PJXB4xpQXOVWfhzhLYXeJj81M
+         XXR76AUGD8OfB6tUlzYMejk+rAyDSAldEOqTA/qMEeysW2SiIfsQ9yqO4eYPzPiqo0iG
+         NfVw53NvsPRdIWTfQEvWSY7WHrH6H/Qm5rHx3SnHlxnbW/jzw3d455StuRmWSf0HpDW+
+         ujRw==
+X-Gm-Message-State: ANoB5pmT1/bCC/s8H0nRPv7mL9DvtTXxZCI74Ak0MwqajBi+fibt2Zou
+        2eybzhNLmEYiCAFaTWoOxyMBrQ==
+X-Google-Smtp-Source: AA0mqf6U95l25iZubD6K14hN1Ncq7oAY8QAmNyarEwa8m5xcbZDpWkUuic5l1vZnnYgt2adI42tyew==
+X-Received: by 2002:a17:906:9f09:b0:7bc:db1b:206f with SMTP id fy9-20020a1709069f0900b007bcdb1b206fmr12269924ejc.719.1670402452588;
+        Wed, 07 Dec 2022 00:40:52 -0800 (PST)
+Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id kx4-20020a170907774400b0079e11b8e891sm8183619ejc.125.2022.12.07.00.40.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 00:40:52 -0800 (PST)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: sm7225-fairphone-fp4: Add pmk8350 PMIC
+Date:   Wed,  7 Dec 2022 09:40:45 +0100
+Message-Id: <20221207084045.270172-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221206163445.868107856@linuxfoundation.org>
-In-Reply-To: <20221206163445.868107856@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 7 Dec 2022 14:10:14 +0530
-Message-ID: <CA+G9fYsNLYgoaRo7-0XCJEo2e6QaL3RRgo1bXXT20p7LZA-f-Q@mail.gmail.com>
-Subject: Re: [PATCH 6.0 000/125] 6.0.12-rc3 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 6 Dec 2022 at 22:09, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.0.12 release.
-> There are 125 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 08 Dec 2022 16:34:27 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.0.12-rc3.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+The PMK8350 (which is actually a PMK8003) is used for the RTC and has
+ADC for thermals.
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Since the adc_tm compatible used in PMK8350 is not yet supported, skip
+configuring that and the associated thermal zone for now.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-## Build
-* kernel: 6.0.12-rc3
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.0.y
-* git commit: b2f10309632954c8f7f5b26604c42ea6944edfd0
-* git describe: v6.0.11-126-gb2f103096329
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.1=
-1-126-gb2f103096329
+diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+index c456e9594ea5..df05e5dc8696 100644
+--- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
++++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
+@@ -5,7 +5,11 @@
+ 
+ /dts-v1/;
+ 
++/* PMK8350 (in reality a PMK8003) is configured to use SID6 instead of 0 */
++#define PMK8350_SID 6
++
+ #include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/iio/qcom,spmi-adc7-pmk8350.h>
+ #include <dt-bindings/input/input.h>
+ #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+ #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+@@ -13,6 +17,7 @@
+ #include "pm6150l.dtsi"
+ #include "pm6350.dtsi"
+ #include "pm7250b.dtsi"
++#include "pmk8350.dtsi"
+ 
+ / {
+ 	model = "Fairphone 4";
+@@ -426,6 +431,20 @@ conn-therm@1 {
+ 	};
+ };
+ 
++&pmk8350_rtc {
++	status = "okay";
++};
++
++&pmk8350_vadc {
++	adc-chan@644 {
++		reg = <PMK8350_ADC7_AMUX_THM1_100K_PU>;
++		qcom,ratiometric;
++		qcom,hw-settle-time = <200>;
++		qcom,pre-scaling = <1 1>;
++		label = "xo_therm";
++	};
++};
++
+ &qupv3_id_1 {
+ 	status = "okay";
+ };
+-- 
+2.38.1
 
-## Test Regressions (compared to v6.0.11)
-
-## Metric Regressions (compared to v6.0.11)
-
-## Test Fixes (compared to v6.0.11)
-
-## Metric Fixes (compared to v6.0.11)
-
-## Test result summary
-total: 150169, pass: 130851, fail: 3573, skip: 15282, xfail: 463
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 151 total, 146 passed, 5 failed
-* arm64: 49 total, 48 passed, 1 failed
-* i386: 39 total, 36 passed, 3 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 38 total, 32 passed, 6 failed
-* riscv: 16 total, 16 passed, 0 failed
-* s390: 16 total, 16 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 42 total, 41 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
