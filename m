@@ -2,297 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8442A64642C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3714564642F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:39:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiLGWgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S229543AbiLGWjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:39:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGWge (ORCPT
+        with ESMTP id S229437AbiLGWjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:36:34 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2086.outbound.protection.outlook.com [40.107.92.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEED285661
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:36:32 -0800 (PST)
+        Wed, 7 Dec 2022 17:39:00 -0500
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C5B6F0FD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:38:56 -0800 (PST)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7Lx9uv030858;
+        Wed, 7 Dec 2022 22:38:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=mMjcFjpkGrUMbQah+4ESEDYEGowW7s7KaucTg1AiKDE=;
+ b=P4kfCrXCgnaq8O6rN5o1c5IYWDEst3Nm8KYAaRUcvfWU9NGun1sI6p/sczbd1N/V4LYy
+ HNwwvJWNFs8lRVIxvr+ey3c5Xa0YJ2uYhaj6yg2JgWBRVwgvxGoZ37CwMeVmErbn+FCR
+ 3RDKUlX6H8j/NEynPn6aAxbS+SVcLCBKB3gjydHrem1jbO8uSpcShtSa2c1qTeQfY1FW
+ vH/rdySKgcaEtfNqz1s9bxStgBv/E5HTFApECsPfgl+ZD8zu/99HPtvhWvmPPojoZYY0
+ U3VrACkE//cY2/Gy9ndENAQ9OJqyptjP03cKqvdvuZzrVy6NQSKQlVb0HBwZXEO6Z/TU Xg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maudk9mrw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Dec 2022 22:38:44 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B7L19AM021779;
+        Wed, 7 Dec 2022 22:38:43 GMT
+Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa8gk7af-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 07 Dec 2022 22:38:43 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZuGu/FE4Z2Vha5cUsWVtsk8FhDZqXumhkm2tPdsk/RuNRHW5k6ql1oWtSPREjvX2XKsE9mSZCqdyocE7HDP3nWtI0nvNIqa5ZjcbCaeHIQP0zAGdjke5fL1GtRZLNq/SCeG6sHaIOfIYNnYgW/HGg+lri02BTpReK8b8k1z6A2dbOGeAQZyOu41tgGSLT62xc7XegLfm0TWwXDXi8XTKF5H1/H7kefy2N7gjVnPBfP8ThurGY7jDroC+7SMrTeYDggz2sfH5RPI5XNFuBOSt4a7Uy5Jeo+PLzgfiEzm/cjogg6JTwDySV3ZbnWgcAdL+2UHaxnKFOcwR1CHDML/00w==
+ b=QWvYqQwuppKl0tc+C90H6lC7Jl6XXM4fuZaYLb1IRxn1VOPnPF2h0HuBkYUKsSpbaJCS9sGNTVdy3bklWOFUzvKBhaoRSaPJd0o5Z38rXv5CwO0hRqgAJkUogJhvy/i/a+CHYfnNaymla6auVkBrwD/L/xC5nfXmNbult4X5Ms+Pgc38TW/Ade1MImv62FZZmmwlSjZAaSPKjHsY4mX83aHOCcAQYvpbA/D5Hobdqc6fffmZlJN5Lbtp2CiHsWwqgC7xs95QwOv6tNzRLu2R0UBu8yzMOAEyVZnJsKbfY5c32NpNTnM+mzJpRF0RlBnt8TFshiVflMIWLi6+H6sLCg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=50iOb6hv9wIoF7sMNInAO9cqRqRPNam9puj+kdTplD8=;
- b=ZmII2evIEF0Vm5VELW4zwCh0BrEq/kclVnV6IL6ORJT1lx9MqDbF4ulf7qPxmjGEXJMoLhY0hyWg94gOM5oz/c2D9SI7TuqqDqbRUOa3WK/jbt6KZh/9zyXErRAPoLbB0eeSnk1kvfdIjNibfL2eOqqKY6mun796HjXyQa28lDCJeVUjvAl/MNwJDwtCI0lYH8Kzh5Bk2SP9zJJIzoKZ/XehLAZLeMUsgxTTg1gfecNiqwFvopOzo0FsS2eotXLPrdMa7/dG2NzPWlhCKXRqSuCGolfOyOieccHDOAypLCAy0308BxdZC6D9nquSZIcMyq/G6pX1NPunE65QSlCaIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=mMjcFjpkGrUMbQah+4ESEDYEGowW7s7KaucTg1AiKDE=;
+ b=mEM1lsRDYWyNiK1SJTRZo0TCW9OwV9gfg1S8fMcevNShZj8aE9eIi8IUlN0Itt1ZoxUsNwZ74uriOdvFR74fes/gE5bKe35+NMgulAyOXGY2jo8LXTNcqVDv0AW162MbMtuzPS6Xn+Lc5jSO62U3knbUmYH8uBtSx2GoMbzOiEMpDUGMFXx4FaPWF6NaBXfs22jAoY62anptTRsKi+V6g8y5une9qJngG7iVx1ay/oq8MJbLhltSz6ovgi3HQFA8WVNsalWSD8X2Q/Ochj8zHvV/CjTPHC0Ucw2k5nQ0Wq5pN1FgxM54k/V1weV/tmpybdPG+SrO+QlIL+GMo33apA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=50iOb6hv9wIoF7sMNInAO9cqRqRPNam9puj+kdTplD8=;
- b=BGWk2YOVQYv8ZJGythLnYd2E8z5yfHa8XjMPJ6MwFaRgIiz37CWv6dMLxHkZ3uo22WANa8lnTfLBqPYrrKALSIVtwmbZzZsk8cg8XVgGi7P0zDrOFpz1OPbPnDMHfANS6xdsZNYALqSTJ4+qObqcqayHOaoIBmIQPxExF9ovVykHuEzf4JiwTZ+mQ45VHT4oeklPiHjY0kOcADnrfwHWV4asDuAPZm4OsDephKYwffKDHt0wkWd/o4xYuQl9Qjr+/CBQTJ18tJqyS53QnIatb35OmyiVAqeB0rG4j5bZgtW1UZ3ozTtANU3WHNVvmqDW8bu6U48D79g465O1T4OWbw==
-Received: from DM6PR01CA0013.prod.exchangelabs.com (2603:10b6:5:296::18) by
- CH3PR12MB8188.namprd12.prod.outlook.com (2603:10b6:610:120::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.14; Wed, 7 Dec 2022 22:36:31 +0000
-Received: from DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:296:cafe::2e) by DM6PR01CA0013.outlook.office365.com
- (2603:10b6:5:296::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10 via Frontend
- Transport; Wed, 7 Dec 2022 22:36:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT024.mail.protection.outlook.com (10.13.172.159) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5901.16 via Frontend Transport; Wed, 7 Dec 2022 22:36:31 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
- 14:36:22 -0800
-Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
- 14:36:21 -0800
-Message-ID: <326789a5-85ba-f13c-389e-fd21d673e3ae@nvidia.com>
-Date:   Wed, 7 Dec 2022 14:36:21 -0800
+ bh=mMjcFjpkGrUMbQah+4ESEDYEGowW7s7KaucTg1AiKDE=;
+ b=nFtM4Tsvg3Wdgs8spbBe478UEl9Jz9oGwkqt98wdZlRNy2N99cqrYj13ljzO7lCAvhzWlkFrYGIQwgckAftMQhhUiyJqAyKBkTGyH52NXj26QVXhT9ntVn3JTzKMa00Gl7yla253ivn8fk9zKLAVWaRO+MH3qgUpgph0HgamaZE=
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
+ by DS7PR10MB5166.namprd10.prod.outlook.com (2603:10b6:5:3a4::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
+ 2022 22:38:41 +0000
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::51be:1301:5ec3:996f]) by CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::51be:1301:5ec3:996f%5]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 22:38:41 +0000
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, willy@infradead.org, tsahu@linux.ibm.com,
+        jhubbard@nvidia.com, david@redhat.com,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Subject: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero support
+Date:   Wed,  7 Dec 2022 14:37:31 -0800
+Message-Id: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
+X-Mailer: git-send-email 2.38.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR04CA0016.namprd04.prod.outlook.com
+ (2603:10b6:a03:40::29) To CH0PR10MB5113.namprd10.prod.outlook.com
+ (2603:10b6:610:c9::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 04/10] mm/hugetlb: Move swap entry handling into vma
- lock when faulted
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Mike Kravetz" <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-References: <20221207203034.650899-1-peterx@redhat.com>
- <20221207203034.650899-5-peterx@redhat.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20221207203034.650899-5-peterx@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT024:EE_|CH3PR12MB8188:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4471203b-2670-4504-3b84-08dad8a37ce2
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|DS7PR10MB5166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9eb76d05-5c03-4451-50f9-08dad8a3ca54
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mmH8Tx+cN/7FlNrUvNKSBggKXQbHGSiVo40XjCQ8CVwkKUjLqQ7xH9/Yx6Ii/T3DeANd3OpFz8CcItkEQIAkWWylrvNZ1XKCLw3YnL/tS/B32V3msBQtBS8IECHn7vi/kELs7QjPQl8qIlk5LD8I2N2WR3elaDi+XNCfWqlK89aA+y5igT411TIsGEzIBJomYlyyuo4aGSQUCHFFLVFm1CH/1zyuU9w9Vz1I8u2TRctGqLRWpGtdTSsxxWUbKMY3PuNMb9xYFv1fsxn6s4KDQMrSOX0oc1XiuzsWtnc2RtCg0o8MJ2w2mSZiMxlcv0so25tU9adi6A9NzN1Mf40zVdWIyKbsiGQWWfQbP9sp+lDIUquzBVHDJxyCKSIvg5NJWZXZQgP2U3tEix6GhnAj/0k60PNynJAs6beDseNXJqUN6hzQ3oQhrZovRCwFUFD5Sn+LMijFxZupIOlJD+N+1wry44JcHqaQF8LFJexE6QMqnuEtFdKfGSuMLEtty2LZ2osCdyCJy17IyV91Je+GIlC6fsZqm2ZqU9oY87P1nmlhl748Dj/OYzKuj6dnD9kyvH+jpiKeY4+gwW0eFDSTlU/DiApT67Cpy3OnYS8WHCObZ21Y41fS3q4nLYiFFjamH4+ToUikQIFxGO0cn/i+J96x/N8WsMEUzE50ykf660iA0RFHcSh3vN4NoEmMiMgquDCiu80OOYKd7ib+ZroUr0QTA2CoXRVNdlczofBtFmikys2kAsRlLAKC/CfpEXCV
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(346002)(39860400002)(376002)(451199015)(36840700001)(46966006)(40470700004)(66899015)(36756003)(7636003)(31696002)(8936002)(86362001)(356005)(40460700003)(41300700001)(4326008)(5660300002)(2906002)(7416002)(36860700001)(83380400001)(82740400003)(31686004)(54906003)(316002)(16576012)(110136005)(70586007)(8676002)(2616005)(82310400005)(40480700001)(186003)(16526019)(478600001)(70206006)(53546011)(47076005)(26005)(336012)(426003)(43740500002)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 22:36:31.0316
+X-Microsoft-Antispam-Message-Info: BK5zlEl8h7P5ZgTHeAkALNIBxvgLbQy8TkiWYc9IXlqzTB6YXX0InJOmCqcIl5/rPtrs9W/S9ZC6+krw5Vc7yNUdZnYY/ZDWYqxR9pCVATYx9zscgm6GhUoHg9wH4s4VJ7dL7mbuU7Hf9FkeCnQB0s5u67g1ZVwelDWnaBp1LjdemUuT0lDHxKQ3C/hXX7yE/roe9OzRy+tQwHiICDFhFndHuXjZkRz8yboQF+CLko0KpNh4vU0e4WIXoswcEBNW+gYbPs+p+HLI3Q3gl6n945Dtll/Fn3j8OsuiF7dmSJlxeDfLmEvOeBPwhMDeLOoEewYUS1BrqCWZKlMSSBkhxlS0/NmbL8BdIWbv+9ya6ZUM2nIrR4AnNu3ASsUYHY7JnYlRhDCq4QOh4CwwToIby6smn/tsco2Zef57ZtOeopPIfs78DgbRubmfBcQf7H1eHXhBJFEmdbQI3acW1EuzYdmSwUJeKKUDY8uxUPjTKYJOYqLFNhDWVyJqHTNTsE7zB6YS6tpZTj5uY8kqbwDazZuR0omt2Sf3Y1vKi0nMPMQCOf4+1oZHRZ3mDQKrbVsENovTempl5CvfH4sn3gegNRbiI7n/pYi77heBiECT6AzuRqjtIx7O/HfbQSbmzuGY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199015)(8676002)(44832011)(2906002)(4326008)(83380400001)(5660300002)(41300700001)(8936002)(6666004)(1076003)(6506007)(6512007)(186003)(107886003)(478600001)(6486002)(2616005)(66556008)(316002)(86362001)(66476007)(66946007)(38100700002)(36756003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X0anNwI6/qYmEq6+CgRd2SAXrfZ26m1Q5sqJERWTD1ypcQOD9N/pJ6FsM78r?=
+ =?us-ascii?Q?LNTMlDce3v9NmZAvh7wsZq64Drvz8iACVyRMcdS4gP1s6PHh76IJvjurhj1O?=
+ =?us-ascii?Q?jeK9jWViLfPBcpbYhWW6Q+WVRmzmvfCq1M4xRi29RQKstQ5iyaAnVwmw3N5w?=
+ =?us-ascii?Q?85ALSME7loR/HXkvFkN6bttZaZbEv+E15Y1sxv8YZ4xiX/2hYfg1ZQj0RroV?=
+ =?us-ascii?Q?B7e2sHz14DluvCKaFfbJQz9xdj+vz+ybqWqQNVOGLNWPPyXJn3I4XP3cQP+c?=
+ =?us-ascii?Q?07UTghnK18sVioEbtzn2TyhYZQ3jtWeEtaKgGbcQtxKkpJ9XF5tVntbju8ro?=
+ =?us-ascii?Q?aXyo35ea0Z+gTdBhf8rT0lJEgxVyL2lYNE1gzLAYllssuGrxRF8NEm/vMxvK?=
+ =?us-ascii?Q?ZBWp+KjgZpGpf4M/z4rAZXUZlS24cVr7qMtl+oRb8/75Ec3p4adAm/mNbRt/?=
+ =?us-ascii?Q?QETe7+6ytA10dsPmDsWU3X9Sf2x+EkOzLVv7Tl7z0ETKvGG0qObVnakRTSFA?=
+ =?us-ascii?Q?AUE9nxafBQ6BJBAbXycHnS7lRwD9Bsys4rs4zmTivN7J3OyZr0Z0gDGHpxcJ?=
+ =?us-ascii?Q?4MUYK3sC3W0i8m8ZJkpHejC0A9YWjLOG7ubE6cxFpGIllAZfHDmRQGxrsJHH?=
+ =?us-ascii?Q?aWOvyaDyvTdOjFoVaDSHz41JB3QlRjroxSHdhAbAzqm6aDxf/YSGVKKSZOyz?=
+ =?us-ascii?Q?lZ41GJPChDE96YtZmeC7MDrsX1zksGuuP4Vu9k393ZCyb46N2GcgXsXJlYAf?=
+ =?us-ascii?Q?mP/vnf+gDP2Mfxdgu0Kbf7o3S/9SWVY4LOJmdoa6HzgGq9hdOilns46bpvm0?=
+ =?us-ascii?Q?pMC76RIC+CZUOjqKH/srveoQpTDlV5aEAv6BowbTyq30pd4so9Q3zu3hDNMw?=
+ =?us-ascii?Q?PhXJfTQKajRxwMegXsGB/Hj3b2Xfshdye9EmND3JaYUVgNYpoX9IBmhbQlnD?=
+ =?us-ascii?Q?hnySfvUuA9mepd2HuVGVr6l2tHBvyxAwJKh6Dt6eFZIVPA4tCjmUWRm8flqw?=
+ =?us-ascii?Q?E56ofOBx5YmAWuJHGSV9tkZ+fyiVIXpAJ5zvGR0i89UXleaBhKWtPppVARq6?=
+ =?us-ascii?Q?dIFvA/azzSE1Gm28pjeGeCXwiOHkN4ruZppCMgnxH0yiiC1xdp9Qqquk59on?=
+ =?us-ascii?Q?g2pbUzxmO1K0UuZjar8MW2W6B4DbbmJQRiz7QXQr9B3FbaF6of+/jorsi6Un?=
+ =?us-ascii?Q?9Vh+8zek1jgkXF0sctF9YulMzz9zSzq/ZkUHtMwdjER2kZs+8EWdOR7+mcjF?=
+ =?us-ascii?Q?NwGHm8SI+WC5t0zqVldNRA0RRodtLbdiaj9uBBNuXSuowKnL5z1dDHcJPB93?=
+ =?us-ascii?Q?zYzVT/i98a/rN/FVd/5/H5UkchTcSzNWORDXM63/glmg1JCz3r3UoPwICfVM?=
+ =?us-ascii?Q?NsVFNZgNl4f8JFzpZ7vFbsDVhm3hdje7nE7Sd9bEjR9vwMgunfHu7/ldRq7v?=
+ =?us-ascii?Q?di1gBQvvSxKvah+VRhdKtQztG6pYFHOZB8g3lKGQe4cC5hXz5nichxbqRXe4?=
+ =?us-ascii?Q?+cztsMNLqnsqQ3hqI2bSMPieJ9wwSjdxkBDm393sePImPJMsk81+r+BQIlo0?=
+ =?us-ascii?Q?kwzltpeACJfY6joW6hbPNhahinDXEDXE5DgPfGrQzIkZxn6agH96/Uc4ZT99?=
+ =?us-ascii?Q?Dewzo/IBFvmmL6DSPDrICIrPB5Ymzi8ZikYrT1WLcBmNJKQcy1hxCqZSg/Oz?=
+ =?us-ascii?Q?wt/6OA=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9eb76d05-5c03-4451-50f9-08dad8a3ca54
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 22:38:41.4169
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4471203b-2670-4504-3b84-08dad8a37ce2
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT024.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8188
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: K/IXl88UsPqYnDS5vXfn94rJSoyyHRgpi9PjWKFtCUHxGe7qighppYPg19cFckzgkI3aIBQ5/odukBcJQ9A3p790MWfzRjkbPtmKOGF6GPI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5166
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-07_11,2022-12-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212070192
+X-Proofpoint-GUID: qEZscxVuqPs59qN_RdmAhCBOAk3lV_5P
+X-Proofpoint-ORIG-GUID: qEZscxVuqPs59qN_RdmAhCBOAk3lV_5P
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/7/22 12:30, Peter Xu wrote:
-> In hugetlb_fault(), there used to have a special path to handle swap entry
-> at the entrance using huge_pte_offset().  That's unsafe because
-> huge_pte_offset() for a pmd sharable range can access freed pgtables if
-> without any lock to protect the pgtable from being freed after pmd unshare.
-> 
-> Here the simplest solution to make it safe is to move the swap handling to
-> be after the vma lock being held.  We may need to take the fault mutex on
-> either migration or hwpoison entries now (also the vma lock, but that's
-> really needed), however neither of them is hot path.
-> 
-> Note that the vma lock cannot be released in hugetlb_fault() when the
-> migration entry is detected, because in migration_entry_wait_huge() the
-> pgtable page will be used again (by taking the pgtable lock), so that also
-> need to be protected by the vma lock.  Modify migration_entry_wait_huge()
-> so that it must be called with vma read lock held, and properly release the
-> lock in __migration_entry_wait_huge().
-> 
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   include/linux/swapops.h |  6 ++++--
->   mm/hugetlb.c            | 36 +++++++++++++++---------------------
->   mm/migrate.c            | 25 +++++++++++++++++++++----
->   3 files changed, 40 insertions(+), 27 deletions(-)
-> 
-> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-> index a70b5c3a68d7..b134c5eb75cb 100644
-> --- a/include/linux/swapops.h
-> +++ b/include/linux/swapops.h
-> @@ -337,7 +337,8 @@ extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->   extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->   					unsigned long address);
->   #ifdef CONFIG_HUGETLB_PAGE
-> -extern void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl);
-> +extern void __migration_entry_wait_huge(struct vm_area_struct *vma,
-> +					pte_t *ptep, spinlock_t *ptl);
->   extern void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte);
->   #endif	/* CONFIG_HUGETLB_PAGE */
->   #else  /* CONFIG_MIGRATION */
-> @@ -366,7 +367,8 @@ static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
->   static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->   					 unsigned long address) { }
->   #ifdef CONFIG_HUGETLB_PAGE
-> -static inline void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl) { }
-> +static inline void __migration_entry_wait_huge(struct vm_area_struct *vma,
-> +					       pte_t *ptep, spinlock_t *ptl) { }
->   static inline void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte) { }
->   #endif	/* CONFIG_HUGETLB_PAGE */
->   static inline int is_writable_migration_entry(swp_entry_t entry)
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index c8a6673fe5b4..49f73677a418 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -5824,22 +5824,6 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->   	int need_wait_lock = 0;
->   	unsigned long haddr = address & huge_page_mask(h);
->   
-> -	ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
-> -	if (ptep) {
-> -		/*
-> -		 * Since we hold no locks, ptep could be stale.  That is
-> -		 * OK as we are only making decisions based on content and
-> -		 * not actually modifying content here.
-> -		 */
-> -		entry = huge_ptep_get(ptep);
-> -		if (unlikely(is_hugetlb_entry_migration(entry))) {
-> -			migration_entry_wait_huge(vma, ptep);
-> -			return 0;
-> -		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
-> -			return VM_FAULT_HWPOISON_LARGE |
-> -				VM_FAULT_SET_HINDEX(hstate_index(h));
-> -	}
-> -
->   	/*
->   	 * Serialize hugepage allocation and instantiation, so that we don't
->   	 * get spurious allocation failures if two CPUs race to instantiate
-> @@ -5854,10 +5838,6 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->   	 * Acquire vma lock before calling huge_pte_alloc and hold
->   	 * until finished with ptep.  This prevents huge_pmd_unshare from
->   	 * being called elsewhere and making the ptep no longer valid.
-> -	 *
-> -	 * ptep could have already be assigned via huge_pte_offset.  That
-> -	 * is OK, as huge_pte_alloc will return the same value unless
-> -	 * something has changed.
->   	 */
->   	hugetlb_vma_lock_read(vma);
->   	ptep = huge_pte_alloc(mm, vma, haddr, huge_page_size(h));
-> @@ -5886,8 +5866,22 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
->   	 * fault, and is_hugetlb_entry_(migration|hwpoisoned) check will
->   	 * properly handle it.
->   	 */
-> -	if (!pte_present(entry))
-> +	if (!pte_present(entry)) {
-> +		if (unlikely(is_hugetlb_entry_migration(entry))) {
-> +			/*
-> +			 * Release fault lock first because the vma lock is
-> +			 * needed to guard the huge_pte_lockptr() later in
-> +			 * migration_entry_wait_huge().  The vma lock will
-> +			 * be released there.
-> +			 */
-> +			mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-> +			migration_entry_wait_huge(vma, ptep);
-> +			return 0;
+Document hugetlb's use of a zero compound order so support for zero
+orders is not removed from folio_set_compound_order().
 
-Oh, but now (and also one other, pre-existing case, above)
-hugetlb_fault() is returning with the vma lock held. This is in contrast
-with most of the rest of the function, which takes great care to release
-locks before returning.
+Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+Suggested-by: Muchun Song <songmuchun@bytedance.com>
+---
+This can be folded into f2b67a51d0ef6871d4fb0c3e8199f278112bd108
+mm: add folio dtor and order setter functions
 
-Which makes this new case really quite irregular and makes the overall
-locking harder to follow. It would be ideal to avoid doing this! But at
-the very least, there should be a little note above hugetlb_fault(),
-explaining this deviation and how it fits in with the locking rules.
+ include/linux/mm.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Do we really have to structure it this way, though?
-
-thanks,
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 443d496949a8..cd8508d728f1 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -999,9 +999,16 @@ static inline void set_compound_order(struct page *page, unsigned int order)
+ #endif
+ }
+ 
++/*
++ * folio_set_compound_order is generally passed a non-zero order to
++ * initialize a large folio.  However, hugetlb code abuses this by
++ * passing in zero when 'dissolving' a large folio.
++ */
+ static inline void folio_set_compound_order(struct folio *folio,
+ 		unsigned int order)
+ {
++	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
++
+ 	folio->_folio_order = order;
+ #ifdef CONFIG_64BIT
+ 	folio->_folio_nr_pages = order ? 1U << order : 0;
 -- 
-John Hubbard
-NVIDIA
-
-> +		} else if (unlikely(is_hugetlb_entry_hwpoisoned(entry)))
-> +			ret = VM_FAULT_HWPOISON_LARGE |
-> +			    VM_FAULT_SET_HINDEX(hstate_index(h));
->   		goto out_mutex;
-> +	}
->   
->   	/*
->   	 * If we are going to COW/unshare the mapping later, we examine the
-> diff --git a/mm/migrate.c b/mm/migrate.c
-> index 48584b032ea9..d14f1f3ab073 100644
-> --- a/mm/migrate.c
-> +++ b/mm/migrate.c
-> @@ -333,24 +333,41 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
->   }
->   
->   #ifdef CONFIG_HUGETLB_PAGE
-> -void __migration_entry_wait_huge(pte_t *ptep, spinlock_t *ptl)
-> +void __migration_entry_wait_huge(struct vm_area_struct *vma,
-> +				 pte_t *ptep, spinlock_t *ptl)
->   {
->   	pte_t pte;
->   
-> +	/*
-> +	 * The vma read lock must be taken, which will be released before
-> +	 * the function returns.  It makes sure the pgtable page (along
-> +	 * with its spin lock) not be freed in parallel.
-> +	 */
-> +	hugetlb_vma_assert_locked(vma);
-> +
->   	spin_lock(ptl);
->   	pte = huge_ptep_get(ptep);
->   
-> -	if (unlikely(!is_hugetlb_entry_migration(pte)))
-> +	if (unlikely(!is_hugetlb_entry_migration(pte))) {
->   		spin_unlock(ptl);
-> -	else
-> +		hugetlb_vma_unlock_read(vma);
-> +	} else {
-> +		/*
-> +		 * If migration entry existed, safe to release vma lock
-> +		 * here because the pgtable page won't be freed without the
-> +		 * pgtable lock released.  See comment right above pgtable
-> +		 * lock release in migration_entry_wait_on_locked().
-> +		 */
-> +		hugetlb_vma_unlock_read(vma);
->   		migration_entry_wait_on_locked(pte_to_swp_entry(pte), NULL, ptl);
-> +	}
->   }
->   
->   void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte)
->   {
->   	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->vm_mm, pte);
->   
-> -	__migration_entry_wait_huge(pte, ptl);
-> +	__migration_entry_wait_huge(vma, pte, ptl);
->   }
->   #endif
->   
+2.38.1
 
