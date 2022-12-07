@@ -2,144 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97D8645E7A
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC086645E80
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiLGQMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:12:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S229486AbiLGQNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:13:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiLGQL7 (ORCPT
+        with ESMTP id S229479AbiLGQNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:11:59 -0500
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E3422AC75;
-        Wed,  7 Dec 2022 08:11:58 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5120D5803C1;
-        Wed,  7 Dec 2022 11:11:57 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Wed, 07 Dec 2022 11:11:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1670429517; x=1670436717; bh=TEYFS/6gZa
-        DWc2dblU5iUytEgOwH+PjKNL3XF1HvRjU=; b=cs53TPq2aKVUc/54sdr6wrQJ6/
-        sTylapB4ECbP99K5rPXD/P+HwtDQTRwedGcP4op1DnSC6/EXWA5w7/AaERO0CqOP
-        bVmzP/ZS6ToEMJ/anbsvNy/WDndoQsVLaZ12ed5n3bY+Vp1GKGiQY4Mp8fxrRw0U
-        8PiGUU1u2kRyPk5zUZNpf4kwK+X9/zDe1bbCDaD/FvtSrsyg6DydyseOLSkFiOzk
-        HWL4TBkjzM9+MA6fN00FAJOLjesJLM9ik2WIu7ogM0vyV0hZEL68A+tyn/O0PUb9
-        W9eUFeqZs6vA0d2RP37Rj/Rxe0R3Q9lGPFmpvl+u3sBA7cy+jaP70pnuhPxg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1670429517; x=1670436717; bh=TEYFS/6gZaDWc2dblU5iUytEgOwH
-        +PjKNL3XF1HvRjU=; b=OZ6xj64jvFJ+ccr2+ELVBBlpfPAaPAY3DphauI71FgMd
-        KxqgrbQurGdB7DNhZx06gw9PKOURZyKFMSMF9ihBZF1QETX4EHhSN+o2hgPRYGq0
-        +3nSyBTQjfkcjWalROC19CHF6Ve8HFI5bRhqI8ITk9OJBDsKvxNycfdvcZyqoeAM
-        wGsTRkSf2oKGsivCa6zJT1DxOqqKXouYztfjWRfkBbVTgyZNSNx5J6DOZtwNfKyv
-        /bvxTElb9cXqilFKgK0+FkadRAog1Wd7HxzWJkg2+SuDV90E1E4w14WksdhLEll/
-        7ZVxokjTOocI9bOk+F3imkbU7O5+lOtlQBd39yewDw==
-X-ME-Sender: <xms:TLuQY6jxrRX76Sfo6zcqdzhjgOx-u-DVuvGRmUvkMcrZ_llLqifB-w>
-    <xme:TLuQY7DwAkHw6ATcYa-tEGkEh6sp9FdZOR1D-UPG3yUq68hi_EfCk9LW7kI_8bvfn
-    fWqwwfPolMLvvS_1ys>
-X-ME-Received: <xmr:TLuQYyHzHsye05U_uFppho6SxxQewvcycEAYbqmhC_QxAryaTAmCAU2GfLsRzNov2wNzR6tXFWa9_WWVEMx8mT5wUQW2sO7AyhXZi_KsTGHMqg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudekgdekgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
-    ffdunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:TLuQYzSX7LwGPf3qOKl-_mgQdgT8SFnrpSs5UtcJQcIRigDD8S1DvQ>
-    <xmx:TLuQY3zdyLjU321g6mIVtkQEEXOcwGQAMumek5T1lBckGt_GwOVdgQ>
-    <xmx:TLuQYx5SultAK7aZz5U1dKZoDPqCkZPOHvFgZkuFMzsq8-OyplLhLg>
-    <xmx:TbuQYyI8abNlVCW1NSf6kZ8Ur3xaFFtlgmhIKhDvgL78eRjIure5IA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 7 Dec 2022 11:11:55 -0500 (EST)
-Date:   Wed, 7 Dec 2022 17:11:54 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 18/20] drm/vc4: tests: Fail the current test if we
- access a register
-Message-ID: <20221207161154.clgmuweddljvco5n@houat>
-References: <20221123-rpi-kunit-tests-v3-0-4615a663a84a@cerno.tech>
- <20221123-rpi-kunit-tests-v3-18-4615a663a84a@cerno.tech>
- <51fb1fdd-edf0-b2a3-0573-76a9101adfb3@igalia.com>
+        Wed, 7 Dec 2022 11:13:11 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D448529C9D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 08:13:10 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso1917786pjt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 08:13:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mpxR1PTMWS3Amx0aRq58+f4tsWCZcZnYsG2feZry+d0=;
+        b=Cp3yXXnkeblAnu8W1rSv0WkmnPoliQNXcW6cVlxwBtomn1Wyoaf7J/JOFXJDTGzk6l
+         v3F9czRTh0qbK7/gmEdURTw/IK9A4R3zZItuBs4i2q8Bzs2aE9aJD3rQ24FbSubDYv9v
+         QSRlS72u4Lj2EgOzZnkIsN0S05aIAYddH3er22NRP/2ZmGmzu1ISqyUn+EsOeBeCUWMW
+         U75FwcOLTVqbTMTYOKTekhpAAhruuVlwbLZZoQ5n9cpFLooc6PA/MS4+taOM8QoNe43U
+         wkLmHyla03eh9NYDBm7HNzn6Y6Liz/7dDIFrrPzvudDs6MFJwVKZQR0dW/+cHlvnDg2e
+         vXzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mpxR1PTMWS3Amx0aRq58+f4tsWCZcZnYsG2feZry+d0=;
+        b=11WjmAOrwVxNfzpncrMy/jv0C5BDGA6ph45V+uu8c3bI23sqwTZNsuwwAm6eEe5pYw
+         dBbuMCk1NjHLjDajHjNLKqi4vpxUdA4Rcslst6fHk64/VYCWr2BiicbJW8jzofjcAsvF
+         J1qz5otexdLErYUnz7nTBYXCxoc1cWzf+z91fsNUeTt6Pz3wzfahCvf6KriPFc/QyU9/
+         Cgxo+sdgbQC6xEgrrYsry+ZiV/i2fpJb6qHSLNWII/UZ6v9bYP+28Bm9xwWPCn0ZKq6v
+         1kNKTJMsy5gNTXn5Z9j5FH4dzkvJylGTPcGd5BGvjBoeqFkR8ZAx1iyeoViwjeA0hPQE
+         ZK9Q==
+X-Gm-Message-State: ANoB5pnlM8qqQuN2ng34d6jgzWQeGi8wOaVFmv5RdasqydI7Tyyn/lsB
+        2/PbUIS8G3t1DU+3pfGhMZAhjQ==
+X-Google-Smtp-Source: AA0mqf4lFybpW2Ej0EN6IrV8xrgLjwNbPBI5T5JN0hhEHYdw0y7sXW25tuvI7yxwT9O96Zgf8atKKw==
+X-Received: by 2002:a05:6a21:9996:b0:a4:efde:2ed8 with SMTP id ve22-20020a056a21999600b000a4efde2ed8mr1710800pzb.0.1670429590170;
+        Wed, 07 Dec 2022 08:13:10 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id m5-20020a63ed45000000b0047829d1b8eesm11654097pgk.31.2022.12.07.08.13.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 08:13:09 -0800 (PST)
+Date:   Wed, 7 Dec 2022 16:13:06 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Adamos Ttofari <attofari@amazon.de>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nikita Leshenko <nikita.leshchenko@oracle.com>,
+        Liran Alon <liran.alon@oracle.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Radim =?utf-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: x86: ioapic: Fix level-triggered EOI and userspace
+ IOAPIC reconfigure race
+Message-ID: <Y5C7kja3slowNfgT@google.com>
+References: <20221207091324.89619-1-attofari@amazon.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zqyddbg4vv7dqu6f"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <51fb1fdd-edf0-b2a3-0573-76a9101adfb3@igalia.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221207091324.89619-1-attofari@amazon.de>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Dec 07, 2022, Adamos Ttofari wrote:
+> When split-irqchip is used KVM uses ioapic_handled_vectors to identify
+> which vectors require an exit to userspace IOAPIC. Unfortunately, when the
+> IOAPIC is reconfigured while the interrupt is being handled, it will use
+> the newest configuration; therefore, the EOI will not be delivered to
+> IOAPIC.
+> 
+> A previous commit 0fc5a36dd6b3
 
---zqyddbg4vv7dqu6f
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+No need for "A previous", the fact that there's a stable commit hash means it
+happened in the past.
 
-Hi Ma=EDra,
+> ("KVM: x86: ioapic: Fix level-triggered EOI and IOAPIC reconfigure race")
+> fixed the race for kernel ioapic, but the issue still persists for
 
-Thanks for your review!
+s/ioapic/IOAPIC to be consistent, and because the I/O APIC is a proper thing.
 
-On Wed, Dec 07, 2022 at 11:26:13AM -0300, Ma=EDra Canal wrote:
-> On 12/1/22 12:11, Maxime Ripard wrote:
-> > Accessing a register when running under kunit is a bad idea since our
-> > device is completely mocked.
-> >=20
-> > Fail the current test if we ever access any of our hardware registers.
-> >=20
-> > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->=20
-> Reviewed-by: Ma=EDra Canal <mcanal@igalia.com>
->=20
-> Just a small nit: I believe that macros with multiple statements should be
-> enclosed in a do-while block [1], even READ macros. I saw that you enclos=
-ed
-> the WRITE macros on a do-while block, but not the READ macros.
+> userspace IOAPIC:
+> 
+> 1) Userspace IOAPIC sends a level triggered interrupt to VCPU0.
+> 2) VCPU0's handler reconfigures the IOAPIC to route the interrupts to
+>    VCPU1. (This can cause userspace IOAPIC to commit a new routing table,
+>    eventually leading KVM to unset the vector in ioapic_handled_vectors)
+> 3) VCPU0 triggers an EOI, and it's not delivered to userspace IOAPIC
+>    because the vector bit is not set in ioapic_handled_vectors.
+> 4) The loss of EOI, leaves remote_irr in IOAPIC set. Eventually blocking
+>    new interrupts.
+> 
+> To avoid the above scenario, we
 
-This is on purpose: do-while blocks don't return a value, but ({ ... })
-blocks do. So we can do a write macros with a do-while, but can't for
-read since we expect to get a value back.
+Please avoid pronouns in shortlogs, changelogs, and comments, as pronouns are
+often ambiguous.  "it" and "they" are ok if the thing(s) being referred to is
+a/the subject and was recently introduced/referenced, e.g. in the same sentence,
+but "we", "us", "I", and "me" should never be used.
 
-Maxime
+> should apply a similar fix like
 
---zqyddbg4vv7dqu6f
-Content-Type: application/pgp-signature; name="signature.asc"
+State what the patch actually does, not what it "should" or "might" do.
 
------BEGIN PGP SIGNATURE-----
+> commit 0fc5a36dd6b3 ("KVM: x86: ioapic: Fix level-triggered EOI and IOAPIC
+> reconfigure race") Which
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY5C7SgAKCRDj7w1vZxhR
-xS7mAP9bKwgLyqEhbFvH4crEyk/rKt4WWQzQ53q0+mdYj8Ke2wEAna4d7Vv87Jfa
-nISBFEINS8khtUTgsX0GgF+ipLJnGQ0=
-=6CdP
------END PGP SIGNATURE-----
+Lack of punctuation, followed by random capitalization.
 
---zqyddbg4vv7dqu6f--
+> is to add all pending and running vectors to ioapic_handled_vectors.
+
+Please describe what this actually does (intercepts EOI for the relevant vectors).
+
+For the changelog as a whole, some maintainers/subsystems prefer leading with the
+"why", but I strongly prefer that changelogs state what the patch actually does
+and then provide the background/justification.
+
+Copy-pasting from a prior discussion[*]:
+
+ : To some extent, it's a personal preference, e.g. I
+ : find it easier to understand the details (why something is a problem) if I have
+ : the extra context of how a problem is fixed (or: what code was broken).
+ : 
+ : But beyond personal preference, there are less subjective reasons for stating
+ : what a patch does before diving into details.  First and foremost, what code is
+ : actually being changed is the most important information, and so that information
+ : should be easy to find.  Changelogs that bury the "what's actually changing" in a
+ : one-liner after 3+ paragraphs of background make it very hard to find that information.
+ : 
+ : Maybe for initial review one could argue that "what's the bug" is more important,
+ : but for skimming logs and git archeology, the gory details matter less and less.
+ : E.g. when doing a series of "git blame", the details of each change along the way
+ : are useless, the details only matter for the culprit; I just want to quickly
+ : determine whether or not a commit might be of interest.
+ : 
+ : Another argument for stating "what's changing" first is that it's almost always
+ : possible to state "what's changing" in a single sentence.  Conversely, all but the
+ : most simple bugs require multiple sentences or paragraphs to fully describe the
+ : problem.  If both the "what's changing" and "what's the bug" are super short then
+ : the order doesn't matter.  But if one is shorter (almost always the "what's changing),
+ : then covering the shorter one first is advantageous because it's less of an
+ : inconvenience for readers/reviewers that have a strict ordering preference.  E.g.
+ : having to skip one sentence to get to the stuff you care about is less painful than
+ : me having to skip three paragraphs to get to the stuff that I care about.
+
+And similar to the suggestion that was made in that discussion, the changelog for
+this patch could be:
+
+  When scanning userspace IOAPIC entries, intercept EOI for level-triggered
+  IRQs if the current vCPU has a pending and/or in-service IRQ for the
+  vector in its local API, even if the vCPU doesn't match the new entry's
+  destination.  This fixes a race between userspace IOAPIC reconfiguration
+  and IRQ delivery that results in the vector's bit being left set in the
+  remote IRR due to the eventual EOI not being forwarded to the userspace
+  IOAPIC.
+
+  Commit 0fc5a36dd6b3 ("KVM: x86: ioapic: Fix level-triggered EOI and IOAPIC
+  reconfigure race") fixed the in-kernel IOAPIC, but not the userspace
+  IOAPIC configuration, which has a similar race.
+
+  <wall of text>
+
+[*] https://lore.kernel.org/all/YurKx+gFAWPvj35L@google.com
+
+> Fixes: 0fc5a36dd6b3 ("KVM: x86: ioapic: Fix level-triggered EOI and IOAPIC reconfigure race")
+> 
+> Signed-off-by: Adamos Ttofari <attofari@amazon.de>
+> ---
+>  arch/x86/kvm/irq_comm.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/irq_comm.c b/arch/x86/kvm/irq_comm.c
+> index 0687162c4f22..36d65997a212 100644
+> --- a/arch/x86/kvm/irq_comm.c
+> +++ b/arch/x86/kvm/irq_comm.c
+> @@ -426,8 +426,8 @@ void kvm_scan_ioapic_routes(struct kvm_vcpu *vcpu,
+>  			kvm_set_msi_irq(vcpu->kvm, entry, &irq);
+>  
+>  			if (irq.trig_mode &&
+> -			    kvm_apic_match_dest(vcpu, NULL, APIC_DEST_NOSHORT,
+> -						irq.dest_id, irq.dest_mode))
+> +			    (kvm_apic_match_dest(vcpu, NULL, APIC_DEST_NOSHORT, irq.dest_id,
+> +				 irq.dest_mode) || kvm_apic_pending_eoi(vcpu, irq.vector)))
+
+This formatting, or lack thereof, is extremely difficult to read.  It also
+unnecessarily runs a fair bit over the 80 char soft limit.
+
+			if (irq.trig_mode &&
+			    (kvm_apic_match_dest(vcpu, NULL, APIC_DEST_NOSHORT,
+			    			 irq.dest_id, irq.dest_mode) ||
+			     kvm_apic_pending_eoi(vcpu, irq.vector)))
+				__set_bit(irq.vector, ioapic_handled_vectors);
