@@ -2,139 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4899645995
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:03:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE447645993
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:03:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiLGMDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 07:03:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S230176AbiLGMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 07:03:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiLGMDj (ORCPT
+        with ESMTP id S229952AbiLGMDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 07:03:39 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E6425E9F;
-        Wed,  7 Dec 2022 04:03:36 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 7 Dec 2022 07:03:20 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E60248E2;
+        Wed,  7 Dec 2022 04:03:18 -0800 (PST)
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NRwsw2Rjvz4xVH;
-        Wed,  7 Dec 2022 23:03:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670414612;
-        bh=SUeN5NLWNEE9mx0glx2Prtl5W/yRPcJJJmfxMVdj4jU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jYhRAGxbLi8Bn0UGkotCn0sXxP2lE9iowK5Em2q425yqQ6LW59TdgMieaWEIEZGDS
-         4JkVAUGevu7Jf1l8zZbqtmcv+UZPwN4cjH/pyuQEKu/dCfysAejHYNUBXYMlniIApV
-         qwBIUzHhcR3LdADMjgiws/FKV7zMdLyVYMCF7HnZQuqIWCh9vMUKDR4P/XvIEbZSd8
-         tmziJJnlUHk1PHHnO1SJtXsmfBNl39ewJsAf4VKinCyUfPAE8ctCljGHWFLtHcSagW
-         WkbZEhmClLvLPc8gJhrDNXGgYDTCdGafQsjZnABB+aa9YbmnPMgyQ+FAJQu8QlhU2n
-         vxH5ZdS1v+qcw==
-Date:   Wed, 7 Dec 2022 23:03:15 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the
- v4l-dvb-next tree
-Message-ID: <20221207212220.66670e30@canb.auug.org.au>
-In-Reply-To: <e250c025-65c4-1760-bcfe-7efb116b5c9d@xs4all.nl>
-References: <20221207075657.39b5552c@canb.auug.org.au>
- <e250c025-65c4-1760-bcfe-7efb116b5c9d@xs4all.nl>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 476DF21C43;
+        Wed,  7 Dec 2022 12:03:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670414597; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m3WRQ0AODchCGFbUuvDHlnmympYC9bYtk3pQXjwDDvE=;
+        b=1pHZp4UnQLr1K623RgYtry6plRMatvIS+nTMO8gKhIkXB5jxLPXMD6BpzswcetjtxE7Z93
+        nbSmT7TdqA9pV9qUFi0XJM7Ha651lC8CDv3WTfstz+ux5e8C87dBK9XuGDXigcOxHJKA/4
+        pZjru+8NnPpCAn6FAsWf3aeDST2kpd8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670414597;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m3WRQ0AODchCGFbUuvDHlnmympYC9bYtk3pQXjwDDvE=;
+        b=D5ZSM/+fDrYU+e5q0FxCFhV0p7CANb17nmKFr7I6z9ldALNjDj1AyBDm7NcaCcZ2989ACl
+        GVBHlBQQBeemtVCw==
+Received: from imap1.suse-dmz.suse.de (imap1.suse-dmz.suse.de [192.168.254.73])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap1.suse-dmz.suse.de (Postfix) with ESMTPS id 188B5136B4;
+        Wed,  7 Dec 2022 12:03:17 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap1.suse-dmz.suse.de with ESMTPSA
+        id DuPyBQWBkGN4PwAAGKfGzw
+        (envelope-from <jack@suse.cz>); Wed, 07 Dec 2022 12:03:17 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 658E0A0725; Wed,  7 Dec 2022 13:03:16 +0100 (CET)
+Date:   Wed, 7 Dec 2022 13:03:16 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     "yebin (H)" <yebin10@huawei.com>
+Cc:     Jan Kara <jack@suse.cz>, Ye Bin <yebin@huaweicloud.com>,
+        tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] ext4: add primary check extended attribute inode
+ in ext4_xattr_check_entries()
+Message-ID: <20221207120316.nzyuxofwlvbmqhsk@quack3>
+References: <20221207074043.1286731-1-yebin@huaweicloud.com>
+ <20221207074043.1286731-3-yebin@huaweicloud.com>
+ <20221207111437.birh6zujw4wauvhu@quack3>
+ <63907B8A.9030800@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xo+/OdhNU7blp0uI5XJQ6y=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <63907B8A.9030800@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/xo+/OdhNU7blp0uI5XJQ6y=
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-
-Hi Hans,
-
-On Wed, 7 Dec 2022 11:08:37 +0100 Hans Verkuil <hverkuil-cisco@xs4all.nl> w=
-rote:
+On Wed 07-12-22 19:39:54, yebin (H) wrote:
+> 
+> 
+> On 2022/12/7 19:14, Jan Kara wrote:
+> > On Wed 07-12-22 15:40:39, Ye Bin wrote:
+> > > From: Ye Bin <yebin10@huawei.com>
+> > > 
+> > > Add primary check for extended attribute inode, only do hash check when read
+> > > ea_inode's data in ext4_xattr_inode_get().
+> > > 
+> > > Signed-off-by: Ye Bin <yebin10@huawei.com>
+> > ...
+> > 
+> > > +static inline int ext4_xattr_check_extra_inode(struct inode *inode,
+> > > +					       struct ext4_xattr_entry *entry)
+> > > +{
+> > > +	int err;
+> > > +	struct inode *ea_inode;
+> > > +
+> > > +	err = ext4_xattr_inode_iget(inode, le32_to_cpu(entry->e_value_inum),
+> > > +				    le32_to_cpu(entry->e_hash), &ea_inode);
+> > > +	if (err)
+> > > +		return err;
+> > > +
+> > > +	if (i_size_read(ea_inode) != le32_to_cpu(entry->e_value_size)) {
+> > > +		ext4_warning_inode(ea_inode,
+> > > +                           "ea_inode file size=%llu entry size=%u",
+> > > +                           i_size_read(ea_inode),
+> > > +			   le32_to_cpu(entry->e_value_size));
+> > > +		err = -EFSCORRUPTED;
+> > > +	}
+> > > +	iput(ea_inode);
+> > > +
+> > > +	return err;
+> > > +}
+> > > +
+> > >   static int
+> > > -ext4_xattr_check_entries(struct ext4_xattr_entry *entry, void *end,
+> > > -			 void *value_start)
+> > > +ext4_xattr_check_entries(struct inode *inode, struct ext4_xattr_entry *entry,
+> > > +			 void *end, void *value_start)
+> > >   {
+> > >   	struct ext4_xattr_entry *e = entry;
+> > > @@ -221,6 +247,10 @@ ext4_xattr_check_entries(struct ext4_xattr_entry *entry, void *end,
+> > >   			    size > end - value ||
+> > >   			    EXT4_XATTR_SIZE(size) > end - value)
+> > >   				return -EFSCORRUPTED;
+> > > +		} else if (entry->e_value_inum) {
+> > > +			int err = ext4_xattr_check_extra_inode(inode, entry);
+> > > +			if (err)
+> > > +				return err;
+> > >   		}
+> > >   		entry = EXT4_XATTR_NEXT(entry);
+> > >   	}
+> > So I was thinking about this. It is nice to have the inode references
+> > checked but OTOH this is rather expensive for a filesystem with EA inodes -
+> > we have to lookup and possibly load EA inodes from the disk although they
+> > won't be needed for anything else than the check. Also as you have noticed
+> > we do check whether i_size and xattr size as recorded in xattr entry match
+> > in ext4_xattr_inode_iget() which gets called once we need to do anything
+> > with the EA inode.
+> > 
+> > Also I've checked and we do call ext4_xattr_check_block() and
+> > xattr_check_inode() in ext4_expand_extra_isize_ea() so Ted's suspicion that
+> > the problem comes from not checking the xattr entries before moving them
+> > from the inode was not correct.
+> > 
+> > So to summarize, I don't think this and the following patch is actually
+> > needed and brings benefit that would outweight the performance cost.
+> > 
+> > 								Honza
+> 
+> Yes, I agree with you.
+> In ext4_ xattr_ check_ Entries () simply verifies the length of the extended
+> attribute with
+> ea_inode. If the previous patch is not merged, EXT4_ XATTR_ SIZE_ MAX is
+> much larger
+> than the actual constraint value. Data verification can only be postponed
+> until the ea_inode
+> is read.
 >
-> On 12/6/22 21:56, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Commits
-> >=20
-> >   85abf40b56af ("media: ipu3-cio2: make the bridge depend on i2c")
-> >   ca61babacbe8 ("media: MAINTAINERS: Add Hans de Goede as staging/atomi=
-sp maintainer")
-> >=20
-> > are missing a Signed-off-by from their committer.
-> >  =20
->=20
-> They have a SoB, but there is a 'Link:' tag right before that:
->=20
-> commit 85abf40b56af5f3130a4f9dcdb808c7feb64e083
-> Author: Adam Borowski <kilobyte@angband.pl>
-> Date:   Fri Sep 16 00:33:18 2022 +0100
->=20
->     media: ipu3-cio2: make the bridge depend on i2c
->=20
->     drivers/media/pci/intel/ipu3/cio2-bridge.c: In function =E2=80=98cio2=
-_bridge_unregister_sensors=E2=80=99:
->     drivers/media/pci/intel/ipu3/cio2-bridge.c:258:17: error: implicit de=
-claration of function =E2=80=98i2c_unregister_device=E2=80=99; did you mean=
- =E2=80=98spi_unregister_device=E2=80=99? [-Werror=3Dimplicit-function-decl=
-aration]
->       258 |                 i2c_unregister_device(sensor->vcm_i2c_client);
->           |                 ^~~~~~~~~~~~~~~~~~~~~
->           |                 spi_unregister_device
->=20
->     Link: https://lore.kernel.org/linux-media/S230142AbiJTWql/20221020224=
-641Z+958@vger.kernel.org
->     Signed-off-by: Adam Borowski <kilobyte@angband.pl>
->     Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->=20
-> commit ca61babacbe8ada7a0671f910c22b8758f481c0c
-> Author: Hans de Goede <hdegoede@redhat.com>
-> Date:   Wed Nov 23 16:14:47 2022 +0000
->=20
->     media: MAINTAINERS: Add Hans de Goede as staging/atomisp maintainer
->=20
->     Add myself as maintainer for the drivers/staging/media/atomisp code.
->=20
->     Link: https://lore.kernel.org/linux-media/20221123161447.15834-1-hdeg=
-oede@redhat.com
->     Signed-off-by: Hans de Goede <hdegoede@redhat.com>
->     Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
->     Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
->=20
-> Could that be the cause? checkpatch doesn't complain about this.
+> So your suggestion is to modify EXT4_ XATTR_ SIZE_ MAX Or defer data
+> verification until the ea_inode is read?
 
-They have no SOB line from you and you are the one who committed them.
+My suggestion would be to take patches 1,4,5,6 from your series. So reduce
+EXT4_XATTR_SIZE_MAX (if Ted agrees), use kvmalloc() instead of kmalloc(),
+do the cleanup of funtion names, and fix the inode refcount leak.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xo+/OdhNU7blp0uI5XJQ6y=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmOQgQMACgkQAVBC80lX
-0Gxu4wf9HbHT2hMXbDlhb6FwDFzpdWQ/LMA5HSpW5dILV9U1zO7faQsn7Blf4lUC
-ZGROQAYefTQ9w8Rk968prJYkEhQgnzF+jx4O8Fuxsci6cf/TI764dDt4pS27qb/U
-X5qfSCALyp+WkhvRtYjf5zAYxS1y/RYLhNAFpUfZos00iXdVvQZqa+UGhTyBfQwn
-L+L4zmAs09kBCJ5RyQra1cXP/gpZ0vvarq73K6Dn/GLVrbgFhdNrBIeLx2G+z8Jr
-0a06Ujl4Fy6ufgg/WhsyCxMcJFQ78dif5vV/6bZmXimdSxjcjQg+eFbkZW0yEOGo
-hwZpL0BUqvpusqqojDv4iXic6ibWuQ==
-=q5Ke
------END PGP SIGNATURE-----
-
---Sig_/xo+/OdhNU7blp0uI5XJQ6y=--
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
