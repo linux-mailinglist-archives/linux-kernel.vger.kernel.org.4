@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7C3064604D
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 830BC646050
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 18:35:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiLGRc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 12:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S229944AbiLGRfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 12:35:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiLGRc4 (ORCPT
+        with ESMTP id S229479AbiLGRfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 12:32:56 -0500
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12905E9DD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:32:55 -0800 (PST)
-Received: by mail-pj1-x1031.google.com with SMTP id fa4-20020a17090af0c400b002198d1328a0so4220128pjb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:32:55 -0800 (PST)
+        Wed, 7 Dec 2022 12:35:22 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC445B869
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 09:35:19 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bx10so29168910wrb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 09:35:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gSytGWam2RsfZ8LDTXkI5HjY+j/pAQztbn0XEeCsCwU=;
-        b=l/guce6zU5tkdP1Fsai1HdMH375B1J1+FAu5avObfFwBew8DKDDWNueXLdA0wcnyRu
-         D+GmIizw1V5vReqrgZxwuA9l2gk4ZEc4gKxsm1GOWpsp26T38RliO4hYAOf80uqf544g
-         IPhfFnrW7vmozoSMxVZEUlSryLxy0ApW9IBVudYmg85F288FD57ZyHxy0wC1vH14aE7H
-         etGnPX09BP2AaxGchWVP6JqEUXpz/8f9FYrfpHtJw3kUNe0+nXt5vPJjPdKhpk/Qc3p9
-         nse6plPuR5xzqBXPsmxoSLUIk6B7FzsICHCRaUYXpiqS/l5YsMfSapTzNDjncaCBI040
-         ZlKA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LHXYK1/3tzOhQsGRwpt3x3TUmp6tmlA5LqS9xLShKD4=;
+        b=KhcbmJgdXL8XjDRNH4wpe35yPewMbwxm9StA8DrY8r4AxwuzF/qEyGUm3rNCUK0U1B
+         MnjqgA7FXnJlToSi+9jS2R2TdU0/aL+n+0GcZuvjMdmKJohXnyrgg/j0yGWO2Q5sNmd5
+         hBfeZkmDaemqx9Uj6JQbc/N3Xh04WWZtI7oP2IVeyNZZBnn/dXcR2Yrz9l6LfONIpc0d
+         jkdzvrzjiQTbGaa+AiH+i9IuUor0aOq4r+Vvqhk0fzCeh8ny5DnF73Djj1lpQJyvOlU1
+         CHxCtNjQ67a5oirxIwN28QZUknejMfcS5HVnlTdQQqZOef2Dh/BehDQ4NqkJled52LyM
+         qHcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gSytGWam2RsfZ8LDTXkI5HjY+j/pAQztbn0XEeCsCwU=;
-        b=D/+JQcCMl/Nci71VCq7FpHtKvGxrh8EgurTr+5HRSe3MPXl2jL2KipG9P4+GYGSjkD
-         IXhQMMDO6NJkkosAhQitsz1yAjaCrFSyvPUrbPyKfRuuTIj3OMNbaczHCkX0asNzKiGw
-         hTxpdMFnO+tI6Fqivg+zcARYNuHO+AAWlZwS5X9WN2sH7yjmK9slHMJpZKWcLOaMcJ1R
-         DlfIYXueZzYcC7YR15rJ9/lnmzXiVwOatN+CbVyo4mqgVifG21yxObSyakXAKexkHmhM
-         TeiITt6rCy7n+jPE8jnEDUS0qs3rJ5b5k8VRxCynOtNOLypbXLXO9lu35bSifWJgELRu
-         XWOA==
-X-Gm-Message-State: ANoB5pn0mxTT0iLX619iql8nC8Uqz/ZKGe238Vrd/72GvPiKwYZnXDqH
-        oxmlvzTZWWuTT0lh8JvkLTOqdg==
-X-Google-Smtp-Source: AA0mqf4YBY5cMi6mJjSx24Uxe6LWKvbJ3oUClYq/wCU+BgOOCsXJMgMFHSm/JA3aK2fI+/4tfLy9wg==
-X-Received: by 2002:a05:6a20:9597:b0:a3:49d2:9504 with SMTP id iu23-20020a056a20959700b000a349d29504mr1637716pzb.3.1670434375344;
-        Wed, 07 Dec 2022 09:32:55 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t3-20020aa79463000000b00576b0893ecasm7844765pfq.46.2022.12.07.09.32.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 09:32:54 -0800 (PST)
-Date:   Wed, 7 Dec 2022 17:32:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH kvm-unit-tests] x86/pmu: Add Intel Guest Transactional
- (commited) cycles testcase
-Message-ID: <Y5DOQ3v2ylWTbGZ7@google.com>
-References: <20221207071506.15733-1-likexu@tencent.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LHXYK1/3tzOhQsGRwpt3x3TUmp6tmlA5LqS9xLShKD4=;
+        b=dL1aVPW64SQJO6jIJEPx7S0/kSX5K0E1u49qPN19dlfqBzAgk8cd0YlXmoHdXUwIJZ
+         /bAV45pnrbMsSUTp1VGW341TYXWq2ynGjWN7eG+aV/jSglM0VEsSQACV4WiotiCd6D8w
+         Zl7vE6Gm04KGtmhQi758PhZYJefJBSZSFnFUBaoJfqYmu0NXpHM3FV5YOhEhZuHS1psx
+         QAUrqNa1vuCNkVuDhr9omk0zQ3oqrPneu4qojn0Na/H3bKb2a57Kwekxl2xRq+Y5m8dQ
+         kQwMlAzBlvQbnBA19grVgDqxI3rCtLmh9w/I1TRPbSCOZMja6g5yRMtMP1LWDlRdrjzs
+         wF2w==
+X-Gm-Message-State: ANoB5pmvLfx3RC/BmsG1Lhpx8vRcZJ8Os2z2DYeKVZxwOIKV59TxVuCx
+        IpfJOpqs8g5cg7j734bSqSxo6oDHF0AE096/hzuJoA+iBf2SHhTt
+X-Google-Smtp-Source: AA0mqf4Ja+gGEZgME+kNtYmtBpivlkvNodc38vquNa5doehZAU30iAaq8a+e3giFkPHCmQt5Lk7lcl2qO947WI4RmXI=
+X-Received: by 2002:a5d:6f0a:0:b0:242:87f3:1de9 with SMTP id
+ ay10-20020a5d6f0a000000b0024287f31de9mr1139832wrb.40.1670434517742; Wed, 07
+ Dec 2022 09:35:17 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207071506.15733-1-likexu@tencent.com>
+References: <20221207053007.336806-1-sandipan.das@amd.com> <20221207053007.336806-5-sandipan.das@amd.com>
+ <CAP-5=fUS37Xqi1x2ZDj48saFu-g5dCvwqg8Vm0DF1V0vuq4tXw@mail.gmail.com> <6675c596-eeb4-3347-ec85-2bd67b970973@amd.com>
+In-Reply-To: <6675c596-eeb4-3347-ec85-2bd67b970973@amd.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 7 Dec 2022 09:35:05 -0800
+Message-ID: <CAP-5=fUTo=fGdLzT0CoQwFw7ULQdegjLevy4_sJf-KG2rkOehA@mail.gmail.com>
+Subject: Re: [PATCH 4/4] perf vendor events amd: Add Zen 4 metrics
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, eranian@google.com,
+        jhladky@redhat.com, ravi.bangoria@amd.com, ananth.narayan@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -73,190 +74,241 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> On Intel platforms with TSX feature, pmu users in guest can collect
-> the commited or total transactional cycles for a tsx-enabled workload,
-> adding new test cases to cover them, as they are not strictly the same
-> as normal hardware events from the KVM implementation point of view.
-> 
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  x86/pmu.c | 73 ++++++++++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 72 insertions(+), 1 deletion(-)
-> 
-> diff --git a/x86/pmu.c b/x86/pmu.c
-> index 72c2c9c..d4c6813 100644
-> --- a/x86/pmu.c
-> +++ b/x86/pmu.c
-> @@ -20,7 +20,7 @@
->  
->  typedef struct {
->  	uint32_t ctr;
-> -	uint32_t config;
-> +	uint64_t config;
->  	uint64_t count;
->  	int idx;
->  } pmu_counter_t;
-> @@ -547,6 +547,76 @@ static void check_emulated_instr(void)
->  	report_prefix_pop();
->  }
->  
-> +#define _XBEGIN_STARTED		(~0u)
-> +
-> +static inline int
+On Tue, Dec 6, 2022 at 10:58 PM Sandipan Das <sandipan.das@amd.com> wrote:
+>
+> On 12/7/2022 11:35 AM, Ian Rogers wrote:
+> > On Tue, Dec 6, 2022 at 9:32 PM Sandipan Das <sandipan.das@amd.com> wrot=
+e:
+> >>
+> >> Add metrics taken from Section 2.1.15.2 "Performance Measurement" in
+> >> the Processor Programming Reference (PPR) for AMD Family 19h Model 11h
+> >> Revision B1 processors.
+> >>
+> >> The recommended metrics are sourced from Table 27 "Guidance for Common
+> >> Performance Statistics with Complex Event Selects".
+> >>
+> >> The pipeline utilization metrics are sourced from Table 28 "Guidance
+> >> for Pipeline Utilization Analysis Statistics". These are new to Zen 4
+> >> processors and useful for finding performance bottlenecks by analyzing
+> >> activity at different stages of the pipeline. Metric groups have been
+> >> added for Level 1 and Level 2 analysis.
+> >>
+> >> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> >> ---
+> >>  .../pmu-events/arch/x86/amdzen4/pipeline.json |  98 +++++
+> >>  .../arch/x86/amdzen4/recommended.json         | 334 +++++++++++++++++=
++
+> >>  2 files changed, 432 insertions(+)
+> >>  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/pipeline.js=
+on
+> >>  create mode 100644 tools/perf/pmu-events/arch/x86/amdzen4/recommended=
+.json
+> >>
+> <snip>
+> >> +  {
+> >> +    "MetricName": "dram_read_data_bytes_for_local_processor",
+> >
+> > nit: Is "bytes" redundant in the name here? It may even be confusing
+> > given the units.
+> >
+>
+> Agreed. I can replace "bytes" with "mbytes" or "megabytes" for these band=
+width metrics.
+>
+> - Sandipan
 
-This should be "unsigned int".  EAX can yield a negative value, e.g. via "XABORT
-0xff", which is why the compiler instrinsics use this explicit, unsigned value
-(that relies on reserved bits in the abort status).
+Perhaps just drop it from the name :-) So,
+dram_read_data_for_local_processor, etc.
 
-> _xbegin(void)
+Thanks,
+Ian
 
-These having nothing to do with the PMU, i.e. belong in processor.h.
-
-The naming is also non-stanard, i.e. drop the underscore.  I assume you're
-trying to match the compiler instrinsics, but that's bound to do more harm than
-good.  Either use the instrinsics or write code that aligns with KUT's style.
-Using instrinsics is probably a bad idea because eventually we'll want to do
-something weird, e.g. provide a bogus fallback address. And having to go lookup
-gcc/clang documentation is rather annoything.
-
-> +{
-> +	int ret = _XBEGIN_STARTED;
-
-Newline after declarations.
-
-> +	asm volatile(".byte 0xc7,0xf8 ; .long 0" : "+a" (ret) :: "memory");
-
-This is just mean.
-
-	unsigned int ret = XBEGIN_STARTED;
-	
-	asm volatile("xbegin 1f\n\t"
-		     "1:\n\t"
-		     : "+a" (ret) :: "memory");
-	return ret;
-
-> +	return ret;
-> +}
-> +
-> +static inline void _xend(void)
-> +{
-> +	asm volatile(".byte 0x0f,0x01,0xd5" ::: "memory");
-
-Like XBEGIN, use the mnemonic.
-
-> +}
-> +
-> +int *ptr;
-
-I'm honestly at a loss for words.
-
-> +static void tsx_fault(void)
-
-s/fault/abort.  Yes, a fault causes an abort, but no fault is ever observed by
-software.  Though I don't quite understand why helpers are needed in the first
-place.
-
-> +{
-> +	int value = 0;
-> +
-> +	ptr = NULL;
-> +	if(_xbegin() == _XBEGIN_STARTED) {
-
-Space after the "if".
-
-> +		value++;
-> +		// causes abort
-> +		*ptr = value;
-
-		/* Generate a non-canonical #GP to trigger ABORT. */
-		(int *)NONCANONICAL) = 0;
-
-> +		_xend();
-
-Why bother with XEND?
-
-> +	}
-> +}
-> +
-> +static void tsx_normal(void)
-> +{
-> +	int value = 0;
-> +
-> +	if(_xbegin() == _XBEGIN_STARTED) {
-> +		value++;
-
-What's the purpose of incrementing an arbitrary value?
-
-> +		_xend();
-
-Does this test rely on the region being successfully committed?  If so, the test
-is guaranteed to be flaky, e.g. due to a host IRQ at the "wrong" time.  Assuming
-success is not required, please add a comment describing the requirements.
-
-> +	}
-> +}
-> +
-> +static void check_tsx_cycles(void)
-> +{
-> +	pmu_counter_t cnt;
-> +	int i;
-> +
-> +	if (!this_cpu_has(X86_FEATURE_RTM) || !this_cpu_has(X86_FEATURE_HLE))
-> +		return;
-> +
-> +	report_prefix_push("TSX cycles");
-> +
-> +	for (i = 0; i < pmu.nr_gp_counters; i++) {
-> +		cnt.ctr = MSR_GP_COUNTERx(i);
-> +
-> +		if (i == 2)
-> +			/* Transactional cycles commited only on gp counter 2 */
-> +			cnt.config = EVNTSEL_OS | EVNTSEL_USR | 0x30000003c;
-> +		else
-> +			/* Transactional cycles */
-> +			cnt.config = EVNTSEL_OS | EVNTSEL_USR | 0x10000003c;
-> +
-> +		start_event(&cnt);
-> +		tsx_fault();
-> +		tsx_normal();
-
-As a above, why bother with helpers?  Can't this just be:
-
-
-		start_event(&cnt);
-
-		/* Generate a non-canonical #GP to trigger ABORT. */
-		if (xbegin() == XBEGIN_STARTED)
-			*(int *)NONCANONICAL = 0;
-
-		/* <comment about what requirements of this code> */
-		if (xbegin() == XBEGIN_STARTED)
-			xend();
-
-		stop_event(&cnt);
-
-> +		stop_event(&cnt);
-> +
-> +		report(cnt.count > 0, "gp cntr-%d", i);
-> +	}
-> +
-> +	report_prefix_pop();
-> +}
-> +
->  static void check_counters(void)
->  {
->  	if (is_fep_available())
-> @@ -559,6 +629,7 @@ static void check_counters(void)
->  	check_counter_overflow();
->  	check_gp_counter_cmask();
->  	check_running_counter_wrmsr();
-> +	check_tsx_cycles();
->  }
->  
->  static void do_unsupported_width_counter_write(void *index)
-> -- 
-> 2.38.1
-> 
+> >> +    "BriefDescription": "DRAM read data bytes for local processor.",
+> >> +    "MetricExpr": "local_processor_read_data_beats_cs0 + local_proces=
+sor_read_data_beats_cs1 + local_processor_read_data_beats_cs2 + local_proce=
+ssor_read_data_beats_cs3 + local_processor_read_data_beats_cs4 + local_proc=
+essor_read_data_beats_cs5 + local_processor_read_data_beats_cs6 + local_pro=
+cessor_read_data_beats_cs7 + local_processor_read_data_beats_cs8 + local_pr=
+ocessor_read_data_beats_cs9 + local_processor_read_data_beats_cs10 + local_=
+processor_read_data_beats_cs11",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "dram_write_data_bytes_for_local_processor",
+> >> +    "BriefDescription": "DRAM write data bytes for local processor.",
+> >> +    "MetricExpr": "local_processor_write_data_beats_cs0 + local_proce=
+ssor_write_data_beats_cs1 + local_processor_write_data_beats_cs2 + local_pr=
+ocessor_write_data_beats_cs3 + local_processor_write_data_beats_cs4 + local=
+_processor_write_data_beats_cs5 + local_processor_write_data_beats_cs6 + lo=
+cal_processor_write_data_beats_cs7 + local_processor_write_data_beats_cs8 +=
+ local_processor_write_data_beats_cs9 + local_processor_write_data_beats_cs=
+10 + local_processor_write_data_beats_cs11",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "dram_read_data_bytes_for_remote_processor",
+> >> +    "BriefDescription": "DRAM read data bytes for remote processor.",
+> >> +    "MetricExpr": "remote_processor_read_data_beats_cs0 + remote_proc=
+essor_read_data_beats_cs1 + remote_processor_read_data_beats_cs2 + remote_p=
+rocessor_read_data_beats_cs3 + remote_processor_read_data_beats_cs4 + remot=
+e_processor_read_data_beats_cs5 + remote_processor_read_data_beats_cs6 + re=
+mote_processor_read_data_beats_cs7 + remote_processor_read_data_beats_cs8 +=
+ remote_processor_read_data_beats_cs9 + remote_processor_read_data_beats_cs=
+10 + remote_processor_read_data_beats_cs11",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "dram_write_data_bytes_for_remote_processor",
+> >> +    "BriefDescription": "DRAM write data bytes for remote processor."=
+,
+> >> +    "MetricExpr": "remote_processor_write_data_beats_cs0 + remote_pro=
+cessor_write_data_beats_cs1 + remote_processor_write_data_beats_cs2 + remot=
+e_processor_write_data_beats_cs3 + remote_processor_write_data_beats_cs4 + =
+remote_processor_write_data_beats_cs5 + remote_processor_write_data_beats_c=
+s6 + remote_processor_write_data_beats_cs7 + remote_processor_write_data_be=
+ats_cs8 + remote_processor_write_data_beats_cs9 + remote_processor_write_da=
+ta_beats_cs10 + remote_processor_write_data_beats_cs11",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "local_socket_upstream_dma_read_data_bytes",
+> >> +    "BriefDescription": "Local socket upstream DMA read data bytes.",
+> >> +    "MetricExpr": "local_socket_upstream_read_beats_iom0 + local_sock=
+et_upstream_read_beats_iom1 + local_socket_upstream_read_beats_iom2 + local=
+_socket_upstream_read_beats_iom3",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "local_socket_upstream_dma_write_data_bytes",
+> >> +    "BriefDescription": "Local socket upstream DMA write data bytes."=
+,
+> >> +    "MetricExpr": "local_socket_upstream_write_beats_iom0 + local_soc=
+ket_upstream_write_beats_iom1 + local_socket_upstream_write_beats_iom2 + lo=
+cal_socket_upstream_write_beats_iom3",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "remote_socket_upstream_dma_read_data_bytes",
+> >> +    "BriefDescription": "Remote socket upstream DMA read data bytes."=
+,
+> >> +    "MetricExpr": "remote_socket_upstream_read_beats_iom0 + remote_so=
+cket_upstream_read_beats_iom1 + remote_socket_upstream_read_beats_iom2 + re=
+mote_socket_upstream_read_beats_iom3",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "remote_socket_upstream_dma_write_data_bytes",
+> >> +    "BriefDescription": "Remote socket upstream DMA write data bytes.=
+",
+> >> +    "MetricExpr": "remote_socket_upstream_write_beats_iom0 + remote_s=
+ocket_upstream_write_beats_iom1 + remote_socket_upstream_write_beats_iom2 +=
+ remote_socket_upstream_write_beats_iom3",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "local_socket_inbound_data_bytes_to_cpu",
+> >> +    "BriefDescription": "Local socket inbound data bytes to the CPU (=
+e.g. read data).",
+> >> +    "MetricExpr": "local_socket_inf0_inbound_data_beats_ccm0 + local_=
+socket_inf1_inbound_data_beats_ccm0 + local_socket_inf0_inbound_data_beats_=
+ccm1 + local_socket_inf1_inbound_data_beats_ccm1 + local_socket_inf0_inboun=
+d_data_beats_ccm2 + local_socket_inf1_inbound_data_beats_ccm2 + local_socke=
+t_inf0_inbound_data_beats_ccm3 + local_socket_inf1_inbound_data_beats_ccm3 =
++ local_socket_inf0_inbound_data_beats_ccm4 + local_socket_inf1_inbound_dat=
+a_beats_ccm4 + local_socket_inf0_inbound_data_beats_ccm5 + local_socket_inf=
+1_inbound_data_beats_ccm5 + local_socket_inf0_inbound_data_beats_ccm6 + loc=
+al_socket_inf1_inbound_data_beats_ccm6 + local_socket_inf0_inbound_data_bea=
+ts_ccm7 + local_socket_inf1_inbound_data_beats_ccm7",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "3.0517578125e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "local_socket_outbound_data_bytes_from_cpu",
+> >> +    "BriefDescription": "Local socket outbound data bytes from the CP=
+U (e.g. write data).",
+> >> +    "MetricExpr": "local_socket_inf0_outbound_data_beats_ccm0 + local=
+_socket_inf1_outbound_data_beats_ccm0 + local_socket_inf0_outbound_data_bea=
+ts_ccm1 + local_socket_inf1_outbound_data_beats_ccm1 + local_socket_inf0_ou=
+tbound_data_beats_ccm2 + local_socket_inf1_outbound_data_beats_ccm2 + local=
+_socket_inf0_outbound_data_beats_ccm3 + local_socket_inf1_outbound_data_bea=
+ts_ccm3 + local_socket_inf0_outbound_data_beats_ccm4 + local_socket_inf1_ou=
+tbound_data_beats_ccm4 + local_socket_inf0_outbound_data_beats_ccm5 + local=
+_socket_inf1_outbound_data_beats_ccm5 + local_socket_inf0_outbound_data_bea=
+ts_ccm6 + local_socket_inf1_outbound_data_beats_ccm6 + local_socket_inf0_ou=
+tbound_data_beats_ccm7 + local_socket_inf1_outbound_data_beats_ccm7",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "remote_socket_inbound_data_bytes_to_cpu",
+> >> +    "BriefDescription": "Remote socket inbound data bytes to the CPU =
+(e.g. read data).",
+> >> +    "MetricExpr": "remote_socket_inf0_inbound_data_beats_ccm0 + remot=
+e_socket_inf1_inbound_data_beats_ccm0 + remote_socket_inf0_inbound_data_bea=
+ts_ccm1 + remote_socket_inf1_inbound_data_beats_ccm1 + remote_socket_inf0_i=
+nbound_data_beats_ccm2 + remote_socket_inf1_inbound_data_beats_ccm2 + remot=
+e_socket_inf0_inbound_data_beats_ccm3 + remote_socket_inf1_inbound_data_bea=
+ts_ccm3 + remote_socket_inf0_inbound_data_beats_ccm4 + remote_socket_inf1_i=
+nbound_data_beats_ccm4 + remote_socket_inf0_inbound_data_beats_ccm5 + remot=
+e_socket_inf1_inbound_data_beats_ccm5 + remote_socket_inf0_inbound_data_bea=
+ts_ccm6 + remote_socket_inf1_inbound_data_beats_ccm6 + remote_socket_inf0_i=
+nbound_data_beats_ccm7 + remote_socket_inf1_inbound_data_beats_ccm7",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "3.0517578125e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "remote_socket_outbound_data_bytes_from_cpu",
+> >> +    "BriefDescription": "Remote socket outbound data bytes from the C=
+PU (e.g. write data).",
+> >> +    "MetricExpr": "remote_socket_inf0_outbound_data_beats_ccm0 + remo=
+te_socket_inf1_outbound_data_beats_ccm0 + remote_socket_inf0_outbound_data_=
+beats_ccm1 + remote_socket_inf1_outbound_data_beats_ccm1 + remote_socket_in=
+f0_outbound_data_beats_ccm2 + remote_socket_inf1_outbound_data_beats_ccm2 +=
+ remote_socket_inf0_outbound_data_beats_ccm3 + remote_socket_inf1_outbound_=
+data_beats_ccm3 + remote_socket_inf0_outbound_data_beats_ccm4 + remote_sock=
+et_inf1_outbound_data_beats_ccm4 + remote_socket_inf0_outbound_data_beats_c=
+cm5 + remote_socket_inf1_outbound_data_beats_ccm5 + remote_socket_inf0_outb=
+ound_data_beats_ccm6 + remote_socket_inf1_outbound_data_beats_ccm6 + remote=
+_socket_inf0_outbound_data_beats_ccm7 + remote_socket_inf1_outbound_data_be=
+ats_ccm7",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  },
+> >> +  {
+> >> +    "MetricName": "local_socket_outbound_data_bytes_from_all_links",
+> >> +    "BriefDescription": "Outbound data bytes from all links (local so=
+cket).",
+> >> +    "MetricExpr": "local_socket_outbound_data_beats_link0 + local_soc=
+ket_outbound_data_beats_link1 + local_socket_outbound_data_beats_link2 + lo=
+cal_socket_outbound_data_beats_link3 + local_socket_outbound_data_beats_lin=
+k4 + local_socket_outbound_data_beats_link5 + local_socket_outbound_data_be=
+ats_link6 + local_socket_outbound_data_beats_link7",
+> >> +    "MetricGroup": "data_fabric",
+> >> +    "PerPkg": "1",
+> >> +    "ScaleUnit": "6.103515625e-5MiB"
+> >> +  }
+> >> +]
+> >> --
+> >> 2.34.1
+> >>
+>
