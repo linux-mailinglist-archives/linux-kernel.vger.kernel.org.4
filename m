@@ -2,99 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA77F645A7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:13:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A72645A83
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:14:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiLGNNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:13:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47386 "EHLO
+        id S229850AbiLGNOl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:14:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGNNf (ORCPT
+        with ESMTP id S229437AbiLGNOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:13:35 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF5B50D5C;
-        Wed,  7 Dec 2022 05:13:34 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id e13so24797510edj.7;
-        Wed, 07 Dec 2022 05:13:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KIJTn6uf5ipjBKv9CY5vtV1Hkp+oVF6IKDi1Z1ze17U=;
-        b=VMJLjAN+QCvNePbdKUldGx4XeyoaC26IemMCfR80C0u4Il56h62+63la6BndXvHG+u
-         7EFhxaqVTPyvlxk3lLlUG+/FX7te2J6nWv7N/IRi3n0hyk1TVEh3PbjvFSbTJVRH5FIm
-         204Ws5Xo2Cm/3UvrVgpnoXIMAWUTMpv3AtBphjio4u6wQfioOOTisL0AiwHy3GOX+vy2
-         6i4sCSCtAtkfYi8/YwjLxg8G/HjwLZSPch5/0hxlPEc0axnRMGgxipmWLznIIEdze2AA
-         6YX6ZXqjDvsYNHc9UQHlg5MTbCsnj26iYo8WT9M7KuUZu1F6Tuj77clfbPx+a5IxQMk5
-         m8TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIJTn6uf5ipjBKv9CY5vtV1Hkp+oVF6IKDi1Z1ze17U=;
-        b=tLnGOdzAxDiF+AxeH6EWMPkPgV0oGzQS9emooVImmFIWIKGqx7fUkETg30LV2LYi7a
-         udDbC3kJuyOm700Wlr22hbEJZiHzf2WETZpmlzGcu6a2Fdatz/3MgcSfMf43N3Lr+FUh
-         vuIpicBjp5mkQw55d/mLYHhdPZW1JD2JQ8NCko8X2X3D/2dVNLtyRv9mhhr8FLsG1nFH
-         7hi8SyXGyCgskwz3TFo4wHHhGhh/Cw0hjzpphyK/BDGPEJNuFxAgcXQh5deqyM7njTvB
-         roDEmRTiaKUIqOysZOO609Jy2jZH3bYbLzGqZV6nJnUrpBxL3sBtVX/0jfE3Gr9/YaPb
-         XZmQ==
-X-Gm-Message-State: ANoB5pnwbVUUFwDTflapq7wNNFomMuY4hQ4GdFaMGWFzRwn7eyBWBo4N
-        JswfTJ1ywiuM5KCFTb1er/U=
-X-Google-Smtp-Source: AA0mqf5dEGRQGRPIJU+djVze2ytX4k7QuRVTwoOo+q8OUe7Dpgl3TXGIbeQddai1A9gh6sueqqq3ng==
-X-Received: by 2002:a05:6402:2993:b0:462:845:ba98 with SMTP id eq19-20020a056402299300b004620845ba98mr1778270edb.12.1670418813147;
-        Wed, 07 Dec 2022 05:13:33 -0800 (PST)
-Received: from skbuf ([188.26.184.215])
-        by smtp.gmail.com with ESMTPSA id dk21-20020a0564021d9500b0045723aa48ccsm2176388edb.93.2022.12.07.05.13.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 05:13:32 -0800 (PST)
-Date:   Wed, 7 Dec 2022 15:13:30 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-Cc:     Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org,
-        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        Jonas Gorski <jonas.gorski@gmail.com>
-Subject: Re: [PATCH 5/5] powerpc: dts: remove label = "cpu" from DSA
- dt-binding
-Message-ID: <20221207131330.pehewfwmr6pv2sln@skbuf>
-References: <20221130141040.32447-1-arinc.unal@arinc9.com>
- <20221130141040.32447-6-arinc.unal@arinc9.com>
- <87a647s8zg.fsf@mpe.ellerman.id.au>
- <20221201173902.zrtpeq4mkk3i3vpk@pali>
- <20221201234400.GA1692656-robh@kernel.org>
- <20221202193552.vehqk6u53n36zxwl@pali>
- <20221204185924.a4q6cifhpyxaur6f@skbuf>
- <84ce6297-5aff-4d6e-8d31-da3f25dc8690@arinc9.com>
+        Wed, 7 Dec 2022 08:14:40 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7727B56D73;
+        Wed,  7 Dec 2022 05:14:39 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 506866602BB7;
+        Wed,  7 Dec 2022 13:14:37 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670418877;
+        bh=2iUfgOK9j8JufH6QlNBq2XRKpukh2AkY3nVEXgGhlWE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TqKlv2bzUiItBhcMPlYg9Y/MiW73qhm60Mz8M6aGnOoUdpt3YJwRrFMh7ysvary1f
+         ryypqtp53Zo1Tq/p6NqPGyIqp50S3K0M+pylKbSR2XmdlbAAt59VfEMJu/m+IwHynO
+         f8xzGfooisrc/g8fS4sKS0steGxabUu7T+NueW2L4IdirRDMqFYqESIBvfzshDd3Ap
+         ZxSDAOY7hr6cVsmwiW3fuA1XsDybPGhX2mHnA4JawqhhPT9Y2UZSAiv4ccXOkAsuck
+         eNPzTDoBkwUXcvmPSwe1wQk8ZHttYPKtMnBVGDjQQc00ybJLfoEgZJBXJbBk8JVnVI
+         uEOHa+XFzyg7w==
+Message-ID: <1829bd00-4d6c-d49e-9251-e5f42bc40525@collabora.com>
+Date:   Wed, 7 Dec 2022 14:14:34 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <84ce6297-5aff-4d6e-8d31-da3f25dc8690@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v6 1/3] media: dt-bindings: media: mediatek: Rename child
+ node names for decoder
+Content-Language: en-US
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, yunfei.dong@mediatek.com
+References: <20221207055107.11333-1-allen-kh.cheng@mediatek.com>
+ <20221207055107.11333-2-allen-kh.cheng@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221207055107.11333-2-allen-kh.cheng@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 10:15:16PM +0300, Arınç ÜNAL wrote:
-> As Jonas (on CC) pointed out, I only see this being used in the swconfig b53
-> driver which uses the label to identify the cpu port.
+Il 07/12/22 06:51, Allen-KH Cheng ha scritto:
+> In order to make the names of the child nodes more generic, we rename
+> "vcodec-lat" and "vcodec-core" to "video-codec" for decoder in
+> patternProperties and example.
 > 
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=blob;f=target/linux/generic/files/drivers/net/phy/b53/b53_common.c;h=87d731ec3e2a868dc8389f554b1dc9ab42c30be2;hb=HEAD#l1508
-> 
-> Maybe this got into DSA dt-bindings unchecked before it was decided to move
-> forward with DSA instead of swconfig on Linux.
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Yes, but swconfig is not DSA and their bindings are not compatible
-anyway (swconfig lacks an ethernet = <&phandle> property that would
-allow DSA to work). Still waiting for Pali to clarify what he had in mind.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+
