@@ -2,142 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E82F645608
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 325C164560C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 10:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbiLGJHp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 7 Dec 2022 04:07:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55256 "EHLO
+        id S229809AbiLGJIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 04:08:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiLGJHk (ORCPT
+        with ESMTP id S229456AbiLGJIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 04:07:40 -0500
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E635E2F4;
-        Wed,  7 Dec 2022 01:07:37 -0800 (PST)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 594B3240005;
-        Wed,  7 Dec 2022 09:07:34 +0000 (UTC)
-Message-ID: <7fabe0c91945b61bae7825dfcdbc2f88d0f2b98c.camel@hadess.net>
-Subject: Re: [Regression] Logitech BT mouse unusable after commit
- 532223c8ac57 (still in 6.1-rc8)
-From:   Bastien Nocera <hadess@hadess.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Date:   Wed, 07 Dec 2022 10:07:33 +0100
-In-Reply-To: <CAJZ5v0jBo-_XnN2m0jeVdeTi7kjr6C3OSzc1NEJgav0srD0JGQ@mail.gmail.com>
-References: <2262737.ElGaqSPkdT@kreacher>
-         <CAJZ5v0jBo-_XnN2m0jeVdeTi7kjr6C3OSzc1NEJgav0srD0JGQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+        Wed, 7 Dec 2022 04:08:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE31421A4;
+        Wed,  7 Dec 2022 01:08:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3717860C50;
+        Wed,  7 Dec 2022 09:08:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13573C433C1;
+        Wed,  7 Dec 2022 09:08:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670404092;
+        bh=g80eSHM5OybWQt7Qs3iEfH+1E1QGLIaYfStYnkM8LwA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ll1rKFSwCk3ZF0q4k4zX0xI6WU0QMZOLSWeTUF8jbO1FTtTngB/Pw2l8HkOvDkLl2
+         YYbP+PajU/Bs/advzeRHbzWKNa9Qdm9HNVKOwCMQ4M8tfY7qQmg4SBDDLMJmzVrfRY
+         3hbBk/3pvCgCuaYqhPyMfE7gN1BCDunRAqRqvH/cXeyNpGFr+ANPBG+y6xmFRoxaEs
+         cC5ZfD0ei2+OYAn4tUjsgqbzN1JfAv2Z3f9EoCjQlPKKqe2Dvmx2rqXkLpAvr8617c
+         Up1qZ6slW+DLpKKQULCqon3p5h3Wu6sHGad79HqQDVltb4IBv1fbLf/WIJWmR2e5HN
+         yJ4uqpxije/vQ==
+Date:   Wed, 7 Dec 2022 11:08:08 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     ye.xingchen@zte.com.cn, dennis.dalessandro@cornelisnetworks.com
+Cc:     jgg@ziepe.ca, linux-rdma@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/hfi1: use sysfs_emit() to instead of scnprintf()
+Message-ID: <Y5BX+Argjn7XqhSw@unreal>
+References: <202212071632188074249@zte.com.cn>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202212071632188074249@zte.com.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 09:58 +0100, Rafael J. Wysocki wrote:
-> On Tue, Dec 6, 2022 at 3:58 PM Rafael J. Wysocki <rjw@rjwysocki.net>
-> wrote:
-> > 
-> > Bastien, Jiri,
-> > 
-> > Commit 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the
-> > Logitech
-> > Bluetooth devices") caused my Logitech Bluetooth mouse to become
-> > unusable.
-> > 
-> > Appended is the change I need to make it work again (note that
-> > adding the
-> > device ID to unhandled_hidpp_devices[] doesn't help, so there must
-> > be some
-> > significant enough difference in how the two cases are handled in
-> > the stack).
-> > 
-> > Here's what I get in the log without the patch below:
-> > 
-> > [   36.710574] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-> > [   36.710592] Bluetooth: HIDP socket layer initialized
-> > [   36.724644] hid-generic 0005:046D:B016.0001: unknown main item
-> > tag 0x0
-> > [   36.725860] input: Bluetooth Mouse M336/M337/M535 Mouse as
-> > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
-> > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
-> > [   36.728036] input: Bluetooth Mouse M336/M337/M535 Consumer
-> > Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
-> > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
-> > [   36.728823] input: Bluetooth Mouse M336/M337/M535 Keyboard as
-> > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
-> > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
-> > [   36.731550] hid-generic 0005:046D:B016.0001: input,hidraw0:
-> > BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on
-> > 9c:b6:d0:96:8e:c8
-> > [   36.833039] logitech-hidpp-device 0005:046D:B016.0001: unknown
-> > main item tag 0x0
-> > [   36.999064] logitech-hidpp-device 0005:046D:B016.0001: Device
-> > not connected
-> > 
-> > and here's what I get with it:
-> > 
-> > [   43.642546] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-> > [   43.642559] Bluetooth: HIDP socket layer initialized
-> > [   43.652898] hid-generic 0005:046D:B016.0001: unknown main item
-> > tag 0x0
-> > [   43.653833] input: Bluetooth Mouse M336/M337/M535 Mouse as
-> > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
-> > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
-> > [   43.655025] input: Bluetooth Mouse M336/M337/M535 Consumer
-> > Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
-> > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
-> > [   43.655400] input: Bluetooth Mouse M336/M337/M535 Keyboard as
-> > /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-
-> > 7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
-> > [   43.657521] hid-generic 0005:046D:B016.0001: input,hidraw0:
-> > BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on
-> > 9c:b6:d0:96:8e:c8
-> > 
-> > The only difference seems to be that in the former case the
-> > logitech-hidpp
-> > driver tries to bind to the device, but I guess that is expected. 
-> > However,
-> > when the device ID is added to unhandled_hidpp_devices[], the
-> > messages look
-> > exactly like in the "good" case, but the mouse still doesn't work.
+On Wed, Dec 07, 2022 at 04:32:18PM +0800, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> Here's what happens.
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 > 
-> - The logitech-hidpp driver is modular and is not present initially,
-> so hid-generic probes first (successfully).
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/infiniband/hw/hfi1/driver.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> - logitech-hidpp is loaded which causes the device to be reporobed
-> due
-> to __hid_bus_driver_added().
+> diff --git a/drivers/infiniband/hw/hfi1/driver.c b/drivers/infiniband/hw/hfi1/driver.c
+> index 8e71bef9d982..bcc6bc0540f0 100644
+> --- a/drivers/infiniband/hw/hfi1/driver.c
+> +++ b/drivers/infiniband/hw/hfi1/driver.c
+> @@ -112,7 +112,7 @@ static int hfi1_caps_get(char *buffer, const struct kernel_param *kp)
+>  	cap_mask &= ~HFI1_CAP_LOCKED_SMASK;
+>  	cap_mask |= ((cap_mask & HFI1_CAP_K2U) << HFI1_CAP_USER_SHIFT);
 > 
-> - Because the ->match() callback in hid-generic returns 0 for the
-> device now, it is unbound from the device.
-> 
-> - The probing of logitech-hidpp fails (due to an error in ->probe()).
-> 
-> - The probing of hid-generic fails due to the failing ->match().
-> 
-> So in order for unhandled_hidpp_devices[] in logitech-hidpp to work
-> with hid-generic, __check_hid_generic() needs to be amended with a
-> change to run the ->match() callback of the "specific" driver being
-> tried.
-> 
-> I have a working patch for this that will be sent shortly.
+> -	return scnprintf(buffer, PAGE_SIZE, "0x%lx", cap_mask);
+> +	return sysfs_emit(buffer, "0x%lx\n", cap_mask);
 
-I'm glad my belated questioning of the hid-generic fallback code was
-correct ;)
+Dennis,
 
-My question about getting the output from the HID++ tool still stands
-though.
+Please pay attention what "\n" doesn't exist in original line.
+I applied the patch as I think it is the same, but if you see that it
+is not, please say so, so we will drop/adapt it before merge window.
+
+Thanks
+
+>  }
+> 
+>  struct pci_dev *get_pci_dev(struct rvt_dev_info *rdi)
+> -- 
+> 2.25.1
