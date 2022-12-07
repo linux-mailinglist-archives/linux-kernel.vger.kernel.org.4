@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD886455E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8BC36455E6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 09:58:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLGI6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 03:58:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S229845AbiLGI6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 03:58:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbiLGI6f (ORCPT
+        with ESMTP id S229514AbiLGI6e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 03:58:35 -0500
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A583AC40;
-        Wed,  7 Dec 2022 00:58:34 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id z17so9511086qki.11;
-        Wed, 07 Dec 2022 00:58:34 -0800 (PST)
+        Wed, 7 Dec 2022 03:58:34 -0500
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B4EBEA;
+        Wed,  7 Dec 2022 00:58:32 -0800 (PST)
+Received: by mail-pf1-x42a.google.com with SMTP id n3so12700673pfq.10;
+        Wed, 07 Dec 2022 00:58:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3kRlTBcDxyj5ptNZ14o1YVXGmrqFxRI2/QpD88qWYiQ=;
+        b=pgoiqd8jUZVnnOCnDAzMxflF6HGuST/I9gEfUjqkMJROwp6XfWDHZNniCByRWCa7+t
+         RnC61XywTSJpzGwcFk6BamEkmE0TXLUXuBJw9eYmqFY6ZYzXW7nOD4FCUBzvlslwE4hh
+         K0pelResXxqzJigLV+9v0/HKhyR7+uBGdGzBvQnVFPFW3qjkP+m90rlXFQPR1JI9D/VH
+         L5g6nidU/g4vdofdkkcBoJVm68l8jnzFvszrmr/K6mfzVdhYtAoTpkG5xY/PAyO16kOv
+         cEikK3MA3tiPlBpiZasPoz3R1O914R9QuaM/oOTufXTHdD8gYkS6RHO9X6YRaEGcsecB
+         HpTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pleAcNei+fQZB0zmkXiJ8AfFaLRxspIhoeV2rVgFZ7Q=;
-        b=2ZY+nh8rz+FGSRpOpKz4viVzf86dGn3b8nZyVbZnbaENew6q8g1hiEIt6XE9idYnAm
-         K7LpqiA2j3qH2ktTi3jtNgAZ2QMfX0ZnZqrvKrHnsLHj+kEZsx3DOwuaDaD7WmLXN8DK
-         l8ehwMabssOguzfloEiD8SyhLsA4AN2M4Oii0+szQ3cYygDg+0G5W9mL37shF/SIOO4E
-         hQI3BE6Xc63xXffV/AY2CFwZW5HYDixAr2Jt/R5YF0pfq5326G1bZiUSfc5iwLhvqPuN
-         33uWK2LK2iCHv0gOpgUSLUs14Jy70LPJ0mxzzCC6iTDKMi+jlC62LUw9Po2O3KADgx5U
-         9qyg==
-X-Gm-Message-State: ANoB5pla/vZt6loh5xbQCIbrxQsvAcpdRYXlfBoeO3KsQgHlFEOil/LV
-        AB+V+E/zD2+dlWT0wjh492uZsf6WHj12l6FRm4Q=
-X-Google-Smtp-Source: AA0mqf53TKybKEpgvhuuUjEXyzo+u+xXdLtr+p5Gh4slnCI9X2C7Vxuk86LOAwCI6Q1qtMmobnFGdYT+IGX/3wg/2jQ=
-X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
- cx10-20020a05620a51ca00b006ecfa04d97cmr61679069qkb.764.1670403513756; Wed, 07
- Dec 2022 00:58:33 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3kRlTBcDxyj5ptNZ14o1YVXGmrqFxRI2/QpD88qWYiQ=;
+        b=sSgyWjaLrC4WkZEZRIFMGIQBWtUOBJ9qfSS3ZbJl/UkhHvk62qT0N8TbFnZrOP1tG5
+         mWG9YJSyh7XmZkLPgjSX5ksnK7VPzUIdINLjBDYlsnt5jUvHWtPVRmY8ALTMlTq2gxBo
+         H04qNJn83mYTuAWPB+p0ACarMVje8gFm04cTUpaFzY+eP8L94C3qroHGcxkIR3Mp0rtg
+         Wx4Rt/SVYcsf9vw+UJSD9HE/kuifsxYF6kc32hYEzBJEVzWw+EOXdA14eA9Chr+Is2tC
+         B1jFuRJ7+nRF9jqG3386Lx/jGJphc5g3MwEXho3BSDXB7ziz8PI0r4NxA2BcnooyK4SF
+         ZjGA==
+X-Gm-Message-State: ANoB5pnFx6gxsqK+ueMxZnI89Ca2/zIgkzN6PKHRyfxoRyjwciH3t65o
+        cZmXNNIIWwt8CKhjkJGOecw=
+X-Google-Smtp-Source: AA0mqf4ZgSAfgs0hcNgueeE8FLs2MF0/38xphbpqsrdRo44kAFrVjIjUCGSHiF/dC/wUBsv7UacLBw==
+X-Received: by 2002:a63:1e49:0:b0:46b:1590:2625 with SMTP id p9-20020a631e49000000b0046b15902625mr62802011pgm.569.1670403511826;
+        Wed, 07 Dec 2022 00:58:31 -0800 (PST)
+Received: from debian.me (subs03-180-214-233-90.three.co.id. [180.214.233.90])
+        by smtp.gmail.com with ESMTPSA id ml13-20020a17090b360d00b00219f8eb271fsm740610pjb.5.2022.12.07.00.58.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 00:58:31 -0800 (PST)
+Received: by debian.me (Postfix, from userid 1000)
+        id B381A1042C6; Wed,  7 Dec 2022 15:58:28 +0700 (WIB)
+Date:   Wed, 7 Dec 2022 15:58:28 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        Sadiya Kazi <sadiyakazi@google.com>,
+        Rae Moar <rmoar@google.com>, Jonathan Corbet <corbet@lwn.net>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v2] Documentation: kunit: Fix "How Do I Use This" / "Next
+ Steps" sections
+Message-ID: <Y5BVtHjnwpn5CFzf@debian.me>
+References: <20221207043319.1890954-1-davidgow@google.com>
 MIME-Version: 1.0
-References: <2262737.ElGaqSPkdT@kreacher>
-In-Reply-To: <2262737.ElGaqSPkdT@kreacher>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 09:58:22 +0100
-Message-ID: <CAJZ5v0jBo-_XnN2m0jeVdeTi7kjr6C3OSzc1NEJgav0srD0JGQ@mail.gmail.com>
-Subject: Re: [Regression] Logitech BT mouse unusable after commit 532223c8ac57
- (still in 6.1-rc8)
-To:     Bastien Nocera <hadess@hadess.net>, Jiri Kosina <jikos@kernel.org>
-Cc:     =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gQZZMfvjrIhTAV6r"
+Content-Disposition: inline
+In-Reply-To: <20221207043319.1890954-1-davidgow@google.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,64 +80,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 6, 2022 at 3:58 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Bastien, Jiri,
->
-> Commit 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the Logitech
-> Bluetooth devices") caused my Logitech Bluetooth mouse to become unusable.
->
-> Appended is the change I need to make it work again (note that adding the
-> device ID to unhandled_hidpp_devices[] doesn't help, so there must be some
-> significant enough difference in how the two cases are handled in the stack).
->
-> Here's what I get in the log without the patch below:
->
-> [   36.710574] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-> [   36.710592] Bluetooth: HIDP socket layer initialized
-> [   36.724644] hid-generic 0005:046D:B016.0001: unknown main item tag 0x0
-> [   36.725860] input: Bluetooth Mouse M336/M337/M535 Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
-> [   36.728036] input: Bluetooth Mouse M336/M337/M535 Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
-> [   36.728823] input: Bluetooth Mouse M336/M337/M535 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
-> [   36.731550] hid-generic 0005:046D:B016.0001: input,hidraw0: BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on 9c:b6:d0:96:8e:c8
-> [   36.833039] logitech-hidpp-device 0005:046D:B016.0001: unknown main item tag 0x0
-> [   36.999064] logitech-hidpp-device 0005:046D:B016.0001: Device not connected
->
-> and here's what I get with it:
->
-> [   43.642546] Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-> [   43.642559] Bluetooth: HIDP socket layer initialized
-> [   43.652898] hid-generic 0005:046D:B016.0001: unknown main item tag 0x0
-> [   43.653833] input: Bluetooth Mouse M336/M337/M535 Mouse as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input14
-> [   43.655025] input: Bluetooth Mouse M336/M337/M535 Consumer Control as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input15
-> [   43.655400] input: Bluetooth Mouse M336/M337/M535 Keyboard as /devices/pci0000:00/0000:00:14.0/usb1/1-7/1-7:1.0/bluetooth/hci0/hci0:1/0005:046D:B016.0001/input/input18
-> [   43.657521] hid-generic 0005:046D:B016.0001: input,hidraw0: BLUETOOTH HID v12.03 Mouse [Bluetooth Mouse M336/M337/M535] on 9c:b6:d0:96:8e:c8
->
-> The only difference seems to be that in the former case the logitech-hidpp
-> driver tries to bind to the device, but I guess that is expected.  However,
-> when the device ID is added to unhandled_hidpp_devices[], the messages look
-> exactly like in the "good" case, but the mouse still doesn't work.
 
-Here's what happens.
+--gQZZMfvjrIhTAV6r
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-- The logitech-hidpp driver is modular and is not present initially,
-so hid-generic probes first (successfully).
+On Wed, Dec 07, 2022 at 12:33:19PM +0800, David Gow wrote:
+> The "How Do I Use This" section of index.rst and "Next Steps" section of
+> start.rst were just copies of the table of contents, and therefore
+> weren't really useful either when looking a sphinx generated output
+> (which already had the TOC visible) or when reading the source (where
+> it's just a list of files that ls could give you).
+>=20
+> Instead, provide a small number of concrete next steps, and a bit more
+> description about what the pages contain.
+>=20
+> This also removes the broken reference to 'tips.rst', which was
+> previously removed.
+>=20
+> Fixes: 4399c737a97d ("Documentation: kunit: Remove redundant 'tips.rst' p=
+age")
+> Signed-off-by: David Gow <davidgow@google.com>
+> ---
+>=20
+> Thanks everyone for reviewing v1. Since this is pretty much a complete
+> rewrite, I've left Reviewed-by tags off, as I don't feel the previous
+> reviews totally apply. Feel free to review again if you have any
+> comments.
+>=20
+> Cheers,
+> -- David
+>=20
+> Changes since v1:
+> https://lore.kernel.org/linux-kselftest/20221129094732.306449-1-davidgow@=
+google.com/
+> - Totally rewrite both sections to only include (and provide more
+>   context for) the most concrete next steps.
+>   - Thanks Bagas for pointing out that this basically duplicates the TOC
+>     as-is.
+>=20
+> ---
+>  Documentation/dev-tools/kunit/index.rst | 19 ++++++++-----------
+>  Documentation/dev-tools/kunit/start.rst | 19 +++++++++----------
+>  2 files changed, 17 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-=
+tools/kunit/index.rst
+> index d5629817cd72..b3593ae29ace 100644
+> --- a/Documentation/dev-tools/kunit/index.rst
+> +++ b/Documentation/dev-tools/kunit/index.rst
+> @@ -99,14 +99,11 @@ Read also :ref:`kinds-of-tests`.
+>  How do I use it?
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+> -*   Documentation/dev-tools/kunit/start.rst - for KUnit new users.
+> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kun=
+it_tool.
+> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
+> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
+> -    examples.
+> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+> -    used for testing.
+> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+> -    answers.
+> +You can find a step-by-step guide to writing and running KUnit tests in
+> +Documentation/dev-tools/kunit/start.rst
+> +
+> +Alternatively, feel free to look through the rest of the KUnit documenta=
+tion,
+> +or to experiment with tools/testing/kunit/kunit.py and the example test =
+under
+> +lib/kunit/kunit-example-test.c
+> +
+> +Happy testing!
+> diff --git a/Documentation/dev-tools/kunit/start.rst b/Documentation/dev-=
+tools/kunit/start.rst
+> index f4f504f1fb15..224387a43543 100644
+> --- a/Documentation/dev-tools/kunit/start.rst
+> +++ b/Documentation/dev-tools/kunit/start.rst
+> @@ -294,13 +294,12 @@ Congrats! You just wrote your first KUnit test.
+>  Next Steps
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =20
+> -*   Documentation/dev-tools/kunit/architecture.rst - KUnit architecture.
+> -*   Documentation/dev-tools/kunit/run_wrapper.rst - run kunit_tool.
+> -*   Documentation/dev-tools/kunit/run_manual.rst - run tests without kun=
+it_tool.
+> -*   Documentation/dev-tools/kunit/usage.rst - write tests.
+> -*   Documentation/dev-tools/kunit/tips.rst - best practices with
+> -    examples.
+> -*   Documentation/dev-tools/kunit/api/index.rst - KUnit APIs
+> -    used for testing.
+> -*   Documentation/dev-tools/kunit/faq.rst - KUnit common questions and
+> -    answers.
+> +If you're interested in using some of the more advanced features of kuni=
+t.py,
+> +take a look at Documentation/dev-tools/kunit/run_wrapper.rst
+> +
+> +If you'd like to run tests without using kunit.py, check out
+> +Documentation/dev-tools/kunit/run_manual.rst
+> +
+> +For more information on writing KUnit tests (including some common techn=
+iques
+> +for testing different things), see Documentation/dev-tools/kunit/usage.r=
+st
+> +
 
-- logitech-hidpp is loaded which causes the device to be reporobed due
-to __hid_bus_driver_added().
+Much better, thanks!
 
-- Because the ->match() callback in hid-generic returns 0 for the
-device now, it is unbound from the device.
+Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-- The probing of logitech-hidpp fails (due to an error in ->probe()).
+--=20
+An old man doll... just what I always wanted! - Clara
 
-- The probing of hid-generic fails due to the failing ->match().
+--gQZZMfvjrIhTAV6r
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So in order for unhandled_hidpp_devices[] in logitech-hidpp to work
-with hid-generic, __check_hid_generic() needs to be amended with a
-change to run the ->match() callback of the "specific" driver being
-tried.
+-----BEGIN PGP SIGNATURE-----
 
-I have a working patch for this that will be sent shortly.
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5BVrwAKCRD2uYlJVVFO
+o90qAP0W0QiL12+wE0JzXPGrOMlc9sFK4uQuxOTzzy+QLsgflwEA+ZWGwB0Yy8f8
+m2zrxJFPUg5QDxd6u2KAbBX0ztNinAg=
+=m9er
+-----END PGP SIGNATURE-----
 
-Thanks!
+--gQZZMfvjrIhTAV6r--
