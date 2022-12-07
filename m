@@ -2,55 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B9B6463E1
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:09:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 543246463E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:13:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiLGWJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:09:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S229717AbiLGWNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLGWJE (ORCPT
+        with ESMTP id S229550AbiLGWNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:09:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380694E41B;
-        Wed,  7 Dec 2022 14:09:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93BB2B81E65;
-        Wed,  7 Dec 2022 22:08:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14FCFC433C1;
-        Wed,  7 Dec 2022 22:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670450932;
-        bh=CiqpI/crF3uh/C4PoPa1whlwowTYXxeodgTYpcn99UY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=kghdk/Yunvzp5xwjQ3Su0WxUsNAqtZY2hrhTRM8GRfc1oO1xDoGUS1ka0d33VvMNp
-         K+YiTHlO6nJZy4ntVCwkfiq5Y4ie7VN7mxyW0v/xDv0RmIe+3ZyxJ0uaWKZQgEu1fN
-         /Fc2HIAAQwaMoXeh3YyS1hC4ZiP0htLZImZR1CV9cqDhWLxosikKLyBJg00ixI4hjz
-         qOQc4k1pBXD52o0HZ35qK9OWxJHlAg4GBk0kru1fC5A9pOPbh8EWrK67UGDSV643pS
-         uvO32MZwAM+d56FgDNhkMpj1mohmGrcp0gPV7rdc++I1LCHLitofcT32nD1VH0Wo3f
-         yd0YJiLCRq2dw==
-Date:   Wed, 7 Dec 2022 16:08:50 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI: mvebu: switch to using gpiod API
-Message-ID: <20221207220850.GA1479029@bhelgaas>
+        Wed, 7 Dec 2022 17:13:52 -0500
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F084B5B5B8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:13:51 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id y4so18379397plb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2nEgt4bnIsVkJIQUqcwPD9I1432q4Z5qtw3xEnhVXCI=;
+        b=igu3cBWidQrTd/ku7BwQIwug8ETi/ySbCW/XBpvclOku5WJ9nlvRQHhZpbKVNR78tc
+         ABD1+ytIxj0GdXe2sz5a3291QwNHZcKn7RhtaCI6ryEpvhk3L2ujBd2+TMYLEeLAtK0n
+         DHY8IJXMCnkKk08+P6gKHbXrZ9/8temljGIYA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2nEgt4bnIsVkJIQUqcwPD9I1432q4Z5qtw3xEnhVXCI=;
+        b=j6TXrgGpuBoihsTUzoTcm5uM8qSMAFDjQkwksU3KgoeA2RsGQyL6LYyWZyACCwt+bI
+         ZyAYf1VL1zgET7YEU4vqEj/Q0og8c5LsrY0pZujl3JXVW91GVZ1q7Lw6Z9xFZhH75VT4
+         uYeudJtcSh/Va+fXhhcw027+ugMB90tdeYwNZibeELfBZyzuLzkV/sDhuOIHV6FajUnD
+         4Z3veWXY8w+MtP4jegV6pk9VO24oofILZgcmiWXdVCTTlTRrag74yrR2avVavdQBhdFO
+         PXxYkG/py1PGNXzLmrrpD1yQIq6v4O69JvLFrlEY2GxiNTDTgkRNP/o6ONG1gmRFtvGr
+         hJbQ==
+X-Gm-Message-State: ANoB5pky57u23y4bIgZmXbYGvwIyOkungYj6SVseeo8BWYPIBos+A8ei
+        0Y9WGKcUp+fHmdtcU6tPijK4yA==
+X-Google-Smtp-Source: AA0mqf5juEY2JmqwIYJahljnggFGeoctHKQSscU3qjPfwxoQcSUcWbssc4pkrH1VlFkhKS7ZE5Qhmg==
+X-Received: by 2002:a17:90a:8402:b0:218:7744:5e9 with SMTP id j2-20020a17090a840200b00218774405e9mr103365755pjn.44.1670451231433;
+        Wed, 07 Dec 2022 14:13:51 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id nr4-20020a17090b240400b002191e769546sm1641462pjb.4.2022.12.07.14.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 14:13:50 -0800 (PST)
+Date:   Wed, 7 Dec 2022 14:13:49 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Kamal Dasu <kdasu.kdev@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        WeiXiong Liao <gmpy.liaowx@gmail.com>,
+        Linux Kernel <linux-kernel@vger.kernel.org>,
+        Anton Vorontsov <anton@enomsg.org>,
+        Colin Cross <ccross@android.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: Invalid pstore_blk use?
+Message-ID: <202212071412.1B1BF97@keescook>
+References: <e97bc607-a913-dbbd-1965-b60d55d956b8@gmail.com>
+ <c5edaa34-6f85-c6a8-84f5-75413dc864ea@gmail.com>
+ <202208091600.D19DFF9C7D@keescook>
+ <CAC=U0a3F6172JH+xvA0pSb0bewu_0PX9XFKmL32ge+KyTOdaZA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5EAft42YiT66mVj@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAC=U0a3F6172JH+xvA0pSb0bewu_0PX9XFKmL32ge+KyTOdaZA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,129 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 01:07:10PM -0800, Dmitry Torokhov wrote:
-> This patch switches the driver away from legacy gpio/of_gpio API to
-> gpiod API, and removes use of of_get_named_gpio_flags() which I want to
-> make private to gpiolib.
+On Fri, Nov 18, 2022 at 03:41:44PM -0500, Kamal Dasu wrote:
+> Kees,
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> I am in the process of implementing  mmcpstore  backend for mmc  based
+> on the mtdpstore driver
+> 
+> This is what is registered with register_pstore_device(&cxt->dev);
+> cxt->dev.flags = PSTORE_FLAGS_DMESG;
+> cxt->dev.zone.read = mmcpstore_read;
+> cxt->dev.zone.write = mmcpstore_write;
+> cxt->dev.zone.erase = mmcpstore_erase;
+> cxt->dev.zone.panic_write = mmcpstore_panic_write;
+> 
+> # dmesg | grep pstor
+> [    0.000000] Kernel command line: pstore_blk.blkdev=/dev/mmcblk1p8
+> crash_kexec_post_notifiers printk.always_kmsg_dump
+> [    1.993986] pstore_zone: registered pstore_blk as backend for
+> kmsg(Oops,panic_write) pmsg
+> [    2.002582] pstore: Using crash dump compression: deflate
+> [    2.008133] pstore: Registered pstore_blk as persistent store backend
+> [    2.020907] mmcpstore: /dev/mmcblk1p8 size 131072 start sector
+> 34468 registered as psblk backend
+> [   17.868753] psz_kmsg_recover_meta: pstore_zone: no valid data in
+> kmsg dump zone 0
+> [   18.298933] psz_recover_zone: pstore_zone: no valid data in zone pmsg
+> [   18.305398] psz_recovery: pstore_zone: recover end!
+> 
+> The driver is successfully registered and the read path works when
+> /sys/fs/pstor is mounted , however mmc_pstore_panic_write is not
+> called.
+> Need help in understanding what could be missing. I am using the
+> latest upstream kernel for testing.
 
-Applied to pci/ctrl/mvebu for v6.2, thanks, Dmitry!
+Hi!
 
-> ---
-> 
-> v3:
->  - add #include <linux/irqchip/chained_irq.h> to avoid compile errors.
->    This was previously included indirectly via linux/of_gpio.h ->
->    linux/gpio/driver.h
-> 
-> v2:
->  - free port->reset_name when reset GPIO is not found (Pali)
->  - remove stray tab (Pali)
-> 
-> This is the last user of of_get_named_gpio_flags() in the "next" tree.
-> 
-> Thanks!
-> 
->  drivers/pci/controller/pci-mvebu.c | 51 ++++++++++--------------------
->  1 file changed, 17 insertions(+), 34 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index 73db99035c2b..600964ba174c 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -11,15 +11,15 @@
->  #include <linux/bitfield.h>
->  #include <linux/clk.h>
->  #include <linux/delay.h>
-> -#include <linux/gpio.h>
-> +#include <linux/gpio/consumer.h>
->  #include <linux/init.h>
->  #include <linux/irqdomain.h>
-> +#include <linux/irqchip/chained_irq.h>
->  #include <linux/mbus.h>
->  #include <linux/slab.h>
->  #include <linux/platform_device.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
-> -#include <linux/of_gpio.h>
->  #include <linux/of_pci.h>
->  #include <linux/of_platform.h>
->  
-> @@ -1262,9 +1262,8 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
->  	struct mvebu_pcie_port *port, struct device_node *child)
->  {
->  	struct device *dev = &pcie->pdev->dev;
-> -	enum of_gpio_flags flags;
->  	u32 slot_power_limit;
-> -	int reset_gpio, ret;
-> +	int ret;
->  	u32 num_lanes;
->  
->  	port->pcie = pcie;
-> @@ -1328,40 +1327,24 @@ static int mvebu_pcie_parse_port(struct mvebu_pcie *pcie,
->  			 port->name, child);
->  	}
->  
-> -	reset_gpio = of_get_named_gpio_flags(child, "reset-gpios", 0, &flags);
-> -	if (reset_gpio == -EPROBE_DEFER) {
-> -		ret = reset_gpio;
-> +	port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
-> +					  port->name);
-> +	if (!port->reset_name) {
-> +		ret = -ENOMEM;
->  		goto err;
->  	}
->  
-> -	if (gpio_is_valid(reset_gpio)) {
-> -		unsigned long gpio_flags;
-> -
-> -		port->reset_name = devm_kasprintf(dev, GFP_KERNEL, "%s-reset",
-> -						  port->name);
-> -		if (!port->reset_name) {
-> -			ret = -ENOMEM;
-> +	port->reset_gpio = devm_fwnode_gpiod_get(dev, of_fwnode_handle(child),
-> +						 "reset", GPIOD_OUT_HIGH,
-> +						 port->name);
-> +	ret = PTR_ERR_OR_ZERO(port->reset_gpio);
-> +	if (ret) {
-> +		if (ret != -ENOENT)
->  			goto err;
-> -		}
-> -
-> -		if (flags & OF_GPIO_ACTIVE_LOW) {
-> -			dev_info(dev, "%pOF: reset gpio is active low\n",
-> -				 child);
-> -			gpio_flags = GPIOF_ACTIVE_LOW |
-> -				     GPIOF_OUT_INIT_LOW;
-> -		} else {
-> -			gpio_flags = GPIOF_OUT_INIT_HIGH;
-> -		}
-> -
-> -		ret = devm_gpio_request_one(dev, reset_gpio, gpio_flags,
-> -					    port->reset_name);
-> -		if (ret) {
-> -			if (ret == -EPROBE_DEFER)
-> -				goto err;
-> -			goto skip;
-> -		}
-> -
-> -		port->reset_gpio = gpio_to_desc(reset_gpio);
-> +		/* reset gpio is optional */
-> +		port->reset_gpio = NULL;
-> +		devm_kfree(dev, port->reset_name);
-> +		port->reset_name = NULL;
->  	}
->  
->  	slot_power_limit = of_pci_get_slot_power_limit(child,
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
-> 
-> 
-> -- 
-> Dmitry
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+Can you send an RFC patch? I'd expect this to work as you've currently
+described it, but without code I'd just be guessing. :)
+
+-Kees
+
+-- 
+Kees Cook
