@@ -2,145 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C19645749
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB03564574D
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:14:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbiLGKOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:14:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S230299AbiLGKOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:14:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiLGKOC (ORCPT
+        with ESMTP id S230323AbiLGKOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:14:02 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B306E00C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 02:14:00 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowAAnLnJRZ5BjUr8+BQ--.9743S2;
-        Wed, 07 Dec 2022 18:13:38 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     harry.wentland@amd.com, sunpeng.li@amd.com,
-        Rodrigo.Siqueira@amd.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, bas@basnieuwenhuizen.nl, Martin.Leung@amd.com,
-        Jun.Lei@amd.com, Chris.Park@amd.com, aurabindo.pillai@amd.com,
-        mwen@igalia.com
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH] drm/amd/display: Add check for kzalloc
-Date:   Wed,  7 Dec 2022 18:13:36 +0800
-Message-Id: <20221207101336.22264-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Dec 2022 05:14:12 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F6F2714D;
+        Wed,  7 Dec 2022 02:14:10 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id o7-20020a05600c510700b003cffc0b3374so713032wms.0;
+        Wed, 07 Dec 2022 02:14:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jxmfktVo1c7I9TfGKhpFnuMsTMZSubcGd4XXjSjhiS8=;
+        b=HDDkcehqX+6CTSSx6ZcH7IBcmqUljP/LUYffmQaakWZHMVdRndoDLP98evMboJIONF
+         5Vyux7uiI28FUdq6tXvYHm004tuWiAofkFLtqmUd80yG9fA9v0zCneL55yeotADd3POK
+         J7dm28C79KXN5VKrAbzVu1T5FtcyCUlzKvqOKACxQzH1B48r0fogJJFeUWkv9aIb59eQ
+         tDdzBTlN9yXjxEduJUTHNwz5b+oLCO66HACgqVWN8rN7J4HiUt657QeJK0oJJUyabU/h
+         rLvUy8Av/S8xgi9HMpgIqq+SUzl8PdAINLfgS2TpN8gjf02X1APolkjhCQ7KPpct/7a7
+         9Vbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jxmfktVo1c7I9TfGKhpFnuMsTMZSubcGd4XXjSjhiS8=;
+        b=hSEwFW26hJVehMXPev07t7gcbd+2tdaHLJfGD97KykoeG1vFUmsVDZ1iKsfbCpZt/+
+         grrA9sQgathw5ZwVYFpvbrzqItJxyiVKJqZuJhs+0Y3sgIoPEtXQZHB+FuMkOe3hAWRz
+         haGHvi4ROp7OojQKyCA3uhSUaiAh5C3DVYY3+9zpGNNTYKHdUNHjJFrJaap8gQM2vbIE
+         LRJEeV43ClykilBHnTrbQYxl+9BcDndV5lJDMYhr+nQr9nQfuxDoUkYMFLwCzkyyPvXf
+         QIctcWbx9JMHYebZanuh3byeSKvKIGCNaksWByhEId1CtYC4cnIalPYqLt86JxvgvXlp
+         89kQ==
+X-Gm-Message-State: ANoB5pmSvWNZB+JKcJ7Bpmy6ljIxHRxLCWyS8RSe9HDPqjAhmyek0c6o
+        L20VIVodofPp9xmP2K7/YhF8pTBAtfgXxTcl
+X-Google-Smtp-Source: AA0mqf64RWzzi27+MgKKIt62u31McnZURFRGUmm0JvtRaf3tquhSgS8+d00TBNGsFF+MM7vHX4Y45A==
+X-Received: by 2002:a05:600c:314f:b0:3cf:9efc:a9b7 with SMTP id h15-20020a05600c314f00b003cf9efca9b7mr66575359wmo.10.1670408049403;
+        Wed, 07 Dec 2022 02:14:09 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id x11-20020adfec0b000000b00241f029e672sm18763941wrn.107.2022.12.07.02.14.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 02:14:08 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: Fix spelling mistake "allright" -> "alright"
+Date:   Wed,  7 Dec 2022 10:14:07 +0000
+Message-Id: <20221207101407.2285701-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowAAnLnJRZ5BjUr8+BQ--.9743S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCryDCFWDCw1rCF1xWr1xZrb_yoWrJry7pa
-        1xJw1jqwsrAF4ktFy3JF1UWF4rJ3WIka4FkrZ8A3sIvF1UAryrCry5AF1jvanYgF4DAr17
-        J3Wjgr45WFnFyrUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
-        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
-        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
-        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JU6c_
-        fUUUUU=
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As kzalloc may fail and return NULL pointer, it should be better to check
-the return value in order to avoid the NULL pointer dereference.
-Moreover, dcn3_clk_mgr_construct should return the error and
-should be checked cascadingly.
+There are spelling mistakes in messages in the prctl tests. Fix these.
+Note: One can use "all right", or "alright", I'm fixing this to use
+the slightly more informal and more modern form of the spelling for
+the fix.
 
-Fixes: 4d55b0dd1cdd ("drm/amd/display: Add DCN3 CLK_MGR")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c         | 9 ++++++---
- .../gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c | 6 +++++-
- .../gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.h | 2 +-
- 3 files changed, 12 insertions(+), 5 deletions(-)
+ tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c | 2 +-
+ tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
-index f276abb63bcd..c08916bd5650 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/clk_mgr.c
-@@ -257,15 +257,18 @@ struct clk_mgr *dc_clk_mgr_create(struct dc_context *ctx, struct pp_smu_funcs *p
- 			return NULL;
- 		}
- 		if (ASICREV_IS_SIENNA_CICHLID_P(asic_id.hw_internal_rev)) {
--			dcn3_clk_mgr_construct(ctx, clk_mgr, pp_smu, dccg);
-+			if (dcn3_clk_mgr_construct(ctx, clk_mgr, pp_smu, dccg))
-+				return NULL;
- 			return &clk_mgr->base;
- 		}
- 		if (ASICREV_IS_DIMGREY_CAVEFISH_P(asic_id.hw_internal_rev)) {
--			dcn3_clk_mgr_construct(ctx, clk_mgr, pp_smu, dccg);
-+			if (dcn3_clk_mgr_construct(ctx, clk_mgr, pp_smu, dccg))
-+				return NULL;
- 			return &clk_mgr->base;
- 		}
- 		if (ASICREV_IS_BEIGE_GOBY_P(asic_id.hw_internal_rev)) {
--			dcn3_clk_mgr_construct(ctx, clk_mgr, pp_smu, dccg);
-+			if (dcn3_clk_mgr_construct(ctx, clk_mgr, pp_smu, dccg))
-+				return NULL;
- 			return &clk_mgr->base;
- 		}
- 		if (asic_id.chip_id == DEVICE_ID_NV_13FE) {
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-index 3ce0ee0d012f..86c29dc45b70 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.c
-@@ -517,7 +517,7 @@ struct clk_mgr_funcs dcn3_fpga_funcs = {
- };
+diff --git a/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c b/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
+index 62a93cc61b7c..868f37fd1d5e 100644
+--- a/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
++++ b/tools/testing/selftests/prctl/disable-tsc-ctxt-sw-stress-test.c
+@@ -79,7 +79,7 @@ int main(void)
+ {
+ 	int n_tasks = 100, i;
  
- /*todo for dcn30 for clk register offset*/
--void dcn3_clk_mgr_construct(
-+int dcn3_clk_mgr_construct(
- 		struct dc_context *ctx,
- 		struct clk_mgr_internal *clk_mgr,
- 		struct pp_smu_funcs *pp_smu,
-@@ -568,11 +568,15 @@ void dcn3_clk_mgr_construct(
- 	dce_clock_read_ss_info(clk_mgr);
+-	fprintf(stderr, "[No further output means we're allright]\n");
++	fprintf(stderr, "[No further output means we're alright]\n");
  
- 	clk_mgr->base.bw_params = kzalloc(sizeof(*clk_mgr->base.bw_params), GFP_KERNEL);
-+	if (!clk_mgr->base.bw_params)
-+		return -ENOMEM;
+ 	for (i=0; i<n_tasks; i++)
+ 		if (fork() == 0)
+diff --git a/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c b/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
+index 79950f9a26fd..3822532fc0c6 100644
+--- a/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
++++ b/tools/testing/selftests/prctl/disable-tsc-on-off-stress-test.c
+@@ -83,7 +83,7 @@ int main(void)
+ {
+ 	int n_tasks = 100, i;
  
- 	/* need physical address of table to give to PMFW */
- 	clk_mgr->wm_range_table = dm_helpers_allocate_gpu_mem(clk_mgr->base.ctx,
- 			DC_MEM_ALLOC_TYPE_GART, sizeof(WatermarksExternal_t),
- 			&clk_mgr->wm_range_table_addr);
-+
-+	return 0;
- }
+-	fprintf(stderr, "[No further output means we're allright]\n");
++	fprintf(stderr, "[No further output means we're alright]\n");
  
- void dcn3_clk_mgr_destroy(struct clk_mgr_internal *clk_mgr)
-diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.h b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.h
-index 2cd95ec38266..8bdfed735184 100644
---- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.h
-+++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn30/dcn30_clk_mgr.h
-@@ -88,7 +88,7 @@
- #endif
- void dcn3_init_clocks(struct clk_mgr *clk_mgr_base);
- 
--void dcn3_clk_mgr_construct(struct dc_context *ctx,
-+int dcn3_clk_mgr_construct(struct dc_context *ctx,
- 		struct clk_mgr_internal *clk_mgr,
- 		struct pp_smu_funcs *pp_smu,
- 		struct dccg *dccg);
+ 	for (i=0; i<n_tasks; i++)
+ 		if (fork() == 0)
 -- 
-2.25.1
+2.38.1
 
