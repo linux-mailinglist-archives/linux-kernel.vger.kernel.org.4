@@ -2,143 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3714564642F
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:39:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52815646430
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 23:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLGWjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 17:39:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
+        id S229679AbiLGWku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 17:40:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGWjA (ORCPT
+        with ESMTP id S229437AbiLGWks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 17:39:00 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C5B6F0FD
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:38:56 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7Lx9uv030858;
-        Wed, 7 Dec 2022 22:38:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : content-transfer-encoding : content-type :
- mime-version; s=corp-2022-7-12;
- bh=mMjcFjpkGrUMbQah+4ESEDYEGowW7s7KaucTg1AiKDE=;
- b=P4kfCrXCgnaq8O6rN5o1c5IYWDEst3Nm8KYAaRUcvfWU9NGun1sI6p/sczbd1N/V4LYy
- HNwwvJWNFs8lRVIxvr+ey3c5Xa0YJ2uYhaj6yg2JgWBRVwgvxGoZ37CwMeVmErbn+FCR
- 3RDKUlX6H8j/NEynPn6aAxbS+SVcLCBKB3gjydHrem1jbO8uSpcShtSa2c1qTeQfY1FW
- vH/rdySKgcaEtfNqz1s9bxStgBv/E5HTFApECsPfgl+ZD8zu/99HPtvhWvmPPojoZYY0
- U3VrACkE//cY2/Gy9ndENAQ9OJqyptjP03cKqvdvuZzrVy6NQSKQlVb0HBwZXEO6Z/TU Xg== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maudk9mrw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 22:38:44 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B7L19AM021779;
-        Wed, 7 Dec 2022 22:38:43 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa8gk7af-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 07 Dec 2022 22:38:43 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QWvYqQwuppKl0tc+C90H6lC7Jl6XXM4fuZaYLb1IRxn1VOPnPF2h0HuBkYUKsSpbaJCS9sGNTVdy3bklWOFUzvKBhaoRSaPJd0o5Z38rXv5CwO0hRqgAJkUogJhvy/i/a+CHYfnNaymla6auVkBrwD/L/xC5nfXmNbult4X5Ms+Pgc38TW/Ade1MImv62FZZmmwlSjZAaSPKjHsY4mX83aHOCcAQYvpbA/D5Hobdqc6fffmZlJN5Lbtp2CiHsWwqgC7xs95QwOv6tNzRLu2R0UBu8yzMOAEyVZnJsKbfY5c32NpNTnM+mzJpRF0RlBnt8TFshiVflMIWLi6+H6sLCg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mMjcFjpkGrUMbQah+4ESEDYEGowW7s7KaucTg1AiKDE=;
- b=mEM1lsRDYWyNiK1SJTRZo0TCW9OwV9gfg1S8fMcevNShZj8aE9eIi8IUlN0Itt1ZoxUsNwZ74uriOdvFR74fes/gE5bKe35+NMgulAyOXGY2jo8LXTNcqVDv0AW162MbMtuzPS6Xn+Lc5jSO62U3knbUmYH8uBtSx2GoMbzOiEMpDUGMFXx4FaPWF6NaBXfs22jAoY62anptTRsKi+V6g8y5une9qJngG7iVx1ay/oq8MJbLhltSz6ovgi3HQFA8WVNsalWSD8X2Q/Ochj8zHvV/CjTPHC0Ucw2k5nQ0Wq5pN1FgxM54k/V1weV/tmpybdPG+SrO+QlIL+GMo33apA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Wed, 7 Dec 2022 17:40:48 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50F118324D
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 14:40:47 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id s196so17690594pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 14:40:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mMjcFjpkGrUMbQah+4ESEDYEGowW7s7KaucTg1AiKDE=;
- b=nFtM4Tsvg3Wdgs8spbBe478UEl9Jz9oGwkqt98wdZlRNy2N99cqrYj13ljzO7lCAvhzWlkFrYGIQwgckAftMQhhUiyJqAyKBkTGyH52NXj26QVXhT9ntVn3JTzKMa00Gl7yla253ivn8fk9zKLAVWaRO+MH3qgUpgph0HgamaZE=
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
- by DS7PR10MB5166.namprd10.prod.outlook.com (2603:10b6:5:3a4::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Wed, 7 Dec
- 2022 22:38:41 +0000
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::51be:1301:5ec3:996f]) by CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::51be:1301:5ec3:996f%5]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
- 22:38:41 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, willy@infradead.org, tsahu@linux.ibm.com,
-        jhubbard@nvidia.com, david@redhat.com,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero support
-Date:   Wed,  7 Dec 2022 14:37:31 -0800
-Message-Id: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.38.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR04CA0016.namprd04.prod.outlook.com
- (2603:10b6:a03:40::29) To CH0PR10MB5113.namprd10.prod.outlook.com
- (2603:10b6:610:c9::8)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YJzcWSpisZxsvZ51YIrLkcT67WEbgQAyYGf6F8KVYIQ=;
+        b=UvK3396Gn/1nQ8kfhBk1nh5KPnRyp77nuDWpnLNzkFiEWSVpX7j1BmSCAqCOr6oxLq
+         PCbbmYy7H1jfQyifTZ3W+NlyG3vxHMS6bdxr8L6RrKl1uABUuajcHpKkvVVIVTADiKdX
+         hppndK07TsPVzebvK66bkxJ8otsdo90xJy18pezX0UvGYj3bzsa8Exk1iShCxW7WZdeh
+         4hyxKzOpiTeuognJxLPFCEoZVvaXC6/tTYxFwqRVq/1AiOsqsI6otY+toAtj+7cwKlCO
+         QXlwwyz/DD5gcMa5aNNhTAsvKFa5xMC8Y8z6+t4CQYY3R+qUK/msmhOPmgZo1V76lPWH
+         TjCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YJzcWSpisZxsvZ51YIrLkcT67WEbgQAyYGf6F8KVYIQ=;
+        b=utbGCdcRYtLYmXDHH1s/0yaWCXNqak0bYnjAGK2ZJ/6Er6jUpRxioP2lO3kdMbl/5w
+         NhV//6e0Vvq1rmD85KvRyRjWl3H4W7I+ATulmpb3upHyisBvogXq33nt14ZHqLeFVtF9
+         Lxzp/rCqMlg8CIkdGCL4/PcA+FfddOhwRsxCwty8TXW83YMEpZuMU0C7xiJZ+aG6EHy3
+         VRisC/uv8wFI6JOjAmF3QEl+NOsqcsxLWBRSOhQ9BidxKSeUVc12hK+gjUJzkCLZGe5S
+         VGFR3qUwEBDIEbueZ22zxWLR//dm+ty44RGM9vBxE33kJ10SDWToRNkH5cOuMwWT8+Oe
+         cWmw==
+X-Gm-Message-State: ANoB5pmDyHMkAL31v3a26Mm2SJnZxs1WXxkr9ZhmQThJO+smrJI9VijE
+        GsDr9AuhwLnCat9Zq+T5ebPd6fwTEsl3eMEBd+M0iFJv
+X-Google-Smtp-Source: AA0mqf4OIo0Mqi1EcLdKGX2GW3GQkWpHDE8XylXCgxwfvqHx/0ItM5ykHtqjqH/QaIz7xVjQ1YSd0mTVVaZ+RmznT7Q=
+X-Received: by 2002:a63:1f48:0:b0:439:db5:f817 with SMTP id
+ q8-20020a631f48000000b004390db5f817mr67696547pgm.310.1670452846776; Wed, 07
+ Dec 2022 14:40:46 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|DS7PR10MB5166:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9eb76d05-5c03-4451-50f9-08dad8a3ca54
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BK5zlEl8h7P5ZgTHeAkALNIBxvgLbQy8TkiWYc9IXlqzTB6YXX0InJOmCqcIl5/rPtrs9W/S9ZC6+krw5Vc7yNUdZnYY/ZDWYqxR9pCVATYx9zscgm6GhUoHg9wH4s4VJ7dL7mbuU7Hf9FkeCnQB0s5u67g1ZVwelDWnaBp1LjdemUuT0lDHxKQ3C/hXX7yE/roe9OzRy+tQwHiICDFhFndHuXjZkRz8yboQF+CLko0KpNh4vU0e4WIXoswcEBNW+gYbPs+p+HLI3Q3gl6n945Dtll/Fn3j8OsuiF7dmSJlxeDfLmEvOeBPwhMDeLOoEewYUS1BrqCWZKlMSSBkhxlS0/NmbL8BdIWbv+9ya6ZUM2nIrR4AnNu3ASsUYHY7JnYlRhDCq4QOh4CwwToIby6smn/tsco2Zef57ZtOeopPIfs78DgbRubmfBcQf7H1eHXhBJFEmdbQI3acW1EuzYdmSwUJeKKUDY8uxUPjTKYJOYqLFNhDWVyJqHTNTsE7zB6YS6tpZTj5uY8kqbwDazZuR0omt2Sf3Y1vKi0nMPMQCOf4+1oZHRZ3mDQKrbVsENovTempl5CvfH4sn3gegNRbiI7n/pYi77heBiECT6AzuRqjtIx7O/HfbQSbmzuGY
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(376002)(136003)(346002)(366004)(451199015)(8676002)(44832011)(2906002)(4326008)(83380400001)(5660300002)(41300700001)(8936002)(6666004)(1076003)(6506007)(6512007)(186003)(107886003)(478600001)(6486002)(2616005)(66556008)(316002)(86362001)(66476007)(66946007)(38100700002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?X0anNwI6/qYmEq6+CgRd2SAXrfZ26m1Q5sqJERWTD1ypcQOD9N/pJ6FsM78r?=
- =?us-ascii?Q?LNTMlDce3v9NmZAvh7wsZq64Drvz8iACVyRMcdS4gP1s6PHh76IJvjurhj1O?=
- =?us-ascii?Q?jeK9jWViLfPBcpbYhWW6Q+WVRmzmvfCq1M4xRi29RQKstQ5iyaAnVwmw3N5w?=
- =?us-ascii?Q?85ALSME7loR/HXkvFkN6bttZaZbEv+E15Y1sxv8YZ4xiX/2hYfg1ZQj0RroV?=
- =?us-ascii?Q?B7e2sHz14DluvCKaFfbJQz9xdj+vz+ybqWqQNVOGLNWPPyXJn3I4XP3cQP+c?=
- =?us-ascii?Q?07UTghnK18sVioEbtzn2TyhYZQ3jtWeEtaKgGbcQtxKkpJ9XF5tVntbju8ro?=
- =?us-ascii?Q?aXyo35ea0Z+gTdBhf8rT0lJEgxVyL2lYNE1gzLAYllssuGrxRF8NEm/vMxvK?=
- =?us-ascii?Q?ZBWp+KjgZpGpf4M/z4rAZXUZlS24cVr7qMtl+oRb8/75Ec3p4adAm/mNbRt/?=
- =?us-ascii?Q?QETe7+6ytA10dsPmDsWU3X9Sf2x+EkOzLVv7Tl7z0ETKvGG0qObVnakRTSFA?=
- =?us-ascii?Q?AUE9nxafBQ6BJBAbXycHnS7lRwD9Bsys4rs4zmTivN7J3OyZr0Z0gDGHpxcJ?=
- =?us-ascii?Q?4MUYK3sC3W0i8m8ZJkpHejC0A9YWjLOG7ubE6cxFpGIllAZfHDmRQGxrsJHH?=
- =?us-ascii?Q?aWOvyaDyvTdOjFoVaDSHz41JB3QlRjroxSHdhAbAzqm6aDxf/YSGVKKSZOyz?=
- =?us-ascii?Q?lZ41GJPChDE96YtZmeC7MDrsX1zksGuuP4Vu9k393ZCyb46N2GcgXsXJlYAf?=
- =?us-ascii?Q?mP/vnf+gDP2Mfxdgu0Kbf7o3S/9SWVY4LOJmdoa6HzgGq9hdOilns46bpvm0?=
- =?us-ascii?Q?pMC76RIC+CZUOjqKH/srveoQpTDlV5aEAv6BowbTyq30pd4so9Q3zu3hDNMw?=
- =?us-ascii?Q?PhXJfTQKajRxwMegXsGB/Hj3b2Xfshdye9EmND3JaYUVgNYpoX9IBmhbQlnD?=
- =?us-ascii?Q?hnySfvUuA9mepd2HuVGVr6l2tHBvyxAwJKh6Dt6eFZIVPA4tCjmUWRm8flqw?=
- =?us-ascii?Q?E56ofOBx5YmAWuJHGSV9tkZ+fyiVIXpAJ5zvGR0i89UXleaBhKWtPppVARq6?=
- =?us-ascii?Q?dIFvA/azzSE1Gm28pjeGeCXwiOHkN4ruZppCMgnxH0yiiC1xdp9Qqquk59on?=
- =?us-ascii?Q?g2pbUzxmO1K0UuZjar8MW2W6B4DbbmJQRiz7QXQr9B3FbaF6of+/jorsi6Un?=
- =?us-ascii?Q?9Vh+8zek1jgkXF0sctF9YulMzz9zSzq/ZkUHtMwdjER2kZs+8EWdOR7+mcjF?=
- =?us-ascii?Q?NwGHm8SI+WC5t0zqVldNRA0RRodtLbdiaj9uBBNuXSuowKnL5z1dDHcJPB93?=
- =?us-ascii?Q?zYzVT/i98a/rN/FVd/5/H5UkchTcSzNWORDXM63/glmg1JCz3r3UoPwICfVM?=
- =?us-ascii?Q?NsVFNZgNl4f8JFzpZ7vFbsDVhm3hdje7nE7Sd9bEjR9vwMgunfHu7/ldRq7v?=
- =?us-ascii?Q?di1gBQvvSxKvah+VRhdKtQztG6pYFHOZB8g3lKGQe4cC5hXz5nichxbqRXe4?=
- =?us-ascii?Q?+cztsMNLqnsqQ3hqI2bSMPieJ9wwSjdxkBDm393sePImPJMsk81+r+BQIlo0?=
- =?us-ascii?Q?kwzltpeACJfY6joW6hbPNhahinDXEDXE5DgPfGrQzIkZxn6agH96/Uc4ZT99?=
- =?us-ascii?Q?Dewzo/IBFvmmL6DSPDrICIrPB5Ymzi8ZikYrT1WLcBmNJKQcy1hxCqZSg/Oz?=
- =?us-ascii?Q?wt/6OA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9eb76d05-5c03-4451-50f9-08dad8a3ca54
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 22:38:41.4169
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K/IXl88UsPqYnDS5vXfn94rJSoyyHRgpi9PjWKFtCUHxGe7qighppYPg19cFckzgkI3aIBQ5/odukBcJQ9A3p790MWfzRjkbPtmKOGF6GPI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5166
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_11,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212070192
-X-Proofpoint-GUID: qEZscxVuqPs59qN_RdmAhCBOAk3lV_5P
-X-Proofpoint-ORIG-GUID: qEZscxVuqPs59qN_RdmAhCBOAk3lV_5P
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221206105737.69478-1-david@redhat.com>
+In-Reply-To: <20221206105737.69478-1-david@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 7 Dec 2022 14:40:34 -0800
+Message-ID: <CAHbLzkra0mjn4utzYPNp+-e77W3tb6yJiJMhkK9Kg=Ra_3rQnQ@mail.gmail.com>
+Subject: Re: [PATCH v2] mm/swap: fix SWP_PFN_BITS with CONFIG_PHYS_ADDR_T_64BIT
+ on 32bit
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -146,40 +70,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document hugetlb's use of a zero compound order so support for zero
-orders is not removed from folio_set_compound_order().
+On Tue, Dec 6, 2022 at 2:57 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> We use "unsigned long" to store a PFN in the kernel and phys_addr_t to
+> store a physical address.
+>
+> On a 64bit system, both are 64bit wide. However, on a 32bit system, the
+> latter might be 64bit wide. This is, for example, the case on x86 with
+> PAE: phys_addr_t and PTEs are 64bit wide, while "unsigned long" only
+> spans 32bit.
+>
+> The current definition of SWP_PFN_BITS without MAX_PHYSMEM_BITS misses
+> that case, and assumes that the maximum PFN is limited by an 32bit
+> phys_addr_t. This implies, that SWP_PFN_BITS will currently only be able to
+> cover 4 GiB - 1 on any 32bit system with 4k page size, which is wrong.
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
-Suggested-by: Muchun Song <songmuchun@bytedance.com>
----
-This can be folded into f2b67a51d0ef6871d4fb0c3e8199f278112bd108
-mm: add folio dtor and order setter functions
+Thanks for debugging this. IIUC this means even swap is actually
+broken on x86_32 + PAE?
 
- include/linux/mm.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+>
+> Let's rely on the number of bits in phys_addr_t instead, but make sure to
+> not exceed the maximum swap offset, to not make the  BUILD_BUG_ON() in
+> is_pfn_swap_entry() unhappy. Note that swp_entry_t is effectively an
+> unsigned long and the maximum swap offset shares that value with the
+> swap type.
+>
+> For example, on an 8 GiB x86 PAE system with a kernel config based on
+> Debian 11.5 (-> CONFIG_FLATMEM=y, CONFIG_X86_PAE=y), we will currently fail
+> removing migration entries (remove_migration_ptes()), because
+> mm/page_vma_mapped.c:check_pte() will fail to identify a PFN match as
+> swp_offset_pfn() wrongly masks off PFN bits. For example,
+> split_huge_page_to_list()->...->remap_page() will leave migration
+> entries in place and continue to unlock the page.
+>
+> Later, when we stumble over these migration entries (e.g., via
+> /proc/self/pagemap), pfn_swap_entry_to_page() will BUG_ON() because
+> these migration entries shouldn't exist anymore and the page was
+> unlocked.
+>
+> [   33.067591] kernel BUG at include/linux/swapops.h:497!
+> [   33.067597] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
+> [   33.067602] CPU: 3 PID: 742 Comm: cow Tainted: G            E      6.1.0-rc8+ #16
+> [   33.067605] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.0-1.fc36 04/01/2014
+> [   33.067606] EIP: pagemap_pmd_range+0x644/0x650
+> [   33.067612] Code: 00 00 00 00 66 90 89 ce b9 00 f0 ff ff e9 ff fb ff ff 89 d8 31 db e8 48 c6 52 00 e9 23 fb ff ff e8 61 83 56 00 e9 b6 fe ff ff <0f> 0b bf 00 f0 ff ff e9 38 fa ff ff 3e 8d 74 26 00 55 89 e5 57 31
+> [   33.067615] EAX: ee394000 EBX: 00000002 ECX: ee394000 EDX: 00000000
+> [   33.067617] ESI: c1b0ded4 EDI: 00024a00 EBP: c1b0ddb4 ESP: c1b0dd68
+> [   33.067619] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010246
+> [   33.067624] CR0: 80050033 CR2: b7a00000 CR3: 01bbbd20 CR4: 00350ef0
+> [   33.067625] Call Trace:
+> [   33.067628]  ? madvise_free_pte_range+0x720/0x720
+> [   33.067632]  ? smaps_pte_range+0x4b0/0x4b0
+> [   33.067634]  walk_pgd_range+0x325/0x720
+> [   33.067637]  ? mt_find+0x1d6/0x3a0
+> [   33.067641]  ? mt_find+0x1d6/0x3a0
+> [   33.067643]  __walk_page_range+0x164/0x170
+> [   33.067646]  walk_page_range+0xf9/0x170
+> [   33.067648]  ? __kmem_cache_alloc_node+0x2a8/0x340
+> [   33.067653]  pagemap_read+0x124/0x280
+> [   33.067658]  ? default_llseek+0x101/0x160
+> [   33.067662]  ? smaps_account+0x1d0/0x1d0
+> [   33.067664]  vfs_read+0x90/0x290
+> [   33.067667]  ? do_madvise.part.0+0x24b/0x390
+> [   33.067669]  ? debug_smp_processor_id+0x12/0x20
+> [   33.067673]  ksys_pread64+0x58/0x90
+> [   33.067675]  __ia32_sys_ia32_pread64+0x1b/0x20
+> [   33.067680]  __do_fast_syscall_32+0x4c/0xc0
+> [   33.067683]  do_fast_syscall_32+0x29/0x60
+> [   33.067686]  do_SYSENTER_32+0x15/0x20
+> [   33.067689]  entry_SYSENTER_32+0x98/0xf1
+>
+> Decrease the indentation level of SWP_PFN_BITS and SWP_PFN_MASK to keep
+> it readable and consistent.
+>
+> Fixes: 0d206b5d2e0d ("mm/swap: add swp_offset_pfn() to fetch PFN from swap entry")
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>
+> v1 -> v2:
+> * Rely on sizeof(phys_addr_t) and min_t() instead.
+> * Survives my various cross compilations and testing on x86 PAE.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 443d496949a8..cd8508d728f1 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -999,9 +999,16 @@ static inline void set_compound_order(struct page *page, unsigned int order)
- #endif
- }
- 
-+/*
-+ * folio_set_compound_order is generally passed a non-zero order to
-+ * initialize a large folio.  However, hugetlb code abuses this by
-+ * passing in zero when 'dissolving' a large folio.
-+ */
- static inline void folio_set_compound_order(struct folio *folio,
- 		unsigned int order)
- {
-+	VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
-+
- 	folio->_folio_order = order;
- #ifdef CONFIG_64BIT
- 	folio->_folio_nr_pages = order ? 1U << order : 0;
--- 
-2.38.1
+Reviewed-by: Yang Shi <shy828301@gmail.com>
 
+>
+> ---
+>  include/linux/swapops.h | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> index 86b95ccb81bb..424d586ed1ca 100644
+> --- a/include/linux/swapops.h
+> +++ b/include/linux/swapops.h
+> @@ -33,11 +33,13 @@
+>   * can use the extra bits to store other information besides PFN.
+>   */
+>  #ifdef MAX_PHYSMEM_BITS
+> -#define SWP_PFN_BITS                   (MAX_PHYSMEM_BITS - PAGE_SHIFT)
+> +#define SWP_PFN_BITS           (MAX_PHYSMEM_BITS - PAGE_SHIFT)
+>  #else  /* MAX_PHYSMEM_BITS */
+> -#define SWP_PFN_BITS                   (BITS_PER_LONG - PAGE_SHIFT)
+> +#define SWP_PFN_BITS           min_t(phys_addr_t, \
+> +                                     sizeof(phys_addr_t) * 8 - PAGE_SHIFT, \
+> +                                     SWP_TYPE_SHIFT)
+>  #endif /* MAX_PHYSMEM_BITS */
+> -#define SWP_PFN_MASK                   (BIT(SWP_PFN_BITS) - 1)
+> +#define SWP_PFN_MASK           (BIT(SWP_PFN_BITS) - 1)
+>
+>  /**
+>   * Migration swap entry specific bitfield definitions.  Layout:
+>
+> base-commit: 76dcd734eca23168cb008912c0f69ff408905235
+> --
+> 2.38.1
+>
