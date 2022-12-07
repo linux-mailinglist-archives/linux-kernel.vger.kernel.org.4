@@ -2,78 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738D864543C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:47:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A461645438
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 07:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiLGGqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 01:46:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37490 "EHLO
+        id S229930AbiLGGpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 01:45:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiLGGqL (ORCPT
+        with ESMTP id S229901AbiLGGpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 01:46:11 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81A453EEF
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 22:46:07 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id x28so9902370lfn.6
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 22:46:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UggBnOsrR1wkrKlJvT82Md2mFprFXQWOhZq6Vyy7RUo=;
-        b=mCdlG2Bgc/f4NLCzy43WqBES4E8lPmklK7koyRdfChGfTWeS85kK7HHqqOJP8BIjS3
-         QYx977jxzJ8U7TndfDGPoUlnX6VObd82cqQypwg94kjfdt2Io+tb1H96tFvX85/TF0rx
-         lzk4O7hh59l8MjRx2OdlKMZmECT5vh/Oeg5j5M0fv7Ea1Hd5DWotLGYMLb/YbtYlstoY
-         KS1luVzcvx0LpAUdHPue0E5ZiannpyztMjNk0XuHCscv7hWVuJAtMDc5TbfAdK6YFUYP
-         GjwIsfXsvxZXV54MbiVtWAcrdveBvZW/3Rgfqg7gd+ABQDOAkE+9gWS0jlz0hCz1jYO7
-         OWeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UggBnOsrR1wkrKlJvT82Md2mFprFXQWOhZq6Vyy7RUo=;
-        b=Th1LKYxMKepMDb+z15fHxty3HUvij25ZAm1Y3zoQUoE44Dhkac5klazuVb8u6twBcv
-         bvhWOvxjCjsdgvU/iuLRNP6M6eJsmzAOFA5gajWcz0ywV8T7cvSC4c96pN0DH9Chle8u
-         PC21Zpjv8h6rImi3JXa5MCSHK3yDkNYip04aNsSfYcfd4ZRxmb1rF25ym1dwHxB5EWKc
-         V1ld9lStytBhA/xaPX5HdVxvrNTBSocmuPXpalHz014aVWGldjEScM6V+1KML461QhUH
-         dSSZLf60pJV58U6c1oNpR/pZbVXPYEejGmzt9wgqrDnvFFBzjqVHrMgxxC80ekEYwgy+
-         aZQA==
-X-Gm-Message-State: ANoB5pmj5/ewhoYQVqW8MkxDHnLnldsCpybeMQLtNeBJfiD5R9UwpmMk
-        Yt/G8S9rVm8s+rQ6oqKwR1zfgT4qdZ9TsgWwuH/H+Q==
-X-Google-Smtp-Source: AA0mqf75R2vTJ9LYkGzilSarQU81AXrkyaGMWGmYtfsvRnYLw6CFNWv6oHmlaI3sTnIQ+qBA+vfhN4eC63FSUJryZio=
-X-Received: by 2002:a05:6512:25a8:b0:4b5:7bf5:f885 with SMTP id
- bf40-20020a05651225a800b004b57bf5f885mr3154248lfb.330.1670395566220; Tue, 06
- Dec 2022 22:46:06 -0800 (PST)
+        Wed, 7 Dec 2022 01:45:43 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162672A723
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 22:45:42 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p2oBE-0006IE-Kn; Wed, 07 Dec 2022 07:45:20 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1p2oB1-0008S8-Sx; Wed, 07 Dec 2022 07:45:07 +0100
+Date:   Wed, 7 Dec 2022 07:45:07 +0100
+From:   Sascha Hauer <sha@pengutronix.de>
+To:     Michael Riesch <michael.riesch@wolfvision.net>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Subject: Re: [PATCH 1/5] drm/rockchip: rgb: embed drm_encoder into
+ rockchip_encoder
+Message-ID: <20221207064507.GV29728@pengutronix.de>
+References: <20221130140217.3196414-1-michael.riesch@wolfvision.net>
+ <20221130140217.3196414-2-michael.riesch@wolfvision.net>
 MIME-Version: 1.0
-References: <20221206144134.1919987-1-yebin@huaweicloud.com>
-In-Reply-To: <20221206144134.1919987-1-yebin@huaweicloud.com>
-From:   Jun Nie <jun.nie@linaro.org>
-Date:   Wed, 7 Dec 2022 14:44:12 +0800
-Message-ID: <CABymUCN-WC5aCpVestRFpXVgZobxs48crUDX2419yvXxLgyjRQ@mail.gmail.com>
-Subject: Re: [PATCH v2] ext4: fix kernel BUG in 'ext4_write_inline_data_end()'
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
-        syzbot+4faa160fa96bfba639f8@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221130140217.3196414-2-michael.riesch@wolfvision.net>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bin,
+On Wed, Nov 30, 2022 at 03:02:13PM +0100, Michael Riesch wrote:
+> Commit 540b8f271e53 ("drm/rockchip: Embed drm_encoder into
+> rockchip_decoder") provides the means to pass the endpoint ID to the
+> VOP2 driver, which sets the interface MUX accordingly. However, this
+> step has not yet been carried out for the RGB output block. Embed the
+> drm_encoder structure into the rockchip_encoder structure and set the
+> endpoint ID correctly.
+> 
+> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_rgb.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_rgb.c b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> index 75eb7cca3d82..16201a5cf1e8 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_rgb.c
+> @@ -18,17 +18,17 @@
+>  #include <drm/drm_probe_helper.h>
+>  #include <drm/drm_simple_kms_helper.h>
+>  
+> +#include <dt-bindings/soc/rockchip,vop2.h>
+> +
+>  #include "rockchip_drm_drv.h"
+>  #include "rockchip_drm_vop.h"
+>  #include "rockchip_rgb.h"
+>  
+> -#define encoder_to_rgb(c) container_of(c, struct rockchip_rgb, encoder)
+> -
+>  struct rockchip_rgb {
+>  	struct device *dev;
+>  	struct drm_device *drm_dev;
+>  	struct drm_bridge *bridge;
+> -	struct drm_encoder encoder;
+> +	struct rockchip_encoder encoder;
+>  	struct drm_connector connector;
+>  	int output_mode;
+>  };
+> @@ -125,7 +125,7 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+>  		return ERR_PTR(ret);
+>  	}
+>  
+> -	encoder = &rgb->encoder;
+> +	encoder = &rgb->encoder.encoder;
+>  	encoder->possible_crtcs = drm_crtc_mask(crtc);
+>  
+>  	ret = drm_simple_encoder_init(drm_dev, encoder, DRM_MODE_ENCODER_NONE);
+> @@ -161,6 +161,8 @@ struct rockchip_rgb *rockchip_rgb_init(struct device *dev,
+>  		goto err_free_encoder;
+>  	}
+>  
+> +	rgb->encoder.crtc_endpoint_id = ROCKCHIP_VOP2_EP_RGB0;
 
-Thanks for the patch! The bug is reproduced with this patch. I can
-help trigger another
-test when you have new patch.
-https://syzkaller.appspot.com/text?tag=CrashLog&x=16760797880000
+This is vop2 specific. This code is used with the vop1 as well, so it
+doesn't look like it belongs here, at least not hidden in a patch titled
+"embed drm_encoder into rockchip_encoder".
 
-Regards,
-Jun
+Normally the crtc_endpoint_id is set by the encoder, coming from the
+encoder node, asking the question "To which port on the VOP am I
+connected to?"
+
+Here the situation is different. We are called from the VOP and the
+question instead is: "Is there something connected to VPx endpoint id
+ROCKCHIP_VOP2_EP_RGB0?"
+
+You might need a vop2 specific entry to this code.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
