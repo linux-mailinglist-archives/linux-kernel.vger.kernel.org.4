@@ -2,84 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B30645F5E
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:57:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C22645F61
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 17:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiLGQ5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 11:57:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42266 "EHLO
+        id S229809AbiLGQ5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 11:57:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiLGQ5E (ORCPT
+        with ESMTP id S229806AbiLGQ5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 11:57:04 -0500
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE1A62E8F;
-        Wed,  7 Dec 2022 08:57:04 -0800 (PST)
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-1447c7aa004so13843631fac.11;
-        Wed, 07 Dec 2022 08:57:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wjsoTXGri8JLvJW2T8GIZAWKirugVS34hV+s8paAZjM=;
-        b=B95HHd9RFVh0YWSFXqw1o7LpQmjiI5/V10JgeDz0NdFru4Lm8pnjCR649fOo/Hw/63
-         om/7vGEtkqJceLGwILoU3ZhROi7rRdoUCKnTdKK4iQSZf0Ze7RBE2HFSbS1rk9VRwvNz
-         gUIeiN6zbGwp8JT4M40R+v2X6KPThUqQM4WdJSjIl1sXa0u0kLlyr8gFMPiEb8z41a+k
-         2VCmijcAihW+ftq7ctgcTnN5IRN0oWliFjbU2JCEzKtCw5BHfCl9WwkzwTuGG5OWff4W
-         KMmCNMXcc/1ko86zk4pT8TzN/0t0Tpx+wuuKTevxEtPc3X/M853ci5tRFoT930jSlmgA
-         W/qQ==
-X-Gm-Message-State: ANoB5pny8xeV48FssdNaZJqSbB5pUMmN5TXwpS3xZZ21LAAYE4re8bF6
-        pyJlPzxAhbFnlMn2W2jh1CVeZkay5Q==
-X-Google-Smtp-Source: AA0mqf7VORNFgWUjiYSUyWALvb0Vfyh3rcM9Jxf+M/TQedidfiv9ZxymKnscFUHhOk0EfWqVdzqw4g==
-X-Received: by 2002:a05:6870:e99f:b0:142:d085:c1cc with SMTP id r31-20020a056870e99f00b00142d085c1ccmr44003737oao.29.1670432223084;
-        Wed, 07 Dec 2022 08:57:03 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id n25-20020a9d6f19000000b00660e833baddsm10495609otq.29.2022.12.07.08.57.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 08:57:02 -0800 (PST)
-Received: (nullmailer pid 2401862 invoked by uid 1000);
-        Wed, 07 Dec 2022 16:57:02 -0000
-Date:   Wed, 7 Dec 2022 10:57:02 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH] dt-bindings: vendor-prefixes: sort entries alphabetically
-Message-ID: <20221207165702.GA2396480-robh@kernel.org>
-References: <20221202110536.22230-1-krzysztof.kozlowski@linaro.org>
+        Wed, 7 Dec 2022 11:57:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C594B775;
+        Wed,  7 Dec 2022 08:57:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85FB7B81B90;
+        Wed,  7 Dec 2022 16:57:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C41C433D6;
+        Wed,  7 Dec 2022 16:57:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670432268;
+        bh=IGp2hmZyOcCMcEh2LddZyGh6DbOd/8iqx5oEvJCkAZU=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=nKBXPl7Q7HM4H5wyfBknQh+CEOoxlF9rmbwwCIW3iBA5uSIUBlUwxvGjUB0538Orh
+         CsVX5T+1mQ5zxuwjsmd9+aBTyGzn6fjt9RE5Mv7gtKOPBM9MNad2okmzInig8h0ild
+         xly170EcyaOeUCaUsli0q7134Ks8ZHkYsMgLyBQVXaYRUmX5+gIDOiVy8n0sZTFYB4
+         b/bjPLcX/1s9zOgKYuZ/k5qSeaVZs1NxzGllFvkFays3mmfVwyyUFTmkcq3KK06+2p
+         e/JBmU5aZHUk466ZvmFlOCeqk0+MjObo5CaEsLQzow5c76qErJOR1HCE5pvmJWVbBz
+         VpR5UCBMqYreg==
+Date:   Wed, 7 Dec 2022 17:57:47 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+cc:     =?ISO-8859-15?Q?Filipe_La=EDns?= <lains@riseup.net>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Bastien Nocera <hadess@hadess.net>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 0/2] HID: Revert catchall handling of Bluetooth device
+ in hid-logitech-hidpp
+In-Reply-To: <20221207142433.1158329-1-benjamin.tissoires@redhat.com>
+Message-ID: <nycvar.YFH.7.76.2212071757220.6045@cbobk.fhfr.pm>
+References: <20221207142433.1158329-1-benjamin.tissoires@redhat.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202110536.22230-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 12:05:36PM +0100, Krzysztof Kozlowski wrote:
-> Sort entries alphabetically.  This was a semi manual job with help of:
-> 
->   cat Documentation/devicetree/bindings/vendor-prefixes.yaml | grep '":' > old
->   cat old | sort > new
->   diff -ubB old new
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Patch rebased on next-20221201 therefore might not apply cleanly to
-> Rob's tree. Probably should be taken after the 6.2-rc1.
+On Wed, 7 Dec 2022, Benjamin Tissoires wrote:
 
-Indeed. I'll pick this up with the other treewide cleanups planned for 
-the merge window.
+> We are basically too late in the 6.1 cycle to be able to do anything
+> else. Let's revert these 2 patches as we are in a situation where we
+> would break too many users.
+> 
+> We will reintroduce them during the next cycle with proper fixes in the
+> driver.
 
-Rob
+Rafael,
+
+it would be nice to get
+
+	Reported-by:
+	Tested-by:
+
+for these reverts if possible.
+
+Thanks!
+
+-- 
+Jiri Kosina
+SUSE Labs
+
