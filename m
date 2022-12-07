@@ -2,75 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD848644FF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 01:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BE6644FFA
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 01:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLGADC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 19:03:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S229530AbiLGAEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 19:04:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbiLGACi (ORCPT
+        with ESMTP id S229651AbiLGAEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 19:02:38 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 272D41002;
-        Tue,  6 Dec 2022 16:02:36 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id d14so17720623edj.11;
-        Tue, 06 Dec 2022 16:02:36 -0800 (PST)
+        Tue, 6 Dec 2022 19:04:08 -0500
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD23864C2
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 16:04:06 -0800 (PST)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3b48b139b46so169444207b3.12
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 16:04:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvL4OnvqYUv2eqU5ocEYZJSQSg7YdqtmTMbAFmsQl9o=;
-        b=kN3lr6Fteki7u6iUPGObjTZpQ3C2E2mWd3YuHKYW9XG+Y5iHo2BQFupY7FfECHfrxq
-         OKbTVUyJZ4bpeuFzYrv+X1SapApgjGdHu8lY6q3O9lcwgI7ap/j3KxNnSCiEKSU9WOeL
-         iXaJkcmhGjketsyFGyh+q+JeKLyPXcyza1OYkAsfFSyitUqlkI8wnfXctIvXiVs5HMLi
-         pzbeIlTRX1lQ9mfMolQs/+MA8lqiXhM8rUVnOxp+kBx8sRmMPAdykeTgpCzOTDDUjzXa
-         vVMESsSpyYMXN7E2oTxwDh2SxV6lNLAdZK6J73zeOXRTB2zAqrBxF4fJ4b4RjYGb49LO
-         Gdgg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XnTgKg0UKBuUXCDS87fs4ThlofePgHVyLSIXWjERYso=;
+        b=XrKy6coLfblQF02e3gM/AreF7bPpcfKkj30gZ0BhpESnFNZhQXBj/1CzMypZxtTnGR
+         pbY/A/7RzNHkPzaMcpiNPbFf6ZpHCRK7eY5eQR1kJ1lswapS6MX5WK2mHkk9ltic1sHY
+         tXyB+96tOJdcoZ1EpjuOQDi+VSUYqt98XsfwE1NbwUL8SHEuuoUwaPrzGHwQ3peCx1sL
+         wDWpsKc4QIwYNyI6YRdi3/hZg4OMKbyKHNf6k7ZmGLW9pQZEkCt8yutE+CjIewQOQKAP
+         aYba8W+HEW9996FyuVrK0OAFQVKqn32hG6hYDHTErCiQxFPrvisnRJXBAJ7DhsWLBhlz
+         c61w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lvL4OnvqYUv2eqU5ocEYZJSQSg7YdqtmTMbAFmsQl9o=;
-        b=bwMHXqGp84/bxA6cMr7vYFiNtYxaYv+6FepK0S3Mj780h78XncmXwOgBnB6C+NYUIS
-         Z9abZVc/vm149Ln1YlJAMfk8yTa1gNtqo2+gh4k6HXb0TNgRaFwiooyeCavEVVwf7uUM
-         oIE022uzTBvxhHKjTX1vYgzUYMGDtGJMjkm/CBl1DVQKOWfnTs9G9yIndNV/ZdrvaYnZ
-         1Awfi3t7bQp4iDF0gyD2MFfeBr1RluiAcn5NBM5nluA3PKjYUEDHj79gxl5lH3intBwG
-         g2/PvXqXBPDTxlVJ1NmZZZcWQ5bG7o6mhShlPR3QRM8JYoDumEPYUyqrJQqD6KuLXY8Y
-         64BQ==
-X-Gm-Message-State: ANoB5pmlS8mSfTRvMyT/2FjZeO5A9X8rg5tq8YLNasH9V3d/85ZUPQIn
-        RiwprNHdBd/fpL3exRTjfqo=
-X-Google-Smtp-Source: AA0mqf7gaFH0KIS1QRPsRDIvUoXgAu7GI+wvd0KasDAQOV+4nUOD8OmmDXJoo9nsI6aIy/oy2QL8aw==
-X-Received: by 2002:a05:6402:2b91:b0:457:23cb:20ab with SMTP id fj17-20020a0564022b9100b0045723cb20abmr14333643edb.254.1670371354583;
-        Tue, 06 Dec 2022 16:02:34 -0800 (PST)
-Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
-        by smtp.gmail.com with ESMTPSA id v18-20020a170906293200b0077b2b0563f4sm8015733ejd.173.2022.12.06.16.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Dec 2022 16:02:34 -0800 (PST)
-Date:   Wed, 7 Dec 2022 01:02:45 +0100
-From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Oleksij Rempel <o.rempel@pengutronix.de>
-Subject: [PATCH v5 net-next 5/5] drivers/net/phy: add driver for the onsemi
- NCN26000 10BASE-T1S PHY
-Message-ID: <d979c74880805525d6117e0e5ece8df9e8fdd2c1.1670371013.git.piergiorgio.beruto@gmail.com>
-References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XnTgKg0UKBuUXCDS87fs4ThlofePgHVyLSIXWjERYso=;
+        b=wC2GuWvj5en4/MaAgu36fBuiwsUOcTWEDpldTAUB+/oUbRCg+qaxQG6g3G47BMium7
+         eLwMlSWfcIXFI4+WWV4xIcU1QteteEGoQxMe8FhJghPJJGt+21tu00DM0aY8a6Ndvgt5
+         2336QXuMDrNx5VqpOHW6v99UAbyWcQ6yWMIiviu00NWi2dogtSSV/exSGo/muVgEyPmt
+         gLrwTyIuM/Wc4seCKT2GLIwHG7YVGe7+crxOzJ5LLF6LR1Mfe+oVmlGZisy7j4tRawLZ
+         F5FOeKKDVQDHBD9Y2MznXvyOAGV7F4opuJFTdROCFip8BEuMoUkKQieJ3o1AUbFHkZhp
+         yJKg==
+X-Gm-Message-State: ANoB5pkiPn1zu2HWI4Gi+XDEL5vm08KW5Oy6MB17PoZfWDn+iGPqaUhr
+        LYS70yFqX3kazquQNCnJtsfwFs+YmcoTfGZTEfPY4A==
+X-Google-Smtp-Source: AA0mqf7+mQ2HzSsiOUnt2yepW4ZOc0QKPbLU/FYyjl8gV8gnkERQwvOrB3JYfDa+Tm1HnvZ8u+dQS4ZEv8h0ypB3Bic=
+X-Received: by 2002:a0d:d80c:0:b0:3ca:b34:9ce1 with SMTP id
+ a12-20020a0dd80c000000b003ca0b349ce1mr39254464ywe.466.1670371445945; Tue, 06
+ Dec 2022 16:04:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221206171340.139790-1-hannes@cmpxchg.org> <20221206171340.139790-4-hannes@cmpxchg.org>
+In-Reply-To: <20221206171340.139790-4-hannes@cmpxchg.org>
+From:   Shakeel Butt <shakeelb@google.com>
+Date:   Tue, 6 Dec 2022 16:03:54 -0800
+Message-ID: <CALvZod6WcBifeWJYG_QLr9Uy5aSbpLoCVyOp+FVx0ca1gzq4fA@mail.gmail.com>
+Subject: Re: [PATCH 3/3] mm: memcontrol: deprecate charge moving
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,275 +71,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for the onsemi NCN26000 10BASE-T1S industrial
-Ethernet PHY. The driver supports Point-to-Multipoint operation without
-auto-negotiation and with link control handling. The PHY also features
-PLCA for improving performance in P2MP mode.
+On Tue, Dec 6, 2022 at 9:14 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> Charge moving mode in cgroup1 allows memory to follow tasks as they
+> migrate between cgroups. This is, and always has been, a questionable
+> thing to do - for several reasons.
+>
+> First, it's expensive. Pages need to be identified, locked and
+> isolated from various MM operations, and reassigned, one by one.
+>
+> Second, it's unreliable. Once pages are charged to a cgroup, there
+> isn't always a clear owner task anymore. Cache isn't moved at all, for
+> example. Mapped memory is moved - but if trylocking or isolating a
+> page fails, it's arbitrarily left behind. Frequent moving between
+> domains may leave a task's memory scattered all over the place.
+>
+> Third, it isn't really needed. Launcher tasks can kick off workload
+> tasks directly in their target cgroup. Using dedicated per-workload
+> groups allows fine-grained policy adjustments - no need to move tasks
+> and their physical pages between control domains. The feature was
+> never forward-ported to cgroup2, and it hasn't been missed.
+>
+> Despite it being a niche usecase, the maintenance overhead of
+> supporting it is enormous. Because pages are moved while they are live
+> and subject to various MM operations, the synchronization rules are
+> complicated. There are lock_page_memcg() in MM and FS code, which
+> non-cgroup people don't understand. In some cases we've been able to
+> shift code and cgroup API calls around such that we can rely on native
+> locking as much as possible. But that's fragile, and sometimes we need
+> to hold MM locks for longer than we otherwise would (pte lock e.g.).
+>
+> Mark the feature deprecated. Hopefully we can remove it soon.
+>
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-Signed-off-by: Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
----
- MAINTAINERS                |   7 ++
- drivers/net/phy/Kconfig    |   7 ++
- drivers/net/phy/Makefile   |   1 +
- drivers/net/phy/ncn26000.c | 201 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 216 insertions(+)
- create mode 100644 drivers/net/phy/ncn26000.c
+Acked-by: Shakeel Butt <shakeelb@google.com>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index ed626cbdf5af..09f0bfa3ae64 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15357,6 +15357,13 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/boot/dts/ralink/omega2p.dts
- 
-+ONSEMI ETHERNET PHY DRIVERS
-+M:	Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
-+L:	netdev@vger.kernel.org
-+S:	Supported
-+W:	http://www.onsemi.com
-+F:	drivers/net/phy/ncn*
-+
- OP-TEE DRIVER
- M:	Jens Wiklander <jens.wiklander@linaro.org>
- L:	op-tee@lists.trustedfirmware.org
-diff --git a/drivers/net/phy/Kconfig b/drivers/net/phy/Kconfig
-index af00cf44cd97..7c466830c611 100644
---- a/drivers/net/phy/Kconfig
-+++ b/drivers/net/phy/Kconfig
-@@ -267,6 +267,13 @@ config NATIONAL_PHY
- 	help
- 	  Currently supports the DP83865 PHY.
- 
-+config NCN26000_PHY
-+	tristate "onsemi 10BASE-T1S Ethernet PHY"
-+	help
-+	  Adds support for the onsemi 10BASE-T1S Ethernet PHY.
-+	  Currently supports the NCN26000 10BASE-T1S Industrial PHY
-+	  with MII interface.
-+
- config NXP_C45_TJA11XX_PHY
- 	tristate "NXP C45 TJA11XX PHYs"
- 	depends on PTP_1588_CLOCK_OPTIONAL
-diff --git a/drivers/net/phy/Makefile b/drivers/net/phy/Makefile
-index f7138d3c896b..b5138066ba04 100644
---- a/drivers/net/phy/Makefile
-+++ b/drivers/net/phy/Makefile
-@@ -77,6 +77,7 @@ obj-$(CONFIG_MICROCHIP_T1_PHY)	+= microchip_t1.o
- obj-$(CONFIG_MICROSEMI_PHY)	+= mscc/
- obj-$(CONFIG_MOTORCOMM_PHY)	+= motorcomm.o
- obj-$(CONFIG_NATIONAL_PHY)	+= national.o
-+obj-$(CONFIG_NCN26000_PHY)	+= ncn26000.o
- obj-$(CONFIG_NXP_C45_TJA11XX_PHY)	+= nxp-c45-tja11xx.o
- obj-$(CONFIG_NXP_TJA11XX_PHY)	+= nxp-tja11xx.o
- obj-$(CONFIG_QSEMI_PHY)		+= qsemi.o
-diff --git a/drivers/net/phy/ncn26000.c b/drivers/net/phy/ncn26000.c
-new file mode 100644
-index 000000000000..d3c0a7420ea8
---- /dev/null
-+++ b/drivers/net/phy/ncn26000.c
-@@ -0,0 +1,201 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ *  Driver for the onsemi 10BASE-T1S NCN26000 PHYs family.
-+ *
-+ * Copyright 2022 onsemi
-+ */
-+#include <linux/kernel.h>
-+#include <linux/bitfield.h>
-+#include <linux/errno.h>
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/mii.h>
-+#include <linux/phy.h>
-+
-+#include "mdio-open-alliance.h"
-+
-+#define PHY_ID_NCN26000			0x180FF5A1
-+
-+#define NCN26000_REG_IRQ_CTL            16
-+#define NCN26000_REG_IRQ_STATUS         17
-+
-+// the NCN26000 maps link_ctrl to BMCR_ANENABLE
-+#define NCN26000_BCMR_LINK_CTRL_BIT	BMCR_ANENABLE
-+
-+// the NCN26000 maps link_status to BMSR_ANEGCOMPLETE
-+#define NCN26000_BMSR_LINK_STATUS_BIT	BMSR_ANEGCOMPLETE
-+
-+#define NCN26000_IRQ_LINKST_BIT		BIT(0)
-+#define NCN26000_IRQ_PLCAST_BIT		BIT(1)
-+#define NCN26000_IRQ_LJABBER_BIT	BIT(2)
-+#define NCN26000_IRQ_RJABBER_BIT	BIT(3)
-+#define NCN26000_IRQ_PLCAREC_BIT	BIT(4)
-+#define NCN26000_IRQ_PHYSCOL_BIT	BIT(5)
-+
-+#define TO_TMR_DEFAULT			32
-+
-+struct ncn26000_priv {
-+	u16 enabled_irqs;
-+};
-+
-+// driver callbacks
-+
-+static int ncn26000_config_init(struct phy_device *phydev)
-+{
-+	/* HW bug workaround: the default value of the PLCA TO_TIMER should be
-+	 * 32, where the current version of NCN26000 reports 24. This will be
-+	 * fixed in future PHY versions. For the time being, we force the
-+	 * correct default here.
-+	 */
-+	return phy_write_mmd(phydev, MDIO_MMD_VEND2, MDIO_OATC14_PLCA_TOTMR,
-+			     TO_TMR_DEFAULT);
-+}
-+
-+static int ncn26000_config_aneg(struct phy_device *phydev)
-+{
-+	// Note: the NCN26000 supports only P2MP link mode. Therefore, AN is not
-+	// supported. However, this function is invoked by phylib to enable the
-+	// PHY, regardless of the AN support.
-+	phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
-+	phydev->mdix = ETH_TP_MDI;
-+
-+	// bring up the link
-+	return phy_write(phydev, MII_BMCR, NCN26000_BCMR_LINK_CTRL_BIT);
-+}
-+
-+static int ncn26000_get_features(struct phy_device *phydev)
-+{
-+	linkmode_zero(phydev->supported);
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_MII_BIT, phydev->supported);
-+
-+	linkmode_set_bit(ETHTOOL_LINK_MODE_10baseT1S_P2MP_Half_BIT,
-+			 phydev->supported);
-+
-+	linkmode_copy(phydev->advertising, phydev->supported);
-+	return 0;
-+}
-+
-+static int ncn26000_read_status(struct phy_device *phydev)
-+{
-+	// The NCN26000 reports NCN26000_LINK_STATUS_BIT if the link status of
-+	// the PHY is up. It further reports the logical AND of the link status
-+	// and the PLCA status in the BMSR_LSTATUS bit.
-+	int ret;
-+
-+	/* The link state is latched low so that momentary link
-+	 * drops can be detected. Do not double-read the status
-+	 * in polling mode to detect such short link drops except
-+	 * the link was already down.
-+	 */
-+	if (!phy_polling_mode(phydev) || !phydev->link) {
-+		ret = phy_read(phydev, MII_BMSR);
-+		if (ret < 0)
-+			return ret;
-+		else if (ret & NCN26000_BMSR_LINK_STATUS_BIT)
-+			goto upd_link;
-+	}
-+
-+	ret = phy_read(phydev, MII_BMSR);
-+	if (unlikely(ret < 0))
-+		return ret;
-+
-+upd_link:
-+	// update link status
-+	if (ret & NCN26000_BMSR_LINK_STATUS_BIT) {
-+		phydev->link = 1;
-+		phydev->pause = 0;
-+		phydev->duplex = DUPLEX_HALF;
-+		phydev->speed = SPEED_10;
-+	} else {
-+		phydev->link = 0;
-+		phydev->duplex = DUPLEX_UNKNOWN;
-+		phydev->speed = SPEED_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+static irqreturn_t ncn26000_handle_interrupt(struct phy_device *phydev)
-+{
-+	const struct ncn26000_priv *const priv = phydev->priv;
-+	int ret;
-+
-+	// read and aknowledge the IRQ status register
-+	ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
-+
-+	if (unlikely(ret < 0) || (ret & priv->enabled_irqs) == 0)
-+		return IRQ_NONE;
-+
-+	phy_trigger_machine(phydev);
-+	return IRQ_HANDLED;
-+}
-+
-+static int ncn26000_config_intr(struct phy_device *phydev)
-+{
-+	int ret;
-+	struct ncn26000_priv *priv = phydev->priv;
-+
-+	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
-+		// acknowledge IRQs
-+		ret = phy_read(phydev, NCN26000_REG_IRQ_STATUS);
-+		if (ret < 0)
-+			return ret;
-+
-+		// get link status notifications
-+		priv->enabled_irqs = NCN26000_IRQ_LINKST_BIT;
-+	} else {
-+		// disable all IRQs
-+		priv->enabled_irqs = 0;
-+	}
-+
-+	ret = phy_write(phydev, NCN26000_REG_IRQ_CTL, priv->enabled_irqs);
-+	if (ret != 0)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static int ncn26000_probe(struct phy_device *phydev)
-+{
-+	struct device *dev = &phydev->mdio.dev;
-+	struct ncn26000_priv *priv;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	phydev->priv = priv;
-+
-+	return 0;
-+}
-+
-+static struct phy_driver ncn26000_driver[] = {
-+	{
-+		PHY_ID_MATCH_MODEL(PHY_ID_NCN26000),
-+		.name			= "NCN26000",
-+		.probe                  = ncn26000_probe,
-+		.get_features		= ncn26000_get_features,
-+		.config_init            = ncn26000_config_init,
-+		.config_intr            = ncn26000_config_intr,
-+		.config_aneg		= ncn26000_config_aneg,
-+		.read_status		= ncn26000_read_status,
-+		.handle_interrupt       = ncn26000_handle_interrupt,
-+		.get_plca_cfg		= genphy_c45_plca_get_cfg,
-+		.set_plca_cfg		= genphy_c45_plca_set_cfg,
-+		.get_plca_status	= genphy_c45_plca_get_status,
-+		.soft_reset             = genphy_soft_reset,
-+	},
-+};
-+
-+module_phy_driver(ncn26000_driver);
-+
-+static struct mdio_device_id __maybe_unused ncn26000_tbl[] = {
-+	{ PHY_ID_MATCH_MODEL(PHY_ID_NCN26000) },
-+	{ }
-+};
-+
-+MODULE_DEVICE_TABLE(mdio, ncn26000_tbl);
-+
-+MODULE_AUTHOR("Piergiorgio Beruto");
-+MODULE_DESCRIPTION("onsemi 10BASE-T1S PHY driver");
-+MODULE_LICENSE("Dual BSD/GPL");
--- 
-2.35.1
-
+I would request this patch to be backported to stable kernels as well
+for early warnings to users which update to newer kernels very late.
