@@ -2,149 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F282645A21
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:49:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA378645A29
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 13:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLGMto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 07:49:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60814 "EHLO
+        id S229689AbiLGMuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 07:50:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLGMtl (ORCPT
+        with ESMTP id S229753AbiLGMus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 07:49:41 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109892FA72;
-        Wed,  7 Dec 2022 04:49:41 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e711329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e711:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 92DB91EC0683;
-        Wed,  7 Dec 2022 13:49:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670417379;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Sbaj5o43ffgVtyPksCtVluOhwVf735Cxu4waTP4cQmQ=;
-        b=rtwv536EWfGY4YZjI7jb2l7/4qP0s4vCoWkyUU3bDgbYYjiOHIIJ2S/x2h0N14kYjWHOxk
-        BRUpXe3Z7Zw0qypSE8lU8IUC3wfcvXirkeAEzkOnBi9AKVnqY8RPD4Gnu/HsN+qXZETm+C
-        baLuSFoBSDnB5+9oTn08Cs96TM+t1EQ=
-Date:   Wed, 7 Dec 2022 13:49:39 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v4 04/39] x86/cpufeatures: Enable CET CR4 bit for shadow
- stack
-Message-ID: <Y5CL4ySPtcTLVrrM@zn.tnic>
-References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
- <20221203003606.6838-5-rick.p.edgecombe@intel.com>
+        Wed, 7 Dec 2022 07:50:48 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D3653EE6
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 04:50:45 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id u5so8126772pjy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 04:50:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=smxRVhRmzb1okWqpy/grVB168UtJPXN5DHAuNQ7dA3Y=;
+        b=t+/vvYCQB2x0JLPTFVaQbBvOzgmzWSVqzIQpR6SmQS+jtHdMYtmoW25HMi4HPjlf4y
+         DMh3pPauzk+u2RnhBFYN+bvm485d3w8T83zQNWDLGH9dAQF0e7NVvyKCx+YEkmVexTNM
+         ONXu6EHgAm3AmoCjr+nYH1595rMFc7+2OI1BJefMi4n4vIjBndgOzdGe/EfsmBkdTQnK
+         G7T+B6NNYMcCvT+XblPqBCDe3bsDySYxj8gtc/h+DGRPuqgnQJLLcCW0UXwEYx4GZ1VY
+         wL4H2habQjEEJ/CTAb6HL9cIEN8iwAa1zzy2RdMfm075FmvUtfox/6I95FUzY0Zo5lGD
+         zzhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=smxRVhRmzb1okWqpy/grVB168UtJPXN5DHAuNQ7dA3Y=;
+        b=Q+B8CtP+ug0MPMIq/RAKx5583cZrb1iQJgvqbvqBELtyLyHFDKFVhjoADaiWzZPaxi
+         KANSHXhYRdMXLAgOeXljeJPyZtRHli8a7nXGyme88XFvWQ4kGkbr6kP7Qdl1Ocppxjiz
+         AVr2Txypsi/aRgv9GRBhmM7YwY2KTTET5QhKB1VGmdlPUkj7rAEfb+RHAx4XtVdlpLH+
+         ECiIBYmgOdPR2T2Alf5P/izuE0L3WtMBu4ur9DeIiwXDETwIuwnUaduZ36+CNdQe5iHk
+         1btqaChqa1qjJgFFvRzO7+GJioAfMgp1tYyBbPnni+JolLjBqxxL/EqdvpQLITC959ED
+         V31A==
+X-Gm-Message-State: ANoB5pnoUIfsXCc4Kx8W6PSmmkj7CcxakU+WfjfhF+LudvXt7oA+jhjv
+        NioXN1+LUWJE3rWGg0A0c5pEnKOArE/5M3Etjjbaug==
+X-Google-Smtp-Source: AA0mqf4tiC/50iNbCBRUhz2Onm5h/3OmzA9iDcTXem3pnGcF2a5DlkzCOzvbHfvpJopCuddzEqq4RtcOe5YgaEpTOSQ=
+X-Received: by 2002:a17:902:eb83:b0:189:e426:4616 with SMTP id
+ q3-20020a170902eb8300b00189e4264616mr10215459plg.37.1670417445110; Wed, 07
+ Dec 2022 04:50:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221203003606.6838-5-rick.p.edgecombe@intel.com>
+References: <20221201091150.3474-1-wenchao.chen@unisoc.com>
+ <CAPDyKFoBf25CDAgg5R0MSp53iC277FzGO9DUDf3LPU+_wuxCsA@mail.gmail.com> <CA+Da2qwjY=ebOmwsauPS5r8ig7wbH0JwjhDPmi1+eaT09tKxGQ@mail.gmail.com>
+In-Reply-To: <CA+Da2qwjY=ebOmwsauPS5r8ig7wbH0JwjhDPmi1+eaT09tKxGQ@mail.gmail.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 7 Dec 2022 13:50:08 +0100
+Message-ID: <CAPDyKFrLVhBs2-b6WP-UQbaS03hBRKRUa08fYU+EWLA1kgPXYQ@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci-sprd: remove prefer asynchronous probe
+To:     Wenchao Chen <wenchao.chen666@gmail.com>
+Cc:     Wenchao Chen <wenchao.chen@unisoc.com>, adrian.hunter@intel.com,
+        orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhenxiong.lai@unisoc.com,
+        yuelin.tang@unisoc.com, gengcixi@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 02, 2022 at 04:35:31PM -0800, Rick Edgecombe wrote:
-> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
-> 
-> Setting CR4.CET is a prerequisite for utilizing any CET features, most of
-> which also require setting MSRs.
+On Fri, 2 Dec 2022 at 03:41, Wenchao Chen <wenchao.chen666@gmail.com> wrote:
+>
+> On Thu, Dec 1, 2022 at 6:41 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> >
+> > On Thu, 1 Dec 2022 at 10:12, Wenchao Chen <wenchao.chen@unisoc.com> wrote:
+> > >
+> > > The prefer asynchronous probe affects the order of device probes.
+> >
+> > Is there a problem with this? If so, can you elaborate on what kind of problems?
+> >
+>
+> Hi Uffe
+> dts:
+> sdio0: sdio@71100000 {
+> ...
+> bus-width = <4>;
+> no-sdio;
+> no-mmc;
+> ...
+> }; // SD Host(Device: SD CARD)
+>
+> sdio3: sdio@71400000 {
+> ...
+> bus-width = <8>;
+> non-removable;
+> no-sdio;
+> no-sd;
+> ...
+> }; // eMMC Host(Device: eMMC)
+>
+> According to the order of DTS: sdio0: sdio@71100000 is MMC0, sdio3:
+> sdio@71400000 is MMC1.
+> Log:
+> [    1.714617][   T11] mmc1: SDHCI controller on 71400000.sdio
+> [71400000.sdio] using ADMA 64-bit
+> [    1.715276][    T9] mmc0: SDHCI controller on 71100000.sdio
+> [71100000.sdio] using ADMA 64-bit
+> [    1.884525][   T75] mmc1: Host Software Queue enabled
+> [    1.890965][   T75] mmc1: new HS400 Enhanced strobe MMC card at address 0001
+>
+> But set prefer_asynchronous_probe, sometimes there will be sdio0:
+> sdio@71100000 is MMC1, sdio3: sdio@71400000 is MMC0.
+> Log:
+> [    1.619888][   T68] mmc0: SDHCI controller on 71400000.sdio
+> [71400000.sdio] using ADMA 64-bit
+> [    1.620534][    T9] mmc1: SDHCI controller on 71100000.sdio
+> [71100000.sdio] using ADMA 64-bit
+> [    1.792570][   T77] mmc0: Host Software Queue enabled
+> [    1.799532][   T77] mmc0: new HS400 Enhanced strobe MMC card at address 0001
 
-...
+Neither the order of the nodes in DT or dropping
+PROBE_PREFER_ASYNCHRONOUS provides the guarantees that you suggest
+above. In fact, that has never been the case for eMMC/SD cards.
 
->  arch/x86/kernel/cpu/common.c | 37 ++++++++++++++++++++++++++++++------
->  1 file changed, 31 insertions(+), 6 deletions(-)
+>
+> We use emmc as rootfs (without ramfs or initfs), but with SD card
+> inserted and not inserted, the partition name of emmc is different, we
+> need to fix this partition name.
 
-Looks better.
+If you can't use PARTUUID/UUID, which is certainly the preferred
+solution - you may also assign a fixed index mmcN to an MMC host
+controller and its corresponding mmcblk[n] devices, by defining an
+alias in the /aliases device tree node.
 
-Let's get rid of the ifdeffery and simplify it even more. Diff ontop:
+[...]
 
----
-
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 579f10222432..c364f3067121 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -597,12 +597,14 @@ __noendbr void ibt_restore(u64 save)
- 
- #endif
- 
--#ifdef CONFIG_X86_CET
- static __always_inline void setup_cet(struct cpuinfo_x86 *c)
- {
--	bool kernel_ibt = HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT);
--	bool user_shstk;
--	u64 msr = 0;
-+	bool kernel_ibt, user_shstk;
-+
-+	if (!IS_ENABLED(CONFIG_X86_CET))
-+		return;
-+
-+	kernel_ibt = HAS_KERNEL_IBT && cpu_feature_enabled(X86_FEATURE_IBT);
- 
- 	/*
- 	 * Enable user shadow stack only if the Linux defined user shadow stack
-@@ -618,21 +620,18 @@ static __always_inline void setup_cet(struct cpuinfo_x86 *c)
- 		set_cpu_cap(c, X86_FEATURE_USER_SHSTK);
- 
- 	if (kernel_ibt)
--		msr = CET_ENDBR_EN;
-+		wrmsrl(MSR_IA32_S_CET, CET_ENDBR_EN);
-+	else
-+		wrmsrl(MSR_IA32_S_CET, 0);
- 
--	wrmsrl(MSR_IA32_S_CET, msr);
- 	cr4_set_bits(X86_CR4_CET);
- 
- 	if (kernel_ibt && !ibt_selftest()) {
- 		pr_err("IBT selftest: Failed!\n");
- 		wrmsrl(MSR_IA32_S_CET, 0);
- 		setup_clear_cpu_cap(X86_FEATURE_IBT);
--		return;
- 	}
- }
--#else /* CONFIG_X86_CET */
--static inline void setup_cet(struct cpuinfo_x86 *c) {}
--#endif
- 
- __noendbr void cet_disable(void)
- {
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Kind regards
+Uffe
