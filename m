@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D52A2645BA5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826F7645BA6
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:58:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229821AbiLGN6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:58:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51812 "EHLO
+        id S230116AbiLGN6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:58:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230208AbiLGN6Z (ORCPT
+        with ESMTP id S230215AbiLGN6c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:58:25 -0500
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C87D5BD78
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:58:23 -0800 (PST)
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 7 Dec 2022 08:58:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B272AC5F
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:58:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id D991141672
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:58:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1670421502;
-        bh=9GCL3W6v/AmfhZbVCu5utEsH4vGz3v+tufp1/dYemRM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=dKUvmoqIGuOxHNNKEtH6Ri+Tj3dSZVfYeYVSgDiUN6H61FwQWPWJqUqi/e4Fn2xuu
-         cFFpbwz27G0cH6IvLJ9wk6uLw6/Ow4k3UNfLuHX976tCwLL8XzugxeKaFI6WAjjwCD
-         r6YjAgtYcE4OPdfkKhayYEYRrmzAcRTeViS01iqxhbNpV5X5rVxhSLpHF6Pin6tx5m
-         CCDm32bdgv/mRZnnZbR6BQ7pMATmx3j8ckrdtGTzDv8s5ePMbVvjv39CcD6tCAFH2J
-         /DPUK9zV3PpQsFoI78UI62t60cGEMqIy4bbVoNDTNKjGyKKiDSdg7yHEYqSm31N70d
-         JlkdjN8VAbp8g==
-Received: by mail-io1-f69.google.com with SMTP id bf14-20020a056602368e00b006ce86e80414so13544417iob.7
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:58:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9GCL3W6v/AmfhZbVCu5utEsH4vGz3v+tufp1/dYemRM=;
-        b=xWjGCNYfyc9kXE9pFVziDPeQeLscTIek99dH1xcx62Uj1MIXRhXd/wsbhPRcVptrrq
-         XMPU5lMla4KfG4qLx69fyhKakqjjFDE4L1QRw4sPicR6XXRepfpapodwogt5SugjMdzh
-         vvRS3hDLUb6JivpjrMSIRRVG5MYHuV73fB45NK9jhM3TpOS+fMI1lVygIegnuFGLsRZ6
-         74H2H5bdLG0IeT1CFzXbjgrw/AeCJTbD9GHtWlBSEBFs+fGyQnmENAj6eaH1Qip4/tIl
-         jMpzbo8uYlhCZ4PYZBo63XfvG9h5mS+NvlDR94cwp2EPGPPeSwPdWHIDulUMtHrCPALC
-         S5+A==
-X-Gm-Message-State: ANoB5plk1bIPOl/bWVyM9SbkaccdgIAcThrWm9Rp89Vc0mQI6zFGigxM
-        VowWipqk7q7ViskHrPOYEKI2FCrakRALof+HgeoomPD0KREd1MXgcMJoSojGlBqY3GTGXP5v2Y4
-        riLHt2zIGND/BfjhEmLiTEspCQ13JAmVSKykj74t3OKDRtbK9kZuj7LnlVA==
-X-Received: by 2002:a05:6638:15cb:b0:38a:a2c:5c1e with SMTP id i11-20020a05663815cb00b0038a0a2c5c1emr14812173jat.35.1670421501102;
-        Wed, 07 Dec 2022 05:58:21 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6oS4WtB4AY/x9xEAWaZszCLUNeiIhVzCL4QBdnRGkNjsZUkTVArtcl3+u1LcaAO1HHytY7Lk4DCTgXk2m0eYo=
-X-Received: by 2002:a05:6638:15cb:b0:38a:a2c:5c1e with SMTP id
- i11-20020a05663815cb00b0038a0a2c5c1emr14812154jat.35.1670421500857; Wed, 07
- Dec 2022 05:58:20 -0800 (PST)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F3EDB81DF4
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 13:58:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288DCC433C1;
+        Wed,  7 Dec 2022 13:58:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670421509;
+        bh=RIC1Cb1hSR/PoVvVlchvFUy6mScD0XG2dUhLJIgDbnw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tcHuDKAix1m05GVzFUIB4skjq7TswGJZAvs1HDb4mp9YiO5Jr1/hLbOd/kSnLUjyC
+         TIuipnB6EgbXdGKkBoOKKaysXl3oKWpe9IAbFlkuehQRVtH/smAHnFV6EJvP/B7sUj
+         PVJIwq57X2tzVq9TWx51dew5jQv3SJLg3wAe0zG3tYvZ2+ttJAQWap2EoCQ15Ft4fT
+         ik1dH0vmDfAieN/JzrBgYZY8LYCkaTpPUSgx0EnL4L2X+Vy4CezKbDHOaIdmYQSXn2
+         pAgMd+G3cqGw0QuLmopfX0uLuDOHMO86VwYUdYFBLQ00jtA51PoDXPbFPgjKi/u/Oq
+         uH0mmVDXPKd1Q==
+Date:   Wed, 7 Dec 2022 13:58:23 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Wang Jingjin <wangjingjin1@huawei.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        heiko@sntech.de, sugar.zhang@rock-chips.com,
+        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: rockchip: spdif: Add missing
+ clk_disable_unprepare() in rockchip_pdm_runtime_resume()
+Message-ID: <Y5Cb/1kRQVOrOT0Q@sirena.org.uk>
+References: <20221205024317.2422223-1-wangjingjin1@huawei.com>
 MIME-Version: 1.0
-References: <20221201090242.2381-1-yanhong.wang@starfivetech.com> <20221201090242.2381-3-yanhong.wang@starfivetech.com>
-In-Reply-To: <20221201090242.2381-3-yanhong.wang@starfivetech.com>
-From:   Emil Renner Berthing <emil.renner.berthing@canonical.com>
-Date:   Wed, 7 Dec 2022 14:58:04 +0100
-Message-ID: <CAJM55Z8ZDKWEkdWuRZfcMQDrySMh4vdB1UvkAC+q1GRKMbGuEw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/7] net: stmmac: platform: Add snps,dwmac-5.20 IP
- compatible string
-To:     Yanhong Wang <yanhong.wang@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Yfqkupk0cs8hEwm8"
+Content-Disposition: inline
+In-Reply-To: <20221205024317.2422223-1-wangjingjin1@huawei.com>
+X-Cookie: What!?  Me worry?
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Dec 2022 at 10:05, Yanhong Wang <yanhong.wang@starfivetech.com> wrote:
->
-> Add "snps,dwmac-5.20" compatible string for 5.20 version that can avoid
-> to define some platform data in the glue layer.
->
-> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
 
-Hi Yanhong.
+--Yfqkupk0cs8hEwm8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for submitting this.
-But just as a reminder. Please don't change the author of the commits
-you cherry-picked from my tree.
-
-/Emil
-
+On Mon, Dec 05, 2022 at 10:43:17AM +0800, Wang Jingjin wrote:
+> The clk_disable_unprepare() should be called in the error handling of
+> rockchip_pdm_runtime_resume().
+>=20
+> Fixes: fc05a5b22253 ("ASoC: rockchip: add support for pdm controller")
+> Signed-off-by: Wang Jingjin <wangjingjin1@huawei.com>
 > ---
->  drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> index 50f6b4a14be4..cc3b701af802 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> @@ -519,7 +519,8 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
->         if (of_device_is_compatible(np, "snps,dwmac-4.00") ||
->             of_device_is_compatible(np, "snps,dwmac-4.10a") ||
->             of_device_is_compatible(np, "snps,dwmac-4.20a") ||
-> -           of_device_is_compatible(np, "snps,dwmac-5.10a")) {
-> +           of_device_is_compatible(np, "snps,dwmac-5.10a") ||
-> +           of_device_is_compatible(np, "snps,dwmac-5.20")) {
->                 plat->has_gmac4 = 1;
->                 plat->has_gmac = 0;
->                 plat->pmt = 1;
-> --
-> 2.17.1
->
->
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>  sound/soc/rockchip/rockchip_pdm.c | 1 +
+>  1 file changed, 1 insertion(+)
+
+The subject line says this is a fix for the S/PDIF driver but the patch
+is for the PDM driver and I see you sent a separate fix for the PDM
+driver.
+
+--Yfqkupk0cs8hEwm8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmOQm/8ACgkQJNaLcl1U
+h9ClSAf+PYmaTOX76hZfmg6lP/5WGJr8lhDunNZmxMYdQc2BEK/H/wN2l+nR6ES8
+v6jxI3ceMQ+78mMpQebV8Hiuvd880D3jjaPh/dZKObPYQvIP6sUthPwAr9nlZh91
+s/EDK3rgQcJuOxR2gQdACyfIM+PvJ0HlNaz8RrGKyM3yq2Ik7ZqjeBJ6gPjODOUg
+eXG5J5GD0Z64hhs572q95LKTTjtCPtcQ3uXqOSmhSqqPbb/pNqZAik069u3/UesA
+JMInss8miBtQv7RfI9ffz4LiINXZpIAFJCeA2BfaLdpenSzz1zfEUfoNZtkQUqJI
+6yCz5HFdPCyky7EA/IrsAO8EDNtTUw==
+=TDQy
+-----END PGP SIGNATURE-----
+
+--Yfqkupk0cs8hEwm8--
