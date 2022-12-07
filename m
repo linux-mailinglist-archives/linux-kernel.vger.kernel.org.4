@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0628B645AD5
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:25:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4FD645AD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiLGNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:24:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S229892AbiLGNZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:25:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbiLGNYW (ORCPT
+        with ESMTP id S229992AbiLGNY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:24:22 -0500
+        Wed, 7 Dec 2022 08:24:28 -0500
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B864E59FCE
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:24:20 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125A357B5C
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:24:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
         s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
         Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
         :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=TG1xpqHfdwRk7lbJjh3WdyMI9E3juJpQZYPXiE72gtY=; b=j12RT/Dz1yDCYbMx5EjIZPfOHY
-        XR1frz+rr2XSLhjWPBDOzwQU6Cc7ZZyyCZqkpZxi+LXttCXZh1S1xegBVY5i7N7bYnZcjOqWLTMEo
-        qNrg2PQAWf0XKU2fCU+qPnEGbqFsf5+XlSwcIDpZhPuVzWDyCv2xBOeKkVk/vUt8sHfSsDQavSQJj
-        2AwZ9Uyqa4u/kKYNeiC1RR9DShNj26PS5Ag/zNq9DyyaLmfbPF/A1ctpImyJR5nfvi6rFxqduXtSM
-        uIZ8xqnYe6OJe0wAV9dPiOp5Gr81unYTIHz7Ml0ez85OMBgNAYbgnOzPn2DdZiP4bPMpXbf9lHV5D
-        B//jSLwA==;
+        bh=XLI4Q5BF1S4Y7/1I9tMeZIh/hDmMgqL/1tXLD7cwxp4=; b=HL5rU1ujcKBXXIKgIT6ku8a4Hk
+        z2vvj1xVtZtXdi4IjiPgqAUY5d9IcXKh6OmyK+ZgbfQv6JNvevnnLfwVWQx8grR9QE38zNU8OTlWw
+        nDGTYQk+1/YHJZopjZcpiw83XcMSWjXJm17c4NeJxfFJ49nz3kh8Lubg49Nz3LIVK0PF+4B5RHWSf
+        SJ7OgRndrOxQzqkI4BMzOtITtgny6ddaXLff4ySKisRsKh9wKVa9dwn48NCcyIvSwAZlk/jAURAXJ
+        yGqUvVS5cjABZ30JxR5V4rmSVYYK7dkTyVzAD58kcnjGy59pTj5EFNxycahrLerWj0rPMIZzTHdIv
+        3GDdWCDg==;
 Received: from [177.34.169.227] (helo=bowie..)
         by fanzine2.igalia.com with esmtpsa 
         (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1p2uPC-00Gaon-VR; Wed, 07 Dec 2022 14:24:11 +0100
+        id 1p2uPI-00Gaon-GH; Wed, 07 Dec 2022 14:24:17 +0100
 From:   =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
 To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Maxime Ripard <mripard@kernel.org>,
@@ -46,9 +46,9 @@ Cc:     Melissa Wen <mwen@igalia.com>,
         Wambui Karuga <wambui@karuga.org>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         =?UTF-8?q?Ma=C3=ADra=20Canal?= <mcanal@igalia.com>
-Subject: [PATCH v3 4/6] drm/v3d: use new debugfs device-centered functions
-Date:   Wed,  7 Dec 2022 10:23:23 -0300
-Message-Id: <20221207132325.140393-5-mcanal@igalia.com>
+Subject: [PATCH v3 5/6] drm/vkms: use new debugfs device-centered functions
+Date:   Wed,  7 Dec 2022 10:23:24 -0300
+Message-Id: <20221207132325.140393-6-mcanal@igalia.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221207132325.140393-1-mcanal@igalia.com>
 References: <20221207132325.140393-1-mcanal@igalia.com>
@@ -66,79 +66,66 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Replace the use of drm_debugfs_create_files() with the new
 drm_debugfs_add_files() function, which centers the debugfs files
-management on the drm_device instead of drm_minor.
+management on the drm_device instead of drm_minor. Moreover, remove the
+debugfs_init hook and add the debugfs files directly on vkms_create(),
+before drm_dev_register().
 
 Signed-off-by: Maíra Canal <mcanal@igalia.com>
 ---
- drivers/gpu/drm/v3d/v3d_debugfs.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+ drivers/gpu/drm/vkms/vkms_drv.c | 17 ++++++-----------
+ 1 file changed, 6 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/gpu/drm/v3d/v3d_debugfs.c b/drivers/gpu/drm/v3d/v3d_debugfs.c
-index efbde124c296..330669f51fa7 100644
---- a/drivers/gpu/drm/v3d/v3d_debugfs.c
-+++ b/drivers/gpu/drm/v3d/v3d_debugfs.c
-@@ -79,8 +79,8 @@ static const struct v3d_reg_def v3d_csd_reg_defs[] = {
+diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
+index 69346906ec81..6d3a2d57d992 100644
+--- a/drivers/gpu/drm/vkms/vkms_drv.c
++++ b/drivers/gpu/drm/vkms/vkms_drv.c
+@@ -92,8 +92,8 @@ static void vkms_atomic_commit_tail(struct drm_atomic_state *old_state)
  
- static int v3d_v3d_debugfs_regs(struct seq_file *m, void *unused)
+ static int vkms_config_show(struct seq_file *m, void *data)
  {
 -	struct drm_info_node *node = (struct drm_info_node *)m->private;
 -	struct drm_device *dev = node->minor->dev;
 +	struct drm_debugfs_entry *entry = m->private;
 +	struct drm_device *dev = entry->dev;
- 	struct v3d_dev *v3d = to_v3d_dev(dev);
- 	int i, core;
+ 	struct vkms_device *vkmsdev = drm_device_to_vkms_device(dev);
  
-@@ -126,8 +126,8 @@ static int v3d_v3d_debugfs_regs(struct seq_file *m, void *unused)
- 
- static int v3d_v3d_debugfs_ident(struct seq_file *m, void *unused)
- {
--	struct drm_info_node *node = (struct drm_info_node *)m->private;
--	struct drm_device *dev = node->minor->dev;
-+	struct drm_debugfs_entry *entry = m->private;
-+	struct drm_device *dev = entry->dev;
- 	struct v3d_dev *v3d = to_v3d_dev(dev);
- 	u32 ident0, ident1, ident2, ident3, cores;
- 	int core;
-@@ -188,8 +188,8 @@ static int v3d_v3d_debugfs_ident(struct seq_file *m, void *unused)
- 
- static int v3d_debugfs_bo_stats(struct seq_file *m, void *unused)
- {
--	struct drm_info_node *node = (struct drm_info_node *)m->private;
--	struct drm_device *dev = node->minor->dev;
-+	struct drm_debugfs_entry *entry = m->private;
-+	struct drm_device *dev = entry->dev;
- 	struct v3d_dev *v3d = to_v3d_dev(dev);
- 
- 	mutex_lock(&v3d->bo_lock);
-@@ -204,8 +204,8 @@ static int v3d_debugfs_bo_stats(struct seq_file *m, void *unused)
- 
- static int v3d_measure_clock(struct seq_file *m, void *unused)
- {
--	struct drm_info_node *node = (struct drm_info_node *)m->private;
--	struct drm_device *dev = node->minor->dev;
-+	struct drm_debugfs_entry *entry = m->private;
-+	struct drm_device *dev = entry->dev;
- 	struct v3d_dev *v3d = to_v3d_dev(dev);
- 	uint32_t cycles;
- 	int core = 0;
-@@ -236,7 +236,7 @@ static int v3d_measure_clock(struct seq_file *m, void *unused)
+ 	seq_printf(m, "writeback=%d\n", vkmsdev->config->writeback);
+@@ -103,24 +103,16 @@ static int vkms_config_show(struct seq_file *m, void *data)
  	return 0;
  }
  
--static const struct drm_info_list v3d_debugfs_list[] = {
-+static const struct drm_debugfs_info v3d_debugfs_list[] = {
- 	{"v3d_ident", v3d_v3d_debugfs_ident, 0},
- 	{"v3d_regs", v3d_v3d_debugfs_regs, 0},
- 	{"measure_clock", v3d_measure_clock, 0},
-@@ -246,7 +246,5 @@ static const struct drm_info_list v3d_debugfs_list[] = {
- void
- v3d_debugfs_init(struct drm_minor *minor)
- {
--	drm_debugfs_create_files(v3d_debugfs_list,
--				 ARRAY_SIZE(v3d_debugfs_list),
+-static const struct drm_info_list vkms_config_debugfs_list[] = {
++static const struct drm_debugfs_info vkms_config_debugfs_list[] = {
+ 	{ "vkms_config", vkms_config_show, 0 },
+ };
+ 
+-static void vkms_config_debugfs_init(struct drm_minor *minor)
+-{
+-	drm_debugfs_create_files(vkms_config_debugfs_list, ARRAY_SIZE(vkms_config_debugfs_list),
 -				 minor->debugfs_root, minor);
-+	drm_debugfs_add_files(minor->dev, v3d_debugfs_list, ARRAY_SIZE(v3d_debugfs_list));
- }
+-}
+-
+ static const struct drm_driver vkms_driver = {
+ 	.driver_features	= DRIVER_MODESET | DRIVER_ATOMIC | DRIVER_GEM,
+ 	.release		= vkms_release,
+ 	.fops			= &vkms_driver_fops,
+ 	DRM_GEM_SHMEM_DRIVER_OPS,
+ 
+-	.debugfs_init           = vkms_config_debugfs_init,
+-
+ 	.name			= DRIVER_NAME,
+ 	.desc			= DRIVER_DESC,
+ 	.date			= DRIVER_DATE,
+@@ -202,6 +194,9 @@ static int vkms_create(struct vkms_config *config)
+ 	if (ret)
+ 		goto out_devres;
+ 
++	drm_debugfs_add_files(&vkms_device->drm, vkms_config_debugfs_list,
++			      ARRAY_SIZE(vkms_config_debugfs_list));
++
+ 	ret = drm_dev_register(&vkms_device->drm, 0);
+ 	if (ret)
+ 		goto out_devres;
 -- 
 2.38.1
 
