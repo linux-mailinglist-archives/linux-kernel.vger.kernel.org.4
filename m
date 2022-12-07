@@ -2,115 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12966645DC4
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:41:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0096645DC8
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 16:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiLGPlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 10:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45508 "EHLO
+        id S229735AbiLGPmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 10:42:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLGPlU (ORCPT
+        with ESMTP id S229437AbiLGPmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 10:41:20 -0500
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C46721252
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 07:41:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=ai9AyaYCOP+1mwEvT2GphqrR/8UUpCv7twpnp2ghV2Y=; b=XFnLUGerdTFheh129qR9NxuuEE
-        wE6qV8cHZ/Xe8fWU6RCnXrx2owtf4Pv3lQ3g3b6gwVp1mdGe0Vo2a4BwKigQg1O3Xy9rT4S8YxWhj
-        TBwt2OJFMefQ5Y3q9dlJojxrbircOIWKn7yD897QcPH0k6PMbqb1rjmAXKttaQtJTUgs71jJ6yDG4
-        PyGxnWT0kOonCAzoFe5yX6gNnBFUMb+KXLz8T7oCcqPnTKAfwbGyRbm8402RZ9vE8P/09PvIFw7DN
-        79gB74o+AD0ZZIVOVwbLBGQ44x8hd9QblrDJBSoiLyMefOHiqf5kh7G4gN6t+qIhPd0xyPWiAmD/2
-        5X48Z14g==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35618)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1p2wXp-0000m5-1X; Wed, 07 Dec 2022 15:41:13 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1p2wXn-0000qu-B2; Wed, 07 Dec 2022 15:41:11 +0000
-Date:   Wed, 7 Dec 2022 15:41:11 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+        Wed, 7 Dec 2022 10:42:06 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9D60B6E;
+        Wed,  7 Dec 2022 07:42:05 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id f7so25442046edc.6;
+        Wed, 07 Dec 2022 07:42:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OwH4Gcv5FX9Ez7R0y/eSqA6CTqQLAguixPLNHBhie6U=;
+        b=goeqfASTX5lCuxyfo1TbHWXrIzFXfbhVoRJ/xt2x+08aKMjEeJ2LkACRwMUP0hT6KI
+         v6o70BZKwQFFU+QKFBuJGQmErWRlWoOXT898wjEBvKiVNl113lXTJhtTtSTWJ9aXUBib
+         lDzE2kp4EqPXmMm0kQPJasS4HyKy1+sEIJYhPMC4UnykbSzcJz2hkTkITHvDSou4vhEN
+         ZgL3uk+y96l1KSH8RimXq+SYbJIUFAr8pSubggGo6dRSt9QWEoEnXBEN55J13UJ31PIQ
+         fmL4lrjJZdILcAJEJGtRqHJIO2F6GZxzqiRdFY8y0FKCHXrnraQj7+Hj9LMj4xGuusBC
+         Sx2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OwH4Gcv5FX9Ez7R0y/eSqA6CTqQLAguixPLNHBhie6U=;
+        b=xj042L07C+FZjlAgeXoMd2de2mIo49nBph82AP6kXY8UpLhiqaVSZd8CWl3VDEr1KI
+         NQvVDA4YDktx9bvzOOw9vNFizfk9bjP5a4yp84NG9bdGl6+HiFalo0HWw8IdsP0s0FI7
+         durZYC9J/XdenVYmi2YasYU2De3McXLwwvmVzBxBKN8O1pE2dP1GQu71L4XTxJbtL7Eh
+         HLRfetxtGgjcfhe/FIslpvWd1b7PJr0MrqQZr2cQ/Am/vUrrPmnGflE0+EZ/GFcNKe6P
+         xBIiy6++FEPgkHpJrcbX/WaDwgqhkcIupYxcSBzdRJz8P92Tt4EAHli8hxFk5UCgU/UZ
+         hntg==
+X-Gm-Message-State: ANoB5pkuTYHNfbN8zZ5skmvVMZ0fWjHdfnGpa+gXFsZw3gY+cqoG0TAW
+        hwn34AEztQ/MJJnjDn5+s9M=
+X-Google-Smtp-Source: AA0mqf51a/63Urivpl9xqLseyeQIr6ko65qJhVWeB7WY2Td1bjdAYAL7YOLHLnhMxvP6OjgpSyLHFQ==
+X-Received: by 2002:a05:6402:3441:b0:46b:2aaf:754e with SMTP id l1-20020a056402344100b0046b2aaf754emr39976106edc.139.1670427723383;
+        Wed, 07 Dec 2022 07:42:03 -0800 (PST)
+Received: from gvm01 (net-2-45-26-236.cust.vodafonedsl.it. [2.45.26.236])
+        by smtp.gmail.com with ESMTPSA id ck3-20020a0564021c0300b0046778ce5fdfsm2352977edb.10.2022.12.07.07.42.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 07:42:02 -0800 (PST)
+Date:   Wed, 7 Dec 2022 16:42:15 +0100
+From:   Piergiorgio Beruto <piergiorgio.beruto@gmail.com>
 To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        linux-arm-kernel@lists.infradead.org,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org
-Subject: Re: PXA25x: GPIO driver fails probe due to resource conflict with
- pinctrl driver
-Message-ID: <Y5C0F/o4JS5MwkkJ@shell.armlinux.org.uk>
-References: <Y5B4QeNMNboJ42n4@probook>
- <Y5CxBzy47Gjn/V5a@lunn.ch>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Oleksij Rempel <o.rempel@pengutronix.de>
+Subject: Re: [PATCH v5 net-next 1/5] net/ethtool: add netlink interface for
+ the PLCA RS
+Message-ID: <Y5C0V52DjS+1GNhJ@gvm01>
+References: <cover.1670371013.git.piergiorgio.beruto@gmail.com>
+ <350e640b5c3c7b9c25f6fd749dc0237e79e1c573.1670371013.git.piergiorgio.beruto@gmail.com>
+ <20221206195014.10d7ec82@kernel.org>
+ <Y5CQY0pI+4DobFSD@gvm01>
+ <Y5CgIL+cu4Fv43vy@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5CxBzy47Gjn/V5a@lunn.ch>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <Y5CgIL+cu4Fv43vy@lunn.ch>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:28:07PM +0100, Andrew Lunn wrote:
-> On Wed, Dec 07, 2022 at 12:25:53PM +0100, Jonathan Neuschäfer wrote:
-> > Hello,
-> > 
-> > I am currently trying to bring up Linux 6.1-rcX on a PXA255 board, using a
-> > devicetree. One problem I encountered is that the PXA GPIO driver fails to
-> > probe because it uses the same MMIO register range as the pinctrl driver:
-> > 
-> > [    0.666169] pxa25x-pinctrl 40e00054.pinctrl: initialized pxa2xx pinctrl driver
-> > [    0.694407] pxa-gpio 40e00000.gpio: can't request region for resource [mem 0x40e00000-0x40e0ffff]
-> > [    0.695050] pxa-gpio: probe of 40e00000.gpio failed with error -16
-> > 
-> > Before I try to fix this myself: Is GPIO on PXA25x currently expected to
-> > work and when has it last been seen working?
-> > 
-> > What would be a good way to fix this?
+On Wed, Dec 07, 2022 at 03:16:00PM +0100, Andrew Lunn wrote:
+> > > TBH I can't parse the "ETHTOOL_A_PLCA_VERSION is reported as 0Axx
+> > > where.." sentence. Specifically I'm confused about what the 0A is.
+> > How about this: "When this standard is supported, the upper byte of
+> > ``ETHTOOL_A_PLCA_VERSION`` shall be 0x0A (see Table A.1.0 â€” IDVER 
+> > bits assignment).
 > 
-> How are the registers arranged?
+> I think the 0x0A is pointless and should not be included here. If the
+> register does not contain 0x0A, the device does not follow the open
+> alliance standard, and hence the lower part of the register is
+> meaningless.
+> 
+> This is why i suggested -ENODEV should actually be returned on invalid
+> values in this register.
+I already integrated this change in v5 (returning -ENODEV). Give what you're
+saying, I can just remove that sentence from the documentations. Agreed?
 
-As documented in drivers/gpio/gpio-pxa.c - it'll be easier for you to
-look there rather than for me to explain it - but suffice it to say
-that the pinctrl registers are amongst the GPIO registers.
-
-> Is 0x40e00000-0x40e0ffff simply too
-> large, and making it smaller would fix the issue? Or are the registers
-> interleaved?
-
-They're interleaved. Looking at the .dtsi file for PXA25x, it seems
-that the pinctrl claims just the addresses that it needs, but the GPIO
-controller has no reg property in the .dtsi, so I'm not sure what fills
-that information in.
-
-DT could describe the region for PXA25x, which is just:
-
-	0x40e00000 - 0x40e00054
-
-Later PXA have more banks, so would require additional resources to be
-listed.
-
-However, first, we need to know what provides the iomem resource for
-this:
-
-                gpio: gpio@40e00000 {
-                        compatible = "intel,pxa25x-gpio";
-                        gpio-ranges = <&pinctrl 0 0 84>;
-                        clocks = <&clks CLK_NONE>;
-                };
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> 
+> > > >   * struct ethtool_phy_ops - Optional PHY device options
+> > > >   * @get_sset_count: Get number of strings that @get_strings will write.
+> > > >   * @get_strings: Return a set of strings that describe the requested objects
+> > > >   * @get_stats: Return extended statistics about the PHY device.
+> > > > + * @get_plca_cfg: Return PLCA configuration.
+> > > > + * @set_plca_cfg: Set PLCA configuration.
+> > > 
+> > > missing get status in kdoc
+> > Fixed. Good catch.
+> 
+> Building with W=1 C=2 will tell you about kerneldoc issues. Ideally we
+> want all network code to be clean with these two options.
+Ok thanks. I probably need to upgrade my machine to achieve this. Will
+do.
