@@ -2,584 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE30964518B
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5829764518F
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 02:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiLGBvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 20:51:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32918 "EHLO
+        id S230090AbiLGBx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 20:53:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiLGBuj (ORCPT
+        with ESMTP id S229968AbiLGBxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 20:50:39 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B0E537CA;
-        Tue,  6 Dec 2022 17:50:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670377804; x=1701913804;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l/GAlLVQNZ1o8mZSLHtW1AKFSz7H9NKdXs1f6iRZxW4=;
-  b=irXLGx9gmwb1STNh5DToL8J28+CImlZM7mjBC/CYgDFT0m8DEkz47ND5
-   FMomLAs06UYy/9WHJVdLVKBadiMe2G7JnlUJSWyvcsUCwPKbBxVN4577S
-   849n1gOPW8/SO5NWGth++M4ky9gfc//jy9BQGodS20vD3gHDzyfuWH0HJ
-   d75AzOfffXlCbGOYXDkXB513qMRARlEMckJa4fE1iwEPaMcFeWKFDQs8U
-   t2mCfLLUww+d2n4C43MBj8iz9W921HduIjFx/YN8dVuwkabP4lQDT4Ejb
-   KVoRocNwDP6IuJZhGS8M9B7u4j7EMaszf4Ly/uc1B4CXGZ39Bf1ScHQgS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="315494535"
-X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
-   d="scan'208";a="315494535"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 17:50:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="646427686"
-X-IronPort-AV: E=Sophos;i="5.96,223,1665471600"; 
-   d="scan'208";a="646427686"
-Received: from puneets1-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.38.123])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2022 17:49:53 -0800
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C5AE0109C92; Wed,  7 Dec 2022 04:49:39 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv8 14/14] x86/tdx: Add unaccepted memory support
-Date:   Wed,  7 Dec 2022 04:49:33 +0300
-Message-Id: <20221207014933.8435-15-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
-References: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
+        Tue, 6 Dec 2022 20:53:11 -0500
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570A754344
+        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 17:51:56 -0800 (PST)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-14455716674so13527104fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 17:51:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fPu3F6AaPpr0cGTXbZ0IU965/QfP/00jiQD3p12tubc=;
+        b=M0JPuZOBA2Srlf0lA9Wk1yOApsWT0kfaoJhDIY1aDNTsWZ2ShTrfzx4aC5chXquuCB
+         QeeXpS8GX8E1Gk3vTDfiaWM0MhbeaHHlzPziuslPDptLyiYvkyzuhDvMsXw8QNuEZ1fW
+         qhcE6HJtOFGZ3E0hgilE26lnsfq4jrEGh5GjGKCSnLnL8AcUnslDr0wr6UE743XlFpxP
+         otVg2XkHDAkiXINLW29jxCNOgzvTpZyFCyk/Rexe7nGsN5Qen2uevSdqPhEPUdVeMz+x
+         enqzQHaRSEMuKLKjWk4Fsa75u3GeZ0YdoJBPr/Ng9HEPhbo5GhrYikS8mTRAVowodFbU
+         MWZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fPu3F6AaPpr0cGTXbZ0IU965/QfP/00jiQD3p12tubc=;
+        b=TqSxE7fQQb5YPFm1hvwn9MLKVbjUvI+sbthhrfAU59FFMYHztePheOcXGI059WBHR7
+         hQaCF5DmSLjjoTax390U85KpnZaCd3YgR0zyDhPu6DdK2iUdbPitcqJMySAwG85MqKCF
+         RzB0/4ukLiztdYrzQFa8REP6muPF6ZOXjIY8B226JQwmvw7wPrzuVqiszNz6fi3fcqgW
+         w2WDFmd6Kjm0aQeDZoCO9D1xhStCcdV46gUGEWv2br7D6sph9awAQf3U6oKoHNz11Wf8
+         XA+G6dH8iwdTjA2LABp6E0EQKV7UB8H0oiGGH2fXg/jYMYHy2s5ziTJbEjhnIAfXdwmY
+         Lb1Q==
+X-Gm-Message-State: ANoB5plfLtZQJHstOI2MWyA+e5qgPaVWlZg/LNIL2dLJZGV8mKSsVRsf
+        lq6xDPBxyvDXru5UpsHYUfX/QA==
+X-Google-Smtp-Source: AA0mqf7XF7f7PoxlbuwsNKMuHDnrvEsJREWazQHWBwsRfHmhm/mAiBwB/UZ+LZBuRYLka7H7I/am6g==
+X-Received: by 2002:a05:6870:b00f:b0:13a:f4fd:7d81 with SMTP id y15-20020a056870b00f00b0013af4fd7d81mr41896478oae.139.1670377915407;
+        Tue, 06 Dec 2022 17:51:55 -0800 (PST)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id w8-20020a4a2748000000b004a0918698f9sm223949oow.17.2022.12.06.17.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Dec 2022 17:51:54 -0800 (PST)
+Date:   Tue, 6 Dec 2022 17:51:46 -0800 (PST)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Johannes Weiner <hannes@cmpxchg.org>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm: memcontrol: skip moving non-present pages that
+ are mapped elsewhere
+In-Reply-To: <20221206171340.139790-2-hannes@cmpxchg.org>
+Message-ID: <124f63e-ade3-78e5-f223-53668db36217@google.com>
+References: <20221206171340.139790-1-hannes@cmpxchg.org> <20221206171340.139790-2-hannes@cmpxchg.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hookup TDX-specific code to accept memory.
+On Tue, 6 Dec 2022, Johannes Weiner wrote:
 
-Accepting the memory is the same process as converting memory from
-shared to private: kernel notifies VMM with MAP_GPA hypercall and then
-accept pages with ACCEPT_PAGE module call.
+> During charge moving, the pte lock and the page lock cover nearly all
+> cases of stabilizing page_mapped(). The only exception is when we're
+> looking at a non-present pte and find a page in the page cache or in
+> the swapcache: if the page is mapped elsewhere, it can become unmapped
+> outside of our control. For this reason, rmap needs lock_page_memcg().
+> 
+> We don't like cgroup-specific locks in generic MM code - especially in
+> performance-critical MM code - and for a legacy feature that's
+> unlikely to have many users left - if any.
+> 
+> So remove the exception. Arguably that's better semantics anyway: the
+> page is shared, and another process seems to be the more active user.
+> 
+> Once we stop moving such pages, rmap doesn't need lock_page_memcg()
+> anymore. The next patch will remove it.
+> 
+> Suggested-by: Hugh Dickins <hughd@google.com>
+> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
 
-The implementation in core kernel uses tdx_enc_status_changed(). It
-already used for converting memory to shared and back for I/O
-transactions.
+Acked-by: Hugh Dickins <hughd@google.com>
 
-Boot stub provides own implementation of tdx_accept_memory(). It is
-similar in structure to tdx_enc_status_changed(), but only cares about
-converting memory to private.
+It ended up simpler than I'd expected: nice, thank you.
 
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
----
- arch/x86/Kconfig                      |  2 +
- arch/x86/boot/compressed/Makefile     |  2 +-
- arch/x86/boot/compressed/error.c      | 19 ++++++
- arch/x86/boot/compressed/error.h      |  1 +
- arch/x86/boot/compressed/mem.c        | 33 +++++++++-
- arch/x86/boot/compressed/tdx-shared.c |  2 +
- arch/x86/boot/compressed/tdx.c        | 39 +++++++++++
- arch/x86/coco/tdx/Makefile            |  2 +-
- arch/x86/coco/tdx/tdx-shared.c        | 95 +++++++++++++++++++++++++++
- arch/x86/coco/tdx/tdx.c               | 86 +-----------------------
- arch/x86/include/asm/shared/tdx.h     |  2 +
- arch/x86/include/asm/tdx.h            |  2 +
- arch/x86/mm/unaccepted_memory.c       |  9 ++-
- 13 files changed, 206 insertions(+), 88 deletions(-)
- create mode 100644 arch/x86/boot/compressed/tdx-shared.c
- create mode 100644 arch/x86/coco/tdx/tdx-shared.c
+I was going to say that you'd missed the most important detail from
+the commit message (that page lock prevents remapping unmapped pages):
+but you've gone into good detail on that in the source comment,
+so that's fine.
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 947937d327c6..bc031fd1d95e 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -888,6 +888,8 @@ config INTEL_TDX_GUEST
- 	select ARCH_HAS_CC_PLATFORM
- 	select X86_MEM_ENCRYPT
- 	select X86_MCE
-+	select UNACCEPTED_MEMORY
-+	select EFI_STUB
- 	help
- 	  Support running as a guest under Intel TDX.  Without this support,
- 	  the guest kernel can not boot or run under TDX.
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index a9937b50c37f..38c42c2b4349 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -106,7 +106,7 @@ ifdef CONFIG_X86_64
- endif
- 
- vmlinux-objs-$(CONFIG_ACPI) += $(obj)/acpi.o
--vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdcall.o
-+vmlinux-objs-$(CONFIG_INTEL_TDX_GUEST) += $(obj)/tdx.o $(obj)/tdx-shared.o $(obj)/tdcall.o
- vmlinux-objs-$(CONFIG_UNACCEPTED_MEMORY) += $(obj)/bitmap.o $(obj)/find.o $(obj)/mem.o
- 
- vmlinux-objs-$(CONFIG_EFI) += $(obj)/efi.o
-diff --git a/arch/x86/boot/compressed/error.c b/arch/x86/boot/compressed/error.c
-index c881878e56d3..5313c5cb2b80 100644
---- a/arch/x86/boot/compressed/error.c
-+++ b/arch/x86/boot/compressed/error.c
-@@ -22,3 +22,22 @@ void error(char *m)
- 	while (1)
- 		asm("hlt");
- }
-+
-+/* EFI libstub  provides vsnprintf() */
-+#ifdef CONFIG_EFI_STUB
-+void panic(const char *fmt, ...)
-+{
-+	static char buf[1024];
-+	va_list args;
-+	int len;
-+
-+	va_start(args, fmt);
-+	len = vsnprintf(buf, sizeof(buf), fmt, args);
-+	va_end(args);
-+
-+	if (len && buf[len - 1] == '\n')
-+		buf[len - 1] = '\0';
-+
-+	error(buf);
-+}
-+#endif
-diff --git a/arch/x86/boot/compressed/error.h b/arch/x86/boot/compressed/error.h
-index 1de5821184f1..86fe33b93715 100644
---- a/arch/x86/boot/compressed/error.h
-+++ b/arch/x86/boot/compressed/error.h
-@@ -6,5 +6,6 @@
- 
- void warn(char *m);
- void error(char *m) __noreturn;
-+void panic(const char *fmt, ...) __noreturn __cold;
- 
- #endif /* BOOT_COMPRESSED_ERROR_H */
-diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
-index 626e4f10ba2c..23a84c46aa9b 100644
---- a/arch/x86/boot/compressed/mem.c
-+++ b/arch/x86/boot/compressed/mem.c
-@@ -5,6 +5,8 @@
- #include "error.h"
- #include "find.h"
- #include "math.h"
-+#include "tdx.h"
-+#include <asm/shared/tdx.h>
- 
- #define PMD_SHIFT	21
- #define PMD_SIZE	(_AC(1, UL) << PMD_SHIFT)
-@@ -12,10 +14,39 @@
- 
- extern struct boot_params *boot_params;
- 
-+/*
-+ * accept_memory() and process_unaccepted_memory() called from EFI stub which
-+ * runs before decompresser and its early_tdx_detect().
-+ *
-+ * Enumerate TDX directly from the early users.
-+ */
-+static bool early_is_tdx_guest(void)
-+{
-+	static bool once;
-+	static bool is_tdx;
-+
-+	if (!IS_ENABLED(CONFIG_INTEL_TDX_GUEST))
-+		return false;
-+
-+	if (!once) {
-+		u32 eax, sig[3];
-+
-+		cpuid_count(TDX_CPUID_LEAF_ID, 0, &eax,
-+			    &sig[0], &sig[2],  &sig[1]);
-+		is_tdx = !memcmp(TDX_IDENT, sig, sizeof(sig));
-+		once = true;
-+	}
-+
-+	return is_tdx;
-+}
-+
- static inline void __accept_memory(phys_addr_t start, phys_addr_t end)
- {
- 	/* Platform-specific memory-acceptance call goes here */
--	error("Cannot accept memory");
-+	if (early_is_tdx_guest())
-+		tdx_accept_memory(start, end);
-+	else
-+		error("Cannot accept memory: unknown platform\n");
- }
- 
- /*
-diff --git a/arch/x86/boot/compressed/tdx-shared.c b/arch/x86/boot/compressed/tdx-shared.c
-new file mode 100644
-index 000000000000..5ac43762fe13
---- /dev/null
-+++ b/arch/x86/boot/compressed/tdx-shared.c
-@@ -0,0 +1,2 @@
-+#include "error.h"
-+#include "../../coco/tdx/tdx-shared.c"
-diff --git a/arch/x86/boot/compressed/tdx.c b/arch/x86/boot/compressed/tdx.c
-index 918a7606f53c..de1d4a87418d 100644
---- a/arch/x86/boot/compressed/tdx.c
-+++ b/arch/x86/boot/compressed/tdx.c
-@@ -3,12 +3,17 @@
- #include "../cpuflags.h"
- #include "../string.h"
- #include "../io.h"
-+#include "align.h"
- #include "error.h"
-+#include "pgtable_types.h"
- 
- #include <vdso/limits.h>
- #include <uapi/asm/vmx.h>
- 
- #include <asm/shared/tdx.h>
-+#include <asm/page_types.h>
-+
-+static u64 cc_mask;
- 
- /* Called from __tdx_hypercall() for unrecoverable failure */
- void __tdx_hypercall_failed(void)
-@@ -16,6 +21,38 @@ void __tdx_hypercall_failed(void)
- 	error("TDVMCALL failed. TDX module bug?");
- }
- 
-+static u64 get_cc_mask(void)
-+{
-+	struct tdx_module_output out;
-+	unsigned int gpa_width;
-+
-+	/*
-+	 * TDINFO TDX module call is used to get the TD execution environment
-+	 * information like GPA width, number of available vcpus, debug mode
-+	 * information, etc. More details about the ABI can be found in TDX
-+	 * Guest-Host-Communication Interface (GHCI), section 2.4.2 TDCALL
-+	 * [TDG.VP.INFO].
-+	 *
-+	 * The GPA width that comes out of this call is critical. TDX guests
-+	 * can not meaningfully run without it.
-+	 */
-+	if (__tdx_module_call(TDX_GET_INFO, 0, 0, 0, 0, &out))
-+		error("TDCALL GET_INFO failed (Buggy TDX module!)\n");
-+
-+	gpa_width = out.rcx & GENMASK(5, 0);
-+
-+	/*
-+	 * The highest bit of a guest physical address is the "sharing" bit.
-+	 * Set it for shared pages and clear it for private pages.
-+	 */
-+	return BIT_ULL(gpa_width - 1);
-+}
-+
-+u64 cc_mkdec(u64 val)
-+{
-+	return val & ~cc_mask;
-+}
-+
- static inline unsigned int tdx_io_in(int size, u16 port)
- {
- 	struct tdx_hypercall_args args = {
-@@ -70,6 +107,8 @@ void early_tdx_detect(void)
- 	if (memcmp(TDX_IDENT, sig, sizeof(sig)))
- 		return;
- 
-+	cc_mask = get_cc_mask();
-+
- 	/* Use hypercalls instead of I/O instructions */
- 	pio_ops.f_inb  = tdx_inb;
- 	pio_ops.f_outb = tdx_outb;
-diff --git a/arch/x86/coco/tdx/Makefile b/arch/x86/coco/tdx/Makefile
-index 46c55998557d..2c7dcbf1458b 100644
---- a/arch/x86/coco/tdx/Makefile
-+++ b/arch/x86/coco/tdx/Makefile
-@@ -1,3 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--obj-y += tdx.o tdcall.o
-+obj-y += tdx.o tdx-shared.o tdcall.o
-diff --git a/arch/x86/coco/tdx/tdx-shared.c b/arch/x86/coco/tdx/tdx-shared.c
-new file mode 100644
-index 000000000000..ee74f7bbe806
---- /dev/null
-+++ b/arch/x86/coco/tdx/tdx-shared.c
-@@ -0,0 +1,95 @@
-+#include <asm/tdx.h>
-+#include <asm/pgtable.h>
-+
-+static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
-+				    enum pg_level pg_level)
-+{
-+	unsigned long accept_size = page_level_size(pg_level);
-+	u64 tdcall_rcx;
-+	u8 page_size;
-+
-+	if (!IS_ALIGNED(start, accept_size))
-+		return 0;
-+
-+	if (len < accept_size)
-+		return 0;
-+
-+	/*
-+	 * Pass the page physical address to the TDX module to accept the
-+	 * pending, private page.
-+	 *
-+	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
-+	 */
-+	switch (pg_level) {
-+	case PG_LEVEL_4K:
-+		page_size = 0;
-+		break;
-+	case PG_LEVEL_2M:
-+		page_size = 1;
-+		break;
-+	case PG_LEVEL_1G:
-+		page_size = 2;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	tdcall_rcx = start | page_size;
-+	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
-+		return 0;
-+
-+	return accept_size;
-+}
-+
-+bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end, bool enc)
-+{
-+	if (!enc) {
-+		/* Set the shared (decrypted) bits: */
-+		start |= cc_mkdec(0);
-+		end   |= cc_mkdec(0);
-+	}
-+
-+	/*
-+	 * Notify the VMM about page mapping conversion. More info about ABI
-+	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
-+	 * section "TDG.VP.VMCALL<MapGPA>"
-+	 */
-+	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
-+		return false;
-+
-+	/* private->shared conversion  requires only MapGPA call */
-+	if (!enc)
-+		return true;
-+
-+	/*
-+	 * For shared->private conversion, accept the page using
-+	 * TDX_ACCEPT_PAGE TDX module call.
-+	 */
-+	while (start < end) {
-+		unsigned long len = end - start;
-+		unsigned long accept_size;
-+
-+		/*
-+		 * Try larger accepts first. It gives chance to VMM to keep
-+		 * 1G/2M Secure EPT entries where possible and speeds up
-+		 * process by cutting number of hypercalls (if successful).
-+		 */
-+
-+		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
-+		if (!accept_size)
-+			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
-+		if (!accept_size)
-+			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
-+		if (!accept_size)
-+			return false;
-+		start += accept_size;
-+	}
-+
-+	return true;
-+}
-+
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end)
-+{
-+	if (!tdx_enc_status_changed_phys(start, end, true))
-+		panic("Accepting memory failed: %#llx-%#llx\n",  start, end);
-+}
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index cf6d9a0968d8..0aa95fe29045 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -674,46 +674,6 @@ static bool tdx_cache_flush_required(void)
- 	return true;
- }
- 
--static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
--				    enum pg_level pg_level)
--{
--	unsigned long accept_size = page_level_size(pg_level);
--	u64 tdcall_rcx;
--	u8 page_size;
--
--	if (!IS_ALIGNED(start, accept_size))
--		return 0;
--
--	if (len < accept_size)
--		return 0;
--
--	/*
--	 * Pass the page physical address to the TDX module to accept the
--	 * pending, private page.
--	 *
--	 * Bits 2:0 of RCX encode page size: 0 - 4K, 1 - 2M, 2 - 1G.
--	 */
--	switch (pg_level) {
--	case PG_LEVEL_4K:
--		page_size = 0;
--		break;
--	case PG_LEVEL_2M:
--		page_size = 1;
--		break;
--	case PG_LEVEL_1G:
--		page_size = 2;
--		break;
--	default:
--		return 0;
--	}
--
--	tdcall_rcx = start | page_size;
--	if (__tdx_module_call(TDX_ACCEPT_PAGE, tdcall_rcx, 0, 0, 0, NULL))
--		return 0;
--
--	return accept_size;
--}
--
- /*
-  * Inform the VMM of the guest's intent for this physical page: shared with
-  * the VMM or private to the guest.  The VMM is expected to change its mapping
-@@ -722,51 +682,9 @@ static unsigned long try_accept_one(phys_addr_t start, unsigned long len,
- static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
- {
- 	phys_addr_t start = __pa(vaddr);
--	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
--
--	if (!enc) {
--		/* Set the shared (decrypted) bits: */
--		start |= cc_mkdec(0);
--		end   |= cc_mkdec(0);
--	}
--
--	/*
--	 * Notify the VMM about page mapping conversion. More info about ABI
--	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
--	 * section "TDG.VP.VMCALL<MapGPA>"
--	 */
--	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
--		return false;
--
--	/* private->shared conversion  requires only MapGPA call */
--	if (!enc)
--		return true;
-+	phys_addr_t end = __pa(vaddr + numpages * PAGE_SIZE);
- 
--	/*
--	 * For shared->private conversion, accept the page using
--	 * TDX_ACCEPT_PAGE TDX module call.
--	 */
--	while (start < end) {
--		unsigned long len = end - start;
--		unsigned long accept_size;
--
--		/*
--		 * Try larger accepts first. It gives chance to VMM to keep
--		 * 1G/2M Secure EPT entries where possible and speeds up
--		 * process by cutting number of hypercalls (if successful).
--		 */
--
--		accept_size = try_accept_one(start, len, PG_LEVEL_1G);
--		if (!accept_size)
--			accept_size = try_accept_one(start, len, PG_LEVEL_2M);
--		if (!accept_size)
--			accept_size = try_accept_one(start, len, PG_LEVEL_4K);
--		if (!accept_size)
--			return false;
--		start += accept_size;
--	}
--
--	return true;
-+	return tdx_enc_status_changed_phys(start, end, enc);
- }
- 
- void __init tdx_early_init(void)
-diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
-index c5f12b90ef70..a21685fd7c4f 100644
---- a/arch/x86/include/asm/shared/tdx.h
-+++ b/arch/x86/include/asm/shared/tdx.h
-@@ -82,5 +82,7 @@ struct tdx_module_output {
- u64 __tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		      struct tdx_module_output *out);
- 
-+void tdx_accept_memory(phys_addr_t start, phys_addr_t end);
-+
- #endif /* !__ASSEMBLY__ */
- #endif /* _ASM_X86_SHARED_TDX_H */
-diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
-index 234197ec17e4..3a7340ad9a4b 100644
---- a/arch/x86/include/asm/tdx.h
-+++ b/arch/x86/include/asm/tdx.h
-@@ -50,6 +50,8 @@ bool tdx_early_handle_ve(struct pt_regs *regs);
- 
- int tdx_mcall_get_report0(u8 *reportdata, u8 *tdreport);
- 
-+bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end, bool enc);
-+
- #else
- 
- static inline void tdx_early_init(void) { };
-diff --git a/arch/x86/mm/unaccepted_memory.c b/arch/x86/mm/unaccepted_memory.c
-index 1745e6a65024..45706c684ca5 100644
---- a/arch/x86/mm/unaccepted_memory.c
-+++ b/arch/x86/mm/unaccepted_memory.c
-@@ -7,6 +7,7 @@
- 
- #include <asm/io.h>
- #include <asm/setup.h>
-+#include <asm/shared/tdx.h>
- #include <asm/unaccepted_memory.h>
- 
- /* Protects unaccepted memory bitmap */
-@@ -62,7 +63,13 @@ void accept_memory(phys_addr_t start, phys_addr_t end)
- 		unsigned long len = range_end - range_start;
- 
- 		/* Platform-specific memory-acceptance call goes here */
--		panic("Cannot accept memory: unknown platform\n");
-+		if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
-+			tdx_accept_memory(range_start * PMD_SIZE,
-+					  range_end * PMD_SIZE);
-+		} else {
-+			panic("Cannot accept memory: unknown platform\n");
-+		}
-+
- 		bitmap_clear(bitmap, range_start, len);
- 	}
- 	spin_unlock_irqrestore(&unaccepted_memory_lock, flags);
--- 
-2.38.0
+I almost thought you could remove the folio_memcg() check from
+mem_cgroup_move_account() itself: but then it looks as if
+get_mctgt_type_thp() does things in a slightly different order,
+leaving a window open in which folio memcg could have been changed.
+Okay, there's no need to go back and rearrange that.
 
+(I notice that get_mctgt_type_thp() has never been updated
+for shmem and file THPs, so will move them iff MOVE_ANON:
+but that's irrelevant to your changes, and probably something
+we're not at all interested in fixing, now it's deprecated code.)
+
+My tmpfs swapping load has been running for five hours on this
+(and the others) so far: going fine.  I hacked in some stats to
+verify that it really is moving anon and shmem and file, mapped
+and unmapped: yes it is, and the unmapped numbers are big enough
+that I'm glad that we chose to include them.
+
+> ---
+>  mm/memcontrol.c | 52 ++++++++++++++++++++++++++++++++++++-------------
+>  1 file changed, 38 insertions(+), 14 deletions(-)
+> 
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 48c44229cf47..b696354c1b21 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -5681,7 +5681,7 @@ static struct page *mc_handle_file_pte(struct vm_area_struct *vma,
+>   * @from: mem_cgroup which the page is moved from.
+>   * @to:	mem_cgroup which the page is moved to. @from != @to.
+>   *
+> - * The caller must make sure the page is not on LRU (isolate_page() is useful.)
+> + * The page must be locked and not on the LRU.
+>   *
+>   * This function doesn't do "charge" to new cgroup and doesn't do "uncharge"
+>   * from old cgroup.
+> @@ -5698,20 +5698,13 @@ static int mem_cgroup_move_account(struct page *page,
+>  	int nid, ret;
+>  
+>  	VM_BUG_ON(from == to);
+> +	VM_BUG_ON_FOLIO(!folio_test_locked(folio), folio);
+>  	VM_BUG_ON_FOLIO(folio_test_lru(folio), folio);
+>  	VM_BUG_ON(compound && !folio_test_large(folio));
+>  
+> -	/*
+> -	 * Prevent mem_cgroup_migrate() from looking at
+> -	 * page's memory cgroup of its source page while we change it.
+> -	 */
+> -	ret = -EBUSY;
+> -	if (!folio_trylock(folio))
+> -		goto out;
+> -
+>  	ret = -EINVAL;
+>  	if (folio_memcg(folio) != from)
+> -		goto out_unlock;
+> +		goto out;
+>  
+>  	pgdat = folio_pgdat(folio);
+>  	from_vec = mem_cgroup_lruvec(from, pgdat);
+> @@ -5798,8 +5791,6 @@ static int mem_cgroup_move_account(struct page *page,
+>  	mem_cgroup_charge_statistics(from, -nr_pages);
+>  	memcg_check_events(from, nid);
+>  	local_irq_enable();
+> -out_unlock:
+> -	folio_unlock(folio);
+>  out:
+>  	return ret;
+>  }
+> @@ -5848,6 +5839,29 @@ static enum mc_target_type get_mctgt_type(struct vm_area_struct *vma,
+>  	else if (is_swap_pte(ptent))
+>  		page = mc_handle_swap_pte(vma, ptent, &ent);
+>  
+> +	if (target && page) {
+> +		if (!trylock_page(page)) {
+> +			put_page(page);
+> +			return ret;
+> +		}
+> +		/*
+> +		 * page_mapped() must be stable during the move. This
+> +		 * pte is locked, so if it's present, the page cannot
+> +		 * become unmapped. If it isn't, we have only partial
+> +		 * control over the mapped state: the page lock will
+> +		 * prevent new faults against pagecache and swapcache,
+> +		 * so an unmapped page cannot become mapped. However,
+> +		 * if the page is already mapped elsewhere, it can
+> +		 * unmap, and there is nothing we can do about it.
+> +		 * Alas, skip moving the page in this case.
+> +		 */
+> +		if (!pte_present(ptent) && page_mapped(page)) {
+> +			unlock_page(page);
+> +			put_page(page);
+> +			return ret;
+> +		}
+> +	}
+> +
+>  	if (!page && !ent.val)
+>  		return ret;
+>  	if (page) {
+> @@ -5864,8 +5878,11 @@ static enum mc_target_type get_mctgt_type(struct vm_area_struct *vma,
+>  			if (target)
+>  				target->page = page;
+>  		}
+> -		if (!ret || !target)
+> +		if (!ret || !target) {
+> +			if (target)
+> +				unlock_page(page);
+>  			put_page(page);
+> +		}
+>  	}
+>  	/*
+>  	 * There is a swap entry and a page doesn't exist or isn't charged.
+> @@ -5905,6 +5922,10 @@ static enum mc_target_type get_mctgt_type_thp(struct vm_area_struct *vma,
+>  		ret = MC_TARGET_PAGE;
+>  		if (target) {
+>  			get_page(page);
+> +			if (!trylock_page(page)) {
+> +				put_page(page);
+> +				return MC_TARGET_NONE;
+> +			}
+>  			target->page = page;
+>  		}
+>  	}
+> @@ -6143,6 +6164,7 @@ static int mem_cgroup_move_charge_pte_range(pmd_t *pmd,
+>  				}
+>  				putback_lru_page(page);
+>  			}
+> +			unlock_page(page);
+>  			put_page(page);
+>  		} else if (target_type == MC_TARGET_DEVICE) {
+>  			page = target.page;
+> @@ -6151,6 +6173,7 @@ static int mem_cgroup_move_charge_pte_range(pmd_t *pmd,
+>  				mc.precharge -= HPAGE_PMD_NR;
+>  				mc.moved_charge += HPAGE_PMD_NR;
+>  			}
+> +			unlock_page(page);
+>  			put_page(page);
+>  		}
+>  		spin_unlock(ptl);
+> @@ -6193,7 +6216,8 @@ static int mem_cgroup_move_charge_pte_range(pmd_t *pmd,
+>  			}
+>  			if (!device)
+>  				putback_lru_page(page);
+> -put:			/* get_mctgt_type() gets the page */
+> +put:			/* get_mctgt_type() gets & locks the page */
+> +			unlock_page(page);
+>  			put_page(page);
+>  			break;
+>  		case MC_TARGET_SWAP:
+> -- 
+> 2.38.1
+> 
+> 
+> 
