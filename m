@@ -2,122 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56ACC645738
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E0AC64573C
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 11:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbiLGKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 05:11:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
+        id S230295AbiLGKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 05:12:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbiLGKLq (ORCPT
+        with ESMTP id S230242AbiLGKMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 05:11:46 -0500
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149FD40469;
-        Wed,  7 Dec 2022 02:11:45 -0800 (PST)
-Received: by mail-qt1-f171.google.com with SMTP id cg5so15765871qtb.12;
-        Wed, 07 Dec 2022 02:11:45 -0800 (PST)
+        Wed, 7 Dec 2022 05:12:03 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6CEA4092E;
+        Wed,  7 Dec 2022 02:12:02 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id n3so12861568pfq.10;
+        Wed, 07 Dec 2022 02:12:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=p+P1xMnkCCBz9CXQ/HSo+U65ScICwkDZ83BVNMvEKZk=;
+        b=NZsAuyNjTb4ztrX0KgkavB2VvvMs21qQi3kR56jkqnPSEYFcfuCrPgNJqSvgnfBFVp
+         6SmeY90qC82fFxB0YYLdKwSaG9Gng35gGvug8pg6bDX8APJNPwcgYtOb5iAdChL6fGve
+         3k98IbCHJgV+/WG8SQhubAQ9NQShX2qOdqye5lONQ0aKW44Z2m60t3sc8nCzzcQn+Zyn
+         Dp29sAAS0JG1mLNe53IO/3NMbj5jjdMqLLEd2gW0ZOAQxM6vx83lmLIkE8UdxNohsEtb
+         rKosAsRiItTOhnaw0ydWwbR5b/Ln0gsgLkg163grxi0ApWKYChjOlx3Xwwend6dp3C3C
+         BM4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=juRVNq6nOEAgeVByhHfIsBezpSVff7XnlAmpgRugblM=;
-        b=DGzp66VLtLTd3mAXxnEFGCIx+YtsbQ0zBBWq8zS1OXF9SYsiSrbdnGZYMZbUW8vfZU
-         DGIe+yuKNhUKIDWqfuXNZLhc3gxPWsR4JJ3dhyR2k0Dmzgc9vEKIktrl0NqxpQ/8fi8j
-         y6zFJRClfZLRSYUyRjxZAsREle5tfbFdi6eZqItp5bDCs5czzJPnMFugcMz3jK81m57X
-         n5gU0IUX3vsqMtb42Dy+yV0Z6DMt2mDB2Oh+ti3tY5K8yHu9oCe+MXzR+4rjuFRsAJVc
-         V06st0CNqEntQaZWMDEnRUb2wo6ekLArcFrbC80slTLGl3VoEwfDsqWKpkJAKq5Y19/9
-         JWuA==
-X-Gm-Message-State: ANoB5plPy4VdQS6pnmYTnzML4OVMmGwkFFvYb6CoBQLfhRUG/NV0SRYh
-        SK1TbQ6BoS2yjgQnNZrWzb7RpdMazqW1v82tVdTCLLtH
-X-Google-Smtp-Source: AA0mqf5v/x8EGofGp9eIVXNaOHp9+Qq49rJ09fkRLEIgmVKttw3ywbZiq0oyo9d8wiacUAhQaof8qrzMAOlMKdYs0aA=
-X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
- l2-20020ac81482000000b003a51e6f7e05mr65753022qtj.357.1670407904195; Wed, 07
- Dec 2022 02:11:44 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p+P1xMnkCCBz9CXQ/HSo+U65ScICwkDZ83BVNMvEKZk=;
+        b=4K3nMixH91XkNA2c1Hlcrt2Vq6VqAbzHZ4xWt29/ACBK5sQa2jsCN2eqGT6UI9BhEH
+         4h2XP9RYzdfwccCsZMYjD3sRbaAQYYPZbEEBPDt0RkN1AzQ1ViyuhldZfLb+p+JZiDhO
+         GE08ebMW1XExF1vEMw7BXF8LaRXNrMysWdgtdTLw6zph3FN+eSXXcHULPjhjwTveyKtw
+         dYpwvfZLipgBaY13+INW/Sakk+bn5tQSNBsH3UDlRMSsjk5eKugE0Egd67gwGAGET3pM
+         v+wlVY8veU3WPiTZUmQLeoMxPVwzNz6VqXcqaYNV4/d2f2vEBwnYvpiJYFNWb7gi9h+8
+         xtxQ==
+X-Gm-Message-State: ANoB5pkD0iemhl/V5Gl4mJW+m+xXZ2yczo2bNOTPJO0AWUTHGwmWyQvP
+        qlGOTZTAjNsEVyls4TL8fgU=
+X-Google-Smtp-Source: AA0mqf6HUg62PrOsODpLPCv8Q5It7/v8kLLYdJaBk9BU/+DnNWPO1P84+r0fZhFEy8CQmMCCfOD58Q==
+X-Received: by 2002:a63:cd44:0:b0:478:1391:fc43 with SMTP id a4-20020a63cd44000000b004781391fc43mr42038466pgj.431.1670407922191;
+        Wed, 07 Dec 2022 02:12:02 -0800 (PST)
+Received: from sol (110-174-14-241.tpgi.com.au. [110.174.14.241])
+        by smtp.gmail.com with ESMTPSA id c6-20020a170902d48600b0017f72a430adsm14257355plg.71.2022.12.07.02.11.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 02:12:01 -0800 (PST)
+Date:   Wed, 7 Dec 2022 18:11:55 +0800
+From:   Kent Gibson <warthog618@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: Re: [PATCH v1 2/3] Documentation: gpio: Add a section on what to
+ return in ->get() callback
+Message-ID: <Y5Bm6+ZKMaWCPDxi@sol>
+References: <20221130155519.20362-1-andriy.shevchenko@linux.intel.com>
+ <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
+ <CACRpkdaQWZE6=BNEh5hSH9=jBK=TcLoD1uUb=JyNYmHFvaSAfg@mail.gmail.com>
+ <Y41MxPthLjitvzEl@sol>
+ <CACRpkdb67ygsEuZhRZ9TGmmNXhiU2LsuefD0-48xtCLx3fq-KA@mail.gmail.com>
+ <Y5BjJmz5Mvdr8cAR@smile.fi.intel.com>
 MIME-Version: 1.0
-References: <2262737.ElGaqSPkdT@kreacher> <5647715.DvuYhMxLoT@kreacher>
- <2283816.ElGaqSPkdT@kreacher> <e7eb0e0c9aea30c0e3205b2f3d96b74a52283b40.camel@hadess.net>
- <CAJZ5v0ibpzoBLXKiqzciYv1Htks0=4+4_XGLvpH7MCyFoYJiDg@mail.gmail.com> <CAO-hwJL7n7HFk4MTKvLcvBPSLDwm9pHqLaZvmuwvSNDVWUF76g@mail.gmail.com>
-In-Reply-To: <CAO-hwJL7n7HFk4MTKvLcvBPSLDwm9pHqLaZvmuwvSNDVWUF76g@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 11:11:32 +0100
-Message-ID: <CAJZ5v0gwBUBbGLoW4xZCEOnGRdi-8gKNDgQ6KJEebLyxyJEUkg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] HID: logitech-hidpp: Add Bluetooth Mouse
- M336/M337/M535 to unhandled_hidpp_devices[]
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bastien Nocera <hadess@hadess.net>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Jiri Kosina <jikos@kernel.org>,
-        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5BjJmz5Mvdr8cAR@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 11:05 AM Benjamin Tissoires
-<benjamin.tissoires@redhat.com> wrote:
->
-> On Wed, Dec 7, 2022 at 10:47 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Wed, Dec 7, 2022 at 10:29 AM Bastien Nocera <hadess@hadess.net> wrote:
-> > >
-> > > On Wed, 2022-12-07 at 10:12 +0100, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Evidently, Logitech Bluetooth Mouse M336/M337/M535 (0xb016) does not
-> > > > work when HID++ is enabled for it,
-> > >
-> > > This needs the output of the hidpp-list-features tool mentioned earlier
-> > > in the thread so we can avoid words like "evidently" and provide
-> > > concrete proof.
-> >
-> > Well, so point me to a binary of this, please.
-> >
-> > > But why is it needed in this case?
-> >
-> > Because it doesn't work otherwise.
-> >
-> > > We purposefully try to avoid blanket
-> > > blocklists. The lack of HID++ can be probed, so the device should work
-> > > just as it used to (if the fallback code works).
-> >
-> > No, because the hid-generic driver has no way to check that the probe
-> > function of your driver fails for this particular device.  The probing
-> > of hid-generic will fail so long as the device matches the device ID
-> > list of any specific HID driver.  With patch [1/2] from this series
-> > applied this is unless that specific driver has a ->match() callback
-> > rejecting the given device.
-> >
-> > You'd need a list of drivers that have been tried and failed somewhere
-> > for that and AFAICS no such list is present in the code.
->
-> That is the reason why I never wanted to enable HID++ on all Logitech
-> mice, and this comes back to bite us at the worst time possible, right
-> before the merge window opens :(
->
-> >
-> > So a minimum fix for 6.1 that actually works for me is to add the
-> > non-working device to the blocklist.  More sophisticated stuff can be
-> > done later.
->
-> Agree, but OTOH, Rafael, your mouse is not brand new AFAICT, so I am
-> worried that you won't be the only one complaining we just killed
-> their mouse.
-> So I think the even wiser solution would be to delay (and so revert in
-> 6.1 or 6.2) the 2 patches that enable hid++ on all logitech mice
-> (8544c812e43ab7bdf40458411b83987b8cba924d and
-> 532223c8ac57605a10e46dc0ab23dcf01c9acb43).
+On Wed, Dec 07, 2022 at 11:55:50AM +0200, Andy Shevchenko wrote:
+> On Wed, Dec 07, 2022 at 01:06:46AM +0100, Linus Walleij wrote:
+> > On Mon, Dec 5, 2022 at 2:43 AM Kent Gibson <warthog618@gmail.com> wrote:
+> > 
+> > > My preference would be for the driver API to be extended with a new
+> > > callback for the output buffer, say get_output(), and have the existing
+> > > get() always return the input buffer.
+> > 
+> > This has a certain elegance to it, as it cuts to the bone of the
+> > problem and partition it in two halves, reflecting the two pieces
+> > of hardware: input and output buffer. Also follows Rusty Russells
+> > API hierarchy.
+> 
+> The (one of) problem is that not all hardware may support input and output
+> be enabled at the same time.
 
-Obviously that would work for me too, so it's your call.
+Exactly - and you want to hide that from the user.
 
-Thanks!
+> What would that new API return in that case
+> and how it would be better with get() returning the value depending on
+> direction?
+> 
+
+It would return an error for whichever is not supported.  So get()
+returns an error when the input buffer is unavailable, and get_output()
+returns an error when the output buffer is unavailable.  And that is for
+whatever reason, e.g. the selected mode or lacking hardware or driver
+support.
+
+It is better because the user is explicitly informed that the buffer
+they are trying to read from is not supported by the current
+configuration.  And they get to choose which buffer they want to read
+as they see fit - not have that selection made for them by magic.
+
+Cheers,
+Kent.
