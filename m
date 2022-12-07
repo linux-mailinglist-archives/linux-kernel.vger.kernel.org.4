@@ -2,152 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19C43646211
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B1E764621B
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229705AbiLGUGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35468 "EHLO
+        id S229522AbiLGUHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229676AbiLGUGO (ORCPT
+        with ESMTP id S229449AbiLGUHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:06:14 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A256151C26
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 12:06:13 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x28so13082591lfn.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 12:06:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SVZZ17cW0EmuZRh2nTo/dxOsOvCo68gbOMlI0qg0Oes=;
-        b=f83oDLXIKgXTvGRYKqZtWpfPU8ufCWVDcdrjasaCLvpkw7nA/JC9IYESereH++ibEn
-         dyVjnTTFusrXcYYJqJXpKhfVOrZoWAEBj3AxokAfqEvE6nDqEVi9Uxat0xtez4s1+Wr2
-         f90QZSh2x+gG0xb1yApoMeZNSB1FxEDyC7wVP90pwRrPLXi88cepilas96RCOzMH+nfG
-         KQ79MkzVpLTfDPbMFnVm3/AJGgNui4KuB9lms45NY87q8eP7BeiiU8Vx5B6CnRzKdFw5
-         4fcWEUcP03ArwhKl7wAVOYsk0sMBXuUlDkGdrrlJM9qABic+vfz5BkHLKBj+GpCFk0K2
-         DH6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SVZZ17cW0EmuZRh2nTo/dxOsOvCo68gbOMlI0qg0Oes=;
-        b=1QoBAGnUv0lqX8+CBDbO4jBN8D8IgIeNGMnq73LaLrPGb+DBdsGkviLN2d8sA5A8pj
-         LZmiHBBaMye+CX6C8CzCHQpvYXsV3X6Y2YqA8prxutNE6qjxApumgBMmmC2HmUyQzBED
-         baUby1CyUAxXABTgacbGwbO5x+XJcGD/GDFz0nhJ4M/OqL81CnG0yAZcwDFOOeeMZ87s
-         ZalvM5Ka+AFZvKYuFhYpFJnHTFGuuAAfL1JPA9xXlHZkHsLoM/a2YqLVNIQsbMIgZADy
-         C00U0Ar1Jvpbe9BPMU671Y1teRRnq0Cyidot5LmZ9DZ7kTz0i4s2A0Dmrw4XaiJImQcs
-         FVUg==
-X-Gm-Message-State: ANoB5pl2m9JVoXSsUd8whDQzdFdHygNO8GQ3mtc07YsXrRf7oU1tm7oi
-        Ic7K5T31E/JSQg8Z4hiW+QeYdA==
-X-Google-Smtp-Source: AA0mqf6lF43siP7A8cs36cAr32BfjPsWC/tEMDD+5bQ4FNR5cgq2SC2e+dr0o9VhXGZ0Qy5V7AFotQ==
-X-Received: by 2002:ac2:4e07:0:b0:4a2:2a60:ecf5 with SMTP id e7-20020ac24e07000000b004a22a60ecf5mr32619085lfr.57.1670443572075;
-        Wed, 07 Dec 2022 12:06:12 -0800 (PST)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id i10-20020a0565123e0a00b004b59067142bsm474079lfv.8.2022.12.07.12.06.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 12:06:11 -0800 (PST)
-Message-ID: <fc1b64dc-938e-0bb2-ef28-c09c7ec17efd@linaro.org>
-Date:   Wed, 7 Dec 2022 22:06:10 +0200
+        Wed, 7 Dec 2022 15:07:18 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC00686BC;
+        Wed,  7 Dec 2022 12:07:17 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1p30hA-0001li-Ox; Wed, 07 Dec 2022 21:07:08 +0100
+Date:   Wed, 7 Dec 2022 20:07:01 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>
+Subject: [PATCH v3] thermal: mediatek: add support for MT7986 and MT7981
+Message-ID: <e7122cc9ae519394cba9eeb50b650484686b7bc4.1670442987.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v10 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        airlied@gmail.com
-Cc:     quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1670432278-30643-1-git-send-email-quic_khsieh@quicinc.com>
- <1670432278-30643-3-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1670432278-30643-3-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 18:57, Kuogee Hsieh wrote:
-> Add both data-lanes and link-frequencies property into endpoint
-> 
-> Changes in v7:
-> -- split yaml out of dtsi patch
-> -- link-frequencies from link rate to symbol rate
-> -- deprecation of old data-lanes property
-> 
-> Changes in v8:
-> -- correct Bjorn mail address to kernel.org
-> 
-> Changes in v10:
-> -- add menu item to data-lanes and link-frequecnis
-> 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
-> ---
->   .../devicetree/bindings/display/msm/dp-controller.yaml      | 13 +++++++++++++
->   1 file changed, 13 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-> index f2515af..c4a278f 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-> @@ -81,6 +81,7 @@ properties:
->   
->     data-lanes:
->       $ref: /schemas/types.yaml#/definitions/uint32-array
-> +    deprecated: true
->       minItems: 1
->       maxItems: 4
->       items:
-> @@ -104,6 +105,15 @@ properties:
->         port@1:
->           $ref: /schemas/graph.yaml#/properties/port
->           description: Output endpoint of the controller
-> +          data-lanes:
-> +          $ref: /schemas/types.yaml#/definitions/uint32-array
-> +          minItems: 1
-> +          maxItems: 4
-> +
-> +          link-frequencies:
-> +          $ref: /schemas/types.yaml#/definitions/uint64-array
-> +          minItems: 1
-> +          maxItems: 4
+Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+Brings code to assign values from efuse as well as new function to
+convert raw temperature to millidegree celsius, as found in MediaTek's
+SDK sources (but cleaned up and de-duplicated).
 
-There is an issue here. You are describing the properties beneath the 
-port@1, while in reality they are found beneath the endpoint node. See 
-analogix,anx7625.yaml for a proper example.
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+This patch depends on series
+"thermal: mediatek: Add support for MT8365 SoC"[1] being merged first.
 
->   
->   required:
->     - compatible
-> @@ -193,6 +203,9 @@ examples:
->                   reg = <1>;
->                   endpoint {
->                       remote-endpoint = <&typec>;
-> +                    data-lanes = <1 2>;
-> +                    link-frequencies = /bits/ 64 <1620000000 2700000000
-> +                                                  5400000000 8100000000>;
->                   };
->               };
->           };
+Changes since v2: Rebase on top of pending patch introducing
+raw_to_mcelsius function pointer.
+Drop left-over macro extracting the unused adc_oe field.
+Use switch (...) instead of if-else-if-else-... statements.
+For now, return -EINVAL as default in case of unknown version. Imho
+this should be BUG(), as this version is only defined within this
+driver.
 
+Changes since v1: Drop use of adc_oe field in efuse, Henry Yen
+confirmed its use has been dropped intentionally in MTK SDK as well.
+
+[1]: https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
+
+ drivers/thermal/mtk_thermal.c | 149 ++++++++++++++++++++++++++++++++--
+ 1 file changed, 142 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index b1f4d19edd4f..4993ed6d3e21 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -151,6 +151,20 @@
+ #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
+ #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
+ 
++/*
++ * Layout of the fuses providing the calibration data
++ * These macros can be used for MT7981 and MT7986.
++ */
++#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
++#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
++#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
++#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
++#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
++#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
++#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
++#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
++#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
++
+ enum {
+ 	VTS1,
+ 	VTS2,
+@@ -164,6 +178,7 @@ enum {
+ enum mtk_thermal_version {
+ 	MTK_THERMAL_V1 = 1,
+ 	MTK_THERMAL_V2,
++	MTK_THERMAL_V3,
+ };
+ 
+ /* MT2701 thermal sensors */
+@@ -257,6 +272,27 @@ enum mtk_thermal_version {
+ #define MT8365_TS2 1
+ #define MT8365_TS3 2
+ 
++/* AUXADC channel 11 is used for the temperature sensors */
++#define MT7986_TEMP_AUXADC_CHANNEL	11
++
++/* The total number of temperature sensors in the MT7986 */
++#define MT7986_NUM_SENSORS		1
++
++/* The number of banks in the MT7986 */
++#define MT7986_NUM_ZONES		1
++
++/* The number of sensing points per bank */
++#define MT7986_NUM_SENSORS_PER_ZONE	1
++
++/* MT7986 thermal sensors */
++#define MT7986_TS1			0
++
++/* The number of controller in the MT7986 */
++#define MT7986_NUM_CONTROLLER		1
++
++/* The calibration coefficient of sensor  */
++#define MT7986_CALIBRATION		165
++
+ struct mtk_thermal;
+ 
+ struct mtk_thermal_zone {
+@@ -426,6 +462,14 @@ static const int mt8365_tc_offset[MT8365_NUM_CONTROLLER] = { 0 };
+ 
+ static const int mt8365_vts_index[MT8365_NUM_SENSORS] = { VTS1, VTS2, VTS3 };
+ 
++/* MT7986 thermal sensor data */
++static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
++static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
++static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
++static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
++static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
++static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
++
+ /*
+  * The MT8173 thermal controller has four banks. Each bank can read up to
+  * four temperature sensors simultaneously. The MT8173 has a total of 5
+@@ -626,6 +670,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
+ 	.version = MTK_THERMAL_V1,
+ };
+ 
++/*
++ * MT7986 uses AUXADC Channel 11 for raw data access.
++ */
++static const struct mtk_thermal_data mt7986_thermal_data = {
++	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
++	.num_banks = MT7986_NUM_ZONES,
++	.num_sensors = MT7986_NUM_SENSORS,
++	.vts_index = mt7986_vts_index,
++	.cali_val = MT7986_CALIBRATION,
++	.num_controller = MT7986_NUM_CONTROLLER,
++	.controller_offset = mt7986_tc_offset,
++	.need_switch_bank = true,
++	.bank_data = {
++		{
++			.num_sensors = 1,
++			.sensors = mt7986_bank_data,
++		},
++	},
++	.msr = mt7986_msr,
++	.adcpnp = mt7986_adcpnp,
++	.sensor_mux_values = mt7986_mux_values,
++	.version = MTK_THERMAL_V3,
++};
++
+ /**
+  * raw_to_mcelsius - convert a raw ADC value to mcelsius
+  * @mt:	The thermal controller
+@@ -680,6 +748,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
+ 	return (format_2 - tmp) * 100;
+ }
+ 
++static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
++{
++	s32 tmp;
++
++	if (raw == 0)
++		return 0;
++
++	raw &= 0xfff;
++	tmp = 100000 * 15 / 16 * 10000;
++	tmp /= 4096 - 512 + mt->adc_ge;
++	tmp /= 1490;
++	tmp *= raw - mt->vts[sensno] - 2900;
++
++	return mt->degc_cali * 500 - tmp;
++}
++
+ /**
+  * mtk_thermal_get_bank - get bank
+  * @bank:	The bank
+@@ -989,6 +1072,25 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
+ 	return 0;
+ }
+ 
++static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
++{
++	if (!CALIB_BUF1_VALID_V3(buf[1]))
++		return -EINVAL;
++
++	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
++	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
++	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
++	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
++	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
++	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
++	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
++
++	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
++		mt->o_slope = 0;
++
++	return 0;
++}
++
+ static int mtk_thermal_get_calibration_data(struct device *dev,
+ 					    struct mtk_thermal *mt)
+ {
+@@ -1024,10 +1126,23 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
+ 		goto out;
+ 	}
+ 
+-	if (mt->conf->version == MTK_THERMAL_V1)
++	switch (mt->conf->version) {
++	case MTK_THERMAL_V1:
+ 		ret = mtk_thermal_extract_efuse_v1(mt, buf);
+-	else
++		break;
++
++	case MTK_THERMAL_V2:
+ 		ret = mtk_thermal_extract_efuse_v2(mt, buf);
++		break;
++
++	case MTK_THERMAL_V3:
++		ret = mtk_thermal_extract_efuse_v3(mt, buf);
++		break;
++
++	default:
++		ret = -EINVAL;
++		break;
++	}
+ 
+ 	if (ret) {
+ 		dev_info(dev, "Device not calibrated, using default calibration values\n");
+@@ -1057,6 +1172,10 @@ static const struct of_device_id mtk_thermal_of_match[] = {
+ 		.compatible = "mediatek,mt7622-thermal",
+ 		.data = (void *)&mt7622_thermal_data,
+ 	},
++	{
++		.compatible = "mediatek,mt7986-thermal",
++		.data = (void *)&mt7986_thermal_data,
++	},
+ 	{
+ 		.compatible = "mediatek,mt8183-thermal",
+ 		.data = (void *)&mt8183_thermal_data,
+@@ -1181,12 +1300,28 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		goto err_disable_clk_auxadc;
+ 	}
+ 
+-	mtk_thermal_turn_on_buffer(mt, apmixed_base);
++	switch (mt->conf->version) {
++	case MTK_THERMAL_V1:
++		mt->raw_to_mcelsius = raw_to_mcelsius_v1;
++		break;
++
++	case MTK_THERMAL_V2:
++		mt->raw_to_mcelsius = raw_to_mcelsius_v2;
++		break;
+ 
+-	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
+-				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
++	case MTK_THERMAL_V3:
++		mt->raw_to_mcelsius = raw_to_mcelsius_v3;
++		break;
++
++	default:
++		ret = -EINVAL;
++		goto err_disable_clk_peri_therm;
++	}
++
++	mtk_thermal_turn_on_buffer(mt, apmixed_base);
+ 
+-	if (mt->conf->version == MTK_THERMAL_V2) {
++	if (mt->conf->version == MTK_THERMAL_V2 ||
++	    mt->conf->version == MTK_THERMAL_V3) {
+ 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+ 	}
+ 
 -- 
-With best wishes
-Dmitry
+2.38.1
 
