@@ -2,245 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADDC645257
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 03:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBB8645260
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 04:04:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLGCzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 6 Dec 2022 21:55:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45336 "EHLO
+        id S229595AbiLGDEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 6 Dec 2022 22:04:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiLGCy5 (ORCPT
+        with ESMTP id S229497AbiLGDEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 6 Dec 2022 21:54:57 -0500
-Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1418A554D4
-        for <linux-kernel@vger.kernel.org>; Tue,  6 Dec 2022 18:54:56 -0800 (PST)
-Received: by mail-vk1-xa2d.google.com with SMTP id l17so2528447vkk.3
-        for <linux-kernel@vger.kernel.org>; Tue, 06 Dec 2022 18:54:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VUyJThHxvf1vetwXom0T/8hrUhaZe55XzHBuX7jumS8=;
-        b=R6Ja3PiTOz4bp03mOKmfBwD1Zkhwp9u4GqqHQEiESYoOdRWu2NqUJ73LQi5tc0O9YW
-         3SEb10Su2TDXiC7uauyxlESYizaHaDZ3mej738O4AD8oe15XEDINGKW5jWgZjGc7nwyj
-         pXJkFqQWic6vZe6Mf6+d545gARYXp2YIPRopMbNzAPh4nmDnD6Xtm8M8h0Men1XdDhav
-         eXhcJT4LcFfu1ZiYNGNzBuR4tB1r2azE57RN7lLt1/itcRhvChtQlRC4TupYgftEIDZc
-         aBwb9T0X48s9oWUtqQTzoRhDElNECzSBXYZ8cZ+/dEn41oBWJGz9H+I/b05dqYecb70A
-         n3CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VUyJThHxvf1vetwXom0T/8hrUhaZe55XzHBuX7jumS8=;
-        b=IKR+VPBGOwMD11WdekBb59P90+faL9UgEvTli4aBy27KCocgROODjH5WbtcR5sb4Ln
-         iEAJO8+eMwYV0A64Ra3G9x0R4MHckhJCgK668lnVsscfPtofPIRPO4WZY0Gnjsg5Z3VU
-         LPjlKeItcTA8IZE3AQyLJ+1jjjGM5gDdmLKev+BnQ9tbg2QA7whqz9iUKTdkb5HPMzwg
-         mJEZx6/t2yN37XXWELvtjucCT/WI5xtSoNsBhhrsXPdyEVo7AH/lgYZ6dwL+ZiHe1eJm
-         x99DkKKsFv0cYp3kogo9SJWpp1GtkN2N0hLHr0Jn5kuJnjxBYaWkU/RaYYnPZV+MSCNU
-         Ta6A==
-X-Gm-Message-State: ANoB5pniOsc7tRasNlZNgq5O+zPO44R1ESb1G0qf8ZBOlvW1Zlse/YEa
-        DPGSaeGGLhx2/izLF1y+o4gGhpDq2m2FDAzwOjUd3g==
-X-Google-Smtp-Source: AA0mqf68ajJtQPax1pmUrvSoqG7xsxXARst3K27OmqRvea+nD9SM8zQs/GMOod1N7OrCQNW/HVkyrkQ8qCAD6zq/WIk=
-X-Received: by 2002:a1f:5cc5:0:b0:3bd:1d27:eaa with SMTP id
- q188-20020a1f5cc5000000b003bd1d270eaamr15466699vkb.4.1670381695006; Tue, 06
- Dec 2022 18:54:55 -0800 (PST)
+        Tue, 6 Dec 2022 22:04:35 -0500
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2079.outbound.protection.outlook.com [40.92.103.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 097B4532FC;
+        Tue,  6 Dec 2022 19:04:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S8KZ2RMUlPL8HjTZfavcGbJObHjGcq21j8PwBZzH1dSH43lRjo7vWFFepkL77YAcwQZ+vVsbOUky8jJvGT5CuO4jPDFtn4CnaG77qG9fXAjI+EtzBQUmDdUKxiVFYYyb+ropfBdN3pBw+j2Hq4sC/aD9NwnaJmVoO47ts17WrrpRCUQhzacVrmy155tA1YI2fWdL35DQj9998dYZh4Unuup7Ta82xeAaUS3Nb6MXlQccHCTuF1u3plWmxrJ/k4V8eeFgKufIFcAsf2TKRd22yGCTiZBITFbxiaBUB6hOslvpDTPHmg0IIKg0Wa4FzO58N4GqExpFI6KlaSv43dco+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Aj3ljViyE4oDDNbA+A8ttEK4QEsL+U5FeyfzcGreTSA=;
+ b=dSkqPCwYj+yAZqrwE46VcMTeiwOLUYiHdFP4P8ftkq6PhAx0C4X5j2dlhvJX02o40J/mRRX67YajF+wKOhu2yUZaMZiLv8ALkHNRGJj2VXnxlvOa94twydADTZ0gQhI/MQ8v8w1JkBzNY0CtG8FhxC1YoS2TdnyQD48RaVGsQWNpI4ywyu+lN4St3NuzCXAW/lbE5HAOhEYwhkR66uTUVI1iDwvCLLkqLfwBKukz9wf5xFQoOoqbEVF/Bm4KtjhVYBqMvXUOEVYcpzvux/yV7D7vP/AUk6pBUObKftnM3zGVrK98Fb9AjNzUUdboCPOzFirUKJ4tQEC3CIX27ACO4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Aj3ljViyE4oDDNbA+A8ttEK4QEsL+U5FeyfzcGreTSA=;
+ b=gFl/1HKjarJvNq8ENb8WFpWDD4mMOOe6hANmuG3/WjAbGafzQFPwG28qYI1SNtsYleo4R9Bdo626xr0BKbTq/IbnFxNHiGD4/xK9UoSckPVQrE2VlDNTyvZXPRMn3JaEVn9exkOC8VYM8oCSJzZek7184MXQ5J/GJ9gsvzXNsQLJ80oiDRRx2QQbR7FAP+8l9/wDrdrHVCeoVSvbRkOT6roT1VOgBbUGRFKN8mOmgK63OphSiyHRCe8HSE91S3/v9ib5B5mvBAnKEk5+946IxBRX4Xn++iOsRSbLpHHOdESxUlaK3udEmkaTJ7THUnk3iZwy9fFz5zAHj2LnO8oU0g==
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:2::9) by
+ PN2PR01MB8896.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:115::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5880.13; Wed, 7 Dec 2022 03:04:28 +0000
+Received: from BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1]) by BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::68ba:5320:b72:4b1%4]) with mapi id 15.20.5880.014; Wed, 7 Dec 2022
+ 03:04:28 +0000
+From:   Aditya Garg <gargaditya08@live.com>
+To:     Viacheslav Dubeyko <slava@dubeyko.com>
+CC:     "willy@infradead.org" <willy@infradead.org>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable
+ to be assigned with mount
+Thread-Topic: [PATCH] hfsplus: Fix bug causing custom uid and gid being unable
+ to be assigned with mount
+Thread-Index: AQHZBmRIqZUco1oHfUewwcIrvr9k1a5bExaAgAC5qICABDvJAIAAf4aAgAAKbwCAAKnBAIAAiCkA
+Date:   Wed, 7 Dec 2022 03:04:28 +0000
+Message-ID: <267A1533-B2A2-4A83-ABC8-39A27D9B734D@live.com>
+References: <93F5197D-2B61-4129-B5D4-771934F70577@live.com>
+ <55A80630-60FB-44BE-9628-29104AB8A7D0@dubeyko.com>
+ <1D7AAEE4-9603-43A4-B89D-6F791EDCB929@live.com>
+ <A2B962C1-AD33-413D-B64A-CD179AFBEA8D@dubeyko.com>
+ <FBF299DB-E235-4BD3-82BD-5A54EE9E26DA@live.com>
+ <CD80923F-4422-416B-AAC1-A676D37C564F@live.com>
+ <20EA622D-12B9-49B6-8564-C8EE2A2329D2@dubeyko.com>
+In-Reply-To: <20EA622D-12B9-49B6-8564-C8EE2A2329D2@dubeyko.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-tmn:  [CWOAJFbUqbCmKzU66eAU5I+r8D+epfXH]
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BM1PR01MB0931:EE_|PN2PR01MB8896:EE_
+x-ms-office365-filtering-correlation-id: c2b91fe5-bbe5-4b5e-e4bd-08dad7ffc142
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dH0jkvw58R4jT8qg6esXdumsxnnbMnR07Pa+Dy87yvZwoRYbLS42nzRqTyH+UR3fvhvYBQxClDjZAXhaM1mfNiG0IHZrMuKXU+ekeXUofwCIkHHObm/iz0PNmr/9G4zcFTIKYpZlMWKcrXen4M5mvrY4v7fKHBUZNdHKuGDPxibkHbvgLycVonlWDVlVPdUmbjFR33SDtQHi+F7CgIkY5+KH0WBQN4vxucAjjrcB1bhf6cuS5l/JJW3mRdwc5P8W1zFMwwRDe3YRAewPvZQiFQEdMKRiWh/i1MRT6VbkL4sGZe8X4mdOyJgAmv5WiW2jTdzM+S5t3Fn7iPtWtWinlbMXUus5/Luz9WrRzjilWoopQmZgAd9SoyfWKUneLOiXMqAuOmlPzUDTiqxgQx6H6KyhLQN2Ap+48LowT/rkKLLurDOj4Xml99lNrh2TDzIR14OJsTqqlkjgbuhlL2jMGRSkiIcCrG+36OzywlE3Vci6aMlgMvvQgr+Tjp0RxZGR5z3WZ+F/S1zkQzoHozZiZ25nZ+yQ8l84rR0zL2oXT0yFTTng77Qw8N4hcYiXzj6tFGTnixcVvlg8wV6vuLbZ1cgogmh6xgysnaqEzv3d+nJMJV8pYDusL2wixx42g6Xqv/2t1gBhBLFUIdyAL5gzUw==
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SnVXaWNQRWVPSWVPdnN3Tml1cjFhalU2ekhZKy80YXRHUkI2QldvdG5XWVpM?=
+ =?utf-8?B?Um4vWGRjNXAyaHZkOWs3UGp4UmlEYXpzU0ZDbi8zMytzbjdIUm1yUmRubGZ3?=
+ =?utf-8?B?cVdNRHh5OW45NkFBQmxtQllPWEt2S3p0b3JnZjU2RWpGZ2ZJQk40OHdaMnlB?=
+ =?utf-8?B?Qk5LWkxlQU05L3gvbEg1RWVVRWdFSTFIR01oY3ZKSzgrY0htM0YvTWFhb1RT?=
+ =?utf-8?B?ZnA0Y0xUd3NWdFpQWFRaLzdFY3JIUGF3d2I3RCtXY1Qvc095cEl4cFhFV0dP?=
+ =?utf-8?B?cmNYaHRab2t2SlhyNVRPTC8vcUZ5MXBoRGIyMzh3UEhFTW9GcmNFV3ZPajFQ?=
+ =?utf-8?B?amRqRDJmaCtiRldNVnZHUThqU3IvTE1RcDFvT2IxaHMxZUZFK2JwQkNURGVY?=
+ =?utf-8?B?Qkp0TGdpOXhRenBwQzZqVjR5Yzd2WUt3aEMxVTRrb1k0b3drbHBobjBGeEdF?=
+ =?utf-8?B?bjk1bXhJSzBGekZqZFVMMlEzMXpFbDBLNDhmV25QOFRaWjNtc1BpYnBqdjdp?=
+ =?utf-8?B?aDFXUjVtc0F2WlVHcGxDKzM4UnRGUDRVNEppaUxORGRHTlA3VkloOHNzSVV4?=
+ =?utf-8?B?VHU4R2g2dkJJWnczeDZNbmVESFFvMnRqc1NuQnFFQ1g5OWlpZzN4L1R2ODJu?=
+ =?utf-8?B?QlBaMjN5Ry85VUZ0OHJ4TFhnVFkrb2pSSHJSa2RZVGt2S3p6RkRORWVBTVZz?=
+ =?utf-8?B?cWt0T1RhVktqMG9OUU14aXhxTHFrbnRVRUlaa1VONFdjcjhhbXdzb0Vyb0dv?=
+ =?utf-8?B?Y0t6dlBGbmNCM08vdDFYTEhacytVd0VlaVZmWlJVTHlWWnpEMDdHMHBkeHBy?=
+ =?utf-8?B?bXpCMzBDMm1LZkcrMW5UUjBvbXVHWHRJTW1xTm0yK0dKWTZEQWwyQzFHdDhO?=
+ =?utf-8?B?Nm5OZU90TVFud3pmU0IvVzJpdFVkcVFET0JoNmkxdHdxTXRxZ2FkaGlQSUhH?=
+ =?utf-8?B?ZnY3dG9mWG42VGtVcCtiK2M1cDVndHdOQllDcmVRbFBwaHFZUFNPN05nbTZR?=
+ =?utf-8?B?eDZTeis5VGhqT3pUSCtFSGowekZoczdrcDJOSkNvUk5VOG04eXpJaTBjMXdq?=
+ =?utf-8?B?Vm8yQjJ2MEF0cC9kV0ZiRXZ3dTZsMkVqbHRZTGZMTllBbE5CS081ZmFzVEZl?=
+ =?utf-8?B?a1NkaTdqbUUwcGZpRDV3OVppTWR1WlhpQVpkdGVKMEZJQ2JKOWJRWlZ1TGdD?=
+ =?utf-8?B?eXBCOUpNNk9XS2k4eEFldnRna09xRnBMRFdtd0w3QnFySlA2S0ZSa3VMUUR1?=
+ =?utf-8?B?Nk9pc1IwUUNVRmhXckpKT045cU5wOElVK2s0aDFjNmVucE5zbzk1MEhkVmJh?=
+ =?utf-8?B?c0wyQWdvMk9MN3VyUmpIVUg4SmpDcUpDVzlHNmhPQnUrVkJTOFJhYnBwOHMx?=
+ =?utf-8?B?cXFvK0VKazBlTzdpWmpOTHAwcDRMWkJKSGVVTkVEamR1ckR5dnROdDF5bHow?=
+ =?utf-8?B?eUI4SXdZcThUWWpWUnkrZjRZVjJ4dDNkOHFWM2d1YXYxaWpXS21WMVpaeDE1?=
+ =?utf-8?B?Rm9FMTEvcS9kY2M5MFN0dDB6b0ZoeDhjWGMvblhBeDlTbENZR0E3VFl2WERi?=
+ =?utf-8?B?SWtUY3N2dFRjSXBDTnBnYmYvbWFJaytqUlVTMmpQem9JcVJscTdBNFo3ak1t?=
+ =?utf-8?B?NXlsTlpIRUlObXc0ZHNRWno5NzVLb1Z1SEZzMzVHTUp5M1lzcHk3akJOdTNq?=
+ =?utf-8?B?eXdTMzlhdHRucEUyTkcrOHBLMks1aHhFM2pyU3pOQmd1QzhHSXZSS0RnPT0=?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4E0FBD352EA3E043899F430F8B7FA814@INDPRD01.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221207014024.340230-1-rmoar@google.com> <3bc67108-9f4a-4cd7-619d-d61816625e1a@canonical.com>
-In-Reply-To: <3bc67108-9f4a-4cd7-619d-d61816625e1a@canonical.com>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 7 Dec 2022 10:54:43 +0800
-Message-ID: <CABVgOS==niZi5O4Gk8uxHdnmX4YFs2e6XYG=B+SQ6Po6v6bHkg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] kunit: add macro to allow conditionally exposing
- static symbols to tests
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Rae Moar <rmoar@google.com>, brendanhiggins@google.com,
-        dlatypov@google.com, skhan@linuxfoundation.org,
-        tales.aparecida@gmail.com, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        apparmor@lists.ubuntu.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000097d49a05ef340bb5"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB0931.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2b91fe5-bbe5-4b5e-e4bd-08dad7ffc142
+X-MS-Exchange-CrossTenant-originalarrivaltime: 07 Dec 2022 03:04:28.5209
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN2PR01MB8896
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000097d49a05ef340bb5
-Content-Type: text/plain; charset="UTF-8"
-
-On Wed, Dec 7, 2022 at 10:43 AM John Johansen
-<john.johansen@canonical.com> wrote:
->
-> On 12/6/22 17:40, Rae Moar wrote:
-> > Currently in order to test a static function, tests must be included in the
-> > same translation unit as the function. However, this can cause issues with
-> > including implementation and test code in the same file. As an alternative,
-> > the first patch in this series creates a macro that will set a function to
-> > be static or not depending on whether CONFIG_KUNIT is enabled. This allows
-> > the function to be visible during testing and static otherwise.
-> >
-> > As an example, the current status quo to test static functions is:
-> >
-> > === test.c ===
-> >
-> > static void test_case(struct kunit *test)
-> > {
-> >    KUNIT_EXPECT_EQ(test, my_func_to_test(), 2);
-> > }
-> >
-> > Then the tests are included in the implementation file as a workaround to
-> > the issue of testing static functions:
-> >
-> > === implementation.c ===
-> >
-> > static int my_func_to_test() {...}
-> > ...
-> > #include "test.c"
-> >
-> > Instead, the function could be defined with this new macro:
-> >
-> > === implementation.c ===
-> >
-> > VISIBLE_IF_KUNIT int my_func_to_test() {...}
-> >
-> > The first patch also creates a macro that will export a symbol into a kunit
-> > testing namespace only if CONFIG_KUNIT is enabled. This follows the logic
-> > above and allows symbols to be conditionally exported based on the testing
-> > status.
-> >
-> > The second patch in the series updates the policy_unpack test in AppArmor
-> > to show an example of how to use both of these macros in order to address
-> > the issue of testing static functions. Additionally, the patch allows the
-> > policy_unpack test to be built as a module.
-> >
-> > Changes since v2:
-> >   - Add mention of namespacing symbols to the commit message of the
-> >     second patch.
-> >   - Change module name in the second patch from policy_unpack_test to
-> >     apparmor_policy_unpack_test.
-> >
-> > Changes since v1:
-> >   - Changed the namespace of exported symbols for the apparmor
-> >     policy_unpack_test by adding the aa_ prefix.
-> >   - Separated the documentation comments for macros in
-> >     include/kunit/visibility.h.
-> >   - Changed copyright date and author for include/kunit/visibility.h.
-> >
-> > Rae Moar (2):
-> >    kunit: add macro to allow conditionally exposing static symbols to
-> >      tests
-> >    apparmor: test: make static symbols visible during kunit testing
-> >
-> >   include/kunit/visibility.h                |  33 +++
-> >   security/apparmor/Kconfig                 |   4 +-
-> >   security/apparmor/Makefile                |   3 +
-> >   security/apparmor/include/policy_unpack.h |  50 +++++
-> >   security/apparmor/policy_unpack.c         | 238 ++++++++++------------
-> >   security/apparmor/policy_unpack_test.c    |  69 ++++---
-> >   6 files changed, 229 insertions(+), 168 deletions(-)
-> >   create mode 100644 include/kunit/visibility.h
-> >
-> >
-> > base-commit: 0f08f3e2a0186dfb8e33cb46105228eb18448a0e
->
-> thanks Rae,
->
-> looks good to me, David unless you tell me otherwise I assume this is
-> still going in via the kselftest/kunit tree.
->
-
-Yup, both of these are looking good to me (and work fine on my machine).
-
-I've added these to the queue for the kselftest/kunit tree. There's a
-chance they won't make it into 6.2, but if not, they should be the
-first things in the 6.3 branch.
-
-Thanks very much,
--- David
-
---00000000000097d49a05ef340bb5
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
-dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
-AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
-c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
-LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
-LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
-Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
-jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
-p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
-2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
-+bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
-/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
-R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB9
-hCAHtDp2SmCIg48x7Xwsagl5HzrO2Rxx6kO5ZyytNDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjEyMDcwMjU0NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
-BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZ3oK6ZaJ3jPkpkpKdzZD
-STwCXyqAB7keaXBPcmIzMLUK6sZ2g0dQ0Dhew1xxjLpcZS+HOuGUIfVyX/KSxfX6pruiZx3rDDio
-GZLFpqgHTvXWLBIYDtd5ZPJ1vQguWoK4eYTpruQtJkfiXxYmkwQrgTY6hzRyAoGO4FlEBfO5G6El
-DB6qZXRG6+ZbNHTtJ3AAc6pzE+Ogs0VxMgi+5C+Ors1Vxs/E9I9/Rl6zBO8TA9MOAQlTkwO3tgjI
-bLoKdxRHuCgWnTGdfrwas5geGDGLTNeCVhhyLm0+pjl2Jo7ihaTZd5nfpOCCIWxo/+jiFzBttd31
-hznKlhazXHtM3F1KCA==
---00000000000097d49a05ef340bb5--
+DQo+IExvb2tzIHJlYXNvbmFibHkgd2VsbC4gSSBiZWxpZXZlIGl04oCZcyBiZXR0ZXIgZml4Lg0K
+PiANCj4gVGhhbmtzLA0KPiBTbGF2YS4NCg0KU2VuZGluZyBhIHZlcnNpb24gMi4gSSBhbHNvIGZv
+cmdvdCB0byBDYyB0byBzdGFibGUsIHNvIHNoYWxsIGRvIHRoYXQgaW4gdjIuDQoNCg==
