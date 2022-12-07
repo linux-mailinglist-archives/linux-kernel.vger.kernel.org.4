@@ -2,447 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9E5F64650D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F8564650F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 00:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbiLGX0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 18:26:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S230200AbiLGX0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 18:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiLGX0O (ORCPT
+        with ESMTP id S230145AbiLGX0h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 18:26:14 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C838930D;
-        Wed,  7 Dec 2022 15:26:12 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7NQ4HD014549;
-        Wed, 7 Dec 2022 23:26:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=V2RHTNYj+y3MoQL8XxgBIwmq8NM9acbI0Zw8SiwpklU=;
- b=f+MkYFL0jkfY9rOscS11AOd6ZlBMqCqrRd2ccYFqMGIlNihfAjk+xBniGYIsZ+Hl6PRz
- QImci5mCQLzvkhbICeGBfIYPHIrA3CTI8sgORZGpGPcFagoNYEnGjdHRkqxQ2eInRAMs
- 2ieOiLJovBkhOy66/UKuS+H4eWTFrKY1D5tJaQwugDQ78/Zc8OEgjbJW5T7ick5CXYee
- 9PcSOQFZotNiY84+VkaSmQAWkgStKj90+pf2y6ld4e1R1EEED49fB6dZIkI++d7mfLJQ
- vOEXv6hoZTZ0O+F/F2nrYf6AfsseEJBcgzHz2/6y4+ZrX3YQ3own84uxrUdkLYknRK1H pw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3maype0gck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Dec 2022 23:26:04 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B7NQ3tx002834
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Dec 2022 23:26:03 GMT
-Received: from hu-collinsd-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 7 Dec 2022 15:26:02 -0800
-From:   David Collins <quic_collinsd@quicinc.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     David Collins <quic_collinsd@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 3/3] thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
-Date:   Wed, 7 Dec 2022 15:24:58 -0800
-Message-ID: <c3caecfa96f0c4370463f8b3410a09ef63aad221.1670454176.git.quic_collinsd@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1670454176.git.quic_collinsd@quicinc.com>
-References: <cover.1670454176.git.quic_collinsd@quicinc.com>
+        Wed, 7 Dec 2022 18:26:37 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE7D89331
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 15:26:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hcCargyC3Vrffz5fx/iHycO3EuI6D+C0VCggGQ3cCiuOa0TYnor4v8qOLDz2fsKgePSZrqMw/vu8c2kKj4IPtXtvpPG6pjisOFFHeV2mt7gPXoxgXJfSQWvNyRiBXQuoHsN9lbFOC2dOV8Pl3sQwn3YXD933StNcz6AZCbIlX2Qnd2A2T942Q56+dExdv1J2MWdeOO6Rr9YXDEYZMqE3dXKEThFk/yMHmwY/i003nrMji7O+f8kTSm0Q8bYo7/3BryMtVPzfzWv44asCaiUvGXFKwF3Ox4B7LlHvZe0YgzszhAgdb8603xN6m8tyM1/E73Mc6m2+6XRrkvXxTV2EGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1eXF+dmk2x8g823zIR2MJP4K8DoF0lpHCRBsC1lRdYA=;
+ b=ZDIo2L5JAyWcPfVjP5W82TXoGPeNMoH9MqaznSBva6nQx7/XvoVaUJL+ehmlRTTL8v80yzc4qon4du0MST9afKOO70uMdjZS27b4a9ae/zO5pQs+rbvUb+HAzkbzzuONwZXgabFh6AvFRHD6zQcn2/wIu+DNM7BNH26An4fMDWQsRhSNYsxjX2xEeZKIb05unCA6tktCmTcrgm0eDcMj9iL1Zu+JexHhcZ9WNQ3QwIjUnz/BFOcIlyN/Sk6jKZQMoYhlQoBXaHllDURS+TpM+NQ798a2DGIdY0qyaF68EOVTEzQRVbAu6RPu+0KROoMS9mfs/gMeyKRl4Apbx+98Nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1eXF+dmk2x8g823zIR2MJP4K8DoF0lpHCRBsC1lRdYA=;
+ b=QiiBDr13U+WK/AqWc0o5deo+rO8tPVmU4ClVpQCJtSPoDhCHDR/ZlrlZm93yhpIGbblubePJGriOwhxd1SnA7gSJBIY3mrAgcBE+8ZLeBxFHUziXk1UPj4tX5jccS9k9pU+JW1B/BHTACNtpcvBzeXw3M7Lv3Xz9/zCl5nY24Sa1r/t4L+d97xdac76Mey1Om8yhnGMAoANJz+H9xw4U3n4q/KCLcRN131MZKBzI1LVwRWfER+aKQEkUEUEXFzVe9oRT5FkMZqJ86dH/qsQ3aUs4b33p1RRmAbTGLE6IA2hkIhZwWinADVc34Srn+nXfWw6qGRXbeA1L1fARL+XzXA==
+Received: from BN9PR03CA0788.namprd03.prod.outlook.com (2603:10b6:408:13f::13)
+ by MN0PR12MB6004.namprd12.prod.outlook.com (2603:10b6:208:380::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.13; Wed, 7 Dec
+ 2022 23:26:23 +0000
+Received: from BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:13f:cafe::36) by BN9PR03CA0788.outlook.office365.com
+ (2603:10b6:408:13f::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
+ Transport; Wed, 7 Dec 2022 23:26:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN8NAM11FT009.mail.protection.outlook.com (10.13.176.65) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5901.16 via Frontend Transport; Wed, 7 Dec 2022 23:26:23 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
+ 15:26:00 -0800
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
+ 15:26:00 -0800
+Message-ID: <acd70cd1-e930-8cbe-b962-da0715c9d311@nvidia.com>
+Date:   Wed, 7 Dec 2022 15:25:59 -0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uH_dleP4cT9BAGG7ZZmCTha0BR2SOmq8
-X-Proofpoint-ORIG-GUID: uH_dleP4cT9BAGG7ZZmCTha0BR2SOmq8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_11,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- bulkscore=0 suspectscore=0 priorityscore=1501 adultscore=0 mlxlogscore=999
- impostorscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212070198
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v2 07/10] mm/hugetlb: Make follow_hugetlb_page() safe to
+ pmd unshare
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Mike Kravetz" <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203034.650899-8-peterx@redhat.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <20221207203034.650899-8-peterx@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT009:EE_|MN0PR12MB6004:EE_
+X-MS-Office365-Filtering-Correlation-Id: b1e112c3-3a36-4b9d-14fb-08dad8aa7450
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: luc8ImbE4Sryg4E2oz1/VvzjVkEYvT5mtkxpACe/vvo2g6I4t8Ee0Sz+AhZCPZQ6ggwPm7jW/9DILlNwTYx0z8ATqlXV9GTKuYvM4KM1PyhCI3FFbnPx73DFskkWdyGf0jmc1KvsEtPDqEfN+NnMb/9vkoQtCFQVk3739kx6DZmenAEshuVdFDgnpI7oF5PjUtcjjoF/9jrRpR0KAIhj+u7W5siSxmuJwk+KOs8Qjzxbw3BJzol/lNQ/vCE/sh7gTuvwINwTN9gOvDnJ6sbaj1hfvWw/C2D4zLCW7iBUo7QA+L5TBdN1gJxHRNFXnj+yEDDqwsGqFD/qiRwbgLlcBb8xzr6DNRZ0Qwa2BvmUUyU4R8DeUzRuV9w0wt+B4tVm6MjRfvtKkvCkwdfxqt7OvStBdsKwDS4UVMpDoL7Sv091BCdH/Yjqjx3pz52HMALYwa1b9Ge6kTXqibuFUIgD2fBbNUJGuDl7TI6zk+U04Clrj+Zkx18nvepu2/MetN9YPtPJLxgB9TLqpG08qa+NxBMq/8nNTLRbZjJY+FP22Eux1saGlcL+vuLwLj5hUjYW7iIF3GuXswHvfFwVjAdmUHvSUlYaYNNI4lx2bVzhq02Pu+7+Bq15rfqSyFklAUM1dvYSs2Mx2R7B1rYuUjJBtyG8XRJYvjBTHySgq54gtO8S5NTWP+SHp6oYbQj1dijLOx5gW+InRgV28Trlkd9d5GNPAY2xrlnIaOeu1rAYJxcYSSEjBUuQYsCgfUu4cB2U
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(396003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(16526019)(186003)(336012)(31686004)(110136005)(54906003)(316002)(478600001)(7636003)(82740400003)(356005)(36756003)(40480700001)(40460700003)(31696002)(2616005)(86362001)(16576012)(83380400001)(426003)(82310400005)(47076005)(26005)(53546011)(70206006)(7416002)(4326008)(2906002)(36860700001)(8936002)(41300700001)(70586007)(5660300002)(8676002)(2101003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2022 23:26:23.1760
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1e112c3-3a36-4b9d-14fb-08dad8aa7450
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT009.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6004
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for TEMP_ALARM LITE PMIC peripherals.  This subtype
-utilizes a pair of registers to configure a warning interrupt
-threshold temperature and an automatic hardware shutdown
-threshold temperature.
+On 12/7/22 12:30, Peter Xu wrote:
+> Since follow_hugetlb_page() walks the pgtable, it needs the vma lock
+> to make sure the pgtable page will not be freed concurrently.
+> 
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>   mm/hugetlb.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
 
-Signed-off-by: David Collins <quic_collinsd@quicinc.com>
----
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 217 +++++++++++++++++++-
- 1 file changed, 208 insertions(+), 9 deletions(-)
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index a8b288de6b52..8fde75e8fd16 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/bitops.h>
- #include <linux/delay.h>
- #include <linux/err.h>
-@@ -24,21 +25,28 @@
- #define QPNP_TM_REG_TYPE		0x04
- #define QPNP_TM_REG_SUBTYPE		0x05
- #define QPNP_TM_REG_STATUS		0x08
-+#define QPNP_TM_REG_IRQ_STATUS		0x10
- #define QPNP_TM_REG_SHUTDOWN_CTRL1	0x40
- #define QPNP_TM_REG_ALARM_CTRL		0x46
- /* TEMP_DAC_* registers are only present for TEMP_GEN2 v2.0 */
- #define QPNP_TM_REG_TEMP_DAC_STG1	0x47
- #define QPNP_TM_REG_TEMP_DAC_STG2	0x48
- #define QPNP_TM_REG_TEMP_DAC_STG3	0x49
-+#define QPNP_TM_REG_LITE_TEMP_CFG1	0x50
-+#define QPNP_TM_REG_LITE_TEMP_CFG2	0x51
- 
- #define QPNP_TM_TYPE			0x09
- #define QPNP_TM_SUBTYPE_GEN1		0x08
- #define QPNP_TM_SUBTYPE_GEN2		0x09
-+#define QPNP_TM_SUBTYPE_LITE		0xC0
- 
- #define STATUS_GEN1_STAGE_MASK		GENMASK(1, 0)
- #define STATUS_GEN2_STATE_MASK		GENMASK(6, 4)
- #define STATUS_GEN2_STATE_SHIFT		4
- 
-+/* IRQ status only needed for TEMP_ALARM_LITE */
-+#define IRQ_STATUS_MASK			BIT(0)
-+
- #define SHUTDOWN_CTRL1_OVERRIDE_S2	BIT(6)
- #define SHUTDOWN_CTRL1_THRESHOLD_MASK	GENMASK(1, 0)
- 
-@@ -46,6 +54,8 @@
- 
- #define ALARM_CTRL_FORCE_ENABLE		BIT(7)
- 
-+#define LITE_TEMP_CFG_THRESHOLD_MASK	GENMASK(3, 2)
-+
- #define THRESH_COUNT			4
- #define STAGE_COUNT			3
- 
-@@ -90,6 +100,19 @@ static const long temp_dac_max[STAGE_COUNT] = {
- 	119375, 159375, 159375
- };
- 
-+/*
-+ * TEMP_ALARM_LITE has two stages: warning and shutdown with independently
-+ * configured threshold temperatures.
-+ */
-+
-+static const long temp_map_lite_warning[THRESH_COUNT] = {
-+	115000, 125000, 135000, 145000
-+};
-+
-+static const long temp_map_lite_shutdown[THRESH_COUNT] = {
-+	135000, 145000, 160000, 175000
-+};
-+
- /* Temperature in Milli Celsius reported during stage 0 if no ADC is present */
- #define DEFAULT_TEMP			37000
- 
-@@ -146,7 +169,7 @@ static int qpnp_tm_write(struct qpnp_tm_chip *chip, u16 addr, u8 data)
-  */
- static long qpnp_tm_decode_temp(struct qpnp_tm_chip *chip, unsigned int stage)
- {
--	if (chip->has_temp_dac) {
-+	if (chip->has_temp_dac || chip->subtype == QPNP_TM_SUBTYPE_LITE) {
- 		if (stage == 0 || stage > STAGE_COUNT)
- 			return 0;
- 
-@@ -164,19 +187,26 @@ static long qpnp_tm_decode_temp(struct qpnp_tm_chip *chip, unsigned int stage)
-  * qpnp_tm_get_temp_stage() - return over-temperature stage
-  * @chip:		Pointer to the qpnp_tm chip
-  *
-- * Return: stage (GEN1) or state (GEN2) on success, or errno on failure.
-+ * Return: stage (GEN1), state (GEN2), or alarm interrupt state (LITE) on
-+ *	   success; or errno on failure.
-  */
- static int qpnp_tm_get_temp_stage(struct qpnp_tm_chip *chip)
- {
- 	int ret;
-+	u16 addr = QPNP_TM_REG_STATUS;
- 	u8 reg = 0;
- 
--	ret = qpnp_tm_read(chip, QPNP_TM_REG_STATUS, &reg);
-+	if (chip->subtype == QPNP_TM_SUBTYPE_LITE)
-+		addr = QPNP_TM_REG_IRQ_STATUS;
-+
-+	ret = qpnp_tm_read(chip, addr, &reg);
- 	if (ret < 0)
- 		return ret;
- 
- 	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1)
- 		ret = reg & STATUS_GEN1_STAGE_MASK;
-+	else if (chip->subtype == QPNP_TM_SUBTYPE_LITE)
-+		ret = reg & IRQ_STATUS_MASK;
- 	else
- 		ret = (reg & STATUS_GEN2_STATE_MASK) >> STATUS_GEN2_STATE_SHIFT;
- 
-@@ -199,7 +229,8 @@ static int qpnp_tm_update_temp_no_adc(struct qpnp_tm_chip *chip)
- 		return ret;
- 	stage = ret;
- 
--	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1) {
-+	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1
-+	    || chip->subtype == QPNP_TM_SUBTYPE_LITE) {
- 		stage_new = stage;
- 		stage_old = chip->stage;
- 	} else {
-@@ -282,6 +313,78 @@ static int qpnp_tm_set_temp_dac_thresh(struct qpnp_tm_chip *chip, int trip,
- 	return 0;
- }
- 
-+static int qpnp_tm_set_temp_lite_thresh(struct qpnp_tm_chip *chip, int trip,
-+				       int temp)
-+{
-+	int ret, temp_cfg, i;
-+	const long *temp_map;
-+	u16 addr;
-+	u8 reg, thresh;
-+
-+	if (trip < 0 || trip >= STAGE_COUNT) {
-+		dev_err(chip->dev, "invalid TEMP_LITE trip = %d\n", trip);
-+		return -EINVAL;
-+	}
-+
-+	switch (trip) {
-+	case 0:
-+		temp_map = temp_map_lite_warning;
-+		addr = QPNP_TM_REG_LITE_TEMP_CFG1;
-+		break;
-+	case 1:
-+		/*
-+		 * The second trip point is purely in software to facilitate
-+		 * a controlled shutdown after the warning threshold is crossed
-+		 * but before the automatic hardware shutdown threshold is
-+		 * crossed.
-+		 */
-+		return 0;
-+	case 2:
-+		temp_map = temp_map_lite_shutdown;
-+		addr = QPNP_TM_REG_LITE_TEMP_CFG2;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	if (temp < temp_map[THRESH_MIN] || temp > temp_map[THRESH_MAX]) {
-+		dev_err(chip->dev, "invalid TEMP_LITE temp = %d\n", temp);
-+		return -EINVAL;
-+	}
-+
-+	thresh = 0;
-+	temp_cfg = temp_map[thresh];
-+	for (i = THRESH_MAX; i >= THRESH_MIN; i--) {
-+		if (temp >= temp_map[i]) {
-+			thresh = i;
-+			temp_cfg = temp_map[i];
-+			break;
-+		}
-+	}
-+
-+	if (temp_cfg == chip->temp_dac_map[trip])
-+		return 0;
-+
-+	ret = qpnp_tm_read(chip, addr, &reg);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "LITE_TEMP_CFG read failed, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	reg &= ~LITE_TEMP_CFG_THRESHOLD_MASK;
-+	reg |= FIELD_PREP(LITE_TEMP_CFG_THRESHOLD_MASK, thresh);
-+
-+	ret = qpnp_tm_write(chip, addr, reg);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "LITE_TEMP_CFG write failed, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	chip->temp_dac_map[trip] = temp_cfg;
-+
-+	return 0;
-+}
-+
- static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
- 					     int temp)
- {
-@@ -387,6 +490,24 @@ static const struct thermal_zone_device_ops qpnp_tm_sensor_temp_dac_ops = {
- 	.set_trip_temp = qpnp_tm_set_temp_dac_trip_temp,
- };
- 
-+static int qpnp_tm_set_temp_lite_trip_temp(struct thermal_zone_device *tz,
-+					   int trip, int temp)
-+{
-+	struct qpnp_tm_chip *chip = tz->devdata;
-+	int ret;
-+
-+	mutex_lock(&chip->lock);
-+	ret = qpnp_tm_set_temp_lite_thresh(chip, trip, temp);
-+	mutex_unlock(&chip->lock);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_zone_device_ops qpnp_tm_sensor_temp_lite_ops = {
-+	.get_temp = qpnp_tm_get_temp,
-+	.set_trip_temp = qpnp_tm_set_temp_lite_trip_temp,
-+};
-+
- static irqreturn_t qpnp_tm_isr(int irq, void *data)
- {
- 	struct qpnp_tm_chip *chip = data;
-@@ -473,6 +594,71 @@ static int qpnp_tm_temp_dac_init(struct qpnp_tm_chip *chip)
- 	return 0;
- }
- 
-+/* Configure TEMP_LITE registers based on DT thermal_zone trips */
-+static int qpnp_tm_temp_lite_update_trip_temps(struct qpnp_tm_chip *chip)
-+{
-+	const struct thermal_trip *trips;
-+	int ret, ntrips, i;
-+
-+	ntrips = of_thermal_get_ntrips(chip->tz_dev);
-+	/* Keep hardware defaults if no DT trips are defined. */
-+	if (ntrips <= 0)
-+		return 0;
-+
-+	trips = of_thermal_get_trip_points(chip->tz_dev);
-+	if (!trips)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ntrips; i++) {
-+		if (of_thermal_is_trip_valid(chip->tz_dev, i)) {
-+			ret = qpnp_tm_set_temp_lite_thresh(chip, i,
-+							  trips[i].temperature);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+
-+	/* Verify that trips are strictly increasing. */
-+	if (chip->temp_dac_map[2] <= chip->temp_dac_map[0]) {
-+		dev_err(chip->dev, "Threshold 2=%ld <= threshold 0=%ld\n",
-+			chip->temp_dac_map[2], chip->temp_dac_map[0]);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+/* Read the hardware default TEMP_LITE stage threshold temperatures */
-+static int qpnp_tm_temp_lite_init(struct qpnp_tm_chip *chip)
-+{
-+	int ret, thresh;
-+	u8 reg = 0;
-+
-+	/*
-+	 * Store the warning trip temp in temp_dac_map[0] and the shutdown trip
-+	 * temp in temp_dac_map[2].  The second trip point is purely in software
-+	 * to facilitate a controlled shutdown after the warning threshold is
-+	 * crossed but before the automatic hardware shutdown threshold is
-+	 * crossed.  Thus, there is no register to read for the second trip
-+	 * point.
-+	 */
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_LITE_TEMP_CFG1, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
-+	chip->temp_dac_map[0] = temp_map_lite_warning[thresh];
-+
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_LITE_TEMP_CFG2, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
-+	chip->temp_dac_map[2] = temp_map_lite_shutdown[thresh];
-+
-+	return 0;
-+}
-+
- /*
-  * This function initializes the internal temp value based on only the
-  * current thermal stage and threshold. Setup threshold control and
-@@ -499,13 +685,18 @@ static int qpnp_tm_init(struct qpnp_tm_chip *chip)
- 		goto out;
- 	chip->stage = ret;
- 
--	stage = chip->subtype == QPNP_TM_SUBTYPE_GEN1
--		? chip->stage : alarm_state_map[chip->stage];
-+	stage = (chip->subtype == QPNP_TM_SUBTYPE_GEN1
-+		 || chip->subtype == QPNP_TM_SUBTYPE_LITE)
-+			? chip->stage : alarm_state_map[chip->stage];
- 
- 	if (stage)
- 		chip->temp = qpnp_tm_decode_temp(chip, stage);
- 
--	if (chip->has_temp_dac) {
-+	if (chip->subtype == QPNP_TM_SUBTYPE_LITE) {
-+		ret = qpnp_tm_temp_lite_update_trip_temps(chip);
-+		if (ret < 0)
-+			goto out;
-+	} else if (chip->has_temp_dac) {
- 		ret = qpnp_tm_temp_dac_update_trip_temps(chip);
- 		if (ret < 0)
- 			goto out;
-@@ -597,7 +788,8 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 	chip->dig_revision = (dig_major << 8) | dig_minor;
- 
- 	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
--				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
-+				     && subtype != QPNP_TM_SUBTYPE_GEN2
-+				     && subtype != QPNP_TM_SUBTYPE_LITE)) {
- 		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
- 			type, subtype);
- 		return -ENODEV;
-@@ -609,7 +801,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 		chip->has_temp_dac = true;
- 	else if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 1)
- 		chip->temp_map = &temp_map_gen2_v1;
--	else
-+	else if (subtype == QPNP_TM_SUBTYPE_GEN1)
- 		chip->temp_map = &temp_map_gen1;
- 
- 	if (chip->has_temp_dac) {
-@@ -619,6 +811,13 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 			return ret;
- 	}
- 
-+	if (chip->subtype == QPNP_TM_SUBTYPE_LITE) {
-+		ops = &qpnp_tm_sensor_temp_lite_ops;
-+		ret = qpnp_tm_temp_lite_init(chip);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	/*
- 	 * Register the sensor before initializing the hardware to be able to
- 	 * read the trip points. get_temp() returns the default temperature
+
+thanks,
 -- 
-2.25.1
+John Hubbard
+NVIDIA
+
+> 
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 3fbbd599d015..f42399522805 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6284,6 +6284,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   			break;
+>   		}
+>   
+> +		hugetlb_vma_lock_read(vma);
+>   		/*
+>   		 * Some archs (sparc64, sh*) have multiple pte_ts to
+>   		 * each hugepage.  We have to make sure we get the
+> @@ -6308,6 +6309,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   		    !hugetlbfs_pagecache_present(h, vma, vaddr)) {
+>   			if (pte)
+>   				spin_unlock(ptl);
+> +			hugetlb_vma_unlock_read(vma);
+>   			remainder = 0;
+>   			break;
+>   		}
+> @@ -6329,6 +6331,8 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   
+>   			if (pte)
+>   				spin_unlock(ptl);
+> +			hugetlb_vma_unlock_read(vma);
+> +
+>   			if (flags & FOLL_WRITE)
+>   				fault_flags |= FAULT_FLAG_WRITE;
+>   			else if (unshare)
+> @@ -6388,6 +6392,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   			remainder -= pages_per_huge_page(h);
+>   			i += pages_per_huge_page(h);
+>   			spin_unlock(ptl);
+> +			hugetlb_vma_unlock_read(vma);
+>   			continue;
+>   		}
+>   
+> @@ -6415,6 +6420,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   			if (WARN_ON_ONCE(!try_grab_folio(pages[i], refs,
+>   							 flags))) {
+>   				spin_unlock(ptl);
+> +				hugetlb_vma_unlock_read(vma);
+>   				remainder = 0;
+>   				err = -ENOMEM;
+>   				break;
+> @@ -6426,6 +6432,7 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   		i += refs;
+>   
+>   		spin_unlock(ptl);
+> +		hugetlb_vma_unlock_read(vma);
+>   	}
+>   	*nr_pages = remainder;
+>   	/*
 
