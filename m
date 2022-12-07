@@ -2,182 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC68645B5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:49:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2B1645B47
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 14:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiLGNtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 08:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45786 "EHLO
+        id S229717AbiLGNsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 08:48:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbiLGNt3 (ORCPT
+        with ESMTP id S230095AbiLGNsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 08:49:29 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A8959876;
-        Wed,  7 Dec 2022 05:49:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670420967; x=1701956967;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=244oBt7BYcfp9OKLgDcoevrJ5DGlb+K1/OKrzuTdtw8=;
-  b=dmNw4xSB8lAyuaDHob2osPr+3zEPleJt8cKRVNCLO/rfDT+VHrY24Yh8
-   5uh5r2bmgUBPetPXkI8SOIOwsDXIE48GuFbZEDywxzJum9GN9+wQxlBnL
-   Unoe65vx2G9ow7ozmOPmceQwOqcLkLb5IEvV5lnz5S8pumqu85w5QcQBJ
-   zY+N5RpfqaGo/SUmppFqO+lmvZXv/ZtfTzEMFV/qwJxEtc3vnQEytPc5J
-   JE3SWAnRLYdvRXcq0OBxiBxTsboEygJeKnK/HIgtGu4sP9Zuk1EP4NZpO
-   Na5hyJzkMcHdwY0eCVAAqTk25AP/2xe9YX9gtor2FhrP8rMKU7qAEIrG2
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="381185384"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="381185384"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 05:49:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10553"; a="710069060"
-X-IronPort-AV: E=Sophos;i="5.96,225,1665471600"; 
-   d="scan'208";a="710069060"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.38.130])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 05:49:21 -0800
-Message-ID: <cae6475a-a1e9-ae57-6e64-59931f467050@intel.com>
-Date:   Wed, 7 Dec 2022 15:49:16 +0200
+        Wed, 7 Dec 2022 08:48:10 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25020252A5
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 05:48:05 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id s11so8196837ybe.2
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 05:48:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YwDK3y8/2CA9L4Z+ruLM0VBm7H5Gax9zmhRB4AegQQ0=;
+        b=Q/gizT6k0+5wnly/A/yFJJKteqGSOy8SwSzM9J6mJb/zZqf+lcu7W7xwMF7a20XUJV
+         FWQrnvFT3vEG564AdlbjU7cfH/7Ph87Lut+ordkFVhAef0Q/T3rGVue7dYZMOA5Draax
+         j5AhOOOZM+rwGsON5CpiCpQYPkWHNsdQex/4Iqg4Wgr0OR+0c2BbAoaio4PjFbUc+imz
+         UquYJpB3/gkKsZXpAzUXc2fj7TzV/lMwf+sPmg/K4ck9km8N6vM22qyY/ko0EspKr6os
+         xf0H0qaqcPyJ2BuNCyOPGpNaedVMCRtQyOOqaR0HNu77YU06PXr/oZ4NGjQXtDNR11j6
+         R1kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YwDK3y8/2CA9L4Z+ruLM0VBm7H5Gax9zmhRB4AegQQ0=;
+        b=dKlZtQ3TRAaTBaK8Fj2fbZRgH6QN+IMdLiVw37R7B42WsJKLmtR40Y2IZz919wXrxB
+         zGAOEIxWbV67SenB3qqi9dtQgELjk8qE2refaDK7C2crm9c5X+9vyzuDv1qdmZvi44Ei
+         dSXfI1bje+/8uRtbkkFTwWEul1ZQzL5nfJPgtyvqDEhL1GcexZYP+cgUSOnwoRCxoFZw
+         /dF344cs32bpqe+0cCbW55Siy27aNLc9tsCRxrOhc5RGJD4kbJ2D3k8WQTrIeMDM11Yb
+         eV9lBmzQ0gCNvTCtLmkln6MkIVMBJyfjWFmV/Yy+zoezlRGFr4hkD/wyh1VvOTej5TdM
+         +uTg==
+X-Gm-Message-State: ANoB5pnEu3ZAjkcoIPyU3VTV52OqihNFdtzCCJfUri8ZDAPXt86TJupw
+        BFFp0juRKmOga3Aan6Lr6ajXnAoUzf1+E5HT3quRBg==
+X-Google-Smtp-Source: AA0mqf7VMtwtgaNnOvGNzWL1HYIL3o0dmnoqT3vqTP5kdXevHgb9CuV7fTj25pC1maCtIjJ/M5dFgtplQP5YUXfot4Q=
+X-Received: by 2002:a25:3dc3:0:b0:6f0:d54a:8f2d with SMTP id
+ k186-20020a253dc3000000b006f0d54a8f2dmr59191839yba.66.1670420884372; Wed, 07
+ Dec 2022 05:48:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/2] mmc: sdhci-npcm: Add NPCM SDHCI driver
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Cc:     ulf.hansson@linaro.org, avifishman70@gmail.com,
-        tali.perry1@gmail.com, joel@jms.id.au, venture@google.com,
-        yuenn@google.com, benjaminfair@google.com,
-        skhan@linuxfoundation.org, davidgow@google.com,
-        pbrobinson@gmail.com, gsomlo@gmail.com, briannorris@chromium.org,
-        arnd@arndb.de, krakoczy@antmicro.com, openbmc@lists.ozlabs.org,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221205085351.27566-1-tmaimon77@gmail.com>
- <20221205085351.27566-3-tmaimon77@gmail.com>
- <CAHp75VeAzgCUiH5Z1pVJ-4X29aCK44q907DRQXX75zS4oEhHHg@mail.gmail.com>
- <CAP6Zq1gi7-pA9wdO3=V9Uf0+pKPTHwWw66MfbYmOwodoXeRDqA@mail.gmail.com>
- <CAHp75VctiJvvk-6AWfQSU9psHvPeKECaCWPuKL9YQ_-Vt3GBGA@mail.gmail.com>
- <c200557f-c30a-62f9-287a-af804e818cf1@intel.com>
- <CAHp75VczbNpHPi-TBe81Ad=P=eXJZpAmkj=m4-apGF1e0uh5kg@mail.gmail.com>
- <CAHp75VemBiGUTspEYDe3hwA9pEzjNMQGY6_kUoVMJyCuEWgChw@mail.gmail.com>
- <c4e2a00c-d09e-95e2-eaf2-1de6b820ac6e@intel.com>
- <CAP6Zq1h9XvH501e_nH9TkUCKPNOuH7dhOM8FrsUM=PYX4gt0qw@mail.gmail.com>
- <CAHp75Vd5DzkCW0Gpouv+0Or=Yhjp_KdFGP-jXkpHD=UZrG2ajA@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <CAHp75Vd5DzkCW0Gpouv+0Or=Yhjp_KdFGP-jXkpHD=UZrG2ajA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221130155519.20362-1-andriy.shevchenko@linux.intel.com>
+ <20221130155519.20362-2-andriy.shevchenko@linux.intel.com>
+ <CACRpkdaQWZE6=BNEh5hSH9=jBK=TcLoD1uUb=JyNYmHFvaSAfg@mail.gmail.com>
+ <Y41MxPthLjitvzEl@sol> <CACRpkdb67ygsEuZhRZ9TGmmNXhiU2LsuefD0-48xtCLx3fq-KA@mail.gmail.com>
+ <Y5BjJmz5Mvdr8cAR@smile.fi.intel.com>
+In-Reply-To: <Y5BjJmz5Mvdr8cAR@smile.fi.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 7 Dec 2022 14:49:20 +0100
+Message-ID: <CACRpkdYVp7j7h-9w_7N05zAv8otmFY0EBkO16ymk0EO-T0LwwQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] Documentation: gpio: Add a section on what to
+ return in ->get() callback
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Kent Gibson <warthog618@gmail.com>, Marc Zyngier <maz@kernel.org>,
+        linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/12/22 15:25, Andy Shevchenko wrote:
-> On Wed, Dec 7, 2022 at 3:01 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
->> On Mon, 5 Dec 2022 at 16:33, Adrian Hunter <adrian.hunter@intel.com> wrote:
->>> On 5/12/22 16:17, Andy Shevchenko wrote:
->>>> On Mon, Dec 5, 2022 at 4:14 PM Andy Shevchenko
->>>> <andy.shevchenko@gmail.com> wrote:
->>>>> On Mon, Dec 5, 2022 at 3:41 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
->>>>>> On 5/12/22 15:25, Andy Shevchenko wrote:
->>>>>>> On Mon, Dec 5, 2022 at 1:20 PM Tomer Maimon <tmaimon77@gmail.com> wrote:
-> 
-> ...
-> 
->>>>>>> devm_ is problematic in your case.
->>>>>>> TL;DR: you need to use clk_get_optional() and clk_put().
->>>>>>
->>>>>> devm_ calls exactly those, so what is the issue?
->>>>>
->>>>> The issue is the error path or removal stage where it may or may be
->>>>> not problematic. To be on the safe side, the best approach is to make
->>>>> sure that allocated resources are being deallocated in the reversed
->>>>> order. That said, the
->>>>>
->>>>> 1. call non-devm_func()
->>>>> 2. call devm_func()
->>>>>
->>>>> is wrong strictly speaking.
->>>>
->>>> To elaborate more, the
->>>>
->>>> 1. call all devm_func()
->>>> 2. call only non-devm_func()
->>>>
->>>> is the correct order.
->>>
->>> 1. WRT pltfm_host->clk, that is what is happening
->>> 2. WRT other resources that is simply not always possible because not every resource is wrapped by devm_
->>> e.g. mmc_alloc_host() / mmc_free_host()
->> I little confused about what to decide, should I use only
->> non-devm_func because mmc_alloc_host() / mmc_free_host() is not
->> warrped with devm_?
-> 
-> It is up to you how to proceed. I pointed out the problem with your
-> code which may or may not be fatal.
-> 
-> If you want to solve it, there are several approaches:
-> 1) get rid of devm_ completely;
-> 2) properly shuffle the ordering in ->probe(), so all devm_ calls are
-> followed by non-devm_;
-> 3) wrap non-devm_ cals to become managed (see
-> devm_add_action_or_reset() approach);
-> 4) fix SDHCI / MMC layer by providing necessary devm_ calls and/or fix
-> sdhci_pltfm_register() to handle the clock.
+On Wed, Dec 7, 2022 at 10:56 AM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+> On Wed, Dec 07, 2022 at 01:06:46AM +0100, Linus Walleij wrote:
+> > On Mon, Dec 5, 2022 at 2:43 AM Kent Gibson <warthog618@gmail.com> wrote:
+> >
+> > > My preference would be for the driver API to be extended with a new
+> > > callback for the output buffer, say get_output(), and have the existing
+> > > get() always return the input buffer.
+> >
+> > This has a certain elegance to it, as it cuts to the bone of the
+> > problem and partition it in two halves, reflecting the two pieces
+> > of hardware: input and output buffer. Also follows Rusty Russells
+> > API hierarchy.
+>
+> The (one of) problem is that not all hardware may support input and output
+> be enabled at the same time. What would that new API return in that case
+> and how it would be better with get() returning the value depending on
+> direction?
 
-I can take care of sdhci_pltfm when I next have some time.
-Otherwise it looks OK to me, so I am acking it.
+I imagine we would leave the .get_output() unassigned and the core
+would just rely on whatever behaviour it has now, so in *that* case,
+the implementation of .get() will need to be more elaborate.
 
-> 
-> Personally, the list order is from the least, what I prefer, to the
-> most (i.o.w. I would like to see rather 4) than 1) to be implemented).
-> 
->>>> Hence in this case the driver can be worked around easily (by
->>>> shuffling the order in ->probe() to call devm_ first), but as I said
->>>> looking into implementation of the _unregister() I'm pretty sure that
->>>> clock management should be in sdhci-pltfm, rather than in all callers
->>>> who won't need the full customization.
->>>>
->>>> Hope this helps to understand my point.
->>>>
->>>>>>> Your ->remove() callback doesn't free resources in the reversed order
->>>>>>> which may or, by luck, may not be the case of all possible crashes,
->>>>>>> UAFs, races, etc during removal stage. All the same for error path in
->>>>>>> ->probe().
->>>>>
->>>>> I also pointed out above what would be the outcome of neglecting this rule.
-> 
-> ...
-> 
->>>>>>>>> Why can't you use sdhci_pltfm_register()?
->>>>>>>> two things are missing in sdhci_pltfm_register
->>>>>>>> 1. clock.
->>>>>>>
->>>>>>> Taking into account the implementation of the corresponding
->>>>>>> _unregister() I would add the clock handling to the _register() one.
->>>>>>> Perhaps via a new member of the platform data that supplies the name
->>>>>>> and index of the clock and hence all clk_get_optional() / clk_put will
->>>>>>> be moved there.
->> Do you mean to add it to sdhci_pltfm_register function? if yes I
->> believe it will take some time to modify sdhci_pltfm_register
->> I prefer not to use sdhci_pltfm_register.
-> 
-> In the Linux kernel we are trying hard to avoid code duplication. Why
-> do you need it to be open coded? (Yes, I heard you, but somebody
-> should fix the issues with that funcion at some point, right?)
-> 
->>>>>>>> 2. Adding SDHCI_CAN_DO_8BIT capability according the eMMC capabilities.
->>>>>>>
->>>>>>> All the same, why can't platform data be utilised for this?
-> 
-
+Yours,
+Linus Walleij
