@@ -2,94 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4207646252
-	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:26:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81920646255
+	for <lists+linux-kernel@lfdr.de>; Wed,  7 Dec 2022 21:28:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiLGU0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 15:26:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46602 "EHLO
+        id S229812AbiLGU17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 15:27:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiLGU0B (ORCPT
+        with ESMTP id S229566AbiLGU15 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 15:26:01 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97C5C58BFA
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 12:26:00 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e73d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e73d:329c:23ff:fea6:a903])
+        Wed, 7 Dec 2022 15:27:57 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C1DDE88;
+        Wed,  7 Dec 2022 12:27:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2E18B1EC0426;
-        Wed,  7 Dec 2022 21:25:59 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670444759;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=FN5Arro5cGI7t/lnI9RReHnWb8Kmqs2yj4TIbTdUO00=;
-        b=XTjyC1xD6dPYsokY9eeYwTRLhSfHNMnVZwQRwYs9/ZQUU2q57DNHJGRAeNXTTkJkSFuNtO
-        YVDDiKbc+iIypc0XMSbFN19CIJjuR2HnSdDmLPl/FLcY9QwCL5RCmtU3FRGTQ0amSMpmaQ
-        m8POq8pvlWQiFRUv23ZUoIqaQpql6/I=
-Date:   Wed, 7 Dec 2022 21:25:54 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     X86-kernel <x86@kernel.org>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Tony Luck <tony.luck@intel.com>, alison.schofield@intel.com,
-        reinette.chatre@intel.com
-Subject: Re: [Patch V1 4/7] x86/microcode/core: Take a snapshot before and
- after applying microcode
-Message-ID: <Y5D20qLOmrj4d2w4@zn.tnic>
-References: <20221129210832.107850-1-ashok.raj@intel.com>
- <20221129210832.107850-5-ashok.raj@intel.com>
+        by sin.source.kernel.org (Postfix) with ESMTPS id 07ADFCE20D0;
+        Wed,  7 Dec 2022 20:27:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A943BC433C1;
+        Wed,  7 Dec 2022 20:27:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670444872;
+        bh=n8AI6CRmB7iQr9k8GAZ6LtXhPbPWQyCuZIgAdiFEAs8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JCjDnUUPVVuZv5CZU7tEwQkYVgSj/VT004h792j1YtiVSBN3JBR/lNflmi3IWxR/5
+         9FGaR0XWF23wR54BaLxOCKTPUkS+u4VgfTwc6XVUH0Vx97YJIINSqMW0OGH/n9RIIO
+         sNohauDMn9awBIbM3OZR9lbcl/11YyABJvCkMOjBLx+K/aGoRjO0rGL7VJg5HqpebX
+         6lGzNwFtkFdpjeIHhwO51VwNTKq6pwH5i/bNb4QUFc5w/8+cy+H3Pj85+JuhZMsOwu
+         gGAkMI+oDRMbX9tZ+a6XivU2OHH/V73TG4q2P1x7sbXh4U4asvoiJ7PC1y1ZR88tA7
+         MOV5iuWOvBPYQ==
+Date:   Wed, 7 Dec 2022 21:27:49 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Jean Delvare <khali@linux-fr.org>,
+        Bill Brown <bill.e.brown@intel.com>,
+        Wolfram Sang <wolfram@the-dreams.de>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: ismt: Fix an out-of-bounds bug in ismt_access()
+Message-ID: <Y5D3RbAjkIjpUlQ3@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Zheyu Ma <zheyuma97@gmail.com>,
+        Seth Heasley <seth.heasley@intel.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Jean Delvare <khali@linux-fr.org>,
+        Bill Brown <bill.e.brown@intel.com>,
+        Wolfram Sang <wolfram@the-dreams.de>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220729110216.557010-1-zheyuma97@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="23ImC7Wm8wIpgV9B"
 Content-Disposition: inline
-In-Reply-To: <20221129210832.107850-5-ashok.raj@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220729110216.557010-1-zheyuma97@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 29, 2022 at 01:08:29PM -0800, Ashok Raj wrote:
-> The kernel caches features about each CPU's features at boot in an
-> x86_capability[] structure. The microcode update takes one snapshot and
-> compares it with the saved copy at boot.
-> 
-> However, the capabilities in the boot copy can be turned off as a result of
-> certain command line parameters or configuration restrictions. This can
-> cause a mismatch when comparing the values before and after the microcode
-> update.
 
-Hmm, but if that has happened, the capabilities will be turned off in
-your @orig argument below?
+--23ImC7Wm8wIpgV9B
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Or are you saying that this copy_cpu_caps() read before the update will
-overwrite the cleared bits with the their actual values from CPUID so
-that what you really wanna compare here is *hardware* CPUID bits before
-and after and not our potentially modified copy?
+On Fri, Jul 29, 2022 at 07:02:16PM +0800, Zheyu Ma wrote:
+> When the driver does not check the data from the user, the variable
+> 'data->block[0]' may be very large to cause an out-of-bounds bug.
+>=20
+> The following log can reveal it:
+>=20
+> [   33.995542] i2c i2c-1: ioctl, cmd=3D0x720, arg=3D0x7ffcb3dc3a20
+> [   33.995978] ismt_smbus 0000:00:05.0: I2C_SMBUS_BLOCK_DATA:  WRITE
+> [   33.996475] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> [   33.996995] BUG: KASAN: out-of-bounds in ismt_access.cold+0x374/0x214b
+> [   33.997473] Read of size 18446744073709551615 at addr ffff88810efcfdb1=
+ by task ismt_poc/485
+> [   33.999450] Call Trace:
+> [   34.001849]  memcpy+0x20/0x60
+> [   34.002077]  ismt_access.cold+0x374/0x214b
+> [   34.003382]  __i2c_smbus_xfer+0x44f/0xfb0
+> [   34.004007]  i2c_smbus_xfer+0x10a/0x390
+> [   34.004291]  i2cdev_ioctl_smbus+0x2c8/0x710
+> [   34.005196]  i2cdev_ioctl+0x5ec/0x74c
+>=20
+> Fix this bug by checking the size of 'data->block[0]' first.
+>=20
+> Fixes: 13f35ac14cd0 ("i2c: Adding support for Intel iSMT SMBus 2.0 host c=
+ontroller")
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
 
-I.e., some bit in CPUID is 1 and we have cleared it in our copy.
+Applied to for-next, thanks!
 
-Close?
 
-If so, then this should be specifically called out in the commit
-message.
+--23ImC7Wm8wIpgV9B
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> +static void copy_cpu_caps(struct cpuinfo_x86 *info)
+-----BEGIN PGP SIGNATURE-----
 
-If anything, that function should be called
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmOQ90QACgkQFA3kzBSg
+KbYQHhAAhTriCfWWeAzuTZBpOIWIYxDXpuczQ+uNShFxKJg1N5mvDuHM6a3lPv0v
+cu2EmgF7W5xdOrsJtrXfrMeEl/Pjy8/YBn3RNi7CXDCvlU0mnib4o0dvSLkSxwEb
+aYO97t+jvfIKwq/DTtzjIUD+gswFvfDUTaXc2gMz+y9veIRU2aAtjE8uolepuP5p
+LEDbY2hh495Dm/mPBNAgVMgw6CVY+xf/2zmTbfTcoroUfm676qNiwhocE9stxAlK
++kB6UlCvuXCOhhQTuloX5L1dTqdked9zoVccOrrIXArSHN8rPVkrE05JZFK5Di95
+kZ2/iGNL1ApeNwoclyAlWzoW2Za9Fbxdd0rKEUXruJXsHgVyYSfnUqYxKXM70P/Z
+SEtPVoJFJF+CbHxNG1f4ihWg7fi5vQpjJOE4Ta4Vk1gTtmFU8vIXHbiSXcC9ohdU
+leDMqhP9eJGS29jZWanGH4BpMpkCIHoq9aTLbZWba28a2pj/nNfgNiwOrJIisPVH
+ilKdYNrTBVz0qDcjYWINcgwIw8lmqnTlxh6TMTbLhTHaM19DdN/Fvo34S+7CyRXQ
+mwbaDIimdaadXn1JI91of6jWQjxQFBDiIww02u9w5+ikbYbYbQg/a2S83D8eacSu
+peQF4eYl6iaR1xC6W6zKbKpRO2Mi6WbtjpCbw+eenle185FmGmo=
+=L5vu
+-----END PGP SIGNATURE-----
 
-store_cpu_caps()
-
-and store it into its parameter *info.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+--23ImC7Wm8wIpgV9B--
