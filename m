@@ -2,69 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5261F64796D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67F16647972
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:02:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiLHXBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 18:01:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46762 "EHLO
+        id S229890AbiLHXCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 18:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiLHXBV (ORCPT
+        with ESMTP id S229876AbiLHXCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 18:01:21 -0500
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A397DA68;
-        Thu,  8 Dec 2022 15:01:20 -0800 (PST)
-Received: by mail-qv1-xf29.google.com with SMTP id d13so2005322qvj.8;
-        Thu, 08 Dec 2022 15:01:20 -0800 (PST)
+        Thu, 8 Dec 2022 18:02:30 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252958F71E;
+        Thu,  8 Dec 2022 15:02:29 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso4579562wme.5;
+        Thu, 08 Dec 2022 15:02:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z0yPQ9yeuVpzjbeyRnkuKRSNvZzvcY5CJBpJ2qX+fow=;
-        b=M4v85Ad5iBYQnrZrTRG+3ShH5sT4XQgWhFFm87rbvMM1gUzDiAkNXUXVt3Hg2Zl7N1
-         uW9JJrWGHCQEvPCT2MJv7fagKsQgbRb8giXXT7JlBIxbBPqWpKK4DNzkLs0mb8OwLElr
-         MkzomRChb+jkMmJV7AG/GAKw2gTcMyy9LCp5OcuMV6o3Ct35sss1egPujPWjzEfv5Yxq
-         sgI8x75o5M2n5NZ/TWii+sniGoh31unzujvZ9jCMHpAEnyIjNsLR35tE1iY6ploe9e1r
-         I6uQKRG0dYPL8xDZgzQu623I+y7ggiZUi0NhRGJG5jw3ufFiv17avUGlRclyqwdqSI3l
-         DqRw==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=N5filO474I4ERJPEAOOPbNNHLQlnDRqdJRF8F6NntJI=;
+        b=FQbpTrqLDz7NQaRpYTp9vnebq44JQOU9PzKLNoVl54tqkd+SvzRql2R3iMOUf/X0uJ
+         B0FVW0zfSlFPELSGsUW3ZrLtKBRWM50OQ2Ulu7NGut0YsgD/StAQtGa8eoXnXJFhEhVV
+         bYWMF+pNYRr90Japae6MitJVcsT99dH5PJYb/0I+DvNE+f+bUFI93sC2n9RoScz7KEYf
+         XcwuNov8g9d5UIzIQP5ekY5FU2SwoxtGvNAWq8maJuPP4Tc2VnFmW0fMfQIC0FFSXIRz
+         JR9cvmJxXwPEnkvTs96sFFaWKRrrY3kTmH6+QBhaEUVk4s7d+17cK1S1Sd3bW01JUcIy
+         UMuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z0yPQ9yeuVpzjbeyRnkuKRSNvZzvcY5CJBpJ2qX+fow=;
-        b=qb/xDbz6E4jzPNhdvr5InRuUqMltXcXiOG028SIxsoqgIBpFM1mvtWdpR9Q3XDNFIs
-         bW0ci2TLPD/GTyU9w4lP4r9sRXYL7Cvw7pn9njs03KXIr+vsU5uOAtHA/L1VUvKkAYv1
-         jBKsGXqYbJPRpHPUIFllkiuqpQRc/D885tps11rika1BnWutPJakDe8H/v64kKkBwrB2
-         44hF9KX0gRfDS1XIN55hFJPyqZJ/kk3jJ231T6daIolC7TjwHeT3cmGx/Ig/t26aOhmM
-         SyJCQ5PEujPsR6FI6nZM5kjT2KrgdaXEx4g9t2smLieXh/61l0Ao8PHyZiGmBUPtJQ3I
-         Dmyw==
-X-Gm-Message-State: ANoB5plqNdunqz8Btd7LL64HOgpQj8fFDWbN/fC0qDf1ySM2yfbLI8hq
-        NmfNR6s1g0dATFzpLN0MXBM=
-X-Google-Smtp-Source: AA0mqf6dWOBiTurqmRPES+C7f+OHp/Px6rIMRVSMaH+faYCh/lE7uxOIfyW8QC2px6Ld0f1zq12IIQ==
-X-Received: by 2002:a0c:e9c6:0:b0:4c7:6938:4514 with SMTP id q6-20020a0ce9c6000000b004c769384514mr5602899qvo.0.1670540479415;
-        Thu, 08 Dec 2022 15:01:19 -0800 (PST)
-Received: from debian-BULLSEYE-live-builder-AMD64 (h96-61-90-13.cntcnh.broadband.dynamic.tds.net. [96.61.90.13])
-        by smtp.gmail.com with ESMTPSA id t3-20020a05620a450300b006eea4b5abcesm21238254qkp.89.2022.12.08.15.01.18
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=N5filO474I4ERJPEAOOPbNNHLQlnDRqdJRF8F6NntJI=;
+        b=3KKWGb2/3LaumTXUAIPUFdgbZPvwil9m8IL3pk4c9io4T9yETQz2HyNl6Nv9kTVbw0
+         7hoWh07280ZZrMeWYPNTnujEsd4vzxe2dIZc7ewKbthBGliSOCUJO/8RM8sFRrvxJPo+
+         z8eJ6St8orvzuH62xfmZ4J9hqPqmfqn4UTX1F+kkXVG8Wz5F1nKFYKRvxOaO9P9ED5QJ
+         KZpcUdAzyY1nHcHu6+HagdAeR/AybCt3XEzZdKGsTYNxLc7EBCIrLBfUsWTQ5TKdvW8E
+         uYZjI8zsU0qjcLADTcxix9bZqZkQPqdSUSyMsVczrggntK8LXlQ8mheYcBDMh7lkaPEu
+         020Q==
+X-Gm-Message-State: ANoB5pn54xJv9ljb6UqY+jKfLMU7sQBLZERuMu+y80yTmYK6WGg5pCbN
+        M+3Vwa968cM9wZK26UTOwxI=
+X-Google-Smtp-Source: AA0mqf4MXBmLp3w7Xzy9uUOWS4PexrIggF0wLnbj+nXyJU/b7JmwhymImQvxm+EOwQi4P4tCJmDvYw==
+X-Received: by 2002:a7b:c8c7:0:b0:3c6:e62e:2e78 with SMTP id f7-20020a7bc8c7000000b003c6e62e2e78mr3034798wml.19.1670540547485;
+        Thu, 08 Dec 2022 15:02:27 -0800 (PST)
+Received: from krava ([83.240.62.58])
+        by smtp.gmail.com with ESMTPSA id bi16-20020a05600c3d9000b003cf6c2f9513sm79114wmb.2.2022.12.08.15.02.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 15:01:18 -0800 (PST)
-Date:   Thu, 8 Dec 2022 18:01:16 -0500
-From:   Eric Whitney <enwlinux@gmail.com>
-To:     Ye Bin <yebin@huaweicloud.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jack@suse.cz, Ye Bin <yebin10@huawei.com>,
-        syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
-Subject: Re: [PATCH v4 1/3] ext4: fix incorrect calculate 'reserved' in
- '__es_remove_extent' when enable bigalloc feature
-Message-ID: <Y5JsvMzx04EcVMHC@debian-BULLSEYE-live-builder-AMD64>
-References: <20221208033426.1832460-1-yebin@huaweicloud.com>
- <20221208033426.1832460-2-yebin@huaweicloud.com>
+        Thu, 08 Dec 2022 15:02:26 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 9 Dec 2022 00:02:24 +0100
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Hao Sun <sunhao.th@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
+Message-ID: <Y5JtACA8ay5QNEi7@krava>
+References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
+ <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
+ <Y49dMUsX2YgHK0J+@krava>
+ <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
+ <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
+ <Y5Inw4HtkA2ql8GF@krava>
+ <Y5JkomOZaCETLDaZ@krava>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221208033426.1832460-2-yebin@huaweicloud.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y5JkomOZaCETLDaZ@krava>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -75,91 +96,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Ye Bin <yebin@huaweicloud.com>:
-> From: Ye Bin <yebin10@huawei.com>
+On Thu, Dec 08, 2022 at 11:26:45PM +0100, Jiri Olsa wrote:
+> On Thu, Dec 08, 2022 at 07:06:59PM +0100, Jiri Olsa wrote:
+> > On Thu, Dec 08, 2022 at 09:48:52AM -0800, Alexei Starovoitov wrote:
+> > > On Wed, Dec 7, 2022 at 11:57 AM Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Tue, Dec 6, 2022 at 7:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Dec 06, 2022 at 02:46:43PM +0800, Hao Sun wrote:
+> > > > > > Hao Sun <sunhao.th@gmail.com> 于2022年12月6日周二 11:28写道：
+> > > > > > >
+> > > > > > > Hi,
+> > > > > > >
+> > > > > > > The following crash can be triggered with the BPF prog provided.
+> > > > > > > It seems the verifier passed some invalid progs. I will try to simplify
+> > > > > > > the C reproducer, for now, the following can reproduce this:
+> > > > > > >
+> > > > > > > HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-in
+> > > > > > > functions in bpf_iter_ksym
+> > > > > > > git tree: bpf-next
+> > > > > > > console log: https://pastebin.com/raw/87RCSnCs
+> > > > > > > kernel config: https://pastebin.com/raw/rZdWLcgK
+> > > > > > > Syz reproducer: https://pastebin.com/raw/4kbwhdEv
+> > > > > > > C reproducer: https://pastebin.com/raw/GFfDn2Gk
+> > > > > > >
+> > > > > >
+> > > > > > Simplified C reproducer: https://pastebin.com/raw/aZgLcPvW
+> > > > > >
+> > > > > > Only two syscalls are required to reproduce this, seems it's an issue
+> > > > > > in XDP test run. Essentially, the reproducer just loads a very simple
+> > > > > > prog and tests run repeatedly and concurrently:
+> > > > > >
+> > > > > > r0 = bpf$PROG_LOAD(0x5, &(0x7f0000000640)=@base={0x6, 0xb,
+> > > > > > &(0x7f0000000500)}, 0x80)
+> > > > > > bpf$BPF_PROG_TEST_RUN(0xa, &(0x7f0000000140)={r0, 0x0, 0x0, 0x0, 0x0,
+> > > > > > 0x0, 0xffffffff, 0x0, 0x0, 0x0, 0x0, 0x0}, 0x48)
+> > > > > >
+> > > > > > Loaded prog:
+> > > > > >    0: (18) r0 = 0x0
+> > > > > >    2: (18) r6 = 0x0
+> > > > > >    4: (18) r7 = 0x0
+> > > > > >    6: (18) r8 = 0x0
+> > > > > >    8: (18) r9 = 0x0
+> > > > > >   10: (95) exit
+> > > > >
+> > > > > hi,
+> > > > > I can reproduce with your config.. it seems related to the
+> > > > > recent static call change:
+> > > > >   c86df29d11df bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
+> > > > >
+> > > > > I can't reproduce when I revert that commit.. Peter, any idea?
+> > > >
+> > > > Jiri,
+> > > >
+> > > > I see your tested-by tag on Peter's commit c86df29d11df.
+> > > > I assume you're actually tested it, but
+> > > > this syzbot oops shows that even empty bpf prog crashes,
+> > > > so there is something wrong with that commit.
+> > > >
+> > > > What is the difference between this new kconfig and old one that
+> > > > you've tested?
 > 
-> Syzbot report issue as follows:
-> EXT4-fs error (device loop0): ext4_validate_block_bitmap:398: comm rep:
-> 	bg 0: block 5: invalid block bitmap
-> EXT4-fs (loop0): Delayed block allocation failed for inode 18 at logical
-> 	offset 0 with max blocks 32 with error 28
-> EXT4-fs (loop0): This should not happen!! Data will be lost
+> I attached the diff, 'config-issue' is the one that reproduces the issue
 > 
-> EXT4-fs (loop0): Total free blocks count 0
-> EXT4-fs (loop0): Free/Dirty block details
-> EXT4-fs (loop0): free_blocks=0
-> EXT4-fs (loop0): dirty_blocks=32
-> EXT4-fs (loop0): Block reservation details
-> EXT4-fs (loop0): i_reserved_data_blocks=2
-> EXT4-fs (loop0): Inode 18 (00000000845cd634):
-> 	i_reserved_data_blocks (1) not cleared!
+> > > >
+> > > > I'm trying to understand the severity of the issues and
+> > > > whether we need to revert that commit asap since the merge window
+> > > > is about to start.
+> > > 
+> > > Jiri, Peter,
+> > > 
+> > > ping.
+> > > 
+> > > cc-ing Thorsten, since he's tracking it now.
+> > > 
+> > > The config has CONFIG_X86_KERNEL_IBT=y.
+> > > Is it related?
+> > 
+> > sorry for late reply.. I still did not find the reason,
+> > but I did not try with IBT yet, will test now
 > 
-> Above issue happens as follows:
-> Assume:
-> sbi->s_cluster_ratio = 16
-> Step1:
-> Insert delay block [0, 31] -> ei->i_reserved_data_blocks=2
-> Step2:
-> ext4_writepages
->   mpage_map_and_submit_extent -> return failed
->   mpage_release_unused_pages -> to release [0, 30]
->     ext4_es_remove_extent -> remove lblk=0 end=30
->       __es_remove_extent -> len1=0 len2=31-30=1
->  __es_remove_extent:
->  ...
->  if (len2 > 0) {
->   ...
-> 	  if (len1 > 0) {
-> 		  ...
-> 	  } else {
-> 		es->es_lblk = end + 1;
-> 		es->es_len = len2;
-> 		...
-> 	  }
->   	if (count_reserved)
-> 		count_rsvd(inode, lblk, ...);
-> 	goto out; -> will return but didn't calculate 'reserved'
->  ...
-> Step3:
-> ext4_destroy_inode -> trigger "i_reserved_data_blocks (1) not cleared!"
+> no difference with IBT enabled, can't reproduce the issue
 > 
-> To solve above issue if 'len2>0' call 'get_rsvd()' before goto out.
-> 
-> Reported-by: syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
-> Fixes: 8fcc3a580651 ("ext4: rework reserved cluster accounting when invalidating pages")
-> Signed-off-by: Ye Bin <yebin10@huawei.com>
-> ---
->  fs/ext4/extents_status.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/ext4/extents_status.c b/fs/ext4/extents_status.c
-> index cd0a861853e3..7ada374ff27d 100644
-> --- a/fs/ext4/extents_status.c
-> +++ b/fs/ext4/extents_status.c
-> @@ -1371,7 +1371,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  		if (count_reserved)
->  			count_rsvd(inode, lblk, orig_es.es_len - len1 - len2,
->  				   &orig_es, &rc);
-> -		goto out;
-> +		goto out_get_reserved;
->  	}
->  
->  	if (len1 > 0) {
-> @@ -1413,6 +1413,7 @@ static int __es_remove_extent(struct inode *inode, ext4_lblk_t lblk,
->  		}
->  	}
->  
-> +out_get_reserved:
->  	if (count_reserved)
->  		*reserved = get_rsvd(inode, end, es, &rc);
->  out:
-> -- 
 
-OK, this looks good.
+ok, scratch that.. the reproducer got stuck on wifi init :-\
 
-As before, feel free to add:
+after I fix that I can now reproduce on my local config with
+IBT enabled or disabled.. it's something else
 
-Reviewed-by: Eric Whitney <enwlinux@gmail.com>
-
-> 2.31.1
-> 
+jirka
