@@ -2,49 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88EE4646FAA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:29:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7350646FB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:30:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiLHM3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:29:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
+        id S229992AbiLHMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 07:30:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLHM3S (ORCPT
+        with ESMTP id S229468AbiLHMaO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:29:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0BE2B185;
-        Thu,  8 Dec 2022 04:29:17 -0800 (PST)
+        Thu, 8 Dec 2022 07:30:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076A4303FC;
+        Thu,  8 Dec 2022 04:30:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAE8961EEE;
-        Thu,  8 Dec 2022 12:29:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05875C433C1;
-        Thu,  8 Dec 2022 12:29:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95D1761F0A;
+        Thu,  8 Dec 2022 12:30:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10221C433C1;
+        Thu,  8 Dec 2022 12:30:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670502556;
-        bh=zbX8/ClFA3b2CThz56cTysR/0+gs5BUOcVmr4sqX8fc=;
+        s=k20201202; t=1670502613;
+        bh=vuyR8NSZXgKNwfmsYoMv4Ol+ici2HnAMRbBD2K6WyGs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=M9aAZxAvft8qRQ0t9SH9a4A7edcdMpmF/DIvHtqVmKMX67+nipkhZzYqP7N6XHAxc
-         1JsQDSahfmod5QD0xJ1hKD5fJD52lp6afr49c8GETzvJtBtje+7/3V7r16T1UfiiHh
-         ayr29LSi6LVoJdeIlk9lx4Q0JG3kwrZEuxg9MASt07OhBHSHT/rXI1fBKL6AX/7hLV
-         jJkNnifxVnE2oVyIshpvLwLHIDD4L6esgn7DlxEZ/AGmMbA4SWKMk08mrkKizjnwGb
-         uxEK6G9oX8Jbo+ygbvtAHcvNGfuah423J0zsf/SkoPYzygexbie1WzOkOE4qKwcowN
-         dSt/ZwIqSYMig==
-Date:   Thu, 8 Dec 2022 12:29:11 +0000
+        b=Twma8AYQ06LUktSgKmq71rkrveB+1CUCh9pDKVdsZGc543B9CJHs7cHmyyyLzeKC/
+         eKR5Bs7pQ2t49ZXvntQpsXNQFEMIFTlSduIq7VVzNhldG6uG+Y74gSLUm1Lv4kC8SJ
+         tiD7E8VomIU384oLv8pTZGpoJ+3ptYH0z3Q7i7+RZFVOGWQDGc/7eZAfVzlPtCwJjr
+         J0j2Yyvu4sH8O1M/R15XSQS4aScmrpZrqT2SOSthasErjuKtrnUIRPMeHhboJ4yKxJ
+         Bsr/y9PorPjqN8tY9eod5rU1W5W+0NiQiXKRdCakYWNCabDSEBJnbn2Rl0CjnwONE8
+         MxBxBfIE996Gg==
+Date:   Thu, 8 Dec 2022 12:30:07 +0000
 From:   Lee Jones <lee@kernel.org>
-To:     Andreas Kemnade <andreas@kemnade.info>
-Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bin Liu <b-liu@ti.com>
-Subject: Re: [PATCH] mfd: twl: fix TWL6032 phy vbus detection
-Message-ID: <Y5HYl2Umqs7HSOKN@google.com>
-References: <20221119100341.2930647-1-andreas@kemnade.info>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Lee Jones <lee.jones@linaro.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/2] mfd: qcom_rpm: Fix an error handling path in
+ qcom_rpm_probe()
+Message-ID: <Y5HYzzwdWCrpWOTv@google.com>
+References: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221119100341.2930647-1-andreas@kemnade.info>
+In-Reply-To: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -54,80 +59,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 19 Nov 2022, Andreas Kemnade wrote:
+On Sun, 20 Nov 2022, Christophe JAILLET wrote:
 
-> TWL6032 has a few charging registers prepended before the charging
-> registers the TWL6030 has. To be able to use common register defines
-> declare the additional registers as additional module.
-> At the moment this affects the access to CHARGERUSB_CTRL1 in
-> phy-twl6030-usb.  Without this patch, it is accessing the wrong register
-> on TWL6032.
-> The consequence is that presence of Vbus is not reported.
+> If an error occurs after the clk_prepare_enable() call, a corresponding
+> clk_disable_unprepare() should be called.
 > 
-> Cc: Bin Liu <b-liu@ti.com>
-> Cc: Tony Lindgren <tony@atomide.com>
-> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Simplify code and switch to devm_clk_get_enabled() to fix it.
+> 
+> Fixes: 3526403353c2 ("mfd: qcom_rpm: Handle message RAM clock")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/mfd/twl-core.c  | 8 ++++----
->  include/linux/mfd/twl.h | 2 ++
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
-> index f6b4b9d94bbd..5a7ed71d0e30 100644
-> --- a/drivers/mfd/twl-core.c
-> +++ b/drivers/mfd/twl-core.c
-> @@ -111,6 +111,7 @@
->  #define TWL6030_BASEADD_GASGAUGE	0x00C0
->  #define TWL6030_BASEADD_PIH		0x00D0
->  #define TWL6030_BASEADD_CHARGER		0x00E0
-> +/* A few regs prepended before the 6030 regs */
+> This changes the order of the clean-ups if the .remove() function is called
+> but it looks fine to me.
+> ---
+>  drivers/mfd/qcom_rpm.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-This would be better represented if the defines were in order.
+Something funny going on here.
 
-The comment is also superfluous.
-
->  #define TWL6032_BASEADD_CHARGER		0x00DA
-
-Are you sure this is prepended i.e. before the other registers?
-
-These looks as though they sit in the middle.
-
->  #define TWL6030_BASEADD_LED		0x00F4
->  
-> @@ -353,6 +354,9 @@ static struct twl_mapping twl6030_map[] = {
->  	{ 2, TWL6030_BASEADD_ZERO },
->  	{ 1, TWL6030_BASEADD_GPADC_CTRL },
->  	{ 1, TWL6030_BASEADD_GASGAUGE },
-> +
-> +	/* TWL6032 specific charger registers */
-> +	{ 1, TWL6032_BASEADD_CHARGER },
->  };
->  
->  static const struct regmap_config twl6030_regmap_config[3] = {
-> @@ -802,10 +806,6 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
->  	if ((id->driver_data) & TWL6030_CLASS) {
->  		twl_priv->twl_id = TWL6030_CLASS_ID;
->  		twl_priv->twl_map = &twl6030_map[0];
-> -		/* The charger base address is different in twl6032 */
-> -		if ((id->driver_data) & TWL6032_SUBCLASS)
-> -			twl_priv->twl_map[TWL_MODULE_MAIN_CHARGE].base =
-> -							TWL6032_BASEADD_CHARGER;
->  		twl_regmap_config = twl6030_regmap_config;
->  	} else {
->  		twl_priv->twl_id = TWL4030_CLASS_ID;
-> diff --git a/include/linux/mfd/twl.h b/include/linux/mfd/twl.h
-> index eaa233038254..6e3d99b7a0ee 100644
-> --- a/include/linux/mfd/twl.h
-> +++ b/include/linux/mfd/twl.h
-> @@ -69,6 +69,8 @@ enum twl6030_module_ids {
->  	TWL6030_MODULE_GPADC,
->  	TWL6030_MODULE_GASGAUGE,
->  
-> +	/* A few extra registers before the registers shared with the 6030 */
-> +	TWL6032_MODULE_CHARGE,
->  	TWL6030_MODULE_LAST,
->  };
->  
+I received 3 identical versions of the same patch.
 
 -- 
 Lee Jones [李琼斯]
