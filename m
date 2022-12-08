@@ -2,105 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C55C646632
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F0A646641
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiLHA6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 19:58:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S229895AbiLHBJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 20:09:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiLHA6V (ORCPT
+        with ESMTP id S229635AbiLHBJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:58:21 -0500
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950238B1B1;
-        Wed,  7 Dec 2022 16:58:20 -0800 (PST)
-Received: from 1p35Ev-000CZe-TS by out3a.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1p35Ex-000CeU-Vi; Wed, 07 Dec 2022 16:58:19 -0800
-Received: by emcmailer; Wed, 07 Dec 2022 16:58:19 -0800
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3a.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1p35Ev-000CZe-TS; Wed, 07 Dec 2022 16:58:17 -0800
-Received: from tsdebian (unknown [75.164.86.214])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 6DF976350;
-        Wed,  7 Dec 2022 17:58:37 -0700 (MST)
-Message-ID: <1670461096.7839.1.camel@embeddedTS.com>
-Subject: Re: [PATCH] spi: spi-gpio: Don't set MOSI as an input if not 3WIRE
- mode
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark@embeddedts.com
-Date:   Wed, 07 Dec 2022 16:58:16 -0800
-In-Reply-To: <Y5EzD8AaAj0EGnvH@sirena.org.uk>
-References: <20221207230853.6174-1-kris@embeddedTS.com>
-         <Y5ElXqDduIZhIiAm@sirena.org.uk> <1670459801.7091.1.camel@embeddedTS.com>
-         <Y5EzD8AaAj0EGnvH@sirena.org.uk>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:DHE-RSA-SEED-SHA:128
-X-Authenticated_ID: 
-X-VIPRE-Scanners: virus_bd;virus_clamav;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=jBOzkw5MaNFhq/JFw7J9yLSH4ULiuio9lwiaduZfN8g=;b=bJumYaoIckcXrlzlEXYEvbhOYKaRMmHaUng3J12nzZ+ZCWpvlUFwzPw1wrnbhWIJnBTupm8DKqdsmipZJINkyU4/ChaSLBomzDaSm6NA4ldWan+HY5qGZX04IZ0AbUmcPL/gdOYq7k1CwPCFc/5viN6D0Zzl8u5QlQHf4H6SZ1skPHV6VFQoehEJpX9AD3D+tTtrRL+FZjvUzxbovigw0/5Qe7k1AWezHXzvdrxUmfr5UgwjsO0/MgwUTgc6gfK/GYsSAtvAj6pWVp1tUBrTj/HVpcJPCmrbth+hf6RK+y/vk0eutrUyUBaPVX/v6cAFPJAiZ87aKbVxrI8R0E0wJQ==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 20:09:44 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4956D8B1AA
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 17:09:43 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so17922874pgh.4
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 17:09:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OuNLZ5V9mVpEP4E+7RLKuznixDeM0jnYmtWKCm4H7jE=;
+        b=ZmwNr2VgagPTT3ZBYNoVwBjEZ+hTBu0Xs8NkTDlHattLl2ckoAg6Ql90z04zJdiWGP
+         g06encHnVXKE8BNITHXGgX4UmZWeULb/apUn8PsNsE/8UEqKPkZc8YIqBsIxxmjDAPyM
+         lCMYtJQCn1yJVcpgShmuOsshEEzsFKR7HhskAtauN0f0OMxPZ12fr8bKOnY/5fT9cN7/
+         5huxN5ZwBtHQaKkTTJomSL0IlWjakFxGe7DERsnT679YuoRtXFPYzUgY2O/VxaFufI/w
+         QoCrHZIZ/FzvCIGtblDpTMibXKQ3eIW9vpRRmf0pSCn5xugcWVBXk1lb7Opq/Q5dzDzK
+         goxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OuNLZ5V9mVpEP4E+7RLKuznixDeM0jnYmtWKCm4H7jE=;
+        b=bwXUH3yKVI9JwSLoqR8Dy7zkFs2gss2HH9hyah/2XYHw6Vi7rUiK/UG4XiUEXDU0Wv
+         vqgftbe8LDn25TnXS+YaaVgMeS2QrvbzyPbudotxj/D2O/ugO+m8iJIhWwuR3kjFG9Bd
+         yiCrCEWFdgJzsTfW/NewNlro3kCPS0ERXTbMKIxxwEcICwFzRrYHxmKz3K/ZmTUt3fL6
+         Cuv8mfwiNVTIa9r2II3iTzfNyIgynC78OMRcTiiJQrW94wgQTkO5HS4KWkjyfaLfUdSc
+         BNHo2twPL7tE9Azp3c6nNtQ4k7kN1hEKQlN2YHcDNW8ED6XEKC5EmdyffHCqrs1QOoc4
+         Kt0A==
+X-Gm-Message-State: ANoB5pmJGilYv7l63KNc+Uuomwl0s/3lOpMdUGSooNdSC4KlpTLPYbQS
+        XJlduQX7SOU/ZhKabhMQ3wg3hQ==
+X-Google-Smtp-Source: AA0mqf4Ng4LFOxiTbN+0d0o0IEUnpmCXmBQG1PbgbdlbkeNM9WRrA3ezk3WauMc6Ej4KZu/Um/5gjA==
+X-Received: by 2002:a62:b60d:0:b0:574:8995:c0d0 with SMTP id j13-20020a62b60d000000b005748995c0d0mr1470010pff.1.1670461782629;
+        Wed, 07 Dec 2022 17:09:42 -0800 (PST)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i15-20020a63130f000000b00478eb777d18sm2083739pgl.72.2022.12.07.17.09.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 17:09:42 -0800 (PST)
+Date:   Thu, 8 Dec 2022 01:09:38 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] KVM: arm64: selftests: Align VA space allocator with
+ TTBR0
+Message-ID: <Y5E5UixcJQ4+tNYg@google.com>
+References: <20221207214809.489070-1-oliver.upton@linux.dev>
+ <20221207214809.489070-4-oliver.upton@linux.dev>
+ <Y5EtP5z6rxSK1VUe@google.com>
+ <Y5EvVtAoDSHvIKie@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5EvVtAoDSHvIKie@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-08 at 00:42 +0000, Mark Brown wrote:
-> On Wed, Dec 07, 2022 at 04:36:41PM -0800, Kris Bahnsen wrote:
-> > On Wed, 2022-12-07 at 23:44 +0000, Mark Brown wrote:
-> > > A cleaner fix which is probably marginally more performant would be to
-> > > make the setting of spi_gpio_set_direction() conditional on SPI_3WIRE -
-> > > then we won't call into the function at all when not doing 3 wire,
-> > > avoiding the issue entirely.
-> > That makes sense to me. I was operating under the assumption that 3WIRE
-> > mode could be switched in to at a later time via ioctl(), but with the
-> > death of spidev that is presumably no longer a concern.
+On Thu, Dec 08, 2022, Oliver Upton wrote:
+> On Thu, Dec 08, 2022 at 12:18:07AM +0000, Sean Christopherson wrote:
 > 
-> Ugh, right, spidev.  Really even with spidev devices should probably
-> have the mode configured beforehand (I'm not sure pinmux will do the
-> right thing on most platforms...) but now I check it's part of the ABI
-> so we can't get rid of it and therefore your current patch probably is
-> what we need.  No need to reroll, sorry for the noise :/
-
-No need to apologize, thanks for the followup. I'm not terribly
-familiar with SPI internals in Linux so I'm not sure how deep that
-rabbit hole goes. Let me know if you change your mind, I will happily
-whip something else up.
-
+> [...]
 > 
-> I'm not sure why you think spidev is dying, it does still exist and
-> devices use it?
+> > Together, what about?  The #ifdef is a bit gross, especially around "hi_start",
+> > but it's less duplicate code.  And IMO, having things bundled in the same place
+> > makes it a lot easier for newbies (to arm64 or kernel coding in general) to
+> > understand what's going on and why arm64 is different.
+> 
+> I'd rather we not go this route. We really shouldn't make any attempt to
+> de-dupe something that is inherently architecture specific.
+> 
+> For example:
+> 
+> > +	/*
+> > +	 * All architectures supports splitting the virtual address space into
+> > +	 * a high and a low half.  Populate both halves, except for arm64 which
+> > +	 * currently uses only TTBR0_EL1 (arbitrary selftests "logic"), i.e.
+> > +	 * only has a valid low half.
+> > +	 */
+> > +	sparsebit_num_t nr_va_bits = (1ULL << (vm->va_bits - 1)) >> vm->page_shift;
+> 
+> This is still wrong for arm64. When we say the VA space is 48 bits, we
+> really do mean that TTBR0 is able to address a full 48 bits. So this
+> truncates the MSB for the addressing mode.
 
-"The death of spidev" _as a generic interface_.
+Ah, I missed the lack of a "-1" in the arm64 code.
 
-A number of our products provide a generic pin header with SPI
-available for customer use. We've been told when we RFC'ed dts files
-to support our platforms that spidev isn't acceptable on these
-headers and the downstream developer must add their own as needed.
-Which, many of our customers use devices that don't have drivers
-anyway, so we still have to assist them in getting spidev functional
-in one way or another. It's just a sore spot for us.
+> With the code living in the arm64 side of the shop, I can also tailor
+> the comment to directly match the architecture to provide breadcrumbs
+> tying it back to the Arm ARM.
+
+The main reason why I don't like splitting the code this way is that it makes it
+harder for non-arm64 folks to understand what makes arm64 different.  Case in
+point, my overlooking of the "-1".  I read the changelog and the comment and
+still missed that small-but-important detail, largely because I am completely
+unfamiliar with how TTBR{0,1}_EL1 works.
+
+Actually, before we do anything, we should get confirmation from the s390 and
+RISC-V folks on whether they have a canonical hole like x86, i.e. maybe x86 is
+the oddball.
+
+Anyways, assuming one architecture is the oddball (I'm betting it's x86), I have
+no objection to bleeding some of the details into the common code, including a
+large comment to document the gory details.  If every architecture manges to be
+different, then yeah, a hook is probably warranted.
+
+That said, I also don't mind shoving a bit of abstraction into arch code if that
+avoids some #ifdef ugliness or allows for better documentation, flexibility, etc.
+What I don't like is duplicating the logic of turning "VA bits" into the bitmap.
+
+E.g. something like this would also be an option.  Readers would obviously need
+to track down has_split_va_space, but that should be fairly easy and can come
+with a big arch-specific comment, and meanwhile the core logic of how selftests
+populate the va bitmaps is common.
+
+Or if arm64 is the only arch without a split, invert the flag and have arm64 set
+the vm->has_combined_va_space or whatever.
+
+static void vm_vaddr_populate_bitmap(struct kvm_vm *vm)
+{
+	unsigned int eff_va_bits = vm->va_bits;
+	sparsebit_num_t nr_bits;
+
+	/* blah blah blah */
+	if (vm->has_split_va_space)
+		eff_va_bits--;
+
+	nr_bits = (1ULL << eff_va_bits) >> vm->page_shift;
+
+	sparsebit_set_num(vm->vpages_valid, 0, nr_va_bits);
+
+	if (vm->has_split_va_space)
+		sparsebit_set_num(vm->vpages_valid,
+			  	  (~((1ULL << eff_va_bits) - 1)) >> vm->page_shift,
+				  nr_bits);
+}
