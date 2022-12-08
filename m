@@ -2,117 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 638F7646EB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:34:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4B5646E90
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiLHLej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:34:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        id S229797AbiLHLaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:30:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiLHLeg (ORCPT
+        with ESMTP id S229783AbiLHLaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:34:36 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B64A66C92;
-        Thu,  8 Dec 2022 03:34:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670499274; x=1702035274;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=BNKj0Q3HaLW0QQmlzFra5ewPCCLiShH0XE7KzON/axc=;
-  b=ZBdy+j/fchQRGmGKP7GDgoYIYvGsgJV4ZOXLhYPAn8C0c++ME7RVjpkJ
-   cBlA8tUIxFHdKaTCPFLfgzUi8EQnBhQLOI3deLcWW7UBkWFKP0AJN8dBa
-   SNFnztz9sNY8zj2/Frtf8hEWFtCgsJQie62pcz5dvhCBlBT0G4QN3ahA1
-   qclFaZFnIVcscJ5hXHqncfBMdr7Yaa3HlW+CxOMbiXG+muzeoABvVVqE/
-   Y6Eno96YqlLZLJpGhZuhSkqyflapfejVrEgmlr6G2gD90HUPDhZ6dsQRu
-   k+/mVeN9omqrHS+5msglRxsGzOzTGWsQ/4TNCQfjBhl+dhG7tMMH7NTQ4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="315865225"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="315865225"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:34:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="624670349"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="624670349"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga006.jf.intel.com with ESMTP; 08 Dec 2022 03:34:22 -0800
-Date:   Thu, 8 Dec 2022 19:30:03 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Message-ID: <20221208113003.GE1304936@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
- <cd950a78-5c5b-16ef-d0a6-ad2878af067e@intel.com>
+        Thu, 8 Dec 2022 06:30:20 -0500
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C8842F4A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:30:19 -0800 (PST)
+Received: by mail-il1-f197.google.com with SMTP id z10-20020a921a4a000000b0030349fa9653so875728ill.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 03:30:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=75neS/lkdeISVpKqYuaazhE+JF5LWGgiKKJqm1yyxZI=;
+        b=4Fc7sBupufoQ1zosNVKjh1CX3tyBDwZqqHyRRxqUNPMdBnvC9QchMan3bnJikMB+kV
+         TWwdIHgFeHqdmu3JCv0rpRjyi1jv6GOhUeXrG7zSe9NpBzmLhmNoa90H2gZZFd4nWEpB
+         Ega8Ri8rWgqUS2lLJtZsB8Wj436p1oLBJcxWEBrEr802ymgu1fLRyt8axWGXJHZsSi0K
+         rf44DhNtu+6xub30f20Sir936Bw9r6Z5pFlmD5/I5nzndeJO1KQpiDVh8/1ATy7z2+gL
+         AoVnJnH3+5vb/LFUm3ozCL4WjLB3b+Mt+UGMpYaB0f1tg6sKmGoZ0cBd4EvhyledJ1Z5
+         IqeQ==
+X-Gm-Message-State: ANoB5pmLrl26B41HEIJgLTF5lDXD2S2aceUnOhfEs2ffvBIpxPlXE4iF
+        H/qFi5EzgLBq6khT79QOWCI5FqLrvP+GFVbZG9wvcrjkcs76
+X-Google-Smtp-Source: AA0mqf6nXjc62ab3UiSC++utB0tioyvDLX4yatRTfGMNbgMDyzP+axwKSj3xpoM2I+8xbWCLrLbvP0XyXQ3BtzNNVnusDVHOhBoJ
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd950a78-5c5b-16ef-d0a6-ad2878af067e@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:8618:0:b0:6df:9c1f:51b1 with SMTP id
+ f24-20020a5d8618000000b006df9c1f51b1mr20400997iol.166.1670499019305; Thu, 08
+ Dec 2022 03:30:19 -0800 (PST)
+Date:   Thu, 08 Dec 2022 03:30:19 -0800
+In-Reply-To: <20221208045304.8105-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a4b91005ef4f5c07@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_destroy_all_locals
+From:   syzbot <syzbot+1eb4232fca28c0a6d1c2@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 04:37:03PM +0800, Xiaoyao Li wrote:
-> On 12/2/2022 2:13 PM, Chao Peng wrote:
-> 
-> ..
-> 
-> > Together with the change, a new config HAVE_KVM_RESTRICTED_MEM is added
-> > and right now it is selected on X86_64 only.
-> > 
-> 
-> From the patch implementation, I have no idea why HAVE_KVM_RESTRICTED_MEM is
-> needed.
+Hello,
 
-The reason is we want KVM further controls the feature enabling. An
-opt-in CONFIG_RESTRICTEDMEM can cause problem if user sets that for
-unsupported architectures.
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+INFO: rcu detected stall in corrupted
 
-Here is the original discussion:
-https://lore.kernel.org/all/YkJLFu98hZOvTSrL@google.com/
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P5546 } 2655 jiffies s: 2813 root: 0x0/T
+rcu: blocking rcu_node structures (internal RCU debug):
 
-Thanks,
-Chao
+
+Tested on:
+
+commit:         591cd615 Add linux-next specific files for 20221207
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=177df597880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=1eb4232fca28c0a6d1c2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1348317b880000
+
