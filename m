@@ -2,136 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CD0646C3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:47:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5EC5646C42
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbiLHJrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:47:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40522 "EHLO
+        id S230011AbiLHJuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:50:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230382AbiLHJqh (ORCPT
+        with ESMTP id S229521AbiLHJt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:46:37 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8886F0DF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:46:36 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b13so1221475lfo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:46:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JbJYjODEjro1RFdAuzwb2wjJ9qbMGZnpipEOMqi0I/0=;
-        b=wSwCTtIanqUXWSPc0KxcMvgfz7n4H8KI2Uxk6yeWeRUPI0N7urywQW+Au5DGF6ywVK
-         IXAzB0+orsU7wslEUAVg7Ay9wEwkz8SmCTk69kAwGuIHELMAHt3FoHsF4im0NqL8K06/
-         RxTzKGkQcLxQyLrH55eXl/pgvWMbIy/TAi7d6YvGoo261/HSfr1f7LTF/RV6M4Kb7tGW
-         RaPKKYeNxMWNdlNgXzSrWV99JpjmvFH81nYP9JiymaxvIYfO++vm9GdCEiYJi/xEoqiT
-         PZc7C9q/Yyp98dry18TEUFJtafKPT8sPXa/SVSxY2p9yB21Fj4QmpphpHgRYVxdmqIX4
-         8xNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JbJYjODEjro1RFdAuzwb2wjJ9qbMGZnpipEOMqi0I/0=;
-        b=0U0kema3NUfRS5+JLfTmkmJbdVLjnwLYqVkoueBg+0EQyEWtkXljpA2vJtxwnkfRdp
-         Sut/GNpW0Uifl/qm6KQfCyyJAwhTM6kuLj7QEUXyX51ahjfWc1bax6CeEQcxW6s8B0LE
-         ZOrgEDDQHS56eWbgPZBMBrWRS0u2jezpB4OJOUGgQksNqOkxudsIx8iYZRs93GzACAMu
-         Iudhi2iLJ64H2gS9jWQFioJ/6fkp0g5Ht0atIBvBqxRpiGHqSQ5qgLnf4dyHcY97hiI6
-         RJ2elL0PL2LM+JQM0kHUkWpa6Zo0oicD1mc3OcWmUksrG9cbe2XZvbfl6a8KwWNmahgd
-         h1UQ==
-X-Gm-Message-State: ANoB5pnp1SPQLRgWzEbnqc+2X4pvsKXdym0N66odkoeaZvGLgqNuBCcV
-        RzDHX+H6dFumsEr2639IEHkGUw==
-X-Google-Smtp-Source: AA0mqf5hBvoUq0DJmDGm6rvtOlEM6uybZlaFXaOwx4rvv/c2CPN/lkieaUTh7DCyPEd6A5RVF74mNw==
-X-Received: by 2002:a05:6512:258b:b0:4b5:a5c7:3289 with SMTP id bf11-20020a056512258b00b004b5a5c73289mr193233lfb.8.1670492794696;
-        Thu, 08 Dec 2022 01:46:34 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id s5-20020a056512314500b004b56a8d9e90sm1826596lfi.116.2022.12.08.01.46.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 01:46:34 -0800 (PST)
-Message-ID: <8dfb5b8a-766a-14ec-16d4-74fdd9f7d622@linaro.org>
-Date:   Thu, 8 Dec 2022 10:46:32 +0100
+        Thu, 8 Dec 2022 04:49:57 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C3161538;
+        Thu,  8 Dec 2022 01:49:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 69F91B82304;
+        Thu,  8 Dec 2022 09:49:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6C67C433C1;
+        Thu,  8 Dec 2022 09:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670492994;
+        bh=bpD04RVwtpt4W5MxFSD4KUm5MDq2FuF0OMSAp3Zzgzg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=U/TAaVQ3a/ZBc84jaCzqDi3A/+KbHr89SUE3XqtFzTHHHsnkggH91+aLHIo+ZASG0
+         v0xEagWtcAOopKrzxKrdrROuJmdY1YQq/pdp6uJ8g+pc2/99U55tzK9DI/nnvImk22
+         oTzGIitUvqchiAuc9UKkdu2Lc+DvxZF0dk+SFryX3juslyznkEn3BsgvUYauHcIqIZ
+         9DhJjXT0oTtSs597C3nLyZ3gKg8cCJ8hfrsPx0wFsBVs44qDvSILngeVczUDW8446E
+         IsLWbkVNFyetP0QKpre67iw3EmNrsi1SZVNSADMXkjJ9zZXCpmr25cBR+jN1bDsrEz
+         Ae8ywyGfc5XXQ==
+Message-ID: <034523fc-5ecd-87ea-c0b4-8c21705cc50d@kernel.org>
+Date:   Thu, 8 Dec 2022 11:49:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
- 'depends-on' is no more optional
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 net-next 4/6] net: ethernet: ti: am65-cpsw: Add
+ suspend/resume support
 Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221207162435.1001782-1-herve.codina@bootlin.com>
- <20221207162435.1001782-4-herve.codina@bootlin.com>
- <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
- <20221208100530.137fa8b7@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221208100530.137fa8b7@bootlin.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     davem@davemloft.net, maciej.fijalkowski@intel.com, andrew@lunn.ch,
+        edumazet@google.com, pabeni@redhat.com, vigneshr@ti.com,
+        linux-omap@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221206094419.19478-1-rogerq@kernel.org>
+ <20221206094419.19478-5-rogerq@kernel.org>
+ <20221207202120.12bc7c33@kernel.org>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20221207202120.12bc7c33@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 10:05, Herve Codina wrote:
-> Hi Krzysztof,
+
+
+On 08/12/2022 06:21, Jakub Kicinski wrote:
+> On Tue,  6 Dec 2022 11:44:17 +0200 Roger Quadros wrote:
+>>  	ret = pm_runtime_resume_and_get(common->dev);
+>>  	if (ret < 0)
+>>  		return ret;
+>>  
+>> +	/* Idle MAC port */
+>> +	cpsw_sl_ctl_set(port->slave.mac_sl, CPSW_SL_CTL_CMD_IDLE);
+>> +	cpsw_sl_wait_for_idle(port->slave.mac_sl, 100);
+>> +	cpsw_sl_ctl_reset(port->slave.mac_sl);
+>> +
+>> +	/* soft reset MAC */
+>> +	cpsw_sl_reg_write(port->slave.mac_sl, CPSW_SL_SOFT_RESET, 1);
+>> +	mdelay(1);
+>> +	reg = cpsw_sl_reg_read(port->slave.mac_sl, CPSW_SL_SOFT_RESET);
+>> +	if (reg) {
+>> +		dev_err(common->dev, "soft RESET didn't complete\n");
+>> +		return -ETIMEDOUT;
 > 
-> On Thu, 8 Dec 2022 09:26:41 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 07/12/2022 17:24, Herve Codina wrote:
->>> The 'depends-on' property is set in involved DTS.
->>>
->>> Move it to a required property.
->>>
->>> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
->>> ---
->>>  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml | 1 +  
->>
->> This should be squashed with previous patch. There is no point to add
->> property and immediately in the next patch make it required. Remember
->> that bindings are separate from DTS.
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> I though about make dtbs_check in case of git bisect.
+> Doesn't this function leak power management references on almost all
+> error paths? Not really related to this set, tho.
 
-And what would this commit change? In Git you will have
-1. dt-bindings: PCI: renesas,pci-rcar-gen2: Add depends-on for RZ/N1 SoC
-family
-2. dt-bindings: PCI: renesas,pci-rcar-gen2: 'depends-on' is no more optional
+Oh yes it does. I'll send a separate fix.
 
-so what is the difference for git bisect?
-
-> 
-> But, ok I will squash or perhaps remove completely this commit.
-> It introduces a DT compatibility break adding a new mandatory
-> property (raised by Rob on cover letter review).
-> Is this compatibility break can be acceptable ?
-
-Requiring property in bindings as a fix for something which was broken
-is ok. But this is independent of Linux drivers, which should not stop
-working.
-
-Best regards,
-Krzysztof
-
+cheers,
+-roger
