@@ -2,392 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD9964670C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EACBA64670E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbiLHChg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 21:37:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
+        id S229763AbiLHChx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 21:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLHChf (ORCPT
+        with ESMTP id S229677AbiLHChj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 21:37:35 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7A7934FA;
-        Wed,  7 Dec 2022 18:37:31 -0800 (PST)
-Received: from canpemm500001.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSJFL1vDVzRpdL;
-        Thu,  8 Dec 2022 10:36:38 +0800 (CST)
-Received: from [10.174.177.236] (10.174.177.236) by
- canpemm500001.china.huawei.com (7.192.104.163) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Dec 2022 10:37:18 +0800
-From:   Xie XiuQi <xiexiuqi@huawei.com>
-Subject: Re: [RFC 1/2] ACPI: APEI: Make memory_failure() triggered by
- synchronization errors execute in the current context
-To:     Shuai Xue <xueshuai@linux.alibaba.com>,
-        Lv Ying <lvying6@huawei.com>, <rafael@kernel.org>,
-        <lenb@kernel.org>, <james.morse@arm.com>, <tony.luck@intel.com>,
-        <bp@alien8.de>, <naoya.horiguchi@nec.com>, <linmiaohe@huawei.com>,
-        <akpm@linux-foundation.org>, <ashish.kalra@amd.com>
-CC:     <xiezhipeng1@huawei.com>, <wangkefeng.wang@huawei.com>,
-        <tanxiaofei@huawei.com>, <linux-acpi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Bixuan Cui <cuibixuan@linux.alibaba.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        <yingwen.cyw@alibaba-inc.com>
-References: <20221205115111.131568-1-lvying6@huawei.com>
- <20221205115111.131568-2-lvying6@huawei.com>
- <c779d666-4937-e2dc-2d52-da0e49d5d1ac@linux.alibaba.com>
-Message-ID: <6c9a17ad-fe68-bbb5-bb37-edbcfbbc2fee@huawei.com>
-Date:   Thu, 8 Dec 2022 10:37:12 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.11.0
+        Wed, 7 Dec 2022 21:37:39 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC04C740
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 18:37:38 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id g7-20020a056e021a2700b0030326ba44e4so184002ile.13
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 18:37:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TWSFVNpU+4+YJ0sYg3o6Zkh+e8YHn+7iDUXmzZIzbIo=;
+        b=clYaX4+MRTwj5kNVgYnbeZabkjqbaHKaQaeQL8mCmK8vZnP8mQbe0NKOZS1QMLq7u4
+         PF/tY7l7BnSRl8k9oaSfEKLSgu0lMdSInJ9R+5Rdu20NJSC0Ibi84rzUFTQikcAsAczh
+         Wa36CRoOBr2aBcUynHrUazwlH8fxc1rkohKhKo/093Au8Le3U+cY3dJ8xytLV6sXEyKO
+         CFXS0dCPlLJyu5M3d8OkY8jWeLZ+R8LjaZLMa8XkadctnjT/JbZcOwZPcHxksLtfkBnZ
+         E+tEVG8o0J5ZONZnIB/oK2QAhYe8aCunA7S4oldTJUygFC5uxKqS7RElWE3LXjltBesa
+         ZQOA==
+X-Gm-Message-State: ANoB5pnroUTz5McIGi6jSoeET8WEleyXjTUY0CfXkL5RkJD2yDvvXRBm
+        xSXdPYWg3pm25faiZ124zqB2Bre499BbY32eaoDTzONH9CEu
+X-Google-Smtp-Source: AA0mqf6RlVUVZ2Hp1i3on+oLJewUJO8o90QMuusRYVvOcvTca5offrVRD3HQA37l6pbs1IBdMHfHWRERuTIxW+pd9uqXnK9LIUCA
 MIME-Version: 1.0
-In-Reply-To: <c779d666-4937-e2dc-2d52-da0e49d5d1ac@linux.alibaba.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.236]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500001.china.huawei.com (7.192.104.163)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c98d:0:b0:303:27a5:b9d7 with SMTP id
+ y13-20020a92c98d000000b0030327a5b9d7mr17548782iln.12.1670467057728; Wed, 07
+ Dec 2022 18:37:37 -0800 (PST)
+Date:   Wed, 07 Dec 2022 18:37:37 -0800
+In-Reply-To: <00000000000017ace905ef2b739d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000095c32a05ef47eb1f@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_destroy_all_locals
+From:   syzbot <syzbot+1eb4232fca28c0a6d1c2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
 
-On 2022/12/7 18:57, Shuai Xue wrote:
-> 
-> 
-> 在 2022/12/5 PM7:51, Lv Ying 写道:
->> The memory uncorrected error which is detected by an external component and
->> notified via an IRQ, can be called asynchronization error. If an error is
->> detected as a result of user-space process accessing a corrupt memory
->> location, the CPU may take an abort. On arm64 this is a
->> 'synchronous external abort', and on a firmware first system it is notified
->> via NOTIFY_SEA, this can be called synchronization error.
->>
->> Currently, synchronization error and asynchronization error both use
->> memory_failure_queue to schedule memory_failure() exectute in kworker
->> context. Commit 7f17b4a121d0 ("ACPI: APEI: Kick the memory_failure() queue
->> for synchronous errors") make task_work pending to flush out the queue,
->> cancel_work_sync() in memory_failure_queue_kick() will make
->> memory_failure() exectute in kworker context first which will get
->> synchronization error info from kfifo, so task_work later will get nothing
->> from kfifo which doesn't work as expected. Even worse, synchronization
->> error notification has NMI like properties, (it can interrupt IRQ-masked
->> code), task_work may get wrong kfifo entry from interrupted
->> asynchronization error which is notified by IRQ.
->>
->> Since the memory_failure() triggered by a synchronous exception is
->> executed in the kworker context, the early_kill mode of memory_failure()
->> will send wrong si_code by SIGBUS signal: current process is kworker
->> thread, the actual user-space process accessing the corrupt memory location
->> will be collected by find_early_kill_thread(), and then send SIGBUS with
->> BUS_MCEERR_AO si_code to the actual user-space process instead of
->> BUS_MCEERR_AR. The machine-manager(kvm) use the si_code: BUS_MCEERR_AO for
->> 'action optional' early notifications, and BUS_MCEERR_AR for
->> 'action required' synchronous/late notifications.
->>
->> Make memory_failure() triggered by synchronization errors execute in the
->> current context, we do not need workqueue for synchronization error
->> anymore, use task_work handle synchronization errors directly. Since,
->> synchronization errors and asynchronization errors share the same kfifo,
->> use MF_ACTION_REQUIRED flag to distinguish them. And the asynchronization
->> error keeps the same as before.
-> 
-> 
-> Hi, Lv Ying,
-> 
-> Thank you for your great work.
-> 
-> We also encountered this problem in production environment, and tried to
-> solve it by dividing synchronous and asynchronous error handling into different
-> paths: task work for synchronous error and workqueue for asynchronous error.
-> 
-> The main challenge is how to distinguish synchronous errors in kernel first
-> mode through APEI, a related discussion is here.[1]
-> 
->> @@ -978,14 +979,14 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>  		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->>  		len = cper_estatus_len(estatus);
->>  		node_len = GHES_ESTATUS_NODE_LEN(len);
->> -		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
->> +		corruption_page_pending = ghes_do_proc(estatus_node->ghes, estatus, true);
->>  		if (!ghes_estatus_cached(estatus)) {
->>  			generic = estatus_node->generic;
->>  			if (ghes_print_estatus(NULL, generic, estatus))
->>  				ghes_estatus_cache_add(generic, estatus);
->>  		}
-> 
-> In the case of your patch, it is inappropriate to assume that ghes_proc_in_irq() is only
-> called to handle synchronous error. Firmware could notify all synchronous and asynchronous
-> error signals to kernel through NMI notification, e.g. SDEI. In this case, asynchronous
-> error will be treated as synchronous error.
-> 
-> Our colleague Yingwen has submitted a proposal to extend acpi_hest_generic_data::flag (bit 8)
-> to indicate that the error is a synchronous[2]. Personally speaking, it is a more general
-> solution and completely solves the problem.
-> 
-> 
->> Background:
->>
->> In ARM world, two type events (Sync/Async) from hardware IP need OS/VMM take different actions.
->> Current CPER memory error record is not able to distinguish sync/async type event right now.
->> Current OS/VMM need to take extra actions beyond CPER which is heavy burden to identify the
->> two type events
->>
->> Sync event (e.g. CPU consume poisoned data) --> Firmware  -> CPER error log  --> OS/VMM take recovery action.
->> Async event (e.g. Memory controller detect UE event)  --> Firmware  --> CPER error log  --> OS take page action.
->>
->>
->> Proposal:
->>
->> - In section description Flags field(UEFI spec section N.2, add sync flag as below. OS/VMM
->>  could depend on this flag to distinguish sync/async events.
->> - Bit8 – sync flag; if set this flag indicates that this event record is synchronous(e.g.
->>  cpu core consumes poison data, then cause instruction/data abort); if not set, this event record is asynchronous.
->>
->> Best regards,
->> Yingwen Chen
-> 
-> A RFC patch set based on above proposal is here[3].
+HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=155a05f5880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=1eb4232fca28c0a6d1c2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16c2defb880000
 
-Hi Shuai & Lv Ying,
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
 
-Thanks for your great works, I'm also trying to improve the handling for ARM SEA.
-But I missed the issue about cancel_work_sync().
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1eb4232fca28c0a6d1c2@syzkaller.appspotmail.com
 
-I also agree that adding SYNC flag in CPER is a better way.
-Otherwise, the notification type is used to distinguish them.
-Let's try to fix this problem before the new UEFI version comes out.
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:147 [inline]
+BUG: KASAN: use-after-free in rxrpc_destroy_all_locals+0x10a/0x180 net/rxrpc/local_object.c:434
+Read of size 4 at addr ffff888026e83014 by task kworker/u4:9/5238
 
-After all, we have to wait for a new UEFI version and a new BIOS version,
-which may take a long time.
+CPU: 0 PID: 5238 Comm: kworker/u4:9 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ refcount_read include/linux/refcount.h:147 [inline]
+ rxrpc_destroy_all_locals+0x10a/0x180 net/rxrpc/local_object.c:434
+ rxrpc_exit_net+0x174/0x300 net/rxrpc/net_ns.c:128
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:606
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-This is the patchset perious.
-https://lore.kernel.org/linux-arm-kernel/20221205160043.57465-4-xiexiuqi@huawei.com/T/
+Allocated by task 5495:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0xa5/0xb0 mm/kasan/common.c:380
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ rxrpc_alloc_local net/rxrpc/local_object.c:93 [inline]
+ rxrpc_lookup_local+0x4d9/0xfb0 net/rxrpc/local_object.c:249
+ rxrpc_bind+0x35e/0x5c0 net/rxrpc/af_rxrpc.c:150
+ afs_open_socket+0x1b4/0x360 fs/afs/rxrpc.c:64
+ afs_net_init+0xa79/0xed0 fs/afs/main.c:126
+ ops_init+0xb9/0x680 net/core/net_namespace.c:135
+ setup_net+0x793/0xe60 net/core/net_namespace.c:333
+ copy_net_ns+0x31b/0x6b0 net/core/net_namespace.c:483
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ copy_namespaces+0x3b3/0x4a0 kernel/nsproxy.c:179
+ copy_process+0x30d3/0x75c0 kernel/fork.c:2269
+ kernel_clone+0xeb/0xa40 kernel/fork.c:2681
+ __do_sys_clone3+0x1d1/0x370 kernel/fork.c:2980
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
+Freed by task 5507:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0xaf/0x3b0 mm/slub.c:3800
+ rcu_do_batch kernel/rcu/tree.c:2244 [inline]
+ rcu_core+0x81f/0x1980 kernel/rcu/tree.c:2504
+ __do_softirq+0x1fb/0xadc kernel/softirq.c:571
 
-> 
-> Thank you.
-> 
-> Best Regards,
-> Shuai
-> 
-> 
-> [1] https://lore.kernel.org/lkml/1aa0ca90-d44c-aa99-1e2d-bd2ae610b088@linux.alibaba.com/T/
-> [2] https://members.uefi.org/wg/uswg/mail/thread/9453
-> [3] https://lore.kernel.org/lkml/20221206153354.92394-2-xueshuai@linux.alibaba.com/
-> 
-> 
->>
->> Signed-off-by: Lv Ying <lvying6@huawei.com>
->> ---
->>  drivers/acpi/apei/ghes.c | 27 ++++++++++++++-------------
->>  mm/memory-failure.c      | 34 ++++++++++++++++++++++------------
->>  2 files changed, 36 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/acpi/apei/ghes.c b/drivers/acpi/apei/ghes.c
->> index 9952f3a792ba..2ec71fc8a8dd 100644
->> --- a/drivers/acpi/apei/ghes.c
->> +++ b/drivers/acpi/apei/ghes.c
->> @@ -423,8 +423,8 @@ static void ghes_clear_estatus(struct ghes *ghes,
->>  
->>  /*
->>   * Called as task_work before returning to user-space.
->> - * Ensure any queued work has been done before we return to the context that
->> - * triggered the notification.
->> + * Ensure any queued corrupt page in synchronous errors has been handled before
->> + * we return to the user context that triggered the notification.
->>   */
->>  static void ghes_kick_task_work(struct callback_head *head)
->>  {
->> @@ -461,7 +461,7 @@ static bool ghes_do_memory_failure(u64 physical_addr, int flags)
->>  }
->>  
->>  static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->> -				       int sev)
->> +				       int sev, bool sync)
->>  {
->>  	int flags = -1;
->>  	int sec_sev = ghes_severity(gdata->error_severity);
->> @@ -475,7 +475,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->>  	    (gdata->flags & CPER_SEC_ERROR_THRESHOLD_EXCEEDED))
->>  		flags = MF_SOFT_OFFLINE;
->>  	if (sev == GHES_SEV_RECOVERABLE && sec_sev == GHES_SEV_RECOVERABLE)
->> -		flags = 0;
->> +		flags = sync ? MF_ACTION_REQUIRED : 0;
->>  
->>  	if (flags != -1)
->>  		return ghes_do_memory_failure(mem_err->physical_addr, flags);
->> @@ -483,7 +483,7 @@ static bool ghes_handle_memory_failure(struct acpi_hest_generic_data *gdata,
->>  	return false;
->>  }
->>  
->> -static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev)
->> +static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int sev, bool sync)
->>  {
->>  	struct cper_sec_proc_arm *err = acpi_hest_get_payload(gdata);
->>  	bool queued = false;
->> @@ -510,7 +510,8 @@ static bool ghes_handle_arm_hw_error(struct acpi_hest_generic_data *gdata, int s
->>  		 * and don't filter out 'corrected' error here.
->>  		 */
->>  		if (is_cache && has_pa) {
->> -			queued = ghes_do_memory_failure(err_info->physical_fault_addr, 0);
->> +			queued = ghes_do_memory_failure(err_info->physical_fault_addr,
->> +					sync ? MF_ACTION_REQUIRED : 0);
->>  			p += err_info->length;
->>  			continue;
->>  		}
->> @@ -623,7 +624,7 @@ static void ghes_defer_non_standard_event(struct acpi_hest_generic_data *gdata,
->>  }
->>  
->>  static bool ghes_do_proc(struct ghes *ghes,
->> -			 const struct acpi_hest_generic_status *estatus)
->> +			 const struct acpi_hest_generic_status *estatus, bool sync)
->>  {
->>  	int sev, sec_sev;
->>  	struct acpi_hest_generic_data *gdata;
->> @@ -648,13 +649,13 @@ static bool ghes_do_proc(struct ghes *ghes,
->>  			ghes_edac_report_mem_error(sev, mem_err);
->>  
->>  			arch_apei_report_mem_error(sev, mem_err);
->> -			queued = ghes_handle_memory_failure(gdata, sev);
->> +			queued = ghes_handle_memory_failure(gdata, sev, sync);
->>  		}
->>  		else if (guid_equal(sec_type, &CPER_SEC_PCIE)) {
->>  			ghes_handle_aer(gdata);
->>  		}
->>  		else if (guid_equal(sec_type, &CPER_SEC_PROC_ARM)) {
->> -			queued = ghes_handle_arm_hw_error(gdata, sev);
->> +			queued = ghes_handle_arm_hw_error(gdata, sev, sync);
->>  		} else {
->>  			void *err = acpi_hest_get_payload(gdata);
->>  
->> @@ -868,7 +869,7 @@ static int ghes_proc(struct ghes *ghes)
->>  		if (ghes_print_estatus(NULL, ghes->generic, estatus))
->>  			ghes_estatus_cache_add(ghes->generic, estatus);
->>  	}
->> -	ghes_do_proc(ghes, estatus);
->> +	ghes_do_proc(ghes, estatus, false);
->>  
->>  out:
->>  	ghes_clear_estatus(ghes, estatus, buf_paddr, FIX_APEI_GHES_IRQ);
->> @@ -961,7 +962,7 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>  	struct ghes_estatus_node *estatus_node;
->>  	struct acpi_hest_generic *generic;
->>  	struct acpi_hest_generic_status *estatus;
->> -	bool task_work_pending;
->> +	bool corruption_page_pending;
->>  	u32 len, node_len;
->>  	int ret;
->>  
->> @@ -978,14 +979,14 @@ static void ghes_proc_in_irq(struct irq_work *irq_work)
->>  		estatus = GHES_ESTATUS_FROM_NODE(estatus_node);
->>  		len = cper_estatus_len(estatus);
->>  		node_len = GHES_ESTATUS_NODE_LEN(len);
->> -		task_work_pending = ghes_do_proc(estatus_node->ghes, estatus);
->> +		corruption_page_pending = ghes_do_proc(estatus_node->ghes, estatus, true);
->>  		if (!ghes_estatus_cached(estatus)) {
->>  			generic = estatus_node->generic;
->>  			if (ghes_print_estatus(NULL, generic, estatus))
->>  				ghes_estatus_cache_add(generic, estatus);
->>  		}
->>  
->> -		if (task_work_pending && current->mm) {
->> +		if (corruption_page_pending && current->mm) {
->>  			estatus_node->task_work.func = ghes_kick_task_work;
->>  			estatus_node->task_work_cpu = smp_processor_id();
->>  			ret = task_work_add(current, &estatus_node->task_work,
->> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
->> index bead6bccc7f2..3b6ac3694b8d 100644
->> --- a/mm/memory-failure.c
->> +++ b/mm/memory-failure.c
->> @@ -2204,7 +2204,11 @@ struct memory_failure_cpu {
->>  static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
->>  
->>  /**
->> - * memory_failure_queue - Schedule handling memory failure of a page.
->> + * memory_failure_queue
->> + * - Schedule handling memory failure of a page for asynchronous error, memory
->> + *   failure page will be executed in kworker thread
->> + * - put corrupt memory info into kfifo for synchronous error, task_work will
->> + *   handle them before returning to the user
->>   * @pfn: Page Number of the corrupted page
->>   * @flags: Flags for memory failure handling
->>   *
->> @@ -2217,6 +2221,11 @@ static DEFINE_PER_CPU(struct memory_failure_cpu, memory_failure_cpu);
->>   * happen outside the current execution context (e.g. when
->>   * detected by a background scrubber)
->>   *
->> + * This function can also be used in synchronous errors which was detected as a
->> + * result of user-space accessing a corrupt memory location, just put memory
->> + * error info into kfifo, and then, task_work get and handle it in current
->> + * execution context instead of scheduling kworker to handle it
->> + *
->>   * Can run in IRQ context.
->>   */
->>  void memory_failure_queue(unsigned long pfn, int flags)
->> @@ -2230,9 +2239,10 @@ void memory_failure_queue(unsigned long pfn, int flags)
->>  
->>  	mf_cpu = &get_cpu_var(memory_failure_cpu);
->>  	spin_lock_irqsave(&mf_cpu->lock, proc_flags);
->> -	if (kfifo_put(&mf_cpu->fifo, entry))
->> -		schedule_work_on(smp_processor_id(), &mf_cpu->work);
->> -	else
->> +	if (kfifo_put(&mf_cpu->fifo, entry)) {
->> +		if (!(entry.flags & MF_ACTION_REQUIRED))
->> +			schedule_work_on(smp_processor_id(), &mf_cpu->work);
->> +	} else
->>  		pr_err("buffer overflow when queuing memory failure at %#lx\n",
->>  		       pfn);
->>  	spin_unlock_irqrestore(&mf_cpu->lock, proc_flags);
->> @@ -2240,7 +2250,7 @@ void memory_failure_queue(unsigned long pfn, int flags)
->>  }
->>  EXPORT_SYMBOL_GPL(memory_failure_queue);
->>  
->> -static void memory_failure_work_func(struct work_struct *work)
->> +static void __memory_failure_work_func(struct work_struct *work, bool sync)
->>  {
->>  	struct memory_failure_cpu *mf_cpu;
->>  	struct memory_failure_entry entry = { 0, };
->> @@ -2256,22 +2266,22 @@ static void memory_failure_work_func(struct work_struct *work)
->>  			break;
->>  		if (entry.flags & MF_SOFT_OFFLINE)
->>  			soft_offline_page(entry.pfn, entry.flags);
->> -		else
->> +		else if (!sync || (entry.flags & MF_ACTION_REQUIRED))
->>  			memory_failure(entry.pfn, entry.flags);
->>  	}
->>  }
->>  
->> -/*
->> - * Process memory_failure work queued on the specified CPU.
->> - * Used to avoid return-to-userspace racing with the memory_failure workqueue.
->> - */
->> +static void memory_failure_work_func(struct work_struct *work)
->> +{
->> +	__memory_failure_work_func(work, false);
->> +}
->> +
->>  void memory_failure_queue_kick(int cpu)
->>  {
->>  	struct memory_failure_cpu *mf_cpu;
->>  
->>  	mf_cpu = &per_cpu(memory_failure_cpu, cpu);
->> -	cancel_work_sync(&mf_cpu->work);
->> -	memory_failure_work_func(&mf_cpu->work);
->> +	__memory_failure_work_func(&mf_cpu->work, true);
->>  }
->>  
->>  static int __init memory_failure_init(void)
-> 
-> .
-> 
+Last potentially related work creation:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
+ __call_rcu_common.constprop.0+0x99/0x820 kernel/rcu/tree.c:2753
+ rxrpc_put_local.part.0+0x128/0x170 net/rxrpc/local_object.c:332
+ rxrpc_put_local+0x25/0x30 net/rxrpc/local_object.c:324
+ rxrpc_release_sock net/rxrpc/af_rxrpc.c:888 [inline]
+ rxrpc_release+0x237/0x550 net/rxrpc/af_rxrpc.c:914
+ __sock_release net/socket.c:650 [inline]
+ sock_release+0x8b/0x1b0 net/socket.c:678
+ afs_close_socket+0x1ce/0x330 fs/afs/rxrpc.c:125
+ afs_net_exit+0x179/0x320 fs/afs/main.c:158
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:606
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+The buggy address belongs to the object at ffff888026e83000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 20 bytes inside of
+ 1024-byte region [ffff888026e83000, ffff888026e83400)
+
+The buggy address belongs to the physical page:
+page:ffffea00009ba000 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x26e80
+head:ffffea00009ba000 order:3 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+anon flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888012441dc0 0000000000000000 dead000000000001
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x152a20(GFP_ATOMIC|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_HARDWALL), pid 5118, tgid 5118 (kworker/1:0), ts 447318827019, free_ts 439289003379
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x119c/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x1a4/0x430 mm/slub.c:3491
+ __do_kmalloc_node mm/slab_common.c:967 [inline]
+ __kmalloc+0x4a/0xd0 mm/slab_common.c:981
+ kmalloc include/linux/slab.h:584 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ neigh_alloc net/core/neighbour.c:476 [inline]
+ ___neigh_create+0x1578/0x2a20 net/core/neighbour.c:661
+ ip6_finish_output2+0xfc4/0x1530 net/ipv6/ip6_output.c:125
+ __ip6_finish_output net/ipv6/ip6_output.c:195 [inline]
+ ip6_finish_output+0x694/0x1170 net/ipv6/ip6_output.c:206
+ NF_HOOK_COND include/linux/netfilter.h:291 [inline]
+ ip6_output+0x1f1/0x540 net/ipv6/ip6_output.c:227
+ dst_output include/net/dst.h:444 [inline]
+ NF_HOOK include/linux/netfilter.h:302 [inline]
+ ndisc_send_skb+0xa63/0x1740 net/ipv6/ndisc.c:508
+ ndisc_send_rs+0x132/0x6f0 net/ipv6/ndisc.c:718
+ addrconf_dad_completed+0x37a/0xda0 net/ipv6/addrconf.c:4248
+ addrconf_dad_work+0x75d/0x12d0 net/ipv6/addrconf.c:4157
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare+0x65c/0xc00 mm/page_alloc.c:1496
+ free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3464
+ __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2637
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x66/0x90 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:761 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ kmem_cache_alloc_node+0x1f1/0x460 mm/slub.c:3497
+ __alloc_skb+0x216/0x310 net/core/skbuff.c:498
+ alloc_skb include/linux/skbuff.h:1269 [inline]
+ nlmsg_new include/net/netlink.h:1002 [inline]
+ netlink_ack+0x184/0x1370 net/netlink/af_netlink.c:2501
+ netlink_rcv_skb+0x34f/0x440 net/netlink/af_netlink.c:2570
+ netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
+ netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
+ sock_sendmsg_nosec net/socket.c:714 [inline]
+ sock_sendmsg+0xd3/0x120 net/socket.c:734
+ __sys_sendto+0x23a/0x340 net/socket.c:2117
+ __do_sys_sendto net/socket.c:2129 [inline]
+ __se_sys_sendto net/socket.c:2125 [inline]
+ __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2125
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+
+Memory state around the buggy address:
+ ffff888026e82f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff888026e82f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff888026e83000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff888026e83080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888026e83100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
