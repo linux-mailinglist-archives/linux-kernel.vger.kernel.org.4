@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9880647097
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E51D86470A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbiLHNPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:15:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S229829AbiLHNSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiLHNPA (ORCPT
+        with ESMTP id S229601AbiLHNR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:15:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 427198E5B2;
-        Thu,  8 Dec 2022 05:15:00 -0800 (PST)
+        Thu, 8 Dec 2022 08:17:59 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1BC2A969
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:17:58 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EEDB9B823C9;
-        Thu,  8 Dec 2022 13:14:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26C58C433C1;
-        Thu,  8 Dec 2022 13:14:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670505297;
-        bh=glSCtV+QzoCCztEb8hKzqZvn/Kmi//N93WanQimJ3rk=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AADB61F1D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B64BC433D7;
+        Thu,  8 Dec 2022 13:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670505477;
+        bh=v1AMqLkYh7fKICo7N8T2Hn8qWxCuvv9yWp5eOf/ObEg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EAwqHfgMtkZyHyvjY/V2PP92GiVHFAxUQ7AfeBuSj2egHNczQ63uPStxjudUu/19G
-         iUO41j6S9tvKd6wB2+l2kEQOY1mH8qlOHgmC+MPr8+X0+cdrOKq94DDdWV4lGraL3p
-         LX4/TT3k/jY5ZPbxpqpUXk0oy6EdKm9cVysL2+dM=
-Date:   Thu, 8 Dec 2022 14:14:54 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Mathias Nyman <mathias.nyman@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: Re: [PATCH v5 1/4] i915: Move list_count() to list.h as
- list_count_nodes() for broader use
-Message-ID: <Y5HjTpzmgZWft+nF@kroah.com>
-References: <20221130134838.23805-1-andriy.shevchenko@linux.intel.com>
- <Y5HelZhkxnPf6hIs@smile.fi.intel.com>
+        b=UycRB4/6G28HcMycky9G1W5e0c3IvNPlsbZgdBOx5xAuLu73sIFPpAsEBMEe/3igg
+         jti72o0Adr7o2oB6qmn8d9vlOe5KQBo8zCtrsth8jdUdFQvCI0///yGuR78x8H+MCO
+         5vaNtQsY8vMEBPa2Cbg3wdVbddnAa9j1FlF20x8V9tRIXsXHaV1trWUINlDxIt82IA
+         nsEzMqYE+tNu0S/x0Ay8ypdPJFrx6veijEbV5zVD1oi6Al5jbRTbnCM9ZBZMunk+Oe
+         avKiBBMZhqfXsxnOu3NNVeJYvSaDDEkK29oAk2AqSWM245agrx9N6mu8wgCI68lbam
+         ccaRMAI5b5Pcg==
+Date:   Thu, 8 Dec 2022 13:16:01 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Jean Delvare <jdelvare@suse.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
+Subject: Re: [PATCH] mfd: Drop obsolete dependencies on COMPILE_TEST
+Message-ID: <Y5HjkaWNF5/nTVTQ@google.com>
+References: <20221122154134.58a7a18b@endymion.delvare>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y5HelZhkxnPf6hIs@smile.fi.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221122154134.58a7a18b@endymion.delvare>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,21 +59,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 02:54:45PM +0200, Andy Shevchenko wrote:
-> On Wed, Nov 30, 2022 at 03:48:35PM +0200, Andy Shevchenko wrote:
-> > Some of the existing users, and definitely will be new ones, want to
-> > count existing nodes in the list. Provide a generic API for that by
-> > moving code from i915 to list.h.
+On Tue, 22 Nov 2022, Jean Delvare wrote:
+
+> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
+> is possible to test-build any driver which depends on OF on any
+> architecture by explicitly selecting OF. Therefore depending on
+> COMPILE_TEST as an alternative is no longer needed.
 > 
-> Greg, I believe this one is ready to be taken. Or please tell me what I need
-> to do.
+> It is actually better to always build such drivers with OF enabled,
+> so that the test builds are closer to how each driver will actually be
+> built on its intended target. Building them without OF may not test
+> much as the compiler will optimize out potentially large parts of the
+> code. In the worst case, this could even pop false positive warnings.
+> Dropping COMPILE_TEST here improves the quality of our testing and
+> avoids wasting time on non-existent issues.
+> 
+> As a minor optimization, this also lets us drop of_match_ptr(), as we
+> now know what it will resolve to, we might as well save cpp some work.
+> 
+> Signed-off-by: Jean Delvare <jdelvare@suse.de>
+> Cc: Lee Jones <lee@kernel.org>
+> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+> Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Cc: "Jonathan Neuschäfer" <j.neuschaefer@gmx.net>
+> ---
+>  drivers/mfd/Kconfig          |   16 ++++++++--------
+>  drivers/mfd/motorola-cpcap.c |    2 +-
+>  2 files changed, 9 insertions(+), 9 deletions(-)
 
-Wait for me to get through the current backlog of patches that I have in
-my review queue.  Odds are, it will have to wait until after 6.2-rc1 is
-out based on when 6.1 is going to be released.
+Applied, thanks.
 
-Don't worry, it's not lost.
-
-thanks,
-
-greg k-h
+-- 
+Lee Jones [李琼斯]
