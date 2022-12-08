@@ -2,192 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12AE6470F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA7E96470EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:41:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiLHNmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S229877AbiLHNlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiLHNlt (ORCPT
+        with ESMTP id S229807AbiLHNlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:41:49 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7998574
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:41:32 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id 4so1568150pli.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 05:41:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nsVDMGdrrcenDbAQ2t+1J/nqCclkhOqEn3pqIwRUG2w=;
-        b=uQy/0f7YV2jnlbCc1jSFqVrE4lbQvl+RRAJkhOLwNKMTRwuan4cjvWkayuWGs0R8oL
-         vnygiP558bf0VxQTsmO1gMaSyfuPFtroV61zbBi/whfupcirDxi2CZL1YSNKEfXqDE+T
-         5piNZUnqR67+TNZqTfGGTQsSVyDTmdMKrUSaB/GcKRURw0DdMy1ZRW3zLz+Mm9NTRcz4
-         dXo/Fy6vLBQU6ntaMD3EpYjq2lVYXCLz0x7AANz9QfcsPOPKY33HoqaaBT3zcY9lcMkH
-         yXHm35VDMvBDL6KcyGNoNfTrflmO5iPsaeb9inrWk2puhSN2S/QjoIr7Dnn/InlZbwtU
-         f9Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nsVDMGdrrcenDbAQ2t+1J/nqCclkhOqEn3pqIwRUG2w=;
-        b=F4XwZ2Ad+4YHTTdwhuQrDrtCzhlKBJ7VNJmdL48IEsFPSaZ4ohkOE9p4fsMuY1MT18
-         qkRvvT2QkqeBqJmgBzaPOiVm7NQx39wnKTPes2b7N0TvDf3O/vavn2ainf1Pw2f32DDu
-         bP9c2OhQrJMLLQd3nWPWgQGCx7+ddTTHHbE1p6tPgENpdpzZywyUArGN8TDREYAlIDe+
-         R0paj52efdjrVfNkRc6I8G0NO15/gMiVXfjVAKgm6zV0SGVapLac6pvEUXrInoQkEbXC
-         cTFysGcBLG20595/nFNpatWeCSK7RyXC81exuXI6FcdimWh5zIIZpe3tlDyyWs3qS6p/
-         E1Zw==
-X-Gm-Message-State: ANoB5pkJzodbG9DcoXSkxnOdQmGLc3xmoerG7vagYHs1cWfku180ln3v
-        Szv1BEt334W3rvNNOWmrEmjPJt5OLCxwsTzispeMKw==
-X-Google-Smtp-Source: AA0mqf7MdR24OCVzRBWFHBA1Ih0rv9hUVtp5dojJr48004Fk2Ur1P7IRRT950dIzOhONwDL/P4n1lllvwgn2ibEO+gk=
-X-Received: by 2002:a17:903:40c6:b0:189:f799:676e with SMTP id
- t6-20020a17090340c600b00189f799676emr6120063pld.148.1670506892322; Thu, 08
- Dec 2022 05:41:32 -0800 (PST)
-MIME-Version: 1.0
-References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
- <20221201225705.46r2m35ketvzipox@builder.lan> <CAPDyKFofsqcoFbYt-9BcisbPdreLGqAAMWorqHi0_D1kwCdYhg@mail.gmail.com>
- <20221207165457.kwdwwiycbwjpogxl@builder.lan>
-In-Reply-To: <20221207165457.kwdwwiycbwjpogxl@builder.lan>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 8 Dec 2022 14:40:55 +0100
-Message-ID: <CAPDyKFpYgYkDdJ79xxkwr-Mqnj5CoBrV+ZZe6Xz4hGLNR4zUVw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
- 'reset' interface
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 8 Dec 2022 08:41:14 -0500
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B25118B387
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:41:12 -0800 (PST)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxE_B16ZFjFR8EAA--.10025S3;
+        Thu, 08 Dec 2022 21:41:10 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxTuB06ZFj8BwoAA--.33104S2;
+        Thu, 08 Dec 2022 21:41:08 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 0/4] Add kprobe and kretprobe support for LoongArch
+Date:   Thu,  8 Dec 2022 21:41:04 +0800
+Message-Id: <1670506868-15771-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8BxTuB06ZFj8BwoAA--.33104S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ZFy8JFW7uw47Ww4DZFyrZwb_yoW5Jr1rpF
+        9rAwn5Kr4rGr93Ar9xJ3WUur1fta1kC3y7W3W7JrW8Z3W7ZryUArs3KrZxXa48Gws0qr1S
+        qr1rX3yagFy7J37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7kYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2AI
+        xVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64
+        kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm
+        72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJbIYCTnIWIevJa73UjIFyTuYvjxUcyxRUUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 7 Dec 2022 at 17:55, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Wed, Dec 07, 2022 at 05:00:51PM +0100, Ulf Hansson wrote:
-> > On Thu, 1 Dec 2022 at 23:57, Bjorn Andersson <andersson@kernel.org> wrote:
-> > >
-> > > On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
-> > > >
-> > >
-> > > @Ulf, Akhil has a power-domain for a piece of hardware which may be
-> > > voted active by multiple different subsystems (co-processors/execution
-> > > contexts) in the system.
-> > >
-> > > As such, during the powering down sequence we don't wait for the
-> > > power-domain to turn off. But in the event of an error, the recovery
-> > > mechanism relies on waiting for the hardware to settle in a powered off
-> > > state.
-> > >
-> > > The proposal here is to use the reset framework to wait for this state
-> > > to be reached, before continuing with the recovery mechanism in the
-> > > client driver.
-> >
-> > I tried to review the series (see my other replies), but I am not sure
-> > I fully understand the consumer part.
-> >
-> > More exactly, when and who is going to pull the reset and at what point?
-> >
-> > >
-> > > Given our other discussions on quirky behavior, do you have any
-> > > input/suggestions on this?
-> > >
-> > > > Some clients like adreno gpu driver would like to ensure that its gdsc
-> > > > is collapsed at hardware during a gpu reset sequence. This is because it
-> > > > has a votable gdsc which could be ON due to a vote from another subsystem
-> > > > like tz, hyp etc or due to an internal hardware signal. To allow
-> > > > this, gpucc driver can expose an interface to the client driver using
-> > > > reset framework. Using this the client driver can trigger a polling within
-> > > > the gdsc driver.
-> > >
-> > > @Akhil, this description is fairly generic. As we've reached the state
-> > > where the hardware has settled and we return to the client, what
-> > > prevents it from being powered up again?
-> > >
-> > > Or is it simply a question of it hitting the powered-off state, not
-> > > necessarily staying there?
-> >
-> > Okay, so it's indeed the GPU driver that is going to assert/de-assert
-> > the reset at some point. Right?
-> >
-> > That seems like a reasonable approach to me, even if it's a bit
-> > unclear under what conditions that could happen.
-> >
->
-> Generally the disable-path of the power-domain does not check that the
-> power-domain is actually turned off, because the status might indicate
-> that the hardware is voting for the power-domain to be on.
+v9:
+  -- Rename sign_extended() to sign_extend()
+  -- Modify kprobe_fault_handler() to handle all of kprobe_status
 
-Is there a good reason why the HW needs to vote too, when the GPU
-driver is already in control?
+v8:
+  -- Put "regs->csr_prmd &= ~CSR_PRMD_PIE;" ahead to save one line
+  -- Add code comment of preempt_disable()
+  -- Put kprobe_page_fault() in __do_page_fault()
+  -- Modify the check condition of break insn in kprobe_breakpoint_handler()
 
-Or perhaps that depends on the running use case?
+v7:
+  -- Remove stop_machine_cpuslocked() related code
 
->
-> As part of the recovery of the GPU after some fatal fault, the GPU
-> driver does something which will cause the hardware votes for the
-> power-domain to be let go, and then the driver does pm_runtime_put().
+v6:
+  -- Add a new patch to redefine larch_insn_patch_text() with
+     stop_machine_cpuslocked()
+  -- Modify kprobe_breakpoint_handler() to consider the original
+     insn is break and return the correct value
+  -- Modify do_bp() to refresh bcode when original insn is break
 
-Okay. That "something", sounds like a device specific setting for the
-corresponding gdsc, right?
+v5:
+  -- Rebase on the latest code
+  -- Use stop_machine_cpuslocked() to modify insn to avoid CPU race
 
-So somehow the GPU driver needs to manage that setting, right?
+v4:
+  -- Remove kprobe_exceptions_notify() in kprobes.c
+  -- Call kprobe_breakpoint_handler() and kprobe_singlestep_handler()
+     in do_bp()
 
->
-> But in this case the GPU driver wants to ensure that the power-domain is
-> actually powered down, before it does pm_runtime_get() again. To ensure
-> that the hardware lost its state...
+v3:
+  -- Rebase on the latest code
+  -- Check the alignment of PC in simu_branch() and simu_pc()
+  -- Add ibar in flush_insn_slot()
+  -- Rename kprobe_{pre,post}_handler() to {post_}kprobe_handler
+  -- Add preempt_disable() and preempt_enable_no_resched()
+  -- Remove r0 save/restore and do some minor changes
+     in kprobes_trampoline.S
+  -- Do not enable CONFIG_KPROBES by default
 
-I see.
+v2:
+  -- Split simu_branch() and simu_pc() into a single patch
+  -- Call kprobe_page_fault() in do_page_fault()
+  -- Add kprobes_trampoline.S for kretprobe
 
->
-> The proposal here is to use a reset to reach into the power-domain
-> provider and wait for the hardware to be turned off, before the GPU
-> driver attempts turning the power-domain on again.
->
->
-> In other words, there is no reset. This is a hack to make a normally
-> asynchronous pd.power_off() to be synchronous in this particular case.
+Tiezhu Yang (4):
+  LoongArch: Simulate branch and PC instructions
+  LoongArch: Add kprobe support
+  LoongArch: Add kretprobe support
+  samples/kprobes: Add LoongArch support
 
-Alright, assuming I understood your clarifications above correctly
-(thanks!), I think I have got a much better picture now.
+ arch/loongarch/Kconfig                     |   2 +
+ arch/loongarch/include/asm/inst.h          |  27 +++
+ arch/loongarch/include/asm/kprobes.h       |  59 +++++
+ arch/loongarch/include/asm/ptrace.h        |   1 +
+ arch/loongarch/kernel/Makefile             |   2 +
+ arch/loongarch/kernel/inst.c               | 123 ++++++++++
+ arch/loongarch/kernel/kprobes.c            | 356 +++++++++++++++++++++++++++++
+ arch/loongarch/kernel/kprobes_trampoline.S |  96 ++++++++
+ arch/loongarch/kernel/traps.c              |  13 +-
+ arch/loongarch/mm/fault.c                  |   3 +
+ samples/kprobes/kprobe_example.c           |   8 +
+ 11 files changed, 686 insertions(+), 4 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/kprobes.h
+ create mode 100644 arch/loongarch/kernel/kprobes.c
+ create mode 100644 arch/loongarch/kernel/kprobes_trampoline.S
 
-Rather than abusing the reset interface, I think we should manage this
-through the genpd's power on/off notifiers (GENPD_NOTIFY_OFF). The GPU
-driver should register its corresponding device for them
-(dev_pm_genpd_add_notifier()).
+-- 
+2.1.0
 
-The trick however, is to make the behaviour of the power-domain for
-the gdsc (the genpd->power_off() callback) conditional on whether the
-HW is configured to vote or not. If the HW can vote, it should not
-poll for the state - and vice versa when the HW can't vote.
-
-Would this work?
-
-Kind regards
-Uffe
