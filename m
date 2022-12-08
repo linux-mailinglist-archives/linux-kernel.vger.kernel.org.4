@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB816478D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689B76478D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:30:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiLHWa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
+        id S230225AbiLHWa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:30:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiLHWaX (ORCPT
+        with ESMTP id S230119AbiLHWaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:30:23 -0500
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8163580A2D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:30:21 -0800 (PST)
-Received: by mail-il1-f197.google.com with SMTP id 7-20020a056e0220c700b0030386f0d0e6so2494800ilq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 14:30:21 -0800 (PST)
+        Thu, 8 Dec 2022 17:30:46 -0500
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20BA84B49
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:30:40 -0800 (PST)
+Received: by mail-il1-f200.google.com with SMTP id a11-20020a92c54b000000b003034a80704fso2496111ilj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 14:30:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h6nCsgNbTEL9V/I4YvAuBBUT9VJEzYo1TZ0yzDzRDzo=;
-        b=lzEG//FSlYJzFmTMZ87oqlQbgxRSrjp4OjwVRThHrK5RoZ/RKvXY/dV01czt6Z3LVE
-         fmPlt36lXJ3FGrmGLblaxhskWCUmr9ByQRShCmQe4ivxZGj24cHw1Ro+cLHz6zvN6d+q
-         O5A/4j1nPTABj1h3qpN2W0iV1+kgi+d19roPU9MWLuP0+DNH7X6XNsKd8h9oQoM5V/s1
-         xjdfNCaXjXM/0pZkH4Zgl903UCHuU9GeWXEiGnRhPJqq6pW3T6RsBM+uGz5W94PxGMti
-         Wpg7mCeW7CtKgUrnbdJj7dV1orGwZlq0Lndz90wiOhRKg26tUq5vJw1jrKKgD47ZHnAN
-         /PQA==
-X-Gm-Message-State: ANoB5pnI5L40HTGuc4Qy9AOnQUn9rEdbrX40A6YIaWbpSPTOPLQaCpE5
-        Gs4ObByfMZgKAZCX2k3BExVxKj016lm7+x/ISp3nOeC7WiFe
-X-Google-Smtp-Source: AA0mqf4DQf53oQehT7k/FbwhQ7ila59s1Ou0pkNhNz6kbqKTcGTi4bHBuOROFsljn9YAfIC3jFZxjpZN5tNCWp3D/0VARVSrWVfI
+        bh=pBlwNfuWu0nLKa++Wb5lWHNyk3e/TtAitunaS8JJcWg=;
+        b=EkvoTZUByhiwxqg8oj+zkh+FDnVXsVjFoR/4ScQzP4zgwYopjxn34egQ4uzS5NLBxk
+         MVKzpLuM5LY5j2G8Q0YfQMKr1MGdIPnZJHJLeWR9SXZdusu6hX2n+cyuftxWIocSk8tz
+         2r4mGzXbzZJHg50CjXIc5WLngenmSXxGRfOfPw/xqZkBDdHOOva5glJM0pUdrD540siW
+         ndlTm/+zvf3+KITqiUzLLsJ5k6sauFfXbMd34uzcXdpAsf9GViE2ZL+3fvgkLszJmFY3
+         i7dqfkoxdbPjEBvqHGzVL1+NguXhg30wqOK+OZ7x776hoN4lHGmqAwlfbVeftrcYenkC
+         3kzQ==
+X-Gm-Message-State: ANoB5pli0LgiZBCfTm7RyVHzutyB/xYncB7IeoUt67Tx2vO+Ac9dm7dh
+        srNex0ovdjQQ1N8uszKbbPfYeWaThGW6r6FqujUvxFimp1g/
+X-Google-Smtp-Source: AA0mqf5ykD7HaKCRFlyntLM6zVK4sacyTDvAn4f46YyAhYyI377ryl1vIldDN73iRjZQ2NRt+lpYJ4LfmvM4mk2xLFzcpvpU+dmp
 MIME-Version: 1.0
-X-Received: by 2002:a02:a0c3:0:b0:38a:d70:cd27 with SMTP id
- i3-20020a02a0c3000000b0038a0d70cd27mr15685935jah.226.1670538620896; Thu, 08
- Dec 2022 14:30:20 -0800 (PST)
-Date:   Thu, 08 Dec 2022 14:30:20 -0800
-In-Reply-To: <20221208124151.8280-1-hdanton@sina.com>
+X-Received: by 2002:a05:6638:4122:b0:38a:5e91:5d49 with SMTP id
+ ay34-20020a056638412200b0038a5e915d49mr5356228jab.147.1670538640191; Thu, 08
+ Dec 2022 14:30:40 -0800 (PST)
+Date:   Thu, 08 Dec 2022 14:30:40 -0800
+In-Reply-To: <0000000000000abae605ef518834@google.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000150cb905ef589576@google.com>
-Subject: Re: [syzbot] kernel stack overflow in sock_close
-From:   syzbot <syzbot+09329bd987ebca21bced@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+Message-ID: <0000000000003b777e05ef58961d@google.com>
+Subject: Re: [syzbot] general protection fault in gfs2_get_tree
+From:   syzbot <syzbot+2be9d17f9de2e7342994@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
         syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
@@ -54,293 +55,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+syzbot has found a reproducer for the following issue on:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-kernel stack overflow in sock_close
+HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=10edd843880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=2be9d17f9de2e7342994
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10dfde7d880000
 
-x8 : 0000000000040579 x7 : ffff80000b22f58c x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000002 x1 : ffff0000c79158f8 x0 : ffff0000c7914ec0
-Kernel panic - not syncing: kernel stack overflow
-CPU: 1 PID: 3696 Comm: syz-executor.0 Not tainted 6.1.0-rc7-syzkaller-00151-ge3cb714fb489-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- panic+0x218/0x508 kernel/panic.c:274
- nmi_panic+0xbc/0xf0 kernel/panic.c:169
- panic_bad_stack+0x134/0x154 arch/arm64/kernel/traps.c:886
- handle_bad_stack+0x34/0x48 arch/arm64/kernel/entry-common.c:849
- __bad_stack+0x78/0x7c arch/arm64/kernel/entry.S:552
- mark_lock+0x4/0x1b4 kernel/locking/lockdep.c:4595
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5668
- __raw_spin_lock_bh include/linux/spinlock_api_smp.h:126 [inline]
- _raw_spin_lock_bh+0x54/0x6c kernel/locking/spinlock.c:178
- spin_lock_bh include/linux/spinlock.h:355 [inline]
- lock_sock_nested+0x88/0xd8 net/core/sock.c:3450
- lock_sock include/net/sock.h:1721 [inline]
- sock_map_close+0x30/0x4bc net/core/sock_map.c:1610
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- sock_map_close+0x400/0x4bc
- inet_release+0xc8/0xe4 net/ipv4/af_inet.c:428
- inet6_release+0x3c/0x58 net/ipv6/af_inet6.c:488
- __sock_release net/socket.c:650 [inline]
- sock_close+0x50/0xf0 net/socket.c:1365
- __fput+0x198/0x3e4 fs/file_table.c:320
- ____fput+0x20/0x30 fs/file_table.c:348
- task_work_run+0x100/0x148 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0x2dc/0xcac kernel/exit.c:820
- do_group_exit+0x98/0xcc kernel/exit.c:950
- get_signal+0xabc/0xb2c kernel/signal.c:2858
- do_signal+0x128/0x438 arch/arm64/kernel/signal.c:1076
- do_notify_resume+0xc0/0x1f0 arch/arm64/kernel/signal.c:1129
- prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
- exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
- el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:638
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:584
-SMP: stopping secondary CPUs
-Kernel Offset: disabled
-CPU features: 0x00000,040e0108,4c017203
-Memory Limit: none
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/d4c744809640/mount_0.gz
 
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+2be9d17f9de2e7342994@syzkaller.appspotmail.com
 
-Tested on:
-
-commit:         e3cb714f Merge branch 'for-next/core' into for-kernelci
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=173b017d880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ec7118319bfb771e
-dashboard link: https://syzkaller.appspot.com/bug?extid=09329bd987ebca21bced
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=16989433880000
+loop1: detected capacity change from 0 to 32768
+general protection fault, probably for non-canonical address 0xdffffc000000001c: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x00000000000000e0-0x00000000000000e7]
+CPU: 1 PID: 5330 Comm: syz-executor.1 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:gfs2_get_tree+0xb8/0x270 fs/gfs2/ops_fstype.c:1342
+Code: 03 80 3c 02 00 0f 85 9f 01 00 00 4c 8b bb b0 00 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bf e0 00 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 62 01 00 00 4d 8b b7 e0 00 00 00 48 b8 00 00 00
+RSP: 0018:ffffc900049a7d50 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff88802319c000 RCX: 0000000000000000
+RDX: 000000000000001c RSI: ffffffff83925ec7 RDI: 00000000000000e0
+RBP: ffff88807bed3800 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000094001 R12: 0000000000000000
+R13: ffff88802319c0b0 R14: ffff88802319c000 R15: 0000000000000000
+FS:  00007f687e332700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f27ec317000 CR3: 0000000021f43000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vfs_get_tree+0x8d/0x2f0 fs/super.c:1489
+ do_new_mount fs/namespace.c:3145 [inline]
+ path_mount+0x132a/0x1e20 fs/namespace.c:3475
+ do_mount fs/namespace.c:3488 [inline]
+ __do_sys_mount fs/namespace.c:3697 [inline]
+ __se_sys_mount fs/namespace.c:3674 [inline]
+ __x64_sys_mount+0x283/0x300 fs/namespace.c:3674
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f687d68d60a
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f687e331f88 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00000000000133e6 RCX: 00007f687d68d60a
+RDX: 0000000020013400 RSI: 0000000020013440 RDI: 00007f687e331fe0
+RBP: 00007f687e332020 R08: 00007f687e332020 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000020013400
+R13: 0000000020013440 R14: 00007f687e331fe0 R15: 00000000200000c0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:gfs2_get_tree+0xb8/0x270 fs/gfs2/ops_fstype.c:1342
+Code: 03 80 3c 02 00 0f 85 9f 01 00 00 4c 8b bb b0 00 00 00 48 b8 00 00 00 00 00 fc ff df 49 8d bf e0 00 00 00 48 89 fa 48 c1 ea 03 <80> 3c 02 00 0f 85 62 01 00 00 4d 8b b7 e0 00 00 00 48 b8 00 00 00
+RSP: 0018:ffffc900049a7d50 EFLAGS: 00010202
+RAX: dffffc0000000000 RBX: ffff88802319c000 RCX: 0000000000000000
+RDX: 000000000000001c RSI: ffffffff83925ec7 RDI: 00000000000000e0
+RBP: ffff88807bed3800 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000094001 R12: 0000000000000000
+R13: ffff88802319c0b0 R14: ffff88802319c000 R15: 0000000000000000
+FS:  00007f687e332700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fe54d4e8000 CR3: 0000000021f43000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	03 80 3c 02 00 0f    	add    0xf00023c(%rax),%eax
+   6:	85 9f 01 00 00 4c    	test   %ebx,0x4c000001(%rdi)
+   c:	8b bb b0 00 00 00    	mov    0xb0(%rbx),%edi
+  12:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  19:	fc ff df
+  1c:	49 8d bf e0 00 00 00 	lea    0xe0(%r15),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1) <-- trapping instruction
+  2e:	0f 85 62 01 00 00    	jne    0x196
+  34:	4d 8b b7 e0 00 00 00 	mov    0xe0(%r15),%r14
+  3b:	48                   	rex.W
+  3c:	b8                   	.byte 0xb8
+  3d:	00 00                	add    %al,(%rax)
 
