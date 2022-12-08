@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFB1F64728F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48934647293
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiLHPMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:12:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56148 "EHLO
+        id S229750AbiLHPOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:14:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiLHPLy (ORCPT
+        with ESMTP id S229524AbiLHPOF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:11:54 -0500
-Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BAC0A13D5;
-        Thu,  8 Dec 2022 07:11:52 -0800 (PST)
-Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 09 Dec 2022 00:11:52 +0900
-Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 832162058B4F;
-        Fri,  9 Dec 2022 00:11:52 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 9 Dec 2022 00:11:52 +0900
-Received: from [10.212.157.17] (unknown [10.212.157.17])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 193481DA8;
-        Fri,  9 Dec 2022 00:11:52 +0900 (JST)
-Message-ID: <1e93d1b9-dfb1-dc4f-79e9-40dfbd23b1c7@socionext.com>
-Date:   Fri, 9 Dec 2022 00:11:51 +0900
+        Thu, 8 Dec 2022 10:14:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF0E7B565
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:14:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D31EACE24B1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 15:13:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDEAC433C1;
+        Thu,  8 Dec 2022 15:13:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670512436;
+        bh=DWeduHE5LG/ZZm2EpXZg/Tyocb4hcbZCucorTSOe254=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gBtwtUPWqcqyPAIlJJPbzSrTmEAtaZk8PN3p7V0GGLeGDJMQEBxxZkVhjEdnJ8pWP
+         0CgjzgwxxDaCn65tZPCdTAokRjq5RRgDH2QMmfBeyOAxl4s3N97q+XL5daN8cq8B37
+         fVIYe2gNsD/hb9zaBdnxsUx8luTQn98B1Q1pFe3NgA86TYGw+V2+2YTpc3pA6QKoll
+         zoWopz6CsPBf4l1bJtgpWVth4T23DLm2D1JBsNodQxjMfoRfkBYlcQ1K/yUOhpuB+f
+         fuOPFfk1fm/R+fSWVlAYegM9DAeHUW0SPO1AujaWhNMa9T6oO1p4FJNPhc4k1jw3I8
+         qdq03fw4IBgMw==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     tal albo <talbo@habana.ai>
+Subject: [PATCH 01/26] habanalabs/gaudi2: fix BMON 3rd address range
+Date:   Thu,  8 Dec 2022 17:13:25 +0200
+Message-Id: <20221208151350.1833823-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 16/16] dt-bindings: soc: socionext: Add UniPhier AHCI
- glue layer
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-17-hayashi.kunihiko@socionext.com>
- <77f3dea3-7009-eccc-6bac-66309e15a767@linaro.org>
-From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <77f3dea3-7009-eccc-6bac-66309e15a767@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,94 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/08 17:24, Krzysztof Kozlowski wrote:
-> On 07/12/2022 06:54, Kunihiko Hayashi wrote:
->> Add DT binding schema for components belonging to the platform-specific
->> AHCI glue layer implemented in UniPhier SoCs.
->>
->> This AHCI glue layer works as a sideband logic for the host controller,
->> including core reset, PHYs, and some signals to the controller.
->>
->> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> ---
->>   .../socionext,uniphier-ahci-glue.yaml         | 78 +++++++++++++++++++
->>   1 file changed, 78 insertions(+)
->>   create mode 100644
->> Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
->>
->> diff --git
->> a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
->> b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
->> new file mode 100644
->> index 000000000000..bf37be8a778d
->> --- /dev/null
->> +++
->> b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-ahci-glue.yaml
->> @@ -0,0 +1,78 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id:
->> http://devicetree.org/schemas/soc/socionext/socionext,uniphier-ahci-glue.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Socionext UniPhier SoC AHCI glue layer
->> +
->> +maintainers:
->> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
->> +
->> +description: |+
->> +  AHCI glue layer implemented on Socionext UniPhier SoCs is a sideband
->> +  logic handling signals to AHCI host controller inside AHCI component.
->> +
->> +properties:
->> +  compatible:
->> +    items:
->> +      - enum:
->> +          - socionext,uniphier-pro4-ahci-glue
->> +          - socionext,uniphier-pxs2-ahci-glue
->> +          - socionext,uniphier-pxs3-ahci-glue
->> +      - const: simple-mfd
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  '#address-cells':
-> 
-> use consistent quotes
+From: tal albo <talbo@habana.ai>
 
-I'll change it.
+Fix programming incorrect value of address range
 
->> +    const: 1
->> +
->> +  '#size-cells':
->> +    const: 1
->> +
->> +  ranges: true
->> +
->> +patternProperties:
->> +  "^reset-controller@[0-9a-f]+$":
->> +    $ref: /schemas/reset/socionext,uniphier-glue-reset.yaml#
->> +
->> +  "phy@[0-9a-f]+$":
->> +    $ref: /schemas/phy/socionext,uniphier-ahci-phy.yaml#
->> +
->> +required:
->> +  - compatible
->> +  - reg
->> +
->> +additionalProperties:
->> +  type: object
-> 
-> What is the additional object? It's not in your example, not in DTS. Why
-> do you need to allow it?
-
-Sorry, I forgot to drop it. I'll replace it with:
-
-    additionalProperties: false
-
-Thank you,
-
+Signed-off-by: tal albo <talbo@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
-Best Regards
-Kunihiko Hayashi
+ drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c b/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
+index 56c6ab692482..1df7a59e4101 100644
+--- a/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
++++ b/drivers/misc/habanalabs/gaudi2/gaudi2_coresight.c
+@@ -2376,10 +2376,10 @@ static int gaudi2_config_bmon(struct hl_device *hdev, struct hl_debug_params *pa
+ 		WREG32(base_reg + mmBMON_ADDRH_S2_OFFSET, upper_32_bits(input->start_addr2));
+ 		WREG32(base_reg + mmBMON_ADDRL_E2_OFFSET, lower_32_bits(input->end_addr2));
+ 		WREG32(base_reg + mmBMON_ADDRH_E2_OFFSET, upper_32_bits(input->end_addr2));
+-		WREG32(base_reg + mmBMON_ADDRL_S3_OFFSET, lower_32_bits(input->start_addr2));
+-		WREG32(base_reg + mmBMON_ADDRH_S3_OFFSET, upper_32_bits(input->start_addr2));
+-		WREG32(base_reg + mmBMON_ADDRL_E3_OFFSET, lower_32_bits(input->end_addr2));
+-		WREG32(base_reg + mmBMON_ADDRH_E3_OFFSET, upper_32_bits(input->end_addr2));
++		WREG32(base_reg + mmBMON_ADDRL_S3_OFFSET, lower_32_bits(input->start_addr3));
++		WREG32(base_reg + mmBMON_ADDRH_S3_OFFSET, upper_32_bits(input->start_addr3));
++		WREG32(base_reg + mmBMON_ADDRL_E3_OFFSET, lower_32_bits(input->end_addr3));
++		WREG32(base_reg + mmBMON_ADDRH_E3_OFFSET, upper_32_bits(input->end_addr3));
+ 
+ 		WREG32(base_reg + mmBMON_IDL_OFFSET, 0x0);
+ 		WREG32(base_reg + mmBMON_IDH_OFFSET, 0x0);
+-- 
+2.25.1
+
