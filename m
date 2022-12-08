@@ -2,64 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF7EC647195
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:23:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E77F64719C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiLHOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:23:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
+        id S229907AbiLHOXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiLHOWT (ORCPT
+        with ESMTP id S230150AbiLHOXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:22:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0539F950CF;
-        Thu,  8 Dec 2022 06:21:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9C285B8240C;
-        Thu,  8 Dec 2022 14:21:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BCCC433D7;
-        Thu,  8 Dec 2022 14:21:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670509284;
-        bh=np8jYI/VKmUFiySM5QA6XkNRELjkC4uz0yzj/atxGbc=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=pBsbW2fJkrzZ1mbPFY9dAWNrUEWM9mqh4a5WJdUU3yiGPGlnSSMIYDO1GzSyIQRhb
-         u0DVDTUjnraW1Xxn0qkhAeqsxP31t55injNiYmq2ur6Of4caRZ3ta1Zsz4tKc70dnE
-         CXNtYagA+noyFQKW82NsA7aBfe5AMSkXiGs4iEIf63kUna8ZrDTNNV4pGfZLRQHM54
-         fHY9FkGB9diZs6kCeaF5YdaZ7IZ6jOUVRE6EIBV1170tiUKXP5auyNvqnAAYDe9gQO
-         nqlwIXqDbO7TyCyypsOGOlw5iOBIHXSxwKV1JJGnK3r7mhClHv75tDWQbY7IsmlRgx
-         jxZiNWECrZ37A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Larry Finger <Larry.Finger@lwfinger.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
-        Hans Ulli Kroll <linux@ulli-kroll.de>,
-        Ping-Ke Shih <pkshih@realtek.com>,
-        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
-        Alexander Hochbaum <alex@appudo.com>,
-        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
-        Viktor Petrenko <g0000ga@gmail.com>
-Subject: Re: [PATCH v4 08/11] wifi: rtw88: Add rtw8821cu chipset support
-References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
-        <20221129100754.2753237-9-s.hauer@pengutronix.de>
-        <20221129081753.087b7a35@kernel.org>
-        <d2113f20-d547-ce16-ff7f-2d1286321014@lwfinger.net>
-Date:   Thu, 08 Dec 2022 16:21:16 +0200
-In-Reply-To: <d2113f20-d547-ce16-ff7f-2d1286321014@lwfinger.net> (Larry
-        Finger's message of "Tue, 29 Nov 2022 10:59:46 -0600")
-Message-ID: <87tu260yeb.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Thu, 8 Dec 2022 09:23:13 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3505A98EBF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:22:26 -0800 (PST)
+Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NSbqd15PNzJpDN;
+        Thu,  8 Dec 2022 22:18:53 +0800 (CST)
+Received: from build.huawei.com (10.175.101.6) by
+ dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Dec 2022 22:22:24 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wenchao Hao <haowenchao@huawei.com>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
+CC:     <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>
+Subject: [PATCH] cma:tracing: Print alloc result in trace_cma_alloc_finish
+Date:   Thu, 8 Dec 2022 22:21:30 +0800
+Message-ID: <20221208142130.1501195-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,45 +48,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Larry Finger <Larry.Finger@lwfinger.net> writes:
+The result of allocation is not printed in trace_cma_alloc_finish
+now, while it's important to do it so we can set filters to catch
+specific error on allocation or trigger some operations on specific
+error.
 
-> On 11/29/22 10:17, Jakub Kicinski wrote:
->> On Tue, 29 Nov 2022 11:07:51 +0100 Sascha Hauer wrote:
->>> +config RTW88_8821CU
->>> +	tristate "Realtek 8821CU USB wireless network adapter"
->>> +	depends on USB
->>> +	select RTW88_CORE
->>> +	select RTW88_USB
->>> +	select RTW88_8821C
->>> +	help
->>> +	  Select this option will enable support for 8821CU chipset
->>> +
->>> +	  802.11ac USB wireless network adapter
->>
->> Those kconfig knobs add so little code, why not combine them all into
->> one? No point bothering the user with 4 different questions with amount
->> to almost nothing.
->
-> I see only one knob there, name RTW88_8821CU. The other configuration
-> variables select parts of the code that are shared with other drivers
-> such as RTW88_8821CE and these parts must be there.
+Although we have printed the result in log, but the log is
+conditional and could not be filtered by tracing event.
 
-I just test compiled these patches and we have four new questions:
+What's more, it introduce little overhead to print this result.
+The result of allocation is named as errorno in trace.
 
-  Realtek 8822BU USB wireless network adapter (RTW88_8822BU) [N/m/?] (NEW) m
-  Realtek 8822CU USB wireless network adapter (RTW88_8822CU) [N/m/?] (NEW) m
-  Realtek 8723DU USB wireless network adapter (RTW88_8723DU) [N/m/?] (NEW) m
-  Realtek 8821CU USB wireless network adapter (RTW88_8821CU) [N/m/?] (NEW) 
+Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+---
+ include/trace/events/cma.h | 32 +++++++++++++++++++++++++++++---
+ mm/cma.c                   |  2 +-
+ 2 files changed, 30 insertions(+), 4 deletions(-)
 
-To me this looks too fine grained. Does it really make sense, for
-example, to enable RTW88_8822BU but not RTW88_8822CU? Would just having
-RTW88_USB containing all USB devices be more sensible? And the same for
-PCI, and if we have in the future, SDIO devices.
-
-But like discussed earlier, to keep things simple let's handle that
-separately from this patchset.
-
+diff --git a/include/trace/events/cma.h b/include/trace/events/cma.h
+index 3d708dae1542..ef75ea606ab2 100644
+--- a/include/trace/events/cma.h
++++ b/include/trace/events/cma.h
+@@ -91,12 +91,38 @@ TRACE_EVENT(cma_alloc_start,
+ 		  __entry->align)
+ );
+ 
+-DEFINE_EVENT(cma_alloc_class, cma_alloc_finish,
++TRACE_EVENT(cma_alloc_finish,
+ 
+ 	TP_PROTO(const char *name, unsigned long pfn, const struct page *page,
+-		 unsigned long count, unsigned int align),
++		 unsigned long count, unsigned int align, int errorno),
+ 
+-	TP_ARGS(name, pfn, page, count, align)
++	TP_ARGS(name, pfn, page, count, align, errorno),
++
++	TP_STRUCT__entry(
++		__string(name, name)
++		__field(unsigned long, pfn)
++		__field(const struct page *, page)
++		__field(unsigned long, count)
++		__field(unsigned int, align)
++		__field(int, errorno)
++	),
++
++	TP_fast_assign(
++		__assign_str(name, name);
++		__entry->pfn = pfn;
++		__entry->page = page;
++		__entry->count = count;
++		__entry->align = align;
++		__entry->errorno = errorno;
++	),
++
++	TP_printk("name=%s pfn=0x%lx page=%p count=%lu align=%u errorno=%d",
++		  __get_str(name),
++		  __entry->pfn,
++		  __entry->page,
++		  __entry->count,
++		  __entry->align,
++		  __entry->errorno)
+ );
+ 
+ DEFINE_EVENT(cma_alloc_class, cma_alloc_busy_retry,
+diff --git a/mm/cma.c b/mm/cma.c
+index 4a978e09547a..a75b17b03b66 100644
+--- a/mm/cma.c
++++ b/mm/cma.c
+@@ -491,7 +491,7 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
+ 		start = bitmap_no + mask + 1;
+ 	}
+ 
+-	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
++	trace_cma_alloc_finish(cma->name, pfn, page, count, align, ret);
+ 
+ 	/*
+ 	 * CMA can allocate multiple page blocks, which results in different
 -- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+2.32.0
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
