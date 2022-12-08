@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63001646C2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F783646C3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbiLHJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:46:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S230383AbiLHJq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:46:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230436AbiLHJqZ (ORCPT
+        with ESMTP id S230373AbiLHJqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:46:25 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC977205;
-        Thu,  8 Dec 2022 01:46:21 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 682B324E2B9;
-        Thu,  8 Dec 2022 17:46:20 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
- 2022 17:46:20 +0800
-Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
- 2022 17:46:19 +0800
-Message-ID: <70ebb0f1-b151-cc83-64c2-cffe361b21a3@starfivetech.com>
-Date:   Thu, 8 Dec 2022 17:46:18 +0800
+        Thu, 8 Dec 2022 04:46:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 481756E57B;
+        Thu,  8 Dec 2022 01:46:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06FA5B82304;
+        Thu,  8 Dec 2022 09:46:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49650C433D6;
+        Thu,  8 Dec 2022 09:46:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670492790;
+        bh=dpBeJVLLnt/wb7IR1Gd04VZ2UovV0cnf+pFYvVnTkNk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RaublSEi40KBKPk2OWsAjhjg4ekec+LxdJ+pqFwjmSC3bBAuRQA4IjFuEjWzjDCCK
+         pjqQUIXjhphrgtZKoT+KSCgFIop8EKdQJqlZi4akY7Y2W/GhVX2EYu1iV/rWbuCFuK
+         nqR9fMgIrVyn34c3R5sYkMe4Nb2Z/5YJTVmhrOUXuZqSR/XwpXx5JDO3G/LNKov2e9
+         4SP9aFKp8l96zdcb5cYZdFQOBE0/IbLCss9So4ZsVt4EPTibKG8cmQzxNmgdXg549X
+         d1N0HNr/yFzJgD8zVhSUByJoLHTaEu/iB2hzKMLy0TF3Pwd9jJ5b7GV+X8nCiSN9P6
+         6ubn8NQOulBFQ==
+Date:   Thu, 8 Dec 2022 09:46:26 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v2 12/18] x86/sgx: Expose sgx_reclaim_pages() for use by
+ EPC cgroup
+Message-ID: <Y5GyckFSARH9ANUt@kernel.org>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-13-kristen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: Add mmc node
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-mmc@vger.kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
- <20221207131731.1291517-4-william.qiu@starfivetech.com>
- <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202183655.3767674-13-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/12/7 23:14, Krzysztof Kozlowski wrote:
-> On 07/12/2022 14:17, William Qiu wrote:
->> This adds the mmc node for the StarFive JH7110 SoC.
->> Set sdioo node to emmc and set sdio1 node to sd.
->> 
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
->>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
->>  2 files changed, 63 insertions(+)
->> 
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> index c8946cf3a268..6ef8e303c2e6 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
->> @@ -47,6 +47,31 @@ &clk_rtc {
->>  	clock-frequency = <32768>;
->>  };
->>  
->> +&sdio0 {
->> +	max-frequency = <100000000>;
->> +	card-detect-delay = <300>;
->> +	bus-width = <8>;
->> +	cap-mmc-highspeed;
->> +	mmc-ddr-1_8v;
->> +	mmc-hs200-1_8v;
->> +	non-removable;
->> +	cap-mmc-hw-reset;
->> +	post-power-on-delay-ms = <200>;
->> +	status = "okay";
->> +};
->> +
->> +&sdio1 {
->> +	max-frequency = <100000000>;
->> +	card-detect-delay = <300>;
->> +	bus-width = <4>;
->> +	no-sdio;
->> +	no-mmc;
->> +	broken-cd;
->> +	cap-sd-highspeed;
->> +	post-power-on-delay-ms = <200>;
->> +	status = "okay";
->> +};
->> +
->>  &gmac0_rmii_refin {
->>  	clock-frequency = <50000000>;
->>  };
->> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> index c22e8f1d2640..e90b085d7e41 100644
->> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
->> @@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
->>  			#reset-cells = <1>;
->>  		};
->>  
->> +		sys_syscon: sys_syscon@13030000 {
+On Fri, Dec 02, 2022 at 10:36:48AM -0800, Kristen Carlson Accardi wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> No underscores in node names, generic node names (syscon or
-> system-controller)
-
-Will fix.
-
+> Expose the top-level reclaim function as sgx_reclaim_epc_pages() for use
+> by the upcoming EPC cgroup, which will initiate reclaim to enforce
+> changes to high/max limits.
 > 
->> +			compatible = "syscon";
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/main.c | 7 ++++---
+>  arch/x86/kernel/cpu/sgx/sgx.h  | 1 +
+>  2 files changed, 5 insertions(+), 3 deletions(-)
 > 
-> This is not allowed alone.
-
-Will fix.
-
-> 
->> +			reg = <0x0 0x13030000 0x0 0x1000>;
->> +		};
->> +
->>  		gpio: gpio@13040000 {
->>  			compatible = "starfive,jh7110-sys-pinctrl";
->>  			reg = <0x0 0x13040000 0x0 0x10000>;
->> @@ -433,5 +438,38 @@ uart5: serial@12020000 {
->>  			reg-shift = <2>;
->>  			status = "disabled";
->>  		};
->> +
->> +		/* unremovable emmc as mmcblk0 */
->> +		sdio0: mmc@16010000 {
->> +			compatible = "starfive,jh7110-sdio";
->> +			reg = <0x0 0x16010000 0x0 0x10000>;
->> +			clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
->> +				 <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
->> +			clock-names = "biu","ciu";
->> +			resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
->> +			reset-names = "reset";
->> +			interrupts = <74>;
->> +			fifo-depth = <32>;
->> +			fifo-watermark-aligned;
->> +			data-addr = <0>;
->> +			starfive,sys-syscon = <&sys_syscon 0x14 0x1a 0x7c000000>;
-> 
-> This does not match your bindings at all. "&sys_syscon" is a phandle,
-> not a number of tuning retries, as you expect in your bindings.
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index 96399e2016a8..c947b4ae06f3 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -281,6 +281,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
+>  
+>  /**
+>   * sgx_reclaim_pages() - Reclaim EPC pages from the consumers
+> + * sgx_reclaim_epc_pages() - Reclaim EPC pages from the consumers
+>   * @nr_to_scan:		 Number of EPC pages to scan for reclaim
+>   * @ignore_age:		 Reclaim a page even if it is young
+>   *
+> @@ -385,7 +386,7 @@ static int __sgx_reclaim_pages(int nr_to_scan, bool ignore_age)
+>  	return i;
+>  }
+>  
+> -static int sgx_reclaim_pages(int nr_to_scan, bool ignore_age)
+> +int sgx_reclaim_epc_pages(int nr_to_scan, bool ignore_age)
+>  {
+>  	int ret;
+>  
+> @@ -441,7 +442,7 @@ static int ksgxd(void *p)
+>  				     sgx_should_reclaim(SGX_NR_HIGH_PAGES));
+>  
+>  		if (sgx_should_reclaim(SGX_NR_HIGH_PAGES))
+> -			sgx_reclaim_pages(SGX_NR_TO_SCAN, false);
+> +			sgx_reclaim_epc_pages(SGX_NR_TO_SCAN, false);
+>  	}
+>  
+>  	return 0;
+> @@ -624,7 +625,7 @@ struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim)
+>  			break;
+>  		}
+>  
+> -		sgx_reclaim_pages(SGX_NR_TO_SCAN, false);
+> +		sgx_reclaim_epc_pages(SGX_NR_TO_SCAN, false);
+>  	}
+>  
+>  	if (sgx_should_reclaim(SGX_NR_LOW_PAGES))
+> diff --git a/arch/x86/kernel/cpu/sgx/sgx.h b/arch/x86/kernel/cpu/sgx/sgx.h
+> index ec8d567cd975..ce859331ddf5 100644
+> --- a/arch/x86/kernel/cpu/sgx/sgx.h
+> +++ b/arch/x86/kernel/cpu/sgx/sgx.h
+> @@ -206,6 +206,7 @@ void sgx_reclaim_direct(void);
+>  void sgx_record_epc_page(struct sgx_epc_page *page, unsigned long flags);
+>  int sgx_drop_epc_page(struct sgx_epc_page *page);
+>  struct sgx_epc_page *sgx_alloc_epc_page(void *owner, bool reclaim);
+> +int sgx_reclaim_epc_pages(int nr_to_scan, bool ignore_age);
+>  
+>  void sgx_ipi_cb(void *info);
+>  
+> -- 
+> 2.38.1
 > 
 
-Hi Krzysztof,
+Unless, there is a risk of name collision, I think this rename is
+just adding unnecessary convolution to the patch set.
 
-The sys_syscon is one of system controller registers, and it is used to be the data strobe
-delay chain select. I will update its type and description in next version.
+I would revert the rename part, and just export.
 
-Thanks,
-William Qiu
-
-> 
-> Best regards,
-> Krzysztof
-> 
+BR, Jarkko
