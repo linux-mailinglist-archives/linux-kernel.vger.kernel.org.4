@@ -2,113 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89241646BE9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B057646BEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiLHJ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:29:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58334 "EHLO
+        id S229643AbiLHJ3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:29:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiLHJ3D (ORCPT
+        with ESMTP id S229470AbiLHJ3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:29:03 -0500
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB721A39E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:29:01 -0800 (PST)
-Received: by mail-ua1-x930.google.com with SMTP id p9so248771uam.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:29:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qb787sHaORfdLtfoTYCIuVG5UOrlAlBZu8TBiM4YuyU=;
-        b=vrwGABWCLqr6D6b18CXMqufA+ZUX9Qa7ZA+Sr73JFKrrwi16RxdOSntEcFOdHgez/q
-         gNtrJ3wnHIDflm9vEEDzZ48VYQ+oM0tsMQojhtEGfHT6JmWtQF7/Lk0tWFbhhEJk8PB1
-         eswZUBYan100SLo6Edd0aN1of1whpOhcZmzT0MpvYA52i1oJmQssElgFTbYgDfWgeRFn
-         hJuPi93Wcwq2WjgnP+KkoaguwtB2Y6X+vJkiNT9Zo6eWKJ1P23HyLLUu2SkLxqrATH66
-         W70cdOhfU5Fx3Ce6Rkl5SXzEP1KaINvfqJYyOwm+W7qrgAQWe8LKJ2sNBC7l1PucUoPw
-         8FZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qb787sHaORfdLtfoTYCIuVG5UOrlAlBZu8TBiM4YuyU=;
-        b=Knbu7ZJsQfO05eX8YVzPAcsoR6eZkQEIlDhA+ox1HNtw4i1ZQq1mLPRQZjUQzmHGCC
-         flyg4IQY6plTyHjiTO3EjvDKBaZH5jOmkq0L8dxDTmCV7x4iHFDRgafh+5o9rWY8DHAJ
-         E40DqevXOm/qMUxx0ajeH/41NuoFKoHZaFjaJdW03LjtCh6LVuhazo+4cSNx+UQnhEfI
-         55IliVcOTBj1dfwu+ztghZfMB8ruHyLjNpbWAIehVwYu7/RiIjh8fo7jwpP6t0Ga/wOo
-         OhHVkikMosV5/nQoO8KRYBh3IFDaXK+JBdGltrzY9GDEPWWo3xTcd/1A0FYaNO6oRBAv
-         DvbA==
-X-Gm-Message-State: ANoB5pn+9+0XQzLQg4JTec/+eRSTDBJBvvoBd4sbbr5H/J4a3UI3IWFS
-        mD6p79qny7iM9BSg8tNtpOhg4KbRZyBr2Z3Iu6drxw==
-X-Google-Smtp-Source: AA0mqf64mt46S4cpX6BNxJtL5eXG0iRM55MSaZxp/YQrhztbBj2290MCPjNsQN9LAKdGlmP/GNvi8ojgrNi8T3ZWC14=
-X-Received: by 2002:ab0:734e:0:b0:419:18c7:58d with SMTP id
- k14-20020ab0734e000000b0041918c7058dmr28519144uap.119.1670491740702; Thu, 08
- Dec 2022 01:29:00 -0800 (PST)
+        Thu, 8 Dec 2022 04:29:09 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57A01A22E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:29:08 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id F399220806;
+        Thu,  8 Dec 2022 09:29:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670491747; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LhmyqWqeeq8ium6fraqzoGU/VqrdLX5bpmPbP9dUApA=;
+        b=DUHa84UrL3XMkAQWdjcVSddi3poJC/fKJzZL2uPcArjLTiRuf3UF619y6iFtlMgJL8QROa
+        6TIeRDozaF/m6oV2X3j1Qzxv7kjdDp9yOcRYhQHhc4J5Y0BZx6cgVj8nIqQWh/PKAwzWZV
+        F3qlgbvjQR6i8gQDUBgnPdAyjkLmqgY=
+Received: from suse.cz (unknown [10.100.201.202])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id ACCC32C916;
+        Thu,  8 Dec 2022 09:29:06 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 10:29:06 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH printk v2 7/7] printk: Handle dropped message smarter
+Message-ID: <Y5GuYvj6VRnhN0+H@alley>
+References: <20221123231400.614679-1-john.ogness@linutronix.de>
+ <20221123231400.614679-8-john.ogness@linutronix.de>
+ <Y5CMD8iZND3rgugG@alley>
+ <87h6y71773.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-References: <20221207204327.2810001-1-robh@kernel.org> <20221207204327.2810001-2-robh@kernel.org>
-In-Reply-To: <20221207204327.2810001-2-robh@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 8 Dec 2022 10:28:50 +0100
-Message-ID: <CAMRc=Mf6oKE30d4h-Fg=bPzGqUndL-vWiOFcTUD_UAG+z3q3oQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: leds: Add missing references to common
- LED schema
-To:     Rob Herring <robh@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Yi Xin <Yixin.zhu@intel.com>,
-        Mallikarjuna reddy <mallikarjunax.reddy@intel.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87h6y71773.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 9:43 PM Rob Herring <robh@kernel.org> wrote:
->
-> 'led' nodes should have a reference to LED common.yaml schema. Add it where
-> missing and drop any duplicate properties.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+On Wed 2022-12-07 18:04:56, John Ogness wrote:
+> On 2022-12-07, Petr Mladek <pmladek@suse.com> wrote:
+> >> +	/*
+> >> +	 * Append the record text to the dropped message so that it
+> >> +	 * goes out with one write.
+> >> +	 */
+> >> +	memcpy(ext_text + len, &cbufs->text[0], cmsg->outbuf_len);
+> >> +
+> >> +	/* Update the output buffer descriptor. */
+> >> +	cmsg->outbuf = ext_text;
+> >> +	cmsg->outbuf_len += len;
+> >
+> > I still think that it would be better to rename the buffers in
+> > struct console_message and avoid the switches of the purpose
+> > of the two buffers.
+> >
+> > We could print the message about dropped text into a local buffer
+> > on stack. IMHO, 64 bytes are acceptable. And we could insert it
+> > into the outbuf by shuffling the existing text. Something like:
+> >
+> > static void msg_print_dropped(struct console_message *cmsg,
+> > 			      unsinged long dropped)
+> > {
+> > 	char dropped_msg[DROPPED_TEXT_MAX];
+> > 	int dropped_len;
+> >
+> > 	if (!con->dropped)
+> > 		return 0;
+> >
+> > 	/* Print it into ext_text, which is unused. */
+> > 	dropped_len = snprintf(dropped_msg, sizeof(dropped_msg),
+> > 		       "** %lu printk messages dropped **\n", con->dropped);
+> >
+> > 	/*
+> > 	 * The buffer might already be full only where the message consist
+> > 	 * of many very short lines. It is not much realistic.
+> > 	 */
+> > 	if (cmsg->outbuf_len + dropped_len + 1 > sizeof(cmsg->outbuf)) {
+> > 		/* Should never happen. */
+> 
+> This certainly can happen. @text is size CONSOLE_LOG_MAX, which is
+> LOG_LINE_MAX+PREFIX_MAX. So a totally legal formatted message of length
+> LOG_LINE_MAX-1 and a prefix will suddenly become truncated.
+> 
+> > 		if (WARN_ON_ONCE(dropped_len + 1 > sizeof(cmsg->outbuf)))
+> > 			return;
+> >
+> > 		/* Trunk the message like in record_print_text() */
+> > 		cmsg->outbuf_len = sizeof(cmsg->outbuf) - dropped_len;
+> > 		cmsg->outbuf[cmsg->outbuf_len] = '\0';
+> > 	}
+> >
+> > 	memmove(cmsg->outbuf + dropped_len, cmsg->outbuf, cmsg->outbuf_len + 1);
+> > 	memcpy(cmsg->outbuf, dropped_msg, dropped_len);
+> > }
+> 
+> I do not like the idea of increasing stack usage, possibly cutting off
+> messages, and performing extra memory operations all because of some
+> variable naming. There is literally a larger unused buffer just sitting
+> there.
 
->  .../devicetree/bindings/leds/leds-max77650.yaml  |  9 ++-------
+Sigh. Your approach is copying buffers:
 
-> diff --git a/Documentation/devicetree/bindings/leds/leds-max77650.yaml b/Documentation/devicetree/bindings/leds/leds-max77650.yaml
-> index c6f96cabd4d1..fdb08f44a45d 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-max77650.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-max77650.yaml
-> @@ -30,9 +30,8 @@ properties:
->
->  patternProperties:
->    "^led@[0-2]$":
-> -    type: object
-> -    description: |
-> -      Properties for a single LED.
-> +    $ref: common.yaml#
-> +    unevaluatedProperties: false
->
->      properties:
->        reg:
-> @@ -41,10 +40,6 @@ patternProperties:
->          minimum: 0
->          maximum: 2
->
-> -      label: true
-> -
-> -      linux,default-trigger: true
-> -
->  required:
->    - compatible
->    - "#address-cells"
+    DROPPED_LOG_MAX + CONSOLE_LOG_MAX -> CONSOLE_EXT_LOG_MAX
 
-Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+which means:
+
+    64 + 1024 -> 8182
+
+The important thing is that it will shrink the text in
+record_print_text() to 1024.
+
+With my approach, it would shrink the text here to 8182 - 64 = 8118.
+
+> I want struct console_buffers to be a black box of working buffers used
+> to process the different types of messages. console_get_next_message()
+> is the only function that should go inside that black box because it is
+> responsible for creating the actual message.
+> 
+> The caller does not care what is in the black box or how those internal
+> working buffers are named. The caller just cares about cmsg->outbuf and
+> cmsg->outbuf_len, which will point to the data that needs to be written
+> out.
+> 
+> For v3 I would like to try my approach one more time. I will give the
+> internal buffers new names so as not to mislead their roles. I will
+> clearly document the black box nature of struct console_buffers.
+
+This is probably my last mail on this matter[*]. I do not want to get
+stuck here. But I really do not see any advantage in your approach:
+
+    + The risk of shrinking the text is bigger.
+
+    + The buffer is accessed via one more dereference that might
+      eventually point to a wrong buffer if there is a bug.
+
+    + The size of the buffer is not clear via the dereference
+      and might be wrong if there is a bug.
+
+    + The more layers, the more code complexity, like more names.
+
+
+The only argument might be the 64B on stack. But it is nothing against
+namebuf[KSYM_NAME_LEN] that is used in kallsyms code that might be
+called via vsprintf.c. It is 512B on the stack. So I do not take it.
+
+Another argument might be if you wanted to use the buffers yet another
+way in the atomic consoles. But I guess (hope) that they will always
+work only with the "outbuf".
+
+[*] I think that I'll learn how to live with whatever you use in v3 :-)
+
+Best Regards,
+Petr
