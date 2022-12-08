@@ -2,68 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E736476F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 815246476FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLHUGQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:06:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46676 "EHLO
+        id S229845AbiLHUIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:08:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbiLHUGL (ORCPT
+        with ESMTP id S229606AbiLHUIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:06:11 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EE871272
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:06:09 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3bd1ff8fadfso25505697b3.18
+        Thu, 8 Dec 2022 15:08:10 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F3471266
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:07:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670530027;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=aO91Cy3aiM72NJuvUVHnXgYZwK+vF7vmwZ76fFMKBJA=;
+        b=MUjSTNFgLbzV2kmaynBsaS3qYt5Sbxg439Z8L2l4A4L7MxJUsoQYzc2H3BISCJT3bm1ipn
+        WYF49W0PyDuS99d4wmniK7AeOnonlSgKRH0ei6e1P4WLpLj0srtGqko9PiR8JJ8t6NFnAz
+        zy+OKe1ihl2NN4pgkIEk5P07YmZQOwA=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-136-tHOEfWaBPpCME_Z7XLVa5g-1; Thu, 08 Dec 2022 15:06:20 -0500
+X-MC-Unique: tHOEfWaBPpCME_Z7XLVa5g-1
+Received: by mail-yb1-f198.google.com with SMTP id r7-20020a25c107000000b006ff55ac0ee7so2599356ybf.15
         for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:06:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=OGhmujOQ3LHvhNffWWxTOz03eJmhoP8dH26JUxPiv9A=;
-        b=U6aDPl2myrZIIKIGUJ0avQLION3uqVvN8qwo9PUj5t2mD90pfGol56QdSn6YYroxDh
-         t9FUxWiOr9zloTUfJNztvnYW7pRZ2CbnxhPrKdKzFuV5vKw2In92C3B+xCCythGGi3VX
-         PFG+MJC8f4laeAiOzw4PLyjHupuxq5yRXj9CtRnHJMlMqxNWEFjI/+SntJP1Nlt15GuR
-         4vFqrHv6DZiF6fLoexqgLAWgHnpxs0UueVtgqiQkG/Fa/7R7UBLmBl+DVh7Ps44P3ptV
-         6akvXSA7VYTpGYyFTfNPmcXyEFPXUs73ERML+KZu+M91SpXPUP7Xk6aittYoztRa5Q0O
-         B36Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OGhmujOQ3LHvhNffWWxTOz03eJmhoP8dH26JUxPiv9A=;
-        b=F3Ihgpup6OhJg71Wp+tfk1eVljDWfiJB41c+7t9O2g7UaNC4+efImMX5INQLtgWVxs
-         4uTemXtfpsjhZ3+J/+h74JrrXLSMmYZiZkq48cqCJFsLBueL4t5jRUfaKrwmVknUOLD4
-         vWR8eanG6Fe5gvHCbl42iYNWDyiSFlTBxvoPUJAd2hu1p0yaznJGRYG8mkU7O+o1RtY5
-         2J7RQsvGQ2ra6zYpsgHWIC84rlwKii/ixZbF8bdmSgOEkZK/qb++1iYaY6i7M+XWH7bL
-         MKxM9A4yGPAjwoLn2EazWVW7HyQ9PWqAQrULY77waB8DiKXADacFEdaUbpLBkMXMkKSY
-         ATfg==
-X-Gm-Message-State: ANoB5pnLxhPgr8VnfknTcGwP+L/wl0swqt5gfykfMbA/UiyQWKVzN4/R
-        Odb4YxHOSiwsDbKki0APPjXhZiijgGgLlRbvzO82iw==
-X-Google-Smtp-Source: AA0mqf5eG4ukM9Gke/9q7x+rfDkZT4u/r6tSFxm6BIumuvsskw9y53vKp2UZkaB752/pmAS1J4CLp+yGVarG50Ub0viBGw==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:c924:bf6:54d9:20e9])
- (user=isaacmanjarres job=sendgmr) by 2002:a05:690c:909:b0:368:70a8:9791 with
- SMTP id cb9-20020a05690c090900b0036870a89791mr15417509ywb.197.1670529968666;
- Thu, 08 Dec 2022 12:06:08 -0800 (PST)
-Date:   Thu,  8 Dec 2022 12:06:04 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221208200605.756287-1-isaacmanjarres@google.com>
-Subject: [PATCH v1] loop: Fix the max_loop commandline argument treatment when
- it is set to 0
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ken Chen <kenchen@google.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        stable@vger.knernel.org, kernel-team@android.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aO91Cy3aiM72NJuvUVHnXgYZwK+vF7vmwZ76fFMKBJA=;
+        b=5RGcCxIw3gjbRdWN1QGjtMdnpBl7j9vdtgdzDAqpd762pK/QkmMc+JLjqGHVhLuytb
+         /zemmz11WKuH7ydST5eQTNDr8sduHXE7CONEBg9DLQjEWDfy7tBWDZ7Te4UI3rFPKfi7
+         xqLVsE3902/i0PAAEnQkxjFGiC7FG2bLeN+fDgMRFrYtUOMH8kLEflFG7mAPQC6aQVpr
+         Pnxd0Iz7BzcboW5MFlx7EMkD5LoPC9r5KVStQzmlmykeyNx50GywZOl9nC7OG8RJtFn1
+         04TJFfnHqDJ3LiN+7NlBCKy4PBjCikkyc0jxrZ8kAAzOYa5uvI59KhF5pjJv+d5tp8im
+         ubyA==
+X-Gm-Message-State: ANoB5pkyshROV7pBHd2I2lCfyAyBvvuqkggX24VOsnaYla9v1VeqsBVD
+        L/JVqFTK+MNG/VaY9F5Vf3SOuuAPzx9j640tZP88bxxuNze2Jl/ZHXUzRLhIDSsRmw4iJjapx7G
+        wU9kpvGfKMRbM/UiKW6J/88ZU
+X-Received: by 2002:a25:2314:0:b0:714:e101:8548 with SMTP id j20-20020a252314000000b00714e1018548mr1353388ybj.58.1670529968073;
+        Thu, 08 Dec 2022 12:06:08 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6rgZb0VkMbKMAwlRjV5wDNe3+42qmtQQXCtPakXyJ8UHqzCz/Y5cKAOu9FJotIYvo1ZV0gPA==
+X-Received: by 2002:a25:2314:0:b0:714:e101:8548 with SMTP id j20-20020a252314000000b00714e1018548mr1353366ybj.58.1670529967829;
+        Thu, 08 Dec 2022 12:06:07 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id q13-20020a05620a0d8d00b006fab416015csm20082249qkl.25.2022.12.08.12.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 12:06:07 -0800 (PST)
+Date:   Thu, 8 Dec 2022 15:06:06 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ives van Hoorne <ives@codesandbox.io>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hugh@veritas.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v1] mm/userfaultfd: enable writenotify while
+ userfaultfd-wp is enabled for a VMA
+Message-ID: <Y5JDrkBGEyZviXz9@x1n>
+References: <20221208114137.35035-1-david@redhat.com>
+ <Y5IQzJkBSYwPOtiP@x1n>
+ <b9162f04-7d8e-1ada-f428-85fd84327d1c@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b9162f04-7d8e-1ada-f428-85fd84327d1c@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,94 +86,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the max_loop commandline argument can be used to specify how
-many loop block devices are created at init time. If it is not
-specified on the commandline, CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block
-devices will be created.
+On Thu, Dec 08, 2022 at 05:44:35PM +0100, David Hildenbrand wrote:
+> I'll wait for some more (+retest) before I resend tomorrow.
 
-The max_loop commandline argument can be used to override the value of
-CONFIG_BLK_DEV_LOOP_MIN_COUNT. However, when max_loop is set to 0
-through the commandline, the current logic treats it as if it had not
-been set, and creates CONFIG_BLK_DEV_LOOP_MIN_COUNT devices anyway.
+One more thing just to double check:
 
-Fix this by starting max_loop off as set to CONFIG_BLK_DEV_LOOP_MIN_COUNT.
-This preserves the intended behavior of creating
-CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block devices if the max_loop
-commandline parameter is not specified, and allowing max_loop to
-be respected for all values, including 0.
+It's 6a56ccbcf6c6 ("mm/autonuma: use can_change_(pte|pmd)_writable() to
+replace savedwrite", 2022-11-30) that just started to break uffd-wp on
+numa, am I right?
 
-This allows environments that can create all of their required loop
-block devices on demand to not have to unnecessarily preallocate loop
-block devices.
+With the old code, pte_modify() will persist uffd-wp bit, afaict, and we
+used to do savedwrite for numa hints.  That all look correct to me until
+the savedwrite removal patchset with/without vm_page_prot changes.
 
-Fixes: 732850827450 ("remove artificial software max_loop limit")
-Cc: stable@vger.knernel.org
-Cc: Ken Chen <kenchen@google.com>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- drivers/block/loop.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
+If that's the case, we'd better also mention that in the commit message and
+has another Fixes: for that one to be clear.
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index ad92192c7d61..d12d3d171ec4 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -1773,7 +1773,16 @@ static const struct block_device_operations lo_fops = {
- /*
-  * And now the modules code and kernel interface.
-  */
--static int max_loop;
-+
-+/*
-+ * If max_loop is specified, create that many devices upfront.
-+ * This also becomes a hard limit. If max_loop is not specified,
-+ * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
-+ * init time. Loop devices can be requested on-demand with the
-+ * /dev/loop-control interface, or be instantiated by accessing
-+ * a 'dead' device node.
-+ */
-+static int max_loop = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
- module_param(max_loop, int, 0444);
- MODULE_PARM_DESC(max_loop, "Maximum number of loop devices");
- module_param(max_part, int, 0444);
-@@ -2181,7 +2190,7 @@ MODULE_ALIAS("devname:loop-control");
- 
- static int __init loop_init(void)
- {
--	int i, nr;
-+	int i;
- 	int err;
- 
- 	part_shift = 0;
-@@ -2209,19 +2218,6 @@ static int __init loop_init(void)
- 		goto err_out;
- 	}
- 
--	/*
--	 * If max_loop is specified, create that many devices upfront.
--	 * This also becomes a hard limit. If max_loop is not specified,
--	 * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
--	 * init time. Loop devices can be requested on-demand with the
--	 * /dev/loop-control interface, or be instantiated by accessing
--	 * a 'dead' device node.
--	 */
--	if (max_loop)
--		nr = max_loop;
--	else
--		nr = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
--
- 	err = misc_register(&loop_misc);
- 	if (err < 0)
- 		goto err_out;
-@@ -2233,7 +2229,7 @@ static int __init loop_init(void)
- 	}
- 
- 	/* pre-create number of devices given by config or max_loop */
--	for (i = 0; i < nr; i++)
-+	for (i = 0; i < max_loop; i++)
- 		loop_add(i);
- 
- 	printk(KERN_INFO "loop: module loaded\n");
 -- 
-2.39.0.rc1.256.g54fd8350bd-goog
+Peter Xu
 
