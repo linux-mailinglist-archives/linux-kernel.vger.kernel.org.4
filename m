@@ -2,44 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F2ED646984
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:01:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E19646986
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLHHBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 02:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
+        id S229662AbiLHHDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 02:03:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLHHBd (ORCPT
+        with ESMTP id S229437AbiLHHDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 02:01:33 -0500
+        Thu, 8 Dec 2022 02:03:15 -0500
 Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFA06F0F9;
-        Wed,  7 Dec 2022 23:01:32 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ED47109E;
+        Wed,  7 Dec 2022 23:03:14 -0800 (PST)
 Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
         by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p3AuO-0001K9-4N; Thu, 08 Dec 2022 08:01:28 +0100
-Message-ID: <1377cc24-62c8-0c96-9ea4-3d08e513fb20@leemhuis.info>
-Date:   Thu, 8 Dec 2022 08:01:27 +0100
+        id 1p3Aw4-0001g8-TQ; Thu, 08 Dec 2022 08:03:12 +0100
+Message-ID: <abf9b7a0-8de4-76e9-bbbf-4630932949e9@leemhuis.info>
+Date:   Thu, 8 Dec 2022 08:03:12 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH v1 0/2] HID: Revert catchall handling of Bluetooth device
- in hid-logitech-hidpp
+Subject: Re: [Regression] Logitech BT mouse unusable after commit 532223c8ac57
+ (still in 6.1-rc8) #forregzbot
 Content-Language: en-US, de-DE
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221207142433.1158329-1-benjamin.tissoires@redhat.com>
- <nycvar.YFH.7.76.2212071757220.6045@cbobk.fhfr.pm>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+References: <2262737.ElGaqSPkdT@kreacher>
 From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <nycvar.YFH.7.76.2212071757220.6045@cbobk.fhfr.pm>
+In-Reply-To: <2262737.ElGaqSPkdT@kreacher>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670482892;371f793d;
-X-HE-SMSGID: 1p3AuO-0001K9-4N
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670482994;d465d31d;
+X-HE-SMSGID: 1p3Aw4-0001g8-TQ
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -49,35 +44,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.12.22 17:57, Jiri Kosina wrote:
-> On Wed, 7 Dec 2022, Benjamin Tissoires wrote:
+[Note: this mail contains only information for Linux kernel regression
+tracking. Mails like these contain '#forregzbot' in the subject to make
+then easy to spot and filter out. The author also tried to remove most
+or all individuals from the list of recipients to spare them the hassle.]
+
+On 06.12.22 15:58, Rafael J. Wysocki wrote:
 > 
->> We are basically too late in the 6.1 cycle to be able to do anything
->> else. Let's revert these 2 patches as we are in a situation where we
->> would break too many users.
->>
->> We will reintroduce them during the next cycle with proper fixes in the
->> driver.
-> 
-> it would be nice to get
-> 
-> 	Reported-by:
+> Commit 532223c8ac57 ("HID: logitech-hidpp: Enable HID++ for all the Logitech
+> Bluetooth devices") caused my Logitech Bluetooth mouse to become unusable.
+> [...]
 
-Nitpicking: and as for nearly every Reported-by it would be nice to have
-an accompanying Link: tag pointing to the report, which makes my
-regression tracking life a whole lot easier *and* is nice for future
-code archaeologist, as it makes it easier to find Rafael's great
-analysis of the cause -- which is why Linus want to see these tags, too
-[1] (and why our docs tell people to add them[2]).
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
 
-Ciao, Thorsten
+#regzbot ^introduced 532223c8ac57
+#regzbot title hid: Logitech BT mouse unusable
+#regzbot monitor:
+https://lore.kernel.org/all/20221207142433.1158329-1-benjamin.tissoires@redhat.com/
+#regzbot ignore-activity
 
-[1] for details, see:
-https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
-https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-[2] see Documentation/process/submitting-patches.rst
-(http://docs.kernel.org/process/submitting-patches.html) and
-Documentation/process/5.Posting.rst
-(https://docs.kernel.org/process/5.Posting.html)
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
