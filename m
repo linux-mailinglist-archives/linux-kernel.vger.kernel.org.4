@@ -2,214 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9959B64785B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1139647862
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiLHV5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:57:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
+        id S229751AbiLHV63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:58:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiLHV5N (ORCPT
+        with ESMTP id S229985AbiLHV6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:57:13 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540CD6B9AF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:57:04 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id a7so3012331ljq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:57:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pivykEMeOC8k2jf5XPeoMmk5A2wR46qumuGcje+Ei0o=;
-        b=lGhCGMkdVr+eMWHzxV4BUBXbHQ5TTADr1PYcqYnbQz+YoK9bJrgM57Vy78B8nxVQkj
-         APRhz3JHUjKUQRk2o2yUo7LdxwH1hglDHr2Oq6GbBEzRkHg3Hgvz8u+aYiTKCZKig4pz
-         ynljJSqDQyCZhITw5JlEZ6OyzJ50h+3094nrTJHUKuMYjmgySvbKjbOWMNnb34nAoSTx
-         dI7cbHkWVJygg+qE0LbN5/ns60bIwNsiIlAZxg0YHoNh8SAAmY7e8NjB/Lmfy0T6g8Qv
-         szI9Zkx/wcNz1KNLi6pWdP5u6sCXFqzSr/CE23Tr9ULqFSKMYqkQu/PO7/3w3cdOcQjx
-         vf7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pivykEMeOC8k2jf5XPeoMmk5A2wR46qumuGcje+Ei0o=;
-        b=WoQMXgzxgulU7HXX6FGVFb/Ro68V6K9AM63muz9aOvxB5E7B+OYko8gn+opP3kpBwS
-         /yLu9XQT/2kqZp9WQHLwo9sPehpawWbC3ya0ogqTVV+lsf0PyZP8pthFBw5LZQLWa9p1
-         jiVIFp0arJ3lQIpKZCDdwdVBE1P7dZUWIlTha4q431jrly6TydcMToCOt9p5pllJVK8D
-         1HdhDe7lhEpcU5sjn4OpmyszvTervTN97X2aGJ3Nd04qrxv4HPTwtdVO59hC1LzE5SPT
-         Y7PPHZzGjHD7TX7Fvooqk49wjVhFg6stJWazHU7ryfnI4jHzB37Xdq62ASSHAZcFt0Ws
-         tFvQ==
-X-Gm-Message-State: ANoB5ploIry+PsWH1HYfCqotLQk9MEY8raJsymdT6nV6i+zcn02EDs6J
-        pgEcjYIG6ToXzboawEV0Mf5D7NYZTz1rig/qN5a22g==
-X-Google-Smtp-Source: AA0mqf774hNvaBtqJ0bicEWGn4mx48PVYa1iTqCUFr3Yv8T/uq/ELj0Cd3js7qUzrOD9Qt1CkfqgcMdGwKdjMNJlwdU=
-X-Received: by 2002:a2e:7a0d:0:b0:279:f766:5021 with SMTP id
- v13-20020a2e7a0d000000b00279f7665021mr6288528ljc.328.1670536622278; Thu, 08
- Dec 2022 13:57:02 -0800 (PST)
+        Thu, 8 Dec 2022 16:58:06 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7615214D;
+        Thu,  8 Dec 2022 13:58:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=7mVkAmDWoHLTK1bm8c0nwGU18XHm9AdQyd1P1ZMmedo=; b=7svQe4mVPjR86ZvGGgn9pXOeQK
+        DH1tngBx2A1YPHnkGOISZ0LIYOvMw4FykoAVxwbHjJpUS84/5c0aBQMC9Gq1f+4yPxtTlr081VdsO
+        tIfF81ifLri8eBItymduq9Aq3+SjItMQ5IaBMTpChyiQqYV/r5jzTKTMw3Unxp14P+pmOVcuGEpUk
+        wXbxJ6kp83+NfMwwyv34JJzjvlmXeFVFXXZvo8edek9c3+vU8sFEU+S0dAQ8r1Lp9I13f538up90r
+        F2Y4imWys0684v5fKI4HtL5hWJMFxwBe65/Als3DUhLm4Zuk0VUxFM7LL7S3e+0oTADCsL/DRxpzE
+        7PftGs+w==;
+Received: from p200300ccff13ea001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff13:ea00:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1p3Otg-0003FV-2b; Thu, 08 Dec 2022 22:57:44 +0100
+Received: from andi by aktux with local (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1p3Ota-000ubq-DI; Thu, 08 Dec 2022 22:57:34 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     tony@atomide.com, lee@kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Andreas Kemnade <andreas@kemnade.info>, Bin Liu <b-liu@ti.com>
+Subject: [PATCH v2] mfd: twl: fix TWL6032 phy vbus detection
+Date:   Thu,  8 Dec 2022 22:57:23 +0100
+Message-Id: <20221208215723.217557-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221111014244.1714148-1-vannapurve@google.com>
- <20221111014244.1714148-5-vannapurve@google.com> <CAMkAt6qLC0BosvSN9Ri2XFYK65xH1E5sqJYNe6uAudb8U08rXw@mail.gmail.com>
- <CAGtprH8TQ9ep5KQ5-U1PUBmzQQC7fBOLOfn2mNgnDLMO70ZYjg@mail.gmail.com>
-In-Reply-To: <CAGtprH8TQ9ep5KQ5-U1PUBmzQQC7fBOLOfn2mNgnDLMO70ZYjg@mail.gmail.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Thu, 8 Dec 2022 13:56:51 -0800
-Message-ID: <CAGtprH9eUCfXEjmYorSZrSTBzD352wLLxdPodiCA-Cs=bOUfFw@mail.gmail.com>
-Subject: Re: [V1 PATCH 4/6] KVM: selftests: x86: Execute VMs with private memory
-To:     Peter Gonda <pgonda@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        vkuznets@redhat.com, wanpengli@tencent.com, jmattson@google.com,
-        joro@8bytes.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        shuah@kernel.org, yang.zhong@intel.com, ricarkol@google.com,
-        aaronlewis@google.com, wei.w.wang@intel.com,
-        kirill.shutemov@linux.intel.com, corbet@lwn.net, hughd@google.com,
-        jlayton@kernel.org, bfields@fieldses.org,
-        akpm@linux-foundation.org, chao.p.peng@linux.intel.com,
-        yu.c.zhang@linux.intel.com, jun.nakajima@intel.com,
-        dave.hansen@intel.com, michael.roth@amd.com, qperret@google.com,
-        steven.price@arm.com, ak@linux.intel.com, david@redhat.com,
-        luto@kernel.org, vbabka@suse.cz, marcorr@google.com,
-        erdemaktas@google.com, nikunj@amd.com, seanjc@google.com,
-        diviness@google.com, maz@kernel.org, dmatlack@google.com,
-        axelrasmussen@google.com, maciej.szmigiero@oracle.com,
-        mizhang@google.com, bgardon@google.com, ackerleytng@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 5:53 PM Vishal Annapurve <vannapurve@google.com> wrote:
->
-> On Mon, Nov 14, 2022 at 11:37 AM Peter Gonda <pgonda@google.com> wrote:
-> >...
-> > > +static void handle_vm_exit_map_gpa_hypercall(struct kvm_vm *vm,
-> > > +                               struct kvm_vcpu *vcpu)
-> > > +{
-> > > +       uint64_t gpa, npages, attrs, size;
-> > > +
-> > > +       TEST_ASSERT(vcpu->run->hypercall.nr == KVM_HC_MAP_GPA_RANGE,
-> > > +               "Unhandled Hypercall %lld\n", vcpu->run->hypercall.nr);
-> > > +       gpa = vcpu->run->hypercall.args[0];
-> > > +       npages = vcpu->run->hypercall.args[1];
-> > > +       size = npages << MIN_PAGE_SHIFT;
-> > > +       attrs = vcpu->run->hypercall.args[2];
-> > > +       pr_info("Explicit conversion off 0x%lx size 0x%lx to %s\n", gpa, size,
-> > > +               (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED) ? "private" : "shared");
-> > > +
-> > > +       if (attrs & KVM_MAP_GPA_RANGE_ENCRYPTED)
-> > > +               vm_allocate_private_mem(vm, gpa, size);
-> > > +       else
-> > > +               vm_unback_private_mem(vm, gpa, size);
-> > > +
-> > > +       vcpu->run->hypercall.ret = 0;
-> > > +}
-> > > +
-> > > +static void vcpu_work(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
-> > > +       struct vm_setup_info *info)
-> > > +{
-> > > +       struct ucall uc;
-> > > +       uint64_t cmd;
-> > > +
-> > > +       /*
-> > > +        * Loop until the guest is done.
-> > > +        */
-> > > +
-> > > +       while (true) {
-> > > +               vcpu_run(vcpu);
-> > > +
-> > > +               if (vcpu->run->exit_reason == KVM_EXIT_IO) {
-> > > +                       cmd = get_ucall(vcpu, &uc);
-> > > +                       if (cmd != UCALL_SYNC)
-> > > +                               break;
-> > > +
-> > > +                       TEST_ASSERT(info->ioexit_cb, "ioexit cb not present");
-> > > +                       info->ioexit_cb(vm, uc.args[1]);
-> > > +                       continue;
-> > > +               }
-> >
-> > Should this be integrated into the ucall library directly somehow?
-> > That way users of VMs with private memory do not need special
-> > handling?
-> >
-> > After Sean's series:
-> > https://lore.kernel.org/linux-arm-kernel/20220825232522.3997340-3-seanjc@google.com/
-> > we have a common get_ucall() that this check could be integrated into?
-> >
+TWL6032 has a few charging registers prepended before the charging
+registers the TWL6030 has. To be able to use common register defines
+declare the additional registers as additional module.
+At the moment this affects the access to CHARGERUSB_CTRL1 in
+phy-twl6030-usb.  Without this patch, it is accessing the wrong register
+on TWL6032.
+The consequence is that presence of Vbus is not reported.
 
-New patchset posted via [1] modifies the APIs to give more control in
-the actual selftest implementation.
+Cc: Bin Liu <b-liu@ti.com>
+Cc: Tony Lindgren <tony@atomide.com>
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+Changes in v2:
+ - remove comment
+ drivers/mfd/twl-core.c  | 9 ++++-----
+ include/linux/mfd/twl.h | 2 ++
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-[1] https://lore.kernel.org/lkml/20221205232341.4131240-5-vannapurve@google.com/T/
+diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
+index f6b4b9d94bbd..240e63949e10 100644
+--- a/drivers/mfd/twl-core.c
++++ b/drivers/mfd/twl-core.c
+@@ -110,8 +110,8 @@
+ #define TWL6030_BASEADD_PWM		0x00BA
+ #define TWL6030_BASEADD_GASGAUGE	0x00C0
+ #define TWL6030_BASEADD_PIH		0x00D0
+-#define TWL6030_BASEADD_CHARGER		0x00E0
+ #define TWL6032_BASEADD_CHARGER		0x00DA
++#define TWL6030_BASEADD_CHARGER		0x00E0
+ #define TWL6030_BASEADD_LED		0x00F4
+ 
+ /* subchip/slave 2 0x4A - DFT */
+@@ -353,6 +353,9 @@ static struct twl_mapping twl6030_map[] = {
+ 	{ 2, TWL6030_BASEADD_ZERO },
+ 	{ 1, TWL6030_BASEADD_GPADC_CTRL },
+ 	{ 1, TWL6030_BASEADD_GASGAUGE },
++
++	/* TWL6032 specific charger registers */
++	{ 1, TWL6032_BASEADD_CHARGER },
+ };
+ 
+ static const struct regmap_config twl6030_regmap_config[3] = {
+@@ -802,10 +805,6 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
+ 	if ((id->driver_data) & TWL6030_CLASS) {
+ 		twl_priv->twl_id = TWL6030_CLASS_ID;
+ 		twl_priv->twl_map = &twl6030_map[0];
+-		/* The charger base address is different in twl6032 */
+-		if ((id->driver_data) & TWL6032_SUBCLASS)
+-			twl_priv->twl_map[TWL_MODULE_MAIN_CHARGE].base =
+-							TWL6032_BASEADD_CHARGER;
+ 		twl_regmap_config = twl6030_regmap_config;
+ 	} else {
+ 		twl_priv->twl_id = TWL4030_CLASS_ID;
+diff --git a/include/linux/mfd/twl.h b/include/linux/mfd/twl.h
+index eaa233038254..6e3d99b7a0ee 100644
+--- a/include/linux/mfd/twl.h
++++ b/include/linux/mfd/twl.h
+@@ -69,6 +69,8 @@ enum twl6030_module_ids {
+ 	TWL6030_MODULE_GPADC,
+ 	TWL6030_MODULE_GASGAUGE,
+ 
++	/* A few extra registers before the registers shared with the 6030 */
++	TWL6032_MODULE_CHARGE,
+ 	TWL6030_MODULE_LAST,
+ };
+ 
+-- 
+2.30.2
 
-> > > +
-> > > +               if (vcpu->run->exit_reason == KVM_EXIT_HYPERCALL) {
-> > > +                       handle_vm_exit_map_gpa_hypercall(vm, vcpu);
-> > > +                       continue;
-> > > +               }
-> > > +
-> > > +               TEST_FAIL("Unhandled VCPU exit reason %d\n",
-> > > +                       vcpu->run->exit_reason);
-> > > +               break;
-> > > +       }
-> > > +
-> > > +       if (vcpu->run->exit_reason == KVM_EXIT_IO && cmd == UCALL_ABORT)
-> > > +               TEST_FAIL("%s at %s:%ld, val = %lu", (const char *)uc.args[0],
-> > > +                         __FILE__, uc.args[1], uc.args[2]);
-> > > +}
-> > > +
-> > > +/*
-> > > + * Execute guest vm with private memory memslots.
-> > > + *
-> > > + * Input Args:
-> > > + *   info - pointer to a structure containing information about setting up a VM
-> > > + *     with private memslots
-> > > + *
-> > > + * Output Args: None
-> > > + *
-> > > + * Return: None
-> > > + *
-> > > + * Function called by host userspace logic in selftests to execute guest vm
-> > > + * logic. It will install test_mem_slot : containing the region of memory that
-> > > + * would be used to test private/shared memory accesses to a memory backed by
-> > > + * private memslots
-> > > + */
-> > > +void execute_vm_with_private_test_mem(struct vm_setup_info *info)
-> > > +{
-> > > +       struct kvm_vm *vm;
-> > > +       struct kvm_enable_cap cap;
-> > > +       struct kvm_vcpu *vcpu;
-> > > +       uint64_t test_area_gpa, test_area_size;
-> > > +       struct test_setup_info *test_info = &info->test_info;
-> > > +
-> > > +       TEST_ASSERT(info->guest_fn, "guest_fn not present");
-> > > +       vm = vm_create_with_one_vcpu(&vcpu, info->guest_fn);
-> >
-> > I am a little confused with how this library is going to work for SEV
-> > VMs that want to have UPM private memory eventually.
-> >
-> > Why should users of UPM be forced to use this very specific VM
-> > creation and vCPU run loop. In the patch
-> > https://lore.kernel.org/lkml/20220829171021.701198-1-pgonda@google.com/T/#m033ebc32df47a172bc6c46d4398b6c4387b7934d
-> > SEV VMs need to be created specially vm_sev_create_with_one_vcpu() but
-> > then callers can run the VM's vCPUs like other selftests.
-> >
-> > How do you see this working with SEV VMs?
-> >
->
-> This VM creation method can be useful to run the VMs whose execution
-> might call mapgpa to change the memory attributes. New VM creation
-> method specific to Sev VMs can be introduced.
->
-> I tried to reuse this framework earlier for Sev VM selftests via:
-> 1) https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/#m8164d3111c9a17ebab77f01635df8930207cc65d
-> 2) https://lore.kernel.org/lkml/20220830224259.412342-8-vannapurve@google.com/T/#m8164d3111c9a17ebab77f01635df8930207cc65d
->
-> Though these changes need to be refreshed after this updated series.
