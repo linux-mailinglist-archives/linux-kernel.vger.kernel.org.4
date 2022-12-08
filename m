@@ -2,189 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EFAA6468FD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 07:18:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DB33646902
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 07:18:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLHGR6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 01:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56328 "EHLO
+        id S229703AbiLHGSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 01:18:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLHGR4 (ORCPT
+        with ESMTP id S229702AbiLHGSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 01:17:56 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E227D61759;
-        Wed,  7 Dec 2022 22:17:53 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6F6A720699;
-        Thu,  8 Dec 2022 06:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670480272; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oX4UolmNCM5xta77wTwRZ1ZazXWUDNvf+NNR2464c64=;
-        b=bidUMpRX4YBgC6QTeDUbdMoPOxwYFxRleuhwBU8OLJwlhX608G9TwrU3poOl89WzN8HDp1
-        eGSOi/7XOwcTTdJa6DRLrztMP1dnOJf9Ucvx/0eJJBdkRhQJZNR7LZ/JM06Zr/H37Hl2rk
-        h5rur7fib7EHBz1tVtWHUajTgnmdGNE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2537213416;
-        Thu,  8 Dec 2022 06:17:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nngbB5CBkWNocQAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 08 Dec 2022 06:17:52 +0000
-Message-ID: <f183c51b-6d81-55e7-3433-e20c6d5604f0@suse.com>
-Date:   Thu, 8 Dec 2022 07:17:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: linux-next: manual merge of the net tree with Linus' tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-References: <20221208082301.5f7483e8@canb.auug.org.au>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20221208082301.5f7483e8@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------q0HI68tj6UKVMXPI5MYyhztQ"
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 01:18:50 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED719B7B7
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 22:18:48 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id f11-20020a5b01cb000000b0070374b66537so459666ybp.14
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 22:18:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=aq+igaQActZoeLPo+P37AxsZ6LyFtCj6997AnfPKCGo=;
+        b=b8yxAQyQnKnqP9TK8IjQI4SpJ0M6l/etWSjXnA8uTuRIhvddvbLg+vxni3QMzIUASB
+         oh5/OaSrCGAy4+HLH8GNZC7vTUpcKKpZ2iBJ36KOeF/+Te4vy7/MAVYIzfJY0vREC7ap
+         BJ5LcGwYfoSMCU7MMVr/TgWPIsQa5zTY5FqNqaIjV5sJxA/dWnuR+rySWt6RL3gP0YPE
+         NxON0CCPT0e/OHA5LohxVfMYzcot8724NhwtqAe5iAaU8UeI9jecdEZ2lA2rrKSm+DIh
+         pooBobPcxO2R+OoIEVDVqb60RVIOP9ZlHRQ04ZBbKWecQ8kdrKab6NIG9J6Pnok0lD2h
+         6HXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aq+igaQActZoeLPo+P37AxsZ6LyFtCj6997AnfPKCGo=;
+        b=wdBcPlbk6gP2YwLJfcmBXz1/tZQBHD8jqFw//NRWa32AkgEpSofagEpa3oawCCZb1m
+         cItpd4v7Vi93opltfalK1fgV8BZSuV8ZM07AHXbvx6146Fmenrk7zHo0IYK7O6SpIBUX
+         856cdrQw1kJhdsi5fQG1wpla/uKJqamWSpCn99twGzGgHT7rXj8n5rP0ebJYNKuajeWb
+         uuVWiMjbpwO3yZBUBxoUqkG+QgqaLP8l9RopjP5BWhRtCK/QFw2ASqjiCSTlvWBFbuK+
+         hIe1PRPqlevHEXRas7PB3uJP34mTShIGP21I1TVa8ZF2ekAgW+rd530hwlaRbQCxqaR1
+         aw2Q==
+X-Gm-Message-State: ANoB5pmk7xEIOHmEePwLH3qW4MV/eJs/HYAVJbRGeMUIQ3Q8enpdvRwo
+        /GpmK0Z/QewE8QV90fMHOwi93RTpdatHvg==
+X-Google-Smtp-Source: AA0mqf4yDR9D5Q2JsEiI6RkOFIuh4GnpzFIuS8zAeq7GKq0p65tzzrure46cqvsCAxEeiPPoiMJH207Kl4uCIQ==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a0d:d949:0:b0:3e8:5c02:56d6 with SMTP id
+ b70-20020a0dd949000000b003e85c0256d6mr19000406ywe.413.1670480327874; Wed, 07
+ Dec 2022 22:18:47 -0800 (PST)
+Date:   Thu,  8 Dec 2022 14:18:39 +0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc0.267.gcb52ba06e7-goog
+Message-ID: <20221208061841.2186447-1-davidgow@google.com>
+Subject: [PATCH 0/2] kunit: Function Redirection ("static stub") support
+From:   David Gow <davidgow@google.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     David Gow <davidgow@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joe Fradley <joefradley@google.com>,
+        Steve Muckle <smuckle@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------q0HI68tj6UKVMXPI5MYyhztQ
-Content-Type: multipart/mixed; boundary="------------fGRLUnwug1ho1ZersnhZbJHD";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Stephen Rothwell <sfr@canb.auug.org.au>,
- David Miller <davem@davemloft.net>, Networking <netdev@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Next Mailing List <linux-next@vger.kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Yang Yingliang <yangyingliang@huawei.com>
-Message-ID: <f183c51b-6d81-55e7-3433-e20c6d5604f0@suse.com>
-Subject: Re: linux-next: manual merge of the net tree with Linus' tree
-References: <20221208082301.5f7483e8@canb.auug.org.au>
-In-Reply-To: <20221208082301.5f7483e8@canb.auug.org.au>
+When writing tests, it'd often be very useful to be able to intercept
+calls to a function in the code being tested and replace it with a
+test-specific stub. This has always been an obviously missing piece of
+KUnit, and the solutions always involve some tradeoffs with cleanliness,
+performance, or impact on non-test code. See the folowing document for
+some of the challenges:
+https://kunit.dev/mocking.html
 
---------------fGRLUnwug1ho1ZersnhZbJHD
-Content-Type: multipart/mixed; boundary="------------KuD8Ek6F2D08rmC9K79aZ7rS"
+This series introduces a new "static_stub" feature add support for this
+sort of redirection to KUnit tests.
 
---------------KuD8Ek6F2D08rmC9K79aZ7rS
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Any function which might want to be intercepted adds a
+call to a macro which checks if a test has redirected calls to it, and
+calls the corresponding replacement.
 
-T24gMDcuMTIuMjIgMjI6MjMsIFN0ZXBoZW4gUm90aHdlbGwgd3JvdGU6DQo+IEhpIGFsbCwN
-Cj4gDQo+IFRvZGF5J3MgbGludXgtbmV4dCBtZXJnZSBvZiB0aGUgbmV0IHRyZWUgZ290IGEg
-Y29uZmxpY3QgaW46DQo+IA0KPiAgICBkcml2ZXJzL25ldC94ZW4tbmV0YmFjay9yeC5jDQo+
-IA0KPiBiZXR3ZWVuIGNvbW1pdDoNCj4gDQo+ICAgIDc0ZTdlMWVmZGFkNCAoInhlbi9uZXRi
-YWNrOiBkb24ndCBjYWxsIGtmcmVlX3NrYigpIHdpdGggaW50ZXJydXB0cyBkaXNhYmxlZCIp
-DQo+IA0KPiBmcm9tIExpbnVzJyB0cmVlIGFuZCBjb21taXQ6DQo+IA0KPiAgICA5ZTYyNDY1
-MTg1OTIgKCJ4ZW4vbmV0YmFjazogZG9uJ3QgY2FsbCBrZnJlZV9za2IoKSB1bmRlciBzcGlu
-X2xvY2tfaXJxc2F2ZSgpIikNCj4gDQo+IGZyb20gdGhlIG5ldCB0cmVlLg0KPiANCj4gSSBm
-aXhlZCBpdCB1cCAoSSBqdXN0IHVzZWQgdGhlIHZlcnNpb24gZnJvbSBMaW51cycgdHJlZSkg
-YW5kIGNhbiBjYXJyeSB0aGUNCj4gZml4IGFzIG5lY2Vzc2FyeS4gVGhpcyBpcyBub3cgZml4
-ZWQgYXMgZmFyIGFzIGxpbnV4LW5leHQgaXMgY29uY2VybmVkLA0KPiBidXQgYW55IG5vbiB0
-cml2aWFsIGNvbmZsaWN0cyBzaG91bGQgYmUgbWVudGlvbmVkIHRvIHlvdXIgdXBzdHJlYW0N
-Cj4gbWFpbnRhaW5lciB3aGVuIHlvdXIgdHJlZSBpcyBzdWJtaXR0ZWQgZm9yIG1lcmdpbmcu
-ICBZb3UgbWF5IGFsc28gd2FudA0KPiB0byBjb25zaWRlciBjb29wZXJhdGluZyB3aXRoIHRo
-ZSBtYWludGFpbmVyIG9mIHRoZSBjb25mbGljdGluZyB0cmVlIHRvDQo+IG1pbmltaXNlIGFu
-eSBwYXJ0aWN1bGFybHkgY29tcGxleCBjb25mbGljdHMuDQo+IA0KDQpZZXMsIHRoaXMgaXMg
-dGhlIGNvcnJlY3Qgc29sdXRpb24uIFRoZSBwYXRjaCBpbiB0aGUgbmV0IHRyZWUgd2FzIG5v
-dCBjb21wbGV0ZQ0KYW5kIHRoZSBvdGhlciBwYXRjaCBuZWVkZWQgdG8gcHVzaGVkIGFzIGl0
-IGZpeGVzIGEgMC1kYXkgc2VjdXJpdHkgaXNzdWUuDQoNCg0KSnVlcmdlbg0K
---------------KuD8Ek6F2D08rmC9K79aZ7rS
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Note that at alternate implementation (based on ftrace) was also
+proposed in an earlier RFC:
+https://lore.kernel.org/linux-kselftest/20220910212804.670622-3-davidgow@google.com/
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+This series only implements "static" stubbing, as it is more compatible
+across different architectures, and more flexible w/r/t inlined code,
+but we don't rule out offering the ftrace-based solution as well if the
+demand is there in the future.
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
+This feature was presented at LPC 2022, see:
+- https://lpc.events/event/16/contributions/1308/
+- https://www.youtube.com/watch?v=0Nm06EdXWsE
 
---------------KuD8Ek6F2D08rmC9K79aZ7rS--
+The KUnit 'example' test suite now includes an example of static stubs
+being used, and the new 'Function Redirection' API documentation
+provides a step-by-step walkthrough for using the new feature.
 
---------------fGRLUnwug1ho1ZersnhZbJHD--
+In addition, an (in-progress) test for the atkbd driver, which provides
+an example of static stubs being used, can be found here:
+https://kunit-review.googlesource.com/c/linux/+/5631
 
---------------q0HI68tj6UKVMXPI5MYyhztQ
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Cheers,
+-- David
 
------BEGIN PGP SIGNATURE-----
+---
+David Gow (1):
+  kunit: Expose 'static stub' API to redirect functions
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmORgY8FAwAAAAAACgkQsN6d1ii/Ey+d
-eAgAhJH61bxkahk9X/mF7o2lIybqFhyniS/HtUKTvs0VN/tf32Yzvl/KXhD8C+yz3Ws5CHBfvvPf
-EEwrCgr7zuu1NpzN3UusXRpTQkcu8NMWUMRgHXaOjZ1ka6oilmyMgJfMWW4g93c8HnkS/TZHP61w
-kv6MfxLZxub4aif89XBAVD52FBq9a4Oj1YdJgvwyh+3ISpLRTZhNTL3Pp6Som8dhrSYg9jKcLJYa
-Qlie0IrJ5h4ifD98Gx8Il8t1dh3ZQIkrWUG2Mt17TSeoDOa4d2D5t4W+yCeZ9z4DEvkJ/AqOpYsB
-BTlls4hn/ALQnx0vGidSjMsImmJt8k9WoeuY+ap8Ng==
-=tBEY
------END PGP SIGNATURE-----
+Sadiya Kazi (1):
+  Documentation: Add Function Redirection API docs
 
---------------q0HI68tj6UKVMXPI5MYyhztQ--
+ .../kunit/api/functionredirection.rst         | 162 ++++++++++++++++++
+ Documentation/dev-tools/kunit/api/index.rst   |  13 +-
+ include/kunit/static_stub.h                   | 117 +++++++++++++
+ lib/kunit/Makefile                            |   1 +
+ lib/kunit/kunit-example-test.c                |  38 ++++
+ lib/kunit/static_stub.c                       | 123 +++++++++++++
+ 6 files changed, 451 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/dev-tools/kunit/api/functionredirection.rst
+ create mode 100644 include/kunit/static_stub.h
+ create mode 100644 lib/kunit/static_stub.c
+
+-- 
+2.39.0.rc0.267.gcb52ba06e7-goog
+
