@@ -2,178 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7299B64746A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:37:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 691A564746F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:38:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiLHQhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:37:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S230154AbiLHQiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:38:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230170AbiLHQhA (ORCPT
+        with ESMTP id S229898AbiLHQiT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:37:00 -0500
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5867E804
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:36:56 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id AB7BC5C2749
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:36:54 +0000 (UTC)
-Received: from pdx1-sub0-mail-a306.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 432425C26D7
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:36:54 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1670517414; a=rsa-sha256;
-        cv=none;
-        b=xOqOcKFIkSOrrgE3tUyKh7EqRfYjgQYqAt7K/JcRwCbZa99CnXHg4VXZLpZg5il9Y4euhg
-        0xK908hpF4T/9XttBvZv5UlH5HgibH+q+xlhgx5FUVhH7iIOFyqgwTx3gRUYlKtxnWUURs
-        89mB/CTFgvqABdIW2V+S0d6wMJfteOmtvFaOBqbBd/HFdLg08eVQy2x5+CAjtT9dTtl1Yy
-        sNUtR5UIEy1FPvTLPzyFU4m34+HidoP9Zscpu87x0w93nBL4+ZzXdcWvSpXXqqmSy4alNt
-        9FX0fV51HPDuNmbOIZ/HNgE3WNTlvLLbztJ0wikSJYqS+x0qq52EkBwMtby04Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1670517414;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         dkim-signature; bh=bs74ZGYQ9FzRSVBX/TLanMiHEEc4YJIYzYEP749rubo=;
-        b=vpeLPixtILnavoTo+WT2h2ekur2rbWeHCxi+DL8hwkfF7WVxJWwa78XE1xBdFlHNRsUDVK
-        tpdB7PnQQlcjV37Ab38qK34KSUxc/bfYsuaD3aKj1BRfULPfw9X2ywPXDHvflR8mxLxb1v
-        HyefjLTTgrNpR7q9DcecSfQvlyM2ki0EGJENKNEdH5ch9dsUu0hV7W+L3XaKRQtnDGcpDn
-        ERaoBTCNQ8JV74Z+5L9VGCZ2VG2Xu1/uhFjiD415w4yCzCzeC7M439F/BRkYQpsFH2RZsA
-        riJuOU3BxJ+jSatcEr7rG0WMrvO4Fb47HD2Kf7mgR9WkdnFBvfYoRfG8dSho8Q==
-ARC-Authentication-Results: i=1;
-        rspamd-d48c5ddb-vt8bg;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Daffy-Company: 4b6091b91c0286ec_1670517414498_684180211
-X-MC-Loop-Signature: 1670517414498:1686728700
-X-MC-Ingress-Time: 1670517414497
-Received: from pdx1-sub0-mail-a306.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.103.24.106 (trex/6.7.1);
-        Thu, 08 Dec 2022 16:36:54 +0000
-Received: from kmjvbox (c-73-70-108-208.hsd1.ca.comcast.net [73.70.108.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a306.dreamhost.com (Postfix) with ESMTPSA id 4NSfts0lgkzK2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:36:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1670517413;
-        bh=bs74ZGYQ9FzRSVBX/TLanMiHEEc4YJIYzYEP749rubo=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=hESgpD/+OrzvH+6b1U6RKBOLOwJiqCQBT1mxoUxpUs5xzHKC70FZgmMfvPziG+V+t
-         3eBIu2KxYLoGa8i9QQd0boR7+3sD213cNgI7PAkExFAk+o++TiclVLFHv5RyUUfOsd
-         k+iXFBHCT0eW5xuSP4bTilUk6Bkr9itiOEoLNz5g=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e005f
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Thu, 08 Dec 2022 08:36:50 -0800
-Date:   Thu, 8 Dec 2022 08:36:50 -0800
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
-        linux-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Anthony Liguori <aliguori@amazon.com>,
-        David Reaver <me@davidreaver.com>,
-        Brendan Gregg <brendan@intel.com>
-Subject: [PATCH linux-next] x86/xen/time: prefer tsc as clocksource when it
- is invariant
-Message-ID: <20221208163650.GA3225@templeofstupid.com>
+        Thu, 8 Dec 2022 11:38:19 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510A913F1A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:38:18 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id c17so2515253edj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:38:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=dOtUGB6deKRvn6QoEmSpDe75lDhRqv61wD41Q8wWa80=;
+        b=luem0n8WFWkWja2+Lv9JWQ+NtS8d+lsAB1pdwuXlv1mobiAy5zJwV/OlL3+I3f3okx
+         mwUsp+3XwMnR9KcjNX5CdaIDgWQjlwa7WvLFcRcbUNLwdlM1rNeRmyLA/1mWO6Yx5yNb
+         M1slKZeooAQ/yUAV9jsI6EUZVVK5GkIXh06Bs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dOtUGB6deKRvn6QoEmSpDe75lDhRqv61wD41Q8wWa80=;
+        b=0FjW9Lh+z/+h24FKpGdDv/Q6k6tK1rRQYSQESdN32kIzvjkcCJCj/5uyPkvqKZ0Ww/
+         eMkqVN4G9C1bzsRmyGDiVY0TTTRKHy+U2vNxZD5TubK70OKJGPq9nXrFt7LjxVX7laRa
+         S1SzkGQipDZEqJd9rkthc8isBKhUJAUQtabcVg5R2FRofZ0z+qHMonVWiTsw97SH2GLs
+         80llZX9jV/HfMgO5ljpGAKX6nfXtL1/O5arLD6LCF/kCMY+VlZMTqQtcRvzWNPz0LWda
+         qp1bZYJnyMi/l8ZiF7dN66BR9yUHaZpq5U6YR4BNij9IPTCQ5EzmZgKMQpW0b+K/TakX
+         S2MA==
+X-Gm-Message-State: ANoB5pnvjqN5TfpPn0l0WfhZMeN9k25Rj9cDz1RWpuh4ac+cOmWmZVjh
+        LyQhm8N4nyZkOQbUCgok64ru9g==
+X-Google-Smtp-Source: AA0mqf6OBO9M0R4/tfeQ7wCA5W1m2OqhyRTihnaGWK/QGkoR17B6i0FAiHXfxux+B4+6fGussdqmUg==
+X-Received: by 2002:a05:6402:550c:b0:462:6ba5:7215 with SMTP id fi12-20020a056402550c00b004626ba57215mr2498559edb.32.1670517496878;
+        Thu, 08 Dec 2022 08:38:16 -0800 (PST)
+Received: from alco.roam.corp.google.com ([2a00:79e1:abd:5c00:8aae:c483:8219:bdba])
+        by smtp.gmail.com with ESMTPSA id ck3-20020a0564021c0300b0046778ce5fdfsm3569046edb.10.2022.12.08.08.38.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 08:38:16 -0800 (PST)
+Subject: [PATCH v2 0/3] kexec: Add new parameter to limit the access to kexec
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOcSkmMC/32NQQrCMBBFr1Jm7UgnVVpdeQ9xkaTTJlgTmGmLUn
+ p3gwdw9Xkf3v8bKEtkhWu1gfAaNeZUwBwq8MGmkTH2hcHUxhDRCfuo1k2MT36zR2HlGeniWiZqm6
+ YboJjOKqMTm3woblqmqZQh6pzl83taqcT9/+hKWOPgztSb2g9dSzcfJL/i8jpmGeGx7/sXh46T4b
+ 4AAAA=
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Thu, 08 Dec 2022 17:37:59 +0100
+Message-Id: <20221114-disable-kexec-reset-v2-0-c498313c1bb5@chromium.org>
+To:     Philipp Rudo <prudo@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        kexec@lists.infradead.org,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Ross Zwisler <zwisler@kernel.org>, linux-kernel@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1662; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=CbpfLIuX926ztJbaYvtqTfAOAnBai/eNkyo5FXq7sBA=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjkhLppvk90Qatmkolw5wibtDPfBL94H1JvWQvB3WN
+ cRKiW5CJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5IS6QAKCRDRN9E+zzrEiE+MD/
+ 4jdZg1kfEyEVoTWZAnJ1gKb1scJhScOKm2An2e7s036FbeW+77cKX3+2hRGFOoSM9Q0WJiqkrps2hE
+ ZuwISGYDHOVPv1cCAeIMKsaI1nzfqxS0lkdJfh/DVwdMhFCzMwUvzc/dI0cc0ul4qlDeJ1dWLIO2cV
+ kxIMUfW5TTza7srzsy0xrrh8WYp+6flBKUCurqA31vYd+BjjzByskXJM7Eor0H5Or/nlTur+ARZrfC
+ WeIw/AkROr3dp85JtTcE72FnTkvzMLuz4qesZQYZ4QtGbxRd8sGQLyqDpFAKAizhSoTb4FK0Ds5med
+ c4mphKC89svw+/N5CCmsKkm3murdJCVOeMw4OmOsN4iElzjRG91EuBwfjZhLHalLBPT1F93fXRBSP0
+ wXVb7HYBRA4Np9kTesGVp4D7QFZB1GQMx3zNfVQqkkAUbNl/VSqmRTJlOzHzUg2nXg964WGpAJ8esG
+ DXVUAcdwgvwr7EjTKMcf/RkVMMbjR+wVX81hOQzYZC566o2Ai6l6tn+MdsAjE8lFxHGe4JIwhY4QNa
+ ID8Oq2Uke1TrIsB61xgGjEuhLUUL+72eAO5vSkF/sWfCMGrc/9hZnWCaXlofTQYbhvxxt1GeoaZPWn
+ h+x13mZFFA0wbhl57zPeqFvTIPojayferH1Lc8pZxfGwUlqCndwqqw9YdV8Q==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kvm elects to use tsc instead of kvm-clock when it can detect that the
-TSC is invariant.
+Add two parameter to specify how many times a kexec kernel can be loaded.
 
-(As of commit 7539b174aef4 ("x86: kvmguest: use TSC clocksource if
-invariant TSC is exposed")).
+These parameter allow hardening the system.
 
-Notable cloud vendors[1] and performance engineers[2] recommend that Xen
-users preferentially select tsc over xen-clocksource due the performance
-penalty incurred by the latter.  These articles are persuasive and
-tailored to specific use cases.  In order to understand the tradeoffs
-around this choice more fully, this author had to reference the
-documented[3] complexities around the Xen configuration, as well as the
-kernel's clocksource selection algorithm.  Many users may not attempt
-this to correctly configure the right clock source in their guest.
+While we are at it, fix a documentation issue and refactor some code.
 
-The approach taken in the kvm-clock module spares users this confusion,
-where possible.
+To: Jonathan Corbet <corbet@lwn.net>
+To: Eric Biederman <ebiederm@xmission.com>
+Cc: linux-doc@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: kexec@lists.infradead.org
+Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ross Zwisler <zwisler@kernel.org>
+To: Philipp Rudo <prudo@redhat.com>
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-Both the Intel SDM[4] and the Xen tsc documentation explain that marking
-a tsc as invariant means that it should be considered stable by the OS
-and is elibile to be used as a wall clock source.  The Xen documentation
-further clarifies that this is only reliable on HVM and PVH because PV
-cannot intercept a cpuid instruction.
-
-In order to obtain better out-of-the-box performance, and reduce the
-need for user tuning, follow kvm's approach and decrease the xen clock
-rating so that tsc is preferable, if it is invariant, stable, and the
-guest is a HVM or PVH domain.
-
-[1] https://aws.amazon.com/premiumsupport/knowledge-center/manage-ec2-linux-clock-source/
-[2] https://www.brendangregg.com/blog/2021-09-26/the-speed-of-time.html
-[3] https://xenbits.xen.org/docs/unstable/man/xen-tscmode.7.html
-[4] Intel 64 and IA-32 Architectures Sofware Developer's Manual Volume
-    3b: System Programming Guide, Part 2, Section 17.17.1, Invariant TSC
-
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-Code-reviewed-by: David Reaver <me@davidreaver.com>
 ---
- arch/x86/xen/time.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+Changes in v2:
+- Instead of kexec_reboot_disabled, add two new counters (Thanks Philipp!)
+- Link to v1: https://lore.kernel.org/r/20221114-disable-kexec-reset-v1-0-fb51d20cf871@chromium.org
 
-diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
-index 9ef0a5cca96e..ca78581e4221 100644
---- a/arch/x86/xen/time.c
-+++ b/arch/x86/xen/time.c
-@@ -480,9 +480,22 @@ static void __init xen_time_init(void)
- 	int cpu = smp_processor_id();
- 	struct timespec64 tp;
- 
--	/* As Dom0 is never moved, no penalty on using TSC there */
--	if (xen_initial_domain())
-+	/*
-+	 * As Dom0 is never moved, no penalty on using TSC there.
-+	 *
-+	 * If the guest has invariant tsc, then set xen_clocksource rating
-+	 * below that of the tsc so that the system prefers tsc instead.  This
-+	 * check excludes PV domains, because PV is unable to guarantee that the
-+	 * guest's cpuid call has been intercepted by the hypervisor.
-+	 */
-+	if (xen_initial_domain()) {
- 		xen_clocksource.rating = 275;
-+	} else if ((xen_hvm_domain() || xen_pvh_domain()) &&
-+	    boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
-+	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
-+	    !check_tsc_unstable()) {
-+		xen_clocksource.rating = 299;
-+	}
- 
- 	clocksource_register_hz(&xen_clocksource, NSEC_PER_SEC);
- 
+---
+Ricardo Ribalda (3):
+      Documentation: sysctl: Correct kexec_load_disabled
+      kexec: Factor out kexec_load_permited
+      kexec: Introduce paramters load_limit_reboot and load_limit_panic
+
+ Documentation/admin-guide/kernel-parameters.txt | 14 ++++
+ Documentation/admin-guide/sysctl/kernel.rst     |  7 +-
+ include/linux/kexec.h                           |  3 +-
+ kernel/kexec.c                                  |  2 +-
+ kernel/kexec_core.c                             | 98 ++++++++++++++++++++++++-
+ kernel/kexec_file.c                             |  2 +-
+ 6 files changed, 119 insertions(+), 7 deletions(-)
+---
+base-commit: 479174d402bcf60789106eedc4def3957c060bad
+change-id: 20221114-disable-kexec-reset-19b7e117338f
+
+Best regards,
 -- 
-2.25.1
-
+Ricardo Ribalda <ribalda@chromium.org>
