@@ -2,64 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 381E16470AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:19:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F5016470AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiLHNS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:18:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41316 "EHLO
+        id S230261AbiLHNTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:19:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiLHNSe (ORCPT
+        with ESMTP id S230280AbiLHNSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:18:34 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528F393A66
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:18:31 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA2DD61F20
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:18:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD20BC433D7;
-        Thu,  8 Dec 2022 13:18:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670505510;
-        bh=OE2p3IdlRIDNul7bR3CfBPXG8zDJGnV23WSvlp8hwKg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T9qgKxn+ySLGraxMbXvcw4xG5vWA3xfYDnmcsE9BeO+RlweMbpndWGcQycl4QxmLe
-         Tou4lNqgKOYhCfTBHDqlfL0Mn5ybKRRpJ+ekTvqOdIu6viF3+xj2zRshwQYVjMKd9E
-         b2AEIkVhPfXFf/m5ympibgOWO4KmHSU75p/XLB+E=
-Date:   Thu, 8 Dec 2022 14:18:26 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     =?utf-8?Q?Micha=C5=82?= Lach <michal.lach@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, mcgrof@kernel.org,
-        russell.h.weight@intel.com, rafael@kernel.org,
-        ming.lei@canonical.com, tiwai@suse.de
-Subject: Re: [PATCH] drivers/firmware_loader: remove list entry before
- deallocation
-Message-ID: <Y5HkIl41zN9fwKV8@kroah.com>
-References: <CGME20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9@eucas1p2.samsung.com>
- <20221123111455.94972-1-michal.lach@samsung.com>
- <000901d90af2$309b7c80$91d27580$@samsung.com>
+        Thu, 8 Dec 2022 08:18:44 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300B894911
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:18:33 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p3GnH-0001Jh-5K; Thu, 08 Dec 2022 14:18:31 +0100
+Message-ID: <ba953e75-d069-47e8-a467-217d4c600f5b@leemhuis.info>
+Date:   Thu, 8 Dec 2022 14:18:30 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <000901d90af2$309b7c80$91d27580$@samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Content-Language: en-US, de-DE
+To:     Joe Perches <joe@perches.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>
+References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
+ <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
+ <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
+ <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
+ <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
+ <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
+ <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
+ <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
+ <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
+ about missing Link:
+In-Reply-To: <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1670505513;a6c52991;
+X-HE-SMSGID: 1p3GnH-0001Jh-5K
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 11:45:28AM +0100, Michał Lach wrote:
-> Pinging
 
-I have no context here at all.
 
-confused,
+On 06.12.22 10:21, Joe Perches wrote:
+> On Tue, 2022-12-06 at 09:50 +0100, Thorsten Leemhuis wrote:
+>> On 06.12.22 08:44, Joe Perches wrote:
+>>> On Tue, 2022-12-06 at 08:17 +0100, Thorsten Leemhuis wrote:
+>>>> On 06.12.22 07:27, Thorsten Leemhuis wrote:
+>>>>> On 06.12.22 06:54, Joe Perches wrote:
+>>> []
+>>>>>> and perhaps a more
+>>>>>> generic, "is the thing in front of a URI/URL" a known/supported entry,
+>>>>>> instead of using an known invalid test would be a better mechanism.
+>>>>>
+>>>>> Are you sure about that? It's not that I disagree completely, but it
+>>>>> sounds overly restrictive to me and makes it harder for new tags to
+>>>>> evolve in case we might want them.
+>>>
+>>> It's easy to add newly supported values to a list.
+>>>
+>>>>> And what tags would be on this allow-list? Anything else then "Link" and
+>>>>> "Patchwork"? Those are the ones that looked common and valid to me when
+>>>>> I ran
+>>>>>
+>>>>> git log --grep='http' v4.0.. | grep http | grep -v '    Link: ' | less
+>>>>>
+>>>>> and skimmed the output. Maybe "Datasheet" should be allowed, too -- not
+>>>>> sure.
+>>> []
+>>>>> But I found a few others that likely should be on the disallow list:
+>>>>> "Closes:", "Bug:", "Gitlab issue:", "References:", "Ref:", "Bugzilla:",
+>>>>> "RHBZ:", and "link", as "Link" should be used instead in all of these
+>>>>> cases afaics.
+>>>
+>>> Do understand please that checkpatch will never be perfect.
+>>> At best, it's just a guidance tool.
+>>
+>> Of course -- and that's actually a reason why I prefer a disallow list
+>> over an allow list, as that gives guidance in the way of "don't use this
+>> tag, use Link instead" instead of enforcing "always use Link: when
+>> linking somewhere" (now that I've written it like that it feels even
+>> more odd, because it's obvious that it's a link, so why bother with a
+>> tag; but whatever).
+>>
+>> I also think the approach with a disallow list will not bother
+>> developers much, while the other forces them a bit to much into a scheme.
+>>
+>>> To me most of these are in the noise level, but perhaps all should just
+>>> use Link:
+>>>
+>>> $ git log -100000 --format=email -P --grep='^\w+:[ \t]*http' | \
+>>>   grep -Poh '^\w+:[ \t]*http' | \
+>>>   sort | uniq -c | sort -rn
+>>>  103889 Link: http
+>>>     415 BugLink: http
+>>>     372 Patchwork: http
+>>>     270 Closes: http
+>>>     221 Bug: http
+>>>     121 References: http
+>>>     101 v1: http
+>>>      77 Bugzilla: http
+>>>      60 URL: http
+>>>      59 v2: http
+>>>      37 Datasheet: http
+>>>      35 v3: http
+>>>      19 v4: http
+>>>      12 v5: http
+>
+>> Ha, I considered doing something like that when I wrote my earlier mail,
+>> but was to lazy. :-D thx!
+>>
+>> Yeah, they are not that often, but I grew tired arguing about that,
+>> that's why I think checkpatch is the better place and in the better
+>> position to handle that.
+> 
+> I'm not sure that "Patchwork:" is a reasonable prefix.
+> Is that documented anywhere?
+> 
+>> Anyway, so how to move forward now? Do you insist on a allow list (IOW:
+>> a Link: or Patchwork: before every http...)? Or is a disallow list with
+>> the most common unwanted tags for links (that you thankfully compiled)
+>> fine for you as well?
+> 
+> Maybe
+> ---
+>  scripts/checkpatch.pl | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> index 1c3d13e65c2d0..a526a354cdfbc 100755
+> --- a/scripts/checkpatch.pl
+> +++ b/scripts/checkpatch.pl
+> @@ -3250,6 +3250,13 @@ sub process {
+>  			$commit_log_possible_stack_dump = 0;
+>  		}
+>  
+> +# Check for odd prefixes before a URI/URL
+> +		if ($in_commit_log &&
+> +		    $line =~ /^\s*(\w+):\s*http/ && $1 !~ /^(?:Link|Patchwork)/) {
+> +			WARN("PREFER_LINK",
+> +			     "Unusual link reference '$1:', prefer 'Link:'\n" . $herecurr);
+> +		}
+> +
 
-greg k-h
+One more thing: That afaics would result in a warning when people use
+things like "v1: https://example.com/somewhere", which some people
+apparently like. Those imho are not considered tags, hence I'd say we
+allow them, unless you disagree.
+
+Ciao, Thorsten
