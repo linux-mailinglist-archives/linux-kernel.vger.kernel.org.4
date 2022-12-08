@@ -2,156 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94A56478B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:15:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6ED6478BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:18:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiLHWPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:15:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49956 "EHLO
+        id S229661AbiLHWSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiLHWO5 (ORCPT
+        with ESMTP id S229942AbiLHWSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:14:57 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2043.outbound.protection.outlook.com [40.107.93.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87090DF20
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:14:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=A5o/2ebltraFpPYxQU6bTdxEOR9nQF+NsNlwRPrutwPWS9Wveci79the4qcJ7LQCD+8w85DcSEdpbNLHsn2WR9KCXWt77EhA016X/G2N+XkU7eQK+m/kNxvZ5VkrKZp+cKpesK8mXW59eFWEcDGlHqybBL1dleP2rTACmg35mRCcYgoE1qS096b9Y2mtHJijP8YaB0wTS23yCxuIlJYaIIDMLKgCbViQ2urIgkecfkuw2wi61utmy1ypldjqAtB5aA7lQdoK/fF7eXDL9diecZv4R2E26IRLQYrY78gG/f/MAYOYKCpobkqU2BkyVTp7aJoYk34xrhVXJcgJxrxs9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=psf4uNW6ODi+Ra5KQ2zddpsm88Lmp53hoG74POQ9mec=;
- b=NsZc96pNF47cpPEmHwSEGbT7X5Zkt72yNuuIux779KMLw4o5D0cpplmt+gXi5IZqzR4WkDdh6X8Fj44/FWfde6HY3RYcBZJ2HPcD/Bi/YTwcm4z1x88vfgFmjgSEhVRJVzshz7EGtADO8CxyubBW2Y3n7P3fLvvbnHyNXv2FKZuW/S/Mq2PdusD7BiKB55H0wXsulA90/v9HJLVsPwCFfw84lSUVAYfCT/JFxna9LvL+CpF06jIEe+z2wA1ncfigndSXvxgregWP8HS4PhhufcEn/s73rYbiiWjRMf0+6Jd+ddTk5rJ1W4cQq9/A1LeGPNC9eSgCEhdjkpA0x/09qw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=psf4uNW6ODi+Ra5KQ2zddpsm88Lmp53hoG74POQ9mec=;
- b=RMS8DeWDtTpdqLjF6Na0B/gwAv6w1CZMEc1eNNflyeKaC7Ul76zgZAPAczguj1tyv4SZTekcEkzlI3tw6A1lwM+c5ZfhvtLUyFF9Kx2aCqHBHyYVFe8UQ9wApHbutvloi2UjnTMdTJhE9EefBZ2B1up3UnjkUa7o8rAMeO3EHIxZTzpNtjFcNA8BxkCX5Rjrsf3uBue3gCWJATlc6xlUNIFFDla3F3o2C+V8A2ji+Jgo3g9oYIFxDLYbRXL+uqSr7X/Rjs8NULCHuIWqz6QzCsVeIgJB8rs6Th1Ycqp7rW0Fgomr4xQl6mxCXJlDKBSK+lYcew+xqacpk5zuA2y7Tg==
-Received: from DM6PR03CA0089.namprd03.prod.outlook.com (2603:10b6:5:333::22)
- by IA0PR12MB8376.namprd12.prod.outlook.com (2603:10b6:208:40b::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
- 2022 22:14:54 +0000
-Received: from DM6NAM11FT075.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:333:cafe::1) by DM6PR03CA0089.outlook.office365.com
- (2603:10b6:5:333::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16 via Frontend
- Transport; Thu, 8 Dec 2022 22:14:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT075.mail.protection.outlook.com (10.13.173.42) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5901.17 via Frontend Transport; Thu, 8 Dec 2022 22:14:54 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 8 Dec 2022
- 14:14:44 -0800
-Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 8 Dec 2022
- 14:14:43 -0800
-Message-ID: <20cc2088-b66e-28d1-a529-414e82146336@nvidia.com>
-Date:   Thu, 8 Dec 2022 14:14:43 -0800
+        Thu, 8 Dec 2022 17:18:12 -0500
+Received: from sonic307-16.consmr.mail.ne1.yahoo.com (sonic307-16.consmr.mail.ne1.yahoo.com [66.163.190.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84AD6FF1F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:18:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670537891; bh=2dAILjLP69OS9FOb9YU5vIxnb/ja4jQMKeNfFXNX264=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PRG2/oNnpGADGD83EeZtPq/kQrBymL9eocf9L0cafJvVP1JXHAZ43YtO0WAU79SFi+c5jCMCbtnjjqyQ4C3elOn/GLvcPzbp+cOkPhFClj0GlKIX15BRHFg96OP6IvRKlMLGkEmT5KnZxKDQ/ST8AjfIIDxnQGA1jFxI8HBdZEyxcXuhJ1mxbCC+RvxlyEoLToW3a6yE1n1eUgFKplpZMTCFla217dTohtfo+VkZJ2RbusnLV6zOeSFHWEXsF9915vzDH3An/ZvFWJ2m7mhp1saagrYiUHysW3IYn6RZatCW2gPARY/RrKF7ZVntHlKtSURn4uNB8ICaDF/3uP5DtQ==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670537891; bh=5lRHWOPF5z14iBE75M6AOstxXbLwGCgN+49brGsVQ7j=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tEfHCtNTBi1uMFSLdThHmzrkDfWfL/7qqnWQysCRr32DQy3BHYfZPYXsFXTUd0+y2pQQ+ARoqDJIV2/jCJYcRkiHt59uNdUz683mJl/3hWCpGu/clzSTCfpRNG+lfda4Lpk8l/ifFra9sVQlCbIs8q/smpP06Ffr1wSOaxM/cwYWFVUtb9MGmj8Rr4R7bDcl6PQW452GHRTy/DdT7+4nWq/qkAsApfp6JiKWm5Jv870Zzpjvaegw1uc6rKSo86P594ExgPXwVdxHxl4sRAraXMm95yMbKQkhOQghvbskHwtCmFeZePrdfTcG5oC3GaR02CZ3mqZZwfpyFxfNUh0M1Q==
+X-YMail-OSG: O2RLWIEVM1kX0tTMjEkN_jNRv0FV8dAQtxZr6H8HYUI60J6CjCv37XMKD2CQwWN
+ Ddfed.mH_vcnWG2nUNEqsnOreN7jUQTZS8PGx_1jTM9guhW2iIWje_2y7go.FqRYRsFY3ALFMukh
+ a9fZgv_7UgWlKoxViHs2jAfPxFD4qOY_CFmX.RipjeQbbCv_PJumVHQZDLPhDqQK..FEBlgK83Dv
+ AbCLZswRq46xiuYJgNLgSus6GY_nbYVlvPAVHnLV4yl5N_amkbYyGQBFPjABwfKDag9jJrKsStdS
+ h3QkWoehd0UyuvjeEI5DcOo6LmgXjgMH5Bd8m6hQsaRyLeQ4j1pgOy.eTcwgN5oYkR.wDujEcRXB
+ qUI9H5XrplDcZQI_jKkWNF131TepZFlvhW__88GDFZsRaaqkzbQWOzQ6SMdB8QyPEwYuRxWPWXHX
+ xOR1Df3G4e9g9GE.7hXxnikp3oEImNX.woH4PRXUppDnSS2jmmG9sTxUIDV.yYG0Xmidc7JJGNvD
+ IbxlJMkNAywH.GXUVlqxWBdt4nvki3HO8TX3egWbQqOY3i8Iag2V0c66UeQPuGaRQt4sMiCiGNLb
+ o0nmGKZVeFKdM4Wl9UGBUFo63OO.dmAgpxFXgfjVWbIDIn_UK2PhjKzkMA1VyVpP6AgUVI0WVFhJ
+ 6BHe354D50k2fHcrJd90t7hILF1Ipy3Xii5yAYbsMF8viZNx.SgnJ2MHYU2CkB6xNlWQF1gJi.bj
+ Vt6Uungp4S3T4ocKujUlhH4uFqT.SLxvTib5q6X5a.l9Jv5R.3teQh27uOTs34fd4kosf7cWUBVx
+ 82Eye6jsvatVpodREn9DIP1NqqaMWRkVmI7RLr67acpm3uLKrDPYrfIat6hFDyugpbTyEvnyVcLn
+ OKCRKTXHavjiVVIkltCons.VnituJj6tSa6MECu..JCDZVvaMytU3JkRnTFs6dlefFTjb8ATp0Rz
+ CYqYBGonBNLn3nnMLl2ZDI1l8Xd0WaFvh6JyuPl982QByrPHXFt6dUzR2sQeyhWQEglxIRElDKvU
+ N8Ybe.ctuIfMcymEWpGWK0AAZWcWJqLXGsLeam02_C3sIPufZJByE2cUhpHs9CZropstg98r0jrm
+ o93Zn910CuVR7CrxKvX5LvZswqEjil_23rBgc6IvzBNALYMhMCvRKPskZ4LGWo3HVpq7Q.S9e768
+ zqIjFOiV5YBlII2OJ5_khv32rhg0jIsuM16asnWksK_75TtAFLMF.nzGMYtcl.7dhuGOxJXEErp1
+ XXG5ucvON7T5lO9PZ7s0YqCOFxlAnYjy9_01G5Geo9OgeBbEuL0kCS8B4.F65I4I0RgboxYghWFa
+ YtpkPIqkykPBGMhHFC3cgb8VZGFJrlosCfufPwnb2J.SCLZ6Va4xyWl4BKsBHvoULYLYAdJ_YGOk
+ e1XUc1oVudyPcd_8vA9ngXAc.8gmvVHFybXZEFuEbhSOtyr21kry8Fv4wvmlhLKU704duD4TjAQP
+ roYswyak9xhl7kHoaUHGZTPrGT21gMerg732sAspOtWXCIPyc6M6kXh4PmbgEmgn6Vo1XK9u.OBm
+ Rujl2YaBeJU1KN1tpPDD9470OclWeuo66lc6ru.Q2hmjrVCLTv.fwjFBsdyZzAc26I4dxMC5F.eo
+ qUakh_GR0UTa0r9p8WkVOPqEtlsgJWVV38V1KsdkeFBtJb.dNDLzCiNsl4glbFe.qwV2F2pdSsiD
+ pBN08wNBpk7xAm5uW2nzHybDO8AxWwrf20K8PPbGZ3QrQNn25J4fcCOhSuTQGzlC8puv42yMH8Ia
+ b8Z9ZZNU91ovq.g77l4kgCVKg2LCSlnhaONutWcF_m9qcGsbbGsSbrNSvRQFlbwu1_HSpy70rue7
+ xnUtScSindofW98pEsvan.3HSln27hhuAauxvzwpI6rj.2kx_oQFrLg7a4WctSXA4ZIrLc97D61H
+ GBw6IJWDaXASSSyskHvT52sJ_EM.V14upipGr2OVGxCpJiDBC89ViRgX5XFAnxXY2R2d8.exVEdm
+ 5N35uUNjYgt1Rzx24TlKnngNBC6TKJiHaG2o.HDobZKbprGhafgYqt.LoNa_fBQ9bZsBpBFYmXNN
+ fVCDRYe6jAXUzuzvKnGRjVhOY902iVmsF5mvRJ4SErdLUNMNzPmvMFpAh0aJiCvanm1eg5T7CrOJ
+ TpPIEt1zu2st9oeVZF_R9Yzv0Vwj2KuRJ_FDgDTWSEszmZUG9kqTeJVz6kkE4ABX9GohLtoC0Ck6
+ YyrpH9x8kRTzlp4R1v9BTfOiJa50F1TIKlEGNWu7RiQ8cEatc2aLxGeccs6yIn3pItrV3ep.Q0op
+ DpcXlYSw9SbSmNn0-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Thu, 8 Dec 2022 22:18:11 +0000
+Received: by hermes--production-gq1-d898c4779-66ldg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e4990e6f66164b6f2d176bcbbed58160;
+          Thu, 08 Dec 2022 22:18:07 +0000 (UTC)
+Message-ID: <8d14fcbe-baab-4678-beb1-4f8ff6171eec@schaufler-ca.com>
+Date:   Thu, 8 Dec 2022 14:18:06 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero
- support
+Subject: Re: [PATCH v2 2/2] lsm: Add/fix return values in lsm_hooks.h and fix
+ formatting
 Content-Language: en-US
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <akpm@linux-foundation.org>, <songmuchun@bytedance.com>,
-        <tsahu@linux.ibm.com>, <david@redhat.com>
-References: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
- <92965844-c430-8b8e-d9f1-705d7578bceb@nvidia.com>
- <ec8f46ca-9ea6-4567-2038-22f6d3000ed5@oracle.com>
- <d17530ad-8e12-8069-d619-a2d72fe80e15@nvidia.com>
- <0187f9c2-e80a-9cde-68bc-c9bdbd96b6fe@oracle.com>
- <Y5I78soNmAFv7pi8@casper.infradead.org> <Y5JCi3h8bUzLf3cu@monkey>
- <2723541a-79aa-c6b5-d82c-53db76b78145@oracle.com>
- <e86ca90f-e59e-3851-7225-b5f596ad04b9@nvidia.com>
- <36ddac45-ecd0-e2d2-e974-8c85ca503053@oracle.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <36ddac45-ecd0-e2d2-e974-8c85ca503053@oracle.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.231.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT075:EE_|IA0PR12MB8376:EE_
-X-MS-Office365-Filtering-Correlation-Id: dae7b43d-8844-40a8-f289-08dad969a285
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: M2sypDj+wls1aZrVWiHC1Hpbtgw6GEMNfoyShF7jsqL63iUuau5uflFczc84LIWhsrSLdoVL0Qy1pVmnqAUyZ5Lo+J7O+bLpv9qSZHPVTkHtT7IeqDVLW4tstP3btHdi8kURY0huGgHo43dqAUdFcB+D+LIBOBDcIdmXe1b++We44cqqyy5W63SE9No/ug8zPR1RNpXEB5eSSuwQUUWewXHNJgg06ZxDYlrq0ncFU3CRe49gN1BefJQithsbu5lphcPGxQf6Z65LAz2ZC6d6Hs6aTfhDOB9yo8vazQIVQo26UJhBGroriH4XdS374jL/J/ooMFndkEbsc2XXDb24gfA+WMs0YWvhAawRplYER+YGeCWjdV444hPDvauJnjriBbTpZBXF61tk6oK6J0xojW1hzqFdP1kEURPNMKoelFH6EQ2/y1a2uQ/BQHOvMncG67hcFQ1A10hpzpdGlrx02lGL9V+IwNtPDg9GzWDo9aEH5Aw2YapueVqcZxPK94ERtlbIY8pLM4UoQhvW9zz071iX2KVxnNh/G9CI3lRLSCvVCowoWw/SgSfJf8UZHPB8Z5gAoZ/0LJfHagTfzqkTLsCpMMjTrFhUNZb2yw6XBZSWV2qj0tFjKe2+8TNDGCh1E7xOZpEdCISIS+0QgklCs0QSUYoHSJ33upfX1I6zThpppS2ilZaBq40b0NaO7idOEr5xarRDNFTzcZw1vlO0KdXMn5zOq0y+yZybEPwA2PI=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(136003)(39860400002)(376002)(451199015)(46966006)(40470700004)(36840700001)(41300700001)(16526019)(5660300002)(336012)(426003)(478600001)(8936002)(47076005)(186003)(40460700003)(36756003)(7636003)(26005)(82310400005)(16576012)(316002)(110136005)(83380400001)(36860700001)(82740400003)(40480700001)(54906003)(356005)(31696002)(86362001)(70586007)(70206006)(53546011)(2616005)(2906002)(31686004)(4326008)(8676002)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 22:14:54.6421
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dae7b43d-8844-40a8-f289-08dad969a285
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT075.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB8376
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+To:     Paul Moore <paul@paul-moore.com>,
+        Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     David Howells <dhowells@redhat.com>, omosnace@redhat.com,
+        john.johansen@canonical.com, kpsingh@kernel.org,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        casey@schaufler-ca.com
+References: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
+ <20221128144240.210110-3-roberto.sassu@huaweicloud.com>
+ <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
+ <7225e76c09c7ff68937e37ee041fefdd6ccac1c8.camel@huaweicloud.com>
+ <0682348d9601ca3847ce9ba035e4ab1b586cf712.camel@huaweicloud.com>
+ <CAHC9VhQZ3VKWsNarUGPcHZuoRLgb8owKgbdLymwR759qVyQ+2Q@mail.gmail.com>
+ <b989b278a16c48e104b32ba7243e4298491a6056.camel@huaweicloud.com>
+ <CAHC9VhSdcyOd01VYtqhJGrgKyG3oZmE_1d0RQymxKv1=ErhduQ@mail.gmail.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <CAHC9VhSdcyOd01VYtqhJGrgKyG3oZmE_1d0RQymxKv1=ErhduQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20926 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 14:12, Sidhartha Kumar wrote:
-> On 12/8/22 2:01 PM, John Hubbard wrote:
->> On 12/8/22 13:58, Sidhartha Kumar wrote:
->>> Thanks John, Mike, Matthew, and Muchun for the feedback.
->>>
->>> To summarize this discussion and outline the next version of this patch, the changes I'll make include:
->>>
->>> 1) change the name of folio_set_compound_order() to folio_set_order()
->>> 2) change the placement of this function from mm.h to mm/internal.h
->>> 3) folio_set_order() will set both _folio_order and _folio_nr_pages and handle the zero order case correctly.
->>> 4) remove the comment about hugetlb's specific use for zero orders
->>> 5) improve the style of folio_set_order() by removing ifdefs from inside the function to doing
->>>
->>> #ifdef CONFIG_64BIT
->>>   static inline void folio_set_order(struct folio *folio,
->>>                   unsigned int order)
->>>   {
->>>       VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+On 12/8/2022 1:59 PM, Paul Moore wrote:
+> On Thu, Dec 8, 2022 at 4:29 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+>> On Wed, 2022-12-07 at 14:34 -0500, Paul Moore wrote:
+>>> On Wed, Dec 7, 2022 at 4:18 AM Roberto Sassu
+>>> <roberto.sassu@huaweicloud.com> wrote:
+>>>> For this patch, I saw it is already in lsm/next. Paul, should I do an
+>>>> incremental patch or change the one in the repo and you force push it?
+>>>> I would just remove the three lines after the parameters description.
+>>> Just send a patch against the current lsm/next branch to remove those
+>>> lines, and please do it ASAP as the merge window opens this
+>>> weekend/Monday.
+>> Ok, was about to send but I would need a clarification first.
 >>
->> Sounds good, except for this part: why is a function named
->> folio_set_order() BUG-ing on a non-large folio? The naming
->> is still wrong, perhaps?
+>> In mount_api.rst, there is for security_fs_context_parse_param():
 >>
-> 
-> This is because the _folio_nr_pages and _folio_order fields are part of the first tail page in the folio. folio_test_large returns if the folio is larger than one page which would be required for setting the fields.
+>>      The value pointed to by param may be modified (if a string) or stolen
+>>      (provided the value pointer is NULL'd out).  If it is stolen, 0 must be
+>>      returned to prevent it being passed to the filesystem.
+>>
+>> Looking at security.c:
+>>
+>>         hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
+>>                              list) {
+>>                 trc = hp->hook.fs_context_parse_param(fc, param);
+>>                 if (trc == 0)
+>>                         rc = 0;
+>>                 else if (trc != -ENOPARAM)
+>>                         return trc;
+>>         }
+>>
+>> If, as mount_api.rst says, the value is modified by an LSM or stolen,
+>> should it be passed to other LSMs too?
+> All of the LSMs should be using fs_parse() in their
+> fs_context_parse_param() hook to identify the mount options that they
+> own, skipping those they do not (fs_parse() would return -ENOPARAM in
+> those cases).  I don't believe we currently have any mount options
+> that are shared across the different LSMs, so I believe this is a
+> non-issue.
 
-OK, but then as I said, the name is wrong. One can either:
+There aren't any today. SELinux and Smack are the only LSMs with
+mount options. Smack mount options all begin with "smack", so it's
+unlikely there is going to be a future overlap. I'd hate to do the
+/proc/self/attr/current battle over again, so I recommend that any
+new LSM that uses mount options be required to use an identifying
+prefix. I don't see any way that using the same option name for
+mounts, even if the use is the same, won't end in tears.
 
-a) handle the non-large case, or
-
-b) rename the function to indicate that it only works on large folios.
-
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+>
+> In the future if we ever find the need to share mount options across
+> different LSMs we will need some additional work to ensure it is
+> handled properly, but I don't think we need to worry too much about
+> that now.
+>
