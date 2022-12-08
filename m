@@ -2,220 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9C2646E32
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:14:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0363D646E69
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbiLHLOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:14:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47408 "EHLO
+        id S229886AbiLHLXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:23:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLHLOu (ORCPT
+        with ESMTP id S230039AbiLHLXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:14:50 -0500
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2076.outbound.protection.outlook.com [40.107.92.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71363F05B;
-        Thu,  8 Dec 2022 03:14:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=STWChbyT3udjy6w/9Of7dI7HLhX5yXghCOab68NjKX40PefejPVhIfdkOev6Iuc/notQVyPwNDTAsJufWaz3eaWnhguV+iv2CFnVEV8wpX0fKi5Vf1JWWLNLYs3VXSgKShsD3fPlsER+eZz+0WZto0TPh0BfP4L/2073/iBboG3v/idloey2xfoCQ0rjF7eZr1qAokr9nXPXTrqb1jUdKF/dlIevWKyRBLr6Op3U45kFZIBsKo1jvYYc8sZHlal/HqeZINxu+SNEN8b2OfTBWl7nBKiVQqU7yfqh8vEfcO/NF9C44+KHLi+iFg/nBVawWdyifoqDdM1ckAvHdLC24A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=29F4+XveJU2QEFPvoP23ot5Wk7UVqUXzp5WVPVimeyo=;
- b=hBVIUIdZkBBkUj70FvF4OALAxPt1eKzSDis4z4HXpokkS5onH2LtT3TDDrN8R8zAKdChp3VurtyE2LoSCZyhTrIH8gVkvyMPn7+xIW1tHHc9BDF7ZrqMyQ/p3x2WmkDeapjmpF2YfZKj340nMp4SC8EswNz6vNUf+KRh3Ec5uzylipkaN+ddi1HY7qfXM4DeHVqITbKKDLcoUv+C+plTIPIvFYC2BkdhvpwXGr/FM73kZnk9zxxLbK0u6ZUVonIf0rpv2Udsh2UiIJj5KSMViSuXZgW95xrWsLxhdh/VvOzXHDAot7oN7i7fG0vYpXQcKItsiiq8RI2haqRNOHq28g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=29F4+XveJU2QEFPvoP23ot5Wk7UVqUXzp5WVPVimeyo=;
- b=QM6Z4KuOiSHyJLu0bS3SkMpPKngYQKECK52oy06uF3d6anDstMeBhe4CFcSg4PZoURHWMHfMPjq29CunO1jWws8j31JPhz+WmrbfcqqAbpV7g6Dyzvhh0OhcQZJdc8EAgdsicD4OWhh7GfceXXc91j65COHj/OzfH93Oi2wG3K4sIW2Cr6I7x1/Km+ht20zL8/K6aiySuoNEWRBrWkQlPrVddUX6x1dtFcj9O006MNxHPv72+d5ojXsJJ1E9t+5FV+QFVR5zIZbqtgATHNbozUtd1CEMSCVz2/nYF2sEl8MZ1k+4Wtyr3hqrU7igqnPyto7bkflfU0+AzUR86cFYXQ==
-Received: from IA1PR12MB6353.namprd12.prod.outlook.com (2603:10b6:208:3e3::9)
- by IA0PR12MB7674.namprd12.prod.outlook.com (2603:10b6:208:434::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
- 2022 11:14:46 +0000
-Received: from IA1PR12MB6353.namprd12.prod.outlook.com
- ([fe80::349c:7f4b:b5a3:fc19]) by IA1PR12MB6353.namprd12.prod.outlook.com
- ([fe80::349c:7f4b:b5a3:fc19%8]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
- 11:14:46 +0000
-From:   Emeel Hakim <ehakim@nvidia.com>
-To:     Sabrina Dubroca <sd@queasysnail.net>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Raed Salem <raeds@nvidia.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "atenart@kernel.org" <atenart@kernel.org>,
-        "jiri@resnulli.us" <jiri@resnulli.us>
-Subject: RE: [PATCH net-next v3 1/2] macsec: add support for
- IFLA_MACSEC_OFFLOAD in macsec_changelink
-Thread-Topic: [PATCH net-next v3 1/2] macsec: add support for
- IFLA_MACSEC_OFFLOAD in macsec_changelink
-Thread-Index: AQHZCiQusL+UzHu/8U2fyvKlL6owS65ikZoAgAAA31CAAGjLgIAAki4ggABAgYCAAAo3wA==
-Date:   Thu, 8 Dec 2022 11:14:46 +0000
-Message-ID: <IA1PR12MB63537D0D08860A9BFB223E42AB1D9@IA1PR12MB6353.namprd12.prod.outlook.com>
-References: <20221207101017.533-1-ehakim@nvidia.com> <Y5C1Hifsg3/lJJ8N@hog>
- <IA1PR12MB635345D00CDE8F81721EEC89AB1A9@IA1PR12MB6353.namprd12.prod.outlook.com>
- <Y5ENwSv4Q+A4O6lG@hog>
- <IA1PR12MB6353847AB0BC0B15EFD46953AB1D9@IA1PR12MB6353.namprd12.prod.outlook.com>
- <Y5G+feJ65XlY/FdT@hog>
-In-Reply-To: <Y5G+feJ65XlY/FdT@hog>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA1PR12MB6353:EE_|IA0PR12MB7674:EE_
-x-ms-office365-filtering-correlation-id: 6a9da171-2ae4-43e4-dff4-08dad90d6a50
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: bnhA2EJKKbNt7lwZXfaai421iL1nde7YMpy5ds86h8RfLW1S2atvZV8VmJFiORcIxFOb7v9M8962ycV9Uz52W6VUXNoI8oKuxUxztiPcqyO9hqoPeNss3mJdE+o7fjuKVNR07VhJXld6f1WWJj7PJvFHuaoVGpil9DL7q9+4+0jfn2WZLmTdF1m45NS4XCAuipsjsLH15SfmPx+b4kOn3LbxsBh2/353XIbm9BBsXzixSdOqnWzK5nEYads23uIODBUjvJPWLm+cnM804hg3Q6Vczba4V/KC2C7mfFrYB7LlUtZkOHK1Log0gIrS4SgajTveH/cBloYkfNbg87ax+HCxBaTsUw11SNHkBs4SxU8SSaXGki/GdQ4UyCMTBrp+OhC8yWcBAsyJ1X2axKORo3Wqw125SCKu/md3nrpWX4hr6gWQzoUSo5rJMcbnhzVBjy9Bdm2W2AWHp+p22TMW92WsUTykJ0DBc0YaG9ORe9OT2neyE4n9yw2Ot3PBm3yLpOrt9fa46BAuZha71BHnW+/duAij3/FXo1r2/+Fv6kg4uwyHiGK4gBmxqFzVsjQECNEyCrEOOYhd5y0LvB92apx65HDmyvmdsyFcWfk4PCc34toYjBRNaeJqJpm875atLsez8Xn37HQwFVoVxbJ2LAuJb6pcZn3nv/OtSX3DDKkEE4J0+7wETXO00iPMY+IMz2rTY8zyPrgkdhow0mXcpQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6353.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(451199015)(76116006)(478600001)(38070700005)(66946007)(38100700002)(66556008)(122000001)(66446008)(4326008)(8676002)(7696005)(66476007)(64756008)(2906002)(6506007)(33656002)(316002)(54906003)(6916009)(55016003)(71200400001)(86362001)(53546011)(83380400001)(8936002)(5660300002)(9686003)(41300700001)(186003)(26005)(52536014);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ekdNZE5LNlVzWDFMTjBXcE9IY1k0T2dFNC9laGltVXB4TDJyTFVFK0ptYlBi?=
- =?utf-8?B?YzZSWlNRVisvZzc1Y1RSejE4TUgvdVN1TStFYXhVckVsVHlQRENwUGtiVEVH?=
- =?utf-8?B?RVlsaDh0ZGdZQ3g3LytWYi8xUndzQjI0QkUyNEVlL0h2WTZMaXZVd3Q1SUJJ?=
- =?utf-8?B?QklkZGo2OSt5WVA5SVRWUEhxZFgvZVhPazYxc004bnFkWWpveXYwQks4eWx1?=
- =?utf-8?B?dWpFRmczQzNQb09qdVM4TURpMEY5MWp2ZUoyTmtZME9KUWZmNjMwd200VVdQ?=
- =?utf-8?B?Qm45YXNtNlhFUi9wOFp6dTZ0TGhZeldvcEpHZDArc0dNWlVhZ09FK0xiUU91?=
- =?utf-8?B?ZGZBSy9vSGIvWjdyNHIyZmZ0Smc2b2pzbm9QajhIQ1VLeFhmOGVjQVcrdFdj?=
- =?utf-8?B?K2ExNnVNdW9GL2lGcHdVbGFKa3AyTlRBUzRScTU2YlJUdEU4TzFwNWNKdFBU?=
- =?utf-8?B?TEtrMnk0S3JDSzkzS2hhekpaUElUZGthbkhnNXlIVDBpRmtTTmV4S3hMMDgr?=
- =?utf-8?B?RDU0aFJLZTZnVGphTDlrTDEvckxPWk95QnZONHoxVXN3RjE3Z05JcmwrM2Zt?=
- =?utf-8?B?S2R2MElDazhHeWdRS3NLYldaOExiRDlrVDZKbHJ1KzNkMC85UlRiOS9WaUVw?=
- =?utf-8?B?RnBaZW9BTnRrL3pRZzByRjk0VVVFMjdQdkxNN2VUc3pJQ2ExU2kwa3RKN2JK?=
- =?utf-8?B?SzlyQUlrTHMxTFA5MU9xMjZhWmg5Z1NrcmI2N2tJcGl6YmF2di9nYXNVRjFK?=
- =?utf-8?B?R2xOTnlITlRPeEI4Z3JUZUJIdnB4U3I4NUtzajlUVkVEWkxTRmZ4TmlSenBJ?=
- =?utf-8?B?WjhGZ0xZdk5CcjNWSldpeHE5bHUyU2Y5R09ETFpJdSt6d0l0VkZRbTJqUjJj?=
- =?utf-8?B?azI1OG5RWUJBZkFoNnRiTDg5M2hKRDZlKzdKTVI3OGQ1QmloUFJjbWVFbmJh?=
- =?utf-8?B?NXlUd01saEVpWUNWVzB5dktsRUFRZWg1emhiTVZWU3dHZDdQbk81bVBCZjNp?=
- =?utf-8?B?QXlTQzcxV1RPbkMxV0liSWc3c0ozc1gzRXNibVFpdWJvTmk2dVR5M2FYTE5O?=
- =?utf-8?B?OU9pOHg5N0hlUGl6SzFWNU5jeHd6U2lPVkVXNzhNaG5haEwxdC9UWXNLVXEx?=
- =?utf-8?B?NlJyL1FNa01WYS94eXBTZ1l5bjV0T05rUDdnd1BrTHFJWVQrZkJtWitBMGw5?=
- =?utf-8?B?RU9IUkFIMlFNSnI1a2pYOGpCK3hTQkdjTVNiZHFXSUJhQ09JVElFbVB0cVd6?=
- =?utf-8?B?elNEcyt0d1AybGJDMUJRekgrSGM2Y1RTVFRHZVp3bWd4Umt4QnYyUkNHRVc0?=
- =?utf-8?B?YlM2b2hRaHpTY1JoR2lKYWZPTE9lclR4N0UyVXF4VUVCSVY2WjRUZjdXL3hq?=
- =?utf-8?B?RnRBZ2dEV2FYUXh3c2ZtaE1ZQk5PRHA3K0NRTXlZcUlPc2VXeEJQWDJ6UDdu?=
- =?utf-8?B?Q3U2Q1ZBcmU4YjVOSWJiUThnbGFwMXlmcndVRUNTSCt2eVRhejl2WnNtb0dm?=
- =?utf-8?B?WTc0em5MMGZ0SzR2ejNzYXhMSmlaQlBSbTRoZUFCMXpxTkV1UVp4SGZIaU1F?=
- =?utf-8?B?aTQ0eGlRdEgzbFdPUFR0REdVaFdlSXZ0TVJIMnZNeVBVbFAxVmdSUHJrYlVS?=
- =?utf-8?B?TG9ub21MRjlQR1BLU2xERUlsQW9PeFk3ZnBpcFlacks0b1VkdWVlTGdoQTRK?=
- =?utf-8?B?YnB1SHZzb1ZRNGd2Y0RRTXVyc1A5NVRra1JFd3VIRWIxNW1xaHRzZjlrcnlr?=
- =?utf-8?B?SGdHOUJaZ2I1SFIrRzNqeDJuQ3pIRFhQL1VCQmR0Z1YvY2RSMm5OMkNSdmZU?=
- =?utf-8?B?R1daVWxzdkZUQnN1bTlrbjlmNVM4QU5JM08vQzBndE9HTC9kVnVocHdWVHpU?=
- =?utf-8?B?M3lTTVZ4aTVrSC85aTBraVlhSGhINGJxMi95Qlk0Tk01UTZMU3N4aHNaUTUz?=
- =?utf-8?B?OCtoYTFrbzdaSEdPMXdWZHR4WHJiWUR5RnJZby9vUU9raVUzQ0c0TzAxdGVK?=
- =?utf-8?B?cVdBN2dkNDl0Wlg3Mk9kREQ1NkNmL1NZelh6VkxPTmJ4K1VIckY0M1IxTWlM?=
- =?utf-8?B?ckIrbUl1UlNNUkJvZjFvS2w0NVg5bU0vMjI4OGhMSjFueGdOdTZkU29Wd0xR?=
- =?utf-8?Q?3qtc=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 8 Dec 2022 06:23:05 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46CF78C466;
+        Thu,  8 Dec 2022 03:22:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670498521; x=1702034521;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=XoVuyODnlpQIgrSkOCC1qB3uSAcKLAz+H1gXlDzLAWI=;
+  b=cfxhksmij2FjGoTqtffqTP+m+WWP8JsiDjUyIX6817ygvPvLGb+zuXJ8
+   pAyewGoaVxGJUvNWFMW7QzfGeU8FI+yn2epHwkG88eWE0GslupZsUu5Xw
+   32SgyO4Dikzelwh4cb8ZxuEfPDdYmj8V7UK/MA7/xnkIjwNvVL/eahAuU
+   swA+Cm7I1Pwp5u7kSRMlijqJvESGBb5jhignuXRoT2Ve1l1Z9TADRB67J
+   nda5f0V8KIrQI7D6wfYM4dDzcnW5WBZRlDWexDb4vFlpJi1FlddKwuXRM
+   XhqJxBmCTUqPPD2sMW9W5kK0C29xQK/PmiB3bfO/cb23AYKTKRXVThIWa
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="314793646"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="314793646"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:22:00 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="677718557"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="677718557"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 08 Dec 2022 03:21:49 -0800
+Date:   Thu, 8 Dec 2022 19:17:29 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v10 7/9] KVM: Update lpage info when private/shared
+ memory are mixed
+Message-ID: <20221208111729.GB1304936@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-8-chao.p.peng@linux.intel.com>
+ <20221205224959.GA3632095@ls.amr.corp.intel.com>
+ <20221206120224.GC1216605@chaop.bj.intel.com>
+ <20221207064224.GC3632095@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6353.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a9da171-2ae4-43e4-dff4-08dad90d6a50
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2022 11:14:46.7365
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: PhBYmIsHRDTzMbcRc0W+3zLfoVqNsfXDMAqhYPCzcg5IUkjgDkUJlnGvHqRm8k8LgJiMLBb5H7C4FYxIpO0ISg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7674
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207064224.GC3632095@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogU2FicmluYSBEdWJyb2Nh
-IDxzZEBxdWVhc3lzbmFpbC5uZXQ+DQo+IFNlbnQ6IFRodXJzZGF5LCA4IERlY2VtYmVyIDIwMjIg
-MTI6MzgNCj4gVG86IEVtZWVsIEhha2ltIDxlaGFraW1AbnZpZGlhLmNvbT4NCj4gQ2M6IGxpbnV4
-LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFJhZWQgU2FsZW0gPHJhZWRzQG52aWRpYS5jb20+Ow0K
-PiBkYXZlbUBkYXZlbWxvZnQubmV0OyBlZHVtYXpldEBnb29nbGUuY29tOyBrdWJhQGtlcm5lbC5v
-cmc7DQo+IHBhYmVuaUByZWRoYXQuY29tOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBhdGVuYXJ0
-QGtlcm5lbC5vcmc7IGppcmlAcmVzbnVsbGkudXMNCj4gU3ViamVjdDogUmU6IFtQQVRDSCBuZXQt
-bmV4dCB2MyAxLzJdIG1hY3NlYzogYWRkIHN1cHBvcnQgZm9yDQo+IElGTEFfTUFDU0VDX09GRkxP
-QUQgaW4gbWFjc2VjX2NoYW5nZWxpbmsNCj4gDQo+IEV4dGVybmFsIGVtYWlsOiBVc2UgY2F1dGlv
-biBvcGVuaW5nIGxpbmtzIG9yIGF0dGFjaG1lbnRzDQo+IA0KPiANCj4gMjAyMi0xMi0wOCwgMDY6
-NTM6MTggKzAwMDAsIEVtZWVsIEhha2ltIHdyb3RlOg0KPiA+DQo+ID4NCj4gPiA+IC0tLS0tT3Jp
-Z2luYWwgTWVzc2FnZS0tLS0tDQo+ID4gPiBGcm9tOiBTYWJyaW5hIER1YnJvY2EgPHNkQHF1ZWFz
-eXNuYWlsLm5ldD4NCj4gPiA+IFNlbnQ6IFRodXJzZGF5LCA4IERlY2VtYmVyIDIwMjIgMDowNA0K
-PiA+ID4gVG86IEVtZWVsIEhha2ltIDxlaGFraW1AbnZpZGlhLmNvbT4NCj4gPiA+IENjOiBsaW51
-eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBSYWVkIFNhbGVtIDxyYWVkc0BudmlkaWEuY29tPjsN
-Cj4gPiA+IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGVkdW1hemV0QGdvb2dsZS5jb207IGt1YmFAa2Vy
-bmVsLm9yZzsNCj4gPiA+IHBhYmVuaUByZWRoYXQuY29tOyBuZXRkZXZAdmdlci5rZXJuZWwub3Jn
-OyBhdGVuYXJ0QGtlcm5lbC5vcmc7DQo+ID4gPiBqaXJpQHJlc251bGxpLnVzDQo+ID4gPiBTdWJq
-ZWN0OiBSZTogW1BBVENIIG5ldC1uZXh0IHYzIDEvMl0gbWFjc2VjOiBhZGQgc3VwcG9ydCBmb3IN
-Cj4gPiA+IElGTEFfTUFDU0VDX09GRkxPQUQgaW4gbWFjc2VjX2NoYW5nZWxpbmsNCj4gPiA+DQo+
-ID4gPiBFeHRlcm5hbCBlbWFpbDogVXNlIGNhdXRpb24gb3BlbmluZyBsaW5rcyBvciBhdHRhY2ht
-ZW50cw0KPiA+ID4NCj4gPiA+DQo+ID4gPiAyMDIyLTEyLTA3LCAxNTo1MjoxNSArMDAwMCwgRW1l
-ZWwgSGFraW0gd3JvdGU6DQo+ID4gPiA+DQo+ID4gPiA+DQo+ID4gPiA+ID4gLS0tLS1PcmlnaW5h
-bCBNZXNzYWdlLS0tLS0NCj4gPiA+ID4gPiBGcm9tOiBTYWJyaW5hIER1YnJvY2EgPHNkQHF1ZWFz
-eXNuYWlsLm5ldD4NCj4gPiA+ID4gPiBTZW50OiBXZWRuZXNkYXksIDcgRGVjZW1iZXIgMjAyMiAx
-Nzo0Ng0KPiA+ID4gPiA+IFRvOiBFbWVlbCBIYWtpbSA8ZWhha2ltQG52aWRpYS5jb20+DQo+ID4g
-PiA+ID4gQ2M6IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IFJhZWQgU2FsZW0gPHJhZWRz
-QG52aWRpYS5jb20+Ow0KPiA+ID4gPiA+IGRhdmVtQGRhdmVtbG9mdC5uZXQ7IGVkdW1hemV0QGdv
-b2dsZS5jb207IGt1YmFAa2VybmVsLm9yZzsNCj4gPiA+ID4gPiBwYWJlbmlAcmVkaGF0LmNvbTsg
-bmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgYXRlbmFydEBrZXJuZWwub3JnOw0KPiA+ID4gPiA+IGpp
-cmlAcmVzbnVsbGkudXMNCj4gPiA+ID4gPiBTdWJqZWN0OiBSZTogW1BBVENIIG5ldC1uZXh0IHYz
-IDEvMl0gbWFjc2VjOiBhZGQgc3VwcG9ydCBmb3INCj4gPiA+ID4gPiBJRkxBX01BQ1NFQ19PRkZM
-T0FEIGluIG1hY3NlY19jaGFuZ2VsaW5rDQo+ID4gPiA+ID4NCj4gPiA+ID4gPiBFeHRlcm5hbCBl
-bWFpbDogVXNlIGNhdXRpb24gb3BlbmluZyBsaW5rcyBvciBhdHRhY2htZW50cw0KPiA+ID4gPiA+
-DQo+ID4gPiA+ID4NCj4gPiA+ID4gPiAyMDIyLTEyLTA3LCAxMjoxMDoxNiArMDIwMCwgZWhha2lt
-QG52aWRpYS5jb20gd3JvdGU6DQo+ID4gPiA+ID4gWy4uLl0NCj4gPiA+ID4gPiA+ICtzdGF0aWMg
-aW50IG1hY3NlY19jaGFuZ2VsaW5rX3VwZF9vZmZsb2FkKHN0cnVjdCBuZXRfZGV2aWNlDQo+ID4g
-PiA+ID4gPiArKmRldiwgc3RydWN0IG5sYXR0ciAqZGF0YVtdKSB7DQo+ID4gPiA+ID4gPiArICAg
-ICBlbnVtIG1hY3NlY19vZmZsb2FkIG9mZmxvYWQ7DQo+ID4gPiA+ID4gPiArICAgICBzdHJ1Y3Qg
-bWFjc2VjX2RldiAqbWFjc2VjOw0KPiA+ID4gPiA+ID4gKw0KPiA+ID4gPiA+ID4gKyAgICAgbWFj
-c2VjID0gbWFjc2VjX3ByaXYoZGV2KTsNCj4gPiA+ID4gPiA+ICsgICAgIG9mZmxvYWQgPSBubGFf
-Z2V0X3U4KGRhdGFbSUZMQV9NQUNTRUNfT0ZGTE9BRF0pOw0KPiA+ID4gPiA+DQo+ID4gPiA+ID4g
-QWxsIHRob3NlIGNoZWNrcyBhcmUgYWxzbyBwcmVzZW50IGluIG1hY3NlY191cGRfb2ZmbG9hZCwg
-d2h5IG5vdA0KPiA+ID4gPiA+IG1vdmUgdGhlbSBpbnRvIG1hY3NlY191cGRhdGVfb2ZmbG9hZCBh
-cyB3ZWxsPyAoYW5kIHRoZW4geW91DQo+ID4gPiA+ID4gZG9uJ3QgcmVhbGx5IG5lZWQgbWFjc2Vj
-X2NoYW5nZWxpbmtfdXBkX29mZmxvYWQgYW55bW9yZSkNCj4gPiA+ID4gPg0KPiA+ID4gPg0KPiA+
-ID4gPiBSaWdodCwgSSB0aG91Z2h0IGFib3V0IGl0ICwgYnV0IEkgcmVhbGl6ZWQgdGhhdCB0aG9z
-ZSBjaGVja3MgYXJlDQo+ID4gPiA+IGRvbmUgYmVmb3JlIGhvbGRpbmcgdGhlIGxvY2sgaW4gbWFj
-c2VjX3VwZF9vZmZsb2FkIGFuZCBpZiBJIG1vdmUNCj4gPiA+ID4gdGhlbSB0byBtYWNzZWNfdXBk
-YXRlX29mZmxvYWQgSSB3aWxsIGhvbGQgdGhlIGxvY2sgZm9yIGEgbG9uZ2VyDQo+ID4gPiA+IHRp
-bWUgLCBJIHdhbnQgdG8gbWluaW1pemUNCj4gPiA+IHRoZSB0aW1lIG9mIGhvbGRpbmcgdGhlIGxv
-Y2suDQo+ID4gPg0KPiA+ID4gVGhvc2UgY291cGxlIG9mIHRlc3RzIGFyZSBwcm9iYWJseSBsb3N0
-IGluIHRoZSBub2lzZSBjb21wYXJlZCB0bw0KPiA+ID4gd2hhdCBtZG9fYWRkX3NlY3kgZW5kcyB1
-cCBkb2luZy4gSXQgYWxzbyBsb29rcyBsaWtlIGEgcmFjZSBjb25kaXRpb24NCj4gPiA+IGJldHdl
-ZW4gdGhlICJtYWNzZWMtPm9mZmxvYWQgPT0gb2ZmbG9hZCIgdGVzdCBpbiBtYWNzZWNfdXBkX29m
-ZmxvYWQNCj4gPiA+IChvdXRzaWRlIHJ0bmxfbG9jaykgYW5kIHVwZGF0aW5nIG1hY3NlYy0+b2Zm
-bG9hZCB2aWENCj4gPiA+IG1hY3NlY19jaGFuZ2VsaW5rIGlzIHBvc3NpYmxlLiAoQ3VycmVudGx5
-IHdlIGNhbiBvbmx5IGNoYW5nZSBpdCB3aXRoDQo+ID4gPiBtYWNzZWNfdXBkX29mZmxvYWQgKGNh
-bGxlZCB1bmRlciBnZW5sX2xvY2spIHNvIHRoZXJlJ3Mgbm8gaXNzdWUNCj4gPiA+IHVudGlsIHdl
-IGFkZCB0aGlzIHBhdGNoKQ0KPiA+DQo+ID4gQWNrLA0KPiA+IHNvIGdldHRpbmcgcmlkIG9mIG1h
-Y3NlY19jaGFuZ2VsaW5rX3VwZF9vZmZsb2FkIGFuZCBtb3ZpbmcgdGhlIGxvY2tpbmcNCj4gPiBp
-bnNpZGUgbWFjc2VjX3VwZGF0ZV9vZmZsb2FkIHNob3VsZCBoYW5kbGUgdGhpcyBpc3N1ZQ0KPiAN
-Cj4gWW91IG1lYW4gbW92aW5nIHJ0bmxfbG9jaygpL3VubG9jayBpbnNpZGUgbWFjc2VjX3VwZGF0
-ZV9vZmZsb2FkPw0KPiBjaGFuZ2VsaW5rIGlzIGFscmVhZHkgdW5kZXIgcnRubF9sb2NrLiBKdXN0
-IG1vdmUgdGhlIGNoZWNrcyB0aGF0IHlvdSBjdXJyZW50bHkgaGF2ZQ0KPiBpbiBtYWNzZWNfY2hh
-bmdlbGlua191cGRfb2ZmbG9hZCBpbnRvIG1hY3NlY191cGRhdGVfb2ZmbG9hZCwgYW5kIHJlbW92
-ZSB0aGVtDQo+IGZyb20gbWFjc2VjX3VwZF9vZmZsb2FkLg0KDQpBY2sgd2lsbCBzZW5kIG5ldyB2
-ZXJzaW9uDQoNCj4gPiA+DQo+ID4gPiA+ID4gPiArICAgICBpZiAobWFjc2VjLT5vZmZsb2FkID09
-IG9mZmxvYWQpDQo+ID4gPiA+ID4gPiArICAgICAgICAgICAgIHJldHVybiAwOw0KPiA+ID4gPiA+
-ID4gKw0KPiA+ID4gPiA+ID4gKyAgICAgLyogQ2hlY2sgaWYgdGhlIG9mZmxvYWRpbmcgbW9kZSBp
-cyBzdXBwb3J0ZWQgYnkgdGhlIHVuZGVybHlpbmcgbGF5ZXJzDQo+ICovDQo+ID4gPiA+ID4gPiAr
-ICAgICBpZiAob2ZmbG9hZCAhPSBNQUNTRUNfT0ZGTE9BRF9PRkYgJiYNCj4gPiA+ID4gPiA+ICsg
-ICAgICAgICAhbWFjc2VjX2NoZWNrX29mZmxvYWQob2ZmbG9hZCwgbWFjc2VjKSkNCj4gPiA+ID4g
-PiA+ICsgICAgICAgICAgICAgcmV0dXJuIC1FT1BOT1RTVVBQOw0KPiA+ID4gPiA+ID4gKw0KPiA+
-ID4gPiA+ID4gKyAgICAgLyogQ2hlY2sgaWYgdGhlIG5ldCBkZXZpY2UgaXMgYnVzeS4gKi8NCj4g
-PiA+ID4gPiA+ICsgICAgIGlmIChuZXRpZl9ydW5uaW5nKGRldikpDQo+ID4gPiA+ID4gPiArICAg
-ICAgICAgICAgIHJldHVybiAtRUJVU1k7DQo+ID4gPiA+ID4gPiArDQo+ID4gPiA+ID4gPiArICAg
-ICByZXR1cm4gbWFjc2VjX3VwZGF0ZV9vZmZsb2FkKG1hY3NlYywgb2ZmbG9hZCk7IH0NCj4gPiA+
-ID4gPiA+ICsNCj4gPiA+ID4gPg0KPiA+ID4gPiA+IC0tDQo+ID4gPiA+ID4gU2FicmluYQ0KPiA+
-ID4gPg0KPiA+ID4NCj4gPiA+IC0tDQo+ID4gPiBTYWJyaW5hDQo+ID4NCj4gDQo+IC0tDQo+IFNh
-YnJpbmENCg0K
+On Tue, Dec 06, 2022 at 10:42:24PM -0800, Isaku Yamahata wrote:
+> On Tue, Dec 06, 2022 at 08:02:24PM +0800,
+> Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> 
+> > On Mon, Dec 05, 2022 at 02:49:59PM -0800, Isaku Yamahata wrote:
+> > > On Fri, Dec 02, 2022 at 02:13:45PM +0800,
+> > > Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> > > 
+> > > > A large page with mixed private/shared subpages can't be mapped as large
+> > > > page since its sub private/shared pages are from different memory
+> > > > backends and may also treated by architecture differently. When
+> > > > private/shared memory are mixed in a large page, the current lpage_info
+> > > > is not sufficient to decide whether the page can be mapped as large page
+> > > > or not and additional private/shared mixed information is needed.
+> > > > 
+> > > > Tracking this 'mixed' information with the current 'count' like
+> > > > disallow_lpage is a bit challenge so reserve a bit in 'disallow_lpage'
+> > > > to indicate a large page has mixed private/share subpages and update
+> > > > this 'mixed' bit whenever the memory attribute is changed between
+> > > > private and shared.
+> > > > 
+> > > > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > > > ---
+> > > >  arch/x86/include/asm/kvm_host.h |   8 ++
+> > > >  arch/x86/kvm/mmu/mmu.c          | 134 +++++++++++++++++++++++++++++++-
+> > > >  arch/x86/kvm/x86.c              |   2 +
+> > > >  include/linux/kvm_host.h        |  19 +++++
+> > > >  virt/kvm/kvm_main.c             |   9 ++-
+> > > >  5 files changed, 169 insertions(+), 3 deletions(-)
+> > > > 
+> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > > > index 283cbb83d6ae..7772ab37ac89 100644
+> > > > --- a/arch/x86/include/asm/kvm_host.h
+> > > > +++ b/arch/x86/include/asm/kvm_host.h
+> > > > @@ -38,6 +38,7 @@
+> > > >  #include <asm/hyperv-tlfs.h>
+> > > >  
+> > > >  #define __KVM_HAVE_ARCH_VCPU_DEBUGFS
+> > > > +#define __KVM_HAVE_ARCH_SET_MEMORY_ATTRIBUTES
+> > > >  
+> > > >  #define KVM_MAX_VCPUS 1024
+> > > >  
+> > > > @@ -1011,6 +1012,13 @@ struct kvm_vcpu_arch {
+> > > >  #endif
+> > > >  };
+> > > >  
+> > > > +/*
+> > > > + * Use a bit in disallow_lpage to indicate private/shared pages mixed at the
+> > > > + * level. The remaining bits are used as a reference count.
+> > > > + */
+> > > > +#define KVM_LPAGE_PRIVATE_SHARED_MIXED		(1U << 31)
+> > > > +#define KVM_LPAGE_COUNT_MAX			((1U << 31) - 1)
+> > > > +
+> > > >  struct kvm_lpage_info {
+> > > >  	int disallow_lpage;
+> > > >  };
+> > > > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > > > index e2c70b5afa3e..2190fd8c95c0 100644
+> > > > --- a/arch/x86/kvm/mmu/mmu.c
+> > > > +++ b/arch/x86/kvm/mmu/mmu.c
+> > > > @@ -763,11 +763,16 @@ static void update_gfn_disallow_lpage_count(const struct kvm_memory_slot *slot,
+> > > >  {
+> > > >  	struct kvm_lpage_info *linfo;
+> > > >  	int i;
+> > > > +	int disallow_count;
+> > > >  
+> > > >  	for (i = PG_LEVEL_2M; i <= KVM_MAX_HUGEPAGE_LEVEL; ++i) {
+> > > >  		linfo = lpage_info_slot(gfn, slot, i);
+> > > > +
+> > > > +		disallow_count = linfo->disallow_lpage & KVM_LPAGE_COUNT_MAX;
+> > > > +		WARN_ON(disallow_count + count < 0 ||
+> > > > +			disallow_count > KVM_LPAGE_COUNT_MAX - count);
+> > > > +
+> > > >  		linfo->disallow_lpage += count;
+> > > > -		WARN_ON(linfo->disallow_lpage < 0);
+> > > >  	}
+> > > >  }
+> > > >  
+> > > > @@ -6986,3 +6991,130 @@ void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+> > > >  	if (kvm->arch.nx_huge_page_recovery_thread)
+> > > >  		kthread_stop(kvm->arch.nx_huge_page_recovery_thread);
+> > > >  }
+> > > > +
+> > > > +static bool linfo_is_mixed(struct kvm_lpage_info *linfo)
+> > > > +{
+> > > > +	return linfo->disallow_lpage & KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> > > > +}
+> > > > +
+> > > > +static void linfo_set_mixed(gfn_t gfn, struct kvm_memory_slot *slot,
+> > > > +			    int level, bool mixed)
+> > > > +{
+> > > > +	struct kvm_lpage_info *linfo = lpage_info_slot(gfn, slot, level);
+> > > > +
+> > > > +	if (mixed)
+> > > > +		linfo->disallow_lpage |= KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> > > > +	else
+> > > > +		linfo->disallow_lpage &= ~KVM_LPAGE_PRIVATE_SHARED_MIXED;
+> > > > +}
+> > > > +
+> > > > +static bool is_expected_attr_entry(void *entry, unsigned long expected_attrs)
+> > > > +{
+> > > > +	bool expect_private = expected_attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
+> > > > +
+> > > > +	if (xa_to_value(entry) & KVM_MEMORY_ATTRIBUTE_PRIVATE) {
+> > > > +		if (!expect_private)
+> > > > +			return false;
+> > > > +	} else if (expect_private)
+> > > > +		return false;
+> > > > +
+> > > > +	return true;
+> > > > +}
+> > > > +
+> > > > +static bool mem_attrs_mixed_2m(struct kvm *kvm, unsigned long attrs,
+> > > > +			       gfn_t start, gfn_t end)
+> > > > +{
+> > > > +	XA_STATE(xas, &kvm->mem_attr_array, start);
+> > > > +	gfn_t gfn = start;
+> > > > +	void *entry;
+> > > > +	bool mixed = false;
+> > > > +
+> > > > +	rcu_read_lock();
+> > > > +	entry = xas_load(&xas);
+> > > > +	while (gfn < end) {
+> > > > +		if (xas_retry(&xas, entry))
+> > > > +			continue;
+> > > > +
+> > > > +		KVM_BUG_ON(gfn != xas.xa_index, kvm);
+> > > > +
+> > > > +		if (!is_expected_attr_entry(entry, attrs)) {
+> > > > +			mixed = true;
+> > > > +			break;
+> > > > +		}
+> > > > +
+> > > > +		entry = xas_next(&xas);
+> > > > +		gfn++;
+> > > > +	}
+> > > > +
+> > > > +	rcu_read_unlock();
+> > > > +	return mixed;
+> > > > +}
+> > > > +
+> > > > +static bool mem_attrs_mixed(struct kvm *kvm, struct kvm_memory_slot *slot,
+> > > > +			    int level, unsigned long attrs,
+> > > > +			    gfn_t start, gfn_t end)
+> > > > +{
+> > > > +	unsigned long gfn;
+> > > > +
+> > > > +	if (level == PG_LEVEL_2M)
+> > > > +		return mem_attrs_mixed_2m(kvm, attrs, start, end);
+> > > > +
+> > > > +	for (gfn = start; gfn < end; gfn += KVM_PAGES_PER_HPAGE(level - 1))
+> > > > +		if (linfo_is_mixed(lpage_info_slot(gfn, slot, level - 1)) ||
+> > > > +		    !is_expected_attr_entry(xa_load(&kvm->mem_attr_array, gfn),
+> > > > +					    attrs))
+> > > > +			return true;
+> > > > +	return false;
+> > > > +}
+> > > > +
+> > > > +static void kvm_update_lpage_private_shared_mixed(struct kvm *kvm,
+> > > > +						  struct kvm_memory_slot *slot,
+> > > > +						  unsigned long attrs,
+> > > > +						  gfn_t start, gfn_t end)
+> > > > +{
+> > > > +	unsigned long pages, mask;
+> > > > +	gfn_t gfn, gfn_end, first, last;
+> > > > +	int level;
+> > > > +	bool mixed;
+> > > > +
+> > > > +	/*
+> > > > +	 * The sequence matters here: we set the higher level basing on the
+> > > > +	 * lower level's scanning result.
+> > > > +	 */
+> > > > +	for (level = PG_LEVEL_2M; level <= KVM_MAX_HUGEPAGE_LEVEL; level++) {
+> > > > +		pages = KVM_PAGES_PER_HPAGE(level);
+> > > > +		mask = ~(pages - 1);
+> > > > +		first = start & mask;
+> > > > +		last = (end - 1) & mask;
+> > > > +
+> > > > +		/*
+> > > > +		 * We only need to scan the head and tail page, for middle pages
+> > > > +		 * we know they will not be mixed.
+> > > > +		 */
+> > > > +		gfn = max(first, slot->base_gfn);
+> > > > +		gfn_end = min(first + pages, slot->base_gfn + slot->npages);
+> > > > +		mixed = mem_attrs_mixed(kvm, slot, level, attrs, gfn, gfn_end);
+> > > > +		linfo_set_mixed(gfn, slot, level, mixed);
+> > > > +
+> > > > +		if (first == last)
+> > > > +			return;
+> > > 
+> > > 
+> > > continue.
+> > 
+> > Ya!
+> > 
+> > > 
+> > > > +
+> > > > +		for (gfn = first + pages; gfn < last; gfn += pages)
+> > > > +			linfo_set_mixed(gfn, slot, level, false);
+> > > > +
+> > > > +		gfn = last;
+> > > > +		gfn_end = min(last + pages, slot->base_gfn + slot->npages);
+> > > 
+> > > if (gfn == gfn_end) continue.
+> > 
+> > Do you see a case where gfn can equal to gfn_end? Though it does not
+> > hurt to add a check.
+> 
+> If last == base_gfn + npages, gfn == gfn_end can occur.
+
+'end' is guaranteed <=  base_gfn + npages in kvm_unmap_mem_range():
+	gfn_range.end = min(end, slot->base_gfn + slot->npages);
+
+And 'last' is defined as:
+	last = (end - 1) & mask;
+
+Then the math is:
+	last = (end - 1) & mask
+	     <= end - 1
+	     <= base_gfn + npages - 1
+	     <  base_gfn + npages
+
+Thanks,
+Chao
+> 
+> 
+> > > > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> > > > index 9a07380f8d3c..5aefcff614d2 100644
+> > > > --- a/arch/x86/kvm/x86.c
+> > > > +++ b/arch/x86/kvm/x86.c
+> > > > @@ -12362,6 +12362,8 @@ static int kvm_alloc_memslot_metadata(struct kvm *kvm,
+> > > >  		if ((slot->base_gfn + npages) & (KVM_PAGES_PER_HPAGE(level) - 1))
+> > > >  			linfo[lpages - 1].disallow_lpage = 1;
+> > > >  		ugfn = slot->userspace_addr >> PAGE_SHIFT;
+> > > > +		if (kvm_slot_can_be_private(slot))
+> > > > +			ugfn |= slot->restricted_offset >> PAGE_SHIFT;
+> > > 
+> > > Is there any alignment restriction? If no, It should be +=.
+> > > In practice, alignment will hold though.
+> > 
+> > All we need here is checking whether both userspace_addr and
+> > restricted_offset are aligned to HPAGE_SIZE or not. '+=' actually can
+> > yield wrong value in cases when userspace_addr + restricted_offset is
+> > aligned to HPAGE_SIZE but individually they may not align to HPAGE_SIZE.
+> 
+> Ah, got it. The blow comment explains it.
+> 
+> > Thanks,
+> > Chao
+> > > 
+> > > Thanks,
+> > > 
+> > > >  		/*
+> > > >  		 * If the gfn and userspace address are not aligned wrt each
+> > > >  		 * other, disable large page support for this slot.
+> -- 
+> Isaku Yamahata <isaku.yamahata@gmail.com>
