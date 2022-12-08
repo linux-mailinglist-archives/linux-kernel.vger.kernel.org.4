@@ -2,122 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09EC646F56
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:12:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C331646F5F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiLHMM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56150 "EHLO
+        id S229845AbiLHMP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 07:15:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229981AbiLHMMY (ORCPT
+        with ESMTP id S229522AbiLHMPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:12:24 -0500
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B84189AD1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 04:12:18 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.west.internal (Postfix) with ESMTP id B94622B05BCC;
-        Thu,  8 Dec 2022 07:12:15 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 08 Dec 2022 07:12:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1670501535; x=1670508735; bh=LObGFes3Ps
-        C1c06fe7UuvWKQtYq/k+HdnZLZPo9kY8o=; b=uJjG96+ko2ZE0swgXh5lszYa+C
-        3lBnxkUapfyTSrkbwtgP6H58Mo6BpVvQzKGJssD/tAglU+OlQU28UfPsMKXjTzxO
-        ZkScUzbGSa07Z/TNbKHC0+OtrLQK6bBr3NlVGOFJn/aq/KWr+BqRhTawd6jhqKxB
-        DASyty6TzILd3jEFqMmSs+ubF3ahusndjgRYpfwdo7SkeqIt4Wh1c4D4xNExc86a
-        MvN+p3oetblZOG80fdFcyRkoUC2Ge0t1kIy60jh9FLQ7B3Z5gvCuGkqHh64OKQ8Y
-        fPTmzYCOsjnTeWE8JVBX4HU3cbisN/+iLitDivgBIV4DsCufi7UZtik+cx0w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1670501535; x=1670508735; bh=LObGFes3PsC1c06fe7UuvWKQtYq/
-        k+HdnZLZPo9kY8o=; b=jOKB0EzPsfxYb8A//0/cM6hGvUT11Pmy/BB5PpQSrSha
-        OUc9JaFgvF4uoijcyqExhhRXDDEzS4WwSwMQq+fTTzSHvnX4FCsYOnHTkxZTN1Dn
-        npGcpUnaRNYcEEq1tUNrpDB4xbw1NNTOwlJuyLlQYlDzCneKn9s1LYzqiEAJQZhA
-        sn8m4FtTSdFMn0J2eJS+0Naf+w9JYKCviYi3BrTa4ILmlAbBmdnSKSqs5SvQB3Pl
-        5vy8+LaHf2eKTRrIb+ah6QYLVASgatuej8KmWmebhpkrfxGbbCQaG2RUDJmHWTWy
-        fi/Vd47V2Wask16D2iM+DD1OykfSAZXz5CHNCOfhJQ==
-X-ME-Sender: <xms:n9SRY4n2Nj2X4h7d4t2ai1AMDgPt_eDrr-Er0TFi0caScJNC_xDCew>
-    <xme:n9SRY30qKM4P7hEeqmh5DXeVGqVHGtnoK3HojDWknv6aFQROpOkbyt8qR6uwvE-1F
-    WGjssEhoo9ctQ5aBP8>
-X-ME-Received: <xmr:n9SRY2q94mWAPVVHQsLTKx4saGzE1forDoUAwy8JFFDXhoIr6ryGvzCRpvKqndMM0k37DQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgdefjecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
-    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
-    htvghrnhepjeevfeehfeekieffgeevleevtefgffefkedtfeeuhfettdegjeehgfegudff
-    ffdunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepmh
-    grgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:n9SRY0lOU-ZeTwRdDoaXBTKpQTBBPLQLOJ15wXNHMS2Px4WbvVMI0w>
-    <xmx:n9SRY22vXZ9ckGa2UeGxD4QDJQRFfhUCs77k8nmNDRRqjZoBsGCUow>
-    <xmx:n9SRY7s74sXcfwQXm5NI4wX6JAdyDQy4jVm64r7CuOTlXhU4weHeuw>
-    <xmx:n9SRY6JNQpvtmSk5egA5szrKluljofO--7IV4TXdB-BeiBhLuXO8vNNJHAY>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 07:12:14 -0500 (EST)
-Date:   Thu, 8 Dec 2022 13:12:13 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mcanal@igalia.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Oded Gabbay <ogabbay@kernel.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Melissa Wen <mwen@igalia.com>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-        Emma Anholt <emma@anholt.net>,
-        Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Wambui Karuga <wambui@karuga.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] drm: use new debugfs device-centered functions on
- DRM core files
-Message-ID: <20221208121213.yly52bcqhawbjil5@houat>
-References: <20221207132325.140393-1-mcanal@igalia.com>
- <20221207132325.140393-3-mcanal@igalia.com>
+        Thu, 8 Dec 2022 07:15:54 -0500
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8515B65F2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 04:15:53 -0800 (PST)
+Received: by mail-ej1-x62e.google.com with SMTP id t17so3427975eju.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 04:15:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fQM/pUBudcr6YU8Nrodod0FXPXqDRSlpxJvuQupwvUA=;
+        b=NPRpefpW1gveWFHbqzUrmm3OVg6JQy6oNdsnfSDvmcgE05hBIye1v57Y3pI5j/qMin
+         xeidj3EzcFrBjNjQq9c73rY3hPqUW/uqmWyWZ1hmChYc3h79JEE7rkn1/CfIaCX4LK7J
+         NRImf4vOzwrPpTyi8baTpy3RmNasuWlamquWUAeu8gJm7s4Y+pYp8J2mymNlLBUd77/z
+         NPoyIvnFf5mHjWs8TCuQdyebVDMM3s8hIgggB+hJxsARbavTZzGu1ClLhf+5ImXkvbpb
+         /EP7KLmMFNblAZjgtgoLC7YRuGmnZ+7x/ua74SGpy2tC94NwFHSFWwmZd6jNw53Defqa
+         JCqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fQM/pUBudcr6YU8Nrodod0FXPXqDRSlpxJvuQupwvUA=;
+        b=3cLsXcb4LEy6sbRJGCA393/0V8Uz21qf7EPdVEDMtt11pL1qKrDVG3AEOS7VfcEuAa
+         Ypb+UFcdEWHuoIB5k1l0yNR6vdPqr+huf6MqTBSWJLr8Rj8RPPA3+Jl3O1GSrTqqzmUL
+         JbEaR8SaQxexEOW71paNpZjyDffsFJo9AizNFewJu0vHRk97Y19IFibc4W8pwQhoGKse
+         aNvctkjY/VfSfy6berWp2QpGHnll+Rc8yBrXGc9EFs/bexRld7AK4DTxKMU+cvW5X9QA
+         tsFstv1zjMn8aEDJeyukk4qdjHr25i9kf2S3uZ+3GOEbFkS5DP6D9KbpshKPxb0/hgBe
+         bbNQ==
+X-Gm-Message-State: ANoB5pkxBiYrtdp0yj44ZGR1Fm85PZ27yFUB98DzVk2btTAMWM0RVzSJ
+        J2sVxVyudAANovw0N7VnoXg=
+X-Google-Smtp-Source: AA0mqf44xnN2FmslEeCLW8mI880+j+ljVisAV+hcyLrKR3sK2ZUCoelmTZmKEJD+Kic1TGphd3ZNUQ==
+X-Received: by 2002:a17:906:144e:b0:78d:cd72:8e3e with SMTP id q14-20020a170906144e00b0078dcd728e3emr7838779ejc.212.1670501751858;
+        Thu, 08 Dec 2022 04:15:51 -0800 (PST)
+Received: from debian ([37.19.195.134])
+        by smtp.gmail.com with ESMTPSA id x17-20020aa7d6d1000000b00458dc7e8ecasm3334637edr.72.2022.12.08.04.15.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 04:15:51 -0800 (PST)
+Date:   Thu, 8 Dec 2022 07:15:49 -0500
+From:   Petar Gligoric <petar.gligor@gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Petar Gligoric <petar.gligoric@rohde-schwarz.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Hagen Paul Pfeifer <hagen@jauu.net>
+Subject: Re: [PATCH v2 0/3] perf: introduce perf based task analyzer
+Message-ID: <Y5HVdS3mlDruNyrl@debian>
+References: <20221206154406.41941-1-petar.gligor@gmail.com>
+ <CAM9d7cizPC3p0-Z1oYsDPofwNfZHyKYiJR5JXEcS31Q=mgzcLg@mail.gmail.com>
+ <Y4/AfA2OYtlTkKwo@debian>
+ <CAM9d7chLZVDg_-tnUh_qFYzchnpis-e7HYNDVM_OPjj_QXMeKQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oeqdxey7zrnjctcz"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207132325.140393-3-mcanal@igalia.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAM9d7chLZVDg_-tnUh_qFYzchnpis-e7HYNDVM_OPjj_QXMeKQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > Thanks for the input! For this patchset we explicitly decided against
+> > extending "perf sched timehist" - after some pros and cons. Mainly we
+> > didn't want to break existing programs (which might parse the output of
+> > perf sched) and also the goal of the task-analyzer is a bit different.
+> > E.g what will follow as a follow-up patch, is to show IRQs visually
+> > pleasing intermixed with tasks to show potential sources of task
+> > latency. This will be offered as an option for the task-analyzer, but
+> > would be too much functionality for "perf sched timehist". This was the
+> > main reason why we decided against the extension.
+> 
+> Then you might want to add a new sub-command under perf sched.
+> But I guess we can just add a new option for the different output
+> format in the perf sched timehist.
+> 
+> Anyway, "perf script" is a generic tool not targeting specific events.
+> This functionality requires sched_switch (and more?) then we need
+> the record part to make sure the data has the events.  That's why
+> it's natural to have it in perf sched IMHO.
+> 
+> Thanks,
+> Namhyung
 
---oeqdxey7zrnjctcz
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+We assumed that python scripts should not only be used as a "generic tool".
+There are a number of tools like flamegraph, netdev-times, dropmonitor and
+other scripts that analyze and look at *very specific* events. The question is
+rather, why should this be implemented in C? When using Python - with batteries
+included - less code has to be written for the identical result, and it is less
+error-prone than C (less technical debt). We have measured the performance,
+even for very large perf.data files, and again we see no problems.
 
-On Wed, Dec 07, 2022 at 10:23:21AM -0300, Ma=EDra Canal wrote:
-> Replace the use of drm_debugfs_create_files() with the new
-> drm_debugfs_add_files() function in all DRM core files, centering the
-> debugfs files management on the drm_device instead of drm_minor.
->=20
-> Signed-off-by: Ma=EDra Canal <mcanal@igalia.com>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
+But maybe this should be clarified in principle! What do you say Arnaldo, Ian,
+...?
 
---oeqdxey7zrnjctcz
-Content-Type: application/pgp-signature; name="signature.asc"
+Petar
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY5HUnQAKCRDj7w1vZxhR
-xSWaAQC48Qdot0J965ijrVZmLJ7zfzdJGdFJYpmjtN0Tk0Xt6gD/Q05JQ9vF5DPn
-wPZcGUu9k52mt4bDsrAwR9Wrd5eAFAQ=
-=Jiv0
------END PGP SIGNATURE-----
-
---oeqdxey7zrnjctcz--
