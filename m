@@ -2,82 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779C7647718
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:16:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 101DB647719
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229660AbiLHUP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:15:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S229739AbiLHUQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229939AbiLHUPd (ORCPT
+        with ESMTP id S229558AbiLHUQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:15:33 -0500
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D557378B9B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:15:25 -0800 (PST)
-Received: by mail-il1-f175.google.com with SMTP id y2so1669492ily.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:15:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hBJ3EpD4mCazHRDaQ0hpxsWyDSGssOPcsHYErf96w0M=;
-        b=LZDZZYsoerHqDDBIYE5Ys/KwPq0bnmxoDl4HSMnfXKyLDJ3uVBTAG5FGEZ9R5X2tNB
-         EyPz/uF8P4cY1zyuabxlbkuSnW18Ke3df8siylVL2PT61ICewNESGeuo5icbuMc5KZ+o
-         r45BzsZyXh65+VRD6bZSu8WBh0ZSLbFq6Txzl1XZ07+sukqr7ti/p87mnQypGdnOHohs
-         VSSAk7xdcOLCtoUy8T7EHFOWJvvdkisq055Fz8Tojxox/0zF6QiBDfWuPGDzIJXQ0QDP
-         fhkhrIkWh55tfzuak7pXjLiZyEfW37m5a4gCSHJYvHCyka72O38hQ1B6z1covEHfsfu4
-         DgDg==
-X-Gm-Message-State: ANoB5pn3mQ9gofmV2LqQJ7Ii7Jfd7amESz88oqZdy3MhkRnKHcevUkUF
-        Uj6vdM1UeW9pYXAi224hrEgmJTd4vHl4HJFf+ms=
-X-Google-Smtp-Source: AA0mqf5JUUqce8JQ28yrQ0HY/cc5JQ738DMG73VEo15NaeOIBoMI8m7Dm/UEvAAFK4DfJ/IQUqWvwQprDjYXv/V9nK4=
-X-Received: by 2002:a92:6b08:0:b0:303:148c:6a28 with SMTP id
- g8-20020a926b08000000b00303148c6a28mr23429305ilc.294.1670530525105; Thu, 08
- Dec 2022 12:15:25 -0800 (PST)
+        Thu, 8 Dec 2022 15:16:05 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC663C6CD
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:16:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8FE4CCE244B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 20:16:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77710C433D2;
+        Thu,  8 Dec 2022 20:15:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670530560;
+        bh=r9HpB/mmg7ZftwCJizYWJ7Mosc/Pfu5PxDDbosk1GEE=;
+        h=Date:From:To:cc:Subject:From;
+        b=t2Zn0jqM8mCoj4Db2FjfdE0a+phsHsOT8J7XtdClDCjY4mlMbel7z88bEF1+bnkc+
+         QKiUVPfZnIHEYF3CpFuk1jqAWdudf8+W4WVzxL/JhufoL60M7DdtjM7rPzNT5y4boS
+         EDlWXMdEYy32f6AAvdAP0f6+tpXu0Hmo2ckymaPtBqIKdhr/1kHA1Hi3YYhsK5uQ6B
+         FZXKE8hFZX0KqklajEAe3ARkGuJZTuMRPc7/2oWKSra14TRXnFEkXCq36HFs1hOA7K
+         +EpQKFF05bMzJTUUeJwrtb8oBCbD0VCIxHjYCpLRmw/19ThZQffokK0gnIght3Ijo0
+         dO1CS75UCSANw==
+Date:   Thu, 8 Dec 2022 21:16:00 +0100 (CET)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] HID regression fix for 6.1
+Message-ID: <nycvar.YFH.7.76.2212082109060.9000@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-References: <20221206154406.41941-1-petar.gligor@gmail.com>
- <CAM9d7cizPC3p0-Z1oYsDPofwNfZHyKYiJR5JXEcS31Q=mgzcLg@mail.gmail.com>
- <Y4/AfA2OYtlTkKwo@debian> <CAM9d7chLZVDg_-tnUh_qFYzchnpis-e7HYNDVM_OPjj_QXMeKQ@mail.gmail.com>
- <Y5HVdS3mlDruNyrl@debian> <CAM9d7ciX9ULwSy5G3cFZi7mMXrt_A52hwwk7L1m-oV_0P07_vw@mail.gmail.com>
- <Y5JE/ci+1nN9RrJQ@debian>
-In-Reply-To: <Y5JE/ci+1nN9RrJQ@debian>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 8 Dec 2022 12:15:13 -0800
-Message-ID: <CAM9d7chSj_p8KzqRdOUZaFMyVVXHLoW+Ra5ZR4FY60bpvzUSMA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] perf: introduce perf based task analyzer
-To:     Petar Gligoric <petar.gligor@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Petar Gligoric <petar.gligoric@rohde-schwarz.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 12:11 PM Petar Gligoric <petar.gligor@gmail.com> wrote:
->
-> >On Thu, Dec 08, 2022 at 11:10:58AM -0800, Namhyung Kim wrote:
-> >
-> > Then I have no problem with python.  Please take a look at the
-> > scripts/python/bin directory to provide shortcuts for record/report.
->
-> Great that we could resolve it! Regarding wrapper: I thought I added
-> them or did you mean something else?
->
-> .../scripts/python/bin/tasks-analyzer-record |  2 +
-> .../scripts/python/bin/tasks-analyzer-report |  3 +
+Linus,
 
-Right, that's what I meant.  You got it already! :)
+please pull from
 
-Thanks,
-Namhyung
+  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022120801
+
+It contains a regression fix for handling Logitech HID++ devices and 
+memory corruption fixes. More specifically:
+
+=====
+- regression fix (revert) for catch-all handling of Logitech HID++ 
+  Bluetooth devices; there are devices that turn out not to work
+  with this, and the root cause is yet to be properly understood. So we
+  are dropping it for now, and it will be revisited for 6.2 or 6.3
+  (Benjamin Tissoires)
+- memory corruption fix in HID core (ZhangPeng)
+- memory corruption fix in hid-lg4ff (Anastasia Belova)
+- Kconfig fix for I2C_HID (Benjamin Tissoires)
+- a few device-id specific quirks that piggy-back on top of the
+  important fixes above
+=====
+
+Thanks.
+
+----------------------------------------------------------------
+Anastasia Belova (1):
+      HID: hid-lg4ff: Add check for empty lbuf
+
+Ankit Patel (1):
+      HID: usbhid: Add ALWAYS_POLL quirk for some mice
+
+Benjamin Tissoires (3):
+      HID: fix I2C_HID not selected when I2C_HID_OF_ELAN is
+      Revert "HID: logitech-hidpp: Remove special-casing of Bluetooth devices"
+      Revert "HID: logitech-hidpp: Enable HID++ for all the Logitech Bluetooth devices"
+
+Hans de Goede (1):
+      HID: ite: Enable QUIRK_TOUCHPAD_ON_OFF_REPORT on Acer Aspire Switch V 10
+
+José Expósito (2):
+      HID: uclogic: Fix frame templates for big endian architectures
+      HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
+
+ZhangPeng (1):
+      HID: core: fix shift-out-of-bounds in hid_report_raw_event
+
+ drivers/hid/hid-core.c           |  3 +++
+ drivers/hid/hid-ids.h            |  4 ++++
+ drivers/hid/hid-ite.c            |  5 +++++
+ drivers/hid/hid-lg4ff.c          |  6 ++++++
+ drivers/hid/hid-logitech-hidpp.c | 28 +++++++++-------------------
+ drivers/hid/hid-quirks.c         |  3 +++
+ drivers/hid/hid-uclogic-core.c   |  1 +
+ drivers/hid/hid-uclogic-rdesc.c  |  2 +-
+ drivers/hid/i2c-hid/Kconfig      |  4 ++--
+ 9 files changed, 34 insertions(+), 22 deletions(-)
+
+-- 
+Jiri Kosina
+SUSE Labs
+
