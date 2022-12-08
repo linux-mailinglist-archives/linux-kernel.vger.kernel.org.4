@@ -2,119 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83F63646A91
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:32:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82682646A9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:33:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiLHIbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:31:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S229558AbiLHIdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:33:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiLHIbp (ORCPT
+        with ESMTP id S229589AbiLHIdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:31:45 -0500
-X-Greylist: delayed 278 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Dec 2022 00:31:41 PST
-Received: from mx0.infotecs.ru (mx0.infotecs.ru [91.244.183.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC32D5E9E1;
-        Thu,  8 Dec 2022 00:31:41 -0800 (PST)
-Received: from mx0.infotecs-nt (localhost [127.0.0.1])
-        by mx0.infotecs.ru (Postfix) with ESMTP id 137C21204047;
-        Thu,  8 Dec 2022 11:31:40 +0300 (MSK)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx0.infotecs.ru 137C21204047
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=infotecs.ru; s=mx;
-        t=1670488300; bh=s0kXhZ5QwF8NQVrywWavoH3BbIaBSkcol4p+WMzzHbA=;
-        h=From:To:CC:Subject:Date:From;
-        b=DbUNE3JG4rJX3rTSn9rY81FAixTQREYeC3GYoLlJZ9uBXiqks7lvmdk1JBo5OP4HM
-         DMHChPDRv7l+rQ24/9o8pXnZ4zK+syjvkfjphYp1Pmaf6SoxsLyMXCrJTST9Jgxzt5
-         5zdfN4WzxfCj2W3iZuqBocCXtD3qwZz31/QDYPS8=
-Received: from msk-exch-02.infotecs-nt (msk-exch-02.infotecs-nt [10.0.7.192])
-        by mx0.infotecs-nt (Postfix) with ESMTP id 104FC3005EC0;
-        Thu,  8 Dec 2022 11:31:40 +0300 (MSK)
-Received: from msk-exch-01.infotecs-nt (10.17.0.3) by msk-exch-02.infotecs-nt
- (10.17.0.2) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Thu, 8 Dec
- 2022 11:31:39 +0300
-Received: from msk-exch-01.infotecs-nt ([fe80::89df:c35f:46be:fd07]) by
- msk-exch-01.infotecs-nt ([fe80::89df:c35f:46be:fd07%14]) with mapi id
- 15.02.1118.012; Thu, 8 Dec 2022 11:31:39 +0300
-From:   Gavrilov Ilia <Ilia.Gavrilov@infotecs.ru>
-To:     Jiri Pirko <jiri@nvidia.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH] net: devlink: Add missing error check to
- devlink_resource_put()
-Thread-Topic: [PATCH] net: devlink: Add missing error check to
- devlink_resource_put()
-Thread-Index: AQHZCt9+6LuahvuDWEOcrRsPGlrGSw==
-Date:   Thu, 8 Dec 2022 08:31:39 +0000
-Message-ID: <20221208082821.3927937-1-Ilia.Gavrilov@infotecs.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.17.0.10]
-x-exclaimer-md-config: 208ac3cd-1ed4-4982-a353-bdefac89ac0a
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 8 Dec 2022 03:33:06 -0500
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6CB27161;
+        Thu,  8 Dec 2022 00:33:03 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NSS0G66C5z9xHw7;
+        Thu,  8 Dec 2022 16:25:50 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwBHM3AjoZFjn3rMAA--.59558S2;
+        Thu, 08 Dec 2022 09:32:43 +0100 (CET)
+Message-ID: <971b28db46dfb4437080b18ba042b290abaf960f.camel@huaweicloud.com>
+Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
+ CONFIG_VMAP_STACK=y
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Mimi Zohar <zohar@linux.ibm.com>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Thu, 08 Dec 2022 09:32:33 +0100
+In-Reply-To: <b3d0cfa7f5391968ce332977eb602305cd57e891.camel@linux.ibm.com>
+References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
+         <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
+         <Y4j4MJzizgEHf4nv@sol.localdomain>
+         <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
+         <Y4pIpxbjBdajymBJ@sol.localdomain>
+         <5813b77edf8f8c6c68da8343b7898f2a5c831077.camel@huaweicloud.com>
+         <b3d0cfa7f5391968ce332977eb602305cd57e891.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-KLMS-Rule-ID: 1
-X-KLMS-Message-Action: clean
-X-KLMS-AntiSpam-Lua-Profiles: 174026 [Dec 08 2022]
-X-KLMS-AntiSpam-Version: 5.9.59.0
-X-KLMS-AntiSpam-Envelope-From: Ilia.Gavrilov@infotecs.ru
-X-KLMS-AntiSpam-Rate: 0
-X-KLMS-AntiSpam-Status: not_detected
-X-KLMS-AntiSpam-Method: none
-X-KLMS-AntiSpam-Auth: dkim=none
-X-KLMS-AntiSpam-Info: LuaCore: 502 502 69dee8ef46717dd3cb3eeb129cb7cc8dab9e30f6, {Tracking_from_domain_doesnt_match_to}, infotecs.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-MS-Exchange-Organization-SCL: -1
-X-KLMS-AntiSpam-Interceptor-Info: scan successful
-X-KLMS-AntiPhishing: Clean, bases: 2022/12/08 05:05:00
-X-KLMS-AntiVirus: Kaspersky Security for Linux Mail Server, version 8.0.3.30, bases: 2022/12/08 05:14:00 #20660675
-X-KLMS-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwBHM3AjoZFjn3rMAA--.59558S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxGFy8Ww4DuF1UGF15ZryUGFg_yoW7JF4kpa
+        1kK3W8Kr45Jr1fCF12v3WYy3Z5KrW8tryUWrs8Jw1YyFyqqrnFyw1Iyr1UWryFgry8GF12
+        qFW8trnxCr15Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4ZryQADsT
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the resource size changes, the return value of the
-'nla_put_u64_64bit' function is not checked. That has been fixed to avoid
-rechecking at the next step.
+On Wed, 2022-12-07 at 20:26 -0500, Mimi Zohar wrote:
+> On Mon, 2022-12-05 at 09:22 +0100, Roberto Sassu wrote:
+> > On Fri, 2022-12-02 at 10:49 -0800, Eric Biggers wrote:
+> > > On Fri, Dec 02, 2022 at 08:58:21AM +0100, Roberto Sassu wrote:
+> > > > On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
+> > > > > On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
+> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > 
+> > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
+> > > > > > mapping") checks that both the signature and the digest reside in the
+> > > > > > linear mapping area.
+> > > > > > 
+> > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
+> > > > > > stack support"), made it possible to move the stack in the vmalloc area,
+> > > > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
+> > > > > > adjacent pages.
+> > > > > > 
+> > > > > > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
+> > > > > > evm_digest structure, and use that instead of the in-stack counterpart.
+> > > > > > 
+> > > > > > Cc: stable@vger.kernel.org # 4.9.x
+> > > > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
+> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > > > > > ---
+> > > > > >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
+> > > > > >  1 file changed, 21 insertions(+), 5 deletions(-)
+> > > > > > 
+> > > > > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
+> > > > > > index 23d484e05e6f..7f76d6103f2e 100644
+> > > > > > --- a/security/integrity/evm/evm_main.c
+> > > > > > +++ b/security/integrity/evm/evm_main.c
+> > > > > > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> > > > > >  	struct signature_v2_hdr *hdr;
+> > > > > >  	enum integrity_status evm_status = INTEGRITY_PASS;
+> > > > > >  	struct evm_digest digest;
+> > > > > > +	struct evm_digest *digest_ptr = &digest;
+> > > > > >  	struct inode *inode;
+> > > > > >  	int rc, xattr_len, evm_immutable = 0;
+> > > > > >  
+> > > > > > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> > > > > >  		}
+> > > > > >  
+> > > > > >  		hdr = (struct signature_v2_hdr *)xattr_data;
+> > > > > > -		digest.hdr.algo = hdr->hash_algo;
+> > > > > > +
+> > > > > > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+> > > > > > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
+> > > > > > +			if (!digest_ptr) {
+> > > > > > +				rc = -ENOMEM;
+> > > > > > +				break;
+> > > > > > +			}
+> > > > > > +		}
+> > > > > > +
+> > > > > > +		digest_ptr->hdr.algo = hdr->hash_algo;
+> > > > > > +
+> > > > > >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
+> > > > > > -				   xattr_value_len, xattr_data->type, &digest);
+> > > > > > +				   xattr_value_len, xattr_data->type,
+> > > > > > +				   digest_ptr);
+> > > > > >  		if (rc)
+> > > > > >  			break;
+> > > > > >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
+> > > > > >  					(const char *)xattr_data, xattr_len,
+> > > > > > -					digest.digest, digest.hdr.length);
+> > > > > > +					digest_ptr->digest,
+> > > > > > +					digest_ptr->hdr.length);
+> > > > > >  		if (!rc) {
+> > > > > >  			inode = d_backing_inode(dentry);
+> > > > > >  
+> > > > > > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
+> > > > > >  		else
+> > > > > >  			evm_status = INTEGRITY_FAIL;
+> > > > > >  	}
+> > > > > > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
+> > > > > > -		  digest.digest);
+> > > > > > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
+> > > > > > +		 digest_ptr->hdr.length, digest_ptr->digest);
+> > > > > > +
+> > > > > > +	if (digest_ptr && digest_ptr != &digest)
+> > > > > > +		kfree(digest_ptr);
+> > > > > 
+> > > > > What is the actual problem here?  Where is a scatterlist being created from this
+> > > > > buffer?  AFAICS it never happens.
+> > > > 
+> > > > Hi Eric
+> > > > 
+> > > > it is in public_key_verify_signature(), called by asymmetric_verify()
+> > > > and integrity_digsig_verify().
+> > > > 
+> > > 
+> > > Hmm, that's several steps down the stack then.  And not something I had
+> > > expected.
+> > > 
+> > > Perhaps this should be fixed in public_key_verify_signature() instead?  It
+> > > already does a kmalloc(), so that allocation size just could be made a bit
+> > > larger to get space for a temporary copy of 's' and 'digest'.
+> > 
+> > Mimi asked to fix it in both IMA and EVM.
+> 
+> At the time I thought the problem was limited to
+> integrity_digsig_verify() and just to the digest.
+> 
+> I'll leave it up to you and Eric to decide what is the preferable
+> solution.
 
-Found by InfoTeCS on behalf of Linux Verification Center
-(linuxtesting.org) with SVACE.
+Ok, yes. I think Eric's suggestion of making a copy in
+public_key_verify_signature() is better. Will do it.
 
-Fixes: d9f9b9a4d05f ("devlink: Add support for resource abstraction")
-Signed-off-by: Ilia.Gavrilov <Ilia.Gavrilov@infotecs.ru>
----
- net/core/devlink.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+> > > Or at the very least, struct public_key_signature should have a *very* clear
+> > > comment saying that the 's' and 'digest' fields must be located in physically
+> > > contiguous memory...
+> > 
+> > That I could add as an additional patch.
+> 
+> Thanks, the new patch containing the comment looks fine.
 
-diff --git a/net/core/devlink.c b/net/core/devlink.c
-index 89baa7c0938b..ff078bcef9ba 100644
---- a/net/core/devlink.c
-+++ b/net/core/devlink.c
-@@ -4193,9 +4193,10 @@ static int devlink_resource_put(struct devlink *devl=
-ink, struct sk_buff *skb,
- 	    nla_put_u64_64bit(skb, DEVLINK_ATTR_RESOURCE_ID, resource->id,
- 			      DEVLINK_ATTR_PAD))
- 		goto nla_put_failure;
--	if (resource->size !=3D resource->size_new)
--		nla_put_u64_64bit(skb, DEVLINK_ATTR_RESOURCE_SIZE_NEW,
--				  resource->size_new, DEVLINK_ATTR_PAD);
-+	if (resource->size !=3D resource->size_new &&
-+	    nla_put_u64_64bit(skb, DEVLINK_ATTR_RESOURCE_SIZE_NEW,
-+			      resource->size_new, DEVLINK_ATTR_PAD))
-+		goto nla_put_failure;
- 	if (devlink_resource_occ_put(resource, skb))
- 		goto nla_put_failure;
- 	if (devlink_resource_size_params_put(resource, skb))
---=20
-2.30.2
+Thanks, not sure if I need to keep it with the new patch (probably
+not).
+
+Roberto
+
