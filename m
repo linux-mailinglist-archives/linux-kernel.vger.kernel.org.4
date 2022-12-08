@@ -2,99 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD31646B70
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E174C646B73
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiLHJHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:07:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35762 "EHLO
+        id S230182AbiLHJHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:07:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiLHJHD (ORCPT
+        with ESMTP id S230201AbiLHJHT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:07:03 -0500
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6CB2F66E;
-        Thu,  8 Dec 2022 01:05:35 -0800 (PST)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 25D7F1C000B;
-        Thu,  8 Dec 2022 09:05:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670490334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AJxDLt8hUXawCrNccreH5yy8sxv6TlhzobWAynLdewY=;
-        b=TOXe+X3BQntT96xi2Ug7VH3tEmj51ZQztuaqU5bz2r4tdYhil9On1DRHvt+7BE7x1TQwFA
-        MmR15kYRhimQE+pIvybnaA0uX9lDNXth17AFiLfNhUNdx9rDb3HcPORaNnse8kIQys5bVL
-        F9LqFrRDh3uNoEjOx/fZoiCQXF+hFEUNXifopRt2YnoSFAjQV19ueUyP9oWbJS7/xHMTYn
-        C4Y8rpDQdSg2oQPwkvz9hHeWcUJm7SVNkHYHFlQHxb9gB3VH01Ww+aXcTssY512rXYhH2K
-        SPTkUC15Nf15yoBeH64AbCgppjkyqRgwseYs2ukZtRGv+dFijeZsgs8g+iyCbQ==
-Date:   Thu, 8 Dec 2022 10:05:30 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
- 'depends-on' is no more optional
-Message-ID: <20221208100530.137fa8b7@bootlin.com>
-In-Reply-To: <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
-References: <20221207162435.1001782-1-herve.codina@bootlin.com>
-        <20221207162435.1001782-4-herve.codina@bootlin.com>
-        <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 04:07:19 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FB86D7DA;
+        Thu,  8 Dec 2022 01:06:33 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NSSvC2GbRz4y0vL;
+        Thu,  8 Dec 2022 17:06:31 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.40.52])
+        by mse-fl1.zte.com.cn with SMTP id 2B896QIo053511;
+        Thu, 8 Dec 2022 17:06:26 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 8 Dec 2022 17:06:29 +0800 (CST)
+Date:   Thu, 8 Dec 2022 17:06:29 +0800 (CST)
+X-Zmail-TransId: 2af96391a9151619e636
+X-Mailer: Zmail v1.0
+Message-ID: <202212081706290141979@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <rafael@kernel.org>
+Cc:     <daniel.lezcano@linaro.org>, <amitk@kernel.org>,
+        <rui.zhang@intel.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsOiBDb252ZXJ0IHRvIHVzZSBzeXNmc19lbWl0X2F0KCkgQVBJ?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B896QIo053511
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 6391A917.000 by FangMail milter!
+X-FangMail-Envelope: 1670490391/4NSSvC2GbRz4y0vL/6391A917.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6391A917.000/4NSSvC2GbRz4y0vL
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-On Thu, 8 Dec 2022 09:26:41 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-> On 07/12/2022 17:24, Herve Codina wrote:
-> > The 'depends-on' property is set in involved DTS.
-> > 
-> > Move it to a required property.
-> > 
-> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> > ---
-> >  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml | 1 +  
-> 
-> This should be squashed with previous patch. There is no point to add
-> property and immediately in the next patch make it required. Remember
-> that bindings are separate from DTS.
-> 
-> Best regards,
-> Krzysztof
-> 
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/thermal/thermal_core.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-I though about make dtbs_check in case of git bisect.
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index f17ab2316dbd..91d40ce62c92 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -229,10 +229,9 @@ int thermal_build_list_of_policies(char *buf)
+ 	mutex_lock(&thermal_governor_lock);
 
-But, ok I will squash or perhaps remove completely this commit.
-It introduces a DT compatibility break adding a new mandatory
-property (raised by Rob on cover letter review).
-Is this compatibility break can be acceptable ?
+ 	list_for_each_entry(pos, &thermal_governor_list, governor_list) {
+-		count += scnprintf(buf + count, PAGE_SIZE - count, "%s ",
+-				   pos->name);
++		count += sysfs_emit_at(buf, count, "%s ", pos->name);
+ 	}
+-	count += scnprintf(buf + count, PAGE_SIZE - count, "\n");
++	count += sysfs_emit_at(buf, count, "\n");
 
-Best regards,
-Herve
+ 	mutex_unlock(&thermal_governor_lock);
+
+-- 
+2.25.1
