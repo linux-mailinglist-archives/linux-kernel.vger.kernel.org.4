@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74366647547
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:03:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE21064754C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:06:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230009AbiLHSDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:03:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S229556AbiLHSGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:06:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiLHSDa (ORCPT
+        with ESMTP id S229524AbiLHSGB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:03:30 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B72AD33C;
-        Thu,  8 Dec 2022 10:03:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670522609; x=1702058609;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=a5QVaJCW+1KfH+RIxcXb6CC8DOjg9E8IGIEr6DurHN4=;
-  b=GZuGOMlkP+zF9wHo7SHVTokw/nl48YpRT0CYYAXRoIrdfryA9SkNIcX6
-   kpiwtN+tR82YC6fGzonfqI081wmtM2D4i6lIxKyxi7eh79gH1Pw7Uqdwm
-   dp96rdTbLgAxN18Dx3xYpD29uc5C2sH03I8lLNAfD2tp4e0jNfH851NXk
-   BA2Ls5d8Nu5DMSeybuvpKFfWlVPnp56giV1T17hFcoGN5XE4SZsjnCBcP
-   gWPEA1kqBrjwJnAuMMjwRog7UHvimecZBHcK7/7Qs16QYWi9d0l31bCgQ
-   imqijagBcvfKFLmeaiBGQudyLz44uZNd+EUasJdv0nKe0cqxlizaDiiT0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="319116038"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="319116038"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:03:06 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="640720980"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="640720980"
-Received: from nmanikan-mobl1.amr.corp.intel.com (HELO [10.251.3.168]) ([10.251.3.168])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:03:05 -0800
-Message-ID: <08a420401b2fb539f37cbf21a0ded6bf8c68c72b.camel@linux.intel.com>
-Subject: Re: [PATCH v2 03/18] x86/sgx: Add 'struct sgx_epc_lru_lists' to
- encapsulate lru list(s)
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Date:   Thu, 08 Dec 2022 10:03:04 -0800
-In-Reply-To: <Y5IDXF+6GmURxbYF@kernel.org>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
-         <20221202183655.3767674-4-kristen@linux.intel.com>
-         <Y5IDXF+6GmURxbYF@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 8 Dec 2022 13:06:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946A22FBC7;
+        Thu,  8 Dec 2022 10:05:59 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E9E6200D;
+        Thu,  8 Dec 2022 18:05:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92F83C433D2;
+        Thu,  8 Dec 2022 18:05:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670522758;
+        bh=LcUc6vIGzM7qLxwzZfCmF429Ev9PHuS1tGR3YI4qEdI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=QWr+6i9XmeU8jFODBTFCkwViF5GsmDG8AOQIsUGUq2V7cb9UFcj9j2Ik0YIPsiCtS
+         Q0QkHQcAUjWR/9QJ02zYNJ0GrUEXY2c3++SWl0p7mTDuFmAKEoMIjWKQ1G1+xAGkQA
+         Q56mlppzFwE0l91532vHILGqMG/p/lJLGvzSxYHRc/nTb9iTRyN2s8L2us/BYcv8pn
+         aHgDBoa+9USYL7mZj6U58fw8fpzZuPXcNtVMiiEjls8W1wrFmEQsO1hyrZOWhh20gG
+         KWwyWIlTmPZc7wPeQ++Q01oSL1RsX3TfkH5WLig1owaN2nM+WlUuZNCkQ8ARAUXpTc
+         zrpAe1utJBFjQ==
+Received: by mail-lf1-f44.google.com with SMTP id c1so3239854lfi.7;
+        Thu, 08 Dec 2022 10:05:58 -0800 (PST)
+X-Gm-Message-State: ANoB5pljB5rW6rV7Z+RvtGvrJV0MDs95IoFaSB4KxI0LFq3eutzm51PK
+        rvOotpogSsxJYEIyuvV3amCJ48lIYhHoZtyGsPQ=
+X-Google-Smtp-Source: AA0mqf7iF6zAnK2GD/yJ+MVH25N0dT0eelPZbqVPPbatxILofsLbcbgIzB4qlMmW63iOzBEA57tkGHLYX5W1TavqjdU=
+X-Received: by 2002:a05:6512:3082:b0:4b5:964d:49a4 with SMTP id
+ z2-20020a056512308200b004b5964d49a4mr1861580lfd.637.1670522756618; Thu, 08
+ Dec 2022 10:05:56 -0800 (PST)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <202211041904.f9S5gAGL-lkp@intel.com> <Y5FvChDBD/+uaFy8@gondor.apana.org.au>
+In-Reply-To: <Y5FvChDBD/+uaFy8@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 8 Dec 2022 19:05:45 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXGkdp_cwOWeX_49Y5xTCH8Y7X-LnM8pJufCH3yw7anBWQ@mail.gmail.com>
+Message-ID: <CAMj1kXGkdp_cwOWeX_49Y5xTCH8Y7X-LnM8pJufCH3yw7anBWQ@mail.gmail.com>
+Subject: Re: arch/arm/crypto/sha1_glue.c:34:8: warning: cast from 'void
+ (*)(u32 *, const unsigned char *, unsigned int)' (aka 'void (*)(unsigned int
+ *, const unsigned char *, unsigned int)') to 'sha1_block_fn *' (aka 'void
+ (*)(struct sha1_state *, const unsigned char ...
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     kernel test robot <lkp@intel.com>,
+        Robert Elliott <elliott@hpe.com>, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-08 at 15:31 +0000, Jarkko Sakkinen wrote:
-> On Fri, Dec 02, 2022 at 10:36:39AM -0800, Kristen Carlson Accardi
-> wrote:
-> > Introduce a data structure to wrap the existing reclaimable list
-> > and its spinlock in a struct to minimize the code changes needed
-> > to handle multiple LRUs as well as reclaimable and non-reclaimable
-> > lists, both of which will be introduced and used by SGX EPC
-> > cgroups.
-> >=20
-> > Signed-off-by: Sean Christopherson
-> > <sean.j.christopherson@intel.com>
-> > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > ---
-> > =C2=A0arch/x86/kernel/cpu/sgx/sgx.h | 65
-> > +++++++++++++++++++++++++++++++++++
-> > =C2=A01 file changed, 65 insertions(+)
-> >=20
-> > diff --git a/arch/x86/kernel/cpu/sgx/sgx.h
-> > b/arch/x86/kernel/cpu/sgx/sgx.h
-> > index 39cb15a8abcb..5e6d88438fae 100644
-> > --- a/arch/x86/kernel/cpu/sgx/sgx.h
-> > +++ b/arch/x86/kernel/cpu/sgx/sgx.h
-> > @@ -90,6 +90,71 @@ static inline void *sgx_get_epc_virt_addr(struct
-> > sgx_epc_page *page)
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return section->virt_ad=
-dr + index * PAGE_SIZE;
-> > =C2=A0}
-> > =C2=A0
-> > +/*
-> > + * This data structure wraps a list of reclaimable EPC pages, and
-> > a list of
-> > + * non-reclaimable EPC pages and is used to implement a LRU policy
-> > during
-> > + * reclamation.
-> > + */
-> > +struct sgx_epc_lru_lists {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spinlock_t lock;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct list_head reclaimable=
-;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct list_head unreclaimab=
-le;
-> > +};
-> =C2=A0
-> Why this is named like this, and not sgx_epc_global_rcu? Are there
-> any other use cases?
->=20
-> BR, Jarkko
+On Thu, 8 Dec 2022 at 05:59, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Fri, Nov 04, 2022 at 07:33:43PM +0800, kernel test robot wrote:
+> >
+> > vim +34 arch/arm/crypto/sha1_glue.c
+> >
+> > f0be44f4fb1fae David McCullough 2012-09-07  23
+> > 1f8673d31a999e Jussi Kivilinna  2014-07-29  24  asmlinkage void sha1_block_data_order(u32 *digest,
+> > f0be44f4fb1fae David McCullough 2012-09-07  25                const unsigned char *data, unsigned int rounds);
+> > f0be44f4fb1fae David McCullough 2012-09-07  26
+> > 604682551aa511 Jussi Kivilinna  2014-07-29  27  int sha1_update_arm(struct shash_desc *desc, const u8 *data,
+> > f0be44f4fb1fae David McCullough 2012-09-07  28                    unsigned int len)
+> > f0be44f4fb1fae David McCullough 2012-09-07  29  {
+> > 90451d6bdb787e Ard Biesheuvel   2015-04-09  30        /* make sure casting to sha1_block_fn() is safe */
+> > 90451d6bdb787e Ard Biesheuvel   2015-04-09  31        BUILD_BUG_ON(offsetof(struct sha1_state, state) != 0);
+> > f0be44f4fb1fae David McCullough 2012-09-07  32
+> > 90451d6bdb787e Ard Biesheuvel   2015-04-09  33        return sha1_base_do_update(desc, data, len,
+> > 90451d6bdb787e Ard Biesheuvel   2015-04-09 @34                                   (sha1_block_fn *)sha1_block_data_order);
+> > f0be44f4fb1fae David McCullough 2012-09-07  35  }
+> > 604682551aa511 Jussi Kivilinna  2014-07-29  36  EXPORT_SYMBOL_GPL(sha1_update_arm);
+> > f0be44f4fb1fae David McCullough 2012-09-07  37
+>
+> So clan doesn't like the cast on the assembly function.
+>
+> Ard, why can't we just change the signature of the assembly
+> function instead of casting?
+>
 
-Yes, there are other use cases that are introduced in the other
-patches. This structure is used to in the cgroup struct to hold cgroup
-specific LRUs.
-
+We can, as the BUILD_BUG() will catch it if struct sha1_state gets
+modified in an incompatible way.
