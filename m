@@ -2,123 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7D664744C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA80F64744E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiLHQ3S convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 11:29:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S229692AbiLHQaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:30:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLHQ3K (ORCPT
+        with ESMTP id S229564AbiLHQaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:29:10 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B0175AC;
-        Thu,  8 Dec 2022 08:29:04 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id fz10so1442385qtb.3;
-        Thu, 08 Dec 2022 08:29:04 -0800 (PST)
+        Thu, 8 Dec 2022 11:30:00 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CC72125A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:29:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670516943;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pm9mT9pO7WE/9vLFhiA7g8rknybeYoY/tVPaAx1JEgs=;
+        b=B2VWUQfe/kUOAGDbUqwsvmI+jehJZ0UO49Equt03j9X9COiMRDOvvAsvAfRx0IBeLNiWTq
+        qraEIWbE2+1O0raMK2PfjOPDgy9zjXL5xDDrx8EvzVYu3oklcxF0zECpAmMt42E5mblq/x
+        XgnlGJL6XX8FWvHbsS8qIDiFhdwcHx0=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-102-HXg8qDxSP--teAj8R8zLAA-1; Thu, 08 Dec 2022 11:29:02 -0500
+X-MC-Unique: HXg8qDxSP--teAj8R8zLAA-1
+Received: by mail-qv1-f71.google.com with SMTP id q17-20020a056214019100b004b1d3c9f3acso1854737qvr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:29:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9SMMf+hquSFM569LOmgsVrquK2ebdVd9ejvYmGcH8kU=;
-        b=zJ7bJHgnNRYyZx7P3CLrYXvezwcwwolkoAUb+lgCpwJf3hcB8ON5GYMzkUyZYFr3rT
-         BgcSAkn7kILaAmTJgyg7/Nx9mQrHQzS4kVJY+uDeqsfmX0wm0vpWGIV3NjMTZy65H+B6
-         dx1cAWxodhvxfnfuXgLNoKOkdUhLaU5z3dtMK86X+Gi46Xu5UDunbe2oofGLoCBjLwfR
-         7I4vu0wq6FkqlsAK+xxoCWEBZTrwYP9CeFgk1ehxj4NwfQYL7Yqu47bc1y1Wqif12ZGI
-         ObdpLVSAAlAjL3K3BeCN9MJjhCclQLunaCSm7Dgk/xkcKDXAqzYyhII32v16+t+FMnvi
-         mPyQ==
-X-Gm-Message-State: ANoB5pkA+UyLxuZTTZmWJLU2gB17L6t9W0SCr+btjSGUL7amHENFPyaI
-        4X3bKQ8bcMdE3wyVoEKazCTDz9CkshuJiytDJfs=
-X-Google-Smtp-Source: AA0mqf4lf5c+gJxv89EuXzWEId/JI8uNVeliPyftHqgt2w9CDgAykQB8Ak/PnOQ83rYcvJ31DYzm94UVrm6p9KzOBLI=
-X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
- u9-20020a05622a198900b003a57cf81a6emr86715503qtc.48.1670516943861; Thu, 08
- Dec 2022 08:29:03 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pm9mT9pO7WE/9vLFhiA7g8rknybeYoY/tVPaAx1JEgs=;
+        b=SSwt9H5T3qSvWkN2ag59rTRhyKeSSNlkjgGuALu30yWURKtRV1v51cp+scZ0cOz53V
+         EUL/i7gKG9wkf9oEIme51Wit+jypnCoKrUzErnqiNbbvO71pGUFs3WN32pOho2IQQF+K
+         in+xju/j1YoPbZrMtWlrIcIzlmbFdrJ/ZfmKUbbN8IQJt+8fiXVAWPHPhvC4mnKGxjgn
+         NhkzXUnAISBVBV27/phCRQE6HKUuDv8ogW7G0WhGjGbWCCB2PmK7GC6OW0ySv3LoZjpk
+         KlDgWV+vVyeIYf3gThg9wAw8O0K4hzJKld+6s+kTBIfRLP9LtgiolzgiTY0CQH1xtC7l
+         tvMw==
+X-Gm-Message-State: ANoB5pmGOku2AbnZJo/Ulzbxy0tb0mUKFZi0Qgc/ERsX3FGGkAfsYZRH
+        Rzhn9RXEAk1w7LhSAWVFpgQzZKHKUtG6a3Sb59qRe1xqLQMSzIDgJncUpVzEBM7Zy7B4w7tECOw
+        AhiqrtM4QPAkK3Bt8OSclcon2
+X-Received: by 2002:ac8:5e91:0:b0:3a6:6f8c:5d78 with SMTP id r17-20020ac85e91000000b003a66f8c5d78mr3294379qtx.68.1670516942132;
+        Thu, 08 Dec 2022 08:29:02 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7o0hEkxrts0nz45XYRAEI+ozjuWLKdORi42BIHdkcvHIUFj0SSffFLmQOUHMsjqI/UoDf+Ww==
+X-Received: by 2002:ac8:5e91:0:b0:3a6:6f8c:5d78 with SMTP id r17-20020ac85e91000000b003a66f8c5d78mr3294353qtx.68.1670516941837;
+        Thu, 08 Dec 2022 08:29:01 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id j11-20020ac8550b000000b003434d3b5938sm15597403qtq.2.2022.12.08.08.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 08:29:01 -0800 (PST)
+Date:   Thu, 8 Dec 2022 11:29:00 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Ives van Hoorne <ives@codesandbox.io>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hugh@veritas.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v1] mm/userfaultfd: enable writenotify while
+ userfaultfd-wp is enabled for a VMA
+Message-ID: <Y5IQzJkBSYwPOtiP@x1n>
+References: <20221208114137.35035-1-david@redhat.com>
 MIME-Version: 1.0
-References: <20221208224016.2009797-1-amadeuszx.slawinski@linux.intel.com>
-In-Reply-To: <20221208224016.2009797-1-amadeuszx.slawinski@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Dec 2022 17:28:52 +0100
-Message-ID: <CAJZ5v0izpg_awSBR-HUa58z-wQAm9QGNBV8T4bzavGUCou+R-w@mail.gmail.com>
-Subject: Re: [PATCH v2] ACPICA: Fix operand resolution
-To:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
-        <amadeuszx.slawinski@linux.intel.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Robert Moore <robert.moore@intel.com>,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-kernel@vger.kernel.org,
-        Cezary Rojewski <cezary.rojewski@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221208114137.35035-1-david@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 3:40 PM Amadeusz Sławiński
-<amadeuszx.slawinski@linux.intel.com> wrote:
->
-> In our tests we get UBSAN warning coming from ACPI parser. This is
-> caused by trying to resolve operands when there is none.
->
-> [    0.000000] Linux version 5.15.0-rc3chromeavsrel1.0.184+ (root@...) (gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #1 SMP PREEMPT Sat Oct 16 00:08:27 UTC 2021
-> ...
-> [ 14.719508] ================================================================================
-> [ 14.719551] UBSAN: array-index-out-of-bounds in /.../linux/drivers/acpi/acpica/dswexec.c:401:12
-> [ 14.719594] index -1 is out of range for type 'acpi_operand_object *[9]'
-> [ 14.719621] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-rc3chromeavsrel1.0.184+ #1
-> [ 14.719657] Hardware name: Intel Corp. Geminilake/GLK RVP2 LP4SD (07), BIOS GELKRVPA.X64.0214.B50.2009111159 09/11/2020
-> [ 14.719694] Call Trace:
-> [ 14.719712] dump_stack_lvl+0x38/0x49
-> [ 14.719749] dump_stack+0x10/0x12
-> [ 14.719775] ubsan_epilogue+0x9/0x45
-> [ 14.719801] __ubsan_handle_out_of_bounds.cold+0x44/0x49
-> [ 14.719835] acpi_ds_exec_end_op+0x1d7/0x6b5
-> [ 14.719870] acpi_ps_parse_loop+0x942/0xb34
-> ...
->
-> Problem happens because WalkState->NumOperands is 0 and it is used when
-> trying to access into operands table. Actual code is:
-> WalkState->Operands [WalkState->NumOperands -1]
-> which causes out of bound access. Improve the check before above access
-> to check if ACPI opcode should have any arguments (operands) at all.
->
-> Link: https://github.com/acpica/acpica/pull/745
-> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
-> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> ---
->
-> Changes:
-> v2: Fix comment to tell that opcode has no arguments
->
-> ---
->  drivers/acpi/acpica/dswexec.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/acpica/dswexec.c b/drivers/acpi/acpica/dswexec.c
-> index e8ad41387f84..b082eb942a0f 100644
-> --- a/drivers/acpi/acpica/dswexec.c
-> +++ b/drivers/acpi/acpica/dswexec.c
-> @@ -389,9 +389,11 @@ acpi_status acpi_ds_exec_end_op(struct acpi_walk_state *walk_state)
->
->                 /*
->                  * All opcodes require operand resolution, with the only exceptions
-> -                * being the object_type and size_of operators.
-> +                * being the object_type and size_of operators as well as opcodes that
-> +                * take no arguments.
->                  */
-> -               if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE)) {
-> +               if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE) &&
-> +                   (walk_state->op_info->flags & AML_HAS_ARGS)) {
->
->                         /* Resolve all operands */
->
-> --
+On Thu, Dec 08, 2022 at 12:41:37PM +0100, David Hildenbrand wrote:
+> Currently, we don't enable writenotify when enabling userfaultfd-wp on
+> a shared writable mapping (for now only shmem and hugetlb). The consequence
+> is that vma->vm_page_prot will still include write permissions, to be set
+> as default for all PTEs that get remapped (e.g., mprotect(), NUMA hinting,
+> page migration, ...).
+> 
+> So far, vma->vm_page_prot is assumed to be a safe default, meaning that
+> we only add permissions (e.g., mkwrite) but not remove permissions (e.g.,
+> wrprotect). For example, when enabling softdirty tracking, we enable
+> writenotify. With uffd-wp on shared mappings, that changed. More details
+> on vma->vm_page_prot semantics were summarized in [1].
+> 
+> This is problematic for uffd-wp: we'd have to manually check for
+> a uffd-wp PTEs/PMDs and manually write-protect PTEs/PMDs, which is error
+> prone. Prone to such issues is any code that uses vma->vm_page_prot to set
+> PTE permissions: primarily pte_modify() and mk_pte().
+> 
+> Instead, let's enable writenotify such that PTEs/PMDs/... will be mapped
+> write-protected as default and we will only allow selected PTEs that are
+> definitely safe to be mapped without write-protection (see
+> can_change_pte_writable()) to be writable. In the future, we might want
+> to enable write-bit recovery -- e.g., can_change_pte_writable() -- at
+> more locations, for example, also when removing uffd-wp protection.
+> 
+> This fixes two known cases:
+> 
+> (a) remove_migration_pte() mapping uffd-wp'ed PTEs writable, resulting
+>     in uffd-wp not triggering on write access.
+> (b) do_numa_page() / do_huge_pmd_numa_page() mapping uffd-wp'ed PTEs/PMDs
+>     writable, resulting in uffd-wp not triggering on write access.
+> 
+> Note that do_numa_page() / do_huge_pmd_numa_page() can be reached even
+> without NUMA hinting (which currently doesn't seem to be applicable to
+> shmem), for example, by using uffd-wp with a PROT_WRITE shmem VMA.
+> On such a VMA, userfaultfd-wp is currently non-functional.
+> 
+> Note that when enabling userfaultfd-wp, there is no need to walk page
+> tables to enforce the new default protection for the PTEs: we know that
+> they cannot be uffd-wp'ed yet, because that can only happen after
+> enabling uffd-wp for the VMA in general.
+> 
+> Also note that this makes mprotect() on ranges with uffd-wp'ed PTEs not
+> accidentally set the write bit -- which would result in uffd-wp not
+> triggering on later write access. This commit makes uffd-wp on shmem behave
+> just like uffd-wp on anonymous memory (iow, less special) in that regard,
+> even though, mixing mprotect with uffd-wp is controversial.
+> 
+> [1] https://lkml.kernel.org/r/92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com
+> 
+> Reported-by: Ives van Hoorne <ives@codesandbox.io>
+> Debugged-by: Peter Xu <peterx@redhat.com>
+> Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
+> Cc: stable@vger.kernel.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Hugh Dickins <hugh@veritas.com>
+> Cc: Alistair Popple <apopple@nvidia.com>
+> Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
+> Cc: Nadav Amit <nadav.amit@gmail.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-Applied, thanks!
+Acked-by: Peter Xu <peterx@redhat.com>
+
+One trivial nit.
+
+> ---
+> 
+> As discussed in [2], this is supposed to replace the fix by Peter:
+>   [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when recover
+>   pte
+> 
+> This survives vm/selftests and my reproducers:
+> * migrating pages that are uffd-wp'ed using mbind() on a machine with 2
+>   NUMA nodes
+> * Using a PROT_WRITE mapping with uffd-wp
+> * Using a PROT_READ|PROT_WRITE mapping with uffd-wp'ed pages and
+>   mprotect()'ing it PROT_WRITE
+> * Using a PROT_READ|PROT_WRITE mapping with uffd-wp'ed pages and
+>   temporarily mprotect()'ing it PROT_READ
+> 
+> uffd-wp properly triggers in all cases. On v8.1-rc8, all mre reproducers
+> fail.
+> 
+> It would be good to get some more testing feedback and review.
+> 
+> [2] https://lkml.kernel.org/r/20221202122748.113774-1-david@redhat.com
+> 
+> ---
+>  fs/userfaultfd.c | 28 ++++++++++++++++++++++------
+>  mm/mmap.c        |  4 ++++
+>  2 files changed, 26 insertions(+), 6 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 98ac37e34e3d..fb0733f2e623 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -108,6 +108,21 @@ static bool userfaultfd_is_initialized(struct userfaultfd_ctx *ctx)
+>  	return ctx->features & UFFD_FEATURE_INITIALIZED;
+>  }
+>  
+> +static void userfaultfd_set_vm_flags(struct vm_area_struct *vma,
+> +				     vm_flags_t flags)
+> +{
+> +	const bool uffd_wp = !!((vma->vm_flags | flags) & VM_UFFD_WP);
+
+IIUC this can be "uffd_wp_changed" then switch "|" to "^".  But not a hot
+path at all, so shouldn't matter a lot.
+
+Thanks,
+
+> +
+> +	vma->vm_flags = flags;
+> +	/*
+> +	 * For shared mappings, we want to enable writenotify while
+> +	 * userfaultfd-wp is enabled (see vma_wants_writenotify()). We'll simply
+> +	 * recalculate vma->vm_page_prot whenever userfaultfd-wp is involved.
+> +	 */
+> +	if ((vma->vm_flags & VM_SHARED) && uffd_wp)
+> +		vma_set_page_prot(vma);
+> +}
+
+-- 
+Peter Xu
+
