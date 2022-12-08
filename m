@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238BC64667F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAA14646687
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiLHB0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 20:26:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S229635AbiLHBeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 20:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLHB0r (ORCPT
+        with ESMTP id S229501AbiLHBeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 20:26:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD28900D5;
-        Wed,  7 Dec 2022 17:26:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDA19B82144;
-        Thu,  8 Dec 2022 01:26:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692E2C433C1;
-        Thu,  8 Dec 2022 01:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670462803;
-        bh=w4h8E1rUddz+mzBNAte5bv9cCRd0SRyTRAA9Do+iWsk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n/ohPV9MwZHrqQxBjPgAylUX9/OWK8wUbAmjSnllSWuL9w/F268nHhTJPdqm+UXnK
-         xVQjr4FOPp6VuPT7WuWgpKihnO7ecRzKodBcEU5uQ3qBcNoHK/1PTIdU35ID7Pfz8/
-         k1wJtkUDXn4MZQIV8mfPxXCg8qlaPyoCs6KU0jb+euz/XKnEq9boQDckirgwuaI/BJ
-         L/1kmvzTJKPR5Y7gsHwXoZ/9ii8Rh8MZvjGL+dl6lKpgFfcesJWEDlEVo0OEQs6oUZ
-         bEgdDCt2logJCy+AO7HUSAn6rl19IsGNqDrUzna79Y/QlZ2FujKA1dUtqNM6j1Edtq
-         tgp0nj466NesA==
-Date:   Wed, 7 Dec 2022 17:26:42 -0800
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
-        david@fromorbit.com, akpm@linux-foundation.org,
-        allison.henderson@oracle.com
-Subject: Re: [PATCH v2.2 1/8] fsdax: introduce page->share for fsdax in
- reflink mode
-Message-ID: <Y5E9UgUyidulL2yp@magnolia>
-References: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
- <1670381359-53-1-git-send-email-ruansy.fnst@fujitsu.com>
+        Wed, 7 Dec 2022 20:34:23 -0500
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E47B88B41;
+        Wed,  7 Dec 2022 17:34:20 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 036A524E1BE;
+        Thu,  8 Dec 2022 09:34:18 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 09:34:18 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
+ (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 09:34:16 +0800
+Message-ID: <c897c858-14d1-3059-7307-84df9460e86e@starfivetech.com>
+Date:   Thu, 8 Dec 2022 09:34:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1670381359-53-1-git-send-email-ruansy.fnst@fujitsu.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 1/7] dt-bindings: net: snps,dwmac: Add compatible
+ string for dwmac-5.20 version.
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-2-yanhong.wang@starfivetech.com>
+ <277f9665-e691-b0ad-e6ef-e11acddc2006@linaro.org>
+ <22123903-ee95-a82e-d792-01417ceb63b1@starfivetech.com>
+ <3a9ef360-73c3-cf26-3eca-4903b9a04ea3@linaro.org>
+ <CAJM55Z-iLy1fZmoyk3FU7oDQcKBk6APYf-cbamKr7Gjx+NaoTQ@mail.gmail.com>
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <CAJM55Z-iLy1fZmoyk3FU7oDQcKBk6APYf-cbamKr7Gjx+NaoTQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
+ (172.16.6.93)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,137 +71,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 02:49:19AM +0000, Shiyang Ruan wrote:
-> fsdax page is used not only when CoW, but also mapread. To make the it
-> easily understood, use 'share' to indicate that the dax page is shared
-> by more than one extent.  And add helper functions to use it.
-> 
-> Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
-> 
-> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
-> Reviewed-by: Allison Henderson <allison.henderson@oracle.com>
 
-Looks fine to me,
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
---D
+On 2022/12/7 21:56, Emil Renner Berthing wrote:
+> On Fri, 2 Dec 2022 at 09:04, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 02/12/2022 03:53, yanhong wang wrote:
+>> >
+>> >
+>> > On 2022/12/2 0:18, Krzysztof Kozlowski wrote:
+>> >> On 01/12/2022 10:02, Yanhong Wang wrote:
+>> >>> Add dwmac-5.20 version to snps.dwmac.yaml
+>> >>
+>> >> Drop full stop from subject and add it here instead.
+>> >>
+>> >
+>> > Will update in the next version.
+>> >
+>> >>>
+>> >>> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
+>> >>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>> >>
+>> >> Two people contributed this one single line?
+>> >>
+>> >
+>> > Emil made this patch and I submitted it.
+>>
+>> If Emil made this patch, then your From field is incorrect.
+> 
+> Yes, please don't change the author of the commits you cherry-picked
+> from my tree.
+> 
+> But now I'm curious. Did you check with your colleagues that the dwmac
+> IP on the SoC is in fact version 5.20?
 
-> ---
->  fs/dax.c                   | 38 ++++++++++++++++++++++----------------
->  include/linux/mm_types.h   |  5 ++++-
->  include/linux/page-flags.h |  2 +-
->  3 files changed, 27 insertions(+), 18 deletions(-)
+I can confirm that the IP version is 5.20 on JH7110 SoC.
+
+> This was just an educated guess from my side.
 > 
-> diff --git a/fs/dax.c b/fs/dax.c
-> index 1c6867810cbd..84fadea08705 100644
-> --- a/fs/dax.c
-> +++ b/fs/dax.c
-> @@ -334,35 +334,41 @@ static unsigned long dax_end_pfn(void *entry)
->  	for (pfn = dax_to_pfn(entry); \
->  			pfn < dax_end_pfn(entry); pfn++)
->  
-> -static inline bool dax_mapping_is_cow(struct address_space *mapping)
-> +static inline bool dax_page_is_shared(struct page *page)
->  {
-> -	return (unsigned long)mapping == PAGE_MAPPING_DAX_COW;
-> +	return page->mapping == PAGE_MAPPING_DAX_SHARED;
->  }
->  
->  /*
-> - * Set the page->mapping with FS_DAX_MAPPING_COW flag, increase the refcount.
-> + * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
-> + * refcount.
->   */
-> -static inline void dax_mapping_set_cow(struct page *page)
-> +static inline void dax_page_share_get(struct page *page)
->  {
-> -	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_COW) {
-> +	if (page->mapping != PAGE_MAPPING_DAX_SHARED) {
->  		/*
->  		 * Reset the index if the page was already mapped
->  		 * regularly before.
->  		 */
->  		if (page->mapping)
-> -			page->index = 1;
-> -		page->mapping = (void *)PAGE_MAPPING_DAX_COW;
-> +			page->share = 1;
-> +		page->mapping = PAGE_MAPPING_DAX_SHARED;
->  	}
-> -	page->index++;
-> +	page->share++;
-> +}
-> +
-> +static inline unsigned long dax_page_share_put(struct page *page)
-> +{
-> +	return --page->share;
->  }
->  
->  /*
-> - * When it is called in dax_insert_entry(), the cow flag will indicate that
-> + * When it is called in dax_insert_entry(), the shared flag will indicate that
->   * whether this entry is shared by multiple files.  If so, set the page->mapping
-> - * FS_DAX_MAPPING_COW, and use page->index as refcount.
-> + * PAGE_MAPPING_DAX_SHARED, and use page->share as refcount.
->   */
->  static void dax_associate_entry(void *entry, struct address_space *mapping,
-> -		struct vm_area_struct *vma, unsigned long address, bool cow)
-> +		struct vm_area_struct *vma, unsigned long address, bool shared)
->  {
->  	unsigned long size = dax_entry_size(entry), pfn, index;
->  	int i = 0;
-> @@ -374,8 +380,8 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
->  	for_each_mapped_pfn(entry, pfn) {
->  		struct page *page = pfn_to_page(pfn);
->  
-> -		if (cow) {
-> -			dax_mapping_set_cow(page);
-> +		if (shared) {
-> +			dax_page_share_get(page);
->  		} else {
->  			WARN_ON_ONCE(page->mapping);
->  			page->mapping = mapping;
-> @@ -396,9 +402,9 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
->  		struct page *page = pfn_to_page(pfn);
->  
->  		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
-> -		if (dax_mapping_is_cow(page->mapping)) {
-> -			/* keep the CoW flag if this page is still shared */
-> -			if (page->index-- > 0)
-> +		if (dax_page_is_shared(page)) {
-> +			/* keep the shared flag if this page is still shared */
-> +			if (dax_page_share_put(page) > 0)
->  				continue;
->  		} else
->  			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 500e536796ca..f46cac3657ad 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -103,7 +103,10 @@ struct page {
->  			};
->  			/* See page-flags.h for PAGE_MAPPING_FLAGS */
->  			struct address_space *mapping;
-> -			pgoff_t index;		/* Our offset within mapping. */
-> +			union {
-> +				pgoff_t index;		/* Our offset within mapping. */
-> +				unsigned long share;	/* share count for fsdax */
-> +			};
->  			/**
->  			 * @private: Mapping-private opaque data.
->  			 * Usually used for buffer_heads if PagePrivate.
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index 0b0ae5084e60..d8e94f2f704a 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -641,7 +641,7 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
->   * Different with flags above, this flag is used only for fsdax mode.  It
->   * indicates that this page->mapping is now under reflink case.
->   */
-> -#define PAGE_MAPPING_DAX_COW	0x1
-> +#define PAGE_MAPPING_DAX_SHARED	((void *)0x1)
->  
->  static __always_inline bool folio_mapping_flags(struct folio *folio)
->  {
-> -- 
-> 2.38.1
+> /Emil
 > 
+>> Best regards,
+>> Krzysztof
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
