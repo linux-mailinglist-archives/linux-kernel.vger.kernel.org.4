@@ -2,121 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F06964730E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9E6647312
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiLHPbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47318 "EHLO
+        id S230450AbiLHPbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:31:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbiLHPaT (ORCPT
+        with ESMTP id S230374AbiLHPav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:30:19 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26D9177214;
-        Thu,  8 Dec 2022 07:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CFCF3B8243F;
-        Thu,  8 Dec 2022 15:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 153CFC433D6;
-        Thu,  8 Dec 2022 15:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670513415;
-        bh=MelMEVFD640a+Eraf0URPWnvaMDa0Z6oybjpXa5D5hc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qnVQZOJ62CX0VOaw1PmcOWmOm6h1WUzKfs7ZdYqK8aLvSoxfI4Jrtq8pfmDee8Hzi
-         0Q/JUMD3tmTUR2o1q+oZ6Hf6okuKoSxfhfi5G6BT1Aeuc+VriI3e2OQiPDIZoizxb7
-         vmNgrxQbhlx0eiGj6ntm6SNXU+HoGZM5g63+673r6J+Wey6jlBWnd3HV7eYk0bezrS
-         Ant79PyU7hTD3pArNOac4+OdT1cnZlChjYu0lTUqfrxgh7woFKxBxzhtHxIicPw+rQ
-         wrxQn77s2306xmO0v9hZ5jO5qvg+2IOjhF7Ve4hh6nt6QLnV0gCfE4E0yH/T4wQ3nQ
-         a5GN6FemD+TAg==
-Date:   Thu, 8 Dec 2022 15:30:11 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v2 17/18] x86/sgx: Add support for misc cgroup controller
-Message-ID: <Y5IDA3J/6pF0sNIP@kernel.org>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-18-kristen@linux.intel.com>
+        Thu, 8 Dec 2022 10:30:51 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C3283248
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:30:44 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id h11so2007051wrw.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 07:30:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h77EcyzmHrKVFjoWMhSpWChgCbULzYbCN7M8zPTR4Iw=;
+        b=QgAChH6txpKBJOTvAjnQBz3MysBSBiOnM5ttfAOm8LpwpJ97PQJ8EmkR9SCHMcabT5
+         vFh5XmCYpbB+uyotqBwdWN/MV12wGjYu8sIXBvteNu+qwwGqg0RqxMVYrkL5Fmg42D1s
+         Vw+s0On6BlcqG3i2ZEvuWQSAeVxXYNlWqYa/QUL1I4JOu9okydOJVcxTtaAYC/qlTHkz
+         It0ii48J1VnQLMQ2PG5qZ3buHA11R5HeBQvTIk2Ef8EvtW9FwRuae4juJ42ocUPuIBQf
+         xzNMtHlxR9shDDM4GT1gkvEEFCsqKJvfwposyXsLOnwkhrWXSsf2Q2BMgKQqw41O6pJC
+         16gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h77EcyzmHrKVFjoWMhSpWChgCbULzYbCN7M8zPTR4Iw=;
+        b=adIgIt2INRQ1vIkEbZud0weEZUIHPPpA91MNs1jksAFOAxO7ULuZ6b9/HU+AEraJjU
+         tjnRHN0Z4vhwZ1jN4F0uyW/FfXSJJIHydl+LGOTHmQOuKS9C1RKtQQWums8kORPAIy0i
+         F+jP3BfF6TgkpkAopb1ZPIFcO3KVHgOIxFRPSdz0uPrnXlzBn2j5DDTIx6ywnD+SloVs
+         jDjNSBj1Ypf4S+TeHQkykxbwz/y4bdQVdBd/6NhLnZ6eytBITSPGeLYphekWVrvpvjwa
+         Ix+055smBp8D5piVk+fqJGdphWtui/DAouFGhOj1he+yZTe4gAJqVye7zU1zIhu+dXk4
+         qjmw==
+X-Gm-Message-State: ANoB5pmX3RwAavDd9WyyqGKSz44oiV3ZGjb1J7Y58spBjkmQe4avB09d
+        NhdkawK9WELLoi6Bq0GQ90bj1g==
+X-Google-Smtp-Source: AA0mqf5K5q5nQ3njTNZN5t/9f0Vch718YFsJMVTBQEXPX4bIWOp+q5Hl1/ug4qvyMu45VA6losj1Tg==
+X-Received: by 2002:adf:dc4b:0:b0:242:149:9f0b with SMTP id m11-20020adfdc4b000000b0024201499f0bmr1682892wrj.55.1670513442704;
+        Thu, 08 Dec 2022 07:30:42 -0800 (PST)
+Received: from predatorhelios.baylibre (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
+        by smtp.gmail.com with ESMTPSA id h10-20020a5d504a000000b002366553eca7sm10673239wrt.83.2022.12.08.07.30.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 07:30:42 -0800 (PST)
+From:   =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>
+To:     linux-mediatek@lists.infradead.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, khilman@baylibre.com
+Subject: [PATCH v4 0/7] Add minimal MT8365 and MT8365-EVK support
+Date:   Thu,  8 Dec 2022 16:30:33 +0100
+Message-Id: <20221208153041.3965378-1-bero@baylibre.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221202183655.3767674-18-kristen@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Perhaps "x86/sgx: Limit process EPC usage with misc cgroup controller"?
+This adds minimal support for the MediaTek 8365 SOC and the EVK reference
+board, allowing the board to boot to initramfs with serial port I/O.
 
-Or something more to the point than "add support".
+v4:
+  - Remove pins-are-numbered references that have been holding things up
+    now that the patches removing it from dt-bindings have landed in linux-next
 
-On Fri, Dec 02, 2022 at 10:36:53AM -0800, Kristen Carlson Accardi wrote:
-  
->  /**
-> - * sgx_reclaim_epc_pages() - Reclaim EPC pages from the consumers
-> + * __sgx_reclaim_epc_pages() - Reclaim EPC pages from the consumers
->   * @nr_to_scan:		 Number of EPC pages to scan for reclaim
->   * @ignore_age:		 Reclaim a page even if it is young
-> + * @epc_cg:		 EPC cgroup from which to reclaim
->   *
->   * Take a fixed number of pages from the head of the active page pool and
->   * reclaim them to the enclave's private shmem files. Skip the pages, which have
-> @@ -336,7 +350,8 @@ void sgx_isolate_epc_pages(struct sgx_epc_lru_lists *lru, int *nr_to_scan,
->   * problematic as it would increase the lock contention too much, which would
->   * halt forward progress.
->   */
-> -static int __sgx_reclaim_pages(int nr_to_scan, bool ignore_age)
-> +static int __sgx_reclaim_epc_pages(int nr_to_scan, bool ignore_age,
-> +			  struct sgx_epc_cgroup *epc_cg)
->  {
->  	struct sgx_backing backing[SGX_MAX_NR_TO_RECLAIM];
->  	struct sgx_epc_page *epc_page, *tmp;
-> @@ -347,7 +362,15 @@ static int __sgx_reclaim_pages(int nr_to_scan, bool ignore_age)
->  	int i = 0;
->  	int ret;
->  
-> -	sgx_isolate_epc_pages(&sgx_global_lru, &nr_to_scan, &iso);
-> +        /*
-> +         * If a specific cgroup is not being targetted, take from the global
-> +         * list first, even when cgroups are enabled.  If there are
-> +         * pages on the global LRU then they should get reclaimed asap.
-> +         */
-> +        if (!IS_ENABLED(CONFIG_CGROUP_SGX_EPC) || !epc_cg)
-> +                sgx_isolate_epc_pages(&sgx_global_lru, &nr_to_scan, &iso);
-> +
-> +	sgx_epc_cgroup_isolate_pages(epc_cg, &nr_to_scan, &iso);
->  
->  	if (list_empty(&iso))
->  		return 0;
-> @@ -397,25 +420,33 @@ static int __sgx_reclaim_pages(int nr_to_scan, bool ignore_age)
->  				     SGX_EPC_PAGE_ENCLAVE |
->  				     SGX_EPC_PAGE_VERSION_ARRAY);
->  
-> +		if (epc_page->epc_cg) {
-> +			sgx_epc_cgroup_uncharge(epc_page->epc_cg);
-> +			epc_page->epc_cg = NULL;
-> +		}
-> +
->  		sgx_free_epc_page(epc_page);
->  	}
->  	return i;
->  }
+v3:
+  - Remove a number of components that are not yet supported (they will
+    come back alongside the corresponding drivers)
+  - Address issues found by dt_binding_check (mostly fixing pinctrl
+    bindings)
+  - Address issues pointed out in comments
+  - Reorder patches
 
-I would consider changes to sgx_reclaim_epc_pages() as a separate patch,
-perhaps squashing with the patch that does the export. And generally
-separate from this patch all internal arch/x86/kernel/cpu/sgx changes,
-and leave only cgroup bindings.
+v2:
+  - Add missing dt-bindings documentation
+  - Small cleanups addressing issues in v1 pointed out by Krzysztof Kozlowski
 
-BR, Jarkko
+
+
+Bernhard Rosenkränzer (4):
+  dt-bindings: arm64: dts: mediatek: Add mt8365-evk board
+  dt-bindings: irq: mtk, sysirq: add support for mt8365
+  dt-bindings: mfd: syscon: Add mt8365-syscfg
+  dt-bindings: pinctrl: add bindings for Mediatek MT8365 SoC
+
+Fabien Parent (3):
+  dt-bindings: usb: mediatek,mtu3: add MT8365 SoC bindings
+  dt-bindings: usb: mediatek,mtk-xhci: add MT8365 SoC bindings
+  arm64: dts: mediatek: Initial mt8365-evk support
+
+ .../devicetree/bindings/arm/mediatek.yaml     |   4 +
+ .../interrupt-controller/mediatek,sysirq.txt  |   1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |   1 +
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 197 ++++++++++
+ .../bindings/usb/mediatek,mtk-xhci.yaml       |   1 +
+ .../bindings/usb/mediatek,mtu3.yaml           |   1 +
+ arch/arm64/boot/dts/mediatek/Makefile         |   1 +
+ arch/arm64/boot/dts/mediatek/mt8365-evk.dts   | 163 +++++++++
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi      | 343 ++++++++++++++++++
+ 9 files changed, 712 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/mediatek,mt8365-pinctrl.yaml
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365-evk.dts
+ create mode 100644 arch/arm64/boot/dts/mediatek/mt8365.dtsi
+
+-- 
+2.38.1
+
