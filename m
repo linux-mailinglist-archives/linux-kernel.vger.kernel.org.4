@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6835646EDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:47:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7220F646F13
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:54:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiLHLr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:47:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S229621AbiLHLyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:54:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLHLrZ (ORCPT
+        with ESMTP id S229997AbiLHLxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:47:25 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C035CD34;
-        Thu,  8 Dec 2022 03:47:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670500044; x=1702036044;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=MVTL6UUvKcTMVCYpcQSuarT5kz7nFvxwqkKHy/9pKRI=;
-  b=s3w5JTnmDfhG0fCQYp/FygzJ6nbkqKQq9yj0DUk+zrnJIZHF19ZS8pyH
-   kU+l6OQ/Q7mCRUJGEiVMcVrPlARU7bYV9SDkXh4gER4IQemvs5mGRhzqd
-   FV/czQ4qIEiWPina9q6Dba3y+Mhy4Qf0s8wyqMXWwgNtmOeDel2YmdC6O
-   DmzkSwDV0qYIyahvJdOGRD9Voo5I56v41mHUlvfY7L5s7tVFrWL5cErGh
-   4yGy2srAfsYQ8GTRsHAHrTx39P0VxExYicelA5YtML76JNy2jXpGPFq1b
-   8LNCxVa19gIeFO0VWF8No/J44SDqPk7JmgxLR9K9xj3bowb9CsGt9esJX
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="127112214"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2022 04:47:23 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 8 Dec 2022 04:47:22 -0700
-Received: from localhost.localdomain (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Thu, 8 Dec 2022 04:47:20 -0700
-From:   Claudiu Beznea <claudiu.beznea@microchip.com>
-To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <sandeepsheriker.mallikarjun@microchip.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: [PATCH] ARM: dts: at91: sam9x60: fix the ddr clock for sam9x60
-Date:   Thu, 8 Dec 2022 13:52:41 +0200
-Message-ID: <20221208115241.36312-1-claudiu.beznea@microchip.com>
-X-Mailer: git-send-email 2.33.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 06:53:47 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585BB83252;
+        Thu,  8 Dec 2022 03:53:29 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NSXbr04Q3z8RTZJ;
+        Thu,  8 Dec 2022 19:53:28 +0800 (CST)
+Received: from szxlzmapp01.zte.com.cn ([10.5.231.85])
+        by mse-fl1.zte.com.cn with SMTP id 2B8BrLOa009453;
+        Thu, 8 Dec 2022 19:53:21 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp04[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Thu, 8 Dec 2022 19:53:25 +0800 (CST)
+Date:   Thu, 8 Dec 2022 19:53:25 +0800 (CST)
+X-Zmail-TransId: 2b066391d0353162d1ea
+X-Mailer: Zmail v1.0
+Message-ID: <202212081953254923522@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <salil.mehta@huawei.com>
+Cc:     <yisen.zhuang@huawei.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <brianvv@google.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <xu.panda@zte.com.cn>,
+        <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG5ldDogaG5zMzogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B8BrLOa009453
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 6391D038.000 by FangMail milter!
+X-FangMail-Envelope: 1670500408/4NSXbr04Q3z8RTZJ/6391D038.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 6391D038.000/4NSXbr04Q3z8RTZJ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 2nd DDR clock for sam9x60 DDR controller is peripheral clock with
-id 49.
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Fixes: 1e5f532c2737 ("ARM: dts: at91: sam9x60: add device tree for soc and board")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL terminated strings.
+
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
- arch/arm/boot/dts/sam9x60.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/sam9x60.dtsi b/arch/arm/boot/dts/sam9x60.dtsi
-index 8f5477e307dd..37a5d96aaf64 100644
---- a/arch/arm/boot/dts/sam9x60.dtsi
-+++ b/arch/arm/boot/dts/sam9x60.dtsi
-@@ -564,7 +564,7 @@ pmecc: ecc-engine@ffffe000 {
- 			mpddrc: mpddrc@ffffe800 {
- 				compatible = "microchip,sam9x60-ddramc", "atmel,sama5d3-ddramc";
- 				reg = <0xffffe800 0x200>;
--				clocks = <&pmc PMC_TYPE_SYSTEM 2>, <&pmc PMC_TYPE_CORE PMC_MCK>;
-+				clocks = <&pmc PMC_TYPE_SYSTEM 2>, <&pmc PMC_TYPE_PERIPHERAL 49>;
- 				clock-names = "ddrck", "mpddr";
- 			};
- 
+diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
+index cdf76fb58d45..55306fe8a540 100644
+--- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
++++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
+@@ -639,13 +639,11 @@ static void hns3_get_drvinfo(struct net_device *netdev,
+ 		return;
+ 	}
+
+-	strncpy(drvinfo->driver, dev_driver_string(&h->pdev->dev),
++	strscpy(drvinfo->driver, dev_driver_string(&h->pdev->dev),
+ 		sizeof(drvinfo->driver));
+-	drvinfo->driver[sizeof(drvinfo->driver) - 1] = '\0';
+
+-	strncpy(drvinfo->bus_info, pci_name(h->pdev),
++	strscpy(drvinfo->bus_info, pci_name(h->pdev),
+ 		sizeof(drvinfo->bus_info));
+-	drvinfo->bus_info[ETHTOOL_BUSINFO_LEN - 1] = '\0';
+
+ 	fw_version = priv->ae_handle->ae_algo->ops->get_fw_version(h);
+
 -- 
-2.34.1
-
+2.15.2
