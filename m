@@ -2,87 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8405647800
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C16647807
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229543AbiLHVcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:32:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
+        id S229731AbiLHVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLHVcs (ORCPT
+        with ESMTP id S229702AbiLHVdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:32:48 -0500
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400EC1209C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:32:47 -0800 (PST)
-Received: by mail-pg1-x52b.google.com with SMTP id r18so2195994pgr.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:32:47 -0800 (PST)
+        Thu, 8 Dec 2022 16:33:36 -0500
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681982FA42
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:33:34 -0800 (PST)
+Received: by mail-io1-xd29.google.com with SMTP id d123so1054954iof.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:33:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+TrQiFZlVHCDTQZCh8d0lNxTCa2DqXYRVLa5t6bBFo4=;
-        b=HoGLKZMHw915NF5vqn7lXXRKSXbZ1SPCMMapkTLnUmxiXPa7OuhV6wJjen2dNpuBB9
-         kSmJN6yLnBh8zJnIOmyf9cW3UehPdl84indT46fiDhl/boDQEOAR4T1CqhthfV0JRk+A
-         TRM2ZcEpi+aDQXUw5lceStPgq4Ott6/LOdkFN3kBz26KL5IdqHNI8JyxOa8miefCSQVC
-         KvtXbAUET8S3spLckG3ejH+N+iSWyvvCykclszNnMhVgJETG5s7V7kduWqPubfnyCX0G
-         nvZ7C6FcRtJZhGdRxnjk5zBk0l/riQ2e+wRVnu7GaXTEGkUUeh1sgsokZRdrD7unngSe
-         jZJg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7FSa8Zfu/8xHbnZSuWDC6ttqZXGs49ojzvmsel6my90=;
+        b=D9tqPJu7STusgHs8sqgkYqGUsLh2aDAXfT6PVsxVzzi2ANsohxmjekjP6JZcuH3Fb5
+         Y0ykqc75MVGoHtSDg0b6c12GzzgzIXo+XU8M0m6wdefQI+yF4Le2aWF5GV1DpegX8zDM
+         IavYzYrnIEDTAt3fw6Mj/hDWduI2QSDC/12aGtg+hqtR+aMiJ32lJq259SaAge/bHJ70
+         Z+CekEUNtvNsv8r8LDEE/hxus4gDaZ+uftFeEi5J1qGz6T9ujcz65aLcYPFwi0NiiSdZ
+         ggxEvrNMCkMxSjCGi+/S89Hvcwyhqkxj15NNYrQqOSCI8vsSAPiUS3WiZGMTzRHFEWoe
+         TBHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+TrQiFZlVHCDTQZCh8d0lNxTCa2DqXYRVLa5t6bBFo4=;
-        b=TQou1vnnV8VSOadvrIaJMSgQsRqoFLgaGtU1l+LX60Z839ouwJtCt/7MKccuDV2tX6
-         rDq4ZJy0Ia076v8OKJGRjfHM9mz1XAOpSMFJrD3fgKdjcel+frm4nm7LDC+0aMf08Xz5
-         G2PNoV35xjtIEp+ogoZeGJSo20tIIV+9yFDSf1jfIJRb/gNEFh7ta1qr1TLU2PrZ7P0J
-         JjthOxMHAoV3q04RPgdQW2jVUyTgsWT81PKHrIWqsACy5Xvwx5Qh+PKX6XspYrJOnz0B
-         xrE0dJdodJk5Uclu3O9qbA3JjBiOVfq+R+JgpqqvD7WzAxISSfklZFuugz6Gw4gf+4fr
-         rf/g==
-X-Gm-Message-State: ANoB5pkNrEilbmMRirye2toQYi0/a/flEqnbkz58U+y781b1cEzGSX9c
-        R5p9U+SFipuQfRy9xHRjl/w=
-X-Google-Smtp-Source: AA0mqf7M6QgtFTdNPWkN/TG+ZEgfifAkZcyXsSnNeA+4G+mvo23tR2sS09f4X9rcsRqBwgsLQAsELg==
-X-Received: by 2002:a62:ee14:0:b0:566:900d:6073 with SMTP id e20-20020a62ee14000000b00566900d6073mr2758766pfi.24.1670535166649;
-        Thu, 08 Dec 2022 13:32:46 -0800 (PST)
-Received: from fedora ([2601:644:8002:1c20::2c6b])
-        by smtp.gmail.com with ESMTPSA id 21-20020a621715000000b005609d3d3008sm16239132pfx.171.2022.12.08.13.32.45
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7FSa8Zfu/8xHbnZSuWDC6ttqZXGs49ojzvmsel6my90=;
+        b=kMFG2vajSXm3C8kb3tmyWnAaVp+vut2vVLuAPvghGoNSDDVDg5UjFTOz5iIgNhM8rv
+         c+02hZsngIFZ6MMj473MDUnfBYWtYWC7Ez5S+c5NmEJ5MpqDtKCIL65PdGDc4iHSDi/3
+         mfHSCECI0rfGYmFAYM86B1ndr/nEdvO4+qbr4dTFuVuAilqXq7FGjoDulv9Tf9kqF7cH
+         gSRsExDckz3WRRQpig+miX0tBVNTFOq2ompDyTfqr2y6Beel0zvESd3GCOmZZebEC8B6
+         yZquXwFwKDE2pX8GZlmiyb3KqzMRLvq/OEcb1FnUdkNit+ttEJKazNKHEGZc1+/JCOzN
+         8Reg==
+X-Gm-Message-State: ANoB5pm61wFCpOeVhN9Oby/0I50LPHC0uvEnTNV9vI8Lg6YCv8TIo/07
+        tfRnhI35lEK4ia1KQE0QqUFJXQ==
+X-Google-Smtp-Source: AA0mqf7fwtNQxQ3tnxh0ts1pIJeXrIh/KEs6UGxsKxVhtsbvnWlEGc/R0c6pmsYGcUD19CXYniovxA==
+X-Received: by 2002:a5d:8351:0:b0:6df:e430:e8af with SMTP id q17-20020a5d8351000000b006dfe430e8afmr2130786ior.18.1670535213618;
+        Thu, 08 Dec 2022 13:33:33 -0800 (PST)
+Received: from localhost.localdomain ([98.61.227.136])
+        by smtp.gmail.com with ESMTPSA id a8-20020a021608000000b003755aa71fffsm9237846jaa.105.2022.12.08.13.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 13:32:46 -0800 (PST)
-Date:   Thu, 8 Dec 2022 13:32:43 -0800
-From:   Vishal Moola <vishal.moola@gmail.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Thu, 08 Dec 2022 13:33:33 -0800 (PST)
+From:   Alex Elder <elder@linaro.org>
+To:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     luca.weiss@fairphone.com, elder@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm: swap: Convert mark_page_lazyfree() to
- mark_folio_lazyfree()
-Message-ID: <Y5JX+1qOuFi546og@fedora>
-References: <20221207023431.151008-1-wangkefeng.wang@huawei.com>
- <20221207023431.151008-2-wangkefeng.wang@huawei.com>
+Subject: [PATCH 0/2] arm64: dts: qcom: sm6350: enable IPA
+Date:   Thu,  8 Dec 2022 15:33:28 -0600
+Message-Id: <20221208213330.937714-1-elder@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207023431.151008-2-wangkefeng.wang@huawei.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 10:34:31AM +0800, Kefeng Wang wrote:
-> @@ -402,7 +402,7 @@ extern void lru_add_drain_cpu(int cpu);
->  extern void lru_add_drain_cpu_zone(struct zone *zone);
->  extern void lru_add_drain_all(void);
->  extern void deactivate_page(struct page *page);
-> -extern void mark_page_lazyfree(struct page *page);
-> +extern void mark_folio_lazyfree(struct folio *folio);
->  extern void swap_setup(void);
+Enable IPA for the SM6350 SoC, which implements IPA v4.7.  Enable it
+on the Fairphone 4, which incorporates IPA definitions used for the
+SM6350.
 
-Can we rename this function to folio_mark_lazyfree() instead so it's more
-consistent with other the folio functions. Also I believe we can get rid of
-the 'extern' keyword.
+Please delay applying this until after Linux v6.1 is tagged.
+
+					-Alex
+
+Luca Weiss (2):
+  arm64: dts: qcom: sm6350: add IPA node
+  arm64: dts: qcom: sm7225-fairphone-fp4: enable IPA
+
+ arch/arm64/boot/dts/qcom/sm6350.dtsi          | 47 +++++++++++++++++++
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |  7 +++
+ 2 files changed, 54 insertions(+)
+
+-- 
+2.34.1
+
