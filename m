@@ -2,309 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2176F647A41
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19049647A42
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:44:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLHXm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 18:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
+        id S230267AbiLHXn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 18:43:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231182AbiLHXmV (ORCPT
+        with ESMTP id S230310AbiLHXnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 18:42:21 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EC640454;
-        Thu,  8 Dec 2022 15:41:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670542885; x=1702078885;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Hu1HTZTafXcdvrkhbeBjON7D3PRjnUtIiEYUaFBoYlg=;
-  b=k4A1dhQq5t8/evUA+QAsITLktGRrkYhmLCZz6V8UqrqEB1TSAkkip/9n
-   3VBF0CcJaBvSs8gFm3RzzMkPS5uHUcxPSg8x14oziZdgEyJdCOJuWh5MG
-   pvrwMUrCbu/xxnxEGwSuJmxkd+2RBlA30iLKNkcHOpRTEg5z2bSa9hO3m
-   xP6xiAqpZujge2I7iHp1mX1KJ/8YX/uPQLn0qglypIr9KuvbOpZ2TX1Hh
-   VefxVJ8DoZ1i7BADPoR/HeQBSiT4W42qc9X9e6k6gehT1WBJKAIQQTKMY
-   H8+661HxsUh2zh3WXTNhF96rOKrK/V6n4q7IauVsYnm2k+qbFlt9TdsTA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="300754205"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="300754205"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 15:41:24 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="710685564"
-X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
-   d="scan'208";a="710685564"
-Received: from bbaylav-mobl1.amr.corp.intel.com (HELO guptapa-desk.lan) ([10.212.230.254])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 15:41:23 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Guillaume Tucker <guillaume.tucker@collabora.com>,
-        Guenter Roeck <groeck@google.com>,
-        Geliang Tang <geliang.tang@suse.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        dave.hansen@linux.intel.com, daniel.sneddon@linux.intel.com,
-        antonio.gomez.iglesias@linux.intel.com, bp@alien8.de
-Subject: [PATCH] selftests/x86/msr: Add MSR restore test for suspend cycle
-Date:   Thu,  8 Dec 2022 15:40:51 -0800
-Message-Id: <b3a9cf7ede696df823c7ea016974c5c1078a1667.1670542734.git.pawan.kumar.gupta@linux.intel.com>
-X-Mailer: git-send-email 2.37.3
+        Thu, 8 Dec 2022 18:43:39 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C68128E15
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 15:43:06 -0800 (PST)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8MIcBB028547;
+        Thu, 8 Dec 2022 23:42:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=bp0i8t3YWgAcZD+38dbWQyGEGviuBkGV0TOK+TFm7zA=;
+ b=heHi3nbMsgnkCyaSSvnEzVv/uKASlpuk9fMeVhfohh1nrGUFDSXwf+mHELcmLZF420BE
+ 8i9Y5P3XPc7fa9aaPOxhRQ3skGOlUSRnsMLMl5EFBuYTHFJqqNYqV4GR4PproBE5xU5N
+ K3gDJZ7h9VV8nLmFLPlvnIbBJIVzy4tVbP0SvVinUOtc6qQV2nvED14K58wHo7KVSmbe
+ SOys/x8L20wXuPf9JkkN64u5Jip+ZTexT9eDQ+eq2waaPqO8bX63E+AlTOk5rihr9pAl
+ wGh00125ukb2GG0+r19NeeOsiznN5pvQVWH8psHm4nhDwiTLE3YHCu1MgKFkob+LRGLl ZA== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3mauduv1j0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Dec 2022 23:42:32 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B8MNbkF019588;
+        Thu, 8 Dec 2022 23:42:31 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa8jjcya-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Dec 2022 23:42:31 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RxwfsceKjXC6ogP4gOk1HQvV8ju5qKMiBfgmF4FwKN7tCNofFkhwurauKcpFkTwe5M/0dcLWmyRgFR4ynPKA9d8q4U/cy0I5lWS16sFAHD2kbWQIZZMog8/1k3K0ebabaK/UZjwKfK4C8StaD8ioUXid/n0WYRj/TiR9udL9WD5U2hK1sKQEJw/cKEkBhGPznSzj64K7M+c37vMcjYSq2zR4n4ndwQeDu2MuQrPmvlyXUyps+HtkuxUWk/NZiwmMofjjJJ3OYlzxg0yqXvXI+RqxtlfQ6hxfyWgw4ngxD2LIPhn5BFy6WfnE/fgDhLkvEBABVLK0qw6Hn2aIA9eQnA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bp0i8t3YWgAcZD+38dbWQyGEGviuBkGV0TOK+TFm7zA=;
+ b=Y1wi1OPwFVJPGS/2Bcat29gR9GRNhZTsuvNCfAvWD1KomfSp/dlXA0pMNe1aJWAOSdf+KOxRBZzb1Elcmn7uz/jnKK+hPT8k6Qh8jk2To8O/w5xZTP4Q1FVh+y8oA2f/Tz9pZJRHbLF+j/NIakMEZs6D+a7hmRiHaCQcFqqQatv/SEsuFGtMz+VdUgRphSNwRd4Z8sghGjUgMf4Jx34+ckaKKoOC5tnXrg5J4d9km955RS8dHxt+XP2GuagSV4tI4uIt69X2WqbfPUCYuxYJNvyDYlpnpOZLXHmwjZamL33IPB8fHYLE3zDjLr87TqX9Jc5Wd3WXJT/Sir9meEldbg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bp0i8t3YWgAcZD+38dbWQyGEGviuBkGV0TOK+TFm7zA=;
+ b=zMIfdDY3j1D+fsudAy50MxvRHkkZvaHJec+4dwEUYvmPzeYkePwW8jvtSt5bPGUSxqbwbg6yrrFBfk+UmJc6rsRb/CKnKvrXMajE3KvGj8Cmzwu3gneNHMrM5rC2cn4jJFI/m4EKv1iFLb1fqtvAt8Fw+K33qU1acKU3fi6uSsE=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SJ0PR10MB5693.namprd10.prod.outlook.com (2603:10b6:a03:3ec::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
+ 2022 23:42:27 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::8d67:8c42:d124:3721%4]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
+ 23:42:27 +0000
+Date:   Thu, 8 Dec 2022 15:42:24 -0800
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Zach O'Keefe <zokeefe@google.com>,
+        Manish Mishra <manish.mishra@nutanix.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 02/47] hugetlb: remove mk_huge_pte; it is unused
+Message-ID: <Y5J2YLW6UWtowZDM@monkey>
+References: <20221021163703.3218176-1-jthoughton@google.com>
+ <20221021163703.3218176-3-jthoughton@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021163703.3218176-3-jthoughton@google.com>
+X-ClientProxiedBy: MW4PR04CA0169.namprd04.prod.outlook.com
+ (2603:10b6:303:85::24) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SJ0PR10MB5693:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a05731f-2f32-4fcc-7651-08dad975dd14
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NZDHB97kWD7XqQ75YrU+5F324tEhEkR5zsFCMJ867rOj87SoD1FjDRFU64aHzvojUKxNo1BV13J0JWpZ2eD4xVvdyixF9PMWItOLOBbWijjJOddMazO5HOQrcCA7ouZ8OeOlUzE4EER3yxAP6QHmAqVF7vKa6cy9X/p8rOhltIJ1vHJ+KESQy7tbtV1i2WAmwTW7K0kKsRAmIv8f4B8GOOIJ3ebDLZ1hNSXqKudkfV+gJ7aJPlAs/N6+s5rqIpzXTIP1h8SOW2arwsvjiHSCZNw2OiYEo/YMyH1edC/wJeSRNDCce5kocCGVJJOIvquWTk3uom4O5HO/VFUYo3BDmCEHu0rZ8N2E+CtKEaNbYc0yWTVsGCGp1f5oc0Ld3uTgZ+eoIRNyjgQH1b1Q7iFuxPKOABwK5RiwUu5AoLu7YqvtnoNy+kUw+iRhcZs3UpNJl7ThsX0+f61TfAj38XEWzYThmEQIEYCf9XJGpo09BYX3hxrlrhu3uAshE5gV2eNaGgVyuOLfJ6MMbsb3k024xOPZ60FG2qUVKN5UfX6zDYJ7h2FiNTCxOVwiogPjmomsjHj+bFQA+uwvpXaz+PL1XX5iO+khGl26HKcvIR15c2z6lxhow5hsLPmcJ5QtyOEP3qXQNxtRYiROWk8CBdLQ1x/YGnRm3yzWVDKgEJJJ8XIc+QWZLzn+Ust1UZ632PJp
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199015)(478600001)(6486002)(7416002)(6506007)(9686003)(6512007)(53546011)(4744005)(66556008)(26005)(41300700001)(186003)(83380400001)(4326008)(8676002)(66476007)(44832011)(5660300002)(66946007)(8936002)(6666004)(38100700002)(2906002)(316002)(6916009)(54906003)(33716001)(86362001)(14583001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?s06ABgm+WqmENKB02I/NuCSoGBPxC3ef4padHFVlgJ4L15qKAFDkEHRiQgjj?=
+ =?us-ascii?Q?+dcWzyQ3k7hi3WGw/KCG8OIosKWA+nrig2W0sDpvrmXV/NZ9WpivYD9SZZsf?=
+ =?us-ascii?Q?kbfrvL4vQau2ph9oaSs5qyYVo4iGtTaNQ3lnmalch39vEx1y5xz6OmLwpA2r?=
+ =?us-ascii?Q?ezFdCQ4hb0eXEVpLbxN+EI1oDYw9NIqTpEtfxDoIKqXi7mg/zIAzyYPzaBGv?=
+ =?us-ascii?Q?vC9unvbH5yTLzzc+91z/iwC8+DhTQ046VnNnJDq1J/KKkPqyox+1Ta1r+HTg?=
+ =?us-ascii?Q?OzEQQlk3eytIBuQ+WagR4itzR4CjLjU44NB5FRfxxf05FfD7zuqI3/FDexzv?=
+ =?us-ascii?Q?bkrxV4mQ0bvp1QWarZDS6ChBDiowbd3eUrtxr1d9su2P5OeVYc+LMOyOWb2F?=
+ =?us-ascii?Q?ndpiux19+Rt3OOwdk4L0fwEgnssLbO64+McBEXV479UNWZso6DlrRNhk6JEA?=
+ =?us-ascii?Q?MBVuoNOZTRVtM7TF551Bju3/ELyTccEsQJ4QBzmZCWxJtpAknkD5cM94qKE2?=
+ =?us-ascii?Q?mvnTLzN3FKAKoYuEqMG0UiVVIDQU+fCt9tzyK/G332Xqo0YxIhzoltqn+8Z6?=
+ =?us-ascii?Q?5pOHM2/CZ7RCdURP3BFV1nexm+PFbHuotJ6Sn7SBp5idJ64HKf+fCV57wlOF?=
+ =?us-ascii?Q?5ArvgeNr69ceEIxvdmyMusqHCWdUlJv/eTwDCObeT3QdWmcPVboL7+ovxRal?=
+ =?us-ascii?Q?+x+MrdeyZQB0N+uwxaLk1Uj+bTD8owQfFtcE08xbwbRX5orChnEI0jhuwZfU?=
+ =?us-ascii?Q?zCU0Wc0gumFUeRTpU+S+gG/kaB0H08bqkf7BGbfwQcR4QjE5m+ipQVwrpXFK?=
+ =?us-ascii?Q?6CzQl2DyiXtkiAk0N0lD88DsyesryvXd+wVeXGPieittndoCvnZqc27NvNga?=
+ =?us-ascii?Q?vl05a3C/Jva05zZl3GRrObSup/wjgD2JrfmjY/IMs/xfMuv8G7kgXI4GsrMH?=
+ =?us-ascii?Q?a/DnEJ+e8AKAClNK5ht8N/qH7Xh/rsK+Qk64AEy+HWaHUT4W8s99oISLN6Sc?=
+ =?us-ascii?Q?dTS9u7PTU1wpVqzWSay0BjtPdKAh89pArV7Sr6KqaFGbnR3tOJGWawHJutjb?=
+ =?us-ascii?Q?KVH8a0KWy77RhNeDxG/M1KY8auPZYy+1M1TRGnjScEHI75iz2iv35O5Zwkde?=
+ =?us-ascii?Q?Nw1Sp7VJ/L7fWMNJpmaoRIc6AeXGJN5X8Cd7AosCQavL5MeJQ70ov+hd3YGf?=
+ =?us-ascii?Q?zv6deM9Z4X3Nx+Gftdo7oyo9h6HEGYDjK2UErRce6bi3wktQ2ZbbGFr1UoHw?=
+ =?us-ascii?Q?bsrGLL/xb9k63QyROYcawkOALInuUlrQacCwqxauGbw2VLjCoisYbdoLIl05?=
+ =?us-ascii?Q?rsmNvYcYzYofs0IahbRdSSVPO+eopCceWagLBeR3RtXy3ugzFRXJG+LbCdAE?=
+ =?us-ascii?Q?RrWfHbxzO4HP5BckzDgVB4WkroDXOQ51NXeMje4sCldgoUBoQ+7sBsuA+wFk?=
+ =?us-ascii?Q?pSFb0eXehfjUQvH0D1jWs8qdlfWODC7+HcOtQtf4toQztiXNCVsMGCVd3jfs?=
+ =?us-ascii?Q?13M6SbquYSgi9JkWMRO6I+m1iwh8rYezaD8q4AtiIpPwn39uWUUlAecsXGYc?=
+ =?us-ascii?Q?WvNwk/oT293um5d8MHOfIuO8Dj2wzfIfLx3zEzuJzwZQrBMrxd3qVb7WDvB9?=
+ =?us-ascii?Q?Rg=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a05731f-2f32-4fcc-7651-08dad975dd14
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 23:42:27.2196
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: URq7cKaDyeEOXRrZudtiGsjcg2c1cWqDmitHqUi2R6WPojKviGDCSYEc4B8NyDMbVs5LGdQh5H8wQM2mqTrsOQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB5693
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-08_12,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=881 bulkscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212080195
+X-Proofpoint-ORIG-GUID: nHO8d5uJwwiuxsF1CaG7lnFyVetMWpMr
+X-Proofpoint-GUID: nHO8d5uJwwiuxsF1CaG7lnFyVetMWpMr
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are certain security related MSRs that must be restored after a
-suspend cycle. There have been quite a few fixes done to restore these
-MSRs:
+On 10/21/22 16:36, James Houghton wrote:
+> mk_huge_pte is unused and not necessary. pte_mkhuge is the appropriate
+> function to call to create a HugeTLB PTE (see
+> Documentation/mm/arch_pgtable_helpers.rst).
+> 
+> It is being removed now to avoid complicating the implementation of
+> HugeTLB high-granularity mapping.
+> 
+> Signed-off-by: James Houghton <jthoughton@google.com>
+> ---
+>  arch/s390/include/asm/hugetlb.h | 5 -----
+>  include/asm-generic/hugetlb.h   | 5 -----
+>  mm/debug_vm_pgtable.c           | 2 +-
+>  mm/hugetlb.c                    | 7 +++----
+>  4 files changed, 4 insertions(+), 15 deletions(-)
 
-commit e2a1256b17b1 ("x86/speculation: Restore speculation related MSRs during S3 resume")
-commit 50bcceb7724e ("x86/pm: Add enumeration check before spec MSRs save/restore setup")
-commit 66065157420c ("x86/bugs: Make sure MSR_SPEC_CTRL is updated properly upon resume from S3")
-commit 2632daebafd0 ("x86/cpu: Restore AMD's DE_CFG MSR after resume")
-commit 73924ec4d560 ("x86/pm: Save the MSR validity status at context setup")
-commit f9e14dbbd454 ("x86/cpu: Load microcode during restore_processor_state()")
+Thanks!
 
-In order to catch regressions early add a selftest that keeps a copy of
-below MSRs for all CPUs:
+I suspect there is more cleanup of 'hugetlb page table helpers' that
+could be done.
 
-  MSR_IA32_SPEC_CTRL
-  MSR_IA32_TSX_CTRL
-  MSR_TSX_FORCE_ABORT
-  MSR_IA32_MCU_OPT_CTRL
-  MSR_AMD64_LS_CFG
-  MSR_AMD64_DE_CFG
-
-The test does a suspend/resume and reports failure if the MSRs are not
-restored to the value before suspend.
-
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
- tools/testing/selftests/x86/Makefile          |   2 +-
- .../selftests/x86/suspend_msr_restore.c       | 193 ++++++++++++++++++
- 2 files changed, 194 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/x86/suspend_msr_restore.c
-
-diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-index 0388c4d60af0..ef8c6cf7d72e 100644
---- a/tools/testing/selftests/x86/Makefile
-+++ b/tools/testing/selftests/x86/Makefile
-@@ -13,7 +13,7 @@ CAN_BUILD_WITH_NOPIE := $(shell ./check_cc.sh "$(CC)" trivial_program.c -no-pie)
- TARGETS_C_BOTHBITS := single_step_syscall sysret_ss_attrs syscall_nt test_mremap_vdso \
- 			check_initial_reg_state sigreturn iopl ioperm \
- 			test_vsyscall mov_ss_trap \
--			syscall_arg_fault fsgsbase_restore sigaltstack
-+			syscall_arg_fault fsgsbase_restore sigaltstack suspend_msr_restore
- TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
- 			test_FCMOV test_FCOMI test_FISTTP \
- 			vdso_restorer
-diff --git a/tools/testing/selftests/x86/suspend_msr_restore.c b/tools/testing/selftests/x86/suspend_msr_restore.c
-new file mode 100644
-index 000000000000..30285c565597
---- /dev/null
-+++ b/tools/testing/selftests/x86/suspend_msr_restore.c
-@@ -0,0 +1,193 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2022 Intel Corporation
-+ *
-+ * This test caches some chosen MSRs, does a suspend cycle and reports failure
-+ * if the MSRs are not restored to the values before suspend.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <fcntl.h>
-+#include <sched.h>
-+#include <stdbool.h>
-+#include <stdint.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <errno.h>
-+#include <sys/stat.h>
-+#include <sys/timerfd.h>
-+#include <sys/sysinfo.h>
-+
-+#include "../kselftest.h"
-+
-+#define MSR_IA32_SPEC_CTRL		0x00000048
-+#define MSR_IA32_TSX_CTRL		0x00000122
-+#define MSR_TSX_FORCE_ABORT		0x0000010F
-+#define MSR_IA32_MCU_OPT_CTRL		0x00000123
-+#define MSR_AMD64_LS_CFG		0xc0011020
-+#define MSR_AMD64_DE_CFG		0xc0011029
-+
-+struct msr_cache {
-+	unsigned int msr_id;
-+	unsigned long long msr_val;
-+	bool valid;
-+};
-+
-+int suspend(void)
-+{
-+	struct itimerspec spec = {};
-+	int power_state_fd;
-+	int timerfd;
-+	int ret = -1;
-+
-+	power_state_fd = open("/sys/power/state", O_RDWR);
-+	if (power_state_fd < 0) {
-+		ksft_test_result_error("open(\"/sys/power/state\") failed %s)\n", strerror(errno));
-+		goto exit;
-+	}
-+
-+	timerfd = timerfd_create(CLOCK_BOOTTIME_ALARM, 0);
-+	if (timerfd < 0) {
-+		ksft_test_result_error("timerfd_create() failed\n");
-+		goto cleanup_power_state;
-+	}
-+
-+	spec.it_value.tv_sec = 15;
-+	ret = timerfd_settime(timerfd, 0, &spec, NULL);
-+	if (ret < 0) {
-+		ksft_test_result_error("timerfd_settime() failed\n");
-+		goto cleanup_timer;
-+	}
-+
-+	if (write(power_state_fd, "mem", strlen("mem")) != strlen("mem")) {
-+		ksft_test_result_error("Failed to enter Suspend state\n");
-+		ret = -1;
-+		goto cleanup_timer;
-+	}
-+
-+	ret = 0;
-+
-+cleanup_timer:
-+	close(timerfd);
-+cleanup_power_state:
-+	close(power_state_fd);
-+exit:
-+	return ret;
-+}
-+
-+int msr_read(int cpu, unsigned int msr_id, unsigned long long *msr_val)
-+{
-+	char msr_file_name[32];
-+	int fd, ret;
-+
-+	snprintf(msr_file_name, 32, "/dev/cpu/%d/msr", cpu);
-+	fd = open(msr_file_name, O_RDONLY);
-+
-+	if (fd == -1) {
-+		perror("Failed to open");
-+		return -ENODEV;
-+	}
-+
-+	ret = pread(fd, msr_val, sizeof(long long), msr_id);
-+	close(fd);
-+
-+	return ret != sizeof(long long);
-+}
-+
-+int main(void)
-+{
-+	/* List of MSRs to tests */
-+	unsigned int msr_id[] = {
-+		MSR_IA32_SPEC_CTRL,
-+		MSR_IA32_TSX_CTRL,
-+		MSR_TSX_FORCE_ABORT,
-+		MSR_IA32_MCU_OPT_CTRL,
-+		MSR_AMD64_LS_CFG,
-+		MSR_AMD64_DE_CFG,
-+	};
-+	int i, cpu, err, max_cpus, msr_idx, total_tests = 0;
-+	int num_msrs = ARRAY_SIZE(msr_id);
-+	unsigned long long msr_val;
-+	cpu_set_t available_cpus;
-+	struct msr_cache *msrs;
-+	bool succeeded = true;
-+
-+	if (getuid() != 0)
-+		ksft_exit_skip("Please re-run the test as root\n");
-+
-+	if (access("/dev/cpu/0/msr", R_OK))
-+		ksft_exit_skip("Can't read MSRs\n");
-+
-+	if (access("/sys/power/state", W_OK))
-+		ksft_exit_skip("/sys/power/state not writable\n");
-+
-+	ksft_print_header();
-+
-+	err = sched_getaffinity(0, sizeof(available_cpus), &available_cpus);
-+	if (err < 0)
-+		ksft_exit_fail_msg("sched_getaffinity() failed\n");
-+
-+	max_cpus = get_nprocs_conf();
-+
-+	msrs = calloc(sizeof(struct msr_cache), max_cpus * num_msrs);
-+	if (!msrs)
-+		ksft_exit_fail_msg("Memory allocation failed\n");
-+
-+	for (cpu = 0; cpu < max_cpus; cpu++) {
-+		if (!CPU_ISSET(cpu, &available_cpus))
-+			continue;
-+		msr_idx = cpu * num_msrs;
-+		for (i = 0; i < num_msrs; i++, msr_idx++) {
-+			if (!msr_read(cpu, msr_id[i], &msr_val)) {
-+				msrs[msr_idx].valid = true;
-+				msrs[msr_idx].msr_id = msr_id[i];
-+				msrs[msr_idx].msr_val = msr_val;
-+				total_tests++;
-+			}
-+		}
-+	}
-+
-+	ksft_set_plan(total_tests);
-+
-+	if (suspend()) {
-+		succeeded = false;
-+		goto cleanup;
-+	}
-+
-+	for (cpu = 0; cpu < max_cpus; cpu++) {
-+		if (!CPU_ISSET(cpu, &available_cpus))
-+			continue;
-+
-+		msr_idx = cpu * num_msrs;
-+		for (i = 0; i < num_msrs; i++, msr_idx++) {
-+			if (!msrs[msr_idx].valid)
-+				continue;
-+			if (msr_read(cpu, msr_id[i], &msr_val)) {
-+				ksft_test_result_fail("Not able to read msr=0x%x on CPU=%d\n",
-+						      msr_id[i], cpu);
-+				succeeded = false;
-+				continue;
-+			}
-+			if (msrs[msr_idx].msr_val != msr_val) {
-+				ksft_test_result_fail("CPU%d: msr=0x%x value after resume=[0x%llx] != suspend=[0x%llx]\n",
-+						      cpu, msr_id[i], msr_val, msrs[msr_idx].msr_val);
-+				succeeded = false;
-+				continue;
-+			}
-+
-+			ksft_test_result_pass("CPU%d: MSR[0x%x] restored to 0x%llx\n",
-+					      cpu, msr_id[i], msr_val);
-+		}
-+	}
-+
-+cleanup:
-+	free(msrs);
-+
-+	if (succeeded)
-+		ksft_exit_pass();
-+	else
-+		ksft_exit_fail();
-+}
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 -- 
-2.37.3
-
+Mike Kravetz
