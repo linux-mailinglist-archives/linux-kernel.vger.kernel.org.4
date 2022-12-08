@@ -2,156 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5F8646BBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:16:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE58646BC1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiLHJQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:16:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45292 "EHLO
+        id S230048AbiLHJSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230406AbiLHJPx (ORCPT
+        with ESMTP id S230211AbiLHJRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:15:53 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A156F0D0;
-        Thu,  8 Dec 2022 01:14:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E644B821EB;
-        Thu,  8 Dec 2022 09:14:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFB4C433C1;
-        Thu,  8 Dec 2022 09:14:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670490883;
-        bh=7ugwqLbMH5I4cKEjyHD4GBrMWrGduu5H0DcZWSNKp0Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nb417taWxe0OC9WHnVJ/WojSZqBpmbKUJV8t0N7saLF3OYaSaOA2o2Q4pgbZopWK/
-         AKwel8xKcxaM21xi8ToBSNBreuD7xSMzuKBs8BhEBI2m4mPJrKq45qNa1pgPk8r7Fk
-         3h4BUAzlc01E93t3rn5wZJMi5BnaxYfZEbQQasSzEmmEHkyvhojh2jz2w8nzCdo8H+
-         H7PSrRP1zoa8ZhWoXjY0fJZ6dbPFqd/3PbyhbBdnzzI1YC0fi+AmZrFz14YqZGebev
-         rPTAuT5JWTKPXg+iWF3Z3VlhoabN7GeYe5DuNsnZUH4aIzdlain1lVRrmR8nfhV8Ro
-         CjZgOkhZSL1CQ==
-Date:   Thu, 8 Dec 2022 11:14:39 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     syzbot <syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com>,
-        jgg@ziepe.ca
-Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        markzhang@nvidia.com, ohartoov@nvidia.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING: refcount bug in nldev_newlink
-Message-ID: <Y5Gq/zVi/fR85OJK@unreal>
-References: <0000000000004fe6c005ef43161d@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000004fe6c005ef43161d@google.com>
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Dec 2022 04:17:48 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5586E542
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:16:29 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id b2so2386304eja.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:16:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=elLETLSwT7VH5/W4TgvYIEFkfudJUq+gajumeb0E6/U=;
+        b=Xl8lOWPuf4BgoDd/DR8s1V45KSGql1YN70Pv5eJQ/LXtaGwoWHadHCKIlwDL6S3v4e
+         3XUIT3PgBdyik1lIe4RPpyMZKrqUuNAgd1/adXZ5ktp1QEdq3r5akAXTRrFwSZEibo6H
+         N4VPKByeukXcn3IRw4Qs70d9PMhIVYW3DFe0GgPzVHT1nZF4SeNunQ9IwTvKvE+uVYwx
+         mjW57fmwrHNLjt3LkDhHANcQYSRZcfKJDq3fI0bB2p80CZJM6+DW1dun0AYyK1qMQQLq
+         nX6ap/pjzA0gP7ZYgULa85ZZJ0n4TWr3PKg7gdWsL2EnMPLT7c/fESFvR0TLokhNzSmI
+         IEIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=elLETLSwT7VH5/W4TgvYIEFkfudJUq+gajumeb0E6/U=;
+        b=ySCqZK2HC1yE0rWwZ0ALkv6UTY77TkCEPrLsyeaE0Ujb8DbBzfsdDSh2M+rd/HqrsJ
+         4+ihiCugJ9yl/AH87s+AiWcvHjqMxqzdtTTD5rxvetRxNpNP9lmOgLBCVzDyqq1asMqG
+         +yXsmedPZA5PD7kckAR9Bp3Sua3ldtUfHBv+TpfYlbaCpRMVM0KgQg+Wwja44R72OXP9
+         lyfqKky3K7VT6FqylyHntAHdvuOaklENL6rVfhJAS6qt5N7U5g9L7NZAQE/jq+eW2Cha
+         BFgvwWTAW5VTEz+hzaJIQQ8oGqtgBduEcObz0wfpHRp0+eZWhn+QGVZYEaTi5A9U/baB
+         A2bg==
+X-Gm-Message-State: ANoB5pnC6HztO6c3TevrR7JzUGnKpRbz+iuZZgF6NdiobC7vwfTqB0/4
+        d57FoWMnva1Inj6gC/XSJc4F5w==
+X-Google-Smtp-Source: AA0mqf5y9Eg/nNQNOVImTYmfbgy6DdU3Rw24mCguzwK/vdn477+84Aesq43eDYwB4GHXXvu7NYvbkQ==
+X-Received: by 2002:a17:907:cb83:b0:7a7:3f0c:e99b with SMTP id un3-20020a170907cb8300b007a73f0ce99bmr2022155ejc.6.1670490988109;
+        Thu, 08 Dec 2022 01:16:28 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id kv22-20020a17090778d600b007c0be4861e8sm5018404ejc.23.2022.12.08.01.16.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 01:16:27 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 08 Dec 2022 10:16:27 +0100
+Message-Id: <COWBMT72Y57W.2W8G3XDNT3T34@otso>
+Cc:     <quic_saipraka@quicinc.com>, <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
+        <linux-edac@vger.kernel.org>, <quic_ppareek@quicinc.com>
+Subject: Re: [PATCH 00/12] Qcom: LLCC/EDAC: Fix base address used for LLCC
+ banks
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Manivannan Sadhasivam" <manivannan.sadhasivam@linaro.org>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <bp@alien8.de>,
+        <tony.luck@intel.com>
+X-Mailer: aerc 0.13.0
+References: <20221207135922.314827-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221207135922.314827-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 12:51:39PM -0800, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=11aeafad880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3fd8326d9a0812d19218
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112536fb880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16aa2e6d880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com
-> 
-> WARNING: CPU: 0 PID: 5156 at lib/refcount.c:31 refcount_warn_saturate+0x1d7/0x1f0 lib/refcount.c:31
-> Modules linked in:
-> CPU: 0 PID: 5156 Comm: syz-executor773 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:refcount_warn_saturate+0x1d7/0x1f0 lib/refcount.c:31
-> Code: 05 5a 60 51 0a 01 e8 35 0a b5 05 0f 0b e9 d3 fe ff ff e8 6c 9b 75 fd 48 c7 c7 c0 6d a6 8a c6 05 37 60 51 0a 01 e8 16 0a b5 05 <0f> 0b e9 b4 fe ff ff 48 89 ef e8 5a b5 c3 fd e9 5c fe ff ff 0f 1f
-> RSP: 0018:ffffc90003ebf0d8 EFLAGS: 00010286
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff88802bfcba80 RSI: ffffffff8166b1dc RDI: fffff520007d7e0d
-> RBP: ffff888070296600 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000080000000 R11: 0000000000000000 R12: 1ffff920007d7e20
-> R13: 0000000000000000 R14: ffff888070296600 R15: ffffc90003ebf608
-> FS:  000055555600f300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007ffed185b004 CR3: 00000000265db000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __refcount_dec include/linux/refcount.h:344 [inline]
->  refcount_dec include/linux/refcount.h:359 [inline]
->  ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
->  netdev_tracker_free include/linux/netdevice.h:4039 [inline]
->  netdev_put include/linux/netdevice.h:4056 [inline]
->  dev_put include/linux/netdevice.h:4082 [inline]
->  nldev_newlink+0x360/0x5d0 drivers/infiniband/core/nldev.c:1733
->  rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
->  rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
->  netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
->  netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
->  netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
->  sock_sendmsg_nosec net/socket.c:714 [inline]
->  sock_sendmsg+0xd3/0x120 net/socket.c:734
->  ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
->  ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
->  __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> RIP: 0033:0x7fd5bc473699
-> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-> RSP: 002b:00007ffed185aff8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fd5bc473699
-> RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000003
-> RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
-> R10: 00007ffed185aa70 R11: 0000000000000246 R12: 00007ffed185b010
-> R13: 00000000000f4240 R14: 0000000000011fc1 R15: 00007ffed185b004
->  </TASK>
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> syzbot can test patches for this issue, for details see:
-> https://goo.gl/tpsmEJ#testing-patches
+Hi Manivannan,
 
-Jason, what do you think?
+On Wed Dec 7, 2022 at 2:59 PM CET, Manivannan Sadhasivam wrote:
+> The Qualcomm LLCC/EDAC drivers were using a fixed register stride for
+> accessing the (Control and Status Regsiters) CSRs of each LLCC bank.
+> This offset only works for some SoCs like SDM845 for which driver support
+> was initially added.
+>    =20
+> But the later SoCs use different register stride that vary between the
+> banks with holes in-between. So it is not possible to use a single regist=
+er
+> stride for accessing the CSRs of each bank. By doing so could result in a
+> crash with the current drivers. So far this crash is not reported since
+> EDAC_QCOM driver is not enabled in ARM64 defconfig and no one tested the
+> driver extensively by triggering the EDAC IRQ (that's where each bank
+> CSRs are accessed).
+>    =20
+> For fixing this issue, let's obtain the base address of each LLCC bank fr=
+om
+> devicetree and get rid of the fixed stride.
+>
+> This series affects multiple platforms but I have only tested this on
+> SM8250 and SM8450. Testing on other platforms is welcomed.
 
-diff --git a/drivers/infiniband/core/nldev.c b/drivers/infiniband/core/nldev.c
-index a981ac2f0975..982938c1dae3 100644
---- a/drivers/infiniband/core/nldev.c
-+++ b/drivers/infiniband/core/nldev.c
-@@ -1730,7 +1730,8 @@ static int nldev_newlink(struct sk_buff *skb, struct nlmsghdr *nlh,
- #endif
-        err = ops ? ops->newlink(ibdev_name, ndev) : -EINVAL;
-        up_read(&link_ops_rwsem);
--       dev_put(ndev);
-+       if (err)
-+               dev_put(ndev);
- 
-        return err;
- }
+If you can tell me *how* I can test it, I'd be happy to test the series
+on sm6350, like how to trigger the EDAC IRQ.
+
+So far without any extra patches I don't even see the driver probing,
+with this in kconfig
+
+  +CONFIG_EDAC=3Dy
+  +CONFIG_EDAC_QCOM=3Dy
+
+I do have /sys/bus/platform/drivers/qcom_llcc_edac at runtime but
+nothing in there (except bind, uevent and unbind), and also nothing
+interesting in dmesg with "llcc", with edac there's just this message:
+
+  [    0.064800] EDAC MC: Ver: 3.0.0
+
+From what I'm seeing now the edac driver is only registered if the
+interrupt is specified but it doesn't seem like sm6350 (=3Dlagoon) has
+this irq? Downstream dts is just this:
+
+	cache-controller@9200000 {
+		compatible =3D "lagoon-llcc-v1";
+		reg =3D <0x9200000 0x50000> , <0x9600000 0x50000>;
+		reg-names =3D "llcc_base", "llcc_broadcast_base";
+		cap-based-alloc-and-pwr-collapse;
+	};
+
+From looking at the downstream code, perhaps it's using the polling mode
+there?
+
+	/* Request for ecc irq */
+	ecc_irq =3D llcc_driv_data->ecc_irq;
+	if (ecc_irq < 0) {
+		dev_info(dev, "No ECC IRQ; defaulting to polling mode\n");
+
+Let me know what you think.
+
+Regards
+Luca
+
+>
+> Thanks,
+> Mani
+>
+> Manivannan Sadhasivam (12):
+>   dt-bindings: arm: msm: Update the maintainers for LLCC
+>   dt-bindings: arm: msm: Fix register regions used for LLCC banks
+>   arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sc7180: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sc7280: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sc8280xp: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sm8150: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sm8250: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sm8350: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sm8450: Fix the base addresses of LLCC banks
+>   arm64: dts: qcom: sm6350: Fix the base addresses of LLCC banks
+>   qcom: llcc/edac: Fix the base address used for accessing LLCC banks
+>
+>  .../bindings/arm/msm/qcom,llcc.yaml           | 128 ++++++++++++++++--
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/sc7280.dtsi          |   5 +-
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  10 +-
+>  arch/arm64/boot/dts/qcom/sdm845.dtsi          |   7 +-
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi          |   2 +-
+>  arch/arm64/boot/dts/qcom/sm8150.dtsi          |   7 +-
+>  arch/arm64/boot/dts/qcom/sm8250.dtsi          |   7 +-
+>  arch/arm64/boot/dts/qcom/sm8350.dtsi          |   7 +-
+>  arch/arm64/boot/dts/qcom/sm8450.dtsi          |   7 +-
+>  drivers/edac/qcom_edac.c                      |  14 +-
+>  drivers/soc/qcom/llcc-qcom.c                  |  64 +++++----
+>  include/linux/soc/qcom/llcc-qcom.h            |   4 +-
+>  13 files changed, 197 insertions(+), 67 deletions(-)
+>
+> --=20
+> 2.25.1
 
