@@ -2,184 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955E86474F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C706474FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:28:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbiLHRXK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 12:23:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S229712AbiLHR2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 12:28:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiLHRXH (ORCPT
+        with ESMTP id S229532AbiLHR2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 12:23:07 -0500
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BDC2981F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:23:03 -0800 (PST)
-Received: from omf05.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay03.hostedemail.com (Postfix) with ESMTP id A3EEDA08F0;
-        Thu,  8 Dec 2022 17:23:02 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf05.hostedemail.com (Postfix) with ESMTPA id 9CD1920011;
-        Thu,  8 Dec 2022 17:23:00 +0000 (UTC)
-Message-ID: <6f7ae389b64b83918ba624d107d8fa49883df540.camel@perches.com>
-Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
- about missing Link:
-From:   Joe Perches <joe@perches.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>
-Date:   Thu, 08 Dec 2022 09:22:59 -0800
-In-Reply-To: <ba953e75-d069-47e8-a467-217d4c600f5b@leemhuis.info>
-References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
-         <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
-         <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
-         <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
-         <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
-         <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
-         <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
-         <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
-         <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
-         <ba953e75-d069-47e8-a467-217d4c600f5b@leemhuis.info>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 8 Dec 2022 12:28:46 -0500
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB3A79857F;
+        Thu,  8 Dec 2022 09:28:45 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id jl24so2150717plb.8;
+        Thu, 08 Dec 2022 09:28:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X6rMA8enB1ZNoyIDqdZjqqp7br7Eu1pXTVbOT7EIYGQ=;
+        b=Sdj63OaJ8MojXe9c/gRNEt1z2QYY+OBx/ELVWYBsMkrZ6UT/Y6T75D2BmOkfLAIV1y
+         bQdq10mrzQ0/9POEgGtjMgqBwyUNW6zH1MXNUFlwXBGrpa6Gcior7USADbD7mp98ryc5
+         00Dw0EPO3DcfOh1J69UAdY/8SxxhhLD6cQFWAD0NF+Es6FFL33QyOeXGwDZvitYbVrIC
+         WeuX2CH4VFjlmj6KSNSQNGNITui2cIWByViP6RENsuq/FgkXjuguUM3Ar+Tf6E3+MWK9
+         3zJN9gVgMX536JElC872dgB1kQ8jcNWB0TfNmJLgB1NXq86J4mK4kxDgEBTHAumS2XIt
+         nYhg==
+X-Gm-Message-State: ANoB5pktdh7g3KaJqmxxJvzqgUfDBQQYc3WOMq3dCqLJ7dNrwkWtQwR2
+        EsAouQeaEzMVMO87P82ADuU=
+X-Google-Smtp-Source: AA0mqf7H3gJ6PPCGAlJNRm5jTIpngXqzz7iYtKR0YUQn52hrfAGFBvok2x2AXPTpmsaP/a3nnv7NpQ==
+X-Received: by 2002:a17:90a:7881:b0:219:f1a2:b641 with SMTP id x1-20020a17090a788100b00219f1a2b641mr13551635pjk.97.1670520525012;
+        Thu, 08 Dec 2022 09:28:45 -0800 (PST)
+Received: from ?IPV6:2620:15c:211:201:7b97:baa3:badc:5af? ([2620:15c:211:201:7b97:baa3:badc:5af])
+        by smtp.gmail.com with ESMTPSA id x22-20020a170902b41600b0016be834d54asm16726919plr.306.2022.12.08.09.28.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 09:28:44 -0800 (PST)
+Message-ID: <b6dfaaee-405a-d576-d46d-0ec78f216f85@acm.org>
+Date:   Thu, 8 Dec 2022 09:28:41 -0800
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 9CD1920011
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Rspamd-Server: rspamout03
-X-Stat-Signature: hwn5yzwfcr1k8hiowuujf4s37gxgtnod
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18MgA23XWJTc9ZheseU0SHZePT6VOa4v7Y=
-X-HE-Tag: 1670520180-603961
-X-HE-Meta: U2FsdGVkX1/L3mppc/KgrWAFbydmTcQJ+k1ivUi6RmNun+GsuXTKEHDGCxDWNV9RhrrnEP9AKzC8IwKA5KvHPQ==
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 1/4] ufs: core: Remove redundant wb check
+Content-Language: en-US
+To:     Bean Huo <huobean@gmail.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        martin.petersen@oracle.com
+Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1669550910-9672-1-git-send-email-Arthur.Simchaev@wdc.com>
+ <1669550910-9672-2-git-send-email-Arthur.Simchaev@wdc.com>
+ <b89f3337-0869-35a8-114d-85e1fd81eb2c@acm.org>
+ <0a44763d-8c40-b9e7-6268-01567c401884@gmail.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <0a44763d-8c40-b9e7-6268-01567c401884@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-12-08 at 14:18 +0100, Thorsten Leemhuis wrote:
-> On 06.12.22 10:21, Joe Perches wrote:
-> > On Tue, 2022-12-06 at 09:50 +0100, Thorsten Leemhuis wrote:
-> > > On 06.12.22 08:44, Joe Perches wrote:
-[]
-> > > > To me most of these are in the noise level, but perhaps all should just
-> > > > use Link:
-> > > > 
-> > > > $ git log -100000 --format=email -P --grep='^\w+:[ \t]*http' | \
-> > > >   grep -Poh '^\w+:[ \t]*http' | \
-> > > >   sort | uniq -c | sort -rn
-> > > >  103889 Link: http
-> > > >     415 BugLink: http
-> > > >     372 Patchwork: http
-> > > >     270 Closes: http
-> > > >     221 Bug: http
-> > > >     121 References: http
-> > > >     101 v1: http
-> > > >      77 Bugzilla: http
-> > > >      60 URL: http
-> > > >      59 v2: http
-> > > >      37 Datasheet: http
-> > > >      35 v3: http
-> > > >      19 v4: http
-> > > >      12 v5: http
-> > 
-> > > Ha, I considered doing something like that when I wrote my earlier mail,
-> > > but was to lazy. :-D thx!
-[]
-> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-[]
-> > @@ -3250,6 +3250,13 @@ sub process {
-> >  			$commit_log_possible_stack_dump = 0;
-> >  		}
-> >  
-> > +# Check for odd prefixes before a URI/URL
-> > +		if ($in_commit_log &&
-> > +		    $line =~ /^\s*(\w+):\s*http/ && $1 !~ /^(?:Link|Patchwork)/) {
-> > +			WARN("PREFER_LINK",
-> > +			     "Unusual link reference '$1:', prefer 'Link:'\n" . $herecurr);
-> > +		}
-> > +
+On 12/8/22 04:22, Bean Huo wrote:
 > 
-> One more thing: That afaics would result in a warning when people use
-> things like "v1: https://example.com/somewhere", which some people
-> apparently like. Those imho are not considered tags, hence I'd say we
-> allow them, unless you disagree.
+> On 08.12.22 12:31 AM, Bart Van Assche wrote:
+>> On 11/27/22 04:08, Arthur Simchaev wrote:
+>>> We used to use the extended-feature field in the device descriptor,
+>>> as an indication that the device supports ufs2.2 or later.
+>>> Remove that as this check is specifically done few lines above.
+>>>
+>>> Reviewed-by: Bean Huo <beanhuo@micron.com>
+>>> Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
+>>> ---
+>>>   drivers/ufs/core/ufshcd.c | 4 ----
+>>>   1 file changed, 4 deletions(-)
+>>>
+>>> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+>>> index 2dbe249..2e47c69 100644
+>>> --- a/drivers/ufs/core/ufshcd.c
+>>> +++ b/drivers/ufs/core/ufshcd.c
+>>> @@ -7608,10 +7608,6 @@ static void ufshcd_wb_probe(struct ufs_hba 
+>>> *hba, const u8 *desc_buf)
+>>>            (hba->dev_quirks & 
+>>> UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES)))
+>>>           goto wb_disabled;
+>>>   -    if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
+>>> -        DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
+>>> -        goto wb_disabled;
+>>> -
+>>>       ext_ufs_feature = get_unaligned_be32(desc_buf +
+>>>                       DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
+>>
+>> Does this code really have to be removed? I see a check of the
+>> UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES flag above the removed
+>> code but no check of the descriptor size?
+>>
+> it is not necessary to check this, but if you have concern, we could 
+> change to like this:
+> 
+> 
+>          if (desc_buf[DEVICE_DESC_PARAM_LEN] <
+>              DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
+>                  goto wb_disabled;
+> 
+> then   hba->desc_size could be removed.
 
-I'd say no as almost all of those are when patches contain
-references to previous patch submissions that should instead
-be below the --- line.  Perhaps there should be a separate
-warning for those v<n>: uses saying to move them below the ---
-but there really aren't many uses.
+Hi Bean,
 
-Most of the v<n>: style prefixes are from git pulls/merges.
-Redoing the git log grep with --no-merges shows that fairly well.
+My only concern is that this patch conflicts with the pending MCQ patch 
+series. Since that conflict is unavoidable, let's keep this patch.
 
-$ git log -100000 --no-merges --format=email -P --grep='^\w+:[ \t]*http' | \
-  grep -Poh '^\w+:[ \t]*http' | \
-  sort | uniq -c | sort -rn
- 103958 Link: http
-    418 BugLink: http
-    372 Patchwork: http
-    280 Closes: http
-    224 Bug: http
-    123 References: http
-     84 Bugzilla: http
-     61 URL: http
-     42 v1: http
-     38 Datasheet: http
-     20 v2: http
-      9 Ref: http
-      9 Fixes: http
-      9 Buglink: http
-      8 v3: http
-      8 Reference: http
-      7 See: http
-      6 1: http
-      5 link: http
-      3 Link:http
-      3 IGT: http
-      3 0: http
-      2 Website: http
-      2 Schematics: http
-      2 RHBZ: http
-      2 Reported: http
-      2 MR: http
-      2 Links: http
-      2 LINK: http
-      2 Link:  http
-      2 Bugs: http
-      2 BUG: http
-      2 2: http
-      1 v5: http
-      1 v4: http
-      1 V1: http
-      1 v1:http
-      1 Twitter: http
-      1 tree: http
-      1 tool: http
-      1 tests: http
-      1 tasks: http
-      1 Source: http
-      1 SoM: http
-      1 scctc: http
-      1 Reproducer: http
-      1 reliable: http
-      1 Related: http
-      1 Reference:http
-      1 oscca: http
-      1 Mesa: http
-      1 Lore: http
-      1 Links:http
-      1 ink: http
-      1 in: http
-      1 IETF: http
-      1 here: http
-      1 Examples: http
-      1 bz: http
-      1 Bug:http
-      1 AlsaInfo: http
-
+Bart.
