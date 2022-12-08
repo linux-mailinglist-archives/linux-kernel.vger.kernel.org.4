@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB31646B49
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1E3646B4B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiLHJCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34088 "EHLO
+        id S230077AbiLHJCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:02:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiLHJCp (ORCPT
+        with ESMTP id S229878AbiLHJCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:02:45 -0500
+        Thu, 8 Dec 2022 04:02:47 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D718710A2;
-        Thu,  8 Dec 2022 01:02:41 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DA35FDD;
+        Thu,  8 Dec 2022 01:02:45 -0800 (PST)
 Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 1798432002E2;
-        Thu,  8 Dec 2022 04:02:40 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 48D1232001AB;
+        Thu,  8 Dec 2022 04:02:43 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 08 Dec 2022 04:02:41 -0500
+  by compute4.internal (MEProxy); Thu, 08 Dec 2022 04:02:44 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1670490159; x=1670576559; bh=R4MrWN+CSz7QFshA2PjZ7T7ly
-        6PvFA9S5vCqTmxqsXM=; b=W1MEgpDCNjWU0o7upZmi7IllenrLxaCsmAFUkzNh+
-        rLin3ekP5WXeyVfnDI50nckR/jhpDV/S0uoVnVzdXBOa9m9KiBsb9ueRIBlvxlx2
-        4H/CHYIMEZnInhzLX+kauwA7VUHyECpUBRWYU2/6tJj/J3kKYMXw0owyHg0VhzHg
-        DQ9PlQ96qhzYpIGMlE9Rca6HrCUGA8LeVJlCJzlilhgmPMuQ7MkrkFTfcPex6LBy
-        GxaT7k0C8C3DuU15NnaWSPVzCPm7TgqWWiT85vCNe2LeJbH771djkIoa5zEg+pPL
-        IP2u17YWHQzLAhkhX5A9YjAH5noZCfM0k/06GVxyZpmnQ==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670490162; x=1670576562; bh=/2
+        5Zms0aIlGn7UuOR8iB864vzGQsFadP0HWzXb42zI4=; b=0hEhAnbHJNDHMyjC0+
+        obqd/bf6wKQ3lqcED9F0ToWleTIW7Eqh/cn2Ya0k+QRiM7YXwXyAmfAeHfIM/t9P
+        Af4EQg8FsOOCIk0Pi+BbLeZ6TYW+WPqV2uyJvNTW711ysx8OscXixK+lApD32bhQ
+        /lVNNlrp+JXOFUGFjupxOoUWbuwxSBUfy+AfQs9qhyrKbLVXTU+Eg4NtzITaiwky
+        ZkBgaGufnhnRy/4tccWhnwAhDXo5MRqwp1JMRU3AMVLy6Py9SQbvWyFdTL459DeU
+        U0Q6vN2aCpInHyDgSQsEM2cBKw907VnHzKICb6mtrOfS5SqQf5xdToto+YF3btnl
+        vmrg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1670490159; x=1670576559; bh=R4MrWN+CSz7QFshA2PjZ7T7ly6PvFA9S5vC
-        qTmxqsXM=; b=wOVT6yiXwfvRTDSBYLqM/dr6II/bX1eOtpd1bCZkHvPQocZKpxJ
-        JYbOHMwoT7Z/LG6mT7lTauRYcWnKGwzZbwEMFJ2/DgsZRCmWF62HT6XdeccrYYHN
-        4mb4oayOMTIRjVrnvp6Lf9BKqUiuVhdUFuyXV35prMPkVgEAUsKjhjXATZpSLUUG
-        Dniv0R9aEDpN/I06YMbeeJjTY6a5ZfCh9IiPF7GgREWXjsIg/HvGbfLmOr3mP/l2
-        T211+e3V7y7TjFTXiGTH6SEr2DCoOZMyTOp2cCSfwjJMMRVIcPClTrtmoL7YG0qK
-        rm1FBFlZGnTK2djv2szGLtyNat6lAsw0JOw==
-X-ME-Sender: <xms:L6iRY6Rxp7ZPmsi4uSRYv2kyXl-ViJ7wa-Iia9QHkWKJYKsWRMoCvw>
-    <xme:L6iRY_zWingWNteGWJRimi5zxP0tEfvRi5s-o8Liqbo6jAj-jITCKkH1H8Jyo_dZp
-    XvQZA8zuPARWvX__w>
-X-ME-Received: <xmr:L6iRY31J9L-DJ0afUbiVZmzwO8HkvcB3K9wTVZv49bwy9B9ejnEMj0hBwbXFkcKpBrt9qh5aH9BfxCl94bqDLSDcNWZC-THz5hFxXInXzxrwfVLtX-y6T4Dq5wxEupoCBnQ9HQ>
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1670490162; x=1670576562; bh=/25Zms0aIlGn7
+        UuOR8iB864vzGQsFadP0HWzXb42zI4=; b=Iitbe5M0PAyGVAxuUrPucZSEW35de
+        NUymnQVdanHenoPwXlAkVWaho2lJvVYkv0iMZsW2Lh89oo1f01kIw/CfsydoWGkQ
+        UdfYWdYgnwn5+MnXz72vNEHd14B51GMr782/g2HwIc1V4jJXLOzWcjLy1j75khfH
+        w5FQtme3lxebiVZskIY2ox/PXdw2mjjr23xZOwttqojwBq9NNTUhP2/EmIsTeAhZ
+        YQEjC81Q4dTUaJTF0ny/AHZ/zQpOmcr+h1JNcdsFtrBW1+3YfmnIRsbNljshUI5w
+        gZcksNvxqPrrF9y+yxnbKDP1d81UyTTBKmfLaioG8+w5bz8THC2hgdKTw==
+X-ME-Sender: <xms:MqiRY5xjmBgPvyWAdGQbH-FraoLFHLFHtIKlyVjTR3vJoFuA4hg7_w>
+    <xme:MqiRY5StJsamoJQzOS9hjy7OiRkNTzqT_UFeBVX9yHKM5sViJJc6Q1wdWLS9SbBOu
+    wZZtXbguJvUSPyizg>
+X-ME-Received: <xmr:MqiRYzU4O3K8PM1iC-lBYDY8BWlMDBIuvwOkSxGTfTArOPrFZBvn_NLpHwlM3egZUTMtw1-N6yY2BI4ULnJIiFOCtX1ahrcJPwQNYOYR_ImVC0F3PO0c9DXwCMM4hQhqOIB4ow>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtucetufdoteggodetrfdotffvucfrrh
     hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
     lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    ephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfjohhl
-    lhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrthhtvg
-    hrnhepkeehffethedtteffgfefteetjedvfeelueevudffgfeutdejvdehledvvdffhfev
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:L6iRY2AEKZ-Lrl_Z_R-5p3r3qv2DEdaK12MV4Q68c2EZtpXmj6FAmw>
-    <xmx:L6iRYzjhKCNafSg8eLD3zrdBiizgK1NFfGycim2vXctw-4EB2ymhGw>
-    <xmx:L6iRYyrRRmOet_ZYXFD-PsL7uohVl29o6HmBUwg2iTwO-Rmm_7RJHQ>
-    <xmx:L6iRY-SBUbEXbSkoGFWhO9ziEeOB6XCrKcUg7mW1EDpQkEqW83Ehqw>
+    ephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
+    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
+    htvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefgudefiedt
+    veetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
+    grmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:MqiRY7j4deMr6WbmTd0d0nygcxQBxwF4nCl2-g8LCkVhrAj-PdKWow>
+    <xmx:MqiRY7D6k-zOkQ6F6R4A0jQocRm9E2C9mP_jNgvEVik12jdN9Ovm8A>
+    <xmx:MqiRY0J5YukAEh5986n_31irKYsE7gRrP36SdLhmm1M1QoX_pGiO7A>
+    <xmx:MqiRYzYOOX8tD1le9c60gkdLSXr3hglrCAwiXpEsGe8JvQFcmoIUjA>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 04:02:38 -0500 (EST)
+ 8 Dec 2022 04:02:41 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -74,11 +75,14 @@ Cc:     Jisheng Zhang <jszhang@kernel.org>, linux-kernel@vger.kernel.org,
         Heiko Stuebner <heiko@sntech.de>,
         linux-arm-kernel@lists.infradead.org,
         Andre Przywara <andre.przywara@arm.com>,
-        Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v3 00/12] riscv: Allwinner D1/D1s platform support
-Date:   Thu,  8 Dec 2022 03:02:25 -0600
-Message-Id: <20221208090237.20572-1-samuel@sholland.org>
+        Samuel Holland <samuel@sholland.org>,
+        Guo Ren <guoren@kernel.org>
+Subject: [PATCH v3 01/12] MAINTAINERS: Match the sun20i family of Allwinner SoCs
+Date:   Thu,  8 Dec 2022 03:02:26 -0600
+Message-Id: <20221208090237.20572-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221208090237.20572-1-samuel@sholland.org>
+References: <20221208090237.20572-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,136 +95,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds the Kconfig/defconfig plumbing and devicetrees for a
-range of Allwinner D1 and D1s-based boards. Many features are already
-enabled, including USB, Ethernet, and WiFi.
+Allwinner sunxi SoCs with a RISC-V CPU use the sun20i designator. Match
+that pattern in addition to the designators for 32 and 64-bit ARM SoCs.
 
-The devicetrees use bindings from the following series which have not
-yet been merged to linux-next:
- - In-package LDO regulators:
-   https://lore.kernel.org/lkml/20221208084127.17443-1-samuel@sholland.org/
- - Ethernet MAC binding fix (not a new issue with D1):
-   https://lore.kernel.org/lkml/20221208061616.7806-1-samuel@sholland.org/
- - TI ADC101C ADC (accepted, not yet in linux-next):
-   https://lore.kernel.org/lkml/20221125220903.8632-1-samuel@sholland.org/
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Reviewed-by: Guo Ren <guoren@kernel.org>
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-The only remaining DT validation issue is that gpio-fan is missing a
-YAML conversion, although one is on the list here:
-https://lore.kernel.org/lkml/20220126200350.3633576-1-clabbe@baylibre.com/
+(no changes since v1)
 
-$ make ARCH=riscv CROSS_COMPILE=riscv64-linux-musl- dtbs_check
-  SYNC    include/config/auto.conf.cmd
-  LINT    Documentation/devicetree/bindings
-  CHKDT   Documentation/devicetree/bindings/processed-schema.json
-  SCHEMA  Documentation/devicetree/bindings/processed-schema.json
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-clockworkpi-v3.14.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-devterm-v3.14.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-480p.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-720p.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dtb
-  DTC_CHK arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dtb
-arch/riscv/boot/dts/allwinner/sun20i-d1-devterm-v3.14.dtb:0:0: /fan: failed to match any schema with compatible: ['gpio-fan']
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Note that validation requires dt-schema v2022.12 or newer.
-
-I tested this series (DMIC, Ethernet, LEDs, MMC, PMIC, touch, and USB,
-all where available) on the following boards:
- - sun20i-d1-devterm-v3.14
- - sun20i-d1-dongshan-nezha-stu
- - sun20i-d1-lichee-rv-86-panel-480p
- - sun20i-d1-mangopi-mq-pro
- - sun20i-d1-nezha
- - sun20i-d1s-mangopi-mq
-
-Changes in v3:
- - Drop dummy DCXO clock-frequency property
- - Decrease the PLIC's riscv,ndev property to 175
- - Fix `make W=1 dtbs` warnings (unnecessary #address/#size-cells)
- - Drop mmc aliases
- - Change LED_FUNCTION_BACKLIGHT to LED_FUNCTION_STATUS (the backlight
-   regulator is disconnected by default, so this is a standalone LED)
- - Fix `make W=1 dtbs` warnings (missing reg properties)
- - ARCH_SUNXI depends on MMU && !XIP_KERNEL
-
-Changes in v2:
- - Add MangoPi MQ (non-Pro) board
- - Split into separate files for sharing with D1s/R528/T113
- - Use SOC_PERIPHERAL_IRQ macro for interrupts
- - Rename osc24M to dcxo and move the frequency to the board DTs
- - Drop analog LDOs due to the missing binding
- - Correct tcon_top DSI clock reference
- - Add DMIC, DSI controller, and DPHY (bindings are in linux-next)
- - Add CPU OPP table
- - Common regulators moved to MangoPi MQ patch, removed analog LDOs
- - Removed LRADC (depends on analog LDOs)
- - Added XR829 host-wake interrupt
- - Added DMIC sound card to Lichee RV dock and Lichee RV 86 Panel
- - Removed LRADC (depends on analog LDOs)
- - Added LED (GPIO shared between onboard LED and backlight regulator)
- - Added PMIC GPIO controller node (binding merged for 6.2)
- - Sort Kconfig as if we had done s/SOC_/ARCH_/ for future-proofing
-
-Samuel Holland (12):
-  MAINTAINERS: Match the sun20i family of Allwinner SoCs
-  dt-bindings: vendor-prefixes: Add Allwinner D1/D1s board vendors
-  dt-bindings: riscv: Add Allwinner D1/D1s board compatibles
-  riscv: dts: allwinner: Add the D1/D1s SoC devicetree
-  riscv: dts: allwinner: Add MangoPi MQ devicetree
-  riscv: dts: allwinner: Add Allwinner D1 Nezha devicetree
-  riscv: dts: allwinner: Add Sipeed Lichee RV devicetrees
-  riscv: dts: allwinner: Add MangoPi MQ Pro devicetree
-  riscv: dts: allwinner: Add Dongshan Nezha STU devicetree
-  riscv: dts: allwinner: Add ClockworkPi and DevTerm devicetrees
-  riscv: Add the Allwinner SoC family Kconfig option
-  riscv: defconfig: Enable the Allwinner D1 platform and drivers
-
- .../devicetree/bindings/riscv/sunxi.yaml      |  69 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |   4 +
- MAINTAINERS                                   |   2 +-
- arch/riscv/Kconfig.socs                       |  10 +
- arch/riscv/boot/dts/Makefile                  |   1 +
- arch/riscv/boot/dts/allwinner/Makefile        |  11 +
- .../allwinner/sun20i-common-regulators.dtsi   |  35 +
- .../allwinner/sun20i-d1-clockworkpi-v3.14.dts | 252 ++++++
- .../dts/allwinner/sun20i-d1-devterm-v3.14.dts |  36 +
- .../sun20i-d1-dongshan-nezha-stu.dts          | 117 +++
- .../sun20i-d1-lichee-rv-86-panel-480p.dts     |  29 +
- .../sun20i-d1-lichee-rv-86-panel-720p.dts     |  10 +
- .../sun20i-d1-lichee-rv-86-panel.dtsi         | 119 +++
- .../allwinner/sun20i-d1-lichee-rv-dock.dts    |  97 ++
- .../dts/allwinner/sun20i-d1-lichee-rv.dts     |  87 ++
- .../allwinner/sun20i-d1-mangopi-mq-pro.dts    | 142 +++
- .../boot/dts/allwinner/sun20i-d1-nezha.dts    | 166 ++++
- arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi  |  66 ++
- .../dts/allwinner/sun20i-d1s-mangopi-mq.dts   | 134 +++
- arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi |  76 ++
- .../boot/dts/allwinner/sunxi-d1-t113.dtsi     |  15 +
- .../boot/dts/allwinner/sunxi-d1s-t113.dtsi    | 837 ++++++++++++++++++
- arch/riscv/configs/defconfig                  |  22 +-
- 23 files changed, 2335 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/riscv/sunxi.yaml
- create mode 100644 arch/riscv/boot/dts/allwinner/Makefile
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-common-regulators.dtsi
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-clockworkpi-v3.14.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-devterm-v3.14.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-480p.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-720p.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel.dtsi
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1.dtsi
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dts
- create mode 100644 arch/riscv/boot/dts/allwinner/sun20i-d1s.dtsi
- create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1-t113.dtsi
- create mode 100644 arch/riscv/boot/dts/allwinner/sunxi-d1s-t113.dtsi
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 38293bfb1918..35f5808cc308 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1828,7 +1828,7 @@ F:	drivers/pinctrl/sunxi/
+ F:	drivers/soc/sunxi/
+ N:	allwinner
+ N:	sun[x456789]i
+-N:	sun50i
++N:	sun[25]0i
+ 
+ ARM/Amlogic Meson SoC CLOCK FRAMEWORK
+ M:	Neil Armstrong <neil.armstrong@linaro.org>
 -- 
 2.37.4
 
