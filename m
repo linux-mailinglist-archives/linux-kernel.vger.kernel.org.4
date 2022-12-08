@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13383647B15
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B462647B5D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:24:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiLIBB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:01:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46542 "EHLO
+        id S230044AbiLIBYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiLIBBX (ORCPT
+        with ESMTP id S229979AbiLIBYV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:01:23 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089E6A505C;
-        Thu,  8 Dec 2022 17:01:22 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id kw15so8015558ejc.10;
-        Thu, 08 Dec 2022 17:01:21 -0800 (PST)
+        Thu, 8 Dec 2022 20:24:21 -0500
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8164286F6E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:24:06 -0800 (PST)
+Received: by mail-pf1-x42b.google.com with SMTP id 65so2634597pfx.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 17:24:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XYnHw3A5Lj4PgcMhioL366GqKUQvej2q/D65GgF3JY8=;
-        b=S/pkZvXLNrFgNz4jW0sLD2ZTMZSD8cMwNLSvKIp5qYnBWWrI8wY3yOu1iGtia8rq7F
-         IXY5PbheWWGPkT+kKJw6TGLxWldyYhrVEO4wAsOKY7W6A+Led3GqjId3uTuNNZaspHcJ
-         o1fQyfCLunRQLNNC1jdw8yP99HFDAd5xa3eyXpsovgnzilF+57c97/iN9KdZjLrAQxa3
-         8oG3xSWmi9lPW2BrrkBpAmz7nGzdqsdiv0eZRdw5RxBASOWZO6xlGv3cJlXUHswr8CYk
-         Tre7vI4nSP9nLKd/Iy1RfM2m01ixuSQdqZx6rm8SHRfjrD10Nvn++968VtuW003cUPpm
-         cnCQ==
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wKTAsr2IrXMz/U2BqEq73Jfn0nVzLtC09ILEdcEpquo=;
+        b=2CRNgwmN3i03MopIoAI+Cyp5x7a2vzmm1Ez+9w0eeXm10PfG3FZT2uDND623esVUul
+         fJesWMTE6Y3FZD0Cyo82R7j/ZSHW9sZVYb6z1eMF2CdYAurpKPq7ZRfbMzvSG1l2T9XB
+         HA7qhLaXo4XqDcrCuyHuHpmVi9ZrFssSbMKxcGKlVjgoY4GrX+d6uIcLc+d020Ze36F6
+         9FsREAqpVzJMGRRzGEX8Gk9JKgmhA74kI1ym1TuxhIDbBDko9TgadlL2+U3KbJCvlElj
+         kJjgHmXcR45ne7Vr4UWCcrYhsQIPJaesj62ipPuL9OkrUv4BCPhul0irQWDd0XNvYTc2
+         uj8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XYnHw3A5Lj4PgcMhioL366GqKUQvej2q/D65GgF3JY8=;
-        b=JmSPT0c50WRfFyOjZzpflbz2FFPEUCXk2YrrtVKYFPYykARNCnhyrhka6zi6sLLvsT
-         SbjAg66IQhwD0T+340z+ibOYi7/rsFe29+fP+tWVSUbFA46hAUL33oHb92qnIUR25WK/
-         e++YDk8fW+s03A6DRLjRdIcWJ5SDiY/g7smXVy9ZYf3H0Z9XEqo00vWEO2dJg9HBvcSf
-         aD5ePKRvSHcvTC4xo+o9MfWtIv943te0QYjttoEeQ3/Q8oLI9CqFvK9HO6KRrvQefgrk
-         9uHonYfAwaCQpZI+psRzaRhPNup5h1iYyz/I2qpBbL0i9+/AUsLBESGHXRWyDnX4eD9C
-         CjoA==
-X-Gm-Message-State: ANoB5plZoZVsRV7B1rYzyYw2OhITYc5YtUlzDCP6XzEDMq7uL0fVqjt3
-        Brt1vVPUBSY+CXZ3U6FZBcsOy8ypUEb4xwoJSwY=
-X-Google-Smtp-Source: AA0mqf5GtaBBe+3V/UdsykawqHO7lFYMp6c5HyOtJGnSray5j24wAmsU2FlqBhZ3loGocEfcWMu7UkvtsVi3Swr/zq8=
-X-Received: by 2002:a17:906:3e53:b0:7c1:1f2b:945f with SMTP id
- t19-20020a1709063e5300b007c11f2b945fmr4815746eji.302.1670547680540; Thu, 08
- Dec 2022 17:01:20 -0800 (PST)
+        h=to:from:cc:content-transfer-encoding:mime-version:date:message-id
+         :subject:references:in-reply-to:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wKTAsr2IrXMz/U2BqEq73Jfn0nVzLtC09ILEdcEpquo=;
+        b=Qb3j+qa3HFG+rr4PiGdN1iAbIz4v9E70F4IiqTjkI0RGB1r6HWdGEa6WX62FCnHGhR
+         XEk+dYT2zQEOsxlYzhNOC8vYidYPHVT0ogRQHGCGF6iKSrWo5dNm61oZ158i7XQuW7CA
+         JJbuZdxt9MihzJH9RMbNQMk1REoJIpqf/Yior++aCTt5YAVyu+tkbxReq6JsH8KbLCy9
+         /fIlZYQCMTMjfCHk06KiMC35OV9AgNKYX6EeS6gUzOn0iZ6ghb0wECed66iGvPhKJ+FH
+         NjcP2G5XltXq5Z3zmBYbuzQoc2USTbC4XsMrEd4jhgq+Q2tjsrgoqgiK8f+BhXO8vL66
+         pxfA==
+X-Gm-Message-State: ANoB5pkLPQRfUHFiroLbC0f3tsGTYlhApKSDL2QLEYEMOzk7J/RbJQHR
+        9SH/p1T9ImOue/Zyr4WG0qIOlw==
+X-Google-Smtp-Source: AA0mqf7IXsDw5KMVyYSCx2/x3dmfWax5dCPlOeHHAghTvWBGXnL1yaFR8uHDgzS2bfAS8m5LzGS/zg==
+X-Received: by 2002:a62:8783:0:b0:577:9d32:b30f with SMTP id i125-20020a628783000000b005779d32b30fmr5183990pfe.15.1670549045965;
+        Thu, 08 Dec 2022 17:24:05 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id q15-20020aa7842f000000b005672daedc8fsm124950pfn.81.2022.12.08.17.24.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 17:24:05 -0800 (PST)
+In-Reply-To: <20221114090536.1662624-1-apatel@ventanamicro.com>
+References: <20221114090536.1662624-1-apatel@ventanamicro.com>
+Subject: Re: [PATCH v6 0/3] Add PMEM support for RISC-V
+Message-Id: <167054326322.9839.358393101882236728.b4-ty@rivosinc.com>
+Date:   Thu, 08 Dec 2022 15:47:43 -0800
 MIME-Version: 1.0
-References: <20221109024155.2810410-1-connoro@google.com> <5708a47d-5400-e75e-ccf6-96177366ea38@meta.com>
- <CALE1s+NfHYpE_=fNr47U2groVDwhdHJJDSo6-2gdN8mR5G700g@mail.gmail.com>
- <0b9023b6-9742-b317-7596-98026a0c5d03@meta.com> <CAEf4BzbTeJWkFhF-bW3mp94THeYEMM7R-ZX3C_c1aazY0Togsw@mail.gmail.com>
- <CALE1s+OrB9wBGyi2zsyyOm=F36zcES7gtwyb2mVX3j_M8pvJuA@mail.gmail.com>
-In-Reply-To: <CALE1s+OrB9wBGyi2zsyyOm=F36zcES7gtwyb2mVX3j_M8pvJuA@mail.gmail.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 8 Dec 2022 17:01:07 -0800
-Message-ID: <CAEf4Bza+-q4XqT_UksVTqJfKRYkx303O2PFz=jPMkPJPsAcHMA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: btf: don't log ignored BTF mismatches
-To:     "Connor O'Brien" <connoro@google.com>
-Cc:     Yonghong Song <yhs@meta.com>, bpf@vger.kernel.org,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-e660e
+Cc:     Heiko Stuebner <heiko@sntech.de>, linux-riscv@lists.infradead.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Atish Patra <atishp@atishpatra.org>,
+        linux-kernel@vger.kernel.org, Anup Patel <anup@brainfault.org>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,102 +76,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 4:59 PM Connor O'Brien <connoro@google.com> wrote:
->
-> On Thu, Dec 8, 2022 at 4:03 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Dec 8, 2022 at 10:01 AM Yonghong Song <yhs@meta.com> wrote:
-> > >
-> > >
-> > >
-> > > On 12/7/22 6:19 PM, Connor O'Brien wrote:
-> > > > On Wed, Nov 9, 2022 at 8:45 AM Yonghong Song <yhs@meta.com> wrote:
-> > > >>
-> > > >>
-> > > >>
-> > > >> On 11/8/22 6:41 PM, Connor O'Brien wrote:
-> > > >>> Enabling CONFIG_MODULE_ALLOW_BTF_MISMATCH is an indication that BTF
-> > > >>> mismatches are expected and module loading should proceed
-> > > >>> anyway. Logging with pr_warn() on every one of these "benign"
-> > > >>> mismatches creates unnecessary noise when many such modules are
-> > > >>> loaded. Instead, limit logging to the case where a BTF mismatch
-> > > >>> actually prevents a module form loading.
-> > > >>>
-> > > >>> Signed-off-by: Connor O'Brien <connoro@google.com>
-> > > >>> ---
-> > > >>>    kernel/bpf/btf.c | 7 ++++---
-> > > >>>    1 file changed, 4 insertions(+), 3 deletions(-)
-> > > >>>
-> > > >>> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > >>> index 5579ff3a5b54..406370487413 100644
-> > > >>> --- a/kernel/bpf/btf.c
-> > > >>> +++ b/kernel/bpf/btf.c
-> > > >>> @@ -7190,11 +7190,12 @@ static int btf_module_notify(struct notifier_block *nb, unsigned long op,
-> > > >>>                }
-> > > >>>                btf = btf_parse_module(mod->name, mod->btf_data, mod->btf_data_size);
-> > > >>>                if (IS_ERR(btf)) {
-> > > >>> -                     pr_warn("failed to validate module [%s] BTF: %ld\n",
-> > > >>> -                             mod->name, PTR_ERR(btf));
-> > > >>
-> > > >> I think such warning still useful even with
-> > > >> CONFIG_MODULE_ALLOW_BTF_MISMATCH.
-> > > >> Can we use pr_warn_ratelimited instead of pr_warn in the above to
-> > > >> avoid excessive warnings?
-> > > >
-> > > > I gave this a try on a Pixel 6 but I'm not sure it quite addresses the
-> > > > issue. The amount of logging doesn't seem to decrease much, I think
-> > > > because the interval between loading one mismatched module and the
-> > > > next can be greater than the default rate limit. To my mind, the issue
-> > > > is the total volume of these messages more so than their rate.
-> > > >
-> > > > For context, Android devices using the GKI may load hundreds of
-> > > > separately-built modules, and BTF mismatches are possible for any/all
-> > > > of these. It was pointed out to me that btf_verifier_log_type can also
-> > > > print several more lines per mismatched module. ~5 lines of logging
-> > > > for each mismatched module can start to add up, in terms of both
-> > > > overhead and the noise added to the kernel logs.
-> > > >
-> > > > This is more subjective but I think the warnings also read as though
-> > > > this is a more serious failure that might prevent affected modules
-> > > > from working correctly; anecdotally, I've gotten multiple questions
-> > > > about them asking if something is broken. This can be a red herring
-> > > > for anyone unfamiliar with BTF who is reading the logs to debug
-> > > > unrelated issues. In the CONFIG_MODULE_ALLOW_BTF_MISMATCH=y case the
-> > > > flood of warnings seems out of proportion to the actual result
-> > > > (modules still load successfully, just without debug info) especially
-> > > > since the user has explicitly enabled a config saying they expect
-> > > > mismatches.
-> > > >
-> > > > If there needs to be some logging in the "mismatch allowed" case,
-> > > > could an acceptable middle ground be to use pr_warn_once to send a
-> > >
-> > > So it looks like pr_warn_ratelimited still produces a lot of warning.
-> > > In this case, I guess pr_warn_once should be okay.
-> >
-> > Maybe pr_warn_once generic "some kernel module BTF mismatched". And
-> > also warn per-module message with details if
-> > CONFIG_MODULE_ALLOW_BTF_MISMATCH is not set?
-> >
->
-> Yeah, I figured the logging behavior should remain unchanged when
-> CONFIG_MODULE_ALLOW_BTF_MISMATCH is unset, the existing verbose
-> logging makes sense when every mismatch stops a module from loading.
->
-> Then for the pr_warn_once case something like "Kernel module BTF
-> mismatch detected, BTF debug info may be unavailable for some modules"
+On Mon, 14 Nov 2022 14:35:33 +0530, Anup Patel wrote:
+> The Linux NVDIMM PEM drivers require arch support to map and access the
+> persistent memory device. This series adds RISC-V PMEM support using
+> recently added Svpbmt and Zicbom support.
+> 
+> First two patches are fixes and remaining two patches add the required
+> PMEM support for Linux RISC-V.
+> 
+> [...]
 
-yep, makes sense to me
+Applied, thanks!
 
->
->
->
-> > >
-> > > > single message reporting that mismatches were detected & module BTF
-> > > > debug info might be unavailable? Alternatively, if we could opt out of
-> > > > module BTF loading then that would also avoid this issue, but that's
-> > > > already been proposed before ([1], [2]) so I thought working with the
-> > > > existing config option might be preferred.
-> > > >
-> > > > [1] https://lore.kernel.org/bpf/20220209052141.140063-1-connoro@google.com/
-> > > > [2] https://lore.kernel.org/bpf/20221004222725.2813510-1-sdf@google.com/
+[1/3] RISC-V: Fix MEMREMAP_WB for systems with Svpbmt
+      https://git.kernel.org/palmer/c/b91676fc16cd
+[2/3] RISC-V: Implement arch specific PMEM APIs
+      https://git.kernel.org/palmer/c/a49ab905a1fc
+[3/3] RISC-V: Enable PMEM drivers
+      https://git.kernel.org/palmer/c/497bcbe3ce04
+
+Best regards,
+-- 
+Palmer Dabbelt <palmer@rivosinc.com>
