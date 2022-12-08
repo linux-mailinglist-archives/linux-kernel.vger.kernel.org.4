@@ -2,139 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF2F646BD0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:24:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36EAA646BD6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:25:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiLHJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
+        id S229928AbiLHJZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:25:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiLHJYJ (ORCPT
+        with ESMTP id S229685AbiLHJZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:24:09 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4385C74F;
-        Thu,  8 Dec 2022 01:24:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Dec 2022 04:25:23 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D355E3C6;
+        Thu,  8 Dec 2022 01:25:22 -0800 (PST)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF2E6B821EB;
-        Thu,  8 Dec 2022 09:24:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE570C433C1;
-        Thu,  8 Dec 2022 09:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670491446;
-        bh=XZlUsEv07hjY4O631nUYURDX0RrEAXkxMKI/UXjPh44=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WlPi4TibsAaYUTb1UptmbOlmFTUoq1ZrCcb/hswmi7YK9rtmOC42UwBeGeWVxUlZC
-         krS5O1VFc9SuHRkcZLfLOF0lxnWA/HS9VFM0HTCkxXqUr1NApI3zX1Dt8lcyJMyXJN
-         M8Znz/5sIjpeEWzdxOjo1u1b3BPStar9xDvBFOPv6gUvrMXhcUMoxwMxSjilFCcrE7
-         WWhNffXUBexBvx48vJFJbr/y0Qt3MpFGuKU4IKxEuAsWo7ZDIDAkJVn6blzFcPZwnZ
-         9GpdogkPmVFow2KEYQd7UoPOxYLJXNcCd58VDzaAjZaziAPhFXcmtVHG/9M93X/fhS
-         8Noaw03g3Lw0g==
-Date:   Thu, 8 Dec 2022 11:24:02 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     jiri@resnulli.us, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] ice: Add check for kzalloc
-Message-ID: <Y5GtMk64Zg+tnbMS@unreal>
-References: <20221208011936.47943-1-jiasheng@iscas.ac.cn>
+        by mail.3ffe.de (Postfix) with ESMTPSA id E53C7121;
+        Thu,  8 Dec 2022 10:25:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1670491520;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1R2dyYxzFhTIG+A8uIWMszimPhlmvmzOf72P/mWZG20=;
+        b=WWzaQC5FSCThOD80qrlOnaDg5TEe90uAYe9upqXMtTsWHeZ6xq37w6pbdVjNevmxxqv+lx
+        yfnO/ipjt1LPdDxrqPFh1vyz1Gfps5GR1FETtCt67iXNoWvzCsTNmI57u1+uWTNZy04Lfp
+        zv99DXRcq7a+AlqsGYYzcGLN3HLx1RL3d9zaXXOGUh2JuVH9+lX+IZgkv2ziHbdyNIPRgT
+        nXD1nubC7NPIR4q3Zt3bzzt3yBE+cxFxckF6XdUTq0olqnkumOs4zcXMFt1WLEqilkBWDz
+        /+uA0B312rzUUcPnVUMY71cE48bQiXnHa4XDpiYgtp65KrqH+eRVpVTXy0aBqQ==
+From:   Michael Walle <michael@walle.cc>
+To:     horatiu.vultur@microchip.com
+Cc:     Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        daniel.machon@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, lars.povlsen@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, olteanv@gmail.com, pabeni@redhat.com,
+        richardcochran@gmail.com, michael@walle.cc
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+Date:   Thu,  8 Dec 2022 10:25:11 +0100
+Message-Id: <20221208092511.4122746-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
+References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208011936.47943-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 09:19:36AM +0800, Jiasheng Jiang wrote:
-> As kzalloc may return NULL pointer, the return value should
-> be checked and return error if fails in order to avoid the
-> NULL pointer dereference.
-> Moreover, use the goto-label to share the clean code.
-> 
-> Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
-> Changelog:
-> 
-> v1 -> v2:
-> 
-> 1. Use goto-label to share the clean code.
-> ---
->  drivers/net/ethernet/intel/ice/ice_gnss.c | 25 ++++++++++++++---------
->  1 file changed, 15 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
-> index b5a7f246d230..7bd3452a16d2 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
-> @@ -421,7 +421,7 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
->  	const int ICE_TTYDRV_NAME_MAX = 14;
->  	struct tty_driver *tty_driver;
->  	char *ttydrv_name;
-> -	unsigned int i;
-> +	unsigned int i, j;
->  	int err;
->  
->  	tty_driver = tty_alloc_driver(ICE_GNSS_TTY_MINOR_DEVICES,
-> @@ -462,6 +462,9 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
->  					       GFP_KERNEL);
->  		pf->gnss_serial[i] = NULL;
->  
-> +		if (!pf->gnss_tty_port[i])
-> +			goto err_out;
-> +
->  		tty_port_init(pf->gnss_tty_port[i]);
->  		tty_port_link_device(pf->gnss_tty_port[i], tty_driver, i);
->  	}
-> @@ -469,21 +472,23 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
->  	err = tty_register_driver(tty_driver);
->  	if (err) {
->  		dev_err(dev, "Failed to register TTY driver err=%d\n", err);
-> -
-> -		for (i = 0; i < ICE_GNSS_TTY_MINOR_DEVICES; i++) {
-> -			tty_port_destroy(pf->gnss_tty_port[i]);
-> -			kfree(pf->gnss_tty_port[i]);
-> -		}
-> -		kfree(ttydrv_name);
-> -		tty_driver_kref_put(pf->ice_gnss_tty_driver);
-> -
-> -		return NULL;
-> +		goto err_out;
->  	}
->  
->  	for (i = 0; i < ICE_GNSS_TTY_MINOR_DEVICES; i++)
->  		dev_info(dev, "%s%d registered\n", ttydrv_name, i);
->  
->  	return tty_driver;
-> +
-> +err_out:
-> +	for (j = 0; j < i; j++) {
+Hi Horatiu,
 
-You don't need an extra variable, "while(i--)" will do the trick.
+> Currently lan966x, doesn't allow to run PTP over interfaces that are
+> part of the bridge. The reason is when the lan966x was receiving a
+> PTP frame (regardless if L2/IPv4/IPv6) the HW it would flood this
+> frame.
+> Now that it is possible to add VCAP rules to the HW, such to trap these
+> frames to the CPU, it is possible to run PTP also over interfaces that
+> are part of the bridge.
 
-Thanks
+This gives me:
 
-> +		tty_port_destroy(pf->gnss_tty_port[j]);
-> +		kfree(pf->gnss_tty_port[j]);
-> +	}
-> +	kfree(ttydrv_name);
-> +	tty_driver_kref_put(pf->ice_gnss_tty_driver);
-> +
-> +	return NULL;
->  }
->  
->  /**
-> -- 
-> 2.25.1
-> 
+# /etc/init.d/S65ptp4l start
+Starting linuxptp daemon: OK
+[   44.136870] vcap_val_rule:1678: keyset was not updated: -22
+[   44.140196] vcap_val_rule:1678: keyset was not updated: -22
+#
+
+# ptp4l -v
+3.1.1
+# uname -a
+Linux buildroot 6.1.0-rc8-next-20221208+ #924 SMP Thu Dec  8 10:08:58 CET 2022 armv7l GNU/Linux
+
+I don't know whats going on, but I'm happy to help with debugging with some
+guidance.
+
+-michael
