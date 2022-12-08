@@ -2,209 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D8A8647A39
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8D22647A3D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:42:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230100AbiLHXlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 18:41:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
+        id S230303AbiLHXme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 18:42:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiLHXld (ORCPT
+        with ESMTP id S230498AbiLHXmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 18:41:33 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC1B94190;
-        Thu,  8 Dec 2022 15:39:09 -0800 (PST)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8NLbDG023958;
-        Thu, 8 Dec 2022 23:38:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vfVMr5PVP/PyqxS//lgn3F/cfbT5Kuc8CzRnXxY5PS0=;
- b=TUSZ9voDSZ6NkZOZsEKGJ9bpiCPoTu19KZWePiIZpru2+2twRiGCdmzDF3a/wArkDLOv
- CcySBYdwCgo5mNRlWSowL3eNz5JHKj3ZDDoSuM9tXR7D4gqj+djrr1zjMbmMBUCMBHJm
- oJdHAzf5aOu+6E/E4WiK/itThFUWGoJN6Q3CMsjfIx5cNi1PhLEQJ2615VVjYz1F10bA
- 6i1UUhm1C78tpv4+lJChdGmzx03VozldJCVkfN4FZRFFAZAvFX0il27qMTsx3AJhKOXr
- 4edkX/r8dkdJAr+rEPiyFwxxEcq2y0ywphwYj3xGBLD7+oEo2Edyv2KC0HmNlIqgKk7c 6g== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3marj0vsja-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Dec 2022 23:38:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B8NcRkr014483
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Dec 2022 23:38:27 GMT
-Received: from [10.110.56.119] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 8 Dec 2022
- 15:38:25 -0800
-Message-ID: <5aa16223-dbf6-996c-1985-794302dcce91@quicinc.com>
-Date:   Thu, 8 Dec 2022 15:38:24 -0800
+        Thu, 8 Dec 2022 18:42:12 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4502DF3;
+        Thu,  8 Dec 2022 15:39:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72781B8262B;
+        Thu,  8 Dec 2022 23:39:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3800C433D2;
+        Thu,  8 Dec 2022 23:39:46 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 18:39:45 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ross Zwisler <zwisler@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        paulmck@kernel.org, Joel Fernandes <joel@joelfernandes.org>,
+        Tom Zanussi <zanussi@kernel.org>
+Subject: Re: [PATCH v2] tracing: Add trace_trigger kernel command line
+ option
+Message-ID: <20221208183945.1de18843@gandalf.local.home>
+In-Reply-To: <CAGRrVHw2ABuBtb+6BtES0WPNpbtu3p6vfZ-pADjtYYxm9kWZ4g@mail.gmail.com>
+References: <20221020210056.0d8d0a5b@gandalf.local.home>
+        <CAGRrVHw2ABuBtb+6BtES0WPNpbtu3p6vfZ-pADjtYYxm9kWZ4g@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v11 2/5] dt-bindings: msm/dp: add data-lanes and
- link-frequencies property
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@somainline.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <devicetree@vger.kernel.org>,
-        <airlied@gmail.com>
-CC:     <quic_abhinavk@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1670539015-11808-1-git-send-email-quic_khsieh@quicinc.com>
- <1670539015-11808-3-git-send-email-quic_khsieh@quicinc.com>
- <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <5a3865ed-8847-db04-3d60-f35438250bef@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: bPBU_QrodpkJA6crWCes3nfgZo0gx-FF
-X-Proofpoint-GUID: bPBU_QrodpkJA6crWCes3nfgZo0gx-FF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-08_12,2022-12-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 clxscore=1015 bulkscore=0 impostorscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212080194
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 8 Dec 2022 15:27:07 -0700
+Ross Zwisler <zwisler@google.com> wrote:
 
-On 12/8/2022 3:33 PM, Dmitry Baryshkov wrote:
-> On 09/12/2022 00:36, Kuogee Hsieh wrote:
->> Add both data-lanes and link-frequencies property into endpoint
->>
->> Changes in v7:
->> -- split yaml out of dtsi patch
->> -- link-frequencies from link rate to symbol rate
->> -- deprecation of old data-lanes property
->>
->> Changes in v8:
->> -- correct Bjorn mail address to kernel.org
->>
->> Changes in v10:
->> -- add menu item to data-lanes and link-frequecnis
->>
->> Changes in v11:
->> -- add endpoint property at port@1
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>`
->
-> Applying: dt-bindings: msm/dp: add data-lanes and link-frequencies 
-> property
-> .git/rebase-apply/patch:47: trailing whitespace.
->
-> .git/rebase-apply/patch:51: trailing whitespace.
->
->
-> Also the dt_binding_check fails with an error for this schema. And 
-> after fixing the error in the schema I faced an example validation 
-> error. Did you check that the schema is correct and that the example 
-> validates against the schema?
+> > +#ifdef CONFIG_HIST_TRIGGERS  
+> 
+> Can you help me understand why this is only available if
+> CONFIG_HIST_TRIGGERS is selected in the kernel config?  AFAICT this
+> code doesn't depend on the histogram code, and the run-time selection
+> of triggers is usable without CONFIG_HIST_TRIGGERS.
 
-yes, but i run "make dt_binding_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/display/msm/dp-controller.yaml" 
-at mu v5.15 branch since
+Good catch!
 
-"make dt_binding_check" does not work at msm-next branch.
+I got confused, and only saw that as "CONFIG_TRIGGERS" and wasn't thinking
+that config was just for histogram triggers :-p
 
-But I did not check trainiling whitespace this time.
+Care to send a patch to fix it?
 
->
->> ---
->>   .../bindings/display/msm/dp-controller.yaml        | 27 
->> ++++++++++++++++++++++
->>   1 file changed, 27 insertions(+)
->>
->> diff --git 
->> a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml 
->> b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
->> index f2515af..2a7fdef8 100644
->> --- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
->> +++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
->> @@ -81,6 +81,7 @@ properties:
->>       data-lanes:
->>       $ref: /schemas/types.yaml#/definitions/uint32-array
->> +    deprecated: true
->>       minItems: 1
->>       maxItems: 4
->>       items:
->> @@ -96,6 +97,7 @@ properties:
->>       ports:
->>       $ref: /schemas/graph.yaml#/properties/ports
->> +
->>       properties:
->>         port@0:
->>           $ref: /schemas/graph.yaml#/properties/port
->> @@ -105,6 +107,29 @@ properties:
->>           $ref: /schemas/graph.yaml#/properties/port
->>           description: Output endpoint of the controller
->>   +        properties:
->> +          endpoint:
->> +            $ref: /schemas/media/video-interfaces.yaml#
->> +
->> +            properties:
->> +              remote-endpoint: true
->
-> PLease add empty lines between the property definitions
->
->> +              data-lanes:
->> +                $ref: /schemas/types.yaml#/definitions/uint32-array
->
-> This is already a part of video-interfaces, so you don't need $ref
->
->> +                minItems: 1
->> +                maxItems: 4
->> +                items:
->> +                  maximum: 3
->
-> enum: [0, 1, 2, 3]
->
->> +              link-frequencies:
->> +                $ref: /schemas/types.yaml#/definitions/uint64-array
->> +                minItems: 1
->> +                maxItems: 4
->> +                items:
->> +                  maximum: 8100000000
->
-> I think we can have enum here too.
->
->> +
->> +  required:
->> +    - port@0
->> +    - port@1
->> +
->>   required:
->>     - compatible
->>     - reg
->> @@ -193,6 +218,8 @@ examples:
->>                   reg = <1>;
->>                   endpoint {
->>                       remote-endpoint = <&typec>;
->> +                    data-lanes = <0 1>;
->> +                    link-frequencies = /bits/ 64 <1620000000 
->> 2700000000 5400000000 8100000000>;
->>                   };
->>               };
->>           };
->
+Thanks Ross,
+
+-- Steve
