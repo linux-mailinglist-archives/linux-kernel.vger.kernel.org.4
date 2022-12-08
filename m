@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2424764711D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C0E64711E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:55:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230025AbiLHNzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:55:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S230118AbiLHNzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:55:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229967AbiLHNzl (ORCPT
+        with ESMTP id S229949AbiLHNzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Dec 2022 08:55:41 -0500
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B39D5E3F8;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF81B60361;
         Thu,  8 Dec 2022 05:55:40 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D58BE20012;
-        Thu,  8 Dec 2022 13:55:33 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0B4602000C;
+        Thu,  8 Dec 2022 13:55:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670507737;
+        t=1670507739;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=D72yUqu7m48k5zBuzbm447wtIHbUMxzdY7+zPY816tM=;
-        b=Ki39pHvrZGR1tB37rKL2j2WxQxZcVVgHLXL7ZfngRZ2bhy5vGzHnmHcUDFAXIPnAggYEGd
-        HR/e09BIj91eRIAslhIxuACBNk/rmCl9GyIckvVtp4FiTZu5NrWM+CiprqDynhcGo5zj0W
-        4/zal0uXw5CgLPiFYWneJzBvTfsEleZlPA7eIub49nMz6854/l/8DNwHdN14QUyX8PQQMe
-        AI1CUSjRjk5sVQSYyjljYN6M0AFIUw+3LDk+2yJHS3pJS7QpWIHIQQtQ6gAtyjLErgwH7p
-        tpl53YYMUeb7M/mXN36Z7qtLSFATwyGIFvKIQi9img8reIU6omcDpN4QoyHqzQ==
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=g8Fr5IFDx706AN895Lw8QOX+f28RaNPliLSLDFSc9/k=;
+        b=DypI5lfuiecIIVcaJEqjMx2cjyjzOxg5nkvZ/I39jQRaEJS+7rCAdgPvs0e9elXqL2srzs
+        hRvx2ocG9BH6ufyiJaazBQoUzZdh+eU8mVlGsBV5jLNX8IM8E+EE1Zk74ZjQTHhMYqy4Qu
+        6uTrRiep8ArzZkRg1VmjynfDfnTAknYjvT74mzZSobhiAPO2fgEYN4SHW7DdBgn5DJQY1G
+        oRZRN0oiGKCN5UmATvz90D2CMBQ5Tms3zCa65OdHzG8480mx89vbQLdTzNTAzjDdXcOkSF
+        9+SKW6g+lIe6X+LXCluqkJ+ZH3+qrljx/g1aXVS6f8zLm98ngCKrr0NsDbp4rg==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -44,10 +45,12 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Conor Dooley <conor@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 00/11] Allwinner A31/A83T CSI/ISP/MIPI CSI-2 media fixes
-Date:   Thu,  8 Dec 2022 14:55:01 +0100
-Message-Id: <20221208135512.421903-1-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v2 01/11] media: sun6i-csi: bridge: Fix return code handling in stream off path
+Date:   Thu,  8 Dec 2022 14:55:02 +0100
+Message-Id: <20221208135512.421903-2-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221208135512.421903-1-paul.kocialkowski@bootlin.com>
+References: <20221208135512.421903-1-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,41 +62,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series resolves reported smatch warnings against the recently-introduced
-Allwinner A31/A83T CSI, ISP and MIPI CSI-2 drivers.
+Explicitly set ret to zero on disable path to avoid a related smatch
+warning. This makes initialization at declaration useless.
 
-Smatch was ran again on the updated tree and no longer shows any error or
-warning.
+Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+---
+ drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Changes since v1:
-- Added fixes for static struct declarations;
-- Fixed ISP commit titles by replacing bridge with proc.
-
-Paul
-
-Paul Kocialkowski (11):
-  media: sun6i-csi: bridge: Fix return code handling in stream off path
-  media: sun6i-csi: bridge: Error out on invalid port to fix warning
-  media: sunxi-csi: bridge: Declare subdev ops as static
-  media: sun6i-csi: capture: Remove useless ret initialization
-  media: sun6i-mipi-csi2: Fix return code handling in stream off path
-  media: sun8i-a83t-mipi-csi2: Fix return code handling in stream off
-    path
-  media: sun6i-isp: proc: Fix return code handling in stream off path
-  media: sun6i-isp: proc: Error out on invalid port to fix warning
-  media: sunxi-isp: proc: Declare subdev ops as static
-  media: sun6i-isp: capture: Fix uninitialized variable use
-  media: sun6i-isp: params: Fix incorrect indentation
-
- drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c | 8 ++++----
- .../media/platform/sunxi/sun6i-csi/sun6i_csi_capture.c    | 2 +-
- .../platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c      | 5 ++---
- .../sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c     | 5 ++---
- drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_capture.c | 4 ++--
- drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c  | 4 ++--
- drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_proc.c    | 8 ++++----
- 7 files changed, 17 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+index 86d20c1c35ed..88df3a73ebfa 100644
+--- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
++++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi_bridge.c
+@@ -415,8 +415,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 	struct sun6i_csi_bridge_source *source;
+ 	struct v4l2_subdev *source_subdev;
+ 	struct media_pad *remote_pad;
+-	/* Initialize to 0 to use both in disable label (ret != 0) and off. */
+-	int ret = 0;
++	int ret;
+ 
+ 	/* Source */
+ 
+@@ -436,6 +435,7 @@ static int sun6i_csi_bridge_s_stream(struct v4l2_subdev *subdev, int on)
+ 
+ 	if (!on) {
+ 		v4l2_subdev_call(source_subdev, video, s_stream, 0);
++		ret = 0;
+ 		goto disable;
+ 	}
+ 
 -- 
 2.38.1
 
