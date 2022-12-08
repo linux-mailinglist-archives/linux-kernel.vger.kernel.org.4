@@ -2,69 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E6E26475AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:34:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0298D6475AC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:36:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiLHSep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:34:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
+        id S229891AbiLHSgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:36:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiLHSeW (ORCPT
+        with ESMTP id S229755AbiLHSgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:34:22 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65549B294
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:33:56 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso2437370pjh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:33:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3HMnEdvlSF5TjjjrupZOysPGDweIaS3qD4bjjLotW48=;
-        b=KE7SYRHqlqq8QkfVRH+aj5xt+UojUw/LjLkt04Mk33NpQt8FmxscR/m0rESsgU7iou
-         hs3k530a6Nlc5wvphwXX/GwbcNynh5tBwKPHYG6Dlo5aonRwQc9tJkPnqX0uZUTIBOhp
-         pQRoJWNjCM2NdrntCc241rXSsNInrTt1YhDAjfI2mtja0Rtb2C07/tj/ggrh90NhIsKc
-         SuKzAZ0WEZDAjyM34QsXXFMsc99zHfeEmg+5qutqLe5DWCGdPy2WFJyLMQ1z9QH7YFGj
-         f981OOSr1zCwl+I1ISonvF5sdNwUdDkYP6BPM7pP7mVl9FkQqHOP03wWry0uJP/Y5DEr
-         426g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3HMnEdvlSF5TjjjrupZOysPGDweIaS3qD4bjjLotW48=;
-        b=1CEufh+yWjgcAktT9/wo95JrIlUSP0KZAYpiH7iJTWcAu4w/y28WlA0qIHXbjdsSQ8
-         tL8PsFEWQGt2C2oSpWTsdGmnKzZyiNAQHi6bdA0mhk3ODUhOfnhLkYfqh/qL8mcK4RpE
-         nAmj1gGi4OjW3afpBeiw0HjPYfXWiqE7+z4ErCD5T5aBR0nd8rsBLg9mMsOq3DzFFW+w
-         LXyjBiRwvMqW9kg2KGGua4F/uDmmrYDWxd43/gaGOefL/11SwR5GdBp27+3W3/bbGWWx
-         VlO7mL0RCovC9u8v+5dPqyLd77i/Naz/jpMLPJ7M/SmwTshJb0ROHydCWM+plyKGvo+G
-         Qeig==
-X-Gm-Message-State: ANoB5pmCSQIyekQ79E80WGRhY5AUcRCzNP5WeeHtT0BcBQ9IH+KQ6DrN
-        f+I+ZFxzgn7rnayTGwsmYvfMZzvOC/TIYN0OaGbONg==
-X-Google-Smtp-Source: AA0mqf7v9g7E7bWC/SwAnZzMQJjPNqcL7NCSx9bBhwK1qoxmDIDfQ2miJHi8NJFOjjeloV1lv0mzWXlBlxmWDysMHCU=
-X-Received: by 2002:a17:903:3052:b0:189:63ef:ef3b with SMTP id
- u18-20020a170903305200b0018963efef3bmr64459851pla.112.1670524436153; Thu, 08
- Dec 2022 10:33:56 -0800 (PST)
+        Thu, 8 Dec 2022 13:36:37 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CA2BE1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:36:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1670524570; bh=ArOKgVB2dEMsvvQv2MSw6kaArsHw6nVYY30UErZ/gVQ=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=Tqaec27XhTxt5jki6hIn4Vwbih5daALP/AOGZBLn0XQy9Kwsm7bme5sAbWVccADs0
+         8HXItdNwAKvMw1G2/srGuzPyxRWsGnKV8VG4zo4UJ9PNgaOixj20F/bKXdGn9htqT0
+         FEPTRYFoH56NqkoRsc8b7O6DFNLNGwr/T/o4gk9dWXyFClppAbvD5v/EMAGoqezJ4W
+         BCp2Qjv8Qj78MB4d7LqjlcySY+vd/sKHz7XuLhiUKHVXUO/NYjdXBmZ9lFVacZaQyZ
+         TftcgjX7xqMFpBeeH0FgIGPVbHIeU6IrepyHx4Yjm/YC7VqX6UlkT8BBpcX3LhC9Sb
+         cK2FkUFwiGx/g==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N63VY-1osWyA2JeC-016SqM; Thu, 08
+ Dec 2022 19:36:10 +0100
+Date:   Thu, 8 Dec 2022 19:36:04 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org
+Subject: Re: PXA25x: GPIO driver fails probe due to resource conflict with
+ pinctrl driver
+Message-ID: <Y5IulKoRctcrWBzl@probook>
+References: <Y5B4QeNMNboJ42n4@probook>
+ <Y5CxBzy47Gjn/V5a@lunn.ch>
+ <Y5C0F/o4JS5MwkkJ@shell.armlinux.org.uk>
+ <Y5DDCmXnamC6Zikx@probook>
+ <Y5DbKNI3e+tFA++1@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20221207154939.2532830-1-jeffxu@google.com> <202212080809.687CC8BC23@keescook>
-In-Reply-To: <202212080809.687CC8BC23@keescook>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Thu, 8 Dec 2022 10:33:19 -0800
-Message-ID: <CALmYWFukzdw4e3RHWRsdXvYr1RZs7Bx6NZ3AK91hoArgVy-RxQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
-To:     Kees Cook <keescook@chromium.org>
-Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Rc/mWC0E3+AOr2MX"
+Content-Disposition: inline
+In-Reply-To: <Y5DbKNI3e+tFA++1@shell.armlinux.org.uk>
+X-Provags-ID: V03:K1:XDwb+F6BLWnqqpTS+GM/JLMzpIFPPyPZWLFjHy6b9uK2DWgHdCy
+ ZyNOlUWKlt367QEHYfOwMGuMwOQcb99XUUQGLOqIL3JdUsvvGi4EbZJuLWyee5VrzGv/dqS
+ AyJsaNPMciT373dmGpvoXYfat9mP3y5LUgeTjWM9MvAXCx1HPu12GFDpjuMzTgUjIX8ahlH
+ KBe2IThWsXrVkhB9z0e4w==
+UI-OutboundReport: notjunk:1;M01:P0:cbYmOp7ZiqE=;lw4M7yo4Pj3NBk/nY/2eEMc/LM6
+ rSe4mFIYzQW5LyW03vj6HqpLGHblh7ouZn1b4uCpyEJrR69yyppl2/3Gb+R2ztjhzW4lD+6by
+ Q7mBO5tRMBjuP3A/RHJWyKrBXq1fvsVJIDO+3MIBO8Vw4Yhry2EnNxDHTQ8bE9ZqsJzPOW/Wj
+ Zv9K4UynPINkjV15f3O3Pb+sZoGzTL9YmLm6kMafjaC2AnaVKFFfiVuk5gz78Eed9n0MBPqNq
+ jT2jp84PnuxBQ/8QY++IZHL1c3TD826Q3XT6rb6nO1yoO/DBY6P3JSzGf7je3DZLndSAD/cda
+ 1P42d9hUKOGJM1gPJWk2aTsxfp65sOj07kyYwGMuGQTNZiqxRHEyfWCnp5I57G4kajy3wyy2S
+ z37R2DUs7Xkss2uK3Izczh6XN8CfAAU8F7dQZxFowAh2TsNM9xMPXAAn1GlPFL+AtBcwxSDXk
+ aQn1nvO0cDUMQgjzhENS34g+CEcnDk0JwO60eZtDASO9KAjab5zzCzHO6r95ZqCzQLVQwNyKZ
+ emdSAtgH/WmVKq6+ba3pWjrH3Xo4SMAtaHX8kYz4LpAsoPDOaktKsK+f/13Q5vTumV5SpD9/k
+ dVs+h3q2N/b3ymcIRoUa95BtbDA21iFfrJ/RLs/+vs8gqY01LvKE3uZT8f7UE/O91YJasyVQA
+ aaJjzM866LTpINcxGQo7Sutr08mwttoReMMfwyqo97uXed4ZYGpE3b4W38RimA9UoEP3jYkUz
+ hhqz/BNCM0J/P7pCBdtd1yoPoX697qMtNlbW9lXZ2bantao7yg97oICY4GPLev/0RlVf9jPLM
+ Y9Pnl7sTBzVxGZES5lIxOlv2Aqrt6GxsCChrgA1je56Aicgs0ux0gWttCJzNoLgiWBSBO7fxT
+ T6WPoa+P0GpA0bZ3URBPLWH1q6LPB4603Xax1T2EM6o4me730Yj3Bz38DEjQl3nBikOMtOn+f
+ hDGSXQ==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,37 +79,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 8:13 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Dec 07, 2022 at 03:49:33PM +0000, jeffxu@chromium.org wrote:
-> > This is V6 version of patch: see [4] [5] [6] [7] for previous versions.
->
-> When sending a new version, can you include an overview of what changed
-> between this version and the prior version? This helps reviewers who are
-> following along, so it's easier to focus our attention on the
-> differences. Also, it's helpful to version the links:
->
-> > [4] https://lwn.net/Articles/890096/
-> > [5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
-> > [6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
-> > [7] https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
->
-> e.g.:
->
-> v6:
-> - moved foo to bar
-> - improve comments for baz
-> v5: https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
-> v3: https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
-> v2: ...etc
->
-Will do!
-Much appreciated for helping me  through the process of my first patch
-in the kernel.
 
-Jeff
+--Rc/mWC0E3+AOr2MX
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> -Kees
->
-> --
-> Kees Cook
+On Wed, Dec 07, 2022 at 06:27:52PM +0000, Russell King (Oracle) wrote:
+> On Wed, Dec 07, 2022 at 05:44:58PM +0100, Jonathan Neusch=C3=A4fer wrote:
+> > On Wed, Dec 07, 2022 at 03:41:11PM +0000, Russell King (Oracle) wrote:
+> > > On Wed, Dec 07, 2022 at 04:28:07PM +0100, Andrew Lunn wrote:
+> > [...]
+> > > > How are the registers arranged?
+> > >=20
+> > > As documented in drivers/gpio/gpio-pxa.c - it'll be easier for you to
+> > > look there rather than for me to explain it - but suffice it to say
+> > > that the pinctrl registers are amongst the GPIO registers.
+> > >=20
+> > > > Is 0x40e00000-0x40e0ffff simply too
+> > > > large, and making it smaller would fix the issue? Or are the regist=
+ers
+> > > > interleaved?
+> > >=20
+> > > They're interleaved. Looking at the .dtsi file for PXA25x, it seems
+> > > that the pinctrl claims just the addresses that it needs, but the GPIO
+> > > controller has no reg property in the .dtsi, so I'm not sure what fil=
+ls
+> > > that information in.
+> >=20
+> > The GPIO reg property is in pxa2xx.dtsi.
+>=20
+> Looks to me like pxa25x should override the reg property with a smaller
+> range (0x54) and  pxa27x probably should have used a second set of
+> entries in reg the subsequent group of 3 gpio blocks at offset 0x100.
+
+Without further code changes this wouldn't be sufficient, because the
+pinctrl driver also touches the GPIO direction registers at offset
+0x0c-0x14.
+
+
+Jonathan
+
+--Rc/mWC0E3+AOr2MX
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmOSLnIACgkQCDBEmo7z
+X9sDcw/+NOGItwyuFjYli1yeq2yxp94FYbLj2r8Y8GQKQBAecd8TVbVKGS0S/FFI
+o7udq8vqtWuPzomlglonHSvRNLW2RS39IjsPnSsWz6bb6SvGSi6jfeeEJuyCA+yV
+foifZI1H7crTIRyGaDpYFsZSfh3JIhLMxmLPf+AYctvFDuldqlY0XHfLPWqKZhuI
+Cs6Qq8XPL4IoNDKdfZpRGMA6AkEljogUqkOl6d7L/CR4aA6hb69lvwGIfPz4/psc
+hQjbzFPx40iJ5fCqUz7TUhwtS3latC9v3XRRuuIKjJmS6fgbn3ftWaTwKFspgRQZ
+Oy5SjDPuT2gIZs6Z6uZAi3v3q+wfGpsFE2sw9FUGUqMbikMQ7KR5ExOIiIxiJte3
+2pAJ5ea/G4CbX1oi/o+wEpRfrd/memiyymbgKAyLhLnJAHRlG65rf8UbFSxeTZ8p
+mT0MyGzUMwtuQTgeHxR2UP+N8FO8+ivfq+KVHfgIg3+7eKF2cFKIJLCPNHFegKDg
+JlhbsPlPs+K76iljbOu/iGzNm5fgIUWhi9Q1XZzRPdBDrliCJekEXAMPsKk24WRb
+c4FdDNOmnSB9v5hWNmyWytYq1m+SehufCejfNRMwK79T85kFXp6gTqa+cSlSb7Hd
+kJIGYtAIlWhjVZv01h06N4pGIxBhXo4rG+Yym8u7ItBBSPNj6po=
+=BF1n
+-----END PGP SIGNATURE-----
+
+--Rc/mWC0E3+AOr2MX--
