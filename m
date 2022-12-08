@@ -2,151 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E5464756A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84C364756E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbiLHSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
+        id S229757AbiLHSSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:18:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiLHSRv (ORCPT
+        with ESMTP id S229634AbiLHSSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:17:51 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D1F18393
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:17:50 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 8 Dec 2022 13:18:23 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58F22497F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:18:21 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4E039208C5;
-        Thu,  8 Dec 2022 18:17:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1670523469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WOpbqhi4deoSPQ5gjb+StOVqnfFIV+93wgbp/8W+O+E=;
-        b=1KSv5ZPicrjspUpQgVfP5D7FhQYHnvc+FaGZQR6RMgEY7A+G91LNeXkAGT6s2lWhUvGno8
-        BGlQZUw6ccq1iRdRElG7L4tiyQnPAFRfqlOe6HAE8poCMsz82FtoQbFN/wTIPc+RkGYR7F
-        t7Ur75e/ldHF7e3LbCA8DFm9oDdX16s=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1670523469;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WOpbqhi4deoSPQ5gjb+StOVqnfFIV+93wgbp/8W+O+E=;
-        b=XBUKp0CH5acsWj28r2DVmK+P6suJul5ddvzmk9HmNOLh8EEVKxMDHMf6Wd5noRThT5bVGp
-        eIIDqVE456wlWLAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2922D138E0;
-        Thu,  8 Dec 2022 18:17:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8c0mCU0qkmNYVgAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 08 Dec 2022 18:17:49 +0000
-Message-ID: <e7b8c312-5433-757d-fb9c-f2f993e4f999@suse.cz>
-Date:   Thu, 8 Dec 2022 19:17:48 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 611E66202A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:18:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50F9CC433EF;
+        Thu,  8 Dec 2022 18:18:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670523500;
+        bh=zmXwjoGkFAz2hVBUPPIezN8vCmBdy+s5fcvA2Gpa6OE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qfPfvyMRhrrGFwSoXoX7OZGm542y7YpOoK8q0GtEUFQyOt4bzAl7fFAU3aF8Ldp/6
+         sH5g0rVWiA8t2gygLm4KqPwkOK4otY7Z65yR9aOeyJu09xm32MCWyCnFtQnxPOBvzA
+         NbmtZszrbJ+Vk1PfhaLbBZodK+inX7/RbuolfdT4=
+Date:   Thu, 8 Dec 2022 19:18:08 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     =?utf-8?Q?Micha=C5=82?= Lach <michal.lach@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, mcgrof@kernel.org,
+        russell.h.weight@intel.com, rafael@kernel.org,
+        ming.lei@canonical.com, tiwai@suse.de
+Subject: Re: [PATCH] drivers/firmware_loader: remove list entry before
+ deallocation
+Message-ID: <Y5IqYBaiwO5Qb/Kw@kroah.com>
+References: <CGME20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9@eucas1p2.samsung.com>
+ <20221123111455.94972-1-michal.lach@samsung.com>
+ <000901d90af2$309b7c80$91d27580$@samsung.com>
+ <Y5HkIl41zN9fwKV8@kroah.com>
+ <97ae8658-4eca-61af-5d5b-21b958ce1c24@samsung.com>
+ <Y5IFz3ovrjlmPctM@kroah.com>
+ <bf8f52d2-1a11-03ed-37e9-4bde42ebc211@samsung.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 6/6] mm: discard __GFP_ATOMIC
-Content-Language: en-US
-To:     Mel Gorman <mgorman@techsingularity.net>,
-        Linux-MM <linux-mm@kvack.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20221129151701.23261-1-mgorman@techsingularity.net>
- <20221129151701.23261-7-mgorman@techsingularity.net>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20221129151701.23261-7-mgorman@techsingularity.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bf8f52d2-1a11-03ed-37e9-4bde42ebc211@samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/29/22 16:17, Mel Gorman wrote:
-> From: NeilBrown <neilb@suse.de>
+On Thu, Dec 08, 2022 at 05:18:15PM +0100, Michał Lach wrote:
+> On 12/8/22 16:42, Greg KH wrote:
+> > On Thu, Dec 08, 2022 at 04:23:52PM +0100, Michał Lach wrote:
+> >> On 12/8/22 14:18, Greg KH wrote:
+> >>> On Thu, Dec 08, 2022 at 11:45:28AM +0100, Michał Lach wrote:
+> >>>> Pinging
+> >>>
+> >>> I have no context here at all.
+> >>>
+> >>> confused,
+> >>
+> >> It seems like my mail client messed up the encoding, sorry.
+> >> Below quoting the patch message:
+> > 
+> > Ok, but what does an empty ping here mean?
+> > 
+> > Are you asking why no one else has reviewed this?  Why it hasn't been
+> > accepted?  What else needs to happen?  Something else?
+> > 
 > 
-> __GFP_ATOMIC serves little purpose.  Its main effect is to set
-> ALLOC_HARDER which adds a few little boosts to increase the chance of an
-> allocation succeeding, one of which is to lower the water-mark at which it
-> will succeed.
-> 
-> It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
-> adjusts this watermark.  It is probable that other users of __GFP_HIGH
-> should benefit from the other little bonuses that __GFP_ATOMIC gets.
-> 
-> __GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM.
-> There is little point to this.  We already get a might_sleep() warning if
-> __GFP_DIRECT_RECLAIM is set.
-> 
-> __GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
-> probable that testing ALLOC_HARDER is a better fit here.
-> 
-> __GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
-> sleep.  This should test __GFP_DIRECT_RECLAIM instead.
-> 
-> This patch:
->  - removes __GFP_ATOMIC
->  - allows __GFP_HIGH allocations to ignore watermark boosting as well
->    as GFP_ATOMIC requests.
->  - makes other adjustments as suggested by the above.
-> 
-> The net result is not change to GFP_ATOMIC allocations.  Other
-> allocations that use __GFP_HIGH will benefit from a few different extra
-> privileges.  This affects:
->   xen, dm, md, ntfs3
->   the vermillion frame buffer
->   hibernation
->   ksm
->   swap
-> all of which likely produce more benefit than cost if these selected
-> allocation are more likely to succeed quickly.
-> 
-> [mgorman: Minor adjustments to rework on top of a series]
-> Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
-> Signed-off-by: NeilBrown <neilb@suse.de>
-> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> It was kind of meant to bump it for other reviewers to review/accept
+> this. Please correct me if this is against the netiquette here or 
+> should I just mention the reason for the ping in the first place.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-Just a nit below.
+Please think about what you would want to see sent to you.  A "naked"
+ping has no context at all, right?
 
+How about a normal "It's been two weeks, anything else I need to do here
+to get this merged?" sentance would be great.
 
-> --- a/mm/page_alloc.c
-> +++ b/mm/page_alloc.c
-> @@ -4081,13 +4081,14 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
->  	if (__zone_watermark_ok(z, order, mark, highest_zoneidx, alloc_flags,
->  					free_pages))
->  		return true;
-> +
->  	/*
-> -	 * Ignore watermark boosting for GFP_ATOMIC order-0 allocations
-> +	 * Ignore watermark boosting for GFP_HIGH order-0 allocations
+And to help maintainer's workload, why not help out and review other
+patches submitted?  That's the best way to help ensure that a
+maintainer's workload is reduced, and help make your patches move to the
+top of the list.
 
-There's no GFP_HIGH. We could either keep GFP_ATOMIC here if we want to talk
-about the high-level flag combo, or __GFP_HIGH if about the low-level
-detail. We're deep in the page allocator implementation so the latter would
-be OK.
+thanks,
 
->  	 * when checking the min watermark. The min watermark is the
->  	 * point where boosting is ignored so that kswapd is woken up
->  	 * when below the low watermark.
->  	 */
-> -	if (unlikely(!order && (gfp_mask & __GFP_ATOMIC) && z->watermark_boost
-> +	if (unlikely(!order && (alloc_flags & ALLOC_MIN_RESERVE) && z->watermark_boost
-
+greg k-h
