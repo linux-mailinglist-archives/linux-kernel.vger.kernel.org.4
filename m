@@ -2,347 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3535647894
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CA3647898
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:08:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiLHWG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:06:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S229873AbiLHWIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:08:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiLHWGD (ORCPT
+        with ESMTP id S230180AbiLHWIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:06:03 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC1E80A1E;
-        Thu,  8 Dec 2022 14:04:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B18896209A;
-        Thu,  8 Dec 2022 22:04:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF04BC433D2;
-        Thu,  8 Dec 2022 22:04:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670537095;
-        bh=0NWar9VWAsNfrAByzGGMqW+t71CDC5S1WJPgpSCdztI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DV8Qgl/t1KaENYj6yKz5r/jQZql1GpsY3F+r3qjw08TJCRd0hq0rTv7nbB3zWmqVV
-         3VFHvG7obPt0N38c+VQeHs6LATr3HHyG5na31cuX5TskJ3sWxm8uy7xzpIyFjY7PY2
-         YgYCmJIz///+GK98hwI7F389/lxKMY19dZYzvvlBN2VN9JPK4tXxVEmXSsAVahjTLx
-         cKqbnm5x+NEJe40IJneAIVA01b6lHZE+fGYtI5mk3gP9zWdYt/xReXfS/QPO0ZcxIR
-         dJ+OAI6Tqzur4ntYstJ5hgFky75xWTz/KxI3NPLBQ50yq3tAwguXBe9UJLrud5mQd9
-         LWCKLl0m8b0lw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 065DD40404; Thu,  8 Dec 2022 19:04:51 -0300 (-03)
-Date:   Thu, 8 Dec 2022 19:04:51 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y5JfgyN59dSeKbUP@kernel.org>
-References: <Y49uKfzfCoZ1ok62@kernel.org>
- <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
- <Y5DNBZNC5rBBqlJW@kernel.org>
- <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com>
+        Thu, 8 Dec 2022 17:08:05 -0500
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AEA4B1050;
+        Thu,  8 Dec 2022 14:06:43 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0F80D5C00C7;
+        Thu,  8 Dec 2022 17:06:43 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 08 Dec 2022 17:06:43 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670537203; x=1670623603; bh=9D
+        fHTo0GC4PlZwrEkw31ByuDSYGHJwT7xoG/PgPL6pk=; b=H6vddsgHc7VHy1bBar
+        C8oNkomXtE3xW6kcFD1MlJiUFdVasLaRkzX4fK0fysvwdlmwrHPnHEEXhP9qkZ2H
+        ZpEGQMW5yoDn/e5fnJ5GDsI7Fb6U+dOlS8juDk/6kTqC4I+RCiM2t1a48mvzECm8
+        B8ZwzAVZRS557nwV6py+oNGIsr+aXbZxF1FMkqVCN5jv8CeQ6sA12Ux2/lDbdqQm
+        p1kKrfYQ9WoLJwGpHbTfhQJ/0Kl0zlgxHp5cCutV6h0EzadH3UGhc8AqYHvy/64v
+        3PvGM6lVj3ugvQ523lX619iZPpo1sgt5RKrAW+toiAfvXQESaSvh6Ln4ffL/G114
+        ZkvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670537203; x=1670623603; bh=9DfHTo0GC4PlZwrEkw31ByuDSYGH
+        JwT7xoG/PgPL6pk=; b=HVZzdDMDN/Hqp2Z8Ow7oh5FxzvzJoCOL+Vf4zfqI8L24
+        +Cqva1jNg2YA7W+5GOiFH4Ff60jnjavsIO5PL4xr7Fr/3C/Xc/nJDSIibX4m9SNy
+        pIPiQKuBwMkdmROl5ujKFskU2hJQNe9VaITkwHsAhlAu8OlW4KtoSD9qnLz6vfy9
+        T1JoD3h1j6N9CC/L7CdVcfZC9012/Hs3QX4DGc0Dv3mJg/82YaSVw+ngmh5RmnES
+        J0DI4tdIleeY1CqxEGm2thHmgVEGOGHCKQbCfQxXpdJc12XNKI36UoHKXqFycjKa
+        YFdIw7mOlG4bd5azs45ERB58/+khCAPll2UKOm7mEg==
+X-ME-Sender: <xms:8l-SY6uKWAoYSN7Gl1cFraUeuA9qIv7pu1jajQRQDHt4MFU2c55zXA>
+    <xme:8l-SY_fI4lufb51eKrfrV7gUaEwSTkQBZ5Y8a-4bvbdfpapWn2M_ENDBoLFPPFjQq
+    CqPyHAc5-0xwleC5dk>
+X-ME-Received: <xmr:8l-SY1zTMU27tV82k4PtivUK3WXptUOfUncua1BVm2eXih2EB0a1PpD8hM69jgY1JgVCbg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgdduheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhgfffueetheehveetfefhiefhueehvdfgjeeg
+    tdejhefhvdeijeekvdekheejfeenucffohhmrghinhepthgutggrlhhlrdhssgenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhes
+    shhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:8l-SY1MSz4daK6XbnupE8-zYUAZq1k7qZYg5ldVo0hqZ6tX709qBUQ>
+    <xmx:8l-SY68jafi3HDcoRRAH257R9wVs59UD81r6RFD5aA5f8ZN9LeyKtg>
+    <xmx:8l-SY9UHDmOyylg6bzYf5E3NyGVGnwvEoOjiIkaSmSGx2RjRRUhjcw>
+    <xmx:81-SY4OTsVbkI4Cv2zjoeOa7zBB4lVZBS28s49x91Aatpzj8qxEj-Q>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Dec 2022 17:06:41 -0500 (EST)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id ECD4B109CB7; Fri,  9 Dec 2022 01:06:38 +0300 (+03)
+Date:   Fri, 9 Dec 2022 01:06:38 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "arnd@arndb.de" <arnd@arndb.de>, "bp@alien8.de" <bp@alien8.de>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "jane.chu@oracle.com" <jane.chu@oracle.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/6] x86/tdx: Expand __tdx_hypercall() to handle more
+ arguments
+Message-ID: <20221208220638.2km3gibpn7wicbtb@box.shutemov.name>
+References: <20221207003325.21503-1-decui@microsoft.com>
+ <20221207003325.21503-5-decui@microsoft.com>
+ <e6a4aeeb-382f-18cc-64da-7730101282c6@linux.intel.com>
+ <SA1PR21MB133568F9F4C70C9F6412BC49BF1D9@SA1PR21MB1335.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <SA1PR21MB133568F9F4C70C9F6412BC49BF1D9@SA1PR21MB1335.namprd21.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Dec 08, 2022 at 12:21:20PM +0530, Athira Rajeev escreveu:
-> > On 07-Dec-2022, at 10:57 PM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > Can you try again? tmp.perf/core? That "tmp." part means its a force
-> > pushed branch, so I just force pushed with some arch specific fixes, now
-> > I'm down to (removing the successful builds and unrelated failures, now
-> > related to libbpf's F_DUPFD_CLOEXEC kaboom):
+On Thu, Dec 08, 2022 at 03:54:32PM +0000, Dexuan Cui wrote:
+> > From: Sathyanarayanan Kuppuswamy
+> > Sent: Wednesday, December 7, 2022 2:14 PM
+> >  [...]
+> > > --- a/arch/x86/coco/tdx/tdcall.S
+> > > +++ b/arch/x86/coco/tdx/tdcall.S
+> > > @@ -13,6 +13,12 @@
+> > >  /*
+> > >   * Bitmasks of exposed registers (with VMM).
+> > >   */
+> > > +#define TDX_RDX		BIT(2)
+> > > +#define TDX_RBX		BIT(3)
+> > > +#define TDX_RSI		BIT(6)
+> > > +#define TDX_RDI		BIT(7)
+> > > +#define TDX_R8		BIT(8)
+> > > +#define TDX_R9		BIT(9)
+> > >  #define TDX_R10		BIT(10)
+> > >  #define TDX_R11		BIT(11)
+> > >  #define TDX_R12		BIT(12)
+> > > @@ -27,9 +33,9 @@
+> > >   * details can be found in TDX GHCI specification, section
+> > >   * titled "TDCALL [TDG.VP.VMCALL] leaf".
+> > >   */
+> > > -#define TDVMCALL_EXPOSE_REGS_MASK	( TDX_R10 | TDX_R11 | \
+> > > -					  TDX_R12 | TDX_R13 | \
+> > > -					  TDX_R14 | TDX_R15 )
+> > > +#define TDVMCALL_EXPOSE_REGS_MASK	\
+> > > +	( TDX_RDX | TDX_RBX | TDX_RSI | TDX_RDI | TDX_R8  | TDX_R9  | \
+> > > +	  TDX_R10 | TDX_R11 | TDX_R12 | TDX_R13 | TDX_R14 | TDX_R15 )
+> > >
+> > 
+> > You seem to have expanded the list to include all VMCALL supported
+> > registers except RBP. Why not include it as well? That way, it will be
+> > a complete support.
+> 
+> Hi Kirill, can you please share your thoughts?
 
-> Ok Arnaldo, Sure, I will check with updated branch
+I wrote the patch to handle redefined ReportFatalError() (the updated GHCI
+comes soon). It doesn't need the RBP. And we run out of registers to stash
+arguments into. Let's think about this when the first user of RBP comes up.
 
-> >   5     7.38 fedora:34                     : FAIL gcc version 11.3.1 20220421 (Red Hat 11.3.1-2) (GCC)
-> >    /git/perf-6.1.0-rc6/tools/perf/util/evsel.c: In function ‘evsel__rawptr’:
-> >    /git/perf-6.1.0-rc6/tools/perf/util/evsel.c:2787:36: error: ‘TEP_FIELD_IS_RELATIVE’ undeclared (first use in this function); did you mean ‘TEP_FIELD_IS_FLAG’?
-> >     2787 |                 if (field->flags & TEP_FIELD_IS_RELATIVE)
-> >          |                                    ^~~~~~~~~~~~~~~~~~~~~
-> >          |                                    TEP_FIELD_IS_FLAG
-
-> I observed same issue as updated here: 
-> https://lore.kernel.org/lkml/10476A85-3F75-4C91-AB5B-E5B136F31297@linux.vnet.ibm.com/
-
-> Looks like TEP_FIELD_IS_RELATIVE is not defined in header file of the system installed version.
-> whereas it is there in header file in tools/lib/traceevent
-
-> # grep TEP_FIELD_IS_RELATIVE /usr/include/traceevent/event-parse.h
-> # grep TEP_FIELD_IS_RELATIVE ../lib/traceevent/event-parse.h
-> 	TEP_FIELD_IS_RELATIVE	= 256,
-
-Right, I had noticed that as well, so as a prep patch I'm adding the
-patch below, before Ian's. Please check and provide an
-Acked-by/Tested-by/Reviewed-by if possible.
-
-- Arnaldo
-
-commit d288f6c03038e8f14f0b53bd4ccc03f664c8c744
-Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Thu Dec 8 18:26:05 2022 -0300
-
-    perf tools: Add test to check if libtracevent has TEP_FIELD_IS_RELATIVE
-    
-    Some distros have older versions of libtraceevent where
-    TEP_FIELD_IS_RELATIVE and its associated semantics are not present, so
-    we need to test for its presence and cope when it isn't present when
-    building with LIBTRACEEVENT_DYNAMIC=1.
-    
-    Reported-by: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-    Cc: Adrian Hunter <adrian.hunter@intel.com>
-    Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-    Cc: Ian Rogers <irogers@google.com>
-    Cc: Ingo Molnar <mingo@redhat.com>
-    Cc: Jiri Olsa <jolsa@kernel.org>
-    Cc: Mark Rutland <mark.rutland@arm.com>
-    Cc: Namhyung Kim <namhyung@kernel.org>
-    Cc: Nick Desaulniers <ndesaulniers@google.com>
-    Cc: Peter Zijlstra <peterz@infradead.org>,
-    Cc: Stephane Eranian <eranian@google.com>
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index 38f8851bd7cbdb0e..c6c9b7c7723d4290 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -71,7 +71,8 @@ FEATURE_TESTS_BASIC :=                  \
-         libzstd				\
-         disassembler-four-args		\
-         disassembler-init-styled	\
--        file-handle
-+        file-handle			\
-+        libtraceevent-tep_field_is_relative
- 
- # FEATURE_TESTS_BASIC + FEATURE_TESTS_EXTRA is the complete list
- # of all feature tests
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 690fe97be1904399..b568be802dc873ed 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -81,7 +81,8 @@ FILES=                                          \
-          test-libzstd.bin			\
-          test-clang-bpf-co-re.bin		\
-          test-file-handle.bin			\
--         test-libpfm4.bin
-+         test-libpfm4.bin			\
-+         test-libtraceevent-tep_field_is_relative
- 
- FILES := $(addprefix $(OUTPUT),$(FILES))
- 
-@@ -92,7 +93,7 @@ all: $(FILES)
- __BUILD = $(CC) $(CFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.c,$(@F)) $(LDFLAGS)
-   BUILD = $(__BUILD) > $(@:.bin=.make.output) 2>&1
-   BUILD_BFD = $(BUILD) -DPACKAGE='"perf"' -lbfd -ldl
--  BUILD_ALL = $(BUILD) -fstack-protector-all -O2 -D_FORTIFY_SOURCE=2 -ldw -lelf -lnuma -lelf -lslang $(FLAGS_PERL_EMBED) $(FLAGS_PYTHON_EMBED) -DPACKAGE='"perf"' -lbfd -ldl -lz -llzma -lzstd -lcap
-+  BUILD_ALL = $(BUILD) -fstack-protector-all -O2 -D_FORTIFY_SOURCE=2 -ldw -lelf -lnuma -lelf -lslang $(FLAGS_PERL_EMBED) $(FLAGS_PYTHON_EMBED) -DPACKAGE='"perf"' -lbfd -ldl -lz -llzma -lzstd -lcap -ltraceevent
- 
- __BUILDXX = $(CXX) $(CXXFLAGS) -MD -Wall -Werror -o $@ $(patsubst %.bin,%.cpp,$(@F)) $(LDFLAGS)
-   BUILDXX = $(__BUILDXX) > $(@:.bin=.make.output) 2>&1
-@@ -159,6 +160,9 @@ $(OUTPUT)test-dwarf_getlocations.bin:
- $(OUTPUT)test-libelf-getphdrnum.bin:
- 	$(BUILD) -lelf
- 
-+$(OUTPUT)test-libtraceevent-tep_field_is_relative.bin:
-+	$(BUILD) -ltraceevent
-+
- $(OUTPUT)test-libelf-gelf_getnote.bin:
- 	$(BUILD) -lelf
- 
-diff --git a/tools/build/feature/test-libtraceevent-tep_field_is_relative.c b/tools/build/feature/test-libtraceevent-tep_field_is_relative.c
-new file mode 100644
-index 0000000000000000..b0664d727d1bf452
---- /dev/null
-+++ b/tools/build/feature/test-libtraceevent-tep_field_is_relative.c
-@@ -0,0 +1,7 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <traceevent/event-parse.h>
-+
-+int main(void)
-+{
-+	return TEP_FIELD_IS_RELATIVE;
-+}
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 9cc3c48f32881c8b..3d0694bece5ed08b 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1192,9 +1192,14 @@ ifdef LIBTRACEEVENT_DYNAMIC
-     LIBTRACEEVENT_VERSION_3 := $(word 3, $(subst ., ,$(LIBTRACEEVENT_VERSION)))
-     LIBTRACEEVENT_VERSION_CPP := $(shell expr $(LIBTRACEEVENT_VERSION_1) \* 255 \* 255 + $(LIBTRACEEVENT_VERSION_2) \* 255 + $(LIBTRACEEVENT_VERSION_3))
-     CFLAGS += -DLIBTRACEEVENT_VERSION=$(LIBTRACEEVENT_VERSION_CPP)
--  else
--    dummy := $(error Error: No libtraceevent devel library found, please install libtraceevent-devel);
-+    $(call feature_check,libtraceevent-tep_field_is_relative)
-+    ifeq ($(feature-libtraceevent-tep_field_is_relative), 1)
-+      CFLAGS += -DHAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-+    endif
-   endif
-+else
-+  # Its the in-kernel tools/lib/traceevent/, so we _have_ TEP_FIELD_IS_RELATIVE
-+  CFLAGS += -DHAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- endif
- 
- ifdef LIBTRACEFS_DYNAMIC
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 543c379d2a57a05a..e38c3b4fc5a69160 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -2726,8 +2726,7 @@ static size_t trace__fprintf_tp_fields(struct trace *trace, struct evsel *evsel,
- 				offset = format_field__intval(field, sample, evsel->needs_swap);
- 				syscall_arg.len = offset >> 16;
- 				offset &= 0xffff;
--				if (field->flags & TEP_FIELD_IS_RELATIVE)
--					offset += field->offset + field->size;
-+				offset += traceevent__field_adjust_relative_offset(field);
- 			}
- 
- 			val = (uintptr_t)(sample->raw_data + offset);
-diff --git a/tools/perf/util/data-convert-bt.c b/tools/perf/util/data-convert-bt.c
-index c65cdaf6975eddeb..955b2a110c7f0b33 100644
---- a/tools/perf/util/data-convert-bt.c
-+++ b/tools/perf/util/data-convert-bt.c
-@@ -319,8 +319,7 @@ static int add_tracepoint_field_value(struct ctf_writer *cw,
- 		offset = tmp_val;
- 		len = offset >> 16;
- 		offset &= 0xffff;
--		if (flags & TEP_FIELD_IS_RELATIVE)
--			offset += fmtf->offset + fmtf->size;
-+		offset += traceevent__field_adjust_relative_offset(fmtf);
- 	}
- 
- 	if (flags & TEP_FIELD_IS_ARRAY) {
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index 0f617359a82f2891..45a4090c78337b4d 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -2776,8 +2776,7 @@ void *evsel__rawptr(struct evsel *evsel, struct perf_sample *sample, const char
- 	if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 		offset = *(int *)(sample->raw_data + field->offset);
- 		offset &= 0xffff;
--		if (field->flags & TEP_FIELD_IS_RELATIVE)
--			offset += field->offset + field->size;
-+		offset += traceevent__field_adjust_relative_offset(field);
- 	}
- 
- 	return sample->raw_data + offset;
-diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-index b5941c74a0d64e10..e46d6de537b1c448 100644
---- a/tools/perf/util/python.c
-+++ b/tools/perf/util/python.c
-@@ -439,8 +439,7 @@ tracepoint_field(struct pyrf_event *pe, struct tep_format_field *field)
- 			offset  = val;
- 			len     = offset >> 16;
- 			offset &= 0xffff;
--			if (field->flags & TEP_FIELD_IS_RELATIVE)
--				offset += field->offset + field->size;
-+			offset += traceevent__field_adjust_relative_offset(field);
- 		}
- 		if (field->flags & TEP_FIELD_IS_STRING &&
- 		    is_printable_array(data + offset, len)) {
-diff --git a/tools/perf/util/scripting-engines/trace-event-perl.c b/tools/perf/util/scripting-engines/trace-event-perl.c
-index 5b602b6d46854133..05814d0c99a43171 100644
---- a/tools/perf/util/scripting-engines/trace-event-perl.c
-+++ b/tools/perf/util/scripting-engines/trace-event-perl.c
-@@ -392,8 +392,7 @@ static void perl_process_tracepoint(struct perf_sample *sample,
- 			if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 				offset = *(int *)(data + field->offset);
- 				offset &= 0xffff;
--				if (field->flags & TEP_FIELD_IS_RELATIVE)
--					offset += field->offset + field->size;
-+				offset += traceevent__field_adjust_relative_offset(field);
- 			} else
- 				offset = field->offset;
- 			XPUSHs(sv_2mortal(newSVpv((char *)data + offset, 0)));
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index d685a7399ee2e6c1..4bceba8dde6e05a0 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -993,8 +993,7 @@ static void python_process_tracepoint(struct perf_sample *sample,
- 				offset  = val;
- 				len     = offset >> 16;
- 				offset &= 0xffff;
--				if (field->flags & TEP_FIELD_IS_RELATIVE)
--					offset += field->offset + field->size;
-+				offset += traceevent__field_adjust_relative_offset(field);
- 			}
- 			if (field->flags & TEP_FIELD_IS_STRING &&
- 			    is_printable_array(data + offset, len)) {
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index 2e7330867e2efd42..dbabe83be43f6095 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -23,6 +23,7 @@
- #include "strlist.h"
- #include "strbuf.h"
- #include <traceevent/event-parse.h>
-+#include "trace-event.h"
- #include "mem-events.h"
- #include "annotate.h"
- #include "event.h"
-@@ -2543,9 +2544,7 @@ static int64_t __sort__hde_cmp(struct perf_hpp_fmt *fmt,
- 		tep_read_number_field(field, a->raw_data, &dyn);
- 		offset = dyn & 0xffff;
- 		size = (dyn >> 16) & 0xffff;
--		if (field->flags & TEP_FIELD_IS_RELATIVE)
--			offset += field->offset + field->size;
--
-+		offset += traceevent__field_adjust_relative_offset(field);
- 		/* record max width for output */
- 		if (size > hde->dynamic_len)
- 			hde->dynamic_len = size;
-diff --git a/tools/perf/util/trace-event.h b/tools/perf/util/trace-event.h
-index 8f39f5bcb2c268fd..78246e6fb25a620b 100644
---- a/tools/perf/util/trace-event.h
-+++ b/tools/perf/util/trace-event.h
-@@ -2,6 +2,7 @@
- #ifndef _PERF_UTIL_TRACE_EVENT_H
- #define _PERF_UTIL_TRACE_EVENT_H
- 
-+#include <linux/compiler.h>
- #include <traceevent/event-parse.h>
- #include "parse-events.h"
- 
-@@ -129,4 +130,14 @@ int common_lock_depth(struct scripting_context *context);
- #define SAMPLE_FLAGS_BUF_SIZE 64
- int perf_sample__sprintf_flags(u32 flags, char *str, size_t sz);
- 
-+
-+static inline int traceevent__field_adjust_relative_offset(struct tep_format_field *field __maybe_unused)
-+{
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-+	if (field->flags & TEP_FIELD_IS_RELATIVE)
-+		return field->offset + field->size;
-+#endif
-+	return 0;
-+}
-+
- #endif /* _PERF_UTIL_TRACE_EVENT_H */
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
