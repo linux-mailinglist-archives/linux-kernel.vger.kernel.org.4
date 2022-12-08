@@ -2,97 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05309647726
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:22:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5C6647744
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiLHUWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:22:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S229973AbiLHU2O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:28:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiLHUW3 (ORCPT
+        with ESMTP id S229652AbiLHU2L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:22:29 -0500
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A5E5AE1C;
-        Thu,  8 Dec 2022 12:22:28 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id vv4so6727130ejc.2;
-        Thu, 08 Dec 2022 12:22:28 -0800 (PST)
+        Thu, 8 Dec 2022 15:28:11 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EC6261BBC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:28:10 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so5853373pjr.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:28:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lkh1P1g6SdIbuYu0UMr6qddEILkP0nJO6Y1lmSw3rRI=;
-        b=HfC+cuf95xAP9a2NmUTOfNtQEUuignCAFg9w1eMrFdH6Vo8UMj9zVH4SEFLTl6ra7I
-         wAQoJ4WXvv3xjUOCtCeVj31tds1y+iyM/Sq3m9+eVgf3hNnwvdSJLX5GlZkwxZqDrTLQ
-         3i5cCJDaaHmRj8mscGATkZi3irV4X3C1AJQ4STWcY63q1i8cQYiUjWF1Dg3SzQKh717L
-         RgcjlRxo+ndmNDqS/VKJw4ihlMJ1Bi0WTOEMRfAkHlew1ZE/DnXV837j76uPn0X6AeiO
-         UxoQC8+ffaO2oC3rQ2vTC8toMBaQu4mAglUCbRXC1f0VjU4QSKa81Xt9E1IyXx5535Ib
-         SG4w==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6aaxwm43tiVxdpJBY9octccgxrKQy3Qmz9QSXAzXTL4=;
+        b=m2+cV4bVjngA8qv+x/EgqbrTWbgdLa5nIrdA6WnUxBgGNGF5zvLDYu/rnWBK3Nibpa
+         YF7Kc8usZ3yAonphUbBm+ld94kFoxswSZ1nmtDSCs2j3PbPRIyTFrsVijUZAfYELDCxl
+         rIv4JRaPtZxg5N4xXgqMT2FIUh9mW6QlboFTnnYjyHH1Xr4ywLvt9YEOxG4OY6tdSE3N
+         4jCVODXuu4i8xyGzhncLoTxHTRsw9vcTGFXKSPe0yBmVAes2FTbyfR+NCVJ4cgWG7Onq
+         QOEdIj1rWWZ+l9nxRTVzPid2C0AG/aopxlw3zGBy3XRJmXO5/Vxdv6H/C+Ssejtq8XJh
+         S7iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lkh1P1g6SdIbuYu0UMr6qddEILkP0nJO6Y1lmSw3rRI=;
-        b=f+EEh/Zl+PUq0D5bz01xfADkpo5hxluzi1yi9aQQOMt0f5i0jWUpRdzuXcMdLt9If2
-         YQf0L9HdJ5crUSWvflh6Taz6OUdbyfO0OyHaLnSfycmfrH0VWF9ooXiXEoM8/Tocw99j
-         lQBblO/lP7VpGhu31Rqv6XgEbLYrFLzVhHRnpO7ch0jK7jokHZQ0qSD5wx6doCSF9mDS
-         xNtqtsK8Yh78Gs3l5E5CC59szb/dR/HnbNytsN0fejaBSFNOO9hDHgDjkZpT+icJp6SM
-         1fkZf8IN5EIVJz2KhkH3OVicqDI/2/nXMuzY+iagGJWdTuxBYazRdbDLBhqtrzw6aTpg
-         dfXg==
-X-Gm-Message-State: ANoB5pmlLYIq5IWLSjpMySkZNydZ4aodstRfdDDQ0UZ2kLUgAeEIMaMz
-        JwJ+jJQibJYZst74d2Ban1Y=
-X-Google-Smtp-Source: AA0mqf4EjMWAqV4kOPGD+L7AFqn8+NNq78OATWVuNAGBCyxTjPGCQQsP8ASH/8u4kktDI/IID9hynA==
-X-Received: by 2002:a17:907:76f2:b0:7c0:eb3c:1037 with SMTP id kg18-20020a17090776f200b007c0eb3c1037mr14884853ejc.663.1670530947039;
-        Thu, 08 Dec 2022 12:22:27 -0800 (PST)
-Received: from [192.168.0.105] ([77.126.19.155])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170906838a00b007c0dacbe00bsm6439680ejx.115.2022.12.08.12.22.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 12:22:26 -0800 (PST)
-Message-ID: <1efd1d75-9c5d-4827-3d28-bef044801859@gmail.com>
-Date:   Thu, 8 Dec 2022 22:22:22 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6aaxwm43tiVxdpJBY9octccgxrKQy3Qmz9QSXAzXTL4=;
+        b=WTw5AxvxDeqXDzllYeG4Rn+kEXKLKq7LyxKrXyPSKGO+9/VRJoqPOm8wor25Pp2KJ8
+         JNmxaq5jK5ClkX6W80rEWYN4gaEmMTy3KaF4XxkgFvzp6Bn7WWfooZpOeuMsaQHpB8dO
+         eYV8TR3/HKPoGj0HSFLJcKWk5Gng95uWRAGKRDavjTxhOp8TPBsYhNDt2xMz0rL/pMhd
+         RacfH/0XKXk6s70QtdeNFN9ZbXyb+UjhM0PbfcgW/S5uoteOQ7OY1956ImTwp/tHoUsp
+         4w7aUIpYAO15OzYmzQgej5GX9jv94UmHplpYmcqEd3ji9TMFl69ukH7BzcgftGS9fsJA
+         JjCQ==
+X-Gm-Message-State: ANoB5pmEHPrhdVUb+MMLfmpOnFHXmCzGX/6+a0owF/rdO+rHVtNdRtcd
+        sWZKZJziNECDM/yyNYDhaXA=
+X-Google-Smtp-Source: AA0mqf62PBR+BMeO5CDIFR47WRLfn7JEfDXkJwAgH8SbfB9zQATjhpfMj0KK2IvHxgkjgh8xKKaM4Q==
+X-Received: by 2002:a17:90b:2711:b0:213:9b80:ceee with SMTP id px17-20020a17090b271100b002139b80ceeemr109608058pjb.243.1670531289530;
+        Thu, 08 Dec 2022 12:28:09 -0800 (PST)
+Received: from localhost (fwdproxy-prn-008.fbsv.net. [2a03:2880:ff:8::face:b00c])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170902f38d00b001868bf6a7b8sm16933787ple.146.2022.12.08.12.28.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 12:28:08 -0800 (PST)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, bfoster@redhat.com,
+        willy@infradead.org, kernel-team@meta.com
+Subject: [PATCH v3 0/4] cachestat: a new syscall for page cache state of files
+Date:   Thu,  8 Dec 2022 12:28:04 -0800
+Message-Id: <20221208202808.908690-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 0/5] cpumask: improve on cpumask_local_spread()
- locality
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-References: <20221208183101.1162006-1-yury.norov@gmail.com>
-From:   Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <20221208183101.1162006-1-yury.norov@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -101,80 +70,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changelog:
+v3:
+  * Fix some minor formatting issues and build errors.
+  * Add the new syscall entry to missing architecture syscall tables.
+    (patch 3).
+  * Add flags argument for the syscall. (patch 3).
+  * Clean up the recency refactoring (patch 2) (suggested by Yu Zhao)
+  * Add the new Kconfig (CONFIG_CACHESTAT) to disable the syscall.
+    (patch 3) (suggested by Josh Triplett)
+v2:
+  * len == 0 means query to EOF. len < 0 is invalid.
+    (patch 3) (suggested by Brian Foster)
+  * Make cachestat extensible by adding the `cstat_size` argument in the
+    syscall (patch 3)
 
+There is currently no good way to query the page cache state of large
+file sets and directory trees. There is mincore(), but it scales poorly:
+the kernel writes out a lot of bitmap data that userspace has to
+aggregate, when the user really doesn not care about per-page information
+in that case. The user also needs to mmap and unmap each file as it goes
+along, which can be quite slow as well.
 
-On 12/8/2022 8:30 PM, Yury Norov wrote:
-> cpumask_local_spread() currently checks local node for presence of i'th
-> CPU, and then if it finds nothing makes a flat search among all non-local
-> CPUs. We can do it better by checking CPUs per NUMA hops.
-> 
-> This series is inspired by Tariq Toukan and Valentin Schneider's
-> "net/mlx5e: Improve remote NUMA preferences used for the IRQ affinity
-> hints"
-> 
-> https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
-> 
-> According to their measurements, for mlx5e:
-> 
->          Bottleneck in RX side is released, reached linerate (~1.8x speedup).
->          ~30% less cpu util on TX.
-> 
-> This patch makes cpumask_local_spread() traversing CPUs based on NUMA
-> distance, just as well, and I expect comparable improvement for its
-> users, as in case of mlx5e.
-> 
-> I tested new behavior on my VM with the following NUMA configuration:
-> 
-> root@debian:~# numactl -H
-> available: 4 nodes (0-3)
-> node 0 cpus: 0 1 2 3
-> node 0 size: 3869 MB
-> node 0 free: 3740 MB
-> node 1 cpus: 4 5
-> node 1 size: 1969 MB
-> node 1 free: 1937 MB
-> node 2 cpus: 6 7
-> node 2 size: 1967 MB
-> node 2 free: 1873 MB
-> node 3 cpus: 8 9 10 11 12 13 14 15
-> node 3 size: 7842 MB
-> node 3 free: 7723 MB
-> node distances:
-> node   0   1   2   3
->    0:  10  50  30  70
->    1:  50  10  70  30
->    2:  30  70  10  50
->    3:  70  30  50  10
-> 
-> And the cpumask_local_spread() for each node and offset traversing looks
-> like this:
-> 
-> node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
-> node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
-> node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
-> node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
-> 
-> v1: https://lore.kernel.org/lkml/20221111040027.621646-5-yury.norov@gmail.com/T/
-> v2: https://lore.kernel.org/all/20221112190946.728270-3-yury.norov@gmail.com/T/
-> v3:
->   - fix typo in find_nth_and_andnot_bit();
->   - add 5th patch that simplifies cpumask_local_spread();
->   - address various coding style nits.
-> 
-> Yury Norov (5):
->    lib/find: introduce find_nth_and_andnot_bit
->    cpumask: introduce cpumask_nth_and_andnot
->    sched: add sched_numa_find_nth_cpu()
->    cpumask: improve on cpumask_local_spread() locality
->    lib/cpumask: reorganize cpumask_local_spread() logic
-> 
->   include/linux/cpumask.h  | 20 ++++++++++++++
->   include/linux/find.h     | 33 +++++++++++++++++++++++
->   include/linux/topology.h |  8 ++++++
->   kernel/sched/topology.c  | 57 ++++++++++++++++++++++++++++++++++++++++
->   lib/cpumask.c            | 26 +++++-------------
->   lib/find_bit.c           |  9 +++++++
->   6 files changed, 134 insertions(+), 19 deletions(-)
-> 
+This series of patches introduces a new system call, cachestat, that
+summarizes the page cache statistics (number of cached pages, dirty
+pages, pages marked for writeback, evicted pages etc.) of a file, in a
+specified range of bytes. It also include a selftest suite that tests some
+typical usage
 
-Acked-by: Tariq Toukan <tariqt@nvidia.com>
+This interface is inspired by past discussion and concerns with fincore,
+which has a similar design (and as a result, issues) as mincore.
+Relevant links:
+
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04207.html
+https://lkml.indiana.edu/hypermail/linux/kernel/1302.1/04209.html
+
+For comparison with mincore, I ran both syscalls on a 2TB sparse file:
+
+Using mincore:
+real    0m37.510s
+user    0m2.934s
+sys     0m34.558s
+
+Using cachestat:
+real    0m0.009s
+user    0m0.000s
+sys     0m0.009s
+
+This series consist of 4 patches:
+
+Johannes Weiner (1):
+  workingset: fix confusion around eviction vs refault container
+
+Nhat Pham (3):
+  workingset: refactor LRU refault to expose refault recency check
+  cachestat: implement cachestat syscall
+  selftests: Add selftests for cachestat
+
+ MAINTAINERS                                   |   8 +
+ arch/alpha/kernel/syscalls/syscall.tbl        |   1 +
+ arch/arm/tools/syscall.tbl                    |   1 +
+ arch/ia64/kernel/syscalls/syscall.tbl         |   1 +
+ arch/m68k/kernel/syscalls/syscall.tbl         |   1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl   |   1 +
+ arch/parisc/kernel/syscalls/syscall.tbl       |   1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl      |   1 +
+ arch/s390/kernel/syscalls/syscall.tbl         |   1 +
+ arch/sh/kernel/syscalls/syscall.tbl           |   1 +
+ arch/sparc/kernel/syscalls/syscall.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+ arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl       |   1 +
+ include/linux/swap.h                          |   1 +
+ include/linux/syscalls.h                      |   3 +
+ include/uapi/asm-generic/unistd.h             |   5 +-
+ include/uapi/linux/mman.h                     |   9 +
+ init/Kconfig                                  |  10 +
+ kernel/sys_ni.c                               |   1 +
+ mm/Makefile                                   |   1 +
+ mm/cachestat.c                                | 117 +++++++++++
+ mm/workingset.c                               | 130 ++++++++----
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/cachestat/.gitignore  |   2 +
+ tools/testing/selftests/cachestat/Makefile    |   7 +
+ .../selftests/cachestat/test_cachestat.c      | 186 ++++++++++++++++++
+ 27 files changed, 455 insertions(+), 39 deletions(-)
+ create mode 100644 mm/cachestat.c
+ create mode 100644 tools/testing/selftests/cachestat/.gitignore
+ create mode 100644 tools/testing/selftests/cachestat/Makefile
+ create mode 100644 tools/testing/selftests/cachestat/test_cachestat.c
+
+--
+2.30.2
