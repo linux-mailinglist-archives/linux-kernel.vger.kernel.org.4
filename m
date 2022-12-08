@@ -2,140 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408B96479AE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3316479B1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 00:19:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiLHXSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 18:18:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S229876AbiLHXTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 18:19:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLHXSE (ORCPT
+        with ESMTP id S229656AbiLHXS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 18:18:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D6579C93;
-        Thu,  8 Dec 2022 15:18:01 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CD65620B3;
-        Thu,  8 Dec 2022 23:18:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 875B3C433EF;
-        Thu,  8 Dec 2022 23:17:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670541480;
-        bh=rd79PBsqcgAsOpiLcHMxEP/sk2UK4Dh/a8VVAA6SQ/k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vp1HXQUb5QfqqnrUWIs78XUnzr8cBvRwQ5ycZ50tmQqCKltrtum4u7Oqrc6zGSbYq
-         SPD4//EXmEFrt0mEuLUNh4mjFoEiSnuqReSIfjUsJ0u5h0nQi2L9/yohC2SCcHN2zF
-         D9gP16Km5VXBDyI8NnNlzFIqWxRvvQPJlO0+Z6xgyt/aPZeC6Xw3Kmq1xHe1lomjn8
-         mTdx5szDs2CccXckuLKnsbO1Mj6RJo7xvAi3Qx92Kb1LCUqGmCkEwyGorBGQstq0Xo
-         qegdmvVWVEfMFpbkeDPco4FZph5m2hahdb69Cbpy5vAzpvfnFoVGfTjitjOjGFu9jd
-         lW/Ltxb8gp0fA==
-Date:   Thu, 8 Dec 2022 15:17:57 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     dhowells@redhat.com, herbert@gondor.apana.org.au,
-        davem@davemloft.net, zohar@linux.ibm.com,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Subject: Re: [PATCH] KEYS: asymmetric: Make a copy of sig and digest in
- vmalloced stack
-Message-ID: <Y5JwpdGF50oFKw0z@sol.localdomain>
-References: <20221208164610.867747-1-roberto.sassu@huaweicloud.com>
+        Thu, 8 Dec 2022 18:18:59 -0500
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC3879C92;
+        Thu,  8 Dec 2022 15:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1670541538; x=1702077538;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=ySeoHANVoUPzDPpnomiG5X9f91zkrUH1wy9mvylqHe0=;
+  b=qdMGqaYa49KbQPzdKWuntnelIbcoHUhQ9vWI6dfyWJm4We1HPCfxHlez
+   5vwG2oe4pSVxrEW7EjFLY0c4k4m9Lef1t1ZIs2Yuc2wjxJwp+Ea+PL+1M
+   JfkzP+GCx4X3qfb8Mtacem3kKxUE7gYCJ3RS6GPHFUyT2eOU263hGHdf1
+   Y=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 08 Dec 2022 15:18:54 -0800
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 15:18:54 -0800
+Received: from asutoshd-linux1.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 8 Dec 2022 15:18:54 -0800
+From:   Asutosh Das <quic_asutoshd@quicinc.com>
+To:     <quic_cang@quicinc.com>, <martin.petersen@oracle.com>,
+        <linux-scsi@vger.kernel.org>
+CC:     <quic_nguyenb@quicinc.com>, <quic_xiaosenh@quicinc.com>,
+        <stanley.chu@mediatek.com>, <eddie.huang@mediatek.com>,
+        <daejun7.park@samsung.com>, <bvanassche@acm.org>,
+        <avri.altman@wdc.com>, <mani@kernel.org>, <beanhuo@micron.com>,
+        Asutosh Das <quic_asutoshd@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Jinyoung Choi <j-young.choi@samsung.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v11 01/16] ufs: core: Optimize duplicate code to read extended feature
+Date:   Thu, 8 Dec 2022 15:18:27 -0800
+Message-ID: <f5bae5e9e3d04c1a0dc0f39e2c6239f8ea450404.1670541363.git.quic_asutoshd@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <cover.1670541363.git.quic_asutoshd@quicinc.com>
+References: <cover.1670541363.git.quic_asutoshd@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208164610.867747-1-roberto.sassu@huaweicloud.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:46:10PM +0100, Roberto Sassu wrote:
-> diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-> index 2f8352e88860..307799ffbc3e 100644
-> --- a/crypto/asymmetric_keys/public_key.c
-> +++ b/crypto/asymmetric_keys/public_key.c
-> @@ -363,7 +363,8 @@ int public_key_verify_signature(const struct public_key *pkey,
->  	struct scatterlist src_sg[2];
->  	char alg_name[CRYPTO_MAX_ALG_NAME];
->  	char *key, *ptr;
-> -	int ret;
-> +	char *sig_s, *digest;
-> +	int ret, verif_bundle_len;
->  
->  	pr_devel("==>%s()\n", __func__);
->  
-> @@ -400,8 +401,21 @@ int public_key_verify_signature(const struct public_key *pkey,
->  	if (!req)
->  		goto error_free_tfm;
->  
-> -	key = kmalloc(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-> -		      GFP_KERNEL);
-> +	verif_bundle_len = pkey->keylen + sizeof(u32) * 2 + pkey->paramlen;
-> +
-> +	sig_s = sig->s;
-> +	digest = sig->digest;
-> +
-> +	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> +		if (!virt_addr_valid(sig_s))
-> +			verif_bundle_len += sig->s_size;
-> +
-> +		if (!virt_addr_valid(digest))
-> +			verif_bundle_len += sig->digest_size;
-> +	}
-> +
-> +	/* key points to a buffer which could contain the sig and digest too. */
-> +	key = kmalloc(verif_bundle_len, GFP_KERNEL);
->  	if (!key)
->  		goto error_free_req;
->  
-> @@ -424,9 +438,24 @@ int public_key_verify_signature(const struct public_key *pkey,
->  			goto error_free_key;
->  	}
->  
-> +	if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> +		ptr += pkey->paramlen;
-> +
-> +		if (!virt_addr_valid(sig_s)) {
-> +			sig_s = ptr;
-> +			memcpy(sig_s, sig->s, sig->s_size);
-> +			ptr += sig->s_size;
-> +		}
-> +
-> +		if (!virt_addr_valid(digest)) {
-> +			digest = ptr;
-> +			memcpy(digest, sig->digest, sig->digest_size);
-> +		}
-> +	}
-> +
->  	sg_init_table(src_sg, 2);
-> -	sg_set_buf(&src_sg[0], sig->s, sig->s_size);
-> -	sg_set_buf(&src_sg[1], sig->digest, sig->digest_size);
-> +	sg_set_buf(&src_sg[0], sig_s, sig->s_size);
-> +	sg_set_buf(&src_sg[1], digest, sig->digest_size);
->  	akcipher_request_set_crypt(req, src_sg, NULL, sig->s_size,
->  				   sig->digest_size);
->  	crypto_init_wait(&cwait);
+The code to parse the extended feature is duplicated twice
+in the ufs core. Replace the duplicated code with a
+function.
 
-We should try to avoid adding error-prone special cases.  How about just doing
-the copy of the signature and digest unconditionally?  That would be much
-simpler.  It would even mean that the scatterlist would only need one element.
+Signed-off-by: Asutosh Das <quic_asutoshd@quicinc.com>
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Reviewed-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/ufs/core/ufshcd.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-Also, the size of buffer needed is only
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 2dbe249..6ea22b5 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -215,6 +215,17 @@ ufs_get_desired_pm_lvl_for_dev_link_state(enum ufs_dev_pwr_mode dev_state,
+ 	return UFS_PM_LVL_0;
+ }
+ 
++static unsigned int ufs_get_ext_ufs_feature(struct ufs_hba *hba,
++					    const u8 *desc_buf)
++{
++	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
++	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
++		return 0;
++
++	return get_unaligned_be32(desc_buf +
++				  DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
++}
++
+ static const struct ufs_dev_quirk ufs_fixups[] = {
+ 	/* UFS cards deviations table */
+ 	{ .wmanufacturerid = UFS_VENDOR_MICRON,
+@@ -7608,13 +7619,7 @@ static void ufshcd_wb_probe(struct ufs_hba *hba, const u8 *desc_buf)
+ 	     (hba->dev_quirks & UFS_DEVICE_QUIRK_SUPPORT_EXTENDED_FEATURES)))
+ 		goto wb_disabled;
+ 
+-	if (hba->desc_size[QUERY_DESC_IDN_DEVICE] <
+-	    DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP + 4)
+-		goto wb_disabled;
+-
+-	ext_ufs_feature = get_unaligned_be32(desc_buf +
+-					DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
+-
++	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
+ 	if (!(ext_ufs_feature & UFS_DEV_WRITE_BOOSTER_SUP))
+ 		goto wb_disabled;
+ 
+@@ -7668,7 +7673,7 @@ static void ufshcd_temp_notif_probe(struct ufs_hba *hba, const u8 *desc_buf)
+ 	if (!(hba->caps & UFSHCD_CAP_TEMP_NOTIF) || dev_info->wspecversion < 0x300)
+ 		return;
+ 
+-	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
++	ext_ufs_feature = ufs_get_ext_ufs_feature(hba, desc_buf);
+ 
+ 	if (ext_ufs_feature & UFS_DEV_LOW_TEMP_NOTIF)
+ 		mask |= MASK_EE_TOO_LOW_TEMP;
+-- 
+2.7.4
 
-	max(pkey->keylen + sizeof(u32) * 2 + pkey->paramlen,
-	    sig->s_size + sig->digest_size)
-
-... since the signature and digest aren't needed until the key was already used.
-
-- Eric
