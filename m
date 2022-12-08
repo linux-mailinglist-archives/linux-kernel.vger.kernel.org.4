@@ -2,114 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2F46475FF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECFB647601
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:13:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiLHTLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:11:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S229793AbiLHTN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:13:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiLHTLM (ORCPT
+        with ESMTP id S229521AbiLHTNZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:11:12 -0500
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 038AE862CD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:11:11 -0800 (PST)
-Received: by mail-io1-f45.google.com with SMTP id p6so807942iod.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:11:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=joAR2U3MbwjKUOm3s5OmrqkSX8hEk/d+Rr8ropcmRlo=;
-        b=crnGFlAK7LIrycywVHJ8sjFCMbggC4WYk+bEeQUetULBCdvKfBgbniFMkNV2B7k/Ii
-         o5Aex3yeZzadMWVqmsWGGd4Iy5XN1fLNuyu3KRlP+m+WFagV8XYlOE3PYwIvJj71M0/g
-         UvdAbswkO2t6SXqkVmftTuqleTtYsS2BQpsgiN+2rrOAfFzGI0h0zZv1Pkv/Qc2r8vze
-         m4x7pApBMSf7J7KE/7Mu7cX25rP0Aw2V0KjdixnLtsVQqKU2WlT4fjGsNAY2/pwR+EnL
-         jQTKDlzInnRAGzLj0lE/WQRBpUtYoFTyxfiLInpxGROhiuQw7znbhUmyG2GYNtUjg+Jd
-         zukg==
-X-Gm-Message-State: ANoB5pkvfGNU6WbumYSTLQLxj4PFrNPUABuhXRcSW5BugyZDsZxlCIhn
-        apxp/YQj7Fy7d+GEm+CHiVjlOpdWpGqVePaCtNg=
-X-Google-Smtp-Source: AA0mqf4PvfnnnRW9Lkn438rrWLZb3o8FaLee51yhDNLGxxZ+ubCjidkrieB4C2yLfNAMJJBh+jPLGawOEPvDr+I9pac=
-X-Received: by 2002:a05:6638:16c3:b0:389:d9a2:8667 with SMTP id
- g3-20020a05663816c300b00389d9a28667mr24878617jat.91.1670526670037; Thu, 08
- Dec 2022 11:11:10 -0800 (PST)
+        Thu, 8 Dec 2022 14:13:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9074E248D1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:13:24 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4D2D2B825E5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:13:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0D86C433D2;
+        Thu,  8 Dec 2022 19:13:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670526802;
+        bh=4S2EY5Lob8l4rRdqqTezVLflo0p1tzugJYBkZhUb91o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sF+r+0o/s3NagjT0nfubNgusdXqBVRdwdHxdPED8imL+82NjK1MBgsrb45IJhC9la
+         B13a54I16a74fe07b9cpE8GAcmJULm1sN7kK56UbjCK9lXKFyupA9xgyqdu1aJdPqF
+         gABlszvPFPHHjEBJ32TVULju7TO7U1SupPgUzU4w8qr64431x+hYcuWGhi39Ttkqfa
+         0wGD0pWExp+QisFysQ+7M4IgZC8YEw835AMUeLk16oFu/Q4H3xRZObEB3M848paY6U
+         2p00CEmQE0UrsHgZptlA2jpvbd0ISubWEOZdIwsTCb3TXAS6gJxnP54hPjMaTS4zPk
+         HaZxZlWtP9VDw==
+Received: by pali.im (Postfix)
+        id 4566E97E; Thu,  8 Dec 2022 20:13:18 +0100 (CET)
+Date:   Thu, 8 Dec 2022 20:13:18 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v1] powerpc/64: Set default CPU in Kconfig
+Message-ID: <20221208191318.air76sl5inxckmdp@pali>
+References: <3fd60c2d8a28668a42b766b18362a526ef47e757.1670420281.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
-References: <20221206154406.41941-1-petar.gligor@gmail.com>
- <CAM9d7cizPC3p0-Z1oYsDPofwNfZHyKYiJR5JXEcS31Q=mgzcLg@mail.gmail.com>
- <Y4/AfA2OYtlTkKwo@debian> <CAM9d7chLZVDg_-tnUh_qFYzchnpis-e7HYNDVM_OPjj_QXMeKQ@mail.gmail.com>
- <Y5HVdS3mlDruNyrl@debian>
-In-Reply-To: <Y5HVdS3mlDruNyrl@debian>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 8 Dec 2022 11:10:58 -0800
-Message-ID: <CAM9d7ciX9ULwSy5G3cFZi7mMXrt_A52hwwk7L1m-oV_0P07_vw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] perf: introduce perf based task analyzer
-To:     Petar Gligoric <petar.gligor@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Petar Gligoric <petar.gligoric@rohde-schwarz.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3fd60c2d8a28668a42b766b18362a526ef47e757.1670420281.git.christophe.leroy@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 4:15 AM Petar Gligoric <petar.gligor@gmail.com> wrote:
->
-> > > Thanks for the input! For this patchset we explicitly decided against
-> > > extending "perf sched timehist" - after some pros and cons. Mainly we
-> > > didn't want to break existing programs (which might parse the output of
-> > > perf sched) and also the goal of the task-analyzer is a bit different.
-> > > E.g what will follow as a follow-up patch, is to show IRQs visually
-> > > pleasing intermixed with tasks to show potential sources of task
-> > > latency. This will be offered as an option for the task-analyzer, but
-> > > would be too much functionality for "perf sched timehist". This was the
-> > > main reason why we decided against the extension.
-> >
-> > Then you might want to add a new sub-command under perf sched.
-> > But I guess we can just add a new option for the different output
-> > format in the perf sched timehist.
-> >
-> > Anyway, "perf script" is a generic tool not targeting specific events.
-> > This functionality requires sched_switch (and more?) then we need
-> > the record part to make sure the data has the events.  That's why
-> > it's natural to have it in perf sched IMHO.
-> >
-> > Thanks,
-> > Namhyung
->
-> We assumed that python scripts should not only be used as a "generic tool".
+On Wednesday 07 December 2022 14:38:40 Christophe Leroy wrote:
+> Since 0069f3d14e7a ("powerpc/64e: Tie PPC_BOOK3E_64 to PPC_E500MC"),
+> the only possible BOOK3E/64 are E500, so no need of a default CPU
+> over the E5500.
+> When the user selects book3e, he must have a e500 compatible compiler,
+> and it won't work anymore with the default -mcpu=power64, see
+> commit d6b551b8f90c ("powerpc/64e: Fix build failure with GCC 12
+> (unrecognized opcode: `wrteei')")
+> 
+> For book3s/64, replace GENERIC_CPU by POWERPC64_CPU to match the PPC32
+> POWERPC_CPU, and set a default mpcu value in Kconfig directly.
+> 
+> When a user selects a particular CPU, he must ensure his compiler has
+> the requested capability. Therefore, remove hidden fallback, instead
+> offer user the possibility to say he wants to use toolchain default.
+> 
+> Reported-by: Pali Rohár <pali@kernel.org>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
-Oh, I didn't know you worked on a separate python script.
-Sorry, I just read the cover letter (but not the diffstat) and
-I thought you added it to the builtin-script.c. ;-)
+Tested-by: Pali Rohár <pali@kernel.org>
 
-> There are a number of tools like flamegraph, netdev-times, dropmonitor and
-> other scripts that analyze and look at *very specific* events. The question is
-> rather, why should this be implemented in C? When using Python - with batteries
-> included - less code has to be written for the identical result, and it is less
-> error-prone than C (less technical debt). We have measured the performance,
-> even for very large perf.data files, and again we see no problems.
+$ make ARCH=powerpc CROSS_COMPILE=powerpc64-linux-gnu- corenet64_smp_defconfig
+...
+# configuration written to .config
 
-Then I have no problem with python.  Please take a look at the
-scripts/python/bin directory to provide shortcuts for record/report.
+$ grep CONFIG_TARGET_CPU .config
+CONFIG_TARGET_CPU_BOOL=y
+CONFIG_TARGET_CPU="e500mc64"
 
-Thanks,
-Namhyung
+Without this patch CONFIG_TARGET_CPU is not set but CONFIG_TARGET_CPU_BOOL is.
 
-
->
-> But maybe this should be clarified in principle! What do you say Arnaldo, Ian,
-> ...?
->
-> Petar
->
+> ---
+>  arch/powerpc/Makefile                  | 22 +++++-----------------
+>  arch/powerpc/platforms/Kconfig.cputype | 12 +++++++-----
+>  2 files changed, 12 insertions(+), 22 deletions(-)
+> 
+> diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
+> index dc4cbf0a5ca9..bf5f0a998273 100644
+> --- a/arch/powerpc/Makefile
+> +++ b/arch/powerpc/Makefile
+> @@ -146,19 +146,6 @@ CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option, $(MULTIPLEWORD))
+>  
+>  CFLAGS-$(CONFIG_PPC32)	+= $(call cc-option,-mno-readonly-in-sdata)
+>  
+> -ifdef CONFIG_PPC_BOOK3S_64
+> -ifdef CONFIG_CPU_LITTLE_ENDIAN
+> -CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power8
+> -else
+> -CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=power4
+> -endif
+> -CFLAGS-$(CONFIG_GENERIC_CPU) += $(call cc-option,-mtune=power10,	\
+> -				  $(call cc-option,-mtune=power9,	\
+> -				  $(call cc-option,-mtune=power8)))
+> -else ifdef CONFIG_PPC_BOOK3E_64
+> -CFLAGS-$(CONFIG_GENERIC_CPU) += -mcpu=powerpc64
+> -endif
+> -
+>  ifdef CONFIG_FUNCTION_TRACER
+>  CC_FLAGS_FTRACE := -pg
+>  ifdef CONFIG_MPROFILE_KERNEL
+> @@ -166,11 +153,12 @@ CC_FLAGS_FTRACE += -mprofile-kernel
+>  endif
+>  endif
+>  
+> -CFLAGS-$(CONFIG_TARGET_CPU_BOOL) += $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+> -AFLAGS-$(CONFIG_TARGET_CPU_BOOL) += $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+> +CFLAGS-$(CONFIG_TARGET_CPU_BOOL) += -mcpu=$(CONFIG_TARGET_CPU)
+> +AFLAGS-$(CONFIG_TARGET_CPU_BOOL) += -mcpu=$(CONFIG_TARGET_CPU)
+>  
+> -CFLAGS-$(CONFIG_E5500_CPU) += $(call cc-option,-mcpu=e500mc64,-mcpu=powerpc64)
+> -CFLAGS-$(CONFIG_E6500_CPU) += $(call cc-option,-mcpu=e6500,$(E5500_CPU))
+> +CFLAGS-$(CONFIG_POWERPC64_CPU) += $(call cc-option,-mtune=power10,	\
+> +				  $(call cc-option,-mtune=power9,	\
+> +				  $(call cc-option,-mtune=power8)))
+>  
+>  asinstr := $(call as-instr,lis 9$(comma)foo@high,-DHAVE_AS_ATHIGH=1)
+>  
+> diff --git a/arch/powerpc/platforms/Kconfig.cputype b/arch/powerpc/platforms/Kconfig.cputype
+> index 9563336e3348..31cea2eeb59e 100644
+> --- a/arch/powerpc/platforms/Kconfig.cputype
+> +++ b/arch/powerpc/platforms/Kconfig.cputype
+> @@ -118,19 +118,18 @@ endchoice
+>  
+>  choice
+>  	prompt "CPU selection"
+> -	default GENERIC_CPU
+>  	help
+>  	  This will create a kernel which is optimised for a particular CPU.
+>  	  The resulting kernel may not run on other CPUs, so use this with care.
+>  
+>  	  If unsure, select Generic.
+>  
+> -config GENERIC_CPU
+> +config POWERPC64_CPU
+>  	bool "Generic (POWER5 and PowerPC 970 and above)"
+>  	depends on PPC_BOOK3S_64 && !CPU_LITTLE_ENDIAN
+>  	select PPC_64S_HASH_MMU
+>  
+> -config GENERIC_CPU
+> +config POWERPC64_CPU
+>  	bool "Generic (POWER8 and above)"
+>  	depends on PPC_BOOK3S_64 && CPU_LITTLE_ENDIAN
+>  	select ARCH_HAS_FAST_MULTIPLIER
+> @@ -233,13 +232,12 @@ config E500MC_CPU
+>  
+>  config TOOLCHAIN_DEFAULT_CPU
+>  	bool "Rely on the toolchain's implicit default CPU"
+> -	depends on PPC32
+>  
+>  endchoice
+>  
+>  config TARGET_CPU_BOOL
+>  	bool
+> -	default !GENERIC_CPU && !TOOLCHAIN_DEFAULT_CPU
+> +	default !TOOLCHAIN_DEFAULT_CPU
+>  
+>  config TARGET_CPU
+>  	string
+> @@ -251,6 +249,10 @@ config TARGET_CPU
+>  	default "power8" if POWER8_CPU
+>  	default "power9" if POWER9_CPU
+>  	default "power10" if POWER10_CPU
+> +	default "e500mc64" if E5500_CPU
+> +	default "e6500" if E6500_CPU
+> +	default "power4" if POWERPC64_CPU && !CPU_LITTLE_ENDIAN
+> +	default "power8" if POWERPC64_CPU && CPU_LITTLE_ENDIAN
+>  	default "405" if 405_CPU
+>  	default "440" if 440_CPU
+>  	default "464" if 464_CPU
+> -- 
+> 2.38.1
+> 
