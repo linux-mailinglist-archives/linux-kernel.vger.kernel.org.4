@@ -2,199 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A1C647458
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:32:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78F0647460
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:33:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiLHQc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:32:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44504 "EHLO
+        id S229814AbiLHQdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:33:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLHQcX (ORCPT
+        with ESMTP id S229965AbiLHQdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:32:23 -0500
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75915215
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:32:21 -0800 (PST)
-Received: by mail-pg1-x534.google.com with SMTP id 142so1597216pga.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=57Ddcfru2LvUQsSfd0q8Xr1c5dKIodEjUxeNkx/mxX0=;
-        b=KGXTAc0X86Oo6sdnfCoLnqgKb5/YNtxmCXPjMyJjXMlnm2HJcButMWPYzawWdOta/N
-         cSs0YGuCxdtkeovYlpHj3CV+CQEvO/hbxrQx1u6l8gMF21cfbWsfXnVMQQi/LwiZ+Pau
-         DELp5r470Ahb/RW/lEDJ84wtTsNeWiUz+jKmY=
+        Thu, 8 Dec 2022 11:33:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B196561
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:32:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670517155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gwyXN9AyJCfUq7SYZ9lwVdPug8mXVxtE2Rq8B8I5K5Y=;
+        b=Cb7pVsCnt3yUtG1RjD1HxNHz8zZPXvadGZV1HtR+0gANlauFSb4jRtdFWCmQRBt8mv6GmB
+        Aho1U1xVXclzYwvi194zBBVWJp3fI23zAseHIhF1GwHIz9KzE8IWa8po0lA3rqZeLzXytq
+        yulRBlOLSffcKyMHRsl00NThRfAIFdw=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-484-ObYsnVhYMeabbg7gLlXyxA-1; Thu, 08 Dec 2022 11:32:34 -0500
+X-MC-Unique: ObYsnVhYMeabbg7gLlXyxA-1
+Received: by mail-ed1-f72.google.com with SMTP id s13-20020a056402520d00b0046c78433b54so1219065edd.16
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:32:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=57Ddcfru2LvUQsSfd0q8Xr1c5dKIodEjUxeNkx/mxX0=;
-        b=mInlkjlbftrZVrk/IVhXJAJYYMcUHHOOl+kEXoUdUjFKOWfyOx9g3ZHAViAfj6fPWi
-         p89sifIeDke5gezOiTrrztj1V6FNHIYEIIcnJ5KOY/C7s0RrHqCv7R1+I8WiWjgWykJK
-         Cf9T+4FC8qDX4hFBbYNa+qEctxlifr04V8NJgGgYb5HCQT/igTOxpZJ+ta15fMMY9ie3
-         KH33P+YOoIVvEX0xs7GbDa91sYt/hxREfgHqvXLqP4IK3UOETBtHtIh3I9ULxYWWOAoj
-         6W+C0rFVFzyTYX364bjB+UPYYnp9foqbzRiNQCWmJ6PxqUckdO3+CVY67AfMUc/3mGnI
-         NRkw==
-X-Gm-Message-State: ANoB5pm9oDTs+sVG+T0SJw6xQ7qF/7meIAyWm2Ooma6LU1WHKvZjlxi+
-        eSerqOhr7Ic8eFEU9SFlPj8DhQ==
-X-Google-Smtp-Source: AA0mqf4wxnc/rqiR7541frAh3SkYVsc69VXIbiMFJy68m5JROZIV5OyvOZr8KZI5wI6EPDwLWc4BDQ==
-X-Received: by 2002:a62:3882:0:b0:56b:9ce2:891f with SMTP id f124-20020a623882000000b0056b9ce2891fmr83105047pfa.43.1670517140886;
-        Thu, 08 Dec 2022 08:32:20 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 6-20020a170902c20600b00186ff402508sm16742741pll.281.2022.12.08.08.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:32:20 -0800 (PST)
-Date:   Thu, 8 Dec 2022 08:32:19 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v6 6/6] mm/memfd: security hook for memfd_create
-Message-ID: <202212080831.9010D8A@keescook>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-7-jeffxu@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gwyXN9AyJCfUq7SYZ9lwVdPug8mXVxtE2Rq8B8I5K5Y=;
+        b=7S6ZpErha7WxW6Fx3j9GELcry1JUeJDMckmZADVY+gmTB0vDss92aZ7MffQGRd748K
+         t5UDVJ3My6odO6yW9SQ2e3Ptwe3cfPgi5i+gkiQRk8rr5PVPSqdjbxdVjnjWEXxS9kjo
+         TnqdkeNLP9h4xvw+LPEtnN4CPLoiW0G3peBkwXHw1lHGUeD8vkzy4q2in68n3QdZXGzI
+         cLhWihJ4YT6qdGjCTUihjhRP3SAoIdZ5pzAzwEE4uQc96JB0aNYJY+VvvvDeKlUvnMf/
+         2assN168ajwyh4MHt+/l2tmZkvb1FvDOhXFunyqdDHFHv/NWxBPRmzKnWQJnZjlDHdUT
+         Iu2g==
+X-Gm-Message-State: ANoB5pnyaBDHcyw2gym9puGoF8/ui+Q5AvdBIU+De4DbBiB7LRCaUfJh
+        j2+FrWiBZ5VVYajjFQ4URyFPoDO7eY88K2QFB0t6VlvyUyucPyEDxVx3FrsWeDsf8h0TA5gZLgx
+        VKrFbSvRnni6zn4Drabc82Xax
+X-Received: by 2002:a05:6402:248e:b0:464:1b51:f85c with SMTP id q14-20020a056402248e00b004641b51f85cmr958728eda.25.1670517150283;
+        Thu, 08 Dec 2022 08:32:30 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5QNK02SqRex45/L+1I16WeAAGRh2xDOaOPYOH3Kpz3x+lfBBShXrLuusgwwrfpnclomxsz8g==
+X-Received: by 2002:a05:6402:248e:b0:464:1b51:f85c with SMTP id q14-20020a056402248e00b004641b51f85cmr958715eda.25.1670517150131;
+        Thu, 08 Dec 2022 08:32:30 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id u14-20020a056402110e00b0046af63521a2sm3548747edv.29.2022.12.08.08.32.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 08:32:29 -0800 (PST)
+Message-ID: <27423188-10ed-be55-3080-570a476b2899@redhat.com>
+Date:   Thu, 8 Dec 2022 17:32:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207154939.2532830-7-jeffxu@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] platform/x86: sony-laptop: Convert to use sysfs_emit_at()
+ API
+Content-Language: en-US, nl
+To:     ye.xingchen@zte.com.cn
+Cc:     malattia@linux.it, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <202212081545178689771@zte.com.cn>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <202212081545178689771@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:49:39PM +0000, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@google.com>
+Hi,
+
+On 12/8/22 08:45, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> The new security_memfd_create allows lsm to check flags of
-> memfd_create.
+> Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+> should only use sysfs_emit() or sysfs_emit_at() when formatting the
+> value to be returned to user space.
 > 
-> The security by default system (such as chromeos) can use this
-> to implement system wide lsm to allow only non-executable memfd
-> being created.
-> 
-> Signed-off-by: Jeff Xu <jeffxu@google.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
+
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 > ---
->  include/linux/lsm_hook_defs.h |  1 +
->  include/linux/lsm_hooks.h     |  4 ++++
->  include/linux/security.h      |  6 ++++++
->  mm/memfd.c                    |  5 +++++
->  security/security.c           | 13 +++++++++++++
->  5 files changed, 29 insertions(+)
+>  drivers/platform/x86/sony-laptop.c | 10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
 > 
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index ec119da1d89b..fd40840927c8 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
->  LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
->  LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
->  	 unsigned long arg)
-> +LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
->  LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
->  LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
->  	 unsigned long prot, unsigned long flags)
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 4ec80b96c22e..5a18a6552278 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -543,6 +543,10 @@
->   *	simple integer value.  When @arg represents a user space pointer, it
->   *	should never be used by the security module.
->   *	Return 0 if permission is granted.
-> + * @memfd_create:
-> + *	@name is the name of memfd file.
-> + *	@flags is the flags used in memfd_create.
-> + *	Return 0 if permission is granted.
->   * @mmap_addr :
->   *	Check permissions for a mmap operation at @addr.
->   *	@addr contains virtual address that will be used for the operation.
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index ca1b7109c0db..5b87a780822a 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
->  int security_file_alloc(struct file *file);
->  void security_file_free(struct file *file);
->  int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-> +int security_memfd_create(char *name, unsigned int flags);
->  int security_mmap_file(struct file *file, unsigned long prot,
->  			unsigned long flags);
->  int security_mmap_addr(unsigned long addr);
-> @@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
->  	return 0;
->  }
->  
-> +static inline int security_memfd_create(char *name, unsigned int flags)
-> +{
-> +	return 0;
-> +}
-> +
->  static inline int security_mmap_file(struct file *file, unsigned long prot,
->  				     unsigned long flags)
->  {
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 92f0a5765f7c..f04ed5f0474f 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
->  		goto err_name;
+> diff --git a/drivers/platform/x86/sony-laptop.c b/drivers/platform/x86/sony-laptop.c
+> index a19aac70252f..7156ae2ad196 100644
+> --- a/drivers/platform/x86/sony-laptop.c
+> +++ b/drivers/platform/x86/sony-laptop.c
+> @@ -820,10 +820,9 @@ static ssize_t sony_nc_handles_show(struct device *dev,
+>  	int i;
+> 
+>  	for (i = 0; i < ARRAY_SIZE(handles->cap); i++) {
+> -		len += scnprintf(buffer + len, PAGE_SIZE - len, "0x%.4x ",
+> -				handles->cap[i]);
+> +		len += sysfs_emit_at(buffer, len, "0x%.4x ", handles->cap[i]);
 >  	}
->  
-> +	/* security hook for memfd_create */
-> +	error = security_memfd_create(name, flags);
-> +	if (error)
-> +		return error;
-> +
->  	if (flags & MFD_HUGETLB) {
->  		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
->  					HUGETLB_ANONHUGE_INODE,
-> diff --git a/security/security.c b/security/security.c
-> index 79d82cb6e469..5c018e080923 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1010,6 +1010,19 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
->  }
->  EXPORT_SYMBOL(security_sb_clone_mnt_opts);
->  
-> +int security_add_mnt_opt(const char *option, const char *val, int len,
-> +			 void **mnt_opts)
-> +{
-> +	return call_int_hook(sb_add_mnt_opt, -EINVAL,
-> +					option, val, len, mnt_opts);
-> +}
-> +EXPORT_SYMBOL(security_add_mnt_opt);
-
-I think security_add_mnt_opt() isn't supposed to be in here. :)
-
-> +
-> +int security_memfd_create(char *name, unsigned int flags)
-> +{
-> +	return call_int_hook(memfd_create, 0, name, flags);
-> +}
-> +
->  int security_move_mount(const struct path *from_path, const struct path *to_path)
->  {
->  	return call_int_hook(move_mount, 0, from_path, to_path);
-> -- 
-> 2.39.0.rc0.267.gcb52ba06e7-goog
+> -	len += scnprintf(buffer + len, PAGE_SIZE - len, "\n");
+> +	len += sysfs_emit_at(buffer, len, "\n");
 > 
+>  	return len;
+>  }
+> @@ -2173,10 +2172,9 @@ static ssize_t sony_nc_thermal_profiles_show(struct device *dev,
+> 
+>  	for (cnt = 0; cnt < THM_PROFILE_MAX; cnt++) {
+>  		if (!cnt || (th_handle->profiles & cnt))
+> -			idx += scnprintf(buffer + idx, PAGE_SIZE - idx, "%s ",
+> -					snc_thermal_profiles[cnt]);
+> +			idx += sysfs_emit_at(buffer, idx, "%s ", snc_thermal_profiles[cnt]);
+>  	}
+> -	idx += scnprintf(buffer + idx, PAGE_SIZE - idx, "\n");
+> +	idx += sysfs_emit_at(buffer, idx, "\n");
+> 
+>  	return idx;
+>  }
 
-Otherwise looks good.
-
-Thanks!
-
--Kees
-
--- 
-Kees Cook
