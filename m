@@ -2,118 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E29A647795
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:58:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96CE8647799
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:59:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiLHU6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:58:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S229561AbiLHU7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:59:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229685AbiLHU5i (ORCPT
+        with ESMTP id S229649AbiLHU7H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:57:38 -0500
-Received: from mail-40136.proton.ch (mail-40136.proton.ch [185.70.40.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C212CD0
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:57:33 -0800 (PST)
-Date:   Thu, 08 Dec 2022 20:57:26 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail; t=1670533050; x=1670792250;
-        bh=hiaxku4ECTjcW+ViXhS5y1VGBf4iN9SgQmqH7d1kyhg=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=ALdD6BUkF8H4ruV1Xbkf6pVWLASu45arsqZf/Hs1yj+Tk4fA+GTfcqjFNGA76RpjF
-         wYOQyQlIC+aeDeROr5fpPbLcH2yLaFieVaNVXEyPP9Gy7EngIcOhxR0wHrkAQKAAaQ
-         Qg09qRacM/v9pwWjTLTIsLV6ZbHdEQqCWvLtGcp+0WxJds0aWLEcH9vq0f4f/9R1WK
-         Y2ZKyexYY2hPO20R+MlImihMxQEq3bglUdUCKVRWc7+KRJTk5+Ff1l3q7JhKBOtsda
-         ZmhYh5T75Ooao1I9+aaD5VrDyjbyZPDaFOKNathPvad+Jc5VzTRdsaCXEzLLBj0iwZ
-         n03z6rvxRo3HA==
-To:     Yury Norov <yury.norov@gmail.com>
-From:   Peter Lafreniere <peter@n8pjl.ca>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] lib/cpumask: reorganize cpumask_local_spread() logic
-Message-ID: <tWPflu4f2FG07nbY54Gbs5fkI1u8Fjc0dLg60fY6deUx8p4jpZmOpOLr_ffvJz_EYWZDNiVLFHlzwMwMMFqWlF8NwXa0XZqlUWbgXE7zgFQ=@n8pjl.ca>
-In-Reply-To: <Y5JL/YqlxoC/4j4A@yury-laptop>
-References: <20221208183101.1162006-1-yury.norov@gmail.com> <20221208183101.1162006-6-yury.norov@gmail.com> <KQCC2QYXZ6BtFjiUQO-XQNUO5Ub3kGfpKzjfIeUfCQEvMUEMKiZ7ofEMqoZElMYxYFtuRqW6v3UzCpDzDR-QYZk-tpMDVLl_HSl8BEi1hZk=@n8pjl.ca> <Y5JL/YqlxoC/4j4A@yury-laptop>
-Feedback-ID: 53133685:user:proton
+        Thu, 8 Dec 2022 15:59:07 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887726FC;
+        Thu,  8 Dec 2022 12:59:06 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id n21so6870515ejb.9;
+        Thu, 08 Dec 2022 12:59:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2uWthW/PoKfC02t1PaCjD6R5HbN1AuXQTJXkZCHE+YY=;
+        b=MmnxtYapb1tWKOt5UnNiQ50t6JfjSaObmvZa9LHlnCnsyJLPhgzfbg0O+ARqNk1b2T
+         Iibz2OIB+1N9V+0Ptw1fa+ywzBwARGYBCNCLZOyGv3BEba2lXVw+SgGgL8Qz3twBv+uO
+         5inxZ7C3lgG64UliXO9ETDOP1UzM4HzoCGeMR3Bb7XbrIJYLuaymbfIFcdl3+uuWddAD
+         dnBDfQ6CcbGyc2Wo9j5Aib2LW5kIDOCsDGbadJga9MRYFgJfUWX0LFNeg+J6LqlmsSg0
+         oKmSSBKI5aBbm/tHxZlPGCVNcJeGVUEuq+cpoRdczZnCXGHlKoT/mIw5Q+emTMhHjgCD
+         SUBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2uWthW/PoKfC02t1PaCjD6R5HbN1AuXQTJXkZCHE+YY=;
+        b=Ua+B6R4KP9TrudNGzHTdYUqUy2j3UhHuJyXRfdKfBNnJKhc8gxhKWcecx4u6+Zg+rK
+         7KP5vjL7jXwYrmOKpl89F5959zbjfV0deMoCSW//44YCB/G2RtUGLF1svurrH/+tAVH1
+         YYF+KOar4t7ZsOLMJeitJyHpec+vVYCGrSClqq7dJWmMVTo+C7jP+mUOJZStJRCJzGCX
+         8AJlxsGNq5vr8hbJMrtFZKIn6LBZhQTtdQglqjhT0Sl9CCCYC9ZMDuzHE8meGDvZgFmh
+         Hobmq7DIOufrenDCNDn1KrvyAOCWzodM6LHsVRQrXZjJzy7B+cGwYQYYmzO8mB8CI9hj
+         Q3Zg==
+X-Gm-Message-State: ANoB5plRa5vthy94yoMV0slCGXCI6gUWveuAJSWepgK5VNwFoShEKKk8
+        V909OoF3xI68CTCD/LOGN+ZKVCdKq8gwc4EbjdQ=
+X-Google-Smtp-Source: AA0mqf4TZbKeyFx4CKL8mJSNkg1i0m8ENpo9jfVK5zMkFq9D/i/Tbc9xNhHkPb/J8xrS0UtiJUz5Ipmfcj/xQEyAwC0=
+X-Received: by 2002:a17:906:a083:b0:7b2:b15e:322f with SMTP id
+ q3-20020a170906a08300b007b2b15e322fmr76404842ejy.75.1670533144943; Thu, 08
+ Dec 2022 12:59:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+References: <20221205210354.11846-1-andrew.smirnov@gmail.com> <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
+In-Reply-To: <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
+From:   Andrey Smirnov <andrew.smirnov@gmail.com>
+Date:   Thu, 8 Dec 2022 12:58:53 -0800
+Message-ID: <CAHQ1cqGaL5v4PARTZU6_0tfSCz3=9b1THz-D-Bg1G64hBV+_Wg@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/2] Handling of non-numbered feature reports by hidraw
+To:     David Rheinsberg <david.rheinsberg@gmail.com>
+Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Thu, Dec 08, 2022 at 08:17:22PM +0000, Peter Lafreniere wrote:
-> > > Now after moving all NUMA logic into sched_numa_find_nth_cpu(),
-> > > else-branch of cpumask_local_spread() is just a function call, and
-> > > we can simplify logic by using ternary operator.
-> > >
-> > > While here, replace BUG() with WARN().
-> > Why make this change? It's still as bad to hit the WARN_ON as it was be=
-fore.
+On Thu, Dec 8, 2022 at 7:46 AM David Rheinsberg
+<david.rheinsberg@gmail.com> wrote:
 >
-> For example, because of this:
+> Hi
 >
->  > Greg, please don't do this
->  >
->  > > ChangeSet@1.614, 2002-09-05 08:33:20-07:00, greg@kroah.com
->  > >   USB: storage driver: replace show_trace() with BUG()
->  >
->  > that BUG() thing is _way_ out of line, and has killed a few of my mach=
-ines
->  > several times for no good reason. It actively hurts debuggability, bec=
-ause
->  > the machine is totally dead after it, and the whole and ONLY point of
->  > BUG() messages is to help debugging and make it clear that we can't ha=
-ndle
->  > something.
->  >
->  > In this case, we _can_ handle it, and we're much better off with a mac=
-hine
->  > that works and that you can look up the messages with than killing it.
->  >
->  > Rule of thumb: BUG() is only good for something that never happens and
->  > that we really have no other option for (ie state is so corrupt that
->  > continuing is deadly).
->  >
->  >            Linus
+> On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
+> > I'm working on a firmware of a device that exposes a HID interface via
+> > USB and/or BLE and uses, among other things, non-numbered feature
+> > reports. Included in this series are two paches I had to create in
+> > order for hidraw devices created for aforementioned subsystems to
+> > behave in the same way when exerciesd by the same test tool.
+> >
+> > I don't know if the patches are acceptable as-is WRT to not breaking
+> > existing userspace, hence the RFC tag.
+>
+> Can you elaborate why you remove the special handling from USBHID but
+> add it to UHID? They both operate logically on the same level, so
+> shouldn't we simply adjust uhid to include the report-id in buf[0]?
+>
+> Also, you override buf[0] in UHID, so I wonder what UHID currently
+> returns there?
+>
+> IOW, can you elaborate a bit what the current behavior of each of the
+> involved modules is, and what behavior you would expect? This would
+> allow to better understand what you are trying to achieve. The more
+> context you can give, the easier it is to understand what happens
+> there.
+>
 
-Fair enough. It's not like it'll be hit anyway. My concern was for if
-any of the 23 callers get an invalid result. I guess that if that causes
-a crash, then so be it. We have the warning to track down the cause.
+Sorry it's not very clear, so the difference between the cases is that
+in the case of UHID the report ID ends up being included as a part of
+"SET_FEATURE", so BlueZ checks UHID_DEV_NUMBERED_FEATURE_REPORTS,
+which is not set (correctly) and tries to send the whole payload. This
+ends up as a maxlen + 1 (extra byte) write to a property that is
+maxlen long, which gets rejected by device's BLE stack.
 
-Thanks for the explanation,
-Peter Lafreniere <peter@n8pjl.ca>
+In the case of USBHID the problem happens in "GET_FEATURE" path. When
+userspace reads the expected data back it gets an extra 0 prepended to
+the payload, so all of the actual payload has an offset of 1. This
+doesn't happen with UHID, which I think is the correct behavior here.
+
+Hopefully that explains the difference, let me know if something is unclear
