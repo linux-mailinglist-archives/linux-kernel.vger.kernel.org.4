@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4986474B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:54:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE90E6474BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiLHQyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:54:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
+        id S230299AbiLHQza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbiLHQy0 (ORCPT
+        with ESMTP id S230265AbiLHQz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:54:26 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9833176801
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:54:15 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id a16so2594740edb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:54:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lALHATX+hiDxRwsr9MpdMABICaz3d1AN8racNeFX2to=;
-        b=iiolJJcKC+aSJva6tJ+DXK3Pcrwcjyc2A27NkGNQ/Pv2HMBnRRrcJzegf/sr7UnnfG
-         Ee84SyF4XFxroIaOUjjZ0XStab7/YEg4S6e7/kYxFKsfthZi/CJA5J+7WA12VhIH8e9k
-         2g0T1MP8RP1ICq+z17RlQE2D1DLw2hYDzUF3k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lALHATX+hiDxRwsr9MpdMABICaz3d1AN8racNeFX2to=;
-        b=RH6bwLaatsT7aVb1VFxnfcfbniyHDzBRpfDz12P8xs9SklrKJhg3QHyqeVz9GUmJqr
-         bVXyIMmOHgkEJaj+yD/DEBW52Qk53YyquTernG0LIWCvhTGA1yRgK08JUcGGEScW2K/H
-         nvsB6ZwDhgQIM5y/KQSoe5wkXKfVGWy2rFVOJardZUwN3HLPoZN6ldmZyv8g0cnVTtZQ
-         0MNnTvwNnRS/YnLGvplmOtGelW2ccWiyP9eLc62Gq+PwFSEOtWmr+BwV3okYDe/w0jF6
-         lJb4oPYHaW+iu5ELRyX7QqkxCic40NUiS3yr9kr5ZhSuao1Cocm5GScc7n0rNqDzi0BE
-         n6HQ==
-X-Gm-Message-State: ANoB5plaFYq7VchaPWlicH5/zmJPhQdSzsktDFr5wYGMTn+c3oPDwfi7
-        RUwkMuxQ7oQjYLsQzNAzpt0X5ksIVou9MZfH
-X-Google-Smtp-Source: AA0mqf4ByBrPoV+4DWoVG3PZpM9Kbl0wpHnp1UWwmGqMI+kf6SvPmgkRFQDAHRZ1WzYh582HZUxHIQ==
-X-Received: by 2002:aa7:cc02:0:b0:45c:835c:1ecd with SMTP id q2-20020aa7cc02000000b0045c835c1ecdmr2549907edt.27.1670518454015;
-        Thu, 08 Dec 2022 08:54:14 -0800 (PST)
-Received: from dario-ThinkPad-T14s-Gen-2i.homenet.telecomitalia.it (host-82-54-95-136.retail.telecomitalia.it. [82.54.95.136])
-        by smtp.gmail.com with ESMTPSA id n11-20020a170906118b00b007be696512ecsm9780614eja.187.2022.12.08.08.54.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:54:13 -0800 (PST)
-From:   Dario Binacchi <dario.binacchi@amarulasolutions.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Amarula patchwork <linux-amarula@amarulasolutions.com>,
-        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 1/1] ARM: imx: add missing of_node_put()
-Date:   Thu,  8 Dec 2022 17:54:03 +0100
-Message-Id: <20221208165404.1512014-2-dario.binacchi@amarulasolutions.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221208165404.1512014-1-dario.binacchi@amarulasolutions.com>
-References: <20221208165404.1512014-1-dario.binacchi@amarulasolutions.com>
+        Thu, 8 Dec 2022 11:55:28 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9922176802;
+        Thu,  8 Dec 2022 08:55:27 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FA8EB82437;
+        Thu,  8 Dec 2022 16:55:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDC0EC433D2;
+        Thu,  8 Dec 2022 16:55:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670518525;
+        bh=yBtV+NuqkDFfk82CWvSm04mo6CBnIuWYTKuRN6NUuaQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=o/rzSXE0uWwq5cISLxM3T9+MQufbYq8D8mHX2TwewdzsHqlyPpVbKv2s7R5qPxL+T
+         3JBkpwICDexZ8ecasB+yQhsQbu5LmAXBQCmlwYupgrMMbBzNUp9SK2+mKoyNIG79Zd
+         JBzaaMZjV/R5oi0t1dYbiZYA+nY8JOqWNmWaFuTpbgTmhzgoRJ6ROJidZsYBgV40kE
+         WIupQV0qjBXVh+bm8+C2Cqmoabsn+g38voN9w5J+45vTOW/7rSFeGO5j98xl75H0Po
+         XXpzAh2ghuGRKbukp7Dd6JE9EPy4wuVH9RsNgo4LK+Jy6iJ6iuiC4+uZpGKdmlCW33
+         Lm848OAjIoyAw==
+Date:   Thu, 8 Dec 2022 10:55:23 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stephen Kitt <steve@sk2.org>
+Cc:     linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, Jan Rueth <rueth@comsys.rwth-aachen.de>
+Subject: Re: [PATCH] PCI/ASPM: Call pcie_aspm_sanity_check() as late as
+ possible
+Message-ID: <20221208165523.GA1548682@bhelgaas>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221208090017.132db7bd@heffalump.sk2.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,90 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Calling of_find_compatible_node() returns a node pointer with refcount
-incremented. Use of_node_put() on it when done.
-The patch fixes the same problem on different i.MX platforms.
+On Thu, Dec 08, 2022 at 09:00:17AM +0100, Stephen Kitt wrote:
+> Hi Bjorn,
+> 
+> On Wed, 7 Dec 2022 15:56:08 -0600, Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Thu, Oct 06, 2022 at 01:59:50PM +0200, Stephen Kitt wrote:
+> > > In pcie_aspm_init_link_state(), a number of checks are made to
+> > > determine whether the function should proceed, before the result of
+> > > the call to pcie_aspm_sanity_check() is actually used. The latter
+> > > function doesn't change any state, it only reports a result, so
+> > > calling it later doesn't make any difference to the state of the
+> > > devices or the information we have about them. But having the call
+> > > early reportedly can cause null-pointer dereferences; see
+> > > https://unix.stackexchange.com/q/322337 for one example with
+> > > pcie_aspm=off (this was reported in 2016, but the relevant code hasn't
+> > > changed since then).  
+> > 
+> > Thanks, Stephen!
+> > 
+> > That stackexchange report doesn't have much information, but it looks
+> > similar to this old report from Jan Rueth, which I'm sorry to say I
+> > never got resolved:
+> > 
+> >   https://bugzilla.kernel.org/show_bug.cgi?id=187731
+> >   https://lore.kernel.org/all/4cec62c2-218a-672b-8c12-d44e8df56aae@comsys.rwth-aachen.de/#t
+> > 
+> > And Jan's patch is almost identical to yours :)
+> > 
+> > I hope to get this resolved, but I don't have time to work on it
+> > before the upcoming merge window, which will probably open Sunday.
+> > And then it's holiday time, so it may be January before I get back to
+> > it.  I'm just dropping the links here as breadcrumbs for picking this
+> > back up.
+> 
+> Thanks for the update! I was somewhat bemused by the dereference here, I’m
+> reassured to see I’m not the only one. Unfortunately I don’t have hardware
+> which exhibits this problem,
 
-Fixes: 8b88f7ef31dde ("ARM: mx25: Retrieve IIM base from dt")
-Fixes: 94b2bec1b0e05 ("ARM: imx27: Retrieve the SYSCTRL base address from devicetree")
-Fixes: 3172225d45bd9 ("ARM: imx31: Retrieve the IIM base address from devicetree")
-Fixes: f68ea682d1da7 ("ARM: imx35: Retrieve the IIM base address from devicetree")
-Fixes: ee18a7154ee08 ("ARM: imx5: retrieve iim base from device tree")
-Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
+Yeah, that's a weird thing about this.  This shouldn't be a
+platform-specific thing, but both stackexchange and Jan's patch
+mention IBM x3850.  
 
----
+Maybe both came from a single source, or maybe there's something
+deeper going on.
 
-Changes in v2:
-- Combine the 5 patches (one for each platform) into one patch as
-  suggested by Arnd Bergmann.
+> I submitted the patch because it seemed
+> reasonably sensible even though as you say there is probably something else
+> going on here. Of course if this approach is useful, Jan’s patch should go in
+> rather than mine.
+> 
+> Anyway, it’s been six years, so a few more weeks won’t make any difference
+> ;-).
+> 
+> Enjoy the holiday season!
+> 
+> Regards,
+> 
+> Stephen
 
- arch/arm/mach-imx/cpu-imx25.c | 1 +
- arch/arm/mach-imx/cpu-imx27.c | 1 +
- arch/arm/mach-imx/cpu-imx31.c | 1 +
- arch/arm/mach-imx/cpu-imx35.c | 1 +
- arch/arm/mach-imx/cpu-imx5.c  | 1 +
- 5 files changed, 5 insertions(+)
-
-diff --git a/arch/arm/mach-imx/cpu-imx25.c b/arch/arm/mach-imx/cpu-imx25.c
-index 3e63445cde06..cc86977d0a34 100644
---- a/arch/arm/mach-imx/cpu-imx25.c
-+++ b/arch/arm/mach-imx/cpu-imx25.c
-@@ -23,6 +23,7 @@ static int mx25_read_cpu_rev(void)
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx25-iim");
- 	iim_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	BUG_ON(!iim_base);
- 	rev = readl(iim_base + MXC_IIMSREV);
- 	iounmap(iim_base);
-diff --git a/arch/arm/mach-imx/cpu-imx27.c b/arch/arm/mach-imx/cpu-imx27.c
-index bf70e13bbe9e..1d2893908368 100644
---- a/arch/arm/mach-imx/cpu-imx27.c
-+++ b/arch/arm/mach-imx/cpu-imx27.c
-@@ -28,6 +28,7 @@ static int mx27_read_cpu_rev(void)
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx27-ccm");
- 	ccm_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	BUG_ON(!ccm_base);
- 	/*
- 	 * now we have access to the IO registers. As we need
-diff --git a/arch/arm/mach-imx/cpu-imx31.c b/arch/arm/mach-imx/cpu-imx31.c
-index b9c24b851d1a..35c544924e50 100644
---- a/arch/arm/mach-imx/cpu-imx31.c
-+++ b/arch/arm/mach-imx/cpu-imx31.c
-@@ -39,6 +39,7 @@ static int mx31_read_cpu_rev(void)
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx31-iim");
- 	iim_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	BUG_ON(!iim_base);
- 
- 	/* read SREV register from IIM module */
-diff --git a/arch/arm/mach-imx/cpu-imx35.c b/arch/arm/mach-imx/cpu-imx35.c
-index 80e7d8ab9f1b..1fe75b39c2d9 100644
---- a/arch/arm/mach-imx/cpu-imx35.c
-+++ b/arch/arm/mach-imx/cpu-imx35.c
-@@ -21,6 +21,7 @@ static int mx35_read_cpu_rev(void)
- 
- 	np = of_find_compatible_node(NULL, NULL, "fsl,imx35-iim");
- 	iim_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	BUG_ON(!iim_base);
- 
- 	rev = imx_readl(iim_base + MXC_IIMSREV);
-diff --git a/arch/arm/mach-imx/cpu-imx5.c b/arch/arm/mach-imx/cpu-imx5.c
-index ad56263778f9..a67c89bf155d 100644
---- a/arch/arm/mach-imx/cpu-imx5.c
-+++ b/arch/arm/mach-imx/cpu-imx5.c
-@@ -28,6 +28,7 @@ static u32 imx5_read_srev_reg(const char *compat)
- 
- 	np = of_find_compatible_node(NULL, NULL, compat);
- 	iim_base = of_iomap(np, 0);
-+	of_node_put(np);
- 	WARN_ON(!iim_base);
- 
- 	srev = readl(iim_base + IIM_SREV) & 0xff;
--- 
-2.32.0
 
