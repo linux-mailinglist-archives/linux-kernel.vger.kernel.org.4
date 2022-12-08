@@ -2,77 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D5D646FA6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88EE4646FAA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiLHM2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
+        id S229981AbiLHM3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 07:29:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiLHM2c (ORCPT
+        with ESMTP id S229538AbiLHM3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:28:32 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F3E24BF7;
-        Thu,  8 Dec 2022 04:28:29 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 954881884579;
-        Thu,  8 Dec 2022 12:28:27 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 87F4725002E1;
-        Thu,  8 Dec 2022 12:28:27 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 7855491201E4; Thu,  8 Dec 2022 12:28:27 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 8 Dec 2022 07:29:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0BE2B185;
+        Thu,  8 Dec 2022 04:29:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BAE8961EEE;
+        Thu,  8 Dec 2022 12:29:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05875C433C1;
+        Thu,  8 Dec 2022 12:29:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670502556;
+        bh=zbX8/ClFA3b2CThz56cTysR/0+gs5BUOcVmr4sqX8fc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=M9aAZxAvft8qRQ0t9SH9a4A7edcdMpmF/DIvHtqVmKMX67+nipkhZzYqP7N6XHAxc
+         1JsQDSahfmod5QD0xJ1hKD5fJD52lp6afr49c8GETzvJtBtje+7/3V7r16T1UfiiHh
+         ayr29LSi6LVoJdeIlk9lx4Q0JG3kwrZEuxg9MASt07OhBHSHT/rXI1fBKL6AX/7hLV
+         jJkNnifxVnE2oVyIshpvLwLHIDD4L6esgn7DlxEZ/AGmMbA4SWKMk08mrkKizjnwGb
+         uxEK6G9oX8Jbo+ygbvtAHcvNGfuah423J0zsf/SkoPYzygexbie1WzOkOE4qKwcowN
+         dSt/ZwIqSYMig==
+Date:   Thu, 8 Dec 2022 12:29:11 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Andreas Kemnade <andreas@kemnade.info>
+Cc:     tony@atomide.com, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bin Liu <b-liu@ti.com>
+Subject: Re: [PATCH] mfd: twl: fix TWL6032 phy vbus detection
+Message-ID: <Y5HYl2Umqs7HSOKN@google.com>
+References: <20221119100341.2930647-1-andreas@kemnade.info>
 MIME-Version: 1.0
-Date:   Thu, 08 Dec 2022 13:28:27 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221207202935.eil7swy4osu65qlb@skbuf>
-References: <20221205185908.217520-1-netdev@kapio-technology.com>
- <20221205185908.217520-4-netdev@kapio-technology.com>
- <Y487T+pUl7QFeL60@shredder>
- <580f6bd5ee7df0c8f0c7623a5b213d8f@kapio-technology.com>
- <20221207202935.eil7swy4osu65qlb@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <1b0d42df6b3f2f17f77cfb45cf8339da@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221119100341.2930647-1-andreas@kemnade.info>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-07 21:29, Vladimir Oltean wrote:
-> On Tue, Dec 06, 2022 at 05:36:42PM +0100, netdev@kapio-technology.com 
-> wrote:
->> > I was under the impression that we agreed that the locking change will
->> > be split to a separate patch.
->> 
->> Sorry, I guess that because of the quite long time that has passed as 
->> I
->> needed to get this FID=0 issue sorted out, and had many other 
->> different
->> changes to attend, I forgot.
-> 
-> Well, at least you got the FID=0 issue sorted out... right?
-> What was the cause, what is the solution?
+On Sat, 19 Nov 2022, Andreas Kemnade wrote:
 
-Well I got it sorted out in the way that I have identified that it is 
-the ATU op that fails some times. I don't think there is anything that 
-can be done about that, other than what I do and let the interrupt 
-routing return an error.
+> TWL6032 has a few charging registers prepended before the charging
+> registers the TWL6030 has. To be able to use common register defines
+> declare the additional registers as additional module.
+> At the moment this affects the access to CHARGERUSB_CTRL1 in
+> phy-twl6030-usb.  Without this patch, it is accessing the wrong register
+> on TWL6032.
+> The consequence is that presence of Vbus is not reported.
+> 
+> Cc: Bin Liu <b-liu@ti.com>
+> Cc: Tony Lindgren <tony@atomide.com>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> ---
+>  drivers/mfd/twl-core.c  | 8 ++++----
+>  include/linux/mfd/twl.h | 2 ++
+>  2 files changed, 6 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
+> index f6b4b9d94bbd..5a7ed71d0e30 100644
+> --- a/drivers/mfd/twl-core.c
+> +++ b/drivers/mfd/twl-core.c
+> @@ -111,6 +111,7 @@
+>  #define TWL6030_BASEADD_GASGAUGE	0x00C0
+>  #define TWL6030_BASEADD_PIH		0x00D0
+>  #define TWL6030_BASEADD_CHARGER		0x00E0
+> +/* A few regs prepended before the 6030 regs */
+
+This would be better represented if the defines were in order.
+
+The comment is also superfluous.
+
+>  #define TWL6032_BASEADD_CHARGER		0x00DA
+
+Are you sure this is prepended i.e. before the other registers?
+
+These looks as though they sit in the middle.
+
+>  #define TWL6030_BASEADD_LED		0x00F4
+>  
+> @@ -353,6 +354,9 @@ static struct twl_mapping twl6030_map[] = {
+>  	{ 2, TWL6030_BASEADD_ZERO },
+>  	{ 1, TWL6030_BASEADD_GPADC_CTRL },
+>  	{ 1, TWL6030_BASEADD_GASGAUGE },
+> +
+> +	/* TWL6032 specific charger registers */
+> +	{ 1, TWL6032_BASEADD_CHARGER },
+>  };
+>  
+>  static const struct regmap_config twl6030_regmap_config[3] = {
+> @@ -802,10 +806,6 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
+>  	if ((id->driver_data) & TWL6030_CLASS) {
+>  		twl_priv->twl_id = TWL6030_CLASS_ID;
+>  		twl_priv->twl_map = &twl6030_map[0];
+> -		/* The charger base address is different in twl6032 */
+> -		if ((id->driver_data) & TWL6032_SUBCLASS)
+> -			twl_priv->twl_map[TWL_MODULE_MAIN_CHARGE].base =
+> -							TWL6032_BASEADD_CHARGER;
+>  		twl_regmap_config = twl6030_regmap_config;
+>  	} else {
+>  		twl_priv->twl_id = TWL4030_CLASS_ID;
+> diff --git a/include/linux/mfd/twl.h b/include/linux/mfd/twl.h
+> index eaa233038254..6e3d99b7a0ee 100644
+> --- a/include/linux/mfd/twl.h
+> +++ b/include/linux/mfd/twl.h
+> @@ -69,6 +69,8 @@ enum twl6030_module_ids {
+>  	TWL6030_MODULE_GPADC,
+>  	TWL6030_MODULE_GASGAUGE,
+>  
+> +	/* A few extra registers before the registers shared with the 6030 */
+> +	TWL6032_MODULE_CHARGE,
+>  	TWL6030_MODULE_LAST,
+>  };
+>  
+
+-- 
+Lee Jones [李琼斯]
