@@ -2,71 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04B2646C65
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46455646C67
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:06:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiLHKG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:06:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49704 "EHLO
+        id S229628AbiLHKGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:06:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiLHKG1 (ORCPT
+        with ESMTP id S229940AbiLHKGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:06:27 -0500
-Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80548537C9;
-        Thu,  8 Dec 2022 02:06:25 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-03 (Coremail) with SMTP id rQCowADnJswMt5Fj7Eh1BQ--.11268S2;
-        Thu, 08 Dec 2022 18:06:04 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     leon@kernel.org
-Cc:     jiri@resnulli.us, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH net v2] ice: Add check for kzalloc
-Date:   Thu,  8 Dec 2022 18:06:03 +0800
-Message-Id: <20221208100603.29588-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Dec 2022 05:06:31 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4EEE653EC0;
+        Thu,  8 Dec 2022 02:06:29 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 23ED723A;
+        Thu,  8 Dec 2022 02:06:36 -0800 (PST)
+Received: from [10.57.9.192] (unknown [10.57.9.192])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 971E73F73B;
+        Thu,  8 Dec 2022 02:06:26 -0800 (PST)
+Message-ID: <7428f6dd-9403-180b-d4b4-7ef1aee3dcb1@arm.com>
+Date:   Thu, 8 Dec 2022 10:06:24 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: rQCowADnJswMt5Fj7Eh1BQ--.11268S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYf7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
-        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
-        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeV
-        CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
-        FIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6r4DMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb8hL5UUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
+ single max CPU capacity
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, saravanak@google.com,
+        wusamuel@google.com, isaacmanjarres@google.com,
+        kernel-team@android.com, juri.lelli@redhat.com,
+        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, viresh.kumar@linaro.org
+References: <20221207101705.9460-1-lukasz.luba@arm.com>
+ <20221207101705.9460-3-lukasz.luba@arm.com>
+ <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:25:02PM +0800, Leon Romanovsky wrote:
->> +err_out:
->> +	for (j = 0; j < i; j++) {
+
+
+On 12/8/22 08:37, Vincent Guittot wrote:
+> On Wed, 7 Dec 2022 at 11:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> The max CPU capacity is the same for all CPUs sharing frequency domain
+>> and thus 'policy' object. There is a way to avoid heavy operations
+>> in a loop for each CPU by leveraging this knowledge. Thus, simplify
+>> the looping code in the sugov_next_freq_shared() and drop heavy
+>> multiplications. Instead, use simple max() to get the highest utilization
+>> from these CPUs. This is useful for platforms with many (4 or 6) little
+>> CPUs.
+>>
+>> The max CPU capacity must be fetched every time we are called, due to
+>> difficulties during the policy setup, where we are not able to get the
+>> normalized CPU capacity at the right time.
+>>
+>> The stored value in sugov_policy::max is also than used in
+>> sugov_iowait_apply() to calculate the right boost. Thus, that field is
+>> useful to have in that sugov_policy struct.
+>>
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
+>>   1 file changed, 11 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+>> index c19d6de67b7a..f9881f3d9488 100644
+>> --- a/kernel/sched/cpufreq_schedutil.c
+>> +++ b/kernel/sched/cpufreq_schedutil.c
+>> @@ -158,10 +158,8 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+>>
+>>   static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>>   {
+>> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>>          struct rq *rq = cpu_rq(sg_cpu->cpu);
+>>
+>> -       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>>          sg_cpu->bw_dl = cpu_bw_dl(rq);
+>>          sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+>>                                            FREQUENCY_UTIL, NULL);
+>> @@ -317,6 +315,8 @@ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
+>>   static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+>>                                                u64 time, unsigned int flags)
+>>   {
+>> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>> +
+>>          sugov_iowait_boost(sg_cpu, time, flags);
+>>          sg_cpu->last_update = time;
+>>
+>> @@ -325,6 +325,9 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+>>          if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+>>                  return false;
+>>
+>> +       /* Fetch the latest CPU capcity to avoid stale data */
+>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>> +
+>>          sugov_get_util(sg_cpu);
+>>          sugov_iowait_apply(sg_cpu, time);
+>>
+>> @@ -414,25 +417,22 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>>   {
+>>          struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>>          struct cpufreq_policy *policy = sg_policy->policy;
+>> -       unsigned long util = 0, max = 1;
+>> +       unsigned long util = 0;
+>>          unsigned int j;
+>>
+>> +       /* Fetch the latest CPU capcity to avoid stale data */
+>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>> +
+>>          for_each_cpu(j, policy->cpus) {
+>>                  struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+>> -               unsigned long j_util, j_max;
+>>
+>>                  sugov_get_util(j_sg_cpu);
+>>                  sugov_iowait_apply(j_sg_cpu, time);
+>> -               j_util = j_sg_cpu->util;
+>> -               j_max = j_sg_cpu->max;
+>>
+>> -               if (j_util * max > j_max * util) {
+>> -                       util = j_util;
+>> -                       max = j_max;
+>> -               }
 > 
-> You don't need an extra variable, "while(i--)" will do the trick.
+> With the code removed above, max is only used in 2 places:
+> - sugov_iowait_apply
+> - map_util_freq
+> 
+> I wonder if it would be better to just call arch_scale_cpu_capacity()
+> in these 2 places instead of saving a copy in sg_policy and then
+> reading it twice.
 
-No, the right range is [0, i - 1], but the "while(i--)" is [1, i].
-If using "while(i--)", the code should be "tty_port_destroy(pf->gnss_tty_port[i - 1]);".
-It will be more complex.
-Therefore, it is worthwhile to use an extra varaible.
+The sugov_iowait_apply() is called in that loop, so probably I will
+add a new argument to that call and just feed it with the capacity value
+from one CPU, which was read before the loop. So, similarly what is in
+this patch. Otherwise, all of those per-cpu capacity vars would be
+accessed inside the sugov_iowait_apply() with sg_cpu->cpu.
 
-Thanks,
-Jiang
+> 
+> arch_scaleu_cpu_capacity is already a per_cpu variable so accessing it
+> should be pretty cheap.
 
+Yes and no, as you said this is per-cpu variable and would access them
+from one CPU, which is running that loop. They will have different pages
+and addresses so cache lines on that CPU. to avoiding trashing a cache
+lines on this running CPU let's read that capacity once, before the
+loop. Let's use the new arg to pass that value via one of the
+registers. In such, only one cache line would have to fetch that data
+into.
+
+So I thought this simple sg_policy->max would do the trick w/o a lot
+of hassle.
+> 
+> Thought ?
+> 
+
+I can change that and drop the sg_policy->max and call differently
+those capacity values. I will have to unfortunately drop Viresh's ACKs,
+since this will be a way different code.
+
+Thanks Vincent for the suggestion. Do you want me to go further with
+such approach and send a v3?
