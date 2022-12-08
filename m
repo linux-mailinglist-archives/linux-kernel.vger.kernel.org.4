@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 251A7646603
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:38:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE356465FF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiLHAiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 19:38:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
+        id S229836AbiLHAhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 19:37:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiLHAiO (ORCPT
+        with ESMTP id S229828AbiLHAha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:38:14 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4351C8D671
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:37:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670459835;
+        Wed, 7 Dec 2022 19:37:30 -0500
+Received: from out-15.mta0.migadu.com (out-15.mta0.migadu.com [91.218.175.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6368DBED
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:37:29 -0800 (PST)
+Date:   Thu, 8 Dec 2022 00:37:23 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670459848;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Na/DatNEjlEBtkHIEc2JrPJeXMI6lGrn4tJNlRzZp9M=;
-        b=IhJf/ohQF5qoetPfr3y+x8JyGPgG2o2MEHF/MOFWUoQ8ZBksdotwpO8bevB8Onin/f4X3r
-        KWcCbHKjIWIqh+Lpu1iIjVcTyPcPCnObuoZ8QuonC+pC5ur/MJeCvU5jj2o8TpNg+eMQ75
-        3POQgWdhHEnjT9WLejGVBo8lDRParDw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-650-qCYLgktkODafZ8b_0srOJg-1; Wed, 07 Dec 2022 19:37:11 -0500
-X-MC-Unique: qCYLgktkODafZ8b_0srOJg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 572CA185A79C;
-        Thu,  8 Dec 2022 00:37:10 +0000 (UTC)
-Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 247241121314;
-        Thu,  8 Dec 2022 00:36:54 +0000 (UTC)
-Date:   Thu, 8 Dec 2022 08:36:49 +0800
-From:   Ming Lei <ming.lei@redhat.com>
-To:     Gulam Mohamed <gulam.mohamed@oracle.com>
-Cc:     linux-block@vger.kernel.org, axboe@kernel.dk,
-        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
-        christoph.boehmwalder@linbit.com, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, colyli@suse.de,
-        kent.overstreet@gmail.com, agk@redhat.com, snitzer@kernel.org,
-        dm-devel@redhat.com, song@kernel.org, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, dave.jiang@intel.com,
-        ira.weiny@intel.com, junxiao.bi@oracle.com,
-        martin.petersen@oracle.com, kch@nvidia.com,
-        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
-        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
-        nvdimm@lists.linux.dev, konrad.wilk@oracle.com, joe.jin@oracle.com,
-        ming.lei@redhat.com
-Subject: Re: [RFC for-6.2/block V2] block: Change the granularity of io ticks
- from ms to ns
-Message-ID: <Y5ExoZ+7Am6Nm8+h@T590>
-References: <20221207223204.22459-1-gulam.mohamed@oracle.com>
+        bh=R1Ot9//nMiXKCXxmYFxpZAtjZ4ruTDUzpHcMNR6JE8Q=;
+        b=Zo+rwodmUSpHYC0YOk/0NSai9qoHKbHeLsICVlcjQQslcyJgdi8NIVirevj/b5ycOtQtoL
+        r1XtqN67K/9InXjPit9tu81ZxVQ+LMFtY3KPPNRrEScL+qmbpv+RRDRA+MScT8fR1Gp305
+        E074yDhdLgLX+Huj4R41n1ZMU6arnIo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Ricardo Koller <ricarkol@google.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
+ into guest memory
+Message-ID: <Y5Exwzr6Ibmmthl0@google.com>
+References: <20221207214809.489070-1-oliver.upton@linux.dev>
+ <20221207214809.489070-3-oliver.upton@linux.dev>
+ <Y5EoZ5uwrTF3eSKw@google.com>
+ <Y5EtMWuTaJk9I3Bd@google.com>
+ <Y5EutGSjkRmdItQb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221207223204.22459-1-gulam.mohamed@oracle.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5EutGSjkRmdItQb@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 10:32:04PM +0000, Gulam Mohamed wrote:
-> As per the review comment from Jens Axboe, I am re-sending this patch
-> against "for-6.2/block".
+On Thu, Dec 08, 2022 at 12:24:20AM +0000, Sean Christopherson wrote:
+> On Thu, Dec 08, 2022, Oliver Upton wrote:
+> > On Wed, Dec 07, 2022 at 11:57:27PM +0000, Sean Christopherson wrote:
+> > > > diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > > > index 92d3a91153b6..95d22cfb7b41 100644
+> > > > --- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > > > +++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > > > @@ -609,8 +609,13 @@ static void setup_memslots(struct kvm_vm *vm, struct test_params *p)
+> > > >  				    data_size / guest_page_size,
+> > > >  				    p->test_desc->data_memslot_flags);
+> > > >  	vm->memslots[MEM_REGION_TEST_DATA] = TEST_DATA_MEMSLOT;
+> > > > +}
+> > > > +
+> > > > +static void setup_ucall(struct kvm_vm *vm)
+> > > > +{
+> > > > +	struct userspace_mem_region *region = vm_get_mem_region(vm, MEM_REGION_TEST_DATA);
+> > > >  
+> > > > -	ucall_init(vm, data_gpa + data_size);
+> > > > +	ucall_init(vm, region->region.guest_phys_addr + region->region.memory_size);
+> > > 
+> > > Isn't there a hole after CODE_AND_DATA_MEMSLOT?  I.e. after memslot 0?
+> > 
+> > Sure, but that's only guaranteed in the PA space.
+> > 
+> > > The reason
+> > > I ask is because if so, then we can do the temporarily heinous, but hopefully forward
+> > > looking thing of adding a helper to wrap kvm_vm_elf_load() + ucall_init().
+> > > 
+> > > E.g. I think we can do this immediately, and then at some point in the 6.2 cycle
+> > > add a dedicated region+memslot for the ucall MMIO page.
+> > 
+> > Even still, that's just a kludge to make ucalls work. We have other
+> > MMIO devices (GIC distributor, for example) that work by chance since
+> > nothing conflicts with the constant GPAs we've selected in the tests.
+> > 
+> > I'd rather we go down the route of having an address allocator for the
+> > for both the VA and PA spaces to provide carveouts at runtime.
 > 
-> 
-> Use ktime to change the granularity of IO accounting in block layer from
-> milli-seconds to nano-seconds to get the proper latency values for the
-> devices whose latency is in micro-seconds. After changing the granularity
-> to nano-seconds the iostat command, which was showing incorrect values for
-> %util, is now showing correct values.
+> Aren't those two separate issues?  The PA, a.k.a. memslots space, can be solved
+> by allocating a dedicated memslot, i.e. doesn't need a carve.  At worst, collisions
+> will yield very explicit asserts, which IMO is better than whatever might go wrong
+> with a carve out.
 
-Please add the theory behind why using nano-seconds can get correct accounting.
+Perhaps the use of the term 'carveout' wasn't right here.
 
-> 
-> We did not work on the patch to drop the logic for
-> STAT_PRECISE_TIMESTAMPS yet. Will do it if this patch is ok.
-> 
-> The iostat command was run after starting the fio with following command
-> on an NVME disk. For the same fio command, the iostat %util was showing
-> ~100% for the disks whose latencies are in the range of microseconds.
-> With the kernel changes (granularity to nano-seconds), the %util was
-> showing correct values. Following are the details of the test and their
-> output:
-> 
-> fio command
-> -----------
-> [global]
-> bs=128K
-> iodepth=1
-> direct=1
-> ioengine=libaio
-> group_reporting
-> time_based
-> runtime=90
-> thinktime=1ms
-> numjobs=1
-> name=raw-write
-> rw=randrw
-> ignore_error=EIO:EIO
-> [job1]
-> filename=/dev/nvme0n1
-> 
-> Correct values after kernel changes:
-> ====================================
-> iostat output
-> -------------
-> iostat -d /dev/nvme0n1 -x 1
-> 
-> Device            r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-> nvme0n1              0.08    0.05   0.06   128.00   128.00   0.07   6.50
-> 
-> Device            r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-> nvme0n1              0.08    0.06   0.06   128.00   128.00   0.07   6.30
-> 
-> Device            r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
-> nvme0n1              0.06    0.05   0.06   128.00   128.00   0.06   5.70
-> 
-> From fio
-> --------
-> Read Latency: clat (usec): min=32, max=2335, avg=79.54, stdev=29.95
-> Write Latency: clat (usec): min=38, max=130, avg=57.76, stdev= 3.25
+What I'm suggesting is we cannot rely on KVM memslots alone to act as an
+allocator for the PA space. KVM can provide devices to the guest that
+aren't represented as memslots. If we're trying to fix PA allocations
+anyway, why not make it generic enough to suit the needs of things
+beyond ucalls?
 
-Can you explain a bit why the above %util is correct?
-
-BTW, %util is usually not important for SSDs, please see 'man iostat':
-
-     %util
-            Percentage of elapsed time during which I/O requests were issued to the device (bandwidth  uti‐
-            lization for the device). Device saturation occurs when this value is close to 100% for devices
-            serving requests serially.  But for devices serving requests in parallel, such as  RAID  arrays
-            and modern SSDs, this number does not reflect their performance limits.
-
-
-Thanks, 
-Ming
-
+--
+Thanks,
+Oliver
