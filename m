@@ -2,74 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF574646C2B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 63001646C2E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiLHJqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:46:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40374 "EHLO
+        id S230389AbiLHJqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:46:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbiLHJp5 (ORCPT
+        with ESMTP id S230436AbiLHJqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:45:57 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137E376173
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:45:42 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id j206so1006454ybj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vHLlGPSWqK6jIiBQvorhk1+88+5nltVyP3glbpWJNGU=;
-        b=nE7GaTwUljG+UPAlrq/8LVWKMRIBt49XTm1xOuTswWk18cj3Ci0OxGkmTMvAWZUN+8
-         7kByBD8v+kf8XAy1HPWusFzdTyon63ep7CI5CPW7KNU9SC+knx3fNi5/wqje0T3pFH/l
-         LFQvD0GVtoERHebO60seC/eHYRHgEi7HJn5fzMskGMxkmX0O9Wyr8N3RMSeOB45sBAWh
-         zG3wdmTSLM8WjXvxzMOMQ2ceTROlo+iL89SgYecGiSTeAc8ZGMyi4HpTrvTuC7EfcwXx
-         WW62+8zdAXXM4yjm6ZTdKTIrsozLaHQnvfmLBrTHtSbHrpS5BF1dmHvszGVxxUd2vLlY
-         nfkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vHLlGPSWqK6jIiBQvorhk1+88+5nltVyP3glbpWJNGU=;
-        b=WLWy7+ynJ2BEWmUO1dZIKc7xFjJFZTb5KDcYiejfQzwQNcEgSefRLy/dek6xry+sIs
-         CecJ7NJMvXbIQlMcNkKNFZe/AsGBThcleqiF2R0df78Lccs++iUiMLsGs2sfB1yM5gZt
-         rO3ofKInEASm6zfxi84hJf1dBx//Iyubwp+36USqnL/ZgsLcdN6EhdenX+AxAkoO7iFr
-         zvSjASRnEKGbY9rHGyUpvy2CbA6hJRJjVCYZFqOZBzHcN9wqQswoZSTTYC1qP0/Rn73A
-         T2AIl+5OQ6pYYpeMnj/ZQ+a4Z5V6t52nVwonLhD+15gqh7kTwL75zfjaLVcRTw7aXDQB
-         ODjA==
-X-Gm-Message-State: ANoB5pn4tCIMfO8EsKSesVykXY4QgBbDT1qmogYNPEIPGHCj6CADqLrg
-        YlxzjZo70Jq2Uw0/GqDP5QGNgX5/0AmR92/nh2kv0w==
-X-Google-Smtp-Source: AA0mqf5dyqYndZKuymdvDwLD7L7hq0Q/58j9fOfP0KxnLzNwcxaQzPUw3plUVXKkisauzFHBOv4gj8Sq46gUsJPk2mo=
-X-Received: by 2002:a25:74c7:0:b0:6fb:67c7:33e1 with SMTP id
- p190-20020a2574c7000000b006fb67c733e1mr32493014ybc.255.1670492734967; Thu, 08
- Dec 2022 01:45:34 -0800 (PST)
+        Thu, 8 Dec 2022 04:46:25 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AC977205;
+        Thu,  8 Dec 2022 01:46:21 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 682B324E2B9;
+        Thu,  8 Dec 2022 17:46:20 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 17:46:20 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 17:46:19 +0800
+Message-ID: <70ebb0f1-b151-cc83-64c2-cffe361b21a3@starfivetech.com>
+Date:   Thu, 8 Dec 2022 17:46:18 +0800
 MIME-Version: 1.0
-References: <20221207112924.3602960-1-peternewman@google.com> <IA1PR11MB6097B274AB8223D44CAFF4899B1A9@IA1PR11MB6097.namprd11.prod.outlook.com>
-In-Reply-To: <IA1PR11MB6097B274AB8223D44CAFF4899B1A9@IA1PR11MB6097.namprd11.prod.outlook.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Thu, 8 Dec 2022 10:45:24 +0100
-Message-ID: <CALPaoCj7JanopjrvZEOvpnNWv_-e2qgre+OLxS5A=3q3hkn0pw@mail.gmail.com>
-Subject: Re: [PATCH] x86/resctrl: Fix event counts regression in reused RMIDs
-To:     "Yu, Fenghua" <fenghua.yu@intel.com>
-Cc:     "Chatre, Reinette" <reinette.chatre@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        James Morse <james.morse@arm.com>,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Eranian, Stephane" <eranian@google.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 3/3] riscv: dts: starfive: Add mmc node
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-4-william.qiu@starfivetech.com>
+ <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <c0b84752-443f-d935-0ed8-c8ed4d212c2e@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,16 +61,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fenghua,
 
-On Wed, Dec 7, 2022 at 8:26 PM Yu, Fenghua <fenghua.yu@intel.com> wrote:
-> > Fixes: 1d81d15db39c ("x86/resctrl: Move mbm_overflow_count() into
-> > resctrl_arch_rmid_read()")
->
-> Are you sure the patch fixes 1d81d15db39c? This commit is just a refactoring patch and doesn't change resctrl_arch_reset_rmid().
 
-Yes, the breaking change was actually in __mon_event_count(). That
-patch removes the initialization of mbm_state::prev_msr and switches
-to using arch_mbm_state::prev_msr.
+On 2022/12/7 23:14, Krzysztof Kozlowski wrote:
+> On 07/12/2022 14:17, William Qiu wrote:
+>> This adds the mmc node for the StarFive JH7110 SoC.
+>> Set sdioo node to emmc and set sdio1 node to sd.
+>> 
+>> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-v2.dts         | 25 ++++++++++++
+>>  arch/riscv/boot/dts/starfive/jh7110.dtsi      | 38 +++++++++++++++++++
+>>  2 files changed, 63 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> index c8946cf3a268..6ef8e303c2e6 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> @@ -47,6 +47,31 @@ &clk_rtc {
+>>  	clock-frequency = <32768>;
+>>  };
+>>  
+>> +&sdio0 {
+>> +	max-frequency = <100000000>;
+>> +	card-detect-delay = <300>;
+>> +	bus-width = <8>;
+>> +	cap-mmc-highspeed;
+>> +	mmc-ddr-1_8v;
+>> +	mmc-hs200-1_8v;
+>> +	non-removable;
+>> +	cap-mmc-hw-reset;
+>> +	post-power-on-delay-ms = <200>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&sdio1 {
+>> +	max-frequency = <100000000>;
+>> +	card-detect-delay = <300>;
+>> +	bus-width = <4>;
+>> +	no-sdio;
+>> +	no-mmc;
+>> +	broken-cd;
+>> +	cap-sd-highspeed;
+>> +	post-power-on-delay-ms = <200>;
+>> +	status = "okay";
+>> +};
+>> +
+>>  &gmac0_rmii_refin {
+>>  	clock-frequency = <50000000>;
+>>  };
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> index c22e8f1d2640..e90b085d7e41 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
+>> @@ -331,6 +331,11 @@ aoncrg: clock-controller@17000000 {
+>>  			#reset-cells = <1>;
+>>  		};
+>>  
+>> +		sys_syscon: sys_syscon@13030000 {
+> 
+> No underscores in node names, generic node names (syscon or
+> system-controller)
 
--Peter
+Will fix.
+
+> 
+>> +			compatible = "syscon";
+> 
+> This is not allowed alone.
+
+Will fix.
+
+> 
+>> +			reg = <0x0 0x13030000 0x0 0x1000>;
+>> +		};
+>> +
+>>  		gpio: gpio@13040000 {
+>>  			compatible = "starfive,jh7110-sys-pinctrl";
+>>  			reg = <0x0 0x13040000 0x0 0x10000>;
+>> @@ -433,5 +438,38 @@ uart5: serial@12020000 {
+>>  			reg-shift = <2>;
+>>  			status = "disabled";
+>>  		};
+>> +
+>> +		/* unremovable emmc as mmcblk0 */
+>> +		sdio0: mmc@16010000 {
+>> +			compatible = "starfive,jh7110-sdio";
+>> +			reg = <0x0 0x16010000 0x0 0x10000>;
+>> +			clocks = <&syscrg JH7110_SYSCLK_SDIO0_AHB>,
+>> +				 <&syscrg JH7110_SYSCLK_SDIO0_SDCARD>;
+>> +			clock-names = "biu","ciu";
+>> +			resets = <&syscrg JH7110_SYSRST_SDIO0_AHB>;
+>> +			reset-names = "reset";
+>> +			interrupts = <74>;
+>> +			fifo-depth = <32>;
+>> +			fifo-watermark-aligned;
+>> +			data-addr = <0>;
+>> +			starfive,sys-syscon = <&sys_syscon 0x14 0x1a 0x7c000000>;
+> 
+> This does not match your bindings at all. "&sys_syscon" is a phandle,
+> not a number of tuning retries, as you expect in your bindings.
+> 
+
+Hi Krzysztof,
+
+The sys_syscon is one of system controller registers, and it is used to be the data strobe
+delay chain select. I will update its type and description in next version.
+
+Thanks,
+William Qiu
+
+> 
+> Best regards,
+> Krzysztof
+> 
