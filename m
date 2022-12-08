@@ -2,328 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1961646D37
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:40:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DC4646D3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:40:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiLHKkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
+        id S229545AbiLHKkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiLHKkP (ORCPT
+        with ESMTP id S229564AbiLHKkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:40:15 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE7F554FA;
-        Thu,  8 Dec 2022 02:35:23 -0800 (PST)
+        Thu, 8 Dec 2022 05:40:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0711858BCF;
+        Thu,  8 Dec 2022 02:35:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66CB7B82370;
-        Thu,  8 Dec 2022 10:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46E6AC433D6;
-        Thu,  8 Dec 2022 10:35:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 44D0DB82378;
+        Thu,  8 Dec 2022 10:35:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E072C433C1;
+        Thu,  8 Dec 2022 10:35:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670495707;
-        bh=sHJA+XMF+VS5weajHauHzPnOxiUvBqMmDOMioww8D4o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ZIG5NwoKkgPECqXNQf5OAUZFPECT6oTZrtSL4Fq/t47z/hLIBvq1CM0uOVgvXRuqj
-         OSW7bC1o46BorgYrBEehaQJX7Fj6tZvTCNSR4A4sTQ+usL2qdz35A2r7ad888VLpu0
-         mWhqdQNI4yEF+1AlBSGNpm7KchWNofjuS/Bs2yQFa415FUMcWb8ncNfM53fRTmyb0E
-         3G3H0oJ06CUet/6K9rahhes+x2HJLxrPdjhvFTuYn8XKBpYrHTvKz4U2BVp9DPURKD
-         N+OomRLsujtGDOjtPfEc9OJfJtfwg7fGhMgBzOkuBlevA5692u+twPCDpoQ1DAqgsQ
-         T208Js+w59lXg==
-Message-ID: <77d79939-53bb-bc27-a8f8-ea5bf509a15f@kernel.org>
-Date:   Thu, 8 Dec 2022 12:35:01 +0200
+        s=k20201202; t=1670495721;
+        bh=25+oqWLVjVrNbO+hRmvsDdetN1PXbmACQaV7gHg5mrg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p/7DK0Rg5WFAxDIZdcmlM5pPNbiQgfKKYPA92P3viUVs9wQwEsjrn6c0BudU1l3RT
+         0pdTEElaOqXYzCWO3xDA+ZvPF3OYsEcCc03qhkmGTiInQHTRQg8CPe+ZiMsJZBEeB4
+         21LU22cveZ9zALMGWCyxOgv9aVmDjoRr7obf6ns6jzFvsjXIFOziXW1rgiefE/LGmP
+         tQv68MyiPKFWGmwSsp2sfP+223xG2jggznzF6MxaNlIdhEAgSAEmjNih9HD7bvXdhJ
+         cVbn4ii27zhIHOkpSmadZWTvrjOLPRnFIc/7yRGxOkGz3+yo6pt3sAmKszazb+0jCR
+         3rb1xEWE5hKCg==
+Date:   Thu, 8 Dec 2022 10:35:16 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Larry Lai <larry.lai@yunjingtech.com>
+Cc:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "pavel@ucw.cz" <pavel@ucw.cz>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-leds@vger.kernel.org" <linux-leds@vger.kernel.org>,
+        "GaryWang@aaeon.com.tw" <GaryWang@aaeon.com.tw>,
+        Musa Lin <musa.lin@yunjingtech.com>,
+        Jack Chang <jack.chang@yunjingtech.com>,
+        Noah Hung <noah.hung@yunjingtech.com>,
+        Javier Arteaga <javier@emutex.com>,
+        Nicola Lunghi <nicola.lunghi@emutex.com>
+Subject: Re: =?utf-8?B?5Zue6KaG?= =?utf-8?Q?=3A?= [PATCH V3 1/3] mfd: Add
+ support for UP board CPLD/FPGA
+Message-ID: <Y5G95OknX2dcBhDw@google.com>
+References: <20221109090957.13167-1-larry.lai@yunjingtech.com>
+ <20221109090957.13167-2-larry.lai@yunjingtech.com>
+ <Y3T+B1zq/XYluO5s@google.com>
+ <SG2PR06MB37427F013BD702117467B8A7F91A9@SG2PR06MB3742.apcprd06.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v11 3/6] remoteproc: pru: Add APIs to get and put the PRU
- cores
-Content-Language: en-US
-To:     MD Danish Anwar <danishanwar@ti.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Suman Anna <s-anna@ti.com>, "Andrew F . Davis" <afd@ti.com>,
-        nm@ti.com, vigneshr@ti.com, srk@ti.com,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221207110411.441692-1-danishanwar@ti.com>
- <20221207110411.441692-4-danishanwar@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20221207110411.441692-4-danishanwar@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <SG2PR06MB37427F013BD702117467B8A7F91A9@SG2PR06MB3742.apcprd06.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 07 Dec 2022, Larry Lai wrote:
 
-On 07/12/2022 13:04, MD Danish Anwar wrote:
-> Add two new APIs, pru_rproc_get() and pru_rproc_put(), to the PRU
-> driver to allow client drivers to acquire and release the remoteproc
-> device associated with a PRU core. The PRU cores are treated as
-> resources with only one client owning it at a time.
+> Dear Jones,
 > 
-> The pru_rproc_get() function returns the rproc handle corresponding
-> to a PRU core identified by the device tree "ti,prus" property under
-> the client node. The pru_rproc_put() is the complementary function
-> to pru_rproc_get().
+>         Thank you for spending time to review this code, please kindly check the following comments with Larry (11/25) beginning .
+>         Some of issues we will fix in new RFC_1125, some may need you give us more examples or comments.
+> We also explained more detail about the FPGA read and write protocol in RFC_1125.
 > 
-> Signed-off-by: Suman Anna <s-anna@ti.com>
-> Signed-off-by: Tero Kristo <t-kristo@ti.com>
-> Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-> Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
-> ---
->  drivers/remoteproc/pru_rproc.c | 133 ++++++++++++++++++++++++++++++++-
->  include/linux/pruss.h          |  29 +++++++
->  2 files changed, 160 insertions(+), 2 deletions(-)
+> Best Regards,
+> Larry Lai
 > 
-> diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-> index a1a208b31846..7d4ed39b3772 100644
-> --- a/drivers/remoteproc/pru_rproc.c
-> +++ b/drivers/remoteproc/pru_rproc.c
-> @@ -2,12 +2,14 @@
->  /*
->   * PRU-ICSS remoteproc driver for various TI SoCs
->   *
-> - * Copyright (C) 2014-2020 Texas Instruments Incorporated - https://www.ti.com/
-> + * Copyright (C) 2014-2022 Texas Instruments Incorporated - https://www.ti.com/
->   *
->   * Author(s):
->   *	Suman Anna <s-anna@ti.com>
->   *	Andrew F. Davis <afd@ti.com>
->   *	Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org> for Texas Instruments
-> + *	Puranjay Mohan <p-mohan@ti.com>
-> + *	Md Danish Anwar <danishanwar@ti.com>
->   */
->  
->  #include <linux/bitops.h>
-> @@ -112,6 +114,8 @@ struct pru_private_data {
->   * @rproc: remoteproc pointer for this PRU core
->   * @data: PRU core specific data
->   * @mem_regions: data for each of the PRU memory regions
-> + * @client_np: client device node
-> + * @lock: mutex to protect client usage
->   * @fw_name: name of firmware image used during loading
->   * @mapped_irq: virtual interrupt numbers of created fw specific mapping
->   * @pru_interrupt_map: pointer to interrupt mapping description (firmware)
-> @@ -127,6 +131,8 @@ struct pru_rproc {
->  	struct rproc *rproc;
->  	const struct pru_private_data *data;
->  	struct pruss_mem_region mem_regions[PRU_IOMEM_MAX];
-> +	struct device_node *client_np;
-> +	struct mutex lock;
->  	const char *fw_name;
->  	unsigned int *mapped_irq;
->  	struct pru_irq_rsc *pru_interrupt_map;
-> @@ -147,6 +153,125 @@ void pru_control_write_reg(struct pru_rproc *pru, unsigned int reg, u32 val)
->  	writel_relaxed(val, pru->mem_regions[PRU_IOMEM_CTRL].va + reg);
->  }
->  
-> +static struct rproc *__pru_rproc_get(struct device_node *np, int index)
-> +{
-> +	struct rproc *rproc;
-> +	phandle rproc_phandle;
-> +	int ret;
-> +
-> +	ret = of_property_read_u32_index(np, "ti,prus", index, &rproc_phandle);
-> +	if (ret)
-> +		return ERR_PTR(ret);
-> +
-> +	rproc = rproc_get_by_phandle(rproc_phandle);
-> +	if (!rproc) {
-> +		ret = -EPROBE_DEFER;
-> +		goto err_no_rproc_handle;
-> +	}
-> +
-> +	/* make sure it is PRU rproc */
-> +	if (!is_pru_rproc(rproc->dev.parent)) {
-> +		rproc_put(rproc);
-> +		return ERR_PTR(-ENODEV);
-> +	}
-> +
-> +	return rproc;
-> +
-> +err_no_rproc_handle:
-> +	rproc_put(rproc);
-> +	return ERR_PTR(ret);
-> +}
-> +
-> +/**
-> + * pru_rproc_get() - get the PRU rproc instance from a device node
-> + * @np: the user/client device node
-> + * @index: index to use for the ti,prus property
-> + * @pru_id: optional pointer to return the PRU remoteproc processor id
-> + *
-> + * This function looks through a client device node's "ti,prus" property at
-> + * index @index and returns the rproc handle for a valid PRU remote processor if
-> + * found. The function allows only one user to own the PRU rproc resource at a
-> + * time. Caller must call pru_rproc_put() when done with using the rproc, not
-> + * required if the function returns a failure.
-> + *
-> + * When optional @pru_id pointer is passed the PRU remoteproc processor id is
-> + * returned.
-> + *
-> + * Return: rproc handle on success, and an ERR_PTR on failure using one
-> + * of the following error values
-> + *    -ENODEV if device is not found
-> + *    -EBUSY if PRU is already acquired by anyone
-> + *    -EPROBE_DEFER is PRU device is not probed yet
-> + */
-> +struct rproc *pru_rproc_get(struct device_node *np, int index,
-> +			    enum pruss_pru_id *pru_id)
-> +{
-> +	struct rproc *rproc;
-> +	struct pru_rproc *pru;
-> +	struct device *dev;
-> +	int ret;
-> +
-> +	rproc = __pru_rproc_get(np, index);
-> +	if (IS_ERR(rproc))
-> +		return rproc;
-> +
-> +	pru = rproc->priv;
-> +	dev = &rproc->dev;
-> +
-> +	mutex_lock(&pru->lock);
-> +
-> +	if (pru->client_np) {
-> +		mutex_unlock(&pru->lock);
-> +		put_device(dev);
+> 寄件者: Lee Jones <lee@kernel.org>
+> 日期: 星期三, 2022年11月16日 下午11:13
+> 收件者: Larry Lai <larry.lai@yunjingtech.com>
+> 副本: andriy.shevchenko@linux.intel.com <andriy.shevchenko@linux.intel.com>, linus.walleij@linaro.org <linus.walleij@linaro.org>, pavel@ucw.cz <pavel@ucw.cz>, linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>, linux-gpio@vger.kernel.org <linux-gpio@vger.kernel.org>, linux-leds@vger.kernel.org <linux-leds@vger.kernel.org>, GaryWang@aaeon.com.tw <GaryWang@aaeon.com.tw>, Musa Lin <musa.lin@yunjingtech.com>, Jack Chang <jack.chang@yunjingtech.com>, Noah Hung <noah.hung@yunjingtech.com>, Javier Arteaga <javier@emutex.com>, Nicola Lunghi <nicola.lunghi@emutex.com>
+> 主旨: Re: [PATCH V3 1/3] mfd: Add support for UP board CPLD/FPGA
 
-Is this put_device() to counter balance the get_device() you had earlier?
-Is it still needed?
+Please fix your mailer so that these headers do not end up in the
+email body.
 
-Did we do the right thing by getting rid of the additional get_device()?
-I didn't see a reason for it.
+> On Wed, 09 Nov 2022, chengwei wrote:
+> 
+> > The UP Squared board <http://www.upboard.com> implements certain
+> > features (pin control, onboard LEDs or CEC) through an on-board CPLD/FPGA.
+> >
+> > This mfd driver implements the line protocol to read and write registers
+> > from the FPGA through regmap. The register address map is also included.
+> >
+> > The UP Boards provide a few I/O pin headers (for both GPIO and
+> > functions), including a 40-pin Raspberry Pi compatible header.
+> >
+> > This patch implements support for the FPGA-based pin controller that
+> > manages direction and enable state for those header pins.
+> >
+> > Partial support UP boards:
+> > * UP core + CREX
+> > * UP core + CRST02
+> >
+> > PATCH V3:
+> > (1) fixed kernel test robot compiler warning
+> >
+> > PATCH V2:
+> > (1) Synchronizing upboard github to rc2
+> > (2) Refer 2022/10/31 Lee Jones review, fixed some of the issues.
+> 
+> The change log should be below the '---' below.
 
-> +		ret = -EBUSY;
-> +		goto err_no_rproc_handle;
-> +	}
-> +
-> +	pru->client_np = np;
-> +
-> +	mutex_unlock(&pru->lock);
-> +
-> +	if (pru_id)
-> +		*pru_id = pru->id;
-> +
-> +	return rproc;
-> +
-> +err_no_rproc_handle:
-> +	rproc_put(rproc);
-> +	return ERR_PTR(ret);
-> +}
-> +EXPORT_SYMBOL_GPL(pru_rproc_get);
-> +
-> +/**
-> + * pru_rproc_put() - release the PRU rproc resource
-> + * @rproc: the rproc resource to release
-> + *
-> + * Releases the PRU rproc resource and makes it available to other
-> + * users.
-> + */
-> +void pru_rproc_put(struct rproc *rproc)
-> +{
-> +	struct pru_rproc *pru;
-> +
-> +	if (IS_ERR_OR_NULL(rproc) || !is_pru_rproc(rproc->dev.parent))
-> +		return;
-> +
-> +	pru = rproc->priv;
-> +
-> +	mutex_lock(&pru->lock);
-> +
-> +	if (!pru->client_np) {
-> +		mutex_unlock(&pru->lock);
-> +		return;
-> +	}
-> +
-> +	pru->client_np = NULL;
-> +	mutex_unlock(&pru->lock);
-> +
-> +	rproc_put(rproc);
-> +}
-> +EXPORT_SYMBOL_GPL(pru_rproc_put);
-> +
->  static inline u32 pru_debug_read_reg(struct pru_rproc *pru, unsigned int reg)
->  {
->  	return readl_relaxed(pru->mem_regions[PRU_IOMEM_DEBUG].va + reg);
-> @@ -817,6 +942,8 @@ static int pru_rproc_probe(struct platform_device *pdev)
->  	pru->pruss = platform_get_drvdata(ppdev);
->  	pru->rproc = rproc;
->  	pru->fw_name = fw_name;
-> +	pru->client_np = NULL;
-> +	mutex_init(&pru->lock);
->  
->  	for (i = 0; i < ARRAY_SIZE(mem_names); i++) {
->  		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
-> @@ -905,7 +1032,7 @@ MODULE_DEVICE_TABLE(of, pru_rproc_match);
->  
->  static struct platform_driver pru_rproc_driver = {
->  	.driver = {
-> -		.name   = "pru-rproc",
-> +		.name   = PRU_RPROC_DRVNAME,
->  		.of_match_table = pru_rproc_match,
->  		.suppress_bind_attrs = true,
->  	},
-> @@ -917,5 +1044,7 @@ module_platform_driver(pru_rproc_driver);
->  MODULE_AUTHOR("Suman Anna <s-anna@ti.com>");
->  MODULE_AUTHOR("Andrew F. Davis <afd@ti.com>");
->  MODULE_AUTHOR("Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>");
-> +MODULE_AUTHOR("Puranjay Mohan <p-mohan@ti.com>");
-> +MODULE_AUTHOR("Md Danish Anwar <danishanwar@ti.com>");
->  MODULE_DESCRIPTION("PRU-ICSS Remote Processor Driver");
->  MODULE_LICENSE("GPL v2");
-> diff --git a/include/linux/pruss.h b/include/linux/pruss.h
-> index fbe4fbb45807..6ea737e995e9 100644
-> --- a/include/linux/pruss.h
-> +++ b/include/linux/pruss.h
-> @@ -28,5 +28,34 @@ enum pruss_pru_id {
->  	PRUSS_NUM_PRUS,
->  };
->  
-> +struct device_node;
-> +
-> +#if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
-> +
-> +struct rproc *pru_rproc_get(struct device_node *np, int index,
-> +			    enum pruss_pru_id *pru_id);
-> +void pru_rproc_put(struct rproc *rproc);
-> +
-> +#else
-> +
-> +static inline struct rproc *
-> +pru_rproc_get(struct device_node *np, int index, enum pruss_pru_id *pru_id)
-> +{
-> +	return ERR_PTR(-EOPNOTSUPP);
-> +}
-> +
-> +static inline void pru_rproc_put(struct rproc *rproc) { }
-> +
-> +#endif /* CONFIG_PRU_REMOTEPROC */
-> +
-> +static inline bool is_pru_rproc(struct device *dev)
-> +{
-> +	const char *drv_name = dev_driver_string(dev);
-> +
-> +	if (strncmp(drv_name, PRU_RPROC_DRVNAME, sizeof(PRU_RPROC_DRVNAME)))
-> +		return false;
-> +
-> +	return true;
-> +}
->  
->  #endif /* __LINUX_PRUSS_H */
-> \ No newline at end of file
+Please fix your mailer to quote the message you're replying to.
 
---
-cheers,
--roger
+Then you can omit the "Larry ..." tags.
+
+> Larry (11/25) : We already fixed it on RFC 1125, thx.
+
+You don't have to reply to comments if you agree with them.
+
+> > Signed-off-by: Javier Arteaga <javier@emutex.com>
+> > [merge various fixes]
+> 
+> Drop this line please.
+> 
+> > Signed-off-by: Nicola Lunghi <nicola.lunghi@emutex.com>
+> > Signed-off-by: chengwei <larry.lai@yunjingtech.com>
+> 
+> Full name?
+> Larry (11/25) : We already fixed it on RFC 1125, thx.
+> 
+> > ---
+> >  drivers/mfd/Kconfig              |  12 +
+> >  drivers/mfd/Makefile             |   1 +
+> >  drivers/mfd/upboard-fpga.c       | 620 +++++++++++++++++++++++++++++++
+> >  include/linux/mfd/upboard-fpga.h |  56 +++
+> >  4 files changed, 689 insertions(+)
+> >  create mode 100644 drivers/mfd/upboard-fpga.c
+> >  create mode 100644 include/linux/mfd/upboard-fpga.h
+> >
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index abb58ab1a1a4..c1d72a70e5f2 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+
+[...]
+
+> > +#define UPBOARD_DEVID 0
+> 
+> No, that's not what this means.
+> 
+> Please use the defines already provided for you.
+> Larry (11/25) :  please refer https://www.kernel.org/doc/htmldocs/writing_musb_glue_layer/device-platform-data.html
+> The id field could be set to -1 (equivalent to PLATFORM_DEVID_NONE),
+> -2 (equivalent to PLATFORM_DEVID_AUTO) or start with 0 for the first
+> device of this kind if we want a specific id number.
+
+Just use '0' in-place.
+
+[...]
+
+> > +static struct upboard_led_data upboard_up2_led_data[] = {
+> > +     { .bit = 0, .colour = "blue" },
+> > +     { .bit = 1, .colour = "yellow" },
+> > +     { .bit = 2, .colour = "green" },
+> > +     { .bit = 3, .colour = "red" },
+> > +};
+> > +
+> > +static const struct mfd_cell upboard_up2_mfd_cells[] = {
+> > +     { .name = "upboard-pinctrl" },
+> > +     UPBOARD_LED_CELL(upboard_up2_led_data, 0),
+> > +     UPBOARD_LED_CELL(upboard_up2_led_data, 1),
+> > +     UPBOARD_LED_CELL(upboard_up2_led_data, 2),
+> > +     UPBOARD_LED_CELL(upboard_up2_led_data, 3),
+> > +};
+> > +
+> > +static const struct upboard_fpga_data upboard_up2_fpga_data = {
+> > +     .regmapconf = &upboard_up2_regmap_config,
+> > +     .cells = upboard_up2_mfd_cells,
+> > +     .ncells = ARRAY_SIZE(upboard_up2_mfd_cells),
+> > +};
+> 
+> You'd be better off getting rid of 'struct upboard_fpga_data'
+> altogether.
+> Larry (11/25) : we cannot understand it clearly. could you kindly give us more examples, thanks.
+
+You shouldn't mix platform initialisation strategies.  Doing so gets
+messy real quick.  So no passing MFD data through ACPI or DT
+match-data please.  Pass device IDs though, then match on those
+instead.
+
+[...]
+
+> > +static void upboard_led_gpio_init(struct upboard_fpga *fpga)
+> 
+> Should this all live in drivers/led?
+> Larry (11/25) :  MFD upboard-fpga is acpi driver and can recognize the AANT ID from different kind of upboards.
+> We get the led gpio initialized information from this then add led-upboard driver.
+
+MFD doesn't know (or want to know) about LEDs.
+
+Please place all LED initialisation inside the LED driver.
+
+> > +{
+> > +     struct gpio_led blue_led, yellow_led, green_led, red_led;
+> > +     struct gpio_desc *desc;
+> > +     int blue_gpio = -1, yellow_gpio = -1, green_gpio = -1, red_gpio = -1;
+> > +     int leds = 0;
+> > +     static struct gpio_led upboard_gpio_leds[8];
+> > +     static struct gpio_led_platform_data upboard_gpio_led_platform_data;
+> > +     static const struct mfd_cell upboard_gpio_led_cells[] = {
+> > +             MFD_CELL_BASIC("leds-gpio", NULL,
+> > +                            &upboard_gpio_led_platform_data,
+> > +                            sizeof(upboard_gpio_led_platform_data), 0)
+> > +     };
+> > +
+> > +     desc = devm_gpiod_get(fpga->dev, "blue", GPIOD_OUT_LOW);
+> > +
+> > +     if (!IS_ERR(desc)) {
+> > +             blue_gpio = desc_to_gpio(desc);
+> > +             leds++;
+> > +             devm_gpiod_put(fpga->dev, desc);
+> > +     }
+> > +     desc = devm_gpiod_get(fpga->dev, "yellow", GPIOD_OUT_LOW);
+> > +     if (!IS_ERR(desc)) {
+> > +             yellow_gpio = desc_to_gpio(desc);
+> > +             leds++;
+> > +             devm_gpiod_put(fpga->dev, desc);
+> > +     }
+> > +     desc = devm_gpiod_get(fpga->dev, "green", GPIOD_OUT_LOW);
+> > +     if (!IS_ERR(desc)) {
+> > +             green_gpio = desc_to_gpio(desc);
+> > +             leds++;
+> > +             devm_gpiod_put(fpga->dev, desc);
+> > +     }
+> > +     desc = devm_gpiod_get(fpga->dev, "red", GPIOD_OUT_LOW);
+> > +     if (!IS_ERR(desc)) {
+> > +             red_gpio = desc_to_gpio(desc);
+> > +             leds++;
+> > +             devm_gpiod_put(fpga->dev, desc);
+> > +     }
+> > +
+> > +     if (leds == 0)  //no leds
+> > +             return;
+> > +
+> > +     leds = 0;
+> > +     if (blue_gpio > -1) {
+> > +             blue_led.name = "upboard:blue:";
+> > +             blue_led.gpio = blue_gpio;
+> > +             blue_led.default_state = LEDS_GPIO_DEFSTATE_KEEP;
+> > +             upboard_gpio_leds[leds++] = blue_led;
+> > +     }
+> > +     if (yellow_gpio > -1) {
+> > +             yellow_led.name = "upboard:yellow:";
+> > +             yellow_led.gpio = yellow_gpio;
+> > +             yellow_led.default_state = LEDS_GPIO_DEFSTATE_KEEP;
+> > +             upboard_gpio_leds[leds++] = yellow_led;
+> > +     }
+> > +     if (green_gpio > -1) {
+> > +             green_led.name = "upboard:green:";
+> > +             green_led.gpio = green_gpio;
+> > +             green_led.default_state = LEDS_GPIO_DEFSTATE_KEEP;
+> > +             upboard_gpio_leds[leds++] = green_led;
+> > +     }
+> > +     if (red_gpio > -1) {
+> > +             red_led.name = "upboard:red:";
+> > +             red_led.gpio = red_gpio;
+> > +             red_led.default_state = LEDS_GPIO_DEFSTATE_KEEP;
+> > +             upboard_gpio_leds[leds++] = red_led;
+> > +     }
+> > +
+> > +     upboard_gpio_led_platform_data.num_leds = leds;
+> > +     upboard_gpio_led_platform_data.leds = upboard_gpio_leds;
+> > +
+> > +     if (devm_mfd_add_devices(fpga->dev, UPBOARD_DEVID,
+> > +                              upboard_gpio_led_cells,
+> > +                              ARRAY_SIZE(upboard_gpio_led_cells),
+> > +                              NULL, 0, NULL)) {
+> > +             dev_info(fpga->dev, "Failed to add GPIO leds");
+> > +     }
+> > +}
+> > +
+> > +static const struct acpi_device_id upboard_fpga_acpi_match[] = {
+> > +     { "AANT0000", (kernel_ulong_t)&upboard_pinctrl_data },
+> > +     { "AANT0F00", (kernel_ulong_t)&upboard_up_fpga_data },
+> > +     { "AANT0F01", (kernel_ulong_t)&upboard_up2_fpga_data },
+> > +     { "AANT0F02", (kernel_ulong_t)&upboard_upcore_crex_fpga_data },
+> > +     { "AANT0F03", (kernel_ulong_t)&upboard_upcore_crst02_fpga_data },
+> > +     { "AANT0F04", (kernel_ulong_t)&upboard_up_fpga_data },
+> > +     { }
+> > +};
+> > +MODULE_DEVICE_TABLE(acpi, upboard_fpga_acpi_match);
+> 
+> Please don't push MFD configuration data through the ACPI API.
+
+Ah look, I already said this.
+
+> Larry (11/25) : we cannot understand it clearly. could you kindly give us more  examples, thanks.
+
+All of these point to MFD cell initialisation structs.  Please don't
+do that.  Assign each platform with an ID, then pull that ID out of
+the ACPI match-data and assign local 'cells', 'ncells', etc based on
+the ID.
+
+[...]
+
+-- 
+Lee Jones [李琼斯]
