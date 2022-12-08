@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529D2646F27
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:58:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB32D646F2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:59:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiLHL6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:58:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
+        id S229809AbiLHL6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:58:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHL6C (ORCPT
+        with ESMTP id S229479AbiLHL6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:58:02 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F4D3E085;
-        Thu,  8 Dec 2022 03:58:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670500682; x=1702036682;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=RhThfi2MnPhsR7HzMO5D1K17BZtYy9Njo3aLlEab60U=;
-  b=HQeE3f0R1q1crURFAI17OEbvvpf/FQfgffHoEXanj7kmO5LaTu/L2RqJ
-   mdYrt5sFO+wjb839MOiss3yD0EH0WPfOvo0qe0I7AAXthuFVbJlBkQSLK
-   rbPoBbrNtY9hIce6izWPBxaOpNtQynZJG0WzwcCIDQQKBgr3M7x/ZLt9m
-   5AuNG8B8wW7hAYpL1wbo/ivMsW0xF/VUgpgiSj7RAhDn6YA0q4veAl4TX
-   6bedKPbMvLkS2jZ/t5iqdIV4W0gY+ApKSOKjj+kWl4oUBsfT2Lk1Fm3eG
-   SzPO99LiPkr/14KY8k1/a2S+XvZ11XPWX5l8+WmxOTTuSODfz8OqTTM6i
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="381444666"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="381444666"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:58:01 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="715573021"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="715573021"
-Received: from pors-mobl3.ger.corp.intel.com ([10.252.39.224])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:57:57 -0800
-Date:   Thu, 8 Dec 2022 13:57:56 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Xu Yilun <yilun.xu@intel.com>
-cc:     Russ Weight <russell.h.weight@intel.com>,
-        linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
-        Tianfei zhang <tianfei.zhang@intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Marco Pagani <marpagan@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 6/9] mfd: intel-m10-bmc: Downscope SPI defines & prefix
- with M10BMC_SPI
-In-Reply-To: <Y44RQ4Wutr/I1xsp@yilunxu-OptiPlex-7050>
-Message-ID: <9579a09f-a5a7-adb4-e34b-2416ae9b3ef@linux.intel.com>
-References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com> <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com> <Y4onmwWT8duVV0Sv@yilunxu-OptiPlex-7050> <2b253321-72ff-f15a-8879-aa41dce48055@intel.com> <b09aabe4-3f82-70f0-aca2-f1cdf7d6a26@linux.intel.com>
- <Y44RQ4Wutr/I1xsp@yilunxu-OptiPlex-7050>
+        Thu, 8 Dec 2022 06:58:51 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A5684E6B0;
+        Thu,  8 Dec 2022 03:58:50 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id o5so1359280wrm.1;
+        Thu, 08 Dec 2022 03:58:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=abg1wOX7oBRj4w0zd4B/AxlUTtvdPy8iDRTZot4FPCc=;
+        b=SUZ0TTuTHGr+pTmUrUq9U23zWNby3XOBjqiTuPsT+xUZPcXELpiS6pwoAClkMZ7DCd
+         e3wSoGElTVajsuFoxO17KJi51pD8i+MxwR8J9MZmP2+iP1SnOSVG83ItNuogRN9ZHPxw
+         dL0SNWtANLD2nVsqz3OJKBkZ1kJ6UZQXBTWu4alhVPgfOTe4wgUksQbW1H2oUYaZ267y
+         mxrQ+B07WhfWQN06HK+pvVkzl45+qUksAOE156H9i+mJikBmZTKxJGxdFRqtDqgWUyrv
+         UXYQUGr+0QiSpc7wBowRbjKWPKb0KOSeeV5ho3oFcjMrhnqOx9Vx1u5K3ABxHeFRA3TX
+         ++8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=abg1wOX7oBRj4w0zd4B/AxlUTtvdPy8iDRTZot4FPCc=;
+        b=cZhwtcYhm9uq6ZjaZV5Y31uJBryJyT4NwIgGTsWXz5UrhfBJPEnpkrdWf4AzFcUnZE
+         gLYua8/uK3Y8KgV95Zjqj//Mt6eP/V2H7D3ZKbDEo0gbXmZaQeNjJCIOz+6BTh9kpabR
+         iCRd7g/AvPvgP0ZG47MgxnDqLpBlKkQtPS5ALOvsNKFZ16K/YDcVGe80GcHBrrjW37Q5
+         pGeJjwoKhlpgzhUnLzLzAKngtEI/ucgSC4pTcW7B6nUC7rUSI8AxCy/LFTOH4SEXW741
+         2OVMQEJsGqNWSOtRPW25lfkVOs3Q9YJy+s/FJWgsPEQqD6TWWaVn8zrNfYIX0GahjvA/
+         fgsA==
+X-Gm-Message-State: ANoB5pnfEaUYLvqaw8IS4fGogAE/qNXlgs3v7Mg0JyVHnC4jU3j9Aw/C
+        gLs0ATIR71WM7r6oWPuRJWs=
+X-Google-Smtp-Source: AA0mqf7c7TjMRGd5RmRUsRQgw5unXjI4LvNEbX8A8YgJASFV9su4ij/6hgyLnIYQG97/vN1C9LG1NA==
+X-Received: by 2002:a05:6000:60c:b0:242:10ac:6ab2 with SMTP id bn12-20020a056000060c00b0024210ac6ab2mr30602872wrb.552.1670500728699;
+        Thu, 08 Dec 2022 03:58:48 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id q21-20020a7bce95000000b003d1de805de5sm4674699wmj.16.2022.12.08.03.58.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 03:58:48 -0800 (PST)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: platform: exynos4-is: Fix spelling mistake "palne" -> "plane"
+Date:   Thu,  8 Dec 2022 11:58:47 +0000
+Message-Id: <20221208115847.2433777-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-273247173-1670500681=:1682"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+There are spelling mistakes in a literal string and a comment. Fix them.
 
---8323329-273247173-1670500681=:1682
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c | 2 +-
+ drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On Mon, 5 Dec 2022, Xu Yilun wrote:
-
-> On 2022-12-05 at 11:31:06 +0200, Ilpo Järvinen wrote:
-> > On Fri, 2 Dec 2022, Russ Weight wrote:
-> > > On 12/2/22 08:28, Xu Yilun wrote:
-> > > > On 2022-12-02 at 12:08:38 +0200, Ilpo Järvinen wrote:
-> > > >> Move SPI based board definitions to per interface file from the global
-> > > >> header. This makes it harder to use them accidently in the
-> > > >> generic/interface agnostic code. Prefix the defines with M10BMC_SPI
-> > > > I'm not sure if the register layout is actually bound to the bus
-> > > > interface. My experience is the register layout is always decided by
-> > > > board type. Is it possible there will be a new SPI based board but
-> > > > has different register layout in future?
-> > > >
-> > > > So is M10BMC_SPI_XXX a good nam
-> > > 
-> > > There could be future devices, spi or pmci based, that require different
-> > > addresses for some of these values, and at that time we would need to
-> > > additional versions of some of these macros using different names.
-> > > Right now, spi and pmci are the primary differentiating factors. I'm not
-> > > sure how to improve on the naming. Do you have any suggestions?
-> > 
-> > It's per board type yes, but there's a strong clustering currently on 
-> > spi/pmci differentiation. That implies a one define applies to multiple 
-> > board types so naming it, e.g., after a single board type seems not much 
-> > better than the current approach.
-> 
-> I think it is better to name after one of the board type among all its
-> supported types. At least it clearly indicates they are related to board
-> type.
-> 
-> Actually it is normal for many driver modules. A driver was initially
-> implemented for one board type, and was named by the initial board.
-> But later you have more board types compatible to the driver, you don't
-> change the driver name, just use it.
-
-Ok, I'll do it that way then.
-
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c b/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c
+index 5d9f4c1cdc5e..7a48fad1df16 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.c
+@@ -54,7 +54,7 @@ const char *fimc_is_param_strerr(unsigned int error)
+ 	case ERROR_DMA_INPUT_ORDER:
+ 		return "ERROR_DMA_INPUT_ORDER: Invalid order(DRC: YYCbCr,YCbYCr,FD:NO,YYCbCr,YCbYCr,CbCr,CrCb)";
+ 	case ERROR_DMA_INPUT_PLANE:
+-		return "ERROR_DMA_INPUT_PLANE: Invalid palne (DRC: 3, FD: 1, 2, 3)";
++		return "ERROR_DMA_INPUT_PLANE: Invalid plane (DRC: 3, FD: 1, 2, 3)";
+ 	case ERROR_OTF_OUTPUT_WIDTH:
+ 		return "ERROR_OTF_OUTPUT_WIDTH: Invalid width (DRC: 128~8192)";
+ 	case ERROR_OTF_OUTPUT_HEIGHT:
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h b/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h
+index 9dcbb9853ac0..809e117331c0 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is-errno.h
+@@ -156,7 +156,7 @@ enum fimc_is_error {
+ 	ERROR_DMA_INPUT_BIT_WIDTH	= 34,
+ 	/* invalid order(DRC: YYCbCrorYCbYCr, FD:NO,YYCbCr,YCbYCr,CbCr,CrCb) */
+ 	ERROR_DMA_INPUT_ORDER		= 35,
+-	/* invalid palne (DRC: 3, FD: 1, 2, 3) */
++	/* invalid plane (DRC: 3, FD: 1, 2, 3) */
+ 	ERROR_DMA_INPUT_PLANE		= 36,
+ 
+ 	ERROR_OTF_OUTPUT_NONE		= ERROR_COMMON_NONE,
 -- 
- i.
+2.38.1
 
---8323329-273247173-1670500681=:1682--
