@@ -2,122 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F838646B39
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:59:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D152646B3C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLHI67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
+        id S229779AbiLHI7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:59:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLHI65 (ORCPT
+        with ESMTP id S229514AbiLHI7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:58:57 -0500
-Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F3D48438
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:58:56 -0800 (PST)
-Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-3f15a6f72d0so7590757b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:58:56 -0800 (PST)
+        Thu, 8 Dec 2022 03:59:32 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B60B48767
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:59:30 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id g7so1041198lfv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:59:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+z6PSdj+SoyIJ7Nd8mIIgQ9Xnp6sfeNAskU/07pZxCo=;
-        b=jSxpxvrsPiHvnSJI4ya5UcNrPjSDlxttFMfoVxtooPAPNQ1ri9nNmzFhsDvr17bS4j
-         +9DOTeOb3+wklf1I17M1MFBgeLVVnzFExUHCXAs8o3ANjfTn8rKdozny680URh8jSjOW
-         I5KbKdaIxi/5mRTiYnLj0oFsDCdL8GW05ppZ5qs7B3JsPOE9kuPPr57R36nA+Ex1hVgg
-         COjwn53hpwlgcSDZbtFPNK/fjpzkCTD215PaN2KyO5umdNScxiI0LGKRhCJ02BgHPxIv
-         36xkhI81REDNWqOj2QmUFl3W1nHV8UNTAnG39aTwvf6K8t7qK4sI17HBAjsx0v4MIc2+
-         gOgg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tydSjWpRvASEylrj7lgLwaBMTJwOnmS8BCH73tzadaI=;
+        b=Zl46YC9PXbJa4rPKgDfkUEVbAm3F2rHn9Tx7G9B7riEQ8IKFz0vBBD9+ZbwX3eY8VQ
+         z/cBDve1xXeuXR91tDVVecjVZsnhxs7Qq/tWJdMdwwgDz6gHvURIqRP14MTst3+Le/Ey
+         iwoFGxxrkA5tF3lvavhQWnKpneuBlhKhY2F9Z1QKZxQFwNcofGXGE69wO8owSGTqcdnV
+         7jjqFdvPckkUehotlwG7r/diYDP+BH8XywBE4gcJhHgvtbZt3vw4n3571FCgfY0sxOgx
+         tkbHfNYcmsdBSJ/j4akFW9O+AnU0zSkmum9SZ5JAaAhocyFdLaV6WEWb3BGGEsjKc7+p
+         ULaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+z6PSdj+SoyIJ7Nd8mIIgQ9Xnp6sfeNAskU/07pZxCo=;
-        b=Im68EVT04xNRgvqgEjMSevSUAPuyvINGCaywJCVat4uOY1Z3Vb3EIKB+PDQHlB94C8
-         6xu9fqEpp/7jfUpSDf8aftG5Q1EKgPvxslz97UuIhTBEq0WNnp5DxwjTLZZs23R2fN7G
-         j/VrNXecXRrMaXqnX1p2pR85Sbg4Lyd8cbIaXpeVKFZ+U5kXel7LthzcIC9J7HXu5xDt
-         8NBr1/zQ5Fd96aPMpV3GKceZQGIiew84MTl82I2mMi+AvSSkqHLxTqFws5DSCMj2QUP8
-         wfF/UMyXCCB8vc0LLSF3BMyC48P4GDdlzMe2XHAPnx8mNXmoYN6R/wFHw/MQrPIafxao
-         Hh9Q==
-X-Gm-Message-State: ANoB5pkfJ0gSYgHRzlueeSBLOzRp6y+gvo2RgQmPHvyIz64dmU2s79s4
-        6v/RuOT4kqNTpXjyFtBjiJYimdVNmCP0Nh4cBJ4=
-X-Google-Smtp-Source: AA0mqf48KLvHUgHgxpl14MTOl0U6QBrNCSo7/HqJqyaWspTkyIW40GVbYwebZbJpQQTFh1pPD831pm5LBWMWLl3SLZM=
-X-Received: by 2002:a81:8457:0:b0:3b8:1d18:90b2 with SMTP id
- u84-20020a818457000000b003b81d1890b2mr58578733ywf.520.1670489935026; Thu, 08
- Dec 2022 00:58:55 -0800 (PST)
+        bh=tydSjWpRvASEylrj7lgLwaBMTJwOnmS8BCH73tzadaI=;
+        b=EhpP2ChPaF6iu+nH52tKqE7bU9Zj1StUhHQQ6oSfs7clNPNqLTuNtkvpIHz8iD35Cs
+         64gs6vIMvlHKe7eXyulDLJWMTtQriUZqx06gyIUM6X072WZXbUoDbhYXbMMi8hltdVws
+         qtg7NHKJFoCmtUizGWAB9y4XInNmmcPNarfbCuECnR/gFBMG4RQDEbd1BqFEtIzBdizg
+         dYBjoNfLrSrMgrwTlGjT/jcM2FZ+P1kPiyMwDYuB8uJo+8lORgvQZEuMsa0Z6Ih1Qv4u
+         in/9B5Y31taV1cfK/MYxFVFBeJaQhFLeSBpL76N01A5ZuQKTULOexr/BA7O56VmqG6OL
+         ZDgA==
+X-Gm-Message-State: ANoB5pnjfeAUeVlLwIr8md0x6pFbIZWcL4gjpv/DwcGPwGycSVvIe9RI
+        wPju8ZwrRvb/sJAtKzxjAgwWyg==
+X-Google-Smtp-Source: AA0mqf557QBudXkUTrEdl0SSFEXGqPr0sabFkkGlQnXdACcs3ThYOLOVf1i14U7d4+89QLusHaeEdg==
+X-Received: by 2002:a05:6512:a84:b0:4b5:827:3cac with SMTP id m4-20020a0565120a8400b004b508273cacmr19243928lfu.154.1670489968832;
+        Thu, 08 Dec 2022 00:59:28 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u17-20020a05651c131100b00279f213302bsm1400931lja.57.2022.12.08.00.59.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 00:59:28 -0800 (PST)
+Message-ID: <d0226fa9-9253-72fc-2fb0-5bfbbcba5d86@linaro.org>
+Date:   Thu, 8 Dec 2022 09:59:27 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:7010:62c7:b0:313:99e7:bf0d with HTTP; Thu, 8 Dec 2022
- 00:58:54 -0800 (PST)
-Reply-To: info@oxfordfoundations.com
-From:   Prof Pierre Louise <contractorvoller@gmail.com>
-Date:   Thu, 8 Dec 2022 00:58:54 -0800
-Message-ID: <CAJ7R6hniXdZh01ehU=pnThVgNftxTXqu8R+ooprQrtc5Q=1H3w@mail.gmail.com>
-Subject: YOU HAVE BEEN CONSIDERED FOR THE OXFORD FOUNDATION GRANT
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_99,BAYES_999,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:1142 listed in]
-        [list.dnswl.org]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [contractorvoller[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RESEND PATCH v2 1/3] dt-bindings: power: Add starfive,jh71xx-pmu
+Content-Language: en-US
+To:     Walker Chen <walker.chen@starfivetech.com>,
+        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <20221208084523.9733-1-walker.chen@starfivetech.com>
+ <20221208084523.9733-2-walker.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221208084523.9733-2-walker.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oxford Foundation Trust
-The County Hall,
-13th Street. 47 W 13th St, New York, NY 10011
-Email:info@oxfordfoundations.com
-Phone:+1 305 590 8254
+On 08/12/2022 09:45, Walker Chen wrote:
+> Add bindings for Power Management Unit (PMU) on the StarFive JH71XX SoC.
+> 
+> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+> ---
+>  .../bindings/power/starfive,jh71xx-pmu.yaml   | 45 +++++++++++++++++++
+>  .../dt-bindings/power/starfive,jh7110-pmu.h   | 17 +++++++
+>  2 files changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml
 
-Dear Cash Grant Beneficiary
+Filename matching compatible, so:
+starfive,jh7110-pmu.yaml
 
-Your information mail has been received.
 
-I am Professor Pierre Louise, the authorization officer hired by
-the Oxford Grant Foundation; a British/American based charity organization to
-coordinate the selection program clearance and grant release process.
+>  create mode 100644 include/dt-bindings/power/starfive,jh7110-pmu.h
+> 
+> diff --git a/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml b/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml
+> new file mode 100644
+> index 000000000000..f308ae136a57
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml
+> @@ -0,0 +1,45 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/power/starfive,jh71xx-pmu.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH71xx Power Management Unit
+> +
+> +maintainers:
+> +  - Walker Chen <walker.chen@starfivetech.com>
+> +
+> +description: |
+> +  StarFive JH71xx SoCs include support for multiple power domains which can be
+> +  powered on/off by software based on different application scenes to save power.
+> +
+> +properties:
+> +  compatible:
+> +      - enum:
 
-The main objective of this selection program basically aims at
-reaching out to individuals outside the United States by empowering
-and to make notable changes in improving the standard of living of
-people in the developing countries of the world and also in crisis
-torn regions including places that have experienced natural disasters
-in recent and past times.
+Wrong indentation.
 
-Your details emerged along with Nine (9) other as beneficiaries of the
-$1,500,000.00 US Dollars Cash Grant/subvention in the selection program
-involving over 850,000 E-mail addresses drawn from shopping cash
-invoices.
-,
-Once the above correspondence by you has been received and verified to be
-authentic, you will be referred to our official paying bank.
+Does not look like you tested the bindings. Please run `make
+dt_binding_check` (see
+Documentation/devicetree/bindings/writing-schema.rst for instructions).
 
-Sincerely.
-Professor pierre louise,
-Authorization/Claims Consultant
+> +          - starfive,jh7110-pmu
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  "#power-domain-cells":
+> +    const: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - "#power-domain-cells"
+> +
+
+Best regards,
+Krzysztof
+
