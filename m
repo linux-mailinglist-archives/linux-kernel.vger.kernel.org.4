@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D1B64761E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C85647622
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiLHTUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:20:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S229722AbiLHTVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:21:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiLHTUg (ORCPT
+        with ESMTP id S229761AbiLHTUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:20:36 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19F199F00
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:20:35 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id s7so2477379plk.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:20:35 -0800 (PST)
+        Thu, 8 Dec 2022 14:20:39 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4148A99F2F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:20:37 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso2554824pjh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:20:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZtJpVPTjR3+tHW4ZAsKi6ZeDCRthwe5efj4GVpBmxAs=;
-        b=ffwgN8uE9SL85C/Va1myHLoiUBLtcIfijgTVQy/h5ctIq5eaiuAtLJ/whuPeuP9/s+
-         tRZlTOzztFg5Cqxb7Kq1D+br5dM2i06yjSwfofpoUzA3fKPWfNBk5jwdtJlYANWUuqIW
-         wl/ROE4R+66WuQhJgaaSlZtnZmZzzW3xtnjG8=
+        bh=SghZa+kW7wIj2RUcdePRPR1tV1IHuHFiC2Ew9exQVO0=;
+        b=ak7msN6Am+PYdy9SBwDyO8HiaGzwCdF79wcoo7pb8KdOw8kNKiwvT04KD8UeG3l4yf
+         GHh80N84AQqX/dKIQiW+9jBDoDh48Vvk/EYWPaYl9SreZxA583cg2J/RuMvZaT2uBUXF
+         DerpsC3NQVtxvjdcQP0Sp8sv2U5KgcCeb+5A4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZtJpVPTjR3+tHW4ZAsKi6ZeDCRthwe5efj4GVpBmxAs=;
-        b=MEo88Cvc1FZKmYtnzEiYB8omT3BZ2SUBH4CYK5TbtVBJN6ZXP10973wm9G5RUduqsY
-         W36gZKpvx2QWSxEM1JgRdnB2Y8xuBjBmL9ZyVsh9ogPAYCr/GFYJs7JUtU+QwvfYkOi1
-         8ajvqOYE4XYoIxL3XorUqxZvme36x85sxY7OUUIZN+b2t5yKwuxvaBFd1dGjAqqAkvSW
-         EnT2HLPdcw/V9Y3MDdsM9QcTZugtmYciCBMpKutAICkG67HlEf0MDJk6g/8EcNtSnJyR
-         MBt6IKz6YiIsvJgtYrt2Nxwm+TZ8X7PJpBlJPhZwQHvhop6rElS6oG2tWLb6d0b8Fmly
-         HiBQ==
-X-Gm-Message-State: ANoB5pmk2GOE4QVp+ar/uU9ErCgNmNSGDBE/RW6qZebPWriRQ28VsQXM
-        0C7btN+eMvHNF4nIWZx12I/bwg==
-X-Google-Smtp-Source: AA0mqf7iizQgzHEJ4C/aUnLxmQepVKEiquAj7KH/sW3cQX7QttsENfP77svR0s+gqOBPU90RcIJUDw==
-X-Received: by 2002:a17:902:c745:b0:189:9519:87b6 with SMTP id q5-20020a170902c74500b00189951987b6mr2424138plq.5.1670527235158;
-        Thu, 08 Dec 2022 11:20:35 -0800 (PST)
+        bh=SghZa+kW7wIj2RUcdePRPR1tV1IHuHFiC2Ew9exQVO0=;
+        b=LFm8ix0RLUhFSxVVEpyIstC89dArN33QLfrHM9Nn+Jiqy3AJsD/YV5oJmFTM2opmOA
+         yYnIM5J1O9FGcGMTbsBmvHPBfLrOfiM1Hav2nmB9VLwziOLvAjAPc6YDXVyiBTCZnLUB
+         zzvweUf4vtZKt95nFgYhLARyX1CNfdVC/aD71igIzL5NLmBeHbncJ3Awsf+vYUWJo6WG
+         Feim42F1FbcpWwsjs48rmUCA3a4IxqrSYwOG+EJnRVK4zbKW95LNEkRpKKthT6Nu8tmM
+         ck0vsCr94at8yySsT1GuORrrPQYIa1S5ErrFwcyiHQkg56hmsCYJJn2r01LFSIQTqrWq
+         aZ2w==
+X-Gm-Message-State: ANoB5pmNR0G/i0gtv4Q5EaDXh0H9pOzviMnh5Dzd366Hw4pGDxl+uSWd
+        zr/KGCX/pfbT5gTsbMy/dwKHZw==
+X-Google-Smtp-Source: AA0mqf4m92QMQvWjvOsl2lEdbxbWHxT+FcSa9B07bLEQjj7z+eqgTBCjsv8IKmgo4AM2FSVhzN8t3w==
+X-Received: by 2002:a17:902:f7ca:b0:189:b203:9e2f with SMTP id h10-20020a170902f7ca00b00189b2039e2fmr2971988plw.56.1670527236814;
+        Thu, 08 Dec 2022 11:20:36 -0800 (PST)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:3aa1:2c62:9ac:4468])
-        by smtp.gmail.com with ESMTPSA id u5-20020a170902e5c500b00186a2274382sm17112019plf.76.2022.12.08.11.20.33
+        by smtp.gmail.com with ESMTPSA id u5-20020a170902e5c500b00186a2274382sm17112019plf.76.2022.12.08.11.20.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 11:20:34 -0800 (PST)
+        Thu, 08 Dec 2022 11:20:36 -0800 (PST)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>
@@ -59,9 +59,9 @@ Cc:     mka@chromium.org, swboyd@chromium.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/5] arm64: dts: qcom: sc7180: Start the trogdor eDP/touchscreen regulator on
-Date:   Thu,  8 Dec 2022 11:20:04 -0800
-Message-Id: <20221208111910.3.I7050a61ba3a48e44b86053f265265b5e3c0cee31@changeid>
+Subject: [PATCH 4/5] arm64: dts: qcom: sc7180: Add pazquel360 touschreen
+Date:   Thu,  8 Dec 2022 11:20:05 -0800
+Message-Id: <20221208111910.4.Id132522bda31fd97684cb076a44a0907cd28097d@changeid>
 X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
 In-Reply-To: <20221208192006.1070898-1-dianders@chromium.org>
 References: <20221208192006.1070898-1-dianders@chromium.org>
@@ -77,100 +77,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we've added the `off-on-delay-us` for the touchpanel
-regulator, we can see that we're actually hitting that delay at
-bootup. I saw about 200 ms of delay.
-
-Let's avoid that delay by starting the regulator on. We'll only do
-this for eDP devices for the time being.
-
-NOTE: we _won't_ do this for homestar. Homestar's panel really likes
-to be power cycled. It's why the Linux driver for this panel has a
-pm_runtime_put_sync_suspend() when the panel is being unprepared but
-the normal panel-edp driver doesn't. It's also why this hardware has a
-separate power rail for eDP vs. touchscreen, unlike all the other
-trogdor boards. We won't start homestar's regulator on. While this
-could mean a slight delay on homestar, it is probably a _correct_
-delay. The bootloader might have left the regulator on (it does so in
-dev and recovery modes), so if we turned the regulator off at probe
-time and we actually hit the delay then we were probably violating T12
-in the panel spec.
+The touchscreen was supposed to have been added when pazquel360 first
+was added upstream but was missed. Add it now.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- .../boot/dts/qcom/sc7180-trogdor-homestar.dtsi | 18 ++++++++++++++++++
- .../dts/qcom/sc7180-trogdor-parade-ps8640.dtsi |  8 ++++++++
- .../dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi  |  8 ++++++++
- 3 files changed, 34 insertions(+)
+ .../dts/qcom/sc7180-trogdor-pazquel360.dtsi   | 21 +++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-index d3cf64c16dcd..b3ba23a88a0b 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
-@@ -85,6 +85,24 @@ map1 {
- 	};
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
+index 5702325d0c7b..54b89def8402 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
+@@ -14,6 +14,27 @@ &alc5682 {
+ 	realtek,dmic-clk-rate-hz = <2048000>;
  };
  
-+/*
-+ * ADDITIONS TO FIXED REGULATORS DEFINED IN PARENT DEVICE TREE FILES
-+ *
-+ * Sort order matches the order in the parent files (parents before children).
-+ */
++ap_ts_pen_1v8: &i2c4 {
++	status = "okay";
++	clock-frequency = <400000>;
 +
-+&pp3300_dx_edp {
-+	/*
-+	 * The atna33xc20 really likes to be power cycled to keep it from
-+	 * getting in a bad state. This is the reason that the touchscreen
-+	 * rail and eDP rails are separate from each other on homestar (but
-+	 * not other trogdor devices) Make sure it starts "off" at bootup.
-+	 */
-+	/delete-property/ regulator-boot-on;
++	ap_ts: touchscreen@10 {
++		compatible = "elan,ekth3915", "elan,ekth3500";
++		reg = <0x10>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&ts_int_l>, <&ts_reset_l>;
++
++		interrupt-parent = <&tlmm>;
++		interrupts = <9 IRQ_TYPE_LEVEL_LOW>;
++
++		hid-descr-addr = <0x0001>;
++
++		vcc33-supply = <&pp3300_ts>;
++		vccio-supply = <&pp1800_l10a>;
++		reset-gpios = <&tlmm 8 GPIO_ACTIVE_LOW>;
++	};
 +};
 +
-+/* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
-+
- ap_ts_pen_1v8: &i2c4 {
- 	status = "okay";
- 	clock-frequency = <400000>;
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-parade-ps8640.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-parade-ps8640.dtsi
-index e27a769f8cd4..5aa7949b5328 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-parade-ps8640.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-parade-ps8640.dtsi
-@@ -34,6 +34,14 @@ pp3300_brij_ps8640: pp3300-brij-ps8640-regulator {
- 
- &pp3300_dx_edp {
- 	off-on-delay-us = <500000>;
-+
-+	/*
-+	 * It's nicer to start with this regulator enabled. The
-+	 * bootloader may have left it on and it's nice not to cause an
-+	 * extra power cycle of the touchscreen and eDP panel at bootup.
-+	 * This should help speed bootup because we have off-on-delay-us.
-+	 */
-+	regulator-boot-on;
- };
- 
- /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi
-index 3188788306d0..e52b8776755d 100644
---- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi
-@@ -15,6 +15,14 @@
- 
- &pp3300_dx_edp {
- 	off-on-delay-us = <500000>;
-+
-+	/*
-+	 * It's nicer to start with this regulator enabled. The
-+	 * bootloader may have left it on and it's nice not to cause an
-+	 * extra power cycle of the touchscreen and eDP panel at bootup.
-+	 * This should help speed bootup because we have off-on-delay-us.
-+	 */
-+	regulator-boot-on;
- };
- 
- /* ADDITIONS TO NODES DEFINED IN PARENT DEVICE TREE FILES */
+ &keyboard_controller {
+ 	function-row-physmap = <
+ 		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
 -- 
 2.39.0.rc1.256.g54fd8350bd-goog
 
