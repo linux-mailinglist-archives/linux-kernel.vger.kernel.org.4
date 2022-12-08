@@ -2,171 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D4D3647235
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:53:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2273647230
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbiLHOxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42658 "EHLO
+        id S229936AbiLHOwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:52:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiLHOwz (ORCPT
+        with ESMTP id S229500AbiLHOwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:52:55 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2BC4C271
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:52:54 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id bg10so1229719wmb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 06:52:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5EQRHK9ZlDWtgRsVXiI0JZkXJchjbzgSFU+bI1duxL4=;
-        b=pcESBS62/zG7V+GsJWrKU7/PXisfwFgAymJ/MUMxWu15xwo3i4GDWcQX9v6VF15qe2
-         D5EwLMHkbvtc9csuGVfJBFiRVWQ2a1NMbJQpgmuG8ujbi2Q7bEsnDCSrmmy8bnlXYpcf
-         ENb5qESpp7R5LgDTYr4Zp8cuQghWlo1KI+z1C4OIxXnILkxM3A5TcTzLN4sLhOkzh0Kw
-         Rno6hezMZki5uOXCT5vLotDr+tE+LL0ewYH+K/MmgRaHbavncKZQSfpIoF1VRKWf015X
-         jR+i0mIyq9ycIRR+onCBLzC4CLPA+n973t7v/PgfWIf+v4UuilplNhNjKpK7O2pJa3I/
-         jXiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5EQRHK9ZlDWtgRsVXiI0JZkXJchjbzgSFU+bI1duxL4=;
-        b=r+tMr99B0Fu0WZfqM9s8KL+NzI/9Uc9s6vbmDEYyg4RSPfFb7k9yMtN59kqx8oOj4p
-         fjhwxdN8BNGpkvphtpRHg1QsUPr2OaMVAjzZcLBFVvybCCTU9gaZAVZEfM0VVi/7lNbg
-         t49oXA73nyuxsF/Gr1VuWJZtBQT5VlGSucJjazGS3YopLci649Hr2ZgokxS6GqYVzJnX
-         EpP3ufVFzVtsceFneS0jsT+JyXk36q2s0pE7cPpm03wLMnVGK1IA/9eUxIx3N/qrWW5G
-         dLTY6C1xo/S+W4IX8rXOq5Hz52f0dPQtIdIE7ibIROElctZ6qcByJJUUcQZaMSUGaC5L
-         PYPg==
-X-Gm-Message-State: ANoB5pnN0/vuGMyzpEl+1WXTyX8X8rRgpskpruNN64gugLpUXXIDnbd5
-        3FS3epo1omDnL02X7LAiYJ4Kug==
-X-Google-Smtp-Source: AA0mqf6NnqFP55HRb79YXq9Xi7imG/OjrWKxmg2AHykMJvlL7/gHosi71god0CG5G865JNWhc7OHtw==
-X-Received: by 2002:a05:600c:6888:b0:3d1:d746:7bca with SMTP id fn8-20020a05600c688800b003d1d7467bcamr2106872wmb.4.1670511172700;
-        Thu, 08 Dec 2022 06:52:52 -0800 (PST)
-Received: from localhost.localdomain ([2a00:79e1:abc:9:c7d:8d2a:a83c:450a])
-        by smtp.gmail.com with ESMTPSA id f13-20020a7bcd0d000000b003b47ff307e1sm4973469wmj.31.2022.12.08.06.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 06:52:52 -0800 (PST)
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Qais Yousef <qyousef@layalina.io>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
-Subject: [PATCH v2] sched/uclamp: Fix a uninitialized variable warnings
-Date:   Thu,  8 Dec 2022 14:51:08 +0000
-Message-Id: <20221208145108.452032-1-qyousef@layalina.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <927e4ffc-8400-b615-2d58-9e88ee4bdc3c@arm.com>
-References: <927e4ffc-8400-b615-2d58-9e88ee4bdc3c@arm.com>
+        Thu, 8 Dec 2022 09:52:13 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D47499F3E;
+        Thu,  8 Dec 2022 06:52:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A83B5B82430;
+        Thu,  8 Dec 2022 14:52:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39D6EC433D6;
+        Thu,  8 Dec 2022 14:52:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670511130;
+        bh=Zt1ASjxOfP069nTeasoXmi8s76tlDSB1EMEAvURlJ5o=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=Rb10/78v2DiHCeqVt87llYpYUyQflxiNWcOAJDo1xg1/sC3NQDhVYPA23xhqnpxpa
+         tVnuv2G6qaRVIceaUSJXuEWspQO594gVa6zpxoaccZ8com02XM94xRQtpEc1/yiatF
+         /UXnrFDs2+jmGdYkz/sKFh3vRdcX/HLdaqunIrDXyrOGv3KuhI0Cxokmfb43WiEAYh
+         +hr6RLRmOVhW6u43x2Un+LST99/aJ+1CNZ3ZSiY8rX7Ba4ZoDr1QO29I4OzhS0X4l0
+         qZ1D9yJFwUsOYC/DeiJcwLRmP2B9fsj6cYmRDC9ubxmoKsUmfnmLapxr7Lo9adO3JH
+         6+oLFj7orYySA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v5 01/11] wifi: rtw88: print firmware type in info message
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221202081224.2779981-2-s.hauer@pengutronix.de>
+References: <20221202081224.2779981-2-s.hauer@pengutronix.de>
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <167051112518.9839.10838893022314456612.kvalo@kernel.org>
+Date:   Thu,  8 Dec 2022 14:52:07 +0000 (UTC)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Addresses the following warnings:
+Sascha Hauer <s.hauer@pengutronix.de> wrote:
 
-> config: riscv-randconfig-m031-20221111
-> compiler: riscv64-linux-gcc (GCC) 12.1.0
->
-> smatch warnings:
-> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
-> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
+> It's confusing to read two different firmware versions in the syslog
+> for the same device:
+> 
+> rtw_8822cu 2-1:1.2: Firmware version 9.9.4, H2C version 15
+> rtw_8822cu 2-1:1.2: Firmware version 9.9.11, H2C version 15
+> 
+> Print the firmware type in this message to make clear these are really
+> two different firmwares for different purposes:
+> 
+> rtw_8822cu 1-1.4:1.2: WOW Firmware version 9.9.4, H2C version 15
+> rtw_8822cu 1-1.4:1.2: Firmware version 9.9.11, H2C version 15
+> 
+> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
+> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-Fixes: 244226035a1f ("sched/uclamp: Fix fits_capacity() check in feec()")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
----
+11 patches applied to wireless-next.git, thanks.
 
-Changes in v2:
+1d8966049440 wifi: rtw88: print firmware type in info message
+69020957bcb7 wifi: rtw88: Call rtw_fw_beacon_filter_config() with rtwdev->mutex held
+d57ca103e54e wifi: rtw88: Drop rf_lock
+1e2701f4079a wifi: rtw88: Drop h2c.lock
+8647f7f0b908 wifi: rtw88: Drop coex mutex
+78d5bf925f30 wifi: rtw88: iterate over vif/sta list non-atomically
+a82dfd33d123 wifi: rtw88: Add common USB chip support
+aff5ffd718de wifi: rtw88: Add rtw8821cu chipset support
+45794099f5e1 wifi: rtw88: Add rtw8822bu chipset support
+07cef03b8d44 wifi: rtw88: Add rtw8822cu chipset support
+87caeef032fc wifi: rtw88: Add rtw8723du chipset support
 
-	* Improve indentation as suggested by Dietmar
-
- kernel/sched/fair.c | 35 ++++++++++++++++-------------------
- 1 file changed, 16 insertions(+), 19 deletions(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 4cc56c91e06e..6a2fc2ca5078 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 	eenv_task_busy_time(&eenv, p, prev_cpu);
- 
- 	for (; pd; pd = pd->next) {
-+		unsigned long util_min = p_util_min, util_max = p_util_max;
- 		unsigned long cpu_cap, cpu_thermal_cap, util;
- 		unsigned long cur_delta, max_spare_cap = 0;
- 		unsigned long rq_util_min, rq_util_max;
--		unsigned long util_min, util_max;
- 		unsigned long prev_spare_cap = 0;
- 		int max_spare_cap_cpu = -1;
- 		unsigned long base_energy;
-@@ -7239,6 +7239,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		eenv.pd_cap = 0;
- 
- 		for_each_cpu(cpu, cpus) {
-+			struct rq *rq = cpu_rq(cpu);
-+
- 			eenv.pd_cap += cpu_thermal_cap;
- 
- 			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
-@@ -7257,24 +7259,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			 * much capacity we can get out of the CPU; this is
- 			 * aligned with sched_cpu_util().
- 			 */
--			if (uclamp_is_used()) {
--				if (uclamp_rq_is_idle(cpu_rq(cpu))) {
--					util_min = p_util_min;
--					util_max = p_util_max;
--				} else {
--					/*
--					 * Open code uclamp_rq_util_with() except for
--					 * the clamp() part. Ie: apply max aggregation
--					 * only. util_fits_cpu() logic requires to
--					 * operate on non clamped util but must use the
--					 * max-aggregated uclamp_{min, max}.
--					 */
--					rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
--					rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
--
--					util_min = max(rq_util_min, p_util_min);
--					util_max = max(rq_util_max, p_util_max);
--				}
-+			if (uclamp_is_used() && !uclamp_rq_is_idle(rq)) {
-+				/*
-+				 * Open code uclamp_rq_util_with() except for
-+				 * the clamp() part. Ie: apply max aggregation
-+				 * only. util_fits_cpu() logic requires to
-+				 * operate on non clamped util but must use the
-+				 * max-aggregated uclamp_{min, max}.
-+				 */
-+				rq_util_min = uclamp_rq_get(rq, UCLAMP_MIN);
-+				rq_util_max = uclamp_rq_get(rq, UCLAMP_MAX);
-+
-+				util_min = max(rq_util_min, p_util_min);
-+				util_max = max(rq_util_max, p_util_max);
- 			}
- 			if (!util_fits_cpu(util, util_min, util_max, cpu))
- 				continue;
 -- 
-2.25.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20221202081224.2779981-2-s.hauer@pengutronix.de/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
