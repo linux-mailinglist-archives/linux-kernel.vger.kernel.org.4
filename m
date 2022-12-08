@@ -2,92 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C68B647192
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:22:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7EC647195
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:23:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiLHOWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:22:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49058 "EHLO
+        id S229656AbiLHOXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:23:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiLHOVV (ORCPT
+        with ESMTP id S230259AbiLHOWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:21:21 -0500
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6010E98554;
-        Thu,  8 Dec 2022 06:20:54 -0800 (PST)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 1E190C0010;
-        Thu,  8 Dec 2022 14:20:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670509253;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l1d1C6XOR5CdMp7rtfdwwMdKTU/wg8Y6oozqFuEEadY=;
-        b=ivdJdSy9X76V6OrTItBkoQRR+c4AdoISFooXkR8IGRL2MT3HVUScvIivkpWj1AdlsnPkc/
-        UKHvMn44v8XAb4kZHG2uEvuC9S3D42mj7i6jp4YYcmmJ7Q5qaGg7OkcDKBkrrqCd7pfULv
-        il6rbTPxXVDP1VJKyBYbb3ouJQaIiJrK2dpqi2pk4EdR+GHrIWcbSQOXuRmzOIbZNKxmDB
-        P+BIzv2n2K+mIIns3UvNnTbY5fMAhoaes9bxgZzzNOsP02Z8OsHlckCVTNca/AUMMzJ76f
-        3CO8V2NbEMBCDmo86DMYWnhoHJAqB6LAqRusyrYfnTcrS2fEXrc9gaXeAV+8HA==
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Sakari Ailus <sakari.ailus@iki.fi>,
-        Conor Dooley <conor@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v3 12/12] media: sun6i-isp: params: Unregister pending buffer on cleanup
-Date:   Thu,  8 Dec 2022 15:20:06 +0100
-Message-Id: <20221208142006.425809-13-paul.kocialkowski@bootlin.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221208142006.425809-1-paul.kocialkowski@bootlin.com>
-References: <20221208142006.425809-1-paul.kocialkowski@bootlin.com>
+        Thu, 8 Dec 2022 09:22:19 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0539F950CF;
+        Thu,  8 Dec 2022 06:21:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9C285B8240C;
+        Thu,  8 Dec 2022 14:21:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BCCC433D7;
+        Thu,  8 Dec 2022 14:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670509284;
+        bh=np8jYI/VKmUFiySM5QA6XkNRELjkC4uz0yzj/atxGbc=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=pBsbW2fJkrzZ1mbPFY9dAWNrUEWM9mqh4a5WJdUU3yiGPGlnSSMIYDO1GzSyIQRhb
+         u0DVDTUjnraW1Xxn0qkhAeqsxP31t55injNiYmq2ur6Of4caRZ3ta1Zsz4tKc70dnE
+         CXNtYagA+noyFQKW82NsA7aBfe5AMSkXiGs4iEIf63kUna8ZrDTNNV4pGfZLRQHM54
+         fHY9FkGB9diZs6kCeaF5YdaZ7IZ6jOUVRE6EIBV1170tiUKXP5auyNvqnAAYDe9gQO
+         nqlwIXqDbO7TyCyypsOGOlw5iOBIHXSxwKV1JJGnK3r7mhClHv75tDWQbY7IsmlRgx
+         jxZiNWECrZ37A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-wireless@vger.kernel.org, Neo Jou <neojou@gmail.com>,
+        Hans Ulli Kroll <linux@ulli-kroll.de>,
+        Ping-Ke Shih <pkshih@realtek.com>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        kernel@pengutronix.de, Johannes Berg <johannes@sipsolutions.net>,
+        Alexander Hochbaum <alex@appudo.com>,
+        Da Xue <da@libre.computer>, Po-Hao Huang <phhuang@realtek.com>,
+        Viktor Petrenko <g0000ga@gmail.com>
+Subject: Re: [PATCH v4 08/11] wifi: rtw88: Add rtw8821cu chipset support
+References: <20221129100754.2753237-1-s.hauer@pengutronix.de>
+        <20221129100754.2753237-9-s.hauer@pengutronix.de>
+        <20221129081753.087b7a35@kernel.org>
+        <d2113f20-d547-ce16-ff7f-2d1286321014@lwfinger.net>
+Date:   Thu, 08 Dec 2022 16:21:16 +0200
+In-Reply-To: <d2113f20-d547-ce16-ff7f-2d1286321014@lwfinger.net> (Larry
+        Finger's message of "Tue, 29 Nov 2022 10:59:46 -0600")
+Message-ID: <87tu260yeb.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The state cleanup helper should unregister the pending buffer from
-the state after returning it to v4l2, like it is done for other
-buffers in the wait queue.
+Larry Finger <Larry.Finger@lwfinger.net> writes:
 
-Before this change, the pending buffer from a previous run might have
-been returned at the beginning of the next run, causing an error.
+> On 11/29/22 10:17, Jakub Kicinski wrote:
+>> On Tue, 29 Nov 2022 11:07:51 +0100 Sascha Hauer wrote:
+>>> +config RTW88_8821CU
+>>> +	tristate "Realtek 8821CU USB wireless network adapter"
+>>> +	depends on USB
+>>> +	select RTW88_CORE
+>>> +	select RTW88_USB
+>>> +	select RTW88_8821C
+>>> +	help
+>>> +	  Select this option will enable support for 8821CU chipset
+>>> +
+>>> +	  802.11ac USB wireless network adapter
+>>
+>> Those kconfig knobs add so little code, why not combine them all into
+>> one? No point bothering the user with 4 different questions with amount
+>> to almost nothing.
+>
+> I see only one knob there, name RTW88_8821CU. The other configuration
+> variables select parts of the code that are shared with other drivers
+> such as RTW88_8821CE and these parts must be there.
 
-Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Fixes: e3185e1d7c14 ("media: staging: media: Add support for the Allwinner A31 ISP")
----
- drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c | 2 ++
- 1 file changed, 2 insertions(+)
+I just test compiled these patches and we have four new questions:
 
-diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
-index 7b41a13162b9..e28be895b486 100644
---- a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
-+++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp_params.c
-@@ -208,6 +208,8 @@ static void sun6i_isp_params_state_cleanup(struct sun6i_isp_device *isp_dev,
- 		vb2_buffer = &state->pending->v4l2_buffer.vb2_buf;
- 		vb2_buffer_done(vb2_buffer, error ? VB2_BUF_STATE_ERROR :
- 				VB2_BUF_STATE_QUEUED);
-+
-+		state->pending = NULL;
- 	}
- 
- 	list_for_each_entry(isp_buffer, &state->queue, list) {
+  Realtek 8822BU USB wireless network adapter (RTW88_8822BU) [N/m/?] (NEW) m
+  Realtek 8822CU USB wireless network adapter (RTW88_8822CU) [N/m/?] (NEW) m
+  Realtek 8723DU USB wireless network adapter (RTW88_8723DU) [N/m/?] (NEW) m
+  Realtek 8821CU USB wireless network adapter (RTW88_8821CU) [N/m/?] (NEW) 
+
+To me this looks too fine grained. Does it really make sense, for
+example, to enable RTW88_8822BU but not RTW88_8822CU? Would just having
+RTW88_USB containing all USB devices be more sensible? And the same for
+PCI, and if we have in the future, SDIO devices.
+
+But like discussed earlier, to keep things simple let's handle that
+separately from this patchset.
+
 -- 
-2.38.1
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
