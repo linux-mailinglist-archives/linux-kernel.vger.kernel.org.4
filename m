@@ -2,116 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B61D1646F2F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:59:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529D2646F27
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:58:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiLHL7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51666 "EHLO
+        id S229692AbiLHL6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:58:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHL7l (ORCPT
+        with ESMTP id S229479AbiLHL6C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:59:41 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CA183273
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:59:40 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id t17so1391289pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 03:59:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0xH94kFWWuqIK3wIDtIngHE1upupdHVcUwiddW+2xMc=;
-        b=N4sDHPjbLCFDqetvJx59bP1Va8x+mS9eu+FPO0dV6/8aB89WuWUMyKP6y1stK2Kyob
-         yZXnl82/DG0u1pCETafI2/evTJ1lLmEziBswJQSA0pOdiKliMCHRd7emwDnjyi2DXGnH
-         oWy+bVRbfMWi0iELesdhFjVcjkWfzt42FrGraNAprvzDvJwwvhFMthUuj9yGlHTefZCd
-         OeUNouaZ77xyrhSfNKRPkudJw3TnhdM8UHgEm/Viepq5Sv1ulamdTZnrYS2HbHYTfcRi
-         8NdWr3eu1RzECoN/hYWzJ4pglfWdqIqwc4gOGxMZg0wEqX1XzxJ44fSTcFrZ++ONFyZu
-         Hk+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0xH94kFWWuqIK3wIDtIngHE1upupdHVcUwiddW+2xMc=;
-        b=R66oqyjyp9yUh204Ek/cshYrSR4aY+KPRTjF5YdsoS/7uxWTLq8bsXWBKHfB5ZcJYm
-         fOLrNF+jZk4sBhjxCJDIHwMYkP7A8GkA/8ZHE8hMv1E+HHJ/x28xJzclFiWk5ktc5wwH
-         BApdvzi0uHBEIF3CkqvUNS2Xmh3kDw3QOpl2iti8rq9VY50SNWqdmEGistnfeeRQ0RId
-         FXS7Y6/SqqMTnueaGotgbOfhguRN/aeDNkdFe3bzDZVj8X4tPi5ICb3vBf3KuZZ9U6iB
-         vtbeYhtOaEjBdXJX5yV9e+/sUQBWsW5WsNuI4zh06iEAa5+lZ22eC4GDHrwsjolW3mmi
-         JTTw==
-X-Gm-Message-State: ANoB5pk39nHb2YvcGnV55aKYzUlF3eHEpFEIVHjGQs/N6RL6T45J6rhJ
-        C4RozD/9z/K+u7lWYtssnfO6XI0TPEqccEbIVIs=
-X-Google-Smtp-Source: AA0mqf7WzrYvIJNtScflldCYQTS0t2XK4D8Ta9g67yIs5EBt+OIgIs9YEt8UmaD0jibwzKPEauogLw==
-X-Received: by 2002:a17:902:b194:b0:188:612b:441b with SMTP id s20-20020a170902b19400b00188612b441bmr1889523plr.65.1670500779912;
-        Thu, 08 Dec 2022 03:59:39 -0800 (PST)
-Received: from PXLDJ45XCM.bytedance.net ([139.177.225.228])
-        by smtp.gmail.com with ESMTPSA id ju2-20020a170903428200b00174d9bbeda4sm16373514plb.197.2022.12.08.03.59.37
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Dec 2022 03:59:39 -0800 (PST)
-From:   Muchun Song <songmuchun@bytedance.com>
-To:     akpm@linux-foundation.org
-Cc:     muchun.song@linux.dev, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH] MAINTAINERS: update Muchun Song's email
-Date:   Thu,  8 Dec 2022 19:55:48 +0800
-Message-Id: <20221208115548.85244-1-songmuchun@bytedance.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Thu, 8 Dec 2022 06:58:02 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F4D3E085;
+        Thu,  8 Dec 2022 03:58:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670500682; x=1702036682;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=RhThfi2MnPhsR7HzMO5D1K17BZtYy9Njo3aLlEab60U=;
+  b=HQeE3f0R1q1crURFAI17OEbvvpf/FQfgffHoEXanj7kmO5LaTu/L2RqJ
+   mdYrt5sFO+wjb839MOiss3yD0EH0WPfOvo0qe0I7AAXthuFVbJlBkQSLK
+   rbPoBbrNtY9hIce6izWPBxaOpNtQynZJG0WzwcCIDQQKBgr3M7x/ZLt9m
+   5AuNG8B8wW7hAYpL1wbo/ivMsW0xF/VUgpgiSj7RAhDn6YA0q4veAl4TX
+   6bedKPbMvLkS2jZ/t5iqdIV4W0gY+ApKSOKjj+kWl4oUBsfT2Lk1Fm3eG
+   SzPO99LiPkr/14KY8k1/a2S+XvZ11XPWX5l8+WmxOTTuSODfz8OqTTM6i
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="381444666"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="381444666"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:58:01 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="715573021"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="715573021"
+Received: from pors-mobl3.ger.corp.intel.com ([10.252.39.224])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:57:57 -0800
+Date:   Thu, 8 Dec 2022 13:57:56 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     Russ Weight <russell.h.weight@intel.com>,
+        linux-fpga@vger.kernel.org, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>,
+        Tianfei zhang <tianfei.zhang@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Marco Pagani <marpagan@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 6/9] mfd: intel-m10-bmc: Downscope SPI defines & prefix
+ with M10BMC_SPI
+In-Reply-To: <Y44RQ4Wutr/I1xsp@yilunxu-OptiPlex-7050>
+Message-ID: <9579a09f-a5a7-adb4-e34b-2416ae9b3ef@linux.intel.com>
+References: <20221202100841.4741-1-ilpo.jarvinen@linux.intel.com> <20221202100841.4741-7-ilpo.jarvinen@linux.intel.com> <Y4onmwWT8duVV0Sv@yilunxu-OptiPlex-7050> <2b253321-72ff-f15a-8879-aa41dce48055@intel.com> <b09aabe4-3f82-70f0-aca2-f1cdf7d6a26@linux.intel.com>
+ <Y44RQ4Wutr/I1xsp@yilunxu-OptiPlex-7050>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-273247173-1670500681=:1682"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm moving to the @linux.dev account. Map my old addresses and update it to
-my new address.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Signed-off-by: Muchun Song <songmuchun@bytedance.com>
----
- .mailmap    | 2 ++
- MAINTAINERS | 4 ++--
- 2 files changed, 4 insertions(+), 2 deletions(-)
+--8323329-273247173-1670500681=:1682
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-diff --git a/.mailmap b/.mailmap
-index 514a5a6c264d..ccba4cf0d893 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -374,6 +374,8 @@ Ricardo Ribalda <ribalda@kernel.org> <ricardo.ribalda@gmail.com>
- Roman Gushchin <roman.gushchin@linux.dev> <guro@fb.com>
- Roman Gushchin <roman.gushchin@linux.dev> <guroan@gmail.com>
- Roman Gushchin <roman.gushchin@linux.dev> <klamm@yandex-team.ru>
-+Muchun Song <muchun.song@linux.dev> <songmuchun@bytedance.com>
-+Muchun Song <muchun.song@linux.dev> <smuchun@gmail.com>
- Ross Zwisler <zwisler@kernel.org> <ross.zwisler@linux.intel.com>
- Rudolf Marek <R.Marek@sh.cvut.cz>
- Rui Saraiva <rmps@joel.ist.utl.pt>
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 997e75dbca5c..b44cfa7f8ce9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5372,7 +5372,7 @@ M:	Johannes Weiner <hannes@cmpxchg.org>
- M:	Michal Hocko <mhocko@kernel.org>
- M:	Roman Gushchin <roman.gushchin@linux.dev>
- M:	Shakeel Butt <shakeelb@google.com>
--R:	Muchun Song <songmuchun@bytedance.com>
-+R:	Muchun Song <muchun.song@linux.dev>
- L:	cgroups@vger.kernel.org
- L:	linux-mm@kvack.org
- S:	Maintained
-@@ -9552,7 +9552,7 @@ F:	drivers/net/ethernet/huawei/hinic/
- 
- HUGETLB SUBSYSTEM
- M:	Mike Kravetz <mike.kravetz@oracle.com>
--M:	Muchun Song <songmuchun@bytedance.com>
-+M:	Muchun Song <muchun.song@linux.dev>
- L:	linux-mm@kvack.org
- S:	Maintained
- F:	Documentation/ABI/testing/sysfs-kernel-mm-hugepages
+On Mon, 5 Dec 2022, Xu Yilun wrote:
+
+> On 2022-12-05 at 11:31:06 +0200, Ilpo Järvinen wrote:
+> > On Fri, 2 Dec 2022, Russ Weight wrote:
+> > > On 12/2/22 08:28, Xu Yilun wrote:
+> > > > On 2022-12-02 at 12:08:38 +0200, Ilpo Järvinen wrote:
+> > > >> Move SPI based board definitions to per interface file from the global
+> > > >> header. This makes it harder to use them accidently in the
+> > > >> generic/interface agnostic code. Prefix the defines with M10BMC_SPI
+> > > > I'm not sure if the register layout is actually bound to the bus
+> > > > interface. My experience is the register layout is always decided by
+> > > > board type. Is it possible there will be a new SPI based board but
+> > > > has different register layout in future?
+> > > >
+> > > > So is M10BMC_SPI_XXX a good nam
+> > > 
+> > > There could be future devices, spi or pmci based, that require different
+> > > addresses for some of these values, and at that time we would need to
+> > > additional versions of some of these macros using different names.
+> > > Right now, spi and pmci are the primary differentiating factors. I'm not
+> > > sure how to improve on the naming. Do you have any suggestions?
+> > 
+> > It's per board type yes, but there's a strong clustering currently on 
+> > spi/pmci differentiation. That implies a one define applies to multiple 
+> > board types so naming it, e.g., after a single board type seems not much 
+> > better than the current approach.
+> 
+> I think it is better to name after one of the board type among all its
+> supported types. At least it clearly indicates they are related to board
+> type.
+> 
+> Actually it is normal for many driver modules. A driver was initially
+> implemented for one board type, and was named by the initial board.
+> But later you have more board types compatible to the driver, you don't
+> change the driver name, just use it.
+
+Ok, I'll do it that way then.
+
 -- 
-2.11.0
+ i.
 
+--8323329-273247173-1670500681=:1682--
