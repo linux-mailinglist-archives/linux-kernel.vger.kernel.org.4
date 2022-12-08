@@ -2,65 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD859646AC4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:42:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC47646AC6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbiLHIlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44836 "EHLO
+        id S229917AbiLHIl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:41:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLHIlg (ORCPT
+        with ESMTP id S229575AbiLHIlg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Dec 2022 03:41:36 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8FA16176F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4B261BA5;
         Thu,  8 Dec 2022 00:41:35 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id A844F3200488;
-        Thu,  8 Dec 2022 03:41:30 -0500 (EST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id F3F1A3200583;
+        Thu,  8 Dec 2022 03:41:33 -0500 (EST)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 08 Dec 2022 03:41:32 -0500
+  by compute5.internal (MEProxy); Thu, 08 Dec 2022 03:41:35 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1670488890; x=1670575290; bh=ofGKFfIQd2m7ie86s3B7/ao4k
-        1jGkO2oySg1tYsGzrU=; b=sfPkxjStcjTieZ6d29X5LqINXORCQAvoGOG3hdpU7
-        vbHignV9KHUlHGepP/a+byTBQCU4t7/ywAnAngxM+oEJUPeghOTvbzk8AsZBp74m
-        UihL6lo3/OgwHdDyQquQaQRoZZtLf7Mkd8waXCgIYfYajh4giQkyyexOwEApEbbE
-        YBK4rcigJXsRE7CEtjYmVhsF23mEw7yYO8m3nMfhqMY/CY/9ETeNO0TinhrcmF3N
-        rsYQPqUP+vEHeqKMtuPJmr9Un7rXifLNmTEhVTIvZbuji/0F9WIxOcj/4HOWl26r
-        EvNPSUffqj10xYGLCyxbL/uw8dcnOAKxJc6OONE+zwnnQ==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1670488893; x=1670575293; bh=Tk
+        CT8U+X3N1U6fotPxSufI3kcQezGdSYmJTP5FLzjnU=; b=JuRmQzN8OIcihpugbq
+        8WDUaOV3eHgPKYMWi0eo501/oyB2x2kSVJFHtAdc/3eIKTfLvew1PriAmMKHPZ0z
+        yxUBG3AXIooAnsmSzrpGHq7Flyt2BLsuhOvSoWdNyGpG/aUdfPLhsMU3mhHZhhwQ
+        0+p9oCX1Jh8vmj7iqRwscc53LjDkQ6MPN935fEN8zYA75tkUkutV3oI/cHiNGEpV
+        wNodbQ5InvFWPjvuM1RP+FfvpILmMPAHyRH5aL0qDu1k2LAccsBZGPJ9jkysqEdf
+        B9pfQKzllCgCw1R64FXf6wcaee/UZgMPQB0kRjpPNgpDJIwgX6qxucS37Bovrd/x
+        8APQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1670488890; x=1670575290; bh=ofGKFfIQd2m7ie86s3B7/ao4k1jGkO2oySg
-        1tYsGzrU=; b=EtyEGp1xj8J0r6bJXsjPrQAdJt74UZqAcAkohqM7xPM4p0FmEM+
-        ckMFw7Mk/G+rPYM6GPI8yk3sMqPxaKnn/GOT2ksjkLss/CPf00ogoLT9N+yAK46t
-        oO0Mm38AuPhD3yHBDYTd4+x5t/3tFzkFp8ln5hBWHfw9qN7IPGfgNftPEBNhV0Hb
-        E854WwObGYXGxncBYSplipbAsRzwFRcu9IiyWavhz9H8PTGWBqJgSi76PdmyMXlg
-        ZzhZZNSBJ3Wj0BZGbYYEG2o4vqxHy53os0WUACmngp8JzVjDXH4aJ4ubE/yjsGZ6
-        XOmAYYIH8FPKp0ecj0YasAmEmf0N90YeyHg==
-X-ME-Sender: <xms:OaORY8s3vjLkNzAzi1uNhT5oim0hjsBLyY8yiFYFBNTU3cBCfworSg>
-    <xme:OaORY5c_OELpoa1zQz1Vd5tvtFPE0lLiZIoVtKgFlrLvaG-qpKZciZwcXcpStax04
-    C4dCh56iHAl5fM7Eg>
-X-ME-Received: <xmr:OaORY3wVqUNnQ0g_8SwMYYnc1j397mS-AgKMKULN4bOzKLripokxeGoIJIyY2lIheN7d3EkVHX4ZV8q4C7uHKobpP65SyDMWvVkVzkNlGayCo4XLc5GEApVXXWIWkCMYQSpNlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgdduvdehucetufdoteggodetrfdotf
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1670488893; x=1670575293; bh=TkCT8U+X3N1U6
+        fotPxSufI3kcQezGdSYmJTP5FLzjnU=; b=MLAmBnAjs4Ab3z2xcLd0i1Xnfhad9
+        KGws1d0FhVKJhgBr30zYDM7cmQ0zn8XH75nLqxC8tEZz6rvKmCbqi31+sK2ga/iX
+        RMcdhyan+SfSKNB/bXlp5xXXFIux/DMIz7iQqthIBAJXCNfV2Hdh20YqnLjXHiEO
+        86/CVVAkR9mGRKUpRxqvtDYz/N+LYWaapWKvjPvgj2+3JQRxZNN3lVtkAPVxbMXY
+        2jFW7JkWUlQegh0LfxroRmhooU085TK+I1Hin8NtYEHwb60ogUiky1zeu4fGe761
+        91m2EKGsYNriJa2I+8/IUgCuIH9ra9dsoyVXzE1F1bl0w9dEwy5jX62Wg==
+X-ME-Sender: <xms:PaORYzroUei0TCjfPwNDDYJtEl0JnKEc4dDFxAXmjyhr9afK260R-A>
+    <xme:PaORY9oY8iqcfaht3c7OCUSf1QtuMrw5zEvW2qrw2AhiFjS-pRDw-QMMnZxF6kMAZ
+    KF3VBIQOms_hkrNJQ>
+X-ME-Received: <xmr:PaORYwPJwLe1ACG0LzH_a2sFa0WZ7F25NYpR4VuCoYi-xL_KbgIhFvjM00uk99mO1c3k7Ov1otEqwSNv_51IuzuANAesKEgDP4sygmiriY3h6DfAEl5ob0o1u1gdSc5GrK29oQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgdduvdegucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:OaORY_P5flMhRbXtN9r5E2Y3bwjYphMhHHFNp9T-s5EDoNLcP64n6g>
-    <xmx:OaORY8-C6AOjyPwXP8dbNPmn7ohZzwXaXm8kkSek2LWX37fMNFMGKQ>
-    <xmx:OaORY3VIQCkCWCmRdlj4ciR5Dh-ZVvslfumW-VNimGZXRArR6a2SUA>
-    <xmx:OqORY2fUNoxh42T9FejvkMFjPVoUBSdGznsIUjw4yvX0SlRMhLj4wQ>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgffhvefhgfehjeehgfekheeuffegheffjeegheeuudeufeffhffh
+    ueeihfeufffhnecuffhomhgrihhnpeguvghvihgtvghtrhgvvgdrohhrghenucevlhhush
+    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhh
+    ohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:PaORY260VZ8yvfk43PO3VcTU90n7KqJAnihF_HbWNSBwYDyfgIn6Ew>
+    <xmx:PaORYy5rRM1WihtHzqU08sTQn44b7_t5nyka6rF6w3RD640vjJe-ZA>
+    <xmx:PaORY-iSuxHJzdTgciBmfFPrlMQfT5Gqo63kpuTM-d2_sVVIudfWgw>
+    <xmx:PaORYxSc8gIz0loOp4jBqy9Vudt53nJq-NCeeI_fNPw0tN65ta_0tg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 03:41:28 -0500 (EST)
+ 8 Dec 2022 03:41:32 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
@@ -73,11 +75,14 @@ Cc:     Chen-Yu Tsai <wens@csie.org>,
         linux-arm-kernel@lists.infradead.org,
         Samuel Holland <samuel@sholland.org>,
         Andrew Lunn <andrew@lunn.ch>, Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH v5 0/4] regulator: Add support for Allwinner D1 system LDOs
-Date:   Thu,  8 Dec 2022 02:41:23 -0600
-Message-Id: <20221208084127.17443-1-samuel@sholland.org>
+        Maxime Ripard <mripard@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/4] regulator: dt-bindings: Add Allwinner D1 system LDOs
+Date:   Thu,  8 Dec 2022 02:41:24 -0600
+Message-Id: <20221208084127.17443-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
+In-Reply-To: <20221208084127.17443-1-samuel@sholland.org>
+References: <20221208084127.17443-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -90,65 +95,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds the binding and driver for one of the two pairs of LDOs
-inside the Allwinner D1 SoC. I am splitting up the two pairs of LDOs to
-unblock merging the SoC devicetree; the analog LDOs depend on the audio
-codec binding, but they are not required to boot.
+The Allwinner D1 SoC contains two pairs of in-package LDOs. The pair of
+"system" LDOs is for general purpose use. LDOA generally powers the
+board's 1.8 V rail. LDOB powers the in-package DRAM, where applicable.
 
-A binding and driver change is required for the SRAM controller, to
-accept the regulators device as its child node.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-The example for the regulator device binding is in SRAM controller
-binding document, per Rob's request to keep MFD examples in one place.
-
-Because of this, at least the first 3 patches need to be taken together
-through the regulator tree, though it should be fine to merge the whole
-series that way.
-
-Changes in v5:
- - Correct the voltage calculation for the non-linearity around 1.6 V.
+(no changes since v4)
 
 Changes in v4:
  - Fix the order of the maintainer/description sections
  - Replace unevaluatedProperties with "additionalProperties: false"
  - Drop the analog LDOs until the codec binding is ready
- - Drop the analog LDOs until the codec binding is ready
- - Remove unevaluatedProperties from regulators schema reference
- - Check the compatible string instead of the node name
 
 Changes in v3:
  - Add "reg" property to bindings
  - Add "unevaluatedProperties: true" to regulator nodes
  - Minor changes to regulator node name patterns
  - Remove system-ldos example (now added in the parent binding)
- - Adjust control flow in sun20i_regulator_get_regmap() for clarity
- - Require the regulators node to have a unit address
- - Reference the regulator schema from the SRAM controller schema
- - Move the system LDOs example to the SRAM controller schema
- - Reorder the patches so the example passes validation
 
 Changes in v2:
  - Remove syscon property from bindings
  - Update binding examples to fix warnings and provide context
- - Use decimal numbers for .n_voltages instead of field widths
- - Get the regmap from the parent device instead of a property/phandle
 
-Samuel Holland (4):
-  regulator: dt-bindings: Add Allwinner D1 system LDOs
-  regulator: sun20i: Add Allwinner D1 LDOs driver
-  dt-bindings: sram: sunxi-sram: Add regulators child
-  soc: sunxi: sram: Only iterate over SRAM children
-
- .../allwinner,sun20i-d1-system-ldos.yaml      |  37 +++++
- .../allwinner,sun4i-a10-system-control.yaml   |  28 ++++
- drivers/regulator/Kconfig                     |   8 +
- drivers/regulator/Makefile                    |   1 +
- drivers/regulator/sun20i-regulator.c          | 156 ++++++++++++++++++
- drivers/soc/sunxi/sunxi_sram.c                |   3 +
- 6 files changed, 233 insertions(+)
+ .../allwinner,sun20i-d1-system-ldos.yaml      | 37 +++++++++++++++++++
+ 1 file changed, 37 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
- create mode 100644 drivers/regulator/sun20i-regulator.c
 
+diff --git a/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
+new file mode 100644
+index 000000000000..ec6695c8d2e3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/allwinner,sun20i-d1-system-ldos.yaml
+@@ -0,0 +1,37 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/allwinner,sun20i-d1-system-ldos.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Allwinner D1 System LDOs
++
++maintainers:
++  - Samuel Holland <samuel@sholland.org>
++
++description:
++  Allwinner D1 contains a pair of general-purpose LDOs which are designed to
++  supply power inside and outside the SoC. They are controlled by a register
++  within the system control MMIO space.
++
++properties:
++  compatible:
++    enum:
++      - allwinner,sun20i-d1-system-ldos
++
++  reg:
++    maxItems: 1
++
++patternProperties:
++  "^ldo[ab]$":
++    type: object
++    $ref: regulator.yaml#
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++...
 -- 
 2.37.4
 
