@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E065C646ACA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:42:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95C46646AD1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiLHImM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:42:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S229968AbiLHInT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiLHIlq (ORCPT
+        with ESMTP id S229692AbiLHImw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:41:46 -0500
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4FF61BA5;
-        Thu,  8 Dec 2022 00:41:46 -0800 (PST)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 5FBC63200406;
-        Thu,  8 Dec 2022 03:41:44 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 08 Dec 2022 03:41:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670488903; x=1670575303; bh=o2
-        7cKNM0F/yZT4+xauvXc0mBIO5hPIuXwZIEKjYIs/4=; b=uGBrY91JweDL0OZJUF
-        3LGUk3EerYvwUZ3Qkdba7oX7StXpB8PlbJQuayR6sQQRPDSetbY/vgwLQt+mFFk9
-        GnShE/4bxIiHgV54NMAzRj+HlIuNkoZmZsYNdeHnzUP2Vt/1ihRyMkZNkZOcYCwE
-        vAwrugA0QSir/zGR26yswLaEvu1RBjfqsiSVsiMWZaDTcRGUYkRWCXvVo8Wp8l0V
-        4MJVfUZnHDd4TKEzgC1NSJ9mJA3lw5Ci+TKsJj7D8wm6dIDlE1O74hXQTyVMrFKC
-        Lzn4arLp/6liijLrKLV3ABGtNND37MVimDn22XUfFyqf7TxOMC8EvAoOtA+kLWAy
-        Cdpg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1670488903; x=1670575303; bh=o27cKNM0F/yZT
-        4+xauvXc0mBIO5hPIuXwZIEKjYIs/4=; b=p7S1ezHwMNotvpUjUmhCwhfxKbm2t
-        w6wwpdzek3O0FQdyJWfur0FNgPmodmKr553+AfeGDqsY9A48xvc4fr/Gu/5xmXbp
-        EpsmEysMjn1rk90tHxojvM2P/4LxCxAcv+uLjkzJGZ+xgIGp1vheL/rR5PYbiALM
-        gYWgGZelfeSb1/Dk2lc4PyVTMbdhaFgO+R41aQ1uGzNGq+uPLLB/8PXSWkYZjFHo
-        QhCMCo89lWfi//s6JpCsCUUaZwPRdSb2oZdh95Ke57teXvp8SBSyUK16fgSz5D8V
-        DkXKI/J1xLw4QNGklrWkNBlgr6QDp9AT3hdvcClFJHcKc5GqloZy2FO/A==
-X-ME-Sender: <xms:R6ORY0_S5trTL60xBjjq9ZUHEWMLXVxm1Wx887HWnkv-vqmUEjwpoQ>
-    <xme:R6ORY8uhBEDQ3lhTfw2bzaQxlMxwbbo__4qG5ncSPVNcaF65BDkF2ahoJFVVemWQ3
-    MswH1HPctoptLbaCw>
-X-ME-Received: <xmr:R6ORY6Cd2ZPsksAxGFZUK2hxBfbFESSevn20CUgHqk_kL-qZyNy5YiEFnrWmtseRBWL0P3440yVCHw6-wyNOJLck-AN-sRu032nKVpAMdbQQw8V124yY06A6Hli6kMralpTblQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgdduvdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
-    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:R6ORY0dJqcuIphmfZLXksqznY6HpuNnKMz2ud24wIyZz5ofjilKyZw>
-    <xmx:R6ORY5PBoSrIZfgl8nvWW3KzlV-RNWsOKd6IcYUmANIL7m0-fEHpmw>
-    <xmx:R6ORY-kZNOlXuyRcpsccmAYRsn4gS-Y2_QoIP9TX5k8oIq0FtRccnQ>
-    <xmx:R6ORY_uRs_aYVR-3yMymBd-5dCss312yWWmU3D7fBeYUnOkKb3dQBg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 03:41:43 -0500 (EST)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andre Przywara <andre.przywara@arm.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-sunxi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org,
-        Samuel Holland <samuel@sholland.org>,
-        Andrew Lunn <andrew@lunn.ch>, Heiko Stuebner <heiko@sntech.de>,
-        Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH v5 4/4] soc: sunxi: sram: Only iterate over SRAM children
-Date:   Thu,  8 Dec 2022 02:41:27 -0600
-Message-Id: <20221208084127.17443-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.37.4
-In-Reply-To: <20221208084127.17443-1-samuel@sholland.org>
-References: <20221208084127.17443-1-samuel@sholland.org>
+        Thu, 8 Dec 2022 03:42:52 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFBA61BA5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:41:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670488908;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wUElgt1lp4nGY3sTMyIIkCMUOHZcBXcdQIFg7HKHvUg=;
+        b=PKGipOrdf+rNTCIOexfLtTijuzkjKyYLamJ/TGGrbRHWSwti2c0XaNaPTYc76IWJgtEQvn
+        YaRYyyUPtqxxofJvnzbx24VL0wM7BtYyyvCC2qgIpAAu0svR0rTNTRRCcL7rx8s/pBVdB2
+        e6qE2i71KVc0bVzh81zvQ1sQbR33vco=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-606-OeUmAbX2PDiYytQsHX3VZA-1; Thu, 08 Dec 2022 03:41:46 -0500
+X-MC-Unique: OeUmAbX2PDiYytQsHX3VZA-1
+Received: by mail-wm1-f69.google.com with SMTP id c187-20020a1c35c4000000b003cfee3c91cdso488180wma.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:41:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wUElgt1lp4nGY3sTMyIIkCMUOHZcBXcdQIFg7HKHvUg=;
+        b=ZB1ltSVht3jKb1iIt+XP89ECD4Glqp31zOcIIugURRg4k51QvrixHn/X1GnNGf1lvf
+         xNxR5c4rIhC0LMpXyJG0Yi7axTUyRB2AOTkINWg3YUDeXCUbwb3Mr8M+XKlUGuMMaUSh
+         2yKHMpLctAgTuNU2iVfYCJHKbDhavOCjaceilO+UWZzhSKJcVN+/NdgnszlK1uFGyCzD
+         tC3LbwhT2ZN41JyQN/FHa8fkmY5bX/QVvTHpLAh2LgI7tjYckS12PvLB71KKbFrT/qu8
+         Waaf0EmpJZuV1QSoXRSse/Rrsds77j+GHwXC4WWdBWK5uYuNwHfnNIV39qI+VkziXlpq
+         IAnQ==
+X-Gm-Message-State: ANoB5pkKO22auaSAoAUIB5VVkLYMBg5yYKnv3Q8vkOxo/XhLaupYBJxo
+        s+mrEOtPXUtzyepwes/DwLWmhM14OqpFF48cn9aNVYOZxZD2rSfoLFdgkU/n7x/iOaJoZA0DrUG
+        NiB1Z1G1gfftCy7FL4h9TqqDg
+X-Received: by 2002:adf:dbcd:0:b0:242:1294:5174 with SMTP id e13-20020adfdbcd000000b0024212945174mr30087114wrj.249.1670488905414;
+        Thu, 08 Dec 2022 00:41:45 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6AXinO8jvwIeLd86MpEyy2fCHsv8sw9X6QpQm+7NAbamPG02zau6AYIEprMxYwXnYwE+cF8g==
+X-Received: by 2002:adf:dbcd:0:b0:242:1294:5174 with SMTP id e13-20020adfdbcd000000b0024212945174mr30087105wrj.249.1670488905092;
+        Thu, 08 Dec 2022 00:41:45 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id e14-20020adff34e000000b0024228b0b932sm26387172wrp.27.2022.12.08.00.41.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 00:41:44 -0800 (PST)
+Message-ID: <bc50265a-d657-c23b-9cfd-3928f3324906@redhat.com>
+Date:   Thu, 8 Dec 2022 09:41:43 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2] mm/swap: fix SWP_PFN_BITS with
+ CONFIG_PHYS_ADDR_T_64BIT on 32bit
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+References: <20221206105737.69478-1-david@redhat.com>
+ <CAHbLzkra0mjn4utzYPNp+-e77W3tb6yJiJMhkK9Kg=Ra_3rQnQ@mail.gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHbLzkra0mjn4utzYPNp+-e77W3tb6yJiJMhkK9Kg=Ra_3rQnQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that a regulators child is accepted by the controller binding, the
-debugfs show routine must be explicitly limited to mmio-sram children.
+On 07.12.22 23:40, Yang Shi wrote:
+> On Tue, Dec 6, 2022 at 2:57 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> We use "unsigned long" to store a PFN in the kernel and phys_addr_t to
+>> store a physical address.
+>>
+>> On a 64bit system, both are 64bit wide. However, on a 32bit system, the
+>> latter might be 64bit wide. This is, for example, the case on x86 with
+>> PAE: phys_addr_t and PTEs are 64bit wide, while "unsigned long" only
+>> spans 32bit.
+>>
+>> The current definition of SWP_PFN_BITS without MAX_PHYSMEM_BITS misses
+>> that case, and assumes that the maximum PFN is limited by an 32bit
+>> phys_addr_t. This implies, that SWP_PFN_BITS will currently only be able to
+>> cover 4 GiB - 1 on any 32bit system with 4k page size, which is wrong.
+> 
+> Thanks for debugging this. IIUC this means even swap is actually
+> broken on x86_32 + PAE?
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
+I saw all different kinds of issues while testing debugging without this 
+patch, but they might just be a fallout from previous page migration/THP 
+splitting issues.
 
-(no changes since v4)
+I think swap should be fine, because SWP_PFN_BITS only affects 
+swp_offset_pfn(): only used when is_pfn_swap_entry()==true.
 
-Changes in v4:
- - Check the compatible string instead of the node name
+Thanks!
 
-Changes in v2:
- - New patch for v2
-
- drivers/soc/sunxi/sunxi_sram.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-index 92f9186c1c42..f09918c59042 100644
---- a/drivers/soc/sunxi/sunxi_sram.c
-+++ b/drivers/soc/sunxi/sunxi_sram.c
-@@ -120,6 +120,9 @@ static int sunxi_sram_show(struct seq_file *s, void *data)
- 	seq_puts(s, "--------------------\n\n");
- 
- 	for_each_child_of_node(sram_dev->of_node, sram_node) {
-+		if (!of_device_is_compatible(sram_node, "mmio-sram"))
-+			continue;
-+
- 		sram_addr_p = of_get_address(sram_node, 0, NULL, NULL);
- 
- 		seq_printf(s, "sram@%08x\n",
 -- 
-2.37.4
+Thanks,
+
+David / dhildenb
 
