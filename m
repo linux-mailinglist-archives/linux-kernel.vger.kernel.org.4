@@ -2,296 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763FA6478D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 616726478D7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:33:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiLHWcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:32:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58858 "EHLO
+        id S229770AbiLHWda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:33:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbiLHWcV (ORCPT
+        with ESMTP id S229632AbiLHWd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:32:21 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2291482F8E;
-        Thu,  8 Dec 2022 14:32:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A39546208B;
-        Thu,  8 Dec 2022 22:32:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1473C433EF;
-        Thu,  8 Dec 2022 22:32:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670538739;
-        bh=evwi1owXfAjUulYHfyWRVMiT7mWVW8ks0w7ZzmsuDjM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SQ4OoGla/sYbqBJ5LjwvRpK6H9x+J/+LiiGO4xL0QKUy1PkUA142XNzUjMWYu7iWw
-         kWW+SfQTPYvUGNjhikqNy1/6TyT8hdfzXLNTUsMHSksfkkIGxx6pn5Nlf+PBnrQMLQ
-         xqzhLy4SteTsauY+fLuzmk5EjfLsVZD54XNq97t/aW+AVBZgpKrHk1ZKszsdOgmWHz
-         XDbi40c2PedKThZOWeWs4paJVTaUmLy0ecunnsL5UK3fiEWiD/x3o2xf5Hp2yscu9W
-         50PX6z/VTePd93LKJIvS179QXmlyZgLgf1LsSnbvKBjKOyGEX14q5d+YtayH1YQTTU
-         O9935CLz/P12g==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 09D0840404; Thu,  8 Dec 2022 19:32:16 -0300 (-03)
-Date:   Thu, 8 Dec 2022 19:32:16 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH 2/3] perf build: Use libtraceevent from the system
-Message-ID: <Y5Jl8MeW90DXy1wT@kernel.org>
-References: <Y49vx0v6Z7EiR8jr@kernel.org>
- <Y49wxSIK7dJ7iTDg@kernel.org>
- <Y491d1wEW4TfUi5f@kernel.org>
- <Y4921D+36UGdhK92@kernel.org>
- <Y494TNa0ZyPH9YSD@kernel.org>
- <Y498YP2N3gvFSr/X@kernel.org>
- <C9F248C8-AF8D-40A1-A1AD-BCC39FBA01C7@linux.vnet.ibm.com>
- <Y5DNBZNC5rBBqlJW@kernel.org>
- <36CD1041-0CAE-41C1-8086-C17854531B3E@linux.vnet.ibm.com>
- <Y5JfgyN59dSeKbUP@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 8 Dec 2022 17:33:28 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964F82627
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:33:27 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8MIgpV028900;
+        Thu, 8 Dec 2022 22:33:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=xogxgduJRE4SF9gjzsYLI4koXbPqjha4cuHDQkvpQ8o=;
+ b=IMCLOJQDSJyTxjqTsHeDChJKG19Jszeq66uoH/jkFHxYNAK8DjhQXJP/KA6+WoJeb/wG
+ w3k3LDVWcj9qZ7Y07sVxN/5VbaBH8uidA3ejKXpfeC0LyPHqPXLVSEp+cQ8aV/eQ82TB
+ 9v17rj7dcwVh7id1O1ViofIq2eqkWK/W9T4abtbEJMArreYO5PvbzVxGyd6anQ20QlVn
+ V7sKn+J2VcUghaNKiWun/Nw67HyuUm2Fu7x0j1KihrFnOHYaYW0c1P7B84hD2K6fZmpz
+ AuSCAjEqU7Zr/VchMY6jbZW0+5A7Ca0HKzHna+Yld+p0jijsqoOlkPGfFh9L2mgKho9c Dw== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maujkkw8e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Dec 2022 22:33:09 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B8ML274033733;
+        Thu, 8 Dec 2022 22:33:08 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa6bru79-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Dec 2022 22:33:08 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FShyhezy64j4+LAU/x05qfEIUOxvhf9o+fzlQMhehS4om9NcXqcysVfM4p6aLROgn9yzj3a1r5OsE50ak2rcQ8QgBRE0vXsxYlIxNDIuD7VkjG1u1f/19QGTu9MPxy2NeQmJFVtYH0P7SmLW4xG3lukokmz/XBDMVNBt1zEnBUDmTZRvx6OR2IZydS45CO1ICyk8N6fS+Cdr041aIZ3zd+PPRcRt8uv05G78is17RWjKfbrvq4F2mnq6h4BWHqMmSHr211zu8Ha1x7LHR9UuLTMSKfFAfA4qXWaD/Tfpq6KGWFM7WpEsz9k809/ZphB9ADvQj1O27yRcVIlYsO5ZQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xogxgduJRE4SF9gjzsYLI4koXbPqjha4cuHDQkvpQ8o=;
+ b=P1TT7lVkR1i5ed27750fsEMXqJICGjcrJnUFIPM11OU6hDol5cMNuktszZyQyx6SRZ3Y0B4gs3HuRMv4mJ2OK1Wqc68oMpE7kEYrRBBrscMmUMicMow1OhjsR1onYec9QbhpNq+QUL60e/QoDezzJWk2EPn/KccqANPD1qVI/MvG+t4335QoWtg4mREPw5WTuBC2Fxr+fr5V0RI6WhkeRohwz9wsdjQx/0p5brBE6Wr5oTR3Bke47pI0l40F3t32je0Y6ihxtDe87Kp+v4mYUIFbxUe4BKJt/A8MI7qoZJoV+odTgdMbZ90V9WCtQ3N13cK5Jo5PMAeJQ3Da2+3wrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xogxgduJRE4SF9gjzsYLI4koXbPqjha4cuHDQkvpQ8o=;
+ b=A8JtnCj+3e5DqHNwqo1HavNM8xTLu1+x/NJMFhuwE9Cp1PmBHUM98Zem5X812iM/CoaVmHLQLwEBnFXF9rIYXQR2rutrOGsPpRO+6ZHej6L+2HM6th8uUDUAI30YIa23aFvV6bbWAa3dhibrdBYgAU1PRrerGJiTM7ZRqW8PJ00=
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
+ by PH7PR10MB6625.namprd10.prod.outlook.com (2603:10b6:510:208::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.10; Thu, 8 Dec
+ 2022 22:33:06 +0000
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::51be:1301:5ec3:996f]) by CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::51be:1301:5ec3:996f%4]) with mapi id 15.20.5880.016; Thu, 8 Dec 2022
+ 22:33:06 +0000
+Message-ID: <434a111c-7f1a-0018-6bd2-561cb382deea@oracle.com>
+Date:   Thu, 8 Dec 2022 14:33:01 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero
+ support
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        tsahu@linux.ibm.com, david@redhat.com
+References: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
+ <92965844-c430-8b8e-d9f1-705d7578bceb@nvidia.com>
+ <ec8f46ca-9ea6-4567-2038-22f6d3000ed5@oracle.com>
+ <d17530ad-8e12-8069-d619-a2d72fe80e15@nvidia.com>
+ <0187f9c2-e80a-9cde-68bc-c9bdbd96b6fe@oracle.com>
+ <Y5I78soNmAFv7pi8@casper.infradead.org> <Y5JCi3h8bUzLf3cu@monkey>
+ <2723541a-79aa-c6b5-d82c-53db76b78145@oracle.com>
+ <e86ca90f-e59e-3851-7225-b5f596ad04b9@nvidia.com>
+ <36ddac45-ecd0-e2d2-e974-8c85ca503053@oracle.com>
+ <20cc2088-b66e-28d1-a529-414e82146336@nvidia.com>
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+In-Reply-To: <20cc2088-b66e-28d1-a529-414e82146336@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5JfgyN59dSeKbUP@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BYAPR08CA0063.namprd08.prod.outlook.com
+ (2603:10b6:a03:117::40) To CH0PR10MB5113.namprd10.prod.outlook.com
+ (2603:10b6:610:c9::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|PH7PR10MB6625:EE_
+X-MS-Office365-Filtering-Correlation-Id: 30fc7a10-0429-4bc7-a8f4-08dad96c2cfb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oIsPp4koqgJfipJDRXQpqngFc1DOluu7/jgSQ47mQ6Vljb2ODuaYyS7PFhujw0Y0618mR8bjxPICFmf4dqFfEXEk/Ezfclr2vtHZtbWBm2DfQqTpP0JAgcDSXBgIk+jLSZ4D4At86okEZal064bUkvdDzOr0wzySHMmn4qOVZQicBT/QsfP2IxhLriUOeUzYsz+Ie+rDzMYf3nBbu8AyYn8IpZHeuvdjRCAEUGCEvXB3IzHfgPOWUcAA+Wpl+04M36gMAa2kpyWXvVQEIaa3D61s0t+RjWHLWVSnE5U8ppoB7kk8DT5Y4/PkplREp4na6oAzgVavtkuPMjcNeu4tqlhGdMYsLh0t9fSOGQ79ONjEEUCO2+48qnadp9J90wP6E4Vlq4JaMANICywNS5G/80fq4MMvObpDZtIYoXw4jV/b9Ab/cs1eGJ7+b3AbaQ/cCNIBdn2I0zPOSJfNJSpphLVg91xdC+GPJ1d6wqSWMGwQJpypfC/bixTKoo4etDN8xyBph162nn5HVQcIO2fXRpfeCYFwNDmdw/Wwat2rLayW6nb0D/l8gjODtzydgOFPX5KZmcFupQ77Kn1PV/oSaoPMSIBFhmA9AycilIMnsGHLzn4Qax+Q8irfPz9jDjAygUINViHxHz9qFFoNoVbvHdlto0weNIdsn6JyfTiXwI8ETJoTOMpftLBDKqbeMxa+RoYbb72MSKVCOrFGKfhJZUrcYCkP57ueJEYd+6yzR+ETiU1+V3pu3xCovtFNtXQK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(396003)(39860400002)(136003)(376002)(451199015)(31686004)(36756003)(4326008)(6512007)(66476007)(5660300002)(2616005)(44832011)(2906002)(38100700002)(66556008)(316002)(110136005)(8936002)(41300700001)(8676002)(6506007)(53546011)(186003)(966005)(6666004)(66946007)(6486002)(86362001)(83380400001)(478600001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFh4UkttVlFWOGJrZ1MrTzQ0a2RubWxOaXA1eWpTUE5DTmw1eEE2dkVHYUtV?=
+ =?utf-8?B?Q3p1MlczQUpPNE9kcDk1OGpOT0tnM1pVdi8xS3dUYmcwb2J2b2JWVDBIZ2pV?=
+ =?utf-8?B?Mk5VY1M5ZXBOOTdSbk1DWFkzbTRtVy95VzYwUE93cnBkSU1URlMvd054RnB1?=
+ =?utf-8?B?dXhNQVhzeVorR0FBaFRwaytIUm1PYVovY0dmdnNnaVpCa3czMndkZ1lDSVRx?=
+ =?utf-8?B?eEZ4aVN2SllQTmd3VFBKNzFqNGNkTWJ2UGs3R1ZyejI0NmNScURDRmZXQ205?=
+ =?utf-8?B?Tlc0WU5uQ1ArVjNlZDc3OC9LSEM2WHdYNVlGcVBjUXpNUXozRHpwL3lDQk1r?=
+ =?utf-8?B?WW11Snl4bEtNUlVoczZZVjRsZkdManpUc2ZxVDlzMkxhSE15Rk5PRlh2d2ZO?=
+ =?utf-8?B?cXJkMUxGRnJDOVBTU2syeWg1S3B4b3dzSWdjNUlUS0ZMNHZ4TktVT0lSS1I1?=
+ =?utf-8?B?YkY1QXhyUW4rVWJuVWxqOWpMZ1Y4aHVnRG4wYm5qMWRGS1dwTjRBdSs1NHFo?=
+ =?utf-8?B?OWIrMUh4VCszb0IyenRDZ3JlZ2lQNXJtYkovWEIyR1Rwd3hGeVMzcEt4cFpn?=
+ =?utf-8?B?RVNTVFc3S1RUWWJKYmw1VUJYUzhxYlVkODVObENlV1pJanBZMVZ5aTZETmJW?=
+ =?utf-8?B?dERIZ2pDY2FabU1EN21UNEhrU2NES1E1WGJsVHoxTnFWQUhsdHNLMmtvbWU4?=
+ =?utf-8?B?dzBCYW0veTY0RzVpcFFhMFkxNWpHbmRPMlFnQkgxSWdrOHZHYXJBeWo3dUFv?=
+ =?utf-8?B?dmpnem1QSThrbW1LWWl0bjBBMEJqR3EvT1ZHaDcrelVsMkVMcmxjSWM1NzBk?=
+ =?utf-8?B?Z3pRUjlrdDRaaEVHLzhjcnpPZTB3ODRnOUNDK1Q5YjRYeVJkbUpBNlZHMVJM?=
+ =?utf-8?B?TFlNV3JNUVRpeS94bFJLTk1aMzBiMFJsVlRvZkJzV3AwRXBXUEFONE4zVi84?=
+ =?utf-8?B?M25Vc1hKblVoNklPQ3U5RVRQVGVSR1l5VUE1VWdHaWY0UlV3MXBCbm1icWtH?=
+ =?utf-8?B?RVlvVkVaUTBiUGIrcUhzQW45UWdjbFIxSG9XejNKNGdmcXJPZjlHTGIvcmFH?=
+ =?utf-8?B?RWFHTHNuMUxNZWljYVNYVGtHeUtZNC9BZHNNT0pzUHZyTERVeE1PTDIwOXQ0?=
+ =?utf-8?B?eTl3cWdIR3dDOFVqb01CSEJDZXIzWkxkU2x0OHNZeSsvaHNZWUtuT1pOR1By?=
+ =?utf-8?B?QkozZm4zNnR1eHo5Q2tjaTdKSHRVR3pkYnFQSHlUU29obGRYbDBiZ290Q2pF?=
+ =?utf-8?B?VWlsRENvLzZUZ0tzUXRmcWdyWk1JRzRUVXJyN1lKVGp0WXV4VVorbFJlNldp?=
+ =?utf-8?B?dGh3RmRsNDQ0RGo0TXFVaTU0N0FzbVI5T3ZhY3NOMEJtbmxyUk1wTnhGSU5O?=
+ =?utf-8?B?NjF1dDRTMUdPL3VjK3V6TnVCVDk0UkFoU3pvTFA2TUgzWmN6ZnZTbFJzZldv?=
+ =?utf-8?B?WVR5ZkZ1b3BzTFNxb20rNEowZW1aNWRQRkhQREJ2VnhITlhQZG9rUzgvQksx?=
+ =?utf-8?B?clNtdEhpeEw1aHc2WEwyOTlzOWRQWTF6SEdudFgzN20ybW9ZcVUwRURLMjdU?=
+ =?utf-8?B?VHNIeWNLcWJFOGFYSFpTRHFERk43bFBRVnYxYjMrZlh5bnQvTk9GSGZhS3M4?=
+ =?utf-8?B?YXdqSjl3YmhrVWhValpPT29HUE5KWjF3NjNGaVVDdU15b0pkNkx1V0ZFTkUx?=
+ =?utf-8?B?bkFyckUzaDE0bXNYWnpYcXpGa1RhSE16YW5jaXU3eXZ1OThxelEyL3FFNjVQ?=
+ =?utf-8?B?Q2dQQlFjY1lQT0pDSFFsbXBNR1M1eVd5SGI1bjhmV0pKSlB4Y29DK2pSMFFL?=
+ =?utf-8?B?TlI3Um5hMlo5UDJ6VHZiRUx4RDhqNG1naWI2WnNlbXJFYXMva0xlaUJBMlNx?=
+ =?utf-8?B?UXpvYW9KU0tVcjIxZ0dWNnYxd1VZVGJWQXByZllObjBKeHN0V213b3FFM2Mv?=
+ =?utf-8?B?U2VFQjJBVDhGcDd0QTN5WUxuekU2OGFzNFE3RDA0c01mVEZiSEpNQjFqUGVQ?=
+ =?utf-8?B?QkhLSmY2YmNvRU5nY2s5Mld4NGdLOG85TFhScmhibFVJVTdxSkZROU1nclN3?=
+ =?utf-8?B?QVBGckZvRk9TSTVGMWRhUnQ1RTEwdTY3N0pBL3NIZXNUOVRnQTJvck80L2VY?=
+ =?utf-8?B?WFdMc3ovZGwzemx4YnZrNUNFSHpaaVVTUUh5M2NDQzhrcmxLN1pwa3pzKzBK?=
+ =?utf-8?B?ejZTMyt2akVvSzg0QmNMUzVZb0ZxbkF0SHBTZW1ZejZCRThOcXBYTXFLbDJ4?=
+ =?utf-8?B?RnM3dXljQ2E0b055elJ6YzdCaW1BPT0=?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30fc7a10-0429-4bc7-a8f4-08dad96c2cfb
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 22:33:06.2450
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ytSzTC7H5rreARLX6Runj2oiDHBqI1BXNmxPyKU4lACNuqQ7FdhBbsNtR3bq/DX2DshGDoc9YVdZu5wYdOESQIx0zVgkw06RIAVMtyu2jGY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB6625
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-08_12,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212080185
+X-Proofpoint-ORIG-GUID: rMBVu6QQApgMgFqvbGj30l8FS45E7N_c
+X-Proofpoint-GUID: rMBVu6QQApgMgFqvbGj30l8FS45E7N_c
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Dec 08, 2022 at 07:04:52PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Thu, Dec 08, 2022 at 12:21:20PM +0530, Athira Rajeev escreveu:
-> > > On 07-Dec-2022, at 10:57 PM, Arnaldo Carvalho de Melo <acme@kernel.org> wrote:
-> > > Can you try again? tmp.perf/core? That "tmp." part means its a force
-> > > pushed branch, so I just force pushed with some arch specific fixes, now
-> > > I'm down to (removing the successful builds and unrelated failures, now
-> > > related to libbpf's F_DUPFD_CLOEXEC kaboom):
+On 12/8/22 2:14 PM, John Hubbard wrote:
+> On 12/8/22 14:12, Sidhartha Kumar wrote:
+>> On 12/8/22 2:01 PM, John Hubbard wrote:
+>>> On 12/8/22 13:58, Sidhartha Kumar wrote:
+>>>> Thanks John, Mike, Matthew, and Muchun for the feedback.
+>>>>
+>>>> To summarize this discussion and outline the next version of this 
+>>>> patch, the changes I'll make include:
+>>>>
+>>>> 1) change the name of folio_set_compound_order() to folio_set_order()
+>>>> 2) change the placement of this function from mm.h to mm/internal.h
+>>>> 3) folio_set_order() will set both _folio_order and _folio_nr_pages 
+>>>> and handle the zero order case correctly.
+>>>> 4) remove the comment about hugetlb's specific use for zero orders
+>>>> 5) improve the style of folio_set_order() by removing ifdefs from 
+>>>> inside the function to doing
+>>>>
+>>>> #ifdef CONFIG_64BIT
+>>>>   static inline void folio_set_order(struct folio *folio,
+>>>>                   unsigned int order)
+>>>>   {
+>>>>       VM_BUG_ON_FOLIO(!folio_test_large(folio), folio);
+>>>
+>>> Sounds good, except for this part: why is a function named
+>>> folio_set_order() BUG-ing on a non-large folio? The naming
+>>> is still wrong, perhaps?
+>>>
+>>
+>> This is because the _folio_nr_pages and _folio_order fields are part 
+>> of the first tail page in the folio. folio_test_large returns if the 
+>> folio is larger than one page which would be required for setting the 
+>> fields.
 > 
-> > Ok Arnaldo, Sure, I will check with updated branch
+> OK, but then as I said, the name is wrong. One can either:
 > 
-> > >   5     7.38 fedora:34                     : FAIL gcc version 11.3.1 20220421 (Red Hat 11.3.1-2) (GCC)
-> > >    /git/perf-6.1.0-rc6/tools/perf/util/evsel.c: In function ‘evsel__rawptr’:
-> > >    /git/perf-6.1.0-rc6/tools/perf/util/evsel.c:2787:36: error: ‘TEP_FIELD_IS_RELATIVE’ undeclared (first use in this function); did you mean ‘TEP_FIELD_IS_FLAG’?
-> > >     2787 |                 if (field->flags & TEP_FIELD_IS_RELATIVE)
-> > >          |                                    ^~~~~~~~~~~~~~~~~~~~~
-> > >          |                                    TEP_FIELD_IS_FLAG
+> a) handle the non-large case, or
 > 
-> > I observed same issue as updated here: 
-> > https://lore.kernel.org/lkml/10476A85-3F75-4C91-AB5B-E5B136F31297@linux.vnet.ibm.com/
+> b) rename the function to indicate that it only works on large folios.
 > 
-> > Looks like TEP_FIELD_IS_RELATIVE is not defined in header file of the system installed version.
-> > whereas it is there in header file in tools/lib/traceevent
-> 
-> > # grep TEP_FIELD_IS_RELATIVE /usr/include/traceevent/event-parse.h
-> > # grep TEP_FIELD_IS_RELATIVE ../lib/traceevent/event-parse.h
-> > 	TEP_FIELD_IS_RELATIVE	= 256,
-> 
-> Right, I had noticed that as well, so as a prep patch I'm adding the
-> patch below, before Ian's. Please check and provide an
-> Acked-by/Tested-by/Reviewed-by if possible.
 
-I ended up with the one below, _after_ Ian's patch as I had some trouble grafting
-it before and had already tested it this way multiple times, I'm pushing
-this to tmp/perf.core.
+Discussed here[1], the BUG_ON line seemed more appropriate over
+  	
+if (!folio_test_large(folio))
+	return;
 
-- Arnaldo
+as the misuse would not be silent. I think I would be against renaming 
+the function as I don't see any large folio specific function names for 
+other accessors of tail page fields. Would both the BUG_ON and return on 
+non-large folio be included then?
 
-commit a0ec3ef4590e7e82339b6f318e671a6b69fd94e8
-Author: Arnaldo Carvalho de Melo <acme@redhat.com>
-Date:   Thu Dec 8 19:28:58 2022 -0300
 
-    perf tools: Add test to check if libtracevent has TEP_FIELD_IS_RELATIVE
-    
-    Some distros have older versions of libtraceevent where
-    TEP_FIELD_IS_RELATIVE and its associated semantics are not present, so
-    we need to test for its presence and cope when it isn't present when
-    building with LIBTRACEEVENT_DYNAMIC=1.
-    
-    Reported-by: Athira Jajeev <atrajeev@linux.vnet.ibm.com>
-    Cc: Adrian Hunter <adrian.hunter@intel.com>
-    Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-    Cc: Ian Rogers <irogers@google.com>
-    Cc: Ingo Molnar <mingo@redhat.com>
-    Cc: Jiri Olsa <jolsa@kernel.org>
-    Cc: Mark Rutland <mark.rutland@arm.com>
-    Cc: Namhyung Kim <namhyung@kernel.org>
-    Cc: Nick Desaulniers <ndesaulniers@google.com>
-    Cc: Peter Zijlstra <peterz@infradead.org>,
-    Cc: Stephane Eranian <eranian@google.com>
-    Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+[1]: 
+https://lore.kernel.org/linux-mm/20221129225039.82257-1-sidhartha.kumar@oracle.com/T/#m98cf80bb21ae533b7385f2e363c602e2c9e2802d
+> 
+> thanks,
 
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index 38f8851bd7cbdb0e..c6c9b7c7723d4290 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -71,7 +71,8 @@ FEATURE_TESTS_BASIC :=                  \
-         libzstd				\
-         disassembler-four-args		\
-         disassembler-init-styled	\
--        file-handle
-+        file-handle			\
-+        libtraceevent-tep_field_is_relative
- 
- # FEATURE_TESTS_BASIC + FEATURE_TESTS_EXTRA is the complete list
- # of all feature tests
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index 690fe97be1904399..24246df35ac30eeb 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -81,7 +81,8 @@ FILES=                                          \
-          test-libzstd.bin			\
-          test-clang-bpf-co-re.bin		\
-          test-file-handle.bin			\
--         test-libpfm4.bin
-+         test-libpfm4.bin			\
-+         test-libtraceevent-tep_field_is_relative
- 
- FILES := $(addprefix $(OUTPUT),$(FILES))
- 
-@@ -159,6 +160,9 @@ $(OUTPUT)test-dwarf_getlocations.bin:
- $(OUTPUT)test-libelf-getphdrnum.bin:
- 	$(BUILD) -lelf
- 
-+$(OUTPUT)test-libtraceevent-tep_field_is_relative.bin:
-+	$(BUILD) -ltraceevent
-+
- $(OUTPUT)test-libelf-gelf_getnote.bin:
- 	$(BUILD) -lelf
- 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 680228e19c1aabdb..e29975664f06bd61 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -1197,6 +1197,10 @@ ifneq ($(NO_LIBTRACEEVENT),1)
-     LIBTRACEEVENT_VERSION_CPP := $(shell expr $(LIBTRACEEVENT_VERSION_1) \* 255 \* 255 + $(LIBTRACEEVENT_VERSION_2) \* 255 + $(LIBTRACEEVENT_VERSION_3))
-     CFLAGS += -DLIBTRACEEVENT_VERSION=$(LIBTRACEEVENT_VERSION_CPP)
-     $(call detected,CONFIG_LIBTRACEEVENT)
-+    $(call feature_check,libtraceevent-tep_field_is_relative)
-+    ifeq ($(feature-libtraceevent-tep_field_is_relative), 1)
-+      CFLAGS += -DHAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
-+    endif
-   else
-     dummy := $(warning Warning: libtraceevent is missing limiting functionality, please install libtraceevent-dev/libtraceevent-devel)
-   endif
-diff --git a/tools/perf/builtin-trace.c b/tools/perf/builtin-trace.c
-index 6909cd9f48d11644..c9802ab549d7782f 100644
---- a/tools/perf/builtin-trace.c
-+++ b/tools/perf/builtin-trace.c
-@@ -2729,8 +2729,10 @@ static size_t trace__fprintf_tp_fields(struct trace *trace, struct evsel *evsel,
- 				offset = format_field__intval(field, sample, evsel->needs_swap);
- 				syscall_arg.len = offset >> 16;
- 				offset &= 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 				if (field->flags & TEP_FIELD_IS_RELATIVE)
- 					offset += field->offset + field->size;
-+#endif
- 			}
- 
- 			val = (uintptr_t)(sample->raw_data + offset);
-diff --git a/tools/perf/util/data-convert-bt.c b/tools/perf/util/data-convert-bt.c
-index 8031b586e81384e7..b842273458b862bd 100644
---- a/tools/perf/util/data-convert-bt.c
-+++ b/tools/perf/util/data-convert-bt.c
-@@ -322,8 +322,10 @@ static int add_tracepoint_field_value(struct ctf_writer *cw,
- 		offset = tmp_val;
- 		len = offset >> 16;
- 		offset &= 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 		if (flags & TEP_FIELD_IS_RELATIVE)
- 			offset += fmtf->offset + fmtf->size;
-+#endif
- 	}
- 
- 	if (flags & TEP_FIELD_IS_ARRAY) {
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index ca911856c4b1d3c8..77b2cf5a214ec1e4 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -2784,8 +2784,10 @@ void *evsel__rawptr(struct evsel *evsel, struct perf_sample *sample, const char
- 	if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 		offset = *(int *)(sample->raw_data + field->offset);
- 		offset &= 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 		if (field->flags & TEP_FIELD_IS_RELATIVE)
- 			offset += field->offset + field->size;
-+#endif
- 	}
- 
- 	return sample->raw_data + offset;
-diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-index 6fb84b7455b8392d..7320f7f777fe0e56 100644
---- a/tools/perf/util/python.c
-+++ b/tools/perf/util/python.c
-@@ -442,8 +442,10 @@ tracepoint_field(struct pyrf_event *pe, struct tep_format_field *field)
- 			offset  = val;
- 			len     = offset >> 16;
- 			offset &= 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 			if (field->flags & TEP_FIELD_IS_RELATIVE)
- 				offset += field->offset + field->size;
-+#endif
- 		}
- 		if (field->flags & TEP_FIELD_IS_STRING &&
- 		    is_printable_array(data + offset, len)) {
-diff --git a/tools/perf/util/scripting-engines/trace-event-perl.c b/tools/perf/util/scripting-engines/trace-event-perl.c
-index 0bacb49408f84adf..c097b7934fd4ebe9 100644
---- a/tools/perf/util/scripting-engines/trace-event-perl.c
-+++ b/tools/perf/util/scripting-engines/trace-event-perl.c
-@@ -393,8 +393,10 @@ static void perl_process_tracepoint(struct perf_sample *sample,
- 			if (field->flags & TEP_FIELD_IS_DYNAMIC) {
- 				offset = *(int *)(data + field->offset);
- 				offset &= 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 				if (field->flags & TEP_FIELD_IS_RELATIVE)
- 					offset += field->offset + field->size;
-+#endif
- 			} else
- 				offset = field->offset;
- 			XPUSHs(sv_2mortal(newSVpv((char *)data + offset, 0)));
-diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
-index fabba21919b8fa51..e930f5f1f36d2831 100644
---- a/tools/perf/util/scripting-engines/trace-event-python.c
-+++ b/tools/perf/util/scripting-engines/trace-event-python.c
-@@ -994,8 +994,10 @@ static void python_process_tracepoint(struct perf_sample *sample,
- 				offset  = val;
- 				len     = offset >> 16;
- 				offset &= 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 				if (field->flags & TEP_FIELD_IS_RELATIVE)
- 					offset += field->offset + field->size;
-+#endif
- 			}
- 			if (field->flags & TEP_FIELD_IS_STRING &&
- 			    is_printable_array(data + offset, len)) {
-diff --git a/tools/perf/util/sort.c b/tools/perf/util/sort.c
-index c7a97b33e13477e1..0ecc2cb137920d2d 100644
---- a/tools/perf/util/sort.c
-+++ b/tools/perf/util/sort.c
-@@ -2568,9 +2568,10 @@ static int64_t __sort__hde_cmp(struct perf_hpp_fmt *fmt,
- 		tep_read_number_field(field, a->raw_data, &dyn);
- 		offset = dyn & 0xffff;
- 		size = (dyn >> 16) & 0xffff;
-+#ifdef HAVE_LIBTRACEEVENT_TEP_FIELD_IS_RELATIVE
- 		if (field->flags & TEP_FIELD_IS_RELATIVE)
- 			offset += field->offset + field->size;
--
-+#endif
- 		/* record max width for output */
- 		if (size > hde->dynamic_len)
- 			hde->dynamic_len = size;
