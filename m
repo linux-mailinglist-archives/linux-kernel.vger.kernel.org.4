@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16270646F0B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:52:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99A3646F0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiLHLwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:52:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        id S230157AbiLHLxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:53:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiLHLwY (ORCPT
+        with ESMTP id S229982AbiLHLwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:52:24 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E14D89AC2;
-        Thu,  8 Dec 2022 03:50:46 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id h16so801489qtu.2;
-        Thu, 08 Dec 2022 03:50:46 -0800 (PST)
+        Thu, 8 Dec 2022 06:52:45 -0500
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25FB81DBC;
+        Thu,  8 Dec 2022 03:51:31 -0800 (PST)
+Received: by mail-qv1-f42.google.com with SMTP id mn15so759088qvb.13;
+        Thu, 08 Dec 2022 03:51:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=V0LAxwHpjYwQaUhf8SQTC1H3vXqd/lIYTQEqP5kdFx0=;
-        b=SK2TYCkrUrBbQqxrTszekNo9T38xMPqtrQDPggGx/9KupZZhdO7dyDgRuQdwCrBoJb
-         lVc0G8UNLEZTxzK4Rx6O5mlqfksykinDFUu8uSujK3sazqbjUmF4f0YGZUpa7tqryhzI
-         S+axOuod8flppBg/MwqZkf0CeIRXPb5Jlkr7+we/pTTKSn7umPpPEUiNOqIk8alNuxXO
-         CyzDZFMd0v/S5PlFAwlmnW5MH3fO914Xeq8tUu6gYw07th5P6oc7ihfmANMeDjDVp9/s
-         w84kbW3Xb/k+3eer2EWL48yTi4HJ7gLRigLi22/oA6l6muBOqSaNE0rnyjl98GM5Buil
-         m/Mw==
-X-Gm-Message-State: ANoB5pmPYKy+4fopYDOkKVns5PYMP0dtk9zeR1Bcj0e3jWuDxdx2dzcs
-        2enzn1Xk0DlOUiXn0BEY0T3Iiwfh/PkDEdbSbUE=
-X-Google-Smtp-Source: AA0mqf75+wq8Bx7g124XcAaiVFY9yZVgoZobB8jwu0LFg1dgTLA8i5QjD7tcdpKJzIECnEBMSf+Nk6MdXNSCRUUWhf4=
-X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
- u9-20020a05622a198900b003a57cf81a6emr86331068qtc.48.1670500245691; Thu, 08
- Dec 2022 03:50:45 -0800 (PST)
+        bh=U/EBcLW8zYEQ4+t+S3wEcSxpFnIWriPs3pqX5SXYMw8=;
+        b=2HFYh6ymMdtAfbR6lHQq28G2/W7yk0qqbILS2JWCkg6brLY6hOSeeil80ijSYMlPHG
+         JezIAL5jHIV6lI1w097zEdHVz2gdmiVYq/Ag2xr0X/+ubUQ8t+VJ8Droksyl3vMZ9bmz
+         D+WCfKdFO7fMLhiQ9RHgArlakeEX7d87p+ldu8X2K/9hbvF+aejoyvyEgoD4XnrO7hRo
+         lFx2k2YS2kfLOFfsrK3H2u4aEr0qXCwn6bXEBO6KGobnBUhxS1gRgG1R3+Oxs1vpH5Wl
+         vPdx3b2lZHGsyETnIBPDpgYXeThrif7xXHwLYvNBsduP7aQoYjge5tZbtl6OKWDFyqDW
+         SufQ==
+X-Gm-Message-State: ANoB5plRNjMD5fwvvoiZOpB+cAfcPqphoAm9G2Km3kxSaKlWVvkKtapP
+        D9CHLLtGGdCSx5KwH/8tZh3+fKZ4Nf0W1ux+gJI=
+X-Google-Smtp-Source: AA0mqf5h2CSXWVb/QRPpxwMdjYO3+RytgXcRavvYeTIJsi374NagoXdX4L8AJsyAIHDcElruy9foc2FKO0QcpKSnaVs=
+X-Received: by 2002:a0c:ea49:0:b0:4c7:660f:1845 with SMTP id
+ u9-20020a0cea49000000b004c7660f1845mr14762438qvp.73.1670500290885; Thu, 08
+ Dec 2022 03:51:30 -0800 (PST)
 MIME-Version: 1.0
-References: <202212081707505932014@zte.com.cn>
-In-Reply-To: <202212081707505932014@zte.com.cn>
+References: <202212081706290141979@zte.com.cn>
+In-Reply-To: <202212081706290141979@zte.com.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Dec 2022 12:50:34 +0100
-Message-ID: <CAJZ5v0iovWVucVZem=eh5sOwjmq_wuwk6S3L+w=+ugeoN+bkxw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/int340x_thermal: Convert to use sysfs_emit_at() API
+Date:   Thu, 8 Dec 2022 12:51:20 +0100
+Message-ID: <CAJZ5v0juOSoQt_9XLM6HmuVOR4A=rkJtucXCgCgMZAU9GhFeow@mail.gmail.com>
+Subject: Re: [PATCH] thermal: Convert to use sysfs_emit_at() API
 To:     ye.xingchen@zte.com.cn
 Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, srinivas.pandruvada@linux.intel.com,
-        dave@stgolabs.net, keescook@chromium.org,
-        sumeet.r.pawnikar@intel.com, jiasheng@iscas.ac.cn,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 10:07 AM <ye.xingchen@zte.com.cn> wrote:
+On Thu, Dec 8, 2022 at 10:06 AM <ye.xingchen@zte.com.cn> wrote:
 >
 > From: ye xingchen <ye.xingchen@zte.com.cn>
 >
@@ -69,41 +67,28 @@ On Thu, Dec 8, 2022 at 10:07 AM <ye.xingchen@zte.com.cn> wrote:
 >
 > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Well, you've clearly not taken my feedback into account.
-
-Please resend this after 6.2-rc1 is out.  It will not be acted upon till then.
+Again, please resend this after 6.2-rc1 is out, thanks!
 
 > ---
->  .../thermal/intel/int340x_thermal/int3400_thermal.c    | 10 ++--------
->  1 file changed, 2 insertions(+), 8 deletions(-)
+>  drivers/thermal/thermal_core.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> index db8a6f63657d..c1fc4a78607c 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int3400_thermal.c
-> @@ -130,10 +130,7 @@ static ssize_t available_uuids_show(struct device *dev,
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index f17ab2316dbd..91d40ce62c92 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -229,10 +229,9 @@ int thermal_build_list_of_policies(char *buf)
+>         mutex_lock(&thermal_governor_lock);
 >
->         for (i = 0; i < INT3400_THERMAL_MAXIMUM_UUID; i++) {
->                 if (priv->uuid_bitmap & (1 << i))
-> -                       length += scnprintf(&buf[length],
-> -                                           PAGE_SIZE - length,
-> -                                           "%s\n",
-> -                                           int3400_thermal_uuids[i]);
-> +                       length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
+>         list_for_each_entry(pos, &thermal_governor_list, governor_list) {
+> -               count += scnprintf(buf + count, PAGE_SIZE - count, "%s ",
+> -                                  pos->name);
+> +               count += sysfs_emit_at(buf, count, "%s ", pos->name);
 >         }
+> -       count += scnprintf(buf + count, PAGE_SIZE - count, "\n");
+> +       count += sysfs_emit_at(buf, count, "\n");
 >
->         return length;
-> @@ -151,10 +148,7 @@ static ssize_t current_uuid_show(struct device *dev,
+>         mutex_unlock(&thermal_governor_lock);
 >
->         for (i = 0; i <= INT3400_THERMAL_CRITICAL; i++) {
->                 if (priv->os_uuid_mask & BIT(i))
-> -                       length += scnprintf(&buf[length],
-> -                                           PAGE_SIZE - length,
-> -                                           "%s\n",
-> -                                           int3400_thermal_uuids[i]);
-> +                       length += sysfs_emit_at(buf, length, int3400_thermal_uuids[i]);
->         }
->
->         if (length)
 > --
 > 2.25.1
