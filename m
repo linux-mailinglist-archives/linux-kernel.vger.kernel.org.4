@@ -2,121 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5953D6472BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CCD6472C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiLHPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
+        id S230193AbiLHPW3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 10:22:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230283AbiLHPUv (ORCPT
+        with ESMTP id S230248AbiLHPVf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:20:51 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A43D75BC4;
-        Thu,  8 Dec 2022 07:19:45 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e73d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e73d:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 54F181EC06FB;
-        Thu,  8 Dec 2022 16:19:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670512783;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=3GU5MeoEbeuS2CWF2tNDJu8X0AyDevMso/wvj1Ji+qA=;
-        b=NUsCzemugvmppmEdsoSK6otFrDka2N/KgWTUsMIzcOKX8/O2yCj11UviDU9BZajMWfNuOZ
-        I+X/oo/Dn1IfADiurnMCSjSTBOGx8z1O6gf/1U0ej+B0F3/tqfxGGLr2JUu2Y2tDXnwMXf
-        OptitUxT+Wn2xIHJ5ac9Pig8cPZKtvQ=
-Date:   Thu, 8 Dec 2022 16:19:39 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-tip-commits@vger.kernel.org,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ian Rogers <irogers@google.com>, x86@kernel.org
-Subject: Re: [tip: perf/core] perf/amd/ibs: Make IBS a core pmu
-Message-ID: <Y5IAi/fgbJk1/h2L@zn.tnic>
-References: <20221115093904.1799-1-ravi.bangoria@amd.com>
- <166929138346.4906.10749574210524260976.tip-bot2@tip-bot2>
+        Thu, 8 Dec 2022 10:21:35 -0500
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA489686B0;
+        Thu,  8 Dec 2022 07:20:52 -0800 (PST)
+Received: (Authenticated sender: hadess@hadess.net)
+        by mail.gandi.net (Postfix) with ESMTPSA id 7C4BB240008;
+        Thu,  8 Dec 2022 15:20:49 +0000 (UTC)
+Message-ID: <b356b5684cc631513c0498f18d7c185b77416f85.camel@hadess.net>
+Subject: Re: [Regression] Logitech BT mouse unusable after commit
+ 532223c8ac57 (still in 6.1-rc8)
+From:   Bastien Nocera <hadess@hadess.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Filipe =?ISO-8859-1?Q?La=EDns?= <lains@riseup.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Date:   Thu, 08 Dec 2022 16:20:48 +0100
+In-Reply-To: <CAJZ5v0ghW2DdC0quVQ-+Oad7bR95Pyp4Uhd9=XUYk9SQrXKj5w@mail.gmail.com>
+References: <2262737.ElGaqSPkdT@kreacher>
+         <1df12728a2e788788fd387588bac62023e123d16.camel@hadess.net>
+         <2145955.irdbgypaU6@kreacher>
+         <CAJZ5v0ic+pm+NWD8g4O2MwQEvi+xuB-W9Wpd6c1RhprhoxuK1g@mail.gmail.com>
+         <8281ddcc16cc950f9cde4b196cf208adcc798319.camel@hadess.net>
+         <CAJZ5v0gjAGZFS6ap+NAbsi96hq7y9MRGE0h_A-n6xfB1CMs=2g@mail.gmail.com>
+         <cd8b2a2160f5d36d1b73bc0567cd0f6e7e5751c4.camel@hadess.net>
+         <CAJZ5v0gRm1NG=QuDFDFdcZgTu7Q0Z3cW3fwGg09sD+3BBV8E1A@mail.gmail.com>
+         <91367d07a72ecb2065faebe974c54ebd966e0d59.camel@hadess.net>
+         <CAJZ5v0ghW2DdC0quVQ-+Oad7bR95Pyp4Uhd9=XUYk9SQrXKj5w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <166929138346.4906.10749574210524260976.tip-bot2@tip-bot2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I believe this is one of the things Linus wanted to have on AMD hw.
+On Wed, 2022-12-07 at 18:44 +0100, Rafael J. Wysocki wrote:
+> On Wed, Dec 7, 2022 at 6:19 PM Bastien Nocera <hadess@hadess.net>
+> wrote:
+> > 
+> > On Wed, 2022-12-07 at 12:07 +0100, Rafael J. Wysocki wrote:
+> > > # hidpp-list-features /dev/hidraw1
+> > > Bluetooth Mouse M336/M337/M535 (046d:b016) is a HID++ 4.5 device
+> > > Feature 0x01: [0x0001] Feature set
+> > > Feature 0x02: [0x0003] Device FW version
+> > > Feature 0x03: [0x0005] Device name
+> > > Feature 0x04: [0x0020] Reset
+> > > Feature 0x05: [0x1e00] Enable hidden features (hidden)
+> > > Feature 0x06: [0x1800] Generic Test (hidden, internal)
+> > > Feature 0x07: [0x1000] Battery status
+> > > Feature 0x08: [0x1b04] Reprog controls v4
+> > > Feature 0x09: [0x2100] Vertical scrolling
+> > > Feature 0x0a: [0x2200] Mouse pointer
+> > > Feature 0x0b: [0x2205] Pointer speed
+> > > Feature 0x0c: [0x18b1] ? (hidden, internal)
+> > > Feature 0x0d: [0x2121] Hi-res wheel
+> > > Feature 0x0e: [0x1f03] ? (hidden, internal)
+> > 
+> > Would you be able to enable debugging for the hid subsystem to get
+> > some
+> > debug data when getting the version from the device fails?
+> 
+> I guess I could, but I think that the device is just quirky.
+> 
+> At least the BT layer appears to think that it is connected.
+> 
+> Anyway, what exactly do you need?
+> 
+> > I can't see any problems in there that wouldn't also have impacted
+> > all
+> > the other Logitech Bluetooth devices listed in the support devices
+> > list.
+> > 
+> > If the problem is a timeout, maybe we should lower the timeouts we
+> > currently have (5*HZ = 5 seconds, right?), so we can retry 5 times
+> > one
+> > second instead.
+> 
+> No, it doesn't take 5 sec to get a response from it.  It rather looks
+> like __hidpp_send_report() returns an error.
 
-On Thu, Nov 24, 2022 at 12:03:03PM -0000, tip-bot2 for Ravi Bangoria wrote:
-> The following commit has been merged into the perf/core branch of tip:
-> 
-> Commit-ID:     30093056f7b2f759ff180d3a86d29f68315e469b
-> Gitweb:        https://git.kernel.org/tip/30093056f7b2f759ff180d3a86d29f68315e469b
-> Author:        Ravi Bangoria <ravi.bangoria@amd.com>
-> AuthorDate:    Tue, 15 Nov 2022 15:09:04 +05:30
-> Committer:     Peter Zijlstra <peterz@infradead.org>
-> CommitterDate: Thu, 24 Nov 2022 11:09:19 +01:00
-> 
-> perf/amd/ibs: Make IBS a core pmu
-> 
-> So far, only one pmu was allowed to be registered as core pmu and thus
-> IBS pmus were being registered as uncore. However, with the event context
-> rewrite, that limitation no longer exists and thus IBS pmus can also be
-> registered as core pmu. This makes IBS much more usable, for ex, user
-> will be able to do per-process precise monitoring on AMD:
-> 
-> Before patch:
->   $ sudo perf record -e cycles:pp ls
->   Error:
->   Invalid event (cycles:pp) in per-thread mode, enable system wide with '-a'
-> 
-> After patch:
->   $ sudo perf record -e cycles:pp ls
->   [ perf record: Woken up 1 times to write data ]
->   [ perf record: Captured and wrote 0.017 MB perf.data (33 samples) ]
-> 
-> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Acked-by: Ian Rogers <irogers@google.com>
-> Link: https://lkml.kernel.org/r/20221115093904.1799-1-ravi.bangoria@amd.com
-> ---
->  arch/x86/events/amd/ibs.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
-> index 3271735..fbc2ce8 100644
-> --- a/arch/x86/events/amd/ibs.c
-> +++ b/arch/x86/events/amd/ibs.c
-> @@ -631,7 +631,7 @@ static const struct attribute_group *op_attr_update[] = {
->  
->  static struct perf_ibs perf_ibs_fetch = {
->  	.pmu = {
-> -		.task_ctx_nr	= perf_invalid_context,
-> +		.task_ctx_nr	= perf_hw_context,
->  
->  		.event_init	= perf_ibs_init,
->  		.add		= perf_ibs_add,
-> @@ -655,7 +655,7 @@ static struct perf_ibs perf_ibs_fetch = {
->  
->  static struct perf_ibs perf_ibs_op = {
->  	.pmu = {
-> -		.task_ctx_nr	= perf_invalid_context,
-> +		.task_ctx_nr	= perf_hw_context,
->  
->  		.event_init	= perf_ibs_init,
->  		.add		= perf_ibs_add,
+Adding "debug" on the kernel command-line should be enough to get debug
+out of hidpp_send_message_sync():
+https://stackoverflow.com/a/63682160
 
--- 
-Regards/Gruss,
-    Boris.
+Either that or turn all the dbg_hid() into hid_err() if you're going to
+be compiling the kernel.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+We're mainly interested in the error code from the device, as that's
+what I'm guessing is caused the error to propagate.
+
+> > Still, as I mentioned earlier, I can't reproduce the problem on
+> > another
+> > Bluetooth Classic device...
+
