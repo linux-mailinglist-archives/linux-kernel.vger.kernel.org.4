@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 218AD646A26
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABABC646A2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbiLHILX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52630 "EHLO
+        id S229830AbiLHIMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiLHILW (ORCPT
+        with ESMTP id S229586AbiLHIL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:11:22 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B07F55A97;
-        Thu,  8 Dec 2022 00:11:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E9AF61DDC;
-        Thu,  8 Dec 2022 08:11:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC8C0C433D6;
-        Thu,  8 Dec 2022 08:11:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670487080;
-        bh=NdFVTBJpV5FMMzSdVcQDTqogNFQJNtLtSeWiycnqC6E=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=RtrLgqSzZLoWB69bmDOS3Y7k4ID1eB5oGbP+XEwrI1eiBIxQ1wBbk7VMf9VrVerlK
-         I4wa6hWCiREHloeUryFLhcSvLUE6bOloEypzb93wIcq11AJReAGYj+V06L1hHo1b1B
-         S7cpuC2AQv4EleioeAoVJ2XAyIlXc3pL014wddaexDi2PEpfI4BLCpsf0w677cRY0D
-         pSZB8f8pNIeWxAotXGpBMrG5Gx/8N7Tqu6RSNGdGyg3PMA/yhfiarE+IivfTXjm1YN
-         X1Q4/dTX5jwk3ECOrjpw8KMMj0ZW23dIV1dQerNtYvvLXY3h9MFsqPuNda5OmoZgYo
-         XolFDFK5GwU2Q==
-Date:   Thu, 08 Dec 2022 09:11:16 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, mturquette@baylibre.com,
-        sboyd@kernel.org, claudiu.beznea@microchip.com,
-        conor.dooley@microchip.com
-CC:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] clk: microchip: Add check for devm_kzalloc
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20221208074025.29015-1-jiasheng@iscas.ac.cn>
-References: <20221208074025.29015-1-jiasheng@iscas.ac.cn>
-Message-ID: <F2FCAF36-B78B-4233-B0DE-A5AAE73EBCC5@kernel.org>
+        Thu, 8 Dec 2022 03:11:56 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF89555CA4;
+        Thu,  8 Dec 2022 00:11:54 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id cm20so931247pjb.1;
+        Thu, 08 Dec 2022 00:11:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=PRliwF0o7oV85eapVBALB7fOMkMAiSkW6Oy/YS7Oo7U=;
+        b=lATRXt6dkZH4gt5YhEeSt3x8Ghu6sSs3KcRDI+4ekQOB6pyiwssZyJfKLrqfQEJwbX
+         H6oHmzvJEss7JQbYUADpVr9RQSmwRI1nqmg+kkgvmUBf6EynopgFdwzUgGKYCpcuq1Nm
+         lo2d9Q7vSLrNyRaeLeGkYOWwhBqlgjP+kdCJsoItvTA4TP12Fo6NkfhCT6jprPFchxZV
+         oGPB4MXBT42laQQxOIcPFoQdTlYf3P1C+JP+AmmV3hc8YyOAYYdZTyHGrEfsRPxk6G17
+         aUK+amu4RPoHGOday6Uf2ZmmM5mZ2lnHY0gOhkin4p+GTfPkuxscKC+MbrN2XdvZn9Pp
+         kxuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PRliwF0o7oV85eapVBALB7fOMkMAiSkW6Oy/YS7Oo7U=;
+        b=ESy191y8TjdZnq3s9v0nqDf650jqqGMACrbtOADaw6rLde35AH8IcZ3P3rlZ773ta1
+         ZUGheeAyq8NcCaNywRQbaGSRmZkKItquymy2SOXVcMiq/JPsAPzefsLD0BpNd4ntYktQ
+         y9Wnrv6Xx9BkFjKyiNyKxsvl45v55MhNMcGqwnPuH0UTCmavBeBm9fxhNle6nHzZbnsZ
+         8V1E13xQO+WsbgSnSEqt63eSFlGVpyj9aucDQ+1cEPXDepS7/pIuTknkhqnjB3FDE6fW
+         M123779FtGEjZ6CO45U72mdqBxLHJgKCj7SsD6Qh4N+/HALS/V6aj9Aq67BG5sC0Xdvl
+         pQUg==
+X-Gm-Message-State: ANoB5pl5J/xy3lEeKoHVhND9G8sdBtb6hKIQah7F3y8nfJtp2Kav5z4U
+        29g9JZsrrA751mLjYbFVZNY=
+X-Google-Smtp-Source: AA0mqf6OoB08efjyc4G4b7F2n3d5oULcT2PESghwoLBvau0HvIDl2PuC9FAFMkSCke2gzJE+TaeJQA==
+X-Received: by 2002:a17:903:268f:b0:189:dfb0:d380 with SMTP id jf15-20020a170903268f00b00189dfb0d380mr1842759plb.33.1670487114241;
+        Thu, 08 Dec 2022 00:11:54 -0800 (PST)
+Received: from XH22050090-L.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.gmail.com with ESMTPSA id b12-20020a1709027e0c00b00188f07c9eedsm15735729plm.176.2022.12.08.00.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 00:11:53 -0800 (PST)
+Sender: Vincent Mailhol <vincent.mailhol@gmail.com>
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org
+Cc:     Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Maximilian Schneider <mws@schneidersoft.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        =?UTF-8?q?Christoph=20M=C3=B6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH 0/2] can: usb: remove pointers to struct usb_interface in device's priv structures
+Date:   Thu,  8 Dec 2022 17:11:40 +0900
+Message-Id: <20221208081142.16936-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The gs_can and ucan drivers keep a pointer to struct usb_interface in
+their private structure. This is not needed. For gs_can the only use
+is to retrieve struct usb_device, which is already available in
+gs_usb::udev. For ucan, the field is set but never used.
 
+Remove the struct usb_interface fields and clean up.
 
-On 8 December 2022 08:40:25 GMT+01:00, Jiasheng Jiang <jiasheng@iscas=2Eac=
-=2Ecn> wrote:
->As devm_kzalloc may return NULL pointer, the return value should
->be checked and return error if it fails since NULL is a invalid
->value of "name" =2E
->
->Fixes: d39fb172760e ("clk: microchip: add PolarFire SoC fabric clock supp=
-ort")
->Signed-off-by: Jiasheng Jiang <jiasheng@iscas=2Eac=2Ecn>
+Vincent Mailhol (2):
+  can: ucan: remove unused ucan_priv::intf
+  can: gs_usb: remove gs_can::iface
 
-Someone already sent this patch, but thanks=2E
+ drivers/net/can/usb/gs_usb.c | 29 +++++++++--------------------
+ drivers/net/can/usb/ucan.c   |  2 --
+ 2 files changed, 9 insertions(+), 22 deletions(-)
 
->---
-> drivers/clk/microchip/clk-mpfs-ccc=2Ec | 6 ++++++
-> 1 file changed, 6 insertions(+)
->
->diff --git a/drivers/clk/microchip/clk-mpfs-ccc=2Ec b/drivers/clk/microch=
-ip/clk-mpfs-ccc=2Ec
->index 7be028dced63=2E=2E32aae880a14f 100644
->--- a/drivers/clk/microchip/clk-mpfs-ccc=2Ec
->+++ b/drivers/clk/microchip/clk-mpfs-ccc=2Ec
->@@ -166,6 +166,9 @@ static int mpfs_ccc_register_outputs(struct device *d=
-ev, struct mpfs_ccc_out_hw_
-> 		struct mpfs_ccc_out_hw_clock *out_hw =3D &out_hws[i];
-> 		char *name =3D devm_kzalloc(dev, 23, GFP_KERNEL);
->=20
->+		if (!name)
->+			return -ENOMEM;
->+
-> 		snprintf(name, 23, "%s_out%u", parent->name, i);
-> 		out_hw->divider=2Ehw=2Einit =3D CLK_HW_INIT_HW(name, &parent->hw, &clk=
-_divider_ops, 0);
-> 		out_hw->divider=2Ereg =3D data->pll_base[i / MPFS_CCC_OUTPUTS_PER_PLL]=
- +
->@@ -200,6 +203,9 @@ static int mpfs_ccc_register_plls(struct device *dev,=
- struct mpfs_ccc_pll_hw_clo
-> 		struct mpfs_ccc_pll_hw_clock *pll_hw =3D &pll_hws[i];
-> 		char *name =3D devm_kzalloc(dev, 18, GFP_KERNEL);
->=20
->+		if (!name)
->+			return -ENOMEM;
->+
-> 		pll_hw->base =3D data->pll_base[i];
-> 		snprintf(name, 18, "ccc%s_pll%u", strchrnul(dev->of_node->full_name, '=
-@'), i);
-> 		pll_hw->name =3D (const char *)name;
+-- 
+2.25.1
+
