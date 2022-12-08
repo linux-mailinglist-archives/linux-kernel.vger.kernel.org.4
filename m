@@ -2,84 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68CB647728
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05309647726
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:22:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiLHUW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:22:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
+        id S229877AbiLHUWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:22:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiLHUWx (ORCPT
+        with ESMTP id S229745AbiLHUW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:22:53 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27ED186EA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:21:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670530919;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mMLxZ2vEpcan9FP4JPPeH3ALepfz4tDO6+Vi7LEQRvk=;
-        b=gjAXwsfnCHE/keAGBiKhfX/Frye1MFNeB9C2/xfV89UtxU4XInvbPmJfrk48Pn1xLXv5pl
-        N1PfcXOSR6NK2vrsad9hIE4WM9+JSh4s6SSjCuwjhyiHdEet1rmWtLLrULJqlsQWrle8Zc
-        lVJEd635DcBJ8UUPEyyGKkaCnqe9Src=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-403-qRZK3BVgNPaD62PWLeBcyw-1; Thu, 08 Dec 2022 15:21:57 -0500
-X-MC-Unique: qRZK3BVgNPaD62PWLeBcyw-1
-Received: by mail-qv1-f72.google.com with SMTP id u15-20020a0cec8f000000b004c704e015f7so2446614qvo.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:21:57 -0800 (PST)
+        Thu, 8 Dec 2022 15:22:29 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A5E5AE1C;
+        Thu,  8 Dec 2022 12:22:28 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id vv4so6727130ejc.2;
+        Thu, 08 Dec 2022 12:22:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lkh1P1g6SdIbuYu0UMr6qddEILkP0nJO6Y1lmSw3rRI=;
+        b=HfC+cuf95xAP9a2NmUTOfNtQEUuignCAFg9w1eMrFdH6Vo8UMj9zVH4SEFLTl6ra7I
+         wAQoJ4WXvv3xjUOCtCeVj31tds1y+iyM/Sq3m9+eVgf3hNnwvdSJLX5GlZkwxZqDrTLQ
+         3i5cCJDaaHmRj8mscGATkZi3irV4X3C1AJQ4STWcY63q1i8cQYiUjWF1Dg3SzQKh717L
+         RgcjlRxo+ndmNDqS/VKJw4ihlMJ1Bi0WTOEMRfAkHlew1ZE/DnXV837j76uPn0X6AeiO
+         UxoQC8+ffaO2oC3rQ2vTC8toMBaQu4mAglUCbRXC1f0VjU4QSKa81Xt9E1IyXx5535Ib
+         SG4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mMLxZ2vEpcan9FP4JPPeH3ALepfz4tDO6+Vi7LEQRvk=;
-        b=myjxJxZLy+WPhJ+cUi7La3zX2sof+sUDOP3BSauRTWq1zuxazQkhEIAdHpAhueLjqb
-         4C9pZUMQkBOdMcoJpsrTVxbj/IuWMhB5e9vbFXyepT0Ku9DcpaYFTu7rafwbsCU+xJag
-         LoTz6PgJ7houaCS8fSVWO43rONhQa3g9OEH4KkhRtzfH6C6tcAE3/RtAURwXS3auYykJ
-         d267gChbWz4mags2VRQoDmH5+jFlVrth9da7Ld1B+/8Bv4zLZZ7QuO1bhOP+xyDns0yA
-         9BE5Y84wDo1LyM7ywN6WR9DIA9mehj1VvVmLfEv8b+0miDpzCOg7emUQWsJNkgudpLGR
-         yJzg==
-X-Gm-Message-State: ANoB5plqpbMgbHjqhPc910JdzsgjNaOV6ordE2SNtdktnwGaHlUjOi1E
-        lA+yO1M+OTngRc/gcTsAgaLpveY9A9dWlOD+oKvQuKG9ACsnBoB1OM6p0VGWtW8dPKS5UuJrKE3
-        mKEl16ADj+6cwHh6JKwoH8wa6
-X-Received: by 2002:ac8:774d:0:b0:3a5:7ab0:e1c4 with SMTP id g13-20020ac8774d000000b003a57ab0e1c4mr4517418qtu.35.1670530917389;
-        Thu, 08 Dec 2022 12:21:57 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7k+qy/zHCSKcSSKL+b4cS9+x4HXGI/lH5oy++Dhi9P840spOv4KDspGKt5GTP4hJO3hvBySw==
-X-Received: by 2002:ac8:774d:0:b0:3a5:7ab0:e1c4 with SMTP id g13-20020ac8774d000000b003a57ab0e1c4mr4517397qtu.35.1670530917146;
-        Thu, 08 Dec 2022 12:21:57 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id ga23-20020a05622a591700b003a526675c07sm16021164qtb.52.2022.12.08.12.21.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 12:21:56 -0800 (PST)
-Date:   Thu, 8 Dec 2022 15:21:55 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Ives van Hoorne <ives@codesandbox.io>,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v1] mm/userfaultfd: enable writenotify while
- userfaultfd-wp is enabled for a VMA
-Message-ID: <Y5JHY2zyK4k8aBtX@x1n>
-References: <20221208114137.35035-1-david@redhat.com>
- <Y5IQzJkBSYwPOtiP@x1n>
- <b9162f04-7d8e-1ada-f428-85fd84327d1c@redhat.com>
- <Y5JDrkBGEyZviXz9@x1n>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lkh1P1g6SdIbuYu0UMr6qddEILkP0nJO6Y1lmSw3rRI=;
+        b=f+EEh/Zl+PUq0D5bz01xfADkpo5hxluzi1yi9aQQOMt0f5i0jWUpRdzuXcMdLt9If2
+         YQf0L9HdJ5crUSWvflh6Taz6OUdbyfO0OyHaLnSfycmfrH0VWF9ooXiXEoM8/Tocw99j
+         lQBblO/lP7VpGhu31Rqv6XgEbLYrFLzVhHRnpO7ch0jK7jokHZQ0qSD5wx6doCSF9mDS
+         xNtqtsK8Yh78Gs3l5E5CC59szb/dR/HnbNytsN0fejaBSFNOO9hDHgDjkZpT+icJp6SM
+         1fkZf8IN5EIVJz2KhkH3OVicqDI/2/nXMuzY+iagGJWdTuxBYazRdbDLBhqtrzw6aTpg
+         dfXg==
+X-Gm-Message-State: ANoB5pmlLYIq5IWLSjpMySkZNydZ4aodstRfdDDQ0UZ2kLUgAeEIMaMz
+        JwJ+jJQibJYZst74d2Ban1Y=
+X-Google-Smtp-Source: AA0mqf4EjMWAqV4kOPGD+L7AFqn8+NNq78OATWVuNAGBCyxTjPGCQQsP8ASH/8u4kktDI/IID9hynA==
+X-Received: by 2002:a17:907:76f2:b0:7c0:eb3c:1037 with SMTP id kg18-20020a17090776f200b007c0eb3c1037mr14884853ejc.663.1670530947039;
+        Thu, 08 Dec 2022 12:22:27 -0800 (PST)
+Received: from [192.168.0.105] ([77.126.19.155])
+        by smtp.gmail.com with ESMTPSA id p10-20020a170906838a00b007c0dacbe00bsm6439680ejx.115.2022.12.08.12.22.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 12:22:26 -0800 (PST)
+Message-ID: <1efd1d75-9c5d-4827-3d28-bef044801859@gmail.com>
+Date:   Thu, 8 Dec 2022 22:22:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y5JDrkBGEyZviXz9@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 0/5] cpumask: improve on cpumask_local_spread()
+ locality
+Content-Language: en-US
+To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+References: <20221208183101.1162006-1-yury.norov@gmail.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20221208183101.1162006-1-yury.norov@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,26 +101,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 03:06:06PM -0500, Peter Xu wrote:
-> On Thu, Dec 08, 2022 at 05:44:35PM +0100, David Hildenbrand wrote:
-> > I'll wait for some more (+retest) before I resend tomorrow.
-> 
-> One more thing just to double check:
-> 
-> It's 6a56ccbcf6c6 ("mm/autonuma: use can_change_(pte|pmd)_writable() to
-> replace savedwrite", 2022-11-30) that just started to break uffd-wp on
-> numa, am I right?
-> 
-> With the old code, pte_modify() will persist uffd-wp bit, afaict, and we
-> used to do savedwrite for numa hints.  That all look correct to me until
-> the savedwrite removal patchset with/without vm_page_prot changes.
-> 
-> If that's the case, we'd better also mention that in the commit message and
-> has another Fixes: for that one to be clear.
 
-Nah, never mind.  I think the savedwrite will not guarantee pte write
-protected just like the migration path.  The commit message is correct.
 
--- 
-Peter Xu
+On 12/8/2022 8:30 PM, Yury Norov wrote:
+> cpumask_local_spread() currently checks local node for presence of i'th
+> CPU, and then if it finds nothing makes a flat search among all non-local
+> CPUs. We can do it better by checking CPUs per NUMA hops.
+> 
+> This series is inspired by Tariq Toukan and Valentin Schneider's
+> "net/mlx5e: Improve remote NUMA preferences used for the IRQ affinity
+> hints"
+> 
+> https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
+> 
+> According to their measurements, for mlx5e:
+> 
+>          Bottleneck in RX side is released, reached linerate (~1.8x speedup).
+>          ~30% less cpu util on TX.
+> 
+> This patch makes cpumask_local_spread() traversing CPUs based on NUMA
+> distance, just as well, and I expect comparable improvement for its
+> users, as in case of mlx5e.
+> 
+> I tested new behavior on my VM with the following NUMA configuration:
+> 
+> root@debian:~# numactl -H
+> available: 4 nodes (0-3)
+> node 0 cpus: 0 1 2 3
+> node 0 size: 3869 MB
+> node 0 free: 3740 MB
+> node 1 cpus: 4 5
+> node 1 size: 1969 MB
+> node 1 free: 1937 MB
+> node 2 cpus: 6 7
+> node 2 size: 1967 MB
+> node 2 free: 1873 MB
+> node 3 cpus: 8 9 10 11 12 13 14 15
+> node 3 size: 7842 MB
+> node 3 free: 7723 MB
+> node distances:
+> node   0   1   2   3
+>    0:  10  50  30  70
+>    1:  50  10  70  30
+>    2:  30  70  10  50
+>    3:  70  30  50  10
+> 
+> And the cpumask_local_spread() for each node and offset traversing looks
+> like this:
+> 
+> node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
+> node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
+> node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
+> node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
+> 
+> v1: https://lore.kernel.org/lkml/20221111040027.621646-5-yury.norov@gmail.com/T/
+> v2: https://lore.kernel.org/all/20221112190946.728270-3-yury.norov@gmail.com/T/
+> v3:
+>   - fix typo in find_nth_and_andnot_bit();
+>   - add 5th patch that simplifies cpumask_local_spread();
+>   - address various coding style nits.
+> 
+> Yury Norov (5):
+>    lib/find: introduce find_nth_and_andnot_bit
+>    cpumask: introduce cpumask_nth_and_andnot
+>    sched: add sched_numa_find_nth_cpu()
+>    cpumask: improve on cpumask_local_spread() locality
+>    lib/cpumask: reorganize cpumask_local_spread() logic
+> 
+>   include/linux/cpumask.h  | 20 ++++++++++++++
+>   include/linux/find.h     | 33 +++++++++++++++++++++++
+>   include/linux/topology.h |  8 ++++++
+>   kernel/sched/topology.c  | 57 ++++++++++++++++++++++++++++++++++++++++
+>   lib/cpumask.c            | 26 +++++-------------
+>   lib/find_bit.c           |  9 +++++++
+>   6 files changed, 134 insertions(+), 19 deletions(-)
+> 
 
+Acked-by: Tariq Toukan <tariqt@nvidia.com>
