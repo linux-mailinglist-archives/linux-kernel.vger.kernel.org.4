@@ -2,82 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7350646FB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB749646FB5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiLHMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:30:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
+        id S230001AbiLHMan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 07:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLHMaO (ORCPT
+        with ESMTP id S229468AbiLHMaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:30:14 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076A4303FC;
-        Thu,  8 Dec 2022 04:30:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95D1761F0A;
-        Thu,  8 Dec 2022 12:30:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10221C433C1;
-        Thu,  8 Dec 2022 12:30:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670502613;
-        bh=vuyR8NSZXgKNwfmsYoMv4Ol+ici2HnAMRbBD2K6WyGs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Twma8AYQ06LUktSgKmq71rkrveB+1CUCh9pDKVdsZGc543B9CJHs7cHmyyyLzeKC/
-         eKR5Bs7pQ2t49ZXvntQpsXNQFEMIFTlSduIq7VVzNhldG6uG+Y74gSLUm1Lv4kC8SJ
-         tiD7E8VomIU384oLv8pTZGpoJ+3ptYH0z3Q7i7+RZFVOGWQDGc/7eZAfVzlPtCwJjr
-         J0j2Yyvu4sH8O1M/R15XSQS4aScmrpZrqT2SOSthasErjuKtrnUIRPMeHhboJ4yKxJ
-         Bsr/y9PorPjqN8tY9eod5rU1W5W+0NiQiXKRdCakYWNCabDSEBJnbn2Rl0CjnwONE8
-         MxBxBfIE996Gg==
-Date:   Thu, 8 Dec 2022 12:30:07 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/2] mfd: qcom_rpm: Fix an error handling path in
- qcom_rpm_probe()
-Message-ID: <Y5HYzzwdWCrpWOTv@google.com>
-References: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
+        Thu, 8 Dec 2022 07:30:39 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D843C2B185;
+        Thu,  8 Dec 2022 04:30:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670502638; x=1702038638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=geMWQwl8f3L8TwGLVN0GOzD32/STIXrJqv4HDrTS7ZE=;
+  b=nrZEHigd0HXl6aoFAdunsYiwb+qUJWAfa5jqBMVWvHnhKB2nyeHq2oxQ
+   EV0V58zegRN7BKxhe2jjJyapxnVCaXN81GB+/24QCAUTq2T32hY2Ahewf
+   ZCxHZ7RbBdzmdTT+G/XiMeFAGBfK1Djoj2hjgVs6KMTloZ2GddHyMgVVO
+   gf18BQIOy3X3p3KUjfTjjKtrVUCwpzYeNep+W0Y+6C7To0mcqUtkNSiSW
+   KQWcJjlMh26JkzvULg2QAtSVEpKXi4BlW/Eqdt7vuxP+o15lya2oGh0TB
+   AUVnbY/FiXaNFcCxmbTDTjVPBcs2Vq9oC6LhweIY/5PSY1w0Gxu47p+3O
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="318298662"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="318298662"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 04:30:37 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="821321712"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="821321712"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2022 04:30:30 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1p3G2l-006KKW-1a;
+        Thu, 08 Dec 2022 14:30:27 +0200
+Date:   Thu, 8 Dec 2022 14:30:27 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+Subject: Re: [PATCH v5 1/8] i2c: core: let adapters be notified of client
+ attach/detach
+Message-ID: <Y5HY4/Ho48KrGFoR@smile.fi.intel.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221208104006.316606-2-tomi.valkeinen@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 20 Nov 2022, Christophe JAILLET wrote:
-
-> If an error occurs after the clk_prepare_enable() call, a corresponding
-> clk_disable_unprepare() should be called.
+On Thu, Dec 08, 2022 at 12:39:59PM +0200, Tomi Valkeinen wrote:
+> From: Luca Ceresoli <luca@lucaceresoli.net>
 > 
-> Simplify code and switch to devm_clk_get_enabled() to fix it.
+> An adapter might need to know when a new device is about to be
+> added. This will soon bee needed to implement an "I2C address
+> translator" (ATR for short), a device that propagates I2C transactions
+> with a different slave address (an "alias" address). An ATR driver
+> needs to know when a slave is being added to find a suitable alias and
+> program the device translation map.
 > 
-> Fixes: 3526403353c2 ("mfd: qcom_rpm: Handle message RAM clock")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This changes the order of the clean-ups if the .remove() function is called
-> but it looks fine to me.
-> ---
->  drivers/mfd/qcom_rpm.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
+> Add an attach/detach callback pair to allow adapter drivers to be
+> notified of clients being added and removed.
 
-Something funny going on here.
+...
 
-I received 3 identical versions of the same patch.
+> +	if (adap->attach_ops &&
+> +	    adap->attach_ops->attach_client &&
+> +	    adap->attach_ops->attach_client(adap, info, client) != 0)
+> +		goto out_remove_swnode;
+
+With a temporary variable it becomes better
+
+	... *ops = adap->attach_ops;
+
+	if (ops && ops->attach_client && ops->attach_client(adap, info, client))
+
+
+Also notice drop of unneeded ' != 0' part.
+
+
+>  	status = device_register(&client->dev);
+>  	if (status)
+> -		goto out_remove_swnode;
+> +		goto out_detach_client;
+>  
+>  	dev_dbg(&adap->dev, "client [%s] registered with bus id %s\n",
+>  		client->name, dev_name(&client->dev));
+>  
+>  	return client;
+>  
+> +out_detach_client:
+> +	if (adap->attach_ops && adap->attach_ops->detach_client)
+> +		adap->attach_ops->detach_client(adap, client);
+
+In the similar way.
+
+...
+
+> +	if (adap->attach_ops &&
+> +	    adap->attach_ops->detach_client)
+> +		adap->attach_ops->detach_client(adap, client);
+
+In the similar way.
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
