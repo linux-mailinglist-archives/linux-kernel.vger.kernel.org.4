@@ -2,196 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EBF96467A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 04:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B0776467A9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 04:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbiLHDUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 22:20:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S229723AbiLHDZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 22:25:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiLHDUl (ORCPT
+        with ESMTP id S229507AbiLHDZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 22:20:41 -0500
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93259950E2
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 19:20:40 -0800 (PST)
-Received: by mail-pg1-x535.google.com with SMTP id 62so149057pgb.13
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 19:20:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lcP9OjdQ5PW2QxVpoWWahvsYVEkwMxh4TexVWLLeoUg=;
-        b=Fbe6IGbTVg8Z358I0mBavqz5hQZDFTyLCdQB+qpde0bt/NhoW7PnsF2vXJdcjroxFc
-         8s2rniL+jd42F8Osw4wdLxDXCIQHpYe0d4Q33nkn1od0GwhSzR628sU8CtgHv2GS9Vn2
-         vP2RiQ3TCyHKKWbQHHEhEXu6motfc+zzR8saZHBsd1slcHwPJixtt4Fglq+aIRdMCVK8
-         bVaPJZ7/bn8RCXlGFoIwOrzb0u7tp5TMSa6pn8V3dSconkcK2DFeI2Fu2GhV0MgLsyAX
-         8YK09WmFkF6kvlWGmERYLk68fj/aDS/oq+htYONRMQ9TX2ob6rOlievjctOQ6YsqtpaT
-         RFsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lcP9OjdQ5PW2QxVpoWWahvsYVEkwMxh4TexVWLLeoUg=;
-        b=skHhDcR5FIacn0HXWhU8LvG47F/9sHJzdHKq/RpOxet+fhb+FxPmjz/TQeloStLRcZ
-         OUpdiB+hzITB/vKaUSschix4tWR+2fF4xapi1X3CSgIMbjJIWUsdOuoOBfjCj3XSNMIl
-         gfBbpnrlOpPKOAbm2h3TQ/L4i6IpdXVVTzKJZZavuITyrAYPCgJgaHDK4ztXlTgQorS+
-         /prMSeeT/tAPobKuHWfGRgTWD52KTCDhQCDZULcpmhGuZiPl6M8k74XFqJoJuYjxtJ/1
-         8m/Cz2GSVurUTUPaivE07/R67Wn7RSB6hOQ5efCIbhkccsNV4mDO2MZuR1+Y2vYQj+nV
-         Vf6w==
-X-Gm-Message-State: ANoB5plFavO+8XR0ow+G0+kp0YJUY459oYtsl12zWs4stYP2gxYHYjOI
-        E2SGVU233Er7XyP+NR0rvckOGPb5DKkTJXPG
-X-Google-Smtp-Source: AA0mqf7Pb9TgDQJkQrs6rsbBvAmaDOHPz8cZASZ/Ji5XkSsNv9G6IxS1zF6xw0Rbc453Rcl8b4LzgQ==
-X-Received: by 2002:a63:4861:0:b0:477:4451:d49 with SMTP id x33-20020a634861000000b0047744510d49mr67359469pgk.575.1670469640130;
-        Wed, 07 Dec 2022 19:20:40 -0800 (PST)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.236])
-        by smtp.gmail.com with ESMTPSA id mm13-20020a17090b358d00b00200461cfa99sm1846781pjb.11.2022.12.07.19.20.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 19:20:39 -0800 (PST)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org
-Cc:     juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, bagasdotme@gmail.com,
-        yu.c.chen@intel.com, Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH v5 2/2] sched/core: Reorganize ttwu_do_wakeup() and ttwu_do_activate()
-Date:   Thu,  8 Dec 2022 11:20:07 +0800
-Message-Id: <20221208032007.94459-2-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221208032007.94459-1-zhouchengming@bytedance.com>
-References: <20221208032007.94459-1-zhouchengming@bytedance.com>
+        Wed, 7 Dec 2022 22:25:15 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40AD880FF;
+        Wed,  7 Dec 2022 19:25:14 -0800 (PST)
+Received: from dggpemm500013.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NSKFK05lBzJp6x;
+        Thu,  8 Dec 2022 11:21:41 +0800 (CST)
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Dec 2022 11:25:12 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <syzbot+2f9183cb6f89b0e16586@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>, <netdev@vger.kernel.org>,
+        <stable@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <chenzhongjin@huawei.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <gregkh@linuxfoundation.org>
+Subject: [PATCH net] net/sched: Fix memory leak in tcindex_set_parms
+Date:   Thu, 8 Dec 2022 11:22:16 +0800
+Message-ID: <20221208032216.63513-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ttwu_do_activate() is used for a complete wakeup, in which we will
-activate_task() and use ttwu_do_wakeup() to mark the task runnable
-and perform wakeup-preemption, also call class->task_woken() callback
-and update the rq->idle_stamp.
+syzkaller reported a memleak:
+https://syzkaller.appspot.com/bug?id=e061e6cd46417ee6566dc249d8f982c0b5977a52
 
-Since ttwu_runnable() is not a complete wakeup, don't need all those
-done in ttwu_do_wakeup(), so we can move those to ttwu_do_activate()
-to simplify ttwu_do_wakeup(), making it only mark the task runnable
-to be reused in ttwu_runnable() and try_to_wake_up().
+unreferenced object 0xffff888107813900 (size 256):
+  backtrace:
+    kcalloc include/linux/slab.h:636 [inline]
+    tcf_exts_init include/net/pkt_cls.h:250 [inline]
+    tcindex_set_parms+0xa7/0xbe0 net/sched/cls_tcindex.c:342
+    tcindex_change+0xdf/0x120 net/sched/cls_tcindex.c:553
+    tc_new_tfilter+0x4f2/0x1100 net/sched/cls_api.c:2147
+    ...
 
-This patch should not have any functional changes.
+The reproduce calls tc_new_tfilter() continuously:
 
-Suggested-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+tc_new_tfilter()...
+tcindex_set_parms()
+  tcf_exts_init(&e, ...) // alloc e->actions
+  tcf_exts_change(&r->exts, &e)
+
+tc_new_tfilter()...
+tcindex_set_parms()
+  old_r = r // same as first r
+  tcindex_filter_result_init(old_r, cp, net);
+  // old_r is holding e->actions but here it calls memset(old_r, 0)
+  // so the previous e->actions is leaked
+
+So here tcf_exts_destroy() should be called to free old_r->exts.actions
+before memset(old_r, 0) sets it to NULL.
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Reported-by: syzbot+2f9183cb6f89b0e16586@syzkaller.appspotmail.com
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- kernel/sched/core.c | 64 ++++++++++++++++++++++-----------------------
- 1 file changed, 31 insertions(+), 33 deletions(-)
+#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 355479c70a48
+---
+ net/sched/cls_tcindex.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 60aa7774e5f4..d8216485b0ad 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3623,14 +3623,39 @@ ttwu_stat(struct task_struct *p, int cpu, int wake_flags)
- }
- 
- /*
-- * Mark the task runnable and perform wakeup-preemption.
-+ * Mark the task runnable.
-  */
--static void ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags,
--			   struct rq_flags *rf)
-+static inline void ttwu_do_wakeup(struct task_struct *p)
- {
--	check_preempt_curr(rq, p, wake_flags);
- 	WRITE_ONCE(p->__state, TASK_RUNNING);
- 	trace_sched_wakeup(p);
-+}
-+
-+static void
-+ttwu_do_activate(struct rq *rq, struct task_struct *p, int wake_flags,
-+		 struct rq_flags *rf)
-+{
-+	int en_flags = ENQUEUE_WAKEUP | ENQUEUE_NOCLOCK;
-+
-+	lockdep_assert_rq_held(rq);
-+
-+	if (p->sched_contributes_to_load)
-+		rq->nr_uninterruptible--;
-+
-+#ifdef CONFIG_SMP
-+	if (wake_flags & WF_MIGRATED)
-+		en_flags |= ENQUEUE_MIGRATED;
-+	else
-+#endif
-+	if (p->in_iowait) {
-+		delayacct_blkio_end(p);
-+		atomic_dec(&task_rq(p)->nr_iowait);
-+	}
-+
-+	activate_task(rq, p, en_flags);
-+	check_preempt_curr(rq, p, wake_flags);
-+
-+	ttwu_do_wakeup(p);
- 
- #ifdef CONFIG_SMP
- 	if (p->sched_class->task_woken) {
-@@ -3660,31 +3685,6 @@ static void ttwu_do_wakeup(struct rq *rq, struct task_struct *p, int wake_flags,
- #endif
- }
- 
--static void
--ttwu_do_activate(struct rq *rq, struct task_struct *p, int wake_flags,
--		 struct rq_flags *rf)
--{
--	int en_flags = ENQUEUE_WAKEUP | ENQUEUE_NOCLOCK;
--
--	lockdep_assert_rq_held(rq);
--
--	if (p->sched_contributes_to_load)
--		rq->nr_uninterruptible--;
--
--#ifdef CONFIG_SMP
--	if (wake_flags & WF_MIGRATED)
--		en_flags |= ENQUEUE_MIGRATED;
--	else
--#endif
--	if (p->in_iowait) {
--		delayacct_blkio_end(p);
--		atomic_dec(&task_rq(p)->nr_iowait);
--	}
--
--	activate_task(rq, p, en_flags);
--	ttwu_do_wakeup(rq, p, wake_flags, rf);
--}
--
- /*
-  * Consider @p being inside a wait loop:
-  *
-@@ -3726,8 +3726,7 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
- 			update_rq_clock(rq);
- 			check_preempt_curr(rq, p, wake_flags);
- 		}
--		WRITE_ONCE(p->__state, TASK_RUNNING);
--		trace_sched_wakeup(p);
-+		ttwu_do_wakeup(p);
- 		ret = 1;
- 	}
- 	__task_rq_unlock(rq, &rf);
-@@ -4093,8 +4092,7 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- 			goto out;
- 
- 		trace_sched_waking(p);
--		WRITE_ONCE(p->__state, TASK_RUNNING);
--		trace_sched_wakeup(p);
-+		ttwu_do_wakeup(p);
- 		goto out;
+diff --git a/net/sched/cls_tcindex.c b/net/sched/cls_tcindex.c
+index 1c9eeb98d826..00a6c04a4b42 100644
+--- a/net/sched/cls_tcindex.c
++++ b/net/sched/cls_tcindex.c
+@@ -479,6 +479,7 @@ tcindex_set_parms(struct net *net, struct tcf_proto *tp, unsigned long base,
  	}
  
+ 	if (old_r && old_r != r) {
++		tcf_exts_destroy(&old_r->exts);
+ 		err = tcindex_filter_result_init(old_r, cp, net);
+ 		if (err < 0) {
+ 			kfree(f);
 -- 
-2.37.2
+2.17.1
 
