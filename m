@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 239D4647186
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC87647183
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:21:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbiLHOU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:20:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S229908AbiLHOU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:20:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiLHOUo (ORCPT
+        with ESMTP id S229939AbiLHOUp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:20:44 -0500
+        Thu, 8 Dec 2022 09:20:45 -0500
 Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CCCC84DD2;
-        Thu,  8 Dec 2022 06:20:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D3087CAC;
+        Thu,  8 Dec 2022 06:20:41 -0800 (PST)
 Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E8DDCC001E;
-        Thu,  8 Dec 2022 14:20:35 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0F7EFC0002;
+        Thu,  8 Dec 2022 14:20:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670509237;
+        t=1670509240;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=DcI0CE2vpt8M7xlyKhWsNrg5u9xwZtrv/Ts2Ew1lIMc=;
-        b=NUTQupy9h9GiEVOPXOZIucyLmIa8F5OCH+jK9GuNbCCMRX/nWubMvp8590YSc0Di8t66N3
-        c2fqtdypEndYmjytjJuaVGrDAaqoDGn0nXhWWPCy4H9ECzo+lfVH3k9zxz3/MD/s/tK65c
-        /DJlwZxNCSf9vdrmsttFr424GCXMTPg2OdNwh2LpTkIHtT4O7v4fMgsIA2rdInUh4sXFfb
-        WwsXK5CHXnu12C4nteflqtOI3grHazyb0qjKY3oCQg4m8/AoB+n4GnRPcTYqgrXZhx0htd
-        B8QX6wI3kpzjjRDi04QMNGibIjIbD21CC9MjrDDWebwJE+mPwrwSPfxC6cD+Yg==
+        bh=0FPh8ptOOh3/7vfnCNdEW59LErgazMVmLGY6D+7mMsQ=;
+        b=oIOdxsy2sgVs+9RbVNqY+Rl2s6zae0B00hC5Ux+LJdFzsGj040wWoFU/QVDqIACDa6jCz9
+        NszmD9pVELijGjHGHdqeNz0dmsWWKogbXJgJjMaNrsnQ0y7IDbeUgNnYBAFgVEGOPgPB9p
+        K22Ax1+1ClYHNLKWCM/MEfYbmyVUkmwfyJ9QoA2+Taqb9uOJ4wtNyXoNg9JIuXnoqrS4/y
+        m5rI47KuU1jl1CoPpAmgbPCkuinq39obTSs4fh8vdAKH0H+UHGua21GHrP/3fDkPJxaFqJ
+        HphBcl2+ZZoGC70u7YuodQSMvvCSrhFpYTTOEfne5Y31wXdUgbJPAdF4Bx5V4w==
 From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 To:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
@@ -45,9 +45,9 @@ Cc:     Yong Deng <yong.deng@magewell.com>,
         Sakari Ailus <sakari.ailus@iki.fi>,
         Conor Dooley <conor@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v3 05/12] media: sun6i-mipi-csi2: Clarify return code handling in stream off path
-Date:   Thu,  8 Dec 2022 15:19:59 +0100
-Message-Id: <20221208142006.425809-6-paul.kocialkowski@bootlin.com>
+Subject: [PATCH v3 06/12] media: sun8i-a83t-mipi-csi2: Clarify return code handling in stream off path
+Date:   Thu,  8 Dec 2022 15:20:00 +0100
+Message-Id: <20221208142006.425809-7-paul.kocialkowski@bootlin.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221208142006.425809-1-paul.kocialkowski@bootlin.com>
 References: <20221208142006.425809-1-paul.kocialkowski@bootlin.com>
@@ -67,14 +67,14 @@ which is a bit confusing to understand.
 
 Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 ---
- .../media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c   | 5 ++---
+ .../sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c        | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-index 484ac5f054d5..a220ce849b41 100644
---- a/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-+++ b/drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
-@@ -188,7 +188,8 @@ static int sun6i_mipi_csi2_s_stream(struct v4l2_subdev *subdev, int on)
+diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+index d993c09a4820..cd2e92ae2293 100644
+--- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
++++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+@@ -220,7 +220,8 @@ static int sun8i_a83t_mipi_csi2_s_stream(struct v4l2_subdev *subdev, int on)
  		return -ENODEV;
  
  	if (!on) {
@@ -84,14 +84,14 @@ index 484ac5f054d5..a220ce849b41 100644
  		goto disable;
  	}
  
-@@ -280,8 +281,6 @@ static int sun6i_mipi_csi2_s_stream(struct v4l2_subdev *subdev, int on)
+@@ -312,8 +313,6 @@ static int sun8i_a83t_mipi_csi2_s_stream(struct v4l2_subdev *subdev, int on)
  	return 0;
  
  disable:
 -	if (!on)
 -		ret = 0;
  	phy_power_off(dphy);
- 	sun6i_mipi_csi2_disable(csi2_dev);
+ 	sun8i_a83t_mipi_csi2_disable(csi2_dev);
  
 -- 
 2.38.1
