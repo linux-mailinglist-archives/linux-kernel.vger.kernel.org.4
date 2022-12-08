@@ -2,66 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBF564710D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1A5D64710E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiLHNxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58714 "EHLO
+        id S229818AbiLHNx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiLHNxK (ORCPT
+        with ESMTP id S229849AbiLHNxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:53:10 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECC83204C;
-        Thu,  8 Dec 2022 05:53:09 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so1050719wmi.3;
-        Thu, 08 Dec 2022 05:53:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2v8l5THJ19GAjS4O893x/pYLkkbHLYw6NG1nL55YPFc=;
-        b=AL19aAA79DEHlxU2LBDbITcgE09dwsxmvXgb6m3ikkCGqlcqc7LNc1YT+vU0WEdmMU
-         IXdkiJEFU3UWYfJSx6oxzZbgiozELKNpcbq7iG+o2g1Q31ou0UX65S8nkCwoRwLKH7IS
-         J0lhIkXCny3lTS7iU/t7yAPz7F89klF3sgBJMCEt0LaTeAkSKduMCXW3nBYjl0Gg2G59
-         +1RvMbKeKU6j3xBBpv63Ax2oQpK/2ExCIylx3H1Ub6tmkxyZBzzQ2+VPt4V/Acxzgr2H
-         z6iNrBMHcrwuJjguz+Ykd96gUCrIphHYoeu6TrtoBEqwK6a8fkmIqZ/BUE2GJQxiY3Wm
-         mj4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2v8l5THJ19GAjS4O893x/pYLkkbHLYw6NG1nL55YPFc=;
-        b=Vx/H7ltFBu8yPSD5xPNCwF499RSdsvv7wtWmnwp1CNF5sWJOs56Z6kZLZPVyem1dYa
-         eeRp41wpZSOluIsbsgbERwB8N6Qh6ZbKhhHOHsP4y2trxVwFR4g9RcKEWfaPUduRsuJq
-         Orx5TeDryltoH7agp49neXQJwGOjK4xcyVEf+8oF6Y6+ecFABRDLJ3F1Or0QvV9jCXz9
-         b7LdN8uZWWwgu5xYihHQFM8SZhVf3WxE9aVC2A4ba0bkXF5hzXxhXKVvCHOEh13aMp9q
-         QGtZURXCUGcGSZXJnfgMgXwbGGz0r7Yqqwv3h0+nBPpHOxnthojghfuMLPhVOt2Q+hwR
-         N6yQ==
-X-Gm-Message-State: ANoB5pnFfXMyor+cb9mAGnhoDLqttslKVk0sUjpAs6+Oz12uFjGFLI8D
-        N4kzuidAiEocAoqsH1UgR0F0ZN06ooCCbcvOOf4=
-X-Google-Smtp-Source: AA0mqf6Bi3YvmAgQHC3Yt6sL/8Ifia4RSL0RqODEeiOHDgXMgNNldxonwBXOgCAjtOx5rpss4/Fs1Q==
-X-Received: by 2002:a05:600c:1e08:b0:3c6:e63d:b89c with SMTP id ay8-20020a05600c1e0800b003c6e63db89cmr1974812wmb.11.1670507587793;
-        Thu, 08 Dec 2022 05:53:07 -0800 (PST)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id t64-20020a1c4643000000b003cfa622a18asm4994319wma.3.2022.12.08.05.53.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 05:53:07 -0800 (PST)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] selftest: Fix spelling mistake "eith" -> "with"
-Date:   Thu,  8 Dec 2022 13:53:05 +0000
-Message-Id: <20221208135305.2445846-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 8 Dec 2022 08:53:24 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684D93B9C6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:53:23 -0800 (PST)
+Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSbF92WXszRphv;
+        Thu,  8 Dec 2022 21:52:29 +0800 (CST)
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 8 Dec 2022 21:53:21 +0800
+Subject: Re: [PATCH] mfd: core: fix UAF while using device of node
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <lee@kernel.org>, <krzysztof.kozlowski@canonical.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20221116074116.1022139-1-yangyingliang@huawei.com>
+Message-ID: <9ad01578-9982-fd55-14a3-a74bf0906165@huawei.com>
+Date:   Thu, 8 Dec 2022 21:53:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221116074116.1022139-1-yangyingliang@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +49,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a ksft_test_result_fail message. Fix it.
+Hi,
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- tools/testing/selftests/capabilities/test_execve.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2022/11/16 15:41, Yang Yingliang wrote:
+> I got the following UAF report:
+>
+>    refcount_t: underflow; use-after-free.
+>    WARNING: CPU: 1 PID: 270 at lib/refcount.c:29 refcount_warn_saturate+0x121/0x180
+>    ...
+>    OF: ERROR: memory leak, expected refcount 1 instead of -1073741824,
+>    of_node_get()/of_node_put() unbalanced - destroy cset entry:
+>    attach overlay node /i2c/pmic@62/powerkey
+>
+> The of_node of device assigned in mfd_match_of_node_to_dev() need be
+> get, and it will be put in platform_device_release().
+>
+> Fixes: 002be8114007 ("mfd: core: Add missing of_node_put for loop iteration")
+> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+Is this patch good or do you have any suggestion ?
 
-diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
-index df0ef02b4036..5cc2481507a6 100644
---- a/tools/testing/selftests/capabilities/test_execve.c
-+++ b/tools/testing/selftests/capabilities/test_execve.c
-@@ -288,7 +288,7 @@ static int do_tests(int uid, const char *our_path)
- 				"PR_CAP_AMBIENT_RAISE isn't supported\n");
- 		else
- 			ksft_test_result_fail(
--				"PR_CAP_AMBIENT_RAISE should have failed eith EPERM on a non-inheritable cap\n");
-+				"PR_CAP_AMBIENT_RAISE should have failed with EPERM on a non-inheritable cap\n");
- 		return 1;
- 	}
- 	ksft_test_result_pass(
--- 
-2.38.1
-
+Thanks,
+Yang
+> ---
+>   drivers/mfd/mfd-core.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
+> index 16d1861e9682..8e57f67719cf 100644
+> --- a/drivers/mfd/mfd-core.c
+> +++ b/drivers/mfd/mfd-core.c
+> @@ -161,7 +161,7 @@ static int mfd_match_of_node_to_dev(struct platform_device *pdev,
+>   	of_entry->np = np;
+>   	list_add_tail(&of_entry->list, &mfd_of_node_list);
+>   
+> -	pdev->dev.of_node = np;
+> +	pdev->dev.of_node = of_node_get(np);
+>   	pdev->dev.fwnode = &np->fwnode;
+>   #endif
+>   	return 0;
