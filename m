@@ -2,146 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6ED6478BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:18:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ADB56478C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbiLHWSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:18:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S230133AbiLHWWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbiLHWSM (ORCPT
+        with ESMTP id S229521AbiLHWWN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:18:12 -0500
-Received: from sonic307-16.consmr.mail.ne1.yahoo.com (sonic307-16.consmr.mail.ne1.yahoo.com [66.163.190.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84AD6FF1F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:18:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670537891; bh=2dAILjLP69OS9FOb9YU5vIxnb/ja4jQMKeNfFXNX264=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PRG2/oNnpGADGD83EeZtPq/kQrBymL9eocf9L0cafJvVP1JXHAZ43YtO0WAU79SFi+c5jCMCbtnjjqyQ4C3elOn/GLvcPzbp+cOkPhFClj0GlKIX15BRHFg96OP6IvRKlMLGkEmT5KnZxKDQ/ST8AjfIIDxnQGA1jFxI8HBdZEyxcXuhJ1mxbCC+RvxlyEoLToW3a6yE1n1eUgFKplpZMTCFla217dTohtfo+VkZJ2RbusnLV6zOeSFHWEXsF9915vzDH3An/ZvFWJ2m7mhp1saagrYiUHysW3IYn6RZatCW2gPARY/RrKF7ZVntHlKtSURn4uNB8ICaDF/3uP5DtQ==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670537891; bh=5lRHWOPF5z14iBE75M6AOstxXbLwGCgN+49brGsVQ7j=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tEfHCtNTBi1uMFSLdThHmzrkDfWfL/7qqnWQysCRr32DQy3BHYfZPYXsFXTUd0+y2pQQ+ARoqDJIV2/jCJYcRkiHt59uNdUz683mJl/3hWCpGu/clzSTCfpRNG+lfda4Lpk8l/ifFra9sVQlCbIs8q/smpP06Ffr1wSOaxM/cwYWFVUtb9MGmj8Rr4R7bDcl6PQW452GHRTy/DdT7+4nWq/qkAsApfp6JiKWm5Jv870Zzpjvaegw1uc6rKSo86P594ExgPXwVdxHxl4sRAraXMm95yMbKQkhOQghvbskHwtCmFeZePrdfTcG5oC3GaR02CZ3mqZZwfpyFxfNUh0M1Q==
-X-YMail-OSG: O2RLWIEVM1kX0tTMjEkN_jNRv0FV8dAQtxZr6H8HYUI60J6CjCv37XMKD2CQwWN
- Ddfed.mH_vcnWG2nUNEqsnOreN7jUQTZS8PGx_1jTM9guhW2iIWje_2y7go.FqRYRsFY3ALFMukh
- a9fZgv_7UgWlKoxViHs2jAfPxFD4qOY_CFmX.RipjeQbbCv_PJumVHQZDLPhDqQK..FEBlgK83Dv
- AbCLZswRq46xiuYJgNLgSus6GY_nbYVlvPAVHnLV4yl5N_amkbYyGQBFPjABwfKDag9jJrKsStdS
- h3QkWoehd0UyuvjeEI5DcOo6LmgXjgMH5Bd8m6hQsaRyLeQ4j1pgOy.eTcwgN5oYkR.wDujEcRXB
- qUI9H5XrplDcZQI_jKkWNF131TepZFlvhW__88GDFZsRaaqkzbQWOzQ6SMdB8QyPEwYuRxWPWXHX
- xOR1Df3G4e9g9GE.7hXxnikp3oEImNX.woH4PRXUppDnSS2jmmG9sTxUIDV.yYG0Xmidc7JJGNvD
- IbxlJMkNAywH.GXUVlqxWBdt4nvki3HO8TX3egWbQqOY3i8Iag2V0c66UeQPuGaRQt4sMiCiGNLb
- o0nmGKZVeFKdM4Wl9UGBUFo63OO.dmAgpxFXgfjVWbIDIn_UK2PhjKzkMA1VyVpP6AgUVI0WVFhJ
- 6BHe354D50k2fHcrJd90t7hILF1Ipy3Xii5yAYbsMF8viZNx.SgnJ2MHYU2CkB6xNlWQF1gJi.bj
- Vt6Uungp4S3T4ocKujUlhH4uFqT.SLxvTib5q6X5a.l9Jv5R.3teQh27uOTs34fd4kosf7cWUBVx
- 82Eye6jsvatVpodREn9DIP1NqqaMWRkVmI7RLr67acpm3uLKrDPYrfIat6hFDyugpbTyEvnyVcLn
- OKCRKTXHavjiVVIkltCons.VnituJj6tSa6MECu..JCDZVvaMytU3JkRnTFs6dlefFTjb8ATp0Rz
- CYqYBGonBNLn3nnMLl2ZDI1l8Xd0WaFvh6JyuPl982QByrPHXFt6dUzR2sQeyhWQEglxIRElDKvU
- N8Ybe.ctuIfMcymEWpGWK0AAZWcWJqLXGsLeam02_C3sIPufZJByE2cUhpHs9CZropstg98r0jrm
- o93Zn910CuVR7CrxKvX5LvZswqEjil_23rBgc6IvzBNALYMhMCvRKPskZ4LGWo3HVpq7Q.S9e768
- zqIjFOiV5YBlII2OJ5_khv32rhg0jIsuM16asnWksK_75TtAFLMF.nzGMYtcl.7dhuGOxJXEErp1
- XXG5ucvON7T5lO9PZ7s0YqCOFxlAnYjy9_01G5Geo9OgeBbEuL0kCS8B4.F65I4I0RgboxYghWFa
- YtpkPIqkykPBGMhHFC3cgb8VZGFJrlosCfufPwnb2J.SCLZ6Va4xyWl4BKsBHvoULYLYAdJ_YGOk
- e1XUc1oVudyPcd_8vA9ngXAc.8gmvVHFybXZEFuEbhSOtyr21kry8Fv4wvmlhLKU704duD4TjAQP
- roYswyak9xhl7kHoaUHGZTPrGT21gMerg732sAspOtWXCIPyc6M6kXh4PmbgEmgn6Vo1XK9u.OBm
- Rujl2YaBeJU1KN1tpPDD9470OclWeuo66lc6ru.Q2hmjrVCLTv.fwjFBsdyZzAc26I4dxMC5F.eo
- qUakh_GR0UTa0r9p8WkVOPqEtlsgJWVV38V1KsdkeFBtJb.dNDLzCiNsl4glbFe.qwV2F2pdSsiD
- pBN08wNBpk7xAm5uW2nzHybDO8AxWwrf20K8PPbGZ3QrQNn25J4fcCOhSuTQGzlC8puv42yMH8Ia
- b8Z9ZZNU91ovq.g77l4kgCVKg2LCSlnhaONutWcF_m9qcGsbbGsSbrNSvRQFlbwu1_HSpy70rue7
- xnUtScSindofW98pEsvan.3HSln27hhuAauxvzwpI6rj.2kx_oQFrLg7a4WctSXA4ZIrLc97D61H
- GBw6IJWDaXASSSyskHvT52sJ_EM.V14upipGr2OVGxCpJiDBC89ViRgX5XFAnxXY2R2d8.exVEdm
- 5N35uUNjYgt1Rzx24TlKnngNBC6TKJiHaG2o.HDobZKbprGhafgYqt.LoNa_fBQ9bZsBpBFYmXNN
- fVCDRYe6jAXUzuzvKnGRjVhOY902iVmsF5mvRJ4SErdLUNMNzPmvMFpAh0aJiCvanm1eg5T7CrOJ
- TpPIEt1zu2st9oeVZF_R9Yzv0Vwj2KuRJ_FDgDTWSEszmZUG9kqTeJVz6kkE4ABX9GohLtoC0Ck6
- YyrpH9x8kRTzlp4R1v9BTfOiJa50F1TIKlEGNWu7RiQ8cEatc2aLxGeccs6yIn3pItrV3ep.Q0op
- DpcXlYSw9SbSmNn0-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Thu, 8 Dec 2022 22:18:11 +0000
-Received: by hermes--production-gq1-d898c4779-66ldg (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID e4990e6f66164b6f2d176bcbbed58160;
-          Thu, 08 Dec 2022 22:18:07 +0000 (UTC)
-Message-ID: <8d14fcbe-baab-4678-beb1-4f8ff6171eec@schaufler-ca.com>
-Date:   Thu, 8 Dec 2022 14:18:06 -0800
+        Thu, 8 Dec 2022 17:22:13 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F81B79C81
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:21:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670538075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=t77lCNIODLpJzB/PzPsfG+a/MQodrWqq6HVKm0HpGEs=;
+        b=Dfdwed/d70QreYqoWbMXT4mq+RYY/iu13melmrKD0j1N7IhzX9bXGHsxAZQkmygk2HuigN
+        b5ycwL0tR7FtFlDCLlUIIiiwaUG9am9QCMk61tJKCqy//GvZCrnc31xCC6hwybYyvX2E2M
+        ZuBG4FFNqd8tse43aN+aqZ2NWv5XpbA=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-350-FYEAnqkTOqCVBpGili9uGA-1; Thu, 08 Dec 2022 17:21:14 -0500
+X-MC-Unique: FYEAnqkTOqCVBpGili9uGA-1
+Received: by mail-qv1-f69.google.com with SMTP id oo9-20020a056214450900b004cfdcb99fa5so444573qvb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 14:21:14 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t77lCNIODLpJzB/PzPsfG+a/MQodrWqq6HVKm0HpGEs=;
+        b=mXNv41AQKoRqZ6tczjJFg/wwGa4sv05dpwZa7fDnIo0X4v52k47psHK0kWe2a/PgNa
+         x4KGI3VQ8d0uMsdwFatczxB8hKUD0/xAFmt4U4AuOISPnaaP+nzfi05q5sMAj/3n8FD7
+         XOZ8kXZK5QHk31y0qdkltOHG4V52AtzXcvW9BKocuzV4tZX08GXCsVKLbDYUM7dR7DEV
+         L19DKXtPr4PplK4uZD2TuKqrhD3iN3JaJ6m9S8cGHvQZ4QUsNgGTcErLS1zG48ik1DHo
+         y6hgEdI3rnrKvWzZbKOH9RqWqeYEvU1WrxX2Lqu2A4kyoTPNIYS4iRvzpu4P3YoYWn9b
+         zaxw==
+X-Gm-Message-State: ANoB5pkSBZNoFNO5a6k+tBIE1fRTWSky1srJkufN4rFzbcROQFVVali1
+        WLIvfWSftKxuvcjVvzBNVM0I5IH1oiqJX+4ZVuwHuGV0g9Bh98fDQZrSJ9w8VrCtVyuZ2/RLOrc
+        IPxIlU9a96nSz9urnHceX6CuT
+X-Received: by 2002:a05:6214:440d:b0:4bb:653c:dd05 with SMTP id oj13-20020a056214440d00b004bb653cdd05mr5414976qvb.37.1670538073904;
+        Thu, 08 Dec 2022 14:21:13 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf6fI6megs0kZxPJ5INnvc+2dK6YcUrRylUvNWmQb/47bV6nxtreyn6Z08QcI4RBwC1gTsbqNg==
+X-Received: by 2002:a05:6214:440d:b0:4bb:653c:dd05 with SMTP id oj13-20020a056214440d00b004bb653cdd05mr5414958qvb.37.1670538073610;
+        Thu, 08 Dec 2022 14:21:13 -0800 (PST)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id dt4-20020a05620a478400b006fc9847d207sm19639798qkb.79.2022.12.08.14.21.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 14:21:12 -0800 (PST)
+Date:   Thu, 8 Dec 2022 17:21:00 -0500
+From:   Peter Xu <peterx@redhat.com>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jann Horn <jannh@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v2 10/10] mm/hugetlb: Document why page_vma_mapped_walk()
+ is safe to walk
+Message-ID: <Y5JjTPTxCWSklCan@x1n>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203158.651092-1-peterx@redhat.com>
+ <6a970de6-e3da-f57d-14fd-55f65ddcb27d@nvidia.com>
+ <Y5JRhU+9QqoUuSdR@x1n>
+ <61751d01-2ba4-efc0-9cb8-eeeb3d70908d@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 2/2] lsm: Add/fix return values in lsm_hooks.h and fix
- formatting
-Content-Language: en-US
-To:     Paul Moore <paul@paul-moore.com>,
-        Roberto Sassu <roberto.sassu@huaweicloud.com>
-Cc:     David Howells <dhowells@redhat.com>, omosnace@redhat.com,
-        john.johansen@canonical.com, kpsingh@kernel.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        casey@schaufler-ca.com
-References: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
- <20221128144240.210110-3-roberto.sassu@huaweicloud.com>
- <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
- <7225e76c09c7ff68937e37ee041fefdd6ccac1c8.camel@huaweicloud.com>
- <0682348d9601ca3847ce9ba035e4ab1b586cf712.camel@huaweicloud.com>
- <CAHC9VhQZ3VKWsNarUGPcHZuoRLgb8owKgbdLymwR759qVyQ+2Q@mail.gmail.com>
- <b989b278a16c48e104b32ba7243e4298491a6056.camel@huaweicloud.com>
- <CAHC9VhSdcyOd01VYtqhJGrgKyG3oZmE_1d0RQymxKv1=ErhduQ@mail.gmail.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <CAHC9VhSdcyOd01VYtqhJGrgKyG3oZmE_1d0RQymxKv1=ErhduQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20926 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <61751d01-2ba4-efc0-9cb8-eeeb3d70908d@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/2022 1:59 PM, Paul Moore wrote:
-> On Thu, Dec 8, 2022 at 4:29 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
->> On Wed, 2022-12-07 at 14:34 -0500, Paul Moore wrote:
->>> On Wed, Dec 7, 2022 at 4:18 AM Roberto Sassu
->>> <roberto.sassu@huaweicloud.com> wrote:
->>>> For this patch, I saw it is already in lsm/next. Paul, should I do an
->>>> incremental patch or change the one in the repo and you force push it?
->>>> I would just remove the three lines after the parameters description.
->>> Just send a patch against the current lsm/next branch to remove those
->>> lines, and please do it ASAP as the merge window opens this
->>> weekend/Monday.
->> Ok, was about to send but I would need a clarification first.
->>
->> In mount_api.rst, there is for security_fs_context_parse_param():
->>
->>      The value pointed to by param may be modified (if a string) or stolen
->>      (provided the value pointer is NULL'd out).  If it is stolen, 0 must be
->>      returned to prevent it being passed to the filesystem.
->>
->> Looking at security.c:
->>
->>         hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
->>                              list) {
->>                 trc = hp->hook.fs_context_parse_param(fc, param);
->>                 if (trc == 0)
->>                         rc = 0;
->>                 else if (trc != -ENOPARAM)
->>                         return trc;
->>         }
->>
->> If, as mount_api.rst says, the value is modified by an LSM or stolen,
->> should it be passed to other LSMs too?
-> All of the LSMs should be using fs_parse() in their
-> fs_context_parse_param() hook to identify the mount options that they
-> own, skipping those they do not (fs_parse() would return -ENOPARAM in
-> those cases).  I don't believe we currently have any mount options
-> that are shared across the different LSMs, so I believe this is a
-> non-issue.
+On Thu, Dec 08, 2022 at 01:54:27PM -0800, John Hubbard wrote:
+> On 12/8/22 13:05, Peter Xu wrote:
+> > > > +		/*
+> > > > +		 * NOTE: we don't need explicit lock here to walk the
+> > > > +		 * hugetlb pgtable because either (1) potential callers of
+> > > > +		 * hugetlb pvmw currently holds i_mmap_rwsem, or (2) the
+> > > > +		 * caller will not walk a hugetlb vma (e.g. ksm or uprobe).
+> > > > +		 * When one day this rule breaks, one will get a warning
+> > > > +		 * in hugetlb_walk(), and then we'll figure out what to do.
+> > > > +		 */
+> > > 
+> > > Confused. Is this documentation actually intended to refer to hugetlb_walk()
+> > > itself, or just this call site? If the former, then let's move it over
+> > > to be right before hugetlb_walk().
+> > 
+> > It is for this specific code path not hugetlb_walk().
+> > 
+> > The "holds i_mmap_rwsem" here is a true statement (not requirement) because
+> > PVMW rmap walkers always have that.  That satisfies with hugetlb_walk()
+> > requirements already even without holding the vma lock.
+> > 
+> 
+> It's really hard to understand. Do you have a few extra words to explain it?
+> I can help with actual comment wording perhaps, but I am still a bit in
+> the dark as to the actual meaning. :)
 
-There aren't any today. SELinux and Smack are the only LSMs with
-mount options. Smack mount options all begin with "smack", so it's
-unlikely there is going to be a future overlap. I'd hate to do the
-/proc/self/attr/current battle over again, so I recommend that any
-new LSM that uses mount options be required to use an identifying
-prefix. I don't see any way that using the same option name for
-mounts, even if the use is the same, won't end in tears.
+Firstly, this patch (to be squashed into previous) is trying to document
+page_vma_mapped_walk() on why it's not needed to further take any lock to
+call hugetlb_walk().
 
->
-> In the future if we ever find the need to share mount options across
-> different LSMs we will need some additional work to ensure it is
-> handled properly, but I don't think we need to worry too much about
-> that now.
->
+To call hugetlb_walk() we need either of the locks listed below (in either
+read or write mode), according to the rules we setup for it in patch 3:
+
+  (1) hugetlb vma lock
+  (2) i_mmap_rwsem lock
+
+page_vma_mapped_walk() is called in below sites across the kernel:
+
+__replace_page[179]            if (!page_vma_mapped_walk(&pvmw))
+__damon_pa_mkold[24]           while (page_vma_mapped_walk(&pvmw)) {
+__damon_pa_young[97]           while (page_vma_mapped_walk(&pvmw)) {
+write_protect_page[1065]       if (!page_vma_mapped_walk(&pvmw))
+remove_migration_pte[179]      while (page_vma_mapped_walk(&pvmw)) {
+page_idle_clear_pte_refs_one[56] while (page_vma_mapped_walk(&pvmw)) {
+page_mapped_in_vma[318]        if (!page_vma_mapped_walk(&pvmw))
+folio_referenced_one[813]      while (page_vma_mapped_walk(&pvmw)) {
+page_vma_mkclean_one[958]      while (page_vma_mapped_walk(pvmw)) {
+try_to_unmap_one[1506]         while (page_vma_mapped_walk(&pvmw)) {
+try_to_migrate_one[1881]       while (page_vma_mapped_walk(&pvmw)) {
+page_make_device_exclusive_one[2205] while (page_vma_mapped_walk(&pvmw)) {
+
+If we group them, we can see that most of them are during a rmap walk
+(i.e., comes from a higher rmap_walk() stack), they are:
+
+__damon_pa_mkold[24]           while (page_vma_mapped_walk(&pvmw)) {
+__damon_pa_young[97]           while (page_vma_mapped_walk(&pvmw)) {
+remove_migration_pte[179]      while (page_vma_mapped_walk(&pvmw)) {
+page_idle_clear_pte_refs_one[56] while (page_vma_mapped_walk(&pvmw)) {
+page_mapped_in_vma[318]        if (!page_vma_mapped_walk(&pvmw))
+folio_referenced_one[813]      while (page_vma_mapped_walk(&pvmw)) {
+page_vma_mkclean_one[958]      while (page_vma_mapped_walk(pvmw)) {
+try_to_unmap_one[1506]         while (page_vma_mapped_walk(&pvmw)) {
+try_to_migrate_one[1881]       while (page_vma_mapped_walk(&pvmw)) {
+page_make_device_exclusive_one[2205] while (page_vma_mapped_walk(&pvmw)) {
+
+Let's call it case (A).
+
+We have another two special cases that are not during a rmap walk, they
+are:
+
+write_protect_page[1065]       if (!page_vma_mapped_walk(&pvmw))
+__replace_page[179]            if (!page_vma_mapped_walk(&pvmw))
+
+Let's call it case (B).
+
+Case (A) is always safe because it always take the i_mmap_rwsem lock in
+read mode.  It's done in rmap_walk_file() where:
+
+	if (!locked) {
+		if (i_mmap_trylock_read(mapping))
+			goto lookup;
+
+		if (rwc->try_lock) {
+			rwc->contended = true;
+			return;
+		}
+
+		i_mmap_lock_read(mapping);
+	}
+
+If locked==true it means the caller already holds the lock, so no need to
+take it.  It justifies that all callers from rmap_walk() upon a hugetlb vma
+is safe to call hugetlb_walk() already according to the rule of hugetlb_walk().
+
+Case (B) contains two cases either in KSM path or uprobe path, and none of
+the paths (afaict) can get a hugetlb vma involved.  IOW, the whole path of 
+
+	if (unlikely(is_vm_hugetlb_page(vma))) {
+
+In page_vma_mapped_walk() just should never trigger.
+
+To summarize above into a shorter paragraph, it'll become the comment.
+
+Hope it explains.  Thanks.
+
+-- 
+Peter Xu
+
