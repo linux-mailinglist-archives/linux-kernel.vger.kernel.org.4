@@ -2,82 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41DC46475A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:32:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 966506475A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:32:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiLHScG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:32:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47322 "EHLO
+        id S229867AbiLHScC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiLHSb2 (ORCPT
+        with ESMTP id S229894AbiLHSbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:31:28 -0500
-Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832A1AE4E6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:31:13 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id 3LfhpT2ds1uKA3Lfhpfwkn; Thu, 08 Dec 2022 19:31:02 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 08 Dec 2022 19:31:02 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <fbd0748f-9f22-42bb-c388-ce1ea10ef60c@wanadoo.fr>
-Date:   Thu, 8 Dec 2022 19:31:01 +0100
+        Thu, 8 Dec 2022 13:31:18 -0500
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0279AE4FD;
+        Thu,  8 Dec 2022 10:31:14 -0800 (PST)
+Received: by mail-ot1-x329.google.com with SMTP id l8-20020a056830054800b006705fd35eceso1362463otb.12;
+        Thu, 08 Dec 2022 10:31:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k44aAa8w+g09OTVc3BtKD/GeVUZOQmCH52b2zgD7vNE=;
+        b=kJnn8W88eYCSTCdaionDWs5lanPHeksZRwOquRqQpTBf+8LE/3uQ6Kb7qIiD+I2JFB
+         NXC1hNgGIMNa4RtjALbAPIj6NPXaAplZSYXFpEgFkCE4Kuvr62KzE9Db6q3E1uaCKomN
+         EIMjj/zqnYLqPfVe+aWersTJ5haEMRKBNYkkM/2+XbFQAQ4YHH1RxjnPmpxvHaUnjvU2
+         ZRhNYhUEHZFxgLz1LFrWWFbSfevTzqa0HvdTj1q3AuGflLvTvBTsVo/X2HEusft2UGsW
+         Q7Ih9kt50RqgUeUUITRHBrHUwXI7bvDSkpH02dZ/dQN5XFutYGi6lP5X4TUXs6MCZIRn
+         fFTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k44aAa8w+g09OTVc3BtKD/GeVUZOQmCH52b2zgD7vNE=;
+        b=AS8kMgIt5wpLTCjPlxvwekueIeibvqTLzAiC78348nVkbvNKMVPaVf/BuvXISj8gIL
+         n52qWIaJqzpSMTeW7w/ekN7bmfTuuknKFGHKcY5hGxl2cYv8aQaVL3zqLr1YSzFy4WWt
+         pjhBiYSSfRhBjMx4YLDsPZMU3Kbx3dOp/GaVkHrBNE20uieS3bsalN8Ihuzh7V/z5cEO
+         D5m7xqaXG5EyZeyMGbU5H3R6SXdipq4xRcN5gz/Ee+4EPXotrSuWq6wNhR7BsABCJpUa
+         lbwg6zTWwLlwp3f8VYtCidQHUrxf+vxhO2rVKJQKbJdTyxTNHKYoD/q7wbRiDwYL/FdL
+         0iLA==
+X-Gm-Message-State: ANoB5pm12qik4BhbF3BA73eNYRQcFcAWtjIWX7mKVdMPpojd2Mm+/pke
+        TLxhxkJN2FeiA9ZAGNMy4cg9xmPzPG8=
+X-Google-Smtp-Source: AA0mqf5qkVMTNLwYrHEwSHnT1jBNeG/TVLvAyXhtP9eQdTstA6d6OIfcNnz3oSL3kXGPlxhIOl1IdQ==
+X-Received: by 2002:a9d:5f02:0:b0:66d:a5fa:5c54 with SMTP id f2-20020a9d5f02000000b0066da5fa5c54mr1449103oti.1.1670524273395;
+        Thu, 08 Dec 2022 10:31:13 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id x26-20020a9d629a000000b006705e35c4e2sm3077138otk.35.2022.12.08.10.31.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 10:31:13 -0800 (PST)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Yury Norov <yury.norov@gmail.com>, linux-crypto@vger.kernel.org,
+        netdev@vger.kernel.org, linux-rdma@vger.kernel.org
+Subject: [PATCH v3 5/5] lib/cpumask: reorganize cpumask_local_spread() logic
+Date:   Thu,  8 Dec 2022 10:31:01 -0800
+Message-Id: <20221208183101.1162006-6-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221208183101.1162006-1-yury.norov@gmail.com>
+References: <20221208183101.1162006-1-yury.norov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/2] mfd: qcom_rpm: Fix an error handling path in
- qcom_rpm_probe()
-To:     Lee Jones <lee@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Lee Jones <lee.jones@linaro.org>, linux-arm-msm@vger.kernel.org
-References: <e39752476d02605b2be46cab7115f71255ce13a8.1668949256.git.christophe.jaillet@wanadoo.fr>
- <Y5HYzzwdWCrpWOTv@google.com>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <Y5HYzzwdWCrpWOTv@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 08/12/2022 à 13:30, Lee Jones a écrit :
-> On Sun, 20 Nov 2022, Christophe JAILLET wrote:
-> 
->> If an error occurs after the clk_prepare_enable() call, a corresponding
->> clk_disable_unprepare() should be called.
->>
->> Simplify code and switch to devm_clk_get_enabled() to fix it.
->>
->> Fixes: 3526403353c2 ("mfd: qcom_rpm: Handle message RAM clock")
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->> This changes the order of the clean-ups if the .remove() function is called
->> but it looks fine to me.
->> ---
->>   drivers/mfd/qcom_rpm.c | 4 +---
->>   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> Something funny going on here.
-> 
-> I received 3 identical versions of the same patch.
-> 
+Now after moving all NUMA logic into sched_numa_find_nth_cpu(),
+else-branch of cpumask_local_spread() is just a function call, and
+we can simplify logic by using ternary operator.
 
-Yes, was my fault.
+While here, replace BUG() with WARN().
 
-Sorry for the inconvenience.
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ lib/cpumask.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-CJ
-
+diff --git a/lib/cpumask.c b/lib/cpumask.c
+index 255974cd6734..c7029fb3c372 100644
+--- a/lib/cpumask.c
++++ b/lib/cpumask.c
+@@ -127,16 +127,12 @@ unsigned int cpumask_local_spread(unsigned int i, int node)
+ 	/* Wrap: we always want a cpu. */
+ 	i %= num_online_cpus();
+ 
+-	if (node == NUMA_NO_NODE) {
+-		cpu = cpumask_nth(i, cpu_online_mask);
+-		if (cpu < nr_cpu_ids)
+-			return cpu;
+-	} else {
+-		cpu = sched_numa_find_nth_cpu(cpu_online_mask, i, node);
+-		if (cpu < nr_cpu_ids)
+-			return cpu;
+-	}
+-	BUG();
++	cpu = node == NUMA_NO_NODE ?
++		cpumask_nth(i, cpu_online_mask) :
++		sched_numa_find_nth_cpu(cpu_online_mask, i, node);
++
++	WARN_ON(cpu >= nr_cpu_ids);
++	return cpu;
+ }
+ EXPORT_SYMBOL(cpumask_local_spread);
+ 
+-- 
+2.34.1
 
