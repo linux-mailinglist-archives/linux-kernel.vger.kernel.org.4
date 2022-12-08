@@ -2,165 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 227716475C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:47:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971EB6475D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiLHSr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:47:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S229873AbiLHS6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:58:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiLHSrX (ORCPT
+        with ESMTP id S229521AbiLHS6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:47:23 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA11784267
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:47:21 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id u5so2406816pjy.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:47:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=j7cHwl40udJhj8Y5X5w0jT3sEs53ZGdIUSJNwRYVu/w=;
-        b=Kk0pmB/xVnaM5ZpgSosT/bmJl6omVaUQZP2piO1stBvkhoJj09JAMEnLa5p0gtxaGp
-         VB7g+dz6WsXuzFyafcY8UNr3vvtXehmmHe02Mm9nFxmyuMsh/wLMv8H3DERotIKWi6AO
-         znLK5EtaINJvDL0b5Oo99YEUgZo45VxCAEobT8jJtFugipi/9yBthEL78JaKdg08Xbph
-         pXkMrQOicMZtmPej55vRfzNvlAHJWxAl6d+e88VeYqBJThVpJ8xmvTsam41HzLJ8vSx+
-         pcYvIRTsXUGU4NF/+rQgmSnF2q0eoUpL4dRNVUkSoHlur/WtaG74BlpZUGwEzD/yuL7l
-         GLFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j7cHwl40udJhj8Y5X5w0jT3sEs53ZGdIUSJNwRYVu/w=;
-        b=23fT5h51AqqDUCPSffvA2XMbptCW19Rvb/a9+ik3AVDsQb7tHS0SSsXmdRjJFpKVxh
-         IYvzSSWDgKL1W1qMNL1NjFusfprVqQyD8T5b1eM5WE2NmOw5MJ1oBcHX9zqb5RiwH63E
-         VEktyx6tMR5rKMj74NUD2nl9lVVtF0XPlmCbL4xcdE8/98isSpJ6acRMz92+dxFkYYGF
-         gvjdy/LYaOgLQBjk3O+CcJXDSXy5KiULhuLedm0omlKKAl2g3bKCKsg4WKsyIc1deafv
-         vs4ZAKafJ7j2LliRfmSzYtNA3ZLMZH+s+iKiMhxrSO/WAwDrjT3Zb1OVMyIiY5/YN4OF
-         FDjA==
-X-Gm-Message-State: ANoB5pli0bsZLc9zwG+bNYVnNVtUB2WilyDVyAxIvY6EPaxkEq+Lhssx
-        vKkAoyy7R358mQxG6BnmZrCgFQ==
-X-Google-Smtp-Source: AA0mqf6vd6AxHTUbjUvIEUAz0NQ7pMMjNAHpvKix0UHaCOnCHjNJp+LLTMFG9Y68lb2WJ+Cv0Q2hGg==
-X-Received: by 2002:a17:90a:fd0d:b0:219:828e:ba2 with SMTP id cv13-20020a17090afd0d00b00219828e0ba2mr1498746pjb.0.1670525241105;
-        Thu, 08 Dec 2022 10:47:21 -0800 (PST)
-Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
-        by smtp.gmail.com with ESMTPSA id ay22-20020a17090b031600b001fd6066284dsm13381pjb.6.2022.12.08.10.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 10:47:20 -0800 (PST)
-Date:   Thu, 8 Dec 2022 10:47:17 -0800
-From:   Ricardo Koller <ricarkol@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Marc Zyngier <maz@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
- into guest memory
-Message-ID: <Y5IxNTKRnacfSsLt@google.com>
-References: <20221207214809.489070-1-oliver.upton@linux.dev>
- <20221207214809.489070-3-oliver.upton@linux.dev>
- <Y5EoZ5uwrTF3eSKw@google.com>
- <Y5EtMWuTaJk9I3Bd@google.com>
- <Y5EutGSjkRmdItQb@google.com>
- <Y5Exwzr6Ibmmthl0@google.com>
+        Thu, 8 Dec 2022 13:58:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197A33FBB7;
+        Thu,  8 Dec 2022 10:58:03 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDFF2B825E5;
+        Thu,  8 Dec 2022 18:58:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21017C433EF;
+        Thu,  8 Dec 2022 18:58:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670525880;
+        bh=nCQW/TAfu/qWh3tR2O/M4aMAZsexiLEy6mTe/U+oVys=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sDf//vMu6YocNot1R0wlJdzEutvCrQONHgRMwvdZcguqtcQJxFFa3wosBkpdOSQQ0
+         qkpJwPqjG8y27wdYUxTket2+jO9tUqn68j8so4xsqHHnm8RXCzIQHWHtocHX/ch6BA
+         yRjk2vLj35OLd6xmtM3SzzeyVmpJtSxZWYsbIFHSUJX1n/ihzaLzF6cJC5tMrg8Xhe
+         WOETVtP38YhT6WnxFbiRwbliO8pV2G5Wz2kgv68GE/PRISQmcylYgyjYqfvXvKtfBT
+         zIAV6NO21Pep2i6pOA6XrUP+7uoKw7hDOGayCGMIgZwj6ZygbqkKa2pKDylN/+/W6z
+         1e3dyGFEt/bVg==
+Date:   Thu, 8 Dec 2022 12:57:58 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
+Message-ID: <20221208185758.GA1478771@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y5Exwzr6Ibmmthl0@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <6da2287f-a2a9-8419-39a5-a3971e4d5499@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 12:37:23AM +0000, Oliver Upton wrote:
-> On Thu, Dec 08, 2022 at 12:24:20AM +0000, Sean Christopherson wrote:
-> > On Thu, Dec 08, 2022, Oliver Upton wrote:
-> > > On Wed, Dec 07, 2022 at 11:57:27PM +0000, Sean Christopherson wrote:
-> > > > > diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-> > > > > index 92d3a91153b6..95d22cfb7b41 100644
-> > > > > --- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-> > > > > +++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
-> > > > > @@ -609,8 +609,13 @@ static void setup_memslots(struct kvm_vm *vm, struct test_params *p)
-> > > > >  				    data_size / guest_page_size,
-> > > > >  				    p->test_desc->data_memslot_flags);
-> > > > >  	vm->memslots[MEM_REGION_TEST_DATA] = TEST_DATA_MEMSLOT;
-> > > > > +}
-> > > > > +
-> > > > > +static void setup_ucall(struct kvm_vm *vm)
-> > > > > +{
-> > > > > +	struct userspace_mem_region *region = vm_get_mem_region(vm, MEM_REGION_TEST_DATA);
-> > > > >  
-> > > > > -	ucall_init(vm, data_gpa + data_size);
-> > > > > +	ucall_init(vm, region->region.guest_phys_addr + region->region.memory_size);
-> > > > 
-> > > > Isn't there a hole after CODE_AND_DATA_MEMSLOT?  I.e. after memslot 0?
-> > > 
-> > > Sure, but that's only guaranteed in the PA space.
-> > > 
-> > > > The reason
-> > > > I ask is because if so, then we can do the temporarily heinous, but hopefully forward
-> > > > looking thing of adding a helper to wrap kvm_vm_elf_load() + ucall_init().
-> > > > 
-> > > > E.g. I think we can do this immediately, and then at some point in the 6.2 cycle
-> > > > add a dedicated region+memslot for the ucall MMIO page.
-> > > 
-> > > Even still, that's just a kludge to make ucalls work. We have other
-> > > MMIO devices (GIC distributor, for example) that work by chance since
-> > > nothing conflicts with the constant GPAs we've selected in the tests.
-> > > 
-> > > I'd rather we go down the route of having an address allocator for the
-> > > for both the VA and PA spaces to provide carveouts at runtime.
+On Wed, Dec 07, 2022 at 04:31:12PM +0100, Hans de Goede wrote:
+> On 12/4/22 10:13, Hans de Goede wrote:
+> 
+> <snip>
+> 
+> >>> 2. I am afraid that now allowing PCI MMIO space to be allocated
+> >>> in regions marked as EfiMemoryMappedIO will cause regressions
+> >>> on some systems. Specifically when I tried something similar
+> >>> the last time I looked at this (using the BIOS date cut-off
+> >>> approach IIRC) there was a suspend/resume regression on
+> >>> a Lenovo ThinkPad X1 carbon (20A7) model:
+> >>>
+> >>> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+> >>>
+> >>> Back then I came to the conclusion that the problem is that not
+> >>> avoiding the EfiMemoryMappedIO regions caused PCI MMIO space to
+> >>> be allocated in the 0xdfa00000 - 0xdfa10000 range which is
+> >>> listed in the EFI memmap as:
+> >>>
+> >>> [    0.000000] efi: mem46: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |  ] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+> >>>
+> >>> And with current kernels with the extra logging added for this
+> >>> the following is logged related to this:
+> >>>
+> >>> [    0.326504] acpi PNP0A08:00: clipped [mem 0xdfa00000-0xfebfffff window] to [mem 0xdfa10000-0xfebfffff window] for e820 entry [mem 0xdceff000-0xdfa0ffff]
+> >>>
+> >>> I believe patch 1/4 of this set will make this clipping go away,
+> >>> re-introducing the suspend/resume problem.
+> >>
+> >> Yes, I'm afraid you're right.  Comparing the logs at comment #31
+> >> (fails) and comment #38 (works):
+> >>
+> >>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+> >>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff] fails
+> >>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff] works
+> >>
+> >> Since 0xdfa00000 is included in the host bridge _CRS, but isn't
+> >> usable, my guess is this is a _CRS bug.
 > > 
-> > Aren't those two separate issues?  The PA, a.k.a. memslots space, can be solved
-> > by allocating a dedicated memslot, i.e. doesn't need a carve.  At worst, collisions
-> > will yield very explicit asserts, which IMO is better than whatever might go wrong
-> > with a carve out.
+> > Ack.
+> > 
+> > So I was thinking to maybe limit the removal of EfiMemoryMappedIO
+> > regions from the E820 map if they are big enough to cause troubles?
+> > 
+> > Looking at the EFI map MMIO regions on this Lenovo ThinkPad X1 carbon
+> > (20A7) model, they are tiny. Where as the ones which we know cause
+> > problems are huge. So maybe add a bit of heuristics to patch 1/4 based
+> > on the EfiMemoryMappedIO region size and only remove the big ones
+> > from the E820 map ?
+> > 
+> > I know that adding heuristics like this always feels a bit wrong,
+> > because you end up putting a somewhat arbitrary cut off point in
+> > the code on which to toggle behavior on/off, but I think that in
+> > this case it should work nicely given how huge the EfiMemoryMappedIO
+> > regions which are actually causing problems are.
+
+I'll post a v2 that removes only regions 256KB or larger in a minute.
+
+> Looking at the efi=debug output from:
 > 
-> Perhaps the use of the term 'carveout' wasn't right here.
+> https://bugzilla-attachments.redhat.com/attachment.cgi?id=1861035
 > 
-> What I'm suggesting is we cannot rely on KVM memslots alone to act as an
-> allocator for the PA space. KVM can provide devices to the guest that
-> aren't represented as memslots. If we're trying to fix PA allocations
-> anyway, why not make it generic enough to suit the needs of things
-> beyond ucalls?
+> The small MMIO regions which we most honor as reserved do
+> have the "RUN" (runtime) flag set in the EFI mmap.
 
-One extra bit of information: in arm, IO is any access to an address (within
-bounds) not backed by a memslot. Not the same as x86 where MMIO are writes to
-read-only memslots.  No idea what other arches do.
+Just trying to follow along here, so not sure any of the following is
+relevant ...
 
+This attachment is from
+https://bugzilla.redhat.com/show_bug.cgi?id=2029207, and it shows:
+
+  efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
+  efi: mem47: [MMIO|RUN|UC] range=[0xf80f8000-0xf80f8fff] (0MB)  [4K]
+  pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+  pci_bus 0000:00: root bus resource [mem 0xfed40000-0xfed4bfff window]
+
+mem46 is included in the PNP0A08 _CRS, and Ivan has verified
+experimentally that we have to avoid it.
+
+mem47 is also included in the _CRS, but I don't have a clue what it
+is.  Maybe some hidden device used by BIOS but not visible to us?
+
+> But I'm afraid that the same applies to the troublesome
+> MMIO EFI regions which cause the failures to assign
+> PCI regions for devices not setup by the firmware:
 > 
-> --
-> Thanks,
-> Oliver
+> https://bugzilla-attachments.redhat.com/attachment.cgi?id=1861407
+> 
+> So that "RUN" flag is of no use.
 
-I think that we should use these proposed changes, and then move to an ideal
-solution.  These are the changes I propose:
+I don't know what bug this attachment is from.
 
-1. add an arch specific API for allocating MMIO physical ranges:
-vm_arch_mmio_region_add(vm, npages).  The x86 version creates a read-only
-memslot, and the arm one allocates physical space without a memslot in it.
+Is the point here that you considered doing the E820 removal based on
+the EFI_MEMORY_RUNTIME memory *attribute* instead of the
+EFI_MEMORY_MAPPED_IO memory *type*?
 
-2. Then change all IO related users (including ucall) to use
-vm_arch_mmio_region_add(). Ex:
+I don't really know the details of EFI_MEMORY_MAPPED_IO vs
+EFI_MEMORY_RUNTIME, but it looks like EFI_MEMORY_RUNTIME can be
+applied to things like EFI_RUNTIME_SERVICES_CODE (not MMIO space) that
+should stay in E820.
 
-	pa = vm_arch_mmio_region_add(vm, npages);
-	ucall_init(vm, pa);
-
-page_fault_test needs to be adapted to use vm_arch_mmio_region_add() as well.
-
-Thanks,
-Ricardo
+Bjorn
