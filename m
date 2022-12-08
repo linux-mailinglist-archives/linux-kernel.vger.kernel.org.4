@@ -2,91 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65C16647807
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BBC647808
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:33:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbiLHVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:33:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S229702AbiLHVdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiLHVdg (ORCPT
+        with ESMTP id S229739AbiLHVdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Dec 2022 16:33:36 -0500
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681982FA42
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:33:34 -0800 (PST)
-Received: by mail-io1-xd29.google.com with SMTP id d123so1054954iof.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:33:34 -0800 (PST)
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A1931DFA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:33:35 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id h6so1049448iof.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:33:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7FSa8Zfu/8xHbnZSuWDC6ttqZXGs49ojzvmsel6my90=;
-        b=D9tqPJu7STusgHs8sqgkYqGUsLh2aDAXfT6PVsxVzzi2ANsohxmjekjP6JZcuH3Fb5
-         Y0ykqc75MVGoHtSDg0b6c12GzzgzIXo+XU8M0m6wdefQI+yF4Le2aWF5GV1DpegX8zDM
-         IavYzYrnIEDTAt3fw6Mj/hDWduI2QSDC/12aGtg+hqtR+aMiJ32lJq259SaAge/bHJ70
-         Z+CekEUNtvNsv8r8LDEE/hxus4gDaZ+uftFeEi5J1qGz6T9ujcz65aLcYPFwi0NiiSdZ
-         ggxEvrNMCkMxSjCGi+/S89Hvcwyhqkxj15NNYrQqOSCI8vsSAPiUS3WiZGMTzRHFEWoe
-         TBHg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=udCwkO8StA61yER1zDj2O8kMSYGesvjzVzZN5NG0PbI=;
+        b=pIJz44bg8gbS5XQfSjtXD9HXcgnfHmFHyw/W5ROamLy6ahYZtrJwCpIhX0Z4vbSTdF
+         HgVs6KyZp5I4ZiHAPgK2M/g18aEN3VuolIkm01Hhe+HQtwzQ9n18KI3hD37FB9/cYYmg
+         rxXfNSdvmb6WJ3Zol7Q6CKbydrRU51NyGOpQpruUrtaVev1clhJye1rGKGmBnTxH7XK3
+         sa0s0fK5h//grGjh29YfY3DfsCQEh/RDuXHieIk31LtXPaf50VWUsmL/hoGNyXKUSIEt
+         F8De6wyNglBXqu1HcNaheSsoE8bLP7DUzEBAA4idlTYG20CV2zLZQfkSm8pdUYgJLnJw
+         NCUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7FSa8Zfu/8xHbnZSuWDC6ttqZXGs49ojzvmsel6my90=;
-        b=kMFG2vajSXm3C8kb3tmyWnAaVp+vut2vVLuAPvghGoNSDDVDg5UjFTOz5iIgNhM8rv
-         c+02hZsngIFZ6MMj473MDUnfBYWtYWC7Ez5S+c5NmEJ5MpqDtKCIL65PdGDc4iHSDi/3
-         mfHSCECI0rfGYmFAYM86B1ndr/nEdvO4+qbr4dTFuVuAilqXq7FGjoDulv9Tf9kqF7cH
-         gSRsExDckz3WRRQpig+miX0tBVNTFOq2ompDyTfqr2y6Beel0zvESd3GCOmZZebEC8B6
-         yZquXwFwKDE2pX8GZlmiyb3KqzMRLvq/OEcb1FnUdkNit+ttEJKazNKHEGZc1+/JCOzN
-         8Reg==
-X-Gm-Message-State: ANoB5pm61wFCpOeVhN9Oby/0I50LPHC0uvEnTNV9vI8Lg6YCv8TIo/07
-        tfRnhI35lEK4ia1KQE0QqUFJXQ==
-X-Google-Smtp-Source: AA0mqf7fwtNQxQ3tnxh0ts1pIJeXrIh/KEs6UGxsKxVhtsbvnWlEGc/R0c6pmsYGcUD19CXYniovxA==
-X-Received: by 2002:a5d:8351:0:b0:6df:e430:e8af with SMTP id q17-20020a5d8351000000b006dfe430e8afmr2130786ior.18.1670535213618;
-        Thu, 08 Dec 2022 13:33:33 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=udCwkO8StA61yER1zDj2O8kMSYGesvjzVzZN5NG0PbI=;
+        b=cjbrAmfDrC5W4JUptp7O+iZQMeSLDFveqIdQEIHXzxisfSfGSZfg89nxnmoeHGv7zw
+         DiU4Y7SCuysbJGVmLBvoeybYX37ZWnt23FbTH7t+OYs0JNsQiz+g9lYF6jP0OdG5fyEx
+         uJMCyo70AxT7DusxSVD0geS9LQuj7SFIh8fyXqkw/IGoMtsc5ojaz6WoH+zuBNNh5Ska
+         xjCempwXXdPs0DN3zRWYu2aRTAthrQ40M5uD8fVdK+InJYEMVUd0xNGyDwxwHtRtgiEy
+         KsR6lZHrLXwQWRNL0Jj0doprRnrLeFwTf6Ow4xkPh2BACDz3fpKZrA/sUjAv2EGn+rYT
+         9W6Q==
+X-Gm-Message-State: ANoB5pnEiBOvagOPUyiF2H5RaX5K5Qnt9iNk87hdXStI7Hhr8suQO68W
+        xRyNjSglRN/m3IGT0cDReozVmw==
+X-Google-Smtp-Source: AA0mqf4yTl76ihYQPyhCijNX4zoOca/AKUlujS/q02e4i7PPKNcywjQgm8pd/wX0FHKyrCiHc5I0wg==
+X-Received: by 2002:a5d:9657:0:b0:6bc:d71a:2b52 with SMTP id d23-20020a5d9657000000b006bcd71a2b52mr1894808ios.19.1670535214481;
+        Thu, 08 Dec 2022 13:33:34 -0800 (PST)
 Received: from localhost.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id a8-20020a021608000000b003755aa71fffsm9237846jaa.105.2022.12.08.13.33.32
+        by smtp.gmail.com with ESMTPSA id a8-20020a021608000000b003755aa71fffsm9237846jaa.105.2022.12.08.13.33.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 13:33:33 -0800 (PST)
+        Thu, 08 Dec 2022 13:33:34 -0800 (PST)
 From:   Alex Elder <elder@linaro.org>
 To:     andersson@kernel.org, konrad.dybcio@linaro.org, agross@kernel.org,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     luca.weiss@fairphone.com, elder@kernel.org,
+Cc:     Luca Weiss <luca.weiss@fairphone.com>, elder@kernel.org,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] arm64: dts: qcom: sm6350: enable IPA
-Date:   Thu,  8 Dec 2022 15:33:28 -0600
-Message-Id: <20221208213330.937714-1-elder@linaro.org>
+Subject: [PATCH 1/2] arm64: dts: qcom: sm6350: add IPA node
+Date:   Thu,  8 Dec 2022 15:33:29 -0600
+Message-Id: <20221208213330.937714-2-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221208213330.937714-1-elder@linaro.org>
+References: <20221208213330.937714-1-elder@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable IPA for the SM6350 SoC, which implements IPA v4.7.  Enable it
-on the Fairphone 4, which incorporates IPA definitions used for the
-SM6350.
+From: Luca Weiss <luca.weiss@fairphone.com>
 
-Please delay applying this until after Linux v6.1 is tagged.
+IPA is used for mobile data. Add a node describing it.
 
-					-Alex
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+Signed-off-by: Alex Elder <elder@linaro.org>
+---
+ arch/arm64/boot/dts/qcom/sm6350.dtsi | 47 ++++++++++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-Luca Weiss (2):
-  arm64: dts: qcom: sm6350: add IPA node
-  arm64: dts: qcom: sm7225-fairphone-fp4: enable IPA
-
- arch/arm64/boot/dts/qcom/sm6350.dtsi          | 47 +++++++++++++++++++
- .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |  7 +++
- 2 files changed, 54 insertions(+)
-
+diff --git a/arch/arm64/boot/dts/qcom/sm6350.dtsi b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+index 43324bf291c30..f622d870bc827 100644
+--- a/arch/arm64/boot/dts/qcom/sm6350.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6350.dtsi
+@@ -432,7 +432,17 @@ modem_smp2p_out: master-kernel {
+ 
+ 		modem_smp2p_in: slave-kernel {
+ 			qcom,entry-name = "slave-kernel";
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
+ 
++		ipa_smp2p_out: ipa-ap-to-modem {
++			qcom,entry-name = "ipa";
++			#qcom,smem-state-cells = <1>;
++		};
++
++		ipa_smp2p_in: ipa-modem-to-ap {
++			qcom,entry-name = "ipa";
+ 			interrupt-controller;
+ 			#interrupt-cells = <2>;
+ 		};
+@@ -847,6 +857,43 @@ ufs_mem_phy_lanes: phy@1d87400 {
+ 			};
+ 		};
+ 
++		ipa: ipa@1e40000 {
++			compatible = "qcom,sm6350-ipa";
++
++			iommus = <&apps_smmu 0x440 0x0>,
++				 <&apps_smmu 0x442 0x0>;
++			reg = <0 0x01e40000 0 0x8000>,
++			      <0 0x01e50000 0 0x3000>,
++			      <0 0x01e04000 0 0x23000>;
++			reg-names = "ipa-reg",
++				    "ipa-shared",
++				    "gsi";
++
++			interrupts-extended = <&intc GIC_SPI 311 IRQ_TYPE_EDGE_RISING>,
++					      <&intc GIC_SPI 432 IRQ_TYPE_LEVEL_HIGH>,
++					      <&ipa_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&ipa_smp2p_in 1 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "ipa",
++					  "gsi",
++					  "ipa-clock-query",
++					  "ipa-setup-ready";
++
++			clocks = <&rpmhcc RPMH_IPA_CLK>;
++			clock-names = "core";
++
++			interconnects = <&aggre2_noc MASTER_IPA 0 &clk_virt SLAVE_EBI_CH0 0>,
++					<&aggre2_noc MASTER_IPA 0 &system_noc SLAVE_OCIMEM 0>,
++					<&gem_noc MASTER_AMPSS_M0 0 &config_noc SLAVE_IPA_CFG 0>;
++			interconnect-names = "memory", "imem", "config";
++
++			qcom,smem-states = <&ipa_smp2p_out 0>,
++					   <&ipa_smp2p_out 1>;
++			qcom,smem-state-names = "ipa-clock-enabled-valid",
++						"ipa-clock-enabled";
++
++			status = "disabled";
++		};
++
+ 		tcsr_mutex: hwlock@1f40000 {
+ 			compatible = "qcom,tcsr-mutex";
+ 			reg = <0x0 0x01f40000 0x0 0x40000>;
 -- 
 2.34.1
 
