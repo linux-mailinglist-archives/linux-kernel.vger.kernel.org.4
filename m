@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23EEE646968
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 07:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26C0B64696D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 07:48:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLHGnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 01:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46920 "EHLO
+        id S229580AbiLHGsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 01:48:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLHGm5 (ORCPT
+        with ESMTP id S229462AbiLHGsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 01:42:57 -0500
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C83C24F09;
-        Wed,  7 Dec 2022 22:42:55 -0800 (PST)
-Received: by mail-ot1-x335.google.com with SMTP id v19-20020a9d5a13000000b0066e82a3872dso374559oth.5;
-        Wed, 07 Dec 2022 22:42:55 -0800 (PST)
+        Thu, 8 Dec 2022 01:48:01 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988034E6BD
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 22:47:59 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id 3so630583vsq.7
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 22:47:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Lf6TLbAlDvGkLXakdNfu88j2XsGakj+kolJRyi9VaU=;
-        b=U2E2I6qSCHUWi2YlIz3b5AdXJjkOH0Tvfim7ffgWOKJkimzoNoCWOUO9sppiR5HNQP
-         IbRWBxkw1Egjsvdu4euegkhnj24XdwKtcWyLFBT/ZkNB+ijtLGI439x14+3g1L2h1l4E
-         eLmZu9pWyjx6rPVUZU7YJUDc12CeB8/C69n9M0up088w78wc8n67swuwEVryzxiDBvMh
-         ql/4G7ehToXVYoHv7AiSgZ4BCjueS4JS0a7riZr2bv/Vsr/37fBrEDvKHYJDRfibEILF
-         zkIpxGEsiT/VrheBOl3x81mQ2KHjzMBO1h9C4/CZIgkaMD7rICcmAbUJne+w1/tkkWwZ
-         hN9g==
+        bh=6zot3OkNfEi53FjSEQfVGLRXMlumoZNtuw1dHZJdR6E=;
+        b=sIqeo013QK9tdm4gyEtGnJT+xWdGfO8Oy8KreARweo8mamVlJSXzkp5xNgQS37QNOd
+         UsH4IhA27HkidPcRmU3d62eS6VbCm4pczntZKKVLOxHAie/DMhFCLfcTCooHoDog/jJl
+         WDMktjYg637M7IoGLSgiH8XiCdV4+AGdAhOvLQCOtKtJs+BZrJ+qgg+NcUbJs9SGkbTf
+         0v19XcBsyEjyjdE64JB2QLNp59zJdJlGr20k2YbOCDPDaytqgsb7ZyI+0yEx03ubIBPd
+         gTT6njtRYP+1WqkT8xnoI1L2Z6BqsZa4yZdVWSkrhu6xRKkYmcBojAj8qV6qd6iSvEZn
+         NTbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/Lf6TLbAlDvGkLXakdNfu88j2XsGakj+kolJRyi9VaU=;
-        b=lCyyFGT63605J7tL6e0HTA2prDd2HdpPndUeH2y4eHIplnbGwY8ZICml1sBxkBXw/L
-         9Iybp8W1yy9Qh5VJL4oiS76Wl0zqNZ8hSF0UCTo4YXvEf8bs4e7ZpNXMYmVawjii+sf1
-         ZQr4ZLHxzEe5w9oWxzgN9WJeb1Y1BFp2IP6AJdh6YIgsm1kZkDDSWSM6g6RVX1MPFmy1
-         vaw7lhcE6QZ+6F4AEqFTBNe9Yr7X6pKnJZ9aANdWVqIUW3lKwkEtRwX9qW7kxCehl21L
-         SMQp3y+G8sKVcDLAuBerM1uNzvTsy1aw2sdhEghD1Bb4gLOMaR/4FVePzHsVW7SSAKVr
-         NI2A==
-X-Gm-Message-State: ANoB5pmOFDV7LeNz9u9se2Wmu8a1UkfLXR4bwr+TzWuwTOK/r4PCU6LF
-        cE06l03Hkq7iyLkk0ybXkOHCbH/yDt37psMZRv0M21EN
-X-Google-Smtp-Source: AA0mqf6qPbVfMZHws+9PHSiOhU8A9Gj3EyzoOSq+IsWd+Z7JB5IQadSt81xXL2waXVU9lOXOCSsPswjXqOI8syEK1lI=
-X-Received: by 2002:a05:6830:699b:b0:66e:7ba6:5e0f with SMTP id
- cy27-20020a056830699b00b0066e7ba65e0fmr14448649otb.312.1670481774961; Wed, 07
- Dec 2022 22:42:54 -0800 (PST)
+        bh=6zot3OkNfEi53FjSEQfVGLRXMlumoZNtuw1dHZJdR6E=;
+        b=km3YrrPmCIgpV2mqzYjGCL/FNVqHsdiljaNhN5HSkuNxm+JG+GqXpyOf+dTDMmFcvL
+         rIH7d7EAd8ryzdvhXzAXq1pmPrWtMyjNv3RBPI9fIsyoDWsunG75eo+faip9xlOjcv+u
+         ZkjiT17Or9sij2gUlbtEGoQ21MXhtDFnmm4LmhESGRyGTXtPPl49YlriWqxU4FUCCK4T
+         AixQigLs31cBPgFMkRfaqAwB5Y8cqwKK6W5TS9YT0bgEsQ77l1vFXk03dNvpBkCGUsJP
+         IEMTMzsBeJPUMwFPiKCHk67J2hx9x/MWSQS+5pPSwDPTTP3Dza1RnrH2vesyyVnvijHP
+         z1Iw==
+X-Gm-Message-State: ANoB5plaNzfPkrWzU002YdAOGOT02pKRkxL8CxUU8qBPmh+60Scn9Ax8
+        mQ+AWnO8t0u7tru8zMlCsyY77LLn0lVhyyyqQdPDJg==
+X-Google-Smtp-Source: AA0mqf7r91LOGOSAN4d8KUitvecDMLr6IV7vf63dj5UU9tGs106oNuIRgGAxoWYre/1ey4Dpt07hl+bwrSh4R5O2b6A=
+X-Received: by 2002:a05:6102:2758:b0:3b1:1962:24f9 with SMTP id
+ p24-20020a056102275800b003b1196224f9mr12966949vsu.72.1670482078566; Wed, 07
+ Dec 2022 22:47:58 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207040904.582585-1-gch981213@gmail.com> <20221207040904.582585-4-gch981213@gmail.com>
- <Y5By0YeGVlS5TlO3@google.com> <CAJsYDV+PBvEBWp=2LLbLkiNqQ0qQgWDOyZ4-onMC9_1B0mTfww@mail.gmail.com>
-In-Reply-To: <CAJsYDV+PBvEBWp=2LLbLkiNqQ0qQgWDOyZ4-onMC9_1B0mTfww@mail.gmail.com>
-From:   Chuanhong Guo <gch981213@gmail.com>
-Date:   Thu, 8 Dec 2022 14:42:43 +0800
-Message-ID: <CAJsYDVJK3jnHezHRHOdfN9oPgA+cVwuRszXDorObNjVZWF9_1A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] leds: add driver for SPI driven WorldSemi WS2812B
- RGB LEDs
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20221208053649.540891-1-almasrymina@google.com>
+In-Reply-To: <20221208053649.540891-1-almasrymina@google.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Wed, 7 Dec 2022 22:47:47 -0800
+Message-ID: <CAHS8izNiM=ckfN1Bvpz5ARSv5OTFi6WLAA-Q9Gnzavp6p4zM_w@mail.gmail.com>
+Subject: Re: [PATCH v1] arch: Enable function alignment for arm64
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,28 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-On Thu, Dec 8, 2022 at 11:00 AM Chuanhong Guo <gch981213@gmail.com> wrote:
-> > You're saving priv in priv.  What is this used for?
-> >
-> > There must be a way around this.
-> >
-> > In fact, doesn't the spi_set_drvdata() below already save priv to
-> > cdev->dev->driver_data?  If you move to devm_*() you may have to
-> > rename this to dev_set_drvdata() to the APIs are symmetrical, but it's
-> > better than this incestuous solution.
+On Wed, Dec 7, 2022 at 9:36 PM Mina Almasry <almasrymina@google.com> wrote:
 >
-> I'm saving priv to struct ws2812b_led. This struct is what we got from
-> LED callbacks. This struct is an array in ws2812b_priv. In order to
-> use the container_of magic I will have to save the index in leds[] array
-> to this struct itself.
-> Since I'm saving a value anyway, save priv can make my life a lot
-> easier than saving an index and calculate priv out of it.
+> We recently ran into a double-digit percentage hackbench regression
+> when backporting commit 12df140f0bdf ("mm,hugetlb: take hugetlb_lock
+> before decrementing h->resv_huge_pages") to an older kernel. This was
+> surprising since hackbench does use hugetlb pages at all and the
+> modified code is not invoked. After some debugging we found that the
+> regression can be fixed by back-porting commit d49a0626216b ("arch:
+> Introduce CONFIG_FUNCTION_ALIGNMENT") and enabling function alignment
+> for arm64. I suggest enabling it by default for arm64 if possible.
+>
+> Tested by examing function alignment on a compiled object file
+> before/after:
+>
+> After this patch:
+>
+> $ ~/is-aligned.sh mm/hugetlb.o 16
+> file=mm/hugetlb.o, alignment=16
+> total number of functions: 146
+> total number of unaligned: 0
+>
+> Before this patch:
+>
+> $ ~/is-aligned.sh mm/hugetlb.o 16
+> file=mm/hugetlb.o, alignment=16
+> total number of functions: 146
+> total number of unaligned: 94
+>
+> Cc: Peter Zijlstra <peterz@infradead.org>
 
-Oh, I didn't notice that I also have access to dev in LED callbacks.
-I'll try implementing your suggestions.
+I missed the Signed-off-by: Mina Almasry <almasrymina@google.com> tag
+here. I can add with the next version.
 
--- 
-Regards,
-Chuanhong Guo
+> ---
+>  arch/arm64/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+> index cf6d1cd8b6dc..bcc9e1578937 100644
+> --- a/arch/arm64/Kconfig
+> +++ b/arch/arm64/Kconfig
+> @@ -235,6 +235,7 @@ config ARM64
+>         select TRACE_IRQFLAGS_SUPPORT
+>         select TRACE_IRQFLAGS_NMI_SUPPORT
+>         select HAVE_SOFTIRQ_ON_OWN_STACK
+> +       select FUNCTION_ALIGNMENT_16B
+>         help
+>           ARM 64-bit (AArch64) Linux support.
+>
+> --
+> 2.39.0.rc0.267.gcb52ba06e7-goog
