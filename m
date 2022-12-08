@@ -2,159 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01629647913
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:55:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA91647915
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:57:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbiLHWzu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:55:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S229965AbiLHW4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:56:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLHWzs (ORCPT
+        with ESMTP id S230236AbiLHW4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:55:48 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4A675BE8
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:55:47 -0800 (PST)
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8MIvlN020769;
-        Thu, 8 Dec 2022 22:55:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=bvJOS8DSJ1EJ4HA30V2gSqCuNWwqSq/VAvTROAY+t10=;
- b=vBdvh3n9vJ28av9S/yN5hy1iUzvtGiGmAkkyh28g9OPpbaKliit+wILZcoKdxlW9OCEU
- Vu3L1cYbDlins9TGD58UiwuSOc3nmtLL3j0aGuX9BFRFJhtNswvbMVwjQfvEYEoQ+mNE
- 07CaVLB3musQbaGvNXmvpuCCckNAmNVuFrjB7UcQVVZEgZOBC7pZ1VCdBtLfECgW2enc
- dL5rl5m3tVbUER5oEJ4JlkqEJ29clJtdl2B1goJi/cfbdJgdrxwBzgqL/oC5MhlavPNm
- BHiiRyBH172XoGXbF5wYFJWXBt5ugYL8Tmxzab2Uh0a1zcFLePlNMTBIi53ozkJAY3zD yQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3maxeyu9aj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Dec 2022 22:55:14 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2B8LwmEe032653;
-        Thu, 8 Dec 2022 22:55:13 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3maa7f0wke-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Dec 2022 22:55:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KvDUyhG20CdNNQ4stMn3qpZ30g9rJRJOlXW7uSiqrMnB+xj+euPNQMErHXwxnNBGVCoCpT9GT5v3aN0fLwZsXeoKwXW3WVECS8EV+vb3Abcp/rJ6NQb22G/OOIZW8ZX3mUda2mLL5ejo0prOjR+9VVNJTm0nbsX1jLGYeuQrixQu5e3DNQXQEjgpI8/KF8yVmCiKZCWChxu6lD/cjigCzsEEMiJWcYcLPquV7tEdydmsZLDSx3GchqvuMXJmJmmOrfC+LHfTndt9IbHXRFBpUopR8CE9FdFCCHjWx7VVtp1xKrMv/i1/h3tudxKHMy4zBfHhxS0cV2WcI3R/LW7FRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bvJOS8DSJ1EJ4HA30V2gSqCuNWwqSq/VAvTROAY+t10=;
- b=XLjafEKl5TWDTkrjqtJGZdsMWw0c79h9o/ZAQqkrH2CduR7rJxHSAl3DKYfmPkGKHGfZlqn0U7qVGgS/8Xli2a8ltvFTe+YJLjn+bb5/9zd7imPMkATmzhqX92KSwut7+p4Ponk6M1g+8AAF8hUknsJiD9TZdkfc9DAjoapNHLtK+jEhMrPC5o02PlTZ1RsQ5HJHweNgzZlPSGH1iPGRZ0gNdAUIX9RHlOO2zvWBh6r9MVHo/1GzWQsXbwe1VLa3r5mp/Fzq6wIFOy1uRa/eEqWxQf1A+coMN301yU0uLRovgmohgqPf/M2y0UB3ksPdewg0qIP7X491rSoX38oDow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 8 Dec 2022 17:56:24 -0500
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A503E75BE8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:56:22 -0800 (PST)
+Received: by mail-pg1-x52d.google.com with SMTP id q1so2340949pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 14:56:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bvJOS8DSJ1EJ4HA30V2gSqCuNWwqSq/VAvTROAY+t10=;
- b=lXA16xUfieU9BSoB+zTFoOgNan8b1nNp+MDF/4sCn7s8OVhcODrlMWK70rLNn/S4zZXfRJ/as4dY1P+7ht9scRCKREoqyFaXRuzAZm7Hfvt6bldPkoC63T5P8GODDKwg+J84yjDPFmnVI4zAubTG92iGPT10xe7vtO+fL/CVHBQ=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by DS7PR10MB7277.namprd10.prod.outlook.com (2603:10b6:8:d8::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.14; Thu, 8 Dec 2022 22:55:11 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::8d67:8c42:d124:3721%4]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
- 22:55:11 +0000
-Date:   Thu, 8 Dec 2022 14:55:07 -0800
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     Peter Xu <peterx@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        David Rientjes <rientjes@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Zach O'Keefe <zokeefe@google.com>,
-        Manish Mishra <manish.mishra@nutanix.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v2 01/47] hugetlb: don't set PageUptodate for
- UFFDIO_CONTINUE
-Message-ID: <Y5JrS4o5Detzid9V@monkey>
-References: <20221021163703.3218176-1-jthoughton@google.com>
- <20221021163703.3218176-2-jthoughton@google.com>
- <Y3UQCmlnQXfKhbyE@x1n>
- <CADrL8HXXT+7BBMj3kgR8g=z4RZv0q-AF5ykkg1vXF9aYCWg9MA@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADrL8HXXT+7BBMj3kgR8g=z4RZv0q-AF5ykkg1vXF9aYCWg9MA@mail.gmail.com>
-X-ClientProxiedBy: MW4PR02CA0027.namprd02.prod.outlook.com
- (2603:10b6:303:16d::32) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DvNMc4CEN7FrHZEa/drqNqz9RRdpbmz0vK6+GBPjgRY=;
+        b=r9YvglAaTTzHM4616VGuWuDMgPybKQ6vYQhXYkD8/2XN+W9N1BhLafhHKLZBoarnGH
+         IeidmNIkIOdqsT9g3TEyisyurEEBCTzr2Uf2xDxwRqVjPFJf4813x7FGv2x5S7owA+F6
+         P5rGQw3Gb8YwYs04ayy5mGzHGA5tNm+NpPqOzIelRWQ679p8imBqGjrj97wIFApCJlYh
+         GYDH12QrF1CcDJ+o/RqF5KdT0LUMr0pGB779EHQZXbaOypJUVWK0mWoZVNeQ99m9E/ZN
+         RX36cKtkZUfMC/vc+D0GecEa8t/r4dOiZNv1xtfTQkSppH4X3q2l3AnBZUxe3cWMlWTF
+         aviA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DvNMc4CEN7FrHZEa/drqNqz9RRdpbmz0vK6+GBPjgRY=;
+        b=x2XqH8W7A6TONma5r9/+zhjtHPHlRpbaXh4AP/eCTNfxncnaJSr3se+2h8/yPeTQzz
+         9jbZB2Pz9BvDRq9hvVV1Fk4ouqDBqCiRfFU8c73cjnuC5ODSGaTHZYHBk3WSRn05ivya
+         PVAq9BbD1I1ex73eWvwwOufrJGs78C3dqNHNoRxja6t0t7/g2SiaFz71aKs58A4hnFqS
+         sf1J4ZnabpWgOEQFTZzxvalSymc1upSzj41gV8inp2TrfZ/nwctw882+RzNBcXGkBsTQ
+         Y8QYAKf06kiGwo+3e93X+3UJkRTkDl7BoWtTJd4LuF8FO6SJbzvP0ImbOID5N+kybgXe
+         sEcg==
+X-Gm-Message-State: ANoB5pmbnHfgy4K10XZTTeCa9GlVWOTQqFT2zBUEhDC5tChv5Z8wmSJo
+        je8d34HJhyxwCD220W59Cfj9YIcqOZ/aPdo2T8hyBw==
+X-Google-Smtp-Source: AA0mqf6jr2R7qtdcnkQ/tELv43q0d5NXLFNdEAn+gInolbuvqEgdEKsQ417nvEPeoooroiSIOuVXpza9ue3fyH89+Wo=
+X-Received: by 2002:a05:6a00:2883:b0:572:7b49:4f47 with SMTP id
+ ch3-20020a056a00288300b005727b494f47mr80259532pfb.16.1670540181666; Thu, 08
+ Dec 2022 14:56:21 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|DS7PR10MB7277:EE_
-X-MS-Office365-Filtering-Correlation-Id: ca325d12-f3b5-4864-e365-08dad96f42bb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KBxXyb8q43FsEYjSgUhCpPt78I+MTy2Ygt82d6YmAYELovApb0Oei9DIOSaiNa5Hsxzz7y3OvZMAMFk/gOzWjx5ua0aC8cj1rs688jPhi9DdYp6/3B8nFuf5VS7Zyz5guCwLP8FoGCv41LJ6maWf6GiemHzQK26GOXnLZmj7XRuBun/N+0YCIZDuxhvQ+tsdrQj4bc74+1Jke173h+PJfVWJ9szxkHTQHQs+TupNWEanib2MDKwAu+AfKBTvnvHLsU85mray0aPvICLGD2cPp+C1FbjTpg0etDTs8PLBbqpG2d4ctNwukp94U/QdSDMCXgG0cIsRDs2qsjTM7a73rFJzMAHq8mLct46ReIOqj3hJZjZLjN1VLcnhF9xm7I+uh7VSrwDNh3uYZg2ny5svuUsFHD+bsm86RwQ+Dpx58hG0Jz3aKbV8Zh5/B1UURkj8qwbzVNJz0r853ewfAoJj53Jhr2F2ImlPYDwAS+x2/IcLtTU/1nRBrsMcqpwy5eMirbQwnZ5zvGJ+qbuJvpy75xsZPdSqR828g8pWn7Qa9XcSu9UKrsyVYrrYWf6y8FNHhXC4BxhnKdT+aZseNSFp7FkyV0yEkCZDsRx4WTdfMRhOrM8gzubFGtX4xb8I8ytZ4kLTOc81xZOWMWxpZIHFuw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(396003)(376002)(366004)(39860400002)(136003)(346002)(451199015)(86362001)(66476007)(41300700001)(186003)(4326008)(8936002)(5660300002)(44832011)(8676002)(66946007)(478600001)(66556008)(53546011)(6916009)(6486002)(54906003)(6666004)(316002)(6506007)(9686003)(38100700002)(6512007)(7416002)(33716001)(26005)(2906002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VAWjxM59SXlqTJsgU9OxwMoYa/Mbsv6u8o8Woh2ExoY9l7t/nfKH9Q230BnK?=
- =?us-ascii?Q?u/IjA/RXkdHlZFZhbuhbBxQ9BgRqUO36627JJl0zCZnLTmzKkUoY+HCVQIww?=
- =?us-ascii?Q?U8VVqzGqz+UBisfffCe6LVCF/hVrSqGcw8PqZijRdBYO5WUgI88eDV0opXYm?=
- =?us-ascii?Q?yIebt2h9SOFv7OvZUuQnXXoxdgSXNalM+lNi96oxJUegzMob0utqwcDXo/OI?=
- =?us-ascii?Q?HPswGMJ/OOfx8Mc2NfGFPvDH8fpdL46dncMq0HTeQA5wvupft6WN51VWtD0Z?=
- =?us-ascii?Q?uzc9xPphnIacD0Mqb4iCyJpOsxH2sLgcw7pczwMloeo18eAF4mP4PTsmkZ5U?=
- =?us-ascii?Q?XwCl/aZOoKa+KIk9sl7aEbmHpNkmMG5XNZ9cKM6B+q55gfe4W6cg23l37YjI?=
- =?us-ascii?Q?6khSHiWgukG123z5unWLm4h4sqoa6HMT+UGqrdvhgKJUB5zntdK/fR9v6BDT?=
- =?us-ascii?Q?wjeMTYywEnL020Bvbd8tcDqEICxH6qYkO2fV6CBtcOgCWdUPxeXjZPU6rInY?=
- =?us-ascii?Q?qO65HxLHtvFC3SZV5HLHyp3+sX3Pr2tzEwE7C6SQG4pll7HIeUn1FZ7LFzRB?=
- =?us-ascii?Q?WgCL3sY5ohMGiQYXciPvH6sdtnvMa7Ou1k/kUpyajEPgBSnExyIr0L5EeIt4?=
- =?us-ascii?Q?+V+R5ecfUhUTK0UZw5Bd+8cmEEyTRMEicPZmVyQSwhLysKyjlMgespZf4Rsr?=
- =?us-ascii?Q?2FqBUNwXmYskF4UxM4mag7NX3hPGcq8yKdgL28eFbsr55va76G/z6b71BVYM?=
- =?us-ascii?Q?FEaVyRRc9xN3ur092DnCGCYZB51a3fOnTNb3/c4ROBj0bqIyOh0YCnKYPjp7?=
- =?us-ascii?Q?50YvStvEyPCoxMtoZv8CV5fysXpV06b1AxVD71gQE2Gku8zU/glpDl8gEqbX?=
- =?us-ascii?Q?CES/5QaVu6j395d2eI4mPtebNXcYk58D34a6LgAoF1Mdf+s/LCNVIJrPZLVc?=
- =?us-ascii?Q?tfUyqE2W9z6lKjlf+kJ0UJZ15wkHwpGkECFIbr+qFDu36lO+UToq1Su8izW6?=
- =?us-ascii?Q?jKMIu6JTvO0gyvr44XyK5cWKPlME3IPj/72Gq8RJkYki0ajpzUAB6EP3BT08?=
- =?us-ascii?Q?4tesdxgb8HJIhl+WWqOHwADd93JpMmTpEtellim16vRtmvb3LEWAneLOB0Fh?=
- =?us-ascii?Q?kD9dgzugMDIqCuKgDASpDHRrNcHbiz+3h4XbFFxJk8sJLQ1JiEWJGj30ajdC?=
- =?us-ascii?Q?HBMDKT3MbaXzqKqy0Kinl/pGINsHUCDU4fCFPvXF7QzyXBopiE0cS2nZZ50k?=
- =?us-ascii?Q?9m0CwRBIZ8eGZVAM3LhO798WMtOqlrIGju17hNnDU1QvgIlvZU2U39zHA2Cb?=
- =?us-ascii?Q?b0Js9knHDbdFSDzg9gZZHMDqhDqLhdJ3b0sB5s593oQJkJvKa0G93RJ4XzFr?=
- =?us-ascii?Q?ElwZxJHEUoF5gIFJ8XJbKt2UHvctMZWy9OcTC2gKP3lMA3hEalJJ/38MMl9t?=
- =?us-ascii?Q?ZIGVrivNvQIONpQso7Bad8ircZ68EOEMEbJx7NkqCKYB7DUNSTFgwjaT+zE3?=
- =?us-ascii?Q?HMVTo4KU0u3QNgHT/ufSnvaJ7aN/qC5sFsuq96Kj53gpsubM4i+mski/haKQ?=
- =?us-ascii?Q?L98abVDdX0fA2c6aTF4fme2rWwrNNuOMRZUDfp3xltq/+6U1O7N5wtpYGzkZ?=
- =?us-ascii?Q?qA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ca325d12-f3b5-4864-e365-08dad96f42bb
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 22:55:11.2428
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ANbahW3JqfcEFAeYNqMmauYsc9z+uyhfpy+I229Ta6qa6QabVM9dE36ozSQyzG+sc1nHmokdj0Bkjei+pejT5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7277
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-08_12,2022-12-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=944 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212080189
-X-Proofpoint-GUID: b2iAiw9KxLEmz-nphlaTBPcaVFhxHP6R
-X-Proofpoint-ORIG-GUID: b2iAiw9KxLEmz-nphlaTBPcaVFhxHP6R
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221207154939.2532830-1-jeffxu@google.com> <20221207154939.2532830-4-jeffxu@google.com>
+ <202212080821.5AE7EE99@keescook>
+In-Reply-To: <202212080821.5AE7EE99@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 8 Dec 2022 14:55:45 -0800
+Message-ID: <CALmYWFuKR538vHxqYH1p6mb9iShOohf5bpHZXSfUN4KQHYiwaA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/6] mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -162,55 +73,316 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/21/22 10:33, James Houghton wrote:
-> On Wed, Nov 16, 2022 at 8:30 AM Peter Xu <peterx@redhat.com> wrote:
+On Thu, Dec 8, 2022 at 8:27 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Dec 07, 2022 at 03:49:36PM +0000, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@google.com>
 > >
-> > On Fri, Oct 21, 2022 at 04:36:17PM +0000, James Houghton wrote:
-> > > This is how it should have been to begin with. It would be very bad if
-> > > we actually set PageUptodate with a UFFDIO_CONTINUE, as UFFDIO_CONTINUE
-> > > doesn't actually set/update the contents of the page, so we would be
-> > > exposing a non-zeroed page to the user.
-> > >
-> > > The reason this change is being made now is because UFFDIO_CONTINUEs on
-> > > subpages definitely shouldn't set this page flag on the head page.
-> > >
-> > > Signed-off-by: James Houghton <jthoughton@google.com>
-> > > ---
-> > >  mm/hugetlb.c | 5 ++++-
-> > >  1 file changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > > index 1a7dc7b2e16c..650761cdd2f6 100644
-> > > --- a/mm/hugetlb.c
-> > > +++ b/mm/hugetlb.c
-> > > @@ -6097,7 +6097,10 @@ int hugetlb_mcopy_atomic_pte(struct mm_struct *dst_mm,
-> > >        * preceding stores to the page contents become visible before
-> > >        * the set_pte_at() write.
-> > >        */
-> > > -     __SetPageUptodate(page);
-> > > +     if (!is_continue)
-> > > +             __SetPageUptodate(page);
-> > > +     else
-> > > +             VM_WARN_ON_ONCE_PAGE(!PageUptodate(page), page);
+> > The new MFD_NOEXEC_SEAL and MFD_EXEC flags allows application to
+> > set executable bit at creation time (memfd_create).
 > >
-> > Yeah the old code looks wrong, I'm just wondering whether we can 100%
-> > guarantee this for hugetlb.  E.g. for shmem that won't hold when we
-> > uffd-continue on a not used page (e.g. by an over-sized fallocate()).
+> > When MFD_NOEXEC_SEAL is set, memfd is created without executable bit
+> > (mode:0666), and sealed with F_SEAL_EXEC, so it can't be chmod to
+> > be executable (mode: 0777) after creation.
 > >
-> > Another safer approach is simply fail the ioctl if !uptodate, but if you're
-> > certain then WARN_ON_ONCE sounds all good too.  At least I did have a quick
-> > look on hugetlb fallocate() and pages will be uptodate immediately.
-> 
-> Failing the ioctl sounds better than only WARNing. I'll do that and
-> drop the WARN_ON_ONCE for v1. Thanks!
-> 
+> > when MFD_EXEC flag is set, memfd is created with executable bit
+> > (mode:0777), this is the same as the old behavior of memfd_create.
+> >
+> > The new pid namespaced sysctl vm.memfd_noexec has 3 values:
+> > 0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
+> >       MFD_EXEC was set.
+> > 1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL acts like
+> >       MFD_NOEXEC_SEAL was set.
+> > 2: memfd_create() without MFD_NOEXEC_SEAL will be rejected.
+> >
+> > The sysctl allows finer control of memfd_create for old-software
+> > that doesn't set the executable bit, for example, a container with
+> > vm.memfd_noexec=1 means the old-software will create non-executable
+> > memfd by default. Also, the value of memfd_noexec is passed to child
+> > namespace at creation time. For example, if the init namespace has
+> > vm.memfd_noexec=2, all its children namespaces will be created with 2.
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@google.com>
+> > Co-developed-by: Daniel Verkamp <dverkamp@chromium.org>
+> > Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+> > Reported-by: kernel test robot <lkp@intel.com>
+>
+> Please rearrange these tags, and add a link to the lkp report:
+>
+>   Reported-by: kernel test robot <lkp@intel.com>
+>   Link: ...url.to.lkp.lore.email...
+>   Co-developed-by: Daniel Verkamp <dverkamp@chromium.org>
+>   Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
+>   Signed-off-by: Jeff Xu <jeffxu@google.com>
+>
+> > ---
+> >  include/linux/pid_namespace.h | 19 +++++++++++
+> >  include/uapi/linux/memfd.h    |  4 +++
+> >  kernel/pid_namespace.c        |  5 +++
+> >  kernel/pid_sysctl.h           | 59 +++++++++++++++++++++++++++++++++++
+> >  mm/memfd.c                    | 48 ++++++++++++++++++++++++++--
+> >  5 files changed, 133 insertions(+), 2 deletions(-)
+> >  create mode 100644 kernel/pid_sysctl.h
+> >
+> > diff --git a/include/linux/pid_namespace.h b/include/linux/pid_namespace.h
+> > index 07481bb87d4e..a4789a7b34a9 100644
+> > --- a/include/linux/pid_namespace.h
+> > +++ b/include/linux/pid_namespace.h
+> > @@ -16,6 +16,21 @@
+> >
+> >  struct fs_pin;
+> >
+> > +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> > +/*
+> > + * sysctl for vm.memfd_noexec
+> > + * 0: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL
+> > + *   acts like MFD_EXEC was set.
+> > + * 1: memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL
+> > + *   acts like MFD_NOEXEC_SEAL was set.
+> > + * 2: memfd_create() without MFD_NOEXEC_SEAL will be
+> > + *   rejected.
+> > + */
+> > +#define MEMFD_NOEXEC_SCOPE_EXEC              0
+> > +#define MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL               1
+> > +#define MEMFD_NOEXEC_SCOPE_NOEXEC_ENFORCED   2
+>
+> These don't align? I think a tab is missing on MEMFD_NOEXEC_SCOPE_EXEC.
+>
+Done
 
-Sorry for the VERY late reply ...
+> > +#endif
+> > +
+> >  struct pid_namespace {
+> >       struct idr idr;
+> >       struct rcu_head rcu;
+> > @@ -31,6 +46,10 @@ struct pid_namespace {
+> >       struct ucounts *ucounts;
+> >       int reboot;     /* group exit code if this pidns was rebooted */
+> >       struct ns_common ns;
+> > +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> > +     /* sysctl for vm.memfd_noexec */
+> > +     int memfd_noexec_scope;
+> > +#endif
+> >  } __randomize_layout;
+> >
+> >  extern struct pid_namespace init_pid_ns;
+> > diff --git a/include/uapi/linux/memfd.h b/include/uapi/linux/memfd.h
+> > index 7a8a26751c23..273a4e15dfcf 100644
+> > --- a/include/uapi/linux/memfd.h
+> > +++ b/include/uapi/linux/memfd.h
+> > @@ -8,6 +8,10 @@
+> >  #define MFD_CLOEXEC          0x0001U
+> >  #define MFD_ALLOW_SEALING    0x0002U
+> >  #define MFD_HUGETLB          0x0004U
+> > +/* not executable and sealed to prevent changing to executable. */
+> > +#define MFD_NOEXEC_SEAL              0x0008U
+> > +/* executable */
+> > +#define MFD_EXEC             0x0010U
+> >
+> >  /*
+> >   * Huge page size encoding when MFD_HUGETLB is specified, and a huge page
+> > diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> > index f4f8cb0435b4..8a98b1af9376 100644
+> > --- a/kernel/pid_namespace.c
+> > +++ b/kernel/pid_namespace.c
+> > @@ -23,6 +23,7 @@
+> >  #include <linux/sched/task.h>
+> >  #include <linux/sched/signal.h>
+> >  #include <linux/idr.h>
+> > +#include "pid_sysctl.h"
+> >
+> >  static DEFINE_MUTEX(pid_caches_mutex);
+> >  static struct kmem_cache *pid_ns_cachep;
+> > @@ -110,6 +111,8 @@ static struct pid_namespace *create_pid_namespace(struct user_namespace *user_ns
+> >       ns->ucounts = ucounts;
+> >       ns->pid_allocated = PIDNS_ADDING;
+> >
+> > +     initialize_memfd_noexec_scope(ns);
+> > +
+> >       return ns;
+> >
+> >  out_free_idr:
+> > @@ -455,6 +458,8 @@ static __init int pid_namespaces_init(void)
+> >  #ifdef CONFIG_CHECKPOINT_RESTORE
+> >       register_sysctl_paths(kern_path, pid_ns_ctl_table);
+> >  #endif
+> > +
+> > +     register_pid_ns_sysctl_table_vm();
+> >       return 0;
+> >  }
+> >
+> > diff --git a/kernel/pid_sysctl.h b/kernel/pid_sysctl.h
+> > new file mode 100644
+> > index 000000000000..5986d6493b5b
+> > --- /dev/null
+> > +++ b/kernel/pid_sysctl.h
+> > @@ -0,0 +1,59 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +#ifndef LINUX_PID_SYSCTL_H
+> > +#define LINUX_PID_SYSCTL_H
+> > +
+> > +#include <linux/pid_namespace.h>
+> > +
+> > +#if defined(CONFIG_SYSCTL) && defined(CONFIG_MEMFD_CREATE)
+> > +static inline void initialize_memfd_noexec_scope(struct pid_namespace *ns)
+> > +{
+> > +     ns->memfd_noexec_scope =
+> > +             task_active_pid_ns(current)->memfd_noexec_scope;
+> > +}
+> > +
+> > +static int pid_mfd_noexec_dointvec_minmax(struct ctl_table *table,
+> > +     int write, void *buf, size_t *lenp, loff_t *ppos)
+> > +{
+> > +     struct pid_namespace *ns = task_active_pid_ns(current);
+> > +     struct ctl_table table_copy;
+> > +
+> > +     if (write && !capable(CAP_SYS_ADMIN))
+> > +             return -EPERM;
+>
+> Should this be CAP_SYS_ADMIN within the userns, rather than the global
+> init_task CAP_SYS_ADMIN?
+>
+Done.
 
-After checking all the code paths, I do not think it is possible for a
-!PageUptodate to be in the cache (target of continue).
+> > +
+> > +     table_copy = *table;
+> > +     if (ns != &init_pid_ns)
+> > +             table_copy.data = &ns->memfd_noexec_scope;
+> > +
+> > +     /*
+> > +      * set minimum to current value, the effect is only bigger
+> > +      * value is accepted.
+> > +      */
+> > +     if (*(int *)table_copy.data > *(int *)table_copy.extra1)
+> > +             table_copy.extra1 = table_copy.data;
+> > +
+> > +     return proc_dointvec_minmax(&table_copy, write, buf, lenp, ppos);
+> > +}
+> > +
+> > +static struct ctl_table pid_ns_ctl_table_vm[] = {
+> > +     {
+> > +             .procname       = "memfd_noexec",
+> > +             .data           = &init_pid_ns.memfd_noexec_scope,
+> > +             .maxlen         = sizeof(init_pid_ns.memfd_noexec_scope),
+> > +             .mode           = 0644,
+> > +             .proc_handler   = pid_mfd_noexec_dointvec_minmax,
+> > +             .extra1         = SYSCTL_ZERO,
+> > +             .extra2         = SYSCTL_TWO,
+> > +     },
+> > +     { }
+> > +};
+> > +static struct ctl_path vm_path[] = { { .procname = "vm", }, { } };
+> > +static inline void register_pid_ns_sysctl_table_vm(void)
+> > +{
+> > +     register_sysctl_paths(vm_path, pid_ns_ctl_table_vm);
+> > +}
+> > +#else
+> > +static inline void set_memfd_noexec_scope(struct pid_namespace *ns) {}
+> > +static inline void register_pid_ns_ctl_table_vm(void) {}
+> > +#endif
+> > +
+> > +#endif /* LINUX_PID_SYSCTL_H */
+> > diff --git a/mm/memfd.c b/mm/memfd.c
+> > index 4ebeab94aa74..ec70675a7069 100644
+> > --- a/mm/memfd.c
+> > +++ b/mm/memfd.c
+> > @@ -18,6 +18,7 @@
+> >  #include <linux/hugetlb.h>
+> >  #include <linux/shmem_fs.h>
+> >  #include <linux/memfd.h>
+> > +#include <linux/pid_namespace.h>
+> >  #include <uapi/linux/memfd.h>
+> >
+> >  /*
+> > @@ -263,12 +264,14 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned long arg)
+> >  #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
+> >  #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
+> >
+> > -#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB)
+> > +#define MFD_ALL_FLAGS (MFD_CLOEXEC | MFD_ALLOW_SEALING | MFD_HUGETLB | MFD_NOEXEC_SEAL | MFD_EXEC)
+> >
+> >  SYSCALL_DEFINE2(memfd_create,
+> >               const char __user *, uname,
+> >               unsigned int, flags)
+> >  {
+> > +     char comm[TASK_COMM_LEN];
+>
+> I'm fine with using "comm", but technically, it's not needed: task->comm
+> will always be %NUL terminated.
+>
+get_task_comm takes a lock.
+Do we need to consider the case of task->comm mutation in a
+multithreaded environment ?
+There seems to be work related with replacing task->comm with
+get_task_comm, such as:
+https://lore.kernel.org/netdev/20211108083840.4627-4-laoar.shao@gmail.com/
 
-ACK to failing the ioctl if not set, although I don't think it is possible
-in current code.
--- 
-Mike Kravetz
+> > +     struct pid_namespace *ns;
+> >       unsigned int *file_seals;
+> >       struct file *file;
+> >       int fd, error;
+> > @@ -285,6 +288,39 @@ SYSCALL_DEFINE2(memfd_create,
+> >                       return -EINVAL;
+> >       }
+> >
+> > +     /* Invalid if both EXEC and NOEXEC_SEAL are set.*/
+> > +     if ((flags & MFD_EXEC) && (flags & MFD_NOEXEC_SEAL))
+> > +             return -EINVAL;
+> > +
+> > +     if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
+> > +#ifdef CONFIG_SYSCTL
+> > +             int sysctl = MEMFD_NOEXEC_SCOPE_EXEC;
+> > +
+> > +             ns = task_active_pid_ns(current);
+> > +             if (ns)
+> > +                     sysctl = ns->memfd_noexec_scope;
+> > +
+> > +             switch (sysctl) {
+> > +             case MEMFD_NOEXEC_SCOPE_EXEC:
+> > +                     flags |= MFD_EXEC;
+> > +                     break;
+> > +             case MEMFD_NOEXEC_SCOPE_NOEXEC_SEAL:
+> > +                     flags |= MFD_NOEXEC_SEAL;
+> > +                     break;
+> > +             default:
+> > +                     pr_warn_ratelimited(
+> > +                             "memfd_create(): MFD_NOEXEC_SEAL is enforced, pid=%d '%s'\n",
+> > +                             task_pid_nr(current), get_task_comm(comm, current));
+> > +                     return -EINVAL;
+> > +             }
+> > +#else
+> > +             flags |= MFD_EXEC;
+> > +#endif
+> > +             pr_warn_ratelimited(
+> > +                     "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=%d '%s'\n",
+> > +                     task_pid_nr(current), get_task_comm(comm, current));
+> > +     }
+> > +
+> >       /* length includes terminating zero */
+> >       len = strnlen_user(uname, MFD_NAME_MAX_LEN + 1);
+> >       if (len <= 0)
+> > @@ -328,7 +364,15 @@ SYSCALL_DEFINE2(memfd_create,
+> >       file->f_mode |= FMODE_LSEEK | FMODE_PREAD | FMODE_PWRITE;
+> >       file->f_flags |= O_LARGEFILE;
+> >
+> > -     if (flags & MFD_ALLOW_SEALING) {
+> > +     if (flags & MFD_NOEXEC_SEAL) {
+> > +             struct inode *inode = file_inode(file);
+> > +
+> > +             inode->i_mode &= ~0111;
+> > +             file_seals = memfd_file_seals_ptr(file);
+> > +             *file_seals &= ~F_SEAL_SEAL;
+> > +             *file_seals |= F_SEAL_EXEC;
+> > +     } else if (flags & MFD_ALLOW_SEALING) {
+> > +             /* MFD_EXEC and MFD_ALLOW_SEALING are set */
+> >               file_seals = memfd_file_seals_ptr(file);
+> >               *file_seals &= ~F_SEAL_SEAL;
+> >       }
+> > --
+> > 2.39.0.rc0.267.gcb52ba06e7-goog
+> >
+>
+> Otherwise looks good!
+>
+> --
+> Kees Cook
