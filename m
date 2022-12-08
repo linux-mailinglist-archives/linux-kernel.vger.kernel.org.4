@@ -2,73 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76FE1647016
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:52:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEAA647019
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbiLHMwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:52:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S230137AbiLHMxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 07:53:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbiLHMwf (ORCPT
+        with ESMTP id S230132AbiLHMxC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:52:35 -0500
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72C323894;
-        Thu,  8 Dec 2022 04:52:33 -0800 (PST)
-Received: from localhost.localdomain (unknown [124.16.138.125])
-        by APP-05 (Coremail) with SMTP id zQCowABXr+z73ZFjRwTKBQ--.40875S2;
-        Thu, 08 Dec 2022 20:52:11 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     jiri@resnulli.us
-Cc:     leon@kernel.org, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH net v2] ice: Add check for kzalloc
-Date:   Thu,  8 Dec 2022 20:52:00 +0800
-Message-Id: <20221208125200.13263-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Dec 2022 07:53:02 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7673A37F8F;
+        Thu,  8 Dec 2022 04:53:01 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NSYwW0f9hz4xDn;
+        Thu,  8 Dec 2022 23:52:59 +1100 (AEDT)
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
+To:     Nicholas Piggin <npiggin@gmail.com>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        linuxppc-dev@lists.ozlabs.org,
+        "Naveen N . Rao" <naveen.n.rao@linux.vnet.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Stanislav Fomichev <sdf@google.com>,
+        linux-kernel@vger.kernel.org, Hao Luo <haoluo@google.com>,
+        stable@vger.kernel.org, KP Singh <kpsingh@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, bpf@vger.kernel.org
+In-Reply-To: <757acccb7fbfc78efa42dcf3c974b46678198905.1669278887.git.christophe.leroy@csgroup.eu>
+References: <757acccb7fbfc78efa42dcf3c974b46678198905.1669278887.git.christophe.leroy@csgroup.eu>
+Subject: Re: [PATCH v2] powerpc/bpf/32: Fix Oops on tail call tests
+Message-Id: <167050396505.1462730.10974040872245094646.b4-ty@ellerman.id.au>
+Date:   Thu, 08 Dec 2022 23:52:45 +1100
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowABXr+z73ZFjRwTKBQ--.40875S2
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYf7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2js
-        IEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE
-        5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r4j6F4UMcvjeV
-        CFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l
-        FIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxC20s
-        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
-        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-        W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUjsjjDUUUUU==
-X-Originating-IP: [124.16.138.125]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 07:17:59PM +0800, Leon Romanovsky wrote:
->>>> +err_out:
->>>> +	for (j = 0; j < i; j++) {
->>> 
->>> You don't need an extra variable, "while(i--)" will do the trick.
->>
->>No, the right range is [0, i - 1], but the "while(i--)" is [1, i].
+On Thu, 24 Nov 2022 09:37:27 +0100, Christophe Leroy wrote:
+> test_bpf tail call tests end up as:
 > 
-> Are you sure??
+>   test_bpf: #0 Tail call leaf jited:1 85 PASS
+>   test_bpf: #1 Tail call 2 jited:1 111 PASS
+>   test_bpf: #2 Tail call 3 jited:1 145 PASS
+>   test_bpf: #3 Tail call 4 jited:1 170 PASS
+>   test_bpf: #4 Tail call load/store leaf jited:1 190 PASS
+>   test_bpf: #5 Tail call load/store jited:1
+>   BUG: Unable to handle kernel data access on write at 0xf1b4e000
+>   Faulting instruction address: 0xbe86b710
+>   Oops: Kernel access of bad area, sig: 11 [#1]
+>   BE PAGE_SIZE=4K MMU=Hash PowerMac
+>   Modules linked in: test_bpf(+)
+>   CPU: 0 PID: 97 Comm: insmod Not tainted 6.1.0-rc4+ #195
+>   Hardware name: PowerMac3,1 750CL 0x87210 PowerMac
+>   NIP:  be86b710 LR: be857e88 CTR: be86b704
+>   REGS: f1b4df20 TRAP: 0300   Not tainted  (6.1.0-rc4+)
+>   MSR:  00009032 <EE,ME,IR,DR,RI>  CR: 28008242  XER: 00000000
+>   DAR: f1b4e000 DSISR: 42000000
+>   GPR00: 00000001 f1b4dfe0 c11d2280 00000000 00000000 00000000 00000002 00000000
+>   GPR08: f1b4e000 be86b704 f1b4e000 00000000 00000000 100d816a f2440000 fe73baa8
+>   GPR16: f2458000 00000000 c1941ae4 f1fe2248 00000045 c0de0000 f2458030 00000000
+>   GPR24: 000003e8 0000000f f2458000 f1b4dc90 3e584b46 00000000 f24466a0 c1941a00
+>   NIP [be86b710] 0xbe86b710
+>   LR [be857e88] __run_one+0xec/0x264 [test_bpf]
+>   Call Trace:
+>   [f1b4dfe0] [00000002] 0x2 (unreliable)
+>   Instruction dump:
+>   XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>   XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX XXXXXXXX
+>   ---[ end trace 0000000000000000 ]---
+> 
+> [...]
 
-Yes, you are right.
-I will submit a v3 to add this change.
+Applied to powerpc/fixes.
 
-Thanks,
-Jiang
+[1/1] powerpc/bpf/32: Fix Oops on tail call tests
+      https://git.kernel.org/powerpc/c/89d21e259a94f7d5582ec675aa445f5a79f347e4
 
+cheers
