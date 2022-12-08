@@ -2,63 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 358AE6471C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:27:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BDF647150
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiLHO1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55442 "EHLO
+        id S229703AbiLHOHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:07:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiLHO1F (ORCPT
+        with ESMTP id S229602AbiLHOHQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:27:05 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC22A9D2DB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:26:31 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id bj12so4384985ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 06:26:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WG+56Z3TVRrxEPIxBZiy2gX7tIWbzFIIdfT6FtjtWvE=;
-        b=WN2X7CswpsMtAuwkX7IDc11VxiQWqLC1ZToC4WYuBAB4CDX8WU/zAucKuooMNbPsB5
-         34Gf9TJHTnOJoYAnlnZJtg2MQ+WWzBEg5v1GW3au1T+iYFjxpQypq7caW7EHvv7u3Vj3
-         hN1KdAwezCLIF7m6lQy88uPs65cRtdJ/UR+aQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WG+56Z3TVRrxEPIxBZiy2gX7tIWbzFIIdfT6FtjtWvE=;
-        b=J5z7If/KVsjkait9moRJ8CLVeLoXVUwgVTZFIvglDraW+oT9Q62AfHlTboVcmuVPn2
-         IQhxa7HkWWBIpld4aZ4IuV6ZK7ef4Z0h/XyO42us91BGAfcQXINbcbxwB0Vlo66ho2Aj
-         IAd171y0CEf5M28CMHg9mH2NfWVV596bcmcP4GtsSLGAY3Vw1mxPLfM+GIzmUlY1Unin
-         878xU3FWmzQeO6EJk3b3x8Bar7RVwzbIa/fu0V8JqBCIyB1v2bUqkWYL7KvRod1E8Avp
-         zY7qPLbcrK6TscDnpxSTkebGjHUiGri4ZT1e0RkqjUqF3AvXIE9Ra8hSHTDF0E/XcoRo
-         8MLA==
-X-Gm-Message-State: ANoB5pkxO0d6hlmNyVJywz3PtpgLxWUlUCNahun8kV4efMkDuQFD6+gh
-        514uNAU4985OP9patNb/7RG+68M87MQCXoXWSzgMWQ==
-X-Google-Smtp-Source: AA0mqf5sfaHaY+BCTcrTCFTAFsmwUqjwfOvqcwRtbf8YqXUa5OfvxzoV7Ii9iRxmWeI5egYjc7gpVCvKt8jB5qnByuk=
-X-Received: by 2002:a17:906:3ad6:b0:7ae:40b7:7fbe with SMTP id
- z22-20020a1709063ad600b007ae40b77fbemr76760198ejd.371.1670509590418; Thu, 08
- Dec 2022 06:26:30 -0800 (PST)
+        Thu, 8 Dec 2022 09:07:16 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34B3F018
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:07:14 -0800 (PST)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NSbV36Xm6zJpCN;
+        Thu,  8 Dec 2022 22:03:39 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 8 Dec
+ 2022 22:07:11 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <snitzer@redhat.com>, <agk@redhat.com>, <snitzer@kernel.org>,
+        <Martin.Wilck@suse.com>, <thornber@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>, <chengzhihao1@huawei.com>,
+        <yi.zhang@huawei.com>, <dm-devel@redhat.com>
+Subject: [dm-devel][PATCH -next] dm thin: Use last transaction's pmd->root when commit failed
+Date:   Thu, 8 Dec 2022 22:28:02 +0800
+Message-ID: <20221208142802.1479048-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <CAJfpegvrd2nsydG26stcmeEkdO1JLyeu69KrZs4dvVxXtoz42Q@mail.gmail.com>
- <20221114160209.1229849-1-tycho@tycho.pizza> <Y4TNI8+QVHFuzeZC@tycho.pizza>
-In-Reply-To: <Y4TNI8+QVHFuzeZC@tycho.pizza>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Thu, 8 Dec 2022 15:26:19 +0100
-Message-ID: <CAJfpegtckCReg7V6ET4a8EW_X-WfmANQdc4hP26bV9zoRrk7Wg@mail.gmail.com>
-Subject: Re: [PATCH v3] fuse: In fuse_flush only wait if someone wants the
- return code
-To:     Tycho Andersen <tycho@tycho.pizza>
-Cc:     Eric Biederman <ebiederm@xmission.com>,
-        linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        "Serge E . Hallyn" <serge@hallyn.com>
-Content-Type: multipart/mixed; boundary="000000000000bb56bc05ef51d27b"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,93 +46,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000bb56bc05ef51d27b
-Content-Type: text/plain; charset="UTF-8"
+Recently we found a softlock up problem in dm thin pool looking up btree
+caused by corrupted metadata:
+ Kernel panic - not syncing: softlockup: hung tasks
+ CPU: 7 PID: 2669225 Comm: kworker/u16:3
+ Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+ Workqueue: dm-thin do_worker [dm_thin_pool]
+ Call Trace:
+   <IRQ>
+   dump_stack+0x9c/0xd3
+   panic+0x35d/0x6b9
+   watchdog_timer_fn.cold+0x16/0x25
+   __run_hrtimer+0xa2/0x2d0
+   </IRQ>
+   RIP: 0010:__relink_lru+0x102/0x220 [dm_bufio]
+   __bufio_new+0x11f/0x4f0 [dm_bufio]
+   new_read+0xa3/0x1e0 [dm_bufio]
+   dm_bm_read_lock+0x33/0xd0 [dm_persistent_data]
+   ro_step+0x63/0x100 [dm_persistent_data]
+   btree_lookup_raw.constprop.0+0x44/0x220 [dm_persistent_data]
+   dm_btree_lookup+0x16f/0x210 [dm_persistent_data]
+   dm_thin_find_block+0x12c/0x210 [dm_thin_pool]
+   __process_bio_read_only+0xc5/0x400 [dm_thin_pool]
+   process_thin_deferred_bios+0x1a4/0x4a0 [dm_thin_pool]
+   process_one_work+0x3c5/0x730
 
-On Mon, 28 Nov 2022 at 16:01, Tycho Andersen <tycho@tycho.pizza> wrote:
->
-> Hi Milkos,
->
-> On Mon, Nov 14, 2022 at 09:02:09AM -0700, Tycho Andersen wrote:
-> > v3: use schedule_work() to avoid other sleeps in inode_write_now() and
-> >     fuse_sync_writes(). Fix a UAF of the stack-based inarg.
->
-> Thoughts on this version?
+Following process may generate a broken btree mixed with fresh and stale
+nodes, which could let dm thin trapped into an infinite loop while looking
+up data block:
+ Transaction 1: pmd->root = A, A->B->C   // One path in btree
+                pmd->root = X, X->Y->Z   // Copy-up
+ Transaction 2: X,Z is updated on disk, Y is written failed.
+                // Commit failed, dm thin becomes read-only.
+                process_bio_read_only
+		 dm_thin_find_block
+		  __find_block
+		   dm_btree_lookup(pmd->root)
+The pmd->root points to a broken btree, Y may contain stale node pointing
+to any block, for example X, which lets dm thin trapped into a dead loop
+while looking up Z.
 
-Skipping attr invalidation on success is wrong.  And there's still too
-much duplication, IMO.
+Fix it by setting pmd->root in __open_metadata(), so that dm thin will use
+last transaction's pmd->root if commit failed.
 
-How about the attached (untested) patch?
+Fetch a reproducer in [Link].
 
-Thanks,
-Miklos
+Linke: https://bugzilla.kernel.org/show_bug.cgi?id=216790
+Fixes: 991d9fa02da0 ("dm: add thin provisioning target")
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ drivers/md/dm-thin-metadata.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
---000000000000bb56bc05ef51d27b
-Content-Type: text/x-patch; charset="US-ASCII"; name="fuse-flush-async-if-exiting.patch"
-Content-Disposition: attachment; 
-	filename="fuse-flush-async-if-exiting.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_lbf676tf0>
-X-Attachment-Id: f_lbf676tf0
+diff --git a/drivers/md/dm-thin-metadata.c b/drivers/md/dm-thin-metadata.c
+index 1a62226ac34e..26c42ee183ed 100644
+--- a/drivers/md/dm-thin-metadata.c
++++ b/drivers/md/dm-thin-metadata.c
+@@ -724,6 +724,15 @@ static int __open_metadata(struct dm_pool_metadata *pmd)
+ 		goto bad_cleanup_data_sm;
+ 	}
+ 
++	/*
++	 * For pool metadata opening process, root setting is redundant
++	 * because it will be set again in __begin_transaction(). But dm
++	 * pool aborting process really needs to get last transaction's
++	 * root in case accessing broken btree.
++	 */
++	pmd->root = le64_to_cpu(disk_super->data_mapping_root);
++	pmd->details_root = le64_to_cpu(disk_super->device_details_root);
++
+ 	__setup_btree_details(pmd);
+ 	dm_bm_unlock(sblock);
+ 
+-- 
+2.31.1
 
-LS0tCiBmcy9mdXNlL2ZpbGUuYyB8ICAgODkgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
-KysrKysrKysrKy0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgNjMgaW5zZXJ0aW9u
-cygrKSwgMjYgZGVsZXRpb25zKC0pCgotLS0gYS9mcy9mdXNlL2ZpbGUuYworKysgYi9mcy9mdXNl
-L2ZpbGUuYwpAQCAtMTgsNiArMTgsNyBAQAogI2luY2x1ZGUgPGxpbnV4L2ZhbGxvYy5oPgogI2lu
-Y2x1ZGUgPGxpbnV4L3Vpby5oPgogI2luY2x1ZGUgPGxpbnV4L2ZzLmg+CisjaW5jbHVkZSA8bGlu
-dXgvZmlsZS5oPgogCiBzdGF0aWMgaW50IGZ1c2Vfc2VuZF9vcGVuKHN0cnVjdCBmdXNlX21vdW50
-ICpmbSwgdTY0IG5vZGVpZCwKIAkJCSAgdW5zaWduZWQgaW50IG9wZW5fZmxhZ3MsIGludCBvcGNv
-ZGUsCkBAIC00NzcsNDggKzQ3OCwzNiBAQCBzdGF0aWMgdm9pZCBmdXNlX3N5bmNfd3JpdGVzKHN0
-cnVjdCBpbm9kCiAJZnVzZV9yZWxlYXNlX25vd3JpdGUoaW5vZGUpOwogfQogCi1zdGF0aWMgaW50
-IGZ1c2VfZmx1c2goc3RydWN0IGZpbGUgKmZpbGUsIGZsX293bmVyX3QgaWQpCi17Ci0Jc3RydWN0
-IGlub2RlICppbm9kZSA9IGZpbGVfaW5vZGUoZmlsZSk7Ci0Jc3RydWN0IGZ1c2VfbW91bnQgKmZt
-ID0gZ2V0X2Z1c2VfbW91bnQoaW5vZGUpOwotCXN0cnVjdCBmdXNlX2ZpbGUgKmZmID0gZmlsZS0+
-cHJpdmF0ZV9kYXRhOworc3RydWN0IGZ1c2VfZmx1c2hfYXJncyB7CisJc3RydWN0IGZ1c2VfYXJn
-cyBhcmdzOwogCXN0cnVjdCBmdXNlX2ZsdXNoX2luIGluYXJnOwotCUZVU0VfQVJHUyhhcmdzKTsK
-LQlpbnQgZXJyOwotCi0JaWYgKGZ1c2VfaXNfYmFkKGlub2RlKSkKLQkJcmV0dXJuIC1FSU87CisJ
-c3RydWN0IHdvcmtfc3RydWN0IHdvcms7CisJc3RydWN0IGZpbGUgKmZpbGU7Cit9OwogCi0JaWYg
-KGZmLT5vcGVuX2ZsYWdzICYgRk9QRU5fTk9GTFVTSCAmJiAhZm0tPmZjLT53cml0ZWJhY2tfY2Fj
-aGUpCi0JCXJldHVybiAwOworc3RhdGljIGludCBmdXNlX2RvX2ZsdXNoKHN0cnVjdCBmdXNlX2Zs
-dXNoX2FyZ3MgKmZhKQoreworCWludCBlcnI7CisJc3RydWN0IGlub2RlICppbm9kZSA9IGZpbGVf
-aW5vZGUoZmEtPmZpbGUpOworCXN0cnVjdCBmdXNlX21vdW50ICpmbSA9IGdldF9mdXNlX21vdW50
-KGlub2RlKTsKIAogCWVyciA9IHdyaXRlX2lub2RlX25vdyhpbm9kZSwgMSk7CiAJaWYgKGVycikK
-LQkJcmV0dXJuIGVycjsKKwkJZ290byBvdXQ7CiAKIAlpbm9kZV9sb2NrKGlub2RlKTsKIAlmdXNl
-X3N5bmNfd3JpdGVzKGlub2RlKTsKIAlpbm9kZV91bmxvY2soaW5vZGUpOwogCi0JZXJyID0gZmls
-ZW1hcF9jaGVja19lcnJvcnMoZmlsZS0+Zl9tYXBwaW5nKTsKKwllcnIgPSBmaWxlbWFwX2NoZWNr
-X2Vycm9ycyhmYS0+ZmlsZS0+Zl9tYXBwaW5nKTsKIAlpZiAoZXJyKQotCQlyZXR1cm4gZXJyOwor
-CQlnb3RvIG91dDsKIAogCWVyciA9IDA7CiAJaWYgKGZtLT5mYy0+bm9fZmx1c2gpCiAJCWdvdG8g
-aW52YWxfYXR0cl9vdXQ7CiAKLQltZW1zZXQoJmluYXJnLCAwLCBzaXplb2YoaW5hcmcpKTsKLQlp
-bmFyZy5maCA9IGZmLT5maDsKLQlpbmFyZy5sb2NrX293bmVyID0gZnVzZV9sb2NrX293bmVyX2lk
-KGZtLT5mYywgaWQpOwotCWFyZ3Mub3Bjb2RlID0gRlVTRV9GTFVTSDsKLQlhcmdzLm5vZGVpZCA9
-IGdldF9ub2RlX2lkKGlub2RlKTsKLQlhcmdzLmluX251bWFyZ3MgPSAxOwotCWFyZ3MuaW5fYXJn
-c1swXS5zaXplID0gc2l6ZW9mKGluYXJnKTsKLQlhcmdzLmluX2FyZ3NbMF0udmFsdWUgPSAmaW5h
-cmc7Ci0JYXJncy5mb3JjZSA9IHRydWU7Ci0KLQllcnIgPSBmdXNlX3NpbXBsZV9yZXF1ZXN0KGZt
-LCAmYXJncyk7CisJZXJyID0gZnVzZV9zaW1wbGVfcmVxdWVzdChmbSwgJmZhLT5hcmdzKTsKIAlp
-ZiAoZXJyID09IC1FTk9TWVMpIHsKIAkJZm0tPmZjLT5ub19mbHVzaCA9IDE7CiAJCWVyciA9IDA7
-CkBAIC01MzEsOSArNTIwLDU3IEBAIHN0YXRpYyBpbnQgZnVzZV9mbHVzaChzdHJ1Y3QgZmlsZSAq
-ZmlsZSwKIAkgKi8KIAlpZiAoIWVyciAmJiBmbS0+ZmMtPndyaXRlYmFja19jYWNoZSkKIAkJZnVz
-ZV9pbnZhbGlkYXRlX2F0dHJfbWFzayhpbm9kZSwgU1RBVFhfQkxPQ0tTKTsKKworb3V0OgorCWZw
-dXQoZmEtPmZpbGUpOworCWtmcmVlKGZhKTsKIAlyZXR1cm4gZXJyOwogfQogCitzdGF0aWMgdm9p
-ZCBmdXNlX2ZsdXNoX2FzeW5jKHN0cnVjdCB3b3JrX3N0cnVjdCAqd29yaykKK3sKKwlzdHJ1Y3Qg
-ZnVzZV9mbHVzaF9hcmdzICpmYSA9IGNvbnRhaW5lcl9vZih3b3JrLCB0eXBlb2YoKmZhKSwgd29y
-ayk7CisKKwlmdXNlX2RvX2ZsdXNoKGZhKTsKK30KKworc3RhdGljIGludCBmdXNlX2ZsdXNoKHN0
-cnVjdCBmaWxlICpmaWxlLCBmbF9vd25lcl90IGlkKQoreworCXN0cnVjdCBmdXNlX2ZsdXNoX2Fy
-Z3MgKmZhOworCXN0cnVjdCBpbm9kZSAqaW5vZGUgPSBmaWxlX2lub2RlKGZpbGUpOworCXN0cnVj
-dCBmdXNlX21vdW50ICpmbSA9IGdldF9mdXNlX21vdW50KGlub2RlKTsKKwlzdHJ1Y3QgZnVzZV9m
-aWxlICpmZiA9IGZpbGUtPnByaXZhdGVfZGF0YTsKKworCWlmIChmdXNlX2lzX2JhZChpbm9kZSkp
-CisJCXJldHVybiAtRUlPOworCisJaWYgKGZmLT5vcGVuX2ZsYWdzICYgRk9QRU5fTk9GTFVTSCAm
-JiAhZm0tPmZjLT53cml0ZWJhY2tfY2FjaGUpCisJCXJldHVybiAwOworCisJZmEgPSBremFsbG9j
-KHNpemVvZigqZmEpLCBHRlBfS0VSTkVMKTsKKwlpZiAoIWZhKQorCQlyZXR1cm4gLUVOT01FTTsK
-KworCWZhLT5pbmFyZy5maCA9IGZmLT5maDsKKwlmYS0+aW5hcmcubG9ja19vd25lciA9IGZ1c2Vf
-bG9ja19vd25lcl9pZChmbS0+ZmMsIGlkKTsKKwlmYS0+YXJncy5vcGNvZGUgPSBGVVNFX0ZMVVNI
-OworCWZhLT5hcmdzLm5vZGVpZCA9IGdldF9ub2RlX2lkKGlub2RlKTsKKwlmYS0+YXJncy5pbl9u
-dW1hcmdzID0gMTsKKwlmYS0+YXJncy5pbl9hcmdzWzBdLnNpemUgPSBzaXplb2YoZmEtPmluYXJn
-KTsKKwlmYS0+YXJncy5pbl9hcmdzWzBdLnZhbHVlID0gJmZhLT5pbmFyZzsKKwlmYS0+YXJncy5m
-b3JjZSA9IHRydWU7CisJZmEtPmZpbGUgPSBnZXRfZmlsZShmaWxlKTsKKworCS8qIERvbid0IHdh
-aXQgaWYgdGhlIHRhc2sgaXMgZXhpdGluZyAqLworCWlmIChjdXJyZW50LT5mbGFncyAmIFBGX0VY
-SVRJTkcpIHsKKwkJSU5JVF9XT1JLKCZmYS0+d29yaywgZnVzZV9mbHVzaF9hc3luYyk7CisJCXNj
-aGVkdWxlX3dvcmsoJmZhLT53b3JrKTsKKwkJcmV0dXJuIDA7CisJfQorCisJcmV0dXJuIGZ1c2Vf
-ZG9fZmx1c2goZmEpOworfQorCiBpbnQgZnVzZV9mc3luY19jb21tb24oc3RydWN0IGZpbGUgKmZp
-bGUsIGxvZmZfdCBzdGFydCwgbG9mZl90IGVuZCwKIAkJICAgICAgaW50IGRhdGFzeW5jLCBpbnQg
-b3Bjb2RlKQogewo=
---000000000000bb56bc05ef51d27b--
