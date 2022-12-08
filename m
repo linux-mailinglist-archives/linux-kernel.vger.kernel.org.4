@@ -2,176 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29CF6477DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0387F6477E0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiLHVVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S229738AbiLHVWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:22:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLHVVe (ORCPT
+        with ESMTP id S229545AbiLHVWQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:21:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B75F25E1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:20:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670534433;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=gdt6sN4IybB7crh5R7stYpZnodJiuuI/ros/sx/Fs0k=;
-        b=NAEkz83zId7gACH/Fa4ETOS+C+RD1K52qLcKBU4jbx7J4tGLl+3F/OViLXK2hkMObL0uN5
-        skrEN4iyYJS9grZEAu/jLy3awhSl4MR3jQHID8V2uVmZ1UdXTbYbiPtAf4d8yNs+osBuPc
-        U+THvFgomjW6GLzWs6trovKoGsiTbPM=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-548-T7IGd3MPPM2h_oJb87axIg-1; Thu, 08 Dec 2022 16:20:32 -0500
-X-MC-Unique: T7IGd3MPPM2h_oJb87axIg-1
-Received: by mail-qk1-f198.google.com with SMTP id x2-20020a05620a448200b006fa7dad5c1cso2873897qkp.10
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:20:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gdt6sN4IybB7crh5R7stYpZnodJiuuI/ros/sx/Fs0k=;
-        b=bFkNmJSFDRDWv0aYJNIN+7O42/h3AfG/x3Aad5kX2HXh9aZx7Qq/f7JngArtdEX4Oz
-         ke07+wqffclYKBk1heuMBK9mb+U6uam1XtC7Yx/6j0jm6TlStTCJ3pPpjwVH8fvwXe8X
-         ZoY5uZ+ZJxcibcPRGo712XXY0x3f6dDmbSaDDrDwJnjEDKvbobV+4jjimzQgd2z/wj40
-         +C4mR4bYZheDxWI/UvAcRWHj3xhkLkDanJHkIrh339ssleNapiWuLirWg6f9UMbPnc2l
-         U0efTjMbLf5lpXHP8G5Pk0bCckHACkOHnWvvF07P2Dq3pu+/MfLgEG3ehwyoypvm/Tnq
-         uMnw==
-X-Gm-Message-State: ANoB5pk2g6Rx5Nf3MVZ5CirBxyLZsMdrRvIeh+QV92TY/4RvgRPqHCxP
-        b6Zz6XAEYMVqYWrc6+hhRAUOlVMtsueKIZAqDSghtHPPElCrA/nOuLbp2EgkUu/f5BYQUO4cd1c
-        k/YD4A9PbjMdxGJwtT1YdVtHJ
-X-Received: by 2002:ac8:5386:0:b0:3a5:7036:b838 with SMTP id x6-20020ac85386000000b003a57036b838mr5168752qtp.33.1670534431147;
-        Thu, 08 Dec 2022 13:20:31 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5u4IKVKdDpiMUh91B1+jG0P07DsxqalynZ1vRQCxfobY15hLx4DV38bB3WC0AkLIIUlb+esQ==
-X-Received: by 2002:ac8:5386:0:b0:3a5:7036:b838 with SMTP id x6-20020ac85386000000b003a57036b838mr5168729qtp.33.1670534430846;
-        Thu, 08 Dec 2022 13:20:30 -0800 (PST)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id l15-20020a37f90f000000b006fc447eebe5sm19578767qkj.27.2022.12.08.13.20.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 13:20:29 -0800 (PST)
-Date:   Thu, 8 Dec 2022 16:20:27 -0500
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Muchun Song <songmuchun@bytedance.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Jann Horn <jannh@google.com>, Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH v2 08/10] mm/hugetlb: Make walk_hugetlb_range() safe to
- pmd unshare
-Message-ID: <Y5JVG0NcwALONT8X@x1n>
-References: <20221207203034.650899-1-peterx@redhat.com>
- <20221207203034.650899-9-peterx@redhat.com>
- <a9cbfa20-b83d-203c-85ef-77ffe9445913@redhat.com>
- <Y5JNXomE5eGo8DyF@x1n>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Thu, 8 Dec 2022 16:22:16 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B69725E1;
+        Thu,  8 Dec 2022 13:22:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670534536; x=1702070536;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Ff/+2tblImZK/RA95aX3/IFBUvrsHeGCHt+k4u6AqMo=;
+  b=MZdLkLgOd8jL7yzdCLymn/Mw+oSzgsukotPM0ZuyaI5AtByL8+LpHXQr
+   rzubmDetpDzxELoZnX+J0HBjjVgbiMi6kluxlkiLS0TKWkiW3OcCn7gU3
+   7TH71MIwMJDYIBPfogua3WDnoNT0vWCkKB9qOj+JBPGmKR1ohu3itgpk4
+   tdnh8K032EaZ8H5o5cNq3kSKpJU4toS6bbSs0Ikmv1buJqNO87y66kOxh
+   LpwVbN7bc2sXFe87si5A5hvlTgx2COtuQhAb4uWmD3+wbsQ4WLgBo3egF
+   3dvn9pysHWwwTM/QEEYsuHIMNyLNdRAzVyVT9Th13j9hU46jo11mSEbh9
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="300726692"
+X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
+   d="scan'208";a="300726692"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 13:22:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="640789445"
+X-IronPort-AV: E=Sophos;i="5.96,228,1665471600"; 
+   d="scan'208";a="640789445"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga007.jf.intel.com with ESMTP; 08 Dec 2022 13:22:13 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 8 Dec 2022 13:22:11 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Thu, 8 Dec 2022 13:22:10 -0800
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Thu, 8 Dec 2022 13:22:10 -0800
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.40) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Thu, 8 Dec 2022 13:22:10 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C18S6VFZxCpPK6T9z2zYgwP5EgqcY7ShcxxqgDDQWvqmU84OYdMgsDf6z/GyypGmJZ+Oe1C1HCydhuOzLDT9x38I9ClO1kZwGZbuS2jK2SAHO4U6XQtqG9/mTa6u7OdLzNaI4CLJw2FOWGEK5WNVFI56nIkYBOHFcBOyTbRrwcPQoj9GFPIqYxcvZSxDQkyqowICAyTLoBHRb72pvGSrZCVaZHrExXL3qET0cE6rDehVlEYKCMVdV1Pzhk/cCfd3IILLEF9FwpwrBGNEihZx8B70eZEBovxFpg2prPB/B0EQAR5aWNv/Pn/Oow5LxVjmnobYCjBf/vp3N7dOhZIiuQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HuLksp6aTww0oQwEvkF8AL5COdJyTOqGALt0I3Wiohc=;
+ b=mqzxo8xVGokt2/iPSzC7uPVAtc+UvVyJBFTVrBlHxui1f8xikiq8GxtPpvPiNhC/SjgJ6I1ZPLuw1Aza3Uo3vRXq2cE+Ev8T0zJWHL4BVN/AxqST839nKxMW0SdYfNRp6PHOg1jbAJ+jqMbfsdcx+tupvScN6OPDlMOSnkXuZrdpR2QM/5TrZyL7XzP7h8zx3wMOPkOnn2iHaSTDwAQYhqmUHqZ49cE6t+XRltuWnF9Vrhu2MQRq8zcuuBDgEM/k0b18oOkrW+Q0RfX3H2ejH+9yAPkUoY7BkvfHpzN1bQOYyP1/RJf3433V98Y9WzB0rFXaMVqkgOGVcWsacEyjew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20) by DS0PR11MB7926.namprd11.prod.outlook.com
+ (2603:10b6:8:f9::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
+ 2022 21:22:08 +0000
+Received: from MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::340d:cb77:604d:b0b]) by MWHPR1101MB2126.namprd11.prod.outlook.com
+ ([fe80::340d:cb77:604d:b0b%9]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
+ 21:22:07 +0000
+Date:   Thu, 8 Dec 2022 13:22:04 -0800
+From:   Dan Williams <dan.j.williams@intel.com>
+To:     Fan Ni <fan.ni@samsung.com>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     "alison.schofield@intel.com" <alison.schofield@intel.com>,
+        "vishal.l.verma@intel.com" <vishal.l.verma@intel.com>,
+        "ira.weiny@intel.com" <ira.weiny@intel.com>,
+        "bwidawsk@kernel.org" <bwidawsk@kernel.org>,
+        "Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+        "dan.carpenter@oracle.com" <dan.carpenter@oracle.com>,
+        "linux-cxl@vger.kernel.org" <linux-cxl@vger.kernel.org>,
+        Adam Manzanares <a.manzanares@samsung.com>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cxl/region: Fix memdev reuse check
+Message-ID: <6392557cc0aeb_3cbe02945b@dwillia2-xfh.jf.intel.com.notmuch>
+References: <CGME20221107212232uscas1p20a000834b76db7a7e459708b06638120@uscas1p2.samsung.com>
+ <20221107212153.745993-1-fan.ni@samsung.com>
+ <63699774d1af_18432294b8@dwillia2-xfh.jf.intel.com.notmuch>
+ <20221207001852.GA2414318@bgt-140510-bm03>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Y5JNXomE5eGo8DyF@x1n>
+In-Reply-To: <20221207001852.GA2414318@bgt-140510-bm03>
+X-ClientProxiedBy: BY5PR17CA0018.namprd17.prod.outlook.com
+ (2603:10b6:a03:1b8::31) To MWHPR1101MB2126.namprd11.prod.outlook.com
+ (2603:10b6:301:50::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWHPR1101MB2126:EE_|DS0PR11MB7926:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e86a8b0-e694-4f1c-389a-08dad9624271
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J/81OO8hfehSvECxhuOx6kVE8cid7S1red6WkLMKJoYRK5uYLiedRrdAEE0bm6tBEaO4iG+Flo7qi0hwM6E+0oKDH9DPDkc/BgJZ19J0I7lpI693bVwOBqUGMfa/EmsmRiItEleGhZr4Ey5xzXiA6vd749ni8sFNIlseDCox+BLMU20/vs2cvwm0fNlkjJ1639TeMLG4VEsUlp+TwKt7j9ZWNqR095fYWVH7gFr1KxK/UIHF0magjmGBVey8lh62RB6JIFmH4FMNA1QUl7TUr2USpyTW0ryG93knMp0Ak/Hdv8odZrkS1EZ604h+8AkAxz86TCHhiDUWIku+4hASCfiRGyjD+XPwyoszYYVP0qEyb1LC1SN7usKRRHxZ11jMrwfxUkx6f83jPiJuk0oLl3Z/2PtJ0X9D0R0iRgMyU5jNcR9X7H2db874RqiZqu8XhXHMgtr6GowBKu/YuRcsRI4NiT8UwjN4xNVo0GREG8yJ6YAtu1feR6KnK9QofY0NtkQEyzRhYgLUGqCQWAq7g8frccR2ZzOtUI3yn7TONglXnuSBeKLXqEJ/aJuQhoNGNfVDyhyRvZTnSpc4Lt/q/OWbTENi9uY9ullIBf04FuCnfNPbEL8pKKtWMzuBmTjUvzAHdogGpZbB51t6Lvm53g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1101MB2126.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(366004)(396003)(136003)(39860400002)(451199015)(54906003)(8676002)(110136005)(41300700001)(4326008)(8936002)(66476007)(316002)(66556008)(66946007)(82960400001)(38100700002)(6486002)(478600001)(6666004)(9686003)(6506007)(86362001)(26005)(6512007)(186003)(2906002)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GoAquaqOKp1WE4KnUs2wAL4z2T/uhmKcJF7EDhn2x6uTiJMFMywSF/NNjYo+?=
+ =?us-ascii?Q?ISHUd7nFxGe6kBOLA7K/cCeTUbibtU8k1C1/ZwxaApbKcN5GODxnNUiYv2bh?=
+ =?us-ascii?Q?j8+84uItax9Iyx3Fac0XxMkENJidKg1z+af1Jzqy4TOm2OuIRdinXX+s5E39?=
+ =?us-ascii?Q?uo25jhQrZlzvEIAGcatxHLLOUHEupP3PJjorTmGq5aFOEGem4LlAotfrRqrN?=
+ =?us-ascii?Q?5dzHy7F2ARrZZhfowUVoJrJ0nDpiIQcuhG5lWlRbugeJG7uKwsjklwZGjfhJ?=
+ =?us-ascii?Q?0/XBnanYoayUvcVsSdpw/DpK5v+sWMR7Y+jcmvjqBNL1RI0Ra9PG34xsSU7i?=
+ =?us-ascii?Q?+6KmaWxg7w9VSyGbf0M0drS2bEKzPBhmPuCRyvkQh+eMDyl+WFYt4Rz+MX7L?=
+ =?us-ascii?Q?9Z2pD48dPCeSEYxE/V7D87ivk2W5QUFF/QkB6ogEqzumF0aXUshYEw9eLo7x?=
+ =?us-ascii?Q?kkfqeG9m5T1umcrRtRAZm03tzrhf2QLCwr3UgllQke7znR9EWmAj9STnuiHx?=
+ =?us-ascii?Q?S6xON48ypWY/i3V1+6Gw43BsY4eWPQ2VEvxTkHqEeu9iK6RTsp/JUB/z/zWk?=
+ =?us-ascii?Q?0aHGpvg7zu7M6LCLCxi4FRAMytAV2KAVqu+I4zB2yQFGhixy7jq0N8tuOPjZ?=
+ =?us-ascii?Q?hWxSKdMqhfrogwbUuw75lNAUpZ01xEUk1P+2xs8ywVCJ5jgeviI6+IjQ3Lw+?=
+ =?us-ascii?Q?Rb3LxGFuY13iLSUUTlBqfecMssDVnin7JDDsAVN6Ziuk0C/Aub/uz5WKRYBf?=
+ =?us-ascii?Q?6KYlk/cc+YHZkNXMDlQkONzDtQuRBLf5uVJhxIrSSE5A5l89zNEhtB8rp2+1?=
+ =?us-ascii?Q?ODsrMUgjPGTTzz+e4m97/DAG+ttugI2jQ8KJFK3MzNM/cq05YAFb/eDWiupO?=
+ =?us-ascii?Q?goMpCGCgRwsbGfNOBkH+fPAiIEiDblspsDjlm2IEeW5TTtlZ13XmNNlPbVzs?=
+ =?us-ascii?Q?WoTAQ6lrkh+HqbzZ4YuimdGttRRqGH2HeEEXxE8MetbMi5kPB6vPYfUf5Slt?=
+ =?us-ascii?Q?QB1WQfT0P+otclEzsqRVEENi+JHgYPuQlVq80caiirEJ17pkIbVCSrkqGkYP?=
+ =?us-ascii?Q?LvpOpkLi7bcoZ0gEo0BfIAlLle+ooee+c82yLyEEUUD4AdouEKif+pRDoNuR?=
+ =?us-ascii?Q?p5tW28lgETWlgS1GGOfjVGPE2k7LXfJZQK1C8nqa1uyXw/9C8ZmbT3r5fXnw?=
+ =?us-ascii?Q?7x0q0NxljfK0JhtIR2NImWJoO89EMZi08edhexBwtNnjNIa9ECs7QTYriW45?=
+ =?us-ascii?Q?20SYy5udBVGyoalWsImwraSSXTtI2j47krNzzeFGKTZyPqVVC8eJd4GMFvSI?=
+ =?us-ascii?Q?q2PuVLb1FT2Gwfil7yhXPI9+WFfJh0CenosI3cZXJjPZwzBq5ZsRJbFDVhT4?=
+ =?us-ascii?Q?XtmcmVCnqYYx6dS0cYmJrT2iKKadGJsxhRZmELiK3G8uVm4TEzMCbrBrM/K8?=
+ =?us-ascii?Q?4TZniGRqtIBWwP39zwcq5YWsbi9bYB9ttd/wLs6KJC9n7aMjDpMMZ5HeO2b2?=
+ =?us-ascii?Q?tw5mMmn00gFi8O4I78rztSTSdjM4xKWJgjvpiR6c14VgpQXFj15yIAa2xwRX?=
+ =?us-ascii?Q?kspVashH2l/U3UQHBCWbSY/u0EEvjCjjD0v2Fr8dGitOiQl6PJcQ7wwHajXa?=
+ =?us-ascii?Q?Fg=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e86a8b0-e694-4f1c-389a-08dad9624271
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1101MB2126.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 21:22:07.3116
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kZ1CWdboSPfjO67rXozNOhJodOKnkV5Gzy7nOBFq/5x/7hQPsmYzIdJbkkL2qU9zQ0QSGUsrq8BftPAuSVn9c/G8U4vjFYclim2RjmFMixk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7926
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 03:47:26PM -0500, Peter Xu wrote:
-> On Thu, Dec 08, 2022 at 02:14:42PM +0100, David Hildenbrand wrote:
-> > On 07.12.22 21:30, Peter Xu wrote:
-> > > Since walk_hugetlb_range() walks the pgtable, it needs the vma lock
-> > > to make sure the pgtable page will not be freed concurrently.
-> > > 
-> > > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > > ---
-> > >   arch/s390/mm/gmap.c      |  2 ++
-> > >   fs/proc/task_mmu.c       |  2 ++
-> > >   include/linux/pagewalk.h | 11 ++++++++++-
-> > >   mm/hmm.c                 | 15 ++++++++++++++-
-> > >   mm/pagewalk.c            |  2 ++
-> > >   5 files changed, 30 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/arch/s390/mm/gmap.c b/arch/s390/mm/gmap.c
-> > > index 8947451ae021..292a54c490d4 100644
-> > > --- a/arch/s390/mm/gmap.c
-> > > +++ b/arch/s390/mm/gmap.c
-> > > @@ -2643,7 +2643,9 @@ static int __s390_enable_skey_hugetlb(pte_t *pte, unsigned long addr,
-> > >   	end = start + HPAGE_SIZE - 1;
-> > >   	__storage_key_init_range(start, end);
-> > >   	set_bit(PG_arch_1, &page->flags);
-> > > +	hugetlb_vma_unlock_read(walk->vma);
-> > >   	cond_resched();
-> > > +	hugetlb_vma_lock_read(walk->vma);
-> > >   	return 0;
-> > >   }
-> > > diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> > > index e35a0398db63..cf3887fb2905 100644
-> > > --- a/fs/proc/task_mmu.c
-> > > +++ b/fs/proc/task_mmu.c
-> > > @@ -1613,7 +1613,9 @@ static int pagemap_hugetlb_range(pte_t *ptep, unsigned long hmask,
-> > >   			frame++;
-> > >   	}
-> > > +	hugetlb_vma_unlock_read(walk->vma);
-> > >   	cond_resched();
-> > > +	hugetlb_vma_lock_read(walk->vma);
+Fan Ni wrote:
+> On Mon, Nov 07, 2022 at 03:40:36PM -0800, Dan Williams wrote:
+> 
+> > Fan Ni wrote:
+> > > Memdev reuse in a region currently does not iterate over all of the
+> > > interleave targets. Fix this by using existing iterator for memdev reuse
+> > > check.
 > > 
-> > We already hold the mmap_lock and reschedule. Even without the
-> > cond_resched() we might happily reschedule on a preemptive kernel. So I'm
-> > not sure if this optimization is strictly required or even helpful in
-> > practice here.
-> 
-> It's just low hanging fruit if we need that complexity anyway.
-> 
-> That's also why I didn't do that for v1 (where I missed hmm special case,
-> though..), but I think since we'll need that anyway, we'd better release
-> the vma lock if we can easily do so.
-> 
-> mmap_lock is just more special because it needs more work in the caller to
-> release (e.g. vma invalidations).  Otherwise I'm happy dropping that too.
-> 
+> > Not enough detail, what does this actually fix in practice? For example,
+> > if an end user encountered this bug, what would they see as the
+> > symptoms?  I could probably figure out, but for bugs I should not have
+> > to, and more importantly downstream OSV kernel maintainers, who do not
+> > have the same context as CXL developers, also need that information to
+> > decide if this is a fix they want to backport into their kernel.
 > > 
-> > In the worst case, concurrent unsharing would have to wait.
-> > For example, s390_enable_skey() is called at most once for a VM, for most
-> > VMs it gets never even called.
-> > 
-> > Or am I missing something important?
 > 
-> Nothing important.  I just don't see why we need to strictly follow the
-> same release rule of mmap_lock here when talking about vma lock.
+> Hi Dan,
+> Thanks for the feedback. Here are more details about the patch, and
+> I will refine the patch.
 > 
-> In short - if we can drop a lock earlier before sleep, why not?
+> cxlmd_target = cxled_to_memdev(cxled_target);
+> if (cxlmd_target == cxlmd) {
+> 	dev_dbg(&cxlr->dev,
+> 			"%s already specified at position %d via: %s\n",
+> 			dev_name(&cxlmd->dev), pos,
+> 			dev_name(&cxled_target->cxld.dev));
+> 	return -EBUSY;
+> }
 > 
-> I tend to just keep it as-is, but let me know if you have further thoughts
-> or concerns.
+> Before the patch, the check of whether or not a memdev has already been
+> used as a target for the region (above code piece) will always be skipped.
+> Given a memdev with more than one HDM decoder, an interleaved region can be
+> created that maps multiple HPAs to the same DPA. According to CXL spec 3.0
+> 8.1.3.8.4, "Aliasing (mapping more than one Host Physical Address (HPA) to a
+> single Device Physical Address) is forbidden."
+> 
+> The CXL specification allows a device to have more than one HDM decoder
+> ("The number of decoders implemented by a component are enumerated via the CXL
+>  HDM Decoder Capability register (see Section 8.2.4.19.1"). If a CXL device
+>  has multiple HDM decoders the current code allows to create memory regions
+>  that map multiple HPAs to a single DPA.
+> 
+> Fan
 
-One thing I can do better here is:
-
--       cond_resched();
-+
-+       if (need_resched()) {
-+               hugetlb_vma_unlock_read(walk->vma);
-+               cond_resched();
-+               hugetlb_vma_lock_read(walk->vma);
-+       }
-+
-
-It's a pity we don't have rwsem version of cond_resched_rwlock_read(), or
-it'll be even cleaner.
-
--- 
-Peter Xu
-
+Thanks for this explanation I folded this into the changelog and applied
+it for v6.2.
