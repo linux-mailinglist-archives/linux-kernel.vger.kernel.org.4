@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD2C646B80
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:08:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7F9C646B91
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:10:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiLHJIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S230319AbiLHJKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:10:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiLHJIN (ORCPT
+        with ESMTP id S230043AbiLHJJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:08:13 -0500
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEB74B775
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:07:58 -0800 (PST)
-Received: by mail-pj1-x1030.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4037346pjt.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:07:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JAAXRXPDf8By1YBPFI9GoJQjrKKS1JFL4TS12ITW2AA=;
-        b=L2aZ681VQn0PT/5g4s+wvARgOx7f69+jSd9jFqblkrKTpSc6ASwygnzE1TpNCW4jEd
-         a0alh9tWpcWx9x83KWAAxkftHfzQv2p8ggpRJZKI/nnStWMj2muCaAa3lTL2Wibx4a1L
-         PKmX0djGN/IWzPWiMnNdtc5wD6w5Rl8RK+uG4F0FB5splcZwj2STOehPRQmvWUDmBoGF
-         WLk+1O+FHTFyu7RWcUrart1iPs1VwxZr9MAMN4U5T5IGxKdYaDmvz1urxm8U48JbawDK
-         u/Hr1FxsUc6EITZkU+OG2IBh9oYIUxk78bvuPQMmAad60nCzoxEFA5dBHbRQTkKnIzW/
-         WfSQ==
+        Thu, 8 Dec 2022 04:09:41 -0500
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C6F115E;
+        Thu,  8 Dec 2022 01:09:14 -0800 (PST)
+Received: by mail-qk1-f169.google.com with SMTP id k3so389688qki.13;
+        Thu, 08 Dec 2022 01:09:14 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JAAXRXPDf8By1YBPFI9GoJQjrKKS1JFL4TS12ITW2AA=;
-        b=3NO4avuxH936mwxxWNPfn0A6hn9sF842T1oI0gp1n6Td3U9sk/2zlquyP5H74AQwSF
-         pr2AV7wfnTOjuGHggXBqRZEXjZn3Gd/rV2YjiPnYMxoI3sge72hmpK4qI41oP/PWRxSQ
-         na6cJ/vmxYekUqYptL6EWY1bS5snm5RAjt0dfIU7Uod2LpPRnXhUCNF2m741CHalAW8P
-         EMiG7ppD9J9PGnxxztWlur9FxZhTrv8DVa0CF5OJYFYJMDARLzjh0MmDWYHaXLenkSVE
-         cvHUjSL7RDDo7aUFm8j4JyrqfS9zTt8VZlMKMYzkD0nxw79yeE+5NM705NMQSyx+n9At
-         OYXQ==
-X-Gm-Message-State: ANoB5pknU8XMoiAAbe6i3vVfm70/1lB44K1RItBVdcPwz44sy5jmkrCG
-        VFwmDDA1QcU2S+XzFCB10mnWPQ==
-X-Google-Smtp-Source: AA0mqf4XnDelqKwHk+AlhrqP3sZga8kbmJgxknbqEAaViROY98UPY+OA9VhA/lfjDQYc47g2y2ik4Q==
-X-Received: by 2002:a17:90b:19c2:b0:21c:6ee5:3b83 with SMTP id nm2-20020a17090b19c200b0021c6ee53b83mr573445pjb.93.1670490477947;
-        Thu, 08 Dec 2022 01:07:57 -0800 (PST)
-Received: from [10.94.58.189] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id f15-20020a170902ce8f00b00189947bd9f7sm16152303plg.50.2022.12.08.01.07.54
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GX7yoUJ5UVZ3SHZOJ/FiTU1z5/uRyGEiAnkth1oZIWc=;
+        b=R32eRC3eN2Q/wcD8aDFGZpNNl001yhOpDRho97ztCblTGuFZgvJcn21SPykwg7fFwI
+         Dyj2ClmsJFxY/0kn50rgGMhburszagOnwmIvHipbmD/vxoplFTKIkIz9zyIj4/iOYxaS
+         vMhMMhhsIqSyx0EXFuisgBJ7KS5YFs3j8ZvMqnhbtfjKoHt7nHYKgR+zMePlsWLKJQGA
+         EtGDW4lS3+7/vpg6eefFgk+uAtVGIBRsdZVE8yYw+zj6/ce4FOxRilxRT0dzytOGkS0S
+         8ouk/C/08jFVbIbVFA/SQCg6rhq/mUatqRCNe8MlQjZrPhTDryO5YE3suBXF8VgXoGoj
+         eZnA==
+X-Gm-Message-State: ANoB5pk7kCv3sLWF/B18/goWCTWXNwBpr4aH34RdiPRqhTHsQXgFByp2
+        eJYwDA1auAYHgCu/F0tdzQ0A1YpJJiRtSQ==
+X-Google-Smtp-Source: AA0mqf5l+PK1CNxVV9iNxJPKT6GbAODSzpi9YxDLSJm9goYqz+8iYayk/3veYB2dHvHMItjwVnrl3A==
+X-Received: by 2002:a05:620a:2190:b0:6fe:c24c:3b15 with SMTP id g16-20020a05620a219000b006fec24c3b15mr12149929qka.380.1670490553148;
+        Thu, 08 Dec 2022 01:09:13 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id s18-20020a05620a29d200b006f9ddaaf01esm19602731qkp.102.2022.12.08.01.09.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 01:07:57 -0800 (PST)
-Message-ID: <c086b5fb-681e-d104-1e11-873ed5444c5c@bytedance.com>
-Date:   Thu, 8 Dec 2022 17:07:52 +0800
+        Thu, 08 Dec 2022 01:09:12 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id s11so906582ybe.2;
+        Thu, 08 Dec 2022 01:09:12 -0800 (PST)
+X-Received: by 2002:a5b:24b:0:b0:6ca:3b11:8d76 with SMTP id
+ g11-20020a5b024b000000b006ca3b118d76mr71131994ybp.202.1670490552413; Thu, 08
+ Dec 2022 01:09:12 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.5.1
-Subject: Re: [PATCH] Reduce rq lock contention in load_balance()
-To:     chenying <chenying.kernel@bytedance.com>, mingo@redhat.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>
-References: <ef54b130-e727-5ed1-1a4e-1e3c0a713b98@bytedance.com>
-Content-Language: en-US
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <ef54b130-e727-5ed1-1a4e-1e3c0a713b98@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207162435.1001782-1-herve.codina@bootlin.com> <20221207162435.1001782-9-herve.codina@bootlin.com>
+In-Reply-To: <20221207162435.1001782-9-herve.codina@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 8 Dec 2022 10:09:01 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWHVStUFx61oKWh=YiJ9wfXZaeWEnt2CSRgn3HQe3pQ6w@mail.gmail.com>
+Message-ID: <CAMuHMdWHVStUFx61oKWh=YiJ9wfXZaeWEnt2CSRgn3HQe3pQ6w@mail.gmail.com>
+Subject: Re: [PATCH v3 8/9] ARM: dts: r9a06g032: Add the USBF controller node
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ying,
+On Wed, Dec 7, 2022 at 5:25 PM Herve Codina <herve.codina@bootlin.com> wrote:
+> Add the USBF controller available in the r9a06g032 SoC.
+>
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
 
-On 11/24/22 5:07 PM, chenying wrote:
-> ...
-> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> index a4a20046e586..384690bda8c3 100644
-> --- a/kernel/sched/sched.h
-> +++ b/kernel/sched/sched.h
-> @@ -954,6 +954,7 @@ struct balance_callback {
->   struct rq {
->       /* runqueue lock: */
->       raw_spinlock_t        __lock;
-> +    raw_spinlock_t          lb_lock;
+My
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+on v2 is still valid.
 
-Do we really need a new lock for doing this? I may suggest the
-following:
+Gr{oetje,eeting}s,
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index 87522c3de7b2..30d84e066a9a 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -1048,6 +1048,7 @@ struct rq {
+                        Geert
 
-         struct balance_callback *balance_callback;
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-+       unsigned char           balancing;
-         unsigned char           nohz_idle_balance;
-         unsigned char           idle_balance;
-
-and skip in-balancing runqueues early when find_busiest_queue().
-
-Thanks,
-	Abel
-
-> 
->       /*
->        * nr_running and cpu_load should be in the same cacheline because
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
