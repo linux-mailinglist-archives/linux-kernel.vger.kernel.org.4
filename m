@@ -2,119 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77659646BE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B89646BE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiLHJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:27:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
+        id S229898AbiLHJ21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:28:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiLHJ1x (ORCPT
+        with ESMTP id S230283AbiLHJ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:27:53 -0500
-Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9521DA42;
-        Thu,  8 Dec 2022 01:27:50 -0800 (PST)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id 1BC14448;
-        Thu,  8 Dec 2022 10:27:49 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1670491669;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2R1Bw6RSyNPWkO+Irjl7dtJBDdipXBznfHNFG4kiq4g=;
-        b=N9pz6Hulf8OSnpbXqumzH6zy4v1Im2Kssmr8IE/azJYuVa8JgNBgykOllJPdSf9S5YxdqT
-        uX+6Rx1sdJC7wPmi+SJLCpEDgIqP38XSprJ2jLQWrB821ldU2egvVKVuvkhMqkqsVxqHkC
-        qFiffa+iIZCtq5WzWuod7qnh54lx5b6OcnRF9AHDOJ7EjSyqkL8mIMWVdVUNfzkWoO8lJc
-        xKRhtsn8CeHVNDUXG8c9ocvIIfFYavCgtuN/wLMtp5TYH0snqYp5MsWIjeHDQCrBszKlHo
-        9KSsMTA9nXU/RkafAkqOS6M0I+LNC1W3AbG5AWip4HdSZOIm80pXLDS82JTYRg==
+        Thu, 8 Dec 2022 04:28:16 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818A51DA63
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:28:10 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id p36so1112856lfa.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:28:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jvonNZ8hzOsUtXfMS5jsK8oAXaTdy0VRFUTiOadKcQc=;
+        b=h0SV4jEnf3LUyPMrtB7fSs0oyXBjNYnC+wPkJTrEpAUXeX5sXQrly2h9pmV/BaIy6R
+         wtqelKyna1vNSa6KpgOzVcTBveTYzc2S67lbmsqmihry8Rub1uAALhMl94mCc+8wYSRJ
+         TGMPDgtWtHtj+W7XZmvrbtxNjfh3A6iZ3Js7OJm47H9nJGn70bbwRnzdForlH+YFf6vZ
+         uMGjvfiNmEKFuHLplsEo4aYd310onrCycBoGJB2C0dzRwqMPSWFQOLNyKPxj3A/tnnJa
+         bwBNmh/BRjTXp6nA+hctAfSA6i37FFHqmeT1ZdXh+9ukwlTZwr1T+PdKCqQfXNMV9fF1
+         uCTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jvonNZ8hzOsUtXfMS5jsK8oAXaTdy0VRFUTiOadKcQc=;
+        b=7w4ER5uRloQE6cNPCmoQpCuX90X9mf0wL/40WI9l0m/cZGULMOqgbmHm1U1BWh7bzX
+         fRkuf7V46D3km9Hui7gzfVzqMUkVWpXijmXKMOZouESfbhKIEvyg5MPrbQ122tJLKOzi
+         PYvUnwovTj9FEH0LOhupCPP/TfAv/zDLCrDTsSJk52CKH97YXSlzWa1P4zr9115VbewU
+         W0hDMFnvRL6vEioBgynlfWaS+SSuyhGi9EC7peyhEpt6HqHNGFL8v8l14oyk8aXJVDGa
+         6xml4rj9rASIcnnWHPQR8Dcc8xGd63OkscnUwvAUVbrwo4+3kdU1niJycGKARhxG1hrP
+         iXMA==
+X-Gm-Message-State: ANoB5pk+BgBQYNtmlI/reWOWTz/nMSPc/dGR6n5Wful+Tp/slZ401SQa
+        xcZl2oJ00qk47qw6Rn82uJMtow==
+X-Google-Smtp-Source: AA0mqf7TNvjfjrF7HrYj9ZQKhyCHR8PdEUqzTgbholw8jlR+OE7FkmeYXQJ4FF00PhAzDPAROjzt2Q==
+X-Received: by 2002:a19:760b:0:b0:4b5:67d8:e3c2 with SMTP id c11-20020a19760b000000b004b567d8e3c2mr6935849lff.166.1670491688911;
+        Thu, 08 Dec 2022 01:28:08 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b24-20020ac25638000000b004b57bbaef87sm532100lff.224.2022.12.08.01.28.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 01:28:08 -0800 (PST)
+Message-ID: <9c7066e4-fa3f-3dda-b939-04dfdaf73242@linaro.org>
+Date:   Thu, 8 Dec 2022 10:28:07 +0100
 MIME-Version: 1.0
-Date:   Thu, 08 Dec 2022 10:27:48 +0100
-From:   Michael Walle <michael@walle.cc>
-To:     horatiu.vultur@microchip.com
-Cc:     Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-        daniel.machon@microchip.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, lars.povlsen@microchip.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, olteanv@gmail.com, pabeni@redhat.com,
-        richardcochran@gmail.com
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-In-Reply-To: <20221208092511.4122746-1-michael@walle.cc>
-References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
- <20221208092511.4122746-1-michael@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/6] crypto: starfive: Add driver for cryptographic engine
+Content-Language: en-US
+To:     JiaJie Ho <jiajie.ho@starfivetech.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+References: <20221130055214.2416888-1-jiajie.ho@starfivetech.com>
+ <e1e9f1d19982493b89ae63f51e00a3bb@EXMBX068.cuchost.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e1e9f1d19982493b89ae63f51e00a3bb@EXMBX068.cuchost.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-12-08 10:25, schrieb Michael Walle:
-> Hi Horatiu,
+On 08/12/2022 10:09, JiaJie Ho wrote:
+>>
+>> The driver has been tested with crypto selftest and additional test.
+>>
+>> This patch series depends on the following patches:
+>> https://patchwork.kernel.org/project/linux-
+>> riscv/cover/20221118010627.70576-1-hal.feng@starfivetech.com/
+>> https://patchwork.kernel.org/project/linux-
+>> riscv/cover/20221118011714.70877-1-hal.feng@starfivetech.com/
+>>
+>> Jia Jie Ho (6):
+>>   crypto: starfive - Add StarFive crypto engine support
+>>   crypto: starfive - Add hash and HMAC support
+>>   crypto: starfive - Add AES skcipher and aead support
+>>   crypto: starfive - Add Public Key algo support
+>>   dt-bindings: crypto: Add bindings for Starfive crypto driver
+>>   riscv: dts: starfive: Add crypto and DMA node for VisionFive 2
+>>
 > 
->> Currently lan966x, doesn't allow to run PTP over interfaces that are
->> part of the bridge. The reason is when the lan966x was receiving a
->> PTP frame (regardless if L2/IPv4/IPv6) the HW it would flood this
->> frame.
->> Now that it is possible to add VCAP rules to the HW, such to trap 
->> these
->> frames to the CPU, it is possible to run PTP also over interfaces that
->> are part of the bridge.
+> Hi Herbert/David,
 > 
-> This gives me:
-> 
-> # /etc/init.d/S65ptp4l start
-> Starting linuxptp daemon: OK
-> [   44.136870] vcap_val_rule:1678: keyset was not updated: -22
-> [   44.140196] vcap_val_rule:1678: keyset was not updated: -22
-> #
-> 
-> # ptp4l -v
-> 3.1.1
-> # uname -a
-> Linux buildroot 6.1.0-rc8-next-20221208+ #924 SMP Thu Dec  8 10:08:58
-> CET 2022 armv7l GNU/Linux
-> 
-> I don't know whats going on, but I'm happy to help with debugging with 
-> some
-> guidance.
+> Could you please help to review and provide comments on this patch series?
+> Thank you in advance.
 
-Oh, and linuxptp is running on eth0, no bridges are set up. linuxptp
-is started with "/usr/sbin/ptp4l -f /etc/linuxptp.cfg"
+You received some comments so the expectation is to send a v2.
 
-# cat /etc/linuxptp.cfg
-# LinuxPTP configuration file for synchronizing the system clock to
-# a remote PTP master in slave-only mode.
-#
-# By default synchronize time in slave-only mode using UDP and hardware 
-time
-# stamps on eth0. If the difference to master is >1.0 second correct by
-# stepping the clock instead of adjusting the frequency.
-#
-# If you change the configuration don't forget to update the phc2sys
-# parameters accordingly in linuxptp-system-clock.service (systemd)
-# or the linuxptp SysV init script.
+Best regards,
+Krzysztof
 
-[global]
-slaveOnly		1
-delay_mechanism		Auto
-network_transport	UDPv4
-time_stamping		hardware
-step_threshold		1.0
-
-[eth0]
-
--michael
