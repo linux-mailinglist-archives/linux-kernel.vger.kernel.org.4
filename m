@@ -2,158 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD3A646C53
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F625646C59
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230001AbiLHKAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:00:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47074 "EHLO
+        id S230042AbiLHKCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:02:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLHKAp (ORCPT
+        with ESMTP id S229479AbiLHKCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:00:45 -0500
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B881164AB;
-        Thu,  8 Dec 2022 02:00:42 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0607420003;
-        Thu,  8 Dec 2022 10:00:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1670493641;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pQBvnBipF0jBYBuu1EcKJlR/pd4YO5GJfr3JHPYqAq8=;
-        b=nHcSa8RDjNx8DzhiTHdnU62FP/U3JJFVD/kHc9FRwYndvpGihZr8KVG5P3UdSF/xTo4u2v
-        +5JyQUxoQvDH5LFHTBxynsI7WZm+tjoremxnDBAN29LIip92uhp2yPPoYAFk6naOyHqako
-        vrCPsn27kC0s95MhEALjy8UeHjE9LZzUO19D+K6X3KM7TMIaZAdVR+fQAO2npW0ycNH54L
-        U2VADhsqdaMr3hdyuVrwoqMT3t6MdCwV6Ok2YX0960rhpZXhuViLxqyX2uUnMAHZlRB7IA
-        UjJOAQ+XxF0KOCp1d6WHagxXOghUylxmnaity+qqz1a+81FqR2bNqC825po7DQ==
-Date:   Thu, 8 Dec 2022 11:00:35 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Chuanhong Guo <gch981213@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
-        bin.zhang@mediatek.com
-Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
- controller
-Message-ID: <20221208110035.5649a051@xps-13>
-In-Reply-To: <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
-References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
-        <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
-        <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Thu, 8 Dec 2022 05:02:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B9511475;
+        Thu,  8 Dec 2022 02:02:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7B25AB821EB;
+        Thu,  8 Dec 2022 10:02:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2286C433C1;
+        Thu,  8 Dec 2022 10:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670493759;
+        bh=Gy+VgX0A4ENpBxacWi8qufdiwf6E1nyIHkyJFa2kRvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S1zrO28RXl8xwIP2Ft5ugtlkCew3ye1WFfBtszRmbL9ok+4nuZfBVCEffyrccbCEa
+         CDQwpA55KrzTDhJ0gfDlxtY51ZNsrZnorZVH31dEuPbCibcK7wCBNsbgLN9cJjdkJM
+         DX3LYQnu40eskXmUlUk5F76TqjTU115nYx9nva1Y=
+Date:   Thu, 8 Dec 2022 11:02:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Daniel Beer <daniel.beer@igorinstitute.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org,
+        Michael Zaidman <michael.zaidman@gmail.com>,
+        Christina Quast <contact@christina-quast.de>,
+        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] hid-ft260: add UART support.
+Message-ID: <Y5G2PBEprjPp3FKR@kroah.com>
+References: <638c51a2.170a0220.3af16.18f8@mx.google.com>
+ <Y4xX7ILXMFHZtJkv@kroah.com>
+ <20221204091247.GA11195@nyquist.nev>
+ <Y4xqyRERBdr8fT7F@kroah.com>
+ <20221205012403.GA14904@nyquist.nev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221205012403.GA14904@nyquist.nev>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On Mon, Dec 05, 2022 at 02:24:03PM +1300, Daniel Beer wrote:
+> On Sun, Dec 04, 2022 at 10:39:21AM +0100, Greg Kroah-Hartman wrote:
+> > > Thanks for reviewing. This device is quite strange -- it presents itself
+> > > as a USB HID, but it provides both an I2C master and a UART. The
+> > > existing driver supports only the I2C functionality currently.
+> > 
+> > Lots of devices are a "fake HID" device as other operating systems make
+> > it easy to write userspace drivers that way.  Linux included.  What
+> > userspace programs are going to want to interact with this device and
+> > what api are they going to use?
+> 
+> Hi Greg,
+> 
+> The application I'm looking at uses it as a debug console, so personally
+> I'd like to be able to use it with picocom and other terminal programs.
+> 
+> > > > > --- a/include/uapi/linux/major.h
+> > > > > +++ b/include/uapi/linux/major.h
+> > > > > @@ -175,4 +175,6 @@
+> > > > >  #define BLOCK_EXT_MAJOR		259
+> > > > >  #define SCSI_OSD_MAJOR		260	/* open-osd's OSD scsi device */
+> > > > >  
+> > > > > +#define FT260_MAJOR		261
+> > > > 
+> > > > A whole new major for just a single tty port?  Please no, use dynamic
+> > > > majors if you have to, or better yet, tie into the usb-serial
+> > > > implementation (this is a USB device, right?) and then you don't have to
+> > > > mess with this at all.
+> > > 
+> > > As far as I understand it, I don't think usb-serial is usable, due to
+> > > the fact that this is already an HID driver.
+> > 
+> > That should not be a restriction at all.  You are adding a tty device to
+> > this driver, no reason you can't interact with usb-serial instead.  That
+> > way you share the correct userspace tty name and major/minor numbers and
+> > all userspace tools should "just work" as they know that name and how to
+> > interact with it already.
+> > 
+> > Try doing that instead of your own "raw" tty device please.
+> 
+> Maybe I've misunderstood something. The reason I thought usb-serial was
+> unusable in this instance was that I couldn't see a way to create a port
+> except via usb-serial's own probe function (otherwise, the API looked
+> fine).
+> 
+> I don't know whether I'm looking at a serial or an I2C interface until
+> after it's already been probed by HID core, I have a struct hid_device
+> and I've asked what type of interface it is via an HID feature report.
+> This can't be determined otherwise, because strapping pins affect the
+> presentation of interfaces.
+> 
+> At that point, I (currently) call uart_add_one_port. I might have missed
+> it, but I didn't see anything analogous in the usb-serial API. Am I
+> going about this the wrong way?
 
-krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 10:44:17 +0100:
+I thought that this could be done, but I might be wrong.  Johan, any
+ideas?
 
-> On 08/12/2022 07:29, Xiangsheng Hou wrote:
-> > Split MediaTek ECC engine with rawnand controller and convert to
-> > YAML schema.
-> >=20
-> > Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> > ---
-> >  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
-> >  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
-> >  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
-> >  3 files changed, 216 insertions(+), 176 deletions(-)
-> >  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-=
-nfc.yaml
-> >  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand=
--ecc-engine.yaml
-> >  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yam=
-l b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
-> > new file mode 100644
-> > index 000000000000..eb1a44c7ae4e
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
-> > @@ -0,0 +1,154 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
-> > +
-> > +maintainers:
-> > +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
-> > +
-> > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - mediatek,mt2701-nfc
-> > +      - mediatek,mt2712-nfc
-> > +      - mediatek,mt7622-nfc
-> > +
-> > +  reg:
-> > +    items:
-> > +      - description: Base physical address and size of NFI.
-> > +
-> > +  interrupts:
-> > +    items:
-> > +      - description: NFI interrupt
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: clock used for the controller
-> > +      - description: clock used for the pad
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: nfi_clk
-> > +      - const: pad_clk
-> > +
-> > +  ecc-engine:
-> > +    description: device-tree node of the required ECC engine.
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
-> > +
-> > +patternProperties:
-> > +  "^nand@[a-f0-9]$":
-> > +    type: object =20
->=20
-> This should be instead:
->     $ref: nand-chip.yaml#
->     unevaluatedProperties: false
->=20
-> and then properties below (due to current dtschema limitations) should
-> list properties from nand-controller.yaml:
->=20
->       nand-on-flash-bbt: true
->=20
-> Optionally, we could create additional schema - nand-controller-chip,
-> which would be referenced directly by nand-controller and itself would
-> ref nand-chip.
+thanks,
 
-Isn't this enough? (in linux-next)
-https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/Document=
-ation/devicetree/bindings/mtd/nand-controller.yaml?h=3Dmtd/next#n54
-
-Thanks,
-Miqu=C3=A8l
+greg k-h
