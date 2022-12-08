@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2150647757
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:35:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F599647758
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:35:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiLHUfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:35:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37454 "EHLO
+        id S230014AbiLHUfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:35:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLHUfI (ORCPT
+        with ESMTP id S229796AbiLHUfI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Dec 2022 15:35:08 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC848566C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:35:07 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id 3-20020a17090a098300b00219041dcbe9so2733962pjo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:35:07 -0800 (PST)
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7D885D32
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:35:08 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id a9so2670982pld.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:35:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pxoZSb+LSg2Sr/OdadIfRMcj1fpcuMZctN0ht3p2zD4=;
-        b=VwCLLnMeB3k+m93uzv1eq29GbH6lHGER8I1wurF0B4Ax5fHnR3DiQNpHMpGfvnQfDu
-         nZmLmXIyRUnA3l2X/+56gt3ZWzqD9PYZjPg1KXKw6WQma7pTMKUxQinuq+mdDLgBkGkC
-         WXAqILax3018nRSDwH4AurHrjYoJUmirxagXs3LOXrnSe8Oh81i+WL8IELBXBUnBxyVB
-         qABu4Lt3o4Izbyi/FqvcONlR5+wY2gSQiveHWVQHRZIfAHROSQ/kr3nHXUL8/bR+TjxD
-         Sy0Kv5Vt3kDsNE4EIrEzNiQWYtTJ8i+k8vZzt/6gKS5hCKt6zCJ338IdAS7JR2e1PjWH
-         sRQg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YC6lmTEI2DddOWPjuQmefmlclj4ZLY2oiewxsoGP1Vs=;
+        b=fvvYF98hTiJGOMFMCMtIoAJFjddR3ZNFHwcDPozFhzpj20s5sT2JGxRa4/JsoWeSxR
+         27O4Hyx3dB8flhxlRct4WhUwoyuhQ4DZa0fBQViceKnlJwnt1M4STuay8S1ELwivT4W5
+         JnFuebtJ/6heRA7futibraynFvgPzx5EmJuSPiVNpscBAw1y+0HX2KpqZedNdKX+q9A2
+         G7EH4P2kHgqJ2MivIeUQpAIzYMbDFn5k7YjhM+D7xCoV9xRpKYOEzznz3w9NL3P1rsBw
+         zHlmiEQdjCjKY6pWfRpw9uokV7ZAai9Fv9pxWmVWIiS+vtmSBZa5JyP1KGX34V0TBLnw
+         9lhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pxoZSb+LSg2Sr/OdadIfRMcj1fpcuMZctN0ht3p2zD4=;
-        b=h3i/QOLdocF7f/egTAU3Sxaj7ToTUQKFg/hoB8Q2EOfhFQ49Wk8GnKW7fP8P/wVR7v
-         SOlaKGuTn0PxDWvhSB4aMmDG37ueA9JOhm3tTCblcxCz1UdCe+lpTL8nFb4FBQOZUrTw
-         ABPDdRp2MslHCGczcJna1BP6YHgSDbMCxdymUPhfPskaUFpGLdwOCTaGTibIRmAUCUGC
-         lDL6fZBNymOhlKnNTJMIH2FBynbX6mUM9taa+BRpw0ocifvPvfDMFRmBVHoesF+iECU3
-         hcPkEAZPVZswco0VwSa2kfnSNSluFm/21IK9yslpHTJhgS9Vr038iX7U8FmCFEXZ3JCD
-         2sgA==
-X-Gm-Message-State: ANoB5pn+HId2pFE4COyhcqzspLXDjZdU3itVW9kGfU/UP+4M+pkxT140
-        mlV/z0+k4TiyX75clVoFWYHZxu7zEJs=
-X-Google-Smtp-Source: AA0mqf4k72/AHpv1DnErQTrKu22mRMb4TU2PdaN2wkHpDZPOhQPVGlP8yF/zfmzlkzsnX00BTjSjMg==
-X-Received: by 2002:a17:902:c94d:b0:189:b36a:5448 with SMTP id i13-20020a170902c94d00b00189b36a5448mr4682294pla.44.1670531706836;
-        Thu, 08 Dec 2022 12:35:06 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YC6lmTEI2DddOWPjuQmefmlclj4ZLY2oiewxsoGP1Vs=;
+        b=fezdE0bmKgj+GxvMfM0a1SJBVF9NLY2HANmkmwXbgM008YiT5zhWeN+zbJMU+ukT/0
+         9sToC4L4qAlqKjS0F94G736iZQjWvdrU1bNFp86WMHARRD+izpXPMB0G7Qubugkc+IZS
+         UE6dvsv2tHSaDK83StTG7DT8PK1siP5728nA/vu8V8IF5WYtNQizZZTUYHakAQdd8hCy
+         eSkJgUn8rSU/tfem8UDxGO6S0eondnLEKpNkeoB74II1ZcwrVkvY5GBlrtvYsVSXh+a9
+         o68lwPQst3iNGdKRBHswi+KQxjTsYVpaOuYUeT+VL8KQGz5QAqnYW0Zyze+DO7BcEGTq
+         18sg==
+X-Gm-Message-State: ANoB5pm+0aJ7skAyWgLwv0QNmplFfoOFG5KJMrvwDBzPB216Gi+xsuL+
+        +mi00gg9V5gvaK+wCa1nNbk=
+X-Google-Smtp-Source: AA0mqf5DoA93piz5CVF9XnFBz7DCsU5iv2lttlOp9VDYowFUmIgZu7ivcuR8M/O6WoSa+05bardiCQ==
+X-Received: by 2002:a17:902:6a8b:b0:186:fb8d:f4d3 with SMTP id n11-20020a1709026a8b00b00186fb8df4d3mr3201464plk.5.1670531707818;
+        Thu, 08 Dec 2022 12:35:07 -0800 (PST)
 Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::2c6b])
-        by smtp.googlemail.com with ESMTPSA id f5-20020a170902860500b00189951514c4sm16954349plo.206.2022.12.08.12.35.05
+        by smtp.googlemail.com with ESMTPSA id f5-20020a170902860500b00189951514c4sm16954349plo.206.2022.12.08.12.35.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 12:35:06 -0800 (PST)
+        Thu, 08 Dec 2022 12:35:07 -0800 (PST)
 From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     damon@lists.linux.dev, linux-kernel@vger.kernel.org,
         akpm@linux-foundation.org, sj@kernel.org,
         "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH v3 0/4] Convert deactivate_page() to folio_deactivate()
-Date:   Thu,  8 Dec 2022 12:34:59 -0800
-Message-Id: <20221208203503.20665-1-vishal.moola@gmail.com>
+Subject: [PATCH v3 1/4] mm/memory: Add vm_normal_folio()
+Date:   Thu,  8 Dec 2022 12:35:00 -0800
+Message-Id: <20221208203503.20665-2-vishal.moola@gmail.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221208203503.20665-1-vishal.moola@gmail.com>
+References: <20221208203503.20665-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,34 +73,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Deactivate_page() has already been converted to use folios. This patch
-series modifies the callers of deactivate_page() to use folios. It also
-introduces vm_normal_folio() to assist with folio conversions, and
-converts deactivate_page() to folio_deactivate() which takes in a folio.
+Introduce a wrapper function called vm_normal_folio(). This function
+calls vm_normal_page() and returns the folio of the page found, or null
+if no page is found.
 
+This function allows callers to get a folio from a pte, which will
+eventually allow them to completely replace their struct page variables
+with struct folio instead.
+
+Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 ---
-v3:
-  Introduce vm_normal_folio() wrapper function to return a folio
-  Fix madvise missing folio_mapcount()
+ include/linux/mm.h |  2 ++
+ mm/memory.c        | 10 ++++++++++
+ 2 files changed, 12 insertions(+)
 
-v2:
-  Fix a compilation issue
-  Some minor rewording of comments/descriptions
-
-Vishal Moola (Oracle) (4):
-  mm/memory: Add vm_normal_folio()
-  madvise: Convert madvise_cold_or_pageout_pte_range() to use folios
-  mm/damon: Convert damon_pa_mark_accessed_or_deactivate() to use folios
-  mm/swap: Convert deactivate_page() to folio_deactivate()
-
- include/linux/mm.h   |  2 +
- include/linux/swap.h |  2 +-
- mm/damon/paddr.c     | 11 ++++--
- mm/madvise.c         | 92 ++++++++++++++++++++++----------------------
- mm/memory.c          | 10 +++++
- mm/swap.c            | 14 +++----
- 6 files changed, 72 insertions(+), 59 deletions(-)
-
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 8bbcccbc5565..626ae0757bd3 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1860,6 +1860,8 @@ static inline bool can_do_mlock(void) { return false; }
+ extern int user_shm_lock(size_t, struct ucounts *);
+ extern void user_shm_unlock(size_t, struct ucounts *);
+ 
++struct folio *vm_normal_folio(struct vm_area_struct *vma, unsigned long addr,
++			     pte_t pte);
+ struct page *vm_normal_page(struct vm_area_struct *vma, unsigned long addr,
+ 			     pte_t pte);
+ struct page *vm_normal_page_pmd(struct vm_area_struct *vma, unsigned long addr,
+diff --git a/mm/memory.c b/mm/memory.c
+index f88c351aecd4..1247c19c516c 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -672,6 +672,16 @@ struct page *vm_normal_page(struct vm_area_struct *vma, unsigned long addr,
+ 	return pfn_to_page(pfn);
+ }
+ 
++struct folio *vm_normal_folio(struct vm_area_struct *vma, unsigned long addr,
++			    pte_t pte)
++{
++	struct page *page = vm_normal_page(vma, addr, pte);
++
++	if (page)
++		return page_folio(page);
++	return NULL;
++}
++
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+ struct page *vm_normal_page_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 				pmd_t pmd)
 -- 
 2.38.1
 
