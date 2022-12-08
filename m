@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59827647394
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD9E647396
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:53:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiLHPxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40834 "EHLO
+        id S230048AbiLHPx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:53:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLHPxS (ORCPT
+        with ESMTP id S229865AbiLHPx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:53:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7572A4E6B7;
-        Thu,  8 Dec 2022 07:53:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 100D061F90;
-        Thu,  8 Dec 2022 15:53:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC74C433C1;
-        Thu,  8 Dec 2022 15:53:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670514796;
-        bh=5YewCq0R8sHcelmq+wc5N2jUev3qPGCtH8YJWDhnGL0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nJ8o2nZMwFp0Hcfh0aoKihq8/YCm6OKOICKIu7oISU/ftkXPkMC+pR4X1f/9zmWIM
-         Fxwm0LqSShV5LnE+y/KJ0epGGnwZZ2BqHbLVHu+fVT+7cOjpN7SGu2Wv+7XEgWrtFh
-         0DJlBfIhbgHga2yxou6XyDuIb8d1AVDRnHiJcDN8=
-Date:   Thu, 8 Dec 2022 16:53:13 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Quentin Schulz <foss+kernel@0leil.net>
-Cc:     Minas Harutyunyan <hminas@synopsys.com>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>,
+        Thu, 8 Dec 2022 10:53:26 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FFB63D7D;
+        Thu,  8 Dec 2022 07:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670514805; x=1702050805;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Oetrozn7hREZ1+E90eIuWjD6cJMvrafRb9KTJQ6cvAQ=;
+  b=izHi7omGR7sl6P2DFIQcvDv4dNUSBrp8NPXl1hw2KhIAEQ9P3DrI3vDG
+   lDJrbkX3xfYCKfpxhPzVo0a+jrF4IuFeohvyAodqr1vGZpogZLUupglnh
+   uvmSRxqEzzRFM6GKlMxGnjTVni2VORk0xDbtey0GtGDZvNrhv+NsbsY/w
+   lz7Uh4pcnYjO3fnaVYkeuOjTFU0qG5S6RXWrAfJVK26ezXi7zpl466kMi
+   2TrkDBelijSTWJPtiDSy4QCvhLG5lJriQwjMKIvz1oW4BgoEVClBQSBvu
+   41Y8HG6WK8Hkv9mfbXWhhVtZfoeT5Q3gZFBld3hxrQka2DfJrhVE+Yj8b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="314850717"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="314850717"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 07:53:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="735852344"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="735852344"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 08 Dec 2022 07:53:19 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1p3JD3-006QZD-2Z;
+        Thu, 08 Dec 2022 17:53:17 +0200
+Date:   Thu, 8 Dec 2022 17:53:17 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mathias Nyman <mathias.nyman@linux.intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
         linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        William Wu <william.wu@rock-chips.com>,
-        Bin Yang <yangbin@rock-chips.com>,
-        Frank Wang <frank.wang@rock-chips.com>
-Subject: Re: [PATCH 3/3] usb: dwc2: prevent core phy initialisation
-Message-ID: <Y5IIaeip81DIvEZ6@kroah.com>
-References: <20221206-dwc2-gadget-dual-role-v1-0-36515e1092cd@theobroma-systems.com>
- <20221206-dwc2-gadget-dual-role-v1-3-36515e1092cd@theobroma-systems.com>
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Cernekee <cernekee@gmail.com>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Jani Nikula <jani.nikula@intel.com>
+Subject: Re: [PATCH v5 1/4] i915: Move list_count() to list.h as
+ list_count_nodes() for broader use
+Message-ID: <Y5IIbTtF4dHxRn/W@smile.fi.intel.com>
+References: <20221130134838.23805-1-andriy.shevchenko@linux.intel.com>
+ <Y5HelZhkxnPf6hIs@smile.fi.intel.com>
+ <Y5HjTpzmgZWft+nF@kroah.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206-dwc2-gadget-dual-role-v1-3-36515e1092cd@theobroma-systems.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5HjTpzmgZWft+nF@kroah.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 02:19:18PM +0100, Quentin Schulz wrote:
-> From: Bin Yang <yangbin@rock-chips.com>
+On Thu, Dec 08, 2022 at 02:14:54PM +0100, Greg Kroah-Hartman wrote:
+> On Thu, Dec 08, 2022 at 02:54:45PM +0200, Andy Shevchenko wrote:
+> > On Wed, Nov 30, 2022 at 03:48:35PM +0200, Andy Shevchenko wrote:
+> > > Some of the existing users, and definitely will be new ones, want to
+> > > count existing nodes in the list. Provide a generic API for that by
+> > > moving code from i915 to list.h.
+> > 
+> > Greg, I believe this one is ready to be taken. Or please tell me what I need
+> > to do.
 > 
-> The usb phys need to be controlled dynamically on some Rockchip SoCs.
-> So set the new HCD flag which prevents USB core from trying to manage
-> our phys.
-> 
-> Signed-off-by: Bin Yang <yangbin@rock-chips.com>
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
-> Signed-off-by: Quentin Schulz <quentin.schulz@theobroma-systems.com>
-> ---
->  drivers/usb/dwc2/hcd.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/usb/dwc2/hcd.c b/drivers/usb/dwc2/hcd.c
-> index 657f1f659ffaf..757a66fa32fa8 100644
-> --- a/drivers/usb/dwc2/hcd.c
-> +++ b/drivers/usb/dwc2/hcd.c
-> @@ -5315,6 +5315,13 @@ int dwc2_hcd_init(struct dwc2_hsotg *hsotg)
->  	if (!IS_ERR_OR_NULL(hsotg->uphy))
->  		otg_set_host(hsotg->uphy->otg, &hcd->self);
->  
-> +	/*
-> +	 * do not manage the PHY state in the HCD core, instead let the driver
-> +	 * handle this (for example if the PHY can only be turned on after a
-> +	 * specific event)
-> +	 */
-> +	hcd->skip_phy_initialization = 1;
+> Wait for me to get through the current backlog of patches that I have in
+> my review queue.  Odds are, it will have to wait until after 6.2-rc1 is
+> out based on when 6.1 is going to be released.
 
-Wait, doesn't this mess with the phy logic for all other chips that use
-this IP block?  Have you tested this on other systems?
+It's fine, no hurry and take your time!
 
-I'd like some verification first before taking this change as it seems
-very specific-platform.
+> Don't worry, it's not lost.
 
-thanks,
+Thank you, got it!
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
