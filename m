@@ -2,99 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4533C646E59
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79022646E5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:21:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbiLHLVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:21:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S229838AbiLHLVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:21:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiLHLUl (ORCPT
+        with ESMTP id S229941AbiLHLVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:20:41 -0500
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2076.outbound.protection.outlook.com [40.107.212.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D953A59846;
-        Thu,  8 Dec 2022 03:20:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MQZ/1vXQjOaRx3WNFVOp0Wr4+P1vVhe0iDMk3Yq0TzMjgz2NTRSmxWuhi7/Sd4NTx0fi275i7mchy/uq/vNl+CP3gkFvB+xkpi92YIPmqoBdJjirimlgVNtxhkG4oIL//ub4BXw+CD7nGkFgbZf4jxiQ1GaEIn8YhZUoF4OQxdBJr+l4ooOeKSBhqkyNcfV5SSEz3EevjqyVXNEZrui4JkS86nursBzt663YI3u4u3BBbsvMxVU3yqhJj+/J4GsF1zZw2v9RgNcDNK7/R33pG66/rDTReWeJj7b8OoqPJr4jL9UtEosM7NW2mKkOoZXwI5YPVKIjAYwqr1zWXgsyjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QkrXvP21/lXSUDBYE91jYDjO48MwETjEk3S/rbUPzxI=;
- b=g9tn4CS53yZbOrtPBCEoQIgGtSgN7rM1qC3dfootdL38oaJ7TkwzKsFN4l5yul1vzAxURVTh9TJp5xeMqXOUj8U02MBMuOY5k3yC8MvH4pEkAjjzqHsOunD8J12joa4IFdjsxuxIt8+6+vDRzRXvbZz1ki1tju7h6TGsB50Pv2OCnRlpkjhfRQtL+wSlavqBxQFJIIYL7zHJFBTTkRkSGkAupS6fwvM56PcMZECVc8lV9PWxLoFt7ztz3hdXVRY/2Gxhj4bTmi3CqKPyMwLii8zqQdXQGZALCR2ndD2V9YBvndD+YSGiVre+LuVBy23mfC7q2nu91+wYtdnunvt7IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QkrXvP21/lXSUDBYE91jYDjO48MwETjEk3S/rbUPzxI=;
- b=pCrbkmCfB+V1m0++ir4qbuORlj8Ezw7f+1MY8IJocaruXZlpswyBO5DPRlroobuSikMxLxehXaYDaecNPgGm0BqIno2XlO9AOY0Mx+u4ovo0UxxVJhT+xnm6tpW+Ni3EoMVT1tUEmYkl9oaf5TMw+kR5qB7duQzV6bGTmBt4NMY=
-Received: from DS7PR03CA0178.namprd03.prod.outlook.com (2603:10b6:5:3b2::33)
- by PH7PR12MB6668.namprd12.prod.outlook.com (2603:10b6:510:1aa::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
- 2022 11:20:35 +0000
-Received: from DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b2:cafe::f9) by DS7PR03CA0178.outlook.office365.com
- (2603:10b6:5:3b2::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14 via Frontend
- Transport; Thu, 8 Dec 2022 11:20:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT037.mail.protection.outlook.com (10.13.172.122) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5901.16 via Frontend Transport; Thu, 8 Dec 2022 11:20:35 +0000
-Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Thu, 8 Dec 2022 05:20:32 -0600
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
-        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 13/13] Documentation: amd-pstate: introduce new global sysfs attributes
-Date:   Thu, 8 Dec 2022 19:18:52 +0800
-Message-ID: <20221208111852.386731-14-perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221208111852.386731-1-perry.yuan@amd.com>
-References: <20221208111852.386731-1-perry.yuan@amd.com>
+        Thu, 8 Dec 2022 06:21:16 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60D960370
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:20:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670498418;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JdWrMzc4dK/3bKJEBuu39zZgc8/cJ70+F9DEjGv5gLw=;
+        b=BgER44Xw43nx5Z0tQTRUpSGC039olaSd/FU4+NKg1XD8In4dscP4QfSJdg0WDCMEWy8zXs
+        Qkfn0BA4NflZCvEVtWVDLpAoOAGdyLC0eYmPgI1JFneBVZmIGcKv5HS3HFrddLz4o/Tk25
+        HeY84d+pRkDTLwDfcwF4GDugQqwLda8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-302-UkN5dHHxM4y44upYdoPi7A-1; Thu, 08 Dec 2022 06:20:12 -0500
+X-MC-Unique: UkN5dHHxM4y44upYdoPi7A-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5BDEF803533;
+        Thu,  8 Dec 2022 11:20:12 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1619740C2065;
+        Thu,  8 Dec 2022 11:20:10 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000229f1505ef2b6159@google.com>
+References: <000000000000229f1505ef2b6159@google.com>
+To:     syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT037:EE_|PH7PR12MB6668:EE_
-X-MS-Office365-Filtering-Correlation-Id: e97cfb31-3870-4748-c7d0-08dad90e3a44
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zm4oGxTejcJzydospRkb2Xoqs+Pi+LL/t6NCHId24guxT9UwscWcjjixqVXov3LnngUARrOutZWNOdiTEOO4N8A3BEQkyHv/q6hSx1ts6QKgQB3AUlVEjSTbmntBoD/+46Xt7qLuKPM+w+r4cuN27ll2eVoKKrbH+sUXWBCYWnZaQgpOl1KHLnDtlX4KlBZfNi7/M8VR15cV6X5CYEfevtislCCcr9PQD3DH1JbBmw/HAr/ss9mkJgRIVezB1ng2jzmhNrd9SYcCXsryjyD7h/qiocX0evbWrf4G2+vGVlX6rzQV6/8F1SrJLTvGB+BX2HX2wA3ZKRclnhKWmR4KBchkW5ZBkxS14i3kzlVXMWZfpP6Zztpxqbf6JTnaSaxP9YEhYWyLAQbFQmPnGDM4tgArQc9fd1jPEYl2W2lsnJQhIWjUVK4gBTgnrA0UA41HRcKyIN00SAjJjkxxUz3JeHqm0P+SdJc63iz73wcjmm/N0FvIfgUUgeaN5UctWjtGgrasfKqZ/Ow/iwN/szKdfQiqHpbuPGO7TvHJPMwCm+TBG52efFp9OnEXL7DAkMXj4AvGMdLZM3mBRe2IImCU9MyhTiQJqnhxQ8H3W5DO33k6TKQTPaXFY4CxTjucWUik0vMLnF8RuE+E1qAOHy889E1IZA5keUMeCCn7wlmxO89JpjvK71cmvpAEcbhb13KNViZutGC+Tt4cFy3+nSVwSjRkNMR2Bhbu7e5P09/y0fU=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199015)(46966006)(40470700004)(36840700001)(40480700001)(86362001)(40460700003)(36756003)(81166007)(7696005)(478600001)(26005)(36860700001)(8936002)(6666004)(44832011)(41300700001)(356005)(8676002)(110136005)(2906002)(316002)(4326008)(70586007)(70206006)(54906003)(16526019)(336012)(82310400005)(82740400003)(186003)(2616005)(1076003)(5660300002)(83380400001)(426003)(47076005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 11:20:35.5920
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e97cfb31-3870-4748-c7d0-08dad90e3a44
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6668
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1728522.1670498408.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Thu, 08 Dec 2022 11:20:08 +0000
+Message-ID: <1728523.1670498408@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,74 +69,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new amd-pstate driver support to switch the driver working mode and
-use can switch the driver mode within the sysfs attributes in the below
-path and check current mode
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next=
+.git master
 
-$ cd /sys/devices/system/cpu/amd-pstate
+diff --git a/net/rxrpc/ar-internal.h b/net/rxrpc/ar-internal.h
+index e7dccab7b741..37f3aec784cc 100644
+--- a/net/rxrpc/ar-internal.h
++++ b/net/rxrpc/ar-internal.h
+@@ -287,6 +287,7 @@ struct rxrpc_local {
+ 	struct hlist_node	link;
+ 	struct socket		*socket;	/* my UDP socket */
+ 	struct task_struct	*io_thread;
++	struct completion	io_thread_ready; /* Indication that the I/O thread sta=
+rted */
+ 	struct rxrpc_sock __rcu	*service;	/* Service(s) listening on this endpoi=
+nt */
+ 	struct rw_semaphore	defrag_sem;	/* control re-enablement of IP DF bit */
+ 	struct sk_buff_head	rx_queue;	/* Received packets */
+diff --git a/net/rxrpc/io_thread.c b/net/rxrpc/io_thread.c
+index d83ae3193032..e460e4151c16 100644
+--- a/net/rxrpc/io_thread.c
++++ b/net/rxrpc/io_thread.c
+@@ -426,6 +426,8 @@ int rxrpc_io_thread(void *data)
+ 	struct rxrpc_call *call;
+ 	struct sk_buff *skb;
+ =
 
-check driver mode:
-$ cat /sys/devices/system/cpu/amd-pstate/status
++	complete(&local->io_thread_ready);
++
+ 	skb_queue_head_init(&rx_queue);
+ =
 
-switch mode:
-sudo bash -c "echo passive  > /sys/devices/system/cpu/amd-pstate/status"
-or
-sudo bash -c "echo active  > /sys/devices/system/cpu/amd-pstate/status"
+ 	set_user_nice(current, MIN_NICE);
+diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
+index 44222923c0d1..d8dfd5459f50 100644
+--- a/net/rxrpc/local_object.c
++++ b/net/rxrpc/local_object.c
+@@ -96,6 +96,7 @@ static struct rxrpc_local *rxrpc_alloc_local(struct rxrp=
+c_net *rxnet,
+ 		atomic_set(&local->active_users, 1);
+ 		local->rxnet =3D rxnet;
+ 		INIT_HLIST_NODE(&local->link);
++		init_completion(&local->io_thread_ready);
+ 		init_rwsem(&local->defrag_sem);
+ 		skb_queue_head_init(&local->rx_queue);
+ 		INIT_LIST_HEAD(&local->call_attend_q);
+@@ -189,6 +190,7 @@ static int rxrpc_open_socket(struct rxrpc_local *local=
+, struct net *net)
+ 		goto error_sock;
+ 	}
+ =
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 38 +++++++++++++++++++++
- 1 file changed, 38 insertions(+)
++	wait_for_completion(&local->io_thread_ready);
+ 	local->io_thread =3D io_thread;
+ 	_leave(" =3D 0");
+ 	return 0;
+@@ -357,10 +359,11 @@ struct rxrpc_local *rxrpc_use_local(struct rxrpc_loc=
+al *local,
+  */
+ void rxrpc_unuse_local(struct rxrpc_local *local, enum rxrpc_local_trace =
+why)
+ {
+-	unsigned int debug_id =3D local->debug_id;
++	unsigned int debug_id;
+ 	int r, u;
+ =
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 62744dae3c5f..b8e33db3957d 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -339,6 +339,44 @@ processor must provide at least nominal performance requested and go higher if c
- operating conditions allow.
- 
- 
-+User Space Interface in ``sysfs``
-+=================================
-+
-+Global Attributes
-+-----------------
-+
-+``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
-+control its functionality at the system level.  They are located in the
-+``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
-+
-+``status``
-+	Operation mode of the driver: "active", "passive" or "off".
-+
-+	"active"
-+		The driver is functional and in the ``active mode``
-+
-+	"passive"
-+		The driver is functional and in the ``passive mode``
-+
-+	"off"
-+		The driver is unregistered and not functional now.
-+
-+	This attribute can be written to in order to change the driver's
-+	operation mode or to unregister it.  The string written to it must be
-+	one of the possible values of it and, if successful, the write will
-+	cause the driver to switch over to the operation mode represented by
-+	that string - or to be unregistered in the "off" case.
-+
-+``cppc_dynamic_boost``
-+	This attribute is only present if ``amd-pstate`` works in the
-+	`active mode` in the processor.  If set to 1, it will cause 
-+        the minimum P-state limit to be increased dynamically for a short time
-+        whenever a task previously waiting on I/O is selected to run on a given
-+        logical CPU (the purpose of this mechanism is to improve performance).
-+        when the I/O wait flag cleared, the increased pstate will be restored
-+        to previous state.
-+
-+
- ``cpupower`` tool support for ``amd-pstate``
- ===============================================
- 
--- 
-2.34.1
+ 	if (local) {
++		debug_id =3D local->debug_id;
+ 		r =3D refcount_read(&local->ref);
+ 		u =3D atomic_dec_return(&local->active_users);
+ 		trace_rxrpc_local(debug_id, why, r, u);
 
