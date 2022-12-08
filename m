@@ -2,147 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7433F647408
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB9764740E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiLHQSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:18:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S229728AbiLHQTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:19:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiLHQSZ (ORCPT
+        with ESMTP id S229538AbiLHQTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:18:25 -0500
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892F998975
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:18:23 -0800 (PST)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20221208161821euoutp020ed82b7bc2765170da7afe85cedf8950~u3bnCJaKo1590815908euoutp02M
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:18:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20221208161821euoutp020ed82b7bc2765170da7afe85cedf8950~u3bnCJaKo1590815908euoutp02M
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1670516301;
-        bh=SIFKWwKq63jD1RvWvzjwNV6bfRNeO36VPDok+sIW6Ns=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=a5Kb5vz4S7x+QpLzLnNVc5ooF0i4rLWzmty+EuxaH3c9OFqWLssuZR/EAfb+bBsAC
-         Ca4coX5hQAlwYpHjAdiCfy2QsXB25U04t1jcv8DbtG2TWXi6WI0LbYpQIB5esUcE55
-         C8rjE0XuQDILC5BZ6htZFP+DVTBtkbnGpjX4zkEE=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20221208161821eucas1p254d47b9e188ead459aa1c07555806da1~u3bmpaGXK0710307103eucas1p2-;
-        Thu,  8 Dec 2022 16:18:21 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id F4.AF.10112.D4E02936; Thu,  8
-        Dec 2022 16:18:21 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221208161820eucas1p1b5b4eede36b24d52100638ab04cd4c8b~u3blyd3Q-2143921439eucas1p1q;
-        Thu,  8 Dec 2022 16:18:20 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221208161820eusmtrp234b107036c36349c0fbdf349bd136512~u3blx4T2Q2320123201eusmtrp2J;
-        Thu,  8 Dec 2022 16:18:20 +0000 (GMT)
-X-AuditID: cbfec7f4-cf3ff70000002780-0d-63920e4d1361
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 7A.96.08916.C4E02936; Thu,  8
-        Dec 2022 16:18:20 +0000 (GMT)
-Received: from [106.120.9.77] (unknown [106.120.9.77]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221208161819eusmtip2cf58c1c8c5291dafd24ad1e8cf0da1a9~u3blStGBg2526525265eusmtip2I;
-        Thu,  8 Dec 2022 16:18:19 +0000 (GMT)
-Message-ID: <bf8f52d2-1a11-03ed-37e9-4bde42ebc211@samsung.com>
-Date:   Thu, 8 Dec 2022 17:18:15 +0100
+        Thu, 8 Dec 2022 11:19:01 -0500
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08B898975;
+        Thu,  8 Dec 2022 08:19:00 -0800 (PST)
+Received: by mail-wr1-x42d.google.com with SMTP id bx10so2234917wrb.0;
+        Thu, 08 Dec 2022 08:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q0OrMwQbxg/ktbV9bRCyNGFbRXJuKGNW0efSxcFv22A=;
+        b=OLsKoG4u286EkOefIm4EvdcJEv8FLTeEDkKA/FB1IYSlhtpkYagrWs0+cswv6/eoXJ
+         Hs77c1hNbDdpMuUpOYRnVHYaQgR7gt+FLmWATca/cTuT26jODS7Uzqv3OdYsp92g9iSy
+         2zwyvqeQslhIm0gOXaIjaypUI0Crie3dPgn7v4h0nnJFSsattdvc15bCr9Dz1AJLon+j
+         VQT4cFNhiTypo6H+bLMLoPky/YjdVMd7b0OczxJdHljev7UhmZUI0KE6k/veatlBGSM1
+         RINNQzcs6+sB7SYBoTuhQNvpoMXGfS8jCRKjqDGBMSGooeueHpFCZhsovskXgaEYMgKI
+         8TNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q0OrMwQbxg/ktbV9bRCyNGFbRXJuKGNW0efSxcFv22A=;
+        b=0KfNGp2AeKpXHY00YuUdjfCabzPIOe3pexhTQ2se1AcHIxYP2TI8rhTEdrn4xgb0A2
+         6mpE2OgjBYqxrNtn6IgEacvOItjFXpI9jfEA0tIz6JeS/6lWKHepNMTIZ3CKmXtmGEzZ
+         8OpTtwS2ve5yPPXmTvnANekmVc3jFZLkQNf0GFFVxaEhMt1BpZVpv+pkh6/8otEAHZgB
+         F2aCQ+ZdHwa1rEX6MsCsm3i5/agc0zEHi85MTb8dccLuDYAcGRHr4ZekHMPfHhxHOhN9
+         dP1KGgude0U/f+Fbjds4Z8jc2fULUkR5iytNA0uT0qYeGHq96aFqEEe8y2xIpyxEtjSI
+         DRyw==
+X-Gm-Message-State: ANoB5pl79SVSJvDqRw61et5/x5XR93o4QM3FyaYrgrcN6QO7Lgj+tpsv
+        8Dmt6Li4LEN+Yg2xNoJUuUuHiBKCRmo=
+X-Google-Smtp-Source: AA0mqf7pacWOyqD/40HZ1D1u3a9YtU5BeJPHSRzRZLsQdT+j+f+/Y5H47ZMELy58NBnGlBVG6FZ/Zw==
+X-Received: by 2002:a5d:5951:0:b0:242:7fb1:194f with SMTP id e17-20020a5d5951000000b002427fb1194fmr1756938wri.49.1670516339174;
+        Thu, 08 Dec 2022 08:18:59 -0800 (PST)
+Received: from [10.20.0.4] ([89.36.76.136])
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d4e92000000b0024206ed539fsm22342021wru.66.2022.12.08.08.18.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 08:18:58 -0800 (PST)
+Message-ID: <7054973b-f659-ee02-e379-df47255e10e0@gmail.com>
+Date:   Thu, 8 Dec 2022 17:18:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.4.2
-Subject: Re: [PATCH] drivers/firmware_loader: remove list entry before
- deallocation
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 0/9] platform/surface: aggregator: Improve target/source
+ handling in SSH messages
 Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, mcgrof@kernel.org,
-        russell.h.weight@intel.com, rafael@kernel.org,
-        ming.lei@canonical.com, tiwai@suse.de
-From:   =?UTF-8?Q?Micha=c5=82_Lach?= <michal.lach@samsung.com>
-In-Reply-To: <Y5IFz3ovrjlmPctM@kroah.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDKsWRmVeSWpSXmKPExsWy7djP87q+fJOSDfbt4LNoXryezeLyrjls
-        FjcmPGW0mD1rA7vFroff2S3mfpnKbLF05gpmi5eb3zA5cHjMauhl81i85yWTx6ZVnWwe++eu
-        Yffo27KK0WPz6WqPz5vkAtijuGxSUnMyy1KL9O0SuDJmbVnLVnCSrWLD5JWsDYxNrF2MnBwS
-        AiYSx/91s3cxcnEICaxglJj65DEbhPOFUWLK9X8sEM5nRom+7VfhWtacnMUMkVjOKHF9yVOo
-        /teMEi2/N4BV8QrYSbw6soYdxGYRUJE43rQeKi4ocXLmExYQW1QgSqLpwk8wW1ggVGLD+y5G
-        EJtZQFzi1pP5TCC2iICGxMujt8DOYBboZZQ48Gwe2FA2ARuJN/O+gDVzCmhK7OjZwgrRLC/R
-        vHU22HkSAj84JI6+/s8EcbeLxOsrj9ggbGGJV8e3sEPYMhL/d86HqimWuPNkPlRNjcS33x3M
-        ELa1xKqtN4DiHEALNCXW79KHCDtKzL77jxkkLCHAJ3HjrSDECXwSk7ZNhwrzSnS0CUFUq0r8
-        b/wEtVRaYu/KQ8wTGJVmIYXKLCTfz0LyzCyEvQsYWVYxiqeWFuempxYb5aWW6xUn5haX5qXr
-        JefnbmIEJqjT/45/2cG4/NVHvUOMTByMhxglOJiVRHiXLZuYLMSbklhZlVqUH19UmpNafIhR
-        moNFSZx3xZSOZCGB9MSS1OzU1ILUIpgsEwenVAMTUyZHp4/mpriLk/nus0/NmHI8/ffeTXtv
-        fGlLT1zDpfhgtfM3y/MLYi/uenWk/t3TK1Mb1+oqShi+/Cr0w0wpzDGNb0fqp+vdi+ISGLwF
-        wm4+9p/TazNzk1C5i2Ds2rTono2FlUsE3i5uWHg25wLz3HlJb07FGJZXVZR1sbdEPZa9cW5d
-        77mKj8Yzlesao121Dvaf7NCedVziuutBQ+/qSlEdqZypPvmqvik+LgFpe78vYBN4vFxY8ZDQ
-        Uo4CroPv/6S4no2/ukQx/rTpxs3fBJiaU9NCZ51W8fj70t/zwcUFoS0n2vz8Ft7WP6264+DV
-        q3J6IVZSspxXXHJEv5VN0miO1PbcWhDbu+3Eh1wlluKMREMt5qLiRACYAv8DvwMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7o+fJOSDS7uEbRoXryezeLyrjls
-        FjcmPGW0mD1rA7vFroff2S3mfpnKbLF05gpmi5eb3zA5cHjMauhl81i85yWTx6ZVnWwe++eu
-        Yffo27KK0WPz6WqPz5vkAtij9GyK8ktLUhUy8otLbJWiDS2M9AwtLfSMTCz1DI3NY62MTJX0
-        7WxSUnMyy1KL9O0S9DJmbVnLVnCSrWLD5JWsDYxNrF2MnBwSAiYSa07OYu5i5OIQEljKKPGy
-        +R1jFyMHUEJaomueNESNsMSfa11sEDUvGSV27J/ODpLgFbCTeHVkDZjNIqAicbxpPStEXFDi
-        5MwnLCC2qECUxM3zD5lAbGGBUIkN77sYQWxmAXGJW0/mg8VFBDQkXh69xQKygFmgl1Fixq+z
-        7BDbNjJJdHfOBpvEJmAj8WbeFzCbU0BTYkfPFlaQS5kF1CXWzxOCGCov0bx1NvMERqFZSO6Y
-        hWTfLISOWUg6FjCyrGIUSS0tzk3PLTbUK07MLS7NS9dLzs/dxAiMx23Hfm7ewTjv1Ue9Q4xM
-        HIyHGCU4mJVEeJctm5gsxJuSWFmVWpQfX1Sak1p8iNEUGBYTmaVEk/OBCSGvJN7QzMDU0MTM
-        0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNTqoFJ9+7eGwfZdJatCHA+c2/q2768K94O
-        cnu8Zhte71/AwbXg1b5tuoxpR33uHW1nydkiKHHWnG2j2MpUP5kvW20vdCbsrMh3VvJc+Jen
-        5jpftWfpwv/srlcqp8rO0jt9ke9djO9jTlmxJHs7Hu5tEpOO1ExmX1z9scefTzRju7C2erNO
-        5WGdc58U51wy0E25zPxduPR05uVFj1OcJzYmb//a9+1hWc97n9WKa/7O2e6smMLBvqns/bxJ
-        8TX5r5fKeSX15sxtj9qjK/8g6/GbiPZTq4yCP4le/r5GN+d0iUJdT/S550UnDe9qTlrpMO3+
-        P2397vaPjnlL1PZPbPXZvOZC0oIYx79mZp+2Gssn+/xUYinOSDTUYi4qTgQAqUTliVADAAA=
-X-CMS-MailID: 20221208161820eucas1p1b5b4eede36b24d52100638ab04cd4c8b
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9
-References: <CGME20221123111806eucas1p23fdcdbe6e5f4a9e714db428fcd6552b9@eucas1p2.samsung.com>
-        <20221123111455.94972-1-michal.lach@samsung.com>
-        <000901d90af2$309b7c80$91d27580$@samsung.com> <Y5HkIl41zN9fwKV8@kroah.com>
-        <97ae8658-4eca-61af-5d5b-21b958ce1c24@samsung.com>
-        <Y5IFz3ovrjlmPctM@kroah.com>
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221202223327.690880-1-luzmaximilian@gmail.com>
+ <c09c9cef-14ac-2ab3-5e01-13189823a053@redhat.com>
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <c09c9cef-14ac-2ab3-5e01-13189823a053@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 16:42, Greg KH wrote:
-> On Thu, Dec 08, 2022 at 04:23:52PM +0100, Michał Lach wrote:
->> On 12/8/22 14:18, Greg KH wrote:
->>> On Thu, Dec 08, 2022 at 11:45:28AM +0100, Michał Lach wrote:
->>>> Pinging
->>>
->>> I have no context here at all.
->>>
->>> confused,
+On 12/8/22 17:03, Hans de Goede wrote:
+> Hi Maximilian,
+> 
+> On 12/2/22 23:33, Maximilian Luz wrote:
+>> We have some new insights into the Serial Hub protocol, obtained through
+>> reverse engineering. In particular, regarding the command structure. The
+>> input/output target IDs actually represent source and target IDs of
+>> (what looks like) physical entities (specifically: host, SAM EC, KIP EC,
+>> debug connector, and SurfLink connector).
 >>
->> It seems like my mail client messed up the encoding, sorry.
->> Below quoting the patch message:
+>> This series aims to improve handling of messages with regards to those
+>> new findings and, mainly, improve clarity of the documentation and usage
+>> around those fields.
+>>
+>> See the discussion in
+>>
+>>      https://github.com/linux-surface/surface-aggregator-module/issues/64
+>>
+>> for more details.
+>>
+>> There are a couple of standouts:
+>>
+>> - Patch 1 ensures that we only handle commands actually intended for us.
+>>    It's possible that we receive messages not intended for us when we
+>>    enable debugging. I've kept it intentionally minimal to simplify
+>>    backporting. The rest of the series patch 9 focuses more on clarity
+>>    and documentation, which is probably too much to backport.
+>>
+>> - Patch 8 touches on multiple subsystems. The intention is to enforce
+>>    proper usage and documentation of target IDs in the SSAM_SDEV() /
+>>    SSAM_VDEV() macros. As it directly touches those macros I
+>>    unfortunately can't split it up by subsystem.
+>>
+>> - Patch 9 is a loosely connected cleanup for consistency.
 > 
-> Ok, but what does an empty ping here mean?
+> Thank you for the patches. Unfortunately I don't have time atm to
+> review this.
 > 
-> Are you asking why no one else has reviewed this?  Why it hasn't been
-> accepted?  What else needs to happen?  Something else?
+> And the next 2 weeks are the merge window, followed by 2 weeks
+> of christmas vacation.
 > 
+> So I'm afraid that I likely won't get around to reviewing
+> this until the week of January 9th.
 
-It was kind of meant to bump it for other reviewers to review/accept
-this. Please correct me if this is against the netiquette here or 
-should I just mention the reason for the ping in the first place.
+Sure, no worries and no rush. Thanks for the heads-up.
 
-> be specific please :)
-> 
-> thanks,
-> 
-> greg k-h
-> 
+Just as a note: While patch 1 is a "fix", I don't consider it
+time-critical in any way. The underlying issue only appears if you
+explicitly enable debug mode on the SAM EC. So no need to hurry.
+
+Happy holidays.
+
+Regards,
+Max
