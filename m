@@ -2,91 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1B1B647425
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:23:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67EF064742C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:25:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiLHQXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36530 "EHLO
+        id S229586AbiLHQZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbiLHQXd (ORCPT
+        with ESMTP id S229796AbiLHQZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:23:33 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2185B60EB9
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:23:24 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id gh17so5262557ejb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:23:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3ffOMrqHbGPKnX9DON08suhw00B/x5l9qlgIhBCvn1s=;
-        b=GcVbR78qgq1zGKeFap4dpyJP2ETn3kww5rg3v8dPl3tCWN0G6qxnGcbwgcX5MCo3OM
-         fKWfEFTBvO7N8XCZBPsxpIZJu/I7SUe3aPGwiRpN/CQgiksUDLrb6z4cKnWd08AfEpdZ
-         r94BbeUn5ovd//wzHhKXPJAWTKlrbHK2MlOIz3fbM4mGNb97gj9dHvVIeeiBbVWMUG83
-         kIoNpiUMsufVsm/m95AH/BSknL/IIYi4+Au5NXHpzpAF6U9MwGhYl2DJgI8UrQgHnbO0
-         7dRNIeeoHyKJg18727lHNV+cCrVrJsiUn1rn7oMXL7Wu9l4f3Ev75gNhks+qShMbBZI8
-         WEAw==
+        Thu, 8 Dec 2022 11:25:12 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9933D4A075
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:24:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670516658;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DOVvOqJbqLIZ2AhZtG8cGPrhcnZ2LRyU5svGNQICX+U=;
+        b=JfuORu6XlatX5EiCKvnRxDtS5fi7iIrNlMREkwzeWqA94lXo+jovymZcAzHKVwd6F4Tlo3
+        UJfMGc4e2vG4+VrhY5PNo2RIK8GXahEApsdlfSy9TRj2W9Nh4wbsTF/NXEB1WvDfMEGauo
+        HVJ8TPPJ55Xa3XcNf9CnVBF0ZNyRVMk=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-29-njvZx21FMWe8PoFPNUdU4w-1; Thu, 08 Dec 2022 11:24:17 -0500
+X-MC-Unique: njvZx21FMWe8PoFPNUdU4w-1
+Received: by mail-il1-f200.google.com with SMTP id i7-20020a056e021b0700b003033a763270so1716101ilv.19
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:24:17 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ffOMrqHbGPKnX9DON08suhw00B/x5l9qlgIhBCvn1s=;
-        b=vBqLgBHOLVLcvbyHM3sW2DlJq88+NLgEQWVStgDhynqoZg3ZBrOSqhWqV5U3b1zCAt
-         rEUnxliJEu5YTgMqGWatIt5Ecnv2Wu8KmU6z+RJJDGvzJpFv8Ohi+LZ1CahciFtOAYcY
-         Z3CbuZ7ARzf4op57BIJSIUIJ0cdmMyYnZMFMLg5Lwh07a4S6pucAjTVRT37a4+bvpMmf
-         fetMDmVLmF7p0Ry9Z6tG8PpFNtJ6vd5pCehU3rK6x88HOYDYl3VoEx/+EVv77X/ptc1p
-         +T4LDBWyEL/JM/iSRSTnPWhpSqN2gbQAl9pHc/RvCMHLPcQdT3UbyvRzD9bU9dDPaqXJ
-         GmFw==
-X-Gm-Message-State: ANoB5pkFwtDyJafeKQ6xEaA5W42AvHwgFnXHvJfX14nL3eJvVR3W3LkM
-        AFLfbKOr/U1znLnt84Hwo976OQ==
-X-Google-Smtp-Source: AA0mqf7cWc12/11dRI8UuaKffduEO9pgwBnCtENeaj4X4vsk2ZRqNQGH/MayWHmkzyTTju2hui+ZmA==
-X-Received: by 2002:a17:907:a426:b0:78d:f456:1ec6 with SMTP id sg38-20020a170907a42600b0078df4561ec6mr3278655ejc.23.1670516602675;
-        Thu, 08 Dec 2022 08:23:22 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id i9-20020a170906698900b007bff9fb211fsm9884789ejr.57.2022.12.08.08.23.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:23:22 -0800 (PST)
-Date:   Thu, 8 Dec 2022 17:23:21 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Oliver Upton <oliver.upton@linux.dev>, kvm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 3/4] KVM: arm64: selftests: Align VA space allocator with
- TTBR0
-Message-ID: <20221208162321.d745p2lsedxdf7v6@kamzik>
-References: <20221207214809.489070-1-oliver.upton@linux.dev>
- <20221207214809.489070-4-oliver.upton@linux.dev>
- <Y5EtP5z6rxSK1VUe@google.com>
- <Y5EvVtAoDSHvIKie@google.com>
- <Y5E5UixcJQ4+tNYg@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DOVvOqJbqLIZ2AhZtG8cGPrhcnZ2LRyU5svGNQICX+U=;
+        b=OJmK/M+BDfFATGQsg0UY8qI/ee8n07VHJgapD0l0wvo4tIkgZGhPXRHxhGIIzJsC5C
+         TjaAc19wXkE8toFlOuuZk1v5sKSXBo9FdMcnAav1NejciSAt1Y9BqVgVc+6XDwymlp4k
+         +nX13nUdHCPGrT9HPoWFJilLsSF9oqnuWzCQ3I/QH3+v3djyXdAp1cPxua/gPNajBQCu
+         +tLnYLxCtP0NsWuXS6xbJ+atutQd85Fe+57XWBsaQNYDVqLy2vjApy31PtIvQgYvUGf4
+         bqCMyKt7feVFORmnz8vzmZikEUN4c2gbFYAwtsmvXVQ31MpfekdBzA6akThRJc/W0EAO
+         GLQA==
+X-Gm-Message-State: ANoB5pn/efIQoNF4dZ3U2djxTgyAUEwQa/R0q9P08bA4aqbpprL54nBP
+        NNoX8/cOWn+DV3oQ2olJYjM71+WoGUrh/LSH3TQy77opWVojHGcAe4cXR0rx+YLzUFC48jxwU/H
+        4stxzUFTDssa0K/CS2nI3TH6d2QiHYVZ1uQog7rm6
+X-Received: by 2002:a92:da48:0:b0:302:ebf5:a7ae with SMTP id p8-20020a92da48000000b00302ebf5a7aemr32196405ilq.34.1670516656856;
+        Thu, 08 Dec 2022 08:24:16 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7Udv+66R4PY489KYK6uqupbMm3pq26p9nW3CFM8lXhyRn0ECXJZkRltfUaVhLCYBfeqsKfZB0RTc8vTPJrYHk=
+X-Received: by 2002:a92:da48:0:b0:302:ebf5:a7ae with SMTP id
+ p8-20020a92da48000000b00302ebf5a7aemr32196398ilq.34.1670516656630; Thu, 08
+ Dec 2022 08:24:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5E5UixcJQ4+tNYg@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221202223327.690880-1-luzmaximilian@gmail.com> <c09c9cef-14ac-2ab3-5e01-13189823a053@redhat.com>
+In-Reply-To: <c09c9cef-14ac-2ab3-5e01-13189823a053@redhat.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Thu, 8 Dec 2022 17:24:05 +0100
+Message-ID: <CAO-hwJLHzRCJF96gKJwj7zCCPxRLoEw=cQ2w8=yLBOfyZz-c8w@mail.gmail.com>
+Subject: Re: [PATCH 0/9] platform/surface: aggregator: Improve target/source
+ handling in SSH messages
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 01:09:38AM +0000, Sean Christopherson wrote:
-...
-> Actually, before we do anything, we should get confirmation from the s390 and
-> RISC-V folks on whether they have a canonical hole like x86, i.e. maybe x86 is
-> the oddball.
+On Thu, Dec 8, 2022 at 5:03 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>
+> Hi Maximilian,
+>
+> On 12/2/22 23:33, Maximilian Luz wrote:
+> > We have some new insights into the Serial Hub protocol, obtained through
+> > reverse engineering. In particular, regarding the command structure. The
+> > input/output target IDs actually represent source and target IDs of
+> > (what looks like) physical entities (specifically: host, SAM EC, KIP EC,
+> > debug connector, and SurfLink connector).
+> >
+> > This series aims to improve handling of messages with regards to those
+> > new findings and, mainly, improve clarity of the documentation and usage
+> > around those fields.
+> >
+> > See the discussion in
+> >
+> >     https://github.com/linux-surface/surface-aggregator-module/issues/64
+> >
+> > for more details.
+> >
+> > There are a couple of standouts:
+> >
+> > - Patch 1 ensures that we only handle commands actually intended for us.
+> >   It's possible that we receive messages not intended for us when we
+> >   enable debugging. I've kept it intentionally minimal to simplify
+> >   backporting. The rest of the series patch 9 focuses more on clarity
+> >   and documentation, which is probably too much to backport.
+> >
+> > - Patch 8 touches on multiple subsystems. The intention is to enforce
+> >   proper usage and documentation of target IDs in the SSAM_SDEV() /
+> >   SSAM_VDEV() macros. As it directly touches those macros I
+> >   unfortunately can't split it up by subsystem.
+> >
+> > - Patch 9 is a loosely connected cleanup for consistency.
+>
+> Thank you for the patches. Unfortunately I don't have time atm to
+> review this.
+>
+> And the next 2 weeks are the merge window, followed by 2 weeks
+> of christmas vacation.
+>
+> So I'm afraid that I likely won't get around to reviewing
+> this until the week of January 9th.
+>
+> > Hans, Jiri, Benjamin, Sebastian: While patch 8 ("platform/surface:
+> > aggregator: Enforce use of target-ID enum in device ID macros") touches
+> > multiple subsystems, it should be possible to take the whole series
+> > through the pdx86 tree. The changes in other subsystems are fairly
+> > limited.
+>
+> I agree that it will be best to take all of this upstream through the
+> pdx86 tree. Sebastian thank you for the ack for patch 8/9.
+>
+> Jiri or Benjamin may we have your ack for merging patch 7/9 + 8/9
+> through the pdx86 tree ?
 
-riscv splits like x86.
+I can give you an ack for taking those through your tree, but I can
+not review the patches themselves because I was only CC-ed to those 2,
+and so was linux-input. Given that SSAM_SSH_TID_KIP is not in my
+current tree I assume it comes from this series.
 
-Thanks,
-drew
+Anyway, enough ranting :)
+
+If you think the patches are OK, they are really small concerning the
+HID part, so feel free to take them through your tree Hans.
+
+Cheers,
+Benjamin
+
+>
+> Regards,
+>
+> Hans
+>
+>
+>
+>
+> > Maximilian Luz (9):
+> >   platform/surface: aggregator: Ignore command messages not intended for
+> >     us
+> >   platform/surface: aggregator: Improve documentation and handling of
+> >     message target and source IDs
+> >   platform/surface: aggregator: Add target and source IDs to command
+> >     trace events
+> >   platform/surface: aggregator_hub: Use target-ID enum instead of
+> >     hard-coding values
+> >   platform/surface: aggregator_tabletsw: Use target-ID enum instead of
+> >     hard-coding values
+> >   platform/surface: dtx: Use target-ID enum instead of hard-coding
+> >     values
+> >   HID: surface-hid: Use target-ID enum instead of hard-coding values
+> >   platform/surface: aggregator: Enforce use of target-ID enum in device
+> >     ID macros
+> >   platform/surface: aggregator_registry: Fix target-ID of base-hub
+> >
+> >  .../driver-api/surface_aggregator/client.rst  |  4 +-
+> >  .../driver-api/surface_aggregator/ssh.rst     | 36 ++++-----
+> >  drivers/hid/surface-hid/surface_hid.c         |  2 +-
+> >  drivers/hid/surface-hid/surface_kbd.c         |  2 +-
+> >  .../platform/surface/aggregator/controller.c  | 12 +--
+> >  .../platform/surface/aggregator/ssh_msgb.h    |  4 +-
+> >  .../surface/aggregator/ssh_request_layer.c    | 15 ++++
+> >  drivers/platform/surface/aggregator/trace.h   | 73 +++++++++++++++++--
+> >  .../platform/surface/surface_aggregator_hub.c |  8 +-
+> >  .../surface/surface_aggregator_registry.c     |  2 +-
+> >  .../surface/surface_aggregator_tabletsw.c     | 10 +--
+> >  drivers/platform/surface/surface_dtx.c        | 20 ++---
+> >  .../surface/surface_platform_profile.c        |  2 +-
+> >  drivers/power/supply/surface_battery.c        |  4 +-
+> >  drivers/power/supply/surface_charger.c        |  2 +-
+> >  include/linux/surface_aggregator/controller.h |  4 +-
+> >  include/linux/surface_aggregator/device.h     | 50 ++++++-------
+> >  include/linux/surface_aggregator/serial_hub.h | 40 ++++++----
+> >  18 files changed, 191 insertions(+), 99 deletions(-)
+> >
+>
+
