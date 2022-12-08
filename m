@@ -2,99 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16DA3646C02
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29280646C07
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiLHJhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:37:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S229963AbiLHJht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:37:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHJhC (ORCPT
+        with ESMTP id S229479AbiLHJhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:37:02 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6FB59FFA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:37:01 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so2950694wma.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:37:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Wk7+i0C/FWEnPCeIRF23zs5aw223SpiGHR62WUI0pA=;
-        b=S/ZRMUYscgN7PwFNXP6eiKHyPpzRzt/H+F6Y0JzP8DT/XhoxoACVk2xE653w1CIyUP
-         6jWQIEa3zfyqh1Sh8XZ3brRt/eXLpja3ZSgaEJXbXqPX2YFnBFr8opdXue+TBRZZ8XYl
-         HWK6KXOJ3yzrG/Tffknu7bxi2KxPP4L8OZURZmnJ+ckl8PL2W2ObwuBs52NLq7uhV7u4
-         eYC7f0sMBtTlkhrXKKq5zeSW58yUGmjVL/ZEbysMpRf4Ivf37TmROB0pu682pqpMJvta
-         0Tpm0vWohE0VYrc80MCFOOJwDWvmbBxNSNwd3tOpOvSVJhT/HxgQKGsBU1P6Tm+vmC/P
-         Fm8Q==
+        Thu, 8 Dec 2022 04:37:46 -0500
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1FA12D26;
+        Thu,  8 Dec 2022 01:37:46 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id bg10so630954wmb.1;
+        Thu, 08 Dec 2022 01:37:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Wk7+i0C/FWEnPCeIRF23zs5aw223SpiGHR62WUI0pA=;
-        b=msYeQf/BlVtuCurJfrF985IHfejkkjM7WsbFpEuQ2U+rqW/qpE4IARQmaVvFcZlE5a
-         WLxxOMijK9EiWlNSH75HDY7hSohfu+nZwqYRbT2lBebn0LkSX/t9jHy9q+l4ogstvuzH
-         kDYmIPmH+JrlBqep9Zf5CdC/oAcQMPSNErhygxefRZ9jiLHwOxWHF7oMwSZv4On/gpNw
-         qCROvYvOH8Tm9uVmoRDMEUyUKYoSWjvXLN4nKatJVaa3PEFjgw5NsBmtxh6ISc73gNOH
-         M7YPmok+j+OKvZ21e9rQJ0CyPExf/4bx5P3PZbK5DF3oR1eXzg09I1V62wSbJhwJCQIw
-         vrOQ==
-X-Gm-Message-State: ANoB5pm3eOeKFQE8VyMcJDiu76ir2tBUaHxC51k6So9lbpJS4vCglP9C
-        iBg74aVvWdECVbmnOJ7eBL9hnC37Y71CTEyp
-X-Google-Smtp-Source: AA0mqf7nPhTl/OBwrtfB1SU92fVjJcQqVpKX6rUXLGgxV8LV9fXuR+r2CN5Zmpws7gZEiGUzMiB+pA==
-X-Received: by 2002:a7b:ce0e:0:b0:3d1:cae5:efe9 with SMTP id m14-20020a7bce0e000000b003d1cae5efe9mr11693567wmc.158.1670492220314;
-        Thu, 08 Dec 2022 01:37:00 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056000004a00b002365730eae8sm21772828wrx.55.2022.12.08.01.36.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 01:36:59 -0800 (PST)
-Date:   Thu, 8 Dec 2022 12:36:56 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Matt Jan <zoo868e@gmail.com>
-Cc:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH 2/3] staging: vme_user: replace 'unsigned' with 'unsigned
- int'
-Message-ID: <Y5GwOELXuuGDPilx@kadam>
-References: <20221208091117.GA95220@zoo868e>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IE2BRq9L+0PqGquoqVrkYyY0LIMIc6GkCZYnscxNcAw=;
+        b=JpDbEKycMR+tvi1qzKUlX9g2eiPXj6nvzeA6bALI4eSZVGiDL47rMHfFtePahVMCM6
+         TtRjUHKeXxedgyxLkQVsy41w1GVoLRer6p2fyWOtD+A+KfR0wnczC0iKwZMUfuHJtwaA
+         Y4DEJsYP3LBNdOlTjZ9HKVxhCAJJzWiH9NagFsAaDplLudcv5rThaa091I4bmfX55/Qa
+         l4C7z6iCeeNj80HikaMf4SNq0D1gShA5DAKa38ZPTtR/pGt2K3MBOVULTH0yrNr/Couz
+         MwGbMn/IZYTu8Qp2lhVA/dLQJEICVpkvybUBMiW3RlnXkfwOyxqHMTP0HjdONmzJJYqT
+         1E0w==
+X-Gm-Message-State: ANoB5pn6YnSmLTxMDhbqfh3tjmUPNwVldHjQ3pGyqV1G7ezk1G9vtQoT
+        +Z+0M16scbvOP9V3T6xoikU=
+X-Google-Smtp-Source: AA0mqf6DS1fgI6lCdD1AjRyLiwjdw5l88iWUrUlwLzQPxLWVmcQUt3zi03en9VlUVHcUhixYmxMjfQ==
+X-Received: by 2002:a05:600c:21d8:b0:3d0:8d48:2993 with SMTP id x24-20020a05600c21d800b003d08d482993mr1655335wmj.36.1670492264474;
+        Thu, 08 Dec 2022 01:37:44 -0800 (PST)
+Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
+        by smtp.gmail.com with ESMTPSA id 6-20020a1c0206000000b003d1e90717ccsm4256666wmc.30.2022.12.08.01.37.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 01:37:44 -0800 (PST)
+Message-ID: <035f431c-15ee-b604-79be-ec2861b45b86@kernel.org>
+Date:   Thu, 8 Dec 2022 10:37:42 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208091117.GA95220@zoo868e>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 1/3] serial: earlycon-arm-semihost: Move smh_putc()
+ variants in respective arch's semihost.h
+Content-Language: en-US
+To:     Bin Meng <bmeng@tinylab.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-serial <linux-serial@vger.kernel.org>
+Cc:     "catalin.marinas" <catalin.marinas@arm.com>,
+        gregkh <gregkh@linuxfoundation.org>,
+        linux <linux@armlinux.org.uk>, will <will@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
+References: <20221207135352.592556-1-bmeng@tinylab.org>
+ <0443d5e9-b2ce-7e6b-c69b-708d67a5bf97@kernel.org>
+ <em14380c7e-ee2b-45d5-8879-dde687f03b2b@eea79fc7.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <em14380c7e-ee2b-45d5-8879-dde687f03b2b@eea79fc7.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:11:17PM +0800, Matt Jan wrote:
-> Update the bare use of "unsigned" to the preferred "unsigned int".
+On 08. 12. 22, 10:32, Bin Meng wrote:
+>>> +#ifdef CONFIG_THUMB2_KERNEL
+>>> +#define SEMIHOST_SWI    "0xab"
+>>> +#else
+>>> +#define SEMIHOST_SWI    "0x123456"
+>>> +#endif
+>>> +
+>>> +static inline void smh_putc(struct uart_port *port, unsigned char c)
+>>
+>> 2) port is unused in all implementations. So it should be dropped.
+>> 3) can you make "c" an explicit u8?
 > 
-> Signed-off-by: Matt Jan <zoo868e@gmail.com>
-> ---
->  drivers/staging/vme_user/vme_bridge.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/staging/vme_user/vme_bridge.h b/drivers/staging/vme_user/vme_bridge.h
-> index e17a8f7de165..9a127f6fefca 100644
-> --- a/drivers/staging/vme_user/vme_bridge.h
-> +++ b/drivers/staging/vme_user/vme_bridge.h
-> @@ -84,7 +84,7 @@ struct vme_error_handler {
->  	unsigned long long end;		/* End of error window */
->  	unsigned long long first_error;	/* Address of the first error */
->  	u32 aspace;			/* Address space of error window*/
-> -	unsigned num_errors;		/* Number of errors */
-> +	unsigned int num_errors;		/* Number of errors */
+> The smh_putc function signature is defined by the uart_console_write 
+> helper. I don't think we can change it.
 
-Now the comment is not aligned correctly.
+Ah. Of course. Then at least forward-declare struct uart_port here. So 
+that it works also when someone decides to include the header outside 
+serial.
 
-regards,
-dan carpenter
+thanks,
+-- 
+js
+suse labs
 
