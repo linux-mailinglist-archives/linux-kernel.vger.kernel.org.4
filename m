@@ -2,66 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15F756473BD
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:01:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C82646473CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiLHQB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:01:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S229941AbiLHQCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:02:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLHQBY (ORCPT
+        with ESMTP id S229896AbiLHQCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:01:24 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FE15E9FD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:01:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A70CD61F80
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:01:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7446C433D6;
-        Thu,  8 Dec 2022 16:01:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670515283;
-        bh=YlO69Sc0M8Hc8I5mYxw/iz45w3vbyvj2NPmlRe3hG4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=diXhpftUYUNVV/xIU+zq/ngEF+033EtYdp0LlZUDACKMnR8/ChR42F8SMRWIyIOe4
-         Vt8EV2+2sQJglWj2gP7yrDYXyf0E3MA0eMeumH4n75T3W+M6AXdKvQz62ca9stccxA
-         MFYhVmHa0N9CI+blJQvgdyciE9cQI2myvEk5CpEg=
-Date:   Thu, 8 Dec 2022 17:01:20 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Matt Jan <zoo868e@gmail.com>
-Cc:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: Re: [PATCH v3 1/3] staging: vme_user: add the spaces around the "*"
-Message-ID: <Y5IKUMH+mq++Kx9s@kroah.com>
-References: <20221208140531.3840-1-zoo868e@gmail.com>
+        Thu, 8 Dec 2022 11:02:13 -0500
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB139B28E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:02:11 -0800 (PST)
+Received: by mail-ej1-x633.google.com with SMTP id vv4so5142434ejc.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PgTcP7Sb6G+mxt6RrmX5diGBUpEOwhypZwyQEkEjZUo=;
+        b=KLiZD2qBOu/qNsJ2cZjRu0xhRjkjzMUvesjTwJF+Nj34blnUwi+EXBP1laZJLS8qQj
+         cAr+pVGQEkgP7EGIXfq2cAWyFCTDfhDG4cfZCYyiuGXVclg4Ynx/DWUMEaRSTGz833dN
+         NCoHV26jGRcTcQFsYg2jyVoKA97rHaaFhk9n7HsPuWB/Tb8YKl8MTuMkV3zveMStl4JV
+         Fs1Hau6UHdvfP1TGdyZ2wg9UWxVTI+u/sCEEHMSHyEXMjnoVcHwKffCOiWvuQNiEBOqL
+         qxXGyjwsH7GGufZlywGdDJo7ICy0YGaGpAj92BiZSrgKRLKt3z8huikoi8IE9RYGETD6
+         s8fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PgTcP7Sb6G+mxt6RrmX5diGBUpEOwhypZwyQEkEjZUo=;
+        b=CNtcInEeFmxg+myVaXv2vYFGfGb1jYCXJ1b9uhN/XZva0hIcgSRT5lpAQfcddqnl49
+         8XUZN3ASUQrB+20G2bh7IxvYbun7yzHgDhHWaSU2/+mgjO4bYvtyhsX7XFY08OlWqrJZ
+         nCc5hXf/5Fa3VcRovgUXHbFDyIc13VUyUm9julsTz/vOzJzRB5WMEN8sF2qmxZXGBfiz
+         ErR/kiabBycaZ2J3JerydtP/ZI2B1lkrmqU4t4Tzf76SMXyqJls6noNmd4TQ4CQrRPJb
+         Z/a21W/WJ+Sryatkxb4QRpriz5/Tswutwn4TB9ZC6v3Vw3DgRksL57wWdOvcJTvKWsbg
+         ZIZA==
+X-Gm-Message-State: ANoB5pk5hW5eMp9S7rcefgjTbX0u3nT4pD2r8MNZm1ltG0rMM1pUC9+r
+        BYoNqw8OlJmtnDMoyxYFPOsiqg==
+X-Google-Smtp-Source: AA0mqf7BntqxGCpKPwxV6jdJ+uAdbt8+2G6+VAMqcwwJNz/syMYkGpO94/UjsegtDWOy3jZydWHzVQ==
+X-Received: by 2002:a17:906:1e4d:b0:7c1:ac8:73a0 with SMTP id i13-20020a1709061e4d00b007c10ac873a0mr2285776ejj.51.1670515330398;
+        Thu, 08 Dec 2022 08:02:10 -0800 (PST)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id z16-20020a1709060f1000b007c1175334basm2675858eji.78.2022.12.08.08.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 08:02:08 -0800 (PST)
+Date:   Thu, 8 Dec 2022 17:02:04 +0100
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     leon@kernel.org, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v4] ice: Add check for kzalloc
+Message-ID: <Y5IKfOOhinE66+Kt@nanopsycho>
+References: <20221208133552.21915-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221208140531.3840-1-zoo868e@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221208133552.21915-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 10:05:32PM +0800, Matt Jan wrote:
-> Add a space around the "*" at vme_bridge.h to clear up a checkpatch
-> check.
-> 
-> Signed-off-by: Matt Jan <zoo868e@gmail.com>
+Thu, Dec 08, 2022 at 02:35:52PM CET, jiasheng@iscas.ac.cn wrote:
+>Add the check for the return value of kzalloc in order to avoid
+>NULL pointer dereference.
+>Moreover, use the goto-label to share the clean code.
+>
+>Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
+>Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-This series never showed up on lore.kernel.org, why not?
-
-It seems like you are spoofing the gmail.com address?  Or is something
-else going wrong on your email side?
-
-thanks,
-
-greg k-h
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
