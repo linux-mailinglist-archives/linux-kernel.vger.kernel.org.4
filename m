@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CD076468B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:43:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF3696468BF
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:52:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiLHFnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 00:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41894 "EHLO
+        id S229561AbiLHFwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 00:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLHFnm (ORCPT
+        with ESMTP id S229486AbiLHFwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 00:43:42 -0500
-Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA1E56D60
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 21:43:34 -0800 (PST)
-X-QQ-mid: bizesmtp62t1670478090t8q2wflu
-Received: from localhost ( [202.85.220.39])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 08 Dec 2022 13:41:26 +0800 (CST)
-X-QQ-SSF: 0140000000200080B000B00A0000000
-X-QQ-FEAT: 3M0okmaRx3gM4+7jki8+3gtus5Iib5lAeL2an5HRZtAr9vdO6JseNtEDerzBc
-        XB0hrxR4b/vbucEu+rQrQdqWKQ/h5usG+LLRWHiLKNh7bozJ8n7EaEkmagjTCh853owUECO
-        6Lpx6TuBHcg8bejUwoOOT2eFtF5tPF6A3TrKjKGfb7vZ92aCEokMmKtdh0smOWGVhOcjEu8
-        BOd00k06ZgsPzH5VS05yYdUWb+R1BhNww9vfYJoZw6HpitBgHZkO7CkU7SOq9Zeqf4OeQzQ
-        tu6ldk8jPlGJ7FETRZvR+afTvHMUV+Symulgp0BEAI5wkmyot3cnecKbEqqBcc+rPgefs5c
-        lrpPQFUl7cfyZCCFzWLzEwwiDTOj0cXgHLvDunG
-X-QQ-GoodBg: 2
-Date:   Thu, 8 Dec 2022 13:41:26 +0800
-From:   Wang Honghui <honghui.wang@ucas.com.cn>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM64: add to support Phytium SoCs
-Message-ID: <98DD627831B718EC+Y5F5BlamuRTaXc/T@TP-P15V>
+        Thu, 8 Dec 2022 00:52:14 -0500
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D327B92A37;
+        Wed,  7 Dec 2022 21:52:13 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 26FB5804D;
+        Thu,  8 Dec 2022 05:52:13 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 07:52:11 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v4 1/1] serial: core: Start managing serial
+ controllers to enable runtime PM
+Message-ID: <Y5F7i8Ee/jAQKu9n@atomide.com>
+References: <20221207124305.49943-1-tony@atomide.com>
+ <Y5D187ygOvDEA0UK@smile.fi.intel.com>
+ <Y5D3UKLgHCT9feuC@smile.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:ucas.com.cn:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_NONE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y5D3UKLgHCT9feuC@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-add a configuration option of ARM64 platform for Phytium SoC family.
+* Andy Shevchenko <andriy.shevchenko@intel.com> [221207 20:28]:
+> We can avoid this check by caching the platform device.
+> 
+> 	struct platform_device *ctrl_pdev = NULL;
+> 
+> 	if (...) {
+> 		ctrl_pdev = to_platform_device(ctrl_dev);
+> 	}
+> 
+> 	platform_device_del(ctrl_pdev);
 
-Signed-off-by: Wang Honghui <honghui.wang@ucas.com.cn>
----
- arch/arm64/Kconfig.platforms | 5 +++++
- 1 file changed, 5 insertions(+)
+OK yeah that's nicer :)
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 76580b932e44..7e8b17855eb7 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -236,6 +236,11 @@ config ARCH_NPCM
- 	  General support for NPCM8xx BMC (Arbel).
- 	  Nuvoton NPCM8xx BMC based on the Cortex A35.
- 
-+config ARCH_PHYTIUM
-+        bool "Phytium SoC Family"
-+        help
-+          This enables support for Phytium ARMv8 SoC family.
-+
- config ARCH_QCOM
- 	bool "Qualcomm Platforms"
- 	select GPIOLIB
--- 
-2.34.1
+> > Shouldn't you call platform_device_unregister()?
 
+Outside the error path it should be platform_device_unregister(),
+I'll check. Thanks also for your other comments.
+
+Regards,
+
+Tony
