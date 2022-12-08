@@ -2,94 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216AB646ED4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:43:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 120A0646ED2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:43:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiLHLnH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S229612AbiLHLnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:43:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbiLHLnE (ORCPT
+        with ESMTP id S229854AbiLHLnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:43:04 -0500
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 622907DA59;
-        Thu,  8 Dec 2022 03:43:03 -0800 (PST)
-Received: by mail-qk1-f176.google.com with SMTP id e1so322530qka.6;
-        Thu, 08 Dec 2022 03:43:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kpFfZJ+dd7Iy+0cWp0WVXsyVyo3bHauLh8AKOw7gOb4=;
-        b=7AFEKjrqLiLgQAHhdHlvlYK7MYMntQVwLnYqFuKBSIYFtkNNE0RYOmfPiIRlBGstBr
-         2zpgbR9bzayxz/cPJ7Qzl7qZ2wzMNzpOfztd8MrJNFlVMdyEekNZ65hrL+EJ/czxCSyP
-         h+9YiMCvJ5AhvcfnSVQoy2/lTcfppYnLTMoSMzINSwgpsq2KckwJ+XRW6oQp0anHG6Ia
-         yYT32k7xCwWZojHLRhBRqq0iokvur7NL6JIVmekmEzYK2nqbzrS67x5l+RBLK0SQyXWw
-         wbQQwzqTNrKLeOFbOvtOhObXzMAcx2TzcGUp+BkfOe5C1cQg2XpzyNeGVrVr0/5Tmye0
-         VvxQ==
-X-Gm-Message-State: ANoB5pkZ19QhuN9+AdgYBtpWIZh1yiybpgR/ySc11Nr5ezcxVlzovtrr
-        JmC6DRP/Shd6wcGaDt8DrxCyPN07d003R1+H19k=
-X-Google-Smtp-Source: AA0mqf4haKcNfFAogIpEO2sYYyE5jix837iZNpaBdOAClE82bkCsJsM6+OCut9s8bSzIENPIHc/0hQII70weaGRblJ0=
-X-Received: by 2002:a37:ad0c:0:b0:6ee:91b3:2484 with SMTP id
- f12-20020a37ad0c000000b006ee91b32484mr80159340qkm.648.1670499782570; Thu, 08
- Dec 2022 03:43:02 -0800 (PST)
+        Thu, 8 Dec 2022 06:43:03 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1D1054777
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:43:01 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94FB9D6E
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:43:07 -0800 (PST)
+Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9B2FB3F73B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:43:00 -0800 (PST)
+Date:   Thu, 8 Dec 2022 11:42:55 +0000
+From:   Liviu Dudau <liviu.dudau@arm.com>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     robin.murphy@arm.com, brian.starkey@arm.com, airlied@gmail.com,
+        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH] drm: mali-dp: Add check for kzalloc
+Message-ID: <Y5HNv5BEEzB2Gt9W@e110455-lin.cambridge.arm.com>
+References: <20221208031621.3274-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
- <1670416895-50172-2-git-send-email-lirongqing@baidu.com> <080936016634.CAJZ5v0i9J2YimfQsqJiZjFMR9MLG0fdBf+Regr+_PcsYrAE=SQ@mail.gmail.com>
- <17a6782c79a44aada31246ddefe02bfb@baidu.com>
-In-Reply-To: <17a6782c79a44aada31246ddefe02bfb@baidu.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 8 Dec 2022 12:42:51 +0100
-Message-ID: <CAJZ5v0gXSUdFeHajUcjV-eh3eW1aRoJ8Yvp9J95czQg0cMetTA@mail.gmail.com>
-Subject: Re: [PATCH 2/2][v2] cpuidle-haltpoll: Build as module by default
-To:     "Li,Rongqing" <lirongqing@baidu.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221208031621.3274-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 3:32 AM Li,Rongqing <lirongqing@baidu.com> wrote:
->
->
-> > > Allow user to unload it in running
-> >
-> > Just like that?  And corrupt things left and right while at it?
-> >
-> > No way.
-> >
-> > And why do you need this?
->
-> Cpuidle-haltpoll can not improve performance for all cases, like when guest has mwait, unixbench shows a small performance drop;
-> So change it as module, user can insmod this drivers and rmmod this driver at run time
+Hi Jiasheng,
 
-That is problematic, because in the mainline Linux kernel (which is
-what we are talking about here) there is no support for modular
-cpuidle governors.
+I appreciate the effort you have put into this and I find nothing wrong with the
+intention of the patch. However, I don't intend to move base from being the first
+member of the malidp_mw_connector_state struct as it has other benefits in the code
+and we can use container_of() in implementation of generic APIs. As Robin has rightly
+pointed, it is unlikely that a compiler will dereference the pointer before doing
+offset_of(), so having mw_state == NULL is safe, even if quirky.
 
-Also, there is an interface for switching cpuidle governors at run
-time already, so why can 't it be used to address this case?
+So I'm going to thank you for the patch but I will not merge it.
 
-> And some downstream os, centos and ubuntu build it module
+As a side comment, please use --in-reply-to and link to previous email when re-sending
+patches with small spelling fixes as otherwise it gets confusing on which email is the last
+one and it also relies on the servers delivering messages in the order you've sent,
+not always a strong guarantee.
 
-Well, it's their problem.
+Best regards,
+Liviu
+
+On Thu, Dec 08, 2022 at 11:16:21AM +0800, Jiasheng Jiang wrote:
+> As kzalloc may fail and return NULL pointer, the "mw_state" can be NULL.
+> If the layout of struct malidp_mw_connector_state ever changes, it
+> will cause NULL poineter derefernce of "&mw_state->base".
+> Therefore, the "mw_state" should be checked whether it is NULL in order
+> to improve the robust.
+> 
+> Fixes: 8cbc5caf36ef ("drm: mali-dp: Add writeback connector")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+>  drivers/gpu/drm/arm/malidp_mw.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/arm/malidp_mw.c b/drivers/gpu/drm/arm/malidp_mw.c
+> index ef76d0e6ee2f..fe4474c2ddcf 100644
+> --- a/drivers/gpu/drm/arm/malidp_mw.c
+> +++ b/drivers/gpu/drm/arm/malidp_mw.c
+> @@ -72,7 +72,11 @@ static void malidp_mw_connector_reset(struct drm_connector *connector)
+>  		__drm_atomic_helper_connector_destroy_state(connector->state);
+>  
+>  	kfree(connector->state);
+> -	__drm_atomic_helper_connector_reset(connector, &mw_state->base);
+> +
+> +	if (mw_state)
+> +		__drm_atomic_helper_connector_reset(connector, &mw_state->base);
+> +	else
+> +		__drm_atomic_helper_connector_reset(connector, NULL);
+>  }
+>  
+>  static enum drm_connector_status
+> -- 
+> 2.25.1
+> 
+
+-- 
+====================
+| I would like to |
+| fix the world,  |
+| but they're not |
+| giving me the   |
+ \ source code!  /
+  ---------------
+    ¯\_(ツ)_/¯
