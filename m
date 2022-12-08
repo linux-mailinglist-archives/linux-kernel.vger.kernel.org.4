@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E77F64719C
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CD764719B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiLHOXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:23:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49760 "EHLO
+        id S229819AbiLHOXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:23:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiLHOXN (ORCPT
+        with ESMTP id S230071AbiLHOWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:23:13 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3505A98EBF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:22:26 -0800 (PST)
-Received: from dggpemm500017.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4NSbqd15PNzJpDN;
-        Thu,  8 Dec 2022 22:18:53 +0800 (CST)
-Received: from build.huawei.com (10.175.101.6) by
- dggpemm500017.china.huawei.com (7.185.36.178) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Dec 2022 22:22:24 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wenchao Hao <haowenchao@huawei.com>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>
-CC:     <liuzhiqiang26@huawei.com>, <linfeilong@huawei.com>
-Subject: [PATCH] cma:tracing: Print alloc result in trace_cma_alloc_finish
-Date:   Thu, 8 Dec 2022 22:21:30 +0800
-Message-ID: <20221208142130.1501195-1-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 8 Dec 2022 09:22:49 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFF887CBE;
+        Thu,  8 Dec 2022 06:21:45 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so4777284pjj.2;
+        Thu, 08 Dec 2022 06:21:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LqtUGDeRhyIU0uvL6sB1iilGR2QZ+QgSxzpj3bG0/0w=;
+        b=XbzNLFQn2MkS6jKtKCqOuDgonun+mWLHs+6xOUJWR9JbHFWiwxJUIcyHlCqydnO1w0
+         raO/wFAEMQwlhYleVtmSMFLq/T1EL+n+FX3ZPasyKW8KlNyaceOFzUHCaLNgF4X3TRTD
+         ySOR+k+3O5bIdPFTcyM6yHwcDL6CUmRcFz9MxSo6695POP/0H/13HaLeiqgMtGVomMIr
+         EggUyaQcI6bfI3BYr42b2sBxh9H163oibE82E1udhNDJWwSVlRQ5TfycS6NdiOX3L82Z
+         W55jWqFZd0e5JWvKrghbGpG3WPwk5y2y/u2UCyIX8jRvnmcBQ+VIas5MsptNokxHLuGS
+         p8PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LqtUGDeRhyIU0uvL6sB1iilGR2QZ+QgSxzpj3bG0/0w=;
+        b=mIZNY0/TVMSANfW899puJVNyBUmjdMAO/xiNZfWmTq9QsVwrz1V++wazzKSJX0IvIs
+         wXsPuULJxav+Wj5K5Dhc2b3Ew1D9NJEvDc+x6PsePoW3fzlN+E6Vy1MkbsYG7YowXIE7
+         N6U2xjhfyxb20/vaZbU1Cm1tcH7H0OjkqMFh1M1LSJzCoXKrCSL/ljKqpFDusOqSVM19
+         HqVgU7fGdDrUhY96nyG/PDwtdZ1OFuHXJDE27Rd1fWZG+Tb5t/emoBcnaCJGKkGfCfkI
+         3n2oN+2c/sIOsOBftwihlDjC+FXWXwgvPmaST4QSlonjqjeorrx6W8bpoxtZorK/UePT
+         Atqg==
+X-Gm-Message-State: ANoB5pny6+KyAPfDZHQwAwttNZLO+N1CGnXxlxij8cj08cVJLA2/yJo8
+        purFbYSFj41IcqfbED/gLpY=
+X-Google-Smtp-Source: AA0mqf62yqWGX4NSoquH8/vJ6ywT+lO47rCgmhBS/AlPQYSxPcvr5USAYB11rckMDH3o8dzPiQWkdw==
+X-Received: by 2002:a17:903:32cb:b0:189:cca6:3966 with SMTP id i11-20020a17090332cb00b00189cca63966mr21750475plr.89.1670509305032;
+        Thu, 08 Dec 2022 06:21:45 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id c129-20020a624e87000000b0057627521e82sm13398950pfb.195.2022.12.08.06.21.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 06:21:44 -0800 (PST)
+Message-ID: <c3123488-1623-831e-783f-dae215b3f457@gmail.com>
+Date:   Thu, 8 Dec 2022 22:21:34 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH V2 16/18] x86/sev: Initialize #HV doorbell and handle
+ interrupt requests
+Content-Language: en-US
+To:     "Gupta, Pankaj" <pankaj.gupta@amd.com>, luto@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        tiala@microsoft.com, kirill@shutemov.name,
+        jiangshan.ljs@antgroup.com, peterz@infradead.org,
+        ashish.kalra@amd.com, srutherford@google.com,
+        akpm@linux-foundation.org, anshuman.khandual@arm.com,
+        pawan.kumar.gupta@linux.intel.com, adrian.hunter@intel.com,
+        daniel.sneddon@linux.intel.com, alexander.shishkin@linux.intel.com,
+        sandipan.das@amd.com, ray.huang@amd.com, brijesh.singh@amd.com,
+        michael.roth@amd.com, thomas.lendacky@amd.com,
+        venu.busireddy@oracle.com, sterritt@google.com,
+        tony.luck@intel.com, samitolvanen@google.com, fenghua.yu@intel.com
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-17-ltykernel@gmail.com>
+ <ddb23472-3f8e-191d-fa5f-d18f1a9e4ad7@amd.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <ddb23472-3f8e-191d-fa5f-d18f1a9e4ad7@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The result of allocation is not printed in trace_cma_alloc_finish
-now, while it's important to do it so we can set filters to catch
-specific error on allocation or trigger some operations on specific
-error.
+On 12/7/2022 10:13 PM, Gupta, Pankaj wrote:
+>> +#endif
+>> +}
+>> +
+>>   static __always_inline void native_irq_disable(void)
+>>   {
+>>       asm volatile("cli": : :"memory");
+>> @@ -43,6 +59,9 @@ static __always_inline void native_irq_disable(void)
+>>   static __always_inline void native_irq_enable(void)
+>>   {
+>>       asm volatile("sti": : :"memory");
+>> +#ifdef CONFIG_AMD_MEM_ENCRYPT
+>> +    check_hv_pending(NULL);
+> 
+> Just trying to understand when regs will be NULL?
 
-Although we have printed the result in log, but the log is
-conditional and could not be filtered by tracing event.
+check_hv_pending() will be divided into two functions.
 
-What's more, it introduce little overhead to print this result.
-The result of allocation is named as errorno in trace.
-
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
----
- include/trace/events/cma.h | 32 +++++++++++++++++++++++++++++---
- mm/cma.c                   |  2 +-
- 2 files changed, 30 insertions(+), 4 deletions(-)
-
-diff --git a/include/trace/events/cma.h b/include/trace/events/cma.h
-index 3d708dae1542..ef75ea606ab2 100644
---- a/include/trace/events/cma.h
-+++ b/include/trace/events/cma.h
-@@ -91,12 +91,38 @@ TRACE_EVENT(cma_alloc_start,
- 		  __entry->align)
- );
- 
--DEFINE_EVENT(cma_alloc_class, cma_alloc_finish,
-+TRACE_EVENT(cma_alloc_finish,
- 
- 	TP_PROTO(const char *name, unsigned long pfn, const struct page *page,
--		 unsigned long count, unsigned int align),
-+		 unsigned long count, unsigned int align, int errorno),
- 
--	TP_ARGS(name, pfn, page, count, align)
-+	TP_ARGS(name, pfn, page, count, align, errorno),
-+
-+	TP_STRUCT__entry(
-+		__string(name, name)
-+		__field(unsigned long, pfn)
-+		__field(const struct page *, page)
-+		__field(unsigned long, count)
-+		__field(unsigned int, align)
-+		__field(int, errorno)
-+	),
-+
-+	TP_fast_assign(
-+		__assign_str(name, name);
-+		__entry->pfn = pfn;
-+		__entry->page = page;
-+		__entry->count = count;
-+		__entry->align = align;
-+		__entry->errorno = errorno;
-+	),
-+
-+	TP_printk("name=%s pfn=0x%lx page=%p count=%lu align=%u errorno=%d",
-+		  __get_str(name),
-+		  __entry->pfn,
-+		  __entry->page,
-+		  __entry->count,
-+		  __entry->align,
-+		  __entry->errorno)
- );
- 
- DEFINE_EVENT(cma_alloc_class, cma_alloc_busy_retry,
-diff --git a/mm/cma.c b/mm/cma.c
-index 4a978e09547a..a75b17b03b66 100644
---- a/mm/cma.c
-+++ b/mm/cma.c
-@@ -491,7 +491,7 @@ struct page *cma_alloc(struct cma *cma, unsigned long count,
- 		start = bitmap_no + mask + 1;
- 	}
- 
--	trace_cma_alloc_finish(cma->name, pfn, page, count, align);
-+	trace_cma_alloc_finish(cma->name, pfn, page, count, align, ret);
- 
- 	/*
- 	 * CMA can allocate multiple page blocks, which results in different
--- 
-2.32.0
+The one handles #hv event in the #HV exception code path.
+The other one handles pending irq event in the irq re-enable
+code path。 In this version, the "regs = NULL" for check_hv_pending()
+is used in the irq re-enable code path.
 
