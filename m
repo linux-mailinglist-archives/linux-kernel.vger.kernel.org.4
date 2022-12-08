@@ -2,120 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB49647549
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:04:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74366647547
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:03:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiLHSEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:04:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiLHSDq (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230009AbiLHSDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 8 Dec 2022 13:03:46 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38676AE4F4
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:03:38 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so5464233pjs.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:03:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:reply-to:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=ltPbBrCKZDS7mJn+bR+RqAKCWGPP/Hc1SQkH2hWVmXg=;
-        b=hRgCXWOPDDo7RlbXFKoM69xuCbwt8WjzTaUsg01akGxMhNwABD12DyylexVFkD/7Mu
-         M+qrq5HV/MDlhFQ2jxpJkr9HNBE7YMfEZaXVGRTNrwlZFE00eokpEecQWj3j6JrbPCbA
-         1zHxzkaBVjYkjr1s2oWBVUR/5nbzmiSc+/4+6qJl50hF8eFgPh9NnQuk0lo+FhfUqNe6
-         F3QleTfoMD2zNv1+SBcEq0q4ftrAofnh81ysKVSlErGBas3RbClmzj9QYTQztCMaIqID
-         gUiM72cYqHlrpjl8RiTv3askqJOawjDqYKnOo2KlhUkvFGpDTtXyhTuqVoXIozJUmNZa
-         Jslw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:reply-to:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ltPbBrCKZDS7mJn+bR+RqAKCWGPP/Hc1SQkH2hWVmXg=;
-        b=S8GbmdEaaJ15ZfSu89GZnVlKJeE2tH/TE8XGzvRWNebysPFY7GUehDE84EXQCGVG0b
-         xMTrBfJk1IVFdCYcz3hQJ1iNm/sqWerwxAIe7qr/Vui2ojXOX4JSfhEtSc9kTCeVcjfX
-         MhDFvswpvCwi2DDSL7tekgo8hFF6Nq6RssRyabUHXKTZ1pM/k0G91jumERUvN6wCMWP3
-         rWznlWXlrfpl3DLU2DGtvFv4JW81F6nidahWbkln8/E4nx2zxFRK7us/Uo8AQPsy/bQp
-         aSGrN6xI2iV7RoLL25JZ+mVNhmYuKN3CZEe7oavR9X7hQVl4wCaQZAIeqow+cOkR2zMz
-         n3AQ==
-X-Gm-Message-State: ANoB5ply8ySWdXqsekZBmbo+21OrIE+1FfirJGQla69sU6ee9CF80pVJ
-        VPNgRtyG6VGWik56JRWplvc=
-X-Google-Smtp-Source: AA0mqf7l35N5CcqRRUA9kCptWivxf7XeTYnN81QwD1VXUWMNcNSdS0Hq0NDpeaJYmfVtAUqrHE18Iw==
-X-Received: by 2002:a17:90a:7606:b0:219:823e:6726 with SMTP id s6-20020a17090a760600b00219823e6726mr2920444pjk.19.1670522617801;
-        Thu, 08 Dec 2022 10:03:37 -0800 (PST)
-Received: from localhost.localdomain ([198.13.51.166])
-        by smtp.gmail.com with ESMTPSA id x23-20020a63db57000000b004785e505bcdsm13377909pgi.51.2022.12.08.10.03.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Dec 2022 10:03:37 -0800 (PST)
-From:   Kairui Song <ryncsn@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>,
-        Kairui Song <kasong@tencent.com>
-Subject: [PATCH 5/5] swap: avoid ra statistic lost when swapin races
-Date:   Fri,  9 Dec 2022 02:02:09 +0800
-Message-Id: <20221208180209.50845-6-ryncsn@gmail.com>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20221208180209.50845-1-ryncsn@gmail.com>
-References: <20221208180209.50845-1-ryncsn@gmail.com>
-Reply-To: Kairui Song <kasong@tencent.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229969AbiLHSDa (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 8 Dec 2022 13:03:30 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B72AD33C;
+        Thu,  8 Dec 2022 10:03:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670522609; x=1702058609;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=a5QVaJCW+1KfH+RIxcXb6CC8DOjg9E8IGIEr6DurHN4=;
+  b=GZuGOMlkP+zF9wHo7SHVTokw/nl48YpRT0CYYAXRoIrdfryA9SkNIcX6
+   kpiwtN+tR82YC6fGzonfqI081wmtM2D4i6lIxKyxi7eh79gH1Pw7Uqdwm
+   dp96rdTbLgAxN18Dx3xYpD29uc5C2sH03I8lLNAfD2tp4e0jNfH851NXk
+   BA2Ls5d8Nu5DMSeybuvpKFfWlVPnp56giV1T17hFcoGN5XE4SZsjnCBcP
+   gWPEA1kqBrjwJnAuMMjwRog7UHvimecZBHcK7/7Qs16QYWi9d0l31bCgQ
+   imqijagBcvfKFLmeaiBGQudyLz44uZNd+EUasJdv0nKe0cqxlizaDiiT0
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="319116038"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="319116038"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:03:06 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="640720980"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="640720980"
+Received: from nmanikan-mobl1.amr.corp.intel.com (HELO [10.251.3.168]) ([10.251.3.168])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:03:05 -0800
+Message-ID: <08a420401b2fb539f37cbf21a0ded6bf8c68c72b.camel@linux.intel.com>
+Subject: Re: [PATCH v2 03/18] x86/sgx: Add 'struct sgx_epc_lru_lists' to
+ encapsulate lru list(s)
+From:   Kristen Carlson Accardi <kristen@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Date:   Thu, 08 Dec 2022 10:03:04 -0800
+In-Reply-To: <Y5IDXF+6GmURxbYF@kernel.org>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+         <20221202183655.3767674-4-kristen@linux.intel.com>
+         <Y5IDXF+6GmURxbYF@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kairui Song <kasong@tencent.com>
+On Thu, 2022-12-08 at 15:31 +0000, Jarkko Sakkinen wrote:
+> On Fri, Dec 02, 2022 at 10:36:39AM -0800, Kristen Carlson Accardi
+> wrote:
+> > Introduce a data structure to wrap the existing reclaimable list
+> > and its spinlock in a struct to minimize the code changes needed
+> > to handle multiple LRUs as well as reclaimable and non-reclaimable
+> > lists, both of which will be introduced and used by SGX EPC
+> > cgroups.
+> >=20
+> > Signed-off-by: Sean Christopherson
+> > <sean.j.christopherson@intel.com>
+> > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> > Cc: Sean Christopherson <seanjc@google.com>
+> > ---
+> > =C2=A0arch/x86/kernel/cpu/sgx/sgx.h | 65
+> > +++++++++++++++++++++++++++++++++++
+> > =C2=A01 file changed, 65 insertions(+)
+> >=20
+> > diff --git a/arch/x86/kernel/cpu/sgx/sgx.h
+> > b/arch/x86/kernel/cpu/sgx/sgx.h
+> > index 39cb15a8abcb..5e6d88438fae 100644
+> > --- a/arch/x86/kernel/cpu/sgx/sgx.h
+> > +++ b/arch/x86/kernel/cpu/sgx/sgx.h
+> > @@ -90,6 +90,71 @@ static inline void *sgx_get_epc_virt_addr(struct
+> > sgx_epc_page *page)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return section->virt_ad=
+dr + index * PAGE_SIZE;
+> > =C2=A0}
+> > =C2=A0
+> > +/*
+> > + * This data structure wraps a list of reclaimable EPC pages, and
+> > a list of
+> > + * non-reclaimable EPC pages and is used to implement a LRU policy
+> > during
+> > + * reclamation.
+> > + */
+> > +struct sgx_epc_lru_lists {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0spinlock_t lock;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct list_head reclaimable=
+;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct list_head unreclaimab=
+le;
+> > +};
+> =C2=A0
+> Why this is named like this, and not sgx_epc_global_rcu? Are there
+> any other use cases?
+>=20
+> BR, Jarkko
 
-__read_swap_cache_async should just call swap_cache_get_folio for trying
-to look up the swap cache. Because swap_cache_get_folio handles the
-readahead statistic, and clears the RA flag, looking up the cache
-directly will skip these parts.
-
-And the comment no longer applies after commit 442701e7058b
-("mm/swap: remove swap_cache_info statistics"), just remove them.
-
-Fixes: 442701e7058b ("mm/swap: remove swap_cache_info statistics")
-Signed-off-by: Kairui Song <kasong@tencent.com>
----
- mm/swap_state.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/mm/swap_state.c b/mm/swap_state.c
-index eba388f67741..f39cfb62551d 100644
---- a/mm/swap_state.c
-+++ b/mm/swap_state.c
-@@ -418,15 +418,12 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
- 	for (;;) {
- 		int err;
- 		/*
--		 * First check the swap cache.  Since this is normally
--		 * called after swap_cache_get_folio() failed, re-calling
--		 * that would confuse statistics.
-+		 * First check the swap cache in case of race.
- 		 */
- 		si = get_swap_device(entry);
- 		if (!si)
- 			return NULL;
--		folio = filemap_get_folio(swap_address_space(entry),
--						swp_offset(entry));
-+		folio = swap_cache_get_folio(entry, vma, addr);
- 		put_swap_device(si);
- 		if (folio)
- 			return folio_file_page(folio, swp_offset(entry));
--- 
-2.35.2
+Yes, there are other use cases that are introduced in the other
+patches. This structure is used to in the cgroup struct to hold cgroup
+specific LRUs.
 
