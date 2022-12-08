@@ -2,128 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D20646C27
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C6D646C17
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:44:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiLHJpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:45:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39402 "EHLO
+        id S230212AbiLHJoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:44:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiLHJpH (ORCPT
+        with ESMTP id S230197AbiLHJoW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:45:07 -0500
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59BB76E57B;
-        Thu,  8 Dec 2022 01:45:06 -0800 (PST)
+        Thu, 8 Dec 2022 04:44:22 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0377B6D7C0
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:44:21 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id p36so1169348lfa.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:44:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1670492707; x=1702028707;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7wbNfUuo0gjVZMzLaxaF+nBToHh3AnEBb4hQSLoqur0=;
-  b=IWNXBn7F56NR0HqP1/DnjfCESKFf1WhOEJKMEBhX1ts44iIy4NV2YS1w
-   qBaTIR4MuMd5RZ9jOM1Ji3B/fqKZMqNZrAV3h0UA1advKBfT9tvsWIGWg
-   ds8wMqZXnqqAFLEpcMhtFBcp22c2N0+3rpmRo5LZ/poX7Qd8syCJnwFHt
-   s=;
-X-IronPort-AV: E=Sophos;i="5.96,227,1665446400"; 
-   d="scan'208";a="159200994"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-6e7a78d7.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 09:45:03 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1e-m6i4x-6e7a78d7.us-east-1.amazon.com (Postfix) with ESMTPS id C2E3282149;
-        Thu,  8 Dec 2022 09:44:57 +0000 (UTC)
-Received: from EX19D008UEC004.ant.amazon.com (10.252.135.170) by
- EX13MTAUEE002.ant.amazon.com (10.43.62.24) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Thu, 8 Dec 2022 09:44:56 +0000
-Received: from EX13MTAUEE002.ant.amazon.com (10.43.62.24) by
- EX19D008UEC004.ant.amazon.com (10.252.135.170) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
- Thu, 8 Dec 2022 09:44:56 +0000
-Received: from dev-dsk-attofari-1c-9e00ebdc.eu-west-1.amazon.com
- (10.13.242.123) by mail-relay.amazon.com (10.43.62.224) with Microsoft SMTP
- Server (TLS) id 15.0.1497.42 via Frontend Transport; Thu, 8 Dec 2022 09:44:55
- +0000
-From:   Adamos Ttofari <attofari@amazon.de>
-CC:     <attofari@amazon.de>, <dwmw@amazon.co.uk>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nikita Leshenko <nikita.leshchenko@oracle.com>,
-        Liran Alon <liran.alon@oracle.com>,
-        "Konrad Rzeszutek Wilk" <konrad.wilk@oracle.com>,
-        =?UTF-8?q?Radim=20Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@redhat.com>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] KVM: x86: ioapic: Fix level-triggered EOI and userspace I/OAPIC reconfigure race
-Date:   Thu, 8 Dec 2022 09:44:14 +0000
-Message-ID: <20221208094415.12723-1-attofari@amazon.de>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221207091324.89619-1-attofari@amazon.de>
-References: <20221207091324.89619-1-attofari@amazon.de>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tR+f/+3nybjrz985QuJTlkfFuvKyHlsK8G2EHEYD21M=;
+        b=NvP+hneTcrJLq5aKAbWBlzRJJD/2srJe9IAT/Pq2hUX9OAuJ1vz01KfcttkSjfGWq6
+         MkVQq1uw8kaTQSnVB8uX4rSsEPLC1n/PxH/go/ginVJgW0kAhDGkoNoRs1nCQHSk4/ck
+         94ktgccj6TDjOHMk+TlN+wvvuCtzqnhdW7+fA1IExI/sPZyyW9qQ4IwDE45IaqKWgC1L
+         fz0+PgDy6EuN18RY7i+dTcRX5m1e/rFaC7S5djIFlmkXMFDMfb3lBRwtf1W/F9Vre7Gh
+         5Y9A7wMqnRq2lIyDogonPN6I6vu4NSaPH0jxR54Lwuur/QSXC6XPAOQghUC7UTeLNFms
+         ZW0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tR+f/+3nybjrz985QuJTlkfFuvKyHlsK8G2EHEYD21M=;
+        b=iJCg+p8+VW3vT9+Im9S5U41bOgn7II4up5oaGHG1xZRrrmOgeJig2cN0+ei4a3dTEU
+         /0nS8/tcDbNI9RTbILxPFj5WbwKNFtQZgYs1j2b+G9dHYbNsd5Q13aZdnu9wFxn8vbRy
+         MSWibL2SVmSdCymHbROgjGqC9REKioGAsdSxSvFDA2yXwCqru7T5DmLteJ2ryKHUD27M
+         pMTQpIphVxzyMy0Ybbp04tm6KzB7tJCWOTGnN0baNm9esRfUPiJtTVwzje1TU6l8f49P
+         pAoYTOumqnwmdZdEuRKsBHgkBn7j+lQ5VS3OPbWhzcXgnHzXHrgI7hcGI7oF2lZ/v0/X
+         x84Q==
+X-Gm-Message-State: ANoB5pm9p8fj3M65LS4kg1oxSbm+/GFJPlBwpi9/1kq/eNmWvrhzTok1
+        XC69Gy4OSk7PJaGg2dU9PLMk3w==
+X-Google-Smtp-Source: AA0mqf77vkoDAk7e+na4oDIjnlgURFAAvORsW7EKDtnaXGZNkHzBFx7iahF6vIP8MxlwXav31qtCag==
+X-Received: by 2002:a05:6512:31c5:b0:4a2:3ca7:3a44 with SMTP id j5-20020a05651231c500b004a23ca73a44mr26614010lfe.23.1670492659337;
+        Thu, 08 Dec 2022 01:44:19 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id d23-20020a194f17000000b0049482adb3basm3257906lfb.63.2022.12.08.01.44.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 01:44:18 -0800 (PST)
+Message-ID: <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
+Date:   Thu, 8 Dec 2022 10:44:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
+ controller
+Content-Language: en-US
+To:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>
+Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
+ <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When scanning userspace I/OAPIC entries, intercept EOI for level-triggered
-IRQs if the current vCPU has a pending and/or in-service IRQ for the
-vector in its local API, even if the vCPU doesn't match the new entry's
-destination.  This fixes a race between userspace I/OAPIC reconfiguration
-and IRQ delivery that results in the vector's bit being left set in the
-remote IRR due to the eventual EOI not being forwarded to the userspace
-I/OAPIC.
+On 08/12/2022 07:29, Xiangsheng Hou wrote:
+> Split MediaTek ECC engine with rawnand controller and convert to
+> YAML schema.
+> 
+> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> ---
+>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
+>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
+>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+>  3 files changed, 216 insertions(+), 176 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+> 
+> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> new file mode 100644
+> index 000000000000..eb1a44c7ae4e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+> @@ -0,0 +1,154 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
+> +
+> +maintainers:
+> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - mediatek,mt2701-nfc
+> +      - mediatek,mt2712-nfc
+> +      - mediatek,mt7622-nfc
+> +
+> +  reg:
+> +    items:
+> +      - description: Base physical address and size of NFI.
+> +
+> +  interrupts:
+> +    items:
+> +      - description: NFI interrupt
+> +
+> +  clocks:
+> +    items:
+> +      - description: clock used for the controller
+> +      - description: clock used for the pad
+> +
+> +  clock-names:
+> +    items:
+> +      - const: nfi_clk
+> +      - const: pad_clk
+> +
+> +  ecc-engine:
+> +    description: device-tree node of the required ECC engine.
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +patternProperties:
+> +  "^nand@[a-f0-9]$":
+> +    type: object
 
-Commit 0fc5a36dd6b3 ("KVM: x86: ioapic: Fix level-triggered EOI and IOAPIC
-reconfigure race") fixed the in-kernel IOAPIC, but not the userspace
-IOAPIC configuration, which has a similar race.
+This should be instead:
+    $ref: nand-chip.yaml#
+    unevaluatedProperties: false
 
-Fixes: 0fc5a36dd6b3 ("KVM: x86: ioapic: Fix level-triggered EOI and IOAPIC reconfigure race")
+and then properties below (due to current dtschema limitations) should
+list properties from nand-controller.yaml:
 
-Signed-off-by: Adamos Ttofari <attofari@amazon.de>
----
- arch/x86/kvm/irq_comm.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+      nand-on-flash-bbt: true
 
-diff --git a/arch/x86/kvm/irq_comm.c b/arch/x86/kvm/irq_comm.c
-index 0687162c4f22..3742d9adacfc 100644
---- a/arch/x86/kvm/irq_comm.c
-+++ b/arch/x86/kvm/irq_comm.c
-@@ -426,8 +426,9 @@ void kvm_scan_ioapic_routes(struct kvm_vcpu *vcpu,
- 			kvm_set_msi_irq(vcpu->kvm, entry, &irq);
- 
- 			if (irq.trig_mode &&
--			    kvm_apic_match_dest(vcpu, NULL, APIC_DEST_NOSHORT,
--						irq.dest_id, irq.dest_mode))
-+			    (kvm_apic_match_dest(vcpu, NULL, APIC_DEST_NOSHORT,
-+						 irq.dest_id, irq.dest_mode) ||
-+			     kvm_apic_pending_eoi(vcpu, irq.vector)))
- 				__set_bit(irq.vector, ioapic_handled_vectors);
- 		}
- 	}
--- 
-2.38.1
+Optionally, we could create additional schema - nand-controller-chip,
+which would be referenced directly by nand-controller and itself would
+ref nand-chip.
 
+> +    properties:
+> +      reg:
+> +        minimum: 0
 
+no need, 0 is the minimum.
 
+> +        maximum: 1
+> +      nand-ecc-mode:
+> +        const: hw
+> +
+> +allOf:
+> +  - $ref: nand-controller.yaml#
+> +
+> +  - if:
 
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+Best regards,
+Krzysztof
 
