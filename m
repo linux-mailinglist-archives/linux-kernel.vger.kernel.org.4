@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7649E646B1E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EDA646B23
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:55:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbiLHIy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:54:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S229930AbiLHIza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:55:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbiLHIyv (ORCPT
+        with ESMTP id S229550AbiLHIz1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:54:51 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974CC61767
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:53:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670489601;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FVqadiQb7PC1SLGPoc0bP4mZV3t5kSxsdX8p7illcMk=;
-        b=T/d0shSWPnFK5E3JsQYs2gHreEuWUrOr6PHFS6PMDdXAew+L1rzrasKKrBPUY+ku1oYTj8
-        wBfW0ZqeWUD/XzgHHslBYUTNj91e/xSOeWkaWNprXOx8a4VtypTmuar1S/gaTmCzBH3Osj
-        1bYKE2V7eYxAGkP/LAoWTBiNmWeTrnA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-b2cxZ0MhPBGBOu5E5zLTqA-1; Thu, 08 Dec 2022 03:53:18 -0500
-X-MC-Unique: b2cxZ0MhPBGBOu5E5zLTqA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BE16D185A79C;
-        Thu,  8 Dec 2022 08:53:17 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.17])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E9BFC15BA8;
-        Thu,  8 Dec 2022 08:53:15 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20221208035617.8037-1-hdanton@sina.com>
-References: <20221208035617.8037-1-hdanton@sina.com> <000000000000229f1505ef2b6159@google.com>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     dhowells@redhat.com,
-        syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
+        Thu, 8 Dec 2022 03:55:27 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68494220FC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:55:26 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id t18so753122pfq.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:55:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6VayokB70LyrjXyEVWXgl8dkywJiJ31ush1u5QME9Tk=;
+        b=C0p48f4zpfmKrFRC7iJWW38eFBvFreifFdLYzew/eWTOnEWLrf4Rec7rra16DB2OAv
+         g6pUj+47xCV17nBOXuIjD7gYLZbqPXHjodmrpj8SzA0wctQqsrnMCMtUk3JCVUJnQJDL
+         f2c8wvIDA1W0GLJMHx4g55gxi5D1SIXU4cwLWkUlqqNnmsam/sEOGOu0gnXgzucoo+b5
+         TPLidokkjGh6Sg7WH9BftcmV6TzjWzmNLzSj0769x+lj/9q5sJnfimWRxewpTGQFv6Hh
+         +DXVSIm1aPR0H1QvYu/5Zw8cH/2JJZBW0975UEhnzrYYpfjvIlAodMbKcEc8e9hWM4uY
+         SKJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6VayokB70LyrjXyEVWXgl8dkywJiJ31ush1u5QME9Tk=;
+        b=0Uw2Iqnir2wjBLvXi5t5mONPb1rgwgvbFNa1ScZ8WzUThXl8fmhIhxzf361Ug3AtLk
+         UZ7r3tAQ0jX7kIRjQ1vGmFCDeymfuwZEy1gBXpH4zpDEgU2Pu5XPmoFlABsUcw72Qplw
+         gj50MAK8aD6/UNkZFk9oDV+xFUO4RF8Ea5hAI/lajOboEoCQ6z1Khen6bgWRctR6kCSB
+         pelFgGmrXsuG8MepNDHD5FIphKcFaNTAIknF263+5CnI9TMALaEunjFe+iWqmVAtFZtg
+         PJgvnXbPMwLCUqcAzfcoD8bOgzChXPtBo3T68YeiY1JR/776mEFIuDxUZLunxD4xDvax
+         QxgA==
+X-Gm-Message-State: ANoB5plLTydzS3Ad9S/YYj4tPLSshyl+eBIzfoJSjEi8MLB4IvazxOkd
+        sMLstF42yQdQE+PaAESE8Yp8LQ==
+X-Google-Smtp-Source: AA0mqf61iqjNUTJ3MoLwp1y/7j/mwSj98Di9I2tLZhII1HDwxBs6fk7hVhzy/DYluSIMVt0fv0vgyw==
+X-Received: by 2002:a62:6d46:0:b0:563:54fd:3638 with SMTP id i67-20020a626d46000000b0056354fd3638mr97634913pfc.44.1670489725917;
+        Thu, 08 Dec 2022 00:55:25 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.253])
+        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b00183c67844aesm16158990plg.22.2022.12.08.00.55.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 00:55:25 -0800 (PST)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
+        muchun.song@linux.dev
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        nvdimm@lists.linux.dev, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH] dax: Kconfig: add depends on !FS_DAX_LIMITED for ARCH_HAS_PMEM_API
+Date:   Thu,  8 Dec 2022 16:55:14 +0800
+Message-Id: <20221208085514.8529-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1643470.1670489593.1@warthog.procyon.org.uk>
-Date:   Thu, 08 Dec 2022 08:53:13 +0000
-Message-ID: <1643471.1670489593@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,11 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hillf Danton <hdanton@sina.com> wrote:
+The implementation of dax_flush() is non-NULL if
+CONFIG_ARCH_HAS_PMEM_API is selected. Then if we select
+CONFIG_FS_DAX_LIMITED with CONFIG_ARCH_HAS_PMEM_API in
+the future, the dax_flush() in the dax_writeback_one()
+will cause a panic since it accepts the struct page by
+default:
 
-> Where is KTHREAD_SHOULD_STOP coming from? Given
+dax_flush(dax_dev, page_address(pfn_to_page(pfn)), count * PAGE_SIZE);
 
-Fair point.
+Instead of fixing this, it is better to declare in Kconfig
+that pmem does not support CONFIG_FS_DAX_LIMITED now.
 
-David
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+BTW, it seems that CONFIG_FS_DAX_LIMITED currently only has
+DCSSBLK as a user, but this makes filesystems dax must support
+the case that the struct page is not required, which makes the
+code complicated. Is it possible to remove DCSSBLK or change it
+to also require struct page?
+
+ lib/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/Kconfig b/lib/Kconfig
+index a7cd6605cc6c..6989ad3fea99 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -672,6 +672,7 @@ config ARCH_NO_SG_CHAIN
+ 
+ config ARCH_HAS_PMEM_API
+ 	bool
++	depends on !FS_DAX_LIMITED
+ 
+ config MEMREGION
+ 	bool
+-- 
+2.20.1
 
