@@ -2,148 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBCA76465E5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F616465E7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiLHAcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 19:32:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50466 "EHLO
+        id S229761AbiLHAdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 19:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLHAci (ORCPT
+        with ESMTP id S229756AbiLHAdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:32:38 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBCE5D4B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670459554; x=1701995554;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DM2Z+fucXtQJUS648zmE4VTfNU26g25896Sw4A0QP1s=;
-  b=QIIcW+goMFc6z1H+gWuqw0xIjfsKFlqnyIg9dq2SlaRNN1U3U/Oot6J4
-   7RmsTwgyCPgLbbqyfyDvfpboQHunBsd7kTGNwIiOwgQE/BfnggcrktKE/
-   WCXcMuFxXAqr1frPRc5WDUYpAr7PShFxu7dQ3oadX9fKl8kNM8Q8d1i8e
-   +/cGKvt1rxylIGUDycMS0FqFOlesoLyPpJY5nrUxOWT/k4LDc1eRFCX6I
-   +Uaj+TrqdwNWPu5eDLzWEnabDQfsm2DogrTwTlz01JhgM5w+/7ZUVBVYE
-   d8J0Lc1Sll1v6+IQ5A5MpifcVVEqCvmRbZKO5lcWUlDUQOXwJzmANHIUS
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="315754491"
-X-IronPort-AV: E=Sophos;i="5.96,226,1665471600"; 
-   d="scan'208";a="315754491"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 16:32:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="892010785"
-X-IronPort-AV: E=Sophos;i="5.96,226,1665471600"; 
-   d="scan'208";a="892010785"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 07 Dec 2022 16:32:24 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p34pr-0000gV-1F;
-        Thu, 08 Dec 2022 00:32:23 +0000
-Date:   Thu, 08 Dec 2022 08:32:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 593cc58736a386aa845707ddcc8de71e252479a4
-Message-ID: <6391308a.j7nC6bY//9lkBmth%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Wed, 7 Dec 2022 19:33:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B35378D65E;
+        Wed,  7 Dec 2022 16:33:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 75E0DB81C57;
+        Thu,  8 Dec 2022 00:33:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2499C433C1;
+        Thu,  8 Dec 2022 00:32:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670459580;
+        bh=aERxJVK9LoSfFhjpfc9CEj7Hfvg3pTGFz3M0Px/sXYI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zd3BfIh7CG0K8SLra+kRrexs7FTQsrK/eqrxe/Xv1h+gJkb8YrMbRuryCDeWLoxxo
+         TVxBAa5CPdqVrtHrSny3XIFghSggD97vCducfp1P+q8RTemBt/5dASbyx/ZRHllhFq
+         TgJcBL9fR6EwHLnBYm3+NJHBx1tV2fgdMVPh/qYnWur3hV1saA5aMKsIym4WdzGamc
+         mIcqPscfHDVSObcE0Duezr3y5QRwKyO1UVnT1BLNDP0CmAqESH5Ad/pnbemJ70BSDm
+         ZNrJOAYAuDwZ7tTI7o90PtgR/AD154vBaQQW9Kyj+HWz2fqY27l2wh/9G+YBMRM5c4
+         MQ1xphWsJQwWA==
+Date:   Wed, 7 Dec 2022 16:32:58 -0800
+From:   Saeed Mahameed <saeed@kernel.org>
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michael Chan <michael.chan@broadcom.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC net-next v5 2/2] bnxt: Use generic HBH removal helper in tx
+ path
+Message-ID: <Y5EwunX89Nq59vf0@x130>
+References: <20221207225435.1273226-1-lixiaoyan@google.com>
+ <20221207225435.1273226-2-lixiaoyan@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20221207225435.1273226-2-lixiaoyan@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
-branch HEAD: 593cc58736a386aa845707ddcc8de71e252479a4  Merge branch into tip/master: 'x86/tdx'
 
-elapsed time: 726m
+On 07 Dec 14:54, Coco Li wrote:
+>Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
+>for IPv6 traffic. See patch series:
+>'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+>
+>This reduces the number of packets traversing the networking stack and
+>should usually improves performance. However, it also inserts a
+>temporary Hop-by-hop IPv6 extension header.
+>
+>Using the HBH header removal method in the previous path, the extra header
+                                                      ^ patch
+>be removed in bnxt drivers to allow it to send big TCP packets (bigger
+>TSO packets) as well.
+>
 
-configs tested: 66
-configs skipped: 2
+I think Eric didn't expose this function because it isn't efficient for
+drivers who are already processing the headers separately from payload for
+LSO packets .. the trick is to have an optimized copy method depending on
+your driver xmit function, usually you would just memcpy the TCP header over
+the HBH exactly at the point you copy/process those headers into the HW
+descriptor.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arc                                 defconfig
-s390                             allmodconfig
-um                             i386_defconfig
-alpha                               defconfig
-um                           x86_64_defconfig
-s390                                defconfig
-i386                                defconfig
-s390                             allyesconfig
-x86_64                              defconfig
-x86_64                           rhel-8.3-syz
-powerpc                           allnoconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-x86_64                           allyesconfig
-x86_64                        randconfig-a004
-ia64                             allmodconfig
-arc                  randconfig-r043-20221207
-x86_64                        randconfig-a011
-x86_64                        randconfig-a002
-x86_64                          rhel-8.3-rust
-sh                               allmodconfig
-x86_64                    rhel-8.3-kselftests
-i386                          randconfig-a014
-mips                             allyesconfig
-x86_64                          rhel-8.3-func
-powerpc                          allmodconfig
-riscv                randconfig-r042-20221207
-x86_64                        randconfig-a006
-i386                             allyesconfig
-s390                 randconfig-r044-20221207
-x86_64                        randconfig-a015
-m68k                             allyesconfig
-i386                          randconfig-a012
-m68k                             allmodconfig
-i386                          randconfig-a016
-arc                              allyesconfig
-alpha                            allyesconfig
-arm                                 defconfig
-i386                          randconfig-a003
-i386                          randconfig-a001
-i386                          randconfig-a005
-arm                        shmobile_defconfig
-nios2                            alldefconfig
-powerpc                     tqm8555_defconfig
-sparc                       sparc64_defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-x86_64                            allnoconfig
-
-clang tested configs:
-arm                  randconfig-r046-20221207
-x86_64                        randconfig-a014
-hexagon              randconfig-r041-20221207
-hexagon              randconfig-r045-20221207
-i386                          randconfig-a013
-x86_64                        randconfig-a016
-x86_64                        randconfig-a001
-i386                          randconfig-a011
-x86_64                        randconfig-a012
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-i386                          randconfig-a002
-i386                          randconfig-a004
-arm                           omap1_defconfig
-i386                          randconfig-a006
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>Tested:
+>Compiled locally
+>
+>To further test functional correctness, update the GSO/GRO limit on the
+>physical NIC:
+>
+>ip link set eth0 gso_max_size 181000
+>ip link set eth0 gro_max_size 181000
+>
+>Note that if there are bonding or ipvan devices on top of the physical
+>NIC, their GSO sizes need to be updated as well.
+>
+>Then, IPv6/TCP packets with sizes larger than 64k can be observed.
+>
+>Big TCP functionality is tested by Michael, feature checks not yet.
+>
+>Tested by Michael:
+>I've confirmed with our hardware team that this is supported by our
+>chips, and I've tested it up to gso_max_size of 524280.  Thanks.
+>
+>Tested-by: Michael Chan <michael.chan@broadcom.com>
+>Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+>Signed-off-by: Coco Li <lixiaoyan@google.com>
+>---
+> drivers/net/ethernet/broadcom/bnxt/bnxt.c | 26 ++++++++++++++++++++++-
+> 1 file changed, 25 insertions(+), 1 deletion(-)
+>
+>diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+>index 0fe164b42c5d..6ba1cd342a80 100644
+>--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+>+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+>@@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
+> 			return NETDEV_TX_BUSY;
+> 	}
+>
+>+	if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
+>+		goto tx_free;
+>+
+> 	length = skb->len;
+> 	len = skb_headlen(skb);
+> 	last_frag = skb_shinfo(skb)->nr_frags;
+>@@ -11315,6 +11318,7 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+> 			      u8 **nextp)
+> {
+> 	struct ipv6hdr *ip6h = (struct ipv6hdr *)(skb->data + nw_off);
+>+	struct hop_jumbo_hdr *jhdr;
+> 	int hdr_count = 0;
+> 	u8 *nexthdr;
+> 	int start;
+>@@ -11342,9 +11346,27 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+>
+> 		if (hdrlen > 64)
+> 			return false;
+>+
+>+		/* The ext header may be a hop-by-hop header inserted for
+>+		 * big TCP purposes. This will be removed before sending
+>+		 * from NIC, so do not count it.
+>+		 */
+>+		if (*nexthdr == NEXTHDR_HOP) {
+>+			if (likely(skb->len <= GRO_LEGACY_MAX_SIZE))
+>+				goto increment_hdr;
+>+
+>+			jhdr = (struct hop_jumbo_hdr *)nexthdr;
+>+			if (jhdr->tlv_type != IPV6_TLV_JUMBO || jhdr->hdrlen != 0 ||
+>+			    jhdr->nexthdr != IPPROTO_TCP)
+>+				goto increment_hdr;
+>+
+>+			goto next_hdr;
+>+		}
+>+increment_hdr:
+>+		hdr_count++;
+>+next_hdr:
+> 		nexthdr = &hp->nexthdr;
+> 		start += hdrlen;
+>-		hdr_count++;
+> 	}
+> 	if (nextp) {
+> 		/* Caller will check inner protocol */
+>@@ -13657,6 +13679,8 @@ static int bnxt_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
+> 		dev->features &= ~NETIF_F_LRO;
+> 	dev->priv_flags |= IFF_UNICAST_FLT;
+>
+>+	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
+>+
+> #ifdef CONFIG_BNXT_SRIOV
+> 	init_waitqueue_head(&bp->sriov_cfg_wait);
+> #endif
+>-- 
+>2.39.0.rc0.267.gcb52ba06e7-goog
+>
