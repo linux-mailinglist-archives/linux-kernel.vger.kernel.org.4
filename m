@@ -2,253 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29EBF646ED0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B869E646F08
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:52:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiLHLmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S230199AbiLHLvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:51:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiLHLmp (ORCPT
+        with ESMTP id S230187AbiLHLvZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:42:45 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD5B63D67
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:41:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670499706;
+        Thu, 8 Dec 2022 06:51:25 -0500
+X-Greylist: delayed 457 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Dec 2022 03:50:05 PST
+Received: from out-116.mta0.migadu.com (out-116.mta0.migadu.com [91.218.175.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75DD84DC9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:50:05 -0800 (PST)
+Subject: Re: [syzbot] WARNING: refcount bug in nldev_newlink
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1670499744;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=g5xBDwwbAPMXsVLc87QM3XiQi+bNxIe4VXdcPfLTTBs=;
-        b=Ms7ahd6xHMdkhMKlMk9yHQ4Qmg/+6DhZkg1DCUVYZdZ4EL/X6Nawy+rmFeBaTgNcVfCRnO
-        jmYYRN7a8EfQKJq+9DpYQoHSsarKtBAw+nxwqQHOjJQkvUapV0b0Gyq4x/GkZvyEzm07j4
-        arllSu2xBno3FuXavUN2swgENtmLNrk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-638-EO_ZK0zzM32kIRDyvyIDqg-1; Thu, 08 Dec 2022 06:41:43 -0500
-X-MC-Unique: EO_ZK0zzM32kIRDyvyIDqg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 647163803911;
-        Thu,  8 Dec 2022 11:41:43 +0000 (UTC)
-Received: from t480s.in.tum.de (unknown [10.39.193.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9E5FA40C2064;
-        Thu,  8 Dec 2022 11:41:40 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Ives van Hoorne <ives@codesandbox.io>,
-        Peter Xu <peterx@redhat.com>, stable@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hugh@veritas.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: [PATCH v1] mm/userfaultfd: enable writenotify while userfaultfd-wp is enabled for a VMA
-Date:   Thu,  8 Dec 2022 12:41:37 +0100
-Message-Id: <20221208114137.35035-1-david@redhat.com>
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8jSWFBDP0k2jWtb3IhGIfoxY6PEwb9/6pM8hEzb4mSM=;
+        b=VTuaXwU1c36e1SQGKZy9vrNf1X2CKc+cKgPY1RhWfT3irzGzQjcDrsvT8fX8dJl+V06q45
+        230hIjN56A2MlB8d6gLgDYHT60+ctN+9uOQz0nbY0dSy70169AF7F8mPUqfKi7Zc/pAzBE
+        oACY0k7+wBmYtTuBlZ+RxAr8/HuV+r0=
+To:     Leon Romanovsky <leon@kernel.org>,
+        syzbot <syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com>,
+        jgg@ziepe.ca
+Cc:     linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        markzhang@nvidia.com, ohartoov@nvidia.com,
+        syzkaller-bugs@googlegroups.com
+References: <0000000000004fe6c005ef43161d@google.com>
+ <Y5Gq/zVi/fR85OJK@unreal>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+Message-ID: <69a62945-3bec-73a3-e347-9cabee4ebdf6@linux.dev>
+Date:   Thu, 8 Dec 2022 19:42:18 +0800
 MIME-Version: 1.0
+In-Reply-To: <Y5Gq/zVi/fR85OJK@unreal>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we don't enable writenotify when enabling userfaultfd-wp on
-a shared writable mapping (for now only shmem and hugetlb). The consequence
-is that vma->vm_page_prot will still include write permissions, to be set
-as default for all PTEs that get remapped (e.g., mprotect(), NUMA hinting,
-page migration, ...).
+Hi,
 
-So far, vma->vm_page_prot is assumed to be a safe default, meaning that
-we only add permissions (e.g., mkwrite) but not remove permissions (e.g.,
-wrprotect). For example, when enabling softdirty tracking, we enable
-writenotify. With uffd-wp on shared mappings, that changed. More details
-on vma->vm_page_prot semantics were summarized in [1].
+On 12/8/22 5:14 PM, Leon Romanovsky wrote:
+> On Wed, Dec 07, 2022 at 12:51:39PM -0800, syzbot wrote:
+>> Hello,
+>>
+>> syzbot found the following issue on:
+>>
+>> HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
+>> git tree:       linux-next
+>> console+strace: https://syzkaller.appspot.com/x/log.txt?x=11aeafad880000
+>> kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+>> dashboard link: https://syzkaller.appspot.com/bug?extid=3fd8326d9a0812d19218
+>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=112536fb880000
+>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16aa2e6d880000
+>>
+>> Downloadable assets:
+>> disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
+>> vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
+>> kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
+>>
+>> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+>> Reported-by: syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com
+>>
+>> WARNING: CPU: 0 PID: 5156 at lib/refcount.c:31 refcount_warn_saturate+0x1d7/0x1f0 lib/refcount.c:31
+>> Modules linked in:
+>> CPU: 0 PID: 5156 Comm: syz-executor773 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
+>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+>> RIP: 0010:refcount_warn_saturate+0x1d7/0x1f0 lib/refcount.c:31
+>> Code: 05 5a 60 51 0a 01 e8 35 0a b5 05 0f 0b e9 d3 fe ff ff e8 6c 9b 75 fd 48 c7 c7 c0 6d a6 8a c6 05 37 60 51 0a 01 e8 16 0a b5 05 <0f> 0b e9 b4 fe ff ff 48 89 ef e8 5a b5 c3 fd e9 5c fe ff ff 0f 1f
+>> RSP: 0018:ffffc90003ebf0d8 EFLAGS: 00010286
+>> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+>> RDX: ffff88802bfcba80 RSI: ffffffff8166b1dc RDI: fffff520007d7e0d
+>> RBP: ffff888070296600 R08: 0000000000000005 R09: 0000000000000000
+>> R10: 0000000080000000 R11: 0000000000000000 R12: 1ffff920007d7e20
+>> R13: 0000000000000000 R14: ffff888070296600 R15: ffffc90003ebf608
+>> FS:  000055555600f300(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>> CR2: 00007ffed185b004 CR3: 00000000265db000 CR4: 00000000003506f0
+>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>> Call Trace:
+>>   <TASK>
+>>   __refcount_dec include/linux/refcount.h:344 [inline]
+>>   refcount_dec include/linux/refcount.h:359 [inline]
+>>   ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
+>>   netdev_tracker_free include/linux/netdevice.h:4039 [inline]
+>>   netdev_put include/linux/netdevice.h:4056 [inline]
+>>   dev_put include/linux/netdevice.h:4082 [inline]
+>>   nldev_newlink+0x360/0x5d0 drivers/infiniband/core/nldev.c:1733
+>>   rdma_nl_rcv_msg+0x371/0x6a0 drivers/infiniband/core/netlink.c:195
+>>   rdma_nl_rcv_skb.constprop.0.isra.0+0x2fc/0x440 drivers/infiniband/core/netlink.c:239
+>>   netlink_unicast_kernel net/netlink/af_netlink.c:1330 [inline]
+>>   netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1356
+>>   netlink_sendmsg+0x91b/0xe10 net/netlink/af_netlink.c:1932
+>>   sock_sendmsg_nosec net/socket.c:714 [inline]
+>>   sock_sendmsg+0xd3/0x120 net/socket.c:734
+>>   ____sys_sendmsg+0x712/0x8c0 net/socket.c:2476
+>>   ___sys_sendmsg+0x110/0x1b0 net/socket.c:2530
+>>   __sys_sendmsg+0xf7/0x1c0 net/socket.c:2559
+>>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>>   do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+>>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>> RIP: 0033:0x7fd5bc473699
+>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+>> RSP: 002b:00007ffed185aff8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+>> RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007fd5bc473699
+>> RDX: 0000000000000000 RSI: 0000000020000340 RDI: 0000000000000003
+>> RBP: 0000000000000000 R08: 000000000000000d R09: 000000000000000d
+>> R10: 00007ffed185aa70 R11: 0000000000000246 R12: 00007ffed185b010
+>> R13: 00000000000f4240 R14: 0000000000011fc1 R15: 00007ffed185b004
+>>   </TASK>
+>>
+>>
+>> ---
+>> This report is generated by a bot. It may contain errors.
+>> See https://goo.gl/tpsmEJ for more information about syzbot.
+>> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>
+>> syzbot will keep track of this issue. See:
+>> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>> syzbot can test patches for this issue, for details see:
+>> https://goo.gl/tpsmEJ#testing-patches
+> Jason, what do you think?
+>
+> diff --git a/drivers/infiniband/core/nldev.c b/drivers/infiniband/core/nldev.c
+> index a981ac2f0975..982938c1dae3 100644
+> --- a/drivers/infiniband/core/nldev.c
+> +++ b/drivers/infiniband/core/nldev.c
+> @@ -1730,7 +1730,8 @@ static int nldev_newlink(struct sk_buff *skb, struct nlmsghdr *nlh,
+>   #endif
+>          err = ops ? ops->newlink(ibdev_name, ndev) : -EINVAL;
+>          up_read(&link_ops_rwsem);
+> -       dev_put(ndev);
+> +       if (err)
+> +               dev_put(ndev);
+>   
+>          return err;
+>   }
+>
 
-This is problematic for uffd-wp: we'd have to manually check for
-a uffd-wp PTEs/PMDs and manually write-protect PTEs/PMDs, which is error
-prone. Prone to such issues is any code that uses vma->vm_page_prot to set
-PTE permissions: primarily pte_modify() and mk_pte().
+I guess the dev_put is paired with dev_hold in dev_get_by_name,
+maybe it should be protected by ink_ops_rwsem, otherwise
+siw_exit_module could call  ib_unregister_driver -> free_netdevs
+after rdma_link_unregister (which needs to hold link_ops_rwsem),
+then seems it is possible that ndev is freed before nldev_newlink
+calls dev_put.
 
-Instead, let's enable writenotify such that PTEs/PMDs/... will be mapped
-write-protected as default and we will only allow selected PTEs that are
-definitely safe to be mapped without write-protection (see
-can_change_pte_writable()) to be writable. In the future, we might want
-to enable write-bit recovery -- e.g., can_change_pte_writable() -- at
-more locations, for example, also when removing uffd-wp protection.
+diff --git a/drivers/infiniband/core/nldev.c 
+b/drivers/infiniband/core/nldev.c
+index 12dc97067ed2..f49bc8ee46da 100644
+--- a/drivers/infiniband/core/nldev.c
++++ b/drivers/infiniband/core/nldev.c
+@@ -1715,8 +1715,8 @@ static int nldev_newlink(struct sk_buff *skb, 
+struct nlmsghdr *nlh,
+         }
+  #endif
+         err = ops ? ops->newlink(ibdev_name, ndev) : -EINVAL;
+-       up_read(&link_ops_rwsem);
+         dev_put(ndev);
++       up_read(&link_ops_rwsem);
 
-This fixes two known cases:
+         return err;
+  }
 
-(a) remove_migration_pte() mapping uffd-wp'ed PTEs writable, resulting
-    in uffd-wp not triggering on write access.
-(b) do_numa_page() / do_huge_pmd_numa_page() mapping uffd-wp'ed PTEs/PMDs
-    writable, resulting in uffd-wp not triggering on write access.
-
-Note that do_numa_page() / do_huge_pmd_numa_page() can be reached even
-without NUMA hinting (which currently doesn't seem to be applicable to
-shmem), for example, by using uffd-wp with a PROT_WRITE shmem VMA.
-On such a VMA, userfaultfd-wp is currently non-functional.
-
-Note that when enabling userfaultfd-wp, there is no need to walk page
-tables to enforce the new default protection for the PTEs: we know that
-they cannot be uffd-wp'ed yet, because that can only happen after
-enabling uffd-wp for the VMA in general.
-
-Also note that this makes mprotect() on ranges with uffd-wp'ed PTEs not
-accidentally set the write bit -- which would result in uffd-wp not
-triggering on later write access. This commit makes uffd-wp on shmem behave
-just like uffd-wp on anonymous memory (iow, less special) in that regard,
-even though, mixing mprotect with uffd-wp is controversial.
-
-[1] https://lkml.kernel.org/r/92173bad-caa3-6b43-9d1e-9a471fdbc184@redhat.com
-
-Reported-by: Ives van Hoorne <ives@codesandbox.io>
-Debugged-by: Peter Xu <peterx@redhat.com>
-Fixes: b1f9e876862d ("mm/uffd: enable write protection for shmem & hugetlbfs")
-Cc: stable@vger.kernel.org
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Hugh Dickins <hugh@veritas.com>
-Cc: Alistair Popple <apopple@nvidia.com>
-Cc: Mike Rapoport <rppt@linux.vnet.ibm.com>
-Cc: Nadav Amit <nadav.amit@gmail.com>
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-As discussed in [2], this is supposed to replace the fix by Peter:
-  [PATCH v3 1/2] mm/migrate: Fix read-only page got writable when recover
-  pte
-
-This survives vm/selftests and my reproducers:
-* migrating pages that are uffd-wp'ed using mbind() on a machine with 2
-  NUMA nodes
-* Using a PROT_WRITE mapping with uffd-wp
-* Using a PROT_READ|PROT_WRITE mapping with uffd-wp'ed pages and
-  mprotect()'ing it PROT_WRITE
-* Using a PROT_READ|PROT_WRITE mapping with uffd-wp'ed pages and
-  temporarily mprotect()'ing it PROT_READ
-
-uffd-wp properly triggers in all cases. On v8.1-rc8, all mre reproducers
-fail.
-
-It would be good to get some more testing feedback and review.
-
-[2] https://lkml.kernel.org/r/20221202122748.113774-1-david@redhat.com
-
----
- fs/userfaultfd.c | 28 ++++++++++++++++++++++------
- mm/mmap.c        |  4 ++++
- 2 files changed, 26 insertions(+), 6 deletions(-)
-
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 98ac37e34e3d..fb0733f2e623 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -108,6 +108,21 @@ static bool userfaultfd_is_initialized(struct userfaultfd_ctx *ctx)
- 	return ctx->features & UFFD_FEATURE_INITIALIZED;
- }
- 
-+static void userfaultfd_set_vm_flags(struct vm_area_struct *vma,
-+				     vm_flags_t flags)
-+{
-+	const bool uffd_wp = !!((vma->vm_flags | flags) & VM_UFFD_WP);
-+
-+	vma->vm_flags = flags;
-+	/*
-+	 * For shared mappings, we want to enable writenotify while
-+	 * userfaultfd-wp is enabled (see vma_wants_writenotify()). We'll simply
-+	 * recalculate vma->vm_page_prot whenever userfaultfd-wp is involved.
-+	 */
-+	if ((vma->vm_flags & VM_SHARED) && uffd_wp)
-+		vma_set_page_prot(vma);
-+}
-+
- static int userfaultfd_wake_function(wait_queue_entry_t *wq, unsigned mode,
- 				     int wake_flags, void *key)
- {
-@@ -618,7 +633,8 @@ static void userfaultfd_event_wait_completion(struct userfaultfd_ctx *ctx,
- 		for_each_vma(vmi, vma) {
- 			if (vma->vm_userfaultfd_ctx.ctx == release_new_ctx) {
- 				vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
--				vma->vm_flags &= ~__VM_UFFD_FLAGS;
-+				userfaultfd_set_vm_flags(vma,
-+							 vma->vm_flags & ~__VM_UFFD_FLAGS);
- 			}
- 		}
- 		mmap_write_unlock(mm);
-@@ -652,7 +668,7 @@ int dup_userfaultfd(struct vm_area_struct *vma, struct list_head *fcs)
- 	octx = vma->vm_userfaultfd_ctx.ctx;
- 	if (!octx || !(octx->features & UFFD_FEATURE_EVENT_FORK)) {
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
--		vma->vm_flags &= ~__VM_UFFD_FLAGS;
-+		userfaultfd_set_vm_flags(vma, vma->vm_flags & ~__VM_UFFD_FLAGS);
- 		return 0;
- 	}
- 
-@@ -733,7 +749,7 @@ void mremap_userfaultfd_prep(struct vm_area_struct *vma,
- 	} else {
- 		/* Drop uffd context if remap feature not enabled */
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
--		vma->vm_flags &= ~__VM_UFFD_FLAGS;
-+		userfaultfd_set_vm_flags(vma, vma->vm_flags & ~__VM_UFFD_FLAGS);
- 	}
- }
- 
-@@ -895,7 +911,7 @@ static int userfaultfd_release(struct inode *inode, struct file *file)
- 			prev = vma;
- 		}
- 
--		vma->vm_flags = new_flags;
-+		userfaultfd_set_vm_flags(vma, new_flags);
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
- 	}
- 	mmap_write_unlock(mm);
-@@ -1463,7 +1479,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
- 		 * the next vma was merged into the current one and
- 		 * the current one has not been updated yet.
- 		 */
--		vma->vm_flags = new_flags;
-+		userfaultfd_set_vm_flags(vma, new_flags);
- 		vma->vm_userfaultfd_ctx.ctx = ctx;
- 
- 		if (is_vm_hugetlb_page(vma) && uffd_disable_huge_pmd_share(vma))
-@@ -1651,7 +1667,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
- 		 * the next vma was merged into the current one and
- 		 * the current one has not been updated yet.
- 		 */
--		vma->vm_flags = new_flags;
-+		userfaultfd_set_vm_flags(vma, new_flags);
- 		vma->vm_userfaultfd_ctx = NULL_VM_UFFD_CTX;
- 
- 	skip:
-diff --git a/mm/mmap.c b/mm/mmap.c
-index a5eb2f175da0..6033d20198b0 100644
---- a/mm/mmap.c
-+++ b/mm/mmap.c
-@@ -1525,6 +1525,10 @@ int vma_wants_writenotify(struct vm_area_struct *vma, pgprot_t vm_page_prot)
- 	if (vma_soft_dirty_enabled(vma) && !is_vm_hugetlb_page(vma))
- 		return 1;
- 
-+	/* Do we need write faults for uffd-wp tracking? */
-+	if (userfaultfd_wp(vma))
-+		return 1;
-+
- 	/* Specialty mapping? */
- 	if (vm_flags & VM_PFNMAP)
- 		return 0;
-
-base-commit: 8ed710da2873c2aeb3bb805864a699affaf1d03b
--- 
-2.38.1
-
+Thanks,
+Guoqing
