@@ -2,206 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3D0646B42
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03650646B47
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiLHJBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:01:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S229779AbiLHJCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:02:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLHJA6 (ORCPT
+        with ESMTP id S230054AbiLHJBo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:00:58 -0500
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141134874C;
-        Thu,  8 Dec 2022 01:00:58 -0800 (PST)
-Received: by mail-pj1-f47.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4020636pjt.0;
-        Thu, 08 Dec 2022 01:00:58 -0800 (PST)
+        Thu, 8 Dec 2022 04:01:44 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43266723D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:01:33 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id c1so1040606lfi.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:01:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oupZ+kN7BsmQiiMOTzuSss+gc5CnRM8obTkN6ZAEyQ0=;
+        b=PH5NstiDSUw9FjLTglzjiCMRNWEfR/Ko199Og1ANGhVysFgUBMD2jQ/p99HQ7F6jsq
+         8RGfl9JBzqxJtHbEDJbQ9pCzBpEducsP8v9+4wzUxBdeFXCl1z4xXDXKbU+RA6hOxx7I
+         6jMhHTgD91b3aSSaXEHrdovZZic5prvhy8bIvKipf3n4gLGEG/F5YDUFlF7z5J7hkMgo
+         OLJs+TW2thjTm4F1HieLXWKJJ/V6+2QmcW0QyvdFY8m1aBd6mlAk55nQt/KBbzymCckG
+         dtWYbvW0Sk7GlcDvSZNGxr3ltJj0S5GadjItC/u2mVMedd7546hIF7mWoiaij7p5+w8U
+         x64A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gnfeenGHSX8pxGcDHDGsgu5jtWy1vtL2VR1fK04qMGU=;
-        b=0+3NAgORvJfV2qMO3lsVn+H3Lqjdoqrb7AmM3DiJFy0jS58oKrf/zhFiC7/uc03CGI
-         xOeY5msMsMNqGSx8gVsg5SvpQtVbCetLzkae8X3t7L2Uxa3FKuBrBapLmglCSbF8rlrI
-         Rrh2v30VjcGLAdspYJLhKZ6A3ND0O5d1ODWut35u9qAFtqXbJeXT4qCBY5Q4Nr+ZYmZ/
-         4sdrte7qg5W7/SL2wjLbJGWI1y5t6m/MpM0uUhpkFy5q/k0VqLaO6eMHQerB++ybv+dp
-         HJkNevC6AVrIlAbtdPonQbAmaPaAhZxOFMDjhjV+EdU1fuwdWF2A2BcxuoSxq0hOZXA/
-         1tOQ==
-X-Gm-Message-State: ANoB5pn98sgA59AO+uIwrrWojjlYBwc8y551g0piXsOFHAVo90tQZHUF
-        zEpjjrssnLtppy+FMc/HGSXkYAULG5HVumNakKY=
-X-Google-Smtp-Source: AA0mqf659+OdeqLrf+FQ+LZZtgdCdNVN8yytNzkVh+PKns/Z4xwYuquj032CQR+ovzq7ynBjBRLwhOyGjC4yQm2+kIg=
-X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
- iw18-20020a170903045200b0018965747ac2mr64198640plb.65.1670490057258; Thu, 08
- Dec 2022 01:00:57 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oupZ+kN7BsmQiiMOTzuSss+gc5CnRM8obTkN6ZAEyQ0=;
+        b=lL3NnlIzY4yqLlmEITVDHFS0C0BUU7eRnPI+AylfuE25923dTV2wtupxFZZEpeuVTZ
+         uau0OtJkaHEEpUBk1ZMaKjdbb+EQKsnah3eUAzklGQVPHqkkbTWKG3RumLDku2vdyNKN
+         HJFsruvbR3LaleKGa2lmjXlPemH6IKRFOIOoebSjPZIqLbUodmOmnYVOPaF1V+axjndQ
+         1H51rSdzOBgVv3/JymfNESRW9OQe7OE6I8PWod2ereA0dRF4GjqrpqMf4Ga+AvYYTCCi
+         ilZ+oOud0kot66cRm+c5G/7oswfacvZqoWysJcB5TucAoU+2OuaYXgT1wDk4+i4tpdzH
+         Lrtw==
+X-Gm-Message-State: ANoB5pmiD1L6hOj8GTtxCC+ns0owVVY0r3oUIvPrE1mETFY5IOZVYPit
+        EOiMr9+ytETPHW+mSh4NZwcchw==
+X-Google-Smtp-Source: AA0mqf6Eagz9JgMi7kX/o8j2qajknHJ6NB91uNWrWH/4O1j4aIvU5N4Qo529XhOn4AFPQskDqCwoHg==
+X-Received: by 2002:a05:6512:3b88:b0:4a3:9533:f4c9 with SMTP id g8-20020a0565123b8800b004a39533f4c9mr27019503lfv.615.1670490092121;
+        Thu, 08 Dec 2022 01:01:32 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o11-20020ac25e2b000000b004b55c1b5c66sm2196831lfg.157.2022.12.08.01.01.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 01:01:31 -0800 (PST)
+Message-ID: <d9e92880-6efe-a528-efa8-2c49483d8530@linaro.org>
+Date:   Thu, 8 Dec 2022 10:01:30 +0100
 MIME-Version: 1.0
-References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr> <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
-In-Reply-To: <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 8 Dec 2022 18:00:46 +0900
-Message-ID: <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
-Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
- drivers' disconnect()
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Peter Fink <pfink@christ-es.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        =?UTF-8?Q?Christoph_M=C3=B6hring?= <cmoehring@christ-es.de>,
-        John Whittington <git@jbrengineering.co.uk>,
-        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Daniel Berglund <db@kvaser.com>,
-        Olivier Sobrie <olivier@sobrie.be>,
-        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
-        <remigiusz.kollataj@mobica.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 1/3] dt-bindings: mmc: Add bindings for StarFive
+Content-Language: en-US
+To:     William Qiu <william.qiu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-mmc@vger.kernel.org
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-2-william.qiu@starfivetech.com>
+ <d7ecbbbf-5d6b-3254-b645-dbea369447ae@linaro.org>
+ <b0dfc269-e06e-4f4d-7695-55c8522d6137@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b0dfc269-e06e-4f4d-7695-55c8522d6137@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon. 5 Dec. 2022 at 17:39, Oliver Neukum <oneukum@suse.com> wrote:
-> On 03.12.22 14:31, Vincent Mailhol wrote:
-> > The core sets the usb_interface to NULL in [1]. Also setting it to
-> > NULL in usb_driver::disconnects() is at best useless, at worse risky.
->
-> Hi,
->
-> I am afraid there is a major issue with your series of patches.
-> The drivers you are removing this from often have a subsequent check
-> for the data they got from usb_get_intfdata() being NULL.
+On 08/12/2022 09:44, William Qiu wrote:
+> 
+>>> +
+>>> +  clock-names:
+>>> +    minItems: 1
+>>> +    items:
+>>> +      - const: biu
+>>> +      - const: ciu
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  starfive,sys-syscon:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>> +    description:
+>>> +      The desired number of times that the host execute tuning when needed.
+>>
+>> That's not matching the property name. Missing number of items... this
+>> is anyway confusing. Why number of tuning tries is a property of DT?
+>>
+> 
+> Will update the description.
 
-ACK, but I do not see the connection.
+I propose first to explain what is it. Because it is not about
+description only, but also type. Your driver uses this as syscon, so
+this cannot be uint32-array but phandle-array...
 
-> That pattern is taken from drivers like btusb or CDC-ACM
+Best regards,
+Krzysztof
 
-Where does CDC-ACM set *his* interface to NULL? Looking at:
-
-  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/class/cdc-acm.c#L1531
-
-I can see that cdc-acm sets acm->control and acm->data to NULL in his
-disconnect(), but it doesn't set its own usb_interface to NULL.
-
-> which claim secondary interfaces disconnect() will be called a second time
-> for.
-
-Are you saying that the disconnect() of those CAN USB drivers is being
-called twice? I do not see this in the source code. The only caller of
-usb_driver::disconnect() I can see is:
-
-  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L458
-
-> In addition, a driver can use setting intfdata to NULL as a flag
-> for disconnect() having proceeded to a point where certain things
-> can no longer be safely done.
-
-Any reference that a driver can do that? This pattern seems racy.
-
-By the way, I did check all the drivers:
-
-  * ems_usb: intf is only used in ems_usb_probe() and
-ems_usb_disconnect() functions.
-
-  * esd_usb: intf is only used in the esd_usb_probe(),
-    esd_usb_probe_one_net() (which is part of probing),
-    esd_usb_disconnect() and a couple of sysfs functions (which only
-    use intf to get a pointer to struct esd_usb).
-
-  * gs_usb: intf is used several time but only to retrive struct
-    usb_device. This seems useless, I will sent this patch to remove
-    it:
-    https://lore.kernel.org/linux-can/20221208081142.16936-3-mailhol.vincent@wanadoo.fr/
-    Aside of that, intf is only used in gs_usb_probe(),
-    gs_make_candev() (which is part of probing) and
-    gs_usb_disconnect() functions.
-
-  * kvaser_usb: intf is only used in kvaser_usb_probe() and
-    kvaser_usb_disconnect() functions.
-
-  * mcba_usb: intf is only used in mcba_usb_probe() and
-    mcba_usb_disconnect() functions.
-
-  * ucan: intf is only used in ucan_probe() and
-    ucan_disconnect(). struct ucan_priv also has a pointer to intf but
-    it is never used. I sent this patch to remove it:
-    https://lore.kernel.org/linux-can/20221208081142.16936-2-mailhol.vincent@wanadoo.fr/
-
-  * usb_8dev: intf is only used in usb_8dev_probe() and
-    usb_8dev_disconnect().
-
-With no significant use of intf outside of the probe() and
-disconnect(), there is definitely no such "use intf as a flag" in any
-of these drivers.
-
-> You need to check for that in every driver
-> you remove this code from and if you decide that it can safely be removed,
-
-What makes you assume that I didn't check this in the first place? Or
-do you see something I missed?
-
-> which is likely, then please also remove checks like this:
->
->         struct ems_usb *dev = usb_get_intfdata(intf);
->
->         usb_set_intfdata(intf, NULL);
->
->         if (dev) {
->                 unregister_netdev(dev->netdev);
-
-How is the if (dev) check related? There is no correlation between
-setting intf to NULL and dev not being NULL.
-
-I think dev is never NULL, but I did not assess that dev could not be NULL.
-
-> Either it can be called a second time, then you need to leave it
-> as is,
-
-Really?! The first thing disconnect() does is calling
-usb_get_intfdata(intf) which dereferences intf without checking if it
-is NULL, c.f.:
-
-  https://elixir.bootlin.com/linux/v6.0/source/include/linux/usb.h#L265
-
-Then it sets intf to NULL.
-
-The second time you call disconnect(), the usb_get_intfdata(intf)
-would be a NULL pointer dereference.
-
-> or the check for NULL is superfluous. But only removing setting
-> the pointer to NULL never makes sense.
-
-
-Yours sincerely,
-Vincent Mailhol
