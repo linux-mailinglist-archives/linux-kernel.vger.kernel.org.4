@@ -2,80 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D355646676
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 238BC64667F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiLHB0J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 20:26:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S229753AbiLHB0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 20:26:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLHB0H (ORCPT
+        with ESMTP id S229462AbiLHB0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 20:26:07 -0500
-Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9326E8E5B1;
-        Wed,  7 Dec 2022 17:26:03 -0800 (PST)
-Received: from mail.aspeedtech.com ([192.168.0.24])
-        by twspam01.aspeedtech.com with ESMTP id 2B81HKDk039245;
-        Thu, 8 Dec 2022 09:17:20 +0800 (GMT-8)
-        (envelope-from jammy_huang@aspeedtech.com)
-Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
- (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 8 Dec
- 2022 09:25:46 +0800
-From:   Jammy Huang <jammy_huang@aspeedtech.com>
-To:     <mchehab@kernel.org>, <hverkuil-cisco@xs4all.nl>,
-        <stanimir.varbanov@linaro.org>, <ezequiel@vanguardiasur.com.ar>,
-        <nicolas.dufresne@collabora.com>, <linux-media@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] media: docs: pixfmt-reserved: Update reference
-Date:   Thu, 8 Dec 2022 09:26:31 +0800
-Message-ID: <20221208012631.3160-1-jammy_huang@aspeedtech.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 7 Dec 2022 20:26:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BD28900D5;
+        Wed,  7 Dec 2022 17:26:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BDA19B82144;
+        Thu,  8 Dec 2022 01:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 692E2C433C1;
+        Thu,  8 Dec 2022 01:26:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670462803;
+        bh=w4h8E1rUddz+mzBNAte5bv9cCRd0SRyTRAA9Do+iWsk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n/ohPV9MwZHrqQxBjPgAylUX9/OWK8wUbAmjSnllSWuL9w/F268nHhTJPdqm+UXnK
+         xVQjr4FOPp6VuPT7WuWgpKihnO7ecRzKodBcEU5uQ3qBcNoHK/1PTIdU35ID7Pfz8/
+         k1wJtkUDXn4MZQIV8mfPxXCg8qlaPyoCs6KU0jb+euz/XKnEq9boQDckirgwuaI/BJ
+         L/1kmvzTJKPR5Y7gsHwXoZ/9ii8Rh8MZvjGL+dl6lKpgFfcesJWEDlEVo0OEQs6oUZ
+         bEgdDCt2logJCy+AO7HUSAn6rl19IsGNqDrUzna79Y/QlZ2FujKA1dUtqNM6j1Edtq
+         tgp0nj466NesA==
+Date:   Wed, 7 Dec 2022 17:26:42 -0800
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
+Cc:     linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, dan.j.williams@intel.com,
+        david@fromorbit.com, akpm@linux-foundation.org,
+        allison.henderson@oracle.com
+Subject: Re: [PATCH v2.2 1/8] fsdax: introduce page->share for fsdax in
+ reflink mode
+Message-ID: <Y5E9UgUyidulL2yp@magnolia>
+References: <1669908538-55-2-git-send-email-ruansy.fnst@fujitsu.com>
+ <1670381359-53-1-git-send-email-ruansy.fnst@fujitsu.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [192.168.2.115]
-X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
- (192.168.0.24)
-X-DNSRBL: 
-X-MAIL: twspam01.aspeedtech.com 2B81HKDk039245
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1670381359-53-1-git-send-email-ruansy.fnst@fujitsu.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use URL rather than plain text.
+On Wed, Dec 07, 2022 at 02:49:19AM +0000, Shiyang Ruan wrote:
+> fsdax page is used not only when CoW, but also mapread. To make the it
+> easily understood, use 'share' to indicate that the dax page is shared
+> by more than one extent.  And add helper functions to use it.
+> 
+> Also, the flag needs to be renamed to PAGE_MAPPING_DAX_SHARED.
+> 
+> Signed-off-by: Shiyang Ruan <ruansy.fnst@fujitsu.com>
+> Reviewed-by: Allison Henderson <allison.henderson@oracle.com>
 
-Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
----
- Documentation/userspace-api/media/v4l/pixfmt-reserved.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks fine to me,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-diff --git a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-index 73cd99828010..58f6ae25b2e7 100644
---- a/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-+++ b/Documentation/userspace-api/media/v4l/pixfmt-reserved.rst
-@@ -271,7 +271,7 @@ please make a proposal on the linux-media mailing list.
-         The implementation is based on AST2600 A3 datasheet, revision 0.9, which
-         is not publicly available. Or you can reference Video stream data format
-         – ASPEED mode compression of SDK_User_Guide which available on
--        AspeedTech-BMC/openbmc/releases.
-+        `github <https://github.com/AspeedTech-BMC/openbmc/releases/>`__.
- 
-         Decoder's implementation can be found here,
-         `aspeed_codec <https://github.com/AspeedTech-BMC/aspeed_codec/>`__
+--D
 
-base-commit: 8ed710da2873c2aeb3bb805864a699affaf1d03b
-prerequisite-patch-id: bf47e8ab2998acfbc32be5a4b7b5ae8a3ae4218b
-prerequisite-patch-id: bf82715983e08f2e810ff1a82ce644f5f9006cd9
-prerequisite-patch-id: 28a2040ef0235e5765f05d2fc5529bce2a0f4c6f
-prerequisite-patch-id: 7e761c779730536db8baf50db5fc8caf058e95af
-prerequisite-patch-id: c48ea20973fa35938a7d33a0e20d2900df48755f
-prerequisite-patch-id: 5d2c8043e4026469638dc4541aec76deefa39315
-prerequisite-patch-id: 81f37634b7fd1203fb728b11032f5e8f2f24b7bf
--- 
-2.25.1
-
+> ---
+>  fs/dax.c                   | 38 ++++++++++++++++++++++----------------
+>  include/linux/mm_types.h   |  5 ++++-
+>  include/linux/page-flags.h |  2 +-
+>  3 files changed, 27 insertions(+), 18 deletions(-)
+> 
+> diff --git a/fs/dax.c b/fs/dax.c
+> index 1c6867810cbd..84fadea08705 100644
+> --- a/fs/dax.c
+> +++ b/fs/dax.c
+> @@ -334,35 +334,41 @@ static unsigned long dax_end_pfn(void *entry)
+>  	for (pfn = dax_to_pfn(entry); \
+>  			pfn < dax_end_pfn(entry); pfn++)
+>  
+> -static inline bool dax_mapping_is_cow(struct address_space *mapping)
+> +static inline bool dax_page_is_shared(struct page *page)
+>  {
+> -	return (unsigned long)mapping == PAGE_MAPPING_DAX_COW;
+> +	return page->mapping == PAGE_MAPPING_DAX_SHARED;
+>  }
+>  
+>  /*
+> - * Set the page->mapping with FS_DAX_MAPPING_COW flag, increase the refcount.
+> + * Set the page->mapping with PAGE_MAPPING_DAX_SHARED flag, increase the
+> + * refcount.
+>   */
+> -static inline void dax_mapping_set_cow(struct page *page)
+> +static inline void dax_page_share_get(struct page *page)
+>  {
+> -	if ((uintptr_t)page->mapping != PAGE_MAPPING_DAX_COW) {
+> +	if (page->mapping != PAGE_MAPPING_DAX_SHARED) {
+>  		/*
+>  		 * Reset the index if the page was already mapped
+>  		 * regularly before.
+>  		 */
+>  		if (page->mapping)
+> -			page->index = 1;
+> -		page->mapping = (void *)PAGE_MAPPING_DAX_COW;
+> +			page->share = 1;
+> +		page->mapping = PAGE_MAPPING_DAX_SHARED;
+>  	}
+> -	page->index++;
+> +	page->share++;
+> +}
+> +
+> +static inline unsigned long dax_page_share_put(struct page *page)
+> +{
+> +	return --page->share;
+>  }
+>  
+>  /*
+> - * When it is called in dax_insert_entry(), the cow flag will indicate that
+> + * When it is called in dax_insert_entry(), the shared flag will indicate that
+>   * whether this entry is shared by multiple files.  If so, set the page->mapping
+> - * FS_DAX_MAPPING_COW, and use page->index as refcount.
+> + * PAGE_MAPPING_DAX_SHARED, and use page->share as refcount.
+>   */
+>  static void dax_associate_entry(void *entry, struct address_space *mapping,
+> -		struct vm_area_struct *vma, unsigned long address, bool cow)
+> +		struct vm_area_struct *vma, unsigned long address, bool shared)
+>  {
+>  	unsigned long size = dax_entry_size(entry), pfn, index;
+>  	int i = 0;
+> @@ -374,8 +380,8 @@ static void dax_associate_entry(void *entry, struct address_space *mapping,
+>  	for_each_mapped_pfn(entry, pfn) {
+>  		struct page *page = pfn_to_page(pfn);
+>  
+> -		if (cow) {
+> -			dax_mapping_set_cow(page);
+> +		if (shared) {
+> +			dax_page_share_get(page);
+>  		} else {
+>  			WARN_ON_ONCE(page->mapping);
+>  			page->mapping = mapping;
+> @@ -396,9 +402,9 @@ static void dax_disassociate_entry(void *entry, struct address_space *mapping,
+>  		struct page *page = pfn_to_page(pfn);
+>  
+>  		WARN_ON_ONCE(trunc && page_ref_count(page) > 1);
+> -		if (dax_mapping_is_cow(page->mapping)) {
+> -			/* keep the CoW flag if this page is still shared */
+> -			if (page->index-- > 0)
+> +		if (dax_page_is_shared(page)) {
+> +			/* keep the shared flag if this page is still shared */
+> +			if (dax_page_share_put(page) > 0)
+>  				continue;
+>  		} else
+>  			WARN_ON_ONCE(page->mapping && page->mapping != mapping);
+> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+> index 500e536796ca..f46cac3657ad 100644
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -103,7 +103,10 @@ struct page {
+>  			};
+>  			/* See page-flags.h for PAGE_MAPPING_FLAGS */
+>  			struct address_space *mapping;
+> -			pgoff_t index;		/* Our offset within mapping. */
+> +			union {
+> +				pgoff_t index;		/* Our offset within mapping. */
+> +				unsigned long share;	/* share count for fsdax */
+> +			};
+>  			/**
+>  			 * @private: Mapping-private opaque data.
+>  			 * Usually used for buffer_heads if PagePrivate.
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index 0b0ae5084e60..d8e94f2f704a 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -641,7 +641,7 @@ PAGEFLAG_FALSE(VmemmapSelfHosted, vmemmap_self_hosted)
+>   * Different with flags above, this flag is used only for fsdax mode.  It
+>   * indicates that this page->mapping is now under reflink case.
+>   */
+> -#define PAGE_MAPPING_DAX_COW	0x1
+> +#define PAGE_MAPPING_DAX_SHARED	((void *)0x1)
+>  
+>  static __always_inline bool folio_mapping_flags(struct folio *folio)
+>  {
+> -- 
+> 2.38.1
+> 
