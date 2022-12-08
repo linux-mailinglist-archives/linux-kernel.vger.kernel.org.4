@@ -2,185 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0036469F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:52:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 011686469F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiLHHwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 02:52:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
+        id S229785AbiLHHw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 02:52:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiLHHwr (ORCPT
+        with ESMTP id S229787AbiLHHwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 02:52:47 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFB710B5A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:52:45 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id q7so684037ljp.9
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 23:52:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WeLvogb5JcadAWbdKBuMs8s2ANbAcK0xMjx9ddwhq14=;
-        b=ZHANhG9Di5kOOXFJDYWU/H7bgD39QQKX/0QHbql541UnEppPeUB17FwVY4f+KQDowh
-         gCQYMEdcbAuhhh6zy3f5wB0otFHnd5cOee/YdrN1dk71ntSyXv5Vy796a9Ue6Rl2aJS+
-         M3LKUrkbQe6Xl2liTjjM1puFs/8QD49O+4YFKnGiyxOQLGP+RUv3SbTrpgsyxorbIMnM
-         M8nDtE6yH9oebfJ1AF2KXh/NaDB92Io4bxk7PYS2Q4QPVhNPD102260eQSMmu5I3+eIJ
-         RW7mS0L02YnQhu+VVQCS8s9sLU/qQiAjDXrwJhgLocr5iBWHPNDFasV1MYkv4MMwSpxG
-         iz5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WeLvogb5JcadAWbdKBuMs8s2ANbAcK0xMjx9ddwhq14=;
-        b=4BqaNVK2pt1M8Lhds7FIcvUcX2PIyKKijFN+gk4HIyHTlWn8gPdDj5mynWF7E5OTAu
-         Q+2PJvOx3Utaz7jxWZ5qs4BuxQ+XCpG1Ub9Kr84QMk1uAbuN5BqdZoJiReWYkTTb8CCn
-         +jxx32wsnj+5u9mc7q8L/Uwau47XJwZde4fvzFAPAkM7yDbPjGrVJfR74ANUmvXIiQyH
-         ndkyd1TfxpmLcBpzxHak+FXu+abH0B/QoV7n58w0dqBq/ix3o7bqH9DnfBb300fdW2hV
-         gRQzREOMkgcJdMk8CW4og7zcS0yuoT3mrlMsp2CALHaHFldXIU9OnAiY8QvyrOIHx00q
-         xa/A==
-X-Gm-Message-State: ANoB5pkZh6iGW4A2G4UZ7XaLHSSTxdms5br9fkEpzwNsiQgjvbSxUMxE
-        1slNslOhI30kAxU6DqfNhKHe4w==
-X-Google-Smtp-Source: AA0mqf7NUrHXH8IdAre6WwZa9HcPzETJhRbH+/idQa0BUPVdPF8aRm+V8yQNfDi69QgGf02lR11a0Q==
-X-Received: by 2002:a05:651c:10b5:b0:27a:727:cb92 with SMTP id k21-20020a05651c10b500b0027a0727cb92mr4328153ljn.84.1670485963624;
-        Wed, 07 Dec 2022 23:52:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f3-20020ac25083000000b0049c29389b98sm3217960lfm.151.2022.12.07.23.52.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Dec 2022 23:52:42 -0800 (PST)
-Message-ID: <dc0254dc-ef1b-d5fb-163e-281c725a3dcd@linaro.org>
-Date:   Thu, 8 Dec 2022 08:52:41 +0100
+        Thu, 8 Dec 2022 02:52:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283612C66C;
+        Wed,  7 Dec 2022 23:52:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CE888B812A9;
+        Thu,  8 Dec 2022 07:52:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03194C433D6;
+        Thu,  8 Dec 2022 07:52:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670485971;
+        bh=mzidjw17lLxadHdR3DfDkJvicQlgmwjH8rXmtGrwExA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h8tkN2PQ0zV1OZiOzm+jHJBjlgxHwNhq7xED2TWcT06QTe1gyx/7oWjKGFesYEyvO
+         D75UlrU+9EV1iYXEAASd0gkZemhz/tplLNM59i4997sfhTc0Fsm7YVTvp1vI9mJOB7
+         XOU/uTcsvZ8omZ551x89buPIep8VNPwGseindYDfD94LMDCaX79Jj72sDroIwqtpk3
+         uXgRI4uIjwbGTWqecJK+uCuTNkplJBFPmdvEToa5EjA5uYwQ8w89hyMWi3tTquuqYr
+         W8EddTR0LeuDdxb2oPgCyO1jLkYZy1DxdBVVaU8+NrZZSD8yPRUTyY6dX4CdhbNZ5D
+         luFH6D2+7n0Dg==
+Date:   Thu, 8 Dec 2022 07:52:47 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/tpm2: Split async tests call to separate shell
+ script runner
+Message-ID: <Y5GXzyyc7cVhA48/@kernel.org>
+References: <20221128220340.536558-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 2/3] dt-bindings: leds: add dt schema for
- worldsemi,ws2812b
-To:     Chuanhong Guo <gch981213@gmail.com>, linux-leds@vger.kernel.org
-Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221207040904.582585-1-gch981213@gmail.com>
- <20221207040904.582585-3-gch981213@gmail.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207040904.582585-3-gch981213@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221128220340.536558-1-nfraprado@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 05:09, Chuanhong Guo wrote:
-> Add dt binding schema for WorldSemi WS2812B driven using SPI
-> bus.
+On Mon, Nov 28, 2022 at 05:03:40PM -0500, Nícolas F. R. A. Prado wrote:
+> When the async test case was introduced, despite being a completely
+> independent test case, the command to run it was added to the same shell
+> script as the smoke test case. Since a shell script implicitly returns
+> the error code from the last run command, this effectively caused the
+> script to only return as error code the result from the async test case,
+> hiding the smoke test result (which could then only be seen from the
+> python unittest logs).
 > 
-> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> ---
-> Changes since v1:
-> remove linux driver reference from description
-> remove some obvious descriptions
-> fix unit address regex in multi-led property
-> drop various minItems
-> add maxItems = 1 to reg
-> fix node names and property orders in binding example
-> drop -spi from compatible string
-> add default-brightness
+> Move the async test case call to its own shell script runner to avoid
+> the aforementioned issue. This also makes the output clearer to read,
+> since each kselftest KTAP result now matches with one python unittest
+> report.
 > 
-> Change since v2:
-> drop "this patch" from commit message
-> rename leds to led-controller
-> drop default-brightness and default-intensity
+> While at it, also make it so the async test case is skipped if
+> /dev/tpmrm0 doesn't exist, since commit 8335adb8f9d3 ("selftests: tpm:
+> add async space test with noneexisting handle") added a test that relies
+> on it.
 > 
->  .../bindings/leds/worldsemi,ws2812b.yaml      | 116 ++++++++++++++++++
->  1 file changed, 116 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> new file mode 100644
-> index 000000000000..548c05ac3d31
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
-> @@ -0,0 +1,116 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: WS2812B LEDs driven using SPI
-> +
-> +maintainers:
-> +  - Chuanhong Guo <gch981213@gmail.com>
-> +
-> +description: |
-> +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
-> +  together and controlled individually using a single wire.
-> +  This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
-> +  Typical setups includes connecting the data pin of the LED chain to MOSI as
-> +  the only device or using CS and MOSI with a tri-state voltage-level shifter
-> +  for the data pin.
-> +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
-> +  and the controller needs to send all the bytes continuously.
-> +
-> +allOf:
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: worldsemi,ws2812b
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  spi-max-frequency:
-> +    minimum: 2105000
-> +    maximum: 2850000
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +patternProperties:
-> +  "^multi-led@[0-9a-f]+$":
-> +    type: object
-> +    $ref: leds-class-multicolor.yaml#
-> +    unevaluatedProperties: false
-> +
-> +    properties:
-> +      color-index:
-> +        description: |
-> +          A 3-item array specifying color of each components in this LED. It
-> +          should be one of the LED_COLOR_ID_* prefixed definitions from the
-> +          header include/dt-bindings/leds/common.h. Defaults to
-> +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
-> +          if unspecified.
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Hmm, maybe we should add more colors the "color" property, like
-LED_COLOR_ID_GRB, LED_COLOR_ID_BRG, LED_COLOR_ID_BGR?
 
-Rest look ok for me. If there is going to be resend, drop redundant "dt
-schema for" from the subject.
+[nix-shell:~/linux-tpmdd]$ sudo make -C tools/testing/selftests TARGETS=tpm2 run_tests
+make: Entering directory '/home/nixos/linux-tpmdd/tools/testing/selftests'
+make[1]: Entering directory '/home/nixos/linux-tpmdd/tools/testing/selftests/tpm2'
+make[1]: Nothing to be done for 'all'.
+make[1]: Leaving directory '/home/nixos/linux-tpmdd/tools/testing/selftests/tpm2'
+make[1]: Entering directory '/home/nixos/linux-tpmdd/tools/testing/selftests/tpm2'
+TAP version 13
+1..3
+# selftests: tpm2: test_smoke.sh
+# test_read_partial_overwrite (tpm2_tests.SmokeTest) ... ok
+# test_read_partial_resp (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_auth (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_policy (tpm2_tests.SmokeTest) ... ok
+# test_seal_with_too_long_auth (tpm2_tests.SmokeTest) ... ok
+# test_send_two_cmds (tpm2_tests.SmokeTest) ... ok
+# test_too_short_cmd (tpm2_tests.SmokeTest) ... ok
+# test_unseal_with_wrong_auth (tpm2_tests.SmokeTest) ... ok
+# test_unseal_with_wrong_policy (tpm2_tests.SmokeTest) ... ok
+#
+# ----------------------------------------------------------------------
+# Ran 9 tests in 82.385s
+#
+# OK
+ok 1 selftests: tpm2: test_smoke.sh
+# selftests: tpm2: test_space.sh
+# test_flush_context (tpm2_tests.SpaceTest) ... ok
+# test_get_handles (tpm2_tests.SpaceTest) ... ok
+# test_invalid_cc (tpm2_tests.SpaceTest) ... ok
+# test_make_two_spaces (tpm2_tests.SpaceTest) ... ok
+#
+# ----------------------------------------------------------------------
+# Ran 4 tests in 73.287s
+#
+# OK
+ok 2 selftests: tpm2: test_space.sh
+# selftests: tpm2: test_async.sh
+# test_async (tpm2_tests.AsyncTest) ... ok
+# test_flush_invalid_context (tpm2_tests.AsyncTest) ... ok
+#
+# ----------------------------------------------------------------------
+# Ran 2 tests in 0.018s
+#
+# OK
+ok 3 selftests: tpm2: test_async.sh
+make[1]: Leaving directory '/home/nixos/linux-tpmdd/tools/testing/selftests/tpm2'
+make: Leaving directory '/home/nixos/linux-tpmdd/tools/testing/selftests'
 
-Best regards,
-Krzysztof
+[nix-shell:~/linux-tpmdd]$ lsmod|grep tpm
+tpm_crb                20480  0
+tpm_tis                16384  0
+tpm_tis_core           32768  1 tpm_tis
+tpm                    94208  3 tpm_tis,tpm_crb,tpm_tis_core
+rng_core               20480  1 tpm
 
+LGTM, thanks!
+
+Tested-by: Jarkko Sakkinen <jarkko@kernel.org>
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+BR, Jarkko
