@@ -2,95 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51D86470A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4136470A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:17:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbiLHNSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:18:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40468 "EHLO
+        id S230175AbiLHNR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:17:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLHNR7 (ORCPT
+        with ESMTP id S230209AbiLHNRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:17:59 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1BC2A969
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:17:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0AADB61F1D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:17:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B64BC433D7;
-        Thu,  8 Dec 2022 13:17:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670505477;
-        bh=v1AMqLkYh7fKICo7N8T2Hn8qWxCuvv9yWp5eOf/ObEg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UycRB4/6G28HcMycky9G1W5e0c3IvNPlsbZgdBOx5xAuLu73sIFPpAsEBMEe/3igg
-         jti72o0Adr7o2oB6qmn8d9vlOe5KQBo8zCtrsth8jdUdFQvCI0///yGuR78x8H+MCO
-         5vaNtQsY8vMEBPa2Cbg3wdVbddnAa9j1FlF20x8V9tRIXsXHaV1trWUINlDxIt82IA
-         nsEzMqYE+tNu0S/x0Ay8ypdPJFrx6veijEbV5zVD1oi6Al5jbRTbnCM9ZBZMunk+Oe
-         avKiBBMZhqfXsxnOu3NNVeJYvSaDDEkK29oAk2AqSWM245agrx9N6mu8wgCI68lbam
-         ccaRMAI5b5Pcg==
-Date:   Thu, 8 Dec 2022 13:16:01 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Subject: Re: [PATCH] mfd: Drop obsolete dependencies on COMPILE_TEST
-Message-ID: <Y5HjkaWNF5/nTVTQ@google.com>
-References: <20221122154134.58a7a18b@endymion.delvare>
+        Thu, 8 Dec 2022 08:17:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7C092FDC
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:16:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670505368;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=neWLwjcyNjI8ZbLG+eysMC72AXD8ev/7q1C2nUvKC3k=;
+        b=PNoMsKw9ZZ+OzsWDRal7QugrhSNFpqkUnEQoCcBQC/KfI0lvM695cpUz1+p0G2oTjT7AP/
+        HloYJI53wyb720NNJAcb3OCHhDHHXMae5O8V+B6nJ5dDhg/IdGwrieyHNHjP/Go+qpg6Ub
+        Lyw+tl+l+hwpuKEsh2MVYF6+FvxtOAo=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-465-IscL99eoMS-qNa6BGtnDXw-1; Thu, 08 Dec 2022 08:16:06 -0500
+X-MC-Unique: IscL99eoMS-qNa6BGtnDXw-1
+Received: by mail-wm1-f72.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so2386309wmb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 05:16:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=neWLwjcyNjI8ZbLG+eysMC72AXD8ev/7q1C2nUvKC3k=;
+        b=3VdM92kog8tafweWwCW7lo3+cK9ozghOU34XsytZdKeviqKvmnXXL0gFW0AcCvBdRa
+         yD3VnH3f6vnNiEUAcn2H24xAPTE0D+j8Rc0pbi0SDepZXcQxTOueynMT7NIJFexhUf64
+         nQV6M7O9+Id+tzTbZxLczyRLUXEFwkcnZ3htv+2pUjJvTCHl5BhXqEeUfcxKb2Ner87Q
+         OhrKvgQ+B5YyiZ+VDhdX6X3uxkMTI33wsx6QKupJiyCjOsbbuUp7Ije+WPNvEJuUXe6H
+         /gEkYGgVkaZDhphRSAzYagvTslUyZ6r6BoTQn91MInqVZlKZoigeRiH0CdHrKK8q2g98
+         2K2g==
+X-Gm-Message-State: ANoB5pmefvQ/4rFZWzVJcQ8KeXMkzDfADv0KNK/fVsiV66yYqdlfW3SA
+        6ojRVyFbTpPcCRqldhqEU3SE0ufosF/4/BahAUsQ9zdDhCFrWrdgLU98xzVyoHgmbHtRi46g0JO
+        qqjESQlrlWvsDS2/Fp8VOirVP
+X-Received: by 2002:a1c:5406:0:b0:3d1:e3ba:3bb6 with SMTP id i6-20020a1c5406000000b003d1e3ba3bb6mr9123508wmb.29.1670505365093;
+        Thu, 08 Dec 2022 05:16:05 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7ZeniNqSJf/bXpP3fqsWoiP81fRuzC3ndMmkkBsTOt9cQD+OEqUkQszPtaCwAqFcKUdPfeWw==
+X-Received: by 2002:a1c:5406:0:b0:3d1:e3ba:3bb6 with SMTP id i6-20020a1c5406000000b003d1e3ba3bb6mr9123496wmb.29.1670505364741;
+        Thu, 08 Dec 2022 05:16:04 -0800 (PST)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id k32-20020a05600c1ca000b003b4ff30e566sm11743772wms.3.2022.12.08.05.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 05:16:04 -0800 (PST)
+Message-ID: <799d6831-2af3-72c1-84b2-1f0454a46c07@redhat.com>
+Date:   Thu, 8 Dec 2022 14:16:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221122154134.58a7a18b@endymion.delvare>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 10/10] mm/hugetlb: Document why page_vma_mapped_walk()
+ is safe to walk
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     Jann Horn <jannh@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        James Houghton <jthoughton@google.com>,
+        Rik van Riel <riel@surriel.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>
+References: <20221207203034.650899-1-peterx@redhat.com>
+ <20221207203158.651092-1-peterx@redhat.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20221207203158.651092-1-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 22 Nov 2022, Jean Delvare wrote:
-
-> Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-> is possible to test-build any driver which depends on OF on any
-> architecture by explicitly selecting OF. Therefore depending on
-> COMPILE_TEST as an alternative is no longer needed.
+On 07.12.22 21:31, Peter Xu wrote:
+> Taking vma lock here is not needed for now because all potential hugetlb
+> walkers here should have i_mmap_rwsem held.  Document the fact.
 > 
-> It is actually better to always build such drivers with OF enabled,
-> so that the test builds are closer to how each driver will actually be
-> built on its intended target. Building them without OF may not test
-> much as the compiler will optimize out potentially large parts of the
-> code. In the worst case, this could even pop false positive warnings.
-> Dropping COMPILE_TEST here improves the quality of our testing and
-> avoids wasting time on non-existent issues.
-> 
-> As a minor optimization, this also lets us drop of_match_ptr(), as we
-> now know what it will resolve to, we might as well save cpp some work.
-> 
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Cc: Lee Jones <lee@kernel.org>
-> Cc: Bartosz Golaszewski <brgl@bgdev.pl>
-> Cc: Chanwoo Choi <cw00.choi@samsung.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-> Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Cc: "Jonathan Neuschäfer" <j.neuschaefer@gmx.net>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->  drivers/mfd/Kconfig          |   16 ++++++++--------
->  drivers/mfd/motorola-cpcap.c |    2 +-
->  2 files changed, 9 insertions(+), 9 deletions(-)
+>   mm/page_vma_mapped.c | 10 ++++++++--
+>   1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+> index e97b2e23bd28..2e59a0419d22 100644
+> --- a/mm/page_vma_mapped.c
+> +++ b/mm/page_vma_mapped.c
+> @@ -168,8 +168,14 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>   		/* The only possible mapping was handled on last iteration */
+>   		if (pvmw->pte)
+>   			return not_found(pvmw);
+> -
+> -		/* when pud is not present, pte will be NULL */
+> +		/*
+> +		 * NOTE: we don't need explicit lock here to walk the
+> +		 * hugetlb pgtable because either (1) potential callers of
+> +		 * hugetlb pvmw currently holds i_mmap_rwsem, or (2) the
+> +		 * caller will not walk a hugetlb vma (e.g. ksm or uprobe).
+> +		 * When one day this rule breaks, one will get a warning
+> +		 * in hugetlb_walk(), and then we'll figure out what to do.
+> +		 */
+>   		pvmw->pte = hugetlb_walk(vma, pvmw->address, size);
+>   		if (!pvmw->pte)
+>   			return false;
 
-Applied, thanks.
+Would it make sense to squash that into the previous commit?
 
 -- 
-Lee Jones [李琼斯]
+Thanks,
+
+David / dhildenb
+
