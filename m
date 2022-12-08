@@ -2,155 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 261AA647202
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED56B647208
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:41:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiLHOlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34506 "EHLO
+        id S229665AbiLHOlq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:41:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiLHOlH (ORCPT
+        with ESMTP id S229568AbiLHOlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:41:07 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B76D54299F;
-        Thu,  8 Dec 2022 06:41:04 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2861B25B;
-        Thu,  8 Dec 2022 15:41:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670510462;
-        bh=7JK1mcWK7ctuZSJVmKN+aaMKQHCYvzcv6b0fzVlOa7Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SOVBFZ+wXPdn7+spHkeH8ZjDrQuWrS5pt1BYvt9XDf23vR2xJQAueCdTSSLw+dTGn
-         BngW/zXk3AU/gsukA0kDYr4P5l9NPojFmc0Dex+HG0b9r7bojvsndmes0tyXolB7Q2
-         GRu2R8TPjEWovcG5OOOEw4JQPXyZSxLk1SsUJK24=
-Message-ID: <0340d15c-be0a-cd28-4149-7976896f8eb1@ideasonboard.com>
-Date:   Thu, 8 Dec 2022 16:40:58 +0200
+        Thu, 8 Dec 2022 09:41:44 -0500
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DAC63B96;
+        Thu,  8 Dec 2022 06:41:41 -0800 (PST)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id DA1A618845A4;
+        Thu,  8 Dec 2022 14:41:24 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id CB56A25002E1;
+        Thu,  8 Dec 2022 14:41:24 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id C129D9EC0025; Thu,  8 Dec 2022 14:41:24 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 0/8] i2c-atr and FPDLink
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
- <Y5HYBzZlkTrsdjfX@smile.fi.intel.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <Y5HYBzZlkTrsdjfX@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date:   Thu, 08 Dec 2022 15:41:24 +0100
+From:   netdev@kapio-technology.com
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
+ implementation
+In-Reply-To: <20221208133524.uiqt3vwecrketc5y@skbuf>
+References: <20221205185908.217520-1-netdev@kapio-technology.com>
+ <20221205185908.217520-4-netdev@kapio-technology.com>
+ <Y487T+pUl7QFeL60@shredder>
+ <580f6bd5ee7df0c8f0c7623a5b213d8f@kapio-technology.com>
+ <20221207202935.eil7swy4osu65qlb@skbuf>
+ <1b0d42df6b3f2f17f77cfb45cf8339da@kapio-technology.com>
+ <20221208133524.uiqt3vwecrketc5y@skbuf>
+User-Agent: Gigahost Webmail
+Message-ID: <c9dc3682dd9e4c2a9d81a7df0f3f9124@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On 2022-12-08 14:35, Vladimir Oltean wrote:
+> On Thu, Dec 08, 2022 at 01:28:27PM +0100, netdev@kapio-technology.com 
+> wrote:
+>> On 2022-12-07 21:29, Vladimir Oltean wrote:
+>> > On Tue, Dec 06, 2022 at 05:36:42PM +0100, netdev@kapio-technology.com wrote:
+>> > > > I was under the impression that we agreed that the locking change will
+>> > > > be split to a separate patch.
+>> > >
+>> > > Sorry, I guess that because of the quite long time that has passed as I
+>> > > needed to get this FID=0 issue sorted out, and had many other different
+>> > > changes to attend, I forgot.
+>> >
+>> > Well, at least you got the FID=0 issue sorted out... right?
+>> > What was the cause, what is the solution?
+>> 
+>> Well I got it sorted out in the way that I have identified that it is 
+>> the
+>> ATU op that fails some times. I don't think there is anything that can 
+>> be
+>> done about that, other than what I do and let the interrupt routing 
+>> return
+>> an error.
+> 
+> Yikes. But why would you call that "sorted out", though? Just to make 
+> it
+> appear as though you really spent some time on it, and use it as an
+> excuse for something else?
+> 
+>> it is the ATU op that fails some times.
+> 
+> Let's start with the assumption that this is correct. A person with
+> critical thinking will ask "can I prove that it is?".
+> 
+> If the ATU operation fails sometimes, I would expect that it always
+> fails in the same way, by returning FID 0, where 0 is some kind of
+> "invalid" value.
+> 
+> But if FID 0 is actually FID_STANDALONE, then you'd read FID_STANDALONE
+> even if you change the value of FID_STANDALONE in the driver to
+> something else, like 1.
+> 
+> Something ultra hackish like this will install VLAN 3050 as first VID 
+> in
+> the switch, and that will gain FID 0. Then, MV886XXX_VID_STANDALONE 
+> will
+> gain FID 1. So we need to adjust the definitions.
+> 
 
-On 08/12/2022 14:26, Andy Shevchenko wrote:
-> On Thu, Dec 08, 2022 at 12:42:13PM +0200, Tomi Valkeinen wrote:
->> On 08/12/2022 12:39, Tomi Valkeinen wrote:
-> 
-> ...
-> 
->> +#include <linux/fwnode.h>
->>   #include <linux/i2c-atr.h>
->>   #include <linux/i2c.h>
->>   #include <linux/kernel.h>
->>   #include <linux/module.h>
->>   #include <linux/mutex.h>
->> -#include <linux/of.h>
->>   #include <linux/slab.h>
-> 
-> + Blank line here?
-> 
+Here is an example of the output I have when running the 
+locked_port_mab() under the selftests...
 
-There is a blank line there.
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6xxx_g1_atu_prob_irq_thread_fn: 13 callbacks suppressed
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
 
->> +#define ATR_MAX_ADAPTERS 99	/* Just a sanity limit */
->> +#define ATR_MAX_SYMLINK_LEN 16	/* Longest name is 10 chars: "channel-99" */
-> 
-> ...
-> 
->> +		u16 *new_buf;
->> +
->> +		new_buf = kmalloc_array(num, sizeof(chan->orig_addrs[0]),
->> +					GFP_KERNEL);
-> 
-> 		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
-> 
-> ?
+the -22 errors are all when it returns FID=0, and it is the same mac all 
+the way.
 
-Yes, I think that looks better here.
 
->> +		if (!new_buf)
->>   			return -ENOMEM;
-> 
-> ...
-> 
->>   	struct i2c_atr_cli2alias_pair *c2a;
->> -	u16 alias_id = 0;
->> -	int ret = 0;
->> +	u16 alias_id;
->> +	int ret;
-> 
-> Is it mangled or it's missing blank line here?
+I have other logs, where the -22 occurs at random other times, f.ex. 
+same test:
 
-Also here there is a blank line. Is the mail somehow mangled on your 
-side? On lore it looks fine:
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6xxx_g1_atu_prob_irq_thread_fn: 4 callbacks suppressed
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU miss violation for 
+8e:a9:fc:14:58:06 portvec 0 spid 2
+mv88e6085 1002b000.ethernet-1:04: ATU problem: error -22 while handling 
+interrupt
 
-https://lore.kernel.org/all/c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com/
-
->>   	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
->>   	if (!c2a)
-> 
-> ...
-> 
->>   struct device;
->>   struct i2c_atr;
->> +struct fwnode_handle;
-> 
-> Order?
-
-Yep, I'll fix.
-
-> ...
-> 
->>   /**
->> - * Helper to add I2C ATR features to a device driver.
->> + * struct i2c_atr - Represents the I2C ATR instance
->>    */
-> 
-> This is incomplete. Have you run kernel doc validator against this file?
-
-What's kernel doc validator? Do you mean that it's incomplete and kernel 
-doc doesn't work correctly, or that there should be more information here?
-
-I don't get any errors/warnings from any tool I have used. But I agree 
-it looks a bit odd with only the name of the struct in the doc.
-
-  Tomi
-
+What else conclusion than it is the ATU op that fails?
