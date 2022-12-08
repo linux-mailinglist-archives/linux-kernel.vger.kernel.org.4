@@ -2,108 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D97BA646BF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84EF1646BF4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:30:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbiLHJ37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:29:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
+        id S229592AbiLHJaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:30:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiLHJ3v (ORCPT
+        with ESMTP id S229492AbiLHJaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:29:51 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE3D1D306;
-        Thu,  8 Dec 2022 01:29:49 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.229])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NSTFp12fyz9xFPw;
-        Thu,  8 Dec 2022 17:22:38 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwCXfflzrpFj0QvMAA--.21566S2;
-        Thu, 08 Dec 2022 10:29:31 +0100 (CET)
-Message-ID: <b989b278a16c48e104b32ba7243e4298491a6056.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 2/2] lsm: Add/fix return values in lsm_hooks.h and
- fix formatting
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     David Howells <dhowells@redhat.com>, casey@schaufler-ca.com,
-        omosnace@redhat.com, john.johansen@canonical.com,
-        kpsingh@kernel.org, bpf@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 08 Dec 2022 10:29:20 +0100
-In-Reply-To: <CAHC9VhQZ3VKWsNarUGPcHZuoRLgb8owKgbdLymwR759qVyQ+2Q@mail.gmail.com>
-References: <20221128144240.210110-1-roberto.sassu@huaweicloud.com>
-         <20221128144240.210110-3-roberto.sassu@huaweicloud.com>
-         <CAHC9VhRx=pCcAHMAX+51rpFT+efW7HH=X37YOwUG1tTLxyg=SA@mail.gmail.com>
-         <7225e76c09c7ff68937e37ee041fefdd6ccac1c8.camel@huaweicloud.com>
-         <0682348d9601ca3847ce9ba035e4ab1b586cf712.camel@huaweicloud.com>
-         <CAHC9VhQZ3VKWsNarUGPcHZuoRLgb8owKgbdLymwR759qVyQ+2Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 8 Dec 2022 04:30:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 702075FBA5;
+        Thu,  8 Dec 2022 01:30:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 08F2F61E04;
+        Thu,  8 Dec 2022 09:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC104C433D6;
+        Thu,  8 Dec 2022 09:30:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670491817;
+        bh=KvDZ6QK3ZFSOs+gv7yHb4EU7Ui4QQ9oYslj/0R5XduM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DJtrzXc2jp78dAEJI54yfardbIC81q390prkd+5L8QNe/LbFbhqmoT18F+gAuZUp6
+         JnwpeICGIWmpXw5dq2ylyazPdFRLEwqQCLvK/g96V9hB9yCdR7agb77GU87KrjYRt3
+         vQlKv/ZmwAqeYBg7lP4o7z/8M5hJNnLjRq0NIYUnUzz9dIArnNfO+rNQ1KiwJdULF+
+         iZTXzuN9Pf8J7YeWVxCfNG8GohARLfeqQRk3ej5I+l9RMfHeNM2b1NBKboSj1LrIWC
+         6y0140hbVaIo6wXA+s7Uw+nMn4GK5g5nsuUZ0KBwGs5gf8BJNUW0p789Y4wX6T9xnK
+         xAaHlFUmaOf8w==
+Date:   Thu, 8 Dec 2022 09:30:13 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v2 09/18] x86/sgx: Return the number of EPC pages that
+ were successfully reclaimed
+Message-ID: <Y5Gupbkb7BmCJlGn@kernel.org>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-10-kristen@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwCXfflzrpFj0QvMAA--.21566S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZFW8Jr45tryxJFW7XF4fKrg_yoWkuwbEkr
-        Z8Ar48Jw45Crn7Cw12ka1F9r92g3srZw1rZ3WDXr1UWa48GrW5JF40kr93Xrs3CrW8Jrnr
-        WFyDAFZ2kasIvjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb7xYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
-        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-        67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
-        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0E
-        wIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E74
-        80Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0
-        I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04
-        k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4ZsWgACsG
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202183655.3767674-10-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 14:34 -0500, Paul Moore wrote:
-> On Wed, Dec 7, 2022 at 4:18 AM Roberto Sassu
-> <roberto.sassu@huaweicloud.com> wrote:
-> > For this patch, I saw it is already in lsm/next. Paul, should I do an
-> > incremental patch or change the one in the repo and you force push it?
-> > I would just remove the three lines after the parameters description.
+On Fri, Dec 02, 2022 at 10:36:45AM -0800, Kristen Carlson Accardi wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> Just send a patch against the current lsm/next branch to remove those
-> lines, and please do it ASAP as the merge window opens this
-> weekend/Monday.
+> Return the number of reclaimed pages from sgx_reclaim_pages(), the EPC
+> cgroup will use the result to track the success rate of its reclaim
+> calls, e.g. to escalate to a more forceful reclaiming mode if necessary.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/main.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index f201ca85212f..a4a65eadfb79 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -291,7 +291,7 @@ static void sgx_reclaimer_write(struct sgx_epc_page *epc_page,
+>   * problematic as it would increase the lock contention too much, which would
+>   * halt forward progress.
+>   */
+> -static void __sgx_reclaim_pages(int nr_to_scan)
+> +static int __sgx_reclaim_pages(int nr_to_scan)
 
-Ok, was about to send but I would need a clarification first.
+Nit: I wonder if we should use ssize_t here?
 
-In mount_api.rst, there is for security_fs_context_parse_param():
+If nothing else, it would document better than 'int'.
 
-     The value pointed to by param may be modified (if a string) or stolen
-     (provided the value pointer is NULL'd out).  If it is stolen, 0 must be
-     returned to prevent it being passed to the filesystem.
-
-Looking at security.c:
-
-	hlist_for_each_entry(hp, &security_hook_heads.fs_context_parse_param,
-			     list) {
-		trc = hp->hook.fs_context_parse_param(fc, param);
-		if (trc == 0)
-			rc = 0;
-		else if (trc != -ENOPARAM)
-			return trc;
-	}
-
-If, as mount_api.rst says, the value is modified by an LSM or stolen,
-should it be passed to other LSMs too?
-
-Thanks
-
-Roberto
-
+BR, Jarkko
