@@ -2,109 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15AD7646BB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5535B646BAC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:13:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiLHJOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:14:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S230363AbiLHJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:13:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiLHJNx (ORCPT
+        with ESMTP id S230239AbiLHJND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:13:53 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B26C720
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:12:55 -0800 (PST)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1p3Cx3-0006oc-8k; Thu, 08 Dec 2022 10:12:21 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:92e:b9fb:f0e7:2adf])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 76E921394C2;
-        Thu,  8 Dec 2022 09:12:19 +0000 (UTC)
-Date:   Thu, 8 Dec 2022 10:12:11 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vivek Yadav <vivek.2311@samsung.com>
-Cc:     rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
-        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
-        ravi.patel@samsung.com, alim.akhtar@samsung.com,
-        linux-fsd@tesla.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        aswani.reddy@samsung.com, sriranjani.p@samsung.com
-Subject: Re: [Patch v4 1/2] can: m_can: Call the RAM init directly from
- m_can_chip_config
-Message-ID: <20221208091211.622jm5raebedxboa@pengutronix.de>
-References: <20221207100632.96200-1-vivek.2311@samsung.com>
- <CGME20221207100650epcas5p408d280e0e2d2d6acfb5e252e37f504b2@epcas5p4.samsung.com>
- <20221207100632.96200-2-vivek.2311@samsung.com>
+        Thu, 8 Dec 2022 04:13:03 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EF877203;
+        Thu,  8 Dec 2022 01:12:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670490751; x=1702026751;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=uG+z6YFt2KidzCc4wAWQpTKyaaYKkEtXode3ts7CuaQ=;
+  b=OBIcIlfCj8RcpK/l+/5WXyezC1DyNuNJLE5iha4IPMHVCqgtuB2KvF/n
+   3xl9nrT+/NjfsnrMjSOPFPLsotLNTEdDJr4zGKq0UX29KzVQY9xmOxN8M
+   AE4U0U1iit8iHfDrLW/+YjotJQdoIdXjhZFY+BxRy7u04o3YEk060lZZo
+   BxmQDGH1X21490kEgIwCIgKVWSWsbI9ryp1jH7oy9Zx2x0XpO44QgoAT5
+   8grEW7lagyIVgKmv82r6tdDFFI4YWE1bNgVLFSRIXjrAeWPcUjR8YXQgq
+   uBfRfrxgaUOiOj/rnpb3vbkvf2GAk+jjk5Ag8xiWWmkHRuhKXnaxC4ZDM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="381415870"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="381415870"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 01:12:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="975790008"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="975790008"
+Received: from pors-mobl3.ger.corp.intel.com ([10.252.39.224])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 01:12:24 -0800
+Date:   Thu, 8 Dec 2022 11:12:14 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        linux-omap@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH v4 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+In-Reply-To: <20221207124305.49943-1-tony@atomide.com>
+Message-ID: <7f105ff9-cdc3-f98e-2557-812361faa94@linux.intel.com>
+References: <20221207124305.49943-1-tony@atomide.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qo5ntlmugze2qlne"
-Content-Disposition: inline
-In-Reply-To: <20221207100632.96200-2-vivek.2311@samsung.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 7 Dec 2022, Tony Lindgren wrote:
 
---qo5ntlmugze2qlne
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> We want to enable runtime PM for serial port device drivers in a generic
+> way. To do this, we want to have the serial core layer manage the
+> registered physical serial controller devices.
+> 
+> To do this, let's set up a struct device for the serial core controller
+> as suggested by Greg and Jiri. The serial core controller devices are
+> children of the physical serial port device. The serial core controller
+> device is needed to support multiple different kind of ports connected
+> to single physical serial port device.
+> 
+> Let's also set up a struct device for the serial core port. The serial
+> core port instances are children of the serial core controller device.
+> With the serial core port device we can now flush pending TX on the
+> runtime PM resume as suggested by Johan.
+> 
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Suggested-by: Jiri Slaby <jirislaby@kernel.org>
+> Suggested-by: Johan Hovold <johan@kernel.org>
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
+> 
+> Changes since v3:
+> 
+> - Simplify things by adding a serial core control device as the child of
+>   the physical serial port as suggested by Jiri
+> 
+> - Drop the tinkering of the physical serial port device for runtime PM.
+>   Serial core just needs to manage port->port_dev with the addition of
+>   the serial core control device and the device hierarchy will keep the
+>   pysical serial port device enabled as needed
+> 
+> - Simplify patch description with all the runtime PM tinkering gone
+> 
+> - Coding style improvments as noted by Andy
+> 
+> - Post as a single RFC patch as we're close to the merge window
+> 
+> Changes since v2:
+> 
+> - Make each serial port a proper device as suggested by Greg. This is
+>   a separate patch that flushes the TX on runtime PM resume
+> 
+> Changes since v1:
+> 
+> - Use kref as suggested by Andy
+> 
+> - Fix memory leak on error as noted by Andy
+> 
+> - Use use unsigned char for supports_autosuspend as suggested by Andy
+> 
+> - Coding style improvments as suggested by Andy
+> 
+> ---
 
-On 07.12.2022 15:36:31, Vivek Yadav wrote:
-> When we try to access the mcan message ram addresses during the probe,
-> hclk is gated by any other drivers or disabled, because of that probe
-> gets failed.
->=20
-> Move the mram init functionality to mcan chip config called by
-> m_can_start from mcan open function, by that time clocks are
-> enabled.
->=20
-> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
+> +	ret = serial_core_add_one_port(drv, port);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mutex_lock(&port_mutex);
+> +
+> +	/* Inititalize a serial core controller device if needed */
+> +	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
+> +	if (!ctrl_dev) {
+> +		ctrl_dev = serial_core_ctrl_device_add(port);
+> +		if (!ctrl_dev)
+> +			goto err_remove_port;
+> +		allocated = true;
+> +	}
+> +
+> +	/* Initialize a serial core port device */
+> +	ret = serial_core_port_device_add(ctrl_dev, port);
 
-Applied to linux-can-next.
+How is ->port_dev supposed to work here?
 
-Thanks,
-Marc
+->port_dev is not set until in serial_core_port_device_add() but you made
+serial_core_add_one_port() call before that.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+-- 
+ i.
 
---qo5ntlmugze2qlne
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmORqmkACgkQrX5LkNig
-013EGAgAqIsT8Spgs5YSH/Ia25bQG5vb66rPRb4TpsVjmLjycBzY26fgnsXhMqnD
-EJ0x3PhYxpZS3/XI8IiRXPgewekGZBl9DkZWk7BreOLS7MbKR+jnW/82FOrYoDvm
-JleZrFmHQB65YiJTZwzmNmcuEgiQ/KJBfnvVWFbN2KZu8zyEJT6OIRpjDCztetuA
-a/lPfdZJybyh4fTrHJo98KTKie/xuzHGcWtu0YXdI6u3R3O7Z8PBr2jhvuzsvFh/
-7ZrrKY55DAp4TfYI472mR3V4IJpM+Xhs0CJhxPBzqjWw6XxckjrJSTk5k1ZLRymX
-Nf3Bm8cceg345Bu4LOi1AiI+AjxzOw==
-=aA7E
------END PGP SIGNATURE-----
-
---qo5ntlmugze2qlne--
+> +	if (ret)
+> +		goto err_del_ctrl_dev;
+> +
+> +	mutex_unlock(&port_mutex);
+> +
+> +	return 0;
+> +
+> +err_del_ctrl_dev:
+> +	if (allocated)
+> +		platform_device_del(to_platform_device(ctrl_dev));
+> +
+> +err_remove_port:
+> +	mutex_unlock(&port_mutex);
+> +
+> +	return serial_core_remove_one_port(drv, port);
+> +}
+> +EXPORT_SYMBOL_NS(serial_core_register_port, SERIAL_CORE);
