@@ -2,73 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 013E864743E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03AB64743D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbiLHQ1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
+        id S230322AbiLHQ1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:27:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230197AbiLHQ1O (ORCPT
+        with ESMTP id S230210AbiLHQ1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:27:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C412C6FF34;
-        Thu,  8 Dec 2022 08:27:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5F7AB824BC;
-        Thu,  8 Dec 2022 16:27:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E7CC433F2;
-        Thu,  8 Dec 2022 16:27:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670516823;
-        bh=2rZpNHS3zjVnsnclVnie2ZUW06W/KbA77iI6A1Cxwto=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CD0XdI/CmJXuvBPJGjhWMaM01S3ubk6YjXjajjz6MlN+6pJyLxyEcZ5UkXGhAHja2
-         nn3cymWvua1BOdteGqpPZZj93BGRpKofIfuPjkprWq0xpLSj2mHrXpO1S+O9oMore1
-         gFoNfVBjuISAD1njKRpuFg+Z57NbxVx90YX1w2UDb18omYEiLUQlI9Eu7PxHDX2I0M
-         ZQ+gsoBIStSt46+drJHAjH8T3D2tM2qU7hb3ASqw6XmbEbExb8JAxRUNmnpzNJZQtf
-         2ag8pw2jA1ti3sSJDNCFspqFeDECIQzke//Q+bey1RCEMqW/XLvRIPQ6dNDyu9ZQgR
-         5SSna6ZOt+b9w==
-Date:   Thu, 8 Dec 2022 08:27:01 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
-        Vladimir Oltean <olteanv@gmail.com>, kernel@pengutronix.de,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64
- support for ksz8 series of switches
-Message-ID: <20221208082701.7b7fffc3@kernel.org>
-In-Reply-To: <20221208055512.GE19179@pengutronix.de>
-References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
-        <20221206114133.291881a4@kernel.org>
-        <20221207061630.GC19179@pengutronix.de>
-        <20221207154826.5477008b@kernel.org>
-        <20221208055512.GE19179@pengutronix.de>
+        Thu, 8 Dec 2022 11:27:05 -0500
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15F973F52
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:27:03 -0800 (PST)
+Received: by mail-il1-x12c.google.com with SMTP id j28so1059518ila.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:27:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YGASGdT0r7NnaA1e4kT6G5JiKwWgMW8ILoizErp/fuA=;
+        b=3cTmyGd7FiNaOd4/sthMFl990S0QTtP747E5NX3mtjTVd8iTdTnwR3pgcy/Qys0cO9
+         faIqpdtoDWkJdKzd6wVT4kaXnz7ODbkhdWHZ27ATrsdgYcYqxV5K9JkSEivflyXztXXZ
+         981U95OZZptesAhsvqD2D/kjcv0L0l3oxa8T7oTzk4hrRunjRckDcu+wAdA5UcanTc6p
+         /jE1RH9RYBN9RCFBB4OJhSa19D6fGkEzRTO9DIccojqIVoiyQhj1GETx0KKUz12wuP3D
+         bw7/TYwQGv4Zhwcgt88TAKQQxFEoGfwl3CDKVxjkuFgNu0vW3bi+64K7MXcwE6Zs19LW
+         rduw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YGASGdT0r7NnaA1e4kT6G5JiKwWgMW8ILoizErp/fuA=;
+        b=QNWrBPYwBQLjuEZfAoOCZUvHlRgSLurTmEIFySMcuIC63zI3uYNhl0iteu1O78Gno9
+         V3jUKVfbLVngHiwHbKAUSQ8RuzlNulHVOKmDSUOZtiNT9bPuY9OvikDebS71nrN5TGv5
+         wUlnMKYK328lnuJ6RidMl5VFIGjm12Zw7PpjrGZ42vVyvOMZixO79dMp0B6jTXuw14XP
+         /PG0Djnn/3d1siaD3yxLujaStBCm4sm3dpmcDlEaHg8tOEeEJSDGXKS8gb4o2EcJuc7o
+         g9kpGZkPgShazhxUfYQpn6T5DuX47KPQ3e0+vwEmDFB/q8NJy9YmQ0TYtNFL3HUvUNiy
+         8fTA==
+X-Gm-Message-State: ANoB5pkz1hqWtzQQSpAiRUaB16+eQi21NPY6Tmc59Kx/TmZM5ECRLtIN
+        MklRwyQa5j0rmEKI7E9lYdwpWA==
+X-Google-Smtp-Source: AA0mqf6Ob3YAi8F6yT37MUpRm8pcfPCY/knzinw6rL7EeVxhm+NGLSkCMgPpGmDYfDo8gge8xn3VAQ==
+X-Received: by 2002:a05:6602:2109:b0:6e0:194a:4f47 with SMTP id x9-20020a056602210900b006e0194a4f47mr6359294iox.134.1670516823258;
+        Thu, 08 Dec 2022 08:27:03 -0800 (PST)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id l10-20020a92d8ca000000b003030d8b3cb7sm882758ilo.42.2022.12.08.08.27.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 08:27:02 -0800 (PST)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, acme@redhat.com,
+        mingo@elte.hu, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Jihong <yangjihong1@huawei.com>
+In-Reply-To: <20221122040410.85113-1-yangjihong1@huawei.com>
+References: <20221122040410.85113-1-yangjihong1@huawei.com>
+Subject: Re: [PATCH] blktrace: Fix output non-blktrace event when blk_classic
+ option enabled
+Message-Id: <167051682259.135565.3126267294037734458.b4-ty@kernel.dk>
+Date:   Thu, 08 Dec 2022 09:27:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.11.0-dev-50ba3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Dec 2022 06:55:12 +0100 Oleksij Rempel wrote:
-> I tested it by sending correct and malformed pause frames manually with
-> mausezahn. Since it is possible to send and receive pause frames
-> manually, it is good to count all bytes in use, otherwise we may have
-> bogus or malicious stealth traffic without possibility to measure it.
 
-=F0=9F=99=83=EF=B8=8F=F0=9F=99=83=EF=B8=8F
+On Tue, 22 Nov 2022 12:04:10 +0800, Yang Jihong wrote:
+> When the blk_classic option is enabled, non-blktrace events must be
+> filtered out. Otherwise, events of other types are output in the blktrace
+> classic format, which is unexpected.
+> 
+> The problem can be triggered in the following ways:
+> 
+>   # echo 1 > /sys/kernel/debug/tracing/options/blk_classic
+>   # echo 1 > /sys/kernel/debug/tracing/events/enable
+>   # echo blk > /sys/kernel/debug/tracing/current_tracer
+>   # cat /sys/kernel/debug/tracing/trace_pipe
+> 
+> [...]
+
+Applied, thanks!
+
+[1/1] blktrace: Fix output non-blktrace event when blk_classic option enabled
+      commit: f596da3efaf4130ff61cd029558845808df9bf99
+
+Best regards,
+-- 
+Jens Axboe
+
+
