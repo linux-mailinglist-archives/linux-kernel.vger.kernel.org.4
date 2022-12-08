@@ -2,104 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8913C647277
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7908A647275
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiLHPG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:06:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52134 "EHLO
+        id S229825AbiLHPGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:06:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiLHPGx (ORCPT
+        with ESMTP id S229867AbiLHPGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:06:53 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F7829D2E0
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:06:47 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id b13-20020a17090a5a0d00b0021906102d05so1808762pjd.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 07:06:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+79/rVNDN1N1SEjLcBAvHUJ9oDu58WUQ9a221hxPVg=;
-        b=r6C6cM8tJS7nLq3dPhUaUvYuhBWqpXXoJBn9BftBTVhpB8h8uDfhlZj+q2OTBluKuS
-         hcoaypjVnnA1BC0iA+54r/xIFhhwuyabeF8qQGDVdBV80fIK1NeDH88Vsc62OE8oQ5zc
-         WU3+eyNwMEhUSF9o8vG9n2oS+E1RBR6tWoMly6RtmGXAP0kpEGQ4KcblKp/vz3Kne+t+
-         detBJcxiiE70B/8vemw2TjDSXm54fzueXdxp0rr4S/+CABoRo3YPFEdtzqc/VADT2pzb
-         7pjoaJtXq71UymkmHj3F/zBCBBjsuU0en+weIiOswLRATrF1l1OTJn4e240nHRl2JoMg
-         3tww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z+79/rVNDN1N1SEjLcBAvHUJ9oDu58WUQ9a221hxPVg=;
-        b=1N+xx3Tfony3EijvyrNwaC1G1j7BPoGZoq07Kdh8X7W8QxBf2L4NwX2r0rCbFTx1tE
-         QTTyvrTImm3+H5IzhRhY6baWeMnA+9VZz3jM/d9MZ4WTw77GBfHEBov4J6P3naD/ZQs8
-         LDRsCosZnGEXm+mr9CyTwj84Cuf029hhzNUHK6dHvKXD41InVZ6B9zNU3YvA7KKhx1iu
-         0T2tq73SXmz/LoYd5gxXtRvGJu+Hpu2wJUt06JI4bIZ33RDRViRV0x8CPYKnAHoaTcZt
-         JIAkVXsOyn0WjPH0BCSaBdfgzAaRxhtv8JQjKX1fwKCKDuJt1JMvrqCwLsC/bMZpHquE
-         KzzA==
-X-Gm-Message-State: ANoB5plbPaJ0kHXbO+igAo2IbALIQ14x9RB0Kui9xONaSGM7rY6IfYxs
-        qJlBPabGMii+HaYE/8KMyiuK1UfgoBZsrjtez767yw==
-X-Google-Smtp-Source: AA0mqf6ryelLIcJtPAb2S5cW1UuwsQpCmsk2//hxrXbnzUoJGrRIS3IouQwBJglIvXqdE9OWXGNry025D53F6/YrY+Y=
-X-Received: by 2002:a17:90a:6b85:b0:219:95eb:e11 with SMTP id
- w5-20020a17090a6b8500b0021995eb0e11mr29820246pjj.152.1670512006650; Thu, 08
- Dec 2022 07:06:46 -0800 (PST)
+        Thu, 8 Dec 2022 10:06:35 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CBD57B54
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:06:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1806CB82439
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 15:06:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7A89C433C1;
+        Thu,  8 Dec 2022 15:06:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670511991;
+        bh=RpnrviEbFDIpdJQF9m6keZwuAic3Ld19rC7PuI9w9Pg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Qv9EgHMwY9WsdrwNl3reVIS8TiRMXn6jY2fLWZVamOYBzILHc5qvI1ryoYaRSvJxz
+         3z0p/4CPXOtLXTq8Nftq0Nn8RMAO55HVawqoeCqVv1jj+8AimI5l4Dm5wta/CPJnFi
+         ED3bhhrXI5QSfzLA1IXiWmDvGowhv9t5mDboZSf65VXN2msEkmXkV2yW7vL20C2/ea
+         LaxALrG+6nJ8FN1stQilYL+E+xPPraZKvBHF5ViMKTRNksQZtIavc/UphA4kCTVnp9
+         q5cUM7H7dn5o8W71vZionO2kBA0oPiNUvzqMtlv2f3w2Jz69gJzcFfgnbcIjlqpYEf
+         3kWLf14eu3S7Q==
+Date:   Thu, 8 Dec 2022 15:06:19 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     krzysztof.kozlowski@canonical.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: core: fix UAF while using device of node
+Message-ID: <Y5H9W6KVXhD9bcNT@google.com>
+References: <20221116074116.1022139-1-yangyingliang@huawei.com>
+ <9ad01578-9982-fd55-14a3-a74bf0906165@huawei.com>
 MIME-Version: 1.0
-References: <20221208020043.374033-1-badhri@google.com> <Y5GMUzmkfU6qWZgS@kroah.com>
-In-Reply-To: <Y5GMUzmkfU6qWZgS@kroah.com>
-From:   Badhri Jagan Sridharan <badhri@google.com>
-Date:   Thu, 8 Dec 2022 07:06:10 -0800
-Message-ID: <CAPTae5KmmYoxcQWGC7yBjyZYqZn7PXLdN4jag=5Zv0RAqYyu_g@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] usb: typec: tcpm: Add callbacks to mitigate
- wakeups due to contaminant
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kyle Tso <kyletso@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9ad01578-9982-fd55-14a3-a74bf0906165@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apologies ! fixed it in Version 6.
+On Thu, 08 Dec 2022, Yang Yingliang wrote:
 
-On Wed, Dec 7, 2022 at 11:03 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Dec 07, 2022 at 06:00:41PM -0800, Badhri Jagan Sridharan wrote:
-> > On some of the TCPC implementations, when the Type-C port is exposed
-> > to contaminants, such as water, TCPC stops toggling while reporting OPEN
-> > either by the time TCPM reads CC pin status or during CC debounce
-> > window. This causes TCPM to be stuck in TOGGLING state. If TCPM is made
-> > to restart toggling, the behavior recurs causing redundant CPU wakeups
-> > till the USB-C port is free of contaminant.
-> >
-> > [206199.287817] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> > [206199.640337] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> > [206199.985789] CC1: 0 -> 0, CC2: 0 -> 0 [state TOGGLING, polarity 0, disconnected]
-> > ...
-> >
-> > TCPM invokes is_potential_contaminant callback to allow low level chip
-> > drivers to monitor TCPM state machine transitions and notify TCPM when
-> > the Type-C port needs to be checked for potential contaminant presence.
-> > TCPCs which do have the needed hardware can implement the check_contaminant
-> > callback which is invoked by TCPM to evaluate for presence of contaminant.
-> > Lower level TCPC driver can restart toggling through TCPM_PORT_CLEAN event
-> > when the driver detects that USB-C port is free of contaminant.
-> >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > Change-Id: I136d788bb46d871d12e64bd73fd50a77b4659dbf
-> > ---
->
-> Always run checkpatch.pl on your patches so you don't get a grumpy
-> maintainer asking why you didn't run checkpatch.pl on your patches :(
+> Hi,
+> 
+> On 2022/11/16 15:41, Yang Yingliang wrote:
+> > I got the following UAF report:
+> > 
+> >    refcount_t: underflow; use-after-free.
+> >    WARNING: CPU: 1 PID: 270 at lib/refcount.c:29 refcount_warn_saturate+0x121/0x180
+> >    ...
+> >    OF: ERROR: memory leak, expected refcount 1 instead of -1073741824,
+> >    of_node_get()/of_node_put() unbalanced - destroy cset entry:
+> >    attach overlay node /i2c/pmic@62/powerkey
+> > 
+> > The of_node of device assigned in mfd_match_of_node_to_dev() need be
+> > get, and it will be put in platform_device_release().
+> > 
+> > Fixes: 002be8114007 ("mfd: core: Add missing of_node_put for loop iteration")
+> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> Is this patch good or do you have any suggestion ?
+
+Looks okay, but I'm not applying it this late in the cycle.
+
+Please wait until the next merge-window closes.
+
+-- 
+Lee Jones [李琼斯]
