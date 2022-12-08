@@ -2,147 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87646646BA1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:12:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 598A4646BA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbiLHJM3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:12:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
+        id S230163AbiLHJMu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 04:12:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbiLHJLq (ORCPT
+        with ESMTP id S230108AbiLHJMN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:11:46 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EDBF1B790
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:11:37 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id cm20so1057731pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kMozxrhekUqthR/ZzwbfPqWM+5U9HTscLOB3qLeUQfY=;
-        b=DBsimqLIo+qEE89hMxiDEss3nJ2pNnaSSoIITz+tZkSCSpOOMi9BfHHyh/D9aJhTUW
-         +cLQyqcYWxVIc7CkFK6IvGYa5AvWgzczgw7F7Nog/uByh073u6U7WTRYdExJwarBvhGq
-         /bLDVRO3zkCZqO9qEF94XaY0FYPuRvGVZM8wPol2XpcALH+q3PLQ4kr+Qm441egmZZ9q
-         2IkpF5oyaJw1XsXUqZvln7togEZiyIRx9i8nQhS0XsNqVbJafjRXWpbgfgHWECKkVJ2f
-         ecwLuSPT3cfbwsld5ldAuijnMxgJzspAV+qByDxxTRE7orj6pMY73Z8z67KS8SPAEZOW
-         Vytw==
+        Thu, 8 Dec 2022 04:12:13 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74DC1BE9E;
+        Thu,  8 Dec 2022 01:12:12 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id fu10so614443qtb.0;
+        Thu, 08 Dec 2022 01:12:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kMozxrhekUqthR/ZzwbfPqWM+5U9HTscLOB3qLeUQfY=;
-        b=eK+ieddEWUjaDy3M99j8pa2qfWsmbKqKqYqC+KGTcHL444QnAMjqyXdLz3q5HYyp0G
-         qLTtVInepCz0LvJKVA4/FuYRdl1cIDDeSGrb7uPbVBkXY/qv7TPB+WFoZSN8VHioZSjB
-         T2FYzR9moslABTnZ5m2erXituWF/CLgFGGdDcyeD8Oyk/548lzrFexQhqmqHW+kdRRjo
-         EzI3nFOHeSGaRAiLCLc5Ey98RLyHFZOBn415jEm49l/4H8i/dAjrstq5MRCGx5ew7zNL
-         CXdxWIjhPye2awP/oljbuPvLPYl5GrBJ16ZzLymS2fj1c+N8E54Rf5op+3pH/URyLQEG
-         d8Rg==
-X-Gm-Message-State: ANoB5pm9cvnTpes2XkglCOW76oZNRU6kxzRERPWHN9HbzoHTUXFTVjbb
-        faOoP+LBeum3bm2I4rYRKJc=
-X-Google-Smtp-Source: AA0mqf6C2QSUugE5UVSkvjHjxR1eVa2jk+YidS6ZFLPvirzkPbRo28j3ULWyI9VDM+gJYlx2nMT/OA==
-X-Received: by 2002:a17:902:82c2:b0:189:a208:d124 with SMTP id u2-20020a17090282c200b00189a208d124mr41050534plz.143.1670490696690;
-        Thu, 08 Dec 2022 01:11:36 -0800 (PST)
-Received: from zoo868e (1-170-0-91.dynamic-ip.hinet.net. [1.170.0.91])
-        by smtp.gmail.com with ESMTPSA id n1-20020a632701000000b0047899d0d62csm8246766pgn.52.2022.12.08.01.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 01:11:36 -0800 (PST)
-Date:   Thu, 8 Dec 2022 17:11:34 +0800
-From:   Matt Jan <zoo868e@gmail.com>
-To:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH 3/3] staging: vme_user: remove unnecessary spaces
-Message-ID: <20221208091134.GA95310@zoo868e>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kpQvrAB2oc4zmgpT3/OeCT7uadErbvigMwWG7EBC7G8=;
+        b=0wHCLLnTABo76zTkxFeCetyaiphjJPnwO8D/9e3DipOAMKFOiliLt4wY/bozTCG0r5
+         55LB38EWtkh+PBifeMIO5dMyMVD/lwlhgc52xqh3KW5GO3ZXTfl9uuHnxEBkhpWjTP0H
+         DWu7hkpTXsoEwE810VHPLldMB+ThMOEoVlT0fV7l4vC8rbsI+g563V9/JwFNusfEUocn
+         Yup3s6z68BEREYBe9y6kuN574WzyfJ0VAPeE7StvMl8cDpvaOXwGWP+oe6ajlLhcsnWZ
+         WvyD1rcfwS5ErjzmGlDYDvPmpNOB/j4JSeaKo/WpzhXwS1uR1X2zwC3r7EvA95EIFPas
+         1Vig==
+X-Gm-Message-State: ANoB5pkEh2DBBtmH2ze3TMZzabrUaYzW0lN2wB0BUxcHe0/Yt2a3AJUT
+        UhDQfwMF4R3Xfw2lRANks24lglXRDsBl4Q==
+X-Google-Smtp-Source: AA0mqf7Qw/7WqYxXiNrVVnUREv8KOdKFjPWk/62yJ00e2mU6rzzZ43wrSsrCuoC8a7hr4XLPRniuew==
+X-Received: by 2002:ac8:51cc:0:b0:3a6:9de4:b60e with SMTP id d12-20020ac851cc000000b003a69de4b60emr21129626qtn.391.1670490731394;
+        Thu, 08 Dec 2022 01:12:11 -0800 (PST)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm18862280qko.34.2022.12.08.01.12.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 01:12:11 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id s11so914665ybe.2;
+        Thu, 08 Dec 2022 01:12:10 -0800 (PST)
+X-Received: by 2002:a25:d655:0:b0:6fc:1c96:c9fe with SMTP id
+ n82-20020a25d655000000b006fc1c96c9femr29925093ybg.36.1670490730512; Thu, 08
+ Dec 2022 01:12:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+ <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com> <20221208092439.6170cf5e@bootlin.com>
+In-Reply-To: <20221208092439.6170cf5e@bootlin.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 8 Dec 2022 10:11:59 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdU4YMmAtZE6XRgaLpqeq1Q6RPX4gE6og3QfY9T9Arw=6A@mail.gmail.com>
+Message-ID: <CAMuHMdU4YMmAtZE6XRgaLpqeq1Q6RPX4gE6og3QfY9T9Arw=6A@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] Add the Renesas USBF controller support
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary spaces before function pointer arguments in
-vme_bridge.h. This is done with command ':%s/) (/)('.
+Hi Hervé,
 
-Signed-off-by: Matt Jan <zoo868e@gmail.com>
----
- drivers/staging/vme_user/vme_bridge.h | 32 +++++++++++++--------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+On Thu, Dec 8, 2022 at 9:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> On Wed, 7 Dec 2022 16:19:42 -0600
+> Rob Herring <robh+dt@kernel.org> wrote:
+> > On Wed, Dec 7, 2022 at 10:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> > > This series add support for the Renesas USBF controller (USB Device
+> > > Controller) available in the Renesas RZ/N1 SoC.
+> > >
+> > > Based on previous review:
+> > >   https://lore.kernel.org/all/20221114111513.1436165-3-herve.codina@bootlin.com/
+> > >
+> > > A new strategy is proposed to handle the H2MODE bit from CFG_USB
+> > > register compared to the previous versions on the series. As a
+> > > reminder, H2MODE bit allows to configure the internal USB Port
+> > > interface for two hosts or one host and one device.
+> >
+> > Is this case any different from all the phandle properties we have in
+> > bindings that point to some misc registers somewhere else you need to
+> > poke? If so, I'm not really a fan of duplicating the information.
+>
+> Our case is that there is a bit in a register that affect several
+> devices. This bit must be set before the devices are started.
+> If this bit is changed while affected devices are running, system
+> hangs can occurs (datasheet).
+>
+> So, in order to do that we need the device in charge to set
+> this bit (sysctrl) to set this bit before other devices (USBF
+> and PCI bridge) were started.
+>
+> At sysctrl level, the bit is set during the probe() call.
+> The property 'depends-on' aim is to ensure the probe() calls
+> order between provider (sysctrl) and consumers (USBF and PCI
+> bridge).
 
-diff --git a/drivers/staging/vme_user/vme_bridge.h b/drivers/staging/vme_user/vme_bridge.h
-index 9a127f6fefca..ab2e24d3b625 100644
---- a/drivers/staging/vme_user/vme_bridge.h
-+++ b/drivers/staging/vme_user/vme_bridge.h
-@@ -128,45 +128,45 @@ struct vme_bridge {
- 	struct mutex irq_mtx;
- 
- 	/* Slave Functions */
--	int (*slave_get) (struct vme_slave_resource *, int *,
-+	int (*slave_get)(struct vme_slave_resource *, int *,
- 		unsigned long long *, unsigned long long *, dma_addr_t *,
- 		u32 *, u32 *);
--	int (*slave_set) (struct vme_slave_resource *, int, unsigned long long,
-+	int (*slave_set)(struct vme_slave_resource *, int, unsigned long long,
- 		unsigned long long, dma_addr_t, u32, u32);
- 
- 	/* Master Functions */
--	int (*master_get) (struct vme_master_resource *, int *,
-+	int (*master_get)(struct vme_master_resource *, int *,
- 		unsigned long long *, unsigned long long *, u32 *, u32 *,
- 		u32 *);
--	int (*master_set) (struct vme_master_resource *, int,
-+	int (*master_set)(struct vme_master_resource *, int,
- 		unsigned long long, unsigned long long,  u32, u32, u32);
--	ssize_t (*master_read) (struct vme_master_resource *, void *, size_t,
-+	ssize_t (*master_read)(struct vme_master_resource *, void *, size_t,
- 		loff_t);
--	ssize_t (*master_write) (struct vme_master_resource *, void *, size_t,
-+	ssize_t (*master_write)(struct vme_master_resource *, void *, size_t,
- 		loff_t);
--	unsigned int (*master_rmw) (struct vme_master_resource *, unsigned int,
-+	unsigned int (*master_rmw)(struct vme_master_resource *, unsigned int,
- 		unsigned int, unsigned int, loff_t);
- 
- 	/* DMA Functions */
--	int (*dma_list_add) (struct vme_dma_list *, struct vme_dma_attr *,
-+	int (*dma_list_add)(struct vme_dma_list *, struct vme_dma_attr *,
- 		struct vme_dma_attr *, size_t);
--	int (*dma_list_exec) (struct vme_dma_list *);
--	int (*dma_list_empty) (struct vme_dma_list *);
-+	int (*dma_list_exec)(struct vme_dma_list *);
-+	int (*dma_list_empty)(struct vme_dma_list *);
- 
- 	/* Interrupt Functions */
--	void (*irq_set) (struct vme_bridge *, int, int, int);
--	int (*irq_generate) (struct vme_bridge *, int, int);
-+	void (*irq_set)(struct vme_bridge *, int, int, int);
-+	int (*irq_generate)(struct vme_bridge *, int, int);
- 
- 	/* Location monitor functions */
--	int (*lm_set) (struct vme_lm_resource *, unsigned long long, u32, u32);
--	int (*lm_get) (struct vme_lm_resource *, unsigned long long *, u32 *,
-+	int (*lm_set)(struct vme_lm_resource *, unsigned long long, u32, u32);
-+	int (*lm_get)(struct vme_lm_resource *, unsigned long long *, u32 *,
- 		u32 *);
- 	int (*lm_attach)(struct vme_lm_resource *, int,
- 			 void (*callback)(void *), void *);
--	int (*lm_detach) (struct vme_lm_resource *, int);
-+	int (*lm_detach)(struct vme_lm_resource *, int);
- 
- 	/* CR/CSR space functions */
--	int (*slot_get) (struct vme_bridge *);
-+	int (*slot_get)(struct vme_bridge *);
- 
- 	/* Bridge parent interface */
- 	void *(*alloc_consistent)(struct device *dev, size_t size,
--- 
-2.25.1
+This order is already guaranteed (twice), through the clocks and
+power-domains properties in the USB host and device nodes,
+all pointing to sysctrl.
 
+So IMHO none of this is needed.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
