@@ -2,151 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E055647049
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD81646F05
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbiLHM7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:59:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56354 "EHLO
+        id S230184AbiLHLvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiLHM7l (ORCPT
+        with ESMTP id S229760AbiLHLvT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:59:41 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593BB81383;
-        Thu,  8 Dec 2022 04:59:38 -0800 (PST)
+        Thu, 8 Dec 2022 06:51:19 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B5784DE5;
+        Thu,  8 Dec 2022 03:50:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670504378; x=1702040378;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+mdgGveD5F8/TOIbQl7PQKtjdVw3MnrmVuzHSyLSyiY=;
-  b=am29KiO9f9J6T25v83EY0kvUezhiEzeAR7Q1wY1gwqMNP396Vncl8hwf
-   iVGmFfyRkJp+wKNxj09Lf039yvAeRr1fD+2e+8FeXy+cgU44/JSwrH8Yc
-   TrGkgyIlioVwjO3u7Bd9+5v/msvWII3nyKnGJmqb/Rm7xKKiT+y/+qKLV
-   aP6eOnQCDkOkdWMP8HgEdQrkgVTx8gV1kwkvwdMQTJJfedV+U9ccdqzAI
-   m8k3JhlNPwKwkralP2XnkcW2Kv600jnWk4oD41/uD6jnnaej+NEBDSp6G
-   g2kENcBnF5VCEE+Gwp96ljFU3dwhw4M8GzWzvwWzEkAGW0V03dHhLENkY
-   g==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670500202; x=1702036202;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aU/UU3IhfOGFIf/tX/8uvsZF4JL0yUqrKcro31NQwXo=;
+  b=g/pqbwcPJKxkC29EOKKbsD3RyWVJbxEBrdIzPCF782sJNkLQW7TG9BeX
+   BSu3atTVgDEp9hSE9wB8UjQI8imn6zOT37IrAOoVWMjCwKlmjnwLOqyJr
+   Vnu9DsRC3x3YMW5LT7Qi+xvvuSatzarrZ4IYJ00ApfUyL8VF8mKAyEUsT
+   zTumAld97yAMWZfenjLuHCKZC1zE/DjIV9kqm2sIRcUSB0e6yOXnY0RQU
+   6HOaOlgzrCI/TOggZEcLEzRDS9bsje85X9UrhMcHDAEltbPPNXJxKGxdZ
+   aDrudnbjr9/KHxlsxUQo9AR/eIoaystWk91i7JhZi7q3LaY/x5j7B+CYF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="297508385"
 X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="192222046"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2022 05:59:37 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 8 Dec 2022 05:59:37 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 8 Dec 2022 05:59:37 -0700
-Date:   Thu, 8 Dec 2022 14:04:44 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <daniel.machon@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <lars.povlsen@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <olteanv@gmail.com>, <pabeni@redhat.com>,
-        <richardcochran@gmail.com>
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-Message-ID: <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
-References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
- <20221208092511.4122746-1-michael@walle.cc>
- <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+   d="scan'208";a="297508385"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 03:50:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="646974577"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="646974577"
+Received: from dev2.igk.intel.com ([10.237.148.94])
+  by orsmga002.jf.intel.com with ESMTP; 08 Dec 2022 03:49:59 -0800
+From:   =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Robert Moore <robert.moore@intel.com>
+Cc:     Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Amadeusz=20S=C5=82awi=C5=84ski?= 
+        <amadeuszx.slawinski@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Subject: [PATCH] ACPICA: Fix operand resolution
+Date:   Thu,  8 Dec 2022 20:50:46 +0100
+Message-Id: <20221208195046.1980312-1-amadeuszx.slawinski@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/08/2022 10:27, Michael Walle wrote:
-> 
-> Am 2022-12-08 10:25, schrieb Michael Walle:
-> > Hi Horatiu,
+In our tests we get UBSAN warning coming from ACPI parser. This is
+caused by trying to resolve operands when there is none.
 
-Hi Michael,
+[    0.000000] Linux version 5.15.0-rc3chromeavsrel1.0.184+ (root@...) (gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #1 SMP PREEMPT Sat Oct 16 00:08:27 UTC 2021
+...
+[ 14.719508] ================================================================================
+[ 14.719551] UBSAN: array-index-out-of-bounds in /.../linux/drivers/acpi/acpica/dswexec.c:401:12
+[ 14.719594] index -1 is out of range for type 'acpi_operand_object *[9]'
+[ 14.719621] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-rc3chromeavsrel1.0.184+ #1
+[ 14.719657] Hardware name: Intel Corp. Geminilake/GLK RVP2 LP4SD (07), BIOS GELKRVPA.X64.0214.B50.2009111159 09/11/2020
+[ 14.719694] Call Trace:
+[ 14.719712] dump_stack_lvl+0x38/0x49
+[ 14.719749] dump_stack+0x10/0x12
+[ 14.719775] ubsan_epilogue+0x9/0x45
+[ 14.719801] __ubsan_handle_out_of_bounds.cold+0x44/0x49
+[ 14.719835] acpi_ds_exec_end_op+0x1d7/0x6b5
+[ 14.719870] acpi_ps_parse_loop+0x942/0xb34
+...
 
-> > 
-> > > Currently lan966x, doesn't allow to run PTP over interfaces that are
-> > > part of the bridge. The reason is when the lan966x was receiving a
-> > > PTP frame (regardless if L2/IPv4/IPv6) the HW it would flood this
-> > > frame.
-> > > Now that it is possible to add VCAP rules to the HW, such to trap
-> > > these
-> > > frames to the CPU, it is possible to run PTP also over interfaces that
-> > > are part of the bridge.
-> > 
-> > This gives me:
-> > 
-> > # /etc/init.d/S65ptp4l start
-> > Starting linuxptp daemon: OK
-> > [   44.136870] vcap_val_rule:1678: keyset was not updated: -22
-> > [   44.140196] vcap_val_rule:1678: keyset was not updated: -22
-> > #
-> > 
-> > # ptp4l -v
-> > 3.1.1
-> > # uname -a
-> > Linux buildroot 6.1.0-rc8-next-20221208+ #924 SMP Thu Dec  8 10:08:58
-> > CET 2022 armv7l GNU/Linux
-> > 
-> > I don't know whats going on, but I'm happy to help with debugging with
-> > some
-> > guidance.
-> 
-> Oh, and linuxptp is running on eth0, no bridges are set up. linuxptp
-> is started with "/usr/sbin/ptp4l -f /etc/linuxptp.cfg"
-> 
-> # cat /etc/linuxptp.cfg
-> # LinuxPTP configuration file for synchronizing the system clock to
-> # a remote PTP master in slave-only mode.
-> #
-> # By default synchronize time in slave-only mode using UDP and hardware
-> time
-> # stamps on eth0. If the difference to master is >1.0 second correct by
-> # stepping the clock instead of adjusting the frequency.
-> #
-> # If you change the configuration don't forget to update the phc2sys
-> # parameters accordingly in linuxptp-system-clock.service (systemd)
-> # or the linuxptp SysV init script.
-> 
-> [global]
-> slaveOnly               1
-> delay_mechanism         Auto
-> network_transport       UDPv4
-> time_stamping           hardware
-> step_threshold          1.0
-> 
-> [eth0]
+Problem happens because WalkState->NumOperands is 0 and it is used when
+trying to access into operands table. Actual code is:
+WalkState->Operands [WalkState->NumOperands -1]
+which causes out of bound access. Improve the check before above access
+to check if ACPI opcode should have any arguments (operands) at all.
 
-Thanks for trying this!
+Link: https://github.com/acpica/acpica/pull/745
+Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+---
+ drivers/acpi/acpica/dswexec.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-The issue is because you have not enabled the TCAM lookups per
-port. They can be enabled using this commands:
-
-tc qdisc add dev eth0 clsact
-tc filter add dev eth0 ingress prio 5 handle 5 matchall skip_sw action goto chain 8000000
-
-This will enable the lookup and then you should be able to start again
-the ptp4l. Sorry for not mention this, at least I should have written it
-somewhere that this is required.
-
-I was not sure if lan966x should or not enable tcam lookups
-automatically when a ptp trap action is added. I am open to suggestion
-here.
-
-> 
-> -michael
-
+diff --git a/drivers/acpi/acpica/dswexec.c b/drivers/acpi/acpica/dswexec.c
+index e8ad41387f84..489c9b9d8d15 100644
+--- a/drivers/acpi/acpica/dswexec.c
++++ b/drivers/acpi/acpica/dswexec.c
+@@ -389,9 +389,11 @@ acpi_status acpi_ds_exec_end_op(struct acpi_walk_state *walk_state)
+ 
+ 		/*
+ 		 * All opcodes require operand resolution, with the only exceptions
+-		 * being the object_type and size_of operators.
++		 * being the object_type and size_of operators as well as operands that
++		 * take no arguments.
+ 		 */
+-		if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE)) {
++		if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE) &&
++		    (walk_state->op_info->flags & AML_HAS_ARGS)) {
+ 
+ 			/* Resolve all operands */
+ 
 -- 
-/Horatiu
+2.25.1
+
