@@ -2,124 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53BD64745D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:33:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7299B64746A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiLHQdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:33:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S229993AbiLHQhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:37:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLHQdU (ORCPT
+        with ESMTP id S230170AbiLHQhA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:33:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A81AF61533;
-        Thu,  8 Dec 2022 08:33:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Dec 2022 11:37:00 -0500
+Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF5867E804
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:36:56 -0800 (PST)
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id AB7BC5C2749
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:36:54 +0000 (UTC)
+Received: from pdx1-sub0-mail-a306.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 432425C26D7
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:36:54 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1670517414; a=rsa-sha256;
+        cv=none;
+        b=xOqOcKFIkSOrrgE3tUyKh7EqRfYjgQYqAt7K/JcRwCbZa99CnXHg4VXZLpZg5il9Y4euhg
+        0xK908hpF4T/9XttBvZv5UlH5HgibH+q+xlhgx5FUVhH7iIOFyqgwTx3gRUYlKtxnWUURs
+        89mB/CTFgvqABdIW2V+S0d6wMJfteOmtvFaOBqbBd/HFdLg08eVQy2x5+CAjtT9dTtl1Yy
+        sNUtR5UIEy1FPvTLPzyFU4m34+HidoP9Zscpu87x0w93nBL4+ZzXdcWvSpXXqqmSy4alNt
+        9FX0fV51HPDuNmbOIZ/HNgE3WNTlvLLbztJ0wikSJYqS+x0qq52EkBwMtby04Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1670517414;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         dkim-signature; bh=bs74ZGYQ9FzRSVBX/TLanMiHEEc4YJIYzYEP749rubo=;
+        b=vpeLPixtILnavoTo+WT2h2ekur2rbWeHCxi+DL8hwkfF7WVxJWwa78XE1xBdFlHNRsUDVK
+        tpdB7PnQQlcjV37Ab38qK34KSUxc/bfYsuaD3aKj1BRfULPfw9X2ywPXDHvflR8mxLxb1v
+        HyefjLTTgrNpR7q9DcecSfQvlyM2ki0EGJENKNEdH5ch9dsUu0hV7W+L3XaKRQtnDGcpDn
+        ERaoBTCNQ8JV74Z+5L9VGCZ2VG2Xu1/uhFjiD415w4yCzCzeC7M439F/BRkYQpsFH2RZsA
+        riJuOU3BxJ+jSatcEr7rG0WMrvO4Fb47HD2Kf7mgR9WkdnFBvfYoRfG8dSho8Q==
+ARC-Authentication-Results: i=1;
+        rspamd-d48c5ddb-vt8bg;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
+X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
+X-MailChannels-Auth-Id: dreamhost
+X-Daffy-Company: 4b6091b91c0286ec_1670517414498_684180211
+X-MC-Loop-Signature: 1670517414498:1686728700
+X-MC-Ingress-Time: 1670517414497
+Received: from pdx1-sub0-mail-a306.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.24.106 (trex/6.7.1);
+        Thu, 08 Dec 2022 16:36:54 +0000
+Received: from kmjvbox (c-73-70-108-208.hsd1.ca.comcast.net [73.70.108.208])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44E8761FD3;
-        Thu,  8 Dec 2022 16:33:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D9F1C433D2;
-        Thu,  8 Dec 2022 16:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670517198;
-        bh=eP1E6RkrVjyINFJHL+hVeqSDWsVXBEt1602/LPV10Bs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=i9TwCW/wcwgG3gZobIVdF1rZ5ICljOXCgVi6M3Tb3BzW+G624iorxweE0dgtTGWab
-         pCSPP7ff+YXqeQWklrBC71MDiHRLEAlGNm0QXa1ozPtAQph299eOM5Q0uZINKrM5vS
-         Oz6o6TM2kR0fisErMX/7WlhURyrln4C3H11XEsUhKmL/uX5GX9lr0LDNQXc2MJ5g34
-         ZtVQwzRALpCdTqh9/PNWje8M99arNKYQwl69NWQlzoDES8RP2bUXCFTq62cU87giIw
-         ikLofJiluOQwsGYm5bPu/1vNFMc879SsY2JZ9txR8rtsvylsgUGER9eCm0sM1ad2Jt
-         x6+UJYGsjSYYQ==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        David Howells <dhowells@redhat.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org
-Subject: [GIT PULL] tpmdd updates for tpmdd-next-v6.2-rc1
-Date:   Thu,  8 Dec 2022 16:33:08 +0000
-Message-Id: <20221208163308.9989-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        (Authenticated sender: kjlx@templeofstupid.com)
+        by pdx1-sub0-mail-a306.dreamhost.com (Postfix) with ESMTPSA id 4NSfts0lgkzK2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:36:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
+        s=dreamhost; t=1670517413;
+        bh=bs74ZGYQ9FzRSVBX/TLanMiHEEc4YJIYzYEP749rubo=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=hESgpD/+OrzvH+6b1U6RKBOLOwJiqCQBT1mxoUxpUs5xzHKC70FZgmMfvPziG+V+t
+         3eBIu2KxYLoGa8i9QQd0boR7+3sD213cNgI7PAkExFAk+o++TiclVLFHv5RyUUfOsd
+         k+iXFBHCT0eW5xuSP4bTilUk6Bkr9itiOEoLNz5g=
+Received: from johansen (uid 1000)
+        (envelope-from kjlx@templeofstupid.com)
+        id e005f
+        by kmjvbox (DragonFly Mail Agent v0.12);
+        Thu, 08 Dec 2022 08:36:50 -0800
+Date:   Thu, 8 Dec 2022 08:36:50 -0800
+From:   Krister Johansen <kjlx@templeofstupid.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, xen-devel@lists.xenproject.org,
+        linux-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Anthony Liguori <aliguori@amazon.com>,
+        David Reaver <me@davidreaver.com>,
+        Brendan Gregg <brendan@intel.com>
+Subject: [PATCH linux-next] x86/xen/time: prefer tsc as clocksource when it
+ is invariant
+Message-ID: <20221208163650.GA3225@templeofstupid.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Kvm elects to use tsc instead of kvm-clock when it can detect that the
+TSC is invariant.
 
-This PR contains an unsorted collection of TPM fixes and one bug fix
-for trusted keys.
+(As of commit 7539b174aef4 ("x86: kvmguest: use TSC clocksource if
+invariant TSC is exposed")).
 
-BR, Jarkko
+Notable cloud vendors[1] and performance engineers[2] recommend that Xen
+users preferentially select tsc over xen-clocksource due the performance
+penalty incurred by the latter.  These articles are persuasive and
+tailored to specific use cases.  In order to understand the tradeoffs
+around this choice more fully, this author had to reference the
+documented[3] complexities around the Xen configuration, as well as the
+kernel's clocksource selection algorithm.  Many users may not attempt
+this to correctly configure the right clock source in their guest.
 
-The following changes since commit 479174d402bcf60789106eedc4def3957c060bad:
+The approach taken in the kvm-clock module spares users this confusion,
+where possible.
 
-  Merge tag 'platform-drivers-x86-v6.1-5' of git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86 (2022-12-07 12:37:35 -0800)
+Both the Intel SDM[4] and the Xen tsc documentation explain that marking
+a tsc as invariant means that it should be considered stable by the OS
+and is elibile to be used as a wall clock source.  The Xen documentation
+further clarifies that this is only reliable on HVM and PVH because PV
+cannot intercept a cpuid instruction.
 
-are available in the Git repository at:
+In order to obtain better out-of-the-box performance, and reduce the
+need for user tuning, follow kvm's approach and decrease the xen clock
+rating so that tsc is preferable, if it is invariant, stable, and the
+guest is a HVM or PVH domain.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/ tags/tpmdd-next-v6.2-rc1
+[1] https://aws.amazon.com/premiumsupport/knowledge-center/manage-ec2-linux-clock-source/
+[2] https://www.brendangregg.com/blog/2021-09-26/the-speed-of-time.html
+[3] https://xenbits.xen.org/docs/unstable/man/xen-tscmode.7.html
+[4] Intel 64 and IA-32 Architectures Sofware Developer's Manual Volume
+    3b: System Programming Guide, Part 2, Section 17.17.1, Invariant TSC
 
-for you to fetch changes up to eaabc245b02a0e0063068178624d2fc12ba91d69:
+Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
+Code-reviewed-by: David Reaver <me@davidreaver.com>
+---
+ arch/x86/xen/time.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-  tpm: st33zp24: remove pointless checks on probe (2022-12-08 16:20:47 +0000)
+diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
+index 9ef0a5cca96e..ca78581e4221 100644
+--- a/arch/x86/xen/time.c
++++ b/arch/x86/xen/time.c
+@@ -480,9 +480,22 @@ static void __init xen_time_init(void)
+ 	int cpu = smp_processor_id();
+ 	struct timespec64 tp;
+ 
+-	/* As Dom0 is never moved, no penalty on using TSC there */
+-	if (xen_initial_domain())
++	/*
++	 * As Dom0 is never moved, no penalty on using TSC there.
++	 *
++	 * If the guest has invariant tsc, then set xen_clocksource rating
++	 * below that of the tsc so that the system prefers tsc instead.  This
++	 * check excludes PV domains, because PV is unable to guarantee that the
++	 * guest's cpuid call has been intercepted by the hypervisor.
++	 */
++	if (xen_initial_domain()) {
+ 		xen_clocksource.rating = 275;
++	} else if ((xen_hvm_domain() || xen_pvh_domain()) &&
++	    boot_cpu_has(X86_FEATURE_CONSTANT_TSC) &&
++	    boot_cpu_has(X86_FEATURE_NONSTOP_TSC) &&
++	    !check_tsc_unstable()) {
++		xen_clocksource.rating = 299;
++	}
+ 
+ 	clocksource_register_hz(&xen_clocksource, NSEC_PER_SEC);
+ 
+-- 
+2.25.1
 
-----------------------------------------------------------------
-tpmdd updates for Linux v6.2-rc1
-
-----------------------------------------------------------------
-Ard Biesheuvel (1):
-      tpm: Avoid function type cast of put_device()
-
-Dmitry Torokhov (3):
-      tpm: st33zp24: drop support for platform data
-      tpm: st33zp24: switch to using gpiod API
-      tpm: st33zp24: remove pointless checks on probe
-
-Eddie James (2):
-      tpm: tis_i2c: Fix sanity check interrupt enable mask
-      tpm: Add flag to use default cancellation policy
-
-Hanjun Guo (3):
-      tpm: acpi: Call acpi_put_table() to fix memory leak
-      tpm: tpm_crb: Add the missed acpi_put_table() to fix memory leak
-      tpm: tpm_tis: Add the missed acpi_put_table() to fix memory leak
-
-Michael Kelley (1):
-      tpm/tpm_crb: Fix error message in __crb_relinquish_locality()
-
-Sumit Garg (1):
-      KEYS: trusted: tee: Make registered shm dependency explicit
-
-Yuan Can (1):
-      tpm/tpm_ftpm_tee: Fix error handling in ftpm_mod_init()
-
- drivers/char/tpm/eventlog/acpi.c         |  12 ++-
- drivers/char/tpm/st33zp24/i2c.c          | 142 +-----------------------------
- drivers/char/tpm/st33zp24/spi.c          | 145 +------------------------------
- drivers/char/tpm/st33zp24/st33zp24.c     |  39 +++++++--
- drivers/char/tpm/st33zp24/st33zp24.h     |   7 +-
- drivers/char/tpm/tpm-chip.c              |   7 +-
- drivers/char/tpm/tpm_crb.c               |  31 ++++---
- drivers/char/tpm/tpm_ftpm_tee.c          |   8 +-
- drivers/char/tpm/tpm_tis.c               |   9 +-
- drivers/char/tpm/tpm_tis_core.c          |  20 +++--
- drivers/char/tpm/tpm_tis_core.h          |   1 +
- drivers/char/tpm/tpm_tis_i2c.c           |   3 +-
- include/linux/platform_data/st33zp24.h   |  16 ----
- security/keys/trusted-keys/trusted_tee.c |   3 +-
- 14 files changed, 108 insertions(+), 335 deletions(-)
- delete mode 100644 include/linux/platform_data/st33zp24.h
