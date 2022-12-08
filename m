@@ -2,134 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFFB6470FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:42:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12AE6470F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:42:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbiLHNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:42:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S229783AbiLHNmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:42:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbiLHNmG (ORCPT
+        with ESMTP id S230175AbiLHNlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:42:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C804B8B39F;
-        Thu,  8 Dec 2022 05:41:53 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8CIeXh003845;
-        Thu, 8 Dec 2022 13:41:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=bGawsvtpYEDznEm4b8jKPt0VkPsUz0y02oBiQf+JrC4=;
- b=aV0uUH/VGVH8VcllqZ7OxTWHlotsxL1I/kCPZW+bAV6WLdw+kUUWj+rgt6/qLP7k6vZv
- aalN4Aq+AUuk2rHv+DiAVZSNkkTbvwz4LRZez0mLsbBSHX1RfIp+dqglFTS34nDJ+IOO
- eGDtNJ683D/NtngtsiwS544Dbk4p69N25K19oNJtNcwmJA4OaLHeWKDr5wRK4hKH+5QE
- /Z+esdcoIaDBWy3D5orFU6YrQGZz9bxxMY/BM4BBwCCnuhzF2cW0u2dz96w14bL1wWxV
- 5rypCzGe5RrquLsbp3kPM2JreFYBd5LLmd4K/djXl+YeI5gYRzH0IdY3wdyCi0mFdnT3 cQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mbffs880v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Dec 2022 13:41:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B8Df3bT015445
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Dec 2022 13:41:03 GMT
-Received: from [10.216.30.208] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 8 Dec 2022
- 05:40:57 -0800
-Message-ID: <ec403926-24ef-947d-2a1c-6cbf0e31ab89@quicinc.com>
-Date:   Thu, 8 Dec 2022 19:10:54 +0530
+        Thu, 8 Dec 2022 08:41:49 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7998574
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:41:32 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id 4so1568150pli.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 05:41:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsVDMGdrrcenDbAQ2t+1J/nqCclkhOqEn3pqIwRUG2w=;
+        b=uQy/0f7YV2jnlbCc1jSFqVrE4lbQvl+RRAJkhOLwNKMTRwuan4cjvWkayuWGs0R8oL
+         vnygiP558bf0VxQTsmO1gMaSyfuPFtroV61zbBi/whfupcirDxi2CZL1YSNKEfXqDE+T
+         5piNZUnqR67+TNZqTfGGTQsSVyDTmdMKrUSaB/GcKRURw0DdMy1ZRW3zLz+Mm9NTRcz4
+         dXo/Fy6vLBQU6ntaMD3EpYjq2lVYXCLz0x7AANz9QfcsPOPKY33HoqaaBT3zcY9lcMkH
+         yXHm35VDMvBDL6KcyGNoNfTrflmO5iPsaeb9inrWk2puhSN2S/QjoIr7Dnn/InlZbwtU
+         f9Dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nsVDMGdrrcenDbAQ2t+1J/nqCclkhOqEn3pqIwRUG2w=;
+        b=F4XwZ2Ad+4YHTTdwhuQrDrtCzhlKBJ7VNJmdL48IEsFPSaZ4ohkOE9p4fsMuY1MT18
+         qkRvvT2QkqeBqJmgBzaPOiVm7NQx39wnKTPes2b7N0TvDf3O/vavn2ainf1Pw2f32DDu
+         bP9c2OhQrJMLLQd3nWPWgQGCx7+ddTTHHbE1p6tPgENpdpzZywyUArGN8TDREYAlIDe+
+         R0paj52efdjrVfNkRc6I8G0NO15/gMiVXfjVAKgm6zV0SGVapLac6pvEUXrInoQkEbXC
+         cTFysGcBLG20595/nFNpatWeCSK7RyXC81exuXI6FcdimWh5zIIZpe3tlDyyWs3qS6p/
+         E1Zw==
+X-Gm-Message-State: ANoB5pkJzodbG9DcoXSkxnOdQmGLc3xmoerG7vagYHs1cWfku180ln3v
+        Szv1BEt334W3rvNNOWmrEmjPJt5OLCxwsTzispeMKw==
+X-Google-Smtp-Source: AA0mqf7MdR24OCVzRBWFHBA1Ih0rv9hUVtp5dojJr48004Fk2Ur1P7IRRT950dIzOhONwDL/P4n1lllvwgn2ibEO+gk=
+X-Received: by 2002:a17:903:40c6:b0:189:f799:676e with SMTP id
+ t6-20020a17090340c600b00189f799676emr6120063pld.148.1670506892322; Thu, 08
+ Dec 2022 05:41:32 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] remoteproc: elf_loader: Update resource table name check
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <andersson@kernel.org>, <bgoswami@quicinc.com>,
-        <broonie@kernel.org>, <devicetree@vger.kernel.org>,
-        <judyhsiao@chromium.org>, <krzysztof.kozlowski@linaro.org>,
-        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <mathieu.poirier@linaro.org>, <perex@perex.cz>,
-        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
-        <robh+dt@kernel.org>, <srinivas.kandagatla@linaro.org>,
-        <tiwai@suse.com>
-References: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
- <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: u0MLp0o3BE-g2iuoQLX6FffRLsAyL9lZ
-X-Proofpoint-GUID: u0MLp0o3BE-g2iuoQLX6FffRLsAyL9lZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-08_07,2022-12-08_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
- bulkscore=0 spamscore=0 malwarescore=0 suspectscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212080115
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20221201225705.46r2m35ketvzipox@builder.lan> <CAPDyKFofsqcoFbYt-9BcisbPdreLGqAAMWorqHi0_D1kwCdYhg@mail.gmail.com>
+ <20221207165457.kwdwwiycbwjpogxl@builder.lan>
+In-Reply-To: <20221207165457.kwdwwiycbwjpogxl@builder.lan>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 8 Dec 2022 14:40:55 +0100
+Message-ID: <CAPDyKFpYgYkDdJ79xxkwr-Mqnj5CoBrV+ZZe6Xz4hGLNR4zUVw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
+ 'reset' interface
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        krzysztof.kozlowski@linaro.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 12/7/2022 7:25 AM, Stephen Boyd wrote:
-Thanks for Your Time Stephen!!!
-> Quoting Srinivasa Rao Mandadapu (2022-12-01 04:20:48)
->> Update resource table name check with sub string search instead of
->> complete string search.
->> In general Qualcomm binary contains, section header name
->> (e.g. .resource_table), amended with extra string to differentiate
->> with other sections.
->> So far Android adsp binaries are being authenticated using TZ,
->> hence this mismatch hasn't created any problem.
->> In recent developments, ADSP binary is being used in Chrome based
->> platforms, which doesn't have TZ path, hence resource table is
->> required for memory sandboxing.
->>
-> Does this need a Fixes tag?
-I don't think so. I feel It's kind of enhancement.
+On Wed, 7 Dec 2022 at 17:55, Bjorn Andersson <andersson@kernel.org> wrote:
 >
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> ---
->>   drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
->> index 5a412d7..0feb120 100644
->> --- a/drivers/remoteproc/remoteproc_elf_loader.c
->> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
->> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
->>                  u64 offset = elf_shdr_get_sh_offset(class, shdr);
->>                  u32 name = elf_shdr_get_sh_name(class, shdr);
->>
->> -               if (strcmp(name_table + name, ".resource_table"))
->> +               if (!strstr(name_table + name, ".resource_table"))
-> Was the strcmp not working before because the 'name_table' has something
-> else in it? It really looks like your elf file is malformed.
+> On Wed, Dec 07, 2022 at 05:00:51PM +0100, Ulf Hansson wrote:
+> > On Thu, 1 Dec 2022 at 23:57, Bjorn Andersson <andersson@kernel.org> wrote:
+> > >
+> > > On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
+> > > >
+> > >
+> > > @Ulf, Akhil has a power-domain for a piece of hardware which may be
+> > > voted active by multiple different subsystems (co-processors/execution
+> > > contexts) in the system.
+> > >
+> > > As such, during the powering down sequence we don't wait for the
+> > > power-domain to turn off. But in the event of an error, the recovery
+> > > mechanism relies on waiting for the hardware to settle in a powered off
+> > > state.
+> > >
+> > > The proposal here is to use the reset framework to wait for this state
+> > > to be reached, before continuing with the recovery mechanism in the
+> > > client driver.
+> >
+> > I tried to review the series (see my other replies), but I am not sure
+> > I fully understand the consumer part.
+> >
+> > More exactly, when and who is going to pull the reset and at what point?
+> >
+> > >
+> > > Given our other discussions on quirky behavior, do you have any
+> > > input/suggestions on this?
+> > >
+> > > > Some clients like adreno gpu driver would like to ensure that its gdsc
+> > > > is collapsed at hardware during a gpu reset sequence. This is because it
+> > > > has a votable gdsc which could be ON due to a vote from another subsystem
+> > > > like tz, hyp etc or due to an internal hardware signal. To allow
+> > > > this, gpucc driver can expose an interface to the client driver using
+> > > > reset framework. Using this the client driver can trigger a polling within
+> > > > the gdsc driver.
+> > >
+> > > @Akhil, this description is fairly generic. As we've reached the state
+> > > where the hardware has settled and we return to the client, what
+> > > prevents it from being powered up again?
+> > >
+> > > Or is it simply a question of it hitting the powered-off state, not
+> > > necessarily staying there?
+> >
+> > Okay, so it's indeed the GPU driver that is going to assert/de-assert
+> > the reset at some point. Right?
+> >
+> > That seems like a reasonable approach to me, even if it's a bit
+> > unclear under what conditions that could happen.
+> >
+>
+> Generally the disable-path of the power-domain does not check that the
+> power-domain is actually turned off, because the status might indicate
+> that the hardware is voting for the power-domain to be on.
 
-Actually, DSP binary is prepared by combining different elfs. So Section 
-header names are appended with
+Is there a good reason why the HW needs to vote too, when the GPU
+driver is already in control?
 
-something else to distinguish same section name of different elfs, by 
-using some Qualcomm specific QURT scripts.
-Hence final binary contains resource_table name appended with module 
-specific name.
+Or perhaps that depends on the running use case?
 
-So this patch is required to handle such modified name.
+>
+> As part of the recovery of the GPU after some fatal fault, the GPU
+> driver does something which will cause the hardware votes for the
+> power-domain to be let go, and then the driver does pm_runtime_put().
 
+Okay. That "something", sounds like a device specific setting for the
+corresponding gdsc, right?
+
+So somehow the GPU driver needs to manage that setting, right?
+
+>
+> But in this case the GPU driver wants to ensure that the power-domain is
+> actually powered down, before it does pm_runtime_get() again. To ensure
+> that the hardware lost its state...
+
+I see.
+
+>
+> The proposal here is to use a reset to reach into the power-domain
+> provider and wait for the hardware to be turned off, before the GPU
+> driver attempts turning the power-domain on again.
+>
+>
+> In other words, there is no reset. This is a hack to make a normally
+> asynchronous pd.power_off() to be synchronous in this particular case.
+
+Alright, assuming I understood your clarifications above correctly
+(thanks!), I think I have got a much better picture now.
+
+Rather than abusing the reset interface, I think we should manage this
+through the genpd's power on/off notifiers (GENPD_NOTIFY_OFF). The GPU
+driver should register its corresponding device for them
+(dev_pm_genpd_add_notifier()).
+
+The trick however, is to make the behaviour of the power-domain for
+the gdsc (the genpd->power_off() callback) conditional on whether the
+HW is configured to vote or not. If the HW can vote, it should not
+poll for the state - and vice versa when the HW can't vote.
+
+Would this work?
+
+Kind regards
+Uffe
