@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3FB647542
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D774647543
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:03:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiLHSDZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
+        id S229939AbiLHSD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:03:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229894AbiLHSDT (ORCPT
+        with ESMTP id S229918AbiLHSDX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:03:19 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D0D5BD60
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:03:16 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id o12so2306871pjo.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:03:16 -0800 (PST)
+        Thu, 8 Dec 2022 13:03:23 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EDB5BD60
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:03:21 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so5459620pje.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:03:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=E96Wm/nE/BO1oqx7KrRbQksoP0SM8QfWpUYCtfF7ZOY=;
-        b=elKCQdyBJ0zfJyNZL9MWCMZLH4HbJp0sc16DHkwY2E5BuxBXc6+kjPqmOH0MEON8c+
-         x1q8YZAV5N61RQT/m3OutBjmiEN7IieOIDAJHd/hq9flNutIgFBfrmAvkwCHiWZpU968
-         l3IuT9uaAPkuHG77zs7QLsSUC6ld+XhS8pJMfNyXq93eNDv1gMb8XaRWqLbPCQg4FLds
-         Zw5LVsx1I3Bf87bQVz8e4Azxrug7PBuZkoHYH/SIAcF3bH6ttLQh+TrjPhbCygJXcrfP
-         dhI88Wq2hZmQ5pkdV4izpmRYDsPTRa9HKcydpMuA1M6ve9u4TicYtF5kp0e90xqzNGBJ
-         sKCw==
+        bh=riLhoP57eVPqwj4BrvS8Vazxssa2eImOkYsWKI1T0t8=;
+        b=iViaYugsyY36Co7pKi2yW3+3twUOGGTtNqIFgF0+7MBH5JAuAvr7KaDfROp3l9GO1t
+         Srqh6rR1dXZMZbpBUXgZqXAo4mtoHxV4pakZa2i/mghgx0d8YgDWCqTQH6v3TePUuhHI
+         yX3yaekIseUtoERJq9NEzxrgtTJrfI8d5Cp1R6AWvyBnz6vV1oUAR2djd1j/hMSt2k+Z
+         4+LL5CGtnmGv/5ZLisC4P7VAVLqe/cweXpWm3xgkYbR/b+jTCHWNVTBP/iMbpt1jht3L
+         panlWfFI7BbV1LS54KzTKj/isn6g3pxCZzMObb0FaAMwDqDUsIUTZlII4ARmHeQIrm9x
+         GrGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:reply-to:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=E96Wm/nE/BO1oqx7KrRbQksoP0SM8QfWpUYCtfF7ZOY=;
-        b=4w8ywLpr/2ueM0D5+aEjz0b4IF03Y2zZ3ofn/dDlUpb5x1JiUyQHliVmlynL7GRONq
-         GFuRvYC2zlp+8IRnksjUOzgl0FhzSYNEW8jbQT/zfAc4GpNdLDocHXFLZYH2x2RQJ6gG
-         YKe07sATnwSo2xLYug9D1QHtI8gPRf6V3pr7NCdrii3pd8dunhM3KTEwItVtobHWPwOj
-         aNsTeEhkXxwXv7WV3arupWlm0bj+ir/pwDkfOlONDyjKk+sBiepw8lXv/6ZPvW/w8YNB
-         fxvgsh7Ccwnv7RNalfDSWwMNu+XfFvGYPQQdlRpJ3E03BNqi7eLNs/+SkiOvrqLZ5keV
-         izzw==
-X-Gm-Message-State: ANoB5pmOKyGH2sf0GlR8NjCjW3NuTYAe83iqkT5vPJV0Bt7qAjC+g7zn
-        0WSCQG8vxNSM0U/ZPyzR7lw=
-X-Google-Smtp-Source: AA0mqf4pM+kGOAZ0I0/E4epPe+dakTrALDjT5h+cTK/rmfAO6gWi5Nw7yw9MBJ7OdK2iYJAqFCaERA==
-X-Received: by 2002:a17:902:d58a:b0:189:a11e:9995 with SMTP id k10-20020a170902d58a00b00189a11e9995mr3153672plh.13.1670522595747;
-        Thu, 08 Dec 2022 10:03:15 -0800 (PST)
+        bh=riLhoP57eVPqwj4BrvS8Vazxssa2eImOkYsWKI1T0t8=;
+        b=pZ5OcCK2yfOwutj/74jiOeQGySPltPyOqYae79+vY8acZPkJckWCwOy0Rk59bTPWTj
+         TkHQTtZsShnQNRk+DBMJJGg1DMvf+EByNGveXo/RbAW6uCkJaotmWQUIQqba5OiTjGlG
+         dhGciw9QFdJI14tkoRNdmROiealM2Jg4818niQXVUtdxKieoVnQP+eXGIyuVAnH5Byl+
+         S/DZoIiarcUBSeqr8UnojihQcz3p8ilZr01Uw/NalWowd2mXb7a7ZBAapDeCTbksGFQo
+         JjSeLy5NKzkzs/fwrg00AvM4ZF1ycuZRwzFxglvuX6H+T9QtwALeytvGHDcFODRysYtA
+         fqsg==
+X-Gm-Message-State: ANoB5pk8VJG+qq9uyx/y2e1rq/AGGLiO7HVaJbW3P1KOfAscVK5UWQUv
+        602ll6c1fdu1viR9492O4iU=
+X-Google-Smtp-Source: AA0mqf6+g/Oq8lkThW8oF445SVxUDWkraBM2XVzF2FkZ356SyOkPQrUSg1X2tifk5oVpQEdOJ+/wig==
+X-Received: by 2002:a17:90a:8c82:b0:213:1e29:c8dd with SMTP id b2-20020a17090a8c8200b002131e29c8ddmr2896254pjo.7.1670522601220;
+        Thu, 08 Dec 2022 10:03:21 -0800 (PST)
 Received: from localhost.localdomain ([198.13.51.166])
-        by smtp.gmail.com with ESMTPSA id x23-20020a63db57000000b004785e505bcdsm13377909pgi.51.2022.12.08.10.03.10
+        by smtp.gmail.com with ESMTPSA id x23-20020a63db57000000b004785e505bcdsm13377909pgi.51.2022.12.08.10.03.16
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 08 Dec 2022 10:03:15 -0800 (PST)
+        Thu, 08 Dec 2022 10:03:20 -0800 (PST)
 From:   Kairui Song <ryncsn@gmail.com>
 To:     linux-mm@kvack.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -59,9 +59,9 @@ Cc:     linux-kernel@vger.kernel.org,
         "Huang, Ying" <ying.huang@intel.com>,
         Hugh Dickins <hughd@google.com>,
         Kairui Song <kasong@tencent.com>
-Subject: [PATCH 1/5] swapfile: get rid of volatile and avoid redundant read
-Date:   Fri,  9 Dec 2022 02:02:05 +0800
-Message-Id: <20221208180209.50845-2-ryncsn@gmail.com>
+Subject: [PATCH 2/5] swap: avoid a redundant pte map if ra window is 1
+Date:   Fri,  9 Dec 2022 02:02:06 +0800
+Message-Id: <20221208180209.50845-3-ryncsn@gmail.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20221208180209.50845-1-ryncsn@gmail.com>
 References: <20221208180209.50845-1-ryncsn@gmail.com>
@@ -80,54 +80,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kairui Song <kasong@tencent.com>
 
-Convert a volatile variable to more readable READ_ONCE. And this
-actually avoids the code from reading the variable twice redundantly
-when it races.
+Avoid a redundant pte map/unmap when swap readahead window is 1.
 
 Signed-off-by: Kairui Song <kasong@tencent.com>
 ---
- mm/swapfile.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ mm/swap_state.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 72e481aacd5d..ff4f3cb85232 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1836,13 +1836,13 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 	pte_t *pte;
- 	struct swap_info_struct *si;
- 	int ret = 0;
--	volatile unsigned char *swap_map;
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index 438d0676c5be..60136bda78e3 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -730,8 +730,6 @@ static void swap_ra_info(struct vm_fault *vmf,
+ 	}
  
- 	si = swap_info[type];
- 	pte = pte_offset_map(pmd, addr);
- 	do {
- 		struct folio *folio;
- 		unsigned long offset;
-+		unsigned char swp_count;
+ 	faddr = vmf->address;
+-	orig_pte = pte = pte_offset_map(vmf->pmd, faddr);
+-
+ 	fpfn = PFN_DOWN(faddr);
+ 	ra_val = GET_SWAP_RA_VAL(vma);
+ 	pfn = PFN_DOWN(SWAP_RA_ADDR(ra_val));
+@@ -742,12 +740,11 @@ static void swap_ra_info(struct vm_fault *vmf,
+ 	atomic_long_set(&vma->swap_readahead_info,
+ 			SWAP_RA_VAL(faddr, win, 0));
  
- 		if (!is_swap_pte(*pte))
- 			continue;
-@@ -1853,7 +1853,6 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
+-	if (win == 1) {
+-		pte_unmap(orig_pte);
++	if (win == 1)
+ 		return;
+-	}
  
- 		offset = swp_offset(entry);
- 		pte_unmap(pte);
--		swap_map = &si->swap_map[offset];
- 		folio = swap_cache_get_folio(entry, vma, addr);
- 		if (!folio) {
- 			struct page *page;
-@@ -1870,8 +1869,10 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 				folio = page_folio(page);
- 		}
- 		if (!folio) {
--			if (*swap_map == 0 || *swap_map == SWAP_MAP_BAD)
-+			swp_count = READ_ONCE(si->swap_map[offset]);
-+			if (swp_count == 0 || swp_count == SWAP_MAP_BAD)
- 				goto try_next;
-+
- 			return -ENOMEM;
- 		}
- 
+ 	/* Copy the PTEs because the page table may be unmapped */
++	orig_pte = pte = pte_offset_map(vmf->pmd, faddr);
+ 	if (fpfn == pfn + 1)
+ 		swap_ra_clamp_pfn(vma, faddr, fpfn, fpfn + win, &start, &end);
+ 	else if (pfn == fpfn + 1)
 -- 
 2.35.2
 
