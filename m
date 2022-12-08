@@ -2,171 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226616476FB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE33647700
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:10:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiLHUHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:07:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S229795AbiLHUKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:10:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiLHUHA (ORCPT
+        with ESMTP id S229563AbiLHUKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:07:00 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F86771266;
-        Thu,  8 Dec 2022 12:06:58 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Dec 2022 15:10:43 -0500
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EC971266;
+        Thu,  8 Dec 2022 12:10:38 -0800 (PST)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BF88B823DB;
-        Thu,  8 Dec 2022 20:06:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D90FC433D2;
-        Thu,  8 Dec 2022 20:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670530016;
-        bh=0JdI+n8ng00UdgEi/QnaAfoel7rBCSs0S6Kg1jsdyFg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=JQVLcWJ//ZZzDRJUU/xYbj43BhhBeaS5Xj0liW8NpuN62sXbSwHDIf1vcHZ7dOgLU
-         XetP7zLXC8OZm01aMfyh4ggeW83zTDjnoFbjDyH0Bbobn/Ti+5N5QhSxqhSZ5tBigm
-         yCHhhMVnJY0UA5DVLzHZOCWrrMquf7DFtb3qrPHzBaC1+icDOmJdxLujTuPaHrIrh9
-         6RfW+C2JflbfWon19HcPPPjE65cAPGfikNt8sHkv2oyzYOgUEmx1NmbigKtGQ1eVzn
-         iu55y5BFjHHIhuFhpOjp6k0vjUJ9isYlediZSirxR6ckkeeIvymvzxBfvSjpiegGbH
-         +3RtnmfjV1fJA==
-Date:   Thu, 8 Dec 2022 14:06:54 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
-Message-ID: <20221208200654.GA1562951@bhelgaas>
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 0F15D420B2;
+        Thu,  8 Dec 2022 20:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1670530237;
+        bh=bHLpKlVywAIn9Mz9IlXBf3CKnLTyGWwhq0WGPu4dJxE=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=FPYdiJn0Wv2IeXB64dV5hw9eDeK1e9mj5wKCVrFEZCzENSE3h7+xN8bo/rhftcL/M
+         zE/BmMQuHVFw6UVsxw7QO6HyjUbwj1oUJnuyqfGyb6VJoHLoXAHZxC8SD3z2Eb9NwL
+         VvTq+FgCdtJFBGs623+U+Mu5iLMDyQE5BzBI9lisgFHvzL6frtH1Fuf9+PRiUIc2Vc
+         fMcj0upMdeIlroCOol+VqAoEbkSA1xOP4HLfeFU18SEjssBQv9zVZXKq05EJEBxpxe
+         k8FOMfyNvYEEwQBHubTtGrEodn48SPWVuD9vIzX92aOjSWS1L53ZeMmgcSqv7thGJS
+         vg82L9TbdrUjw==
+Message-ID: <bff89220-df3a-a148-2ba4-6aad3874f322@canonical.com>
+Date:   Thu, 8 Dec 2022 12:10:34 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <92359eca-b651-8a1e-6de6-3107d87ac088@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: linux-next: manual merge of the kunit-next tree with the apparmor
+ tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Rae Moar <rmoar@google.com>
+References: <20221208135327.01364529@canb.auug.org.au>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20221208135327.01364529@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 08:16:31PM +0100, Hans de Goede wrote:
-> Hi Bjorn,
+On 12/7/22 18:53, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 12/8/22 19:57, Bjorn Helgaas wrote:
-> > On Wed, Dec 07, 2022 at 04:31:12PM +0100, Hans de Goede wrote:
-> >> On 12/4/22 10:13, Hans de Goede wrote:
-> >>
-> >> <snip>
-> >>
-> >>>>> 2. I am afraid that now allowing PCI MMIO space to be allocated
-> >>>>> in regions marked as EfiMemoryMappedIO will cause regressions
-> >>>>> on some systems. Specifically when I tried something similar
-> >>>>> the last time I looked at this (using the BIOS date cut-off
-> >>>>> approach IIRC) there was a suspend/resume regression on
-> >>>>> a Lenovo ThinkPad X1 carbon (20A7) model:
-> >>>>>
-> >>>>> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
-> >>>>>
-> >>>>> Back then I came to the conclusion that the problem is that not
-> >>>>> avoiding the EfiMemoryMappedIO regions caused PCI MMIO space to
-> >>>>> be allocated in the 0xdfa00000 - 0xdfa10000 range which is
-> >>>>> listed in the EFI memmap as:
-> >>>>>
-> >>>>> [    0.000000] efi: mem46: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |  ] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
-> >>>>>
-> >>>>> And with current kernels with the extra logging added for this
-> >>>>> the following is logged related to this:
-> >>>>>
-> >>>>> [    0.326504] acpi PNP0A08:00: clipped [mem 0xdfa00000-0xfebfffff window] to [mem 0xdfa10000-0xfebfffff window] for e820 entry [mem 0xdceff000-0xdfa0ffff]
-> >>>>>
-> >>>>> I believe patch 1/4 of this set will make this clipping go away,
-> >>>>> re-introducing the suspend/resume problem.
-> >>>>
-> >>>> Yes, I'm afraid you're right.  Comparing the logs at comment #31
-> >>>> (fails) and comment #38 (works):
-> >>>>
-> >>>>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
-> >>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff] fails
-> >>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff] works
-> >>>>
-> >>>> Since 0xdfa00000 is included in the host bridge _CRS, but isn't
-> >>>> usable, my guess is this is a _CRS bug.
-> >>>
-> >>> Ack.
-> >>>
-> >>> So I was thinking to maybe limit the removal of EfiMemoryMappedIO
-> >>> regions from the E820 map if they are big enough to cause troubles?
-> >>>
-> >>> Looking at the EFI map MMIO regions on this Lenovo ThinkPad X1 carbon
-> >>> (20A7) model, they are tiny. Where as the ones which we know cause
-> >>> problems are huge. So maybe add a bit of heuristics to patch 1/4 based
-> >>> on the EfiMemoryMappedIO region size and only remove the big ones
-> >>> from the E820 map ?
-> >>>
-> >>> I know that adding heuristics like this always feels a bit wrong,
-> >>> because you end up putting a somewhat arbitrary cut off point in
-> >>> the code on which to toggle behavior on/off, but I think that in
-> >>> this case it should work nicely given how huge the EfiMemoryMappedIO
-> >>> regions which are actually causing problems are.
-> > 
-> > I'll post a v2 that removes only regions 256KB or larger in a minute.
+> Today's linux-next merge of the kunit-next tree got a conflict in:
 > 
-> Ok, may I ask why 256KB?
+>    security/apparmor/policy_unpack.c
 > 
-> I see that that rules out then troublesome MMIO regions from the X1 carbon from:
-> https://bugzilla.redhat.com/show_bug.cgi?id=2029207 :
-> efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
-> which we know we need to avoid / keep reserved.
+> between commits:
 > 
-> But OTOH the reservations which are causing the problems with assigning
-> resources to PCI devices by Linux look like this:
-> efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
-> which is significantly larger then 256KB.
+>    371e50a0b19f ("apparmor: make unpack_array return a trianary value")
+>    73c7e91c8bc9 ("apparmor: Remove unnecessary size check when unpacking trans_table")
+>    217af7e2f4de ("apparmor: refactor profile rules and attachments")
+> (and probably others)
 > 
-> So we could e.g. also put the cut-off point at 16MB and still
-> remove the above troublesome reservation from the E820 table.
-> Note just thinking out loud here. I have no idea if 16MB
-> would be better...
+> from the apparmor tree and commit:
+> 
+>    2c92044683f5 ("apparmor: test: make static symbols visible during kunit testing")
+> 
+> from the kunit-next tree.
+> 
+> This is somewhat of a mess ... pity there is not a shared branch (or
+> better routing if the patches).
+> 
+sorry, there was a miscommunication/misunderstanding, probably all on me, I
+thought the kunit stuff that is conflicting here was going to merge next
+cycle.
 
-No good reason for 256KB.  We know it needs to be at least 64KB for
-the X1 Carbon.  I picked 4x bigger just for headroom, since I assume
-the 64KB is platform-specific host bridge registers or something.  Do
-you think a bigger number would be better, i.e., we would retain more
-MMIO things in E820?
-
-ECAM areas would be 1MB per bus, so between 1MB and 256MB.  Those areas
-*should* be reserved by PNP0C02 _CRS, but IIRC the early MMCONFIG code
-checks E820, and the late code checks for _CRS.  I guess one could
-argue that ignoring those, e.g., by retaining anything 256MB or
-smaller in E820, would reduce the amount of change.  
-
-But if the host bridge _CRS includes 256MB of legitimate window that
-EFI says is MMIO and is hence included in E820, that seems like kind
-of a lot of usable window space to give up.
-
-> ...
-> Sorry for the confusion. What I was trying to say is that I was interested
-> in seeing if we could use the "RUN" flag to differentiate between:
+> I fixed it up (hopefully - see below) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 > 
-> 1. The big MMIO region which we want to remove from the e820 map:
->    efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+> I also had to add this patch:
 > 
-> 2. The small MMIO region which we want to keep to avoid the reported suspend/resume issue:
->    efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
+this needs to be modified to build if kunit is not enabled, basically
+the defines need to move up outside the #if IS_ENABLED(CONFIG_KUNIT)
+
+ie.
+diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
+index 8fdf8f703bd0..dcf7d1bbf96b 100644
+--- a/security/apparmor/include/policy_unpack.h
++++ b/security/apparmor/include/policy_unpack.h
+@@ -165,6 +165,11 @@ static inline void aa_put_loaddata(struct aa_loaddata *data)
+  		kref_put(&data->count, aa_loaddata_kref);
+  }
+  
++#define tri int
++#define TRI_TRUE 1
++#define TRI_NONE 0
++#define TRI_FALSE -1
++
+  #if IS_ENABLED(CONFIG_KUNIT)
+  bool aa_inbounds(struct aa_ext *e, size_t size);
+  size_t aa_unpack_u16_chunk(struct aa_ext *e, char **chunk);
+@@ -173,11 +178,6 @@ bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
+  bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
+  bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
+  
+-#define tri int
+-#define TRI_TRUE 1
+-#define TRI_NONE 0
+-#define TRI_FALSE -1
+-
+  tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
+  size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
+  int aa_unpack_str(struct aa_ext *e, const char **string, const char *name);
+
+
+feel free to apply that to your patch and then add my
+Acked-by: John Johansen <john.johansen@canonical.com>
+
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 8 Dec 2022 13:47:43 +1100
+> Subject: [PATCH] fixup for "apparmor: make unpack_array return a trianary value"
 > 
-> But unfortunately both have the RUN flag set so the RUN flag is
-> of no use to us.
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>   security/apparmor/include/policy_unpack.h | 8 +++++++-
+>   security/apparmor/policy_unpack.c         | 5 -----
+>   2 files changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/security/apparmor/include/policy_unpack.h b/security/apparmor/include/policy_unpack.h
+> index 940da8a33e0c..8fdf8f703bd0 100644
+> --- a/security/apparmor/include/policy_unpack.h
+> +++ b/security/apparmor/include/policy_unpack.h
+> @@ -172,7 +172,13 @@ bool aa_unpack_X(struct aa_ext *e, enum aa_code code);
+>   bool aa_unpack_nameX(struct aa_ext *e, enum aa_code code, const char *name);
+>   bool aa_unpack_u32(struct aa_ext *e, u32 *data, const char *name);
+>   bool aa_unpack_u64(struct aa_ext *e, u64 *data, const char *name);
+> -size_t aa_unpack_array(struct aa_ext *e, const char *name);
+> +
+> +#define tri int
+> +#define TRI_TRUE 1
+> +#define TRI_NONE 0
+> +#define TRI_FALSE -1
+> +
+> +tri aa_unpack_array(struct aa_ext *e, const char *name, u16 *size);
+>   size_t aa_unpack_blob(struct aa_ext *e, char **blob, const char *name);
+>   int aa_unpack_str(struct aa_ext *e, const char **string, const char *name);
+>   int aa_unpack_strdup(struct aa_ext *e, char **string, const char *name);
+> diff --git a/security/apparmor/policy_unpack.c b/security/apparmor/policy_unpack.c
+> index 6513545dad5e..173d832fc4ee 100644
+> --- a/security/apparmor/policy_unpack.c
+> +++ b/security/apparmor/policy_unpack.c
+> @@ -30,11 +30,6 @@
+>   #include "include/policy_unpack.h"
+>   #include "include/policy_compat.h"
+>   
+> -#define tri int
+> -#define TRI_TRUE 1
+> -#define TRI_NONE 0
+> -#define TRI_FALSE -1
+> -
+>   /* audit callback for unpack fields */
+>   static void audit_cb(struct audit_buffer *ab, void *va)
+>   {
 
-Right, makes sense.
-
-Bjorn
