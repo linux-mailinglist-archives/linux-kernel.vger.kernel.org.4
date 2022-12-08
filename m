@@ -2,185 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCEF6474C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1516474C6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:59:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiLHQ6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:58:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33608 "EHLO
+        id S229572AbiLHQ7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:59:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiLHQ60 (ORCPT
+        with ESMTP id S229571AbiLHQ7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:58:26 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7DC7680B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:58:24 -0800 (PST)
-Received: from mercury (dyndsl-095-033-158-150.ewe-ip-backbone.de [95.33.158.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37808660036A;
-        Thu,  8 Dec 2022 16:58:23 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670518703;
-        bh=P2McKGJSYN/Q/1FW5RmK5ZByLS6xD9ZsyWAFpvSazLQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e118TZyzWDQwjJJIZcgD/2Wt+9lxQnJj+N+K3mYy+d8Abp7rxfo72+Xjn2oFRq+5r
-         1u0wEbvPdxeFiSwuuvxA66W7MzGF/4RP2ALM/D2TpNrN/sQMpzZ3Zra+9jBrWyWG4S
-         YIjmuGF81I/LgZHroMgDtORcYTrF3MeWNxW2u4jjYM2WVFGy7R2h3MNqtTAwZBQet/
-         AnHmN9m9y3JHejeidWwr86w0bSLLgb/uMcZZMI+G1V6hKt0CP78R3KnNcxHx/KWFqS
-         unL7wM5DZLq5mlimoSMr7GeyxBzsm0SIAny4WcNmooqemWRXqDBJnfBSw10LwOFNDL
-         oDj+stbG+nZIQ==
-Received: by mercury (Postfix, from userid 1000)
-        id B74FD1060F43; Thu,  8 Dec 2022 17:58:20 +0100 (CET)
-Date:   Thu, 8 Dec 2022 17:58:20 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Harry Song <jundongsong1@gmail.com>
-Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irqchip/gic-v3-its: remove the shareability of ITS
-Message-ID: <20221208165820.5maej4we3mfdeprm@mercury.elektranox.org>
-References: <20221207135223.3938-1-jundongsong1@gmail.com>
- <86a63zkzru.wl-maz@kernel.org>
- <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com>
+        Thu, 8 Dec 2022 11:59:09 -0500
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 117F67680B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:59:09 -0800 (PST)
+Received: by mail-pl1-x631.google.com with SMTP id k7so2070069pll.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:59:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ASRKRaXrVIIOkZO1WIOXBaqyzBqar9YDmRMNGtlTR7g=;
+        b=F9SEm1rXTKd7sKeT3rZSAkqCyUcAEVmPRbNAQFQ/9Sx3d0S7kaXh1U83V2OAW2O+8y
+         DnbWhxZcP0JOyKCqa67l+5okwUd6INAUxaArnjy3eqMR/vaYNWyS42ktlyzS661tOruv
+         cxLRBi7Pa6Q7FPIZQmMfaD/lkRK59BnQFek+s=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ASRKRaXrVIIOkZO1WIOXBaqyzBqar9YDmRMNGtlTR7g=;
+        b=XyljyiajCAn1tJ7MYoHnFV9AMZbAgTC2FOSme5c6p7X3xSIu6iqJ2eoesZFniDsXQe
+         qCXKieeqfac7AT9adpzgRIFpaEpMiivjsoq/cYKrjfztBtiKWk4A9VqG3OLxyXn8/4bR
+         W19juhbh6rwxjfbjgaebLnf1kzD4qyVtjDfefS5xvHyhC3YS3epQ5aJrZQsgm+JlYfHA
+         0M+dXG+nnIhCDC/ILl03bVkGeJJAnmFrVopHbkJOxSo35EoLBWVtVu4zbyvOJAWdRUEe
+         Hby5sKIB+snJelcgLI0cnc/5HxXqg4GMe9VrI4En3KyC3FXblSvmIoXZ/3HMB+jtZ67O
+         wO0w==
+X-Gm-Message-State: ANoB5plJ4vmqdEabK+29Wby05cSS9/zJEp23OBuE2VvhrozoXFnOmhUn
+        kjpYegs3jr8aKxN4FxMy1aFO5Q==
+X-Google-Smtp-Source: AA0mqf5m4JmgZSGbe85/oxXWpGL20n55etjxV4/ljtbD3IXY6GVMut8BfJf1vkGHH5Y40WE9BYacbQ==
+X-Received: by 2002:a17:902:ab97:b0:189:315f:1d40 with SMTP id f23-20020a170902ab9700b00189315f1d40mr2663330plr.69.1670518748522;
+        Thu, 08 Dec 2022 08:59:08 -0800 (PST)
+Received: from ballway1.c.googlers.com.com (97.173.125.34.bc.googleusercontent.com. [34.125.173.97])
+        by smtp.gmail.com with ESMTPSA id e8-20020a17090301c800b00189b2b8dbedsm14944923plh.228.2022.12.08.08.59.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 08:59:07 -0800 (PST)
+From:   Allen Ballway <ballway@chromium.org>
+To:     dtor@chromium.org
+Cc:     ballway@chromium.org, benjamin.tissoires@redhat.com,
+        jikos@kernel.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rydberg@bitmath.org
+Subject: [PATCH v2] HID: multitouch: Add quirks for flipped axes
+Date:   Thu,  8 Dec 2022 16:58:36 +0000
+Message-Id: <20221208165145.1.I69657e84c0606b2e5ccfa9fedbf42b7676a1e129@changeid>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+In-Reply-To: <CAE_wzQ-WrjOgSADCn4v80ESwicOFif_Trn3Wrq=5toy2+y+q=g@mail.gmail.com>
+References: <CAE_wzQ-WrjOgSADCn4v80ESwicOFif_Trn3Wrq=5toy2+y+q=g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2m3s3tijkpchtwwb"
-Content-Disposition: inline
-In-Reply-To: <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Certain touchscreen devices, such as the ELAN9034, are oriented
+incorrectly and report touches on opposite points on the X and Y axes.
+For example, a 100x200 screen touched at (10,20) would report (90, 180)
+and vice versa.
 
---2m3s3tijkpchtwwb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is fixed by adding device quirks to transform the touch points
+into the correct spaces, from X -> MAX(X) - X, and Y -> MAX(Y) - Y.
 
-Hi,
+Signed-off-by: Allen Ballway <ballway@chromium.org>
+---
+V1 -> V2: Address review comments, change to use DMI match. Confirmed
+MT_TOOL_X/Y require transformation and update orientation based on
+flipped axes.
 
-On Thu, Dec 08, 2022 at 10:28:29AM +0800, Harry Song wrote:
-> On Wed, Dec 7, 2022 at 11:19 PM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > On Wed, 07 Dec 2022 13:52:23 +0000,
-> > Harry Song <jundongsong1@gmail.com> wrote:
-> > >
-> > > I know this is a very wrong patch, but my platform
-> > > has an abnormal ITS problem caused by data consistency:
-> > > My chip does not support Cache Coherent Interconnect (CCI).
-> >
-> > That doesn't mean much. Nothing mandates to have a CCI, and plenty of
-> > systems have other ways to maintain coherency.
-> >
-> > > By default, ITS driver is the inner memory attribute.
-> > > gits_write_cbaser() is used to write the inner memory
-> > > attribute. But hw doesn't return the hardware's non-shareable
-> > > property,so I don't think reading GITS_CBASER and GICR_PROPBASER
-> > > here will get the real property of the current hardware: inner
-> > > or outer shareable is not supported, so I would like to know
-> > > whether ITS driver cannot be used on chips without CCI, or
-> > > what method can be used to use ITS driver on chips without CCI?
-> >
-> > It's not about CCI or not CCI. It is about which shareability domain
-> > your ITS is in.
-> >
-> > And it doesn't only affect the ITS. It also affects the
-> > redistributors, and anything that accesses memory.
-> >
->=20
-> Yes, my current chip is Rockchip platform (rk3588), so is it because the =
-chip
-> is not designed as a proper shared domain for ITS, so the exception of
-> ITS is caused?
->=20
-> > >
-> > > The current patch is designed to make ITS think that the current
-> > > chip has no inner or outer memory properties, and then use
-> > > its by flushing dcache.
-> > >
-> > > This is the log for bug reports without patches:
-> > >
-> > > [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x00000000=
-03460000
-> > > [    0.000000] ITS [mem 0x03440000-0x0345ffff]
-> > > [    0.000000] ITS@0x0000000003440000: allocated 8192 Devices @418500=
-00 (indirect, esz 8, psz 64K, shr 0)
-> > > [    0.000000] ITS@0x0000000003440000: allocated 32768 Interrupt Coll=
-ections @41860000 (flat, esz 2, psz 64K, shr 0)
-> > > [    0.000000] GICv3: using LPI property table @0x0000000041870000
-> > > [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000=
-000041880000
-> > > [    0.000000] ITS queue timeout (64 1)
-> > > [    0.000000] ITS cmd its_build_mapc_cmd failed
-> > > [    0.000000] ITS queue timeout (128 1)
-> > > [    0.000000] ITS cmd its_build_invall_cmd failed
-> >
-> > Ah, this suspiciously looks like a Rockchip machine...
-> >
-> > >
-> > > Signed-off-by: Harry Song <jundongsong1@gmail.com>
-> > > ---
-> > >
-> > > I am very sorry to bother you. This problem has been bothering me
-> > > for several weeks.  I am looking forward to your reply.
-> >
-> > If you have such issue, this needs to be handled as per-platform
-> > quirk. I'm not putting such generic hacks in the driver.
-> >
-> >         M.
-> >
-> > --
-> > Without deviation from the norm, progress is not possible.
->=20
-> Are there currently other chip platforms that have this problem, and then=
- ITS
-> is already compatible with the problem? Please tell me how to submit
-> hacks patch for rk3588 platform?
->=20
-> If the hacks patch cannot be submitted, please tell me whether it
-> requires the next generation
-> chip to have any design requirements for ITS?
->=20
-> Design ITS and CPU to be the same inner memory property?
+ drivers/hid/hid-multitouch.c | 72 +++++++++++++++++++++++++++++++++---
+ 1 file changed, 67 insertions(+), 5 deletions(-)
 
-Previous rockchip generation has the same bug and it got discussed
-here:
+diff --git a/drivers/hid/hid-multitouch.c b/drivers/hid/hid-multitouch.c
+index 91a4d3fc30e08..8a4f77e534a75 100644
+--- a/drivers/hid/hid-multitouch.c
++++ b/drivers/hid/hid-multitouch.c
+@@ -39,6 +39,7 @@
+ #include <linux/jiffies.h>
+ #include <linux/string.h>
+ #include <linux/timer.h>
++#include <linux/dmi.h>
 
-https://lore.kernel.org/lkml/871rbdt4tu.wl-maz@kernel.org/T/#m5dbc70ff308d8=
-1e98dd0d797e23d3fbf9c353245
 
-You can use this DT as base with mainline to avoid ITS:
+ MODULE_AUTHOR("Stephane Chatty <chatty@enac.fr>");
+@@ -71,6 +72,8 @@ MODULE_LICENSE("GPL");
+ #define MT_QUIRK_SEPARATE_APP_REPORT	BIT(19)
+ #define MT_QUIRK_FORCE_MULTI_INPUT	BIT(20)
+ #define MT_QUIRK_DISABLE_WAKEUP		BIT(21)
++#define MT_QUIRK_FLIP_X			BIT(22)
++#define MT_QUIRK_FLIP_Y			BIT(23)
 
-https://lore.kernel.org/all/20221205172350.75234-1-sebastian.reichel@collab=
-ora.com/
+ #define MT_INPUTMODE_TOUCHSCREEN	0x02
+ #define MT_INPUTMODE_TOUCHPAD		0x03
+@@ -212,6 +215,7 @@ static void mt_post_parse(struct mt_device *td, struct mt_application *app);
+ #define MT_CLS_GOOGLE				0x0111
+ #define MT_CLS_RAZER_BLADE_STEALTH		0x0112
+ #define MT_CLS_SMART_TECH			0x0113
++#define MT_CLS_ELAN_FLIPPED			0x0114
 
--- Sebastian
+ #define MT_DEFAULT_MAXCONTACT	10
+ #define MT_MAX_MAXCONTACT	250
+@@ -396,9 +400,36 @@ static const struct mt_class mt_classes[] = {
+ 			MT_QUIRK_CONTACT_CNT_ACCURATE |
+ 			MT_QUIRK_SEPARATE_APP_REPORT,
+ 	},
++	{ .name = MT_CLS_ELAN_FLIPPED,
++		.quirks = MT_QUIRK_ALWAYS_VALID |
++			MT_QUIRK_IGNORE_DUPLICATES |
++			MT_QUIRK_HOVERING |
++			MT_QUIRK_CONTACT_CNT_ACCURATE |
++			MT_QUIRK_STICKY_FINGERS |
++			MT_QUIRK_WIN8_PTP_BUTTONS |
++			MT_QUIRK_FLIP_X |
++			MT_QUIRK_FLIP_Y,
++		.export_all_inputs = true },
++
+ 	{ }
+ };
 
---2m3s3tijkpchtwwb
-Content-Type: application/pgp-signature; name="signature.asc"
++/*
++ * This list contains devices which have specific issues based on the system
++ * they're on and not just the device itself.
++ */
++static const struct dmi_system_id mt_devices_dmi_override_table[] = {
++	{
++		.ident = "DynaBook K50/FR",
++		.matches = {
++			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Dynabook Inc."),
++			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "dynabook K50/FR"),
++		},
++		.driver_data = (void *)MT_CLS_ELAN_FLIPPED,
++	},
++	{ }	/* Terminate list */
++};
++
+ static ssize_t mt_show_quirks(struct device *dev,
+ 			   struct device_attribute *attr,
+ 			   char *buf)
+@@ -1086,6 +1117,10 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
+ 		int orientation = wide;
+ 		int max_azimuth;
+ 		int azimuth;
++		int x;
++		int y;
++		int cx;
++		int cy;
 
------BEGIN PGP SIGNATURE-----
+ 		if (slot->a != DEFAULT_ZERO) {
+ 			/*
+@@ -1104,6 +1139,16 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
+ 			if (azimuth > max_azimuth * 2)
+ 				azimuth -= max_azimuth * 4;
+ 			orientation = -azimuth;
++
++			/* Orientation is inverted if the X or Y axes are
++			 * flipped, but normalized if both are inverted.
++			 */
++			if (quirks & (MT_QUIRK_FLIP_X | MT_QUIRK_FLIP_Y) &&
++			    !((quirks & MT_QUIRK_FLIP_X)
++			      && (quirks & MT_QUIRK_FLIP_Y))) {
++				orientation = -orientation;
++			}
++
+ 		}
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOSF6EACgkQ2O7X88g7
-+pq3+Q//TSgzJ5/1+3Y73ppgbI3jfueKQZ0E0fcEZZL8mXJYez1q6FoCyViuU5/D
-+jGmunhzUOYBDVswf10iQ68vRNBMrCa8mubr62++EaSRahHLBshL49HNDgiZrLv8
-X1XciBGmtZFnUWdTECc74fXfEYC4CPR2XCpY5tVCRrj3h/4PkAskaMvEGMUzt1dd
-hPaowB/anhq/HRkBGnvIfPm2vx3+aZHeAU93emryJCcIYgbxyMMUNfqy6okS0u5C
-iSStghNHb7opGrjWblbc5JiBnOLARbqm3dnf4bp5eFuk+fq5ntHK+gw26Hms0D+W
-npFXfx0YVNNLHAtnkcdqwC/ps1Ai5EZWGbw2ULtthe6yVXBdsSUzw28cN/4Bzkuw
-bHZ2URilImQzxWMqRCU6SAwbhu6JYtCFRetmqY2u0PJ6daKNp/8o2+OsGI/SxOQl
-MBEEUBPyqRfrE7C0vMHsjLdMj2OhL3ryr6ayyDuJbkj2axPhAhozlZPhTF7ymCXu
-92lLqOtvKeYMEwl06YHJquJ9dyYWDIclgOg/4kyu1k7zs2QdPhYrYVW59zKNvwUO
-aPjkHVcZQ7rVl3pmM0exFy7V2j8jq5PdgYMf1BEMzHI9djclQTFloxPG4jWzkiGr
-3eLjnBsGWKJ1LwSWHKZ4K0NRg8I2bxSY4pLWNiFweKy+dArR3FQ=
-=ondU
------END PGP SIGNATURE-----
+ 		if (quirks & MT_QUIRK_TOUCH_SIZE_SCALING) {
+@@ -1115,10 +1160,23 @@ static int mt_process_slot(struct mt_device *td, struct input_dev *input,
+ 			minor = minor >> 1;
+ 		}
 
---2m3s3tijkpchtwwb--
+-		input_event(input, EV_ABS, ABS_MT_POSITION_X, *slot->x);
+-		input_event(input, EV_ABS, ABS_MT_POSITION_Y, *slot->y);
+-		input_event(input, EV_ABS, ABS_MT_TOOL_X, *slot->cx);
+-		input_event(input, EV_ABS, ABS_MT_TOOL_Y, *slot->cy);
++		x = quirks & MT_QUIRK_FLIP_X ?
++			input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->x :
++			*slot->x;
++		y = quirks & MT_QUIRK_FLIP_Y ?
++			input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->y :
++			*slot->y;
++		cx = quirks & MT_QUIRK_FLIP_X ?
++			input_abs_get_max(input, ABS_MT_POSITION_X) - *slot->cx :
++			*slot->cx;
++		cy = quirks & MT_QUIRK_FLIP_Y ?
++			input_abs_get_max(input, ABS_MT_POSITION_Y) - *slot->cy :
++			*slot->cy;
++
++		input_event(input, EV_ABS, ABS_MT_POSITION_X, x);
++		input_event(input, EV_ABS, ABS_MT_POSITION_Y, y);
++		input_event(input, EV_ABS, ABS_MT_TOOL_X, cx);
++		input_event(input, EV_ABS, ABS_MT_TOOL_Y, cy);
+ 		input_event(input, EV_ABS, ABS_MT_DISTANCE, !*slot->tip_state);
+ 		input_event(input, EV_ABS, ABS_MT_ORIENTATION, orientation);
+ 		input_event(input, EV_ABS, ABS_MT_PRESSURE, *slot->p);
+@@ -1711,9 +1769,13 @@ static int mt_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ 	int ret, i;
+ 	struct mt_device *td;
+ 	const struct mt_class *mtclass = mt_classes; /* MT_CLS_DEFAULT */
++	const struct dmi_system_id *system_id
++			= dmi_first_match(mt_devices_dmi_override_table);
++	const long driver_data_name = system_id ?
++			(long)(system_id->driver_data) : id->driver_data;
+
+ 	for (i = 0; mt_classes[i].name ; i++) {
+-		if (id->driver_data == mt_classes[i].name) {
++		if (driver_data_name == mt_classes[i].name) {
+ 			mtclass = &(mt_classes[i]);
+ 			break;
+ 		}
+--
+2.39.0.rc1.256.g54fd8350bd-goog
+
