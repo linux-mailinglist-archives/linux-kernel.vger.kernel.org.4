@@ -2,76 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F85647631
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:27:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E23647638
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiLHT1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:27:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
+        id S229575AbiLHTaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiLHT0k (ORCPT
+        with ESMTP id S229550AbiLHTaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:26:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E2F9AE21;
-        Thu,  8 Dec 2022 11:26:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F2ED5B8260A;
-        Thu,  8 Dec 2022 19:26:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B7C5AC433F1;
-        Thu,  8 Dec 2022 19:26:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670527597;
-        bh=gRMgv8VlWkaarD7xijlxtiEai7TIaFe7+oa66LGsDZY=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=MumKzoJ6DL6rdHiL0W6Fi/FjkaAg5bSlU2Y5copSctRT8kq8MChdvT6VPOhgeAYpE
-         3sudv6iI1uitKfHJVjvdlDJmzZVH2ChjEYbSVUjbgL/IbxW5nfIw8xPmWbfIXNum75
-         Gnd2ql+AWm0HnOvDXAEXVNmdWRHKdUwOk8ad7ffXaPmlWQEBNwS3Y8iID3CFf0wzc2
-         YezUMJo4bpi7X8SuW4TncrCRZUrvlNdEjYPl8GlWl3erAsiXcf86ZjEcdUaF49LxcF
-         AjJt/2djTwyVF/GuEuuNlqKXwPOCXlUdLp09WODUP7kmKpEvUpSw77/BXpu6M150Td
-         LCUT1Xyhk4L1A==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A50BDE1B4D8;
-        Thu,  8 Dec 2022 19:26:37 +0000 (UTC)
-Subject: Re: [GIT PULL] gpio: fixes for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221208184110.252270-1-brgl@bgdev.pl>
-References: <20221208184110.252270-1-brgl@bgdev.pl>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221208184110.252270-1-brgl@bgdev.pl>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.1
-X-PR-Tracked-Commit-Id: 63ff545af73f759d1bd04198af8ed8577fb739fc
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 306ba2402de569a401549bf343ef60748b8f43df
-Message-Id: <167052759767.15249.16000264001242254576.pr-tracker-bot@kernel.org>
-Date:   Thu, 08 Dec 2022 19:26:37 +0000
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 14:30:12 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC5519B2A3;
+        Thu,  8 Dec 2022 11:30:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670527811; x=1702063811;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=NOuLtBAEfPRVp4erYU2PYxtgRLXk4Rc5kofNmn0gXUs=;
+  b=yV9W5ZFIUQ/95TJFWgg2RuzSDIOgV/OJgp6KDp64mjmzrriIk8cyi5CS
+   Qht1XRqHEOD3HQlO29Tz52ShzVRU9+CzJa8Kfz9PyqyGiXwK17sv5UxTC
+   Lt1lC/vcLWudeMrO7OMxNlB2XTeLQarVEwoJ6cxmy9oXuKD+EUG3knIYC
+   SHaVxpz0nLDh3pv9opYjEdNmwK+4QJBY+wKrFaEl2wmuWhKjpecaj6ImX
+   Hc5rKOWZJrKfOdur1KryRBe5X2n/m9sNgkdHrLGtZGEoXNIFh9P2+EplR
+   awMOH9GXVfhpbcn7+f7R1dsyWLZSP+rUrO6jnM6GYJvS2vzsxOizaRmvp
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="187244671"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 08 Dec 2022 12:30:10 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 8 Dec 2022 12:30:08 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 8 Dec 2022 12:30:06 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux@armlinux.org.uk>,
+        Jerry Ray <jerry.ray@microchip.com>
+Subject: [PATCH net-next] lan9303: Fix read error execution path
+Date:   Thu, 8 Dec 2022 13:30:05 -0600
+Message-ID: <20221208193005.12434-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu,  8 Dec 2022 19:41:10 +0100:
+This patch fixes an issue where a read failure of a port statistic counter
+will return unknown results.  While it is highly unlikely the read will
+ever fail, it is much cleaner to return a zero for the stat count.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.1
+Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/306ba2402de569a401549bf343ef60748b8f43df
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+ drivers/net/dsa/lan9303-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Thank you!
-
+diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+index 80f07bd20593..2e270b479143 100644
+--- a/drivers/net/dsa/lan9303-core.c
++++ b/drivers/net/dsa/lan9303-core.c
+@@ -1005,9 +1005,11 @@ static void lan9303_get_ethtool_stats(struct dsa_switch *ds, int port,
+ 		ret = lan9303_read_switch_port(
+ 			chip, port, lan9303_mib[u].offset, &reg);
+ 
+-		if (ret)
++		if (ret) {
+ 			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
+ 				 port, lan9303_mib[u].offset);
++			reg = 0;
++		}
+ 		data[u] = reg;
+ 	}
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.17.1
+
