@@ -2,190 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26409647566
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3E5464756A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiLHSNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:13:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39014 "EHLO
+        id S229626AbiLHSRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:17:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbiLHSNm (ORCPT
+        with ESMTP id S229463AbiLHSRv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:13:42 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0B776831;
-        Thu,  8 Dec 2022 10:13:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670523221; x=1702059221;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=shZLSFSHk7cyvEmOvu+L1aGeUnOVtdDfgOpI+fJT6U0=;
-  b=jGsTzc/gs7x0Njwy136HESDctZZYcE/RPI1wV4KiXlf8v21pVZ1ezSu8
-   8zvAmS+pAVaU5qpftXu89kbsZY3xgvjzQj1DRJPkjFU/a9hGx/slbMYEA
-   Py/w1CZo/USI6mbVAzmUyLJkRV11nyGovmTsaskKyqwbcr/8AYfMG/Urb
-   9cZmgdnCusjeD6Q2syeW8vvsKJMh0tYnBDZvdppaATZaK3voedZEbMBpp
-   4S7+RHPLj4yrBkH5oZSuFvvda1E84G0bmcQhK1tSS5tnWBG45KrtDMwGh
-   lgH7lQN9vXNQ4I2p0R3k0biG7jnDvfjHxQUUIBJAEZynAmi1owZxN6llf
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="318408992"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="318408992"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:13:40 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="710576019"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="710576019"
-Received: from nmanikan-mobl1.amr.corp.intel.com (HELO [10.251.3.168]) ([10.251.3.168])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:13:37 -0800
-Message-ID: <dd0c92b47496be5f59cc416c6e135ef573184c66.camel@linux.intel.com>
-Subject: Re: [PATCH v2 06/18] x86/sgx: Introduce RECLAIM_IN_PROGRESS flag
- for EPC pages
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Date:   Thu, 08 Dec 2022 10:13:36 -0800
-In-Reply-To: <Y5IGzbNxOBkRoaRx@kernel.org>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
-         <20221202183655.3767674-7-kristen@linux.intel.com>
-         <Y5IGzbNxOBkRoaRx@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Thu, 8 Dec 2022 13:17:51 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D1F18393
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:17:50 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 4E039208C5;
+        Thu,  8 Dec 2022 18:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670523469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WOpbqhi4deoSPQ5gjb+StOVqnfFIV+93wgbp/8W+O+E=;
+        b=1KSv5ZPicrjspUpQgVfP5D7FhQYHnvc+FaGZQR6RMgEY7A+G91LNeXkAGT6s2lWhUvGno8
+        BGlQZUw6ccq1iRdRElG7L4tiyQnPAFRfqlOe6HAE8poCMsz82FtoQbFN/wTIPc+RkGYR7F
+        t7Ur75e/ldHF7e3LbCA8DFm9oDdX16s=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670523469;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WOpbqhi4deoSPQ5gjb+StOVqnfFIV+93wgbp/8W+O+E=;
+        b=XBUKp0CH5acsWj28r2DVmK+P6suJul5ddvzmk9HmNOLh8EEVKxMDHMf6Wd5noRThT5bVGp
+        eIIDqVE456wlWLAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2922D138E0;
+        Thu,  8 Dec 2022 18:17:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8c0mCU0qkmNYVgAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 08 Dec 2022 18:17:49 +0000
+Message-ID: <e7b8c312-5433-757d-fb9c-f2f993e4f999@suse.cz>
+Date:   Thu, 8 Dec 2022 19:17:48 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 6/6] mm: discard __GFP_ATOMIC
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Linux-MM <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20221129151701.23261-1-mgorman@techsingularity.net>
+ <20221129151701.23261-7-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221129151701.23261-7-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVGh1LCAyMDIyLTEyLTA4IGF0IDE1OjQ2ICswMDAwLCBKYXJra28gU2Fra2luZW4gd3JvdGU6
-Cj4gT24gRnJpLCBEZWMgMDIsIDIwMjIgYXQgMTA6MzY6NDJBTSAtMDgwMCwgS3Jpc3RlbiBDYXJs
-c29uIEFjY2FyZGkKPiB3cm90ZToKPiA+IEZyb206IFNlYW4gQ2hyaXN0b3BoZXJzb24gPHNlYW4u
-ai5jaHJpc3RvcGhlcnNvbkBpbnRlbC5jb20+Cj4gPiAKPiA+IFdoZW4gc2VsZWN0aW5nIHBhZ2Vz
-IHRvIGJlIHJlY2xhaW1lZCBmcm9tIHRoZSBwYWdlIHBvb2wKPiA+IChzZ3hfZ2xvYmFsX2xydSks
-Cj4gPiB0aGUgbGlzdCBvZiByZWNsYWltYWJsZSBwYWdlcyBpcyB3YWxrZWQsIGFuZCBhbnkgcGFn
-ZSB0aGF0IGlzIGJvdGgKPiA+IHJlY2xhaW1hYmxlIGFuZCBub3QgaW4gdGhlIHByb2Nlc3Mgb2Yg
-YmVpbmcgZnJlZWQgaXMgYWRkZWQgdG8gYQo+ID4gbGlzdCBvZgo+ID4gcG90ZW50aWFsIGNhbmRp
-ZGF0ZXMgdG8gYmUgcmVjbGFpbWVkLiBBZnRlciB0aGF0LCB0aGlzIHNlcGFyYXRlCj4gPiBsaXN0
-IGlzCj4gPiBmdXJ0aGVyIGV4YW1pbmVkIGFuZCBtYXkgb3IgbWF5IG5vdCB1bHRpbWF0ZWx5IGJl
-IHJlY2xhaW1lZC4gSW4KPiA+IG9yZGVyCj4gPiB0byBwcmV2ZW50IHRoaXMgcGFnZSBmcm9tIGJl
-aW5nIHJlbW92ZWQgZnJvbSB0aGUgc2d4X2VwY19scnVfbGlzdHMKPiA+IHN0cnVjdCBpbiBhIHNl
-cGFyYXRlIHRocmVhZCBieSBzZ3hfZHJvcF9lcGNfcGFnZSgpLCBrZWVwIHRyYWNrIG9mCj4gPiB3
-aGV0aGVyIHRoZSBFUEMgcGFnZSBpcyBpbiB0aGUgbWlkZGxlIG9mIGJlaW5nIHJlY2xhaW1lZCB3
-aXRoCj4gPiB0aGUgYWRkdGlvbiBvZiBhIFJFQ0xBSU1fSU5fUFJPR1JFU1MgZmxhZywgYW5kIGRv
-IG5vdCBkZWxldGUgdGhlCj4gPiBwYWdlCj4gPiBvZmYgdGhlIExSVSBpbiBzZ3hfZHJvcF9lcGNf
-cGFnZSgpIGlmIGl0IGhhcyBub3QgeWV0IGZpbmlzaGVkIGJlaW5nCj4gPiByZWNsYWltZWQuCj4g
-PiAKPiA+IFNpZ25lZC1vZmYtYnk6IFNlYW4gQ2hyaXN0b3BoZXJzb24KPiA+IDxzZWFuLmouY2hy
-aXN0b3BoZXJzb25AaW50ZWwuY29tPgo+ID4gU2lnbmVkLW9mZi1ieTogS3Jpc3RlbiBDYXJsc29u
-IEFjY2FyZGkgPGtyaXN0ZW5AbGludXguaW50ZWwuY29tPgo+ID4gQ2M6IFNlYW4gQ2hyaXN0b3Bo
-ZXJzb24gPHNlYW5qY0Bnb29nbGUuY29tPgo+ID4gLS0tCj4gPiDCoGFyY2gveDg2L2tlcm5lbC9j
-cHUvc2d4L21haW4uYyB8IDE1ICsrKysrKysrKystLS0tLQo+ID4gwqBhcmNoL3g4Ni9rZXJuZWwv
-Y3B1L3NneC9zZ3guaMKgIHzCoCAyICsrCj4gPiDCoDIgZmlsZXMgY2hhbmdlZCwgMTIgaW5zZXJ0
-aW9ucygrKSwgNSBkZWxldGlvbnMoLSkKPiA+IAo+ID4gZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tl
-cm5lbC9jcHUvc2d4L21haW4uYwo+ID4gYi9hcmNoL3g4Ni9rZXJuZWwvY3B1L3NneC9tYWluLmMK
-PiA+IGluZGV4IGVjZDdmOGU3MDRjYy4uYmFkNzI0OThiMGE3IDEwMDY0NAo+ID4gLS0tIGEvYXJj
-aC94ODYva2VybmVsL2NwdS9zZ3gvbWFpbi5jCj4gPiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvY3B1
-L3NneC9tYWluLmMKPiA+IEBAIC0zMDUsMTMgKzMwNSwxNSBAQCBzdGF0aWMgdm9pZCBfX3NneF9y
-ZWNsYWltX3BhZ2VzKHZvaWQpCj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqBlbmNsX3BhZ2UgPSBlcGNfcGFnZS0+ZW5jbF9vd25lcjsKPiA+IMKgCj4gPiAtwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGtyZWZfZ2V0X3VubGVzc196ZXJvKCZlbmNsX3Bh
-Z2UtPmVuY2wtCj4gPiA+cmVmY291bnQpICE9IDApCj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgaWYgKGtyZWZfZ2V0X3VubGVzc196ZXJvKCZlbmNsX3BhZ2UtPmVuY2wtCj4gPiA+
-cmVmY291bnQpICE9IDApIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgZXBjX3BhZ2UtPmZsYWdzIHw9Cj4gPiBTR1hfRVBDX1BBR0VfUkVDTEFJTV9J
-Tl9QUk9HUkVTUzsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoGNodW5rW2NudCsrXSA9IGVwY19wYWdlOwo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoGVsc2UKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9IGVsc2Ug
-ewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgLyog
-VGhlIG93bmVyIGlzIGZyZWVpbmcgdGhlIHBhZ2UuIE5vIG5lZWQKPiA+IHRvIGFkZCB0aGUKPiA+
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAqIHBhZ2Ug
-YmFjayB0byB0aGUgbGlzdCBvZiByZWNsYWltYWJsZQo+ID4gcGFnZXMuCj4gPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgKi8KPiA+IMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGVwY19wYWdlLT5mbGFncyAmPQo+
-ID4gflNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRDsKPiA+ICvCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqB9Cj4gPiDCoMKgwqDCoMKgwqDCoMKgfQo+ID4gwqDCoMKgwqDCoMKgwqDC
-oHNwaW5fdW5sb2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKgCj4gPiBAQCAtMzM3LDYg
-KzMzOSw3IEBAIHN0YXRpYyB2b2lkIF9fc2d4X3JlY2xhaW1fcGFnZXModm9pZCkKPiA+IMKgCj4g
-PiDCoHNraXA6Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNwaW5fbG9jaygm
-c2d4X2dsb2JhbF9scnUubG9jayk7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-ZXBjX3BhZ2UtPmZsYWdzICY9Cj4gPiB+U0dYX0VQQ19QQUdFX1JFQ0xBSU1fSU5fUFJPR1JFU1M7
-Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHNneF9lcGNfcHVzaF9yZWNsYWlt
-YWJsZSgmc2d4X2dsb2JhbF9scnUsCj4gPiBlcGNfcGFnZSk7Cj4gPiDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoHNwaW5fdW5sb2NrKCZzZ3hfZ2xvYmFsX2xydS5sb2NrKTsKPiA+IMKg
-Cj4gPiBAQCAtMzYwLDcgKzM2Myw4IEBAIHN0YXRpYyB2b2lkIF9fc2d4X3JlY2xhaW1fcGFnZXMo
-dm9pZCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2d4X3JlY2xhaW1lcl93
-cml0ZShlcGNfcGFnZSwgJmJhY2tpbmdbaV0pOwo+ID4gwqAKPiA+IMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKga3JlZl9wdXQoJmVuY2xfcGFnZS0+ZW5jbC0+cmVmY291bnQsCj4gPiBz
-Z3hfZW5jbF9yZWxlYXNlKTsKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlcGNf
-cGFnZS0+ZmxhZ3MgJj0gflNHWF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRDsKPiA+ICvCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBlcGNfcGFnZS0+ZmxhZ3MgJj0gfihTR1hfRVBDX1BB
-R0VfUkVDTEFJTUVSX1RSQUNLRUQKPiA+IHwKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBTR1hfRVBD
-X1BBR0VfUkVDTEFJTV9JTl9QUk9HUkVTUyk7Cj4gPiDCoAo+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqBzZ3hfZnJlZV9lcGNfcGFnZShlcGNfcGFnZSk7Cj4gPiDCoMKgwqDCoMKg
-wqDCoMKgfQo+ID4gQEAgLTUwOCw3ICs1MTIsOCBAQCBzdHJ1Y3Qgc2d4X2VwY19wYWdlICpfX3Nn
-eF9hbGxvY19lcGNfcGFnZSh2b2lkKQo+ID4gwqB2b2lkIHNneF9yZWNvcmRfZXBjX3BhZ2Uoc3Ry
-dWN0IHNneF9lcGNfcGFnZSAqcGFnZSwgdW5zaWduZWQgbG9uZwo+ID4gZmxhZ3MpCj4gPiDCoHsK
-PiA+IMKgwqDCoMKgwqDCoMKgwqBzcGluX2xvY2soJnNneF9nbG9iYWxfbHJ1LmxvY2spOwo+ID4g
-LcKgwqDCoMKgwqDCoMKgV0FSTl9PTihwYWdlLT5mbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlN
-RVJfVFJBQ0tFRCk7Cj4gPiArwqDCoMKgwqDCoMKgwqBXQVJOX09OKHBhZ2UtPmZsYWdzICYgKFNH
-WF9FUENfUEFHRV9SRUNMQUlNRVJfVFJBQ0tFRCB8Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBTR1hfRVBDX1BBR0VfUkVDTEFJ
-TV9JTl9QUk9HUkVTUykpOwo+ID4gwqDCoMKgwqDCoMKgwqDCoHBhZ2UtPmZsYWdzIHw9IGZsYWdz
-Owo+ID4gwqDCoMKgwqDCoMKgwqDCoGlmIChmbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlNRVJf
-VFJBQ0tFRCkKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgc2d4X2VwY19wdXNo
-X3JlY2xhaW1hYmxlKCZzZ3hfZ2xvYmFsX2xydSwgcGFnZSk7Cj4gPiBAQCAtNTMyLDcgKzUzNyw3
-IEBAIGludCBzZ3hfZHJvcF9lcGNfcGFnZShzdHJ1Y3Qgc2d4X2VwY19wYWdlCj4gPiAqcGFnZSkK
-PiA+IMKgwqDCoMKgwqDCoMKgwqBzcGluX2xvY2soJnNneF9nbG9iYWxfbHJ1LmxvY2spOwo+ID4g
-wqDCoMKgwqDCoMKgwqDCoGlmIChwYWdlLT5mbGFncyAmIFNHWF9FUENfUEFHRV9SRUNMQUlNRVJf
-VFJBQ0tFRCkgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAvKiBUaGUgcGFn
-ZSBpcyBiZWluZyByZWNsYWltZWQuICovCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgaWYgKGxpc3RfZW1wdHkoJnBhZ2UtPmxpc3QpKSB7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgaWYgKHBhZ2UtPmZsYWdzICYgU0dYX0VQQ19QQUdFX1JFQ0xBSU1fSU5fUFJP
-R1JFU1MpCj4gPiB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqBzcGluX3VubG9jaygmc2d4X2dsb2JhbF9scnUubG9jayk7Cj4gPiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqByZXR1cm4gLUVCVVNZOwo+ID4g
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB9Cj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC94
-ODYva2VybmVsL2NwdS9zZ3gvc2d4LmgKPiA+IGIvYXJjaC94ODYva2VybmVsL2NwdS9zZ3gvc2d4
-LmgKPiA+IGluZGV4IGJhNDMzOGI3MzAzZi4uMzdkNjZiYzZjYTI3IDEwMDY0NAo+ID4gLS0tIGEv
-YXJjaC94ODYva2VybmVsL2NwdS9zZ3gvc2d4LmgKPiA+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9j
-cHUvc2d4L3NneC5oCj4gPiBAQCAtMzAsNiArMzAsOCBAQAo+ID4gwqAjZGVmaW5lIFNHWF9FUENf
-UEFHRV9JU19GUkVFwqDCoMKgwqDCoMKgwqDCoMKgwqDCoEJJVCgxKQo+ID4gwqAvKiBQYWdlcyBh
-bGxvY2F0ZWQgZm9yIEtWTSBndWVzdCAqLwo+ID4gwqAjZGVmaW5lIFNHWF9FUENfUEFHRV9LVk1f
-R1VFU1TCoMKgwqDCoMKgwqDCoMKgwqBCSVQoMikKPiA+ICsvKiBwYWdlIGZsYWcgdG8gaW5kaWNh
-dGUgcmVjbGFpbSBpcyBpbiBwcm9ncmVzcyAqLwo+ID4gKyNkZWZpbmUgU0dYX0VQQ19QQUdFX1JF
-Q0xBSU1fSU5fUFJPR1JFU1MgQklUKDMpCj4gPiDCoAo+ID4gwqBzdHJ1Y3Qgc2d4X2VwY19wYWdl
-IHsKPiA+IMKgwqDCoMKgwqDCoMKgwqB1bnNpZ25lZCBpbnQgc2VjdGlvbjsKPiA+IC0tIAo+ID4g
-Mi4zOC4xCj4gPiAKPiAKPiBJIHdvdWxkIGNyZWF0ZToKPiAKPiBlbnVtIHNneF9lcGNfc3RhdGUg
-e8KgwqDCoCAKPiDCoMKgwqDCoMKgwqDCoCBTR1hfRVBDX1NUQVRFX1JFQURZID0gMCwKPiDCoMKg
-wqDCoMKgwqDCoCBTR1hfRVBDX1NUQVRFX1JFQ0xBSU1FUl9UUkFDS0VEID0gMSwKPiDCoMKgwqDC
-oMKgwqDCoCBTR1hfRVBDX1NUQVRFX1JFQ0xBSU1fSU5fUFJPR1JFU1MgPSAyLAo+IH07Cj4gCj4g
-SS5lLiBub3QgYSBiaXRtYXNrIGJlY2F1c2UgcGFnZSBzaG91bGQgaGF2ZSBvbmx5IG9uZSBzdGF0
-ZSBhdAo+IGEgdGltZSBmb3IgYW55IG9mIHRoaXMgdG8gbWFrZSBhbnkgc2Vuc2UuIFdlIGhhdmUg
-YW4gRlNNLAo+IHJpZ2h0Pwo+IAoKSSBjYW4gZXhwZXJpbWVudCB3aXRoIGl0IGFuZCBzZWUgaWYg
-aXQgY2FuIHdvcmsgZm9yIHRoZSBmbGFncyB0bwpyZXByZXNlbnQgYSBzdGF0ZSBtYWNoaW5lLiBU
-aGV5IGRvbid0IHdvcmsgbGlrZSB0aGF0IHJpZ2h0IG5vdwpvYnZpb3VzbHksIHNpbmNlIHlvdSBj
-YW4gaGF2ZSBib3RoIFJFQ0xBSU1FUl9UUkFDS0VEIGFuZApSRUNMQUlNX0lOX1BST0dSRVNTIHNl
-dCBhdCB0aGUgc2FtZSB0aW1lLgoKCj4gQW5kIHRoZW4gYWxsb2NhdGUgMiB1cHBlciBiaXRzIHRv
-IHN0b3JlIHRoaXMgaW5mb3JtYXRpb24gZnJvbQo+IGZsYWdzLgo+IAo+IEFuZCBwcm9iYWJseSB3
-b3VsZCBtYWtlIHNlbnNlIHRvIGhhdmUgaW5saW5lIGhlbHBlciBmdW5jdGlvbnMKPiB0byBzZXR0
-aW5nIGFuZCBnZXR0aW5nIHRoZSBzdGF0ZSB0aGF0IGRvZXMgdGhlIGJpdHNoaWZ0aW5nIGFuZAo+
-IG1hc2tpbmcgc2hlbmFuaWdhbmdzLgo+IAo+IFRoaXMgd291bGQgYmUgYSBwYXRjaCBwcmVwZW5k
-aW5nIHRoaXMuCj4gCj4gSW4gdGhpcyBwYXRjaCB5b3Ugc2hvdWxkIHRoZW4gZGVzY3JpYmUgaW4g
-dGhlIGNvbnRleHQgb2YgRlNNCj4gaG93IEVQQyBwYWdlIG1vdmVzIGJldHdlZW4gdGhlc2Ugc3Rh
-dGVzLiBXaXRoIHRoYXQga25vd2xlZGdlCj4gd2UgY2FuIHRoZW4gcmVmbGVjdCB0aGUgYWN0dWFs
-IGNvZGUgY2hhbmdlLgo+IAo+IFRoZSBwb2ludCBpcyBub3QgdG8gZ2V0IHJpZ2h0IGJ1dCBtb3Jl
-IGxpa2UgYSBtaW5kc2V0IHRoYXQgd2UKPiBjYW4gZGlzY3VzcyByaWdodCBvciB3cm9uZyBpbiB0
-aGVlIGZpcnN0IHBsYWNlIHNvIGp1c3QgZG8geW91cgo+IGJlc3QgYnV0IGRvbid0IHN0cmVzcyB0
-b28gbXVjaC4KPiAKPiBCUiwgSmFya2tvCgo=
+On 11/29/22 16:17, Mel Gorman wrote:
+> From: NeilBrown <neilb@suse.de>
+> 
+> __GFP_ATOMIC serves little purpose.  Its main effect is to set
+> ALLOC_HARDER which adds a few little boosts to increase the chance of an
+> allocation succeeding, one of which is to lower the water-mark at which it
+> will succeed.
+> 
+> It is *always* paired with __GFP_HIGH which sets ALLOC_HIGH which also
+> adjusts this watermark.  It is probable that other users of __GFP_HIGH
+> should benefit from the other little bonuses that __GFP_ATOMIC gets.
+> 
+> __GFP_ATOMIC also gives a warning if used with __GFP_DIRECT_RECLAIM.
+> There is little point to this.  We already get a might_sleep() warning if
+> __GFP_DIRECT_RECLAIM is set.
+> 
+> __GFP_ATOMIC allows the "watermark_boost" to be side-stepped.  It is
+> probable that testing ALLOC_HARDER is a better fit here.
+> 
+> __GFP_ATOMIC is used by tegra-smmu.c to check if the allocation might
+> sleep.  This should test __GFP_DIRECT_RECLAIM instead.
+> 
+> This patch:
+>  - removes __GFP_ATOMIC
+>  - allows __GFP_HIGH allocations to ignore watermark boosting as well
+>    as GFP_ATOMIC requests.
+>  - makes other adjustments as suggested by the above.
+> 
+> The net result is not change to GFP_ATOMIC allocations.  Other
+> allocations that use __GFP_HIGH will benefit from a few different extra
+> privileges.  This affects:
+>   xen, dm, md, ntfs3
+>   the vermillion frame buffer
+>   hibernation
+>   ksm
+>   swap
+> all of which likely produce more benefit than cost if these selected
+> allocation are more likely to succeed quickly.
+> 
+> [mgorman: Minor adjustments to rework on top of a series]
+> Link: https://lkml.kernel.org/r/163712397076.13692.4727608274002939094@noble.neil.brown.name
+> Signed-off-by: NeilBrown <neilb@suse.de>
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
+Just a nit below.
+
+
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -4081,13 +4081,14 @@ static inline bool zone_watermark_fast(struct zone *z, unsigned int order,
+>  	if (__zone_watermark_ok(z, order, mark, highest_zoneidx, alloc_flags,
+>  					free_pages))
+>  		return true;
+> +
+>  	/*
+> -	 * Ignore watermark boosting for GFP_ATOMIC order-0 allocations
+> +	 * Ignore watermark boosting for GFP_HIGH order-0 allocations
+
+There's no GFP_HIGH. We could either keep GFP_ATOMIC here if we want to talk
+about the high-level flag combo, or __GFP_HIGH if about the low-level
+detail. We're deep in the page allocator implementation so the latter would
+be OK.
+
+>  	 * when checking the min watermark. The min watermark is the
+>  	 * point where boosting is ignored so that kswapd is woken up
+>  	 * when below the low watermark.
+>  	 */
+> -	if (unlikely(!order && (gfp_mask & __GFP_ATOMIC) && z->watermark_boost
+> +	if (unlikely(!order && (alloc_flags & ALLOC_MIN_RESERVE) && z->watermark_boost
 
