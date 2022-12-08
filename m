@@ -2,226 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA8B1646D0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:34:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04940646D13
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:34:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiLHKeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:34:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38142 "EHLO
+        id S229969AbiLHKeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiLHKdW (ORCPT
+        with ESMTP id S229919AbiLHKdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:33:22 -0500
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5418326C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:31:44 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id b9so1086304ljr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 02:31:44 -0800 (PST)
+        Thu, 8 Dec 2022 05:33:41 -0500
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3643183EA8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:31:54 -0800 (PST)
+Received: by mail-il1-x12e.google.com with SMTP id j28so282101ila.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 02:31:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GdMCi41BRhoRVn7tJmgZDPG+60TkiWedqCw4ysK9tk0=;
-        b=lRIiBy6pSMLBYxynao/nIi1eDsNXlLTyCPFstwfxAluBEIsM6LiU7Plqhn1aJ02Yq6
-         2YJdwZYqtp5SUDN3HjG8GhAdVu762AjwFrIhiLmMDo+/00U1QEUfrdxnnY8+JxFp2uPJ
-         2UYDhpLJAL6B/y+H9+VzKsi7aadEJjjhvkzC/UHQ1EBYgTJOCwfCibi7quEmPArd3F+X
-         FAysDVc0mFhSzNCGA+sXa3nJM2+nODtpkXx2XWAXTSyOLjOiD/4fwSGhvQfbsosyBohS
-         xJncVnJWk1EZGOlLaEax8AtfdXsmnjE6ZV3mzb8dI2Z23PrpJYC8Rr45WQYiVPutyQen
-         y1ww==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ekXDW6NKqQAtjK+zDFtGFfwc8w0TI9ziiAyFM4g2xo0=;
+        b=nRHE+hC42Lrzix3djG4QgHIHW2WW7ZzruP5AAyy2x6XQzERMd1gtJsYBaOp3gVX/1s
+         YZTtPIXvzdwur5a7Uz8X7i68sLqEJgztKmIieu9O9mTxB4SoWQr2z+TQjRrzkGTM2aqH
+         4wdp2azsMX85Mq9s2LVBig4SyUYzOe68adt8UBeLRtcqhXCMWG8Dnxy9I8ElkUnfeFV+
+         PqesVAsyfADFYeiOd1cRLpRFklfIn5Z+Zu8FHKbSJpTb3XtNDrmUpAar8MfTxJezMFA6
+         KZFV3ZW/mH1XykGp6TQCq0EKsOKxWwB2riwgMdFfiBDP2HmWHP9MO10fRR6GZ1PWVMi5
+         RjTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GdMCi41BRhoRVn7tJmgZDPG+60TkiWedqCw4ysK9tk0=;
-        b=sIFcC3BMsBUzLeiB0wQTCOucW5uQG565mus90qo2r9kVEmn4zfrsDQOKw0BKJaI53E
-         Q6/7cJ5J+oBHV6YimJPQqnUoCGJUIhX+RMgDA4ymvsDN0urnsbEj6RiWc79gCVBxpRuh
-         7tWQNOUuBOwCPLaDd/Q2z23F4IYyx4ewVQ9CoRI3zrrml++RWxsCShiAx7Po0TeyyGzK
-         hrJRaw+2NzHs3S+1CHjUfZ8l5HDqFxi/0YUyS1+hwIz1f9mEGmVg7VcZ9esFEMqDA9mz
-         2zXUCUjIZmvP8kalu0/PupqUwDAuZyw2U/vZnS3WnA/suZAIGjO0L+8ki5C5qYhWMjrf
-         J5WA==
-X-Gm-Message-State: ANoB5pli/ynVDlHGAUHDkVyq7LqMINOe+dwER+GSqEHEQMYPW6UrpySk
-        3mf7PMxYFkPkcPCD6HkG0crzig==
-X-Google-Smtp-Source: AA0mqf7PxHyaFqnbm9AneVRfDtcor/UK1px7NfgtBLnuUx3d7/tdOhjSb70zTR6W11rGcy5bWMAsRg==
-X-Received: by 2002:a05:651c:2328:b0:27a:eae:9ecc with SMTP id bi40-20020a05651c232800b0027a0eae9eccmr3403499ljb.248.1670495503950;
-        Thu, 08 Dec 2022 02:31:43 -0800 (PST)
-Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id h18-20020a2eb0f2000000b00279e5247dabsm1699580ljl.18.2022.12.08.02.31.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 02:31:43 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Alain Volmat <alain.volmat@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Joe Tessler <jrt@google.com>,
-        Yannick Fertre <yannick.fertre@foss.st.com>,
-        Jeff Chase <jnchase@google.com>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 9/9] media: dt-bindings: st,stih-cec: convert to DT schema
-Date:   Thu,  8 Dec 2022 11:31:15 +0100
-Message-Id: <20221208103115.25512-10-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
-References: <20221208103115.25512-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ekXDW6NKqQAtjK+zDFtGFfwc8w0TI9ziiAyFM4g2xo0=;
+        b=43HqdKnZ21cnIC6Ovd7lNZvA+/Ff3d//QoY5lekRuRdrrubEzkdC8EuFXuuSY+TcHs
+         hFnzVhe6JwwUUolv8hHMDBfmFA7M7KyRnZ+SjrwFVUZOQ/yw8ec7HjRZXVPufkXbbses
+         aZ2HXFTIYjc7L448PYUxbMLMr4nf3NFiYTcYKkPWx7inl3KaMfpYA4lJyE3pLUBZ9WqK
+         WIpU70X7J69Um8Z8acZotDPLamXfS81FjSsT/tY3OnSA79CV37daazdnK0nvGwyqYlwS
+         Tve6M3wGEjbmafqMIH2va5WLGx3+5sf0m/hQXzmuxMpCGCQLlSIUjuxFRg9sY8kScA5K
+         Btjw==
+X-Gm-Message-State: ANoB5pmwWoM0etmx38vOC9Jh/wRxDQUJXob01IcPubb1ozPkZoiTp7Wq
+        YUlaxz7G0ouXlaBMhSAbgmpx//X/UjqY9FfnbehQxA==
+X-Google-Smtp-Source: AA0mqf6g60r6Y9owqdzC7cwzUZ723g9PHLsEAJbP82mnxJAxyZo2RQRYDwk7I6+JzYOCP03sS8961i9AZSbfuXwNXTQ=
+X-Received: by 2002:a92:870e:0:b0:2fa:f47:d960 with SMTP id
+ m14-20020a92870e000000b002fa0f47d960mr34171199ild.19.1670495507923; Thu, 08
+ Dec 2022 02:31:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221207101705.9460-1-lukasz.luba@arm.com> <20221207101705.9460-3-lukasz.luba@arm.com>
+ <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com> <7428f6dd-9403-180b-d4b4-7ef1aee3dcb1@arm.com>
+In-Reply-To: <7428f6dd-9403-180b-d4b4-7ef1aee3dcb1@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 8 Dec 2022 11:31:36 +0100
+Message-ID: <CAKfTPtDoZ2paL7DW+JsML8aKeVzwu4oSnojij1osqJzNhO4ceA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
+ single max CPU capacity
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, saravanak@google.com,
+        wusamuel@google.com, isaacmanjarres@google.com,
+        kernel-team@android.com, juri.lelli@redhat.com,
+        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, viresh.kumar@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert ST STIH4xx HDMI CEC bindings to DT schema.
+On Thu, 8 Dec 2022 at 11:06, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 12/8/22 08:37, Vincent Guittot wrote:
+> > On Wed, 7 Dec 2022 at 11:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >> The max CPU capacity is the same for all CPUs sharing frequency domain
+> >> and thus 'policy' object. There is a way to avoid heavy operations
+> >> in a loop for each CPU by leveraging this knowledge. Thus, simplify
+> >> the looping code in the sugov_next_freq_shared() and drop heavy
+> >> multiplications. Instead, use simple max() to get the highest utilization
+> >> from these CPUs. This is useful for platforms with many (4 or 6) little
+> >> CPUs.
+> >>
+> >> The max CPU capacity must be fetched every time we are called, due to
+> >> difficulties during the policy setup, where we are not able to get the
+> >> normalized CPU capacity at the right time.
+> >>
+> >> The stored value in sugov_policy::max is also than used in
+> >> sugov_iowait_apply() to calculate the right boost. Thus, that field is
+> >> useful to have in that sugov_policy struct.
+> >>
+> >> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >> ---
+> >>   kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
+> >>   1 file changed, 11 insertions(+), 11 deletions(-)
+> >>
+> >> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> >> index c19d6de67b7a..f9881f3d9488 100644
+> >> --- a/kernel/sched/cpufreq_schedutil.c
+> >> +++ b/kernel/sched/cpufreq_schedutil.c
+> >> @@ -158,10 +158,8 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+> >>
+> >>   static void sugov_get_util(struct sugov_cpu *sg_cpu)
+> >>   {
+> >> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> >>          struct rq *rq = cpu_rq(sg_cpu->cpu);
+> >>
+> >> -       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> >>          sg_cpu->bw_dl = cpu_bw_dl(rq);
+> >>          sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+> >>                                            FREQUENCY_UTIL, NULL);
+> >> @@ -317,6 +315,8 @@ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
+> >>   static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> >>                                                u64 time, unsigned int flags)
+> >>   {
+> >> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> >> +
+> >>          sugov_iowait_boost(sg_cpu, time, flags);
+> >>          sg_cpu->last_update = time;
+> >>
+> >> @@ -325,6 +325,9 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> >>          if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> >>                  return false;
+> >>
+> >> +       /* Fetch the latest CPU capcity to avoid stale data */
+> >> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> >> +
+> >>          sugov_get_util(sg_cpu);
+> >>          sugov_iowait_apply(sg_cpu, time);
+> >>
+> >> @@ -414,25 +417,22 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+> >>   {
+> >>          struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> >>          struct cpufreq_policy *policy = sg_policy->policy;
+> >> -       unsigned long util = 0, max = 1;
+> >> +       unsigned long util = 0;
+> >>          unsigned int j;
+> >>
+> >> +       /* Fetch the latest CPU capcity to avoid stale data */
+> >> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> >> +
+> >>          for_each_cpu(j, policy->cpus) {
+> >>                  struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> >> -               unsigned long j_util, j_max;
+> >>
+> >>                  sugov_get_util(j_sg_cpu);
+> >>                  sugov_iowait_apply(j_sg_cpu, time);
+> >> -               j_util = j_sg_cpu->util;
+> >> -               j_max = j_sg_cpu->max;
+> >>
+> >> -               if (j_util * max > j_max * util) {
+> >> -                       util = j_util;
+> >> -                       max = j_max;
+> >> -               }
+> >
+> > With the code removed above, max is only used in 2 places:
+> > - sugov_iowait_apply
+> > - map_util_freq
+> >
+> > I wonder if it would be better to just call arch_scale_cpu_capacity()
+> > in these 2 places instead of saving a copy in sg_policy and then
+> > reading it twice.
+>
+> The sugov_iowait_apply() is called in that loop, so probably I will
+> add a new argument to that call and just feed it with the capacity value
+> from one CPU, which was read before the loop. So, similarly what is in
+> this patch. Otherwise, all of those per-cpu capacity vars would be
+> accessed inside the sugov_iowait_apply() with sg_cpu->cpu.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- .../bindings/media/cec/st,stih-cec.yaml       | 66 +++++++++++++++++++
- .../devicetree/bindings/media/stih-cec.txt    | 27 --------
- MAINTAINERS                                   |  2 +-
- 3 files changed, 67 insertions(+), 28 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/stih-cec.txt
+Yes make sense
 
-diff --git a/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml b/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
-new file mode 100644
-index 000000000000..aeddf16ed339
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/cec/st,stih-cec.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: STMicroelectronics STIH4xx HDMI CEC
-+
-+maintainers:
-+  - Alain Volmat <alain.volmat@foss.st.com>
-+
-+allOf:
-+  - $ref: cec-common.yaml#
-+
-+properties:
-+  compatible:
-+    const: st,stih-cec
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-names:
-+    items:
-+      - const: cec-clk
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-names:
-+    items:
-+      - const: cec-irq
-+
-+  resets:
-+    maxItems: 1
-+
-+  reg:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - clocks
-+  - hdmi-phandle
-+  - interrupts
-+  - resets
-+  - reg
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/reset/stih407-resets.h>
-+
-+    cec@94a087c {
-+        compatible = "st,stih-cec";
-+        reg = <0x94a087c 0x64>;
-+
-+        clocks = <&clk_sysin>;
-+        clock-names = "cec-clk";
-+        hdmi-phandle = <&sti_hdmi>;
-+        interrupts = <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>;
-+        interrupt-names = "cec-irq";
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_cec0_default>;
-+        resets = <&softreset STIH407_LPM_SOFTRESET>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/stih-cec.txt b/Documentation/devicetree/bindings/media/stih-cec.txt
-deleted file mode 100644
-index ece0832fdeaf..000000000000
---- a/Documentation/devicetree/bindings/media/stih-cec.txt
-+++ /dev/null
-@@ -1,27 +0,0 @@
--STMicroelectronics STIH4xx HDMI CEC driver
--
--Required properties:
-- - compatible : value should be "st,stih-cec"
-- - reg : Physical base address of the IP registers and length of memory
--	 mapped region.
-- - clocks : from common clock binding: handle to HDMI CEC clock
-- - interrupts : HDMI CEC interrupt number to the CPU.
-- - pinctrl-names: Contains only one value - "default"
-- - pinctrl-0: Specifies the pin control groups used for CEC hardware.
-- - resets: Reference to a reset controller
-- - hdmi-phandle: Phandle to the HDMI controller, see also cec.txt.
--
--Example for STIH407:
--
--sti-cec@94a087c {
--	compatible = "st,stih-cec";
--	reg = <0x94a087c 0x64>;
--	clocks = <&clk_sysin>;
--	clock-names = "cec-clk";
--	interrupts = <GIC_SPI 140 IRQ_TYPE_NONE>;
--	interrupt-names = "cec-irq";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_cec0_default>;
--	resets = <&softreset STIH407_LPM_SOFTRESET>;
--	hdmi-phandle = <&hdmi>;
--};
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 5c2593f346f8..b110c6d5133e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19924,7 +19924,7 @@ F:	sound/soc/sti/
- STI CEC DRIVER
- M:	Alain Volmat <alain.volmat@foss.st.com>
- S:	Maintained
--F:	Documentation/devicetree/bindings/media/stih-cec.txt
-+F:	Documentation/devicetree/bindings/media/cec/st,stih-cec.yaml
- F:	drivers/media/cec/platform/sti/
- 
- STK1160 USB VIDEO CAPTURE DRIVER
--- 
-2.34.1
+>
+> >
+> > arch_scaleu_cpu_capacity is already a per_cpu variable so accessing it
+> > should be pretty cheap.
+>
+> Yes and no, as you said this is per-cpu variable and would access them
+> from one CPU, which is running that loop. They will have different pages
+> and addresses so cache lines on that CPU. to avoiding trashing a cache
+> lines on this running CPU let's read that capacity once, before the
+> loop. Let's use the new arg to pass that value via one of the
+> registers. In such, only one cache line would have to fetch that data
+> into.
+>
+> So I thought this simple sg_policy->max would do the trick w/o a lot
+> of hassle.
 
+For the shared mode, everything is located in sugov_next_freq_shared
+so you don't need to save the max value with your proposal above to
+change sugov_iowait_apply interface.
+
+This should be doable as well for single mode
+
+> >
+> > Thought ?
+> >
+>
+> I can change that and drop the sg_policy->max and call differently
+> those capacity values. I will have to unfortunately drop Viresh's ACKs,
+> since this will be a way different code.
+>
+> Thanks Vincent for the suggestion. Do you want me to go further with
+> such approach and send a v3?
+
+Don't know what Rafael and Viresh think but it seems that we don't
+need to save the return of arch_scale_cpu_capacity in ->max field but
+directly use it
