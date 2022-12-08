@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B4636472A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 221196472A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:15:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbiLHPPj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S230211AbiLHPPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:15:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiLHPOd (ORCPT
+        with ESMTP id S230151AbiLHPOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:14:33 -0500
+        Thu, 8 Dec 2022 10:14:34 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CA0699F3E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:14:25 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4977ABA3B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:14:26 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E74661F7D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 15:14:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D674C433B5;
-        Thu,  8 Dec 2022 15:14:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B88C61F7C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 15:14:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB2EEC433C1;
+        Thu,  8 Dec 2022 15:14:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670512464;
-        bh=zTmncM0WxJ5kdI/AaCxtRQosZClPsUDSPGCXdWDYCjE=;
+        s=k20201202; t=1670512465;
+        bh=Efq5ukaDJ2ts0dWvrsIKmLu4t+yi7P/WceV654akUco=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d6mqwmoF20NyV8UTjI5S2Jf8S9ynQfH5OaTxtoukHI3DvSdML6c5L7XOawTdR9m8R
-         7bbXd8wDmKX+kQkRM1LzXVCLjfvuwhB28tgxZcqLudelIIk5l9xdicPr469YL/qSvM
-         AQIFYLU/C11ZQB5eq8yCiERyMuTC3bzCSYn0DdIh+d4Sv2xZJkFieOSilpT4lfn6DV
-         451jKkzEs+uReKIc7Hw1C6AwDkgqxow/jJzFpHYxXM8kRdnpaH7VgTsx2DBStgDt1z
-         SZ6ejS3++cuTwjNvNuH9PM43bQSf3BXGDutytacPSKsHtakx6v3xuZZh2cnC31KPt2
-         epH+SPzakJQIA==
+        b=t+6qIkS34HzWkqwr1Qnuodm0vPwocNi7IE+dJqiZH0srusbkvR3o9BS/oSZdYyPYJ
+         R0oCtxpU3t/TZqf6lhu+V8b4sx1IDCBe+qgRyBONFiBnvBgaCKIjNQu1HXnHHEAFjY
+         c5JoHVn8Dm3jLsrRHqtzPnlXFYPREesRkzYdBIPVZh76pLubUFkp/gQuFx0o+ceKfN
+         B4TQ6DX5o5pxQFp/cTosPvFlRtYPwqTM3SadQPIJAxFwAI+aFjoAU2RGIHvmW0iww8
+         c6bqQFCWC46Nf5O+SGAm+DEnj+w8pxhGJvsevoYANOFeS8rmLvxaGCH7zbl887lJ2+
+         6FITrXOCs2fsg==
 From:   Oded Gabbay <ogabbay@kernel.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     Ohad Sharabi <osharabi@habana.ai>
-Subject: [PATCH 22/26] habanalabs: fix dmabuf to export only required size
-Date:   Thu,  8 Dec 2022 17:13:46 +0200
-Message-Id: <20221208151350.1833823-22-ogabbay@kernel.org>
+Cc:     Tomer Tayar <ttayar@habana.ai>
+Subject: [PATCH 23/26] habanalabs: fix handling of wait CS for interrupting signals
+Date:   Thu,  8 Dec 2022 17:13:47 +0200
+Message-Id: <20221208151350.1833823-23-ogabbay@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221208151350.1833823-1-ogabbay@kernel.org>
 References: <20221208151350.1833823-1-ogabbay@kernel.org>
@@ -52,177 +52,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ohad Sharabi <osharabi@habana.ai>
+From: Tomer Tayar <ttayar@habana.ai>
 
-This patch fixes a bug that was found in the dmabuf flow.
-Bug description as found on Gaudi2 device:
-1. User allocates 4MB of device memory
-    - Note that although the allocation size was 4MB the HMMU allocated
-      a full page of 768MB to back the request.
-    - The user gets a memory handle that points to a single page (768MB)
-    - Mapping the handle, the user gets virtual address to the start of
-      the page.
-2. User exports the buffer
-3. User registers the exported buffer in the importer. This flow has
-   a callback to the exporter which in turn converts the phys_page_pack
-   to an SG list for the importer. This SG list is of single entry of
-   size 768MB. However, the size that was passed to the importer was
-   only 4MB.
+The -ERESTARTSYS return value is not handled correctly when a signal is
+received while waiting for CS completion.
+This can lead to bad output values to user when waiting for a single CS
+completion, and more severe, it can cause a non-stopping loop when
+waiting to multi-CS completion and until a CS timeout.
 
-The solution for this is to make sure the importer gets exposure only
-to the exported size.
+Fix the handling and exit the waiting if this return value is received.
 
-This will be done by fixing the SG created by the exporter to be of
-the total size of the actual exported memory requested by the user.
-
-Signed-off-by: Ohad Sharabi <osharabi@habana.ai>
+Signed-off-by: Tomer Tayar <ttayar@habana.ai>
 Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
 Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
 ---
- drivers/misc/habanalabs/common/habanalabs.h |  2 ++
- drivers/misc/habanalabs/common/memory.c     | 35 +++++++++++++++------
- 2 files changed, 28 insertions(+), 9 deletions(-)
+ .../misc/habanalabs/common/command_submission.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/misc/habanalabs/common/habanalabs.h b/drivers/misc/habanalabs/common/habanalabs.h
-index ef5a765f3313..de715c91a87e 100644
---- a/drivers/misc/habanalabs/common/habanalabs.h
-+++ b/drivers/misc/habanalabs/common/habanalabs.h
-@@ -2120,6 +2120,7 @@ struct hl_vm_hw_block_list_node {
-  * @pages: the physical page array.
-  * @npages: num physical pages in the pack.
-  * @total_size: total size of all the pages in this list.
-+ * @exported_size: buffer exported size.
-  * @node: used to attach to deletion list that is used when all the allocations are cleared
-  *        at the teardown of the context.
-  * @mapping_cnt: number of shared mappings.
-@@ -2136,6 +2137,7 @@ struct hl_vm_phys_pg_pack {
- 	u64			*pages;
- 	u64			npages;
- 	u64			total_size;
-+	u64			exported_size;
- 	struct list_head	node;
- 	atomic_t		mapping_cnt;
- 	u32			asid;
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index c7c27ffa6309..3f05bb398c70 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -1548,10 +1548,10 @@ static int set_dma_sg(struct scatterlist *sg, u64 bar_address, u64 chunk_size,
- }
- 
- static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64 *pages, u64 npages,
--						u64 page_size, struct device *dev,
--						enum dma_data_direction dir)
-+						u64 page_size, u64 exported_size,
-+						struct device *dev, enum dma_data_direction dir)
- {
--	u64 chunk_size, bar_address, dma_max_seg_size;
-+	u64 chunk_size, bar_address, dma_max_seg_size, cur_size_to_export, cur_npages;
- 	struct asic_fixed_properties *prop;
- 	int rc, i, j, nents, cur_page;
- 	struct scatterlist *sg;
-@@ -1577,16 +1577,23 @@ static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64
- 	if (!sgt)
- 		return ERR_PTR(-ENOMEM);
- 
-+	/* remove export size restrictions in case not explicitly defined */
-+	cur_size_to_export = exported_size ? exported_size : (npages * page_size);
-+
- 	/* If the size of each page is larger than the dma max segment size,
- 	 * then we can't combine pages and the number of entries in the SGL
- 	 * will just be the
- 	 * <number of pages> * <chunks of max segment size in each page>
- 	 */
--	if (page_size > dma_max_seg_size)
--		nents = npages * DIV_ROUND_UP_ULL(page_size, dma_max_seg_size);
--	else
-+	if (page_size > dma_max_seg_size) {
-+		/* we should limit number of pages according to the exported size */
-+		cur_npages = DIV_ROUND_UP_SECTOR_T(cur_size_to_export, page_size);
-+		nents = cur_npages * DIV_ROUND_UP_SECTOR_T(page_size, dma_max_seg_size);
-+	} else {
-+		cur_npages = npages;
-+
- 		/* Get number of non-contiguous chunks */
--		for (i = 1, nents = 1, chunk_size = page_size ; i < npages ; i++) {
-+		for (i = 1, nents = 1, chunk_size = page_size ; i < cur_npages ; i++) {
- 			if (pages[i - 1] + page_size != pages[i] ||
- 					chunk_size + page_size > dma_max_seg_size) {
- 				nents++;
-@@ -1596,6 +1603,7 @@ static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64
- 
- 			chunk_size += page_size;
- 		}
-+	}
- 
- 	rc = sg_alloc_table(sgt, nents, GFP_KERNEL | __GFP_ZERO);
- 	if (rc)
-@@ -1618,7 +1626,8 @@ static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64
- 			else
- 				cur_device_address += dma_max_seg_size;
- 
--			chunk_size = min(size_left, dma_max_seg_size);
-+			/* make sure not to export over exported size */
-+			chunk_size = min3(size_left, dma_max_seg_size, cur_size_to_export);
- 
- 			bar_address = hdev->dram_pci_bar_start + cur_device_address;
- 
-@@ -1626,6 +1635,8 @@ static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64
- 			if (rc)
- 				goto error_unmap;
- 
-+			cur_size_to_export -= chunk_size;
-+
- 			if (size_left > dma_max_seg_size) {
- 				size_left -= dma_max_seg_size;
- 			} else {
-@@ -1637,7 +1648,7 @@ static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64
- 		/* Merge pages and put them into the scatterlist */
- 		for_each_sgtable_dma_sg(sgt, sg, i) {
- 			chunk_size = page_size;
--			for (j = cur_page + 1 ; j < npages ; j++) {
-+			for (j = cur_page + 1 ; j < cur_npages ; j++) {
- 				if (pages[j - 1] + page_size != pages[j] ||
- 						chunk_size + page_size > dma_max_seg_size)
- 					break;
-@@ -1648,10 +1659,13 @@ static struct sg_table *alloc_sgt_from_device_pages(struct hl_device *hdev, u64
- 			bar_address = hdev->dram_pci_bar_start +
- 					(pages[cur_page] - prop->dram_base_address);
- 
-+			/* make sure not to export over exported size */
-+			chunk_size = min(chunk_size, cur_size_to_export);
- 			rc = set_dma_sg(sg, bar_address, chunk_size, dev, dir);
- 			if (rc)
- 				goto error_unmap;
- 
-+			cur_size_to_export -= chunk_size;
- 			cur_page = j;
- 		}
+diff --git a/drivers/misc/habanalabs/common/command_submission.c b/drivers/misc/habanalabs/common/command_submission.c
+index cf3b82efc65c..0ec8cdcbb1f5 100644
+--- a/drivers/misc/habanalabs/common/command_submission.c
++++ b/drivers/misc/habanalabs/common/command_submission.c
+@@ -2590,7 +2590,9 @@ static int hl_wait_for_fence(struct hl_ctx *ctx, u64 seq, struct hl_fence *fence
+ 		*status = CS_WAIT_STATUS_BUSY;
  	}
-@@ -1722,6 +1736,7 @@ static struct sg_table *hl_map_dmabuf(struct dma_buf_attachment *attachment,
- 						phys_pg_pack->pages,
- 						phys_pg_pack->npages,
- 						phys_pg_pack->page_size,
-+						phys_pg_pack->exported_size,
- 						attachment->dev,
- 						dir);
- 	else
-@@ -1729,6 +1744,7 @@ static struct sg_table *hl_map_dmabuf(struct dma_buf_attachment *attachment,
- 						&hl_dmabuf->device_address,
- 						1,
- 						hl_dmabuf->dmabuf->size,
-+						0,
- 						attachment->dev,
- 						dir);
  
-@@ -2033,6 +2049,7 @@ static int export_dmabuf_from_addr(struct hl_ctx *ctx, u64 addr, u64 size, u64 o
- 		if (rc)
- 			goto dec_memhash_export_cnt;
+-	if (error == -ETIMEDOUT || error == -EIO)
++	if (completion_rc == -ERESTARTSYS)
++		rc = completion_rc;
++	else if (error == -ETIMEDOUT || error == -EIO)
+ 		rc = error;
  
-+		phys_pg_pack->exported_size = size;
- 		hl_dmabuf->phys_pg_pack = phys_pg_pack;
- 		hl_dmabuf->memhash_hnode = hnode;
- 	} else {
+ 	return rc;
+@@ -2849,6 +2851,9 @@ static int hl_wait_multi_cs_completion(struct multi_cs_data *mcs_data,
+ 	if (completion_rc > 0)
+ 		mcs_data->timestamp = mcs_compl->timestamp;
+ 
++	if (completion_rc == -ERESTARTSYS)
++		return completion_rc;
++
+ 	mcs_data->wait_status = completion_rc;
+ 
+ 	return 0;
+@@ -2994,15 +2999,15 @@ static int hl_multi_cs_wait_ioctl(struct hl_fpriv *hpriv, void *data)
+ free_seq_arr:
+ 	kfree(cs_seq_arr);
+ 
+-	if (rc)
+-		return rc;
+-
+-	if (mcs_data.wait_status == -ERESTARTSYS) {
++	if (rc == -ERESTARTSYS) {
+ 		dev_err_ratelimited(hdev->dev,
+ 				"user process got signal while waiting for Multi-CS\n");
+-		return -EINTR;
++		rc = -EINTR;
+ 	}
+ 
++	if (rc)
++		return rc;
++
+ 	/* update output args */
+ 	memset(args, 0, sizeof(*args));
+ 
 -- 
 2.25.1
 
