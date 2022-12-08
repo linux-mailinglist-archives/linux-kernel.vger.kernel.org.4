@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 446AE6477F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:29:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8405647800
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:32:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbiLHV3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:29:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
+        id S229543AbiLHVcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:32:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbiLHV3H (ORCPT
+        with ESMTP id S229470AbiLHVcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:29:07 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF88426B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:29:06 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3fe3bedbb16so27814027b3.15
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:29:06 -0800 (PST)
+        Thu, 8 Dec 2022 16:32:48 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400EC1209C
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:32:47 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id r18so2195994pgr.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:32:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=1/7SmmzO1fjUhk6gqNU1IGSXCaBrn6wr7PS0uHHL0Y4=;
-        b=LqiYpvieBDCbLQwkb+CSQO3e5kvlO9YkgEAx+uj4dvnOMSYSbFp+eB6H7weFJnTz89
-         8MDyvy5lu8E6NOlVICNsMMIWd2RXsQrhEHP/T+ym9fr0388elXolqAQVV5XMtGyPc7hB
-         mh47hi5HEFtu4bMGkuw7sLC+CgMhhQDK3rFxEm+R8vsaFvB3a8j6j2zQv0P+wJGMQLDy
-         6qYqDgN4YpiZmvCgZNbe6NfpIeJGuTrFf6M+9a2bJ+nkDnbJl61wH4k79YmSG333Qxbj
-         9U7xGHcetB4fBU33IHmW5ZSKzsib8LREKjD5mpb4io1ayunr/o9VMJFRteWlgb2E3MvY
-         WTSg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+TrQiFZlVHCDTQZCh8d0lNxTCa2DqXYRVLa5t6bBFo4=;
+        b=HoGLKZMHw915NF5vqn7lXXRKSXbZ1SPCMMapkTLnUmxiXPa7OuhV6wJjen2dNpuBB9
+         kSmJN6yLnBh8zJnIOmyf9cW3UehPdl84indT46fiDhl/boDQEOAR4T1CqhthfV0JRk+A
+         TRM2ZcEpi+aDQXUw5lceStPgq4Ott6/LOdkFN3kBz26KL5IdqHNI8JyxOa8miefCSQVC
+         KvtXbAUET8S3spLckG3ejH+N+iSWyvvCykclszNnMhVgJETG5s7V7kduWqPubfnyCX0G
+         nvZ7C6FcRtJZhGdRxnjk5zBk0l/riQ2e+wRVnu7GaXTEGkUUeh1sgsokZRdrD7unngSe
+         jZJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1/7SmmzO1fjUhk6gqNU1IGSXCaBrn6wr7PS0uHHL0Y4=;
-        b=ZJsi8B3DmdV+7c+76Oa5NGZ/x/UMGH++wfmlpgzMEZKUk4makQZhstEPZhBxrQX/S6
-         6eVZTkxE60Xgss7noz6e9AlLbIDSkUeU71UOx6PC65uQ5ZEYvqsIwroti8j8i7rTs0JD
-         21t78Shtx1UtUn532Q+WC/+3hJrDrvst5Oug73LQgcflrfEG39F/bq8nMPfgXHHB0Xz/
-         0g8jwubP4JpeB1yFc5+FestbxTGPxh67M2zBuIRlYeaBmnTTmzyRfZZm6q6zRDAMdVMN
-         3DHR6pK3rPEZtHFwj45YUS0t+jSxHzfX9qlTVsu/QEwm/DRPx/zf2lePcu+8rBIHKF4q
-         6RHg==
-X-Gm-Message-State: ANoB5pkKYmU9SsWu5LhjU78lk/xjHDQt73UwDgmjuHmZX/npqiPB3cpE
-        tvEHudsLipOWv8wnRdl3JY1VUlGrTgtbAi/p46RW8w==
-X-Google-Smtp-Source: AA0mqf5uSOfyS4zTT3VGBQCIxUQ4g9tCxEa+73pikowJ78eitpwdyfLrX+kPJHU3xsZsUmGtzI1+a4VpVYAb7VSEbSE1OQ==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:c924:bf6:54d9:20e9])
- (user=isaacmanjarres job=sendgmr) by 2002:a05:690c:902:b0:3f6:489a:a06f with
- SMTP id cb2-20020a05690c090200b003f6489aa06fmr10039866ywb.470.1670534945529;
- Thu, 08 Dec 2022 13:29:05 -0800 (PST)
-Date:   Thu,  8 Dec 2022 13:29:01 -0800
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
-Message-ID: <20221208212902.765781-1-isaacmanjarres@google.com>
-Subject: [PATCH RESEND v1] loop: Fix the max_loop commandline argument
- treatment when it is set to 0
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ken Chen <kenchen@google.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        stable@vger.kernel.org, kernel-team@android.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+TrQiFZlVHCDTQZCh8d0lNxTCa2DqXYRVLa5t6bBFo4=;
+        b=TQou1vnnV8VSOadvrIaJMSgQsRqoFLgaGtU1l+LX60Z839ouwJtCt/7MKccuDV2tX6
+         rDq4ZJy0Ia076v8OKJGRjfHM9mz1XAOpSMFJrD3fgKdjcel+frm4nm7LDC+0aMf08Xz5
+         G2PNoV35xjtIEp+ogoZeGJSo20tIIV+9yFDSf1jfIJRb/gNEFh7ta1qr1TLU2PrZ7P0J
+         JjthOxMHAoV3q04RPgdQW2jVUyTgsWT81PKHrIWqsACy5Xvwx5Qh+PKX6XspYrJOnz0B
+         xrE0dJdodJk5Uclu3O9qbA3JjBiOVfq+R+JgpqqvD7WzAxISSfklZFuugz6Gw4gf+4fr
+         rf/g==
+X-Gm-Message-State: ANoB5pkNrEilbmMRirye2toQYi0/a/flEqnbkz58U+y781b1cEzGSX9c
+        R5p9U+SFipuQfRy9xHRjl/w=
+X-Google-Smtp-Source: AA0mqf7M6QgtFTdNPWkN/TG+ZEgfifAkZcyXsSnNeA+4G+mvo23tR2sS09f4X9rcsRqBwgsLQAsELg==
+X-Received: by 2002:a62:ee14:0:b0:566:900d:6073 with SMTP id e20-20020a62ee14000000b00566900d6073mr2758766pfi.24.1670535166649;
+        Thu, 08 Dec 2022 13:32:46 -0800 (PST)
+Received: from fedora ([2601:644:8002:1c20::2c6b])
+        by smtp.gmail.com with ESMTPSA id 21-20020a621715000000b005609d3d3008sm16239132pfx.171.2022.12.08.13.32.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 13:32:46 -0800 (PST)
+Date:   Thu, 8 Dec 2022 13:32:43 -0800
+From:   Vishal Moola <vishal.moola@gmail.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mm: swap: Convert mark_page_lazyfree() to
+ mark_folio_lazyfree()
+Message-ID: <Y5JX+1qOuFi546og@fedora>
+References: <20221207023431.151008-1-wangkefeng.wang@huawei.com>
+ <20221207023431.151008-2-wangkefeng.wang@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207023431.151008-2-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,99 +74,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the max_loop commandline argument can be used to specify how
-many loop block devices are created at init time. If it is not
-specified on the commandline, CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block
-devices will be created.
+On Wed, Dec 07, 2022 at 10:34:31AM +0800, Kefeng Wang wrote:
+> @@ -402,7 +402,7 @@ extern void lru_add_drain_cpu(int cpu);
+>  extern void lru_add_drain_cpu_zone(struct zone *zone);
+>  extern void lru_add_drain_all(void);
+>  extern void deactivate_page(struct page *page);
+> -extern void mark_page_lazyfree(struct page *page);
+> +extern void mark_folio_lazyfree(struct folio *folio);
+>  extern void swap_setup(void);
 
-The max_loop commandline argument can be used to override the value of
-CONFIG_BLK_DEV_LOOP_MIN_COUNT. However, when max_loop is set to 0
-through the commandline, the current logic treats it as if it had not
-been set, and creates CONFIG_BLK_DEV_LOOP_MIN_COUNT devices anyway.
-
-Fix this by starting max_loop off as set to CONFIG_BLK_DEV_LOOP_MIN_COUNT.
-This preserves the intended behavior of creating
-CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block devices if the max_loop
-commandline parameter is not specified, and allowing max_loop to
-be respected for all values, including 0.
-
-This allows environments that can create all of their required loop
-block devices on demand to not have to unnecessarily preallocate loop
-block devices.
-
-Fixes: 732850827450 ("remove artificial software max_loop limit")
-Cc: stable@vger.kernel.org
-Cc: Ken Chen <kenchen@google.com>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- drivers/block/loop.c | 28 ++++++++++++----------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
-
-This is a resend because I misspelled the address for
-stable@vger.kernel.org the first time.
-
---Isaac
-
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index ad92192c7d61..d12d3d171ec4 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -1773,7 +1773,16 @@ static const struct block_device_operations lo_fops = {
- /*
-  * And now the modules code and kernel interface.
-  */
--static int max_loop;
-+
-+/*
-+ * If max_loop is specified, create that many devices upfront.
-+ * This also becomes a hard limit. If max_loop is not specified,
-+ * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
-+ * init time. Loop devices can be requested on-demand with the
-+ * /dev/loop-control interface, or be instantiated by accessing
-+ * a 'dead' device node.
-+ */
-+static int max_loop = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
- module_param(max_loop, int, 0444);
- MODULE_PARM_DESC(max_loop, "Maximum number of loop devices");
- module_param(max_part, int, 0444);
-@@ -2181,7 +2190,7 @@ MODULE_ALIAS("devname:loop-control");
- 
- static int __init loop_init(void)
- {
--	int i, nr;
-+	int i;
- 	int err;
- 
- 	part_shift = 0;
-@@ -2209,19 +2218,6 @@ static int __init loop_init(void)
- 		goto err_out;
- 	}
- 
--	/*
--	 * If max_loop is specified, create that many devices upfront.
--	 * This also becomes a hard limit. If max_loop is not specified,
--	 * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
--	 * init time. Loop devices can be requested on-demand with the
--	 * /dev/loop-control interface, or be instantiated by accessing
--	 * a 'dead' device node.
--	 */
--	if (max_loop)
--		nr = max_loop;
--	else
--		nr = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
--
- 	err = misc_register(&loop_misc);
- 	if (err < 0)
- 		goto err_out;
-@@ -2233,7 +2229,7 @@ static int __init loop_init(void)
- 	}
- 
- 	/* pre-create number of devices given by config or max_loop */
--	for (i = 0; i < nr; i++)
-+	for (i = 0; i < max_loop; i++)
- 		loop_add(i);
- 
- 	printk(KERN_INFO "loop: module loaded\n");
--- 
-2.39.0.rc1.256.g54fd8350bd-goog
-
+Can we rename this function to folio_mark_lazyfree() instead so it's more
+consistent with other the folio functions. Also I believe we can get rid of
+the 'extern' keyword.
