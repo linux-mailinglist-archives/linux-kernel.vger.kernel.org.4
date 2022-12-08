@@ -2,93 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1667646BDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 77659646BE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLHJ1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57250 "EHLO
+        id S230003AbiLHJ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:27:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiLHJ1n (ORCPT
+        with ESMTP id S229905AbiLHJ1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:27:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5B9DF01;
-        Thu,  8 Dec 2022 01:27:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 8 Dec 2022 04:27:53 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9521DA42;
+        Thu,  8 Dec 2022 01:27:50 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7AA0A61E32;
-        Thu,  8 Dec 2022 09:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83402C433C1;
-        Thu,  8 Dec 2022 09:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670491660;
-        bh=nYDQKYl6AfmksUUe3QUl1LuA/5DbK7++WISDhMXABeQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=evhG5/iAkrAQcfVfv+xgSTPcK0iGoj6oi9z71dSCl1yY45SFmuoX/sppTwbabYhCJ
-         VegQd8R0eq/y953guEZOEyWVrdJwJFl/U9Gn0TCZMpJ2uAwsvCCRWvmAMn9UNChX2e
-         YTdy9LTTUbAo0pgss5i5fCBeUwzWY56wGw1tAKPkpLbGFsIFbWfBE+sCGEp6Cgfwbp
-         O38krwtNC4XT2wKkw2pOmKODbW9vWqbXya3KuxzG6PUxeeSFXGn+Y9Q3QudIxACFov
-         Ibw5Orv2ro3YzvpzuJeNzn5PxhE1b1qzqRo/1yxnIfGFHcqzVK6hd3I15pejhD1wsV
-         8+KIvc8SU8Pjg==
-Date:   Thu, 8 Dec 2022 09:27:36 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Kristen Carlson Accardi <kristen@linux.intel.com>
-Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
-        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH v2 08/18] x86/sgx: Allow reclaiming up to 32 pages, but
- scan 16 by default
-Message-ID: <Y5GuCAXhSBQMj2Oy@kernel.org>
-References: <20221202183655.3767674-1-kristen@linux.intel.com>
- <20221202183655.3767674-9-kristen@linux.intel.com>
- <Y5GtyM92jE5/UJT3@kernel.org>
+        by mail.3ffe.de (Postfix) with ESMTPSA id 1BC14448;
+        Thu,  8 Dec 2022 10:27:49 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1670491669;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2R1Bw6RSyNPWkO+Irjl7dtJBDdipXBznfHNFG4kiq4g=;
+        b=N9pz6Hulf8OSnpbXqumzH6zy4v1Im2Kssmr8IE/azJYuVa8JgNBgykOllJPdSf9S5YxdqT
+        uX+6Rx1sdJC7wPmi+SJLCpEDgIqP38XSprJ2jLQWrB821ldU2egvVKVuvkhMqkqsVxqHkC
+        qFiffa+iIZCtq5WzWuod7qnh54lx5b6OcnRF9AHDOJ7EjSyqkL8mIMWVdVUNfzkWoO8lJc
+        xKRhtsn8CeHVNDUXG8c9ocvIIfFYavCgtuN/wLMtp5TYH0snqYp5MsWIjeHDQCrBszKlHo
+        9KSsMTA9nXU/RkafAkqOS6M0I+LNC1W3AbG5AWip4HdSZOIm80pXLDS82JTYRg==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5GtyM92jE5/UJT3@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 08 Dec 2022 10:27:48 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     horatiu.vultur@microchip.com
+Cc:     Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        daniel.machon@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, lars.povlsen@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, olteanv@gmail.com, pabeni@redhat.com,
+        richardcochran@gmail.com
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+In-Reply-To: <20221208092511.4122746-1-michael@walle.cc>
+References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
+ <20221208092511.4122746-1-michael@walle.cc>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 09:26:35AM +0000, Jarkko Sakkinen wrote:
-> On Fri, Dec 02, 2022 at 10:36:44AM -0800, Kristen Carlson Accardi wrote:
-> > From: Sean Christopherson <sean.j.christopherson@intel.com>
-> > 
-> > Modify sgx_reclaim_pages() to take a parameter that specifies the
-> > number of pages to scan for reclaiming. Specify a max value of
-> > 32, but scan 16 in the usual case. This allows the number of pages
-> > sgx_reclaim_pages() scans to be specified by the caller, and adjusted
-> > in future patches.
-> > 
-> > Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> > Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
-> > Cc: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kernel/cpu/sgx/main.c | 25 +++++++++++++++----------
-> >  1 file changed, 15 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
-> > index 83aaf5cea7b9..f201ca85212f 100644
-> > --- a/arch/x86/kernel/cpu/sgx/main.c
-> > +++ b/arch/x86/kernel/cpu/sgx/main.c
-> > @@ -18,6 +18,8 @@
-> >  #include "encl.h"
-> >  #include "encls.h"
-> >  
-> > +#define SGX_MAX_NR_TO_RECLAIM	32
+Am 2022-12-08 10:25, schrieb Michael Walle:
+> Hi Horatiu,
 > 
-> SGX_NR_TO_SCAN_MAX
+>> Currently lan966x, doesn't allow to run PTP over interfaces that are
+>> part of the bridge. The reason is when the lan966x was receiving a
+>> PTP frame (regardless if L2/IPv4/IPv6) the HW it would flood this
+>> frame.
+>> Now that it is possible to add VCAP rules to the HW, such to trap 
+>> these
+>> frames to the CPU, it is possible to run PTP also over interfaces that
+>> are part of the bridge.
+> 
+> This gives me:
+> 
+> # /etc/init.d/S65ptp4l start
+> Starting linuxptp daemon: OK
+> [   44.136870] vcap_val_rule:1678: keyset was not updated: -22
+> [   44.140196] vcap_val_rule:1678: keyset was not updated: -22
+> #
+> 
+> # ptp4l -v
+> 3.1.1
+> # uname -a
+> Linux buildroot 6.1.0-rc8-next-20221208+ #924 SMP Thu Dec  8 10:08:58
+> CET 2022 armv7l GNU/Linux
+> 
+> I don't know whats going on, but I'm happy to help with debugging with 
+> some
+> guidance.
 
-Would also deserve a descriptive comment.
+Oh, and linuxptp is running on eth0, no bridges are set up. linuxptp
+is started with "/usr/sbin/ptp4l -f /etc/linuxptp.cfg"
 
-BR, Jarkko
+# cat /etc/linuxptp.cfg
+# LinuxPTP configuration file for synchronizing the system clock to
+# a remote PTP master in slave-only mode.
+#
+# By default synchronize time in slave-only mode using UDP and hardware 
+time
+# stamps on eth0. If the difference to master is >1.0 second correct by
+# stepping the clock instead of adjusting the frequency.
+#
+# If you change the configuration don't forget to update the phc2sys
+# parameters accordingly in linuxptp-system-clock.service (systemd)
+# or the linuxptp SysV init script.
+
+[global]
+slaveOnly		1
+delay_mechanism		Auto
+network_transport	UDPv4
+time_stamping		hardware
+step_threshold		1.0
+
+[eth0]
+
+-michael
