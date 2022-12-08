@@ -2,148 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C151E646D4E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B44D646D57
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229936AbiLHKnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:43:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S230269AbiLHKnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:43:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLHKmp (ORCPT
+        with ESMTP id S229733AbiLHKnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:42:45 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1177DA52
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:39:15 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 130so952890pfu.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 02:39:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EM9XDkM0kdpm93Xos1U4iZn+vpJvsChiHhm6+GOqbHs=;
-        b=n0lYvR0R4CkYqr8Fn6qjW6uylGig6i3EjcFXXrXv49HU0Y4P6x+nJnhZvkrKgccznq
-         Tqiias5qApau128FrQO9qoAvTc+ZVnoA4Nrd54/AQEtY5P9NvL6hbBSWwk0xJkknbjQl
-         N2IcUrJsZzksddKavbVkDggnAgODQX9TZE2QR8sIXYg3EjY1vDf4RKnNtWzA8WJL6Dbh
-         /ciOOHroCIo+oInm/YPUx2YEVv1sneV8uDMapPPWlRoxO+KEeZgshEPHTklv5vgzX5rh
-         /b5kH6MmbhkiOJcpYpBOwF/9Ue+UNPGJeKAJmkECvomXg+yK4lEXKhgjk2cZNyy/ZQ/q
-         hrwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EM9XDkM0kdpm93Xos1U4iZn+vpJvsChiHhm6+GOqbHs=;
-        b=lI2cWEdvrvxp6sROhgHyuMVu338SO1Am3zi2P04L4tHHh5ofWi+Fj2laiBGdiBhYLI
-         ReTGdk9wT9RWoE5Wvlp5CnzEtCS/N4M7/5wfHJZL5yO5pum2o/kCjb8S60NUgU1QUH44
-         zAu3AIEBmditEQ5W1wGfbLVcGLlKq6EtThjKy1SASA4fcK844K+mL3ul8ymawyAHzbKy
-         Eg5m43gLucUSgeL23aqlpssmyfoHJSaGBfU9hp9RDcaR+rMB/mF8zGCndqIFmTfn4vFa
-         3ncmbD08gN+0pUANz1mDCFRtAexbvf5d9sDq2Uk4HKlE1zem5iDKVcRMbKQROvQv25E/
-         L4YA==
-X-Gm-Message-State: ANoB5pkzSe2sMoNe77Rj9A34AjOhesQb6M1ltQB3+wwe5cTD2JdnrkDH
-        MCf3Jqthe9DKPxQ56eCI5ic=
-X-Google-Smtp-Source: AA0mqf5JIMmFlKvvzXBqcMyNk9owDgwTNcql54ZieSry8plQ2MSuZEHkSMMefw7IfPngGzXsZyrFqQ==
-X-Received: by 2002:a05:6a00:84d:b0:56d:5709:a03e with SMTP id q13-20020a056a00084d00b0056d5709a03emr97619222pfk.23.1670495955216;
-        Thu, 08 Dec 2022 02:39:15 -0800 (PST)
-Received: from zoo868e (1-170-0-91.dynamic-ip.hinet.net. [1.170.0.91])
-        by smtp.gmail.com with ESMTPSA id fv3-20020a17090b0e8300b00217090ece49sm2624888pjb.31.2022.12.08.02.39.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 02:39:14 -0800 (PST)
-Date:   Thu, 8 Dec 2022 18:39:12 +0800
-From:   Matt Jan <zoo868e@gmail.com>
-To:     Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
-Subject: [PATCH v2 2/3] staging: vme_user: remove unnecessary spaces
-Message-ID: <20221208103912.GA100281@zoo868e>
+        Thu, 8 Dec 2022 05:43:19 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89121222;
+        Thu,  8 Dec 2022 02:40:26 -0800 (PST)
+Received: from desky.lan (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 893EB25B;
+        Thu,  8 Dec 2022 11:40:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670496023;
+        bh=ab3VDBBlRhkk1OCm+eM9aIt0zkYjaGuasNx+kTETGB4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NcuWxdUAooti/wS8UrXxku4R8b30Fb+FkevjbueyMSUXpAN4K+05fGzHheelm+naP
+         ZiGKIEIA+cJuJhCdyXA83ZJLDNRWQwEo/soJmAsO9pWSM+WsM/JJ9+e16sRO4uHBhX
+         ghN+fenSpn6jVQ4kJQOaplqDCZRDcFK4JPrR/JYw=
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?q?Krzysztof=20Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Subject: [PATCH v5 0/8] i2c-atr and FPDLink
+Date:   Thu,  8 Dec 2022 12:39:58 +0200
+Message-Id: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unnecessary spaces before function pointer arguments in
-vme_bridge.h. This is done with command ':%s/) (/)('.
+Hi,
 
-Signed-off-by: Matt Jan <zoo868e@gmail.com>
----
- drivers/staging/vme_user/vme_bridge.h | 32 +++++++++++++--------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
+You can find v4 of the series from:
 
-diff --git a/drivers/staging/vme_user/vme_bridge.h b/drivers/staging/vme_user/vme_bridge.h
-index e17a8f7de165..5da2643e20d5 100644
---- a/drivers/staging/vme_user/vme_bridge.h
-+++ b/drivers/staging/vme_user/vme_bridge.h
-@@ -128,45 +128,45 @@ struct vme_bridge {
- 	struct mutex irq_mtx;
- 
- 	/* Slave Functions */
--	int (*slave_get) (struct vme_slave_resource *, int *,
-+	int (*slave_get)(struct vme_slave_resource *, int *,
- 		unsigned long long *, unsigned long long *, dma_addr_t *,
- 		u32 *, u32 *);
--	int (*slave_set) (struct vme_slave_resource *, int, unsigned long long,
-+	int (*slave_set)(struct vme_slave_resource *, int, unsigned long long,
- 		unsigned long long, dma_addr_t, u32, u32);
- 
- 	/* Master Functions */
--	int (*master_get) (struct vme_master_resource *, int *,
-+	int (*master_get)(struct vme_master_resource *, int *,
- 		unsigned long long *, unsigned long long *, u32 *, u32 *,
- 		u32 *);
--	int (*master_set) (struct vme_master_resource *, int,
-+	int (*master_set)(struct vme_master_resource *, int,
- 		unsigned long long, unsigned long long,  u32, u32, u32);
--	ssize_t (*master_read) (struct vme_master_resource *, void *, size_t,
-+	ssize_t (*master_read)(struct vme_master_resource *, void *, size_t,
- 		loff_t);
--	ssize_t (*master_write) (struct vme_master_resource *, void *, size_t,
-+	ssize_t (*master_write)(struct vme_master_resource *, void *, size_t,
- 		loff_t);
--	unsigned int (*master_rmw) (struct vme_master_resource *, unsigned int,
-+	unsigned int (*master_rmw)(struct vme_master_resource *, unsigned int,
- 		unsigned int, unsigned int, loff_t);
- 
- 	/* DMA Functions */
--	int (*dma_list_add) (struct vme_dma_list *, struct vme_dma_attr *,
-+	int (*dma_list_add)(struct vme_dma_list *, struct vme_dma_attr *,
- 		struct vme_dma_attr *, size_t);
--	int (*dma_list_exec) (struct vme_dma_list *);
--	int (*dma_list_empty) (struct vme_dma_list *);
-+	int (*dma_list_exec)(struct vme_dma_list *);
-+	int (*dma_list_empty)(struct vme_dma_list *);
- 
- 	/* Interrupt Functions */
--	void (*irq_set) (struct vme_bridge *, int, int, int);
--	int (*irq_generate) (struct vme_bridge *, int, int);
-+	void (*irq_set)(struct vme_bridge *, int, int, int);
-+	int (*irq_generate)(struct vme_bridge *, int, int);
- 
- 	/* Location monitor functions */
--	int (*lm_set) (struct vme_lm_resource *, unsigned long long, u32, u32);
--	int (*lm_get) (struct vme_lm_resource *, unsigned long long *, u32 *,
-+	int (*lm_set)(struct vme_lm_resource *, unsigned long long, u32, u32);
-+	int (*lm_get)(struct vme_lm_resource *, unsigned long long *, u32 *,
- 		u32 *);
- 	int (*lm_attach)(struct vme_lm_resource *, int,
- 			 void (*callback)(void *), void *);
--	int (*lm_detach) (struct vme_lm_resource *, int);
-+	int (*lm_detach)(struct vme_lm_resource *, int);
- 
- 	/* CR/CSR space functions */
--	int (*slot_get) (struct vme_bridge *);
-+	int (*slot_get)(struct vme_bridge *);
- 
- 	/* Bridge parent interface */
- 	void *(*alloc_consistent)(struct device *dev, size_t size,
+https://lore.kernel.org/all/20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com/
+
+You can find a longer introduction of the series in that version's cover
+letter.
+
+There has been a lot of changes to the DT bindings and the i2c-atr code in this
+version, but they are all fixes and cleanups, no architectural changes. The
+FPDLink drivers have not been changed, except to reflect the changes in the
+DT.
+
+I will send a diff between v4 and v5 to give a better idea of the changes.
+
+One thing that was discussed a bit but not handled in this version is the
+i2c-pool/i2c-alias topic. I believe we have three options: 1) use fixed
+addresses, defined in DT, 2) get the addresses from an i2c-pool, 3) dynamically
+reserve the addresses at runtime. The current series uses 2).
+
+ Tomi
+
+Luca Ceresoli (2):
+  i2c: core: let adapters be notified of client attach/detach
+  i2c: add I2C Address Translator (ATR) support
+
+Tomi Valkeinen (6):
+  dt-bindings: media: add bindings for TI DS90UB913
+  dt-bindings: media: add bindings for TI DS90UB953
+  dt-bindings: media: add bindings for TI DS90UB960
+  media: i2c: add DS90UB960 driver
+  media: i2c: add DS90UB913 driver
+  media: i2c: add DS90UB953 driver
+
+ .../bindings/media/i2c/ti,ds90ub913.yaml      |  121 +
+ .../bindings/media/i2c/ti,ds90ub953.yaml      |  112 +
+ .../bindings/media/i2c/ti,ds90ub960.yaml      |  358 ++
+ Documentation/i2c/index.rst                   |    1 +
+ Documentation/i2c/muxes/i2c-atr.rst           |   78 +
+ MAINTAINERS                                   |    8 +
+ drivers/i2c/Kconfig                           |    9 +
+ drivers/i2c/Makefile                          |    1 +
+ drivers/i2c/i2c-atr.c                         |  503 ++
+ drivers/i2c/i2c-core-base.c                   |   18 +-
+ drivers/media/i2c/Kconfig                     |   47 +
+ drivers/media/i2c/Makefile                    |    3 +
+ drivers/media/i2c/ds90ub913.c                 |  892 ++++
+ drivers/media/i2c/ds90ub953.c                 | 1607 +++++++
+ drivers/media/i2c/ds90ub960.c                 | 4195 +++++++++++++++++
+ include/linux/i2c-atr.h                       |   82 +
+ include/linux/i2c.h                           |   16 +
+ include/media/i2c/ds90ub9xx.h                 |   16 +
+ 18 files changed, 8066 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub953.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+ create mode 100644 Documentation/i2c/muxes/i2c-atr.rst
+ create mode 100644 drivers/i2c/i2c-atr.c
+ create mode 100644 drivers/media/i2c/ds90ub913.c
+ create mode 100644 drivers/media/i2c/ds90ub953.c
+ create mode 100644 drivers/media/i2c/ds90ub960.c
+ create mode 100644 include/linux/i2c-atr.h
+ create mode 100644 include/media/i2c/ds90ub9xx.h
+
 -- 
-2.25.1
-v2: Resend the correct patch set, noted by Greg Kroah-Hartmamn <gregkh@linuxfoundation.org>
+2.34.1
 
