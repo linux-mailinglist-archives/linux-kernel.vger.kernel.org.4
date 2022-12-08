@@ -2,89 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8D36475A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E6E26475AA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:34:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbiLHSdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:33:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S230099AbiLHSep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbiLHSdJ (ORCPT
+        with ESMTP id S229891AbiLHSeW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:33:09 -0500
-Received: from server.eikelenboom.it (server.eikelenboom.it [91.121.65.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252707A199;
-        Thu,  8 Dec 2022 10:31:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=eikelenboom.it; s=20180706; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=xh7NYgKqJIs6p/O05J4xYYF4pKK9kYdP7khjJXgOgSk=; b=F7fd1PyDPZxieCswJjDDZ9UCbv
-        nF3RnxOIAWJRm0w4ju2cI30eMoaciQQ9bUN5Tu3wW1SP3oSEqMKWGyD673jHM2Nxa3zHg3+x7vy+t
-        46VY3PQjvgDB4euRFgOSr13UQ5ByKjXwwIsHGM1eliLUwALKifBOtlA4mPnGMCSfm04Y=;
-Received: from 131-195-250-62.ftth.glasoperator.nl ([62.250.195.131]:58874 helo=[172.16.1.50])
-        by server.eikelenboom.it with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <linux@eikelenboom.it>)
-        id 1p3LhV-0002BF-8r; Thu, 08 Dec 2022 19:32:53 +0100
-Message-ID: <c5dc1c91-dd32-e233-6029-10b175fc1eff@eikelenboom.it>
-Date:   Thu, 8 Dec 2022 19:31:40 +0100
+        Thu, 8 Dec 2022 13:34:22 -0500
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65549B294
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:33:56 -0800 (PST)
+Received: by mail-pj1-x102b.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso2437370pjh.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:33:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3HMnEdvlSF5TjjjrupZOysPGDweIaS3qD4bjjLotW48=;
+        b=KE7SYRHqlqq8QkfVRH+aj5xt+UojUw/LjLkt04Mk33NpQt8FmxscR/m0rESsgU7iou
+         hs3k530a6Nlc5wvphwXX/GwbcNynh5tBwKPHYG6Dlo5aonRwQc9tJkPnqX0uZUTIBOhp
+         pQRoJWNjCM2NdrntCc241rXSsNInrTt1YhDAjfI2mtja0Rtb2C07/tj/ggrh90NhIsKc
+         SuKzAZ0WEZDAjyM34QsXXFMsc99zHfeEmg+5qutqLe5DWCGdPy2WFJyLMQ1z9QH7YFGj
+         f981OOSr1zCwl+I1ISonvF5sdNwUdDkYP6BPM7pP7mVl9FkQqHOP03wWry0uJP/Y5DEr
+         426g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3HMnEdvlSF5TjjjrupZOysPGDweIaS3qD4bjjLotW48=;
+        b=1CEufh+yWjgcAktT9/wo95JrIlUSP0KZAYpiH7iJTWcAu4w/y28WlA0qIHXbjdsSQ8
+         tL8PsFEWQGt2C2oSpWTsdGmnKzZyiNAQHi6bdA0mhk3ODUhOfnhLkYfqh/qL8mcK4RpE
+         nAmj1gGi4OjW3afpBeiw0HjPYfXWiqE7+z4ErCD5T5aBR0nd8rsBLg9mMsOq3DzFFW+w
+         LXyjBiRwvMqW9kg2KGGua4F/uDmmrYDWxd43/gaGOefL/11SwR5GdBp27+3W3/bbGWWx
+         VlO7mL0RCovC9u8v+5dPqyLd77i/Naz/jpMLPJ7M/SmwTshJb0ROHydCWM+plyKGvo+G
+         Qeig==
+X-Gm-Message-State: ANoB5pmCSQIyekQ79E80WGRhY5AUcRCzNP5WeeHtT0BcBQ9IH+KQ6DrN
+        f+I+ZFxzgn7rnayTGwsmYvfMZzvOC/TIYN0OaGbONg==
+X-Google-Smtp-Source: AA0mqf7v9g7E7bWC/SwAnZzMQJjPNqcL7NCSx9bBhwK1qoxmDIDfQ2miJHi8NJFOjjeloV1lv0mzWXlBlxmWDysMHCU=
+X-Received: by 2002:a17:903:3052:b0:189:63ef:ef3b with SMTP id
+ u18-20020a170903305200b0018963efef3bmr64459851pla.112.1670524436153; Thu, 08
+ Dec 2022 10:33:56 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: Xen + linux 6.1.0-rc8, network to guest VM not working after
- commit ad7f402ae4f466647c3a669b8a6f3e5d4271c84a fixing XSA-423
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Ross Lagerwall <ross.lagerwall@citrix.com>,
-        Juergen Gross <jgross@suse.com>,
-        Xen-devel <xen-devel@lists.xen.org>, Paul Durrant <paul@xen.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-References: <2f364567-3598-2d86-ae3d-e0fabad4704a@eikelenboom.it>
- <56054539-4a02-5310-b93f-6baacaf8e007@citrix.com>
-Content-Language: nl-NL, en-US
-From:   Sander Eikelenboom <linux@eikelenboom.it>
-In-Reply-To: <56054539-4a02-5310-b93f-6baacaf8e007@citrix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207154939.2532830-1-jeffxu@google.com> <202212080809.687CC8BC23@keescook>
+In-Reply-To: <202212080809.687CC8BC23@keescook>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 8 Dec 2022 10:33:19 -0800
+Message-ID: <CALmYWFukzdw4e3RHWRsdXvYr1RZs7Bx6NZ3AK91hoArgVy-RxQ@mail.gmail.com>
+Subject: Re: [PATCH v6 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 00:00, Andrew Cooper wrote:
-> On 07/12/2022 21:42, Sander Eikelenboom wrote:
->> Hi Ross / Juergen,
->>
->> I just updated my linux kernel to the latest of Linus his tree which
->> included commit ad7f402ae4f466647c3a669b8a6f3e5d4271c84a fixing XSA-423.
->>
->> Unfortunately when using this kernel I can't SSH anymore into the Xen
->> guest I start, but I don't see any apparent failures either.
->> A straight revert of the commit
->> ad7f402ae4f466647c3a669b8a6f3e5d4271c84a makes networking function
->> normally again.
->>
->> I have added some of the logging below, perhaps it at gives some idea
->> off the state around the Xen network front and backend.
->>
->> Any ideas or a test patch that I could run to shed some more light on
->> what is going on ?
-> 
-> XSA-423 was buggy.  Fix and discussion at:
-> 
-> https://lore.kernel.org/xen-devel/681773dd-6264-63ac-a3b5-a9182b9e0cc1@suse.com/T/#t
-> 
-> ~Andrew
+On Thu, Dec 8, 2022 at 8:13 AM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Wed, Dec 07, 2022 at 03:49:33PM +0000, jeffxu@chromium.org wrote:
+> > This is V6 version of patch: see [4] [5] [6] [7] for previous versions.
+>
+> When sending a new version, can you include an overview of what changed
+> between this version and the prior version? This helps reviewers who are
+> following along, so it's easier to focus our attention on the
+> differences. Also, it's helpful to version the links:
+>
+> > [4] https://lwn.net/Articles/890096/
+> > [5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
+> > [6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+> > [7] https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+>
+> e.g.:
+>
+> v6:
+> - moved foo to bar
+> - improve comments for baz
+> v5: https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
+> v3: https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
+> v2: ...etc
+>
+Will do!
+Much appreciated for helping me  through the process of my first patch
+in the kernel.
 
-Thanks for the pointer Andrew, that fix works for me as well!
-What a difference a few characters can make :)
+Jeff
 
---
-Sander
+> -Kees
+>
+> --
+> Kees Cook
