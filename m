@@ -2,112 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4EF64741A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6981A647421
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiLHQVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
+        id S230139AbiLHQXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:23:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiLHQVd (ORCPT
+        with ESMTP id S229658AbiLHQXO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:21:33 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FEC06FF01
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:21:31 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id v13-20020a17090a6b0d00b00219c3be9830so2040283pjj.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:21:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hrJ14ayLT7F+1zAXfd85zeuS9jwgRhVrcw7Y0+tLb6Y=;
-        b=g8P4/eojTrI2HBCiA4zp/WCQXL2NPFnOjDEnV/senXcKqmtpvz8/sl35IibIlf56Xb
-         ZynllzhNzGK/ud3dS9sa5QvNDOO/hi6CMtTwElRCKkJcwqr16oyYBna2FSFSeQmU9wko
-         JEFCS20QBntq7LbVs0aCBuYQzFzL9J9+gjq70=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hrJ14ayLT7F+1zAXfd85zeuS9jwgRhVrcw7Y0+tLb6Y=;
-        b=xMLEq620ESWiCtGUIF/3HZApGXaxB6W1uR9nNODXCt0l9NbXc/xUKipyTcjDjB6Dp1
-         Bd30g1jrpOfAyoUbJ1gtG0lXToh+he/P7Ds2Y/a4Ab0gqGXpqxwX7+ahVAVRs5ueJ5CN
-         SOSiry1eJS9/JhCq2nsMa4dobGrDm2QM1EGuVSJ0XlvPFm7Fnc2JpGX/ucdJKFsZVROP
-         Y0tDstA+m5wYvx1eVzNLhCOUR2rnDczhEJ2sN+fmu1L+uzG7yw/wIMYHUQE1jzrB090L
-         0t9lIudIdaBUJau1ntSbjL9/DxVwRJOh3WbRakAbs9St785ReteD7Dr5MWYnqpAjawtG
-         uz7A==
-X-Gm-Message-State: ANoB5plvFYXzUqEF4gfXrnMWEOQdQYNHvgzwhmgw7DdTV2p6IBv/KLF0
-        0m9pibdVtpqql7WPk/70757G3A==
-X-Google-Smtp-Source: AA0mqf7RMfVU6OSBfzQOkqOeCkx3TWMEkSgjK0ClXrEprodhsyI5WvH+XKjOP1ImKWPf16MmgfyfaA==
-X-Received: by 2002:a17:90a:9f46:b0:219:b1db:f7e3 with SMTP id q6-20020a17090a9f4600b00219b1dbf7e3mr23917526pjv.64.1670516490729;
-        Thu, 08 Dec 2022 08:21:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id pc16-20020a17090b3b9000b00212cf2fe8c3sm7924158pjb.1.2022.12.08.08.21.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:21:30 -0800 (PST)
-Date:   Thu, 8 Dec 2022 08:21:29 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     jeffxu@chromium.org
-Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v6 2/6] selftests/memfd: add tests for F_SEAL_EXEC
-Message-ID: <202212080818.28476A4@keescook>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <20221207154939.2532830-3-jeffxu@google.com>
+        Thu, 8 Dec 2022 11:23:14 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2071.outbound.protection.outlook.com [40.107.223.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B758C45A30;
+        Thu,  8 Dec 2022 08:23:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HfYaqoGCMKgM+PIxirjG7mARij2QoB2bhxjjgvHa46gxrvSaEsFgZKhxpp3zfHM7UQH6g1PEle7yxOqiAWI5FUFiSuW3pImC5yWw6eGLW3rm4Y7Av9JmnIvIqv3N5cGHDtnSY4rt1YsQuoBPtM0F8K5c5Rrxt0r4vU4Es1kjOQxpf+1Zu1+KnCMDwOmvY0OZtkbEjAhkDf9fqRGY2rs6IQMIHyh5EGqiwjJxC5v22Nflyi9bEEq6v/hE+j1hLanyEHLZ7MMg7RFZ/nHlMe3Xk0eiW+Lg3cAw1EpzUIGeEPSrm6j0xwjr5dkxBNkDk/42UGQD6N0pzKDSXYmtu65IdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=mm8JJSdTkjSjTmZq22MWrS28qNCU95/+FY4zoxpBUEs=;
+ b=Ls0ZVrQlTR9WIDddF3DGWmotoOBwMnKSmwHBXY23xVcuRDgGbhXTt0xxZxQVxVENhr2ad0F9muNt9amQ0ioX1gdLxf5DiqgIrLMcDxD/hP+9S72rKhb92WIJQujB/maNzZAWgPbvJJFNKGBwvXylIFuaIVj99p/N+WjWHhBzx8tlENIBZ6I80JS1j50TA3cXrDpma3u8AzrDswk034EJte7rsF9bNBnhddwOyNKKX9KWJQr2o6sgY/0TfY1yNCU3GyO31AKc2xoWXdPOuwTSP4qB3Cvhu6jARPRaUvh/ds9mmtlf4YpC75BZjsAqQwywEp4zJ4Qz9iH9/9stCynAOg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mm8JJSdTkjSjTmZq22MWrS28qNCU95/+FY4zoxpBUEs=;
+ b=LBX0aSKiVpfkVkMo0bZ9hh8qJIezIn6vfOANy+X2CiXxilNBk4BZZcwcIaRniRUHAYz/h4DQg10ihKN7z3OVhcnsvHN5ue0a3fWRSw9xyzXIkonTZTNj+mPT0LE33dgRcGlIqpIj7+gHr1kt08xYGmnUTqXtwsDrQuztAkWgBsc=
+Received: from BN9PR03CA0622.namprd03.prod.outlook.com (2603:10b6:408:106::27)
+ by PH7PR12MB7869.namprd12.prod.outlook.com (2603:10b6:510:27e::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
+ 2022 16:23:07 +0000
+Received: from BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:106:cafe::2b) by BN9PR03CA0622.outlook.office365.com
+ (2603:10b6:408:106::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16 via Frontend
+ Transport; Thu, 8 Dec 2022 16:23:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT100.mail.protection.outlook.com (10.13.177.100) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5901.16 via Frontend Transport; Thu, 8 Dec 2022 16:23:07 +0000
+Received: from tlendack-t1.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 8 Dec
+ 2022 10:22:55 -0600
+From:   Tom Lendacky <thomas.lendacky@amd.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
+Subject: [PATCH net 0/2] AMD XGBE active/passive cable fixes
+Date:   Thu, 8 Dec 2022 10:22:23 -0600
+Message-ID: <cover.1670516545.git.thomas.lendacky@amd.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207154939.2532830-3-jeffxu@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT100:EE_|PH7PR12MB7869:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95789793-82c7-438c-6486-08dad9387d89
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dONnh9DOPJ53dHGnH/1InzMb4aG1qycha1Vn6xnK06X03I+OG4NEp+QSzTBliPYG7Z4kbJ9j4fbaXRApKzSBNJiHzFowqh54NegcRYTJTr9jPJ5p+/TRcEQUnmb1RpBdLIO4A4AHSeMHKPVThQDTC4mjE0qbJ47MH1VFiYJ7fQCkZ7SgenpNN8pqDsBG2nnfC4YJdagrD3GetBvqtNLH+AUNfnqWXami/WfKQJyHat9P8kJ9m8ojVXacMC2bT3wLk3KLRVYlwWznqJgT1BD5XtBcK+3lZBmaDbc/B4gtZlwheyOc0UJz+V169xX+DoOJdl8gRL/kp/R7tDgetYA9nU6qJSiLzTeNwsANndvwS2RyDUlxY3zU+40oNkMTM4RtU8T4gnlaOGVF1bgAZuLPmJRDVnVvJh5VayO3Z/K9vdU/1ZhIRUjb0CtRfTaQJ56NFrBwn5M88LmuSiNET/r2G7gLNzKnzQEeZSzzVXHY8EAn7fkgDrR51uMvYVNWGNQoxkVOUzHzA55owjXFmcdPSnqVKCCFU0DZrzD2XRdUlxKEUH+UYjZBj3ubgW12p0K1jvvF61xuBFri9T3oqtifhUe3pa4egic73mWkHoJFd00jXv6wk+WtnGW63XJ7cAD8gK/wSLltxJkaPuQiDVwcweSRd+ZdwqLdJjTmEYRn7HqkJBD3Gkx8fYK8uQ/OOBu4ZhHBu6yzoDlsLkuF9xzdqRraoosRLLCIn8Cpx+tva8Y=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(86362001)(6666004)(7696005)(40480700001)(54906003)(26005)(110136005)(41300700001)(316002)(16526019)(36756003)(186003)(336012)(8936002)(40460700003)(70206006)(426003)(70586007)(2616005)(82310400005)(8676002)(5660300002)(4326008)(2906002)(478600001)(36860700001)(82740400003)(47076005)(4744005)(81166007)(356005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 16:23:07.3429
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95789793-82c7-438c-6486-08dad9387d89
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT100.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7869
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 03:49:35PM +0000, jeffxu@chromium.org wrote:
-> From: Daniel Verkamp <dverkamp@chromium.org>
-> 
-> Basic tests to ensure that user/group/other execute bits cannot be
-> changed after applying F_SEAL_EXEC to a memfd.
-> 
-> Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
-> Co-developed-by: Jeff Xu <jeffxu@google.com>
-> Signed-off-by: Jeff Xu <jeffxu@google.com>
-> ---
->  tools/testing/selftests/memfd/memfd_test.c | 129 ++++++++++++++++++++-
->  1 file changed, 128 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-> index 94df2692e6e4..1d7e7b36bbdd 100644
-> --- a/tools/testing/selftests/memfd/memfd_test.c
-> +++ b/tools/testing/selftests/memfd/memfd_test.c
-> @@ -28,12 +28,44 @@
->  #define MFD_DEF_SIZE 8192
->  #define STACK_SIZE 65536
->  
-> +#ifndef F_SEAL_EXEC
-> +#define F_SEAL_EXEC	0x0020
-> +#endif
-> +
-> +#ifndef MAX_PATH
-> +#define MAX_PATH 256
-> +#endif
+This series fixes some issues related to active and passive cables and
+consists of two patches:
 
-I'd expect this to be named PATH_MAX, and it shouldn't need to have an
-#ifdef? That's a regular POSIX define.
+- Provide proper recognition of active cables.
 
-Otherwise, looks good. Though it'd be nice if this test use
-kselftest_harness.h, but that's not your problem. :)
+- Only check for a minimum supported speed for passive cables.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Tom Lendacky (2):
+  net: amd-xgbe: Fix logic around active and passive cables
+  net: amd-xgbe: Check only the minimum speed for active/passive cables
+
+ drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c | 23 +++++++--------------
+ 1 file changed, 8 insertions(+), 15 deletions(-)
 
 -- 
-Kees Cook
+2.38.1
+
