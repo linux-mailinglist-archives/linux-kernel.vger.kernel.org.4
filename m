@@ -2,111 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CE8647799
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88BC264779A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:59:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiLHU7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:59:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
+        id S229876AbiLHU7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:59:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiLHU7H (ORCPT
+        with ESMTP id S229677AbiLHU7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:59:07 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9887726FC;
-        Thu,  8 Dec 2022 12:59:06 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id n21so6870515ejb.9;
-        Thu, 08 Dec 2022 12:59:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=2uWthW/PoKfC02t1PaCjD6R5HbN1AuXQTJXkZCHE+YY=;
-        b=MmnxtYapb1tWKOt5UnNiQ50t6JfjSaObmvZa9LHlnCnsyJLPhgzfbg0O+ARqNk1b2T
-         Iibz2OIB+1N9V+0Ptw1fa+ywzBwARGYBCNCLZOyGv3BEba2lXVw+SgGgL8Qz3twBv+uO
-         5inxZ7C3lgG64UliXO9ETDOP1UzM4HzoCGeMR3Bb7XbrIJYLuaymbfIFcdl3+uuWddAD
-         dnBDfQ6CcbGyc2Wo9j5Aib2LW5kIDOCsDGbadJga9MRYFgJfUWX0LFNeg+J6LqlmsSg0
-         oKmSSBKI5aBbm/tHxZlPGCVNcJeGVUEuq+cpoRdczZnCXGHlKoT/mIw5Q+emTMhHjgCD
-         SUBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2uWthW/PoKfC02t1PaCjD6R5HbN1AuXQTJXkZCHE+YY=;
-        b=Ua+B6R4KP9TrudNGzHTdYUqUy2j3UhHuJyXRfdKfBNnJKhc8gxhKWcecx4u6+Zg+rK
-         7KP5vjL7jXwYrmOKpl89F5959zbjfV0deMoCSW//44YCB/G2RtUGLF1svurrH/+tAVH1
-         YYF+KOar4t7ZsOLMJeitJyHpec+vVYCGrSClqq7dJWmMVTo+C7jP+mUOJZStJRCJzGCX
-         8AJlxsGNq5vr8hbJMrtFZKIn6LBZhQTtdQglqjhT0Sl9CCCYC9ZMDuzHE8meGDvZgFmh
-         Hobmq7DIOufrenDCNDn1KrvyAOCWzodM6LHsVRQrXZjJzy7B+cGwYQYYmzO8mB8CI9hj
-         Q3Zg==
-X-Gm-Message-State: ANoB5plRa5vthy94yoMV0slCGXCI6gUWveuAJSWepgK5VNwFoShEKKk8
-        V909OoF3xI68CTCD/LOGN+ZKVCdKq8gwc4EbjdQ=
-X-Google-Smtp-Source: AA0mqf4TZbKeyFx4CKL8mJSNkg1i0m8ENpo9jfVK5zMkFq9D/i/Tbc9xNhHkPb/J8xrS0UtiJUz5Ipmfcj/xQEyAwC0=
-X-Received: by 2002:a17:906:a083:b0:7b2:b15e:322f with SMTP id
- q3-20020a170906a08300b007b2b15e322fmr76404842ejy.75.1670533144943; Thu, 08
- Dec 2022 12:59:04 -0800 (PST)
+        Thu, 8 Dec 2022 15:59:14 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D5C1010
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:59:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Jb9j7hoUMtJrjIlX4VkfqzP4vBPOAIAet/v5+Ib4wy0=; b=ugalxz2fQQ9utCCE5YX4aE1dVs
+        aQGxLZglMEbkiuoNTITgIi4+UIR0kY5qALFNc4uxXI5OcRa6Lj4Mz2cy6nvmQZxk/Sh+0nRUYYQl+
+        5A1bIZ4YMXVacWKJIKZ3lzkXKa1S85DxH30zvLAUMrQ7ew3sez9uWAfk2CWgWsN0AqrVcNbYP5+9Q
+        a7a012ZZuNZ3aXTWoFW8CuGwgDn9WScQY0BbMlEFWjsvMNO1S+iOf8jbu+VBH+KsgvdBXkJrCJiFa
+        j1hIe8I+XrWsNM6AfDBHYiH7+cKa36D53rM+Eg3r/l7eb5/FXObtWQe1EJXIspLnO0/WzJjXXN6/l
+        rIDGsA2g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p3NzA-007Jqa-4l; Thu, 08 Dec 2022 20:59:16 +0000
+Date:   Thu, 8 Dec 2022 20:59:16 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-mm@kvack.org, damon@lists.linux.dev,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        sj@kernel.org
+Subject: Re: [PATCH v3 4/4] mm/swap: Convert deactivate_page() to
+ folio_deactivate()
+Message-ID: <Y5JQJINs4LPG510r@casper.infradead.org>
+References: <20221208203503.20665-1-vishal.moola@gmail.com>
+ <20221208203503.20665-5-vishal.moola@gmail.com>
 MIME-Version: 1.0
-References: <20221205210354.11846-1-andrew.smirnov@gmail.com> <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
-In-Reply-To: <CADyDSO4uh6b+sSZTkZ2_DR923=bA=kXgK1LqUMkknCMzf_DSwQ@mail.gmail.com>
-From:   Andrey Smirnov <andrew.smirnov@gmail.com>
-Date:   Thu, 8 Dec 2022 12:58:53 -0800
-Message-ID: <CAHQ1cqGaL5v4PARTZU6_0tfSCz3=9b1THz-D-Bg1G64hBV+_Wg@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/2] Handling of non-numbered feature reports by hidraw
-To:     David Rheinsberg <david.rheinsberg@gmail.com>
-Cc:     linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208203503.20665-5-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 7:46 AM David Rheinsberg
-<david.rheinsberg@gmail.com> wrote:
->
-> Hi
->
-> On Mon, 5 Dec 2022 at 22:04, Andrey Smirnov <andrew.smirnov@gmail.com> wrote:
-> > I'm working on a firmware of a device that exposes a HID interface via
-> > USB and/or BLE and uses, among other things, non-numbered feature
-> > reports. Included in this series are two paches I had to create in
-> > order for hidraw devices created for aforementioned subsystems to
-> > behave in the same way when exerciesd by the same test tool.
-> >
-> > I don't know if the patches are acceptable as-is WRT to not breaking
-> > existing userspace, hence the RFC tag.
->
-> Can you elaborate why you remove the special handling from USBHID but
-> add it to UHID? They both operate logically on the same level, so
-> shouldn't we simply adjust uhid to include the report-id in buf[0]?
->
-> Also, you override buf[0] in UHID, so I wonder what UHID currently
-> returns there?
->
-> IOW, can you elaborate a bit what the current behavior of each of the
-> involved modules is, and what behavior you would expect? This would
-> allow to better understand what you are trying to achieve. The more
-> context you can give, the easier it is to understand what happens
-> there.
->
+On Thu, Dec 08, 2022 at 12:35:03PM -0800, Vishal Moola (Oracle) wrote:
+> Deactivate_page() has already been converted to use folios, this change
+> converts it to take in a folio argument instead of calling page_folio().
+> It also renames the function folio_deactivate() to be more consistent
+> with other folio functions.
+> 
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
 
-Sorry it's not very clear, so the difference between the cases is that
-in the case of UHID the report ID ends up being included as a part of
-"SET_FEATURE", so BlueZ checks UHID_DEV_NUMBERED_FEATURE_REPORTS,
-which is not set (correctly) and tries to send the whole payload. This
-ends up as a maxlen + 1 (extra byte) write to a property that is
-maxlen long, which gets rejected by device's BLE stack.
+Reviewed-by: Matthew Wilcox (Oracle) <willy@infradead.org>
 
-In the case of USBHID the problem happens in "GET_FEATURE" path. When
-userspace reads the expected data back it gets an extra 0 prepended to
-the payload, so all of the actual payload has an offset of 1. This
-doesn't happen with UHID, which I think is the correct behavior here.
-
-Hopefully that explains the difference, let me know if something is unclear
+(for future series like this, it's slightly fewer changes to introduce
+folio_deactivate() first and change deactivate_page() to be a wrapper.
+Then patches 2 & 3 in this series can just be converted straight to
+folio_deactivate() instead of being changed twice.  wouldn't ask
+you to redo the patch series at this point, but next time ...)
