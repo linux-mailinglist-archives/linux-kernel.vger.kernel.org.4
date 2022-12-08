@@ -2,204 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CDC1646B33
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F838646B39
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbiLHI5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:57:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57924 "EHLO
+        id S229680AbiLHI67 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:58:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiLHI46 (ORCPT
+        with ESMTP id S229486AbiLHI65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:56:58 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC835C0E2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:55:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670489755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qZzQND0XXn/ac1VVVRiwKzVF2wPIGejtH8QPoB1hHfA=;
-        b=QPFkG++A/8JL5La+pALQpMxgOwAt4ktwVCkc0B7GKmSOmsQdJwO6bUe02qtZHfivaxVdc3
-        G9Wjgdcy6CTAaGzTr8Cckc2sdx+1EbdNMrC++y5ZAPBbYS5RMOrBZy9yOPYliW8bDkf1S/
-        1Ay3qqX5PGov4onlFtRbv5LxaYRg05Q=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-662-gKV3ynqOMma1wpMWQ7f1hw-1; Thu, 08 Dec 2022 03:55:54 -0500
-X-MC-Unique: gKV3ynqOMma1wpMWQ7f1hw-1
-Received: by mail-wm1-f69.google.com with SMTP id m17-20020a05600c3b1100b003cf9cc47da5so500000wms.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:55:53 -0800 (PST)
+        Thu, 8 Dec 2022 03:58:57 -0500
+Received: from mail-yw1-x1142.google.com (mail-yw1-x1142.google.com [IPv6:2607:f8b0:4864:20::1142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F3D48438
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:58:56 -0800 (PST)
+Received: by mail-yw1-x1142.google.com with SMTP id 00721157ae682-3f15a6f72d0so7590757b3.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:58:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+z6PSdj+SoyIJ7Nd8mIIgQ9Xnp6sfeNAskU/07pZxCo=;
+        b=jSxpxvrsPiHvnSJI4ya5UcNrPjSDlxttFMfoVxtooPAPNQ1ri9nNmzFhsDvr17bS4j
+         +9DOTeOb3+wklf1I17M1MFBgeLVVnzFExUHCXAs8o3ANjfTn8rKdozny680URh8jSjOW
+         I5KbKdaIxi/5mRTiYnLj0oFsDCdL8GW05ppZ5qs7B3JsPOE9kuPPr57R36nA+Ex1hVgg
+         COjwn53hpwlgcSDZbtFPNK/fjpzkCTD215PaN2KyO5umdNScxiI0LGKRhCJ02BgHPxIv
+         36xkhI81REDNWqOj2QmUFl3W1nHV8UNTAnG39aTwvf6K8t7qK4sI17HBAjsx0v4MIc2+
+         gOgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qZzQND0XXn/ac1VVVRiwKzVF2wPIGejtH8QPoB1hHfA=;
-        b=iTm0MBcyF57aivC8W2cVlZmsqI2xnvmbIzmUgPlm81SasnqqFLSRZQNQJgpKflAZzr
-         uj6MbCFOwEg1qLxXG8CpI1Etz3TR5VOb1bDWVkJTWVtNbB8OM14VCgUL/vw159MXFeNP
-         gCaE1vEdrjLaSAynD7pO9Ui4FBlrw7MyXni9bkndc16hHPqRQxx0rc1LcTYfVkZUpzLm
-         nB4+K36XJV5rjTwKg3SwkQz4k34p8wckyGlbPuC8grdL5cAzH0jTqxdZzuQOZDB4YcUI
-         OR6uK/myfNIfXpMVSXBKgYPpyi04j4FX4TitvHgBeE4nRo62anCHbU3l3YVyjZhhxOLA
-         PYyA==
-X-Gm-Message-State: ANoB5pmaRRy6M3zvsN9W5SoSCVmEI9jQNExpvdICNN740opzgFNuqtV/
-        18+gZ1zQdTv3dxjHylGfVl5lHc7QwwesZ8X6OBN9mUyU/JqLPPgTm5EOSmbMJh5e4PePsGFMj/r
-        xOosq0jko3tLZe8SenqVHtGXY
-X-Received: by 2002:a5d:504d:0:b0:242:246c:2f89 with SMTP id h13-20020a5d504d000000b00242246c2f89mr22919584wrt.108.1670489752974;
-        Thu, 08 Dec 2022 00:55:52 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf668NfxbMXQWSDBD6iCzqqUG4mJSCJROvTfbJs0ERpg3lPeZTVH/8wev7o0MHbpIs1xArxqSg==
-X-Received: by 2002:a5d:504d:0:b0:242:246c:2f89 with SMTP id h13-20020a5d504d000000b00242246c2f89mr22919565wrt.108.1670489752626;
-        Thu, 08 Dec 2022 00:55:52 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id o29-20020adfa11d000000b0024278304ef6sm6288982wro.13.2022.12.08.00.55.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 00:55:52 -0800 (PST)
-Message-ID: <c904aa67-1add-119c-162f-e35d8243a11a@redhat.com>
-Date:   Thu, 8 Dec 2022 09:55:49 +0100
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+z6PSdj+SoyIJ7Nd8mIIgQ9Xnp6sfeNAskU/07pZxCo=;
+        b=Im68EVT04xNRgvqgEjMSevSUAPuyvINGCaywJCVat4uOY1Z3Vb3EIKB+PDQHlB94C8
+         6xu9fqEpp/7jfUpSDf8aftG5Q1EKgPvxslz97UuIhTBEq0WNnp5DxwjTLZZs23R2fN7G
+         j/VrNXecXRrMaXqnX1p2pR85Sbg4Lyd8cbIaXpeVKFZ+U5kXel7LthzcIC9J7HXu5xDt
+         8NBr1/zQ5Fd96aPMpV3GKceZQGIiew84MTl82I2mMi+AvSSkqHLxTqFws5DSCMj2QUP8
+         wfF/UMyXCCB8vc0LLSF3BMyC48P4GDdlzMe2XHAPnx8mNXmoYN6R/wFHw/MQrPIafxao
+         Hh9Q==
+X-Gm-Message-State: ANoB5pkfJ0gSYgHRzlueeSBLOzRp6y+gvo2RgQmPHvyIz64dmU2s79s4
+        6v/RuOT4kqNTpXjyFtBjiJYimdVNmCP0Nh4cBJ4=
+X-Google-Smtp-Source: AA0mqf48KLvHUgHgxpl14MTOl0U6QBrNCSo7/HqJqyaWspTkyIW40GVbYwebZbJpQQTFh1pPD831pm5LBWMWLl3SLZM=
+X-Received: by 2002:a81:8457:0:b0:3b8:1d18:90b2 with SMTP id
+ u84-20020a818457000000b003b81d1890b2mr58578733ywf.520.1670489935026; Thu, 08
+ Dec 2022 00:58:55 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH mm-unstable RFC 17/26] powerpc/mm: support
- __HAVE_ARCH_PTE_SWP_EXCLUSIVE on 32bit book3s
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <namit@vmware.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-alpha@vger.kernel.org" <linux-alpha@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-hexagon@vger.kernel.org" <linux-hexagon@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "openrisc@lists.librecores.org" <openrisc@lists.librecores.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-sh@vger.kernel.org" <linux-sh@vger.kernel.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-um@lists.infradead.org" <linux-um@lists.infradead.org>,
-        "linux-xtensa@linux-xtensa.org" <linux-xtensa@linux-xtensa.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-References: <20221206144730.163732-1-david@redhat.com>
- <20221206144730.163732-18-david@redhat.com>
- <8be167b6-3836-25c3-9f69-b8b3916ee5b4@csgroup.eu>
- <0b5b1303-8bcb-c19d-5f63-0e4a3517fea5@redhat.com>
-Organization: Red Hat
-In-Reply-To: <0b5b1303-8bcb-c19d-5f63-0e4a3517fea5@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Received: by 2002:a05:7010:62c7:b0:313:99e7:bf0d with HTTP; Thu, 8 Dec 2022
+ 00:58:54 -0800 (PST)
+Reply-To: info@oxfordfoundations.com
+From:   Prof Pierre Louise <contractorvoller@gmail.com>
+Date:   Thu, 8 Dec 2022 00:58:54 -0800
+Message-ID: <CAJ7R6hniXdZh01ehU=pnThVgNftxTXqu8R+ooprQrtc5Q=1H3w@mail.gmail.com>
+Subject: YOU HAVE BEEN CONSIDERED FOR THE OXFORD FOUNDATION GRANT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.1 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        UNDISC_MONEY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1142 listed in]
+        [list.dnswl.org]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [contractorvoller[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.1 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.12.22 09:52, David Hildenbrand wrote:
-> On 07.12.22 14:55, Christophe Leroy wrote:
->>
->>
->> Le 06/12/2022 à 15:47, David Hildenbrand a écrit :
->>> We already implemented support for 64bit book3s in commit bff9beaa2e80
->>> ("powerpc/pgtable: support __HAVE_ARCH_PTE_SWP_EXCLUSIVE for book3s")
->>>
->>> Let's support __HAVE_ARCH_PTE_SWP_EXCLUSIVE also in 32bit by reusing yet
->>> unused LSB 2 / MSB 29. There seems to be no real reason why that bit cannot
->>> be used, and reusing it avoids having to steal one bit from the swap
->>> offset.
->>>
->>> While at it, mask the type in __swp_entry().
->>>
->>> Cc: Michael Ellerman <mpe@ellerman.id.au>
->>> Cc: Nicholas Piggin <npiggin@gmail.com>
->>> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
->>> Signed-off-by: David Hildenbrand <david@redhat.com>
->>> ---
->>>     arch/powerpc/include/asm/book3s/32/pgtable.h | 38 +++++++++++++++++---
->>>     1 file changed, 33 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/include/asm/book3s/32/pgtable.h
->>> index 75823f39e042..8107835b38c1 100644
->>> --- a/arch/powerpc/include/asm/book3s/32/pgtable.h
->>> +++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
->>> @@ -42,6 +42,9 @@
->>>     #define _PMD_PRESENT_MASK (PAGE_MASK)
->>>     #define _PMD_BAD	(~PAGE_MASK)
->>>     
->>> +/* We borrow the _PAGE_USER bit to store the exclusive marker in swap PTEs. */
->>> +#define _PAGE_SWP_EXCLUSIVE	_PAGE_USER
->>> +
->>>     /* And here we include common definitions */
->>>     
->>>     #define _PAGE_KERNEL_RO		0
->>> @@ -363,17 +366,42 @@ static inline void __ptep_set_access_flags(struct vm_area_struct *vma,
->>>     #define pmd_page(pmd)		pfn_to_page(pmd_pfn(pmd))
->>>     
->>>     /*
->>> - * Encode and decode a swap entry.
->>> - * Note that the bits we use in a PTE for representing a swap entry
->>> - * must not include the _PAGE_PRESENT bit or the _PAGE_HASHPTE bit (if used).
->>> - *   -- paulus
->>> + * Encode/decode swap entries and swap PTEs. Swap PTEs are all PTEs that
->>> + * are !pte_none() && !pte_present().
->>> + *
->>> + * Format of swap PTEs (32bit PTEs):
->>> + *
->>> + *                         1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
->>> + *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
->>> + *   E H P <- type --> <----------------- offset ------------------>
->>
->> That's in reversed order. _PAGE_HASHPTE is bit 30 and should be on the
->> right hand side. Etc ...
-> 
-> Ugh, messed it up while converting back and forth between LSB 0 and MSB 0.
-> 
-> /*
->    * Format of swap PTEs (32bit PTEs):
->    *
->    *                         1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
->    *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
->    *   <----------------- offset ------------------> <- type --> E H P
-> 
-> 
+Oxford Foundation Trust
+The County Hall,
+13th Street. 47 W 13th St, New York, NY 10011
+Email:info@oxfordfoundations.com
+Phone:+1 305 590 8254
 
-Still wrong, the type is only 5 bits:
+Dear Cash Grant Beneficiary
 
-+ * Format of swap PTEs (32bit PTEs):
-+ *
-+ *                         1 1 1 1 1 1 1 1 1 2 2 2 2 2 2 2 2 2 2 3 3
-+ *   0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
-+ *   <----------------- offset --------------------> < type -> E H P
-+ *
+Your information mail has been received.
 
+I am Professor Pierre Louise, the authorization officer hired by
+the Oxford Grant Foundation; a British/American based charity organization to
+coordinate the selection program clearance and grant release process.
 
--- 
-Thanks,
+The main objective of this selection program basically aims at
+reaching out to individuals outside the United States by empowering
+and to make notable changes in improving the standard of living of
+people in the developing countries of the world and also in crisis
+torn regions including places that have experienced natural disasters
+in recent and past times.
 
-David / dhildenb
+Your details emerged along with Nine (9) other as beneficiaries of the
+$1,500,000.00 US Dollars Cash Grant/subvention in the selection program
+involving over 850,000 E-mail addresses drawn from shopping cash
+invoices.
+,
+Once the above correspondence by you has been received and verified to be
+authentic, you will be referred to our official paying bank.
 
+Sincerely.
+Professor pierre louise,
+Authorization/Claims Consultant
