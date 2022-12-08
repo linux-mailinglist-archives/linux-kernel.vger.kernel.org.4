@@ -2,146 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B661F646892
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0AA6646894
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiLHFYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 00:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S229530AbiLHF0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 00:26:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiLHFYA (ORCPT
+        with ESMTP id S229478AbiLHF01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 00:24:00 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B19A13EE;
-        Wed,  7 Dec 2022 21:22:10 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A76A622BB0;
-        Thu,  8 Dec 2022 05:22:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1670476926;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ACV4rT4gBkGjhfs+VCatmrCp7ZnekU2Vc70HRnY/zuM=;
-        b=QPqvb/DpJi4JdY0ueKrbo4U+osPUnwv923TMjuzc5/SBMKsgYXO6z7hzG6qXl8xNmCCYoe
-        SpcC5xDWfOKsuDjrzMZzhz/nGOMG65eOB6OdNSm25QdE+xnqtDyL79xyjRLJHO4V1xObLP
-        e45h8hBsbKjqKUxshiCCUB1Fo98YfXk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1670476926;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ACV4rT4gBkGjhfs+VCatmrCp7ZnekU2Vc70HRnY/zuM=;
-        b=9EUifSzgee1fhYYRgFFhXzVDIy33OVwWogjvHi3jkvinZxR/u5/dXjUaljBdqaI2rKTIT7
-        /8sp1dCLLlYQFPDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 05BA013254;
-        Thu,  8 Dec 2022 05:22:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id agBPAH50kWOLXwAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 08 Dec 2022 05:22:06 +0000
-Date:   Thu, 8 Dec 2022 06:22:04 +0100
-From:   Petr Vorel <pvorel@suse.cz>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     jarkko@kernel.org, zohar@linux.ibm.com, dhowells@redhat.com,
-        dwmw2@infradead.org, herbert@gondor.apana.org.au,
-        davem@davemloft.net, dmitry.kasatkin@gmail.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        noodles@fb.com, tiwai@suse.de, bp@suse.de,
-        kanth.ghatraju@oracle.com, konrad.wilk@oracle.com,
-        erpalmer@linux.vnet.ibm.com, coxu@redhat.com,
-        keyrings@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v2 02/10] KEYS: Add missing function documentation
-Message-ID: <Y5F0fP0MH+LUod4f@pevik>
-Reply-To: Petr Vorel <pvorel@suse.cz>
-References: <20221207171238.2945307-1-eric.snowberg@oracle.com>
- <20221207171238.2945307-3-eric.snowberg@oracle.com>
+        Thu, 8 Dec 2022 00:26:27 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EAC182
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 21:26:26 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id qk9so1339025ejc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 21:26:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qyAC9pGA3bM4rM543zM+YmJ53hSTj7w0+tIgvP3ytYE=;
+        b=mk7ikO7V+gLhSvJNXyc0Lk4Q5twTTGLGzvBjtcO50S2myHLd3dRMs3AplR6ldR1vYw
+         oTCXkBm/rTVIZ1aLvYupS9oaCIzAIKuMabD0ozybMvsi0Hnu+ZTmms7YRkl2GYxDN3K7
+         ut3jQ4mW2Z2HLPwkkXS8G6GWIEpUL4W+aT0z3kdE72owhIZJRy8GqL4WcMLiZj2kzkSf
+         OYa78jBZcIkAgQS38MmgzbexmjZvyDOecL0pAGinIWwEfk3l4Ahgp3UWs6qhTI2Pc3rx
+         4WNuIjJH7KTqhqX1Vb7zmRqc6p7T56oN1CaN7h8YWF4mq7K2b8ewUVd6kHpWL15GLzTt
+         BxSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qyAC9pGA3bM4rM543zM+YmJ53hSTj7w0+tIgvP3ytYE=;
+        b=Hvkj9rZUiZ5uIpuElTJX49YLDK6tSm+Y5eOyaRR4Awj8r3vnx2XgtxwQYWukBccgD8
+         QOQO74BlxY1A/sX03djO40Hhpg3mKJe4Xa9MNBgrBRgsqdRQ7RW0TS2XeEFMOpAcwbp0
+         H0R7Hkme0rKphKig161OjO/+oXdrYYDr/BHLZCz3mpTFeBHMSQQ/sLqRvEjVoSPQc/q2
+         Ce4oZrPmxiyregKWo3cfGrEK0Nz/T22FSzZtTSI5TzGwrGfMYBjKycLEKOGQKkepoziL
+         NIw1VfYgpvKoe1RdxGzpYXonmp7CL+RXjcKTLmuuYk/j5rT7Pp5W+aXiV1yJTCKCoUVU
+         zVNQ==
+X-Gm-Message-State: ANoB5plWBpFG0B4WKdDL1tVohifU8m7sTHtkCGe6MwEYubCKJCUdQy+m
+        TIjStSBcnCKlqMOgXcAugZwi5yfwdBcN393RHeM=
+X-Google-Smtp-Source: AA0mqf43fy1U/hpgFgSTREx9HqRRsJ39IsTXgb3/H/MmWwCZn8wtF2A329/yX7mw8nW7vz954oj7UeqlYFgpy7oH7kc=
+X-Received: by 2002:a17:906:ad86:b0:7c0:7e90:ec98 with SMTP id
+ la6-20020a170906ad8600b007c07e90ec98mr9243580ejb.537.1670477185246; Wed, 07
+ Dec 2022 21:26:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207171238.2945307-3-eric.snowberg@oracle.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7208:55a8:b0:5e:5428:fcf9 with HTTP; Wed, 7 Dec 2022
+ 21:26:24 -0800 (PST)
+Reply-To: abrahamamesse@outlook.com
+From:   Abraha Mamesse <bartolosimon105@gmail.com>
+Date:   Thu, 8 Dec 2022 05:26:24 +0000
+Message-ID: <CALmWg1jQaUWQ5gS3mUYd1LXXgpzeDH1hD3N44xpAfLUyUb=gKw@mail.gmail.com>
+Subject: /////////Good morning,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric,
-
-> Compiling with 'W=1' results in warnings that 'Function parameter or member
-> not described'
-
-> Add the missing parameters for
-> restrict_link_by_builtin_and_secondary_trusted and
-> restrict_link_to_builtin_trusted.
-
-> Use /* instead of /** for get_builtin_and_secondary_restriction, since
-> it is a static function.
-
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> ---
->  certs/system_keyring.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
-
-> diff --git a/certs/system_keyring.c b/certs/system_keyring.c
-> index 5042cc54fa5e..250148298690 100644
-> --- a/certs/system_keyring.c
-> +++ b/certs/system_keyring.c
-> @@ -33,7 +33,11 @@ extern __initconst const unsigned long system_certificate_list_size;
->  extern __initconst const unsigned long module_cert_size;
-
->  /**
-> - * restrict_link_to_builtin_trusted - Restrict keyring addition by built in CA
-> + * restrict_link_by_builtin_trusted - Restrict keyring addition by built in CA
-Hm, wrong function name restrict_link_to_builtin_trusted brought by:
-d3bfe84129f6 ("certs: Add a secondary system keyring that can be added to dynamically")
-
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restriction_key: A ring of keys that can be used to vouch for the new cert.
->   *
->   * Restrict the addition of keys into a keyring based on the key-to-be-added
->   * being vouched for by a key in the built in system keyring.
-> @@ -51,6 +55,10 @@ int restrict_link_by_builtin_trusted(struct key *dest_keyring,
->  /**
->   * restrict_link_by_builtin_and_secondary_trusted - Restrict keyring
->   *   addition by both builtin and secondary keyrings
-nit: missing dot at the end of the sentence (maybe can be fixed before merge).
-
-Obviously correct.
-
-Reviewed-by: Petr Vorel <pvorel@suse.cz>
-
-Kind regards,
-Petr
-
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @restrict_key: A ring of keys that can be used to vouch for the new cert.
->   *
->   * Restrict the addition of keys into a keyring based on the key-to-be-added
->   * being vouched for by a key in either the built-in or the secondary system
-> @@ -75,7 +83,7 @@ int restrict_link_by_builtin_and_secondary_trusted(
->  					  secondary_trusted_keys);
->  }
-
-> -/**
-> +/*
->   * Allocate a struct key_restriction for the "builtin and secondary trust"
->   * keyring. Only for use in system_trusted_keyring_init().
->   */
+I am contacting you again further to my previous email which you never
+responded to. Please confirm to me if you are still using this email
+address. However, I apologize for any inconvenience.
