@@ -2,100 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D86647701
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F291E647702
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:12:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiLHULs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:11:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S229853AbiLHUME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:12:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLHULr (ORCPT
+        with ESMTP id S229556AbiLHUMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:11:47 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7017171266
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:11:46 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id o5so3038663wrm.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JtbOrMo6wdNtyC/UhfcUZ9MIo03/XSa++ujJjTCLb48=;
-        b=JClcizhBWdIQUrnb+z7ZgDV8D5KRedOoIS1+bJ/Sa0k/D1sxMBItJf1fc/d4cuIt4v
-         J463B1dPxXnleFugUk+3E++AVrRUU7oBf4xT7a1E4mqdgRYZmr/lzsrEvpSIVlUNENwi
-         odOgaI8+FxRekXupCVBQ0J4G4Lkc4UWRyPRufoJhnojYP97ZdMyi11cvgqvHdYCmOcUL
-         SZGr9aen5/GyUaFsechv+dGGyiqTv4Bwllcb2xEPRvNcW+Sl4EJalaK6tbGRKnVike0W
-         X5yQfwvWQpigjRfC/i5KdNW32twsqMlWwa2Y/oCYguW8AoUvkQj9dC4mVuQA9SvP4xhs
-         BpkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JtbOrMo6wdNtyC/UhfcUZ9MIo03/XSa++ujJjTCLb48=;
-        b=jNVvgWpHMjC4IyW1pBx5h8jTOpnWwtMAihi0VeDEWT5tAvwvnp3Q9WUbn+GgRX5IjF
-         paaIE1wYwUdHV8XvsV1gv4PBQUMHTc7YGcjxZslDTNkUFzJkq7tBT6yHvbmcWuSeBe5S
-         DgPtDQyH7mxwjyvhZVD7RuR23u9SI6FQpmLRS/e/7q3Qbbio+sT2xkrcKI4ls5u1bt/q
-         YSIL1Zqc/BzGa3txuukfl4jEj8ZZfeIL+E4Ce+YKECXuueUfjS43WWyGJjWXneOnL27Z
-         zwXm0dVl6SBada135j7F6ElBCeoCQ3VU5HaXXXufHxvxvsxTk2cSwgMIIMuSmZrLURJJ
-         Kbmg==
-X-Gm-Message-State: ANoB5plkokAikkoF66bhtkz3RBqudmBdBpxLZswHVUzWCws0E+dWL+Pa
-        A5xKKmNYV6tAZJzKCj7aj2AgslxVHzyn2MSyOvE=
-X-Google-Smtp-Source: AA0mqf5Ac07J1dF2CBKqxEKulovREAc1KkD2Iet1HJgDc824s9ZWUjFXXpgNRjf8TbuPTQIdMAjA7g==
-X-Received: by 2002:a05:6000:1d84:b0:236:3686:797 with SMTP id bk4-20020a0560001d8400b0023636860797mr2168962wrb.65.1670530305011;
-        Thu, 08 Dec 2022 12:11:45 -0800 (PST)
-Received: from debian ([37.19.195.134])
-        by smtp.gmail.com with ESMTPSA id bs21-20020a056000071500b002428c4fb16asm2805773wrb.10.2022.12.08.12.11.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 12:11:44 -0800 (PST)
-Date:   Thu, 8 Dec 2022 15:11:41 -0500
-From:   Petar Gligoric <petar.gligor@gmail.com>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Petar Gligoric <petar.gligoric@rohde-schwarz.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Andi Kleen <ak@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Hagen Paul Pfeifer <hagen@jauu.net>
-Subject: Re: [PATCH v2 0/3] perf: introduce perf based task analyzer
-Message-ID: <Y5JE/ci+1nN9RrJQ@debian>
-References: <20221206154406.41941-1-petar.gligor@gmail.com>
- <CAM9d7cizPC3p0-Z1oYsDPofwNfZHyKYiJR5JXEcS31Q=mgzcLg@mail.gmail.com>
- <Y4/AfA2OYtlTkKwo@debian>
- <CAM9d7chLZVDg_-tnUh_qFYzchnpis-e7HYNDVM_OPjj_QXMeKQ@mail.gmail.com>
- <Y5HVdS3mlDruNyrl@debian>
- <CAM9d7ciX9ULwSy5G3cFZi7mMXrt_A52hwwk7L1m-oV_0P07_vw@mail.gmail.com>
+        Thu, 8 Dec 2022 15:12:02 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AC475BE8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:11:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1670530308; bh=np9LxRy0F0UdCuzWmhqg0f9pldJi1547pGyEjPm1Tr8=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=moIZhKblDc1NeAwvS0r4y7XrnQecYgMgWUX40zRAmq3aSyt8QDDw2ANPh+oWWy9j/
+         CG6SYK7VYTzo7EqN6khJmpyI+QVi4v0UqaaMyOH3JF3B8iacO9L5QdJAn3QNEu3bBY
+         BGFrvafwfnSrHgdNMoiDFZco++7n1yLECbsVsn4w=
+Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
+        via ip-206.mailobj.net [213.182.55.206]
+        Thu,  8 Dec 2022 21:11:48 +0100 (CET)
+X-EA-Auth: zYdqVgwlvkUQFlqk19DDdYMHtswHpddg1fTRrBgKdy/RWNkAlp0P7/7PZVfk0j/KJYshB62KH01tdfXVP/af82a1qGVR6Ahm
+Date:   Fri, 9 Dec 2022 01:41:43 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Jack Wang <jinpu.wang@cloud.ionos.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Saurabh Singh Sengar <ssengar@microsoft.com>,
+        Praveen Kumar <kumarpraveen@linux.microsoft.com>, drv@mailo.com
+Subject: [PATCH] scsi: pm8001: Use sysfs_emit in show function callsbacks
+Message-ID: <Y5JE/xI2NNbnox/A@qemulion>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAM9d7ciX9ULwSy5G3cFZi7mMXrt_A52hwwk7L1m-oV_0P07_vw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->On Thu, Dec 08, 2022 at 11:10:58AM -0800, Namhyung Kim wrote:
-> 
-> Then I have no problem with python.  Please take a look at the
-> scripts/python/bin directory to provide shortcuts for record/report.
-> 
-> Thanks,
-> Namhyung
-> 
-> 
+According to Documentation/filesystems/sysfs.rst, the show() callback
+function of kobject attributes should strictly use sysfs_emit instead
+of sprintf family functions.
+Issue identified using the coccinelle device_attr_show.cocci script.
 
-Great that we could resolve it! Regarding wrapper: I thought I added
-them or did you mean something else?
+Signed-off-by: Deepak R Varma <drv@mailo.com>
+---
+ drivers/scsi/pm8001/pm8001_ctl.c | 48 +++++++++++++++-----------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
 
-.../scripts/python/bin/tasks-analyzer-record |  2 +
-.../scripts/python/bin/tasks-analyzer-report |  3 +
+diff --git a/drivers/scsi/pm8001/pm8001_ctl.c b/drivers/scsi/pm8001/pm8001_ctl.c
+index 73f036bed128..8cfdf9b412c9 100644
+--- a/drivers/scsi/pm8001/pm8001_ctl.c
++++ b/drivers/scsi/pm8001/pm8001_ctl.c
+@@ -61,10 +61,10 @@ static ssize_t pm8001_ctl_mpi_interface_rev_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
 
-Best Regards,
-Petar
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%d\n",
++		return sysfs_emit(buf, "%d\n",
+ 			pm8001_ha->main_cfg_tbl.pm8001_tbl.interface_rev);
+ 	} else {
+-		return snprintf(buf, PAGE_SIZE, "%d\n",
++		return sysfs_emit(buf, "%d\n",
+ 			pm8001_ha->main_cfg_tbl.pm80xx_tbl.interface_rev);
+ 	}
+ }
+@@ -86,7 +86,7 @@ static ssize_t controller_fatal_error_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return sysfs_emit(buf, "%d\n",
+ 			pm8001_ha->controller_fatal_error);
+ }
+ static DEVICE_ATTR_RO(controller_fatal_error);
+@@ -107,13 +107,13 @@ static ssize_t pm8001_ctl_fw_version_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev >> 8),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm8001_tbl.firmware_rev));
+ 	} else {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.firmware_rev >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.firmware_rev >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.firmware_rev >> 8),
+@@ -138,7 +138,7 @@ static ssize_t pm8001_ctl_ila_version_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+ 	if (pm8001_ha->chip_id != chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.ila_version >> 8),
+@@ -164,7 +164,7 @@ static ssize_t pm8001_ctl_inactive_fw_version_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+ 	if (pm8001_ha->chip_id != chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%02x.%02x.%02x.%02x\n",
++		return sysfs_emit(buf, "%02x.%02x.%02x.%02x\n",
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 24),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 16),
+ 		(u8)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.inc_fw_version >> 8),
+@@ -191,10 +191,10 @@ static ssize_t pm8001_ctl_max_out_io_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%d\n",
++		return sysfs_emit(buf, "%d\n",
+ 			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_out_io);
+ 	} else {
+-		return snprintf(buf, PAGE_SIZE, "%d\n",
++		return sysfs_emit(buf, "%d\n",
+ 			pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_out_io);
+ 	}
+ }
+@@ -215,13 +215,11 @@ static ssize_t pm8001_ctl_max_devices_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%04d\n",
+-			(u16)(pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl >> 16)
+-			);
++		return sysfs_emit(buf, "%04d\n",
++			(u16)(pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl >> 16));
+ 	} else {
+-		return snprintf(buf, PAGE_SIZE, "%04d\n",
+-			(u16)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_sgl >> 16)
+-			);
++		return sysfs_emit(buf, "%04d\n",
++			(u16)(pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_sgl >> 16));
+ 	}
+ }
+ static DEVICE_ATTR(max_devices, S_IRUGO, pm8001_ctl_max_devices_show, NULL);
+@@ -242,13 +240,11 @@ static ssize_t pm8001_ctl_max_sg_list_show(struct device *cdev,
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+ 	if (pm8001_ha->chip_id == chip_8001) {
+-		return snprintf(buf, PAGE_SIZE, "%04d\n",
+-			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl & 0x0000FFFF
+-			);
++		return sysfs_emit(buf, "%04d\n",
++			pm8001_ha->main_cfg_tbl.pm8001_tbl.max_sgl & 0x0000FFFF);
+ 	} else {
+-		return snprintf(buf, PAGE_SIZE, "%04d\n",
+-			pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_sgl & 0x0000FFFF
+-			);
++		return sysfs_emit(buf, "%04d\n",
++			pm8001_ha->main_cfg_tbl.pm80xx_tbl.max_sgl & 0x0000FFFF);
+ 	}
+ }
+ static DEVICE_ATTR(max_sg_list, S_IRUGO, pm8001_ctl_max_sg_list_show, NULL);
+@@ -315,7 +311,7 @@ static ssize_t pm8001_ctl_host_sas_address_show(struct device *cdev,
+ 	struct Scsi_Host *shost = class_to_shost(cdev);
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+-	return snprintf(buf, PAGE_SIZE, "0x%016llx\n",
++	return sysfs_emit(buf, "0x%016llx\n",
+ 			be64_to_cpu(*(__be64 *)pm8001_ha->sas_addr));
+ }
+ static DEVICE_ATTR(host_sas_address, S_IRUGO,
+@@ -336,7 +332,7 @@ static ssize_t pm8001_ctl_logging_level_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+-	return snprintf(buf, PAGE_SIZE, "%08xh\n", pm8001_ha->logging_level);
++	return sysfs_emit(buf, "%08xh\n", pm8001_ha->logging_level);
+ }
+
+ static ssize_t pm8001_ctl_logging_level_store(struct device *cdev,
+@@ -517,7 +513,7 @@ static ssize_t event_log_size_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return sysfs_emit(buf, "%d\n",
+ 		pm8001_ha->main_cfg_tbl.pm80xx_tbl.event_log_size);
+ }
+ static DEVICE_ATTR_RO(event_log_size);
+@@ -604,7 +600,7 @@ static ssize_t non_fatal_count_show(struct device *cdev,
+ 	struct sas_ha_struct *sha = SHOST_TO_SAS_HA(shost);
+ 	struct pm8001_hba_info *pm8001_ha = sha->lldd_ha;
+
+-	return snprintf(buf, PAGE_SIZE, "%08x",
++	return sysfs_emit(buf, "%08x",
+ 			pm8001_ha->non_fatal_count);
+ }
+
+@@ -884,7 +880,7 @@ static ssize_t pm8001_show_update_fw(struct device *cdev,
+ 	if (pm8001_ha->fw_status != FLASH_IN_PROGRESS)
+ 		pm8001_ha->fw_status = FLASH_OK;
+
+-	return snprintf(buf, PAGE_SIZE, "status=%x %s\n",
++	return sysfs_emit(buf, "status=%x %s\n",
+ 			flash_error_table[i].err_code,
+ 			flash_error_table[i].reason);
+ }
+--
+2.34.1
+
+
 
