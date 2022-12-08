@@ -2,234 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14FCC646E02
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:05:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39F4646E1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiLHLEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:04:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40430 "EHLO
+        id S229735AbiLHLKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:10:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbiLHLDa (ORCPT
+        with ESMTP id S229813AbiLHLJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:03:30 -0500
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63ED8932F;
-        Thu,  8 Dec 2022 03:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670497303; x=1702033303;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NCnbh+fwg8DrIT+FYlYEQD8y0Pfiz4OuOe484jfsh6I=;
-  b=WF7M/M0gZYeL85DrZtTqCfCS6zkX/+m1a+msuXiVf8QOClDHFkDREDPJ
-   Rg1QZZy89VAuhlOntB7KooyI8ORtmKhEuz9G63FGEaKBxHFkFISUy18wW
-   QqdwUPt3yl/yePjty68Ku9HuTgdscq94KZtFSmLt13ehMOj4I//jA9dUC
-   FYarKEGn8QAr2+SPWRa3C+H1Dpk2i6fUcb+GEUQJnLWe5MsBzFN3D82xN
-   xO7bFVIMqt+CjWbHZTCQGnAYzk/fLO/JTkVczAn5aJFxXYyoNOx7dltQB
-   WREEfVF5a8He+ETJvrQkziWRXYrSeZ66k0twQmGg99KFA/HWxaBU3GvX7
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,227,1665417600"; 
-   d="scan'208";a="223333440"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 08 Dec 2022 19:01:43 +0800
-IronPort-SDR: iL4Xm1jd1bTg2a5A72vHqi8XeBtI03RDF+a46ZQnPaY+pk4a3XhQCJtgiZA2OLTks5kafZXKKU
- 7vGglxgSzpWdr7aHaOREUygpX976NJwpPG5CnI7/1Hsa79dcwH3svQZ0D/JjxuJCoq0f3grRjk
- E5ZlQiXQgcs0IXQenoM8SEgr4RgUMRWSqI4Tz9JqxwnRi5VX/M8pAXfWruF9Y20CZl41rVL+sc
- vZCzFt7ICGEL6ZvT7SoOz3m7BLzcXK1iByoFtblD4XcstAnMZB83ZyIOfg7+571dqwYC+fZbX6
- tEU=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 02:14:28 -0800
-IronPort-SDR: lH0I2LL8Td+V8zpKZDvQN2JXyuFfwFJ/WJwJHI4g3oCU4OlnnIcGij+ff7/scdguZZUCNa/fV3
- oUsBUre7SroxLel2sEwxi1V83Jg+lIsxL4spr3yVrSdv0H1Zav9wKxN4Sj7goW2Uia4TE8d8vC
- sqcT0kHSamh1GII5KG6vz1/0ZHywU5/cpRqbSiVPJ4qpb1lhSq6plpfnDdWuweLeloSNKC4mQZ
- YqXRhfXkPvWAetm/yNR1oTJkSOopt0hL53YsbYGChTzrBaJGaNYg2tCMKqtr9r5o8oI61YS8n/
- gkA=
-WDCIronportException: Internal
-Received: from dellx5.wdc.com (HELO x1-carbon.cphwdc) ([10.200.210.81])
-  by uls-op-cesaip01.wdc.com with ESMTP; 08 Dec 2022 03:01:43 -0800
-From:   Niklas Cassel <niklas.cassel@wdc.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Hannes Reinecke <hare@suse.de>, linux-scsi@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [PATCH 25/25] Documentation: sysfs-block-device: document command duration limits
-Date:   Thu,  8 Dec 2022 11:59:41 +0100
-Message-Id: <20221208105947.2399894-26-niklas.cassel@wdc.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221208105947.2399894-1-niklas.cassel@wdc.com>
-References: <20221208105947.2399894-1-niklas.cassel@wdc.com>
+        Thu, 8 Dec 2022 06:09:47 -0500
+X-Greylist: delayed 384 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Dec 2022 03:07:31 PST
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 45065F59;
+        Thu,  8 Dec 2022 03:07:31 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowAB3t8zsw5Fj7yF3BQ--.26980S2;
+        Thu, 08 Dec 2022 19:01:00 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] usb: storage: Add check for kcalloc
+Date:   Thu,  8 Dec 2022 19:00:58 +0800
+Message-Id: <20221208110058.12983-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowAB3t8zsw5Fj7yF3BQ--.26980S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw15uF1kGr43tFy8Jr4xJFb_yoWDtFc_K3
+        WUXw1fu34Yka4a9w1DXF1jvrWIya1DZrnYg3WIqa4fJr9rZFWxWF1jv393CrW5GFyUZan7
+        Ga93uF1rCr1xAjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUb2AFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Jr0_
+        Gr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8KwCF
+        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUFeHhUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+As kcalloc may return NULL pointer, the return value should
+be checked and return error if fails as same as the ones in
+alauda_read_map.
 
-Document ABI/testing/sysfs-block-device the sysfs attributes present
-under /sys/block/*/device/duration_limits for ATA and SCSI devices
-supporting the command duration limits feature.
-
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Fixes: e80b0fade09e ("[PATCH] USB Storage: add alauda support")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- Documentation/ABI/testing/sysfs-block-device | 143 +++++++++++++++++++
- 1 file changed, 143 insertions(+)
+ drivers/usb/storage/alauda.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-block-device b/Documentation/ABI/testing/sysfs-block-device
-index 7ac7b19b2f72..44841f91c69b 100644
---- a/Documentation/ABI/testing/sysfs-block-device
-+++ b/Documentation/ABI/testing/sysfs-block-device
-@@ -95,3 +95,146 @@ Description:
- 		This file does not exist if the HBA driver does not implement
- 		support for the SATA NCQ priority feature, regardless of the
- 		device support for this feature.
-+
-+
-+What:		/sys/block/*/device/duration_limits/enable
-+Date:		Dec, 2022
-+KernelVersion:	v6.3
-+Contact:	linux-scsi@vger.kernel.org
-+Description:
-+		(RW) For ATA and SCSI devices supporting the command duration
-+		limits feature, write to the file to turn on or off the
-+		feature. By default this feature is turned off. If the device
-+		does not support the command duration limits feature, this
-+		attribute does not exist (the directory
-+		"/sys/block/*/device/duration_limits" does not exist).
-+		Writing "1" to this file enables the use of command duration
-+		limits for read and write commands in the kernel and turns on
-+		the feature on the device. Writing "0" disables the feature.
-+
-+
-+What:		/sys/block/*/device/duration_limits/read/[1-7]/*
-+Date:		Dec, 2022
-+KernelVersion:	v6.3
-+Contact:	linux-scsi@vger.kernel.org
-+Description:
-+		(RO) For ATA and SCSI devices supporting the command duration
-+		limits feature, this shows the set of 7 command duration limits
-+		descriptors for read commands currently set on the device. For
-+		each of the 7 descritors, the following read-only attributes
-+		are present:
-+
-+		  - duration_guideline: specifies the preferred length of time
-+		    in microseconds for the completion of a command.
-+
-+		  - duration_guideline_policy: specifies the policy action
-+		    taken if the duration_guideline attribute specifies a
-+		    non-zero command duration guideline that the device is
-+		    unable to achieve for a command.
-+
-+		    Possible values are:
-+
-+		      - 0x0: The device will complete the command at the
-+			     earliest possible time consistent with the
-+			     specified command duration guideline.
-+		      - 0x1: If the specified command duration guideline has
-+			     not been achieved and the command duration
-+			     guideline policy field is not the seventh command
-+			     duration limits descriptor, then the device
-+			     continues processing that command using the
-+			     command duration limits descriptor that has
-+			     the next higher number.
-+		      - 0x2: The device will continue processing the command
-+			     as with no command duration limits descriptor
-+			     being used.
-+		      - 0xD: The device will complete the command and an IO
-+			     failure will be reported to the user with the ETIME
-+			     error code.
-+		      - 0xF: Same as 0xD.
-+
-+		  - max_active_time: specifies an upper limit in microseconds
-+		    on the time that elapses from the time at which the device
-+		    initiates actions to access, transfer, or act upon the
-+		    specified data until the time the device returns status for
-+		    the command.
-+
-+		  - max_active_time_policy: specifies the policy action taken
-+		    if the time used to process a command exceeds a non-zero
-+		    time specified by the max_active_time attribute.
-+
-+		    Possible values are:
-+
-+		      - 0x0: The device will complete the command at the
-+			     earliest possible time (i.e, do nothing based on
-+			     the max limit not being met).
-+		      - 0xD: The device will complete the command and an IO
-+			     failure will be reported to the user with the ETIME
-+			     error code.
-+		      - 0xE: Same as 0xD.
-+		      - 0xF: Same as 0xD.
-+
-+		  - max_inactive_time: specifies an upper limit in microseconds
-+		    on the time that elapses from the time at which the device
-+		    receives the command until the time at which the device
-+		    initiates actions to access, transfer, or act upon the
-+		    specified data.
-+
-+		  - max_inactive_time_policy: specifies the policy action taken
-+		    if a non-zero max_inactive_time limit is not met.
-+
-+		    Possible values are:
-+
-+		      - 0x0: The device will complete the command at the
-+			     earliest possible time (i.e, do nothing based on
-+			     the time limit not being met).
-+		      - 0xD: The device will complete the command and an IO
-+			     failure will be reported to the user with the ETIME
-+			     error code.
-+		      - 0xF: Same as 0xD.
-+
-+
-+What:		/sys/block/*/device/duration_limits/read/page
-+Date:		Dec, 2022
-+KernelVersion:	v6.3
-+Contact:	linux-scsi@vger.kernel.org
-+Description:
-+		(RO) For ATA and SCSI devices supporting the command duration
-+		limits feature, this shows the name of the device VPD page
-+		specifying the set of 7 command duration limits descriptors for
-+		read commands. Possible values are "T2A" and "T2B".
-+
-+
-+What:		/sys/block/*/device/duration_limits/write/[1-7]/*
-+Date:		Dec, 2022
-+KernelVersion:	v6.3
-+Contact:	linux-scsi@vger.kernel.org
-+Description:
-+		(RO) For ATA and SCSI devices supporting the command duration
-+		limits feature, this shows the set of 7 command duration limits
-+		descriptors for write commands currently set on the device. For
-+		each of the 7 descritors, the same set of read-only attributes
-+		as for read commands is present.
-+
-+
-+What:		/sys/block/*/device/duration_limits/write/page
-+Date:		Dec, 2022
-+KernelVersion:	v6.3
-+Contact:	linux-scsi@vger.kernel.org
-+Description:
-+		(RO) For ATA and SCSI devices supporting the command duration
-+		limits feature, this shows the name of the device VPD page
-+		specifying the set of 7 command duration limits descriptors for
-+		write commands. Possible values are "T2A" and "T2B".
-+
-+
-+What:		/sys/block/*/device/duration_limits/perf_vs_duration_guideline
-+Date:		Dec, 2022
-+KernelVersion:	v6.3
-+Contact:	linux-scsi@vger.kernel.org
-+Description:
-+		(RO) For ATA and SCSI devices supporting the command duration
-+		limits feature, this specifies the maximum percentage increase
-+		in average command completion times (reduction in IOPS) that
-+		is allowed for the device to perform actions based on the
-+		contents of the duration guideline field in every command
-+		duration limit descriptor for both read and write commands.
+diff --git a/drivers/usb/storage/alauda.c b/drivers/usb/storage/alauda.c
+index 747be69e5e69..5e912dd29b4c 100644
+--- a/drivers/usb/storage/alauda.c
++++ b/drivers/usb/storage/alauda.c
+@@ -438,6 +438,8 @@ static int alauda_init_media(struct us_data *us)
+ 		+ MEDIA_INFO(us).blockshift + MEDIA_INFO(us).pageshift);
+ 	MEDIA_INFO(us).pba_to_lba = kcalloc(num_zones, sizeof(u16*), GFP_NOIO);
+ 	MEDIA_INFO(us).lba_to_pba = kcalloc(num_zones, sizeof(u16*), GFP_NOIO);
++	if (MEDIA_INFO(us).pba_to_lba == NULL || MEDIA_INFO(us).lba_to_pba == NULL)
++		return USB_STOR_TRANSPORT_ERROR;
+ 
+ 	if (alauda_reset_media(us) != USB_STOR_XFER_GOOD)
+ 		return USB_STOR_TRANSPORT_ERROR;
 -- 
-2.38.1
+2.25.1
 
