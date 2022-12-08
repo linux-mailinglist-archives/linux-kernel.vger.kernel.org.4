@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1E3646B4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5F0646B4D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:03:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiLHJCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:02:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34090 "EHLO
+        id S230043AbiLHJDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:03:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiLHJCr (ORCPT
+        with ESMTP id S230054AbiLHJCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:02:47 -0500
+        Thu, 8 Dec 2022 04:02:50 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28DA35FDD;
-        Thu,  8 Dec 2022 01:02:45 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 48D1232001AB;
-        Thu,  8 Dec 2022 04:02:43 -0500 (EST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C812B6276;
+        Thu,  8 Dec 2022 01:02:48 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id C70ED32002E2;
+        Thu,  8 Dec 2022 04:02:46 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 08 Dec 2022 04:02:44 -0500
+  by compute6.internal (MEProxy); Thu, 08 Dec 2022 04:02:48 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670490162; x=1670576562; bh=/2
-        5Zms0aIlGn7UuOR8iB864vzGQsFadP0HWzXb42zI4=; b=0hEhAnbHJNDHMyjC0+
-        obqd/bf6wKQ3lqcED9F0ToWleTIW7Eqh/cn2Ya0k+QRiM7YXwXyAmfAeHfIM/t9P
-        Af4EQg8FsOOCIk0Pi+BbLeZ6TYW+WPqV2uyJvNTW711ysx8OscXixK+lApD32bhQ
-        /lVNNlrp+JXOFUGFjupxOoUWbuwxSBUfy+AfQs9qhyrKbLVXTU+Eg4NtzITaiwky
-        ZkBgaGufnhnRy/4tccWhnwAhDXo5MRqwp1JMRU3AMVLy6Py9SQbvWyFdTL459DeU
-        U0Q6vN2aCpInHyDgSQsEM2cBKw907VnHzKICb6mtrOfS5SqQf5xdToto+YF3btnl
-        vmrg==
+        :subject:subject:to:to; s=fm3; t=1670490166; x=1670576566; bh=JG
+        w0CLwJFa2mZr+m37NEpZYVUBjHBKI5WIz9XbIZnTk=; b=wvBIW0DvyIQbRAs30J
+        jlkHHoMrwMIBsqzx6UX7BjDmqSMcun7h+lW3DEFvEW/F12vgHWuuW8Ah/NuydmBJ
+        ekxL5bRyPsmAOo2M9TPmKT2aIl4uau2pyN5XlqrArpJy+U1stQmy0GBwMOeAp7lD
+        NJYPP4W04qt6j7EugrSxpSSrfHLrbGOM2Kl+LsK1LQ/Mz1WN7ypqeRG1xaSLO9O3
+        EP2+5DSCeigzO5Dh4LhrFr5CBdSiOgy3x5nNxhpbKhiUcPUITNnNrbTucEgy68Jj
+        KSjjzLpX+Nd3RE4y2JvtlBT+Z2uOmBVXq2KLbqoKs12UF1LcQAabBLl3wxPUmxxJ
+        Gbkg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1670490162; x=1670576562; bh=/25Zms0aIlGn7
-        UuOR8iB864vzGQsFadP0HWzXb42zI4=; b=Iitbe5M0PAyGVAxuUrPucZSEW35de
-        NUymnQVdanHenoPwXlAkVWaho2lJvVYkv0iMZsW2Lh89oo1f01kIw/CfsydoWGkQ
-        UdfYWdYgnwn5+MnXz72vNEHd14B51GMr782/g2HwIc1V4jJXLOzWcjLy1j75khfH
-        w5FQtme3lxebiVZskIY2ox/PXdw2mjjr23xZOwttqojwBq9NNTUhP2/EmIsTeAhZ
-        YQEjC81Q4dTUaJTF0ny/AHZ/zQpOmcr+h1JNcdsFtrBW1+3YfmnIRsbNljshUI5w
-        gZcksNvxqPrrF9y+yxnbKDP1d81UyTTBKmfLaioG8+w5bz8THC2hgdKTw==
-X-ME-Sender: <xms:MqiRY5xjmBgPvyWAdGQbH-FraoLFHLFHtIKlyVjTR3vJoFuA4hg7_w>
-    <xme:MqiRY5StJsamoJQzOS9hjy7OiRkNTzqT_UFeBVX9yHKM5sViJJc6Q1wdWLS9SbBOu
-    wZZtXbguJvUSPyizg>
-X-ME-Received: <xmr:MqiRYzU4O3K8PM1iC-lBYDY8BWlMDBIuvwOkSxGTfTArOPrFZBvn_NLpHwlM3egZUTMtw1-N6yY2BI4ULnJIiFOCtX1ahrcJPwQNYOYR_ImVC0F3PO0c9DXwCMM4hQhqOIB4ow>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtucetufdoteggodetrfdotffvucfrrh
-    hofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgenuceurghi
-    lhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurh
-    ephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghlucfj
-    ohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrfgrth
-    htvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefgudefiedt
-    veetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepsh
-    grmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:MqiRY7j4deMr6WbmTd0d0nygcxQBxwF4nCl2-g8LCkVhrAj-PdKWow>
-    <xmx:MqiRY7D6k-zOkQ6F6R4A0jQocRm9E2C9mP_jNgvEVik12jdN9Ovm8A>
-    <xmx:MqiRY0J5YukAEh5986n_31irKYsE7gRrP36SdLhmm1M1QoX_pGiO7A>
-    <xmx:MqiRYzYOOX8tD1le9c60gkdLSXr3hglrCAwiXpEsGe8JvQFcmoIUjA>
+        :x-sasl-enc; s=fm2; t=1670490166; x=1670576566; bh=JGw0CLwJFa2mZ
+        r+m37NEpZYVUBjHBKI5WIz9XbIZnTk=; b=Ek7osepW+po1q9BnKMowh0x7B5GTx
+        3bEUebCShPTf8KYHot+5kA7JlujyNGJElI2vkFNrsAoG8lAbIx3gAty73SB4n7PV
+        GHjiYtIL8CCsgU8BR3xyFmCq9U6PjsoXSF7o+1VSWs41JT4WG+V+1FnDHlhfFAjC
+        o8kq2eDoSwkOEuhevicnYFc+6gQ3PFJfYYs0rtP8unfooPDuW9ZqApMsE2GCCivE
+        EYjgpmltJcsJLjkFEG6NnFFcTAyObw2sMhrDqk1ij0qzo5xxkqcoop+lZOas1mLa
+        6j7wQ9hVNM+8W6TVKTRUXHwRCnZkhZFeY620+ZFDAIAv+1PhtwNmMTRhw==
+X-ME-Sender: <xms:NqiRY-PyG6OXOk9_niGbbqOmwr7cFkhoMh_j51QoVcQ-bNYoBKphQw>
+    <xme:NqiRY894WJog3CZsdIvwWaj6gNcrLrREmoAAaNxv2YXNpR8dNDaOuTlUL_fnoKMOT
+    P3fFYZoYNANA5M_8g>
+X-ME-Received: <xmr:NqiRY1TCaQx9XIxhZbLJvQbP-6xMSuoW2HMLqXVDrAdh-cl3-_M9J1b2HUP9Qng5P3IiPwAES3eddQrwzF7PKHL1RBRTcg8ATVcOMS8_t8AwBBcZpBMQkWtDcOoz3x4v6-qPeQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrudelgdduvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdljedmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
+    tdenucfhrhhomhepufgrmhhuvghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholh
+    hlrghnugdrohhrgheqnecuggftrfgrthhtvghrnhepleevtddvvdevieekieffjefggfeu
+    ieetieelveelhfeukeejvddvgfeiveekleefnecuffhomhgrihhnpegtlhhotghkfihorh
+    hkphhirdgtohhmpdhmrghnghhophhirdgttgenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:NqiRY-uh8o_-mttOnNxud2pWvNzGp3nKtQSVJWTroT6A0iC67iIo5Q>
+    <xmx:NqiRY2fXr5ISFB1CvAWT5UpntxMFh4hMBPCi48UjrZV5LUilGhU-CQ>
+    <xmx:NqiRYy3dP9ZBHKQSUoY5BMLGesIYyqwSYNL9TvxrldgrorxHJP7cgQ>
+    <xmx:NqiRY5vxTt-SOckaDgEmOK3HvBOIESt_eHiWB0z_ofM4fFjnG-6Wjg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 04:02:41 -0500 (EST)
+ 8 Dec 2022 04:02:45 -0500 (EST)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>,
@@ -76,10 +77,11 @@ Cc:     Jisheng Zhang <jszhang@kernel.org>, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         Andre Przywara <andre.przywara@arm.com>,
         Samuel Holland <samuel@sholland.org>,
-        Guo Ren <guoren@kernel.org>
-Subject: [PATCH v3 01/12] MAINTAINERS: Match the sun20i family of Allwinner SoCs
-Date:   Thu,  8 Dec 2022 03:02:26 -0600
-Message-Id: <20221208090237.20572-2-samuel@sholland.org>
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Rob Herring <robh@kernel.org>, Guo Ren <guoren@kerenl.org>
+Subject: [PATCH v3 02/12] dt-bindings: vendor-prefixes: Add Allwinner D1/D1s board vendors
+Date:   Thu,  8 Dec 2022 03:02:27 -0600
+Message-Id: <20221208090237.20572-3-samuel@sholland.org>
 X-Mailer: git-send-email 2.37.4
 In-Reply-To: <20221208090237.20572-1-samuel@sholland.org>
 References: <20221208090237.20572-1-samuel@sholland.org>
@@ -95,33 +97,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allwinner sunxi SoCs with a RISC-V CPU use the sun20i designator. Match
-that pattern in addition to the designators for 32 and 64-bit ARM SoCs.
+Some boards using the Allwinner D1 or D1s SoC are made by vendors not
+previously documented.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-Reviewed-by: Guo Ren <guoren@kernel.org>
+Clockwork Tech LLC (https://www.clockworkpi.com/) manufactures the
+ClockworkPi and DevTerm boards.
+
+Beijing Widora Technology Co., Ltd. (https://mangopi.cc/) manufactures
+the MangoPi family of boards.
+
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Acked-by: Rob Herring <robh@kernel.org>
+Reviewed-by: Guo Ren <guoren@kerenl.org>
 Reviewed-by: Heiko Stuebner <heiko@sntech.de>
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
 (no changes since v1)
 
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 38293bfb1918..35f5808cc308 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1828,7 +1828,7 @@ F:	drivers/pinctrl/sunxi/
- F:	drivers/soc/sunxi/
- N:	allwinner
- N:	sun[x456789]i
--N:	sun50i
-+N:	sun[25]0i
- 
- ARM/Amlogic Meson SoC CLOCK FRAMEWORK
- M:	Neil Armstrong <neil.armstrong@linaro.org>
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 592e43911a07..f2c67b7418e4 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -262,6 +262,8 @@ patternProperties:
+     description: Cirrus Logic, Inc.
+   "^cisco,.*":
+     description: Cisco Systems, Inc.
++  "^clockwork,.*":
++    description: Clockwork Tech LLC
+   "^cloudengines,.*":
+     description: Cloud Engines, Inc.
+   "^cnm,.*":
+@@ -1430,6 +1432,8 @@ patternProperties:
+     description: Shenzhen whwave Electronics, Inc.
+   "^wi2wi,.*":
+     description: Wi2Wi, Inc.
++  "^widora,.*":
++    description: Beijing Widora Technology Co., Ltd.
+   "^wiligear,.*":
+     description: Wiligear, Ltd.
+   "^willsemi,.*":
 -- 
 2.37.4
 
