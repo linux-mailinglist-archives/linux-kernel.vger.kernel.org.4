@@ -2,135 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBCBA6469C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:34:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E07B66469C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229725AbiLHHe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 02:34:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S229689AbiLHHgm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 02:36:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLHHeX (ORCPT
+        with ESMTP id S229576AbiLHHgk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 02:34:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DDB22E9F1
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:33:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670484808;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KKpO4mivO2W1yNm3A0HXsqmTgKdI5x9eAmnflBCtN/Q=;
-        b=ggvxuL+DktZeS9bI3V7aFDc9OuIIcY8FFGIG6JsaE4tGC7mjVRyU+YOHB9hHVBRk5DRsVm
-        KZsM8yTp34x19hDTEV+D0Bxel+G/+rKKFM2t10yiwlyM8xtpYnU0yc5aRyzA6kopTxJtW4
-        1wV28fbMQmJ0Uwd8hi+WgfXETnU7wRc=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-124-njK18LrGNCG-I1AX5FN_gQ-1; Thu, 08 Dec 2022 02:33:26 -0500
-X-MC-Unique: njK18LrGNCG-I1AX5FN_gQ-1
-Received: by mail-oo1-f72.google.com with SMTP id c8-20020a4a87c8000000b0049f149a83fdso169936ooi.19
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 23:33:26 -0800 (PST)
+        Thu, 8 Dec 2022 02:36:40 -0500
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB3632076
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:36:39 -0800 (PST)
+Received: by mail-qk1-x731.google.com with SMTP id x24so307684qkf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 23:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=97CF61NxNfINvAmFCHySr8pBYXl0fpYSbMxv8vXatSE=;
+        b=QlyXdnWfeAGEZrdOzy9s6Z4X237j8Pipot9BBuCfCRDqWCQpOi464m8FComOVhAP8a
+         3UewOiGSWl2flvhaBM//5YFvyOVH0AafmRZokxXAXiH2pMK3/MDpcBsMF6IdvRVyrJ//
+         sUJFaGIBWiR4PuKQVzsIl6PPuhbj0gJBlF/OeXi1KmkFnYfG9FSXo9QZ1N4jxVmwB6MD
+         c+A8DPLIq1Wa59nidmiqsn3XihHjDvYBo2YeNIum0v9E7Yf1YwAq3GruNpD1e9hZTkum
+         JJCsENXYTiW/+pnS0uT6UEGIEZ8YO6JogP/pe+MLwxHIBWWjYkaIOhw73prhhgFsJWtg
+         GOVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KKpO4mivO2W1yNm3A0HXsqmTgKdI5x9eAmnflBCtN/Q=;
-        b=xjiXtgzRto/mPBpiIairl1SXTVEuzxpo7ukUoTTfvOmaD1lr4tonFvFx0XoYDigbQM
-         quOrj0MudnTS3+F+4x0xPg/S6T9k1+xS3rpoxprz7MjrW9xiKYLDLGJM6jnzSxz3nSn3
-         NSr6qbOCxoM3Xfeq4mTBSNsd6BF5Esfi1Hjm/aGybyqtctM9pwbvPp4h5kwN4FmdLyhc
-         ScsQmvHBjAGcmA2pvOprlJxUZBWNiUlst5+jOXBeMGx76gyk3f9F9yjaEgx+W5CTvoP5
-         kX2Qa+717k0lOdoLI2hdoDRb0OvtY9b8uN93Z94Z4ziwE6o0LJt8oTx8PVv9mhjzeefm
-         +Uig==
-X-Gm-Message-State: ANoB5plBn6xsVxyDyarABv2M1OmL/LK0ABwcBljSO3FGtEhJgogDPG5B
-        1eatsrAE8zr4jbc0drHylE+DutVs/aSymqUch4bn/kw+CwdR8YQrlw7ZX4DWHqiJguDRtd+gUwV
-        zRr+Z1j80QE8DcCy5dNYHqWKUUj/bjfRWWE6L2E0k
-X-Received: by 2002:a9d:832:0:b0:670:5283:dd3e with SMTP id 47-20020a9d0832000000b006705283dd3emr6224367oty.201.1670484804226;
-        Wed, 07 Dec 2022 23:33:24 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5Z/YaUgjQym50YJjJOHD3I4Z+BYdpVXLlv581GRTQvj0YH5cF06AcofePFl78CMoLz23eOJpLzJJuRD6RTv/0=
-X-Received: by 2002:a9d:832:0:b0:670:5283:dd3e with SMTP id
- 47-20020a9d0832000000b006705283dd3emr6224356oty.201.1670484804020; Wed, 07
- Dec 2022 23:33:24 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=97CF61NxNfINvAmFCHySr8pBYXl0fpYSbMxv8vXatSE=;
+        b=O8rulC+rQTlLDEaREZtmPymfO694Kn3uh//cUrjkVss5QvFa198JVmeJWjBV7D1P4K
+         Vsu6IQqvnG/43SjzO9CcUHRgCfOLHfvNv9iAiD60MYjjgdvMsfvFbIPVol1eEWrnuSD4
+         DMBIprzf7t/86jqVznmsouJhEIQE6mkQUC+UEUTTdIg1jF0nHIdDMay4CWARJDGrc4mG
+         CPmv9V3nVUx69Ax2FqHSZT4GWceHEfKGl4XFfrzRJFVfY1ruJ7gIWZLo3G0sGcd1aiby
+         8cAf8PbyJGUOE0yZ3CyBf7MKGzkMpGS9piVXLtvtdjacnTd90iMglAUUs7y52QlYVDNe
+         Ubwg==
+X-Gm-Message-State: ANoB5pmaqObV3qhMbxJUotrWMEFvY0lXDI227Xn3QAxMxJ+TXs93Ft23
+        HC2JXsPjKXyax0RSSxk/ONY5KmDNV9M9SHr786Gx1foUODs0v237
+X-Google-Smtp-Source: AA0mqf5OdwKrHO32/1x7P/rNBKW+fZ551hgS5X0cGSFAUGwcbf2vK6lAreSWv++D00yRLWC6YrOQ28myI+AyLgolrfQ=
+X-Received: by 2002:a05:620a:13aa:b0:6fc:99c2:2567 with SMTP id
+ m10-20020a05620a13aa00b006fc99c22567mr30870312qki.784.1670484997799; Wed, 07
+ Dec 2022 23:36:37 -0800 (PST)
 MIME-Version: 1.0
-References: <20221207120813.2837529-1-sunnanyong@huawei.com> <CACLfguXTQuYjt_ftPS=P-CUoMkiiE9K7=oXhQ4Up8p3g-OwXgw@mail.gmail.com>
-In-Reply-To: <CACLfguXTQuYjt_ftPS=P-CUoMkiiE9K7=oXhQ4Up8p3g-OwXgw@mail.gmail.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Thu, 8 Dec 2022 15:33:13 +0800
-Message-ID: <CACGkMEtC5Ed+JKhuyRMuvW4eoHNidr3MFNjv2F3-R4R0brrnWA@mail.gmail.com>
-Subject: Re: [PATCH] vdpa/vp_vdpa: fix kfree a wrong pointer in vp_vdpa_remove
-To:     Cindy Lu <lulu@redhat.com>
-Cc:     Nanyong Sun <sunnanyong@huawei.com>, mst@redhat.com,
-        gautam.dawar@xilinx.com, elic@nvidia.com, sgarzare@redhat.com,
-        wangrong68@huawei.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, liushixin2@huawei.com,
-        wangkefeng.wang@huawei.com
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 8 Dec 2022 13:06:26 +0530
+Message-ID: <CA+G9fYu5JjZzpFfNOqzLV+KQnSL1VU7n8Yv-FrZYvuvwo1Ayug@mail.gmail.com>
+Subject: security: policy_unpack.c:325:10: error: use of undeclared identifier 'TRI_TRUE'
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, apparmor@lists.ubuntu.com
+Cc:     Nick Terrell <terrelln@fb.com>,
+        John Johansen <john.johansen@canonical.com>,
+        David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 10:05 AM Cindy Lu <lulu@redhat.com> wrote:
->
-> On Wed, 7 Dec 2022 at 19:23, Nanyong Sun <sunnanyong@huawei.com> wrote:
-> >
-> > From: Rong Wang <wangrong68@huawei.com>
-> >
-> > In vp_vdpa_remove(), the code kfree(&vp_vdpa_mgtdev->mgtdev.id_table) uses
-> > a reference of pointer as the argument of kfree, which is the wrong pointer
-> > and then may hit crash like this:
-> >
-> > Unable to handle kernel paging request at virtual address 00ffff003363e30c
-> > Internal error: Oops: 96000004 [#1] SMP
-> > Call trace:
-> >  rb_next+0x20/0x5c
-> >  ext4_readdir+0x494/0x5c4 [ext4]
-> >  iterate_dir+0x168/0x1b4
-> >  __se_sys_getdents64+0x68/0x170
-> >  __arm64_sys_getdents64+0x24/0x30
-> >  el0_svc_common.constprop.0+0x7c/0x1bc
-> >  do_el0_svc+0x2c/0x94
-> >  el0_svc+0x20/0x30
-> >  el0_sync_handler+0xb0/0xb4
-> >  el0_sync+0x160/0x180
-> > Code: 54000220 f9400441 b4000161 aa0103e0 (f9400821)
-> > SMP: stopping secondary CPUs
-> > Starting crashdump kernel...
-> >
-> > Fixes: ffbda8e9df10 ("vdpa/vp_vdpa : add vdpa tool support in vp_vdpa")
-> > Signed-off-by: Rong Wang <wangrong68@huawei.com>
-> > Signed-off-by: Nanyong Sun <sunnanyong@huawei.com>
-> > ---
-> >  drivers/vdpa/virtio_pci/vp_vdpa.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/vdpa/virtio_pci/vp_vdpa.c b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> > index d448db0c4de3..8fe267ca3e76 100644
-> > --- a/drivers/vdpa/virtio_pci/vp_vdpa.c
-> > +++ b/drivers/vdpa/virtio_pci/vp_vdpa.c
-> > @@ -647,7 +647,7 @@ static void vp_vdpa_remove(struct pci_dev *pdev)
-> >         mdev = vp_vdpa_mgtdev->mdev;
-> >         vp_modern_remove(mdev);
-> >         vdpa_mgmtdev_unregister(&vp_vdpa_mgtdev->mgtdev);
-> > -       kfree(&vp_vdpa_mgtdev->mgtdev.id_table);
-> > +       kfree(vp_vdpa_mgtdev->mgtdev.id_table);
-> >         kfree(mdev);
-> >         kfree(vp_vdpa_mgtdev);
-> >  }
-> > --
-> > 2.25.1
-> >
-> Reviewed-by: Cindy Lu <lulu@redhat.com>
+Following build regresion found on Linux next-20221208 tag.
 
-Acked-by: Jason Wang <jasowang@redhat.com>
+Regressions found on riscv:
+  - build/clang-nightly-defconfig
+  - build/gcc-8-defconfig
+  - build/gcc-11-defconfig
+  - build/clang-15-defconfig
 
-Thanks
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
+'CC=sccache clang' defconfig
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- 'HOSTCC=sccache clang'
+'CC=sccache clang'
+security/apparmor/policy_unpack.c:316:18: error: unknown type name 'tri'
+VISIBLE_IF_KUNIT tri aa_unpack_array(struct aa_ext *e, const char
+*name, u16 *size)
+                 ^
+security/apparmor/policy_unpack.c:325:10: error: use of undeclared
+identifier 'TRI_TRUE'
+                return TRI_TRUE;
+                       ^
+security/apparmor/policy_unpack.c:328:9: error: use of undeclared
+identifier 'TRI_NONE'
+        return TRI_NONE;
+               ^
+security/apparmor/policy_unpack.c:331:9: error: use of undeclared
+identifier 'TRI_FALSE'
+        return TRI_FALSE;
+               ^
+security/apparmor/policy_unpack.c:455:42: error: use of undeclared
+identifier 'TRI_TRUE'
+                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+                                                       ^
+security/apparmor/policy_unpack.c:529:42: error: use of undeclared
+identifier 'TRI_TRUE'
+                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+                                                       ^
+security/apparmor/policy_unpack.c:559:42: error: use of undeclared
+identifier 'TRI_TRUE'
+                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+                                                       ^
+security/apparmor/policy_unpack.c:611:42: error: use of undeclared
+identifier 'TRI_TRUE'
+                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE ||
+                                                       ^
+security/apparmor/policy_unpack.c:674:42: error: use of undeclared
+identifier 'TRI_TRUE'
+                if (aa_unpack_array(e, NULL, &size) != TRI_TRUE)
+                                                       ^
+9 errors generated.
+make[4]: *** [scripts/Makefile.build:252:
+security/apparmor/policy_unpack.o] Error 1
+make[4]: Target 'security/apparmor/' not remade because of errors.
+make[3]: *** [scripts/Makefile.build:504: security/apparmor] Error 2
 
->
+Build link,
+  - https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/details/
 
+Build results comparison:
+  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20221208/testrun/13508560/suite/build/test/gcc-11-defconfig/history/
+
+
+steps to reproduce:
+# To install tuxmake on your system globally:
+# sudo pip3 install -U tuxmake
+#
+# See https://docs.tuxmake.org/ for complete documentation.
+# Original tuxmake command with fragments listed below.
+# tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+--kconfig defconfig
+
+
+tuxmake --runtime podman --target-arch riscv --toolchain gcc-11
+--kconfig https://builds.tuxbuild.com/2IcJeyR3s4kGd2Nca8vVq7Sleao/config
+
+--
+Linaro LKFT
+https://lkft.linaro.org
