@@ -2,39 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25AB564750A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:40:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68ED8647510
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:42:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiLHRkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 12:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
+        id S229743AbiLHRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 12:42:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLHRkT (ORCPT
+        with ESMTP id S229695AbiLHRmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 12:40:19 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id DC4877DA6D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:40:17 -0800 (PST)
-Received: (qmail 734591 invoked by uid 1000); 8 Dec 2022 12:40:17 -0500
-Date:   Thu, 8 Dec 2022 12:40:17 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Oliver Neukum <oneukum@suse.com>
-Cc:     syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>,
-        WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
-        kishon@ti.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
-Message-ID: <Y5IhgenNzQXzbWqT@rowland.harvard.edu>
-References: <0000000000002fc8dc05ef267a9f@google.com>
- <Y49h3MX8iXEO/na+@rowland.harvard.edu>
- <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
+        Thu, 8 Dec 2022 12:42:09 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73637E806
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:42:07 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id b189so2125363vsc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 09:42:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZLBXt2Jtw0kYFWpcJPTwwMQ6BDpS6jKcsiWh2x9aQ68=;
+        b=q1rHnTY7Tadre4D+fqST2ld7So3s26m9HTLgoPCGDo1koR1yer4RbVIKn4L+Y2qbuU
+         uW177VPnbUlziy1OucBIa1tm/gBCzOldbcB9kxUM1pn89texknSond0wO8diqwQIhcFY
+         eKL6S8X2C/FaeIVDdJixZcJvZYjmLrrgBxZ5CBtywJC7ULgeultgKTu1tVT34nc3Z4b3
+         PxJiKpJ8IAQZ9CLlkhSOj047IpG9ZjTgUPHarmjfF43MsGEmQrBKgSd+WefifG3W8q69
+         zUPZbGp5ATTqyylOG6Mmj0VZBi+kYd7T7zIFLgwfePAbUWZkUndclxJa8QjLP+t/LWaB
+         CjDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZLBXt2Jtw0kYFWpcJPTwwMQ6BDpS6jKcsiWh2x9aQ68=;
+        b=Be3X9sWR1nkzl2M7UeBLSYIjYBxCQ5idrn/wkBoqQ6+EPPNyCcb/Yg13ytSCWMS65p
+         5Oyub24n+Sy2NGZBHQuYOM4LGaT2l6ieHhodF9+BWJ8zWZh7MaAUMbSn90dSycotQW+T
+         SIRhJoaoddtk8QDhX7ruxH+500WH2hOLPQn6UqjUnDSxr0HRIEHMPFYti9PY+3gNeOPB
+         7OpChqWU8yOza05FgwUGyXVZ9Bvm2L/VBSzUQgoEWy4k/cjKBEYl1m+Sgw36JxwtieJN
+         wM1yGqsAY1irHAd95n8ZsQ/pl97Gl98TTylHAY5NEu/byDy/oL6icnlk6GoONWRCr3Hw
+         usmA==
+X-Gm-Message-State: ANoB5pnyHxQm5CYZx90HyDXmtrxl9Y38RvbI4WQGagMSn/4O2a2Bhkop
+        QFPjBMnI0m70O5XcxEwlEfa3lhrZ1lc1CVi1axad4Q==
+X-Google-Smtp-Source: AA0mqf5988ezjzMU+pj3GZmQT8TbVYw3+msm3Gje3bceuHYPjEBbPuSHL9bVhPvP+54fI00E0UUCZLYWZcEtwKIds40=
+X-Received: by 2002:a05:6102:114b:b0:3b0:5300:a99b with SMTP id
+ j11-20020a056102114b00b003b05300a99bmr43661599vsg.23.1670521326913; Thu, 08
+ Dec 2022 09:42:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+References: <20221207055908.1385448-1-irogers@google.com> <Y5DQKif+PdRJblk+@kernel.org>
+ <0d64e485-5acf-b7ad-e228-9bf85d8ae16d@oracle.com> <Y5DRjecE88KFc4He@kernel.org>
+In-Reply-To: <Y5DRjecE88KFc4He@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 8 Dec 2022 09:41:55 -0800
+Message-ID: <CAP-5=fWa=zNK_ecpWGoGggHCQx7z-oW0eGMQf19Maywg0QK=4g@mail.gmail.com>
+Subject: Re: [PATCH v4] perf jevents: Parse metrics during conversion
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        John Garry <john.g.garry@oracle.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,77 +80,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 03:36:45PM +0100, Oliver Neukum wrote:
-> On 06.12.22 16:38, Alan Stern wrote:
-> 
-> Hi,
-> 
-> > Oliver:
-> > 
-> > This looks like a bug in the anchor API.
-> 
-> Yes, it does.
-> > On Tue, Dec 06, 2022 at 02:43:41AM -0800, syzbot wrote:
-> > > Hello,
-> > > 
-> > > syzbot found the following issue on:
-> > > 
-> > > HEAD commit:    ef4d3ea40565 afs: Fix server->active leak in afs_put_server
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=100b244d880000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=8e7e79f8a1e34200
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=712fd0e60dda3ba34642
-> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > 
-> > > Unfortunately, I don't have any reproducer for this issue yet.
-> > > 
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/ef790e7777cd/disk-ef4d3ea4.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/2ed3c6bc9230/vmlinux-ef4d3ea4.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/f1dbd004fa88/bzImage-ef4d3ea4.xz
-> > > 
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com
-> > > 
-> > > xpad 3-1:179.65: xpad_irq_in - usb_submit_urb failed with result -19
-> > > xpad 3-1:179.65: xpad_irq_out - usb_submit_urb failed with result -19
-> > > ==================================================================
-> > > BUG: KASAN: use-after-free in register_lock_class+0x8d2/0x9b0 kernel/locking/lockdep.c:1338
+Apologies, I found an issue with a double-if. Could you add the 1 line
+fix plus test:
 
-> > >   __wake_up+0xf8/0x1c0 kernel/sched/wait.c:156
-> > >   __usb_hcd_giveback_urb+0x3a0/0x530 drivers/usb/core/hcd.c:1674
-> 
-> 
-> > This is the call to usb_anchor_resume_wakeups().  The call is made after
-> > the completion handler callback.  Evidently the xpad driver deallocated
-> > the anchor during that time window.  This can happen if the driver is
-> > just waiting for its last URB to complete before freeing all its memory.
-> 
-> Yes, complete() had run.
-> > 
-> > I don't know what the best solution is.  It may be necessary to refcount
-> > anchors somehow.
-> 
-> Then we cannot embed them anymore. Many drivers would need a lot of changes.
-> xpad included.
+diff --git a/tools/perf/pmu-events/metric.py b/tools/perf/pmu-events/metric=
+.py
+index cc451a265751..4797ed4fd817 100644
+--- a/tools/perf/pmu-events/metric.py
++++ b/tools/perf/pmu-events/metric.py
+@@ -462,6 +462,7 @@ class _RewriteIfExpToSelect(ast.NodeTransformer):
 
-It's hard to tell what's really going on.  Looking at 
-xpad_stop_output(), you see that it doesn't do anything if xpad->type is 
-XTYPE_UNKNOWN.  Is that what happened here?
+  def visit_IfExp(self, node):
+    # pylint: disable=3Dinvalid-name
++    self.generic_visit(node)
+    call =3D ast.Call(
+        func=3Dast.Name(id=3D'Select', ctx=3Dast.Load()),
+        args=3D[node.body, node.test, node.orelse],
+diff --git a/tools/perf/pmu-events/metric_test.py
+b/tools/perf/pmu-events/metric_test.py
+index 4741b7b6612d..6980f452df0a 100644
+--- a/tools/perf/pmu-events/metric_test.py
++++ b/tools/perf/pmu-events/metric_test.py
+@@ -87,6 +87,10 @@ class TestMetricExpressions(unittest.TestCase):
+    after =3D r'min((a + b if c > 1 else c + d), e + f)'
+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
 
-I can't figure out where the underlying race is.  Maybe it's not 
-directly connected with anchors after all.
++    before =3D r'a if b else c if d else e'
++    after =3D r'(a if b else (c if d else e))'
++    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
++
+  def test_ToPython(self):
+    # pylint: disable=3Deval-used
+    # Based on an example of a real metric.
 
-> As far as I can tell the order we decrease use_count is correct. But:
-> 
-> 6ec4147e7bdbd (Hans de Goede             2013-10-09 17:01:41 +0200 1674)        usb_anchor_resume_wakeups(anchor);
-> 94dfd7edfd5c9 (Ming Lei                  2013-07-03 22:53:07 +0800 1675)        atomic_dec(&urb->use_count);
-> 
-> Do we need to guarantee memory ordering here?
+Thanks,
+Ian
 
-I don't think we need to do anything more.  usb_kill_urb() is careful to 
-wait for completion handlers to finish, and we already have 
-smp_mb__after_atomic() barriers in the appropriate places to ensure 
-proper memory ordering.
-
-Alan Stern
+On Wed, Dec 7, 2022 at 9:47 AM Arnaldo Carvalho de Melo <acme@kernel.org> w=
+rote:
+>
+> Em Wed, Dec 07, 2022 at 05:42:52PM +0000, John Garry escreveu:
+> > On 07/12/2022 17:40, Arnaldo Carvalho de Melo wrote:
+> > > Em Tue, Dec 06, 2022 at 09:59:08PM -0800, Ian Rogers escreveu:
+> > > > Currently the 'MetricExpr' json value is passed from the json
+> > > > file to the pmu-events.c. This change introduces an expression
+> > > > tree that is parsed into. The parsing is done largely by using
+> > > > operator overloading and python's 'eval' function. Two advantages
+> > > > in doing this are:
+> > > John, what tag can I get from you? =F0=9F=98=84
+> > >
+> > > - Arnaldo
+> > Sure,
+> > Reviewed-by: John Garry <john.g.garry@oracle.com>
+>
+> Thanks a lot!
+>
+> - Arnaldo
