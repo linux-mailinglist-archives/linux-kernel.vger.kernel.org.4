@@ -2,119 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69069647434
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:26:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2426647436
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiLHQ0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:26:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S230189AbiLHQ1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:27:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbiLHQ0f (ORCPT
+        with ESMTP id S230289AbiLHQ1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:26:35 -0500
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4BB04A075
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:26:34 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id y17so1992714plp.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:26:34 -0800 (PST)
+        Thu, 8 Dec 2022 11:27:00 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14BB4AF14
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:26:59 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id y2so1237825ily.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:26:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTgWx4scVyEdnNwP8DjnL1zHNWGeK2kwc0Zp2eRMXQk=;
-        b=DtPAybS0x/Bv9SwEFO8iJm3Nt7GLaKJyB5eY3bSfC+VBuMJsbkTJk+3VLNLVGY97gW
-         YROZkWwojaG47GUXQLrCTFJjvlpv88vKyYmpnOc7FWDgCcttWvm89GqcBOgYh8KN/QL8
-         /9v/7LFByFTev9BlbnpF8R4jmudaKyQI6sPde3SvQxBvwc2GOTI4GXI5zvbTLRFvcEGx
-         AGbHbEnLGeCwOozEKpTvyUxotEiTTnNjv6inA0lwY/Qszez/CUSG9OWGrms3an78tEEn
-         tTpwS66zjdSS3hLf/dvzM1UXX6tyn+ws0DYwdZ39fO40IVLomt9gYa9j4OrSf3Oy0wmR
-         g5lA==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lLNYG7Z5yfhFRfHKNccnXxuMC8fmolMqOdSQBS5UEp8=;
+        b=jTLzBnJM4FphLJwgz02AcUaTB4lri7p07bjeDGShPEzJo3yU+xkwLJvl35ydq84be1
+         cn7Cn3B3x1d/qbSgKp+z9WknPKgOXfAaWWYnKO673RvQpxd9XkdIuu9bkTQJioUdRCY+
+         CTZy/fPxcnQdIMXzkm3WL2D9c7Rbu0id7X0HqI18F340auNgft+37WmPN1W+6HS/b7Ge
+         vTPaAmbeWPb0LMwVf/W0Z3FO/FkZRUvKeeBFwrrVS0kG567YkX++mkQY3/FGjw1m2X2v
+         B1+03jAEurAUg3HC1gRGEOyQjteLYMTSTRh1FHs39yyT4DcqtSsQKq8YMv3H++MfoLRE
+         ZhLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lTgWx4scVyEdnNwP8DjnL1zHNWGeK2kwc0Zp2eRMXQk=;
-        b=u+f5X4oTAdz5LeFoHHPeczAHk7fy8aqlhXpeRCfrA1wuOgFgWM2+D2s5rXYHV5ERco
-         2cb/jy8zSfgfCxa29RIXbY6TMtdX8IPq6KpBsl5KKymxmt80Y16FPuafUN2i7jWL1eE8
-         i1igZd3ivDe0iDdUNqgXzoOUFF4C3scnDvO5DyiwoCIiDYC1Iuo0cR7iLmUXDxGQsqbU
-         HGK1j6WzY6TklfblMljjtL6hcbP2fyrcCY6NpcWAD8SMKsviovBvJJ2TGqWFEeW2TwNZ
-         loQYKSHAoFO9087+inWcD7jordE3blg4rro4lmX/40MobCRzjDufTIWgRROEILXBZKHz
-         GzJw==
-X-Gm-Message-State: ANoB5pmTLRU4cs8SV8fQl+KA7X7GD3db6vgm0OfhMXwVR/8J1RCwxnBL
-        ZZ7ZWlDSWL/sJf7OkA/ZFpKR4tjyfzFT/MxT
-X-Google-Smtp-Source: AA0mqf7Bf1kskqLUj18tNkAcl3wyAWmGfpn9j1mAuma80CPFVrsgkisnFLZddTsm/ZeRKXFPmZsm1A==
-X-Received: by 2002:a17:90a:fd0d:b0:219:828e:ba2 with SMTP id cv13-20020a17090afd0d00b00219828e0ba2mr1449958pjb.0.1670516794018;
-        Thu, 08 Dec 2022 08:26:34 -0800 (PST)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h13-20020a65468d000000b00477f5ae26bbsm13286522pgr.50.2022.12.08.08.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:26:33 -0800 (PST)
-Date:   Thu, 8 Dec 2022 16:26:29 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/3] x86/cpu: Process all CPUID dependencies after
- identifying CPU info
-Message-ID: <Y5IQNY/fZw2JFA0B@google.com>
-References: <20221203003745.1475584-1-seanjc@google.com>
- <20221203003745.1475584-2-seanjc@google.com>
- <Y5INU3o+SFReGkLz@zn.tnic>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lLNYG7Z5yfhFRfHKNccnXxuMC8fmolMqOdSQBS5UEp8=;
+        b=rXQbNK7GCWfF6QXHDs6MsmceSiX6r4yW4Poe18rLmb76CyaveCqmfX0aS/q7map0Yj
+         ThkDO0F/hEEjLWYawJtRWVp+NVikTxR5IuiNkaEobNbNJLXZLPVZruP/OI20uYzRvcrq
+         Xi+kRBrzk6VFoZ7AVwSVbwrclWbsVxmbOaPV2h69NtazrNJGwC3PiZMVhm+J1XNvLRhm
+         +6aFUqzFHglXt57cKBTT1takhqLuyVPnT3as0wlWkTAahtRENy9hsRFPK+pEBPWU7CMe
+         lnZ81D/CaM4jmkTFNntvsmayQIyjJI119kHsroRD7oYGULyPuUFQ7F8ujzDJ3eZbAXDK
+         dKuw==
+X-Gm-Message-State: ANoB5plfOEqsp1i7AmpEqLdn8OINcSUsuIAPBIWQ9d1tTr+b/YpK8Msd
+        tknEMxJvw7BQ951Z4ECjb//k2s+fkMa/X0mu9Kk=
+X-Google-Smtp-Source: AA0mqf4I6Poabn6rhRsJ47rUKzZQmFeb8LPY22vlJn0/WYD/A/CA5nKLA7Pj6YVkjlru0GVzVv07Dg==
+X-Received: by 2002:a02:a04e:0:b0:375:b099:e48e with SMTP id f14-20020a02a04e000000b00375b099e48emr41641039jah.319.1670516819048;
+        Thu, 08 Dec 2022 08:26:59 -0800 (PST)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id d39-20020a026067000000b00389e42ac620sm8852119jaf.129.2022.12.08.08.26.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 08:26:58 -0800 (PST)
+Message-ID: <2dab17f3-65de-e237-4374-7040d945404c@kernel.dk>
+Date:   Thu, 8 Dec 2022 09:26:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5INU3o+SFReGkLz@zn.tnic>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] blktrace: Fix output non-blktrace event when blk_classic
+ option enabled
+Content-Language: en-US
+To:     Yang Jihong <yangjihong1@huawei.com>, rostedt@goodmis.org,
+        mhiramat@kernel.org, acme@redhat.com, mingo@elte.hu,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221122040410.85113-1-yangjihong1@huawei.com>
+ <e5654353-9850-beb5-cf72-7a7473a14743@huawei.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <e5654353-9850-beb5-cf72-7a7473a14743@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022, Borislav Petkov wrote:
-> On Sat, Dec 03, 2022 at 12:37:43AM +0000, Sean Christopherson wrote:
-> > Process all CPUID dependencies to ensure that a dependent is disabled if
-> > one or more of its parent features is unsupported.
+On 12/6/22 6:34 PM, Yang Jihong wrote:
+> Hello,
 > 
-> Just out of curiosity: this is some weird guest configuration, right?
+> PING.
 
-No, it's also relevant for bare metal.
+Get your company email fixed so that messages don't get marked as spam,
+that would help ensure your patches are more visible.
 
-> Not addressing a real hw issue...
+-- 
+Jens Axboe
 
-But it's not really a hardware issue either.  More like an admin/user issue.
 
-The problem is that if a kernel is built for subset of CPU types, e.g. just Intel
-or just Centaur, and then booted on an "unsupported" CPU type, init_ia32_feat_ctl()
-will never be invoked because ->c_init() will point a default_init(), and so the
-kernel never checks MSR_IA32_FEAT_CTL to see if VMX and/or SGX are fully enabled.
-
-E.g. if someone booted an "unsupported" kernel and also disabled VMX in BIOS, then
-the CPU will enumerate support for VMX in CPUID, but attempting to actually enable
-VMX will fail due to VMX being disabled in MSR_IA32_FEAT_CTL.
-
-> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> > index bf4ac1cb93d7..094fc69dba63 100644
-> > --- a/arch/x86/kernel/cpu/common.c
-> > +++ b/arch/x86/kernel/cpu/common.c
-> > @@ -1887,6 +1887,12 @@ static void identify_cpu(struct cpuinfo_x86 *c)
-> >  
-> >  	ppin_init(c);
-> >  
-> > +	/*
-> > +	 * Apply CPUID dependencies to ensure dependent features are disabled
-> > +	 * if a parent feature is unsupported but wasn't explicitly disabled.
-> > +	 */
-> > +	apply_cpuid_deps(c);
-> 
-> I'd probably call that resolve_cpuid_deps()...
-
-"resolve" works for me.
