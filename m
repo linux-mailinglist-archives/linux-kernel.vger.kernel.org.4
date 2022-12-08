@@ -2,69 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3696468BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:52:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B090D6468C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiLHFwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 00:52:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43672 "EHLO
+        id S229591AbiLHFz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 00:55:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbiLHFwO (ORCPT
+        with ESMTP id S229572AbiLHFzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 00:52:14 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D327B92A37;
-        Wed,  7 Dec 2022 21:52:13 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 26FB5804D;
-        Thu,  8 Dec 2022 05:52:13 +0000 (UTC)
-Date:   Thu, 8 Dec 2022 07:52:11 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial@vger.kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v4 1/1] serial: core: Start managing serial
- controllers to enable runtime PM
-Message-ID: <Y5F7i8Ee/jAQKu9n@atomide.com>
-References: <20221207124305.49943-1-tony@atomide.com>
- <Y5D187ygOvDEA0UK@smile.fi.intel.com>
- <Y5D3UKLgHCT9feuC@smile.fi.intel.com>
+        Thu, 8 Dec 2022 00:55:22 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA9B99534
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 21:55:21 -0800 (PST)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p39sJ-0006mT-Dm; Thu, 08 Dec 2022 06:55:15 +0100
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1p39sG-0001fG-Qo; Thu, 08 Dec 2022 06:55:12 +0100
+Date:   Thu, 8 Dec 2022 06:55:12 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>, Arun.Ramadoss@microchip.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>, kernel@pengutronix.de,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64 support
+ for ksz8 series of switches
+Message-ID: <20221208055512.GE19179@pengutronix.de>
+References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
+ <20221206114133.291881a4@kernel.org>
+ <20221207061630.GC19179@pengutronix.de>
+ <20221207154826.5477008b@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y5D3UKLgHCT9feuC@smile.fi.intel.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221207154826.5477008b@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Andy Shevchenko <andriy.shevchenko@intel.com> [221207 20:28]:
-> We can avoid this check by caching the platform device.
+On Wed, Dec 07, 2022 at 03:48:26PM -0800, Jakub Kicinski wrote:
+> On Wed, 7 Dec 2022 07:16:30 +0100 Oleksij Rempel wrote:
+> > > FWIW for normal netdevs / NICs the rtnl_link_stat pkts do not include
+> > > pause frames, normally. Otherwise one can't maintain those stats in SW
+> > > (and per-ring stats, if any, don't add up to the full link stats).
+> > > But if you have a good reason to do this - I won't nack..  
+> > 
+> > Pause frames are accounted by rx/tx_bytes by HW. Since pause frames may
+> > have different size, it is not possible to correct byte counters, so I
+> > need to add them to the packet counters.
 > 
-> 	struct platform_device *ctrl_pdev = NULL;
+> I have embarrassed myself with my lack of understanding of pause frames
+> before but nonetheless - are you sure?  I thought they are always 64B.
+> Quick look at the standard seems to agree:
 > 
-> 	if (...) {
-> 		ctrl_pdev = to_platform_device(ctrl_dev);
-> 	}
+>  31C.3.1 Receive state diagram (INITIATE MAC CONTROL FUNCTION) for
+>          EXTENSION operation
 > 
-> 	platform_device_del(ctrl_pdev);
+> shows a 64 octet frame.
+> 
+> Sending long pause frames seems self-defeating as we presumably want
+> the receiver to react ASAP.
 
-OK yeah that's nicer :)
-
-> > Shouldn't you call platform_device_unregister()?
-
-Outside the error path it should be platform_device_unregister(),
-I'll check. Thanks also for your other comments.
+I tested it by sending correct and malformed pause frames manually with
+mausezahn. Since it is possible to send and receive pause frames
+manually, it is good to count all bytes in use, otherwise we may have
+bogus or malicious stealth traffic without possibility to measure it.
 
 Regards,
-
-Tony
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
