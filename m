@@ -2,125 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 788056477E2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 446AE6477F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:29:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiLHVWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:22:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S229816AbiLHV3K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:29:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiLHVWT (ORCPT
+        with ESMTP id S229809AbiLHV3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:22:19 -0500
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58B3A716E1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:22:18 -0800 (PST)
-Received: by mail-lf1-x12e.google.com with SMTP id g7so3994749lfv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:22:18 -0800 (PST)
+        Thu, 8 Dec 2022 16:29:07 -0500
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40FF88426B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:29:06 -0800 (PST)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3fe3bedbb16so27814027b3.15
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=abZKbKUJfOxCSq1MPfvZXV7QCvgG9o8fBXW4C3oMuuI=;
-        b=V+OOnCcFNysG2pLGicgTlbVl+LUJe54qHq5jnSwM7K2q8GJ2fYaDrkaH+bzLcWwxZK
-         WQn++2QsiBh+c9n2FnCTm1sggPfsPeqpmQYeOu+3umFug+H+uYmAUkPkIJwZQ2/OEK4D
-         dDa1ic+0ND/GUBShWRmzztzRNiAqtE01a28vMe4iceNpDfzzz0CfrkZGD6xJFPWC6+F4
-         qaz0aoYDNrCt1qa/tEFAkEg00AAq9gSN0JZw/QNH9Ylx+x4wVDINWw7TvLzbg12c2ZYK
-         3rmxDk+z80cxDIekpgpovY/1d+SoegDfQeqXwIhHLAUfULv2oYnjpUmxcdrGqL+A9hPo
-         x4Ew==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1/7SmmzO1fjUhk6gqNU1IGSXCaBrn6wr7PS0uHHL0Y4=;
+        b=LqiYpvieBDCbLQwkb+CSQO3e5kvlO9YkgEAx+uj4dvnOMSYSbFp+eB6H7weFJnTz89
+         8MDyvy5lu8E6NOlVICNsMMIWd2RXsQrhEHP/T+ym9fr0388elXolqAQVV5XMtGyPc7hB
+         mh47hi5HEFtu4bMGkuw7sLC+CgMhhQDK3rFxEm+R8vsaFvB3a8j6j2zQv0P+wJGMQLDy
+         6qYqDgN4YpiZmvCgZNbe6NfpIeJGuTrFf6M+9a2bJ+nkDnbJl61wH4k79YmSG333Qxbj
+         9U7xGHcetB4fBU33IHmW5ZSKzsib8LREKjD5mpb4io1ayunr/o9VMJFRteWlgb2E3MvY
+         WTSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=abZKbKUJfOxCSq1MPfvZXV7QCvgG9o8fBXW4C3oMuuI=;
-        b=a5eYBRm0oyFX5rzbmb7OR/GobXq9ZbZGKLwZr3X/GXdOgOpZGCTULMGQuv55cEDLYV
-         3Ww4HjPoavKkuTDvYva+WPzNWkT8ZJujKGegunifdBxH91J7d6XCbtWfLiRc4Nbv03jD
-         S+KX9vNP87UXRLUU+iQ02pAYcgttCla0WWQkfJKOev+7RTA2ddpzKpUAekEuICqqBDTX
-         iVG2Nlbsi0yQkSrQEOZlbnL3qX1yjJdnrMe0NWFpJcB13fogA50zjmq9slf1Ucw2M4zY
-         Lw6bPkoYhnDcplKx4I9cx2L/rXM9N+HpYCHoc9Mbf/Dm8pmU/ss5Q6yYleffBDScoa38
-         c4BQ==
-X-Gm-Message-State: ANoB5plTBiU9Ysfub4MAcGY9Mjm8c8lXONs/3siCN+32gXkMKQNbctRo
-        HttXe5IMMfgJI+PgS4wSMVux6Q==
-X-Google-Smtp-Source: AA0mqf57IDQUvyPzGFYIG1ByCLs5HahO5hw2LWOrgdpshJUChB20nKmieK/du4yTeDGn5f5XlsXN0w==
-X-Received: by 2002:a05:6512:22c5:b0:4b5:5880:8359 with SMTP id g5-20020a05651222c500b004b558808359mr7702628lfu.425.1670534536643;
-        Thu, 08 Dec 2022 13:22:16 -0800 (PST)
-Received: from [192.168.1.101] (95.49.125.53.neoplus.adsl.tpnet.pl. [95.49.125.53])
-        by smtp.gmail.com with ESMTPSA id v3-20020a05651203a300b004a4754c5db5sm3480550lfp.244.2022.12.08.13.22.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 13:22:16 -0800 (PST)
-Message-ID: <47b2fb29-1c2e-db6e-b14f-6dfe90341825@linaro.org>
-Date:   Thu, 8 Dec 2022 22:22:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH net-next 2/2] net: ipa: add IPA v4.7 support
-To:     Alex Elder <elder@linaro.org>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc:     andersson@kernel.org, agross@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, elder@kernel.org,
-        linux-arm-msm@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-References: <20221208211529.757669-1-elder@linaro.org>
- <20221208211529.757669-3-elder@linaro.org>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221208211529.757669-3-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1/7SmmzO1fjUhk6gqNU1IGSXCaBrn6wr7PS0uHHL0Y4=;
+        b=ZJsi8B3DmdV+7c+76Oa5NGZ/x/UMGH++wfmlpgzMEZKUk4makQZhstEPZhBxrQX/S6
+         6eVZTkxE60Xgss7noz6e9AlLbIDSkUeU71UOx6PC65uQ5ZEYvqsIwroti8j8i7rTs0JD
+         21t78Shtx1UtUn532Q+WC/+3hJrDrvst5Oug73LQgcflrfEG39F/bq8nMPfgXHHB0Xz/
+         0g8jwubP4JpeB1yFc5+FestbxTGPxh67M2zBuIRlYeaBmnTTmzyRfZZm6q6zRDAMdVMN
+         3DHR6pK3rPEZtHFwj45YUS0t+jSxHzfX9qlTVsu/QEwm/DRPx/zf2lePcu+8rBIHKF4q
+         6RHg==
+X-Gm-Message-State: ANoB5pkKYmU9SsWu5LhjU78lk/xjHDQt73UwDgmjuHmZX/npqiPB3cpE
+        tvEHudsLipOWv8wnRdl3JY1VUlGrTgtbAi/p46RW8w==
+X-Google-Smtp-Source: AA0mqf5uSOfyS4zTT3VGBQCIxUQ4g9tCxEa+73pikowJ78eitpwdyfLrX+kPJHU3xsZsUmGtzI1+a4VpVYAb7VSEbSE1OQ==
+X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:c924:bf6:54d9:20e9])
+ (user=isaacmanjarres job=sendgmr) by 2002:a05:690c:902:b0:3f6:489a:a06f with
+ SMTP id cb2-20020a05690c090200b003f6489aa06fmr10039866ywb.470.1670534945529;
+ Thu, 08 Dec 2022 13:29:05 -0800 (PST)
+Date:   Thu,  8 Dec 2022 13:29:01 -0800
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
+Message-ID: <20221208212902.765781-1-isaacmanjarres@google.com>
+Subject: [PATCH RESEND v1] loop: Fix the max_loop commandline argument
+ treatment when it is set to 0
+From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ken Chen <kenchen@google.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        "Isaac J. Manjarres" <isaacmanjarres@google.com>,
+        stable@vger.kernel.org, kernel-team@android.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Currently, the max_loop commandline argument can be used to specify how
+many loop block devices are created at init time. If it is not
+specified on the commandline, CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block
+devices will be created.
 
+The max_loop commandline argument can be used to override the value of
+CONFIG_BLK_DEV_LOOP_MIN_COUNT. However, when max_loop is set to 0
+through the commandline, the current logic treats it as if it had not
+been set, and creates CONFIG_BLK_DEV_LOOP_MIN_COUNT devices anyway.
 
-On 8.12.2022 22:15, Alex Elder wrote:
-> Add the necessary register and data definitions needed for IPA v4.7,
-> which is found on the SM6350 SoC.
-> 
-> Co-developed-by: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Alex Elder <elder@linaro.org>
-> ---
-[...]
-> +
-> +/* Memory configuration data for an SoC having IPA v4.7 */
-> +static const struct ipa_mem_data ipa_mem_data = {
-> +	.local_count	= ARRAY_SIZE(ipa_mem_local_data),
-> +	.local		= ipa_mem_local_data,
-> +	.imem_addr	= 0x146a9000,
-> +	.imem_size	= 0x00002000,
-Should probably be
+Fix this by starting max_loop off as set to CONFIG_BLK_DEV_LOOP_MIN_COUNT.
+This preserves the intended behavior of creating
+CONFIG_BLK_DEV_LOOP_MIN_COUNT loop block devices if the max_loop
+commandline parameter is not specified, and allowing max_loop to
+be respected for all values, including 0.
 
-0x146a8000
-0x00003000
+This allows environments that can create all of their required loop
+block devices on demand to not have to unnecessarily preallocate loop
+block devices.
 
-with an appropriate change in dt to reserve that region.
+Fixes: 732850827450 ("remove artificial software max_loop limit")
+Cc: stable@vger.kernel.org
+Cc: Ken Chen <kenchen@google.com>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+---
+ drivers/block/loop.c | 28 ++++++++++++----------------
+ 1 file changed, 12 insertions(+), 16 deletions(-)
 
-Qualcomm does:
-ipa@... { qcom,additional-mapping = <0x146a8000 0x146a8000 0x2000>; };
+This is a resend because I misspelled the address for
+stable@vger.kernel.org the first time.
 
-which covers 0x146a8000-0x146a9fff
+--Isaac
 
-plus
+diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+index ad92192c7d61..d12d3d171ec4 100644
+--- a/drivers/block/loop.c
++++ b/drivers/block/loop.c
+@@ -1773,7 +1773,16 @@ static const struct block_device_operations lo_fops = {
+ /*
+  * And now the modules code and kernel interface.
+  */
+-static int max_loop;
++
++/*
++ * If max_loop is specified, create that many devices upfront.
++ * This also becomes a hard limit. If max_loop is not specified,
++ * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
++ * init time. Loop devices can be requested on-demand with the
++ * /dev/loop-control interface, or be instantiated by accessing
++ * a 'dead' device node.
++ */
++static int max_loop = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
+ module_param(max_loop, int, 0444);
+ MODULE_PARM_DESC(max_loop, "Maximum number of loop devices");
+ module_param(max_part, int, 0444);
+@@ -2181,7 +2190,7 @@ MODULE_ALIAS("devname:loop-control");
+ 
+ static int __init loop_init(void)
+ {
+-	int i, nr;
++	int i;
+ 	int err;
+ 
+ 	part_shift = 0;
+@@ -2209,19 +2218,6 @@ static int __init loop_init(void)
+ 		goto err_out;
+ 	}
+ 
+-	/*
+-	 * If max_loop is specified, create that many devices upfront.
+-	 * This also becomes a hard limit. If max_loop is not specified,
+-	 * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
+-	 * init time. Loop devices can be requested on-demand with the
+-	 * /dev/loop-control interface, or be instantiated by accessing
+-	 * a 'dead' device node.
+-	 */
+-	if (max_loop)
+-		nr = max_loop;
+-	else
+-		nr = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
+-
+ 	err = misc_register(&loop_misc);
+ 	if (err < 0)
+ 		goto err_out;
+@@ -2233,7 +2229,7 @@ static int __init loop_init(void)
+ 	}
+ 
+ 	/* pre-create number of devices given by config or max_loop */
+-	for (i = 0; i < nr; i++)
++	for (i = 0; i < max_loop; i++)
+ 		loop_add(i);
+ 
+ 	printk(KERN_INFO "loop: module loaded\n");
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
-imem@.. { reg = <0x146aa000 0x1000>; };
-
-which in total gives us 0x146a8000-0x146aafff
-
-
-That would also mean all of your writes are kind of skewed, unless
-you already applied some offsets to them.
-
-(IMEM on 6350 starts at 0x14680000 and is 0x2e000 long, as per
-the bootloader memory map)
-
-Konrad
