@@ -2,96 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29280646C07
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A689D646C09
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiLHJht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:37:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
+        id S230090AbiLHJiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:38:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHJhq (ORCPT
+        with ESMTP id S230070AbiLHJiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:37:46 -0500
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1FA12D26;
-        Thu,  8 Dec 2022 01:37:46 -0800 (PST)
-Received: by mail-wm1-f48.google.com with SMTP id bg10so630954wmb.1;
-        Thu, 08 Dec 2022 01:37:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IE2BRq9L+0PqGquoqVrkYyY0LIMIc6GkCZYnscxNcAw=;
-        b=JpDbEKycMR+tvi1qzKUlX9g2eiPXj6nvzeA6bALI4eSZVGiDL47rMHfFtePahVMCM6
-         TtRjUHKeXxedgyxLkQVsy41w1GVoLRer6p2fyWOtD+A+KfR0wnczC0iKwZMUfuHJtwaA
-         Y4DEJsYP3LBNdOlTjZ9HKVxhCAJJzWiH9NagFsAaDplLudcv5rThaa091I4bmfX55/Qa
-         l4C7z6iCeeNj80HikaMf4SNq0D1gShA5DAKa38ZPTtR/pGt2K3MBOVULTH0yrNr/Couz
-         MwGbMn/IZYTu8Qp2lhVA/dLQJEICVpkvybUBMiW3RlnXkfwOyxqHMTP0HjdONmzJJYqT
-         1E0w==
-X-Gm-Message-State: ANoB5pn6YnSmLTxMDhbqfh3tjmUPNwVldHjQ3pGyqV1G7ezk1G9vtQoT
-        +Z+0M16scbvOP9V3T6xoikU=
-X-Google-Smtp-Source: AA0mqf6DS1fgI6lCdD1AjRyLiwjdw5l88iWUrUlwLzQPxLWVmcQUt3zi03en9VlUVHcUhixYmxMjfQ==
-X-Received: by 2002:a05:600c:21d8:b0:3d0:8d48:2993 with SMTP id x24-20020a05600c21d800b003d08d482993mr1655335wmj.36.1670492264474;
-        Thu, 08 Dec 2022 01:37:44 -0800 (PST)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:49? ([2a0b:e7c0:0:107::aaaa:49])
-        by smtp.gmail.com with ESMTPSA id 6-20020a1c0206000000b003d1e90717ccsm4256666wmc.30.2022.12.08.01.37.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 01:37:44 -0800 (PST)
-Message-ID: <035f431c-15ee-b604-79be-ec2861b45b86@kernel.org>
-Date:   Thu, 8 Dec 2022 10:37:42 +0100
+        Thu, 8 Dec 2022 04:38:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709242FC23;
+        Thu,  8 Dec 2022 01:37:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CF7BD61E42;
+        Thu,  8 Dec 2022 09:37:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE5F2C433D6;
+        Thu,  8 Dec 2022 09:37:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670492273;
+        bh=wYx2MO5YR6MseoVFegS6uhUtm5jWg22S6hWITNm5BM4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=P8HFEZSYo9pu0gboQpt9k8bdF2m9KCt5kF1ymZ/H5G65QDagLY+dzTTppFobUWtFv
+         NSyEtoj1nMd8euSMT+6GAVXcfB1FjOek03/GBlFLmzduklr7BWi4RRO5eC3N41T8hZ
+         S8wXuQ5t0JK8Mho1XXB7C7TrE3lXvfhcgfttHemOU+DpHQ7EEfAYnEdoe1UJfxc2sk
+         A0kthGwJ7QKTrOdQEKS4JAViEvlv5C7trtTLedyaySjodl/liolDvHUDKIetuIujmQ
+         OtA3wBq3T7SvvMSqE4Vr5E9l3CmP5aqn3WPTWF2rzOpjx6lsxj9l5FoaENZr+pgaE4
+         couMnWNctPAJA==
+Date:   Thu, 8 Dec 2022 09:37:48 +0000
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Kristen Carlson Accardi <kristen@linux.intel.com>
+Cc:     dave.hansen@linux.intel.com, tj@kernel.org,
+        linux-kernel@vger.kernel.org, linux-sgx@vger.kernel.org,
+        cgroups@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        zhiquan1.li@intel.com, Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v2 10/18] x86/sgx: Add option to ignore age of page
+ during EPC reclaim
+Message-ID: <Y5GwbPu4cUs0/4Fi@kernel.org>
+References: <20221202183655.3767674-1-kristen@linux.intel.com>
+ <20221202183655.3767674-11-kristen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] serial: earlycon-arm-semihost: Move smh_putc()
- variants in respective arch's semihost.h
-Content-Language: en-US
-To:     Bin Meng <bmeng@tinylab.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        linux-serial <linux-serial@vger.kernel.org>
-Cc:     "catalin.marinas" <catalin.marinas@arm.com>,
-        gregkh <gregkh@linuxfoundation.org>,
-        linux <linux@armlinux.org.uk>, will <will@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-References: <20221207135352.592556-1-bmeng@tinylab.org>
- <0443d5e9-b2ce-7e6b-c69b-708d67a5bf97@kernel.org>
- <em14380c7e-ee2b-45d5-8879-dde687f03b2b@eea79fc7.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <em14380c7e-ee2b-45d5-8879-dde687f03b2b@eea79fc7.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221202183655.3767674-11-kristen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08. 12. 22, 10:32, Bin Meng wrote:
->>> +#ifdef CONFIG_THUMB2_KERNEL
->>> +#define SEMIHOST_SWI    "0xab"
->>> +#else
->>> +#define SEMIHOST_SWI    "0x123456"
->>> +#endif
->>> +
->>> +static inline void smh_putc(struct uart_port *port, unsigned char c)
->>
->> 2) port is unused in all implementations. So it should be dropped.
->> 3) can you make "c" an explicit u8?
+On Fri, Dec 02, 2022 at 10:36:46AM -0800, Kristen Carlson Accardi wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> The smh_putc function signature is defined by the uart_console_write 
-> helper. I don't think we can change it.
+> Add a flag to sgx_reclaim_pages() to instruct it to ignore the age of
+> page, i.e. reclaim the page even if it's young.  The EPC cgroup will use
+> the flag to enforce its limits by draining the reclaimable lists before
+> resorting to other measures, e.g. forcefully reclaimable "unreclaimable"
+> pages by killing enclaves.
+> 
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kernel/cpu/sgx/main.c | 46 +++++++++++++++++++++-------------
+>  1 file changed, 29 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/sgx/main.c b/arch/x86/kernel/cpu/sgx/main.c
+> index a4a65eadfb79..db96483e2e74 100644
+> --- a/arch/x86/kernel/cpu/sgx/main.c
+> +++ b/arch/x86/kernel/cpu/sgx/main.c
+> @@ -31,6 +31,10 @@ static DEFINE_XARRAY(sgx_epc_address_space);
+>   * with sgx_global_lru.lock acquired.
+>   */
+>  static struct sgx_epc_lru_lists sgx_global_lru;
 
-Ah. Of course. Then at least forward-declare struct uart_port here. So 
-that it works also when someone decides to include the header outside 
-serial.
+Please, separate these by an empty line.
 
-thanks,
--- 
-js
-suse labs
+> +static inline struct sgx_epc_lru_lists *sgx_lru_lists(struct sgx_epc_page *epc_page)
+> +{
+> +	return &sgx_global_lru;
+> +}
 
+Should be named by the thing it returns, not by the type.
+
+BR, Jarkko
