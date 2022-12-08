@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101DB647719
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1343764771F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiLHUQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:16:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S229876AbiLHURm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLHUQF (ORCPT
+        with ESMTP id S229558AbiLHURj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:16:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC663C6CD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:16:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 8FE4CCE244B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 20:16:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77710C433D2;
-        Thu,  8 Dec 2022 20:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670530560;
-        bh=r9HpB/mmg7ZftwCJizYWJ7Mosc/Pfu5PxDDbosk1GEE=;
-        h=Date:From:To:cc:Subject:From;
-        b=t2Zn0jqM8mCoj4Db2FjfdE0a+phsHsOT8J7XtdClDCjY4mlMbel7z88bEF1+bnkc+
-         QKiUVPfZnIHEYF3CpFuk1jqAWdudf8+W4WVzxL/JhufoL60M7DdtjM7rPzNT5y4boS
-         EDlWXMdEYy32f6AAvdAP0f6+tpXu0Hmo2ckymaPtBqIKdhr/1kHA1Hi3YYhsK5uQ6B
-         FZXKE8hFZX0KqklajEAe3ARkGuJZTuMRPc7/2oWKSra14TRXnFEkXCq36HFs1hOA7K
-         +EpQKFF05bMzJTUUeJwrtb8oBCbD0VCIxHjYCpLRmw/19ThZQffokK0gnIght3Ijo0
-         dO1CS75UCSANw==
-Date:   Thu, 8 Dec 2022 21:16:00 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] HID regression fix for 6.1
-Message-ID: <nycvar.YFH.7.76.2212082109060.9000@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Thu, 8 Dec 2022 15:17:39 -0500
+Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11A06165;
+        Thu,  8 Dec 2022 12:17:35 -0800 (PST)
+Date:   Thu, 08 Dec 2022 20:17:22 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
+        s=protonmail; t=1670530652; x=1670789852;
+        bh=XDr9OU9uLvDybQvM4E4TClVzCFExjZb/R4pcEYzFNcM=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=r7V12HGieDYlc1YW4cn7A2k7cTeu55Aw4HBD38EeiSyxRrLT5souB/WgEEimolI7q
+         uS+Guulf83OZ8C3QthpVzKWbbEVD1aDJBerOqy4+YJ6uX9XHrPOre0Sq30OTQIQYMv
+         pNuX2uuKxsZ6Wta8CkX0RoFolqo1Bd/M7Bcmjedr7tiqLGaWcUjqx5A2jtPN7oezQa
+         y2CaVgnAXNwAsLbySDSD/ByopOW6H0/Fqk00AUEnJiTNYsVUmr6SlnpdnnneI4juHL
+         5I3AslsG/VPBmq1Ctwsu2TM8KF46USl4ktkeXljd8w94rIevfRBqflXJ3M4IzVpneB
+         dWql3SZoyzqcg==
+To:     Yury Norov <yury.norov@gmail.com>
+From:   Peter Lafreniere <peter@n8pjl.ca>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v3 5/5] lib/cpumask: reorganize cpumask_local_spread() logic
+Message-ID: <KQCC2QYXZ6BtFjiUQO-XQNUO5Ub3kGfpKzjfIeUfCQEvMUEMKiZ7ofEMqoZElMYxYFtuRqW6v3UzCpDzDR-QYZk-tpMDVLl_HSl8BEi1hZk=@n8pjl.ca>
+In-Reply-To: <20221208183101.1162006-6-yury.norov@gmail.com>
+References: <20221208183101.1162006-1-yury.norov@gmail.com> <20221208183101.1162006-6-yury.norov@gmail.com>
+Feedback-ID: 53133685:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+> Now after moving all NUMA logic into sched_numa_find_nth_cpu(),
+> else-branch of cpumask_local_spread() is just a function call, and
+> we can simplify logic by using ternary operator.
+>
+> While here, replace BUG() with WARN().
+Why make this change? It's still as bad to hit the WARN_ON as it was before=
+.
 
-please pull from
+> Signed-off-by: Yury Norov yury.norov@gmail.com
+>
+> ---
+> lib/cpumask.c | 16 ++++++----------
+> 1 file changed, 6 insertions(+), 10 deletions(-)
+>
+> diff --git a/lib/cpumask.c b/lib/cpumask.c
+> index 255974cd6734..c7029fb3c372 100644
+> --- a/lib/cpumask.c
+> +++ b/lib/cpumask.c
+> @@ -127,16 +127,12 @@ unsigned int cpumask_local_spread(unsigned int i, i=
+nt node)
+> /* Wrap: we always want a cpu. */
+> i %=3D num_online_cpus();
+>
+> - if (node =3D=3D NUMA_NO_NODE) {
+> - cpu =3D cpumask_nth(i, cpu_online_mask);
+> - if (cpu < nr_cpu_ids)
+> - return cpu;
+> - } else {
+> - cpu =3D sched_numa_find_nth_cpu(cpu_online_mask, i, node);
+> - if (cpu < nr_cpu_ids)
+> - return cpu;
+> - }
+> - BUG();
+> + cpu =3D node =3D=3D NUMA_NO_NODE ?
+> + cpumask_nth(i, cpu_online_mask) :
+> + sched_numa_find_nth_cpu(cpu_online_mask, i, node);
+I find the if version clearer, and cleaner too if you drop the brackets.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git tags/for-linus-2022120801
+For the ternary version it would be nice to parenthesize the equality
+like you did in cmp() in 3/5.
 
-It contains a regression fix for handling Logitech HID++ devices and 
-memory corruption fixes. More specifically:
+> +
+> + WARN_ON(cpu >=3D nr_cpu_ids);
+>
+> + return cpu;
+> }
+> EXPORT_SYMBOL(cpumask_local_spread);
+>
+> --
+> 2.34.1
 
-=====
-- regression fix (revert) for catch-all handling of Logitech HID++ 
-  Bluetooth devices; there are devices that turn out not to work
-  with this, and the root cause is yet to be properly understood. So we
-  are dropping it for now, and it will be revisited for 6.2 or 6.3
-  (Benjamin Tissoires)
-- memory corruption fix in HID core (ZhangPeng)
-- memory corruption fix in hid-lg4ff (Anastasia Belova)
-- Kconfig fix for I2C_HID (Benjamin Tissoires)
-- a few device-id specific quirks that piggy-back on top of the
-  important fixes above
-=====
+Minor nit: cmp() in 3/5 could use a longer name. The file's long, and
+cmp() doesn't explain _what_ it's comparing. How about cmp_cpumask() or
+something related to the function using it?
 
-Thanks.
-
-----------------------------------------------------------------
-Anastasia Belova (1):
-      HID: hid-lg4ff: Add check for empty lbuf
-
-Ankit Patel (1):
-      HID: usbhid: Add ALWAYS_POLL quirk for some mice
-
-Benjamin Tissoires (3):
-      HID: fix I2C_HID not selected when I2C_HID_OF_ELAN is
-      Revert "HID: logitech-hidpp: Remove special-casing of Bluetooth devices"
-      Revert "HID: logitech-hidpp: Enable HID++ for all the Logitech Bluetooth devices"
-
-Hans de Goede (1):
-      HID: ite: Enable QUIRK_TOUCHPAD_ON_OFF_REPORT on Acer Aspire Switch V 10
-
-José Expósito (2):
-      HID: uclogic: Fix frame templates for big endian architectures
-      HID: uclogic: Add HID_QUIRK_HIDINPUT_FORCE quirk
-
-ZhangPeng (1):
-      HID: core: fix shift-out-of-bounds in hid_report_raw_event
-
- drivers/hid/hid-core.c           |  3 +++
- drivers/hid/hid-ids.h            |  4 ++++
- drivers/hid/hid-ite.c            |  5 +++++
- drivers/hid/hid-lg4ff.c          |  6 ++++++
- drivers/hid/hid-logitech-hidpp.c | 28 +++++++++-------------------
- drivers/hid/hid-quirks.c         |  3 +++
- drivers/hid/hid-uclogic-core.c   |  1 +
- drivers/hid/hid-uclogic-rdesc.c  |  2 +-
- drivers/hid/i2c-hid/Kconfig      |  4 ++--
- 9 files changed, 34 insertions(+), 22 deletions(-)
-
--- 
-Jiri Kosina
-SUSE Labs
+Other than the above particularities, the whole series looks good to me.
+Reviewed-by: Peter Lafreniere <peter@n8pjl.ca>
 
