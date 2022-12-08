@@ -2,194 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82682646A9A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54789646A9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbiLHIdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:33:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S229719AbiLHIe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiLHIdG (ORCPT
+        with ESMTP id S229462AbiLHIeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:33:06 -0500
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6CB27161;
-        Thu,  8 Dec 2022 00:33:03 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4NSS0G66C5z9xHw7;
-        Thu,  8 Dec 2022 16:25:50 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP1 (Coremail) with SMTP id LxC2BwBHM3AjoZFjn3rMAA--.59558S2;
-        Thu, 08 Dec 2022 09:32:43 +0100 (CET)
-Message-ID: <971b28db46dfb4437080b18ba042b290abaf960f.camel@huaweicloud.com>
-Subject: Re: [PATCH v2 1/2] evm: Alloc evm_digest in evm_verify_hmac() if
- CONFIG_VMAP_STACK=y
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        stable@vger.kernel.org
-Date:   Thu, 08 Dec 2022 09:32:33 +0100
-In-Reply-To: <b3d0cfa7f5391968ce332977eb602305cd57e891.camel@linux.ibm.com>
-References: <20221201100625.916781-1-roberto.sassu@huaweicloud.com>
-         <20221201100625.916781-2-roberto.sassu@huaweicloud.com>
-         <Y4j4MJzizgEHf4nv@sol.localdomain>
-         <c8ef0ab69635b99d5175eaf4c96bb3a8957c6210.camel@huaweicloud.com>
-         <Y4pIpxbjBdajymBJ@sol.localdomain>
-         <5813b77edf8f8c6c68da8343b7898f2a5c831077.camel@huaweicloud.com>
-         <b3d0cfa7f5391968ce332977eb602305cd57e891.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 8 Dec 2022 03:34:25 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C8C60EA5;
+        Thu,  8 Dec 2022 00:34:25 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id 124so770852pfy.0;
+        Thu, 08 Dec 2022 00:34:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BZ7BqfAhscppPd/MMMpuIWNmxf+bevD/qEdzAfh6TaA=;
+        b=i4WtgrRFZFtuWZpu0rjYVGQ0WZiSRkT4KxWWsX62cUJsJiIC+5aqn2OQpn9fBZh2fF
+         +evj1UKVOAfpBKVnWpYLsc7pEhJa1O9bXKs5+103J9Hu61HpO6u4V3fzqzgy1QP34JSp
+         kcci03OZEbgzsk8r9dk1AX8NXlt6KLZcTUwyoWzux4oyJCc5H3gLrV9gU320mgVRQabc
+         9oJ2yMhfzLxe4qpAO0KrrhQo7g5/84pGIEYgPGYmTwO3uZhBZDKXO31my+lUdSdu8y/a
+         qiW6paHrwp5uIkyBuCvrfTUYL/X4/YxJMFgzpVYtwl2HezbEH57z0uHcMmivRsCl3RT9
+         V83w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BZ7BqfAhscppPd/MMMpuIWNmxf+bevD/qEdzAfh6TaA=;
+        b=NsVi6RmDWnidbjTa4mAnhHeX1Pdx75zlfXh+ACWnFqCab5vB90VI634Nq0hbtnEcl7
+         CJzbkiwSROqMtBXfbH2sNYM4wKaVZcQH76AgtNiE+7BV8zAzrhPwrvUYhtQIdHTeiHNX
+         o7XAuCf8CK0V6VIkp5cRzCRmO81s8PQzMvJjg+QqCTxteUqJ5CrMToTwBrLBvOaPBWt9
+         1WM6MMX3qcBvPf2Lu31T7PaU/VqksszSOIh0VcRrU3WjIzXhy9KGMm4V0O4EErKKXxa6
+         y+Ma7rR+hl0bZJsvwk93IDrukeE05wKmKV315hdNqssnI6ScCTw+7kn4zaZyR2Ri1zSE
+         XNzg==
+X-Gm-Message-State: ANoB5pk223DFOImDWOozPUSJw9WtqqWqNKGnqNXqpHRXUMbBQlSfsodH
+        r1jQo/74P9r/p71nKilFl6M=
+X-Google-Smtp-Source: AA0mqf6aFICfOn7lllVd/nJdh2oYrJ2tni0ymgClNyq5cUlsGJT07TT+CUlYUqxbEC5bWIlK2s5yEw==
+X-Received: by 2002:a63:120c:0:b0:477:6ccd:9f4 with SMTP id h12-20020a63120c000000b004776ccd09f4mr73105104pgl.534.1670488464697;
+        Thu, 08 Dec 2022 00:34:24 -0800 (PST)
+Received: from localhost.localdomain ([185.216.119.110])
+        by smtp.googlemail.com with ESMTPSA id j9-20020a654d49000000b0046ae5cfc3d5sm12445980pgt.61.2022.12.08.00.34.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 00:34:23 -0800 (PST)
+From:   Wang Yong <yongw.kernel@gmail.com>
+To:     alexs@kernel.org, siyanteng@loongson.cn, corbet@lwn.net,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wang Yong <yongw.kernel@gmail.com>
+Subject: [PATCH] docs/zh_CN: fix a typo in howto
+Date:   Thu,  8 Dec 2022 08:33:53 +0000
+Message-Id: <20221208083353.160152-1-yongw.kernel@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: LxC2BwBHM3AjoZFjn3rMAA--.59558S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxGFy8Ww4DuF1UGF15ZryUGFg_yoW7JF4kpa
-        1kK3W8Kr45Jr1fCF12v3WYy3Z5KrW8tryUWrs8Jw1YyFyqqrnFyw1Iyr1UWryFgry8GF12
-        qFW8trnxCr15Aa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQAABF1jj4ZryQADsT
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 20:26 -0500, Mimi Zohar wrote:
-> On Mon, 2022-12-05 at 09:22 +0100, Roberto Sassu wrote:
-> > On Fri, 2022-12-02 at 10:49 -0800, Eric Biggers wrote:
-> > > On Fri, Dec 02, 2022 at 08:58:21AM +0100, Roberto Sassu wrote:
-> > > > On Thu, 2022-12-01 at 10:53 -0800, Eric Biggers wrote:
-> > > > > On Thu, Dec 01, 2022 at 11:06:24AM +0100, Roberto Sassu wrote:
-> > > > > > From: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > 
-> > > > > > Commit ac4e97abce9b8 ("scatterlist: sg_set_buf() argument must be in linear
-> > > > > > mapping") checks that both the signature and the digest reside in the
-> > > > > > linear mapping area.
-> > > > > > 
-> > > > > > However, more recently commit ba14a194a434c ("fork: Add generic vmalloced
-> > > > > > stack support"), made it possible to move the stack in the vmalloc area,
-> > > > > > which is not contiguous, and thus not suitable for sg_set_buf() which needs
-> > > > > > adjacent pages.
-> > > > > > 
-> > > > > > Fix this by checking if CONFIG_VMAP_STACK is enabled. If yes, allocate an
-> > > > > > evm_digest structure, and use that instead of the in-stack counterpart.
-> > > > > > 
-> > > > > > Cc: stable@vger.kernel.org # 4.9.x
-> > > > > > Fixes: ba14a194a434 ("fork: Add generic vmalloced stack support")
-> > > > > > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > > > > > ---
-> > > > > >  security/integrity/evm/evm_main.c | 26 +++++++++++++++++++++-----
-> > > > > >  1 file changed, 21 insertions(+), 5 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/security/integrity/evm/evm_main.c b/security/integrity/evm/evm_main.c
-> > > > > > index 23d484e05e6f..7f76d6103f2e 100644
-> > > > > > --- a/security/integrity/evm/evm_main.c
-> > > > > > +++ b/security/integrity/evm/evm_main.c
-> > > > > > @@ -174,6 +174,7 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > > > >  	struct signature_v2_hdr *hdr;
-> > > > > >  	enum integrity_status evm_status = INTEGRITY_PASS;
-> > > > > >  	struct evm_digest digest;
-> > > > > > +	struct evm_digest *digest_ptr = &digest;
-> > > > > >  	struct inode *inode;
-> > > > > >  	int rc, xattr_len, evm_immutable = 0;
-> > > > > >  
-> > > > > > @@ -231,14 +232,26 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > > > >  		}
-> > > > > >  
-> > > > > >  		hdr = (struct signature_v2_hdr *)xattr_data;
-> > > > > > -		digest.hdr.algo = hdr->hash_algo;
-> > > > > > +
-> > > > > > +		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
-> > > > > > +			digest_ptr = kmalloc(sizeof(*digest_ptr), GFP_NOFS);
-> > > > > > +			if (!digest_ptr) {
-> > > > > > +				rc = -ENOMEM;
-> > > > > > +				break;
-> > > > > > +			}
-> > > > > > +		}
-> > > > > > +
-> > > > > > +		digest_ptr->hdr.algo = hdr->hash_algo;
-> > > > > > +
-> > > > > >  		rc = evm_calc_hash(dentry, xattr_name, xattr_value,
-> > > > > > -				   xattr_value_len, xattr_data->type, &digest);
-> > > > > > +				   xattr_value_len, xattr_data->type,
-> > > > > > +				   digest_ptr);
-> > > > > >  		if (rc)
-> > > > > >  			break;
-> > > > > >  		rc = integrity_digsig_verify(INTEGRITY_KEYRING_EVM,
-> > > > > >  					(const char *)xattr_data, xattr_len,
-> > > > > > -					digest.digest, digest.hdr.length);
-> > > > > > +					digest_ptr->digest,
-> > > > > > +					digest_ptr->hdr.length);
-> > > > > >  		if (!rc) {
-> > > > > >  			inode = d_backing_inode(dentry);
-> > > > > >  
-> > > > > > @@ -268,8 +281,11 @@ static enum integrity_status evm_verify_hmac(struct dentry *dentry,
-> > > > > >  		else
-> > > > > >  			evm_status = INTEGRITY_FAIL;
-> > > > > >  	}
-> > > > > > -	pr_debug("digest: (%d) [%*phN]\n", digest.hdr.length, digest.hdr.length,
-> > > > > > -		  digest.digest);
-> > > > > > +	pr_debug("digest: (%d) [%*phN]\n", digest_ptr->hdr.length,
-> > > > > > +		 digest_ptr->hdr.length, digest_ptr->digest);
-> > > > > > +
-> > > > > > +	if (digest_ptr && digest_ptr != &digest)
-> > > > > > +		kfree(digest_ptr);
-> > > > > 
-> > > > > What is the actual problem here?  Where is a scatterlist being created from this
-> > > > > buffer?  AFAICS it never happens.
-> > > > 
-> > > > Hi Eric
-> > > > 
-> > > > it is in public_key_verify_signature(), called by asymmetric_verify()
-> > > > and integrity_digsig_verify().
-> > > > 
-> > > 
-> > > Hmm, that's several steps down the stack then.  And not something I had
-> > > expected.
-> > > 
-> > > Perhaps this should be fixed in public_key_verify_signature() instead?  It
-> > > already does a kmalloc(), so that allocation size just could be made a bit
-> > > larger to get space for a temporary copy of 's' and 'digest'.
-> > 
-> > Mimi asked to fix it in both IMA and EVM.
-> 
-> At the time I thought the problem was limited to
-> integrity_digsig_verify() and just to the digest.
-> 
-> I'll leave it up to you and Eric to decide what is the preferable
-> solution.
+Fix a typo in Chinese translation of howto.rst
 
-Ok, yes. I think Eric's suggestion of making a copy in
-public_key_verify_signature() is better. Will do it.
+Fixes: 40d93e496180 ("docs/zh_CN: update howto.rst to latest version")
+Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
+---
+ Documentation/translations/zh_CN/process/howto.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > > Or at the very least, struct public_key_signature should have a *very* clear
-> > > comment saying that the 's' and 'digest' fields must be located in physically
-> > > contiguous memory...
-> > 
-> > That I could add as an additional patch.
-> 
-> Thanks, the new patch containing the comment looks fine.
-
-Thanks, not sure if I need to keep it with the new patch (probably
-not).
-
-Roberto
+diff --git a/Documentation/translations/zh_CN/process/howto.rst b/Documentation/translations/zh_CN/process/howto.rst
+index 888978a62db3..10254751df6a 100644
+--- a/Documentation/translations/zh_CN/process/howto.rst
++++ b/Documentation/translations/zh_CN/process/howto.rst
+@@ -254,7 +254,7 @@ Linux-next 集成测试树
+         https://git.kernel.org/?p=linux/kernel/git/next/linux-next.git
+ 
+ 通过这种方式，Linux-next 对下一个合并阶段将进入主线内核的内容给出了一个概要
+-展望。非常欢冒险的测试者运行测试Linux-next。
++展望。非常欢迎冒险的测试者运行测试Linux-next。
+ 
+ 多个主要版本的稳定版内核树
+ -----------------------------------
+-- 
+2.25.1
 
