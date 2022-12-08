@@ -2,254 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ACF46475BE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227716475C3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiLHSpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:45:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S229591AbiLHSr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:47:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiLHSpb (ORCPT
+        with ESMTP id S229605AbiLHSrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:45:31 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B62E8425A;
-        Thu,  8 Dec 2022 10:45:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670525130; x=1702061130;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=E1Cph4P7kbYjv1zN7qwxZ4XAr2o3KSaZLk8ojybtGTY=;
-  b=HZIeaK2GX7PvQcrEeP85gFiWtRcoJwh0Nh2PZaAEY6OQ7HWUSSZdheBm
-   BMoEBS2N4UobxDlicpxzZa/yIv0zY/Bbd/LWfHdrwso1FXsZP0FHzQn34
-   7Q6qiofxBDo/H+bfeCNd3X019yXPJa65kjbNp36KMoM4lRcPep/bsH/x2
-   8WFUBVUl4hrqgULAQglSKdRhHQ7KiEuB40bxcPWEsRw4U/BMj6IylZNqD
-   u+Tj4dMQ1abFKbK/xMSBaBjizjwkvUgRxXUThoe4cJe8modmozLXz+eub
-   5ewN8gXhG99/nrrXSDCHRSHhF2cjeRqiFQ1wUZhVcmRZsNYuwrN5up2wv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="344302738"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="344302738"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 10:45:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="892349136"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="892349136"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 08 Dec 2022 10:45:26 -0800
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 8 Dec 2022 10:45:26 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 8 Dec 2022 10:45:25 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 8 Dec 2022 10:45:25 -0800
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 8 Dec 2022 10:45:24 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l+pidFwF9QShIc88s+QBhBHSVSqGls2PfDO6/U5JLghOoHtrNmQ9pb6II/MQL2SANnPUZIV/79agyWoCaEsLfgExLh5xOU9TvKInVFIGEmbij1BMO8dR2kumc61QjK7yfwM76gLvVIGFfE+lMK1r9UnOtuNhXZbNlr5HPioabGqdAsw7DfRFNf5J5EGcLX8SEewOMmZYFoVq8ogHVTQhsNzZ1DDLze3XZ+b/7KKhtrka7zaM+6nnNKTGdDMkJHYujUvZ/Jxnv0Xw+amj6OAhxXl05KWfOXtMQ2fldh5Uj4T8xOKJmhUEdFkgnTe3ND61pX1OOVZjsZEeBwV1U9rBZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2y88U+N1FQjqftmhvgxDLXMMidCT1xjLu1lZWpcLw24=;
- b=FYhyR1bumGcGzh4fXYJOfr3y/vXSVX+KmM7PzXQgrm6MjRyGaYFBnan3lFwK99E+YL3g592APcibJ/ZpKjVUmedF0z3gZqvBkPAY0j185iQF+/Neb59ErsMnCBlLdKcDIc+bcBJojRfhW9p21pwv4gFMpbwF9UwlRE4RG8MJNZ/uPhhtIVefGoV3J86bPe01d8nXxFAUTF1jnHo4VTN4iDUxd+GEqMEqDNGP4BcFNmHLVH/QEhewRluQ4stQ6NYjILsCekeQ+0CkDlZ5+PcaeIY9qmQZhyWTBs6HUsDUet7Uqr1Bpe1jjbuTJZnUKewSxFoIRICL9IVtTIY9yU+Vrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
- by SA3PR11MB7626.namprd11.prod.outlook.com (2603:10b6:806:307::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
- 2022 18:45:22 +0000
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::3862:3b51:be36:e6f3]) by CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::3862:3b51:be36:e6f3%5]) with mapi id 15.20.5880.016; Thu, 8 Dec 2022
- 18:45:22 +0000
-Message-ID: <4ba59b52-7549-aa9f-5fac-22ea42190727@intel.com>
-Date:   Thu, 8 Dec 2022 10:45:18 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 0/5] cpumask: improve on cpumask_local_spread()
- locality
-Content-Language: en-US
-To:     Yury Norov <yury.norov@gmail.com>, <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        "Ben Segall" <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Gal Pressman" <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Jesse Brandeburg" <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Leon Romanovsky" <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "Tariq Toukan" <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Valentin Schneider" <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <linux-crypto@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>
-References: <20221208183101.1162006-1-yury.norov@gmail.com>
-From:   Jacob Keller <jacob.e.keller@intel.com>
-In-Reply-To: <20221208183101.1162006-1-yury.norov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0359.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::34) To CO1PR11MB5089.namprd11.prod.outlook.com
- (2603:10b6:303:9b::16)
+        Thu, 8 Dec 2022 13:47:23 -0500
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA11784267
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:47:21 -0800 (PST)
+Received: by mail-pj1-x1036.google.com with SMTP id u5so2406816pjy.5
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:47:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j7cHwl40udJhj8Y5X5w0jT3sEs53ZGdIUSJNwRYVu/w=;
+        b=Kk0pmB/xVnaM5ZpgSosT/bmJl6omVaUQZP2piO1stBvkhoJj09JAMEnLa5p0gtxaGp
+         VB7g+dz6WsXuzFyafcY8UNr3vvtXehmmHe02Mm9nFxmyuMsh/wLMv8H3DERotIKWi6AO
+         znLK5EtaINJvDL0b5Oo99YEUgZo45VxCAEobT8jJtFugipi/9yBthEL78JaKdg08Xbph
+         pXkMrQOicMZtmPej55vRfzNvlAHJWxAl6d+e88VeYqBJThVpJ8xmvTsam41HzLJ8vSx+
+         pcYvIRTsXUGU4NF/+rQgmSnF2q0eoUpL4dRNVUkSoHlur/WtaG74BlpZUGwEzD/yuL7l
+         GLFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j7cHwl40udJhj8Y5X5w0jT3sEs53ZGdIUSJNwRYVu/w=;
+        b=23fT5h51AqqDUCPSffvA2XMbptCW19Rvb/a9+ik3AVDsQb7tHS0SSsXmdRjJFpKVxh
+         IYvzSSWDgKL1W1qMNL1NjFusfprVqQyD8T5b1eM5WE2NmOw5MJ1oBcHX9zqb5RiwH63E
+         VEktyx6tMR5rKMj74NUD2nl9lVVtF0XPlmCbL4xcdE8/98isSpJ6acRMz92+dxFkYYGF
+         gvjdy/LYaOgLQBjk3O+CcJXDSXy5KiULhuLedm0omlKKAl2g3bKCKsg4WKsyIc1deafv
+         vs4ZAKafJ7j2LliRfmSzYtNA3ZLMZH+s+iKiMhxrSO/WAwDrjT3Zb1OVMyIiY5/YN4OF
+         FDjA==
+X-Gm-Message-State: ANoB5pli0bsZLc9zwG+bNYVnNVtUB2WilyDVyAxIvY6EPaxkEq+Lhssx
+        vKkAoyy7R358mQxG6BnmZrCgFQ==
+X-Google-Smtp-Source: AA0mqf6vd6AxHTUbjUvIEUAz0NQ7pMMjNAHpvKix0UHaCOnCHjNJp+LLTMFG9Y68lb2WJ+Cv0Q2hGg==
+X-Received: by 2002:a17:90a:fd0d:b0:219:828e:ba2 with SMTP id cv13-20020a17090afd0d00b00219828e0ba2mr1498746pjb.0.1670525241105;
+        Thu, 08 Dec 2022 10:47:21 -0800 (PST)
+Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
+        by smtp.gmail.com with ESMTPSA id ay22-20020a17090b031600b001fd6066284dsm13381pjb.6.2022.12.08.10.47.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 10:47:20 -0800 (PST)
+Date:   Thu, 8 Dec 2022 10:47:17 -0800
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
+ into guest memory
+Message-ID: <Y5IxNTKRnacfSsLt@google.com>
+References: <20221207214809.489070-1-oliver.upton@linux.dev>
+ <20221207214809.489070-3-oliver.upton@linux.dev>
+ <Y5EoZ5uwrTF3eSKw@google.com>
+ <Y5EtMWuTaJk9I3Bd@google.com>
+ <Y5EutGSjkRmdItQb@google.com>
+ <Y5Exwzr6Ibmmthl0@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB5089:EE_|SA3PR11MB7626:EE_
-X-MS-Office365-Filtering-Correlation-Id: e1ca654a-01f8-4e93-4da7-08dad94c5be6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ceed+DGDTsQxchThLhLsdS0M8QCJEhi63zkf4v5djyeYAhMnjOKqhtPaTVAawOXMAKrhAkEaOAAAM63B43eOQKT49S6/EziLqKJkq/9zBDl21aH9g7Zhdftda6FTaamGoHWq2BxQ8TheHH5QfJAKJNKxejSwyVvD+5Xc3oleV3Fl2L73xgn9upo7jUTEDyVgJJSzWyMQ/tIiWjiUqs0Crp6xheVa6Sq7eiipM7cI2ZUT9nemhlaRqwZ1OdwAGCv7t740sYPc2/g9cCRrIuJoFr+Cu69Gy0luteleAkyDu4eSF6f/77Wu/09KIKqflivsuWDzLo6IE5U00D3V07IetQ9or8BH9KADhWoGKQSa2zTJTwIBshd6TKJdTHYL7DNV2MulUxjYGjC0Ca15YfNi9S8KOCQcilscEg5LOgIUS1NoWUrMEodUk3Pa3InKpwYnhOiQxtqEwp0J6H/9KriDJoD10quwYwMNu2HXaHXt8chHKmcnm5WG1m5jrNY/MK3IiTAcDEvoHucm896KV07LfD3WCsmewU4bkm+Lhh5CT+U4ScaS8etC6q7ALcFMXbJO/Z1Uwo2VaIkGrWU3CF75kfRTgmIQ53fIdZJfsJdEW1TB06EKlHDTdJ/iGhE9u0YIG8VcwBp8FAKZ16VUg35fsSyhxV59zF54e3L2tQKDcAJxgecjrWENGVbmmWuXefKU0wHXEaLy2DAmdnVFvXwnc7Qz4R5iTKbo77UiguWjmMJzVumJcuoFQgN+9M7r5u0OPAO9JmGZVhZeoBRgnMf+RHRAXSrnYPrVTUfD+ph4QL0UBDAX8+PBQhq5IIok3Zj/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(346002)(396003)(39860400002)(136003)(376002)(451199015)(66476007)(6666004)(186003)(41300700001)(8676002)(66946007)(4326008)(2906002)(66556008)(53546011)(82960400001)(478600001)(38100700002)(966005)(6486002)(921005)(36756003)(6506007)(2616005)(7416002)(8936002)(31696002)(316002)(5660300002)(31686004)(6512007)(110136005)(26005)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eDJnWGQzZWdNakpWRWRPb2JBQzZPOEpwZVladXdBWUlDandCaW9qTVl6elQx?=
- =?utf-8?B?VlZjRk1IZk9oejl0NjErczI2ZENEUU5kc28vd3NSUWJmZ0J0cTBOZm5CZ0J3?=
- =?utf-8?B?aUdabUtJZWhaQzRiZHJsZFZDY3NabWxpQVdmZkVpd0VMVXN0Ym95aWF1NjFM?=
- =?utf-8?B?ZDZNelNQbDJOQS9ITE4xajZyaUdOZVZKWTRoQUdjcEJPZlZkSzJoUUJpYm1T?=
- =?utf-8?B?bk56ZWNqSWJpVlpOQlRYdHZMZkJTOHZXM0R5Mk9PcG80VG1pQmRqbkZpRlVD?=
- =?utf-8?B?WWdSNVViQWljWnllcXNGc2VWODNVYzlXL2h2VVdRVGFzeXN4RUtmY0NyUG5l?=
- =?utf-8?B?b0NTOXU3a1N0NkV4K05UKzFTS3hQM0hxcUhibi9DZEFJQmZkQzFLQUlDR3VS?=
- =?utf-8?B?bEJpR05FV2xCYnV5a3BlUElxRDh5V09lc21BU3R6VUdicVFsSHpZdWwvdVVi?=
- =?utf-8?B?UGRmL21rK0Q4bmQyQmxkYmhrMkZ6WTNtQXVINkcrMUZsRGdwbkYvRWhEcjAv?=
- =?utf-8?B?ZUxJbFMwYUVQNkp0MHlEaWU0eFpJeUhkSVZEMWdEZ0V2bDIyL0MzN0EwRCtn?=
- =?utf-8?B?cmFlY1lvb08yY1hjVUs4WGdMUVR0aUhoYnU4T2dqYjVmTjRkb3IvWEZlM2gw?=
- =?utf-8?B?UFc4eFpUS1hzSVBNamF3TjBxQ1N2T3VDR3pPbU42L0x3LzhXeW9TL21jTjI5?=
- =?utf-8?B?Y20vVHlXWTFVTDZuTU9TSEJaS0pvK0xKeWZtdGVGSUlCZnF0VDRMTWJrWG5k?=
- =?utf-8?B?UE53MU5TbnBWOTBTazV6NCtHblRLeFdFMzBRdmtpSE53eDMzdUZKd1dXcE9a?=
- =?utf-8?B?YVFMNmsvalZvNFBtL3k0U2dWVC90eDF0SnU2bzJMTGhMcXBJNHo3REJ4V0Np?=
- =?utf-8?B?bkFQYTJUMVcrMkZZTUYwSHVNV2ppZG95dXpGUDZyNzJPbGsrOW5HMkxvR2hS?=
- =?utf-8?B?WGVrc3Q0QldDQjUvRDk4OE5IOWF0dThLMFBWbzN3ZE95VmM5U1RqVlFnK0F0?=
- =?utf-8?B?ZUNwSEFOYWhXUjFIVEx3UjcxWkVTWHBoc0FWUGJjd3JzSVhMRzVkVHY5b1RP?=
- =?utf-8?B?cWpCTUFUYURsczY0VUFuY3Z4VzluTDhPUjUrQXFSVUxKcVFlRHZmRXR5dFFw?=
- =?utf-8?B?S3RxL0V3dnhjZVp6M0hvYmZqOFRwZnZHTURqZ1FKVU05MjVHWUl6UnlGeVF2?=
- =?utf-8?B?ODFkZnduZVlkRkRlU2FwV1A2UzJiTEtFM3RKOEd4VGg2N3B2VHNRaUdFQnYx?=
- =?utf-8?B?d2JXMzVnNDNWOXRPbUU3TUVpSStMc1NJYVFNeFhUdnJvSlJsME9ORTN0SERa?=
- =?utf-8?B?VCtiaWc3ZG5qYjBUQnpJUS9QdHNXVnRmT1lVVEd3Vk81MDJXN2I5OGpVL3Y0?=
- =?utf-8?B?d2k0ZnlLM1llOExrYm54aDJMZTVVU1B1cWkrU2ZTdGhvc25vSHNzYjg5Qllq?=
- =?utf-8?B?ZHdBa1VXVlZmSUxFQzdTb2padSt2R01WeDFTRnR0a2hlZ0pOY3l6OElLSm1F?=
- =?utf-8?B?Vy9rSUpSUk9xaHdPNVcxRitTZ0RwdU5ETGFmbCtvWldERlVSTTFYOWgrYVZO?=
- =?utf-8?B?c3hmRlJWaVd2dGpZQ0pINCtvbHU4SEZmOE9HOWI1aHF4MUZvTWJORHFnT0li?=
- =?utf-8?B?Snk4NUJSR1pqVzBXeXltUzdZU3AwRlM3VWRrcVg4Mms2WERtV0JLeElkUVZa?=
- =?utf-8?B?d1ZPejhzZ2JHSjhvamt2QmJ1OXpHdnhidkpFNk9DeWxvN0hiSTA4Zk9nSTBM?=
- =?utf-8?B?M1Fpc0JmVllsQjJLTSs1Z1BGeThxRFVmdXhib2FscXVGOE5Lc2ZIdXJmRnRr?=
- =?utf-8?B?ZzdQNG4vVVo3dGpkZlVnMHNWOEMwYm9COWNqaC9Hc2tRd2RaZkFUM3FEcGo1?=
- =?utf-8?B?eitHUFdzNHBZdWtsZ0ROZjZNeGs3eU9KVkpmOEk4emUzVUlCeFpHRUE0VHdK?=
- =?utf-8?B?RU5BdFBBMERCN2U4dUdZYnpGblRZaG51QlA2ZkQwNk5TL0pST25Eb0hGRmdl?=
- =?utf-8?B?d0plUHR6TVU3eGl6MXNKSXBDRE0vNGorM2tlQk56bnpnc1MxOEx1YUQxU0Zl?=
- =?utf-8?B?RjZZeUd0V0lPYUttNHdsMjVYeDhjayt5Rko4TWxyaDduWDlvdGNUYnBzZFdC?=
- =?utf-8?B?T0J5VHdqS1dmTjRQSGlqWEFZc1BJdVhRbDk1QW9ydlozamtWRXozWWZXbTBa?=
- =?utf-8?B?dkE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e1ca654a-01f8-4e93-4da7-08dad94c5be6
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Dec 2022 18:45:21.9367
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OqGT5+p0Zoforh/QLI6fCuor7VWfjVBb056b/NPn4mE6nfXm0tEB1mLTpJFTI9ln4Diar7hu/PaBMj4t9YxcMUm39WTX4fh6zXZmOlA1T3Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7626
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5Exwzr6Ibmmthl0@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Dec 08, 2022 at 12:37:23AM +0000, Oliver Upton wrote:
+> On Thu, Dec 08, 2022 at 12:24:20AM +0000, Sean Christopherson wrote:
+> > On Thu, Dec 08, 2022, Oliver Upton wrote:
+> > > On Wed, Dec 07, 2022 at 11:57:27PM +0000, Sean Christopherson wrote:
+> > > > > diff --git a/tools/testing/selftests/kvm/aarch64/page_fault_test.c b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > > > > index 92d3a91153b6..95d22cfb7b41 100644
+> > > > > --- a/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > > > > +++ b/tools/testing/selftests/kvm/aarch64/page_fault_test.c
+> > > > > @@ -609,8 +609,13 @@ static void setup_memslots(struct kvm_vm *vm, struct test_params *p)
+> > > > >  				    data_size / guest_page_size,
+> > > > >  				    p->test_desc->data_memslot_flags);
+> > > > >  	vm->memslots[MEM_REGION_TEST_DATA] = TEST_DATA_MEMSLOT;
+> > > > > +}
+> > > > > +
+> > > > > +static void setup_ucall(struct kvm_vm *vm)
+> > > > > +{
+> > > > > +	struct userspace_mem_region *region = vm_get_mem_region(vm, MEM_REGION_TEST_DATA);
+> > > > >  
+> > > > > -	ucall_init(vm, data_gpa + data_size);
+> > > > > +	ucall_init(vm, region->region.guest_phys_addr + region->region.memory_size);
+> > > > 
+> > > > Isn't there a hole after CODE_AND_DATA_MEMSLOT?  I.e. after memslot 0?
+> > > 
+> > > Sure, but that's only guaranteed in the PA space.
+> > > 
+> > > > The reason
+> > > > I ask is because if so, then we can do the temporarily heinous, but hopefully forward
+> > > > looking thing of adding a helper to wrap kvm_vm_elf_load() + ucall_init().
+> > > > 
+> > > > E.g. I think we can do this immediately, and then at some point in the 6.2 cycle
+> > > > add a dedicated region+memslot for the ucall MMIO page.
+> > > 
+> > > Even still, that's just a kludge to make ucalls work. We have other
+> > > MMIO devices (GIC distributor, for example) that work by chance since
+> > > nothing conflicts with the constant GPAs we've selected in the tests.
+> > > 
+> > > I'd rather we go down the route of having an address allocator for the
+> > > for both the VA and PA spaces to provide carveouts at runtime.
+> > 
+> > Aren't those two separate issues?  The PA, a.k.a. memslots space, can be solved
+> > by allocating a dedicated memslot, i.e. doesn't need a carve.  At worst, collisions
+> > will yield very explicit asserts, which IMO is better than whatever might go wrong
+> > with a carve out.
+> 
+> Perhaps the use of the term 'carveout' wasn't right here.
+> 
+> What I'm suggesting is we cannot rely on KVM memslots alone to act as an
+> allocator for the PA space. KVM can provide devices to the guest that
+> aren't represented as memslots. If we're trying to fix PA allocations
+> anyway, why not make it generic enough to suit the needs of things
+> beyond ucalls?
 
+One extra bit of information: in arm, IO is any access to an address (within
+bounds) not backed by a memslot. Not the same as x86 where MMIO are writes to
+read-only memslots.  No idea what other arches do.
 
-On 12/8/2022 10:30 AM, Yury Norov wrote:
-> cpumask_local_spread() currently checks local node for presence of i'th
-> CPU, and then if it finds nothing makes a flat search among all non-local
-> CPUs. We can do it better by checking CPUs per NUMA hops.
 > 
-> This series is inspired by Tariq Toukan and Valentin Schneider's
-> "net/mlx5e: Improve remote NUMA preferences used for the IRQ affinity
-> hints"
-> 
-> https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
-> 
-> According to their measurements, for mlx5e:
-> 
->          Bottleneck in RX side is released, reached linerate (~1.8x speedup).
->          ~30% less cpu util on TX.
-> 
-> This patch makes cpumask_local_spread() traversing CPUs based on NUMA
-> distance, just as well, and I expect comparable improvement for its
-> users, as in case of mlx5e.
-> 
-> I tested new behavior on my VM with the following NUMA configuration:
-> 
-> root@debian:~# numactl -H
-> available: 4 nodes (0-3)
-> node 0 cpus: 0 1 2 3
-> node 0 size: 3869 MB
-> node 0 free: 3740 MB
-> node 1 cpus: 4 5
-> node 1 size: 1969 MB
-> node 1 free: 1937 MB
-> node 2 cpus: 6 7
-> node 2 size: 1967 MB
-> node 2 free: 1873 MB
-> node 3 cpus: 8 9 10 11 12 13 14 15
-> node 3 size: 7842 MB
-> node 3 free: 7723 MB
-> node distances:
-> node   0   1   2   3
->    0:  10  50  30  70
->    1:  50  10  70  30
->    2:  30  70  10  50
->    3:  70  30  50  10
-> 
-> And the cpumask_local_spread() for each node and offset traversing looks
-> like this:
-> 
-> node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
-> node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
-> node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
-> node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
-> 
-> v1: https://lore.kernel.org/lkml/20221111040027.621646-5-yury.norov@gmail.com/T/
-> v2: https://lore.kernel.org/all/20221112190946.728270-3-yury.norov@gmail.com/T/
-> v3:
->   - fix typo in find_nth_and_andnot_bit();
->   - add 5th patch that simplifies cpumask_local_spread();
->   - address various coding style nits.
-> 
+> --
+> Thanks,
+> Oliver
 
-The whole series look reasonable to me!
+I think that we should use these proposed changes, and then move to an ideal
+solution.  These are the changes I propose:
 
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+1. add an arch specific API for allocating MMIO physical ranges:
+vm_arch_mmio_region_add(vm, npages).  The x86 version creates a read-only
+memslot, and the arm one allocates physical space without a memslot in it.
 
+2. Then change all IO related users (including ucall) to use
+vm_arch_mmio_region_add(). Ex:
+
+	pa = vm_arch_mmio_region_add(vm, npages);
+	ucall_init(vm, pa);
+
+page_fault_test needs to be adapted to use vm_arch_mmio_region_add() as well.
+
+Thanks,
+Ricardo
