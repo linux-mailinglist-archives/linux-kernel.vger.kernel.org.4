@@ -2,117 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32FF646DA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:55:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10AA1646DA9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbiLHKzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:55:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33008 "EHLO
+        id S229790AbiLHK7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiLHKzH (ORCPT
+        with ESMTP id S229898AbiLHK7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:55:07 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25FF83244;
-        Thu,  8 Dec 2022 02:48:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670496537; x=1702032537;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=6Lc8UH5jmbeum+UYKXkdmWfy6L1eJ0Ew3kz09+x4P4g=;
-  b=EYcs0ciPdPhqzkpi4nKMwDJKMZqLyekX+LLYLJZgA/+LyKK4UEp/LQku
-   9/k8fH/+uOjNduF+X0NJ1FsfKUXEOmruVUe7ejBXSta00omPXBHFM62gS
-   jeZ1DhS0KFFvy1DjEdyFTQLHCwsoPjK8ISRuPdVJX+O27SVJqa3CYOrIY
-   hqaCnlq8QUQ65j3BMqBuGcuaSH18+McKdo6kvuEvfVZcvgW1cRIvQdMzt
-   m4YIngQQD3uUz672gt6X3f5rRG6AvRl8amI5Z+TDefI58M3nXR0I7R26r
-   fBfsB1UTz14ke2pImObUpgVCWAt+82zEux44VP/5r/msseOZ0tPnrXB/d
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="315856841"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="315856841"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 02:48:57 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="640584949"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="640584949"
-Received: from pors-mobl3.ger.corp.intel.com ([10.252.39.224])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 02:48:53 -0800
-Date:   Thu, 8 Dec 2022 12:48:47 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        linux-omap@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH v4 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-In-Reply-To: <Y5G5Udw6FAEFdAYi@atomide.com>
-Message-ID: <3c87186b-336f-6884-a2c-6ee3c9d70@linux.intel.com>
-References: <20221207124305.49943-1-tony@atomide.com> <7f105ff9-cdc3-f98e-2557-812361faa94@linux.intel.com> <Y5G5Udw6FAEFdAYi@atomide.com>
+        Thu, 8 Dec 2022 05:59:18 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ED192A03;
+        Thu,  8 Dec 2022 02:51:25 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8B055208AD;
+        Thu,  8 Dec 2022 10:51:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670496684; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSaHkEqadKz6Lj4LX693awEbtIj1UyMwaIh3AiAJ7l0=;
+        b=TCQfldZoLzBcalU+ldxeRz8jICL2nDry/ntYAUdvGgipsJwBVmVfbBmzZeHdK5oDK/dODv
+        BPKpva7x9xgZh4H46H1+j9Nkb8cbuZkPB/Jy67GHIsiQHnnnxGlz9dA/jO+wJ46gf5++AW
+        zWu8AsBqavIBKrjYXie/adLrOf5t1a0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670496684;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSaHkEqadKz6Lj4LX693awEbtIj1UyMwaIh3AiAJ7l0=;
+        b=Pw8tmZ6Jl716sFYtiV8lkZcndzW3ky7Ka09wMIX04atMtcSl8XXxV+CcsVYN1xBkPslmXq
+        q5y89az6rMVvO2BA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5163513416;
+        Thu,  8 Dec 2022 10:51:24 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 14wnE6zBkWP6GAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 08 Dec 2022 10:51:24 +0000
+Message-ID: <6d13f2ba-7598-4522-e0e6-32f1577a2655@suse.cz>
+Date:   Thu, 8 Dec 2022 11:51:24 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1480847773-1670496537=:1682"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>,
+        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
+        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
+        timvp@google.com, apronin@google.com, mw@semihalf.com,
+        upstream@semihalf.com, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, stable@vger.kernel.org
+References: <20221128195651.322822-1-Jason@zx2c4.com>
+ <Y4zTnhgunXuwVXHe@kernel.org> <Y4zUotH0UeHlRBGP@kernel.org>
+ <Y4zxly0XABDg1OhU@zx2c4.com> <Y5Gs9jaSIGTNdRbV@kernel.org>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y5Gs9jaSIGTNdRbV@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1480847773-1670496537=:1682
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-
-On Thu, 8 Dec 2022, Tony Lindgren wrote:
-
-> * Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> [221208 09:12]:
-> > On Wed, 7 Dec 2022, Tony Lindgren wrote:
-> > > +	ret = serial_core_add_one_port(drv, port);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	mutex_lock(&port_mutex);
-> > > +
-> > > +	/* Inititalize a serial core controller device if needed */
-> > > +	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
-> > > +	if (!ctrl_dev) {
-> > > +		ctrl_dev = serial_core_ctrl_device_add(port);
-> > > +		if (!ctrl_dev)
-> > > +			goto err_remove_port;
-> > > +		allocated = true;
-> > > +	}
-> > > +
-> > > +	/* Initialize a serial core port device */
-> > > +	ret = serial_core_port_device_add(ctrl_dev, port);
-> > 
-> > How is ->port_dev supposed to work here?
-> > 
-> > ->port_dev is not set until in serial_core_port_device_add() but you made
-> > serial_core_add_one_port() call before that.
+On 12/8/22 10:23, Jarkko Sakkinen wrote:
+> On Sun, Dec 04, 2022 at 08:14:31PM +0100, Jason A. Donenfeld wrote:
+>> > 
+>> > Applied to  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+>> 
+>> Oh thank goodness. You'll send this in for rc8 today?
 > 
-> Hmm do you mean you want to call serial_core_add_one_port() later after
-> serial_core_port_device_add()?
-> 
-> Or are you seeing some uninitialized use of port->port_dev (and not
-> port->dev)?
+> for 6.2-rc1
 
-With the other patch on top of this, yes, I did see uninitialized 
-port->port_dev already in serial_core_add_one_port()->uart_configure_port().
-While that could be solved by removing the pm_runtime_*() calls from 
-there, I think it's a generic problem because after 
-serial_core_add_one_port() the port can have anything happening on it, no?
+Linus took it directly to rc8, so it would conflict now.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v6.1-rc8&id=23393c6461422df5bf8084a086ada9a7e17dc2ba
 
+> BR, Jarkko
 
--- 
- i.
-
---8323329-1480847773-1670496537=:1682--
