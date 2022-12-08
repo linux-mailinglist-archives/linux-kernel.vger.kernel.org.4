@@ -2,106 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9B16465FA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 251A7646603
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:38:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLHAhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 19:37:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S229848AbiLHAiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 19:38:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiLHAhP (ORCPT
+        with ESMTP id S229811AbiLHAiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:37:15 -0500
-Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24948DBDE;
-        Wed,  7 Dec 2022 16:37:14 -0800 (PST)
-Received: from 1p34uW-0001n8-VE by out3c.electric.net with emc1-ok (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1p34uX-0001op-Vc; Wed, 07 Dec 2022 16:37:13 -0800
-Received: by emcmailer; Wed, 07 Dec 2022 16:37:13 -0800
-Received: from [66.210.251.27] (helo=mail.embeddedts.com)
-        by out3c.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
-        (Exim 4.94.2)
-        (envelope-from <kris@embeddedTS.com>)
-        id 1p34uW-0001n8-VE; Wed, 07 Dec 2022 16:37:12 -0800
-Received: from tsdebian (unknown [75.164.86.214])
-        by mail.embeddedts.com (Postfix) with ESMTPSA id 17057634E;
-        Wed,  7 Dec 2022 17:37:33 -0700 (MST)
-Message-ID: <1670459801.7091.1.camel@embeddedTS.com>
-Subject: Re: [PATCH] spi: spi-gpio: Don't set MOSI as an input if not 3WIRE
- mode
-From:   Kris Bahnsen <kris@embeddedTS.com>
-Reply-To: kris@embeddedTS.com
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mark@embeddedts.com
-Date:   Wed, 07 Dec 2022 16:36:41 -0800
-In-Reply-To: <Y5ElXqDduIZhIiAm@sirena.org.uk>
-References: <20221207230853.6174-1-kris@embeddedTS.com>
-         <Y5ElXqDduIZhIiAm@sirena.org.uk>
-Organization: embeddedTS
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.22.6-1+deb9u2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Outbound-IP: 66.210.251.27
-X-Env-From: kris@embeddedTS.com
-X-Proto: esmtps
-X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
-X-HELO: mail.embeddedts.com
-X-TLS:  TLS1.2:DHE-RSA-SEED-SHA:128
-X-Authenticated_ID: 
-X-VIPRE-Scanners: virus_bd;virus_clamav;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=4NKUhY6MkD/bFUkICTfZjmTJpg+nsJAFL1xKv/Q1xYk=;b=ENVbpQtI+2wfNMmYwec/oCpLDwlumTfsMnjQ1wzI0TG1D6PjobQB6P1mOj6C2FkfPtT23VxEYxzmS52H4v91FkLKh8voSiR8WFYvG2+e8SLXWEwlMosR3IqFrjmHXa2ahz8PJaS4cQv2GbIR18GI6ADc5ZPx0vfBjqi9Ea23QH7Hm0+gWBteAq5E4WyW/I7v84qW4MSWjDu6KOZulrMThzupEhXjmmAiNTbAPe4lIGa/qA0Je2/8CjPmDro1vbvobris+BtY885xMlB+FAM15u1l8IXDJdWXj0lObuIqVnuibVeYXGxrVWAJB1AJKKGBwQFFRAzS9BlwkH2P+3/NbA==;
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-FM-Delivery-Delay: 15749372,23518412
-X-PolicySMART: 13164782, 15749372, 26810492
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 7 Dec 2022 19:38:14 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4351C8D671
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:37:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670459835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Na/DatNEjlEBtkHIEc2JrPJeXMI6lGrn4tJNlRzZp9M=;
+        b=IhJf/ohQF5qoetPfr3y+x8JyGPgG2o2MEHF/MOFWUoQ8ZBksdotwpO8bevB8Onin/f4X3r
+        KWcCbHKjIWIqh+Lpu1iIjVcTyPcPCnObuoZ8QuonC+pC5ur/MJeCvU5jj2o8TpNg+eMQ75
+        3POQgWdhHEnjT9WLejGVBo8lDRParDw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-650-qCYLgktkODafZ8b_0srOJg-1; Wed, 07 Dec 2022 19:37:11 -0500
+X-MC-Unique: qCYLgktkODafZ8b_0srOJg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 572CA185A79C;
+        Thu,  8 Dec 2022 00:37:10 +0000 (UTC)
+Received: from T590 (ovpn-8-18.pek2.redhat.com [10.72.8.18])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 247241121314;
+        Thu,  8 Dec 2022 00:36:54 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 08:36:49 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Gulam Mohamed <gulam.mohamed@oracle.com>
+Cc:     linux-block@vger.kernel.org, axboe@kernel.dk,
+        philipp.reisner@linbit.com, lars.ellenberg@linbit.com,
+        christoph.boehmwalder@linbit.com, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, colyli@suse.de,
+        kent.overstreet@gmail.com, agk@redhat.com, snitzer@kernel.org,
+        dm-devel@redhat.com, song@kernel.org, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, dave.jiang@intel.com,
+        ira.weiny@intel.com, junxiao.bi@oracle.com,
+        martin.petersen@oracle.com, kch@nvidia.com,
+        drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        linux-bcache@vger.kernel.org, linux-raid@vger.kernel.org,
+        nvdimm@lists.linux.dev, konrad.wilk@oracle.com, joe.jin@oracle.com,
+        ming.lei@redhat.com
+Subject: Re: [RFC for-6.2/block V2] block: Change the granularity of io ticks
+ from ms to ns
+Message-ID: <Y5ExoZ+7Am6Nm8+h@T590>
+References: <20221207223204.22459-1-gulam.mohamed@oracle.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221207223204.22459-1-gulam.mohamed@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-12-07 at 23:44 +0000, Mark Brown wrote:
-> On Wed, Dec 07, 2022 at 03:08:53PM -0800, Kris Bahnsen wrote:
-> > The addition of 3WIRE support would affect MOSI direction even
-> > when still in standard (4 wire) mode. This can lead to MOSI being
-> > at an invalid logic level when a device driver sets an SPI
-> > message with a NULL tx_buf.
-> > 
-> > spi.h states that if tx_buf is NULL then "zeros will be shifted
-> > out ... " If MOSI is tristated then the data shifted out is subject
-> > to pull resistors, keepers, or in the absence of those, noise.
-> > 
-> > This issue came to light when using spi-gpio connected to an
-> > ADS7843 touchscreen controller. MOSI pulled high when clocking
-> > MISO data in caused the SPI device to interpret this as a command
-> > which would put the device in an unexpected and non-functional
-> > state.
+On Wed, Dec 07, 2022 at 10:32:04PM +0000, Gulam Mohamed wrote:
+> As per the review comment from Jens Axboe, I am re-sending this patch
+> against "for-6.2/block".
 > 
-> A cleaner fix which is probably marginally more performant would be to
-> make the setting of spi_gpio_set_direction() conditional on SPI_3WIRE -
-> then we won't call into the function at all when not doing 3 wire,
-> avoiding the issue entirely.
+> 
+> Use ktime to change the granularity of IO accounting in block layer from
+> milli-seconds to nano-seconds to get the proper latency values for the
+> devices whose latency is in micro-seconds. After changing the granularity
+> to nano-seconds the iostat command, which was showing incorrect values for
+> %util, is now showing correct values.
 
-That makes sense to me. I was operating under the assumption that 3WIRE
-mode could be switched in to at a later time via ioctl(), but with the
-death of spidev that is presumably no longer a concern.
-
-I'll get a v2 put together and probably sent in tomorrow. Thanks.
+Please add the theory behind why using nano-seconds can get correct accounting.
 
 > 
-> > As an aside, I wasn't sure how to best put down the Fixes: tags.
-> > 4b859db2c606 ("spi: spi-gpio: add SPI_3WIRE support") introduced the
-> > actual bug, but 5132b3d28371 ("spi: gpio: Support 3WIRE high-impedance turn-around")
-> > modified that commit slightly and is what this patch actually applies
-> > to. Let me know if marking both as fixes is incorrect and I can
-> > create another patch.
+> We did not work on the patch to drop the logic for
+> STAT_PRECISE_TIMESTAMPS yet. Will do it if this patch is ok.
 > 
-> That's fine, it doesn't really matter either way.
+> The iostat command was run after starting the fio with following command
+> on an NVME disk. For the same fio command, the iostat %util was showing
+> ~100% for the disks whose latencies are in the range of microseconds.
+> With the kernel changes (granularity to nano-seconds), the %util was
+> showing correct values. Following are the details of the test and their
+> output:
+> 
+> fio command
+> -----------
+> [global]
+> bs=128K
+> iodepth=1
+> direct=1
+> ioengine=libaio
+> group_reporting
+> time_based
+> runtime=90
+> thinktime=1ms
+> numjobs=1
+> name=raw-write
+> rw=randrw
+> ignore_error=EIO:EIO
+> [job1]
+> filename=/dev/nvme0n1
+> 
+> Correct values after kernel changes:
+> ====================================
+> iostat output
+> -------------
+> iostat -d /dev/nvme0n1 -x 1
+> 
+> Device            r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+> nvme0n1              0.08    0.05   0.06   128.00   128.00   0.07   6.50
+> 
+> Device            r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+> nvme0n1              0.08    0.06   0.06   128.00   128.00   0.07   6.30
+> 
+> Device            r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+> nvme0n1              0.06    0.05   0.06   128.00   128.00   0.06   5.70
+> 
+> From fio
+> --------
+> Read Latency: clat (usec): min=32, max=2335, avg=79.54, stdev=29.95
+> Write Latency: clat (usec): min=38, max=130, avg=57.76, stdev= 3.25
+
+Can you explain a bit why the above %util is correct?
+
+BTW, %util is usually not important for SSDs, please see 'man iostat':
+
+     %util
+            Percentage of elapsed time during which I/O requests were issued to the device (bandwidth  uti‐
+            lization for the device). Device saturation occurs when this value is close to 100% for devices
+            serving requests serially.  But for devices serving requests in parallel, such as  RAID  arrays
+            and modern SSDs, this number does not reflect their performance limits.
+
+
+Thanks, 
+Ming
+
