@@ -2,264 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90948646CB4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:28:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED833646CB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbiLHK2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:28:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S229606AbiLHK1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:27:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLHK2D (ORCPT
+        with ESMTP id S229478AbiLHK1f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:28:03 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EB632BB5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:27:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670495224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Rcw0nobjza3LFKftOLSGKGtb0s1UoIfEnKEaE42BZ0A=;
-        b=Yj/TFfBej6XK6kTkZb080vtLB2cgHOHmHSVYaXwnDoxhTxjbyYlnoaDx4t3zBOb1DCck0U
-        TA5EAl55QSjM1ECFrxwP0H+7nY4GftyPM2YraBLE9X/GcUysCNbkcFRdbp70NJJeHF/xHt
-        vTs+JGQhZ6miZYZU2NsT+Ved6/sj6NM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-111-LqtBgEMjMB6LO6reEDIxWw-1; Thu, 08 Dec 2022 05:27:03 -0500
-X-MC-Unique: LqtBgEMjMB6LO6reEDIxWw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 136B98339CA;
-        Thu,  8 Dec 2022 10:27:03 +0000 (UTC)
-Received: from ovpn-193-245.brq.redhat.com (ovpn-193-245.brq.redhat.com [10.40.193.245])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 81A6340C6EC2;
-        Thu,  8 Dec 2022 10:27:01 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     coverity-bot <keescook@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] KVM: x86: hyper-v: Fix 'using uninitialized value' Coverity warning
-Date:   Thu,  8 Dec 2022 11:27:00 +0100
-Message-Id: <20221208102700.959630-1-vkuznets@redhat.com>
+        Thu, 8 Dec 2022 05:27:35 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627C854779
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:27:31 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 1so1363137lfz.4
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 02:27:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=08K5Vlx4IB2Dsl4MLI7dMUqa7FCe1uwxxccMSj5m7Jc=;
+        b=IixV+1uuN0bY/bbX/+N1Lj3Yzho/GsLoaPm65A55jNVZnGBKdqqPJHjimnAVhl56jG
+         KkHyze5xgI+sqQzAHIwAnyBQlnetfyzeAarswqTTSMXXcJNiQTtHWLlyr2HKy6RJHB3z
+         ftbwsIEMBQHSadpP1Bt5ZwTO7fLPQ6u61hiDiuROWH4cjz5jlPIxKlw8V2u6uH5Ao8X6
+         ghDfPPV54N7yzq3bpv7U8lCMbuW1HOhxWsVQ661f4FCHJfSLxQzRaiJTq2EIx/m89PDH
+         15wEdAs1fzHM+kIxmA0U77aUjmrFCD3ZXlg68lUD2GXnrrxUfb7cp6sY2zmfuaNILclm
+         Db6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=08K5Vlx4IB2Dsl4MLI7dMUqa7FCe1uwxxccMSj5m7Jc=;
+        b=XTkq6HYVeRzZwmG8TdAgu0sFaxlj6UDzpRwW97U6Q+rYbLbwwIg2Y6Mt0El+xQeUgW
+         m7IZSZKf1gZOhN0auykwOusU8LjnfsnhW8pCr0KpghrRhSN4BwdH0ufYfOEpPTf/R2uZ
+         MkcdxR72ijz2FR5zw/7EqzYr9RXErKy/tGxfKRooHLytqn8r8HTghnmHk2dnbrCYMxnw
+         X5OazoTQCqC25N7bJreRQzQk4ODErReNA9I+MvacTmTSWy/J2l/86ArCTb66URw6goag
+         IMxic/0QKUUNQE3gWV3huDquuTlBU6bKIblmZKpvmjiF0SXsWvdXmCUOltRy/tUuAi4p
+         YYxg==
+X-Gm-Message-State: ANoB5pmgvZbGm3WAWw93DOVGCJUeYaIfAQcSgPdhjv4qqnt/myVd83zC
+        RCq/ZWtUdMpK/y+UEH+yn5C+sA==
+X-Google-Smtp-Source: AA0mqf7/AP5zYXuEc0m0ov+YEb0CvMKWc7CDgcN+N/jX1BqZ0D2ehR+bjn3ZqxsyUTZwP+wrkY7e3w==
+X-Received: by 2002:a05:6512:c29:b0:4b1:b061:4815 with SMTP id z41-20020a0565120c2900b004b1b0614815mr30077826lfu.18.1670495249722;
+        Thu, 08 Dec 2022 02:27:29 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id v7-20020ac25927000000b0048a982ad0a8sm3304728lfi.23.2022.12.08.02.27.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 02:27:29 -0800 (PST)
+Message-ID: <f3e3a3d0-6d21-c782-38a2-c8b2c36242c3@linaro.org>
+Date:   Thu, 8 Dec 2022 11:27:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 7/9] dt-bindings: mtd: Split ECC engine with rawnand
+ controller
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+Cc:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Chuanhong Guo <gch981213@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, benliang.zhao@mediatek.com,
+        bin.zhang@mediatek.com
+References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
+ <20221208062955.2546-8-xiangsheng.hou@mediatek.com>
+ <fe70d964-229a-8bda-a414-e009dd955e5e@linaro.org>
+ <20221208110035.5649a051@xps-13>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221208110035.5649a051@xps-13>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
-are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
-halves' and increase 'data_offset' otherwise. Coverity discovered, that in
-one case both variables are incremented unconditionally. This doesn't seem
-to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
-data is kvm_hv_get_tlb_flush_entries() -> kvm_hv_get_hc_data() which also
-takes into account 'hc->fast' but is still worth fixing.
+On 08/12/2022 11:00, Miquel Raynal wrote:
+> Hi Krzysztof,
+> 
+> krzysztof.kozlowski@linaro.org wrote on Thu, 8 Dec 2022 10:44:17 +0100:
+> 
+>> On 08/12/2022 07:29, Xiangsheng Hou wrote:
+>>> Split MediaTek ECC engine with rawnand controller and convert to
+>>> YAML schema.
+>>>
+>>> Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+>>> ---
+>>>  .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
+>>>  .../mtd/mediatek,nand-ecc-engine.yaml         |  62 ++++++
+>>>  .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
+>>>  3 files changed, 216 insertions(+), 176 deletions(-)
+>>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>>>  create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
+>>>  delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>>> new file mode 100644
+>>> index 000000000000..eb1a44c7ae4e
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
+>>> @@ -0,0 +1,154 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/mtd/mediatek,mtk-nfc.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: MediaTek(MTK) SoCs raw NAND FLASH controller (NFC)
+>>> +
+>>> +maintainers:
+>>> +  - Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - mediatek,mt2701-nfc
+>>> +      - mediatek,mt2712-nfc
+>>> +      - mediatek,mt7622-nfc
+>>> +
+>>> +  reg:
+>>> +    items:
+>>> +      - description: Base physical address and size of NFI.
+>>> +
+>>> +  interrupts:
+>>> +    items:
+>>> +      - description: NFI interrupt
+>>> +
+>>> +  clocks:
+>>> +    items:
+>>> +      - description: clock used for the controller
+>>> +      - description: clock used for the pad
+>>> +
+>>> +  clock-names:
+>>> +    items:
+>>> +      - const: nfi_clk
+>>> +      - const: pad_clk
+>>> +
+>>> +  ecc-engine:
+>>> +    description: device-tree node of the required ECC engine.
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +
+>>> +patternProperties:
+>>> +  "^nand@[a-f0-9]$":
+>>> +    type: object  
+>>
+>> This should be instead:
+>>     $ref: nand-chip.yaml#
+>>     unevaluatedProperties: false
+>>
+>> and then properties below (due to current dtschema limitations) should
+>> list properties from nand-controller.yaml:
+>>
+>>       nand-on-flash-bbt: true
+>>
+>> Optionally, we could create additional schema - nand-controller-chip,
+>> which would be referenced directly by nand-controller and itself would
+>> ref nand-chip.
+> 
+> Isn't this enough? (in linux-next)
+> https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git/tree/Documentation/devicetree/bindings/mtd/nand-controller.yaml?h=mtd/next#n54
 
-To make things explicit, put 'data_offset' and 'consumed_xmm_halves' to
-'struct kvm_hv_hcall' as a union and use at call sites. This allows to
-remove explicit 'data_offset'/'consumed_xmm_halves' parameters from
-kvm_hv_get_hc_data()/kvm_get_sparse_vp_set()/kvm_hv_get_tlb_flush_entries()
-helpers.
+No, I tested it and it does not work as intended. In this particular
+case. I think this is a limitation of dtschema, because binding itself
+looks fine. The problem is that you have:
+1. mtk-nfc having nand@ children. mtk-nfc references nand-controller
+which brings these children.
+2. However nand-controller while bringing these children does two things:
+a. ref: nand-chip
+b. add more propeties
 
-Note: 'struct kvm_hv_hcall' is allocated on stack in kvm_hv_hypercall() and
-is not zeroed, consumers are supposed to initialize the appropriate field
-if needed.
+3. The mtk-nfc must further extend the nand@ child.
+4. If you add "unevaluatedProperties: false" you notice warnings of
+unevaluated propertie from nand-controller children.
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1527764 ("Uninitialized variables")
-Fixes: 260970862c88 ("KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently")
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
-Changes since v1:
-- Shove 'data_offset'/'consumed_xmm_halves' into a union in 'struct
-kvm_hv_hcall' to make things more explicit. [Sean]
----
- arch/x86/kvm/hyperv.c | 63 ++++++++++++++++++++++++-------------------
- 1 file changed, 36 insertions(+), 27 deletions(-)
-
-diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-index 2c7f2a26421e..e8296942a868 100644
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -1769,6 +1769,7 @@ static bool hv_is_vp_in_sparse_set(u32 vp_id, u64 valid_bank_mask, u64 sparse_ba
- }
- 
- struct kvm_hv_hcall {
-+	/* Hypercall input data */
- 	u64 param;
- 	u64 ingpa;
- 	u64 outgpa;
-@@ -1779,12 +1780,21 @@ struct kvm_hv_hcall {
- 	bool fast;
- 	bool rep;
- 	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
-+
-+	/*
-+	 * Current read offset when KVM reads hypercall input data gradually,
-+	 * either offset in bytes from 'ingpa' for regular hypercalls or the
-+	 * number of already consumed 'XMM halves' for 'fast' hypercalls.
-+	 */
-+	union {
-+		gpa_t data_offset;
-+		int consumed_xmm_halves;
-+	};
- };
- 
- 
- static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
--			      u16 orig_cnt, u16 cnt_cap, u64 *data,
--			      int consumed_xmm_halves, gpa_t offset)
-+			      u16 orig_cnt, u16 cnt_cap, u64 *data)
- {
- 	/*
- 	 * Preserve the original count when ignoring entries via a "cap", KVM
-@@ -1799,11 +1809,11 @@ static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
- 		 * Each XMM holds two sparse banks, but do not count halves that
- 		 * have already been consumed for hypercall parameters.
- 		 */
--		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
-+		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - hc->consumed_xmm_halves)
- 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 
- 		for (i = 0; i < cnt; i++) {
--			j = i + consumed_xmm_halves;
-+			j = i + hc->consumed_xmm_halves;
- 			if (j % 2)
- 				data[i] = sse128_hi(hc->xmm[j / 2]);
- 			else
-@@ -1812,27 +1822,24 @@ static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
- 		return 0;
- 	}
- 
--	return kvm_read_guest(kvm, hc->ingpa + offset, data,
-+	return kvm_read_guest(kvm, hc->ingpa + hc->data_offset, data,
- 			      cnt * sizeof(*data));
- }
- 
- static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
--				 u64 *sparse_banks, int consumed_xmm_halves,
--				 gpa_t offset)
-+				 u64 *sparse_banks)
- {
- 	if (hc->var_cnt > HV_MAX_SPARSE_VCPU_BANKS)
- 		return -EINVAL;
- 
- 	/* Cap var_cnt to ignore banks that cannot contain a legal VP index. */
- 	return kvm_hv_get_hc_data(kvm, hc, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS,
--				  sparse_banks, consumed_xmm_halves, offset);
-+				  sparse_banks);
- }
- 
--static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
--					int consumed_xmm_halves, gpa_t offset)
-+static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[])
- {
--	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
--				  entries, consumed_xmm_halves, offset);
-+	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt, entries);
- }
- 
- static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu,
-@@ -1926,8 +1933,6 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 	struct kvm_vcpu *v;
- 	unsigned long i;
- 	bool all_cpus;
--	int consumed_xmm_halves = 0;
--	gpa_t data_offset;
- 
- 	/*
- 	 * The Hyper-V TLFS doesn't allow more than HV_MAX_SPARSE_VCPU_BANKS
-@@ -1955,12 +1960,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 			flush.address_space = hc->ingpa;
- 			flush.flags = hc->outgpa;
- 			flush.processor_mask = sse128_lo(hc->xmm[0]);
--			consumed_xmm_halves = 1;
-+			hc->consumed_xmm_halves = 1;
- 		} else {
- 			if (unlikely(kvm_read_guest(kvm, hc->ingpa,
- 						    &flush, sizeof(flush))))
- 				return HV_STATUS_INVALID_HYPERCALL_INPUT;
--			data_offset = sizeof(flush);
-+			hc->data_offset = sizeof(flush);
- 		}
- 
- 		trace_kvm_hv_flush_tlb(flush.processor_mask,
-@@ -1985,12 +1990,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 			flush_ex.flags = hc->outgpa;
- 			memcpy(&flush_ex.hv_vp_set,
- 			       &hc->xmm[0], sizeof(hc->xmm[0]));
--			consumed_xmm_halves = 2;
-+			hc->consumed_xmm_halves = 2;
- 		} else {
- 			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &flush_ex,
- 						    sizeof(flush_ex))))
- 				return HV_STATUS_INVALID_HYPERCALL_INPUT;
--			data_offset = sizeof(flush_ex);
-+			hc->data_offset = sizeof(flush_ex);
- 		}
- 
- 		trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
-@@ -2009,8 +2014,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 			if (!hc->var_cnt)
- 				goto ret_success;
- 
--			if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
--						  consumed_xmm_halves, data_offset))
-+			if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks))
- 				return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 		}
- 
-@@ -2021,8 +2025,10 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 		 * consumed_xmm_halves to make sure TLB flush entries are read
- 		 * from the correct offset.
- 		 */
--		data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
--		consumed_xmm_halves += hc->var_cnt;
-+		if (hc->fast)
-+			hc->consumed_xmm_halves += hc->var_cnt;
-+		else
-+			hc->data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
- 	}
- 
- 	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
-@@ -2030,8 +2036,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 	    hc->rep_cnt > ARRAY_SIZE(__tlb_flush_entries)) {
- 		tlb_flush_entries = NULL;
- 	} else {
--		if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries,
--						consumed_xmm_halves, data_offset))
-+		if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries))
- 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 		tlb_flush_entries = __tlb_flush_entries;
- 	}
-@@ -2180,9 +2185,13 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
- 		if (!hc->var_cnt)
- 			goto ret_success;
- 
--		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 1,
--					  offsetof(struct hv_send_ipi_ex,
--						   vp_set.bank_contents)))
-+		if (!hc->fast)
-+			hc->data_offset = offsetof(struct hv_send_ipi_ex,
-+						   vp_set.bank_contents);
-+		else
-+			hc->consumed_xmm_halves = 1;
-+
-+		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks))
- 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
- 	}
- 
--- 
-2.38.1
+Best regards,
+Krzysztof
 
