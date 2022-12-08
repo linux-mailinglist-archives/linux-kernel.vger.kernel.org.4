@@ -2,86 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E522A647452
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3519647455
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiLHQa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:30:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43126 "EHLO
+        id S229895AbiLHQan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:30:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiLHQaU (ORCPT
+        with ESMTP id S230217AbiLHQac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:30:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E902CE1B;
-        Thu,  8 Dec 2022 08:30:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6611B824D5;
-        Thu,  8 Dec 2022 16:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7BFF4C433F0;
-        Thu,  8 Dec 2022 16:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670517015;
-        bh=jIHClrtH+bsQzKWr6c4SJ0wAfJTGHritbW/XGWOr/gs=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=N3MwQqJfZMDqApiqxx0dWfd9Q+OjgaFcZNKbNYkwjlsHJBy8PguoqI/AY7aWQc/39
-         jyez09SrzReqd7Olw73+BsP3zSPg7CvfUNBuGD5N9pqRYykMCd/g5Uhcj+QAsu3Z+u
-         bTOw9hBoLyUN4/Fiz9HMM8DTFa6Uj+EzPL9yOLiD5dlpoLMWv4Lk2SnwrdXHz8OOkw
-         kjWk073dMBk2SjWAgYv2rlokZCBxeM1WII7utv5GMW6TewIXQzWs9BFXMOEv9asZXQ
-         x2QRYw3a7TI823PCgghP4qkBSUL9h5wWSoQftK1VlDS2hM1+LCs+U6t6jnBzvQ8CcE
-         zK9CHJzKUE+Qg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5FDFDE1B4D9;
-        Thu,  8 Dec 2022 16:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 8 Dec 2022 11:30:32 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD8B70B9B
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:30:30 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso5216176pjt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:30:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4tmfXAitcgkSlUsd80rpXrMdUZPjLhK1NcCQ+49+g8=;
+        b=IfAhwPlyRtM85i8rguQOmP7CnTCezl5zNw1zvLw2K9t/3snzqJ13XzN33EuGXVmdL7
+         kuGJCxBQ0DAIKjAwY35ZND7i0UIklkDsfJ1LCwZaoQB3sJw5qQRG9YGF/gn42W4DMLem
+         DkKozVqyjHBsuR1CAhF3Xu981CEhsvXZWHGPQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k4tmfXAitcgkSlUsd80rpXrMdUZPjLhK1NcCQ+49+g8=;
+        b=4IJ/B2kslp0CsTJEkmLAv/qS2v2gc94BvukbEZAB8p1qqcL6Su0sg8L+814phnJyji
+         378DeU6LaGJgHfMijc3G5bQZp0O2X9POXk7em3EgeRWET2cKuzcjSbSapdHORSDNwKKz
+         8tTGcrxUZMeFzu4QLensQk4KpkBA0ChaaRtE5Bboc3H6YinbtqubIxmdaFAUfMStZNYu
+         Bgiw2QMbYKtrKDU0GsWtJ4me8WT88hi9B3iXhwGNQ5bmCxm0rIWHKptQ/0dcZXVhq4YZ
+         gLb75Xnj7tAxGqjNeT8sZduFNwXgnSeybiqz4OmQm5dqmpsZ2mmDaGlJ4WQKulylLYHj
+         IsZQ==
+X-Gm-Message-State: ANoB5pmpkoeqi2L9rKcMn19jKj/opI5xMBB98q9uZ8bKuqWRmfhHQSKU
+        N8suN4MX8BPlt7VaZz8iigGneg==
+X-Google-Smtp-Source: AA0mqf57k6PyE3EokGT1H+zjRGQDn0VQYsc/0IIGVvGFWMnZS6uaAnbVF+b/XI2sHwbsUpcdDciiPQ==
+X-Received: by 2002:a17:902:a505:b0:189:e149:a1a6 with SMTP id s5-20020a170902a50500b00189e149a1a6mr14708502plq.58.1670517029595;
+        Thu, 08 Dec 2022 08:30:29 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h15-20020a170902680f00b00186cd4a8aedsm16697608plk.252.2022.12.08.08.30.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 08:30:29 -0800 (PST)
+Date:   Thu, 8 Dec 2022 08:30:28 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     jeffxu@chromium.org
+Cc:     skhan@linuxfoundation.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jeffxu@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v6 5/6] selftests/memfd: add tests for MFD_NOEXEC_SEAL
+ MFD_EXEC
+Message-ID: <202212080830.EB9070F758@keescook>
+References: <20221207154939.2532830-1-jeffxu@google.com>
+ <20221207154939.2532830-6-jeffxu@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v1 1/1] net: dsa: microchip: add stats64 support for
- ksz8 series of switches
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167051701538.25268.9186895326935961207.git-patchwork-notify@kernel.org>
-Date:   Thu, 08 Dec 2022 16:30:15 +0000
-References: <20221205052904.2834962-1-o.rempel@pengutronix.de>
-In-Reply-To: <20221205052904.2834962-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Arun.Ramadoss@microchip.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207154939.2532830-6-jeffxu@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  5 Dec 2022 06:29:04 +0100 you wrote:
-> Add stats64 support for ksz8xxx series of switches.
+On Wed, Dec 07, 2022 at 03:49:38PM +0000, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@google.com>
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->  drivers/net/dsa/microchip/ksz_common.c | 87 ++++++++++++++++++++++++++
->  drivers/net/dsa/microchip/ksz_common.h |  1 +
->  2 files changed, 88 insertions(+)
+> Tests to verify MFD_NOEXEC, MFD_EXEC and vm.memfd_noexec sysctl.
+> 
+> Co-developed-by: Daniel Verkamp <dverkamp@chromium.org>
+> Signed-off-by: Daniel Verkamp <dverkamp@chromium.org>
 
-Here is the summary with links:
-  - [net-next,v1,1/1] net: dsa: microchip: add stats64 support for ksz8 series of switches
-    https://git.kernel.org/netdev/net-next/c/bde55dd9ccda
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Kees Cook
