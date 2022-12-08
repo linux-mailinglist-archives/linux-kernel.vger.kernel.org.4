@@ -2,177 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6576469E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:51:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0036469F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiLHHvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 02:51:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S229732AbiLHHwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 02:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiLHHvU (ORCPT
+        with ESMTP id S229621AbiLHHwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 02:51:20 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6627F3E097
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:51:19 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3BgU-0003Dz-SH; Thu, 08 Dec 2022 08:51:10 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3BgS-0035oC-HE; Thu, 08 Dec 2022 08:51:09 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p3BgS-003TQ0-ML; Thu, 08 Dec 2022 08:51:08 +0100
-Date:   Thu, 8 Dec 2022 08:51:02 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
-        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org
-Subject: Re: [PATCH 288/606] leds: turris-omnia: Convert to i2c's .probe_new()
-Message-ID: <20221208075102.qumdzncjglpdrq35@pengutronix.de>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
- <20221118224540.619276-289-uwe@kleine-koenig.org>
- <20221202111221.zl7w6guy4bgqwkdp@pengutronix.de>
- <Y5D34yLLJ+d7sDbi@duo.ucw.cz>
+        Thu, 8 Dec 2022 02:52:47 -0500
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFB710B5A
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:52:45 -0800 (PST)
+Received: by mail-lj1-x22a.google.com with SMTP id q7so684037ljp.9
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 23:52:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WeLvogb5JcadAWbdKBuMs8s2ANbAcK0xMjx9ddwhq14=;
+        b=ZHANhG9Di5kOOXFJDYWU/H7bgD39QQKX/0QHbql541UnEppPeUB17FwVY4f+KQDowh
+         gCQYMEdcbAuhhh6zy3f5wB0otFHnd5cOee/YdrN1dk71ntSyXv5Vy796a9Ue6Rl2aJS+
+         M3LKUrkbQe6Xl2liTjjM1puFs/8QD49O+4YFKnGiyxOQLGP+RUv3SbTrpgsyxorbIMnM
+         M8nDtE6yH9oebfJ1AF2KXh/NaDB92Io4bxk7PYS2Q4QPVhNPD102260eQSMmu5I3+eIJ
+         RW7mS0L02YnQhu+VVQCS8s9sLU/qQiAjDXrwJhgLocr5iBWHPNDFasV1MYkv4MMwSpxG
+         iz5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WeLvogb5JcadAWbdKBuMs8s2ANbAcK0xMjx9ddwhq14=;
+        b=4BqaNVK2pt1M8Lhds7FIcvUcX2PIyKKijFN+gk4HIyHTlWn8gPdDj5mynWF7E5OTAu
+         Q+2PJvOx3Utaz7jxWZ5qs4BuxQ+XCpG1Ub9Kr84QMk1uAbuN5BqdZoJiReWYkTTb8CCn
+         +jxx32wsnj+5u9mc7q8L/Uwau47XJwZde4fvzFAPAkM7yDbPjGrVJfR74ANUmvXIiQyH
+         ndkyd1TfxpmLcBpzxHak+FXu+abH0B/QoV7n58w0dqBq/ix3o7bqH9DnfBb300fdW2hV
+         gRQzREOMkgcJdMk8CW4og7zcS0yuoT3mrlMsp2CALHaHFldXIU9OnAiY8QvyrOIHx00q
+         xa/A==
+X-Gm-Message-State: ANoB5pkZh6iGW4A2G4UZ7XaLHSSTxdms5br9fkEpzwNsiQgjvbSxUMxE
+        1slNslOhI30kAxU6DqfNhKHe4w==
+X-Google-Smtp-Source: AA0mqf7NUrHXH8IdAre6WwZa9HcPzETJhRbH+/idQa0BUPVdPF8aRm+V8yQNfDi69QgGf02lR11a0Q==
+X-Received: by 2002:a05:651c:10b5:b0:27a:727:cb92 with SMTP id k21-20020a05651c10b500b0027a0727cb92mr4328153ljn.84.1670485963624;
+        Wed, 07 Dec 2022 23:52:43 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id f3-20020ac25083000000b0049c29389b98sm3217960lfm.151.2022.12.07.23.52.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 23:52:42 -0800 (PST)
+Message-ID: <dc0254dc-ef1b-d5fb-163e-281c725a3dcd@linaro.org>
+Date:   Thu, 8 Dec 2022 08:52:41 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="p7efjmlg2zhegoce"
-Content-Disposition: inline
-In-Reply-To: <Y5D34yLLJ+d7sDbi@duo.ucw.cz>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 2/3] dt-bindings: leds: add dt schema for
+ worldsemi,ws2812b
+To:     Chuanhong Guo <gch981213@gmail.com>, linux-leds@vger.kernel.org
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221207040904.582585-1-gch981213@gmail.com>
+ <20221207040904.582585-3-gch981213@gmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221207040904.582585-3-gch981213@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 07/12/2022 05:09, Chuanhong Guo wrote:
+> Add dt binding schema for WorldSemi WS2812B driven using SPI
+> bus.
+> 
+> Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
+> ---
+> Changes since v1:
+> remove linux driver reference from description
+> remove some obvious descriptions
+> fix unit address regex in multi-led property
+> drop various minItems
+> add maxItems = 1 to reg
+> fix node names and property orders in binding example
+> drop -spi from compatible string
+> add default-brightness
+> 
+> Change since v2:
+> drop "this patch" from commit message
+> rename leds to led-controller
+> drop default-brightness and default-intensity
+> 
+>  .../bindings/leds/worldsemi,ws2812b.yaml      | 116 ++++++++++++++++++
+>  1 file changed, 116 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+> new file mode 100644
+> index 000000000000..548c05ac3d31
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/leds/worldsemi,ws2812b.yaml
+> @@ -0,0 +1,116 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/leds/worldsemi,ws2812b.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: WS2812B LEDs driven using SPI
+> +
+> +maintainers:
+> +  - Chuanhong Guo <gch981213@gmail.com>
+> +
+> +description: |
+> +  WorldSemi WS2812B is a individually addressable LED chip that can be chained
+> +  together and controlled individually using a single wire.
+> +  This binding describes a chain of WS2812B LEDs connected to the SPI MOSI pin.
+> +  Typical setups includes connecting the data pin of the LED chain to MOSI as
+> +  the only device or using CS and MOSI with a tri-state voltage-level shifter
+> +  for the data pin.
+> +  The SPI frequency needs to be 2.105MHz~2.85MHz for the timing to be correct
+> +  and the controller needs to send all the bytes continuously.
+> +
+> +allOf:
+> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: worldsemi,ws2812b
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    minimum: 2105000
+> +    maximum: 2850000
+> +
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+> +patternProperties:
+> +  "^multi-led@[0-9a-f]+$":
+> +    type: object
+> +    $ref: leds-class-multicolor.yaml#
+> +    unevaluatedProperties: false
+> +
+> +    properties:
+> +      color-index:
+> +        description: |
+> +          A 3-item array specifying color of each components in this LED. It
+> +          should be one of the LED_COLOR_ID_* prefixed definitions from the
+> +          header include/dt-bindings/leds/common.h. Defaults to
+> +          <LED_COLOR_ID_GREEN LED_COLOR_ID_RED LED_COLOR_ID_BLUE>
+> +          if unspecified.
+> +        $ref: /schemas/types.yaml#/definitions/uint32-array
 
---p7efjmlg2zhegoce
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hmm, maybe we should add more colors the "color" property, like
+LED_COLOR_ID_GRB, LED_COLOR_ID_BRG, LED_COLOR_ID_BGR?
 
-Hello Pavel,
+Rest look ok for me. If there is going to be resend, drop redundant "dt
+schema for" from the subject.
 
-On Wed, Dec 07, 2022 at 09:30:27PM +0100, Pavel Machek wrote:
-> > On Fri, Nov 18, 2022 at 11:40:22PM +0100, Uwe Kleine-K=F6nig wrote:
-> > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > >=20
-> > > The probe function doesn't make use of the i2c_device_id * parameter =
-so it
-> > > can be trivially converted.
-> > >=20
-> > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> >=20
-> > I didn't get any feedback from your side about this patch set.
-> >=20
-> > In case the problem is "only" to get the led patches out of this
-> > series, I recommend:
-> >=20
-> > 	b4 am -l -s -P268-288 20221118224540.619276-1-uwe@kleine-koenig.org
->=20
-> Yeah, well, I guess:
->=20
-> # A part of the patches depend on commit 662233731d66 ("i2c: core:
-> # Introduce i2c_client_get_device_id helper function"), there is a branch=
- that
-> # you can pull into your tree to get it:
->=20
-> this is a bit of a problem because Linus will be unhappy if I pull
-> into my for-next branch.
+Best regards,
+Krzysztof
 
-I wonder if it's you or me who has a wrong expectation about Linus here.
-IIUC he is unhappy if you pull some random tree (e.g. his own) for no
-better reason than to update, but an immutable tag/branch to get a
-dependency right should be fine. That's the whole idea about immutable
-tags and branches, isn't it?
-
-Looking at today's next, there are several merges of this immutable branch:
-
- - 3d94887aca09 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
-ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into next")
-   by Dmitry Torokhov for branch 'next' of git://git.kernel.org/pub/scm/lin=
-ux/kernel/git/dtor/input.git
- - 719c547c6551 ("Merge branch 'i2c/client_device_id_helper-immutable' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux")
-   by Herbert Xu for branch 'master' of git://git.kernel.org/pub/scm/linux/=
-kernel/git/herbert/cryptodev-2.6.git
- - 963c7fe6cdbf ("Merge branch i2c/client_device_id_helper-immutable of wsa=
-/linux into next")
-   by Michael Ellerman for branch 'next' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/powerpc/linux.git
- - 06fa87fc9311 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
-ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into gpio/for-next=
-")
-   by Bartosz Golaszewski for branch 'gpio/for-next' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/brgl/linux.git
- - 2f88b7050d67 ("Merge 'i2c/client_device_id_helper-immutable'")
-   by Sebastian Reichel for branch 'for-next' of git://git.kernel.org/pub/s=
-cm/linux/kernel/git/sre/linux-power-supply.git
- - b15654dd11e6 ("Merge remote-tracking branch 'i2c/i2c/client_device_id_he=
-lper-immutable' into togreg")
-   by Jonathan Cameron for branch 'char-misc-next' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/gregkh/char-misc.git
- - 149f52664bb3 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
-ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into regulator-6.2=
-")
-   by Mark Brown for branch 'for-next' of git://git.kernel.org/pub/scm/linu=
-x/kernel/git/broonie/regulator.git
- - e0c7800a5530 ("Merge branch 'i2c/client_device_id_helper-immutable' into=
- i2c/for-mergewindow")
-   by Wolfram Sang for branch 'i2c/for-next' of git://git.kernel.org/pub/sc=
-m/linux/kernel/git/wsa/linux.git
- - 4cb55a9a1ab7 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
-ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into HEAD")
-   by Mark Brown for branch 'for-next' of git://git.kernel.org/pub/scm/linu=
-x/kernel/git/broonie/sound.git
- - c43c0e589e69 ("Merge branch 'i2c/client_device_id_helper-immutable' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux")
-   by Jakub Kicinski for branch 'master' of git://git.kernel.org/pub/scm/li=
-nux/kernel/git/netdev/net-next.git
- - 41948bd9cf01 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
-ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into spi-6.2")
-   by Mark Brown for branch 'for-next' of git://git.kernel.org/pub/scm/linu=
-x/kernel/git/broonie/spi.git
-
-mfd and backlight just started stacking on top of 662233731d66cf41e7494e532=
-e702849c8ce18f3.
-
-So you should be in good company at least if Linus gets angry :-)
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---p7efjmlg2zhegoce
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmORl2EACgkQwfwUeK3K
-7AleJAf/UEPqNbZFQjdQN2ZGCsACyJSUDwz0MILVRHDJFmgs30JLP3JSz6KA5nul
-046t7c+cQgBYXjDtBotpeKtPrzgEv+vPDfOPtj/B7SAWdMEMUZUE8BoLbOLq55RH
-RlvotEUpF4vBC7uOX7G7VUsSsfqT/QbLbg3/b7CuubA1w8FYM4gI5d0Oajoc4TH5
-qfLgwJfL5kkiv364sgNv6un/iDTuoKUG1py5P2ztbHndFCr1W85PnekJvJ8I8yX3
-DH/JR/CWSan0+FUrG5uw8TbAhYJW36bIGE4BeLMDcIBsWGGlad337TiAXiPv5FrH
-fHp96wpwbfAsUo0vdaBJ3qeTWIj3+A==
-=JqHu
------END PGP SIGNATURE-----
-
---p7efjmlg2zhegoce--
