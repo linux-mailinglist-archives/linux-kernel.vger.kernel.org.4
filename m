@@ -2,228 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01256470B3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D486470B8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiLHNU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:20:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
+        id S230140AbiLHNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:23:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiLHNUv (ORCPT
+        with ESMTP id S229818AbiLHNXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:20:51 -0500
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F5892A39
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:20:50 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id x11so645939ilo.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 05:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=l+8f7R5Bh5XH8mXZ7Mq9vlU+wLO8F2293iNf6qWF9/8=;
-        b=L6bqhDcFLpV3GdkbsEF+3lJo4zdCBjgntAGQ6+aPoi7Y8vAXvA3whIvadIqKvOSwPR
-         /1fuwwFAi/PO4lZZ3WvAMd5spOSoPOi5mgp0Ox1YYPmz0CZGuJUHYqNzdJ8vMIjU9xCn
-         pGkmJmS3LPkICuOeTOxD4gQHUlmFjXxDsrPSfz9x2wVDgw/5lO7irz8ez/TJKAu9D5wC
-         0R5uh1NCQEmwKqwCqjLEh9hswKkZLO0HhwIbhW6QlZFnBphH+v+kqiGWEV0DTbJ3tMT7
-         C1SH0mXRHh4tXxrVR5y+VB3L2TibA+J/5iMr0SH3QtEtVsg9vqzXkJMG59HM41XEyBnS
-         w9PQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l+8f7R5Bh5XH8mXZ7Mq9vlU+wLO8F2293iNf6qWF9/8=;
-        b=ZaKSdyzYkPRakepwy9SjhXCuuIC7p5pwUN1MuJWamFurm+/UNkexd9Y7OdFps6/4Z4
-         6xcZbGGaEr2QOcJ7BTBwGZFvEkOlm9C6YD5imf/xEUqgK2MDeAjJ/K/ViiDK7Em00S5X
-         Mi6p4JPRe2AYUCwq5Lh/mMJKDtLmtHIxD+N3aCib0P0lygcDmPO0xwN43ms4KM97rf4v
-         JV2QjkFQ3m5BxjNCYP5sHWZG4JhZinTX5jbemCVmaHtVPu35PmPwjLwYImmmoYEk5D1g
-         KXXQs3SEeajCqRXD81bNtU5UpPKw72Kxcwri3fM0FKne91TI2ibOm5AEDF7mzLd6uGxz
-         s0iw==
-X-Gm-Message-State: ANoB5plUi3AZXJNvvU/syi4urxIWjvG+txLNSTP5KJ5qzxmXluBE4g88
-        MS8PqQ5Z5bC8t7ty0z4GcYiy0wi+vxPfbzx9R2O/HQ==
-X-Google-Smtp-Source: AA0mqf7aBhqmCKG9No0zjuDlXHqzG4ImOJbXaMaWLJOjSjM0KR+tkyQ8O0Ucex7P96Fyy6STfpboH2OO6VQtZBaGmKE=
-X-Received: by 2002:a92:7c0c:0:b0:302:efa3:6230 with SMTP id
- x12-20020a927c0c000000b00302efa36230mr29267158ilc.232.1670505649909; Thu, 08
- Dec 2022 05:20:49 -0800 (PST)
-MIME-Version: 1.0
-References: <20221207101705.9460-1-lukasz.luba@arm.com> <20221207101705.9460-3-lukasz.luba@arm.com>
- <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com>
- <7428f6dd-9403-180b-d4b4-7ef1aee3dcb1@arm.com> <CAKfTPtDoZ2paL7DW+JsML8aKeVzwu4oSnojij1osqJzNhO4ceA@mail.gmail.com>
- <4a648e81-e529-e09c-ed8b-10b703f1c305@arm.com>
-In-Reply-To: <4a648e81-e529-e09c-ed8b-10b703f1c305@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 8 Dec 2022 14:20:38 +0100
-Message-ID: <CAKfTPtBPJma6DtDnheM3AeD_wEAyMPE+Buckvx8AQ3AzO4mN8A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
- single max CPU capacity
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, saravanak@google.com,
-        wusamuel@google.com, isaacmanjarres@google.com,
-        kernel-team@android.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, viresh.kumar@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 08:23:10 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603AB8138F
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:23:09 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 5A00A3200917;
+        Thu,  8 Dec 2022 08:23:08 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 08 Dec 2022 08:23:08 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1670505787; x=1670592187; bh=86NztHs9QVX/n93qJfYm/s7/pby6qjrKy/D
+        ct4MFEvM=; b=hI/3Sg1/GdBfxNMFsIa5cqTzUSo210/cc/BCASPSTZpe7XSPovA
+        NhrsU/JH61i1otSd+PSr+bh5IQQWEioASuB2YC9ff5xVvQOs5xC/5cTaLyueMOG5
+        AFkBx2XPJMfh1G7lUEvrzCIkMgE7C8g2E7J3IY7APBn/0BU4Wrn3I7iMwzDVnrCW
+        2bE1w9VOs2RRZXMFlaZj+H3k7UZkLzOILXDPw6vY8ENUt2GDhYmHMuROYXtRhNAE
+        CoierpoudtgoLhPmA49givAHfrIIZfV2MRYnDidI+FV2n1+HTNi1+PdBa0gR9GnW
+        kvG7e6h1ruxu7x1Smmcld2kijuJQQlDog3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1670505787; x=
+        1670592187; bh=86NztHs9QVX/n93qJfYm/s7/pby6qjrKy/Dct4MFEvM=; b=w
+        Fd6NpQgsqe+ZhM8kTFTOq87R9Og2Q1craJFjVm4qW3kE0UlUATPxJVFQO9SSBlNG
+        js7jg+BZoSDPhIrPV6CW6E5Z5OuFu9v20ouzM2Et2I0F8vjR2FetJdMYwkZn6THC
+        tGFTS6Ic1DVyrIGDGL7Psthex2Bg2gpWR6AVUyVDsM/fthPlNWDIAls1ZBnE0ROq
+        qlQJGDuuDWhuoThUB9r+eBsb+NMJG2dq11FcIZCIDOrarJi7KSbmShMb+xSw2dBr
+        z/OyBaVHw3vxr21SfuUKF5vKQ8F0fy3I59/epJ7aZhzFeX8+MsaF+1xUhjXImq/G
+        R7zMFM7CTEn84S5Pa6HzA==
+X-ME-Sender: <xms:O-WRY3AzwOM8jZao1owRU5u_6JCBqeCdr26TRJ4yunjFjAp3htA2RA>
+    <xme:O-WRY9iiQnoi6BIoM-gnVyqtmyNwo9wITdGlmZPdlvVH_L6_gWoQ3rERNoR6zf1yD
+    t1QGV9xZsXn4dNZ8Fk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgdehudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:O-WRYym-LVNTQ05GPp6HulfGIDRQGldMkjJOJK9lqRK-N-hHYZXsog>
+    <xmx:O-WRY5w5AqRgvFRUz9rn9Z98hXGIjBr-N7Zh9Ra97fGlaBq-6IURQw>
+    <xmx:O-WRY8RzyHSYprtaGXT5Hl_vGONMQzHGMYgOaZpbVjjJQwf-ZblqRA>
+    <xmx:O-WRY3Jc9NhXXCPmN7Av54Ta_1f4B03ZX243PJuaNl_v5Oea1RTsPw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5D4EFB60086; Thu,  8 Dec 2022 08:23:07 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <c6664af4-7a91-401e-a079-e700e9ff5bbf@app.fastmail.com>
+Date:   Thu, 08 Dec 2022 14:22:09 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 5
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Dec 2022 at 11:56, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 12/8/22 10:31, Vincent Guittot wrote:
-> > On Thu, 8 Dec 2022 at 11:06, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 12/8/22 08:37, Vincent Guittot wrote:
-> >>> On Wed, 7 Dec 2022 at 11:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>
-> >>>> The max CPU capacity is the same for all CPUs sharing frequency domain
-> >>>> and thus 'policy' object. There is a way to avoid heavy operations
-> >>>> in a loop for each CPU by leveraging this knowledge. Thus, simplify
-> >>>> the looping code in the sugov_next_freq_shared() and drop heavy
-> >>>> multiplications. Instead, use simple max() to get the highest utilization
-> >>>> from these CPUs. This is useful for platforms with many (4 or 6) little
-> >>>> CPUs.
-> >>>>
-> >>>> The max CPU capacity must be fetched every time we are called, due to
-> >>>> difficulties during the policy setup, where we are not able to get the
-> >>>> normalized CPU capacity at the right time.
-> >>>>
-> >>>> The stored value in sugov_policy::max is also than used in
-> >>>> sugov_iowait_apply() to calculate the right boost. Thus, that field is
-> >>>> useful to have in that sugov_policy struct.
-> >>>>
-> >>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>>> ---
-> >>>>    kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
-> >>>>    1 file changed, 11 insertions(+), 11 deletions(-)
-> >>>>
-> >>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> >>>> index c19d6de67b7a..f9881f3d9488 100644
-> >>>> --- a/kernel/sched/cpufreq_schedutil.c
-> >>>> +++ b/kernel/sched/cpufreq_schedutil.c
-> >>>> @@ -158,10 +158,8 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >>>>
-> >>>>    static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> >>>>    {
-> >>>> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> >>>>           struct rq *rq = cpu_rq(sg_cpu->cpu);
-> >>>>
-> >>>> -       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>>           sg_cpu->bw_dl = cpu_bw_dl(rq);
-> >>>>           sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
-> >>>>                                             FREQUENCY_UTIL, NULL);
-> >>>> @@ -317,6 +315,8 @@ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
-> >>>>    static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> >>>>                                                 u64 time, unsigned int flags)
-> >>>>    {
-> >>>> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> >>>> +
-> >>>>           sugov_iowait_boost(sg_cpu, time, flags);
-> >>>>           sg_cpu->last_update = time;
-> >>>>
-> >>>> @@ -325,6 +325,9 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> >>>>           if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
-> >>>>                   return false;
-> >>>>
-> >>>> +       /* Fetch the latest CPU capcity to avoid stale data */
-> >>>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>> +
-> >>>>           sugov_get_util(sg_cpu);
-> >>>>           sugov_iowait_apply(sg_cpu, time);
-> >>>>
-> >>>> @@ -414,25 +417,22 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
-> >>>>    {
-> >>>>           struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> >>>>           struct cpufreq_policy *policy = sg_policy->policy;
-> >>>> -       unsigned long util = 0, max = 1;
-> >>>> +       unsigned long util = 0;
-> >>>>           unsigned int j;
-> >>>>
-> >>>> +       /* Fetch the latest CPU capcity to avoid stale data */
-> >>>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>> +
-> >>>>           for_each_cpu(j, policy->cpus) {
-> >>>>                   struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-> >>>> -               unsigned long j_util, j_max;
-> >>>>
-> >>>>                   sugov_get_util(j_sg_cpu);
-> >>>>                   sugov_iowait_apply(j_sg_cpu, time);
-> >>>> -               j_util = j_sg_cpu->util;
-> >>>> -               j_max = j_sg_cpu->max;
-> >>>>
-> >>>> -               if (j_util * max > j_max * util) {
-> >>>> -                       util = j_util;
-> >>>> -                       max = j_max;
-> >>>> -               }
-> >>>
-> >>> With the code removed above, max is only used in 2 places:
-> >>> - sugov_iowait_apply
-> >>> - map_util_freq
-> >>>
-> >>> I wonder if it would be better to just call arch_scale_cpu_capacity()
-> >>> in these 2 places instead of saving a copy in sg_policy and then
-> >>> reading it twice.
-> >>
-> >> The sugov_iowait_apply() is called in that loop, so probably I will
-> >> add a new argument to that call and just feed it with the capacity value
-> >> from one CPU, which was read before the loop. So, similarly what is in
-> >> this patch. Otherwise, all of those per-cpu capacity vars would be
-> >> accessed inside the sugov_iowait_apply() with sg_cpu->cpu.
-> >
-> > Yes make sense
-> >
-> >>
-> >>>
-> >>> arch_scaleu_cpu_capacity is already a per_cpu variable so accessing it
-> >>> should be pretty cheap.
-> >>
-> >> Yes and no, as you said this is per-cpu variable and would access them
-> >> from one CPU, which is running that loop. They will have different pages
-> >> and addresses so cache lines on that CPU. to avoiding trashing a cache
-> >> lines on this running CPU let's read that capacity once, before the
-> >> loop. Let's use the new arg to pass that value via one of the
-> >> registers. In such, only one cache line would have to fetch that data
-> >> into.
-> >>
-> >> So I thought this simple sg_policy->max would do the trick w/o a lot
-> >> of hassle.
-> >
-> > For the shared mode, everything is located in sugov_next_freq_shared
-> > so you don't need to save the max value with your proposal above to
-> > change sugov_iowait_apply interface.
-> >
-> > This should be doable as well for single mode
-> >
-> >>>
-> >>> Thought ?
-> >>>
-> >>
-> >> I can change that and drop the sg_policy->max and call differently
-> >> those capacity values. I will have to unfortunately drop Viresh's ACKs,
-> >> since this will be a way different code.
-> >>
-> >> Thanks Vincent for the suggestion. Do you want me to go further with
-> >> such approach and send a v3?
-> >
-> > Don't know what Rafael and Viresh think but it seems that we don't
-> > need to save the return of arch_scale_cpu_capacity in ->max field but
-> > directly use it
->
-> Yes I agree, we don't need to, but I will have to modify a few function
-> calls and args.
->
-> So IMO we have agreed. I won't call the call arch_scale_cpu_capacity()
-> in these 2 places, but I will make it with the local var and data
-> fetched as little as possible.
+The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
 
-yes
+  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-5
+
+for you to fetch changes up to da0cbf9307a227f52a38a0a580a4642ad9d7325c:
+
+  Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes (2022-11-29 15:45:36 +0100)
+
+----------------------------------------------------------------
+ARM: SoC fixes for 6.1, part 5
+
+One last build fix came in, addressing a link failure when
+building without CONFIG_OUTER_CACHE
+
+----------------------------------------------------------------
+Arnd Bergmann (1):
+      Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
+
+Peter Rosin (1):
+      ARM: at91: fix build for SAMA5D3 w/o L2 cache
+
+ arch/arm/mach-at91/sama5.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
