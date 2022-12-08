@@ -2,171 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1464647552
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96432647553
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:07:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiLHSHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:07:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
+        id S229677AbiLHSHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:07:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLHSHF (ORCPT
+        with ESMTP id S229521AbiLHSHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:07:05 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBAC2FBCE;
-        Thu,  8 Dec 2022 10:07:04 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id a16so2876382edb.9;
-        Thu, 08 Dec 2022 10:07:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zlZ5JYrfoxlWWhYLoRlXAX2lb7aDsHfABVN0GPpBHNM=;
-        b=lruSRpX2iU7Qy3Bybc+bFJcYPzpZBUHVHjfOKiYhVqC9kGN7RQfw/4mQ26JOMqEjdU
-         gfY+acMolufoIoWyhLrYmzpzzNRx+B6o7rsP9hBsHfMyfTI4g71ZEiGSWASeGtr3FR9g
-         AuF3W5S3rXfqbBHme3vWhMwKoiDPGaAPY1M0GsEPxqmORDknDR9YMWDRGsc78SLblTPB
-         HrviXQ/jWJdPMqerf/ZNft1pgViT2wWbhAh7QYcDGJDDijO2JzlnFDuVDc8utzEPw+Zq
-         PU1Ze8C5lLNq6gAsUoOlqxFZxf9NMXOzv1bKx3JxFWRjviEeWoKiufovPrvV/JaNut1k
-         yZCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlZ5JYrfoxlWWhYLoRlXAX2lb7aDsHfABVN0GPpBHNM=;
-        b=u1/v1H+tyYMqdz/J0V4tgHWAN8CGYqTECu4RlGNXvjoMLFpw+b8m+0Csxijuk98UDJ
-         TT+cfVPOAXfW/eMxCb6HCUVulk3lIkR1hmESrk/4Qd+pM6q0knxfVexartviUwg0HuKa
-         8p8fvzxUFTHwQkTGSu0+eB8IeHoNtb2SKmINrpDySnJw0D1psk0Mxz6Fx+uHmnE0W2zL
-         Fq70wp6Sb1xMXfgvacgY00i0rvukRN4/RCPfRNQT5seYWuC9SjNaWCZIK3eDTXxmAmGC
-         846vl5Mq+47jFiADWpYrxc+m7ejsYnpwJN7DP/xLg0dx5dkVNmb8gJmatakbgmGbLVtr
-         vXQQ==
-X-Gm-Message-State: ANoB5pklgLJhyZoxCCUz1mooR/Zke+qezTmDLbZmlWEEufV2pCcga/n+
-        fu5WABu0tnJ7JnVoOXteMOs=
-X-Google-Smtp-Source: AA0mqf7DiOruFzawmpbEDX8sSceVWIPq+u8dLVRJ5tc0JilGkZFIMKpo9H0anA7MpyB5lchyygmvBg==
-X-Received: by 2002:a05:6402:370e:b0:463:398a:9fe7 with SMTP id ek14-20020a056402370e00b00463398a9fe7mr2413340edb.34.1670522822943;
-        Thu, 08 Dec 2022 10:07:02 -0800 (PST)
-Received: from krava (ip-78-102-146-30.bb.vodafone.cz. [78.102.146.30])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa7cd8e000000b0046b00a9eeb5sm3634944edv.49.2022.12.08.10.07.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 10:07:02 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 8 Dec 2022 19:06:59 +0100
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Hao Sun <sunhao.th@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-Message-ID: <Y5Inw4HtkA2ql8GF@krava>
-References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
- <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
- <Y49dMUsX2YgHK0J+@krava>
- <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
- <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
+        Thu, 8 Dec 2022 13:07:09 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78CC12FBC2
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:07:08 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 2C9F6337BE;
+        Thu,  8 Dec 2022 18:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670522827; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2IVFdreTiW3Ao76M0ZnFXsibpRuEnW0G9TNOeobmX04=;
+        b=fSbt6kLY63AOz+vIZuy4QK+CplJnBNxZh4n9ub+MlrIRjqChSxJ9Uo9q7oB/1CB4V7OOVX
+        rBDWYpzRc03wJBWUUxFyBUitjmI5/fRNP3CY7k2byohmqKLG3OVw1IthirZQGjOekOm4v3
+        jSOG6pJDIugFm3FH9bb6IHIZrbEisjU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670522827;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2IVFdreTiW3Ao76M0ZnFXsibpRuEnW0G9TNOeobmX04=;
+        b=cd4pX7eaU2waBv+JzMDNpQDtWsG6lwe1eWMZTu58/TxXMwzz+avDzSAa/oAhgFnNo+HC4b
+        WMjc+MHj0tFmOQBg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0524E138E0;
+        Thu,  8 Dec 2022 18:07:07 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id e6AzAMsnkmP/UQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 08 Dec 2022 18:07:07 +0000
+Message-ID: <ebe54af3-f679-32ab-1ef1-17f565796ef2@suse.cz>
+Date:   Thu, 8 Dec 2022 19:07:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 5/6] mm/page_alloc: Give GFP_ATOMIC and non-blocking
+ allocations access to reserves
+Content-Language: en-US
+To:     Mel Gorman <mgorman@techsingularity.net>,
+        Linux-MM <linux-mm@kvack.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>, NeilBrown <neilb@suse.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20221129151701.23261-1-mgorman@techsingularity.net>
+ <20221129151701.23261-6-mgorman@techsingularity.net>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221129151701.23261-6-mgorman@techsingularity.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 09:48:52AM -0800, Alexei Starovoitov wrote:
-> On Wed, Dec 7, 2022 at 11:57 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Dec 6, 2022 at 7:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > >
-> > > On Tue, Dec 06, 2022 at 02:46:43PM +0800, Hao Sun wrote:
-> > > > Hao Sun <sunhao.th@gmail.com> 于2022年12月6日周二 11:28写道：
-> > > > >
-> > > > > Hi,
-> > > > >
-> > > > > The following crash can be triggered with the BPF prog provided.
-> > > > > It seems the verifier passed some invalid progs. I will try to simplify
-> > > > > the C reproducer, for now, the following can reproduce this:
-> > > > >
-> > > > > HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-in
-> > > > > functions in bpf_iter_ksym
-> > > > > git tree: bpf-next
-> > > > > console log: https://pastebin.com/raw/87RCSnCs
-> > > > > kernel config: https://pastebin.com/raw/rZdWLcgK
-> > > > > Syz reproducer: https://pastebin.com/raw/4kbwhdEv
-> > > > > C reproducer: https://pastebin.com/raw/GFfDn2Gk
-> > > > >
-> > > >
-> > > > Simplified C reproducer: https://pastebin.com/raw/aZgLcPvW
-> > > >
-> > > > Only two syscalls are required to reproduce this, seems it's an issue
-> > > > in XDP test run. Essentially, the reproducer just loads a very simple
-> > > > prog and tests run repeatedly and concurrently:
-> > > >
-> > > > r0 = bpf$PROG_LOAD(0x5, &(0x7f0000000640)=@base={0x6, 0xb,
-> > > > &(0x7f0000000500)}, 0x80)
-> > > > bpf$BPF_PROG_TEST_RUN(0xa, &(0x7f0000000140)={r0, 0x0, 0x0, 0x0, 0x0,
-> > > > 0x0, 0xffffffff, 0x0, 0x0, 0x0, 0x0, 0x0}, 0x48)
-> > > >
-> > > > Loaded prog:
-> > > >    0: (18) r0 = 0x0
-> > > >    2: (18) r6 = 0x0
-> > > >    4: (18) r7 = 0x0
-> > > >    6: (18) r8 = 0x0
-> > > >    8: (18) r9 = 0x0
-> > > >   10: (95) exit
-> > >
-> > > hi,
-> > > I can reproduce with your config.. it seems related to the
-> > > recent static call change:
-> > >   c86df29d11df bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-> > >
-> > > I can't reproduce when I revert that commit.. Peter, any idea?
-> >
-> > Jiri,
-> >
-> > I see your tested-by tag on Peter's commit c86df29d11df.
-> > I assume you're actually tested it, but
-> > this syzbot oops shows that even empty bpf prog crashes,
-> > so there is something wrong with that commit.
-> >
-> > What is the difference between this new kconfig and old one that
-> > you've tested?
-> >
-> > I'm trying to understand the severity of the issues and
-> > whether we need to revert that commit asap since the merge window
-> > is about to start.
+On 11/29/22 16:17, Mel Gorman wrote:
+> Explicit GFP_ATOMIC allocations get flagged ALLOC_HARDER which is a bit
+> vague. In preparation for removing __GFP_ATOMIC, give GFP_ATOMIC and
+> other non-blocking allocation requests equal access to reserve.  Rename
+> ALLOC_HARDER to ALLOC_NON_BLOCK to make it more clear what the flag
+> means.
 > 
-> Jiri, Peter,
+> Signed-off-by: Mel Gorman <mgorman@techsingularity.net>
+> ---
+>  mm/internal.h   |  7 +++++--
+>  mm/page_alloc.c | 23 +++++++++++++----------
+>  2 files changed, 18 insertions(+), 12 deletions(-)
 > 
-> ping.
-> 
-> cc-ing Thorsten, since he's tracking it now.
-> 
-> The config has CONFIG_X86_KERNEL_IBT=y.
-> Is it related?
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 370500718732..98b1e526559d 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -743,7 +743,10 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>  #define ALLOC_OOM		ALLOC_NO_WATERMARKS
+>  #endif
+>  
+> -#define ALLOC_HARDER		 0x10 /* try to alloc harder */
+> +#define ALLOC_NON_BLOCK		 0x10 /* Caller cannot block. Allow access
+> +				       * to 25% of the min watermark or
+> +				       * 62.5% if __GFP_HIGH is set.
+> +				       */
+>  #define ALLOC_MIN_RESERVE	 0x20 /* __GFP_HIGH set. Allow access to 50%
+>  				       * of the min watermark.
+>  				       */
+> @@ -758,7 +761,7 @@ unsigned int reclaim_clean_pages_from_list(struct zone *zone,
+>  #define ALLOC_KSWAPD		0x800 /* allow waking of kswapd, __GFP_KSWAPD_RECLAIM set */
+>  
+>  /* Flags that allow allocations below the min watermark. */
+> -#define ALLOC_RESERVES (ALLOC_HARDER|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
+> +#define ALLOC_RESERVES (ALLOC_NON_BLOCK|ALLOC_MIN_RESERVE|ALLOC_HIGHATOMIC|ALLOC_OOM)
+>  
+>  enum ttu_flags;
+>  struct tlbflush_unmap_batch;
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 85a87d0ac57a..6bee987ec9a3 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -3994,7 +3994,7 @@ bool __zone_watermark_ok(struct zone *z, unsigned int order, unsigned long mark,
+>  		 * if it cannot get memory quickly, particularly if it's
+>  		 * also __GFP_HIGH.
+>  		 */
+> -		if (alloc_flags & (ALLOC_HARDER|ALLOC_HIGHATOMIC))
+> +		if (alloc_flags & (ALLOC_NON_BLOCK|ALLOC_HIGHATOMIC))
+>  			min -= min / 4;
+>  
+>  		/*
+> @@ -4846,28 +4846,30 @@ gfp_to_alloc_flags(gfp_t gfp_mask, unsigned int order)
+>  	 * The caller may dip into page reserves a bit more if the caller
+>  	 * cannot run direct reclaim, or if the caller has realtime scheduling
+>  	 * policy or is asking for __GFP_HIGH memory.  GFP_ATOMIC requests will
+> -	 * set both ALLOC_HARDER (__GFP_ATOMIC) and ALLOC_MIN_RESERVE(__GFP_HIGH).
+> +	 * set both ALLOC_NON_BLOCK and ALLOC_MIN_RESERVE(__GFP_HIGH).
+>  	 */
+>  	alloc_flags |= (__force int)
+>  		(gfp_mask & (__GFP_HIGH | __GFP_KSWAPD_RECLAIM));
+>  
+> -	if (gfp_mask & __GFP_ATOMIC) {
+> +	if (!(gfp_mask & __GFP_RECLAIM)) {
 
-sorry for late reply.. I still did not find the reason,
-but I did not try with IBT yet, will test now
+This is supposed to be __GFP_DIRECT_RECLAIM right? Otherwise that includes
+also __GFP_KSWAPD_RECLAIM and GFP_ATOMIC sets that one...
 
-jirka
+>  		/*
+>  		 * Not worth trying to allocate harder for __GFP_NOMEMALLOC even
+>  		 * if it can't schedule.
+>  		 */
+>  		if (!(gfp_mask & __GFP_NOMEMALLOC)) {
+> -			alloc_flags |= ALLOC_HARDER;
+> +			alloc_flags |= ALLOC_NON_BLOCK;
+>  
+>  			if (order > 0)
+>  				alloc_flags |= ALLOC_HIGHATOMIC;
+>  		}
+>  
+>  		/*
+> -		 * Ignore cpuset mems for GFP_ATOMIC rather than fail, see the
+> -		 * comment for __cpuset_node_allowed().
+> +		 * Ignore cpuset mems for non-blocking __GFP_HIGH (probably
+> +		 * GFP_ATOMIC) rather than fail, see the comment for
+> +		 * __cpuset_node_allowed().
+>  		 */
+> -		alloc_flags &= ~ALLOC_CPUSET;
+> +		if (alloc_flags & ALLOC_MIN_RESERVE)
+> +			alloc_flags &= ~ALLOC_CPUSET;
+>  	} else if (unlikely(rt_task(current)) && in_task())
+>  		alloc_flags |= ALLOC_MIN_RESERVE;
+>  
+> @@ -5299,11 +5301,12 @@ __alloc_pages_slowpath(gfp_t gfp_mask, unsigned int order,
+>  
+>  		/*
+>  		 * Help non-failing allocations by giving them access to memory
+> -		 * reserves but do not use ALLOC_NO_WATERMARKS because this
+> +		 * reserves normally used for high priority non-blocking
+> +		 * allocations but do not use ALLOC_NO_WATERMARKS because this
+>  		 * could deplete whole memory reserves which would just make
+> -		 * the situation worse
+> +		 * the situation worse.
+>  		 */
+> -		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_MIN_RESERVE|ALLOC_HARDER, ac);
+> +		page = __alloc_pages_cpuset_fallback(gfp_mask, order, ALLOC_MIN_RESERVE|ALLOC_NON_BLOCK, ac);
+>  		if (page)
+>  			goto got_pg;
+>  
+
