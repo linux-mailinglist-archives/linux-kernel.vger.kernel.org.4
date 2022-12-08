@@ -2,88 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B08C64684A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 05:36:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B3AE64684F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 05:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiLHEgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 23:36:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
+        id S229470AbiLHEma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 23:42:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiLHEge (ORCPT
+        with ESMTP id S229796AbiLHEmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 23:36:34 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DC9950FB;
-        Wed,  7 Dec 2022 20:36:33 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so3435046pje.5;
-        Wed, 07 Dec 2022 20:36:33 -0800 (PST)
+        Wed, 7 Dec 2022 23:42:16 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF6E98950
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 20:42:14 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id n7so231174wms.3
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 20:42:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ccUzDrEghhLsXQFl1LnCRKBfNr2RNIsuFQMC+oBQ8aY=;
-        b=MpnuuRPnc+1kms77dkQ6uzrnzrdjI7Xc/BGQ/SqiB272YGnNkwhGKKjtswJx7TAUXF
-         6BIDK4gAaO7QL9rGzPLT2PM2/gkf4V8ycDrTC+7QR2j7BGCNz7uGJrWHCVjbEBmJ3W20
-         EDaaLa9mFEGDGbFsjCheQpi/xINd9z16+L+gjfGmChBV+fAmHVfKTpjMDI51CEp5LuMJ
-         HKX+8GjtX8VVjxgGS7dGUQdMNwoxMQn47pE7ds2AVGqu8I/28qKMdcVbG3cPWr50Ihmd
-         usRgHz2vdWWUMHg1Cn/HBkO61Jtj2VSuWnIfJQO9Rkh1y+Uqz6Nti6vZfprC85yABmfZ
-         D0Qg==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j/PvhyblV7HKQCmFJuCM8xjUeOCgi9qEWjiHxHwW/fc=;
+        b=bxVEtj9id7NYGZWl5RP1fEHo9S7pZWpFPtW459Zq4i26NcLBhq4fFkGimTzsXqYGV9
+         tqNGoSWXTYlF+aqK4r6Omvq4Ib/HxORussF8BE3wjR8tq6P8l8V9Fbr7f+Ns74bWujMd
+         3QmmNRJFzhdXPv3LhqvcQYFz6sHimKnVddADlr2EJjzLFWBjvygGaq19JE8Dp+L6f9xQ
+         fmE/4OzaFfvYI6vxGf8O2gAvuaE3olog9u4xBtqZ6pR70UYIzySiyX1FQmrM8zahKoMR
+         J6F2a/dEejDoy33GLBsD0+9GmLMt869CQVSribquFY0OCEfDWvRp6ph2s8NOpijF9Jxa
+         OF/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ccUzDrEghhLsXQFl1LnCRKBfNr2RNIsuFQMC+oBQ8aY=;
-        b=1oKvRkzZPfArn0qF0QRU9AhRdudnRScqngeug8/fMKVyt61gLpHY9e+YN3xbKdnsqS
-         3S2RIz1/9OINUkFZ3d0KMTi/dTmVbDkN7Ieq1/wxg5TEqdQEeteI5jIzmFM3cNO5IBhs
-         cchoPz6NFs5cDT+lRweBADZfyCID3g1PC9/FEhn16D5Xjgtp1cOK45C8NUxRK56yUyzs
-         0U2CIQDmj2yYXhWNir329A317aSppeqFnKTRKK+Lf38plo5FQDBhfnOLm83jbvQmCz6d
-         dj+sQsxP1e0ZSGs8DL7HicOshxEQoFL3mR19qfsohtb0Pznt3V5hplqGQl1792FqQDjE
-         CJ0Q==
-X-Gm-Message-State: ANoB5pnADv9qq/37NovGVJ3qyTfRS27Jm/Y1KGB5tpQ9BN/HAyO5h0pU
-        9BhTL1MvoV/vb6luEuu9ax8=
-X-Google-Smtp-Source: AA0mqf5YgapsOp/xkaCmHIMElgclnfQSdz19H4cycdcx251TrJ9pCixA4rIDwBKqC3ealPXvtVW8tA==
-X-Received: by 2002:a05:6a20:958b:b0:a3:ca9a:ff82 with SMTP id iu11-20020a056a20958b00b000a3ca9aff82mr2320727pzb.61.1670474192864;
-        Wed, 07 Dec 2022 20:36:32 -0800 (PST)
-Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:11da])
-        by smtp.gmail.com with ESMTPSA id d17-20020a63f251000000b00476d1385265sm12193973pgk.25.2022.12.07.20.36.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 20:36:32 -0800 (PST)
-Date:   Wed, 7 Dec 2022 20:36:28 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Florent Revest <revest@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Chris Mason <clm@meta.com>
-Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
-Message-ID: <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
-References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
- <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
- <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
- <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
- <20221206162035.97ae19674d6d17108bed1910@kernel.org>
- <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
- <20221206233947.4c27cc9d@gandalf.local.home>
- <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
- <20221207074806.6f869be2@gandalf.local.home>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j/PvhyblV7HKQCmFJuCM8xjUeOCgi9qEWjiHxHwW/fc=;
+        b=wj3cFJR0kKfUDuRHTwVuQoBXiw2yb6lz4ceyqCHWqI68HIcpBZVxui1pqNeDxYIqr9
+         Hq7JBmBtfV9hborwZey/kLEsIqwzRfWn1H1gdjrw5TUZsefzjQOj8eNiUzSXqnbgYhC2
+         JEwLFjUEDkSav2SrhbijclUTVTJdaETGTImDGeb8TtRyibO+xJUcqVAinQAiMi27CWcn
+         OjbaSYRc+75YiFYs1iRi2C1GtnFtVhPflqpX1aRxhevAscaVyT2W+i5q9aaaFfqB3VOk
+         4uZ7xKBhHAMI6b7nWrSyW0bWPAftMg/650YrYUgmvpSJQXmmrtvKDxqpKvIeGI3Z5IdG
+         3lmw==
+X-Gm-Message-State: ANoB5pnM8dsvDN/irJs5ftfffWAhnsVzsCof6dAq2ZMePiEr5XmxtZon
+        EFQbrekswt/AS28Y5iHWP+Au8QrcShxedjBj76hJew==
+X-Google-Smtp-Source: AA0mqf5joQloInZ0rfKwtDbqKUhM24CtsHzxr6in5aTp1K+dJQf69rQD0uBdSPPGaJ6lI9cJRyd9PXeHD1p3Y3YLvtM=
+X-Received: by 2002:a05:600c:4b1b:b0:3d1:d771:373 with SMTP id
+ i27-20020a05600c4b1b00b003d1d7710373mr9524251wmp.18.1670474533107; Wed, 07
+ Dec 2022 20:42:13 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207074806.6f869be2@gandalf.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221207223731.32784-1-sidhartha.kumar@oracle.com>
+ <92965844-c430-8b8e-d9f1-705d7578bceb@nvidia.com> <ec8f46ca-9ea6-4567-2038-22f6d3000ed5@oracle.com>
+ <d17530ad-8e12-8069-d619-a2d72fe80e15@nvidia.com>
+In-Reply-To: <d17530ad-8e12-8069-d619-a2d72fe80e15@nvidia.com>
+From:   Muchun Song <songmuchun@bytedance.com>
+Date:   Thu, 8 Dec 2022 12:41:36 +0800
+Message-ID: <CAMZfGtU7ktsz9VnQ5A0j+yx9irXyRLqyAkMxrjxnG=A62=WHaA@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable] mm: clarify folio_set_compound_order() zero support
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>, willy@infradead.org,
+        tsahu@linux.ibm.com, David Hildenbrand <david@redhat.com>,
+        muchun.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,106 +75,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 07:48:06AM -0500, Steven Rostedt wrote:
-> On Tue, 6 Dec 2022 20:45:17 -0800
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
-> 
-> > > "G - Proprietary module" - "O - out of tree module"
-> > >
-> > > Can you reproduce this without those taints?  
-> > 
-> > Lol. That question is exactly the reason why my Nack stands.
-> 
-> First, that's a BS reason for a NACK.
-> 
-> But in all seriousness, what I would actually ask (and what I'll ask now)
-> is, what module did you use that is out of tree, and was it relevant to
-> this test?
-> 
-> That's a reasonable question to ask, and one that only gets asked with a
-> taint.
+On Thu, Dec 8, 2022 at 10:27 AM John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> On 12/7/22 17:42, Sidhartha Kumar wrote:
+> >> Wouldn't it be better to instead just create a new function for that
+> >> case, such as:
+> >>
+> >>      dissolve_large_folio()
+> >>
+> >
+> > Prior to the folio conversion, the helper function __destroy_compound_g=
+igantic_page() did:
+> >
+> >      set_compound_order(page, 0);
+> > #ifdef CONFIG_64BIT
+> >      page[1].compound_nr =3D 0;
+> > #endif
+> >
+> > as part of dissolving the page. My goal for this patch was to create a =
+function that would encapsulate that segment of code with a single call of =
+folio_set_compound_order(folio, 0). set_compound_order() does not set compo=
+und_nr to 0 when 0 is passed in to the order argument so explicitly setting=
+ it is required. I don't think a separate dissolve_large_folio() function f=
+or the hugetlb case is needed as __destroy_compound_gigantic_folio() is pre=
+tty concise as it is.
+> >
+>
+> Instead of "this is abusing function X()" comments, we should prefer
+> well-named functions that do something understandable. And you can get
+> that by noticing that folio_set_compound_order() collapses down to
+> nearly nothing in the special "order 0" case. So just inline that code
+> directly into __destroy_compound_gigantic_folio(), taking a moment to
+> fill in and consolidate the CONFIG_64BIT missing parts in mm.h.
+>
+> And now you can get rid of this cruft and "abuse" comment, and instead
+> just end up with two simple lines of code that are crystal clear--as
+> they should be, in a "__destroy" function. Like this:
+>
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 105878936485..cf227ed00945 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -1754,6 +1754,7 @@ static inline void set_page_links(struct page *page=
+, enum zone_type zone,
+>   #endif
+>   }
+>
+> +#ifdef CONFIG_64BIT
+>   /**
+>    * folio_nr_pages - The number of pages in the folio.
+>    * @folio: The folio.
+> @@ -1764,13 +1765,32 @@ static inline long folio_nr_pages(struct folio *f=
+olio)
+>   {
+>         if (!folio_test_large(folio))
+>                 return 1;
+> -#ifdef CONFIG_64BIT
+>         return folio->_folio_nr_pages;
+> +}
+> +
+> +static inline void folio_set_nr_pages(struct folio *folio, long nr_pages=
+)
 
-When we receive bug reports in bpf@vger the only question we ask is:
-"How to reproduce this bug?"
-We ignoring taint completely.
-tbh I didn't even know that our BPF CI causes taint until that email.
+I like this approach and helper name since it is more consistent
+with folio_nr_pages.
 
-In the previous email I said that the bug report comes from bpf selftest on bpf-next.
-Clearly there is no ambiguity that this is as upstream as it can get.
-Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
-And that happens all the time on lkml. Somebody reports a bug and kernel devs
-jump on the poor person:
-"Can you repro without taint?",
-"Can you repro with upstream kernel?"
-This is discouraging.
-The 'taint' concept makes it easier for kernel devs to ignore bug reports
-and push back on the reporter. Do it few times and people stop reporting bugs.
-Say, this particular bug in rethook was found by one of our BPF CI developers.
-They're not very familiar with the kernel, but they can see plenty of 'rethook'
-references in the stack trace, lookup MAINTAINER file and ping Massami,
-but to the question "can you repro without taint?" they can only say NO,
-because this is how our CI works. So they will keep silence and the bug will be lost.
-That's not the only reason why I'm against generalizing 'taint'.
-Tainting because HW is misbehaving makes sense, but tainting because
-of OoO module or because of live-patching does not.
-It becomes an excuse that people abuse.
+> +{
+> +       folio->_folio_nr_pages =3D nr_pages;
+> +}
+>   #else
+> +/**
+> + * folio_nr_pages - The number of pages in the folio.
+> + * @folio: The folio.
+> + *
+> + * Return: A positive power of two.
+> + */
+> +static inline long folio_nr_pages(struct folio *folio)
+> +{
+> +       if (!folio_test_large(folio))
+> +               return 1;
+>         return 1L << folio->_folio_order;
+> -#endif
+>   }
+>
+> +static inline void folio_set_nr_pages(struct folio *folio, long nr_pages=
+)
+> +{
+> +}
+> +#endif
+> +
+>   /**
+>    * folio_next - Move to the next physical folio.
+>    * @folio: The folio we're currently operating on.
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index e3500c087893..b507a98063e6 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1344,7 +1344,8 @@ static void __destroy_compound_gigantic_folio(struc=
+t folio *folio,
+>                         set_page_refcounted(p);
+>         }
+>
+> -       folio_set_compound_order(folio, 0);
+> +       folio->_folio_order =3D 0;
 
-Right now syzbot is finding all sorts of bugs. Most of the time syzbot
-turns error injection on to find those allocation issues.
-If syzbot reports will start coming as tainted there will be even less
-attention to them. That will not be good.
+I suggest not touch _folio_order directly, we can introduce another helper =
+like
+folio_sert_order to set -> _folio_order pairing with folio_order.
 
-> If there's a BPF injection taint, one can ask that same question, as the
-> bug may happen sometime after the injection but be caused by that injection,
-> and not be in the backtrace. Not all kernel developers have the access to
-> debugging utilities that backend production servers have. A lot of bugs that
-> kernel developers debug are from someone's laptop.
+Thanks.
 
-I would have to disagree.
-We see few human reported bugs and prioritize them higher,
-but majority are coming from the production fleet, test tiers,
-syzbot, CIs, and automated things.
-
-> Where all they have is
-> that backtrace. 
-
-Even laptops typically leave vmcore after crash. distro support packages have
-clear rules what scripts to run to collect all the necessary data in case
-of the crash from vmcore.
-These tools support extracting everything bpf related too.
-For example see:
-Documentation/bpf/drgn.rst
-It works on vmcore and on the running kernel.
-
-> If a tool or root kit, added function error injection, it
-> would be extremely useful information to debug what happened.
-> 
-> I don't understand the push back here.
-
-All these years we've been working on improving bpf introspection and
-debuggability. Today crash dumps look like this:
-  bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
-  bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
-  bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
-  __bpf_prog_run include/linux/filter.h:600 [inline]
-  bpf_prog_run include/linux/filter.h:607 [inline]
-
-The 2nd from the top is a bpf prog. The rest are kernel functions.
-bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
-         ^^ is a prog tag   ^^ name of bpf prog
-
-If you do 'bpftool prog show' you can see both tag and name. 
-'bpftool prog dump jited'
-dumps x86 code mixed with source line text.
-Often enough +0x2b offset will have some C code right next to it.
-
-One can monitor all prog load/unload via perf or via audit.
-'perf record' collects all bpf progs that were loaded before
-the start and even thouse that were loaded and unloaded quickly
-while 'perf record' was running.
-So 'perf report' has all the data including annotation and source code.
-
-Currently we're working on adding 'file.c:lineno' to dump_stack()
-for bpf progs.
-
-If you have ideas how we can improve debuggability we are all ears.
+> +       folio_set_nr_pages(folio, 0);
+>         __folio_clear_head(folio);
+>   }
+>
+>
+> Yes?
+>
+> thanks,
+> --
+> John Hubbard
+> NVIDIA
