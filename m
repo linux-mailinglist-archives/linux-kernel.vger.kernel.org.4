@@ -2,73 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 576DD646AD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 656CE646AE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:45:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiLHIoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:44:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45184 "EHLO
+        id S230019AbiLHIpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:45:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiLHIoE (ORCPT
+        with ESMTP id S230004AbiLHIpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:44:04 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411FDCDC;
-        Thu,  8 Dec 2022 00:44:03 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p3CVd-0005TO-LV; Thu, 08 Dec 2022 09:44:01 +0100
-Message-ID: <96ee7141-f09c-4df9-015b-6ae8f3588091@leemhuis.info>
-Date:   Thu, 8 Dec 2022 09:44:01 +0100
+        Thu, 8 Dec 2022 03:45:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 892A5686B0;
+        Thu,  8 Dec 2022 00:45:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1DC25D6E;
+        Thu,  8 Dec 2022 00:45:13 -0800 (PST)
+Received: from a077893.blr.arm.com (unknown [10.162.40.44])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 5365F3F73D;
+        Thu,  8 Dec 2022 00:45:01 -0800 (PST)
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH V6 7/7] drivers: perf: arm_pmu: Enable branch stack sampling event
+Date:   Thu,  8 Dec 2022 14:14:02 +0530
+Message-Id: <20221208084402.863310-8-anshuman.khandual@arm.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221208084402.863310-1-anshuman.khandual@arm.com>
+References: <20221208084402.863310-1-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
- #forregzbot
-Content-Language: en-US, de-DE
-To:     bpf <bpf@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>
-References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670489043;d88ccd6f;
-X-HE-SMSGID: 1p3CVd-0005TO-LV
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Note: this mail contains only information for Linux kernel regression
-tracking. Mails like these contain '#forregzbot' in the subject to make
-then easy to spot and filter out. The author also tried to remove most
-or all individuals from the list of recipients to spare them the hassle.]
+Now that all the required pieces are already in place, just enable the perf
+branch stack sampling event on supported platforms, removing the gate which
+blocks it unconditionally in armpmu_event_init(). Instead a quick probe can
+be initiated first via arm_pmu_branch_stack_supported().
 
-On 06.12.22 04:28, Hao Sun wrote:
-> 
-> The following crash can be triggered with the BPF prog provided.
-> It seems the verifier passed some invalid progs. I will try to simplify
-> the C reproducer, for now, the following can reproduce this:
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+---
+ drivers/perf/arm_pmu.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
+diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+index 66880a4bb248..52a93b9bcbda 100644
+--- a/drivers/perf/arm_pmu.c
++++ b/drivers/perf/arm_pmu.c
+@@ -510,8 +510,7 @@ static int armpmu_event_init(struct perf_event *event)
+ 		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
+ 		return -ENOENT;
+ 
+-	/* does not support taken branch sampling */
+-	if (has_branch_stack(event))
++	if (has_branch_stack(event) && !arm_pmu_branch_stack_supported(armpmu))
+ 		return -EOPNOTSUPP;
+ 
+ 	if (armpmu->map_event(event) == -ENOENT)
+-- 
+2.25.1
 
-#regzbot ^introduced c86df29d11df
-#regzbot title net/bpf: BUG: unable to handle kernel paging request in
-bpf_dispatcher_xdp
-#regzbot ignore-activity
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
