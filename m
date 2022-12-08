@@ -2,218 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E0F6466A0
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A23476466A7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:50:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbiLHBnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 20:43:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
+        id S229793AbiLHBt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 20:49:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiLHBnl (ORCPT
+        with ESMTP id S229507AbiLHBt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 20:43:41 -0500
-Received: from conssluserg-01.nifty.com (conssluserg-01.nifty.com [210.131.2.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F42134B756;
-        Wed,  7 Dec 2022 17:43:39 -0800 (PST)
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 2B81hOiI017429;
-        Thu, 8 Dec 2022 10:43:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 2B81hOiI017429
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1670463805;
-        bh=k3I8on4gq36IvbTZWeLET12jxubwa9OOg1ZKsIOl2ss=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=mtOo8T0cq1jDd6kIRWnpp0UdEGEL2YahHo5hb57KLXkHKlw8MIhG/J1CiPCd6uPFd
-         KKpT1X4bdoAnRLZXhc9q8WChe3TyVckcHUCuiN/uu+KE4MPcRKvWhMrzjkaYjf+6s8
-         IWkC8+NobGSN3dDvY4HESmxF7kgvUZJRCtoKi0bzL35t6jeGAn3CTMqAV14BCNeiFX
-         JNGvjTlqlXbxWxIGWZS7Hh9kGRDaKqmhczCH/0m0lPLHW/ugIrYX0aQV/k6EkxJtwA
-         FI03uKGiOTh7uoplKlf7YGo8xaMqTiCt06gFAxnztMsh5U5dF7v3xWrHV2JPTW6jvw
-         ol6jaKsi8Yu7w==
-X-Nifty-SrcIP: [209.85.210.44]
-Received: by mail-ot1-f44.google.com with SMTP id v19-20020a9d5a13000000b0066e82a3872dso81239oth.5;
-        Wed, 07 Dec 2022 17:43:25 -0800 (PST)
-X-Gm-Message-State: ANoB5pknK4HFf5TwNXRqg/xKfhE6CqrxDe/UP4sy5xMaomiCi2AMcq5z
-        K+AsOjz1EAPD0I/ICMjB7ZThqZHV2aCM2fj2MZw=
-X-Google-Smtp-Source: AA0mqf5rlckUeBOxtlV5cmoxR9u+G4SHU30UtcO5gXpDSCqFhD98tHV3D02NMhFgMRT7jBugEMm4fqq68XFQrqTt1ME=
-X-Received: by 2002:a9d:282:0:b0:66c:794e:f8c6 with SMTP id
- 2-20020a9d0282000000b0066c794ef8c6mr47413478otl.343.1670463804040; Wed, 07
- Dec 2022 17:43:24 -0800 (PST)
+        Wed, 7 Dec 2022 20:49:57 -0500
+Received: from baidu.com (mx20.baidu.com [111.202.115.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875866A748;
+        Wed,  7 Dec 2022 17:49:55 -0800 (PST)
+From:   "Li,Rongqing" <lirongqing@baidu.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with
+ arch_cpu_idle
+Thread-Topic: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with
+ arch_cpu_idle
+Thread-Index: AQHZCkl35vAH2p6SAUK3SxvI0ANPyq5jOG4A
+Date:   Thu, 8 Dec 2022 01:46:35 +0000
+Message-ID: <9e19c594bcf144fbb433fb4cfee54e08@baidu.com>
+References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
+ <080936167059.CAJZ5v0g5kTRE+x-8xC2WwQr11j01ox=Nk0aguiC1_HGPU8W=Rw@mail.gmail.com>
+In-Reply-To: <080936167059.CAJZ5v0g5kTRE+x-8xC2WwQr11j01ox=Nk0aguiC1_HGPU8W=Rw@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.204.59]
+x-baidu-bdmsfe-datecheck: 1_BJHW-Mail-Ex15_2022-12-08 09:46:35:454
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <20221123151828.509565-1-masahiroy@kernel.org>
-In-Reply-To: <20221123151828.509565-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 8 Dec 2022 10:42:47 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATBBHJR_46HUvZ61zTgt_U4t3BmwTTyHwKjgz8JkFquYg@mail.gmail.com>
-Message-ID: <CAK7LNATBBHJR_46HUvZ61zTgt_U4t3BmwTTyHwKjgz8JkFquYg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/5] kbuild: add test-{le,ge,lt,gt} macros
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
-        autolearn_force=no version=3.4.6
+X-FEAS-Client-IP: 10.127.64.38
+X-FE-Last-Public-Client-IP: 100.100.100.38
+X-FE-Policy-ID: 15:10:21:SYSTEM
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 24, 2022 at 12:19 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
-> Because GNU Make is only able to handle strings, it is very hard to
-> perform arighmetic in Makefiles.
-
-
-
-
-
-I terribly missed that GNU Make 4.4
-introduced the $(intcmp ...) function.
-
-https://www.gnu.org/software/make/manual/make.html#Conditional-Functions
-
-
-I am thinking if we can do better by using it.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->
-> When we compare two integers, we invokes shell. One example is in the
-> top Makefile:
->
->   ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
->
-> This is more expensive than using built-in functions since it forks a
-> process.
->
-> If we know the two have the same number of digits, we can do better.
->
-> This commit adds four macros, test-le, test-ge, test-lt, test-gt.
->
-> $(call test-lt, A, B) is evaluated to 'y' if A is less than B, or
-> empty otherwise. This will replace $(call shell test A -lt B).
->
-> Again, the limitation is that A and B must have the same number of
-> digits because these macros are based on $(sort ) function.
->
->   $(call test-lt, 1, 9)    -->  y        (Works!)
->   $(call test-lt, 10, 9)   -->  y        (Not work...)
->
-> To make the latter work, you need to add '0' prefix to align the number
-> of digits:
->
->   $(call test-lt, 10, 09)  -->  empty    (Works!)
->
-> Actually, we can live with this limitation in many places. As for the
-> example above, we know $(CONFIG_LLD_VERSION) is 6-digits because the
-> minimal supported version of LLVM is 11.0.0.
->
-> So, the shell invocation can be replaced with more efficient code:
->
->   ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
->
-> Of course, this assumption will break when LLVM 100 is released, but it
-> will be far in the future.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
-> (no changes since v1)
->
->  Makefile               |  2 +-
->  arch/riscv/Makefile    |  2 +-
->  arch/x86/Makefile      |  2 +-
->  scripts/Kbuild.include | 10 ++++++++++
->  4 files changed, 13 insertions(+), 3 deletions(-)
->
-> diff --git a/Makefile b/Makefile
-> index 6f846b1f2618..eb80332f7b51 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -986,7 +986,7 @@ KBUILD_LDFLAGS += -mllvm -import-instr-limit=5
->  # Check for frame size exceeding threshold during prolog/epilog insertion
->  # when using lld < 13.0.0.
->  ifneq ($(CONFIG_FRAME_WARN),0)
-> -ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-> +ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
->  KBUILD_LDFLAGS += -plugin-opt=-warn-stack-size=$(CONFIG_FRAME_WARN)
->  endif
->  endif
-> diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
-> index 0d13b597cb55..faf2c2177094 100644
-> --- a/arch/riscv/Makefile
-> +++ b/arch/riscv/Makefile
-> @@ -37,7 +37,7 @@ else
->  endif
->
->  ifeq ($(CONFIG_LD_IS_LLD),y)
-> -ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 150000; echo $$?),0)
-> +ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 150000),y)
->         KBUILD_CFLAGS += -mno-relax
->         KBUILD_AFLAGS += -mno-relax
->  ifndef CONFIG_AS_IS_LLVM
-> diff --git a/arch/x86/Makefile b/arch/x86/Makefile
-> index 415a5d138de4..e72c7a49cd59 100644
-> --- a/arch/x86/Makefile
-> +++ b/arch/x86/Makefile
-> @@ -211,7 +211,7 @@ endif
->  KBUILD_LDFLAGS += -m elf_$(UTS_MACHINE)
->
->  ifdef CONFIG_LTO_CLANG
-> -ifeq ($(shell test $(CONFIG_LLD_VERSION) -lt 130000; echo $$?),0)
-> +ifeq ($(call test-lt, $(CONFIG_LLD_VERSION), 130000),y)
->  KBUILD_LDFLAGS += -plugin-opt=-stack-alignment=$(if $(CONFIG_X86_32),4,8)
->  endif
->  endif
-> diff --git a/scripts/Kbuild.include b/scripts/Kbuild.include
-> index cbe28744637b..9996f34327cb 100644
-> --- a/scripts/Kbuild.include
-> +++ b/scripts/Kbuild.include
-> @@ -11,6 +11,16 @@ space   := $(empty) $(empty)
->  space_escape := _-_SPACE_-_
->  pound := \#
->
-> +###
-> +# Comparison macros.
-> +# Usage: $(call test-le, A, B)
-> +# works like shell's "test A -le B", but A and B must have the same number of
-> +# digits since it is just ASCII sort.
-> +test-le = $(if $(filter $1, $(firstword $(sort $1 $2))),y)
-> +test-ge = $(call test-le, $2, $1)
-> +test-lt = $(if $(filter-out $2, $(firstword $(sort $1 $2))),y)
-> +test-gt = $(call test-lt, $2, $1)
-> +
->  ###
->  # Name of target with a '.' as filename prefix. foo/bar.o => foo/.bar.o
->  dot-target = $(dir $@).$(notdir $@)
-> --
-> 2.34.1
->
-
-
--- 
-Best Regards
-Masahiro Yamada
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUmFmYWVsIEouIFd5c29j
+a2kgPHJhZmFlbEBrZXJuZWwub3JnPg0KPiBTZW50OiBXZWRuZXNkYXksIERlY2VtYmVyIDcsIDIw
+MjIgMTA6MzggUE0NCj4gVG86IExpLFJvbmdxaW5nIDxsaXJvbmdxaW5nQGJhaWR1LmNvbT4NCj4g
+Q2M6IHRnbHhAbGludXRyb25peC5kZTsgbWluZ29AcmVkaGF0LmNvbTsgYnBAYWxpZW44LmRlOw0K
+PiBkYXZlLmhhbnNlbkBsaW51eC5pbnRlbC5jb207IHg4NkBrZXJuZWwub3JnOyByYWZhZWxAa2Vy
+bmVsLm9yZzsNCj4gZGFuaWVsLmxlemNhbm9AbGluYXJvLm9yZzsgcGV0ZXJ6QGluZnJhZGVhZC5v
+cmc7IGFrcG1AbGludXgtZm91bmRhdGlvbi5vcmc7DQo+IHRvbnkubHVja0BpbnRlbC5jb207IGpw
+b2ltYm9lQGtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7DQo+IGxpbnV4
+LXBtQHZnZXIua2VybmVsLm9yZw0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDEvMl1bdjJdIGNwdWlk
+bGUtaGFsdHBvbGw6IFJlcGxhY2UgZGVmYXVsdF9pZGxlIHdpdGgNCj4gYXJjaF9jcHVfaWRsZQ0K
+PiANCj4gT24gV2VkLCBEZWMgNywgMjAyMiBhdCAxOjQyIFBNIDxsaXJvbmdxaW5nQGJhaWR1LmNv
+bT4gd3JvdGU6DQo+ID4NCj4gPiBGcm9tOiBMaSBSb25nUWluZyA8bGlyb25ncWluZ0BiYWlkdS5j
+b20+DQo+ID4NCj4gPiBXaGVuIEtWTSBndWVzdCBoYXMgTVdBSVQgYW5kIG13YWl0X2lkbGUgaXMg
+dXNlZCBhcyBkZWZhdWx0IGlkbGUNCj4gPiBmdW5jdGlvbiwgYnV0IG9uY2UgY3B1aWRsZS1oYWx0
+cG9sbCBpcyBsb2FkZWQsIGRlZmF1bHRfaWRsZSBpbg0KPiA+IGRlZmF1bHRfZW50ZXJfaWRsZSBp
+cyB1c2VkLCB3aGljaCBpcyB1c2luZyBITFQsIGFuZCBjYXVzZSBhDQo+ID4gcGVyZm9ybWFuY2Ug
+cmVncmVzc2lvbi4gQXMgdGhlIGNvbW1pdCBhZWJlZjYzY2Y3ZmYgKCJ4ODY6IFJlbW92ZQ0KPiA+
+IHZlbmRvciBjaGVja3MgZnJvbSBwcmVmZXJfbXdhaXRfYzFfb3Zlcl9oYWx0IikgZXhwbGFpbnMg
+dGhhdCBtd2FpdCBpcw0KPiA+IHByZWZlcnJlZA0KPiA+DQo+ID4gc28gcmVwbGFjZSBkZWZhdWx0
+X2lkbGUgd2l0aCBhcmNoX2NwdV9pZGxlIHdoaWNoIGNhbiB1c2luZyBNV0FJVA0KPiA+IG9wdGlt
+aXphdGlvbi4NCj4gPg0KPiA+IGxhdGVuY3kgb2Ygc29ja3BlcmYgcGluZy1wb25nIGxvY2FsaG9z
+dCB0ZXN0IGlzIHJlZHVjZWQgYnkgbW9yZSAyMCUNCj4gPiB1bml4YmVuY2ggaGFzIDUlIHBlcmZv
+cm1hbmNlIGltcHJvdmVtZW50cyBmb3Igc2luZ2xlIGNvcmUNCj4gPg0KPiA+IFN1Z2dlc3RlZC1i
+eTogVGhvbWFzIEdsZWl4bmVyIDx0Z2x4QGxpbnV0cm9uaXguZGU+DQo+ID4gU3VnZ2VzdGVkLWJ5
+OiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsLmoud3lzb2NraUBpbnRlbC5jb20+DQo+ID4gU2ln
+bmVkLW9mZi1ieTogTGkgUm9uZ1FpbmcgPGxpcm9uZ3FpbmdAYmFpZHUuY29tPg0KPiA+IC0tLQ0K
+PiA+ICBhcmNoL3g4Ni9rZXJuZWwvcHJvY2Vzcy5jICAgICAgICAgIHwgMSArDQo+ID4gIGRyaXZl
+cnMvY3B1aWRsZS9jcHVpZGxlLWhhbHRwb2xsLmMgfCAyICstDQo+ID4gIDIgZmlsZXMgY2hhbmdl
+ZCwgMiBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+ID4NCj4gPiBkaWZmIC0tZ2l0IGEv
+YXJjaC94ODYva2VybmVsL3Byb2Nlc3MuYyBiL2FyY2gveDg2L2tlcm5lbC9wcm9jZXNzLmMNCj4g
+PiBpbmRleCBjMjFiNzM0Li4zMDNhZmFkIDEwMDY0NA0KPiA+IC0tLSBhL2FyY2gveDg2L2tlcm5l
+bC9wcm9jZXNzLmMNCj4gPiArKysgYi9hcmNoL3g4Ni9rZXJuZWwvcHJvY2Vzcy5jDQo+ID4gQEAg
+LTcyMSw2ICs3MjEsNyBAQCB2b2lkIGFyY2hfY3B1X2lkbGUodm9pZCkgIHsNCj4gPiAgICAgICAg
+IHg4Nl9pZGxlKCk7DQo+ID4gIH0NCj4gPiArRVhQT1JUX1NZTUJPTChhcmNoX2NwdV9pZGxlKTsN
+Cj4gDQo+IFdoeSBkbyB5b3UgbmVlZCB0aGlzIGV4cG9ydCBhdCBhbGw/DQo+IA0KDQpXaGVuIGNw
+dWlkbGUtaGFsdHBvbGwgaXMgYnVpbHQgYXMgbW9kdWxlLCBpZiBhcmNoX2NwdV9pZGxlIGlzIG5v
+dCBleHBvcnQsIGNwdWlkbGUtaGFsdHBvbGwgd2lsbCBjb21wbGFpbiAiYXJjaF9jcHVfaWRsZSIg
+dW5kZWZpbmVkDQoNCkxpa2UNCg0KRVJST1I6IG1vZHBvc3Q6ICJhcmNoX2NwdV9pZGxlIiBbZHJp
+dmVycy9jcHVpZGxlL2NwdWlkbGUtaGFsdHBvbGwua29dIHVuZGVmaW5lZCENCm1ha2VbMV06ICoq
+KiBbc2NyaXB0cy9NYWtlZmlsZS5tb2Rwb3N0OjEyNjogTW9kdWxlLnN5bXZlcnNdIEVycm9yIDEN
+Cm1ha2U6ICoqKiBbTWFrZWZpbGU6MTk0NDogbW9kcG9zdF0gRXJyb3IgMg0KRXJyb3I6IE1ha2Ug
+ZmFpbGVkIQ0KDQpJIHdpbGwgYWRkIHRoZSByZWFzb24gdG8gdjMgDQpUaGFua3MNCg0KLUxpDQoN
+Cg0K
