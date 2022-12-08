@@ -2,157 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3B6647606
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:16:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 497BD64760A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:17:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229592AbiLHTQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:16:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
+        id S229640AbiLHTRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:17:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLHTQd (ORCPT
+        with ESMTP id S229470AbiLHTRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:16:33 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EDC3B9FA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:16:32 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 373B7B825FE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:16:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8F4C433EF;
-        Thu,  8 Dec 2022 19:16:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670526989;
-        bh=pxwQPnCXqG586C3H5ieqJi51v5G6Xt2CGmhL4Tp86Vk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gspoUKMF6ct/veenO8JLmK5QjDcc1PF31I+eSRol66JmDMXFVo0FnEJIRC8bJkxAC
-         aAMzaNINNu2GKZBPk2kKCK/3bTUvupRsxsBXqVbXsw4Y8a3DRPf6ZrK0PbU4D9zqit
-         Tx0wt99k0iqDN4DGi0f0IJWT6FQOLKtrPq9Lq8E7zSAogHcrER4w1OpS5MLIUHOkhc
-         ZkFZ02hHSgfxecll3N7d18tGqOkAWOMU5/9YfNZjkdSuBiJbXV48eqlwhEvajqoxLW
-         +4eUaSqrnLto0fuVFyOMjpEf7hV8B0r0yehDcDsTgvmYRnjhfsCF0BTOR8wbbSVso+
-         Z1R051UYF54nA==
-Received: by pali.im (Postfix)
-        id CBFC997E; Thu,  8 Dec 2022 20:16:26 +0100 (CET)
-Date:   Thu, 8 Dec 2022 20:16:26 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Joel Stanley <joel@jms.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when
- building 32-bit uImage
-Message-ID: <20221208191626.vqez4aofjndnj4ih@pali>
-References: <e3cb2642-20e4-6c26-104d-329a04260946@csgroup.eu>
- <c8d657db-02da-7840-5b40-755e47277a2c@csgroup.eu>
- <20220828174135.rcql4uiunqbnn5gh@pali>
- <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
- <20220829085451.upubyo5e7uop72lb@pali>
- <20221009110652.h7senqesk7nabxmn@pali>
- <20221101221255.gwaem6w7upv545fw@pali>
- <00398948-d06c-3894-5be3-acb6cc09ff6b@csgroup.eu>
- <20221126163044.cnoccovve4a74a7l@pali>
- <aa61fc51-c6ea-2ad9-42c6-c62b280ab034@csgroup.eu>
+        Thu, 8 Dec 2022 14:17:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DE399533
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670526995;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MTmFSSsz+iEuRFF+TLjAXGnA587Ei6XR2PcJ8paquCk=;
+        b=iSfAnjJw1pQHFvNYlxW0b/oddMJwWGGakBp26c/gZUti6b7J1uczTKhwWbgoMnYSwmTN8n
+        ji8dGZ7Vg1U3uK5EhlMUjSp1Bh/zRlXsmfSh2FzQ6lWhvhaluAQI/McZsqIsSC2h/iHJc/
+        TC3a7tULs5xyY6eh41dFDdAtjxKhvto=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-659-pIteN09pN22mtpS4RPysGQ-1; Thu, 08 Dec 2022 14:16:34 -0500
+X-MC-Unique: pIteN09pN22mtpS4RPysGQ-1
+Received: by mail-ed1-f72.google.com with SMTP id j11-20020aa7c40b000000b0046b45e2ff83so54359edq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:16:34 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MTmFSSsz+iEuRFF+TLjAXGnA587Ei6XR2PcJ8paquCk=;
+        b=SrMgV5Z0dUYuwzmHXmMQKAUqROLAmdfcVgYoIaCGTt3jUrpc45GFD+XfiiOD1QswOK
+         57thgZVGOsEQKD/fpdmcgwqiOtYROSePwiiD0rv2NiYv++GXzyf/0o3vA1G8/Tr0cnfD
+         S79H5DWVJY66/KhFi5SVkQZYCsiSM9bpNr1gHfMfknRSxCQPddUNrMShLRl77QJ9PV//
+         Hhcfymcf0jD3KLnwB4nLIsLF/F3G3LhKgSV99CxqlsKsNb6ULQv2G0Jm+LwSYKRCx1w8
+         szhANOa83bdSmqPd24jJrBwZlZI8mWPaFYuVxMVlg7OW2PAcjGeye9Ypx7BheXC21ymJ
+         VoDA==
+X-Gm-Message-State: ANoB5plj6Rz08cnxKoy6F8BXHWUtsrk2Aezz9A35Ax5XTHOnRCPHleJ2
+        PTsPpP80UvvQrbc9FOgqfeT5bsUqCtP/agmeFuhyK2UJPjTHqQty9O/4/ZrdJR0YswZq4+mvgiv
+        ZrGePO2sKomkwNyCDIQnvgkuc
+X-Received: by 2002:a05:6402:298d:b0:461:f201:2d98 with SMTP id eq13-20020a056402298d00b00461f2012d98mr2826961edb.3.1670526992742;
+        Thu, 08 Dec 2022 11:16:32 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7wl1P7mGcEUEOyQk271yeJILGTDdVupDVfcZTUXj5dftT3etqO2s8iD3iBioXEJZKJGWVPIQ==
+X-Received: by 2002:a05:6402:298d:b0:461:f201:2d98 with SMTP id eq13-20020a056402298d00b00461f2012d98mr2826943edb.3.1670526992535;
+        Thu, 08 Dec 2022 11:16:32 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id f8-20020a17090631c800b007aed2057eaesm9952618ejf.161.2022.12.08.11.16.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 11:16:32 -0800 (PST)
+Message-ID: <92359eca-b651-8a1e-6de6-3107d87ac088@redhat.com>
+Date:   Thu, 8 Dec 2022 20:16:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aa61fc51-c6ea-2ad9-42c6-c62b280ab034@csgroup.eu>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
+Content-Language: en-US, nl
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20221208185758.GA1478771@bhelgaas>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221208185758.GA1478771@bhelgaas>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday 07 December 2022 13:39:18 Christophe Leroy wrote:
-> Le 26/11/2022 à 17:30, Pali Rohár a écrit :
-> > On Wednesday 02 November 2022 14:05:35 Christophe Leroy wrote:
-> >> Le 01/11/2022 à 23:12, Pali Rohár a écrit :
-> >>> On Sunday 09 October 2022 13:06:52 Pali Rohár wrote:
-> >>>> On Monday 29 August 2022 10:54:51 Pali Rohár wrote:
-> >>>>> On Sunday 28 August 2022 17:43:53 Christophe Leroy wrote:
-> >>>>>> Le 28/08/2022 à 19:41, Pali Rohár a écrit :
-> >>>>>>> On Sunday 28 August 2022 17:39:25 Christophe Leroy wrote:
-> >>>>>>>> Le 28/08/2022 à 19:33, Christophe Leroy a écrit :
-> >>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>> Le 28/08/2022 à 11:56, Pali Rohár a écrit :
-> >>>>>>>>>> When CONFIG_TARGET_CPU is specified then pass its value to the compiler
-> >>>>>>>>>> -mcpu option. This fixes following build error when building kernel with
-> >>>>>>>>>> powerpc e500 SPE capable cross compilers:
-> >>>>>>>>>>
-> >>>>>>>>>>         BOOTAS  arch/powerpc/boot/crt0.o
-> >>>>>>>>>>       powerpc-linux-gnuspe-gcc: error: unrecognized argument in option
-> >>>>>>>>>> ‘-mcpu=powerpc’
-> >>>>>>>>>>       powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are:
-> >>>>>>>>>> 8540 8548 native
-> >>>>>>>>>>       make[1]: *** [arch/powerpc/boot/Makefile:231:
-> >>>>>>>>>> arch/powerpc/boot/crt0.o] Error 1
-> >>>>>>>>>
-> >>>>>>>>> corenet64_smp_defconfig :
-> >>>>>>>>>
-> >>>>>>>>>       BOOTAS  arch/powerpc/boot/crt0.o
-> >>>>>>>>> powerpc64-linux-gcc: error: missing argument to '-mcpu='
-> >>>>>>>>> make[1]: *** [arch/powerpc/boot/Makefile:237 : arch/powerpc/boot/crt0.o]
-> >>>>>>>>> Erreur 1
-> >>>>>>>>> make: *** [arch/powerpc/Makefile:253 : uImage] Erreur 2
-> >>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>>
-> >>>>>>>> Seems like in fact, E5500_CPU and E6500_CPU are not taken into account
-> >>>>>>>> in CONFIG_TARGET_CPU, and get special treatment directly in
-> >>>>>>>> arch/powerpc/Makefile.
-> >>>>>>>>
-> >>>>>>>> This goes unnoticed because of CFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=
-> >>>>>>>> $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
-> >>>>>>>>
-> >>>>>>>> I think we need to fix that prior to your patch.
-> >>>>>>>
-> >>>>>>> It looks like that CONFIG_TARGET_CPU is broken.
-> >>>>>>>
-> >>>>>>>      $ make ARCH=powerpc corenet64_smp_defconfig CROSS_COMPILE=powerpc64-linux-gnu-
-> >>>>>>>      ...
-> >>>>>>>      # configuration written to .config
-> >>>>>>>
-> >>>>>>>      $ grep CONFIG_TARGET_CPU .config
-> >>>>>>>      CONFIG_TARGET_CPU_BOOL=y
-> >>>>>>>
-> >>>>>>> CONFIG_TARGET_CPU_BOOL is set but CONFIG_TARGET_CPU not!
-> >>>>>>
-> >>>>>> Yes, because there is no default value for E5500_CPU and E6500_CPU. We
-> >>>>>> need to add one for each.
-> >>>>>
-> >>>>> I see... Will you prepare this fixup for your previous patch?
-> >>>>>
-> >>>>> And I think that following construct
-> >>>>>
-> >>>>>     $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
-> >>>>>
-> >>>>> should be changed just to
-> >>>>>
-> >>>>>     -mcpu=$(CONFIG_TARGET_CPU)
-> >>>>>
-> >>>>> Because if user specified that want build for specific target CPU, it
-> >>>>> should not be silently ignored.
-> >>>>
-> >>>> Christophe, should I do something in this area?
-> >>>
-> >>> Christophe, any input from your side?
-> >>
-> >> Hi, sorry I was on holiday until today. I'll try to have a look in the
-> >> coming days.
-> > 
-> > Ok, Did you have a time to look at it?
-> 
-> I just sent a patch for it.
-> 
-> Christophe
+Hi Bjorn,
 
-Thanks!
+On 12/8/22 19:57, Bjorn Helgaas wrote:
+> On Wed, Dec 07, 2022 at 04:31:12PM +0100, Hans de Goede wrote:
+>> On 12/4/22 10:13, Hans de Goede wrote:
+>>
+>> <snip>
+>>
+>>>>> 2. I am afraid that now allowing PCI MMIO space to be allocated
+>>>>> in regions marked as EfiMemoryMappedIO will cause regressions
+>>>>> on some systems. Specifically when I tried something similar
+>>>>> the last time I looked at this (using the BIOS date cut-off
+>>>>> approach IIRC) there was a suspend/resume regression on
+>>>>> a Lenovo ThinkPad X1 carbon (20A7) model:
+>>>>>
+>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
+>>>>>
+>>>>> Back then I came to the conclusion that the problem is that not
+>>>>> avoiding the EfiMemoryMappedIO regions caused PCI MMIO space to
+>>>>> be allocated in the 0xdfa00000 - 0xdfa10000 range which is
+>>>>> listed in the EFI memmap as:
+>>>>>
+>>>>> [    0.000000] efi: mem46: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |  ] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
+>>>>>
+>>>>> And with current kernels with the extra logging added for this
+>>>>> the following is logged related to this:
+>>>>>
+>>>>> [    0.326504] acpi PNP0A08:00: clipped [mem 0xdfa00000-0xfebfffff window] to [mem 0xdfa10000-0xfebfffff window] for e820 entry [mem 0xdceff000-0xdfa0ffff]
+>>>>>
+>>>>> I believe patch 1/4 of this set will make this clipping go away,
+>>>>> re-introducing the suspend/resume problem.
+>>>>
+>>>> Yes, I'm afraid you're right.  Comparing the logs at comment #31
+>>>> (fails) and comment #38 (works):
+>>>>
+>>>>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+>>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff] fails
+>>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff] works
+>>>>
+>>>> Since 0xdfa00000 is included in the host bridge _CRS, but isn't
+>>>> usable, my guess is this is a _CRS bug.
+>>>
+>>> Ack.
+>>>
+>>> So I was thinking to maybe limit the removal of EfiMemoryMappedIO
+>>> regions from the E820 map if they are big enough to cause troubles?
+>>>
+>>> Looking at the EFI map MMIO regions on this Lenovo ThinkPad X1 carbon
+>>> (20A7) model, they are tiny. Where as the ones which we know cause
+>>> problems are huge. So maybe add a bit of heuristics to patch 1/4 based
+>>> on the EfiMemoryMappedIO region size and only remove the big ones
+>>> from the E820 map ?
+>>>
+>>> I know that adding heuristics like this always feels a bit wrong,
+>>> because you end up putting a somewhat arbitrary cut off point in
+>>> the code on which to toggle behavior on/off, but I think that in
+>>> this case it should work nicely given how huge the EfiMemoryMappedIO
+>>> regions which are actually causing problems are.
+> 
+> I'll post a v2 that removes only regions 256KB or larger in a minute.
+
+Ok, may I ask why 256KB?
+
+I see that that rules out then troublesome MMIO regions from the X1 carbon from:
+https://bugzilla.redhat.com/show_bug.cgi?id=2029207 :
+efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
+which we know we need to avoid / keep reserved.
+
+But OTOH the reservations which are causing the problems with assigning
+resources to PCI devices by Linux look like this:
+efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+which is significantly larger then 256KB.
+
+So we could e.g. also put the cut-off point at 16MB and still
+remove the above troublesome reservation from the E820 table.
+Note just thinking out loud here. I have no idea if 16MB
+would be better...
+
+
+> 
+>> Looking at the efi=debug output from:
+>>
+>> https://bugzilla-attachments.redhat.com/attachment.cgi?id=1861035
+>>
+>> The small MMIO regions which we most honor as reserved do
+>> have the "RUN" (runtime) flag set in the EFI mmap.
+> 
+> Just trying to follow along here, so not sure any of the following is
+> relevant ...
+> 
+> This attachment is from
+> https://bugzilla.redhat.com/show_bug.cgi?id=2029207, and it shows:
+> 
+>   efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
+>   efi: mem47: [MMIO|RUN|UC] range=[0xf80f8000-0xf80f8fff] (0MB)  [4K]
+>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
+>   pci_bus 0000:00: root bus resource [mem 0xfed40000-0xfed4bfff window]
+> 
+> mem46 is included in the PNP0A08 _CRS, and Ivan has verified
+> experimentally that we have to avoid it.
+
+Ack.
+
+> mem47 is also included in the _CRS, but I don't have a clue what it
+> is.  Maybe some hidden device used by BIOS but not visible to us?
+
+Could be, there is at least one hidden device called the P2SB on
+most Intel systems.
+
+>> But I'm afraid that the same applies to the troublesome
+>> MMIO EFI regions which cause the failures to assign
+>> PCI regions for devices not setup by the firmware:
+>>
+>> https://bugzilla-attachments.redhat.com/attachment.cgi?id=1861407
+>>
+>> So that "RUN" flag is of no use.
+> 
+> I don't know what bug this attachment is from.
+
+It is from https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+which is the ideapad slim 3 with the touchpad issue caused by the:
+efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+reservation getting in the way of assigning resources to
+the i2c-controller.
+
+> Is the point here that you considered doing the E820 removal based on
+> the EFI_MEMORY_RUNTIME memory *attribute* instead of the
+> EFI_MEMORY_MAPPED_IO memory *type*?
+> 
+> I don't really know the details of EFI_MEMORY_MAPPED_IO vs
+> EFI_MEMORY_RUNTIME, but it looks like EFI_MEMORY_RUNTIME can be
+> applied to things like EFI_RUNTIME_SERVICES_CODE (not MMIO space) that
+> should stay in E820.
+
+Sorry for the confusion. What I was trying to say is that I was interested
+in seeing if we could use the "RUN" flag to differentiate between:
+
+1. The big MMIO region which we want to remove from the e820 map:
+   efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
+
+2. The small MMIO region which we want to keep to avoid the reported suspend/resume issue:
+   efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
+
+But unfortunately both have the RUN flag set so the RUN flag is
+of no use to us.
+
+Regards,
+
+Hans
+
+
