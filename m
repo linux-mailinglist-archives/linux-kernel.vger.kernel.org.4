@@ -2,294 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A07647857
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:56:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 565DD647858
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:56:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiLHV4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:56:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
+        id S229967AbiLHV4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:56:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiLHV4g (ORCPT
+        with ESMTP id S229977AbiLHV4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:56:36 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87DC16B9BD
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:55:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670536524;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fZEl3N04EMAP2CKa6UNjlTejw3q2BTFmKhNwbtfSXdQ=;
-        b=FBFylfhyWgP5zi41KT1AUJqfaYISFIFtVuXF06ZmzOU5VB1fcFuqt5XgQklXiBgbaRSPAq
-        CV3DlTO7LS854s/fg/j383k8fCF1o+8g+oNUss23CdhH3AMlYfiiVdQqsXQEDQe3186P81
-        fqO8bkYzU7s5xsE9qpYtVz+DYHsYbGc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-256-Pkd-WK6wM6SjpHbiMn6xxw-1; Thu, 08 Dec 2022 16:55:21 -0500
-X-MC-Unique: Pkd-WK6wM6SjpHbiMn6xxw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 8 Dec 2022 16:56:35 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09336B988
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:56:33 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4A516185A78B;
-        Thu,  8 Dec 2022 21:55:21 +0000 (UTC)
-Received: from starship (unknown [10.35.206.46])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D64B6140EBF5;
-        Thu,  8 Dec 2022 21:55:19 +0000 (UTC)
-Message-ID: <b358ea43c7647c4ec4678932d1912845a2b29f1b.camel@redhat.com>
-Subject: Re: [PATCH v4 10/32] KVM: x86: Move APIC access page helper to
- common x86 code
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Thu, 08 Dec 2022 23:55:18 +0200
-In-Reply-To: <20221001005915.2041642-11-seanjc@google.com>
-References: <20221001005915.2041642-1-seanjc@google.com>
-         <20221001005915.2041642-11-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by sin.source.kernel.org (Postfix) with ESMTPS id C0E30CE26F8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 21:56:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70FEDC433D2;
+        Thu,  8 Dec 2022 21:56:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670536590;
+        bh=bFNu3vNOxRzISUHbhrcGwqprv78edRC0TLjOn0yrO78=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jgg7917lyxodDm1WbIW+2Tx+zBacForxyiPmNzhfg6WQBEX9JAXM3Jn46tHhaTcAN
+         C9rOtlO1PHDlbL1jjSAjp52xrx+axl9hp2KyZk4HoWiLFh3pQbYlo+A8aeDuKfc7o6
+         mw6cxE6S5wGxkZmJmkPX7FUjSXHlxgZ1EOxoo6lqkbTsrzEyKrj/3dlenhdGtrT5VD
+         FMeANQ2guYHBdQO2BTsXk0yr4wm47pskJ0vHDor432z2HK4mrJvHRSmropCawyGgyu
+         z4ebrnz/2eDrxvNSHX93Q5702Hi/IW8Eyj2qBqwaimluETtvYXYYgNdKhT9yT33yel
+         Yz/2RyOIlKVkQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-mm@kvack.org, damon@lists.linux.dev,
+        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        sj@kernel.org
+Subject: Re: [PATCH v3 4/4] mm/swap: Convert deactivate_page() to folio_deactivate()
+Date:   Thu,  8 Dec 2022 21:56:27 +0000
+Message-Id: <20221208215627.116940-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221208203503.20665-5-vishal.moola@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-10-01 at 00:58 +0000, Sean Christopherson wrote:
-> Move the APIC access page allocation helper function to common x86 code,
-> the allocation routine is virtually identical between APICv (VMX) and
-> AVIC (SVM).  Keep APICv's gfn_to_page() + put_page() sequence, which
-> verifies that a backing page can be allocated, i.e. that the system isn't
-> under heavy memory pressure.  Forcing the backing page to be populated
-> isn't strictly necessary, but skipping the effective prefetch only delays
-> the inevitable.
+On Thu, 8 Dec 2022 12:35:03 -0800 "Vishal Moola (Oracle)" <vishal.moola@gmail.com> wrote:
 
-
-Just a note on the way we deal with that dummy page differs between APICv and AVIC
-a bit:
-
-
-On APICv we need physical address of the dummy page, since APICv 
-has physical address of this page in VMCB, and when guest "accesses"
-only then APICv specific handling is invoked.
-
-Since we don't want to pin it, we have a mmu notifier telling us where
-it is currently and we update the vmcb each time it moves.
-
-If the page is swapped out, mmu notifier will call us, and we will
-pretty much swap it back in on next VM entry, in 'vmx_set_apic_access_page_addr'
-I hope that this code doesn't have races, I never looked at depth at it.
-
-
-On AVIC on the other hand we don't force the page to be mapped at all, since
-AVIC stores in the vmcb the virtual address of the page and only checkes that
-'something' is mapped there.
-
-If we get nothing mapped there, AVIC will not intercept, we will get normal
-NPT fault and hopefully swap that page in.
-
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
-
-
+> Deactivate_page() has already been converted to use folios, this change
+> converts it to take in a folio argument instead of calling page_folio().
+> It also renames the function folio_deactivate() to be more consistent
+> with other folio functions.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+
+Reviewed-by: SeongJae Park <sj@kernel.org>
+
+
+Thanks,
+SJ
+
 > ---
->  arch/x86/kvm/lapic.c    | 35 +++++++++++++++++++++++++++++++++++
->  arch/x86/kvm/lapic.h    |  1 +
->  arch/x86/kvm/svm/avic.c | 41 +++++++----------------------------------
->  arch/x86/kvm/vmx/vmx.c  | 35 +----------------------------------
->  4 files changed, 44 insertions(+), 68 deletions(-)
+>  include/linux/swap.h |  2 +-
+>  mm/damon/paddr.c     |  2 +-
+>  mm/madvise.c         |  4 ++--
+>  mm/swap.c            | 14 ++++++--------
+>  4 files changed, 10 insertions(+), 12 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 316b61b56cca..80e8b1cc6dc2 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -2436,6 +2436,41 @@ void kvm_apic_update_apicv(struct kvm_vcpu *vcpu)
->  }
->  EXPORT_SYMBOL_GPL(kvm_apic_update_apicv);
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index a18cf4b7c724..6427b3af30c3 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -409,7 +409,7 @@ extern void lru_add_drain(void);
+>  extern void lru_add_drain_cpu(int cpu);
+>  extern void lru_add_drain_cpu_zone(struct zone *zone);
+>  extern void lru_add_drain_all(void);
+> -extern void deactivate_page(struct page *page);
+> +void folio_deactivate(struct folio *folio);
+>  extern void mark_page_lazyfree(struct page *page);
+>  extern void swap_setup(void);
 >  
-> +int kvm_alloc_apic_access_page(struct kvm *kvm)
-> +{
-> +	struct page *page;
-> +	void __user *hva;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&kvm->slots_lock);
-> +	if (kvm->arch.apic_access_memslot_enabled)
-> +		goto out;
-> +
-> +	hva = __x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT,
-> +				      APIC_DEFAULT_PHYS_BASE, PAGE_SIZE);
-> +	if (IS_ERR(hva)) {
-> +		ret = PTR_ERR(hva);
-> +		goto out;
-> +	}
-> +
-> +	page = gfn_to_page(kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
-> +	if (is_error_page(page)) {
-> +		ret = -EFAULT;
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Do not pin the page in memory, so that memory hot-unplug
-> +	 * is able to migrate it.
-> +	 */
-> +	put_page(page);
-
-
-
-
-> +	kvm->arch.apic_access_memslot_enabled = true;
-> +out:
-> +	mutex_unlock(&kvm->slots_lock);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_alloc_apic_access_page);
-> +
->  void kvm_lapic_reset(struct kvm_vcpu *vcpu, bool init_event)
->  {
->  	struct kvm_lapic *apic = vcpu->arch.apic;
-> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-> index a5ac4a5a5179..0587a8282cb3 100644
-> --- a/arch/x86/kvm/lapic.h
-> +++ b/arch/x86/kvm/lapic.h
-> @@ -112,6 +112,7 @@ int kvm_apic_set_irq(struct kvm_vcpu *vcpu, struct kvm_lapic_irq *irq,
->  		     struct dest_map *dest_map);
->  int kvm_apic_local_deliver(struct kvm_lapic *apic, int lvt_type);
->  void kvm_apic_update_apicv(struct kvm_vcpu *vcpu);
-> +int kvm_alloc_apic_access_page(struct kvm *kvm);
->  
->  bool kvm_irq_delivery_to_apic_fast(struct kvm *kvm, struct kvm_lapic *src,
->  		struct kvm_lapic_irq *irq, int *r, struct dest_map *dest_map);
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 97ad0661f963..ec28ba4c5f1b 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -256,39 +256,6 @@ static u64 *avic_get_physical_id_entry(struct kvm_vcpu *vcpu,
->  	return &avic_physical_id_table[index];
->  }
->  
-> -/*
-> - * Note:
-> - * AVIC hardware walks the nested page table to check permissions,
-> - * but does not use the SPA address specified in the leaf page
-> - * table entry since it uses  address in the AVIC_BACKING_PAGE pointer
-> - * field of the VMCB. Therefore, we set up the
-> - * APIC_ACCESS_PAGE_PRIVATE_MEMSLOT (4KB) here.
-> - */
-> -static int avic_alloc_access_page(struct kvm *kvm)
-> -{
-> -	void __user *ret;
-> -	int r = 0;
-> -
-> -	mutex_lock(&kvm->slots_lock);
-> -
-> -	if (kvm->arch.apic_access_memslot_enabled)
-> -		goto out;
-> -
-> -	ret = __x86_set_memory_region(kvm,
-> -				      APIC_ACCESS_PAGE_PRIVATE_MEMSLOT,
-> -				      APIC_DEFAULT_PHYS_BASE,
-> -				      PAGE_SIZE);
-> -	if (IS_ERR(ret)) {
-> -		r = PTR_ERR(ret);
-> -		goto out;
-> -	}
-> -
-> -	kvm->arch.apic_access_memslot_enabled = true;
-> -out:
-> -	mutex_unlock(&kvm->slots_lock);
-> -	return r;
-> -}
-> -
->  static int avic_init_backing_page(struct kvm_vcpu *vcpu)
->  {
->  	u64 *entry, new_entry;
-> @@ -305,7 +272,13 @@ static int avic_init_backing_page(struct kvm_vcpu *vcpu)
->  	if (kvm_apicv_activated(vcpu->kvm)) {
->  		int ret;
->  
-> -		ret = avic_alloc_access_page(vcpu->kvm);
-> +		/*
-> +		 * Note, AVIC hardware walks the nested page table to check
-> +		 * permissions, but does not use the SPA address specified in
-> +		 * the leaf SPTE since it uses address in the AVIC_BACKING_PAGE
-> +		 * pointer field of the VMCB.
-> +		 */
-> +		ret = kvm_alloc_apic_access_page(vcpu->kvm);
->  		if (ret)
->  			return ret;
+> diff --git a/mm/damon/paddr.c b/mm/damon/paddr.c
+> index 73548bc82297..6b36de1396a4 100644
+> --- a/mm/damon/paddr.c
+> +++ b/mm/damon/paddr.c
+> @@ -247,7 +247,7 @@ static inline unsigned long damon_pa_mark_accessed_or_deactivate(
+>  		if (mark_accessed)
+>  			folio_mark_accessed(folio);
+>  		else
+> -			deactivate_page(&folio->page);
+> +			folio_deactivate(folio);
+>  		folio_put(folio);
+>  		applied += folio_nr_pages(folio);
 >  	}
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 9dba04b6b019..974d9a366d5d 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -3771,39 +3771,6 @@ static void seg_setup(int seg)
->  	vmcs_write32(sf->ar_bytes, ar);
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 2a84b5dfbb4c..1ab293019862 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -396,7 +396,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>  					list_add(&folio->lru, &folio_list);
+>  			}
+>  		} else
+> -			deactivate_page(&folio->page);
+> +			folio_deactivate(folio);
+>  huge_unlock:
+>  		spin_unlock(ptl);
+>  		if (pageout)
+> @@ -485,7 +485,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+>  					list_add(&folio->lru, &folio_list);
+>  			}
+>  		} else
+> -			deactivate_page(&folio->page);
+> +			folio_deactivate(folio);
+>  	}
+>  
+>  	arch_leave_lazy_mmu_mode();
+> diff --git a/mm/swap.c b/mm/swap.c
+> index 955930f41d20..9cc8215acdbb 100644
+> --- a/mm/swap.c
+> +++ b/mm/swap.c
+> @@ -720,17 +720,15 @@ void deactivate_file_folio(struct folio *folio)
 >  }
 >  
-> -static int alloc_apic_access_page(struct kvm *kvm)
-> -{
-> -	struct page *page;
-> -	void __user *hva;
-> -	int ret = 0;
-> -
-> -	mutex_lock(&kvm->slots_lock);
-> -	if (kvm->arch.apic_access_memslot_enabled)
-> -		goto out;
-> -	hva = __x86_set_memory_region(kvm, APIC_ACCESS_PAGE_PRIVATE_MEMSLOT,
-> -				      APIC_DEFAULT_PHYS_BASE, PAGE_SIZE);
-> -	if (IS_ERR(hva)) {
-> -		ret = PTR_ERR(hva);
-> -		goto out;
-> -	}
-> -
-> -	page = gfn_to_page(kvm, APIC_DEFAULT_PHYS_BASE >> PAGE_SHIFT);
-> -	if (is_error_page(page)) {
-> -		ret = -EFAULT;
-> -		goto out;
-> -	}
-> -
-> -	/*
-> -	 * Do not pin the page in memory, so that memory hot-unplug
-> -	 * is able to migrate it.
-> -	 */
-> -	put_page(page);
-> -	kvm->arch.apic_access_memslot_enabled = true;
-> -out:
-> -	mutex_unlock(&kvm->slots_lock);
-> -	return ret;
-> -}
-> -
->  int allocate_vpid(void)
+>  /*
+> - * deactivate_page - deactivate a page
+> - * @page: page to deactivate
+> + * folio_deactivate - deactivate a folio
+> + * @folio: folio to deactivate
+>   *
+> - * deactivate_page() moves @page to the inactive list if @page was on the active
+> - * list and was not an unevictable page.  This is done to accelerate the reclaim
+> - * of @page.
+> + * folio_deactivate() moves @folio to the inactive list if @folio was on the
+> + * active list and was not unevictable. This is done to accelerate the
+> + * reclaim of @folio.
+>   */
+> -void deactivate_page(struct page *page)
+> +void folio_deactivate(struct folio *folio)
 >  {
->  	int vpid;
-> @@ -7348,7 +7315,7 @@ static int vmx_vcpu_create(struct kvm_vcpu *vcpu)
->  	vmx->loaded_vmcs = &vmx->vmcs01;
->  
->  	if (cpu_need_virtualize_apic_accesses(vcpu)) {
-> -		err = alloc_apic_access_page(vcpu->kvm);
-> +		err = kvm_alloc_apic_access_page(vcpu->kvm);
->  		if (err)
->  			goto free_vmcs;
->  	}
-
-
+> -	struct folio *folio = page_folio(page);
+> -
+>  	if (folio_test_lru(folio) && !folio_test_unevictable(folio) &&
+>  	    (folio_test_active(folio) || lru_gen_enabled())) {
+>  		struct folio_batch *fbatch;
+> -- 
+> 2.38.1
+> 
