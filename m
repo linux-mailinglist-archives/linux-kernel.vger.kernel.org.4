@@ -2,199 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE1B647720
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60E25647722
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:22:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiLHUUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:20:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S229558AbiLHUWF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 15:22:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLHUUY (ORCPT
+        with ESMTP id S229751AbiLHUV5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:20:24 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF85A186EA
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:19:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670530769;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mKHzWNJ7JSA7UPpo6qNq0rP4CnM5zYPQGSntpfKSPk8=;
-        b=c0A8gl1K9SZLyvmyHOjsy3gK/ls+viXcADKk1aTr4x3Kz9/I0HT0f/pdK0c8lMOFA+9pt5
-        j9PjOLrL2ecg0m8U+MqQUlJcsasEsQAUbr7HBt7W8cnNIWozRY6CdyrK2U1cN3IdRy2m6T
-        Qrw3IjQcW7uqaqOcJKOfjKerR8dW9qA=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-487-8HoXatlOONWTa_gE1gRecQ-1; Thu, 08 Dec 2022 15:19:28 -0500
-X-MC-Unique: 8HoXatlOONWTa_gE1gRecQ-1
-Received: by mail-ed1-f72.google.com with SMTP id q13-20020a056402518d00b00462b0599644so123634edd.20
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:19:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mKHzWNJ7JSA7UPpo6qNq0rP4CnM5zYPQGSntpfKSPk8=;
-        b=vBjN06Qw5IpcyeuiMzkClc1xDPyUDgWtITkcEZsqmFeLymlfooNl5/JOQnYQqKeaLw
-         PBK6bM5aXKwyXDozWm0vy5CR66h/kJ95FlnUWEfP3thozNHUK2OOuxgNVvJ6rIRcdkg+
-         hl7bjbKk0fJzr1ppOQtalH74Vm0j3lC6+3SDxdpwEX1/3IgATDOXCCyh7MPy4Ji77Ai7
-         uCJ/VF/3wzdTAj4gfaeXeQxNfLaS/qljBVM58+AEOdhWbZ5DMhBd+HgdP7YM2cIdezLh
-         hpKCzinA9QFKp8OKiEieYsTDL7Gq4pquSX0yR4RwxpRzBRnsf9IfzXH0xKiOEbfQYIoI
-         EN1Q==
-X-Gm-Message-State: ANoB5pkNyhgsn/RxuT74AwxRbUq0deZtrcncN+y0w5AFq2E7kH4Eon2K
-        RbFHAzaAP89dbu89NtpyrH5ARv4GpoVeRH5JXoJo4d7MOjR2p0yOUnFvBOuPzZgnREECON+yuWa
-        W4j7AKyVn2mDO+INorcU7Nn4Z
-X-Received: by 2002:a17:906:9f23:b0:7c1:1ad9:e5b0 with SMTP id fy35-20020a1709069f2300b007c11ad9e5b0mr2612487ejc.33.1670530767035;
-        Thu, 08 Dec 2022 12:19:27 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5qLAF0gLqrx/eRPyh21FaHB793/ueuMNyqAZ8hP4ElQDFnheRxg+heDR/LvRlqLubJyHLjjg==
-X-Received: by 2002:a17:906:9f23:b0:7c1:1ad9:e5b0 with SMTP id fy35-20020a1709069f2300b007c11ad9e5b0mr2612478ejc.33.1670530766853;
-        Thu, 08 Dec 2022 12:19:26 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0073dc5bb7c32sm10061712eja.64.2022.12.08.12.19.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 12:19:26 -0800 (PST)
-Message-ID: <33a65ae8-784d-920f-8542-3762916e070c@redhat.com>
-Date:   Thu, 8 Dec 2022 21:19:25 +0100
+        Thu, 8 Dec 2022 15:21:57 -0500
+Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6551E186EA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:21:56 -0800 (PST)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay09.hostedemail.com (Postfix) with ESMTP id 8AAC880C73;
+        Thu,  8 Dec 2022 20:21:54 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id 0708B20027;
+        Thu,  8 Dec 2022 20:21:50 +0000 (UTC)
+Message-ID: <3953eb4913bf9b5610854624c4c632e710cd1ec9.camel@perches.com>
+Subject: Re: [PATCH 2/2] checkpatch: warn when Reported-by: is not followed
+ by Link:
+From:   Joe Perches <joe@perches.com>
+To:     Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>,
+        linux-kernel@vger.kernel.org
+Cc:     Thorsten Leemhuis <linux@leemhuis.info>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Thu, 08 Dec 2022 12:21:50 -0800
+In-Reply-To: <4af6cd7f0833f18e9eee8caba1913e682c5ec071.1670527774.git.kai@dev.carbon-project.org>
+References: <cover.1670152844.git.kai@dev.carbon-project.org>
+         <4af6cd7f0833f18e9eee8caba1913e682c5ec071.1670527774.git.kai@dev.carbon-project.org>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
-Content-Language: en-US, nl
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221208200654.GA1562951@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221208200654.GA1562951@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: 0708B20027
+X-Stat-Signature: j5k8sgrmcu75hwdfzkbseua4tdzyxyjt
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/YVhSE+ihJj0vummOmnovpWEljgE6P5Xc=
+X-HE-Tag: 1670530910-641128
+X-HE-Meta: U2FsdGVkX181QdevkTFaY+KaBvX6D0nW5i2dEOJdh/h4CaE8sb267r7G6XwMJfjXaeJ8MM/VqPZbbws8eadouQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/8/22 21:06, Bjorn Helgaas wrote:
-> On Thu, Dec 08, 2022 at 08:16:31PM +0100, Hans de Goede wrote:
->> Hi Bjorn,
->>
->> On 12/8/22 19:57, Bjorn Helgaas wrote:
->>> On Wed, Dec 07, 2022 at 04:31:12PM +0100, Hans de Goede wrote:
->>>> On 12/4/22 10:13, Hans de Goede wrote:
->>>>
->>>> <snip>
->>>>
->>>>>>> 2. I am afraid that now allowing PCI MMIO space to be allocated
->>>>>>> in regions marked as EfiMemoryMappedIO will cause regressions
->>>>>>> on some systems. Specifically when I tried something similar
->>>>>>> the last time I looked at this (using the BIOS date cut-off
->>>>>>> approach IIRC) there was a suspend/resume regression on
->>>>>>> a Lenovo ThinkPad X1 carbon (20A7) model:
->>>>>>>
->>>>>>> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
->>>>>>>
->>>>>>> Back then I came to the conclusion that the problem is that not
->>>>>>> avoiding the EfiMemoryMappedIO regions caused PCI MMIO space to
->>>>>>> be allocated in the 0xdfa00000 - 0xdfa10000 range which is
->>>>>>> listed in the EFI memmap as:
->>>>>>>
->>>>>>> [    0.000000] efi: mem46: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |  ] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
->>>>>>>
->>>>>>> And with current kernels with the extra logging added for this
->>>>>>> the following is logged related to this:
->>>>>>>
->>>>>>> [    0.326504] acpi PNP0A08:00: clipped [mem 0xdfa00000-0xfebfffff window] to [mem 0xdfa10000-0xfebfffff window] for e820 entry [mem 0xdceff000-0xdfa0ffff]
->>>>>>>
->>>>>>> I believe patch 1/4 of this set will make this clipping go away,
->>>>>>> re-introducing the suspend/resume problem.
->>>>>>
->>>>>> Yes, I'm afraid you're right.  Comparing the logs at comment #31
->>>>>> (fails) and comment #38 (works):
->>>>>>
->>>>>>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
->>>>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff] fails
->>>>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff] works
->>>>>>
->>>>>> Since 0xdfa00000 is included in the host bridge _CRS, but isn't
->>>>>> usable, my guess is this is a _CRS bug.
->>>>>
->>>>> Ack.
->>>>>
->>>>> So I was thinking to maybe limit the removal of EfiMemoryMappedIO
->>>>> regions from the E820 map if they are big enough to cause troubles?
->>>>>
->>>>> Looking at the EFI map MMIO regions on this Lenovo ThinkPad X1 carbon
->>>>> (20A7) model, they are tiny. Where as the ones which we know cause
->>>>> problems are huge. So maybe add a bit of heuristics to patch 1/4 based
->>>>> on the EfiMemoryMappedIO region size and only remove the big ones
->>>>> from the E820 map ?
->>>>>
->>>>> I know that adding heuristics like this always feels a bit wrong,
->>>>> because you end up putting a somewhat arbitrary cut off point in
->>>>> the code on which to toggle behavior on/off, but I think that in
->>>>> this case it should work nicely given how huge the EfiMemoryMappedIO
->>>>> regions which are actually causing problems are.
->>>
->>> I'll post a v2 that removes only regions 256KB or larger in a minute.
->>
->> Ok, may I ask why 256KB?
->>
->> I see that that rules out then troublesome MMIO regions from the X1 carbon from:
->> https://bugzilla.redhat.com/show_bug.cgi?id=2029207 :
->> efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
->> which we know we need to avoid / keep reserved.
->>
->> But OTOH the reservations which are causing the problems with assigning
->> resources to PCI devices by Linux look like this:
->> efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
->> which is significantly larger then 256KB.
->>
->> So we could e.g. also put the cut-off point at 16MB and still
->> remove the above troublesome reservation from the E820 table.
->> Note just thinking out loud here. I have no idea if 16MB
->> would be better...
+On Thu, 2022-12-08 at 20:32 +0100, Kai Wasserbäch wrote:
+> Encourage patch authors to link to reports by issuing a warning, if
+> a Reported-by: is not accompanied by a link to the report. Those links
+> are often extremely useful for any code archaeologist that wants to know
+> more about the backstory of a change than the commit message provides.
+> That includes maintainers higher up in the patch-flow hierarchy, which
+> is why Linus asks developers to add such links [1, 2, 3]. To quote [1]:
 > 
-> No good reason for 256KB.  We know it needs to be at least 64KB for
-> the X1 Carbon.  I picked 4x bigger just for headroom, since I assume
-> the 64KB is platform-specific host bridge registers or something.  Do
-> you think a bigger number would be better, i.e., we would retain more
-> MMIO things in E820?
+> > Again, the commit has a link to the patch *submission*, which is
+> > almost entirely useless. There's no link to the actual problem the
+> > patch fixes.
+> > 
+> > [...]
+> > 
+> > Put another way: I can see that
+> > 
+> > Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+> > 
+> > in the commit, but I don't have a clue what the actual report was, and
+> > there really isn't enough information in the commit itself, except for
+> > a fairly handwavy "Device drivers might, for instance, still need to
+> > flush operations.."
+> > 
+> > I don't want to know what device drivers _might_ do. I would want to
+> > have an actual pointer to what they do and where.
 > 
-> ECAM areas would be 1MB per bus, so between 1MB and 256MB.  Those areas
-> *should* be reserved by PNP0C02 _CRS, but IIRC the early MMCONFIG code
-> checks E820, and the late code checks for _CRS.  I guess one could
-> argue that ignoring those, e.g., by retaining anything 256MB or
-> smaller in E820, would reduce the amount of change.  
+> Another reason why these links are wanted: the ongoing regression
+> tracking efforts can only scale with them, as they allow the regression
+> tracking bot 'regzbot' to automatically connect tracked reports with
+> patches that are posted or committed to fix tracked regressions.
+[]
+> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+[]
+> @@ -3144,6 +3144,20 @@ sub process {
+>  					     "Co-developed-by and Signed-off-by: name/email do not match \n" . "$here\n" . $rawline . "\n" .$rawlines[$linenr]);
 
-Right, reducing how much we change what the E820 map looks like after
-this would be the main reason to make the cut of point bigger then
-256KB.
+I believe this use of '"$here\n" . $rawline . "\n"' to be a defect.
+I think this should just use $herecurr
 
-> But if the host bridge _CRS includes 256MB of legitimate window that
-> EFI says is MMIO and is hence included in E820, that seems like kind
-> of a lot of usable window space to give up.
+And the unnecessary space before a newline is an abomination ;)
 
-Ack, I guess we can just go with 256KB for now and then see how things go.
+  					     "Co-developed-by and Signed-off-by: name/email do not match\n" . $herecurr . $rawlines[$linenr]);
 
-Regards,
+> +
+> +			# check if Reported-by: is followed by a Link:
+> +			if ($sign_off =~ /^reported-by:$/i) {
+> +				if (!defined $lines[$linenr]) {
+> +					WARN("BAD_REPORTED_BY_LINK",
+> +					     "Reported-by: should be immediately followed by Link: to the report\n" . "$here\n" . $rawline);
+> +				} elsif ($rawlines[$linenr] !~ /^\s*link:\s*(.*)/i) {
+> +					WARN("BAD_REPORTED_BY_LINK",
+> +					     "Reported-by: should be immediately followed by Link: to the report\n" . "$here\n" . $rawline . "\n" .$rawlines[$linenr]);
+> +				} elsif ($lines[$linenr] !~ /https?:\/\//i) {
+> +					WARN("BAD_REPORTED_BY_LINK",
+> +					     "Link: following Reported-by: should contain an URL\n" . "$here\n" . $rawline . "\n" .$rawlines[$linenr]);
 
-Hans
+Please use a space before and after a string concatenation '.'
 
+English generally uses "a URL" and not "an URL"
+https://www.techtarget.com/whatis/feature/Which-is-correct-a-URL-or-an-URL
 
+Also the actual link line should likely be from lore
+
+So maybe: 
+				} elsif ($lines[$linenr] !~ m{https?://lore.kernel.org/.+}i) {
+					WARN("BAD_REPORTED_BY_LINK",
+					     "Link: following Reported-by: should use a lore.kernel.org URL\n" . $herecurr . $rawlines[$linenr]);
+
+etc...
 
