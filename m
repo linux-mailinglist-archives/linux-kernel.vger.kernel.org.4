@@ -2,122 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95561646737
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25644646744
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:53:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLHCqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 21:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38208 "EHLO
+        id S229865AbiLHCxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 21:53:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiLHCqJ (ORCPT
+        with ESMTP id S229835AbiLHCxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 21:46:09 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BB0F880F4;
-        Wed,  7 Dec 2022 18:46:07 -0800 (PST)
-Received: from loongson.cn (unknown [10.20.42.77])
-        by gateway (Coremail) with SMTP id _____8Cx7+vuT5FjEAMEAA--.9526S3;
-        Thu, 08 Dec 2022 10:46:06 +0800 (CST)
-Received: from [10.20.42.77] (unknown [10.20.42.77])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFlfsT5FjMqInAA--.13593S3;
-        Thu, 08 Dec 2022 10:46:05 +0800 (CST)
-Subject: Re: [PATCH v2 2/2] dt-bindings: interrupt-controller: add yaml for
- LoongArch CPU interrupt controller
-To:     Rob Herring <robh@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        wanghongliang <wanghongliang@loongson.cn>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221114113824.1880-1-liupeibao@loongson.cn>
- <20221114113824.1880-3-liupeibao@loongson.cn>
- <20221208020954.GA3368836-robh@kernel.org>
-From:   Liu Peibao <liupeibao@loongson.cn>
-Message-ID: <62a8ab9a-6b02-a919-c026-d48f7e11264e@loongson.cn>
-Date:   Thu, 8 Dec 2022 10:46:04 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Wed, 7 Dec 2022 21:53:19 -0500
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DA6C5BD55;
+        Wed,  7 Dec 2022 18:53:17 -0800 (PST)
+Received: by mail-pl1-x629.google.com with SMTP id d3so228231plr.10;
+        Wed, 07 Dec 2022 18:53:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tg8aD+lDH6Tv1G5iqzFowxNp9DpUbCk5WdkpP14KUyw=;
+        b=bwaVRySVfZUnRb2bEPwJ5xCOaAbW2JOL2VzvtwPsxsOLsgpqhXcMxtBMO4VtjWsH7V
+         MDQdVhBlbBUjWAU33uNkOOvxe6VkCUIQpal1m6VcrraOtDor8fGL9ie8cC1x1k9jxDpj
+         czQSokKN+AFxHVJpY8Th5uLXRaS/kzWqoEfgdtR/nJOjRFicdSnYdhZ4WHoINWQqfB/R
+         k05tFcdSkGfjgd0dvF+scgm7a1+iUyuh/FVGqvRGA392bZFPehNVJTITg5BaWJBBlLvm
+         tIEKV5suDt1M2Sc9G4ukFt5sH7wc7eq/2lUB3Z18JNCWI+My330fDciGZKoERtGwNA5C
+         HQVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tg8aD+lDH6Tv1G5iqzFowxNp9DpUbCk5WdkpP14KUyw=;
+        b=6LKQ6WRHjit+VvlRmohFvuan4UmIN3DNtmQPDPWG/N9GzebLs8sYYKZYcCVCkbtZjC
+         TkiayfHHdwEhYvHjoneo9S0LHak4vHy7zeFdh9Cyy5c6xqvwhPW7LjBk7paset4b3xgk
+         V9bMlcmA0wxC6KzEBTrFCYn+X3xKtPxaX3xQbbiLZ7lIla+mYjGnCOtGQoiTqHJ3ZRUF
+         0hl43YWqzOz5EWkSIgR11M3EHj2tNMLMGueBdMQMNx9pXmmbTiDGFe6HxypAKscJZiwO
+         vjZSYgmIe7o42GeEicXX/hFg6aBDSSPlegECOP6osicqVPV/yU685FU+5rFroBmgaPR5
+         mZqQ==
+X-Gm-Message-State: ANoB5plIAgCtF7pVUUx27G5A0kAUTfVdlHRaYEnJnacj/9Jyp+2GIBtS
+        l3P48d9sLXsVV3xnBCB+EHA=
+X-Google-Smtp-Source: AA0mqf6MHLTy6w/tpnXtPpaIlwt8HeZbJL0xdkJqzAciMkw8dRBGOvKbVId36jXJqjg26Wh9+SLmYQ==
+X-Received: by 2002:a17:90a:1f8c:b0:219:fcad:75be with SMTP id x12-20020a17090a1f8c00b00219fcad75bemr10669236pja.165.1670467996865;
+        Wed, 07 Dec 2022 18:53:16 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id o25-20020aa79799000000b005769b244c2fsm8692079pfp.40.2022.12.07.18.53.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 18:53:16 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 7 Dec 2022 16:53:15 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jann Horn <jannh@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, cgroups@vger.kernel.org
+Subject: [PATCH for-6.1-fixes] memcg: Fix possible use-after-free in
+ memcg_write_event_control()
+Message-ID: <Y5FRm/cfcKPGzWwl@slm.duckdns.org>
 MIME-Version: 1.0
-In-Reply-To: <20221208020954.GA3368836-robh@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8BxFlfsT5FjMqInAA--.13593S3
-X-CM-SenderInfo: xolx1vpled0qxorr0wxvrqhubq/1tbiAQAOCmOQgmgMegAAsq
-X-Coremail-Antispam: 1Uk129KBjvJXoW7Zw47ZFWUZF1xZr48Zr18Krg_yoW8AFWxpF
-        y7CFsxWF40qF13Gws2qa4jkrnxZrn3CFn2gan3tw1xKr9Iga47XFW29F95uFW8GrWxXr42
-        vw1Fga10ga9rJFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bI8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
-        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
-        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487Mx
-        AIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_
-        Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwI
-        xGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8
-        JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcV
-        C2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7_MaUUUUU
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 10:09 AM, Rob Herring wrote:
-> On Mon, Nov 14, 2022 at 07:38:24PM +0800, Liu Peibao wrote:
->> Current LoongArch compatible CPUs support 14 CPU IRQs. We can describe how
->> the 14 IRQs are wired to the platform's internal interrupt controller by
->> devicetree.
->>
->> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
->> ---
->>  .../loongarch,cpu-interrupt-controller.yaml   | 34 +++++++++++++++++++
->>  1 file changed, 34 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->> new file mode 100644
->> index 000000000000..2a1cf885c99d
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/interrupt-controller/loongarch,cpu-interrupt-controller.yaml
->> @@ -0,0 +1,34 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/interrupt-controller/loongarch,cpu-interrupt-controller.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: LoongArch CPU Interrupt Controller
->> +
->> +maintainers:
->> +  - Liu Peibao <liupeibao@loongson.cn>
->> +
->> +properties:
->> +  compatible:
->> +    const: loongarch,cpu-interrupt-controller
-> 
-> This doesn't match what the kernel is using. It has loongson rather than 
-> loongarch. Please send an incremental fix. (Don't forget the example)
-> 
-> Rob
-> 
+memcg_write_event_control() accesses the dentry->d_name of the specified
+control fd to route the write call. As a cgroup interface file can't be
+renamed, it's safe to access d_name as long as the specified file is a
+regular cgroup file. Also, as these cgroup interface files can't be removed
+before the directory, it's safe to access the parent too.
 
-I will send an incremental fix.
+Prior to 347c4a874710 ("memcg: remove cgroup_event->cft"), there was a call
+to __file_cft() which verified that the specified file is a regular cgroupfs
+file before further accesses. The cftype pointer returned from __file_cft()
+was no longer necessary and the commit inadvertently dropped the file type
+check with it allowing any file to slip through. With the invarients broken,
+the d_name and parent accesses can now race against renames and removals of
+arbitrary files and cause use-after-free's.
 
-It is much embarrassed for my careless.
-Thanks! 
+Fix the bug by resurrecting the file type check in __file_cft(). Now that
+cgroupfs is implemented through kernfs, checking the file operations needs
+to go through a layer of indirection. Instead, let's check the superblock
+and dentry type.
 
-BR,
-Peibao
+Signed-off-by: Tejun Heo <tj@kernel.org>
+Fixes: 347c4a874710 ("memcg: remove cgroup_event->cft")
+Cc: stable@vger.kernel.org # v3.14+
+Reported-by: Jann Horn <jannh@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+---
+ include/linux/cgroup.h          |    1 +
+ kernel/cgroup/cgroup-internal.h |    1 -
+ mm/memcontrol.c                 |   15 +++++++++++++--
+ 3 files changed, 14 insertions(+), 3 deletions(-)
 
+diff --git a/include/linux/cgroup.h b/include/linux/cgroup.h
+index 528bd44b59e2..2b7d077de7ef 100644
+--- a/include/linux/cgroup.h
++++ b/include/linux/cgroup.h
+@@ -68,6 +68,7 @@ struct css_task_iter {
+ 	struct list_head		iters_node;	/* css_set->task_iters */
+ };
+ 
++extern struct file_system_type cgroup_fs_type;
+ extern struct cgroup_root cgrp_dfl_root;
+ extern struct css_set init_css_set;
+ 
+diff --git a/kernel/cgroup/cgroup-internal.h b/kernel/cgroup/cgroup-internal.h
+index fd4020835ec6..367b0a42ada9 100644
+--- a/kernel/cgroup/cgroup-internal.h
++++ b/kernel/cgroup/cgroup-internal.h
+@@ -167,7 +167,6 @@ struct cgroup_mgctx {
+ extern spinlock_t css_set_lock;
+ extern struct cgroup_subsys *cgroup_subsys[];
+ extern struct list_head cgroup_roots;
+-extern struct file_system_type cgroup_fs_type;
+ 
+ /* iterate across the hierarchies */
+ #define for_each_root(root)						\
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index a1a35c12635e..266a1ab05434 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -4832,6 +4832,7 @@ static ssize_t memcg_write_event_control(struct kernfs_open_file *of,
+ 	unsigned int efd, cfd;
+ 	struct fd efile;
+ 	struct fd cfile;
++	struct dentry *cdentry;
+ 	const char *name;
+ 	char *endp;
+ 	int ret;
+@@ -4885,6 +4886,16 @@ static ssize_t memcg_write_event_control(struct kernfs_open_file *of,
+ 	if (ret < 0)
+ 		goto out_put_cfile;
+ 
++	/*
++	 * The control file must be a regular cgroup1 file. As a regular cgroup
++	 * file can't be renamed, it's safe to access its name afterwards.
++	 */
++	cdentry = cfile.file->f_path.dentry;
++	if (cdentry->d_sb->s_type != &cgroup_fs_type || !d_is_reg(cdentry)) {
++		ret = -EINVAL;
++		goto out_put_cfile;
++	}
++
+ 	/*
+ 	 * Determine the event callbacks and set them in @event.  This used
+ 	 * to be done via struct cftype but cgroup core no longer knows
+@@ -4893,7 +4904,7 @@ static ssize_t memcg_write_event_control(struct kernfs_open_file *of,
+ 	 *
+ 	 * DO NOT ADD NEW FILES.
+ 	 */
+-	name = cfile.file->f_path.dentry->d_name.name;
++	name = cdentry->d_name.name;
+ 
+ 	if (!strcmp(name, "memory.usage_in_bytes")) {
+ 		event->register_event = mem_cgroup_usage_register_event;
+@@ -4917,7 +4928,7 @@ static ssize_t memcg_write_event_control(struct kernfs_open_file *of,
+ 	 * automatically removed on cgroup destruction but the removal is
+ 	 * asynchronous, so take an extra ref on @css.
+ 	 */
+-	cfile_css = css_tryget_online_from_dir(cfile.file->f_path.dentry->d_parent,
++	cfile_css = css_tryget_online_from_dir(cdentry->d_parent,
+ 					       &memory_cgrp_subsys);
+ 	ret = -EINVAL;
+ 	if (IS_ERR(cfile_css))
