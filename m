@@ -2,129 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598A4646BA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 15AD7646BB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiLHJMu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 04:12:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S230182AbiLHJOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:14:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiLHJMN (ORCPT
+        with ESMTP id S230333AbiLHJNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:12:13 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74DC1BE9E;
-        Thu,  8 Dec 2022 01:12:12 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id fu10so614443qtb.0;
-        Thu, 08 Dec 2022 01:12:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kpQvrAB2oc4zmgpT3/OeCT7uadErbvigMwWG7EBC7G8=;
-        b=0wHCLLnTABo76zTkxFeCetyaiphjJPnwO8D/9e3DipOAMKFOiliLt4wY/bozTCG0r5
-         55LB38EWtkh+PBifeMIO5dMyMVD/lwlhgc52xqh3KW5GO3ZXTfl9uuHnxEBkhpWjTP0H
-         DWu7hkpTXsoEwE810VHPLldMB+ThMOEoVlT0fV7l4vC8rbsI+g563V9/JwFNusfEUocn
-         Yup3s6z68BEREYBe9y6kuN574WzyfJ0VAPeE7StvMl8cDpvaOXwGWP+oe6ajlLhcsnWZ
-         WvyD1rcfwS5ErjzmGlDYDvPmpNOB/j4JSeaKo/WpzhXwS1uR1X2zwC3r7EvA95EIFPas
-         1Vig==
-X-Gm-Message-State: ANoB5pkEh2DBBtmH2ze3TMZzabrUaYzW0lN2wB0BUxcHe0/Yt2a3AJUT
-        UhDQfwMF4R3Xfw2lRANks24lglXRDsBl4Q==
-X-Google-Smtp-Source: AA0mqf7Qw/7WqYxXiNrVVnUREv8KOdKFjPWk/62yJ00e2mU6rzzZ43wrSsrCuoC8a7hr4XLPRniuew==
-X-Received: by 2002:ac8:51cc:0:b0:3a6:9de4:b60e with SMTP id d12-20020ac851cc000000b003a69de4b60emr21129626qtn.391.1670490731394;
-        Thu, 08 Dec 2022 01:12:11 -0800 (PST)
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006fc5a1d9cd4sm18862280qko.34.2022.12.08.01.12.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 01:12:11 -0800 (PST)
-Received: by mail-yb1-f175.google.com with SMTP id s11so914665ybe.2;
-        Thu, 08 Dec 2022 01:12:10 -0800 (PST)
-X-Received: by 2002:a25:d655:0:b0:6fc:1c96:c9fe with SMTP id
- n82-20020a25d655000000b006fc1c96c9femr29925093ybg.36.1670490730512; Thu, 08
- Dec 2022 01:12:10 -0800 (PST)
+        Thu, 8 Dec 2022 04:13:53 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A4B26C720
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:12:55 -0800 (PST)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1p3Cx3-0006oc-8k; Thu, 08 Dec 2022 10:12:21 +0100
+Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:92e:b9fb:f0e7:2adf])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 76E921394C2;
+        Thu,  8 Dec 2022 09:12:19 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 10:12:11 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vivek Yadav <vivek.2311@samsung.com>
+Cc:     rcsekar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
+        wg@grandegger.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, pankaj.dubey@samsung.com,
+        ravi.patel@samsung.com, alim.akhtar@samsung.com,
+        linux-fsd@tesla.com, robh+dt@kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        aswani.reddy@samsung.com, sriranjani.p@samsung.com
+Subject: Re: [Patch v4 1/2] can: m_can: Call the RAM init directly from
+ m_can_chip_config
+Message-ID: <20221208091211.622jm5raebedxboa@pengutronix.de>
+References: <20221207100632.96200-1-vivek.2311@samsung.com>
+ <CGME20221207100650epcas5p408d280e0e2d2d6acfb5e252e37f504b2@epcas5p4.samsung.com>
+ <20221207100632.96200-2-vivek.2311@samsung.com>
 MIME-Version: 1.0
-References: <20221207162435.1001782-1-herve.codina@bootlin.com>
- <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com> <20221208092439.6170cf5e@bootlin.com>
-In-Reply-To: <20221208092439.6170cf5e@bootlin.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 8 Dec 2022 10:11:59 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU4YMmAtZE6XRgaLpqeq1Q6RPX4gE6og3QfY9T9Arw=6A@mail.gmail.com>
-Message-ID: <CAMuHMdU4YMmAtZE6XRgaLpqeq1Q6RPX4gE6og3QfY9T9Arw=6A@mail.gmail.com>
-Subject: Re: [PATCH v3 0/9] Add the Renesas USBF controller support
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>,
-        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qo5ntlmugze2qlne"
+Content-Disposition: inline
+In-Reply-To: <20221207100632.96200-2-vivek.2311@samsung.com>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hervé,
 
-On Thu, Dec 8, 2022 at 9:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> On Wed, 7 Dec 2022 16:19:42 -0600
-> Rob Herring <robh+dt@kernel.org> wrote:
-> > On Wed, Dec 7, 2022 at 10:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
-> > > This series add support for the Renesas USBF controller (USB Device
-> > > Controller) available in the Renesas RZ/N1 SoC.
-> > >
-> > > Based on previous review:
-> > >   https://lore.kernel.org/all/20221114111513.1436165-3-herve.codina@bootlin.com/
-> > >
-> > > A new strategy is proposed to handle the H2MODE bit from CFG_USB
-> > > register compared to the previous versions on the series. As a
-> > > reminder, H2MODE bit allows to configure the internal USB Port
-> > > interface for two hosts or one host and one device.
-> >
-> > Is this case any different from all the phandle properties we have in
-> > bindings that point to some misc registers somewhere else you need to
-> > poke? If so, I'm not really a fan of duplicating the information.
->
-> Our case is that there is a bit in a register that affect several
-> devices. This bit must be set before the devices are started.
-> If this bit is changed while affected devices are running, system
-> hangs can occurs (datasheet).
->
-> So, in order to do that we need the device in charge to set
-> this bit (sysctrl) to set this bit before other devices (USBF
-> and PCI bridge) were started.
->
-> At sysctrl level, the bit is set during the probe() call.
-> The property 'depends-on' aim is to ensure the probe() calls
-> order between provider (sysctrl) and consumers (USBF and PCI
-> bridge).
+--qo5ntlmugze2qlne
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This order is already guaranteed (twice), through the clocks and
-power-domains properties in the USB host and device nodes,
-all pointing to sysctrl.
+On 07.12.2022 15:36:31, Vivek Yadav wrote:
+> When we try to access the mcan message ram addresses during the probe,
+> hclk is gated by any other drivers or disabled, because of that probe
+> gets failed.
+>=20
+> Move the mram init functionality to mcan chip config called by
+> m_can_start from mcan open function, by that time clocks are
+> enabled.
+>=20
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Signed-off-by: Vivek Yadav <vivek.2311@samsung.com>
 
-So IMHO none of this is needed.
+Applied to linux-can-next.
 
-Gr{oetje,eeting}s,
+Thanks,
+Marc
 
-                        Geert
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+--qo5ntlmugze2qlne
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmORqmkACgkQrX5LkNig
+013EGAgAqIsT8Spgs5YSH/Ia25bQG5vb66rPRb4TpsVjmLjycBzY26fgnsXhMqnD
+EJ0x3PhYxpZS3/XI8IiRXPgewekGZBl9DkZWk7BreOLS7MbKR+jnW/82FOrYoDvm
+JleZrFmHQB65YiJTZwzmNmcuEgiQ/KJBfnvVWFbN2KZu8zyEJT6OIRpjDCztetuA
+a/lPfdZJybyh4fTrHJo98KTKie/xuzHGcWtu0YXdI6u3R3O7Z8PBr2jhvuzsvFh/
+7ZrrKY55DAp4TfYI472mR3V4IJpM+Xhs0CJhxPBzqjWw6XxckjrJSTk5k1ZLRymX
+Nf3Bm8cceg345Bu4LOi1AiI+AjxzOw==
+=aA7E
+-----END PGP SIGNATURE-----
+
+--qo5ntlmugze2qlne--
