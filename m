@@ -2,106 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152F1646866
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:08:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A63646873
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 06:21:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiLHFIU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 00:08:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53522 "EHLO
+        id S229749AbiLHFVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 00:21:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbiLHFIS (ORCPT
+        with ESMTP id S229575AbiLHFVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 00:08:18 -0500
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767C448420
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 21:08:16 -0800 (PST)
-Received: by mail-pg1-x544.google.com with SMTP id q71so314643pgq.8
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 21:08:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gdty8nCzzxU1/GlNFaeUd8yKGkLHYUKDqxUERmNsEr8=;
-        b=Vvwv2VkYAQSACAqdzGSFhy3nem8BCnsPHs21OgZQITrEYaUTG8oEBA2DViOjBh+BW2
-         wZ/tqygqhcuZry305fAntN9EC3u9EOlGOvOhB7HWhaAcPuYGXItjyWWOXdlUGuW/t3e1
-         IgiZMThF0EfEliihC1T4XYgRHgiIMNQXungYCrOusU/uwzp2ZZS0k7C8b+EEK4pyOVJR
-         bJ2b+WWqDY9STB1g3O22lyKteYGnyPN1v5nufkmsCsSRKCOSMg5S/6YGUkWwAEbr2yUG
-         yIOuhUnGMrg4y03ktzfdZ4Ak3bM1L5p1GxlC/zbTae5wEG064gOVKcELLsKRxsH9aKsv
-         bJ0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gdty8nCzzxU1/GlNFaeUd8yKGkLHYUKDqxUERmNsEr8=;
-        b=qJ+ibV/5FvCagRqj4ln0ARfXowZhArzhmVd/VvXXc2+ysI4i9oQDMgNNaUm1B7STE4
-         Dn9UXE5C1uR4vfNaTipKX6PSYCAd6KTE4yjnRJrsJE14fHVtGpUV5kOg1/tN33YtwNGd
-         1LhfaVOmqSantQPUGcZZbUcWUGrIzBrpyd7qsL/bWOj5u3be7p/lcUK5EjE+KGGugW1p
-         EPhppG6p2OgIul4GvNMBeP/R3+SP4WHrigo9H1Z0STX3J4uCc4o6HZut9uGOg9F6zRgS
-         QeeQnxg4X2LU5J0pFzMjNtZK7tzBygB9FZXs3mVucWuVRNeeJUB8Cf6AI0oVgPD+ka07
-         cRtA==
-X-Gm-Message-State: ANoB5pnnW6VT9cTUrRXdZMjxlt+QLjdnvZ8HkR3JboJazqAkeynSrMWK
-        CikXK2jQqi/DbqY15+ev2p5Ce8FgqZBOKQ==
-X-Google-Smtp-Source: AA0mqf5M8DVggQQWkH79sh8XoqSYBx2IHKmduKAbiSGSLQ1P8h0TzOZbwvdLoN9yLs3f4L/RzoaYYg==
-X-Received: by 2002:a05:6a00:1388:b0:577:1c59:a96c with SMTP id t8-20020a056a00138800b005771c59a96cmr2103581pfg.2.1670476095931;
-        Wed, 07 Dec 2022 21:08:15 -0800 (PST)
-Received: from mi-ThinkStation-K.mioffice.cn ([43.224.245.228])
-        by smtp.gmail.com with ESMTPSA id c194-20020a621ccb000000b0056d3b8f530csm14383760pfc.34.2022.12.07.21.08.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 21:08:15 -0800 (PST)
-From:   zhoudan8 <zhuqiandann@gmail.com>
-X-Google-Original-From: zhoudan8 <zhoudan8@xiaomi.com>
-To:     jaegeuk@kernel.org
-Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, zhoudan8 <zhoudan8@xiaomi.com>
-Subject: [PATCH] f2fs: don't set FI_COMPRESS_RELEASED if file is not compressed
-Date:   Thu,  8 Dec 2022 13:08:08 +0800
-Message-Id: <20221208050808.2448146-1-zhoudan8@xiaomi.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 8 Dec 2022 00:21:20 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EEB888B69;
+        Wed,  7 Dec 2022 21:21:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670476879; x=1702012879;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4anARoAcZ+FMWx+rU/JO2ajIw8NyiGsHus+CHa4WuRw=;
+  b=c6U/npNmxwBCt3qWygl8Q7QxsVVJMQLS4snCKBW90hVVrQAP2QprQZK1
+   rFG2nyEYXGbzbEJTBa44zyFElQuZhtth/5lzGJsR30DxAoEZ2EciDZNsv
+   oqCi5XKHQdBxiEcZygceU/rdfZy+S/l4qpf5qTCCfuKer3r3fMDSKxGZn
+   cfH+ZlkZI8TxkcGKBxX8MsopxYVqjIZD01Di5ukD54l/m85AgS9qYU/Hl
+   5nFnJ9sTrUybj3evTJXG3E4mheu9CMkFeCuNbWSfKbSCZVVAsG/FUmVKS
+   kLS4UHQAkN0Bn7gxmXcg6m4LDd7hI2huTZgBtM/EFSv2jGtpZryUG3pHG
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="381367216"
+X-IronPort-AV: E=Sophos;i="5.96,226,1665471600"; 
+   d="scan'208";a="381367216"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 21:21:18 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="710324444"
+X-IronPort-AV: E=Sophos;i="5.96,226,1665471600"; 
+   d="scan'208";a="710324444"
+Received: from iweiny-mobl.amr.corp.intel.com (HELO localhost) ([10.209.25.22])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 21:21:17 -0800
+From:   ira.weiny@intel.com
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-cxl@vger.kernel.org
+Subject: [PATCH V3 0/8] CXL: Process event logs
+Date:   Wed,  7 Dec 2022 21:21:06 -0800
+Message-Id: <20221208052115.800170-1-ira.weiny@intel.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In compress_mode=user, f2fs_release_compress_blocks()
- does not verify whether it has been compressed and
- sets FI_COMPRESS_RELEASED directly. which will lead to
-return -EINVAL after calling compress.
-To fix it,let's do not set FI_COMPRESS_RELEASED if file
-is not compressed.
+From: Ira Weiny <ira.weiny@intel.com>
 
-Signed-off-by: zhoudan8 <zhoudan8@xiaomi.com>
----
- fs/f2fs/file.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+This code has been tested with a newer qemu which allows for more events to be
+returned at a time as well an additional QMP event and interrupt injection.
+Those patches will follow once they have been cleaned up.
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index 82cda1258227..f32910077df6 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -3451,14 +3451,13 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
- 	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
- 	if (ret)
- 		goto out;
--
--	set_inode_flag(inode, FI_COMPRESS_RELEASED);
- 	inode->i_ctime = current_time(inode);
- 	f2fs_mark_inode_dirty_sync(inode, true);
- 
- 	if (!atomic_read(&F2FS_I(inode)->i_compr_blocks))
- 		goto out;
- 
-+	set_inode_flag(inode, FI_COMPRESS_RELEASED);
- 	f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
- 	filemap_invalidate_lock(inode->i_mapping);
- 
+The series is now in 3 parts:
+
+	1) Base functionality including interrupts
+	2) Tracing specific events (Dynamic Capacity Event Record is defered)
+	3) cxl-test infrastructure for basic tests
+
+Changes from V2
+	Rebased on pending 6.3 changes
+		CXL security patches from Dave J.
+		Moving tracing to cxl core from Dan
+	Feed back from Dan, Steven, Jonathan, and Dave.
+	The series looks very different now with a lot of the patches squashed
+	per Dan's feedback.
+
+- Link to v2: https://lore.kernel.org/r/20221201002719.2596558-1-ira.weiny@intel.com
+
+Changes from V1
+	Address comments, from Jonathan, Dave, and Alison
+		Main comment was to allow for a full payload size number of
+		event records to be processed on each Get event cyle.
+	Pick up tags
+
+Changes from RFC v2
+	Integrated Davidlohr's irq patch, allocate up to 16 vectors, and base
+		my irq support on modifications to that patch.
+	Smita
+		Check event status before reading each log.
+	Jonathan
+		Process more than 1 record at a time
+		Remove reserved fields
+	Steven
+		Prefix trace points with 'cxl_'
+	Davidlohr
+		PUll in his patch
+
+Changes from RFC v1
+	Add event irqs
+	General simplification of the code.
+	Resolve field alignment questions
+	Update to rev 3.0 for comments and structures
+	Add reserved fields and output them
+
+Davidlohr Bueso (1):
+  cxl/mem: Wire up event interrupts
+
+Ira Weiny (7):
+  cxl/mem: Read, trace, and clear events on driver load
+  cxl/mem: Trace General Media Event Record
+  cxl/mem: Trace DRAM Event Record
+  cxl/mem: Trace Memory Module Event Record
+  cxl/test: Add generic mock events
+  cxl/test: Add specific events
+  cxl/test: Simulate event log overflow
+
+ drivers/acpi/pci_root.c         |   3 +
+ drivers/cxl/core/mbox.c         | 233 ++++++++++++++++
+ drivers/cxl/core/trace.h        | 479 ++++++++++++++++++++++++++++++++
+ drivers/cxl/cxl.h               |  12 +
+ drivers/cxl/cxlmem.h            | 180 ++++++++++++
+ drivers/cxl/cxlpci.h            |   6 +
+ drivers/cxl/pci.c               | 130 +++++++++
+ include/linux/pci.h             |   1 +
+ tools/testing/cxl/test/Kbuild   |   4 +-
+ tools/testing/cxl/test/events.c | 314 +++++++++++++++++++++
+ tools/testing/cxl/test/events.h |  34 +++
+ tools/testing/cxl/test/mem.c    |  33 ++-
+ tools/testing/cxl/test/mock.h   |  12 +
+ 13 files changed, 1429 insertions(+), 12 deletions(-)
+ create mode 100644 tools/testing/cxl/test/events.c
+ create mode 100644 tools/testing/cxl/test/events.h
+
+
+base-commit: acb704099642bc822ef2aed223a0b8db1f7ea76e
 -- 
-2.38.1
+2.37.2
 
