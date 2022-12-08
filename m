@@ -2,149 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F7B6469AF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D4A6469B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:29:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiLHHXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 02:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S229725AbiLHH3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 02:29:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbiLHHXf (ORCPT
+        with ESMTP id S229646AbiLHH3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 02:23:35 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9188A46646;
-        Wed,  7 Dec 2022 23:23:32 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NSQcM0rSdz8R041;
-        Thu,  8 Dec 2022 15:23:31 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2B87NPXn058403;
-        Thu, 8 Dec 2022 15:23:25 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 8 Dec 2022 15:23:27 +0800 (CST)
-Date:   Thu, 8 Dec 2022 15:23:27 +0800 (CST)
-X-Zmail-TransId: 2af9639190efffffffff94be3eda
-X-Mailer: Zmail v1.0
-Message-ID: <202212081523277319144@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <kuba@kernel.org>
-Cc:     <ecree.xilinx@gmail.com>, <habetsm.xilinx@gmail.com>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <wangxiang@cdjrlc.com>, <dossche.niels@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIIG5ldC1uZXh0XSBzZmM6IENvbnZlcnQgdG8gdXNlIHN5c2ZzX2VtaXRfYXQoKSBBUEk=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B87NPXn058403
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 639190F3.000 by FangMail milter!
-X-FangMail-Envelope: 1670484211/4NSQcM0rSdz8R041/639190F3.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 639190F3.000/4NSQcM0rSdz8R041
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 02:29:12 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BEBF442E8
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:29:07 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B87EACK032204;
+        Thu, 8 Dec 2022 07:28:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=/vWbz5KhwgjEw42c2phzV4dm5XkZc5kuH6Tqe0s+h0c=;
+ b=A+Hm7Lbp45WoV2HBnIntToDBO6gpi7SIeFijdqeOUiO8u9Z0c9uEQCxUTrK1u7lD4tyf
+ 2BOMCJ6HxKuwobYJLmq+nqQdzGc+pj4VcbwkY/5fiNP/2+yr0HE2OzIFcVQ9/APUpDTl
+ BYm2a4YmwIFtQ3jEfW69G0Yav1ZvOItKeDpJssW+yaItcudjCvxrIQjvB1KZXaak5RrD
+ BFamFf0rDfFHzHkqja504o9rc5w62CsSjeGmxdaSc/vsgfVt8FRnuP4ny45JWc7vOea0
+ FrC3rZv0DIm/2ibPW5qInOiaAgGdPo8RYzS/lFDAUeU1lhRvMvYlsOYpLoscv7HOfZoy rA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mbbbpg8pd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Dec 2022 07:28:25 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2B87HPAG001175;
+        Thu, 8 Dec 2022 07:28:24 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mbbbpg8nt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Dec 2022 07:28:24 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.16.1.2) with ESMTP id 2B7HHdrP018440;
+        Thu, 8 Dec 2022 07:28:22 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3m9m7raxaq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Dec 2022 07:28:22 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B87SK4K40894962
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 8 Dec 2022 07:28:20 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4207F20043;
+        Thu,  8 Dec 2022 07:28:20 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id F1DFE20040;
+        Thu,  8 Dec 2022 07:28:16 +0000 (GMT)
+Received: from li-c3569c4c-1ef8-11b2-a85c-ee139cda3133.in.ibm.com (unknown [9.109.198.140])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  8 Dec 2022 07:28:16 +0000 (GMT)
+From:   Sathvika Vasireddy <sv@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc:     jpoimboe@redhat.com, peterz@infradead.org, aik@ozlabs.ru,
+        mpe@ellerman.id.au, mingo@redhat.com, christophe.leroy@csgroup.eu,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        sfr@canb.auug.org.au, naveen.n.rao@linux.vnet.ibm.com,
+        sv@linux.ibm.com
+Subject: [PATCH] objtool: continue if find_insn() fails in decode_instructions()
+Date:   Thu,  8 Dec 2022 12:58:13 +0530
+Message-Id: <20221208072813.25799-1-sv@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AySpy7Cdu0YWMaH4C-tvSb10BlArRF6k
+X-Proofpoint-ORIG-GUID: YHdJbgeL6N5dvbpLGt1TXBw6vcAR7tIa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-08_04,2022-12-07_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ clxscore=1011 impostorscore=0 mlxscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212080059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Currently, decode_instructions() is failing if it is not able to find
+instruction, and this is happening since commit dbcdbdfdf137b4
+("objtool: Rework instruction -> symbol mapping") because it is
+expecting instruction for STT_NOTYPE symbols.
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+Due to this, the following objtool warnings are seen:
+ [1] arch/powerpc/kernel/optprobes_head.o: warning: objtool: optprobe_template_end(): can't find starting instruction
+ [2] arch/powerpc/kernel/kvm_emul.o: warning: objtool: kvm_template_end(): can't find starting instruction
+ [3] arch/powerpc/kernel/head_64.o: warning: objtool: end_first_256B(): can't find starting instruction
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+The warnings are thrown because find_insn() is failing for symbols that
+are at the end of the file, or at the end of the section. Given how
+STT_NOTYPE symbols are currently handled in decode_instructions(),
+continue if the instruction is not found, instead of throwing warning
+and returning.
+
+Signed-off-by: Naveen N. Rao <naveen.n.rao@linux.vnet.ibm.com>
+Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
 ---
- drivers/net/ethernet/sfc/mcdi.c       | 14 ++++----------
- drivers/net/ethernet/sfc/siena/mcdi.c | 14 ++++----------
- 2 files changed, 8 insertions(+), 20 deletions(-)
+ tools/objtool/check.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/sfc/mcdi.c b/drivers/net/ethernet/sfc/mcdi.c
-index af338208eae9..73269db3ca39 100644
---- a/drivers/net/ethernet/sfc/mcdi.c
-+++ b/drivers/net/ethernet/sfc/mcdi.c
-@@ -210,14 +210,10 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
- 		 * progress on a NIC at any one time.  So no need for locking.
- 		 */
- 		for (i = 0; i < hdr_len / 4 && bytes < PAGE_SIZE; i++)
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x",
--					   le32_to_cpu(hdr[i].u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(hdr[i].u32[0]));
-
- 		for (i = 0; i < inlen / 4 && bytes < PAGE_SIZE; i++)
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x",
--					   le32_to_cpu(inbuf[i].u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(inbuf[i].u32[0]));
-
- 		netif_info(efx, hw, efx->net_dev, "MCDI RPC REQ:%s\n", buf);
- 	}
-@@ -302,15 +298,13 @@ static void efx_mcdi_read_response_header(struct efx_nic *efx)
- 		 */
- 		for (i = 0; i < hdr_len && bytes < PAGE_SIZE; i++) {
- 			efx->type->mcdi_read_response(efx, &hdr, (i * 4), 4);
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x", le32_to_cpu(hdr.u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(hdr.u32[0]));
- 		}
-
- 		for (i = 0; i < data_len && bytes < PAGE_SIZE; i++) {
- 			efx->type->mcdi_read_response(efx, &hdr,
- 					mcdi->resp_hdr_len + (i * 4), 4);
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x", le32_to_cpu(hdr.u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(hdr.u32[0]));
- 		}
-
- 		netif_info(efx, hw, efx->net_dev, "MCDI RPC RESP:%s\n", buf);
-diff --git a/drivers/net/ethernet/sfc/siena/mcdi.c b/drivers/net/ethernet/sfc/siena/mcdi.c
-index 3f7899daa86a..4e10d4594c3a 100644
---- a/drivers/net/ethernet/sfc/siena/mcdi.c
-+++ b/drivers/net/ethernet/sfc/siena/mcdi.c
-@@ -213,14 +213,10 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
- 		 * progress on a NIC at any one time.  So no need for locking.
- 		 */
- 		for (i = 0; i < hdr_len / 4 && bytes < PAGE_SIZE; i++)
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x",
--					   le32_to_cpu(hdr[i].u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(hdr[i].u32[0]));
-
- 		for (i = 0; i < inlen / 4 && bytes < PAGE_SIZE; i++)
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x",
--					   le32_to_cpu(inbuf[i].u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(inbuf[i].u32[0]));
-
- 		netif_info(efx, hw, efx->net_dev, "MCDI RPC REQ:%s\n", buf);
- 	}
-@@ -305,15 +301,13 @@ static void efx_mcdi_read_response_header(struct efx_nic *efx)
- 		 */
- 		for (i = 0; i < hdr_len && bytes < PAGE_SIZE; i++) {
- 			efx->type->mcdi_read_response(efx, &hdr, (i * 4), 4);
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x", le32_to_cpu(hdr.u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(hdr.u32[0]));
- 		}
-
- 		for (i = 0; i < data_len && bytes < PAGE_SIZE; i++) {
- 			efx->type->mcdi_read_response(efx, &hdr,
- 					mcdi->resp_hdr_len + (i * 4), 4);
--			bytes += scnprintf(buf + bytes, PAGE_SIZE - bytes,
--					   " %08x", le32_to_cpu(hdr.u32[0]));
-+			bytes += sysfs_emit_at(buf, bytes, " %08x", le32_to_cpu(hdr.u32[0]));
- 		}
-
- 		netif_info(efx, hw, efx->net_dev, "MCDI RPC RESP:%s\n", buf);
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 4350be739f4f..bce2be5ebf36 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -430,11 +430,8 @@ static int decode_instructions(struct objtool_file *file)
+ 			if (func->return_thunk || func->alias != func)
+ 				continue;
+ 
+-			if (!find_insn(file, sec, func->offset)) {
+-				WARN("%s(): can't find starting instruction",
+-				     func->name);
+-				return -1;
+-			}
++			if (!find_insn(file, sec, func->offset))
++				continue;
+ 
+ 			sym_for_each_insn(file, func, insn) {
+ 				insn->sym = func;
 -- 
-2.25.1
+2.31.1
+
