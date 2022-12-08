@@ -2,144 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 614DC646CB7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F6D646CBC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:30:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLHK2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:28:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35642 "EHLO
+        id S229734AbiLHK37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:29:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiLHK2Z (ORCPT
+        with ESMTP id S229652AbiLHK34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:28:25 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BA1388F;
-        Thu,  8 Dec 2022 02:28:24 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DEE360F35;
-        Thu,  8 Dec 2022 10:28:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C685BC433D6;
-        Thu,  8 Dec 2022 10:28:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670495303;
-        bh=kVBPuZl/SCeQHmRkrQsC7oS+MPH0fShGve01Y+Suolw=;
-        h=Date:From:To:Cc:Subject:References:From;
-        b=F21buIGWYDxMdSJkX7V58LWjtEh8fYiHrAQxJ3pnYxGpAIyaGtE2AmvV2FOPrUAIf
-         jufCZfy983CAnVXu26h1hCvdoWHw5JvX35CCx7BbxrP+oWa801sMiffa+3q2E36ZJh
-         xrKQAZbzZXxWViV/caDuHOVHZ26ESHHTJvHtUPhyytWxjOvwsqzfLmL8ti/d98F2v0
-         VMhcpcO2z98yAqTIR+Ao32oMds81nqOR43HMxd2O20xJ8GL18Fh0KINiPBn5DzhHpt
-         6k3GidLJyqO5t95Be/M4Vlt+E3Em8wU16UyNPQ9nA7qNq2O6PZZAb1CX96rdQpJKAK
-         Xtm+IyT08mXVA==
-Date:   Thu, 8 Dec 2022 12:28:19 +0200
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Ajit Khaparde <ajit.khaparde@broadcom.com>
-Cc:     andrew.gospodarek@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, jgg@ziepe.ca, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        michael.chan@broadcom.com, netdev@vger.kernel.org,
-        pabeni@redhat.com, selvin.xavier@broadcom.com
-Subject: Re: [PATCH v5 0/7] Add Auxiliary driver support
-Message-ID: <Y5G8Qzly9F3fP0Em@unreal>
-References: <20221207175310.23656-1-ajit.khaparde@broadcom.com>
+        Thu, 8 Dec 2022 05:29:56 -0500
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91BEA30550;
+        Thu,  8 Dec 2022 02:29:55 -0800 (PST)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id DFF771C09FA; Thu,  8 Dec 2022 11:29:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1670495392;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7w9NZ5zMjCJ6jruselsa9gif4njcjBN9vZovQO3hsCw=;
+        b=E/XC91OllcUxx1hBoqvZ/VvLx7jAx91ScHqsv3K0SgZ6d0TJBzV9y9luDkkFuKPrCOKruO
+        whhYzx2FKbvPp5nlxiFTM81Nd+CvJXxJ0kXloSQ9W9lrqqwL9X/IqbGDjzUK+tFLSGM0cY
+        mkS7KeITmJkynn9zc5vvBPeWH6aypCo=
+Date:   Thu, 8 Dec 2022 11:29:52 +0100
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] leds: qcom,pm8058-led: Convert to DT schema
+Message-ID: <Y5G8oK+L0ck5Zb9j@duo.ucw.cz>
+References: <20221201131505.42292-1-krzysztof.kozlowski@linaro.org>
+ <20221202000858.GA1737135-robh@kernel.org>
+ <Y5Dzamz6XRZudQzq@duo.ucw.cz>
+ <Y5G30ttrf1RJa+sM@google.com>
+ <947e47d3-4235-8f16-d3ef-c3ddd7d51acf@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="0szrq67hw48wihFy"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <947e47d3-4235-8f16-d3ef-c3ddd7d51acf@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 09:53:03AM -0800, Ajit Khaparde wrote:
-> Add auxiliary device driver for Broadcom devices.
-> The bnxt_en driver will register and initialize an aux device
-> if RDMA is enabled in the underlying device.
-> The bnxt_re driver will then probe and initialize the
-> RoCE interfaces with the infiniband stack.
->=20
-> We got rid of the bnxt_en_ops which the bnxt_re driver used to
-> communicate with bnxt_en.
-> Similarly  We have tried to clean up most of the bnxt_ulp_ops.
-> In most of the cases we used the functions and entry points provided
-> by the auxiliary bus driver framework.
-> And now these are the minimal functions needed to support the functionali=
-ty.
->=20
-> We will try to work on getting rid of the remaining if we find any
-> other viable option in future.
->=20
-> v1->v2:
-> - Incorporated review comments including usage of ulp_id &
->   complex function indirections.
-> - Used function calls provided by the auxiliary bus interface
->   instead of proprietary calls.
-> - Refactor code to remove ROCE driver's access to bnxt structure.
 
-I still see wrong usage of auxiliary driver model, especially for RDMA
-device. That model mimics general driver model, where you should
-separate between device creation and configuration.=20
+--0szrq67hw48wihFy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I would expect that your bnxt_en create pre-configured devices with
-right amount of MSI-X, limits, capabilities e.t.c and RDMA driver will
-simply bind to it. It means that calls like bnxt_re_request_msix()
-should go too. All PCI-related logic needs to be in netdev.
+On Thu 2022-12-08 11:19:47, Krzysztof Kozlowski wrote:
+> On 08/12/2022 11:09, Lee Jones wrote:
+> > On Wed, 07 Dec 2022, Pavel Machek wrote:
+> >=20
+> >> On Thu 2022-12-01 18:08:58, Rob Herring wrote:
+> >>> On Thu, Dec 01, 2022 at 02:15:05PM +0100, Krzysztof Kozlowski wrote:
+> >>>> Convert the Qualcomm PM8058 PMIC LED bindings to DT schema.
+> >>>>
+> >>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>>> ---
+> >>>>  .../devicetree/bindings/leds/leds-pm8058.txt  | 67 ----------------=
+---
+> >>>>  .../bindings/leds/qcom,pm8058-led.yaml        | 57 ++++++++++++++++
+> >>>>  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml  |  4 ++
+> >>>>  3 files changed, 61 insertions(+), 67 deletions(-)
+> >>>>  delete mode 100644 Documentation/devicetree/bindings/leds/leds-pm80=
+58.txt
+> >>>>  create mode 100644 Documentation/devicetree/bindings/leds/qcom,pm80=
+58-led.yaml
+> >>>
+> >>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>>
+> >>> Or should I apply it?
+> >>
+> >> Thanks for ACK, let me take it, I guess.
+> >=20
+> > Did you see Krzysztof's replies to this patch?
+> >=20
+> > Sounded like he was going to re-work it, which is why I left it.
+>=20
+> The only rework needed was to add "dt-bindings:" prefix in the subject.
+> If you could add it while applying/amending commit, that would be great
+> and spare me resend. Otherwise, let me know if you dropped this patch
+> and expect a resend.
 
-In addition, I saw IS_ERR_OR_NULL(..) and "if(dev)" checks in various
-uninit functions and it can be one of two: wrong unwind flow or wrong
-use of driver model. In right implementation, your driver will be called
-only on valid device and uninit won't be called for not-initialized device.
+Lets not do anything if the patch is otherwise correct.
 
-Also I spotted .ulp_async_notifier, which is not used and
-bnxt_re_sriov_config() is prune to races due to separation between
-driver bind and device creation. You should configure SR-IOV in device
-creation stage.
+Best regards,
+							Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
 
-Thanks
+--0szrq67hw48wihFy
+Content-Type: application/pgp-signature; name="signature.asc"
 
->=20
-> v2->v3:
-> - Addressed review comments including cleanup of some unnecessary wrappers
-> - Fixed warnings seen during cross compilation
->=20
-> v3->v4:
-> - Cleaned up bnxt_ulp.c and bnxt_ulp.h further
-> - Removed some more dead code
-> - Sending the patchset as a standalone series
->=20
-> v4->v5:
-> - Removed the SRIOV config callback which bnxt_en driver was calling into
->   bnxt_re driver.
-> - Removed excessive checks for rdev and other pointers.
->=20
-> Please apply. Thanks.
->=20
-> Ajit Khaparde (6):
->   bnxt_en: Add auxiliary driver support
->   RDMA/bnxt_re: Use auxiliary driver interface
->   bnxt_en: Remove usage of ulp_id
->   bnxt_en: Use direct API instead of indirection
->   bnxt_en: Use auxiliary bus calls over proprietary calls
->   RDMA/bnxt_re: Remove the sriov config callback
->=20
-> Hongguang Gao (1):
->   bnxt_en: Remove struct bnxt access from RoCE driver
->=20
->  drivers/infiniband/hw/bnxt_re/bnxt_re.h       |   9 +-
->  drivers/infiniband/hw/bnxt_re/main.c          | 591 +++++++-----------
->  drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  10 +-
->  drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   8 +
->  .../net/ethernet/broadcom/bnxt/bnxt_sriov.c   |   7 +-
->  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.c | 413 ++++++------
->  drivers/net/ethernet/broadcom/bnxt/bnxt_ulp.h |  53 +-
->  7 files changed, 490 insertions(+), 601 deletions(-)
->=20
-> --=20
-> 2.37.1 (Apple Git-137.1)
->=20
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCY5G8oAAKCRAw5/Bqldv6
+8o7nAJ401end/9RufAJqigoyfG5TThos+QCcD4SqympiWjM80RAF50EcMuaM4ds=
+=FrpG
+-----END PGP SIGNATURE-----
+
+--0szrq67hw48wihFy--
