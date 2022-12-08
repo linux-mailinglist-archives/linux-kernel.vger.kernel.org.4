@@ -2,108 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1592646AAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:37:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAED1646AAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:38:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiLHIh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:37:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41990 "EHLO
+        id S229731AbiLHIiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiLHIhT (ORCPT
+        with ESMTP id S229604AbiLHIiA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:37:19 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3078761BB1;
-        Thu,  8 Dec 2022 00:37:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670488637; x=1702024637;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=mp8wMDnH+XvlgDi27JmuMhnOonriOi5aQPBcwc8cBlo=;
-  b=kyIWeA5d58X7lbTcAwJtGqHsBLOoZv9LE5uk8KxHQNSnwxkMX0mxh/ff
-   Yxgbcg5kkP7sauuW6C+MHGKS324V6YPNcTePd04X2r+n320xfaQOQn5RW
-   tNewBKzhh13nIlRV4d1LhnI5Z41ATrWqcFS67qTAlWdSPM4R9m0wTG/hZ
-   xrqumd5GzgH8GLnql7asl63xHU0OTqXUOXoSasRuO0HXNpEeexm0HzZsS
-   xQHz8gMCF1EgHwabZOk4avgZgE8+H6kPC+vTBRFKmjOsbcPsXsOVZbEF5
-   LZQtbn4FUqBCN1+vdorKtagDwRx4+MLHyeGNZIrtgms3h9dpBUKAQ42kI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="296808118"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="296808118"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 00:37:16 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="710381311"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="710381311"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.174.177]) ([10.249.174.177])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 00:37:05 -0800
-Message-ID: <cd950a78-5c5b-16ef-d0a6-ad2878af067e@intel.com>
-Date:   Thu, 8 Dec 2022 16:37:03 +0800
+        Thu, 8 Dec 2022 03:38:00 -0500
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3123A31DE3
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:37:59 -0800 (PST)
+Received: by mail-io1-xd34.google.com with SMTP id g20so349187iob.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:37:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mc02ZfrYOJ3+oJFjjLedRFiQuFgTS0ibOsHmLGsOq1s=;
+        b=SBf4qsXMiYTRUzMgRFTlaE6NAOf5FNKX2hHcsPvW0zoMyzf+W2AZMbBTFyKaIdnbP9
+         TvsZzNWQfFuh38MVCiNfUyQSc7nzXLncW0WFIG3FGMar6jOW/qJ2NDKWbjsKvzWa5StN
+         I0eAVuaVNkrEltBmn2/BQvM1CWarMEk+UKc60J10qNHzjGEmFVDAhg0vFIyvBY7FR0ew
+         SxRcIa5gLlEk6WoU9XYQlIw4cLW5xk4UaTRhyFTWeIHQsM8xl2BozD6eu3U/f8DnKhUK
+         +Ar2V7QMXKaxQf2PIzAjCNOKmhbBpoBQezhG6CAXENQ1xpAb80Ef0K0Gp/1RfY+dnsG6
+         T0cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mc02ZfrYOJ3+oJFjjLedRFiQuFgTS0ibOsHmLGsOq1s=;
+        b=eJFWsz7K51gGnCZ7O79ac7RvN46RY9zRNBILFeRKTDMT4zCPe0TGIRdPrqO41D/si7
+         7Q+w+5FkhP3It/emw4aaxFeHqFlwiVb0Nb5APGQP+qV5wR9GyicnUOQoVGdTf4MG7XQn
+         dnMxtYYtuyuIWcmFrnZHgf/yt15JitJiZcU5MSZpB7fqDCgtkpzchZ82TZwvDz5luWRJ
+         lyK8Ko0ySj4Dp89CrwxHS29wp0GBFN/VWN3BUq9Owlah7VGNq79KRDeC1pzLt2pNwiuL
+         unp2bG61ULtos11SBwj9kLnxu82aTGcT9WEYiiHRmQ42Li8sHZzX3Ly/sWcpwlNrH3PL
+         6z3w==
+X-Gm-Message-State: ANoB5plo+A1S9BZEn3hJ3ekpPYw8eUcpW0CPJVS0E7GUIUfLZmJhR0QI
+        YP9KJMggJk2xv6PSJDUdOoyv5Yj7zTPYzNoNZap8gw==
+X-Google-Smtp-Source: AA0mqf6rj5WxqJdQ5U5VKCUfb5VL+yDTa+9Uxc+7TZaty5sKReLB8Ovbc/Wnf4ZzlJC8Z8YOa3jeD0h5UVRN4JoRwQg=
+X-Received: by 2002:a05:6638:328a:b0:386:eaa7:85dd with SMTP id
+ f10-20020a056638328a00b00386eaa785ddmr32566226jav.120.1670488678426; Thu, 08
+ Dec 2022 00:37:58 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.1
-Subject: Re: [PATCH v10 3/9] KVM: Extend the memslot to support fd-based
- private memory
-Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20221202061347.1070246-4-chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207101705.9460-1-lukasz.luba@arm.com> <20221207101705.9460-3-lukasz.luba@arm.com>
+In-Reply-To: <20221207101705.9460-3-lukasz.luba@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 8 Dec 2022 09:37:47 +0100
+Message-ID: <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
+ single max CPU capacity
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org,
+        dietmar.eggemann@arm.com, saravanak@google.com,
+        wusamuel@google.com, isaacmanjarres@google.com,
+        kernel-team@android.com, juri.lelli@redhat.com,
+        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/2/2022 2:13 PM, Chao Peng wrote:
+On Wed, 7 Dec 2022 at 11:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> The max CPU capacity is the same for all CPUs sharing frequency domain
+> and thus 'policy' object. There is a way to avoid heavy operations
+> in a loop for each CPU by leveraging this knowledge. Thus, simplify
+> the looping code in the sugov_next_freq_shared() and drop heavy
+> multiplications. Instead, use simple max() to get the highest utilization
+> from these CPUs. This is useful for platforms with many (4 or 6) little
+> CPUs.
+>
+> The max CPU capacity must be fetched every time we are called, due to
+> difficulties during the policy setup, where we are not able to get the
+> normalized CPU capacity at the right time.
+>
+> The stored value in sugov_policy::max is also than used in
+> sugov_iowait_apply() to calculate the right boost. Thus, that field is
+> useful to have in that sugov_policy struct.
+>
+> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index c19d6de67b7a..f9881f3d9488 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -158,10 +158,8 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+>
+>  static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>  {
+> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         struct rq *rq = cpu_rq(sg_cpu->cpu);
+>
+> -       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>         sg_cpu->bw_dl = cpu_bw_dl(rq);
+>         sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+>                                           FREQUENCY_UTIL, NULL);
+> @@ -317,6 +315,8 @@ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
+>  static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+>                                               u64 time, unsigned int flags)
+>  {
+> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> +
+>         sugov_iowait_boost(sg_cpu, time, flags);
+>         sg_cpu->last_update = time;
+>
+> @@ -325,6 +325,9 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+>         if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+>                 return false;
+>
+> +       /* Fetch the latest CPU capcity to avoid stale data */
+> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> +
+>         sugov_get_util(sg_cpu);
+>         sugov_iowait_apply(sg_cpu, time);
+>
+> @@ -414,25 +417,22 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>  {
+>         struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         struct cpufreq_policy *policy = sg_policy->policy;
+> -       unsigned long util = 0, max = 1;
+> +       unsigned long util = 0;
+>         unsigned int j;
+>
+> +       /* Fetch the latest CPU capcity to avoid stale data */
+> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> +
+>         for_each_cpu(j, policy->cpus) {
+>                 struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> -               unsigned long j_util, j_max;
+>
+>                 sugov_get_util(j_sg_cpu);
+>                 sugov_iowait_apply(j_sg_cpu, time);
+> -               j_util = j_sg_cpu->util;
+> -               j_max = j_sg_cpu->max;
+>
+> -               if (j_util * max > j_max * util) {
+> -                       util = j_util;
+> -                       max = j_max;
+> -               }
 
-..
+With the code removed above, max is only used in 2 places:
+- sugov_iowait_apply
+- map_util_freq
 
-> Together with the change, a new config HAVE_KVM_RESTRICTED_MEM is added
-> and right now it is selected on X86_64 only.
-> 
+I wonder if it would be better to just call arch_scale_cpu_capacity()
+in these 2 places instead of saving a copy in sg_policy and then
+reading it twice.
 
- From the patch implementation, I have no idea why 
-HAVE_KVM_RESTRICTED_MEM is needed.
+arch_scaleu_cpu_capacity is already a per_cpu variable so accessing it
+should be pretty cheap.
 
+Thought ?
+
+> +               util = max(j_sg_cpu->util, util);
+>         }
+>
+> -       return get_next_freq(sg_policy, util, max);
+> +       return get_next_freq(sg_policy, util, sg_policy->max);
+>  }
+>
+>  static void
+> --
+> 2.17.1
+>
