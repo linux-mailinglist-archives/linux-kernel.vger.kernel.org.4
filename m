@@ -2,111 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A055A646CAB
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90948646CB4
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:28:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiLHKXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:23:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33052 "EHLO
+        id S229637AbiLHK2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiLHKXV (ORCPT
+        with ESMTP id S229478AbiLHK2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:23:21 -0500
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B841066C86
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:23:20 -0800 (PST)
-Received: by mail-lj1-x22e.google.com with SMTP id b9so1066405ljr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 02:23:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g+B5X/siBQMDNHW++d/NVJYttMcaz1xev1asS50hTk8=;
-        b=EQQ3NvJkl389D4dVGmRkI7rzjjmUgb9H1rWNL3+YePkOU2G367ojIHLfsHdsAo1Bpt
-         G8l05jUG/3HYadgZuEumI+wyElNcaHx0FTeW3EXRgyLJB3MsJDUrSpy1Qu7UVEHod6uE
-         0plq1iyITpsNdTa28xmpRQrpVUrPbz7zsFSDPDGzH3HVK8HZo4KJ71Cm5bN+BJQvTyYG
-         p5ncQxRrourn1artoxlR0ljkaBPNd+H5KlODWDHbtTqsrUb53GZKzamVFz5/ZLYx9qzj
-         TIXikXWtokZESio2ssV8bENWplx9E5VuQRJAiHFfGOgCcASMVlryfcxnCDLoL9WSR/cD
-         WZiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g+B5X/siBQMDNHW++d/NVJYttMcaz1xev1asS50hTk8=;
-        b=e4PvCqbJGZpSXmZ+iMiswmSiuvwyrNAjK0s68qlL+TIrgtwdpMlULqi9UjOmnOpm+U
-         OFhRCmXY4ZNHuu8FeGuJ2mTDb65ahmyw5RJ4KYhL1KJzgLdVMAV4/7caJnfSf4h+q+A6
-         tiO07bhAEgzzUX2InM0ZuzfsTbn8DZF4vb8OFJyzVjHb2V5+AOaq1rDykkajPZMMuy7w
-         Kancb0njxTrOcH/TkZJ3XtVku0pJra8I0UzJ4lvHc0Lvv4zM45CdrdzAVRgM1vHy5mCc
-         l6rX+2dfIDqOCspNEg1gvR8wOhuG7GpvmQB/8E+MLdHRKwUGeZ+n3gLegDzJzTWQshvG
-         zzzg==
-X-Gm-Message-State: ANoB5plfUOYqO9tqOFurgt9oEdhhY2Cx1Tfv4shh9QpASwQNlnabFnM/
-        +dBDHI1CSECXPz2oURMHC03qmg==
-X-Google-Smtp-Source: AA0mqf4yZqf8tgWsUV7vtH0t1c6GV/jQbn+tgZj2f773cilX6ivTWQ5qvmx4rfBe7VjJ9RNWCqRjkQ==
-X-Received: by 2002:a05:651c:1c7:b0:27a:267b:f33f with SMTP id d7-20020a05651c01c700b0027a267bf33fmr339228ljn.260.1670494999039;
-        Thu, 08 Dec 2022 02:23:19 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id e1-20020a195001000000b0048aee825e2esm3276489lfb.282.2022.12.08.02.23.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 02:23:18 -0800 (PST)
-Message-ID: <36eb03e8-aace-f7ce-edc8-53715021c0ea@linaro.org>
-Date:   Thu, 8 Dec 2022 11:23:17 +0100
+        Thu, 8 Dec 2022 05:28:03 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EB632BB5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:27:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670495224;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Rcw0nobjza3LFKftOLSGKGtb0s1UoIfEnKEaE42BZ0A=;
+        b=Yj/TFfBej6XK6kTkZb080vtLB2cgHOHmHSVYaXwnDoxhTxjbyYlnoaDx4t3zBOb1DCck0U
+        TA5EAl55QSjM1ECFrxwP0H+7nY4GftyPM2YraBLE9X/GcUysCNbkcFRdbp70NJJeHF/xHt
+        vTs+JGQhZ6miZYZU2NsT+Ved6/sj6NM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-111-LqtBgEMjMB6LO6reEDIxWw-1; Thu, 08 Dec 2022 05:27:03 -0500
+X-MC-Unique: LqtBgEMjMB6LO6reEDIxWw-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 136B98339CA;
+        Thu,  8 Dec 2022 10:27:03 +0000 (UTC)
+Received: from ovpn-193-245.brq.redhat.com (ovpn-193-245.brq.redhat.com [10.40.193.245])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 81A6340C6EC2;
+        Thu,  8 Dec 2022 10:27:01 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     coverity-bot <keescook@chromium.org>, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] KVM: x86: hyper-v: Fix 'using uninitialized value' Coverity warning
+Date:   Thu,  8 Dec 2022 11:27:00 +0100
+Message-Id: <20221208102700.959630-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950
- peripheral
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
- <20221106193722.j64xrhitdencrjxy@SoMainline.org>
- <20221202093658.vg6t2ptar2arh7hn@SoMainline.org> <2656622.mvXUDI8C0e@g550jk>
- <20221208101232.536i3cmjf4uk2z52@SoMainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221208101232.536i3cmjf4uk2z52@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 11:12, Marijn Suijten wrote:
-> On 2022-12-04 17:19:05, Luca Weiss wrote:
->> On Freitag, 2. Dezember 2022 10:36:58 CET Marijn Suijten wrote:
->> [..]
->>
->> So the way this patch does it is good or does it need changes?
-> 
-> Except the typo(s?) pointed out in my first reply, this is good to go.
-> 
-> If we stick with generic adc-chan node names that should be documented
-> in the bindings IMO, as it is currently only captured implicitly in the
-> examples.  Krzysztof, what is your thought on this?
+In kvm_hv_flush_tlb(), 'data_offset' and 'consumed_xmm_halves' variables
+are used in a mutually exclusive way: in 'hc->fast' we count in 'XMM
+halves' and increase 'data_offset' otherwise. Coverity discovered, that in
+one case both variables are incremented unconditionally. This doesn't seem
+to cause any issues as the only user of 'data_offset'/'consumed_xmm_halves'
+data is kvm_hv_get_tlb_flush_entries() -> kvm_hv_get_hc_data() which also
+takes into account 'hc->fast' but is still worth fixing.
 
-If I understand correctly, the outcome of other discussion [1] was to
-use labels and generic node names. In such case the patch was correct
-(except other comments).
+To make things explicit, put 'data_offset' and 'consumed_xmm_halves' to
+'struct kvm_hv_hcall' as a union and use at call sites. This allows to
+remove explicit 'data_offset'/'consumed_xmm_halves' parameters from
+kvm_hv_get_hc_data()/kvm_get_sparse_vp_set()/kvm_hv_get_tlb_flush_entries()
+helpers.
 
-[1]
-https://lore.kernel.org/linux-arm-msm/20221112162719.0ac87998@jic23-huawei/
+Note: 'struct kvm_hv_hcall' is allocated on stack in kvm_hv_hypercall() and
+is not zeroed, consumers are supposed to initialize the appropriate field
+if needed.
 
-Best regards,
-Krzysztof
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1527764 ("Uninitialized variables")
+Fixes: 260970862c88 ("KVM: x86: hyper-v: Handle HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST{,EX} calls gently")
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+Changes since v1:
+- Shove 'data_offset'/'consumed_xmm_halves' into a union in 'struct
+kvm_hv_hcall' to make things more explicit. [Sean]
+---
+ arch/x86/kvm/hyperv.c | 63 ++++++++++++++++++++++++-------------------
+ 1 file changed, 36 insertions(+), 27 deletions(-)
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index 2c7f2a26421e..e8296942a868 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -1769,6 +1769,7 @@ static bool hv_is_vp_in_sparse_set(u32 vp_id, u64 valid_bank_mask, u64 sparse_ba
+ }
+ 
+ struct kvm_hv_hcall {
++	/* Hypercall input data */
+ 	u64 param;
+ 	u64 ingpa;
+ 	u64 outgpa;
+@@ -1779,12 +1780,21 @@ struct kvm_hv_hcall {
+ 	bool fast;
+ 	bool rep;
+ 	sse128_t xmm[HV_HYPERCALL_MAX_XMM_REGISTERS];
++
++	/*
++	 * Current read offset when KVM reads hypercall input data gradually,
++	 * either offset in bytes from 'ingpa' for regular hypercalls or the
++	 * number of already consumed 'XMM halves' for 'fast' hypercalls.
++	 */
++	union {
++		gpa_t data_offset;
++		int consumed_xmm_halves;
++	};
+ };
+ 
+ 
+ static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
+-			      u16 orig_cnt, u16 cnt_cap, u64 *data,
+-			      int consumed_xmm_halves, gpa_t offset)
++			      u16 orig_cnt, u16 cnt_cap, u64 *data)
+ {
+ 	/*
+ 	 * Preserve the original count when ignoring entries via a "cap", KVM
+@@ -1799,11 +1809,11 @@ static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
+ 		 * Each XMM holds two sparse banks, but do not count halves that
+ 		 * have already been consumed for hypercall parameters.
+ 		 */
+-		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - consumed_xmm_halves)
++		if (orig_cnt > 2 * HV_HYPERCALL_MAX_XMM_REGISTERS - hc->consumed_xmm_halves)
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 
+ 		for (i = 0; i < cnt; i++) {
+-			j = i + consumed_xmm_halves;
++			j = i + hc->consumed_xmm_halves;
+ 			if (j % 2)
+ 				data[i] = sse128_hi(hc->xmm[j / 2]);
+ 			else
+@@ -1812,27 +1822,24 @@ static int kvm_hv_get_hc_data(struct kvm *kvm, struct kvm_hv_hcall *hc,
+ 		return 0;
+ 	}
+ 
+-	return kvm_read_guest(kvm, hc->ingpa + offset, data,
++	return kvm_read_guest(kvm, hc->ingpa + hc->data_offset, data,
+ 			      cnt * sizeof(*data));
+ }
+ 
+ static u64 kvm_get_sparse_vp_set(struct kvm *kvm, struct kvm_hv_hcall *hc,
+-				 u64 *sparse_banks, int consumed_xmm_halves,
+-				 gpa_t offset)
++				 u64 *sparse_banks)
+ {
+ 	if (hc->var_cnt > HV_MAX_SPARSE_VCPU_BANKS)
+ 		return -EINVAL;
+ 
+ 	/* Cap var_cnt to ignore banks that cannot contain a legal VP index. */
+ 	return kvm_hv_get_hc_data(kvm, hc, hc->var_cnt, KVM_HV_MAX_SPARSE_VCPU_SET_BITS,
+-				  sparse_banks, consumed_xmm_halves, offset);
++				  sparse_banks);
+ }
+ 
+-static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[],
+-					int consumed_xmm_halves, gpa_t offset)
++static int kvm_hv_get_tlb_flush_entries(struct kvm *kvm, struct kvm_hv_hcall *hc, u64 entries[])
+ {
+-	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt,
+-				  entries, consumed_xmm_halves, offset);
++	return kvm_hv_get_hc_data(kvm, hc, hc->rep_cnt, hc->rep_cnt, entries);
+ }
+ 
+ static void hv_tlb_flush_enqueue(struct kvm_vcpu *vcpu,
+@@ -1926,8 +1933,6 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	struct kvm_vcpu *v;
+ 	unsigned long i;
+ 	bool all_cpus;
+-	int consumed_xmm_halves = 0;
+-	gpa_t data_offset;
+ 
+ 	/*
+ 	 * The Hyper-V TLFS doesn't allow more than HV_MAX_SPARSE_VCPU_BANKS
+@@ -1955,12 +1960,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 			flush.address_space = hc->ingpa;
+ 			flush.flags = hc->outgpa;
+ 			flush.processor_mask = sse128_lo(hc->xmm[0]);
+-			consumed_xmm_halves = 1;
++			hc->consumed_xmm_halves = 1;
+ 		} else {
+ 			if (unlikely(kvm_read_guest(kvm, hc->ingpa,
+ 						    &flush, sizeof(flush))))
+ 				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+-			data_offset = sizeof(flush);
++			hc->data_offset = sizeof(flush);
+ 		}
+ 
+ 		trace_kvm_hv_flush_tlb(flush.processor_mask,
+@@ -1985,12 +1990,12 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 			flush_ex.flags = hc->outgpa;
+ 			memcpy(&flush_ex.hv_vp_set,
+ 			       &hc->xmm[0], sizeof(hc->xmm[0]));
+-			consumed_xmm_halves = 2;
++			hc->consumed_xmm_halves = 2;
+ 		} else {
+ 			if (unlikely(kvm_read_guest(kvm, hc->ingpa, &flush_ex,
+ 						    sizeof(flush_ex))))
+ 				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+-			data_offset = sizeof(flush_ex);
++			hc->data_offset = sizeof(flush_ex);
+ 		}
+ 
+ 		trace_kvm_hv_flush_tlb_ex(flush_ex.hv_vp_set.valid_bank_mask,
+@@ -2009,8 +2014,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 			if (!hc->var_cnt)
+ 				goto ret_success;
+ 
+-			if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks,
+-						  consumed_xmm_halves, data_offset))
++			if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks))
+ 				return HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 		}
+ 
+@@ -2021,8 +2025,10 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		 * consumed_xmm_halves to make sure TLB flush entries are read
+ 		 * from the correct offset.
+ 		 */
+-		data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
+-		consumed_xmm_halves += hc->var_cnt;
++		if (hc->fast)
++			hc->consumed_xmm_halves += hc->var_cnt;
++		else
++			hc->data_offset += hc->var_cnt * sizeof(sparse_banks[0]);
+ 	}
+ 
+ 	if (hc->code == HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE ||
+@@ -2030,8 +2036,7 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	    hc->rep_cnt > ARRAY_SIZE(__tlb_flush_entries)) {
+ 		tlb_flush_entries = NULL;
+ 	} else {
+-		if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries,
+-						consumed_xmm_halves, data_offset))
++		if (kvm_hv_get_tlb_flush_entries(kvm, hc, __tlb_flush_entries))
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 		tlb_flush_entries = __tlb_flush_entries;
+ 	}
+@@ -2180,9 +2185,13 @@ static u64 kvm_hv_send_ipi(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		if (!hc->var_cnt)
+ 			goto ret_success;
+ 
+-		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks, 1,
+-					  offsetof(struct hv_send_ipi_ex,
+-						   vp_set.bank_contents)))
++		if (!hc->fast)
++			hc->data_offset = offsetof(struct hv_send_ipi_ex,
++						   vp_set.bank_contents);
++		else
++			hc->consumed_xmm_halves = 1;
++
++		if (kvm_get_sparse_vp_set(kvm, hc, sparse_banks))
+ 			return HV_STATUS_INVALID_HYPERCALL_INPUT;
+ 	}
+ 
+-- 
+2.38.1
 
