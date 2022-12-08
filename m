@@ -2,134 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21169646BCE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF2F646BD0
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiLHJXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:23:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S230168AbiLHJYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:24:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiLHJXs (ORCPT
+        with ESMTP id S230048AbiLHJYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:23:48 -0500
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8875C74E;
-        Thu,  8 Dec 2022 01:23:45 -0800 (PST)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4ADBE25B;
-        Thu,  8 Dec 2022 10:23:42 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1670491423;
-        bh=6e3cUNNKs0Mbc6lRI0WlQoFsDq6mdyEYot1UJAoMES8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=viWeAjRfAvQDJgnz5ohqc3JZkl7Q+gk/Z3jJt8aK+WmByB4rXDZUkfs2Sg2ZcCA4E
-         fddgUjJkVmLM9By1Lr+REp0CsPRxZDIQxfz+uEvj73auGnCvKWwy6r4mo73JXaMmSm
-         LmAN/hm7+be8HNS8BQ/HlAqrxUToEAWMkxYNCp2o=
-Message-ID: <e2f8d8f2-dd16-fe2a-8413-ba408672801d@ideasonboard.com>
-Date:   Thu, 8 Dec 2022 11:23:39 +0200
+        Thu, 8 Dec 2022 04:24:09 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4385C74F;
+        Thu,  8 Dec 2022 01:24:08 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF2E6B821EB;
+        Thu,  8 Dec 2022 09:24:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE570C433C1;
+        Thu,  8 Dec 2022 09:24:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670491446;
+        bh=XZlUsEv07hjY4O631nUYURDX0RrEAXkxMKI/UXjPh44=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WlPi4TibsAaYUTb1UptmbOlmFTUoq1ZrCcb/hswmi7YK9rtmOC42UwBeGeWVxUlZC
+         krS5O1VFc9SuHRkcZLfLOF0lxnWA/HS9VFM0HTCkxXqUr1NApI3zX1Dt8lcyJMyXJN
+         M8Znz/5sIjpeEWzdxOjo1u1b3BPStar9xDvBFOPv6gUvrMXhcUMoxwMxSjilFCcrE7
+         WWhNffXUBexBvx48vJFJbr/y0Qt3MpFGuKU4IKxEuAsWo7ZDIDAkJVn6blzFcPZwnZ
+         9GpdogkPmVFow2KEYQd7UoPOxYLJXNcCd58VDzaAjZaziAPhFXcmtVHG/9M93X/fhS
+         8Noaw03g3Lw0g==
+Date:   Thu, 8 Dec 2022 11:24:02 +0200
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Cc:     jiri@resnulli.us, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2] ice: Add check for kzalloc
+Message-ID: <Y5GtMk64Zg+tnbMS@unreal>
+References: <20221208011936.47943-1-jiasheng@iscas.ac.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
-Content-Language: en-US
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Cc:     Rob Herring <robh@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
- <20221102172630.GA4140587-robh@kernel.org>
- <6c254d5f-9fa1-b06a-4edb-7e58e4b33101@ideasonboard.com>
- <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
- <8360ac8f-64aa-9edd-a110-903e734739f3@ideasonboard.com>
- <20221111172631.2832ae6c@booty>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20221111172631.2832ae6c@booty>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221208011936.47943-1-jiasheng@iscas.ac.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
-
-On 11/11/2022 18:26, Luca Ceresoli wrote:
-> Hello Tomi, Matti, Wolfram,
+On Thu, Dec 08, 2022 at 09:19:36AM +0800, Jiasheng Jiang wrote:
+> As kzalloc may return NULL pointer, the return value should
+> be checked and return error if fails in order to avoid the
+> NULL pointer dereference.
+> Moreover, use the goto-label to share the clean code.
 > 
-> On Thu, 3 Nov 2022 14:32:02 +0200
-> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+> ---
+> Changelog:
 > 
->> On 03/11/2022 14:13, Vaittinen, Matti wrote:
->>> On 11/3/22 13:50, Tomi Valkeinen wrote:
->>>> Hi Rob,
->>>>
->>>> On 02/11/2022 19:26, Rob Herring wrote:
->>>>> On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
->>>>>> +
->>>>>> +  i2c-alias-pool:
->>>>>
->>>>> Something common or could be? If not, then needs a vendor prefix.
->>>>
->>>> I'll have to think about this. It is related to the i2c-atr, so I think
->>>> it might be a common thing.
->>>
->>> I'd say this should be common. Where the i2c-atr properties should live
->>> is another question though. If the I2C-atr stays as a genericly usable
->>> component - then these bindings should be in a file that can be
->>> referenced by other I2C-atr users (like the UB960 here).
->>
->> Yep. All the links, link, serializer and alias nodes/properties are new
->> things here, and I guess these could be used by other deser-ser systems.
->> That said, I don't have any experience with other systems.
+> v1 -> v2:
 > 
-> The i2c-alias-pool was discussed during the RFC,v2 review [1] and it
-> was agreed that it should be generic. The same principle should apply
-> to the other ATR properties.
+> 1. Use goto-label to share the clean code.
+> ---
+>  drivers/net/ethernet/intel/ice/ice_gnss.c | 25 ++++++++++++++---------
+>  1 file changed, 15 insertions(+), 10 deletions(-)
 > 
-> That said, at some point it was also decided that the alias pool should
-> just be ditched in favor of an automatic selection of an unused address
-> by the i2c core [2] [3]. Maybe that idea has changed, definitely some
-> i2c core things needed to be omdified for it to happen, but overall I'm
-> still convinced automatic assignment without a pool was a good idea.
+> diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> index b5a7f246d230..7bd3452a16d2 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_gnss.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
+> @@ -421,7 +421,7 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+>  	const int ICE_TTYDRV_NAME_MAX = 14;
+>  	struct tty_driver *tty_driver;
+>  	char *ttydrv_name;
+> -	unsigned int i;
+> +	unsigned int i, j;
+>  	int err;
+>  
+>  	tty_driver = tty_alloc_driver(ICE_GNSS_TTY_MINOR_DEVICES,
+> @@ -462,6 +462,9 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+>  					       GFP_KERNEL);
+>  		pf->gnss_serial[i] = NULL;
+>  
+> +		if (!pf->gnss_tty_port[i])
+> +			goto err_out;
+> +
+>  		tty_port_init(pf->gnss_tty_port[i]);
+>  		tty_port_link_device(pf->gnss_tty_port[i], tty_driver, i);
+>  	}
+> @@ -469,21 +472,23 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+>  	err = tty_register_driver(tty_driver);
+>  	if (err) {
+>  		dev_err(dev, "Failed to register TTY driver err=%d\n", err);
+> -
+> -		for (i = 0; i < ICE_GNSS_TTY_MINOR_DEVICES; i++) {
+> -			tty_port_destroy(pf->gnss_tty_port[i]);
+> -			kfree(pf->gnss_tty_port[i]);
+> -		}
+> -		kfree(ttydrv_name);
+> -		tty_driver_kref_put(pf->ice_gnss_tty_driver);
+> -
+> -		return NULL;
+> +		goto err_out;
+>  	}
+>  
+>  	for (i = 0; i < ICE_GNSS_TTY_MINOR_DEVICES; i++)
+>  		dev_info(dev, "%s%d registered\n", ttydrv_name, i);
+>  
+>  	return tty_driver;
+> +
+> +err_out:
+> +	for (j = 0; j < i; j++) {
 
-Yes, the serializer and the remote peripheral i2c aliases can be 
-dynamically reserved at runtime, so the i2c-alias-pool and the i2c-alias 
-are, in that sense, not needed.
+You don't need an extra variable, "while(i--)" will do the trick.
 
-I haven't looked at this in depth yet, but reading the references you 
-gave, it sounds like it's not quite clear what addresses are available 
-and what are not.
+Thanks
 
-On the other hand, is dynamic i2c address reservation something that the 
-users expect to happen? All i2c devices I have used have always had a 
-fixed address in the DT, even if at times the devices may support 
-choosing between a few different addresses.
-
-Keeping with that tradition, would it be best to just use fixed i2c 
-aliases, defined in the DT, for the serializers and the remote 
-peripherals? In the current series this is already the case for 
-serializers (with i2c-alias property), but we could do something similar 
-for the remote peripherals.
-
-  Tomi
-
+> +		tty_port_destroy(pf->gnss_tty_port[j]);
+> +		kfree(pf->gnss_tty_port[j]);
+> +	}
+> +	kfree(ttydrv_name);
+> +	tty_driver_kref_put(pf->ice_gnss_tty_driver);
+> +
+> +	return NULL;
+>  }
+>  
+>  /**
+> -- 
+> 2.25.1
+> 
