@@ -2,145 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8B56473BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1F336473C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiLHP7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:59:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S229847AbiLHQBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLHP7k (ORCPT
+        with ESMTP id S229734AbiLHQB1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:59:40 -0500
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06E889AEA;
-        Thu,  8 Dec 2022 07:59:38 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 6so1506729pgm.6;
-        Thu, 08 Dec 2022 07:59:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q0YLsvBKzhSCVgibbSxOvtb/WdQ/EJIsYcqmRJMPdrA=;
-        b=LKqMi50ut5W+4QYLYDzZRJz8rOYDM1FZOI+bsaRUBjbfPxkaXOkGHv/B58zlQJCVp9
-         MOjRUaRqxNz0nLVuO6/F76JbXbGZitk+2iyDmotSKGPXPoVVHHddmOrwt9KP6Mv6y5Xd
-         SxD/qLNSLtneYFA9954fdAcCxDvWe7t+RaCdqX50dbiBJuc0xdbdRlVvJKMOZr6k2AeA
-         UN4OLtD63b3uEgMi5eMop+qH9rGyXYzEIxZ1PinFgbvoWMIZ8pq6K8gfKFZ/b8EHRO6N
-         rXk0i0ECbUePeDcBgMkYPccKs/o9Q4EQc3aSt5FYGtktl4E40BnuiUuFe8kE39ATlds/
-         GDuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q0YLsvBKzhSCVgibbSxOvtb/WdQ/EJIsYcqmRJMPdrA=;
-        b=p01k9VIyA0yWCShjml6FkmnPt8vCsCvHHJeUMDkO4GTJGDsx9OVzUvqyJ6MH6KKten
-         +1Gnvsz2qTHoMc0HGi69hCleoP+ZkA92oKLTkGD9lNCxMiwjZIo4SaJXAbEjhAoEEtps
-         JLjRWHcpsaKxdDE2Tx4TDGU7XsyC5/RncrhogMMszqFGi09WoTA3IuOjUSQyaPAXQqMz
-         9DNP9zU9HfqPldmDN7cSImo6zBxXZk/oaao/qeTdlGqYgUP7tZdj982F3+8Nq4FG8AlQ
-         itHwA5+hVjan7yOjxAUmFjJWdt9GeCX6e8GjgThzHJyTEVXV/EPUPvQuHiHX7Ernd+Gz
-         mUuQ==
-X-Gm-Message-State: ANoB5pnBVZWk2rSxif8tPhrfCDn/o/SjxjhtXZAtRy3dRCJ98z8ruKSW
-        30OB2ZL3jkM+EOUE1C8NYtQ=
-X-Google-Smtp-Source: AA0mqf5fUWNBxoR7bQr+SHUqc2hyMkzGP2cITTq2LBCg5GHCZkrG2V5QTuBQmVq/ebNqbnw1rkjP8A==
-X-Received: by 2002:a62:648a:0:b0:572:76dd:3756 with SMTP id y132-20020a62648a000000b0057276dd3756mr78402506pfb.9.1670515178140;
-        Thu, 08 Dec 2022 07:59:38 -0800 (PST)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id ij22-20020a170902ab5600b001893a002107sm16781662plb.0.2022.12.08.07.59.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 07:59:37 -0800 (PST)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 8 Dec 2022 05:59:36 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, hch@lst.de, josef@toxicpanda.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
- warnning
-Message-ID: <Y5IJ6Nk56KPBhpfr@slm.duckdns.org>
-References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
- <20221104023938.2346986-5-yukuai1@huaweicloud.com>
- <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
- <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
- <Y306xJV6aNXd94kb@slm.duckdns.org>
- <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
- <Y31sYFdA2lHIvjt3@slm.duckdns.org>
- <ec3754a6-3249-51ab-b659-fd795884e346@huaweicloud.com>
- <f227e4bd-c74b-a02e-2a02-11a1376ee4f9@huaweicloud.com>
+        Thu, 8 Dec 2022 11:01:27 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F0CD5E9FD;
+        Thu,  8 Dec 2022 08:01:25 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2C37825B;
+        Thu,  8 Dec 2022 17:01:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670515283;
+        bh=/Gi18eEY/McV0Qto8WvXepa9hiIT4Dza2hydohuZMsE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=e2E8id13JFmvvhrmzf4qSCMMlCzagmlG0ahdeTnuqOttP4kgtPzypXj/weEeXIiD6
+         DAhUSYpcaoUjUVispaP1dCfbWYCwg0nbF8MsXbPl65mEGSCHdrsPOl31tJdo4Cdw8y
+         OxeKpGOMr/xUtX1AvLVEdvRMD9wcDuUPu+Eus5ls=
+Message-ID: <e55d0aa0-e860-3510-2d2f-11486a23c3ea@ideasonboard.com>
+Date:   Thu, 8 Dec 2022 18:01:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f227e4bd-c74b-a02e-2a02-11a1376ee4f9@huaweicloud.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 2/8] i2c: add I2C Address Translator (ATR) support
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Luca Ceresoli <luca@lucaceresoli.net>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <20221208104006.316606-3-tomi.valkeinen@ideasonboard.com>
+ <Y5HeRL6H5vEeDznl@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y5HeRL6H5vEeDznl@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 05:39:33PM +0800, Yu Kuai wrote:
-> Hi, Tejun
-> 
-> 在 2022/11/23 18:22, Yu Kuai 写道:
-> > Hi, Tejun
-> > 
-> > 在 2022/11/23 8:42, Tejun Heo 写道:
-> > > On Tue, Nov 22, 2022 at 05:14:29PM -0700, Jens Axboe wrote:
-> > > > > > Then match_strdup() and kfree() in match_NUMBER() can be replaced with
-> > > > > > get_buffer() and put_buffer().
-> > > > > 
-> > > > > Sorry about the late reply. Yeah, something like this.
-> > 
-> 
-> I wonder can we just use arary directly in stack? The max size is just
-> 24 bytes, which should be fine:
-> 
-> HEX: "0xFFFFFFFFFFFFFFFF" --> 18
-> DEC: "18446744073709551615" --> 20
-> OCT: "01777777777777777777777" --> 23
-> 
-> Something like:
-> #define U64_MAX_SIZE 23
-> static int match_strdup_local(const substring_t *s, char *buf)
-> {
-> 	size_t len = s->to - s->from;
-> 
-> 	if (len > U64_MAX_SIZE)
-> 		return -ERANGE;
-> 
-> 	if (!s->from)
-> 		return -EINVAL;
-> 
-> 	memcpy(buf, s->from, len);
-> 	buf[len] = '\0';
-> 	return 0;
-> }
-> 
->  static int match_u64int(substring_t *s, u64 *result, int base)
->  {
-> 	char buf[U64_MAX_SIZE + 1];
->  	int ret;
->  	u64 val;
-> 
-> 	ret = match_strdup_local(s, buf);
-> 	if (ret)
-> 		return ret;
->  	ret = kstrtoull(buf, base, &val);
->  	if (!ret)
->  		*result = val;;
->  	return ret;
->  }
+Hi Andy,
 
-Oh yeah, absolutely. That's much better.
+On 08/12/2022 14:53, Andy Shevchenko wrote:
+> On Thu, Dec 08, 2022 at 12:40:00PM +0200, Tomi Valkeinen wrote:
+>> From: Luca Ceresoli <luca@lucaceresoli.net>
+>>
+>> An ATR is a device that looks similar to an i2c-mux: it has an I2C
+>> slave "upstream" port and N master "downstream" ports, and forwards
+>> transactions from upstream to the appropriate downstream port. But is
+>> is different in that the forwarded transaction has a different slave
+>> address. The address used on the upstream bus is called the "alias"
+>> and is (potentially) different from the physical slave address of the
+>> downstream chip.
+>>
+>> Add a helper file (just like i2c-mux.c for a mux or switch) to allow
+>> implementing ATR features in a device driver. The helper takes care or
+>> adapter creation/destruction and translates addresses at each transaction.
+> 
+> Besides comments given against diff between series versions, see below.
+> 
+> ...
+> 
+>> +static int i2c_atr_attach_client(struct i2c_adapter *adapter,
+>> +				 const struct i2c_board_info *info,
+>> +				 const struct i2c_client *client)
+>> +{
+>> +	struct i2c_atr_chan *chan = adapter->algo_data;
+>> +	struct i2c_atr *atr = chan->atr;
+>> +	struct i2c_atr_cli2alias_pair *c2a;
+>> +	u16 alias_id;
+>> +	int ret;
+>> +
+>> +	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
+>> +	if (!c2a)
+>> +		return -ENOMEM;
+>> +
+>> +	ret = atr->ops->attach_client(atr, chan->chan_id, info, client,
+>> +				      &alias_id);
+>> +	if (ret)
+>> +		goto err_free;
+> 
+>> +	if (alias_id == 0) {
+>> +		ret = -EINVAL;
+> 
+> I'm wondering why attach_client can't return this error and provide a guarantee
+> that if no error, the alias_id is never be 0?
 
-Thanks.
+I think that's a valid point. I see no reason to check for alias_id == 0 
+here.
 
--- 
-tejun
+>> +		goto err_free;
+>> +	}
+>> +
+>> +	c2a->client = client;
+>> +	c2a->alias = alias_id;
+>> +	list_add(&c2a->node, &chan->alias_list);
+>> +
+>> +	return 0;
+>> +
+>> +err_free:
+>> +	kfree(c2a);
+>> +	return ret;
+>> +}
+> 
+> ...
+> 
+>> +	if (bus_handle) {
+>> +		device_set_node(&chan->adap.dev, fwnode_handle_get(bus_handle));
+> 
+> I believe the correct way, while above still works, is
+> 
+> 		device_set_node(&chan->adap.dev, bus_handle);
+> 		fwnode_handle_get(dev_fwnode(&chan->adap.dev));
+
+Hmm, why is that correct? Shouldn't you give device_set_node() an fwnode 
+that has been referenced?
+
+> But I agree that this looks a bit verbose. And...
+> 
+>> +	} else {
+>> +		struct fwnode_handle *atr_node;
+>> +		struct fwnode_handle *child;
+>> +		u32 reg;
+>> +
+>> +		atr_node = device_get_named_child_node(dev, "i2c-atr");
+>> +
+>> +		fwnode_for_each_child_node(atr_node, child) {
+>> +			ret = fwnode_property_read_u32(child, "reg", &reg);
+>> +			if (ret)
+>> +				continue;
+>> +			if (chan_id == reg)
+>> +				break;
+>> +		}
+>> +
+>> +		device_set_node(&chan->adap.dev, child);
+> 
+> ...OTOH, you set node with bumped reference here. So I leave all this to
+> the maintainers.
+> 
+>> +		fwnode_handle_put(atr_node);
+>> +	}
+> 
+>> +	ret = i2c_add_adapter(&chan->adap);
+>> +	if (ret) {
+>> +		dev_err(dev, "failed to add atr-adapter %u (error=%d)\n",
+>> +			chan_id, ret);
+>> +		goto err_mutex_destroy;
+>> +	}
+>> +
+>> +	snprintf(symlink_name, sizeof(symlink_name), "channel-%u",
+>> +		 chan->chan_id);
+>> +
+>> +	ret = sysfs_create_link(&chan->adap.dev.kobj, &dev->kobj, "atr_device");
+>> +	if (ret)
+>> +		dev_warn(dev, "can't create symlink to atr device\n");
+>> +	ret = sysfs_create_link(&dev->kobj, &chan->adap.dev.kobj, symlink_name);
+>> +	if (ret)
+>> +		dev_warn(dev, "can't create symlink for channel %u\n", chan_id);
+>> +
+>> +	dev_dbg(dev, "Added ATR child bus %d\n", i2c_adapter_id(&chan->adap));
+>> +
+>> +	atr->adapter[chan_id] = &chan->adap;
+>> +	return 0;
+>> +
+>> +err_mutex_destroy:
+> 
+> Now it's a bit misleading, wouldn't be better
+> 
+> err_put_fwnode:
+> 
+> ?
+
+Yes.
+
+>> +	fwnode_handle_put(dev_fwnode(&chan->adap.dev));
+>> +	mutex_destroy(&chan->orig_addrs_lock);
+>> +	kfree(chan);
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(i2c_atr_add_adapter);
+> 
+> Wondering if we may put this into namespace from day 1.
+
+Right, that's something I didn't look at all for v5. I have not heard 
+anyone else commenting about the NS, though. I could have a look at it 
+anyway, just to learn about NSes.
+
+> ...
+> 
+>> +/**
+>> + * i2c_atr_del_adapter - Remove a child ("downstream") I2C bus added by
+>> + * i2c_atr_del_adapter().
+>> + * @atr:     The I2C ATR
+>> + * @chan_id: Index of the `adapter to be removed (0 .. max_adapters-1)
+>> + */
+>> +void i2c_atr_del_adapter(struct i2c_atr *atr, u32 chan_id)
+>> +{
+>> +	char symlink_name[ATR_MAX_SYMLINK_LEN];
+>> +
+>> +	struct i2c_adapter *adap = atr->adapter[chan_id];
+>> +	struct i2c_atr_chan *chan = adap->algo_data;
+>> +	struct fwnode_handle *fwnode = dev_fwnode(&adap->dev);
+>> +	struct device *dev = atr->dev;
+> 
+>> +	if (!atr->adapter[chan_id]) {
+> 
+> Isn't it the same as
+> 
+> 	if (!adap)
+> 
+> ?
+
+Yes.
+
+> 
+>> +		dev_err(dev, "Adapter %d does not exist\n", chan_id);
+>> +		return;
+>> +	}
+>> +
+>> +	dev_dbg(dev, "Removing ATR child bus %d\n", i2c_adapter_id(adap));
+>> +
+>> +	atr->adapter[chan_id] = NULL;
+>> +
+>> +	snprintf(symlink_name, sizeof(symlink_name), "channel-%u",
+>> +		 chan->chan_id);
+>> +	sysfs_remove_link(&dev->kobj, symlink_name);
+>> +	sysfs_remove_link(&chan->adap.dev.kobj, "atr_device");
+>> +
+>> +	i2c_del_adapter(adap);
+>> +	fwnode_handle_put(fwnode);
+>> +	mutex_destroy(&chan->orig_addrs_lock);
+>> +	kfree(chan->orig_addrs);
+>> +	kfree(chan);
+>> +}
+> 
+> ...
+> 
+>> +struct i2c_atr {
+>> +	/* private: internal use only */
+> 
+> What is private? The entire structure? Then why it's defined in
+> the include/linux/? Can't you make it opaque?
+
+Good point, I see no reason to keep this in the public header. 
+i2c_atr_set/get_clientdata used it, but I can move their implementations 
+into the .c file.
+
+>> +	struct i2c_adapter *parent;
+>> +	struct device *dev;
+>> +	const struct i2c_atr_ops *ops;
+>> +
+>> +	void *priv;
+>> +
+>> +	struct i2c_algorithm algo;
+>> +	/* lock for the I2C bus segment (see struct i2c_lock_operations) */
+>> +	struct mutex lock;
+>> +	int max_adapters;
+>> +
+>> +	struct i2c_adapter *adapter[];
+>> +};
+> 
+> ...
+> 
+>> +static inline void i2c_atr_set_clientdata(struct i2c_atr *atr, void *data)
+>> +{
+>> +	atr->priv = data;
+>> +}
+>> +
+>> +static inline void *i2c_atr_get_clientdata(struct i2c_atr *atr)
+>> +{
+>> +	return atr->priv;
+>> +}
+> 
+> The function names are misleading, because I would think this is about driver
+> data that has been set.
+> 
+> I would rather use name like
+> 
+> 	i2c_atr_get_priv()
+> 	i2c_atr_set_priv()
+
+Indeed, set_clientdata is probably wrong. But i2c_atr_set_priv() sounds 
+like it's private to the i2c-atr itself. Maybe i2c_atr_set_driver_data?
+
+  Tomi
+
