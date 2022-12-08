@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79AA06473AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:58:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8B56473BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbiLHP62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:58:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S229556AbiLHP7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:59:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiLHP6Z (ORCPT
+        with ESMTP id S229514AbiLHP7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:58:25 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4BD4A581;
-        Thu,  8 Dec 2022 07:58:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670515104; x=1702051104;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HFHvTj2UxyZTR/3t9cajOIIUSSoBJRn2X/zqMgVxw4E=;
-  b=T2yxe8iA3iP6ksojfo5i3dDAD5pFJ1AV73nuRcirw0oajr5XtfphoNo7
-   1kISGWJOm/3TI4Nw6WkaYIyJOqJMWTkGBvZDfFvufxBjQ2l0RGOUzHnO4
-   kwhi7s7gUuu/oDhBsXIhf36a2IIQflr89hoG1YtzP9hQtA4WPs1LGJGBO
-   UGeZ4PwzyeTNLXvFpSFN49lqQqcs20NOIdxEjSKRLG0Dgdtco56fF7EA5
-   1MW+o6cRQQjmm6gbnI6yxhOsh5DDBlWbpZYgGqJMApYrK0LZDVIbEf5jr
-   FXorunn38gUpVUI+kHpFSWiXueTYxwKF+f7WP4eQFl8EzzA7pwi7vDGLO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="344250837"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="344250837"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 07:58:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="715655563"
-X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
-   d="scan'208";a="715655563"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 08 Dec 2022 07:58:18 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p3JHr-006QgJ-0K;
-        Thu, 08 Dec 2022 17:58:15 +0200
-Date:   Thu, 8 Dec 2022 17:58:14 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Mike Pagano <mpagano@gentoo.org>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Marek Vasut <marex@denx.de>
-Subject: Re: [PATCH v5 0/8] i2c-atr and FPDLink
-Message-ID: <Y5IJlpWlngrvZemy@smile.fi.intel.com>
-References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
- <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
- <Y5HYBzZlkTrsdjfX@smile.fi.intel.com>
- <0340d15c-be0a-cd28-4149-7976896f8eb1@ideasonboard.com>
- <Y5IJY2nUkt/6BoKm@smile.fi.intel.com>
+        Thu, 8 Dec 2022 10:59:40 -0500
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F06E889AEA;
+        Thu,  8 Dec 2022 07:59:38 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 6so1506729pgm.6;
+        Thu, 08 Dec 2022 07:59:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q0YLsvBKzhSCVgibbSxOvtb/WdQ/EJIsYcqmRJMPdrA=;
+        b=LKqMi50ut5W+4QYLYDzZRJz8rOYDM1FZOI+bsaRUBjbfPxkaXOkGHv/B58zlQJCVp9
+         MOjRUaRqxNz0nLVuO6/F76JbXbGZitk+2iyDmotSKGPXPoVVHHddmOrwt9KP6Mv6y5Xd
+         SxD/qLNSLtneYFA9954fdAcCxDvWe7t+RaCdqX50dbiBJuc0xdbdRlVvJKMOZr6k2AeA
+         UN4OLtD63b3uEgMi5eMop+qH9rGyXYzEIxZ1PinFgbvoWMIZ8pq6K8gfKFZ/b8EHRO6N
+         rXk0i0ECbUePeDcBgMkYPccKs/o9Q4EQc3aSt5FYGtktl4E40BnuiUuFe8kE39ATlds/
+         GDuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q0YLsvBKzhSCVgibbSxOvtb/WdQ/EJIsYcqmRJMPdrA=;
+        b=p01k9VIyA0yWCShjml6FkmnPt8vCsCvHHJeUMDkO4GTJGDsx9OVzUvqyJ6MH6KKten
+         +1Gnvsz2qTHoMc0HGi69hCleoP+ZkA92oKLTkGD9lNCxMiwjZIo4SaJXAbEjhAoEEtps
+         JLjRWHcpsaKxdDE2Tx4TDGU7XsyC5/RncrhogMMszqFGi09WoTA3IuOjUSQyaPAXQqMz
+         9DNP9zU9HfqPldmDN7cSImo6zBxXZk/oaao/qeTdlGqYgUP7tZdj982F3+8Nq4FG8AlQ
+         itHwA5+hVjan7yOjxAUmFjJWdt9GeCX6e8GjgThzHJyTEVXV/EPUPvQuHiHX7Ernd+Gz
+         mUuQ==
+X-Gm-Message-State: ANoB5pnBVZWk2rSxif8tPhrfCDn/o/SjxjhtXZAtRy3dRCJ98z8ruKSW
+        30OB2ZL3jkM+EOUE1C8NYtQ=
+X-Google-Smtp-Source: AA0mqf5fUWNBxoR7bQr+SHUqc2hyMkzGP2cITTq2LBCg5GHCZkrG2V5QTuBQmVq/ebNqbnw1rkjP8A==
+X-Received: by 2002:a62:648a:0:b0:572:76dd:3756 with SMTP id y132-20020a62648a000000b0057276dd3756mr78402506pfb.9.1670515178140;
+        Thu, 08 Dec 2022 07:59:38 -0800 (PST)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id ij22-20020a170902ab5600b001893a002107sm16781662plb.0.2022.12.08.07.59.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 07:59:37 -0800 (PST)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 8 Dec 2022 05:59:36 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, hch@lst.de, josef@toxicpanda.com,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH v2 4/5] blk-iocost: fix sleeping in atomic context
+ warnning
+Message-ID: <Y5IJ6Nk56KPBhpfr@slm.duckdns.org>
+References: <20221104023938.2346986-1-yukuai1@huaweicloud.com>
+ <20221104023938.2346986-5-yukuai1@huaweicloud.com>
+ <Y3K8MSFWw8eTnxtm@slm.duckdns.org>
+ <3da991c6-21e4-8ed8-ba75-ccb92059f0ae@huaweicloud.com>
+ <Y306xJV6aNXd94kb@slm.duckdns.org>
+ <1f52ccb1-c357-a2a0-ef9d-48d7e2eb51f8@kernel.dk>
+ <Y31sYFdA2lHIvjt3@slm.duckdns.org>
+ <ec3754a6-3249-51ab-b659-fd795884e346@huaweicloud.com>
+ <f227e4bd-c74b-a02e-2a02-11a1376ee4f9@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y5IJY2nUkt/6BoKm@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f227e4bd-c74b-a02e-2a02-11a1376ee4f9@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:57:23PM +0200, Andy Shevchenko wrote:
-> On Thu, Dec 08, 2022 at 04:40:58PM +0200, Tomi Valkeinen wrote:
-> > On 08/12/2022 14:26, Andy Shevchenko wrote:
-> > > On Thu, Dec 08, 2022 at 12:42:13PM +0200, Tomi Valkeinen wrote:
-> > > > On 08/12/2022 12:39, Tomi Valkeinen wrote:
-
-...
-
-> > > >   /**
-> > > > - * Helper to add I2C ATR features to a device driver.
-> > > > + * struct i2c_atr - Represents the I2C ATR instance
-> > > >    */
-> > > 
-> > > This is incomplete. Have you run kernel doc validator against this file?
-> > 
-> > What's kernel doc validator? Do you mean that it's incomplete and kernel doc
-> > doesn't work correctly, or that there should be more information here?
-> > 
-> > I don't get any errors/warnings from any tool I have used. But I agree it
-> > looks a bit odd with only the name of the struct in the doc.
+On Mon, Dec 05, 2022 at 05:39:33PM +0800, Yu Kuai wrote:
+> Hi, Tejun
 > 
-> ...
+> 在 2022/11/23 18:22, Yu Kuai 写道:
+> > Hi, Tejun
+> > 
+> > 在 2022/11/23 8:42, Tejun Heo 写道:
+> > > On Tue, Nov 22, 2022 at 05:14:29PM -0700, Jens Axboe wrote:
+> > > > > > Then match_strdup() and kfree() in match_NUMBER() can be replaced with
+> > > > > > get_buffer() and put_buffer().
+> > > > > 
+> > > > > Sorry about the late reply. Yeah, something like this.
+> > 
 > 
-> $ scripts/kernel-doc -none -v include/linux/i2c.h
-> include/linux/i2c.h:79: warning: No description found for return value of 'i2c_master_recv'
-> include/linux/i2c.h:94: warning: No description found for return value of 'i2c_master_recv_dmasafe'
-> include/linux/i2c.h:109: warning: No description found for return value of 'i2c_master_send'
-> include/linux/i2c.h:124: warning: No description found for return value of 'i2c_master_send_dmasafe'
-> 4 warnings
+> I wonder can we just use arary directly in stack? The max size is just
+> 24 bytes, which should be fine:
+> 
+> HEX: "0xFFFFFFFFFFFFFFFF" --> 18
+> DEC: "18446744073709551615" --> 20
+> OCT: "01777777777777777777777" --> 23
+> 
+> Something like:
+> #define U64_MAX_SIZE 23
+> static int match_strdup_local(const substring_t *s, char *buf)
+> {
+> 	size_t len = s->to - s->from;
+> 
+> 	if (len > U64_MAX_SIZE)
+> 		return -ERANGE;
+> 
+> 	if (!s->from)
+> 		return -EINVAL;
+> 
+> 	memcpy(buf, s->from, len);
+> 	buf[len] = '\0';
+> 	return 0;
+> }
+> 
+>  static int match_u64int(substring_t *s, u64 *result, int base)
+>  {
+> 	char buf[U64_MAX_SIZE + 1];
+>  	int ret;
+>  	u64 val;
+> 
+> 	ret = match_strdup_local(s, buf);
+> 	if (ret)
+> 		return ret;
+>  	ret = kstrtoull(buf, base, &val);
+>  	if (!ret)
+>  		*result = val;;
+>  	return ret;
+>  }
 
-Note, this is just example against existing file, not your case.
+Oh yeah, absolutely. That's much better.
+
+Thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+tejun
