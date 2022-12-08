@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F57646BC9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21169646BCE
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:23:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiLHJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
+        id S229772AbiLHJXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:23:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiLHJXJ (ORCPT
+        with ESMTP id S230048AbiLHJXs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:23:09 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC1458BF8;
-        Thu,  8 Dec 2022 01:23:08 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8DAE61E04;
-        Thu,  8 Dec 2022 09:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C91A1C433C1;
-        Thu,  8 Dec 2022 09:23:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670491387;
-        bh=Pyvsh6dNxc4HyaxTZC50pJ+mJJTEHkJ0yEeOFq7Ogtg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lM0mxqNbjFKVZaNSAF2Q5ScBfU3ZH4tDZo69w55WIKrcund6O1FP1G6l6We9svoNA
-         3JNiDHPn6h5Fx6TY0CZnUxf01ApSvRurtC39cHYouBmnjwCo06eX7Sjy1O/X7NVxXN
-         fOxhB6gj8sTLHUMLH6VVKFW7iJBWxBe0xC3MhLpQaZHRG34tPaZgNOMQtWNMPY2I55
-         AIBQvF2V0RFrOQiXZJQ0LWtM2inYP3kcTVwGb8LyzSSYdm6X6nEQ009UCSnPzQ0m1p
-         gwKhpc4a6EkDJ92mtU8vNHY3eoFTxHkwCPWaYegdYF+nq8WMvJjEUpWHBhVa5iheg9
-         gYFIXksKNL+pg==
-Date:   Thu, 8 Dec 2022 09:23:02 +0000
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
-        linux-integrity@vger.kernel.org, peterhuewe@gmx.de, jgg@ziepe.ca,
-        gregkh@linuxfoundation.org, arnd@arndb.de, rrangel@chromium.org,
-        timvp@google.com, apronin@google.com, mw@semihalf.com,
-        upstream@semihalf.com, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v3] char: tpm: Protect tpm_pm_suspend with locks
-Message-ID: <Y5Gs9jaSIGTNdRbV@kernel.org>
-References: <20221128195651.322822-1-Jason@zx2c4.com>
- <Y4zTnhgunXuwVXHe@kernel.org>
- <Y4zUotH0UeHlRBGP@kernel.org>
- <Y4zxly0XABDg1OhU@zx2c4.com>
+        Thu, 8 Dec 2022 04:23:48 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8875C74E;
+        Thu,  8 Dec 2022 01:23:45 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 4ADBE25B;
+        Thu,  8 Dec 2022 10:23:42 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670491423;
+        bh=6e3cUNNKs0Mbc6lRI0WlQoFsDq6mdyEYot1UJAoMES8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=viWeAjRfAvQDJgnz5ohqc3JZkl7Q+gk/Z3jJt8aK+WmByB4rXDZUkfs2Sg2ZcCA4E
+         fddgUjJkVmLM9By1Lr+REp0CsPRxZDIQxfz+uEvj73auGnCvKWwy6r4mo73JXaMmSm
+         LmAN/hm7+be8HNS8BQ/HlAqrxUToEAWMkxYNCp2o=
+Message-ID: <e2f8d8f2-dd16-fe2a-8413-ba408672801d@ideasonboard.com>
+Date:   Thu, 8 Dec 2022 11:23:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y4zxly0XABDg1OhU@zx2c4.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
+Content-Language: en-US
+To:     Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Cc:     Rob Herring <robh@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+ <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
+ <20221102172630.GA4140587-robh@kernel.org>
+ <6c254d5f-9fa1-b06a-4edb-7e58e4b33101@ideasonboard.com>
+ <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
+ <8360ac8f-64aa-9edd-a110-903e734739f3@ideasonboard.com>
+ <20221111172631.2832ae6c@booty>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20221111172631.2832ae6c@booty>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Dec 04, 2022 at 08:14:31PM +0100, Jason A. Donenfeld wrote:
-> On Sun, Dec 04, 2022 at 05:10:58PM +0000, Jarkko Sakkinen wrote:
-> > On Sun, Dec 04, 2022 at 05:06:41PM +0000, Jarkko Sakkinen wrote:
-> > > On Mon, Nov 28, 2022 at 08:56:51PM +0100, Jason A. Donenfeld wrote:
-> > > > From: Jan Dabros <jsd@semihalf.com>
-> > > > 
-> > > > Currently tpm transactions are executed unconditionally in
-> > > > tpm_pm_suspend() function, which may lead to races with other tpm
-> > > > accessors in the system. Specifically, the hw_random tpm driver makes
-> > > > use of tpm_get_random(), and this function is called in a loop from a
-> > > > kthread, which means it's not frozen alongside userspace, and so can
-> > > > race with the work done during system suspend:
-> > > > 
-> > > > [    3.277834] tpm tpm0: tpm_transmit: tpm_recv: error -52
-> > > > [    3.278437] tpm tpm0: invalid TPM_STS.x 0xff, dumping stack for forensics
-> > > > [    3.278445] CPU: 0 PID: 1 Comm: init Not tainted 6.1.0-rc5+ #135
-> > > > [    3.278450] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.0-20220807_005459-localhost 04/01/2014
-> > > > [    3.278453] Call Trace:
-> > > > [    3.278458]  <TASK>
-> > > > [    3.278460]  dump_stack_lvl+0x34/0x44
-> > > > [    3.278471]  tpm_tis_status.cold+0x19/0x20
-> > > > [    3.278479]  tpm_transmit+0x13b/0x390
-> > > > [    3.278489]  tpm_transmit_cmd+0x20/0x80
-> > > > [    3.278496]  tpm1_pm_suspend+0xa6/0x110
-> > > > [    3.278503]  tpm_pm_suspend+0x53/0x80
-> > > > [    3.278510]  __pnp_bus_suspend+0x35/0xe0
-> > > > [    3.278515]  ? pnp_bus_freeze+0x10/0x10
-> > > > [    3.278519]  __device_suspend+0x10f/0x350
-> > > > 
-> > > > Fix this by calling tpm_try_get_ops(), which itself is a wrapper around
-> > > > tpm_chip_start(), but takes the appropriate mutex.
-> > > > 
-> > > > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > > > Reported-by: Vlastimil Babka <vbabka@suse.cz>
-> > > > Tested-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > > Tested-by: Vlastimil Babka <vbabka@suse.cz>
-> > > > Link: https://lore.kernel.org/all/c5ba47ef-393f-1fba-30bd-1230d1b4b592@suse.cz/
-> > > > Cc: stable@vger.kernel.org
-> > > > Fixes: e891db1a18bf ("tpm: turn on TPM on suspend for TPM 1.x")
-> > > > [Jason: reworked commit message, added metadata]
-> > > > Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-> > > > ---
-> > > >  drivers/char/tpm/tpm-interface.c | 5 +++--
-> > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-> > > > index 1621ce818705..d69905233aff 100644
-> > > > --- a/drivers/char/tpm/tpm-interface.c
-> > > > +++ b/drivers/char/tpm/tpm-interface.c
-> > > > @@ -401,13 +401,14 @@ int tpm_pm_suspend(struct device *dev)
-> > > >  	    !pm_suspend_via_firmware())
-> > > >  		goto suspended;
-> > > >  
-> > > > -	if (!tpm_chip_start(chip)) {
-> > > > +	rc = tpm_try_get_ops(chip);
-> > > > +	if (!rc) {
-> > > >  		if (chip->flags & TPM_CHIP_FLAG_TPM2)
-> > > >  			tpm2_shutdown(chip, TPM2_SU_STATE);
-> > > >  		else
-> > > >  			rc = tpm1_pm_suspend(chip, tpm_suspend_pcr);
-> > > >  
-> > > > -		tpm_chip_stop(chip);
-> > > > +		tpm_put_ops(chip);
-> > > >  	}
-> > > >  
-> > > >  suspended:
-> > > > -- 
-> > > > 2.38.1
-> > > > 
-> > > 
-> > > Hi, sorry for the latency.
-> > > 
-> > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > 
-> > Applied to  git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+Hi Luca,
+
+On 11/11/2022 18:26, Luca Ceresoli wrote:
+> Hello Tomi, Matti, Wolfram,
 > 
-> Oh thank goodness. You'll send this in for rc8 today?
+> On Thu, 3 Nov 2022 14:32:02 +0200
+> Tomi Valkeinen <tomi.valkeinen@ideasonboard.com> wrote:
+> 
+>> On 03/11/2022 14:13, Vaittinen, Matti wrote:
+>>> On 11/3/22 13:50, Tomi Valkeinen wrote:
+>>>> Hi Rob,
+>>>>
+>>>> On 02/11/2022 19:26, Rob Herring wrote:
+>>>>> On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
+>>>>>> +
+>>>>>> +  i2c-alias-pool:
+>>>>>
+>>>>> Something common or could be? If not, then needs a vendor prefix.
+>>>>
+>>>> I'll have to think about this. It is related to the i2c-atr, so I think
+>>>> it might be a common thing.
+>>>
+>>> I'd say this should be common. Where the i2c-atr properties should live
+>>> is another question though. If the I2C-atr stays as a genericly usable
+>>> component - then these bindings should be in a file that can be
+>>> referenced by other I2C-atr users (like the UB960 here).
+>>
+>> Yep. All the links, link, serializer and alias nodes/properties are new
+>> things here, and I guess these could be used by other deser-ser systems.
+>> That said, I don't have any experience with other systems.
+> 
+> The i2c-alias-pool was discussed during the RFC,v2 review [1] and it
+> was agreed that it should be generic. The same principle should apply
+> to the other ATR properties.
+> 
+> That said, at some point it was also decided that the alias pool should
+> just be ditched in favor of an automatic selection of an unused address
+> by the i2c core [2] [3]. Maybe that idea has changed, definitely some
+> i2c core things needed to be omdified for it to happen, but overall I'm
+> still convinced automatic assignment without a pool was a good idea.
 
-for 6.2-rc1
+Yes, the serializer and the remote peripheral i2c aliases can be 
+dynamically reserved at runtime, so the i2c-alias-pool and the i2c-alias 
+are, in that sense, not needed.
 
-BR, Jarkko
+I haven't looked at this in depth yet, but reading the references you 
+gave, it sounds like it's not quite clear what addresses are available 
+and what are not.
+
+On the other hand, is dynamic i2c address reservation something that the 
+users expect to happen? All i2c devices I have used have always had a 
+fixed address in the DT, even if at times the devices may support 
+choosing between a few different addresses.
+
+Keeping with that tradition, would it be best to just use fixed i2c 
+aliases, defined in the DT, for the serializers and the remote 
+peripherals? In the current series this is already the case for 
+serializers (with i2c-alias property), but we could do something similar 
+for the remote peripherals.
+
+  Tomi
+
