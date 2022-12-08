@@ -2,131 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C83647768
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3E5647776
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:44:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiLHUlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:41:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S229752AbiLHUou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:44:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiLHUlh (ORCPT
+        with ESMTP id S229479AbiLHUor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:41:37 -0500
-Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5D084B49;
-        Thu,  8 Dec 2022 12:41:36 -0800 (PST)
-Received: by mail-oo1-xc36.google.com with SMTP id t15-20020a4a96cf000000b0049f7e18db0dso406955ooi.10;
-        Thu, 08 Dec 2022 12:41:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kn6pAPyh7GVd4yH8ZcVetJ6KHkFeBkaGTE995AlcjFw=;
-        b=OgRFSxxKU/XYW75jfxIfe2MfQbklXKHvxUOmEBipoUobgiLU1dSoroxxBEl80631+b
-         PyfzEZBfcqSASDlIh/jsUchLCUq9MfiehjbD7dB2JEVb0NK3W43FBKFuyFh2VQ0sAO1C
-         G9f9tXxLqd8AhZgIQNYvqgRXUlNVHpHzUrd4Q9FBHX9TeDiGAWdk/0jZzVI1l/3Gt9Hr
-         wkLwCMGhMKhk7Camqpa4+s/kdtOUdS0YPSJAJrWcMUkjgB0ZyuqkK+oyHPU2wtATBeKo
-         3loLg1RnDie2HI1kW6lxIragcixGM0Swq7NqhD/CogH0UyepiehKUjzdGN5Sn6cI71vs
-         1hoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kn6pAPyh7GVd4yH8ZcVetJ6KHkFeBkaGTE995AlcjFw=;
-        b=6oVdSh2hFW6L9bM5Ty82akDZ+WkHZMBPZHmNGCv90VXNlYDU4th3j14qW9NCFCN0Lj
-         qhV246kj2EItrWys5tYtsE7zKrUeHDvNgNIKaJ85DMdKT88MkK9XggEoU2+T7O8aj6v7
-         58fEw/y5kEGHJNknPC1WIV4OtRjMqaS6smbFRQWSwUNJq0HdeqU3WaLPIXiCEc6u6D/B
-         waiPCcfkD4fDaD96Stp0n/BL2cEGQzDMD/d24TMqZU7GWKMmJigZ89hHqERcJJy3UlH3
-         0zWpSSFyEDXQLhU8FBHAaxg7+dbL1GMM3lpg563Iow0FWPU7iGtI8Fz1sGhE441PH4W1
-         LMMg==
-X-Gm-Message-State: ANoB5pn6VCNLJYDDUNcn/0jWyhLMui5xjXVwDucPMcwdoKUG26l4Y4mz
-        mDVqt9HAv6fXaRfQOUqjZjc=
-X-Google-Smtp-Source: AA0mqf70R0QQ/wCK7uiugWelDJDoVzwW91xBAtjTwhILf09JL4bMpPB6FKRTSaXw8Um9MH57paktXg==
-X-Received: by 2002:a4a:dc8c:0:b0:4a0:c270:2f3f with SMTP id g12-20020a4adc8c000000b004a0c2702f3fmr1887940oou.3.1670532095338;
-        Thu, 08 Dec 2022 12:41:35 -0800 (PST)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id j2-20020a4a9442000000b0049f0671a23asm10308930ooi.9.2022.12.08.12.41.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 12:41:34 -0800 (PST)
-Date:   Thu, 8 Dec 2022 12:41:33 -0800
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Peter Lafreniere <peter@n8pjl.ca>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] lib/cpumask: reorganize cpumask_local_spread()
- logic
-Message-ID: <Y5JL/YqlxoC/4j4A@yury-laptop>
-References: <20221208183101.1162006-1-yury.norov@gmail.com>
- <20221208183101.1162006-6-yury.norov@gmail.com>
- <KQCC2QYXZ6BtFjiUQO-XQNUO5Ub3kGfpKzjfIeUfCQEvMUEMKiZ7ofEMqoZElMYxYFtuRqW6v3UzCpDzDR-QYZk-tpMDVLl_HSl8BEi1hZk=@n8pjl.ca>
+        Thu, 8 Dec 2022 15:44:47 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B01701AF33;
+        Thu,  8 Dec 2022 12:44:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61DB8B825E5;
+        Thu,  8 Dec 2022 20:44:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CBE2C43398;
+        Thu,  8 Dec 2022 20:44:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670532284;
+        bh=Op3UYf+6olBgWrruca2+4Cw44tWd/dJqwafFuHi8BuQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TzZk98Sm7iHP5ggszXg7OSQVOGQWmechaPq8sdWf6iN8A8VkpGD4NQDM06bssaYaN
+         lgWc9vcIcmS6g+dsTZ/1ykRw3u6RG+Fg9/2sFyQhj2ilkoUszIPR7GUwMfYbHGofAm
+         j17lqnYNJok5WR1ys0ih3OZlds6Dy28ib/oZubk70FfQWd02vSqrFQlxmcl1MIdJZj
+         GmiUrnYKWGJjellgBWsKNJpZltUqi4nlu09jAQVueDNlfoaGhzcRIaeZ+lV6LMtmBW
+         hajdN19eK7yyFNHS/V16wBGnRt3VSGa+q5PONKJViCXbo20GWmxcEv2RwLEgNoNAZz
+         9qoWk3T7xXZ/g==
+Received: by mail-ua1-f50.google.com with SMTP id m5so772987uah.3;
+        Thu, 08 Dec 2022 12:44:44 -0800 (PST)
+X-Gm-Message-State: ANoB5pk3s4dy/5FRocmvte06X+ULIi0ycfzRFK6pffIsoS3/8pGfZNbS
+        ozDYP1ODQo/dWFNkHQrh1Agqy6zvL07c01jr2w==
+X-Google-Smtp-Source: AA0mqf4ma8F1BT0uBQEYiHxBjiJL0Ol47jNJrTLDn/AAI8VlbTaGwaiuMSNkRkY2hh2jshSQyk61IDhlm1kZOsxD1n0=
+X-Received: by 2002:a9f:22c7:0:b0:3d6:45ee:7efc with SMTP id
+ 65-20020a9f22c7000000b003d645ee7efcmr44640221uan.86.1670532282914; Thu, 08
+ Dec 2022 12:44:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <KQCC2QYXZ6BtFjiUQO-XQNUO5Ub3kGfpKzjfIeUfCQEvMUEMKiZ7ofEMqoZElMYxYFtuRqW6v3UzCpDzDR-QYZk-tpMDVLl_HSl8BEi1hZk=@n8pjl.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+ <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com> <20221208092439.6170cf5e@bootlin.com>
+In-Reply-To: <20221208092439.6170cf5e@bootlin.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Thu, 8 Dec 2022 14:44:31 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLjD=DbKJRrmn2GmbAwmVyE=gVcz-fZfNJ_xAup6GReSA@mail.gmail.com>
+Message-ID: <CAL_JsqLjD=DbKJRrmn2GmbAwmVyE=gVcz-fZfNJ_xAup6GReSA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/9] Add the Renesas USBF controller support
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 08:17:22PM +0000, Peter Lafreniere wrote:
-> > Now after moving all NUMA logic into sched_numa_find_nth_cpu(),
-> > else-branch of cpumask_local_spread() is just a function call, and
-> > we can simplify logic by using ternary operator.
+On Thu, Dec 8, 2022 at 2:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+>
+> Hi Rob,
+>
+> On Wed, 7 Dec 2022 16:19:42 -0600
+> Rob Herring <robh+dt@kernel.org> wrote:
+>
+> > On Wed, Dec 7, 2022 at 10:24 AM Herve Codina <herve.codina@bootlin.com> wrote:
+> > >
+> > > Hi,
+> > >
+> > > This series add support for the Renesas USBF controller (USB Device
+> > > Controller) available in the Renesas RZ/N1 SoC.
+> > >
+> > > Based on previous review:
+> > >   https://lore.kernel.org/all/20221114111513.1436165-3-herve.codina@bootlin.com/
+> > >
+> > > A new strategy is proposed to handle the H2MODE bit from CFG_USB
+> > > register compared to the previous versions on the series. As a
+> > > reminder, H2MODE bit allows to configure the internal USB Port
+> > > interface for two hosts or one host and one device.
 > >
-> > While here, replace BUG() with WARN().
-> Why make this change? It's still as bad to hit the WARN_ON as it was before.
+> > Is this case any different from all the phandle properties we have in
+> > bindings that point to some misc registers somewhere else you need to
+> > poke? If so, I'm not really a fan of duplicating the information.
+>
+> Our case is that there is a bit in a register that affect several
+> devices. This bit must be set before the devices are started.
+> If this bit is changed while affected devices are running, system
+> hangs can occurs (datasheet).
+>
+> So, in order to do that we need the device in charge to set
+> this bit (sysctrl) to set this bit before other devices (USBF
+> and PCI bridge) were started.
 
-For example, because of this:
+That sounds like you just need some platform level initialization and
+you are working around the desire to not have platform level
+initialization.
 
-  > Greg, please don't do this
-  > 
-  > > ChangeSet@1.614, 2002-09-05 08:33:20-07:00, greg@kroah.com
-  > >   USB: storage driver: replace show_trace() with BUG()
-  > 
-  > that BUG() thing is _way_ out of line, and has killed a few of my machines
-  > several times for no good reason. It actively hurts debuggability, because
-  > the machine is totally dead after it, and the whole and ONLY point of
-  > BUG() messages is to help debugging and make it clear that we can't handle
-  > something.
-  > 
-  > In this case, we _can_ handle it, and we're much better off with a machine
-  > that works and that you can look up the messages with than killing it.
-  > 
-  > Rule of thumb: BUG() is only good for something that never happens and
-  > that we really have no other option for (ie state is so corrupt that
-  > continuing is deadly).
-  > 
-  > 		Linus
+Why doesn't/can't the bootloader initialize this? Seems like it might
+want to use PCI or USB too.
+
+> At sysctrl level, the bit is set during the probe() call.
+> The property 'depends-on' aim is to ensure the probe() calls
+> order between provider (sysctrl) and consumers (USBF and PCI
+> bridge).
+>
+> regmap and syscon are used to export registers from one device
+> to an other and the probe() calls order is not ensured by the
+> core or regmap infrastructure. Indeed, the regmap provider
+> probe() will not be called if the regmap provider was not probed
+> before the consumer ask for the regmap.
+>   https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L152
+>   https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L43
+> No specific action synchronisation are done with regmap/syscon
+> other than the regmap creation itself.
+
+Oh right. That's in place of course to avoid probe ordering issues...
+
+> I don't think the regmap/syscon will help in our case.
+>
+> >
+> > We also have cases of of_find_compatible_node(NULL, NULL,
+> > "foo-bar-syscon") which is a dependency expressed in the driver, but
+> > not DT. In either case, adding 'depends-on' would be an ABI break as
+> > you are requiring a DT change.
+>
+> In order to avoid the DT change, I can keep the 'depends-on'
+> optional in the PCI bridge binding.
+> This will be functionnal as sysctrl is already used in this node
+> (power-domain = <&sysctrl>). The relationship is already present
+> with this power-domain link.
+>
+> If ok, I will do this change in v4 series.
+
+I agree with Geert that this shouldn't be needed.
+
+Rob
