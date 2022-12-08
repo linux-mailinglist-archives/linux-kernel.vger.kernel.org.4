@@ -2,92 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB7986471A2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E59E76471A6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiLHOYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:24:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
+        id S229890AbiLHOZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:25:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230048AbiLHOXw (ORCPT
+        with ESMTP id S229979AbiLHOYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:23:52 -0500
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9D9B7A6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:23:09 -0800 (PST)
-Received: by mail-vs1-xe35.google.com with SMTP id b189so1564641vsc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 06:23:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=As/CZIt5orfwQ7Fab3NuD7sU3ZdGXQ0KUV67djSyEM4=;
-        b=Svr4EJWyVAy8ZEDYXtdX/3PhjyfOQy/jlGEJYjzvXbZJ6WagFt+kE6B4+1PJM6DBBd
-         tYLQU11uo0Z6tw7curiNweecxh8wA0L2msqtQg35Kt9uQJ/dXmeLKTyiqwPV/R3mCv+8
-         s/kqcY20HDJpUPmsSOHZCjyjivbBegAoR5eo9s2XyR9jQ+FzbCQYs+D8P4SLK2q9cHF5
-         r1KZoEqqJlj3PDOcAXEyAwXUsH7TG2q0p4LRsrwOhuBV7+vP6LMwSLSBAtOQ4HDGd05q
-         jd4gAD5Xs9r394g3IL1vPEWZXMXX2Y1gR2c9NUz29GhNXHqBljPeOBwSjxcp//Zl+qql
-         /0vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=As/CZIt5orfwQ7Fab3NuD7sU3ZdGXQ0KUV67djSyEM4=;
-        b=TbZDLcnI6OkD6nIPrAHEZCKrZOh8tI6GYIWd6HoPJo1EsEDbdSZGP8mWEMa0zTjLym
-         kAa/ZNGlwbRpnS5h4YoAhYDqhFAb0Q+chvYfXZMqmCiKBPBaKvId+K7UzQx2KO9QmwmK
-         0Q75w+P0ZfWeCJMKwFiA+j5shvoE8yC+RNvudOs2uNJPR2oACTURe1owB1JgpjsFLwQ2
-         7h9plCADRFq9eYoHIwIwbzpgv/rxXYxJCoHb9l6fsRuBH/2X9VzaOvp0uKdKbA4h1ZkP
-         W2mdcXrZSTx8t+LT+dg0W+C6mSKoJw+CdIxwUinUqn6bCzxuqTQyCsZsWnxOwPcf6KHG
-         Lrsw==
-X-Gm-Message-State: ANoB5pmXsfpIyhWTGBM6KS0ZKpyGCtUbntfjs+k1LekljpgolmvDuqo1
-        b8wi9+kAEkhCQccDJdkEe9D0TX45g2iwjIspArFgiw==
-X-Google-Smtp-Source: AA0mqf5hrLUh6geFTTa3xvTozjjJK81CXBxyGaTS+c820T86mab4aBRhrL3B/1Vxhuy4Xvm3PYggqZk+jFxLc26n1DQ=
-X-Received: by 2002:a67:ed4b:0:b0:3b1:1506:bca5 with SMTP id
- m11-20020a67ed4b000000b003b11506bca5mr14620578vsp.35.1670509387721; Thu, 08
- Dec 2022 06:23:07 -0800 (PST)
+        Thu, 8 Dec 2022 09:24:45 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B50C45080;
+        Thu,  8 Dec 2022 06:23:58 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3F65B208CE;
+        Thu,  8 Dec 2022 14:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670509437; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DX6YDzb8PyIKMrTf468EmhvBSzk6iJctUJatHJ6cuIA=;
+        b=Qz7O1fJU8HHKKGBJmw8kfV/cErZ0iiN4f0bZfE5jsTRKpgLCCwWA2WlbQKYkLPlqYUsdIv
+        QL4Tw0VatsYd6IlM50vHZ/Vh+5Gf/HUmlVUUZOZbte/Xefcdyd2eJjwb7GOYwzbCqbDOFp
+        u3emrcIcxK2r4dEtCLvHkYxAVTnsGc0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1574913416;
+        Thu,  8 Dec 2022 14:23:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id SgCvBH3zkWODbAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 08 Dec 2022 14:23:57 +0000
+Date:   Thu, 8 Dec 2022 15:23:56 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     chengkaitao <pilgrimtao@gmail.com>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "songmuchun@bytedance.com" <songmuchun@bytedance.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "sujiaxun@uniontech.com" <sujiaxun@uniontech.com>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v2] mm: memcontrol: protect the memory in cgroup from
+ being oom killed
+Message-ID: <Y5HzfLB7lu4+BOu1@dhcp22.suse.cz>
+References: <Y5Gc0jiDlWlRlMYH@dhcp22.suse.cz>
+ <3E260DAC-2E2F-48B7-98BB-036EF0A423DC@didiglobal.com>
 MIME-Version: 1.0
-References: <CAJzde06+FXNpyBzT+NfS2GCfqEERMkGDpdsmHQj=v1foLJW4Cw@mail.gmail.com>
- <20221129224313.455862-1-allenwebb@google.com> <Y5FNNYVSRglS0Lpe@bombadil.infradead.org>
-In-Reply-To: <Y5FNNYVSRglS0Lpe@bombadil.infradead.org>
-From:   Allen Webb <allenwebb@google.com>
-Date:   Thu, 8 Dec 2022 08:22:56 -0600
-Message-ID: <CAJzde06ACctpK-5ht_Ow9dMuisOwTM5CKE_SK+bW5eWTmwCUxg@mail.gmail.com>
-Subject: Re: [PATCH v3] modules: add modalias file to sysfs for modules.
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     lucas.de.marchi@gmail.com,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3E260DAC-2E2F-48B7-98BB-036EF0A423DC@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 8:34 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
->
-> On Tue, Nov 29, 2022 at 04:43:13PM -0600, Allen Webb wrote:
-> > This information is readily available for external modules in
-> > modules.alias. However, builtin kernel modules are not covered.
->
-> Why add this into the kernel instead of just a modules.builtin.alias
-> or something like that?
->
->   Luis
+On Thu 08-12-22 14:07:06, 程垲涛 Chengkaitao Cheng wrote:
+> At 2022-12-08 16:14:10, "Michal Hocko" <mhocko@suse.com> wrote:
+> >On Thu 08-12-22 07:59:27, 程垲涛 Chengkaitao Cheng wrote:
+> >> At 2022-12-08 15:33:07, "Michal Hocko" <mhocko@suse.com> wrote:
+> >> >On Thu 08-12-22 11:46:44, chengkaitao wrote:
+> >> >> From: chengkaitao <pilgrimtao@gmail.com>
+> >> >> 
+> >> >> We created a new interface <memory.oom.protect> for memory, If there is
+> >> >> the OOM killer under parent memory cgroup, and the memory usage of a
+> >> >> child cgroup is within its effective oom.protect boundary, the cgroup's
+> >> >> tasks won't be OOM killed unless there is no unprotected tasks in other
+> >> >> children cgroups. It draws on the logic of <memory.min/low> in the
+> >> >> inheritance relationship.
+> >> >> 
+> >> >> It has the following advantages,
+> >> >> 1. We have the ability to protect more important processes, when there
+> >> >> is a memcg's OOM killer. The oom.protect only takes effect local memcg,
+> >> >> and does not affect the OOM killer of the host.
+> >> >> 2. Historically, we can often use oom_score_adj to control a group of
+> >> >> processes, It requires that all processes in the cgroup must have a
+> >> >> common parent processes, we have to set the common parent process's
+> >> >> oom_score_adj, before it forks all children processes. So that it is
+> >> >> very difficult to apply it in other situations. Now oom.protect has no
+> >> >> such restrictions, we can protect a cgroup of processes more easily. The
+> >> >> cgroup can keep some memory, even if the OOM killer has to be called.
+> >> >> 
+> >> >> Signed-off-by: chengkaitao <pilgrimtao@gmail.com>
+> >> >> ---
+> >> >> v2: Modify the formula of the process request memcg protection quota.
+> >> >
+> >> >The new formula doesn't really address concerns expressed previously.
+> >> >Please read my feedback carefully again and follow up with questions if
+> >> >something is not clear.
+> >> 
+> >> The previous discussion was quite scattered. Can you help me summarize
+> >> your concerns again?
+> >
+> >The most important part is http://lkml.kernel.org/r/Y4jFnY7kMdB8ReSW@dhcp22.suse.cz
+> >: Let me just emphasise that we are talking about fundamental disconnect.
+> >: Rss based accounting has been used for the OOM killer selection because
+> >: the memory gets unmapped and _potentially_ freed when the process goes
+> >: away. Memcg changes are bound to the object life time and as said in
+> >: many cases there is no direct relation with any process life time.
+> >
+> We need to discuss the relationship between memcg's mem and process's mem, 
+> 
+> task_usage = task_anon(rss_anon) + task_mapped_file(rss_file) 
+> 	 + task_mapped_share(rss_share) + task_pgtables + task_swapents
+> 
+> memcg_usage	= memcg_anon + memcg_file + memcg_pgtables + memcg_share
+> 	= all_task_anon + all_task_mapped_file + all_task_mapped_share 
+> 	 + all_task_pgtables + unmapped_file + unmapped_share
+> 	= all_task_usage + unmapped_file + unmapped_share - all_task_swapents
 
-I am fine with that approach and already have a PoC for it. Here are
-some considerations:
-* This would add a new file to the kernel packaging requirements.
-* It is easier for separate files to get out of sync with the runtime
-state (this isn't really a big deal because we already have to deal
-with it for modules.alias)
+You are missing all the kernel charged objects (aka __GFP_ACCOUNT
+allocations resp. SLAB_ACCOUNT for slab caches). Depending on the
+workload this can be really a very noticeable portion. So not this is
+not just about unmapped cache or shm.
+
+> >That is to the per-process discount based on rss or any per-process
+> >memory metrics.
+> >
+> >Another really important question is the actual configurability. The
+> >hierarchical protection has to be enforced and that means that same as
+> >memory reclaim protection it has to be enforced top-to-bottom in the
+> >cgroup hierarchy. That makes the oom protection rather non-trivial to
+> >configure without having a good picture of a larger part of the cgroup
+> >hierarchy as it cannot be tuned based on a reclaim feedback.
+> 
+> There is an essential difference between reclaim and oom killer.
+
+oom killer is a memory reclaim of the last resort. So yes, there is some
+difference but fundamentally it is about releasing some memory. And long
+term we have learned that the more clever it tries to be the more likely
+corner cases can happen. It is simply impossible to know the best
+candidate so this is a just a best effort. We try to aim for
+predictability at least.
+
+> The reclaim 
+> cannot be directly perceived by users,
+
+I very strongly disagree with this statement. First the direct reclaim is a
+direct source of latencies because the work is done on behalf of the
+allocating process. There are side effect possible as well because
+refaults have their cost as well.
+
+> so memcg need to count indicators 
+> similar to pgscan_(kswapd/direct). However, when the user process is killed 
+> by oom killer, users can clearly perceive and count (such as the number of 
+> restarts of a certain type of process). At the same time, the kernel also has 
+> memory.events to count some information about the oom killer, which can 
+> also be used for feedback adjustment.
+
+Yes we have those metrics already. I suspect I haven't made myself
+clear. I didn't say there are no measures to see how oom behaves. What
+I've said that I _suspect_ that oom protection would be really hard to
+configure correctly because unlike the memory reclaim which happens
+during the normal operation, oom is a relatively rare event and it is
+quite hard to use it for any feedback mechanisms. But I am really open
+to be convinced otherwise and this is in fact what I have been asking
+for since the beginning. I would love to see some examples on the
+reasonable configuration for a practical usecase. It is one thing to say
+that you can set the protection to a certain value and a different one
+to have a way to determine that value. See my point?
+
+-- 
+Michal Hocko
+SUSE Labs
