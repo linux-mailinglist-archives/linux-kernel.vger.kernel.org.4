@@ -2,67 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CD3C647263
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:02:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 564AC647269
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:03:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiLHPCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:02:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49742 "EHLO
+        id S230009AbiLHPDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:03:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLHPCv (ORCPT
+        with ESMTP id S229561AbiLHPD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:02:51 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056811FCC5
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 07:02:50 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DB4A61D99
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 15:02:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30BE0C433D6;
-        Thu,  8 Dec 2022 15:02:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670511769;
-        bh=QIp3dYP3MbL2i6Why3T1zkhj7QeR0vGowO05CjyufKo=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=OdvAgczR1tGqCrXNG4gWvpoZmo+yUYYoPdDceA1PB/nGJ0FMnTvOdtRXsd3+lEedC
-         Gh0gviHTX/izxuc8OAjC0RZmRoNJXkGWt1Hcpq7UBhTPl2ewfn0eoM0Ycs8ejJgsRu
-         wF3ZtF0U0zMkBIAvvyCQopTK4V3WcA+zVD8zOZXoJkhL3hcpuPyZr//Vojh8yZUu5v
-         KYyBwbIXkxyf6b7n6XfqB0VQOwB8wZK1b1MVKj1iJeO+9z5kaxl4tYzd3ZlPA2JGzM
-         ETpHp8rgSPylzvd0TdCoGCY9lNVKcd4VvSfy/p9VJbuC0uHjoluXaKajgEM0HxJ6KX
-         LSJewnjyU1kHQ==
-Message-ID: <b96845da-0fc8-a9a9-42e4-76940dd7e713@kernel.org>
-Date:   Thu, 8 Dec 2022 23:02:47 +0800
+        Thu, 8 Dec 2022 10:03:27 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B20845ECA;
+        Thu,  8 Dec 2022 07:03:26 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B86KHk2008719;
+        Thu, 8 Dec 2022 15:03:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=1ZutQiq09d9f+9p1SPqnaMr6I0W7Z5/+WNBzbiAIRpk=;
+ b=JLvRNPY2FhDk5Rho+LAHbSkn3sGDxbPOon30zT8Sk54NIdnt70eqYyc2g9lSvbOipJ1i
+ bMMnIQTROtEuPrlH78PowygLWaG1MTy33aDPAqKZq+OMrCJlm53P1k07Yqj3w9/3/5ts
+ 2NKDltHu7PJzuZrX5mKucIJZ1yXqDKxW8JL2lvkgqmNh3pHroRwlsmjZLRqyFs14Byik
+ PnWas1MwRNJS6JWDWzKu8tVaRikfJ0LWK+Eq4OJtkBPhMZJxn/r7ZwJqwphYhKSfC8Ue
+ WaTuuHpo0iec0ZvGbQ7ysbnxmUjqY3zASt8FvtuszD/6R3FSTqfUMpOP0TeCHhbs5PXw jg== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3majt4ctjj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Dec 2022 15:03:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B8F36qf007742
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Dec 2022 15:03:06 GMT
+Received: from [10.216.54.36] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 8 Dec 2022
+ 07:03:00 -0800
+Message-ID: <9726a08f-266e-2949-8141-3a726ffd2795@quicinc.com>
+Date:   Thu, 8 Dec 2022 20:32:57 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [f2fs-dev] [PATCH 4/6 v2] f2fs: refactor extent_cache to support
- for read and more
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v7 3/6] clk: qcom: gdsc: Add a reset op to poll gdsc
+ collapse
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20221205185433.3479699-1-jaegeuk@kernel.org>
- <20221205185433.3479699-4-jaegeuk@kernel.org> <Y4+SiufEJLNqrmSi@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Y4+SiufEJLNqrmSi@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        <krzysztof.kozlowski@linaro.org>, Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20221005143618.v7.3.I162c4be55f230cd439f0643f1624527bdc8a9831@changeid>
+ <CAPDyKFpMUQo-Q2sbm3YXPeagt88zsRFWgc06GmNm0TVUPmPY_g@mail.gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <CAPDyKFpMUQo-Q2sbm3YXPeagt88zsRFWgc06GmNm0TVUPmPY_g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ytwsmVnTBekg-BcnS9tXUJe47KKT6SaZ
+X-Proofpoint-ORIG-GUID: ytwsmVnTBekg-BcnS9tXUJe47KKT6SaZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-08_08,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=999 bulkscore=0 clxscore=1015 adultscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212080124
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/7 3:05, Jaegeuk Kim wrote:
-> This patch prepares extent_cache to get more use-cases.
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+On 12/7/2022 9:15 PM, Ulf Hansson wrote:
+> On Wed, 5 Oct 2022 at 11:08, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>> Add a reset op compatible function to poll for gdsc collapse. This is
+>> required because:
+>>   1. We don't wait for it to turn OFF at hardware for VOTABLE GDSCs.
+>>   2. There is no way for client drivers (eg. gpu driver) to do
+>>   put-with-wait for these gdscs which is required in some scenarios
+>>   (eg. GPU recovery).
+> What puzzles me a bit, who is the typical consumer of the reset.
+>
+> I looked at patch4 and tried to figure it out, but let's discuss that
+> in that thread instead. Some more comments, see below.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+https://patchwork.freedesktop.org/patch/498397/
+gpu driver side changes are already merged in upstream. We call this interface during a GPU recovery which is supposed to be a rare event.
+>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+>>
+>> Changes in v7:
+>> - Update commit message (Bjorn)
+>>
+>> Changes in v2:
+>> - Minor update to function prototype
+>>
+>>  drivers/clk/qcom/gdsc.c | 23 +++++++++++++++++++----
+>>  drivers/clk/qcom/gdsc.h |  7 +++++++
+>>  2 files changed, 26 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+>> index 7cf5e13..ccef742 100644
+>> --- a/drivers/clk/qcom/gdsc.c
+>> +++ b/drivers/clk/qcom/gdsc.c
+>> @@ -17,6 +17,7 @@
+>>  #include <linux/reset-controller.h>
+>>  #include <linux/slab.h>
+>>  #include "gdsc.h"
+>> +#include "reset.h"
+>>
+>>  #define PWR_ON_MASK            BIT(31)
+>>  #define EN_REST_WAIT_MASK      GENMASK_ULL(23, 20)
+>> @@ -116,7 +117,8 @@ static int gdsc_hwctrl(struct gdsc *sc, bool en)
+>>         return regmap_update_bits(sc->regmap, sc->gdscr, HW_CONTROL_MASK, val);
+>>  }
+>>
+>> -static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
+>> +static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status,
+>> +               s64 timeout_us, unsigned int interval_ms)
+>>  {
+>>         ktime_t start;
+>>
+>> @@ -124,7 +126,9 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
+>>         do {
+>>                 if (gdsc_check_status(sc, status))
+>>                         return 0;
+>> -       } while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
+>> +               if (interval_ms)
+>> +                       msleep(interval_ms);
+>> +       } while (ktime_us_delta(ktime_get(), start) < timeout_us);
+> Rather than continue to open code this polling loop, would it not make
+> sense to convert the code into using readx_poll_timeout() (or some of
+> its friends).
+I was going for a minimal code churn to get this mainlined easily. I like the idea, perhaps we can have a refactor patch if there is consensus.
 
-Thanks,
+-Akhil.
+>
+> Down the road, this leads to that the msleep() above should become
+> usleep_range() instead, which seems more correct to me.
+>
+>>         if (gdsc_check_status(sc, status))
+>>                 return 0;
+>> @@ -189,7 +193,7 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
+>>                 udelay(1);
+>>         }
+>>
+>> -       ret = gdsc_poll_status(sc, status);
+>> +       ret = gdsc_poll_status(sc, status, TIMEOUT_US, 0);
+>>         WARN(ret, "%s status stuck at 'o%s'", sc->pd.name, status ? "ff" : "n");
+>>
+>>         if (!ret && status == GDSC_OFF && sc->rsupply) {
+>> @@ -360,7 +364,7 @@ static int _gdsc_disable(struct gdsc *sc)
+>>                  */
+>>                 udelay(1);
+>>
+>> -               ret = gdsc_poll_status(sc, GDSC_ON);
+>> +               ret = gdsc_poll_status(sc, GDSC_ON, TIMEOUT_US, 0);
+>>                 if (ret)
+>>                         return ret;
+>>         }
+>> @@ -608,3 +612,14 @@ int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain)
+>>         return 0;
+>>  }
+>>  EXPORT_SYMBOL_GPL(gdsc_gx_do_nothing_enable);
+>> +
+>> +int gdsc_wait_for_collapse(void *priv)
+>> +{
+>> +       struct gdsc *sc = priv;
+>> +       int ret;
+>> +
+>> +       ret = gdsc_poll_status(sc, GDSC_OFF, 500000, 5);
+>> +       WARN(ret, "%s status stuck at 'on'", sc->pd.name);
+>> +       return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(gdsc_wait_for_collapse);
+>> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+>> index 981a12c..5395f69 100644
+>> --- a/drivers/clk/qcom/gdsc.h
+>> +++ b/drivers/clk/qcom/gdsc.h
+>> @@ -12,6 +12,7 @@
+>>  struct regmap;
+>>  struct regulator;
+>>  struct reset_controller_dev;
+>> +struct qcom_reset_map;
+>>
+>>  /**
+>>   * struct gdsc - Globally Distributed Switch Controller
+>> @@ -88,6 +89,7 @@ int gdsc_register(struct gdsc_desc *desc, struct reset_controller_dev *,
+>>                   struct regmap *);
+>>  void gdsc_unregister(struct gdsc_desc *desc);
+>>  int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain);
+>> +int gdsc_wait_for_collapse(void *priv);
+>>  #else
+>>  static inline int gdsc_register(struct gdsc_desc *desc,
+>>                                 struct reset_controller_dev *rcdev,
+>> @@ -97,5 +99,10 @@ static inline int gdsc_register(struct gdsc_desc *desc,
+>>  }
+>>
+>>  static inline void gdsc_unregister(struct gdsc_desc *desc) {};
+>> +
+>> +static int gdsc_wait_for_collapse(void *priv)
+>> +{
+>> +       return  -ENOSYS;
+>> +}
+>>  #endif /* CONFIG_QCOM_GDSC */
+>>  #endif /* __QCOM_GDSC_H__ */
+> Kind regards
+> Uffe
+
