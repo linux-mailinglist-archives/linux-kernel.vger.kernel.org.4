@@ -2,332 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D328F6472B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:20:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5953D6472BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiLHPUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:20:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36374 "EHLO
+        id S230293AbiLHPVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiLHPUG (ORCPT
+        with ESMTP id S230283AbiLHPUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:20:06 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67124EC33;
-        Thu,  8 Dec 2022 07:18:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 8 Dec 2022 10:20:51 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A43D75BC4;
+        Thu,  8 Dec 2022 07:19:45 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e73d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e73d:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 711D461D99;
-        Thu,  8 Dec 2022 15:18:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 157C0C433D6;
-        Thu,  8 Dec 2022 15:17:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670512698;
-        bh=vq2JZdIXZxuzPq+eKkO04EmYL/odF/HNbaofJ5z9G2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dVf0bTIYvtDM0bsdxnvONKoMRSeFoGN6XdiMz27/UrRQKp1iNphnns0UyF4DHDMGS
-         xU2iNaFwKFlM5liiIGJB/nfPIS8cM1m0U7e6EwikNZTHnylSkYpxcF1r3ASHtSWLPm
-         xVZ+XLXAiI4YJllOoBO4grwI83o7F11URjkICTrbMbKZ1jbNejihF9yNgMXtf1L44i
-         AI166+m02CiT2+rX8TEOfPBdSIc4CPI6EbUPt6ayhKnruZH/mY3tX8AN2z/x+W4Woq
-         xvjaARq7BxrapWpWqJZpiKaTT2EzJHdKznSGe5mGjQlkiK3WoFdMK0DMssfr8FzuWp
-         Hd5uhmqB9l4FA==
-Date:   Thu, 8 Dec 2022 15:17:28 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Chuanhong Guo <gch981213@gmail.com>
-Cc:     linux-leds@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sven Schwermer <sven.schwermer@disruptive-technologies.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 3/3] leds: add driver for SPI driven WorldSemi WS2812B
- RGB LEDs
-Message-ID: <Y5IACDDFH/yBoxPn@google.com>
-References: <20221207040904.582585-1-gch981213@gmail.com>
- <20221207040904.582585-4-gch981213@gmail.com>
- <Y5By0YeGVlS5TlO3@google.com>
- <CAJsYDV+PBvEBWp=2LLbLkiNqQ0qQgWDOyZ4-onMC9_1B0mTfww@mail.gmail.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 54F181EC06FB;
+        Thu,  8 Dec 2022 16:19:43 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670512783;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=3GU5MeoEbeuS2CWF2tNDJu8X0AyDevMso/wvj1Ji+qA=;
+        b=NUsCzemugvmppmEdsoSK6otFrDka2N/KgWTUsMIzcOKX8/O2yCj11UviDU9BZajMWfNuOZ
+        I+X/oo/Dn1IfADiurnMCSjSTBOGx8z1O6gf/1U0ej+B0F3/tqfxGGLr2JUu2Y2tDXnwMXf
+        OptitUxT+Wn2xIHJ5ac9Pig8cPZKtvQ=
+Date:   Thu, 8 Dec 2022 16:19:39 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-tip-commits@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Ian Rogers <irogers@google.com>, x86@kernel.org
+Subject: Re: [tip: perf/core] perf/amd/ibs: Make IBS a core pmu
+Message-ID: <Y5IAi/fgbJk1/h2L@zn.tnic>
+References: <20221115093904.1799-1-ravi.bangoria@amd.com>
+ <166929138346.4906.10749574210524260976.tip-bot2@tip-bot2>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJsYDV+PBvEBWp=2LLbLkiNqQ0qQgWDOyZ4-onMC9_1B0mTfww@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <166929138346.4906.10749574210524260976.tip-bot2@tip-bot2>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Dec 2022, Chuanhong Guo wrote:
+I believe this is one of the things Linus wanted to have on AMD hw.
 
-> Hi!
+On Thu, Nov 24, 2022 at 12:03:03PM -0000, tip-bot2 for Ravi Bangoria wrote:
+> The following commit has been merged into the perf/core branch of tip:
 > 
-> On Wed, Dec 7, 2022 at 7:02 PM Lee Jones <lee@kernel.org> wrote:
-> >
-> > On Wed, 07 Dec 2022, Chuanhong Guo wrote:
-> >
-> > > This patch adds support for driving a chain of WS2812B LED chips
-> > > using SPI bus.
-> > >
-> > > WorldSemi WS2812B is a individually addressable LED chip that
-> > > can be chained together and controlled individually using a
-> > > single wire. The chip recognize a long pulse as a bit of 1 and
-> > > a short pulse as a bit of 0. Host sends a continuous stream
-> > > of 24-bits color values, each LED chip takes the first 3 byte
-> > > it receives as its color value and passes the leftover bytes to
-> > > the next LED on the chain.
-> > >
-> > > This driver simulates this protocol using SPI bus by sending
-> > > a long pulse as 3'b110 and a short pulse as 3'b100. The SPI
-> > > frequency needs to be 2.105MHz~2.85MHz for the timing to be
-> > > correct and the controller needs to transfer all the bytes
-> > > continuously.
-> > >
-> > > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
-> > > ---
-> > > Changes since v1:
-> > > rename the driver to drop -spi suffix
-> > > add support for default-brightness
-> > > use fwnode apis for properties
-> > >
-> > > Changes since v2:
-> > > drop default-brightness and default-intensity
-> > >
-> > >  drivers/leds/rgb/Kconfig        |  11 ++
-> > >  drivers/leds/rgb/Makefile       |   1 +
-> > >  drivers/leds/rgb/leds-ws2812b.c | 219 ++++++++++++++++++++++++++++++++
-> > >  3 files changed, 231 insertions(+)
-> > >  create mode 100644 drivers/leds/rgb/leds-ws2812b.c
-> > >
-> > > diff --git a/drivers/leds/rgb/Kconfig b/drivers/leds/rgb/Kconfig
-> > > index 204cf470beae..5c2081852f01 100644
-> > > --- a/drivers/leds/rgb/Kconfig
-> > > +++ b/drivers/leds/rgb/Kconfig
-> > > @@ -26,4 +26,15 @@ config LEDS_QCOM_LPG
-> > >
-> > >         If compiled as a module, the module will be named leds-qcom-lpg.
-> > >
-> > > +config LEDS_WS2812B
-> > > +     tristate "SPI driven WS2812B RGB LED support"
-> > > +     depends on OF
-> > > +     depends on SPI
-> > > +     help
-> > > +       This option enables support for driving daisy-chained WS2812B RGB
-> > > +       LED chips using SPI bus. This driver simulates the single-wire
-> > > +       protocol by sending bits over the SPI MOSI pin. For this to work,
-> > > +       the SPI frequency should be 2.105MHz~2.85MHz and the controller
-> > > +       needs to transfer all the bytes continuously.
-> > > +
-> > >  endif # LEDS_CLASS_MULTICOLOR
-> > > diff --git a/drivers/leds/rgb/Makefile b/drivers/leds/rgb/Makefile
-> > > index 0675bc0f6e18..a6f855eaeb14 100644
-> > > --- a/drivers/leds/rgb/Makefile
-> > > +++ b/drivers/leds/rgb/Makefile
-> > > @@ -2,3 +2,4 @@
-> > >
-> > >  obj-$(CONFIG_LEDS_PWM_MULTICOLOR)    += leds-pwm-multicolor.o
-> > >  obj-$(CONFIG_LEDS_QCOM_LPG)          += leds-qcom-lpg.o
-> > > +obj-$(CONFIG_LEDS_WS2812B)           += leds-ws2812b.o
-> > > diff --git a/drivers/leds/rgb/leds-ws2812b.c b/drivers/leds/rgb/leds-ws2812b.c
-> > > new file mode 100644
-> > > index 000000000000..68c80beb304c
-> > > --- /dev/null
-> > > +++ b/drivers/leds/rgb/leds-ws2812b.c
-> > > @@ -0,0 +1,219 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * WorldSemi WS2812B individually-addressable LED driver using SPI
-> > > + *
-> > > + * Copyright 2022 Chuanhong Guo <gch981213@gmail.com>
-> > > + *
-> > > + * This driver simulates WS2812B protocol using SPI MOSI pin. A one pulse
-> > > + * is transferred as 3'b110 and a zero pulse is 3'b100. For this driver to
-> > > + * work properly, the SPI frequency should be 2.105MHz~2.85MHz and it needs
-> > > + * to transfer all the bytes continuously.
-> > > + */
-> > > +
-> > > +#include <linux/led-class-multicolor.h>
-> > > +#include <linux/leds.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/of_device.h>
-> > > +#include <linux/property.h>
-> > > +#include <linux/spi/spi.h>
-> > > +#include <linux/mutex.h>
-> > > +
-> > > +#define WS2812B_BYTES_PER_COLOR 3
-> > > +#define WS2812B_NUM_COLORS 3
-> > > +#define WS2812B_RESET_LEN 18
-> > > +
-> > > +struct ws2812b_led {
-> > > +     struct led_classdev_mc mc_cdev;
-> > > +     struct mc_subled subled[WS2812B_NUM_COLORS];
-> > > +     struct ws2812b_priv *priv;
-> > > +     int reg;
-> >
-> > Looks like you're leaking the Device Tree nomenclature into the
-> > driver.  IIUC, this is not a reg(ister) value at all, but the LED
-> > indices.
+> Commit-ID:     30093056f7b2f759ff180d3a86d29f68315e469b
+> Gitweb:        https://git.kernel.org/tip/30093056f7b2f759ff180d3a86d29f68315e469b
+> Author:        Ravi Bangoria <ravi.bangoria@amd.com>
+> AuthorDate:    Tue, 15 Nov 2022 15:09:04 +05:30
+> Committer:     Peter Zijlstra <peterz@infradead.org>
+> CommitterDate: Thu, 24 Nov 2022 11:09:19 +01:00
 > 
-> You are right. reg is a bit weird here. I'll go with idx instead.
-
-idx is a terrible variable name (like 'data' or 'value').
-
-Please use something better, like cascade (as per the datasheet).
-
-> > How does the datasheet describe / differentiate them?
+> perf/amd/ibs: Make IBS a core pmu
 > 
-> The datasheet only describes a single chip instead of
-> a chain of them, so there's no specific word for this,
-> it says:
+> So far, only one pmu was allowed to be registered as core pmu and thus
+> IBS pmus were being registered as uncore. However, with the event context
+> rewrite, that limitation no longer exists and thus IBS pmus can also be
+> registered as core pmu. This makes IBS much more usable, for ex, user
+> will be able to do per-process precise monitoring on AMD:
 > 
-> After the pixel power-on reset, the DIN port receive
-> data from controller, the first pixel collect initial 24bit
-> data then sent to the internal data latch, the other
-> data which reshaping by the internal signal reshaping
-> amplification circuit sent to the next cascade pixel
-> through the DO port.
+> Before patch:
+>   $ sudo perf record -e cycles:pp ls
+>   Error:
+>   Invalid event (cycles:pp) in per-thread mode, enable system wide with '-a'
 > 
-> Here's the datasheet:
-> https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf
+> After patch:
+>   $ sudo perf record -e cycles:pp ls
+>   [ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.017 MB perf.data (33 samples) ]
 > 
-> >
-> > > +};
-> > > +
-> > > +struct ws2812b_priv {
-> > > +     struct led_classdev ldev;
-> > > +     struct spi_device *spi;
-> > > +     struct mutex mutex;
-> > > +     int num_leds;
-> > > +     size_t data_len;
-> > > +     u8 *data_buf;
-> > > +     struct ws2812b_led leds[];
-> > > +};
-> > > +
-> > > +static void ws2812b_set_byte(u8 *p, u8 val)
-> > > +{
-> > > +     /*
-> > > +      * Every bit of data is represented using 3 bits: 3'b100 for
-> > > +      * 0 and 3'b110 for 1.
-> > > +      * 1 byte of data takes up 3 bytes in a SPI transfer. The higher
-> > > +      * 3 bits, middle 2 bits and lower 3 bits are represented
-> > > +      * with the 1st, 2nd and 3rd byte in the SPI transfer.
-> > > +      * Here's the lookup table for them.
-> >
-> > Sometimes a little ASCII representation can help people visualise the
-> > data stream / layout.
-> >
-> > > +      */
-> > > +     const u8 h3b[] = { 0x92, 0x93, 0x9a, 0x9b, 0xd2, 0xd3, 0xda, 0xdb };
-> > > +     const u8 m2b[] = { 0x49, 0x4d, 0x69, 0x6d };
-> > > +     const u8 l3b[] = { 0x24, 0x26, 0x34, 0x36, 0xa4, 0xa6, 0xb4, 0xb6 };
-> >
-> > It's taken me a couple of minutes to parse this, which leads me to
-> > believe it requires more explanation.  The blurb you've written so
-> > far is good, please keep going.  What do the values in the lookup
-> > table represent?  I see that brightness is passed in (should val be
-> > called brightness too?).  Is the returned data the register values to
-> > set that brightness, or something else?
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Acked-by: Ian Rogers <irogers@google.com>
+> Link: https://lkml.kernel.org/r/20221115093904.1799-1-ravi.bangoria@amd.com
+> ---
+>  arch/x86/events/amd/ibs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> It is used to set brightness, but it's not register values. I'm abusing
-> SPI MOSI to send pulses of specific length. See the comments
-> below.
-> 
-> >
-> > Please also consider adding these comments to further the clarity:
-> >
-> > > +     p[0] = h3b[val >> 5];            /* 0-7 */
-> > > +     p[1] = m2b[(val >> 3) & 0x3];    /* 0-3 */
-> > > +     p[2] = l3b[val & 0x7];           /* 0-7 */
-> > > +}
-> 
-> /**
-> * ws2812b_set_byte - convert a byte of data to 3-byte SPI data for pulses
-> * @p: pointer to the 3-byte SPI data
-> * @val: 1-byte input data to be converted
-> *
-> * WS2812B receives a stream of bytes from DI, takes the first 3 byte as LED
-> * brightness and pases the rest to the next LED through the DO pin.
-> * This function assembles a single byte of data to the LED:
-> * A bit is represented with a pulse of specific length. A long pulse is a 1
-> * and a short pulse is a 0.
-> * SPI transfers data continuously, MSB first. We can send 3'b100 to create a
-> * 0 pulse and 3'b110 for a 1 pulse. In this way, a byte of data takes up 3
-> * bytes in a SPI transfer:
-> * 1x0 1x0 1x0 1x0 1x0 1x0 1x0 1x0
-> * Let's rearrange it in 8 bits:
-> * 1x01x01x 01x01x01 x01x01x0
-> * The higher 3 bits, middle 2 bits and lower 3 bits are represented with the
-> * 1st, 2nd and 3rd byte in the SPI transfer respectively.
-> * There are only 8 combinations for 3 bits and 4 for 2 bits, so we can create
-> * a lookup table for the 3 bytes. e.g. For 0x6b -> 2'b01101011:
-> * Bit 7-5: 3'b011 -> 10011011 -> 0x9b
-> * Bit 4-3: 2'b01 -> 01001101 -> 0x4d
-> * Bit 2-0: 3'b011 -> 00110110 -> 0x36
-> */
-
-This is good, thank you.
-
-Please change the formatting so it's a little nicer to read.
-
-E.g. tab out the examples.
-
-> > > +
-> > > +static int ws2812b_set(struct led_classdev *cdev,
-> > > +                    enum led_brightness brightness)
-> > > +{
-> > > +     struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-> > > +     struct ws2812b_led *led =
-> > > +             container_of(mc_cdev, struct ws2812b_led, mc_cdev);
-> > > +     struct ws2812b_priv *priv = led->priv;
-> > > +     u8 *buf = priv->data_buf + WS2812B_RESET_LEN +
-> > > +               led->reg * WS2812B_NUM_COLORS * WS2812B_BYTES_PER_COLOR;
-> >
-> > Please add some bracketing.  This also goes for the other places you
-> > have complex BODMAS type arithmetic where ordering may cause issues.
-> 
-> OK.
-> 
-> > Actually, I'm very comfortable with all of this, mostly unparsable (at
-> > least quickly) pointer arithmetic happening in this driver.  We have
-> > some very readable / maintainable ways of referencing registers /
-> > offsets that does not involve register address hopping.  Would you
-> > mind revisiting this please?  Have you considered Regmap for instance?
-> 
-> I couldn't figure out how regmap could make this simpler. If I create a
-> regmap for the entire buffer, it just moves this whole calculation into
-> reg_read callback isn't it?
-
-Have a go at putting the logic into a MACRO.
-
-Then you can swap out all of the repeated pointer arithmetic.
-
-> BTW the WS2812B_RESET_LEN is for a continuous 0 of more
-> than 50us. This indicates the start of a byte stream.
-
-[...]
-
-> > > +
-> > > +     for (i = 0; i < num_leds * WS2812B_NUM_COLORS; i++)
-> > > +             ws2812b_set_byte(priv->data_buf + WS2812B_RESET_LEN +
-> > > +                                      i * WS2812B_BYTES_PER_COLOR,
-> > > +                              0);
-> >
-> > At which point do you usually line-wrap?
-> 
-> I just write everything in one line and clang-format it :P
-
-Probably best not to do that.  100-chars is good.
+> diff --git a/arch/x86/events/amd/ibs.c b/arch/x86/events/amd/ibs.c
+> index 3271735..fbc2ce8 100644
+> --- a/arch/x86/events/amd/ibs.c
+> +++ b/arch/x86/events/amd/ibs.c
+> @@ -631,7 +631,7 @@ static const struct attribute_group *op_attr_update[] = {
+>  
+>  static struct perf_ibs perf_ibs_fetch = {
+>  	.pmu = {
+> -		.task_ctx_nr	= perf_invalid_context,
+> +		.task_ctx_nr	= perf_hw_context,
+>  
+>  		.event_init	= perf_ibs_init,
+>  		.add		= perf_ibs_add,
+> @@ -655,7 +655,7 @@ static struct perf_ibs perf_ibs_fetch = {
+>  
+>  static struct perf_ibs perf_ibs_op = {
+>  	.pmu = {
+> -		.task_ctx_nr	= perf_invalid_context,
+> +		.task_ctx_nr	= perf_hw_context,
+>  
+>  		.event_init	= perf_ibs_init,
+>  		.add		= perf_ibs_add,
 
 -- 
-Lee Jones [李琼斯]
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
