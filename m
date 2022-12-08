@@ -2,117 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6385864789E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4F0E64789F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 23:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiLHWIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 17:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40584 "EHLO
+        id S229538AbiLHWKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 17:10:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbiLHWIM (ORCPT
+        with ESMTP id S229468AbiLHWKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 17:08:12 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0422A79C35;
-        Thu,  8 Dec 2022 14:07:09 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 6EAC25C00DE;
-        Thu,  8 Dec 2022 17:07:08 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 08 Dec 2022 17:07:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670537228; x=1670623628; bh=Dy
-        B+B8MtQb2fOnIlvIxqzSDOKodU/cQnRbndcmgRAbg=; b=HNhMVbw5qWol0S3yls
-        x35r7e29BknDwgYpIClfd43/NXUEp90AJAe4hAJ7e0McdPHPd/QhVo2Wx7bxaMb2
-        ouYEJY07izoVGMVWfeqUBy8EPceiAf1uZbzR1Qh/SXkFwakkJzhiB5bAi2wXuwXD
-        BxPXOzj+H083LY3VOyGC7UmQpL5swywAqltM6tyB99rXam+R3lnkRZX8mEfpN4Lr
-        +HtTj+xqpVO8AXilvXE06V0xokCp59cnTxGClE8aQPgZF/Mc6TV3nttVxYMyyOFg
-        5Z5+mmNfD2SNbeZWlq3gYNJxk2vDWx4bUrWs/GOWdUrmqt3o+l+L2KMv8lvP+qWq
-        MeZw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1670537228; x=1670623628; bh=DyB+B8MtQb2fOnIlvIxqzSDOKodU
-        /cQnRbndcmgRAbg=; b=h2emNTSpOXXr+KNTvpkiPqusLJXQuK3wBz+5OWsBa6P/
-        a4drG90UXraKh6bZBvXRQNqJN+vv5FW8Cu0HclocdQmFLpDjLJYRB68T5UQxYAob
-        EGylAGFBpZWdADv0jnFl6HI+ttQxFilCDyy36INTB9icyv99z4+fdqHOWQiq1HGO
-        AST2L4g7kDr1U9bHRBVW6CG/qvS67MmPVhGIyjrh7SRfX2WraRbJnsDcsbF4ycEa
-        1+OqA4WZhVIH51EFIHvFOvqBGfjUWzqYu8Zl1x6/u+rm8ra6UyP8QC7LAlfkOgBX
-        Sy2Nt+B0waqIa5x20I88ZhiZ5OoM6GeBcHJV9LVf8w==
-X-ME-Sender: <xms:C2CSY7dgoqyuM9irjTL5kAkn37nkxoba95wFvXWf0Kpra_f9yHTSAg>
-    <xme:C2CSYxO0sYYAQJHzhGa2QXKeHhWwsF1Ya6wCrsERb46H9aKW1ptopTc66wgZQuCjN
-    ExwaoitAgnkxJdJykI>
-X-ME-Received: <xmr:C2CSY0gWV3TWaCWJGY9gCfcXibdMbwfoJrsmhdzP2QLUWKNBX3fHHE26ZkCqPgYTFw-2nA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgdduheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:C2CSY8-YXAaGhoO0xtB-Nue_MU9P7YldgjXMGe1NXqB5x9mEddEZIQ>
-    <xmx:C2CSY3vOzoNg0tVSYm8TF2_I0TY8MIW9_7JFLix-8dfqJiaPzJZZ6g>
-    <xmx:C2CSY7EI23D16QxOvuK6G1_V9nnHeoU9dxxx5MpI2kDGsPf8fBYcdA>
-    <xmx:DGCSY2-8LiZNMh-nG0Zhu-WWzdOwl8nZvS3IIGs6nACC-woHdASDFw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 17:07:07 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id DE081109CB7; Fri,  9 Dec 2022 01:07:05 +0300 (+03)
-Date:   Fri, 9 Dec 2022 01:07:05 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] x86/tdx: Expand __tdx_hypercall() to handle more
- arguments
-Message-ID: <20221208220705.gog2lmlooio4act3@box.shutemov.name>
-References: <20221207003325.21503-1-decui@microsoft.com>
- <20221207003325.21503-5-decui@microsoft.com>
+        Thu, 8 Dec 2022 17:10:52 -0500
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5596227DE5
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 14:10:51 -0800 (PST)
+Received: by mail-yb1-xb2e.google.com with SMTP id f139so3126827yba.8
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 14:10:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=GlnKwCM+RiupdXA6cs5QqgrNaf48G0/GZTk3jwIRsLA=;
+        b=u1UXoQ4QFd/pYaY44ys8dwVAgJjH5SG22JiE6WI3T/vEjgqMG2avck3clvDZgLXwzY
+         Lk8VuODv9nrMVfUhXnt1lsXBildi2l5O3Sdh7sqD7K0B59iKU1K8ihQ4q1+ZWCegceW7
+         Tf+oGNKiZVNtpMGmBEON+HWRpvnPf1SCqr5MBDg+7bEf9slkj3FBCG+MrKnI0uAWuvBO
+         KCCyWreBS8V9vPiGlGSwqpjeRYl1ulnfeMEz+hUiXxMZ7j25+Udwwoy3EF1ADv8WP/iA
+         c3KPbJ8kcJcxKwmYwyBHAbwWI1hno9KTV/itHodzTF6k8K0DZRJZOHWlFgAvLM+0tdoK
+         nYMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GlnKwCM+RiupdXA6cs5QqgrNaf48G0/GZTk3jwIRsLA=;
+        b=IdOkljTODggppDPuReLYOvnH5ooT4jiQ6AY3+0XETcMMl0Ng73srXXzy1lk4kSk7rm
+         h2/PQbY4P4y4NxZbqtjdkUVCt/Q73igWYItfMwzXKN37Hd2woLFCMGdOrhRkj4+n0uQX
+         3aN6rHFto7FUCaWbVxE+1Fed5T/O0muub8VOMYNFfrjTY5vlBS7fi2eFJDPGh8IvE8Jf
+         W/BST+Ff12ovWu8w8Xov5tO/ZWiCzmTaHewUr8b6dK84xiXFpK+HAaA7zbkKsxVVNDcn
+         6rEQkz/VvUcNobA+98q2THqhJNHfOtIKmfl0qjCZXFLdU5RNUiBakBBZNMsdS+bHJKm/
+         O63Q==
+X-Gm-Message-State: ANoB5pnmZBXgDe/XoxJElrV2zR6fYCSE3+CZZWJdDWUjQAu9gKogKVSY
+        We2ONED6T/fKOipyPXGm4a5lvg3uAOM2GZ57hMw+JQ==
+X-Google-Smtp-Source: AA0mqf7k2rXJzsp3owofHLadYx2njTpl+Cn89G+/gTH9j4sizhKXJVD907a1oo2LWwUuxip3tqXfWZU1mHvG4WStX9o=
+X-Received: by 2002:a25:8e82:0:b0:6d2:70d5:3ed0 with SMTP id
+ q2-20020a258e82000000b006d270d53ed0mr94181732ybl.457.1670537450502; Thu, 08
+ Dec 2022 14:10:50 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207003325.21503-5-decui@microsoft.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <BYAPR11MB3240F382BD180FF90C7DF0B9E1069@BYAPR11MB3240.namprd11.prod.outlook.com>
+ <7de35859-97ab-8e88-f590-d5851b81773b@nvidia.com> <BYAPR11MB32405F4FA22BB47BD03C8F18E10C9@BYAPR11MB3240.namprd11.prod.outlook.com>
+ <CACRpkdbY5aU3OTufA0q+N7Pwm0shGgnjScAGR_96oo9XdgBDhQ@mail.gmail.com>
+ <34baa0b1-72c3-e4b3-3eaf-9b07fe86c3df@nvidia.com> <BYAPR11MB324034C53D14D8F7E332A3C5E1179@BYAPR11MB3240.namprd11.prod.outlook.com>
+ <CACRpkdaTaDNB12vkmUVdmk0yBH-YW07RfcDO97q7d+ppLHj_iQ@mail.gmail.com> <MWHPR11MB1984A17A2263E5EBAB8B9853C21D9@MWHPR11MB1984.namprd11.prod.outlook.com>
+In-Reply-To: <MWHPR11MB1984A17A2263E5EBAB8B9853C21D9@MWHPR11MB1984.namprd11.prod.outlook.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 8 Dec 2022 23:10:38 +0100
+Message-ID: <CACRpkdbi7ArVe83XOLGot+j49fSj_hXhxGuC9o4woYgN9Mpt+g@mail.gmail.com>
+Subject: Re: Intel timed i/o driver in HTE
+To:     "Hall, Christopher S" <christopher.s.hall@intel.com>
+Cc:     "N, Pandith" <pandith.n@intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Dipen Patel <dipenp@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Gross, Mark" <mark.gross@intel.com>,
+        "Sangannavar, Mallikarjunappa" 
+        <mallikarjunappa.sangannavar@intel.com>,
+        "D, Lakshmi Sowjanya" <lakshmi.sowjanya.d@intel.com>,
+        "T R, Thejesh Reddy" <thejesh.reddy.t.r@intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "timestamp@lists.linux.dev" <timestamp@lists.linux.dev>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 04:33:23PM -0800, Dexuan Cui wrote:
-> From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-> 
-> So far __tdx_hypercall() only handles six arguments for VMCALL.
-> Expanding it to six more register would allow to cover more use-cases.
-> 
-> Using RDI and RSI as VMCALL arguments requires more register shuffling.
-> RAX is used to hold tdx_hypercall_args pointer and RBP stores flags.
-> 
-> While there, fix typo in the comment on panic branch.
-> 
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Dexuan Cui <decui@microsoft.com>
-> Tested-by: Dexuan Cui <decui@microsoft.com>
+Hi Christopher!
 
-Since you submit the patch you need to add your Signed-off-by.
+thanks for the lengthy explanation, I think I get it now.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+As usual I have now a slight impostor syndrome for now knowing
+what PPS is and what it is for despite it has its own subsystem
+and all.
+
+On Thu, Dec 8, 2022 at 5:52 AM Hall, Christopher S
+<christopher.s.hall@intel.com> wrote:
+
+> For PPS input, we plan to use the PPS subsystem.
+
+Why are you not planning to use the PPS "generators" for output?
+
+> The application configures the pin for PPS input
+> A device in created /dev/ppsX
+> while 1:
+>         The timed I/O device captures / timestamps a pulse from an
+>                 external PPS provider
+>         The timestamp is translated to system time(TN)
+>         A PPS event is generated using pps_event(TN
+>
+> Another application like PHC2SYS or Chrony consumes the timestamps from
+> the PPS device and disciplines the system clock.
+
+This is great and to the point.
+
+> Currently, most - maybe all - PPS clients (drivers/pps/clients) capture
+> timestamps in software (pps_get_ts()). We can do at least 50x better
+> timestamping using hardware. The timestamp accuracy is in the range of
+> a few 10s of nanoseconds. I think this is a good thing.
+
+So the plan is to let a driver in drivers/pps obtain a timed IO input
+from the HTE subsystem with high resution, which is great.
+
+> Again we provided an example application. Let's not get "hung up" on GPS.
+> There are many GPS receivers that produce a PPS output.
+
+OK I'm sorry for being so stubborn with that example.
+
+> If I may, I would like to re-focus the discussion. The question we want
+> to answer in this thread is whether it makes sense to modify the HTE
+> subsystem to accommodate our device and whether it "belongs" there.
+
+Yeah I agree.
+
+> To summarize this and previous threads the Timed IO use case is
+> importing and exporting system time with about nanosecond precision.
+
+Yeah I think that point has not been the main focus actually:
+maybe I'm especially dumb but it looked to me as posed for
+"random events" in and "random pulsetrains" out. But in this
+context it makes much more sense.
+
+> We also want to be able to timestamp / generate single events.
+> Existing HTE already do the first.
+>
+> Are these use cases that you are willing to support in the HTE
+> subsystem? We seem to be unable to dig into the implementation
+> without circling back to the use cases which I believe are
+> clearly defined.
+
+Sorry for the misunderstandings. This is really Dipen's decision.
+
+If you ask me, it seems like you should begin with making a
+PPS input using the HTE as back-end, then think about the next
+thing.
+
+If this *makes* *sense*, and is not over-generalizing the
+timed input. I.e. if you expect people to be using it for some
+random other line sampling unrelated to PPS. There is no
+point in putting it into drivers/hte for random abstraction.
+
+Otherwise by all means put the whole thing into drivers/pps
+why not? If that is what it is for?
+
+This *could* be one of those cases where the subsystem is not
+a clear cut, and that does not matter because we are not especially
+OCD about pigeon-holeing hardware into one subsystem and
+one subsystem only.
+
+Perhaps the output mode should just go into drivers/pps/generators
+without any HTE back-end while the input mode uses
+HTE?
+
+The fact that this is one single HW block doesn't really matter
+as long as you can share the hw access using something like
+MFD or regmap in worst case.
+
+Yours,
+Linus Walleij
