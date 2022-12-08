@@ -2,155 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7B86476CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:48:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58F4B6476D1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbiLHTsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S229564AbiLHTte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:49:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbiLHTsM (ORCPT
+        with ESMTP id S229462AbiLHTtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:48:12 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA0D2389DC;
-        Thu,  8 Dec 2022 11:48:09 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id B2CA05C0069;
-        Thu,  8 Dec 2022 14:48:06 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 08 Dec 2022 14:48:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1670528886; x=1670615286; bh=hn
-        /OnOtk3EASdGn92mWNbIzbnlYcn0q3Kf908b3pElo=; b=k0BfM5Xmr1BuhCrrQl
-        03JuMYehLfM6mUUmRIOk0F3ik/ftbG7J2GUi93knfDi9fvkegXdewTDmKbYTdSWq
-        Z81TR41z7Vplq+QyjWiqTbght6/53lIN1U9+9rWEOi5itMVycc3KSTSLPcv/ypvQ
-        ewFRB95lN3Kl8eBFhpv1EHpX+vJE3cbQBMU+Qth9sx9/7PaTgryDartyR25robn3
-        /UGoitFYqhbTr3iJL36T8juROQBNqds0JvYnngTCj1k2LQ35FLE6Vofk7q8W01u4
-        H0z5cPE2ycN6YhJtznV7DxpppzSUL8b4I1bcsopa3yqqHvj18Ig9SVdaxNds+Qwo
-        uzGA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm2; t=1670528886; x=1670615286; bh=hn/OnOtk3EASdGn92mWNbIzbnlYc
-        n0q3Kf908b3pElo=; b=qavhLUIrbBjbDvtE/aQE6C82RgilvuZVpyOGz0ip7N2U
-        xn9kgkts8vSnerOddtY/Vj0Yj7+GS5szWg1APvswdRLqbYKa8QJUb57JAsp9A4be
-        Dgv2lEsxeLeMznOlzuv5iSKdibFg5BaaRqsApONfrWOH8cJyveHbF3rMPK0g179b
-        cwyDSgHnqTDq45/RWGbGq2zg+DhONNga83Swg9l9iGY8+pXW/SqijAdtb8UbT/Dq
-        B14MnY6INU1v8EjDImlmKsBTOTND7H2KsfIgdbHc35daZf2ueBeuYKgD6R/C1Wh2
-        0ic2kFp+LI/HTgIjhqS47onD67Y5e4k4K6hSUTbGgA==
-X-ME-Sender: <xms:dT-SY8YvffzaelK86bZuXREEACVZ5wlO47_y7MGmP1odIFLSQXWpoQ>
-    <xme:dT-SY3ZXtwB3GJ7E1U1RyAAK5mDD28zpWhaijx-_gEJI_mb71jdvMMln98_0FCR7D
-    s0MtbCzAoUvo8vQpA0>
-X-ME-Received: <xmr:dT-SY2-ZzPJkygjgodaaYWQsuEiXA1aMtHPP198vcDC9a9BP3JnQznhSclH-B-oBJdEENw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgddufeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:dT-SY2p6LiyBboVTxyFHH1oecN3QTCPC0xVZIIMBnASLy7xwfu73wg>
-    <xmx:dT-SY3ofwZPLui7aVwZmADkcCsBAgGfF9To7YpF6xXK8fL_lkuDOkw>
-    <xmx:dT-SY0Sf4LzpdQKHVp7YnDINAG2Y5bH7erZ-OY8uW2U8YNOL2DKCwA>
-    <xmx:dj-SYxbfvz63zviX8rgeDKC6YaCjTXsEmHmoWeyFYb4XAw3HZmJLYQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 8 Dec 2022 14:48:05 -0500 (EST)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 91B70109CB7; Thu,  8 Dec 2022 22:48:00 +0300 (+03)
-Date:   Thu, 8 Dec 2022 22:48:00 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dexuan Cui <decui@microsoft.com>
-Cc:     ak@linux.intel.com, arnd@arndb.de, bp@alien8.de,
-        brijesh.singh@amd.com, dan.j.williams@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
-Message-ID: <20221208194800.n27ak4xj6pmyny46@box.shutemov.name>
-References: <20221207003325.21503-1-decui@microsoft.com>
- <20221207003325.21503-2-decui@microsoft.com>
+        Thu, 8 Dec 2022 14:49:31 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9186D389E8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:49:30 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so2624451pjm.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:49:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/iRRuEpq3SHF2tTVNW+V0pd2eP3QVViktpfmGsJo8SE=;
+        b=kbZjAjJOckI+jlOCJbuKM/9hTPPtgPZftSrpNxz+6MLKgxGWvBLLNyUR+yLtAe1FHf
+         wJpg2MHXkTzpBNyZxTGd1AdsYy4ZLs6dxynTISt9vca/TyPOGTgUZjlcmzeqpYDnp/lr
+         nfbOFjW274MxXgm+RUWP24N0ybK+fuofYxDYYO/sGvPoD5lfmmfOO3tdwNjQLoMr4mpd
+         /RF/OCtj9uVDzdQiD1V8pMJXjG1PPQFii8S4PnRl+HioQe97ZvVWKQiPgKLeNQV2/HJw
+         gBUXqS7+VDy/y8Zx1/EhxyC9Yxe7Bai4askP49YC2QyLOF6z9J+4HJ7bjYXM/dfQMhAm
+         uWhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/iRRuEpq3SHF2tTVNW+V0pd2eP3QVViktpfmGsJo8SE=;
+        b=Pn5yUkd5SAdAbfw/cBuGS23a+GfYTbLbiqq4slkfYXJnzA3Fkx2wvpHdGYkZVExGGz
+         LvlzzAEDdHoJlwqC/j99gi3u6Ana2Fs2DBAVJ8ZSwrLHvojlj8lXiRbPPbgPU65u2xCG
+         lrsKiOuQ4IIwPBwJXAGys/qqxkALb4x2ghHYhqW8Z7IenZQcftgrhwN+YhoGQJ8QsDs0
+         f98OUOT3mkgN/RPVQXh37ui5jcqswkUa1QzA+Bgw8/G02Sgb/rpqSODuxXlMEFiLP/F8
+         yLznmJkcgCZtHAY0fpMc42f+VaFa4POncvMbjULcVoPNvVFYGi+maIHe9Fl6B6nSGoyS
+         lQVA==
+X-Gm-Message-State: ANoB5pk9sD4bxFXA0AZTl5ZgiyJoWt36AAuXeAAB0mafset/nIxKV06Y
+        +yKIi4eJ5WlLAf7m761QDFi2mA==
+X-Google-Smtp-Source: AA0mqf4+sYmN6TRhUnqm6pJbxgGCoSUwTGEipBsiO/jKS6U41yXiKghC+TQNsnXSTcuYW70TLswWgg==
+X-Received: by 2002:a17:90a:d681:b0:218:84a0:65eb with SMTP id x1-20020a17090ad68100b0021884a065ebmr1775305pju.1.1670528969909;
+        Thu, 08 Dec 2022 11:49:29 -0800 (PST)
+Received: from google.com (220.181.82.34.bc.googleusercontent.com. [34.82.181.220])
+        by smtp.gmail.com with ESMTPSA id d15-20020a17090ac24f00b0020b7de675a4sm34718pjx.41.2022.12.08.11.49.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 11:49:29 -0800 (PST)
+Date:   Thu, 8 Dec 2022 11:49:26 -0800
+From:   Ricardo Koller <ricarkol@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] KVM: selftests: Setup ucall after loading program
+ into guest memory
+Message-ID: <Y5I/xiFMLVbpAZj+@google.com>
+References: <20221207214809.489070-1-oliver.upton@linux.dev>
+ <20221207214809.489070-3-oliver.upton@linux.dev>
+ <Y5EoZ5uwrTF3eSKw@google.com>
+ <Y5EtMWuTaJk9I3Bd@google.com>
+ <Y5EutGSjkRmdItQb@google.com>
+ <Y5Exwzr6Ibmmthl0@google.com>
+ <Y5IxNTKRnacfSsLt@google.com>
+ <Y5I0paok+dvTtrkt@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221207003325.21503-2-decui@microsoft.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5I0paok+dvTtrkt@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 04:33:20PM -0800, Dexuan Cui wrote:
-> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
-> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
-> operation for the pages in the region starting at the GPA specified
-> in R11.
+On Thu, Dec 08, 2022 at 07:01:57PM +0000, Sean Christopherson wrote:
+> On Thu, Dec 08, 2022, Ricardo Koller wrote:
+> > On Thu, Dec 08, 2022 at 12:37:23AM +0000, Oliver Upton wrote:
+> > > On Thu, Dec 08, 2022 at 12:24:20AM +0000, Sean Christopherson wrote:
+> > > > > Even still, that's just a kludge to make ucalls work. We have other
+> > > > > MMIO devices (GIC distributor, for example) that work by chance since
+> > > > > nothing conflicts with the constant GPAs we've selected in the tests.
+> > > > > 
+> > > > > I'd rather we go down the route of having an address allocator for the
+> > > > > for both the VA and PA spaces to provide carveouts at runtime.
+> > > > 
+> > > > Aren't those two separate issues?  The PA, a.k.a. memslots space, can be solved
+> > > > by allocating a dedicated memslot, i.e. doesn't need a carve.  At worst, collisions
+> > > > will yield very explicit asserts, which IMO is better than whatever might go wrong
+> > > > with a carve out.
+> > > 
+> > > Perhaps the use of the term 'carveout' wasn't right here.
+> > > 
+> > > What I'm suggesting is we cannot rely on KVM memslots alone to act as an
+> > > allocator for the PA space. KVM can provide devices to the guest that
+> > > aren't represented as memslots. If we're trying to fix PA allocations
+> > > anyway, why not make it generic enough to suit the needs of things
+> > > beyond ucalls?
+> > 
+> > One extra bit of information: in arm, IO is any access to an address (within
+> > bounds) not backed by a memslot. Not the same as x86 where MMIO are writes to
+> > read-only memslots.  No idea what other arches do.
 > 
-> When a TDX guest runs on Hyper-V, Hyper-V returns the retry error
-> when hyperv_init() -> swiotlb_update_mem_attributes() ->
-> set_memory_decrypted() decrypts up to 1GB of swiotlb bounce buffers.
-> 
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
-> 
-> Changes in v2:
->   Used __tdx_hypercall() directly in tdx_map_gpa().
->   Added a max_retry_cnt of 1000.
->   Renamed a few variables, e.g., r11 -> map_fail_paddr.
-> 
->  arch/x86/coco/tdx/tdx.c | 64 +++++++++++++++++++++++++++++++++--------
->  1 file changed, 52 insertions(+), 12 deletions(-)
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 3fee96931ff5..cdeda698d308 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -20,6 +20,8 @@
->  /* TDX hypercall Leaf IDs */
->  #define TDVMCALL_MAP_GPA		0x10001
->  
-> +#define TDVMCALL_STATUS_RETRY		1
-> +
->  /* MMIO direction */
->  #define EPT_READ	0
->  #define EPT_WRITE	1
-> @@ -692,14 +694,15 @@ static bool try_accept_one(phys_addr_t *start, unsigned long len,
->  }
->  
->  /*
-> - * Inform the VMM of the guest's intent for this physical page: shared with
-> - * the VMM or private to the guest.  The VMM is expected to change its mapping
-> - * of the page in response.
-> + * Notify the VMM about page mapping conversion. More info about ABI
-> + * can be found in TDX Guest-Host-Communication Interface (GHCI),
-> + * section "TDG.VP.VMCALL<MapGPA>".
->   */
-> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
-> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
->  {
-> -	phys_addr_t start = __pa(vaddr);
-> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-> +	int max_retry_cnt = 1000, retry_cnt = 0;
+> I don't think that's correct, doesn't this code turn write abort on a RO memslot
+> into an io_mem_abort()?  Specifically, the "(write_fault && !writable)" check will
+> match, and assuming none the the edge cases in the if-statement fire, KVM will
+> send the write down io_mem_abort().
 
-Hm. max_retry_cnt looks too high to me. I expected to see 3 or something.
+You are right. In fact, page_fault_test checks precisely that: writes on
+RO memslots are sent to userspace as an mmio exit. I was just referring
+to the MMIO done for ucall.
 
-Any justification for it to be *that* high?
+Having said that, we could use ucall as writes on read-only memslots
+like what x86 does.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> 
+> 	gfn = fault_ipa >> PAGE_SHIFT;
+> 	memslot = gfn_to_memslot(vcpu->kvm, gfn);
+> 	hva = gfn_to_hva_memslot_prot(memslot, gfn, &writable);
+> 	write_fault = kvm_is_write_fault(vcpu);
+> 	if (kvm_is_error_hva(hva) || (write_fault && !writable)) {
+> 		/*
+> 		 * The guest has put either its instructions or its page-tables
+> 		 * somewhere it shouldn't have. Userspace won't be able to do
+> 		 * anything about this (there's no syndrome for a start), so
+> 		 * re-inject the abort back into the guest.
+> 		 */
+> 		if (is_iabt) {
+> 			ret = -ENOEXEC;
+> 			goto out;
+> 		}
+> 
+> 		if (kvm_vcpu_abt_iss1tw(vcpu)) {
+> 			kvm_inject_dabt(vcpu, kvm_vcpu_get_hfar(vcpu));
+> 			ret = 1;
+> 			goto out_unlock;
+> 		}
+> 
+> 		/*
+> 		 * Check for a cache maintenance operation. Since we
+> 		 * ended-up here, we know it is outside of any memory
+> 		 * slot. But we can't find out if that is for a device,
+> 		 * or if the guest is just being stupid. The only thing
+> 		 * we know for sure is that this range cannot be cached.
+> 		 *
+> 		 * So let's assume that the guest is just being
+> 		 * cautious, and skip the instruction.
+> 		 */
+> 		if (kvm_is_error_hva(hva) && kvm_vcpu_dabt_is_cm(vcpu)) {
+> 			kvm_incr_pc(vcpu);
+> 			ret = 1;
+> 			goto out_unlock;
+> 		}
+> 
+> 		/*
+> 		 * The IPA is reported as [MAX:12], so we need to
+> 		 * complement it with the bottom 12 bits from the
+> 		 * faulting VA. This is always 12 bits, irrespective
+> 		 * of the page size.
+> 		 */
+> 		fault_ipa |= kvm_vcpu_get_hfar(vcpu) & ((1 << 12) - 1);
+> 		ret = io_mem_abort(vcpu, fault_ipa);
+> 		goto out_unlock;
+> 	}
