@@ -2,122 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D798E646796
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 04:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B906467F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 04:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiLHDNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 22:13:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
+        id S229538AbiLHDim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 22:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiLHDNi (ORCPT
+        with ESMTP id S229637AbiLHDik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 22:13:38 -0500
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88DA25C746;
-        Wed,  7 Dec 2022 19:13:37 -0800 (PST)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4NSK3v6T9dz4f3kpC;
-        Thu,  8 Dec 2022 11:13:31 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP1 (Coremail) with SMTP id cCh0CgAn0a9cVpFjvYz4Bg--.16330S7;
-        Thu, 08 Dec 2022 11:13:34 +0800 (CST)
-From:   Ye Bin <yebin@huaweicloud.com>
-To:     tytso@mit.edu, adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.cz,
-        Ye Bin <yebin10@huawei.com>,
-        syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
-Subject: [PATCH v4 3/3] ext4: add check pending tree when evict inode
-Date:   Thu,  8 Dec 2022 11:34:26 +0800
-Message-Id: <20221208033426.1832460-4-yebin@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221208033426.1832460-1-yebin@huaweicloud.com>
-References: <20221208033426.1832460-1-yebin@huaweicloud.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgAn0a9cVpFjvYz4Bg--.16330S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxGrWxAF1kKw4DJr1UAF4rGrg_yoW5Jw1rp3
-        4UGw15Cr4kur1DCF4ftF15Jr13Wa1vkF4UJrWrKr1jqFy8Ja4xtFnrtr1agF4UJrZxur1Y
-        qF18Cr9YqrW8G3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Gr0_Xr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0
-        oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7V
-        C0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j
-        6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r
-        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
-        67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
-        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
-        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
-        UI43ZEXa7IU8-zVUUUUUU==
-X-CM-SenderInfo: p1hex046kxt4xhlfz01xgou0bp/
-X-CFilter-Loop: Reflected
+        Wed, 7 Dec 2022 22:38:40 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E074F60364;
+        Wed,  7 Dec 2022 19:38:37 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NSKcr1C4yz4xVnm;
+        Thu,  8 Dec 2022 11:38:36 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.40.52])
+        by mse-fl1.zte.com.cn with SMTP id 2B83cHPT001033;
+        Thu, 8 Dec 2022 11:38:17 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 8 Dec 2022 11:38:19 +0800 (CST)
+Date:   Thu, 8 Dec 2022 11:38:19 +0800 (CST)
+X-Zmail-TransId: 2af963915c2b2708f952
+X-Mailer: Zmail v1.0
+Message-ID: <202212081138191215291@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <ulf.hansson@linaro.org>
+Cc:     <maximlevitsky@gmail.com>, <oakad@yahoo.com>, <axboe@kernel.dk>,
+        <hare@suse.de>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSBtZW1zdGljay9tc3Byb19ibG9jazogQ29udmVydCB0byB1c2XCoHN5c2ZzX2VtaXQoKS9zeXNmc19lbWl0X2F0KCkgQVBJcw==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2B83cHPT001033
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63915C3C.000 by FangMail milter!
+X-FangMail-Envelope: 1670470716/4NSKcr1C4yz4xVnm/63915C3C.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63915C3C.000/4NSKcr1C4yz4xVnm
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ye Bin <yebin10@huawei.com>
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Syzbot found the following issue:
-BUG: memory leak
-unreferenced object 0xffff8881bde17420 (size 32):
-  comm "rep", pid 2327, jiffies 4295381963 (age 32.265s)
-  hex dump (first 32 bytes):
-    01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<00000000ac6d38f8>] __insert_pending+0x13c/0x2d0
-    [<00000000d717de3b>] ext4_es_insert_delayed_block+0x399/0x4e0
-    [<000000004be03913>] ext4_da_map_blocks.constprop.0+0x739/0xfa0
-    [<00000000885a832a>] ext4_da_get_block_prep+0x10c/0x440
-    [<0000000029b7f8ef>] __block_write_begin_int+0x28d/0x860
-    [<00000000e182ebc3>] ext4_da_write_inline_data_begin+0x2d1/0xf30
-    [<00000000ced0c8a2>] ext4_da_write_begin+0x612/0x860
-    [<000000008d5f27fa>] generic_perform_write+0x215/0x4d0
-    [<00000000552c1cde>] ext4_buffered_write_iter+0x101/0x3b0
-    [<0000000052177ae8>] do_iter_readv_writev+0x19f/0x340
-    [<000000004b9de834>] do_iter_write+0x13b/0x650
-    [<00000000e2401b9b>] iter_file_splice_write+0x5a5/0xab0
-    [<0000000023aa5d90>] direct_splice_actor+0x103/0x1e0
-    [<0000000089e00fc1>] splice_direct_to_actor+0x2c9/0x7b0
-    [<000000004386851e>] do_splice_direct+0x159/0x280
-    [<00000000b567e609>] do_sendfile+0x932/0x1200
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-Above issue fixed by
-commit 1b8f787ef547 ("ext4: fix warning in 'ext4_da_release_space'")
-in this scene. To make things better add check pending tree when evict
-inode.
-According to Eric Whitney's suggestion, bigalloc + inline is still in
-development so we just add test for this situation, there isn't need to
-add code to free pending tree entry.
-
-Reported-by: syzbot+05a0f0ccab4a25626e38@syzkaller.appspotmail.com
-Signed-off-by: Ye Bin <yebin10@huawei.com>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- fs/ext4/super.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/memstick/core/mspro_block.c | 177 +++++++++++-----------------
+ 1 file changed, 72 insertions(+), 105 deletions(-)
 
-diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-index 4b2d257d3845..15b6634975e7 100644
---- a/fs/ext4/super.c
-+++ b/fs/ext4/super.c
-@@ -1391,6 +1391,11 @@ static void ext4_destroy_inode(struct inode *inode)
- 			   "Inode %lu (%p): i_reserved_data_blocks (%u) not cleared!",
- 			   inode->i_ino, EXT4_I(inode),
- 			   EXT4_I(inode)->i_reserved_data_blocks);
-+
-+	if (!RB_EMPTY_ROOT(&EXT4_I(inode)->i_pending_tree.root))
-+		ext4_error(inode->i_sb,
-+			   "Inode %lu (%p): i_pending_tree not empty!",
-+			   inode->i_ino, EXT4_I(inode));
+diff --git a/drivers/memstick/core/mspro_block.c b/drivers/memstick/core/mspro_block.c
+index 61cf75d4a01e..5a69ed33999b 100644
+--- a/drivers/memstick/core/mspro_block.c
++++ b/drivers/memstick/core/mspro_block.c
+@@ -260,8 +260,8 @@ static ssize_t mspro_block_attr_show_default(struct device *dev,
+ 				buffer[rc++] = '\n';
+ 		}
+
+-		rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "%02x ",
+-				((unsigned char *)s_attr->data)[cnt]);
++		rc += sysfs_emit_at(buffer, rc, "%02x ",
++				    ((unsigned char *)s_attr->data)[cnt]);
+ 	}
+ 	return rc;
  }
- 
- static void init_once(void *foo)
--- 
-2.31.1
+@@ -290,61 +290,43 @@ static ssize_t mspro_block_attr_show_sysinfo(struct device *dev,
+ 		date_tz_f *= 15;
+ 	}
 
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "class: %x\n",
+-			x_sys->class);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "block size: %x\n",
+-			be16_to_cpu(x_sys->block_size));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "block count: %x\n",
+-			be16_to_cpu(x_sys->block_count));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "user block count: %x\n",
+-			be16_to_cpu(x_sys->user_block_count));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "page size: %x\n",
+-			be16_to_cpu(x_sys->page_size));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "assembly date: "
+-			"GMT%+d:%d %04u-%02u-%02u %02u:%02u:%02u\n",
+-			date_tz, date_tz_f,
+-			be16_to_cpup((__be16 *)&x_sys->assembly_date[1]),
+-			x_sys->assembly_date[3], x_sys->assembly_date[4],
+-			x_sys->assembly_date[5], x_sys->assembly_date[6],
+-			x_sys->assembly_date[7]);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "serial number: %x\n",
+-			be32_to_cpu(x_sys->serial_number));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc,
+-			"assembly maker code: %x\n",
+-			x_sys->assembly_maker_code);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "assembly model code: "
+-			"%02x%02x%02x\n", x_sys->assembly_model_code[0],
+-			x_sys->assembly_model_code[1],
+-			x_sys->assembly_model_code[2]);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "memory maker code: %x\n",
+-			be16_to_cpu(x_sys->memory_maker_code));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "memory model code: %x\n",
+-			be16_to_cpu(x_sys->memory_model_code));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "vcc: %x\n",
+-			x_sys->vcc);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "vpp: %x\n",
+-			x_sys->vpp);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "controller number: %x\n",
+-			be16_to_cpu(x_sys->controller_number));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc,
+-			"controller function: %x\n",
+-			be16_to_cpu(x_sys->controller_function));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "start sector: %x\n",
+-			be16_to_cpu(x_sys->start_sector));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "unit size: %x\n",
+-			be16_to_cpu(x_sys->unit_size));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "sub class: %x\n",
+-			x_sys->ms_sub_class);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "interface type: %x\n",
+-			x_sys->interface_type);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "controller code: %x\n",
+-			be16_to_cpu(x_sys->controller_code));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "format type: %x\n",
+-			x_sys->format_type);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "device type: %x\n",
+-			x_sys->device_type);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "mspro id: %s\n",
+-			x_sys->mspro_id);
++	rc += sysfs_emit_at(buffer, rc, "class: %x\n", x_sys->class);
++	rc += sysfs_emit_at(buffer, rc, "block size: %x\n", be16_to_cpu(x_sys->block_size));
++	rc += sysfs_emit_at(buffer, rc, "block count: %x\n", be16_to_cpu(x_sys->block_count));
++	rc += sysfs_emit_at(buffer, rc, "user block count: %x\n",
++			    be16_to_cpu(x_sys->user_block_count));
++	rc += sysfs_emit_at(buffer, rc, "page size: %x\n", be16_to_cpu(x_sys->page_size));
++	rc += sysfs_emit_at(buffer, rc, "assembly date: GMT%+d:%d %04u-%02u-%02u %02u:%02u:%02u\n",
++			    date_tz, date_tz_f,
++			    be16_to_cpup((__be16 *)&x_sys->assembly_date[1]),
++			    x_sys->assembly_date[3], x_sys->assembly_date[4],
++			    x_sys->assembly_date[5], x_sys->assembly_date[6],
++			    x_sys->assembly_date[7]);
++	rc += sysfs_emit_at(buffer, rc, "serial number: %x\n", be32_to_cpu(x_sys->serial_number));
++	rc += sysfs_emit_at(buffer, rc, "assembly maker code: %x\n", x_sys->assembly_maker_code);
++	rc += sysfs_emit_at(buffer, rc, "assembly model code: %02x%02x%02x\n",
++			    x_sys->assembly_model_code[0],
++			    x_sys->assembly_model_code[1],
++			    x_sys->assembly_model_code[2]);
++	rc += sysfs_emit_at(buffer, rc, "memory maker code: %x\n",
++			    be16_to_cpu(x_sys->memory_maker_code));
++	rc += sysfs_emit_at(buffer, rc, "memory model code: %x\n",
++			    be16_to_cpu(x_sys->memory_model_code));
++	rc += sysfs_emit_at(buffer, rc, "vcc: %x\n", x_sys->vcc);
++	rc += sysfs_emit_at(buffer, rc, "vpp: %x\n", x_sys->vpp);
++	rc += sysfs_emit_at(buffer, rc, "controller number: %x\n",
++			    be16_to_cpu(x_sys->controller_number));
++	rc += sysfs_emit_at(buffer, rc, "controller function: %x\n",
++			    be16_to_cpu(x_sys->controller_function));
++	rc += sysfs_emit_at(buffer, rc, "start sector: %x\n", be16_to_cpu(x_sys->start_sector));
++	rc += sysfs_emit_at(buffer, rc, "unit size: %x\n", be16_to_cpu(x_sys->unit_size));
++	rc += sysfs_emit_at(buffer, rc, "sub class: %x\n", x_sys->ms_sub_class);
++	rc += sysfs_emit_at(buffer, rc, "interface type: %x\n", x_sys->interface_type);
++	rc += sysfs_emit_at(buffer, rc, "controller code: %x\n",
++			    be16_to_cpu(x_sys->controller_code));
++	rc += sysfs_emit_at(buffer, rc, "format type: %x\n", x_sys->format_type);
++	rc += sysfs_emit_at(buffer, rc, "device type: %x\n", x_sys->device_type);
++	rc += sysfs_emit_at(buffer, rc, "mspro id: %s\n", x_sys->mspro_id);
+ 	return rc;
+ }
+
+@@ -356,7 +338,7 @@ static ssize_t mspro_block_attr_show_modelname(struct device *dev,
+ 						     struct mspro_sys_attr,
+ 						     dev_attr);
+
+-	return scnprintf(buffer, PAGE_SIZE, "%s", (char *)s_attr->data);
++	return sysfs_emit(buffer, "%s", (char *)s_attr->data);
+ }
+
+ static ssize_t mspro_block_attr_show_mbr(struct device *dev,
+@@ -369,27 +351,17 @@ static ssize_t mspro_block_attr_show_mbr(struct device *dev,
+ 	struct mspro_mbr *x_mbr = x_attr->data;
+ 	ssize_t rc = 0;
+
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "boot partition: %x\n",
+-			x_mbr->boot_partition);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "start head: %x\n",
+-			x_mbr->start_head);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "start sector: %x\n",
+-			x_mbr->start_sector);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "start cylinder: %x\n",
+-			x_mbr->start_cylinder);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "partition type: %x\n",
+-			x_mbr->partition_type);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "end head: %x\n",
+-			x_mbr->end_head);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "end sector: %x\n",
+-			x_mbr->end_sector);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "end cylinder: %x\n",
+-			x_mbr->end_cylinder);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "start sectors: %x\n",
+-			x_mbr->start_sectors);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc,
+-			"sectors per partition: %x\n",
+-			x_mbr->sectors_per_partition);
++	rc += sysfs_emit_at(buffer, rc, "boot partition: %x\n", x_mbr->boot_partition);
++	rc += sysfs_emit_at(buffer, rc, "start head: %x\n", x_mbr->start_head);
++	rc += sysfs_emit_at(buffer, rc, "start sector: %x\n", x_mbr->start_sector);
++	rc += sysfs_emit_at(buffer, rc, "start cylinder: %x\n", x_mbr->start_cylinder);
++	rc += sysfs_emit_at(buffer, rc, "partition type: %x\n", x_mbr->partition_type);
++	rc += sysfs_emit_at(buffer, rc, "end head: %x\n", x_mbr->end_head);
++	rc += sysfs_emit_at(buffer, rc, "end sector: %x\n", x_mbr->end_sector);
++	rc += sysfs_emit_at(buffer, rc, "end cylinder: %x\n", x_mbr->end_cylinder);
++	rc += sysfs_emit_at(buffer, rc, "start sectors: %x\n", x_mbr->start_sectors);
++	rc += sysfs_emit_at(buffer, rc, "sectors per partition: %x\n",
++			    x_mbr->sectors_per_partition);
+ 	return rc;
+ }
+
+@@ -409,22 +381,19 @@ static ssize_t mspro_block_attr_show_specfile(struct device *dev,
+ 	memcpy(ext, x_spfile->ext, 3);
+ 	ext[3] = 0;
+
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "name: %s\n", name);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "ext: %s\n", ext);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "attribute: %x\n",
+-			x_spfile->attr);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "time: %d:%d:%d\n",
+-			x_spfile->time >> 11,
+-			(x_spfile->time >> 5) & 0x3f,
+-			(x_spfile->time & 0x1f) * 2);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "date: %d-%d-%d\n",
+-			(x_spfile->date >> 9) + 1980,
+-			(x_spfile->date >> 5) & 0xf,
+-			x_spfile->date & 0x1f);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "start cluster: %x\n",
+-			x_spfile->cluster);
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "size: %x\n",
+-			x_spfile->size);
++	rc += sysfs_emit_at(buffer, rc, "name: %s\n", name);
++	rc += sysfs_emit_at(buffer, rc, "ext: %s\n", ext);
++	rc += sysfs_emit_at(buffer, rc, "attribute: %x\n", x_spfile->attr);
++	rc += sysfs_emit_at(buffer, rc, "time: %d:%d:%d\n",
++			    x_spfile->time >> 11,
++			    (x_spfile->time >> 5) & 0x3f,
++			    (x_spfile->time & 0x1f) * 2);
++	rc += sysfs_emit_at(buffer, rc, "date: %d-%d-%d\n",
++			    (x_spfile->date >> 9) + 1980,
++			    (x_spfile->date >> 5) & 0xf,
++			    x_spfile->date & 0x1f);
++	rc += sysfs_emit_at(buffer, rc, "start cluster: %x\n", x_spfile->cluster);
++	rc += sysfs_emit_at(buffer, rc, "size: %x\n", x_spfile->size);
+ 	return rc;
+ }
+
+@@ -438,16 +407,14 @@ static ssize_t mspro_block_attr_show_devinfo(struct device *dev,
+ 	struct mspro_devinfo *x_devinfo = x_attr->data;
+ 	ssize_t rc = 0;
+
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "cylinders: %x\n",
+-			be16_to_cpu(x_devinfo->cylinders));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "heads: %x\n",
+-			be16_to_cpu(x_devinfo->heads));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "bytes per track: %x\n",
+-			be16_to_cpu(x_devinfo->bytes_per_track));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "bytes per sector: %x\n",
+-			be16_to_cpu(x_devinfo->bytes_per_sector));
+-	rc += scnprintf(buffer + rc, PAGE_SIZE - rc, "sectors per track: %x\n",
+-			be16_to_cpu(x_devinfo->sectors_per_track));
++	rc += sysfs_emit_at(buffer, rc, "cylinders: %x\n", be16_to_cpu(x_devinfo->cylinders));
++	rc += sysfs_emit_at(buffer, rc, "heads: %x\n", be16_to_cpu(x_devinfo->heads));
++	rc += sysfs_emit_at(buffer, rc, "bytes per track: %x\n",
++			    be16_to_cpu(x_devinfo->bytes_per_track));
++	rc += sysfs_emit_at(buffer, rc, "bytes per sector: %x\n",
++			    be16_to_cpu(x_devinfo->bytes_per_sector));
++	rc += sysfs_emit_at(buffer, rc, "sectors per track: %x\n",
++			    be16_to_cpu(x_devinfo->sectors_per_track));
+ 	return rc;
+ }
+
+-- 
+2.25.1
