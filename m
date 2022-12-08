@@ -2,81 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B05646BFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D985D646C01
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLHJfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:35:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
+        id S229879AbiLHJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:36:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLHJfQ (ORCPT
+        with ESMTP id S229479AbiLHJga (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:35:16 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B6C5B84E;
-        Thu,  8 Dec 2022 01:35:13 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 67B0E24DD6E;
-        Thu,  8 Dec 2022 17:35:11 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
- 2022 17:35:11 +0800
-Received: from EXMBX068.cuchost.com ([fe80::c4da:cbc4:bb39:ca7e]) by
- EXMBX068.cuchost.com ([fe80::c4da:cbc4:bb39:ca7e%16]) with mapi id
- 15.00.1497.044; Thu, 8 Dec 2022 17:35:10 +0800
-From:   JiaJie Ho <jiajie.ho@starfivetech.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: RE: [PATCH 0/6] crypto: starfive: Add driver for cryptographic engine
-Thread-Topic: [PATCH 0/6] crypto: starfive: Add driver for cryptographic
- engine
-Thread-Index: AQHZBH/pPWRKQfsetk2izJkM4PGjPq5jvsYw//+A4ICAAIfRMA==
-Date:   Thu, 8 Dec 2022 09:35:10 +0000
-Message-ID: <a0bd9060bab348eba1044cd911653bd7@EXMBX068.cuchost.com>
-References: <20221130055214.2416888-1-jiajie.ho@starfivetech.com>
- <e1e9f1d19982493b89ae63f51e00a3bb@EXMBX068.cuchost.com>
- <9c7066e4-fa3f-3dda-b939-04dfdaf73242@linaro.org>
-In-Reply-To: <9c7066e4-fa3f-3dda-b939-04dfdaf73242@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [161.142.158.8]
-x-yovoleruleagent: yovoleflag
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 8 Dec 2022 04:36:30 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9435E9DD;
+        Thu,  8 Dec 2022 01:36:29 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id h7so918339wrs.6;
+        Thu, 08 Dec 2022 01:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vzvhVqrPG1tKRsCvh4LCgxjPjyy657R8RcpZzQGS+tA=;
+        b=MfLWVAWkrg7h52VP6avmx+dbSJ7FOnKbDMnbrZv1hBqoS/PBeZrYnMGqIjvtu0E1o4
+         paMQmnrTbJSSiP/I2KS3u0ICDMzfORmzpR9JjyHzBQ5Tm+TP0fdgGx/IF4yXLmAioS/l
+         mYuExigRjT5hHVtnJUIbqY2caTNt59842NceEunJDFuy5vwouDt1t8hUdiLnwV96+rP3
+         9pwCRdEBiAMeCkCaH53x2e6N7HyidPVqtmS8j+NzFvdZxhaXY8ejXzyRNdY2e7Yrn2LY
+         JNpzfGMJTkRzlabkmjJmd2RiR5R1IPe64e7Twmm18fZpQI7TLizf+8qga8BXyCW3k9wz
+         ouCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vzvhVqrPG1tKRsCvh4LCgxjPjyy657R8RcpZzQGS+tA=;
+        b=AHYfKCsfGvgb9GwkpbUI9FosmJ8fF30gqgPCm7dKdhLPqGKT6tRS/c3btC5pdWijg5
+         mI+iqoULXqa8y1zRKI9xjUDonkp3vcyHxb/WxTLyjH2OHonzlRUFUvH8R7/LECyJTeZI
+         9ZfDB0cN6NHRRm8RGhOkRkgsvCZ5B/rAW0kg1/3whG74JXiByAV97VM2/oNXFc+XVjSJ
+         4jvQU2RTz0c/UFejPdbTysMc+HaR9gEK8ZfGSuJs2RcxpqLH6CfT1bcsPQmLYist4//+
+         wEgE4hXuHZhGR5MBG/jaKRDQ4HWQDoeqnjrMnTxnr4yksql22QzGYxHmw6sl6bhQnrd+
+         5TlA==
+X-Gm-Message-State: ANoB5pnKtqDj2nU3odDz1rDWU/S7x53WeG0Jgdxpzv5HDmQcWyY/Y+Y6
+        mFXstpQxQIQJrgk7gUhujtU=
+X-Google-Smtp-Source: AA0mqf4e/mWcPd5avTxy30ryYO/u4DA51g6lNAEGDeUkrn7fyQ3cEAyZCp8lT5Da7dCNrZ4NeByIFg==
+X-Received: by 2002:a05:6000:1d84:b0:236:6fb9:9ce2 with SMTP id bk4-20020a0560001d8400b002366fb99ce2mr1101797wrb.67.1670492188100;
+        Thu, 08 Dec 2022 01:36:28 -0800 (PST)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id j13-20020a056000124d00b002421db5f279sm21422615wrx.78.2022.12.08.01.36.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 01:36:27 -0800 (PST)
+Date:   Thu, 8 Dec 2022 09:36:26 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.0 000/125] 6.0.12-rc3 review
+Message-ID: <Y5GwGrJmtTJWCCT/@debian>
+References: <20221206163445.868107856@linuxfoundation.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221206163445.868107856@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogS3J6eXN6dG9mIEtvemxv
-d3NraSA8a3J6eXN6dG9mLmtvemxvd3NraUBsaW5hcm8ub3JnPg0KPiBTZW50OiBUaHVyc2RheSwg
-RGVjZW1iZXIgOCwgMjAyMiA1OjI4IFBNDQo+IFRvOiBKaWFKaWUgSG8gPGppYWppZS5ob0BzdGFy
-Zml2ZXRlY2guY29tPjsgSGVyYmVydCBYdQ0KPiA8aGVyYmVydEBnb25kb3IuYXBhbmEub3JnLmF1
-PjsgRGF2aWQgUyAuIE1pbGxlciA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47DQo+IFJvYiBIZXJyaW5n
-IDxyb2JoK2R0QGtlcm5lbC5vcmc+OyBLcnp5c3p0b2YgS296bG93c2tpDQo+IDxrcnp5c3p0b2Yu
-a296bG93c2tpK2R0QGxpbmFyby5vcmc+DQo+IENjOiBsaW51eC1jcnlwdG9Admdlci5rZXJuZWwu
-b3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgtDQo+IGtlcm5lbEB2Z2VyLmtl
-cm5lbC5vcmc7IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gU3ViamVjdDogUmU6
-IFtQQVRDSCAwLzZdIGNyeXB0bzogc3RhcmZpdmU6IEFkZCBkcml2ZXIgZm9yIGNyeXB0b2dyYXBo
-aWMgZW5naW5lDQo+IA0KPiBPbiAwOC8xMi8yMDIyIDEwOjA5LCBKaWFKaWUgSG8gd3JvdGU6DQo+
-ID4NCj4gPiBIaSBIZXJiZXJ0L0RhdmlkLA0KPiA+DQo+ID4gQ291bGQgeW91IHBsZWFzZSBoZWxw
-IHRvIHJldmlldyBhbmQgcHJvdmlkZSBjb21tZW50cyBvbiB0aGlzIHBhdGNoIHNlcmllcz8NCj4g
-PiBUaGFuayB5b3UgaW4gYWR2YW5jZS4NCj4gDQo+IFlvdSByZWNlaXZlZCBzb21lIGNvbW1lbnRz
-IHNvIHRoZSBleHBlY3RhdGlvbiBpcyB0byBzZW5kIGEgdjIuDQo+IA0KDQpTdXJlLCBJJ2xsIGRv
-IHRoYXQgdGhlbi4NCg0KVGhhbmtzDQpKaWEgSmllDQo=
+Hi Greg,
+
+On Tue, Dec 06, 2022 at 05:39:48PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.12 release.
+> There are 125 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 08 Dec 2022 16:34:27 +0000.
+> Anything received after that time might be too late.
+
+Build test (gcc version 12.2.1 20221127):
+mips: 52 configs -> no failure
+arm: 100 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/2315
+[2]. https://openqa.qa.codethink.co.uk/tests/2299
+[3]. https://openqa.qa.codethink.co.uk/tests/2325
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
