@@ -2,125 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1139647862
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:58:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F98B647865
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:59:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229751AbiLHV63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:58:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32782 "EHLO
+        id S230149AbiLHV7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:59:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiLHV6G (ORCPT
+        with ESMTP id S230105AbiLHV6n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:58:06 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7615214D;
-        Thu,  8 Dec 2022 13:58:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7mVkAmDWoHLTK1bm8c0nwGU18XHm9AdQyd1P1ZMmedo=; b=7svQe4mVPjR86ZvGGgn9pXOeQK
-        DH1tngBx2A1YPHnkGOISZ0LIYOvMw4FykoAVxwbHjJpUS84/5c0aBQMC9Gq1f+4yPxtTlr081VdsO
-        tIfF81ifLri8eBItymduq9Aq3+SjItMQ5IaBMTpChyiQqYV/r5jzTKTMw3Unxp14P+pmOVcuGEpUk
-        wXbxJ6kp83+NfMwwyv34JJzjvlmXeFVFXXZvo8edek9c3+vU8sFEU+S0dAQ8r1Lp9I13f538up90r
-        F2Y4imWys0684v5fKI4HtL5hWJMFxwBe65/Als3DUhLm4Zuk0VUxFM7LL7S3e+0oTADCsL/DRxpzE
-        7PftGs+w==;
-Received: from p200300ccff13ea001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff13:ea00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1p3Otg-0003FV-2b; Thu, 08 Dec 2022 22:57:44 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1p3Ota-000ubq-DI; Thu, 08 Dec 2022 22:57:34 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     tony@atomide.com, lee@kernel.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>, Bin Liu <b-liu@ti.com>
-Subject: [PATCH v2] mfd: twl: fix TWL6032 phy vbus detection
-Date:   Thu,  8 Dec 2022 22:57:23 +0100
-Message-Id: <20221208215723.217557-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+        Thu, 8 Dec 2022 16:58:43 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5274013FA9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:57:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670536662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ASIj2kEQ6oY1hd8auPy7e53VDe/NPdiMHyAQK+FFLxI=;
+        b=Lv8wFv+YzJU3rbQXJZcz4Jk/vQZg86/uyHooxme6PLVkTzvOcO98dgt3xPs2wW6QbUNNay
+        py/tqmpsNwXUrt64VoO1J6N8lyLWFlGH9azcLDhkpeFC1s/xzIrcBT/q9tUp5xkto/s7zO
+        JnMw/D02iLU+jha5Q+iWGON53Zl5egU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-25-MhO298SpOWi7X7VbPRRFlQ-1; Thu, 08 Dec 2022 16:57:39 -0500
+X-MC-Unique: MhO298SpOWi7X7VbPRRFlQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CF7D29AA3AF;
+        Thu,  8 Dec 2022 21:57:39 +0000 (UTC)
+Received: from starship (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9BFA22024CC0;
+        Thu,  8 Dec 2022 21:57:37 +0000 (UTC)
+Message-ID: <96c369fb2042e8722256d36c9b2ccf4a930752d1.camel@redhat.com>
+Subject: Re: [PATCH v4 19/32] KVM: x86: Explicitly track all possibilities
+ for APIC map's logical modes
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Thu, 08 Dec 2022 23:57:36 +0200
+In-Reply-To: <20221001005915.2041642-20-seanjc@google.com>
+References: <20221001005915.2041642-1-seanjc@google.com>
+         <20221001005915.2041642-20-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWL6032 has a few charging registers prepended before the charging
-registers the TWL6030 has. To be able to use common register defines
-declare the additional registers as additional module.
-At the moment this affects the access to CHARGERUSB_CTRL1 in
-phy-twl6030-usb.  Without this patch, it is accessing the wrong register
-on TWL6032.
-The consequence is that presence of Vbus is not reported.
+On Sat, 2022-10-01 at 00:59 +0000, Sean Christopherson wrote:
+> Track all possibilities for the optimized APIC map's logical modes
+> instead of overloading the pseudo-bitmap and treating any "unknown" value
+> as "invalid".
+> 
+> As documented by the now-stale comment above the mode values, the values
+> did have meaning when the optimized map was originally added.  That
+> dependent logical was removed by commit e45115b62f9a ("KVM: x86: use
+> physical LAPIC array for logical x2APIC"), but the obfuscated behavior
+> and its comment were left behind.
+> 
+> Opportunistically rename "mode" to "logical_mode", partly to make it
+> clear that the "disabled" case applies only to the logical map, but also
+> to prove that there is no lurking code that expects "mode" to be a bitmap.
+> 
+> Functionally, this is a glorified nop.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h | 21 +++++++++++---------
+>  arch/x86/kvm/lapic.c            | 35 +++++++++++++++++++++++++--------
+>  2 files changed, 39 insertions(+), 17 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 062758135c86..ac28bbfbf0e3 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -962,19 +962,22 @@ struct kvm_arch_memory_slot {
+>  };
+>  
+>  /*
+> - * We use as the mode the number of bits allocated in the LDR for the
+> - * logical processor ID.  It happens that these are all powers of two.
+> - * This makes it is very easy to detect cases where the APICs are
+> - * configured for multiple modes; in that case, we cannot use the map and
+> - * hence cannot use kvm_irq_delivery_to_apic_fast either.
+> + * Track the mode of the optimized logical map, as the rules for decoding the
+> + * destination vary per mode.  Enabling the optimized logical map requires all
+> + * software-enabled local APIs to be in the same mode, each addressable APIC to
+> + * be mapped to only one MDA, and each MDA to map to at most one APIC.
+>   */
+> -#define KVM_APIC_MODE_XAPIC_CLUSTER          4
+> -#define KVM_APIC_MODE_XAPIC_FLAT             8
+> -#define KVM_APIC_MODE_X2APIC                16
+> +enum kvm_apic_logical_mode {
 
-Cc: Bin Liu <b-liu@ti.com>
-Cc: Tony Lindgren <tony@atomide.com>
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
-Changes in v2:
- - remove comment
- drivers/mfd/twl-core.c  | 9 ++++-----
- include/linux/mfd/twl.h | 2 ++
- 2 files changed, 6 insertions(+), 5 deletions(-)
+It would be nice to have short comment about each of the modes, like
 
-diff --git a/drivers/mfd/twl-core.c b/drivers/mfd/twl-core.c
-index f6b4b9d94bbd..240e63949e10 100644
---- a/drivers/mfd/twl-core.c
-+++ b/drivers/mfd/twl-core.c
-@@ -110,8 +110,8 @@
- #define TWL6030_BASEADD_PWM		0x00BA
- #define TWL6030_BASEADD_GASGAUGE	0x00C0
- #define TWL6030_BASEADD_PIH		0x00D0
--#define TWL6030_BASEADD_CHARGER		0x00E0
- #define TWL6032_BASEADD_CHARGER		0x00DA
-+#define TWL6030_BASEADD_CHARGER		0x00E0
- #define TWL6030_BASEADD_LED		0x00F4
- 
- /* subchip/slave 2 0x4A - DFT */
-@@ -353,6 +353,9 @@ static struct twl_mapping twl6030_map[] = {
- 	{ 2, TWL6030_BASEADD_ZERO },
- 	{ 1, TWL6030_BASEADD_GPADC_CTRL },
- 	{ 1, TWL6030_BASEADD_GASGAUGE },
-+
-+	/* TWL6032 specific charger registers */
-+	{ 1, TWL6032_BASEADD_CHARGER },
- };
- 
- static const struct regmap_config twl6030_regmap_config[3] = {
-@@ -802,10 +805,6 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
- 	if ((id->driver_data) & TWL6030_CLASS) {
- 		twl_priv->twl_id = TWL6030_CLASS_ID;
- 		twl_priv->twl_map = &twl6030_map[0];
--		/* The charger base address is different in twl6032 */
--		if ((id->driver_data) & TWL6032_SUBCLASS)
--			twl_priv->twl_map[TWL_MODULE_MAIN_CHARGE].base =
--							TWL6032_BASEADD_CHARGER;
- 		twl_regmap_config = twl6030_regmap_config;
- 	} else {
- 		twl_priv->twl_id = TWL4030_CLASS_ID;
-diff --git a/include/linux/mfd/twl.h b/include/linux/mfd/twl.h
-index eaa233038254..6e3d99b7a0ee 100644
---- a/include/linux/mfd/twl.h
-+++ b/include/linux/mfd/twl.h
-@@ -69,6 +69,8 @@ enum twl6030_module_ids {
- 	TWL6030_MODULE_GPADC,
- 	TWL6030_MODULE_GASGAUGE,
- 
-+	/* A few extra registers before the registers shared with the 6030 */
-+	TWL6032_MODULE_CHARGE,
- 	TWL6030_MODULE_LAST,
- };
- 
--- 
-2.30.2
+/* All local APICs are disabled */
+> +	KVM_APIC_MODE_SW_DISABLED,
+/* All enabled local APICs are in XAPIC mode using cluster logical addresssing */
+> +	KVM_APIC_MODE_XAPIC_CLUSTER,
+/* All enabled local APICs are in XAPIC mode using flat logical addresssing */
+> +	KVM_APIC_MODE_XAPIC_FLAT,
+/* All enabled local APICs are in X2APIC mode */
+> +	KVM_APIC_MODE_X2APIC,
+/* 
+   Due to differencies in mode between enabled local APICs and/or other corner cases, 
+   the optimized logical map disabled 
+*/
+> +	KVM_APIC_MODE_MAP_DISABLED,
+> +};
+>  
+>  struct kvm_apic_map {
+>  	struct rcu_head rcu;
+> -	u8 mode;
+> +	enum kvm_apic_logical_mode logical_mode;
+>  	u32 max_apic_id;
+>  	union {
+>  		struct kvm_lapic *xapic_flat_map[8];
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index cef8b202490b..9989893fef69 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -168,7 +168,12 @@ static bool kvm_use_posted_timer_interrupt(struct kvm_vcpu *vcpu)
+>  
+>  static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
+>  		u32 dest_id, struct kvm_lapic ***cluster, u16 *mask) {
+> -	switch (map->mode) {
+> +	switch (map->logical_mode) {
+> +	case KVM_APIC_MODE_SW_DISABLED:
+> +		/* Arbitrarily use the flat map so that @cluster isn't NULL. */
+> +		*cluster = map->xapic_flat_map;
+> +		*mask = 0;
+> +		return true;
+>  	case KVM_APIC_MODE_X2APIC: {
+>  		u32 offset = (dest_id >> 16) * 16;
+>  		u32 max_apic_id = map->max_apic_id;
+> @@ -193,8 +198,10 @@ static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
+>  		*cluster = map->xapic_cluster_map[(dest_id >> 4) & 0xf];
+>  		*mask = dest_id & 0xf;
+>  		return true;
+> +	case KVM_APIC_MODE_MAP_DISABLED:
+> +		return false;
+>  	default:
+> -		/* Not optimized. */
+> +		WARN_ON_ONCE(1);
+>  		return false;
+>  	}
+>  }
+> @@ -256,10 +263,12 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>  		goto out;
+>  
+>  	new->max_apic_id = max_id;
+> +	new->logical_mode = KVM_APIC_MODE_SW_DISABLED;
+>  
+>  	kvm_for_each_vcpu(i, vcpu, kvm) {
+>  		struct kvm_lapic *apic = vcpu->arch.apic;
+>  		struct kvm_lapic **cluster;
+> +		enum kvm_apic_logical_mode logical_mode;
+>  		u16 mask;
+>  		u32 ldr;
+>  		u8 xapic_id;
+> @@ -282,7 +291,8 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>  		if (!apic_x2apic_mode(apic) && !new->phys_map[xapic_id])
+>  			new->phys_map[xapic_id] = apic;
+>  
+> -		if (!kvm_apic_sw_enabled(apic))
+> +		if (new->logical_mode == KVM_APIC_MODE_MAP_DISABLED ||
+> +		    !kvm_apic_sw_enabled(apic))
+>  			continue;
+Very minor nitpick: it feels to me that code that updates the logical mode of the
+map, might be better to be in a function, or in 'if', like
+
+		if (new->logical_mode != KVM_APIC_MODE_MAP_DISABLED) {
+
+			/* Disabled local APICs don't affect the logical map */
+			if (!kvm_apic_sw_enabled(apic))
+				continue;
+			....
+		}
+>  
+>  		ldr = kvm_lapic_get_reg(apic, APIC_LDR);
+> @@ -290,17 +300,26 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>  			continue;
+>  
+>  		if (apic_x2apic_mode(apic)) {
+> -			new->mode |= KVM_APIC_MODE_X2APIC;
+> +			logical_mode = KVM_APIC_MODE_X2APIC;
+>  		} else {
+>  			ldr = GET_APIC_LOGICAL_ID(ldr);
+>  			if (kvm_lapic_get_reg(apic, APIC_DFR) == APIC_DFR_FLAT)
+> -				new->mode |= KVM_APIC_MODE_XAPIC_FLAT;
+> +				logical_mode = KVM_APIC_MODE_XAPIC_FLAT;
+>  			else
+> -				new->mode |= KVM_APIC_MODE_XAPIC_CLUSTER;
+> +				logical_mode = KVM_APIC_MODE_XAPIC_CLUSTER;
+>  		}
+> +		if (new->logical_mode != KVM_APIC_MODE_SW_DISABLED &&
+> +		    new->logical_mode != logical_mode) {
+> +			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
+> +			continue;
+> +		}
+> +		new->logical_mode = logical_mode;
+
+How about:
+
+		if (new->logical_mode == KVM_APIC_MODE_SW_DISABLED)
+			new->logical_mode = logical_mode;
+
+		if (new->logical_mode != logical_mode) {
+			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
+			continue;
+		}
+		
+>  
+> -		if (!kvm_apic_map_get_logical_dest(new, ldr, &cluster, &mask))
+> +		if (WARN_ON_ONCE(!kvm_apic_map_get_logical_dest(new, ldr,
+> +								&cluster, &mask))) {
+> +			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
+>  			continue;
+> +		}
+>  
+>  		if (mask)
+>  			cluster[ffs(mask) - 1] = apic;
+> @@ -953,7 +972,7 @@ static bool kvm_apic_is_broadcast_dest(struct kvm *kvm, struct kvm_lapic **src,
+>  {
+>  	if (kvm->arch.x2apic_broadcast_quirk_disabled) {
+>  		if ((irq->dest_id == APIC_BROADCAST &&
+> -				map->mode != KVM_APIC_MODE_X2APIC))
+> +		     map->logical_mode != KVM_APIC_MODE_X2APIC))
+>  			return true;
+>  		if (irq->dest_id == X2APIC_BROADCAST)
+>  			return true;
+
+
+Functionality wise the code looks OK to me.
+
+Best regards,
+	Maxim Levitsky
 
