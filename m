@@ -2,95 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68962647816
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B92647833
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 22:48:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbiLHViC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 16:38:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
+        id S229709AbiLHVsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 16:48:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiLHVh5 (ORCPT
+        with ESMTP id S229652AbiLHVsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 16:37:57 -0500
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A25420997
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:37:48 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id f139so3033524yba.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 13:37:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G41Op/lXG3g8Cnic6c+y5fMoL1kfzSLedyaKM6ngDWk=;
-        b=VpKYfGNZb5NLOpCp/ra9Y2Ulw55z+QsCoke03jVwQYoK9q/V9V4MH4UDvmU/KT5E5y
-         xzaa2CrDyT8Rafr7S87MxrWHIp775KtLJccKp/ErlERK1ai8gDR1KucY4E0gS5vrC8ue
-         o2a2uxAXzDyaZn6KYzvBhrGGHgU2OYNyhOgLehAiwyGEA2DxZqfqTz/ivnVp8an9p6qf
-         4lnkXsUHdIeDkebmwL4Wpu0kkB+/tkL8OqnH0ExiDEFtVN1z8BIeuA4+asytJtsZBt5h
-         X5+Cm5oms9BQOlb8Gfa4nskF6afkGCb/Fjw6V5SujsBw7hhQtl9yEJSbcxlJ6kfxjqFg
-         m4OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G41Op/lXG3g8Cnic6c+y5fMoL1kfzSLedyaKM6ngDWk=;
-        b=QOJkw9ObG6b1UZkZL2b46Zan+ynmED21bcb5AIZWEaTmc0/uEtaufMOSGUaGj8GZIJ
-         Bvs5OBdKcDSrknQYUKiA6YDswly4W2nUp2a+lod5U4Szc766fqpC+xC5kp1rBTLxSxkY
-         tcU+uyAapSXd+qt2q/IicfFgu8kyU4S1qJmiPTNhcif35QY2FhEFMm0H8aMk8JM3VRRo
-         zoCbHdSgWwdTwnpbi8uNmCWuhtVLwwCIi9HpAym3P+UqjSGKW+/37MLXGRsK2dprxsbt
-         u6VhQQbOvfsKioUNDgfxF+VJbZTUQA2qjfw6i5niu8oyXXHDeavwxhnbN0hQKBPI5vfS
-         UcZQ==
-X-Gm-Message-State: ANoB5pkF2mwbjfbI3pUOYpXZHYSAVWsuzBaUhQktQcM0W5TID71UM0u8
-        NsnO7AhXpc5/ceaglfPah8G94XG3BonEYUAAYubCOQ==
-X-Google-Smtp-Source: AA0mqf7rPAESFFVwhyJ9HkuCCRFFiTbnhyEA/d6xsWGCjrmTSVvR3DD4aRUtEyo49QuIvzEJhbumeD0JLnToI4RKBHw=
-X-Received: by 2002:a25:ac2:0:b0:6e9:3d7a:8012 with SMTP id
- 185-20020a250ac2000000b006e93d7a8012mr69106030ybk.449.1670535468018; Thu, 08
- Dec 2022 13:37:48 -0800 (PST)
-MIME-Version: 1.0
-References: <20221128054820.1771-1-clin@suse.com> <20221128054820.1771-3-clin@suse.com>
- <CAOMZO5D0wJcfbFsvUN3K17S5F4zT2Yf8yQB+wMKQPzuMBitrpA@mail.gmail.com>
-In-Reply-To: <CAOMZO5D0wJcfbFsvUN3K17S5F4zT2Yf8yQB+wMKQPzuMBitrpA@mail.gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 8 Dec 2022 22:37:36 +0100
-Message-ID: <CACRpkdaKYFbXRcV1WgDEiYPEwzNAZq-AqAHpWd1rJyW-h369dw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] pinctrl: add NXP S32 SoC family support
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     Chester Lin <clin@suse.com>, Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>, s32@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Matthew Nunez <matthew.nunez@nxp.com>,
-        Phu Luu An <phu.luuan@nxp.com>,
-        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
+        Thu, 8 Dec 2022 16:48:09 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BDC376818
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:47:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670536032;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IlCKc99cFpdm8E1COJJ/fCt6u0thpaENNsxRHeyQUzE=;
+        b=HosoqUTp4sFz1hiyHvOrumdPh4AaKmg3dcvMyrMvW3rVt3eH9KIZZ84m+1Z2KY4VHTfVQ5
+        TES98hF03urpT7T4S6Rn0ZvUfZ9zFW7l5j+JgrMlKOcTf37+AtlhQGYLe7G45Av/rbocrZ
+        5yfmzXKKoPzBe5PMiytQTtErbOFlsUU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-653-q95tK7haMXKtEB8UQsoZ7g-1; Thu, 08 Dec 2022 16:47:08 -0500
+X-MC-Unique: q95tK7haMXKtEB8UQsoZ7g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8743D101A52A;
+        Thu,  8 Dec 2022 21:47:07 +0000 (UTC)
+Received: from starship (unknown [10.35.206.46])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C95B81121331;
+        Thu,  8 Dec 2022 21:47:05 +0000 (UTC)
+Message-ID: <d2cd803a75dc4d7114fc0d45018b7f517a83a867.camel@redhat.com>
+Subject: Re: [PATCH v4 01/32] KVM: x86: Blindly get current x2APIC reg value
+ on "nodecode write" traps
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Thu, 08 Dec 2022 23:47:04 +0200
+In-Reply-To: <20221001005915.2041642-2-seanjc@google.com>
+References: <20221001005915.2041642-1-seanjc@google.com>
+         <20221001005915.2041642-2-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 12:04 AM Fabio Estevam <festevam@gmail.com> wrote:
+On Sat, 2022-10-01 at 00:58 +0000, Sean Christopherson wrote:
+> When emulating a x2APIC write in response to an APICv/AVIC trap, get the
+> the written value from the vAPIC page without checking that reads are
+> allowed for the target register.  AVIC can generate trap-like VM-Exits on
+> writes to EOI, and so KVM needs to get the written value from the backing
+> page without running afoul of EOI's write-only behavior.
+> 
+> Alternatively, EOI could be special cased to always write '0', e.g. so
+> that the sanity check could be preserved, but x2APIC on AMD is actually
+> supposed to disallow non-zero writes (not emulated by KVM), and the
+> sanity check was a byproduct of how the KVM code was written, i.e. wasn't
+> added to guard against anything in particular.
+> 
+> Fixes: 70c8327c11c6 ("KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg")
+> Fixes: 1bd9dfec9fd4 ("KVM: x86: Do not block APIC write for non ICR registers")
+> Reported-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/lapic.c | 9 ++-------
+>  1 file changed, 2 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index d7639d126e6c..05d079fc2c66 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -2284,23 +2284,18 @@ void kvm_apic_write_nodecode(struct kvm_vcpu *vcpu, u32 offset)
+>  	struct kvm_lapic *apic = vcpu->arch.apic;
+>  	u64 val;
+>  
+> -	if (apic_x2apic_mode(apic)) {
+> -		if (KVM_BUG_ON(kvm_lapic_msr_read(apic, offset, &val), vcpu->kvm))
+> -			return;
+> -	} else {
+> -		val = kvm_lapic_get_reg(apic, offset);
+> -	}
+> -
+>  	/*
+>  	 * ICR is a single 64-bit register when x2APIC is enabled.  For legacy
+>  	 * xAPIC, ICR writes need to go down the common (slightly slower) path
+>  	 * to get the upper half from ICR2.
+>  	 */
+>  	if (apic_x2apic_mode(apic) && offset == APIC_ICR) {
+> +		val = kvm_lapic_get_reg64(apic, APIC_ICR);
+>  		kvm_apic_send_ipi(apic, (u32)val, (u32)(val >> 32));
+>  		trace_kvm_apic_write(APIC_ICR, val);
+>  	} else {
+>  		/* TODO: optimize to just emulate side effect w/o one more write */
+> +		val = kvm_lapic_get_reg(apic, offset);
+>  		kvm_lapic_reg_write(apic, offset, (u32)val);
+>  	}
+>  }
 
-> In other imx8m pinctrl drivers we pass:
-(...)
-> > +module_platform_driver(s32g_pinctrl_driver);
->
-> And we also register it in arch_initcall() level.
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-Do you really need that though? This driver certainly does not.
+Best regards,
+	Maxim Levitsky
 
-I was under the impression that recent changes to the probe-order
-logic has made most explicit arch_ etc initcall orderings surplus.
-
-Yours,
-Linus Walleij
