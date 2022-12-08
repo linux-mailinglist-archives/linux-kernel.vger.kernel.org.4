@@ -2,209 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47222646848
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 05:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B08C64684A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 05:36:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiLHEfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 23:35:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39946 "EHLO
+        id S229775AbiLHEgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 23:36:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiLHEfn (ORCPT
+        with ESMTP id S229544AbiLHEge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 23:35:43 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46579950C5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 20:35:41 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8428ot026365
-        for <linux-kernel@vger.kernel.org>; Thu, 8 Dec 2022 04:35:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=fnOiwKU7dx2sVNVT0gww8hTF46Vlj3JdoazSNDkkTMc=;
- b=T28kVhDIFXge/G9Us73YLVoRgQiJiAOdd8f0qxMykj19s89sXU6/e8xSh0XbFKEKVn/K
- 8pcatqFSrVLEQbw/AO3yMw3OP9qQqp3ktqLc6ALwsK4rxaehZQeAJ3OOattsq3BWFiq+
- Ho9Fq4+8+DA12+ucF7XVkXMfKSC0uwdFvhnijiaOvzXpLSSvvP+nG6+3HG2JK3UtC2I9
- 5meZFedMb4AWUJ9PT9UjMXKgCwFF6wdLsydQUKSYofKrHNDuC5Y15fGNGBvRH1Jj7B4Y
- AiByHy8a2w9GiwXkfN0sfrPRKbc/Nc7GkErvzlSd25qan2HJShm6AX4/5pzI9Q6OIbSY Ug== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3majt4b4pd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 04:35:41 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B84ZeFX023973
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Thu, 8 Dec 2022 04:35:40 GMT
-Received: from nasanex01a.na.qualcomm.com (10.52.223.231) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 7 Dec 2022 20:35:39 -0800
-Received: from nasanex01a.na.qualcomm.com ([fe80::ee26:f363:2738:f953]) by
- nasanex01a.na.qualcomm.com ([fe80::ee26:f363:2738:f953%12]) with mapi id
- 15.02.0986.036; Wed, 7 Dec 2022 20:35:39 -0800
-From:   "Visweswara Tanuku (QUIC)" <quic_vtanuku@quicinc.com>
-To:     "Visweswara Tanuku (QUIC)" <quic_vtanuku@quicinc.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "Vijaya Krishna Nivarthi (Temp) (QUIC)" <quic_vnivarth@quicinc.com>,
-        "Visweswara Tanuku (QUIC)" <quic_vtanuku@quicinc.com>,
-        "Mukesh Savaliya (QUIC)" <quic_msavaliy@quicinc.com>
-Subject: RE: [PATCH] soc: qcom-geni-se: Update Tx and Rx fifo depth based on
- QUP HW version
-Thread-Topic: [PATCH] soc: qcom-geni-se: Update Tx and Rx fifo depth based on
- QUP HW version
-Thread-Index: AQHY/aYb84iM+7JnME65ZOEDXxLWrq5kB9iA
-Date:   Thu, 8 Dec 2022 04:35:39 +0000
-Message-ID: <31c4f532ec6646f7977ebf930b8a2812@quicinc.com>
-References: <20221121123758.5052-1-quic_vtanuku@quicinc.com>
-In-Reply-To: <20221121123758.5052-1-quic_vtanuku@quicinc.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.216.55.60]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 7 Dec 2022 23:36:34 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DC9950FB;
+        Wed,  7 Dec 2022 20:36:33 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so3435046pje.5;
+        Wed, 07 Dec 2022 20:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ccUzDrEghhLsXQFl1LnCRKBfNr2RNIsuFQMC+oBQ8aY=;
+        b=MpnuuRPnc+1kms77dkQ6uzrnzrdjI7Xc/BGQ/SqiB272YGnNkwhGKKjtswJx7TAUXF
+         6BIDK4gAaO7QL9rGzPLT2PM2/gkf4V8ycDrTC+7QR2j7BGCNz7uGJrWHCVjbEBmJ3W20
+         EDaaLa9mFEGDGbFsjCheQpi/xINd9z16+L+gjfGmChBV+fAmHVfKTpjMDI51CEp5LuMJ
+         HKX+8GjtX8VVjxgGS7dGUQdMNwoxMQn47pE7ds2AVGqu8I/28qKMdcVbG3cPWr50Ihmd
+         usRgHz2vdWWUMHg1Cn/HBkO61Jtj2VSuWnIfJQO9Rkh1y+Uqz6Nti6vZfprC85yABmfZ
+         D0Qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ccUzDrEghhLsXQFl1LnCRKBfNr2RNIsuFQMC+oBQ8aY=;
+        b=1oKvRkzZPfArn0qF0QRU9AhRdudnRScqngeug8/fMKVyt61gLpHY9e+YN3xbKdnsqS
+         3S2RIz1/9OINUkFZ3d0KMTi/dTmVbDkN7Ieq1/wxg5TEqdQEeteI5jIzmFM3cNO5IBhs
+         cchoPz6NFs5cDT+lRweBADZfyCID3g1PC9/FEhn16D5Xjgtp1cOK45C8NUxRK56yUyzs
+         0U2CIQDmj2yYXhWNir329A317aSppeqFnKTRKK+Lf38plo5FQDBhfnOLm83jbvQmCz6d
+         dj+sQsxP1e0ZSGs8DL7HicOshxEQoFL3mR19qfsohtb0Pznt3V5hplqGQl1792FqQDjE
+         CJ0Q==
+X-Gm-Message-State: ANoB5pnADv9qq/37NovGVJ3qyTfRS27Jm/Y1KGB5tpQ9BN/HAyO5h0pU
+        9BhTL1MvoV/vb6luEuu9ax8=
+X-Google-Smtp-Source: AA0mqf5YgapsOp/xkaCmHIMElgclnfQSdz19H4cycdcx251TrJ9pCixA4rIDwBKqC3ealPXvtVW8tA==
+X-Received: by 2002:a05:6a20:958b:b0:a3:ca9a:ff82 with SMTP id iu11-20020a056a20958b00b000a3ca9aff82mr2320727pzb.61.1670474192864;
+        Wed, 07 Dec 2022 20:36:32 -0800 (PST)
+Received: from macbook-pro-6.dhcp.thefacebook.com ([2620:10d:c090:400::5:11da])
+        by smtp.gmail.com with ESMTPSA id d17-20020a63f251000000b00476d1385265sm12193973pgk.25.2022.12.07.20.36.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 20:36:32 -0800 (PST)
+Date:   Wed, 7 Dec 2022 20:36:28 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-ID: <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+ <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+ <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+ <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+ <20221206162035.97ae19674d6d17108bed1910@kernel.org>
+ <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
+ <20221206233947.4c27cc9d@gandalf.local.home>
+ <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
+ <20221207074806.6f869be2@gandalf.local.home>
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4vJWkEypACcPzX8kyvjsKH_NCEITd1Vp
-X-Proofpoint-ORIG-GUID: 4vJWkEypACcPzX8kyvjsKH_NCEITd1Vp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-08_02,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=599 bulkscore=0 clxscore=1015 adultscore=0 mlxscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212080038
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221207074806.6f869be2@gandalf.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle Reminder!
+On Wed, Dec 07, 2022 at 07:48:06AM -0500, Steven Rostedt wrote:
+> On Tue, 6 Dec 2022 20:45:17 -0800
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+> 
+> > > "G - Proprietary module" - "O - out of tree module"
+> > >
+> > > Can you reproduce this without those taints?  
+> > 
+> > Lol. That question is exactly the reason why my Nack stands.
+> 
+> First, that's a BS reason for a NACK.
+> 
+> But in all seriousness, what I would actually ask (and what I'll ask now)
+> is, what module did you use that is out of tree, and was it relevant to
+> this test?
+> 
+> That's a reasonable question to ask, and one that only gets asked with a
+> taint.
 
------Original Message-----
-From: Visweswara Tanuku <quic_vtanuku@quicinc.com>=20
-Sent: Monday, November 21, 2022 6:08 PM
-To: linux-kernel@vger.kernel.org
-Cc: Vijaya Krishna Nivarthi (Temp) (QUIC) <quic_vnivarth@quicinc.com>; Visw=
-eswara Tanuku (QUIC) <quic_vtanuku@quicinc.com>
-Subject: [PATCH] soc: qcom-geni-se: Update Tx and Rx fifo depth based on QU=
-P HW version
+When we receive bug reports in bpf@vger the only question we ask is:
+"How to reproduce this bug?"
+We ignoring taint completely.
+tbh I didn't even know that our BPF CI causes taint until that email.
 
-From QUP HW Version 3.10 and above the Tx and Rx fifo depth bits are increa=
-sed to 23:16 bits from
-21:16 bits in SE_HW_PARAM registers accomodating 256bytes of fifo depth.
+In the previous email I said that the bug report comes from bpf selftest on bpf-next.
+Clearly there is no ambiguity that this is as upstream as it can get.
+Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
+And that happens all the time on lkml. Somebody reports a bug and kernel devs
+jump on the poor person:
+"Can you repro without taint?",
+"Can you repro with upstream kernel?"
+This is discouraging.
+The 'taint' concept makes it easier for kernel devs to ignore bug reports
+and push back on the reporter. Do it few times and people stop reporting bugs.
+Say, this particular bug in rethook was found by one of our BPF CI developers.
+They're not very familiar with the kernel, but they can see plenty of 'rethook'
+references in the stack trace, lookup MAINTAINER file and ping Massami,
+but to the question "can you repro without taint?" they can only say NO,
+because this is how our CI works. So they will keep silence and the bug will be lost.
+That's not the only reason why I'm against generalizing 'taint'.
+Tainting because HW is misbehaving makes sense, but tainting because
+of OoO module or because of live-patching does not.
+It becomes an excuse that people abuse.
 
-Updated geni_se_get_tx_fifo_depth and
-geni_se_get_rx_fifo_depth to retrieve right fifo depth based on QUP HW vers=
-ion.
+Right now syzbot is finding all sorts of bugs. Most of the time syzbot
+turns error injection on to find those allocation issues.
+If syzbot reports will start coming as tainted there will be even less
+attention to them. That will not be good.
 
-Signed-off-by: Visweswara Tanuku <quic_vtanuku@quicinc.com>
----
- include/linux/qcom-geni-se.h | 42 ++++++++++++++++++++++++++++++------
- 1 file changed, 36 insertions(+), 6 deletions(-)
+> If there's a BPF injection taint, one can ask that same question, as the
+> bug may happen sometime after the injection but be caused by that injection,
+> and not be in the backtrace. Not all kernel developers have the access to
+> debugging utilities that backend production servers have. A lot of bugs that
+> kernel developers debug are from someone's laptop.
 
-diff --git a/include/linux/qcom-geni-se.h b/include/linux/qcom-geni-se.h in=
-dex f5672785c0c4..5ea5351f8818 100644
---- a/include/linux/qcom-geni-se.h
-+++ b/include/linux/qcom-geni-se.h
-@@ -242,12 +242,22 @@ struct geni_se {
- /* SE_HW_PARAM_0 fields */
- #define TX_FIFO_WIDTH_MSK		GENMASK(29, 24)
- #define TX_FIFO_WIDTH_SHFT		24
-+/*
-+ * For QUP HW Version >=3D 3.10 Tx fifo depth support is increased
-+ * to 256bytes and corresponding bits are 16 to 23  */
-+#define TX_FIFO_DEPTH_MSK_256_BYTES	GENMASK(23, 16)
- #define TX_FIFO_DEPTH_MSK		GENMASK(21, 16)
- #define TX_FIFO_DEPTH_SHFT		16
-=20
- /* SE_HW_PARAM_1 fields */
- #define RX_FIFO_WIDTH_MSK		GENMASK(29, 24)
- #define RX_FIFO_WIDTH_SHFT		24
-+/*
-+ * For QUP HW Version >=3D 3.10 Rx fifo depth support is increased
-+ * to 256bytes and corresponding bits are 16 to 23  */
-+#define RX_FIFO_DEPTH_MSK_256_BYTES	GENMASK(23, 16)
- #define RX_FIFO_DEPTH_MSK		GENMASK(21, 16)
- #define RX_FIFO_DEPTH_SHFT		16
-=20
-@@ -388,7 +398,8 @@ static inline void geni_se_abort_s_cmd(struct geni_se *=
-se)
-=20
- /**
-  * geni_se_get_tx_fifo_depth() - Get the TX fifo depth of the serial engin=
-e
-- * @se:	Pointer to the concerned serial engine.
-+ * based on QUP HW version
-+ * @se: Pointer to the concerned serial engine.
-  *
-  * This function is used to get the depth i.e. number of elements in the
-  * TX fifo of the serial engine.
-@@ -397,11 +408,20 @@ static inline void geni_se_abort_s_cmd(struct geni_se=
- *se)
-  */
- static inline u32 geni_se_get_tx_fifo_depth(struct geni_se *se)  {
--	u32 val;
-+	u32 val, hw_version, hw_major, hw_minor, tx_fifo_depth_mask;
-+
-+	hw_version =3D geni_se_get_qup_hw_version(se);
-+	hw_major =3D GENI_SE_VERSION_MAJOR(hw_version);
-+	hw_minor =3D GENI_SE_VERSION_MINOR(hw_version);
-+
-+	if ((hw_major =3D=3D 3 && hw_minor >=3D 10) || hw_major > 3)
-+		tx_fifo_depth_mask =3D TX_FIFO_DEPTH_MSK_256_BYTES;
-+	else
-+		tx_fifo_depth_mask =3D TX_FIFO_DEPTH_MSK;
-=20
- 	val =3D readl_relaxed(se->base + SE_HW_PARAM_0);
-=20
--	return (val & TX_FIFO_DEPTH_MSK) >> TX_FIFO_DEPTH_SHFT;
-+	return (val & tx_fifo_depth_mask) >> TX_FIFO_DEPTH_SHFT;
- }
-=20
- /**
-@@ -424,7 +444,8 @@ static inline u32 geni_se_get_tx_fifo_width(struct geni=
-_se *se)
-=20
- /**
-  * geni_se_get_rx_fifo_depth() - Get the RX fifo depth of the serial engin=
-e
-- * @se:	Pointer to the concerned serial engine.
-+ * based on QUP HW version
-+ * @se: Pointer to the concerned serial engine.
-  *
-  * This function is used to get the depth i.e. number of elements in the
-  * RX fifo of the serial engine.
-@@ -433,11 +454,20 @@ static inline u32 geni_se_get_tx_fifo_width(struct ge=
-ni_se *se)
-  */
- static inline u32 geni_se_get_rx_fifo_depth(struct geni_se *se)  {
--	u32 val;
-+	u32 val, hw_version, hw_major, hw_minor, rx_fifo_depth_mask;
-+
-+	hw_version =3D geni_se_get_qup_hw_version(se);
-+	hw_major =3D GENI_SE_VERSION_MAJOR(hw_version);
-+	hw_minor =3D GENI_SE_VERSION_MINOR(hw_version);
-+
-+	if ((hw_major =3D=3D 3 && hw_minor >=3D 10) || hw_major > 3)
-+		rx_fifo_depth_mask =3D RX_FIFO_DEPTH_MSK_256_BYTES;
-+	else
-+		rx_fifo_depth_mask =3D RX_FIFO_DEPTH_MSK;
-=20
- 	val =3D readl_relaxed(se->base + SE_HW_PARAM_1);
-=20
--	return (val & RX_FIFO_DEPTH_MSK) >> RX_FIFO_DEPTH_SHFT;
-+	return (val & rx_fifo_depth_mask) >> RX_FIFO_DEPTH_SHFT;
- }
-=20
- void geni_se_init(struct geni_se *se, u32 rx_wm, u32 rx_rfr);
---
-2.17.1
+I would have to disagree.
+We see few human reported bugs and prioritize them higher,
+but majority are coming from the production fleet, test tiers,
+syzbot, CIs, and automated things.
 
+> Where all they have is
+> that backtrace. 
+
+Even laptops typically leave vmcore after crash. distro support packages have
+clear rules what scripts to run to collect all the necessary data in case
+of the crash from vmcore.
+These tools support extracting everything bpf related too.
+For example see:
+Documentation/bpf/drgn.rst
+It works on vmcore and on the running kernel.
+
+> If a tool or root kit, added function error injection, it
+> would be extremely useful information to debug what happened.
+> 
+> I don't understand the push back here.
+
+All these years we've been working on improving bpf introspection and
+debuggability. Today crash dumps look like this:
+  bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
+  bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
+  bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
+  __bpf_prog_run include/linux/filter.h:600 [inline]
+  bpf_prog_run include/linux/filter.h:607 [inline]
+
+The 2nd from the top is a bpf prog. The rest are kernel functions.
+bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
+         ^^ is a prog tag   ^^ name of bpf prog
+
+If you do 'bpftool prog show' you can see both tag and name. 
+'bpftool prog dump jited'
+dumps x86 code mixed with source line text.
+Often enough +0x2b offset will have some C code right next to it.
+
+One can monitor all prog load/unload via perf or via audit.
+'perf record' collects all bpf progs that were loaded before
+the start and even thouse that were loaded and unloaded quickly
+while 'perf record' was running.
+So 'perf report' has all the data including annotation and source code.
+
+Currently we're working on adding 'file.c:lineno' to dump_stack()
+for bpf progs.
+
+If you have ideas how we can improve debuggability we are all ears.
