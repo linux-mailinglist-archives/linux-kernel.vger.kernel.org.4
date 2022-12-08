@@ -2,124 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B5FD64679D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 04:16:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7404F64679E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 04:16:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiLHDQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 22:16:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
+        id S229724AbiLHDQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 22:16:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229592AbiLHDQZ (ORCPT
+        with ESMTP id S229628AbiLHDQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 22:16:25 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5038C89314;
-        Wed,  7 Dec 2022 19:16:24 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B81EOuu017898;
-        Thu, 8 Dec 2022 03:15:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=fX9YysgAjbQPemKghGo5CL+0ytYkO+4l+kV31uhGsG0=;
- b=Urw0C2+aeizUx2Zszr36k6rSw/beM+AEbzuA1EvVFqoqx4puJ6rJ2IyrOJiyTLAh/zoj
- dKHYZCqmdlDwP4r8xJLN0WPmzamhV6ktGDYw6TtcKPOlmgUwWYaYLen4b7mEiN/pD/8W
- PrY/2yzGZo7loUUUIPn72heOEsX/I2rIcPU+As6/QW8oaa4rZVPTCUUmRxLz/6O03myU
- oo9EDsyxmcDcrrHvJUltWuAtovrArCg0ajH8lf6cb9/WwWHX4ImsWMEE/0UdX73+NWkX
- kaHV6pDtdkNaVfjxGPYW4F1hgmtjV7B3nYD1nBmd2cm5jWcVvrNGS4q66jT1pc9xffoI fA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3macsyutqh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Dec 2022 03:15:57 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B83FuGW019830
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Dec 2022 03:15:56 GMT
-Received: from [10.50.39.14] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Wed, 7 Dec 2022
- 19:15:51 -0800
-Message-ID: <5b731ae4-ae5f-af2a-3357-e5e33612a977@quicinc.com>
-Date:   Thu, 8 Dec 2022 08:45:48 +0530
+        Wed, 7 Dec 2022 22:16:29 -0500
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9945389314
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 19:16:26 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-01 (Coremail) with SMTP id qwCowAAXmewGV5Fj8eepBQ--.45513S2;
+        Thu, 08 Dec 2022 11:16:22 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     robin.murphy@arm.com, liviu.dudau@arm.com, brian.starkey@arm.com,
+        airlied@gmail.com, daniel@ffwll.ch
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] drm: mali-dp: Add check for kzalloc
+Date:   Thu,  8 Dec 2022 11:16:21 +0800
+Message-Id: <20221208031621.3274-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 01/12] dt-bindings: arm: msm: Update the maintainers for
- LLCC
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <andersson@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <bp@alien8.de>,
-        <tony.luck@intel.com>
-CC:     <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <james.morse@arm.com>,
-        <mchehab@kernel.org>, <rric@kernel.org>,
-        <linux-edac@vger.kernel.org>, <quic_ppareek@quicinc.com>
-References: <20221207135922.314827-1-manivannan.sadhasivam@linaro.org>
- <20221207135922.314827-2-manivannan.sadhasivam@linaro.org>
-From:   Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-In-Reply-To: <20221207135922.314827-2-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Q2Xqh7G8GZ_wd3d2in99MUSLewY4YCQm
-X-Proofpoint-ORIG-GUID: Q2Xqh7G8GZ_wd3d2in99MUSLewY4YCQm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_11,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 mlxscore=0 suspectscore=0 bulkscore=0 spamscore=0
- mlxlogscore=893 priorityscore=1501 phishscore=0 clxscore=1011 adultscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212080025
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAAXmewGV5Fj8eepBQ--.45513S2
+X-Coremail-Antispam: 1UD129KBjvJXoWruw4fCr1kKFyUWFyxAw13Jwb_yoW8Jry7pr
+        48trZakr95ZF45KrZrAa1kurn8Ca9IvFyxKFykWw15uw10g3s8AF4kKas8Wa1UJrZxJr1a
+        yanFqF4fZFn0kw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AK
+        xVWUAVWUtwCY02Avz4vE14v_Gr4l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
+        0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+        17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+        C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUeGYpUUUUU
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mani,
+As kzalloc may fail and return NULL pointer, the "mw_state" can be NULL.
+If the layout of struct malidp_mw_connector_state ever changes, it
+will cause NULL poineter derefernce of "&mw_state->base".
+Therefore, the "mw_state" should be checked whether it is NULL in order
+to improve the robust.
 
-On 12/7/2022 7:29 PM, Manivannan Sadhasivam wrote:
-> Rishabh Bhatnagar has left Qualcomm, and there is no evidence of him
-> maintaining with a new identity. So his entry needs to be removed.
-> 
-> Also, Sai Prakash Ranjan's email address should be updated to use
-> quicinc domain.
-> 
-> Cc: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->   Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-> index 38efcad56dbd..d1df49ffcc1b 100644
-> --- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-> +++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-> @@ -7,8 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->   title: Last Level Cache Controller
->   
->   maintainers:
-> -  - Rishabh Bhatnagar <rishabhb@codeaurora.org>
-> -  - Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-> +  - Sai Prakash Ranjan <quic_saipraka@quicinc.com>
->   
+Fixes: 8cbc5caf36ef ("drm: mali-dp: Add writeback connector")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/gpu/drm/arm/malidp_mw.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Thanks for updating, I believe you can add yourself as well now since
-you maintain LLCC driver.
-
-Either way,
-
-Acked-by: Sai Prakash Ranjan <quic_saipraka@quicinc.com>
-
-
-Thanks,
-Sai
+diff --git a/drivers/gpu/drm/arm/malidp_mw.c b/drivers/gpu/drm/arm/malidp_mw.c
+index ef76d0e6ee2f..fe4474c2ddcf 100644
+--- a/drivers/gpu/drm/arm/malidp_mw.c
++++ b/drivers/gpu/drm/arm/malidp_mw.c
+@@ -72,7 +72,11 @@ static void malidp_mw_connector_reset(struct drm_connector *connector)
+ 		__drm_atomic_helper_connector_destroy_state(connector->state);
+ 
+ 	kfree(connector->state);
+-	__drm_atomic_helper_connector_reset(connector, &mw_state->base);
++
++	if (mw_state)
++		__drm_atomic_helper_connector_reset(connector, &mw_state->base);
++	else
++		__drm_atomic_helper_connector_reset(connector, NULL);
+ }
+ 
+ static enum drm_connector_status
+-- 
+2.25.1
 
