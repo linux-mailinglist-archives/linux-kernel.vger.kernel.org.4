@@ -2,108 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D486470B8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:23:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6146470BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbiLHNXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:23:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S229976AbiLHNXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229818AbiLHNXK (ORCPT
+        with ESMTP id S229807AbiLHNXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:23:10 -0500
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603AB8138F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:23:09 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 5A00A3200917;
-        Thu,  8 Dec 2022 08:23:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 08 Dec 2022 08:23:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1670505787; x=1670592187; bh=86NztHs9QVX/n93qJfYm/s7/pby6qjrKy/D
-        ct4MFEvM=; b=hI/3Sg1/GdBfxNMFsIa5cqTzUSo210/cc/BCASPSTZpe7XSPovA
-        NhrsU/JH61i1otSd+PSr+bh5IQQWEioASuB2YC9ff5xVvQOs5xC/5cTaLyueMOG5
-        AFkBx2XPJMfh1G7lUEvrzCIkMgE7C8g2E7J3IY7APBn/0BU4Wrn3I7iMwzDVnrCW
-        2bE1w9VOs2RRZXMFlaZj+H3k7UZkLzOILXDPw6vY8ENUt2GDhYmHMuROYXtRhNAE
-        CoierpoudtgoLhPmA49givAHfrIIZfV2MRYnDidI+FV2n1+HTNi1+PdBa0gR9GnW
-        kvG7e6h1ruxu7x1Smmcld2kijuJQQlDog3Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1670505787; x=
-        1670592187; bh=86NztHs9QVX/n93qJfYm/s7/pby6qjrKy/Dct4MFEvM=; b=w
-        Fd6NpQgsqe+ZhM8kTFTOq87R9Og2Q1craJFjVm4qW3kE0UlUATPxJVFQO9SSBlNG
-        js7jg+BZoSDPhIrPV6CW6E5Z5OuFu9v20ouzM2Et2I0F8vjR2FetJdMYwkZn6THC
-        tGFTS6Ic1DVyrIGDGL7Psthex2Bg2gpWR6AVUyVDsM/fthPlNWDIAls1ZBnE0ROq
-        qlQJGDuuDWhuoThUB9r+eBsb+NMJG2dq11FcIZCIDOrarJi7KSbmShMb+xSw2dBr
-        z/OyBaVHw3vxr21SfuUKF5vKQ8F0fy3I59/epJ7aZhzFeX8+MsaF+1xUhjXImq/G
-        R7zMFM7CTEn84S5Pa6HzA==
-X-ME-Sender: <xms:O-WRY3AzwOM8jZao1owRU5u_6JCBqeCdr26TRJ4yunjFjAp3htA2RA>
-    <xme:O-WRY9iiQnoi6BIoM-gnVyqtmyNwo9wITdGlmZPdlvVH_L6_gWoQ3rERNoR6zf1yD
-    t1QGV9xZsXn4dNZ8Fk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgdehudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:O-WRYym-LVNTQ05GPp6HulfGIDRQGldMkjJOJK9lqRK-N-hHYZXsog>
-    <xmx:O-WRY5w5AqRgvFRUz9rn9Z98hXGIjBr-N7Zh9Ra97fGlaBq-6IURQw>
-    <xmx:O-WRY8RzyHSYprtaGXT5Hl_vGONMQzHGMYgOaZpbVjjJQwf-ZblqRA>
-    <xmx:O-WRY3Jc9NhXXCPmN7Av54Ta_1f4B03ZX243PJuaNl_v5Oea1RTsPw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5D4EFB60086; Thu,  8 Dec 2022 08:23:07 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
-Mime-Version: 1.0
-Message-Id: <c6664af4-7a91-401e-a079-e700e9ff5bbf@app.fastmail.com>
-Date:   Thu, 08 Dec 2022 14:22:09 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc:     soc@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 5
-Content-Type: text/plain
+        Thu, 8 Dec 2022 08:23:53 -0500
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1667BC03;
+        Thu,  8 Dec 2022 05:23:52 -0800 (PST)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 54AD940009;
+        Thu,  8 Dec 2022 13:23:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670505830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=MwHKoO8RqRbDHdIh2HtTogVbNLJEMKgbOzQRa4vVfEs=;
+        b=nNUc44NhtNWbajrgohS0Wr1SuTlTglT8HMVq3BzGid2zwj0CvsgeOQumPg5mg5p3vIjCnA
+        1VGsB8MCBP92oOkR5g+zmn9SDbrQTmqdy3Om5V+F+lwHOmwbQt579wQ+2BmwUTWSXknOOi
+        DMziAb4f+TNmhq8sl6oQKC8qDfNsipyfFWHrUQJ2Xp560rltCw0K9O09bI5Bi5ckRIuiw1
+        3oey8x8CcXC13BLVarWiObxmSGycKv6FjHGWT7y+BzaAJRnAbdDmAFgeAAtIAq3EQ8+Pbz
+        SZjTaF5BHYOcJPXqvSpyjZzqyrNjaAlgX7VSps9Wcf8t8vqKqPFy4JfEDGPWfQ==
+Date:   Thu, 8 Dec 2022 14:23:47 +0100
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Yang Li <yang.lee@linux.alibaba.com>
+Cc:     mchehab@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, linux-media@vger.kernel.org,
+        linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH -next] staging: media: Remove surplus dev_err() when
+ using platform_get_irq()
+Message-ID: <Y5HlY1tuqLBJqFHE@aptenodytes>
+References: <20221129012923.111691-1-yang.lee@linux.alibaba.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="w5lRKAfW1cxqulwg"
+Content-Disposition: inline
+In-Reply-To: <20221129012923.111691-1-yang.lee@linux.alibaba.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
 
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+--w5lRKAfW1cxqulwg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+Hi,
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-5
+On Tue 29 Nov 22, 09:29, Yang Li wrote:
+> There is no need to call the dev_err() function directly to print a
+> custom message when handling an error from either the platform_get_irq()
+> or platform_get_irq_byname() functions as both are going to display an
+> appropriate error message in case of a failure.
+>=20
+> ./drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c:390:2-9: line 390 is =
+redundant because platform_get_irq() already prints an error
+>=20
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D3274
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-for you to fetch changes up to da0cbf9307a227f52a38a0a580a4642ad9d7325c:
+Thanks for the fix!
 
-  Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes (2022-11-29 15:45:36 +0100)
+Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-----------------------------------------------------------------
-ARM: SoC fixes for 6.1, part 5
+Paul
 
-One last build fix came in, addressing a link failure when
-building without CONFIG_OUTER_CACHE
+> ---
+>  drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c b/drivers/=
+staging/media/sunxi/sun6i-isp/sun6i_isp.c
+> index 7b7947509b69..a6e813ff413a 100644
+> --- a/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+> +++ b/drivers/staging/media/sunxi/sun6i-isp/sun6i_isp.c
+> @@ -387,7 +387,6 @@ static int sun6i_isp_resources_setup(struct sun6i_isp=
+_device *isp_dev,
+> =20
+>  	irq =3D platform_get_irq(platform_dev, 0);
+>  	if (irq < 0) {
+> -		dev_err(dev, "failed to get interrupt\n");
+>  		ret =3D -ENXIO;
+>  		goto error_clock_rate_exclusive;
+>  	}
+> --=20
+> 2.20.1.7.g153144c
+>=20
 
-----------------------------------------------------------------
-Arnd Bergmann (1):
-      Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
 
-Peter Rosin (1):
-      ARM: at91: fix build for SAMA5D3 w/o L2 cache
+--w5lRKAfW1cxqulwg
+Content-Type: application/pgp-signature; name="signature.asc"
 
- arch/arm/mach-at91/sama5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmOR5WMACgkQ3cLmz3+f
+v9F+ggf7BckTVRt4YCzD1uAr6kDTr02r2Kh/3bjNcb6r3rS445PTOHRAS+kkwfmM
+YYQE1dl/B+2Un8M2P0n4SAsKQ5CEZz0PDgFgEJxZ4D3J1aFatXu09Kest58JaBHF
+MbsyHyLZwOtTUlfSH2/Kx28BGGOXigPG1YuKfGI75ClBKqWtpVzF7cBKEyH1T/vL
+ISVKdqs/HWjXwTB2pJgsB5NjqThMiZqI90YB0Vhjlz+RUWSDVdJIpGxCo2vKTs9Y
+9kYWyoIKnUqFcx3A3d4Iid4kRNlBw3Qy69Rt3GKgUVKrTW2yj5nnsww7AcFl4USR
+Qg6BoOQiFC8QLQh08ntAUf5AAet9Sg==
+=rMsZ
+-----END PGP SIGNATURE-----
+
+--w5lRKAfW1cxqulwg--
