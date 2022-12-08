@@ -2,104 +2,619 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00C4A646A5A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:21:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC80646A5E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbiLHIV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:21:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S229652AbiLHIWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:22:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiLHIVY (ORCPT
+        with ESMTP id S229555AbiLHIWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:21:24 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8F759178;
-        Thu,  8 Dec 2022 00:21:23 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NSRv55mX6z4xVnf;
-        Thu,  8 Dec 2022 16:21:21 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.40.52])
-        by mse-fl1.zte.com.cn with SMTP id 2B88LGWi014440;
-        Thu, 8 Dec 2022 16:21:16 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 8 Dec 2022 16:21:18 +0800 (CST)
-Date:   Thu, 8 Dec 2022 16:21:18 +0800 (CST)
-X-Zmail-TransId: 2af963919e7effffffff8cb47df7
-X-Mailer: Zmail v1.0
-Message-ID: <202212081621189260759@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <martin.petersen@oracle.com>
-Cc:     <ketan.mukadam@broadcom.com>, <jejb@linux.ibm.com>,
-        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBzY3NpOiBiZTJpc2NzaTogQ29udmVydCB0byB1c2Ugc3lzZnNfZW1pdF9hdCgpIEFQSQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B88LGWi014440
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63919E81.000 by FangMail milter!
-X-FangMail-Envelope: 1670487681/4NSRv55mX6z4xVnf/63919E81.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63919E81.000/4NSRv55mX6z4xVnf
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 8 Dec 2022 03:22:45 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8490AB1CB
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:22:44 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id b11so951576pjp.2
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:22:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7u/E5qpdHwFQuHeaPU2cEPl1VrhfJjZCudUhgqf6PS4=;
+        b=zIICd3HQmh+fecmGSrbUQMD3zmtzx+bfsFr6o8meAHfbGoqA6dXKsdNQ2s5Sxtn3xS
+         xTYIxAFw/dmd14039xC1dFywEtxcf1sgW3WPXQ3mw7KCpROMWnIPhUz6XQPDgoBQCQaH
+         xUGOsubLCOJty5hwpmdjnOobW03CFChjaZOZc2B0fugRPQLO7AFuADqSgj92EPi77zka
+         tTfudr9abjUP7rcsZj7tmaiPlV5OipoEbngQQ4YerRvrC+OGJ63nRJU3aUjefLACWlX/
+         OCZsUfZmFL+iuVvnsFWEO6SVJw+3hO//VERjEr8SVVNbCILaZT+AOsMlAvKdQSJGGH2l
+         E/2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7u/E5qpdHwFQuHeaPU2cEPl1VrhfJjZCudUhgqf6PS4=;
+        b=BP3RIrOr1MtWoL/uBEIaUWzqsyjsYBDrcbWgH6N/iMnnifgHRrO82lopXnYxpDCJoM
+         NO83u/OM7kqtGk287nrs0oVIsQEhsl+m4JCpXcZ6w/1RqWfgcqQDLcsdpkibkQlvbkkn
+         rI2iXHNp8JX7kDmFF83mgNXOMxThrCkij76o3hrTB5gy9Nzt6lRG+nmNaB+blWBTNEzg
+         rRmOSTy09dMPNlw9qeFQsVBrT2eOkGTnKNfVEMjn3BsyP134ys07CX1U8mxg5ALoywMQ
+         TZK3bGbZ4H/DmXxdMKzX2PXlrera09SU0E6NllRt2T9d56Tk5nQnFttBNKRV0mrJaRCf
+         64SA==
+X-Gm-Message-State: ANoB5plwfGv00FVyeVs+aI9230vhjoYUJzOe346HMP2QeC1U6NyTuQMi
+        kcHIEHgxgve55Y8B0ztsq2zxrcrTmh9mQlfCApE=
+X-Google-Smtp-Source: AA0mqf64b8xGKD4D1SAtTLAAbF3xdkkMRv6p7PsPsPC7K60mDS165m0Zj8QKel7QZDYCB5BAzIdL4A==
+X-Received: by 2002:a05:6a20:9f05:b0:a5:798c:f929 with SMTP id mk5-20020a056a209f0500b000a5798cf929mr2180406pzb.10.1670487763592;
+        Thu, 08 Dec 2022 00:22:43 -0800 (PST)
+Received: from localhost ([49.7.199.160])
+        by smtp.gmail.com with ESMTPSA id w63-20020a626242000000b005624e2e0508sm14749705pfb.207.2022.12.08.00.22.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 00:22:43 -0800 (PST)
+From:   Wang Xiaohua <wangxiaohua.1217@bytedance.com>
+To:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        linux-hwmon@vger.kernel.org, jdelvare@suse.com,
+        openbmc@lists.ozlabs.org, joel@jms.id.au
+Subject: [PATCH linux dev-6.0] pmbus: Add mp2971/mp2973 support in mp2975
+Date:   Thu,  8 Dec 2022 16:22:39 +0800
+Message-Id: <20221208082239.1062679-1-wangxiaohua.1217@bytedance.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Add mp2971/mp2973 support in mp2975
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+Tested with:
+My unit only include mp2971 and mp2973 devices
+MP2973:
+cat /sys/bus/i2c/devices/5-0076/hwmon/hwmon24/*label
+iin
+iout1
+iout2
+vin
+vout1
+vout2
+pin
+pout1
+pout2
+cat /sys/bus/i2c/devices/5-0076/hwmon/hwmon24/*input
+0
+82500
+14000
+12187
+1787
+1793
+0
+148000000
+25000000
+54000
+MP2971:
+cat /sys/bus/i2c/devices/5-0062/hwmon/hwmon20/*label
+iin
+iout1
+iout2
+vin
+vout1
+vout2
+pin
+pout1
+pout2
+cat /sys/bus/i2c/devices/5-0062/hwmon/hwmon20/*input
+18500
+22000
+500
+12187
+1025
+1800
+226000000
+22000000
+1000000
+55000
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Signed-off-by: Wang Xiaohua <wangxiaohua.1217@bytedance.com>
 ---
- drivers/scsi/be2iscsi/be_mgmt.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ drivers/hwmon/pmbus/mp2975.c | 413 +++++++++++++++++++++++++++++++----
+ 1 file changed, 372 insertions(+), 41 deletions(-)
 
-diff --git a/drivers/scsi/be2iscsi/be_mgmt.c b/drivers/scsi/be2iscsi/be_mgmt.c
-index 4e899ec1477d..bf39140250bc 100644
---- a/drivers/scsi/be2iscsi/be_mgmt.c
-+++ b/drivers/scsi/be2iscsi/be_mgmt.c
-@@ -1185,12 +1185,10 @@ beiscsi_active_session_disp(struct device *dev, struct device_attribute *attr,
- 		if (test_bit(ulp_num, (void *)&phba->fw_config.ulp_supported)) {
- 			avlbl_cids = BEISCSI_ULP_AVLBL_CID(phba, ulp_num);
- 			total_cids = BEISCSI_GET_CID_COUNT(phba, ulp_num);
--			len += scnprintf(buf+len, PAGE_SIZE - len,
--					 "ULP%d : %d\n", ulp_num,
--					 (total_cids - avlbl_cids));
-+			len += sysfs_emit_at(buf, len, "ULP%d : %d\n",
-+					     ulp_num, (total_cids - avlbl_cids));
- 		} else
--			len += scnprintf(buf+len, PAGE_SIZE - len,
--					 "ULP%d : %d\n", ulp_num, 0);
-+			len += sysfs_emit_at(buf, len, "ULP%d : %d\n", ulp_num, 0);
- 	}
-
- 	return len;
-@@ -1215,12 +1213,10 @@ beiscsi_free_session_disp(struct device *dev, struct device_attribute *attr,
-
- 	for (ulp_num = 0; ulp_num < BEISCSI_ULP_COUNT; ulp_num++) {
- 		if (test_bit(ulp_num, (void *)&phba->fw_config.ulp_supported))
--			len += scnprintf(buf+len, PAGE_SIZE - len,
--					 "ULP%d : %d\n", ulp_num,
--					 BEISCSI_ULP_AVLBL_CID(phba, ulp_num));
-+			len += sysfs_emit_at(buf, len, "ULP%d : %d\n", ulp_num,
-+					     BEISCSI_ULP_AVLBL_CID(phba, ulp_num));
- 		else
--			len += scnprintf(buf+len, PAGE_SIZE - len,
--					 "ULP%d : %d\n", ulp_num, 0);
-+			len += sysfs_emit_at(buf, len, "ULP%d : %d\n", ulp_num, 0);
- 	}
-
- 	return len;
+diff --git a/drivers/hwmon/pmbus/mp2975.c b/drivers/hwmon/pmbus/mp2975.c
+index 51986adfbf47..972b5b02dfdd 100644
+--- a/drivers/hwmon/pmbus/mp2975.c
++++ b/drivers/hwmon/pmbus/mp2975.c
+@@ -52,10 +52,33 @@
+ #define MP2975_MAX_PHASE_RAIL2	4
+ #define MP2975_PAGE_NUM		2
+ 
++#define MP2971_RAIL2_FUNC                                                      \
++	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | PMBUS_HAVE_IOUT |          \
++	 PMBUS_HAVE_STATUS_IOUT | PMBUS_HAVE_POUT)
++
+ #define MP2975_RAIL2_FUNC	(PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT | \
+ 				 PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT | \
+ 				 PMBUS_HAVE_POUT | PMBUS_PHASE_VIRTUAL)
+ 
++struct mp2971_device_info {
++	int max_phase_rail1;
++	int max_phase_rail2;
++	int imvp9_en_r1_mask;
++	int imvp9_en_r2_mask;
++};
++
++struct mp2971_data {
++	struct pmbus_driver_info info;
++	int vid_step[MP2975_PAGE_NUM];
++	int vout_format[MP2975_PAGE_NUM];
++	int vout_mode[MP2975_PAGE_NUM];
++	int vout_exponent[MP2975_PAGE_NUM];
++	int max_phase_rail1;
++	int max_phase_rail2;
++	int imvp9_en_r1_mask;
++	int imvp9_en_r2_mask;
++};
++
+ struct mp2975_data {
+ 	struct pmbus_driver_info info;
+ 	int vout_scale;
+@@ -68,6 +91,9 @@ struct mp2975_data {
+ 	int curr_sense_gain[MP2975_PAGE_NUM];
+ };
+ 
++static const struct i2c_device_id mp2975_id[];
++
++#define to_mp2971_data(x) container_of(x, struct mp2971_data, info)
+ #define to_mp2975_data(x)  container_of(x, struct mp2975_data, info)
+ 
+ static int mp2975_read_byte_data(struct i2c_client *client, int page, int reg)
+@@ -95,6 +121,40 @@ mp2975_read_word_helper(struct i2c_client *client, int page, int phase, u8 reg,
+ 	return (ret > 0) ? ret & mask : ret;
+ }
+ 
++static int
++mp2971_linear2direct(struct mp2971_data *data, int page, int val)
++{
++	/* simple case */
++	if (val == 0)
++		return 0;
++
++	/* LINEAR16 does not support negative voltages */
++	if (val < 0)
++		return 0;
++
++	/*
++	 * For a static exponents, we don't have a choice
++	 * but to adjust the value to it.
++	 */
++
++	if (data->vout_exponent[page] < 0)
++		val <<= -data->vout_exponent[page];
++	else
++		val >>= data->vout_exponent[page];
++	return clamp_val(val, 0, 0xffff);
++}
++
++static int
++mp2971_vid2direct(struct mp2971_data *data, int page, int val)
++{
++	int vrf = data->info.vrm_version[page];
++
++	if (vrf == imvp9)
++		return (val + 29) * data->vid_step[page];
++
++	return (val + 49) * data->vid_step[page];
++}
++
+ static int
+ mp2975_vid2direct(int vrf, int val)
+ {
+@@ -214,6 +274,74 @@ mp2975_read_phases(struct i2c_client *client, struct mp2975_data *data,
+ 	return ret;
+ }
+ 
++static int
++mp2971_read_word_data(struct i2c_client *client, int page,
++				int phase, int reg)
++{
++	const struct pmbus_driver_info *info = pmbus_get_driver_info(client);
++	struct mp2971_data *data = to_mp2971_data(info);
++	int ret;
++
++	switch (reg) {
++	case PMBUS_OT_FAULT_LIMIT:
++	case PMBUS_VIN_OV_FAULT_LIMIT:
++	case PMBUS_VOUT_OV_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_FAULT_LIMIT:
++	case PMBUS_READ_IOUT:
++		ret = mp2975_read_word_helper(client, page, phase,
++						 reg, GENMASK(15, 0));
++		break;
++	case PMBUS_READ_VOUT:
++		ret = mp2975_read_word_helper(client, page, phase, reg,
++					      GENMASK(11, 0));
++		if (ret < 0)
++			return ret;
++		/*
++		 * READ_VOUT can be provided in VID or direct format. The
++		 * format type is specified by bit 15 of the register
++		 * MP2971_MFR_DC_LOOP_CTRL. The driver enforces VOUT direct
++		 * format, since device allows to set the different formats for
++		 * the different rails and also all VOUT limits registers are
++		 * provided in a direct format. In case format is VID - convert
++		 * to direct.
++		 */
++		switch (data->vout_format[page]) {
++		case linear:
++			ret = mp2971_linear2direct(data, page, ret);
++			break;
++		case vid:
++			ret = mp2971_vid2direct(data, page, ret);
++			break;
++		case direct:
++			break;
++		default:
++			return -ENODATA;
++		}
++		break;
++	case PMBUS_UT_WARN_LIMIT:
++	case PMBUS_UT_FAULT_LIMIT:
++	case PMBUS_VIN_UV_WARN_LIMIT:
++	case PMBUS_VIN_UV_FAULT_LIMIT:
++	case PMBUS_VOUT_UV_WARN_LIMIT:
++	case PMBUS_VOUT_OV_WARN_LIMIT:
++	case PMBUS_VIN_OV_WARN_LIMIT:
++	case PMBUS_IIN_OC_FAULT_LIMIT:
++	case PMBUS_IOUT_OC_LV_FAULT_LIMIT:
++	case PMBUS_IIN_OC_WARN_LIMIT:
++	case PMBUS_IOUT_OC_WARN_LIMIT:
++	case PMBUS_IOUT_OC_FAULT_LIMIT:
++	case PMBUS_IOUT_UC_FAULT_LIMIT:
++	case PMBUS_POUT_OP_FAULT_LIMIT:
++	case PMBUS_POUT_OP_WARN_LIMIT:
++	case PMBUS_PIN_OP_WARN_LIMIT:
++		return -ENXIO;
++	default:
++		return -ENODATA;
++	}
++
++	return ret;
++}
++
+ static int mp2975_read_word_data(struct i2c_client *client, int page,
+ 				 int phase, int reg)
+ {
+@@ -365,6 +493,63 @@ mp2975_set_phase_rail2(struct pmbus_driver_info *info, int num_phases)
+ 		info->pfunc[MP2975_MAX_PHASE_RAIL1 - i] = PMBUS_HAVE_IOUT;
+ }
+ 
++static int mp2971_identify_multiphase(struct i2c_client *client,
++				      struct mp2971_data *data,
++				      struct pmbus_driver_info *info)
++{
++	int ret;
++
++	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
++	if (ret < 0)
++		return ret;
++
++	/* Identify multiphase for rail 1 - could be from 1 to 12. */
++	ret = i2c_smbus_read_word_data(client, MP2975_MFR_VR_MULTI_CONFIG_R1);
++	if (ret <= 0)
++		return ret;
++
++	info->phases[0] = ret & GENMASK(3, 0);
++
++	/*
++	 * The device provides a total of 8 PWM pins, and can be configured
++	 * to different phase count applications for rail 1 and rail 2.
++	 * Rail 1 can be set to 8 phases, while rail 2 can only be set to 4
++	 * phases at most. When rail 1’s phase count is configured as 0, rail
++	 * 1 operates with 1-phase DCM. When rail 2 phase count is configured
++	 * as 0, rail 2 is disabled.
++	 */
++	if (info->phases[0] > data->max_phase_rail1)
++		return -EINVAL;
++
++	return 0;
++}
++
++static int
++mp2971_identify_vid(struct i2c_client *client, struct mp2971_data *data,
++			struct pmbus_driver_info *info, u32 reg, int page,
++			u32 imvp_bit, u32 vr_bit)
++{
++	int ret;
++
++	/* Identify VID mode and step selection. */
++	ret = i2c_smbus_read_word_data(client, reg);
++	if (ret < 0)
++		return ret;
++
++	if (ret & imvp_bit) {
++		info->vrm_version[page] = imvp9;
++		data->vid_step[page] = MP2975_PROT_DEV_OV_OFF;
++	} else if (ret & vr_bit) {
++		info->vrm_version[page] = vr12;
++		data->vid_step[page] = MP2975_PROT_DEV_OV_ON;
++	} else {
++		info->vrm_version[page] = vr13;
++		data->vid_step[page] = MP2975_PROT_DEV_OV_OFF;
++	}
++
++	return 0;
++}
++
+ static int
+ mp2975_identify_multiphase(struct i2c_client *client, struct mp2975_data *data,
+ 			   struct pmbus_driver_info *info)
+@@ -428,6 +613,68 @@ mp2975_identify_vid(struct i2c_client *client, struct mp2975_data *data,
+ 	return 0;
+ }
+ 
++static int
++mp2971_identify_rails_vid(struct i2c_client *client, struct mp2971_data *data,
++				     struct pmbus_driver_info *info)
++{
++	int ret;
++
++	ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, 2);
++	if (ret < 0)
++		return ret;
++
++	/* Identify VID mode for rail 1. */
++	ret = mp2971_identify_vid(client, data, info,
++				  MP2975_MFR_VR_MULTI_CONFIG_R1, 0,
++				  data->imvp9_en_r1_mask,
++				  MP2975_VID_STEP_SEL_R1);
++	if (ret < 0)
++		return ret;
++
++	/* Identify VID mode for rail 2, if connected. */
++	if (info->phases[1])
++		ret = mp2971_identify_vid(client, data, info,
++					  MP2975_MFR_VR_MULTI_CONFIG_R2, 1,
++					  data->imvp9_en_r2_mask,
++					  MP2975_VID_STEP_SEL_R2);
++	return ret;
++}
++
++static int mp2971_identify_vout_format(struct i2c_client *client,
++				       struct mp2971_data *data,
++				       struct pmbus_driver_info *info)
++{
++	int i, ret, vout_mode;
++
++	for (i = 0; i < info->pages; i++) {
++		ret = i2c_smbus_write_byte_data(client, PMBUS_PAGE, i);
++		if (ret < 0)
++			return ret;
++
++		ret = i2c_smbus_read_byte_data(client, PMBUS_VOUT_MODE);
++		if (ret < 0)
++			return ret;
++
++		vout_mode = ret;
++
++		switch (vout_mode >> 5) {
++		case 0:
++			data->vout_format[i] = linear;
++			data->vout_exponent[i] = ((s8)(vout_mode << 3)) >> 3;
++			break;
++		case 1:
++			data->vout_format[i] = vid;
++			break;
++		case 2:
++			data->vout_format[i] = direct;
++			break;
++		default:
++			return -ENODEV;
++		}
++	}
++	return 0;
++}
++
+ static int
+ mp2975_identify_rails_vid(struct i2c_client *client, struct mp2975_data *data,
+ 			  struct pmbus_driver_info *info)
+@@ -659,6 +906,24 @@ mp2975_vout_per_rail_config_get(struct i2c_client *client,
+ 	return 0;
+ }
+ 
++static struct pmbus_driver_info mp2971_info = {
++	.pages = 1,
++	.format[PSC_VOLTAGE_IN] = linear,
++	.format[PSC_VOLTAGE_OUT] = direct,
++	.format[PSC_TEMPERATURE] = linear,
++	.format[PSC_CURRENT_IN] = linear,
++	.format[PSC_CURRENT_OUT] = linear,
++	.format[PSC_POWER] = linear,
++	.m[PSC_VOLTAGE_OUT] = 1,
++	.R[PSC_VOLTAGE_OUT] = 3,
++	.func[0] = PMBUS_HAVE_VIN | PMBUS_HAVE_VOUT | PMBUS_HAVE_STATUS_VOUT |
++		   PMBUS_HAVE_IIN | PMBUS_HAVE_IOUT | PMBUS_HAVE_STATUS_IOUT |
++		   PMBUS_HAVE_TEMP | PMBUS_HAVE_STATUS_TEMP | PMBUS_HAVE_POUT |
++		   PMBUS_HAVE_PIN | PMBUS_HAVE_STATUS_INPUT,
++	.read_byte_data = mp2975_read_byte_data,
++	.read_word_data = mp2971_read_word_data,
++};
++
+ static struct pmbus_driver_info mp2975_info = {
+ 	.pages = 1,
+ 	.format[PSC_VOLTAGE_IN] = linear,
+@@ -683,63 +948,129 @@ static struct pmbus_driver_info mp2975_info = {
+ static int mp2975_probe(struct i2c_client *client)
+ {
+ 	struct pmbus_driver_info *info;
+-	struct mp2975_data *data;
+ 	int ret;
++	char *name;
++
++	name = (int)i2c_match_id(mp2975_id, client)->name;
++	if (name == NULL)
++		return 0;
++	if (!strcmp(name, "mp2971") || !strcmp(name, "mp2973")) {
++		struct mp2971_data *data;
++		struct mp2971_device_info *device_info;
++
++		data = devm_kzalloc(&client->dev, sizeof(struct mp2971_data),
++					GFP_KERNEL);
++		if (!data)
++			return -ENOMEM;
++
++		device_info =
++			(struct mp2971_device_info *)i2c_match_id(mp2975_id, client)
++				->driver_data;
++
++		memcpy(&data->info, &mp2971_info, sizeof(*info));
++		info = &data->info;
++
++		if (device_info) {
++			data->imvp9_en_r1_mask = device_info->imvp9_en_r1_mask;
++			data->imvp9_en_r2_mask = device_info->imvp9_en_r2_mask;
++			data->max_phase_rail1 = device_info->max_phase_rail1;
++			data->max_phase_rail2 = device_info->max_phase_rail2;
++		}
+ 
+-	data = devm_kzalloc(&client->dev, sizeof(struct mp2975_data),
+-			    GFP_KERNEL);
+-	if (!data)
+-		return -ENOMEM;
++		/* Identify multiphase configuration for rail 2. */
++		ret = mp2975_identify_multiphase_rail2(client);
++		if (ret < 0)
++			return ret;
+ 
+-	memcpy(&data->info, &mp2975_info, sizeof(*info));
+-	info = &data->info;
++		if (ret) {
++			/* Two rails are connected. */
++			data->info.pages = MP2975_PAGE_NUM;
++			data->info.phases[1] = ret;
++			data->info.func[1] = MP2971_RAIL2_FUNC;
++		}
+ 
+-	/* Identify multiphase configuration for rail 2. */
+-	ret = mp2975_identify_multiphase_rail2(client);
+-	if (ret < 0)
+-		return ret;
++		/* Identify multiphase configuration. */
++		ret = mp2971_identify_multiphase(client, data, info);
++		if (ret)
++			return ret;
+ 
+-	if (ret) {
+-		/* Two rails are connected. */
+-		data->info.pages = MP2975_PAGE_NUM;
+-		data->info.phases[1] = ret;
+-		data->info.func[1] = MP2975_RAIL2_FUNC;
+-	}
++		/* Identify VID setting per rail. */
++		ret = mp2971_identify_rails_vid(client, data, info);
++		if (ret < 0)
++			return ret;
+ 
+-	/* Identify multiphase configuration. */
+-	ret = mp2975_identify_multiphase(client, data, info);
+-	if (ret)
+-		return ret;
++		/* Identify vout format. */
++		ret = mp2971_identify_vout_format(client, data, info);
++		if (ret < 0)
++			return ret;
+ 
+-	/* Identify VID setting per rail. */
+-	ret = mp2975_identify_rails_vid(client, data, info);
+-	if (ret < 0)
+-		return ret;
++	} else {
++		struct mp2975_data *data;
+ 
+-	/* Obtain current sense gain of power stage. */
+-	ret = mp2975_current_sense_gain_get(client, data);
+-	if (ret)
+-		return ret;
++		data = devm_kzalloc(&client->dev, sizeof(struct mp2975_data),
++					GFP_KERNEL);
++		if (!data)
++			return -ENOMEM;
+ 
+-	/* Obtain voltage reference values. */
+-	ret = mp2975_vref_get(client, data, info);
+-	if (ret)
+-		return ret;
++		memcpy(&data->info, &mp2975_info, sizeof(*info));
++		info = &data->info;
+ 
+-	/* Obtain vout over-voltage scales. */
+-	ret = mp2975_vout_ov_scale_get(client, data, info);
+-	if (ret < 0)
+-		return ret;
++		/* Identify multiphase configuration for rail 2. */
++		ret = mp2975_identify_multiphase_rail2(client);
++		if (ret < 0)
++			return ret;
+ 
+-	/* Obtain offsets, maximum and format for vout. */
+-	ret = mp2975_vout_per_rail_config_get(client, data, info);
+-	if (ret)
+-		return ret;
++		if (ret) {
++			/* Two rails are connected. */
++			data->info.pages = MP2975_PAGE_NUM;
++			data->info.phases[1] = ret;
++			data->info.func[1] = MP2975_RAIL2_FUNC;
++		}
++
++		/* Identify multiphase configuration. */
++		ret = mp2975_identify_multiphase(client, data, info);
++		if (ret)
++			return ret;
++
++		/* Identify VID setting per rail. */
++		ret = mp2975_identify_rails_vid(client, data, info);
++		if (ret < 0)
++			return ret;
++
++		/* Obtain current sense gain of power stage. */
++		ret = mp2975_current_sense_gain_get(client, data);
++		if (ret)
++			return ret;
++
++		/* Obtain voltage reference values. */
++		ret = mp2975_vref_get(client, data, info);
++		if (ret)
++			return ret;
++
++		/* Obtain vout over-voltage scales. */
++		ret = mp2975_vout_ov_scale_get(client, data, info);
++		if (ret < 0)
++			return ret;
++
++		/* Obtain offsets, maximum and format for vout. */
++		ret = mp2975_vout_per_rail_config_get(client, data, info);
++		if (ret)
++			return ret;
++	}
+ 
+ 	return pmbus_do_probe(client, info);
+ }
+ 
++static const struct mp2971_device_info mp2971_device_info = {
++	.imvp9_en_r1_mask = BIT(14),
++	.imvp9_en_r2_mask = BIT(13),
++	.max_phase_rail1 = 8,
++	.max_phase_rail2 = 4,
++};
++
+ static const struct i2c_device_id mp2975_id[] = {
++	{"mp2971", (kernel_ulong_t)&mp2971_device_info },
++	{"mp2973", (kernel_ulong_t)&mp2971_device_info },
+ 	{"mp2975", 0},
+ 	{}
+ };
 -- 
 2.25.1
+
