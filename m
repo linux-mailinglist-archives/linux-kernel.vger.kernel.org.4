@@ -2,85 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62B164666F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:23:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 151FD646672
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:24:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiLHBX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 20:23:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S229677AbiLHBYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 20:24:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHBX0 (ORCPT
+        with ESMTP id S229437AbiLHBYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 20:23:26 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 138A7578F3;
-        Wed,  7 Dec 2022 17:23:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B7A7DB821CA;
-        Thu,  8 Dec 2022 01:23:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E73A9C433C1;
-        Thu,  8 Dec 2022 01:23:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670462603;
-        bh=8rCjfbDiR4db16mymv7WYvtLQ9BVPlo1/EQLjBZWGd8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KOdnkIbzzTLcTZXg9tM25dfhkp9/dJD3YfXifWRD0C3Edh+rKDtO5+nMxNItsg/0C
-         dmvo+rTjqr1QfUMqwtODgZEn9W9miUgJqDViZfqKITVDqY/LDx74N5XwkG5RUmj6G8
-         5Dnrf6TJD3wiZn200GZR+Kq5OAxboAkC4b9iWHsOx6k+PO4FtcKLY9vY+UEGV5hF3s
-         Ew06cGr8FqeLt8JxfIlwOP45LV43wnrluHl0VYNSVezx5tvqWJ7I5MrDZ6D46L6LkD
-         BXbULLVOsWFlEQ7RsR9Y5jFaGN7wSovbm148RecouEC/eagZHA5WGxiKonIkpEu16R
-         vJCdBbY1ZjhQg==
-Date:   Wed, 7 Dec 2022 17:23:21 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     <yang.yang29@zte.com.cn>
-Cc:     <edumazet@google.com>, <davem@davemloft.net>, <pabeni@redhat.com>,
-        <bigeasy@linutronix.de>, <imagedong@tencent.com>,
-        <kuniyu@amazon.com>, <petrm@nvidia.com>, <liu3101@purdue.edu>,
-        <wujianguo@chinatelecom.cn>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <tedheadster@gmail.com>
-Subject: Re: [PATCH linux-next] net: record times of netdev_budget exhausted
-Message-ID: <20221207172321.7da162c7@kernel.org>
-In-Reply-To: <202212080912066313234@zte.com.cn>
-References: <20221207153256.6c0ec51a@kernel.org>
-        <202212080912066313234@zte.com.cn>
+        Wed, 7 Dec 2022 20:24:48 -0500
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C1187CA1;
+        Wed,  7 Dec 2022 17:24:45 -0800 (PST)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 2B81FC9Q039171;
+        Thu, 8 Dec 2022 09:15:12 +0800 (GMT-8)
+        (envelope-from jammy_huang@aspeedtech.com)
+Received: from JammyHuang-PC.aspeed.com (192.168.2.115) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 8 Dec
+ 2022 09:23:38 +0800
+From:   Jammy Huang <jammy_huang@aspeedtech.com>
+To:     <mchehab@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <linux-media@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] media: docs: aspeed-video: Update reference
+Date:   Thu, 8 Dec 2022 09:24:23 +0800
+Message-ID: <20221208012423.3106-1-jammy_huang@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.115]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 2B81FC9Q039171
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Dec 2022 09:12:06 +0800 (CST) yang.yang29@zte.com.cn wrote:
-> > Sorry if this is too direct, but it seems to me like you're trying hard
-> > to find something useful to do in this area without a clear use case.
->   
-> I see maybe this is a too special scenes, not suitable. The motivation
-> is we see lots of time_squeeze on our working machines, and want to
-> tuning, but our kernel are not ready to use threaded NAPI. And we
+Use URL rather than plain text.
 
-Ah, in that cases I indeed misjudged, sorry.
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+---
+ Documentation/userspace-api/media/drivers/aspeed-video.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> did see performance difference on different netdev_budget* in
-> preliminary tests.
+diff --git a/Documentation/userspace-api/media/drivers/aspeed-video.rst b/Documentation/userspace-api/media/drivers/aspeed-video.rst
+index e5656a8d990e..0e9a3cc838d6 100644
+--- a/Documentation/userspace-api/media/drivers/aspeed-video.rst
++++ b/Documentation/userspace-api/media/drivers/aspeed-video.rst
+@@ -23,7 +23,7 @@ proprietary mode.
+ 
+ More details on the ASPEED video hardware operations can be found in
+ *chapter 6.2.16 KVM Video Driver* of SDK_User_Guide which available on
+-AspeedTech-BMC/openbmc/releases.
++`github <https://github.com/AspeedTech-BMC/openbmc/releases/>`__.
+ 
+ The ASPEED video driver implements the following driver-specific control:
+ 
 
-Right, the budget values < 100 are quite impractical. Also as I said
-time_squeeze is a terrible metric, if you can find a direct metric
-in terms of application latency or max PPS, that's much more valuable.
+base-commit: 8ed710da2873c2aeb3bb805864a699affaf1d03b
+prerequisite-patch-id: bf47e8ab2998acfbc32be5a4b7b5ae8a3ae4218b
+prerequisite-patch-id: bf82715983e08f2e810ff1a82ce644f5f9006cd9
+prerequisite-patch-id: 28a2040ef0235e5765f05d2fc5529bce2a0f4c6f
+prerequisite-patch-id: 7e761c779730536db8baf50db5fc8caf058e95af
+prerequisite-patch-id: c48ea20973fa35938a7d33a0e20d2900df48755f
+prerequisite-patch-id: 5d2c8043e4026469638dc4541aec76deefa39315
+-- 
+2.25.1
 
-> > We have coding tasks which would definitely be useful and which nobody
-> > has time to accomplish. Please ask if you're trying to find something
-> > to do.  
-> 
-> We focus on 5G telecom machine, which has huge TIPC packets in the
-> intranet. If it's related, we are glad to do it with much appreciate of your
-> indicate!
-
-Oh, unfortunately most of the tasks we have are around driver
-infrastructure.
