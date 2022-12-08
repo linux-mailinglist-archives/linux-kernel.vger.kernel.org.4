@@ -2,150 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E56A64744A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:28:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7D664744C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:29:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbiLHQ2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:28:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39314 "EHLO
+        id S229715AbiLHQ3S convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 8 Dec 2022 11:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiLHQ23 (ORCPT
+        with ESMTP id S229564AbiLHQ3K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:28:29 -0500
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2BC9B1005F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:28:28 -0800 (PST)
-Received: (qmail 731998 invoked by uid 1000); 8 Dec 2022 11:28:24 -0500
-Date:   Thu, 8 Dec 2022 11:28:24 -0500
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Oliver Neukum <oneukum@suse.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
-        Yasushi SHOJI <yashi@spacecubics.com>,
-        Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
-        Hangyu Hua <hbh25y@gmail.com>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Peter Fink <pfink@christ-es.de>,
-        Jeroen Hofstee <jhofstee@victronenergy.com>,
-        Christoph =?iso-8859-1?Q?M=F6hring?= <cmoehring@christ-es.de>,
-        John Whittington <git@jbrengineering.co.uk>,
-        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
-        Jimmy Assarsson <extja@kvaser.com>,
-        Anssi Hannula <anssi.hannula@bitwise.fi>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Stephane Grosjean <s.grosjean@peak-system.com>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Sebastian Haas <haas@ems-wuensche.com>,
-        Maximilian Schneider <max@schneidersoft.net>,
-        Daniel Berglund <db@kvaser.com>,
-        Olivier Sobrie <olivier@sobrie.be>,
-        Remigiusz =?utf-8?B?S2/FgsWCxIV0YWo=?= 
-        <remigiusz.kollataj@mobica.com>,
-        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
-        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
-        Bernd Krumboeck <b.krumboeck@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
- drivers' disconnect()
-Message-ID: <Y5IQqExJN9C9xQbF@rowland.harvard.edu>
-References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr>
- <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
- <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
- <b5df2262-7a4f-0dcf-6460-793dad02401d@suse.com>
- <CAMZ6RqL9eKco+fAMZoQ6X9PNE7dDK3KnFZoMCXrjgvx_ZU8=Ew@mail.gmail.com>
+        Thu, 8 Dec 2022 11:29:10 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69B0175AC;
+        Thu,  8 Dec 2022 08:29:04 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id fz10so1442385qtb.3;
+        Thu, 08 Dec 2022 08:29:04 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9SMMf+hquSFM569LOmgsVrquK2ebdVd9ejvYmGcH8kU=;
+        b=zJ7bJHgnNRYyZx7P3CLrYXvezwcwwolkoAUb+lgCpwJf3hcB8ON5GYMzkUyZYFr3rT
+         BgcSAkn7kILaAmTJgyg7/Nx9mQrHQzS4kVJY+uDeqsfmX0wm0vpWGIV3NjMTZy65H+B6
+         dx1cAWxodhvxfnfuXgLNoKOkdUhLaU5z3dtMK86X+Gi46Xu5UDunbe2oofGLoCBjLwfR
+         7I4vu0wq6FkqlsAK+xxoCWEBZTrwYP9CeFgk1ehxj4NwfQYL7Yqu47bc1y1Wqif12ZGI
+         ObdpLVSAAlAjL3K3BeCN9MJjhCclQLunaCSm7Dgk/xkcKDXAqzYyhII32v16+t+FMnvi
+         mPyQ==
+X-Gm-Message-State: ANoB5pkA+UyLxuZTTZmWJLU2gB17L6t9W0SCr+btjSGUL7amHENFPyaI
+        4X3bKQ8bcMdE3wyVoEKazCTDz9CkshuJiytDJfs=
+X-Google-Smtp-Source: AA0mqf4lf5c+gJxv89EuXzWEId/JI8uNVeliPyftHqgt2w9CDgAykQB8Ak/PnOQ83rYcvJ31DYzm94UVrm6p9KzOBLI=
+X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
+ u9-20020a05622a198900b003a57cf81a6emr86715503qtc.48.1670516943861; Thu, 08
+ Dec 2022 08:29:03 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqL9eKco+fAMZoQ6X9PNE7dDK3KnFZoMCXrjgvx_ZU8=Ew@mail.gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221208224016.2009797-1-amadeuszx.slawinski@linux.intel.com>
+In-Reply-To: <20221208224016.2009797-1-amadeuszx.slawinski@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Dec 2022 17:28:52 +0100
+Message-ID: <CAJZ5v0izpg_awSBR-HUa58z-wQAm9QGNBV8T4bzavGUCou+R-w@mail.gmail.com>
+Subject: Re: [PATCH v2] ACPICA: Fix operand resolution
+To:     =?UTF-8?B?QW1hZGV1c3ogU8WCYXdpxYRza2k=?= 
+        <amadeuszx.slawinski@linux.intel.com>
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Robert Moore <robert.moore@intel.com>,
+        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org,
+        devel@acpica.org, linux-kernel@vger.kernel.org,
+        Cezary Rojewski <cezary.rojewski@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:44:51AM +0900, Vincent MAILHOL wrote:
-> On Thu. 8 Dec. 2022 at 20:04, Oliver Neukum <oneukum@suse.com> wrote:
+On Thu, Dec 8, 2022 at 3:40 PM Amadeusz Sławiński
+<amadeuszx.slawinski@linux.intel.com> wrote:
+>
+> In our tests we get UBSAN warning coming from ACPI parser. This is
+> caused by trying to resolve operands when there is none.
+>
+> [    0.000000] Linux version 5.15.0-rc3chromeavsrel1.0.184+ (root@...) (gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0, GNU ld (GNU Binutils for Ubuntu) 2.34) #1 SMP PREEMPT Sat Oct 16 00:08:27 UTC 2021
+> ...
+> [ 14.719508] ================================================================================
+> [ 14.719551] UBSAN: array-index-out-of-bounds in /.../linux/drivers/acpi/acpica/dswexec.c:401:12
+> [ 14.719594] index -1 is out of range for type 'acpi_operand_object *[9]'
+> [ 14.719621] CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-rc3chromeavsrel1.0.184+ #1
+> [ 14.719657] Hardware name: Intel Corp. Geminilake/GLK RVP2 LP4SD (07), BIOS GELKRVPA.X64.0214.B50.2009111159 09/11/2020
+> [ 14.719694] Call Trace:
+> [ 14.719712] dump_stack_lvl+0x38/0x49
+> [ 14.719749] dump_stack+0x10/0x12
+> [ 14.719775] ubsan_epilogue+0x9/0x45
+> [ 14.719801] __ubsan_handle_out_of_bounds.cold+0x44/0x49
+> [ 14.719835] acpi_ds_exec_end_op+0x1d7/0x6b5
+> [ 14.719870] acpi_ps_parse_loop+0x942/0xb34
+> ...
+>
+> Problem happens because WalkState->NumOperands is 0 and it is used when
+> trying to access into operands table. Actual code is:
+> WalkState->Operands [WalkState->NumOperands -1]
+> which causes out of bound access. Improve the check before above access
+> to check if ACPI opcode should have any arguments (operands) at all.
+>
+> Link: https://github.com/acpica/acpica/pull/745
+> Signed-off-by: Amadeusz Sławiński <amadeuszx.slawinski@linux.intel.com>
+> Reviewed-by: Cezary Rojewski <cezary.rojewski@intel.com>
+> ---
+>
+> Changes:
+> v2: Fix comment to tell that opcode has no arguments
+>
+> ---
+>  drivers/acpi/acpica/dswexec.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/acpi/acpica/dswexec.c b/drivers/acpi/acpica/dswexec.c
+> index e8ad41387f84..b082eb942a0f 100644
+> --- a/drivers/acpi/acpica/dswexec.c
+> +++ b/drivers/acpi/acpica/dswexec.c
+> @@ -389,9 +389,11 @@ acpi_status acpi_ds_exec_end_op(struct acpi_walk_state *walk_state)
+>
+>                 /*
+>                  * All opcodes require operand resolution, with the only exceptions
+> -                * being the object_type and size_of operators.
+> +                * being the object_type and size_of operators as well as opcodes that
+> +                * take no arguments.
+>                  */
+> -               if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE)) {
+> +               if (!(walk_state->op_info->flags & AML_NO_OPERAND_RESOLVE) &&
+> +                   (walk_state->op_info->flags & AML_HAS_ARGS)) {
+>
+>                         /* Resolve all operands */
+>
+> --
 
-> > >> which is likely, then please also remove checks like this:
-> > >>
-> > >>          struct ems_usb *dev = usb_get_intfdata(intf);
-> > >>
-> > >>          usb_set_intfdata(intf, NULL);
-> > >>
-> > >>          if (dev) {
-> >
-> > Here. If you have a driver that uses usb_claim_interface().
-> > You need this check or you unregister an already unregistered
-> > netdev.
-> 
-> Sorry, but with all my best intentions, I still do not get it. During
-> the second iteration, inft is NULL and:
-
-No, intf is never NULL.  Rather, the driver-specific pointer stored in 
-intfdata may be NULL.
-
-You seem to be confusing intf with intfdata(intf).
-
->         /* equivalent to dev = intf->dev.data. Because intf is NULL,
->          * this is a NULL pointer dereference */
->         struct ems_usb *dev = usb_get_intfdata(intf);
-
-So here dev will be NULL when the second interface's disconnect routine 
-runs, because the first time through the routine sets the intfdata to 
-NULL for both interfaces:
-
-	USB core calls ->disconnect(intf1)
-
-		disconnect routine sets intfdata(intf1) and 
-		intfdata(intf2) both to NULL and handles the
-		disconnection
-
-	USB core calls ->disconnect(intf2)
-
-		disconnect routine sees that intfdata(intf2) is
-		already NULL, so it knows that it doesn't need
-		to do anything more.
-
-As you can see in this scenario, neither intf1 nor intf2 is ever NULL.
-
->         /* OK, intf is already NULL */
->         usb_set_intfdata(intf, NULL);
-> 
->         /* follows a NULL pointer dereference so this is undefined
->          * behaviour */
->        if (dev) {
-> 
-> How is this a valid check that you entered the function for the second
-> time? If intf is the flag, you should check intf, not dev? Something
-> like this:
-
-intf is not a flag; it is the argument to the function and is never 
-NULL.  The flag is the intfdata.
-
->         struct ems_usb *dev;
-> 
->         if (!intf)
->                 return;
-> 
->         dev = usb_get_intfdata(intf);
->         /* ... */
-> 
-> I just can not see the connection between intf being NULL and the if
-> (dev) check. All I see is some undefined behaviour, sorry.
-
-Once you get it straightened out in your head, you will understand.
-
-Alan Stern
+Applied, thanks!
