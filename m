@@ -2,261 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38E36476D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:53:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BA56476D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiLHTw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:52:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S229694AbiLHTyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiLHTw4 (ORCPT
+        with ESMTP id S229635AbiLHTyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:52:56 -0500
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C7851329
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:52:54 -0800 (PST)
-Received: by mail-ej1-x62e.google.com with SMTP id bj12so6462085ejb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:52:54 -0800 (PST)
+        Thu, 8 Dec 2022 14:54:31 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C83A59FE4
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:54:30 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id x22so6501786ejs.11
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:54:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cbt5AP/opVLc7mMBSSuU1JbLyeELh40EDgvhnoHJP70=;
-        b=fyYeafmB6c2C0PZNOSzG2fMQws/DAdxSprCidbNS2n7zzH+51oGt5mYtwqlYLChtjL
-         qVVXu91amMPeax6kKa92akWxT5LhsFZGvSX4Xz1PO8P+IDUvvDFABVjLIPeUNtwtFNzh
-         F+MZcmx/zC4R5K4KpKUrI2RaY+NWyjbHDmL17PlzTCc6fK1OPn01iv2arCi+T0mQoRaF
-         fqerH8kKZbr/8IXsfEx33JPsNzXs+LPbMKMNa+D7tKeXys58dqdX0w8dlky17dPeLbk0
-         iEFS4eS9sEYxp/yPVhFA7X0GiYIakCXNNrXdAFqA5QOZe4cNJ+7GoWTEXBJoak0BRn8B
-         xB0g==
+        d=broadcom.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zw8hOoQVksJJycjvlfiOHVKW9DmDlZPoCkMtOlTvBAk=;
+        b=B4wlYtGtu5sPq1YZ6J+4j3ddrMI2ba3rtBn0Ys07pjdcs7Gqm4J4C/vYS73V6B0c+X
+         CdyArO9RfokTCUJskAmV2ZYoWsWq0p5US/HZI+np8dyXSOY44EJusJwLsGkq6UCzbznA
+         +35e0AD53pmPFpr1zNzIY2mnazM9P7BAJJNs4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cbt5AP/opVLc7mMBSSuU1JbLyeELh40EDgvhnoHJP70=;
-        b=jEaA410nrsmzq7dkQUQ9vKcV+zMx7oLq0X7W/jIjpjkoACl9QPAKYM4dH8zxKp/jfx
-         C0GOXT0cMtdeOvxMDSEYRL0fUvRB7IyBQYJcLcHPoy9VTGY2bYPV2REtVnzMmrIk8Zi6
-         ncILT6qs5gJ2YoZBSOWMXgpPsHr+oa03bBWBUe5f1UZfbkFfAKmsRGF0pnu3an8ERZ9J
-         sEY7F6WZjLH5UcGZn/kuOEZNjcsQ/ryaxFdbjyYuDKswWHQC+Vt1W93kg00HjA897xey
-         UcFzXCj++HkgxCou/68FzvVHlgRnUJYsydDE2uAm+8+uaoIt9stMnNu+Z7M2+ZTvUQXt
-         scWg==
-X-Gm-Message-State: ANoB5pnQveEcdJtxYEAO3eMQfqlJukA6SdpSmeZRhP/3+zSVHQIyFxap
-        PnYSnMTp6LKQuqiQK2mbjk/FtggPJ4M=
-X-Google-Smtp-Source: AA0mqf5ptS1ysFEt5E9ddx06NKu6/xOtdByMq9Zr7XTuRascFI3VgS0SzOtgCo3B5td0KRXiqPfQCg==
-X-Received: by 2002:a17:906:37d5:b0:7c0:a961:8aad with SMTP id o21-20020a17090637d500b007c0a9618aadmr3213884ejc.34.1670529172683;
-        Thu, 08 Dec 2022 11:52:52 -0800 (PST)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id o17-20020a170906769100b00782fbb7f5f7sm10009703ejm.113.2022.12.08.11.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 11:52:52 -0800 (PST)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Thu, 8 Dec 2022 20:52:50 +0100
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, stephen.s.brennan@oracle.com,
-        willy@infradead.org, akpm@linux-foundation.org, hch@infradead.org
-Subject: Re: [PATCH v1 2/7] mm/vmalloc.c: add flags to mark vm_map_ram area
-Message-ID: <Y5JAkqeecvNwPcRf@pc636>
-References: <20221204013046.154960-1-bhe@redhat.com>
- <20221204013046.154960-3-bhe@redhat.com>
- <Y43qfdseyq0zizJO@pc636>
- <Y5BI3Sp8QCyweXwt@MiWiFi-R3L-srv>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zw8hOoQVksJJycjvlfiOHVKW9DmDlZPoCkMtOlTvBAk=;
+        b=I3lk4zh1BqKEQq5Z+Kkp1OEerbjZisSJF5LKcybe1VMU2y20X84XefZoLNM+yVzz75
+         Okc2DPK+viVY0jmaZ0TcSvH113ow+5bGUACizui6dAvkfgueGZQ8/YAO1UZ+sU9vOi4d
+         mKunRXnuOCD8Sg1d4Be5oGtm6zinzHsMUI1DDBCNO5x0u8tDSdPhEavjrQ+D3nDht6cg
+         FvYtinqHTysiWlPw1FXSyubLrmCcQZq8aZsJy47s97xjEPZ+Kb479SWGYd0WCXYDATtf
+         /J8oa5c+Pu7zNtpmrPauCHA2oLS/Qei3wH3qieGLxiIjo3fVop4YbYj2Uq5hZLzXWU/F
+         SbKA==
+X-Gm-Message-State: ANoB5ploaskCSVWrSCQQ17at7V+/raCH92vlkEzkOVjFIJhCn4jkZ8g9
+        m66xYlsTZFluZDDFDsv180jW96zS5rVyfOVl3xNSsw==
+X-Google-Smtp-Source: AA0mqf50mkyNf4ARV701ZG/LUrz2fUXLJ1GGe/FgkMIvY8UbUPQ5uTsO+P6eXbHC/BJ5iJw+FTZgRG1TSrA1vzG+G2M=
+X-Received: by 2002:a17:906:a41a:b0:7c0:e80e:5af0 with SMTP id
+ l26-20020a170906a41a00b007c0e80e5af0mr15656997ejz.235.1670529268819; Thu, 08
+ Dec 2022 11:54:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5BI3Sp8QCyweXwt@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221207225435.1273226-1-lixiaoyan@google.com> <20221207225435.1273226-2-lixiaoyan@google.com>
+In-Reply-To: <20221207225435.1273226-2-lixiaoyan@google.com>
+From:   Michael Chan <michael.chan@broadcom.com>
+Date:   Thu, 8 Dec 2022 11:54:17 -0800
+Message-ID: <CACKFLimL-+MGBsisQSnkvDfj7TJPAR4V59ec0DOubxxfH50RmA@mail.gmail.com>
+Subject: Re: [RFC net-next v5 2/2] bnxt: Use generic HBH removal helper in tx path
+To:     Coco Li <lixiaoyan@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000ae499f05ef5667cb"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 04:03:41PM +0800, Baoquan He wrote:
-> On 12/05/22 at 01:56pm, Uladzislau Rezki wrote:
-> > > Through vmalloc API, a virtual kernel area is reserved for physical
-> > > address mapping. And vmap_area is used to track them, while vm_struct
-> > > is allocated to associate with the vmap_area to store more information
-> > > and passed out.
-> > > 
-> > > However, area reserved via vm_map_ram() is an exception. It doesn't have
-> > > vm_struct to associate with vmap_area. And we can't recognize the
-> > > vmap_area with '->vm == NULL' as a vm_map_ram() area because the normal
-> > > freeing path will set va->vm = NULL before unmapping, please see
-> > > function remove_vm_area().
-> > > 
-> > > Meanwhile, there are two types of vm_map_ram area. One is the whole
-> > > vmap_area being reserved and mapped at one time; the other is the
-> > > whole vmap_area with VMAP_BLOCK_SIZE size being reserved, while mapped
-> > > into split regions with smaller size several times via vb_alloc().
-> > > 
-> > > To mark the area reserved through vm_map_ram(), add flags field into
-> > > struct vmap_area. Bit 0 indicates whether it's a vm_map_ram area,
-> > > while bit 1 indicates whether it's a vmap_block type of vm_map_ram
-> > > area.
-> > > 
-> > > This is a preparatoin for later use.
-> > > 
-> > > Signed-off-by: Baoquan He <bhe@redhat.com>
-> > > ---
-> > >  include/linux/vmalloc.h |  1 +
-> > >  mm/vmalloc.c            | 18 +++++++++++++++++-
-> > >  2 files changed, 18 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> > > index 096d48aa3437..69250efa03d1 100644
-> > > --- a/include/linux/vmalloc.h
-> > > +++ b/include/linux/vmalloc.h
-> > > @@ -76,6 +76,7 @@ struct vmap_area {
-> > >  		unsigned long subtree_max_size; /* in "free" tree */
-> > >  		struct vm_struct *vm;           /* in "busy" tree */
-> > >  	};
-> > > +	unsigned long flags; /* mark type of vm_map_ram area */
-> > >  };
-> > >  
-> > >  /* archs that select HAVE_ARCH_HUGE_VMAP should override one or more of these */
-> > > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> > > index 5d3fd3e6fe09..d6f376060d83 100644
-> > > --- a/mm/vmalloc.c
-> > > +++ b/mm/vmalloc.c
-> > > @@ -1815,6 +1815,7 @@ static void free_vmap_area_noflush(struct vmap_area *va)
-> > >  
-> > >  	spin_lock(&vmap_area_lock);
-> > >  	unlink_va(va, &vmap_area_root);
-> > > +	va->flags = 0;
-> > >  	spin_unlock(&vmap_area_lock);
-> > >  
-> > This is not a good place to set flags to zero. It looks to me like
-> > corner and kind of specific.
-> 
-> Thanks for reviewing.
-> 
-> Here, I thought to clear VMAP_RAM|VMAP_BLOCK on vmap->flags when free
-> the vmap_block. I didn't find a good place to do the clearing. When we
-> call free_vmap_block(), we either come from purge_fragmented_blocks(),
-> or from vb_free(). In vb_free(), it will call free_vmap_block() when
-> the whole vmap_block is dirty. In purge_fragmented_blocks(), it will
-> try to purge all vmap_block which only has dirty or free regions.
-> For both of above functions, they will call free_vmap_block() when
-> there's no being used region in the vmap_block.
-> 
->   purge_fragmented_blocks()
->   vb_free()
->     -->free_vmap_block()
-> 
-> So seems we don't need to clear the VMAP_RAM|VMAP_BLOCK on vmap->flags
-> because there's no mapping existed in the vmap_block. The consequent
-> free_vmap_block() will remove the relevant vmap_area from vmap_area_list
-> and vmap_area_root tree.
-> 
-> So I plan to remove code change in this place.
-> > 
-> > 
-> > >  	nr_lazy = atomic_long_add_return((va->va_end - va->va_start) >>
-> > > @@ -1887,6 +1888,10 @@ struct vmap_area *find_vmap_area(unsigned long addr)
-> > >  
-> > >  #define VMAP_BLOCK_SIZE		(VMAP_BBMAP_BITS * PAGE_SIZE)
-> > >  
-> > > +#define VMAP_RAM		0x1
-> > > +#define VMAP_BLOCK		0x2
-> > > +#define VMAP_FLAGS_MASK		0x3
-> > > +
-> > >  struct vmap_block_queue {
-> > >  	spinlock_t lock;
-> > >  	struct list_head free;
-> > > @@ -1967,6 +1972,9 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
-> > >  		kfree(vb);
-> > >  		return ERR_CAST(va);
-> > >  	}
-> > > +	spin_lock(&vmap_area_lock);
-> > > +	va->flags = VMAP_RAM|VMAP_BLOCK;
-> > > +	spin_unlock(&vmap_area_lock);
-> > >
-> > The per-cpu code was created as a fast per-cpu allocator because of high
-> > vmalloc lock contention. If possible we should avoid of locking of the
-> > vmap_area_lock. Because it has a high contention.
-> 
-> Fair enough. I made below draft patch to address the concern. By
-> adding argument va_flags to alloc_vmap_area(), we can pass the 
-> vm_map_ram flags into alloc_vmap_area and filled into vmap_area->flags.
-> With this, we don't need add extra action to acquire vmap_area_root lock
-> and do the flags setting. Is it OK to you?
-> 
-> From 115f6080b339d0cf9dd20c5f6c0d3121f6b22274 Mon Sep 17 00:00:00 2001
-> From: Baoquan He <bhe@redhat.com>
-> Date: Wed, 7 Dec 2022 11:08:14 +0800
-> Subject: [PATCH] mm/vmalloc: change alloc_vmap_area() to pass in va_flags
-> 
-> With this change, we can pass and set vmap_area->flags for vm_map_ram area
-> in alloc_vmap_area(). Then no extra action need be added to acquire
-> vmap_area_lock when doing the vmap_area->flags setting.
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> ---
->  mm/vmalloc.c | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ccaa461998f3..d74eddec352f 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -1586,7 +1586,9 @@ preload_this_cpu_lock(spinlock_t *lock, gfp_t gfp_mask, int node)
->  static struct vmap_area *alloc_vmap_area(unsigned long size,
->  				unsigned long align,
->  				unsigned long vstart, unsigned long vend,
-> -				int node, gfp_t gfp_mask)
-> +				int node, gfp_t gfp_mask,
-> +				unsigned long va_flags)
-> +)
->  {
->  	struct vmap_area *va;
->  	unsigned long freed;
-> @@ -1630,6 +1632,7 @@ static struct vmap_area *alloc_vmap_area(unsigned long size,
->  	va->va_start = addr;
->  	va->va_end = addr + size;
->  	va->vm = NULL;
-> +	va->flags = va_flags;
->  
->  	spin_lock(&vmap_area_lock);
->  	insert_vmap_area(va, &vmap_area_root, &vmap_area_list);
-> @@ -1961,7 +1964,8 @@ static void *new_vmap_block(unsigned int order, gfp_t gfp_mask)
->  
->  	va = alloc_vmap_area(VMAP_BLOCK_SIZE, VMAP_BLOCK_SIZE,
->  					VMALLOC_START, VMALLOC_END,
-> -					node, gfp_mask);
-> +					node, gfp_mask,
-> +					VMAP_RAM|VMAP_BLOCK);
->  	if (IS_ERR(va)) {
->  		kfree(vb);
->  		return ERR_CAST(va);
-> @@ -2258,7 +2262,8 @@ void *vm_map_ram(struct page **pages, unsigned int count, int node)
->  	} else {
->  		struct vmap_area *va;
->  		va = alloc_vmap_area(size, PAGE_SIZE,
-> -				VMALLOC_START, VMALLOC_END, node, GFP_KERNEL);
-> +				VMALLOC_START, VMALLOC_END,
-> +				node, GFP_KERNEL, VMAP_RAM|VMAP_BLOCK);
->  		if (IS_ERR(va))
->  			return NULL;
->  
-> @@ -2498,7 +2503,7 @@ static struct vm_struct *__get_vm_area_node(unsigned long size,
->  	if (!(flags & VM_NO_GUARD))
->  		size += PAGE_SIZE;
->  
-> -	va = alloc_vmap_area(size, align, start, end, node, gfp_mask);
-> +	va = alloc_vmap_area(size, align, start, end, node, gfp_mask, 0);
->  	if (IS_ERR(va)) {
->  		kfree(area);
->  		return NULL;
-> -- 
-> 2.34.1
-> 
-Yes, this is better than it was before. Adding an extra parameter makes
-it more valid and logical.
+--000000000000ae499f05ef5667cb
+Content-Type: text/plain; charset="UTF-8"
 
---
-Uladzislau Rezki
+On Wed, Dec 7, 2022 at 2:54 PM Coco Li <lixiaoyan@google.com> wrote:
+>
+> Eric Dumazet implemented Big TCP that allowed bigger TSO/GRO packet sizes
+> for IPv6 traffic. See patch series:
+> 'commit 89527be8d8d6 ("net: add IFLA_TSO_{MAX_SIZE|SEGS} attributes")'
+>
+> This reduces the number of packets traversing the networking stack and
+> should usually improves performance. However, it also inserts a
+> temporary Hop-by-hop IPv6 extension header.
+>
+> Using the HBH header removal method in the previous path, the extra header
+> be removed in bnxt drivers to allow it to send big TCP packets (bigger
+> TSO packets) as well.
+>
+> Tested:
+> Compiled locally
+>
+> To further test functional correctness, update the GSO/GRO limit on the
+> physical NIC:
+>
+> ip link set eth0 gso_max_size 181000
+> ip link set eth0 gro_max_size 181000
+>
+> Note that if there are bonding or ipvan devices on top of the physical
+> NIC, their GSO sizes need to be updated as well.
+>
+> Then, IPv6/TCP packets with sizes larger than 64k can be observed.
+>
+> Big TCP functionality is tested by Michael, feature checks not yet.
+>
+> Tested by Michael:
+> I've confirmed with our hardware team that this is supported by our
+> chips, and I've tested it up to gso_max_size of 524280.  Thanks.
+>
+> Tested-by: Michael Chan <michael.chan@broadcom.com>
+> Reviewed-by: Michael Chan <michael.chan@broadcom.com>
+
+If you have made changes since the last version, please drop these
+tags.  Reviewers will provide new tags after reviewing the new
+version.
+
+> Signed-off-by: Coco Li <lixiaoyan@google.com>
+> ---
+>  drivers/net/ethernet/broadcom/bnxt/bnxt.c | 26 ++++++++++++++++++++++-
+>  1 file changed, 25 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 0fe164b42c5d..6ba1cd342a80 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -389,6 +389,9 @@ static netdev_tx_t bnxt_start_xmit(struct sk_buff *skb, struct net_device *dev)
+>                         return NETDEV_TX_BUSY;
+>         }
+>
+> +       if (unlikely(ipv6_hopopt_jumbo_remove(skb)))
+> +               goto tx_free;
+> +
+>         length = skb->len;
+>         len = skb_headlen(skb);
+>         last_frag = skb_shinfo(skb)->nr_frags;
+> @@ -11315,6 +11318,7 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+>                               u8 **nextp)
+>  {
+>         struct ipv6hdr *ip6h = (struct ipv6hdr *)(skb->data + nw_off);
+> +       struct hop_jumbo_hdr *jhdr;
+>         int hdr_count = 0;
+>         u8 *nexthdr;
+>         int start;
+> @@ -11342,9 +11346,27 @@ static bool bnxt_exthdr_check(struct bnxt *bp, struct sk_buff *skb, int nw_off,
+>
+>                 if (hdrlen > 64)
+>                         return false;
+> +
+> +               /* The ext header may be a hop-by-hop header inserted for
+> +                * big TCP purposes. This will be removed before sending
+> +                * from NIC, so do not count it.
+> +                */
+> +               if (*nexthdr == NEXTHDR_HOP) {
+> +                       if (likely(skb->len <= GRO_LEGACY_MAX_SIZE))
+> +                               goto increment_hdr;
+> +
+> +                       jhdr = (struct hop_jumbo_hdr *)nexthdr;
+
+I already explained when reviewing your last version that nexthdr
+initially points to the next header field within the ipv6 header so
+this won't work.  If you cast it to jhdr, jhdr will be at offset 6 of
+the ipv6 header.  It won't be pointing to the extension header.  You
+need to do:
+
+jhdr = (struct hop_jumbo_hdr *)hp
+
+hp is pointing to the extension header.
+
+Thanks.
+
+> +                       if (jhdr->tlv_type != IPV6_TLV_JUMBO || jhdr->hdrlen != 0 ||
+> +                           jhdr->nexthdr != IPPROTO_TCP)
+> +                               goto increment_hdr;
+> +
+> +                       goto next_hdr;
+> +               }
+> +increment_hdr:
+> +               hdr_count++;
+> +next_hdr:
+>                 nexthdr = &hp->nexthdr;
+>                 start += hdrlen;
+> -               hdr_count++;
+>         }
+>         if (nextp) {
+>                 /* Caller will check inner protocol */
+
+--000000000000ae499f05ef5667cb
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+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
+OnaLEot1MoQO7BIe5S9H4AcCEXXcrJJiAtMCl47ARpyHmvQFQFFTrHgUYEd9V+9bOzY7MBIGSV1N
+/JfsT1sZw6HT0lJkSQefhPGpBniAob62DJP3qr11tu8CAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
+AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
+c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
+AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
+TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
+bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
+L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
+BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
+HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQU31rAyTdZweIF0tJTFYwfOv2w
+L4QwDQYJKoZIhvcNAQELBQADggEBACcuyaGmk0NSZ7Kio7O7WSZ0j0f9xXcBnLbJvQXFYM7JI5uS
+kw5ozATEN5gfmNIe0AHzqwoYjAf3x8Dv2w7HgyrxWdpjTKQFv5jojxa3A5LVuM8mhPGZfR/L5jSk
+5xc3llsKqrWI4ov4JyW79p0E99gfPA6Waixoavxvv1CZBQ4Stu7N660kTu9sJrACf20E+hdKLoiU
+hd5wiQXo9B2ncm5P3jFLYLBmPltIn/uzdiYpFj+E9kS9XYDd+boBZhN1Vh0296zLQZobLfKFzClo
+E6IFyTTANonrXvCRgodKS+QJEH8Syu2jSKe023aVemkuZjzvPK7o9iU7BKkPG2pzLPgxggJtMIIC
+aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
+EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgxeQGjDntHGb2iaQkIw
+DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIEjIi+Q2OIv9cdcKLHy9OH8qqYkfPa+a
+fbjI3Ae3WQQwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIyMTIw
+ODE5NTQyOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
+SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
+ATANBgkqhkiG9w0BAQEFAASCAQBXdaIZsCmcZn1xdqbTHJnvrU7uojZb9OvsXIi2reFaVEuH1NC5
+VkYmhmYKICltVmgVuBUDfE6/qZbgPWIy8LKFCvFbWWiLXQUSRljB5lxf/giIbSXGj4mbeivpJU7i
+2nw61Apa78Um4LxjzW1s63DpJUNjuL8s+ZZU0bNu46tVirY4YNM+vw897nl3+drVOl2JV8nA+ZZR
+NmgLpN1RpTirWDbFVeknIm6y9pLHe0Q5Aga8UtBw4+UDpk/3KZyXfXhOcNve8dsbLGQij6qsMb53
+MQEwmxuGQwqfJvAEE2v4bzlRSARDsUKspLdlW/tY7Eh8i4ceOw0h4M/rLdbTDH9c
+--000000000000ae499f05ef5667cb--
