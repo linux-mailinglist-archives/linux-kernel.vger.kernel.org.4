@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C419C6473D8
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A5E6473E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiLHQEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49512 "EHLO
+        id S230049AbiLHQFf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:05:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiLHQEF (ORCPT
+        with ESMTP id S229612AbiLHQFb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:04:05 -0500
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4339B2AD;
-        Thu,  8 Dec 2022 08:04:01 -0800 (PST)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id DF03A1883A08;
-        Thu,  8 Dec 2022 16:03:59 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id CD4E825002E1;
-        Thu,  8 Dec 2022 16:03:59 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id BF2359EC0022; Thu,  8 Dec 2022 16:03:59 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
+        Thu, 8 Dec 2022 11:05:31 -0500
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CA59D2E6;
+        Thu,  8 Dec 2022 08:05:30 -0800 (PST)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 60C4E25B;
+        Thu,  8 Dec 2022 17:05:27 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1670515528;
+        bh=QWLlEdgzVfuNXMkoGAKaN0y9Ur+bmlx22FQ8K/0EgQM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RRWNwDoShHDB0lrSWIswvEn4+bCch6wO0vXQEmSKxoj03bCftQir6L9FDAWXE06Ud
+         B7wldYXo+QRNOECs1dLvRQDRXPK4DIKFSiKX1VajC4plCsu+RVXnF6uh7gx8KcUDxv
+         ccEDfN3Ba4kex/Ylvb0lZ9Hr/wY11sJ6QWbmbZEY=
+Message-ID: <d95b9cfc-159a-895e-808d-0c93469936fd@ideasonboard.com>
+Date:   Thu, 8 Dec 2022 18:05:24 +0200
 MIME-Version: 1.0
-Date:   Thu, 08 Dec 2022 17:03:59 +0100
-From:   netdev@kapio-technology.com
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Ido Schimmel <idosch@idosch.org>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH net-next 3/3] net: dsa: mv88e6xxx: mac-auth/MAB
- implementation
-In-Reply-To: <20221208133524.uiqt3vwecrketc5y@skbuf>
-References: <20221205185908.217520-1-netdev@kapio-technology.com>
- <20221205185908.217520-4-netdev@kapio-technology.com>
- <Y487T+pUl7QFeL60@shredder>
- <580f6bd5ee7df0c8f0c7623a5b213d8f@kapio-technology.com>
- <20221207202935.eil7swy4osu65qlb@skbuf>
- <1b0d42df6b3f2f17f77cfb45cf8339da@kapio-technology.com>
- <20221208133524.uiqt3vwecrketc5y@skbuf>
-User-Agent: Gigahost Webmail
-Message-ID: <7c7986329901730416b1505535ec3d36@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v5 0/8] i2c-atr and FPDLink
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
+ <Y5HYBzZlkTrsdjfX@smile.fi.intel.com>
+ <0340d15c-be0a-cd28-4149-7976896f8eb1@ideasonboard.com>
+ <Y5IJY2nUkt/6BoKm@smile.fi.intel.com> <Y5IJlpWlngrvZemy@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <Y5IJlpWlngrvZemy@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-12-08 14:35, Vladimir Oltean wrote:
+On 08/12/2022 17:58, Andy Shevchenko wrote:
+> On Thu, Dec 08, 2022 at 05:57:23PM +0200, Andy Shevchenko wrote:
+>> On Thu, Dec 08, 2022 at 04:40:58PM +0200, Tomi Valkeinen wrote:
+>>> On 08/12/2022 14:26, Andy Shevchenko wrote:
+>>>> On Thu, Dec 08, 2022 at 12:42:13PM +0200, Tomi Valkeinen wrote:
+>>>>> On 08/12/2022 12:39, Tomi Valkeinen wrote:
 > 
-> So it appears that frames which get a VTU miss will still also cause an
-> ATU miss, and that's what you're seeing.
+> ...
 > 
-> The solution would be to acknowledge this fact, and not print any error
-> message from the ATU IRQ handler for unknown FID/VID, which would just
-> alarm the user.
+>>>>>    /**
+>>>>> - * Helper to add I2C ATR features to a device driver.
+>>>>> + * struct i2c_atr - Represents the I2C ATR instance
+>>>>>     */
+>>>>
+>>>> This is incomplete. Have you run kernel doc validator against this file?
+>>>
+>>> What's kernel doc validator? Do you mean that it's incomplete and kernel doc
+>>> doesn't work correctly, or that there should be more information here?
+>>>
+>>> I don't get any errors/warnings from any tool I have used. But I agree it
+>>> looks a bit odd with only the name of the struct in the doc.
+>>
+>> ...
+>>
+>> $ scripts/kernel-doc -none -v include/linux/i2c.h
+>> include/linux/i2c.h:79: warning: No description found for return value of 'i2c_master_recv'
+>> include/linux/i2c.h:94: warning: No description found for return value of 'i2c_master_recv_dmasafe'
+>> include/linux/i2c.h:109: warning: No description found for return value of 'i2c_master_send'
+>> include/linux/i2c.h:124: warning: No description found for return value of 'i2c_master_send_dmasafe'
+>> 4 warnings
+> 
+> Note, this is just example against existing file, not your case.
 
-Thanks for clearing that up!
+Yes, I tested with scripts/kernel-doc, it doesn't give any warnings 
+about i2c-atr.h.
 
-At leisure, do you have an idea why it will encounter a VTU miss 
-violation at random?
+  Tomi
 
-I guess I must check if FID != FID_STANDALONE instead then...
