@@ -2,67 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E2D26475B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833936475B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 19:41:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiLHSlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 13:41:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S229963AbiLHSle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 13:41:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbiLHSlR (ORCPT
+        with ESMTP id S229968AbiLHSla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 13:41:17 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D0384240
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 10:41:16 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id co23so2696843wrb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 10:41:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7pbq7+rpaYIQ8cR3gMH/amJidSeybt6jlwzS86DlhDY=;
-        b=4nrr8N6Ja8d4FL9eIVZnD7H3v0fTE5f4ZNIPk00w1eNd6OSSsJS5D7JJAThz54n/4p
-         s5+7n35E74OUiTkQyI7tyVQB7mNyR7f52wwGH2V2aqk8Lvjch5XbisC0pR+jMQ7B1OFG
-         27I1z009HdgkRlJlfL39Kw2xX8bVXJ+REGlbTwJsWkVGUP0PTxpTa9Dj9cQwGXNYa86T
-         28ZmXbAuKWKGXDelhSzkqQ1gKKdezWyv961xzyIwwbpSu5KX07d8MQsuH46EscTC0vRx
-         q2OM9I6h799/SaOtXIQGPHFZodwgiYVO/s/hmkUlET0Nd1PaDuKe0unmGBHxJf48gkga
-         t4eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7pbq7+rpaYIQ8cR3gMH/amJidSeybt6jlwzS86DlhDY=;
-        b=J62Ikkb13M1Ip+KIus2wqy3ISNrlaZrEkStLvXhVumDumTg44tK3kKh7I4YeWf0+nS
-         OF1jWCmmpZj8imTT+7QSnQFkewe9qD+eJ0KiHhtuo8wt6ZADCaS98EKNNC+1MRA5lsW+
-         FN+rHbnG1gEJQqfV+zjc8tSX8AUyU5K9cAkIUlEh1j546TGDUYIWtHxSAItDkyKoNO1A
-         pPK8PlBX40B68dtGkQZiEOWuSuuQusfrfaQDreIthDK5N8gGSTZyt6C7XfixqyKC0HTV
-         bjRzj0BDUzP6UoWrc4oNp5gxXiGBaVi4elkw8pyyIzNsCyBrzx1XprFPmx9T8LJ2i6iH
-         1zoQ==
-X-Gm-Message-State: ANoB5pkXxB0S774AKiHqvPxyXsaxK5CsfLTw4CAwpcZcry6VusGkRaF1
-        UIv7pipsptxbS3JXRmNk4IrSMw==
-X-Google-Smtp-Source: AA0mqf4uKpADED9U3uXT9PTeg7ggQcdp5KYsufGIgONvE3Zzbo8Ow3lW8LmrGRv5VyllEq+bf4Ewdg==
-X-Received: by 2002:a5d:4086:0:b0:242:509a:ad42 with SMTP id o6-20020a5d4086000000b00242509aad42mr1977726wrp.36.1670524875029;
-        Thu, 08 Dec 2022 10:41:15 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:1fd:11b0:f877:1d6c])
-        by smtp.gmail.com with ESMTPSA id i12-20020adffc0c000000b00241d21d4652sm22511361wrr.21.2022.12.08.10.41.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 10:41:14 -0800 (PST)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] gpio: fixes for v6.1
-Date:   Thu,  8 Dec 2022 19:41:10 +0100
-Message-Id: <20221208184110.252270-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.37.2
+        Thu, 8 Dec 2022 13:41:30 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E80884248;
+        Thu,  8 Dec 2022 10:41:29 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p3Lpn-00007C-NX; Thu, 08 Dec 2022 19:41:27 +0100
+Message-ID: <dec37fc9-1a69-74dc-d613-d806c732ffd7@leemhuis.info>
+Date:   Thu, 8 Dec 2022 19:41:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: =?UTF-8?Q?Re=3a_=5bregression=5d_Bug=c2=a0216782_-_resume_from_susp?=
+ =?UTF-8?Q?end_broken_on_Asus_UX305FA?=
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+References: <5e8317f7-170a-588b-7a94-e0a546fbc9f3@leemhuis.info>
+Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        Linux PCI <linux-pci@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Tasev Nikola <tasev.stefanoska@skynet.be>
+In-Reply-To: <5e8317f7-170a-588b-7a94-e0a546fbc9f3@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670524889;762026d0;
+X-HE-SMSGID: 1p3Lpn-00007C-NX
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +48,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi, this is your Linux kernel regression tracker.
 
-Linus,
+On 08.12.22 15:43, Thorsten Leemhuis wrote:
+> 
+> I noticed a regression report in bugzilla.kernel.org. It afaics needs
+> more debugging, but I nevertheless want add it to the tracking.
 
-Here's the last PR with fixes for this release from the GPIO subsystem.
-This is the same PR as last week sans the character device changes and with
-one more tiny resource leak fix.
+Bjorn, if you have a minute, could you please take a quick look at this
+please: https://bugzilla.kernel.org/show_bug.cgi?id=216782
 
-Please pull,
-Bartosz Golaszewski
+To quote
 
-The following changes since commit b7b275e60bcd5f89771e865a8239325f86d9927d:
+```
+> Starting from kernel 6.1-rc1 for the first time in 8 years the
+> resume
+> from suspend is broken on my Asus UX305FA. After resume the sysrsq keys
+> do not work and a hard reset is the only solution for shutdown, the
+> screen is black, keyboard and mouse do not respond.
+> 
+> After bisecting the first bad commit is:
+> 
+> commit a47126ec29f538e1197862919f94d3b6668144a4
+> Author: Bjorn Helgaas <bhelgaas@google.com>
+> Date:   Fri Sep 9 15:24:57 2022 -0500
+> 
+>     PCI/PTM: Cache PTM Capability offset
+>     
+>     Cache the PTM Capability offset instead of searching for it every time we
+>     enable/disable PTM or save/restore PTM state.  No functional change
+>     intended.
+```
 
-  Linux 6.1-rc7 (2022-11-27 13:31:48 -0800)
+The reporter has some trouble with the bisection (see the ticket for
+details), but it looks a bit like the problems are actually caused by
+that patch or something in that series.
 
-are available in the Git repository at:
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.1
-
-for you to fetch changes up to 63ff545af73f759d1bd04198af8ed8577fb739fc:
-
-  gpio/rockchip: fix refcount leak in rockchip_gpiolib_register() (2022-12-06 10:10:46 +0100)
-
-----------------------------------------------------------------
-gpio fixes for v6.1
-
-- fix a memory leak in gpiolib core
-- fix reference leaks in gpio-amd8111 and gpio-rockchip
-
-----------------------------------------------------------------
-Wang Yufen (1):
-      gpio/rockchip: fix refcount leak in rockchip_gpiolib_register()
-
-Xiongfeng Wang (1):
-      gpio: amd8111: Fix PCI device reference count leak
-
-Zeng Heng (1):
-      gpiolib: fix memory leak in gpiochip_setup_dev()
-
- drivers/gpio/gpio-amd8111.c  |  4 ++++
- drivers/gpio/gpio-rockchip.c |  1 +
- drivers/gpio/gpiolib.c       | 42 ++++++++++++++++++++++++++----------------
- 3 files changed, 31 insertions(+), 16 deletions(-)
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
