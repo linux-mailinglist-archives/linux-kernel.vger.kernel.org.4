@@ -2,99 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27769647604
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 990F3647605
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiLHTOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:14:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42646 "EHLO
+        id S229513AbiLHTQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLHTOh (ORCPT
+        with ESMTP id S229470AbiLHTQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:14:37 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFCF328738
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:14:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0uwthzCinj77lhOFlJtbRaN2SPsCgH53sRB6S+9jybM=; b=VhWSQh5nAy1Tc/aDBJOzNFtxM7
-        WjDctl7sLwr+V4OTuuhPg33yHaLQOsaUOPBS5dGnQ41UTiwG+xWYuxQojZdyr43uryNXElRdcFKj8
-        FL7VaY5rrh212pZecIiMNbVDLUWcUR/r536hoGL0U4Ual66QG0uFewHDaNQCPDjNvmCrcmrR+xm/4
-        qfeZd6yiCIcgW/3tSIwMuw2a8Cd6qfDE2fwEQtHRvy+OkXp48EkQaisLBSQjBZChzNITTgEBVUWb9
-        9bYhqcwyYVcQ+SZX91AE5oBEd62G9wb3UEgOu1+15SsXr8U1OMhkZ8GuMCd7W8PAsEslKxzf+ydDV
-        nCPEc1VQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1p3MLl-007ElF-1s; Thu, 08 Dec 2022 19:14:29 +0000
-Date:   Thu, 8 Dec 2022 19:14:29 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Kairui Song <kasong@tencent.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 5/5] swap: avoid ra statistic lost when swapin races
-Message-ID: <Y5I3lSfsTmZ6tlJk@casper.infradead.org>
-References: <20221208180209.50845-1-ryncsn@gmail.com>
- <20221208180209.50845-6-ryncsn@gmail.com>
+        Thu, 8 Dec 2022 14:16:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9CFD3B9FA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:16:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8519262041
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:16:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99279C433D2;
+        Thu,  8 Dec 2022 19:16:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670526965;
+        bh=z+N9fxN1bumG6ozwZdWvrjtq+nRyqeqSupSvs69OVrU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BwypU2hNY7NgOh1p7KJEQ4LM+yeyqspNCdMEiltGeI7JutjiOPmKB1Lb6F2Z4Eyy0
+         GO0bH9pcyBTLMLaZgiOtXyRyvdMg9SYJMaljRKLTpTcNYQwDD5TWeBr2p4wmxvsHzh
+         mSwcJAA+cYWHjnKhz6/5kCFsC0eoFgiKLiwwX4KkKmitn0LBNj2M8k4Yr18bK6VSef
+         VluN3NaRARFgB+WaS2/88qwW2YH7eam281dGEqs6XE+4/jHBmap9Ngrw9xq7Mbr0XN
+         saM9/8XN7YCiXSo2SdHxfhfacxtw6fimmqBqwfnngcr26DdrpYAY6ykM5RNj/XGmZZ
+         DNqVLy0+8yvEQ==
+Received: by pali.im (Postfix)
+        id CF87B97E; Thu,  8 Dec 2022 20:16:02 +0100 (CET)
+Date:   Thu, 8 Dec 2022 20:16:02 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Joel Stanley <joel@jms.id.au>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] powerpc/boot: Don't always pass -mcpu=powerpc when
+ building 32-bit uImage
+Message-ID: <20221208191602.diywrt3g2f6zmt4s@pali>
+References: <20220820105200.30425-1-pali@kernel.org>
+ <20220828095659.4061-1-pali@kernel.org>
+ <e3cb2642-20e4-6c26-104d-329a04260946@csgroup.eu>
+ <c8d657db-02da-7840-5b40-755e47277a2c@csgroup.eu>
+ <20220828174135.rcql4uiunqbnn5gh@pali>
+ <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221208180209.50845-6-ryncsn@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d49c5905-ff68-00e9-ddaf-d60d5e5ebe65@csgroup.eu>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 02:02:09AM +0800, Kairui Song wrote:
-> From: Kairui Song <kasong@tencent.com>
+On Sunday 28 August 2022 17:43:53 Christophe Leroy wrote:
+> Le 28/08/2022 à 19:41, Pali Rohár a écrit :
+> > On Sunday 28 August 2022 17:39:25 Christophe Leroy wrote:
+> >> Le 28/08/2022 à 19:33, Christophe Leroy a écrit :
+> >>>
+> >>>
+> >>> Le 28/08/2022 à 11:56, Pali Rohár a écrit :
+> >>>> When CONFIG_TARGET_CPU is specified then pass its value to the compiler
+> >>>> -mcpu option. This fixes following build error when building kernel with
+> >>>> powerpc e500 SPE capable cross compilers:
+> >>>>
+> >>>>       BOOTAS  arch/powerpc/boot/crt0.o
+> >>>>     powerpc-linux-gnuspe-gcc: error: unrecognized argument in option
+> >>>> ‘-mcpu=powerpc’
+> >>>>     powerpc-linux-gnuspe-gcc: note: valid arguments to ‘-mcpu=’ are:
+> >>>> 8540 8548 native
+> >>>>     make[1]: *** [arch/powerpc/boot/Makefile:231:
+> >>>> arch/powerpc/boot/crt0.o] Error 1
+> >>>
+> >>> corenet64_smp_defconfig :
+> >>>
+> >>>     BOOTAS  arch/powerpc/boot/crt0.o
+> >>> powerpc64-linux-gcc: error: missing argument to '-mcpu='
+> >>> make[1]: *** [arch/powerpc/boot/Makefile:237 : arch/powerpc/boot/crt0.o]
+> >>> Erreur 1
+> >>> make: *** [arch/powerpc/Makefile:253 : uImage] Erreur 2
+> >>>
+> >>>
+> >>
+> >> Seems like in fact, E5500_CPU and E6500_CPU are not taken into account
+> >> in CONFIG_TARGET_CPU, and get special treatment directly in
+> >> arch/powerpc/Makefile.
+> >>
+> >> This goes unnoticed because of CFLAGS-$(CONFIG_TARGET_CPU_BOOL) +=
+> >> $(call cc-option,-mcpu=$(CONFIG_TARGET_CPU))
+> >>
+> >> I think we need to fix that prior to your patch.
+> > 
+> > It looks like that CONFIG_TARGET_CPU is broken.
+> > 
+> >    $ make ARCH=powerpc corenet64_smp_defconfig CROSS_COMPILE=powerpc64-linux-gnu-
+> >    ...
+> >    # configuration written to .config
+> > 
+> >    $ grep CONFIG_TARGET_CPU .config
+> >    CONFIG_TARGET_CPU_BOOL=y
+> > 
+> > CONFIG_TARGET_CPU_BOOL is set but CONFIG_TARGET_CPU not!
 > 
-> __read_swap_cache_async should just call swap_cache_get_folio for trying
-> to look up the swap cache. Because swap_cache_get_folio handles the
-> readahead statistic, and clears the RA flag, looking up the cache
-> directly will skip these parts.
-> 
-> And the comment no longer applies after commit 442701e7058b
-> ("mm/swap: remove swap_cache_info statistics"), just remove them.
+> Yes, because there is no default value for E5500_CPU and E6500_CPU. We 
+> need to add one for each.
 
-But what about the readahead stats?
+With "[PATCH v1] powerpc/64: Set default CPU in Kconfig" patch from
+https://lore.kernel.org/linuxppc-dev/3fd60c2d8a28668a42b766b18362a526ef47e757.1670420281.git.christophe.leroy@csgroup.eu/
+this change does not throw above compile error anymore.
 
-> Fixes: 442701e7058b ("mm/swap: remove swap_cache_info statistics")
-> Signed-off-by: Kairui Song <kasong@tencent.com>
-> ---
->  mm/swap_state.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/mm/swap_state.c b/mm/swap_state.c
-> index eba388f67741..f39cfb62551d 100644
-> --- a/mm/swap_state.c
-> +++ b/mm/swap_state.c
-> @@ -418,15 +418,12 @@ struct page *__read_swap_cache_async(swp_entry_t entry, gfp_t gfp_mask,
->  	for (;;) {
->  		int err;
->  		/*
-> -		 * First check the swap cache.  Since this is normally
-> -		 * called after swap_cache_get_folio() failed, re-calling
-> -		 * that would confuse statistics.
-> +		 * First check the swap cache in case of race.
->  		 */
->  		si = get_swap_device(entry);
->  		if (!si)
->  			return NULL;
-> -		folio = filemap_get_folio(swap_address_space(entry),
-> -						swp_offset(entry));
-> +		folio = swap_cache_get_folio(entry, vma, addr);
->  		put_swap_device(si);
->  		if (folio)
->  			return folio_file_page(folio, swp_offset(entry));
-> -- 
-> 2.35.2
-> 
-> 
+> > 
+> >>> Christophe
+> >>>
+> >>>
+> >>>>
+> >>>> Similar change was already introduced for the main powerpc Makefile in
+> >>>> commit 446cda1b21d9 ("powerpc/32: Don't always pass -mcpu=powerpc to the
+> >>>> compiler").
+> >>>>
+> >>>> Fixes: 40a75584e526 ("powerpc/boot: Build wrapper for an appropriate
+> >>>> CPU")
+> >>>> Cc: stable@vger.kernel.org # 446cda1b21d9 ("powerpc/32: Don't always
+> >>>> pass -mcpu=powerpc to the compiler")
+> >>>> Signed-off-by: Pali Rohár <pali@kernel.org>
+> >>>> ---
+> >>>>    arch/powerpc/boot/Makefile | 14 ++++++++++----
+> >>>>    1 file changed, 10 insertions(+), 4 deletions(-)
+> >>>>
+> >>>> diff --git a/arch/powerpc/boot/Makefile b/arch/powerpc/boot/Makefile
+> >>>> index a9cd2ea4a861..1957a3de7a1c 100644
+> >>>> --- a/arch/powerpc/boot/Makefile
+> >>>> +++ b/arch/powerpc/boot/Makefile
+> >>>> @@ -38,13 +38,19 @@ BOOTCFLAGS    := -Wall -Wundef -Wstrict-prototypes
+> >>>> -Wno-trigraphs \
+> >>>>             $(LINUXINCLUDE)
+> >>>>    ifdef CONFIG_PPC64_BOOT_WRAPPER
+> >>>> -ifdef CONFIG_CPU_LITTLE_ENDIAN
+> >>>> -BOOTCFLAGS    += -m64 -mcpu=powerpc64le
+> >>>> +BOOTCFLAGS    += -m64
+> >>>>    else
+> >>>> -BOOTCFLAGS    += -m64 -mcpu=powerpc64
+> >>>> +BOOTCFLAGS    += -m32
+> >>>>    endif
+> >>>> +
+> >>>> +ifdef CONFIG_TARGET_CPU_BOOL
+> >>>> +BOOTCFLAGS    += -mcpu=$(CONFIG_TARGET_CPU)
+> >>>> +else ifdef CONFIG_PPC64_BOOT_WRAPPER
+> >>>> +ifdef CONFIG_CPU_LITTLE_ENDIAN
+> >>>> +BOOTCFLAGS    += -mcpu=powerpc64le
+> >>>>    else
+> >>>> -BOOTCFLAGS    += -m32 -mcpu=powerpc
+> >>>> +BOOTCFLAGS    += -mcpu=powerpc64
+> >>>> +endif
+> >>>>    endif
+> >>>>    BOOTCFLAGS    += -isystem $(shell $(BOOTCC) -print-file-name=include)
