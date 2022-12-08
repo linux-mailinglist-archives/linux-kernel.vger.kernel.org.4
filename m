@@ -2,94 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DF1647197
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:23:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB7986471A2
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbiLHOXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:23:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
+        id S229808AbiLHOYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 09:24:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230049AbiLHOWs (ORCPT
+        with ESMTP id S230048AbiLHOXw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:22:48 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E8F98971;
-        Thu,  8 Dec 2022 06:21:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8C346B823ED;
-        Thu,  8 Dec 2022 14:21:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B365C433D6;
-        Thu,  8 Dec 2022 14:21:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670509301;
-        bh=CHUUS11Irklp2aq0yPULup9/8ZfZ0PcKy0w6/BW9dOM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QXpxl8NvdTHnmXleeXCFtlVY1zWFVBY2ND4tWwe7H3TUohJeDDoU8nGJzVUwWWNnN
-         SURG7f7SVvmdUgulfAvD8LIcwN2oPGmd6pSIYphhxcRTJ7wbd6LJ7o7avOJzlB8BSh
-         fcm18g9wY3z/GsaqktDgO9CBKJtTlTdkzWdcs5Vp78xjpS6117esbeLZLlBLjV61rz
-         nLUxxG1O/9KN9MT5EBYmrC3Cq/FwUYswhMbV+13e8J+F67A/AT/ezDssFZnFD4eZjv
-         2XtCV+gY0gdm1ljDY9D4qhbFocvarUZsGPfMsVZXPGu6k7IzC+trjUot+KdRSKs3x3
-         wgy1m+/PHV6BA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1p3Hmd-0005Kz-12; Thu, 08 Dec 2022 15:21:55 +0100
-Date:   Thu, 8 Dec 2022 15:21:55 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] USB-serial updates for 6.2-rc1
-Message-ID: <Y5HzA49I6EB1IlNr@hovoldconsulting.com>
+        Thu, 8 Dec 2022 09:23:52 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D9D9B7A6
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:23:09 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id b189so1564641vsc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 06:23:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=As/CZIt5orfwQ7Fab3NuD7sU3ZdGXQ0KUV67djSyEM4=;
+        b=Svr4EJWyVAy8ZEDYXtdX/3PhjyfOQy/jlGEJYjzvXbZJ6WagFt+kE6B4+1PJM6DBBd
+         tYLQU11uo0Z6tw7curiNweecxh8wA0L2msqtQg35Kt9uQJ/dXmeLKTyiqwPV/R3mCv+8
+         s/kqcY20HDJpUPmsSOHZCjyjivbBegAoR5eo9s2XyR9jQ+FzbCQYs+D8P4SLK2q9cHF5
+         r1KZoEqqJlj3PDOcAXEyAwXUsH7TG2q0p4LRsrwOhuBV7+vP6LMwSLSBAtOQ4HDGd05q
+         jd4gAD5Xs9r394g3IL1vPEWZXMXX2Y1gR2c9NUz29GhNXHqBljPeOBwSjxcp//Zl+qql
+         /0vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=As/CZIt5orfwQ7Fab3NuD7sU3ZdGXQ0KUV67djSyEM4=;
+        b=TbZDLcnI6OkD6nIPrAHEZCKrZOh8tI6GYIWd6HoPJo1EsEDbdSZGP8mWEMa0zTjLym
+         kAa/ZNGlwbRpnS5h4YoAhYDqhFAb0Q+chvYfXZMqmCiKBPBaKvId+K7UzQx2KO9QmwmK
+         0Q75w+P0ZfWeCJMKwFiA+j5shvoE8yC+RNvudOs2uNJPR2oACTURe1owB1JgpjsFLwQ2
+         7h9plCADRFq9eYoHIwIwbzpgv/rxXYxJCoHb9l6fsRuBH/2X9VzaOvp0uKdKbA4h1ZkP
+         W2mdcXrZSTx8t+LT+dg0W+C6mSKoJw+CdIxwUinUqn6bCzxuqTQyCsZsWnxOwPcf6KHG
+         Lrsw==
+X-Gm-Message-State: ANoB5pmXsfpIyhWTGBM6KS0ZKpyGCtUbntfjs+k1LekljpgolmvDuqo1
+        b8wi9+kAEkhCQccDJdkEe9D0TX45g2iwjIspArFgiw==
+X-Google-Smtp-Source: AA0mqf5hrLUh6geFTTa3xvTozjjJK81CXBxyGaTS+c820T86mab4aBRhrL3B/1Vxhuy4Xvm3PYggqZk+jFxLc26n1DQ=
+X-Received: by 2002:a67:ed4b:0:b0:3b1:1506:bca5 with SMTP id
+ m11-20020a67ed4b000000b003b11506bca5mr14620578vsp.35.1670509387721; Thu, 08
+ Dec 2022 06:23:07 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJzde06+FXNpyBzT+NfS2GCfqEERMkGDpdsmHQj=v1foLJW4Cw@mail.gmail.com>
+ <20221129224313.455862-1-allenwebb@google.com> <Y5FNNYVSRglS0Lpe@bombadil.infradead.org>
+In-Reply-To: <Y5FNNYVSRglS0Lpe@bombadil.infradead.org>
+From:   Allen Webb <allenwebb@google.com>
+Date:   Thu, 8 Dec 2022 08:22:56 -0600
+Message-ID: <CAJzde06ACctpK-5ht_Ow9dMuisOwTM5CKE_SK+bW5eWTmwCUxg@mail.gmail.com>
+Subject: Re: [PATCH v3] modules: add modalias file to sysfs for modules.
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     lucas.de.marchi@gmail.com,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit eb7081409f94a9a8608593d0fb63a1aa3d6f95d8:
+On Wed, Dec 7, 2022 at 8:34 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
+>
+> On Tue, Nov 29, 2022 at 04:43:13PM -0600, Allen Webb wrote:
+> > This information is readily available for external modules in
+> > modules.alias. However, builtin kernel modules are not covered.
+>
+> Why add this into the kernel instead of just a modules.builtin.alias
+> or something like that?
+>
+>   Luis
 
-  Linux 6.1-rc6 (2022-11-20 16:02:16 -0800)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial.git tags/usb-serial-6.2-rc1
-
-for you to fetch changes up to 63b8ed26cd093ecc1bcdd1fd841f238a52c11031:
-
-  USB: serial: xr: avoid requesting zero DTE rate (2022-11-30 12:28:51 +0100)
-
-----------------------------------------------------------------
-USB-serial updates for 6.2-rc1
-
-Here are the USB-serial updates for 6.2-rc1, including:
-
- - B0 hangup support for cp210x
- - avoid requesting a zero DTE rate which could potentially confuse
-   buggy firmware in XR devices
-
-Included are also some new device ids.
-
-All have been in linux-next with no reported issues.
-
-----------------------------------------------------------------
-Bruno Thomsen (1):
-      USB: serial: cp210x: add Kamstrup RF sniffer PIDs
-
-Duke Xin (1):
-      USB: serial: option: add Quectel EM05-G modem
-
-Johan Hovold (2):
-      USB: serial: cp210x: add support for B0 hangup
-      USB: serial: xr: avoid requesting zero DTE rate
-
- drivers/usb/serial/cp210x.c    | 21 +++++++++++++++++----
- drivers/usb/serial/option.c    |  3 +++
- drivers/usb/serial/xr_serial.c |  2 --
- 3 files changed, 20 insertions(+), 6 deletions(-)
+I am fine with that approach and already have a PoC for it. Here are
+some considerations:
+* This would add a new file to the kernel packaging requirements.
+* It is easier for separate files to get out of sync with the runtime
+state (this isn't really a big deal because we already have to deal
+with it for modules.alias)
