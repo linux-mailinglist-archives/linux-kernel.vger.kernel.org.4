@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1343764771F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8699C64775E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:39:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiLHURm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:17:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
+        id S229573AbiLHUjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:39:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLHURj (ORCPT
+        with ESMTP id S229463AbiLHUjD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:17:39 -0500
-Received: from mail-4323.proton.ch (mail-4323.proton.ch [185.70.43.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11A06165;
-        Thu,  8 Dec 2022 12:17:35 -0800 (PST)
-Date:   Thu, 08 Dec 2022 20:17:22 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=n8pjl.ca;
-        s=protonmail; t=1670530652; x=1670789852;
-        bh=XDr9OU9uLvDybQvM4E4TClVzCFExjZb/R4pcEYzFNcM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=r7V12HGieDYlc1YW4cn7A2k7cTeu55Aw4HBD38EeiSyxRrLT5souB/WgEEimolI7q
-         uS+Guulf83OZ8C3QthpVzKWbbEVD1aDJBerOqy4+YJ6uX9XHrPOre0Sq30OTQIQYMv
-         pNuX2uuKxsZ6Wta8CkX0RoFolqo1Bd/M7Bcmjedr7tiqLGaWcUjqx5A2jtPN7oezQa
-         y2CaVgnAXNwAsLbySDSD/ByopOW6H0/Fqk00AUEnJiTNYsVUmr6SlnpdnnneI4juHL
-         5I3AslsG/VPBmq1Ctwsu2TM8KF46USl4ktkeXljd8w94rIevfRBqflXJ3M4IzVpneB
-         dWql3SZoyzqcg==
-To:     Yury Norov <yury.norov@gmail.com>
-From:   Peter Lafreniere <peter@n8pjl.ca>
-Cc:     linux-kernel@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Barry Song <baohua@kernel.org>,
-        Ben Segall <bsegall@google.com>,
-        haniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Gal Pressman <gal@nvidia.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org
-Subject: Re: [PATCH v3 5/5] lib/cpumask: reorganize cpumask_local_spread() logic
-Message-ID: <KQCC2QYXZ6BtFjiUQO-XQNUO5Ub3kGfpKzjfIeUfCQEvMUEMKiZ7ofEMqoZElMYxYFtuRqW6v3UzCpDzDR-QYZk-tpMDVLl_HSl8BEi1hZk=@n8pjl.ca>
-In-Reply-To: <20221208183101.1162006-6-yury.norov@gmail.com>
-References: <20221208183101.1162006-1-yury.norov@gmail.com> <20221208183101.1162006-6-yury.norov@gmail.com>
-Feedback-ID: 53133685:user:proton
+        Thu, 8 Dec 2022 15:39:03 -0500
+Received: from smtp1-g21.free.fr (smtp1-g21.free.fr [212.27.42.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4385582F9A
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:39:02 -0800 (PST)
+Received: from sopl295-1.home (unknown [IPv6:2a01:cb19:8d70:d500:6d47:7868:523:4848])
+        (Authenticated sender: robert.jarzmik@free.fr)
+        by smtp1-g21.free.fr (Postfix) with ESMTPSA id CFD18B00571;
+        Thu,  8 Dec 2022 21:38:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1670531940;
+        bh=YstTq1Myiif2EgThZ1/Ik29o/fO83gS7mbfHozyghFU=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=JVo2uzx7wkukQqGB/tORaLKiG+VvWQYfEUqaYh0iaYlC9MpVCfoTUkf4GAMP6rhFc
+         TcvZt7ZD5EFlVm6fnXv6lgt6d11JQGRAXx2LAB2Vk/d3hj8PJDo0rzpK3Mz61lGeGk
+         ehNIg/yOTycYsl18/3HC/+hxVQ4e5An1aLiDtS985aflFhOmWAttjR3EnAHgwIJ71u
+         WtEfVNBiPqhO5Hz3gU05LK9oL13FOKJmDtVru/edrI8GjM24J8Dcr+zWIR1LdAuLGH
+         jJFgRMNNoQwalTtZ2MHSqUZFH7wFTCihbvmcfkB8jBIS/nBJ+7WYnuNko9/WH8pWPu
+         VT44TsUBnhitw==
+References: <Y5B4QeNMNboJ42n4@probook> <Y5CxBzy47Gjn/V5a@lunn.ch>
+ <Y5C0F/o4JS5MwkkJ@shell.armlinux.org.uk> <Y5DDCmXnamC6Zikx@probook>
+ <Y5DbKNI3e+tFA++1@shell.armlinux.org.uk> <Y5IulKoRctcrWBzl@probook>
+ <m2wn71emze.fsf@sopl295-1.home> <Y5I2oQexHNdlIbsQ@shell.armlinux.org.uk>
+User-agent: mu4e 1.8.11; emacs 28.1
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Jonathan =?utf-8?Q?Ne?= =?utf-8?Q?usch=C3=A4fer?= 
+        <j.neuschaefer@gmx.net>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Andrew Lunn <andrew@lunn.ch>,
+        linux-arm-kernel@lists.infradead.org,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Daniel Mack <daniel@zonque.org>, linux-kernel@vger.kernel.org
+Subject: Re: PXA25x: GPIO driver fails probe due to resource conflict with
+ pinctrl driver
+Date:   Thu, 08 Dec 2022 21:19:12 +0100
+In-reply-to: <Y5I2oQexHNdlIbsQ@shell.armlinux.org.uk>
+Message-ID: <m2pmcteilg.fsf@sopl295-1.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; format=flowed
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,61 +60,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Now after moving all NUMA logic into sched_numa_find_nth_cpu(),
-> else-branch of cpumask_local_spread() is just a function call, and
-> we can simplify logic by using ternary operator.
->
-> While here, replace BUG() with WARN().
-Why make this change? It's still as bad to hit the WARN_ON as it was before=
-.
 
-> Signed-off-by: Yury Norov yury.norov@gmail.com
+"Russell King (Oracle)" <linux@armlinux.org.uk> writes:
+> From a quick look, I think this commit is to blame:
 >
-> ---
-> lib/cpumask.c | 16 ++++++----------
-> 1 file changed, 6 insertions(+), 10 deletions(-)
+> 542c25b7a209 drivers: gpio: pxa: use 
+> devm_platform_ioremap_resource()
 >
-> diff --git a/lib/cpumask.c b/lib/cpumask.c
-> index 255974cd6734..c7029fb3c372 100644
-> --- a/lib/cpumask.c
-> +++ b/lib/cpumask.c
-> @@ -127,16 +127,12 @@ unsigned int cpumask_local_spread(unsigned int i, i=
-nt node)
-> /* Wrap: we always want a cpu. */
-> i %=3D num_online_cpus();
+> Someone "helpfully" making this change:
 >
-> - if (node =3D=3D NUMA_NO_NODE) {
-> - cpu =3D cpumask_nth(i, cpu_online_mask);
-> - if (cpu < nr_cpu_ids)
-> - return cpu;
-> - } else {
-> - cpu =3D sched_numa_find_nth_cpu(cpu_online_mask, i, node);
-> - if (cpu < nr_cpu_ids)
-> - return cpu;
-> - }
-> - BUG();
-> + cpu =3D node =3D=3D NUMA_NO_NODE ?
-> + cpumask_nth(i, cpu_online_mask) :
-> + sched_numa_find_nth_cpu(cpu_online_mask, i, node);
-I find the if version clearer, and cleaner too if you drop the brackets.
-
-For the ternary version it would be nice to parenthesize the equality
-like you did in cmp() in 3/5.
-
+> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> -       if (!res)
+> -               return -EINVAL;
+> -       gpio_reg_base = devm_ioremap(&pdev->dev, res->start,
+> -                                    resource_size(res));
 > +
-> + WARN_ON(cpu >=3D nr_cpu_ids);
+> +       gpio_reg_base = devm_platform_ioremap_resource(pdev, 0);
 >
-> + return cpu;
-> }
-> EXPORT_SYMBOL(cpumask_local_spread);
->
-> --
-> 2.34.1
+> which introduces request_mem_region() to the PXA GPIO driver, 
+> resulting
+> in this resource clash.
+You're right.
 
-Minor nit: cmp() in 3/5 could use a longer name. The file's long, and
-cmp() doesn't explain _what_ it's comparing. How about cmp_cpumask() or
-something related to the function using it?
+Now, as for Jonathan, there are 2 options :
+ - first one : revert the patch Russell pointed out
+ - second one : a lot of work, detailed below :
 
-Other than the above particularities, the whole series looks good to me.
-Reviewed-by: Peter Lafreniere <peter@n8pjl.ca>
+Given that Arnd is removing legacy platformdata code, that will 
+only leave the
+device-tree one, which works only with the pinctrl driver enabled.
+That gives the opportunity to drop the use of GPDR from the 
+gpio-pxa driver,
+and now we can map with separate iomem ressources pinctrl-pxa and 
+gpio-pxa.
 
+Therefore, if Jonathan has the will to make a patch, I would :
+- keep the patch identfied by Russell (ie. don't revert it)
+- amend the device-tree descriptions for pxa
+  - pxa2xx.dtsi
+...
+		gpio: gpio@40e00000 {
+...
+			reg = <0x40e00000 0xc>, <0x40e00018 0x3c>, 
+			<0x40e00100 4>, <0x40e00118 0x34>;
+- amend the gpio_pxa.c driver, to map the 4 regions (and not only 
+  one as before)
+- the pinctrl-pxa25.c and its device-tree are already mapping the 
+  holes in the
+  previous list
+- check that I didn't mess up the 4 iomem regions, they should 
+  overlap with
+  "pinctrl: pinctrl@40e00000".
+
+Well it's up to Jonathan to see which version he prefers to 
+choose, the simple
+one or the tedious one.
+
+Cheers.
+
+--
+Robert
