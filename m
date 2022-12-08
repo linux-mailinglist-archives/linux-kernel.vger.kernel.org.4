@@ -2,88 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A5D64710E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8281064710F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:53:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiLHNx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:53:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
+        id S229865AbiLHNxw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:53:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbiLHNxY (ORCPT
+        with ESMTP id S229841AbiLHNxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:53:24 -0500
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684D93B9C6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:53:23 -0800 (PST)
-Received: from dggpemm500007.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSbF92WXszRphv;
-        Thu,  8 Dec 2022 21:52:29 +0800 (CST)
-Received: from [10.174.178.174] (10.174.178.174) by
- dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Dec 2022 21:53:21 +0800
-Subject: Re: [PATCH] mfd: core: fix UAF while using device of node
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <lee@kernel.org>, <krzysztof.kozlowski@canonical.com>
-CC:     <linux-kernel@vger.kernel.org>
-References: <20221116074116.1022139-1-yangyingliang@huawei.com>
-Message-ID: <9ad01578-9982-fd55-14a3-a74bf0906165@huawei.com>
-Date:   Thu, 8 Dec 2022 21:53:20 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Thu, 8 Dec 2022 08:53:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6313837214
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:53:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3FDD61F23
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:53:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E3E9C433C1;
+        Thu,  8 Dec 2022 13:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670507629;
+        bh=UFQfRk1vno7SOJWjl9cbkzX7RqM//nccHk5UmmdBsRA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p2RYVV7mpy7vFXjesp3hKa50RyAYHP6xR6F/NCvGl/FGqULl0p6i2rTwvIcjAwsOP
+         5mOYkZ5TjnrzZVQw3qvL+nXNfEgc/g1lXsBBGX5FjGUIbWSF2r3fmGBUbkP7Nooa5z
+         y3tHxBmTLtF4F1KVpS6NcqtBL5yC3qSziMChs6NSw7up0v5hMTbxxNdK3/7PCkVu+4
+         VT4/VvtU4e6CtMogRye0IpRanYbfmfGXy5tu8bnTJigNJYFOUuNLuabP0ckoLqhX98
+         A3ONv+/bKRMdIsH69z9JfvaTt7BPhKLf384A6yhHX17SrQF1JTNZ2pIpI50jGNg5aU
+         Ju7098aDnZ1iQ==
+Date:   Thu, 8 Dec 2022 13:53:27 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: rohm-bd*: Use dev_err_probe()
+Message-ID: <Y5HsV41KCSEmWSNV@google.com>
+References: <Y33lte0PKd2u6dyR@fedora>
 MIME-Version: 1.0
-In-Reply-To: <20221116074116.1022139-1-yangyingliang@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.178.174]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y33lte0PKd2u6dyR@fedora>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 23 Nov 2022, Matti Vaittinen wrote:
 
-On 2022/11/16 15:41, Yang Yingliang wrote:
-> I got the following UAF report:
->
->    refcount_t: underflow; use-after-free.
->    WARNING: CPU: 1 PID: 270 at lib/refcount.c:29 refcount_warn_saturate+0x121/0x180
->    ...
->    OF: ERROR: memory leak, expected refcount 1 instead of -1073741824,
->    of_node_get()/of_node_put() unbalanced - destroy cset entry:
->    attach overlay node /i2c/pmic@62/powerkey
->
-> The of_node of device assigned in mfd_match_of_node_to_dev() need be
-> get, and it will be put in platform_device_release().
->
-> Fixes: 002be8114007 ("mfd: core: Add missing of_node_put for loop iteration")
-> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-Is this patch good or do you have any suggestion ?
-
-Thanks,
-Yang
+> The dev_err_probe() has (at least) following benefits over dev_err()
+> when printing an error print for a failed function call at a device
+> driver probe:
+> 	- Omit error level print if error is 'EPRBE_DEFER'
+> 	- Standardized print format for returned error
+> 	- return the error value allowing shortening calls like:
+> 
+> 	if (ret) {
+> 		dev_err(...);
+> 		return ret;
+> 	}
+> 
+> 	to
+> 
+> 	if (ret)
+> 		return dev_err_probe(...);
+> 
+> Convert the ROHM BD71828, ROHM BD718x7 and ROHM BD9576 core drivers to
+> use the dev_err_probe() when returned error is not hard-coded constant.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > ---
->   drivers/mfd/mfd-core.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/mfd/mfd-core.c b/drivers/mfd/mfd-core.c
-> index 16d1861e9682..8e57f67719cf 100644
-> --- a/drivers/mfd/mfd-core.c
-> +++ b/drivers/mfd/mfd-core.c
-> @@ -161,7 +161,7 @@ static int mfd_match_of_node_to_dev(struct platform_device *pdev,
->   	of_entry->np = np;
->   	list_add_tail(&of_entry->list, &mfd_of_node_list);
->   
-> -	pdev->dev.of_node = np;
-> +	pdev->dev.of_node = of_node_get(np);
->   	pdev->dev.fwnode = &np->fwnode;
->   #endif
->   	return 0;
+>  drivers/mfd/rohm-bd71828.c | 23 ++++++++++-------------
+>  drivers/mfd/rohm-bd718x7.c | 21 ++++++++-------------
+>  drivers/mfd/rohm-bd9576.c  | 17 ++++++++---------
+>  3 files changed, 26 insertions(+), 35 deletions(-)
+
+Applied, thanks.
+
+-- 
+Lee Jones [李琼斯]
