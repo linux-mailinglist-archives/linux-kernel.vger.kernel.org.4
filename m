@@ -2,77 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68ED8647510
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5A82647513
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:42:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbiLHRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 12:42:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
+        id S229849AbiLHRmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 12:42:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiLHRmJ (ORCPT
+        with ESMTP id S229770AbiLHRmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 12:42:09 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73637E806
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:42:07 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id b189so2125363vsc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 09:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZLBXt2Jtw0kYFWpcJPTwwMQ6BDpS6jKcsiWh2x9aQ68=;
-        b=q1rHnTY7Tadre4D+fqST2ld7So3s26m9HTLgoPCGDo1koR1yer4RbVIKn4L+Y2qbuU
-         uW177VPnbUlziy1OucBIa1tm/gBCzOldbcB9kxUM1pn89texknSond0wO8diqwQIhcFY
-         eKL6S8X2C/FaeIVDdJixZcJvZYjmLrrgBxZ5CBtywJC7ULgeultgKTu1tVT34nc3Z4b3
-         PxJiKpJ8IAQZ9CLlkhSOj047IpG9ZjTgUPHarmjfF43MsGEmQrBKgSd+WefifG3W8q69
-         zUPZbGp5ATTqyylOG6Mmj0VZBi+kYd7T7zIFLgwfePAbUWZkUndclxJa8QjLP+t/LWaB
-         CjDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZLBXt2Jtw0kYFWpcJPTwwMQ6BDpS6jKcsiWh2x9aQ68=;
-        b=Be3X9sWR1nkzl2M7UeBLSYIjYBxCQ5idrn/wkBoqQ6+EPPNyCcb/Yg13ytSCWMS65p
-         5Oyub24n+Sy2NGZBHQuYOM4LGaT2l6ieHhodF9+BWJ8zWZh7MaAUMbSn90dSycotQW+T
-         SIRhJoaoddtk8QDhX7ruxH+500WH2hOLPQn6UqjUnDSxr0HRIEHMPFYti9PY+3gNeOPB
-         7OpChqWU8yOza05FgwUGyXVZ9Bvm2L/VBSzUQgoEWy4k/cjKBEYl1m+Sgw36JxwtieJN
-         wM1yGqsAY1irHAd95n8ZsQ/pl97Gl98TTylHAY5NEu/byDy/oL6icnlk6GoONWRCr3Hw
-         usmA==
-X-Gm-Message-State: ANoB5pnyHxQm5CYZx90HyDXmtrxl9Y38RvbI4WQGagMSn/4O2a2Bhkop
-        QFPjBMnI0m70O5XcxEwlEfa3lhrZ1lc1CVi1axad4Q==
-X-Google-Smtp-Source: AA0mqf5988ezjzMU+pj3GZmQT8TbVYw3+msm3Gje3bceuHYPjEBbPuSHL9bVhPvP+54fI00E0UUCZLYWZcEtwKIds40=
-X-Received: by 2002:a05:6102:114b:b0:3b0:5300:a99b with SMTP id
- j11-20020a056102114b00b003b05300a99bmr43661599vsg.23.1670521326913; Thu, 08
- Dec 2022 09:42:06 -0800 (PST)
+        Thu, 8 Dec 2022 12:42:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E6828B;
+        Thu,  8 Dec 2022 09:42:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C47A62010;
+        Thu,  8 Dec 2022 17:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A4DC433F0;
+        Thu,  8 Dec 2022 17:42:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670521351;
+        bh=utdMMEDMbfjfANs9F7ogpyQ+wApNaZHIFkDzje1WJv8=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=V8qzq44Vq/8QwTdsjTYOhe3MIneNOz5L12HbgDnpv0/TeTKU6mwkibRz0j89hW/Ae
+         g156wOzaGlx2DLdlcfgB4sQGHeBCMs22tRxwPJVkXA1p9KfFv54XmBXg3bmqfkZ44s
+         vX3e+qnRsEoDqkqgt62wcfGAwd5QJhqP60C5ErSFa878dR2hh3gdXUyBMKf19K8Mkg
+         yjYsowlsvjJxDf9G8Uj+Go6xmuDylsjfLE66Jo01yxsNX0J6RU+9a383mk3uoY7Kvw
+         kIsYvaG7ageK9CPy3o3RuYdlHFBx/PV98CGQONTGSYIa12SppxGF74oQUd+jQ90XNY
+         T3BMGwkB7RgTQ==
+Message-ID: <7b510e87-3a34-d9c8-a9e9-65c1d93ad645@kernel.org>
+Date:   Thu, 8 Dec 2022 10:42:30 -0700
 MIME-Version: 1.0
-References: <20221207055908.1385448-1-irogers@google.com> <Y5DQKif+PdRJblk+@kernel.org>
- <0d64e485-5acf-b7ad-e228-9bf85d8ae16d@oracle.com> <Y5DRjecE88KFc4He@kernel.org>
-In-Reply-To: <Y5DRjecE88KFc4He@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 8 Dec 2022 09:41:55 -0800
-Message-ID: <CAP-5=fWa=zNK_ecpWGoGggHCQx7z-oW0eGMQf19Maywg0QK=4g@mail.gmail.com>
-Subject: Re: [PATCH v4] perf jevents: Parse metrics during conversion
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        John Garry <john.g.garry@oracle.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.1
+Subject: Re: [PATCH v2] net: setsockopt: fix IPV6_UNICAST_IF option for
+ connected sockets
+Content-Language: en-US
+To:     Richard Gobert <richardbgobert@gmail.com>, davem@davemloft.net,
+        yoshfuji@linux-ipv6.org, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221208145437.GA75680@debian>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20221208145437.GA75680@debian>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,59 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Apologies, I found an issue with a double-if. Could you add the 1 line
-fix plus test:
+On 12/8/22 7:54 AM, Richard Gobert wrote:
+> Change the behaviour of ip6_datagram_connect to consider the interface
+> set by the IPV6_UNICAST_IF socket option, similarly to udpv6_sendmsg.
+> 
+> This change is the IPv6 counterpart of the fix for IP_UNICAST_IF.
+> The tests introduced by that patch showed that the incorrect
+> behavior is present in IPv6 as well.
+> This patch fixes the broken test.
+> 
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Link: https://lore.kernel.org/r/202210062117.c7eef1a3-oliver.sang@intel.com
+> Fixes: 0e4d354762ce ("net-next: Fix IP_UNICAST_IF option behavior for connected sockets")
+> 
+> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+> ---
+>  net/ipv6/datagram.c | 15 ++++++++++-----
+>  1 file changed, 10 insertions(+), 5 deletions(-)
+> 
 
-diff --git a/tools/perf/pmu-events/metric.py b/tools/perf/pmu-events/metric=
-.py
-index cc451a265751..4797ed4fd817 100644
---- a/tools/perf/pmu-events/metric.py
-+++ b/tools/perf/pmu-events/metric.py
-@@ -462,6 +462,7 @@ class _RewriteIfExpToSelect(ast.NodeTransformer):
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-  def visit_IfExp(self, node):
-    # pylint: disable=3Dinvalid-name
-+    self.generic_visit(node)
-    call =3D ast.Call(
-        func=3Dast.Name(id=3D'Select', ctx=3Dast.Load()),
-        args=3D[node.body, node.test, node.orelse],
-diff --git a/tools/perf/pmu-events/metric_test.py
-b/tools/perf/pmu-events/metric_test.py
-index 4741b7b6612d..6980f452df0a 100644
---- a/tools/perf/pmu-events/metric_test.py
-+++ b/tools/perf/pmu-events/metric_test.py
-@@ -87,6 +87,10 @@ class TestMetricExpressions(unittest.TestCase):
-    after =3D r'min((a + b if c > 1 else c + d), e + f)'
-    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-
-+    before =3D r'a if b else c if d else e'
-+    after =3D r'(a if b else (c if d else e))'
-+    self.assertEqual(ParsePerfJson(before).ToPerfJson(), after)
-+
-  def test_ToPython(self):
-    # pylint: disable=3Deval-used
-    # Based on an example of a real metric.
-
-Thanks,
-Ian
-
-On Wed, Dec 7, 2022 at 9:47 AM Arnaldo Carvalho de Melo <acme@kernel.org> w=
-rote:
->
-> Em Wed, Dec 07, 2022 at 05:42:52PM +0000, John Garry escreveu:
-> > On 07/12/2022 17:40, Arnaldo Carvalho de Melo wrote:
-> > > Em Tue, Dec 06, 2022 at 09:59:08PM -0800, Ian Rogers escreveu:
-> > > > Currently the 'MetricExpr' json value is passed from the json
-> > > > file to the pmu-events.c. This change introduces an expression
-> > > > tree that is parsed into. The parsing is done largely by using
-> > > > operator overloading and python's 'eval' function. Two advantages
-> > > > in doing this are:
-> > > John, what tag can I get from you? =F0=9F=98=84
-> > >
-> > > - Arnaldo
-> > Sure,
-> > Reviewed-by: John Garry <john.g.garry@oracle.com>
->
-> Thanks a lot!
->
-> - Arnaldo
