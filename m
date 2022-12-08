@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6918647630
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51F85647631
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:27:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiLHT1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49016 "EHLO
+        id S229717AbiLHT1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbiLHT0i (ORCPT
+        with ESMTP id S229678AbiLHT0k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:26:38 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68795750B8;
-        Thu,  8 Dec 2022 11:26:38 -0800 (PST)
+        Thu, 8 Dec 2022 14:26:40 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E2F9AE21;
+        Thu,  8 Dec 2022 11:26:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 048EB62025;
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2ED5B8260A;
         Thu,  8 Dec 2022 19:26:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 61468C433EF;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7C5AC433F1;
         Thu,  8 Dec 2022 19:26:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1670527597;
-        bh=SHlfv/OZgrUjwfzihuHOXgOGAoYqPNCzLq+K9PJeh/M=;
+        bh=gRMgv8VlWkaarD7xijlxtiEai7TIaFe7+oa66LGsDZY=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=p6pvzu6JNbsZClX3nb2V3NJpFiakPCv+7Wqo8i/EXto8NVRyV9Vb8+Y9BAgrCb6KV
-         VxY4ISzlBKsbADfkWKStD56i06/klvubr4GFgri/wFIDL3hiM1ZjGzl7j5KfzwijLT
-         0iWxiFopLhc7Rp+HXkTxgw56qpDtzPtgJrSz39dstwij2cMlMUgLaV2LCNQFefjhwg
-         kgZmsVpuRyH+sNsKE2FMN9ZeYYtgUa2RQydt2xV/sfgHN5G5fOZfMeXt0Y/5MWLwH/
-         ir5ZXFOhbxfio81mOqs8hC0Hg3yqAc9DmHyyLKWERqUI/Qt3BhjVoQTOeh1+3EiYS1
-         Us3MI7ejWkCKg==
+        b=MumKzoJ6DL6rdHiL0W6Fi/FjkaAg5bSlU2Y5copSctRT8kq8MChdvT6VPOhgeAYpE
+         3sudv6iI1uitKfHJVjvdlDJmzZVH2ChjEYbSVUjbgL/IbxW5nfIw8xPmWbfIXNum75
+         Gnd2ql+AWm0HnOvDXAEXVNmdWRHKdUwOk8ad7ffXaPmlWQEBNwS3Y8iID3CFf0wzc2
+         YezUMJo4bpi7X8SuW4TncrCRZUrvlNdEjYPl8GlWl3erAsiXcf86ZjEcdUaF49LxcF
+         AjJt/2djTwyVF/GuEuuNlqKXwPOCXlUdLp09WODUP7kmKpEvUpSw77/BXpu6M150Td
+         LCUT1Xyhk4L1A==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4F4BDE1B4D8;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A50BDE1B4D8;
         Thu,  8 Dec 2022 19:26:37 +0000 (UTC)
-Subject: Re: [GIT PULL] LoongArch fixes for v6.1-final
+Subject: Re: [GIT PULL] gpio: fixes for v6.1
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221208130007.336248-1-chenhuacai@loongson.cn>
-References: <20221208130007.336248-1-chenhuacai@loongson.cn>
+In-Reply-To: <20221208184110.252270-1-brgl@bgdev.pl>
+References: <20221208184110.252270-1-brgl@bgdev.pl>
 X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221208130007.336248-1-chenhuacai@loongson.cn>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-3
-X-PR-Tracked-Commit-Id: 1385313d8bc112760559f06f64708d936b3f2d7c
+X-PR-Tracked-Message-Id: <20221208184110.252270-1-brgl@bgdev.pl>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.1
+X-PR-Tracked-Commit-Id: 63ff545af73f759d1bd04198af8ed8577fb739fc
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 7f043b7662b6a9cfa981c02199ac939ed1c11372
-Message-Id: <167052759732.15249.88213761977579177.pr-tracker-bot@kernel.org>
+X-PR-Merge-Commit-Id: 306ba2402de569a401549bf343ef60748b8f43df
+Message-Id: <167052759767.15249.16000264001242254576.pr-tracker-bot@kernel.org>
 Date:   Thu, 08 Dec 2022 19:26:37 +0000
-To:     Huacai Chen <chenhuacai@loongson.cn>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Huacai Chen <chenhuacai@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -65,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu,  8 Dec 2022 21:00:07 +0800:
+The pull request you sent on Thu,  8 Dec 2022 19:41:10 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson.git tags/loongarch-fixes-6.1-3
+> git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v6.1
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/7f043b7662b6a9cfa981c02199ac939ed1c11372
+https://git.kernel.org/torvalds/c/306ba2402de569a401549bf343ef60748b8f43df
 
 Thank you!
 
