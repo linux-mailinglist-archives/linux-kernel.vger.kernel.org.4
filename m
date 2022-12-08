@@ -2,137 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802FB64777D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07822647784
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:51:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiLHUr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:47:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45314 "EHLO
+        id S229829AbiLHUvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:51:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHUr5 (ORCPT
+        with ESMTP id S229463AbiLHUvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:47:57 -0500
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74D3B248F1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:47:55 -0800 (PST)
-Received: by mail-lj1-x233.google.com with SMTP id b9so2858860ljr.5
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:47:55 -0800 (PST)
+        Thu, 8 Dec 2022 15:51:49 -0500
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64EDA2A0;
+        Thu,  8 Dec 2022 12:51:48 -0800 (PST)
+Received: by mail-ot1-x333.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so1586318otl.10;
+        Thu, 08 Dec 2022 12:51:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:reply-to:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=E4OG3gIKhP9b6oDormQTANR9G0dEFN+Gu8sz+bmNZls=;
-        b=GyiIPRyNAXEMxHFiqbUS7k8gnM0YtqOMoPMgDyNNYNSHQtPAjSH2tTQIuIMoGXVZ/q
-         AkmD7PaBDkmCMxCDM9DvV/npcLQDeqdXJngC1JOaRo6Fes25E0BMPD+ITfi90U/oMDyR
-         yUJD2rxFPoivP9sl/U8lfxKp/RoDY61tRte15Tcd55RLatKTnlBq7DonsHWPrKwfNYml
-         aevbu7+Fk3F5x0GfbI7xdV8VjZoQCAo0sitM6VjuLYliQeGCWwCOzsr4JQVYAuFlKUuV
-         h0+UngCqLYRE63u7lRU269/sFPxiPQJXVutKO+kaZD5+/wzRlEFDOUEFkWa2KYvWBBD5
-         RBAw==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GihlQcK9cYAm1zf1IIYdLzFrOYYpv+dPmFF2jtn2Pws=;
+        b=EZK+2otC2iqILdnHZbj+g1By8Y6vEnXt0GXdj2YlZ3P09tQP8QlXgRMgqfp9fALytB
+         7Ehs1e52eEdghndn6xfrkGDhdX3VAfha0ij15rYiwGVhylTV/hvy5WjUl/ODYy6NeF/n
+         UZtbHLnvCwyf/+AYQeJqv0lfYv/hRGo8YJcxnSs1tfo4NYTWJaBQFrU7fUaLi6PUgDsP
+         WpCh6iFUkbItA9kcadRvbJLtksow2/Mht5fX67hp0Ku+ev215c1OjK/OHsxccU4YaUYk
+         2+nHPTk9vYdHfoEhIHf5wRaQDU3xVR3teYnfv7gXu6u5i6r4vSWMRvdCBqx8fTOidCnp
+         hbrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:reply-to:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E4OG3gIKhP9b6oDormQTANR9G0dEFN+Gu8sz+bmNZls=;
-        b=vzI5TxZbRHoKuW9vKlrvKzcg5UGhG5/RX0DYMdt/CwivtGNrpTJ8X7e5igsp4cG2RE
-         o20iE2YwUJkAlomfjvbGewb11iZ4zcDAZQE6BF1F5XH5Ato95dc64RYJJF5ajyinhLrn
-         FuVmAssATIQXh3GEdOpLo3RJsAOYxidUNGJXMwrhqEcnMm9Bl0J0tL9aQ6bt8nlsdhW9
-         lysppISIF4deNjbF17IqIbc3qhhbcDbIFyt0UBTlfmBAn7Fe/pfVGTb5GkLdm+W+zIBi
-         byTUehqo/hVrsjJtSPV8gHlA0+7qyPRTgpHcT2qDf2nU2i281WqnPa+EtqXpYKH0FsZy
-         idaQ==
-X-Gm-Message-State: ANoB5pnP2X03IiS/3jbq7Cyh1/zghuBZjEDxqTAa9kelNl5orzQQdBlh
-        HlsixZtU/HsTLzs8LdCjCg8=
-X-Google-Smtp-Source: AA0mqf5cA+KnSgMkBK+xmYdjKkrs0kuJ0sFQ5TsNPXSWCkaSAiqFExKhsM0FjyEkeUa3C0cdsnc+rw==
-X-Received: by 2002:a2e:9b51:0:b0:27a:2225:ed74 with SMTP id o17-20020a2e9b51000000b0027a2225ed74mr1132642ljj.30.1670532473725;
-        Thu, 08 Dec 2022 12:47:53 -0800 (PST)
-Received: from [172.22.204.227] (ppp85-140-58-71.pppoe.mtu-net.ru. [85.140.58.71])
-        by smtp.gmail.com with ESMTPSA id bf12-20020a2eaa0c000000b0027a2e0b8766sm286433ljb.9.2022.12.08.12.47.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 12:47:53 -0800 (PST)
-Message-ID: <692bb076-dc42-8caa-3c02-c160a006e0e5@gmail.com>
-Date:   Thu, 8 Dec 2022 23:47:31 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GihlQcK9cYAm1zf1IIYdLzFrOYYpv+dPmFF2jtn2Pws=;
+        b=Ouyfu55zn7Zk//2UQRB53/KR8RSXkBJJh7EVBKKoloG7iTXcioZXCrHxVBO2ue1eaU
+         qXtSs6uX+fMy5vRXx5sqG2mrEZllyJxLyq5CFpmHYXZhMHgqnWAB/68/QOXSnTABEx/E
+         cnXI92vJbmsWNjSIVFH1SG+RrrMERL4M7ZyKdo2tty2rxKV6f7hKKyMlTGQG07YdBuFT
+         Ksr2va1LP2iRSOBfK0fY2+NOegHro7VmWCw/vEuTYm36w80RFeqFIg2U/M3BmYW3zP66
+         vi/y2r+hS0zGVYc/tMunrmZYepZpay47r/u3U4eyjISTZCeaW5deqefmFPpUtKhBc0U5
+         INuQ==
+X-Gm-Message-State: ANoB5pnRI1IHXonqLcVM7AZHkOdPQZo9vaL9f+IdsxfgQ47rfs6B8r22
+        ys4OVi8GaqyyTrQ97G36Ogw=
+X-Google-Smtp-Source: AA0mqf5jO/3SHxozsQwCiP3NUl+OBNFKX//G16s+v+bK99YpbQLz3olHSxPOFekszajQVg168KW9Lw==
+X-Received: by 2002:a9d:7699:0:b0:661:dfe6:9732 with SMTP id j25-20020a9d7699000000b00661dfe69732mr1338993otl.1.1670532707597;
+        Thu, 08 Dec 2022 12:51:47 -0800 (PST)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id h5-20020a056830164500b00667ff6b7e9esm12285612otr.40.2022.12.08.12.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 12:51:47 -0800 (PST)
+Date:   Thu, 8 Dec 2022 12:51:45 -0800
+From:   Yury Norov <yury.norov@gmail.com>
+To:     Tariq Toukan <ttoukan.linux@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Barry Song <baohua@kernel.org>,
+        Ben Segall <bsegall@google.com>,
+        haniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Gal Pressman <gal@nvidia.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org
+Subject: Re: [PATCH v3 0/5] cpumask: improve on cpumask_local_spread()
+ locality
+Message-ID: <Y5JOYVlXvTDMQxOq@yury-laptop>
+References: <20221208183101.1162006-1-yury.norov@gmail.com>
+ <1efd1d75-9c5d-4827-3d28-bef044801859@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH] mtd: parsers: scpart: fix __udivdi3 undefined on mips
-Content-Language: en-US
-From:   Mikhail Zhilkin <csharper2005@gmail.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        NOGUCHI Hiroshi <drvlabo@gmail.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-References: <8bf10097-519c-a3de-8a08-d0c5d7ddb2de@gmail.com>
-Reply-To: 8bf10097-519c-a3de-8a08-d0c5d7ddb2de@gmail.com
-In-Reply-To: <8bf10097-519c-a3de-8a08-d0c5d7ddb2de@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1efd1d75-9c5d-4827-3d28-bef044801859@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi guys,
-
-I'm sorry. I noticed that the patch below is broken. For some time now I can't send patches using git-send-mail since the gmail changed the authentication process and I have to use Thunderbird. The Thunderbird broke the line in the patch.  
-
-I've already sent the PATCH v2.
-
-Link:
-https://lore.kernel.org/linux-mtd/805fe58e-690f-6a3f-5ebf-2f6f6e6e4599@gmail.com/
-
-Have a nice day!
-
--- 
-Best regards,
-Mikhail
-
-On 12/8/2022 9:59 PM, Mikhail Zhilkin wrote:
-
-> This fixes the following compile error on mips architecture with clang
-> version 16.0.0 reported by the 0-DAY CI Kernel Test Service:
->    ld.lld: error: undefined symbol: __udivdi3
->    referenced by scpart.c
->    mtd/parsers/scpart.o:(scpart_parse) in archive drivers/built-in.a
+On Thu, Dec 08, 2022 at 10:22:22PM +0200, Tariq Toukan wrote:
 > 
-> As a workaround this makes 'offs' a 32-bit type. This is enough, because
-> the mtd containing partition table practically does not exceed 1 MB. We
-> can revert this when the [Link] has been resolved.
 > 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1635
-> Fixes: 9b78ef0c7997 ("mtd: parsers: add support for Sercomm partitions")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Suggested-by: Arnd Bergmann <arnd@arndb.de>
-> Signed-off-by: Mikhail Zhilkin <csharper2005@gmail.com>
-> ---
->  drivers/mtd/parsers/scpart.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 12/8/2022 8:30 PM, Yury Norov wrote:
+> > cpumask_local_spread() currently checks local node for presence of i'th
+> > CPU, and then if it finds nothing makes a flat search among all non-local
+> > CPUs. We can do it better by checking CPUs per NUMA hops.
+> > 
+> > This series is inspired by Tariq Toukan and Valentin Schneider's
+> > "net/mlx5e: Improve remote NUMA preferences used for the IRQ affinity
+> > hints"
+> > 
+> > https://patchwork.kernel.org/project/netdevbpf/patch/20220728191203.4055-3-tariqt@nvidia.com/
+> > 
+> > According to their measurements, for mlx5e:
+> > 
+> >          Bottleneck in RX side is released, reached linerate (~1.8x speedup).
+> >          ~30% less cpu util on TX.
+> > 
+> > This patch makes cpumask_local_spread() traversing CPUs based on NUMA
+> > distance, just as well, and I expect comparable improvement for its
+> > users, as in case of mlx5e.
+> > 
+> > I tested new behavior on my VM with the following NUMA configuration:
+> > 
+> > root@debian:~# numactl -H
+> > available: 4 nodes (0-3)
+> > node 0 cpus: 0 1 2 3
+> > node 0 size: 3869 MB
+> > node 0 free: 3740 MB
+> > node 1 cpus: 4 5
+> > node 1 size: 1969 MB
+> > node 1 free: 1937 MB
+> > node 2 cpus: 6 7
+> > node 2 size: 1967 MB
+> > node 2 free: 1873 MB
+> > node 3 cpus: 8 9 10 11 12 13 14 15
+> > node 3 size: 7842 MB
+> > node 3 free: 7723 MB
+> > node distances:
+> > node   0   1   2   3
+> >    0:  10  50  30  70
+> >    1:  50  10  70  30
+> >    2:  30  70  10  50
+> >    3:  70  30  50  10
+> > 
+> > And the cpumask_local_spread() for each node and offset traversing looks
+> > like this:
+> > 
+> > node 0:   0   1   2   3   6   7   4   5   8   9  10  11  12  13  14  15
+> > node 1:   4   5   8   9  10  11  12  13  14  15   0   1   2   3   6   7
+> > node 2:   6   7   0   1   2   3   8   9  10  11  12  13  14  15   4   5
+> > node 3:   8   9  10  11  12  13  14  15   4   5   6   7   0   1   2   3
+> > 
+> > v1: https://lore.kernel.org/lkml/20221111040027.621646-5-yury.norov@gmail.com/T/
+> > v2: https://lore.kernel.org/all/20221112190946.728270-3-yury.norov@gmail.com/T/
+> > v3:
+> >   - fix typo in find_nth_and_andnot_bit();
+> >   - add 5th patch that simplifies cpumask_local_spread();
+> >   - address various coding style nits.
+> > 
+> > Yury Norov (5):
+> >    lib/find: introduce find_nth_and_andnot_bit
+> >    cpumask: introduce cpumask_nth_and_andnot
+> >    sched: add sched_numa_find_nth_cpu()
+> >    cpumask: improve on cpumask_local_spread() locality
+> >    lib/cpumask: reorganize cpumask_local_spread() logic
+> > 
+> >   include/linux/cpumask.h  | 20 ++++++++++++++
+> >   include/linux/find.h     | 33 +++++++++++++++++++++++
+> >   include/linux/topology.h |  8 ++++++
+> >   kernel/sched/topology.c  | 57 ++++++++++++++++++++++++++++++++++++++++
+> >   lib/cpumask.c            | 26 +++++-------------
+> >   lib/find_bit.c           |  9 +++++++
+> >   6 files changed, 134 insertions(+), 19 deletions(-)
+> > 
 > 
-> diff --git a/drivers/mtd/parsers/scpart.c b/drivers/mtd/parsers/scpart.c
-> index 02601bb33de4..6e5e11c37078 100644
-> --- a/drivers/mtd/parsers/scpart.c
-> +++ b/drivers/mtd/parsers/scpart.c
-> @@ -50,7 +50,7 @@ static int scpart_scan_partmap(struct mtd_info
-> *master, loff_t partmap_offs,
->  	int cnt = 0;
->  	int res = 0;
->  	int res2;
-> -	loff_t offs;
-> +	uint32_t offs;
->  	size_t retlen;
->  	struct sc_part_desc *pdesc = NULL;
->  	struct sc_part_desc *tmpdesc;
+> Acked-by: Tariq Toukan <tariqt@nvidia.com>
 
+Thanks Tariq, Jacob and Peter for review. I'll add the series in
+bitmap-for-next for testing. Still, I think that sched/numa branches
+would be more suitable.
+
+Thanks,
+Yury
