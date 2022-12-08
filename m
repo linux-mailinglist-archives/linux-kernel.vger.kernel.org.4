@@ -2,147 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8E86466A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:47:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEC696466B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiLHBrF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 20:47:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60526 "EHLO
+        id S229825AbiLHCAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 21:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiLHBrD (ORCPT
+        with ESMTP id S229668AbiLHCAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 20:47:03 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D22E020;
-        Wed,  7 Dec 2022 17:47:01 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 7 Dec 2022 21:00:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56FBF7E40B
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 18:00:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NSH801Qhdz4xGR;
-        Thu,  8 Dec 2022 12:46:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1670464016;
-        bh=BrcZjgFnCX4I+Yu3flH1nq1Ho9Y5wmemxz6VeoaM0Ug=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FfmFtRspk7xuUJXzygVfWpKb4hV9eqY3GDBYDUldJShBIg995rDRXKeHctdPlZh3d
-         nO0ak4iIUl921x5SG+xS8cKmxnnjQZ+t8CP3IO/nvtff1mT1cz2ZrS1IY/B1w5KdXC
-         Jws3cDx9BInfn+wf5WOpQ5qvdU/TFeS92aoBzLsEDVnIUuxBNRjjhKdndqKoYs+isy
-         GzizMA1jbVPAeayPUiSrZcHjmeTHokPnuEpvEjCG1MUlcRuGlimaQHSew22CLbZ70y
-         beDqek4TBYWDewVLvLi7RFzmWZphYFOLLlRqmC+wYzAjo0Oi5/2ZuaGogwm06pOMLO
-         K2bDPUAMMdzpw==
-Date:   Thu, 8 Dec 2022 12:46:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        John Johansen <john.johansen@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rae Moar <rmoar@google.com>
-Subject: linux-next: manual merge of the kunit-next tree with the apparmor
- tree
-Message-ID: <20221208124653.71ba9491@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1419AB821E8
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 02:00:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AAE1AC43470;
+        Thu,  8 Dec 2022 02:00:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670464816;
+        bh=b2JNCHrrbGbWbfVVcExNZqndpNih0iWnfm7zxzMnKPY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KweSlSz1je67AibWS7bgui3YxRez0/8R01kp/lFtEKAY/z4Jp51kRhVToiJ6c8i5R
+         fo2IaEmVAs5T8/d04aQxGpkDU8dQRqzhdvOG1WmjSU47vsA3aUeJc+yQwL+HSuJTXC
+         yjT/NShQKzW/0UyqYqPpefS+YxbEBbzdIv4IFXVH9v7QOr8+sIc3t4oZNz7tV4s0jM
+         ssiegUoYCgkSwQRmlYX5jZPAfWxUxSfuI4oXX58aafwysCrD0l3gRE8eE5A8Ei2ch6
+         4RAreI2fgbrmdwhrhJoMvyOif9Cu8vljQysotkb55vccrNvY34yxa1IwgBD+vqXxoG
+         CGQ4Bm5c4tMjQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 957D8E270CF;
+        Thu,  8 Dec 2022 02:00:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Q+BBA6cEB4yIN0ghvRN3GVl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] platform/chrome: cros_ec_typec: zero out stale pointers
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <167046481660.18277.3545657496706146746.git-patchwork-notify@kernel.org>
+Date:   Thu, 08 Dec 2022 02:00:16 +0000
+References: <20221207093924.v2.1.I1864b6a7ee98824118b93677868d22d3750f439b@changeid>
+In-Reply-To: <20221207093924.v2.1.I1864b6a7ee98824118b93677868d22d3750f439b@changeid>
+To:     Victor Ding <victording@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        pmalani@chromium.org, groeck@chromium.org, dustin@howett.net,
+        gustavoars@kernel.org, gregkh@linuxfoundation.org,
+        sebastian.reichel@collabora.com, dnojiri@chromium.org,
+        lee.jones@linaro.org, bleung@chromium.org,
+        tinghan.shen@mediatek.com, tzungbi@kernel.org,
+        enric.balletbo@collabora.com, heikki.krogerus@linux.intel.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Q+BBA6cEB4yIN0ghvRN3GVl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This patch was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-Today's linux-next merge of the kunit-next tree got a conflict in:
+On Wed,  7 Dec 2022 09:39:40 +0000 you wrote:
+> `cros_typec_get_switch_handles` allocates four pointers when obtaining
+> type-c switch handles. These pointers are all freed if failing to obtain
+> any of them; therefore, pointers in `port` become stale. The stale
+> pointers eventually cause use-after-free or double free in later code
+> paths. Zeroing out all pointer fields after freeing to eliminate these
+> stale pointers.
+> 
+> [...]
 
-  security/apparmor/policy_unpack_test.c
+Here is the summary with links:
+  - [v2] platform/chrome: cros_ec_typec: zero out stale pointers
+    https://git.kernel.org/chrome-platform/c/9a8aadcf0b45
 
-between commits:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  371e50a0b19f ("apparmor: make unpack_array return a trianary value")
-  32490541682b ("apparmor: Fix kunit test for out of bounds array")
 
-from the apparmor tree and commit:
-
-  2c92044683f5 ("apparmor: test: make static symbols visible during kunit t=
-esting")
-
-from the kunit-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc security/apparmor/policy_unpack_test.c
-index 7465da42492d,f25cf2a023d5..000000000000
---- a/security/apparmor/policy_unpack_test.c
-+++ b/security/apparmor/policy_unpack_test.c
-@@@ -144,8 -147,8 +147,8 @@@ static void policy_unpack_test_unpack_a
- =20
-  	puf->e->pos +=3D TEST_ARRAY_BUF_OFFSET;
- =20
-- 	KUNIT_EXPECT_EQ(test, unpack_array(puf->e, NULL, &array_size),
- -	array_size =3D aa_unpack_array(puf->e, NULL);
- -
-++	KUNIT_EXPECT_EQ(test, aa_unpack_array(puf->e, NULL, &array_size),
- +			TRI_TRUE);
-  	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
-  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-  		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
-@@@ -159,8 -162,8 +162,8 @@@ static void policy_unpack_test_unpack_a
- =20
-  	puf->e->pos +=3D TEST_NAMED_ARRAY_BUF_OFFSET;
- =20
-- 	KUNIT_EXPECT_EQ(test, unpack_array(puf->e, name, &array_size),
- -	array_size =3D aa_unpack_array(puf->e, name);
- -
-++	KUNIT_EXPECT_EQ(test, aa_unpack_array(puf->e, name, &array_size),
- +			TRI_TRUE);
-  	KUNIT_EXPECT_EQ(test, array_size, (u16)TEST_ARRAY_SIZE);
-  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-  		puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16) + 1);
-@@@ -175,8 -178,9 +178,8 @@@ static void policy_unpack_test_unpack_a
-  	puf->e->pos +=3D TEST_NAMED_ARRAY_BUF_OFFSET;
-  	puf->e->end =3D puf->e->start + TEST_ARRAY_BUF_OFFSET + sizeof(u16);
- =20
-- 	KUNIT_EXPECT_EQ(test, unpack_array(puf->e, name, &array_size),
- -	array_size =3D aa_unpack_array(puf->e, name);
- -
- -	KUNIT_EXPECT_EQ(test, array_size, 0);
-++	KUNIT_EXPECT_EQ(test, aa_unpack_array(puf->e, name, &array_size),
- +			TRI_FALSE);
-  	KUNIT_EXPECT_PTR_EQ(test, puf->e->pos,
-  		puf->e->start + TEST_NAMED_ARRAY_BUF_OFFSET);
-  }
-
---Sig_/Q+BBA6cEB4yIN0ghvRN3GVl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmORQg0ACgkQAVBC80lX
-0GzV5gf+JTwzJNKW1cEuJuCkTEF5EPMN1qLpObPKX4OORf6uX8LcICq9mTae/DVy
-ijV+ef8vgI8pn2O40cZWaNDUOjXc1BUxVOeBO8/Qp8KR4svA8H194lwMbVPQcUvN
-/b/YbNoAuakj+VwFXY8RQGjAYIDBFP2Ke5LL+dRVEZAATdjReAWA8y19r2h0oYAV
-RL5mDy7unZ61QOuW+wMLQy3/N11i/GwnfYlL05yjLNhYR7csOMZPFhJiAN431dYF
-zSMxXeGQ54g0nkSU9AuUVHIfztnh58hM1ZC704R2r+wEjy1nwYGa/T8IXxpj3mjL
-QIKdIG55mSFw/nA4fHQy4bHMaDgD7Q==
-=O70J
------END PGP SIGNATURE-----
-
---Sig_/Q+BBA6cEB4yIN0ghvRN3GVl--
