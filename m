@@ -2,44 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4665D6470E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:38:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFFB6470FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:42:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLHNi2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:38:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
+        id S230250AbiLHNm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:42:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiLHNi0 (ORCPT
+        with ESMTP id S230372AbiLHNmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:38:26 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BBE48B1BF;
-        Thu,  8 Dec 2022 05:38:25 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NSZvw0FmfzmWL1;
-        Thu,  8 Dec 2022 21:37:32 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 8 Dec 2022 21:38:22 +0800
-From:   Qiheng Lin <linqiheng@huawei.com>
-To:     <sth@linux.ibm.com>, <hoeppner@linux.ibm.com>, <hca@linux.ibm.com>,
-        <gor@linux.ibm.com>, <agordeev@linux.ibm.com>,
-        <borntraeger@linux.ibm.com>, <svens@linux.ibm.com>
-CC:     <linux-s390@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linqiheng@huawei.com>
-Subject: [PATCH] s390/dasd: Fix potential memleak in dasd_eckd_init()
-Date:   Thu, 8 Dec 2022 21:38:09 +0800
-Message-ID: <20221208133809.16796-1-linqiheng@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 8 Dec 2022 08:42:06 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C804B8B39F;
+        Thu,  8 Dec 2022 05:41:53 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8CIeXh003845;
+        Thu, 8 Dec 2022 13:41:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=bGawsvtpYEDznEm4b8jKPt0VkPsUz0y02oBiQf+JrC4=;
+ b=aV0uUH/VGVH8VcllqZ7OxTWHlotsxL1I/kCPZW+bAV6WLdw+kUUWj+rgt6/qLP7k6vZv
+ aalN4Aq+AUuk2rHv+DiAVZSNkkTbvwz4LRZez0mLsbBSHX1RfIp+dqglFTS34nDJ+IOO
+ eGDtNJ683D/NtngtsiwS544Dbk4p69N25K19oNJtNcwmJA4OaLHeWKDr5wRK4hKH+5QE
+ /Z+esdcoIaDBWy3D5orFU6YrQGZz9bxxMY/BM4BBwCCnuhzF2cW0u2dz96w14bL1wWxV
+ 5rypCzGe5RrquLsbp3kPM2JreFYBd5LLmd4K/djXl+YeI5gYRzH0IdY3wdyCi0mFdnT3 cQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mbffs880v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 08 Dec 2022 13:41:04 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B8Df3bT015445
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 8 Dec 2022 13:41:03 GMT
+Received: from [10.216.30.208] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 8 Dec 2022
+ 05:40:57 -0800
+Message-ID: <ec403926-24ef-947d-2a1c-6cbf0e31ab89@quicinc.com>
+Date:   Thu, 8 Dec 2022 19:10:54 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] remoteproc: elf_loader: Update resource table name check
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <andersson@kernel.org>, <bgoswami@quicinc.com>,
+        <broonie@kernel.org>, <devicetree@vger.kernel.org>,
+        <judyhsiao@chromium.org>, <krzysztof.kozlowski@linaro.org>,
+        <lgirdwood@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <mathieu.poirier@linaro.org>, <perex@perex.cz>,
+        <quic_plai@quicinc.com>, <quic_rohkumar@quicinc.com>,
+        <robh+dt@kernel.org>, <srinivas.kandagatla@linaro.org>,
+        <tiwai@suse.com>
+References: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: u0MLp0o3BE-g2iuoQLX6FffRLsAyL9lZ
+X-Proofpoint-GUID: u0MLp0o3BE-g2iuoQLX6FffRLsAyL9lZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-08_07,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 spamscore=0 malwarescore=0 suspectscore=0 clxscore=1015
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212080115
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,32 +87,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-`dasd_reserve_req` is allocated before `dasd_vol_info_req`, and it
-also needs to be freed before the error returns, just like the other
-cases in this function.
 
-Fixes: 9e12e54c7a8f ("s390/dasd: Handle out-of-space constraint")
-Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
----
- drivers/s390/block/dasd_eckd.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 12/7/2022 7:25 AM, Stephen Boyd wrote:
+Thanks for Your Time Stephen!!!
+> Quoting Srinivasa Rao Mandadapu (2022-12-01 04:20:48)
+>> Update resource table name check with sub string search instead of
+>> complete string search.
+>> In general Qualcomm binary contains, section header name
+>> (e.g. .resource_table), amended with extra string to differentiate
+>> with other sections.
+>> So far Android adsp binaries are being authenticated using TZ,
+>> hence this mismatch hasn't created any problem.
+>> In recent developments, ADSP binary is being used in Chrome based
+>> platforms, which doesn't have TZ path, hence resource table is
+>> required for memory sandboxing.
+>>
+> Does this need a Fixes tag?
+I don't think so. I feel It's kind of enhancement.
+>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>>   drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+>> index 5a412d7..0feb120 100644
+>> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+>> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+>> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
+>>                  u64 offset = elf_shdr_get_sh_offset(class, shdr);
+>>                  u32 name = elf_shdr_get_sh_name(class, shdr);
+>>
+>> -               if (strcmp(name_table + name, ".resource_table"))
+>> +               if (!strstr(name_table + name, ".resource_table"))
+> Was the strcmp not working before because the 'name_table' has something
+> else in it? It really looks like your elf file is malformed.
 
-diff --git a/drivers/s390/block/dasd_eckd.c b/drivers/s390/block/dasd_eckd.c
-index 5d0b9991e91a..b20ce86b97b2 100644
---- a/drivers/s390/block/dasd_eckd.c
-+++ b/drivers/s390/block/dasd_eckd.c
-@@ -6956,8 +6956,10 @@ dasd_eckd_init(void)
- 		return -ENOMEM;
- 	dasd_vol_info_req = kmalloc(sizeof(*dasd_vol_info_req),
- 				    GFP_KERNEL | GFP_DMA);
--	if (!dasd_vol_info_req)
-+	if (!dasd_vol_info_req) {
-+		kfree(dasd_reserve_req);
- 		return -ENOMEM;
-+	}
- 	pe_handler_worker = kmalloc(sizeof(*pe_handler_worker),
- 				    GFP_KERNEL | GFP_DMA);
- 	if (!pe_handler_worker) {
--- 
-2.32.0
+Actually, DSP binary is prepared by combining different elfs. So Section 
+header names are appended with
+
+something else to distinguish same section name of different elfs, by 
+using some Qualcomm specific QURT scripts.
+Hence final binary contains resource_table name appended with module 
+specific name.
+
+So this patch is required to handle such modified name.
 
