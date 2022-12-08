@@ -2,112 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F891647254
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 15:58:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D51E64725B
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiLHO6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 09:58:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47864 "EHLO
+        id S230014AbiLHPAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:00:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbiLHO6a (ORCPT
+        with ESMTP id S229562AbiLHO75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 09:58:30 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D794B11A30
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 06:58:28 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id bx10so1951519wrb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 06:58:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U59H1v37fnrRuO5gY9YEIJq45nAGp9i0WZRmt0YHAV0=;
-        b=sAtKmSnbD3QKlav53j+c7KsUgjOq+FGOo1ZO8mmvgQ+fXCpIh1w5ZUV4IsTe4/5jf1
-         N/7HntUn2cy/4FaPDS1Jr3ka1ji2N5wEnWHkBr0AMbLSjm9O0I5MQu9MNWjuiC5DjLqI
-         Ihz3U5McYq50fi8U71OooOUR9kZ7lLQWdEwlJwx7YbhWUeeqkuqa5p6vSN4bntoSka77
-         MDvi+ysyOuJZHI6tcSDufLHoY+tPfRA6ySlW910Ap+grOTNNBDnxxdIBQoNU8RnPYe/+
-         ywJC6uI3ietCuxNqCr8M2UFcFBQYT9GH+jbBZOjdinKbftXtU+b0GiNYpLBTNcZuAI5/
-         fAsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U59H1v37fnrRuO5gY9YEIJq45nAGp9i0WZRmt0YHAV0=;
-        b=GzkkOWVG1hlHeoiFnYzJEh4D3STp/VGYeOtLIjUMnlH62bRWotnnXT0B0XiMdYbcGA
-         i00rCmH07Bx/tUb4+Ewk0+VwQiaYXKw1V1Ir+JILH5r97iwd9gS9dhN9X+y2OKAQAhGB
-         WagwABVvY0ZQSSggukOiHeuYgny1tbUgYL4Gh7yOJlo9Itp7nQAiU0rrkk1Y8SZnrmvv
-         X8DjUo9S7v1TbIzH3ilvg7RWx/6H+943bCm9CEcBUn1QQ9Fk6n+txDVV7ET6b5Qq8F1U
-         JXSgtHicPsMyNjVnZupgVb9xaN/h1Bd5qcNiDt1ZGD6jQ7O+wq8My22wmZEpUXLIaLUe
-         OVFg==
-X-Gm-Message-State: ANoB5pkoPtUK0x0zdqUhYLJT9vW88cVD//liSFMHefjvZ2Q3b9bTtlkJ
-        5FHDD8QKX/K8novoDo7f0kpHBw3jlWFKp4sX
-X-Google-Smtp-Source: AA0mqf71X822z99TPqBxMJl7WdxzFzoHxz7hLc2sjMC48Lwb6t6ILfwEwxrbDYxx+lyPmkhLqm6ytQ==
-X-Received: by 2002:a5d:51cd:0:b0:242:17d3:a9f9 with SMTP id n13-20020a5d51cd000000b0024217d3a9f9mr1590705wrv.68.1670511507440;
-        Thu, 08 Dec 2022 06:58:27 -0800 (PST)
-Received: from airbuntu ([2a00:79e1:abc:9:c7d:8d2a:a83c:450a])
-        by smtp.gmail.com with ESMTPSA id p1-20020adf9d81000000b0024258722a7fsm13289723wre.37.2022.12.08.06.58.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 06:58:27 -0800 (PST)
-Date:   Thu, 8 Dec 2022 14:58:25 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
+        Thu, 8 Dec 2022 09:59:57 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927BEBF71;
+        Thu,  8 Dec 2022 06:59:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D4E161F34;
+        Thu,  8 Dec 2022 14:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0CF9C433D7;
+        Thu,  8 Dec 2022 14:59:53 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 09:59:52 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Subject: Re: [PATCH v2] sched/fair: Fixes for capacity inversion detection
-Message-ID: <20221208145825.gt3rsysykqaklrwt@airbuntu>
-References: <f06321f0-def6-6f9d-b72f-f700e7e9a60a@arm.com>
- <20221208145409.453308-1-qyousef@layalina.io>
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Florent Revest <revest@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Chris Mason <clm@meta.com>
+Subject: Re: [PATCH v2] panic: Taint kernel if fault injection has been used
+Message-ID: <20221208095952.7c83333a@gandalf.local.home>
+In-Reply-To: <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+References: <167019256481.3792653.4369637751468386073.stgit@devnote3>
+        <20221204223001.6wea7cgkofjsiy2z@macbook-pro-6.dhcp.thefacebook.com>
+        <20221205075921.02edfe6b54abc5c2f9831875@kernel.org>
+        <20221206021700.oryt26otos7vpxjh@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206162035.97ae19674d6d17108bed1910@kernel.org>
+        <20221207040146.zhm3kyduqp7kosqa@macbook-pro-6.dhcp.thefacebook.com>
+        <20221206233947.4c27cc9d@gandalf.local.home>
+        <CAADnVQKDZfP51WeVOeY-6RNH=MHT2BhtW6F8PaJV5-RoJOtMkQ@mail.gmail.com>
+        <20221207074806.6f869be2@gandalf.local.home>
+        <20221208043628.el5yykpjr4j45zqx@macbook-pro-6.dhcp.thefacebook.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221208145409.453308-1-qyousef@layalina.io>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/22 14:54, Qais Yousef wrote:
-> Traversing the Perf Domains requires rcu_read_lock() to be held and is
-> conditional on sched_energy_enabled(). rcu_read_lock() is held while in
-> load_balance(), add an assert to ensure this is always the case.
+On Wed, 7 Dec 2022 20:36:28 -0800
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
 
-Err that should say instead
+> > But in all seriousness, what I would actually ask (and what I'll ask now)
+> > is, what module did you use that is out of tree, and was it relevant to
+> > this test?
+> > 
+> > That's a reasonable question to ask, and one that only gets asked with a
+> > taint.  
+> 
+> When we receive bug reports in bpf@vger the only question we ask is:
+> "How to reproduce this bug?"
+> We ignoring taint completely.
 
-	Traversing the Perf Domains requires rcu_read_lock() to be held and is
-	conditional on sched_energy_enabled(). Ensure right protections applied.
+Um, I'm guessing that bug reports that go to bpf@vger are focused on issues
+with BPF and not core kernel infrastructure. No, I do not consider BPF (nor
+tracing for that matter) as core infrastructure. The bug reports I'm
+talking about is for the scheduler, exception handling, interrupts, VFS,
+MM, and networking. When one of these have a bug report, you most
+definitely do look at taints. There's been several times where a bug report
+was caused by an out of tree module, or a machine check exception.
 
-Peter, let me know if you want me to resend with that fixed or happy to apply
-yourself.
+> tbh I didn't even know that our BPF CI causes taint until that email.
 
-
-Thanks!
-
---
-Qais Yousef
+That's because BPF development probably never gets hit by things that cause
+taints. That doesn't go for the rest of the kernel.
 
 > 
-> Also skip capacity inversion detection for our own pd; which was an
-> error.
+> In the previous email I said that the bug report comes from bpf selftest on bpf-next.
+> Clearly there is no ambiguity that this is as upstream as it can get.
+> Yet for 2 days this 'taint' arguing is preventing people from looking at the bug.
+
+Who isn't looking at the bug because of the 'taint' argument? I'm not
+looking at it right now, because it isn't top of my priority list.
+
+
+> And that happens all the time on lkml. Somebody reports a bug and kernel devs
+> jump on the poor person:
+> "Can you repro without taint?",
+> "Can you repro with upstream kernel?"
+> This is discouraging.
+
+So is spending 5 days debugging something and then finding out that what
+caused the taint *was* the culprit!
+
+Sorry, but that has happened to me too many times. Which is why you get
+grumpy kernel developers pushing back on this.
+
+> The 'taint' concept makes it easier for kernel devs to ignore bug reports
+> and push back on the reporter. Do it few times and people stop reporting bugs.
+> Say, this particular bug in rethook was found by one of our BPF CI developers.
+> They're not very familiar with the kernel, but they can see plenty of 'rethook'
+> references in the stack trace, lookup MAINTAINER file and ping Massami,
+> but to the question "can you repro without taint?" they can only say NO,
+> because this is how our CI works. So they will keep silence and the bug will be lost.
+> That's not the only reason why I'm against generalizing 'taint'.
+> Tainting because HW is misbehaving makes sense, but tainting because
+> of OoO module or because of live-patching does not.
+> It becomes an excuse that people abuse.
+
+Again, I've been burned by OoO modules more than once. If you send 5 days
+debugging something to find out that the cause was from an OoO module,
+you'd change your tune too.
+
 > 
-> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-> Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
-> ---
+> Right now syzbot is finding all sorts of bugs. Most of the time syzbot
+> turns error injection on to find those allocation issues.
+> If syzbot reports will start coming as tainted there will be even less
+> attention to them. That will not be good.
 > 
-> Changes in v2:
+> > If there's a BPF injection taint, one can ask that same question, as the
+> > bug may happen sometime after the injection but be caused by that injection,
+> > and not be in the backtrace. Not all kernel developers have the access to
+> > debugging utilities that backend production servers have. A lot of bugs that
+> > kernel developers debug are from someone's laptop.  
 > 
-> 	* Make sure to hold rcu_read_lock() as we need it's not held in all
-> 	  paths (thanks Dietmar!)
+> I would have to disagree.
+> We see few human reported bugs and prioritize them higher,
+> but majority are coming from the production fleet, test tiers,
+> syzbot, CIs, and automated things.
+> 
+> > Where all they have is
+> > that backtrace.   
+> 
+> Even laptops typically leave vmcore after crash. distro support packages have
+> clear rules what scripts to run to collect all the necessary data in case
+> of the crash from vmcore.
+
+They are not as common as you think.
+
+> These tools support extracting everything bpf related too.
+> For example see:
+> Documentation/bpf/drgn.rst
+> It works on vmcore and on the running kernel.
+> 
+> > If a tool or root kit, added function error injection, it
+> > would be extremely useful information to debug what happened.
+> > 
+> > I don't understand the push back here.  
+> 
+> All these years we've been working on improving bpf introspection and
+> debuggability. Today crash dumps look like this:
+>   bpf_trace_printk+0xd3/0x170 kernel/trace/bpf_trace.c:377
+>   bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk+0x2b/0x37
+>   bpf_dispatcher_nop_func include/linux/bpf.h:1082 [inline]
+>   __bpf_prog_run include/linux/filter.h:600 [inline]
+>   bpf_prog_run include/linux/filter.h:607 [inline]
+> 
+> The 2nd from the top is a bpf prog. The rest are kernel functions.
+> bpf_prog_cf2ac6d483d8499b_trace_bpf_trace_printk
+>          ^^ is a prog tag   ^^ name of bpf prog
+> 
+> If you do 'bpftool prog show' you can see both tag and name. 
+> 'bpftool prog dump jited'
+> dumps x86 code mixed with source line text.
+> Often enough +0x2b offset will have some C code right next to it.
+> 
+> One can monitor all prog load/unload via perf or via audit.
+> 'perf record' collects all bpf progs that were loaded before
+> the start and even thouse that were loaded and unloaded quickly
+> while 'perf record' was running.
+> So 'perf report' has all the data including annotation and source code.
+> 
+> Currently we're working on adding 'file.c:lineno' to dump_stack()
+> for bpf progs.
+> 
+> If you have ideas how we can improve debuggability we are all ears.
+
+I talked with KP on IRC, and he said he's going to work on the same thing
+as above. That is, showing what BPF programs are loaded, and if they modify
+the return of any function, as well as what those functions are. And have
+that reported in the oops message.
+
+I'm not hell bent on BPF triggering a taint, as long as the oops message
+explicitly defines what BPF is doing. I think that's much more informative
+than a taint, and I would greatly welcome that. The main issue I'm raising
+is that I want the oops message to have most the information to gather what
+went wrong, and not rely on other tooling like kernel core dumps and drgn
+for debugging the problem.
+
+-- Steve
