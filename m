@@ -2,83 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1468864751D
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1F164751F
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbiLHRtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 12:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53462 "EHLO
+        id S229813AbiLHRth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 12:49:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLHRtG (ORCPT
+        with ESMTP id S229847AbiLHRte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 12:49:06 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5724775BD0;
-        Thu,  8 Dec 2022 09:49:05 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id t17so5846859eju.1;
-        Thu, 08 Dec 2022 09:49:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vCUy2A8QkoNgKNjTy0YPJIsFUI9pgEyDcRhSPvn8O2o=;
-        b=cg2u29RTlmTya3gy6M1iGhv6QB0BoOubx4J/4evpAvd/61UfJx/iG+xSNCkLTsi556
-         pcjokwQ1rVw5LoYxaNKwkkEMXUydpKvv5nfbmSg+nye/CaoLn0sG7Ah4nTSoqAgNM97P
-         6SmLWbxoyuZOJKPICtf8M8U82s30HZMlT62mvq/PSepW39/wSU6qXU50J6Q6LFbk3JTz
-         5MFmRQeUNea/S5uUjENQhCd4kL+JmdAp7wGIq8DmgNHVB+zMdNJq5fZaQVqwzF7MeOpZ
-         ZRL7DspFX3tYJ9pP7XRB0+YtxR82Rf2SV18tWCp6jRA057UA6NJNZT01KdvE0kMgWXF1
-         Cyog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vCUy2A8QkoNgKNjTy0YPJIsFUI9pgEyDcRhSPvn8O2o=;
-        b=22nvpxzS++GRDgKgxc01NqX7NmNyivt4j+N5l58Gkib6dQXRl74RdvwtrDBhdv1TKa
-         /B6OlkfmSn8YMSeCT35EMPkpI0eOnRlE4MI57PSH8T2a4Ami/Mq+AYVqREJxY2QXbuJW
-         XL6a5ymvT56eqSAJZh/WY6s692usqESG1v/1f0V8JeJVXPOHUeKMGEKLqKCKCQ2rEMju
-         aZpkusxiOCim8GDzb2TnWCwyiwW4vEGm9eD9MaxuqeRapzlbeK4uPPMBnICsfyrcAMiN
-         cTi9E/WWxgtkGWxjTcl1+BTM5ifDnpGbmoia8TrdOm0/62omoiohF/c5NeDhyWV73/kC
-         oQqA==
-X-Gm-Message-State: ANoB5pkzH8SJTfbRpcad0UNwPd215itEdnEdz9DozQip56XxyBatw8/Q
-        aS7sxtLX1uGDDM8LHhEazCHYcgk8KVLod1BR1rI=
-X-Google-Smtp-Source: AA0mqf7awQKl5+4hcqSd2fB4clEKH9QAibbQcSEDjPR9EyxIhmJvrp39aeGPMIsj6Y3m4eHZOCxa7fT5u8q3/sJIByg=
-X-Received: by 2002:a17:906:2ac3:b0:7ad:f2f9:2b49 with SMTP id
- m3-20020a1709062ac300b007adf2f92b49mr65036826eje.94.1670521743673; Thu, 08
- Dec 2022 09:49:03 -0800 (PST)
+        Thu, 8 Dec 2022 12:49:34 -0500
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375059B2A9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:49:33 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 091315C00DD;
+        Thu,  8 Dec 2022 12:49:30 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Thu, 08 Dec 2022 12:49:30 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670521770; x=1670608170; bh=C8TXy9Fk8+
+        /VGu61vKrcCcU3jfSCcH0UL/PnmjTog/Q=; b=Ndnm5x+y48/6cXmUhP1+nDdC5i
+        lNJHYEPZWgRBW1PdJNVR3wjlmNy+XFBovGBYHpqoKQ25dkUCoJXSkpX9ozd6UVRf
+        pq2LfTp1YFmR2NNIFXeJx+BEM9ajCozSxXl5JueOZOlG3QbnGoE2EhMsYFPvogdr
+        gUQ2hIu1BEDUGAYZQhScWg+3CDG4TgwiwMXbEgQRhFcKBJ97lczllSPUV15lzkWF
+        c0JPaVhalfpXTh8ESVvY58Izii9eXt8fl3IJPibt1yrmvujwafEbsxoE1gf39JLy
+        lwnocGQUZbasVZMuYw1XHoorPwsvEjY2X4Cg/CNsCVF31U/QxOyimXjP5iiA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670521770; x=1670608170; bh=C8TXy9Fk8+/VGu61vKrcCcU3jfSC
+        cH0UL/PnmjTog/Q=; b=Rm8PX8MvBTjvGl6e464tif7hA3DfX/zV1jczJm7KnnKD
+        R9XH9TybUEctphXVuh7IiH8LH3uQJKQUoaUDc/qAihbX6ewfalg1X2gHFg5QsTmR
+        D2BNOXvcvLlIrrJMoHKMg9taJkbqq6YKs6+cH3BfL5cfSFPSk8d6H89ocENpopvq
+        whvvxUfBZOq9AhpsoLuL2IOlLw7szYguht/fm90sVV6VAlQOiMA3fbtakFnkZGP8
+        YxKg18azrPb3XvSNSSenOGOxNIGrWO39sAcQNTPpx8S+GaDlmqEeJ8aDxG5w6ZNi
+        4RqC2YpoBZ/0m0Jlp4EAF7FHXitA2CkzzVs33M+q4w==
+X-ME-Sender: <xms:qSOSY46Xfppjxhqb2fytVl1dqeBQWHbhnb9dzkoXsznn4CcqfJmuTw>
+    <xme:qSOSY5437qZMOzRB-dmA8gVqgz1MXuoellqP2q4s4RLjn9P3RLXyQ-Jx_Mb1CzLKB
+    ID4guJyGnW8pFiUOQ8>
+X-ME-Received: <xmr:qSOSY3f6bVpJP6B9_Z2G8cyAbnAJLAKVc1U0Q4mjOr5s_JOiUWg1ApQUAgQVMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddtgddutdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
+    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:qSOSY9L6cayahyEnFTkWcILhnLcnjAzxDBrPXjmNhVwJ394DlUxe9w>
+    <xmx:qSOSY8I7vGWMcj-IhHLyiAFSq25UHyZUqOqNBZjm-988pNxglwn-3g>
+    <xmx:qSOSY-xZlELmoy_nNlOdbrGW_NAvmEhRtAwUUg5CjqdfmVYIebuXoQ>
+    <xmx:qiOSYw2RvTHuSlYti-OkkDV8BcCIF2SlgJhRFveQZ_DFFG906veFjA>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 8 Dec 2022 12:49:28 -0500 (EST)
+Date:   Thu, 8 Dec 2022 10:49:27 -0700
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Eric Biederman <ebiederm@xmission.com>,
+        linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Subject: Re: [PATCH v3] fuse: In fuse_flush only wait if someone wants the
+ return code
+Message-ID: <Y5IjpyLHIF8PgQ6l@tycho.pizza>
+References: <CAJfpegvrd2nsydG26stcmeEkdO1JLyeu69KrZs4dvVxXtoz42Q@mail.gmail.com>
+ <20221114160209.1229849-1-tycho@tycho.pizza>
+ <Y4TNI8+QVHFuzeZC@tycho.pizza>
+ <CAJfpegtckCReg7V6ET4a8EW_X-WfmANQdc4hP26bV9zoRrk7Wg@mail.gmail.com>
 MIME-Version: 1.0
-References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
- <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
- <Y49dMUsX2YgHK0J+@krava> <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 8 Dec 2022 09:48:52 -0800
-Message-ID: <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Hao Sun <sunhao.th@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJfpegtckCReg7V6ET4a8EW_X-WfmANQdc4hP26bV9zoRrk7Wg@mail.gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,79 +88,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 11:57 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Dec 6, 2022 at 7:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+On Thu, Dec 08, 2022 at 03:26:19PM +0100, Miklos Szeredi wrote:
+> On Mon, 28 Nov 2022 at 16:01, Tycho Andersen <tycho@tycho.pizza> wrote:
 > >
-> > On Tue, Dec 06, 2022 at 02:46:43PM +0800, Hao Sun wrote:
-> > > Hao Sun <sunhao.th@gmail.com> =E4=BA=8E2022=E5=B9=B412=E6=9C=886=E6=
-=97=A5=E5=91=A8=E4=BA=8C 11:28=E5=86=99=E9=81=93=EF=BC=9A
-> > > >
-> > > > Hi,
-> > > >
-> > > > The following crash can be triggered with the BPF prog provided.
-> > > > It seems the verifier passed some invalid progs. I will try to simp=
-lify
-> > > > the C reproducer, for now, the following can reproduce this:
-> > > >
-> > > > HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-i=
-n
-> > > > functions in bpf_iter_ksym
-> > > > git tree: bpf-next
-> > > > console log: https://pastebin.com/raw/87RCSnCs
-> > > > kernel config: https://pastebin.com/raw/rZdWLcgK
-> > > > Syz reproducer: https://pastebin.com/raw/4kbwhdEv
-> > > > C reproducer: https://pastebin.com/raw/GFfDn2Gk
-> > > >
-> > >
-> > > Simplified C reproducer: https://pastebin.com/raw/aZgLcPvW
-> > >
-> > > Only two syscalls are required to reproduce this, seems it's an issue
-> > > in XDP test run. Essentially, the reproducer just loads a very simple
-> > > prog and tests run repeatedly and concurrently:
-> > >
-> > > r0 =3D bpf$PROG_LOAD(0x5, &(0x7f0000000640)=3D@base=3D{0x6, 0xb,
-> > > &(0x7f0000000500)}, 0x80)
-> > > bpf$BPF_PROG_TEST_RUN(0xa, &(0x7f0000000140)=3D{r0, 0x0, 0x0, 0x0, 0x=
-0,
-> > > 0x0, 0xffffffff, 0x0, 0x0, 0x0, 0x0, 0x0}, 0x48)
-> > >
-> > > Loaded prog:
-> > >    0: (18) r0 =3D 0x0
-> > >    2: (18) r6 =3D 0x0
-> > >    4: (18) r7 =3D 0x0
-> > >    6: (18) r8 =3D 0x0
-> > >    8: (18) r9 =3D 0x0
-> > >   10: (95) exit
+> > Hi Milkos,
 > >
-> > hi,
-> > I can reproduce with your config.. it seems related to the
-> > recent static call change:
-> >   c86df29d11df bpf: Convert BPF_DISPATCHER to use static_call() (not ft=
-race)
+> > On Mon, Nov 14, 2022 at 09:02:09AM -0700, Tycho Andersen wrote:
+> > > v3: use schedule_work() to avoid other sleeps in inode_write_now() and
+> > >     fuse_sync_writes(). Fix a UAF of the stack-based inarg.
 > >
-> > I can't reproduce when I revert that commit.. Peter, any idea?
->
-> Jiri,
->
-> I see your tested-by tag on Peter's commit c86df29d11df.
-> I assume you're actually tested it, but
-> this syzbot oops shows that even empty bpf prog crashes,
-> so there is something wrong with that commit.
->
-> What is the difference between this new kconfig and old one that
-> you've tested?
->
-> I'm trying to understand the severity of the issues and
-> whether we need to revert that commit asap since the merge window
-> is about to start.
+> > Thoughts on this version?
+> 
+> Skipping attr invalidation on success is wrong.
 
-Jiri, Peter,
+Agreed, that looks like my mistake.
 
-ping.
+> How about the attached (untested) patch?
 
-cc-ing Thorsten, since he's tracking it now.
+It passes my reproducer with no warnings or anything. Feel free to
+add:
 
-The config has CONFIG_X86_KERNEL_IBT=3Dy.
-Is it related?
+Tested-by: Tycho Andersen <tycho@tycho.pizza>
+
+if you want to commit it.
+
+Tycho
