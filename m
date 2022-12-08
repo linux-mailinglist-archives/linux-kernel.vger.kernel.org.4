@@ -2,89 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D61646596
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DC6646591
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiLHADf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 19:03:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
+        id S230189AbiLHACV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 19:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiLHADd (ORCPT
+        with ESMTP id S229915AbiLHACR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:03:33 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A97EAF7B
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:03:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670457812; x=1701993812;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=RW6fdvIXpCxTU4dqxR6X8OMdODJuBSPa3qWNunPaM2w=;
-  b=WuqfdCp1evXYNv89NF6FcyP1SI8koeYgqUspRNOeB2T03OSETWWAilog
-   jBAzMFY++K3SFDb8NKw9Txzjn8pWAdfE9yo42wOVzuy13/lDZj+iF72hK
-   VqTOMVC03mlX7RKb3GKTpiPUSRlk3X6In3708BpYel2TCAH59b0OeAesW
-   diziuHyu0JIlgjtm0s/okfQkaJ1eEOYFocEzBK4iEuDK8OLuLPq34Zwdq
-   xqRHv9pzgmY+DBEdnArIknsVNevBvUEE5DwuaPTFidW1CqBrvjcGvYBTk
-   3C+149NN1DzuvDKx+4uqfFmF5+pSyRF7sgtLM2z1NKqop9awBAbvNeH8L
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="297391549"
-X-IronPort-AV: E=Sophos;i="5.96,226,1665471600"; 
-   d="scan'208";a="297391549"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 16:03:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="753321015"
-X-IronPort-AV: E=Sophos;i="5.96,226,1665471600"; 
-   d="scan'208";a="753321015"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2022 16:03:31 -0800
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Wang Yong <yongw.kernel@gmail.com>
-Cc:     akpm@linux-foundation.org, baolin.wang@linux.alibaba.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: fix typo in struct pglist_data code comment
-References: <20221207074011.GA151242@cloud>
-Date:   Thu, 08 Dec 2022 08:02:02 +0800
-In-Reply-To: <20221207074011.GA151242@cloud> (Wang Yong's message of "Wed, 7
-        Dec 2022 07:40:11 +0000")
-Message-ID: <875yemzrt1.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 7 Dec 2022 19:02:17 -0500
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AA518BD1E
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:02:16 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id k88-20020a17090a4ce100b00219d0b857bcso3302220pjh.1
+        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 16:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dk1yAoyQU+RLCYzQPhP3++n5k0AlqyyhOlwfArVtCN8=;
+        b=CfAuGzp9X4iBKtpuQ05m/nLzqNjWLddivhcjBXfwQpOFO0jBdxJx2iBZedSmSZhQkq
+         xUTzYrTLLf23grDjO0hf/+R8GsE4OfFz5vPRSFlyvyiRbq7JAN5B0OhF2O1LGbvKXpc2
+         dkD25p/EY7gml9MOqEmL3vlNPDCwS8NjoJx1w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dk1yAoyQU+RLCYzQPhP3++n5k0AlqyyhOlwfArVtCN8=;
+        b=nfDoSo9VqZCP0IZK/hywZfYwemK89n3cfltuoAtbkIbJTvkvMOu1VrHTcYA19fiHEt
+         unuxKUIOIApUkyL9ragMHO/bxXtrnyXfvFZWm7Dd1BCcyD0KVN4P8Unkp5+d2DpZQ+0d
+         Ub4L/wwxhcE+JIigWeLFxWsnqYj//GUEE2QmcofJclrXhnVPveqmUQLnkF6Yy0fdgetG
+         /GDJ0A2DyFbD5WhpRuJk4b+zj6P59kuBNBtQCl0lF2/c+qnfupckZmSkvaUlYyQWqHRC
+         hhePC8UgA3qTEbv7AllKBH81CcciyRYb+ig+1rMcsG9GA81R9nfLw7nO65dgk3BmVyAV
+         Jbdw==
+X-Gm-Message-State: ANoB5pnhob7GnQl3lsZ+DyuojAIrD7vvoSitwBPnfMH42oX2HLhEo9iR
+        JdVlXND+dftT9ITGIAjwbRYldQ==
+X-Google-Smtp-Source: AA0mqf4HIgFTUJHMRF3JILeCrjw7S70fUUJWDbaPjwiHDjSbqcJpUgdTYeHaVR0Jfy9Z0A83nK/xfA==
+X-Received: by 2002:a17:90b:711:b0:210:9858:2b2c with SMTP id s17-20020a17090b071100b0021098582b2cmr102785702pjz.191.1670457735590;
+        Wed, 07 Dec 2022 16:02:15 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s30-20020a63925e000000b00477def759cbsm5933519pgn.58.2022.12.07.16.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 07 Dec 2022 16:02:15 -0800 (PST)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        pepsipu <soopthegoop@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Andrii Nakryiko <andrii@kernel.org>, ast@kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>, jolsa@kernel.org,
+        KP Singh <kpsingh@kernel.org>, martin.lau@linux.dev,
+        Stanislav Fomichev <sdf@google.com>, song@kernel.org,
+        Yonghong Song <yhs@fb.com>, netdev@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rasesh Mody <rmody@marvell.com>,
+        Ariel Elior <aelior@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        David Ahern <dsahern@kernel.org>,
+        Richard Gobert <richardbgobert@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        GR-Linux-NIC-Dev@marvell.com, linux-hardening@vger.kernel.org
+Subject: [PATCH net-next v2] skbuff: Introduce slab_build_skb()
+Date:   Wed,  7 Dec 2022 16:02:13 -0800
+Message-Id: <20221208000209.gonna.368-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6532; h=from:subject:message-id; bh=I5zpjdf6giyPTGWK3waT0b1aZ9hEwojgcygujraz8dc=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjkSmEkOgkOZcWwciYH5GLWV3obftsCrvUcG4e847b Bi5nkbGJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY5EphAAKCRCJcvTf3G3AJrfZD/ 9J2X/Gw9ncWI4dk8wA/WdzHwO05CFaHzRpUpXr+GMG8xWhch5i+SxqJDXVTzXb0YA7TXlpkO9D+otk 5R29AmizYM7EXsl1yZeyMbGQ5hpAufcuX82qAOIodz/lW3bzrzs21vRcUZLrwoV/Fyw0pxzHY5Pf5h ph+jxiId3DghZjSkowXYtsPGXEcnWxRVtUdTcXIwi4Ry8XvyJpqk0jOBV7ZnM8kEJVJ6pUgNjdt61c Gdhjag0bgthVFgM2mpz/QmavD+S+3QlwLB9a3DoVWUJOKJTSQrHNNzbygYMoN5RqmnPz+OcqVneI4E +XcJ6Dh3/v1qbD+rVNET9u/b3bPLy/x06rWB8dgrKn0P/mb601uzlKCKhmm1TG24z1Z9h8w366AVA7 9dU9EwQINOJTDi6NUYcnGa3GApoKuVGCZ03C9xewFJ6BfCrj5qjwQT7CGTH5Vug9puDgl7rBqlIskS WiKGOdtd2hO+BdD3ggipo0i6+bmO07sYVTvcUDv/6GsZZyUy8jET1YpxQS6KU6pKyabXunytY0XNDN o2/3jZeX+Q1xeLy+ge8aeZvS6ypBvKHk51BiHlDd+HM/Ea0wvyjuZr6d5xnNwg9UqO3Po4lIYkKctJ kXJR6WE6EASTgDFD1Xdp19J2MB65NyB2AMFRRTo2I8Nk6cmA+N6Z+5R+M5Sg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wang Yong <yongw.kernel@gmail.com> writes:
+syzkaller reported:
 
-> change "stat" to "start".
->
-> Fixes: c959924b0dc5 ("memory tiering: adjust hot threshold automatically")
-> Signed-off-by: Wang Yong <yongw.kernel@gmail.com>
-> ---
->  include/linux/mmzone.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 5f74891556f3..128f3cde800c 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1200,7 +1200,7 @@ typedef struct pglist_data {
->  	/* start time in ms of current promote threshold adjustment period */
->  	unsigned int nbp_th_start;
->  	/*
-> -	 * number of promote candidate pages at stat time of current promote
-> +	 * number of promote candidate pages at start time of current promote
+  BUG: KASAN: slab-out-of-bounds in __build_skb_around+0x235/0x340 net/core/skbuff.c:294
+  Write of size 32 at addr ffff88802aa172c0 by task syz-executor413/5295
 
-Thanks!
+For bpf_prog_test_run_skb(), which uses a kmalloc()ed buffer passed to
+build_skb().
 
-Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+When build_skb() is passed a frag_size of 0, it means the buffer came
+from kmalloc. In these cases, ksize() is used to find its actual size,
+but since the allocation may not have been made to that size, actually
+perform the krealloc() call so that all the associated buffer size
+checking will be correctly notified. Split this logic out into a new
+interface, slab_build_skb(), but leave the original 0 checking for now
+to catch any stragglers.
 
->  	 * threshold adjustment period
->  	 */
->  	unsigned long nbp_th_nr_cand;
+Reported-by: syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com
+Link: https://groups.google.com/g/syzkaller-bugs/c/UnIKxTtU5-0/m/-wbXinkgAQAJ
+Fixes: 38931d8989b5 ("mm: Make ksize() a reporting-only function")
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Pavel Begunkov <asml.silence@gmail.com>
+Cc: pepsipu <soopthegoop@gmail.com>
+Cc: syzbot+fda18eaa8c12534ccb3b@syzkaller.appspotmail.com
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: kasan-dev <kasan-dev@googlegroups.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: ast@kernel.org
+Cc: bpf <bpf@vger.kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: jolsa@kernel.org
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: martin.lau@linux.dev
+Cc: Stanislav Fomichev <sdf@google.com>
+Cc: song@kernel.org
+Cc: Yonghong Song <yhs@fb.com>
+Cc: netdev@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+Is this what you had in mind for this kind of change?
+v2: introduce separate helper (kuba)
+v1: https://lore.kernel.org/netdev/20221206231659.never.929-kees@kernel.org/
+---
+ drivers/net/ethernet/broadcom/bnx2.c      |  2 +-
+ drivers/net/ethernet/qlogic/qed/qed_ll2.c |  2 +-
+ include/linux/skbuff.h                    |  1 +
+ net/bpf/test_run.c                        |  2 +-
+ net/core/skbuff.c                         | 52 +++++++++++++++++++++--
+ 5 files changed, 52 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnx2.c b/drivers/net/ethernet/broadcom/bnx2.c
+index fec57f1982c8..b2230a4a2086 100644
+--- a/drivers/net/ethernet/broadcom/bnx2.c
++++ b/drivers/net/ethernet/broadcom/bnx2.c
+@@ -3045,7 +3045,7 @@ bnx2_rx_skb(struct bnx2 *bp, struct bnx2_rx_ring_info *rxr, u8 *data,
+ 
+ 	dma_unmap_single(&bp->pdev->dev, dma_addr, bp->rx_buf_use_size,
+ 			 DMA_FROM_DEVICE);
+-	skb = build_skb(data, 0);
++	skb = slab_build_skb(data);
+ 	if (!skb) {
+ 		kfree(data);
+ 		goto error;
+diff --git a/drivers/net/ethernet/qlogic/qed/qed_ll2.c b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
+index ed274f033626..e5116a86cfbc 100644
+--- a/drivers/net/ethernet/qlogic/qed/qed_ll2.c
++++ b/drivers/net/ethernet/qlogic/qed/qed_ll2.c
+@@ -200,7 +200,7 @@ static void qed_ll2b_complete_rx_packet(void *cxt,
+ 	dma_unmap_single(&cdev->pdev->dev, buffer->phys_addr,
+ 			 cdev->ll2->rx_size, DMA_FROM_DEVICE);
+ 
+-	skb = build_skb(buffer->data, 0);
++	skb = slab_build_skb(buffer->data);
+ 	if (!skb) {
+ 		DP_INFO(cdev, "Failed to build SKB\n");
+ 		kfree(buffer->data);
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 7be5bb4c94b6..0b391b635430 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -1253,6 +1253,7 @@ struct sk_buff *build_skb_around(struct sk_buff *skb,
+ void skb_attempt_defer_free(struct sk_buff *skb);
+ 
+ struct sk_buff *napi_build_skb(void *data, unsigned int frag_size);
++struct sk_buff *slab_build_skb(void *data);
+ 
+ /**
+  * alloc_skb - allocate a network buffer
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 13d578ce2a09..611b1f4082cf 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -1130,7 +1130,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	}
+ 	sock_init_data(NULL, sk);
+ 
+-	skb = build_skb(data, 0);
++	skb = slab_build_skb(data);
+ 	if (!skb) {
+ 		kfree(data);
+ 		kfree(ctx);
+diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+index 1d9719e72f9d..2bff6af6a777 100644
+--- a/net/core/skbuff.c
++++ b/net/core/skbuff.c
+@@ -269,12 +269,10 @@ static struct sk_buff *napi_skb_cache_get(void)
+ 	return skb;
+ }
+ 
+-/* Caller must provide SKB that is memset cleared */
+-static void __build_skb_around(struct sk_buff *skb, void *data,
+-			       unsigned int frag_size)
++static inline void __finalize_skb_around(struct sk_buff *skb, void *data,
++					 unsigned int size)
+ {
+ 	struct skb_shared_info *shinfo;
+-	unsigned int size = frag_size ? : ksize(data);
+ 
+ 	size -= SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 
+@@ -296,6 +294,52 @@ static void __build_skb_around(struct sk_buff *skb, void *data,
+ 	skb_set_kcov_handle(skb, kcov_common_handle());
+ }
+ 
++static inline void __slab_build_skb(struct sk_buff *skb, void *data,
++				    unsigned int *size)
++{
++	void *resized;
++
++	*size = ksize(data);
++	/* krealloc() will immediate return "data" when
++	 * "ksize(data)" is requested: it is the existing upper
++	 * bounds. As a result, GFP_ATOMIC will be ignored.
++	 */
++	resized = krealloc(data, *size, GFP_ATOMIC);
++	WARN_ON_ONCE(resized != data);
++}
++
++struct sk_buff *slab_build_skb(void *data)
++{
++	struct sk_buff *skb;
++	unsigned int size;
++
++	skb = kmem_cache_alloc(skbuff_head_cache, GFP_ATOMIC);
++	if (unlikely(!skb))
++		return NULL;
++
++	memset(skb, 0, offsetof(struct sk_buff, tail));
++	__slab_build_skb(skb, data, &size);
++	__finalize_skb_around(skb, data, size);
++
++	return skb;
++}
++EXPORT_SYMBOL(slab_build_skb);
++
++/* Caller must provide SKB that is memset cleared */
++static void __build_skb_around(struct sk_buff *skb, void *data,
++			       unsigned int frag_size)
++{
++	unsigned int size = frag_size;
++
++	/* When frag_size == 0, the buffer came from kmalloc, so we
++	 * must find its true allocation size (and grow it to match).
++	 */
++	if (WARN_ONCE(size == 0, "Use slab_build_skb() instead"))
++		__slab_build_skb(skb, data, &size);
++
++	__finalize_skb_around(skb, data, size);
++}
++
+ /**
+  * __build_skb - build a network buffer
+  * @data: data buffer provided by caller
+-- 
+2.34.1
+
