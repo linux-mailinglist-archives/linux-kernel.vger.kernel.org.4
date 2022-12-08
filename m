@@ -2,84 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3027B646D3D
+	by mail.lfdr.de (Postfix) with ESMTP id 570E6646D3E
 	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiLHKkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:40:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45758 "EHLO
+        id S230255AbiLHKko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:40:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLHKkW (ORCPT
+        with ESMTP id S230180AbiLHKkU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:40:22 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAEE59FC5;
-        Thu,  8 Dec 2022 02:35:39 -0800 (PST)
-Received: from zn.tnic (p200300ea9733e73d329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e73d:329c:23ff:fea6:a903])
+        Thu, 8 Dec 2022 05:40:20 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3065C0C5;
+        Thu,  8 Dec 2022 02:35:37 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1603A33791;
+        Thu,  8 Dec 2022 10:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670495736; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m4BtgX7iuUEohIxHVLiyV8sjI0sG1CemLNb9OtXHuyE=;
+        b=sqBMBGxUS2aksX5AHpvvEhCJZ2pjVIua73CcaodAUua2Rs6GLBLoz7AozXIe3auL5QkAMp
+        hduTOwQ81EpFiTxmD2Dq5y5gjoqLfNiRIkKlYpoIPzjLWJklJBDoD/nZynRH35/r3FJicU
+        F0m1zuTpL3d9L52rPbju9b+WR84nkok=
+Received: from suse.cz (unknown [10.100.201.202])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1F14A1EC01E0;
-        Thu,  8 Dec 2022 11:35:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1670495738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=zUnJLixyNV5KmmklK9vf+i8gOj4NpSWGc8A+ex1VX5o=;
-        b=CUZ/3tnbl3X8OY614clE6UQaupXP87AcGQXbl0KKxNN6ljchQqSp59Jyslwb5b0tHxxOfs
-        7zfQp7cXiWdAzw3xkI+MW0rmDW7UUXFF5MWttjS/uHqicsxLiB2OMIxn1bJdcqWtgyupAj
-        vJxoWN5K+N+ICXlFzZqaIy5Cd71TtNo=
-Date:   Thu, 8 Dec 2022 11:35:32 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Venu Busireddy <venu.busireddy@oracle.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sean Christopherson <seanjc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Michael Sterritt <sterritt@google.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
+        by relay2.suse.de (Postfix) with ESMTPS id 8DAD82C153;
+        Thu,  8 Dec 2022 10:35:33 +0000 (UTC)
+Date:   Thu, 8 Dec 2022 11:35:35 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: Re: [PATCH kernel 1/3] x86/amd/dr_addr_mask: Cache values in percpu
- variables
-Message-ID: <Y5G99Lp4zRqVejb7@zn.tnic>
-References: <20221201021948.9259-1-aik@amd.com>
- <20221201021948.9259-2-aik@amd.com>
- <Y5DhvRZX0Aizu1ya@zn.tnic>
- <ce2b2cac-2a18-ef23-7bdf-4040c28ffa24@amd.com>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Yong Zhi <yong.zhi@intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        Daniel Scally <dan.scally@ideasonboard.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v2 1/4] media: ipu3-cio2: Don't dereference fwnode handle
+Message-ID: <Y5G99yAmflKJpF32@alley>
+References: <20221121152704.30180-1-andriy.shevchenko@linux.intel.com>
+ <Y35wQuIbiCxyaOyp@smile.fi.intel.com>
+ <Y5BWuXjipZcMXlan@paasikivi.fi.intel.com>
+ <Y5BiiAwukaVrIvpF@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ce2b2cac-2a18-ef23-7bdf-4040c28ffa24@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y5BiiAwukaVrIvpF@smile.fi.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 05:11:26PM +1100, Alexey Kardashevskiy wrote:
-> Not an array, as Sean suggested? Uff...
+On Wed 2022-12-07 11:53:12, Andy Shevchenko wrote:
+> On Wed, Dec 07, 2022 at 09:02:49AM +0000, Sakari Ailus wrote:
+> > On Wed, Nov 23, 2022 at 09:10:58PM +0200, Andy Shevchenko wrote:
+> > > Dunno what happened to my previous reply to this. Okay, trying again...
+> > > 
+> > > + Cc: Petr, Sergey
+> > > 
+> > > On Mon, Nov 21, 2022 at 05:27:01PM +0200, Andy Shevchenko wrote:
+> > > > Use acpi_fwnode_handle() instead of dereferencing an fwnode handle directly,
+> > > > which is a better coding practice.
+> > > 
+> > > It appears that this series depends on fd070e8ceb90 ("test_printf: Refactor
+> > > fwnode_pointer() to make it more readable") which is in PRINTK tree.
+> > > 
+> > > Sakari, Mauro, if you are okay to route this via that tree, can we get your
+> > > tags for that? Otherwise we need to postpone this till v6.2-rc1 (but I would
+> > > like to decrease the chances to appear a new user of the to be removed API).
+> > > 
+> > > Note, that Greg Acked v1 of the swnode patches (which are the same in v2).
+> > 
+> > Sorry for the late reply. Feel free to do that if it's not too late, with:
+> > 
+> > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> 
+> Thank you!
+> I think it's a bit late for printk tree to consume this. If it's the case
+> (Petr?) then I will submit a new version after v6.2-rc1 is out.
 
-Sure an array if it makes the code even more readable and clean. With an
-array it should become even more compact, I'd say.
+Yes, I am sorry but it is too late for the printk tree. I am going to
+send the pull request for 6.2 today or tomorrow. Linus explicitly
+asked to send the pull request early this time because the merge
+window will be overlapping with the holidays.
 
-Thx.
+On the positive side. There is a high chance that the changes from
+the printk tree will be in the mainline early enough so that you
+could manage to send this still during the merge window.
 
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best Regards,
+Petr
