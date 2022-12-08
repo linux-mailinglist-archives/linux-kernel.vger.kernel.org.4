@@ -2,105 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BAC1646A78
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0EF1646A7A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:26:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229733AbiLHI0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:26:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S229655AbiLHI0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:26:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiLHI0r (ORCPT
+        with ESMTP id S229737AbiLHI0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:26:47 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8FD5E9E1
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:26:44 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id s10so789032ljg.1
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:26:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I6ClY8Qn5PhU88a7o7iHI8P//YfoghPFJcCo7zTwnx8=;
-        b=xI/MBzy1SAK+zJrVSmYY0x+h/gh0oAVfK1JHbYnRpeJh1Z7iY1kY1TW6Ixp3W2Kabj
-         p41PCFYiUJT6aaQGicyGHO/I0aqlLmHYk1XJ+/N4uWQfESbMN4uxPgj9X3BxlCtX69jg
-         jEUaXE1820E6AMvDr69hJG/x2hqILM5PWE3VdJUJb1T6wk6kh6RVkLkS8uGaTpC9k+Fj
-         5kcDAKeiaq6GqovSIz07BBory0mJSNMGGGDlkWuFeX4YkGUF2SlPgqrdvLDgBdm/ZZyJ
-         KIDmXdeY1/hDwNj2jfFc9n5fZA9puhsqbABk9w7KpihVi2si54vMF+4znQrOQI++QMKp
-         a2hw==
+        Thu, 8 Dec 2022 03:26:48 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE571CB35
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:26:47 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id g11-20020a6be60b000000b006e2c707e565so340822ioh.14
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:26:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6ClY8Qn5PhU88a7o7iHI8P//YfoghPFJcCo7zTwnx8=;
-        b=pk/Cku8AUwYGZcpfSzjx4mSWh1H7iB3Lgn0MgO/AkC7JcX1ClbYnv1e5PQMXYoT3Ze
-         TR+W5pVw5eOswm1TzKjTzrT85sUlgQ0w5hivcTZVFMYeaz/ZenjM6zCKe6g5W89dfECj
-         EyVNAHU8adDpRABIfqT15Q4tg7GKSRtO1QOQ9E3eoG7S+yJSazPoMfNmdFSKThZ5Xb7y
-         86vDgXbbapQ8ae/phYSgiUSEzgeR3YM+VspA27XSVSlyYKc+zzQOhw0JvxwtC/GVKIc5
-         ov8r6AQEAuGPb6CO0UXkopMMjn7ZMWnN5hK7X9OPlFitpbMPVoohhIMCyD5VQLWxChu9
-         SYBQ==
-X-Gm-Message-State: ANoB5pn2/9Q/qHmSHhlGWy9D0ZI9TNEYgHRjwSSxbzNw2TJIbKWvBiLk
-        2OjiS1Y8INFvYZdmI+Fial9LMQ==
-X-Google-Smtp-Source: AA0mqf6epq8Tk3LPsvkLyf6+nNpqKEYyRgrRwB6VG90m/K7IlmsjsseL+xDK/7lLb1TyxhdT7bvecA==
-X-Received: by 2002:a05:651c:1108:b0:277:e8c:a5a4 with SMTP id e8-20020a05651c110800b002770e8ca5a4mr25863815ljo.311.1670488003075;
-        Thu, 08 Dec 2022 00:26:43 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id t15-20020a05651c204f00b0026bf43a4d72sm2114512ljo.115.2022.12.08.00.26.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 00:26:42 -0800 (PST)
-Message-ID: <36895e49-aea5-3676-e7df-78b30277e6a0@linaro.org>
-Date:   Thu, 8 Dec 2022 09:26:41 +0100
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=D29xb/Z+5WTN+XE9gVFvEvb1Rr+QEuNqVEJlqmRpp0M=;
+        b=GBIC+vRMr257SV0l2jTRRRnRcWSDZoejhAno1XsmJ5EIFUNiGvp1Vwk+VWi9XjN3v3
+         Ij3f4J1G7GKsImDRBd2xZaxVezG74/lq8uOmAvjzjcUM+dRJ4vT4WpnqAGBxYhG0HgWQ
+         rhZQWLJINb6ymcdczXCZi/zWWvgSfdUdRRv4hrftvLgI9el7Mo0B8V38ED+bpZexiAtB
+         OLnZ4QbuH4AVvN3kD4AASoV/zwL3jPlZwjinTvg7YqQEXAQQLLXvSO9eyB3tGdGZaY+T
+         x/g/LEnC9UqmHUdSWtC1hQ8vdK6bC6jBOnr01kJ7wCBd8pQXRLeye5QS0ho8IObugURy
+         uPrA==
+X-Gm-Message-State: ANoB5pnNi8KCT1mnAwtUCKvMLKb48fFAkVlwOJsz8EaNTTPvdajC49EV
+        +nz+5HgxRTuD/lxLaZfvpPpWhkrtOYH1NMij9BiVRz8Pys2k
+X-Google-Smtp-Source: AA0mqf6OZIlrIcwPi4EKxoCOPTvFm9R7wZj5Ia0OcP59nLg1Sq5aDU6vAnNembaWj2uhSp7qiYgPPAaAJU1x8lWYUH0wU38l4tS5
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v3 3/9] dt-bindings: PCI: renesas,pci-rcar-gen2:
- 'depends-on' is no more optional
-Content-Language: en-US
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Gareth Williams <gareth.williams.jx@renesas.com>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>
-References: <20221207162435.1001782-1-herve.codina@bootlin.com>
- <20221207162435.1001782-4-herve.codina@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207162435.1001782-4-herve.codina@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:3822:b0:38a:486d:4f71 with SMTP id
+ i34-20020a056638382200b0038a486d4f71mr7464024jav.102.1670488007099; Thu, 08
+ Dec 2022 00:26:47 -0800 (PST)
+Date:   Thu, 08 Dec 2022 00:26:47 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000043c9a105ef4cccf7@google.com>
+Subject: [syzbot] KMSAN: uninit-value in hfs_brec_find
+From:   syzbot <syzbot+5ce571007a695806e949@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 17:24, Herve Codina wrote:
-> The 'depends-on' property is set in involved DTS.
-> 
-> Move it to a required property.
-> 
-> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/pci/renesas,pci-rcar-gen2.yaml | 1 +
+Hello,
 
-This should be squashed with previous patch. There is no point to add
-property and immediately in the next patch make it required. Remember
-that bindings are separate from DTS.
+syzbot found the following issue on:
 
-Best regards,
-Krzysztof
+HEAD commit:    30d2727189c5 kmsan: fix memcpy tests
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=15931383880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a2144983ada8b4f3
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ce571007a695806e949
+compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1e8c2d419c2e/disk-30d27271.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9e8a728a72a9/vmlinux-30d27271.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/89f71c80c707/bzImage-30d27271.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5ce571007a695806e949@syzkaller.appspotmail.com
+
+hfs: keylen 9474 too large
+=====================================================
+BUG: KMSAN: uninit-value in hfs_brec_find+0x671/0x9b0 fs/hfs/bfind.c:141
+ hfs_brec_find+0x671/0x9b0 fs/hfs/bfind.c:141
+ hfs_brec_read+0x3b/0x190 fs/hfs/bfind.c:165
+ hfs_cat_find_brec+0xfb/0x450 fs/hfs/catalog.c:194
+ hfs_fill_super+0x1f49/0x2400 fs/hfs/super.c:419
+ mount_bdev+0x508/0x840 fs/super.c:1401
+ hfs_mount+0x49/0x60 fs/hfs/super.c:456
+ legacy_get_tree+0x10c/0x280 fs/fs_context.c:610
+ vfs_get_tree+0xa1/0x500 fs/super.c:1531
+ do_new_mount+0x694/0x1580 fs/namespace.c:3040
+ path_mount+0x71a/0x1eb0 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x734/0x840 fs/namespace.c:3568
+ __ia32_sys_mount+0xdf/0x140 fs/namespace.c:3568
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1b/0x20 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
+
+Local variable fd created at:
+ hfs_fill_super+0x5e/0x2400 fs/hfs/super.c:381
+ mount_bdev+0x508/0x840 fs/super.c:1401
+
+CPU: 0 PID: 5557 Comm: syz-executor.2 Not tainted 6.1.0-rc8-syzkaller-64144-g30d2727189c5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+=====================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
