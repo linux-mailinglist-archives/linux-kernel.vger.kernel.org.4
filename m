@@ -2,70 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04CD64778B
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:56:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 053F464778D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 21:56:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiLHU4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 15:56:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48062 "EHLO
+        id S229848AbiLHU4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 15:56:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiLHUz7 (ORCPT
+        with ESMTP id S229606AbiLHU4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 15:55:59 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E7DD8C452
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 12:55:57 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 65so2224859pfx.9
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 12:55:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NJg0tjf49GVzZZXYJm/ESQ/vYejcTaVis8L45uiNSHA=;
-        b=WGDXl+n8K/dWeZKeldPrcD/v5Zbw4izCFegv/+gHVqJz5fo4i63IakbdgfDk32UOJ0
-         K7CA6axewHrdePgh+eO1x8V+20MgZoSmeS/R+OUwnzbSv5HurnxALTfCXtREO7ppxxNa
-         U6LdFtKTrAAZMCV9qJ/PEyYe9JUYQMujpcuIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NJg0tjf49GVzZZXYJm/ESQ/vYejcTaVis8L45uiNSHA=;
-        b=q0aMtCHcJnB5HFrc/G9ceVrMdkR1m2QQ4Cn//1tELezMJr8Cpbeg7DYcpuegXDTgNY
-         yQPNnoven67wMLqiLjAg1ox2YsUvw0OhfsAHNU/M/tvxW+pDbYCg+6eE7qEdUNKLX4GD
-         9duHL+EG8yit8Rg6Xi/5aK+eHcbRrAVVzXjwrZFviEvPB0TBxcqrdcm8l6wVqvBSw020
-         dTKyPs3+VgsrQLq3JwLGLfbxeVSRL38VwIiUzLvfQeQUxMMv4kHvYt6ZwGVg+tEmN8SK
-         qmgLuWuJWedzEdfXjkaapj8VIsmFwGuAczcSsvzeRb/DUxlKdhtIlhDCko3xye2p10W/
-         YyWQ==
-X-Gm-Message-State: ANoB5pntzqk2nJY8ocZdQ/DjSLf+jF7csjBjFzDrrG4F1vpTQluK9Mgx
-        abSOHwBulnof08JzRdhsiQJeyw==
-X-Google-Smtp-Source: AA0mqf4zdrgHUuOag7wMXflhe99eH3jKylHoxnM8ECvbLmGYxFdavLPXAx42+E9rBdvD3R4pu3TLog==
-X-Received: by 2002:a62:e219:0:b0:577:5678:bc80 with SMTP id a25-20020a62e219000000b005775678bc80mr9602372pfi.62.1670532956522;
-        Thu, 08 Dec 2022 12:55:56 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a7-20020aa78e87000000b005764c8f8f07sm12310108pfr.84.2022.12.08.12.55.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 12:55:56 -0800 (PST)
-Date:   Thu, 8 Dec 2022 12:55:55 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v6 0/6] mm/memfd: introduce MFD_NOEXEC_SEAL and MFD_EXEC
-Message-ID: <202212081255.22D92C5@keescook>
-References: <20221207154939.2532830-1-jeffxu@google.com>
- <202212080809.687CC8BC23@keescook>
- <CALmYWFukzdw4e3RHWRsdXvYr1RZs7Bx6NZ3AK91hoArgVy-RxQ@mail.gmail.com>
+        Thu, 8 Dec 2022 15:56:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DD389AF6;
+        Thu,  8 Dec 2022 12:56:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 228E0B82625;
+        Thu,  8 Dec 2022 20:56:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90010C433D2;
+        Thu,  8 Dec 2022 20:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670533000;
+        bh=EQDC9p3OWWSvvCFNFv5c1Bt5hZ6HjhjzQov8gVjAP8Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uYPkLlwZ5/eEWAVzvAaA/dEH5p74ROhF9e/jRkjI89aZCD2rsJgR1J4W5vmWGe6rK
+         OGTyHGEoqu/ZBJ98ShF0Jpxil3MeSm3G0qTVdyx6XVCxT2pLYxAA+jhtaJucTYRxg2
+         2fTbhkAYZ0a+H2TzGmu9ahY7iUpsO8mtRCqnEl9N+VWPlloBr+H0mN70+kDSEBlTkI
+         otlMBsPuZNnFyibrsyyHmWRKk6lxzrQtXuSqqDLPpx2kh3ShTxn7jDOzf47dIci6jm
+         hKhl4B+vH00PnMLUfte50GPPZzgM6mTS/rt1v9e1NtFCoMkNkIY3po/bvWygJcKEpq
+         yugQpA5ns+/Tg==
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+Subject: [PULL] Networking for v6.1 final / v6.1-rc9
+Date:   Thu,  8 Dec 2022 12:56:39 -0800
+Message-Id: <20221208205639.1799257-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALmYWFukzdw4e3RHWRsdXvYr1RZs7Bx6NZ3AK91hoArgVy-RxQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,36 +52,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 10:33:19AM -0800, Jeff Xu wrote:
-> On Thu, Dec 8, 2022 at 8:13 AM Kees Cook <keescook@chromium.org> wrote:
-> >
-> > On Wed, Dec 07, 2022 at 03:49:33PM +0000, jeffxu@chromium.org wrote:
-> > > This is V6 version of patch: see [4] [5] [6] [7] for previous versions.
-> >
-> > When sending a new version, can you include an overview of what changed
-> > between this version and the prior version? This helps reviewers who are
-> > following along, so it's easier to focus our attention on the
-> > differences. Also, it's helpful to version the links:
-> >
-> > > [4] https://lwn.net/Articles/890096/
-> > > [5] https://lore.kernel.org/lkml/20220805222126.142525-1-jeffxu@google.com/
-> > > [6] https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
-> > > [7] https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
-> >
-> > e.g.:
-> >
-> > v6:
-> > - moved foo to bar
-> > - improve comments for baz
-> > v5: https://lore.kernel.org/lkml/20221206152358.1966099-1-jeffxu@google.com/
-> > v3: https://lore.kernel.org/lkml/20221202013404.163143-1-jeffxu@google.com/
-> > v2: ...etc
-> >
-> Will do!
-> Much appreciated for helping me  through the process of my first patch
-> in the kernel.
+Hi Linus!
 
-Happy to help! I'm excited to see this gap in memfd security closed. :)
+Couple of "new code fixes" which is annoying this late, but neither
+of those gives me pause.
 
--- 
-Kees Cook
+We pooped it by merging a Xen patch too quickly, and Juergen ended
+up sending you a different version via his tree, so you'll see
+a conflict. Just keep what you have. Link to the linux-next conflict
+report:
+https://lore.kernel.org/all/20221208082301.5f7483e8@canb.auug.org.au/
+
+There is an outstanding regression in BPF / Peter's static calls stuff,
+you can probably judge this sort of stuff better than I can:
+https://lore.kernel.org/all/CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com/
+
+No other known regressions.
+
+The following changes since commit f8bac7f9fdb0017b32157957ffffd490f95faa07:
+
+  net: dsa: sja1105: avoid out of bounds access in sja1105_init_l2_policing() (2022-12-08 09:38:31 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc9
+
+for you to fetch changes up to f8bac7f9fdb0017b32157957ffffd490f95faa07:
+
+  net: dsa: sja1105: avoid out of bounds access in sja1105_init_l2_policing() (2022-12-08 09:38:31 -0800)
+
+----------------------------------------------------------------
+Including fixes from bluetooth, can and netfilter.
+
+Current release - new code bugs:
+
+ - bonding: ipv6: correct address used in Neighbour Advertisement
+   parsing (src vs dst typo)
+
+ - fec: properly scope IRQ coalesce setup during link up to supported
+   chips only
+
+Previous releases - regressions:
+
+ - Bluetooth fixes for fake CSR clones (knockoffs):
+   - re-add ERR_DATA_REPORTING quirk
+   - fix crash when device is replugged
+
+ - Bluetooth:
+   - silence a user-triggerable dmesg error message
+   - L2CAP: fix u8 overflow, oob access
+   - correct vendor codec definition
+   - fix support for Read Local Supported Codecs V2
+
+ - ti: am65-cpsw: fix RGMII configuration at SPEED_10
+
+ - mana: fix race on per-CQ variable NAPI work_done
+
+Previous releases - always broken:
+
+ - af_unix: diag: fetch user_ns from in_skb in unix_diag_get_exact(),
+   avoid null-deref
+
+ - af_can: fix NULL pointer dereference in can_rcv_filter
+
+ - can: slcan: fix UAF with a freed work
+
+ - can: can327: flush TX_work on ldisc .close()
+
+ - macsec: add missing attribute validation for offload
+
+ - ipv6: avoid use-after-free in ip6_fragment()
+
+ - nft_set_pipapo: actually validate intervals in fields
+   after the first one
+
+ - mvneta: prevent oob access in mvneta_config_rss()
+
+ - ipv4: fix incorrect route flushing when table ID 0 is used,
+   or when source address is deleted
+
+ - phy: mxl-gpy: add workaround for IRQ bug on GPY215B and GPY215C
+
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+
+----------------------------------------------------------------
