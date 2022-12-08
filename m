@@ -2,109 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CDA646F86
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:24:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25480646F9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:27:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbiLHMYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:24:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33182 "EHLO
+        id S229720AbiLHM1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 07:27:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiLHMYB (ORCPT
+        with ESMTP id S229523AbiLHM06 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:24:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7127060A;
-        Thu,  8 Dec 2022 04:24:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F3D3961EEC;
-        Thu,  8 Dec 2022 12:23:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AE3C433D7;
-        Thu,  8 Dec 2022 12:23:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670502239;
-        bh=A8xhLuEbo8yuIcWIHqJJ3U5345cbtdIGtchmgXpObHk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vCn7WJhNLKv20YUQZ78+OWrAuzPL2Cadb+nUtOVCH5+FGkknzuYnLBr1njxsc5jyB
-         uNz1y7tiO6IgkaGGYoik1bQv4a4+sk76TXvzXY+M3LrpnAIWMt/B5f8JMV/yvF7d9J
-         iKrXbed0djgjRI6dgQ84D+/fkhx0oeZ5cxXaafjaeBPzKzmG2BcqAcM1uDo99gWXrM
-         8qgpDG/h9cCByOiUhr0an/AWaD0LNzWMloCKjqPPMbeGU5w6+s/A0airYlnyWioZtp
-         x+WnkQ+q787eVrRpmqMD8HGVr7shck6gskuE1r+Je+QtkN9xyc3MFbhA9s03xy/OeL
-         Xw5AG3E2PVSUw==
-Date:   Thu, 8 Dec 2022 12:23:54 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>
-Subject: Re: [PATCH v11 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Message-ID: <Y5HXWk4d5J9VgFBV@google.com>
-References: <20221116205822.1128275-1-Naresh.Solanki@9elements.com>
- <20221116205822.1128275-3-Naresh.Solanki@9elements.com>
- <Y3YJ2EkYNW+gA+/R@google.com>
- <5d9e41b8-7b2a-d60b-3e92-641cea5a9f4a@9elements.com>
+        Thu, 8 Dec 2022 07:26:58 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 988A98658A;
+        Thu,  8 Dec 2022 04:26:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670502417; x=1702038417;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=spdlWevniBpu51g03nRTe2+ZbrLpWs90S14TUiE7A/M=;
+  b=BfdCLZOca8PNTJTb2V5gKTLkEhylw7PigXyhzUkvbIr8FWZKHtuqZzUv
+   HumHlDAC02rVFjnF/7qbfBnp5Wtr5+1pRyE3kwDBzUB1wGyc/dVelQaOC
+   XNq8LHAGUTTRvkXmOiGKJHu+AeJhK7WZXBJRhl7GKldG3cNyB2TTEvc42
+   /Dc7vwoGikd2D/jqj6/AOlchLVoNEVc8rXspBjF0dz3z6MV8og/SWgCQ2
+   BgL8rz+lK0+WVQpdVN0F4EjdAdSllXaGDhyqlMvvFiadwCQRoHwzM8XAb
+   V8b3xJXsMND0I4UeRiEsNDbMZOl1AZoXuCJkEtd2YqXl0vt8b9gbYTSbM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="318297842"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="318297842"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 04:26:56 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10554"; a="821320560"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="821320560"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 08 Dec 2022 04:26:50 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1p3FzD-006KFQ-1i;
+        Thu, 08 Dec 2022 14:26:47 +0200
+Date:   Thu, 8 Dec 2022 14:26:47 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Shawn Tu <shawnx.tu@intel.com>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>
+Subject: Re: [PATCH v5 0/8] i2c-atr and FPDLink
+Message-ID: <Y5HYBzZlkTrsdjfX@smile.fi.intel.com>
+References: <20221208104006.316606-1-tomi.valkeinen@ideasonboard.com>
+ <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5d9e41b8-7b2a-d60b-3e92-641cea5a9f4a@9elements.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c5eac6a6-f44b-ddd0-d27b-ccbe01498ae9@ideasonboard.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 18 Nov 2022, Naresh Solanki wrote:
+On Thu, Dec 08, 2022 at 12:42:13PM +0200, Tomi Valkeinen wrote:
+> On 08/12/2022 12:39, Tomi Valkeinen wrote:
 
-> 
-> 
-> On 17-11-2022 03:45 pm, Lee Jones wrote:
-> > On Wed, 16 Nov 2022, Naresh Solanki wrote:
-> > 
-> > > From: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > > 
-> > > Implement a regulator driver with IRQ support for fault management.
-> > > Written against documentation [1] and [2] and tested on real hardware.
-> > > 
-> > > Every channel has its own regulator supplies nammed 'vss1-supply' and
-> > > 'vss2-supply'. The regulator supply is used to determine the output
-> > > voltage, as the smart switch provides no output regulation.
-> > > The driver requires the 'shunt-resistor-micro-ohms' property to be
-> > > present in Device Tree to properly calculate current related
-> > > values.
-> > > 
-> > > Datasheet links:
-> > > 1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-> > > 2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-> > > 
-> > > Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> > > Co-developed-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> > > Co-developed-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > > Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
-> > > ---
-> > >   drivers/mfd/Kconfig         |  12 +++++
-> > >   drivers/mfd/Makefile        |   1 +
-> > >   drivers/mfd/max597x.c       |  93 +++++++++++++++++++++++++++++++++
-> > >   include/linux/mfd/max597x.h | 101 ++++++++++++++++++++++++++++++++++++
-> > >   4 files changed, 207 insertions(+)
-> > >   create mode 100644 drivers/mfd/max597x.c
-> > >   create mode 100644 include/linux/mfd/max597x.h
-> > 
-> > Ignoring my comments won't make them go away. :)
-> > 
-> > Please tell me why you need a whole new driver, instead of adding
-> > support to simple-mfd-i2c?
-> > 
-> I felt current implementation to be simpler, clearer & straight forward.
+...
 
-If you can make it work with simple-mfd-i2c, please do so.
+> +#include <linux/fwnode.h>
+>  #include <linux/i2c-atr.h>
+>  #include <linux/i2c.h>
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/mutex.h>
+> -#include <linux/of.h>
+>  #include <linux/slab.h>
 
-No need to submit an entirely new driver for these simple use-cases.
++ Blank line here?
+
+> +#define ATR_MAX_ADAPTERS 99	/* Just a sanity limit */
+> +#define ATR_MAX_SYMLINK_LEN 16	/* Longest name is 10 chars: "channel-99" */
+
+...
+
+> +		u16 *new_buf;
+> +
+> +		new_buf = kmalloc_array(num, sizeof(chan->orig_addrs[0]),
+> +					GFP_KERNEL);
+
+		new_buf = kmalloc_array(num, sizeof(*new_buf), GFP_KERNEL);
+
+?
+
+> +		if (!new_buf)
+>  			return -ENOMEM;
+
+...
+
+>  	struct i2c_atr_cli2alias_pair *c2a;
+> -	u16 alias_id = 0;
+> -	int ret = 0;
+> +	u16 alias_id;
+> +	int ret;
+
+Is it mangled or it's missing blank line here?
+
+>  	c2a = kzalloc(sizeof(*c2a), GFP_KERNEL);
+>  	if (!c2a)
+
+...
+
+>  struct device;
+>  struct i2c_atr;
+> +struct fwnode_handle;
+
+Order?
+
+...
+
+>  /**
+> - * Helper to add I2C ATR features to a device driver.
+> + * struct i2c_atr - Represents the I2C ATR instance
+>   */
+
+This is incomplete. Have you run kernel doc validator against this file?
+
+>  struct i2c_atr {
+
+>  };
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
