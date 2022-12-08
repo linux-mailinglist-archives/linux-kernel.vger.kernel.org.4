@@ -2,72 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D985D646C01
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:36:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DA3646C02
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiLHJgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S229956AbiLHJhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:37:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHJga (ORCPT
+        with ESMTP id S229479AbiLHJhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:36:30 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9435E9DD;
-        Thu,  8 Dec 2022 01:36:29 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id h7so918339wrs.6;
-        Thu, 08 Dec 2022 01:36:29 -0800 (PST)
+        Thu, 8 Dec 2022 04:37:02 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB6FB59FFA
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:37:01 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so2950694wma.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:37:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vzvhVqrPG1tKRsCvh4LCgxjPjyy657R8RcpZzQGS+tA=;
-        b=MfLWVAWkrg7h52VP6avmx+dbSJ7FOnKbDMnbrZv1hBqoS/PBeZrYnMGqIjvtu0E1o4
-         paMQmnrTbJSSiP/I2KS3u0ICDMzfORmzpR9JjyHzBQ5Tm+TP0fdgGx/IF4yXLmAioS/l
-         mYuExigRjT5hHVtnJUIbqY2caTNt59842NceEunJDFuy5vwouDt1t8hUdiLnwV96+rP3
-         9pwCRdEBiAMeCkCaH53x2e6N7HyidPVqtmS8j+NzFvdZxhaXY8ejXzyRNdY2e7Yrn2LY
-         JNpzfGMJTkRzlabkmjJmd2RiR5R1IPe64e7Twmm18fZpQI7TLizf+8qga8BXyCW3k9wz
-         ouCw==
+        bh=3Wk7+i0C/FWEnPCeIRF23zs5aw223SpiGHR62WUI0pA=;
+        b=S/ZRMUYscgN7PwFNXP6eiKHyPpzRzt/H+F6Y0JzP8DT/XhoxoACVk2xE653w1CIyUP
+         6jWQIEa3zfyqh1Sh8XZ3brRt/eXLpja3ZSgaEJXbXqPX2YFnBFr8opdXue+TBRZZ8XYl
+         HWK6KXOJ3yzrG/Tffknu7bxi2KxPP4L8OZURZmnJ+ckl8PL2W2ObwuBs52NLq7uhV7u4
+         eYC7f0sMBtTlkhrXKKq5zeSW58yUGmjVL/ZEbysMpRf4Ivf37TmROB0pu682pqpMJvta
+         0Tpm0vWohE0VYrc80MCFOOJwDWvmbBxNSNwd3tOpOvSVJhT/HxgQKGsBU1P6Tm+vmC/P
+         Fm8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vzvhVqrPG1tKRsCvh4LCgxjPjyy657R8RcpZzQGS+tA=;
-        b=AHYfKCsfGvgb9GwkpbUI9FosmJ8fF30gqgPCm7dKdhLPqGKT6tRS/c3btC5pdWijg5
-         mI+iqoULXqa8y1zRKI9xjUDonkp3vcyHxb/WxTLyjH2OHonzlRUFUvH8R7/LECyJTeZI
-         9ZfDB0cN6NHRRm8RGhOkRkgsvCZ5B/rAW0kg1/3whG74JXiByAV97VM2/oNXFc+XVjSJ
-         4jvQU2RTz0c/UFejPdbTysMc+HaR9gEK8ZfGSuJs2RcxpqLH6CfT1bcsPQmLYist4//+
-         wEgE4hXuHZhGR5MBG/jaKRDQ4HWQDoeqnjrMnTxnr4yksql22QzGYxHmw6sl6bhQnrd+
-         5TlA==
-X-Gm-Message-State: ANoB5pnKtqDj2nU3odDz1rDWU/S7x53WeG0Jgdxpzv5HDmQcWyY/Y+Y6
-        mFXstpQxQIQJrgk7gUhujtU=
-X-Google-Smtp-Source: AA0mqf4e/mWcPd5avTxy30ryYO/u4DA51g6lNAEGDeUkrn7fyQ3cEAyZCp8lT5Da7dCNrZ4NeByIFg==
-X-Received: by 2002:a05:6000:1d84:b0:236:6fb9:9ce2 with SMTP id bk4-20020a0560001d8400b002366fb99ce2mr1101797wrb.67.1670492188100;
-        Thu, 08 Dec 2022 01:36:28 -0800 (PST)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id j13-20020a056000124d00b002421db5f279sm21422615wrx.78.2022.12.08.01.36.27
+        bh=3Wk7+i0C/FWEnPCeIRF23zs5aw223SpiGHR62WUI0pA=;
+        b=msYeQf/BlVtuCurJfrF985IHfejkkjM7WsbFpEuQ2U+rqW/qpE4IARQmaVvFcZlE5a
+         WLxxOMijK9EiWlNSH75HDY7hSohfu+nZwqYRbT2lBebn0LkSX/t9jHy9q+l4ogstvuzH
+         kDYmIPmH+JrlBqep9Zf5CdC/oAcQMPSNErhygxefRZ9jiLHwOxWHF7oMwSZv4On/gpNw
+         qCROvYvOH8Tm9uVmoRDMEUyUKYoSWjvXLN4nKatJVaa3PEFjgw5NsBmtxh6ISc73gNOH
+         M7YPmok+j+OKvZ21e9rQJ0CyPExf/4bx5P3PZbK5DF3oR1eXzg09I1V62wSbJhwJCQIw
+         vrOQ==
+X-Gm-Message-State: ANoB5pm3eOeKFQE8VyMcJDiu76ir2tBUaHxC51k6So9lbpJS4vCglP9C
+        iBg74aVvWdECVbmnOJ7eBL9hnC37Y71CTEyp
+X-Google-Smtp-Source: AA0mqf7nPhTl/OBwrtfB1SU92fVjJcQqVpKX6rUXLGgxV8LV9fXuR+r2CN5Zmpws7gZEiGUzMiB+pA==
+X-Received: by 2002:a7b:ce0e:0:b0:3d1:cae5:efe9 with SMTP id m14-20020a7bce0e000000b003d1cae5efe9mr11693567wmc.158.1670492220314;
+        Thu, 08 Dec 2022 01:37:00 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id k10-20020a056000004a00b002365730eae8sm21772828wrx.55.2022.12.08.01.36.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 01:36:27 -0800 (PST)
-Date:   Thu, 8 Dec 2022 09:36:26 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.0 000/125] 6.0.12-rc3 review
-Message-ID: <Y5GwGrJmtTJWCCT/@debian>
-References: <20221206163445.868107856@linuxfoundation.org>
+        Thu, 08 Dec 2022 01:36:59 -0800 (PST)
+Date:   Thu, 8 Dec 2022 12:36:56 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Matt Jan <zoo868e@gmail.com>
+Cc:     Martyn Welch <martyn@welchs.me.uk>,
+        Manohar Vanga <manohar.vanga@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH 2/3] staging: vme_user: replace 'unsigned' with 'unsigned
+ int'
+Message-ID: <Y5GwOELXuuGDPilx@kadam>
+References: <20221208091117.GA95220@zoo868e>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221206163445.868107856@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221208091117.GA95220@zoo868e>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,41 +74,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, Dec 06, 2022 at 05:39:48PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.12 release.
-> There are 125 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Thu, Dec 08, 2022 at 05:11:17PM +0800, Matt Jan wrote:
+> Update the bare use of "unsigned" to the preferred "unsigned int".
 > 
-> Responses should be made by Thu, 08 Dec 2022 16:34:27 +0000.
-> Anything received after that time might be too late.
+> Signed-off-by: Matt Jan <zoo868e@gmail.com>
+> ---
+>  drivers/staging/vme_user/vme_bridge.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/staging/vme_user/vme_bridge.h b/drivers/staging/vme_user/vme_bridge.h
+> index e17a8f7de165..9a127f6fefca 100644
+> --- a/drivers/staging/vme_user/vme_bridge.h
+> +++ b/drivers/staging/vme_user/vme_bridge.h
+> @@ -84,7 +84,7 @@ struct vme_error_handler {
+>  	unsigned long long end;		/* End of error window */
+>  	unsigned long long first_error;	/* Address of the first error */
+>  	u32 aspace;			/* Address space of error window*/
+> -	unsigned num_errors;		/* Number of errors */
+> +	unsigned int num_errors;		/* Number of errors */
 
-Build test (gcc version 12.2.1 20221127):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Now the comment is not aligned correctly.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+regards,
+dan carpenter
 
-[1]. https://openqa.qa.codethink.co.uk/tests/2315
-[2]. https://openqa.qa.codethink.co.uk/tests/2299
-[3]. https://openqa.qa.codethink.co.uk/tests/2325
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
