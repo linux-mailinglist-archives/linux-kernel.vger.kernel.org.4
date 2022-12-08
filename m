@@ -2,106 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 120A0646ED2
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 904E1646ED6
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiLHLnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 06:43:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37304 "EHLO
+        id S229604AbiLHLn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:43:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiLHLnD (ORCPT
+        with ESMTP id S229470AbiLHLny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 06:43:03 -0500
+        Thu, 8 Dec 2022 06:43:54 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D1D1054777
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:43:01 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F385F1F9F9;
+        Thu,  8 Dec 2022 03:43:52 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94FB9D6E
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:43:07 -0800 (PST)
-Received: from e110455-lin.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9B2FB3F73B
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 03:43:00 -0800 (PST)
-Date:   Thu, 8 Dec 2022 11:42:55 +0000
-From:   Liviu Dudau <liviu.dudau@arm.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     robin.murphy@arm.com, brian.starkey@arm.com, airlied@gmail.com,
-        daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm: mali-dp: Add check for kzalloc
-Message-ID: <Y5HNv5BEEzB2Gt9W@e110455-lin.cambridge.arm.com>
-References: <20221208031621.3274-1-jiasheng@iscas.ac.cn>
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D45B23A;
+        Thu,  8 Dec 2022 03:43:59 -0800 (PST)
+Received: from [10.57.7.3] (unknown [10.57.7.3])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFC7F3FA31;
+        Thu,  8 Dec 2022 03:43:50 -0800 (PST)
+Message-ID: <422d2bce-b764-7894-12ac-d16ee3bdfbba@arm.com>
+Date:   Thu, 8 Dec 2022 11:43:49 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221208031621.3274-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V6 7/7] drivers: perf: arm_pmu: Enable branch stack
+ sampling event
+Content-Language: en-US
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com
+References: <20221208084402.863310-1-anshuman.khandual@arm.com>
+ <20221208084402.863310-8-anshuman.khandual@arm.com>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20221208084402.863310-8-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jiasheng,
 
-I appreciate the effort you have put into this and I find nothing wrong with the
-intention of the patch. However, I don't intend to move base from being the first
-member of the malidp_mw_connector_state struct as it has other benefits in the code
-and we can use container_of() in implementation of generic APIs. As Robin has rightly
-pointed, it is unlikely that a compiler will dereference the pointer before doing
-offset_of(), so having mw_state == NULL is safe, even if quirky.
 
-So I'm going to thank you for the patch but I will not merge it.
-
-As a side comment, please use --in-reply-to and link to previous email when re-sending
-patches with small spelling fixes as otherwise it gets confusing on which email is the last
-one and it also relies on the servers delivering messages in the order you've sent,
-not always a strong guarantee.
-
-Best regards,
-Liviu
-
-On Thu, Dec 08, 2022 at 11:16:21AM +0800, Jiasheng Jiang wrote:
-> As kzalloc may fail and return NULL pointer, the "mw_state" can be NULL.
-> If the layout of struct malidp_mw_connector_state ever changes, it
-> will cause NULL poineter derefernce of "&mw_state->base".
-> Therefore, the "mw_state" should be checked whether it is NULL in order
-> to improve the robust.
+On 08/12/2022 08:44, Anshuman Khandual wrote:
+> Now that all the required pieces are already in place, just enable the perf
+> branch stack sampling event on supported platforms, removing the gate which
+> blocks it unconditionally in armpmu_event_init(). Instead a quick probe can
+> be initiated first via arm_pmu_branch_stack_supported().
 > 
-> Fixes: 8cbc5caf36ef ("drm: mali-dp: Add writeback connector")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+
+All the issues from the previous versions seem to be resolved now:
+
+Tested-by: James Clark <james.clark@arm.com>
+
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->  drivers/gpu/drm/arm/malidp_mw.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
+>  drivers/perf/arm_pmu.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/arm/malidp_mw.c b/drivers/gpu/drm/arm/malidp_mw.c
-> index ef76d0e6ee2f..fe4474c2ddcf 100644
-> --- a/drivers/gpu/drm/arm/malidp_mw.c
-> +++ b/drivers/gpu/drm/arm/malidp_mw.c
-> @@ -72,7 +72,11 @@ static void malidp_mw_connector_reset(struct drm_connector *connector)
->  		__drm_atomic_helper_connector_destroy_state(connector->state);
+> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+> index 66880a4bb248..52a93b9bcbda 100644
+> --- a/drivers/perf/arm_pmu.c
+> +++ b/drivers/perf/arm_pmu.c
+> @@ -510,8 +510,7 @@ static int armpmu_event_init(struct perf_event *event)
+>  		!cpumask_test_cpu(event->cpu, &armpmu->supported_cpus))
+>  		return -ENOENT;
 >  
->  	kfree(connector->state);
-> -	__drm_atomic_helper_connector_reset(connector, &mw_state->base);
-> +
-> +	if (mw_state)
-> +		__drm_atomic_helper_connector_reset(connector, &mw_state->base);
-> +	else
-> +		__drm_atomic_helper_connector_reset(connector, NULL);
->  }
+> -	/* does not support taken branch sampling */
+> -	if (has_branch_stack(event))
+> +	if (has_branch_stack(event) && !arm_pmu_branch_stack_supported(armpmu))
+>  		return -EOPNOTSUPP;
 >  
->  static enum drm_connector_status
-> -- 
-> 2.25.1
-> 
-
--- 
-====================
-| I would like to |
-| fix the world,  |
-| but they're not |
-| giving me the   |
- \ source code!  /
-  ---------------
-    ¯\_(ツ)_/¯
+>  	if (armpmu->map_event(event) == -ENOENT)
