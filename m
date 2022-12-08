@@ -2,168 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0607646A62
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01655646A6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229580AbiLHIXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:23:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
+        id S229773AbiLHIYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:24:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiLHIXT (ORCPT
+        with ESMTP id S229546AbiLHIYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:23:19 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41986FD3D
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:23:18 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id s8so909860lfc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:23:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fPuBgj1yabvOJ7+IGzwNtRsPpYRu7YfyBOxzUD3UuBw=;
-        b=Q1FNM2pSCaZYh3ABN/8xmcVo1qkp440IkUqCxf4aOJ6X9OdMSffMh2DKy1kXWgHrOw
-         +Ls+9UsiUTXgAHBUEnD/hAEXz9cGyI7eA2QJ0jouZJdAoIDIap4BqU4TWJ8B/SRMtjEs
-         AmqO5RL96AHElBCfNvrWELZuIqDnaQ0nh2ta/vLttgDdvZIMpWFAb8cdOGEWlXMgbqhB
-         MlkspRoABTOJ5OoXWdqtejntFaDye+085sWwduV8edXs2MZALEMjav5GR01izJKYsjcs
-         5r31ZscJJBAEso6G96lgpLJPXR2LywTSBuz2TaprZOcaq8tevZlf09fuEHKTWYmTLxkT
-         op9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fPuBgj1yabvOJ7+IGzwNtRsPpYRu7YfyBOxzUD3UuBw=;
-        b=JhKsCiO3m2UreSZbcdQvtzO+KauXmSxGJtty9AvSpicpS3U38cQvBcQCAoscX0xRP6
-         DbftRJ28MfLjLCbDQ2G7mbOG9CGD7o9kMZko3IBLt/IIOriijw8JuMRKAoGrIxRV1QjE
-         pqNng0RR72rZyMjCyKBolVDbFNYtkLf5zt9LCEKdCEp4URTsAqLWuFK7hVcUI/Qf/HyC
-         UfxR3njZEb17uK/1A9nw5lqDko6ZoLpcXE1eBm1suCmlR/f3GZJV7qCg58pdO0wWvRP5
-         xoD2S5CGteJ+vihH4uuGsvoEssBhL7FSx03KRd2CePDvePPSCzFDB4+nn/fzQn9UhGuT
-         o73Q==
-X-Gm-Message-State: ANoB5pkPNow5oLI641KE2dG+tdz2to9P4homZ7nLETKoL2o6R+LkZWkt
-        GgYn8GtJa+ol68zn+OmYtOY7kQ==
-X-Google-Smtp-Source: AA0mqf7bIu8b4cGA9tgzIXjo+isdrK+OBdu95kGpnZSbwyBHjIhCA1SpnULiT6DdGmrgF65HSi4pOg==
-X-Received: by 2002:a05:6512:3e13:b0:4b5:3f5f:da27 with SMTP id i19-20020a0565123e1300b004b53f5fda27mr9942065lfv.666.1670487796636;
-        Thu, 08 Dec 2022 00:23:16 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bi35-20020a0565120ea300b004ac6a444b26sm3227727lfb.141.2022.12.08.00.23.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 00:23:16 -0800 (PST)
-Message-ID: <1ceecc45-43bd-49bd-68f5-57294093d731@linaro.org>
-Date:   Thu, 8 Dec 2022 09:23:15 +0100
+        Thu, 8 Dec 2022 03:24:52 -0500
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EB110B52;
+        Thu,  8 Dec 2022 00:24:46 -0800 (PST)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BE90120005;
+        Thu,  8 Dec 2022 08:24:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1670487883;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LeAya0VSpti9hnkxK7KJZn2L3jCrFe71dZh0PwM8o4M=;
+        b=Ob1mKJGguYVoZg10T2JV0hnjOIefvmLjS80xg/9qkLZft+dH8O6lOo9VeFhN5X474piEsW
+        fBNIgVFELeFqGllqebNYkUsWnuLRh7Yb9fhS6PPkK/vtuJ9QvJ5gi1rAyFxZ/9LeO4ULlW
+        xV+MV1cjiZXom9/QqQOkR6R/lc+g6K/xW9YlCitY+ZX0yKd73GYOOz/xAi7fG2irOQ6v9t
+        vAcRrBU+a1SUVrpbWXP40rkOEQcdTFPE92BJA+rqW0ojmqBJGLH5NjbnSlwxM4vJeZ9Gps
+        h5/lrDoN6lyko52fUkTSUGCPPI2jjKD3/OVq6QcOzD4Fc3KOBPqS2tSLTfUOmw==
+Date:   Thu, 8 Dec 2022 09:24:39 +0100
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Gareth Williams <gareth.williams.jx@renesas.com>,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v3 0/9] Add the Renesas USBF controller support
+Message-ID: <20221208092439.6170cf5e@bootlin.com>
+In-Reply-To: <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com>
+References: <20221207162435.1001782-1-herve.codina@bootlin.com>
+        <CAL_JsqJiZU=sHVPc92nDNoqUjm7FUb=u0izGYa+irkUW1XmA_w@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 15/16] dt-bindings: soc: socionext: Add UniPhier DWC3
- USB glue layer
-Content-Language: en-US
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-16-hayashi.kunihiko@socionext.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221207055405.30940-16-hayashi.kunihiko@socionext.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/12/2022 06:54, Kunihiko Hayashi wrote:
-> Add DT binding schema for components belonging to the platform-specific
-> DWC3 USB glue layer implemented in UniPhier SoCs.
-> 
-> This USB glue layer works as a sideband logic for the host controller,
-> including core reset, vbus control, PHYs, and some signals to the
-> controller.
-> 
-> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> ---
->  .../socionext,uniphier-dwc3-glue.yaml         | 106 ++++++++++++++++++
->  1 file changed, 106 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-> new file mode 100644
-> index 000000000000..1b5585a5a3a2
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/socionext/socionext,uniphier-dwc3-glue.yaml
-> @@ -0,0 +1,106 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/socionext/socionext,uniphier-dwc3-glue.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Socionext UniPhier SoC DWC3 USB3.0 glue layer
-> +
-> +maintainers:
-> +  - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> +
-> +description: |+
-> +  DWC3 USB3.0 glue layer implemented on Socionext UniPhier SoCs is
-> +  a sideband logic handling signals to DWC3 host controller inside
-> +  USB3.0 component.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - socionext,uniphier-pro4-dwc3-glue
-> +          - socionext,uniphier-pro5-dwc3-glue
-> +          - socionext,uniphier-pxs2-dwc3-glue
-> +          - socionext,uniphier-ld20-dwc3-glue
-> +          - socionext,uniphier-pxs3-dwc3-glue
-> +          - socionext,uniphier-nx1-dwc3-glue
-> +      - const: simple-mfd
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#address-cells':
+Hi Rob,
 
-Use consistent quotes - either ' or "
+On Wed, 7 Dec 2022 16:19:42 -0600
+Rob Herring <robh+dt@kernel.org> wrote:
 
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  ranges: true
-> +
-> +patternProperties:
-> +  "^reset-controller@[0-9a-f]+$":
-> +    $ref: /schemas/reset/socionext,uniphier-glue-reset.yaml#
-> +
-> +  "^regulator@[0-9a-f]+$":
-> +    $ref: /schemas/regulator/socionext,uniphier-regulator.yaml#
-> +
-> +  "^phy@[0-9a-f]+$":
-> +    oneOf:
-> +      - $ref: /schemas/phy/socionext,uniphier-usb3hs-phy.yaml#
-> +      - $ref: /schemas/phy/socionext,uniphier-usb3ss-phy.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
+> On Wed, Dec 7, 2022 at 10:24 AM Herve Codina <herve.codina@bootlin.com> w=
+rote:
+> >
+> > Hi,
+> >
+> > This series add support for the Renesas USBF controller (USB Device
+> > Controller) available in the Renesas RZ/N1 SoC.
+> >
+> > Based on previous review:
+> >   https://lore.kernel.org/all/20221114111513.1436165-3-herve.codina@boo=
+tlin.com/
+> >
+> > A new strategy is proposed to handle the H2MODE bit from CFG_USB
+> > register compared to the previous versions on the series. As a
+> > reminder, H2MODE bit allows to configure the internal USB Port
+> > interface for two hosts or one host and one device. =20
+>=20
+> Is this case any different from all the phandle properties we have in
+> bindings that point to some misc registers somewhere else you need to
+> poke? If so, I'm not really a fan of duplicating the information.
 
-You need to fix
-Documentation/devicetree/bindings/phy/socionext,uniphier-usb3hs-phy.yaml
-example. I propose to drop usb-glue@65b00000 from that file. It's not
-relevant to that example.
+Our case is that there is a bit in a register that affect several
+devices. This bit must be set before the devices are started.
+If this bit is changed while affected devices are running, system
+hangs can occurs (datasheet).
 
-Best regards,
-Krzysztof
+So, in order to do that we need the device in charge to set
+this bit (sysctrl) to set this bit before other devices (USBF
+and PCI bridge) were started.
 
+At sysctrl level, the bit is set during the probe() call.
+The property 'depends-on' aim is to ensure the probe() calls
+order between provider (sysctrl) and consumers (USBF and PCI
+bridge).
+
+regmap and syscon are used to export registers from one device
+to an other and the probe() calls order is not ensured by the
+core or regmap infrastructure. Indeed, the regmap provider
+probe() will not be called if the regmap provider was not probed
+before the consumer ask for the regmap.
+  https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L152
+  https://elixir.bootlin.com/linux/latest/source/drivers/mfd/syscon.c#L43
+No specific action synchronisation are done with regmap/syscon
+other than the regmap creation itself.
+
+I don't think the regmap/syscon will help in our case.
+
+>=20
+> We also have cases of of_find_compatible_node(NULL, NULL,
+> "foo-bar-syscon") which is a dependency expressed in the driver, but
+> not DT. In either case, adding 'depends-on' would be an ABI break as
+> you are requiring a DT change.
+
+In order to avoid the DT change, I can keep the 'depends-on'
+optional in the PCI bridge binding.
+This will be functionnal as sysctrl is already used in this node
+(power-domain =3D <&sysctrl>). The relationship is already present
+with this power-domain link.
+
+If ok, I will do this change in v4 series.
+
+>=20
+> > This new strategy is:
+> >   - Add the new generic 'depends-on' property in the device tree.
+> >
+> >     This generic property expresses an simple functionnal dependency
+> >     that does not rely on a specific topic. It is an 'order only'
+> >     dependency that can be used for dependencies between consumers
+> >     and producers that are not based on a specific infrastructure
+> >     and not need other relationship than this simple 'order only'
+> >     (ie no API is provided between the provider and the consumer) =20
+>=20
+> Isn't getting a regmap an API?
+>=20
+> Rob
+
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
