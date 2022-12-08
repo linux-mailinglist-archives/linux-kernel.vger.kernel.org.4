@@ -2,110 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FFC647081
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:08:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6099647083
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:08:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbiLHNH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:07:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S229602AbiLHNIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:08:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiLHNHw (ORCPT
+        with ESMTP id S229543AbiLHNIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:07:52 -0500
-Received: from albert.telenet-ops.be (albert.telenet-ops.be [IPv6:2a02:1800:110:4::f00:1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2060C2EF45
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:07:45 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:5574:4fdf:a801:888e])
-        by albert.telenet-ops.be with bizsmtp
-        id tp7d2800K2deJRf06p7dvV; Thu, 08 Dec 2022 14:07:43 +0100
-Received: from rox.of.borg ([192.168.97.57])
-        by ramsan.of.borg with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p3GIF-002tBF-6Q; Thu, 08 Dec 2022 13:46:27 +0100
-Received: from geert by rox.of.borg with local (Exim 4.93)
-        (envelope-from <geert@linux-m68k.org>)
-        id 1p3EN6-003gqg-Pz; Thu, 08 Dec 2022 11:43:20 +0100
-From:   Geert Uytterhoeven <geert+renesas@glider.be>
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] iopoll: Call cpu_relax() in busy loops
-Date:   Thu,  8 Dec 2022 11:43:19 +0100
-Message-Id: <d25a332bbb792f4c8d74f7e54bf9ca1d706979d9.1670495642.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.25.1
+        Thu, 8 Dec 2022 08:08:35 -0500
+X-Greylist: delayed 602 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 08 Dec 2022 05:08:34 PST
+Received: from mail0.hwacosteel.sbs (mail0.hwacosteel.sbs [85.209.135.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7796DCEF
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:08:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; s=default; d=hwacosteel.sbs;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:
+ Content-Transfer-Encoding; i=sales@hwacosteel.sbs;
+ bh=YKcXv+YTvwG0C4gmlm28dCkqglNjM7FPmQouL4L2keo=;
+ b=gISxavLUUT1gzioYlCoSck5v8J4xHgLKQYxcxYF0lEb9NZaxcMCJvKUf6sYDtg8iCtgkjW87je88
+   COUrvDHz06BE8ZBP4IS8lhllo5FWQgtG9vUZRkNIhwbj7vrtWUk10Jko2fqrodyaqPe2KtJGaVLu
+   I3+GG7HEZpusHq37SBY=
+Reply-To: sales@dextecs.com
+From:   sales@hwacosteel.sbs
+To:     linux-kernel@vger.kernel.org
+Subject: WTS Tech
+Date:   8 Dec 2022 09:58:29 -0300
+Message-ID: <20221208095828.B4BF9D9ADDE6E1CC@hwacosteel.sbs>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_FMBLA_NEWDOM,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,URIBL_CSS_A,URIBL_DBL_SPAM
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  2.5 URIBL_DBL_SPAM Contains a spam URL listed in the Spamhaus DBL
+        *      blocklist
+        *      [URIs: hwacosteel.sbs]
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [85.209.135.102 listed in zen.spamhaus.org]
+        *  0.1 URIBL_CSS_A Contains URL's A record listed in the Spamhaus CSS
+        *      blocklist
+        *      [URIs: hwacosteel.sbs]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  1.0 FROM_FMBLA_NEWDOM From domain was registered in last 7 days
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is considered good practice to call cpu_relax() in busy loops, see
-Documentation/process/volatile-considered-harmful.rst.  This can not
-only lower CPU power consumption or yield to a hyperthreaded twin
-processor, but also allows an architecture to mitigate hardware issues
-(e.g. ARM Erratum 754327 for Cortex-A9 prior to r2p0) in the
-architecture-specific cpu_relax() implementation.
+Hello linux-kernel@vger.kernel.org
+Original New Sealed Box Cisco Clean With S/N Located In USA
+Make An Offer If You Are Interested.
+5 X 3WS-C3850-48P-S=20
+6 x WS-2960X 48-LPS-L=20
+2X ASR1002-X=20
+2X C9200L-48T-4G-A=C2=A0
+2X C9200L-48T-4G-E=20=20
+3X C9200L-48T-4X-A=C2=A0=20=20
+3X C9200L-48T-4X-E=20=20=20=20
+3X C9400-LC-24XS=20=20=20=20=20
+WS-C2960L-48PS-LL=20
+3X C9400-LC-24XS=20=20=20=20=20
+WS-C2960L-48PS-LL=20=20=20=20
+POLYCOM SOUNDSTATION IP 5000=20
+WS-C3650-24TS-L ( USED)=20
+C921-4P
 
-As the iopoll helpers lack calls to cpu_relax(), people are sometimes
-reluctant to use them, and may fall back to open-coded polling loops
-(including cpu_relax() calls) instead.
+32GB2Rx4 PC4 2400T
+QTY: 200
+Price:16USD each.
+DDR4 4GB, 8GB and 16GB 5USD each.
 
-Fix this by adding calls to cpu_relax() to the iopoll helpers:
-  - For the non-atomic case, it is sufficient to call cpu_relax() in
-    case of a zero sleep-between-reads value, as a call to
-    usleep_range() is a safe barrier otherwise.
-  - For the atomic case, cpu_relax() must be called regardless of the
-    sleep-between-reads value, as there is no guarantee all
-    architecture-specific implementations of udelay() handle this.
+Lenovo ThinkBook 13+
+100 USD each
+QTY: 21
 
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-This has been discussed before, but I am not aware of any patches moving
-forward:
-  - "Re: [PATCH 6/7] clk: renesas: rcar-gen3: Add custom clock for PLLs"
-    https://lore.kernel.org/all/CAMuHMdWUEhs=nwP+a0vO2jOzkq-7FEOqcJ+SsxAGNXX1PQ2KMA@mail.gmail.com/
-  - "Re: [PATCH v2] clk: samsung: Prevent potential endless loop in the PLL set_rate ops"
-    https://lore.kernel.org/all/20200811164628.GA7958@kozik-lap
----
- include/linux/iopoll.h | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
-index 2c8860e406bd8cae..73132721d1891a2e 100644
---- a/include/linux/iopoll.h
-+++ b/include/linux/iopoll.h
-@@ -53,6 +53,8 @@
- 		} \
- 		if (__sleep_us) \
- 			usleep_range((__sleep_us >> 2) + 1, __sleep_us); \
-+		else \
-+			cpu_relax(); \
- 	} \
- 	(cond) ? 0 : -ETIMEDOUT; \
- })
-@@ -95,6 +97,7 @@
- 		} \
- 		if (__delay_us) \
- 			udelay(__delay_us); \
-+		cpu_relax(); \
- 	} \
- 	(cond) ? 0 : -ETIMEDOUT; \
- })
--- 
-2.25.1
-
+Best Regards,
+Williams Joe.
+Dextecs LLC.
+4800 Rainbow, Westwood,
+KS 66205, United States.
+Tel: (913) 608-9858 | Fax: 778 308 4563
+Web: https://www.dextecs.com
+Email: sales@dextecs.com
+Cisco=C2=A0|=C2=A0Juniper=C2=A0|=C2=A0HP=C2=A0|=C2=A0Dell=C2=A0|=C2=A0IBM=
+=C2=A0| Net App |=C2=A0EMC
