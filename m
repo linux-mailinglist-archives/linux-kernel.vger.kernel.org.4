@@ -2,240 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 497BD64760A
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:17:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E03F647612
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 20:20:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiLHTRg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 14:17:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43318 "EHLO
+        id S229655AbiLHTUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 14:20:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiLHTRd (ORCPT
+        with ESMTP id S229561AbiLHTUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 14:17:33 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DE399533
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:16:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670526995;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MTmFSSsz+iEuRFF+TLjAXGnA587Ei6XR2PcJ8paquCk=;
-        b=iSfAnjJw1pQHFvNYlxW0b/oddMJwWGGakBp26c/gZUti6b7J1uczTKhwWbgoMnYSwmTN8n
-        ji8dGZ7Vg1U3uK5EhlMUjSp1Bh/zRlXsmfSh2FzQ6lWhvhaluAQI/McZsqIsSC2h/iHJc/
-        TC3a7tULs5xyY6eh41dFDdAtjxKhvto=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-659-pIteN09pN22mtpS4RPysGQ-1; Thu, 08 Dec 2022 14:16:34 -0500
-X-MC-Unique: pIteN09pN22mtpS4RPysGQ-1
-Received: by mail-ed1-f72.google.com with SMTP id j11-20020aa7c40b000000b0046b45e2ff83so54359edq.12
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:16:34 -0800 (PST)
+        Thu, 8 Dec 2022 14:20:31 -0500
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B216225F4
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 11:20:30 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id jl24so2468416plb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 11:20:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ifQ3Jav6VsSh1zyTRvbz7pDkhV+r1K5wCw7Us/t45o0=;
+        b=X5atqoLOC95H8hGG6aBCNBoodKm+iMf7Ug0EuydjqLq5lc+FvwdCwRWqKzn+D6ITYD
+         sHDDLbefyapJJE5aWPeT2ZnrzctfSZmI4BdUvu7Tsm8IfbmyXCAitOp0ICvAWYCLohSr
+         /WxClb5RXALcnX5LBwlGxTkiMGVRtouhYKSc8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MTmFSSsz+iEuRFF+TLjAXGnA587Ei6XR2PcJ8paquCk=;
-        b=SrMgV5Z0dUYuwzmHXmMQKAUqROLAmdfcVgYoIaCGTt3jUrpc45GFD+XfiiOD1QswOK
-         57thgZVGOsEQKD/fpdmcgwqiOtYROSePwiiD0rv2NiYv++GXzyf/0o3vA1G8/Tr0cnfD
-         S79H5DWVJY66/KhFi5SVkQZYCsiSM9bpNr1gHfMfknRSxCQPddUNrMShLRl77QJ9PV//
-         Hhcfymcf0jD3KLnwB4nLIsLF/F3G3LhKgSV99CxqlsKsNb6ULQv2G0Jm+LwSYKRCx1w8
-         szhANOa83bdSmqPd24jJrBwZlZI8mWPaFYuVxMVlg7OW2PAcjGeye9Ypx7BheXC21ymJ
-         VoDA==
-X-Gm-Message-State: ANoB5plj6Rz08cnxKoy6F8BXHWUtsrk2Aezz9A35Ax5XTHOnRCPHleJ2
-        PTsPpP80UvvQrbc9FOgqfeT5bsUqCtP/agmeFuhyK2UJPjTHqQty9O/4/ZrdJR0YswZq4+mvgiv
-        ZrGePO2sKomkwNyCDIQnvgkuc
-X-Received: by 2002:a05:6402:298d:b0:461:f201:2d98 with SMTP id eq13-20020a056402298d00b00461f2012d98mr2826961edb.3.1670526992742;
-        Thu, 08 Dec 2022 11:16:32 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7wl1P7mGcEUEOyQk271yeJILGTDdVupDVfcZTUXj5dftT3etqO2s8iD3iBioXEJZKJGWVPIQ==
-X-Received: by 2002:a05:6402:298d:b0:461:f201:2d98 with SMTP id eq13-20020a056402298d00b00461f2012d98mr2826943edb.3.1670526992535;
-        Thu, 08 Dec 2022 11:16:32 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id f8-20020a17090631c800b007aed2057eaesm9952618ejf.161.2022.12.08.11.16.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 11:16:32 -0800 (PST)
-Message-ID: <92359eca-b651-8a1e-6de6-3107d87ac088@redhat.com>
-Date:   Thu, 8 Dec 2022 20:16:31 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ifQ3Jav6VsSh1zyTRvbz7pDkhV+r1K5wCw7Us/t45o0=;
+        b=2+OpHHP088cqR8asggPvP1N30vOxtAHk3/XV7CFZSZKxzG09vjJ+KU2MNAsA8u7SEL
+         uV+ZayPb9sJdqpLv0NHBQI8mpuckA7E+c/lad6HII8u6HxSmJEogVZdxncWW83T0zgl/
+         ZERPd8cujN9GHgIRDCxFPso4EOcrqQLoYZEQa536MTT/yUyIEQLrbixv9melWO9NPZb1
+         bGdbqGID91hrMC4Mc8V+OeW5pnruO6KV3woAdSrP+22xJWTfba5VbDrPoKZoK8VUN/oV
+         JvjNvbgQI+wi5Ep8pBlugtW4cjb9b/1x+VjSBbPdyCWlbG2sWcsxSyWFBT+mIOinsp8T
+         i98w==
+X-Gm-Message-State: ANoB5pmj9lUpyK89UDrnmWxopliMtAUj8Mls5cyQYDKvaeT9jCUlrPTP
+        beVwMiKN8OB+Z20FU4eZmgWO0A==
+X-Google-Smtp-Source: AA0mqf70cATti+xb7wjPXJuFUg5RS0zjxNnJbgQkzNAyfUDBsVP2zR8uCcSgJ32j6So/RiOaMZCGuA==
+X-Received: by 2002:a17:902:c745:b0:189:9519:87b6 with SMTP id q5-20020a170902c74500b00189951987b6mr2423967plq.5.1670527230259;
+        Thu, 08 Dec 2022 11:20:30 -0800 (PST)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:3aa1:2c62:9ac:4468])
+        by smtp.gmail.com with ESMTPSA id u5-20020a170902e5c500b00186a2274382sm17112019plf.76.2022.12.08.11.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 11:20:29 -0800 (PST)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     mka@chromium.org, swboyd@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-input@vger.kernel.org,
+        Yunlong Jia <ecs.beijing2022@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Johnny Chuang <johnny.chuang.emc@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] arm64: dts: qcom: sc7180: Make pazquel360's touchscreen work
+Date:   Thu,  8 Dec 2022 11:20:01 -0800
+Message-Id: <20221208192006.1070898-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.39.0.rc1.256.g54fd8350bd-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH 0/4] PCI: Continue E820 vs host bridge window saga
-Content-Language: en-US, nl
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20221208185758.GA1478771@bhelgaas>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221208185758.GA1478771@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+This series of patches adds / fixes problems with pazquel360's
+touchscreen. A few notes here:
 
-On 12/8/22 19:57, Bjorn Helgaas wrote:
-> On Wed, Dec 07, 2022 at 04:31:12PM +0100, Hans de Goede wrote:
->> On 12/4/22 10:13, Hans de Goede wrote:
->>
->> <snip>
->>
->>>>> 2. I am afraid that now allowing PCI MMIO space to be allocated
->>>>> in regions marked as EfiMemoryMappedIO will cause regressions
->>>>> on some systems. Specifically when I tried something similar
->>>>> the last time I looked at this (using the BIOS date cut-off
->>>>> approach IIRC) there was a suspend/resume regression on
->>>>> a Lenovo ThinkPad X1 carbon (20A7) model:
->>>>>
->>>>> https://bugzilla.redhat.com/show_bug.cgi?id=2029207
->>>>>
->>>>> Back then I came to the conclusion that the problem is that not
->>>>> avoiding the EfiMemoryMappedIO regions caused PCI MMIO space to
->>>>> be allocated in the 0xdfa00000 - 0xdfa10000 range which is
->>>>> listed in the EFI memmap as:
->>>>>
->>>>> [    0.000000] efi: mem46: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |  ] range=[0x00000000dfa00000-0x00000000dfa0ffff] (0MB)
->>>>>
->>>>> And with current kernels with the extra logging added for this
->>>>> the following is logged related to this:
->>>>>
->>>>> [    0.326504] acpi PNP0A08:00: clipped [mem 0xdfa00000-0xfebfffff window] to [mem 0xdfa10000-0xfebfffff window] for e820 entry [mem 0xdceff000-0xdfa0ffff]
->>>>>
->>>>> I believe patch 1/4 of this set will make this clipping go away,
->>>>> re-introducing the suspend/resume problem.
->>>>
->>>> Yes, I'm afraid you're right.  Comparing the logs at comment #31
->>>> (fails) and comment #38 (works):
->>>>
->>>>   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
->>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfa00000-0xdfbfffff] fails
->>>>   pci 0000:00:1c.0: BAR 14: assigned [mem 0xdfb00000-0xdfcfffff] works
->>>>
->>>> Since 0xdfa00000 is included in the host bridge _CRS, but isn't
->>>> usable, my guess is this is a _CRS bug.
->>>
->>> Ack.
->>>
->>> So I was thinking to maybe limit the removal of EfiMemoryMappedIO
->>> regions from the E820 map if they are big enough to cause troubles?
->>>
->>> Looking at the EFI map MMIO regions on this Lenovo ThinkPad X1 carbon
->>> (20A7) model, they are tiny. Where as the ones which we know cause
->>> problems are huge. So maybe add a bit of heuristics to patch 1/4 based
->>> on the EfiMemoryMappedIO region size and only remove the big ones
->>> from the E820 map ?
->>>
->>> I know that adding heuristics like this always feels a bit wrong,
->>> because you end up putting a somewhat arbitrary cut off point in
->>> the code on which to toggle behavior on/off, but I think that in
->>> this case it should work nicely given how huge the EfiMemoryMappedIO
->>> regions which are actually causing problems are.
-> 
-> I'll post a v2 that removes only regions 256KB or larger in a minute.
+1. Originally the touchscreen was supposed to be added as part of the
+first landing of the pazquel360 device tree. ...but the fact that
+Yunlong changed email addresses seems to have messed up Bjorn's
+scripts. What landed was v3 [1] instead of v5 [2]. The pazquel360 part
+of this series is that diff.
 
-Ok, may I ask why 256KB?
+2. We delayed sending the fixup till now because soon after the series
+landed upstream we found that some laptops were having trouble
+initting the touchscreen in cases where the eDP/touchscreen regulator
+was left on by the bootloader. We've been struggling to make sense of
+all of this. As part of this investigation we landed a85fbd649844
+("Input: elants_i2c - properly handle the reset GPIO when power is
+off") but that wasn't enough. That fix, together with the fixes in
+this series, is enough though.
 
-I see that that rules out then troublesome MMIO regions from the X1 carbon from:
-https://bugzilla.redhat.com/show_bug.cgi?id=2029207 :
-efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
-which we know we need to avoid / keep reserved.
+3. This series is mostly device tree changes with one more change to
+the Elan driver. They are fine to land in separate trees. It turns out
+that with _just_ the device tree changes things are actually working
+OK but the timing is tight, so getting a little extra breathing room
+from the Linux driver is nice.
 
-But OTOH the reservations which are causing the problems with assigning
-resources to PCI devices by Linux look like this:
-efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
-which is significantly larger then 256KB.
+4. Despite the fact that we did debugging here on pazquel360, many of
+the changes here are made in general for trogdor devices. I believe
+that this will make the timing more correct on those devices even if
+we weren't actually seeing problems.
 
-So we could e.g. also put the cut-off point at 16MB and still
-remove the above troublesome reservation from the E820 table.
-Note just thinking out loud here. I have no idea if 16MB
-would be better...
+[1] https://lore.kernel.org/r/20220901024827.v3.2.Iea2d2918adfff2825b87d428b5732717425c196f@changeid
+[2] https://lore.kernel.org/r/20220923083657.v5.3.Iea2d2918adfff2825b87d428b5732717425c196f@changeid
 
 
-> 
->> Looking at the efi=debug output from:
->>
->> https://bugzilla-attachments.redhat.com/attachment.cgi?id=1861035
->>
->> The small MMIO regions which we most honor as reserved do
->> have the "RUN" (runtime) flag set in the EFI mmap.
-> 
-> Just trying to follow along here, so not sure any of the following is
-> relevant ...
-> 
-> This attachment is from
-> https://bugzilla.redhat.com/show_bug.cgi?id=2029207, and it shows:
-> 
->   efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
->   efi: mem47: [MMIO|RUN|UC] range=[0xf80f8000-0xf80f8fff] (0MB)  [4K]
->   pci_bus 0000:00: root bus resource [mem 0xdfa00000-0xfebfffff window]
->   pci_bus 0000:00: root bus resource [mem 0xfed40000-0xfed4bfff window]
-> 
-> mem46 is included in the PNP0A08 _CRS, and Ivan has verified
-> experimentally that we have to avoid it.
+Douglas Anderson (5):
+  arm64: dts: qcom: sc7180: Bump up trogdor ts_reset_l drive strength
+  arm64: dts: qcom: sc7180: Add trogdor eDP/touchscreen regulator
+    off-on-time
+  arm64: dts: qcom: sc7180: Start the trogdor eDP/touchscreen regulator
+    on
+  arm64: dts: qcom: sc7180: Add pazquel360 touschreen
+  Input: elants_i2c: Delay longer with reset asserted
 
-Ack.
+ .../dts/qcom/sc7180-trogdor-homestar.dtsi     | 18 ++++++++++++++++
+ .../qcom/sc7180-trogdor-parade-ps8640.dtsi    | 20 ++++++++++++++++++
+ .../dts/qcom/sc7180-trogdor-pazquel360.dtsi   | 21 +++++++++++++++++++
+ .../dts/qcom/sc7180-trogdor-ti-sn65dsi86.dtsi | 20 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  | 10 ++++++++-
+ drivers/input/touchscreen/elants_i2c.c        |  2 +-
+ 6 files changed, 89 insertions(+), 2 deletions(-)
 
-> mem47 is also included in the _CRS, but I don't have a clue what it
-> is.  Maybe some hidden device used by BIOS but not visible to us?
-
-Could be, there is at least one hidden device called the P2SB on
-most Intel systems.
-
->> But I'm afraid that the same applies to the troublesome
->> MMIO EFI regions which cause the failures to assign
->> PCI regions for devices not setup by the firmware:
->>
->> https://bugzilla-attachments.redhat.com/attachment.cgi?id=1861407
->>
->> So that "RUN" flag is of no use.
-> 
-> I don't know what bug this attachment is from.
-
-It is from https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-which is the ideapad slim 3 with the touchpad issue caused by the:
-efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
-reservation getting in the way of assigning resources to
-the i2c-controller.
-
-> Is the point here that you considered doing the E820 removal based on
-> the EFI_MEMORY_RUNTIME memory *attribute* instead of the
-> EFI_MEMORY_MAPPED_IO memory *type*?
-> 
-> I don't really know the details of EFI_MEMORY_MAPPED_IO vs
-> EFI_MEMORY_RUNTIME, but it looks like EFI_MEMORY_RUNTIME can be
-> applied to things like EFI_RUNTIME_SERVICES_CODE (not MMIO space) that
-> should stay in E820.
-
-Sorry for the confusion. What I was trying to say is that I was interested
-in seeing if we could use the "RUN" flag to differentiate between:
-
-1. The big MMIO region which we want to remove from the e820 map:
-   efi: mem50: [MMIO        |RUN|  |  |  |  |  |  |  |  |   |  |  |  |UC] range=[0x0000000065400000-0x00000000cfffffff] (1708MB)
-
-2. The small MMIO region which we want to keep to avoid the reported suspend/resume issue:
-   efi: mem46: [MMIO|RUN|  ] range=[0xdfa00000-0xdfa0ffff] (0MB) [64K]
-
-But unfortunately both have the RUN flag set so the RUN flag is
-of no use to us.
-
-Regards,
-
-Hans
-
+-- 
+2.39.0.rc1.256.g54fd8350bd-goog
 
