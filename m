@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F625646C59
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5583646C5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 11:02:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbiLHKCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 05:02:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S230189AbiLHKC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 05:02:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiLHKCn (ORCPT
+        with ESMTP id S230133AbiLHKCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 05:02:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B9511475;
-        Thu,  8 Dec 2022 02:02:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B25AB821EB;
-        Thu,  8 Dec 2022 10:02:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2286C433C1;
-        Thu,  8 Dec 2022 10:02:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1670493759;
-        bh=Gy+VgX0A4ENpBxacWi8qufdiwf6E1nyIHkyJFa2kRvo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S1zrO28RXl8xwIP2Ft5ugtlkCew3ye1WFfBtszRmbL9ok+4nuZfBVCEffyrccbCEa
-         CDQwpA55KrzTDhJ0gfDlxtY51ZNsrZnorZVH31dEuPbCibcK7wCBNsbgLN9cJjdkJM
-         DX3LYQnu40eskXmUlUk5F76TqjTU115nYx9nva1Y=
-Date:   Thu, 8 Dec 2022 11:02:36 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Daniel Beer <daniel.beer@igorinstitute.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-i2c@vger.kernel.org,
-        Michael Zaidman <michael.zaidman@gmail.com>,
-        Christina Quast <contact@christina-quast.de>,
-        linux-serial@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] hid-ft260: add UART support.
-Message-ID: <Y5G2PBEprjPp3FKR@kroah.com>
-References: <638c51a2.170a0220.3af16.18f8@mx.google.com>
- <Y4xX7ILXMFHZtJkv@kroah.com>
- <20221204091247.GA11195@nyquist.nev>
- <Y4xqyRERBdr8fT7F@kroah.com>
- <20221205012403.GA14904@nyquist.nev>
+        Thu, 8 Dec 2022 05:02:49 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB255186D8;
+        Thu,  8 Dec 2022 02:02:47 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D29EB24DD6E;
+        Thu,  8 Dec 2022 18:02:46 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 18:02:47 +0800
+Received: from [192.168.120.55] (171.223.208.138) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 18:02:46 +0800
+Message-ID: <91201e26-76b9-619e-99a0-b60f08981a8a@starfivetech.com>
+Date:   Thu, 8 Dec 2022 18:02:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221205012403.GA14904@nyquist.nev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 1/3] dt-bindings: mmc: Add bindings for StarFive
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221207131731.1291517-1-william.qiu@starfivetech.com>
+ <20221207131731.1291517-2-william.qiu@starfivetech.com>
+ <d7ecbbbf-5d6b-3254-b645-dbea369447ae@linaro.org>
+ <b0dfc269-e06e-4f4d-7695-55c8522d6137@starfivetech.com>
+ <d9e92880-6efe-a528-efa8-2c49483d8530@linaro.org>
+From:   William Qiu <william.qiu@starfivetech.com>
+In-Reply-To: <d9e92880-6efe-a528-efa8-2c49483d8530@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Dec 05, 2022 at 02:24:03PM +1300, Daniel Beer wrote:
-> On Sun, Dec 04, 2022 at 10:39:21AM +0100, Greg Kroah-Hartman wrote:
-> > > Thanks for reviewing. This device is quite strange -- it presents itself
-> > > as a USB HID, but it provides both an I2C master and a UART. The
-> > > existing driver supports only the I2C functionality currently.
-> > 
-> > Lots of devices are a "fake HID" device as other operating systems make
-> > it easy to write userspace drivers that way.  Linux included.  What
-> > userspace programs are going to want to interact with this device and
-> > what api are they going to use?
-> 
-> Hi Greg,
-> 
-> The application I'm looking at uses it as a debug console, so personally
-> I'd like to be able to use it with picocom and other terminal programs.
-> 
-> > > > > --- a/include/uapi/linux/major.h
-> > > > > +++ b/include/uapi/linux/major.h
-> > > > > @@ -175,4 +175,6 @@
-> > > > >  #define BLOCK_EXT_MAJOR		259
-> > > > >  #define SCSI_OSD_MAJOR		260	/* open-osd's OSD scsi device */
-> > > > >  
-> > > > > +#define FT260_MAJOR		261
-> > > > 
-> > > > A whole new major for just a single tty port?  Please no, use dynamic
-> > > > majors if you have to, or better yet, tie into the usb-serial
-> > > > implementation (this is a USB device, right?) and then you don't have to
-> > > > mess with this at all.
-> > > 
-> > > As far as I understand it, I don't think usb-serial is usable, due to
-> > > the fact that this is already an HID driver.
-> > 
-> > That should not be a restriction at all.  You are adding a tty device to
-> > this driver, no reason you can't interact with usb-serial instead.  That
-> > way you share the correct userspace tty name and major/minor numbers and
-> > all userspace tools should "just work" as they know that name and how to
-> > interact with it already.
-> > 
-> > Try doing that instead of your own "raw" tty device please.
-> 
-> Maybe I've misunderstood something. The reason I thought usb-serial was
-> unusable in this instance was that I couldn't see a way to create a port
-> except via usb-serial's own probe function (otherwise, the API looked
-> fine).
-> 
-> I don't know whether I'm looking at a serial or an I2C interface until
-> after it's already been probed by HID core, I have a struct hid_device
-> and I've asked what type of interface it is via an HID feature report.
-> This can't be determined otherwise, because strapping pins affect the
-> presentation of interfaces.
-> 
-> At that point, I (currently) call uart_add_one_port. I might have missed
-> it, but I didn't see anything analogous in the usb-serial API. Am I
-> going about this the wrong way?
 
-I thought that this could be done, but I might be wrong.  Johan, any
-ideas?
 
-thanks,
+On 2022/12/8 17:01, Krzysztof Kozlowski wrote:
+> On 08/12/2022 09:44, William Qiu wrote:
+>> 
+>>>> +
+>>>> +  clock-names:
+>>>> +    minItems: 1
+>>>> +    items:
+>>>> +      - const: biu
+>>>> +      - const: ciu
+>>>> +
+>>>> +  interrupts:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  starfive,sys-syscon:
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+>>>> +    description:
+>>>> +      The desired number of times that the host execute tuning when needed.
+>>>
+>>> That's not matching the property name. Missing number of items... this
+>>> is anyway confusing. Why number of tuning tries is a property of DT?
+>>>
+>> 
+>> Will update the description.
+> 
+> I propose first to explain what is it. Because it is not about
+> description only, but also type. Your driver uses this as syscon, so
+> this cannot be uint32-array but phandle-array...
+> 
+> Best regards,
+> Krzysztof
+> 
 
-greg k-h
+Hi Krzysztof,
+
+Thank you for suggestion and I'll take it. I'll update it in next
+version.
+
+Best regards,
+William Qiu
