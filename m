@@ -2,283 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6246647473
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D0364747A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 17:40:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiLHQi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 11:38:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48274 "EHLO
+        id S229470AbiLHQkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 11:40:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiLHQiV (ORCPT
+        with ESMTP id S229770AbiLHQkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 11:38:21 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44709286CE
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:38:20 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id c17so2515466edj.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3nXDL6kXVne0kc9TUvNDrggV3hJQmgrUq1c5voIjIIY=;
-        b=PojL+2VW16cI+CcvRz8pQZWoBJ9qktlie/qAPj5ucWA5MY8xtpgOHHVDVRU5pAe7Ce
-         nDMmiPUpy0eW53Q6kW23pyE7V2lP4nW7AbwoIeQfkrOqyTUr4G+BupC0g3nDqnKbB6sP
-         ldvNVDRaqGjV6SEVCCxtCFgoIT/1ss5WM32c0=
+        Thu, 8 Dec 2022 11:40:02 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F3B33AC15
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 08:39:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670517541;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7cRXDJWcjfeRkRo2+R2+cz6b1HoZXpYfUmYKBkAZh0g=;
+        b=UMNVJXiXyP8DvYp3v4je2ucPHe/NVwJXRqqJqCqwbyh5FWEJrLCN7OkI5PMZW0zKr1N/Iw
+        GNU/uc15Dx8QLE8BmMcLNRX7LQxH0SMqWsrSbyf1/Cj0TctTydG5qFCIGRAz5ZfhTPoGXa
+        mlQnkp24fv60+q6dqvczNeSY5ycb1LA=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-500-l7FI-DG8Ok-rl-OE4fC7xw-1; Thu, 08 Dec 2022 11:39:00 -0500
+X-MC-Unique: l7FI-DG8Ok-rl-OE4fC7xw-1
+Received: by mail-ed1-f69.google.com with SMTP id v4-20020a056402348400b0046cbbc786bdso1231055edc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 08:38:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3nXDL6kXVne0kc9TUvNDrggV3hJQmgrUq1c5voIjIIY=;
-        b=xVdgVQfdYoqLW2kx+SN528HBran6HyNbHlHJsx0aa1X+mhfpqFa2HsW/F+bTsYOg8x
-         eQxGKkhaQkaFJVSpPPFKZ/n48nA0/FJg0o1TXvZfrBODaocHxtCvtjrap61ndZmGs978
-         LkbkvQ7obffajkKQglcjjt2heKT+4eBJa2vOkJ+rStVE97u+buJw9oIOL9jKlNwRGj44
-         2sPJ5RPdiaUiEOwrNGn5H0rDuBElMsLvv4WTcIcV1kkR23QbZsAF2Bqga/Z2LC75cqWR
-         TjuutimWbzLcc2hRsRisnoPtw0tbHtRyELfdMOl7JbaOGWH23K5WTdTJkdzZsrRLptoE
-         eRHQ==
-X-Gm-Message-State: ANoB5pmslEgiIm3Hb6NUZhWkc873k8sGekppeznVmxMKLNmP4elja6IY
-        b6+t2r9JfxMW9QIB+imIUrbG/A==
-X-Google-Smtp-Source: AA0mqf4CXQQmQaEo4whtEenrTv1AF48ud3Wm8rJD9/sh1MVGHJSDMD4mFmnIAgfRq63Kr0Qkr+X62A==
-X-Received: by 2002:a05:6402:4284:b0:45c:835c:eab7 with SMTP id g4-20020a056402428400b0045c835ceab7mr2555836edc.37.1670517499837;
-        Thu, 08 Dec 2022 08:38:19 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2a00:79e1:abd:5c00:8aae:c483:8219:bdba])
-        by smtp.gmail.com with ESMTPSA id ck3-20020a0564021c0300b0046778ce5fdfsm3569046edb.10.2022.12.08.08.38.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 08:38:19 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 08 Dec 2022 17:38:02 +0100
-Subject: [PATCH v2 3/3] kexec: Introduce paramters load_limit_reboot and
- load_limit_panic
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7cRXDJWcjfeRkRo2+R2+cz6b1HoZXpYfUmYKBkAZh0g=;
+        b=tm9Je6ZN07ByLh/t1zo9IQyIzPzdyOtH1JDMys+tLheTWGPiOpfs5rJIxo7+ZqMQCV
+         RX2DA1oLiWcZ34q1z/bgJe97mfKoIY4J82+HIIK+ykRYZ8dYQQYAo5Px3L4ZUlkGYEXG
+         qki/zkhjLOR4barG8yApnSaRxWbyACpEQYpgYN0ltS9IPNmifEx/LLNy/z+mfyZur064
+         mBPo5mAHGFiAcY31Rt58hnkB3kFla03O0N0ERSaEBNiJdZTcERPcH0JBgNJomOLqBal8
+         8ftUVtUJoHtIgMfLXiICFGDMAMz07y2jZ7yTDU2NSXmSoceEOYd71zS6Mgl+x1cE3coI
+         eWUg==
+X-Gm-Message-State: ANoB5pmQdX4YfLXvUmk/iLVssxd2SSq6rXUaEvMMNQRNm7NRxLBlDjAR
+        EnNgj9wA0s0M02ic8OFtmhIcZULsCUUOtOTdIaMXTtq6fxM2L8yOjvs6FBBpfkLb+hPyiI6vxfY
+        eunhG9z2ArPkxUuKRNOBuoACC
+X-Received: by 2002:a17:906:524f:b0:7bf:f0e9:4edc with SMTP id y15-20020a170906524f00b007bff0e94edcmr2332669ejm.31.1670517539022;
+        Thu, 08 Dec 2022 08:38:59 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5Rd5bxDXePpQ1VGCxZvAg/1rd0WHCMLNUaT3hqs+6IPYP3T/OhXw0KVpYLtdEq5O193tUGEA==
+X-Received: by 2002:a17:906:524f:b0:7bf:f0e9:4edc with SMTP id y15-20020a170906524f00b007bff0e94edcmr2332656ejm.31.1670517538859;
+        Thu, 08 Dec 2022 08:38:58 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id bd7-20020a056402206700b0046b847d6a1csm3555506edb.21.2022.12.08.08.38.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 08:38:58 -0800 (PST)
+Message-ID: <dc06357e-2d4d-208f-d59d-c0f8bf4c1843@redhat.com>
+Date:   Thu, 8 Dec 2022 17:38:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 0/9] platform/surface: aggregator: Improve target/source
+ handling in SSH messages
+Content-Language: en-US, nl
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Gross <markgross@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221202223327.690880-1-luzmaximilian@gmail.com>
+ <c09c9cef-14ac-2ab3-5e01-13189823a053@redhat.com>
+ <CAO-hwJLHzRCJF96gKJwj7zCCPxRLoEw=cQ2w8=yLBOfyZz-c8w@mail.gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <CAO-hwJLHzRCJF96gKJwj7zCCPxRLoEw=cQ2w8=yLBOfyZz-c8w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221114-disable-kexec-reset-v2-3-c498313c1bb5@chromium.org>
-References: <20221114-disable-kexec-reset-v2-0-c498313c1bb5@chromium.org>
-In-Reply-To: <20221114-disable-kexec-reset-v2-0-c498313c1bb5@chromium.org>
-To:     Philipp Rudo <prudo@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, Ricardo Ribalda <ribalda@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        kexec@lists.infradead.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Ross Zwisler <zwisler@kernel.org>, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5820; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=ufAC+5YemcJmz894l6PORczSfr2QBpgPQ5bjY5F1p5U=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjkhL1d+L3xiTqMUfLNsBi+qtGpD5Qyq+yPRk8XU3C
- qeZYpfGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY5IS9QAKCRDRN9E+zzrEiOw9EA
- Ci4347jIGvkhhvZj0crcvK5gwVYFGy86RP/xrwiw1eNsD4O5aYVg/imd6Nc49cl04xIhEeTj/hv1W/
- hkARCp318XqH7yNDOpH5IAE3TKoKalTtEKGbrWCsaD4pCUf4oYuRKqNq2Zu+WFw3/vnGoUXSX9SBRw
- A6HYl93KHYPcrFL0QqE+StFWwWYqBwmkxsM+1boorjoLIV3hL0xZDfMH/o4KY2YK0uAPXPm1WPNc/o
- WZgslC6WHQhWKRowkutP4MCINeOIbd5SCP1jIuukVb4q8xsGzKNlcQ1Hz0vW3YFYWaOY/hsjGzAIFZ
- sUwO7jou4m9QOjkXzctFUIQKWjyTwbwGLHlzxPqWKKvnQ+W+U3yY2a5I7Q3fLpvIFrJoJt505mshGc
- bhBJBXKGorGs4F0nP5F5Evh90AUQsAaNcQgwgnqvqytM+TAzLXSXr57DZHZ/PRRnUEqEOb0J4eZXJt
- IPM9sjrhAmU+Y1/nhOAEN84BmowIsyz8QMjpZkTlALIc29owcmvKAi8DrM/wPCxJJOypZlSY7Lx24G
- FE7KiVsqpaR5KDpx5kK9C3ompKCNYN7PMoySslSGsnpNfWzjC96bSFRJqB2Qy6JR5tBaIIz6Dh0GTh
- b0lX3nfY+sVZ6nbUulNMptRcET51QU4x3Fori81S1zjoUm6JjXW3cuyF86RA==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add two parameter to specify how many times a kexec kernel can be loaded.
+Hi,
 
-The sysadmin can set different limits for kexec panic and kexec reboot
-kernels.
+On 12/8/22 17:24, Benjamin Tissoires wrote:
+> On Thu, Dec 8, 2022 at 5:03 PM Hans de Goede <hdegoede@redhat.com> wrote:
+>>
+>> Hi Maximilian,
+>>
+>> On 12/2/22 23:33, Maximilian Luz wrote:
+>>> We have some new insights into the Serial Hub protocol, obtained through
+>>> reverse engineering. In particular, regarding the command structure. The
+>>> input/output target IDs actually represent source and target IDs of
+>>> (what looks like) physical entities (specifically: host, SAM EC, KIP EC,
+>>> debug connector, and SurfLink connector).
+>>>
+>>> This series aims to improve handling of messages with regards to those
+>>> new findings and, mainly, improve clarity of the documentation and usage
+>>> around those fields.
+>>>
+>>> See the discussion in
+>>>
+>>>     https://github.com/linux-surface/surface-aggregator-module/issues/64
+>>>
+>>> for more details.
+>>>
+>>> There are a couple of standouts:
+>>>
+>>> - Patch 1 ensures that we only handle commands actually intended for us.
+>>>   It's possible that we receive messages not intended for us when we
+>>>   enable debugging. I've kept it intentionally minimal to simplify
+>>>   backporting. The rest of the series patch 9 focuses more on clarity
+>>>   and documentation, which is probably too much to backport.
+>>>
+>>> - Patch 8 touches on multiple subsystems. The intention is to enforce
+>>>   proper usage and documentation of target IDs in the SSAM_SDEV() /
+>>>   SSAM_VDEV() macros. As it directly touches those macros I
+>>>   unfortunately can't split it up by subsystem.
+>>>
+>>> - Patch 9 is a loosely connected cleanup for consistency.
+>>
+>> Thank you for the patches. Unfortunately I don't have time atm to
+>> review this.
+>>
+>> And the next 2 weeks are the merge window, followed by 2 weeks
+>> of christmas vacation.
+>>
+>> So I'm afraid that I likely won't get around to reviewing
+>> this until the week of January 9th.
+>>
+>>> Hans, Jiri, Benjamin, Sebastian: While patch 8 ("platform/surface:
+>>> aggregator: Enforce use of target-ID enum in device ID macros") touches
+>>> multiple subsystems, it should be possible to take the whole series
+>>> through the pdx86 tree. The changes in other subsystems are fairly
+>>> limited.
+>>
+>> I agree that it will be best to take all of this upstream through the
+>> pdx86 tree. Sebastian thank you for the ack for patch 8/9.
+>>
+>> Jiri or Benjamin may we have your ack for merging patch 7/9 + 8/9
+>> through the pdx86 tree ?
+> 
+> I can give you an ack for taking those through your tree, but I can
+> not review the patches themselves because I was only CC-ed to those 2,
+> and so was linux-input. Given that SSAM_SSH_TID_KIP is not in my
+> current tree I assume it comes from this series.
+> 
+> Anyway, enough ranting :)
+> 
+> If you think the patches are OK, they are really small concerning the
+> HID part, so feel free to take them through your tree Hans.
 
-The value can be modified at runtime via sysfs, but only with a value
-smaller than the current one (except -1).
+Thank you.
 
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- Documentation/admin-guide/kernel-parameters.txt | 14 ++++
- include/linux/kexec.h                           |  2 +-
- kernel/kexec.c                                  |  2 +-
- kernel/kexec_core.c                             | 91 ++++++++++++++++++++++++-
- kernel/kexec_file.c                             |  2 +-
- 5 files changed, 106 insertions(+), 5 deletions(-)
+Regards,
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 42af9ca0127e..2b37d6a20747 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -2374,6 +2374,20 @@
- 			for Movable pages.  "nn[KMGTPE]", "nn%", and "mirror"
- 			are exclusive, so you cannot specify multiple forms.
- 
-+	kexec_core.load_limit_reboot=
-+	kexec_core.load_limit_panic=
-+			[KNL]
-+			This parameter specifies a limit to the number of times
-+			a kexec kernel can be loaded.
-+			Format: <int>
-+			-1  = Unlimited.
-+			int = Number of times kexec can be called.
-+
-+			During runtime, this parameter can be modified with a
-+			value smaller than the current one (but not -1).
-+
-+			Default: -1
-+
- 	kgdbdbgp=	[KGDB,HW] kgdb over EHCI usb debug port.
- 			Format: <Controller#>[,poll interval]
- 			The controller # is the number of the ehci usb debug
-diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-index e9e1ab5e8006..3d7d10f7187a 100644
---- a/include/linux/kexec.h
-+++ b/include/linux/kexec.h
-@@ -407,7 +407,7 @@ extern int kimage_crash_copy_vmcoreinfo(struct kimage *image);
- extern struct kimage *kexec_image;
- extern struct kimage *kexec_crash_image;
- 
--bool kexec_load_permited(void);
-+bool kexec_load_permited(bool crash_image);
- 
- #ifndef kexec_flush_icache_page
- #define kexec_flush_icache_page(page)
-diff --git a/kernel/kexec.c b/kernel/kexec.c
-index d83fc9093aff..2b0856e83fe1 100644
---- a/kernel/kexec.c
-+++ b/kernel/kexec.c
-@@ -193,7 +193,7 @@ static inline int kexec_load_check(unsigned long nr_segments,
- 	int result;
- 
- 	/* We only trust the superuser with rebooting the system. */
--	if (!kexec_load_permited())
-+	if (!kexec_load_permited(flags & KEXEC_ON_CRASH))
- 		return -EPERM;
- 
- 	/* Permit LSMs and IMA to fail the kexec */
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 18bd90ca9c99..7f9d5288b24b 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -952,13 +952,100 @@ static int __init kexec_core_sysctl_init(void)
- late_initcall(kexec_core_sysctl_init);
- #endif
- 
--bool kexec_load_permited(void)
-+struct kexec_load_limit {
-+	/* Mutex protects the limit count. */
-+	struct mutex mutex;
-+	int limit;
-+};
-+
-+struct kexec_load_limit load_limit_reboot = {
-+	.mutex = __MUTEX_INITIALIZER(load_limit_reboot.mutex),
-+	.limit = -1,
-+};
-+
-+struct kexec_load_limit load_limit_panic = {
-+	.mutex = __MUTEX_INITIALIZER(load_limit_panic.mutex),
-+	.limit = -1,
-+};
-+
-+static int param_get_limit(char *buffer, const struct kernel_param *kp)
- {
-+	int ret;
-+	struct kexec_load_limit *limit = kp->arg;
-+
-+	mutex_lock(&limit->mutex);
-+	ret = scnprintf(buffer, PAGE_SIZE, "%i\n", limit->limit);
-+	mutex_unlock(&limit->mutex);
-+
-+	return ret;
-+}
-+
-+static int param_set_limit(const char *buffer, const struct kernel_param *kp)
-+{
-+	int ret;
-+	struct kexec_load_limit *limit = kp->arg;
-+	int new_val;
-+
-+	ret = kstrtoint(buffer, 0, &new_val);
-+	if (ret)
-+		return ret;
-+
-+	new_val = max(-1, new_val);
-+
-+	mutex_lock(&limit->mutex);
-+
-+	if (new_val == -1 && limit->limit != -1) {
-+		ret = -EINVAL;
-+		goto done;
-+	}
-+
-+	if (limit->limit != -1 && new_val > limit->limit) {
-+		ret = -EINVAL;
-+		goto done;
-+	}
-+
-+	limit->limit = new_val;
-+
-+done:
-+	mutex_unlock(&limit->mutex);
-+
-+	return ret;
-+}
-+
-+static const struct kernel_param_ops load_limit_ops = {
-+	.get = param_get_limit,
-+	.set = param_set_limit,
-+};
-+
-+module_param_cb(load_limit_reboot, &load_limit_ops, &load_limit_reboot, 0644);
-+MODULE_PARM_DESC(load_limit_reboot, "Maximum attempts to load a kexec reboot kernel");
-+
-+module_param_cb(load_limit_panic, &load_limit_ops, &load_limit_panic, 0644);
-+MODULE_PARM_DESC(load_limit_reboot, "Maximum attempts to load a kexec panic kernel");
-+
-+bool kexec_load_permited(bool crash_image)
-+{
-+	struct kexec_load_limit *limit;
-+
- 	/*
- 	 * Only the superuser can use the kexec syscall and if it has not
- 	 * been disabled.
- 	 */
--	return capable(CAP_SYS_BOOT) && !kexec_load_disabled;
-+	if (!capable(CAP_SYS_BOOT) || kexec_load_disabled)
-+		return false;
-+
-+	/* Check limit counter and decrease it.*/
-+	limit = crash_image ? &load_limit_panic : &load_limit_reboot;
-+	mutex_lock(&limit->mutex);
-+	if (!limit->limit) {
-+		mutex_unlock(&limit->mutex);
-+		return false;
-+	}
-+	if (limit->limit != -1)
-+		limit->limit--;
-+	mutex_unlock(&limit->mutex);
-+
-+	return true;
- }
- 
- /*
-diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-index 701147c118d4..61212a9252a6 100644
---- a/kernel/kexec_file.c
-+++ b/kernel/kexec_file.c
-@@ -330,7 +330,7 @@ SYSCALL_DEFINE5(kexec_file_load, int, kernel_fd, int, initrd_fd,
- 	struct kimage **dest_image, *image;
- 
- 	/* We only trust the superuser with rebooting the system. */
--	if (!kexec_load_permited())
-+	if (!kexec_load_permited(flags & KEXEC_FILE_FLAGS))
- 		return -EPERM;
- 
- 	/* Make sure we have a legal set of flags */
+Hans
 
--- 
-2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+
+
+
+
+>>> Maximilian Luz (9):
+>>>   platform/surface: aggregator: Ignore command messages not intended for
+>>>     us
+>>>   platform/surface: aggregator: Improve documentation and handling of
+>>>     message target and source IDs
+>>>   platform/surface: aggregator: Add target and source IDs to command
+>>>     trace events
+>>>   platform/surface: aggregator_hub: Use target-ID enum instead of
+>>>     hard-coding values
+>>>   platform/surface: aggregator_tabletsw: Use target-ID enum instead of
+>>>     hard-coding values
+>>>   platform/surface: dtx: Use target-ID enum instead of hard-coding
+>>>     values
+>>>   HID: surface-hid: Use target-ID enum instead of hard-coding values
+>>>   platform/surface: aggregator: Enforce use of target-ID enum in device
+>>>     ID macros
+>>>   platform/surface: aggregator_registry: Fix target-ID of base-hub
+>>>
+>>>  .../driver-api/surface_aggregator/client.rst  |  4 +-
+>>>  .../driver-api/surface_aggregator/ssh.rst     | 36 ++++-----
+>>>  drivers/hid/surface-hid/surface_hid.c         |  2 +-
+>>>  drivers/hid/surface-hid/surface_kbd.c         |  2 +-
+>>>  .../platform/surface/aggregator/controller.c  | 12 +--
+>>>  .../platform/surface/aggregator/ssh_msgb.h    |  4 +-
+>>>  .../surface/aggregator/ssh_request_layer.c    | 15 ++++
+>>>  drivers/platform/surface/aggregator/trace.h   | 73 +++++++++++++++++--
+>>>  .../platform/surface/surface_aggregator_hub.c |  8 +-
+>>>  .../surface/surface_aggregator_registry.c     |  2 +-
+>>>  .../surface/surface_aggregator_tabletsw.c     | 10 +--
+>>>  drivers/platform/surface/surface_dtx.c        | 20 ++---
+>>>  .../surface/surface_platform_profile.c        |  2 +-
+>>>  drivers/power/supply/surface_battery.c        |  4 +-
+>>>  drivers/power/supply/surface_charger.c        |  2 +-
+>>>  include/linux/surface_aggregator/controller.h |  4 +-
+>>>  include/linux/surface_aggregator/device.h     | 50 ++++++-------
+>>>  include/linux/surface_aggregator/serial_hub.h | 40 ++++++----
+>>>  18 files changed, 191 insertions(+), 99 deletions(-)
+>>>
+>>
+> 
+
