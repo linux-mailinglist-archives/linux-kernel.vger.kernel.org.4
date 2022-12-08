@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E01646819
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 05:09:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D0F64681D
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 05:10:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbiLHEJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 23:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56430 "EHLO
+        id S229813AbiLHEKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 23:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiLHEJa (ORCPT
+        with ESMTP id S229602AbiLHEKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 23:09:30 -0500
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA898D655
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 20:09:28 -0800 (PST)
-Received: by mail-pl1-x629.google.com with SMTP id 4so408506pli.0
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 20:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hunJBYHsFf+Z6ONJcd5pZZLsPxJbVZOYvwp3Lj446lM=;
-        b=nvQbINZCuWy31KkXFJkiCtfBYXylSRoUyBDiOOmFeROr/jHoahgK6POXLR7S6FHGkB
-         OEymcGAjmYB+imapqxfOY3PwwH6c2en7F6vay/6EVqibdKKSgCGQzG3zr0JTnsnjiN2X
-         12jaayEN5rBujyCGm7czLnJTpDPKDExxleDFOsaNFkppO7UjnS+n5Qauq867asFr23rU
-         Zlrd9HP1Is3rDT/l7PxJx3XPe6N+f9U65/im7Fu+KR1Vw8XvUnW9j51UUUKpNA3jo3lJ
-         1Tdd6PlZjh5a0RX9Xge3y67mdcPgEwkJwl6SpRgA9NxvYmZ0Jc+hGT5viyejmbolWpbh
-         UbrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hunJBYHsFf+Z6ONJcd5pZZLsPxJbVZOYvwp3Lj446lM=;
-        b=IiyThAerOT3r7TJ7RY54kde7Was62QM3Xn0D8tPZhCTYUW23j94RhxwmGtyksw4OgE
-         DQdr5Rzbtfu06X7HuqinTJhiXKw+kUf6KIzhi/vwfOH1xEf9S02wHaKlCYVnCmEZyNiV
-         KMU6hMcHRNB0Ie+BzoZJqK6zh92MczrvxfMLOKDQHocdY/QNUcWLGpsmCelYYbZE2nQY
-         q72b3w7m6OTBmqtzetnLXlsmSma33sp60Ia4FWupew1tvzqwIriRRbQE1x0x7rmVgxxS
-         gDC0aT07UvJ1CxICDMZluvYOE9Cw+RsjzPD98CKvcbM2w2h+7yO3dZGHkLRaW/cbLT2b
-         6U5g==
-X-Gm-Message-State: ANoB5pmRi18WXs0PWqPTC7KCeyLwMIAsnz7qeJUYraPgAksFe7v2DsUI
-        mXvg7Ur4Qp1itlPlLE2uD48buw==
-X-Google-Smtp-Source: AA0mqf4FNeItYeFKIDAzTuEICmoPtdYX09UiHI99shzMqW8aEaO6ly9tJV8a6dWEy4W04xbacdoPIQ==
-X-Received: by 2002:a17:90a:5581:b0:219:b015:58d5 with SMTP id c1-20020a17090a558100b00219b01558d5mr22663434pji.199.1670472568310;
-        Wed, 07 Dec 2022 20:09:28 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b001868ed86a95sm15393369plg.174.2022.12.07.20.09.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 20:09:26 -0800 (PST)
-Date:   Thu, 8 Dec 2022 09:39:21 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com,
-        vincent.guittot@linaro.org, saravanak@google.com,
-        wusamuel@google.com, isaacmanjarres@google.com,
-        kernel-team@android.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de
-Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
- single max CPU capacity
-Message-ID: <20221208040921.tgwegk7fvdm4nkiu@vireshk-i7>
-References: <20221207101705.9460-1-lukasz.luba@arm.com>
- <20221207101705.9460-3-lukasz.luba@arm.com>
+        Wed, 7 Dec 2022 23:10:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704158C6BC;
+        Wed,  7 Dec 2022 20:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1456661D7A;
+        Thu,  8 Dec 2022 04:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 61AC9C433D7;
+        Thu,  8 Dec 2022 04:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670472617;
+        bh=HUSOoUc6Ang6qCld8EX48PL0LPT4Qr2BguSasnkKP70=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=KKSf6jyjdzpIWP8tXW/+/puCs+A73H0tgFSDDxA9vp9cel4Ve9hH83G+72YS1RMlx
+         4Yi/0PI0CEeFzJRJjcaxOp4Bzyu87fb1zkT5pDCefW83c1qZeesaYCsS5L5bqmriRU
+         a9OrCV7z9sMEYAw/fk+ip9wTOtps0KXHJ+crFbkVz1svY9rYriw3jnmUtoqFFL5ZrK
+         +GfNri5AAyZWVTSpoUK2T7qGx7itugAL1LT7jh89qFJtF+zgBRvuHb6x2r+u6+vQ1Y
+         8VyhucxYWfFqnjHFkIHFoUkZtVtcxdo8olMfSTgRkKaG1/1cxC/uhdhmp/bSQedXlr
+         aKOVM3nOPDl7A==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 419DAE4D02D;
+        Thu,  8 Dec 2022 04:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221207101705.9460-3-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 net] net: phy: mxl-gpy: add MDINT workaround
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167047261726.18861.14289044396650307534.git-patchwork-notify@kernel.org>
+Date:   Thu, 08 Dec 2022 04:10:17 +0000
+References: <20221205200453.3447866-1-michael@walle.cc>
+In-Reply-To: <20221205200453.3447866-1-michael@walle.cc>
+To:     Michael Walle <michael@walle.cc>
+Cc:     lxu@maxlinear.com, andrew@lunn.ch, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07-12-22, 10:17, Lukasz Luba wrote:
-> The max CPU capacity is the same for all CPUs sharing frequency domain
-> and thus 'policy' object. There is a way to avoid heavy operations
-> in a loop for each CPU by leveraging this knowledge. Thus, simplify
-> the looping code in the sugov_next_freq_shared() and drop heavy
-> multiplications. Instead, use simple max() to get the highest utilization
-> from these CPUs. This is useful for platforms with many (4 or 6) little
-> CPUs.
-> 
-> The max CPU capacity must be fetched every time we are called, due to
-> difficulties during the policy setup, where we are not able to get the
-> normalized CPU capacity at the right time.
-> 
-> The stored value in sugov_policy::max is also than used in
-> sugov_iowait_apply() to calculate the right boost. Thus, that field is
-> useful to have in that sugov_policy struct.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
+Hello:
 
-Looks okay to me.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+On Mon,  5 Dec 2022 21:04:53 +0100 you wrote:
+> At least the GPY215B and GPY215C has a bug where it is still driving the
+> interrupt line (MDINT) even after the interrupt status register is read
+> and its bits are cleared. This will cause an interrupt storm.
+> 
+> Although the MDINT is multiplexed with a GPIO pin and theoretically we
+> could switch the pinmux to GPIO input mode, this isn't possible because
+> the access to this register will stall exactly as long as the interrupt
+> line is asserted. We exploit this very fact and just read a random
+> internal register in our interrupt handler. This way, it will be delayed
+> until the external interrupt line is released and an interrupt storm is
+> avoided.
+> 
+> [...]
 
+Here is the summary with links:
+  - [v2,net] net: phy: mxl-gpy: add MDINT workaround
+    https://git.kernel.org/netdev/net/c/5f4d487d01ff
+
+You are awesome, thank you!
 -- 
-viresh
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
