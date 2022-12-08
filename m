@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FE3464692F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 07:30:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2EF64692E
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 07:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiLHGaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 01:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36636 "EHLO
+        id S229809AbiLHGaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 01:30:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbiLHGaK (ORCPT
+        with ESMTP id S229773AbiLHGaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 8 Dec 2022 01:30:10 -0500
 Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E967EE011;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C109D128;
         Wed,  7 Dec 2022 22:30:07 -0800 (PST)
-X-UUID: bb5766d3350a4b1cbfee27ebe5d6e852-20221208
+X-UUID: 30f7034dc8794c7590f08f04ea43903b-20221208
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=hKtAWAV0bi6rqv43sLV/uWtA5c/Igilteq9bn17Jhys=;
-        b=uFPMcPxg4sSbbB4EWJ3se0uRgc2qCX8MMISX1rKICPTBAAmoh65FYdJ1wkH1v/JsDbB5OFpBMuoRvKrLQDZ02tyOo7KopUHuVzW6MM33iFqhXzwC9xfxAEMYVop7NnhBMjwHfKPeygqCfgRtLBOCKWDxuztZiTaO6GYw4b9WBMY=;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=mt32S3LwKdem0E64IVk6P3PMnbE8zfDO1YzBQ7//4fc=;
+        b=NMmYfzn1ln5dxvN5kASHq2DWgEWV6CwjmQsjCVVSVEpiTgRqZeLMFJrDWdJsgZRBZ9fEGcTac1lpP76ndAqfEfyKHI66TzmtkmPvEwF5MJ102WSMqVSBxSRXjTU0gGsHcLOoaeGSJmMSYd/t3/EeJPoO9qtgrTqc98oT3yiXN+g=;
 X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:b6ef4d75-363f-419a-88e3-ff522e574262,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:-25
-X-CID-META: VersionHash:dcaaed0,CLOUDID:4987fed1-652d-43fd-a13a-a5dd3c69a43d,B
+X-CID-O-INFO: VERSION:1.1.14,REQID:bd4530d6-4ac2-402d-bd46-959fad0ec30d,IP:0,U
+        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:-5
+X-CID-META: VersionHash:dcaaed0,CLOUDID:eac6a924-4387-4253-a41d-4f6f2296b154,B
         ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
         RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: bb5766d3350a4b1cbfee27ebe5d6e852-20221208
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+X-UUID: 30f7034dc8794c7590f08f04ea43903b-20221208
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
         (envelope-from <xiangsheng.hou@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2052830187; Thu, 08 Dec 2022 14:30:02 +0800
+        with ESMTP id 353037254; Thu, 08 Dec 2022 14:30:03 +0800
 Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 8 Dec 2022 14:30:00 +0800
+ 15.2.792.15; Thu, 8 Dec 2022 14:30:02 +0800
 Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n1.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 8 Dec 2022 14:29:59 +0800
+ Transport; Thu, 8 Dec 2022 14:30:01 +0800
 From:   Xiangsheng Hou <xiangsheng.hou@mediatek.com>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -53,10 +53,12 @@ CC:     Xiangsheng Hou <xiangsheng.hou@mediatek.com>,
         <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
         <benliang.zhao@mediatek.com>, <bin.zhang@mediatek.com>
-Subject: [PATCH v3 0/9] Add MediaTek MT7986 SPI NAND and ECC support
-Date:   Thu, 8 Dec 2022 14:29:46 +0800
-Message-ID: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
+Subject: [PATCH v3 1/9] spi: mtk-snfi: Change default page format to setup default setting
+Date:   Thu, 8 Dec 2022 14:29:47 +0800
+Message-ID: <20221208062955.2546-2-xiangsheng.hou@mediatek.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
+References: <20221208062955.2546-1-xiangsheng.hou@mediatek.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -71,46 +73,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Changes since V2:
- - Change ECC err_mask value with GENMASK macro.
- - Change snfi mediatek,rx-latch-latency to mediatek,rx-latch-latency-ns.
- - Add a separate patch for DTS change.
- - Move common description to top-level pattern properties.
- - Drop redundant parts in dt-bindings.
+Change default page format to setup default setting since the sector
+size 1024 on MT7986 will lead to probe fail.
 
-Changes since V1:
- - Use existing sample delay property.
- - Add restricting for optional nfi_hclk.
- - Improve and perfect dt-bindings documentation.
- - Change existing node name to match NAND controller DT bingings.
- - Fix issues reported by dt_binding_check.
- - Fix issues reported by dtbs_check.
+Signed-off-by: Xiangsheng Hou <xiangsheng.hou@mediatek.com>
+---
+ drivers/spi/spi-mtk-snfi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Xiangsheng Hou (9):
-  spi: mtk-snfi: Change default page format to setup default setting
-  spi: mtk-snfi: Add optional nfi_hclk which is needed for MT7986
-  mtd: nand: ecc-mtk: Add ECC support fot MT7986 IC
-  dt-bindings: spi: mtk-snfi: Add compatible for MT7986
-  spi: mtk-snfi: Add snfi sample delay and read latency adjustment
-  dt-bindings: spi: mtk-snfi: Add read latch latency property
-  dt-bindings: mtd: Split ECC engine with rawnand controller
-  arm/arm64: dts: mediatek: Fix existing NAND controller node name
-  dt-bindings: mtd: mediatek,nand-ecc-engine: Add compatible for MT7986
-
- .../bindings/mtd/mediatek,mtk-nfc.yaml        | 154 +++++++++++++++
- .../mtd/mediatek,nand-ecc-engine.yaml         |  63 +++++++
- .../devicetree/bindings/mtd/mtk-nand.txt      | 176 ------------------
- .../bindings/spi/mediatek,spi-mtk-snfi.yaml   |  54 +++++-
- arch/arm/boot/dts/mt2701.dtsi                 |   2 +-
- arch/arm64/boot/dts/mediatek/mt2712e.dtsi     |   2 +-
- arch/arm64/boot/dts/mediatek/mt7622.dtsi      |   2 +-
- drivers/mtd/nand/ecc-mtk.c                    |  28 ++-
- drivers/spi/spi-mtk-snfi.c                    |  41 +++-
- 9 files changed, 329 insertions(+), 193 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,mtk-nfc.yaml
- create mode 100644 Documentation/devicetree/bindings/mtd/mediatek,nand-ecc-engine.yaml
- delete mode 100644 Documentation/devicetree/bindings/mtd/mtk-nand.txt
-
+diff --git a/drivers/spi/spi-mtk-snfi.c b/drivers/spi/spi-mtk-snfi.c
+index fa8412ba20e2..719fc6f53ab1 100644
+--- a/drivers/spi/spi-mtk-snfi.c
++++ b/drivers/spi/spi-mtk-snfi.c
+@@ -1430,8 +1430,7 @@ static int mtk_snand_probe(struct platform_device *pdev)
+ 
+ 	// setup an initial page format for ops matching page_cache_op template
+ 	// before ECC is called.
+-	ret = mtk_snand_setup_pagefmt(ms, ms->caps->sector_size,
+-				      ms->caps->spare_sizes[0]);
++	ret = mtk_snand_setup_pagefmt(ms, SZ_2K, SZ_64);
+ 	if (ret) {
+ 		dev_err(ms->dev, "failed to set initial page format\n");
+ 		goto disable_clk;
 -- 
 2.25.1
 
