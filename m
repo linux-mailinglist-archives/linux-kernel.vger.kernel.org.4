@@ -2,134 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4136470A6
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:17:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91FAD6470A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:17:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiLHNR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:17:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
+        id S230140AbiLHNRJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:17:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiLHNRR (ORCPT
+        with ESMTP id S230227AbiLHNRA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:17:17 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7C092FDC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:16:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670505368;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=neWLwjcyNjI8ZbLG+eysMC72AXD8ev/7q1C2nUvKC3k=;
-        b=PNoMsKw9ZZ+OzsWDRal7QugrhSNFpqkUnEQoCcBQC/KfI0lvM695cpUz1+p0G2oTjT7AP/
-        HloYJI53wyb720NNJAcb3OCHhDHHXMae5O8V+B6nJ5dDhg/IdGwrieyHNHjP/Go+qpg6Ub
-        Lyw+tl+l+hwpuKEsh2MVYF6+FvxtOAo=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-465-IscL99eoMS-qNa6BGtnDXw-1; Thu, 08 Dec 2022 08:16:06 -0500
-X-MC-Unique: IscL99eoMS-qNa6BGtnDXw-1
-Received: by mail-wm1-f72.google.com with SMTP id bi19-20020a05600c3d9300b003cf9d6c4016so2386309wmb.8
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 05:16:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=neWLwjcyNjI8ZbLG+eysMC72AXD8ev/7q1C2nUvKC3k=;
-        b=3VdM92kog8tafweWwCW7lo3+cK9ozghOU34XsytZdKeviqKvmnXXL0gFW0AcCvBdRa
-         yD3VnH3f6vnNiEUAcn2H24xAPTE0D+j8Rc0pbi0SDepZXcQxTOueynMT7NIJFexhUf64
-         nQV6M7O9+Id+tzTbZxLczyRLUXEFwkcnZ3htv+2pUjJvTCHl5BhXqEeUfcxKb2Ner87Q
-         OhrKvgQ+B5YyiZ+VDhdX6X3uxkMTI33wsx6QKupJiyCjOsbbuUp7Ije+WPNvEJuUXe6H
-         /gEkYGgVkaZDhphRSAzYagvTslUyZ6r6BoTQn91MInqVZlKZoigeRiH0CdHrKK8q2g98
-         2K2g==
-X-Gm-Message-State: ANoB5pmefvQ/4rFZWzVJcQ8KeXMkzDfADv0KNK/fVsiV66yYqdlfW3SA
-        6ojRVyFbTpPcCRqldhqEU3SE0ufosF/4/BahAUsQ9zdDhCFrWrdgLU98xzVyoHgmbHtRi46g0JO
-        qqjESQlrlWvsDS2/Fp8VOirVP
-X-Received: by 2002:a1c:5406:0:b0:3d1:e3ba:3bb6 with SMTP id i6-20020a1c5406000000b003d1e3ba3bb6mr9123508wmb.29.1670505365093;
-        Thu, 08 Dec 2022 05:16:05 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7ZeniNqSJf/bXpP3fqsWoiP81fRuzC3ndMmkkBsTOt9cQD+OEqUkQszPtaCwAqFcKUdPfeWw==
-X-Received: by 2002:a1c:5406:0:b0:3d1:e3ba:3bb6 with SMTP id i6-20020a1c5406000000b003d1e3ba3bb6mr9123496wmb.29.1670505364741;
-        Thu, 08 Dec 2022 05:16:04 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id k32-20020a05600c1ca000b003b4ff30e566sm11743772wms.3.2022.12.08.05.16.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 05:16:04 -0800 (PST)
-Message-ID: <799d6831-2af3-72c1-84b2-1f0454a46c07@redhat.com>
-Date:   Thu, 8 Dec 2022 14:16:03 +0100
+        Thu, 8 Dec 2022 08:17:00 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D68492A06
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:17:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E22A7B823A9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 13:16:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1659CC433D6;
+        Thu,  8 Dec 2022 13:16:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670505417;
+        bh=gpubDH/pCGKvPdJH9MG3bPfxMTeRtDSfnPVSy+DbnLk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jBkmfJZ6qJpv3Ik9DFQqizGYkmp0o/o8SxnPdw4Up/E+ZDKQwJL7eE/g82MhnJIrg
+         zVf+fMuakZHpvZyQzMDHzI5wwEbzhoCXw5w5SPJVddfEWv1A+3saQSPs8tgPhqN+rp
+         StTcmJUOLnEufgsnoOw4OZoHlVaa1DXVMV7csjYo=
+Date:   Thu, 8 Dec 2022 14:16:53 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     =?utf-8?B?0JDQu9C10LrRgdCw0L3QtNGAINCR0YPRgNCw0LrQvtCy?= 
+        <a.burakov@rosalinux.ru>
+Cc:     Frank Haverkamp <haver@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [PATCH 2/2] misc: genwqe: card_dev: Array index overflow fix in
+ ddcb_cmd_fixups()
+Message-ID: <Y5HjxaC8HcVRvOW+@kroah.com>
+References: <20221207141808.22922-1-a.burakov@rosalinux.ru>
+ <20221207141808.22922-2-a.burakov@rosalinux.ru>
+ <Y5C98NpQr2G1bkvs@kroah.com>
+ <1315574310.3286650.1670496901569.JavaMail.zimbra@rosalinux.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 10/10] mm/hugetlb: Document why page_vma_mapped_walk()
- is safe to walk
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jann Horn <jannh@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Rik van Riel <riel@surriel.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20221207203034.650899-1-peterx@redhat.com>
- <20221207203158.651092-1-peterx@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20221207203158.651092-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1315574310.3286650.1670496901569.JavaMail.zimbra@rosalinux.ru>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07.12.22 21:31, Peter Xu wrote:
-> Taking vma lock here is not needed for now because all potential hugetlb
-> walkers here should have i_mmap_rwsem held.  Document the fact.
+
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
+
+A: No.
+Q: Should I include quotations after my reply?
+
+
+http://daringfireball.net/2007/07/on_top
+
+On Thu, Dec 08, 2022 at 01:55:01PM +0300, Александр Бураков wrote:
+> Hello!
 > 
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->   mm/page_vma_mapped.c | 10 ++++++++--
->   1 file changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-> index e97b2e23bd28..2e59a0419d22 100644
-> --- a/mm/page_vma_mapped.c
-> +++ b/mm/page_vma_mapped.c
-> @@ -168,8 +168,14 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
->   		/* The only possible mapping was handled on last iteration */
->   		if (pvmw->pte)
->   			return not_found(pvmw);
-> -
-> -		/* when pud is not present, pte will be NULL */
-> +		/*
-> +		 * NOTE: we don't need explicit lock here to walk the
-> +		 * hugetlb pgtable because either (1) potential callers of
-> +		 * hugetlb pvmw currently holds i_mmap_rwsem, or (2) the
-> +		 * caller will not walk a hugetlb vma (e.g. ksm or uprobe).
-> +		 * When one day this rule breaks, one will get a warning
-> +		 * in hugetlb_walk(), and then we'll figure out what to do.
-> +		 */
->   		pvmw->pte = hugetlb_walk(vma, pvmw->address, size);
->   		if (!pvmw->pte)
->   			return false;
+> The subject was created this way due to technical issues. There is only one patch here.
 
-Would it make sense to squash that into the previous commit?
+Great, then please fix up those issues and resend a version 2 of this
+patch, otherwise it confuses us all.  Please remember that we optimize
+for review, and as such, if you make a mistake like this, it's up to you
+to fix it up, not us.
 
--- 
-Thanks,
+thanks,
 
-David / dhildenb
-
+greg k-h
