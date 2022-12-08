@@ -2,86 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE0D4647524
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:50:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C70EB647526
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:50:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbiLHRuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 12:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S229954AbiLHRut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 12:50:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiLHRuS (ORCPT
+        with ESMTP id S229948AbiLHRup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 12:50:18 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1ED98B3AE;
-        Thu,  8 Dec 2022 09:50:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF046B825A9;
-        Thu,  8 Dec 2022 17:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 64905C433D2;
-        Thu,  8 Dec 2022 17:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670521815;
-        bh=zBK5KvggkjJJ3BCPGvnHXC2UKVb94RIF663iWX+BBgw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=mIh+kFn2j8DROl+M//spbSOyIx36jsX2OPrau3yfynAHXwvau11vdk0zSmz4hZGnA
-         NqRdS/52/pQwIaFAsbHKvxlTq8zQrEIsP++TWOKWz9y3sVmQdbYBIgUNiRp5c8WpsA
-         FH9cjMb3FqRVLyAJezyqFBGRStLrDK5TZH8i5Ofx3QUPUlYVtw+eyoyrWH7y58E90A
-         Unyq7mCR24K+hsAFsfuqaGRN9TtUiXg9Js1Jir0WXPabo4+TcFpjl5T6vO6LDvpWtw
-         ShKLEzLxCk5EP53fqJLANDOaD3vGdjSMc0INajeno28uEvnyWfaPtA6n+MrCJv2D08
-         8mtd4M8hxiZtQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 47E75E1B4D8;
-        Thu,  8 Dec 2022 17:50:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 8 Dec 2022 12:50:45 -0500
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64B0AD338
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:50:42 -0800 (PST)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1442977d77dso2676755fac.6
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 09:50:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EcDib7bnYJl/Unwetka3jeGow0uypTS8xDJA3Nr+9ew=;
+        b=l06xBHdQVkajTuW7VX6uuHvMIl1RK9SMqeMSWCTAKB5XUhqLqmc9mAymE2iOCDxYAO
+         syHdyaUequqZSnvWv/kMv9oBmyfZMlcyPvA1+GFuNTEdiCTZNZ7sGFR8FzU+cQxuRqSK
+         8ZPzeFuAjqnvFSMqTKQ5YTPFgsTS06BCqqOloaW5P2/GsqHm7MPOqxwz5pl84x4INS30
+         WN+wShP+a52htV46LnSO3BuboU5LOPC1AZvUZPORjoz48ahBPnmica10L6fee7Xm6Gwl
+         mFu/C6F1c7WFEKR/pcT8wo96eCRhvfc7EsD48dEKFL8Yfe22jE+BXtmKyQPXrgsdT5nn
+         BYKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EcDib7bnYJl/Unwetka3jeGow0uypTS8xDJA3Nr+9ew=;
+        b=cOO1QNL+qDdmJ9VHae4La+wdaUIm502TrROzXlanvbULpg/oMtOPhN8oWupXANJmyY
+         Fw5LSHUzlro28DURUswlzbvKl4oWVEihdiy/rHjNsU2PDifPc9DqUthCN1oQfVH1WgBw
+         9qOkRFEm36KGKZRj6XOsnbrMwTYyXls3JF2BecpoOSHtZ/3jvrIcYDWku2vLb//giBMo
+         peN/sWbXujkv4+aRvIkXd4nQozvNp55MSLQaAAwVkjY/GpsCHFvQAiL9cSjMQD69xr6v
+         nzuwBTf737ClEpBCwHqkv3PmYvdApkdbEQ6RfD04x5YZUDcL1AD3tQxw2SoVS2wsJmJp
+         VW4A==
+X-Gm-Message-State: ANoB5pl5I3iqY41BF8si+tE7Y8za/gI9Oe/RopZCZhHbcGkCIDxlUFrW
+        qrY/O0OHd3qcrwxIUwh3/RiXmSVPiNKnJH2y5G8=
+X-Google-Smtp-Source: AA0mqf45SvHm6kzi6ZeuT3Fspud9r0wFsO3c0zqTSaFW8u5+a19GLvzh8KfOeGWpOGfak5/ALktSWVh2t9AukR9HO/4=
+X-Received: by 2002:a05:6870:2b05:b0:12d:58c1:33f9 with SMTP id
+ ld5-20020a0568702b0500b0012d58c133f9mr43749954oab.46.1670521842232; Thu, 08
+ Dec 2022 09:50:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND v2] net: dsa: sja1105: avoid out of bounds access in
- sja1105_init_l2_policing()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167052181528.971.4904636382041460131.git-patchwork-notify@kernel.org>
-Date:   Thu, 08 Dec 2022 17:50:15 +0000
-References: <20221207132347.38698-1-radu-nicolae.pirea@oss.nxp.com>
-In-Reply-To: <20221207132347.38698-1-radu-nicolae.pirea@oss.nxp.com>
-To:     Radu Nicolae Pirea (OSS) <radu-nicolae.pirea@oss.nxp.com>
-Cc:     olteanv@gmail.com, andrew@lunn.ch, f.fainelli@gmail.com,
-        davem@davemloft.net, gregkh@linuxfoundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221206073156.43453-1-xurui@kylinos.cn>
+In-Reply-To: <20221206073156.43453-1-xurui@kylinos.cn>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 8 Dec 2022 12:50:30 -0500
+Message-ID: <CADnq5_ONUkteQrhgMVfst5UCK5+GjVQaj-=-ABo8bYczeGCRLg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu: Retry DDC probing on DVI on failure if we got
+ an HPD interrupt
+To:     xurui <xurui@kylinos.cn>
+Cc:     alexander.deucher@amd.com, tzimmermann@suse.de,
+        guchun.chen@amd.com, Xinhui.Pan@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        sam@ravnborg.org, aurabindo.pillai@amd.com, cssk@net-c.es,
+        dri-devel@lists.freedesktop.org, christian.koenig@amd.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Wed, Dec 7, 2022 at 3:09 AM xurui <xurui@kylinos.cn> wrote:
+>
+> HPD signals on DVI ports can be fired off before the pins required for
+> DDC probing actually make contact, due to the pins for HPD making
+> contact first. This results in a HPD signal being asserted but DDC
+> probing failing, resulting in hotplugging occasionally failing.
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+It seems like DP should get a similar fix.
 
-On Wed,  7 Dec 2022 15:23:47 +0200 you wrote:
-> The SJA1105 family has 45 L2 policing table entries
-> (SJA1105_MAX_L2_POLICING_COUNT) and SJA1110 has 110
-> (SJA1110_MAX_L2_POLICING_COUNT). Keeping the table structure but
-> accounting for the difference in port count (5 in SJA1105 vs 10 in
-> SJA1110) does not fully explain the difference. Rather, the SJA1110 also
-> has L2 ingress policers for multicast traffic. If a packet is classified
-> as multicast, it will be processed by the policer index 99 + SRCPORT.
-> 
-> [...]
+>
+> Rescheduling the hotplug work for a second when we run into an HPD
+> signal with a failing DDC probe usually gives enough time for the rest
+> of the connector's pins to make contact, and fixes this issue.
 
-Here is the summary with links:
-  - [RESEND,v2] net: dsa: sja1105: avoid out of bounds access in sja1105_init_l2_policing()
-    https://git.kernel.org/netdev/net/c/f8bac7f9fdb0
+This looks reasonable.  Please address the kernel test robot reports.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Thanks,
 
+Alex
 
+>
+> Signed-off-by: xurui <xurui@kylinos.cn>
+> ---
+>  .../gpu/drm/amd/amdgpu/amdgpu_connectors.c    | 22 ++++++++++++++++++-
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h      |  1 +
+>  2 files changed, 22 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+> index cfb262911bfc..dd8d414249a5 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_connectors.c
+> @@ -997,13 +997,33 @@ amdgpu_connector_dvi_detect(struct drm_connector *connector, bool force)
+>                 }
+>         }
+>
+> +       if (amdgpu_connector->detected_hpd_without_ddc) {
+> +               force = true;
+> +               amdgpu_connector->detected_hpd_without_ddc = false;
+> +       }
+> +
+>         if (!force && amdgpu_connector_check_hpd_status_unchanged(connector)) {
+>                 ret = connector->status;
+>                 goto exit;
+>         }
+>
+> -       if (amdgpu_connector->ddc_bus)
+> +       if (amdgpu_connector->ddc_bus) {
+>                 dret = amdgpu_display_ddc_probe(amdgpu_connector, false);
+> +
+> +               /* Sometimes the pins required for the DDC probe on DVI
+> +                * connectors don't make contact at the same time that the ones
+> +                * for HPD do. If the DDC probe fails even though we had an HPD
+> +                * signal, try again later
+> +                */
+> +               if (!dret && !force &&
+> +                   amdgpu_display_hpd_sense(adev, amdgpu_connector->hpd.hpd)) {
+> +                       DRM_DEBUG_KMS("hpd detected without ddc, retrying in 1 second\n");
+> +                       amdgpu_connector->detected_hpd_without_ddc = true;
+> +                       schedule_delayed_work(&adev->hotplug_work,
+> +                                             msecs_to_jiffies(1000));
+> +                       goto exit;
+> +               }
+> +       }
+>         if (dret) {
+>                 amdgpu_connector->detected_by_load = false;
+>                 amdgpu_connector_free_edid(connector);
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+> index 37322550d750..bf009de59710 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+> @@ -535,6 +535,7 @@ struct amdgpu_connector {
+>         void *con_priv;
+>         bool dac_load_detect;
+>         bool detected_by_load; /* if the connection status was determined by load */
+> +       bool detected_hpd_without_ddc; /* if an HPD signal was detected on DVI, but ddc probing failed */
+>         uint16_t connector_object_id;
+>         struct amdgpu_hpd hpd;
+>         struct amdgpu_router router;
+> --
+> 2.25.1
+>
+>
+> No virus found
+>                 Checked by Hillstone Network AntiVirus
