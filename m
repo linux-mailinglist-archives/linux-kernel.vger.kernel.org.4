@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30339646630
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:58:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C55C646632
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 01:58:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229848AbiLHA6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 19:58:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34870 "EHLO
+        id S229885AbiLHA6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 19:58:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbiLHA6K (ORCPT
+        with ESMTP id S229875AbiLHA6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 19:58:10 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E9B55C8A
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 16:58:10 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B80ENuT017605;
-        Thu, 8 Dec 2022 00:58:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=tR4J0ENApu7V6J6cHaQ+088HmoYLX3qp6nekwCS6xyI=;
- b=gD+p0BuxkVvNCy8cqCrkkuSzPrYb8850SgyRU61kv0R7QM7rkoOOJd+Ahnme1FvH7Ptm
- koC22rp7A7IOJwL8vglngib+2ty6j2gE5lUQd0nqk/ieC4VvkySV9EOzpxwxew66xTwB
- sxFOdaPqy5p2sXD1G7sZ3Mb6VXSoxi8oxwAm0QH3+cf/FVjTBBMNsOHIHczKLADsmwST
- WCLNo2d6docf/CuZbM4+lrA+rpXHXzo38C3/2xpWWj2T1HrN0PDwp8l8p1mrFhxNo6oH
- UI1VK7vp6m0bf1JU4S/NnTzV3d6QULSmltoFlujnnAniuFqEd1cyJCVnOyGQxXE3XIk+ Fg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3maww69672-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 08 Dec 2022 00:58:07 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B80w6WJ000370
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 8 Dec 2022 00:58:06 GMT
-Received: from hu-johmoo-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 7 Dec 2022 16:58:06 -0800
-From:   John Moon <quic_johmoo@quicinc.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     John Moon <quic_johmoo@quicinc.com>, Tejun Heo <tj@kernel.org>
-Subject: [PATCH] workqueue: Check for null pointer return from get_work_pwq()
-Date:   Wed, 7 Dec 2022 16:53:44 -0800
-Message-ID: <20221208005344.25195-1-quic_johmoo@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UAKEu7DJSSNipv1lyhZ0CL777UioTYIx
-X-Proofpoint-ORIG-GUID: UAKEu7DJSSNipv1lyhZ0CL777UioTYIx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_11,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- impostorscore=0 lowpriorityscore=0 malwarescore=0 adultscore=0
- priorityscore=1501 mlxlogscore=999 suspectscore=0 bulkscore=0
- clxscore=1011 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2212080003
+        Wed, 7 Dec 2022 19:58:21 -0500
+Received: from smtp-out3.electric.net (smtp-out3.electric.net [208.70.128.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950238B1B1;
+        Wed,  7 Dec 2022 16:58:20 -0800 (PST)
+Received: from 1p35Ev-000CZe-TS by out3a.electric.net with emc1-ok (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1p35Ex-000CeU-Vi; Wed, 07 Dec 2022 16:58:19 -0800
+Received: by emcmailer; Wed, 07 Dec 2022 16:58:19 -0800
+Received: from [66.210.251.27] (helo=mail.embeddedts.com)
+        by out3a.electric.net with esmtps  (TLS1.2) tls TLS_DHE_RSA_WITH_SEED_CBC_SHA
+        (Exim 4.94.2)
+        (envelope-from <kris@embeddedTS.com>)
+        id 1p35Ev-000CZe-TS; Wed, 07 Dec 2022 16:58:17 -0800
+Received: from tsdebian (unknown [75.164.86.214])
+        by mail.embeddedts.com (Postfix) with ESMTPSA id 6DF976350;
+        Wed,  7 Dec 2022 17:58:37 -0700 (MST)
+Message-ID: <1670461096.7839.1.camel@embeddedTS.com>
+Subject: Re: [PATCH] spi: spi-gpio: Don't set MOSI as an input if not 3WIRE
+ mode
+From:   Kris Bahnsen <kris@embeddedTS.com>
+Reply-To: kris@embeddedTS.com
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mark@embeddedts.com
+Date:   Wed, 07 Dec 2022 16:58:16 -0800
+In-Reply-To: <Y5EzD8AaAj0EGnvH@sirena.org.uk>
+References: <20221207230853.6174-1-kris@embeddedTS.com>
+         <Y5ElXqDduIZhIiAm@sirena.org.uk> <1670459801.7091.1.camel@embeddedTS.com>
+         <Y5EzD8AaAj0EGnvH@sirena.org.uk>
+Organization: embeddedTS
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.22.6-1+deb9u2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Outbound-IP: 66.210.251.27
+X-Env-From: kris@embeddedTS.com
+X-Proto: esmtps
+X-Revdns: wsip-66-210-251-27.ph.ph.cox.net
+X-HELO: mail.embeddedts.com
+X-TLS:  TLS1.2:DHE-RSA-SEED-SHA:128
+X-Authenticated_ID: 
+X-VIPRE-Scanners: virus_bd;virus_clamav;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=embeddedTS.com; s=mailanyone20220121;h=Mime-Version:References:In-Reply-To:Date:To:From:Message-ID; bh=jBOzkw5MaNFhq/JFw7J9yLSH4ULiuio9lwiaduZfN8g=;b=bJumYaoIckcXrlzlEXYEvbhOYKaRMmHaUng3J12nzZ+ZCWpvlUFwzPw1wrnbhWIJnBTupm8DKqdsmipZJINkyU4/ChaSLBomzDaSm6NA4ldWan+HY5qGZX04IZ0AbUmcPL/gdOYq7k1CwPCFc/5viN6D0Zzl8u5QlQHf4H6SZ1skPHV6VFQoehEJpX9AD3D+tTtrRL+FZjvUzxbovigw0/5Qe7k1AWezHXzvdrxUmfr5UgwjsO0/MgwUTgc6gfK/GYsSAtvAj6pWVp1tUBrTj/HVpcJPCmrbth+hf6RK+y/vk0eutrUyUBaPVX/v6cAFPJAiZ87aKbVxrI8R0E0wJQ==;
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
+X-FM-Delivery-Delay: 15749372,23518412
+X-PolicySMART: 13164782, 15749372, 26810492
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,82 +69,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We've encountered a kernel panic with the following stack trace:
+On Thu, 2022-12-08 at 00:42 +0000, Mark Brown wrote:
+> On Wed, Dec 07, 2022 at 04:36:41PM -0800, Kris Bahnsen wrote:
+> > On Wed, 2022-12-07 at 23:44 +0000, Mark Brown wrote:
+> > > A cleaner fix which is probably marginally more performant would be to
+> > > make the setting of spi_gpio_set_direction() conditional on SPI_3WIRE -
+> > > then we won't call into the function at all when not doing 3 wire,
+> > > avoiding the issue entirely.
+> > That makes sense to me. I was operating under the assumption that 3WIRE
+> > mode could be switched in to at a later time via ioctl(), but with the
+> > death of spidev that is presumably no longer a concern.
+> 
+> Ugh, right, spidev.  Really even with spidev devices should probably
+> have the mode configured beforehand (I'm not sure pinmux will do the
+> right thing on most platforms...) but now I check it's part of the ABI
+> so we can't get rid of it and therefore your current patch probably is
+> what we need.  No need to reroll, sorry for the noise :/
 
--> ret_from_fork
- -> kthread
-  -> worker_thread
-   -> process_one_work
-    -> pwq_dec_nr_in_flight
-     -> pwq_activate_inactive_work
+No need to apologize, thanks for the followup. I'm not terribly
+familiar with SPI internals in Linux so I'm not sure how deep that
+rabbit hole goes. Let me know if you change your mind, I will happily
+whip something else up.
 
-The issue was narrowed down to a null pointer dereference within
-pwq_activate_inactive_work() stemming from the return value of
-get_work_pwq() which may return NULL, but was not checked for
-null return prior to use.
+> 
+> I'm not sure why you think spidev is dying, it does still exist and
+> devices use it?
 
-While fixing the issue, other dereferences of get_work_pwq()'s
-return value were found without a null check.
+"The death of spidev" _as a generic interface_.
 
-Add null pointer checks to the calling functions that need them.
-
-Signed-off-by: John Moon <quic_johmoo@quicinc.com>
----
- kernel/workqueue.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 7cd5f5e7e0a1..5de0a2e1aeaa 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1162,6 +1162,9 @@ static void pwq_activate_inactive_work(struct work_struct *work)
- {
- 	struct pool_workqueue *pwq = get_work_pwq(work);
-
-+	if (!pwq)
-+		return;
-+
- 	trace_workqueue_activate_work(work);
- 	if (list_empty(&pwq->pool->worklist))
- 		pwq->pool->watchdog_ts = jiffies;
-@@ -2030,8 +2033,12 @@ static void idle_worker_timeout(struct timer_list *t)
- static void send_mayday(struct work_struct *work)
- {
- 	struct pool_workqueue *pwq = get_work_pwq(work);
--	struct workqueue_struct *wq = pwq->wq;
-+	struct workqueue_struct *wq;
-+
-+	if (!pwq)
-+		return;
-
-+	wq = pwq->wq;
- 	lockdep_assert_held(&wq_mayday_lock);
-
- 	if (!wq->rescuer)
-@@ -2184,9 +2191,10 @@ __acquires(&pool->lock)
- {
- 	struct pool_workqueue *pwq = get_work_pwq(work);
- 	struct worker_pool *pool = worker->pool;
--	bool cpu_intensive = pwq->wq->flags & WQ_CPU_INTENSIVE;
-+	bool cpu_intensive;
- 	unsigned long work_data;
- 	struct worker *collision;
-+
- #ifdef CONFIG_LOCKDEP
- 	/*
- 	 * It is permissible to free the struct work_struct from
-@@ -2199,6 +2207,11 @@ __acquires(&pool->lock)
-
- 	lockdep_copy_map(&lockdep_map, &work->lockdep_map);
- #endif
-+	if (!pwq)
-+		return;
-+
-+	cpu_intensive = pwq->wq->flags & WQ_CPU_INTENSIVE;
-+
- 	/* ensure we're on the correct CPU */
- 	WARN_ON_ONCE(!(pool->flags & POOL_DISASSOCIATED) &&
- 		     raw_smp_processor_id() != pool->cpu);
---
-2.17.1
-
+A number of our products provide a generic pin header with SPI
+available for customer use. We've been told when we RFC'ed dts files
+to support our platforms that spidev isn't acceptable on these
+headers and the downstream developer must add their own as needed.
+Which, many of our customers use devices that don't have drivers
+anyway, so we still have to assist them in getting spidev functional
+in one way or another. It's just a sore spot for us.
