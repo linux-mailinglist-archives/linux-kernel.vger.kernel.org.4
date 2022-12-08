@@ -2,252 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1BD5647501
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AB564750A
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 18:40:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiLHRaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 12:30:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46744 "EHLO
+        id S229651AbiLHRkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 12:40:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiLHR36 (ORCPT
+        with ESMTP id S229530AbiLHRkT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 12:29:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17AE9857F
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:29:57 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DBCD60EA0
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:29:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D757C433D2;
-        Thu,  8 Dec 2022 17:29:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670520596;
-        bh=qSA198bplUrIbdYGyPLtvL7kzzxiHPcIk4XswMN9Yzw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Iq8KU0WtPwZOWPLaGlHsBYp1bdGrxduZAK3WjPnKrnWMq2VsZfh7HHk2AephyDpYd
-         EjsN1X+EKfJL+mEswxNpxPclz5TOg9x18ub0geFbEHOQgBsojIK6pIPylDjT5AAhcN
-         NrJ65WHYNStknY4ZgXmWgkAT76w5i1LPyIpjanTudixDXJvUa49uIS4zXQ7mHrG0Vk
-         uN1msctRq5OI8/lAqWTT+wuNjb/1qCM3LFGVZduWqWZlN/4eZIBXqQ9JwrtwsMmVLC
-         RWwA0PGHKl3XX6oZfMv3zmoDycgUUtTyKOuVoOHuqp1q1H//9ibvqYtsEvOCHJLB7o
-         /c8zwNFTF2Waw==
-Date:   Thu, 8 Dec 2022 09:29:54 -0800
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Subject: Re: [f2fs-dev] [PATCH 1/6] f2fs: specify extent cache for read
- explicitly
-Message-ID: <Y5IfEkHlpZ0oBRID@google.com>
-References: <20221205185433.3479699-1-jaegeuk@kernel.org>
- <8ffb43dd-3887-aa56-6f0a-1fb6ff0e191e@kernel.org>
+        Thu, 8 Dec 2022 12:40:19 -0500
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id DC4877DA6D
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 09:40:17 -0800 (PST)
+Received: (qmail 734591 invoked by uid 1000); 8 Dec 2022 12:40:17 -0500
+Date:   Thu, 8 Dec 2022 12:40:17 -0500
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     syzbot <syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com>,
+        WeitaoWang-oc@zhaoxin.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, khalid.masum.92@gmail.com,
+        kishon@ti.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] KASAN: use-after-free Read in __usb_hcd_giveback_urb (2)
+Message-ID: <Y5IhgenNzQXzbWqT@rowland.harvard.edu>
+References: <0000000000002fc8dc05ef267a9f@google.com>
+ <Y49h3MX8iXEO/na+@rowland.harvard.edu>
+ <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8ffb43dd-3887-aa56-6f0a-1fb6ff0e191e@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cac60598-5080-5876-d28d-e8caab8b9b0f@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08, Chao Yu wrote:
-> On 2022/12/6 2:54, Jaegeuk Kim wrote:
-> > Let's descrbie it's read extent cache.
+On Thu, Dec 08, 2022 at 03:36:45PM +0100, Oliver Neukum wrote:
+> On 06.12.22 16:38, Alan Stern wrote:
+> 
+> Hi,
+> 
+> > Oliver:
 > > 
-> > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> > ---
-> >   fs/f2fs/extent_cache.c |  4 ++--
-> >   fs/f2fs/f2fs.h         | 10 +++++-----
-> >   fs/f2fs/inode.c        |  2 +-
-> >   fs/f2fs/node.c         |  2 +-
-> >   fs/f2fs/node.h         |  2 +-
-> >   fs/f2fs/segment.c      |  4 ++--
-> >   fs/f2fs/super.c        | 16 ++++++++--------
-> >   7 files changed, 20 insertions(+), 20 deletions(-)
+> > This looks like a bug in the anchor API.
+> 
+> Yes, it does.
+> > On Tue, Dec 06, 2022 at 02:43:41AM -0800, syzbot wrote:
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > > 
+> > > HEAD commit:    ef4d3ea40565 afs: Fix server->active leak in afs_put_server
+> > > git tree:       upstream
+> > > console output: https://syzkaller.appspot.com/x/log.txt?x=100b244d880000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=8e7e79f8a1e34200
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=712fd0e60dda3ba34642
+> > > compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > 
+> > > Unfortunately, I don't have any reproducer for this issue yet.
+> > > 
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/ef790e7777cd/disk-ef4d3ea4.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/2ed3c6bc9230/vmlinux-ef4d3ea4.xz
+> > > kernel image: https://storage.googleapis.com/syzbot-assets/f1dbd004fa88/bzImage-ef4d3ea4.xz
+> > > 
+> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > Reported-by: syzbot+712fd0e60dda3ba34642@syzkaller.appspotmail.com
+> > > 
+> > > xpad 3-1:179.65: xpad_irq_in - usb_submit_urb failed with result -19
+> > > xpad 3-1:179.65: xpad_irq_out - usb_submit_urb failed with result -19
+> > > ==================================================================
+> > > BUG: KASAN: use-after-free in register_lock_class+0x8d2/0x9b0 kernel/locking/lockdep.c:1338
+
+> > >   __wake_up+0xf8/0x1c0 kernel/sched/wait.c:156
+> > >   __usb_hcd_giveback_urb+0x3a0/0x530 drivers/usb/core/hcd.c:1674
+> 
+> 
+> > This is the call to usb_anchor_resume_wakeups().  The call is made after
+> > the completion handler callback.  Evidently the xpad driver deallocated
+> > the anchor during that time window.  This can happen if the driver is
+> > just waiting for its last URB to complete before freeing all its memory.
+> 
+> Yes, complete() had run.
 > > 
-> > diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-> > index 932c070173b9..8cd87aee0292 100644
-> > --- a/fs/f2fs/extent_cache.c
-> > +++ b/fs/f2fs/extent_cache.c
-> > @@ -383,7 +383,7 @@ static void __f2fs_init_extent_tree(struct inode *inode, struct page *ipage)
-> >   	if (!i_ext || !i_ext->len)
-> >   		return;
-> > -	get_extent_info(&ei, i_ext);
-> > +	get_read_extent_info(&ei, i_ext);
-> >   	write_lock(&et->lock);
-> >   	if (atomic_read(&et->node_cnt))
-> > @@ -710,7 +710,7 @@ unsigned int f2fs_shrink_extent_tree(struct f2fs_sb_info *sbi, int nr_shrink)
-> >   	unsigned int node_cnt = 0, tree_cnt = 0;
-> >   	int remained;
-> > -	if (!test_opt(sbi, EXTENT_CACHE))
-> > +	if (!test_opt(sbi, READ_EXTENT_CACHE))
-> >   		return 0;
-> >   	if (!atomic_read(&sbi->total_zombie_tree))
-> > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> > index eb8c27c4e5fc..1c39f8145b61 100644
-> > --- a/fs/f2fs/f2fs.h
-> > +++ b/fs/f2fs/f2fs.h
-> > @@ -92,7 +92,7 @@ extern const char *f2fs_fault_name[FAULT_MAX];
-> >   #define F2FS_MOUNT_FLUSH_MERGE		0x00000400
-> >   #define F2FS_MOUNT_NOBARRIER		0x00000800
-> >   #define F2FS_MOUNT_FASTBOOT		0x00001000
-> > -#define F2FS_MOUNT_EXTENT_CACHE		0x00002000
-> > +#define F2FS_MOUNT_READ_EXTENT_CACHE	0x00002000
-> >   #define F2FS_MOUNT_DATA_FLUSH		0x00008000
-> >   #define F2FS_MOUNT_FAULT_INJECTION	0x00010000
-> >   #define F2FS_MOUNT_USRQUOTA		0x00080000
-> > @@ -600,7 +600,7 @@ enum {
-> >   #define F2FS_MIN_EXTENT_LEN	64	/* minimum extent length */
-> >   /* number of extent info in extent cache we try to shrink */
-> > -#define EXTENT_CACHE_SHRINK_NUMBER	128
-> > +#define READ_EXTENT_CACHE_SHRINK_NUMBER	128
-> >   #define RECOVERY_MAX_RA_BLOCKS		BIO_MAX_VECS
-> >   #define RECOVERY_MIN_RA_BLOCKS		1
-> > @@ -830,7 +830,7 @@ struct f2fs_inode_info {
-> >   	loff_t original_i_size;		/* original i_size before atomic write */
-> >   };
-> > -static inline void get_extent_info(struct extent_info *ext,
-> > +static inline void get_read_extent_info(struct extent_info *ext,
-> >   					struct f2fs_extent *i_ext)
-> >   {
-> >   	ext->fofs = le32_to_cpu(i_ext->fofs);
-> > @@ -838,7 +838,7 @@ static inline void get_extent_info(struct extent_info *ext,
-> >   	ext->len = le32_to_cpu(i_ext->len);
-> >   }
-> > -static inline void set_raw_extent(struct extent_info *ext,
-> > +static inline void set_raw_read_extent(struct extent_info *ext,
-> >   					struct f2fs_extent *i_ext)
-> >   {
-> >   	i_ext->fofs = cpu_to_le32(ext->fofs);
-> > @@ -4407,7 +4407,7 @@ static inline bool f2fs_may_extent_tree(struct inode *inode)
-> >   {
-> >   	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-> > -	if (!test_opt(sbi, EXTENT_CACHE) ||
-> > +	if (!test_opt(sbi, READ_EXTENT_CACHE) ||
-> >   			is_inode_flag_set(inode, FI_NO_EXTENT) ||
-> >   			(is_inode_flag_set(inode, FI_COMPRESSED_FILE) &&
-> >   			 !f2fs_sb_has_readonly(sbi)))
-> > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-> > index 577f109b4e1d..2c705c60019b 100644
-> > --- a/fs/f2fs/inode.c
-> > +++ b/fs/f2fs/inode.c
-> > @@ -629,7 +629,7 @@ void f2fs_update_inode(struct inode *inode, struct page *node_page)
-> >   	if (et) {
-> >   		read_lock(&et->lock);
-> > -		set_raw_extent(&et->largest, &ri->i_ext);
-> > +		set_raw_read_extent(&et->largest, &ri->i_ext);
-> >   		read_unlock(&et->lock);
-> >   	} else {
-> >   		memset(&ri->i_ext, 0, sizeof(ri->i_ext));
-> > diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-> > index b9ee5a1176a0..84b147966080 100644
-> > --- a/fs/f2fs/node.c
-> > +++ b/fs/f2fs/node.c
-> > @@ -85,7 +85,7 @@ bool f2fs_available_free_memory(struct f2fs_sb_info *sbi, int type)
-> >   						sizeof(struct ino_entry);
-> >   		mem_size >>= PAGE_SHIFT;
-> >   		res = mem_size < ((avail_ram * nm_i->ram_thresh / 100) >> 1);
-> > -	} else if (type == EXTENT_CACHE) {
-> > +	} else if (type == READ_EXTENT_CACHE) {
-> >   		mem_size = (atomic_read(&sbi->total_ext_tree) *
-> >   				sizeof(struct extent_tree) +
-> >   				atomic_read(&sbi->total_ext_node) *
-> > diff --git a/fs/f2fs/node.h b/fs/f2fs/node.h
-> > index 3c09cae058b0..0aa48704c77a 100644
-> > --- a/fs/f2fs/node.h
-> > +++ b/fs/f2fs/node.h
-> > @@ -146,7 +146,7 @@ enum mem_type {
-> >   	NAT_ENTRIES,	/* indicates the cached nat entry */
-> >   	DIRTY_DENTS,	/* indicates dirty dentry pages */
-> >   	INO_ENTRIES,	/* indicates inode entries */
-> > -	EXTENT_CACHE,	/* indicates extent cache */
-> > +	READ_EXTENT_CACHE,	/* indicates read extent cache */
-> >   	DISCARD_CACHE,	/* indicates memory of cached discard cmds */
-> >   	COMPRESS_PAGE,	/* indicates memory of cached compressed pages */
-> >   	BASE_CHECK,	/* check kernel status */
-> > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-> > index 9486ca49ecb1..51de358bc452 100644
-> > --- a/fs/f2fs/segment.c
-> > +++ b/fs/f2fs/segment.c
-> > @@ -449,8 +449,8 @@ void f2fs_balance_fs_bg(struct f2fs_sb_info *sbi, bool from_bg)
-> >   		return;
-> >   	/* try to shrink extent cache when there is no enough memory */
-> > -	if (!f2fs_available_free_memory(sbi, EXTENT_CACHE))
-> > -		f2fs_shrink_extent_tree(sbi, EXTENT_CACHE_SHRINK_NUMBER);
-> > +	if (!f2fs_available_free_memory(sbi, READ_EXTENT_CACHE))
-> > +		f2fs_shrink_extent_tree(sbi, READ_EXTENT_CACHE_SHRINK_NUMBER);
-> >   	/* check the # of cached NAT entries */
-> >   	if (!f2fs_available_free_memory(sbi, NAT_ENTRIES))
-> > diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-> > index 79bf1faf4161..10bd03bbefec 100644
-> > --- a/fs/f2fs/super.c
-> > +++ b/fs/f2fs/super.c
-> > @@ -814,10 +814,10 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
-> >   			set_opt(sbi, FASTBOOT);
-> >   			break;
-> >   		case Opt_extent_cache:
-> > -			set_opt(sbi, EXTENT_CACHE);
-> > +			set_opt(sbi, READ_EXTENT_CACHE);
-> >   			break;
-> >   		case Opt_noextent_cache:
-> > -			clear_opt(sbi, EXTENT_CACHE);
-> > +			clear_opt(sbi, READ_EXTENT_CACHE);
-> >   			break;
-> >   		case Opt_noinline_data:
-> >   			clear_opt(sbi, INLINE_DATA);
-> > @@ -1954,10 +1954,10 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
-> >   		seq_puts(seq, ",barrier");
-> >   	if (test_opt(sbi, FASTBOOT))
-> >   		seq_puts(seq, ",fastboot");
-> > -	if (test_opt(sbi, EXTENT_CACHE))
-> > -		seq_puts(seq, ",extent_cache");
-> > +	if (test_opt(sbi, READ_EXTENT_CACHE))
-> > +		seq_puts(seq, ",read_extent_cache");
+> > I don't know what the best solution is.  It may be necessary to refcount
+> > anchors somehow.
 > 
-> How about keeping consistent w/ description of f2fs.rst?
+> Then we cannot embed them anymore. Many drivers would need a lot of changes.
+> xpad included.
 
-This doesn't change the mount options, but do show the exact name which
-would be better to say what's going on.
+It's hard to tell what's really going on.  Looking at 
+xpad_stop_output(), you see that it doesn't do anything if xpad->type is 
+XTYPE_UNKNOWN.  Is that what happened here?
 
+I can't figure out where the underlying race is.  Maybe it's not 
+directly connected with anchors after all.
+
+> As far as I can tell the order we decrease use_count is correct. But:
 > 
-> >   	else
-> > -		seq_puts(seq, ",noextent_cache");
-> > +		seq_puts(seq, ",no_read_extent_cache");
+> 6ec4147e7bdbd (Hans de Goede             2013-10-09 17:01:41 +0200 1674)        usb_anchor_resume_wakeups(anchor);
+> 94dfd7edfd5c9 (Ming Lei                  2013-07-03 22:53:07 +0800 1675)        atomic_dec(&urb->use_count);
 > 
-> Ditto,
-> 
-> Thanks,
-> 
-> >   	if (test_opt(sbi, DATA_FLUSH))
-> >   		seq_puts(seq, ",data_flush");
-> > @@ -2076,7 +2076,7 @@ static void default_options(struct f2fs_sb_info *sbi)
-> >   	set_opt(sbi, INLINE_XATTR);
-> >   	set_opt(sbi, INLINE_DATA);
-> >   	set_opt(sbi, INLINE_DENTRY);
-> > -	set_opt(sbi, EXTENT_CACHE);
-> > +	set_opt(sbi, READ_EXTENT_CACHE);
-> >   	set_opt(sbi, NOHEAP);
-> >   	clear_opt(sbi, DISABLE_CHECKPOINT);
-> >   	set_opt(sbi, MERGE_CHECKPOINT);
-> > @@ -2218,7 +2218,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
-> >   	bool need_restart_ckpt = false, need_stop_ckpt = false;
-> >   	bool need_restart_flush = false, need_stop_flush = false;
-> >   	bool need_restart_discard = false, need_stop_discard = false;
-> > -	bool no_extent_cache = !test_opt(sbi, EXTENT_CACHE);
-> > +	bool no_read_extent_cache = !test_opt(sbi, READ_EXTENT_CACHE);
-> >   	bool enable_checkpoint = !test_opt(sbi, DISABLE_CHECKPOINT);
-> >   	bool no_io_align = !F2FS_IO_ALIGNED(sbi);
-> >   	bool no_atgc = !test_opt(sbi, ATGC);
-> > @@ -2308,7 +2308,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
-> >   	}
-> >   	/* disallow enable/disable extent_cache dynamically */
-> > -	if (no_extent_cache == !!test_opt(sbi, EXTENT_CACHE)) {
-> > +	if (no_read_extent_cache == !!test_opt(sbi, READ_EXTENT_CACHE)) {
-> >   		err = -EINVAL;
-> >   		f2fs_warn(sbi, "switch extent_cache option is not allowed");
-> >   		goto restore_opts;
+> Do we need to guarantee memory ordering here?
+
+I don't think we need to do anything more.  usb_kill_urb() is careful to 
+wait for completion handlers to finish, and we already have 
+smp_mb__after_atomic() barriers in the appropriate places to ensure 
+proper memory ordering.
+
+Alan Stern
