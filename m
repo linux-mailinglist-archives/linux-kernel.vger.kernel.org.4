@@ -2,208 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4048F6469D7
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:46:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6576469E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 08:51:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiLHHqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 02:46:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S229781AbiLHHvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 02:51:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiLHHqN (ORCPT
+        with ESMTP id S229674AbiLHHvU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 02:46:13 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912C710B5
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:46:12 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id k7so766777pll.6
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 23:46:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4iyFOc6mqeP0ouoUVHWQ24fiUJSM8xa0yloWBaFJIWU=;
-        b=hSXLMlS7cq0ZWNmDcq+AQdcH1tqKoCl5GXc5v1woHa9r91Dn311rsGUOCaI8gZkQ2c
-         uiXDlUFpWJKEMpO2Jee7vYEWQe4FlDQfwj9LoNSnwOBTYJdBExc+QI3ilnYzuE1hmTfc
-         HtS+vbRzZnpPujhe/o+eb+bXlLXQW/tKZZ4gGbzgVrwjJ8SSoL21HUviVnSUNeYw+xYK
-         myjcmxfvQUe2zMMgIcbmrr+ibOCW8LpID9yl7WN0YHCiUWVFJ/3ynIUH8n7DV5pJ0xML
-         IW/rkN+J404oI3iLaGKgK8eWF0HpVjKril4ilYAN2CKFHmB4xRzFrei2zlydUkiLub2v
-         Y3OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4iyFOc6mqeP0ouoUVHWQ24fiUJSM8xa0yloWBaFJIWU=;
-        b=F0UNfRktzFDwu0WiVTUFHC32/X11C6qkDeKPIbLaxOE468kWZcyTvOshaWiy6QKe1F
-         1MDUmpBBYzvn6S5/Me5LOjs9JAWkR+p84ZwHxw9GE31njAutkgKR2qazEB16tYg2+TxR
-         vnzdvp3fKAkgnG+ozoqGmmOt88LlcVKQ5lSkOw440pVT3no35gMIlWsc0CnrbUvFNlr7
-         e/GyZRTyCLyBbVP0MsSA07XB5dooBSTGhgUghr6uPI/NtoUOthjtfF1O72AxgDvwUzut
-         48nUIMtD9XdVIRxkcjuIoTE6nB7im26hthjKikf5zizZRnVpBE3ogg/bSxJhjXs6kiF3
-         jG0g==
-X-Gm-Message-State: ANoB5pk7ihVdK5gPjB5yeMuFNRu6Hx3gtQGRKYMYwxtRJJlY4QinZThs
-        OLVRhkoOH5Bmn7/xT+4cqvc44NBPPrqs4f5JljIFhoWis/U=
-X-Google-Smtp-Source: AA0mqf7Uc1XJZhtQcKixumA3f4EcFMFZruB0XBpYcddutroGDMHk1NONgcRSlrpBbxqNCNM1I0li/sHtEM5VdJPCzvI=
-X-Received: by 2002:a17:902:d510:b0:186:b137:4b42 with SMTP id
- b16-20020a170902d51000b00186b1374b42mr4087976plg.98.1670485572053; Wed, 07
- Dec 2022 23:46:12 -0800 (PST)
+        Thu, 8 Dec 2022 02:51:20 -0500
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6627F3E097
+        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 23:51:19 -0800 (PST)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p3BgU-0003Dz-SH; Thu, 08 Dec 2022 08:51:10 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p3BgS-0035oC-HE; Thu, 08 Dec 2022 08:51:09 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1p3BgS-003TQ0-ML; Thu, 08 Dec 2022 08:51:08 +0100
+Date:   Thu, 8 Dec 2022 08:51:02 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-kernel@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
+        Angel Iglesias <ang.iglesiasg@gmail.com>,
+        linux-i2c@vger.kernel.org, kernel@pengutronix.de,
+        Grant Likely <grant.likely@linaro.org>,
+        Lee Jones <lee.jones@linaro.org>, linux-leds@vger.kernel.org
+Subject: Re: [PATCH 288/606] leds: turris-omnia: Convert to i2c's .probe_new()
+Message-ID: <20221208075102.qumdzncjglpdrq35@pengutronix.de>
+References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+ <20221118224540.619276-289-uwe@kleine-koenig.org>
+ <20221202111221.zl7w6guy4bgqwkdp@pengutronix.de>
+ <Y5D34yLLJ+d7sDbi@duo.ucw.cz>
 MIME-Version: 1.0
-References: <CAJNi4rOgYmmtOaXVqYB9sAxDmRhGhS_vVXmZbCbMjvFCQsdjCw@mail.gmail.com>
- <CAJhGHyD+oR8SeYeObJ2DSKfudqBtBOiL14jCsST3L5OG8WjT_g@mail.gmail.com>
- <CAJNi4rOs-=xx5qV-hQQYgSLQCz_q3JuFxJEd+wpPaao8Ej26yQ@mail.gmail.com>
- <CAJhGHyAVbCm6i7pTRDDXgdwS25d5O3uMCvKzyOcafRAdN-S7JQ@mail.gmail.com>
- <CAJNi4rNU0-GVnLMqdGFvHOsTb26eDEgjZJSE6Doo8QU6MYx+JQ@mail.gmail.com>
- <CAJhGHyC=-bD8L5KSYLp3_tN0WdoCYgtpwNaM_=oLb2c=Gsu+6A@mail.gmail.com> <CAJNi4rMDOSq6-ba4CV88E7e-f8Wzq0e6M5bYV8LBS=LzLb7--Q@mail.gmail.com>
-In-Reply-To: <CAJNi4rMDOSq6-ba4CV88E7e-f8Wzq0e6M5bYV8LBS=LzLb7--Q@mail.gmail.com>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Thu, 8 Dec 2022 15:46:00 +0800
-Message-ID: <CAJhGHyAEF8Hi-f1xtWA6jRNbr+hkKv4K_LJytMGF06BD86cZyg@mail.gmail.com>
-Subject: Re: work item still be scheduled to execute after destroy_workqueue?
-To:     richard clark <richard.xnu.clark@gmail.com>
-Cc:     tj@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="p7efjmlg2zhegoce"
+Content-Disposition: inline
+In-Reply-To: <Y5D34yLLJ+d7sDbi@duo.ucw.cz>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 10:44 AM richard clark
-<richard.xnu.clark@gmail.com> wrote:
->
-> On Wed, Dec 7, 2022 at 10:38 AM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
-> >
-> > On Tue, Dec 6, 2022 at 5:20 PM richard clark
-> > <richard.xnu.clark@gmail.com> wrote:
-> > >
-> > > On Tue, Dec 6, 2022 at 2:23 PM Lai Jiangshan <jiangshanlai@gmail.com> wrote:
-> > > >
-> > > > On Tue, Dec 6, 2022 at 12:35 PM richard clark
-> > > > <richard.xnu.clark@gmail.com> wrote:
-> > > >
-> > > > > >
-> > > > > A WARN is definitely reasonable and has its benefits. Can I try to
-> > > > > submit the patch and you're nice to review as maintainer?
-> > > > >
-> > > > > Thanks,
-> > > > > Richard
-> > > > > >
-> > > >
-> > > > Sure, go ahead.
-> > > >
-> > > > What's in my mind is that the following code is wrapped in a new function:
-> > > >
-> > > >         mutex_lock(&wq->mutex);
-> > > >         if (!wq->nr_drainers++)
-> > > >                 wq->flags |= __WQ_DRAINING;
-> > > >         mutex_unlock(&wq->mutex);
-> > > >
-> > > >
-> > > > and the new function replaces the open code drain_workqueue() and
-> > > > is also called in destroy_workqueue() (before calling drain_workqueue()).
-> > > >
-> > > Except that, do we need to defer the __WQ_DRAINING clean to the
-> > > rcu_call, thus we still have a close-loop of the drainer's count, like
-> > > this?
-> >
-> > No, I don't think we need it. The wq is totally freed in rcu_free_wq.
-> >
-> > Or we can just introduce __WQ_DESTROYING.
-> >
-> > It seems using __WQ_DESTROYING is better.
->
-> The wq->flags will be unreliable after kfree(wq), for example, in my
-> machine, the wq->flags can be 0x7ec1e1a3, 0x37cff1a3 or 0x7fa23da3 ...
-> after wq be kfreed, consequently the result of queueing a new work
-> item to a kfreed wq is undetermined, sometimes it's ok because the
-> queue_work will return directly(e.g, the wq->flags = 0x7ec1e1a3, a
-> fake __WQ_DRAINING state), sometimes it will trigger a kernel NULL
-> pointer dereference BUG when the wq->flags = 0x7fa23da3(fake
-> !__WQ_DRAINING state).
 
-The whole wq is unreliable after destroy_workqueue().
+--p7efjmlg2zhegoce
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-All we need is just adding something to help identify any
-wrong usage while the wq is in RCU grace period.
+Hello Pavel,
 
->
-> IMO, given the above condition,  we can handle this in 2 phases:
-> before the rcu_call and after.
-> a. before rcu_call. Using __WQ_DESTROYING to allow the chained work
-> queued in or not in destroy_workqueue(...) level, __WQ_DRAINING is
-> used to make the drain_workqueue(...) still can be standalone. The
-> code snippet like this:
-> destroy_workqueue(...)
-> {
->         mutex_lock(&wq->mutex);
->         wq->flags |= __WQ_DESTROYING;
->         mutex_lock(&wq->mutex);
+On Wed, Dec 07, 2022 at 09:30:27PM +0100, Pavel Machek wrote:
+> > On Fri, Nov 18, 2022 at 11:40:22PM +0100, Uwe Kleine-K=F6nig wrote:
+> > > From: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> > >=20
+> > > The probe function doesn't make use of the i2c_device_id * parameter =
+so it
+> > > can be trivially converted.
+> > >=20
+> > > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> >=20
+> > I didn't get any feedback from your side about this patch set.
+> >=20
+> > In case the problem is "only" to get the led patches out of this
+> > series, I recommend:
+> >=20
+> > 	b4 am -l -s -P268-288 20221118224540.619276-1-uwe@kleine-koenig.org
+>=20
+> Yeah, well, I guess:
+>=20
+> # A part of the patches depend on commit 662233731d66 ("i2c: core:
+> # Introduce i2c_client_get_device_id helper function"), there is a branch=
+ that
+> # you can pull into your tree to get it:
+>=20
+> this is a bit of a problem because Linus will be unhappy if I pull
+> into my for-next branch.
 
-Ok, put it before calling drain_workqueue()
+I wonder if it's you or me who has a wrong expectation about Linus here.
+IIUC he is unhappy if you pull some random tree (e.g. his own) for no
+better reason than to update, but an immutable tag/branch to get a
+dependency right should be fine. That's the whole idea about immutable
+tags and branches, isn't it?
 
->         ...
-> }
->
-> __queue_work(...)
-> {
->           if (unlikely((wq->flags & __WQ_DESTROYING) || (wq->flags &
-> __WQ_DRAINING)) &&
->                    WARN_ON_ONCE(!is_chained_work(wq)))
+Looking at today's next, there are several merges of this immutable branch:
 
-Ok, combine __WQ_DESTROYING and __WQ_DRAINING together as:
-           if (unlikely((wq->flags & (__WQ_DESTROYING | __WQ_DRAINING)) &&
+ - 3d94887aca09 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
+ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into next")
+   by Dmitry Torokhov for branch 'next' of git://git.kernel.org/pub/scm/lin=
+ux/kernel/git/dtor/input.git
+ - 719c547c6551 ("Merge branch 'i2c/client_device_id_helper-immutable' of g=
+it://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux")
+   by Herbert Xu for branch 'master' of git://git.kernel.org/pub/scm/linux/=
+kernel/git/herbert/cryptodev-2.6.git
+ - 963c7fe6cdbf ("Merge branch i2c/client_device_id_helper-immutable of wsa=
+/linux into next")
+   by Michael Ellerman for branch 'next' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/powerpc/linux.git
+ - 06fa87fc9311 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
+ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into gpio/for-next=
+")
+   by Bartosz Golaszewski for branch 'gpio/for-next' of git://git.kernel.or=
+g/pub/scm/linux/kernel/git/brgl/linux.git
+ - 2f88b7050d67 ("Merge 'i2c/client_device_id_helper-immutable'")
+   by Sebastian Reichel for branch 'for-next' of git://git.kernel.org/pub/s=
+cm/linux/kernel/git/sre/linux-power-supply.git
+ - b15654dd11e6 ("Merge remote-tracking branch 'i2c/i2c/client_device_id_he=
+lper-immutable' into togreg")
+   by Jonathan Cameron for branch 'char-misc-next' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/gregkh/char-misc.git
+ - 149f52664bb3 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
+ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into regulator-6.2=
+")
+   by Mark Brown for branch 'for-next' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/broonie/regulator.git
+ - e0c7800a5530 ("Merge branch 'i2c/client_device_id_helper-immutable' into=
+ i2c/for-mergewindow")
+   by Wolfram Sang for branch 'i2c/for-next' of git://git.kernel.org/pub/sc=
+m/linux/kernel/git/wsa/linux.git
+ - 4cb55a9a1ab7 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
+ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into HEAD")
+   by Mark Brown for branch 'for-next' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/broonie/sound.git
+ - c43c0e589e69 ("Merge branch 'i2c/client_device_id_helper-immutable' of g=
+it://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux")
+   by Jakub Kicinski for branch 'master' of git://git.kernel.org/pub/scm/li=
+nux/kernel/git/netdev/net-next.git
+ - 41948bd9cf01 ("Merge branch 'i2c/client_device_id_helper-immutable' of h=
+ttps://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux into spi-6.2")
+   by Mark Brown for branch 'for-next' of git://git.kernel.org/pub/scm/linu=
+x/kernel/git/broonie/spi.git
 
+mfd and backlight just started stacking on top of 662233731d66cf41e7494e532=
+e702849c8ce18f3.
 
->          return;
-> }
->
-> b. after rcu_call. What in my mind is:
-> rcu_free_wq(struct rcu_head *rcu)
-> {
->           ...
->           kfree(wq);
->           wq = NULL;
+So you should be in good company at least if Linus gets angry :-)
 
-It is useless code.
+Best regards
+Uwe
 
-> }
->
-> __queue_work(...)
-> {
->         if (!wq)
->                 return;
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
-It is useless code.
+--p7efjmlg2zhegoce
+Content-Type: application/pgp-signature; name="signature.asc"
 
->         ...
-> }
->
-> Any comments?
->
-> >
-> > >
-> > > --- a/kernel/workqueue.c
-> > > +++ b/kernel/workqueue.c
-> > >
-> > > @@ -3528,6 +3526,9 @@ static void rcu_free_wq(struct rcu_head *rcu)
-> > >
-> > >         else
-> > >                 free_workqueue_attrs(wq->unbound_attrs);
-> > >
-> > > +       if (!--wq->nr_drainers)
-> > > +               wq->flags &= ~__WQ_DRAINING;
-> > > +
-> > >         kfree(wq);
-> > >
-> > > >
-> > > > __WQ_DRAINING will cause the needed WARN on illegally queuing items on
-> > > > destroyed workqueue.
-> > >
-> > > I will re-test it if there are no concerns about the above fix...
-> > >
-> > > >
-> > > > Thanks
-> > > > Lai
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmORl2EACgkQwfwUeK3K
+7AleJAf/UEPqNbZFQjdQN2ZGCsACyJSUDwz0MILVRHDJFmgs30JLP3JSz6KA5nul
+046t7c+cQgBYXjDtBotpeKtPrzgEv+vPDfOPtj/B7SAWdMEMUZUE8BoLbOLq55RH
+RlvotEUpF4vBC7uOX7G7VUsSsfqT/QbLbg3/b7CuubA1w8FYM4gI5d0Oajoc4TH5
+qfLgwJfL5kkiv364sgNv6un/iDTuoKUG1py5P2ztbHndFCr1W85PnekJvJ8I8yX3
+DH/JR/CWSan0+FUrG5uw8TbAhYJW36bIGE4BeLMDcIBsWGGlad337TiAXiPv5FrH
+fHp96wpwbfAsUo0vdaBJ3qeTWIj3+A==
+=JqHu
+-----END PGP SIGNATURE-----
+
+--p7efjmlg2zhegoce--
