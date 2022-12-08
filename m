@@ -2,164 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F5016470AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01256470B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 14:21:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiLHNTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 08:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40878 "EHLO
+        id S230148AbiLHNU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 08:20:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiLHNSo (ORCPT
+        with ESMTP id S229601AbiLHNUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 08:18:44 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 300B894911
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:18:33 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p3GnH-0001Jh-5K; Thu, 08 Dec 2022 14:18:31 +0100
-Message-ID: <ba953e75-d069-47e8-a467-217d4c600f5b@leemhuis.info>
-Date:   Thu, 8 Dec 2022 14:18:30 +0100
+        Thu, 8 Dec 2022 08:20:51 -0500
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F5892A39
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 05:20:50 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id x11so645939ilo.13
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 05:20:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l+8f7R5Bh5XH8mXZ7Mq9vlU+wLO8F2293iNf6qWF9/8=;
+        b=L6bqhDcFLpV3GdkbsEF+3lJo4zdCBjgntAGQ6+aPoi7Y8vAXvA3whIvadIqKvOSwPR
+         /1fuwwFAi/PO4lZZ3WvAMd5spOSoPOi5mgp0Ox1YYPmz0CZGuJUHYqNzdJ8vMIjU9xCn
+         pGkmJmS3LPkICuOeTOxD4gQHUlmFjXxDsrPSfz9x2wVDgw/5lO7irz8ez/TJKAu9D5wC
+         0R5uh1NCQEmwKqwCqjLEh9hswKkZLO0HhwIbhW6QlZFnBphH+v+kqiGWEV0DTbJ3tMT7
+         C1SH0mXRHh4tXxrVR5y+VB3L2TibA+J/5iMr0SH3QtEtVsg9vqzXkJMG59HM41XEyBnS
+         w9PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l+8f7R5Bh5XH8mXZ7Mq9vlU+wLO8F2293iNf6qWF9/8=;
+        b=ZaKSdyzYkPRakepwy9SjhXCuuIC7p5pwUN1MuJWamFurm+/UNkexd9Y7OdFps6/4Z4
+         6xcZbGGaEr2QOcJ7BTBwGZFvEkOlm9C6YD5imf/xEUqgK2MDeAjJ/K/ViiDK7Em00S5X
+         Mi6p4JPRe2AYUCwq5Lh/mMJKDtLmtHIxD+N3aCib0P0lygcDmPO0xwN43ms4KM97rf4v
+         JV2QjkFQ3m5BxjNCYP5sHWZG4JhZinTX5jbemCVmaHtVPu35PmPwjLwYImmmoYEk5D1g
+         KXXQs3SEeajCqRXD81bNtU5UpPKw72Kxcwri3fM0FKne91TI2ibOm5AEDF7mzLd6uGxz
+         s0iw==
+X-Gm-Message-State: ANoB5plUi3AZXJNvvU/syi4urxIWjvG+txLNSTP5KJ5qzxmXluBE4g88
+        MS8PqQ5Z5bC8t7ty0z4GcYiy0wi+vxPfbzx9R2O/HQ==
+X-Google-Smtp-Source: AA0mqf7aBhqmCKG9No0zjuDlXHqzG4ImOJbXaMaWLJOjSjM0KR+tkyQ8O0Ucex7P96Fyy6STfpboH2OO6VQtZBaGmKE=
+X-Received: by 2002:a92:7c0c:0:b0:302:efa3:6230 with SMTP id
+ x12-20020a927c0c000000b00302efa36230mr29267158ilc.232.1670505649909; Thu, 08
+ Dec 2022 05:20:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Content-Language: en-US, de-DE
-To:     Joe Perches <joe@perches.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?Q?Kai_Wasserb=c3=a4ch?= <kai@dev.carbon-project.org>
-References: <20221205131424.36909375d90d5a40cd028bc0@linux-foundation.org>
- <11a9fe60f5333a931b8d75f67808b6d923c16dfa.camel@perches.com>
- <25f4838b-208a-cf8c-914c-b2092665d56f@leemhuis.info>
- <23a61dd072ee1d2cc5b54281b0a9dc13e01aa0b8.camel@perches.com>
- <bba95554-19a0-d548-d63c-811b229cbca0@leemhuis.info>
- <d64338a1-e708-dd1f-4d9c-3b793754a8fa@leemhuis.info>
- <b76cd99552c135629ab8e52d3e929916c7965a14.camel@perches.com>
- <9958a748-2608-8ed2-6e8f-2f3291286271@leemhuis.info>
- <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: Fw: [PATCH 0/2] feat: checkpatch: prohibit Buglink: and warn
- about missing Link:
-In-Reply-To: <15f7df96d49082fb7799dda6e187b33c84f38831.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1670505513;a6c52991;
-X-HE-SMSGID: 1p3GnH-0001Jh-5K
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221207101705.9460-1-lukasz.luba@arm.com> <20221207101705.9460-3-lukasz.luba@arm.com>
+ <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com>
+ <7428f6dd-9403-180b-d4b4-7ef1aee3dcb1@arm.com> <CAKfTPtDoZ2paL7DW+JsML8aKeVzwu4oSnojij1osqJzNhO4ceA@mail.gmail.com>
+ <4a648e81-e529-e09c-ed8b-10b703f1c305@arm.com>
+In-Reply-To: <4a648e81-e529-e09c-ed8b-10b703f1c305@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Thu, 8 Dec 2022 14:20:38 +0100
+Message-ID: <CAKfTPtBPJma6DtDnheM3AeD_wEAyMPE+Buckvx8AQ3AzO4mN8A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
+ single max CPU capacity
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rafael@kernel.org, dietmar.eggemann@arm.com, saravanak@google.com,
+        wusamuel@google.com, isaacmanjarres@google.com,
+        kernel-team@android.com, juri.lelli@redhat.com,
+        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
+        bsegall@google.com, mgorman@suse.de, viresh.kumar@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 06.12.22 10:21, Joe Perches wrote:
-> On Tue, 2022-12-06 at 09:50 +0100, Thorsten Leemhuis wrote:
->> On 06.12.22 08:44, Joe Perches wrote:
->>> On Tue, 2022-12-06 at 08:17 +0100, Thorsten Leemhuis wrote:
->>>> On 06.12.22 07:27, Thorsten Leemhuis wrote:
->>>>> On 06.12.22 06:54, Joe Perches wrote:
->>> []
->>>>>> and perhaps a more
->>>>>> generic, "is the thing in front of a URI/URL" a known/supported entry,
->>>>>> instead of using an known invalid test would be a better mechanism.
->>>>>
->>>>> Are you sure about that? It's not that I disagree completely, but it
->>>>> sounds overly restrictive to me and makes it harder for new tags to
->>>>> evolve in case we might want them.
->>>
->>> It's easy to add newly supported values to a list.
->>>
->>>>> And what tags would be on this allow-list? Anything else then "Link" and
->>>>> "Patchwork"? Those are the ones that looked common and valid to me when
->>>>> I ran
->>>>>
->>>>> git log --grep='http' v4.0.. | grep http | grep -v '    Link: ' | less
->>>>>
->>>>> and skimmed the output. Maybe "Datasheet" should be allowed, too -- not
->>>>> sure.
->>> []
->>>>> But I found a few others that likely should be on the disallow list:
->>>>> "Closes:", "Bug:", "Gitlab issue:", "References:", "Ref:", "Bugzilla:",
->>>>> "RHBZ:", and "link", as "Link" should be used instead in all of these
->>>>> cases afaics.
->>>
->>> Do understand please that checkpatch will never be perfect.
->>> At best, it's just a guidance tool.
->>
->> Of course -- and that's actually a reason why I prefer a disallow list
->> over an allow list, as that gives guidance in the way of "don't use this
->> tag, use Link instead" instead of enforcing "always use Link: when
->> linking somewhere" (now that I've written it like that it feels even
->> more odd, because it's obvious that it's a link, so why bother with a
->> tag; but whatever).
->>
->> I also think the approach with a disallow list will not bother
->> developers much, while the other forces them a bit to much into a scheme.
->>
->>> To me most of these are in the noise level, but perhaps all should just
->>> use Link:
->>>
->>> $ git log -100000 --format=email -P --grep='^\w+:[ \t]*http' | \
->>>   grep -Poh '^\w+:[ \t]*http' | \
->>>   sort | uniq -c | sort -rn
->>>  103889 Link: http
->>>     415 BugLink: http
->>>     372 Patchwork: http
->>>     270 Closes: http
->>>     221 Bug: http
->>>     121 References: http
->>>     101 v1: http
->>>      77 Bugzilla: http
->>>      60 URL: http
->>>      59 v2: http
->>>      37 Datasheet: http
->>>      35 v3: http
->>>      19 v4: http
->>>      12 v5: http
+On Thu, 8 Dec 2022 at 11:56, Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
->> Ha, I considered doing something like that when I wrote my earlier mail,
->> but was to lazy. :-D thx!
->>
->> Yeah, they are not that often, but I grew tired arguing about that,
->> that's why I think checkpatch is the better place and in the better
->> position to handle that.
-> 
-> I'm not sure that "Patchwork:" is a reasonable prefix.
-> Is that documented anywhere?
-> 
->> Anyway, so how to move forward now? Do you insist on a allow list (IOW:
->> a Link: or Patchwork: before every http...)? Or is a disallow list with
->> the most common unwanted tags for links (that you thankfully compiled)
->> fine for you as well?
-> 
-> Maybe
-> ---
->  scripts/checkpatch.pl | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> index 1c3d13e65c2d0..a526a354cdfbc 100755
-> --- a/scripts/checkpatch.pl
-> +++ b/scripts/checkpatch.pl
-> @@ -3250,6 +3250,13 @@ sub process {
->  			$commit_log_possible_stack_dump = 0;
->  		}
->  
-> +# Check for odd prefixes before a URI/URL
-> +		if ($in_commit_log &&
-> +		    $line =~ /^\s*(\w+):\s*http/ && $1 !~ /^(?:Link|Patchwork)/) {
-> +			WARN("PREFER_LINK",
-> +			     "Unusual link reference '$1:', prefer 'Link:'\n" . $herecurr);
-> +		}
-> +
+>
+>
+> On 12/8/22 10:31, Vincent Guittot wrote:
+> > On Thu, 8 Dec 2022 at 11:06, Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>
+> >>
+> >>
+> >> On 12/8/22 08:37, Vincent Guittot wrote:
+> >>> On Wed, 7 Dec 2022 at 11:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
+> >>>>
+> >>>> The max CPU capacity is the same for all CPUs sharing frequency domain
+> >>>> and thus 'policy' object. There is a way to avoid heavy operations
+> >>>> in a loop for each CPU by leveraging this knowledge. Thus, simplify
+> >>>> the looping code in the sugov_next_freq_shared() and drop heavy
+> >>>> multiplications. Instead, use simple max() to get the highest utilization
+> >>>> from these CPUs. This is useful for platforms with many (4 or 6) little
+> >>>> CPUs.
+> >>>>
+> >>>> The max CPU capacity must be fetched every time we are called, due to
+> >>>> difficulties during the policy setup, where we are not able to get the
+> >>>> normalized CPU capacity at the right time.
+> >>>>
+> >>>> The stored value in sugov_policy::max is also than used in
+> >>>> sugov_iowait_apply() to calculate the right boost. Thus, that field is
+> >>>> useful to have in that sugov_policy struct.
+> >>>>
+> >>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> >>>> ---
+> >>>>    kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
+> >>>>    1 file changed, 11 insertions(+), 11 deletions(-)
+> >>>>
+> >>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> >>>> index c19d6de67b7a..f9881f3d9488 100644
+> >>>> --- a/kernel/sched/cpufreq_schedutil.c
+> >>>> +++ b/kernel/sched/cpufreq_schedutil.c
+> >>>> @@ -158,10 +158,8 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+> >>>>
+> >>>>    static void sugov_get_util(struct sugov_cpu *sg_cpu)
+> >>>>    {
+> >>>> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> >>>>           struct rq *rq = cpu_rq(sg_cpu->cpu);
+> >>>>
+> >>>> -       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> >>>>           sg_cpu->bw_dl = cpu_bw_dl(rq);
+> >>>>           sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+> >>>>                                             FREQUENCY_UTIL, NULL);
+> >>>> @@ -317,6 +315,8 @@ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
+> >>>>    static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> >>>>                                                 u64 time, unsigned int flags)
+> >>>>    {
+> >>>> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> >>>> +
+> >>>>           sugov_iowait_boost(sg_cpu, time, flags);
+> >>>>           sg_cpu->last_update = time;
+> >>>>
+> >>>> @@ -325,6 +325,9 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+> >>>>           if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+> >>>>                   return false;
+> >>>>
+> >>>> +       /* Fetch the latest CPU capcity to avoid stale data */
+> >>>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> >>>> +
+> >>>>           sugov_get_util(sg_cpu);
+> >>>>           sugov_iowait_apply(sg_cpu, time);
+> >>>>
+> >>>> @@ -414,25 +417,22 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+> >>>>    {
+> >>>>           struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> >>>>           struct cpufreq_policy *policy = sg_policy->policy;
+> >>>> -       unsigned long util = 0, max = 1;
+> >>>> +       unsigned long util = 0;
+> >>>>           unsigned int j;
+> >>>>
+> >>>> +       /* Fetch the latest CPU capcity to avoid stale data */
+> >>>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+> >>>> +
+> >>>>           for_each_cpu(j, policy->cpus) {
+> >>>>                   struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> >>>> -               unsigned long j_util, j_max;
+> >>>>
+> >>>>                   sugov_get_util(j_sg_cpu);
+> >>>>                   sugov_iowait_apply(j_sg_cpu, time);
+> >>>> -               j_util = j_sg_cpu->util;
+> >>>> -               j_max = j_sg_cpu->max;
+> >>>>
+> >>>> -               if (j_util * max > j_max * util) {
+> >>>> -                       util = j_util;
+> >>>> -                       max = j_max;
+> >>>> -               }
+> >>>
+> >>> With the code removed above, max is only used in 2 places:
+> >>> - sugov_iowait_apply
+> >>> - map_util_freq
+> >>>
+> >>> I wonder if it would be better to just call arch_scale_cpu_capacity()
+> >>> in these 2 places instead of saving a copy in sg_policy and then
+> >>> reading it twice.
+> >>
+> >> The sugov_iowait_apply() is called in that loop, so probably I will
+> >> add a new argument to that call and just feed it with the capacity value
+> >> from one CPU, which was read before the loop. So, similarly what is in
+> >> this patch. Otherwise, all of those per-cpu capacity vars would be
+> >> accessed inside the sugov_iowait_apply() with sg_cpu->cpu.
+> >
+> > Yes make sense
+> >
+> >>
+> >>>
+> >>> arch_scaleu_cpu_capacity is already a per_cpu variable so accessing it
+> >>> should be pretty cheap.
+> >>
+> >> Yes and no, as you said this is per-cpu variable and would access them
+> >> from one CPU, which is running that loop. They will have different pages
+> >> and addresses so cache lines on that CPU. to avoiding trashing a cache
+> >> lines on this running CPU let's read that capacity once, before the
+> >> loop. Let's use the new arg to pass that value via one of the
+> >> registers. In such, only one cache line would have to fetch that data
+> >> into.
+> >>
+> >> So I thought this simple sg_policy->max would do the trick w/o a lot
+> >> of hassle.
+> >
+> > For the shared mode, everything is located in sugov_next_freq_shared
+> > so you don't need to save the max value with your proposal above to
+> > change sugov_iowait_apply interface.
+> >
+> > This should be doable as well for single mode
+> >
+> >>>
+> >>> Thought ?
+> >>>
+> >>
+> >> I can change that and drop the sg_policy->max and call differently
+> >> those capacity values. I will have to unfortunately drop Viresh's ACKs,
+> >> since this will be a way different code.
+> >>
+> >> Thanks Vincent for the suggestion. Do you want me to go further with
+> >> such approach and send a v3?
+> >
+> > Don't know what Rafael and Viresh think but it seems that we don't
+> > need to save the return of arch_scale_cpu_capacity in ->max field but
+> > directly use it
+>
+> Yes I agree, we don't need to, but I will have to modify a few function
+> calls and args.
+>
+> So IMO we have agreed. I won't call the call arch_scale_cpu_capacity()
+> in these 2 places, but I will make it with the local var and data
+> fetched as little as possible.
 
-One more thing: That afaics would result in a warning when people use
-things like "v1: https://example.com/somewhere", which some people
-apparently like. Those imho are not considered tags, hence I'd say we
-allow them, unless you disagree.
-
-Ciao, Thorsten
+yes
