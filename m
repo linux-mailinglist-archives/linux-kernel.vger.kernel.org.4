@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0EDA646B23
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:55:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97066646B29
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 09:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiLHIza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 03:55:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57602 "EHLO
+        id S229813AbiLHI4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 03:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiLHIz1 (ORCPT
+        with ESMTP id S229470AbiLHI4o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 03:55:27 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68494220FC
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:55:26 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id t18so753122pfq.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:55:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6VayokB70LyrjXyEVWXgl8dkywJiJ31ush1u5QME9Tk=;
-        b=C0p48f4zpfmKrFRC7iJWW38eFBvFreifFdLYzew/eWTOnEWLrf4Rec7rra16DB2OAv
-         g6pUj+47xCV17nBOXuIjD7gYLZbqPXHjodmrpj8SzA0wctQqsrnMCMtUk3JCVUJnQJDL
-         f2c8wvIDA1W0GLJMHx4g55gxi5D1SIXU4cwLWkUlqqNnmsam/sEOGOu0gnXgzucoo+b5
-         TPLidokkjGh6Sg7WH9BftcmV6TzjWzmNLzSj0769x+lj/9q5sJnfimWRxewpTGQFv6Hh
-         +DXVSIm1aPR0H1QvYu/5Zw8cH/2JJZBW0975UEhnzrYYpfjvIlAodMbKcEc8e9hWM4uY
-         SKJg==
+        Thu, 8 Dec 2022 03:56:44 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E68C61B92
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 00:55:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670489742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=94o1vDMU6dLWOzRVJEl23OAXi5JeqCSUmbJc/8D9OYk=;
+        b=XIbIbgE2kN3C93rw9VnzqLxAXhWO27v4zI+zIRzd4/EV3aNGc/2tCss5qcEoKRi/2LCNw/
+        6iREnmhg4zcaxQUic/lWh2GRG+zGp5uAzXnin9f+HNfk3DwjmrpDvknSkjweTFMUyepcot
+        qcKXL1GVnynGA6oQhroQ+VTdRpBZI4w=
+Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
+ [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-490-r0Py_6g1NuOfMjPRAnwy-Q-1; Thu, 08 Dec 2022 03:55:38 -0500
+X-MC-Unique: r0Py_6g1NuOfMjPRAnwy-Q-1
+Received: by mail-vs1-f69.google.com with SMTP id a4-20020a671a04000000b003b057ae263cso168413vsa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 00:55:38 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6VayokB70LyrjXyEVWXgl8dkywJiJ31ush1u5QME9Tk=;
-        b=0Uw2Iqnir2wjBLvXi5t5mONPb1rgwgvbFNa1ScZ8WzUThXl8fmhIhxzf361Ug3AtLk
-         UZ7r3tAQ0jX7kIRjQ1vGmFCDeymfuwZEy1gBXpH4zpDEgU2Pu5XPmoFlABsUcw72Qplw
-         gj50MAK8aD6/UNkZFk9oDV+xFUO4RF8Ea5hAI/lajOboEoCQ6z1Khen6bgWRctR6kCSB
-         pelFgGmrXsuG8MepNDHD5FIphKcFaNTAIknF263+5CnI9TMALaEunjFe+iWqmVAtFZtg
-         PJgvnXbPMwLCUqcAzfcoD8bOgzChXPtBo3T68YeiY1JR/776mEFIuDxUZLunxD4xDvax
-         QxgA==
-X-Gm-Message-State: ANoB5plLTydzS3Ad9S/YYj4tPLSshyl+eBIzfoJSjEi8MLB4IvazxOkd
-        sMLstF42yQdQE+PaAESE8Yp8LQ==
-X-Google-Smtp-Source: AA0mqf61iqjNUTJ3MoLwp1y/7j/mwSj98Di9I2tLZhII1HDwxBs6fk7hVhzy/DYluSIMVt0fv0vgyw==
-X-Received: by 2002:a62:6d46:0:b0:563:54fd:3638 with SMTP id i67-20020a626d46000000b0056354fd3638mr97634913pfc.44.1670489725917;
-        Thu, 08 Dec 2022 00:55:25 -0800 (PST)
-Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.253])
-        by smtp.gmail.com with ESMTPSA id w10-20020a170902e88a00b00183c67844aesm16158990plg.22.2022.12.08.00.55.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 00:55:25 -0800 (PST)
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-To:     dan.j.williams@intel.com, willy@infradead.org, jack@suse.cz,
-        muchun.song@linux.dev
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        nvdimm@lists.linux.dev, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: [PATCH] dax: Kconfig: add depends on !FS_DAX_LIMITED for ARCH_HAS_PMEM_API
-Date:   Thu,  8 Dec 2022 16:55:14 +0800
-Message-Id: <20221208085514.8529-1-zhengqi.arch@bytedance.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+        bh=94o1vDMU6dLWOzRVJEl23OAXi5JeqCSUmbJc/8D9OYk=;
+        b=m+RIKifXueKm8OgeKz/ReF9jRbPEMiACNHtFxZe+nMmXbA+ib6oLSaEGAQLAgV5Dnv
+         /P8ZZThFb6P43/s6TPz/4JAfGl3qWeGEoe1ra6OE0AUdcfU6UAx6A90NYQ0AFRPo7fkc
+         glEXfQRM/KvKiMPiNkIJAh4KQnzjQivWKnAQ871aNkH8vlsAh1plnS8D1Em+cOuOXa+Z
+         y6amsK/pek2DXHqdG03a5nnhBu+hqkZdbqK3cG+HHkATNGPa3BtESN4ij5amqwnH2q36
+         cc2YYG/hmXnCf6qmipHCc3WrE2QYzWnyMaolJmFRQB38LhHpxjCAAdNcTEZ+aoN5Kq3P
+         H3Ww==
+X-Gm-Message-State: ANoB5pm2E7pRUujBD15FUg5Zvdu9L9cJBeOzRDwjnFdc1IvjdpCXRZ75
+        T06gpK1nb+Gh0Tf7rpNOS+MhW7ovmQxGayu4Gj92OqP1/q2UK4+bj383n0JOMRbNFnD3MEyn57I
+        RikaTtIQyVjggf+Ix5HMc4W7jeDuo5NlLWLNEd/Uw
+X-Received: by 2002:a05:6102:a4c:b0:3aa:2125:2573 with SMTP id i12-20020a0561020a4c00b003aa21252573mr41688486vss.59.1670489737618;
+        Thu, 08 Dec 2022 00:55:37 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5RYrccsx+1CD8iQ1H386933+kgTEz7P8+0xUUtameokiOyPtVElOj0qR1dboms72q9sne52T2ahn4Gs+1Ikl0=
+X-Received: by 2002:a05:6102:a4c:b0:3aa:2125:2573 with SMTP id
+ i12-20020a0561020a4c00b003aa21252573mr41688483vss.59.1670489737380; Thu, 08
+ Dec 2022 00:55:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221206090939.871239-1-zhongjinghua@huawei.com> <Y4/mzMd4evRg9yDi@fedora>
+In-Reply-To: <Y4/mzMd4evRg9yDi@fedora>
+From:   Ming Lei <ming.lei@redhat.com>
+Date:   Thu, 8 Dec 2022 16:55:26 +0800
+Message-ID: <CAFj5m9KHDMaK5jg3_UXNWiEFbSNt9Ot==B8Bdxd8_G_Kis0nsw@mail.gmail.com>
+Subject: Re: [PATCH-next] block: fix null-deref in percpu_ref_put
+To:     Dennis Zhou <dennis@kernel.org>
+Cc:     Zhong Jinghua <zhongjinghua@huawei.com>, tj@kernel.org,
+        cl@linux.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yukuai3@huawei.com,
+        Ming Lei <ming.lei@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,41 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The implementation of dax_flush() is non-NULL if
-CONFIG_ARCH_HAS_PMEM_API is selected. Then if we select
-CONFIG_FS_DAX_LIMITED with CONFIG_ARCH_HAS_PMEM_API in
-the future, the dax_flush() in the dax_writeback_one()
-will cause a panic since it accepts the struct page by
-default:
+On Wed, Dec 7, 2022 at 9:08 AM Dennis Zhou <dennis@kernel.org> wrote:
+>
+> Hello,
+>
+> On Tue, Dec 06, 2022 at 05:09:39PM +0800, Zhong Jinghua wrote:
+> > A problem was find in stable 5.10 and the root cause of it like below.
+> >
+> > In the use of q_usage_counter of request_queue, blk_cleanup_queue using
+> > "wait_event(q->mq_freeze_wq, percpu_ref_is_zero(&q->q_usage_counter))"
+> > to wait q_usage_counter becoming zero. however, if the q_usage_counter
+> > becoming zero quickly, and percpu_ref_exit will execute and ref->data
+> > will be freed, maybe another process will cause a null-defef problem
+> > like below:
+> >
+> >       CPU0                             CPU1
+> > blk_mq_destroy_queue
+> >  blk_freeze_queue
+> >   blk_mq_freeze_queue_wait
+> >                               scsi_end_request
+> >                                percpu_ref_get
+> >                                ...
+> >                                percpu_ref_put
+> >                                 atomic_long_sub_and_test
+> >  blk_put_queue
+> >   kobject_put
+> >    kref_put
+> >     blk_release_queue
+> >      percpu_ref_exit
+> >       ref->data -> NULL
+> >                                  ref->data->release(ref) -> null-deref
+> >
+>
+> I remember thinking about this a while ago. I don't think this fix works
+> as nicely as it may seem. Please correct me if I'm wrong.
+>
+> q->q_usage_counter has the oddity that the lifetime of the percpu_ref
+> object isn't managed by the release function. The freeing is handled by
+> a separate path where it depends on the percpu_ref hitting 0. So here we
+> have 2 concurrent paths racing to run with 1 destroying the object. We
+> probably need blk_release_queue() to wait on percpu_ref's release
+> finishing, not starting.
+>
+> I think the above works in this specific case because there is a
+> call_rcu() in blk_release_queue(). If there wasn't a call_rcu(),
+> then by the same logic we could delay ref->data->release(ref) further
+> and that could potentially lead to a use after free.
+>
+> Ideally, I think fixing the race in q->q_usage_counter's pattern is
+> better than masking it here as I think we're being saved by the
+> call_rcu() call further down the object release path.
 
-dax_flush(dax_dev, page_address(pfn_to_page(pfn)), count * PAGE_SIZE);
+The problem is actually in percpu_ref_is_zero(), which can return true
+before ->release() is called. And any pattern of wait_event(percpu_ref_is_zero)
+may imply such risk.
 
-Instead of fixing this, it is better to declare in Kconfig
-that pmem does not support CONFIG_FS_DAX_LIMITED now.
+It may be not easy to fix the issue in block layer cleanly, but can be
+solved in percpu-refcount simply by adding ->release_lock(spin lock)
+in the counter for draining atomic_long_sub_and_test() & ->release()
+in percpu_ref_exit(). Or simply use percpu_ref_switch_lock.
 
-Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
----
-BTW, it seems that CONFIG_FS_DAX_LIMITED currently only has
-DCSSBLK as a user, but this makes filesystems dax must support
-the case that the struct page is not required, which makes the
-code complicated. Is it possible to remove DCSSBLK or change it
-to also require struct page?
-
- lib/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/Kconfig b/lib/Kconfig
-index a7cd6605cc6c..6989ad3fea99 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -672,6 +672,7 @@ config ARCH_NO_SG_CHAIN
- 
- config ARCH_HAS_PMEM_API
- 	bool
-+	depends on !FS_DAX_LIMITED
- 
- config MEMREGION
- 	bool
--- 
-2.20.1
+Thanks,
+Ming
 
