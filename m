@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B293E646666
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:19:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9E6C646668
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 02:20:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiLHBTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 20:19:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S229702AbiLHBUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 20:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLHBTV (ORCPT
+        with ESMTP id S229538AbiLHBUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 20:19:21 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6648DBEF;
-        Wed,  7 Dec 2022 17:19:21 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id n9-20020a05600c3b8900b003d0944dba41so2376474wms.4;
-        Wed, 07 Dec 2022 17:19:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=F7aBLr/WPCbhlzqY1hJmfvUDhrJb2eGJyyyPzfEuW20=;
-        b=LO2BdsfLlTDkFnX9Xj5fkiZ3SWRLoLJZ0h95C8AfwUJ8qp1CuZbt9eE2I6UNsJx7kc
-         +5ZGauRadHGOg2oxisS5UTc+xIO8QKzbRraYgBXReR6wTbFK0WYbTYhCga7c4Ngq6uXi
-         sQxIZXMLCLFcigZhRa2g2bfmP4T+Z5drCbCexzMzcyRUjZVX403OYSO3LTJWPBfgAZcU
-         6klk5o/gTA8WUi5oDIHeiLWtWPWQqtLNfUB5H+fKXgwPbSYDAOYaHOo1ymbBjMUvN/JX
-         n5hp2e59EPtTXimJFpZYfGsNxzOdQZVp6ebX4tlL3sG09xoul79SxjUE0Ho4XRh2/WCi
-         faQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F7aBLr/WPCbhlzqY1hJmfvUDhrJb2eGJyyyPzfEuW20=;
-        b=QKsNhRr5fijPhQIboM+4cHcwZHCOg6EtlXuWO8vM/dc2aLDGDd0zcYrg6xoyg40Atw
-         Bddlhhw2pR/nzzS9zv1A//D52Mxf6PF/M67WnapIvuHdp1n2+KI8GAFbdE5nszTkh2Yn
-         gPfhuuo0Hj5dtRhqJecKzERTju1VlYDtsjx/SOs5B8YM1oNkou4QnYdulyaSJ/AykSjq
-         K5yz+IEAaq3uZzcF5MwLzRheBsDKUlgYuLkeDrEPElhrTVd7LTyaSeSz67z1oNWhoJAf
-         aRobjwv/NAh9QJAfLNiiGbi/zbbDA68KHfjkPH50F72SuCa737k/+pNnBOccyEcID/o8
-         zl4A==
-X-Gm-Message-State: ANoB5pmH3wDVoW0mXXetXnOMAsuqXJcgxK/YusvWN+9h7PHUKuzFbwIH
-        qtw+6CwOypWbcqXMuEs4CWq3RsM3RNO5ws0iOjzpm58UIAE=
-X-Google-Smtp-Source: AA0mqf4DbsF4RH0Ewkt69H/TCQxV9+I0zxyi1ZlWvGczAE+bgBwxUCAFX828O0r8xYXt3zKDgSwntxGlBbSIAJ2jpyQ=
-X-Received: by 2002:a05:600c:524c:b0:3d0:8698:4bcc with SMTP id
- fc12-20020a05600c524c00b003d086984bccmr17137435wmb.144.1670462359569; Wed, 07
- Dec 2022 17:19:19 -0800 (PST)
+        Wed, 7 Dec 2022 20:20:01 -0500
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 427C08DFE5;
+        Wed,  7 Dec 2022 17:19:59 -0800 (PST)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-05 (Coremail) with SMTP id zQCowAAXfuyqO5FjpT+vBQ--.8312S2;
+        Thu, 08 Dec 2022 09:19:38 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     jiri@resnulli.us
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH net v2] ice: Add check for kzalloc
+Date:   Thu,  8 Dec 2022 09:19:36 +0800
+Message-Id: <20221208011936.47943-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-From:   Hao Peng <flyingpenghao@gmail.com>
-Date:   Thu, 8 Dec 2022 09:19:08 +0800
-Message-ID: <CAPm50aJTh7optC=gBXfj+1HKVu+9U0165mYH0sjj3Jqgf8Aivg@mail.gmail.com>
-Subject: [PATCH] KVM: use unified srcu interface function
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAAXfuyqO5FjpT+vBQ--.8312S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CrW5uw4Uur4xAFyDuFykXwb_yoW8tF1Dpa
+        15JFyjyrW8Ar4UWrnrXF4qvFW5uayxJ340ga9rJ345ZF1qyr1rt3WjkryYyr1rGrW7ZanI
+        qF15AFZ7CasFvr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr
+        1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv
+        7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r
+        1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02
+        628vn2kIc2xKxwCY02Avz4vE14v_KwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbV
+        WUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF
+        67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42
+        IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF
+        0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxh
+        VjvjDU0xZFpf9x0JUHpB-UUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peng Hao <flyingpeng@tencent.com>
+As kzalloc may return NULL pointer, the return value should
+be checked and return error if fails in order to avoid the
+NULL pointer dereference.
+Moreover, use the goto-label to share the clean code.
 
-kvm->irq_routing is protected by kvm->irq_srcu.
-
-Signed-off-by: Peng Hao <flyingpeng@tencent.com>
+Fixes: d6b98c8d242a ("ice: add write functionality for GNSS TTY")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- virt/kvm/irqchip.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Changelog:
 
-diff --git a/virt/kvm/irqchip.c b/virt/kvm/irqchip.c
-index 1e567d1f6d3d..90f54f04e37c 100644
---- a/virt/kvm/irqchip.c
-+++ b/virt/kvm/irqchip.c
-@@ -216,7 +216,8 @@ int kvm_set_irq_routing(struct kvm *kvm,
-        }
+v1 -> v2:
 
-        mutex_lock(&kvm->irq_lock);
--       old = rcu_dereference_protected(kvm->irq_routing, 1);
-+       old = srcu_dereference_check(kvm->irq_routing, &kvm->irq_srcu,
-+                                       lockdep_is_held(&kvm->irq_lock));
-        rcu_assign_pointer(kvm->irq_routing, new);
-        kvm_irq_routing_update(kvm);
-        kvm_arch_irq_routing_update(kvm);
---
-2.27.0
+1. Use goto-label to share the clean code.
+---
+ drivers/net/ethernet/intel/ice/ice_gnss.c | 25 ++++++++++++++---------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/ice/ice_gnss.c b/drivers/net/ethernet/intel/ice/ice_gnss.c
+index b5a7f246d230..7bd3452a16d2 100644
+--- a/drivers/net/ethernet/intel/ice/ice_gnss.c
++++ b/drivers/net/ethernet/intel/ice/ice_gnss.c
+@@ -421,7 +421,7 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+ 	const int ICE_TTYDRV_NAME_MAX = 14;
+ 	struct tty_driver *tty_driver;
+ 	char *ttydrv_name;
+-	unsigned int i;
++	unsigned int i, j;
+ 	int err;
+ 
+ 	tty_driver = tty_alloc_driver(ICE_GNSS_TTY_MINOR_DEVICES,
+@@ -462,6 +462,9 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+ 					       GFP_KERNEL);
+ 		pf->gnss_serial[i] = NULL;
+ 
++		if (!pf->gnss_tty_port[i])
++			goto err_out;
++
+ 		tty_port_init(pf->gnss_tty_port[i]);
+ 		tty_port_link_device(pf->gnss_tty_port[i], tty_driver, i);
+ 	}
+@@ -469,21 +472,23 @@ static struct tty_driver *ice_gnss_create_tty_driver(struct ice_pf *pf)
+ 	err = tty_register_driver(tty_driver);
+ 	if (err) {
+ 		dev_err(dev, "Failed to register TTY driver err=%d\n", err);
+-
+-		for (i = 0; i < ICE_GNSS_TTY_MINOR_DEVICES; i++) {
+-			tty_port_destroy(pf->gnss_tty_port[i]);
+-			kfree(pf->gnss_tty_port[i]);
+-		}
+-		kfree(ttydrv_name);
+-		tty_driver_kref_put(pf->ice_gnss_tty_driver);
+-
+-		return NULL;
++		goto err_out;
+ 	}
+ 
+ 	for (i = 0; i < ICE_GNSS_TTY_MINOR_DEVICES; i++)
+ 		dev_info(dev, "%s%d registered\n", ttydrv_name, i);
+ 
+ 	return tty_driver;
++
++err_out:
++	for (j = 0; j < i; j++) {
++		tty_port_destroy(pf->gnss_tty_port[j]);
++		kfree(pf->gnss_tty_port[j]);
++	}
++	kfree(ttydrv_name);
++	tty_driver_kref_put(pf->ice_gnss_tty_driver);
++
++	return NULL;
+ }
+ 
+ /**
+-- 
+2.25.1
+
