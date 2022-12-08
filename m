@@ -2,76 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5533646F35
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 13:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E2E646DF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 12:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229646AbiLHMCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 07:02:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52422 "EHLO
+        id S230262AbiLHLDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 06:03:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbiLHMCU (ORCPT
+        with ESMTP id S230366AbiLHLDE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 07:02:20 -0500
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E655C880CF
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 04:02:19 -0800 (PST)
-Received: by mail-io1-f70.google.com with SMTP id l22-20020a05660227d600b006dfa191ca8aso553156ios.20
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 04:02:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JjxQ34dJ3tskIxeH8twqyU5m7zs/JDWT/OvBnJNVkBs=;
-        b=s+u7/vzQNa0sGv9DdLOHC8tdRc6e2rMB6nvMUUeHPlYq1fXQhXIqWazElz3BDr2Pi9
-         e6VZKTfxvwlatbqon6NMjbTDOUEQspw2hVVo/VMgGqDNyf4Z2YNRmJVahPz69SSxPJZX
-         FCXL1R+aUVfI2t2ZWzSjcGe27V35jelcforNxlFimqrYhjGAWFBKlGpOyRIgXvU+f6Yo
-         eSbZEWHFExP2WedISln/ov4kpu2xXqhAJ8aD+gNIJp4BWaAvELn6Dn2nRPs0nnTeGfwb
-         Y/OoD501Rvk5LVQ3n+h2BkZJsdm4Sbmvd1to+s1c67+aeoYhs7gQ4bNQ8Dv5/UO67uFl
-         oZig==
-X-Gm-Message-State: ANoB5plu7XKKnsURalUw6TGu2qoQ0bPqxuSkkRnFiXzhE++RDRwF4Vo/
-        oiE+Ro2CyhLsapED+LThR2J0nvZYAS2kDh2emsuIslY+IoZ5
-X-Google-Smtp-Source: AA0mqf67s/XQpJ2AqNhm4XZgalEZHGLLg2lCUbf0Sqoa5kCKwQ9T8+5LPwZV5H5IkKnRAeWTfc/Whj54TCBMv2tRuh1s+ZDQK05Q
+        Thu, 8 Dec 2022 06:03:04 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0F060B7F;
+        Thu,  8 Dec 2022 03:01:24 -0800 (PST)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NSWLt6dS9znTmV;
+        Thu,  8 Dec 2022 18:57:10 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500012.china.huawei.com
+ (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 8 Dec
+ 2022 19:01:21 +0800
+From:   Li Zetao <lizetao1@huawei.com>
+To:     <kevin.curtis@farsite.co.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC:     <lizetao1@huawei.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] net: farsync: Fix kmemleak when rmmods farsync
+Date:   Thu, 8 Dec 2022 20:05:40 +0800
+Message-ID: <20221208120540.3758720-1-lizetao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Received: by 2002:a5e:a604:0:b0:6de:353:ab43 with SMTP id
- q4-20020a5ea604000000b006de0353ab43mr34638237ioi.40.1670500939298; Thu, 08
- Dec 2022 04:02:19 -0800 (PST)
-Date:   Thu, 08 Dec 2022 04:02:19 -0800
-In-Reply-To: <1728523.1670498408@warthog.procyon.org.uk>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000015816905ef4fcf16@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_lookup_local
-From:   syzbot <syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
-        kuba@kernel.org, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+There are two memory leaks reported by kmemleak:
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+  unreferenced object 0xffff888114b20200 (size 128):
+    comm "modprobe", pid 4846, jiffies 4295146524 (age 401.345s)
+    hex dump (first 32 bytes):
+      e0 62 57 09 81 88 ff ff e0 62 57 09 81 88 ff ff  .bW......bW.....
+      01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    backtrace:
+      [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
+      [<ffffffff83d35c78>] __hw_addr_add_ex+0x198/0x6c0
+      [<ffffffff83d3989d>] dev_addr_init+0x13d/0x230
+      [<ffffffff83d1063d>] alloc_netdev_mqs+0x10d/0xe50
+      [<ffffffff82b4a06e>] alloc_hdlcdev+0x2e/0x80
+      [<ffffffffa016a741>] fst_add_one+0x601/0x10e0 [farsync]
+      ...
 
-Reported-and-tested-by: syzbot+3538a6a72efa8b059c38@syzkaller.appspotmail.com
+  unreferenced object 0xffff88810b85b000 (size 1024):
+    comm "modprobe", pid 4846, jiffies 4295146523 (age 401.346s)
+    hex dump (first 32 bytes):
+      00 00 b0 02 00 c9 ff ff 00 70 0a 00 00 c9 ff ff  .........p......
+      00 00 00 f2 00 00 00 f3 0a 00 00 00 02 00 00 00  ................
+    backtrace:
+      [<ffffffff815bcd82>] kmalloc_trace+0x22/0x60
+      [<ffffffffa016a294>] fst_add_one+0x154/0x10e0 [farsync]
+      [<ffffffff82060e83>] local_pci_probe+0xd3/0x170
+      ...
 
-Tested on:
+The root cause is traced to the netdev and fst_card_info are not freed
+when removes one fst in fst_remove_one(), which may trigger oom if
+repeated insmod and rmmod module.
 
-commit:         d8b879c0 Merge branch 'net-ethernet-ti-am65-cpsw-fix-s..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=14186857880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c608c21151db14f2
-dashboard link: https://syzkaller.appspot.com/bug?extid=3538a6a72efa8b059c38
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=1257cd23880000
+Fix it by adding free_netdev() and kfree() in fst_remove_one(), just as
+the operations on the error handling path in fst_add_one().
 
-Note: testing is done by a robot and is best-effort only.
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Li Zetao <lizetao1@huawei.com>
+---
+ drivers/net/wan/farsync.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/net/wan/farsync.c b/drivers/net/wan/farsync.c
+index 6a212c085435..5b01642ca44e 100644
+--- a/drivers/net/wan/farsync.c
++++ b/drivers/net/wan/farsync.c
+@@ -2545,6 +2545,7 @@ fst_remove_one(struct pci_dev *pdev)
+ 		struct net_device *dev = port_to_dev(&card->ports[i]);
+ 
+ 		unregister_hdlc_device(dev);
++		free_netdev(dev);
+ 	}
+ 
+ 	fst_disable_intr(card);
+@@ -2564,6 +2565,7 @@ fst_remove_one(struct pci_dev *pdev)
+ 				  card->tx_dma_handle_card);
+ 	}
+ 	fst_card_array[card->card_no] = NULL;
++	kfree(card);
+ }
+ 
+ static struct pci_driver fst_driver = {
+-- 
+2.31.1
+
