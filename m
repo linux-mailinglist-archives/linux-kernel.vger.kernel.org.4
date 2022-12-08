@@ -2,71 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11086466DF
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:21:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9307F6466E5
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 03:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiLHCVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 7 Dec 2022 21:21:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S229572AbiLHCXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 7 Dec 2022 21:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiLHCVh (ORCPT
+        with ESMTP id S229449AbiLHCW6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 7 Dec 2022 21:21:37 -0500
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA3737063C
-        for <linux-kernel@vger.kernel.org>; Wed,  7 Dec 2022 18:21:36 -0800 (PST)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3b5d9050e48so234447b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 07 Dec 2022 18:21:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aR88s3Ybl0DvsKtxthIky8N3akpynVM/kGiV7SX8Qbo=;
-        b=B/xBlaIF+jNGf5iiBTKySZ+7r2wiB/6Xv26z88ota5t3XkT+7X3jaFadw+Q82Qq1P0
-         chRs2VEEEuIHVszUV9iO786js+VI5QCkZaOa7MevzcJoWFIZ57z0HhX11ZZLuJ5X14gR
-         sr6drNTXHEhi9WRx5ZRMcB1GRSgBHLx/f4zFnwlpW/tqzcOJmZfbt9lLChFr97uz23uc
-         A/O+w/60sZ/qChHf12ohkzNBzMwLAxUf+lrI+7EgmLTzv6iugqzCVAUpcaIuZ9uSpAer
-         +TUeVkG4BuvM0apTeklDKZzFz+HyOsWzs8xkxWZPVI6mwkfeLH2ZQZcea/0ZKlkQBl34
-         b4rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aR88s3Ybl0DvsKtxthIky8N3akpynVM/kGiV7SX8Qbo=;
-        b=dcXA8GKVVsKffT3eDc7v1pHvl+PWpBo6zNebHSrgQX7g9nBBtBBHKpdnwgTlH+2zEj
-         zH2e/WEg+mZAOeU+BJSozC8u7MQq9q4Jsf+qE06YNGNleGwbspb+Hsut6S1vKUYvez93
-         cBvgtoDLLpuubTWE+3kTATYBSxnIhQ/pkMQi2hB2ZHGXLupbbz7I0Su8YK6qGocBPLAX
-         O/YYrQK/hmKKE7utWujUY7IG25wCyXdJ9EUu6ewO8IMzqW1ky8NpxTiblxTHV13U03yG
-         1VcZztoYfWX279XLE+iAEU+yepn7IORVqf1Emr6ecif+pKAuZ1hCOGJ0LK5tPwBzZtHZ
-         ENHA==
-X-Gm-Message-State: ANoB5plDOTZ4q6h01jMHiRRAdA5HYhekqM8193GlJxuUiNDCGCrrB8Qi
-        W7zDqt1UXfO11oo4fD3bUHsUcWTIz8Nt+fKJkHKkHQ==
-X-Google-Smtp-Source: AA0mqf7xQ7rLKJrYh5a/tN47/NHtHo8yir8GaUwY1K2ECqfq0uO/K35W6r+Pk4UhT9NWj3cGe/hz1ww294pRASJKUnc=
-X-Received: by 2002:a81:4f46:0:b0:36c:aaa6:e571 with SMTP id
- d67-20020a814f46000000b0036caaa6e571mr23216066ywb.467.1670466095559; Wed, 07
- Dec 2022 18:21:35 -0800 (PST)
+        Wed, 7 Dec 2022 21:22:58 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AEC8E59A;
+        Wed,  7 Dec 2022 18:22:53 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id E6BBB24E17E;
+        Thu,  8 Dec 2022 10:22:45 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 10:22:45 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
+ (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 8 Dec
+ 2022 10:22:44 +0800
+Message-ID: <82b08671-3119-98ab-dc19-21f1d5119a84@starfivetech.com>
+Date:   Thu, 8 Dec 2022 10:22:43 +0800
 MIME-Version: 1.0
-References: <20221207225435.1273226-1-lixiaoyan@google.com>
-In-Reply-To: <20221207225435.1273226-1-lixiaoyan@google.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Thu, 8 Dec 2022 03:21:24 +0100
-Message-ID: <CANn89iLCUywiUVASmk0WtishPdURFSsMD4y7e=uuwz8hdQHLJw@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 1/2] IPv6/GRO: generic helper to remove
- temporary HBH/jumbo header in driver
-To:     Coco Li <lixiaoyan@google.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 5/7] net: stmmac: Add StarFive dwmac supoort
+Content-Language: en-US
+To:     Emil Renner Berthing <emil.renner.berthing@canonical.com>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Michael Chan <michael.chan@broadcom.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-6-yanhong.wang@starfivetech.com>
+ <CAJM55Z9bdpxLsKOM8UhE=b5Z2uPzL227N1-x6d8AuvkZHRajqA@mail.gmail.com>
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <CAJM55Z9bdpxLsKOM8UhE=b5Z2uPzL227N1-x6d8AuvkZHRajqA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX173.cuchost.com
+ (172.16.6.93)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,129 +67,264 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 11:54 PM Coco Li <lixiaoyan@google.com> wrote:
->
-> IPv6/TCP and GRO stacks can build big TCP packets with an added
-> temporary Hop By Hop header.
->
-> Is GSO is not involved, then the temporary header needs to be removed in
-> the driver. This patch provides a generic helper for drivers that need
-> to modify their headers in place.
->
-> Tested:
-> Compiled and ran with ethtool -K eth1 tso off
-> Could send Big TCP packets
->
-> Signed-off-by: Coco Li <lixiaoyan@google.com>
-> ---
->  include/net/ipv6.h     | 36 ++++++++++++++++++++++++++++++++++++
->  net/ipv6/ip6_offload.c | 27 ++++-----------------------
->  2 files changed, 40 insertions(+), 23 deletions(-)
->
-> diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-> index d383c895592a..6dcf93a1ec14 100644
-> --- a/include/net/ipv6.h
-> +++ b/include/net/ipv6.h
-> @@ -500,6 +500,42 @@ static inline int ipv6_has_hopopt_jumbo(const struct sk_buff *skb)
->         return jhdr->nexthdr;
->  }
->
-> +/* Return 0 if HBH header is successfully removed
-> + * Or if HBH removal is unnecessary (packet is not big TCP)
-> + * Return error to indicate dropping the packet
-> + */
-> +static inline int ipv6_hopopt_jumbo_remove(struct sk_buff *skb)
-> +{
-> +       const int hophdr_len = sizeof(struct hop_jumbo_hdr);
-> +       int nexthdr = ipv6_has_hopopt_jumbo(skb);
-> +       struct ipv6hdr *h6;
-> +
-> +       if (!nexthdr)
-> +               return 0;
-> +
-> +       if (skb_cow_head(skb, 0))
-> +               return -1;
-> +
-> +       /* Remove the HBH header.
-> +        * Layout: [Ethernet header][IPv6 header][HBH][L4 Header]
-> +        */
-> +       memmove(skb_mac_header(skb) + hophdr_len, skb_mac_header(skb),
-> +               skb_network_header(skb) - skb_mac_header(skb) +
-> +               sizeof(struct ipv6hdr));
-> +
-> +       if (unlikely(!pskb_may_pull(skb, hophdr_len)))
-> +               return -1;
-
-ipv6_has_hopopt_jumbo() had a stronger condition already.
-
-if (skb_network_offset(skb) +
-     sizeof(struct ipv6hdr) +
-     sizeof(struct hop_jumbo_hdr) > skb_headlen(skb))
-        return 0;
-
-So this !pskb_may_pull(skb, hophdr_len) , especially if done after the
-memmove(), is not needed.
 
 
-> +
-> +       __skb_pull(skb, hophdr_len);
-> +       skb->network_header += hophdr_len;
-> +       skb->mac_header += hophdr_len;
-> +
-> +       h6 = ipv6_hdr(skb);
-> +       h6->nexthdr = nexthdr;
-> +
-> +       return 0;
-> +}
-> +
->  static inline bool ipv6_accept_ra(struct inet6_dev *idev)
->  {
->         /* If forwarding is enabled, RA are not accepted unless the special
-> diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-> index 3ee345672849..00dc2e3b0184 100644
-> --- a/net/ipv6/ip6_offload.c
-> +++ b/net/ipv6/ip6_offload.c
-> @@ -77,7 +77,7 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
->         struct sk_buff *segs = ERR_PTR(-EINVAL);
->         struct ipv6hdr *ipv6h;
->         const struct net_offload *ops;
-> -       int proto, nexthdr;
-> +       int proto, err;
->         struct frag_hdr *fptr;
->         unsigned int payload_len;
->         u8 *prevhdr;
-> @@ -87,28 +87,9 @@ static struct sk_buff *ipv6_gso_segment(struct sk_buff *skb,
->         bool gso_partial;
->
->         skb_reset_network_header(skb);
-> -       nexthdr = ipv6_has_hopopt_jumbo(skb);
-> -       if (nexthdr) {
-> -               const int hophdr_len = sizeof(struct hop_jumbo_hdr);
-> -               int err;
-> -
-> -               err = skb_cow_head(skb, 0);
-> -               if (err < 0)
-> -                       return ERR_PTR(err);
-> -
-> -               /* remove the HBH header.
-> -                * Layout: [Ethernet header][IPv6 header][HBH][TCP header]
-> -                */
-> -               memmove(skb_mac_header(skb) + hophdr_len,
-> -                       skb_mac_header(skb),
-> -                       ETH_HLEN + sizeof(struct ipv6hdr));
-> -               skb->data += hophdr_len;
-> -               skb->len -= hophdr_len;
-> -               skb->network_header += hophdr_len;
-> -               skb->mac_header += hophdr_len;
-> -               ipv6h = (struct ipv6hdr *)skb->data;
-> -               ipv6h->nexthdr = nexthdr;
-> -       }
-> +       err = ipv6_hopopt_jumbo_remove(skb);
-> +       if (err)
-> +               return ERR_PTR(err);
->         nhoff = skb_network_header(skb) - skb_mac_header(skb);
->         if (unlikely(!pskb_may_pull(skb, sizeof(*ipv6h))))
->                 goto out;
-> --
-> 2.39.0.rc0.267.gcb52ba06e7-goog
->
+On 2022/12/7 22:16, Emil Renner Berthing wrote:
+> Hi Yanhong,
+> 
+> Thanks for submitting this. Again please don't change the author of
+> the commits you cherry-picked from my tree. This is why we have the
+> Co-developed-by: tag so you can mark that you added or in this case
+> removed code.
+
+This commit is not cherry-picked from your tree.
+
+> I'd hoped you would still include the support for the JH7100 though.
+> 
+
+If necessary, would include the support for the JH7100 in the next version.
+
+> Also you seem to have changed the name of some of the functions.
+> Please at least keep the prefix consistent if you do that. Now it's a
+> mix of dwmac_starfive_, starfive_eth_ and starfive_eth_plat.
+> 
+> On Thu, 1 Dec 2022 at 10:07, Yanhong Wang <yanhong.wang@starfivetech.com> wrote:
+>>
+>> This adds StarFive dwmac driver support on the StarFive JH7110 SoCs.
+>>
+>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>> ---
+>>  MAINTAINERS                                   |   1 +
+>>  drivers/net/ethernet/stmicro/stmmac/Kconfig   |  11 ++
+>>  drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+>>  .../stmicro/stmmac/dwmac-starfive-plat.c      | 147 ++++++++++++++++++
+>>  4 files changed, 160 insertions(+)
+>>  create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 7eaaec8d3b96..36cb00cf860b 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -19610,6 +19610,7 @@ STARFIVE DWMAC GLUE LAYER
+>>  M:     Yanhong Wang <yanhong.wang@starfivetech.com>
+>>  S:     Maintained
+>>  F:     Documentation/devicetree/bindings/net/starfive,dwmac-plat.yaml
+>> +F:     drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+>>
+>>  STARFIVE PINCTRL DRIVER
+>>  M:     Emil Renner Berthing <kernel@esmil.dk>
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Kconfig b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> index 31ff35174034..1e29cd3770b9 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/Kconfig
+>> @@ -235,6 +235,17 @@ config DWMAC_INTEL_PLAT
+>>           the stmmac device driver. This driver is used for the Intel Keem Bay
+>>           SoC.
+>>
+>> +config DWMAC_STARFIVE_PLAT
+> 
+> Why did you add the _PLAT suffix? None of the other SoC wrappers have this..
+
+The _PLAT suffix definition reference the other SoC,such as DWMAC_INTEL_PLAT.
+
+> 
+>> +       tristate "StarFive dwmac support"
+>> +       depends on OF && COMMON_CLK
+>> +       depends on STMMAC_ETH
+>> +       default SOC_STARFIVE
+>> +       help
+>> +         Support for ethernet controllers on StarFive RISC-V SoCs
+>> +
+>> +         This selects the StarFive platform specific glue layer support for
+>> +         the stmmac device driver. This driver is used for StarFive RISC-V SoCs.
+>> +
+>>  config DWMAC_VISCONTI
+>>         tristate "Toshiba Visconti DWMAC support"
+>>         default ARCH_VISCONTI
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/Makefile b/drivers/net/ethernet/stmicro/stmmac/Makefile
+>> index d4e12e9ace4f..a63ab0ab5071 100644
+>> --- a/drivers/net/ethernet/stmicro/stmmac/Makefile
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/Makefile
+>> @@ -31,6 +31,7 @@ obj-$(CONFIG_DWMAC_DWC_QOS_ETH)       += dwmac-dwc-qos-eth.o
+>>  obj-$(CONFIG_DWMAC_INTEL_PLAT) += dwmac-intel-plat.o
+>>  obj-$(CONFIG_DWMAC_GENERIC)    += dwmac-generic.o
+>>  obj-$(CONFIG_DWMAC_IMX8)       += dwmac-imx.o
+>> +obj-$(CONFIG_DWMAC_STARFIVE_PLAT)      += dwmac-starfive-plat.o
+>>  obj-$(CONFIG_DWMAC_VISCONTI)   += dwmac-visconti.o
+>>  stmmac-platform-objs:= stmmac_platform.o
+>>  dwmac-altr-socfpga-objs := altr_tse_pcs.o dwmac-socfpga.o
+>> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+>> new file mode 100644
+>> index 000000000000..8fbf584d4e19
+>> --- /dev/null
+>> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive-plat.c
+>> @@ -0,0 +1,147 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
+>> +/*
+>> + * StarFive DWMAC platform driver
+>> + *
+>> + * Copyright(C) 2022 StarFive Technology Co., Ltd.
+> 
+> Hmm.. where did my copyright go?
+> 
+>> + *
+>> + */
+>> +
+>> +#include <linux/of_device.h>
+>> +#include "stmmac_platform.h"
+>> +
+>> +struct starfive_dwmac {
+>> +       struct device *dev;
+>> +       struct clk *clk_tx;
+>> +       struct clk *clk_gtx;
+>> +       struct clk *clk_gtxc;
+>> +};
+>> +
+>> +static void starfive_eth_fix_mac_speed(void *priv, unsigned int speed)
+>> +{
+>> +       struct starfive_dwmac *dwmac = priv;
+>> +       unsigned long rate;
+>> +       int err;
+>> +
+>> +       switch (speed) {
+>> +       case SPEED_1000:
+>> +               rate = 125000000;
+>> +               break;
+>> +       case SPEED_100:
+>> +               rate = 25000000;
+>> +               break;
+>> +       case SPEED_10:
+>> +               rate = 2500000;
+>> +               break;
+>> +       default:
+>> +               dev_err(dwmac->dev, "invalid speed %u\n", speed);
+>> +               return;
+>> +       }
+>> +
+>> +       err = clk_set_rate(dwmac->clk_gtx, rate);
+>> +       if (err)
+>> +               dev_err(dwmac->dev, "failed to set tx rate %lu\n", rate);
+>> +}
+>> +
+>> +static void dwmac_starfive_clk_disable(void *clk)
+>> +{
+>> +       clk_disable_unprepare(clk);
+>> +}
+>> +
+>> +static int starfive_eth_plat_probe(struct platform_device *pdev)
+>> +{
+>> +       struct plat_stmmacenet_data *plat_dat;
+>> +       struct stmmac_resources stmmac_res;
+>> +       struct starfive_dwmac *dwmac;
+>> +       int err;
+>> +
+>> +       err = stmmac_get_platform_resources(pdev, &stmmac_res);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       plat_dat = stmmac_probe_config_dt(pdev, stmmac_res.mac);
+>> +       if (IS_ERR(plat_dat)) {
+>> +               dev_err(&pdev->dev, "dt configuration failed\n");
+>> +               return PTR_ERR(plat_dat);
+>> +       }
+>> +
+>> +       dwmac = devm_kzalloc(&pdev->dev, sizeof(*dwmac), GFP_KERNEL);
+>> +       if (!dwmac)
+>> +               return -ENOMEM;
+>> +
+>> +       dwmac->clk_tx = devm_clk_get(&pdev->dev, "tx");
+>> +       if (IS_ERR(dwmac->clk_tx))
+>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_tx),
+>> +                                               "error getting tx clock\n");
+>> +
+>> +       err = devm_add_action(&pdev->dev, dwmac_starfive_clk_disable,
+>> +                             dwmac->clk_tx);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       err = clk_prepare_enable(dwmac->clk_tx);
+>> +       if (err)
+>> +               return dev_err_probe(&pdev->dev, err, "error enabling tx clock\n");
+>> +
+>> +       dwmac->clk_gtx = devm_clk_get(&pdev->dev, "gtx");
+>> +       if (IS_ERR(dwmac->clk_gtx))
+>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtx),
+>> +                                               "error getting gtx clock\n");
+>> +
+>> +       err = devm_add_action(&pdev->dev, dwmac_starfive_clk_disable,
+>> +                             dwmac->clk_gtx);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       err = clk_prepare_enable(dwmac->clk_gtx);
+>> +       if (err)
+>> +               return dev_err_probe(&pdev->dev, err, "error enabling gtx clock\n");
+> 
+> I think the 3 calls above can be simplified to devm_clk_get_enabled().
+
+I'll simplify it to devm_ clk_ get_ enabled() in the next version.
+
+> 
+>> +       dwmac->clk_gtxc = devm_clk_get(&pdev->dev, "gtxc");
+>> +       if (IS_ERR(dwmac->clk_gtxc))
+>> +               return dev_err_probe(&pdev->dev, PTR_ERR(dwmac->clk_gtxc),
+>> +                                               "error getting gtxc clock\n");
+>> +
+>> +       err = devm_add_action(&pdev->dev, dwmac_starfive_clk_disable,
+>> +                             dwmac->clk_gtxc);
+>> +       if (err)
+>> +               return err;
+>> +
+>> +       err = clk_prepare_enable(dwmac->clk_gtxc);
+>> +       if (err)
+>> +               return dev_err_probe(&pdev->dev, err, "error enabling gtxc clock\n");
+> 
+> Same here.
+> 
+>> +
+>> +       dwmac->dev = &pdev->dev;
+>> +       plat_dat->fix_mac_speed = starfive_eth_fix_mac_speed;
+>> +       plat_dat->init = NULL;
+>> +       plat_dat->bsp_priv = dwmac;
+>> +       plat_dat->dma_cfg->dche = true;
+>> +
+>> +       err = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+>> +       if (err) {
+>> +               stmmac_remove_config_dt(pdev, plat_dat);
+>> +               return err;
+>> +       }
+>> +
+>> +       return 0;
+>> +}
+>> +
+>> +static const struct of_device_id starfive_eth_plat_match[] = {
+>> +       {.compatible = "starfive,dwmac"},
+>> +       { }
+>> +};
+>> +
+>> +static struct platform_driver starfive_eth_plat_driver = {
+>> +       .probe  = starfive_eth_plat_probe,
+>> +       .remove = stmmac_pltfr_remove,
+>> +       .driver = {
+>> +               .name = "starfive-eth-plat",
+>> +               .pm = &stmmac_pltfr_pm_ops,
+>> +               .of_match_table = starfive_eth_plat_match,
+>> +       },
+>> +};
+>> +
+>> +module_platform_driver(starfive_eth_plat_driver);
+>> +
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_DESCRIPTION("StarFive DWMAC platform driver");
+> 
+> Here you also seem to have removed me.
+> 
+>> +MODULE_AUTHOR("Yanhong Wang <yanhong.wang@starfivetech.com>");
+>> --
+>> 2.17.1
+>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
