@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40AF764727F
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 067D1647282
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 16:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiLHPJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 10:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54592 "EHLO
+        id S229851AbiLHPJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 10:09:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiLHPJo (ORCPT
+        with ESMTP id S229865AbiLHPJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 10:09:44 -0500
+        Thu, 8 Dec 2022 10:09:52 -0500
 Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6C49349B70;
-        Thu,  8 Dec 2022 07:09:43 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7FDD99526;
+        Thu,  8 Dec 2022 07:09:50 -0800 (PST)
 Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
-  by mx.socionext.com with ESMTP; 09 Dec 2022 00:09:42 +0900
-Received: from mail.mfilter.local (m-filter-1 [10.213.24.61])
-        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id CDA812058B4F;
-        Fri,  9 Dec 2022 00:09:42 +0900 (JST)
-Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 9 Dec 2022 00:09:42 +0900
+  by mx.socionext.com with ESMTP; 09 Dec 2022 00:09:50 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 503112058B4F;
+        Fri,  9 Dec 2022 00:09:50 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 9 Dec 2022 00:09:50 +0900
 Received: from [10.212.157.17] (unknown [10.212.157.17])
-        by kinkan2.css.socionext.com (Postfix) with ESMTP id 0E4CE1DA8;
-        Fri,  9 Dec 2022 00:09:42 +0900 (JST)
-Message-ID: <8d29ddb9-359c-df91-abb6-acdb6927fa95@socionext.com>
-Date:   Fri, 9 Dec 2022 00:09:41 +0900
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id BBD711DA8;
+        Fri,  9 Dec 2022 00:09:49 +0900 (JST)
+Message-ID: <27378fda-5b0b-1be8-dc2e-bd408fad4071@socionext.com>
+Date:   Fri, 9 Dec 2022 00:09:49 +0900
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 01/16] dt-bindings: clock: Fix node descriptions in
- uniphier-clock example
+Subject: Re: [PATCH v2 03/16] dt-bindings: pinctrl: Fix node descriptions in
+ uniphier-pinctrl example
+Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 References: <20221207055405.30940-1-hayashi.kunihiko@socionext.com>
- <20221207055405.30940-2-hayashi.kunihiko@socionext.com>
- <c2782196-6dae-522a-50d5-5e5223e66e56@linaro.org>
-Content-Language: en-US
+ <20221207055405.30940-4-hayashi.kunihiko@socionext.com>
+ <edd39013-af5f-5868-6c78-173d8f163754@linaro.org>
 From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-In-Reply-To: <c2782196-6dae-522a-50d5-5e5223e66e56@linaro.org>
+In-Reply-To: <edd39013-af5f-5868-6c78-173d8f163754@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -52,82 +52,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/12/08 17:06, Krzysztof Kozlowski wrote:
+On 2022/12/08 17:07, Krzysztof Kozlowski wrote:
 > On 07/12/2022 06:53, Kunihiko Hayashi wrote:
->> Prior to adding dt-bindings for SoC-dependent controllers, rename the
->> clock nodes their parent nodes to the generic names in the example.
->>
->> And also fix the missing compatible string.
+>> Rename the parent node to the generic node name "syscon".
 >>
 >> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
 >> ---
->>   .../clock/socionext,uniphier-clock.yaml       | 21 +++++++++++--------
->>   1 file changed, 12 insertions(+), 9 deletions(-)
+>>   .../devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
 >> diff --git
->> a/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
->> b/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
->> index 9a0cc7341630..672450a1ecda 100644
+>> a/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+>> b/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+>> index 14a8c0215cc6..186fc550af4c 100644
 >> ---
->> a/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
+>> a/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
 >> +++
->> b/Documentation/devicetree/bindings/clock/socionext,uniphier-clock.yaml
->> @@ -61,11 +61,12 @@ required:
->>
->>   examples:
+>> b/Documentation/devicetree/bindings/pinctrl/socionext,uniphier-pinctrl.yaml
+>> @@ -69,7 +69,7 @@ examples:
 >>     - |
->> -    sysctrl@61840000 {
->> -        compatible = "socionext,uniphier-sysctrl", "simple-mfd",
+>>       // The UniPhier pinctrl should be a subnode of a "syscon" compatible
+>> node.
+>>
+>> -    soc-glue@5f800000 {
+>> +    syscon@5f800000 {
+>>           compatible = "socionext,uniphier-pro4-soc-glue", "simple-mfd",
 >> "syscon";
->> +    syscon@61840000 {
->> +        compatible = "socionext,uniphier-ld11-sysctrl",
->> +                     "simple-mfd", "syscon";
->>           reg = <0x61840000 0x4000>;
+>>           reg = <0x5f800000 0x2000>;
 >>
->> -        clock {
->> +        clock-controller {
->>               compatible = "socionext,uniphier-ld11-clock";
->>               #clock-cells = <1>;
->>           };
->> @@ -74,11 +75,12 @@ examples:
->>       };
->>
->>     - |
->> -    mioctrl@59810000 {
->> -        compatible = "socionext,uniphier-mioctrl", "simple-mfd",
->> "syscon";
->> +    syscon@59810000 {
->> +        compatible = "socionext,uniphier-ld11-mioctrl",
->> +                     "simple-mfd", "syscon";
->>           reg = <0x59810000 0x800>;
->>
->> -        clock {
->> +        clock-controller {
->>               compatible = "socionext,uniphier-ld11-mio-clock";
->>               #clock-cells = <1>;
->>           };
->> @@ -87,11 +89,12 @@ examples:
->>       };
->>
->>     - |
->> -    perictrl@59820000 {
->> -        compatible = "socionext,uniphier-perictrl", "simple-mfd",
->> "syscon";
->> +    syscon@59820000 {
->> +        compatible = "socionext,uniphier-ld11-perictrl",
->> +                     "simple-mfd", "syscon";
->>           reg = <0x59820000 0x200>;
->>
->> -        clock {
 > 
-> These are all three same examples (no differences except compatibles),
-> so you can as well keep only one. You can also skip parent node,
-> otherwise you might keep getting warnings for this schema. The parent is
-> not that relevant here and its bindings (e.g.
-> socionext,uniphier-sysctrl.yaml) should include complete example -
-> parent with all the children.
-I understand.
-I'll keep one and drop the parent node from the example.
+> Not visible in the diff but this is a poor example. It has only
+> compatible! Drop the parent node instead and extend the pinctrl node to
+> show complete picture of pinctrl.
+
+I should add some child nodes of groups and pin attributes as an example
+from the devicetree.
 
 Thank you,
 
