@@ -2,207 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D67E646B3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3D0646B42
+	for <lists+linux-kernel@lfdr.de>; Thu,  8 Dec 2022 10:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLHJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 04:00:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60772 "EHLO
+        id S230003AbiLHJBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 04:01:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiLHJAz (ORCPT
+        with ESMTP id S229514AbiLHJA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 04:00:55 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2627D4841C
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 01:00:53 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id d185so904236vsd.0
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 01:00:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/JR2pG9tV9FSrRFa+WDb2jw9B3fBXybAeCMdReMmHEA=;
-        b=EzjyjnhEaXK3XlFKfEJjDH1m9eC1v0n0aiIRocc6iwyNzpxSguqz7Syw2fSRQYYHlE
-         PAUpRLlr+qnUS0aPIFl0oc+rsoV1z6bWBoDe5Z6u9j8osJYs8xRLDBQWPxgEWT7zX6dh
-         KJp0OUQpQ2EIS7H9wajb7F/tL/xECMxIU8fEAniQNmhWbfkkLsU5BzR/DpXVkP1/sn+7
-         Szdki1JXv2nwz8AOldezpoDfYZb21LXhPOHvf/tGmMrpgR30pm9Dx6wrd+5PQLKBgTUr
-         qcVV3TKhw620Fyp9kf5AbyfFgPy8mA9anJOBqyYiqqrsiuM31or4uoNaAF74GKX4+V6T
-         t3GA==
+        Thu, 8 Dec 2022 04:00:58 -0500
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141134874C;
+        Thu,  8 Dec 2022 01:00:58 -0800 (PST)
+Received: by mail-pj1-f47.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso4020636pjt.0;
+        Thu, 08 Dec 2022 01:00:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/JR2pG9tV9FSrRFa+WDb2jw9B3fBXybAeCMdReMmHEA=;
-        b=bbWkA6oHXlIsXrFzhDCY+0BqsHU/MSmrbq5M05Y8Glm/1DvaWIYfqeKKew/4KWfqz0
-         inU84AHu+cOlpN2GEyiAjYU/7oecDi5JqV0z/y0i9NjOzjxKDh+QQnd66/0KveRdAGfM
-         g+ZMBpA1gFFiKryQ8zPxEgw92PAHX7OVDPT40tyj4AyAUPp3ef43Y3C1GvVoSsOQQ5YT
-         4A3lSGXEZxVkAuy7Z6bQrTLDnrOGgY6IniPY7ARIn+1lQUPU4mZM3/S91TDrceho+rUi
-         YmIHHDcJ/rEEalZBAf+iIbdNwMWKLr7evjNO/hYjFhcH2/eBzdTpmiqlnpi/pYMMR2JE
-         TyLg==
-X-Gm-Message-State: ANoB5pnSAqkU4laD/ESeETFRsemqjptRhnNw5b4H22Tecsi9e/k7zJVK
-        Rsh3ag2IUWIvtFvBkZRJzhA1slU+1OM5JpHS/OYdmA==
-X-Google-Smtp-Source: AA0mqf5IM9NcRNgCI2Fdb5O6N4IdAmRg2deTbxr+Xj6ercC607o7pe9uQk8QDVhskwWn0bUuEFC+Vb/kzRdzuAo2JeY=
-X-Received: by 2002:a67:ea04:0:b0:3a7:d7bc:c2e9 with SMTP id
- g4-20020a67ea04000000b003a7d7bcc2e9mr42911158vso.61.1670490051902; Thu, 08
- Dec 2022 01:00:51 -0800 (PST)
+        bh=gnfeenGHSX8pxGcDHDGsgu5jtWy1vtL2VR1fK04qMGU=;
+        b=0+3NAgORvJfV2qMO3lsVn+H3Lqjdoqrb7AmM3DiJFy0jS58oKrf/zhFiC7/uc03CGI
+         xOeY5msMsMNqGSx8gVsg5SvpQtVbCetLzkae8X3t7L2Uxa3FKuBrBapLmglCSbF8rlrI
+         Rrh2v30VjcGLAdspYJLhKZ6A3ND0O5d1ODWut35u9qAFtqXbJeXT4qCBY5Q4Nr+ZYmZ/
+         4sdrte7qg5W7/SL2wjLbJGWI1y5t6m/MpM0uUhpkFy5q/k0VqLaO6eMHQerB++ybv+dp
+         HJkNevC6AVrIlAbtdPonQbAmaPaAhZxOFMDjhjV+EdU1fuwdWF2A2BcxuoSxq0hOZXA/
+         1tOQ==
+X-Gm-Message-State: ANoB5pn98sgA59AO+uIwrrWojjlYBwc8y551g0piXsOFHAVo90tQZHUF
+        zEpjjrssnLtppy+FMc/HGSXkYAULG5HVumNakKY=
+X-Google-Smtp-Source: AA0mqf659+OdeqLrf+FQ+LZZtgdCdNVN8yytNzkVh+PKns/Z4xwYuquj032CQR+ovzq7ynBjBRLwhOyGjC4yQm2+kIg=
+X-Received: by 2002:a17:903:452:b0:189:6574:7ac2 with SMTP id
+ iw18-20020a170903045200b0018965747ac2mr64198640plb.65.1670490057258; Thu, 08
+ Dec 2022 01:00:57 -0800 (PST)
 MIME-Version: 1.0
-References: <20221206023406.3182800-1-almasrymina@google.com>
- <Y48zlaimOb/wr8qd@dhcp22.suse.cz> <CAHS8izMKz_JtN-P7BTHydE2x2rmSg5-JRoHgaDCdCHV-S0YLJw@mail.gmail.com>
- <Y4+eLyl8HQNZS5ot@dhcp22.suse.cz> <CAHS8izOW70Eb7RRePQv6SP8hW3iUnAcPSD=aOY+aMu=6ReEtHQ@mail.gmail.com>
- <Y5B1K5zAE0PkjFZx@dhcp22.suse.cz> <CAHS8izMKK107wVFSJvg36nQ=WzXd8_cjYBtR0p47L+XLYUSsqA@mail.gmail.com>
- <Y5Gbwwp7AlFiltuu@dhcp22.suse.cz>
-In-Reply-To: <Y5Gbwwp7AlFiltuu@dhcp22.suse.cz>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 8 Dec 2022 01:00:40 -0800
-Message-ID: <CAHS8izMhRXMB5QJab5AvuHiWiQUAzUf81-7Y71ueEEnz71dwiQ@mail.gmail.com>
-Subject: Re: [PATCH v3] [mm-unstable] mm: Fix memcg reclaim on memory tiered systems
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Yosry Ahmed <yosryahmed@google.com>, weixugc@google.com,
-        fvdl@google.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20221203133159.94414-1-mailhol.vincent@wanadoo.fr> <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+In-Reply-To: <9493232b-c8fa-5612-fb13-fccf58b01942@suse.com>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 8 Dec 2022 18:00:46 +0900
+Message-ID: <CAMZ6RqJejJCOUk+MSvxjw9Us0gYhTuoOB4MUTk9jji6Bk=ix3A@mail.gmail.com>
+Subject: Re: [PATCH 0/8] can: usb: remove all usb_set_intfdata(intf, NULL) in
+ drivers' disconnect()
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>, linux-can@vger.kernel.org,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Jungclaus <frank.jungclaus@esd.eu>, socketcan@esd.eu,
+        Yasushi SHOJI <yashi@spacecubics.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Hangyu Hua <hbh25y@gmail.com>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Peter Fink <pfink@christ-es.de>,
+        Jeroen Hofstee <jhofstee@victronenergy.com>,
+        =?UTF-8?Q?Christoph_M=C3=B6hring?= <cmoehring@christ-es.de>,
+        John Whittington <git@jbrengineering.co.uk>,
+        Vasanth Sadhasivan <vasanth.sadhasivan@samsara.com>,
+        Jimmy Assarsson <extja@kvaser.com>,
+        Anssi Hannula <anssi.hannula@bitwise.fi>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Stephane Grosjean <s.grosjean@peak-system.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Sebastian Haas <haas@ems-wuensche.com>,
+        Maximilian Schneider <max@schneidersoft.net>,
+        Daniel Berglund <db@kvaser.com>,
+        Olivier Sobrie <olivier@sobrie.be>,
+        =?UTF-8?B?UmVtaWdpdXN6IEtvxYLFgsSFdGFq?= 
+        <remigiusz.kollataj@mobica.com>,
+        Jakob Unterwurzacher <jakob.unterwurzacher@theobroma-systems.com>,
+        Martin Elshuber <martin.elshuber@theobroma-systems.com>,
+        Philipp Tomsich <philipp.tomsich@theobroma-systems.com>,
+        Bernd Krumboeck <b.krumboeck@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alan Stern <stern@rowland.harvard.edu>,
+        linux-usb@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 12:09 AM Michal Hocko <mhocko@suse.com> wrote:
+On Mon. 5 Dec. 2022 at 17:39, Oliver Neukum <oneukum@suse.com> wrote:
+> On 03.12.22 14:31, Vincent Mailhol wrote:
+> > The core sets the usb_interface to NULL in [1]. Also setting it to
+> > NULL in usb_driver::disconnects() is at best useless, at worse risky.
 >
-> On Wed 07-12-22 13:43:55, Mina Almasry wrote:
-> > On Wed, Dec 7, 2022 at 3:12 AM Michal Hocko <mhocko@suse.com> wrote:
-> [...]
-> > > Anyway a proper nr_reclaimed tracking should be rather straightforward
-> > > but I do not expect to make a big difference in practice
-> > >
-> > > diff --git a/mm/vmscan.c b/mm/vmscan.c
-> > > index 026199c047e0..1b7f2d8cb128 100644
-> > > --- a/mm/vmscan.c
-> > > +++ b/mm/vmscan.c
-> > > @@ -1633,7 +1633,7 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> > >         LIST_HEAD(ret_folios);
-> > >         LIST_HEAD(free_folios);
-> > >         LIST_HEAD(demote_folios);
-> > > -       unsigned int nr_reclaimed = 0;
-> > > +       unsigned int nr_reclaimed = 0, nr_demoted = 0;
-> > >         unsigned int pgactivate = 0;
-> > >         bool do_demote_pass;
-> > >         struct swap_iocb *plug = NULL;
-> > > @@ -2065,8 +2065,17 @@ static unsigned int shrink_folio_list(struct list_head *folio_list,
-> > >         }
-> > >         /* 'folio_list' is always empty here */
-> > >
-> > > -       /* Migrate folios selected for demotion */
-> > > -       nr_reclaimed += demote_folio_list(&demote_folios, pgdat);
-> > > +       /*
-> > > +        * Migrate folios selected for demotion.
-> > > +        * Do not consider demoted pages to be reclaimed for the memcg reclaim
-> > > +        * because no charges are really freed during the migration. Global
-> > > +        * reclaim aims at releasing memory from nodes/zones so consider
-> > > +        * demotion to reclaim memory.
-> > > +        */
-> > > +       nr_demoted += demote_folio_list(&demote_folios, pgdat);
-> > > +       if (!cgroup_reclaim(sc))
-> > > +               nr_reclaimed += nr_demoted;
-> > > +
-> > >         /* Folios that could not be demoted are still in @demote_folios */
-> > >         if (!list_empty(&demote_folios)) {
-> > >                 /* Folios which weren't demoted go back on @folio_list for retry: */
-> > >
-> > > [...]
-> >
-> > Thank you again, but this patch breaks the memory.reclaim nodes arg
-> > for me. This is my test case. I run it on a machine with 2 memory
-> > tiers.
-> >
-> > Memory tier 1= nodes 0-2
-> > Memory tier 2= node 3
-> >
-> >     mkdir -p /sys/fs/cgroup/unified/test
-> >     cd /sys/fs/cgroup/unified/test
-> >     echo $$ > cgroup.procs
-> >     head -c 500m /dev/random > /tmp/testfile
-> >     echo $$ > /sys/fs/cgroup/unified/cgroup.procs
-> >     echo "1m nodes=0-2" > memory.reclaim
-> >
-> > In my opinion the expected behavior is for the kernel to demote 1mb of
-> > memory from nodes 0-2 to node 3.
-> >
-> > Actual behavior on the tip of mm-unstable is as expected.
-> >
-> > Actual behavior with your patch cherry-picked to mm-unstable is that
-> > the kernel demotes all 500mb of memory from nodes 0-2 to node 3, and
-> > returns -EAGAIN to the user. This may be the correct behavior you're
-> > intending, but it completely breaks the use case I implemented the
-> > nodes= arg for and listed on the commit message of that change.
+> Hi,
 >
-> Yes, strictly speaking the behavior is correct albeit unexpected. You
-> have told the kernel to _reclaim_ that much memory but demotion are
-> simply aging handling rather than a reclaim if the demotion target has a
-> lot of memory free.
+> I am afraid there is a major issue with your series of patches.
+> The drivers you are removing this from often have a subsequent check
+> for the data they got from usb_get_intfdata() being NULL.
 
-Yes, by the strict definition of reclaim, you're completely correct.
-But in reality earlier I proposed a patch to the kernel that disables
-demotion in proactive reclaim. That would have been a correct change
-by the strict definition of reclaim, but Johannes informed me that
-meta already has a dependency on proactive reclaim triggering demotion
-and directed me to add a nodes= arg to memory.reclaim to trigger
-demotion instead, to satisfy both use cases. Seems both us and meta
-are using this interface to trigger both reclaim and demotion, despite
-the strict definition of the word?
+ACK, but I do not see the connection.
 
-> This would be the case without any nodemask as well
-> btw.
+> That pattern is taken from drivers like btusb or CDC-ACM
+
+Where does CDC-ACM set *his* interface to NULL? Looking at:
+
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/class/cdc-acm.c#L1531
+
+I can see that cdc-acm sets acm->control and acm->data to NULL in his
+disconnect(), but it doesn't set its own usb_interface to NULL.
+
+> which claim secondary interfaces disconnect() will be called a second time
+> for.
+
+Are you saying that the disconnect() of those CAN USB drivers is being
+called twice? I do not see this in the source code. The only caller of
+usb_driver::disconnect() I can see is:
+
+  https://elixir.bootlin.com/linux/v6.0/source/drivers/usb/core/driver.c#L458
+
+> In addition, a driver can use setting intfdata to NULL as a flag
+> for disconnect() having proceeded to a point where certain things
+> can no longer be safely done.
+
+Any reference that a driver can do that? This pattern seems racy.
+
+By the way, I did check all the drivers:
+
+  * ems_usb: intf is only used in ems_usb_probe() and
+ems_usb_disconnect() functions.
+
+  * esd_usb: intf is only used in the esd_usb_probe(),
+    esd_usb_probe_one_net() (which is part of probing),
+    esd_usb_disconnect() and a couple of sysfs functions (which only
+    use intf to get a pointer to struct esd_usb).
+
+  * gs_usb: intf is used several time but only to retrive struct
+    usb_device. This seems useless, I will sent this patch to remove
+    it:
+    https://lore.kernel.org/linux-can/20221208081142.16936-3-mailhol.vincent@wanadoo.fr/
+    Aside of that, intf is only used in gs_usb_probe(),
+    gs_make_candev() (which is part of probing) and
+    gs_usb_disconnect() functions.
+
+  * kvaser_usb: intf is only used in kvaser_usb_probe() and
+    kvaser_usb_disconnect() functions.
+
+  * mcba_usb: intf is only used in mcba_usb_probe() and
+    mcba_usb_disconnect() functions.
+
+  * ucan: intf is only used in ucan_probe() and
+    ucan_disconnect(). struct ucan_priv also has a pointer to intf but
+    it is never used. I sent this patch to remove it:
+    https://lore.kernel.org/linux-can/20221208081142.16936-2-mailhol.vincent@wanadoo.fr/
+
+  * usb_8dev: intf is only used in usb_8dev_probe() and
+    usb_8dev_disconnect().
+
+With no significant use of intf outside of the probe() and
+disconnect(), there is definitely no such "use intf as a flag" in any
+of these drivers.
+
+> You need to check for that in every driver
+> you remove this code from and if you decide that it can safely be removed,
+
+What makes you assume that I didn't check this in the first place? Or
+do you see something I missed?
+
+> which is likely, then please also remove checks like this:
 >
-
-The difference here is that without any nodemask, the kernel will also
-reclaim from bottom tier nodes, which will count towards the user's
-request so the behavior makes sense in my opinion. If nodemask=NULL or
-nodemask=ALL_NODES, then the caller is asking for reclaim across all
-nodes which should not count demoted pages IMO. The kernel can still
-look for demotion opportunities, but the demoted pages would not count
-towards the user's request.
-
-> I am worried this will popping up again and again. I thought your nodes
-> subset approach could deal with this but I have overlooked one important
-> thing in your patch. The user provided nodemask controls where to
-> reclaim from but it doesn't constrain demotion targets. Is this
-> intentional? Would it actually make more sense to control demotion by
-> addint demotion nodes into the nodemask?
+>         struct ems_usb *dev = usb_get_intfdata(intf);
 >
+>         usb_set_intfdata(intf, NULL);
+>
+>         if (dev) {
+>                 unregister_netdev(dev->netdev);
 
-IMO, yes it is intentional, and no I would not recommend adding
-demotion nodes (I assume you mean adding both demote_from_nodes and
-demote_to_nodes as arg). My opinion is based on 2 reasons:
+How is the if (dev) check related? There is no correlation between
+setting intf to NULL and dev not being NULL.
 
-1. We control proactive reclaim by looking for nodes/tiers approaching
-pressure and triggering reclaim/demotion from said nodes/tiers. So we
-know the node/tier we would like to reclaim from, but not necessarily
-have a requirement on where the memory should go. I think it should be
-up to the kernel.
-2. Currently I think most tiered machines will have 2 memory tiers,
-but I think the code is designed to support N memory tiers. What
-happens if N=3 and the user asks you to demote from the top tier nodes
-to the bottom tier nodes (skipping the middle tier)? The user in this
-case is explicitly asking to break the aging pipeline. From my short
-while on the mailing list I see great interest in respecting the aging
-pipeline, so it seems to me the demotion target should be decided by
-the kernel based on the aging pipeline, and the user should not be
-able to override it? I don't know. Maybe there is a valid use case for
-that somewhere.
+I think dev is never NULL, but I did not assess that dev could not be NULL.
 
-> --
-> Michal Hocko
-> SUSE Labs
+> Either it can be called a second time, then you need to leave it
+> as is,
+
+Really?! The first thing disconnect() does is calling
+usb_get_intfdata(intf) which dereferences intf without checking if it
+is NULL, c.f.:
+
+  https://elixir.bootlin.com/linux/v6.0/source/include/linux/usb.h#L265
+
+Then it sets intf to NULL.
+
+The second time you call disconnect(), the usb_get_intfdata(intf)
+would be a NULL pointer dereference.
+
+> or the check for NULL is superfluous. But only removing setting
+> the pointer to NULL never makes sense.
+
+
+Yours sincerely,
+Vincent Mailhol
