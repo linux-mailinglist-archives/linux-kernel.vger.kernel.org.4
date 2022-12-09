@@ -2,185 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08A24648617
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BD3648618
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:04:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiLIQEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 11:04:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49132 "EHLO
+        id S229997AbiLIQEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 11:04:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbiLIQEB (ORCPT
+        with ESMTP id S229573AbiLIQEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:04:01 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6329950D59;
-        Fri,  9 Dec 2022 08:03:59 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 98D88337F5;
-        Fri,  9 Dec 2022 16:03:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670601838; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ACEb0peWm3spbIZkD6VxQeoNEBO3y0M6patrqqDV3Po=;
-        b=tBtgeiW1eSS/J9B9gcfYy+/v8vbO8NRaNKUU1zejqaPXv97ZTJaZK4xuAdsEOS1Lr0tAav
-        MSU8lMLDtNfRMUEoyp2Q47/FEwAYog1suVu8MBd1UU1/bwohc/fdQjbZFWyi9mGBkjtv8Y
-        64ox5KSY/AS4NHDKZD/D2fgykCfzTpA=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id CF9042C142;
-        Fri,  9 Dec 2022 16:03:56 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 17:03:54 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     akpm@linux-foundation.org, bhe@redhat.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
-        halves@canonical.com, fabiomirmar@gmail.com,
-        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
-        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
-        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
-        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
-        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
-        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
-        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
-        senozhatsky@chromium.org, stern@rowland.harvard.edu,
-        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
-        will@kernel.org, xuqiang36@huawei.com, linux-edac@vger.kernel.org,
-        Tony Luck <tony.luck@intel.com>,
-        Dinh Nguyen <dinguyen@kernel.org>
-Subject: Re: [PATCH V3 08/11] EDAC/altera: Skip the panic notifier if kdump
- is loaded
-Message-ID: <Y5Ncaur0S4rEbath@alley>
-References: <20220819221731.480795-1-gpiccoli@igalia.com>
- <20220819221731.480795-9-gpiccoli@igalia.com>
+        Fri, 9 Dec 2022 11:04:45 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115C3511C1
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:04:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=uriMDI2ZCE8yJ2s7gliLiFl9TTIyTtgkAsDBvtqWibY=; b=uKj/FxhqB8krz9Rqdy8k27wZBX
+        KpnM67BLl5YrRtxp9F7m8oparV/7xJ3FJRU5QNtW7bVA441JtRJ+flpqfBV6Ex6+jk5tuKaEq1Snp
+        JUcicfbyZI3+8ZPGEwghQSBFpWL66fiM47Ulfo0BeG99pZeiNIoPtbBcW2fh6fGcW2rmxI/nFF1dZ
+        wFbeI+OmAZpJhQU3FbVvFJVPHMSv1PQx9941VAm6L92bR9pLTRyZLWM7HE1iGBAORIa4Bp2mF9eBh
+        26pvZLCtqTG0WfuzvQdv6BFqKkwtE29vSaonIBlBAJysafgg2Cld9t++5UvftSxViGIssZI+WvIWQ
+        ZeAzkHpQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p3frW-008B1J-6s; Fri, 09 Dec 2022 16:04:34 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Subject: [PATCH] sched: Make const-safe
+Date:   Fri,  9 Dec 2022 16:04:31 +0000
+Message-Id: <20221209160431.1948817-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220819221731.480795-9-gpiccoli@igalia.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-08-19 19:17:28, Guilherme G. Piccoli wrote:
-> The altera_edac panic notifier performs some data collection with
-> regards errors detected; such code relies in the regmap layer to
-> perform reads/writes, so the code is abstracted and there is some
-> risk level to execute that, since the panic path runs in atomic
-> context, with interrupts/preemption and secondary CPUs disabled.
-> 
-> Users want the information collected in this panic notifier though,
-> so in order to balance the risk/benefit, let's skip the altera panic
-> notifier if kdump is loaded. While at it, remove a useless header
-> and encompass a macro inside the sole ifdef block it is used.
-> 
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Acked-by: Dinh Nguyen <dinguyen@kernel.org>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> 
-> ---
-> 
-> V3:
-> - added the ack tag from Dinh - thanks!
-> - had a good discussion with Boris about that in V2 [0],
-> hopefully we can continue and reach a consensus in this V3.
-> [0] https://lore.kernel.org/lkml/46137c67-25b4-6657-33b7-cffdc7afc0d7@igalia.com/
-> 
-> V2:
-> - new patch, based on the discussion in [1].
-> [1] https://lore.kernel.org/lkml/62a63fc2-346f-f375-043a-fa21385279df@igalia.com/
-> 
-> 
->  drivers/edac/altera_edac.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/edac/altera_edac.c b/drivers/edac/altera_edac.c
-> index e7e8e624a436..741fe5539154 100644
-> --- a/drivers/edac/altera_edac.c
-> +++ b/drivers/edac/altera_edac.c
-> @@ -16,7 +16,6 @@
->  #include <linux/kernel.h>
->  #include <linux/mfd/altera-sysmgr.h>
->  #include <linux/mfd/syscon.h>
-> -#include <linux/notifier.h>
->  #include <linux/of_address.h>
->  #include <linux/of_irq.h>
->  #include <linux/of_platform.h>
-> @@ -24,6 +23,7 @@
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
->  #include <linux/types.h>
-> +#include <linux/kexec.h>
->  #include <linux/uaccess.h>
->  
->  #include "altera_edac.h"
-> @@ -2063,22 +2063,30 @@ static const struct irq_domain_ops a10_eccmgr_ic_ops = {
->  };
->  
->  /************** Stratix 10 EDAC Double Bit Error Handler ************/
-> -#define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
-> -
->  #ifdef CONFIG_64BIT
->  /* panic routine issues reboot on non-zero panic_timeout */
->  extern int panic_timeout;
->  
-> +#define to_a10edac(p, m) container_of(p, struct altr_arria10_edac, m)
-> +
->  /*
->   * The double bit error is handled through SError which is fatal. This is
->   * called as a panic notifier to printout ECC error info as part of the panic.
-> + *
-> + * Notice that if kdump is set, we take the risk avoidance approach and
-> + * skip the notifier, given that users are expected to have access to a
-> + * full vmcore.
->   */
->  static int s10_edac_dberr_handler(struct notifier_block *this,
->  				  unsigned long event, void *ptr)
->  {
-> -	struct altr_arria10_edac *edac = to_a10edac(this, panic_notifier);
-> +	struct altr_arria10_edac *edac;
->  	int err_addr, dberror;
->  
-> +	if (kexec_crash_loaded())
-> +		return NOTIFY_DONE;
+With a modified container_of() that preserves constness, the compiler
+finds some variables which should have been const and some functions
+which should have had their arguments marked as const.  No change to
+generated code.
 
-I have read the discussion about v2 [1] and this looks like a bad
-approach from my POV.
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ kernel/sched/core.c  |  8 +++++---
+ kernel/sched/fair.c  | 16 +++++++++-------
+ kernel/sched/sched.h | 11 ++++++-----
+ 3 files changed, 20 insertions(+), 15 deletions(-)
 
-My understanding is that the information provided by this notifier
-could not be found in the crashdump. It means that people really
-want to run this before crashdump in principle.
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 25b582b6ee5f..853188cb6c84 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -152,7 +152,7 @@ __read_mostly int scheduler_running;
+ DEFINE_STATIC_KEY_FALSE(__sched_core_enabled);
+ 
+ /* kernel prio, less is more */
+-static inline int __task_prio(struct task_struct *p)
++static inline int __task_prio(const struct task_struct *p)
+ {
+ 	if (p->sched_class == &stop_sched_class) /* trumps deadline */
+ 		return -2;
+@@ -174,7 +174,8 @@ static inline int __task_prio(struct task_struct *p)
+  */
+ 
+ /* real prio, less is less */
+-static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
++static inline bool prio_less(const struct task_struct *a,
++			     const struct task_struct *b, bool in_fi)
+ {
+ 
+ 	int pa = __task_prio(a), pb = __task_prio(b);
+@@ -194,7 +195,8 @@ static inline bool prio_less(struct task_struct *a, struct task_struct *b, bool
+ 	return false;
+ }
+ 
+-static inline bool __sched_core_less(struct task_struct *a, struct task_struct *b)
++static inline bool __sched_core_less(const struct task_struct *a,
++				     const struct task_struct *b)
+ {
+ 	if (a->core_cookie < b->core_cookie)
+ 		return true;
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index c36aa54ae071..855470310903 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -468,7 +468,7 @@ is_same_group(struct sched_entity *se, struct sched_entity *pse)
+ 	return NULL;
+ }
+ 
+-static inline struct sched_entity *parent_entity(struct sched_entity *se)
++static inline struct sched_entity *parent_entity(const struct sched_entity *se)
+ {
+ 	return se->parent;
+ }
+@@ -595,8 +595,8 @@ static inline u64 min_vruntime(u64 min_vruntime, u64 vruntime)
+ 	return min_vruntime;
+ }
+ 
+-static inline bool entity_before(struct sched_entity *a,
+-				struct sched_entity *b)
++static inline bool entity_before(const struct sched_entity *a,
++				 const struct sched_entity *b)
+ {
+ 	return (s64)(a->vruntime - b->vruntime) < 0;
+ }
+@@ -11728,7 +11728,8 @@ static inline void task_tick_core(struct rq *rq, struct task_struct *curr)
+ /*
+  * se_fi_update - Update the cfs_rq->min_vruntime_fi in a CFS hierarchy if needed.
+  */
+-static void se_fi_update(struct sched_entity *se, unsigned int fi_seq, bool forceidle)
++static void se_fi_update(const struct sched_entity *se, unsigned int fi_seq,
++			 bool forceidle)
+ {
+ 	for_each_sched_entity(se) {
+ 		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+@@ -11753,11 +11754,12 @@ void task_vruntime_update(struct rq *rq, struct task_struct *p, bool in_fi)
+ 	se_fi_update(se, rq->core->core_forceidle_seq, in_fi);
+ }
+ 
+-bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
++bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
++			bool in_fi)
+ {
+ 	struct rq *rq = task_rq(a);
+-	struct sched_entity *sea = &a->se;
+-	struct sched_entity *seb = &b->se;
++	const struct sched_entity *sea = &a->se;
++	const struct sched_entity *seb = &b->se;
+ 	struct cfs_rq *cfs_rqa;
+ 	struct cfs_rq *cfs_rqb;
+ 	s64 delta;
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index 771f8ddb7053..aa729d54cf94 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -248,7 +248,7 @@ static inline void update_avg(u64 *avg, u64 sample)
+ 
+ #define SCHED_DL_FLAGS (SCHED_FLAG_RECLAIM | SCHED_FLAG_DL_OVERRUN | SCHED_FLAG_SUGOV)
+ 
+-static inline bool dl_entity_is_special(struct sched_dl_entity *dl_se)
++static inline bool dl_entity_is_special(const struct sched_dl_entity *dl_se)
+ {
+ #ifdef CONFIG_CPU_FREQ_GOV_SCHEDUTIL
+ 	return unlikely(dl_se->flags & SCHED_FLAG_SUGOV);
+@@ -260,8 +260,8 @@ static inline bool dl_entity_is_special(struct sched_dl_entity *dl_se)
+ /*
+  * Tells if entity @a should preempt entity @b.
+  */
+-static inline bool
+-dl_entity_preempt(struct sched_dl_entity *a, struct sched_dl_entity *b)
++static inline bool dl_entity_preempt(const struct sched_dl_entity *a,
++				     const struct sched_dl_entity *b)
+ {
+ 	return dl_entity_is_special(a) ||
+ 	       dl_time_before(a->deadline, b->deadline);
+@@ -1236,7 +1236,8 @@ static inline raw_spinlock_t *__rq_lockp(struct rq *rq)
+ 	return &rq->__lock;
+ }
+ 
+-bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool fi);
++bool cfs_prio_less(const struct task_struct *a, const struct task_struct *b,
++			bool fi);
+ 
+ /*
+  * Helpers to check if the CPU's core cookie matches with the task's cookie
+@@ -1415,7 +1416,7 @@ static inline struct cfs_rq *task_cfs_rq(struct task_struct *p)
+ }
+ 
+ /* runqueue on which this entity is (to be) queued */
+-static inline struct cfs_rq *cfs_rq_of(struct sched_entity *se)
++static inline struct cfs_rq *cfs_rq_of(const struct sched_entity *se)
+ {
+ 	return se->cfs_rq;
+ }
+-- 
+2.35.1
 
-Of course, there is the question how much safe this code is. I mean
-if the panic() code path might get blocked here.
-
-I see two possibilities.
-
-The best solution would be if we know that this is "always" safe or if
-it can be done a safe way. Then we could keep it as it is or implement
-the safe way.
-
-Alternative solution would be to create a kernel parameter that
-would enable/disable this particular report when kdump is enabled.
-The question would be the default. It would depend on how risky
-the code is and how useful the information is.
-
-[1] https://lore.kernel.org/r/20220719195325.402745-11-gpiccoli@igalia.com
-
-> +	edac = to_a10edac(this, panic_notifier);
->  	regmap_read(edac->ecc_mgr_map, S10_SYSMGR_ECC_INTSTAT_DERR_OFST,
->  		    &dberror);
->  	regmap_write(edac->ecc_mgr_map, S10_SYSMGR_UE_VAL_OFST, dberror);
-
-Best Regards,
-Petr
