@@ -2,117 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DE0A648934
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:50:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C49F64893E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiLITuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 14:50:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42602 "EHLO
+        id S229684AbiLITxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 14:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiLITun (ORCPT
+        with ESMTP id S229573AbiLITxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 14:50:43 -0500
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B124B58BC8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 11:50:42 -0800 (PST)
-Received: by mail-il1-f198.google.com with SMTP id 7-20020a056e0220c700b0030386f0d0e6so554816ilq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 11:50:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l1B4yy+jcFEyr9XmliYRcMTHvapMRmJPSRkI5eNsWgw=;
-        b=qnwUMbcR3i8P0tcbpk+oAiIGS98PPriGhgZ/5L8Swv5DHYW4qBGOY+kpDcVHsOxo8J
-         0Hu6aGQXaGpkoUqhvvrJlVfePgQMCJBSnlYo88k4hLcfyTTZINYEcT34Va0tg33g4eQa
-         p4XjPrD/248VR27q/8DglGsIQQ2oGktJKnDJhMaArLTIR5X5v32VSaHRVuItwfJOHKuj
-         EwTCdWjWQaVWDg6mi41u0+FHCu7rCA2JhQ1yYWe9I07MPWK2A+bnBbbac7N0M98AXjXw
-         MR24WDrNeSvUZvbyGLhApxwUDm4r0lfc2FRTcOGeQreEP0+WnHo6hhHlYUP/tiaviZdW
-         zOjQ==
-X-Gm-Message-State: ANoB5pkjLAa10Los+BhuGrRaN98/vNimr4tSIm+LOL+Q4cbqk9nn0eF6
-        GVQeIU2QCMmIe1yOC01TwbH5jzIHUt5LVgT/0W3fgEIQ4hCC
-X-Google-Smtp-Source: AA0mqf7Odl5v7SxeVzPmVBlmjiKzz7LCaQaJChj68GswgYdIYp91EKFoDPSMfcro7Lkutf/1xDEsQrA4kJFj+1XuWamkUE2g6TWY
+        Fri, 9 Dec 2022 14:53:32 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2CB6B9B4;
+        Fri,  9 Dec 2022 11:53:31 -0800 (PST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670615608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2vgxfx/i9kYzvSYspcEHbEEAe0+JN+WukTrnXgbW7wY=;
+        b=XKzurZMWPYfNQs5p8r67n9C0fgxSEHaIAiIYu/Pm1lg48sdwqnhkn7Y2m3GuOimHVqKjrT
+        ExmvtetajHnYz97oVeQAOvkw3z1eae3xJ8sx9j70aX09BNoxePCV8udcvC7y+vIIUakS36
+        OWtUNrj6pdrnhfqkkPTX+snB/fsYiNOIUw5Mmbnk1m46riCRmHpPtHf0xLZTf/3kafxUqf
+        YrXJBT47POQZw2h3PdydAVknVXAzL0VBZkyMjrGwJjeVCzaNxHzE7Qr8YQlRCM59LRO5lt
+        Lix9aNxms4sEB1lbL3qh5NstHDLK5l0TMpwN3f9bKZKbdfy95YTcsus4A0WW1Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670615608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2vgxfx/i9kYzvSYspcEHbEEAe0+JN+WukTrnXgbW7wY=;
+        b=LCJeDN4TmIQw3S7soch4Gm6FTqCBtP4eFmM6foQtsFJOjidIKlDvmHtRnJ887106JJAxya
+        XIbQS2UyZJnBAuBQ==
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, x86@kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/19] irqdomain: fix mapping race and clean up locking
+In-Reply-To: <Y5NfZ3bKTA15MWpu@hovoldconsulting.com>
+References: <20221209140150.1453-1-johan+linaro@kernel.org>
+ <87o7scd197.ffs@tglx> <Y5NfZ3bKTA15MWpu@hovoldconsulting.com>
+Date:   Fri, 09 Dec 2022 20:53:28 +0100
+Message-ID: <87lengcq13.ffs@tglx>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:507:b0:303:1379:c325 with SMTP id
- d7-20020a056e02050700b003031379c325mr20188083ils.7.1670615441889; Fri, 09 Dec
- 2022 11:50:41 -0800 (PST)
-Date:   Fri, 09 Dec 2022 11:50:41 -0800
-In-Reply-To: <00000000000064d06705eeed9b4e@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f865be05ef6a77fa@google.com>
-Subject: Re: [syzbot] WARNING in do_mkdirat
-From:   syzbot <syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com>
-To:     dvyukov@google.com, elver@google.com, hdanton@sina.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
-        viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Fri, Dec 09 2022 at 17:16, Johan Hovold wrote:
+> On Fri, Dec 09, 2022 at 04:51:00PM +0100, Thomas Gleixner wrote:
+>> On Fri, Dec 09 2022 at 15:01, Johan Hovold wrote:
+>> > Parallel probing (e.g. due to asynchronous probing) of devices that
+>> > share interrupts can currently result in two mappings for the same
+>> > hardware interrupt to be created.
+>> >
+>> > This series fixes this mapping race and clean up the irqdomain locking
+>> > so that in the end the global irq_domain_mutex is only used for managing
+>> > the likewise global irq_domain_list, while domain operations (e.g.
+>> > IRQ allocations) use per-domain (hierarchy) locking.
+>> 
+>> Can you please rebase that on top of:
+>> 
+>>   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/core
+>
+> The series is based on next-20221208 which should contain that branch in
+> its current state if I'm not mistaken.
+>
+> I just tried applying it on top of irq/core and did not notice any
+> problems.
 
-HEAD commit:    0d1409e4ff08 Merge tag 'drm-fixes-2022-12-09' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=172b960b880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d58e7fe7f9cf5e24
-dashboard link: https://syzkaller.appspot.com/bug?extid=919c5a9be8433b8bf201
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=145fde33880000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9ab0143f95cb/disk-0d1409e4.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e574d5eaa32f/vmlinux-0d1409e4.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/31109436b00b/bzImage-0d1409e4.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/5cec1c83630e/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+919c5a9be8433b8bf201@syzkaller.appspotmail.com
-
-WARNING: CPU: 1 PID: 4982 at kernel/locking/rwsem.c:1361 __up_write kernel/locking/rwsem.c:1360 [inline]
-WARNING: CPU: 1 PID: 4982 at kernel/locking/rwsem.c:1361 up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Modules linked in:
-CPU: 1 PID: 4982 Comm: syz-executor.4 Not tainted 6.1.0-rc8-syzkaller-00148-g0d1409e4ff08 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-RIP: 0010:__up_write kernel/locking/rwsem.c:1360 [inline]
-RIP: 0010:up_write+0x4f9/0x580 kernel/locking/rwsem.c:1615
-Code: c7 c0 a3 ed 8a 48 c7 c6 60 a6 ed 8a 48 8b 54 24 28 48 8b 4c 24 18 4d 89 e0 4c 8b 4c 24 30 31 c0 53 e8 ab 7c e8 ff 48 83 c4 08 <0f> 0b e9 6b fd ff ff 48 c7 c1 18 2a 76 8e 80 e1 07 80 c1 03 38 c1
-RSP: 0018:ffffc9000564fd40 EFLAGS: 00010292
-RAX: 9a2b61996b411800 RBX: ffffffff8aeda4a0 RCX: ffff88801f5d3a80
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc9000564fe10 R08: ffffffff816e5c7d R09: fffff52000ac9f61
-R10: fffff52000ac9f61 R11: 1ffff92000ac9f60 R12: 0000000000000000
-R13: ffff888069880a90 R14: 1ffff92000ac9fb0 R15: dffffc0000000000
-FS:  00007f71b6d62700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f825d9ff000 CR3: 000000006cef1000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- inode_unlock include/linux/fs.h:761 [inline]
- done_path_create fs/namei.c:3857 [inline]
- do_mkdirat+0x2de/0x550 fs/namei.c:4064
- __do_sys_mkdirat fs/namei.c:4076 [inline]
- __se_sys_mkdirat fs/namei.c:4074 [inline]
- __x64_sys_mkdirat+0x85/0x90 fs/namei.c:4074
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f71b608c0d9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f71b6d62168 EFLAGS: 00000246 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 00007f71b61ac050 RCX: 00007f71b608c0d9
-RDX: 0000000000000000 RSI: 0000000020000280 RDI: 0000000000000004
-RBP: 00007f71b60e7ae9 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffeac9136ff R14: 00007f71b6d62300 R15: 0000000000022000
- </TASK>
-
+Sorry for the noise. Pilot error. -ETOOMANYBRANCHES :)
