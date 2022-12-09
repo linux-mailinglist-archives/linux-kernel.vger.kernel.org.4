@@ -2,156 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3902C647F38
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:28:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F818647F43
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:29:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbiLII2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:28:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42402 "EHLO
+        id S229724AbiLII3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:29:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLII2H (ORCPT
+        with ESMTP id S229563AbiLII33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:28:07 -0500
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on20629.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1a::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFB7D2FBC8;
-        Fri,  9 Dec 2022 00:28:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dv7uFK5Qpm4fZs/f9TePx7qczLPoJhrFf95I7r22bJhVhsG1K/AdcMAYWqnouNJsIq5YDhbAjhYc3Eq84EaepoMn3+8NWAyP1J0ORfbn2ibERdntKbHi0JQTajr4Uiz7TlNbfYEHF9sweNDa/LHhTd8qYvxOsfc0sfuNcbAWy9IDgpXGh5dcTNLw9sP/AlWt+H4Tgi364NXR6kvds0ahup4kJWctgO6Q9eKST8FNyYCnhJzJMw1VjJmi2+UqmrTT1I9TYja2tmKR1xnfIMARuIcyWsSh10U4Ar0qRwOMVqWlang17VNv28kBPW7Wy55GERloUx1pNUvvDYd7m8jZeQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wfWda/4I+7eVj+W+FAKhiwssHPHQH2AEUZ9S0TSuh8s=;
- b=R/PxeBsGoLwhcL2oO2SO7uaa01fMtvOXyiqNNOwzceEyD0QhecIfoik3m4e7mDlrDUm7KremiVD74B9vPx+wZED71pt75YMkehdFsOkhuZTYOLpRX/5BM32gr6o/j1QT0e8h2zS0Fawt7JW5LaoXLHIIDoaUFZ8UxhMdkZmLTeRSst+iMRKKBICx/31oENcGWZFMEIVmN97Y89XflL8Puat/lZqcxdwgh7LpuxkelWyvUmos04BpNlSEcb5IsNwiFzJakrvC9y67vqRgXrAhnNij1ZpA1V/cU4Prhocl/byQnj3smswmaKEp6fW2euWrIbz/DXQSXbXCaTu4q5Y8og==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wfWda/4I+7eVj+W+FAKhiwssHPHQH2AEUZ9S0TSuh8s=;
- b=EmqioN3frnMWrrR+tPpNPLHUi/8DVCmFPMtbxvRdzRZYRSGNG/IkVh+tojflpGlyFTAsl5s9TKqBIV3vTQJrXiBdNZuirTgeKnMfQnipQJmVoJTch8Lx+P6ZAqGKZcJlR4+qZkVRVfllKIFlAo9qK/QozKlTFdRidT9oIqoKr7U=
-Received: from DB7PR04MB4010.eurprd04.prod.outlook.com (2603:10a6:5:21::30) by
- GV1PR04MB9118.eurprd04.prod.outlook.com (2603:10a6:150:25::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5880.11; Fri, 9 Dec 2022 08:28:02 +0000
-Received: from DB7PR04MB4010.eurprd04.prod.outlook.com
- ([fe80::7479:76ef:8e5:da0b]) by DB7PR04MB4010.eurprd04.prod.outlook.com
- ([fe80::7479:76ef:8e5:da0b%7]) with mapi id 15.20.5880.018; Fri, 9 Dec 2022
- 08:28:02 +0000
-From:   Bough Chen <haibo.chen@nxp.com>
-To:     "ye.xingchen@zte.com.cn" <ye.xingchen@zte.com.cn>,
-        "jic23@kernel.org" <jic23@kernel.org>
-CC:     "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] iio: adc: vf610_adc: Convert to use sysfs_emit_at() API
-Thread-Topic: [PATCH] iio: adc: vf610_adc: Convert to use sysfs_emit_at() API
-Thread-Index: AQHZCg5rhUDsxPc9XEKNBOZZpVwt5q5lO+pg
-Date:   Fri, 9 Dec 2022 08:28:02 +0000
-Message-ID: <DB7PR04MB40107C14EF610040D1927EB0901C9@DB7PR04MB4010.eurprd04.prod.outlook.com>
-References: <202212071534513812390@zte.com.cn>
-In-Reply-To: <202212071534513812390@zte.com.cn>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DB7PR04MB4010:EE_|GV1PR04MB9118:EE_
-x-ms-office365-filtering-correlation-id: 8480c2f6-8c36-46b9-dbe8-08dad9bf4987
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qTS6fB67jxVOg735fkK0uUh8JnF4UqCw855fa7+BaQzCtEYUQnFTyyMKBDOakU/pL3Jtmt9x7X6TbfPnoAGEHurw9tAPAPw9zRIYyD5yZmQuZKS1vgrORdXQ5UQCc0uD2F9D98XjjzkrFc20HtZFrtNA73Bde50s509HS+afrIFesLn1VjaSAcXhecDbzDe4UVxaozcFszNd0z/d2U0UciDjhgFdnXBd8G6Gvn57Sq3tcROyR/FXm0+wouLHyfmmG4GYBaWoTjqcecH+goA43KC+NFBXcyuELdOZnZzDXo1HszvES1mmAclPblACPdqmmWHqm7GKvmS5LPq6ipDyE2khsaY+6jLxHDmGU6EXNAYKdT5MQqJXGUlwYEj/FSzY9kUAWbfPHvoWH/38c0aPwcaCNDd/HRfZvBmbK53HOQoegf+w7Im6+57w1OHl7O+LughW7TJ330VhGiyrzwezMb1QlIsmf1YORKqUMWLXJPWTJSpsHLDOfqKYhXXdmPogdAUvugdAWAPaenrGrun7S21+Xo3hX1yhV+GmuqPg/U5k8o8PDYQgUrBLXDSLLCqF+Ht5F4JzO3JnQIvc8r38phH2T1fg2RpEcMPJ6Wac+UxN47PC9rs9ReQ/RKF4GpMfD8fwA0fzRM7LGaMwvsJ4IzW+A/i6dEfJFucrQUsU9wAHYSHKCxKekY9roCnQze8IJI9qO39a/+if9OhRM0O/rw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB4010.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(136003)(366004)(376002)(346002)(451199015)(2906002)(38070700005)(55016003)(6506007)(33656002)(86362001)(316002)(54906003)(9686003)(53546011)(83380400001)(186003)(122000001)(26005)(7696005)(110136005)(478600001)(8936002)(41300700001)(52536014)(76116006)(64756008)(4326008)(66556008)(8676002)(5660300002)(66946007)(66446008)(71200400001)(38100700002)(66476007);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZE5rRUtlRWRwYnB5MHZ4Tk1yN2hXSGhaNmFBbHd3amlKbVhWTDVjS1pGM0lo?=
- =?utf-8?B?SkRpbEh0U0VRWC82N1htZjZsMnBLamhBT0JXSDVNdHYvL2pLRStqc2xZRjQ2?=
- =?utf-8?B?a2J4cTdhalFSN25ldXlqQVhtVi8xK3VPajF3SU9EaUR2Vmk5cEpzdG9qbGFq?=
- =?utf-8?B?YS9JZEFtMVVLYlVtUXFnTkJjOWRob1hiSi9JWUtIOXR0VVIzWjY1bTZJQkIx?=
- =?utf-8?B?cFd6b1RFbFVtUy9FUmZ4ODVZTGhnSkpEaGtIWjhjNjY2QUlTYlVGci9CbFRZ?=
- =?utf-8?B?amZjdFNjRzFVUk9ub2dKaWJIeDdJUDdtOHJBOGVtbzllYXRITXRhdVM3R1ZH?=
- =?utf-8?B?TFFlNkVEOXBrdWQ2TXVIMUZKRW5Vc2RDM2tDV0g5Y0p0dVNXNHNNM1l2V2tS?=
- =?utf-8?B?Ym9vNXZqVlN4RnRXRVl3Slh1UG5WUmRnVkQ5bnRYNzVwOGJRR0w1Zjc2ZE1D?=
- =?utf-8?B?eExmZTBiVkFVUVE5RGplQ1IyeWdxTFFSTkhsVjRQOFNLeEtXbndFN3duRWd0?=
- =?utf-8?B?NEkwYXF0OG1SdTNzVDUwdWoyaWVPdTVQMVVteXo1ZElUaDFvdFZJLzJzVWRj?=
- =?utf-8?B?U3A4d3VJSDMxSXU5K3NWTGVmMDErRU53VXFIeThyQ25JcUcyc1p0OTlQRUFj?=
- =?utf-8?B?TVBYVWxDZlFmT2tweUlwdEc4cFUwQTlpK1k4ZlJSK2RCS3hFeTNXc3AyWkp3?=
- =?utf-8?B?M0RMTjR6eTVKNmE2RGY5RDJQbWtrL3ZUMUZUNTdMblFWZ3ZoNEp2end1ampS?=
- =?utf-8?B?SWd3K3dVRWhaV2xjTmxQSVRXeXhZZUZ1VDhENVRRQUhMV05uRkpCNXlWS1BU?=
- =?utf-8?B?SEVmeXRleDlhaG45YmJsdTJwWFFDZTJTU284bWFlUHE0UFh0UndERTZZTFVX?=
- =?utf-8?B?T1RYRTVJMWRUNXYwR1NHQVVVQkgyVzA5VTREN25HRzlEMFdXN0lSZGlxK2Vp?=
- =?utf-8?B?dS9IcjNUbU0vNjJnYmZKWnAxYUtUb1J2aFNrTU5NTW9yblV5NDlqYjRiblJl?=
- =?utf-8?B?L01hQVUxN3pQMmUzT2NDeUJreTYzU0xMRjhkZnVuSGNiSnpIT3V3WWZzRU5U?=
- =?utf-8?B?a3dVUFdDV1pLTnhpcXMzV21hUCt2NVkwSEE3U2RneGFXUnA5dTNaT0RHL0lD?=
- =?utf-8?B?SXFQVHlVTjNTVHhwbkloeFBTZ2VFR3Z3ZzFNYzhBdkF1R2pVTmszNjVLVkNp?=
- =?utf-8?B?dkRGS2VGMFNjWXk4WDhBOHpkZGFOR2RtWHZKYWN2enZpWThGUGZaeHJ0OCtp?=
- =?utf-8?B?VVdPa0x0bnd4LzluSTJBN1ArcHNhbllqdDF1UXdMYnJ2amYvTEY0eEE0TC9K?=
- =?utf-8?B?ZzFKY2lKaWJCOFMxaSt3dnBwU3NYZFZwQ25yUDVVbVJURWNBUXFjb0Y2eW9T?=
- =?utf-8?B?a3l1SVRFUlptbHkzbW04ZjArT3BYYTJUM3Joa2d0dzBvU0c3UlVGbTR3dW8y?=
- =?utf-8?B?WUEwQ0g0eXVkWENEaEptYy9GblVCM3FMVGdPaFFJaGk1TGVyMGNKU25ubFgv?=
- =?utf-8?B?YTBDZUpIbnAwNERraGlKYU5FOWtudGJRWjBqUGpaZE5xditUY1BBYStSbnk5?=
- =?utf-8?B?dmQ2dVQxTlJxb0I5Q3ZYUUxqeU8zRENoZUZwdllqNmZYZ1VsU1VFTmE1VTU0?=
- =?utf-8?B?SDVNS2FpdDZFTVRpN2tIWlMwZ3o3OEV4VTE2Ty9pRDMxU2hxcENlWmk1RTZ4?=
- =?utf-8?B?WGczUTdNYlMwQ3BNUGpJRW1jczljcHVmaGE3TTYxMG95MnM0WDFyaWs5eVRR?=
- =?utf-8?B?Q0pRNFdaSmE2aUNYdFdoTHJDWklHYzc5UEdheFArcWdxQU5Kd0hkVzNHbUcw?=
- =?utf-8?B?dThyT3dtZlhHUmV0a2lmV2VtdnhFYlEzemhnVGtVMDRRM1hyT3lKVzdNMDUy?=
- =?utf-8?B?RkdCSWpHenVLZ0F5Um9kRWRxdVZnejl4RE51dERvakVZL09WbmhOVHB4aE5F?=
- =?utf-8?B?ZlNVUnMxeHpvY3NpaEl1Ulp6cjliWjY4bGxhclBkdVRwS29NQ1Z3RmpWd2My?=
- =?utf-8?B?MWN4cDRKYWJweVZJRFNYajdaaEVUU3FFVitadklsYXBYemN5NTBwaWpsc0sv?=
- =?utf-8?B?NG54Z21iOHhQVnVjd0w5R1QwMkFic0gzU3JXWnBobWROeUM1ODVDNHkxVzdh?=
- =?utf-8?Q?eZpniSub6ZAR1f9gAkkhHV/HU?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 9 Dec 2022 03:29:29 -0500
+Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F0F5E3FE;
+        Fri,  9 Dec 2022 00:29:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1670574545; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=Kp9f9qDxAe0hlfK5vFCbM5y8/3ZlMd4DRhe7eK3dZ3iJFb/9oIGwRt4KkICv8tjgjnsyJOM6VtXNp5rCSiKqc958LUh4AKIp81x3vwbXRBXyNzANxVIeN1iMjYfJxkZ1hwUd7Omkvxv0Y1Df6xpjKwpKlnsbfauv/tatb3kz8l0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1670574545; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=lgXvQW8T8idwqTG2o/i6+KoDTaqrhbyGX00cZFdE/wE=; 
+        b=DjBLN7xsKF/wjkmLQzRNaC5Qo1TaRGtGlVU1EygBU4bESeG0MWzbYUlMdX1HwCUKMj5Aj4lVHBAMaJcug+2ioWywOnEVTr87StiBpALrb9W8nxQ4RELM5rza3LSfWRsW+SI7MYKi9rjrJNiwqZZe+j4qrBOG7FVBlWIwsIlr8rU=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670574545;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
+        bh=lgXvQW8T8idwqTG2o/i6+KoDTaqrhbyGX00cZFdE/wE=;
+        b=NCjulmO8gZs+W/M/oOaiCbmVcWKYiJNVz/fXgM0ojRz9vl+R9CKr/y0vyviOcjCP
+        6IQ6LkIa2ZkgzbPo6PCHIezrKiYyJmAGY3yzPaV4miLOe/5oqt4o41NYyCWd4Hdqt8q
+        XB6La6DEZYyPN1FOHh8vdKfvIKsD3Ptz2pEPsbh4=
+Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
+        with SMTPS id 1670574543792307.4749119019116; Fri, 9 Dec 2022 13:59:03 +0530 (IST)
+Message-ID: <7c836cf0-d978-c892-bec8-0992e2347512@siddh.me>
+Date:   Fri, 9 Dec 2022 13:59:02 +0530
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB4010.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8480c2f6-8c36-46b9-dbe8-08dad9bf4987
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Dec 2022 08:28:02.1655
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7H90TPw4EuNGfSUUqSDOK9ige6EWk9XOVBFd8NOK6YM9/fRdUw1QTJfc5jU4TFdfr5e68fTVZOgyY8jnDBLfzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB9118
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,T_SPF_PERMERROR autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH] erofs/zmap.c: Bail out when no further region remains
+Content-Language: en-US, en-GB, hi-IN
+To:     linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Yue Hu <huyue2@coolpad.com>,
+        linux-erofs <linux-erofs@lists.ozlabs.org>
+References: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
+ <917344b4-4256-6d77-b89b-07fa96ec4539@siddh.me>
+ <Y3Nu+TNRp6Fv3L19@B-P7TQMD6M-0146.local>
+ <Y5K+p6td52QppRZt@B-P7TQMD6M-0146.local>
+From:   Siddh Raman Pant <code@siddh.me>
+In-Reply-To: <Y5K+p6td52QppRZt@B-P7TQMD6M-0146.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiB5ZS54aW5nY2hlbkB6dGUuY29t
-LmNuIDx5ZS54aW5nY2hlbkB6dGUuY29tLmNuPg0KPiBTZW50OiAyMDIy5bm0MTLmnIg35pelIDE1
-OjM1DQo+IFRvOiBqaWMyM0BrZXJuZWwub3JnDQo+IENjOiBCb3VnaCBDaGVuIDxoYWliby5jaGVu
-QG54cC5jb20+OyBhbmRyaXkuc2hldmNoZW5rb0BsaW51eC5pbnRlbC5jb207DQo+IGxhcnNAbWV0
-YWZvby5kZTsgbGludXgtaWlvQHZnZXIua2VybmVsLm9yZzsgZGwtbGludXgtaW14IDxsaW51eC1p
-bXhAbnhwLmNvbT47DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDog
-W1BBVENIXSBpaW86IGFkYzogdmY2MTBfYWRjOiBDb252ZXJ0IHRvIHVzZSBzeXNmc19lbWl0X2F0
-KCkgQVBJDQo+IA0KPiBGcm9tOiB5ZSB4aW5nY2hlbiA8eWUueGluZ2NoZW5AenRlLmNvbS5jbj4N
-Cj4gDQo+IEZvbGxvdyB0aGUgYWR2aWNlIG9mIHRoZSBEb2N1bWVudGF0aW9uL2ZpbGVzeXN0ZW1z
-L3N5c2ZzLnJzdCBhbmQgc2hvdygpIHNob3VsZA0KPiBvbmx5IHVzZSBzeXNmc19lbWl0KCkgb3Ig
-c3lzZnNfZW1pdF9hdCgpIHdoZW4gZm9ybWF0dGluZyB0aGUgdmFsdWUgdG8gYmUNCj4gcmV0dXJu
-ZWQgdG8gdXNlciBzcGFjZS4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IHllIHhpbmdjaGVuIDx5ZS54
-aW5nY2hlbkB6dGUuY29tLmNuPg0KDQpBY2tlZC1ieTogSGFpYm8gQ2hlbiA8aGFpYm8uY2hlbkBu
-eHAuY29tPg0KDQpCZXN0IFJlZ2FyZHMNCkhhaWJvIENoZW4NCj4gLS0tDQo+ICBkcml2ZXJzL2lp
-by9hZGMvdmY2MTBfYWRjLmMgfCAzICstLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9u
-KCspLCAyIGRlbGV0aW9ucygtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaWlvL2FkYy92
-ZjYxMF9hZGMuYyBiL2RyaXZlcnMvaWlvL2FkYy92ZjYxMF9hZGMuYyBpbmRleA0KPiBhZTMxYWFm
-ZDI2NTMuLmRiZjgwZjVmNjc0YiAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9paW8vYWRjL3ZmNjEw
-X2FkYy5jDQo+ICsrKyBiL2RyaXZlcnMvaWlvL2FkYy92ZjYxMF9hZGMuYw0KPiBAQCAtNjA2LDgg
-KzYwNiw3IEBAIHN0YXRpYyBzc2l6ZV90IHZmNjEwX3Nob3dfc2FtcF9mcmVxX2F2YWlsKHN0cnVj
-dA0KPiBkZXZpY2UgKmRldiwNCj4gIAlpbnQgaTsNCj4gDQo+ICAJZm9yIChpID0gMDsgaSA8IEFS
-UkFZX1NJWkUoaW5mby0+c2FtcGxlX2ZyZXFfYXZhaWwpOyBpKyspDQo+IC0JCWxlbiArPSBzY25w
-cmludGYoYnVmICsgbGVuLCBQQUdFX1NJWkUgLSBsZW4sDQo+IC0JCQkiJXUgIiwgaW5mby0+c2Ft
-cGxlX2ZyZXFfYXZhaWxbaV0pOw0KPiArCQlsZW4gKz0gc3lzZnNfZW1pdF9hdChidWYsIGxlbiwg
-IiV1ICIsIGluZm8tPnNhbXBsZV9mcmVxX2F2YWlsW2ldKTsNCj4gDQo+ICAJLyogcmVwbGFjZSB0
-cmFpbGluZyBzcGFjZSBieSBuZXdsaW5lICovDQo+ICAJYnVmW2xlbiAtIDFdID0gJ1xuJzsNCj4g
-LS0NCj4gMi4yNS4xDQo=
+On Fri, Dec 09 2022 at 10:20:47 +0530, Gao Xiang wrote:
+> Hi Siddh,
+> 
+> On Tue, Nov 15, 2022 at 06:50:33PM +0800, Gao Xiang wrote:
+>> On Tue, Nov 15, 2022 at 03:39:38PM +0530, Siddh Raman Pant via Linux-erofs wrote:
+>>> On Tue, 15 Nov 2022 08:54:47 +0530, Gao Xiang wrote:
+>>>> I just wonder if we should return -EINVAL for post-EOF cases or
+>>>> IOMAP_HOLE with arbitrary length?
+>>>
+>>> Since it has been observed that length can be zeroed, and we
+>>> must stop, I think we should return an error appropriately.
+>>>
+>>> For a read-only filesystem, we probably don't really need to
+>>> care what's after the EOF or in unmapped regions, nothing can
+>>> be changed/extended. The definition of IOMAP_HOLE in iomap.h
+>>> says it stands for "no blocks allocated, need allocation".
+>>
+>> For fiemap implementation, yes.  So it looks fine to me.
+>>
+>> Let's see what other people think.  Anyway, I'd like to apply it later.
+>>
+> 
+> Very sorry for late response.
+> 
+> I've just confirmed that the reason is that
+> 
+> 796                 /*
+> 797                  * No strict rule how to describe extents for post EOF, yet
+> 798                  * we need do like below. Otherwise, iomap itself will get
+> 799                  * into an endless loop on post EOF.
+> 800                  */
+> 801                 if (iomap->offset >= inode->i_size)
+> 802                         iomap->length = length + map.m_la - offset;
+> 
+> Here iomap->length should be length + offset - map.m_la here. Because
+> the extent start (map.m_la) is always no more than requested `offset'.
+> 
+> We should need this code sub-block since userspace (filefrag -v) could
+> pass
+> ioctl(3, FS_IOC_FIEMAP, {fm_start=0, fm_length=18446744073709551615, fm_flags=0, fm_extent_count=292} => {fm_flags=0, fm_mapped_extents=68, ...}) = 0
+> 
+> without this sub-block, fiemap could get into a very long loop as below:
+> [  574.030856][ T7030] erofs: m_la 70000000 offset 70457397 length 9223372036784318410 m_llen 457398
+> [  574.031622][ T7030] erofs: m_la 70000000 offset 70457398 length 9223372036784318409 m_llen 457399
+> [  574.032397][ T7030] erofs: m_la 70000000 offset 70457399 length 9223372036784318408 m_llen 457400
+
+Thanks for the detailed explanation!
+
+> So could you fix this as?
+> 	iomap->length = length + offset - map.m_la;
+> 
+> I've already verified it can properly resolve the issue and do the
+> correct thing although I'd like to submit this later since we're quite
+> close to the merge window.
+> 
+> Thanks,
+> Gao Xiang
+
+Sure, I'll send the patch for now, which can be merged after the window.
+
+Thanks,
+Siddh
