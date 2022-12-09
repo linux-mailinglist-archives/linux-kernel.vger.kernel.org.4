@@ -2,192 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86642648739
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:05:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8893648741
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbiLIRFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:05:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52050 "EHLO
+        id S229976AbiLIRHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiLIREd (ORCPT
+        with ESMTP id S230022AbiLIRGo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:04:33 -0500
-Received: from sonic314-26.consmr.mail.ne1.yahoo.com (sonic314-26.consmr.mail.ne1.yahoo.com [66.163.189.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D9AD389F9
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:02:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670605378; bh=MyMUlj5UJfAp+eU10kjTGA4h5Trvl3n2yx62dVmJUto=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=jgF8+VlCs6Y6af9d+SoUZk4sjlHmAMM9jatMFidCPMpakgmpdJAp0KaHYiuZs3gJXM6FxYRql01CnvNKogqU+yKcLWKM3kY/i68pxEGkOrz6RLm0AyDceyoBVbafyBtkum9uvB4ijj059yK5obUDr+0dASpWusgYUOZUMQaHUGDbqZycdgQKK0mnZoOP2DH/EzAgS2HAp8Ld9ehe6UmuDdnRcULifBPbiSpijski+a4GWur6VhdriBo7f1UWlPuZR2RM/GVdM1l4b1cR75CFLvO92riOHvdtJPIpoAXO4LmqIEaTrIdgnPARIDt/o4MeQW1KUjj5GsOFUNNT08fjmA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1670605378; bh=GTyIwEIyFc5nHqUqmDYhYYe5Y/368xxilQ4FUXbpB89=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=tgIHUMJPlmRBTH8YWeM3Zlrd4CKTireMXVbpHoq6kJfsk+u7QZUZ0RnXLrc9C0jyX0mNtqDXwNUb/xZGnB6NzD5fLdD8n2DEWA8hDloKdob+A7lgjAIt2oCMg7VW554Ud9Qs1qnqhg4c8UX/iRWm1n0obB92UXDcfUAxf0xRfKB8YEKSbFAM9zLjJ/EZlsGRx1PhZF9wwJH9/DtE0K+k6IprJI8JFAUjZ9+lWDMJ4+DLZSB68oYYCALIIB8NM+ezaOkQLgCufIBCxr/jkOdgj87CtmRBv4LLPre01/eQeoZw9+fC90t6AZ0q9PPKI1yRWgV44vOrYiC5JiP2+3pVPg==
-X-YMail-OSG: lL7Y9y8VM1l_BqUfrYBN0lBOjEdhHbVchVr58QRsi3aIdTLukr5phEZ89VFvAVB
- CkJZVQotERsst7pKJTRrunU5CoMB9K2f2B8kCohnOkNNefFwVMUsyueCpkW9QTcdG3LU3EXbfsuU
- TiG5g2zbDzcS2R7sWX5lpjpkX.u__XO.HzCEYKG41gfLpoenWmauCarpfnFXxgS2pQecjBwCO6PD
- ynhjahxMhud5vJs2OoYrNufdZSvpBSzn9kqXHJJgrvDGnT7V.L9jpIZ9Xgf1uHBD9R4216xXgSIt
- kCBougzYXFtfHMc_qRLa1E1gNJ23XDr.Lvt1hLEG2R5YSAGCdbMYipe3vhJpcXUDcm5rEby7AKm8
- YbShrXjXEye0MRbeqdYDNfib46KRlhYnjazTZBtkfqAqQ4ykyoyT1ybMlIUuXxevMuJQsXkBIWvV
- Mk6PGVuviyztEUOr.k1kZyAQMp3_vewfh.S2ZTk4XD0EJjWbt0GBt4BIPCRtV_Wd5d8Z3mVOvgXr
- eE1tzxgjZRx.G0iCJ0hRVUfZ9vh2TjcdcqodgWMhH0R3JxXYBGnEEuC1PTDcgtNU_iJ6Q2IPBYht
- LnHisQ5Yibsrrd24thyCKcTOuGM0iAe5zIYVtvL68YXzjwidxjkmvWOc4hII8xSOEeQ8oU8LXosZ
- ZlZQzW_t_mCLx6KMVs0FDM0MTcpB_G1Ay5Ifu.vdx.hBhu8eyJ0Hrqp8NizEHkbJziYdG1TCtwF7
- bpmVWlVHEF8JVPtgxbpJ0X.fCbenpmPwCJ9QHqM2iBGu9IftV_wAdSP5STjMP9KsH5C_cZDD5Plq
- yqaW27p4Q.OhNDfuKZgI.k76WvS2wCCxgJvIz7O1Pl9OPhis4HuVcaJsDUCW8kxu9Vq3SFyQF2nT
- IdQSiCKXi8Io66Yj8.AyadVeTdS.oe1A9v0RN68LldyfiU2AoI3b_yYB77R8lQzBA9hLxSHk0PkI
- dIPCZEonwyYYaCkuS04TaOUHwluvs8oFCzR5kCEhquIQ_DBwR_LZL.SAwM6PKN_tf.Q17pd3oPQe
- C961a.CIol4JkGkxS8FRW6SwhD7QNfjNeI50F10jBL9CopYj4Uot1t_WbeSYoS30_U6QZ3ghNvup
- vwxqywDrpiEJWFf.vrrYy2cprtCb6D1JfqTZ53xYMz_OYC19yGe5JePPttXsii_f1FkZMLJKl2La
- TPmnfJ_Zv41uAqKuz1EA3vm4wEB1kn_gBLFLj3WILqzY9SRW4m.R025Fwvf7CIvb3PxqfuiZ5yNG
- tIOHctNTq3DkfltRNsbX5g6gRkk0fOANOkwKS6V.BVU8QLWVg8FSXNL.O7i91POcuF10w5ZG86Se
- SeARFe.mzj6GxVlkOcrJZdwHgF11a853lTc_xs.zT6VbhDZ7fXBM6ftvPni6ni.9NarO2dHJHDpa
- _PzYAZWWPVYO.Zx9mAyE_ApDkl749_1GPJlhbCNRoZ6krhuagsLyjk8DbLCIw17quxpAh_KIVjXJ
- TEhNVWvtE7Ldkpq2FqAMV595IcJcvr9BRpdkEw251uBMRuXuJqugNK_yAqBqrohidzNDEh21WhhE
- PuKMyC7bPiSGML__cCIStn.9nBJpnEjLhTJurMDu3T1mVjvtXf5Z.0Bufsic1393kL51QVqnkhhi
- VebC1XJwhlNhjodPBZcdlxbAeCJT6kG3zaWdEDFccO50MHxq9mv7EPKH_hjeKSFTiL91YDpJx1CU
- XR9zYqJ46kVPrKMQdcipTwrg7.ppIu4YuBEtzpuShZS0N_crtiZkK4K6jU.pjbP95dTrQCj_FCsu
- 1KzvlJYgDU7UULTFo6t8dIqqGlJqIZE8zslrCCYIo2E1DABEtLhRrpehZ0pT1So5Mtj95w5oc17M
- YZQenTO3eg7IK2mgg5Hcf0KtxbJIR.RwXSJpliWoaZc_6DHcoaXuh9ihYlxqcyIsMWYVjL24fI6q
- izeL6Chszszn6f1M7NGQktXNGqTORYqVwhPyw5xuq5HmL9O9rbdKYan6.2KI9O8E59sxrYVFG04b
- 3QofzocQOgp2EXkywjQDZONavNapKRXjzMvJ.ESyKsNG_971A6XeRXXwJHSOWHB6FjkYjqbgXUPz
- Wzis6US_tXsCzRDPfjqeb7KB4r1PtTPQzbZte6fZh7OrIyZM2xCBO1SM_9vOBxyCgvKfKDc7cpgn
- TG01NA9Az33gUBSphK7T3x2AAzl1cY60UC6km5zTNE.aZ_VVvP_z.3LCC5DyLdwR69K7QNbjhX77
- 9n4vuK6xlnRmNR9UqVFDtyh8.NQ_3pQc7Z79bZZSJL1R4nmZzg.naOf3y8ZYnn1vWcZnOctzvkY9
- g860vf6TkMbp4200-
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ne1.yahoo.com with HTTP; Fri, 9 Dec 2022 17:02:58 +0000
-Received: by hermes--production-gq1-d898c4779-kw4j9 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a6a3eaab463986d72460c801a21e852f;
-          Fri, 09 Dec 2022 17:02:52 +0000 (UTC)
-Message-ID: <27c63309-4a36-74d5-42e0-d4a2e9e02db4@schaufler-ca.com>
-Date:   Fri, 9 Dec 2022 09:02:51 -0800
+        Fri, 9 Dec 2022 12:06:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9700FACB;
+        Fri,  9 Dec 2022 09:04:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FECF622C9;
+        Fri,  9 Dec 2022 17:04:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9986C433EF;
+        Fri,  9 Dec 2022 17:04:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670605487;
+        bh=gQXA+j2g4oXs6RnRNrCZ0AkHANYxi91gTp0MorfjTGI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ICmW33ahP9H3MfZN7R7k0WrqPoeMU3QossaBBbInxc9p29nNkyqIKVKZKPN3wvnMA
+         H4gGLoeNiu/SJ4nUCF+01yi89YfqqGZmaH4ykfsg7Zakdisjl7y0+YWjRRsv09cwSZ
+         ysEMrqXZRcUCLdgxLP/y9QD0LU+r4mCFQnC1kslVdO6ok3RSwflZiTSquCHlvQyAdZ
+         2K1K7BBbqbV01VjBT8Rt2u9ffacu/fJ46WI51h0DhQfQt4/fmI+/QixriXEana3qRj
+         pa2KH0kR3m8xVYpjPl/j8R5voWGbnqrpqQTUyBaQPS7no8zEIEskmkPOSSlIWC+l1y
+         L5UxNWbAnZrYQ==
+Date:   Fri, 9 Dec 2022 19:04:24 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        Yu-cheng Yu <yu-cheng.yu@intel.com>
+Subject: Re: [PATCH v4 37/39] x86: Add PTRACE interface for shadow stack
+Message-ID: <Y5NqmLqXfXpowoSM@kernel.org>
+References: <20221203003606.6838-1-rick.p.edgecombe@intel.com>
+ <20221203003606.6838-38-rick.p.edgecombe@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v7 6/6] mm/memfd: security hook for memfd_create
-Content-Language: en-US
-To:     jeffxu@chromium.org, skhan@linuxfoundation.org,
-        keescook@chromium.org
-Cc:     akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
-        dverkamp@chromium.org, hughd@google.com, jeffxu@google.com,
-        jorgelo@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, linux-hardening@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        kernel test robot <lkp@intel.com>, casey@schaufler-ca.com
-References: <20221209160453.3246150-1-jeffxu@google.com>
- <20221209160453.3246150-7-jeffxu@google.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20221209160453.3246150-7-jeffxu@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20926 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221203003606.6838-38-rick.p.edgecombe@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/9/2022 8:04 AM, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@google.com>
->
-> The new security_memfd_create allows lsm to check flags of
-> memfd_create.
->
-> The security by default system (such as chromeos) can use this
-> to implement system wide lsm to allow only non-executable memfd
-> being created.
->
-> Signed-off-by: Jeff Xu <jeffxu@google.com>
-> Reported-by: kernel test robot <lkp@intel.com>
+Hi Rick,
+
+On Fri, Dec 02, 2022 at 04:36:04PM -0800, Rick Edgecombe wrote:
+> From: Yu-cheng Yu <yu-cheng.yu@intel.com>
+> 
+> Some applications (like GDB) would like to tweak shadow stack state via
+> ptrace. This allows for existing functionality to continue to work for
+> seized shadow stack applications. Provide an regset interface for
+> manipulating the shadow stack pointer (SSP).
+> 
+> There is already ptrace functionality for accessing xstate, but this
+> does not include supervisor xfeatures. So there is not a completely
+> clear place for where to put the shadow stack state. Adding it to the
+> user xfeatures regset would complicate that code, as it currently shares
+> logic with signals which should not have supervisor features.
+> 
+> Don't add a general supervisor xfeature regset like the user one,
+> because it is better to maintain flexibility for other supervisor
+> xfeatures to define their own interface. For example, an xfeature may
+> decide not to expose all of it's state to userspace, as is actually the
+> case for  shadow stack ptrace functionality. A lot of enum values remain
+> to be used, so just put it in dedicated shadow stack regset.
+> 
+> The only downside to not having a generic supervisor xfeature regset,
+> is that apps need to be enlightened of any new supervisor xfeature
+> exposed this way (i.e. they can't try to have generic save/restore
+> logic). But maybe that is a good thing, because they have to think
+> through each new xfeature instead of encountering issues when new a new
+> supervisor xfeature was added.
+> 
+> By adding a shadow stack regset, it also has the effect of including the
+> shadow stack state in a core dump, which could be useful for debugging.
+> 
+> The shadow stack specific xstate includes the SSP, and the shadow stack
+> and WRSS enablement status. Enabling shadow stack or wrss in the kernel
+> involves more than just flipping the bit. The kernel is made aware that
+> it has to do extra things when cloning or handling signals. That logic
+> is triggered off of separate feature enablement state kept in the task
+> struct. So the flipping on HW shadow stack enforcement without notifying
+> the kernel to change its behavior would severely limit what an application
+> could do without crashing, and the results would depend on kernel
+> internal implementation details. There is also no known use for controlling
+> this state via prtace today. So only expose the SSP, which is something
+> that userspace already has indirect control over.
+> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
 > ---
->  include/linux/lsm_hook_defs.h | 1 +
->  include/linux/lsm_hooks.h     | 4 ++++
->  include/linux/security.h      | 6 ++++++
->  mm/memfd.c                    | 5 +++++
->  security/security.c           | 5 +++++
->  5 files changed, 21 insertions(+)
->
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index ec119da1d89b..fd40840927c8 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -164,6 +164,7 @@ LSM_HOOK(int, 0, file_alloc_security, struct file *file)
->  LSM_HOOK(void, LSM_RET_VOID, file_free_security, struct file *file)
->  LSM_HOOK(int, 0, file_ioctl, struct file *file, unsigned int cmd,
->  	 unsigned long arg)
-> +LSM_HOOK(int, 0, memfd_create, char *name, unsigned int flags)
->  LSM_HOOK(int, 0, mmap_addr, unsigned long addr)
->  LSM_HOOK(int, 0, mmap_file, struct file *file, unsigned long reqprot,
->  	 unsigned long prot, unsigned long flags)
-> diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
-> index 4ec80b96c22e..5a18a6552278 100644
-> --- a/include/linux/lsm_hooks.h
-> +++ b/include/linux/lsm_hooks.h
-> @@ -543,6 +543,10 @@
->   *	simple integer value.  When @arg represents a user space pointer, it
->   *	should never be used by the security module.
->   *	Return 0 if permission is granted.
-> + * @memfd_create:
-> + *	@name is the name of memfd file.
-> + *	@flags is the flags used in memfd_create.
-> + *	Return 0 if permission is granted.
->   * @mmap_addr :
->   *	Check permissions for a mmap operation at @addr.
->   *	@addr contains virtual address that will be used for the operation.
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index ca1b7109c0db..5b87a780822a 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -384,6 +384,7 @@ int security_file_permission(struct file *file, int mask);
->  int security_file_alloc(struct file *file);
->  void security_file_free(struct file *file);
->  int security_file_ioctl(struct file *file, unsigned int cmd, unsigned long arg);
-> +int security_memfd_create(char *name, unsigned int flags);
->  int security_mmap_file(struct file *file, unsigned long prot,
->  			unsigned long flags);
->  int security_mmap_addr(unsigned long addr);
-> @@ -963,6 +964,11 @@ static inline int security_file_ioctl(struct file *file, unsigned int cmd,
->  	return 0;
+> 
+> v4:
+>  - Make shadow stack only. Reduce to only supporting SSP register, and
+>    remove CET references (peterz)
+>  - Add comment to not use 0x203, becuase binutils already looks for it in
+>    coredumps. (Christina Schimpe)
+> 
+> v3:
+>  - Drop dependence on thread.shstk.size, and use thread.features bits
+>  - Drop 32 bit support
+> 
+> v2:
+>  - Check alignment on ssp.
+>  - Block IBT bits.
+>  - Handle init states instead of returning error.
+>  - Add verbose commit log justifying the design.
+> 
+> Yu-Cheng v12:
+>  - Return -ENODEV when CET registers are in INIT state.
+>  - Check reserved/non-support bits from user input.
+> 
+>  arch/x86/include/asm/fpu/regset.h |  7 +--
+>  arch/x86/kernel/fpu/regset.c      | 87 +++++++++++++++++++++++++++++++
+>  arch/x86/kernel/ptrace.c          | 12 +++++
+>  include/uapi/linux/elf.h          |  2 +
+>  4 files changed, 105 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/fpu/regset.h b/arch/x86/include/asm/fpu/regset.h
+> index 4f928d6a367b..697b77e96025 100644
+> --- a/arch/x86/include/asm/fpu/regset.h
+> +++ b/arch/x86/include/asm/fpu/regset.h
+> @@ -7,11 +7,12 @@
+>  
+>  #include <linux/regset.h>
+>  
+> -extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active;
+> +extern user_regset_active_fn regset_fpregs_active, regset_xregset_fpregs_active,
+> +				ssp_active;
+>  extern user_regset_get2_fn fpregs_get, xfpregs_get, fpregs_soft_get,
+> -				 xstateregs_get;
+> +				 xstateregs_get, ssp_get;
+>  extern user_regset_set_fn fpregs_set, xfpregs_set, fpregs_soft_set,
+> -				 xstateregs_set;
+> +				 xstateregs_set, ssp_set;
+>  
+>  /*
+>   * xstateregs_active == regset_fpregs_active. Please refer to the comment
+> diff --git a/arch/x86/kernel/fpu/regset.c b/arch/x86/kernel/fpu/regset.c
+> index 6d056b68f4ed..00f3d5c9b682 100644
+> --- a/arch/x86/kernel/fpu/regset.c
+> +++ b/arch/x86/kernel/fpu/regset.c
+> @@ -8,6 +8,7 @@
+>  #include <asm/fpu/api.h>
+>  #include <asm/fpu/signal.h>
+>  #include <asm/fpu/regset.h>
+> +#include <asm/prctl.h>
+>  
+>  #include "context.h"
+>  #include "internal.h"
+> @@ -174,6 +175,92 @@ int xstateregs_set(struct task_struct *target, const struct user_regset *regset,
+>  	return ret;
 >  }
 >  
-> +static inline int security_memfd_create(char *name, unsigned int flags)
+> +
+> +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +int ssp_active(struct task_struct *target, const struct user_regset *regset)
 > +{
+> +	if (shstk_enabled())
+
+This is not going to work with ptrace as shstk_enabled() checks current
+rather than target.
+
+> +		return regset->n;
+> +
 > +	return 0;
 > +}
 > +
-
-Add a proper kernel doc comment for this function.
-
->  static inline int security_mmap_file(struct file *file, unsigned long prot,
->  				     unsigned long flags)
->  {
-> diff --git a/mm/memfd.c b/mm/memfd.c
-> index 92f0a5765f7c..f04ed5f0474f 100644
-> --- a/mm/memfd.c
-> +++ b/mm/memfd.c
-> @@ -356,6 +356,11 @@ SYSCALL_DEFINE2(memfd_create,
->  		goto err_name;
->  	}
->  
-> +	/* security hook for memfd_create */
-> +	error = security_memfd_create(name, flags);
-> +	if (error)
-> +		return error;
-> +
->  	if (flags & MFD_HUGETLB) {
->  		file = hugetlb_file_setup(name, 0, VM_NORESERVE,
->  					HUGETLB_ANONHUGE_INODE,
-> diff --git a/security/security.c b/security/security.c
-> index 79d82cb6e469..57788cf94075 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -1010,6 +1010,11 @@ int security_sb_clone_mnt_opts(const struct super_block *oldsb,
->  }
->  EXPORT_SYMBOL(security_sb_clone_mnt_opts);
->  
-> +int security_memfd_create(char *name, unsigned int flags)
+> +int ssp_get(struct task_struct *target, const struct user_regset *regset,
+> +		struct membuf to)
 > +{
-> +	return call_int_hook(memfd_create, 0, name, flags);
+> +	struct fpu *fpu = &target->thread.fpu;
+> +	struct cet_user_state *cetregs;
+> +
+> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK))
+> +		return -ENODEV;
+> +
+> +	sync_fpstate(fpu);
+> +	cetregs = get_xsave_addr(&fpu->fpstate->regs.xsave, XFEATURE_CET_USER);
+> +	if (!cetregs) {
+> +		/*
+> +		 * The registers are the in the init state. The init values for
+> +		 * these regs are zero, so just zero the output buffer.
+> +		 */
+> +		membuf_zero(&to, sizeof(cetregs->user_ssp));
+> +		return 0;
+> +	}
+> +
+> +	return membuf_write(&to, (unsigned long *)&cetregs->user_ssp,
+> +			    sizeof(cetregs->user_ssp));
 > +}
 > +
->  int security_move_mount(const struct path *from_path, const struct path *to_path)
->  {
->  	return call_int_hook(move_mount, 0, from_path, to_path);
+> +int ssp_set(struct task_struct *target, const struct user_regset *regset,
+> +		  unsigned int pos, unsigned int count,
+> +		  const void *kbuf, const void __user *ubuf)
+> +{
+> +	struct fpu *fpu = &target->thread.fpu;
+> +	struct xregs_state *xsave = &fpu->fpstate->regs.xsave;
+> +	struct cet_user_state *cetregs;
+> +	unsigned long user_ssp;
+> +	int r;
+> +
+> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK) ||
+> +	    !ssp_active(target, regset))
+> +		return -ENODEV;
+> +
+> +	r = user_regset_copyin(&pos, &count, &kbuf, &ubuf, &user_ssp, 0, -1);
+> +	if (r)
+> +		return r;
+> +
+> +	/*
+> +	 * Some kernel instructions (IRET, etc) can cause exceptions in the case
+> +	 * of disallowed CET register values. Just prevent invalid values.
+> +	 */
+> +	if ((user_ssp >= TASK_SIZE_MAX) || !IS_ALIGNED(user_ssp, 8))
+> +		return -EINVAL;
+> +
+> +	fpu_force_restore(fpu);
+> +
+> +	/*
+> +	 * Don't want to init the xfeature until the kernel will definetely
+> +	 * overwrite it, otherwise if it inits and then fails out, it would
+> +	 * end up initing it to random data.
+> +	 */
+> +	if (!xfeature_saved(xsave, XFEATURE_CET_USER) &&
+> +	    WARN_ON(init_xfeature(xsave, XFEATURE_CET_USER)))
+> +		return -ENODEV;
+> +
+> +	cetregs = get_xsave_addr(xsave, XFEATURE_CET_USER);
+> +	if (WARN_ON(!cetregs)) {
+> +		/*
+> +		 * This shouldn't ever be NULL because it was successfully
+> +		 * inited above if needed. The only scenario would be if an
+> +		 * xfeature was somehow saved in a buffer, but not enabled in
+> +		 * xsave.
+> +		 */
+> +		return -ENODEV;
+> +	}
+> +
+> +	cetregs->user_ssp = user_ssp;
+> +	return 0;
+> +}
+> +#endif /* CONFIG_X86_USER_SHADOW_STACK */
+> +
+>  #if defined CONFIG_X86_32 || defined CONFIG_IA32_EMULATION
+>  
+>  /*
+> diff --git a/arch/x86/kernel/ptrace.c b/arch/x86/kernel/ptrace.c
+> index dfaa270a7cc9..095f04bdabdc 100644
+> --- a/arch/x86/kernel/ptrace.c
+> +++ b/arch/x86/kernel/ptrace.c
+> @@ -58,6 +58,7 @@ enum x86_regset_64 {
+>  	REGSET64_FP,
+>  	REGSET64_IOPERM,
+>  	REGSET64_XSTATE,
+> +	REGSET64_SSP,
+>  };
+>  
+>  #define REGSET_GENERAL \
+> @@ -1267,6 +1268,17 @@ static struct user_regset x86_64_regsets[] __ro_after_init = {
+>  		.active		= ioperm_active,
+>  		.regset_get	= ioperm_get
+>  	},
+> +#ifdef CONFIG_X86_USER_SHADOW_STACK
+> +	[REGSET64_SSP] = {
+> +		.core_note_type	= NT_X86_SHSTK,
+> +		.n		= 1,
+> +		.size		= sizeof(u64),
+> +		.align		= sizeof(u64),
+> +		.active		= ssp_active,
+> +		.regset_get	= ssp_get,
+> +		.set		= ssp_set
+> +	},
+> +#endif
+>  };
+>  
+>  static const struct user_regset_view user_x86_64_view = {
+> diff --git a/include/uapi/linux/elf.h b/include/uapi/linux/elf.h
+> index c7b056af9ef0..e9283f0641c4 100644
+> --- a/include/uapi/linux/elf.h
+> +++ b/include/uapi/linux/elf.h
+> @@ -406,6 +406,8 @@ typedef struct elf64_shdr {
+>  #define NT_386_TLS	0x200		/* i386 TLS slots (struct user_desc) */
+>  #define NT_386_IOPERM	0x201		/* x86 io permission bitmap (1=deny) */
+>  #define NT_X86_XSTATE	0x202		/* x86 extended state using xsave */
+> +/* Old binutils treats 0x203 as a CET state */
+> +#define NT_X86_SHSTK	0x204		/* x86 SHSTK state */
+>  #define NT_S390_HIGH_GPRS	0x300	/* s390 upper register halves */
+>  #define NT_S390_TIMER	0x301		/* s390 timer register */
+>  #define NT_S390_TODCMP	0x302		/* s390 TOD clock comparator register */
+> -- 
+> 2.17.1
+> 
+
+-- 
+Sincerely yours,
+Mike.
