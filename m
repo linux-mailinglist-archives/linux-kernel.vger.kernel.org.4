@@ -2,103 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8FB648748
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:07:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D12AE648749
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:08:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbiLIRHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:07:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S230049AbiLIRIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:08:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229979AbiLIRHZ (ORCPT
+        with ESMTP id S229635AbiLIRHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:07:25 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCA99D896;
-        Fri,  9 Dec 2022 09:05:54 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so12971331ejc.4;
-        Fri, 09 Dec 2022 09:05:54 -0800 (PST)
+        Fri, 9 Dec 2022 12:07:34 -0500
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1401C6E
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:06:49 -0800 (PST)
+Received: by mail-yb1-xb2c.google.com with SMTP id s11so6250986ybe.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:06:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V9HH5/Q/ZXGLIYrLL/jsX1Wvnszqx04FlI27U7A4YSE=;
-        b=UkSZa0jip2PCMoAVGzDgsOljXaWxlJUjO6lTqvs7mgU7VsmoNZnbrOuIKw8sJGOrTE
-         pmtVyLawCgEdPI2dE5qixKZUnPO2OE0sI7TTiY3kt+yCdE3N9QGHpCSyMTcCJAz8W0xf
-         fKisly+ooiMwYB8irHWGMeo6IdSEw5tjFD/jSiuGcCaL5d+detI0Ck4f6YegXCm6Z/Lj
-         XfCGeFpqDFpQLE782ypLw0Y4/zW27zweYKsXOn5wP3VwAogdvbzhfaDffJlTQhFat9oo
-         pSo1EBZ0+f2nIrRRUNPy32cquRxL27FPRMgxMsVboabv5Mh1vPTSh6JBwmsuJ0srYVVw
-         BNlw==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7v0Z5SII5lc88SchWlGOU2fHuY/bVMdgG+8xYXDaM4=;
+        b=tEWPBuWaeaRHXKVLQf119O3ROzEzV0m0qCU63eeky+tEo5IBLDxDS/wUyD206U4tTe
+         dd/CIyzh8kyfWI0AM42MKxiJvHcTAFJmWZ4pneTy8J1hEaGg5LgBUusYPSxEb9L6RadW
+         JiX2SzDkItJYEP753ClmfmlXmNXQFnbdylwJIy1qjretyuofSHzjp1eQLbq2maepHf0r
+         pJSsAKvXwBiIE54GFeXtZ5PRNjHINCPMqrjAfQQtcYloRR/Fz7jXi4vQRLr7AT28e9IC
+         YeJ94a2T37qITRiKlWUFwlPQ6R6wlnPELx+QeCRT8QkqqY2LnTvwS9s9aUa5HJBgVBcn
+         W0Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V9HH5/Q/ZXGLIYrLL/jsX1Wvnszqx04FlI27U7A4YSE=;
-        b=wGo8oZgM4JPOy4QDAA2rBhrofkc7qEmgTSpz6q2fy2M1LyzWwaBPSmGDhpY6ke2S0+
-         IY14I2hf819J3M/9JoCwpRCvWDyp0w7qa0R4WLLu2NEQBfzsNG9WJ6Ze5YbQLoT1gPGg
-         HFzLZj0dXj3Z+cIgi+7IW8qa8NOkzv/zuA9Fjn19d4At88UK25UjdlG0Jh/kUz2PFh2B
-         UqLb1VWTgWcazahyIlaAsrJA78ITqpe8aVKFPNFGrXSu49AjWzgZU5LWF/fhiEacLIzW
-         11uxnoR2Is8OhWBwQ62HUtzSSvbrEdevuZ5ZI88Eod6j6uB4aP+Kc42yssWIvVjWP/Fa
-         0aKw==
-X-Gm-Message-State: ANoB5pnvzVnsxAWahmu2tGF6mJRoBDgrp55S0+siPFGczbdwdw0+O/r9
-        XSxKty/NKTHPH9luSZ1twiM=
-X-Google-Smtp-Source: AA0mqf68TUBWPm7jzqXobVKWAP1l1AiBtc0brkLA5r92jLwIiYFD9xuYrO9iJsmbARj7C8FTNpkDIQ==
-X-Received: by 2002:a17:907:c787:b0:7ae:126a:99b8 with SMTP id tz7-20020a170907c78700b007ae126a99b8mr6459901ejc.61.1670605553268;
-        Fri, 09 Dec 2022 09:05:53 -0800 (PST)
-Received: from skbuf ([188.27.185.190])
-        by smtp.gmail.com with ESMTPSA id kw26-20020a170907771a00b007add1c4dadbsm118982ejc.153.2022.12.09.09.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 09:05:52 -0800 (PST)
-Date:   Fri, 9 Dec 2022 19:05:50 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jerry Ray <jerry.ray@microchip.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, jbe@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux@armlinux.org.uk
-Subject: Re: [PATCH v2] net: lan9303: Fix read error execution path
-Message-ID: <20221209170550.o3pro2tx5n6lh7pa@skbuf>
-References: <20221209153502.7429-1-jerry.ray@microchip.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=P7v0Z5SII5lc88SchWlGOU2fHuY/bVMdgG+8xYXDaM4=;
+        b=kEhm++GiNCGt28CODGzDT89b89nixQgEwVSgV4kJAgd4KEkuNj0LvfHVPIL4TuEiQ1
+         49YxoYy5K7bMra7ME+6MEuViPgqKln9r+JCQlGd43fy22yUmbxdCzrsi8uDADMFW99Un
+         tZY01+Xkbs/kItYO4B+V81n0Vh0gxhySds3u54OVdikMRuknsCVx2kFJ9PkpNq832PBZ
+         +ap/uXJipFJg5ol9nbGFU/zQN8fdkSNKpQILc0dg3WzoG3FtKhUAaNIN1wzufi4vidCP
+         4/R3BlNZSI35QPch2XHUzw5gzEzFS3z1ILeNGfdaBgMXT13qX3QS9yadNCYdYg4ZEUkr
+         oRZg==
+X-Gm-Message-State: ANoB5pna+bpod4vQG994LNLKft010Nzkb3iGL0jnI8dtcBK+vy1Xccyr
+        trcQkyWyhrLvO55KOlwsVxKHjwyoZ8ViJtj3ps0wYha9yQE8qoVwqn0=
+X-Google-Smtp-Source: AA0mqf5T5MUF/zloobEh7ghw97shyQNQuYyAKTvXIS+ST8HKOfx+pYSxCC4f3/aht2O5lJ5Icoy5jntmn49DjBzF7ng=
+X-Received: by 2002:a25:d313:0:b0:716:9baa:18cf with SMTP id
+ e19-20020a25d313000000b007169baa18cfmr1009394ybf.453.1670605609116; Fri, 09
+ Dec 2022 09:06:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209153502.7429-1-jerry.ray@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221209150503.11875-1-ajye_huang@compal.corp-partner.google.com> <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com>
+In-Reply-To: <eca17001-93ff-d379-1ab2-2927f1831e78@linux.intel.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Sat, 10 Dec 2022 01:06:38 +0800
+Message-ID: <CALprXBayJtWRe9J+q7EahgpXrRy_B-tMAf0KXbDtWa+=4RKyHA@mail.gmail.com>
+Subject: Re: [PATCH v1] ASoC: Intel: sof_nau8825: add support for nau8825 with
+ amp nau8318
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
+        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        Yong Zhi <yong.zhi@intel.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Muralidhar Reddy <muralidhar.reddy@intel.com>,
+        "balamurugan . c" <balamurugan.c@intel.com>,
+        Libin Yang <libin.yang@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Cezary Rojewski <cezary.rojewski@intel.com>,
+        David Lin <CTLIN0@nuvoton.com>, Brent Lu <brent.lu@intel.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 09:35:02AM -0600, Jerry Ray wrote:
-> This patch fixes an issue where a read failure of a port statistic counter
-> will return unknown results.  While it is highly unlikely the read will
-> ever fail, it is much cleaner to return a zero for the stat count.
-> 
-> Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
-> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
-> ---
-> v1->v2:
->   corrected email header: net vs net-next, Added 1 maintainer, removed
->   blank line.
+Hi Pierre
 
-Actually it's not "net vs net-next", but rather, "nothing vs net-next".
-As you can see, the patchwork CI complains that "Target tree name [is]
-not specified in the subject".
-https://patchwork.kernel.org/project/netdevbpf/patch/20221209153502.7429-1-jerry.ray@microchip.com/
+On Fri, Dec 9, 2022 at 11:52 PM Pierre-Louis Bossart
+<pierre-louis.bossart@linux.intel.com> wrote:
 
-Anyway, I think it's quite obvious for maintainers that it's a patch
-intended for the net.git tree, so there isn't a reason to resend this
-patch, just something to know and to do better in the future.
+> This looks inconsistent with the commit message. There are separate
+> Kconfigs for different codecs.
+>
+> SND_SOC_NAU8315
+> SND_SOC_NAU8825
+>
+> Which is it?
+>
 
->   No changes to the body of the patch.
-> ---
+Sorry about confusing you, I think it is better to change the title as
+ASoC: Intel: sof_nau8825: add combination of nau8825 headset codec
+with nau8318 Amp.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+And add some information about Nuvoton chips in the comment message.
+***
+The nau8315 and nau8318 are both Nuvoton Amp chips. They use the same
+Amp driver nau8315.c. The acpi_device_id for nau8315 is "NVTN2010",
+for nau8318 is "NVTN2012".
+The nau8825 is one of Nuvoton headset codec, and its acpi_device_id is
+"10508825".
+***
+
+>
+> Deep sigh...
+>
+> This ACPI HID is already used to match with the 8815, so this is not
+> going to work if we confuse two independent drivers...
+>
+> sound/soc/codecs/nau8315.c:
+>
+> #ifdef CONFIG_ACPI
+> static const struct acpi_device_id nau8315_acpi_match[] = {
+>         { "NVTN2010", 0 },
+>         { "NVTN2012", 0},
+>         {},
+> };
+> MODULE_DEVICE_TABLE(acpi, nau8315_acpi_match);
+> #endif
+>
+> How does this identify a NAU8825?
+>
+
+The NAU8825 Is headset codec, we added a new combination of nau8825
+headset codec + nau8318 amp in the machine driver.
+
+
+>
+> > +             .dai_name = "nau8315-hifi",
+>
+> and again this makes a reference to 8815.
+>
+
+Because the Amp driver is the same file nau8315.c , so nau8318 use the
+same dai_name "nau8315-hifi"
+
+
+> I will stop the review here.
+>
+> NAK for this v1. Please clarify which codec you are using and make sure
+> all references are consistent.
+>
+>
+
+I apologize for the unclear comment message, please give me any
+suggestions if needed, and I will send v2 for review.
+thanks.
