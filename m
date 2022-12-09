@@ -2,92 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E49B8648837
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:11:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65AC64883D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:14:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLISLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
+        id S229876AbiLISOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:14:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLISLb (ORCPT
+        with ESMTP id S229554AbiLISOD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:11:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DECAB9B7B2;
-        Fri,  9 Dec 2022 10:11:30 -0800 (PST)
+        Fri, 9 Dec 2022 13:14:03 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A311A431B;
+        Fri,  9 Dec 2022 10:14:02 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7634A622F8;
-        Fri,  9 Dec 2022 18:11:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28D4BC433D2;
-        Fri,  9 Dec 2022 18:11:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670609489;
-        bh=epx/3n6EwqEj5rJc+f7YxdkKGXlAtgNwhwzCjKBq+B8=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=q0fqputXafLstYl7s0bbqBLoARECT4s7udCu2lxwMr8acbXZx0lwkn41Ah5tYa6/m
-         Dw5GPNYVmG7/KMGJyL9dNgkzPdj1b9gzLW7x7XdFXZq6T/53w9aRpTBAHy1NV4gZQQ
-         cUjf/jbzo3V3qQnEUDrSWeS+lfxhDlf9ifvGJ0C1/ONiRUMWlXGPJgVVHqZLjn1A5U
-         heKpQRMS58dIB1xlUlW4/ckFhzwzj5aBBqJmhJVr/hxG6nswwtuTHWbgkAWl0ytECl
-         bYCXaHPvTTGJkVUZzzIWgsh7qSZRM8a9dU/h9H6GYx3y+mnu4YH3FvcXMKIfLhbI9O
-         jg05ybqRsE7EA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Masahisa Kojima <masahisa.kojima@linaro.org>,
-        Jassi Brar <jaswinder.singh@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221209171644.3351787-1-robh@kernel.org>
-References: <20221209171644.3351787-1-robh@kernel.org>
-Subject: Re: [PATCH] spi: dt-bindings: Convert Synquacer SPI to DT schema
-Message-Id: <167060948678.166802.5232484726492968107.b4-ty@kernel.org>
-Date:   Fri, 09 Dec 2022 18:11:26 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3089AB828A7;
+        Fri,  9 Dec 2022 18:14:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30E59C433EF;
+        Fri,  9 Dec 2022 18:13:59 +0000 (UTC)
+Date:   Fri, 9 Dec 2022 13:13:57 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Ross Zwisler <zwisler@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] ring-buffer: Handle resize in early boot up
+Message-ID: <20221209131357.5e4f6d01@gandalf.local.home>
+In-Reply-To: <Y5NpDF0AnY9ibwEl@google.com>
+References: <20221209101151.1fec1167@gandalf.local.home>
+        <Y5NpDF0AnY9ibwEl@google.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-64ef0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 09 Dec 2022 11:16:43 -0600, Rob Herring wrote:
-> Convert the Socionext Synquacer SPI binding to DT format.
+On Fri, 9 Dec 2022 09:57:48 -0700
+Ross Zwisler <zwisler@google.com> wrote:
+
+> > +			if (cpu_id == smp_processor_id()) {
+> > +				rb_update_pages(cpu_buffer);
+> > +				migrate_enable();
+> > +			} else {
+> > +				migrate_enable();
+> > +				schedule_work_on(cpu_id,
+> > +						 &cpu_buffer->update_pages_work);
+> > +				wait_for_completion(&cpu_buffer->update_done);  
 > 
+> I ran with this patch on my test VM and hit the same Oops from the original
+> report.
 > 
+> I think the problem is that we're still trying to enable interrupts via
+> wait_for_completion():
+> 
+> wait_for_completion()
+>   wait_for_common()
+>     __wait_for_common()
+>       raw_spin_unlock_irq()
+>         _raw_spin_unlock_irq()
+>           __raw_spin_unlock_irq()
+>             local_irq_enable()
+> 
+> I'm testing on a QEMU VM with 4 virtual CPUs, if that helps WRT where work is
+> being scheduled (cpu_id == smp_processor_id).
 
-Applied to
+Can you show the backtrace with that. Because when I triggered it, the
+other CPUs were not up and running. I'm testing this on a VM with 8 CPUs.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
-
-Thanks!
-
-[1/1] spi: dt-bindings: Convert Synquacer SPI to DT schema
-      commit: 3cf241c3d56ff19f5192cb42a025bc6582b6e8fa
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- Steve
