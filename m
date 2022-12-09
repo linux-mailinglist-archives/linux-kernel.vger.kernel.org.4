@@ -2,74 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486A06484FB
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:24:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2236648509
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:25:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiLIPYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:24:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S230384AbiLIPZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiLIPYh (ORCPT
+        with ESMTP id S229939AbiLIPZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:24:37 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63478F65;
-        Fri,  9 Dec 2022 07:24:36 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id m18so12265954eji.5;
-        Fri, 09 Dec 2022 07:24:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zBxZmKASujRGXAQwg4AGB2Rb3A92fAIMeJdn8tudd7s=;
-        b=pAstSTIGSWebBSqcCm9ACftdx6zeG4YpPXLxDYjTRS0te5Z/MyYFFDIGUaKaG2mTDe
-         wEl6eW0QozZI3EQfycUhhcjAlpMxlA6wt9wtEn85VV7Knx0iAabnr7v+dtW3lX7zRtqd
-         khg9YXmO2I0liB/Nvc8msQWYQZYOSpJSxui/3IbjZxjcMKZrEa/27tdnejCgiNF5e9p9
-         WidQmwISlR+c7Slj5esf9ICvGPTchWZSEajYSJkqkw2lIQVF/W4Qx541uxNqcrFdtIxF
-         9VTcpDy2yniDaZTMnETtsMgHjBzPo6DmUPBrEAK6rP18kO0ySLOvE5WcGoqki/zaKMPC
-         ABsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zBxZmKASujRGXAQwg4AGB2Rb3A92fAIMeJdn8tudd7s=;
-        b=MQu1q+5jPDm03/uuxWUUSSXAeYMMzqeaFgoGVi9lraj68w4WxVuXvxbETbfT2wmh6N
-         VojCUR9KvjvmmQQwfLB9scg/twRE7wuJNlXGlNAsycJR+TXe0ahZheis2NA/6dqqOjYB
-         OsVKcSXECtNiGKrBOByTiMV9XjMg0kWg80fyaOSnLai8/WzQt8e1IeBk9V4pmmoWOF3q
-         7STTxQr1aaNTq+DNToRAFVZwaJHCOVak8M9Q6niQWx56x94byndduKZjAQjEi53KvjRP
-         jht68LTxQxU929qBTXaJuAWAIrl1AA9yq1vEH7iTDZ5ywlNuTMGS8eIAfKiOMxoYdLlU
-         A2nw==
-X-Gm-Message-State: ANoB5pltOw/1VKrdZmu+c6SzVBknV6haOVl5AWucopHlAm+hIwSst2pD
-        QqMvhjwsTziU3u31FIw6rDs=
-X-Google-Smtp-Source: AA0mqf7mqOqpRcv0MWLL5rVRVffbqJSsoYl1RFMT//Oaiur1xvkXmeVJDwyI4+bF0RS00od0zQrNYw==
-X-Received: by 2002:a17:906:c096:b0:7bf:1090:ded4 with SMTP id f22-20020a170906c09600b007bf1090ded4mr5451643ejz.49.1670599474843;
-        Fri, 09 Dec 2022 07:24:34 -0800 (PST)
-Received: from skbuf ([188.27.185.190])
-        by smtp.gmail.com with ESMTPSA id s7-20020a056402520700b0046ac017b007sm764258edd.18.2022.12.09.07.24.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 07:24:34 -0800 (PST)
-Date:   Fri, 9 Dec 2022 17:24:32 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux@armlinux.org.uk,
-        Tristram.Ha@microchip.com, richardcochran@gmail.com,
-        ceggers@arri.de
-Subject: Re: [Patch net-next v3 00/13] net: dsa: microchip: add PTP support
- for KSZ9563/KSZ8563 and LAN937x
-Message-ID: <20221209152432.pv2bhygt4mqx3bq7@skbuf>
-References: <20221209072437.18373-1-arun.ramadoss@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209072437.18373-1-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Fri, 9 Dec 2022 10:25:41 -0500
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A03F786A0;
+        Fri,  9 Dec 2022 07:25:40 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id B5CEF320091F;
+        Fri,  9 Dec 2022 10:25:38 -0500 (EST)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 09 Dec 2022 10:25:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1670599538; x=1670685938; bh=El72L61y206EseKUUon70geO5hnaNo4Skdb
+        zoWJup0s=; b=ZryyW61SmwUNUdXyXyeQ04j4PF/btO/bIFiVJ29PUhV6gC60luy
+        HCSHGECW3YPsUK9C479qv2dQrElPCHFklE0QsHvrS7phHWjGSoA1zJFzV/utK9iC
+        GuOmpFBjBs92WvkROGmKkgiQqTCYOUwVAymioMpWryLBAkOTCXFATk7Mxdi9vk5B
+        chiG82E0ZuGWHLNLI3UOgNB6k64FdxM1pM2w0ylg1govsSZKrLex0pzFuHEHaOWg
+        qy95Y+pkCfF7KGcrxYYwv97yRAqh8mSdj/Wt93HecRDI0FZ3w/Oi3SOaphFtPNEi
+        KIo40JnRIV7Hz0U7Ccw7eRUKfsCzHw4tXAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1670599538; x=
+        1670685938; bh=El72L61y206EseKUUon70geO5hnaNo4SkdbzoWJup0s=; b=M
+        WHAAOylbf+HAsSWpB1jAKZkX+NtsBIJkA9NWLcNLsq3njdBQ4q+Px7TCX/x2AMoC
+        PRLKczD/9UVuDpHXUrd4HFEEK1Tus8esKtHAwq+2WNvq1pAlTXuDwhgcOuOPAkDJ
+        I7xTrDaGz7BQ6Alk4dc4jWO84MVs/ICkmDEdZZME2/jWN196M1EiK2d8u52Zqr9O
+        foQ9ijN7MKjAO7J3dPfyXy/c6dKyaazn9BNwvxAJZ3AZt9KWZESM1b0tDRDpSgl6
+        YnFOgR2wuztmHZ1T9Q9EEMlkKXjh6XYjdTWm2HhVSpZev3xUw/I1tyS6PG3Xz66/
+        lzN45huAuLtd4RuALJKRg==
+X-ME-Sender: <xms:cVOTY6kIgkInYQhS_OQKlTGkmQnhJ6h3e0yL9A-U8nlAUCR3y4_cZA>
+    <xme:cVOTYx2i5_bB9EtX8PJV2OF3vR13VOEerSPii0kjEDmkT6inGDGtxt1PO0xsYKxVh
+    _EwpN_a_Jk9LDWIWv8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgdejhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpeeffeeuhfekjeevtddvtdelledttddtjeegvdfhtdduvdfhueekudeihfejtefgieen
+    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:cVOTY4psYswyKqlfJrDg2gF_Aci8hRilCeU-hNwLGFR7zMWGN4ByIA>
+    <xmx:cVOTY-meh3OlMcdPaOUbmWMP0VKJIPypP7j11aRaqePKU8p9ocrGwA>
+    <xmx:cVOTY43Dk9LFjhq-wf7sZl8-1uuRhpD0WgqBDTM3XUaszHf4eRzPXA>
+    <xmx:clOTY-xLVuNhsJ5PG_mck_njKRkFepB_7Ha6PMM-ECko88aQ_chGKw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id D8385B60086; Fri,  9 Dec 2022 10:25:37 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
+Mime-Version: 1.0
+Message-Id: <c2178eba-0c25-4310-8b87-1dc7708d2a34@app.fastmail.com>
+Date:   Fri, 09 Dec 2022 16:25:17 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+Cc:     "Francesco Dolcini" <francesco.dolcini@toradex.com>,
+        "Miquel Raynal" <miquel.raynal@bootlin.com>,
+        "Marek Vasut" <marex@denx.de>,
+        "NXP Linux Team" <linux-imx@nxp.com>, devicetree@vger.kernel.org,
+        linux-mtd@lists.infradead.org, stable@vger.kernel.org,
+        "Thorsten Leemhuis" <regressions@leemhuis.info>, soc@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] ARM: SoC fixes for 6.1, part 6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,20 +86,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:54:24PM +0530, Arun Ramadoss wrote:
-> KSZ9563/KSZ8563 and  LAN937x switch are capable for supporting IEEE 1588 PTP
-> protocol.  LAN937x has the same PTP register set similar to KSZ9563, hence the
-> implementation has been made common for the KSZ switches.  KSZ9563 does not
-> support two step timestamping but LAN937x supports both.  Tested the 1step &
-> 2step p2p timestamping in LAN937x and p2p1step timestamping in KSZ9563.
-> 
-> This patch series is based on the Christian Eggers PTP support for KSZ9563.
-> Applied the Christian patch and updated as per the latest refactoring of KSZ
-> series code. The features added on top are PTP packet Interrupt
-> implementation based on nested handler, LAN937x two step timestamping and
-> programmable per_out pins.
+The following changes since commit da0cbf9307a227f52a38a0a580a4642ad9d7325c:
 
-From my perspective, the DSA API is used correctly and it should be good
-to go in the next patchset iteration. API usage is about all I tried to
-concentrate upon. I of course encourage Richard and Christian to point out
-if there's something out of the ordinary on the protocol side of things.
+  Merge tag 'at91-fixes-6.1-3' of https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux into arm/fixes (2022-11-29 15:45:36 +0100)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-fixes-6.1-6
+
+for you to fetch changes up to ef19964da8a668c683f1d38274f6fb756e047945:
+
+  Revert "ARM: dts: imx7: Fix NAND controller size-cells" (2022-12-08 17:47:57 +0100)
+
+----------------------------------------------------------------
+ARM: SoC fixes for 6.1, part 6
+
+One more last minute revert for a boot regression that was
+found on the popular colibri-imx7.
+
+----------------------------------------------------------------
+
+This came in just after I sent off the "final pull request for 6.1"
+yesterday, and it seems important enough for another even more
+final round.
+
+Author: Francesco Dolcini <francesco.dolcini@toradex.com>
+Date:   Mon Dec 5 16:23:27 2022 +0100
+
+    Revert "ARM: dts: imx7: Fix NAND controller size-cells"
+    
+    This reverts commit 753395ea1e45c724150070b5785900b6a44bd5fb.
+    
+    It introduced a boot regression on colibri-imx7, and potentially any
+    other i.MX7 boards with MTD partition list generated into the fdt by
+    U-Boot.
+    
+    While the commit we are reverting here is not obviously wrong, it fixes
+    only a dt binding checker warning that is non-functional, while it
+    introduces a boot regression and there is no obvious fix ready.
+    
+    Fixes: 753395ea1e45 ("ARM: dts: imx7: Fix NAND controller size-cells")
+    Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+    Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+    Acked-by: Marek Vasut <marex@denx.de>
+    Cc: stable@vger.kernel.org
+    Link: https://lore.kernel.org/all/Y4dgBTGNWpM6SQXI@francesco-nb.int.toradex.com/
+    Link: https://lore.kernel.org/all/20221205144917.6514168a@xps-13/
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
+index 03d2e8544a4e..0fc9e6b8b05d 100644
+--- a/arch/arm/boot/dts/imx7s.dtsi
++++ b/arch/arm/boot/dts/imx7s.dtsi
+@@ -1270,10 +1270,10 @@ dma_apbh: dma-apbh@33000000 {
+                        clocks = <&clks IMX7D_NAND_USDHC_BUS_RAWNAND_CLK>;
+                };
+ 
+-               gpmi: nand-controller@33002000 {
++               gpmi: nand-controller@33002000{
+                        compatible = "fsl,imx7d-gpmi-nand";
+                        #address-cells = <1>;
+-                       #size-cells = <0>;
++                       #size-cells = <1>;
+                        reg = <0x33002000 0x2000>, <0x33004000 0x4000>;
+                        reg-names = "gpmi-nand", "bch";
+                        interrupts = <GIC_SPI 14 IRQ_TYPE_LEVEL_HIGH>;
