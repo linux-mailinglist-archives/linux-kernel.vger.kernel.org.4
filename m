@@ -2,201 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321696487D0
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:35:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB726487D4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:37:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiLIRfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:35:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S229982AbiLIRhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:37:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiLIRfD (ORCPT
+        with ESMTP id S230059AbiLIRg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:35:03 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7D446BC83;
-        Fri,  9 Dec 2022 09:35:01 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F1B1623A;
-        Fri,  9 Dec 2022 09:35:07 -0800 (PST)
-Received: from [10.57.7.11] (unknown [10.57.7.11])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C25993F73D;
-        Fri,  9 Dec 2022 09:34:59 -0800 (PST)
-Message-ID: <ba52dac5-2ce7-a567-41af-841b857abbed@arm.com>
-Date:   Fri, 9 Dec 2022 17:34:41 +0000
+        Fri, 9 Dec 2022 12:36:56 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D9982FA2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:36:55 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so8855492pjr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:36:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qXsbmkoodLU/AwJjQ4JXkNGpOiLYdE4+WQE1E7o+Bwo=;
+        b=t86EOBMhIP/ldR8nxcwebrMd9ocR8tExby0yg2pG8hDVAeplTlpkAB6UlHdjUGL2b5
+         OQ8Ls6Okk6+BnUPMmDzTmJqEM8BRuNIHYChWzI/RnpKmNMT3ipirfQ/ZKwIDn+n9H+Ac
+         dFa1a+3eO+2Sw6svqf5F6CPOssBlL7/HJcVRRKRV6zreayrpLDquE0Zg8Jcfyxo/Y4pg
+         CjscTZcU+4ZQQmGN89+YHXMn6iH0H9Ihsfug23tfhKLS0dOfdg/fgggBFiLKd7soUUc3
+         KivDhsoDilYjezLZhtQUMnYVSn2EnUpu+jrvaa46iK29QVFbKVNkTS58yaBOx42Nd/w5
+         oyHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qXsbmkoodLU/AwJjQ4JXkNGpOiLYdE4+WQE1E7o+Bwo=;
+        b=KbwsGaIgV2em7yPTul4xza7l6Xysx0fHrqNPr1yfZTy9yar91r44aDcUlVUOr598ER
+         rc5GvLAChZ3V5AtJp41E8IxTjfbSDrYP/Rf4OQVIbjn5uBJBeNWilFSy2XF6a17kK87P
+         qTzKO34CFV9U5ISvAw6ehx/XffciDbJxDaHL/V2P1CyiOhF85vPZZXPsYorqHdxjz7jt
+         A5IB5sOWBxPd+o/s2PHnJD2Wqne34ryMjWfln5ZTYs03+HiMGxyYDVujRevjDHz3pqrY
+         G7LMEcLoHH6fo2S6jUgTn4peuJmAnJnT9/4D0qA7pOQnrq0m84uAwURpe0njfY70Xdc6
+         M/WQ==
+X-Gm-Message-State: ANoB5pkgtsvTWqLbaP5QhzdlcScRxBICRnOu5hnccB/AGukEWqLH68pq
+        rBiuhHltaKw95W+j0kRlScfz8zeMzem8JZA5MTe89w==
+X-Google-Smtp-Source: AA0mqf7ateMtxBRPd0IFutE2MIFyHz0rRGBmqts6dBrsLB2FgXxkLDLjQoTz8MBCRkUTjg8zk1rHSrEfMZ8gVlOEGUM=
+X-Received: by 2002:a17:90a:7485:b0:219:ef02:a5eb with SMTP id
+ p5-20020a17090a748500b00219ef02a5ebmr15259474pjk.84.1670607414431; Fri, 09
+ Dec 2022 09:36:54 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] lkdtm: Add CFI_BACKWARD to test ROP mitigations
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-Cc:     Dan Li <ashimida@linux.alibaba.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20220416001103.1524653-1-keescook@chromium.org>
- <CAEUSe78kDPxQmQqCWW-_9LCgJDFhAeMoVBFnX9QLx18Z4uT4VQ@mail.gmail.com>
- <202212072221.A9FCC905CF@keescook>
-From:   Kristina Martsenko <kristina.martsenko@arm.com>
-In-Reply-To: <202212072221.A9FCC905CF@keescook>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20221201225705.46r2m35ketvzipox@builder.lan> <CAPDyKFofsqcoFbYt-9BcisbPdreLGqAAMWorqHi0_D1kwCdYhg@mail.gmail.com>
+ <20221207165457.kwdwwiycbwjpogxl@builder.lan> <CAPDyKFpYgYkDdJ79xxkwr-Mqnj5CoBrV+ZZe6Xz4hGLNR4zUVw@mail.gmail.com>
+ <20221208210622.x656vbf7rum5hrl7@builder.lan>
+In-Reply-To: <20221208210622.x656vbf7rum5hrl7@builder.lan>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Fri, 9 Dec 2022 18:36:18 +0100
+Message-ID: <CAPDyKFpSXjcJZ=H491s74BChAV89pQ1Wm8PSdU0nVRfroK1=4A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
+ 'reset' interface
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Douglas Anderson <dianders@chromium.org>,
+        krzysztof.kozlowski@linaro.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 06:22, Kees Cook wrote:
-> On Tue, Dec 06, 2022 at 06:28:53PM -0600, Daniel Dï¿½az wrote:
->> Hello!
->>
->> On Sat, 16 Apr 2022 at 00:30, Kees Cook <keescook@chromium.org> wrote:
->>> In order to test various backward-edge control flow integrity methods,
->>> add a test that manipulates the return address on the stack. Currently
->>> only arm64 Pointer Authentication and Shadow Call Stack is supported.
->>>
->>>  $ echo CFI_BACKWARD | cat >/sys/kernel/debug/provoke-crash/DIRECT
->>>
->>> Under SCS, successful test of the mitigation is reported as:
->>>
->>>  lkdtm: Performing direct entry CFI_BACKWARD
->>>  lkdtm: Attempting unchecked stack return address redirection ...
->>>  lkdtm: ok: redirected stack return address.
->>>  lkdtm: Attempting checked stack return address redirection ...
->>>  lkdtm: ok: control flow unchanged.
->>>
->>> Under PAC, successful test of the mitigation is reported by the PAC
->>> exception handler:
->>>
->>>  lkdtm: Performing direct entry CFI_BACKWARD
->>>  lkdtm: Attempting unchecked stack return address redirection ...
->>>  lkdtm: ok: redirected stack return address.
->>>  lkdtm: Attempting checked stack return address redirection ...
->>>  Unable to handle kernel paging request at virtual address bfffffc0088d0514
->>>  Mem abort info:
->>>    ESR = 0x86000004
->>>    EC = 0x21: IABT (current EL), IL = 32 bits
->>>    SET = 0, FnV = 0
->>>    EA = 0, S1PTW = 0
->>>    FSC = 0x04: level 0 translation fault
->>>  [bfffffc0088d0514] address between user and kernel address ranges
->>>  ...
->>>
->>> If the CONFIGs are missing (or the mitigation isn't working), failure
->>> is reported as:
->>>
->>>  lkdtm: Performing direct entry CFI_BACKWARD
->>>  lkdtm: Attempting unchecked stack return address redirection ...
->>>  lkdtm: ok: redirected stack return address.
->>>  lkdtm: Attempting checked stack return address redirection ...
->>>  lkdtm: FAIL: stack return address was redirected!
->>>  lkdtm: This is probably expected, since this kernel was built *without* CONFIG_ARM64_PTR_AUTH_KERNEL=y nor CONFIG_SHADOW_CALL_STACK=y
->>>
->>> Co-developed-by: Dan Li <ashimida@linux.alibaba.com>
->>> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
->>> Cc: Arnd Bergmann <arnd@arndb.de>
->>> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> Signed-off-by: Kees Cook <keescook@chromium.org>
->>> ---
->>> v1: https://lore.kernel.org/lkml/20220413213917.711770-1-keescook@chromium.org
->>> v2:
->>>  - add PAGE_OFFSET setting for PAC bits (Dan Li)
->>> ---
->>>  drivers/misc/lkdtm/cfi.c                | 134 ++++++++++++++++++++++++
->>>  tools/testing/selftests/lkdtm/tests.txt |   1 +
->>>  2 files changed, 135 insertions(+)
->>>
->>> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
->>> index e88f778be0d5..804965a480b7 100644
->>> --- a/drivers/misc/lkdtm/cfi.c
->>> +++ b/drivers/misc/lkdtm/cfi.c
->>> @@ -3,6 +3,7 @@
->>>   * This is for all the tests relating directly to Control Flow Integrity.
->>>   */
->>>  #include "lkdtm.h"
->>> +#include <asm/page.h>
->>>
->>>  static int called_count;
->>>
->>> @@ -42,8 +43,141 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
->>>         pr_expected_config(CONFIG_CFI_CLANG);
->>>  }
->>>
->>> +/*
->>> + * This can stay local to LKDTM, as there should not be a production reason
->>> + * to disable PAC && SCS.
->>> + */
->>> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
->>> +# ifdef CONFIG_ARM64_BTI_KERNEL
->>> +#  define __no_pac             "branch-protection=bti"
->>> +# else
->>> +#  define __no_pac             "branch-protection=none"
->>> +# endif
->>> +# define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
->>> +#else
->>> +# define __no_ret_protection   __noscs
->>> +#endif
->>
->> We're seeing this problem with allmodconfig on arm64 and GCC 8 (this
->> one observed on 6.0.12-rc3):
->>
->> -----8<----------8<----------8<-----
->> make --silent --keep-going --jobs=8
->> O=/home/tuxbuild/.cache/tuxmake/builds/2/build
->> CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- ARCH=arm64
->> CROSS_COMPILE=aarch64-linux-gnu- 'CC=sccache aarch64-linux-gnu-gcc'
->> 'HOSTCC=sccache gcc'
->> /builds/linux/drivers/misc/lkdtm/cfi.c:67:1: error: pragma or
->> attribute 'target("branch-protection=none")' is not valid
->>  {
->>  ^
-> 
-> Uuuh... how is CONFIG_ARM64_PTR_AUTH_KERNEL getting set if the compiler
-> can't support the 'target("branch-protection=none")' attribute?
-> 
+On Thu, 8 Dec 2022 at 22:06, Bjorn Andersson <andersson@kernel.org> wrote:
+>
+> On Thu, Dec 08, 2022 at 02:40:55PM +0100, Ulf Hansson wrote:
+> > On Wed, 7 Dec 2022 at 17:55, Bjorn Andersson <andersson@kernel.org> wrote:
+> > >
+> > > On Wed, Dec 07, 2022 at 05:00:51PM +0100, Ulf Hansson wrote:
+> > > > On Thu, 1 Dec 2022 at 23:57, Bjorn Andersson <andersson@kernel.org> wrote:
+> > > > >
+> > > > > On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
+> > > > > >
+> > > > >
+> > > > > @Ulf, Akhil has a power-domain for a piece of hardware which may be
+> > > > > voted active by multiple different subsystems (co-processors/execution
+> > > > > contexts) in the system.
+> > > > >
+> > > > > As such, during the powering down sequence we don't wait for the
+> > > > > power-domain to turn off. But in the event of an error, the recovery
+> > > > > mechanism relies on waiting for the hardware to settle in a powered off
+> > > > > state.
+> > > > >
+> > > > > The proposal here is to use the reset framework to wait for this state
+> > > > > to be reached, before continuing with the recovery mechanism in the
+> > > > > client driver.
+> > > >
+> > > > I tried to review the series (see my other replies), but I am not sure
+> > > > I fully understand the consumer part.
+> > > >
+> > > > More exactly, when and who is going to pull the reset and at what point?
+> > > >
+> > > > >
+> > > > > Given our other discussions on quirky behavior, do you have any
+> > > > > input/suggestions on this?
+> > > > >
+> > > > > > Some clients like adreno gpu driver would like to ensure that its gdsc
+> > > > > > is collapsed at hardware during a gpu reset sequence. This is because it
+> > > > > > has a votable gdsc which could be ON due to a vote from another subsystem
+> > > > > > like tz, hyp etc or due to an internal hardware signal. To allow
+> > > > > > this, gpucc driver can expose an interface to the client driver using
+> > > > > > reset framework. Using this the client driver can trigger a polling within
+> > > > > > the gdsc driver.
+> > > > >
+> > > > > @Akhil, this description is fairly generic. As we've reached the state
+> > > > > where the hardware has settled and we return to the client, what
+> > > > > prevents it from being powered up again?
+> > > > >
+> > > > > Or is it simply a question of it hitting the powered-off state, not
+> > > > > necessarily staying there?
+> > > >
+> > > > Okay, so it's indeed the GPU driver that is going to assert/de-assert
+> > > > the reset at some point. Right?
+> > > >
+> > > > That seems like a reasonable approach to me, even if it's a bit
+> > > > unclear under what conditions that could happen.
+> > > >
+> > >
+> > > Generally the disable-path of the power-domain does not check that the
+> > > power-domain is actually turned off, because the status might indicate
+> > > that the hardware is voting for the power-domain to be on.
+> >
+> > Is there a good reason why the HW needs to vote too, when the GPU
+> > driver is already in control?
+> >
+> > Or perhaps that depends on the running use case?
+> >
+> > >
+> > > As part of the recovery of the GPU after some fatal fault, the GPU
+> > > driver does something which will cause the hardware votes for the
+> > > power-domain to be let go, and then the driver does pm_runtime_put().
+> >
+> > Okay. That "something", sounds like a device specific setting for the
+> > corresponding gdsc, right?
+> >
+> > So somehow the GPU driver needs to manage that setting, right?
+> >
+> > >
+> > > But in this case the GPU driver wants to ensure that the power-domain is
+> > > actually powered down, before it does pm_runtime_get() again. To ensure
+> > > that the hardware lost its state...
+> >
+> > I see.
+> >
+> > >
+> > > The proposal here is to use a reset to reach into the power-domain
+> > > provider and wait for the hardware to be turned off, before the GPU
+> > > driver attempts turning the power-domain on again.
+> > >
+> > >
+> > > In other words, there is no reset. This is a hack to make a normally
+> > > asynchronous pd.power_off() to be synchronous in this particular case.
+> >
+> > Alright, assuming I understood your clarifications above correctly
+> > (thanks!), I think I have got a much better picture now.
+> >
+> > Rather than abusing the reset interface, I think we should manage this
+> > through the genpd's power on/off notifiers (GENPD_NOTIFY_OFF). The GPU
+> > driver should register its corresponding device for them
+> > (dev_pm_genpd_add_notifier()).
+> >
+> > The trick however, is to make the behaviour of the power-domain for
+> > the gdsc (the genpd->power_off() callback) conditional on whether the
+> > HW is configured to vote or not. If the HW can vote, it should not
+> > poll for the state - and vice versa when the HW can't vote.
+> >
+>
+> Per Akhil's description I misunderstood who the other voters are; but
+> either way it's not the same "HW configured" mechanism as the one we're
+> already discussing.
 
-Older GCC versions supported the (now deprecated) -msign-return-address option 
-instead of the newer -mbranch-protection option, and the kernel checks for that
-too when setting CONFIG_ARM64_PTR_AUTH_KERNEL. I guess the test has never
-compiled with older GCC versions. The following patch should fix it.
+Okay, so this is another thing then.
 
--- 8< --
+>
+>
+> But if we based on similar means could control if the power_off() ops
+> should be blocking, waiting for the status indication to show that the
+> hardware is indeed powered down, I think this would meet the needs.
 
-Subject: [PATCH] lkdtm: cfi: Make PAC test work with GCC 7 and 8
+Right.
 
-The CFI test uses the branch-protection=none compiler attribute to
-disable PAC return address protection on a function. While newer GCC
-versions support this attribute, older versions (GCC 7 and 8) instead
-supported the sign-return-address=none attribute, leading to a build
-failure when the test is built with older compilers. Fix it by checking
-which attribute is supported and using the correct one.
+>
+> And GENPD_NOTIFY_OFF seems to provide the notification that it was
+> successful (i.e. happened within the timeout etc).
+>
+> > Would this work?
+> >
+>
+> If we can control the behavior of the genpd, I think it would.
 
-Fixes: 2e53b877dc12 ("lkdtm: Add CFI_BACKWARD to test ROP mitigations")
-Reported-by: Daniel Díaz <daniel.diaz@linaro.org>
-Signed-off-by: Kristina Martsenko <kristina.martsenko@arm.com>
-Link: https://lore.kernel.org/all/CAEUSe78kDPxQmQqCWW-_9LCgJDFhAeMoVBFnX9QLx18Z4uT4VQ@mail.gmail.com/
----
- drivers/misc/lkdtm/cfi.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+Okay, it seems like we need a new dev_pm_genpd_* interface that
+consumers can call to instruct the genpd provider, that its
+->power_off() callback needs to temporarily switch to become
+synchronous.
 
-diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
-index 5245cf6013c9..d4bb8e31a2fe 100644
---- a/drivers/misc/lkdtm/cfi.c
-+++ b/drivers/misc/lkdtm/cfi.c
-@@ -54,7 +54,11 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
- # ifdef CONFIG_ARM64_BTI_KERNEL
- #  define __no_pac             "branch-protection=bti"
- # else
--#  define __no_pac             "branch-protection=none"
-+#  ifdef CONFIG_CC_HAS_BRANCH_PROT_PAC_RET
-+#   define __no_pac             "branch-protection=none"
-+#  else
-+#   define __no_pac             "sign-return-address=none"
-+#  endif
- # endif
- # define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
- #else
+I guess this could be useful for other similar cases too, where the
+corresponding PM domain isn't actually being powered off, but rather
+just voted for to become powered off, thus relying on the HW to do the
+aggregation.
 
+In any case, I am still a bit skeptical of the reset approach, as is
+being suggested in the $subject series. Even if it's rather nice and
+clean (but somewhat abusing the interface), it looks like there will
+be synchronization problems between the calls to the
+pm_runtime_put_sync() and reset_control_reset() in the GPU driver. The
+"reset" may actually already have happened when the call to
+reset_control_reset() is done, so we may fail to detect the power
+collapse, right!?
+
+Let me cook a patch for the new genpd interface that I have in mind,
+then we can see how that plays out together with the other parts. I
+will post it on Monday!
+
+Kind regards
+Uffe
