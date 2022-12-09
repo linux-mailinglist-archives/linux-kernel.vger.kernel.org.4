@@ -2,175 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CFFD647DBF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:27:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96458647DC1
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 07:28:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbiLIG1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 01:27:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
+        id S229828AbiLIG2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 01:28:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbiLIG13 (ORCPT
+        with ESMTP id S229463AbiLIG2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 01:27:29 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B6DA0F81
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 22:27:27 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id x66so3009587pfx.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 22:27:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0jUPsjxg8mjZtPZdgOOBhKekaG25NqeQVx3NoTckFqU=;
-        b=Om/s5iBhy8JwdyH6SpFGpvmiX0UPIEiHvO0hdr4EDejdTZOXZ3j4iXjv/5my7z2b8O
-         Z6fALnQob1nShvjNHelMTr5wK0Pfaq2BnnCmL1ryM5qNkEW4e7md51ure7IzTowbi7M3
-         6VaRdkCbxLd8G2WPqS9T2VIpux4aLHBt+h4WU/eWUem2z9LsV4be6PFsn93R+lH0YUDp
-         0AteGwXK5H5PRwywxxk5Qlu+j04Y3HiwBg4rZIy+n1ST/S1FlWq7UKU+r2JcVZa6q0vX
-         YfNpt/B2bJVP+a5QZdS2+bl7A9U23yiKGcNCmFfKIO5fEDEzvx5/809EjG67/u1dkfkX
-         82sQ==
+        Fri, 9 Dec 2022 01:28:42 -0500
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A52277
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 22:28:41 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id h21-20020a05660224d500b006debd7dedccso1585823ioe.9
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 22:28:41 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0jUPsjxg8mjZtPZdgOOBhKekaG25NqeQVx3NoTckFqU=;
-        b=pe/Z8tS01XnFD9NsT03YBNd8Z06QnQfRh/S3e9j4brtMP7y1fyAqyCsZGZHZ/vGYRp
-         4v1JXKn9v6e22eqj3J5RSfzXj1RLQc0yvVuMmcg5Suyh3SYy9Se5exSpHYfqMS3Ceg07
-         cmSfHxL09kelNldnMCzgkYqXPg7ps3FWzTymazZ1CyAXAk77wuXnz/Rd+fcLNeJmHp9V
-         6x1uGZryl783MwEvUz5ig4duF2s2nEBQHMxFbAN9+w2mQ+Q2u+6QPXYm30NbOE7A9JmD
-         ADu8MjpRKegFPoQktJtb4ar1P0Mfzl2GgWD91CHU2Rt+mjSgYlLWXkBvC5wWZMV2/MrE
-         lbNg==
-X-Gm-Message-State: ANoB5pn0UlspBOHNwzOHY+PyfvepIJxPG11RAK3mx3Z54Qxwv/Q5SIAw
-        l1b++JiVz/Y6gOFTClf3vviq3g==
-X-Google-Smtp-Source: AA0mqf65atgRZvrXd5DTqRN8+QS2yCowlpJ7bliMI1T8LHb+bEEQ43Npp6j2jbLxgB5kgdsxYFtJag==
-X-Received: by 2002:a62:3896:0:b0:576:1c37:5720 with SMTP id f144-20020a623896000000b005761c375720mr4539976pfa.4.1670567247274;
-        Thu, 08 Dec 2022 22:27:27 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id e67-20020a621e46000000b00574e84ed847sm503077pfe.24.2022.12.08.22.27.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 22:27:26 -0800 (PST)
-Date:   Thu, 08 Dec 2022 22:27:26 -0800 (PST)
-X-Google-Original-Date: Thu, 08 Dec 2022 22:27:22 PST (-0800)
-Subject:     Re: RISCV Vector unit disabled by default for new task (was Re: [PATCH v12 17/17] riscv: prctl to enable vector commands)
-In-Reply-To: <b1dae947-d52a-d28e-5ddc-c1ad6d29828c@rivosinc.com>
-CC:     stillson@rivosinc.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        anup@brainfault.org, atishp@atishpatra.org, guoren@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        greentime.hu@sifive.com, vincent.chen@sifive.com,
-        andy.chiu@sifive.com, Andrew Waterman <andrew@sifive.com>,
-        Darius Rad <darius@bluespec.com>, arnd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bjorn@kernel.org, fweimer@redhat.com, libc-alpha@sourceware.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        christoph.muellner@vrull.eu, Aaron Durbin <adurbin@rivosinc.com>,
-        linux@rivosinc.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Vineet Gupta <vineetg@rivosinc.com>
-Message-ID: <mhng-84ad9495-ef4b-4343-89ee-dfe45ab69ff7@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p8I01iF6fK7P+Y0hROsTsUpSWcysS+l/B8KHOsUgNWI=;
+        b=fvpeCFfm+VolLMGzEtQ4HQndkPMqnIHSkIrPosluocCiukfuPcaJoty6+klgQPP+Ki
+         oWASpa5tTpYTPdrdmZI00OSaWeqZz7vUCiZNonDEx6+Yri4iAFJg88XpfWQwvnST+t5a
+         SO3vJ2f3+4gtMZey5zOQ3qT1bEwJTzc7DHmhnfHl0gE1uCdnUMxciZWYjRepatqbwxSQ
+         6PL6q/NJyxPFd3xBfWSW29pPiwuEHSL4C+GHAxgM/pntfsOUmdH6sll56DDyRyednHAG
+         MVJV85uspTqz/8Ee3LoPRL1yYMqqg1YjpUPje0Ou7Ik71+xqZGRFuZ2uuWIScbDR3SFN
+         8DZg==
+X-Gm-Message-State: ANoB5pkaDMkpArkVZbW681DGY0emX4k4ZXXHfHR/DNxPBRfOVJ83cf3W
+        XO771f35BmC3STlNM9Pdd4deM0q0a6mnHaK1swzm+U1EtJ+v
+X-Google-Smtp-Source: AA0mqf7G0BdWc/F922mhaD447+vTgnFR6ukyq2q8uxFKKJrNkCF/2Mk2f8M7c0AR8oZIkUZkOm0JEMtNlajxBRWip+DzNsqdrqSV
+MIME-Version: 1.0
+X-Received: by 2002:a92:cc08:0:b0:303:824b:25e5 with SMTP id
+ s8-20020a92cc08000000b00303824b25e5mr2504301ilp.44.1670567321180; Thu, 08 Dec
+ 2022 22:28:41 -0800 (PST)
+Date:   Thu, 08 Dec 2022 22:28:41 -0800
+In-Reply-To: <00000000000017ace905ef2b739d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c0a98a05ef5f436b@google.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in rxrpc_destroy_all_locals
+From:   syzbot <syzbot+1eb4232fca28c0a6d1c2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, dhowells@redhat.com, edumazet@google.com,
+        hdanton@sina.com, kuba@kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, marc.dionne@auristor.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Dec 2022 21:16:06 PST (-0800), Vineet Gupta wrote:
-> Hi Darius, Andrew, Palmer
->
-> On 9/21/22 14:43, Chris Stillson wrote:
->> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
->>
->> @@ -134,7 +135,6 @@ void start_thread(struct pt_regs *regs, unsigned long pc,
->>   			if (WARN_ON(!vstate->datap))
->>   				return;
->>   		}
->> -		regs->status |= SR_VS_INITIAL;
->>
->
-> Perhaps not obvious from the patch, but this is a major user experience
-> change: As in V unit would be turned off for a new task and we will rely
-> on a userspace prctl (also introduced in this patch) to enable V.
+syzbot has found a reproducer for the following issue on:
 
-IMO that's the only viable option: enabling V adds more user-visible 
-state, which is a uABI break.  I haven't really had time to poke through 
-all the versions here, but I'd have the call look something like
+HEAD commit:    591cd61541b9 Add linux-next specific files for 20221207
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1391f17d880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b2d3e63e054c24f
+dashboard link: https://syzkaller.appspot.com/bug?extid=1eb4232fca28c0a6d1c2
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13b597bd880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1008851d880000
 
-    prctl(RISCV_ENABLE_V, min_vlenb, max_vlenb, flags);
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bc862c01ec56/disk-591cd615.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/8f9b93f8ed2f/vmlinux-591cd615.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9d5cb636d548/bzImage-591cd615.xz
 
-where
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1eb4232fca28c0a6d1c2@syzkaller.appspotmail.com
 
-* min_vlenb is the smallest VLENB that userspace can support.  There's 
-  alreday an LLVM argument for this, I haven't dug into the generated 
-  code but I assume it'll blow up on smaller VLENB systems somehow.
-* max_vlenb is the largest VLENB that userspace can support.
-* flags is just a placeholder for now, with 0 meaning "V as defined by 
-  1.0 for all threads in this proces".  That should give us an out if 
-  something more complicated happens in the future.
+==================================================================
+BUG: KASAN: use-after-free in instrument_atomic_read include/linux/instrumented.h:72 [inline]
+BUG: KASAN: use-after-free in atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+BUG: KASAN: use-after-free in refcount_read include/linux/refcount.h:147 [inline]
+BUG: KASAN: use-after-free in rxrpc_destroy_all_locals+0x10a/0x180 net/rxrpc/local_object.c:434
+Read of size 4 at addr ffff888078ad0014 by task kworker/u4:2/31
 
-That way VLA code can call `prctl(RISCV_ENABLE_V, 128, 8192, 0)` as it 
-supports any V 1.0 implementation, while code with other constraints can 
-avoid having V turned on in an unsupported configuration.
+CPU: 0 PID: 31 Comm: kworker/u4:2 Not tainted 6.1.0-rc8-next-20221207-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+Workqueue: netns cleanup_net
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xd1/0x138 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:306 [inline]
+ print_report+0x15e/0x45d mm/kasan/report.c:417
+ kasan_report+0xbf/0x1f0 mm/kasan/report.c:517
+ check_region_inline mm/kasan/generic.c:183 [inline]
+ kasan_check_range+0x141/0x190 mm/kasan/generic.c:189
+ instrument_atomic_read include/linux/instrumented.h:72 [inline]
+ atomic_read include/linux/atomic/atomic-instrumented.h:27 [inline]
+ refcount_read include/linux/refcount.h:147 [inline]
+ rxrpc_destroy_all_locals+0x10a/0x180 net/rxrpc/local_object.c:434
+ rxrpc_exit_net+0x174/0x300 net/rxrpc/net_ns.c:128
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:606
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-I think we can start out with no flags, but there's a few I could see 
-being useful already:
+Allocated by task 5248:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:371 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:330 [inline]
+ __kasan_kmalloc+0xa5/0xb0 mm/kasan/common.c:380
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ rxrpc_alloc_local net/rxrpc/local_object.c:93 [inline]
+ rxrpc_lookup_local+0x4d9/0xfb0 net/rxrpc/local_object.c:249
+ rxrpc_bind+0x35e/0x5c0 net/rxrpc/af_rxrpc.c:150
+ afs_open_socket+0x1b4/0x360 fs/afs/rxrpc.c:64
+ afs_net_init+0xa79/0xed0 fs/afs/main.c:126
+ ops_init+0xb9/0x680 net/core/net_namespace.c:135
+ setup_net+0x793/0xe60 net/core/net_namespace.c:333
+ copy_net_ns+0x31b/0x6b0 net/core/net_namespace.c:483
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+ copy_namespaces+0x3b3/0x4a0 kernel/nsproxy.c:179
+ copy_process+0x30d3/0x75c0 kernel/fork.c:2269
+ kernel_clone+0xeb/0xa40 kernel/fork.c:2681
+ __do_sys_clone3+0x1d1/0x370 kernel/fork.c:2980
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-* Cross process/thread enabling.  I think a reasonable default is 
-  "enable V for all current and future threads in this process", but one 
-  could imagine flags for "just this thread" vs "all current threads", a 
-  default for new threads, and a default for child processes.  I don't 
-  think it matters so much what we pick as a default, just that it's 
-  written down.
-* Setting the VLENB bounds vs updating them.  I'm thinking for shared 
-  libraries, where they'd only want to enable V in the shared library if 
-  it's already in a supported configuration.  I'm not sure what the 
-  right rules are here, but again it's best to write that down.
-* Some way to disable V.  Maybe we just say `prctl(RISCV_ENABLE_V, 0, 0, 
-  ...)` disables V, or maybe it's a flag?  Again, it should just be 
-  written down.
-* What exactly we're enabling -- is it the V extension, or just the V 
-  registers?
+Freed by task 5069:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ kasan_set_track+0x25/0x30 mm/kasan/common.c:52
+ kasan_save_free_info+0x2e/0x40 mm/kasan/generic.c:518
+ ____kasan_slab_free mm/kasan/common.c:236 [inline]
+ ____kasan_slab_free+0x160/0x1c0 mm/kasan/common.c:200
+ kasan_slab_free include/linux/kasan.h:177 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1807
+ slab_free mm/slub.c:3787 [inline]
+ __kmem_cache_free+0xaf/0x3b0 mm/slub.c:3800
+ rcu_do_batch kernel/rcu/tree.c:2244 [inline]
+ rcu_core+0x81f/0x1980 kernel/rcu/tree.c:2504
+ __do_softirq+0x1fb/0xadc kernel/softirq.c:571
 
-There's a bunch of subtly here, though, so I think we'd at least want 
-glibc and gdb support posted before committing to any uABI.  It's 
-probably also worth looking at what the Arm folks did for SVE: I gave it 
-a quick glance and it seems like there's a lot of similarities with what 
-I'm suggesting here, but again a lot of this is pretty subtle stuff so 
-it's hard to tell just at a glance.
+Last potentially related work creation:
+ kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xbc/0xd0 mm/kasan/generic.c:488
+ __call_rcu_common.constprop.0+0x99/0x820 kernel/rcu/tree.c:2753
+ rxrpc_put_local.part.0+0x128/0x170 net/rxrpc/local_object.c:332
+ rxrpc_put_local+0x25/0x30 net/rxrpc/local_object.c:324
+ rxrpc_release_sock net/rxrpc/af_rxrpc.c:888 [inline]
+ rxrpc_release+0x237/0x550 net/rxrpc/af_rxrpc.c:914
+ __sock_release net/socket.c:650 [inline]
+ sock_release+0x8b/0x1b0 net/socket.c:678
+ afs_close_socket+0x1ce/0x330 fs/afs/rxrpc.c:125
+ afs_net_exit+0x179/0x320 fs/afs/main.c:158
+ ops_exit_list+0xb0/0x170 net/core/net_namespace.c:169
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:606
+ process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
+ worker_thread+0x669/0x1090 kernel/workqueue.c:2436
+ kthread+0x2e8/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-> I know some of you had different opinion on this in the past [1], so
-> this is to make sure everyone's on same page.
-> And if we agree this is the way to go, how exactly will this be done in
-> userspace.
->
-> glibc dynamic loader will invoke the prctl() ? How will it decide
-> whether to do this (or not) - will it be unconditional or will it use
-> the hwcap - does latter plumbing exist already ? If so is it AT_HWCAP /
-> HWCAP2.
+The buggy address belongs to the object at ffff888078ad0000
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 20 bytes inside of
+ 1024-byte region [ffff888078ad0000, ffff888078ad0400)
 
-That part I haven't sorted out yet, and I don't think it's sufficient to 
-just say "userspace should enable what it can support" because of how 
-pervasive V instructions are going to be.
+The buggy address belongs to the physical page:
+page:ffffea0001e2b400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x78ad0
+head:ffffea0001e2b400 order:3 compound_mapcount:0 subpages_mapcount:0 compound_pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000010200 ffff888012441dc0 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5248, tgid 5245 (syz-executor423), ts 105105032247, free_ts 45157750006
+ prep_new_page mm/page_alloc.c:2531 [inline]
+ get_page_from_freelist+0x119c/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1cb/0x5b0 mm/page_alloc.c:5549
+ alloc_pages+0x1aa/0x270 mm/mempolicy.c:2285
+ alloc_slab_page mm/slub.c:1851 [inline]
+ allocate_slab+0x25f/0x350 mm/slub.c:1998
+ new_slab mm/slub.c:2051 [inline]
+ ___slab_alloc+0xa91/0x1400 mm/slub.c:3193
+ __slab_alloc.constprop.0+0x56/0xa0 mm/slub.c:3292
+ __slab_alloc_node mm/slub.c:3345 [inline]
+ slab_alloc_node mm/slub.c:3442 [inline]
+ __kmem_cache_alloc_node+0x1a4/0x430 mm/slub.c:3491
+ kmalloc_trace+0x26/0x60 mm/slab_common.c:1062
+ kmalloc include/linux/slab.h:580 [inline]
+ kzalloc include/linux/slab.h:720 [inline]
+ rxrpc_alloc_local net/rxrpc/local_object.c:93 [inline]
+ rxrpc_lookup_local+0x4d9/0xfb0 net/rxrpc/local_object.c:249
+ rxrpc_bind+0x35e/0x5c0 net/rxrpc/af_rxrpc.c:150
+ afs_open_socket+0x1b4/0x360 fs/afs/rxrpc.c:64
+ afs_net_init+0xa79/0xed0 fs/afs/main.c:126
+ ops_init+0xb9/0x680 net/core/net_namespace.c:135
+ setup_net+0x793/0xe60 net/core/net_namespace.c:333
+ copy_net_ns+0x31b/0x6b0 net/core/net_namespace.c:483
+ create_new_namespaces+0x3f6/0xb20 kernel/nsproxy.c:110
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1446 [inline]
+ free_pcp_prepare+0x65c/0xc00 mm/page_alloc.c:1496
+ free_unref_page_prepare mm/page_alloc.c:3369 [inline]
+ free_unref_page+0x1d/0x490 mm/page_alloc.c:3464
+ __unfreeze_partials+0x17c/0x1a0 mm/slub.c:2637
+ qlink_free mm/kasan/quarantine.c:168 [inline]
+ qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:187
+ kasan_quarantine_reduce+0x192/0x220 mm/kasan/quarantine.c:294
+ __kasan_slab_alloc+0x66/0x90 mm/kasan/common.c:302
+ kasan_slab_alloc include/linux/kasan.h:201 [inline]
+ slab_post_alloc_hook mm/slab.h:761 [inline]
+ slab_alloc_node mm/slub.c:3452 [inline]
+ slab_alloc mm/slub.c:3460 [inline]
+ __kmem_cache_alloc_lru mm/slub.c:3467 [inline]
+ kmem_cache_alloc+0x1e4/0x430 mm/slub.c:3476
+ getname_flags.part.0+0x50/0x4f0 fs/namei.c:139
+ getname_flags+0x9e/0xe0 include/linux/audit.h:320
+ vfs_fstatat+0x77/0xb0 fs/stat.c:275
+ __do_sys_newfstatat+0x8a/0x110 fs/stat.c:446
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-I don't think we need HWCAP, as userspace will need to call the prctl() 
-anyway to turn on V and thus can just use the success/failure of that to 
-sort things out.  
+Memory state around the buggy address:
+ ffff888078acff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888078acff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff888078ad0000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff888078ad0080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888078ad0100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
-Maybe it's sufficient to rely on some sort of sticky prctl() (or sysctl 
-type thing, the differences there would be pretty subtle) and just not 
-worry about it, but having some way of encoding this in the ELF seems 
-nice.  That said, we've had a bunch of trouble sorting out the ISA 
-encoding in ELFs so maybe it's just not worth bothering?
-
-> Also for static linked executables, where will the prctl be called from ?
-
-I guess that's pretty far in the weeds, but we could at least hook CRT 
-to insert the relevant code.  We'd really need to sort out how we're 
-going to encode the V support in binaries, though.
-
-> [1] https://sourceware.org/pipermail/libc-alpha/2021-November/132883.html
