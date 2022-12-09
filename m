@@ -2,127 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F818647F43
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:29:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02CF647F81
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:46:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLII3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:29:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S229811AbiLIIqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:46:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLII33 (ORCPT
+        with ESMTP id S229563AbiLIIp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:29:29 -0500
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F0F5E3FE;
-        Fri,  9 Dec 2022 00:29:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1670574545; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=Kp9f9qDxAe0hlfK5vFCbM5y8/3ZlMd4DRhe7eK3dZ3iJFb/9oIGwRt4KkICv8tjgjnsyJOM6VtXNp5rCSiKqc958LUh4AKIp81x3vwbXRBXyNzANxVIeN1iMjYfJxkZ1hwUd7Omkvxv0Y1Df6xpjKwpKlnsbfauv/tatb3kz8l0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1670574545; h=Content-Type:Content-Transfer-Encoding:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=lgXvQW8T8idwqTG2o/i6+KoDTaqrhbyGX00cZFdE/wE=; 
-        b=DjBLN7xsKF/wjkmLQzRNaC5Qo1TaRGtGlVU1EygBU4bESeG0MWzbYUlMdX1HwCUKMj5Aj4lVHBAMaJcug+2ioWywOnEVTr87StiBpALrb9W8nxQ4RELM5rza3LSfWRsW+SI7MYKi9rjrJNiwqZZe+j4qrBOG7FVBlWIwsIlr8rU=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1670574545;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To:Cc;
-        bh=lgXvQW8T8idwqTG2o/i6+KoDTaqrhbyGX00cZFdE/wE=;
-        b=NCjulmO8gZs+W/M/oOaiCbmVcWKYiJNVz/fXgM0ojRz9vl+R9CKr/y0vyviOcjCP
-        6IQ6LkIa2ZkgzbPo6PCHIezrKiYyJmAGY3yzPaV4miLOe/5oqt4o41NYyCWd4Hdqt8q
-        XB6La6DEZYyPN1FOHh8vdKfvIKsD3Ptz2pEPsbh4=
-Received: from [192.168.1.9] (110.226.31.37 [110.226.31.37]) by mx.zoho.in
-        with SMTPS id 1670574543792307.4749119019116; Fri, 9 Dec 2022 13:59:03 +0530 (IST)
-Message-ID: <7c836cf0-d978-c892-bec8-0992e2347512@siddh.me>
-Date:   Fri, 9 Dec 2022 13:59:02 +0530
+        Fri, 9 Dec 2022 03:45:58 -0500
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423FA5CD12;
+        Fri,  9 Dec 2022 00:45:56 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.18.147.229])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4NT3tT5G6rz9v7Yr;
+        Fri,  9 Dec 2022 16:22:57 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwBnUG318ZJjXxnRAA--.238S2;
+        Fri, 09 Dec 2022 09:29:49 +0100 (CET)
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     corbet@lwn.net, paul@paul-moore.com, casey@schaufler-ca.com,
+        omosnace@redhat.com, john.johansen@canonical.com,
+        kpsingh@kernel.org
+Cc:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Subject: [PATCH 1/2] lsm: Fix description of fs_context_parse_param
+Date:   Fri,  9 Dec 2022 09:29:35 +0100
+Message-Id: <20221209082936.892416-1-roberto.sassu@huaweicloud.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [RFC PATCH] erofs/zmap.c: Bail out when no further region remains
-Content-Language: en-US, en-GB, hi-IN
-To:     linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Yue Hu <huyue2@coolpad.com>,
-        linux-erofs <linux-erofs@lists.ozlabs.org>
-References: <Y3MGf3TzgKpAz4IP@B-P7TQMD6M-0146.local>
- <917344b4-4256-6d77-b89b-07fa96ec4539@siddh.me>
- <Y3Nu+TNRp6Fv3L19@B-P7TQMD6M-0146.local>
- <Y5K+p6td52QppRZt@B-P7TQMD6M-0146.local>
-From:   Siddh Raman Pant <code@siddh.me>
-In-Reply-To: <Y5K+p6td52QppRZt@B-P7TQMD6M-0146.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: LxC2BwBnUG318ZJjXxnRAA--.238S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrtw13Cw4DCFyxXF4xtFy8uFg_yoWfJFgE9w
+        4ftrWkXan7AFn7Ja4IkFnIgF17Krs7Ary0g3Z5t343WF4kXF4kGas7JF93Ww1Fgrnakr97
+        ZFs5Zr97ZF1fWjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbIkYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+        A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+        67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267
+        AKxVW8JVW8Jr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+        j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+        kEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+        e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+        02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_
+        GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+        CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07jzQ6JUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj4J1LgAAsv
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09 2022 at 10:20:47 +0530, Gao Xiang wrote:
-> Hi Siddh,
-> 
-> On Tue, Nov 15, 2022 at 06:50:33PM +0800, Gao Xiang wrote:
->> On Tue, Nov 15, 2022 at 03:39:38PM +0530, Siddh Raman Pant via Linux-erofs wrote:
->>> On Tue, 15 Nov 2022 08:54:47 +0530, Gao Xiang wrote:
->>>> I just wonder if we should return -EINVAL for post-EOF cases or
->>>> IOMAP_HOLE with arbitrary length?
->>>
->>> Since it has been observed that length can be zeroed, and we
->>> must stop, I think we should return an error appropriately.
->>>
->>> For a read-only filesystem, we probably don't really need to
->>> care what's after the EOF or in unmapped regions, nothing can
->>> be changed/extended. The definition of IOMAP_HOLE in iomap.h
->>> says it stands for "no blocks allocated, need allocation".
->>
->> For fiemap implementation, yes.  So it looks fine to me.
->>
->> Let's see what other people think.  Anyway, I'd like to apply it later.
->>
-> 
-> Very sorry for late response.
-> 
-> I've just confirmed that the reason is that
-> 
-> 796                 /*
-> 797                  * No strict rule how to describe extents for post EOF, yet
-> 798                  * we need do like below. Otherwise, iomap itself will get
-> 799                  * into an endless loop on post EOF.
-> 800                  */
-> 801                 if (iomap->offset >= inode->i_size)
-> 802                         iomap->length = length + map.m_la - offset;
-> 
-> Here iomap->length should be length + offset - map.m_la here. Because
-> the extent start (map.m_la) is always no more than requested `offset'.
-> 
-> We should need this code sub-block since userspace (filefrag -v) could
-> pass
-> ioctl(3, FS_IOC_FIEMAP, {fm_start=0, fm_length=18446744073709551615, fm_flags=0, fm_extent_count=292} => {fm_flags=0, fm_mapped_extents=68, ...}) = 0
-> 
-> without this sub-block, fiemap could get into a very long loop as below:
-> [  574.030856][ T7030] erofs: m_la 70000000 offset 70457397 length 9223372036784318410 m_llen 457398
-> [  574.031622][ T7030] erofs: m_la 70000000 offset 70457398 length 9223372036784318409 m_llen 457399
-> [  574.032397][ T7030] erofs: m_la 70000000 offset 70457399 length 9223372036784318408 m_llen 457400
+From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Thanks for the detailed explanation!
+The fs_context_parse_param hook already has a description, which seems the
+right one according to the code.
 
-> So could you fix this as?
-> 	iomap->length = length + offset - map.m_la;
-> 
-> I've already verified it can properly resolve the issue and do the
-> correct thing although I'd like to submit this later since we're quite
-> close to the merge window.
-> 
-> Thanks,
-> Gao Xiang
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ include/linux/lsm_hooks.h | 3 ---
+ 1 file changed, 3 deletions(-)
 
-Sure, I'll send the patch for now, which can be merged after the window.
+diff --git a/include/linux/lsm_hooks.h b/include/linux/lsm_hooks.h
+index bad3b6baad86..20e70132584c 100644
+--- a/include/linux/lsm_hooks.h
++++ b/include/linux/lsm_hooks.h
+@@ -100,9 +100,6 @@
+  *	the filesystem.
+  *	@fc indicates the filesystem context.
+  *	@param The parameter.
+- *	Return 0 to indicate that the parameter should be passed on to the
+- *	filesystem, 1 to indicate that the parameter should be discarded or an
+- *	error to indicate that the parameter should be rejected.
+  *
+  * Security hooks for filesystem operations.
+  *
+-- 
+2.25.1
 
-Thanks,
-Siddh
