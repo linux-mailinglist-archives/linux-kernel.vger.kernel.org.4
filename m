@@ -2,46 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4D8647B96
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:49:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D5E647BF7
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:07:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiLIBtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:49:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
+        id S229696AbiLICHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 21:07:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiLIBtd (ORCPT
+        with ESMTP id S229816AbiLICGy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:49:33 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2FD511FB
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:49:32 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NSv3f6f9KzqSt4;
-        Fri,  9 Dec 2022 09:45:18 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Fri, 9 Dec 2022 09:49:30 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>
-CC:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>
-Subject: [PATCH v2] mm: swap: Convert mark_page_lazyfree() to folio_mark_lazyfree()
-Date:   Fri, 9 Dec 2022 10:06:18 +0800
-Message-ID: <20221209020618.190306-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221207023431.151008-2-wangkefeng.wang@huawei.com>
-References: <20221207023431.151008-2-wangkefeng.wang@huawei.com>
+        Thu, 8 Dec 2022 21:06:54 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F777A0FB2;
+        Thu,  8 Dec 2022 18:06:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5D1A620ED;
+        Fri,  9 Dec 2022 02:06:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5655BC43398;
+        Fri,  9 Dec 2022 02:06:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670551597;
+        bh=5QpixbtmNzWooQk3ElYjvEVW/qRgv7IG6Byv+Fza6hc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Sv9DLJvRVAr0NLNQO7JLSaxU6jFy3foTYOWUJnEZBkwDsLGIH8ZSF1IJ/L9NQuiPK
+         VYO0eXMt9a/MhlVbr4frHHkMfHYBfL7KpaiPmVsEG27K6yzz+z7vNrMueR72aJnsh/
+         ASsmlopsmAqemP43YMgGsvdduiHzxfHb9KmT+zQMhS7V1WMJxq+HD6mQjP639w0Ws8
+         U3x5SUXd/VqoNH4sGc6rHiT/hHX/OoG7BvWK4IXWdg1UinUFQzEUmhKCUje9DbmvB3
+         JDUEPXHLyqIKlg84MRVv1PGe5XL+VJKv36zrc2aU2G505eA93xEn8UHmPiKTctQbdZ
+         tGeD3xUH/+4UQ==
+Received: by mail-ej1-f54.google.com with SMTP id fc4so8238479ejc.12;
+        Thu, 08 Dec 2022 18:06:37 -0800 (PST)
+X-Gm-Message-State: ANoB5pmR8hQZ06qXO0IRcWCyXMausUPQX+igZaEBvfG+8yxqqvEv6XNU
+        ne4IWVuoLlYnABWKdqH3fv5qPLm7V7JVnhrVozg=
+X-Google-Smtp-Source: AA0mqf5gJhnOM9o8qbAYa9mC3Jv/2/bwd5oaEafkiJmsSNYg6KcPO+/xD3U0aU3vRpjBmvWRO0Gk5SwsBu4+/irBfHg=
+X-Received: by 2002:a17:906:ee2:b0:78d:3f96:b7aa with SMTP id
+ x2-20020a1709060ee200b0078d3f96b7aamr64217621eji.74.1670551595573; Thu, 08
+ Dec 2022 18:06:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221208025816.138712-1-guoren@kernel.org> <20221208025816.138712-9-guoren@kernel.org>
+ <87pmcuw6f5.fsf@all.your.base.are.belong.to.us>
+In-Reply-To: <87pmcuw6f5.fsf@all.your.base.are.belong.to.us>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 9 Dec 2022 10:06:23 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQzANzhQCWcfEWvTUVQexePBmS2S=doYte9CrFTy5cYcg@mail.gmail.com>
+Message-ID: <CAJF2gTQzANzhQCWcfEWvTUVQexePBmS2S=doYte9CrFTy5cYcg@mail.gmail.com>
+Subject: Re: [PATCH -next V10 08/10] riscv: stack: Support HAVE_IRQ_EXIT_ON_IRQ_STACK
+To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc:     arnd@arndb.de, palmer@rivosinc.com, tglx@linutronix.de,
+        peterz@infradead.org, luto@kernel.org, conor.dooley@microchip.com,
+        heiko@sntech.de, jszhang@kernel.org, lazyparser@gmail.com,
+        falcon@tinylab.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
+        atishp@atishpatra.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, mark.rutland@arm.com,
+        zouyipeng@huawei.com, bigeasy@linutronix.de,
+        David.Laight@aculab.com, chenzhongjin@huawei.com,
+        greentime.hu@sifive.com, andy.chiu@sifive.com, ben@decadent.org.uk,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,86 +72,226 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mark_page_lazyfree() and the callers are converted to use folio,
-this rename and make it to take in a folio argument instead of
-calling page_folio().
+On Thu, Dec 8, 2022 at 6:12 PM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> wro=
+te:
+>
+> guoren@kernel.org writes:
+>
+> > From: Guo Ren <guoren@linux.alibaba.com>
+> >
+> > Add independent irq stacks for percpu to prevent kernel stack overflows=
+.
+> > It is also compatible with VMAP_STACK by implementing
+> > arch_alloc_vmap_stack.  Many architectures have supported
+> > HAVE_IRQ_EXIT_ON_IRQ_STACK, riscv should follow up.
+> >
+>
+> I still would like to see this as a separate series, and that the
+> generic entry series ended with the previous patch. It's already a lot
+> of moving pieces in this series. Now add stack changes? Is this really
+> required for generic entry support?
+Okay, Let the generic entry merge first.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
----
-v2: use new name, folio_mark_lazyfree() and drop extern suggested by
-    Vishal Moola
+>
+> Some comments below.
+>
+> > Tested-by: Jisheng Zhang <jszhang@kernel.org>
+> > Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> > Signed-off-by: Guo Ren <guoren@kernel.org>
+> > ---
+> >  arch/riscv/Kconfig                   |  8 ++++
+> >  arch/riscv/include/asm/thread_info.h |  2 +
+> >  arch/riscv/include/asm/vmap_stack.h  | 28 ++++++++++++
+> >  arch/riscv/kernel/irq.c              | 66 +++++++++++++++++++++++++++-
+> >  4 files changed, 102 insertions(+), 2 deletions(-)
+> >  create mode 100644 arch/riscv/include/asm/vmap_stack.h
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 518e8523d41d..0a9d4bdc0338 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -446,6 +446,14 @@ config FPU
+> >
+> >         If you don't know what to do here, say Y.
+> >
+> > +config IRQ_STACKS
+> > +     bool "Independent irq stacks" if EXPERT
+> > +     default y
+> > +     select HAVE_IRQ_EXIT_ON_IRQ_STACK
+> > +     help
+> > +       Add independent irq stacks for percpu to prevent kernel stack o=
+verflows.
+> > +       We may save some memory footprint by disabling IRQ_STACKS.
+> > +
+>
+> Other archs uses CONFIG_IRQSTACKS. Let's use that for riscv as well, and
+> also use the same Kconfig wording as the other archs.
+Okay
 
- include/linux/swap.h |  2 +-
- mm/huge_memory.c     |  2 +-
- mm/madvise.c         |  2 +-
- mm/swap.c            | 12 +++++-------
- 4 files changed, 8 insertions(+), 10 deletions(-)
+>
+> >  endmenu # "Platform type"
+> >
+> >  menu "Kernel features"
+> > diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/=
+asm/thread_info.h
+> > index 7de4fb96f0b5..043da8ccc7e6 100644
+> > --- a/arch/riscv/include/asm/thread_info.h
+> > +++ b/arch/riscv/include/asm/thread_info.h
+> > @@ -40,6 +40,8 @@
+> >  #define OVERFLOW_STACK_SIZE     SZ_4K
+> >  #define SHADOW_OVERFLOW_STACK_SIZE (1024)
+> >
+> > +#define IRQ_STACK_SIZE               THREAD_SIZE
+> > +
+> >  #ifndef __ASSEMBLY__
+> >
+> >  extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
+> > diff --git a/arch/riscv/include/asm/vmap_stack.h b/arch/riscv/include/a=
+sm/vmap_stack.h
+> > new file mode 100644
+> > index 000000000000..3fbf481abf4f
+> > --- /dev/null
+> > +++ b/arch/riscv/include/asm/vmap_stack.h
+> > @@ -0,0 +1,28 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +// Copied from arch/arm64/include/asm/vmap_stack.h.
+> > +#ifndef _ASM_RISCV_VMAP_STACK_H
+> > +#define _ASM_RISCV_VMAP_STACK_H
+> > +
+> > +#include <linux/bug.h>
+> > +#include <linux/gfp.h>
+> > +#include <linux/kconfig.h>
+> > +#include <linux/vmalloc.h>
+> > +#include <linux/pgtable.h>
+> > +#include <asm/thread_info.h>
+> > +
+> > +/*
+> > + * To ensure that VMAP'd stack overflow detection works correctly, all=
+ VMAP'd
+> > + * stacks need to have the same alignment.
+> > + */
+> > +static inline unsigned long *arch_alloc_vmap_stack(size_t stack_size, =
+int node)
+> > +{
+> > +     void *p;
+> > +
+> > +     BUILD_BUG_ON(!IS_ENABLED(CONFIG_VMAP_STACK));
+> > +
+> > +     p =3D __vmalloc_node(stack_size, THREAD_ALIGN, THREADINFO_GFP, no=
+de,
+> > +                     __builtin_return_address(0));
+> > +     return kasan_reset_tag(p);
+> > +}
+> > +
+> > +#endif /* _ASM_RISCV_VMAP_STACK_H */
+> > diff --git a/arch/riscv/kernel/irq.c b/arch/riscv/kernel/irq.c
+> > index 24c2e1bd756a..5d77f692b198 100644
+> > --- a/arch/riscv/kernel/irq.c
+> > +++ b/arch/riscv/kernel/irq.c
+> > @@ -10,6 +10,37 @@
+> >  #include <linux/irqchip.h>
+> >  #include <linux/seq_file.h>
+> >  #include <asm/smp.h>
+> > +#include <asm/vmap_stack.h>
+> > +
+> > +#ifdef CONFIG_IRQ_STACKS
+> > +static DEFINE_PER_CPU(ulong *, irq_stack_ptr);
+> > +
+> > +#ifdef CONFIG_VMAP_STACK
+> > +static void init_irq_stacks(void)
+> > +{
+> > +     int cpu;
+> > +     ulong *p;
+> > +
+> > +     for_each_possible_cpu(cpu) {
+> > +             p =3D arch_alloc_vmap_stack(IRQ_STACK_SIZE, cpu_to_node(c=
+pu));
+> > +             per_cpu(irq_stack_ptr, cpu) =3D p;
+> > +     }
+> > +}
+> > +#else
+> > +/* irq stack only needs to be 16 byte aligned - not IRQ_STACK_SIZE ali=
+gned. */
+> > +DEFINE_PER_CPU_ALIGNED(ulong [IRQ_STACK_SIZE/sizeof(ulong)], irq_stack=
+);
+> > +
+> > +static void init_irq_stacks(void)
+> > +{
+> > +     int cpu;
+> > +
+> > +     for_each_possible_cpu(cpu)
+> > +             per_cpu(irq_stack_ptr, cpu) =3D per_cpu(irq_stack, cpu);
+> > +}
+> > +#endif /* CONFIG_VMAP_STACK */
+> > +#else
+> > +static void init_irq_stacks(void) {}
+> > +#endif /* CONFIG_IRQ_STACKS */
+> >
+> >  int arch_show_interrupts(struct seq_file *p, int prec)
+> >  {
+> > @@ -19,21 +50,52 @@ int arch_show_interrupts(struct seq_file *p, int pr=
+ec)
+> >
+> >  void __init init_IRQ(void)
+> >  {
+> > +     init_irq_stacks();
+> >       irqchip_init();
+> >       if (!handle_arch_irq)
+> >               panic("No interrupt controller found.");
+> >  }
+> >
+> > -asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
+> > +static void noinstr handle_riscv_irq(struct pt_regs *regs)
+> >  {
+> >       struct pt_regs *old_regs;
+> > -     irqentry_state_t state =3D irqentry_enter(regs);
+> >
+> >       irq_enter_rcu();
+> >       old_regs =3D set_irq_regs(regs);
+> >       handle_arch_irq(regs);
+> >       set_irq_regs(old_regs);
+> >       irq_exit_rcu();
+> > +}
+> > +
+> > +asmlinkage void noinstr do_riscv_irq(struct pt_regs *regs)
+> > +{
+> > +     irqentry_state_t state =3D irqentry_enter(regs);
+> > +#ifdef CONFIG_IRQ_STACKS
+> > +     if (on_thread_stack()) {
+> > +             ulong *sp =3D per_cpu(irq_stack_ptr, smp_processor_id())
+> > +                                     + IRQ_STACK_SIZE/sizeof(ulong);
+> > +             __asm__ __volatile(
+> > +             "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> > +             REG_S"  ra, (sp)                \n"
+> > +             "addi   sp, sp, -"RISCV_SZPTR  "\n"
+> > +             REG_S"  s0, (sp)                \n"
+> > +             "addi   s0, sp, 2*"RISCV_SZPTR "\n"
+> > +             "move   sp, %[sp]               \n"
+> > +             "move   a0, %[regs]             \n"
+> > +             "call   handle_riscv_irq        \n"
+> > +             "addi   sp, s0, -2*"RISCV_SZPTR"\n"
+> > +             REG_L"  s0, (sp)                \n"
+> > +             "addi   sp, sp, "RISCV_SZPTR   "\n"
+> > +             REG_L"  ra, (sp)                \n"
+> > +             "addi   sp, sp, "RISCV_SZPTR   "\n"
+> > +             :
+> > +             : [sp] "r" (sp), [regs] "r" (regs)
+> > +             : "a0", "a1", "a2", "a3", "a4", "a5", "a6", "a7",
+> > +               "t0", "t1", "t2", "t3", "t4", "t5", "t6",
+> > +               "memory");
+>
+> This whole assembly thing will be C&P in later commits. Can we please do
+> something like x86 does here (call_on_stack --
+> arch/x86/include/asm/irq_stack.h), which will hurt our eyes a bit less,
+> and make it more maintainable?
+Okay.
 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 2787b84eaf12..93f1cebd8545 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -402,7 +402,7 @@ extern void lru_add_drain_cpu(int cpu);
- extern void lru_add_drain_cpu_zone(struct zone *zone);
- extern void lru_add_drain_all(void);
- extern void deactivate_page(struct page *page);
--extern void mark_page_lazyfree(struct page *page);
-+void folio_mark_lazyfree(struct folio *folio);
- extern void swap_setup(void);
- 
- extern void lru_cache_add_inactive_or_unevictable(struct page *page,
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 6e76c770529b..eb17c24c5fda 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1660,7 +1660,7 @@ bool madvise_free_huge_pmd(struct mmu_gather *tlb, struct vm_area_struct *vma,
- 		tlb_remove_pmd_tlb_entry(tlb, pmd, addr);
- 	}
- 
--	mark_page_lazyfree(&folio->page);
-+	folio_mark_lazyfree(folio);
- 	ret = true;
- out:
- 	spin_unlock(ptl);
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 87703a19bbef..72565e58e067 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -728,7 +728,7 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
- 			set_pte_at(mm, addr, pte, ptent);
- 			tlb_remove_tlb_entry(tlb, pte, addr);
- 		}
--		mark_page_lazyfree(&folio->page);
-+		folio_mark_lazyfree(folio);
- 	}
- out:
- 	if (nr_swap) {
-diff --git a/mm/swap.c b/mm/swap.c
-index 70e2063ef43a..5e5eba186930 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -757,16 +757,14 @@ void deactivate_page(struct page *page)
- }
- 
- /**
-- * mark_page_lazyfree - make an anon page lazyfree
-- * @page: page to deactivate
-+ * folio_mark_lazyfree - make an anon folio lazyfree
-+ * @folio: folio to deactivate
-  *
-- * mark_page_lazyfree() moves @page to the inactive file list.
-- * This is done to accelerate the reclaim of @page.
-+ * folio_mark_lazyfree() moves @folio to the inactive file list.
-+ * This is done to accelerate the reclaim of @folio.
-  */
--void mark_page_lazyfree(struct page *page)
-+void folio_mark_lazyfree(struct folio *folio)
- {
--	struct folio *folio = page_folio(page);
--
- 	if (folio_test_lru(folio) && folio_test_anon(folio) &&
- 	    folio_test_swapbacked(folio) && !folio_test_swapcache(folio) &&
- 	    !folio_test_unevictable(folio)) {
--- 
-2.35.3
+>
+>
+> Bj=C3=B6rn
 
+
+
+--=20
+Best Regards
+ Guo Ren
