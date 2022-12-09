@@ -2,241 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB726487D4
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:37:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D22656487E2
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229982AbiLIRhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:37:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52390 "EHLO
+        id S230123AbiLIRli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiLIRg4 (ORCPT
+        with ESMTP id S230037AbiLIRle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:36:56 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D9982FA2
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:36:55 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so8855492pjr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:36:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=qXsbmkoodLU/AwJjQ4JXkNGpOiLYdE4+WQE1E7o+Bwo=;
-        b=t86EOBMhIP/ldR8nxcwebrMd9ocR8tExby0yg2pG8hDVAeplTlpkAB6UlHdjUGL2b5
-         OQ8Ls6Okk6+BnUPMmDzTmJqEM8BRuNIHYChWzI/RnpKmNMT3ipirfQ/ZKwIDn+n9H+Ac
-         dFa1a+3eO+2Sw6svqf5F6CPOssBlL7/HJcVRRKRV6zreayrpLDquE0Zg8Jcfyxo/Y4pg
-         CjscTZcU+4ZQQmGN89+YHXMn6iH0H9Ihsfug23tfhKLS0dOfdg/fgggBFiLKd7soUUc3
-         KivDhsoDilYjezLZhtQUMnYVSn2EnUpu+jrvaa46iK29QVFbKVNkTS58yaBOx42Nd/w5
-         oyHQ==
+        Fri, 9 Dec 2022 12:41:34 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384FA53EC8;
+        Fri,  9 Dec 2022 09:41:33 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1442977d77dso571922fac.6;
+        Fri, 09 Dec 2022 09:41:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qXsbmkoodLU/AwJjQ4JXkNGpOiLYdE4+WQE1E7o+Bwo=;
-        b=KbwsGaIgV2em7yPTul4xza7l6Xysx0fHrqNPr1yfZTy9yar91r44aDcUlVUOr598ER
-         rc5GvLAChZ3V5AtJp41E8IxTjfbSDrYP/Rf4OQVIbjn5uBJBeNWilFSy2XF6a17kK87P
-         qTzKO34CFV9U5ISvAw6ehx/XffciDbJxDaHL/V2P1CyiOhF85vPZZXPsYorqHdxjz7jt
-         A5IB5sOWBxPd+o/s2PHnJD2Wqne34ryMjWfln5ZTYs03+HiMGxyYDVujRevjDHz3pqrY
-         G7LMEcLoHH6fo2S6jUgTn4peuJmAnJnT9/4D0qA7pOQnrq0m84uAwURpe0njfY70Xdc6
-         M/WQ==
-X-Gm-Message-State: ANoB5pkgtsvTWqLbaP5QhzdlcScRxBICRnOu5hnccB/AGukEWqLH68pq
-        rBiuhHltaKw95W+j0kRlScfz8zeMzem8JZA5MTe89w==
-X-Google-Smtp-Source: AA0mqf7ateMtxBRPd0IFutE2MIFyHz0rRGBmqts6dBrsLB2FgXxkLDLjQoTz8MBCRkUTjg8zk1rHSrEfMZ8gVlOEGUM=
-X-Received: by 2002:a17:90a:7485:b0:219:ef02:a5eb with SMTP id
- p5-20020a17090a748500b00219ef02a5ebmr15259474pjk.84.1670607414431; Fri, 09
- Dec 2022 09:36:54 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lfLx+eHbQgdk9kX2AxUh539ocDqtDYlE8mRQQ26b+yU=;
+        b=OH4YzqvJSTxOhyP7USYic2+3okVDgaREE8YkhTbTyR+ydBIZ99XQjQDU6Vsxb3wi8a
+         jKt8Ur4cma/8A0OPKfbxmjqYnD1PbvXgaPpgm8+rPAIQBk2rZpKkyF5Eoc0xkjHrC+fG
+         2xcY5/iccmZcBqFBkKam+6ngDGi4p6tgtMpC4Chpz5Kqox/uW7DF+BQ62QHrxSWV5+6x
+         DlcMM3n+XaCF2HuYol39MdmojMwCkA7SthWvc8qK3DpSR5/Q2yS3vrAqLM5dZAsSACH2
+         dCiciFk4vFMZLUSFS0arBfSXPjbvYlZ7c37wHIfREqMBncgYwbvuFvoXtKf3KkngfPB0
+         TG0w==
+X-Gm-Message-State: ANoB5pn9eT4rAC61opHyto04kgmUDNat2wny75tNTSBrnvH0Yyn9FYHj
+        VbbqSEZHutZIPPZyRAQB1w==
+X-Google-Smtp-Source: AA0mqf4TJZVJBOiEUEB4kjkImACvkIXApXTLaNah1G9II/0nko8+ADK6eFGTQun035lZBJG4M6/AKg==
+X-Received: by 2002:a05:6870:da0c:b0:144:1078:ed9 with SMTP id go12-20020a056870da0c00b0014410780ed9mr3477199oab.25.1670607692409;
+        Fri, 09 Dec 2022 09:41:32 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l17-20020a056870f15100b0010d7242b623sm1120461oac.21.2022.12.09.09.41.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 09:41:31 -0800 (PST)
+Received: (nullmailer pid 3384468 invoked by uid 1000);
+        Fri, 09 Dec 2022 17:41:31 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <1664960824-20951-1-git-send-email-quic_akhilpo@quicinc.com>
- <20221201225705.46r2m35ketvzipox@builder.lan> <CAPDyKFofsqcoFbYt-9BcisbPdreLGqAAMWorqHi0_D1kwCdYhg@mail.gmail.com>
- <20221207165457.kwdwwiycbwjpogxl@builder.lan> <CAPDyKFpYgYkDdJ79xxkwr-Mqnj5CoBrV+ZZe6Xz4hGLNR4zUVw@mail.gmail.com>
- <20221208210622.x656vbf7rum5hrl7@builder.lan>
-In-Reply-To: <20221208210622.x656vbf7rum5hrl7@builder.lan>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 9 Dec 2022 18:36:18 +0100
-Message-ID: <CAPDyKFpSXjcJZ=H491s74BChAV89pQ1Wm8PSdU0nVRfroK1=4A@mail.gmail.com>
-Subject: Re: [PATCH v7 0/6] clk/qcom: Support gdsc collapse polling using
- 'reset' interface
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-scsi@vger.kernel.org, Bart Van Assche <bvanassche@acm.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>, Sean Paul <sean@poorly.run>,
-        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-arm-msm@vger.kernel.org, phone-devel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
+        Avri Altman <avri.altman@wdc.com>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org
+In-Reply-To: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+References: <20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com>
+Message-Id: <167060767531.3383988.11067282925964862729.robh@kernel.org>
+Subject: Re: [PATCH] dt-bindings: ufs: qcom: Add reg-names property for ICE
+Date:   Fri, 09 Dec 2022 11:41:31 -0600
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 8 Dec 2022 at 22:06, Bjorn Andersson <andersson@kernel.org> wrote:
->
-> On Thu, Dec 08, 2022 at 02:40:55PM +0100, Ulf Hansson wrote:
-> > On Wed, 7 Dec 2022 at 17:55, Bjorn Andersson <andersson@kernel.org> wrote:
-> > >
-> > > On Wed, Dec 07, 2022 at 05:00:51PM +0100, Ulf Hansson wrote:
-> > > > On Thu, 1 Dec 2022 at 23:57, Bjorn Andersson <andersson@kernel.org> wrote:
-> > > > >
-> > > > > On Wed, Oct 05, 2022 at 02:36:58PM +0530, Akhil P Oommen wrote:
-> > > > > >
-> > > > >
-> > > > > @Ulf, Akhil has a power-domain for a piece of hardware which may be
-> > > > > voted active by multiple different subsystems (co-processors/execution
-> > > > > contexts) in the system.
-> > > > >
-> > > > > As such, during the powering down sequence we don't wait for the
-> > > > > power-domain to turn off. But in the event of an error, the recovery
-> > > > > mechanism relies on waiting for the hardware to settle in a powered off
-> > > > > state.
-> > > > >
-> > > > > The proposal here is to use the reset framework to wait for this state
-> > > > > to be reached, before continuing with the recovery mechanism in the
-> > > > > client driver.
-> > > >
-> > > > I tried to review the series (see my other replies), but I am not sure
-> > > > I fully understand the consumer part.
-> > > >
-> > > > More exactly, when and who is going to pull the reset and at what point?
-> > > >
-> > > > >
-> > > > > Given our other discussions on quirky behavior, do you have any
-> > > > > input/suggestions on this?
-> > > > >
-> > > > > > Some clients like adreno gpu driver would like to ensure that its gdsc
-> > > > > > is collapsed at hardware during a gpu reset sequence. This is because it
-> > > > > > has a votable gdsc which could be ON due to a vote from another subsystem
-> > > > > > like tz, hyp etc or due to an internal hardware signal. To allow
-> > > > > > this, gpucc driver can expose an interface to the client driver using
-> > > > > > reset framework. Using this the client driver can trigger a polling within
-> > > > > > the gdsc driver.
-> > > > >
-> > > > > @Akhil, this description is fairly generic. As we've reached the state
-> > > > > where the hardware has settled and we return to the client, what
-> > > > > prevents it from being powered up again?
-> > > > >
-> > > > > Or is it simply a question of it hitting the powered-off state, not
-> > > > > necessarily staying there?
-> > > >
-> > > > Okay, so it's indeed the GPU driver that is going to assert/de-assert
-> > > > the reset at some point. Right?
-> > > >
-> > > > That seems like a reasonable approach to me, even if it's a bit
-> > > > unclear under what conditions that could happen.
-> > > >
-> > >
-> > > Generally the disable-path of the power-domain does not check that the
-> > > power-domain is actually turned off, because the status might indicate
-> > > that the hardware is voting for the power-domain to be on.
-> >
-> > Is there a good reason why the HW needs to vote too, when the GPU
-> > driver is already in control?
-> >
-> > Or perhaps that depends on the running use case?
-> >
-> > >
-> > > As part of the recovery of the GPU after some fatal fault, the GPU
-> > > driver does something which will cause the hardware votes for the
-> > > power-domain to be let go, and then the driver does pm_runtime_put().
-> >
-> > Okay. That "something", sounds like a device specific setting for the
-> > corresponding gdsc, right?
-> >
-> > So somehow the GPU driver needs to manage that setting, right?
-> >
-> > >
-> > > But in this case the GPU driver wants to ensure that the power-domain is
-> > > actually powered down, before it does pm_runtime_get() again. To ensure
-> > > that the hardware lost its state...
-> >
-> > I see.
-> >
-> > >
-> > > The proposal here is to use a reset to reach into the power-domain
-> > > provider and wait for the hardware to be turned off, before the GPU
-> > > driver attempts turning the power-domain on again.
-> > >
-> > >
-> > > In other words, there is no reset. This is a hack to make a normally
-> > > asynchronous pd.power_off() to be synchronous in this particular case.
-> >
-> > Alright, assuming I understood your clarifications above correctly
-> > (thanks!), I think I have got a much better picture now.
-> >
-> > Rather than abusing the reset interface, I think we should manage this
-> > through the genpd's power on/off notifiers (GENPD_NOTIFY_OFF). The GPU
-> > driver should register its corresponding device for them
-> > (dev_pm_genpd_add_notifier()).
-> >
-> > The trick however, is to make the behaviour of the power-domain for
-> > the gdsc (the genpd->power_off() callback) conditional on whether the
-> > HW is configured to vote or not. If the HW can vote, it should not
-> > poll for the state - and vice versa when the HW can't vote.
-> >
->
-> Per Akhil's description I misunderstood who the other voters are; but
-> either way it's not the same "HW configured" mechanism as the one we're
-> already discussing.
 
-Okay, so this is another thing then.
+On Fri, 09 Dec 2022 15:29:47 +0100, Luca Weiss wrote:
+> The code in ufs-qcom-ice.c needs the ICE reg to be named "ice". Add this
+> in the bindings so the existing dts can validate successfully.
+> 
+> Also sm8450 is using ICE since commit 276ee34a40c1 ("arm64: dts: qcom:
+> sm8450: add Inline Crypto Engine registers and clock") so move the
+> compatible to the correct if.
+> 
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> ---
+> (no cover subject)
+> 
+> The only remaining validation issues I see is the following on sc8280xp-crd.dtb
+> and sa8540p-ride.dtb:
+> 
+>   Unevaluated properties are not allowed ('required-opps', 'dma-coherent' were unexpected)
+> 
+> Maybe someone who knows something about this can handle this?
+> 
+> And the patch adding qcom,sm6115-ufshc hasn't been applied yet.
+> ---
+>  Documentation/devicetree/bindings/ufs/qcom,ufs.yaml | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
 
->
->
-> But if we based on similar means could control if the power_off() ops
-> should be blocking, waiting for the status indication to show that the
-> hardware is indeed powered down, I think this would meet the needs.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Right.
+yamllint warnings/errors:
 
->
-> And GENPD_NOTIFY_OFF seems to provide the notification that it was
-> successful (i.e. happened within the timeout etc).
->
-> > Would this work?
-> >
->
-> If we can control the behavior of the genpd, I think it would.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: clocks: [[4294967295, 151], [4294967295, 10], [4294967295, 150], [4294967295, 166], [4294967295, 0], [4294967295, 164], [4294967295, 160], [4294967295, 162]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: clock-names: ['core_clk', 'bus_aggr_clk', 'iface_clk', 'core_clk_unipro', 'ref_clk', 'tx_lane0_sync_clk', 'rx_lane0_sync_clk', 'rx_lane1_sync_clk'] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: reg: [[0, 30949376, 0, 12288]] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.example.dtb: ufs@1d84000: 'reg-names' is a required property
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
 
-Okay, it seems like we need a new dev_pm_genpd_* interface that
-consumers can call to instruct the genpd provider, that its
-->power_off() callback needs to temporarily switch to become
-synchronous.
+doc reference errors (make refcheckdocs):
 
-I guess this could be useful for other similar cases too, where the
-corresponding PM domain isn't actually being powered off, but rather
-just voted for to become powered off, thus relying on the HW to do the
-aggregation.
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221209-dt-binding-ufs-v1-0-8d502f0e18d5@fairphone.com
 
-In any case, I am still a bit skeptical of the reset approach, as is
-being suggested in the $subject series. Even if it's rather nice and
-clean (but somewhat abusing the interface), it looks like there will
-be synchronization problems between the calls to the
-pm_runtime_put_sync() and reset_control_reset() in the GPU driver. The
-"reset" may actually already have happened when the call to
-reset_control_reset() is done, so we may fail to detect the power
-collapse, right!?
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-Let me cook a patch for the new genpd interface that I have in mind,
-then we can see how that plays out together with the other parts. I
-will post it on Monday!
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Kind regards
-Uffe
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
