@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418BC648195
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B96F6481A5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 12:28:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbiLIL0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 06:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50102 "EHLO
+        id S229966AbiLIL2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 06:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiLIL0J (ORCPT
+        with ESMTP id S229948AbiLIL14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 06:26:09 -0500
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EDE6932D
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:26:08 -0800 (PST)
-Received: by mail-yb1-xb2f.google.com with SMTP id e141so5146243ybh.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 03:26:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CeH76cIn44BHozvkORl6+VsQ+27Ui3VZGR1dvHq/zpw=;
-        b=IY+agMYTzfHBx+3Qkj4f7wSGEXcVTNzwuJ17QNdQUvenElRs5D4sYRUzbCDlz4dqoY
-         7ZGU1BWq4Kyz8FchqdvJ6Pj2Ee8jsVKRw5sYsH4aYLAY9IOtXBMfDgPrdzKNK1IcJ1bC
-         M0mropxzc4utuKa0eeuQykt9I8qP2aJ6wuVv1lB+ElriT9oRsxWIO9kwX7uB4uSDUSgC
-         tAzY0XbBn1ewdGat06eQNwY6+iiLzplRzZ6R3UWhQ2k549n4HI0349rIumKcZuEGjquy
-         4TIq4DLSk8qAGThvkLIGC/RosPo0y+FmvkK61h0sPKRESAby048mN+VuvCfCEHoRMFke
-         ymWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CeH76cIn44BHozvkORl6+VsQ+27Ui3VZGR1dvHq/zpw=;
-        b=sH5ohTyi2O5ezLWC/XPyj8KaHoqEsw/3Du1ExfZ4vURQjNNAc920d/VMTdd2tka2ao
-         BP1V8I5/jxU4WHBYlg3S3gdHsq7YBmzfg0agwxE+epPcUpR0wWw6DTMSaljYXK27KvEW
-         9rorvGQvNzPK5G+F547QduoHcRWL6qyyXF6xKCovc/yiDRqsLeWSAKUcJbvWwdP6GOMC
-         q5AnO1A/sEe5m/Et5tfRpGIPtuDPLqBNCNOY7ZAaPvwLV8ucbu46cOE4GnRilOiUwbnd
-         w1E48KKAJQYl5WJ2RhAe5pJIn0VscCUD0q3iCajD00RA27zZF6c8b2oRY5G17ChWWlS5
-         Yd4Q==
-X-Gm-Message-State: ANoB5plYNlq1vL2H/0JzrEdp6S9oJCLp/+EMXhx4UmT14QlWONypsDw5
-        Ar4I3J4cmV2WB5Ssuq3TxWxiMWYf0aYSO9/M7V6M1g==
-X-Google-Smtp-Source: AA0mqf7jyZWqtibAsNuf2QqSyrQUnzfxgWM+yG68w7fvn6r/Tssjws87Qyze9unNdcrV/6P3sBiLoNu6Lqm6fVGGW3s=
-X-Received: by 2002:a25:7648:0:b0:6fe:54d5:2524 with SMTP id
- r69-20020a257648000000b006fe54d52524mr22109411ybc.522.1670585167318; Fri, 09
- Dec 2022 03:26:07 -0800 (PST)
+        Fri, 9 Dec 2022 06:27:56 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BAAE43ADD;
+        Fri,  9 Dec 2022 03:27:54 -0800 (PST)
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B995JPf018605;
+        Fri, 9 Dec 2022 11:27:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=lr8FlHb5L+VJR40kJ/GrAGAAjLPIS+pgH6GTe2l/4GQ=;
+ b=jJQjgDXqW6cyantg7+629A6yXn3sUCBjw/ozNQlBBPbfPW6d+N5+Tvbt2xI4NVfCckC1
+ QA+GGFYwhCZVIBP0tJD/J+vXfsD00XwDuayarRDrraiXG3X7qfeMzV+V3qxuE+L4NZmR
+ ASOSq3ccKJ3f1l4J3jRtHYdx6uLNUinbsJo0+9CNWt5w+Iqn87mxq64z2M54Qvs4Uq01
+ WMEYwjMowOsDx1kfRFkYlUH7XXUzYm8PoFE/u8wNvegc4LM4vTtJnU0d/RsSd4MO5HL9
+ zVmA2vKtjiqKTcJfwkabUMUuE5ft8sAur4JfoKS1p/kWejbD2wMjAE+iDKoGAdOXK7Ak qQ== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3mbuw92rxg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 11:27:50 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.17.1.19/8.16.1.2) with ESMTP id 2B98JYw8018447;
+        Fri, 9 Dec 2022 11:27:48 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma05fra.de.ibm.com (PPS) with ESMTPS id 3m9m7rca37-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 11:27:47 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B9BRj5F43516408
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Dec 2022 11:27:45 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 906A820043;
+        Fri,  9 Dec 2022 11:27:45 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 81DC420040;
+        Fri,  9 Dec 2022 11:27:45 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  9 Dec 2022 11:27:45 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 55390)
+        id 5241BE027E; Fri,  9 Dec 2022 12:27:45 +0100 (CET)
+From:   Sven Schnelle <svens@linux.ibm.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: [PATCH v2 0/2] fix out-of-bounds access when specifying invalid console
+Date:   Fri,  9 Dec 2022 12:27:35 +0100
+Message-Id: <20221209112737.3222509-1-svens@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221128054820.1771-1-clin@suse.com> <20221128054820.1771-3-clin@suse.com>
- <CAOMZO5D0wJcfbFsvUN3K17S5F4zT2Yf8yQB+wMKQPzuMBitrpA@mail.gmail.com>
- <CACRpkdaKYFbXRcV1WgDEiYPEwzNAZq-AqAHpWd1rJyW-h369dw@mail.gmail.com> <Y5K726npjKAO4sIq@linux-8mug>
-In-Reply-To: <Y5K726npjKAO4sIq@linux-8mug>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Fri, 9 Dec 2022 12:27:28 +0100
-Message-ID: <CACRpkdbyfp3FwUfS7aDCLmsyM-3Xc1GfyX7_jFcuF1dhf+knQA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] pinctrl: add NXP S32 SoC family support
-To:     Chester Lin <clin@suse.com>, Saravana Kannan <saravanak@google.com>
-Cc:     Fabio Estevam <festevam@gmail.com>,
-        Dong Aisheng <aisheng.dong@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>, s32@nxp.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Larisa Grigore <larisa.grigore@nxp.com>,
-        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
-        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
-        Radu Pirea <radu-nicolae.pirea@nxp.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Matthias Brugger <mbrugger@suse.com>,
-        Matthew Nunez <matthew.nunez@nxp.com>,
-        Phu Luu An <phu.luuan@nxp.com>,
-        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 2sUlgT5ZT9mzptxguIx4hfPZIB8c9Fcz
+X-Proofpoint-ORIG-GUID: 2sUlgT5ZT9mzptxguIx4hfPZIB8c9Fcz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-09_04,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 suspectscore=0 bulkscore=0 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 adultscore=0 spamscore=0 mlxlogscore=661 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212090066
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 5:39 AM Chester Lin <clin@suse.com> wrote:
->
-> Hi Linus and Fabio,
->
-> Thanks for your time to review this patch!
->
-> On Thu, Dec 08, 2022 at 10:37:36PM +0100, Linus Walleij wrote:
-> > On Thu, Dec 8, 2022 at 12:04 AM Fabio Estevam <festevam@gmail.com> wrote:
-> >
-> > > In other imx8m pinctrl drivers we pass:
-> > (...)
-> > > > +module_platform_driver(s32g_pinctrl_driver);
-> > >
-> > > And we also register it in arch_initcall() level.
-> >
-> > Do you really need that though? This driver certainly does not.
-> >
-> > I was under the impression that recent changes to the probe-order
-> > logic has made most explicit arch_ etc initcall orderings surplus.
-> >
->
-> Could bool/tristate options in the Kconfig be the key point?
->
-> Based on current design I prefer to build the s32g2 pinctrl driver as built-in
-> rather than a loadable module. IIUC, when the driver is not built as module
-> then the initcall ordering should still matter.
+Hi,
 
-It is true that if you compile something into a module then all initicalls
-are the same: they are called when the module is loaded.
+these two patches fix a crash in the tty driver when a user specifies an
+invalid console like 'console=tty3000'. The first patch adds a check to
+tty_driver_lookup_tty(), the second one prevents that such a console gets
+registered in the vt driver.
 
-But the remaining initcalls used to be assigned to core, arch, subsystem
-etc in order for resources (such as clocks, regulators or pins) to be
-available before the drivers that need them get probed.
+Changes in v2:
+- trim commit message in first patch
+- add second patch as suggested by Jiri Slaby
 
-However there was first deferred probe to partially solve the problem
-and recently a large and refined series that use the dependencies in
-the device tree to resolve probe order.
+Sven Schnelle (2):
+  tty: fix out-of-bounds access in tty_driver_lookup_tty()
+  tty/vt: prevent registration of console with invalid number
 
-Saravana Kannan has been working tirelessly at this, issueing
-git log --oneline --author="Saravana Kannan"
-you will see the scope of this work.
+ drivers/tty/tty_io.c | 8 +++++---
+ drivers/tty/vt/vt.c  | 6 ++++++
+ 2 files changed, 11 insertions(+), 3 deletions(-)
 
-Yours,
-Linus Walleij
+-- 
+2.34.1
+
