@@ -2,223 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CA4647B76
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38995647B79
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLIBah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:30:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S229940AbiLIBcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:32:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbiLIBa3 (ORCPT
+        with ESMTP id S229615AbiLIBbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:30:29 -0500
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94787801F2
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1670549427; x=1702085427;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Z+MB6BKbERAk/aU/VdmESjhXVsEOrKd+g9suaVcIVzs=;
-  b=QSlmlaXo3GBtzE2c57mPhAmK82R/EK7QEHoJKzofhRXmkpmqKPR5Cyik
-   0I/OSyL+itqjbK6s4s6AYeA924AN78eWkD+Ih7ESGsN2/BC7i3A9BLCXG
-   8BGuWN3jl2sUDjuJKMpKN5s6hFwo5fwrmw6clg9/ZulSGh9p/j6N16kKh
-   wC2oYps8hHY2//zRklcepQ8U0TwThlaj7Aiurc5Xjxw5bIdxswMNoA1VI
-   6XIkC8OaztNnJ2drL4TbcoQMvWxUT8J5/PgLmbE6WRNSCW8nwHBofn/GB
-   YEimGKp8IzKfd87Ib5ujTmvoW5zx7D/rt9xiKqC3i5/69ynWEmIm9F/19
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.96,228,1665417600"; 
-   d="scan'208";a="330328948"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 09 Dec 2022 09:30:27 +0800
-IronPort-SDR: JPocgS0iloai9v99Yjk0d6sUl9e5o+5QqelN5OJixOwlxGwqJw3WngEJ4l6SIAVLANnwEUNJFW
- NYvH+VGW1vA7nwgLE9yQuvDi3f8TKwJjdglKnRnh8sHf0DtNlbn6nw63Q3FSn4TtHo3Wp2OgAL
- UoZNH2my+EGYXPYN9wiqPrCSqzpAlydWSaU/X6vK0IrLY2FgegvcZHgvyYhjuJ2eEqLcIhZXLM
- MSOTMaAkW3Lxm3Sypyia1uWRlRnmYS7RgxY5z0sXO/3O+6IcL1ByMNV+ZD7lJ7UdxbbVWWVqxt
- +MM=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 16:48:55 -0800
-IronPort-SDR: IoQd9DT/hd15eXxu44exDQdBzi2Jmt2BUlTLOL/UKKCq6a8sNB1ZlEHwFVrN2q0iKz8c4v3nI9
- 9pI4u81/RKgNt1Rs25tVFdm+9nmUxbQevEx5DBXRevgNigy2tSbrPdF33aUx5nONdKBEMiofU7
- WO9lagCMrdbC2lIFmIhBej6nYbGm2raeUKK9SgHm8quf7pE6t8v7NEyZOQm+2ZoP5PDD+OnEbe
- femGH6mtM9hUroqZh+N5VxjvHMM4hrdorQyRBU4YqnsFCgSrrpgmrUKp6LArJQ7iIm6gMNgwnU
- tDI=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 08 Dec 2022 17:30:27 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4NStkV5Gd8z1Rwrq
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:30:26 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1670549425; x=1673141426; bh=Z+MB6BKbERAk/aU/VdmESjhXVsEOrKd+g9s
-        uaVcIVzs=; b=o2qNqd7qAEIYwB0IRQG3i2PEuyxzBJAsHxHRUkyL+6aE6sxRQB2
-        3SEpm5dWS6gyBSya+aFhg5dCp+EHlv8GVmjNHYkUhASIDoH9pBdBmo7sB57qbS6k
-        El9f4DNYPYcfSCLLutju/A3rwU0md2NdVB7GKYVuHmjeEUwpU0KYZvydwh4JjI5O
-        AuqX277Ql/3t6kPJy6u0l0Lh3RqB0Xr+X9EUTpWVA5157lUN7C/NgdKRNYkAOHek
-        CFfsmBBzSLlnrvBH8SDZtE2sYsLlQv6k9OA1ueoR6YJlV/JOSr0A5KdwxoKlgr9A
-        HFkeJAWf42CpNsVKp571KSnllnerdzPlMkw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id mEGhOT496My2 for <linux-kernel@vger.kernel.org>;
-        Thu,  8 Dec 2022 17:30:25 -0800 (PST)
-Received: from [10.225.163.85] (unknown [10.225.163.85])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4NStkR4tBBz1RvLy;
-        Thu,  8 Dec 2022 17:30:23 -0800 (PST)
-Message-ID: <49aa8a40-938f-50c2-990e-04cf743e3b19@opensource.wdc.com>
-Date:   Fri, 9 Dec 2022 10:30:22 +0900
+        Thu, 8 Dec 2022 20:31:55 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EE7801E0
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:31:54 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2FCA3620FF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 01:31:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD2F4C433EF;
+        Fri,  9 Dec 2022 01:31:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670549513;
+        bh=Zv5ZlzJR4cEeJo3qJGsXmVHZ/bYUfRUeATJ9ndKXUCQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=t5wWa85e6LMISrWm0MAcBp6kAZeQrw3S7NbvPvMvDybs6aenhLCDl2H1DCFXKohRW
+         DAGQlFi3F2/xYwIYPNulXejJOu1j1RSdFOeck9IC5mmOY7fxxuSzLo2QleU/EpO8b5
+         hNmaSj6ZxpvDxfdLnuu/MDapNYgeVzd7YhlHlxGWF1n/W/B05tSB3lbsZKwSwz5jZC
+         xlDvPV4QW0xzYiSijma+s4erkqUMW4a6JA5QdcWDan2J/K50k87hB2LpPFmtmMpe0M
+         ggA4nalAbdqHOV19fOezCI+q2Aa+kSE40VxXOpRcUUfexuOkpHTJsErpLwXgNWx/Kh
+         icVs/aR7EAU4A==
+Message-ID: <0c36cfba-f8b8-b899-95db-09ce5b0a8e8a@kernel.org>
+Date:   Fri, 9 Dec 2022 09:31:50 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH V9 4/8] block, bfq: turn bfqq_data into an array in
- bfq_io_cq
+Subject: Re: [f2fs-dev] [PATCH 1/6] f2fs: specify extent cache for read
+ explicitly
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+References: <20221205185433.3479699-1-jaegeuk@kernel.org>
+ <8ffb43dd-3887-aa56-6f0a-1fb6ff0e191e@kernel.org>
+ <Y5IfEkHlpZ0oBRID@google.com>
 Content-Language: en-US
-To:     Paolo Valente <paolo.valente@linaro.org>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arie.vanderhoeven@seagate.com, rory.c.chen@seagate.com,
-        glen.valante@linaro.org, Gabriele Felici <felicigb@gmail.com>,
-        Gianmarco Lusvardi <glusvardi@posteo.net>,
-        Giulio Barabino <giuliobarabino99@gmail.com>,
-        Emiliano Maccaferri <inbox@emilianomaccaferri.com>
-References: <20221208104351.35038-1-paolo.valente@linaro.org>
- <20221208104351.35038-5-paolo.valente@linaro.org>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20221208104351.35038-5-paolo.valente@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Y5IfEkHlpZ0oBRID@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/22 19:43, Paolo Valente wrote:
-> When a bfq_queue Q is merged with another queue, several pieces of
-> information are saved about Q. These pieces are stored in the
-> bfqq_data field in the bfq_io_cq data structure of the process
-> associated with Q.
+On 2022/12/9 1:29, Jaegeuk Kim wrote:
+> On 12/08, Chao Yu wrote:
+>> On 2022/12/6 2:54, Jaegeuk Kim wrote:
+>>> Let's descrbie it's read extent cache.
+>>>
+>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> ---
+>>>    fs/f2fs/extent_cache.c |  4 ++--
+>>>    fs/f2fs/f2fs.h         | 10 +++++-----
+>>>    fs/f2fs/inode.c        |  2 +-
+>>>    fs/f2fs/node.c         |  2 +-
+>>>    fs/f2fs/node.h         |  2 +-
+>>>    fs/f2fs/segment.c      |  4 ++--
+>>>    fs/f2fs/super.c        | 16 ++++++++--------
+>>>    7 files changed, 20 insertions(+), 20 deletions(-)
+>>>
+>>> diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
+>>> index 932c070173b9..8cd87aee0292 100644
+>>> --- a/fs/f2fs/extent_cache.c
+>>> +++ b/fs/f2fs/extent_cache.c
+>>> @@ -383,7 +383,7 @@ static void __f2fs_init_extent_tree(struct inode *inode, struct page *ipage)
+>>>    	if (!i_ext || !i_ext->len)
+>>>    		return;
+>>> -	get_extent_info(&ei, i_ext);
+>>> +	get_read_extent_info(&ei, i_ext);
+>>>    	write_lock(&et->lock);
+>>>    	if (atomic_read(&et->node_cnt))
+>>> @@ -710,7 +710,7 @@ unsigned int f2fs_shrink_extent_tree(struct f2fs_sb_info *sbi, int nr_shrink)
+>>>    	unsigned int node_cnt = 0, tree_cnt = 0;
+>>>    	int remained;
+>>> -	if (!test_opt(sbi, EXTENT_CACHE))
+>>> +	if (!test_opt(sbi, READ_EXTENT_CACHE))
+>>>    		return 0;
+>>>    	if (!atomic_read(&sbi->total_zombie_tree))
+>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>> index eb8c27c4e5fc..1c39f8145b61 100644
+>>> --- a/fs/f2fs/f2fs.h
+>>> +++ b/fs/f2fs/f2fs.h
+>>> @@ -92,7 +92,7 @@ extern const char *f2fs_fault_name[FAULT_MAX];
+>>>    #define F2FS_MOUNT_FLUSH_MERGE		0x00000400
+>>>    #define F2FS_MOUNT_NOBARRIER		0x00000800
+>>>    #define F2FS_MOUNT_FASTBOOT		0x00001000
+>>> -#define F2FS_MOUNT_EXTENT_CACHE		0x00002000
+>>> +#define F2FS_MOUNT_READ_EXTENT_CACHE	0x00002000
+>>>    #define F2FS_MOUNT_DATA_FLUSH		0x00008000
+>>>    #define F2FS_MOUNT_FAULT_INJECTION	0x00010000
+>>>    #define F2FS_MOUNT_USRQUOTA		0x00080000
+>>> @@ -600,7 +600,7 @@ enum {
+>>>    #define F2FS_MIN_EXTENT_LEN	64	/* minimum extent length */
+>>>    /* number of extent info in extent cache we try to shrink */
+>>> -#define EXTENT_CACHE_SHRINK_NUMBER	128
+>>> +#define READ_EXTENT_CACHE_SHRINK_NUMBER	128
+>>>    #define RECOVERY_MAX_RA_BLOCKS		BIO_MAX_VECS
+>>>    #define RECOVERY_MIN_RA_BLOCKS		1
+>>> @@ -830,7 +830,7 @@ struct f2fs_inode_info {
+>>>    	loff_t original_i_size;		/* original i_size before atomic write */
+>>>    };
+>>> -static inline void get_extent_info(struct extent_info *ext,
+>>> +static inline void get_read_extent_info(struct extent_info *ext,
+>>>    					struct f2fs_extent *i_ext)
+>>>    {
+>>>    	ext->fofs = le32_to_cpu(i_ext->fofs);
+>>> @@ -838,7 +838,7 @@ static inline void get_extent_info(struct extent_info *ext,
+>>>    	ext->len = le32_to_cpu(i_ext->len);
+>>>    }
+>>> -static inline void set_raw_extent(struct extent_info *ext,
+>>> +static inline void set_raw_read_extent(struct extent_info *ext,
+>>>    					struct f2fs_extent *i_ext)
+>>>    {
+>>>    	i_ext->fofs = cpu_to_le32(ext->fofs);
+>>> @@ -4407,7 +4407,7 @@ static inline bool f2fs_may_extent_tree(struct inode *inode)
+>>>    {
+>>>    	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>>> -	if (!test_opt(sbi, EXTENT_CACHE) ||
+>>> +	if (!test_opt(sbi, READ_EXTENT_CACHE) ||
+>>>    			is_inode_flag_set(inode, FI_NO_EXTENT) ||
+>>>    			(is_inode_flag_set(inode, FI_COMPRESSED_FILE) &&
+>>>    			 !f2fs_sb_has_readonly(sbi)))
+>>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>>> index 577f109b4e1d..2c705c60019b 100644
+>>> --- a/fs/f2fs/inode.c
+>>> +++ b/fs/f2fs/inode.c
+>>> @@ -629,7 +629,7 @@ void f2fs_update_inode(struct inode *inode, struct page *node_page)
+>>>    	if (et) {
+>>>    		read_lock(&et->lock);
+>>> -		set_raw_extent(&et->largest, &ri->i_ext);
+>>> +		set_raw_read_extent(&et->largest, &ri->i_ext);
+>>>    		read_unlock(&et->lock);
+>>>    	} else {
+>>>    		memset(&ri->i_ext, 0, sizeof(ri->i_ext));
+>>> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
+>>> index b9ee5a1176a0..84b147966080 100644
+>>> --- a/fs/f2fs/node.c
+>>> +++ b/fs/f2fs/node.c
+>>> @@ -85,7 +85,7 @@ bool f2fs_available_free_memory(struct f2fs_sb_info *sbi, int type)
+>>>    						sizeof(struct ino_entry);
+>>>    		mem_size >>= PAGE_SHIFT;
+>>>    		res = mem_size < ((avail_ram * nm_i->ram_thresh / 100) >> 1);
+>>> -	} else if (type == EXTENT_CACHE) {
+>>> +	} else if (type == READ_EXTENT_CACHE) {
+>>>    		mem_size = (atomic_read(&sbi->total_ext_tree) *
+>>>    				sizeof(struct extent_tree) +
+>>>    				atomic_read(&sbi->total_ext_node) *
+>>> diff --git a/fs/f2fs/node.h b/fs/f2fs/node.h
+>>> index 3c09cae058b0..0aa48704c77a 100644
+>>> --- a/fs/f2fs/node.h
+>>> +++ b/fs/f2fs/node.h
+>>> @@ -146,7 +146,7 @@ enum mem_type {
+>>>    	NAT_ENTRIES,	/* indicates the cached nat entry */
+>>>    	DIRTY_DENTS,	/* indicates dirty dentry pages */
+>>>    	INO_ENTRIES,	/* indicates inode entries */
+>>> -	EXTENT_CACHE,	/* indicates extent cache */
+>>> +	READ_EXTENT_CACHE,	/* indicates read extent cache */
+>>>    	DISCARD_CACHE,	/* indicates memory of cached discard cmds */
+>>>    	COMPRESS_PAGE,	/* indicates memory of cached compressed pages */
+>>>    	BASE_CHECK,	/* check kernel status */
+>>> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+>>> index 9486ca49ecb1..51de358bc452 100644
+>>> --- a/fs/f2fs/segment.c
+>>> +++ b/fs/f2fs/segment.c
+>>> @@ -449,8 +449,8 @@ void f2fs_balance_fs_bg(struct f2fs_sb_info *sbi, bool from_bg)
+>>>    		return;
+>>>    	/* try to shrink extent cache when there is no enough memory */
+>>> -	if (!f2fs_available_free_memory(sbi, EXTENT_CACHE))
+>>> -		f2fs_shrink_extent_tree(sbi, EXTENT_CACHE_SHRINK_NUMBER);
+>>> +	if (!f2fs_available_free_memory(sbi, READ_EXTENT_CACHE))
+>>> +		f2fs_shrink_extent_tree(sbi, READ_EXTENT_CACHE_SHRINK_NUMBER);
+>>>    	/* check the # of cached NAT entries */
+>>>    	if (!f2fs_available_free_memory(sbi, NAT_ENTRIES))
+>>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+>>> index 79bf1faf4161..10bd03bbefec 100644
+>>> --- a/fs/f2fs/super.c
+>>> +++ b/fs/f2fs/super.c
+>>> @@ -814,10 +814,10 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+>>>    			set_opt(sbi, FASTBOOT);
+>>>    			break;
+>>>    		case Opt_extent_cache:
+>>> -			set_opt(sbi, EXTENT_CACHE);
+>>> +			set_opt(sbi, READ_EXTENT_CACHE);
+>>>    			break;
+>>>    		case Opt_noextent_cache:
+>>> -			clear_opt(sbi, EXTENT_CACHE);
+>>> +			clear_opt(sbi, READ_EXTENT_CACHE);
+>>>    			break;
+>>>    		case Opt_noinline_data:
+>>>    			clear_opt(sbi, INLINE_DATA);
+>>> @@ -1954,10 +1954,10 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+>>>    		seq_puts(seq, ",barrier");
+>>>    	if (test_opt(sbi, FASTBOOT))
+>>>    		seq_puts(seq, ",fastboot");
+>>> -	if (test_opt(sbi, EXTENT_CACHE))
+>>> -		seq_puts(seq, ",extent_cache");
+>>> +	if (test_opt(sbi, READ_EXTENT_CACHE))
+>>> +		seq_puts(seq, ",read_extent_cache");
+>>
+>> How about keeping consistent w/ description of f2fs.rst?
 > 
-> Yet, with a multi-actuator drive, a process may get associated with
-> multiple bfq_queues: one queue for each of the N actuators. Each of
-> these queues may undergo a merge. So, the bfq_io_cq data structure
-> must be able to accommodate the above information for N queues.
+> This doesn't change the mount options, but do show the exact name which
+> would be better to say what's going on.
+
+mount -t f2fs /dev/vda /mnt/f2fs
+mount|grep f2fs
+/dev/vda on /mnt/f2fs type f2fs (rw,relatime,lazytime,background_gc=on,discard,no_heap,user_xattr,inline_xattr,acl,inline_data,inline_dentry,flush_merge,barrier,read_extent_cache,mode=adaptive,active_logs=6,alloc_mode=reuse,check)
+
+mount -t f2fs -o remount /mnt/f2fs/
+[   63.142480] F2FS-fs (vda): Unrecognized mount option "read_extent_cache" or missing value
+
+Quoted from manual of mount
+
+"mount -o remount,rw  /dir
+
+After this call, mount reads fstab and merges these options with the options
+from the command line (-o).  If no mountpoint is found in fstab, then a
+remount with unspecified source is allowed."
+
+I guess above command tries to use previous mountoptions which were read
+via .show_options().
+
+Thanks,
+
 > 
-> This commit solves this problem by turning the bfqq_data scalar field
-> into an array of N elements (and by changing code so as to handle
-> this array).
-> 
-> This solution is written under the assumption that bfq_queues
-> associated with different actuators cannot be cross-merged. This
-> assumption holds naturally with basic queue merging: the latter is
-> triggered by spatial locality, and sectors for different actuators are
-> not close to each other (apart from the corner case of the last
-> sectors served by a given actuator and the first sectors served by the
-> next actuator). As for stable cross-merging, the assumption here is
-> that it is disabled.
-> 
-> Signed-off-by: Gabriele Felici <felicigb@gmail.com>
-> Signed-off-by: Gianmarco Lusvardi <glusvardi@posteo.net>
-> Signed-off-by: Giulio Barabino <giuliobarabino99@gmail.com>
-> Signed-off-by: Emiliano Maccaferri <inbox@emilianomaccaferri.com>
-> Signed-off-by: Paolo Valente <paolo.valente@linaro.org>
-> ---
->  block/bfq-iosched.c | 95 +++++++++++++++++++++++++++------------------
->  block/bfq-iosched.h | 12 ++++--
->  2 files changed, 65 insertions(+), 42 deletions(-)
-> 
-> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-> index 0d6b35ef3d3f..18e2b8f75435 100644
-> --- a/block/bfq-iosched.c
-> +++ b/block/bfq-iosched.c
-> @@ -406,7 +406,7 @@ void bic_set_bfqq(struct bfq_io_cq *bic,
->  	 * we cancel the stable merge if
->  	 * bic->stable_merge_bfqq == bfqq.
->  	 */
-> -	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data[actuator_idx];
->  
->  	if (is_sync)
->  		bic->bfqq[1][actuator_idx] = bfqq;
-> @@ -1181,9 +1181,10 @@ static void
->  bfq_bfqq_resume_state(struct bfq_queue *bfqq, struct bfq_data *bfqd,
->  		      struct bfq_io_cq *bic, bool bfq_already_existing)
->  {
-> -	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data;
->  	unsigned int old_wr_coeff = 1;
->  	bool busy = bfq_already_existing && bfq_bfqq_busy(bfqq);
-> +	unsigned int a_idx = bfqq->actuator_idx;
-> +	struct bfq_iocq_bfqq_data *bfqq_data = &bic->bfqq_data[a_idx];
->  
->  	if (bfqq_data->saved_has_short_ttime)
->  		bfq_mark_bfqq_has_short_ttime(bfqq);
-> @@ -1899,7 +1900,9 @@ static void bfq_bfqq_handle_idle_busy_switch(struct bfq_data *bfqd,
->  	wr_or_deserves_wr = bfqd->low_latency &&
->  		(bfqq->wr_coeff > 1 ||
->  		 (bfq_bfqq_sync(bfqq) &&
-> -		  (bfqq->bic || RQ_BIC(rq)->bfqq_data.stably_merged) &&
-> +		  (bfqq->bic ||
-> +		   RQ_BIC(rq)->bfqq_data[bfq_actuator_index(bfqd, rq->bio)]
-> +		   .stably_merged) &&
-
-very weird line split here...
-
->  		   (*interactive || soft_rt)));
->  
->  	/*
-> @@ -2888,6 +2891,35 @@ static bool bfq_may_be_close_cooperator(struct bfq_queue *bfqq,
->  static bool idling_boosts_thr_without_issues(struct bfq_data *bfqd,
->  					     struct bfq_queue *bfqq);
->  
-> +static struct bfq_queue *
-> +bfq_setup_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
-> +		       struct bfq_queue *stable_merge_bfqq,
-> +		       struct bfq_iocq_bfqq_data *bfqq_data)
-> +{
-> +	int proc_ref = min(bfqq_process_refs(bfqq),
-> +			   bfqq_process_refs(stable_merge_bfqq));
-> +
-> +	if (!idling_boosts_thr_without_issues(bfqd, bfqq) &&
-> +	    proc_ref > 0) {
-
-If you reverse the if condition and return NULL here you can save one tab
-indent level for the hunk below (no need for an else after a return).
-
-> +		/* next function will take at least one ref */
-> +		struct bfq_queue *new_bfqq =
-> +			bfq_setup_merge(bfqq, stable_merge_bfqq);
-> +
-> +		if (new_bfqq) {
-> +			bfqq_data->stably_merged = true;
-> +			if (new_bfqq->bic) {
-> +				unsigned int new_a_idx = new_bfqq->actuator_idx;
-> +				struct bfq_iocq_bfqq_data *new_bfqq_data =
-> +					&new_bfqq->bic->bfqq_data[new_a_idx];
-> +
-> +				new_bfqq_data->stably_merged = true;
-> +			}
-> +		}
-> +		return new_bfqq;
-> +	} else
-> +		return NULL;
-> +}
-
-Otherwise, looks OK.
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
--- 
-Damien Le Moal
-Western Digital Research
-
+>>
+>>>    	else
+>>> -		seq_puts(seq, ",noextent_cache");
+>>> +		seq_puts(seq, ",no_read_extent_cache");
+>>
+>> Ditto,
+>>
+>> Thanks,
+>>
+>>>    	if (test_opt(sbi, DATA_FLUSH))
+>>>    		seq_puts(seq, ",data_flush");
+>>> @@ -2076,7 +2076,7 @@ static void default_options(struct f2fs_sb_info *sbi)
+>>>    	set_opt(sbi, INLINE_XATTR);
+>>>    	set_opt(sbi, INLINE_DATA);
+>>>    	set_opt(sbi, INLINE_DENTRY);
+>>> -	set_opt(sbi, EXTENT_CACHE);
+>>> +	set_opt(sbi, READ_EXTENT_CACHE);
+>>>    	set_opt(sbi, NOHEAP);
+>>>    	clear_opt(sbi, DISABLE_CHECKPOINT);
+>>>    	set_opt(sbi, MERGE_CHECKPOINT);
+>>> @@ -2218,7 +2218,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+>>>    	bool need_restart_ckpt = false, need_stop_ckpt = false;
+>>>    	bool need_restart_flush = false, need_stop_flush = false;
+>>>    	bool need_restart_discard = false, need_stop_discard = false;
+>>> -	bool no_extent_cache = !test_opt(sbi, EXTENT_CACHE);
+>>> +	bool no_read_extent_cache = !test_opt(sbi, READ_EXTENT_CACHE);
+>>>    	bool enable_checkpoint = !test_opt(sbi, DISABLE_CHECKPOINT);
+>>>    	bool no_io_align = !F2FS_IO_ALIGNED(sbi);
+>>>    	bool no_atgc = !test_opt(sbi, ATGC);
+>>> @@ -2308,7 +2308,7 @@ static int f2fs_remount(struct super_block *sb, int *flags, char *data)
+>>>    	}
+>>>    	/* disallow enable/disable extent_cache dynamically */
+>>> -	if (no_extent_cache == !!test_opt(sbi, EXTENT_CACHE)) {
+>>> +	if (no_read_extent_cache == !!test_opt(sbi, READ_EXTENT_CACHE)) {
+>>>    		err = -EINVAL;
+>>>    		f2fs_warn(sbi, "switch extent_cache option is not allowed");
+>>>    		goto restore_opts;
