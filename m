@@ -2,157 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22907647CDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D14647CEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229815AbiLIEOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 23:14:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
+        id S229545AbiLIEdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 23:33:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbiLIEOU (ORCPT
+        with ESMTP id S229478AbiLIEdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 23:14:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6BD8D647;
-        Thu,  8 Dec 2022 20:14:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3322D60D3D;
-        Fri,  9 Dec 2022 04:14:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8ACD8C433EF;
-        Fri,  9 Dec 2022 04:14:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670559254;
-        bh=vjrNpXWuFkrA9dYPbRXlKKrAEhbKOATrYr3Q/+hU0y4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=UIDM88Oq8Pk7MYSiDqxXwCk/dPvTRGnTGPkrxa/Zq/KLVBZce8ohbBpVaPY1yZzdx
-         HrK0fFkDUC1QVOpLObnTgu9lnMBmlC/71SAMnGu468gw+gQm7rIi5h0DzgH8acckRf
-         yjYrT5f45CbtOj6vq8un78b4AkaRLejuuL+tGO5bfcAWwuSdSHqYCun0sLRfTEzi5m
-         lbtFUYKCszCn+zfJFXtd4GMexVVlvW2vG0XTyuFgvei54YmbJaY/mjpkBd+JWGXBOF
-         4eVbQNZhb/+S1v/2Bqn9IWOLTgXDwRO1/PthIPVQawlNPidvLxxbHn+P84S6tn3LNl
-         eja84hEGX3xRg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 2B51B5C1523; Thu,  8 Dec 2022 20:14:14 -0800 (PST)
-Date:   Thu, 8 Dec 2022 20:14:14 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] KASAN: use-after-free Read in xfs_qm_dqfree_one
-Message-ID: <20221209041414.GU4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <000000000000bd587705ef202b08@google.com>
- <20221206033450.GS3600936@dread.disaster.area>
- <CACT4Y+b-DCu=3LT+OMHuy4R1Fkgg_cBBtVT=jGtcyiBn4UcbRA@mail.gmail.com>
- <20221209034605.1801-1-hdanton@sina.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209034605.1801-1-hdanton@sina.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 8 Dec 2022 23:33:12 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B101FCE9
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 20:33:10 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso6897062pjt.0
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 20:33:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8V2911JbsQ7q3MV8ByLBMvoup/1u6ZZgGLRpPzpF/E8=;
+        b=tD9/OuaQk4Ny5ftlapIHalH7LY+UdxT5DNVq73qwQk5brpKADBpSV9VBVZOrdrU7xS
+         jFYq052qCafhdRHVC/bdhkALtxcuHOOH4BEpTNI66zXOXYxyZbqg6kxKdhXeXo4nGBza
+         5raDi1jiqsQ2OAWGNFkv8XlefPj1uC0aaWRqbqYnuABo/HjzH+yfNp/qVKmpqkN8Uk9L
+         1jFrGeZRQQm3n+1vkzjJxQHzxx9nTNlMKkY0QL8t/OPY/2B3lTzZRNUV5HS+9OMTCEO9
+         1bgrkOd/X4V6rKK8IF5TqW3xRVzi6tBpzp4i+FDIcjZDj/1mxWREQIOM5UTRTd2emXnf
+         eEgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8V2911JbsQ7q3MV8ByLBMvoup/1u6ZZgGLRpPzpF/E8=;
+        b=Px2V0svFpML8rCKYjKmfx5XvOaVa/R/bD6jXZ4i92hjyKxiCvh7fjJfsfvPwcO/hyf
+         0LKNMGxIR99k1bUuT2C3cozP4e2FOH6/PtfC++Z0jkL6yW3vo+DuDQR1UofKOZNH3rLL
+         4XACd+1uaxYeAuud030E3ucLlxMgHuIxvsgYkvD/nLqQRf0z7VjT6MFCbtD5xZWLjA1P
+         xt/AnAg6tw/6+zmN2pNUYFeGExOTwAQ+7CAS5PI8s5XpqUBfmgi47MLuwMnWEaSnSGx7
+         bMwyEeTP8sL6VeZMMXHPa0xd+2YFpHeCWDh37pmwChnH2UTGxUbPifZyofDAuYcAubNR
+         oUGA==
+X-Gm-Message-State: ANoB5pmJnXZqAMz90YA2VTMAnGSI+x54/64jMtbHi8QUzEDiMpggHZ8x
+        Tmxh+oDmBoNk8jZExIfiP0eAlw==
+X-Google-Smtp-Source: AA0mqf53l7n1lwXWo6ELFRoXqPMMWNSKJ4uBBIpg0VM28LtzLEoabSx/gaDvmcRZcN05Lor9GtpL0A==
+X-Received: by 2002:a05:6a20:e68f:b0:9d:efbf:48d7 with SMTP id mz15-20020a056a20e68f00b0009defbf48d7mr6076987pzb.27.1670560390227;
+        Thu, 08 Dec 2022 20:33:10 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa79f1a000000b0056bbeaa82b9sm296387pfr.113.2022.12.08.20.33.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 20:33:09 -0800 (PST)
+Date:   Thu, 08 Dec 2022 20:33:09 -0800 (PST)
+X-Google-Original-Date: Thu, 08 Dec 2022 20:32:57 PST (-0800)
+Subject:     Re: [PATCH 6/9] RISC-V: Export sbi_get_mvendorid() and friends
+In-Reply-To: <CAOnJCUJ6b5=e=k19q0Q51Gptgw_QSr_989cN8q0xoBN+yq=Mmw@mail.gmail.com>
+CC:     apatel@ventanamicro.com, pbonzini@redhat.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        ajones@ventanamicro.com, anup@brainfault.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     atishp@atishpatra.org
+Message-ID: <mhng-1fa7f552-95e4-4299-ab83-52001eab8b30@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 11:46:05AM +0800, Hillf Danton wrote:
-> On 6 Dec 2022 07:32:11 -0800 "Paul E. McKenney" <paulmck@kernel.org>
-> > On Tue, Dec 06, 2022 at 12:06:10PM +0100, Dmitry Vyukov wrote:
-> > > On Tue, 6 Dec 2022 at 04:34, Dave Chinner <david@fromorbit.com> wrote:
-> > > >
-> > > > On Mon, Dec 05, 2022 at 07:12:15PM -0800, syzbot wrote:
-> > > > > Hello,
-> > > > >
-> > > > > syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> > > > > INFO: rcu detected stall in corrupted
-> > > > >
-> > > > > rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: { P4122 } 2641 jiffies s: 2877 root: 0x0/T
-> > > > > rcu: blocking rcu_node structures (internal RCU debug):
-> > > >
-> > > > I'm pretty sure this has nothing to do with the reproducer - the
-> > > > console log here:
-> > > >
-> > > > > Tested on:
-> > > > >
-> > > > > commit:         bce93322 proc: proc_skip_spaces() shouldn't think it i..
-> > > > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=1566216b880000
-> > > >
-> > > > indicates that syzbot is screwing around with bluetooth, HCI,
-> > > > netdevsim, bridging, bonding, etc.
-> > > >
-> > > > There's no evidence that it actually ran the reproducer for the bug
-> > > > reported in this thread - there's no record of a single XFS
-> > > > filesystem being mounted in the log....
-> > > >
-> > > > It look slike someone else also tried a private patch to fix this
-> > > > problem (which was obviously broken) and it failed with exactly the
-> > > > same RCU warnings. That was run from the same commit id as the
-> > > > original reproducer, so this looks like either syzbot is broken or
-> > > > there's some other completely unrelated problem that syzbot is
-> > > > tripping over here.
-> > > >
-> > > > Over to the syzbot people to debug the syzbot failure....
-> > > 
-> > > Hi Dave,
-> > > 
-> > > It's not uncommon for a single program to trigger multiple bugs.
-> > > That's what happens here. The rcu stall issue is reproducible with
-> > > this test program.
-> > > In such cases you can either submit more test requests, or test manually.
-> > > 
-> > > I think there is an RCU expedited stall detection.
-> > > For some reason CONFIG_RCU_EXP_CPU_STALL_TIMEOUT is limited to 21
-> > > seconds, and that's not enough for reliable flake-free stress testing.
-> > > We bump other timeouts to 100+ seconds.
-> > > +RCU maintainers, do you mind removing the overly restrictive limit on
-> > > CONFIG_RCU_EXP_CPU_STALL_TIMEOUT?
-> > > Or you think there is something to fix in the kernel to not stall? I
-> > > see the test writes to
-> > > /proc/sys/vm/drop_caches, maybe there is some issue in that code.
-> > 
-> > Like this?
-> > 
-> > If so, I don't see why not.  And in that case, may I please have
-> > your Tested-by or similar?
-> > 
-> > At the same time, I am sure that there are things in the kernel that
-> > should be adjusted to avoid stalls, but I recognize that different
-> > developers in different situations will have different issues that they
-> > choose to focus on.  ;-)
-> > 
-> > 							Thanx, Paul
-> > 
-> > ------------------------------------------------------------------------
-> > 
-> > diff --git a/kernel/rcu/Kconfig.debug b/kernel/rcu/Kconfig.debug
-> > index 49da904df6aa6..2984de629f749 100644
-> > --- a/kernel/rcu/Kconfig.debug
-> > +++ b/kernel/rcu/Kconfig.debug
-> > @@ -82,7 +82,7 @@ config RCU_CPU_STALL_TIMEOUT
-> >  config RCU_EXP_CPU_STALL_TIMEOUT
-> >  	int "Expedited RCU CPU stall timeout in milliseconds"
-> >  	depends on RCU_STALL_COMMON
-> > -	range 0 21000
-> > +	range 0 300000
-> >  	default 0
-> >  	help
-> >  	  If a given expedited RCU grace period extends more than the
-> >
-> 	// Limit check must be consistent with the Kconfig limits for
-> 	// CONFIG_RCU_EXP_CPU_STALL_TIMEOUT, so check the allowed range.
-> 	// The minimum clamped value is "2UL", because at least one full
-> 	// tick has to be guaranteed.
-> 	till_stall_check = clamp(msecs_to_jiffies(cpu_stall_timeout), 2UL, 21UL * HZ); 
-> 
-> But with 21UL left behind intact?
+On Mon, 28 Nov 2022 13:07:27 PST (-0800), atishp@atishpatra.org wrote:
+> On Mon, Nov 28, 2022 at 8:14 AM Anup Patel <apatel@ventanamicro.com> wrote:
+>>
+>> The sbi_get_mvendorid(), sbi_get_marchid(), and sbi_get_mimpid()
+>> can be used by KVM module so let us export these functions.
+>>
+>> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+>> ---
+>>  arch/riscv/kernel/sbi.c | 3 +++
+>>  1 file changed, 3 insertions(+)
+>>
+>> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
+>> index 775d3322b422..5c87db8fdff2 100644
+>> --- a/arch/riscv/kernel/sbi.c
+>> +++ b/arch/riscv/kernel/sbi.c
+>> @@ -627,16 +627,19 @@ long sbi_get_mvendorid(void)
+>>  {
+>>         return __sbi_base_ecall(SBI_EXT_BASE_GET_MVENDORID);
+>>  }
+>> +EXPORT_SYMBOL_GPL(sbi_get_mvendorid);
+>>
+>>  long sbi_get_marchid(void)
+>>  {
+>>         return __sbi_base_ecall(SBI_EXT_BASE_GET_MARCHID);
+>>  }
+>> +EXPORT_SYMBOL_GPL(sbi_get_marchid);
+>>
+>>  long sbi_get_mimpid(void)
+>>  {
+>>         return __sbi_base_ecall(SBI_EXT_BASE_GET_MIMPID);
+>>  }
+>> +EXPORT_SYMBOL_GPL(sbi_get_mimpid);
+>>
+>>  static void sbi_send_cpumask_ipi(const struct cpumask *target)
+>>  {
+>> --
+>> 2.34.1
+>>
+>
+> Reviewed-by: Atish Patra <atishp@rivosinc.com>
 
-Good catch, will fix, thank you!
-
-							Thanx, Paul
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
