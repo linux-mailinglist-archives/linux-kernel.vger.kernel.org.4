@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328966482FA
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:51:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D59976482FD
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:53:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiLINvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 08:51:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52214 "EHLO
+        id S229796AbiLINxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 08:53:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbiLINvq (ORCPT
+        with ESMTP id S229635AbiLINxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 08:51:46 -0500
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF61E686B0
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:51:45 -0800 (PST)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-1447c7aa004so5673700fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 05:51:45 -0800 (PST)
+        Fri, 9 Dec 2022 08:53:35 -0500
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4597285B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:53:34 -0800 (PST)
+Received: by mail-pj1-x1042.google.com with SMTP id o1-20020a17090a678100b00219cf69e5f0so8186163pjj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 05:53:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/uSxCv4WF0QaHKgDSogZbErR2Lw6zQ7VMbcq35VL21s=;
-        b=O72D1IKRQjG8i26wTTOnP3gkT0ETa3ClYQiNOxsNMogeoc/uP3ZMpi4uiTpsu24hES
-         4X9j4TgiB1wuiE3gNtJ30vLLostu3eKBuOGb66PE1xkabaWokM0J8cOF+v+qBxoEpgo8
-         tUVoB3/Qaj6+VgMAP7oI9xl5516MHSvxjx5Kj1AymRFRN8P7Ce9kStmE9T6mlzKEI/6s
-         4BzlGtE61cYTVz1i6RoKYSBQAGsfIvyu3t/+aOx421RmQ2ljc1n/IPHIYVPakoz6otO0
-         V4oQRhEWxAA90TkbY44ztxpo98I2FY1VRA7xtf3HbXFobw9rRTX8GXlXQX0B/9JXDgf0
-         a91Q==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iuRW8bb+Xuc5Kw9Ss68gOSGDX5ftSELw7fxSLgdhk9o=;
+        b=HAcVaLxMpMOnLw4dVXy71oo9WD/KStFSbTUbMtFL4GLK34QrJi7aurdZTEWEO/AlmI
+         kKXmheNN8ZD7PdIBIu6XsHweyCBv5lDauGTLQ0mTTsiaYR5Wd4gi7lOZTrZUpz0oPm3U
+         fQaEXxfQxm/E34yBjhQIe20n4zvouBFfHFtuFcTcRQQKfpaM0dKhx/ZXfYeyf5GP/zqA
+         SV/T6QTzChFVSzWtKhaimH7sog5wOtxnPtN3zt9Zd9qtMQB6+RSVLj89mYmASYqiCmUi
+         BWjJuwoGrGFAxG1Mrm5JZodFpjvnOvDz7wgXLoSnYjRYbGfdZhAOAR7o3Z3CrLINOfVW
+         5AVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/uSxCv4WF0QaHKgDSogZbErR2Lw6zQ7VMbcq35VL21s=;
-        b=1ObW0DQao6H2vEZRXCe9yHNvHN4a0O57Z2RLCV1oMj5w87kPImhnLYAJmCZhhGFwWu
-         M42ca9UpZBJUhSjVsomf8g3t48GDX5rlngQroeemUbLweR063Cif7+fBlbwewrZU4YBh
-         Fw5empnJ/cVxZPDKiJRHZfNgAJSJgyzmpB/QPk+0NpSUgH1fLfk4bxZoIl4aN3m3oXA+
-         RBC7noHFxdK5Qrxim5NZLsXdehT0FrQJ78hKH1DP9gXuiasvXTXizxo+Jhlx35PP55C0
-         yk17mxM3doRVp+1QkANlbsMpCqJllUrOjEGW4Clasqomyin8u9MV8eiLVHe5ov5GrVO3
-         h1kw==
-X-Gm-Message-State: ANoB5pmc7mc/kIkRmc6s1PHfM47UUCQlRoAMrbyRAbIxPblPP7SAor/o
-        ISPE/MuMvPmOuHJvO3edlMX/mDppfiM9PyMcLag=
-X-Google-Smtp-Source: AA0mqf4FkPB/DMRGov6c2W44wjH5B4USukcrgs+vn292N7Bh6s0GsCLQ0ago9NLAJ3WVaDvLTTEUJgbi0Njynv50/GQ=
-X-Received: by 2002:a05:6870:f592:b0:144:543:c801 with SMTP id
- eh18-20020a056870f59200b001440543c801mr20734854oab.201.1670593905207; Fri, 09
- Dec 2022 05:51:45 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iuRW8bb+Xuc5Kw9Ss68gOSGDX5ftSELw7fxSLgdhk9o=;
+        b=cMrFko6yzPPzU3U4WSaGUYgkwtEcrzkPVNZ+jCEbyHHccs10zvhI3W3iT8y0WmkMIl
+         mJPTXKybEQCVxV5hpmC7ws7unbnc/VMRH6hyQpwrw81AejXqoZJ97Sufc84nWmWlpv/I
+         DsrEGdP/H2UHdTQxYxVfKmG9Xl6sjlYBN4y08bOvziN3iT7rNpAXmLNdK+FHR9z3/a/W
+         iEIm0WxXHrU4YmW9S9TQK7CsV5+AlZn0AHRYsaLChTEDXM11oNUbngzC2gukZcdD82E4
+         dlWVrFBnR2hPP0raFjR4Vrd5OzXiqdQylM9R9ZIU2/N+sah2iyS72NOL3KMaZN3NEHiW
+         FWfA==
+X-Gm-Message-State: ANoB5pltTGQFkKmHqKb1M0yhpV3290Xh+ZyVpi3+Lp+thqsYCAw12d7f
+        CWUDBWyRhaQ3lPk3A99zf+4=
+X-Google-Smtp-Source: AA0mqf4u2zsNVxEGPtQEj4/7+yH9TnLkzbjepukOASwxQwvyAAgAATrE0ly7dOFwNJc8GPhhl6RerA==
+X-Received: by 2002:a17:902:eb52:b0:189:c253:3625 with SMTP id i18-20020a170902eb5200b00189c2533625mr5870441pli.11.1670594013936;
+        Fri, 09 Dec 2022 05:53:33 -0800 (PST)
+Received: from junjun.localdomain ([113.140.249.126])
+        by smtp.gmail.com with ESMTPSA id n10-20020a170902e54a00b00186ff402508sm1356489plf.281.2022.12.09.05.53.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 05:53:32 -0800 (PST)
+From:   Harry Song <jundongsong1@gmail.com>
+To:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com
+Cc:     jundongsong1@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] iommu/arm-smmu-v3: Fix incorrect description of DMB instruction
+Date:   Fri,  9 Dec 2022 21:53:04 +0800
+Message-Id: <20221209135304.3306-1-jundongsong1@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221209131052.64235-1-xander.moerkerken@omron.com>
- <Y5M1UowMyucPOqAl@FVFF77S0Q05N> <CAGkG8RF0QNrC=UQ3uwurYQRS-kajYr3=g1qa6d7x=RC55z7ymg@mail.gmail.com>
- <ed1c32c0-e882-e7f8-3acf-0c0204fb96ae@csgroup.eu>
-In-Reply-To: <ed1c32c0-e882-e7f8-3acf-0c0204fb96ae@csgroup.eu>
-From:   Xander <xandermoerkerken@gmail.com>
-Date:   Fri, 9 Dec 2022 14:51:19 +0100
-Message-ID: <CAGkG8RFW2=rLVtUmCOMPoTf2LP9WbQsYFLfJ3Dy17DV99Uza1A@mail.gmail.com>
-Subject: Re: [PATCH] Added ability to vmalloc executable memory
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Xander Moerkerken <xander.moerkerken@omron.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,114 +69,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Dec 2022 at 14:46, Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
->
->
-> Le 09/12/2022 =C3=A0 14:38, Xander a =C3=A9crit :
-> >
-> > The pgprot parameter got removed because, according to the commit log,
-> > for no other apparent reason than it being called with 'PAGE_KERNEL' as
-> > an argument in the whole kernel. Therefore it got removed.
-> > This removed the ability to allocate virtual memory with executing righ=
-ts.
-> > My use case comes from ioremap().
-> > I think this is useful for others too.
-> >
-> > I don't see why this pgprot parameter got removed but this is the
-> > alternative to reverting it to the older 5.7 function.
->
-> Please avoid top-posting, and use only plain text.
->
-> I think you don't answer to Mark's question.
->
-> You are adding a new function that no driver uses apparently. If you are
-> working on some piece of code that needs this new fonction, you can send
-> this patch as part of a patch series including that code.
->
-> By the way, when you need executable memory, the fonction to use is
-> module_alloc(), that's the only function that garanties real executable
-> memory on all platforms. For instance, on some powerpc, setting the X
-> bit is not enough to get executable memory in vmalloc space.
->
-> Christophe
->
+The current comment is a description of the DSB instruction:
+previous commit [1].
 
-Loud and clear, thanks for the feedback.
+In the ARM architecture manual, DSB and DMB instructions
+are described as follows:
 
-> >
-> > On Fri, 9 Dec 2022 at 14:17, Mark Rutland <mark.rutland@arm.com
-> > <mailto:mark.rutland@arm.com>> wrote:
-> >
-> >     On Fri, Dec 09, 2022 at 02:10:52PM +0100, Xander Moerkerken wrote:
-> >      > From: Xander Moerkerken <xander.moerkerken@gmail.com
-> >     <mailto:xander.moerkerken@gmail.com>>
-> >      >
-> >      > Since release 5.8-rc1 the pgprot got removed from __vmalloc
-> >      > because the only usage was PAGE_KERNEL as argument.
-> >      > However, this removes the ability to input other arguments
-> >      > such as 'PAGE_KERNEL_EXEC', which can be used to allocate
-> >      > memory in which you can execute. For this reason a new
-> >      > function is introduced called '__vmalloc_exec'.
-> >      >
-> >      > Signed-off-by: Xander Moerkerken <xander.moerkerken@omron.com
-> >     <mailto:xander.moerkerken@omron.com>>
-> >
-> >     What is this going to be used for? There's no user from this patch
-> >     alone, as a
-> >     module or otherwise.
-> >
-> >     Mark.
-> >
-> >      > ---
-> >      >  include/linux/vmalloc.h | 1 +
-> >      >  mm/vmalloc.c            | 8 ++++++++
-> >      >  2 files changed, 9 insertions(+)
-> >      >
-> >      > diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> >      > index 096d48aa3437..10c46513b6b2 100644
-> >      > --- a/include/linux/vmalloc.h
-> >      > +++ b/include/linux/vmalloc.h
-> >      > @@ -147,6 +147,7 @@ extern void *vzalloc_node(unsigned long size=
-,
-> >     int node) __alloc_size(1);
-> >      >  extern void *vmalloc_32(unsigned long size) __alloc_size(1);
-> >      >  extern void *vmalloc_32_user(unsigned long size) __alloc_size(1=
-);
-> >      >  extern void *__vmalloc(unsigned long size, gfp_t gfp_mask)
-> >     __alloc_size(1);
-> >      > +extern void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
-> >     __alloc_size(1);
-> >      >  extern void *__vmalloc_node_range(unsigned long size, unsigned
-> >     long align,
-> >      >                       unsigned long start, unsigned long end,
-> >     gfp_t gfp_mask,
-> >      >                       pgprot_t prot, unsigned long vm_flags, int
-> >     node,
-> >      > diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> >      > index ccaa461998f3..8fd01ed7082b 100644
-> >      > --- a/mm/vmalloc.c
-> >      > +++ b/mm/vmalloc.c
-> >      > @@ -3294,6 +3294,14 @@ void *__vmalloc(unsigned long size, gfp_t
-> >     gfp_mask)
-> >      >  }
-> >      >  EXPORT_SYMBOL(__vmalloc);
-> >      >
-> >      > +
-> >      > +void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
-> >      > +{
-> >      > +     return __vmalloc_node_prot(size, 1, gfp_mask, PAGE_KERNEL_=
-EXEC,
-> >      > +                               NUMA_NO_NODE,
-> >     __builtin_return_address(0));
-> >      > +}
-> >      > +EXPORT_SYMBOL(__vmalloc_exec);
-> >      > +
-> >      >  /**
-> >      >   * vmalloc - allocate virtually contiguous memory
-> >      >   * @size:    allocation size
-> >      > --
-> >      > 2.37.2
-> >      >
-> >
+DMB: The DMB instruction does not ensure the completion of
+any of the memory accesses for which it ensures relative order.i
+
+DSB: A DSB instruction is a memory barrier that ensures that
+memory accesses that occur before the DSB instruction have
+completed before the completion of the DSB instruction.
+
+So after dsb is replaced with dmb, the description here is not correct.
+DMB instructions do not ensure that memory access has been completed,
+but rather ensure the order of instructions.
+
+  a76a37777f2c ("iommu/arm-smmu-v3: Ensure queue is read after updating prod pointer") [1]
+
+Signed-off-by: Harry Song <jundongsong1@gmail.com>
+---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index 6d5df91c5..fb229c0ab 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -139,8 +139,8 @@ static bool queue_consumed(struct arm_smmu_ll_queue *q, u32 prod)
+ static void queue_sync_cons_out(struct arm_smmu_queue *q)
+ {
+ 	/*
+-	 * Ensure that all CPU accesses (reads and writes) to the queue
+-	 * are complete before we update the cons pointer.
++	 * Ensure the relative order of cpu accesses (reads and writes)
++	 * to the queue before update the cons pointer.
+ 	 */
+ 	__iomb();
+ 	writel_relaxed(q->llq.cons, q->cons_reg);
+-- 
+2.25.1
+
