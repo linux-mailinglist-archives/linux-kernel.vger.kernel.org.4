@@ -2,80 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36324648722
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1AFF648724
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:01:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLIRA0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 9 Dec 2022 12:00:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50988 "EHLO
+        id S229809AbiLIRA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbiLIRAY (ORCPT
+        with ESMTP id S229612AbiLIRA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:00:24 -0500
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E70B6311
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:00:20 -0800 (PST)
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay08.hostedemail.com (Postfix) with ESMTP id 0698C141383;
-        Fri,  9 Dec 2022 17:00:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf06.hostedemail.com (Postfix) with ESMTPA id 7348720011;
-        Fri,  9 Dec 2022 17:00:16 +0000 (UTC)
-Message-ID: <a8f383e35a4194c5b137a787f2f0e133e11a80c5.camel@perches.com>
-Subject: Re: [PATCH 2/2] checkpatch: warn when Reported-by: is not followed
- by Link:
-From:   Joe Perches <joe@perches.com>
-To:     Thorsten Leemhuis <linux@leemhuis.info>,
-        Kai =?ISO-8859-1?Q?Wasserb=E4ch?= <kai@dev.carbon-project.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Fri, 09 Dec 2022 09:00:15 -0800
-In-Reply-To: <c0f9e6d8-d402-df54-475d-0552dd5576dd@leemhuis.info>
-References: <cover.1670152844.git.kai@dev.carbon-project.org>
-         <4af6cd7f0833f18e9eee8caba1913e682c5ec071.1670527774.git.kai@dev.carbon-project.org>
-         <3953eb4913bf9b5610854624c4c632e710cd1ec9.camel@perches.com>
-         <c0f9e6d8-d402-df54-475d-0552dd5576dd@leemhuis.info>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
+        Fri, 9 Dec 2022 12:00:56 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D4716311;
+        Fri,  9 Dec 2022 09:00:55 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1p3gjm-0003BX-4w; Fri, 09 Dec 2022 18:00:38 +0100
+Date:   Fri, 9 Dec 2022 17:00:34 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     Richard Weinberger <richard@nod.at>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/4] init: move block device helpers from
+ init/do_mounts.c
+Message-ID: <Y5NpsmN/npnG8lxY@makrotopia.org>
+References: <cover.1668644705.git.daniel@makrotopia.org>
+ <e5e0ab0429b1fc8a4e3f9614d2d1cc43dea78093.1668644705.git.daniel@makrotopia.org>
+ <Y3XM62P7CaeKXFsz@infradead.org>
+ <Y3j+Pzy1JpqG8Yd8@makrotopia.org>
+ <Y3zCdJr5dKsADsnM@infradead.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 7348720011
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3zCdJr5dKsADsnM@infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham autolearn_force=no
         version=3.4.6
-X-Rspamd-Server: rspamout01
-X-Stat-Signature: hw7fcro58j5p4nwnxfaq7k51161gt61y
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX182XctC+8KKGwuIl56b++vn9jT8kV/Ymcw=
-X-HE-Tag: 1670605216-195453
-X-HE-Meta: U2FsdGVkX1/Wf4/piGhYuePvRRf3VBCkfKNboBSk8R1D0ALByvEpR4qjlAoDPjTtsBUi2tcFxkSDDoNIOy1giQ==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-12-09 at 10:54 +0100, Thorsten Leemhuis wrote:
-> On 08.12.22 21:21, Joe Perches wrote:
-> > On Thu, 2022-12-08 at 20:32 +0100, Kai Wasserbäch wrote:
-[]
-> > > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-> > []
-> > > @@ -3144,6 +3144,20 @@ sub process {
-> > >  					     "Co-developed-by and Signed-off-by: name/email do not match \n" . "$here\n" . $rawline . "\n" .$rawlines[$linenr]);
-> > 
-> > I believe this use of '"$here\n" . $rawline . "\n"' to be a defect.
-> > I think this should just use $herecurr
-> > 
-> > And the unnecessary space before a newline is an abomination ;)
-> > 
-> >   					     "Co-developed-by and Signed-off-by: name/email do not match\n" . $herecurr . $rawlines[$linenr]);
+Hi Christoph,
+
+On Tue, Nov 22, 2022 at 04:37:08AM -0800, Christoph Hellwig wrote:
+> On Sat, Nov 19, 2022 at 04:03:11PM +0000, Daniel Golle wrote:
+> > That works, but has slightly less utility value than the partition
+> > parser approach as in this way I cannot easily populate the PARTNAME
+> > uevent which can later help userspace to identify a device by the FIT
+> > subimage name -- I'd have to either invent a new bus_type or
+> > device_type, both seem inappropriate and have unwanted side effects.
+> > Or am I missing something and there is a way to use add_uevent_var()
+> > for a disk_type device?
 > 
-> Well, that's existing code. Want me to add a separate patch that fixes
-> both of these aspects up in that area?
+> You're not exposing a partition here - this is an image format that
+> sits in a partition and we should not pretend that is a partition.
 
-Sure, thanks.
+It doesn't need to be literally the PARTNAME uevent, just any way to
+communicate the names of mapped subimages to userspace.
 
+My understanding by now is that there is no way around introducing a
+new device_type and then mitigate the unwanted side effects by
+follow-up changes, ie. make it possible to use that new device_type
+when specifying the rootfs= cmdline variable (currently only disks and
+partitions are considered there).
+
+Or give up on the idea that uImage.FIT subimages mapped by the new
+driver can be identified by userspace by poking uevent from sysfs and
+just rely on convention and ordering.
+
+> 
+> > However, I don't see a way to avoid using (or duplicating)
+> > devt_from_devname() to select the lower device somehow without having
+> > to probe and parse *all* block devices present (which is, from what I
+> > understood, what you want to avoid, and I agree that it is more safe to
+> > not do that...)
+> > 
+> > Can you or anyone give some advise on how this should be done?
+> 
+> Just set the block driver up from an initramfs, like we do for all
+> modern stackable drivers.
+
+Instead of using a kernel cmdline parameter we could also have the
+bootloader embed that information as string in the 'chosen' section in
+the device tree blob, right next to the cmdline. However, as there is
+no representation of block partitions in device tree, also in that case
+the lower device will have to be referenced by a string somehow, ie.
+devt_from_devname() or the like will be needed.
+
+Needing an initramfs, even if it boils down to just one statically
+compile executable, is a massive bloat and complication when building
+embedded device firmware and none of the over 1580 devices currently
+supported by OpenWrt need an intermediate initramfs to mount their
+on-flash squashfs rootfs (some, however, already use this uImage.FIT
+partition parser, and not needing a downstream patch for that would be
+nice).
+
+uImage.FIT typically contains the complete firmware used on an embedded
+device, ie. at least a Linux kernel, device tree blob and a filesystem.
+The main use of this whole uImage.FIT-parsing-in-Linux approach I'm
+trying to get across here is to expose one or more 'filesystem'-type
+subimages of such an image as block devices, also so that one of them
+can directly be mounted as rootfs by the kernel.
+
+This *replaces* the use of 'ramdisk' type sub-images which need to
+remain allocated at runtime, while using a squashfs 'filesystem' type
+sub-image allows freeing the filesystem cache if ram is becomes scarce.
+
+As both, storage and memory, are often very limited on small embedded
+devices, OpenWrt has always been using a squashfs as rootfs with a
+storage-type specific filesytem used as r/w overlay on top. Up to now,
+the rootfs is often stored in platform-specific ways, ie. an additional
+partition on block devices, MTD partition on NOR flash or UBI volume on
+NAND flash.
+
+Carrying the read-only squashfs filesystem inside the uImage.FIT
+structure has the advantage of being agnostic regarding the
+storage-type (NOR/mtdblockX, NAND/ubiblockX, MMC/mmcblkXpY) and allows
+the bootloader to validate the filesystem hash before starting the
+kernel, ie. ensuring integrity of the firmware as-a-whole which
+includes the root filesystem.
+
+
+> 
+> > Yet another (imho not terrible) problem is removal of the lower device.
+> > Many of the supported SBC use a micro SD card to boot, which can be
+> > removed by the user while the system is running (which is generally not
+> > a good idea, but anyway). For partitions this is handled automatically
+> > by blk_drop_partitions() called directly from genhd.c.
+> > I'm currently playing with doing something similar using the bus device
+> > removal notification, but it doesn't seem to work for all cases, e.g.
+> > mmcblk device do not seem to have the ->bus pointer populated at all
+> > (ie. disk_to_dev(disk)->bus == NULL for mmcblk devices).
+> 
+> I have WIP patches that allow the claimer of a block device get
+> resize and removal notification.  It's not going to land for 6.2,
+> but I hope I have it ready in time for the next merge window.
+
+I'm looking forward to integrate that in the uImage.FIT block driver
+I've been working on. In the meantime, should I already post my current
+draft so we can start discussing if that solution could be acceptable?
+
+
+Best regards
+
+
+Daniel
