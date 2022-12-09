@@ -2,97 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064AE647EE6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:04:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C4C6647EEF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 09:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbiLIIE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 03:04:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S229977AbiLIIHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 03:07:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiLIIE0 (ORCPT
+        with ESMTP id S229834AbiLIIHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 03:04:26 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607F05AE1F
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:04:25 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id g14so155312ljh.10
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 00:04:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eTLraVCW2+yq4yH7aq+Ix50RknoV/LoBc1AGTJJK5cw=;
-        b=A3AsGw2XT+w5SWlTLYvwfRD1wHSdO8O0JDyKh18jGNzuCK4AnFZl6cyNL3bFmnv6Nv
-         mpQ2/hMwx3M9TXkz/hBqE3D6T3WKbjxbQKYZp+ShBpqdmb9rDIefIximFKAVKEP29crb
-         5iKa/wA2tpr8Jl5/5fWEnwEpkOMRCDtGqa73uQDK8QerEPREebrO80kJykoDZbBLUf85
-         aZ/tJorHgkXFyB28eTooXiphagesbqpzhZZrlbaOXhE93AtzMnIumLkdF9hfMvCcMi+E
-         EA9oLH9jzOpAGwR/yXS3OL3kOi4y5JhhtmKRnvkqAl3CQu01RoeXzYqu6+bsDB18Dkis
-         n+7g==
+        Fri, 9 Dec 2022 03:07:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29CD5B5BA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 00:06:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1670573210;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V3QgFqyfFrbqLPDlT52YmMXtZ218dmGSv5KKxRxqdCk=;
+        b=QTUyOdpvlz+MawvTlUAji5t3giue/gNYhUxHM8ZtJfgROXa6mZmNwNjDPWug23wMXC289U
+        6xzxSbNAQCrWg6MLbUroCpxCysGN1+JAPJOLAb5TyNUE38OpjYLvMIE9PF2VE5/kBsh1mi
+        smU9KqZurP+4YR9kyA7RvqWQSrDW+IY=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-573-qaghu8TdN0izZjbQINzMTQ-1; Fri, 09 Dec 2022 03:06:48 -0500
+X-MC-Unique: qaghu8TdN0izZjbQINzMTQ-1
+Received: by mail-ej1-f72.google.com with SMTP id hp16-20020a1709073e1000b007adf5a83df7so2608152ejc.1
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 00:06:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eTLraVCW2+yq4yH7aq+Ix50RknoV/LoBc1AGTJJK5cw=;
-        b=hRGoOL9HGy34PzV2DWpSdIgq7SymrJQ29F/6yAAJBrGYwJyNEhjyMy0xpZmjiz/vlT
-         yjdKVBFRfzbxGI9oCXOpw/XsCf9uNA+quVeYPCD2YOSy05eAxMd93agjkk5SFAgaCGDE
-         9lwgr25fIeVx0BzOPaLn9KMk/B+EaAs6hQRxnMqfqiZTvi6QQnn2/i3ZGdWfu5EK3rSJ
-         R/ZGpeiHzq4b9qNBCCVaemb30EKyCiqxA4F6p9It26z/4+BYMCGlhFSAlApmYAL3C2XU
-         JSMdwrDRuuIJznEt3YPK0BP/gXHo1jDlNftTWfL/4btC2PpTHcUizkyRICAJCz/+fTM3
-         tE+Q==
-X-Gm-Message-State: ANoB5plfzkpISKzf1HmI5C9B8Z89gkjxjj+UvwWKe8UWctM0Ogow5Dpl
-        d6E+z+ZfQORzsONS8QaQ/TxN9g==
-X-Google-Smtp-Source: AA0mqf6U+cJ7mLtJ30Q9BL1pN1jGQzIzm+3FHYTR5SAC9qTGyhS38TrtEta+6S2yRis/6dlhQN02Yg==
-X-Received: by 2002:a2e:ab0d:0:b0:279:e1ba:8c6a with SMTP id ce13-20020a2eab0d000000b00279e1ba8c6amr1312691ljb.44.1670573063639;
-        Fri, 09 Dec 2022 00:04:23 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id o25-20020a2e7319000000b002770e6c620bsm116238ljc.106.2022.12.09.00.04.22
+        bh=V3QgFqyfFrbqLPDlT52YmMXtZ218dmGSv5KKxRxqdCk=;
+        b=UrpPYRrEGI9JF4LJcA7IfWMBKkuYaoqKLf8TP5gqoMUaHqglEoEPbPeWEqP8Kvo/jf
+         4Hzk1ZWUKBmu7kg2sH698Llk+UkofOSF1ErSDXAaw0pg7VHVGkTIJkO/tNi9g/LGiE7J
+         8XuWv5+L3XAMJjKEaRbFdzVukQlDZoiFSYItPwTZwn4AAAzfjgdemzhI8l2Ssdk7vYLL
+         MXsG4bVTQO8gFa5tfH8zVnSseedFyfodZqWDM/PMOmMc1GiNnTQ7T/kFtfbZ8fxhLh8p
+         aciFEcutaHA0ac9V64eCpIBfjKdgEK6Ksko9GL4IX6oIkbKxu+XEx5MItv87VZACnSIK
+         Dcfw==
+X-Gm-Message-State: ANoB5plLsiwj7MhHTm2fTnPX0gMu474iwba5UgQMBIsZ96wGa3oWV/K0
+        wsODr6YA8qXxlKs0UvvXgxaNHIJuhyhI99D/Qq8ah6bQOWqqNYMeXw6h/zE9j3Fg6WpP+YmwrHy
+        8cFXJnzVuLnd9u6/sBcMsS/Cb
+X-Received: by 2002:a17:907:cb83:b0:7a7:3f0c:e99b with SMTP id un3-20020a170907cb8300b007a73f0ce99bmr5064393ejc.6.1670573207473;
+        Fri, 09 Dec 2022 00:06:47 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf7klU0966/E4UhDV6QpTmeUmszwvubniR+Nwjaz9MxI9+rSghMh5wa219tCfxgWffAwigYiUQ==
+X-Received: by 2002:a17:907:cb83:b0:7a7:3f0c:e99b with SMTP id un3-20020a170907cb8300b007a73f0ce99bmr5064371ejc.6.1670573207238;
+        Fri, 09 Dec 2022 00:06:47 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id lo14-20020a170906fa0e00b007c0d0dad9c6sm263054ejb.108.2022.12.09.00.06.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 00:04:23 -0800 (PST)
-Message-ID: <713fb813-cd4d-aac7-5532-131207529bce@linaro.org>
-Date:   Fri, 9 Dec 2022 09:04:21 +0100
+        Fri, 09 Dec 2022 00:06:46 -0800 (PST)
+Message-ID: <805ea628-77a2-a1c1-10fe-edf2203e9c86@redhat.com>
+Date:   Fri, 9 Dec 2022 09:06:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 4/5] dt-bindings: arm: qcom: Add SM6115(P) and Lenovo Tab
- P11
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     patches@linaro.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Iskren Chernev <me@iskren.info>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221208201401.530555-1-konrad.dybcio@linaro.org>
- <20221208201401.530555-4-konrad.dybcio@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221208201401.530555-4-konrad.dybcio@linaro.org>
+Subject: Re: [PATCH v2 1/4] efi/x86: Remove EfiMemoryMappedIO from E820 map
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        =?UTF-8?Q?Benoit_Gr=c3=a9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20221208190341.1560157-1-helgaas@kernel.org>
+ <20221208190341.1560157-2-helgaas@kernel.org>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221208190341.1560157-2-helgaas@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/2022 21:14, Konrad Dybcio wrote:
-> Document SM6115P, an APQ version of SM6115, which in turn is more or
-> less a beefier version of SM4250.
+Hi,
+
+One comment (logging bug in patch) below:
+
+On 12/8/22 20:03, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Document Lenovo Tab P11 (J606F) as a SM6115P device.
+> Firmware can use EfiMemoryMappedIO to request that MMIO regions be mapped
+> by the OS so they can be accessed by EFI runtime services, but should have
+> no other significance to the OS (UEFI r2.10, sec 7.2).  However, most
+> bootloaders and EFI stubs convert EfiMemoryMappedIO regions to
+> E820_TYPE_RESERVED entries, which prevent Linux from allocating space from
+> them (see remove_e820_regions()).
 > 
-> Add SM6115 to the msm-id list of shame.
+> Some platforms use EfiMemoryMappedIO entries for PCI MMCONFIG space and PCI
+> host bridge windows, which means Linux can't allocate BAR space for
+> hot-added devices.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Remove large EfiMemoryMappedIO regions from the E820 map to avoid this
+> problem.
+> 
+> Leave small (< 256KB) EfiMemoryMappedIO regions alone because on some
+> platforms, these describe non-window space that's included in host bridge
+> _CRS.  If we assign that space to PCI devices, they don't work.  On the
+> Lenovo X1 Carbon, this leads to suspend/resume failures.
+> 
+> The previous solution to the problem of allocating BARs in these regions
+> was to add pci_crs_quirks[] entries to disable E820 checking for these
+> machines (see d341838d776a ("x86/PCI: Disable E820 reserved region clipping
+> via quirks")):
+> 
+>   Acer   DMI_PRODUCT_NAME    Spin SP513-54N
+>   Clevo  DMI_BOARD_NAME      X170KM-G
+>   Lenovo DMI_PRODUCT_VERSION *IIL*
+> 
+> Florent reported the BAR allocation issue on the Clevo NL4XLU.  We could
+> add another quirk for the NL4XLU, but I hope this generic change can solve
+> it for many machines without having to add quirks.
+> 
+> This change has been tested on Clevo X170KM-G (Konrad) and Lenovo Ideapad
+> Slim 3 (Matt) and solves the problem even when overriding the existing
+> quirks by booting with "pci=use_e820".
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216565     Clevo NL4XLU
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=206459#c78 Clevo X170KM-G
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=1868899    Ideapad Slim 3
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=2029207    X1 Carbon
+> Reported-by: Florent DELAHAYE <kernelorg@undead.fr>
+> Tested-by: Konrad J Hambrick <kjhambrick@gmail.com>
+> Tested-by: Matt Hansen <2lprbe78@duck.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> ---
+>  arch/x86/platform/efi/efi.c | 46 +++++++++++++++++++++++++++++++++++++
+>  1 file changed, 46 insertions(+)
+> 
+> diff --git a/arch/x86/platform/efi/efi.c b/arch/x86/platform/efi/efi.c
+> index ebc98a68c400..dee1852e95cd 100644
+> --- a/arch/x86/platform/efi/efi.c
+> +++ b/arch/x86/platform/efi/efi.c
+> @@ -303,6 +303,50 @@ static void __init efi_clean_memmap(void)
+>  	}
+>  }
+>  
+> +/*
+> + * Firmware can use EfiMemoryMappedIO to request that MMIO regions be
+> + * mapped by the OS so they can be accessed by EFI runtime services, but
+> + * should have no other significance to the OS (UEFI r2.10, sec 7.2).
+> + * However, most bootloaders and EFI stubs convert EfiMemoryMappedIO
+> + * regions to E820_TYPE_RESERVED entries, which prevent Linux from
+> + * allocating space from them (see remove_e820_regions()).
+> + *
+> + * Some platforms use EfiMemoryMappedIO entries for PCI MMCONFIG space and
+> + * PCI host bridge windows, which means Linux can't allocate BAR space for
+> + * hot-added devices.
+> + *
+> + * Remove large EfiMemoryMappedIO regions from the E820 map to avoid this
+> + * problem.
+> + *
+> + * Retain small EfiMemoryMappedIO regions because on some platforms, these
+> + * describe non-window space that's included in host bridge _CRS.  If we
+> + * assign that space to PCI devices, they don't work.
+> + */
+> +static void __init efi_remove_e820_mmio(void)
+> +{
+> +	efi_memory_desc_t *md;
+> +	u64 size, start, end;
+> +	int i = 0;
+> +
+> +	for_each_efi_memory_desc(md) {
+> +		if (md->type == EFI_MEMORY_MAPPED_IO) {
+> +			size = md->num_pages << EFI_PAGE_SHIFT;
+> +			if (size >= 256*1024) {
+> +				start = md->phys_addr;
+> +				end = start + size - 1;
+> +				pr_info("Remove mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluMB) from e820 map\n",
+> +					i, start, end, size >> 20);
+> +				e820__range_remove(start, size,
+> +						   E820_TYPE_RESERVED, 1);
+> +			} else {
+> +				pr_info("Not removing mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluKB) from e820 map\n",
+> +					i, start, end, size >> 10);
+
+The logging in this else is re-using the start and end from the previous section which was actually removed.
+
+E.g. Matt's latest log from:
+https://bugzilla.redhat.com/show_bug.cgi?id=1868899
+has:
+
+[    0.000000] e820: remove [mem 0xfc800000-0xfe7fffff] reserved
+[    0.000000] efi: Not removing mem46: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
+[    0.000000] efi: Not removing mem47: MMIO range=[0xfc800000-0xfe7fffff] (32KB) from e820 map
+[    0.000000] efi: Not removing mem49: MMIO range=[0xfc800000-0xfe7fffff] (8KB) from e820 map
+[    0.000000] efi: Not removing mem50: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
+
+Notice how all the "Not removing ..." lines log the same range as
+the actually removed map entry above them.
+
+Regards,
+
+Hans
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+
+
+
+
+
+> +			}
+> +		}
+> +		i++;
+> +	}
+> +}
+> +
+>  void __init efi_print_memmap(void)
+>  {
+>  	efi_memory_desc_t *md;
+> @@ -474,6 +518,8 @@ void __init efi_init(void)
+>  	set_bit(EFI_RUNTIME_SERVICES, &efi.flags);
+>  	efi_clean_memmap();
+>  
+> +	efi_remove_e820_mmio();
+> +
+>  	if (efi_enabled(EFI_DBG))
+>  		efi_print_memmap();
+>  }
 
