@@ -2,56 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98C664848A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:04:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C58648498
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:05:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbiLIPEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:04:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S230150AbiLIPF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiLIPDm (ORCPT
+        with ESMTP id S230019AbiLIPFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:03:42 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EA136C63
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:03:28 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E3AA6B82784
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 15:03:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9523EC433EF;
-        Fri,  9 Dec 2022 15:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670598205;
-        bh=18Gm+GTjx7z3bOUA1+OzccJAJKlPNwg/R1e2Vl34IPM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=gRkhJ0vy3WdGx5Cxs765pFrL8kSQZ+lgVynCTKII9Z8XCTQ31N5LaQ59vfJUNLb3e
-         s1TDxDEDtaT0+xIHLnLiBk2/vwRdqi7HYeZOORGW2ytY8WSZ9YK2VPQp4Df5QfAdUb
-         YDwzd0TdocFGMUpwcVD6K6dUYPZ5UpiLWfo/5ge24Il9XVt5mpfljMOhcFAUafYIE1
-         04TNcbao9/7yAx5OaOyyPJPwuqiHjrnqLVQXf3Ht4aCmOcMcjLiIqAe5Du3pMpmZHP
-         51pR8kFIBCqbfbqnQi3AKNi4iYKv5Ga5QZzEdA2z1LnPdQ6NrliaXdqHbz7Wfv2KCZ
-         SjHsoHrTJ8Ctw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 3BAE55C095D; Fri,  9 Dec 2022 07:03:25 -0800 (PST)
-Date:   Fri, 9 Dec 2022 07:03:25 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Sven Schnelle <svens@linux.ibm.com>
-Cc:     Willy Tarreau <w@1wt.eu>, Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] add s390 support to nolibc and rcutorture
-Message-ID: <20221209150325.GX4001@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20221209141939.3634586-1-svens@linux.ibm.com>
+        Fri, 9 Dec 2022 10:05:14 -0500
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D591E2189C;
+        Fri,  9 Dec 2022 07:05:12 -0800 (PST)
+X-QQ-mid: bizesmtp89t1670598279tf8ekbj4
+Received: from ubuntu.. ( [111.196.135.79])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 09 Dec 2022 23:04:37 +0800 (CST)
+X-QQ-SSF: 01200000002000B0C000B00A0000000
+X-QQ-FEAT: 7bD38UErqBMse/wQvkTTMEyob1uRl85oGpxpBEZmiEMslPZLCL+kkKP6NtbX2
+        gPc0PSkUeyw56O8ET95uXwx6vMo+BhrnioINwoXo4H2tTnglrQ/7WRNrtlQxK7ZQxSzw4ba
+        ZeYLrpHEC9pG4k7/gbKQgezfWTytqnhFV+jA16UgOb0XV+eGbyAAhyEZQ7gB/3fFm0ivwFx
+        bdP+CFTqDOLadz2kycFslFhdoxQFI4FDYuWQVzMVw3ReGwgKnFOt8f3+eihWRjuFqXfIje2
+        KdVb9RsMmhoL4ikneZlRSDmfernerWgzDol1vR6cutPf4eSN8cTqRMCFNRjhWwlE0OvFo4z
+        hbLJM6xeg60PoRG+FB96PPSALEiAg==
+X-QQ-GoodBg: 0
+From:   Bin Meng <bmeng@tinylab.org>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org
+Cc:     Albert Ou <aou@eecs.berkeley.edu>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v3 0/3] serial: Add RISC-V support to the earlycon semihost driver
+Date:   Fri,  9 Dec 2022 23:04:34 +0800
+Message-Id: <20221209150437.795918-1-bmeng@tinylab.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209141939.3634586-1-svens@linux.ibm.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvr:qybglogicsvr3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,39 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 03:19:34PM +0100, Sven Schnelle wrote:
-> Hi,
-> 
-> these patches add support for the s390 architecture both to nolibc
-> and rcutorture. Note that this only adds support for the 64 bit
-> version, no support for 31 bit (compat) is added. For nolibc it
-> includes one bugfix to make the fd_set datatype match the kernel
-> type.
 
-Nice!!!
+RISC-V semihosting spec [1] is built on top of the existing Arm one;
+we can add RISC-V earlycon semihost driver easily.
 
-The rcutorture patches look plausible to me, but I must defer to Willy
-Tarreau on the nolibc changes.
+This series refactors the existing driver a little bit, to move smh_putc()
+variants in respective arch's semihost.h, then we can implement RISC-V's
+version in the riscv arch directory.
 
-							Thanx, Paul
+Link: https://github.com/riscv/riscv-semihosting-spec/blob/main/riscv-semihosting-spec.adoc [1]
 
-> Sven Schnelle (5):
->   nolibc: fix fd_set type
->   nolibc: add support for s390
->   selftests/nolibc: add s390 support
->   rcutorture: add support for s390
->   rcutorture: build initrd for rcutorture with nolibc
-> 
->  tools/include/nolibc/arch-s390.h              | 213 ++++++++++++++++++
->  tools/include/nolibc/arch.h                   |   2 +
->  tools/include/nolibc/sys.h                    |   2 +
->  tools/include/nolibc/types.h                  |  53 +++--
->  tools/testing/selftests/nolibc/Makefile       |   4 +
->  .../selftests/rcutorture/bin/functions.sh     |   6 +
->  .../selftests/rcutorture/bin/mkinitrd.sh      |   2 +-
->  7 files changed, 258 insertions(+), 24 deletions(-)
->  create mode 100644 tools/include/nolibc/arch-s390.h
-> 
-> -- 
-> 2.34.1
-> 
+Changes in v3:
+- add #ifdef in the header to prevent from multiple inclusion
+- add forward-declare struct uart_port
+- add a Link tag in the commit message
+
+Changes in v2:
+- new patch: "serial: earlycon-arm-semihost: Move smh_putc() variants in respective arch's semihost.h"
+- Move the RISC-V implementation to semihost.h
+
+Bin Meng (3):
+  serial: earlycon-arm-semihost: Move smh_putc() variants in respective
+    arch's semihost.h
+  riscv: Implement semihost.h for earlycon semihost driver
+  serial: Rename earlycon semihost driver
+
+ arch/arm/include/asm/semihost.h               | 30 +++++++++++++++++++
+ arch/arm64/include/asm/semihost.h             | 24 +++++++++++++++
+ arch/riscv/include/asm/semihost.h             | 26 ++++++++++++++++
+ drivers/tty/serial/Kconfig                    | 14 ++++-----
+ drivers/tty/serial/Makefile                   |  2 +-
+ ...con-arm-semihost.c => earlycon-semihost.c} | 25 +---------------
+ 6 files changed, 89 insertions(+), 32 deletions(-)
+ create mode 100644 arch/arm/include/asm/semihost.h
+ create mode 100644 arch/arm64/include/asm/semihost.h
+ create mode 100644 arch/riscv/include/asm/semihost.h
+ rename drivers/tty/serial/{earlycon-arm-semihost.c => earlycon-semihost.c} (57%)
+
+-- 
+2.34.1
+
