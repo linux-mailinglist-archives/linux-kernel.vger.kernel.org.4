@@ -2,57 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B961D6489B2
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:51:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EE8B6489B6
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:52:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229683AbiLIUvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 15:51:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40342 "EHLO
+        id S229758AbiLIUwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 15:52:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbiLIUvg (ORCPT
+        with ESMTP id S229735AbiLIUwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 15:51:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E127A386E;
-        Fri,  9 Dec 2022 12:51:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CAE2D6226D;
-        Fri,  9 Dec 2022 20:51:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C29CCC433D2;
-        Fri,  9 Dec 2022 20:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670619094;
-        bh=4XvJxrqF3sAgvuSNY4QXlfijdGTscOOPGfOGyD+HURM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=DbckalQQrOfTLzdikfJ9WRywkgDNsJXUmtHQ+laCVoXa5lfPSxVI5o0suyNauwR+u
-         S3cjQkkNBTFUuYUKczm/hWi3LlNd9rn0KzklJL0CsaGb/L3HvW12Ua4U5xj5Y9PNRs
-         a3jghRl/CziOfLMP+9ZSKqDpL5eQPiGjV7cO6BedcIAfehDoGrcl+QLJKytxESigiM
-         LXuadSQY3dD7WBJnCS+ZmHsxp3XhfeC4JxXbLKWAxzJwQln1sAICHCuGhqhwEUUq9V
-         Uljdf2rm/fchdjKJa3hNvdbAT88IiwWSDv+60YDm589LYkNr0FKRKr8ODjiNShwm2R
-         sAhTlCvJ3wr6w==
-Date:   Fri, 9 Dec 2022 14:51:31 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc:     linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 4/4] x86/PCI: Fix log message typo
-Message-ID: <20221209205131.GA1726524@bhelgaas>
+        Fri, 9 Dec 2022 15:52:45 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97246BC3B
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 12:52:44 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id y25so8815931lfa.9
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 12:52:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jj9hWgWY6DzifYBIvFgTsPapdUtki3fp8cPuRUAv5cU=;
+        b=X31HflyuE5ExTUYKMZ1LI6Zs0Si1rbwcCV0qulY4VPQABapKV1wmpSmX/nGbkzAnmw
+         TjBWIsDUbIp5E5tcwg8VNeaaOXjFuSy0izUKNbCG0L7ODuVA+52P9IjqO7baKVkHEyva
+         bLyvN2Dc5Jh+lO5z/Eib+he9nr+J4Jtu6tr8U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jj9hWgWY6DzifYBIvFgTsPapdUtki3fp8cPuRUAv5cU=;
+        b=Xoa0RrCQFPzPST7NXDaFTMYgvO5SlloObPvvQOaIo50KolVe3Oyf4fSbEw7zyUNtu8
+         4C+cEDEhzdGoiYMoigc9M0P+z8rOI6tF3NwozBXXfh6xJp0Fs1aBFvk3EbrGX5+ro6YO
+         jiCnJSPj1IfvAiHDIZf3irgWinZrRjspP0r5Le+vgLOfWS/bOfhWdczcfsu3jYLJhRmn
+         ra8dRg03HsH5Kp4paY97RqxCwJ91EPdwt3HPA2/nri/h1j8eWG0ebkR2jqpIHiZAeJs0
+         Pcgr+SXd1+fYn0+iOSCFab/0ZiLkEM7uHZs1iM7M8Fms+eXpVZ3OEgbsNjbzFUE7BDYL
+         iCRw==
+X-Gm-Message-State: ANoB5plpzySppwWXTRvgsekUj4SbQkRJTP+NdbKgqVqF6+ErlVFnv9Lu
+        49jQh6PF51gUIuSmXIa3Kfat02zK475ZeUZzKdde/w==
+X-Google-Smtp-Source: AA0mqf7MC4Uryvkm5Y9sHf/fsm/ghqu2q3sYTfxfmTOOaObG5TKXiLAgEubGJE1ayHAEA+rzNVvKX/hqSBAVlhtWzK8=
+X-Received: by 2002:ac2:5e37:0:b0:4a2:4d72:6cc2 with SMTP id
+ o23-20020ac25e37000000b004a24d726cc2mr35867808lfg.511.1670619162961; Fri, 09
+ Dec 2022 12:52:42 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Fri, 9 Dec 2022 15:52:42 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5OBupWBghHfvG/h@smile.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <ec403926-24ef-947d-2a1c-6cbf0e31ab89@quicinc.com>
+References: <1669897248-23052-1-git-send-email-quic_srivasam@quicinc.com>
+ <CAE-0n520=mjdc4H1m8au0iBo2qEeaL8OrF1HCP0bXORe2Wa_7w@mail.gmail.com> <ec403926-24ef-947d-2a1c-6cbf0e31ab89@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Fri, 9 Dec 2022 15:52:42 -0500
+Message-ID: <CAE-0n50VYGNF_rGzyb_2Jd8dY8cFx3BeOw0s-ywELkRqEEig4g@mail.gmail.com>
+Subject: Re: [PATCH] remoteproc: elf_loader: Update resource table name check
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        agross@kernel.org, andersson@kernel.org, bgoswami@quicinc.com,
+        broonie@kernel.org, devicetree@vger.kernel.org,
+        judyhsiao@chromium.org, krzysztof.kozlowski@linaro.org,
+        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        mathieu.poirier@linaro.org, perex@perex.cz, quic_plai@quicinc.com,
+        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
+        srinivas.kandagatla@linaro.org, tiwai@suse.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,146 +73,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 08:43:06PM +0200, Andy Shevchenko wrote:
-> On Thu, Dec 08, 2022 at 01:03:41PM -0600, Bjorn Helgaas wrote:
-> > From: Bjorn Helgaas <bhelgaas@google.com>
-> > 
-> > Add missing word in the log message:
-> > 
-> >   - ... so future kernels can this automatically
-> >   + ... so future kernels can do this automatically
-> 
-> ...
-> 
-> >  	printk(KERN_INFO "PCI: %s E820 reservations for host bridge windows\n",
-> >  	       pci_use_e820 ? "Using" : "Ignoring");
-> >  	if (pci_probe & (PCI_NO_E820 | PCI_USE_E820))
-> > -		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can this automatically\n");
-> > +		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
-> 
-> Wondering if we can change printk(KERN_LVL) to pr_lvl() in this file.
+Quoting Srinivasa Rao Mandadapu (2022-12-08 05:40:54)
+>
+> On 12/7/2022 7:25 AM, Stephen Boyd wrote:
+> Thanks for Your Time Stephen!!!
+> > Quoting Srinivasa Rao Mandadapu (2022-12-01 04:20:48)
+> >> Update resource table name check with sub string search instead of
+> >> complete string search.
+> >> In general Qualcomm binary contains, section header name
+> >> (e.g. .resource_table), amended with extra string to differentiate
+> >> with other sections.
+> >> So far Android adsp binaries are being authenticated using TZ,
+> >> hence this mismatch hasn't created any problem.
+> >> In recent developments, ADSP binary is being used in Chrome based
+> >> platforms, which doesn't have TZ path, hence resource table is
+> >> required for memory sandboxing.
+> >>
+> > Does this need a Fixes tag?
+> I don't think so. I feel It's kind of enhancement.
+> >
+> >> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> >> ---
+> >>   drivers/remoteproc/remoteproc_elf_loader.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/remoteproc/remoteproc_elf_loader.c b/drivers/remoteproc/remoteproc_elf_loader.c
+> >> index 5a412d7..0feb120 100644
+> >> --- a/drivers/remoteproc/remoteproc_elf_loader.c
+> >> +++ b/drivers/remoteproc/remoteproc_elf_loader.c
+> >> @@ -272,7 +272,7 @@ find_table(struct device *dev, const struct firmware *fw)
+> >>                  u64 offset = elf_shdr_get_sh_offset(class, shdr);
+> >>                  u32 name = elf_shdr_get_sh_name(class, shdr);
+> >>
+> >> -               if (strcmp(name_table + name, ".resource_table"))
+> >> +               if (!strstr(name_table + name, ".resource_table"))
+> > Was the strcmp not working before because the 'name_table' has something
+> > else in it? It really looks like your elf file is malformed.
+>
+> Actually, DSP binary is prepared by combining different elfs. So Section
+> header names are appended with
+>
+> something else to distinguish same section name of different elfs, by
+> using some Qualcomm specific QURT scripts.
+> Hence final binary contains resource_table name appended with module
+> specific name.
+>
+> So this patch is required to handle such modified name.
+>
 
-Sure!  How about this?
+Can you clarify how the section header name looks? Probably you can
+objdump the section here and provide that information to help us
+understand.
 
-
-commit 7058cdb558d5 ("x86/PCI: Use pr_info() when possible")
-Author: Bjorn Helgaas <bhelgaas@google.com>
-Date:   Fri Dec 9 14:41:27 2022 -0600
-
-    x86/PCI: Use pr_info() when possible
-    
-    Use pr_info() and similar when possible.  No functional change intended.
-    
-    Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-
-diff --git a/arch/x86/pci/acpi.c b/arch/x86/pci/acpi.c
-index 83dfea9e9894..ea2eb2ec90e2 100644
---- a/arch/x86/pci/acpi.c
-+++ b/arch/x86/pci/acpi.c
-@@ -1,4 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
-+
-+#define pr_fmt(fmt) "PCI: " fmt
-+
- #include <linux/pci.h>
- #include <linux/acpi.h>
- #include <linux/init.h>
-@@ -37,15 +40,15 @@ static int __init set_nouse_crs(const struct dmi_system_id *id)
- 
- static int __init set_ignore_seg(const struct dmi_system_id *id)
- {
--	printk(KERN_INFO "PCI: %s detected: ignoring ACPI _SEG\n", id->ident);
-+	pr_info("%s detected: ignoring ACPI _SEG\n", id->ident);
- 	pci_ignore_seg = true;
- 	return 0;
- }
- 
- static int __init set_no_e820(const struct dmi_system_id *id)
- {
--	printk(KERN_INFO "PCI: %s detected: not clipping E820 regions from _CRS\n",
--	       id->ident);
-+	pr_info("%s detected: not clipping E820 regions from _CRS\n",
-+	        id->ident);
- 	pci_use_e820 = false;
- 	return 0;
- }
-@@ -231,10 +234,9 @@ void __init pci_acpi_crs_quirks(void)
- 	else if (pci_probe & PCI_USE__CRS)
- 		pci_use_crs = true;
- 
--	printk(KERN_INFO "PCI: %s host bridge windows from ACPI; "
--	       "if necessary, use \"pci=%s\" and report a bug\n",
--	       pci_use_crs ? "Using" : "Ignoring",
--	       pci_use_crs ? "nocrs" : "use_crs");
-+	pr_info("%s host bridge windows from ACPI; if necessary, use \"pci=%s\" and report a bug\n",
-+	        pci_use_crs ? "Using" : "Ignoring",
-+	        pci_use_crs ? "nocrs" : "use_crs");
- 
- 	/* "pci=use_e820"/"pci=no_e820" on the kernel cmdline takes precedence */
- 	if (pci_probe & PCI_NO_E820)
-@@ -242,19 +244,17 @@ void __init pci_acpi_crs_quirks(void)
- 	else if (pci_probe & PCI_USE_E820)
- 		pci_use_e820 = true;
- 
--	printk(KERN_INFO "PCI: %s E820 reservations for host bridge windows\n",
--	       pci_use_e820 ? "Using" : "Ignoring");
-+	pr_info("%s E820 reservations for host bridge windows\n",
-+	        pci_use_e820 ? "Using" : "Ignoring");
- 	if (pci_probe & (PCI_NO_E820 | PCI_USE_E820))
--		printk(KERN_INFO "PCI: Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
-+		pr_info("Please notify linux-pci@vger.kernel.org so future kernels can do this automatically\n");
- }
- 
- #ifdef	CONFIG_PCI_MMCONFIG
- static int check_segment(u16 seg, struct device *dev, char *estr)
- {
- 	if (seg) {
--		dev_err(dev,
--			"%s can't access PCI configuration "
--			"space under this host bridge.\n",
-+		dev_err(dev, "%s can't access configuration space under this host bridge\n",
- 			estr);
- 		return -EIO;
- 	}
-@@ -264,9 +264,7 @@ static int check_segment(u16 seg, struct device *dev, char *estr)
- 	 * just can't access extended configuration space of
- 	 * devices under this host bridge.
- 	 */
--	dev_warn(dev,
--		 "%s can't access extended PCI configuration "
--		 "space under this bridge.\n",
-+	dev_warn(dev, "%s can't access extended configuration space under this bridge\n",
- 		 estr);
- 
- 	return 0;
-@@ -421,9 +419,8 @@ struct pci_bus *pci_acpi_scan_root(struct acpi_pci_root *root)
- 		root->segment = domain = 0;
- 
- 	if (domain && !pci_domains_supported) {
--		printk(KERN_WARNING "pci_bus %04x:%02x: "
--		       "ignored (multiple domains not supported)\n",
--		       domain, busnum);
-+		pr_warn("pci_bus %04x:%02x: ignored (multiple domains not supported)\n",
-+		        domain, busnum);
- 		return NULL;
- 	}
- 
-@@ -491,7 +488,7 @@ int __init pci_acpi_init(void)
- 	if (acpi_noirq)
- 		return -ENODEV;
- 
--	printk(KERN_INFO "PCI: Using ACPI for IRQ routing\n");
-+	pr_info("Using ACPI for IRQ routing\n");
- 	acpi_irq_penalty_init();
- 	pcibios_enable_irq = acpi_pci_irq_enable;
- 	pcibios_disable_irq = acpi_pci_irq_disable;
-@@ -503,7 +500,7 @@ int __init pci_acpi_init(void)
- 		 * also do it here in case there are still broken drivers that
- 		 * don't use pci_enable_device().
- 		 */
--		printk(KERN_INFO "PCI: Routing PCI interrupts for all devices because \"pci=routeirq\" specified\n");
-+		pr_info("Routing PCI interrupts for all devices because \"pci=routeirq\" specified\n");
- 		for_each_pci_dev(dev)
- 			acpi_pci_irq_enable(dev);
- 	}
+I think remoteproc_elf_loader.c assumes the ELF file is properly formed.
+There should be a section named '.resource_table', so the strcmp will
+find it by looking at the section header names.
