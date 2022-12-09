@@ -2,80 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2C0A64879F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:20:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C83476487A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:20:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiLIRT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:19:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41782 "EHLO
+        id S230018AbiLIRUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:20:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiLIRTl (ORCPT
+        with ESMTP id S229918AbiLIRU1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:19:41 -0500
+        Fri, 9 Dec 2022 12:20:27 -0500
 Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FDC18B03
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:19:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17DFE2EA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:20:27 -0800 (PST)
 Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 2286E3200916;
-        Fri,  9 Dec 2022 12:19:39 -0500 (EST)
+        by mailout.west.internal (Postfix) with ESMTP id 5C093320090C;
+        Fri,  9 Dec 2022 12:20:26 -0500 (EST)
 Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 09 Dec 2022 12:19:39 -0500
+  by compute6.internal (MEProxy); Fri, 09 Dec 2022 12:20:26 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1670606378; x=
-        1670692778; bh=WMh0atwWtRwdirolYUfL96TY8u3PLU91dpI4dYz4yEQ=; b=K
-        bYjb2wT+JCwrofrDLcgQeCM+OUaOmhohkuo8iCLAUSFC46OjrmZb9f07bTQ9Bc1U
-        YKGHrqfK2amLEuRp7v16R8GMRgxKQ33FXxnjQDG81ZOL85oW7niDatQLrqJXkYWq
-        Ef2K6Q6vphh4Vf1CXohSapr/vzpFzH+KhWuwzOoz40N0vKHTC8ZDQpYFlXDYWIqh
-        upkQ5eGj4MIYog8vFrzJ8aja76NEl9a+5x/Bt31whZyovIbPUnXuX/KXwj2SSSfE
-        fN/DlamgTaWEP9GYZViBUDbjxfxNqwrqnjVsd59s2gvUtMLjeNBPpubknyXoRmWJ
-        irAMp/lKtviea3kqk8FVQ==
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1670606425; x=1670692825; bh=S6n3+92phS
+        riW5IJgU6qkLeUckJ6rE5IY/sxC2TcWdw=; b=SaMMIDY+Kqqf4UEGxr2vHWonpE
+        Cpm9Qr9SoGVplbduanDI00Eom4zkyZWEU/T0vOJjDz57nqKDmanZHKMthDPEjrIf
+        ralOvaBvvpxLwmLCrxZb/Ondd++afU8Jprrj/T02qMGO1EwcWINfhHg6Cq1hBmff
+        QIv+5H+b2tnyfQWQmo8Cb5SJonEKGgEGTxQGt9IlrI+NJ9/sgjBTERB7U35nSMIz
+        1Qbnh44F1R/ZADAq/6w7hfaLoJKIP7Oe15sgO7WhlZUJtuxQydOyRMthKSTVlagn
+        gBPzFpPlvW/GrJ2qiDp+afsGqXyB1rGbvHYEuC7m6VZQJOpKPOnGrI6/VHuA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1670606378; x=
-        1670692778; bh=WMh0atwWtRwdirolYUfL96TY8u3PLU91dpI4dYz4yEQ=; b=B
-        ruXVFxYU8CiXPTTtnDNifygBvfHG2zCm+7rfF8U2EivmWTXPplg3BMh4yLjdg2Rl
-        yEuJHWmhuelPx/wsq2ICtpNESOL794W5jAyo0Q/TMGJs30jQuCIZOsRJf21iQ4Wa
-        1zHgl46HLvHtvGYg1B15OAM3jdUDQ1vussFHBVc+RMklR5wx7CBUNMAmFa+f82xC
-        uXJBgjBeErvwsYKOcm08YBn7DyEW59glr5cLLGTbSf2PX6AVYJ3O4HHSrX3CWZ2p
-        Pp3CitfHKWavX49WS3t21+HElZMqBP8z+LOzaAoSDi+kOSBzDx8H651s633l2rE/
-        XhiTCapaF3dlaK79Tn9YA==
-X-ME-Sender: <xms:Km6TY7GkoY41XBE2UnS2Mdrf5wCdikLL5YhhvJ3VTvyUU38MXVAF8A>
-    <xme:Km6TY4VB7I34FyuWEuuCgMuRD8_QwtMRGqxHjepFBi5Na9vc2NuH9XCbM1fMVnRw5
-    Vb9Zu-rFiVAnRbPn_g>
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm2; t=1670606425; x=1670692825; bh=S6n3+92phSriW5IJgU6qkLeUckJ6
+        rE5IY/sxC2TcWdw=; b=u5aGvc8pfx7KCZ3lvbn8/LWvpUU4kodUdfLbVv4JZltg
+        Q5L4PS7KFpMRjh6mqq+3L74kgfXCepgrByPAqcL/Os6Sy5iFzH9GppTLApPv9u0i
+        exbohzFam1d8dq7bkwfeh8VZ4RHE6U0HR0aQPsN6OuvYWsXktjAUGuX4iqeijhsx
+        jBq85NXOJWTUCgslrRGuc4qLYIj5I0XNk4kLe4k/65/d5x9zGucB3OV7HnXaDTbg
+        96f6CnqsnGKhncqhcxs61i5xspmxCZ8kCKSGvhWPDBxtFGnZR7FuoRByZvgowlyx
+        lDOuAE7PIndc/Ohgw6NiEk85hR4KuAYIaazITr871w==
+X-ME-Sender: <xms:WW6TYzHuOi3jsUff-LpN-W2kCc-uGui5PtGww7dXONJ9fGW_2JMpIQ>
+    <xme:WW6TYwWNOY9qoUYL8w68JS-IfnHyh4r-dW0fawtzvc_skKmj4Ld_b1RfNLmDcTsbV
+    amW4AkUYcKD40hIZ3g>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgdeljecutefuodetggdotefrodftvf
     curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
     uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgfgsehtqhertderreejnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepgfekueelgeeigefhudduledtkeefffejueelheelfedutedttdfgveeufeef
-    ieegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:Km6TY9K7cWRkUEuuF5SSj717JzY3TupjVGH_AndsEJN7lpIfXrK4gg>
-    <xmx:Km6TY5EQp3mY53yCF1Sa4r8n60YOHBwnI5bJL09vnxROnQkpk7EvAw>
-    <xmx:Km6TYxUY9CSaihiJbx-Qn6tnH-j8Czrzo-s6Etrf0uXGGhzYTJE8lQ>
-    <xmx:Km6TYwc9HwGp7Nq6oBnfmzKwuQROMPYyMA7vFIIXzTGsUKhAgodsAg>
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
+    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
+    gvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeufeeh
+    udenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:WW6TY1LhL_7eUWCWd52dpLG-oX0FPcEQyWIvMz7kMCcyZR4PnJiR9w>
+    <xmx:WW6TYxEITleL3aCHuaQFzK_c4_dYmzMbpR6bYVNCTxFa6DYOo8G9bA>
+    <xmx:WW6TY5V5aLHqIbOps8THZuMUKX1j5ODVA7_V7qyT7uy-njWXIS9-hg>
+    <xmx:WW6TY4ek3YyJObHplFuNXg7JWbqPOu25dqyMlyON4D2fpqeTHXBs_Q>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 817E4B60086; Fri,  9 Dec 2022 12:19:38 -0500 (EST)
+        id C293DB60086; Fri,  9 Dec 2022 12:20:25 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 User-Agent: Cyrus-JMAP/3.7.0-alpha0-1115-g8b801eadce-fm-20221102.001-g8b801ead
 Mime-Version: 1.0
-Message-Id: <4a5121a4-9b3a-45d3-934b-f24ec3a222f5@app.fastmail.com>
+Message-Id: <4f256035-0959-4c00-a263-6720139c6a7d@app.fastmail.com>
 In-Reply-To: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com>
 References: <257c9d3c-5bfa-4c5a-8ba3-11982a00b1d3@app.fastmail.com>
-Date:   Fri, 09 Dec 2022 18:19:18 +0100
+Date:   Fri, 09 Dec 2022 18:20:05 +0100
 From:   "Arnd Bergmann" <arnd@arndb.de>
 To:     "Linus Torvalds" <torvalds@linux-foundation.org>
 Cc:     soc@kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [GIT PULL 1/4] SoC: arm defconfig updates for 6.2
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: [GIT PULL 2/4] SoC code updates for 6.2
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -86,123 +83,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a=
-740:
+The following changes since commit 247f34f7b80357943234f93f247a1ae6b6c3a740:
 
   Linux 6.1-rc2 (2022-10-23 15:27:33 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-d=
-efconfig-6.2
+  https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git tags/soc-6.2
 
-for you to fetch changes up to 93b8c91e4cdb520b67ffc4513a7d6232f1037d9b:
+for you to fetch changes up to 8b7f4dd73879598ac6876753732e158055d8b671:
 
-  Merge tag 'qcom-arm64-defconfig-for-6.2-2' of https://git.kernel.org/p=
-ub/scm/linux/kernel/git/qcom/linux into arm/defconfig (2022-12-07 22:10:=
-05 +0100)
+  Merge tag 'ti-keystone-soc-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/soc (2022-11-23 13:05:06 +0100)
 
 ----------------------------------------------------------------
-SoC: arm defconfig updates for 6.2
+SoC code updates for 6.2
 
-This contains the ususal arm and arm64 updates to defconfig
-files, enabling newly added drivers and adapting the files to
-Kconfig changes, in particular for qualcomm, microchip, and
-nxp SoC platforms.
+This time there are only fairly minor cleanups across the i.MX, ixp4xx,
+ux500 and renesas platforms. The only notable update is a change to
+the keystone2 platform to switch switch it over to standard PSCI SMP
+bringup, which apparently was present in the shipped firmware almost
+from the start.
 
 ----------------------------------------------------------------
-Alexander Stein (1):
-      arm64: defconfig: Add Renesas 9-series PCIe clock generator
+Andrew Davis (1):
+      ARM: keystone: Replace platform SMP with PSCI
 
-Alistair Francis (2):
-      ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
-      ARM: imx_v6_v7_defconfig: Enable the cyttsp5 touchscreen
+Arnd Bergmann (6):
+      Merge tag 'ux500-soc-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik into arm/soc
+      Merge tag 'renesas-arm-soc-for-v6.2-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/soc
+      Merge tag 'ixp4xx-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-nomadik into arm/soc
+      Merge tag 'imx-soc-6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/shawnguo/linux into arm/soc
+      Merge tag 'renesas-riscv-soc-for-v6.2-tag1' of git://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/soc
+      Merge tag 'ti-keystone-soc-for-v6.2' of git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux into arm/soc
 
-Arnd Bergmann (11):
-      Merge tag 'at91-defconfig-6.2' of https://git.kernel.org/pub/scm/l=
-inux/kernel/git/at91/linux into arm/defconfig
-      Merge tag 'renesas-arm-defconfig-for-v6.2-tag1' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/defconfig
-      Merge tag 'renesas-riscv-defconfig-for-v6.2-tag1' of git://git.ker=
-nel.org/pub/scm/linux/kernel/git/geert/renesas-devel into arm/defconfig
-      Merge tag 'tegra-for-6.2-arm64-defconfig' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/tegra/linux into arm/defconfig
-      Merge tag 'imx-defconfig-6.2' of git://git.kernel.org/pub/scm/linu=
-x/kernel/git/shawnguo/linux into arm/defconfig
-      Merge tag 'v6.1-next-defconfig' of https://git.kernel.org/pub/scm/=
-linux/kernel/git/matthias.bgg/linux into arm/defconfig
-      Merge tag 'ti-k3-config-for-v6.2' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/ti/linux into arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-6.2' of https://git.kernel.org=
-/pub/scm/linux/kernel/git/qcom/linux into arm/defconfig
-      Merge tag 'qcom-defconfig-for-6.2' of https://git.kernel.org/pub/s=
-cm/linux/kernel/git/qcom/linux into arm/defconfig
-      Merge tag 'at91-defconfig-6.2-2' of https://git.kernel.org/pub/scm=
-/linux/kernel/git/at91/linux into arm/defconfig
-      Merge tag 'qcom-arm64-defconfig-for-6.2-2' of https://git.kernel.o=
-rg/pub/scm/linux/kernel/git/qcom/linux into arm/defconfig
+Christoph Niedermaier (1):
+      MAINTAINERS: Add DHCOR to the DH electronic i.MX6 board support
 
-Bhupesh Sharma (3):
-      arm64: defconfig: Enable Qualcomm QCE crypto
-      arm64: defconfig: Enable Qualcomm SM6115 / SM4250 GCC and Pinctrl
-      arm64: defconfig: Enable Qualcomm SM6115 / SM4250 GCC and Pinctrl
+Geert Uytterhoeven (2):
+      ARM: mxs: Remove unneeded #include <linux/pinctrl/consumer.h>
+      ARM: imx3: Remove unneeded #include <linux/pinctrl/machine.h>
 
-Claudiu Beznea (3):
-      ARM: configs: at91: sama7: use make savedefconfig
-      ARM: configs: at91: sama7: add config for microchip otpc
-      ARM: configs: at91: sama7: add config for thermal management
+Jason A. Donenfeld (1):
+      ARM: ux500: do not directly dereference __iomem
 
-Dipen Patel (1):
-      arm64: defconfig: Enable HTE config
+Lad Prabhakar (4):
+      soc: renesas: Kconfig: Explicitly select GPIOLIB and PINCTRL config under SOC_RENESAS
+      ARM: shmobile: Drop selecting GPIOLIB and PINCTRL
+      arm64: renesas: Drop selecting GPIOLIB and PINCTRL
+      riscv: Kconfig.socs: Add ARCH_RENESAS kconfig option
 
-Eugen Hristev (2):
-      ARM: configs: sama5/7: switch to new MICROCHIP_ISC driver
-      ARM: configs: multi_v7: switch to new MICROCHIP_ISC driver
+Linus Walleij (3):
+      ARM: ux500: Drop unused register file
+      ARM: ixp4xx: Remove unused static map
+      ARM: ixp4xx: Remove unused debug iomap
 
-Fabrice Gasnier (1):
-      ARM: multi_v7_defconfig: enable Type-C UCSI and STM32G0 as modules
+Lukas Bulwahn (1):
+      MAINTAINERS: adjust ARM/INTEL IXP4XX ARM ARCHITECTURE to ixp4xx clean-up
 
-Jon Hunter (1):
-      arm64: defconfig: Enable Tegra186 timer support
+wangjianli (1):
+      arm/mach-ux500: fix repeated words in comments
 
-Kory Maincent (2):
-      arm: configs: spear6xx: Refresh defconfig
-      arm: configs: spear6xx: Enable PL110 display controller
-
-Krzysztof Kozlowski (3):
-      ARM: qcom_defconfig: enable rest of ARMv7 SoCs pinctrl drivers
-      arm64: defconfig: enable rest of Qualcomm ARMv8 SoCs pinctrl drive=
-rs
-      arm64: defconfig: build-in Qualcomm SC7180 and SM8450 interconnects
-
-Lad Prabhakar (1):
-      riscv: configs: defconfig: Enable Renesas RZ/Five SoC
-
-Marcel Ziswiler (3):
-      arm64: defconfig: enable snvs lpgpr support
-      arm64: defconfig: enable i.mx 8m plus specific interconnect support
-      ARM: imx_v6_v7_defconfig: Enable USB GPIO extcon support
-
-N=C3=ADcolas F. R. A. Prado (1):
-      arm64: defconfig: Enable missing configs for mt8183-jacuzzi-juniper
-
-Rahul T R (1):
-      arm64: defconfig: Enable TI_TFP410 DVI bridge
-
-Sameer Pujar (2):
-      arm64: defconfig: Enable couple of audio codecs
-      arm64: defconfig: Enable SND_ALOOP
-
-Yoshihiro Shimoda (1):
-      arm64: defconfig: Enable Renesas R-Car S4-8 Spider Ethernet devices
-
- arch/arm/configs/imx_v6_v7_defconfig |  5 +++++
- arch/arm/configs/multi_v7_defconfig  |  8 ++++---
- arch/arm/configs/qcom_defconfig      |  5 +++++
- arch/arm/configs/sama5_defconfig     |  2 +-
- arch/arm/configs/sama7_defconfig     | 11 ++++++---
- arch/arm/configs/spear6xx_defconfig  |  7 ++----
- arch/arm64/configs/defconfig         | 43 +++++++++++++++++++++++++++++=
-++++---
- arch/riscv/configs/defconfig         |  3 +++
- 8 files changed, 69 insertions(+), 15 deletions(-)
+ MAINTAINERS                       |   5 +-
+ arch/arm/mach-imx/mm-imx3.c       |   1 -
+ arch/arm/mach-ixp4xx/ixp4xx-of.c  |  42 --------
+ arch/arm/mach-keystone/Makefile   |   4 +-
+ arch/arm/mach-keystone/keystone.c |   2 -
+ arch/arm/mach-keystone/keystone.h |   5 -
+ arch/arm/mach-keystone/platsmp.c  |  41 --------
+ arch/arm/mach-keystone/smc.S      |  26 -----
+ arch/arm/mach-mxs/mach-mxs.c      |   1 -
+ arch/arm/mach-shmobile/Kconfig    |   2 -
+ arch/arm/mach-ux500/cpu-db8500.c  |   1 -
+ arch/arm/mach-ux500/db8500-regs.h | 195 --------------------------------------
+ arch/arm/mach-ux500/platsmp.c     |   2 -
+ arch/arm/mach-ux500/pm.c          |   4 +-
+ arch/arm64/Kconfig.platforms      |   2 -
+ arch/riscv/Kconfig.socs           |   5 +
+ drivers/soc/renesas/Kconfig       |   2 +
+ drivers/soc/ux500/ux500-soc-id.c  |  10 +-
+ 18 files changed, 15 insertions(+), 335 deletions(-)
+ delete mode 100644 arch/arm/mach-keystone/platsmp.c
+ delete mode 100644 arch/arm/mach-keystone/smc.S
+ delete mode 100644 arch/arm/mach-ux500/db8500-regs.h
