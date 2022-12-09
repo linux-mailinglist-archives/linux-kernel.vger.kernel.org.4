@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6209C648A5E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:51:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 531B8648A60
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:52:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiLIVvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 16:51:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44550 "EHLO
+        id S230022AbiLIVwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 16:52:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIVvq (ORCPT
+        with ESMTP id S229721AbiLIVwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 16:51:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026D3389ED
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 13:51:46 -0800 (PST)
+        Fri, 9 Dec 2022 16:52:14 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C4E96574;
+        Fri,  9 Dec 2022 13:52:14 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67EF2B82918
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 21:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29DA3C433EF;
-        Fri,  9 Dec 2022 21:51:42 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 16:51:39 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, will@kernel.org,
-        samitolvanen@google.com, keescook@chromium.org, mhiramat@kernel.org
-Subject: Re: [PATCH] ftrace: Allow WITH_ARGS flavour of graph tracer with
- shadow call stack
-Message-ID: <20221209165139.37d033ee@gandalf.local.home>
-In-Reply-To: <Y5NI2TKtGbDKyt53@FVFF77S0Q05N>
-References: <20221209143402.3332369-1-ardb@kernel.org>
-        <Y5NI2TKtGbDKyt53@FVFF77S0Q05N>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95F0A6234F;
+        Fri,  9 Dec 2022 21:52:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED66C433D2;
+        Fri,  9 Dec 2022 21:52:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670622733;
+        bh=rCgoEKsboTnL4Z1WodJeBu08+BLRkSWIVTHZ3gPfK7Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=T0qoK928jpTta9mAhw0BQnzrBzkKsvseRYnTin/0INEIzInZVay2nZaE1nFVvAXBr
+         YrB0Y4+88P3LgBGI4QUzXTl704cEbl8cLc3PYpNXQGj2GA69uuO2xkeTP7ItzWtwvI
+         WkwAA9ixLnfAnVFc4QytL8xw4k3axU2d5ngmFvim0a8/lRvsSxe+pPFmhmdp2iyc8v
+         PDVPuUCbHuA9l0Fj4Ryx12IRyJCMigieJnCh7XpyBBBtnLGrvZJmIgBmhI62LW+eWF
+         ngeqL+mGPseDeC8yN77oEKEpe+QWFNhd1EfcyAHz3VthHomfiyudAXE2rNvK47UOOI
+         qRxI69y4DkCMQ==
+Date:   Fri, 9 Dec 2022 15:52:11 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Florent DELAHAYE <kernelorg@undead.fr>,
+        Konrad J Hambrick <kjhambrick@gmail.com>,
+        Matt Hansen <2lprbe78@duck.com>,
+        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
+        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Werner Sembach <wse@tuxedocomputers.com>,
+        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2 4/4] x86/PCI: Fix log message typo
+Message-ID: <20221209215211.GA1736471@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5OqPSV2RDdkAITE@smile.fi.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Dec 2022 14:40:25 +0000
-Mark Rutland <mark.rutland@arm.com> wrote:
-
-> On Fri, Dec 09, 2022 at 03:34:02PM +0100, Ard Biesheuvel wrote:
-> > The recent switch on arm64 from DYNAMIC_FTRACE_WITH_REGS to
-> > DYNAMIC_FTRACE_WITH_ARGS failed to take into account that we currently
-> > require the former in order to allow the function graph tracer to be
-> > enabled in combination with shadow call stacks. This means that this is
-> > no longer permitted at all, in spite of the fact that either flavour of
-> > ftrace works perfectly fine in this combination.
+On Fri, Dec 09, 2022 at 11:35:57PM +0200, Andy Shevchenko wrote:
+> On Fri, Dec 09, 2022 at 02:51:31PM -0600, Bjorn Helgaas wrote:
+> > On Fri, Dec 09, 2022 at 08:43:06PM +0200, Andy Shevchenko wrote:
+> > > On Thu, Dec 08, 2022 at 01:03:41PM -0600, Bjorn Helgaas wrote:
+> 
+> ...
+> 
+> > > Wondering if we can change printk(KERN_LVL) to pr_lvl() in this file.
 > > 
-> > Given that arm64 is the only arch that implements shadow call stacks in
-> > the first place, let's update the condition to just reflect the arm64
-> > change. When other architectures adopt shadow call stack support, this
-> > can be revisited if needed.
-> > 
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>  
+> > Sure!  How about this?
 > 
-> My bad; sorry about this, and thanks for the fix!
+> LGTM, you can add
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> to it if you wish.
+
+Done, thanks!
+
+> >     Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
 > 
-> Acked-by: Mark Rutland <mark.rutland@arm.com>
-> 
-> We should probably also add:
-> 
-> Fixes: 26299b3f6ba26bfc ("ftrace: arm64: move from REGS to ARGS")
+> I prefer @linux.intel.com.
 
-Actually, I believe it is:
+Oops, sorry, I should have known that.  I had copied that from
+the From: line of your email
+(https://lore.kernel.org/r/Y5OBupWBghHfvG/h@smile.fi.intel.com)
 
-Fixes: ddc9863e9e90 ("scs: Disable when function graph tracing is enabled")
-
-As according to the comments, scs is broken with function graph unless
-function graph is using the ftrace mechanism. And that is only true if
-WITH_ARGS is set, not REGS.
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
+Bjorn
