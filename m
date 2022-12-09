@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41AD76482B6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8036482C4
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:25:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLINRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 08:17:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
+        id S229988AbiLINZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 08:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbiLINRM (ORCPT
+        with ESMTP id S229677AbiLINZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 08:17:12 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C88AF6E54E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:17:10 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5D8F023A;
-        Fri,  9 Dec 2022 05:17:17 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.39.232])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 868643F73B;
-        Fri,  9 Dec 2022 05:17:09 -0800 (PST)
-Date:   Fri, 9 Dec 2022 13:17:06 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Xander Moerkerken <xandermoerkerken@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Xander Moerkerken <xander.moerkerken@gmail.com>,
-        Xander Moerkerken <xander.moerkerken@omron.com>
-Subject: Re: [PATCH] Added ability to vmalloc executable memory
-Message-ID: <Y5M1UowMyucPOqAl@FVFF77S0Q05N>
-References: <20221209131052.64235-1-xander.moerkerken@omron.com>
+        Fri, 9 Dec 2022 08:25:39 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA8E3FB95
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:25:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670592338; x=1702128338;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BSrPUYonGntiTXzc7J4wwmhKstgGiqEhA6jFvc+d+NI=;
+  b=aKP5ek4m6ufnjFSsZr7brhDvHBoiyxXfpexg5mLP9DXFHtCnUrfFxK2U
+   OU834nMm7MbPZE9P0Eu2seUuRZSeWIHyy8VzdSX/1j9xhVCEfpJ8j9sin
+   KW4obKwa4k6xZZlVj+zn1qchPXfX75Ie6g4ItR5/50MY+htQ9KwoydpUg
+   hzR8T9BIPvDffUDhsEaKh54Bq0H824mlrKoSSwZFyS3dkRFaOxEwwt51F
+   aZBXGsudB85hdtstVSegeO7O30QJrm4tMXFn6h4nckSuDOPy1JfOjAdNi
+   G2aE7PAaH+9Df2ISmfJe9bcuhBjlHrhO99/SfvYwwCYcjmNyRbLQphcJQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="317483319"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="317483319"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 05:25:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="892670382"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="892670382"
+Received: from elinares-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.249.38.98])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 05:25:33 -0800
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3AACD109CE2; Fri,  9 Dec 2022 16:25:31 +0300 (+03)
+From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Elena Reshetova <elena.reshetova@intel.com>, x86@kernel.org,
+        linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCH 0/4] x86/tdx: Changes for TDX guest initialization
+Date:   Fri,  9 Dec 2022 16:25:20 +0300
+Message-Id: <20221209132524.20200-1-kirill.shutemov@linux.intel.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209131052.64235-1-xander.moerkerken@omron.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 02:10:52PM +0100, Xander Moerkerken wrote:
-> From: Xander Moerkerken <xander.moerkerken@gmail.com>
-> 
-> Since release 5.8-rc1 the pgprot got removed from __vmalloc
-> because the only usage was PAGE_KERNEL as argument.
-> However, this removes the ability to input other arguments
-> such as 'PAGE_KERNEL_EXEC', which can be used to allocate
-> memory in which you can execute. For this reason a new
-> function is introduced called '__vmalloc_exec'.
-> 
-> Signed-off-by: Xander Moerkerken <xander.moerkerken@omron.com>
+Several changes to TDX initialization:
 
-What is this going to be used for? There's no user from this patch alone, as a
-module or otherwise.
+- Make early panic message visible to user;
 
-Mark.
+- Relax SEPT_VE_DISABLE for debug TD. It helps to investigate bugs
+  resulting in access of unaccepted memory.
 
-> ---
->  include/linux/vmalloc.h | 1 +
->  mm/vmalloc.c            | 8 ++++++++
->  2 files changed, 9 insertions(+)
-> 
-> diff --git a/include/linux/vmalloc.h b/include/linux/vmalloc.h
-> index 096d48aa3437..10c46513b6b2 100644
-> --- a/include/linux/vmalloc.h
-> +++ b/include/linux/vmalloc.h
-> @@ -147,6 +147,7 @@ extern void *vzalloc_node(unsigned long size, int node) __alloc_size(1);
->  extern void *vmalloc_32(unsigned long size) __alloc_size(1);
->  extern void *vmalloc_32_user(unsigned long size) __alloc_size(1);
->  extern void *__vmalloc(unsigned long size, gfp_t gfp_mask) __alloc_size(1);
-> +extern void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask) __alloc_size(1);
->  extern void *__vmalloc_node_range(unsigned long size, unsigned long align,
->  			unsigned long start, unsigned long end, gfp_t gfp_mask,
->  			pgprot_t prot, unsigned long vm_flags, int node,
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index ccaa461998f3..8fd01ed7082b 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -3294,6 +3294,14 @@ void *__vmalloc(unsigned long size, gfp_t gfp_mask)
->  }
->  EXPORT_SYMBOL(__vmalloc);
->  
-> +
-> +void *__vmalloc_exec(unsigned long size, gfp_t gfp_mask)
-> +{
-> +	return __vmalloc_node_prot(size, 1, gfp_mask, PAGE_KERNEL_EXEC,
-> +	                          NUMA_NO_NODE, __builtin_return_address(0));
-> +}
-> +EXPORT_SYMBOL(__vmalloc_exec);
-> +
->  /**
->   * vmalloc - allocate virtually contiguous memory
->   * @size:    allocation size
-> -- 
-> 2.37.2
-> 
+- Make sure NOTIFY_ENABLES is off to eliminate possible source of random
+  #VE.
+
+The patchset makes use of ReportFatalError TDVMCALL. The definition of
+the TDVMCALL has changed in recent GHCI update[1]. It now requires more
+arguments handled by __tdx_hypercall(). The patch that expands
+__tdx_hypercall() is the same as the patch included in TDX guest
+enabling for Hyper-V.
+
+[1] https://cdrdv2.intel.com/v1/dl/getContent/726790
+
+Kirill A. Shutemov (4):
+  x86/tdx: Expand __tdx_hypercall() to handle more arguments
+  x86/tdx: Use ReportFatalError to report missing SEPT_VE_DISABLE
+  x86/tdx: Relax SEPT_VE_DISABLE check for debug TD
+  x86/tdx: Disable NOTIFY_ENABLES
+
+ arch/x86/coco/tdx/tdcall.S        | 82 ++++++++++++++++++++++---------
+ arch/x86/coco/tdx/tdx.c           | 57 ++++++++++++++++++++-
+ arch/x86/include/asm/shared/tdx.h |  6 +++
+ arch/x86/kernel/asm-offsets.c     |  6 +++
+ 4 files changed, 125 insertions(+), 26 deletions(-)
+
+-- 
+2.38.0
+
