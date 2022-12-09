@@ -2,172 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B14647CD6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:09:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1C7647CCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiLIEJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 23:09:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S229917AbiLIDeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:34:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiLIEJC (ORCPT
+        with ESMTP id S229517AbiLIDem (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 23:09:02 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4C5D36ACCF;
-        Thu,  8 Dec 2022 20:08:50 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Dx9vB_rJJjg1IEAA--.9934S3;
-        Fri, 09 Dec 2022 11:33:19 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxd1d2rJJjbdsoAA--.16617S2;
-        Fri, 09 Dec 2022 11:33:19 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>, wanghongliang@loongson.cn
-Subject: [PATCH v2] irqchip: loongson-liointc: add hierarchy irq support
-Date:   Fri,  9 Dec 2022 11:33:09 +0800
-Message-Id: <20221209033309.4374-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Thu, 8 Dec 2022 22:34:42 -0500
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21651D304
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:34:33 -0800 (PST)
+Received: by mail-qt1-x844.google.com with SMTP id g7so2767623qts.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 19:34:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AX6+KQueG/0V+PW0SCatE3qkqdMoa6EoSb0hMoNBlmw=;
+        b=kwDDxicYDe7Aib24SuhHlX9g+etY8Io9ReoN25F7cOKE5v3yESqyOru4Y6Uo4XO7J8
+         LVM/PWfiazNVm3RG4pSfHQrlS0aC/JIueRDqKSbDeCdSSaUtnjobMfVDnD9ja2dsbTE5
+         HKjv2OZWpe5jUyfwAVwHS2n+eBMo1fCyVGHH60lEJFpSZt2Pf8WhPvHqwnaTu2T6Kw7S
+         lJY7qV9unnm+M+JL3vQ1FPDEjhrYqoiMKdZDM95MUB+XkAUWOZyfmMIef4/3nhXdQm+n
+         uq+Pcpx92QXNdykT9uYObaNAU6ZHluU7WysRViHqI5O8qQ65+Gg5LcdCYmvwWZ/c7OJP
+         /vMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AX6+KQueG/0V+PW0SCatE3qkqdMoa6EoSb0hMoNBlmw=;
+        b=EIfaK9Cp7E7RZ3e6tTAXu9zrRmsNE7d3u1Kx9Nf2ClO0rgbq4R69xFQR7nMZInWRtz
+         K8LamMRe+D75iKWGoEtn/ZRzdQPx1TkCYtRdO/lDBAApqdqUiTw4oxaJcuZcDZ/hEaPx
+         J9WuNcyeSNi/s2nZr5PcJG7cMhakBt/fLjquS7pfmLzba/q+xJ0nJ+ZgRdK/t0+XDgXo
+         yIvz/mE2Y0ImfkINA9STiSZn90sjm4PPOlOXl3A471cPmz/LeOh6VL5uaWwJRAtS5OnU
+         xHgbHB41IaryUlVIAYbwUR9vgvQZ8N81rQVbItkj15qoIx5nOdgIX+Y6vCWcZeIwMP6V
+         QbIA==
+X-Gm-Message-State: ANoB5pkXTbILbVy7bfZKcMdUV7wYpa7RGMwsoAt46fo9BLezxRV+lmLW
+        xyaEcZVsNlgEqjT9Yo6yT+eBHtA0Lq7uT0Arx5Y=
+X-Google-Smtp-Source: AA0mqf6+QKZR5iv5fkYEz5uVZuFEmmMbiRkt9MUzlOgf0zVCpJLokrqzH0S0GWU1Th+FgsmJe0d1Tr6l5ZPR9Cx21eA=
+X-Received: by 2002:ac8:6c8:0:b0:3a6:9ac9:6800 with SMTP id
+ j8-20020ac806c8000000b003a69ac96800mr22388706qth.410.1670556873017; Thu, 08
+ Dec 2022 19:34:33 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dxd1d2rJJjbdsoAA--.16617S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXFy3KrWrXr47Cw15JF4kCrg_yoWrJr1UpF
-        4Fy3sFqrWUJayUXr47Cw1kWa4ak3yftrZrtayfWF9rZ3WDGr95uFW8uF9F9r1YkryUGF1j
-        vF4fWay8ua15AaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        b7xFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxV
-        CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-        6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-        WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
-        6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-        1UYxBIdaVFxhVjvjDU0xZFpf9x07U_uc_UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221207135223.3938-1-jundongsong1@gmail.com> <86a63zkzru.wl-maz@kernel.org>
+ <CAJqh2T+h2oHZoxc5-zbjPWEGFUVnTs9JB04Dh-sR4WeUMYrj2A@mail.gmail.com> <20221208165820.5maej4we3mfdeprm@mercury.elektranox.org>
+In-Reply-To: <20221208165820.5maej4we3mfdeprm@mercury.elektranox.org>
+From:   Harry Song <jundongsong1@gmail.com>
+Date:   Fri, 9 Dec 2022 11:34:21 +0800
+Message-ID: <CAJqh2TJvkk5o+MkET8UED-8AUhsDdehvsnR2+7bfeRoY7AmPdQ@mail.gmail.com>
+Subject: Re: [PATCH] irqchip/gic-v3-its: remove the shareability of ITS
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Marc Zyngier <maz@kernel.org>, tglx@linutronix.de,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the irq of hierarchical interrupt chip was routed to liointc
-that asked liointc driver to support hierarchy irq and this patch
-was to add such support.
+Thank you for your reply. I know these two links.
+My email is to ask about the root cause of this bug.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v2:
-		1. Keep consistent approach for irq handle of dts and acpi.
-		2. Use a domain to cover all case.
-		3. Fixup the commit log.
+I would like to know whether the driver design of ITS requires that
+the CPU and ITS
+must be in a shared domain. Such as using CCI in chips;
 
- drivers/irqchip/Kconfig                |  1 +
- drivers/irqchip/irq-loongson-liointc.c | 53 +++++++++++++++++---------
- 2 files changed, 37 insertions(+), 17 deletions(-)
+From marc's reply, I think so. In addition to CCI, other methods can
+also be used to
+ensure consistency, which is a requirement for IC design.
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index d07568a2c539..97f589d681c6 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -593,6 +593,7 @@ config LOONGSON_LIOINTC
- 	default y
- 	select IRQ_DOMAIN
- 	select GENERIC_IRQ_CHIP
-+	select IRQ_DOMAIN_HIERARCHY
- 	help
- 	  Support for the Loongson Local I/O Interrupt Controller.
- 
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index 85b754f7f4e6..e5670cc6123a 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -160,26 +160,48 @@ static u32 parent_int_map[LIOINTC_NUM_PARENT];
- static const char *const parent_names[] = {"int0", "int1", "int2", "int3"};
- static const char *const core_reg_names[] = {"isr0", "isr1", "isr2", "isr3"};
- 
--static int liointc_domain_xlate(struct irq_domain *d, struct device_node *ctrlr,
--			     const u32 *intspec, unsigned int intsize,
--			     unsigned long *out_hwirq, unsigned int *out_type)
-+static int liointc_irq_domain_translate(struct irq_domain *d,
-+			struct irq_fwspec *fwspec, unsigned long *out_hwirq,
-+			unsigned int *out_type)
- {
--	if (WARN_ON(intsize < 1))
-+	if (WARN_ON(fwspec->param_count < 1))
- 		return -EINVAL;
--	*out_hwirq = intspec[0] - GSI_MIN_CPU_IRQ;
- 
--	if (intsize > 1)
--		*out_type = intspec[1] & IRQ_TYPE_SENSE_MASK;
-+	if (!acpi_disabled)
-+		*out_hwirq = fwspec->param[0] - GSI_MIN_CPU_IRQ;
-+	else
-+		*out_hwirq = fwspec->param[0];
-+
-+	if (fwspec->param_count > 1)
-+		*out_type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
- 	else
- 		*out_type = IRQ_TYPE_NONE;
- 
- 	return 0;
- }
- 
--static const struct irq_domain_ops acpi_irq_gc_ops = {
--	.map	= irq_map_generic_chip,
--	.unmap  = irq_unmap_generic_chip,
--	.xlate	= liointc_domain_xlate,
-+static int liointc_irq_domain_alloc(struct irq_domain *domain,
-+		unsigned int virq, unsigned int nr_irqs, void *arg)
-+{
-+	int i, ret;
-+	irq_hw_number_t hwirq;
-+	unsigned int type = IRQ_TYPE_NONE;
-+	struct irq_fwspec *fwspec = arg;
-+
-+	ret = liointc_irq_domain_translate(domain, fwspec, &hwirq, &type);
-+	if (ret)
-+		return ret;
-+
-+	for (i = 0; i < nr_irqs; i++)
-+		irq_map_generic_chip(domain, virq + i, hwirq + i);
-+
-+	return 0;
-+}
-+
-+static const struct irq_domain_ops irq_gc_ops = {
-+	.translate = liointc_irq_domain_translate,
-+	.alloc     = liointc_irq_domain_alloc,
-+	.free      = irq_domain_free_irqs_top,
- };
- 
- static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
-@@ -222,12 +244,9 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
- 	}
- 
- 	/* Setup IRQ domain */
--	if (!acpi_disabled)
--		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
--					&acpi_irq_gc_ops, priv);
--	else
--		domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
--					&irq_generic_chip_ops, priv);
-+	domain = irq_domain_create_linear(domain_handle, LIOINTC_CHIP_IRQ,
-+					  &irq_gc_ops, priv);
-+
- 	if (!domain) {
- 		pr_err("loongson-liointc: cannot add IRQ domain\n");
- 		goto out_iounmap;
--- 
-2.20.1
+Thanks,
+Harry
 
+On Fri, Dec 9, 2022 at 12:58 AM Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
+>
+> Hi,
+>
+> On Thu, Dec 08, 2022 at 10:28:29AM +0800, Harry Song wrote:
+> > On Wed, Dec 7, 2022 at 11:19 PM Marc Zyngier <maz@kernel.org> wrote:
+> > >
+> > > On Wed, 07 Dec 2022 13:52:23 +0000,
+> > > Harry Song <jundongsong1@gmail.com> wrote:
+> > > >
+> > > > I know this is a very wrong patch, but my platform
+> > > > has an abnormal ITS problem caused by data consistency:
+> > > > My chip does not support Cache Coherent Interconnect (CCI).
+> > >
+> > > That doesn't mean much. Nothing mandates to have a CCI, and plenty of
+> > > systems have other ways to maintain coherency.
+> > >
+> > > > By default, ITS driver is the inner memory attribute.
+> > > > gits_write_cbaser() is used to write the inner memory
+> > > > attribute. But hw doesn't return the hardware's non-shareable
+> > > > property,so I don't think reading GITS_CBASER and GICR_PROPBASER
+> > > > here will get the real property of the current hardware: inner
+> > > > or outer shareable is not supported, so I would like to know
+> > > > whether ITS driver cannot be used on chips without CCI, or
+> > > > what method can be used to use ITS driver on chips without CCI?
+> > >
+> > > It's not about CCI or not CCI. It is about which shareability domain
+> > > your ITS is in.
+> > >
+> > > And it doesn't only affect the ITS. It also affects the
+> > > redistributors, and anything that accesses memory.
+> > >
+> >
+> > Yes, my current chip is Rockchip platform (rk3588), so is it because the chip
+> > is not designed as a proper shared domain for ITS, so the exception of
+> > ITS is caused?
+> >
+> > > >
+> > > > The current patch is designed to make ITS think that the current
+> > > > chip has no inner or outer memory properties, and then use
+> > > > its by flushing dcache.
+> > > >
+> > > > This is the log for bug reports without patches:
+> > > >
+> > > > [    0.000000] GICv3: CPU0: found redistributor 0 region 0:0x0000000003460000
+> > > > [    0.000000] ITS [mem 0x03440000-0x0345ffff]
+> > > > [    0.000000] ITS@0x0000000003440000: allocated 8192 Devices @41850000 (indirect, esz 8, psz 64K, shr 0)
+> > > > [    0.000000] ITS@0x0000000003440000: allocated 32768 Interrupt Collections @41860000 (flat, esz 2, psz 64K, shr 0)
+> > > > [    0.000000] GICv3: using LPI property table @0x0000000041870000
+> > > > [    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000000041880000
+> > > > [    0.000000] ITS queue timeout (64 1)
+> > > > [    0.000000] ITS cmd its_build_mapc_cmd failed
+> > > > [    0.000000] ITS queue timeout (128 1)
+> > > > [    0.000000] ITS cmd its_build_invall_cmd failed
+> > >
+> > > Ah, this suspiciously looks like a Rockchip machine...
+> > >
+> > > >
+> > > > Signed-off-by: Harry Song <jundongsong1@gmail.com>
+> > > > ---
+> > > >
+> > > > I am very sorry to bother you. This problem has been bothering me
+> > > > for several weeks.  I am looking forward to your reply.
+> > >
+> > > If you have such issue, this needs to be handled as per-platform
+> > > quirk. I'm not putting such generic hacks in the driver.
+> > >
+> > >         M.
+> > >
+> > > --
+> > > Without deviation from the norm, progress is not possible.
+> >
+> > Are there currently other chip platforms that have this problem, and then ITS
+> > is already compatible with the problem? Please tell me how to submit
+> > hacks patch for rk3588 platform?
+> >
+> > If the hacks patch cannot be submitted, please tell me whether it
+> > requires the next generation
+> > chip to have any design requirements for ITS?
+> >
+> > Design ITS and CPU to be the same inner memory property?
+>
+> Previous rockchip generation has the same bug and it got discussed
+> here:
+>
+> https://lore.kernel.org/lkml/871rbdt4tu.wl-maz@kernel.org/T/#m5dbc70ff308d81e98dd0d797e23d3fbf9c353245
+>
+> You can use this DT as base with mainline to avoid ITS:
+>
+> https://lore.kernel.org/all/20221205172350.75234-1-sebastian.reichel@collabora.com/
+>
+> -- Sebastian
