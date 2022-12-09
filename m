@@ -2,89 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEAF6483A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:20:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E49648393
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiLIOUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:20:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S229571AbiLIOQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:16:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiLIOUQ (ORCPT
+        with ESMTP id S229956AbiLIOQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:20:16 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603EA1903E;
-        Fri,  9 Dec 2022 06:20:16 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 519BF229E8;
-        Fri,  9 Dec 2022 14:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1670595614; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nzwv4m3Hgg/uWdoPi0O3B5YBmF8eSTJJtprw/dS4JvI=;
-        b=S9KPDqoEIBpJEb0CYzWi/31c4xU81n60FczF8mVTo/65TE9V/WYhYGIo+p3iAOaE8yb7LI
-        9EFZT/TtHuRtVToHzZ+MvaH+6zE8eDtFeaD+Z0MZ3VH09k+EsrWz6c7g/1dgokCsdBWqI6
-        X4Kk0boP5CGTvvybOrWwYtg3WoIsVrI=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 2DABF2C141;
-        Fri,  9 Dec 2022 14:20:14 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 15:20:13 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Song Liu <song@kernel.org>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
-        x86@kernel.org, joe.lawrence@redhat.com,
-        linuxppc-dev@lists.ozlabs.org, Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <Y5NEHdSSMSyec6S+@alley>
-References: <20220901171252.2148348-1-song@kernel.org>
- <Y3expGRt4cPoZgHL@alley>
- <CAPhsuW4qYpX7wzHn5J5Hn9cnOFSZwwQPCjTM_HPTt_zbBS03ww@mail.gmail.com>
- <Y5M+AoKHDK4rn6/i@alley>
+        Fri, 9 Dec 2022 09:16:16 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DC664D0;
+        Fri,  9 Dec 2022 06:15:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670595353; x=1702131353;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Q4a9U1SZ0Rp7ftX9JdBYHlEBnCnbX6tXmyOibpHi2+M=;
+  b=IravYnSqmliil7Q4B85Nd9h4Mtewnm9OVLHxgEC9vHtLFY0Hv+cQe6gG
+   2YyYFQG7mFAK5/l4i1OuA69wFUkcIzmPZU8EUPcgU76vo6VxdCs2NQ0kw
+   peCHh/khoDt6JVk40idnE6NOO65S6GRE1jBJO9Ylcv0zQMQ643ytRCk0T
+   vMqN22ub2z3R9tzIr9v18TFqGuY7/4PWhdfd4nZBHCasm0np7BOxuKHFe
+   jnWlgP0Mp+Xsc+MksXx6tUbv6gxh0xnJZ5s2ODbmNxqx+pLwJzY7kCm0S
+   /GguS3lFTdJA5O4OwWXt8cuUrQu/pm9se/XRu2dbP6GveWefjQX4+5+oa
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="190897842"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 07:15:52 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 07:15:51 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 9 Dec 2022 07:15:51 -0700
+Date:   Fri, 9 Dec 2022 15:20:58 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Michael Walle <michael@walle.cc>
+CC:     Vladimir Oltean <olteanv@gmail.com>,
+        <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+        <daniel.machon@microchip.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>,
+        <lars.povlsen@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+Message-ID: <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
+References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
+ <20221208092511.4122746-1-michael@walle.cc>
+ <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+ <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
+ <adb8e2312b169d13e756ff23c45872c3@walle.cc>
+ <20221209092904.asgka7zttvdtijub@soft-dev3-1>
+ <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
+ <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
+ <20221209125611.m5cp3depjigs7452@skbuf>
+ <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <Y5M+AoKHDK4rn6/i@alley>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 2022-12-09 14:54:10, Petr Mladek wrote:
-> On Mon 2022-11-28 17:57:06, Song Liu wrote:
-> > On Fri, Nov 18, 2022 at 8:24 AM Petr Mladek <pmladek@suse.com> wrote:
-> > > > --- a/kernel/livepatch/core.c
-> > > > +++ b/kernel/livepatch/core.c
-> I see that you removed also:
+The 12/09/2022 15:05, Michael Walle wrote:
 > 
-> 	if (strcmp(objname ? objname : "vmlinux", sec_objname))
-> 		return 0;
+> Am 2022-12-09 13:56, schrieb Vladimir Oltean:
+> > On Fri, Dec 09, 2022 at 01:58:57PM +0100, Horatiu Vultur wrote:
+> > > > Does it also work out of the box with the following patch if
+> > > > the interface is part of a bridge or do you still have to do
+> > > > the tc magic from above?
+> > > 
+> > > You will still need to enable the TCAM using the tc command to have it
+> > > working when the interface is part of the bridge.
+> > 
+> > FWIW, with ocelot (same VCAP mechanism), PTP traps work out of the box,
+> > no need to use tc. Same goes for ocelot-8021q, which also uses the
+> > VCAP.
+> > I wouldn't consider forcing the user to add any tc command in order for
+> > packet timestamping to work properly.
+
+On ocelot, the vcap is enabled at port initialization, while on other
+platforms(lan966x and sparx5) you have the option to enable or disable.
+
 > 
-> This is another bug in your "simplification".
+> +1
+> Esp. because there is no warning. I.e. I tried this patch while
+> the interface was added on a bridge and there was no error
+> whatsoever.
 
-This actually is not a bug. It was replaced by the strcmp() check below.
+What error/warning were you expecting to see here?
 
-> > > > +
-> > > > +             if (strcmp(objname, sec_objname))
-> > > > +                     continue;
+> Also, you'd force the user to have that Kconfig option
+> set.
 
-But this works only because the function is not called for "vmlinux".
-It can't be unloaded.
 
-Well, this optimization is not worth it. IMHO, it is better when
-the API is able to handle "vmlinux" object a safe way.
 
-We always try to make the livepatch API as error-proof as possible.
-It is the main idea of livepatching. It should fix bugs without
-breaking the running system.
+> 
+> -michael
+> 
 
-Best Regards,
-Petr
+-- 
+/Horatiu
