@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA65F647D56
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 06:36:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EEA647D57
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 06:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiLIFg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 00:36:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55750 "EHLO
+        id S229763AbiLIFiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 00:38:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbiLIFgv (ORCPT
+        with ESMTP id S229555AbiLIFiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 00:36:51 -0500
+        Fri, 9 Dec 2022 00:38:05 -0500
 Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC4962E97
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 21:36:47 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D6971248
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 21:38:04 -0800 (PST)
 Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8JjZUs001924;
-        Thu, 8 Dec 2022 21:36:36 -0800
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B8Jjc5h002003;
+        Thu, 8 Dec 2022 21:37:57 -0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
  subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=vtWxq85+Kn4wg7fIvd4MdjxD2PWRFitUCpQG3biK9OI=;
- b=J6XVp59yBgbM64D8vbnGvsLzrjZf0CdpYdHwD8NZ9PFegSigdAZgP+Kqoo5/1iezBLu3
- Fx6rtRJcrEYpJ3tZLB1xDqouV9YtXJzJ4bwwTYZaJtzLfxOjSQNuf2addvdFcD49URPr
- 0IT1BMQgVIxtLTExVEOqQDlONFLLmTDqpaBemaK/sAbDtsuVqEJUEODbNLI11xhsF2ah
- j8LD7/H9zhclmH59PGXNURXkE49Ai72APFjzMjdEarIi35a5qqZBl5CVtculP/zoMjZz
- WNB5ypa2EsnHwaEVsdNGXw1XABrb4Pd4ftcbyeWv9BlUJL/3q4rDhKQUFqHLIxRoW3zL TA== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mb22sxc2g-1
+ content-type; s=pfpt0220; bh=HiIykd16Jp1D2JvnVXWWdYpYbATlNq3Q1gAU5oyHKWQ=;
+ b=J0OhxL5iLRfcMtpgluG51ov6U2tSCYrdeZIZ7HRwzcIqsHGb0p8fdiPgepZTMnsCt93J
+ sccMQe/SZcXix1EiNa7p3qs4gsRlkDo6brptzQZjpKlxyUCAc1NSp98HlgCHRHLBzGgP
+ Y6LLl6V0VuYpXlR3EQn4QArUnzB/t5E1t1Ay1NwwUdqTTEb1CT1ofN3bLRY2oB2BkIXP
+ aTEaoN5thx14WF5lWWzKEh1jWHPIYyldur0Qj+28xWfJZN3zflLUhyaFtZuvFFgjs4xf
+ N3I8tnys5DHnaRJ5MuNhltU4Q/9Wef91h85yDurVOh6cZ0rDhm1vOAchmU77Zu0HZjoP 9Q== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3mb22sxc5f-2
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Thu, 08 Dec 2022 21:36:36 -0800
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 8 Dec
- 2022 21:36:34 -0800
+        Thu, 08 Dec 2022 21:37:57 -0800
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Thu, 8 Dec
+ 2022 21:37:55 -0800
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
  (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Thu, 8 Dec 2022 21:36:34 -0800
+ Transport; Thu, 8 Dec 2022 21:37:55 -0800
 Received: from IPBU-BLR-SERVER1.marvell.com (IPBU-BLR-SERVER1.marvell.com [10.28.8.41])
-        by maili.marvell.com (Postfix) with ESMTP id 7667A3F7062;
-        Thu,  8 Dec 2022 21:36:31 -0800 (PST)
+        by maili.marvell.com (Postfix) with ESMTP id EB6E23F7062;
+        Thu,  8 Dec 2022 21:37:52 -0800 (PST)
 From:   Gowthami Thiagarajan <gthiagarajan@marvell.com>
 To:     <will@kernel.org>, <mark.rutland@arm.com>,
         <linux-arm-kernel@lists.infradead.org>,
@@ -46,15 +46,15 @@ To:     <will@kernel.org>, <mark.rutland@arm.com>,
 CC:     <sgoutham@marvell.com>, <gcherian@marvell.com>,
         <bbhushan2@marvell.com>,
         Gowthami Thiagarajan <gthiagarajan@marvell.com>
-Subject: [PATCH] perf/marvell: Add ACPI support to DDR uncore driver
-Date:   Fri, 9 Dec 2022 11:06:07 +0530
-Message-ID: <20221209053607.3929964-1-gthiagarajan@marvell.com>
+Subject: [PATCH] perf/marvell: Add ACPI support to TAD uncore driver
+Date:   Fri, 9 Dec 2022 11:07:15 +0530
+Message-ID: <20221209053715.3930071-1-gthiagarajan@marvell.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: _RKBXP5kIzmDPXwwe3RfFrzWaK2AqBo_
-X-Proofpoint-GUID: _RKBXP5kIzmDPXwwe3RfFrzWaK2AqBo_
+X-Proofpoint-ORIG-GUID: zbf-8vhCefATiqRtJGEfxToshKdogTBM
+X-Proofpoint-GUID: zbf-8vhCefATiqRtJGEfxToshKdogTBM
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-12-09_02,2022-12-08_01,2022-06-22_01
@@ -68,45 +68,83 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Add support for ACPI based device registration so that the driver
-can be also enabled through ACPI table.
+can be also enabled through ACPI table. 
+While at that change the DT specific API's to device_* API's so that 
+both DT based and ACPI based probing works.
 
 Signed-off-by: Gowthami Thiagarajan <gthiagarajan@marvell.com>
 ---
- drivers/perf/marvell_cn10k_ddr_pmu.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/perf/marvell_cn10k_tad_pmu.c | 22 ++++++++++++++++------
+ 1 file changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/perf/marvell_cn10k_ddr_pmu.c b/drivers/perf/marvell_cn10k_ddr_pmu.c
-index 665b382a0ee3..b94a5f6cc22b 100644
---- a/drivers/perf/marvell_cn10k_ddr_pmu.c
-+++ b/drivers/perf/marvell_cn10k_ddr_pmu.c
-@@ -12,6 +12,7 @@
- #include <linux/of_device.h>
+diff --git a/drivers/perf/marvell_cn10k_tad_pmu.c b/drivers/perf/marvell_cn10k_tad_pmu.c
+index 69c3050a4348..b1f5580e070a 100644
+--- a/drivers/perf/marvell_cn10k_tad_pmu.c
++++ b/drivers/perf/marvell_cn10k_tad_pmu.c
+@@ -13,6 +13,7 @@
+ #include <linux/cpuhotplug.h>
  #include <linux/perf_event.h>
- #include <linux/hrtimer.h>
+ #include <linux/platform_device.h>
 +#include <linux/acpi.h>
  
- /* Performance Counters Operating Mode Control Registers */
- #define DDRC_PERF_CNT_OP_MODE_CTRL	0x8020
-@@ -717,10 +718,19 @@ static const struct of_device_id cn10k_ddr_pmu_of_match[] = {
- MODULE_DEVICE_TABLE(of, cn10k_ddr_pmu_of_match);
+ #define TAD_PFC_OFFSET		0x800
+ #define TAD_PFC(counter)	(TAD_PFC_OFFSET | (counter << 3))
+@@ -254,7 +255,7 @@ static const struct attribute_group *tad_pmu_attr_groups[] = {
+ 
+ static int tad_pmu_probe(struct platform_device *pdev)
+ {
+-	struct device_node *node = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
+ 	struct tad_region *regions;
+ 	struct tad_pmu *tad_pmu;
+ 	struct resource *res;
+@@ -276,21 +277,21 @@ static int tad_pmu_probe(struct platform_device *pdev)
+ 		return -ENODEV;
+ 	}
+ 
+-	ret = of_property_read_u32(node, "marvell,tad-page-size",
+-				   &tad_page_size);
++	ret = device_property_read_u32(dev, "marvell,tad-page-size",
++				       &tad_page_size);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Can't find tad-page-size property\n");
+ 		return ret;
+ 	}
+ 
+-	ret = of_property_read_u32(node, "marvell,tad-pmu-page-size",
+-				   &tad_pmu_page_size);
++	ret = device_property_read_u32(dev, "marvell,tad-pmu-page-size",
++				       &tad_pmu_page_size);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Can't find tad-pmu-page-size property\n");
+ 		return ret;
+ 	}
+ 
+-	ret = of_property_read_u32(node, "marvell,tad-cnt", &tad_cnt);
++	ret = device_property_read_u32(dev, "marvell,tad-cnt", &tad_cnt);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "Can't find tad-cnt property\n");
+ 		return ret;
+@@ -369,10 +370,19 @@ static const struct of_device_id tad_pmu_of_match[] = {
+ };
  #endif
  
 +#ifdef CONFIG_ACPI
-+static const struct acpi_device_id cn10k_ddr_pmu_acpi_match[] = {
-+	{"MRVL000A", 0},
++static const struct acpi_device_id tad_pmu_acpi_match[] = {
++	{"MRVL000B", 0},
 +	{},
 +};
-+MODULE_DEVICE_TABLE(acpi, cn10k_ddr_pmu_acpi_match);
++MODULE_DEVICE_TABLE(acpi, tad_pmu_acpi_match);
 +#endif
 +
- static struct platform_driver cn10k_ddr_pmu_driver = {
- 	.driver	= {
- 		.name   = "cn10k-ddr-pmu",
- 		.of_match_table = of_match_ptr(cn10k_ddr_pmu_of_match),
-+		.acpi_match_table  = ACPI_PTR(cn10k_ddr_pmu_acpi_match),
+ static struct platform_driver tad_pmu_driver = {
+ 	.driver         = {
+ 		.name   = "cn10k_tad_pmu",
+ 		.of_match_table = of_match_ptr(tad_pmu_of_match),
++		.acpi_match_table = ACPI_PTR(tad_pmu_acpi_match),
  		.suppress_bind_attrs = true,
  	},
- 	.probe		= cn10k_ddr_perf_probe,
+ 	.probe          = tad_pmu_probe,
 -- 
 2.25.1
 
