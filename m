@@ -2,174 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCF4647A72
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AD3647A77
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 01:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiLIAGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 19:06:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
+        id S229655AbiLIAHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 19:07:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLIAGc (ORCPT
+        with ESMTP id S229469AbiLIAHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 19:06:32 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679364D5C3
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:06:31 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 6so2451190pgm.6
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:06:31 -0800 (PST)
+        Thu, 8 Dec 2022 19:07:11 -0500
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF4B5BD78
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 16:07:10 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id n205so3063935oib.1
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 16:07:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1aXPgCiWEn4KqpNvDV1bjWt6gr8wgSQNFAq4xiow/SE=;
-        b=RdBqSc6M4CRSmpGk02jYZa4dcKFJimgLaChffzjNbU2wVkOQG6eD2WGzanYIohroQY
-         AbeZDovqExaPRQ8s0CnPuprwv5ZjmzOwCGQnWJB4AQP/15y38j/Eb4/CLV1s7R/BzVzG
-         y9Oi5cQWHpGNqq67QlQpPKjko3dGs1ue8Vs5Sf6L1E/j2MZVU3A/eDg71zgCTqoEcGZG
-         dh13GnYgoNVkfEtMKkfOrMvyuqWRxNATkZDVmfCmZCuIBs6Op2F7eHgPRfndb6xsH78Q
-         cNOOU1buHucGHI8MjUcB+piHd96M6DJO1Bbw/ybJGHQ/CkLRTF8a5X7qDfWpJULEyvP1
-         edTw==
+        d=gigaio-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ebmoDY8nCZPCqTmmr9ClRUpQd5hVuv8r0dFmTWEzCxc=;
+        b=u9zVCFxcgsUCpwrv+MLDq5+mQ7r+nViJlJlPn2dukx4J2QiwppP6npxYmm0WhwKFxl
+         JuvQ4mCE6fxDQ61i70imniq2X1wyg/nsEGQS0aTPJPDSAYu/70zoh8q0PHt8f1D3aKgV
+         HGBvU8BqblrsPrz8Dn/oW7FriIqgEKtEc6BpECtEamvoYGkPSCdxIN8GAgqkeyGz972h
+         y57yCoHrKTjwpTFIwJVT1yoHGf9tNwLZkvvY3fHWMcK4E7yOIbVXwar5gmP1MEd7bwCQ
+         zcWIKRTPVhSle91MLadp1mYRAkFS8qy7neCY6iqXFqbBGFeV4we7hIo8w9aodl6ygAov
+         nZRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1aXPgCiWEn4KqpNvDV1bjWt6gr8wgSQNFAq4xiow/SE=;
-        b=fpgSLUBfCEMnvDLwiYkhS9MEuDl3VN8gCRhxJdUg7u2IwhCYeyxWO5eDE/fYgX+etH
-         mCcEzFUmwF9Ap7jG8jsZLniGGIlTfex6YnP+IdngLAs/+JeS/zlneg918MN27sqTx8l3
-         1MiWoe5ACULP/5+xnkFWqZpuivQA43zuFdAncCq2iaISOoBvicJVUgfHLaeELGXtZXzn
-         4ye3/u9kUwpnhTzQrMFWLKzlEuPQH04+f74dQs8AaC3CVidAW9XyM7B7Y3seZ8a74bF7
-         GuVtwjuQzG+B9OgJv83Wgq7XWlfj8RhywI+LRZMZipQQdS2KX1LgWTk2cQODUWO3GHBP
-         m3hQ==
-X-Gm-Message-State: ANoB5pkXyh8UwIMJPfrGT1xhrC7Mr78RBz1X5wyMSEJy0VgQNhj/BcN0
-        BdyWf0ip6MrL7EvLDFFcW17REA==
-X-Google-Smtp-Source: AA0mqf4AMhsIf2K3Tptm8/7d4RQtGLeL65KmhGjthDZ2yajQnvnet3vuitTe3LK2aCIDKN2PgXFCHA==
-X-Received: by 2002:aa7:870a:0:b0:574:f201:660a with SMTP id b10-20020aa7870a000000b00574f201660amr3294647pfo.33.1670544390734;
-        Thu, 08 Dec 2022 16:06:30 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id x17-20020aa79411000000b005777fe7681esm78051pfo.20.2022.12.08.16.06.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 16:06:30 -0800 (PST)
-Date:   Thu, 8 Dec 2022 16:06:26 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ben Gardon <bgardon@google.com>
-Subject: Re: [Patch v2 2/2] KVM: x86/mmu: Allocate page table pages on NUMA
- node of underlying pages
-Message-ID: <Y5J8ArpcVVyBm3CY@google.com>
-References: <20221201195718.1409782-1-vipinsh@google.com>
- <20221201195718.1409782-3-vipinsh@google.com>
- <CANgfPd9Khg2tMAfpj18R39cqzerFE6pu+4YUSrYr3KD5FG9zRA@mail.gmail.com>
- <CAHVum0cf_AeJ8rZGcWdne=QV6f_+09b=7kJb3xd-9eNiZr75Qg@mail.gmail.com>
- <CANgfPd9tBncLoVM4BnD5yq2O+=pXBN5_axBOh=bx=zjG7u8T7Q@mail.gmail.com>
- <CAHVum0f_6UQvcqWAJxDJyL_LN-6ryAXNuh9xY6nFtLxCOMtoXA@mail.gmail.com>
- <CANgfPd-XkHPZyFsPe75WbUrufLpKtdr1Neri1JrrApQrjRLRJw@mail.gmail.com>
- <CAHVum0dkKSY9e90xgfBVBHUqntwJOmONK+TYBXFEwg6acvUrAw@mail.gmail.com>
- <CAHVum0dPRqOmoMQsjV5M0kcaccqTpfwou0zrMj1R1RUYMFBjEg@mail.gmail.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ebmoDY8nCZPCqTmmr9ClRUpQd5hVuv8r0dFmTWEzCxc=;
+        b=nEqN7ZJ738BOWSFI9WEQEQIUWm2EVtkFHfQp6zU3nZwUKBgannflYcJuU8Rz5OkI6P
+         Xz8M3RF9vRFzqPh95Dj6rmAXwaJKLrlrI0rZYJehnYAxlDs5A2zgt86W5g8mBTHk352n
+         M19CuXNiCrJj6GXUUnhHPCqookNw7oP2TIDt5NFnNn+uvTT/Y5w5+tleK+2KZFeO7hX3
+         sxV44Dr2oUCsCSSqRXa3jrYWvnD4R5mtgHMiR0dYwS+D6sK5freeeowZP5pbFxgimptC
+         YR55uQWtYAkxf1dm0C2YMrTQdNETMpM+u2/HcUYwPik7K2uKPKpXe/3qC+AaJJrtHOHS
+         YbMg==
+X-Gm-Message-State: ANoB5pma3lXXbzg+pB3nyF98Tl4qPVGAuHgR6WYwOM6C8/G8bMswIAA2
+        ibbZJq0jGW62RJM2DCM81UF/OA==
+X-Google-Smtp-Source: AA0mqf4qOwsnBziL9Aclkzc/HxDGyT7+1LyCWP87maLZEVNpww70bSwq1ULNLvHFa0zUGz8aLTkg7A==
+X-Received: by 2002:aca:1b0e:0:b0:35b:6d5:21ca with SMTP id b14-20020aca1b0e000000b0035b06d521camr1809324oib.51.1670544429683;
+        Thu, 08 Dec 2022 16:07:09 -0800 (PST)
+Received: from bigtwin1b.gigaio.com ([12.22.252.226])
+        by smtp.gmail.com with ESMTPSA id bk9-20020a0568081a0900b003509cc4ad4esm2294oib.39.2022.12.08.16.07.08
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 08 Dec 2022 16:07:09 -0800 (PST)
+From:   epilmore@gigaio.com
+To:     epilmore@gigaio.com, netdev@vger.kernel.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntb@lists.linux.dev, allenbh@gmail.com, dave.jiang@intel.com,
+        jdmason@kudzu.us
+Subject: [PATCH v2] ntb_netdev: Use dev_kfree_skb_any() in interrupt context
+Date:   Thu,  8 Dec 2022 16:06:59 -0800
+Message-Id: <20221209000659.8318-1-epilmore@gigaio.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0dPRqOmoMQsjV5M0kcaccqTpfwou0zrMj1R1RUYMFBjEg@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 11:05:09AM -0800, Vipin Sharma wrote:
-> By mistake I started replying to just Ben and realized it after few
-> exchanges. Adding others. Sorry about that.
-> 
-> On Wed, Dec 7, 2022 at 10:58 AM Vipin Sharma <vipinsh@google.com> wrote:
-> >
-> > On Tue, Dec 6, 2022 at 11:57 AM Ben Gardon <bgardon@google.com> wrote:
-> > >
-> > > On Tue, Dec 6, 2022 at 11:18 AM Vipin Sharma <vipinsh@google.com> wrote:
-> > > >
-> > > > On Tue, Dec 6, 2022 at 10:17 AM Ben Gardon <bgardon@google.com> wrote:
-> > > > >
-> > > > > On Mon, Dec 5, 2022 at 3:40 PM Vipin Sharma <vipinsh@google.com> wrote:
-> > > > > >
-> > > > > > On Mon, Dec 5, 2022 at 10:17 AM Ben Gardon <bgardon@google.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Dec 1, 2022 at 11:57 AM Vipin Sharma <vipinsh@google.com> wrote:
-> > > > > > > > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > > > > > > > index 1782c4555d94..4d59c9d48277 100644
-> > > > > > > > --- a/virt/kvm/kvm_main.c
-> > > > > > > > +++ b/virt/kvm/kvm_main.c
-> > > > > > > > @@ -384,6 +384,11 @@ static void kvm_flush_shadow_all(struct kvm *kvm)
-> > > > > > > >         kvm_arch_guest_memory_reclaimed(kvm);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +void * __weak kvm_arch_mmu_get_free_page(int nid, gfp_t gfp_flags)
-> > > > > > > > +{
-> > > > > > > > +               return (void *)__get_free_page(gfp_flags);
-> > > > > > > > +}
-> > > > > > > > +
-> > > > > > >
-> > > > > > > Rather than making this __weak, you could use #ifdef CONFIG_NUMA to
-> > > > > > > just put all the code in the arch-neutral function.
-> > > > > > >
-> > > > > >
-> > > > > > I am not sure how it will work. Here, I am trying to keep this feature
-> > > > > > only for x86. This function will be used for all architecture except
-> > > > > > in x86 where we have different implementation in arch/x86/mmu/mmu.c
-> > > > > > So, even if CONFIG_NUMA is defined, we want to keep the same
-> > > > > > definition on other architectures.
-> > > > > >
-> > > > > >
-> > > > >
-> > > > > Something like:
-> > > > >
-> > > > > +void * kvm_arch_mmu_get_free_page(int nid, gfp_t gfp_flags)
-> > > > > +{
-> > > > > +       struct page *spt_page;
-> > > > > +       void *address = NULL;
-> > > > > +
-> > > > > +       #ifdef CONFIG_NUMA
-> > > > > +       if (nid != NUMA_NO_NODE) {
-> > > > > +               spt_page = alloc_pages_node(nid, gfp, 0);
-> > > > > +               if (spt_page) {
-> > > > > +                       address = page_address(spt_page);
-> > > > > +                       return address;
-> > > > > +               }
-> > > > > +       }
-> > > > > +       #endif // CONFIG_NUMA
-> > > > > +       return (void *)__get_free_page(gfp);
-> > > > > +}
-> > > > >
-> > > >
-> > > > 'nid' will be 0 not NUMA_NO_NODE for other architectures. In x86, I am
-> > > > explicitly setting kvm_mmu_memory_cache->node to NUMA_NO_NODE or
-> > > > specific desired nodes. In others architectures it will be 0 as struct
-> > > > will be 0 initialized. __weak avoids initializing nid to NUM_NO_NODE
-> > > > in other architectures.
-> > >
-> > > ooh, I see. It might be worth setting it to NUMA_NO_NODE on other
-> > > archs as 0 could be kind of misleading.
-> >
-> > Discussed offline with Ben.
-> > Initialization code for cache is in the respective architectures.
-> > Using "__weak" avoids touching code in other architectures.
+From: Eric Pilmore <epilmore@gigaio.com>
 
-But it's still a bit gross to have node=0 in struct
-kvm_mmu_memory_cache for other architectures, even if it doesn't happen
-to be misused in this series.
+TX/RX callback handlers (ntb_netdev_tx_handler(),
+ntb_netdev_rx_handler()) can be called in interrupt
+context via the DMA framework when the respective
+DMA operations have completed. As such, any calls
+by these routines to free skb's, should use the
+interrupt context safe dev_kfree_skb_any() function.
 
-I would just bite the bullet and modify the other architectures. Do it
-in a precusor patch where you just add node to struct
-kvm_mmu_memory_cache and initialize it to NUMA_NO_NODE across all
-architectures, probably with a common macro e.g.
+Previously, these callback handlers would call the
+interrupt unsafe version of dev_kfree_skb(). This has
+not presented an issue on Intel IOAT DMA engines as
+that driver utilizes tasklets rather than a hard
+interrupt handler, like the AMD PTDMA DMA driver.
+On AMD systems, a kernel WARNING message is
+encountered, which is being issued from
+skb_release_head_state() due to in_hardirq()
+being true.
 
-#define INIT_KVM_MMU_MEMORY_CACHE(_cache) do { \
-	(_cache)->node = NUMA_NO_NODE; \
-} while (0)
+Besides the user visible WARNING from the kernel,
+the other symptom of this bug was that TCP/IP performance
+across the ntb_netdev interface was very poor, i.e.
+approximately an order of magnitude below what was
+expected. With the repair to use dev_kfree_skb_any(),
+kernel WARNINGs from skb_release_head_state() ceased
+and TCP/IP performance, as measured by iperf, was on
+par with expected results, approximately 20 Gb/s on
+AMD Milan based server. Note that this performance
+is comparable with Intel based servers.
 
-Then, you can follow Ben's approach and avoid the __weak function.
+Fixes: 765ccc7bc3d91 ("ntb_netdev: correct skb leak")
+Fixes: 548c237c0a997 ("net: Add support for NTB virtual ethernet device")
+Signed-off-by: Eric Pilmore <epilmore@gigaio.com>
+---
+ drivers/net/ntb_netdev.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ntb_netdev.c b/drivers/net/ntb_netdev.c
+index 80bdc07f2cd3..59250b7accfb 100644
+--- a/drivers/net/ntb_netdev.c
++++ b/drivers/net/ntb_netdev.c
+@@ -137,7 +137,7 @@ static void ntb_netdev_rx_handler(struct ntb_transport_qp *qp, void *qp_data,
+ enqueue_again:
+ 	rc = ntb_transport_rx_enqueue(qp, skb, skb->data, ndev->mtu + ETH_HLEN);
+ 	if (rc) {
+-		dev_kfree_skb(skb);
++		dev_kfree_skb_any(skb);
+ 		ndev->stats.rx_errors++;
+ 		ndev->stats.rx_fifo_errors++;
+ 	}
+@@ -192,7 +192,7 @@ static void ntb_netdev_tx_handler(struct ntb_transport_qp *qp, void *qp_data,
+ 		ndev->stats.tx_aborted_errors++;
+ 	}
+ 
+-	dev_kfree_skb(skb);
++	dev_kfree_skb_any(skb);
+ 
+ 	if (ntb_transport_tx_free_entry(dev->qp) >= tx_start) {
+ 		/* Make sure anybody stopping the queue after this sees the new
+-- 
+2.38.1
+
