@@ -2,89 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C3F648854
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:17:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 530A1648857
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiLISRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:17:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S229956AbiLISRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:17:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiLISQ6 (ORCPT
+        with ESMTP id S229849AbiLISRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:16:58 -0500
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06ED8AC6DF;
-        Fri,  9 Dec 2022 10:16:57 -0800 (PST)
-Received: from [192.168.0.5] (71-212-113-106.tukw.qwest.net [71.212.113.106])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 7333820B83C2;
-        Fri,  9 Dec 2022 10:16:56 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7333820B83C2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1670609816;
-        bh=lzFnTftRvxlZ+Gp85uwktXavpvOXAhfKFviLo3DMfwo=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=ml8VmkXz4Y1dj/DbMqloNM7VMWznzIn+ig7QaDWVQbzj1O7/crKJi1zVjqTWT09q0
-         0rRVt7NwqKNDuqt/c+8B0kq9cqw+dPNLVCBknhjt5lKwQiEvcPdzeMhayh3VpBpaa3
-         g6iK/YUGVnqJ0UOP/IhoWG4+JVexLjnYaT+TCfYs=
-Subject: Re: [PATCH v8 4/5] Drivers: hv: Enable vmbus driver for nested root
- partition
-To:     Jinank Jain <jinankjain@linux.microsoft.com>,
-        jinankjain@microsoft.com
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, seanjc@google.com,
-        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
-        mikelley@microsoft.com
-References: <cover.1670561320.git.jinankjain@linux.microsoft.com>
- <c8aa55ee5b48f301ef721908e6195a102a089d42.1670561320.git.jinankjain@linux.microsoft.com>
-From:   Nuno Das Neves <nunodasneves@linux.microsoft.com>
-Message-ID: <b69f0aa9-3f6e-b1d4-7927-1c807adbbf75@linux.microsoft.com>
-Date:   Fri, 9 Dec 2022 10:16:56 -0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
- Thunderbird/68.12.1
+        Fri, 9 Dec 2022 13:17:23 -0500
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B03AC6F9
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:17:20 -0800 (PST)
+Received: by mail-pg1-x531.google.com with SMTP id h193so4047502pgc.10
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:17:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=mHldBNwMDxBGa5oJAciP9SUh7XCxBJPxzIOTUsmKXsg=;
+        b=WN8zt38fo0rPzI1M/6FwYLK6sw5AQwIa6Pr5EoLBhkjMBvLUWnVWr0DxkBlJlJ8Uib
+         7O7rhSf7jJoryqf0zhjFyeRUTUHZdMu3yTJaMm5kK/UTv+7hyq6ilrMMEk9pqYl/bQcG
+         dXIuqC4UOSOWfpEfqD9PrDzkJsuwrxH/YP2tiwSsM4TyPUeXB6m5gIk+YRQNYGivlLmB
+         PpogDGG/pQumE4+vhoOiU6S/k7GN1Qxg8FZDPvwqUf4N6SIvZ0XXQver8oUZiWtfIg9w
+         wcXYt9uRPJ/iiWJA7z1jF95/usONGU6/+6MgmkWTBFfSAkt0vjUm0bkwRGUgWLV6H3pM
+         Bt7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mHldBNwMDxBGa5oJAciP9SUh7XCxBJPxzIOTUsmKXsg=;
+        b=AZxJ4+FX5Zucgbv7oQy6eO8E6STudzj9EW5mh+m/HeG+MhhlRDC3bk5x2N02KGGIIK
+         0nmdIlhNQrToshzgvX0dPkDpm7v8EqcTbLth7DVF6GOk979KudaQdniUDfC415Cz0a1Z
+         xS8uK8vnh/dq265c38JlKc/YeeV07MolfHSxHrw2gMT/7CCVEP+Yh4arhYUI7J8ID+K+
+         JOyAL1/+PdlLhR4X9YZxYGcKsxssImsVUyEtNEzWFvqj0J19GjRb06H2rj9hGHg4WJ/Z
+         Avu2eaWc9q3UhLqQTKHGJq4LYHltaJojBpDD0CZx2Q7NIGcxMGNhkyrB7hvpfzL9RdWh
+         QOOA==
+X-Gm-Message-State: ANoB5pmgXxKOGtH+cKaw8alxJVU2WfAuV7IdSf9ZBx2Wz5Izy4avf8ND
+        PiwELgYQp5LpQw3sPLVeC/EPNLMHf00qDry2i+ZWSQ==
+X-Google-Smtp-Source: AA0mqf7Z/nMXR28vj8/FO4hAcG3xVvi1C0aJ5KtF473JPDM/O/TREHX4VgMJrUiLBXmw/AOAZYWK+u+q+01l1XwZgCI=
+X-Received: by 2002:aa7:8c54:0:b0:574:2f5a:18d0 with SMTP id
+ e20-20020aa78c54000000b005742f5a18d0mr73001464pfd.23.1670609839914; Fri, 09
+ Dec 2022 10:17:19 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <c8aa55ee5b48f301ef721908e6195a102a089d42.1670561320.git.jinankjain@linux.microsoft.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-20.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20221122001125.765003-1-irogers@google.com>
+In-Reply-To: <20221122001125.765003-1-irogers@google.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 9 Dec 2022 10:17:08 -0800
+Message-ID: <CAKwvOd=fEc=f++NFJpb+QOynC8vRrRp3wFT1KpQNwVcG9WWdrQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] objtool build improvements
+To:     Ian Rogers <irogers@google.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Stephane Eranian <eranian@google.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/8/2022 9:32 PM, Jinank Jain wrote:
-> Currently VMBus driver is not initialized for root partition but we need
-> to enable the VMBus driver for nested root partition. This is required,
-> so that L2 root can use the VMBus devices.
-> 
-> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> ---
->  drivers/hv/vmbus_drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 0f00d57b7c25..6324e01d5eec 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -2745,7 +2745,7 @@ static int __init hv_acpi_init(void)
->  	if (!hv_is_hyperv_initialized())
->  		return -ENODEV;
->  
-> -	if (hv_root_partition)
-> +	if (hv_root_partition && !hv_nested)
->  		return 0;
->  
->  	/*
-> 
+On Mon, Nov 21, 2022 at 4:11 PM Ian Rogers <irogers@google.com> wrote:
+>
+> Install libsubcmd and then get headers from there, this avoids
+> inadvertent dependencies on things in tools/lib. Fix V=1
+> support. Clean up how HOSTCC is used to override CC to avoid CFLAGS
+> being set for say gcc, and then CC being overridden to clang. Support
+> HOSTCFLAGS as a make option.
 
-Reviewed-by: Nuno Das Neves <nunodasneves@linux.microsoft.com>
+Ian, I'm terribly sorry about the delay in reviewing this; usually my
+turnaround time is much lower on code review...
+
+Anyways, the patchset LGTM; thanks for the work that went into this.
+
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Tested-by: Nick Desaulniers <ndesaulniers@google.com>
+
+>
+> v2. Include required "tools lib subcmd: Add install target" that is
+>     already in Arnaldo's tree:
+> https://lore.kernel.org/lkml/20221109184914.1357295-3-irogers@google.com/
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/commit/?h=perf/core&id=630ae80ea1dd253609cb50cff87f3248f901aca3
+>     When building libsubcmd.a from objtool's Makefile, clear the
+>     subdir to avoid it being appended onto OUTPUT and breaking the
+>     build.
+>
+> Ian Rogers (4):
+>   tools lib subcmd: Add install target
+>   objtool: Install libsubcmd in build
+>   objtool: Properly support make V=1
+>   objtool: Alter how HOSTCC is forced
+>
+>  tools/lib/subcmd/Makefile | 49 ++++++++++++++++++++++++++++
+>  tools/objtool/Build       |  2 --
+>  tools/objtool/Makefile    | 68 +++++++++++++++++++++++++++------------
+>  3 files changed, 97 insertions(+), 22 deletions(-)
+>
+> --
+> 2.38.1.584.g0f3c55d4c2-goog
+>
+
+
+-- 
+Thanks,
+~Nick Desaulniers
