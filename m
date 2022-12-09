@@ -2,91 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54BFE647E4D
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:09:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C45647E63
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 08:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiLIHJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 02:09:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52636 "EHLO
+        id S229892AbiLIHRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 02:17:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiLIHJo (ORCPT
+        with ESMTP id S229886AbiLIHRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 02:09:44 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042BB25C49;
-        Thu,  8 Dec 2022 23:09:42 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id v7so2904210wmn.0;
-        Thu, 08 Dec 2022 23:09:41 -0800 (PST)
+        Fri, 9 Dec 2022 02:17:09 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D83A31DD7;
+        Thu,  8 Dec 2022 23:17:08 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so2741290wmi.3;
+        Thu, 08 Dec 2022 23:17:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=l5+rNzDfs1zsypdoRqJxdk+waRpxcBnDQcEOJe8SCHM=;
-        b=n11oX8Rz9D6UWbDalnNpX6HxE7SvzadtkFPJa5QD8b90Eee3KsWJD1CSqAnNkV00mD
-         h4euS6LoKlURhSoMTCdev/5GEIvQnZCvvCzGWTnGHRzBiOHzAtCXQwAy/hWp6aYKMO1r
-         Hy33EvzZe/w7SR+no0EpmkyckFFGdsUXx6aKCqm1U+4ms/W57RhhGgYUf2Ddd+IJ+Azv
-         kHopm2CnKlCw+/QArRxbcEN8wPjS0SdMf6exxTkeUzW2AUuK2YVbYClyqeUQJDw579Gh
-         nmSn7XPGnywricthZv+HmOC7uiqP38RMdnsIA3BHd7eSA1sL3xOHl3RuApopLwaAyOus
-         /Idg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8/LCy/d/7cFCAy3kAThheVqXGRbKxH6e9mviumbYm7c=;
+        b=Ep5jefDyiLAXJnhqR+U2NKELAg+lA97eqqHMhvkVV+aRjYE4InGCkBCOle7ysDnbTO
+         PKaVDBdtcp1EJkvwwrSCcY2AtQ8tI6w95+Xk4YBQbgQ+cwPBl7rwCAEI8P6hN+ofp7M7
+         XlL0rLPuFw5YiPjyKeuDl21SWZfgwuIKSFQuOe6NFhEyUIILCCNwUaiw8PxUeDLQV3xt
+         GNAeDtGIJu9z2sqZ/Z33nJc+IiW5WvysqNV3g4psYxP2rqJ3rCtZFpXss8JYqkanavfV
+         1vaOFJElsrkSL8x2TLqq+mb1OW2wYptbCsS1uI+Sqjw7P3GHodmlu2NUDsTXQiXVKmSy
+         aMOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l5+rNzDfs1zsypdoRqJxdk+waRpxcBnDQcEOJe8SCHM=;
-        b=4bclhTZF3IHYHPKwt03ndobZlfw4havKIHTEtMNxB7w8lKzwBiKYWpnr6pdoKKwBNf
-         HhCx8sD5M9KIjAXyNWsm+kUYMkI/EZx7CZa6AcWVnMP11/AhnOetb49oUdWx83fn/uSR
-         MrwCdZ+LTDTDJUbZTycK7OO/e75IGz0en3rd0Vuiww61qJX8YM+fo5m4SzdGAxqaKX0j
-         aXWtPXqws8YCMLL0iu/agZIu2WXFUYKAHFX5MHt39wcPQqz/o2e4U69njMsCyBGSzFT5
-         xV01DbFPMGxy8tc8YqbZfwXHlXYOqKxxQ4lJVkPa0Vm4TuFU9yWlja2CknEKJjKWDZZy
-         xITw==
-X-Gm-Message-State: ANoB5pntDHGuhO4OOnH1SATRxRirwRwkt4E77FyL8u0CWV6GfNcDW9Ly
-        UGCFdBaF5WH3uEX2M83Lgj8HicUU2yMeLw==
-X-Google-Smtp-Source: AA0mqf7dUf3bFAaGY+YH7LRyCcxgc0zIdK9DsxDMlqPObxjk1ppqZYu3vJAVd9UA6boOjtOMxI0+DA==
-X-Received: by 2002:a05:600c:6899:b0:3d1:cf66:3afa with SMTP id fn25-20020a05600c689900b003d1cf663afamr3748540wmb.19.1670569780354;
-        Thu, 08 Dec 2022 23:09:40 -0800 (PST)
-Received: from krava ([83.240.62.58])
-        by smtp.gmail.com with ESMTPSA id t6-20020a05600c41c600b003b4935f04a4sm1094320wmh.5.2022.12.08.23.09.38
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8/LCy/d/7cFCAy3kAThheVqXGRbKxH6e9mviumbYm7c=;
+        b=lhTFyMvN6jHI4dAJ2X0yvFAzW6P9WaMLDxoJVuyV4FfnOOreX0HHXQHYHc7EYmIcrd
+         6q1d+YWFdpqz5EaBCSpUhw/Z7I3qtFNN1R7ObfIXmxbD9KHtDmn9gw1nCS9p5RwxZA3B
+         i/MeQrqusR15IcM27uhwSku9lF/jDyXI1C/vZoHhmAVGWQ/Y/M5HYgjQIHRq1ZCZbqGF
+         ygcdYjUHNuYL/aNp9iTtEMKnzYKYNeFpQgz924htw040WXbQnQwYyq8HglrugV6vapcZ
+         7VjlEZjQUfh1Qg7fJ3VZEQT7/06o2jVzOYeOJ35sS4U4gOQ0v/CRXfmrbuQ0ZbbCA1Dz
+         zzPg==
+X-Gm-Message-State: ANoB5pnG8utuda3PiINGHkmlVvGbnTwh1QqiQCW5RblCjrJkpNNOBCLk
+        CIMEY4ho5r3ffVX3gR5iZo3yglghY/8=
+X-Google-Smtp-Source: AA0mqf5yU2g+sGKdKn91qa1TmxluiqjdrDClfICOFqEJUtyO738YTISN0kqyFNWFPXVxdyE4s+4AJA==
+X-Received: by 2002:a05:600c:4fd1:b0:3d0:6c60:b4d1 with SMTP id o17-20020a05600c4fd100b003d06c60b4d1mr4820311wmq.6.1670570226308;
+        Thu, 08 Dec 2022 23:17:06 -0800 (PST)
+Received: from localhost.localdomain (188.red-88-10-59.dynamicip.rima-tde.net. [88.10.59.188])
+        by smtp.gmail.com with ESMTPSA id j10-20020a05600c1c0a00b003b49bd61b19sm8249488wms.15.2022.12.08.23.17.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 23:09:39 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 9 Dec 2022 08:09:36 +0100
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Hao Sun <sunhao.th@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-Message-ID: <Y5LfMGbOHpaBfuw4@krava>
-References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
- <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
- <Y49dMUsX2YgHK0J+@krava>
- <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
- <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
- <Y5Inw4HtkA2ql8GF@krava>
- <Y5JkomOZaCETLDaZ@krava>
- <Y5JtACA8ay5QNEi7@krava>
+        Thu, 08 Dec 2022 23:17:05 -0800 (PST)
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To:     linux-pci@vger.kernel.org
+Cc:     bhelgaas@google.com, lpieralisi@kernel.org, robh@kernel.org,
+        kw@linux.com, matthias.bgg@gmail.com, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: mt7621: Sleep a bit after power on the PCIs phy ports
+Date:   Fri,  9 Dec 2022 08:17:03 +0100
+Message-Id: <20221209071703.2891714-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y5JtACA8ay5QNEi7@krava>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -97,102 +69,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:02:24AM +0100, Jiri Olsa wrote:
-> On Thu, Dec 08, 2022 at 11:26:45PM +0100, Jiri Olsa wrote:
-> > On Thu, Dec 08, 2022 at 07:06:59PM +0100, Jiri Olsa wrote:
-> > > On Thu, Dec 08, 2022 at 09:48:52AM -0800, Alexei Starovoitov wrote:
-> > > > On Wed, Dec 7, 2022 at 11:57 AM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Tue, Dec 6, 2022 at 7:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > > > >
-> > > > > > On Tue, Dec 06, 2022 at 02:46:43PM +0800, Hao Sun wrote:
-> > > > > > > Hao Sun <sunhao.th@gmail.com> 于2022年12月6日周二 11:28写道：
-> > > > > > > >
-> > > > > > > > Hi,
-> > > > > > > >
-> > > > > > > > The following crash can be triggered with the BPF prog provided.
-> > > > > > > > It seems the verifier passed some invalid progs. I will try to simplify
-> > > > > > > > the C reproducer, for now, the following can reproduce this:
-> > > > > > > >
-> > > > > > > > HEAD commit: ab0350c743d5 selftests/bpf: Fix conflicts with built-in
-> > > > > > > > functions in bpf_iter_ksym
-> > > > > > > > git tree: bpf-next
-> > > > > > > > console log: https://pastebin.com/raw/87RCSnCs
-> > > > > > > > kernel config: https://pastebin.com/raw/rZdWLcgK
-> > > > > > > > Syz reproducer: https://pastebin.com/raw/4kbwhdEv
-> > > > > > > > C reproducer: https://pastebin.com/raw/GFfDn2Gk
-> > > > > > > >
-> > > > > > >
-> > > > > > > Simplified C reproducer: https://pastebin.com/raw/aZgLcPvW
-> > > > > > >
-> > > > > > > Only two syscalls are required to reproduce this, seems it's an issue
-> > > > > > > in XDP test run. Essentially, the reproducer just loads a very simple
-> > > > > > > prog and tests run repeatedly and concurrently:
-> > > > > > >
-> > > > > > > r0 = bpf$PROG_LOAD(0x5, &(0x7f0000000640)=@base={0x6, 0xb,
-> > > > > > > &(0x7f0000000500)}, 0x80)
-> > > > > > > bpf$BPF_PROG_TEST_RUN(0xa, &(0x7f0000000140)={r0, 0x0, 0x0, 0x0, 0x0,
-> > > > > > > 0x0, 0xffffffff, 0x0, 0x0, 0x0, 0x0, 0x0}, 0x48)
-> > > > > > >
-> > > > > > > Loaded prog:
-> > > > > > >    0: (18) r0 = 0x0
-> > > > > > >    2: (18) r6 = 0x0
-> > > > > > >    4: (18) r7 = 0x0
-> > > > > > >    6: (18) r8 = 0x0
-> > > > > > >    8: (18) r9 = 0x0
-> > > > > > >   10: (95) exit
-> > > > > >
-> > > > > > hi,
-> > > > > > I can reproduce with your config.. it seems related to the
-> > > > > > recent static call change:
-> > > > > >   c86df29d11df bpf: Convert BPF_DISPATCHER to use static_call() (not ftrace)
-> > > > > >
-> > > > > > I can't reproduce when I revert that commit.. Peter, any idea?
-> > > > >
-> > > > > Jiri,
-> > > > >
-> > > > > I see your tested-by tag on Peter's commit c86df29d11df.
-> > > > > I assume you're actually tested it, but
-> > > > > this syzbot oops shows that even empty bpf prog crashes,
-> > > > > so there is something wrong with that commit.
-> > > > >
-> > > > > What is the difference between this new kconfig and old one that
-> > > > > you've tested?
-> > 
-> > I attached the diff, 'config-issue' is the one that reproduces the issue
-> > 
-> > > > >
-> > > > > I'm trying to understand the severity of the issues and
-> > > > > whether we need to revert that commit asap since the merge window
-> > > > > is about to start.
-> > > > 
-> > > > Jiri, Peter,
-> > > > 
-> > > > ping.
-> > > > 
-> > > > cc-ing Thorsten, since he's tracking it now.
-> > > > 
-> > > > The config has CONFIG_X86_KERNEL_IBT=y.
-> > > > Is it related?
-> > > 
-> > > sorry for late reply.. I still did not find the reason,
-> > > but I did not try with IBT yet, will test now
-> > 
-> > no difference with IBT enabled, can't reproduce the issue
-> > 
-> 
-> ok, scratch that.. the reproducer got stuck on wifi init :-\
-> 
-> after I fix that I can now reproduce on my local config with
-> IBT enabled or disabled.. it's something else
+Some devices like ZBT WE1326 and ZBT WF3526-P need to sleep a bit after call
+to mt7621_pcie_init_port() driver function to get into reliable boots for
+both warn and hard resets. The needed time for these devices to always detect
+the ports seems to be from 75 to 100 milliseconds. Hence, properly add an
+extra 100 milliseconds msleep() call to make also these devices work.
 
-I'm getting the error also when reverting the static call change,
-looking for good commit, bisecting
+Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+---
+Hi Bjorn / Lorenzo,
 
-I'm getting fail with:
-   f0c4d9fc9cc9 (tag: v6.1-rc4) Linux 6.1-rc4
+I send previous patch here [0] related with this issue. Since after a bit
+of testing with these devices by openwrt community [1] we end up that there is
+no need of increasing PERST_DELAY_MS definition. This is also the reason
+of not sending a v2 for this but a new patch with the proper solution.
+I preferred to just use the same PERST_DELAY_MS define also for this to
+not perform extra changes but the needed to the driver. If you prefer
+me to write new definitions for all the sleep paths you pointed out in
+[0], just let me know and I will send them also.
 
-v6.1-rc1 is ok
+Thanks in advance for your time.
 
-jirka
+Best regards,
+    Sergio Paracuellos
+
+[0]: https://lore.kernel.org/linux-pci/20221119110837.2419466-1-sergio.paracuellos@gmail.com/T/#u
+[1]: https://github.com/openwrt/openwrt/pull/11220
+
+ drivers/pci/controller/pcie-mt7621.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/pci/controller/pcie-mt7621.c b/drivers/pci/controller/pcie-mt7621.c
+index 4bd1abf26008..3311ca64b315 100644
+--- a/drivers/pci/controller/pcie-mt7621.c
++++ b/drivers/pci/controller/pcie-mt7621.c
+@@ -369,6 +369,7 @@ static int mt7621_pcie_init_ports(struct mt7621_pcie *pcie)
+ 		}
+ 	}
+ 
++	msleep(PERST_DELAY_MS);
+ 	mt7621_pcie_reset_ep_deassert(pcie);
+ 
+ 	tmp = NULL;
+-- 
+2.25.1
+
