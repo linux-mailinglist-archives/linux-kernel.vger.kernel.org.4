@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AC1364832B
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:04:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6694F64832D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:05:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiLIOEX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:04:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S229783AbiLIOFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:05:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLIOET (ORCPT
+        with ESMTP id S229517AbiLIOFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:04:19 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364146C731;
-        Fri,  9 Dec 2022 06:04:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670594658; x=1702130658;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xRDLAgO0B0bki/4vlcUzPPWeDY+4XUKMNAA2OHnB5WI=;
-  b=hgww7odzgNhDbqQfsW4qopKa2e69Upb9NZXuOz7yh9HHJ/UC3vmQ29TC
-   N2U9I/XGq9rzo7AAuB5XKpXIo+sjDcOxWmvDk7/Abuk3nqdgRCg8vXRw9
-   tHRtw2DjenpvKf17CiaNKljLPEt3wGHK4vj6rLTvK6EX5f5hzoti85QeL
-   EpR7GBnuRbJIli7LZ1w0MaRAbSp+6sru4T7ICPI/m9OnZCSrxiD2qJB7H
-   Hh/6T+hLbK1/yKaSr5M49eygbNCyfp/Jufq+DYFov6qGbhu5o9nWkFLYK
-   kxm4VxDSIDVcRRcE8vjga0GVyqTbsRBkX+FtXss6AcSr/j9WukWA48gBt
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="305105839"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="305105839"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 06:04:17 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="678159905"
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="678159905"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 09 Dec 2022 06:04:14 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1p3dz3-006yRX-0f;
-        Fri, 09 Dec 2022 16:04:13 +0200
-Date:   Fri, 9 Dec 2022 16:04:12 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Richard Fitzgerald <rf@opensource.cirrus.com>, wsa@kernel.org,
-        jarkko.nikula@linux.intel.com, mika.westerberg@linux.intel.com,
-        jsd@semihalf.com, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH] i2c: designware: Fix unbalanced suspended flag
-Message-ID: <Y5NAXP718ZS2CZUb@smile.fi.intel.com>
-References: <20221209114034.18025-1-rf@opensource.cirrus.com>
- <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
+        Fri, 9 Dec 2022 09:05:04 -0500
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8601572856;
+        Fri,  9 Dec 2022 06:05:03 -0800 (PST)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 591661D2A;
+        Fri,  9 Dec 2022 15:05:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1670594701;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2YpDJExtWrn75eERpM+XzkW1nqJfI2pmtL3qmKW7EzA=;
+        b=zX8/PUNdaBaxPoSJ4n9rhzUf+l3ji7UlL+QRJMRzT6Mu4qFVzSEdeAm1ThWrnJU3ANlMhY
+        9RAlIhCpyF39JQ3Sj2qGLqPExZboJinxhgdWUCIWCvXQtsIteB8/9J95lovnf6JyJHI/CN
+        YeA7vd80KskZG549v6xnBkjt75n6eHLYDJqka3IUlXXsFnh/8r/vJ+l1fVwK8b/lY8AjDw
+        he0B7/m/xUAFyxhCOY+D/xwwzXkVk/d2FGRNiGKTLlMwFQZluI3/YUpl+ne1sbnwd5D6FM
+        hY0amjHPtxQrE99V8zasG7kYG8q+eDl3h0uYtNCPeXerv7+2klulpFtXZWZcFw==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Date:   Fri, 09 Dec 2022 15:05:01 +0100
+From:   Michael Walle <michael@walle.cc>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Steen.Hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+        daniel.machon@microchip.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, lars.povlsen@microchip.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, richardcochran@gmail.com
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+In-Reply-To: <20221209125611.m5cp3depjigs7452@skbuf>
+References: <20221203104348.1749811-5-horatiu.vultur@microchip.com>
+ <20221208092511.4122746-1-michael@walle.cc>
+ <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
+ <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
+ <adb8e2312b169d13e756ff23c45872c3@walle.cc>
+ <20221209092904.asgka7zttvdtijub@soft-dev3-1>
+ <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
+ <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
+ <20221209125611.m5cp3depjigs7452@skbuf>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,25 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:15:21PM +0100, Hans de Goede wrote:
-> On 12/9/22 12:40, Richard Fitzgerald wrote:
+Am 2022-12-09 13:56, schrieb Vladimir Oltean:
+> On Fri, Dec 09, 2022 at 01:58:57PM +0100, Horatiu Vultur wrote:
+>> > Does it also work out of the box with the following patch if
+>> > the interface is part of a bridge or do you still have to do
+>> > the tc magic from above?
+>> 
+>> You will still need to enable the TCAM using the tc command to have it
+>> working when the interface is part of the bridge.
+> 
+> FWIW, with ocelot (same VCAP mechanism), PTP traps work out of the box,
+> no need to use tc. Same goes for ocelot-8021q, which also uses the 
+> VCAP.
+> I wouldn't consider forcing the user to add any tc command in order for
+> packet timestamping to work properly.
 
-...
++1
+Esp. because there is no warning. I.e. I tried this patch while
+the interface was added on a bridge and there was no error
+whatsoever. Also, you'd force the user to have that Kconfig option
+set.
 
-> Did you add printk messages to the suspend/resume callbacks of
-> i2c-designware-platdrv.c which show the system suspend callback
-> being called but not the system resume one ?
-
-Side note: It's better to use ftrace for that, less invasive time-wise.
-
-...
-
-> Did you add a printk to both the if + else paths
-> and have you ever seen the controller not get
-> resumed with this test added ?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+-michael
 
