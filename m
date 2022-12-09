@@ -2,134 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA304648372
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC99164837C
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiLIOKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S229939AbiLIOMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:12:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230007AbiLIOKE (ORCPT
+        with ESMTP id S229807AbiLIOL2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:10:04 -0500
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026CC79CA1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:07:10 -0800 (PST)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1447c7aa004so5727455fac.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:07:09 -0800 (PST)
+        Fri, 9 Dec 2022 09:11:28 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A34C1D323
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:07:47 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so5842762wmb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:07:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EC7aCx3NVZPRrIAdRd/P0UiHZeuimNDqrKtypaG8KIs=;
-        b=VgMCqrSWhn+zUG0ZHoAQzM6Ocr5uTpzOurxKHgH2SVCKmWO2RCPqntsO6OsqWIuRqC
-         bSa9VZ9Qb2lmALXqzuojvsvaplZfwILqCRwnEHeaJZTDKKqMJZr/ZNYbCRUc66sWssWT
-         iJr2frb9W0Ksz6aVDTK4UmTsYtFOgnO9w0mCg7p23vOHpAIz0azzKcyoFvRwosPjtFyL
-         R6X0irs1PC3HS3DoNahJH0rEnLz+61/H+PGWaHPY29tH74waoU22igeFiLlWH8TELDQP
-         piuSuwuyJ7ftIxwuQ54Ca0N6TGZ4t1zJeAx4gqRBsNdu3Kw6Yc3ZwidX1RDPsMDCbTfj
-         spNA==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ifEzYQVWgi27Tkh3vf+OK8A00LK9ON40E32Dr2itBE=;
+        b=a6iDHi2eu7tlyATy9Debb4go9/WqaTPOWZbnOyk9Hkmy54InAp41PPJhli2R67ffx9
+         J5uh6QxY4p4pXBWFFWcLuCtfXHVKJk1LO8ZEJaHvOgY/REFmcpjiZQI5c4mMfvTWSIUJ
+         9bJpamWU+J+Fl0pc56au/jTfMELC7GRvqQ8onw4kBTJZUl3BQDL68wPRWL28RD+B4rdR
+         s+QR01e+ZDAN1KYe0dUBJ1Rh2vc2AUbpcOXNhgskwJeUAyrF+xbiFGUMNnzZJd4YLuzR
+         LdmnrC/+n5EZe6TX7ZusU7Ye+fG/6lHh3zwMKI2npgEGgNekz2r3YTZJaBCZpVg3urQW
+         kiWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EC7aCx3NVZPRrIAdRd/P0UiHZeuimNDqrKtypaG8KIs=;
-        b=6PvGqqUsGhkbV4F4Mm5PrhYouLNV1CmKZo8llwqfAFAfweiSCCKhyhgYvTdMHBV6yv
-         Ok0G+BrbhmYOF4LbUuBlIa6KTtMYDFWkisTFMqNl92xYnW8fI/RVXdkJ3MrBVq1DrcAF
-         KsQ7MUlmGq76hbOl6F3o93WlV3QUHm/sk26/jJccaVcUnEvyJQyLVxraHO+rsKPZwlL9
-         aZG1jbW/lJfTfrEMovByYskTaIa2KM0IoGtBMz+65ewSC+nRmbcKJZkhwzAur4C0rRqq
-         xZeqvRtNJlAytAD0u45OB4Yg6fB/1oJJ9JVSPzQUTqqicClr8nUcLPwd35ja8fQzVYUo
-         z5mA==
-X-Gm-Message-State: ANoB5pmYgGPcN2zcX/tAJ8Q9B9XNaoToBKCfJsh+O/T+7gCjL0KBFvlt
-        W3OXtN7sL1bGXzG6wUROPfCFQQ==
-X-Google-Smtp-Source: AA0mqf6r+0JFrZ8XA1iJTcU/t4YRiTG+aRPr+8wCCnDVUggR1p5Evn3Kyr9O0njDcH4rzdjaOs8vhA==
-X-Received: by 2002:a05:6359:204:b0:e0:5d8a:8170 with SMTP id ej4-20020a056359020400b000e05d8a8170mr83874rwb.20.1670594816259;
-        Fri, 09 Dec 2022 06:06:56 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
-        by smtp.gmail.com with ESMTPSA id dm15-20020a05620a1d4f00b006feb0007217sm1158484qkb.65.2022.12.09.06.06.55
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9ifEzYQVWgi27Tkh3vf+OK8A00LK9ON40E32Dr2itBE=;
+        b=j45BwqGBnhUDzQIe9wwAPjlisxw4SQrlmwNdw+KhtV9LoR4pUI0BCcR/27s/QXgYsF
+         Uas97H7MHAPzen6jMWC7u32iyfo92Ri3uUF8AVKrDgwOU5wS4OAZOkQ4IWdg65AcG/hm
+         UWTVQOehPTFth0KJf34futbwXdTvf6eqSH2HTH0KRn2XVebn0KDD5Sgt4ivsjPpQ6YY3
+         WLtPvVFKjLNglf8ZmNnX6cz2MeOJs3e29UaZl288kn7hL/rzIuiVt8nRZHFG+j56LCBI
+         y7IBg42kYRLulFTHhc2oDaadoiuNi2AirM11/fJu0Y2Hc66u4oGmP/wyqVh6U8MvBL/Z
+         v32w==
+X-Gm-Message-State: ANoB5pkmjkVDAuHaIYcMlT89tJlzixXxEr3sbbsMtVbYLtQz1TKz/5rg
+        FMGh02OLBqEi8qa1iIMbeuTLbg==
+X-Google-Smtp-Source: AA0mqf5M5nFxDZ8gitSxEywysxN2WU8x6dsn9ZKZmkOe7rX95bLrnLlH5x5gUuy0Rd0g2/YD5oAPCg==
+X-Received: by 2002:a05:600c:1d83:b0:3d2:13c6:4740 with SMTP id p3-20020a05600c1d8300b003d213c64740mr1382557wms.39.1670594855337;
+        Fri, 09 Dec 2022 06:07:35 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:51db:8fd7:45e0:fe69])
+        by smtp.gmail.com with ESMTPSA id q3-20020a1c4303000000b003cfa81e2eb4sm1869848wma.38.2022.12.09.06.07.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 06:06:55 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1p3e1e-0070V7-LG;
-        Fri, 09 Dec 2022 10:06:54 -0400
-Date:   Fri, 9 Dec 2022 10:06:54 -0400
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        syzbot <syzbot+3fd8326d9a0812d19218@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
-        markzhang@nvidia.com, ohartoov@nvidia.com,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] WARNING: refcount bug in nldev_newlink
-Message-ID: <Y5NA/oZ7RpeUXzJN@ziepe.ca>
-References: <0000000000004fe6c005ef43161d@google.com>
- <Y5Gq/zVi/fR85OJK@unreal>
- <20221209134229.1987-1-hdanton@sina.com>
+        Fri, 09 Dec 2022 06:07:34 -0800 (PST)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH 0/2] tty: serial: add and use a managed variant of uart_add_one_port()
+Date:   Fri,  9 Dec 2022 15:07:29 +0100
+Message-Id: <20221209140731.573503-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209134229.1987-1-hdanton@sina.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 09:42:29PM +0800, Hillf Danton wrote:
-> On 9 Dec 2022 09:01:14 -0400 Jason Gunthorpe <jgg@ziepe.ca>
-> > On Thu, Dec 08, 2022 at 11:14:39AM +0200, Leon Romanovsky wrote:
-> > 
-> > > Jason, what do you think?
-> > 
-> > No, the key to this report is that the refcount dec is inside the tracker:
-> > 
-> > > >  __refcount_dec include/linux/refcount.h:344 [inline]
-> > > >  refcount_dec include/linux/refcount.h:359 [inline]
-> > > >  ref_tracker_free+0x539/0x6b0 lib/ref_tracker.c:118
-> > > >  netdev_tracker_free include/linux/netdevice.h:4039 [inline]
-> > 
-> > Which is not underflowing the refcount on the dev, it is actually
-> > trying to say the tracker has become unbalanced.
-> > 
-> > Eg this put is not matched with a hold that specified the tracker.
-> > 
-> > Probably this:
-> > 
-> > diff --git a/drivers/infiniband/core/device.c b/drivers/infiniband/core/device.c
-> > index ff35cebb25e265..115b77c5e9a146 100644
-> > --- a/drivers/infiniband/core/device.c
-> > +++ b/drivers/infiniband/core/device.c
-> > @@ -2192,6 +2192,7 @@ static void free_netdevs(struct ib_device *ib_dev)
-> >                 if (ndev) {
-> >                         spin_lock(&ndev_hash_lock);
-> >                         hash_del_rcu(&pdata->ndev_hash_link);
-> > +                       netdev_tracker_free(ndev, &pdata->netdev_tracker);
-> >                         spin_unlock(&ndev_hash_lock);
-> >  
-> >                         /*
-> > @@ -2201,7 +2202,7 @@ static void free_netdevs(struct ib_device *ib_dev)
-> >                          * comparisons after the put
-> >                          */
-> >                         rcu_assign_pointer(pdata->netdev, NULL);
-> > -                       dev_put(ndev);
-> > +                       __dev_put(ndev);
-> >                 }
-> >                 spin_unlock_irqrestore(&pdata->netdev_lock, flags);
-> >         }
-> 
-> Wonder why this makes sense given rcu_assign_pointer(pdata->netdev, NULL)
-> under pdata->netdev_lock.
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Oh, yah, that is right, so we can just do the natural thing:
+This series adds a managed variant of uart_add_one_port() and uses it in the
+qcom-geni-serial driver.
 
-                        rcu_assign_pointer(pdata->netdev, NULL);
--                       dev_put(ndev);
-+                       netdev_put(ndev, &pdata->netdev_tracker);
+I've been asked by Greg to send it separately and he didn't seem to be
+impressed by the proposition of adding devres interfaces to the tty layer
+in general. I can only assume it has something to do with the ongoing
+discussion about the supposed danger of using devres interfaces in conjunction
+with exporting character devices to user-space.
 
+The bug in question can be triggered by opening a device file, unbinding the
+driver that exported it and then calling any of the system calls on the
+associated file descriptor.
 
-Jason
+After some testing I noticed that many subsystems are indeed either crashing
+or deadlocking in the above situation. I've sent patches that attempt to fix
+the GPIO and I2C subsystems[1][2]. Neither of these issues have anything to
+do with devres and all to do with the fact that certain resources are freed
+on driver unbind and others need to live for as long as the character device
+exists. More details on that in the cover letters and commit messages in the
+links.
+
+I'd like to point out that the serial code is immune to this issue as before
+every operation, the serial core takes the port lock and checks the uart
+state. If the device no longer exists (when the uart port is removed, the
+pointer to uart_port inside uart_state is to NULL), it gracefully returns
+-ENODEV to user-space.
+
+Please consider applying the patches in the series as devres is the easiest
+way to lessen the burden on driver developers when dealing with complex error
+paths and resource leaks. The general rule for devres is: if it can be freed
+in .remove() then it can be managed by devres, which is the case for this new
+helper.
+
+Bart
+
+[1] https://lkml.org/lkml/2022/12/8/826
+[2] https://lkml.org/lkml/2022/12/5/414
+
+Bartosz Golaszewski (2):
+  tty: serial: provide devm_uart_add_one_port()
+  tty: serial: qcom-geni-serial: use devres for uart port management
+
+ .../driver-api/driver-model/devres.rst        |  3 ++
+ drivers/tty/serial/qcom_geni_serial.c         |  8 +---
+ drivers/tty/serial/serial_core.c              | 48 +++++++++++++++++++
+ include/linux/serial_core.h                   |  6 +++
+ 4 files changed, 58 insertions(+), 7 deletions(-)
+
+-- 
+2.37.2
+
