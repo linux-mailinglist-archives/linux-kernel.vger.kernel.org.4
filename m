@@ -2,123 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C332648422
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:50:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DD5648448
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 15:56:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiLIOuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 09:50:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S230028AbiLIO4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 09:56:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiLIOtv (ORCPT
+        with ESMTP id S230060AbiLIOzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 09:49:51 -0500
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2430B801CE;
-        Fri,  9 Dec 2022 06:49:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1670597376; x=1702133376;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YUXAzZaiIHP+TeJDcIUQIh8idIpiiNMmvl01maD+8eY=;
-  b=Cse/+WQqoA+jUhE37jUbCo/YvADagjzV3GEDovT3Dlchhl9lFlbOfABz
-   drwMaebL6D8U3veR7yz7pcC9oXGQCtwXupZR6nXxb/V26OXrQr7zxw8Yy
-   r0b9w3tAjPNM3tqIhAoLiQYUWH3C+QQWMX7UBeSl8EvpDOdgJ4MEDmyuw
-   r2K8naCBihZbIsVOpyVga7OQynHuT460WiqNPM/+OOa5R99ODPP0WulaP
-   oVezIPir8pMWZyo7L+7qF0pW0Iw3fb7aDTYjMz3+c30Tzr8iqcACyQ0pF
-   dubsc/rhOageeMARL5ApnoA3tYlhE0CuC8EHsJ8iZ19pk65pv7aoGfDg6
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
-   d="scan'208";a="187394902"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 07:49:35 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Fri, 9 Dec 2022 07:49:29 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Fri, 9 Dec 2022 07:49:29 -0700
-Date:   Fri, 9 Dec 2022 15:54:36 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Vladimir Oltean <olteanv@gmail.com>,
-        <Steen.Hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <daniel.machon@microchip.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <lars.povlsen@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>
-Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
-Message-ID: <20221209145436.o5nclzrtu2eztvzs@soft-dev3-1>
-References: <c8b2ef73330c7bc5d823997dd1c8bf09@walle.cc>
- <20221208130444.xshazhpg4e2utvjs@soft-dev3-1>
- <adb8e2312b169d13e756ff23c45872c3@walle.cc>
- <20221209092904.asgka7zttvdtijub@soft-dev3-1>
- <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
- <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
- <20221209125611.m5cp3depjigs7452@skbuf>
- <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
- <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
- <287d650a96aaac34ac2f31c6735a9ecc@walle.cc>
+        Fri, 9 Dec 2022 09:55:46 -0500
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C98780A27
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 06:55:08 -0800 (PST)
+Received: by mail-ej1-x636.google.com with SMTP id fc4so12006203ejc.12
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 06:55:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linbit-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NGS8p58llTH0j/JtmBIf8IcqQNNb3dOfgpZWMO+4qxc=;
+        b=ZKM+8vmyIyGnqJGMg1PLrEyjzHURIQ49nrR+4Cjb2tDfhRzSNwsUBEQ3CDMpzbTWlK
+         wKbONKbccHcx7tdtrRxI5jqvo+xhjD+v6FvDo2UjxteCxErRQ8jOMzBOaQkbcMIJvv39
+         wPgwsSPiQ+Ng/npOz16yJBEtmbjEy8VV+fP6aW9bqBRCwzBpOHK4zWUmd1AeFlqG26W4
+         5ZYMibLNHHIudvWomfOP0bxVYcHEieLRIlFflAwXX/V/d5gmZ+Kvk3dyz0dTQo1rpCsd
+         KCaqDixfrYloL6JFEoI9btVVm7ggxh3H4TGOiPkp+r4FjxgD+eGf5J6O9HXV1XMPDAj1
+         pUag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NGS8p58llTH0j/JtmBIf8IcqQNNb3dOfgpZWMO+4qxc=;
+        b=WQq/Fp00CWNaDhgS6SfHofZOB89adhLsNLQjNzY6VHSu1Q3MAwdyXTYXQp662PWhwO
+         cAqKYg5Agfbx2PVUnlsnf6329m8mVq4K0Xpb1nVsXvI/kKW9Xm59TnNhLD5Qnt9L+cxI
+         0U7vnuQD2e3wmxoTfrEVvEBvn+QEUJA5NiBlWjEWSFoh63b3mquwH4hc+sRQsf0Ko8Ja
+         DQDGLkpM/Pww66OoD8e8fWgHtZxzfBsxpc6Fv8kbT2/A7Bsy2+kCG0EKLQvQ1+84YMaR
+         Ihr3vBbe636dV+mAeDrX+5AdGxjR0hGGSc6IJ4O+4NOoyrNdywNJ7G4fQIiBINVelXRb
+         wr1A==
+X-Gm-Message-State: ANoB5plD01U1eMQdLPbKLs6sm09lhuXcwlxdjmbuTWzTKqMZ09bdA+TV
+        Tmv1q2R9VNBs6a7i++DZbot4eg==
+X-Google-Smtp-Source: AA0mqf7K+mE1v7tZQxx275XaT1evbeQtA2Yf7MlJpotalKJ4eJCBxIJUmePOtFfIcVRJx6XFbXGQGA==
+X-Received: by 2002:a17:906:30d3:b0:78d:f454:ba10 with SMTP id b19-20020a17090630d300b0078df454ba10mr5517836ejb.15.1670597706776;
+        Fri, 09 Dec 2022 06:55:06 -0800 (PST)
+Received: from localhost.localdomain (h082218028181.host.wavenet.at. [82.218.28.181])
+        by smtp.gmail.com with ESMTPSA id l4-20020aa7c304000000b0046b1d63cfc1sm716856edq.88.2022.12.09.06.55.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 06:55:06 -0800 (PST)
+From:   =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     drbd-dev@lists.linbit.com, linux-kernel@vger.kernel.org,
+        Lars Ellenberg <lars.ellenberg@linbit.com>,
+        Philipp Reisner <philipp.reisner@linbit.com>,
+        linux-block@vger.kernel.org,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>
+Subject: [PATCH 0/3] DRBD file structure reorganization
+Date:   Fri,  9 Dec 2022 15:55:01 +0100
+Message-Id: <20221209145504.2273072-1-christoph.boehmwalder@linbit.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <287d650a96aaac34ac2f31c6735a9ecc@walle.cc>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 12/09/2022 15:23, Michael Walle wrote:
-> 
-> Am 2022-12-09 15:20, schrieb Horatiu Vultur:
-> > The 12/09/2022 15:05, Michael Walle wrote:
-> > > 
-> > > Am 2022-12-09 13:56, schrieb Vladimir Oltean:
-> > > > On Fri, Dec 09, 2022 at 01:58:57PM +0100, Horatiu Vultur wrote:
-> > > > > > Does it also work out of the box with the following patch if
-> > > > > > the interface is part of a bridge or do you still have to do
-> > > > > > the tc magic from above?
-> > > > >
-> > > > > You will still need to enable the TCAM using the tc command to have it
-> > > > > working when the interface is part of the bridge.
-> > > >
-> > > > FWIW, with ocelot (same VCAP mechanism), PTP traps work out of the box,
-> > > > no need to use tc. Same goes for ocelot-8021q, which also uses the
-> > > > VCAP.
-> > > > I wouldn't consider forcing the user to add any tc command in order for
-> > > > packet timestamping to work properly.
-> > 
-> > On ocelot, the vcap is enabled at port initialization, while on other
-> > platforms(lan966x and sparx5) you have the option to enable or disable.
-> > 
-> > > 
-> > > +1
-> > > Esp. because there is no warning. I.e. I tried this patch while
-> > > the interface was added on a bridge and there was no error
-> > > whatsoever.
-> > 
-> > What error/warning were you expecting to see here?
-> 
-> Scrap that. ptp4l is reporting an error in case the device is part
-> of a bridge:
-> Jan  1 02:33:04 buildroot user.info syslog: [9184.261] driver rejected
-> most general HWTSTAMP filter
-> 
-> Nevertheless, from a users POV I'd just expect it to work. How
-> would I know what I need to do here?
+To make our lives easier when sending future, more complex patches,
+we want to align the file structure as best as possible with what we
+have in the out-of-tree module.
 
-What about a warning in the driver? Say that the vcap needs to be
-enabled.
+Christoph Böhmwalder (3):
+  drbd: split off drbd_buildtag into separate file
+  drbd: drop API_VERSION define
+  drbd: split off drbd_config into separate file
 
-> 
-> -michael
+ drivers/block/drbd/Makefile        |  2 +-
+ drivers/block/drbd/drbd_buildtag.c | 22 ++++++++++++++++++++++
+ drivers/block/drbd/drbd_debugfs.c  |  2 +-
+ drivers/block/drbd/drbd_int.h      |  1 +
+ drivers/block/drbd/drbd_main.c     | 20 +-------------------
+ drivers/block/drbd/drbd_proc.c     |  2 +-
+ include/linux/drbd.h               |  7 -------
+ include/linux/drbd_config.h        | 16 ++++++++++++++++
+ include/linux/drbd_genl_api.h      |  2 +-
+ 9 files changed, 44 insertions(+), 30 deletions(-)
+ create mode 100644 drivers/block/drbd/drbd_buildtag.c
+ create mode 100644 include/linux/drbd_config.h
 
+
+base-commit: f596da3efaf4130ff61cd029558845808df9bf99
 -- 
-/Horatiu
+2.38.1
+
