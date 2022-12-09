@@ -2,79 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6CF647B40
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:19:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E9D647B43
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiLIBTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:19:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56472 "EHLO
+        id S229813AbiLIBUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:20:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiLIBTo (ORCPT
+        with ESMTP id S229841AbiLIBUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:19:44 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8ECA84BF;
-        Thu,  8 Dec 2022 17:19:43 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 415506200C;
-        Fri,  9 Dec 2022 01:19:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93BE0C433EF;
-        Fri,  9 Dec 2022 01:19:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670548782;
-        bh=y/JkA1z3j5ghb+0sq8CbfGQoFeR3nhwZAt4hqaZxAMM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=b1To0AP5faUnujcQjy6qc3OgbBl+hOHhovAIu08bSLzYWqKrz4Y+DbSo3KfaeRfAc
-         62WDJxvbcZ3AaPlZ46KRbkLFoGlM6AR6nri3gq1med7Eeu28vl3hMZ6rayBrkGlxWL
-         WML24tI1ghdBmUk4fwDArh767uGqC/UnyjjCEBJQLr3D/FLJAEawwlIeL1Yc4qr9nB
-         vpImNJ8LAWw6V6wWX/w0kFCoAFVJq4LqJISDE5VlUKEWqUMuiMbjFKkTJlHtDm5e4F
-         zv8nX7rav70r4fI+QtHxF6/FsyojUm7+QUi54ToiP9wDbN0ygUM4dbLFgFLb0xK0Kg
-         Ihl+r9mDu1AVw==
-Content-Type: text/plain; charset="utf-8"
+        Thu, 8 Dec 2022 20:20:10 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2C9941AD;
+        Thu,  8 Dec 2022 17:20:06 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DB57824E041;
+        Fri,  9 Dec 2022 09:19:53 +0800 (CST)
+Received: from EXMBX173.cuchost.com (172.16.6.93) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
+ 2022 09:19:51 +0800
+Received: from [192.168.120.49] (171.223.208.138) by EXMBX173.cuchost.com
+ (172.16.6.93) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 9 Dec
+ 2022 09:19:49 +0800
+Message-ID: <ed2f5df6-66c4-26b4-b650-48a128760965@starfivetech.com>
+Date:   Fri, 9 Dec 2022 09:19:48 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20221120030257.531153-5-liambeguin@gmail.com>
-References: <20221120030257.531153-1-liambeguin@gmail.com> <20221120030257.531153-5-liambeguin@gmail.com>
-Subject: Re: [PATCH v1 4/4] clk: lmk04832: fix kernel-doc warnings
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-To:     Liam Beguin <liambeguin@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>
-Date:   Thu, 08 Dec 2022 17:19:40 -0800
-User-Agent: alot/0.10
-Message-Id: <20221209011942.93BE0C433EF@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v1 7/7] riscv: dts: starfive: visionfive-v2: Add phy
+ delay_chain configuration
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>
+References: <20221201090242.2381-1-yanhong.wang@starfivetech.com>
+ <20221201090242.2381-8-yanhong.wang@starfivetech.com> <Y4jpDvXo/uj9ygLR@spud>
+From:   yanhong wang <yanhong.wang@starfivetech.com>
+In-Reply-To: <Y4jpDvXo/uj9ygLR@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX173.cuchost.com
+ (172.16.6.93)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Liam Beguin (2022-11-19 19:02:57)
-> Fix syntax generating the following kernel-doc warnings:
->=20
-> drivers/clk/clk-lmk04832.c:189: warning: cannot understand function proto=
-type: 'struct lmk04832_device_info '
-> drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'pi=
-d' not described in 'lmk04832_device_info'
-> drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'ma=
-skrev' not described in 'lmk04832_device_info'
-> drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'nu=
-m_channels' not described in 'lmk04832_device_info'
-> drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'vc=
-o0_range' not described in 'lmk04832_device_info'
-> drivers/clk/clk-lmk04832.c:193: warning: Function parameter or member 'vc=
-o1_range' not described in 'lmk04832_device_info'
-> drivers/clk/clk-lmk04832.c:420: warning: No description found for return =
-value of 'lmk04832_check_vco_ranges'
-> drivers/clk/clk-lmk04832.c:459: warning: No description found for return =
-value of 'lmk04832_calc_pll2_params'
->=20
-> Signed-off-by: Liam Beguin <liambeguin@gmail.com>
-> ---
 
-Applied to clk-next
+
+On 2022/12/2 1:49, Conor Dooley wrote:
+> On Thu, Dec 01, 2022 at 05:02:42PM +0800, Yanhong Wang wrote:
+>> Add phy delay_chain configuration to support motorcomm phy driver for
+>> StarFive VisionFive 2 board.
+>> 
+>> Signed-off-by: Yanhong Wang <yanhong.wang@starfivetech.com>
+>> ---
+>>  .../jh7110-starfive-visionfive-v2.dts         | 46 +++++++++++++++++++
+>>  1 file changed, 46 insertions(+)
+>> 
+>> diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> index c8946cf3a268..2868ef4c74ef 100644
+>> --- a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> +++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-v2.dts
+>> @@ -15,6 +15,8 @@
+>>  
+>>  	aliases {
+>>  		serial0 = &uart0;
+>> +		ethernet0=&gmac0;
+>> +		ethernet1=&gmac1;
+> 
+> Please match the whitespace usage of the existing entry.
+> 
+
+Will fix in the next version.
+
+>>  	};
+>>  
+>>  	chosen {
+>> @@ -114,3 +116,47 @@
+>>  	pinctrl-0 = <&uart0_pins>;
+>>  	status = "okay";
+>>  };
+>> +
+>> +&gmac0 {
+>> +	status = "okay";
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	phy-handle = <&phy0>;
+>> +	status = "okay";
+>> +	mdio0 {
+> 
+> A line of whitespace before the child nodes too please :)
+> 
+
+Will fix.
+
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +		compatible = "snps,dwmac-mdio";
+>> +		phy0: ethernet-phy@0 {
+>> +			reg = <0>;
+>> +			rxc_dly_en = <1>;
+>> +			tx_delay_sel_fe = <5>;
+>> +			tx_delay_sel = <0xa>;
+>> +			tx_inverted_10 = <0x1>;
+>> +			tx_inverted_100 = <0x1>;
+>> +			tx_inverted_1000 = <0x1>;
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +&gmac1 {
+>> +	status = "okay";
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +	phy-handle = <&phy1>;
+>> +	status = "okay";
+>> +	mdio1 {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +		compatible = "snps,dwmac-mdio";
+>> +		phy1: ethernet-phy@1 {
+>> +			reg = <1>;
+>> +			tx_delay_sel_fe = <5>;
+>> +			tx_delay_sel = <0>;
+>> +			rxc_dly_en = <0>;
+>> +			tx_inverted_10 = <0x1>;
+>> +			tx_inverted_100 = <0x1>;
+>> +			tx_inverted_1000 = <0x0>;
+>> +		};
+>> +	};
+>> +};
+>> -- 
+>> 2.17.1
+>> 
