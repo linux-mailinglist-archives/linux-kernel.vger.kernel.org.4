@@ -2,236 +2,686 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EF3648A63
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A666B648A66
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:53:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiLIVxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 16:53:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46642 "EHLO
+        id S230030AbiLIVxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 16:53:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbiLIVxJ (ORCPT
+        with ESMTP id S229677AbiLIVx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 16:53:09 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7734E1D65D;
-        Fri,  9 Dec 2022 13:53:08 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso6559679wmb.0;
-        Fri, 09 Dec 2022 13:53:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e04fWdrgLrCJ7xFCCYgZ998Z3D+QTmt0l/uRKckiRY0=;
-        b=KAm7RhPjXfPzcHcAK7ilA1CutcIi95JHKl4ciiUhFrim3Lw+wQZN1Itcuw6khB8PZi
-         PoOrCc+0fEqXI6a3P3vIhq3pNvStYW+b++lC3QPSzfKBhIN6xeNqHIf85FU3RuiTFzmo
-         pshJVQfsAmaRqZa9kLkuQLOTM+WgP7zM4E/W2m3gHFOK4a7DVi2QB9qvYIWb4Bpz/h2i
-         RY5rWBpAXSF3uM1PC2CRbZfYZ+7jAorTQ7Idv2EY+9rJsvFr2s+noV9PPSS8vga5pPJa
-         bWC/bbiUT+REQ2wf26Awzehetfy1Mj1xuteL5zXXxPcnGTpwR0YKJXKvoS7PxQy19HwP
-         Z/jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e04fWdrgLrCJ7xFCCYgZ998Z3D+QTmt0l/uRKckiRY0=;
-        b=FXZiEgCFHzmyMQqAeEVZF1nlR/u0Lz4YE6ytbwZd016be8O9xm4g7Dvk+T9Hfsjwlh
-         KgcGM2bBW4vDH9qa0kNhsR9cPvRWtiFL5bjwBdHBWQarZPiT516um6QcsS7Z13p8CIzw
-         N1ebjeUDKaGgooVB5R+75zTqUney2t7lpwhdgeQA08RVyxeEpmVqvY09gNuG6jsN0Vpo
-         +6MXop13yP5uILpvYPlC1PKhj4CvFRRtq022drxzev+yIbqhTBuYTrEnQ4gjzOD+CQe9
-         /EIwT/xcFKfwc5cW3COeRQZNSrYScDmMx7aeGS7Bxgn1eFn0unKMobhI3b1aqpPI+qtU
-         O+iw==
-X-Gm-Message-State: ANoB5pmJRHBZk5VR8hUb2Jp9ArGsRHlPQ/x0Ip+MCg3NQEkkpt4l16vJ
-        k+79Ik/xDTCEsUKDnpHPuZg=
-X-Google-Smtp-Source: AA0mqf7i9Wkuh/QW7GPUQeMM7VV0Wffu8wnytmIeaumPpoCJSGte+QMkhGRVyXjsEHmdWisdHfisZA==
-X-Received: by 2002:a1c:4b16:0:b0:3cf:7197:e68a with SMTP id y22-20020a1c4b16000000b003cf7197e68amr6142506wma.18.1670622786829;
-        Fri, 09 Dec 2022 13:53:06 -0800 (PST)
-Received: from krava ([83.240.62.58])
-        by smtp.gmail.com with ESMTPSA id f9-20020a05600c154900b003d2157627a8sm830998wmg.47.2022.12.09.13.53.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 13:53:06 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Fri, 9 Dec 2022 22:53:04 +0100
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Song Liu <song@kernel.org>, Hao Sun <sunhao.th@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
-Message-ID: <Y5OuQNmkoIvcV6IL@krava>
-References: <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
- <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
- <Y5Inw4HtkA2ql8GF@krava>
- <Y5JkomOZaCETLDaZ@krava>
- <Y5JtACA8ay5QNEi7@krava>
- <Y5LfMGbOHpaBfuw4@krava>
- <Y5MaffJOe1QtumSN@krava>
- <Y5M9P95l85oMHki9@krava>
- <Y5NSStSi7h9Vdo/j@krava>
- <5c9d77bf-75f5-954a-c691-39869bb22127@meta.com>
+        Fri, 9 Dec 2022 16:53:27 -0500
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [IPv6:2001:4b7a:2000:18::162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0C1A385F;
+        Fri,  9 Dec 2022 13:53:21 -0800 (PST)
+Received: from localhost.localdomain (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 435C01F963;
+        Fri,  9 Dec 2022 22:53:18 +0100 (CET)
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] arm64: dts: qcom: Use labels with generic node names for ADC channels
+Date:   Fri,  9 Dec 2022 22:53:07 +0100
+Message-Id: <20221209215308.1781047-1-marijn.suijten@somainline.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5c9d77bf-75f5-954a-c691-39869bb22127@meta.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:31:06PM -0800, Yonghong Song wrote:
-> 
-> 
-> On 12/9/22 7:20 AM, Jiri Olsa wrote:
-> > On Fri, Dec 09, 2022 at 02:50:55PM +0100, Jiri Olsa wrote:
-> > > On Fri, Dec 09, 2022 at 12:22:37PM +0100, Jiri Olsa wrote:
-> > > 
-> > > SBIP
-> > > 
-> > > > > > > > > > 
-> > > > > > > > > > I'm trying to understand the severity of the issues and
-> > > > > > > > > > whether we need to revert that commit asap since the merge window
-> > > > > > > > > > is about to start.
-> > > > > > > > > 
-> > > > > > > > > Jiri, Peter,
-> > > > > > > > > 
-> > > > > > > > > ping.
-> > > > > > > > > 
-> > > > > > > > > cc-ing Thorsten, since he's tracking it now.
-> > > > > > > > > 
-> > > > > > > > > The config has CONFIG_X86_KERNEL_IBT=y.
-> > > > > > > > > Is it related?
-> > > > > > > > 
-> > > > > > > > sorry for late reply.. I still did not find the reason,
-> > > > > > > > but I did not try with IBT yet, will test now
-> > > > > > > 
-> > > > > > > no difference with IBT enabled, can't reproduce the issue
-> > > > > > > 
-> > > > > > 
-> > > > > > ok, scratch that.. the reproducer got stuck on wifi init :-\
-> > > > > > 
-> > > > > > after I fix that I can now reproduce on my local config with
-> > > > > > IBT enabled or disabled.. it's something else
-> > > > > 
-> > > > > I'm getting the error also when reverting the static call change,
-> > > > > looking for good commit, bisecting
-> > > > > 
-> > > > > I'm getting fail with:
-> > > > >     f0c4d9fc9cc9 (tag: v6.1-rc4) Linux 6.1-rc4
-> > > > > 
-> > > > > v6.1-rc1 is ok
-> > > > 
-> > > > so far I narrowed it down between rc1 and rc3.. bisect got me nowhere so far
-> > > > 
-> > > > attaching some more logs
-> > > 
-> > > looking at the code.. how do we ensure that code running through
-> > > bpf_prog_run_xdp will not get dispatcher image changed while
-> > > it's being exetuted
-> > > 
-> > > we use 'the other half' of the image when we add/remove programs,
-> > > but could bpf_dispatcher_update race with bpf_prog_run_xdp like:
-> > > 
-> > > 
-> > > cpu 0:                                  cpu 1:
-> > > 
-> > > bpf_prog_run_xdp
-> > >     ...
-> > >     bpf_dispatcher_xdp_func
-> > >        start exec image at offset 0x0
-> > > 
-> > >                                          bpf_dispatcher_update
-> > >                                                  update image at offset 0x800
-> > >                                          bpf_dispatcher_update
-> > >                                                  update image at offset 0x0
-> > > 
-> > >        still in image at offset 0x0
-> > > 
-> > > 
-> > > that might explain why I wasn't able to trigger that on
-> > > bare metal just in qemu
-> > 
-> > I tried patch below and it fixes the issue for me and seems
-> > to confirm the race above.. but not sure it's the best fix
-> > 
-> > jirka
-> > 
-> > 
-> > ---
-> > diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-> > index c19719f48ce0..6a2ced102fc7 100644
-> > --- a/kernel/bpf/dispatcher.c
-> > +++ b/kernel/bpf/dispatcher.c
-> > @@ -124,6 +124,7 @@ static void bpf_dispatcher_update(struct bpf_dispatcher *d, int prev_num_progs)
-> >   	}
-> >   	__BPF_DISPATCHER_UPDATE(d, new ?: (void *)&bpf_dispatcher_nop_func);
-> > +	synchronize_rcu_tasks();
-> >   	if (new)
-> >   		d->image_off = noff;
-> 
-> This might work. In arch/x86/kernel/alternative.c, we have following
-> code and comments. For text_poke, synchronize_rcu_tasks() might be able
-> to avoid concurrent execution and update.
+As discussed in [1] the DT should use labels to describe ADC channels,
+with generic node names, since the IIO drivers now moved to the fwnode
+API where node names include the `@xx` address suffix.
 
-so my idea was that we need to ensure all the current callers of
-bpf_dispatcher_xdp_func (which should have rcu read lock, based
-on the comment in bpf_prog_run_xdp) are gone before and new ones
-execute the new image, so the next call to the bpf_dispatcher_update
-will be safe to overwrite the other half of the image
+Especially for the ADC5 driver that uses extend_name - which cannot be
+removed for compatibility reasons - this results in sysfs files with the
+@xx name that wasn't previously present, and leads to an unpleasant
+file-browsing experience.
 
-jirka
+Also remove all the unused channel labels in pm660.dtsi.
 
-> 
-> /**
->  * text_poke_copy - Copy instructions into (an unused part of) RX memory
->  * @addr: address to modify
->  * @opcode: source of the copy
->  * @len: length to copy, could be more than 2x PAGE_SIZE
->  *
->  * Not safe against concurrent execution; useful for JITs to dump
->  * new code blocks into unused regions of RX memory. Can be used in
->  * conjunction with synchronize_rcu_tasks() to wait for existing
->  * execution to quiesce after having made sure no existing functions
->  * pointers are live.
->  */
-> void *text_poke_copy(void *addr, const void *opcode, size_t len)
-> {
->         unsigned long start = (unsigned long)addr;
->         size_t patched = 0;
-> 
->         if (WARN_ON_ONCE(core_kernel_text(start)))
->                 return NULL;
-> 
->         mutex_lock(&text_mutex);
->         while (patched < len) {
->                 unsigned long ptr = start + patched;
->                 size_t s;
-> 
->                 s = min_t(size_t, PAGE_SIZE * 2 - offset_in_page(ptr), len -
-> patched);
-> 
->                 __text_poke(text_poke_memcpy, (void *)ptr, opcode + patched,
-> s);
->                 patched += s;
->         }
->         mutex_unlock(&text_mutex);
->         return addr;
-> }
+[1]: https://lore.kernel.org/linux-arm-msm/20221106193018.270106-1-marijn.suijten@somainline.org/T/#u
+
+Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+---
+ arch/arm64/boot/dts/qcom/pm6125.dtsi          | 18 ++++++---
+ arch/arm64/boot/dts/qcom/pm660.dtsi           | 33 ++++++++++------
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          | 39 ++++++++++++-------
+ arch/arm64/boot/dts/qcom/qrb5165-rb5.dts      | 15 ++++---
+ .../dts/qcom/sc7180-trogdor-coachz-r1.dts     |  4 +-
+ .../boot/dts/qcom/sc7180-trogdor-coachz.dtsi  |  3 +-
+ .../dts/qcom/sc7180-trogdor-homestar.dtsi     |  3 +-
+ .../boot/dts/qcom/sc7180-trogdor-lazor.dtsi   |  2 +-
+ .../dts/qcom/sc7180-trogdor-pompom-r1.dts     |  2 +-
+ .../dts/qcom/sc7180-trogdor-pompom-r2.dts     |  2 +-
+ .../boot/dts/qcom/sc7180-trogdor-pompom.dtsi  |  3 +-
+ .../dts/qcom/sc7180-trogdor-wormdingler.dtsi  |  3 +-
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  3 +-
+ .../qcom/sm6125-sony-xperia-seine-pdx201.dts  | 15 ++++---
+ arch/arm64/boot/dts/qcom/sm8250-mtp.dts       | 21 ++++++----
+ 15 files changed, 109 insertions(+), 57 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/qcom/pm6125.dtsi b/arch/arm64/boot/dts/qcom/pm6125.dtsi
+index 59092a551a16..7cfd73f8707e 100644
+--- a/arch/arm64/boot/dts/qcom/pm6125.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm6125.dtsi
+@@ -85,36 +85,42 @@ pm6125_adc: adc@3100 {
+ 			interrupts = <0x0 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
+ 			#io-channel-cells = <1>;
+ 
+-			ref-gnd@0 {
++			adc-chan@0 {
+ 				reg = <ADC5_REF_GND>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "ref_gnd";
+ 			};
+ 
+-			vref-1p25@1 {
++			adc-chan@1 {
+ 				reg = <ADC5_1P25VREF>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "vref_1p25";
+ 			};
+ 
+-			die-temp@6 {
++			adc-chan@6 {
+ 				reg = <ADC5_DIE_TEMP>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "die_temp";
+ 			};
+ 
+-			vph-pwr@83 {
++			adc-chan@83 {
+ 				reg = <ADC5_VPH_PWR>;
+ 				qcom,pre-scaling = <1 3>;
++				label = "vph_pwr";
+ 			};
+ 
+-			vcoin@85 {
++			adc-chan@85 {
+ 				reg = <ADC5_VCOIN>;
+ 				qcom,pre-scaling = <1 3>;
++				label = "vcoin";
+ 			};
+ 
+-			xo-therm@4c {
++			adc-chan@4c {
+ 				reg = <ADC5_XO_THERM_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "xo_therm";
+ 			};
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/pm660.dtsi b/arch/arm64/boot/dts/qcom/pm660.dtsi
+index fc0eccaccdf6..d05bd8f2170b 100644
+--- a/arch/arm64/boot/dts/qcom/pm660.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm660.dtsi
+@@ -91,82 +91,93 @@ pm660_adc: adc@3100 {
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+ 
+-			ref_gnd: ref_gnd@0 {
++			adc-chan@0 {
+ 				reg = <ADC5_REF_GND>;
+ 				qcom,decimation = <1024>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "ref_gnd";
+ 			};
+ 
+-			vref_1p25: vref_1p25@1 {
++			adc-chan@1 {
+ 				reg = <ADC5_1P25VREF>;
+ 				qcom,decimation = <1024>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "vref_1p25";
+ 			};
+ 
+-			die_temp: die_temp@6 {
++			adc-chan@6 {
+ 				reg = <ADC5_DIE_TEMP>;
+ 				qcom,decimation = <1024>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "die_temp";
+ 			};
+ 
+-			xo_therm: xo_therm@4c {
++			adc-chan@4c {
+ 				reg = <ADC5_XO_THERM_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,decimation = <1024>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "xo_therm";
+ 			};
+ 
+-			msm_therm: msm_therm@4d {
++			adc-chan@4d {
+ 				reg = <ADC5_AMUX_THM1_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,decimation = <1024>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "msm_therm";
+ 			};
+ 
+-			emmc_therm: emmc_therm@4e {
++			adc-chan@4e {
+ 				reg = <ADC5_AMUX_THM2_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,decimation = <1024>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "emmc_therm";
+ 			};
+ 
+-			pa_therm0: thermistor0@4f {
++			adc-chan@4f {
+ 				reg = <ADC5_AMUX_THM3_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,decimation = <1024>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "pa_therm0";
+ 			};
+ 
+-			pa_therm1: thermistor1@50 {
++			adc-chan@50 {
+ 				reg = <ADC5_AMUX_THM4_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,decimation = <1024>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "pa_therm1";
+ 			};
+ 
+-			quiet_therm: quiet_therm@51 {
++			adc-chan@51 {
+ 				reg = <ADC5_AMUX_THM5_100K_PU>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,decimation = <1024>;
+ 				qcom,hw-settle-time = <200>;
+ 				qcom,ratiometric;
++				label = "quiet_therm";
+ 			};
+ 
+-			vadc_vph_pwr: vph_pwr@83 {
++			adc-chan@83 {
+ 				reg = <ADC5_VPH_PWR>;
+ 				qcom,decimation = <1024>;
+ 				qcom,pre-scaling = <1 3>;
++				label = "vph_pwr";
+ 			};
+ 
+-			vcoin: vcoin@85 {
++			adc-chan@85 {
+ 				reg = <ADC5_VCOIN>;
+ 				qcom,decimation = <1024>;
+ 				qcom,pre-scaling = <1 3>;
++				label = "vcoin";
+ 			};
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/pm8950.dtsi b/arch/arm64/boot/dts/qcom/pm8950.dtsi
+index 631761f98999..c07572b732dc 100644
+--- a/arch/arm64/boot/dts/qcom/pm8950.dtsi
++++ b/arch/arm64/boot/dts/qcom/pm8950.dtsi
+@@ -50,77 +50,90 @@ pm8950_vadc: adc@3100 {
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+ 
+-			vcoin@5 {
++			adc-chan@5 {
+ 				reg = <VADC_VCOIN>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "vcoin";
+ 			};
+ 
+-			vph-pwr@7 {
++			adc-chan@7 {
+ 				reg = <VADC_VSYS>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "vph_pwr";
+ 			};
+ 
+-			die-temp@8 {
++			adc-chan@8 {
+ 				reg = <VADC_DIE_TEMP>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "die_temp";
+ 			};
+ 
+-			ref-625mv@9 {
++			adc-chan@9 {
+ 				reg = <VADC_REF_625MV>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "ref_625mv";
+ 			};
+ 
+-			ref-1250mv@a {
++			adc-chan@a {
+ 				reg = <VADC_REF_1250MV>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "ref_1250mv";
+ 			};
+ 
+-			ref-buf-625mv@c {
++			adc-chan@c {
+ 				reg = <VADC_SPARE1>;
+ 				qcom,pre-scaling = <1 1>;
++				label = "ref_buf_625mv";
+ 			};
+ 
+-			ref-gnd@e {
++			adc-chan@e {
+ 				reg = <VADC_GND_REF>;
++				label = "ref_gnd";
+ 			};
+ 
+-			ref-vdd@f {
++			adc-chan@f {
+ 				reg = <VADC_VDD_VADC>;
++				label = "ref_vdd";
+ 			};
+ 
+-			pa-therm1@11 {
++			adc-chan@11 {
+ 				reg = <VADC_P_MUX2_1_1>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,ratiometric;
+ 				qcom,hw-settle-time = <200>;
++				label = "pa_therm1";
+ 			};
+ 
+-			case-therm@13 {
++			adc-chan@13 {
+ 				reg = <VADC_P_MUX4_1_1>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,ratiometric;
+ 				qcom,hw-settle-time = <200>;
++				label = "case_therm";
+ 			};
+ 
+-			xo-therm@32 {
++			adc-chan@32 {
+ 				reg = <VADC_LR_MUX3_XO_THERM>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,ratiometric;
+ 				qcom,hw-settle-time = <200>;
++				label = "xo_therm";
+ 			};
+ 
+-			pa-therm0@36 {
++			adc-chan@36 {
+ 				reg = <VADC_LR_MUX7_HW_ID>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,ratiometric;
+ 				qcom,hw-settle-time = <200>;
++				label = "pa_therm0";
+ 			};
+ 
+-			xo-therm-buf@3c {
++			adc-chan@3c {
+ 				reg = <VADC_LR_MUX3_BUF_XO_THERM>;
+ 				qcom,pre-scaling = <1 1>;
+ 				qcom,ratiometric;
+ 				qcom,hw-settle-time = <200>;
++				label = "xo_therm_buf";
+ 			};
+ 		};
+ 
+diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+index 8c64cb060e21..4ebf2e0fe838 100644
+--- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
++++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
+@@ -644,16 +644,18 @@ &mdss_mdp {
+ };
+ 
+ &pm8150_adc {
+-	xo-therm@4c {
++	adc-chan@4c {
+ 		reg = <ADC5_XO_THERM_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "xo_therm";
+ 	};
+ 
+-	wifi-therm@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "wifi_therm";
+ 	};
+ };
+ 
+@@ -721,10 +723,11 @@ &pm8150_gpios {
+ };
+ 
+ &pm8150b_adc {
+-	conn-therm@4f {
++	adc-chan@4f {
+ 		reg = <ADC5_AMUX_THM3_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "conn_therm";
+ 	};
+ };
+ 
+@@ -756,16 +759,18 @@ &pm8150b_gpios {
+ };
+ 
+ &pm8150l_adc {
+-	skin-msm-therm@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "skin_msm_therm";
+ 	};
+ 
+-	pm8150l-therm@4f {
++	adc-chan@4f {
+ 		reg = <ADC5_AMUX_THM3_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "pm8150l_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
+index edfcd47e1a00..2db57ecd71c5 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz-r1.dts
+@@ -24,8 +24,8 @@ &charger_thermal {
+ };
+ 
+ &pm6150_adc {
+-	/delete-node/ skin-temp-thermistor@4e;
+-	/delete-node/ charger-thermistor@4f;
++	/delete-node/ adc-chan@4e;
++	/delete-node/ adc-chan@4f;
+ };
+ 
+ &pm6150_adc_tm {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+index 8b8ea8af165d..4dd51ba62f6f 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-coachz.dtsi
+@@ -119,10 +119,11 @@ &panel {
+ };
+ 
+ &pm6150_adc {
+-	skin-temp-thermistor@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "skin_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+index d3cf64c16dcd..1511c48f5278 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-homestar.dtsi
+@@ -127,10 +127,11 @@ &panel {
+ };
+ 
+ &pm6150_adc {
+-	skin-temp-thermistor@4d {
++	adc-chan@4d {
+ 		reg = <ADC5_AMUX_THM1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "skin_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
+index 269007d73162..508d7e4bdf62 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor.dtsi
+@@ -55,7 +55,7 @@ &panel {
+ };
+ 
+ &pm6150_adc {
+-	/delete-node/ charger-thermistor@4f;
++	/delete-node/ adc-chan@4f;
+ };
+ 
+ &pm6150_adc_tm {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+index 8467ff41e6d5..b2a0164529d4 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r1.dts
+@@ -27,7 +27,7 @@ &charger_thermal {
+ };
+ 
+ &pm6150_adc {
+-	/delete-node/ charger-thermistor@4f;
++	/delete-node/ adc-chan@4f;
+ };
+ 
+ &pm6150_adc_tm {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dts
+index 88cf2246c18a..e620001240db 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dts
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom-r2.dts
+@@ -24,7 +24,7 @@ &charger_thermal {
+ };
+ 
+ &pm6150_adc {
+-	/delete-node/ charger-thermistor@4f;
++	/delete-node/ adc-chan@4f;
+ };
+ 
+ &pm6150_adc_tm {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
+index 6c5287bd27d6..701ec7892b42 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pompom.dtsi
+@@ -148,10 +148,11 @@ &pen_insert {
+ };
+ 
+ &pm6150_adc {
+-	5v-choke-thermistor@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "5v_choke_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
+index 9832e752da35..5eccb7860711 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-wormdingler.dtsi
+@@ -168,10 +168,11 @@ ap_ts: touchscreen@1 {
+ };
+ 
+ &pm6150_adc {
+-	skin-temp-thermistor@4d {
++	adc-chan@4d {
+ 		reg = <ADC5_AMUX_THM1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "skin_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+index b82956f8f1cf..3c3031aa0e55 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi
+@@ -820,10 +820,11 @@ &mdss_dp {
+ };
+ 
+ &pm6150_adc {
+-	charger-thermistor@4f {
++	adc-chan@4f {
+ 		reg = <ADC5_AMUX_THM3_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "charger_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+index 650819c028b6..2805a490a6df 100644
+--- a/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
++++ b/arch/arm64/boot/dts/qcom/sm6125-sony-xperia-seine-pdx201.dts
+@@ -149,39 +149,44 @@ &pm6125_adc {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&camera_flash_therm &emmc_ufs_therm &rf_pa1_therm>;
+ 
+-	rf-pa0-therm@4d {
++	adc-chan@4d {
+ 		reg = <ADC5_AMUX_THM1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,pre-scaling = <1 1>;
++		label = "rf_pa0_therm";
+ 	};
+ 
+-	quiet-therm@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,pre-scaling = <1 1>;
++		label = "quiet_therm";
+ 	};
+ 
+-	camera-flash-therm@52 {
++	adc-chan@52 {
+ 		reg = <ADC5_GPIO1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,pre-scaling = <1 1>;
++		label = "camera_flash_therm";
+ 	};
+ 
+-	emmc-ufs-therm@54 {
++	adc-chan@54 {
+ 		reg = <ADC5_GPIO3_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,pre-scaling = <1 1>;
++		label = "emmc_ufs_therm";
+ 	};
+ 
+-	rf-pa1-therm@55 {
++	adc-chan@55 {
+ 		reg = <ADC5_GPIO4_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
+ 		qcom,pre-scaling = <1 1>;
++		label = "rf_pa1_therm";
+ 	};
+ };
+ 
+diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+index 3ed8c84e25b8..f4ac617dfab4 100644
+--- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
++++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+@@ -502,22 +502,25 @@ &i2c15 {
+ };
+ 
+ &pm8150_adc {
+-	xo-therm@4c {
++	adc-chan@4c {
+ 		reg = <ADC5_XO_THERM_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "xo_therm";
+ 	};
+ 
+-	skin-therm@4d {
++	adc-chan@4d {
+ 		reg = <ADC5_AMUX_THM1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "skin_therm";
+ 	};
+ 
+-	pa-therm1@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "pa_therm1";
+ 	};
+ };
+ 
+@@ -547,10 +550,11 @@ pa-therm1@2 {
+ };
+ 
+ &pm8150b_adc {
+-	conn-therm@4f {
++	adc-chan@4f {
+ 		reg = <ADC5_AMUX_THM3_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "conn_therm";
+ 	};
+ };
+ 
+@@ -591,22 +595,25 @@ pa-therm2@2 {
+ };
+ 
+ &pm8150l_adc {
+-	camera-flash-therm@4d {
++	adc-chan@4d {
+ 		reg = <ADC5_AMUX_THM1_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "camera_flash_therm";
+ 	};
+ 
+-	skin-msm-therm@4e {
++	adc-chan@4e {
+ 		reg = <ADC5_AMUX_THM2_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "skin_msm_therm";
+ 	};
+ 
+-	pa-therm2@4f {
++	adc-chan2@4f {
+ 		reg = <ADC5_AMUX_THM3_100K_PU>;
+ 		qcom,ratiometric;
+ 		qcom,hw-settle-time = <200>;
++		label = "pa_therm";
+ 	};
+ };
+ 
+-- 
+2.38.1
+
