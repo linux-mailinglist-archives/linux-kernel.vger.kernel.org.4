@@ -2,106 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8376488EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:22:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9756488F0
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 20:24:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbiLITWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 14:22:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
+        id S229704AbiLITYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 14:24:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLITWF (ORCPT
+        with ESMTP id S229538AbiLITYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 14:22:05 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CA478BA7;
-        Fri,  9 Dec 2022 11:22:05 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id jn7so5860963plb.13;
-        Fri, 09 Dec 2022 11:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BhRGeJWGrl0tr2bjnWyizth/nhOim0rSCX/mVsf4FsI=;
-        b=jdzNMVpr4uHxXDO6uF6Z+4fuId1VRik3H9I3yGfzwXeRXAMfacAtS2iG+grTIwxiee
-         6bMVyhr8xa6JdiZyypIERaCGtlmS77PHs8tHVkTwFWA6/GgShNry8csPojRQL2LmzLOU
-         QZhPHUlv/ltOFMmIGh6B+2lpHCfCI7EyxlSu7MlYTkdhRwNvoeNApleDxmPl2wsOKnKt
-         pXBImU/vsPCAFdHByYxONpKDX8jghKpHo4suCZge3VNpFhlzpmS4qsq/Ih/n7uwkkV1W
-         nmLklSSr2mTHQw8Lh9kEmYTv1XTTidafb++TuFK4cV3oZVmkt0vZM7QRVQip70GisfHt
-         XSGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BhRGeJWGrl0tr2bjnWyizth/nhOim0rSCX/mVsf4FsI=;
-        b=KQmCoxz1BUeXKE1dFhS80S3nQY4P39jwGeRqtfXXonA8qmeeE/HdmhxRmvRIdr+pl0
-         PVow0fSUf9npJJVA1xxC8GR087Yl8NOC7NN1E2KVXx0ISKL+ztapK0L0shG7wUyi78g1
-         jAemPteh2OQ8gO4et1h1kR9qHJNZRCo4rJ2cjwZ1hTAlg0kBStF+MwfCYvxEWTyutg3z
-         Fg0Zjwxu++K9hElMPb35DSBvG+Ar5/R1GpjvXUCrSpEmlJHAXavuA+TJaDLL1hg+rVtf
-         nXJ7xht+KJHz4kSEIOO1q90Y2dh3zDYdZq5gq8ApceIP7RcsCMseS3M7LHPLmAE2fEea
-         k4CQ==
-X-Gm-Message-State: ANoB5plXpZcwWc47zd/QP8ibf3uQ/yxrrup68biU+oYFc2bfJvZgqIQU
-        Tiuz+2E1v4Xg+Zfme9HUAdA=
-X-Google-Smtp-Source: AA0mqf4wdfMIqGQEHLdJxiXpEjHBSnTL5Tg00ntUG/Fa/LRlZHT0p2nb7uxswyrXWf6WqayH3/tOgA==
-X-Received: by 2002:a17:902:ccd2:b0:185:441e:4cfc with SMTP id z18-20020a170902ccd200b00185441e4cfcmr7857718ple.44.1670613724242;
-        Fri, 09 Dec 2022 11:22:04 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:5853:f1e8:694c:1488])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b00183e2a96414sm1658778pln.121.2022.12.09.11.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 11:22:03 -0800 (PST)
-Date:   Fri, 9 Dec 2022 11:22:00 -0800
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] wireless: ti: remove obsolete lines in the Makefile
-Message-ID: <Y5OK2AvJGhgHXepf@google.com>
-References: <20221209095937.17773-1-lukas.bulwahn@gmail.com>
+        Fri, 9 Dec 2022 14:24:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2021DA13E7;
+        Fri,  9 Dec 2022 11:24:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F84762303;
+        Fri,  9 Dec 2022 19:24:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0794CC43392;
+        Fri,  9 Dec 2022 19:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670613883;
+        bh=tOYtwqHozmknhMUKtwgTT6asrmy6Qi5D4CXEZwEJFvA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=o+uByTIMqF7RUXv3I6g1DZkmGKf30295zJ5Yy+usR/Yre92mgZ9FLZTDV0fUhIKRw
+         eZOEwGalOjtsJ8vriXEbEhULwugKKKTADBg5k2x6qjBaXyFQwZN60klJR+0Codn8x8
+         VrGp/+MG9rFXv2O2FpFty7lTeENJPwPN3cqCmPe5uc815/F60KYufIR03ol5ug1M17
+         R6hLK2rR4J7hsdGPmEr5p58Oip8nGVrZS2L7MCdAA7i9atz1+TwKgutTr+6p/EM2nO
+         22ps+mD4Gl5n5uB6TjmH4rH/wf6okQF14H0WBnaHvLSLbRR7ZFdc9VfbuCgpktcK8C
+         1/+8WgligIhiA==
+Received: by mail-ej1-f44.google.com with SMTP id x22so13723955ejs.11;
+        Fri, 09 Dec 2022 11:24:42 -0800 (PST)
+X-Gm-Message-State: ANoB5pniCgPuQzr8x7e2TsiKqtJj6IZCM8D9zy1u6+rqQkuxXagvGHBj
+        JMiNXcBZ5SMZNN3yeSNhC/kJHUCJNZiT5eIXBlQ=
+X-Google-Smtp-Source: AA0mqf7aAgHrQfEzZdzeILDHgJ9onlTpQ2Xs+zasDCpKDyDGwI5bKDRQye5Tl8FgSfid1YFAkOyyngd4VTMK1bAq2Fg=
+X-Received: by 2002:a17:907:2c68:b0:7c0:999d:1767 with SMTP id
+ ib8-20020a1709072c6800b007c0999d1767mr30991365ejc.301.1670613881161; Fri, 09
+ Dec 2022 11:24:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221209095937.17773-1-lukas.bulwahn@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220901171252.2148348-1-song@kernel.org> <alpine.LSU.2.21.2212091352370.18933@pobox.suse.cz>
+ <CAPhsuW53njtTrL=w33QBY5AiSftNxZ=UOQ1_qZ+qsp5VL1vU0g@mail.gmail.com> <7ddc326c-0c55-4901-16df-3e4e376e2570@csgroup.eu>
+In-Reply-To: <7ddc326c-0c55-4901-16df-3e4e376e2570@csgroup.eu>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 9 Dec 2022 11:24:29 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5YXqYcerxeR+nkZ5DpgvDe8fQ1iZXFeq4DcfY1a4VmwQ@mail.gmail.com>
+Message-ID: <CAPhsuW5YXqYcerxeR+nkZ5DpgvDe8fQ1iZXFeq4DcfY1a4VmwQ@mail.gmail.com>
+Subject: Re: [PATCH v6] livepatch: Clear relocation targets on a module removal
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Miroslav Benes <mbenes@suse.cz>,
+        "pmladek@suse.com" <pmladek@suse.com>,
+        "jikos@kernel.org" <jikos@kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "joe.lawrence@redhat.com" <joe.lawrence@redhat.com>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        "live-patching@vger.kernel.org" <live-patching@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 10:59:37AM +0100, Lukas Bulwahn wrote:
-> Commit 06463f6e98df ("wifi: wl1251: drop support for platform data")
-> removes TI WiLink platform data, but leaves some dead lines in the
-> Makefile.
-> 
-> Remove these obsolete lines in the Makefile.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+On Fri, Dec 9, 2022 at 10:52 AM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+>
+>
+> Le 09/12/2022 =C3=A0 19:30, Song Liu a =C3=A9crit :
+> > On Fri, Dec 9, 2022 at 4:55 AM Miroslav Benes <mbenes@suse.cz> wrote:
+> >>
+> >> Hi,
+> >>
+> >> first thank you for taking over and I also appologize for not replying
+> >> much sooner.
+> >>
+> >> On Thu, 1 Sep 2022, Song Liu wrote:
+> >>
+> >>> From: Miroslav Benes <mbenes@suse.cz>
+> >>>
+> >>> Josh reported a bug:
+> >>>
+> >>>    When the object to be patched is a module, and that module is
+> >>>    rmmod'ed and reloaded, it fails to load with:
+> >>>
+> >>>    module: x86/modules: Skipping invalid relocation target, existing =
+value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> >>>    livepatch: failed to initialize patch 'livepatch_nfsd' for module =
+'nfsd' (-8)
+> >>>    livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusi=
+ng to load module 'nfsd'
+> >>>
+> >>>    The livepatch module has a relocation which references a symbol
+> >>>    in the _previous_ loading of nfsd. When apply_relocate_add()
+> >>>    tries to replace the old relocation with a new one, it sees that
+> >>>    the previous one is nonzero and it errors out.
+> >>>
+> >>>    On ppc64le, we have a similar issue:
+> >>>
+> >>>    module_64: livepatch_nfsd: Expected nop after call, got e8410018 a=
+t e_show+0x60/0x548 [livepatch_nfsd]
+> >>>    livepatch: failed to initialize patch 'livepatch_nfsd' for module =
+'nfsd' (-8)
+> >>>    livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusi=
+ng to load module 'nfsd'
+> >>>
+> >>> He also proposed three different solutions. We could remove the error
+> >>> check in apply_relocate_add() introduced by commit eda9cec4c9a1
+> >>> ("x86/module: Detect and skip invalid relocations"). However the chec=
+k
+> >>> is useful for detecting corrupted modules.
+> >>>
+> >>> We could also deny the patched modules to be removed. If it proved to=
+ be
+> >>> a major drawback for users, we could still implement a different
+> >>> approach. The solution would also complicate the existing code a lot.
+> >>>
+> >>> We thus decided to reverse the relocation patching (clear all relocat=
+ion
+> >>> targets on x86_64). The solution is not
+> >>> universal and is too much arch-specific, but it may prove to be simpl=
+er
+> >>> in the end.
+> >>>
+> >>> Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> >>> Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+> >>> Signed-off-by: Song Liu <song@kernel.org>
+> >>
+> >> Petr has commented on the code aspects. I will just add that s390x was=
+ not
+> >> dealt with at the time because there was no live patching support for
+> >> s390x back then if I remember correctly and my notes do not lie. The s=
+ame
+> >> applies to powerpc32. I think that both should be fixed as well with t=
+his
+> >> patch. It might also help to clean up the ifdeffery in the patch a bit=
+.
+> >
+> > I don't have test environments for s390 and powerpc, so I really don't =
+know
+> > whether I am doing something sane for them.
+> >
+> > Would you have time to finish these parts? (Or maybe the whole patch..)
+>
+> Setting up a powerpc test environment is fairly easy with QEMU.
+>
+> Some information below:
+> - https://github.com/linuxppc/wiki/wiki
+> - https://wiki.qemu.org/Documentation/Platforms/PowerPC
 
-Thanks for spotting this.
+Thanks for these pointers! I will give it a try.
 
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Song
 
-> ---
->  drivers/net/wireless/ti/Makefile | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/ti/Makefile b/drivers/net/wireless/ti/Makefile
-> index 0530dd744275..05ee016594f8 100644
-> --- a/drivers/net/wireless/ti/Makefile
-> +++ b/drivers/net/wireless/ti/Makefile
-> @@ -3,6 +3,3 @@ obj-$(CONFIG_WLCORE)			+= wlcore/
->  obj-$(CONFIG_WL12XX)			+= wl12xx/
->  obj-$(CONFIG_WL1251)			+= wl1251/
->  obj-$(CONFIG_WL18XX)			+= wl18xx/
-> -
-> -# small builtin driver bit
-> -obj-$(CONFIG_WILINK_PLATFORM_DATA)	+= wilink_platform_data.o
-> -- 
-> 2.17.1
-> 
-
--- 
-Dmitry
+PS: Sometimes I am just lazy, you know..
