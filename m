@@ -2,159 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203CB647C82
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:11:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FA0647C84
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 04:13:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiLIDLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 22:11:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S229876AbiLIDNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:13:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiLIDLO (ORCPT
+        with ESMTP id S229553AbiLIDNq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:11:14 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2E18D188
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:11:05 -0800 (PST)
-X-UUID: 477afe1c999b4addaeae07fecc270c2f-20221209
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0IUYP1FMYMYrYJClJDGBDoSMePz+IPYu2tTV/hqTIg4=;
-        b=jEcYxOzAoNoSBkLUSERUCtUaMruZag/aG/ZvjITUyuxv6zTVXPoQdFbgwrKyKgZVovE0EW69zY38t+HGVGM1dy70mIvt6RfmJ0xKco38ujCG66VTtvor29grs/RZtFiRZgZnQAE9k8F9T/hlpbdYdUVBEwmBoenK1X8J7lYNXLM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.14,REQID:b2a5f13b-35ac-4432-a0ce-cf9ad2ad1484,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.14,REQID:b2a5f13b-35ac-4432-a0ce-cf9ad2ad1484,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:dcaaed0,CLOUDID:2d1615d2-652d-43fd-a13a-a5dd3c69a43d,B
-        ulkID:221209111100ORC5MHTL,BulkQuantity:1,Recheck:0,SF:40|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 477afe1c999b4addaeae07fecc270c2f-20221209
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <yc.hung@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 354103708; Fri, 09 Dec 2022 11:10:59 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Fri, 9 Dec 2022 11:10:58 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Fri, 9 Dec 2022 11:10:58 +0800
-From:   YC Hung <yc.hung@mediatek.com>
-CC:     <yc.hung@mediatek.com>, Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Trevor Wu <trevor.wu@mediatek.com>,
-        "Nicolas F . R . A . Prado" <nfraprado@collabora.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        <alsa-devel@alsa-project.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Curtis Malainey" <cujomalainey@chromium.org>,
-        <whalechang@google.com>
-Subject: [PATCH] ASoC: mediatek: mt8195: add sof be ops to check audio active
-Date:   Fri, 9 Dec 2022 11:10:53 +0800
-Message-ID: <20221209031053.8444-1-yc.hung@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 8 Dec 2022 22:13:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21010716E1
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:13:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0227B82780
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:13:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63760C433F2
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 03:13:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670555622;
+        bh=x+9MrQMMOfSTvflWMJ+YfKIq/lzAfeXGJeLdsIAP3fs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bwphORUVbhRZlcJYegc5KIHzlojwm+TIe0e5QN9c1zeizXhSujyIYNOhK8qTsBHbD
+         re8U0EJVP4cY9lRM+Fg2+vkOCNQJ71qzMSzMcU+cIEU3FVQMhAn9X29g7LzBHWH9jN
+         tcSSa/9+42Hr0i9sOL0uvYPuMnOE5bc4mCZ3fNPJNad87+wApMuwY1uwVmGXgyXE6l
+         xp8emKZ/HpsqCzouReH+8tNbHLOHtvKLklSklaplrJ0zsL7/1wCKGGFGJCk1ssC3JB
+         5r26U3dND08rfeOZxivd5mS6zWoRHp8z8YAo4Yxip9IkNXyF6n0eBuhxxIIEkw68Ew
+         iT+Urxw9PGiVA==
+Received: by mail-ej1-f47.google.com with SMTP id ud5so8549817ejc.4
+        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 19:13:42 -0800 (PST)
+X-Gm-Message-State: ANoB5pkFu/MjZ8EXRMaUKNBEa+m5KBORyPiQGB7b6+6vEBN/ovrcbPnE
+        fMovl9N3Qes7ftZ+4F6wUiZtEbbUwCQmcIyKZjQ=
+X-Google-Smtp-Source: AA0mqf46N45tPba3FH4c8/5VKiowiVnhF8psDwbHD8oJxrSPlp44NQUMpaslqZTw59wcxYXGf93Q6V16adxCICV3DiM=
+X-Received: by 2002:a17:906:ee2:b0:78d:3f96:b7aa with SMTP id
+ x2-20020a1709060ee200b0078d3f96b7aamr64225763eji.74.1670555620457; Thu, 08
+ Dec 2022 19:13:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,MAY_BE_FORGED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+References: <Y3fxsWPLPlKGfMBj@curiosity> <mhng-1d55338a-53a1-42eb-bf5c-91655fde2734@palmer-ri-x1c9a>
+In-Reply-To: <mhng-1d55338a-53a1-42eb-bf5c-91655fde2734@palmer-ri-x1c9a>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Fri, 9 Dec 2022 11:13:28 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQqF8GG77SKm9MpJC28DQebHsjuSoD_+FRRV0GcKpQFCg@mail.gmail.com>
+Message-ID: <CAJF2gTQqF8GG77SKm9MpJC28DQebHsjuSoD_+FRRV0GcKpQFCg@mail.gmail.com>
+Subject: Re: [PATCH V3] riscv: asid: Fixup stale TLB entry cause application crash
+To:     Palmer Dabbelt <palmer@rivosinc.com>, geomatsi@gmail.com,
+        philipp.tomsich@vrull.eu, Paul Walmsley <paul.walmsley@sifive.com>,
+        anup@brainfault.org
+Cc:     Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
+        alex@ghiti.fr, Christoph Hellwig <hch@lst.de>,
+        ajones@ventanamicro.com, gary@garyguo.net, jszhang@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        guoren@linux.alibaba.com, apatel@ventanamicro.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In MT8195 SOF design, both DSP and audio driver would access audio
-registers. Before DSP accesses audio registers, audio power and clock
-should be enabled. DSP will hang up if DSP access audio register but
-audio power and clock are disabled. Therefore, we add audio pm runtime
-active checking before accessing audio registers in SOF BE's callback
-hw_params function to avoid this situation.
+On Fri, Dec 9, 2022 at 7:30 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>
+> On Fri, 18 Nov 2022 12:57:21 PST (-0800), geomatsi@gmail.com wrote:
+> > Hi Guo Ren,
+> >
+> >
+> >> After use_asid_allocator is enabled, the userspace application will
+> >> crash by stale TLB entries. Because only using cpumask_clear_cpu without
+> >> local_flush_tlb_all couldn't guarantee CPU's TLB entries were fresh.
+> >> Then set_mm_asid would cause the user space application to get a stale
+> >> value by stale TLB entry, but set_mm_noasid is okay.
+> >
+> > ... [snip]
+> >
+> >> +    /*
+> >> +     * The mm_cpumask indicates which harts' TLBs contain the virtual
+> >> +     * address mapping of the mm. Compared to noasid, using asid
+> >> +     * can't guarantee that stale TLB entries are invalidated because
+> >> +     * the asid mechanism wouldn't flush TLB for every switch_mm for
+> >> +     * performance. So when using asid, keep all CPUs footmarks in
+> >> +     * cpumask() until mm reset.
+> >> +     */
+> >> +    cpumask_set_cpu(cpu, mm_cpumask(next));
+> >> +    if (static_branch_unlikely(&use_asid_allocator)) {
+> >> +            set_mm_asid(next, cpu);
+> >> +    } else {
+> >> +            cpumask_clear_cpu(cpu, mm_cpumask(prev));
+> >> +            set_mm_noasid(next);
+> >> +    }
+> >>  }
+> >
+> > I observe similar user-space crashes on my SMP systems with enabled ASID.
+> > My attempt to fix the issue was a bit different, see the following patch:
+> >
+> > https://lore.kernel.org/linux-riscv/20220829205219.283543-1-geomatsi@gmail.com/
+> >
+> > In brief, the idea was borrowed from flush_icache_mm handling:
+> > - keep track of CPUs not running the task
+> > - perform per-ASID TLB flush on such CPUs only if the task is switched there
+>
+> That way looks better to me: leaking hartids in the ASID allocator might
+> make the crashes go away, but it's just going to end up trending towards
+> flushing everything and that doesn't seem like the right long-term
+> solution.
+The penalty in switch_mm is too heavy!!!
+ - If the system has multiple NUMA nodes, it will cause switch_mm_fast
+flush unnecessary harts.
+ - If flush_range is just 1 entry, it would case flush_tlb_all_asid.
 
-Signed-off-by: YC Hung <yc.hung@mediatek.com>
----
- sound/soc/mediatek/mt8195/mt8195-mt6359.c | 30 +++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+switch_mm_fast:
+        csr_write(CSR_SATP, virt_to_pfn(mm->pgd) |
+                  ((cntx & asid_mask) << SATP_ASID_SHIFT) |
+                  satp_mode);
 
-diff --git a/sound/soc/mediatek/mt8195/mt8195-mt6359.c b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
-index 61be66f47723..4682748d82be 100644
---- a/sound/soc/mediatek/mt8195/mt8195-mt6359.c
-+++ b/sound/soc/mediatek/mt8195/mt8195-mt6359.c
-@@ -633,6 +633,32 @@ static const struct snd_soc_ops mt8195_rt1011_etdm_ops = {
- 	.hw_params = mt8195_rt1011_etdm_hw_params,
- };
- 
-+static int mt8195_sof_be_hw_params(struct snd_pcm_substream *substream,
-+				   struct snd_pcm_hw_params *params)
-+{
-+	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-+	struct snd_soc_component *cmpnt_afe = NULL;
-+	struct snd_soc_pcm_runtime *runtime;
+        if (need_flush_tlb)
+                local_flush_tlb_all();
++#ifdef CONFIG_SMP
++        else {
++                cpumask_t *mask = &mm->context.tlb_stale_mask;+
 +
-+	/* find afe component */
-+	for_each_card_rtds(rtd->card, runtime) {
-+		cmpnt_afe = snd_soc_rtdcom_lookup(runtime, AFE_PCM_NAME);
-+		if (cmpnt_afe)
-+			break;
-+	}
-+
-+	if (cmpnt_afe && !pm_runtime_active(cmpnt_afe->dev)) {
-+		dev_err(rtd->dev, "afe pm runtime is not active!!\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct snd_soc_ops mt8195_sof_be_ops = {
-+	.hw_params = mt8195_sof_be_hw_params,
-+};
-+
- static int mt8195_rt1011_init(struct snd_soc_pcm_runtime *rtd)
++               if (cpumask_test_cpu(cpu, mask)) {
++                        cpumask_clear_cpu(cpu, mask);
++                        local_flush_tlb_all_asid(cntx & asid_mask);
+// penalty in switch_mm fast path
++                }
++        }
++#endif
+
+And See:
+ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+                                  unsigned long size, unsigned long stride)
  {
- 	struct snd_soc_card *card = rtd->card;
-@@ -1272,24 +1298,28 @@ static struct snd_soc_dai_link mt8195_mt6359_dai_links[] = {
- 		.name = "AFE_SOF_DL2",
- 		.no_pcm = 1,
- 		.dpcm_playback = 1,
-+		.ops = &mt8195_sof_be_ops,
- 		SND_SOC_DAILINK_REG(AFE_SOF_DL2),
- 	},
- 	[DAI_LINK_SOF_DL3_BE] = {
- 		.name = "AFE_SOF_DL3",
- 		.no_pcm = 1,
- 		.dpcm_playback = 1,
-+		.ops = &mt8195_sof_be_ops,
- 		SND_SOC_DAILINK_REG(AFE_SOF_DL3),
- 	},
- 	[DAI_LINK_SOF_UL4_BE] = {
- 		.name = "AFE_SOF_UL4",
- 		.no_pcm = 1,
- 		.dpcm_capture = 1,
-+		.ops = &mt8195_sof_be_ops,
- 		SND_SOC_DAILINK_REG(AFE_SOF_UL4),
- 	},
- 	[DAI_LINK_SOF_UL5_BE] = {
- 		.name = "AFE_SOF_UL5",
- 		.no_pcm = 1,
- 		.dpcm_capture = 1,
-+		.ops = &mt8195_sof_be_ops,
- 		SND_SOC_DAILINK_REG(AFE_SOF_UL5),
- 	},
- };
--- 
-2.18.0
++       struct cpumask *pmask = &mm->context.tlb_stale_mask;
+        struct cpumask *cmask = mm_cpumask(mm);
+        unsigned int cpuid;
+        bool broadcast;
+@@ -44,6 +29,15 @@ static void __sbi_tlb_flush_range(struct mm_struct
+*mm, unsigned long start,
+        if (static_branch_unlikely(&use_asid_allocator)) {
+                unsigned long asid = atomic_long_read(&mm->context.id);
 
++               /*
++                * TLB will be immediately flushed on harts concurrently
++                * executing this MM context. TLB flush on other harts
++                * is deferred until this MM context migrates there.
++                */
++               cpumask_setall(pmask);
+                 ^^^^^^^^^^^^^^^^^^^^^^^ It would flush all harts for
+all NUMA nodes!!! Most of them deferred to switch_mm_fast. The penalty
+contains unnecessary harts!
++               cpumask_clear_cpu(cpuid, pmask);
++               cpumask_andnot(pmask, pmask, cmask);
+
+Please reconsider a bit, and make a smart decision. Just penalty the
+harts who touched the mm, not all. And only flush the whole TLB when
+some entries are needed.
+
+The __sbi_tlb_flush_range is the slow path; keeping the fast path
+performance is worth more than improving a slow one.
+
+>
+> So I've got that one on for-next, sorry I missed it before.
+>
+> Thanks!
+>
+> >
+> > Your patch also works fine in my tests fixing those crashes. I have a
+> > question though, regarding removed cpumask_clear_cpu. How CPUs no more
+> > running the task are removed from its mm_cpumask ? If they are not
+> > removed, then flush_tlb_mm/flush_tlb_page will broadcast unnecessary
+> > TLB flushes to those CPUs when ASID is enabled.
+> >
+> > Regards,
+> > Sergey
+
+
+
+-- 
+Best Regards
+ Guo Ren
