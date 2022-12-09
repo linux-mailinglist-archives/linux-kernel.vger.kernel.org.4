@@ -2,54 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01F38648964
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:10:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BD764896E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 21:19:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLIUKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 15:10:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52394 "EHLO
+        id S229691AbiLIUTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 15:19:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiLIUKT (ORCPT
+        with ESMTP id S229498AbiLIUTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 15:10:19 -0500
+        Fri, 9 Dec 2022 15:19:50 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F27D75BC8;
-        Fri,  9 Dec 2022 12:10:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4B410B55
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 12:19:49 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ABFB2B828E3;
-        Fri,  9 Dec 2022 20:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F43C433EF;
-        Fri,  9 Dec 2022 20:10:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 103D9B82910
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 20:19:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75D05C433D2;
+        Fri,  9 Dec 2022 20:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670616615;
-        bh=cpwj8aLB1ZSo0VyHds3i+gDgN3tfM1UuJLmIqM6xe0k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=H3u9AoyALXeWTKNvDfwO58lXMg32cZkhySUu99Jmc645UBUDYk5tVMmmNUfGWPhrq
-         8d/kYR1tBvW1wTZEXj3MRs4F1XOoB+2KIu6VnvDhvK5WY8AWTPMxIcyvg9mCvzBR94
-         ggN+pxXqwq0mOA/pXLioSxBQxQplEoNQgApf5FI3tUUnJJvWgDG82DjENdXZZXhYba
-         vnXbpn9syy/E0Y+OBWujJjm9la6CFT4ZljLJCc7DH4saF87uPbUtnm2ly135Lgvc2m
-         nYyq7WSzf3/sD0XDAc6ikPqjJv4nbWpZYo0qk09RCz6MqrNyQYFqETSExRZ+ne0lqg
-         6z821JD2dvnXA==
-Date:   Fri, 9 Dec 2022 14:10:13 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     linux-pci@vger.kernel.org, Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 1/4] efi/x86: Remove EfiMemoryMappedIO from E820 map
-Message-ID: <20221209201013.GA1719699@bhelgaas>
+        s=k20201202; t=1670617186;
+        bh=n/aLPvjBDYJVMFXxElsDKBo/M3EKYJZF4SnN3OdN5zs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CzhWZ+5epGcSYwjTVOqnGyRc/3hnCRskyG1PI2aBYuzNq0mRZf6lU/fqHOorwhGNy
+         HYINjFWS6Jjfh0Nu6Hx+X4fpCgOm3qqh6oO9iaeA1bGp+IPd3ZPo/4z/N4CM1vKMl4
+         EBzIJvcZrdxyKyM2+F2GhVyclV41LEp8wwRVxayv7ck+7JSLQy0leJzQALhS6gDyor
+         EbUyBb9bBtntXTW2Wlkgso7jizPCiXJJfhgMyzjgqmyzvMZIcggAuMoIaPj6cJvwX2
+         J1PxCrbeVcdCKunufoAQHwfLPMz2D4yWJOcpu/kOfwgaRHxltkZvbzUmnXRoayphMJ
+         +1kwkz2VHxMHA==
+Date:   Fri, 9 Dec 2022 12:19:44 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     zhoudan8 <zhuqiandann@gmail.com>
+Cc:     chao@kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, zhoudan8 <zhoudan8@xiaomi.com>
+Subject: Re: [PATCH] f2fs: don't set FI_COMPRESS_RELEASED if file is not
+ compressed
+Message-ID: <Y5OYYJYx9G2LbRmc@google.com>
+References: <20221208050808.2448146-1-zhoudan8@xiaomi.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c7418ea8-6b1a-f648-da5f-bf6ae412e359@redhat.com>
+In-Reply-To: <20221208050808.2448146-1-zhoudan8@xiaomi.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,43 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 12:04:53PM +0100, Hans de Goede wrote:
-> On 12/9/22 09:06, Hans de Goede wrote:
-> > One comment (logging bug in patch) below:
-> > ...
+On 12/08, zhoudan8 wrote:
+> In compress_mode=user, f2fs_release_compress_blocks()
+>  does not verify whether it has been compressed and
+>  sets FI_COMPRESS_RELEASED directly. which will lead to
+> return -EINVAL after calling compress.
+> To fix it,let's do not set FI_COMPRESS_RELEASED if file
+> is not compressed.
 
-> > The logging in this else is re-using the start and end from the previous section which was actually removed.
-> > 
-> > E.g. Matt's latest log from:
-> > https://bugzilla.redhat.com/show_bug.cgi?id=1868899
-> > has:
-> > 
-> > [    0.000000] e820: remove [mem 0xfc800000-0xfe7fffff] reserved
-> > [    0.000000] efi: Not removing mem46: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
-> > [    0.000000] efi: Not removing mem47: MMIO range=[0xfc800000-0xfe7fffff] (32KB) from e820 map
-> > [    0.000000] efi: Not removing mem49: MMIO range=[0xfc800000-0xfe7fffff] (8KB) from e820 map
-> > [    0.000000] efi: Not removing mem50: MMIO range=[0xfc800000-0xfe7fffff] (4KB) from e820 map
-> > 
-> > Notice how all the "Not removing ..." lines log the same range as
-> > the actually removed map entry above them.
+Do you mean you want to avoid EINVAL on a file having FI_COMPRESS_RELEASED
+with zero i_compr_blokcs?
+
+I think the current logic is giving the error on a released file already.
+
 > 
-> I realize the fix is very obvious, but since I just fixed this in my
-> local tree anyways, here is my fix for this:
-
-Thank you!  Incorporated.
-
-> --- a/arch/x86/platform/efi/efi.c
-> +++ b/arch/x86/platform/efi/efi.c
-> @@ -331,9 +331,9 @@ static void __init efi_remove_e820_mmio(void)
->  	for_each_efi_memory_desc(md) {
->  		if (md->type == EFI_MEMORY_MAPPED_IO) {
->  			size = md->num_pages << EFI_PAGE_SHIFT;
-> +			start = md->phys_addr;
-> +			end = start + size - 1;
->  			if (size >= 256*1024) {
-> -				start = md->phys_addr;
-> -				end = start + size - 1;
->  				pr_info("Remove mem%02u: MMIO range=[0x%08llx-0x%08llx] (%lluMB) from e820 map\n",
->  					i, start, end, size >> 20);
->  				e820__range_remove(start, size,
+> Signed-off-by: zhoudan8 <zhoudan8@xiaomi.com>
+> ---
+>  fs/f2fs/file.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 82cda1258227..f32910077df6 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -3451,14 +3451,13 @@ static int f2fs_release_compress_blocks(struct file *filp, unsigned long arg)
+>  	ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+>  	if (ret)
+>  		goto out;
+> -
+> -	set_inode_flag(inode, FI_COMPRESS_RELEASED);
+>  	inode->i_ctime = current_time(inode);
+>  	f2fs_mark_inode_dirty_sync(inode, true);
+>  
+>  	if (!atomic_read(&F2FS_I(inode)->i_compr_blocks))
+>  		goto out;
+>  
+> +	set_inode_flag(inode, FI_COMPRESS_RELEASED);
+>  	f2fs_down_write(&F2FS_I(inode)->i_gc_rwsem[WRITE]);
+>  	filemap_invalidate_lock(inode->i_mapping);
+>  
+> -- 
+> 2.38.1
