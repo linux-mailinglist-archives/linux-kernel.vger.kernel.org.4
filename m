@@ -2,56 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ABDE648A49
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:47:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B3F3648A67
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 22:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229720AbiLIVr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 16:47:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40078 "EHLO
+        id S229983AbiLIVx7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 16:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLIVrX (ORCPT
+        with ESMTP id S230010AbiLIVx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 16:47:23 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3F3D381
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 13:47:22 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id w15so6510483wrl.9
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 13:47:22 -0800 (PST)
+        Fri, 9 Dec 2022 16:53:56 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D199527CCF
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 13:53:54 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id cg5so4692577qtb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 13:53:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Pj6fEio9GMBTTHsUKN327d/y8NUqAks43uKCHfaSmLs=;
-        b=mb7tWCrLDmGYT7t7An9lV/NQSe5kR86hqGck0z3DNpPW2s5TFbhTfFXPMl0Py1AhyX
-         AMo/QqJ96mnXlc6/NBvNArZCm4E7CMwaPH69HBD3Ny9kjJmXXDeJAQP+K2W25ByJ2IU8
-         wkosx5IA2cacD6ljCsoGU+fUHUqLyUVkd2AFQJv8ap4BSxGsLrMMxm3UjI3kUxqf++uo
-         AzLN83n1YIqtDDC/B8wzFKMianEZcMcYbLxP7N+mLfTBDOkYKy7hGXiJHzVHXZOcEQFL
-         jXYFLdfuWRcfsdjhzVrsXZOGZbDlMVrxx4CJkjpZPt1d7wq9VGKLpDLfAvXaZvROurMp
-         bjbA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CogeahCDAeDbkConNno5D9xjUNwnhFqYTxCoNNSIi44=;
+        b=gwMxZGYCwrO7jsCEDiClzh8A+LsHYs0+15yt63BjNCy9KjrzUYquIcXyHPsrWLu4aF
+         lCqP/akNWkQuJWc2jILHnXhhokRpvFk2c39kf67zvtYXD3DmCKPMALytDx85LPEFwEod
+         PTWxkjMNoP+AH8V4TfeiVGFpasFF5sMC2OeAa91RrrcG/Ps4Riufsf7MxvHQo74EbVCB
+         Konk9THbEDwIitcvNth0DA1wMDfHcRVIRZOPRphuab1qx0RsRYzdRMIOOlDsbCtHV6qy
+         Slvg4fD/GYEfZ9Supz0pUrMbfFAaMKYJnoGviAJ+U5cpIqELkbqvcP54ciHNUy2hd64m
+         sTtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Pj6fEio9GMBTTHsUKN327d/y8NUqAks43uKCHfaSmLs=;
-        b=0NmpWWryJON4uPHm2jl+D4HJko+l8XIoTLVwBIDxihJq4aCUigYi2huoAB5NCr6EPP
-         gHGG9bHudUUjF2v8ZJJP7JR3fuZut+h2u8V3IMKEIE5v8OFP3CIz+HZCxZ8VrC/hqwS8
-         n6/odyUc40OAtGY6XHAl28XpFgj77zlsywLP6zK8Fwp6mOwu2UdS/ERD/z1Xe+c0tw3t
-         Oz90JAWPqOPyeGki+cqfitKQp0nvfG1be2rY+EIxPaubjKT1V7kUbIB/VtKQrpvBAhFK
-         0+rUoKgZ+pQPGjq+p3sUV7oaSbocRo9XhLC1dOSmF1kDpPVbLS8nla8mSUAtiAHFIi8n
-         gIkg==
-X-Gm-Message-State: ANoB5pnc/gT1d76jtrzVccddOS13jZNWGNSFK6JQBqeXG55rwGAqewN+
-        23YB3o89mJo1Z9hlNAAjttphL4DuOx4sRniAve5gGdbDew5GlA==
-X-Google-Smtp-Source: AA0mqf50J+hdEGZmzaZ153eaZiupzCfzw+lwtn2Qm4b+RxM9vYWB6RlKrtHhNZn1USVCgSoyEMyfwgd1oHHcf5usDrI=
-X-Received: by 2002:adf:fd03:0:b0:242:5361:54ee with SMTP id
- e3-20020adffd03000000b00242536154eemr12633940wrr.667.1670622440325; Fri, 09
- Dec 2022 13:47:20 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CogeahCDAeDbkConNno5D9xjUNwnhFqYTxCoNNSIi44=;
+        b=XhP+GIWk0tXITMk4zPIAaXMdD11TbY8h/0mEqC9Egb2OJXvwCVEaYeteo+LsccL1Gs
+         pCDgndaDZFJ7WwkiIoUK+RsQlv76v8MlhFnSMS92O1NjlvGMIp4Da+ZJAO5LgRrldwj7
+         iLWcLtUV82Nl7EaVKre7qROQ8kEQI56reub9oUGrqRTPYqUSieqwjL/wE89GdKXu+cv5
+         CwPulLzOUSkKjppxC5PVH2WFGIE8svVKTMstsbFHiSRa/EgISkw3wAN1bgFtwpAk0w8A
+         xMHPv9kBLRcI0lGXr6tkSnKVuuaWEJvlhgbmRrd9fSD9JwvkHjDgwkbELpG8zj46iYRY
+         9vHg==
+X-Gm-Message-State: ANoB5pmPN/SipmBTQoJtKso1AS/1vn71a1pQQtobv5dsdMaBj55kf9ms
+        XKWwDVlXKmRXhdkupN88xOY=
+X-Google-Smtp-Source: AA0mqf5Se2vnZARHxGLZnlgo8WFco4pE56l2BBYu/6YHuNmd5/aKI85W/31ebRGVZbDr/+KajsjjEg==
+X-Received: by 2002:ac8:748d:0:b0:3a5:f909:8a7b with SMTP id v13-20020ac8748d000000b003a5f9098a7bmr9446273qtq.58.1670622833978;
+        Fri, 09 Dec 2022 13:53:53 -0800 (PST)
+Received: from Dell-Inspiron-15.. ([2601:18c:8380:74b0:e8e5:f40c:d741:8f07])
+        by smtp.gmail.com with ESMTPSA id p16-20020a05620a057000b006fee9a70343sm712718qkp.14.2022.12.09.13.53.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 13:53:53 -0800 (PST)
+From:   Ben Wolsieffer <benwolsieffer@gmail.com>
+To:     linux-stm32@st-md-mailman.stormreply.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Ben Wolsieffer <benwolsieffer@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/2] ARM: v7m: handle faults and enable debugging
+Date:   Fri,  9 Dec 2022 16:48:11 -0500
+Message-Id: <20221209214824.3444954-1-benwolsieffer@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-From:   davide rossetti <davide.rossetti@gmail.com>
-Date:   Fri, 9 Dec 2022 13:47:08 -0800
-Message-ID: <CAPSaadwWXXF3N4BaUYS_Aqas27eqNX+mcx3a7MnohqPy7+--ug@mail.gmail.com>
-Subject: dma_to_phys on Intel CC platforms
-To:     linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -62,24 +77,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-looking at https://elixir.bootlin.com/linux/v6.1-rc8/source/include/linux/dma-direct.h#L86,
-it looks like it assume the AMD CC convention, i.e. CC bit set means
-encrypted:
+This series enables real exception handlers on no-MMU systems,
+increasing robustness in the face of buggy user- or kernel-space
+software. Previously, any fault would trigger the invalid exception
+handler, which would hang the system. With this series, faults only
+kill the offending process and allow the rest of the system to
+continue operating.
 
-static inline phys_addr_t dma_to_phys(struct device *dev, dma_addr_t dma_addr)
-{
-phys_addr_t paddr;
+The second patch in this series adds support for undefined instruction
+hooks, enabling software breakpoints through ptrace. Using this
+functionality currently requires a patch to gdb.
 
-if (dev->dma_range_map)
-paddr = translate_dma_to_phys(dev, dma_addr);
-else
-paddr = dma_addr;
+This series has been tested on an STM32F746 (Cortex-M7).
 
-return __sme_clr(paddr);
-}
+I would appreciate feedback in particular on the following questions:
+* Is the fault table formatting acceptable? Or should the lines be
+  wrapped/shortened?
+* Does my chosen mapping between faults and signals make sense?
 
-What guarantees that this works on Intel too?
+This time around this series has been sent to linux-stm32 as well, as I was
+previously unaware of that list.
+
+Ben Wolsieffer (2):
+  ARM: v7m: handle faults
+  ARM: v7m: support undefined instruction hooks
+
+ arch/arm/include/asm/traps.h |   2 +
+ arch/arm/include/asm/v7m.h   |  29 +++++++
+ arch/arm/kernel/Makefile     |   2 +-
+ arch/arm/kernel/entry-v7m.S  |  68 ++++++++++++++-
+ arch/arm/kernel/traps-v7m.c  | 162 +++++++++++++++++++++++++++++++++++
+ 5 files changed, 258 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/kernel/traps-v7m.c
 
 -- 
-sincerely,
-d.
+2.38.1
+
