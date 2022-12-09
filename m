@@ -2,161 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86DD648597
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4383F648502
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:25:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbiLIPaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:30:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S230380AbiLIPZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:25:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbiLIPa0 (ORCPT
+        with ESMTP id S229696AbiLIPZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:30:26 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8986E1E3C8
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:29:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670599771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iLUYz9gKiHY3ndA68I5cW74nts6kf3HnnSAI7CDyETY=;
-        b=dYIQ3XzWmwC+AzjFzcO3lS9fD1YTx5k63ME7n5BVhRpcQdiZfrnA6SVcaRvEC2upUyu1Z/
-        oIOsQm+eq+WIbzkCmwV9yRJjIa/q8oZklz4MfgkD8Gekrw8yeGy/izC2EjLOPzXZlKnwEd
-        3tct3b1EWrLf9XQuGo4Q4pJkmc49Itc=
-Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
- [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-185-YveCQ8BnOKWSlsd-qdT_gA-1; Fri, 09 Dec 2022 10:29:30 -0500
-X-MC-Unique: YveCQ8BnOKWSlsd-qdT_gA-1
-Received: by mail-vs1-f71.google.com with SMTP id 190-20020a6719c7000000b003aa14ac75f5so1321656vsz.1
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:29:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iLUYz9gKiHY3ndA68I5cW74nts6kf3HnnSAI7CDyETY=;
-        b=ZNcEUNRC1JZVZ6oNEAQmMDsb2geG92PHfoxDZXSwufmpQ/0K+gpWWlxkk1XFbXKHkA
-         rNsLjju88Z7eFj+qxu6wN0EHv2D+APnN5dvC0Fynhep4mYOSUEfoODEmmURRj6r015fP
-         XVYOlqTbsd3nI6kwfK5ztw0Y/pFyClNM6y6FqK+IHbl90Yw19ykcHdSg8djafrtE+72r
-         GwTpShpprc2SnzFs4SmhiQuUHeLlrbEhT6nzaPB+rM2M2sWZCPB0+hl65vEviz0wmIHK
-         CCnT5cs8bNJ5okywZNCz6xIxbrXTUhhqRt6QoojEO0RJMjV/oc8PDAiv/fZ2+E10lu7g
-         I+gA==
-X-Gm-Message-State: ANoB5pnt9ZOwqaLId+8yYYwNaoj6A2maixc95rArKp+LZROTEascD9kK
-        LgA+zs42/5c25kkdjqtM6SOoOPJkR/BH02bMRxwgsnaelRaAMjm8BtsUKlWwshOhdA04WHnKlHS
-        +1ShF52gX6GkSAPiU0wP7eHg=
-X-Received: by 2002:a05:6122:2c5:b0:3bd:b78b:102b with SMTP id k5-20020a05612202c500b003bdb78b102bmr3298744vki.5.1670599770344;
-        Fri, 09 Dec 2022 07:29:30 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf6+U2uhioAWISnye3Qoub4LCzfeuIPe70H/84a6MC+WFWRbN5P56LHkPbSWwOlcP2wVGqB3Mg==
-X-Received: by 2002:a05:6122:2c5:b0:3bd:b78b:102b with SMTP id k5-20020a05612202c500b003bdb78b102bmr3298723vki.5.1670599770101;
-        Fri, 09 Dec 2022 07:29:30 -0800 (PST)
-Received: from klayman.redhat.com (net-2-34-28-158.cust.vodafonedsl.it. [2.34.28.158])
-        by smtp.gmail.com with ESMTPSA id dt26-20020a05620a479a00b006fbf88667bcsm29484qkb.77.2022.12.09.07.29.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 07:29:29 -0800 (PST)
-From:   Marco Pagani <marpagan@redhat.com>
-To:     Dinh Nguyen <dinguyen@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Marco Pagani <marpagan@redhat.com>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] clk: socfpga: arria10: use of_clk_add_hw_provider and improve error handling
-Date:   Fri,  9 Dec 2022 16:29:13 +0100
-Message-Id: <20221209152913.1335068-7-marpagan@redhat.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221209152913.1335068-1-marpagan@redhat.com>
-References: <20221209152913.1335068-1-marpagan@redhat.com>
+        Fri, 9 Dec 2022 10:25:08 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B188B1A6;
+        Fri,  9 Dec 2022 07:25:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670599504; x=1702135504;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WmwpTYyxcVQtiW1tL9fJMr4BDXHV7YEW8emRKA6pCLM=;
+  b=FHKGNhcF5a/VoIsDn+xf7QSag4dlUuYqcc9B7X8JHvKzBa+4FQRqWd2D
+   ZPQJluuiEAJc2e5HOwuqIp1N6giVYbSTxv+TWQDknKimEXPf92piFEAck
+   5zVUUC4U8zPyJ/lp2Y5ZbFgjg6U2/qtVRXdzOZc+gs06kqvxtIdLk6jnU
+   vJSaLF7GPQr/TYxvpCuc3oe5Ug0KVhVK2N+766+zz7HFLhoqu/Ei9OqtM
+   tnpn6Fq6I3tiOHmEbnZjvO3YycLEF9nj9PCP4AFObm6d4M6LUYG60A+Y/
+   cpb13kEvfWeHtK6fGKBwMy/uX4Tb8SptGTW4BmMMpe+jb56fn3msW+C/z
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="190905714"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 08:25:03 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 08:25:02 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Fri, 9 Dec 2022 08:25:02 -0700
+Date:   Fri, 9 Dec 2022 16:30:10 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+CC:     Michael Walle <michael@walle.cc>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <daniel.machon@microchip.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <lars.povlsen@microchip.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <pabeni@redhat.com>, <richardcochran@gmail.com>
+Subject: Re: [PATCH net-next v3 4/4] net: lan966x: Add ptp trap rules
+Message-ID: <20221209153010.f4r577ilnlein77e@soft-dev3-1>
+References: <adb8e2312b169d13e756ff23c45872c3@walle.cc>
+ <20221209092904.asgka7zttvdtijub@soft-dev3-1>
+ <c8b755672e20c223a83bc3cd4332f8cd@walle.cc>
+ <20221209125857.yhsqt4nj5kmavhmc@soft-dev3-1>
+ <20221209125611.m5cp3depjigs7452@skbuf>
+ <a821d62e2ed2c6ec7b305f7d34abf0ba@walle.cc>
+ <20221209142058.ww7aijhsr76y3h2t@soft-dev3-1>
+ <20221209144328.m54ksmoeitmcjo5f@skbuf>
+ <20221209145720.ahjmercylzqo5tla@soft-dev3-1>
+ <20221209145637.nr6favnsofmwo45s@skbuf>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20221209145637.nr6favnsofmwo45s@skbuf>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function of_clk_add_provider() has been deprecated, so use its
-suggested replacement of_clk_add_hw_provider() instead.
+The 12/09/2022 16:56, Vladimir Oltean wrote:
+> 
+> On Fri, Dec 09, 2022 at 03:57:20PM +0100, Horatiu Vultur wrote:
+> > The 12/09/2022 16:43, Vladimir Oltean wrote:
+> > >
+> > > On Fri, Dec 09, 2022 at 03:20:58PM +0100, Horatiu Vultur wrote:
+> > > > On ocelot, the vcap is enabled at port initialization, while on other
+> > > > platforms(lan966x and sparx5) you have the option to enable or disable.
+> > >
+> > > Even if that wasn't the case, I'd still consider enabling/disabling VCAP
+> > > lookups privately in the ocelot driver when there are non-tc users of
+> > > traps, instead of requiring users to do anything with tc.
+> >
+> > I was thinking also about this, such the ptp to enable the VCAP
+> > privately. But then the issue would be if a user adds entries using tc
+> > and then start ptp, then suddently the rules that were added using tc
+> > could be hit. That is the reason why expected the user to enable the
+> > tcam manually.
+> 
+> I don't understand, tc rules which do what? Why would those rules only
+> be hit after PTP is enabled and not before?
 
-Since of_clk_add_hw_provider() can fail, like of_clk_add_provider(),
-check its return value and do the error handling.
+Because you have not enabled the vcap.
 
-The return type of the init function has been changed to void since
-the return value was not used, and the indentation of the parameters has
-been aligned to match open parenthesis, as suggested by checkpatch.
+For example this rule:
+tc filter add dev eth0 ingress chain 8000000 prio 1 handle 1 protocol all
+flower skip_sw dst_mac 00:11:22:33:44:55/ff:ff:ff:ff:ff:ff action trap
+action goto chain 8100000
 
-Signed-off-by: Marco Pagani <marpagan@redhat.com>
----
- drivers/clk/socfpga/clk-pll-a10.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+This will not be hit until you add this rule:
+tc filter add dev eth0 ingress prio 1 handle 2 matchall skip_sw action goto chain 8000000
 
-diff --git a/drivers/clk/socfpga/clk-pll-a10.c b/drivers/clk/socfpga/clk-pll-a10.c
-index bee0f7da5b6e..b028f25c658a 100644
---- a/drivers/clk/socfpga/clk-pll-a10.c
-+++ b/drivers/clk/socfpga/clk-pll-a10.c
-@@ -63,8 +63,8 @@ static const struct clk_ops clk_pll_ops = {
- 	.get_parent = clk_pll_get_parent,
- };
- 
--static struct clk_hw * __init __socfpga_pll_init(struct device_node *node,
--	const struct clk_ops *ops)
-+static void __init __socfpga_pll_init(struct device_node *node,
-+				      const struct clk_ops *ops)
- {
- 	u32 reg;
- 	struct clk_hw *hw_clk;
-@@ -73,13 +73,14 @@ static struct clk_hw * __init __socfpga_pll_init(struct device_node *node,
- 	const char *parent_name[SOCFGPA_MAX_PARENTS];
- 	struct clk_init_data init;
- 	struct device_node *clkmgr_np;
-+	int rc;
- 	int i = 0;
- 
- 	of_property_read_u32(node, "reg", &reg);
- 
- 	pll_clk = kzalloc(sizeof(*pll_clk), GFP_KERNEL);
- 	if (WARN_ON(!pll_clk))
--		return NULL;
-+		return;
- 
- 	clkmgr_np = of_find_compatible_node(NULL, NULL, "altr,clk-mgr");
- 	clk_mgr_a10_base_addr = of_iomap(clkmgr_np, 0);
-@@ -103,12 +104,25 @@ static struct clk_hw * __init __socfpga_pll_init(struct device_node *node,
- 	pll_clk->hw.bit_idx = SOCFPGA_PLL_EXT_ENA;
- 	hw_clk = &pll_clk->hw.hw;
- 
--	if (clk_hw_register(NULL, hw_clk)) {
--		kfree(pll_clk);
--		return NULL;
-+	rc = clk_hw_register(NULL, hw_clk);
-+	if (rc) {
-+		pr_err("Could not register clock:%s\n", clk_name);
-+		goto err_clk_hw_register;
- 	}
--	of_clk_add_provider(node, of_clk_src_simple_get, hw_clk);
--	return hw_clk;
-+
-+	rc = of_clk_add_hw_provider(node, of_clk_hw_simple_get, hw_clk);
-+	if (rc) {
-+		pr_err("Could not register clock provider for node:%s\n",
-+		       clk_name);
-+		goto err_of_clk_add_hw_provider;
-+	}
-+
-+	return;
-+
-+err_of_clk_add_hw_provider:
-+	clk_hw_unregister(hw_clk);
-+err_clk_hw_register:
-+	kfree(pll_clk);
- }
- 
- void __init socfpga_a10_pll_init(struct device_node *node)
+Because this rule will enable the HW. Just to aligned to a SW
+implementation of the tc, we don't enable the vcap until there is a rule
+in chain 0 that has an action to go to chain 8000000 were it resides
+IS2 rules.
+
+So for example, on a fresh started lan966x the user will add the following
+rule:
+tc filter add dev eth0 ingress chain 8000000 prio 1 handle 1 protocol
+all flower skip_sw dst_mac 00:11:22:33:44:55/ff:ff:ff:ff:ff:ff action
+trap action goto chain 8100000
+
+He expects this rule not to be hit as there is no rule in chain 0. Now if
+PTP is started and it would enable vcap, then suddenly this rule may be
+hit.
+
+I hope this helps a little bit.
+
 -- 
-2.38.1
-
+/Horatiu
