@@ -2,172 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09741648858
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:17:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA7864884E
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:16:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiLISRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:17:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
+        id S229605AbiLISQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:16:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiLISRX (ORCPT
+        with ESMTP id S229460AbiLISQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:17:23 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96950A56C4
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:16:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1670609785;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=570D9M8P8VwH+5u6QVwudCE9N1qA2/b8uaboQLq/EEU=;
-        b=JkTgu47BFeWBNQhJ/1yRwmo8Cg0Kxc6zyugLtgZkvnelVy8135Ti4Jd80PYy4ivNWihH2g
-        c4o6B5OcIb5kffcUWt757PbOTBozFdgTDxt6JqxlIYoeFZAPU1+/Zh4PMJ68/1MnWEMXcS
-        Eg6o2X3EMIcLwbs/WKpBAYtQi8V/ZQ8=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-205-sl44lSvqNoGna0mXL7gJDA-1; Fri, 09 Dec 2022 13:16:24 -0500
-X-MC-Unique: sl44lSvqNoGna0mXL7gJDA-1
-Received: by mail-ed1-f71.google.com with SMTP id y18-20020a056402359200b004635f8b1bfbso1830163edc.17
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:16:24 -0800 (PST)
+        Fri, 9 Dec 2022 13:16:29 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE19A6592
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 10:16:27 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id n1so5755576ljg.3
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 10:16:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JoijXwXZ/QMJ+MHmkZyk6ZNFTzCacwwN6Dw+3qiPXXU=;
+        b=h+HpFt+vSKp8kV7WQ++6tCOuO+RtZ++ppnktlp1IbIk13aECw9XflFvc2XB5Yv+N09
+         bgU57OdhcTCbne6b1N/EnY0OuW91EQgCes/7Xox9Z7prerMqRvKGVwpurPHkeX0B2Kvl
+         9oRveEUnlks0l6TLSuDC4btGK/HyS1ZPam3qjzEVCOklNvgcJ2xojRD0bdHgBLPcycRR
+         jukmzQ/cFEKEKSQI0DUGQ3WcQ8hsGCgI24lGieyDvzrvJGOl3CrONkYyAp9QFBfk2vpk
+         jQabuwnUXPIQN3aAlsrIkqu6W2YLTVhtyJxwJbB5hYWBmwSkxErvRgNOXIsaHX0qJdHb
+         kMFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=570D9M8P8VwH+5u6QVwudCE9N1qA2/b8uaboQLq/EEU=;
-        b=THa/huuPRJhRAeXbDD+9f3f9uT/dlby6x70QG9tN7DmvTJtlYOXs4r2WJCfHNXqVQB
-         ybo9SWilvn1DUthBvXgsPyVZ9xpy4W0NxjXH9k4v8RrRvH9x4rldHYTE69YTjNL2Fhyw
-         PD9OqmMJLPpQvNV+5mmFkqnL1hISvd8YwIDmKLeM67zqMTulc5oisgBrhI9VJnSpoah+
-         sV1RcKv361C3SNfUc2KAAl+r6LMFZVTErbaow1AWTgc+XVS+l4BtvOTMW9wqoCMsciZW
-         gE2I2CUH/ui9cMaWr1dHwicuCoLot6P7nvYZN+JuB9zMQ1aNkfjx555zf5NOqSg5qy15
-         Xphw==
-X-Gm-Message-State: ANoB5pn9YtEkLlX0Yho+Tk0xpegwc0aVEzPTvKN3HWfNgA4pijgRuCJc
-        LQoR+klwvwvP7vnaZKyla9DaVdb35p0XogCKv4xCerng/BSDUjsmf1IXGU7R5YIYRO7KDYPDdfa
-        NxGE9vAIF9irN//rx3XLqzpmv
-X-Received: by 2002:a17:906:7158:b0:7c0:fa2c:fd5d with SMTP id z24-20020a170906715800b007c0fa2cfd5dmr6024811ejj.59.1670609783215;
-        Fri, 09 Dec 2022 10:16:23 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4EMCM7etF+2vLtimJF3+DatjzHbFJKuAQdxEaB2JdPkpzen+BxVXLTDVTlvnmJWCil/XIKXg==
-X-Received: by 2002:a17:906:7158:b0:7c0:fa2c:fd5d with SMTP id z24-20020a170906715800b007c0fa2cfd5dmr6024801ejj.59.1670609783020;
-        Fri, 09 Dec 2022 10:16:23 -0800 (PST)
-Received: from ?IPV6:2001:1c00:2a07:3a01:67e5:daf9:cec0:df6? (2001-1c00-2a07-3a01-67e5-daf9-cec0-0df6.cable.dynamic.v6.ziggo.nl. [2001:1c00:2a07:3a01:67e5:daf9:cec0:df6])
-        by smtp.gmail.com with ESMTPSA id j10-20020a17090623ea00b007c081cf2d25sm175268ejg.204.2022.12.09.10.16.22
+        bh=JoijXwXZ/QMJ+MHmkZyk6ZNFTzCacwwN6Dw+3qiPXXU=;
+        b=y3RO2TCpg5ifRf7O0grOzHd/4ymypGpLF9tgoEzWt5KpjZsSO4Te4OTYYJG3fHXC9S
+         eq8ZvCII5fOVFqBz2QgB6vvufoZHWQ93qknk5A+TymXz+EVY+ztSLQKlQtxwPkpkAk19
+         rsE9Ln5axyXzpJlKxN8NEmU+SupuG8eiJpZpfSZq8nJY4J6CCoaZmFL7ShKNF+nmL5Sy
+         3qv8la0Bq/zP4aSSaxzrYI1vVdszyTVsXGmMjQsg7bMKhwOSeGPTEQZbclRTAUJbojT9
+         F03nxe+iqYJGZ9lxfr2ypMeAQVnacY4pxYyW+mt6/m6mnPNGiOIu+PKlYeCduBNceSaU
+         dx9g==
+X-Gm-Message-State: ANoB5pk81l8RIJINnBjicZiBodFfGkVkjmufEYZMXQXkGxIqH5xEGxnz
+        J5lIi/VRFYSlnh7R7jsrpTSIVA==
+X-Google-Smtp-Source: AA0mqf5r3ZO5zIYlFZLUCjVtJaiX96hnOAEKv0jeiM/6xAWJJKHfLoffaNGAMOsEnOBRAEYra8d6lg==
+X-Received: by 2002:a2e:9cce:0:b0:27a:1c5a:9faa with SMTP id g14-20020a2e9cce000000b0027a1c5a9faamr1898251ljj.24.1670609785903;
+        Fri, 09 Dec 2022 10:16:25 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id i124-20020a2e2282000000b0027712379ec8sm302618lji.28.2022.12.09.10.16.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 10:16:22 -0800 (PST)
-Message-ID: <6338cce6-c13d-bda3-6f0b-06767122076c@redhat.com>
-Date:   Fri, 9 Dec 2022 19:16:21 +0100
+        Fri, 09 Dec 2022 10:16:25 -0800 (PST)
+Message-ID: <0055a151-0f29-581f-f938-e7647105c3ec@linaro.org>
+Date:   Fri, 9 Dec 2022 19:16:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] i2c: designware: Fix unbalanced suspended flag
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>, wsa@kernel.org,
-        jarkko.nikula@linux.intel.com, andriy.shevchenko@linux.intel.com,
-        mika.westerberg@linux.intel.com, jsd@semihalf.com
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@opensource.cirrus.com
-References: <20221209114034.18025-1-rf@opensource.cirrus.com>
- <e9d113fb-5cd1-d93d-3d8f-fa9c1e55a8e2@redhat.com>
- <e8b6733c-33b8-cb28-a62b-21dad9bd6466@opensource.cirrus.com>
- <c210c1d6-7327-d377-22e7-b5a123de5cbb@opensource.cirrus.com>
+ Thunderbird/102.5.1
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sdm845: align TLMM pin
+ configuration with DT schema
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
+ <20221202155738.383301-2-krzysztof.kozlowski@linaro.org>
+ <CAD=FV=UPLssDromnt89RYbSEU9qq_t+CSyd5VhmD7b-9JkcMFA@mail.gmail.com>
+ <c0b660bf-93c2-89b6-e704-17489efe6840@linaro.org>
+ <CAD=FV=UjwDkgXXmVcV-XNsPKOGh=TVsQexC0YQoU-_fz==y+UQ@mail.gmail.com>
 Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <c210c1d6-7327-d377-22e7-b5a123de5cbb@opensource.cirrus.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAD=FV=UjwDkgXXmVcV-XNsPKOGh=TVsQexC0YQoU-_fz==y+UQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 12/9/22 15:22, Richard Fitzgerald wrote:
-> On 9/12/22 13:36, Richard Fitzgerald wrote:
->> On 9/12/22 12:15, Hans de Goede wrote:
->>> Hi Richard,
->>>
->>> On 12/9/22 12:40, Richard Fitzgerald wrote:
->>>> Ensure that i2c_mark_adapter_suspended() is always balanced by a call to
->>>> i2c_mark_adapter_resumed().
->>
->> <snip>
->>
->>>
->>> It is not entirely clear to me where the unbalance you claim to see comes
->>> from? When runtime-suspended SMART_SUSPEND should keep it suspended at which point
->>> the system suspend callback will never run ?
->>>
->>> Are you sure that you are not maybe seeing a suspend/resume ordering issue?
->>>
->>> Did you add printk messages to the suspend/resume callbacks of
->>> i2c-designware-platdrv.c which show the system suspend callback
->>> being called but not the system resume one ?
->>>
->>
->> With messages in strategic places.
->>
->> [  169.607358] i2c_designware i2c_designware.2: PM: dev_pm_skip_suspend: SMART_SUSPEND=0 pm_runtime_status_suspended=1
->> [  169.607361] i2c_designware i2c_designware.2: PM: __device_suspend_late: dev_pm_skip_suspend:false
->> [  169.607364] i2c_designware i2c_designware.2: dw_i2c_plat_suspend
->> ...
->> [  169.702511] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
->> [  169.706241] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
->> [  169.706244] i2c_designware i2c_designware.2: PM: device_resume_early: dev_pm_skip_resume:true
->> ...
->> [  175.254832] i2c i2c-2: Transfer while suspended
->>
->> (Just to prove my logging isn't lying, for i2c3 it reports
->> SMART_SUSPEND=1)
->>
+On 09/12/2022 18:53, Doug Anderson wrote:
+> Hi,
 > 
-> Oh, that's embarrassing. After confidently telling you my logging
-> is perfect, actually there was a bug in it...
+> On Fri, Dec 9, 2022 at 2:25 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 02/12/2022 17:53, Doug Anderson wrote:
+>>> Hi,
+>>>
+>>> On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
+>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>
+>>>> DT schema expects TLMM pin configuration nodes to be named with
+>>>> '-state' suffix and their optional children with '-pins' suffix.
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>
+>>>> ---
+>>>>
+>>>> Cc: Doug Anderson <dianders@chromium.org>
+>>>>
+>>>> Tested on Qualcomm RB3. Please kndly test a bit more on other devices.
+>>>> This should not have an functional impact.
+>>>>
+>>>> Changes since v2:
+>>>> 1. Bring back UART6 4-pin bias/drive strength to DTSI.
+>>>
+>>> Just to be clear, it doesn't actually belong in the DTSI, but it was
+>>> there before your patch and it's fine if your patch series doesn't fix
+>>> the whole world. I'm OK with this one staying in the DTSI for now just
+>>> to keep things simpler.
+>>>
+>>> One change missing in v3 that I would have expected based on our
+>>> discussion in the previous version would be to "Add UART3 4-pin mux
+>>> settings for use in db845c." I think you said you would do this, but I
+>>> don't see it done.
+>>
+>> Hm, I don't recall that. Changing db845c to usage of RTS/CTS is
+>> independent problem, not related to fixes or aligning with DT schema.
 > 
-> New log summary:
+> It was in the message:
 > 
-> [  162.253431] i2c_designware i2c_designware.2: PM: dev_pm_skip_suspend: SMART_SUSPEND=1 pm_runtime_status_suspended=0
-
-Ok, so the device's pm_runtime_get() count is 0 here (otherwise must_resume
-should be 1 later on) but the device is not run-time suspended yet. Probably
-because of some timeout; or because of runtime pm getting disabled durig suspend
-before the count dropped to 0.
-
-And this scenario will indeed cause the system-level suspend callback to
-get called, but not the resume one ...
-
-> [  162.253438] i2c_designware i2c_designware.2: PM: __device_suspend_late: dev_pm_skip_suspend:false
-> [  162.253445] i2c_designware i2c_designware.2: dw_i2c_plat_suspend
-> [  162.273115] i2c_designware i2c_designware.2: PM: dev_pm_skip_suspend: SMART_SUSPEND=1 pm_runtime_status_suspended=0
-> [  162.362547] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
-> [  162.369216] i2c_designware i2c_designware.2: PM: dev_pm_skip_resume: 1 because !power.must_resume
-> [  162.369220] i2c_designware i2c_designware.2: PM: device_resume_early: dev_pm_skip_resume:true
-> [  167.901269] i2c i2c-2: Transfer while suspended
+> https://lore.kerne.org/r/68bcdf25-e8e3-f817-f213-efb0bce3f43a@linaro.org
 > 
-> Same result that it doesn't skip suspend but does skip resume.
+> I said:
+> 
+>> FWIW, I would have expected that the SoC dtsi file would get a "4-pin"
+>> definition (similar to what you did with qup_uart6_4pin) and then we'd
+>> use that here.
+> 
+> You said:
+> 
+>> Sure.
+> 
 
-From your other email:
+Yes, indeed and it see now I still keep there cts-rts-pins. Somehow I
+thought now we talk about UART6 or UART9...
 
-> Ok, what do you suggest as the fix?
-> If you post an alternate fix I can test it.
+However, the UART3 is disabled, so it will not have any effect, except
+for some downstream users.
 
-I don't really see a better solution, so lets go with your solution, but then:
-
-1. Simply drop the flag but don't add the if (!pm_runtime_suspended(dev))
-check. The runtime status is always going to be set to active at this point
-so the check does not do anything.
-
-2. Drop the dw_i2c_plat_complete() callback since we now always resume the controller
-on system resume.
-
-Regards,
-
-Hans
-
+Best regards,
+Krzysztof
 
