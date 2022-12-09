@@ -2,97 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 147826482EC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F8D6482F5
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 14:51:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbiLINtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 08:49:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50758 "EHLO
+        id S229635AbiLINvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 08:51:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbiLINtE (ORCPT
+        with ESMTP id S229530AbiLINvB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 08:49:04 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5C3663D1
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 05:49:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38A1F62252
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 13:49:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93421C433F0
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 13:49:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670593742;
-        bh=3jHwGrWXIaajQHLAHJv0bUIaZfGO6HeNo3DaTBSlRTs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=WcW+YPI5Smt1GF7pa41c0h5ENLwPBE2tEPnasGycyhsXhw5QPrm51AJJFvSH+Zwsu
-         mXADFP6GEaW1SeRAIAlN2lNOsJqbsGcDlzxMOcuhzwaa/l0T3vIkB+c/BmBDhf0Pjg
-         bHfvvOXNjaTeui4fR9MC5XYZJyg/EWcDxM4YMXBghKnDbdkAUXWHzD0XFpMcIneVhg
-         PIsBc7z5ZuapLj7vVbiw6vQf880gduDaQK9j3JNlqVnm+KpJyZbw3yoG6vGfKmdPJZ
-         8jtPJiORW4sU7fKzijuhLKvJQP30UuTj1AAfdzo/DaCd3gqelUAjY0IpzkaXscdn8f
-         AqxOa5SvgFecA==
-Received: by mail-lj1-f173.google.com with SMTP id f16so4964891ljc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 05:49:02 -0800 (PST)
-X-Gm-Message-State: ANoB5pmx+Omq3kPgWm9w7qqpW/baiB3pmE3diR8gZzEJcTc9HjBgnRnW
-        THat+TAGuIXW02khCCByNzCswJfMsgJdceAU91M=
-X-Google-Smtp-Source: AA0mqf4RmbRqWXip5kBY4Jq/TgDztXi+43o+fLNAOHwfZQGgIoj2nYUTaNrBeTfyRVGTLAnhRIMUZ+ShaJmRykgCDtE=
-X-Received: by 2002:a05:651c:220a:b0:277:2428:3682 with SMTP id
- y10-20020a05651c220a00b0027724283682mr32090765ljq.291.1670593740662; Fri, 09
- Dec 2022 05:49:00 -0800 (PST)
+        Fri, 9 Dec 2022 08:51:01 -0500
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9485A6ACD6;
+        Fri,  9 Dec 2022 05:51:00 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id n20so11727493ejh.0;
+        Fri, 09 Dec 2022 05:51:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MayxEdP8sGeFElsJFgC+MBaPXZ8b65rXJQ4R4+c3n94=;
+        b=BHzo/UAM/xPaoyrSdelfF9IeGCylMna9VH0X9Nb2DNA12VPORtYZEOPLiVFkrApY6X
+         SQ6bGl0FRKonaWucUZBOp6QFmoduHGYFEq8cMoa3PijlQK+LJ37SNEFQcXAGbPowrrzt
+         ube8tJ6T77ibEmMkBy62FAHDjnauLoEA5UaTULjp/ic3Gbr+xtTe2laJ19wwLj/zs24M
+         nFnd4BiGA1EZy2NmzZ7RcdyG6l3y63IQ/ofPaSZ/ADm9pYrNaZ42g8v9L6piMnFcRtFp
+         maYA1yTifjN1NYlnF0jVjffkTzRu9/RgQsheT26CAM03G92qHP2TL9E794vK1yjCLYkq
+         u1Aw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MayxEdP8sGeFElsJFgC+MBaPXZ8b65rXJQ4R4+c3n94=;
+        b=f9IyrU7VSfoQA1KzHkXYa7d25BOLEIR4HN3H31TmHxeCBxA4BCOQii4LtBKUhfD4XA
+         rqieiGFxl3x8CpIS/7JUYeOSbAPn8UHlXxgWBmJVxZvgD+ItZve5mRt4KHkc23yw3UJI
+         OyNAejxdTjvDYfoJ3TaAbCk1NQQEafdk3moEg30oA02dyDq4A+2Oty35h07AYFdSCjI6
+         NALbzgH+WNTuY+naC5pa40cwQPlzPS6mke/LDdYhRl60meV9kBdumSSIjXgTVbNfA+/a
+         ZwBEUIY3IJYFmNO61vERWFlPEQA19AbJ6X+qLEKZlqR7rujXruryxkJ6nhgmAjfkY9PB
+         cgag==
+X-Gm-Message-State: ANoB5plG0+IBqiXPyMPlVwowEm/D+PCsEdgWGs3Vl6QYUIldqrjZiTKM
+        U0nc9MgZJAcoREUAMLE4hKg=
+X-Google-Smtp-Source: AA0mqf4ownPWdu+gIVnMpkqZNcezxOQgc87din9xNy9rmaIl/nBQ46g4Vb42pH3kGhMkC3RhJEPRLA==
+X-Received: by 2002:a17:906:2a10:b0:7c0:cc6d:5df7 with SMTP id j16-20020a1709062a1000b007c0cc6d5df7mr5267934eje.68.1670593859029;
+        Fri, 09 Dec 2022 05:50:59 -0800 (PST)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b007c07dfb0816sm561499ejf.215.2022.12.09.05.50.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Dec 2022 05:50:58 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 9 Dec 2022 14:50:55 +0100
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Song Liu <song@kernel.org>
+Cc:     Hao Sun <sunhao.th@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>, KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: BUG: unable to handle kernel paging request in bpf_dispatcher_xdp
+Message-ID: <Y5M9P95l85oMHki9@krava>
+References: <CACkBjsYioeJLhJAZ=Sq4CAL2O_W+5uqcJynFgLSizWLqEjNrjw@mail.gmail.com>
+ <CACkBjsbD4SWoAmhYFR2qkP1b6JHO3Og0Vyve0=FO-Jb2JGGRfw@mail.gmail.com>
+ <Y49dMUsX2YgHK0J+@krava>
+ <CAADnVQ+w-xtH=oWPYszG-TqxcHmbrKJK10C=P-o2Ouicx-9OUA@mail.gmail.com>
+ <CAADnVQJ+9oiPEJaSgoXOmZwUEq9FnyLR3Kp38E_vuQo2PmDsbg@mail.gmail.com>
+ <Y5Inw4HtkA2ql8GF@krava>
+ <Y5JkomOZaCETLDaZ@krava>
+ <Y5JtACA8ay5QNEi7@krava>
+ <Y5LfMGbOHpaBfuw4@krava>
+ <Y5MaffJOe1QtumSN@krava>
 MIME-Version: 1.0
-References: <20221209060740.2785164-1-agordeev@linux.ibm.com>
- <CAMj1kXF5OR6TGhCrxYCmrnA=CTAfkGcga8BDE2Vj3rixgi7U3w@mail.gmail.com> <Y5Murs1nSi45xEuK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-In-Reply-To: <Y5Murs1nSi45xEuK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 9 Dec 2022 14:48:49 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXEW-m4Z=wt0S-drRCD0naKrQk07hcONdQTRZJGmHYRY-Q@mail.gmail.com>
-Message-ID: <CAMj1kXEW-m4Z=wt0S-drRCD0naKrQk07hcONdQTRZJGmHYRY-Q@mail.gmail.com>
-Subject: Re: [PATCH] jump_label: explicitly annotate inittext labels as init
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y5MaffJOe1QtumSN@krava>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 9 Dec 2022 at 13:49, Alexander Gordeev <agordeev@linux.ibm.com> wrote:
->
-> On Fri, Dec 09, 2022 at 10:41:55AM +0100, Ard Biesheuvel wrote:
-> > > diff --git a/kernel/jump_label.c b/kernel/jump_label.c
-> > > index 714ac4c3b556..77680665d374 100644
-> > > --- a/kernel/jump_label.c
-> > > +++ b/kernel/jump_label.c
-> > > @@ -481,13 +481,16 @@ void __init jump_label_init(void)
-> > >
-> > >         for (iter = iter_start; iter < iter_stop; iter++) {
-> > >                 struct static_key *iterk;
-> > > +               unsigned long addr;
-> > >                 bool in_init;
-> > >
-> > >                 /* rewrite NOPs */
-> > >                 if (jump_label_type(iter) == JUMP_LABEL_NOP)
-> > >                         arch_jump_label_transform_static(iter, JUMP_LABEL_NOP);
-> > >
-> > > -               in_init = init_section_contains((void *)jump_entry_code(iter), 1);
-> > > +               addr = jump_entry_code(iter);
-> > > +               in_init = init_section_contains((void *)addr, 1) ||
-> > > +                         is_kernel_inittext(addr);
-> >
-> > Isn't it sufficient to only call is_kenel_inittext here?
->
-> I am not sure every arch out there would stick to putting
-> init code to inittext only.
->
-> However, should not is_kernel_exittext() (which does not
-> exist) also get checked here?
+On Fri, Dec 09, 2022 at 12:22:37PM +0100, Jiri Olsa wrote:
 
-No, exittext either exists or it doesn't, rather than disappearing at
-runtime like inittext.
+SBIP
+
+> > > > > > >
+> > > > > > > I'm trying to understand the severity of the issues and
+> > > > > > > whether we need to revert that commit asap since the merge window
+> > > > > > > is about to start.
+> > > > > > 
+> > > > > > Jiri, Peter,
+> > > > > > 
+> > > > > > ping.
+> > > > > > 
+> > > > > > cc-ing Thorsten, since he's tracking it now.
+> > > > > > 
+> > > > > > The config has CONFIG_X86_KERNEL_IBT=y.
+> > > > > > Is it related?
+> > > > > 
+> > > > > sorry for late reply.. I still did not find the reason,
+> > > > > but I did not try with IBT yet, will test now
+> > > > 
+> > > > no difference with IBT enabled, can't reproduce the issue
+> > > > 
+> > > 
+> > > ok, scratch that.. the reproducer got stuck on wifi init :-\
+> > > 
+> > > after I fix that I can now reproduce on my local config with
+> > > IBT enabled or disabled.. it's something else
+> > 
+> > I'm getting the error also when reverting the static call change,
+> > looking for good commit, bisecting
+> > 
+> > I'm getting fail with:
+> >    f0c4d9fc9cc9 (tag: v6.1-rc4) Linux 6.1-rc4
+> > 
+> > v6.1-rc1 is ok
+> 
+> so far I narrowed it down between rc1 and rc3.. bisect got me nowhere so far
+> 
+> attaching some more logs
+
+looking at the code.. how do we ensure that code running through
+bpf_prog_run_xdp will not get dispatcher image changed while
+it's being exetuted
+
+we use 'the other half' of the image when we add/remove programs,
+but could bpf_dispatcher_update race with bpf_prog_run_xdp like:
+
+
+cpu 0:                                  cpu 1:
+
+bpf_prog_run_xdp
+   ...
+   bpf_dispatcher_xdp_func
+      start exec image at offset 0x0
+
+                                        bpf_dispatcher_update
+                                                update image at offset 0x800
+                                        bpf_dispatcher_update
+                                                update image at offset 0x0
+
+      still in image at offset 0x0
+
+
+that might explain why I wasn't able to trigger that on
+bare metal just in qemu
+
+jirka
