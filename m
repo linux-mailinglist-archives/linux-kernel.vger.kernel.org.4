@@ -2,300 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75358647C3E
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97C0647C45
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 03:27:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229715AbiLIC1F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 21:27:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52072 "EHLO
+        id S229815AbiLIC1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 21:27:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiLIC1C (ORCPT
+        with ESMTP id S229819AbiLIC1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 21:27:02 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E1F67E813
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 18:27:01 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id l8so3509515ljh.13
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 18:27:00 -0800 (PST)
+        Thu, 8 Dec 2022 21:27:07 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F086AAC6CB;
+        Thu,  8 Dec 2022 18:27:06 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id hd14-20020a17090b458e00b0021909875bccso7034561pjb.1;
+        Thu, 08 Dec 2022 18:27:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X8MOoXqUDbJlb+GBoy+k3WpGikVWg8B+EcbBrdi8ENo=;
-        b=YQ8wH3AiTUIlVGtfZN2A8ucpwgUqcZS6x/T+MesrZCOJdztadQl8j4dqJ04LuhHra3
-         MZrQWtg1au970Feqft5JmV00Odtwusx43Mdet4Xn+YM/FgMli9VC8sSPyS2wfze8pqjJ
-         em+dS+UGk1uNJ8SQV+rdAHtSBuNAhDwX57fGU=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YbPDlthA5QMrCiVF+zEK9fkfI4RLt96DNaR+n8gduKM=;
+        b=PugI+mf5T7sKtWsytITVHnSPZSj+kCZikqeC0l6VdiOFaOLg4m8LSXOAQFNjkpWUP0
+         9OlLzKNM5TSFmZSKdXVnIi9bQTSFdkEb6yntgysR/i35jUc07X7bSZQ0fIsxY34LyMGC
+         5EkTVglC67N4dI/U1ZiCIzpcm6z4Q7oGCJiYMXyXMaJsp3P8CL3wsJUzWphxZTAD2F7J
+         Lc9VB4w1MNfCo9Al7DgjSwkWrfIK9ybgdPZ92IoFjdhmMAvgfKXLS7P7yad35pGOb5n8
+         r9cBuwk4VTsNoaGLmQLkmmMrVvdyatdHCq7fjU4PFz0IIV+tzBHwXXqkn/lrCsIRUBjZ
+         Iwew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X8MOoXqUDbJlb+GBoy+k3WpGikVWg8B+EcbBrdi8ENo=;
-        b=3eiM2/3SPcG7K62iQFFrhzif/SCXWghvc1eLY9lYTpSU/L9rHUH/2hhBY8KFzavDmN
-         3bzLV6Km4J5URGcVjlllZN+MWo60Fj79hlXPO7YKVsxMXc4y+BakKSaA8+sO2gyKhojk
-         VmF5DYWTwC7xYBygarCgBqPyDq2W/zZihezuXaa7U7kSK+J9as1o5znRjBXYEMNvPRWS
-         V4EyaBYrm+T+F937zSAx6ugYM4Z6x+BRQ6109WN1jRuSjcFOZdrB9muPhz8OgZejLA2w
-         HWjKl/pm+mNWOuSqjgXRsX0Nd6fOchgkeprO2Th5JwnqmKAaJXY2VoNFjaxm7Qcgeeeu
-         r6RA==
-X-Gm-Message-State: ANoB5pm9OF5F3zhTE4NC+HpPT/uZ3NTeuYvDOPuuqm5qA8JhJ6XkswWR
-        G/2m/2V5o1hO1RBwchCA4o4PANTAeexYIT0+8AFptqG6rm0LlQ==
-X-Google-Smtp-Source: AA0mqf49I+hd4NrBtlIhKZM0vn2WLRcWJlhiLngo7GPuQAUvLaVEFBNb+i8bMoKa60tdWPMkFsWmIWtAuaxgu7REiNs=
-X-Received: by 2002:a05:651c:124c:b0:279:f45e:ccd6 with SMTP id
- h12-20020a05651c124c00b00279f45eccd6mr6316673ljh.483.1670552818312; Thu, 08
- Dec 2022 18:26:58 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YbPDlthA5QMrCiVF+zEK9fkfI4RLt96DNaR+n8gduKM=;
+        b=Z62NpvkzrXAlOGYmbgc4/x8w/D0eOt2AOk0P31wKWHewsvb2/DHoGesWsJvs4isVCq
+         +oj2CZjGOpCBGU6kS7y3H4iqg+2sm7G0M6MYtEYqrbnihnz7UuUuUah40SqbJL57JQzD
+         mIypjVyRRiFwxV+/Am8FjDPyCkgs9IYM2X2NUWt0pAKo4H+C3ihNlOda1+RqqcQFUERr
+         h23dpPquaN+KlpqGhQPCcLFXI9CfF0naocTrZZ6PrKI3OT99OjfKqWGFMC2Lk2Z0yRUS
+         /Kxu05v1WokXS6r0vVzgQnoAMG0XIijQ6VBd9IMA4ufZWzNLB3hqnzOJMwJFTUa1d30l
+         r4JQ==
+X-Gm-Message-State: ANoB5pmDyw7EYQFzgz/S0skVRIralKsQLU9pBgS2SP3l079rYrX6NZeV
+        hdI/yds1ttJNrUeU1Uui2Qw=
+X-Google-Smtp-Source: AA0mqf4ia0Zg1Z3eCHwugZhoxIs+iOjYg1lcKbJjzY0XHZHwHRh8Qxgt7nR88Xl/8SurMv9+V/IJAw==
+X-Received: by 2002:a05:6a21:3a86:b0:a7:9f6:b790 with SMTP id zv6-20020a056a213a8600b000a709f6b790mr5705512pzb.10.1670552826425;
+        Thu, 08 Dec 2022 18:27:06 -0800 (PST)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id w2-20020a17090a1b8200b00219b04cf66asm242039pjc.36.2022.12.08.18.26.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 08 Dec 2022 18:27:05 -0800 (PST)
+Message-ID: <5909d07b-4930-6790-e160-ed6c88a8c58a@gmail.com>
+Date:   Fri, 9 Dec 2022 10:26:53 +0800
 MIME-Version: 1.0
-References: <20221209022305.321149-1-joel@joelfernandes.org>
-In-Reply-To: <20221209022305.321149-1-joel@joelfernandes.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 8 Dec 2022 21:26:46 -0500
-Message-ID: <CAEXW_YT+Hwk1RC=QmPpUKGNa3kyPaBdZByEeAPFKD91=dm2XXw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] locktorture: Allow non-rtmutex lock types to be boosted
-To:     linux-kernel@vger.kernel.org
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        connoro@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [RFC PATCH V2 10/18] drivers: hv: Decrypt percpu hvcall input arg
+ page in sev-snp enlightened guest
+To:     Dexuan Cui <decui@microsoft.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "jgross@suse.com" <jgross@suse.com>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "jiangshan.ljs@antgroup.com" <jiangshan.ljs@antgroup.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ashish.kalra@amd.com" <ashish.kalra@amd.com>,
+        "srutherford@google.com" <srutherford@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>,
+        "pawan.kumar.gupta@linux.intel.com" 
+        <pawan.kumar.gupta@linux.intel.com>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "daniel.sneddon@linux.intel.com" <daniel.sneddon@linux.intel.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "sandipan.das@amd.com" <sandipan.das@amd.com>,
+        "ray.huang@amd.com" <ray.huang@amd.com>,
+        "brijesh.singh@amd.com" <brijesh.singh@amd.com>,
+        "michael.roth@amd.com" <michael.roth@amd.com>,
+        "thomas.lendacky@amd.com" <thomas.lendacky@amd.com>,
+        "venu.busireddy@oracle.com" <venu.busireddy@oracle.com>,
+        "sterritt@google.com" <sterritt@google.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "samitolvanen@google.com" <samitolvanen@google.com>,
+        "fenghua.yu@intel.com" <fenghua.yu@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>
+References: <20221119034633.1728632-1-ltykernel@gmail.com>
+ <20221119034633.1728632-11-ltykernel@gmail.com>
+ <SA1PR21MB13357A3B9348705F4EB59DAFBF1D9@SA1PR21MB1335.namprd21.prod.outlook.com>
+Content-Language: en-US
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <SA1PR21MB13357A3B9348705F4EB59DAFBF1D9@SA1PR21MB1335.namprd21.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 8, 2022 at 9:23 PM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
+On 12/9/2022 5:52 AM, Dexuan Cui wrote:
+>> @@ -134,6 +136,16 @@ int hv_common_cpu_init(unsigned int cpu)
+>>   	if (!(*inputarg))
+>>   		return -ENOMEM;
+>>
+>> +	if (hv_isolation_type_en_snp()) {
+>> +		ret = set_memory_decrypted((unsigned long)*inputarg, 1);
+> Is it possible hv_root_partition==1 here? If yes, the pgcount is 2.
 >
-> Currently RT boosting is only done for rtmutex_lock, however with proxy
-> execution, we also have the mutex_lock participating in priorities. To
-> exercise the testing better, add RT boosting to other lock testing types
-> as well, using a new knob (rt_boost).
->
-> Tested with boot parameters:
-> locktorture.torture_type=mutex_lock
-> locktorture.onoff_interval=1
-> locktorture.nwriters_stress=8
-> locktorture.stutter=0
-> locktorture.rt_boost=1
-> locktorture.rt_boost_factor=1
-> locktorture.nlocks=3
->
-> For the rtmutex test, rt_boost is always enabled even if disabling is
-> requested.
+Hi Dexuan:
+	Thanks for review. So far, root partition doesn't support sev 
+enlightened guest and so here assume pgcount is always 1. We may use 
+pgcount variable here instead of the number.
 
-Sorry, these 2 lines are outdated, I'll hope for you to delete the 2
-lines, or I can respin and send later.
+>> +		if (ret) {
+>> +			kfree(*inputarg);
+>> +			return ret;
+>> +		}
+>> +
+>> +		memset(*inputarg, 0x00, PAGE_SIZE);
+>> +	}
+>> +
+>>   	if (hv_root_partition) {
+>>   		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+>>   		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+>> @@ -168,6 +180,9 @@ int hv_common_cpu_die(unsigned int cpu)
+>>
+>>   	local_irq_restore(flags);
+>>
+>> +	if (hv_isolation_type_en_snp())
+>> +		set_memory_encrypted((unsigned long)mem, 1);
+> If set_memory_encrypted() fails, we should not free the 'mem'.
 
-thanks,
-
- - Joel
-
-
->
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  kernel/locking/locktorture.c | 99 ++++++++++++++++++++----------------
->  1 file changed, 56 insertions(+), 43 deletions(-)
->
-> diff --git a/kernel/locking/locktorture.c b/kernel/locking/locktorture.c
-> index bc3557677eed..8968fd65a90d 100644
-> --- a/kernel/locking/locktorture.c
-> +++ b/kernel/locking/locktorture.c
-> @@ -46,6 +46,8 @@ torture_param(int, shutdown_secs, 0, "Shutdown time (j), <= zero to disable.");
->  torture_param(int, stat_interval, 60,
->              "Number of seconds between stats printk()s");
->  torture_param(int, stutter, 5, "Number of jiffies to run/halt test, 0=disable");
-> +torture_param(int, rt_boost, 2,
-> +               "Do periodic rt-boost. 0=Disable, 1=Only for rt_mutex, 2=For all lock types.");
->  torture_param(int, verbose, 1,
->              "Enable verbose debugging printk()s");
->  torture_param(int, nlocks, 1,
-> @@ -129,15 +131,49 @@ static void torture_lock_busted_write_unlock(int tid __maybe_unused)
->           /* BUGGY, do not use in real life!!! */
->  }
->
-> -static void torture_boost_dummy(struct torture_random_state *trsp)
-> +static void __torture_rt_boost(struct torture_random_state *trsp)
->  {
-> -       /* Only rtmutexes care about priority */
-> +       const unsigned int factor = 50000; /* yes, quite arbitrary */
-> +
-> +       if (!rt_task(current)) {
-> +               /*
-> +                * Boost priority once every ~50k operations. When the
-> +                * task tries to take the lock, the rtmutex it will account
-> +                * for the new priority, and do any corresponding pi-dance.
-> +                */
-> +               if (trsp && !(torture_random(trsp) %
-> +                             (cxt.nrealwriters_stress * factor))) {
-> +                       sched_set_fifo(current);
-> +               } else /* common case, do nothing */
-> +                       return;
-> +       } else {
-> +               /*
-> +                * The task will remain boosted for another ~500k operations,
-> +                * then restored back to its original prio, and so forth.
-> +                *
-> +                * When @trsp is nil, we want to force-reset the task for
-> +                * stopping the kthread.
-> +                */
-> +               if (!trsp || !(torture_random(trsp) %
-> +                              (cxt.nrealwriters_stress * factor * 2))) {
-> +                       sched_set_normal(current, 0);
-> +               } else /* common case, do nothing */
-> +                       return;
-> +       }
-> +}
-> +
-> +static void torture_rt_boost(struct torture_random_state *trsp)
-> +{
-> +       if (rt_boost != 2)
-> +               return;
-> +
-> +       __torture_rt_boost(trsp);
->  }
->
->  static struct lock_torture_ops lock_busted_ops = {
->         .writelock      = torture_lock_busted_write_lock,
->         .write_delay    = torture_lock_busted_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_lock_busted_write_unlock,
->         .readlock       = NULL,
->         .read_delay     = NULL,
-> @@ -181,7 +217,7 @@ __releases(torture_spinlock)
->  static struct lock_torture_ops spin_lock_ops = {
->         .writelock      = torture_spin_lock_write_lock,
->         .write_delay    = torture_spin_lock_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_spin_lock_write_unlock,
->         .readlock       = NULL,
->         .read_delay     = NULL,
-> @@ -208,7 +244,7 @@ __releases(torture_spinlock)
->  static struct lock_torture_ops spin_lock_irq_ops = {
->         .writelock      = torture_spin_lock_write_lock_irq,
->         .write_delay    = torture_spin_lock_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_lock_spin_write_unlock_irq,
->         .readlock       = NULL,
->         .read_delay     = NULL,
-> @@ -277,7 +313,7 @@ __releases(torture_rwlock)
->  static struct lock_torture_ops rw_lock_ops = {
->         .writelock      = torture_rwlock_write_lock,
->         .write_delay    = torture_rwlock_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_rwlock_write_unlock,
->         .readlock       = torture_rwlock_read_lock,
->         .read_delay     = torture_rwlock_read_delay,
-> @@ -320,7 +356,7 @@ __releases(torture_rwlock)
->  static struct lock_torture_ops rw_lock_irq_ops = {
->         .writelock      = torture_rwlock_write_lock_irq,
->         .write_delay    = torture_rwlock_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_rwlock_write_unlock_irq,
->         .readlock       = torture_rwlock_read_lock_irq,
->         .read_delay     = torture_rwlock_read_delay,
-> @@ -362,7 +398,7 @@ __releases(torture_mutex)
->  static struct lock_torture_ops mutex_lock_ops = {
->         .writelock      = torture_mutex_lock,
->         .write_delay    = torture_mutex_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_mutex_unlock,
->         .readlock       = NULL,
->         .read_delay     = NULL,
-> @@ -460,7 +496,7 @@ static struct lock_torture_ops ww_mutex_lock_ops = {
->         .exit           = torture_ww_mutex_exit,
->         .writelock      = torture_ww_mutex_lock,
->         .write_delay    = torture_mutex_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_ww_mutex_unlock,
->         .readlock       = NULL,
->         .read_delay     = NULL,
-> @@ -478,37 +514,6 @@ __acquires(torture_rtmutex)
->         return 0;
->  }
->
-> -static void torture_rtmutex_boost(struct torture_random_state *trsp)
-> -{
-> -       const unsigned int factor = 50000; /* yes, quite arbitrary */
-> -
-> -       if (!rt_task(current)) {
-> -               /*
-> -                * Boost priority once every ~50k operations. When the
-> -                * task tries to take the lock, the rtmutex it will account
-> -                * for the new priority, and do any corresponding pi-dance.
-> -                */
-> -               if (trsp && !(torture_random(trsp) %
-> -                             (cxt.nrealwriters_stress * factor))) {
-> -                       sched_set_fifo(current);
-> -               } else /* common case, do nothing */
-> -                       return;
-> -       } else {
-> -               /*
-> -                * The task will remain boosted for another ~500k operations,
-> -                * then restored back to its original prio, and so forth.
-> -                *
-> -                * When @trsp is nil, we want to force-reset the task for
-> -                * stopping the kthread.
-> -                */
-> -               if (!trsp || !(torture_random(trsp) %
-> -                              (cxt.nrealwriters_stress * factor * 2))) {
-> -                       sched_set_normal(current, 0);
-> -               } else /* common case, do nothing */
-> -                       return;
-> -       }
-> -}
-> -
->  static void torture_rtmutex_delay(struct torture_random_state *trsp)
->  {
->         const unsigned long shortdelay_us = 2;
-> @@ -534,10 +539,18 @@ __releases(torture_rtmutex)
->         rt_mutex_unlock(&torture_rtmutex);
->  }
->
-> +static void torture_rt_boost_rtmutex(struct torture_random_state *trsp)
-> +{
-> +       if (!rt_boost)
-> +               return;
-> +
-> +       __torture_rt_boost(trsp);
-> +}
-> +
->  static struct lock_torture_ops rtmutex_lock_ops = {
->         .writelock      = torture_rtmutex_lock,
->         .write_delay    = torture_rtmutex_delay,
-> -       .task_boost     = torture_rtmutex_boost,
-> +       .task_boost     = torture_rt_boost_rtmutex,
->         .writeunlock    = torture_rtmutex_unlock,
->         .readlock       = NULL,
->         .read_delay     = NULL,
-> @@ -604,7 +617,7 @@ __releases(torture_rwsem)
->  static struct lock_torture_ops rwsem_lock_ops = {
->         .writelock      = torture_rwsem_down_write,
->         .write_delay    = torture_rwsem_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_rwsem_up_write,
->         .readlock       = torture_rwsem_down_read,
->         .read_delay     = torture_rwsem_read_delay,
-> @@ -656,7 +669,7 @@ static struct lock_torture_ops percpu_rwsem_lock_ops = {
->         .exit           = torture_percpu_rwsem_exit,
->         .writelock      = torture_percpu_rwsem_down_write,
->         .write_delay    = torture_rwsem_write_delay,
-> -       .task_boost     = torture_boost_dummy,
-> +       .task_boost     = torture_rt_boost,
->         .writeunlock    = torture_percpu_rwsem_up_write,
->         .readlock       = torture_percpu_rwsem_down_read,
->         .read_delay     = torture_rwsem_read_delay,
-> --
-> 2.39.0.rc1.256.g54fd8350bd-goog
->
+Good point. Will update in the next version.
