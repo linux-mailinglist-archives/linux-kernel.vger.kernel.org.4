@@ -2,98 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EA4C647CB2
+	by mail.lfdr.de (Postfix) with ESMTP id A9FB5647CB5
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbiLID66 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 22:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S229760AbiLIEAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 23:00:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiLID64 (ORCPT
+        with ESMTP id S229469AbiLIEAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:58:56 -0500
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8814FFA6
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 19:58:50 -0800 (PST)
-Received: by mail-qt1-x82a.google.com with SMTP id fz10so2793012qtb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 19:58:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H5NBFExJQX/d6O4EBVZbzy/yhUjpt1GHLcfTjZTMaiE=;
-        b=iFcKcca7ArFEQgM14qoskwpw7ghHqKQbpaVNgtX+pbj7X6cfac6FCmqpneWw3drvep
-         3bqnIWeR2CaEOlNogdF5MdGRBV47vAl/x9X2ettjsd9HwNFURwSkS2GrsINYzJiX0DYf
-         qdKbkYWGFLuvliEUjA2fQEgHOHx8oNmB+WVts=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=H5NBFExJQX/d6O4EBVZbzy/yhUjpt1GHLcfTjZTMaiE=;
-        b=M1lmeea7Fj0X9e6ISYtgUvGrgb6BGhX82WkaUHgl+6RhkSoB59hj7UYU2s13wyDQo4
-         tuDUfFXR5BabYyn5uSEkL8SHwuNorjnhBVdkrAzWd0ViwwqtpdDB5xkSEUVQ+m45fA1p
-         d+vzCQmYH3jQd//CNpQwqxkCJx3sP7C9G9oNwJvmwSfz+Ra+Xlp0kTAbw70dZL4b2nVu
-         chxRZSmS51++8bom2/U8YrTpxPenqk5IOZUOtLwEv7H1SFoatMBmI3OhmPQsqo5+Ctst
-         oRSB/x6pl97Tm9eC7HunRfNViZZphay0kJNUkIQh0mmLlwerEMIOE3QIZkD6xl39xTWb
-         TefA==
-X-Gm-Message-State: ANoB5pnWjLRjE5SxcxjEAfdIEA80S/x2AUiPJZcv2SRVZfV1eOZWHg6N
-        LpSAR+mf5G7kChw7NthBbPkUpTYNpnhqtyq4
-X-Google-Smtp-Source: AA0mqf5rErhlkiiQqaAysDUvSWZ7f1LB1vbu2Rlbe1Sm5ag2aO6eDLaohQsq0nj3URy02xoQHnkN6w==
-X-Received: by 2002:ac8:1013:0:b0:3a5:6961:e1c5 with SMTP id z19-20020ac81013000000b003a56961e1c5mr5613885qti.48.1670558328627;
-        Thu, 08 Dec 2022 19:58:48 -0800 (PST)
-Received: from smtpclient.apple ([2600:1003:b867:2d8b:5186:cf90:77eb:ee52])
-        by smtp.gmail.com with ESMTPSA id bq39-20020a05620a46a700b006fbae4a5f59sm278336qkb.41.2022.12.08.19.58.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 19:58:47 -0800 (PST)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v2 1/2] locktorture: Allow non-rtmutex lock types to be boosted
-Date:   Thu, 8 Dec 2022 22:58:36 -0500
-Message-Id: <2D7B1E52-D2FC-45ED-A739-BA9A1213FD49@joelfernandes.org>
-References: <20221209032550.p4tcyypgkuspp2ur@offworld>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        connoro@google.com
-In-Reply-To: <20221209032550.p4tcyypgkuspp2ur@offworld>
-To:     Davidlohr Bueso <dave@stgolabs.net>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 8 Dec 2022 23:00:02 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9665D379FF;
+        Thu,  8 Dec 2022 19:59:56 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 4B5ADCE2874;
+        Fri,  9 Dec 2022 03:59:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49A5BC433D2;
+        Fri,  9 Dec 2022 03:59:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670558391;
+        bh=5L9mqsZf3iMJpnzx/OYOcSwAgaIpEKcgPiuLx3CUubE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dMjrxxRWB+YOmtOPVlPqtST5ES/W3s3GM+Yy8BSZ7WSDx09YRY1uGAybWc+hjDP/9
+         4A/bq5pGGaZQvxL3lllv1qidufVnOupTAD48YOUvQC7n5C0JBHN/ME1BR+AddrlRWM
+         +YaOeoPhM6wF2YaLG4hTRgPOpdGiZWI2Nc1zAteHP7fLdODyHTllx8CIG9u85+DGw4
+         aWZa0Gg73CiFI71xH3KwlfXACNm7z5fn3vKVpoUA1sEpkIs1XdrawlApdKUJztr37V
+         u6EIgFZMDK9Z6nyhC6fKUiSp7w+BbtIAOnia6IDx3FwN6gbNPHaItfzQy2/yQdns9K
+         rLwEIqWv2UYnQ==
+Date:   Thu, 8 Dec 2022 19:59:50 -0800
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     <davem@davemloft.net>, <pabeni@redhat.com>, <edumazet@google.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@openeuler.org>
+Subject: Re: [PATCH net-next] net: tso: inline tso_count_descs()
+Message-ID: <20221208195950.1efe71db@kernel.org>
+In-Reply-To: <20221208195721.698f68b6@kernel.org>
+References: <20221208024303.11191-1-linyunsheng@huawei.com>
+        <20221208195721.698f68b6@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 8 Dec 2022 19:57:21 -0800 Jakub Kicinski wrote:
+> On Thu, 8 Dec 2022 10:43:03 +0800 Yunsheng Lin wrote:
+> > tso_count_descs() is a small function doing simple calculation,
+> > and tso_count_descs() is used in fast path, so inline it to
+> > reduce the overhead of calls.  
+> 
+> TSO frames are large, the overhead is fine.
+> I'm open to other opinions but I'd rather keep the code as is than
+> deal with the influx with similar sloppily automated changes.
 
+Oh, wait, you're not one of the bot people. Sorry, please just address
+my comments and post a v2.
 
-> On Dec 8, 2022, at 10:50 PM, Davidlohr Bueso <dave@stgolabs.net> wrote:
->=20
-> =EF=BB=BFOn Fri, 09 Dec 2022, Joel Fernandes (Google) wrote:
->=20
->> Currently RT boosting is only done for rtmutex_lock, however with proxy
->> execution, we also have the mutex_lock participating in priorities. To
->> exercise the testing better, add RT boosting to other lock testing types
->> as well, using a new knob (rt_boost).
->=20
-> No particular objection to the patches, but shouldn't these go as part
-> of the next iteration of the PE series?
-
-Hey Davidlohr,
-Nice to hear from you. Paul was interested in these for some things he is lo=
-oking at and also as general clean up ;)
-
-Thanks.
-
-
-
->=20
-> Thanks,
-> Davidlohr
+There is a lot of poorly written patches coming from @huawei addresses
+which are giving the company a bad name :(
