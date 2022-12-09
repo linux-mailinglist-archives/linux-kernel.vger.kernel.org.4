@@ -2,204 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9856487FC
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:53:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1CD6487FF
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 18:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbiLIRxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 12:53:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59692 "EHLO
+        id S229750AbiLIRxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 12:53:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiLIRxQ (ORCPT
+        with ESMTP id S229591AbiLIRxn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 12:53:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B29021830;
-        Fri,  9 Dec 2022 09:53:15 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 11D4CB827F4;
-        Fri,  9 Dec 2022 17:53:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1432EC433D2;
-        Fri,  9 Dec 2022 17:53:11 +0000 (UTC)
-Date:   Fri, 9 Dec 2022 12:53:10 -0500
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        mhiramat@kernel.org, Ross Zwisler <zwisler@google.com>
-Subject: Re: [PATCH v2] tracing: Dump instance traces into dmesg on
- ftrace_dump_on_oops
-Message-ID: <20221209125310.450aee97@gandalf.local.home>
-In-Reply-To: <20221110175959.3240475-1-joel@joelfernandes.org>
-References: <20221110175959.3240475-1-joel@joelfernandes.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Fri, 9 Dec 2022 12:53:43 -0500
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2976389FA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 09:53:40 -0800 (PST)
+Received: by mail-ej1-x635.google.com with SMTP id gh17so13238293ejb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:53:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/wRgTT7mfPEDjEBC1SBU9VxUa8TZcUsiPK96xgeDuoY=;
+        b=HVOMQPYvrmBDtrv9eaX/4gK3RTAZPgUUTGWINcWrpBhKNJBnLTkF7AD9upQcm7SAbr
+         nygR+llDuVa+oA61p3UcXKk0TB+w8BpBX2jPNROk+vSeKEp0xsaABv1wdiqxX7U3Xr9n
+         hxkogHROR1+ExrxA2jPopXyWwMvQuocZPfUlw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/wRgTT7mfPEDjEBC1SBU9VxUa8TZcUsiPK96xgeDuoY=;
+        b=vnvxdQ+qov9rJoUmxXYzRX3KSD7uJwVUOU5NdK9zYVyJ9JNVvecgQGKAvG31qeDFic
+         XMFk6wSxzECMD6aV9T64HS5KZadei/U3uEOnAZ0Sf3BevQiX3jFz3adloodMzbEI+HsM
+         z/WitoC+znyvaleDY5BDB6yl1jOJtMzUL6sbJVpr+I49wU+pBThRNRp883R1olmQcZzF
+         4x3aIHvnXAtuoDzkV2yIQ67/oYx3XNusbgQhnRVrDkOEaqVDug1Fb2aGZLPtrdJDj9vS
+         8MeCu4fMT8E1j9tdcOM8POPrD62JJSWeFUCjCXwiJ6/QzyPl/tBDfQarr8oKBsHouZ4s
+         8j+A==
+X-Gm-Message-State: ANoB5pmA0GZqLZ7GJVU2p19cmCEOgUrCTR0K1uTTkLmWXcngn3bCN6JN
+        ESSuoLBVmZ0+baCbXNR/Kf2kzIadCeE5VevWjYs=
+X-Google-Smtp-Source: AA0mqf4s7ts3TOsU6M6nl0iGDu+vBmbHSd/CeTVAb7KwHKdsZ+/nD+DRzNA6JAxxB7wE4mM+S6UTAg==
+X-Received: by 2002:a17:906:3a93:b0:7c0:b124:fa05 with SMTP id y19-20020a1709063a9300b007c0b124fa05mr5742433ejd.53.1670608418965;
+        Fri, 09 Dec 2022 09:53:38 -0800 (PST)
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com. [209.85.128.44])
+        by smtp.gmail.com with ESMTPSA id la12-20020a170907780c00b007a9c3831409sm166294ejc.137.2022.12.09.09.53.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Dec 2022 09:53:38 -0800 (PST)
+Received: by mail-wm1-f44.google.com with SMTP id v7so437225wmn.0
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 09:53:37 -0800 (PST)
+X-Received: by 2002:a7b:cd18:0:b0:3d1:e45f:34f with SMTP id
+ f24-20020a7bcd18000000b003d1e45f034fmr8849715wmj.188.1670608417210; Fri, 09
+ Dec 2022 09:53:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221202155738.383301-1-krzysztof.kozlowski@linaro.org>
+ <20221202155738.383301-2-krzysztof.kozlowski@linaro.org> <CAD=FV=UPLssDromnt89RYbSEU9qq_t+CSyd5VhmD7b-9JkcMFA@mail.gmail.com>
+ <c0b660bf-93c2-89b6-e704-17489efe6840@linaro.org>
+In-Reply-To: <c0b660bf-93c2-89b6-e704-17489efe6840@linaro.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 9 Dec 2022 09:53:25 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=UjwDkgXXmVcV-XNsPKOGh=TVsQexC0YQoU-_fz==y+UQ@mail.gmail.com>
+Message-ID: <CAD=FV=UjwDkgXXmVcV-XNsPKOGh=TVsQexC0YQoU-_fz==y+UQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] arm64: dts: qcom: sdm845: align TLMM pin
+ configuration with DT schema
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 10 Nov 2022 17:59:59 +0000
-"Joel Fernandes (Google)" <joel@joelfernandes.org> wrote:
+Hi,
 
-> Currently ftrace only dumps the global trace buffer on an OOPs. For
-> debugging a production usecase, I'd like to dump instance traces as
-> well, into the kernel logs. The reason is we cannot use the global trace
-> buffer as it may be used for other purposes.
-> 
-> This patch adds support for dumping the trace buffer instances along
-> with the global trace buffer.
-> 
-> The instance traces are dumped first, and then the global trace buffer.
+On Fri, Dec 9, 2022 at 2:25 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 02/12/2022 17:53, Doug Anderson wrote:
+> > Hi,
+> >
+> > On Fri, Dec 2, 2022 at 7:57 AM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> DT schema expects TLMM pin configuration nodes to be named with
+> >> '-state' suffix and their optional children with '-pins' suffix.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>
+> >> ---
+> >>
+> >> Cc: Doug Anderson <dianders@chromium.org>
+> >>
+> >> Tested on Qualcomm RB3. Please kndly test a bit more on other devices.
+> >> This should not have an functional impact.
+> >>
+> >> Changes since v2:
+> >> 1. Bring back UART6 4-pin bias/drive strength to DTSI.
+> >
+> > Just to be clear, it doesn't actually belong in the DTSI, but it was
+> > there before your patch and it's fine if your patch series doesn't fix
+> > the whole world. I'm OK with this one staying in the DTSI for now just
+> > to keep things simpler.
+> >
+> > One change missing in v3 that I would have expected based on our
+> > discussion in the previous version would be to "Add UART3 4-pin mux
+> > settings for use in db845c." I think you said you would do this, but I
+> > don't see it done.
+>
+> Hm, I don't recall that. Changing db845c to usage of RTS/CTS is
+> independent problem, not related to fixes or aligning with DT schema.
 
-Sorry for the late review :-/
+It was in the message:
 
-> 
-> Cc: Ross Zwisler <zwisler@google.com>
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  kernel/trace/trace.c | 67 ++++++++++++++++++++++++++------------------
->  1 file changed, 39 insertions(+), 28 deletions(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index 47a44b055a1d..2cc75497d6d3 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -9914,12 +9914,12 @@ trace_printk_seq(struct trace_seq *s)
->  	trace_seq_init(s);
->  }
->  
-> -void trace_init_global_iter(struct trace_iterator *iter)
-> +void trace_init_iter_with_tr(struct trace_iterator *iter, struct trace_array *tr)
+https://lore.kerne.org/r/68bcdf25-e8e3-f817-f213-efb0bce3f43a@linaro.org
 
-Should be static. The trace_init_global_iter() is used by trace_kdb.c which
-is why it wasn't static. Which means you also need to add that function
-back, otherwise trace_kdb.c will not build.
+I said:
 
+> FWIW, I would have expected that the SoC dtsi file would get a "4-pin"
+> definition (similar to what you did with qup_uart6_4pin) and then we'd
+> use that here.
 
->  {
-> -	iter->tr = &global_trace;
-> +	iter->tr = tr;
->  	iter->trace = iter->tr->current_trace;
->  	iter->cpu_file = RING_BUFFER_ALL_CPUS;
-> -	iter->array_buffer = &global_trace.array_buffer;
-> +	iter->array_buffer = &tr->array_buffer;
->  
->  	if (iter->trace && iter->trace->open)
->  		iter->trace->open(iter);
-> @@ -9939,36 +9939,14 @@ void trace_init_global_iter(struct trace_iterator *iter)
->  	iter->fmt_size = STATIC_FMT_BUF_SIZE;
->  }
->  
-> -void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
-> +void ftrace_dump_one(struct trace_array *tr, enum ftrace_dump_mode oops_dump_mode)
+You said:
 
-Should also be static.
+> Sure.
 
->  {
-> -	/* use static because iter can be a bit big for the stack */
->  	static struct trace_iterator iter;
-> -	static atomic_t dump_running;
-> -	struct trace_array *tr = &global_trace;
->  	unsigned int old_userobj;
-> -	unsigned long flags;
->  	int cnt = 0, cpu;
->  
-> -	/* Only allow one dump user at a time. */
-> -	if (atomic_inc_return(&dump_running) != 1) {
-> -		atomic_dec(&dump_running);
-> -		return;
-> -	}
-> -
-> -	/*
-> -	 * Always turn off tracing when we dump.
-> -	 * We don't need to show trace output of what happens
-> -	 * between multiple crashes.
-> -	 *
-> -	 * If the user does a sysrq-z, then they can re-enable
-> -	 * tracing with echo 1 > tracing_on.
-> -	 */
-> -	tracing_off();
-
-We need trace_tracing_off(tr) here.
-
-> -
-> -	local_irq_save(flags);
-> -
->  	/* Simulate the iterator */
-> -	trace_init_global_iter(&iter);
-> +	trace_init_iter_with_tr(&iter, tr);
->  
->  	for_each_tracing_cpu(cpu) {
->  		atomic_inc(&per_cpu_ptr(iter.array_buffer->data, cpu)->disabled);
-> @@ -9993,7 +9971,10 @@ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
->  		iter.cpu_file = RING_BUFFER_ALL_CPUS;
->  	}
->  
-> -	printk(KERN_TRACE "Dumping ftrace buffer:\n");
-> +	if (tr == &global_trace)
-> +		printk(KERN_TRACE "Dumping ftrace buffer:\n");
-> +	else
-> +		printk(KERN_TRACE "Dumping ftrace instance %s buffer:\n", tr->name);
->  
->  	/* Did function tracer already get disabled? */
->  	if (ftrace_is_dead()) {
-> @@ -10041,6 +10022,36 @@ void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
->  	for_each_tracing_cpu(cpu) {
->  		atomic_dec(&per_cpu_ptr(iter.array_buffer->data, cpu)->disabled);
->  	}
-> +}
-> +
-> +void ftrace_dump(enum ftrace_dump_mode oops_dump_mode)
-> +{
-> +	/* use static because iter can be a bit big for the stack */
-> +	static atomic_t dump_running;
-> +	struct trace_array *tr;
-> +	unsigned long flags;
-> +
-> +	/* Only allow one dump user at a time. */
-> +	if (atomic_inc_return(&dump_running) != 1) {
-> +		atomic_dec(&dump_running);
-> +		return;
-> +	}
-> +
-> +	/*
-> +	 * Always turn off tracing when we dump.
-> +	 * We don't need to show trace output of what happens
-> +	 * between multiple crashes.
-> +	 *
-> +	 * If the user does a sysrq-z, then they can re-enable
-> +	 * tracing with echo 1 > tracing_on.
-> +	 */
-> +	tracing_off();
-> +	local_irq_save(flags);
-> +
-> +	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
-
-I really do not want this to be the default. We should add a new option
-that triggers this. Perhaps even specify the tracer to dump.
-
-	ftrace_dump_on_oops=<tracer-name>
-
-and
-
-	echo <tracer-name> > /proc/sys/kernel/ftrace_dump_on_oops
-
-But still have "echo 1" enable just the global_trace and "echo 0" disable
-all.
-
--- Steve
-
-> +		ftrace_dump_one(tr, oops_dump_mode);
-> +	}
-> +
->  	atomic_dec(&dump_running);
->  	local_irq_restore(flags);
->  }
-
+-Doug
