@@ -2,136 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBB164871A
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD1C64871D
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 17:58:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbiLIQ6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 11:58:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S229911AbiLIQ6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 11:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiLIQ56 (ORCPT
+        with ESMTP id S229865AbiLIQ6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 11:57:58 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEF912761
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:57:54 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id i83so2331025ioa.11
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 08:57:54 -0800 (PST)
+        Fri, 9 Dec 2022 11:58:05 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00D1756EED
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 08:57:57 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id x28so7960549lfn.6
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 08:57:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P9011w90XDpr2MVjqnY9vogUhRJotSgkyEmZP8aBuFE=;
-        b=JwKeeivhpsC10CzgvrHnuK1oVUEYYiIUo6cczYHGAiWtUOc7/TIoFhhzYahvQrsQoP
-         XLDHRxeV2jJoFgAAgMExr2BKGSPgUTjVvGd/kj9+SZZ+fdDN4K95x8PhfJ3Ru+ssJYV1
-         hIa7DbzOLShdmupfceuf+xeB+mIppHuMcaWyK7Bwef/Kabr8yqqEA9k3AF8SHjbFM0VB
-         1sy29nq6VcqnMAJ8aJfVYj0gn8apBGD09M+lwbnXUwSQUhv27V1YC/o7p875emZv/ecm
-         h7eDFZOCnVW8ca7CH8+WI5/RpK2My/4+c3+Yo+E7Nr1/9qc/joNUb78OErFrp4BPSdGT
-         4znQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RpqPCBfzDAs8JVS1IeOpD/CKxCRHOoR51Vnm5lxDkNA=;
+        b=lsm4bM/FVHMd9HNKHL0b6U4XIPGnbS59knpkI/1xA5FnZQfqN3PUXusvmDIht8LRNa
+         P2vbJj4oi73OsOmEOrlLKzDBweEBcFCa0bCOVRpmsl/skFkyXhI5Km9L7UfAf8YQ1d7k
+         QaBuOOZvdDjHkIQic82vHrks4VJm0S1NCJwmzhWMiCiCxo57iiq12dLDKVYGldmqPgp2
+         Rm2jqVZ4h1lx/eqy4hHdYDQ+1i/JCNYd63U+Iq9vwkT1XtFbltg0Fd96byPPBhmpkfH3
+         LKKAKWYkzD3CEX3oXnHwRRCEA/GZhIxws/cQifyAFBoysezf0/Z7kyjGlo+24fi3axOi
+         GikQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P9011w90XDpr2MVjqnY9vogUhRJotSgkyEmZP8aBuFE=;
-        b=Y/8PyRUQLrLVLLsl4Bv+nqzEYucrCub0FdjnOerqSKPX4oCyDBgT7oE+iZ5qzh1c+J
-         C7k2b9W9EXbB0qhpSG+SdmhKfrbs6tZLfGVttI65OC9t/gS6R+G37nlO/eCiqSaC3jJy
-         16MEm+oRa9BpGObWTcjkQKVOyEyRTNgveULfYoGT4fIDhFz0GMsO62aogWRJITBI5Hs0
-         Ouy7rTk7L7fwaCCPeWCwEHt+dQkk9shOgoewQUvb7EnNODTpWPUIcJ/90sIyzCMQtwH6
-         y27FnxLqtcr3ZTQqGFjOmJOpx+KKZrgsiNb7ARSADV6lg9QxuuZMZQLz9bLwFIqxWm/u
-         6QTA==
-X-Gm-Message-State: ANoB5pn3sTks71KYgsPerOhc5g92pgPaj9YSATwersrWyf0xNYNBmrtu
-        OFeM6yqByucCgc5/BDuvMqM1wg==
-X-Google-Smtp-Source: AA0mqf6TgS97lagKm0YkuI6Gf5tZhd8p5qNJkld8omxKxp09jFRBbzDewGDblwWEuMmOaRRdWQMptw==
-X-Received: by 2002:a5d:991a:0:b0:6df:da71:30d5 with SMTP id x26-20020a5d991a000000b006dfda7130d5mr3730719iol.0.1670605073180;
-        Fri, 09 Dec 2022 08:57:53 -0800 (PST)
-Received: from google.com ([2620:15c:183:200:a53b:fb2d:b8a1:f544])
-        by smtp.gmail.com with ESMTPSA id c1-20020a023b01000000b00389e336e92fsm582833jaa.75.2022.12.09.08.57.52
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RpqPCBfzDAs8JVS1IeOpD/CKxCRHOoR51Vnm5lxDkNA=;
+        b=yuTjGLGE7OL3+eXNcK0RPd8DwnfVdX6tjPGLBe01GatZTzDIHjsskz/HpV+v6Px+1L
+         g/6HmTV/WaY0lavtcVlsjkXrCI9guSXjuQ7BU04vE0hWyO61OOgILCjnCQq6kdJma7n3
+         l2NSl7r1bNGgVBHw6DIIssA80qKnz7+mYs/yYeDAUU8G/No+UwHMMFOVuykOr6BhxA6Q
+         B8jRT2RB7rS3Xi1ElISgWOxI29H8ptTEQC6mrr1vpwcq1RUlW4BnekBBXKvHvIvL6qDE
+         ntyaYXl7fvqxWzLsBtdta7f1DmomAoMQ3YdL/R1xS3RBOCOXZuym5DGeAIHuJQ+39HLb
+         KaTA==
+X-Gm-Message-State: ANoB5pltTEv+/tNz76vdWaJXG28HzyvgQq8dnjcotCj4WAXC+8ydW2dJ
+        skIyFfUU7dmOhN23Xx8tsV8ZzQ==
+X-Google-Smtp-Source: AA0mqf7kzu6iAfWEPXh8v/aZNVbaQTPA+0OCONbOH+E5SHR2eUqLP85TXJEV/QkpOHRfXXEDIX1s/g==
+X-Received: by 2002:a19:7405:0:b0:4b5:7096:23ff with SMTP id v5-20020a197405000000b004b5709623ffmr1813356lfe.66.1670605076396;
+        Fri, 09 Dec 2022 08:57:56 -0800 (PST)
+Received: from krzk-bin (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id y1-20020a196401000000b004b5850e6b63sm332534lfb.65.2022.12.09.08.57.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 08:57:52 -0800 (PST)
-Date:   Fri, 9 Dec 2022 09:57:48 -0700
-From:   Ross Zwisler <zwisler@google.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH] ring-buffer: Handle resize in early boot up
-Message-ID: <Y5NpDF0AnY9ibwEl@google.com>
-References: <20221209101151.1fec1167@gandalf.local.home>
+        Fri, 09 Dec 2022 08:57:55 -0800 (PST)
+Date:   Fri, 9 Dec 2022 17:57:53 +0100
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>
+Subject: Re: [RESEND PATCH v11 2/2] mfd: max597x: Add support for MAX5970 and
+ MAX5978
+Message-ID: <20221209165753.q4ovlu2lebxfibed@krzk-bin>
+References: <20221124110210.3905092-1-Naresh.Solanki@9elements.com>
+ <20221124110210.3905092-3-Naresh.Solanki@9elements.com>
+ <CABqG17hCoY86w3usA6RNLQbGjHo_JRFioznuvdCZLo4_KNaMWg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221209101151.1fec1167@gandalf.local.home>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CABqG17hCoY86w3usA6RNLQbGjHo_JRFioznuvdCZLo4_KNaMWg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 10:11:51AM -0500, Steven Rostedt wrote:
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> With the new command line option that allows trace event triggers to be
-> added at boot, the "snapshot" trigger will allocate the snapshot buffer
-> very early, when interrupts can not be enabled. Allocating the ring buffer
-> is not the problem, but it also resizes it, which is, as the resize code
-> does synchronization that can not be preformed at early boot.
-> 
-> To handle this, first change the raw_spin_lock_irq() in rb_insert_pages()
-> to raw_spin_lock_irqsave(), such that the unlocking of that spin lock will
-> not enable interrupts.
-> 
-> Next, where it calls schedule_work_on(), disable migration and check if
-> the CPU to update is the current CPU, and if so, perform the work
-> directly, otherwise re-enable migration and call the schedule_work_on() to
-> the CPU that is being updated. The rb_insert_pages() just needs to be run
-> on the CPU that it is updating, and does not need preemption nor
-> interrupts disabled when calling it.
-> 
-> Link: https://lore.kernel.org/lkml/Y5J%2FCajlNh1gexvo@google.com/
-> 
-> Fixes: a01fdc897fa5 ("tracing: Add trace_trigger kernel command line option")
-> Reported-by: Ross Zwisler <zwisler@google.com>
-> Signed-off-by: Steven Rostedt <rostedt@goodmis.org>
-> ---
-<>
-> @@ -2298,9 +2308,17 @@ int ring_buffer_resize(struct trace_buffer *buffer, unsigned long size,
->  		if (!cpu_online(cpu_id))
->  			rb_update_pages(cpu_buffer);
->  		else {
-> -			schedule_work_on(cpu_id,
-> -					 &cpu_buffer->update_pages_work);
-> -			wait_for_completion(&cpu_buffer->update_done);
-> +			/* Run directly if possible. */
-> +			migrate_disable();
-> +			if (cpu_id == smp_processor_id()) {
-> +				rb_update_pages(cpu_buffer);
-> +				migrate_enable();
-> +			} else {
-> +				migrate_enable();
-> +				schedule_work_on(cpu_id,
-> +						 &cpu_buffer->update_pages_work);
-> +				wait_for_completion(&cpu_buffer->update_done);
+On Tue, Dec 06, 2022 at 11:00:52PM +0530, Naresh Solanki wrote:
+> ping
 
-I ran with this patch on my test VM and hit the same Oops from the original
-report.
+You missed several mailing lists and maintainers, so whom do you ping?
+Yourself? Please start using get_maintainers.pl...
 
-I think the problem is that we're still trying to enable interrupts via
-wait_for_completion():
-
-wait_for_completion()
-  wait_for_common()
-    __wait_for_common()
-      raw_spin_unlock_irq()
-        _raw_spin_unlock_irq()
-          __raw_spin_unlock_irq()
-            local_irq_enable()
-
-I'm testing on a QEMU VM with 4 virtual CPUs, if that helps WRT where work is
-being scheduled (cpu_id == smp_processor_id).
+>=20
+> Regards,
+> Naresh Solanki
+>=20
+>=20
+>=20
+> 9elements GmbH, Kortumstra=C3=9Fe 19-21, 44787 Bochum, Germany
+> Email:  naresh.solanki@9elements.com
+> Mobile:  +91 9538631477
+>=20
+> Sitz der Gesellschaft: Bochum
+> Handelsregister: Amtsgericht Bochum, HRB 17519
+> Gesch=C3=A4ftsf=C3=BChrung: Sebastian Deutsch, Eray Basar
+>=20
+> Datenschutzhinweise nach Art. 13 DSGVO
+>=20
