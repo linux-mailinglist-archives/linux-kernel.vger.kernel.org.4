@@ -2,71 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23AAC647CCF
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92102647CBE
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 05:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiLIDmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 22:42:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S229995AbiLIDnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 22:43:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiLIDmC (ORCPT
+        with ESMTP id S229902AbiLIDnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 22:42:02 -0500
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C1AB079C;
-        Thu,  8 Dec 2022 19:41:57 -0800 (PST)
-Received: by mail-qv1-xf2f.google.com with SMTP id s14so2377012qvo.11;
-        Thu, 08 Dec 2022 19:41:57 -0800 (PST)
+        Thu, 8 Dec 2022 22:43:16 -0500
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A449CFA;
+        Thu,  8 Dec 2022 19:43:10 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id a14so2824897pfa.1;
+        Thu, 08 Dec 2022 19:43:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=pgIpvY0LTWC8//oo98rnPVZasE3c5eO/Lj+ZMeQ7so8=;
-        b=ojYAfK81/mDNxpaBmxYJMVWELNq4cY6w54Wley838af/dUV6qzPQPtFHihdyaGEP5p
-         +qY85rFzd4JifddL/+FvTilwbbce05hTbr6+T2cyyxcqZe/VeU1GD38Nw23sCpVSV3S5
-         LHkuo1XWfcbFO/kogNj8evHenJ0z5EDmOZ9QHIaR5kX5acxSd1fssAsp4fEStqnjfm2O
-         6Xb9BxkkOqZ2EFJaHgpPkz78YRc50KYP/IqsrVIr6n8lolt5tBJAzbi8idgBMwYhWr0K
-         t04xGYn7DRvRSo+I3wo5SwupYAYZFOS/iWADdVMfy56CCMJfnFWgS5yK2PEx5bFnYzCh
-         2h/w==
+        bh=KzTx46VsPlNBtMUazlqoN2pJfqj2F09S8xX/pSLFCGo=;
+        b=i/JQjYIhPgIflT4dl1HEXlY0uLvEHEF1mcMgqGuRA7RIkSIll5DO0xBsbhMAxHrw/f
+         OSEikPHufGbEG5aMghcO5x9TVB/Wym3Qtxi4pqF5VmIkEooHc3aWbZvLcbut4yQSupN/
+         laSxPa7V2i4PI/8OEE7Yna3Mt7uapNgALsQt1yZWVgmInywCKp6uzOLNvwau/PNIwWET
+         1oG8Ra5ao8UhUjOtJu8KMmps1mMTnNYSjuDZ7sHdShKrlPlq0ITl4d5uS8KogVl2J2i0
+         bfJ3ppD5nwXwnSrq9uS5b+XE5YWsZ3t2CbghLsPuEOITFcUcSu8/oVrym7ALIxrnvOxF
+         OSYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pgIpvY0LTWC8//oo98rnPVZasE3c5eO/Lj+ZMeQ7so8=;
-        b=jlacJQAQQn1j4vQ22TsNMKgaJs+M9WV8Z0q4721HfvHrlKxouX2TRebCpYWD2IfGjm
-         P6RIPRW6PoShUwefjs9JY8WpHfXReB3oqqeXSQlQeHWOMd1rTkQUID9aMjGJfrGuwSH+
-         pZLpUbNcCtQvWMSWF42tmMVMNgSjBXbmEnof8YYfa/hIygwAUfO+OCdSnVEiXUXMnkhB
-         7KxG/vjWjpA70bMngDkTJJ6V7dhHxVkwEs9xG5jRynvzReFp0pWxMwzendCvdhi772e1
-         ZO/CWQ5aT85zZ8Ka1aMd57+5XAmzUmiihfBvC8Jf20rf8uSy1YVrrHaGVXsQgTLgaTDd
-         26Bg==
-X-Gm-Message-State: ANoB5pm6A/wPWzzrx+Z5zT2qTCQbkNgUiujb0ZhR2l9cXdpF8StAa24O
-        IWl79R3oMPjPFoNxwdCHtO0=
-X-Google-Smtp-Source: AA0mqf5VOXaO/mBUDg1wLqT5kK6xgOdcoeWekvED2P9fqSZyuOxF6fN30qfJpAEIsYkc3DICHaei2A==
-X-Received: by 2002:a05:6214:1908:b0:4c7:7ef:3052 with SMTP id er8-20020a056214190800b004c707ef3052mr6233311qvb.39.1670557316480;
-        Thu, 08 Dec 2022 19:41:56 -0800 (PST)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id h129-20020a376c87000000b006fc40dafaa2sm284255qkc.8.2022.12.08.19.41.54
+        bh=KzTx46VsPlNBtMUazlqoN2pJfqj2F09S8xX/pSLFCGo=;
+        b=NvK3GDgaT/8rVen869P/RzHh5RHmiQs5ILQQT6evVMcMiyYIEgM6NP2jQ1s09VHL5F
+         SKR1UiGRe+p5vOM/RiDwGu+jTfOi9JfKiE6pmuE5+cjH0p66hEAaf2jMf8YMNOnR43xT
+         XiiZpmI4i/0uV7kJ3xidkkgqXCM/cmXIa2PDjIOnWBu3t4br2gY9yVrEf/51ij47KKB8
+         /Bh/MDdegxpNFDeTFdpI+3DyEX7zh/3JPAFOKuwp6G1mqAjsheXNew9WJqsc3zXBbpuk
+         FQGzORg+cTjpp1A1WmMc47fejk7f4Q4/lnHc1pjiAdyPred7skibwI9+b5guYTZTuZHX
+         Qk2g==
+X-Gm-Message-State: ANoB5pko4ENh+4oeOdluPxH6hUVQZxZi5rfPlHjbBYM3tOMngF1cnQW9
+        8tkq4z5IOF6bKFZBwIzcx6LWQD72jdWeZA==
+X-Google-Smtp-Source: AA0mqf4Xv5B508LHmEcNLP3bfnRlnLKzbtTqCexJYTKcyQr7BN6m+nxHrlQoWXwmg//WwYPTBeYsug==
+X-Received: by 2002:aa7:858a:0:b0:56e:705e:3608 with SMTP id w10-20020aa7858a000000b0056e705e3608mr3904227pfn.31.1670557389598;
+        Thu, 08 Dec 2022 19:43:09 -0800 (PST)
+Received: from [10.230.29.214] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id u82-20020a627955000000b00571cdbd0771sm238815pfc.102.2022.12.08.19.43.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 19:41:55 -0800 (PST)
-Message-ID: <f81e356e-0eb4-a676-ad43-2987994f4543@gmail.com>
-Date:   Thu, 8 Dec 2022 19:41:53 -0800
+        Thu, 08 Dec 2022 19:43:09 -0800 (PST)
+Message-ID: <af8093e9-11a5-930d-6dc5-2387195446b1@gmail.com>
+Date:   Thu, 8 Dec 2022 19:43:06 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH] net: bcmgenet: Remove the unused function
+Subject: Re: [PATCH net 1/2] MAINTAINERS: Update NXP FEC maintainer
 Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>, opendmb@gmail.com
-Cc:     bcm-kernel-feedback-list@broadcom.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20221209033723.32452-1-jiapeng.chong@linux.alibaba.com>
+To:     Clark Wang <xiaoning.wang@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        "open list:IRQCHIP DRIVERS" <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <20221205212340.1073283-1-f.fainelli@gmail.com>
+ <20221205212340.1073283-2-f.fainelli@gmail.com>
+ <HE1PR0402MB2939AE5C96DE9ECD183D5522F31C9@HE1PR0402MB2939.eurprd04.prod.outlook.com>
 From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221209033723.32452-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <HE1PR0402MB2939AE5C96DE9ECD183D5522F31C9@HE1PR0402MB2939.eurprd04.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -79,16 +98,58 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 12/8/2022 7:37 PM, Jiapeng Chong wrote:
-> The function dmadesc_get_addr() is defined in the bcmgenet.c file, but
-> not called elsewhere, so remove this unused function.
+On 12/8/2022 6:01 PM, Clark Wang wrote:
+> Hi Florian,
 > 
-> drivers/net/ethernet/broadcom/genet/bcmgenet.c:120:26: warning: unused function 'dmadesc_get_addr'.
 > 
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3401
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>> -----Original Message-----
+>> From: Florian Fainelli <f.fainelli@gmail.com>
+>> Sent: 2022年12月6日 5:24
+>> To: netdev@vger.kernel.org
+>> Cc: Florian Fainelli <f.fainelli@gmail.com>; Thomas Gleixner
+>> <tglx@linutronix.de>; Marc Zyngier <maz@kernel.org>; Rob Herring
+>> <robh+dt@kernel.org>; Krzysztof Kozlowski
+>> <krzysztof.kozlowski+dt@linaro.org>; Shawn Guo <shawnguo@kernel.org>;
+>> dl-linux-imx <linux-imx@nxp.com>; David S. Miller <davem@davemloft.net>;
+>> Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
+>> Paolo Abeni <pabeni@redhat.com>; Sascha Hauer <s.hauer@pengutronix.de>;
+>> Pengutronix Kernel Team <kernel@pengutronix.de>; Fabio Estevam
+>> <festevam@gmail.com>; open list:IRQCHIP DRIVERS
+>> <linux-kernel@vger.kernel.org>; open list:OPEN FIRMWARE AND FLATTENED
+>> DEVICE TREE BINDINGS <devicetree@vger.kernel.org>; moderated
+>> list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE
+>> <linux-arm-kernel@lists.infradead.org>
+>> Subject: [PATCH net 1/2] MAINTAINERS: Update NXP FEC maintainer
+>>
+>> Emails to Joakim Zhang bounce, add Shawn Guo (i.MX architecture
+>> maintainer) and the NXP Linux Team exploder email.
+>>
+>> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> ---
+>>   MAINTAINERS | 3 ++-
+>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 256f03904987..ba25d5af51a0 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -8187,7 +8187,8 @@ S:	Maintained
+>>   F:	drivers/i2c/busses/i2c-cpm.c
+>>
+>>   FREESCALE IMX / MXC FEC DRIVER
+>> -M:	Joakim Zhang <qiangqing.zhang@nxp.com>
+>> +M:	Shawn Guo <shawnguo@kernel.org>
+>> +M:	NXP Linux Team <linux-imx@nxp.com>
+> 
+> For FEC driver, please change as follows. Thanks.
+> M: Wei Fang <wei.fang@nxp.com>
+> R: Shenwei Wang <shenwei.wang@nxp.com>
+> R: Clark Wang <xiaoning.wang@nxp.com>
+> R: NXP Linux Team <linux-imx@nxp.com>
+> 
+> Best Regards,
+> Clark Wang
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Will do, thanks for stepping in.
 -- 
 Florian
