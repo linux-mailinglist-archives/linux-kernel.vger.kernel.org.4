@@ -2,132 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E58648282
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C9C648290
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiLIMm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:42:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
+        id S229930AbiLIMtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:49:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiLIMm5 (ORCPT
+        with ESMTP id S229571AbiLIMtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:42:57 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D251AF0E
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:42:56 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id j16so3438607qtv.4
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:42:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bluespec-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=igBuNDpaHFuZEiBvHZ2c4/iSakohbRrwsz40HKIGNEA=;
-        b=yZZBXbZxeZz5QZrL1Dt+BF4rJDeHdP6+MsHJiU+Jq7Kgdyhns9NGtYv82PhDfAB5b7
-         o1L1h5aCpY6Kl6QWL5vQUcDCBzfj9Wv7dpj+GqW3+EM4r13+uqoo5EhpmjM41VVfTWho
-         pQs/OiHYUdfi6exiEnxhQ1ME/h85omQJeRUbPtJQPcPPNOJRnbLd3XCd0/2j4scAEaPN
-         8VMihd4/sNJpfFNVvZAEawyEKh/iTRPJqXqZhI7vpH6TK6dNctKCYl1nwcTNgN4fQ+Rt
-         bvAgeXk2H5aIRUyOLZogd6PkidHEshj2c6Hzk7glLWx2Q9lBUZIJCnyPGnlwef5IgeOW
-         xshg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=igBuNDpaHFuZEiBvHZ2c4/iSakohbRrwsz40HKIGNEA=;
-        b=LVj9iNfVXAIFG7Ar6ZKA//GZAxJ3Yz0MuaYYAVmCHdNvMlxvWVG3TgeqUInSeooA+u
-         SOy/XP6yNCKrB7Kyf5jUki9urfu9oB+MciYboA8OJUzF9uWksfh+e3MrxBo5Jq9DUJ4X
-         5R0K8pZgBt9AA5ugqimTIl2K+NLFz4Dd4WUfRULw/Mmv0LINnHsRcaeOM8u9b3DgGHcD
-         UGja3Sxa1/4NiRZUEVqPMKAlMZXESSLWY72exxTljERqyeTExcb0uPJ6+s5Sqc+yXzCg
-         ln1ySZT1w9asGNLDZcKFDrI1liFQVVk2Y0Q+/BOhap9vUUIoYTeHr4apiP/KSDfeI0Pi
-         LK+A==
-X-Gm-Message-State: ANoB5pm47E/myEi7wOGpC5b4n49/fzjS2GsfQfhN6oZIApbCfhRh4t2n
-        Yda28t143sUOXm3MMrw6VEIY
-X-Google-Smtp-Source: AA0mqf7h3NrKKgZHoxcpultPrxTev9dn4y0DQnPSJpPUwiCdCUj+2QZZrVKFSHDsG7JKVvD1HYx8eA==
-X-Received: by 2002:ac8:745:0:b0:3a8:325:47e with SMTP id k5-20020ac80745000000b003a80325047emr3161524qth.54.1670589775249;
-        Fri, 09 Dec 2022 04:42:55 -0800 (PST)
-Received: from bruce.bluespec.com ([38.70.11.69])
-        by smtp.gmail.com with ESMTPSA id bp13-20020a05620a458d00b006fa16fe93bbsm1051872qkb.15.2022.12.09.04.42.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:42:54 -0800 (PST)
-Date:   Fri, 9 Dec 2022 07:42:52 -0500
-From:   Darius Rad <darius@bluespec.com>
-To:     Florian Weimer <fweimer@redhat.com>
-Cc:     Andrew Waterman <andrew@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Vineet Gupta <vineetg@rivosinc.com>, stillson@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
-        atishp@atishpatra.org, guoren@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        greentime.hu@sifive.com, vincent.chen@sifive.com,
-        andy.chiu@sifive.com, arnd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bjorn@kernel.org, libc-alpha@sourceware.org,
-        christoph.muellner@vrull.eu, Aaron Durbin <adurbin@rivosinc.com>,
-        linux@rivosinc.com
-Subject: Re: RISCV Vector unit disabled by default for new task (was Re:
- [PATCH v12 17/17] riscv: prctl to enable vector commands)
-Message-ID: <Y5MtTLtrDnCW6Dik@bruce.bluespec.com>
-Mail-Followup-To: Florian Weimer <fweimer@redhat.com>,
-        Andrew Waterman <andrew@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Vineet Gupta <vineetg@rivosinc.com>, stillson@rivosinc.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, anup@brainfault.org,
-        atishp@atishpatra.org, guoren@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>, greentime.hu@sifive.com,
-        vincent.chen@sifive.com, andy.chiu@sifive.com, arnd@kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        bjorn@kernel.org, libc-alpha@sourceware.org,
-        christoph.muellner@vrull.eu, Aaron Durbin <adurbin@rivosinc.com>,
-        linux@rivosinc.com
-References: <b1dae947-d52a-d28e-5ddc-c1ad6d29828c@rivosinc.com>
- <mhng-84ad9495-ef4b-4343-89ee-dfe45ab69ff7@palmer-ri-x1c9>
- <CA++6G0D8RdjgvzQf-gMdakcF-Jj_PMjP=MBtAbSC0Qcu_WrTTQ@mail.gmail.com>
- <877cz0nbce.fsf@oldenburg.str.redhat.com>
- <Y5MoPdYimQtqQvkM@bruce.bluespec.com>
- <874ju4lpum.fsf@oldenburg.str.redhat.com>
+        Fri, 9 Dec 2022 07:49:01 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51266407
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:49:00 -0800 (PST)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9B5p56038765;
+        Fri, 9 Dec 2022 12:48:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=M+ce5XJ5+K0FLZ/Q3JFl4/fnlN4F1Xiy27TY9fWzOs8=;
+ b=J30YsOjkUzG6OvVSweQS55AVLufwUp0ztcgFvqTJ+d4S0/Em+MtT8NlYDSjFqk/qYNKF
+ dnO715BwAlEN68vIyXT9o9f0smHqFXDmU4BIp6nMBILzM6ExLRem9Y9Bj1t1n2gxzrc2
+ i/pPEwca0fYDHbN6mzdhpaHgJaC2EjO4F5QIM/lyOuWRbVJ6nGBM17r/K+cJcUwzpSUl
+ Sie5fao4Wp7tS+GEfOrSXcBP4CO1g1vSpj2G2AQuZXdHLUy12nzUffAMnel79EZcIYto
+ ZWBNCDlaBZb1/5RUOO/dmMLdoZJhiNTGsxwZ7jKHShhDq7ZktWTLfL3+o3JeBcq3ONjA KA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3mc10qp85c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 12:48:53 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 2B9Bk1Fi027261;
+        Fri, 9 Dec 2022 12:48:50 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3m9ks460fc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 09 Dec 2022 12:48:50 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2B9CmmXC40108464
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 9 Dec 2022 12:48:48 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7299F20049;
+        Fri,  9 Dec 2022 12:48:48 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0691D20043;
+        Fri,  9 Dec 2022 12:48:48 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.179.4.6])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri,  9 Dec 2022 12:48:47 +0000 (GMT)
+Date:   Fri, 9 Dec 2022 13:48:46 +0100
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] jump_label: explicitly annotate inittext labels as init
+Message-ID: <Y5Murs1nSi45xEuK@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20221209060740.2785164-1-agordeev@linux.ibm.com>
+ <CAMj1kXF5OR6TGhCrxYCmrnA=CTAfkGcga8BDE2Vj3rixgi7U3w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <874ju4lpum.fsf@oldenburg.str.redhat.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NEUTRAL autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMj1kXF5OR6TGhCrxYCmrnA=CTAfkGcga8BDE2Vj3rixgi7U3w@mail.gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: y1k8QV6Nt6Xz5O9EUQh-vVsKxE8wXXdG
+X-Proofpoint-ORIG-GUID: y1k8QV6Nt6Xz5O9EUQh-vVsKxE8wXXdG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-09_07,2022-12-08_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=815 spamscore=0 bulkscore=0 phishscore=0 priorityscore=1501
+ impostorscore=0 adultscore=0 lowpriorityscore=0 malwarescore=0
+ clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212090098
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Dec 09, 2022 at 01:32:33PM +0100, Florian Weimer via Libc-alpha wrote:
-> * Darius Rad:
-> 
-> > On Fri, Dec 09, 2022 at 11:02:57AM +0100, Florian Weimer wrote:
-> >> * Andrew Waterman:
-> >> 
-> >> > This suggests that ld.so, early-stage libc, or possibly both will need
-> >> > to make this prctl() call, perhaps by parsing the ELF headers of the
-> >> > binary and each library to determine if the V extension is used.
-> >> 
-> >> If the string functions use the V extension, it will be enabled
-> >> unconditionally.  So I don't see why it's okay for libc to trigger this
-> >> alleged UAPI change, when the kernel can't do it by default.
-> >> 
+On Fri, Dec 09, 2022 at 10:41:55AM +0100, Ard Biesheuvel wrote:
+> > diff --git a/kernel/jump_label.c b/kernel/jump_label.c
+> > index 714ac4c3b556..77680665d374 100644
+> > --- a/kernel/jump_label.c
+> > +++ b/kernel/jump_label.c
+> > @@ -481,13 +481,16 @@ void __init jump_label_init(void)
 > >
-> > Because the call to enable can fail and userspace needs to deal with that.
+> >         for (iter = iter_start; iter < iter_stop; iter++) {
+> >                 struct static_key *iterk;
+> > +               unsigned long addr;
+> >                 bool in_init;
+> >
+> >                 /* rewrite NOPs */
+> >                 if (jump_label_type(iter) == JUMP_LABEL_NOP)
+> >                         arch_jump_label_transform_static(iter, JUMP_LABEL_NOP);
+> >
+> > -               in_init = init_section_contains((void *)jump_entry_code(iter), 1);
+> > +               addr = jump_entry_code(iter);
+> > +               in_init = init_section_contains((void *)addr, 1) ||
+> > +                         is_kernel_inittext(addr);
 > 
-> Failure is usually indicated by an AT_HWCAP or AT_HWCAP2 bit remaining
-> zero, or perhaps a special CPU register (although that is more unusual).
+> Isn't it sufficient to only call is_kenel_inittext here?
 
-That would indicate that the extension is not present, which is one of, but
-not the only way it can fail.
+I am not sure every arch out there would stick to putting
+init code to inittext only.
 
-The vector extension relies on dynamically allocated memory in the kernel,
-which can fail.
-
-It also provides the opportunity for the kernel to deny access to the
-vector extension, perhaps due to administrative policy or other future
-mechanism.
-
-// darius
-
+However, should not is_kernel_exittext() (which does not
+exist) also get checked here?
