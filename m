@@ -2,104 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E63964888F
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:42:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FA49648892
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 19:43:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiLISme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 13:42:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60156 "EHLO
+        id S229877AbiLISnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 13:43:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbiLISmb (ORCPT
+        with ESMTP id S229951AbiLISmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 13:42:31 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F035B59C;
-        Fri,  9 Dec 2022 10:42:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670611351; x=1702147351;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=n0tWGGZDbd5iBdvKg5QC1cQ6LSUj5SaZ5KFci2+KPTE=;
-  b=Z9cOOdps1fvgaAwdT+4OrAqcSqf/OD4M6ih2CDAkXuR7TGDXm/x9OY6Q
-   iAunoxPoK9B+EFGCp5J6Q22q4ecKXnk5LMXKWjZH5jLfS1LhtELZIqgXL
-   mOwsw1yL696INgrZ+zb0xkEf6iaZwoBw2T9sBkuZOqE2exi1a2nH8wjhP
-   GjqnV8c3x5dpZHVqy7kqVuAZbtCS4YY4d/BF8wvEWqoEaQiFNUEPpyq9j
-   T3grapRFgDY1xB8XbVDvczr7TwHyfNRvQCP+s7EFd3lWM27vAg5/FOvvS
-   Rynk7GlI+OY51uyrmgahfP1Zc27Vigi8MTNdhsxGScWr5mcrEiG6i5+GK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="403779567"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="403779567"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 10:42:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="647488707"
-X-IronPort-AV: E=Sophos;i="5.96,232,1665471600"; 
-   d="scan'208";a="647488707"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP; 09 Dec 2022 10:42:09 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1p3iJz-0077mF-0r;
-        Fri, 09 Dec 2022 20:42:07 +0200
-Date:   Fri, 9 Dec 2022 20:42:06 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Florent DELAHAYE <kernelorg@undead.fr>,
-        Konrad J Hambrick <kjhambrick@gmail.com>,
-        Matt Hansen <2lprbe78@duck.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Nicholas Johnson <nicholas.johnson-opensource@outlook.com.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Werner Sembach <wse@tuxedocomputers.com>,
-        mumblingdrunkard@protonmail.com, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 3/4] x86/PCI: Tidy E820 removal messages
-Message-ID: <Y5OBfjKXFc5d88i1@smile.fi.intel.com>
-References: <20221208190341.1560157-1-helgaas@kernel.org>
- <20221208190341.1560157-4-helgaas@kernel.org>
+        Fri, 9 Dec 2022 13:42:53 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE795C76B;
+        Fri,  9 Dec 2022 10:42:51 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A3B2622FE;
+        Fri,  9 Dec 2022 18:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F09FDC433EF;
+        Fri,  9 Dec 2022 18:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670611371;
+        bh=PpE/G/4dvnSSAm8Q7Pn2IAc5LMvy9D6cw/GCLldO0ms=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=F1S6Ycl3LrDQuNE7lflcCF9ALoe/dSaR0vWZv/KPyaGuzx5CDdcOsTvPmrszRAt6h
+         MbgC3lOeF+nfVAE5h2KKDRMqyR8zOPu4l08ZXCEdV8L361DTKlZ6jZEd5pnhz1HviI
+         FVafqAjov2Z2kNFV1zN85bPLqyK5PyWgvox3UdZSJb/p9Nz/l0Kuz64QK+d2yz99fK
+         WDMJX8IRE6t2WwjAfOx67ONytkso+oFnWzzPaV1bnqtaHqI7SOeil28bR8jVa2os0o
+         TMzBBZ4PruxP4u5F8sNn2LUPGaD1GbGOjUmaLWin4ZBsg93tv+EqjziZhmSq4JMd5p
+         qPUeYjzTmKz1A==
+Received: by mail-ua1-f50.google.com with SMTP id m5so1557829uah.3;
+        Fri, 09 Dec 2022 10:42:50 -0800 (PST)
+X-Gm-Message-State: ANoB5pmZGUEtTazTkIGIMi9ruI7pE1TR526lmUZZgTAZDcDZ18CBpqh5
+        p1PEm3jXepkTWwQC7AOjthSCovahG9jPFnQbQQ==
+X-Google-Smtp-Source: AA0mqf79z59cmKU7wd0hgtORScW/h1SAPCmD82lmyH4G17E8k94N0WGkMeg1Mx2wwn6Wlpetminrk/ZkwcmCMD0R5uE=
+X-Received: by 2002:ab0:3a96:0:b0:419:678:cf31 with SMTP id
+ r22-20020ab03a96000000b004190678cf31mr34441960uaw.63.1670611369881; Fri, 09
+ Dec 2022 10:42:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221208190341.1560157-4-helgaas@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221209171621.3351220-1-robh@kernel.org>
+In-Reply-To: <20221209171621.3351220-1-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Fri, 9 Dec 2022 12:42:38 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqL-FVy1SK1ZTVoPaxDG0-7_PtcZZHFWJt8+aaGWFFBwaA@mail.gmail.com>
+Message-ID: <CAL_JsqL-FVy1SK1ZTVoPaxDG0-7_PtcZZHFWJt8+aaGWFFBwaA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: Convert Fujitsu SDHCI to DT schema
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 01:03:40PM -0600, Bjorn Helgaas wrote:
-> From: Bjorn Helgaas <bhelgaas@google.com>
-> 
-> These messages:
-> 
->   clipped [mem size 0x00000000 64bit] to [mem size 0xfffffffffffa0000 64bit] for e820 entry [mem 0x0009f000-0x000fffff]
-> 
-> aren't as useful as they could be because (a) the resource is often
-> IORESOURCE_UNSET, so we print the size instead of the start/end and (b) we
-> print the available resource even if it is empty after removing the E820
-> entry.
-> 
-> Print the available space by hand to avoid the IORESOURCE_UNSET problem and
-> only if it's non-empty.  No functional change intended.
+On Fri, Dec 9, 2022 at 11:16 AM Rob Herring <robh@kernel.org> wrote:
+>
+> Convert the Fujitsu SDHCI binding to DT schema format.
+>
+> The interrupts were not documented. The driver only uses the first
+> interrupt, but the DT and example have 2 interrupts. The 2nd one is
+> unknown. "dma-coherent" was also not documented, but is used.
+>
+> The "socionext,synquacer-sdhci" compatible was not documented, but it is
+> compatible with "fujitsu,mb86s70-sdhci-3.0.yaml" and is in use (in
+> u-boot Synquacer dts).
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../mmc/fujitsu,mb86s70-sdhci-3.0.yaml        | 67 +++++++++++++++++++
+>  .../devicetree/bindings/mmc/sdhci-fujitsu.txt | 32 ---------
+>  2 files changed, 67 insertions(+), 32 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml b/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
+> new file mode 100644
+> index 000000000000..0218a6ce4b2f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/fujitsu,mb86s70-sdhci-3.0.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/fujitsu,mb86s70-sdhci-3.0.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Fujitsu SDHCI controller
+> +
+> +maintainers:
+> +  - Vincent Yang <Vincent.Yang@tw.fujitsu.com>
 
-...
+Bounces. Any other volunteers?
 
-> +			if (avail->end > avail->start)
-> +				pr_info("resource: remaining [mem %#010llx-%#010llx] available\n",
-> +					(unsigned long long) avail->start,
-> +					(unsigned long long) avail->end);
-
-Is there any point why we do not use %pa for resource_size_t parameters?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> +
+> +allOf:
+> +  - $ref: mmc-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: socionext,synquacer-sdhci
+> +          - const: fujitsu,mb86s70-sdhci-3.0
+> +      - const: fujitsu,mb86s70-sdhci-3.0
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Core clock
+> +      - description: Interface clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: core
+> +      - const: iface
+> +
+> +  dma-coherent: true
+> +
+> +  interrupts:
+> +    maxItems: 2
+> +
+> +  fujitsu,cmd-dat-delay-select:
+> +    type: boolean
+> +    description: Indicating that the host requires the CMD_DAT_DELAY control
+> +      to be enabled.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    mmc@36600000 {
+> +        compatible = "fujitsu,mb86s70-sdhci-3.0";
+> +        reg = <0x36600000 0x1000>;
+> +        interrupts = <0 172 0x4>,
+> +               <0 173 0x4>;
+> +        bus-width = <4>;
+> +        vqmmc-supply = <&vccq_sdhci1>;
+> +        clocks = <&clock 2 2 0>, <&clock 2 3 0>;
+> +        clock-names = "core", "iface";
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt b/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
+> deleted file mode 100644
+> index 3ee9263adf73..000000000000
+> --- a/Documentation/devicetree/bindings/mmc/sdhci-fujitsu.txt
+> +++ /dev/null
+> @@ -1,32 +0,0 @@
+> -* Fujitsu SDHCI controller
+> -
+> -This file documents differences between the core properties in mmc.txt
+> -and the properties used by the sdhci_f_sdh30 driver.
+> -
+> -Required properties:
+> -- compatible: "fujitsu,mb86s70-sdhci-3.0"
+> -- clocks: Must contain an entry for each entry in clock-names. It is a
+> -  list of phandles and clock-specifier pairs.
+> -  See ../clocks/clock-bindings.txt for details.
+> -- clock-names: Should contain the following two entries:
+> -       "iface" - clock used for sdhci interface
+> -       "core"  - core clock for sdhci controller
+> -
+> -Optional properties:
+> -- vqmmc-supply: phandle to the regulator device tree node, mentioned
+> -  as the VCCQ/VDD_IO supply in the eMMC/SD specs.
+> -- fujitsu,cmd-dat-delay-select: boolean property indicating that this host
+> -  requires the CMD_DAT_DELAY control to be enabled.
+> -
+> -Example:
+> -
+> -       sdhci1: mmc@36600000 {
+> -               compatible = "fujitsu,mb86s70-sdhci-3.0";
+> -               reg = <0 0x36600000 0x1000>;
+> -               interrupts = <0 172 0x4>,
+> -                            <0 173 0x4>;
+> -               bus-width = <4>;
+> -               vqmmc-supply = <&vccq_sdhci1>;
+> -               clocks = <&clock 2 2 0>, <&clock 2 3 0>;
+> -               clock-names = "iface", "core";
+> -       };
+> --
+> 2.35.1
+>
