@@ -2,138 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DB4648AB6
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:22:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06251648AB8
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 23:24:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229498AbiLIWWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 17:22:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S229762AbiLIWX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 17:23:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIWWo (ORCPT
+        with ESMTP id S229468AbiLIWXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 17:22:44 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D429212D0B
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 14:22:42 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so9605256pjr.3
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 14:22:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ReHKPYHQZTteLwT0As2JQVVBmkWDUyL/DLK/qSWjsM0=;
-        b=NL0NAV0RdzuWBOp2ztZtcwpxd0baUkzJPflsSIUOYyOJkDtDNQw7zaldPmUIqfROgG
-         eqjdZ61AFx+xo4O1hoZGcm9VBA5buBbjkDYHw0gfVD9ImWiW5y6JE8LYfwUhobHia7pF
-         3FgMiIeLemdaXd9YSjsmWT+hdsdDWNhUh68NHnXGGq3j0zzNCvNRMmtC1265TxMIo0BY
-         R/ICPspwjQszq6cZAkmmnE6QJtOuG+bkJH8B8TAPNRtU3DjktIFydHTdtDZZ7VwQvgjW
-         FR+BRD7LBKzXIN3yNsqbc4ObOnyRObK314QuOr5U/sIxypKLAgijROJ+sC6/dNZn2oVx
-         QwAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ReHKPYHQZTteLwT0As2JQVVBmkWDUyL/DLK/qSWjsM0=;
-        b=TEDZHKF/YEmjtRl9HSr+63n9wmGCIgFCcpXQ0XO68EHSnkLS1sizGD187u3zz1Ogiq
-         GW88r4qtmPweJvOsE4AoPj1lMyoIJV9EigFqPC6TKybze2DYCwtT2PMuFluruJ80y3Nx
-         M63lFlx2rDVtXu62CsrshTsroghMoyCv/pAUEYb9ON64pmi43AmvhHw/IBInxdCFs8cm
-         CGqEY0UhSG0/UK7AZRKB70413muWLTVddlOjBN+K4eIoT2wQAFfjRJWj2iouqRsV1L3a
-         5EXakWpsAwxkWGqKf6E1lmDdHcJajuRSTyep/j8LcdoEKFvV59oPqTKpMrwI/WGUiX3k
-         M8kA==
-X-Gm-Message-State: ANoB5pk6Or5BXLbaK7eib7HCKLlQiSDFddJnKH82/GBarpgqQ28OVzLt
-        hXikRs4gm3p0mSJUS2JjUp5oGA==
-X-Google-Smtp-Source: AA0mqf6aScZwgCPYfMRSa5E8XNfnCmiGLZwxfPrkfh+4XDjSInpYt0kGjwi4Vh98kjkFu/B0H6f59Q==
-X-Received: by 2002:a17:902:b087:b0:189:e81b:d25f with SMTP id p7-20020a170902b08700b00189e81bd25fmr7356933plr.56.1670624562233;
-        Fri, 09 Dec 2022 14:22:42 -0800 (PST)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id n20-20020a170902d0d400b00189348ab156sm1754985pln.283.2022.12.09.14.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 14:22:41 -0800 (PST)
-Date:   Fri, 9 Dec 2022 14:22:37 -0800
-From:   David Matlack <dmatlack@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>
-Subject: Re: [PATCH 1/7] KVM: x86/MMU: Move pte_list operations to rmap.c
-Message-ID: <Y5O1LbbeI7XXeaT2@google.com>
-References: <20221206173601.549281-1-bgardon@google.com>
- <20221206173601.549281-2-bgardon@google.com>
+        Fri, 9 Dec 2022 17:23:53 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7803413F60;
+        Fri,  9 Dec 2022 14:23:52 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DD4FE1FD74;
+        Fri,  9 Dec 2022 22:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1670624630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yazt+l+wO+0PmZJrbTp0vGTCDSc87Dt5hYFTptn2yHM=;
+        b=z+Jq+hOaStbFPtaNKlg3FRxlSBaJXPh+oQnblB5JeLK9QCSD5hkCKokZJHkzC4ZBGcEoS8
+        vLH8TNiP0LfBe/WMywCdbj5Tvhbr7KprdSH0e6iBWZPfpgudPSkMaotO3kiXvRyWmVlLrC
+        l+y1sHZ68X32TZgeSWYxn6wkOV3kK4I=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1670624630;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yazt+l+wO+0PmZJrbTp0vGTCDSc87Dt5hYFTptn2yHM=;
+        b=3bULmWys6kgqDJazRM50lrTiCrUAe0nUMdboobiW6WAV1/JQD9e6r6NUpUFhCOxFGJf6gX
+        6LWv0XsEnE0/tOAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7889F13597;
+        Fri,  9 Dec 2022 22:23:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id UJS+HHa1k2NPUQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Fri, 09 Dec 2022 22:23:50 +0000
+Message-ID: <3ab6ea38-5a9b-af4f-3c94-b75dce682bc1@suse.cz>
+Date:   Fri, 9 Dec 2022 23:23:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221206173601.549281-2-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCHv8 02/14] mm: Add support for unaccepted memory
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>
+References: <20221207014933.8435-1-kirill.shutemov@linux.intel.com>
+ <20221207014933.8435-3-kirill.shutemov@linux.intel.com>
+ <f944459f-76a6-60c3-7dae-0918d9ef0c5d@suse.cz>
+ <20221209192616.dg4cbe7mgh3axv5h@box.shutemov.name>
+Content-Language: en-US
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <20221209192616.dg4cbe7mgh3axv5h@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Dec 06, 2022 at 05:35:55PM +0000, Ben Gardon wrote:
-> In the interest of eventually splitting the Shadow MMU out of mmu.c,
-> start by moving some of the operations for manipulating pte_lists out of
-> mmu.c and into a new pair of files: rmap.c and rmap.h.
+On 12/9/22 20:26, Kirill A. Shutemov wrote:
+>> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>> >  			/*
+>> >  			 * Watermark failed for this zone, but see if we can
+>> > @@ -4299,6 +4411,9 @@ get_page_from_freelist(gfp_t gfp_mask, unsigned int order, int alloc_flags,
+>> >  
+>> >  			return page;
+>> >  		} else {
+>> > +			if (try_to_accept_memory(zone))
+>> > +				goto try_this_zone;
+>> 
+>> On the other hand, here we failed the full rmqueue(), including the
+>> potentially fragmenting fallbacks, so I'm worried that before we finally
+>> fail all of that and resort to accepting more memory, we already fragmented
+>> the already accepted memory, more than necessary.
 > 
-> No functional change intended.
+> I'm not sure I follow. We accept memory in pageblock chunks. Do we want to
+> allocate from a free pageblock if we have other memory to tap from? It
+> doesn't make sense to me.
+
+The fragmentation avoidance based on migratetype does work with pageblock
+granularity, so yeah, if you accept a single pageblock worth of memory and
+then (through __rmqueue_fallback()) end up serving both movable and
+unmovable allocations from it, the whole fragmentation avoidance mechanism
+is defeated and you end up with unmovable allocations (e.g. page tables)
+scattered over many pageblocks and inability to allocate any huge pages.
+
+>> So one way to prevent would be to move the acceptance into rmqueue() to
+>> happen before __rmqueue_fallback(), which I originally had in mind and maybe
+>> suggested that previously.
 > 
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
-[...]
-> diff --git a/arch/x86/kvm/mmu/rmap.h b/arch/x86/kvm/mmu/rmap.h
-> new file mode 100644
-> index 000000000000..059765b6e066
-> --- /dev/null
-> +++ b/arch/x86/kvm/mmu/rmap.h
-> @@ -0,0 +1,34 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#ifndef __KVM_X86_MMU_RMAP_H
-> +#define __KVM_X86_MMU_RMAP_H
-> +
-> +#include <linux/kvm_host.h>
-> +
-> +/* make pte_list_desc fit well in cache lines */
-> +#define PTE_LIST_EXT 14
-> +
-> +/*
-> + * Slight optimization of cacheline layout, by putting `more' and `spte_count'
-> + * at the start; then accessing it will only use one single cacheline for
-> + * either full (entries==PTE_LIST_EXT) case or entries<=6.
-> + */
-> +struct pte_list_desc {
-> +	struct pte_list_desc *more;
-> +	/*
-> +	 * Stores number of entries stored in the pte_list_desc.  No need to be
-> +	 * u64 but just for easier alignment.  When PTE_LIST_EXT, means full.
-> +	 */
-> +	u64 spte_count;
-> +	u64 *sptes[PTE_LIST_EXT];
-> +};
-> +
-> +static struct kmem_cache *pte_list_desc_cache;
+> I guess it should be pretty straight forward to fail __rmqueue_fallback()
+> if there's non-empty unaccepted_pages list and steer to
+> try_to_accept_memory() this way.
 
-The definition of pte_list_desc_cache needs to go in a C file since it's
-a global variable. Since it now needs to be accessed by more than once C
-file, drop the static. Then it can be accessed with extern.
+That could be a way indeed. We do have ALLOC_NOFRAGMENT which could be
+possible to employ here.
+But maybe the zone_watermark_fast() modification would be simpler yet
+sufficient. It makes sense to me that we'd try to keep a high watermark
+worth of pre-accepted memory. zone_watermark_fast() would fail at low
+watermark, so we could try accepting (high-low) at a time instead of single
+pageblock.
 
-Since most of the code that sets up and deals with pte_list_desc_cache
-is still in mmu.c, my vote is to keep the definition there.
+> But I still don't understand why.
 
-i.e.
+To avoid what I described above.
 
-mmu.c:
+>> But maybe less intrusive and more robust way would be to track how much
+>> memory is unaccepted, and actually decrement that amount  from free memory
+>> in zone_watermark_fast() in order to force earlier failure of that check and
+>> thus to accept more memory and give us a buffer of truly accepted and
+>> available memory up to high watermark, which should hopefully prevent most
+>> of the fallbacks. Then the code I flagged above as currently unecessary
+>> would make perfect sense.
+> 
+> The next patch adds per-node unaccepted memory accounting. We can move it
+> per-zone if it would help.
 
-  struct kmem_cache *pte_list_desc_cache;
+Right.
 
-rmap.c
+>> And maybe Mel will have some ideas as well.
+> 
+> I don't have much expertise in page allocator. Any input is valuable.
+> 
+>> > +
+>> >  #ifdef CONFIG_DEFERRED_STRUCT_PAGE_INIT
+>> >  			/* Try again if zone has deferred pages */
+>> >  			if (static_branch_unlikely(&deferred_pages)) {
+>> > @@ -6935,6 +7050,10 @@ static void __meminit zone_init_free_lists(struct zone *zone)
+>> >  		INIT_LIST_HEAD(&zone->free_area[order].free_list[t]);
+>> >  		zone->free_area[order].nr_free = 0;
+>> >  	}
+>> > +
+>> > +#ifdef CONFIG_UNACCEPTED_MEMORY
+>> > +	INIT_LIST_HEAD(&zone->unaccepted_pages);
+>> > +#endif
+>> >  }
+>> >  
+>> >  /*
+>> 
+> 
 
-  extern struct kmem_cache *pte_list_desc_cache;
-
-And no need for anything in rmap.h.
