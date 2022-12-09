@@ -2,71 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3E44647BC1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:56:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2BA647BC3
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 02:58:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230138AbiLIB4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 8 Dec 2022 20:56:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53834 "EHLO
+        id S229538AbiLIB6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 8 Dec 2022 20:58:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiLIB4D (ORCPT
+        with ESMTP id S230070AbiLIB5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 8 Dec 2022 20:56:03 -0500
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685F77D073
-        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:54:44 -0800 (PST)
-Received: by mail-pj1-x1033.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so3442649pjm.2
-        for <linux-kernel@vger.kernel.org>; Thu, 08 Dec 2022 17:54:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dWEbjZuwz21qMAipQfSCpbrlbb3ehRFAaolDfDj6BYE=;
-        b=HWIrb+g3Tr8iHSI08FLnXtwM1i+s4LoF5DGHrWkGkf+Jqd903i77WQVYt1WBH7Qct9
-         klab4063qWxSiA74HCSP0IITwFbCCyN3P8PRFEDy2xhRV/7YZ50oznUDXEwAWLwkgW8I
-         YDILBWWtcPHtKRQOTSfuthWLM7k1bBrLZAVKOEMe4LbxfJUUf3Z6/PWEvT6i/r4O9s9d
-         u4L+z3DmRqn38SSLNtVIiIKDPuvfPjZJP1P/vY0vHP88Lf0e5ylCy63U66UqvQhgGW0t
-         FYw1MhLQvENAXdggUrPFaLx8+RdSNcayIslxBv9OjiMsLuYZZfuH+TrHBYpSIZqbpAji
-         jong==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dWEbjZuwz21qMAipQfSCpbrlbb3ehRFAaolDfDj6BYE=;
-        b=DH1Xs8eek58QWgj+l2Ib/N3GEXcMuuypvbVGfPmLj9cUIY6J6E/kVL2Q0KRV3zdZp9
-         HpnXRGuAFoqnBZ7oSyFJfkqDnjXilPsF7QgJJsSDLIxSHKTs4ZSl6S3Tr6o2qx0xv2HY
-         p/uMpctDkYWlOnGD6haH2jKzVtNdCKq4BJ4ejRvakkho5IA/01lFjIKKSo8zmZNrLcie
-         V+Ll+jum7tjSMZTW3Un5p3HZiocOjsrWxELTYJ+xq83ob/oCy1hHum38gj5sEWxgzdgC
-         Obd8ydKShNsFzMa48n+8i2jhq7mh3iCGwdJQnBvZnVIr3Yd0QUeHQnGFzzfhKFVLVCLN
-         X7iw==
-X-Gm-Message-State: ANoB5pmqFIWC6u1vk92URdUVPIIX+r9TjuGuj3AWflYvCe54AFEOvqUm
-        6MLiLuw3fLo4QzAqRrSN+TA9NWlo9dt/dnZXAWU=
-X-Google-Smtp-Source: AA0mqf5o+H2Twq4K0sRizhUqxKyhJr5qkHexPhiRcOmmbFrKC5rYQUzAqenv3kypsZUo3oYqgkuY0YV3O5aaSGMlSRM=
-X-Received: by 2002:a17:90a:c087:b0:21d:203f:a306 with SMTP id
- o7-20020a17090ac08700b0021d203fa306mr1064859pjs.148.1670550883960; Thu, 08
- Dec 2022 17:54:43 -0800 (PST)
+        Thu, 8 Dec 2022 20:57:40 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289267D071
+        for <linux-kernel@vger.kernel.org>; Thu,  8 Dec 2022 17:56:44 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NSvHl3bLwzJqRM;
+        Fri,  9 Dec 2022 09:55:47 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 9 Dec 2022 09:56:09 +0800
+Message-ID: <91ec9413-8045-428e-d7e6-9327d63685d1@huawei.com>
+Date:   Fri, 9 Dec 2022 09:56:09 +0800
 MIME-Version: 1.0
-References: <20221208180209.50845-1-ryncsn@gmail.com> <20221208180209.50845-6-ryncsn@gmail.com>
- <Y5I3lSfsTmZ6tlJk@casper.infradead.org>
-In-Reply-To: <Y5I3lSfsTmZ6tlJk@casper.infradead.org>
-From:   Kairui Song <ryncsn@gmail.com>
-Date:   Fri, 9 Dec 2022 09:54:31 +0800
-Message-ID: <CAMgjq7AuY_oi9Rw2r8rnA_tr7NeEXAd0OgZ4sNz4CiVV+2i9Rg@mail.gmail.com>
-Subject: Re: [PATCH 5/5] swap: avoid ra statistic lost when swapin races
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        Hugh Dickins <hughd@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH] mm: hwposion: support recovery from
+ ksm_might_need_to_copy()
+Content-Language: en-US
+To:     <naoya.horiguchi@nec.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>
+CC:     <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
+        <linmiaohe@huawei.com>
+References: <20221209021041.192835-1-wangkefeng.wang@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20221209021041.192835-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +52,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Matthew Wilcox <willy@infradead.org> =E4=BA=8E2022=E5=B9=B412=E6=9C=889=E6=
-=97=A5=E5=91=A8=E4=BA=94 03:14=E5=86=99=E9=81=93=EF=BC=9A
+sorry, please ignore it,  will resend.
+
+On 2022/12/9 10:10, Kefeng Wang wrote:
+> When the kernel copy a page from ksm_might_need_to_copy(), but runs
+> into an uncorrectable error, it will crash since poisoned page is
+> consumed by kernel, this is similar to Copy-on-write poison recovery,
+> When an error is detected during the page copy, return VM_FAULT_HWPOISON,
+> which help us to avoid system crash. Note, memory failure on a KSM
+> page will be skipped, but still call memory_failure_queue() to be
+> consistent with general memory failure process.
 >
-
-Hi, thanks for the review.
-
-> On Fri, Dec 09, 2022 at 02:02:09AM +0800, Kairui Song wrote:
-> > From: Kairui Song <kasong@tencent.com>
-> >
-> > __read_swap_cache_async should just call swap_cache_get_folio for tryin=
-g
-> > to look up the swap cache. Because swap_cache_get_folio handles the
-> > readahead statistic, and clears the RA flag, looking up the cache
-> > directly will skip these parts.
-> >
-> > And the comment no longer applies after commit 442701e7058b
-> > ("mm/swap: remove swap_cache_info statistics"), just remove them.
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>   mm/ksm.c      | 8 ++++++--
+>   mm/memory.c   | 3 +++
+>   mm/swapfile.c | 2 +-
+>   3 files changed, 10 insertions(+), 3 deletions(-)
 >
-> But what about the readahead stats?
->
-
-Shouldn't readahead stats be accounted here? __read_swap_cache_async
-is called by swap read in path, if it hits the swap cache, and the
-page have readahead page flag set, then accounting that readahead
-should be just the right thing todo. And the readahead flag is checked
-with folio_test_clear_readahead, so there should be no issue about
-repeated accounting.
-
-Only the addr info of the swap_readahead_info could be updated for
-multiple times by racing readers, but I think that seems fine, since
-we don't know which swap read comes later in case of race, just let
-the last reader that hits the swap cache update the address info of
-readahead makes sense to me.
-
-Or do you mean I should update the comment about the readahead stat
-instead of just drop the commnet?
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index f1e06b1d47f3..356e93b85287 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -2629,8 +2629,12 @@ struct page *ksm_might_need_to_copy(struct page *page,
+>   		new_page = NULL;
+>   	}
+>   	if (new_page) {
+> -		copy_user_highpage(new_page, page, address, vma);
+> -
+> +		if (copy_mc_user_highpage(new_page, page, address, vma)) {
+> +			put_page(new_page);
+> +			new_page = ERR_PTR(-EHWPOISON);
+> +			memory_failure_queue(page_to_pfn(page), 0);
+> +			return new_page;
+> +		}
+>   		SetPageDirty(new_page);
+>   		__SetPageUptodate(new_page);
+>   		__SetPageLocked(new_page);
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 2615fa615be4..bb7b35e42297 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3840,6 +3840,9 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+>   		if (unlikely(!page)) {
+>   			ret = VM_FAULT_OOM;
+>   			goto out_page;
+> +		} els if (unlikely(PTR_ERR(page) == -EHWPOISON)) {
+> +			ret = VM_FAULT_HWPOISON;
+> +			goto out_page;
+>   		}
+>   		folio = page_folio(page);
+>   
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index f670ffb7df7e..763ff6a8a576 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1767,7 +1767,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+>   
+>   	swapcache = page;
+>   	page = ksm_might_need_to_copy(page, vma, addr);
+> -	if (unlikely(!page))
+> +	if (IS_ERR_OR_NULL(!page))
+should  be IS_ERR_OR_NULL(page)
+>   		return -ENOMEM;
+>   
+>   	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
