@@ -2,272 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90E6648233
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:11:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39CF648235
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 13:11:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiLIMLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 07:11:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40842 "EHLO
+        id S229828AbiLIML5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 07:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiLIMKx (ORCPT
+        with ESMTP id S229841AbiLIMLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 07:10:53 -0500
-Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2102.outbound.protection.outlook.com [40.107.103.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356093FB95;
-        Fri,  9 Dec 2022 04:10:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O5lErK6EIY9ScnLCau1dJwp0g1KjqQTpK9uVAayqmM7tKaTTsBZmqKZE8N01wqiDaj+ahvMItnKWO750RevyhoecZsc/RXtbX/E59VqTpl7a+/ViDHvu8EM7VvDt2j1sJgjYEt/T/r0W2TUGmztpDiC2+YayYmTD0BYVlLXj2q1MXBSJgvdRJiGMd4p1R90ztWjxDyzWXQaBK+cixziqVXEufd92qdhrTMLvV0jcEBWniwhCar8Zgqf9XSPcVZkn96BNL1QcjYw5hhxLk5Di28NccQoCdncATFAP8QpcPZUJk1EHAwEdVDpOotJuJrQFzkGPKEOlntzUAih8ZmtubQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d3MIj4nGJw9z+qaBA9ZBWWGKXuCwVRS2us7hqDIV94U=;
- b=Y1NrpD6zj5uq3X8DTHzYWLOrQTrCQFP01fJDFGJgdq2G5wWVfpcA0K770UuagrFpugoGW6wRsv0mKZWgxT9peyWuRrVjdugYC/mUykEVb8Iaa5Ac94sfVOUAR+VuYCyYeCHAsHl/CcArxmkvZbzkGTna/6H7XFgza/d2kpMRqzisPULEPwcIF/oDkCakNoOPlQFBevHrqZHCRJpjixAJWxYAJDJWLdcT+sjRoQF+ZbkMsw9nzygKUspeItTqmN6mJy91jGM+KYlytAcEuPlduGQ/xZnV9SRh1UCn3pmhCXHn/4FmLT7N1DEYl3TIqwrAeIU74C8biKSG/qdLRBEP7Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d3MIj4nGJw9z+qaBA9ZBWWGKXuCwVRS2us7hqDIV94U=;
- b=YcLk1BnADfJow+1k8/Tuib6N6SyAt0ImrBhM0HV3XEUaORzuF3sTMvR2U6Ezi7aHikidtTQ0I9o8OyUuZumXLf3U+GmDjM+5PrLJ17uvWPpyYJqGG6FILbC60q8xJTeaoxndgeJY/S/iraklwiNzxV1f7s4dy+p5O0l8+tzBu/c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM (2603:10a6:802:38::26)
- by DU0P190MB2001.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:3b7::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.16; Fri, 9 Dec
- 2022 12:10:48 +0000
-Received: from VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5912:e2b4:985e:265a]) by VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- ([fe80::5912:e2b4:985e:265a%3]) with mapi id 15.20.5880.014; Fri, 9 Dec 2022
- 12:10:48 +0000
-Date:   Fri, 09 Dec 2022 14:10:46 +0200
-From:   Vadym Kochan <vadym.kochan@plvision.eu>
-Subject: Re: [PATCH v3 3/3] mmc: xenon: Fix 2G limitation on AC5 SoC
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Hu Ziji <huziji@marvell.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Elad Nachman <enachman@marvell.com>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com>
-References: <20221205105931.410686-1-vadym.kochan@plvision.eu>
-        <20221205105931.410686-4-vadym.kochan@plvision.eu>
-        <18cf4197-adce-3e47-7802-80b0d078368b@intel.com>
-        <VI1P190MB0317641905664AFF51F9F4EA951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
-        <ce870974-3e4f-107f-2047-89dcaebff1a2@intel.com>
-Content-Type: text/plain
-X-ClientProxiedBy: AM7PR03CA0004.eurprd03.prod.outlook.com
- (2603:10a6:20b:130::14) To VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:802:38::26)
-Message-ID: <VI1P190MB0317A616976EC99EA0C44F47951C9@VI1P190MB0317.EURP190.PROD.OUTLOOK.COM>
+        Fri, 9 Dec 2022 07:11:41 -0500
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C72653D93D
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 04:11:23 -0800 (PST)
+Received: by mail-io1-f69.google.com with SMTP id f23-20020a5d8157000000b006dfb209094fso1979057ioo.18
+        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 04:11:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=27pxGUhnzYicBxjH03IaVIFoOWTqXBEXA2qSGC27VXw=;
+        b=PgVp0cYUxQpBgoRm6LgIfaYpi2s1DXjaeOv45OEMLSOx+b9UTeniEvZP85637XNQUE
+         7eoDtcDvBlkiV/VKO9BdPhluHCxmPWpTQ54n2OCq/WOM/GyYSPHlSEUBoQ8r6wmJpe3D
+         X/aB4MfB9fW4eacGMgGuO/GaGBU1jgQBrlaygpYYUz5fQuhojyX7LfIoUkJCMxwhaOWu
+         LFRIT98fXBTUryClCcPfo0QlM9QowaAWdgaRKIeTa1RVfk/Yl2Dv38GGjF0owadrR8lO
+         eT2oP8+Nw0jh0UWpramO+9T5mNMX7b9xrsE7ha8e/MDFWuxAr4h9LjBzidMdr5Qrm3/Z
+         DChg==
+X-Gm-Message-State: ANoB5pkg3Y3Jc3cCmcM8xDR9Kvsjyook0SIEsFMBldwFPFqLdE4yzbTh
+        gG+5RX59HkqOKGnHoR3XlAGNfy4TY4nsey7Kd+/DaVOYb072
+X-Google-Smtp-Source: AA0mqf5p/icoGOhwns+OGvGmDW9LW4/7fO7ruCrhnKtuNfURdT8SNEJXbdlgdaM56uFIXwe2iHIfN8BtSiCG1hLCy8wvL6j3ZAjM
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P190MB0317:EE_|DU0P190MB2001:EE_
-X-MS-Office365-Filtering-Correlation-Id: aae75ee8-ce66-4153-1758-08dad9de684a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kVdg6+0B+Ww0Ha6W3yFYo14ba0zN5UvjPb4ie2gKaO+VjO95xcFEh++W7DMzwWF1ReM+II2bquKzdFfK056P/GrwCBV9dRC6xdg9DKVxWFNMNUMWwg+LJKceKU4VbsRhTUYo2mWk1D17BQMcQByPan44+qx4z/tqeIhvcbuC3m7VHaDqYw8eaXgPQh51ysVvONfBa9hD7a9ZagmvPSTqd39q3sBpLHOLW2K4QUfg6J5ibOPLkW6VB61uCjwlyMOJ0LMUoA7TN7W++N5scT7K/B0mut7tf2YO/NunZBWnJWFWsW4b2ynUEZ1FIuK/P+lH3k3xypxHT2ZiUqc8NnF2Uz7JIyrUXCWCPxMTeMJ/OCw/MlfpgOHwtRNoI0Ow+gy2G2MLXnZMXnfkUV2FSxl7o4RXbx1U/mh+Dwz2G+J6JrJt6VgW2LQrqaw0OWlhbvtQ6BJ6E3vc4c05DMKduoPn7kDS0/wZhfv6S1PpLZ1SQ1jBBleQi1MztpLNDlPA5NWv5zFVLfgKBzpiQwm07DEwrQndHrcga7+TM1t8e2IOVhAAGMNFqNpP9Xe1yjEs0KikPLohz0bfTCTBmxMCayd1tDyBmObn0/e2KeXJzwNKJXz5bRmi7g/9RrhX5He75dDmsFfWmCVohoDS6HBSBoR2pSKUXOG3kCIly4xfbnYiq5sJU84lK7lclQK6Jg8nB9kMTbhzhVjbRkHiExRv7uy7MQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P190MB0317.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39830400003)(396003)(366004)(376002)(136003)(346002)(451199015)(83380400001)(86362001)(38100700002)(38350700002)(2906002)(44832011)(8936002)(5660300002)(52536014)(7416002)(55016003)(26005)(41300700001)(9686003)(186003)(478600001)(66946007)(52116002)(66556008)(7696005)(53546011)(66476007)(8676002)(4326008)(6506007)(110136005)(316002)(54906003)(33656002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7BPKGTfUIkAkDrgY0zx/0fB3NmYXTbQU5FDQfFT7YIid9uwrMFdeRgiaexit?=
- =?us-ascii?Q?XypANJ1hKqeVtkMFVwioLwl+aRTpWbXACj+9d8LjEmlW4mOzAiwNL7q89Fkp?=
- =?us-ascii?Q?UD9NjT4BExDjsF/wH2tNlI3bx8B3Eg6H+Emu9uSOkxTGeI1mFf48bjhUSKzr?=
- =?us-ascii?Q?tA3EvKSXs90Ile3OmW5McdWHBj5jwV8bmfe1gTjv24n19isC5b9TTmT3JjGP?=
- =?us-ascii?Q?TUIf7Pxdar3/EXu56ID5Y6q6XddARjwIVuPiyye3zhh1j3f0LI8tei0vlZi2?=
- =?us-ascii?Q?lXLwnAq5nNQhkRGakbOk7Vyqwx5l4BYgAZXv3HPgsZ3TD8p7jGU9IlDpjAlm?=
- =?us-ascii?Q?gL/xcWbTX92q2+k17XH/apGkZvLskOJujDzcfKK/RcHxkXNddg6toV8wjw1l?=
- =?us-ascii?Q?TgWCOTrBu1EDVDHX7jfRzTrkABRsrU5NchABSaVXbIL8EaLcVGLG5Lf6Lg7r?=
- =?us-ascii?Q?QgMhNB4fZpE1egStkIzkz8KmIjctpLBlfng3XfVGZRbeBmgn/xWI8xNJHU+N?=
- =?us-ascii?Q?PcmLLlq0z7QTKgwBlIkrqjngcQFjCXmdtZymiIErXL3/7Etcm+IOuhLbHzxm?=
- =?us-ascii?Q?OygmXnNCoZI3u3PHfZg/sTxTK8oUF1dc/Dx3ULLTRipRKiWAo7qBNUTdVFur?=
- =?us-ascii?Q?NdUX36GQ3qKxCE6tWkuMDZPTX4FLoDqXlFw2brAht2F3DNXLC3pkxqQOcdvB?=
- =?us-ascii?Q?oByL4xj4D4rdTlY53M1dbumHc7AYEzKOHb6ysRs47vL16SEmtMZiAmBDMSfk?=
- =?us-ascii?Q?4U+nT/INJCo2xs2KG81+7lYTsyNAK3X+nn/D89On71hWy8h0ofrpvcvIa4q2?=
- =?us-ascii?Q?SZNjb8vph0BfGAh30hOuPx/dztwgT0cDR861K+xjEUFuVPYcFgYgEDA9/Kz3?=
- =?us-ascii?Q?4VM2BAnP+GKGs9aPz0Dud1PZys79wpuwWuLRwpwyhkSmwNQ2ww59pr0BxVQw?=
- =?us-ascii?Q?BgbFKDsbYGA0f0d4YwnWPH0sBTH2MolnmTc4HokdnIbjq89NA39rPDddjotL?=
- =?us-ascii?Q?sXqgwWDw8R8wxKzqgG+pFYlX9MwHEPY6aZfx2xw4Fm+AG/wygqmy6CRs9PxT?=
- =?us-ascii?Q?nAUhBKT+9X5YCRkMVu+qYjK3HHg0xgpKl7aGkjzfiYJEYUGCh2pkN6vrOAEx?=
- =?us-ascii?Q?OI761E2W0Wom/IiuIdBNahfmRqsB4WH7MsxZpnlfWGFsRLSX1RZaSqMyj57C?=
- =?us-ascii?Q?ihaUf34e2e9+4E0NPDUdHfEy9STWIV7Hzi+LGz7GPdW2sviZwvMXz2CC0ACR?=
- =?us-ascii?Q?SkKj3fJxtXc5CXJf/CBUPFlFBa/YTzv/axCeWRchHwotTMTJzrvlZeL5Vy4G?=
- =?us-ascii?Q?9MLmJdnMkokYO7sKO0j61kv/OOkwbF5EB6P8ylEkGpxbSxKbocvEca1NduvD?=
- =?us-ascii?Q?Ar4/PdbC7cldxJ0RPF9mVaMqpkx8jOt1Y6+NUQ9WSTTnwGYTKSivbDnr2dPc?=
- =?us-ascii?Q?U4e4CbrLtyPDGV7xdG5XGrRYHvcFAYV2VdOZrkeMWFqZHxStfdjKQklly355?=
- =?us-ascii?Q?dHzm+C2f6OtXfnC/5yHW14PyjCfugQIz2McYeG7MHxbNfEw6xTCJsfxnNY4q?=
- =?us-ascii?Q?lMj5Z+d27saF/We8iAvGogRQbm5Tp3INy3peOSYDrt0VL9Ker8LEcozq6FMk?=
- =?us-ascii?Q?PA=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: aae75ee8-ce66-4153-1758-08dad9de684a
-X-MS-Exchange-CrossTenant-AuthSource: VI1P190MB0317.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2022 12:10:48.3874
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WSXRmDoH6p0EnsZf8NUokUHZArrx8ZOpGhwHhesU5IWOESmprWJhl2nGfYuSi5aqGW/lBqJ8w1Lxefl4LJ5GdmxVJ3rB1Wvs8yhf+a/LiNE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0P190MB2001
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c98e:0:b0:303:5425:fc00 with SMTP id
+ y14-20020a92c98e000000b003035425fc00mr10012564iln.76.1670587883145; Fri, 09
+ Dec 2022 04:11:23 -0800 (PST)
+Date:   Fri, 09 Dec 2022 04:11:23 -0800
+In-Reply-To: <524d919d-0197-2a81-9165-d0d6feb607fe@siddh.me>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000005752c105ef640d84@google.com>
+Subject: Re: [syzbot] WARNING in drm_wait_one_vblank
+From:   syzbot <syzbot+6f7fe2dbc479dca0ed17@syzkaller.appspotmail.com>
+To:     code@siddh.me, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+Hello,
 
-On Fri, 9 Dec 2022 13:53:58 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> On 9/12/22 13:39, Vadym Kochan wrote:
-> > Hi Adrian,
-> > 
-> > On Fri, 9 Dec 2022 09:23:05 +0200, Adrian Hunter <adrian.hunter@intel.com> wrote:
-> >> On 5/12/22 12:59, Vadym Kochan wrote:
-> >>> There is a limitation on AC5 SoC that mmc controller
-> >>> can't have DMA access over 2G memory, so use SDMA with
-> >>> a bounce buffer. Swiotlb can't help because on arm64 arch
-> >>> it reserves memblock's at the end of the memory.
-> >>>
-> >>> Additionally set mask to 34 bit since on AC5 SoC RAM starts
-> >>> at 0x2_00000000.
-> >>
-> >> Can you explain more about how a 34-bit DMA mask works when
-> >> SDMA only supports 32-bit addresses?
-> >>
-> > 
-> > So, after I set
-> > 
-> >>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
-> > 
-> > then sdhc core sets mask to 32 bit, but then dma_map fails to map
-> > bounce buffer because the base address is higher than 32bit - 0x2_00000000,
-> > and 34bit mask fixed it.
-> 
-> What happens if the bounce buffer gets mapped in the range
-> 0x1_00000000 to 0x1_ffffffff ?
-> 
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in drm_wait_one_vblank
 
-From my understanding, on the AC5 SoC RAM starts at 0x2_00000000 so the bounce
-buffer can be mapped in the range 0x2_00000000..0x2_ffffffff
+platform vkms: vblank wait timed out on crtc 0
+WARNING: CPU: 1 PID: 4329 at drivers/gpu/drm/drm_vblank.c:1269 drm_wait_one_vblank+0x2bc/0x500 drivers/gpu/drm/drm_vblank.c:1269
+Modules linked in:
 
-> > 
-> >>>
-> >>> Co-developed-by: Elad Nachman <enachman@marvell.com>
-> >>> Signed-off-by: Elad Nachman <enachman@marvell.com>
-> >>> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
-> >>> ---
-> >>>  drivers/mmc/host/sdhci-xenon.c | 38 ++++++++++++++++++++++++++++++++++
-> >>>  drivers/mmc/host/sdhci-xenon.h |  3 ++-
-> >>>  2 files changed, 40 insertions(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/drivers/mmc/host/sdhci-xenon.c b/drivers/mmc/host/sdhci-xenon.c
-> >>> index 08e838400b52..5f3db0425674 100644
-> >>> --- a/drivers/mmc/host/sdhci-xenon.c
-> >>> +++ b/drivers/mmc/host/sdhci-xenon.c
-> >>> @@ -13,7 +13,9 @@
-> >>>  
-> >>>  #include <linux/acpi.h>
-> >>>  #include <linux/delay.h>
-> >>> +#include <linux/dma-mapping.h>
-> >>>  #include <linux/ktime.h>
-> >>> +#include <linux/mm.h>
-> >>>  #include <linux/module.h>
-> >>>  #include <linux/of.h>
-> >>>  #include <linux/pm.h>
-> >>> @@ -253,6 +255,22 @@ static unsigned int xenon_get_max_clock(struct sdhci_host *host)
-> >>>  		return pltfm_host->clock;
-> >>>  }
-> >>>  
-> >>> +static int xenon_set_dma_mask(struct sdhci_host *host)
-> >>> +{
-> >>> +	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-> >>> +	struct xenon_priv *priv = sdhci_pltfm_priv(pltfm_host);
-> >>> +	struct mmc_host *mmc = host->mmc;
-> >>> +	struct device *dev = mmc_dev(mmc);
-> >>> +
-> >>> +	if (priv->hw_version == XENON_AC5) {
-> >>> +		host->flags &= ~SDHCI_USE_64_BIT_DMA;
-> >>> +
-> >>> +		return dma_set_mask_and_coherent(dev, DMA_BIT_MASK(34));
-> >>> +	}
-> >>> +
-> >>> +	return sdhci_set_dma_mask(host);
-> >>> +}
-> >>> +
-> >>>  static const struct sdhci_ops sdhci_xenon_ops = {
-> >>>  	.voltage_switch		= xenon_voltage_switch,
-> >>>  	.set_clock		= sdhci_set_clock,
-> >>> @@ -261,6 +279,7 @@ static const struct sdhci_ops sdhci_xenon_ops = {
-> >>>  	.reset			= xenon_reset,
-> >>>  	.set_uhs_signaling	= xenon_set_uhs_signaling,
-> >>>  	.get_max_clock		= xenon_get_max_clock,
-> >>> +	.set_dma_mask		= xenon_set_dma_mask,
-> >>>  };
-> >>>  
-> >>>  static const struct sdhci_pltfm_data sdhci_xenon_pdata = {
-> >>> @@ -486,6 +505,18 @@ static void xenon_sdhc_unprepare(struct sdhci_host *host)
-> >>>  	xenon_disable_sdhc(host, sdhc_id);
-> >>>  }
-> >>>  
-> >>> +static int xenon_ac5_probe(struct sdhci_host *host)
-> >>> +{
-> >>> +	struct sysinfo si;
-> >>> +
-> >>> +	si_meminfo(&si);
-> >>> +
-> >>> +	if ((si.totalram * si.mem_unit) > SZ_2G)
-> >>> +		host->quirks |= SDHCI_QUIRK_BROKEN_ADMA;
-> >>> +
-> >>> +	return 0;
-> >>> +}
-> >>> +
-> >>>  static int xenon_probe(struct platform_device *pdev)
-> >>>  {
-> >>>  	struct sdhci_pltfm_host *pltfm_host;
-> >>> @@ -533,6 +564,12 @@ static int xenon_probe(struct platform_device *pdev)
-> >>>  		}
-> >>>  	}
-> >>>  
-> >>> +	if (priv->hw_version == XENON_AC5) {
-> >>> +		err = xenon_ac5_probe(host);
-> >>> +		if (err)
-> >>> +			goto err_clk_axi;
-> >>> +	}
-> >>> +
-> >>>  	err = mmc_of_parse(host->mmc);
-> >>>  	if (err)
-> >>>  		goto err_clk_axi;
-> >>> @@ -682,6 +719,7 @@ static const struct of_device_id sdhci_xenon_dt_ids[] = {
-> >>>  	{ .compatible = "marvell,armada-ap807-sdhci", .data = (void *)XENON_AP807},
-> >>>  	{ .compatible = "marvell,armada-cp110-sdhci", .data =  (void *)XENON_CP110},
-> >>>  	{ .compatible = "marvell,armada-3700-sdhci", .data =  (void *)XENON_A3700},
-> >>> +	{ .compatible = "marvell,ac5-sdhci", .data = (void *)XENON_AC5},
-> >>>  	{}
-> >>>  };
-> >>>  MODULE_DEVICE_TABLE(of, sdhci_xenon_dt_ids);
-> >>> diff --git a/drivers/mmc/host/sdhci-xenon.h b/drivers/mmc/host/sdhci-xenon.h
-> >>> index 3e9c6c908a79..0460d97aad26 100644
-> >>> --- a/drivers/mmc/host/sdhci-xenon.h
-> >>> +++ b/drivers/mmc/host/sdhci-xenon.h
-> >>> @@ -57,7 +57,8 @@ enum xenon_variant {
-> >>>  	XENON_A3700,
-> >>>  	XENON_AP806,
-> >>>  	XENON_AP807,
-> >>> -	XENON_CP110
-> >>> +	XENON_CP110,
-> >>> +	XENON_AC5
-> >>>  };
-> >>>  
-> >>>  struct xenon_priv {
-> >>
-> > 
-> > Regards,
-> 
+CPU: 1 PID: 4329 Comm: syz-executor.5 Not tainted 6.1.0-rc8-syzkaller-00148-g0d1409e4ff08 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
+RIP: 0010:drm_wait_one_vblank+0x2bc/0x500 drivers/gpu/drm/drm_vblank.c:1269
+Code: 85 f6 0f 84 a3 01 00 00 e8 a1 82 03 fd 4c 89 ef e8 19 34 1b 00 44 89 e1 4c 89 f2 48 c7 c7 80 67 5d 8a 48 89 c6 e8 1b 54 d1 04 <0f> 0b e9 87 fe ff ff e8 78 82 03 fd 31 ff 4c 89 ee e8 5e 7f 03 fd
+RSP: 0018:ffffc90003887b40 EFLAGS: 00010282
+
+RAX: 0000000000000000 RBX: 000000000000187a RCX: 0000000000000000
+RDX: ffff888077e56080 RSI: ffffffff81615618 RDI: fffff52000710f5a
+RBP: ffff888146b6c000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: 0000000000000000
+R13: ffff88801e146010 R14: ffff888146fb2dc0 R15: ffff888146ffe030
+FS:  00007fd446839700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055d58fce0300 CR3: 0000000066c1d000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ drm_fb_helper_ioctl+0x159/0x1a0 drivers/gpu/drm/drm_fb_helper.c:1259
+ do_fb_ioctl+0x1d5/0x6e0 drivers/video/fbdev/core/fbmem.c:1188
+ fb_ioctl+0xe7/0x150 drivers/video/fbdev/core/fbmem.c:1202
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd445689409
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd446839168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fd44579bf80 RCX: 00007fd445689409
+RDX: 0000000000000000 RSI: 0000000040044620 RDI: 0000000000000003
+RBP: 00007fd4468391d0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000001
+R13: 00007ffff493021f R14: 00007fd446839300 R15: 0000000000022000
+ </TASK>
+
+
+Tested on:
+
+commit:         0d1409e4 Merge tag 'drm-fixes-2022-12-09' of git://ano..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=10bf8cb7880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f99d4932d068617a
+dashboard link: https://syzkaller.appspot.com/bug?extid=6f7fe2dbc479dca0ed17
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
