@@ -2,61 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C60D648122
+	by mail.lfdr.de (Postfix) with ESMTP id B851A648123
 	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 11:50:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229785AbiLIKuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 05:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S229824AbiLIKu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 05:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLIKuS (ORCPT
+        with ESMTP id S229677AbiLIKuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 9 Dec 2022 05:50:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9301326D0;
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC967326D2;
         Fri,  9 Dec 2022 02:50:17 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FD636220F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6980662213;
         Fri,  9 Dec 2022 10:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AA3ADC43396;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD80BC4339E;
         Fri,  9 Dec 2022 10:50:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1670583016;
-        bh=Mk5kGnqo42SNHR6sGONiYrfz//LqmSMoH+ldcjIbhMI=;
+        bh=1Z4MTBuUheQSqBo/QMyK6dTREtkDgn0tx4E9Algvv9c=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=uTIVI1O7NgF6g9N6u3+CFCh1fHVfo8qyGEvRTvZEbbwiQjGj0pNrwoVx4kaPGIlqB
-         73opABP6MZuBFsD9b20kXXpQaqSEdkjOxPfcz2NULJDqDyVUFGSDAr1T4J0nq4FNnz
-         lob9X5e8dxdgocQGynx5W6g+zmo+gBDcgwNXbF3p8O4c4LNpcfJUZBr3kG0CqjwVIz
-         8x4doSZIXcIzqJAerEY3BbV/NjnCHQ1b4iShk8GRcgVBeK9hatKCmulQNi5H3r40O/
-         5GJxUyYscZM4LbyKsgCESJekm7v/Fe6dbqTozxIXi+7UJIEwgJFbQjqAqFpNXHZTKi
-         JHkOvFS/aiZ8Q==
+        b=MVBlkBY5Ewgwn+q/vnQjgzukmqdku9eBcNz5MxYlDLzJaeFBZr8UKfypbjP8B85Rd
+         krsUoK7KvazTBqszMW/+oKTRBIKkv08q0Al/TUp9TLr3LXyWWoAugySHL53ED4jaUA
+         9LDwkeg+hu3kXl3Kcx2sjnJoblPeVTGz9VY+52ni1SPAmwl/p8wXfSwHQvr11NA/aE
+         eyOIm8kPZbaD9MRlhAe6bNhO299p/sNr465j6iOJJORWrN8JO9GYtQIYAWRyI3OosC
+         tjyH6qj1kfAf/lCouJWsFLSjuzKdDeB/w8VZR1kjN58loVhTpKSbVv0FFUFlf1tUIm
+         uqhMNkZ+Gm/FQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 94261E1B4D9;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F86CE1B4D8;
         Fri,  9 Dec 2022 10:50:16 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 01/31] rhashtable: Allow rhashtable to be used from
- irq-safe contexts
+Subject: Re: [PATCH] [PATCH v9 net-next] net: openvswitch: Add support to count
+ upcall packets
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167058301660.16848.3282482071239074275.git-patchwork-notify@kernel.org>
+Message-Id: <167058301664.16848.12349707069284287031.git-patchwork-notify@kernel.org>
 Date:   Fri, 09 Dec 2022 10:50:16 +0000
-References: <Y4+14IFcWXNcLBE7@slm.duckdns.org>
-In-Reply-To: <Y4+14IFcWXNcLBE7@slm.duckdns.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     torvalds@linux-foundation.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        joshdon@google.com, brho@google.com, pjt@google.com,
-        derkling@google.com, haoluo@google.com, dvernet@meta.com,
-        dschatzberg@meta.com, dskarlat@cs.cmu.edu, riel@surriel.com,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        kernel-team@meta.com
+References: <20221207013857.4066561-1-wangchuanlei@inspur.com>
+In-Reply-To: <20221207013857.4066561-1-wangchuanlei@inspur.com>
+To:     wangchuanlei <wangchuanlei@inspur.com>
+Cc:     leon@kernel.org, jiri@resnulli.us, echaudro@redhat.com,
+        alexandr.lobakin@intel.com, pabeni@redhat.com, pshelar@ovn.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        wangpeihui@inspur.com, netdev@vger.kernel.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,20 +65,19 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Tue, 6 Dec 2022 11:36:32 -1000 you wrote:
-> rhashtable currently only does bh-safe synchronization making it impossible
-> to use from irq-safe contexts. Switch it to use irq-safe synchronization to
-> remove the restriction.
+On Tue, 6 Dec 2022 20:38:57 -0500 you wrote:
+> Add support to count upall packets, when kmod of openvswitch
+> upcall to count the number of packets for upcall succeed and
+> failed, which is a better way to see how many packets upcalled
+> on every interfaces.
 > 
-> v2: Update the lock functions to return the ulong flags value and unlock
->     functions to take the value directly instead of passing around the
->     pointer. Suggested by Linus.
+> Signed-off-by: wangchuanlei <wangchuanlei@inspur.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [v2,01/31] rhashtable: Allow rhashtable to be used from irq-safe contexts
-    https://git.kernel.org/netdev/net-next/c/e47877c7aa82
+  - [v9,net-next] net: openvswitch: Add support to count upcall packets
+    https://git.kernel.org/netdev/net-next/c/1933ea365aa7
 
 You are awesome, thank you!
 -- 
