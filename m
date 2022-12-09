@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E3E6485E1
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:48:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5E26485ED
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiLIPsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:48:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S230482AbiLIPul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:50:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiLIPr1 (ORCPT
+        with ESMTP id S230458AbiLIPuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:47:27 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062E737FB6;
-        Fri,  9 Dec 2022 07:47:27 -0800 (PST)
-Date:   Fri, 09 Dec 2022 15:47:24 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670600844;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/yVbJpzaf1w317Dy1LDwVLXIIF+GPE5lsvg9s421slY=;
-        b=gWMvEZxpIR1kXVjYWpx5wlxA85jrSRGnR3v27EvABsa0WLbCobdzbixUHkLsmJ2F63ChLI
-        xKCD4bKgKr34K58JpZDy1Mq0+7jyZt9Vio2jm1laFe9u8zZ5Eo6lNg4kAB0mu5qKRkJG4R
-        wDgH2I328HTpGemtdit/IXOQfYf+bQdU0OdylHG6sFVuZEzVLgXRqxezoB+QQ1Lww9dcUC
-        s/hQoi9rYB+PqmwQG48/cwKGkvRCApt1n9NdMxA34XE+KgJ+XIZnjIY6dkEq6sUyKtgx92
-        uYaxk955DXmycTtXkxSVT9UOzAtBpl/p4c2IrhMNcUee2EyayPZtc/OZ5Oq4zw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670600844;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/yVbJpzaf1w317Dy1LDwVLXIIF+GPE5lsvg9s421slY=;
-        b=FAQFBeVauMlgUWUGErYgJa9arWuSKP9OQgxF0XeoJs4ko/DQcJiHc3skUIqcp9QAHKGsbc
-        jd3rZrIz3SuZD4AA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] Merge tag 'timers-v6.2-rc1' of
- https://git.linaro.org/people/daniel.lezcano/linux into timers/core
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <3c4c3bb2-b849-0c87-0948-8a36984bdde4@linaro.org>
-References: <3c4c3bb2-b849-0c87-0948-8a36984bdde4@linaro.org>
+        Fri, 9 Dec 2022 10:50:17 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE3D389CA
+        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670600957; x=1702136957;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=P6mxkpgd/Y8Bq72Ach78IUjaBu+/BBrZjDnHgxQR2ks=;
+  b=EKd59fFs+WhI+Zt7IcOQEX81cwzhu+8EPAV5X8BRKyMOhlpUUIHW+tMH
+   q6wORFIo/+5JTsLcGLdTXDDSgyl4GvFsBdw9LvczGBw0OtDXlF75crvBD
+   f6cRq0Si/afMybQssVvuoS0GsBEq8Hx4gt34VsAv5rz9BS0Po9xZbooQT
+   FrTq/Tfh58jhLkzymBKZkPyPvPbEYVQLgjj3tnVbhVPYu8nWpGGEeAvVe
+   cN+fD7BBMfFBfsOukC38PkCkDFPEMUJEMycoA78mjD+GJ+DJD7jtD2r+n
+   guDf6ri8ufEI/iRZCcw6v1VOUncDkB8K6bjPVIftk9loFh31uuhP3vGKs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="315119780"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="315119780"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:49:17 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="647433321"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="647433321"
+Received: from lab-ah.igk.intel.com ([10.91.215.196])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 07:49:13 -0800
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+To:     linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH 1/5] linux/minmax.h: add non-atomic version of xchg
+Date:   Fri,  9 Dec 2022 16:48:39 +0100
+Message-Id: <20221209154843.4162814-1-andrzej.hajda@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <167060084414.4906.17415351148962544132.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298 Gdansk - KRS 101882 - NIP 957-07-52-316
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+The pattern of setting variable with new value and returning old
+one is very common in kernel. Usually atomicity of the operation
+is not required, so xchg seems to be suboptimal and confusing in
+such cases. Since name xchg is already in use and __xchg is used
+in architecture code, proposition is to name the macro exchange.
 
-Commit-ID:     18a207849218d8c15072f449e6d0b901262290c9
-Gitweb:        https://git.kernel.org/tip/18a207849218d8c15072f449e6d0b901262=
-290c9
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Fri, 09 Dec 2022 16:41:58 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Fri, 09 Dec 2022 16:41:58 +01:00
-
-Merge tag 'timers-v6.2-rc1' of https://git.linaro.org/people/daniel.lezcano/l=
-inux into timers/core
-
-Pull clockevent/source driver updates from Daniel Lezcano:
-
-  - Add DT bindings for the Rockchip rk3128 timer (Johan Jonker)
-
-  - Change the DT bindings for the npcm7xx timer in order to specify
-    multiple clocks and enable the clock for the timer1 on WPCM450
-    (Jonathan Neusch=C3=A4fer)
-
-  - Fix the timer duration being too long the ARM architected timer in
-    order to prevent an integer overflow leading to a negative value and
-    an immediate interruption (Joe Korty)
-
-  - Fix an unused pointer warning reported by lkp and some cleanups in
-    the timer TI dm (Tony Lindgren)
-
-  - Fix a missing call to clk_disable_unprepare() in the error path at
-    init time on the timer TI dm (Yang Yingliang)
-
-  - Use kstrtobool() instead of strtobool() in the ARM architected timer
-    (Christophe JAILLET)
-
-  - Add DT bindings for r8a779g0 on Renesas platform (Wolfram Sang)
-
-Link: https://lore.kernel.org/all/3c4c3bb2-b849-0c87-0948-8a36984bdde4@linaro=
-.org
+Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 ---
+Hi,
+
+I hope there will be place for such tiny helper in kernel.
+Quick cocci analyze shows there is probably few thousands places
+where it could be used, of course I do not intend to do it :).
+
+I was not sure where to put this macro, I hope near swap definition
+is the most suitable place.
+
+Moreover sorry if to/cc is not correct - get_maintainers.pl was
+more confused than me, to who address this patch.
+
+Regards
+Andrzej
+---
+ include/linux/minmax.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/include/linux/minmax.h b/include/linux/minmax.h
+index 5433c08fcc6858..17d48769203bd5 100644
+--- a/include/linux/minmax.h
++++ b/include/linux/minmax.h
+@@ -144,4 +144,18 @@
+ #define swap(a, b) \
+ 	do { typeof(a) __tmp = (a); (a) = (b); (b) = __tmp; } while (0)
+ 
++/**
++ * exchange - set variable pointed by @ptr to @val, return old value
++ * @ptr: pointer to affected variable
++ * @val: value to be written
++ *
++ * This is non-atomic variant of xchg.
++ */
++#define exchange(ptr, val) ({		\
++	typeof(ptr) __ptr = ptr;	\
++	typeof(*__ptr) __t = *__ptr;	\
++	*(__ptr) = (val);		\
++	__t;				\
++})
++
+ #endif	/* _LINUX_MINMAX_H */
+-- 
+2.34.1
+
