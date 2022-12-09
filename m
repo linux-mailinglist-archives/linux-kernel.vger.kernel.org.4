@@ -2,97 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CC0B6485A7
-	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E75B6485AA
+	for <lists+linux-kernel@lfdr.de>; Fri,  9 Dec 2022 16:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230070AbiLIPdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 9 Dec 2022 10:33:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        id S230209AbiLIPfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 9 Dec 2022 10:35:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiLIPdV (ORCPT
+        with ESMTP id S229646AbiLIPfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 9 Dec 2022 10:33:21 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B2D55A92
-        for <linux-kernel@vger.kernel.org>; Fri,  9 Dec 2022 07:33:20 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id j4so7639789lfk.0
-        for <linux-kernel@vger.kernel.org>; Fri, 09 Dec 2022 07:33:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=ImNzBE3SlxRlVIPcifzS5JYjvJJ0yu9Pcf5kr6WJysFeUVzEC7UdQ0bmmbVunCMViY
-         E0MlsJxem/Hz01Y8SyHlWM9DBMZaiHK1jMGOMKkh8dYgQM3+FEhyuyT8IBNLAd2H/U2e
-         GzfKyW9CF1r3HpmON7O14EwkLeviC5pDTfEvgA1nOSi/mZFC8KMOUiH/6mquksUpIG0H
-         qsUzY5kpjUASHUPUCoDt0GoYOXmYQEOZp3krgLSmurmT2wHSnu/ZUrRutWFZnLeuTDWH
-         iWqxULpAWAmX385HAgonXg7/urodLc92Vd5hri2U0vDQUHLt1jApr5gaPrHw0m3b7aeS
-         M0qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=47DEQpj8HBSa+/TImW+5JCeuQeRkm5NMpJWZG3hSuFU=;
-        b=fVMacvHl/SVoaqvrHoebSJ9wIKcJiC27Su5ck5qCTLFB3xxWZLReiNTBnEMOrcgCK0
-         nFXKNR9XIM07I1ZdwInOgSiQT7aZ1bzhd7XMZsIqX1ebDTuUB13RTEvbBuEkaLBvQOv6
-         2ylmfIvmJQnoTGcyO65mfsa9sKzi/eFSRVrhbDbaxSi/p0oWjBe7FpBpS2NFjcTEA5ZZ
-         g0ioJobCvkto5KXJR1HwSxgtJLBcaSt9O6LTFR22+pHdyCLbnMGzTmuMgkxG+shwkkn8
-         EE/MBriH2qV3OmxNCwoa0RRsa81mJthmq2VIK1qRaVF4V8n3Bvrm9shZv2jZ3jp7f9zW
-         +a3Q==
-X-Gm-Message-State: ANoB5pmd5tgRzPstXTY3v8gbwWTdq7l2QFfQQmV3Zq9Z5MyB3ZcH2JVc
-        jNl8FSxst5hncdG07BzYgJRpJPN841+g5N1MFOY=
-X-Google-Smtp-Source: AA0mqf6D6kxSW4zDDTaH0/5a6BIP6RsAc9Q5jTUD/01/ya+WnXoO/vjDBDDpP/ZeX3uGLCm4F5Io/ktuB6phl8ShcmQ=
-X-Received: by 2002:ac2:488e:0:b0:4b4:cf32:e105 with SMTP id
- x14-20020ac2488e000000b004b4cf32e105mr31530896lfc.110.1670599998863; Fri, 09
- Dec 2022 07:33:18 -0800 (PST)
+        Fri, 9 Dec 2022 10:35:07 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B020E6B9BE;
+        Fri,  9 Dec 2022 07:35:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1670600106; x=1702136106;
+  h=from:to:subject:date:message-id:mime-version;
+  bh=2nhTdbC2PR8CepBOOqGB8k4UrM29lA7Y0BC0ZtFimPw=;
+  b=b2ARAgl1RAo9aR7WYQ6DF9cdP4aSq0jtviuRExlPGuU0v9qvhcjJFzcj
+   GYSE45PaFVi2B77ssTIpf9kQPd1sf5PgSvHeN8LHdLTrSc4QRY6pNzBB3
+   07cX8/nlDBQos3ssKQemy/SeGe0HsgJPT0riHYDYQbxyNQO3pZVTBRsm0
+   x3+svwdqPQdh4Xl8q4rSC1ZML8cM5Z8IFItaTlTylhzPVPrQu31BUrik6
+   18XGzV3d42leilqzxtYaLkwfGx5Bz7FyOMjSzf+8XZfp8nwyC4AM4mrt9
+   peWGTkTI2UHr1daev0gx1unk6Nl/apJY7ZB9rSipkWynDzzRmKTeQVZh9
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="190907093"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 09 Dec 2022 08:35:05 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Fri, 9 Dec 2022 08:35:03 -0700
+Received: from AUS-LT-C33025.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Fri, 9 Dec 2022 08:35:02 -0700
+From:   Jerry Ray <jerry.ray@microchip.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>, <jbe@pengutronix.de>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux@armlinux.org.uk>, Jerry Ray <jerry.ray@microchip.com>
+Subject: [PATCH v2] net: lan9303: Fix read error execution path
+Date:   Fri, 9 Dec 2022 09:35:02 -0600
+Message-ID: <20221209153502.7429-1-jerry.ray@microchip.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Received: by 2002:a2e:a988:0:0:0:0:0 with HTTP; Fri, 9 Dec 2022 07:33:18 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <anonymusxt2@gmail.com>
-Date:   Fri, 9 Dec 2022 15:33:18 +0000
-Message-ID: <CAKr3oRRe+TLWTuDixFQK1dKgOEdNGVF1uL2LNXpgrc8kkfRbrA@mail.gmail.com>
-Subject: Hello, This is my second message to you regarding the funds of your
- late relative. I shall send you details after I receive your response.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,EMPTY_MESSAGE,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:131 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4982]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [anonymusxt2[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [anonymusxt2[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [gregdenzell9[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.3 EMPTY_MESSAGE Message appears to have no textual parts
-        *  2.8 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *******
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch fixes an issue where a read failure of a port statistic counter
+will return unknown results.  While it is highly unlikely the read will
+ever fail, it is much cleaner to return a zero for the stat count.
+
+Fixes: a1292595e006 ("net: dsa: add new DSA switch driver for the SMSC-LAN9303")
+Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+---
+v1->v2:
+  corrected email header: net vs net-next, Added 1 maintainer, removed
+  blank line.
+  No changes to the body of the patch.
+---
+ drivers/net/dsa/lan9303-core.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/dsa/lan9303-core.c b/drivers/net/dsa/lan9303-core.c
+index 80f07bd20593..2e270b479143 100644
+--- a/drivers/net/dsa/lan9303-core.c
++++ b/drivers/net/dsa/lan9303-core.c
+@@ -1005,9 +1005,11 @@ static void lan9303_get_ethtool_stats(struct dsa_switch *ds, int port,
+ 		ret = lan9303_read_switch_port(
+ 			chip, port, lan9303_mib[u].offset, &reg);
+ 
+-		if (ret)
++		if (ret) {
+ 			dev_warn(chip->dev, "Reading status port %d reg %u failed\n",
+ 				 port, lan9303_mib[u].offset);
++			reg = 0;
++		}
+ 		data[u] = reg;
+ 	}
+ }
+-- 
+2.17.1
 
